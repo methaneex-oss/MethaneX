@@ -3,11 +3,11 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "methane-x"
-version = "0.3.0"
-description = "MethaneX JARVIS cognitive prototype"
+name = "jarvis"
+version = "0.3.1"
+description = "JARVIS cognitive assistant prototype"
 requires-python = ">=3.11"
 dependencies = []
 
 [tool.setuptools.packages.find]
-include = ["methane_x*"]
+include = ["jarvis*", "methane_x*"]
