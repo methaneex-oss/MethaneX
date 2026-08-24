@@ -22,25 +22,26 @@ def main() -> None:
             if text.casefold() in {"exit", "quit", "shutdown"}:
                 print("JARVIS > Shutdown requested.")
                 break
-            if not wake.matches(text):
-                continue
 
             command = text
-            lowered = command.casefold()
-            matched = False
-            for word in settings.wake_words:
-                if lowered == word:
-                    command = "status"
-                    matched = True
-                    break
-                prefix = word + " "
-                if lowered.startswith(prefix):
-                    command = command[len(word):].strip(" ,:-")
-                    matched = True
-                    break
-            if not matched:
-                print("JARVIS > I heard the wake word, but I could not isolate the command.")
-                continue
+            if settings.require_wake_word:
+                if not wake.matches(text):
+                    continue
+                lowered = command.casefold()
+                matched = False
+                for word in settings.wake_words:
+                    if lowered == word:
+                        command = "status"
+                        matched = True
+                        break
+                    prefix = word + " "
+                    if lowered.startswith(prefix):
+                        command = command[len(word):].strip(" ,:-")
+                        matched = True
+                        break
+                if not matched:
+                    print("JARVIS > I heard the wake word, but I could not isolate the command.")
+                    continue
             print(f"JARVIS > {brain.process(command or 'status')}")
     finally:
         brain.memory.close()
