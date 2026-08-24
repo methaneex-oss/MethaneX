@@ -4,8 +4,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
-from .cognitive_loop import CognitiveLoop
-from .intelligence import IntelligenceRouter, LocalReasoner
+from .intelligence import IntelligenceRequest, IntelligenceRouter, LocalReasoner
 from .learning import Experience, LearningEngine
 from .memory import MemoryStore
 from .planning import Planner
@@ -25,7 +24,6 @@ class Brain:
         self.memory = memory or MemoryStore(memory_path)
         self.intelligence = IntelligenceRouter([LocalReasoner()])
         self.planner = Planner()
-        self.cognition = CognitiveLoop(self.planner, self.intelligence)
         self.learning = LearningEngine(self.memory)
         self.policy = CapabilityPolicy()
         self.guard = ActionGuard(self.policy)
@@ -77,10 +75,9 @@ class Brain:
         memories = tuple(self.memory.relevant(event.payload, limit=5))
         context = tuple(item.content for item in memories)
         plan = self.planner.create(event.payload)
-        task = self.planner.next(plan)
-        if task is None:
+        if self.planner.next(plan) is None:
             return "I could not create an executable plan."
-        response = self.intelligence.generate(__import__("methane_x.intelligence", fromlist=["IntelligenceRequest"]).IntelligenceRequest(event.payload, context))
+        response = self.intelligence.generate(IntelligenceRequest(event.payload, context))
         self.learning.learn(Experience(event.payload, "reason", response.text, True))
         return response.text
 
