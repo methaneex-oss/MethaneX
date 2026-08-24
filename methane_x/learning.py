@@ -3,7 +3,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Protocol
 
-from .memory import MemoryStore
+
+class MemorySink(Protocol):
+    def remember(self, content: str, *, confidence: float = 1.0, source: str = "user", tier: int = 3) -> object: ...
 
 
 @dataclass(frozen=True)
@@ -28,7 +30,7 @@ class LessonValidator(Protocol):
 class LearningEngine:
     """Turns observed outcomes into bounded, reviewable memory candidates."""
 
-    def __init__(self, memory: MemoryStore, validator: LessonValidator | None = None) -> None:
+    def __init__(self, memory: MemorySink, validator: LessonValidator | None = None) -> None:
         self.memory = memory
         self.validator = validator
 
