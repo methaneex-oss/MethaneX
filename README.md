@@ -1,6 +1,6 @@
-# MethaneX — JARVIS Prototype
+# JARVIS Prototype
 
-MethaneX is the clean prototype repository for the JARVIS system. This repository intentionally starts from an empty foundation rather than importing the older JARVIS repository files.
+This repository contains the clean JARVIS prototype foundation. It intentionally starts from an empty foundation rather than importing the older JARVIS repository files.
 
 ## Prototype goals
 
@@ -10,23 +10,23 @@ MethaneX is the clean prototype repository for the JARVIS system. This repositor
 - Provider/model adapters can be added later without changing the core.
 - Explicit safety boundaries around actions.
 - Persistent experience memory with confidence and provenance.
-- Fast local orchestration; external intelligence remains replaceable.
+- Fast orchestration; external intelligence remains replaceable.
 
 ## Run
 
 Requires Python 3.11+.
 
 ```bash
-python -m methane_x
+python -m jarvis
 ```
 
 Then try:
 
 ```text
 Hey Jarvis
-status
-remember that the prototype is called MethaneX
-what do you remember
+Jarvis status
+Jarvis remember that the prototype is called Jarvis
+Jarvis what do you remember
 exit
 ```
 
@@ -39,9 +39,17 @@ python -m unittest discover -s tests -v
 ## Architecture
 
 ```text
-Input -> Intent/Event -> Brain -> Memory/Reasoning -> Action -> Observation
-                         |              |
-                         +---- adapters/providers
+Input -> Perception -> Cognitive Core -> Memory/Reasoning -> Action
+                         |                    |
+                         +---- Planning ------+
+                         |                    |
+                         +---- Learning ------+
+                         |                    |
+                         +---- Verification -+
 ```
 
-The prototype is deliberately small. It establishes the core contracts that later voice, vision, device, web, coding, and external-model adapters can implement without rewriting the brain.
+The prototype establishes core contracts so voice, vision, devices, web, coding, and external-model adapters can be added without rewriting the cognitive core.
+
+## Naming
+
+`jarvis` is the canonical Python package and CLI namespace. The older `methane_x` package remains as an internal compatibility namespace during the migration so existing tests and integrations do not break abruptly.
