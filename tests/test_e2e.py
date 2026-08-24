@@ -4,7 +4,6 @@ from pathlib import Path
 
 from methane_x.brain import Brain
 from methane_x.memory import MemoryStore
-from methane_x.safety import ActionRequest
 from methane_x.verification import VerifiedExecutor
 
 
