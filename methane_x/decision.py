@@ -19,10 +19,12 @@ class Candidate:
 class DecisionEngine:
     """Scores candidate strategies from supplied evidence; it does not encode command-specific behavior."""
 
-    def choose(self, candidates: Sequence[Candidate]) -> Candidate | None:
-        if not candidates:
+    def choose(self, candidates: Sequence[Candidate], *, risk_tolerance: float = 1.0) -> Candidate | None:
+        eligible = [item for item in candidates if 0.0 <= item.risk <= risk_tolerance]
+        if not eligible:
             return None
-        return max(candidates, key=lambda item: item.score)
+        return max(eligible, key=lambda item: item.score)
 
-    def rank(self, candidates: Sequence[Candidate]) -> tuple[Candidate, ...]:
-        return tuple(sorted(candidates, key=lambda item: item.score, reverse=True))
+    def rank(self, candidates: Sequence[Candidate], *, risk_tolerance: float = 1.0) -> tuple[Candidate, ...]:
+        eligible = [item for item in candidates if item.risk <= risk_tolerance]
+        return tuple(sorted(eligible, key=lambda item: item.score, reverse=True))
