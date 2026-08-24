@@ -11,7 +11,7 @@ class MemoryVoiceTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "memory.db"
             first = MemoryStore(path)
-            first.remember("prototype identity", tier=1, source="identity")
+            first.remember("prototype identity", tier=1, source="system")
             first.close()
             second = MemoryStore(path)
             self.assertEqual(second.all()[0].content, "prototype identity")
