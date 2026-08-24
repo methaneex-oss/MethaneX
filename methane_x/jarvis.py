@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
-from .intelligence import IntelligenceRequest, IntelligenceProvider, IntelligenceResponse, LocalReasoner
+from .intelligence import IntelligenceRequest, IntelligenceProvider, LocalReasoner
 from .learning import Experience, LearningEngine
 from .persistent_memory import PersistentMemory
 from .speech import ConsoleSpeech
@@ -77,10 +77,7 @@ class Jarvis:
         if kind == "tool":
             name = payload
             result = str(self.tools[name].handler(text))
-            experience = Experience(text, name, result, True)
-            lesson = self.learning.learn(experience)
-            if lesson is not None:
-                return result
+            self.learning.learn(Experience(text, name, result, True))
             return result
 
         memories = self.memory.search(text)
