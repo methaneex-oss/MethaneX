@@ -5,7 +5,6 @@ from .config import Settings
 from .devices import DeviceRegistry
 from .health import HealthMonitor
 from .intelligence import IntelligenceRouter, LocalReasoner
-from .learning import Experience, LearningEngine
 from .memory import MemoryStore
 from .memory_consolidation import MemoryConsolidator
 from .observability import EventLog
@@ -18,7 +17,7 @@ from .voice import WakeWordDetector
 
 
 class JarvisRuntime:
-    """Application runtime wiring the autonomous cognitive subsystems together."""
+    """Application runtime wiring the cognitive subsystems together."""
 
     def __init__(self, settings: Settings | None = None) -> None:
         self.settings = settings or Settings.from_env()
@@ -26,7 +25,6 @@ class JarvisRuntime:
         self.intelligence = IntelligenceRouter([LocalReasoner()])
         self.wake_word = WakeWordDetector(self.settings.wake_words)
         self.brain = Brain(memory=self.memory, intelligence=self.intelligence)
-        self.learning = LearningEngine(self.memory)
         self.consolidator = MemoryConsolidator(self.memory)
         self.perception = PerceptionHub()
         self.tools = ToolRegistry()
@@ -44,7 +42,6 @@ class JarvisRuntime:
     def process(self, text: str) -> str:
         self.events.emit("input.received", text=text)
         output = self.brain.process(text)
-        self.learning.learn(Experience(text, text, output, True))
         self.events.emit("response.completed", output=output)
         return output
 
