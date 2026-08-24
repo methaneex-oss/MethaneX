@@ -1,4 +1,4 @@
-"""MethaneX JARVIS prototype package."""
+"""JARVIS cognitive assistant prototype package."""
 
 from .cognitive_loop import CognitiveLoop, CycleResult
 from .decision import Candidate, DecisionEngine
@@ -17,7 +17,7 @@ from .tools import Tool, ToolRegistry
 from .verification import VerifiedExecutor
 from .voice import ConsoleSpeech, WakeWordDetector
 
-__version__ = "0.3.0"
+__version__ = "0.3.1"
 
 __all__ = [
     "ActionGuard", "ActionRequest", "Candidate", "CapabilityPolicy", "CognitiveLoop", "ConsoleSpeech",
