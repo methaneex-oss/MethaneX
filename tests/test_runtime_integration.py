@@ -2,17 +2,15 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from methane_x.config import Settings
 from methane_x.runtime import JarvisRuntime
 
 
 class RuntimeIntegrationTests(unittest.TestCase):
     def test_runtime_persists_learning_and_reports_health(self):
         with tempfile.TemporaryDirectory() as tmp:
-            runtime = JarvisRuntime()
-            runtime.settings = runtime.settings.__class__(memory_path=Path(tmp) / "memory.db", wake_words=runtime.settings.wake_words, require_wake_word=runtime.settings.require_wake_word)
-            runtime.memory.close()
-            runtime.memory = runtime.memory.__class__(runtime.settings.memory_path)
-            runtime.learning.memory = runtime.memory
+            settings = Settings(memory_path=Path(tmp) / "memory.db")
+            runtime = JarvisRuntime(settings)
             output = runtime.process("remember prototype goal")
             self.assertTrue(output)
             self.assertGreaterEqual(len(runtime.memory.all()), 1)
