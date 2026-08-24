@@ -26,14 +26,19 @@ class MemoryStore:
         if self.path:
             self.path.parent.mkdir(parents=True, exist_ok=True)
             self._db = sqlite3.connect(self.path)
-            self._db.execute("CREATE TABLE IF NOT EXISTS memories (content TEXT NOT NULL, confidence REAL NOT NULL, source TEXT NOT NULL, tier INTEGER NOT NULL, created_at TEXT NOT NULL)")
+            self._db.execute(
+                "CREATE TABLE IF NOT EXISTS memories (content TEXT NOT NULL, confidence REAL NOT NULL, source TEXT NOT NULL, tier INTEGER NOT NULL, created_at TEXT NOT NULL)"
+            )
             self._db.commit()
 
     def remember(self, content: str, *, confidence: float = 1.0, source: str = "user", tier: int = 3) -> Memory:
         if tier not in (1, 2, 3):
             raise ValueError("tier must be 1, 2, or 3")
+        content = content.strip()
+        if not content:
+            raise ValueError("memory cannot be empty")
         confidence = max(0.0, min(1.0, confidence))
-        item = Memory(content=content.strip(), confidence=confidence, source=source, tier=tier)
+        item = Memory(content=content, confidence=confidence, source=source, tier=tier)
         if self._db:
             self._db.execute("INSERT INTO memories VALUES (?, ?, ?, ?, ?)", (item.content, item.confidence, item.source, item.tier, item.created_at))
             self._db.commit()
@@ -49,6 +54,8 @@ class MemoryStore:
 
     def relevant(self, query: str, *, limit: int = 10) -> list[Memory]:
         terms = {word.lower() for word in query.split() if word.strip()}
+        if not terms or limit < 1:
+            return []
         scored: list[tuple[float, Memory]] = []
         for item in self.all():
             overlap = len(terms & set(item.content.lower().split()))
@@ -60,5 +67,6 @@ class MemoryStore:
         return json.dumps([memory.__dict__ for memory in self.all()], indent=2)
 
     def close(self) -> None:
-        if self._db:
+        if self._db is not None:
             self._db.close()
+            self._db = None
