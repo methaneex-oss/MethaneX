@@ -10,19 +10,16 @@ from .memory import MemoryStore
 from .planning import Planner
 from .safety import ActionGuard, ActionRequest, CapabilityPolicy
 
-
 @dataclass(frozen=True)
 class Event:
     kind: str
     payload: str
 
-
 class Brain:
     """JARVIS orchestration layer: perception, memory, planning, intelligence and guarded actions."""
-
-    def __init__(self, memory: MemoryStore | None = None, *, memory_path: str | Path | None = None) -> None:
+    def __init__(self, memory: MemoryStore | None = None, *, memory_path: str | Path | None = None, intelligence: IntelligenceRouter | None = None) -> None:
         self.memory = memory or MemoryStore(memory_path)
-        self.intelligence = IntelligenceRouter([LocalReasoner()])
+        self.intelligence = intelligence or IntelligenceRouter([LocalReasoner()])
         self.planner = Planner()
         self.learning = LearningEngine(self.memory)
         self.policy = CapabilityPolicy()
@@ -57,13 +54,10 @@ class Brain:
                 return "I need something to remember."
             self.memory.remember(content, tier=3, source="user")
             return f"Stored: {content}"
-
         if event.kind == "status":
             return f"Online. Memory entries: {len(self.memory.all())}. Brain: ready. Intelligence providers: {len(self.intelligence.providers)}."
-
         if event.kind == "shutdown":
             return "Shutdown requested."
-
         if event.kind.startswith("action."):
             name = event.kind.split(".", 1)[1]
             capability, handler = self._actions[name]
@@ -71,7 +65,6 @@ class Brain:
             result = handler(event.payload)
             self.learning.learn(Experience(event.payload, name, result, True))
             return result
-
         memories = tuple(self.memory.relevant(event.payload, limit=5))
         context = tuple(item.content for item in memories)
         plan = self.planner.create(event.payload)
