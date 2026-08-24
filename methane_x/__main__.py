@@ -1,10 +1,15 @@
+from pathlib import Path
+
 from .brain import Brain
+from .voice import WakeWordDetector
 
 
 def main() -> None:
-    brain = Brain()
+    data_dir = Path.home() / ".methane_x"
+    brain = Brain(memory_path=data_dir / "memory.db")
+    wake = WakeWordDetector()
     print("MethaneX JARVIS prototype online.")
-    print("Type 'Jarvis status', 'Jarvis remember ...', or 'exit'.")
+    print("Say/type 'Hey Jarvis' or 'Jarvis' before a command. Type 'exit' to stop.")
 
     while True:
         try:
@@ -16,13 +21,16 @@ def main() -> None:
         if not text:
             continue
 
-        # Prototype wake-word gate: commands can be spoken with or without the wake word.
-        if text.lower().startswith("jarvis"):
-            text = text[6:].strip(" ,:—-") or "status"
+        normalized = text.strip()
+        if wake.matches(normalized):
+            normalized = "status"
+        elif normalized.casefold().startswith("jarvis "):
+            normalized = normalized[7:].strip()
 
-        response = brain.process(text)
+        response = brain.process(normalized)
         print(f"Jarvis > {response}")
-        if brain.perceive(text).kind == "shutdown":
+        if brain.perceive(normalized).kind == "shutdown":
+            brain.memory.close()
             break
 
 
