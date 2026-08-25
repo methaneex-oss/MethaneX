@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Iterable
+from typing import Callable, Iterable
 
 
 class FailureClass(str, Enum):
@@ -21,28 +21,20 @@ class RecoveryDecision:
 
 
 class RecoveryEngine:
-    """Classifies failure evidence before selecting a bounded recovery direction."""
+    """Recovery substrate. Domain intelligence supplies classification and the recovery strategy."""
+
+    def __init__(self, classifier: Callable[[tuple[str, ...]], FailureClass] | None = None) -> None:
+        self.classifier = classifier or (lambda evidence: FailureClass.UNKNOWN)
 
     def classify(self, evidence: Iterable[str]) -> FailureClass:
-        text = " ".join(evidence).casefold()
-        if any(token in text for token in ("timeout", "temporarily", "unavailable")):
-            return FailureClass.TRANSIENT
-        if any(token in text for token in ("unknown", "missing", "insufficient information")):
-            return FailureClass.INFORMATION
-        if any(token in text for token in ("wrong plan", "strategy failed", "invalid approach")):
-            return FailureClass.STRATEGY
-        if any(token in text for token in ("unsupported", "not capable", "permission denied")):
-            return FailureClass.CAPABILITY
-        return FailureClass.UNKNOWN
+        return self.classifier(tuple(evidence))
 
-    def decide(self, evidence: Iterable[str]) -> RecoveryDecision:
+    def decide(
+        self,
+        evidence: Iterable[str],
+        *,
+        strategy: str = "investigate before acting",
+        confidence: float = 0.4,
+    ) -> RecoveryDecision:
         failure = self.classify(evidence)
-        actions = {
-            FailureClass.TRANSIENT: "retry or wait for the environment to stabilize",
-            FailureClass.INFORMATION: "gather missing evidence",
-            FailureClass.STRATEGY: "generate and evaluate an alternative strategy",
-            FailureClass.CAPABILITY: "identify another authorized capability",
-            FailureClass.UNKNOWN: "pause and investigate before acting again",
-        }
-        confidence = 0.8 if failure != FailureClass.UNKNOWN else 0.4
-        return RecoveryDecision(failure, actions[failure], confidence)
+        return RecoveryDecision(failure, strategy, max(0.0, min(1.0, confidence)))
