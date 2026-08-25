@@ -8,7 +8,7 @@ from .adaptation import AdaptationLedger
 from .attention import AttentionController, Focus
 from .cognitive_cycle import CognitiveCycle, CycleResult
 from .conflict import ConflictResolver
-from .continuity import Continuity
+from .continuity import Continuity, Experience
 from .memory_consolidation import ExperienceRecord, MemoryConsolidator
 from .persistence import StateJournal
 from .world_model import SelfModel, WorldModel
@@ -53,11 +53,21 @@ class Brain:
         focused = self.attention.select(observations)
         context = tuple(facts) + tuple(f"attention: {item.item}" for item in focused)
         self.self_model.active_processes.add("thinking")
-        result = self.cycle.run(goal, facts=context, options=options, execute=execute)
-        self.self_model.active_processes.discard("thinking")
-        self.continuity.observe(goal, result.reflection.outcome, bool(result.reflection.what_worked))
-        self._persist()
-        return result
+        try:
+            result = self.cycle.run(goal, facts=context, options=options, execute=execute)
+            evaluation = result.decision.evaluation
+            self.continuity.record(Experience(
+                cycle_id=self.cycle.state.cycle_id,
+                goal=goal,
+                decision=result.decision.strategy.name if result.decision.strategy else "gather information",
+                outcome=result.reflection.outcome,
+                success=bool(result.reflection.what_worked),
+                confidence=evaluation.confidence if evaluation else 0.0,
+            ))
+            return result
+        finally:
+            self.self_model.active_processes.discard("thinking")
+            self._persist()
 
     def consolidate(self, experiences: list[ExperienceRecord]):
         return self.consolidator.consolidate(experiences)
