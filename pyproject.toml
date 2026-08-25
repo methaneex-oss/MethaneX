@@ -10,4 +10,4 @@ requires-python = ">=3.11"
 dependencies = ["python-dotenv>=1.0,<2"]
 
 [tool.setuptools.packages.find]
-include = ["jarvis*"]
+include = ["jarvis*", "methane_x*"]
