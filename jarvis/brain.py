@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Callable, Iterable
 
@@ -110,6 +111,18 @@ class Brain:
             "history": self.cycle.state.history[-50:],
             "capabilities": sorted(self.self_model.capabilities),
             "limitations": sorted(self.self_model.limitations),
+            "experiences": [
+                {
+                    "cycle_id": experience.cycle_id,
+                    "goal": experience.goal,
+                    "decision": experience.decision,
+                    "outcome": experience.outcome,
+                    "success": experience.success,
+                    "confidence": experience.confidence,
+                    "timestamp": experience.timestamp,
+                }
+                for experience in self.continuity.experiences[-200:]
+            ],
             "goals": [
                 {
                     "objective": goal.objective,
@@ -134,11 +147,33 @@ class Brain:
         self.cycle.state.history.extend(str(x) for x in state.get("history", [])[-50:])
         self.self_model.capabilities.update(str(x) for x in state.get("capabilities", []))
         self.self_model.limitations.update(str(x) for x in state.get("limitations", []))
+        for saved in state.get("experiences", []):
+            try:
+                timestamp = str(saved.get("timestamp", ""))
+                if timestamp:
+                    datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
+                self.continuity.record(Experience(
+                    cycle_id=int(saved.get("cycle_id", 0)),
+                    goal=str(saved.get("goal", "")),
+                    decision=str(saved.get("decision", "")),
+                    outcome=str(saved.get("outcome", "")),
+                    success=bool(saved.get("success", False)),
+                    confidence=max(0.0, min(1.0, float(saved.get("confidence", 0.0)))),
+                    timestamp=timestamp or datetime.now(timezone.utc).isoformat(),
+                ))
+            except (TypeError, ValueError):
+                continue
         for saved in state.get("goals", []):
+            objective = str(saved.get("objective", "")).strip()
+            if not objective:
+                continue
             goal = self.goals.add(
-                str(saved.get("objective", "")),
+                objective,
                 priority=float(saved.get("priority", 0.5)),
                 urgency=float(saved.get("urgency", 0.5)),
                 confidence=float(saved.get("confidence", 0.5)),
             )
+            goal.id = str(saved.get("id", goal.id))
             goal.active = bool(saved.get("active", True))
+            self.goals.goals.pop(goal.id, None)
+            self.goals.goals[goal.id] = goal
