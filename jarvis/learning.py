@@ -39,18 +39,24 @@ class LearningLoop:
         return self.training.memory.recall(curriculum.subject)
 
     def assess(self, subject: str, questions: Iterable[TrainingQuestion]) -> TrainingAssessment:
+        question_list = tuple(questions)
         lessons = self.training.memory.recall(subject)
         corpus = " ".join(item.lesson.lower() for item in lessons)
         answered = 0
         strengths: list[str] = []
         weaknesses: list[str] = []
-        for question in questions:
+        for question in question_list:
             concepts = tuple(c.strip().lower() for c in question.expected_concepts if c.strip())
             if concepts and all(concept in corpus for concept in concepts):
                 answered += 1
                 strengths.extend(concepts)
             else:
                 weaknesses.extend(concepts or (question.prompt,))
-        total = answered + len(list(questions))
-        score = answered / total if total else 0.0
-        return TrainingAssessment(subject, score, tuple(dict.fromkeys(strengths)), tuple(dict.fromkeys(weaknesses)), total)
+        score = answered / len(question_list) if question_list else 0.0
+        return TrainingAssessment(
+            subject,
+            score,
+            tuple(dict.fromkeys(strengths)),
+            tuple(dict.fromkeys(weaknesses)),
+            answered,
+        )
