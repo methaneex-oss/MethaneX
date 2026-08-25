@@ -44,7 +44,11 @@ class CognitiveWorkspace:
     def add_belief(self, statement: str, confidence: float = 0.5, source: str | None = None) -> Belief:
         belief = self.beliefs.get(statement)
         if belief is None:
-            belief = Belief(statement, max(0.0, min(1.0, confidence)), source=([source] if source else []))
+            belief = Belief(
+                statement=statement,
+                confidence=max(0.0, min(1.0, confidence)),
+                sources=[source] if source else [],
+            )
             self.beliefs[statement] = belief
         else:
             belief.update(confidence, source=source)
