@@ -173,7 +173,9 @@ class Brain:
                 urgency=float(saved.get("urgency", 0.5)),
                 confidence=float(saved.get("confidence", 0.5)),
             )
-            goal.id = str(saved.get("id", goal.id))
+            generated_id = goal.id
+            saved_id = str(saved.get("id", generated_id))
+            goal.id = saved_id
             goal.active = bool(saved.get("active", True))
-            self.goals.goals.pop(goal.id, None)
-            self.goals.goals[goal.id] = goal
+            self.goals.goals.pop(generated_id, None)
+            self.goals.goals[saved_id] = goal
