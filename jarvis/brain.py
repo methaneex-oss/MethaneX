@@ -9,8 +9,12 @@ from .attention import AttentionController, Focus
 from .cognitive_cycle import CognitiveCycle, CycleResult
 from .conflict import ConflictResolver
 from .continuity import Continuity, Experience
+from .goals import Goal, GoalArbiter
+from .intelligence import IntelligenceFederator
 from .memory_consolidation import ExperienceRecord, MemoryConsolidator
 from .persistence import StateJournal
+from .recovery import RecoveryEngine
+from .simulation import Simulator
 from .world_model import SelfModel, WorldModel
 
 
@@ -21,12 +25,13 @@ class BrainSnapshot:
     experiences: int
     world_entities: int
     pending_adaptations: int
+    active_goals: int
     capabilities: int
     limitations: int
 
 
 class Brain:
-    """Unified persistent cognitive substrate. Sensors, models and tools plug into this facade."""
+    """Persistent cognitive substrate: one identity, many replaceable cognitive capabilities."""
 
     def __init__(self, identity: str = "JARVIS", state_path: str | Path | None = None) -> None:
         self.world = WorldModel()
@@ -35,11 +40,23 @@ class Brain:
         self.attention = AttentionController()
         self.conflicts = ConflictResolver()
         self.adaptations = AdaptationLedger()
+        self.goals = GoalArbiter()
+        self.intelligence = IntelligenceFederator()
+        self.recovery = RecoveryEngine()
+        self.simulator = Simulator()
         self.consolidator = MemoryConsolidator()
         self.cycle = CognitiveCycle()
         self.identity = identity
         self.journal = StateJournal(state_path) if state_path else None
         self._restore()
+
+    def add_goal(self, objective: str, *, priority: float = 0.5, urgency: float = 0.5, confidence: float = 0.5) -> Goal:
+        goal = self.goals.add(objective, priority=priority, urgency=urgency, confidence=confidence)
+        self._persist()
+        return goal
+
+    def choose_goal(self) -> Goal | None:
+        return self.goals.choose()
 
     def think(
         self,
@@ -79,6 +96,7 @@ class Brain:
             experiences=len(self.continuity.experiences),
             world_entities=len(self.world.entities),
             pending_adaptations=len(self.adaptations.proposals),
+            active_goals=sum(goal.active for goal in self.goals.goals.values()),
             capabilities=len(self.self_model.capabilities),
             limitations=len(self.self_model.limitations),
         )
@@ -92,6 +110,17 @@ class Brain:
             "history": self.cycle.state.history[-50:],
             "capabilities": sorted(self.self_model.capabilities),
             "limitations": sorted(self.self_model.limitations),
+            "goals": [
+                {
+                    "objective": goal.objective,
+                    "priority": goal.priority,
+                    "urgency": goal.urgency,
+                    "confidence": goal.confidence,
+                    "id": goal.id,
+                    "active": goal.active,
+                }
+                for goal in self.goals.goals.values()
+            ],
         })
 
     def _restore(self) -> None:
@@ -105,3 +134,11 @@ class Brain:
         self.cycle.state.history.extend(str(x) for x in state.get("history", [])[-50:])
         self.self_model.capabilities.update(str(x) for x in state.get("capabilities", []))
         self.self_model.limitations.update(str(x) for x in state.get("limitations", []))
+        for saved in state.get("goals", []):
+            goal = self.goals.add(
+                str(saved.get("objective", "")),
+                priority=float(saved.get("priority", 0.5)),
+                urgency=float(saved.get("urgency", 0.5)),
+                confidence=float(saved.get("confidence", 0.5)),
+            )
+            goal.active = bool(saved.get("active", True))
