@@ -7,7 +7,13 @@ from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
+from dotenv import load_dotenv
+
 from .training import ExternalTeacher, TeachingExample
+
+# Load a local .env when present. Existing environment variables win, so
+# production/CI secret injection remains authoritative.
+load_dotenv(override=False)
 
 
 @dataclass(frozen=True)
