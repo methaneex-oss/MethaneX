@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from collections import Counter
 
 
 @dataclass(frozen=True)
@@ -34,7 +33,8 @@ class MemoryConsolidator:
                 continue
             successes = sum(item.success for item in items)
             rate = successes / len(items)
-            confidence = max(0.0, min(1.0, 0.5 * rate + 0.5 * sum(i.confidence for i in items) / len(items)))
-            guidance = "prefer" if rate >= 0.5 else "avoid"
+            mean_confidence = sum(max(0.0, min(1.0, item.confidence)) for item in items) / len(items)
+            confidence = max(0.0, min(1.0, 0.5 * rate + 0.5 * mean_confidence))
+            guidance = "prefer" if rate > 0.5 else "avoid" if rate < 0.5 else "insufficient evidence"
             lessons.append(Lesson(situation, f"{guidance} action '{action}'", confidence, len(items)))
         return tuple(sorted(lessons, key=lambda lesson: lesson.confidence, reverse=True))
