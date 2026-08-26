@@ -62,6 +62,24 @@ class BrainTests(unittest.TestCase):
             brain = Brain(state_path=path)
             self.assertEqual(brain.snapshot().cycles, 0)
 
+    def test_shadow_evolution_survives_restart(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "state.json"
+            brain = Brain(state_path=path)
+            brain.propose_adaptation(
+                "reasoning",
+                "reduce redundant planning",
+                ["repeated duplicate work"],
+                0.8,
+            )
+            result = brain.evaluate_evolution(lambda target, change: (0.5, 0.75))[0]
+            self.assertTrue(result.accepted)
+            self.assertEqual(brain.snapshot().evaluated_evolutions, 1)
+
+            restored = Brain(state_path=path)
+            self.assertEqual(restored.snapshot().evaluated_evolutions, 1)
+            self.assertTrue(restored.evolution.accepted()[0].accepted)
+
 
 if __name__ == "__main__":
     unittest.main()
