@@ -12,6 +12,11 @@ add_library(jarvis_core STATIC
     src/causal_model.cpp
     src/decision.cpp
     src/adaptation.cpp
+    src/attention.cpp
+    src/threat.cpp
+    src/resilience.cpp
+    src/evolution.cpp
+    src/planning.cpp
 )
 
 target_include_directories(jarvis_core PUBLIC include)
