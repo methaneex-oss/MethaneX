@@ -6,7 +6,8 @@
 namespace jarvis::core {
 
 void EvolutionModel::register_parameter(std::string key, double initial) {
-    parameters_.try_emplace(std::move(key), StrategyParameter{std::move(key), initial, 0.0, 0});
+    StrategyParameter parameter{key, initial, 0.0, 0};
+    parameters_.try_emplace(std::move(key), parameter);
 }
 
 void EvolutionModel::observe_fitness(const std::string& key, double fitness) {
