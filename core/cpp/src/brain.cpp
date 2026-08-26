@@ -65,7 +65,24 @@ bool Brain::resolve_prediction(const std::string& key, const Scalar& actual) {
     if (it == predictions_.end() || it->second.resolved) return false;
     it->second.resolved = true;
     it->second.error = it->second.predicted == actual ? 0.0 : 1.0;
+
+    if (const auto predicted = std::get_if<double>(&it->second.predicted);
+        predicted != nullptr) {
+        if (const auto observed = std::get_if<double>(&actual); observed != nullptr) {
+            adaptation_.observe(key, *predicted, *observed);
+        }
+    }
     return it->second.error == 0.0;
+}
+
+const AdaptiveMetric* Brain::learning_metric(const std::string& key) const noexcept {
+    std::shared_lock lock(mutex_);
+    return adaptation_.metric(key);
+}
+
+double Brain::learning_confidence(const std::string& key) const noexcept {
+    std::shared_lock lock(mutex_);
+    return adaptation_.confidence(key);
 }
 
 std::vector<std::pair<std::string, Scalar>> Brain::simulate(const std::vector<Belief>& assumptions) const {
