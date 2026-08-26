@@ -16,10 +16,12 @@
 #include "knowledge.hpp"
 #include "self_model.hpp"
 
+#include <cstddef>
 #include <cstdint>
 #include <shared_mutex>
 #include <string>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 namespace jarvis::core {
@@ -41,6 +43,7 @@ public:
     Prediction predict(std::string key, Scalar value, double confidence);
     bool resolve_prediction(const std::string& key, const Scalar& actual);
     std::vector<std::pair<std::string, Scalar>> simulate(const std::vector<Belief>& assumptions) const;
+    std::vector<CausalLink> causal_links() const;
     std::vector<Decision> choose(const std::vector<CandidateAction>& actions) const;
     Plan plan(const std::vector<CandidateAction>& actions, std::size_t horizon) const;
     Reflection reflect() const;
