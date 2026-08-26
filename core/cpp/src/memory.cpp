@@ -4,7 +4,6 @@
 #include <cstdint>
 #include <fstream>
 #include <mutex>
-#include <type_traits>
 
 namespace jarvis::core {
 namespace {
@@ -24,7 +23,7 @@ bool read_string(std::istream& in, std::string& value) {
 }
 
 void write_scalar(std::ostream& out, const Scalar& value) {
-    const std::uint8_t tag = static_cast<std::uint8_t>(value.index());
+    const auto tag = static_cast<std::uint8_t>(value.index());
     out.write(reinterpret_cast<const char*>(&tag), sizeof(tag));
     if (const auto p = std::get_if<bool>(&value)) out.write(reinterpret_cast<const char*>(p), sizeof(*p));
     else if (const auto p = std::get_if<std::int64_t>(&value)) out.write(reinterpret_cast<const char*>(p), sizeof(*p));
@@ -104,8 +103,7 @@ void Memory::load() {
 
 void Memory::persist(const Event& event) const {
     std::error_code error;
-    if (!journal_path_.parent_path().empty())
-        std::filesystem::create_directories(journal_path_.parent_path(), error);
+    if (!journal_path_.parent_path().empty()) std::filesystem::create_directories(journal_path_.parent_path(), error);
     if (error) return;
     std::ofstream out(journal_path_, std::ios::binary | std::ios::app);
     if (out) write_event(out, event);
@@ -121,6 +119,11 @@ std::vector<Event> Memory::recent(std::size_t limit) const {
     std::shared_lock lock(mutex_);
     const auto count = std::min(limit == 0 ? working_limit_ : limit, continuity_.size());
     return std::vector<Event>(continuity_.end() - static_cast<std::ptrdiff_t>(count), continuity_.end());
+}
+
+std::vector<Event> Memory::all() const {
+    std::shared_lock lock(mutex_);
+    return continuity_;
 }
 
 std::vector<Event> Memory::by_source(const std::string& source, std::size_t limit) const {
