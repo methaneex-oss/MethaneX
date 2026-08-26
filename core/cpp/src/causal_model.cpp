@@ -5,8 +5,8 @@
 #include <type_traits>
 
 namespace jarvis::core {
-
 namespace {
+
 std::string encode(const std::string& key, const Scalar& value) {
     return key + "=" + std::visit([](const auto& item) -> std::string {
         using T = std::decay_t<decltype(item)>;
@@ -16,6 +16,24 @@ std::string encode(const std::string& key, const Scalar& value) {
         else return std::to_string(item);
     }, value);
 }
+
+Scalar decode(const std::string& text) {
+    if (text == "null") return std::monostate{};
+    if (text == "true") return true;
+    if (text == "false") return false;
+    try {
+        std::size_t consumed = 0;
+        const auto integer = std::stoll(text, &consumed);
+        if (consumed == text.size()) return static_cast<std::int64_t>(integer);
+    } catch (...) {}
+    try {
+        std::size_t consumed = 0;
+        const auto number = std::stod(text, &consumed);
+        if (consumed == text.size()) return number;
+    } catch (...) {}
+    return text;
+}
+
 }
 
 void CausalModel::observe_transition(const std::vector<Belief>& before, const std::vector<Belief>& after) {
@@ -52,7 +70,7 @@ std::vector<std::pair<std::string, Scalar>> CausalModel::predict(const std::vect
         for (const auto& [_, link] : links_) {
             if (link.cause.rfind(prefix, 0) == 0 && link.strength >= 0.5) {
                 const auto separator = link.effect.find('=');
-                if (separator != std::string::npos) result.emplace_back(link.effect.substr(0, separator), link.effect.substr(separator + 1));
+                if (separator != std::string::npos) result.emplace_back(link.effect.substr(0, separator), decode(link.effect.substr(separator + 1)));
             }
         }
     }
