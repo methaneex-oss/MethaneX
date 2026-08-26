@@ -2,7 +2,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Callable, Iterable
+
+from .persistence import StateJournal
 
 
 @dataclass(frozen=True)
@@ -33,16 +36,85 @@ class ExternalTeacher:
 class TrainingMemory:
     """Stores validated learning independently from external teacher implementations."""
 
-    def __init__(self) -> None:
+    def __init__(self, state_path: str | Path | None = None) -> None:
         self._lessons: dict[str, list[TeachingExample]] = {}
+        self._journal = StateJournal(state_path) if state_path else None
+        self._restore()
 
     def store(self, examples: Iterable[TeachingExample]) -> None:
+        changed = False
         for example in examples:
-            if example.subject.strip() and example.lesson.strip():
-                self._lessons.setdefault(example.subject.strip().lower(), []).append(example)
+            subject = example.subject.strip()
+            lesson = example.lesson.strip()
+            if subject and lesson:
+                self._lessons.setdefault(subject.lower(), []).append(
+                    TeachingExample(
+                        subject=subject,
+                        lesson=lesson,
+                        source=example.source,
+                        difficulty=max(0.0, min(1.0, example.difficulty)),
+                        timestamp=example.timestamp,
+                    )
+                )
+                changed = True
+        if changed:
+            self._persist()
 
     def recall(self, subject: str) -> tuple[TeachingExample, ...]:
         return tuple(self._lessons.get(subject.strip().lower(), ()))
+
+    def _persist(self) -> None:
+        if not self._journal:
+            return
+        self._journal.save({
+            "lessons": {
+                subject: [
+                    {
+                        "subject": example.subject,
+                        "lesson": example.lesson,
+                        "source": example.source,
+                        "difficulty": example.difficulty,
+                        "timestamp": example.timestamp,
+                    }
+                    for example in examples
+                ]
+                for subject, examples in self._lessons.items()
+            }
+        })
+
+    def _restore(self) -> None:
+        if not self._journal:
+            return
+        state = self._journal.load()
+        lessons = state.get("lessons")
+        if not isinstance(lessons, dict):
+            return
+        for subject, entries in lessons.items():
+            if not isinstance(subject, str) or not isinstance(entries, list):
+                continue
+            restored: list[TeachingExample] = []
+            for entry in entries:
+                if not isinstance(entry, dict):
+                    continue
+                lesson = entry.get("lesson")
+                source = entry.get("source")
+                if not isinstance(lesson, str) or not lesson.strip() or not isinstance(source, str) or not source.strip():
+                    continue
+                difficulty = entry.get("difficulty", 0.5)
+                if not isinstance(difficulty, (int, float)):
+                    difficulty = 0.5
+                timestamp = entry.get("timestamp")
+                if not isinstance(timestamp, str) or not timestamp:
+                    timestamp = datetime.now(timezone.utc).isoformat()
+                restored.append(TeachingExample(
+                    subject=subject.strip(),
+                    lesson=lesson.strip(),
+                    source=source.strip(),
+                    difficulty=max(0.0, min(1.0, float(difficulty))),
+                    timestamp=timestamp,
+                ))
+            if restored:
+                self._lessons[subject.strip().lower()] = restored
 
 
 class TrainingEngine:
