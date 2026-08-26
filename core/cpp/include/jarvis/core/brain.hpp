@@ -12,6 +12,7 @@
 #include "resilience.hpp"
 #include "evolution.hpp"
 #include "planning.hpp"
+#include "reflection.hpp"
 
 #include <cstdint>
 #include <shared_mutex>
@@ -38,6 +39,7 @@ public:
     std::vector<std::pair<std::string, Scalar>> simulate(const std::vector<Belief>& assumptions) const;
     std::vector<Decision> choose(const std::vector<CandidateAction>& actions) const;
     Plan plan(const std::vector<CandidateAction>& actions, std::size_t horizon) const;
+    Reflection reflect() const;
     const AdaptiveMetric* learning_metric(const std::string& key) const noexcept;
     double learning_confidence(const std::string& key) const noexcept;
     AttentionSignal attention() const;
@@ -68,6 +70,7 @@ private:
     ResilienceModel resilience_{};
     EvolutionModel evolution_{};
     Planner planner_{};
+    ReflectionModel reflection_model_{};
     AttentionSignal attention_state_{};
     ThreatAssessment threat_state_{};
 };
