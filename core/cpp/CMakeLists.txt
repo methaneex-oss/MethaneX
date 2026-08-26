@@ -9,10 +9,11 @@ add_library(jarvis_core STATIC
     src/brain.cpp
     src/memory.cpp
     src/world_model.cpp
+    src/causal_model.cpp
+    src/decision.cpp
 )
 
 target_include_directories(jarvis_core PUBLIC include)
-
 target_compile_features(jarvis_core PUBLIC cxx_std_20)
 
 if (MSVC)
