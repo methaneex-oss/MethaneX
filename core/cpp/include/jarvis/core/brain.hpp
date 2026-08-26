@@ -13,6 +13,7 @@
 #include "evolution.hpp"
 #include "planning.hpp"
 #include "reflection.hpp"
+#include "knowledge.hpp"
 
 #include <cstdint>
 #include <shared_mutex>
@@ -34,6 +35,7 @@ class Brain {
 public:
     Brain();
     Observation observe(Event event);
+    double learn(const Evidence& evidence);
     std::vector<Belief> beliefs() const;
     Prediction predict(std::string key, Scalar value, double confidence);
     bool resolve_prediction(const std::string& key, const Scalar& actual);
@@ -41,6 +43,7 @@ public:
     std::vector<Decision> choose(const std::vector<CandidateAction>& actions) const;
     Plan plan(const std::vector<CandidateAction>& actions, std::size_t horizon) const;
     Reflection reflect() const;
+    const KnowledgeMetric* knowledge_source(const std::string& source) const noexcept;
     const AdaptiveMetric* learning_metric(const std::string& key) const noexcept;
     double learning_confidence(const std::string& key) const noexcept;
     AttentionSignal attention() const;
@@ -73,6 +76,7 @@ private:
     EvolutionModel evolution_{};
     Planner planner_{};
     ReflectionModel reflection_model_{};
+    KnowledgeModel knowledge_{};
     AttentionSignal attention_state_{};
     ThreatAssessment threat_state_{};
 };
