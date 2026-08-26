@@ -1,7 +1,6 @@
 #include "jarvis/core/brain.hpp"
 
 #include <algorithm>
-#include <cmath>
 #include <mutex>
 #include <utility>
 
@@ -9,7 +8,9 @@ namespace jarvis::core {
 
 Observation Brain::observe(Event event) {
     std::unique_lock lock(mutex_);
-    const auto before = beliefs();
+    std::vector<Belief> before;
+    before.reserve(beliefs_.size());
+    for (const auto& [_, belief] : beliefs_) before.push_back(belief);
 
     event.sequence = memory_.next_sequence();
     ++state_.events_seen;
@@ -36,12 +37,15 @@ Observation Brain::observe(Event event) {
         world_.observe(Fact{event.source, key, value, 0.7, 1});
     }
 
-    const auto after = beliefs();
+    std::vector<Belief> after;
+    after.reserve(beliefs_.size());
+    for (const auto& [_, belief] : beliefs_) after.push_back(belief);
     causal_.observe_transition(before, after);
     return Observation{std::move(event), novelty};
 }
 
 std::vector<Belief> Brain::beliefs() const {
+    std::shared_lock lock(mutex_);
     std::vector<Belief> result;
     result.reserve(beliefs_.size());
     for (const auto& [_, belief] : beliefs_) result.push_back(belief);
