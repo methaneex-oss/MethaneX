@@ -14,6 +14,7 @@
 #include "planning.hpp"
 #include "reflection.hpp"
 #include "knowledge.hpp"
+#include "self_model.hpp"
 
 #include <cstdint>
 #include <shared_mutex>
@@ -53,6 +54,10 @@ public:
     bool recover(const std::string& component, double restored_health);
     std::vector<EvolutionProposal> evolution_options() const;
     bool adopt_evolution(const EvolutionProposal& proposal);
+    void observe_capability(const std::string& name, double availability, double performance);
+    bool isolate_capability(const std::string& name);
+    bool restore_capability(const std::string& name, double availability, double performance);
+    const SelfModel& self_model() const noexcept { return self_model_; }
     const WorldModel& world() const noexcept { return world_; }
     const Memory& memory() const noexcept { return memory_; }
     BrainState state() const;
@@ -77,6 +82,7 @@ private:
     Planner planner_{};
     ReflectionModel reflection_model_{};
     KnowledgeModel knowledge_{};
+    SelfModel self_model_{};
     AttentionSignal attention_state_{};
     ThreatAssessment threat_state_{};
 };
