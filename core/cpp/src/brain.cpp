@@ -22,8 +22,7 @@ void Brain::replay(const Event& event) {
         else {
             const bool same = it->second.value == value;
             it->second.value = value;
-            it->second.confidence = same ? std::min(0.999, it->second.confidence + (1.0 - it->second.confidence) * 0.12)
-                                         : std::max(0.05, it->second.confidence * 0.82);
+            it->second.confidence = same ? std::min(0.999, it->second.confidence + (1.0 - it->second.confidence) * 0.12) : std::max(0.05, it->second.confidence * 0.82);
             ++it->second.observations;
             it->second.updated_sequence = event.sequence;
         }
@@ -65,8 +64,7 @@ Observation Brain::observe(Event event) {
         else {
             const bool same = it->second.value == value;
             it->second.value = value;
-            it->second.confidence = same ? std::min(0.999, it->second.confidence + (1.0 - it->second.confidence) * 0.12)
-                                         : std::max(0.05, it->second.confidence * 0.82);
+            it->second.confidence = same ? std::min(0.999, it->second.confidence + (1.0 - it->second.confidence) * 0.12) : std::max(0.05, it->second.confidence * 0.82);
             ++it->second.observations;
             it->second.updated_sequence = event.sequence;
         }
@@ -111,21 +109,8 @@ double Brain::learn(const Evidence& evidence) {
     return fused;
 }
 
-std::vector<Belief> Brain::beliefs() const {
-    std::shared_lock lock(mutex_);
-    std::vector<Belief> result;
-    result.reserve(beliefs_.size());
-    for (const auto& [_, belief] : beliefs_) result.push_back(belief);
-    return result;
-}
-
-Prediction Brain::predict(std::string key, Scalar value, double confidence) {
-    std::unique_lock lock(mutex_);
-    Prediction prediction{std::move(key), std::move(value), std::clamp(confidence, 0.0, 1.0), state_.cycle, false, 0.0};
-    evolution_.register_parameter(prediction.key, prediction.confidence);
-    predictions_[prediction.key] = prediction;
-    return prediction;
-}
+std::vector<Belief> Brain::beliefs() const { std::shared_lock lock(mutex_); std::vector<Belief> result; result.reserve(beliefs_.size()); for (const auto& [_, belief] : beliefs_) result.push_back(belief); return result; }
+Prediction Brain::predict(std::string key, Scalar value, double confidence) { std::unique_lock lock(mutex_); Prediction prediction{std::move(key), std::move(value), std::clamp(confidence, 0.0, 1.0), state_.cycle, false, 0.0}; evolution_.register_parameter(prediction.key, prediction.confidence); predictions_[prediction.key] = prediction; return prediction; }
 
 bool Brain::resolve_prediction(const std::string& key, const Scalar& actual) {
     std::unique_lock lock(mutex_);
@@ -133,84 +118,36 @@ bool Brain::resolve_prediction(const std::string& key, const Scalar& actual) {
     if (it == predictions_.end() || it->second.resolved) return false;
     it->second.resolved = true;
     it->second.error = it->second.predicted == actual ? 0.0 : 1.0;
-    if (const auto predicted = std::get_if<double>(&it->second.predicted); predicted != nullptr) {
-        if (const auto observed = std::get_if<double>(&actual); observed != nullptr) adaptation_.observe(key, *predicted, *observed);
-    }
+    if (const auto predicted = std::get_if<double>(&it->second.predicted); predicted != nullptr) if (const auto observed = std::get_if<double>(&actual); observed != nullptr) adaptation_.observe(key, *predicted, *observed);
     evolution_.observe_fitness(key, 1.0 - it->second.error);
     return it->second.error == 0.0;
 }
 
-const KnowledgeMetric* Brain::knowledge_source(const std::string& source) const noexcept {
-    std::shared_lock lock(mutex_);
-    return knowledge_.source_metric(source);
-}
-
-const AdaptiveMetric* Brain::learning_metric(const std::string& key) const noexcept {
-    std::shared_lock lock(mutex_);
-    return adaptation_.metric(key);
-}
-
-double Brain::learning_confidence(const std::string& key) const noexcept {
-    std::shared_lock lock(mutex_);
-    return adaptation_.confidence(key);
-}
-
-std::vector<std::pair<std::string, Scalar>> Brain::simulate(const std::vector<Belief>& assumptions) const {
-    std::shared_lock lock(mutex_);
-    return causal_.predict(assumptions);
-}
-
-std::vector<Decision> Brain::choose(const std::vector<CandidateAction>& actions) const {
-    std::shared_lock lock(mutex_);
-    double strongest = 0.0;
-    for (const auto& [_, belief] : beliefs_) strongest = std::max(strongest, belief.confidence);
-    return decision_.rank(actions, 1.0 - strongest);
-}
-
-Plan Brain::plan(const std::vector<CandidateAction>& actions, std::size_t horizon) const {
-    std::shared_lock lock(mutex_);
-    return planner_.build(actions, horizon);
-}
+const KnowledgeMetric* Brain::knowledge_source(const std::string& source) const noexcept { std::shared_lock lock(mutex_); return knowledge_.source_metric(source); }
+const AdaptiveMetric* Brain::learning_metric(const std::string& key) const noexcept { std::shared_lock lock(mutex_); return adaptation_.metric(key); }
+double Brain::learning_confidence(const std::string& key) const noexcept { std::shared_lock lock(mutex_); return adaptation_.confidence(key); }
+std::vector<std::pair<std::string, Scalar>> Brain::simulate(const std::vector<Belief>& assumptions) const { std::shared_lock lock(mutex_); return causal_.predict(assumptions); }
+std::vector<Decision> Brain::choose(const std::vector<CandidateAction>& actions) const { std::shared_lock lock(mutex_); double strongest = 0.0; for (const auto& [_, belief] : beliefs_) strongest = std::max(strongest, belief.confidence); return decision_.rank(actions, 1.0 - strongest); }
+Plan Brain::plan(const std::vector<CandidateAction>& actions, std::size_t horizon) const { std::shared_lock lock(mutex_); return planner_.build(actions, horizon); }
 
 Reflection Brain::reflect() const {
     std::shared_lock lock(mutex_);
-    std::vector<Belief> beliefs;
-    beliefs.reserve(beliefs_.size());
-    for (const auto& [_, belief] : beliefs_) beliefs.push_back(belief);
-    std::vector<Prediction> predictions;
-    predictions.reserve(predictions_.size());
-    for (const auto& [_, prediction] : predictions_) predictions.push_back(prediction);
+    std::vector<Belief> beliefs; beliefs.reserve(beliefs_.size()); for (const auto& [_, belief] : beliefs_) beliefs.push_back(belief);
+    std::vector<Prediction> predictions; predictions.reserve(predictions_.size()); for (const auto& [_, prediction] : predictions_) predictions.push_back(prediction);
     return reflection_model_.evaluate(beliefs, predictions);
 }
 
 AttentionSignal Brain::attention() const { std::shared_lock lock(mutex_); return attention_state_; }
 ThreatAssessment Brain::threat() const { std::shared_lock lock(mutex_); return threat_state_; }
-
-std::vector<RecoveryPlan> Brain::recovery_options() const {
-    std::shared_lock lock(mutex_);
-    return resilience_.required_recovery();
-}
-
+std::vector<RecoveryPlan> Brain::recovery_options() const { std::shared_lock lock(mutex_); return resilience_.required_recovery(); }
 bool Brain::isolate(const std::string& component) { std::unique_lock lock(mutex_); return resilience_.isolate(component); }
 bool Brain::recover(const std::string& component, double restored_health) { std::unique_lock lock(mutex_); return resilience_.recover(component, restored_health); }
-
 std::vector<EvolutionProposal> Brain::evolution_options() const { std::shared_lock lock(mutex_); return evolution_.propose(); }
 bool Brain::adopt_evolution(const EvolutionProposal& proposal) { std::unique_lock lock(mutex_); return evolution_.adopt(proposal); }
 
-void Brain::observe_capability(const std::string& name, double availability, double performance) {
-    std::unique_lock lock(mutex_);
-    self_model_.observe_capability(name, availability, performance);
-}
-
-bool Brain::isolate_capability(const std::string& name) {
-    std::unique_lock lock(mutex_);
-    return self_model_.isolate(name);
-}
-
-bool Brain::restore_capability(const std::string& name, double availability, double performance) {
-    std::unique_lock lock(mutex_);
-    return self_model_.restore(name, availability, performance);
-}
+void Brain::observe_capability(const std::string& name, double availability, double performance) { std::unique_lock lock(mutex_); self_model_.observe_capability(name, availability, performance); }
+bool Brain::isolate_capability(const std::string& name) { std::unique_lock lock(mutex_); return self_model_.isolate(name); }
+bool Brain::restore_capability(const std::string& name, double availability, double performance) { std::unique_lock lock(mutex_); return self_model_.restore(name, availability, performance); }
 
 BrainState Brain::state() const { std::shared_lock lock(mutex_); return state_; }
 
@@ -218,10 +155,7 @@ double Brain::compute_novelty(const Event& event, const std::vector<Event>& hist
     if (history.empty()) return 1.0;
     const auto& previous = history.back();
     std::size_t differences = event.data.size();
-    for (const auto& [key, value] : event.data) {
-        const auto it = previous.data.find(key);
-        if (it != previous.data.end() && it->second == value) --differences;
-    }
+    for (const auto& [key, value] : event.data) { const auto it = previous.data.find(key); if (it != previous.data.end() && it->second == value) --differences; }
     const double denominator = std::max<std::size_t>(1, event.data.size());
     return std::clamp(static_cast<double>(differences) / denominator, 0.0, 1.0);
 }
