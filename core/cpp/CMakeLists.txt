@@ -19,6 +19,7 @@ add_library(jarvis_core STATIC
     src/planning.cpp
     src/reflection.cpp
     src/knowledge.cpp
+    src/self_model.cpp
 )
 
 target_include_directories(jarvis_core PUBLIC include)
