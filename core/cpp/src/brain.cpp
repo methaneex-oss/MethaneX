@@ -14,7 +14,6 @@ void Brain::replay(const Event& event) {
     std::vector<Belief> before;
     before.reserve(beliefs_.size());
     for (const auto& [_, belief] : beliefs_) before.push_back(belief);
-
     ++state_.events_seen;
     ++state_.cycle;
     for (const auto& [key, value] : event.data) {
@@ -23,9 +22,8 @@ void Brain::replay(const Event& event) {
         else {
             const bool same = it->second.value == value;
             it->second.value = value;
-            it->second.confidence = same
-                ? std::min(0.999, it->second.confidence + (1.0 - it->second.confidence) * 0.12)
-                : std::max(0.05, it->second.confidence * 0.82);
+            it->second.confidence = same ? std::min(0.999, it->second.confidence + (1.0 - it->second.confidence) * 0.12)
+                                         : std::max(0.05, it->second.confidence * 0.82);
             ++it->second.observations;
             it->second.updated_sequence = event.sequence;
         }
@@ -35,7 +33,6 @@ void Brain::replay(const Event& event) {
     after.reserve(beliefs_.size());
     for (const auto& [_, belief] : beliefs_) after.push_back(belief);
     causal_.observe_transition(before, after);
-
     double strongest = 0.0;
     for (const auto& [_, belief] : beliefs_) strongest = std::max(strongest, belief.confidence);
     attention_state_ = attention_model_.score(event, state_.novelty, strongest);
@@ -55,15 +52,12 @@ Observation Brain::observe(Event event) {
     std::vector<Belief> before;
     before.reserve(beliefs_.size());
     for (const auto& [_, belief] : beliefs_) before.push_back(belief);
-
     event.sequence = memory_.next_sequence();
     ++state_.events_seen;
     ++state_.cycle;
-
     const auto history = memory_.recent(1);
     const double novelty = compute_novelty(event, history);
     state_.novelty = novelty;
-
     memory_.append(event);
     for (const auto& [key, value] : event.data) {
         auto it = beliefs_.find(key);
@@ -71,34 +65,29 @@ Observation Brain::observe(Event event) {
         else {
             const bool same = it->second.value == value;
             it->second.value = value;
-            it->second.confidence = same
-                ? std::min(0.999, it->second.confidence + (1.0 - it->second.confidence) * 0.12)
-                : std::max(0.05, it->second.confidence * 0.82);
+            it->second.confidence = same ? std::min(0.999, it->second.confidence + (1.0 - it->second.confidence) * 0.12)
+                                         : std::max(0.05, it->second.confidence * 0.82);
             ++it->second.observations;
             it->second.updated_sequence = event.sequence;
         }
         world_.observe(Fact{event.source, key, value, 0.7, 1});
     }
-
     std::vector<Belief> after;
     after.reserve(beliefs_.size());
     for (const auto& [_, belief] : beliefs_) after.push_back(belief);
     causal_.observe_transition(before, after);
-
     double strongest = 0.0;
     for (const auto& [_, belief] : beliefs_) strongest = std::max(strongest, belief.confidence);
     attention_state_ = attention_model_.score(event, novelty, strongest);
     threat_state_ = threat_model_.assess(event);
     state_.attention = attention_state_.salience;
     state_.threat = threat_state_.score;
-
     if (const auto it = event.data.find("health"); it != event.data.end()) {
         double health = 1.0;
         if (const auto p = std::get_if<double>(&it->second)) health = *p;
         else if (const auto p = std::get_if<std::int64_t>(&it->second)) health = static_cast<double>(*p);
         resilience_.observe(event.source, health);
     }
-
     return Observation{std::move(event), novelty};
 }
 
@@ -108,15 +97,13 @@ double Brain::learn(const Evidence& evidence) {
     const auto sequence = memory_.next_sequence();
     Event event{sequence, 0, evidence.source, "learning", {{evidence.key, evidence.value}, {"reliability", fused}}};
     memory_.append(event);
-
     auto it = beliefs_.find(evidence.key);
     if (it == beliefs_.end()) beliefs_.emplace(evidence.key, Belief{evidence.key, evidence.value, fused, 1, sequence});
     else {
         const double old = it->second.confidence;
         const bool same = it->second.value == evidence.value;
         it->second.value = evidence.value;
-        it->second.confidence = same ? std::min(0.999, old + (1.0 - old) * fused)
-                                     : std::max(0.05, old * (1.0 - fused));
+        it->second.confidence = same ? std::min(0.999, old + (1.0 - old) * fused) : std::max(0.05, old * (1.0 - fused));
         ++it->second.observations;
         it->second.updated_sequence = sequence;
     }
@@ -146,10 +133,8 @@ bool Brain::resolve_prediction(const std::string& key, const Scalar& actual) {
     if (it == predictions_.end() || it->second.resolved) return false;
     it->second.resolved = true;
     it->second.error = it->second.predicted == actual ? 0.0 : 1.0;
-    if (const auto predicted = std::get_if<double>(&it->second.predicted);
-        predicted != nullptr) {
-        if (const auto observed = std::get_if<double>(&actual); observed != nullptr)
-            adaptation_.observe(key, *predicted, *observed);
+    if (const auto predicted = std::get_if<double>(&it->second.predicted); predicted != nullptr) {
+        if (const auto observed = std::get_if<double>(&actual); observed != nullptr) adaptation_.observe(key, *predicted, *observed);
     }
     evolution_.observe_fitness(key, 1.0 - it->second.error);
     return it->second.error == 0.0;
@@ -198,45 +183,36 @@ Reflection Brain::reflect() const {
     return reflection_model_.evaluate(beliefs, predictions);
 }
 
-AttentionSignal Brain::attention() const {
-    std::shared_lock lock(mutex_);
-    return attention_state_;
-}
-
-ThreatAssessment Brain::threat() const {
-    std::shared_lock lock(mutex_);
-    return threat_state_;
-}
+AttentionSignal Brain::attention() const { std::shared_lock lock(mutex_); return attention_state_; }
+ThreatAssessment Brain::threat() const { std::shared_lock lock(mutex_); return threat_state_; }
 
 std::vector<RecoveryPlan> Brain::recovery_options() const {
     std::shared_lock lock(mutex_);
     return resilience_.required_recovery();
 }
 
-bool Brain::isolate(const std::string& component) {
+bool Brain::isolate(const std::string& component) { std::unique_lock lock(mutex_); return resilience_.isolate(component); }
+bool Brain::recover(const std::string& component, double restored_health) { std::unique_lock lock(mutex_); return resilience_.recover(component, restored_health); }
+
+std::vector<EvolutionProposal> Brain::evolution_options() const { std::shared_lock lock(mutex_); return evolution_.propose(); }
+bool Brain::adopt_evolution(const EvolutionProposal& proposal) { std::unique_lock lock(mutex_); return evolution_.adopt(proposal); }
+
+void Brain::observe_capability(const std::string& name, double availability, double performance) {
     std::unique_lock lock(mutex_);
-    return resilience_.isolate(component);
+    self_model_.observe_capability(name, availability, performance);
 }
 
-bool Brain::recover(const std::string& component, double restored_health) {
+bool Brain::isolate_capability(const std::string& name) {
     std::unique_lock lock(mutex_);
-    return resilience_.recover(component, restored_health);
+    return self_model_.isolate(name);
 }
 
-std::vector<EvolutionProposal> Brain::evolution_options() const {
-    std::shared_lock lock(mutex_);
-    return evolution_.propose();
-}
-
-bool Brain::adopt_evolution(const EvolutionProposal& proposal) {
+bool Brain::restore_capability(const std::string& name, double availability, double performance) {
     std::unique_lock lock(mutex_);
-    return evolution_.adopt(proposal);
+    return self_model_.restore(name, availability, performance);
 }
 
-BrainState Brain::state() const {
-    std::shared_lock lock(mutex_);
-    return state_;
-}
+BrainState Brain::state() const { std::shared_lock lock(mutex_); return state_; }
 
 double Brain::compute_novelty(const Event& event, const std::vector<Event>& history) {
     if (history.empty()) return 1.0;
