@@ -7,6 +7,11 @@
 #include "causal_model.hpp"
 #include "decision.hpp"
 #include "adaptation.hpp"
+#include "attention.hpp"
+#include "threat.hpp"
+#include "resilience.hpp"
+#include "evolution.hpp"
+#include "planning.hpp"
 
 #include <cstdint>
 #include <shared_mutex>
@@ -20,6 +25,8 @@ struct BrainState {
     std::uint64_t cycle{0};
     std::uint64_t events_seen{0};
     double novelty{0.0};
+    double attention{0.0};
+    double threat{0.0};
 };
 
 class Brain {
@@ -30,8 +37,16 @@ public:
     bool resolve_prediction(const std::string& key, const Scalar& actual);
     std::vector<std::pair<std::string, Scalar>> simulate(const std::vector<Belief>& assumptions) const;
     std::vector<Decision> choose(const std::vector<CandidateAction>& actions) const;
+    Plan plan(const std::vector<CandidateAction>& actions, std::size_t horizon) const;
     const AdaptiveMetric* learning_metric(const std::string& key) const noexcept;
     double learning_confidence(const std::string& key) const noexcept;
+    AttentionSignal attention() const;
+    ThreatAssessment threat() const;
+    std::vector<RecoveryPlan> recovery_options() const;
+    bool isolate(const std::string& component);
+    bool recover(const std::string& component, double restored_health);
+    std::vector<EvolutionProposal> evolution_options() const;
+    bool adopt_evolution(const EvolutionProposal& proposal);
     const WorldModel& world() const noexcept { return world_; }
     const Memory& memory() const noexcept { return memory_; }
     BrainState state() const;
@@ -48,6 +63,13 @@ private:
     CausalModel causal_{};
     DecisionEngine decision_{};
     AdaptationModel adaptation_{};
+    AttentionModel attention_model_{};
+    ThreatModel threat_model_{};
+    ResilienceModel resilience_{};
+    EvolutionModel evolution_{};
+    Planner planner_{};
+    AttentionSignal attention_state_{};
+    ThreatAssessment threat_state_{};
 };
 
 } // namespace jarvis::core
