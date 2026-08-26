@@ -10,6 +10,7 @@ from .attention import AttentionController, Focus
 from .cognitive_cycle import CognitiveCycle, CycleResult
 from .conflict import ConflictResolver
 from .continuity import Continuity, Experience
+from .evolution import EvolutionEngine, ShadowResult
 from .goals import Goal, GoalArbiter
 from .intelligence import IntelligenceFederator
 from .memory_consolidation import ExperienceRecord, MemoryConsolidator
@@ -30,6 +31,7 @@ class BrainSnapshot:
     active_goals: int
     capabilities: int
     limitations: int
+    evaluated_evolutions: int
 
 
 class Brain:
@@ -42,6 +44,7 @@ class Brain:
         self.attention = AttentionController()
         self.conflicts = ConflictResolver()
         self.adaptations = AdaptationLedger()
+        self.evolution = EvolutionEngine()
         self.goals = GoalArbiter()
         self.intelligence = IntelligenceFederator()
         self.recovery = RecoveryEngine()
@@ -80,6 +83,26 @@ class Brain:
     def record_metric(self, name: str, value: float) -> None:
         self.self_model.record_metric(name, value)
         self._persist()
+
+    def propose_adaptation(self, target: str, change: str, evidence: list[str], expected_benefit: float, reversible: bool = True):
+        proposal = self.adaptations.propose(target, change, evidence, expected_benefit, reversible)
+        self._persist()
+        return proposal
+
+    def evaluate_evolution(
+        self,
+        scorer: Callable[[str, str], tuple[float, float]],
+        *,
+        minimum_improvement: float = 0.0,
+    ) -> tuple[ShadowResult, ...]:
+        """Evaluate reversible adaptations in shadow mode; nothing is applied automatically."""
+        results = self.evolution.evaluate(
+            self.adaptations.proposals,
+            scorer,
+            minimum_improvement=minimum_improvement,
+        )
+        self._persist()
+        return results
 
     def think(
         self,
@@ -123,6 +146,7 @@ class Brain:
             active_goals=sum(goal.active for goal in self.goals.goals.values()),
             capabilities=len(self.self_model.capabilities),
             limitations=len(self.self_model.limitations),
+            evaluated_evolutions=len(self.evolution.history),
         )
 
     def _persist(self) -> None:
@@ -168,6 +192,18 @@ class Brain:
                     "active": goal.active,
                 }
                 for goal in self.goals.goals.values()
+            ],
+            "evolution": [
+                {
+                    "target": result.target,
+                    "change": result.change,
+                    "baseline_score": result.baseline_score,
+                    "candidate_score": result.candidate_score,
+                    "improvement": result.improvement,
+                    "accepted": result.accepted,
+                    "reason": result.reason,
+                }
+                for result in self.evolution.history[-200:]
             ],
         })
 
@@ -266,3 +302,20 @@ class Brain:
                 goal.active = bool(saved.get("active", True))
                 self.goals.goals.pop(generated_id, None)
                 self.goals.goals[saved_id] = goal
+        evolution = state.get("evolution", [])
+        if isinstance(evolution, list):
+            for saved in evolution:
+                if not isinstance(saved, dict):
+                    continue
+                try:
+                    self.evolution.history.append(ShadowResult(
+                        target=str(saved.get("target", "")),
+                        change=str(saved.get("change", "")),
+                        baseline_score=max(0.0, min(1.0, float(saved.get("baseline_score", 0.0)))),
+                        candidate_score=max(0.0, min(1.0, float(saved.get("candidate_score", 0.0)))),
+                        improvement=float(saved.get("improvement", 0.0)),
+                        accepted=bool(saved.get("accepted", False)),
+                        reason=str(saved.get("reason", "")),
+                    ))
+                except (TypeError, ValueError):
+                    continue
