@@ -102,6 +102,28 @@ Observation Brain::observe(Event event) {
     return Observation{std::move(event), novelty};
 }
 
+double Brain::learn(const Evidence& evidence) {
+    std::unique_lock lock(mutex_);
+    const double fused = knowledge_.assimilate(evidence);
+    const auto sequence = memory_.next_sequence();
+    Event event{sequence, 0, evidence.source, "learning", {{evidence.key, evidence.value}, {"reliability", fused}}};
+    memory_.append(event);
+
+    auto it = beliefs_.find(evidence.key);
+    if (it == beliefs_.end()) beliefs_.emplace(evidence.key, Belief{evidence.key, evidence.value, fused, 1, sequence});
+    else {
+        const double old = it->second.confidence;
+        const bool same = it->second.value == evidence.value;
+        it->second.value = evidence.value;
+        it->second.confidence = same ? std::min(0.999, old + (1.0 - old) * fused)
+                                     : std::max(0.05, old * (1.0 - fused));
+        ++it->second.observations;
+        it->second.updated_sequence = sequence;
+    }
+    world_.observe(Fact{evidence.source, evidence.key, evidence.value, fused, 1});
+    return fused;
+}
+
 std::vector<Belief> Brain::beliefs() const {
     std::shared_lock lock(mutex_);
     std::vector<Belief> result;
@@ -131,6 +153,11 @@ bool Brain::resolve_prediction(const std::string& key, const Scalar& actual) {
     }
     evolution_.observe_fitness(key, 1.0 - it->second.error);
     return it->second.error == 0.0;
+}
+
+const KnowledgeMetric* Brain::knowledge_source(const std::string& source) const noexcept {
+    std::shared_lock lock(mutex_);
+    return knowledge_.source_metric(source);
 }
 
 const AdaptiveMetric* Brain::learning_metric(const std::string& key) const noexcept {
