@@ -7,6 +7,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_library(jarvis_core STATIC
     src/brain.cpp
+    src/brain_snapshot.cpp
     src/memory.cpp
     src/world_model.cpp
     src/causal_model.cpp
