@@ -41,6 +41,21 @@ Observation Brain::observe(Event event) {
     after.reserve(beliefs_.size());
     for (const auto& [_, belief] : beliefs_) after.push_back(belief);
     causal_.observe_transition(before, after);
+
+    double strongest = 0.0;
+    for (const auto& [_, belief] : beliefs_) strongest = std::max(strongest, belief.confidence);
+    attention_state_ = attention_model_.score(event, novelty, strongest);
+    threat_state_ = threat_model_.assess(event);
+    state_.attention = attention_state_.salience;
+    state_.threat = threat_state_.score;
+
+    if (const auto it = event.data.find("health"); it != event.data.end()) {
+        double health = 1.0;
+        if (const auto p = std::get_if<double>(&it->second)) health = *p;
+        else if (const auto p = std::get_if<std::int64_t>(&it->second)) health = static_cast<double>(*p);
+        resilience_.observe(event.source, health);
+    }
+
     return Observation{std::move(event), novelty};
 }
 
@@ -55,6 +70,7 @@ std::vector<Belief> Brain::beliefs() const {
 Prediction Brain::predict(std::string key, Scalar value, double confidence) {
     std::unique_lock lock(mutex_);
     Prediction prediction{std::move(key), std::move(value), std::clamp(confidence, 0.0, 1.0), state_.cycle, false, 0.0};
+    evolution_.register_parameter(prediction.key, prediction.confidence);
     predictions_[prediction.key] = prediction;
     return prediction;
 }
@@ -72,6 +88,7 @@ bool Brain::resolve_prediction(const std::string& key, const Scalar& actual) {
             adaptation_.observe(key, *predicted, *observed);
         }
     }
+    evolution_.observe_fitness(key, 1.0 - it->second.error);
     return it->second.error == 0.0;
 }
 
@@ -95,6 +112,46 @@ std::vector<Decision> Brain::choose(const std::vector<CandidateAction>& actions)
     double strongest = 0.0;
     for (const auto& [_, belief] : beliefs_) strongest = std::max(strongest, belief.confidence);
     return decision_.rank(actions, 1.0 - strongest);
+}
+
+Plan Brain::plan(const std::vector<CandidateAction>& actions, std::size_t horizon) const {
+    std::shared_lock lock(mutex_);
+    return planner_.build(actions, horizon);
+}
+
+AttentionSignal Brain::attention() const {
+    std::shared_lock lock(mutex_);
+    return attention_state_;
+}
+
+ThreatAssessment Brain::threat() const {
+    std::shared_lock lock(mutex_);
+    return threat_state_;
+}
+
+std::vector<RecoveryPlan> Brain::recovery_options() const {
+    std::shared_lock lock(mutex_);
+    return resilience_.required_recovery();
+}
+
+bool Brain::isolate(const std::string& component) {
+    std::unique_lock lock(mutex_);
+    return resilience_.isolate(component);
+}
+
+bool Brain::recover(const std::string& component, double restored_health) {
+    std::unique_lock lock(mutex_);
+    return resilience_.recover(component, restored_health);
+}
+
+std::vector<EvolutionProposal> Brain::evolution_options() const {
+    std::shared_lock lock(mutex_);
+    return evolution_.propose();
+}
+
+bool Brain::adopt_evolution(const EvolutionProposal& proposal) {
+    std::unique_lock lock(mutex_);
+    return evolution_.adopt(proposal);
 }
 
 BrainState Brain::state() const {
