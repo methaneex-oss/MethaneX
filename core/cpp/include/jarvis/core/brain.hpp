@@ -32,6 +32,7 @@ struct BrainState {
 
 class Brain {
 public:
+    Brain();
     Observation observe(Event event);
     std::vector<Belief> beliefs() const;
     Prediction predict(std::string key, Scalar value, double confidence);
@@ -55,6 +56,7 @@ public:
 
 private:
     static double compute_novelty(const Event& event, const std::vector<Event>& history);
+    void replay(const Event& event);
 
     mutable std::shared_mutex mutex_;
     BrainState state_{};
