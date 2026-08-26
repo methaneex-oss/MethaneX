@@ -18,6 +18,7 @@ add_library(jarvis_core STATIC
     src/evolution.cpp
     src/planning.cpp
     src/reflection.cpp
+    src/knowledge.cpp
 )
 
 target_include_directories(jarvis_core PUBLIC include)
