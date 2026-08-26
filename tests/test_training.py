@@ -1,6 +1,8 @@
+import tempfile
 import unittest
+from pathlib import Path
 
-from jarvis.training import ExternalTeacher, TeachingExample, TrainingEngine
+from jarvis.training import ExternalTeacher, TeachingExample, TrainingEngine, TrainingMemory
 
 
 class DemoTeacher(ExternalTeacher):
@@ -29,6 +31,29 @@ class TrainingTests(unittest.TestCase):
         result = TrainingEngine().train("math", EmptyTeacher())
         self.assertEqual(result.learned, ())
         self.assertEqual(result.score, 0.0)
+
+    def test_validated_learning_survives_restart(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "training.json"
+            engine = TrainingEngine(TrainingMemory(path))
+            engine.train(
+                "physics",
+                DemoTeacher(),
+                validator=lambda example: example.lesson.startswith("gravity"),
+            )
+
+            restored = TrainingMemory(path)
+            lessons = restored.recall("physics")
+            self.assertEqual(len(lessons), 1)
+            self.assertEqual(lessons[0].lesson, "gravity describes attraction between masses")
+            self.assertEqual(lessons[0].source, "demo-teacher")
+
+    def test_corrupt_training_state_is_ignored(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "training.json"
+            path.write_text('{"lessons": {"physics": ["bad-entry", {"lesson": 4}]}}', encoding="utf-8")
+            memory = TrainingMemory(path)
+            self.assertEqual(memory.recall("physics"), ())
 
 
 if __name__ == "__main__":
