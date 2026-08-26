@@ -6,6 +6,7 @@
 #include "cognition.hpp"
 #include "causal_model.hpp"
 #include "decision.hpp"
+#include "adaptation.hpp"
 
 #include <cstdint>
 #include <shared_mutex>
@@ -29,6 +30,8 @@ public:
     bool resolve_prediction(const std::string& key, const Scalar& actual);
     std::vector<std::pair<std::string, Scalar>> simulate(const std::vector<Belief>& assumptions) const;
     std::vector<Decision> choose(const std::vector<CandidateAction>& actions) const;
+    const AdaptiveMetric* learning_metric(const std::string& key) const noexcept;
+    double learning_confidence(const std::string& key) const noexcept;
     const WorldModel& world() const noexcept { return world_; }
     const Memory& memory() const noexcept { return memory_; }
     BrainState state() const;
@@ -44,6 +47,7 @@ private:
     std::unordered_map<std::string, Prediction> predictions_;
     CausalModel causal_{};
     DecisionEngine decision_{};
+    AdaptationModel adaptation_{};
 };
 
 } // namespace jarvis::core
