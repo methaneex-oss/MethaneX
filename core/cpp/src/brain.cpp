@@ -96,6 +96,7 @@ const KnowledgeMetric* Brain::knowledge_source(const std::string& source) const 
 const AdaptiveMetric* Brain::learning_metric(const std::string& key) const noexcept { std::shared_lock lock(mutex_); return adaptation_.metric(key); }
 double Brain::learning_confidence(const std::string& key) const noexcept { std::shared_lock lock(mutex_); return adaptation_.confidence(key); }
 std::vector<std::pair<std::string, Scalar>> Brain::simulate(const std::vector<Belief>& assumptions) const { std::shared_lock lock(mutex_); return causal_.predict(assumptions); }
+std::vector<CausalLink> Brain::causal_links() const { std::shared_lock lock(mutex_); return causal_.links(); }
 std::vector<Decision> Brain::choose(const std::vector<CandidateAction>& actions) const { std::shared_lock lock(mutex_); double strongest = 0.0; for (const auto& [_, belief] : beliefs_) strongest = std::max(strongest, belief.confidence); return decision_.rank(actions, 1.0 - strongest); }
 Plan Brain::plan(const std::vector<CandidateAction>& actions, std::size_t horizon) const { std::shared_lock lock(mutex_); return planner_.build(actions, horizon); }
 Reflection Brain::reflect() const { std::shared_lock lock(mutex_); std::vector<Belief> bs; std::vector<Prediction> ps; for (const auto& [_, b] : beliefs_) bs.push_back(b); for (const auto& [_, p] : predictions_) ps.push_back(p); return reflection_model_.evaluate(bs, ps); }
