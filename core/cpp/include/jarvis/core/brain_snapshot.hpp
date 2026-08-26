@@ -1,9 +1,8 @@
 #pragma once
 
-#include "jarvis/core/brain.hpp"
+#include "cognition.hpp"
 
 #include <cstdint>
-#include <string>
 #include <vector>
 
 namespace jarvis::core {
