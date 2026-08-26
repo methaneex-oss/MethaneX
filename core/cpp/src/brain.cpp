@@ -119,6 +119,17 @@ Plan Brain::plan(const std::vector<CandidateAction>& actions, std::size_t horizo
     return planner_.build(actions, horizon);
 }
 
+Reflection Brain::reflect() const {
+    std::shared_lock lock(mutex_);
+    std::vector<Belief> beliefs;
+    beliefs.reserve(beliefs_.size());
+    for (const auto& [_, belief] : beliefs_) beliefs.push_back(belief);
+    std::vector<Prediction> predictions;
+    predictions.reserve(predictions_.size());
+    for (const auto& [_, prediction] : predictions_) predictions.push_back(prediction);
+    return reflection_model_.evaluate(beliefs, predictions);
+}
+
 AttentionSignal Brain::attention() const {
     std::shared_lock lock(mutex_);
     return attention_state_;
