@@ -1,6 +1,7 @@
 #include "jarvis/core/world_model.hpp"
 
 #include <algorithm>
+#include <mutex>
 
 namespace jarvis::core {
 
