@@ -6,6 +6,50 @@
 
 namespace jarvis::core {
 
+Brain::Brain() {
+    for (const auto& event : memory_.all()) replay(event);
+}
+
+void Brain::replay(const Event& event) {
+    std::vector<Belief> before;
+    before.reserve(beliefs_.size());
+    for (const auto& [_, belief] : beliefs_) before.push_back(belief);
+
+    ++state_.events_seen;
+    ++state_.cycle;
+    for (const auto& [key, value] : event.data) {
+        auto it = beliefs_.find(key);
+        if (it == beliefs_.end()) beliefs_.emplace(key, Belief{key, value, 0.7, 1, event.sequence});
+        else {
+            const bool same = it->second.value == value;
+            it->second.value = value;
+            it->second.confidence = same
+                ? std::min(0.999, it->second.confidence + (1.0 - it->second.confidence) * 0.12)
+                : std::max(0.05, it->second.confidence * 0.82);
+            ++it->second.observations;
+            it->second.updated_sequence = event.sequence;
+        }
+        world_.observe(Fact{event.source, key, value, 0.7, 1});
+    }
+    std::vector<Belief> after;
+    after.reserve(beliefs_.size());
+    for (const auto& [_, belief] : beliefs_) after.push_back(belief);
+    causal_.observe_transition(before, after);
+
+    double strongest = 0.0;
+    for (const auto& [_, belief] : beliefs_) strongest = std::max(strongest, belief.confidence);
+    attention_state_ = attention_model_.score(event, state_.novelty, strongest);
+    threat_state_ = threat_model_.assess(event);
+    state_.attention = attention_state_.salience;
+    state_.threat = threat_state_.score;
+    if (const auto it = event.data.find("health"); it != event.data.end()) {
+        double health = 1.0;
+        if (const auto p = std::get_if<double>(&it->second)) health = *p;
+        else if (const auto p = std::get_if<std::int64_t>(&it->second)) health = static_cast<double>(*p);
+        resilience_.observe(event.source, health);
+    }
+}
+
 Observation Brain::observe(Event event) {
     std::unique_lock lock(mutex_);
     std::vector<Belief> before;
@@ -23,9 +67,8 @@ Observation Brain::observe(Event event) {
     memory_.append(event);
     for (const auto& [key, value] : event.data) {
         auto it = beliefs_.find(key);
-        if (it == beliefs_.end()) {
-            beliefs_.emplace(key, Belief{key, value, 0.7, 1, event.sequence});
-        } else {
+        if (it == beliefs_.end()) beliefs_.emplace(key, Belief{key, value, 0.7, 1, event.sequence});
+        else {
             const bool same = it->second.value == value;
             it->second.value = value;
             it->second.confidence = same
@@ -81,12 +124,10 @@ bool Brain::resolve_prediction(const std::string& key, const Scalar& actual) {
     if (it == predictions_.end() || it->second.resolved) return false;
     it->second.resolved = true;
     it->second.error = it->second.predicted == actual ? 0.0 : 1.0;
-
     if (const auto predicted = std::get_if<double>(&it->second.predicted);
         predicted != nullptr) {
-        if (const auto observed = std::get_if<double>(&actual); observed != nullptr) {
+        if (const auto observed = std::get_if<double>(&actual); observed != nullptr)
             adaptation_.observe(key, *predicted, *observed);
-        }
     }
     evolution_.observe_fitness(key, 1.0 - it->second.error);
     return it->second.error == 0.0;
