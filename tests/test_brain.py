@@ -55,6 +55,13 @@ class BrainTests(unittest.TestCase):
             self.assertIn("valid", {goal.objective for goal in brain.goals.goals.values()})
             self.assertIn("node", brain.world.entities)
 
+    def test_malformed_cycle_count_fails_closed(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "state.json"
+            path.write_text('{"cycles": "not-a-number"}', encoding="utf-8")
+            brain = Brain(state_path=path)
+            self.assertEqual(brain.snapshot().cycles, 0)
+
 
 if __name__ == "__main__":
     unittest.main()
