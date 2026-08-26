@@ -181,10 +181,19 @@ class Brain:
             self.identity = str(state["identity"])
             self.self_model.identity = self.identity
             self.continuity.identity = self.identity
-        self.cycle.state.cycle_id = int(state.get("cycles", 0))
-        self.cycle.state.history.extend(str(x) for x in state.get("history", [])[-50:])
-        self.self_model.capabilities.update(str(x) for x in state.get("capabilities", []))
-        self.self_model.limitations.update(str(x) for x in state.get("limitations", []))
+        try:
+            self.cycle.state.cycle_id = max(0, int(state.get("cycles", 0)))
+        except (TypeError, ValueError):
+            self.cycle.state.cycle_id = 0
+        history = state.get("history", [])
+        if isinstance(history, list):
+            self.cycle.state.history.extend(str(x) for x in history[-50:])
+        capabilities = state.get("capabilities", [])
+        if isinstance(capabilities, (list, tuple, set)):
+            self.self_model.capabilities.update(str(x) for x in capabilities)
+        limitations = state.get("limitations", [])
+        if isinstance(limitations, (list, tuple, set)):
+            self.self_model.limitations.update(str(x) for x in limitations)
         performance = state.get("performance", {})
         if isinstance(performance, dict):
             for key, value in performance.items():
@@ -216,40 +225,44 @@ class Brain:
                 for relation in relations:
                     if isinstance(relation, (list, tuple)) and len(relation) == 3:
                         self.world.relations.add(tuple(str(x) for x in relation))
-        for saved in state.get("experiences", []):
-            if not isinstance(saved, dict):
-                continue
-            try:
-                timestamp = str(saved.get("timestamp", ""))
-                if timestamp:
-                    datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
-                self.continuity.record(Experience(
-                    cycle_id=int(saved.get("cycle_id", 0)),
-                    goal=str(saved.get("goal", "")),
-                    decision=str(saved.get("decision", "")),
-                    outcome=str(saved.get("outcome", "")),
-                    success=bool(saved.get("success", False)),
-                    confidence=max(0.0, min(1.0, float(saved.get("confidence", 0.0)))),
-                    timestamp=timestamp or datetime.now(timezone.utc).isoformat(),
-                ))
-            except (TypeError, ValueError):
-                continue
-        for saved in state.get("goals", []):
-            if not isinstance(saved, dict):
-                continue
-            objective = str(saved.get("objective", "")).strip()
-            if not objective:
-                continue
-            try:
-                priority = float(saved.get("priority", 0.5))
-                urgency = float(saved.get("urgency", 0.5))
-                confidence = float(saved.get("confidence", 0.5))
-            except (TypeError, ValueError):
-                priority = urgency = confidence = 0.5
-            goal = self.goals.add(objective, priority=priority, urgency=urgency, confidence=confidence)
-            generated_id = goal.id
-            saved_id = str(saved.get("id", generated_id))
-            goal.id = saved_id
-            goal.active = bool(saved.get("active", True))
-            self.goals.goals.pop(generated_id, None)
-            self.goals.goals[saved_id] = goal
+        experiences = state.get("experiences", [])
+        if isinstance(experiences, list):
+            for saved in experiences:
+                if not isinstance(saved, dict):
+                    continue
+                try:
+                    timestamp = str(saved.get("timestamp", ""))
+                    if timestamp:
+                        datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
+                    self.continuity.record(Experience(
+                        cycle_id=int(saved.get("cycle_id", 0)),
+                        goal=str(saved.get("goal", "")),
+                        decision=str(saved.get("decision", "")),
+                        outcome=str(saved.get("outcome", "")),
+                        success=bool(saved.get("success", False)),
+                        confidence=max(0.0, min(1.0, float(saved.get("confidence", 0.0)))),
+                        timestamp=timestamp or datetime.now(timezone.utc).isoformat(),
+                    ))
+                except (TypeError, ValueError):
+                    continue
+        goals = state.get("goals", [])
+        if isinstance(goals, list):
+            for saved in goals:
+                if not isinstance(saved, dict):
+                    continue
+                objective = str(saved.get("objective", "")).strip()
+                if not objective:
+                    continue
+                try:
+                    priority = float(saved.get("priority", 0.5))
+                    urgency = float(saved.get("urgency", 0.5))
+                    confidence = float(saved.get("confidence", 0.5))
+                except (TypeError, ValueError):
+                    priority = urgency = confidence = 0.5
+                goal = self.goals.add(objective, priority=priority, urgency=urgency, confidence=confidence)
+                generated_id = goal.id
+                saved_id = str(saved.get("id", generated_id))
+                goal.id = saved_id
+                goal.active = bool(saved.get("active", True))
+                self.goals.goals.pop(generated_id, None)
+                self.goals.goals[saved_id] = goal
