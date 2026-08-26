@@ -1,11 +1,12 @@
 #pragma once
 
 #include "event.hpp"
+#include "memory.hpp"
 #include "world_model.hpp"
+
 #include <cstdint>
 #include <shared_mutex>
 #include <string>
-#include <vector>
 
 namespace jarvis::core {
 
@@ -19,6 +20,7 @@ class Brain {
 public:
     Observation observe(Event event);
     const WorldModel& world() const noexcept { return world_; }
+    const Memory& memory() const noexcept { return memory_; }
     BrainState state() const;
 
 private:
@@ -27,7 +29,7 @@ private:
     mutable std::shared_mutex mutex_;
     BrainState state_{};
     WorldModel world_{};
-    std::vector<Event> history_;
+    Memory memory_{};
 };
 
 } // namespace jarvis::core
