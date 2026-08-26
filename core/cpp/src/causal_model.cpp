@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <string>
+#include <type_traits>
 
 namespace jarvis::core {
 
@@ -18,15 +19,15 @@ std::string encode(const std::string& key, const Scalar& value) {
 }
 
 void CausalModel::observe_transition(const std::vector<Belief>& before, const std::vector<Belief>& after) {
-    for (const auto& a : after) {
-        const auto prior = std::find_if(before.begin(), before.end(), [&](const Belief& b) { return b.key == a.key; });
-        if (prior == before.end() || prior->value == a.value) continue;
+    for (const auto& current : after) {
+        const auto prior = std::find_if(before.begin(), before.end(), [&](const Belief& belief) { return belief.key == current.key; });
+        if (prior == before.end() || prior->value == current.value) continue;
         for (const auto& effect : after) {
-            if (effect.key == a.key) continue;
-            const auto id = encode(a.key, a.value) + "->" + encode(effect.key, effect.value);
+            if (effect.key == current.key) continue;
+            const auto id = encode(current.key, current.value) + "->" + encode(effect.key, effect.value);
             auto& link = links_[id];
             if (link.observations == 0) {
-                link.cause = encode(a.key, a.value);
+                link.cause = encode(current.key, current.value);
                 link.effect = encode(effect.key, effect.value);
                 link.strength = 0.55;
             } else {
