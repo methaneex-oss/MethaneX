@@ -2,21 +2,22 @@
 
 #include <algorithm>
 #include <cmath>
+#include <utility>
 
 namespace jarvis::core {
 
 void EvolutionModel::register_parameter(std::string key, double initial) {
-    StrategyParameter parameter{key, initial, 0.0, 0};
-    parameters_.try_emplace(std::move(key), parameter);
+    if (key.empty() || !std::isfinite(initial)) return;
+    initial = std::clamp(initial, -1.0, 1.0);
+    parameters_.try_emplace(key, StrategyParameter{std::move(key), initial, 0.0, 0});
 }
 
 void EvolutionModel::observe_fitness(const std::string& key, double fitness) {
     auto it = parameters_.find(key);
-    if (it == parameters_.end()) return;
+    if (it == parameters_.end() || !std::isfinite(fitness)) return;
     auto& p = it->second;
     const double value = std::clamp(fitness, -1.0, 1.0);
-    p.fitness = (p.fitness * static_cast<double>(p.observations) + value) /
-                static_cast<double>(p.observations + 1);
+    p.fitness = (p.fitness * static_cast<double>(p.observations) + value) / static_cast<double>(p.observations + 1);
     ++p.observations;
 }
 
@@ -26,7 +27,7 @@ std::vector<EvolutionProposal> EvolutionModel::propose() const {
         if (p.observations == 0) continue;
         const double direction = p.fitness >= 0.0 ? 1.0 : -1.0;
         const double magnitude = std::clamp(std::abs(p.fitness) * 0.10, 0.005, 0.10);
-        const double proposed = p.value + direction * magnitude;
+        const double proposed = std::clamp(p.value + direction * magnitude, -1.0, 1.0);
         result.push_back(EvolutionProposal{key, p.value, proposed, std::abs(p.fitness) * magnitude});
     }
     return result;
@@ -34,8 +35,9 @@ std::vector<EvolutionProposal> EvolutionModel::propose() const {
 
 bool EvolutionModel::adopt(const EvolutionProposal& proposal) {
     auto it = parameters_.find(proposal.key);
-    if (it == parameters_.end()) return false;
-    it->second.value = proposal.proposed;
+    if (it == parameters_.end() || !std::isfinite(proposal.proposed) || !std::isfinite(proposal.expected_gain)) return false;
+    if (proposal.current != it->second.value || proposal.expected_gain <= 0.0) return false;
+    it->second.value = std::clamp(proposal.proposed, -1.0, 1.0);
     return true;
 }
 
