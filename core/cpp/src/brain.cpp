@@ -1,3 +1,4 @@
+// Cognitive core: state, continuity, learning, evolution and recovery are replayable.
 #include "jarvis/core/brain.hpp"
 
 #include <algorithm>
