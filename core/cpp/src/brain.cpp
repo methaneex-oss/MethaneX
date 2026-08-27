@@ -106,8 +106,10 @@ void Brain::replay(const Event& event) {
     causal_.observe_transition(before, after);
 
     if (event.kind == "observation") {
-        const auto previous = memory_.recent(2);
-        const double novelty = compute_novelty(event, previous);
+        const auto history = memory_.recent(2);
+        const double novelty = history.size() > 1
+            ? compute_novelty(event, {history.front()})
+            : 1.0;
         double strongest = 0.0;
         for (const auto& [_, belief] : beliefs_) strongest = std::max(strongest, belief.confidence);
         attention_state_ = attention_model_.score(event, novelty, strongest);
@@ -135,6 +137,7 @@ Observation Brain::observe(Event event) {
     state_.cycle = event.sequence;
     state_.novelty = novelty;
     replay(event);
+    state_.novelty = novelty;
     return Observation{std::move(event), novelty};
 }
 
@@ -162,7 +165,6 @@ Prediction Brain::predict(std::string key, Scalar value, double confidence) {
     std::unique_lock lock(mutex_);
     Prediction prediction{std::move(key), std::move(value), std::clamp(confidence, 0.0, 1.0),
                           state_.cycle, false, 0.0};
-    predictions_[prediction.key] = prediction;
     Event event{0, now_ns(), "brain", "prediction",
                 {{"key", prediction.key}, {"value", prediction.predicted},
                  {"confidence", prediction.confidence}}};
@@ -196,7 +198,7 @@ const AdaptiveMetric* Brain::learning_metric(const std::string& key) const noexc
 double Brain::learning_confidence(const std::string& key) const noexcept { std::shared_lock lock(mutex_); return adaptation_.confidence(key); }
 std::vector<std::pair<std::string, Scalar>> Brain::simulate(const std::vector<Belief>& assumptions) const { std::shared_lock lock(mutex_); return causal_.predict(assumptions); }
 std::vector<CausalLink> Brain::causal_links() const { std::shared_lock lock(mutex_); return causal_.links(); }
-std::vector<Decision> Brain::choose(const std::vector<CandidateAction>& actions) const { std::shared_lock lock(mutex_); double strongest = 0.0; for (const auto& [_, belief] : beliefs_) strongest = std::max(strongest, belief.confidence); return decision_.rank(actions, 1.0 - strongest, threat_state_.score); }
+std::vector<Decision> Brain::choose(const std::vector<CandidateAction>& actions) const { std::shared_lock lock(mutex_); double strongest = 0.0; for (const auto& [_, b] : beliefs_) strongest = std::max(strongest, b.confidence); return decision_.rank(actions, 1.0 - strongest, threat_state_.score); }
 Plan Brain::plan(const std::vector<CandidateAction>& actions, std::size_t horizon) const { std::shared_lock lock(mutex_); return planner_.build(actions, horizon); }
 Reflection Brain::reflect() const { std::shared_lock lock(mutex_); std::vector<Belief> bs; std::vector<Prediction> ps; for (const auto& [_, b] : beliefs_) bs.push_back(b); for (const auto& [_, p] : predictions_) ps.push_back(p); return reflection_model_.evaluate(bs, ps); }
 AttentionSignal Brain::attention() const { std::shared_lock lock(mutex_); return attention_state_; }
