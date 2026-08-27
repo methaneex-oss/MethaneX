@@ -8,3 +8,8 @@ name = "jarvis_runtime"
 path = "src/lib.rs"
 
 [dependencies]
+
+[lints.rust]
+unsafe_code = "forbid"
+missing_debug_implementations = "warn"
+missing_docs = "warn"
