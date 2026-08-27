@@ -2,6 +2,7 @@
 
 #include "cognition.hpp"
 
+#include <cstddef>
 #include <string>
 #include <vector>
 
