@@ -1,7 +1,7 @@
 #include "jarvis/core/brain.hpp"
 
 #include <cassert>
-#include <cstdint>
+#include <string>
 
 using namespace jarvis::core;
 
@@ -20,7 +20,8 @@ int main() {
     assert(brain.resolve_prediction("test.value", Scalar{0.9}));
 
     const auto reflection = brain.reflect();
-    assert(reflection.predictions >= 1);
+    assert(reflection.prediction_accuracy >= 0.0 && reflection.prediction_accuracy <= 1.0);
+    assert(reflection.coherence >= 0.0 && reflection.coherence <= 1.0);
 
     const auto state = brain.state();
     assert(state.events_seen >= 1);
