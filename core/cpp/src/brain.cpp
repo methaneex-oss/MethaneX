@@ -6,9 +6,7 @@
 
 namespace jarvis::core {
 
-Brain::Brain() {
-    for (const auto& event : memory_.all()) replay(event);
-}
+Brain::Brain() { for (const auto& event : memory_.all()) replay(event); }
 
 void Brain::replay(const Event& event) {
     ++state_.events_seen;
