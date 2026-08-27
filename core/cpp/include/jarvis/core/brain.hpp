@@ -16,7 +16,6 @@
 #include "knowledge.hpp"
 #include "self_model.hpp"
 
-#include <cstddef>
 #include <cstdint>
 #include <shared_mutex>
 #include <string>
