@@ -75,12 +75,7 @@ void Brain::replay(const Event& event) {
     if (event.kind == "evolution_adopt") {
         const auto* key = string_value(event.data, "key");
         if (key == nullptr) return;
-        evolution_.adopt(EvolutionProposal{
-            *key,
-            double_value(event.data, "current"),
-            double_value(event.data, "proposed"),
-            double_value(event.data, "expected_gain"),
-            double_value(event.data, "confidence")});
+        evolution_.adopt(EvolutionProposal{*key, double_value(event.data, "current"), double_value(event.data, "proposed"), double_value(event.data, "expected_gain"), double_value(event.data, "confidence")});
         return;
     }
 
@@ -126,10 +121,11 @@ void Brain::replay(const Event& event) {
     if (event.kind == "learning") reliability = std::clamp(double_value(event.data, "reliability", 0.5), 0.0, 1.0);
 
     if (event.kind == "learning") {
-        const auto key_it = event.data.find("reliability");
-        if (key_it != event.data.end()) {
-            const auto value_it = event.data.begin();
-            if (value_it != event.data.end()) knowledge_.assimilate(Evidence{event.source, value_it->first, value_it->second, reliability});
+        for (const auto& [key, value] : event.data) {
+            if (key != "reliability") {
+                knowledge_.assimilate(Evidence{event.source, key, value, reliability});
+                break;
+            }
         }
     }
 
@@ -251,78 +247,18 @@ Reflection Brain::reflect() const { std::shared_lock lock(mutex_); std::vector<B
 AttentionSignal Brain::attention() const { std::shared_lock lock(mutex_); return attention_state_; }
 ThreatAssessment Brain::threat() const { std::shared_lock lock(mutex_); return threat_state_; }
 std::vector<RecoveryPlan> Brain::recovery_options() const { std::shared_lock lock(mutex_); return resilience_.required_recovery(); }
-bool Brain::isolate(const std::string& component) {
-    std::unique_lock lock(mutex_);
-    if (!resilience_.isolate(component)) return false;
-    Event event{0, now_ns(), "brain", "resilience_isolate", {{"component", component}}};
-    memory_.append(std::move(event)); ++state_.events_seen; ++state_.cycle;
-    return true;
-}
-bool Brain::recover(const std::string& component, double restored_health) {
-    std::unique_lock lock(mutex_);
-    const double health = std::clamp(restored_health, 0.0, 1.0);
-    if (!resilience_.recover(component, health)) return false;
-    Event event{0, now_ns(), "brain", "resilience_recover", {{"component", component}, {"health", health}}};
-    memory_.append(std::move(event)); ++state_.events_seen; ++state_.cycle;
-    return true;
-}
-void Brain::register_evolution_parameter(std::string key, double initial) {
-    std::unique_lock lock(mutex_);
-    evolution_.register_parameter(key, initial);
-    Event event{0, now_ns(), "brain", "evolution_register", {{"key", std::move(key)}, {"initial", initial}}};
-    memory_.append(std::move(event)); ++state_.events_seen; ++state_.cycle;
-}
+bool Brain::isolate(const std::string& component) { std::unique_lock lock(mutex_); if (!resilience_.isolate(component)) return false; Event event{0, now_ns(), "brain", "resilience_isolate", {{"component", component}}}; memory_.append(std::move(event)); ++state_.events_seen; ++state_.cycle; return true; }
+bool Brain::recover(const std::string& component, double restored_health) { std::unique_lock lock(mutex_); const double health = std::clamp(restored_health, 0.0, 1.0); if (!resilience_.recover(component, health)) return false; Event event{0, now_ns(), "brain", "resilience_recover", {{"component", component}, {"health", health}}}; memory_.append(std::move(event)); ++state_.events_seen; ++state_.cycle; return true; }
+void Brain::register_evolution_parameter(std::string key, double initial) { std::unique_lock lock(mutex_); evolution_.register_parameter(key, initial); Event event{0, now_ns(), "brain", "evolution_register", {{"key", key}, {"initial", initial}}}; memory_.append(std::move(event)); ++state_.events_seen; ++state_.cycle; }
 std::vector<EvolutionProposal> Brain::evolution_options() const { std::shared_lock lock(mutex_); return evolution_.propose(); }
-bool Brain::adopt_evolution(const EvolutionProposal& proposal) {
-    std::unique_lock lock(mutex_);
-    if (!evolution_.adopt(proposal)) return false;
-    Event event{0, now_ns(), "brain", "evolution_adopt", {{"key", proposal.key}, {"current", proposal.current}, {"proposed", proposal.proposed}, {"expected_gain", proposal.expected_gain}, {"confidence", proposal.confidence}}};
-    memory_.append(std::move(event)); ++state_.events_seen; ++state_.cycle;
-    return true;
-}
-bool Brain::rollback_evolution(const std::string& key) {
-    std::unique_lock lock(mutex_);
-    if (!evolution_.rollback(key)) return false;
-    Event event{0, now_ns(), "brain", "evolution_rollback", {{"key", key}}};
-    memory_.append(std::move(event)); ++state_.events_seen; ++state_.cycle;
-    return true;
-}
-void Brain::observe_capability(const std::string& name, double availability, double performance) {
-    std::unique_lock lock(mutex_);
-    const double bounded_availability = std::clamp(availability, 0.0, 1.0);
-    const double bounded_performance = std::clamp(performance, 0.0, 1.0);
-    self_model_.observe_capability(name, bounded_availability, bounded_performance);
-    Event event{0, now_ns(), "brain", "capability_observe", {{"name", name}, {"availability", bounded_availability}, {"performance", bounded_performance}}};
-    memory_.append(std::move(event)); ++state_.events_seen; ++state_.cycle;
-}
-bool Brain::isolate_capability(const std::string& name) {
-    std::unique_lock lock(mutex_);
-    if (!self_model_.isolate(name)) return false;
-    Event event{0, now_ns(), "brain", "capability_isolate", {{"name", name}}};
-    memory_.append(std::move(event)); ++state_.events_seen; ++state_.cycle;
-    return true;
-}
-bool Brain::restore_capability(const std::string& name, double availability, double performance) {
-    std::unique_lock lock(mutex_);
-    const double bounded_availability = std::clamp(availability, 0.0, 1.0);
-    const double bounded_performance = std::clamp(performance, 0.0, 1.0);
-    if (!self_model_.restore(name, bounded_availability, bounded_performance)) return false;
-    Event event{0, now_ns(), "brain", "capability_restore", {{"name", name}, {"availability", bounded_availability}, {"performance", bounded_performance}}};
-    memory_.append(std::move(event)); ++state_.events_seen; ++state_.cycle;
-    return true;
-}
+bool Brain::adopt_evolution(const EvolutionProposal& proposal) { std::unique_lock lock(mutex_); if (!evolution_.adopt(proposal)) return false; Event event{0, now_ns(), "brain", "evolution_adopt", {{"key", proposal.key}, {"current", proposal.current}, {"proposed", proposal.proposed}, {"expected_gain", proposal.expected_gain}, {"confidence", proposal.confidence}}}; memory_.append(std::move(event)); ++state_.events_seen; ++state_.cycle; return true; }
+bool Brain::rollback_evolution(const std::string& key) { std::unique_lock lock(mutex_); if (!evolution_.rollback(key)) return false; Event event{0, now_ns(), "brain", "evolution_rollback", {{"key", key}}}; memory_.append(std::move(event)); ++state_.events_seen; ++state_.cycle; return true; }
+void Brain::observe_capability(const std::string& name, double availability, double performance) { std::unique_lock lock(mutex_); const double bounded_availability = std::clamp(availability, 0.0, 1.0); const double bounded_performance = std::clamp(performance, 0.0, 1.0); self_model_.observe_capability(name, bounded_availability, bounded_performance); Event event{0, now_ns(), "brain", "capability_observe", {{"name", name}, {"availability", bounded_availability}, {"performance", bounded_performance}}}; memory_.append(std::move(event)); ++state_.events_seen; ++state_.cycle; }
+bool Brain::isolate_capability(const std::string& name) { std::unique_lock lock(mutex_); if (!self_model_.isolate(name)) return false; Event event{0, now_ns(), "brain", "capability_isolate", {{"name", name}}}; memory_.append(std::move(event)); ++state_.events_seen; ++state_.cycle; return true; }
+bool Brain::restore_capability(const std::string& name, double availability, double performance) { std::unique_lock lock(mutex_); const double bounded_availability = std::clamp(availability, 0.0, 1.0); const double bounded_performance = std::clamp(performance, 0.0, 1.0); if (!self_model_.restore(name, bounded_availability, bounded_performance)) return false; Event event{0, now_ns(), "brain", "capability_restore", {{"name", name}, {"availability", bounded_availability}, {"performance", bounded_performance}}}; memory_.append(std::move(event)); ++state_.events_seen; ++state_.cycle; return true; }
 BrainSnapshot Brain::snapshot() const { std::shared_lock lock(mutex_); BrainSnapshot result; result.state = state_; for (const auto& [_, b] : beliefs_) result.beliefs.push_back(b); for (const auto& [_, p] : predictions_) result.predictions.push_back(p); result.causal_links = causal_.links(); return result; }
 BrainState Brain::state() const { std::shared_lock lock(mutex_); return state_; }
 
-double Brain::compute_novelty(const Event& event, const std::vector<Event>& history) {
-    if (history.empty() || event.data.empty()) return history.empty() ? 1.0 : 0.0;
-    const auto& previous = history.back();
-    std::size_t differences = event.data.size();
-    for (const auto& [key, value] : event.data) {
-        const auto it = previous.data.find(key);
-        if (it != previous.data.end() && it->second == value && differences > 0) --differences;
-    }
-    return std::clamp(static_cast<double>(differences) / static_cast<double>(event.data.size()), 0.0, 1.0);
-}
+double Brain::compute_novelty(const Event& event, const std::vector<Event>& history) { if (history.empty() || event.data.empty()) return history.empty() ? 1.0 : 0.0; const auto& previous = history.back(); std::size_t differences = event.data.size(); for (const auto& [key, value] : event.data) { const auto it = previous.data.find(key); if (it != previous.data.end() && it->second == value && differences > 0) --differences; } return std::clamp(static_cast<double>(differences) / static_cast<double>(event.data.size()), 0.0, 1.0); }
 
 } // namespace jarvis::core
