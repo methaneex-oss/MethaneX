@@ -12,6 +12,8 @@ struct StrategyParameter {
     double value{0.0};
     double fitness{0.0};
     std::uint64_t observations{0};
+    double baseline{0.0};
+    double previous_value{0.0};
 };
 
 struct EvolutionProposal {
@@ -19,6 +21,7 @@ struct EvolutionProposal {
     double current{0.0};
     double proposed{0.0};
     double expected_gain{0.0};
+    double confidence{0.0};
 };
 
 class EvolutionModel {
@@ -27,6 +30,7 @@ public:
     void observe_fitness(const std::string& key, double fitness);
     std::vector<EvolutionProposal> propose() const;
     bool adopt(const EvolutionProposal& proposal);
+    bool rollback(const std::string& key);
     const StrategyParameter* parameter(const std::string& key) const noexcept;
 
 private:
