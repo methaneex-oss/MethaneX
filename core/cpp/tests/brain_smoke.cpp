@@ -15,8 +15,10 @@ int main() {
         jarvis::core::Event event{0, 0, "smoke", "observation", {{"temperature", std::int64_t{25}}, {"status", std::string{"stable"}}}};
         const auto observation = brain.observe(event);
         assert(observation.event.sequence == 1);
+        assert(observation.event.timestamp_ns != 0);
         assert(brain.beliefs().size() == 2);
         assert(brain.state().events_seen == 1);
+        assert(brain.state().cycle == 1);
     }
 
     std::filesystem::remove(path, ec);
