@@ -12,7 +12,8 @@ std::uint64_t now_ns() noexcept {
 }
 }
 
-Brain::Brain() {
+Brain::Brain(std::filesystem::path journal_path)
+    : memory_(256, std::move(journal_path)) {
     const auto history = memory_.all();
     for (const auto& event : history) replay(event);
     state_.events_seen = static_cast<std::uint64_t>(history.size());
@@ -54,13 +55,16 @@ Observation Brain::observe(Event event) {
     event.timestamp_ns = event.timestamp_ns == 0 ? now_ns() : event.timestamp_ns;
     const auto previous = memory_.recent(1);
     const double novelty = compute_novelty(event, previous);
-    std::vector<Belief> before; before.reserve(beliefs_.size());
+    std::vector<Belief> before;
+    before.reserve(beliefs_.size());
     for (const auto& [_, belief] : beliefs_) before.push_back(belief);
     event.sequence = memory_.append(event);
+    ++state_.events_seen;
     ++state_.cycle;
     state_.novelty = novelty;
     replay(event);
-    std::vector<Belief> after; after.reserve(beliefs_.size());
+    std::vector<Belief> after;
+    after.reserve(beliefs_.size());
     for (const auto& [_, belief] : beliefs_) after.push_back(belief);
     causal_.observe_transition(before, after);
     double strongest = 0.0;
