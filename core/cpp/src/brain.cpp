@@ -1,23 +1,38 @@
 #include "jarvis/core/brain.hpp"
 
 #include <algorithm>
+#include <chrono>
 #include <mutex>
 #include <utility>
 
 namespace jarvis::core {
+namespace {
 
-Brain::Brain() { for (const auto& event : memory_.all()) replay(event); }
+std::uint64_t now_ns() noexcept {
+    return static_cast<std::uint64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(
+        std::chrono::steady_clock::now().time_since_epoch()).count());
+}
+
+} // namespace
+
+Brain::Brain() {
+    const auto history = memory_.all();
+    for (const auto& event : history) replay(event);
+    state_.events_seen = static_cast<std::uint64_t>(history.size());
+}
 
 void Brain::replay(const Event& event) {
-    ++state_.events_seen;
     state_.cycle = std::max(state_.cycle, event.sequence);
     for (const auto& [key, value] : event.data) {
         auto it = beliefs_.find(key);
-        if (it == beliefs_.end()) beliefs_.emplace(key, Belief{key, value, 0.7, 1, event.sequence});
-        else {
+        if (it == beliefs_.end()) {
+            beliefs_.emplace(key, Belief{key, value, 0.7, 1, event.sequence});
+        } else {
             const bool same = it->second.value == value;
             it->second.value = value;
-            it->second.confidence = same ? std::min(0.999, it->second.confidence + (1.0 - it->second.confidence) * 0.12) : std::max(0.05, it->second.confidence * 0.82);
+            it->second.confidence = same
+                ? std::min(0.999, it->second.confidence + (1.0 - it->second.confidence) * 0.12)
+                : std::max(0.05, it->second.confidence * 0.82);
             ++it->second.observations;
             it->second.updated_sequence = event.sequence;
         }
@@ -27,12 +42,12 @@ void Brain::replay(const Event& event) {
 
 Observation Brain::observe(Event event) {
     std::unique_lock lock(mutex_);
-    event.sequence = memory_.next_sequence();
-    ++state_.events_seen;
+    event.sequence = memory_.append(Event{0, event.timestamp_ns == 0 ? now_ns() : event.timestamp_ns,
+                                         std::move(event.source), std::move(event.kind), std::move(event.data)});
     ++state_.cycle;
-    const double novelty = compute_novelty(event, memory_.recent(1));
+    const double novelty = compute_novelty(event, memory_.recent(2));
     state_.novelty = novelty;
-    memory_.append(event);
+
     std::vector<Belief> before;
     before.reserve(beliefs_.size());
     for (const auto& [_, belief] : beliefs_) before.push_back(belief);
@@ -41,6 +56,7 @@ Observation Brain::observe(Event event) {
     after.reserve(beliefs_.size());
     for (const auto& [_, belief] : beliefs_) after.push_back(belief);
     causal_.observe_transition(before, after);
+
     double strongest = 0.0;
     for (const auto& [_, belief] : beliefs_) strongest = std::max(strongest, belief.confidence);
     attention_state_ = attention_model_.score(event, novelty, strongest);
@@ -59,10 +75,8 @@ Observation Brain::observe(Event event) {
 double Brain::learn(const Evidence& evidence) {
     std::unique_lock lock(mutex_);
     const double fused = knowledge_.assimilate(evidence);
-    const auto sequence = memory_.next_sequence();
-    Event event{sequence, 0, evidence.source, "learning", {{evidence.key, evidence.value}, {"reliability", fused}}};
-    memory_.append(event);
-    const auto it = beliefs_.find(evidence.key);
+    const auto sequence = memory_.append(Event{0, now_ns(), evidence.source, "learning", {{evidence.key, evidence.value}, {"reliability", fused}}});
+    auto it = beliefs_.find(evidence.key);
     if (it == beliefs_.end()) beliefs_.emplace(evidence.key, Belief{evidence.key, evidence.value, fused, 1, sequence});
     else {
         const double old = it->second.confidence;
@@ -73,6 +87,7 @@ double Brain::learn(const Evidence& evidence) {
         it->second.updated_sequence = sequence;
     }
     world_.observe(Fact{evidence.source, evidence.key, evidence.value, fused, 1});
+    ++state_.cycle;
     return fused;
 }
 
@@ -85,7 +100,8 @@ bool Brain::resolve_prediction(const std::string& key, const Scalar& actual) {
     if (it == predictions_.end() || it->second.resolved) return false;
     it->second.resolved = true;
     it->second.error = it->second.predicted == actual ? 0.0 : 1.0;
-    if (const auto predicted = std::get_if<double>(&it->second.predicted); predicted != nullptr) if (const auto observed = std::get_if<double>(&actual); observed != nullptr) adaptation_.observe(key, *predicted, *observed);
+    if (const auto predicted = std::get_if<double>(&it->second.predicted); predicted != nullptr)
+        if (const auto observed = std::get_if<double>(&actual); observed != nullptr) adaptation_.observe(key, *predicted, *observed);
     evolution_.observe_fitness(key, 1.0 - it->second.error);
     return it->second.error == 0.0;
 }
@@ -113,9 +129,10 @@ BrainState Brain::state() const { std::shared_lock lock(mutex_); return state_; 
 double Brain::compute_novelty(const Event& event, const std::vector<Event>& history) {
     if (history.empty()) return 1.0;
     const auto& previous = history.back();
+    if (event.data.empty()) return 0.0;
     std::size_t differences = event.data.size();
     for (const auto& [key, value] : event.data) { const auto it = previous.data.find(key); if (it != previous.data.end() && it->second == value && differences > 0) --differences; }
-    return std::clamp(static_cast<double>(differences) / static_cast<double>(std::max<std::size_t>(1, event.data.size())), 0.0, 1.0);
+    return std::clamp(static_cast<double>(differences) / static_cast<double>(event.data.size()), 0.0, 1.0);
 }
 
 } // namespace jarvis::core
