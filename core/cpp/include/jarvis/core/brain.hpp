@@ -62,8 +62,10 @@ public:
     std::vector<RecoveryPlan> recovery_options() const;
     bool isolate(const std::string& component);
     bool recover(const std::string& component, double restored_health);
+    void register_evolution_parameter(std::string key, double initial);
     std::vector<EvolutionProposal> evolution_options() const;
     bool adopt_evolution(const EvolutionProposal& proposal);
+    bool rollback_evolution(const std::string& key);
     void observe_capability(const std::string& name, double availability, double performance);
     bool isolate_capability(const std::string& name);
     bool restore_capability(const std::string& name, double availability, double performance);
