@@ -107,9 +107,7 @@ void Brain::replay(const Event& event) {
 
     if (event.kind == "observation") {
         const auto history = memory_.recent(2);
-        const double novelty = history.size() > 1
-            ? compute_novelty(event, {history.front()})
-            : 1.0;
+        const double novelty = history.size() > 1 ? compute_novelty(event, {history.front()}) : 1.0;
         double strongest = 0.0;
         for (const auto& [_, belief] : beliefs_) strongest = std::max(strongest, belief.confidence);
         attention_state_ = attention_model_.score(event, novelty, strongest);
@@ -144,8 +142,7 @@ Observation Brain::observe(Event event) {
 double Brain::learn(const Evidence& evidence) {
     std::unique_lock lock(mutex_);
     const double fused = knowledge_.assimilate(evidence);
-    Event event{0, now_ns(), evidence.source, "learning",
-                {{evidence.key, evidence.value}, {"reliability", fused}}};
+    Event event{0, now_ns(), evidence.source, "learning", {{evidence.key, evidence.value}, {"reliability", fused}}};
     event.sequence = memory_.append(event);
     ++state_.events_seen;
     state_.cycle = event.sequence;
@@ -163,11 +160,8 @@ std::vector<Belief> Brain::beliefs() const {
 
 Prediction Brain::predict(std::string key, Scalar value, double confidence) {
     std::unique_lock lock(mutex_);
-    Prediction prediction{std::move(key), std::move(value), std::clamp(confidence, 0.0, 1.0),
-                          state_.cycle, false, 0.0};
-    Event event{0, now_ns(), "brain", "prediction",
-                {{"key", prediction.key}, {"value", prediction.predicted},
-                 {"confidence", prediction.confidence}}};
+    Prediction prediction{std::move(key), std::move(value), std::clamp(confidence, 0.0, 1.0), state_.cycle, false, 0.0};
+    Event event{0, now_ns(), "brain", "prediction", {{"key", prediction.key}, {"value", prediction.predicted}, {"confidence", prediction.confidence}}};
     event.sequence = memory_.append(std::move(event));
     prediction.created_sequence = event.sequence;
     predictions_[prediction.key] = prediction;
@@ -185,8 +179,7 @@ bool Brain::resolve_prediction(const std::string& key, const Scalar& actual) {
     if (const auto predicted = std::get_if<double>(&it->second.predicted)) {
         if (const auto observed = std::get_if<double>(&actual)) adaptation_.observe(key, *predicted, *observed);
     }
-    Event event{0, now_ns(), "brain", "prediction_outcome",
-                {{"key", key}, {"actual", actual}, {"error", it->second.error}}};
+    Event event{0, now_ns(), "brain", "prediction_outcome", {{"key", key}, {"actual", actual}, {"error", it->second.error}}};
     event.sequence = memory_.append(std::move(event));
     ++state_.events_seen;
     state_.cycle = event.sequence;
