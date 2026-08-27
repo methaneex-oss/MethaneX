@@ -7,14 +7,16 @@ namespace jarvis::core {
 
 AdaptiveMetric AdaptationModel::observe(const std::string& key, double predicted, double actual) {
     auto& metric = metrics_[key];
+    if (!std::isfinite(predicted) || !std::isfinite(actual)) return metric;
     const double p = std::clamp(predicted, 0.0, 1.0);
     const double a = std::clamp(actual, 0.0, 1.0);
     const double error = std::abs(a - p);
-
     ++metric.observations;
     const double rate = 1.0 / static_cast<double>(metric.observations);
     metric.mean_error += (error - metric.mean_error) * rate;
     metric.estimate += (a - metric.estimate) * rate;
+    metric.mean_error = std::clamp(metric.mean_error, 0.0, 1.0);
+    metric.estimate = std::clamp(metric.estimate, 0.0, 1.0);
     return metric;
 }
 
