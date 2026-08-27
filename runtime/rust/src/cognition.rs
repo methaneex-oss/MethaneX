@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Belief {
     pub key: String,
     pub value: String,
@@ -19,22 +19,24 @@ impl CognitiveState {
     pub fn observe(&mut self, key: impl Into<String>, value: impl Into<String>, evidence_strength: f64) {
         let key = key.into();
         let value = value.into();
+        let strength = evidence_strength.clamp(0.0, 1.0);
         match self.beliefs.get_mut(&key) {
             Some(existing) if existing.value == value => {
                 let n = existing.evidence as f64;
-                existing.strength = ((existing.strength * n) + evidence_strength) / (n + 1.0);
+                existing.strength = ((existing.strength * n) + strength) / (n + 1.0);
                 existing.evidence += 1;
             }
-            Some(existing) if evidence_strength > existing.strength => {
-                existing.value = value;
-                existing.strength = evidence_strength;
+            Some(existing) if strength > existing.strength => {
+                existing.value = value.clone();
+                existing.strength = strength;
                 existing.evidence += 1;
             }
             Some(existing) => {
-                existing.strength *= 0.95;
+                existing.strength = (existing.strength * 0.95).max(0.0);
+                existing.evidence += 1;
             }
             None => {
-                self.beliefs.insert(key.clone(), Belief { key, value, strength: evidence_strength, evidence: 1 });
+                self.beliefs.insert(key.clone(), Belief { key, value: value.clone(), strength, evidence: 1 });
             }
         }
         self.cycle += 1;
