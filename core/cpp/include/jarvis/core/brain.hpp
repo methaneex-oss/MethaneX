@@ -15,6 +15,7 @@
 #include "reflection.hpp"
 #include "knowledge.hpp"
 #include "self_model.hpp"
+#include "goals.hpp"
 
 #include <cstdint>
 #include <filesystem>
@@ -39,6 +40,7 @@ struct BrainSnapshot {
     std::vector<Belief> beliefs;
     std::vector<Prediction> predictions;
     std::vector<CausalLink> causal_links;
+    std::vector<Goal> goals;
 };
 
 class Brain {
@@ -70,6 +72,12 @@ public:
     void observe_capability(const std::string& name, double availability, double performance);
     bool isolate_capability(const std::string& name);
     bool restore_capability(const std::string& name, double availability, double performance);
+    bool set_goal(Goal goal);
+    bool update_goal_progress(const std::string& id, double progress);
+    bool complete_goal(const std::string& id);
+    bool remove_goal(const std::string& id);
+    std::vector<Goal> active_goals() const;
+    const Goal* goal(const std::string& id) const noexcept;
     const SelfModel& self_model() const noexcept { return self_model_; }
     const WorldModel& world() const noexcept { return world_; }
     const Memory& memory() const noexcept { return memory_; }
@@ -97,6 +105,7 @@ private:
     ReflectionModel reflection_model_{};
     KnowledgeModel knowledge_{};
     SelfModel self_model_{};
+    GoalModel goals_{};
     AttentionSignal attention_state_{};
     ThreatAssessment threat_state_{};
 };
