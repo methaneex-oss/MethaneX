@@ -1,6 +1,7 @@
 #include "jarvis/core/memory.hpp"
 
 #include <algorithm>
+#include <cmath>
 #include <cstdint>
 #include <fstream>
 #include <mutex>
@@ -120,6 +121,50 @@ std::vector<Event> Memory::recent(std::size_t limit) const {
     std::shared_lock lock(mutex_);
     const auto count = std::min(limit == 0 ? working_limit_ : limit, continuity_.size());
     return std::vector<Event>(continuity_.end() - static_cast<std::ptrdiff_t>(count), continuity_.end());
+}
+
+std::vector<Event> Memory::recall(const Attributes& query, std::size_t limit) const {
+    std::shared_lock lock(mutex_);
+    if (query.empty() || continuity_.empty() || limit == 0) return {};
+
+    struct ScoredEvent {
+        double score;
+        std::size_t index;
+    };
+    std::vector<ScoredEvent> ranked;
+    ranked.reserve(continuity_.size());
+
+    for (std::size_t index = 0; index < continuity_.size(); ++index) {
+        const auto& event = continuity_[index];
+        if (event.data.empty()) continue;
+        double matches = 0.0;
+        double overlap = 0.0;
+        for (const auto& [key, value] : query) {
+            const auto it = event.data.find(key);
+            if (it == event.data.end()) continue;
+            overlap += 1.0;
+            if (it->second == value) matches += 1.0;
+        }
+        if (overlap == 0.0) continue;
+
+        const double key_similarity = matches / static_cast<double>(query.size());
+        const double overlap_ratio = overlap / static_cast<double>(query.size());
+        const double position = static_cast<double>(index + 1) / static_cast<double>(continuity_.size());
+        const double recency = 0.5 + 0.5 * position;
+        ranked.push_back({0.65 * key_similarity + 0.20 * overlap_ratio + 0.15 * recency, index});
+    }
+
+    const auto count = std::min(limit, ranked.size());
+    std::partial_sort(ranked.begin(), ranked.begin() + static_cast<std::ptrdiff_t>(count), ranked.end(),
+        [](const ScoredEvent& a, const ScoredEvent& b) {
+            if (a.score != b.score) return a.score > b.score;
+            return a.index > b.index;
+        });
+
+    std::vector<Event> result;
+    result.reserve(count);
+    for (std::size_t i = 0; i < count; ++i) result.push_back(continuity_[ranked[i].index]);
+    return result;
 }
 
 std::vector<Event> Memory::all() const {
