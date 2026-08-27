@@ -63,6 +63,7 @@ public:
     bool isolate(const std::string& component);
     bool recover(const std::string& component, double restored_health);
     void register_evolution_parameter(std::string key, double initial);
+    void observe_evolution_fitness(const std::string& key, double fitness);
     std::vector<EvolutionProposal> evolution_options() const;
     bool adopt_evolution(const EvolutionProposal& proposal);
     bool rollback_evolution(const std::string& key);
