@@ -11,7 +11,7 @@ int main() {
     std::filesystem::remove(path, ec);
 
     {
-        jarvis::core::Brain brain;
+        jarvis::core::Brain brain(path);
         jarvis::core::Event event{0, 0, "smoke", "observation", {{"temperature", std::int64_t{25}}, {"status", std::string{"stable"}}}};
         const auto observation = brain.observe(event);
         assert(observation.event.sequence == 1);
@@ -19,6 +19,14 @@ int main() {
         assert(brain.beliefs().size() == 2);
         assert(brain.state().events_seen == 1);
         assert(brain.state().cycle == 1);
+    }
+
+    {
+        jarvis::core::Brain restored(path);
+        assert(restored.state().events_seen == 1);
+        assert(restored.state().cycle == 1);
+        assert(restored.beliefs().size() == 2);
+        assert(restored.memory().size() == 1);
     }
 
     std::filesystem::remove(path, ec);
