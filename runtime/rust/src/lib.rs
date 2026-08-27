@@ -1,6 +1,8 @@
 pub mod cognition;
+pub mod error;
 
 use cognition::CognitiveState;
+use error::{RuntimeError, RuntimeResult};
 
 pub struct BrainRuntime {
     pub state: CognitiveState,
@@ -11,8 +13,18 @@ impl BrainRuntime {
         Self { state: CognitiveState::default() }
     }
 
-    pub fn observe(&mut self, key: &str, value: &str, strength: f64) {
-        self.state.observe(key, value, strength.clamp(0.0, 1.0));
+    pub fn observe(&mut self, key: &str, value: &str, strength: f64) -> RuntimeResult<()> {
+        if key.trim().is_empty() {
+            return Err(RuntimeError::InvalidInput("observation key cannot be empty".into()));
+        }
+        if value.trim().is_empty() {
+            return Err(RuntimeError::InvalidInput("observation value cannot be empty".into()));
+        }
+        if !strength.is_finite() {
+            return Err(RuntimeError::InvalidInput("observation strength must be finite".into()));
+        }
+        self.state.observe(key, value, strength);
+        Ok(())
     }
 }
 
