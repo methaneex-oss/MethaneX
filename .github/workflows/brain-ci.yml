@@ -1,0 +1,33 @@
+name: Brain CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'core/cpp/**'
+      - '.github/workflows/brain-ci.yml'
+  pull_request:
+    paths:
+      - 'core/cpp/**'
+      - '.github/workflows/brain-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  native-brain:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Configure
+        run: cmake -S core/cpp -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON
+
+      - name: Build
+        run: cmake --build build --parallel
+
+      - name: Test
+        working-directory: build
+        run: ctest --output-on-failure
