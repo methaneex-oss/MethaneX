@@ -17,6 +17,7 @@
 #include "self_model.hpp"
 
 #include <cstdint>
+#include <filesystem>
 #include <shared_mutex>
 #include <string>
 #include <unordered_map>
@@ -33,9 +34,16 @@ struct BrainState {
     double threat{0.0};
 };
 
+struct BrainSnapshot {
+    BrainState state{};
+    std::vector<Belief> beliefs;
+    std::vector<Prediction> predictions;
+    std::vector<CausalLink> causal_links;
+};
+
 class Brain {
 public:
-    Brain();
+    explicit Brain(std::filesystem::path journal_path = "data/brain/continuity.bin");
     Observation observe(Event event);
     double learn(const Evidence& evidence);
     std::vector<Belief> beliefs() const;
@@ -62,6 +70,7 @@ public:
     const SelfModel& self_model() const noexcept { return self_model_; }
     const WorldModel& world() const noexcept { return world_; }
     const Memory& memory() const noexcept { return memory_; }
+    BrainSnapshot snapshot() const;
     BrainState state() const;
 
 private:
@@ -71,7 +80,7 @@ private:
     mutable std::shared_mutex mutex_;
     BrainState state_{};
     WorldModel world_{};
-    Memory memory_{};
+    Memory memory_;
     std::unordered_map<std::string, Belief> beliefs_;
     std::unordered_map<std::string, Prediction> predictions_;
     CausalModel causal_{};
