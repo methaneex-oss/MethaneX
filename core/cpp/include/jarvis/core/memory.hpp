@@ -22,6 +22,7 @@ public:
     std::uint64_t append(Event event);
     std::optional<Event> latest() const;
     std::vector<Event> recent(std::size_t limit) const;
+    std::vector<Event> recall(const Attributes& query, std::size_t limit = 8) const;
     std::vector<Event> all() const;
     std::vector<Event> by_source(const std::string& source, std::size_t limit = 0) const;
     std::vector<Event> by_kind(const std::string& kind, std::size_t limit = 0) const;
