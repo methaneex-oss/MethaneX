@@ -26,13 +26,7 @@
 namespace jarvis::core {
 
 struct BrainState { std::uint64_t cycle{0}; std::uint64_t events_seen{0}; double novelty{0.0}; double attention{0.0}; double threat{0.0}; };
-
-struct BrainSnapshot {
-    BrainState state{};
-    std::vector<Belief> beliefs;
-    std::vector<Prediction> predictions;
-    std::vector<CausalLink> causal_links;
-};
+struct BrainSnapshot { BrainState state{}; std::vector<Belief> beliefs; std::vector<Prediction> predictions; std::vector<CausalLink> causal_links; };
 
 class Brain {
 public:
@@ -69,15 +63,12 @@ public:
 private:
     static double compute_novelty(const Event& event, const std::vector<Event>& history);
     void replay(const Event& event);
-
     mutable std::shared_mutex mutex_;
     BrainState state_{}; WorldModel world_{}; Memory memory_{};
-    std::unordered_map<std::string, Belief> beliefs_;
-    std::unordered_map<std::string, Prediction> predictions_;
-    CausalModel causal_{}; DecisionEngine decision_{}; AdaptationModel adaptation_{};
-    AttentionModel attention_model_{}; ThreatModel threat_model_{}; ResilienceModel resilience_{};
-    EvolutionModel evolution_{}; Planner planner_{}; ReflectionModel reflection_model_{};
-    KnowledgeModel knowledge_{}; SelfModel self_model_{};
+    std::unordered_map<std::string, Belief> beliefs_; std::unordered_map<std::string, Prediction> predictions_;
+    CausalModel causal_{}; DecisionEngine decision_{}; AdaptationModel adaptation_{}; AttentionModel attention_model_{};
+    ThreatModel threat_model_{}; ResilienceModel resilience_{}; EvolutionModel evolution_{}; Planner planner_{};
+    ReflectionModel reflection_model_{}; KnowledgeModel knowledge_{}; SelfModel self_model_{};
     AttentionSignal attention_state_{}; ThreatAssessment threat_state_{};
 };
 
