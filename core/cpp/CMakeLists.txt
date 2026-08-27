@@ -30,3 +30,8 @@ if (MSVC)
 else()
     target_compile_options(jarvis_core PRIVATE -Wall -Wextra -Wpedantic)
 endif()
+
+include(CTest)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
