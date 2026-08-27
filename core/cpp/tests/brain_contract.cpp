@@ -23,7 +23,14 @@ int main() {
         const auto prediction = brain.predict("test.value", Scalar{0.9}, 0.8);
         assert(prediction.key == "test.value");
         assert(brain.resolve_prediction("test.value", Scalar{0.9}));
-        assert(brain.memory().size() == 3);
+
+        brain.register_evolution_parameter("strategy.rate", 0.5);
+        brain.observe_evolution_fitness("strategy.rate", 0.8);
+        brain.observe_evolution_fitness("strategy.rate", 0.9);
+        const auto proposals = brain.evolution_options();
+        assert(!proposals.empty());
+        assert(brain.adopt_evolution(proposals.front()));
+        assert(brain.rollback_evolution("strategy.rate"));
 
         const auto reflection = brain.reflect();
         assert(reflection.prediction_accuracy >= 0.0 && reflection.prediction_accuracy <= 1.0);
@@ -32,14 +39,15 @@ int main() {
 
     {
         Brain restored(path);
-        assert(restored.state().events_seen == 3);
-        assert(restored.state().cycle == 3);
+        assert(restored.state().events_seen == 8);
+        assert(restored.state().cycle == 8);
         assert(restored.beliefs().size() == 2);
-        assert(restored.memory().size() == 3);
+        assert(restored.memory().size() == 8);
         const auto snapshot = restored.snapshot();
-        assert(snapshot.state.events_seen == 3);
+        assert(snapshot.state.events_seen == 8);
         assert(snapshot.predictions.size() == 1);
         assert(snapshot.predictions.front().resolved);
+        assert(!restored.evolution_options().empty());
     }
 
     std::filesystem::remove(path, ec);
