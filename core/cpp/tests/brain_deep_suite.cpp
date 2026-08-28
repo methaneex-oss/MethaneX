@@ -27,7 +27,8 @@ int main() {
     // Persistence and restart continuity.
     {
         Brain first(journal);
-        first.observe(event(1, "test", "observation", "persistent", 42.0));
+        const auto observed = first.observe(event(0, "test", "observation", "persistent", 42.0));
+        assert(observed.event.sequence == 1);
         assert(first.memory().size() == 1);
         assert(first.memory().next_sequence() == 2);
         const auto snap = first.snapshot();
@@ -41,6 +42,7 @@ int main() {
         assert(latest.has_value());
         assert(latest->kind == "observation");
         assert(restarted.memory().next_sequence() == 2);
+        assert(restarted.state().events_seen == 1);
         assert(!restarted.beliefs().empty());
     }
 
@@ -52,12 +54,16 @@ int main() {
     assert(brain.resolve_prediction("missing", Scalar{1.0}) == false);
     assert(brain.isolate("") == false);
     assert(brain.recover("", 2.0) == false);
-    brain.observe(Event{0, 0, "", "", {}});
+    const auto before_invalid = brain.state().events_seen;
+    const auto empty_observation = brain.observe(Event{0, 0, "", "", {}});
+    assert(empty_observation.novelty == 0.0);
+    assert(brain.state().events_seen == before_invalid + 1);
 
-    // Memory ranking and bounded retrieval.
-    for (std::uint64_t i = 1; i <= 20; ++i) {
-        brain.observe(event(i, "memory", "observation",
-                            i % 2 ? "target" : "noise", static_cast<double>(i)));
+    // Memory ranking and bounded retrieval. Use automatic sequencing to avoid
+    // collisions with the empty observation above.
+    for (int i = 0; i < 20; ++i) {
+        brain.observe(event(0, "memory", "observation",
+                            i % 2 ? "target" : "noise", static_cast<double>(i + 1)));
     }
     const auto recalled = brain.memory().recall(
         Attributes{{"topic", Scalar{std::string("target")}}}, 3);
@@ -76,8 +82,7 @@ int main() {
     brain.observe(event(0, "sensor", "observation", "temperature", 26.0));
     const auto beliefs = brain.beliefs();
     assert(!beliefs.empty());
-    const auto simulation = brain.simulate(beliefs);
-    (void)simulation;
+    (void)brain.simulate(beliefs);
     assert(brain.causal_links().size() >= causal_before);
 
     // Planning, decision, reflection, attention and threat remain callable together.
@@ -134,8 +139,7 @@ int main() {
     for (int w = 0; w < workers; ++w) {
         threads.emplace_back([&brain, w]() {
             for (int i = 0; i < per_worker; ++i) {
-                const auto seq = 10000ULL + static_cast<std::uint64_t>(w * per_worker + i);
-                brain.observe(event(seq, "stress", "observation", "concurrent", 0.5));
+                brain.observe(event(0, "stress", "observation", "concurrent", 0.5));
             }
         });
     }
@@ -145,8 +149,7 @@ int main() {
     // Sustained bounded workload with basic latency accounting.
     const auto start = std::chrono::steady_clock::now();
     for (int i = 0; i < 1000; ++i) {
-        brain.observe(event(30000ULL + static_cast<std::uint64_t>(i),
-                            "benchmark", "observation", "load", 0.25));
+        brain.observe(event(0, "benchmark", "observation", "load", 0.25));
     }
     const auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
         std::chrono::steady_clock::now() - start).count();
@@ -157,8 +160,8 @@ int main() {
     const auto corrupt = root / "corrupt.bin";
     {
         Memory writer(256, corrupt);
-        assert(writer.append(event(1, "recovery", "observation", "valid", 1.0)) == 1);
-        assert(writer.append(event(2, "recovery", "observation", "valid", 2.0)) == 2);
+        assert(writer.append(event(0, "recovery", "observation", "valid", 1.0)) == 1);
+        assert(writer.append(event(0, "recovery", "observation", "valid", 2.0)) == 2);
     }
     {
         std::ofstream out(corrupt, std::ios::binary | std::ios::app);
