@@ -1,7 +1,6 @@
 #include "jarvis/core/memory.hpp"
 
 #include <algorithm>
-#include <cmath>
 #include <cstdint>
 #include <fstream>
 #include <mutex>
@@ -84,31 +83,52 @@ Memory::Memory(std::size_t working_limit, std::filesystem::path journal_path)
 
 std::uint64_t Memory::append(Event event) {
     std::unique_lock lock(mutex_);
-    if (event.sequence == 0) event.sequence = next_sequence_++;
-    else next_sequence_ = std::max(next_sequence_, event.sequence + 1);
-    continuity_.push_back(event);
-    persist(continuity_.back());
-    return continuity_.back().sequence;
+    if (event.sequence == 0) event.sequence = next_sequence_;
+    const auto assigned_sequence = event.sequence;
+    if (!persist(event)) return 0;
+    continuity_.push_back(std::move(event));
+    next_sequence_ = std::max(next_sequence_, assigned_sequence + 1);
+    return assigned_sequence;
 }
 
 void Memory::load() {
     std::unique_lock lock(mutex_);
     std::ifstream in(journal_path_, std::ios::binary);
     if (!in) return;
+
+    std::uintmax_t valid_end = 0;
     Event event;
-    while (read_event(in, event)) {
+    std::uint64_t previous_sequence = 0;
+    while (true) {
+        if (!read_event(in, event)) break;
+        if (event.sequence == 0 || (previous_sequence != 0 && event.sequence <= previous_sequence)) break;
+        previous_sequence = event.sequence;
         next_sequence_ = std::max(next_sequence_, event.sequence + 1);
         continuity_.push_back(std::move(event));
         event = Event{};
+        const auto position = in.tellg();
+        if (position < 0) break;
+        valid_end = static_cast<std::uintmax_t>(position);
+    }
+    in.close();
+
+    std::error_code error;
+    const auto file_size = std::filesystem::file_size(journal_path_, error);
+    if (!error && file_size > valid_end) {
+        std::filesystem::resize_file(journal_path_, valid_end, error);
     }
 }
 
-void Memory::persist(const Event& event) const {
+bool Memory::persist(const Event& event) const {
     std::error_code error;
     if (!journal_path_.parent_path().empty()) std::filesystem::create_directories(journal_path_.parent_path(), error);
-    if (error) return;
+    if (error) return false;
+
     std::ofstream out(journal_path_, std::ios::binary | std::ios::app);
-    if (out) write_event(out, event);
+    if (!out) return false;
+    write_event(out, event);
+    out.flush();
+    return static_cast<bool>(out);
 }
 
 std::optional<Event> Memory::latest() const {
@@ -127,10 +147,7 @@ std::vector<Event> Memory::recall(const Attributes& query, std::size_t limit) co
     std::shared_lock lock(mutex_);
     if (query.empty() || continuity_.empty() || limit == 0) return {};
 
-    struct ScoredEvent {
-        double score;
-        std::size_t index;
-    };
+    struct ScoredEvent { double score; std::size_t index; };
     std::vector<ScoredEvent> ranked;
     ranked.reserve(continuity_.size());
 
@@ -146,7 +163,6 @@ std::vector<Event> Memory::recall(const Attributes& query, std::size_t limit) co
             if (it->second == value) matches += 1.0;
         }
         if (overlap == 0.0) continue;
-
         const double key_similarity = matches / static_cast<double>(query.size());
         const double overlap_ratio = overlap / static_cast<double>(query.size());
         const double position = static_cast<double>(index + 1) / static_cast<double>(continuity_.size());
