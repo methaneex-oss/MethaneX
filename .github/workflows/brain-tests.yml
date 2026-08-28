@@ -3,18 +3,46 @@ name: JARVIS Brain Tests
 on:
   push:
     branches: [main]
+    paths:
+      - 'core/cpp/**'
+      - '.github/workflows/brain-tests.yml'
   pull_request:
+    paths:
+      - 'core/cpp/**'
+      - '.github/workflows/brain-tests.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   brain:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Configure
         run: cmake -S core/cpp -B build -DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - name: Build
         run: cmake --build build --parallel
       - name: Test
         working-directory: build
-        run: ctest --output-on-failure --test-dir .
+        run: ctest --output-on-failure --timeout 60
+
+  sanitizer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Configure sanitizers
+        run: >-
+          cmake -S core/cpp -B build-sanitized
+          -DBUILD_TESTING=ON
+          -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_CXX_FLAGS='-fsanitize=address,undefined -fno-omit-frame-pointer'
+          -DCMAKE_EXE_LINKER_FLAGS='-fsanitize=address,undefined'
+      - name: Build
+        run: cmake --build build-sanitized --parallel
+      - name: Sanitized test
+        working-directory: build-sanitized
+        run: ctest --output-on-failure --timeout 120
