@@ -32,7 +32,7 @@ public:
 
 private:
     void load();
-    void persist(const Event& event) const;
+    bool persist(const Event& event) const;
 
     mutable std::shared_mutex mutex_;
     std::vector<Event> continuity_;
