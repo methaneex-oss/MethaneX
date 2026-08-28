@@ -24,11 +24,15 @@ int main() {
     std::filesystem::create_directories(root, ec);
     const auto journal = root / "continuity.bin";
 
+    // Persistence and restart continuity.
     {
         Brain first(journal);
         first.observe(event(1, "test", "observation", "persistent", 42.0));
         assert(first.memory().size() == 1);
         assert(first.memory().next_sequence() == 2);
+        const auto snap = first.snapshot();
+        assert(snap.state.events_seen == 1);
+        assert(!snap.beliefs.empty());
     }
     {
         Brain restarted(journal);
@@ -37,9 +41,20 @@ int main() {
         assert(latest.has_value());
         assert(latest->kind == "observation");
         assert(restarted.memory().next_sequence() == 2);
+        assert(!restarted.beliefs().empty());
     }
 
     Brain brain(root / "main.bin");
+
+    // Invalid/ambiguous input must not crash the cognitive core.
+    assert(brain.learn(Evidence{"", "", Scalar{}, -5.0}) == 0.0);
+    assert(brain.predict("", Scalar{1.0}, 2.0).key.empty());
+    assert(brain.resolve_prediction("missing", Scalar{1.0}) == false);
+    assert(brain.isolate("") == false);
+    assert(brain.recover("", 2.0) == false);
+    brain.observe(Event{0, 0, "", "", {}});
+
+    // Memory ranking and bounded retrieval.
     for (std::uint64_t i = 1; i <= 20; ++i) {
         brain.observe(event(i, "memory", "observation",
                             i % 2 ? "target" : "noise", static_cast<double>(i)));
@@ -48,7 +63,24 @@ int main() {
         Attributes{{"topic", Scalar{std::string("target")}}}, 3);
     assert(recalled.size() == 3);
     assert(recalled.front().data.at("topic") == Scalar{std::string("target")});
+    assert(brain.memory().recent(0).size() <= 256);
+    assert(brain.memory().recent(2).size() == 2);
+    assert(brain.memory().by_kind("observation", 2).size() == 2);
+    assert(brain.memory().by_source("memory", 2).size() == 2);
 
+    // Learning, causal simulation and observability.
+    const auto learned = brain.learn(Evidence{"trusted", "temperature", Scalar{25.0}, 0.9});
+    assert(learned >= 0.0 && learned <= 1.0);
+    assert(brain.knowledge_source("trusted") != nullptr);
+    const auto causal_before = brain.causal_links().size();
+    brain.observe(event(0, "sensor", "observation", "temperature", 26.0));
+    const auto beliefs = brain.beliefs();
+    assert(!beliefs.empty());
+    const auto simulation = brain.simulate(beliefs);
+    (void)simulation;
+    assert(brain.causal_links().size() >= causal_before);
+
+    // Planning, decision, reflection, attention and threat remain callable together.
     const std::vector<CandidateAction> actions{
         {"safe", 0.9, 0.9, 0.05, 0.9},
         {"risky", 0.95, 0.2, 0.9, 0.8}
@@ -67,10 +99,12 @@ int main() {
     assert(!brain.recovery_options().empty());
     assert(brain.recover("memory", 1.0));
 
-    brain.observe_capability("test-capability", 1.0, 1.0);
+    // Capability loss and restoration, including invalid bounds being safely clamped.
+    brain.observe_capability("test-capability", 2.0, -1.0);
     assert(brain.isolate_capability("test-capability"));
-    assert(brain.restore_capability("test-capability", 1.0, 1.0));
+    assert(brain.restore_capability("test-capability", 2.0, -1.0));
 
+    // Evolution proposal, adoption and rollback.
     brain.register_evolution_parameter("latency", 1.0);
     for (int i = 0; i < 6; ++i) {
         brain.observe_evolution_fitness("latency", 0.8 + 0.02 * i);
@@ -80,14 +114,22 @@ int main() {
     const auto proposal = proposals.front();
     assert(brain.adopt_evolution(proposal));
     assert(brain.rollback_evolution(proposal.key));
+    assert(!brain.adopt_evolution(EvolutionProposal{}));
+    assert(!brain.rollback_evolution(""));
 
-    brain.predict("deep.prediction", Scalar{10.0}, 0.5);
+    // Prediction learning: incorrect and correct outcomes, duplicate resolution and bounds.
+    brain.predict("deep.prediction", Scalar{10.0}, 2.0);
     assert(!brain.resolve_prediction("deep.prediction", Scalar{11.0}));
+    assert(!brain.resolve_prediction("deep.prediction", Scalar{11.0}));
+    brain.predict("correct.prediction", Scalar{10.0}, -1.0);
+    assert(brain.resolve_prediction("correct.prediction", Scalar{10.0}));
     assert(brain.learning_confidence("deep.prediction") >= 0.0);
     assert(brain.learning_confidence("deep.prediction") <= 1.0);
 
+    // Concurrent mixed observations: completion and monotonic accounting.
     constexpr int workers = 16;
     constexpr int per_worker = 100;
+    const auto before_events = brain.state().events_seen;
     std::vector<std::thread> threads;
     for (int w = 0; w < workers; ++w) {
         threads.emplace_back([&brain, w]() {
@@ -98,8 +140,9 @@ int main() {
         });
     }
     for (auto& t : threads) t.join();
-    assert(brain.state().events_seen >= static_cast<std::uint64_t>(workers * per_worker));
+    assert(brain.state().events_seen >= before_events + static_cast<std::uint64_t>(workers * per_worker));
 
+    // Sustained bounded workload with basic latency accounting.
     const auto start = std::chrono::steady_clock::now();
     for (int i = 0; i < 1000; ++i) {
         brain.observe(event(30000ULL + static_cast<std::uint64_t>(i),
@@ -110,14 +153,23 @@ int main() {
     assert(elapsed >= 0);
     assert(brain.state().cycle > 0);
 
+    // Truncated journal recovery: valid prefix survives and corrupt tail is discarded.
     const auto corrupt = root / "corrupt.bin";
     {
-        std::ofstream out(corrupt, std::ios::binary | std::ios::trunc);
+        Memory writer(256, corrupt);
+        assert(writer.append(event(1, "recovery", "observation", "valid", 1.0)) == 1);
+        assert(writer.append(event(2, "recovery", "observation", "valid", 2.0)) == 2);
+    }
+    {
+        std::ofstream out(corrupt, std::ios::binary | std::ios::app);
         const char bytes[] = {0x7f, 0x45, 0x4c, 0x46, 0x00, 0x01, 0x02};
         out.write(bytes, sizeof(bytes));
     }
-    Brain recovered(corrupt);
-    assert(recovered.memory().size() == 0);
+    Memory recovered_memory(256, corrupt);
+    assert(recovered_memory.size() == 2);
+    assert(recovered_memory.next_sequence() == 3);
+    assert(recovered_memory.append(event(0, "recovery", "observation", "after", 3.0)) == 3);
+    assert(recovered_memory.size() == 3);
 
     std::filesystem::remove_all(root, ec);
     return 0;
