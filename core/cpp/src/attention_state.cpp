@@ -10,9 +10,14 @@ void AttentionState::ingest(const AttentionSignal& signal, std::uint64_t cycle) 
     auto& context = contexts_[signal.key];
     context.key = signal.key;
     const double incoming = std::clamp(signal.salience, 0.0, 1.0);
-    context.salience = std::clamp(0.7 * context.salience + 0.3 * incoming, 0.0, 1.0);
+    const double previous_observations = static_cast<double>(context.observations);
+    const double next_observations = previous_observations + 1.0;
+    context.salience = std::clamp(
+        (context.salience * previous_observations + incoming) / next_observations, 0.0, 1.0);
+    const double priority_sample = std::clamp(
+        (incoming + std::clamp(signal.urgency, 0.0, 1.0)) / 2.0, 0.0, 1.0);
     context.priority = std::clamp(
-        0.5 * context.priority + 0.5 * (incoming + signal.urgency) * 0.5, 0.0, 1.0);
+        (context.priority * previous_observations + priority_sample) / next_observations, 0.0, 1.0);
     context.last_seen = cycle;
     ++context.observations;
 }
@@ -21,8 +26,9 @@ void AttentionState::reinforce(const std::string& key, double reward) {
     if (key.empty()) return;
     auto it = contexts_.find(key);
     if (it == contexts_.end()) return;
-    it->second.priority = std::clamp(it->second.priority + std::clamp(reward, 0.0, 1.0) * 0.2, 0.0, 1.0);
-    it->second.salience = std::clamp(it->second.salience + std::clamp(reward, 0.0, 1.0) * 0.1, 0.0, 1.0);
+    const double r = std::clamp(reward, 0.0, 1.0);
+    it->second.priority = std::clamp(it->second.priority + r, 0.0, 1.0);
+    it->second.salience = std::clamp(it->second.salience + r, 0.0, 1.0);
 }
 
 void AttentionState::suppress(const std::string& key, double penalty) {
@@ -30,8 +36,8 @@ void AttentionState::suppress(const std::string& key, double penalty) {
     auto it = contexts_.find(key);
     if (it == contexts_.end()) return;
     const double p = std::clamp(penalty, 0.0, 1.0);
-    it->second.priority = std::clamp(it->second.priority * (1.0 - 0.2 * p), 0.0, 1.0);
-    it->second.salience = std::clamp(it->second.salience * (1.0 - 0.1 * p), 0.0, 1.0);
+    it->second.priority = std::clamp(it->second.priority - p, 0.0, 1.0);
+    it->second.salience = std::clamp(it->second.salience - p, 0.0, 1.0);
 }
 
 std::vector<AttentionContext> AttentionState::focus(std::size_t limit) const {
