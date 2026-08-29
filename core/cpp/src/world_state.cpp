@@ -65,7 +65,7 @@ std::optional<WorldSnapshot> WorldState::at(std::uint64_t sequence) const {
 }
 
 void WorldState::clear() {
-    model_ = WorldModel{};
+    model_.clear();
     history_.clear();
     snapshots_.clear();
 }
