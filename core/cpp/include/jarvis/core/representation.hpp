@@ -10,7 +10,7 @@ namespace jarvis::core {
 
 enum class Modality : std::uint8_t { unknown, text, speech, vision, audio, sensor, system };
 
-enum class RepresentationKind : std::uint8_t { unknown, entity, event, concept, relation, attribute };
+enum class RepresentationKind : std::uint8_t { unknown, entity, event, concept_node, relation, attribute };
 
 struct EvidenceSpan {
     std::string source;
