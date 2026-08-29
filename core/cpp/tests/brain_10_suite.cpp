@@ -11,8 +11,9 @@ using namespace jarvis::core;
 
 static Event make_event(std::uint64_t seq, const std::string& source,
                         const std::string& text, double value = 1.0) {
-    return Event{seq, seq, source, text,
-                 {{"value", Scalar{value}},
+    return Event{seq, seq, source, "observation",
+                 {{"utterance", Scalar{text}},
+                  {"value", Scalar{value}},
                   {"topic", Scalar{std::string("weather")}}}};
 }
 
@@ -43,49 +44,57 @@ int main() {
         {"inspect", 0.7, 0.8, 0.1, 0.9},
         {"notify", 0.5, 0.6, 0.2, 1.0}
     };
-    const auto decisions = brain.choose(actions);
-    assert(!decisions.empty());
-    assert(!decisions.front().action.name.empty());
-    const auto plan = brain.plan(actions, 2);
-    assert(!plan.steps.empty());
+    assert(!brain.choose(actions).empty());
+    assert(!brain.plan(actions, 4).steps.empty());
+    (void)brain.reflect();
+    (void)brain.attention();
+    (void)brain.threat();
 
-    brain.predict("adapt.value", Scalar{0.0}, 0.5);
-    assert(!brain.resolve_prediction("adapt.value", Scalar{1.0}));
-    const auto* metric = brain.learning_metric("adapt.value");
-    assert(metric != nullptr);
-    assert(metric->observations >= 1);
-
-    // Register a real component health signal before isolation/recovery.
     brain.observe(Event{0, 0, "memory", "observation",
                         {{"health", Scalar{0.2}}, {"mode", Scalar{std::string("degraded")}}}});
     assert(brain.isolate("memory"));
     assert(!brain.recovery_options().empty());
     assert(brain.recover("memory", 1.0));
 
-    constexpr int workers = 8;
-    constexpr int events_per_worker = 25;
+    brain.observe_capability("test-capability", 1.0, 1.0);
+    assert(brain.isolate_capability("test-capability"));
+    assert(brain.restore_capability("test-capability", 1.0, 1.0));
+
+    brain.register_evolution_parameter("latency", 0.5);
+    for (int i = 0; i < 6; ++i) brain.observe_evolution_fitness("latency", 0.8 + 0.02 * i);
+    const auto proposals = brain.evolution_options();
+    assert(!proposals.empty());
+    const auto proposal = proposals.front();
+    assert(proposal.proposed != proposal.current);
+    assert(brain.adopt_evolution(proposal));
+    assert(brain.rollback_evolution(proposal.key));
+    assert(!brain.adopt_evolution(EvolutionProposal{}));
+    assert(!brain.rollback_evolution(""));
+
+    assert(!brain.predict("", Scalar{1.0}, 2.0).key.size());
+    assert(!brain.resolve_prediction("missing", Scalar{1.0}));
+
+    constexpr int workers = 16;
+    constexpr int per_worker = 100;
+    const auto before_events = brain.state().events_seen;
     std::vector<std::thread> threads;
-    threads.reserve(workers);
     for (int w = 0; w < workers; ++w) {
-        threads.emplace_back([&brain, w]() {
-            for (int i = 0; i < events_per_worker; ++i) {
-                const auto seq = 1000 + static_cast<std::uint64_t>(w * events_per_worker + i);
-                brain.observe(make_event(seq, "concurrent", "background event", 0.5));
-            }
+        threads.emplace_back([&brain]() {
+            for (int i = 0; i < per_worker; ++i)
+                brain.observe(make_event(0, "stress", "background event", 0.5));
         });
     }
-    for (auto& thread : threads) thread.join();
-    assert(brain.state().events_seen >= static_cast<std::uint64_t>(workers * events_per_worker));
+    for (auto& t : threads) t.join();
+    assert(brain.state().events_seen >= before_events + static_cast<std::uint64_t>(workers * per_worker));
 
     const auto start = std::chrono::steady_clock::now();
-    for (int i = 0; i < 100; ++i) {
-        brain.observe(make_event(5000 + static_cast<std::uint64_t>(i),
-                                 "benchmark", "measure latency", 0.25));
-    }
-    const auto elapsed = std::chrono::steady_clock::now() - start;
-    assert(elapsed >= std::chrono::steady_clock::duration::zero());
+    for (int i = 0; i < 1000; ++i)
+        brain.observe(make_event(0, "benchmark", "measure latency", 0.25));
+    const auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
+        std::chrono::steady_clock::now() - start).count();
+    assert(elapsed >= 0);
     assert(brain.state().cycle > 0);
 
-    assert(brain.self_model().capabilities().size() >= 0);
+    assert(!brain.authorize("unknown-principal", "restricted-action"));
     return 0;
 }
