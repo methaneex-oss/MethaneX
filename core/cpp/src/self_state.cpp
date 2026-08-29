@@ -54,9 +54,9 @@ void SelfStateModel::set_resource_pressure(std::string resource, double pressure
     touch();
 }
 
-void SelfStateModel::synchronize_cycle(std::uint64_t cycle, std::uint64_t events_seen) {
-    if (state_.cycle == cycle && state_.events_seen == events_seen) return;
-    state_.cycle = cycle;
+void SelfStateModel::advance_cycle(std::uint64_t events_seen) {
+    if (state_.events_seen == events_seen) return;
+    ++state_.cycle;
     state_.events_seen = events_seen;
     touch();
 }
