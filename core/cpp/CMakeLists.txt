@@ -18,6 +18,7 @@ add_library(jarvis_core STATIC
     src/resilience.cpp
     src/evolution.cpp
     src/planning.cpp
+    src/reasoning.cpp
     src/reflection.cpp
     src/knowledge.cpp
     src/self_model.cpp
