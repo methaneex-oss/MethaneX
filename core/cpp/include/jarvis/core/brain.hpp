@@ -8,7 +8,6 @@
 #include "decision.hpp"
 #include "adaptation.hpp"
 #include "attention.hpp"
-#include "attention_state.hpp"
 #include "threat.hpp"
 #include "resilience.hpp"
 #include "evolution.hpp"
@@ -61,9 +60,6 @@ public:
     const AdaptiveMetric* learning_metric(const std::string& key) const noexcept;
     double learning_confidence(const std::string& key) const noexcept;
     AttentionSignal attention() const;
-    std::vector<AttentionContext> attention_focus(std::size_t limit) const;
-    void reinforce_attention(const std::string& key, double reward);
-    void suppress_attention(const std::string& key, double penalty);
     ThreatAssessment threat() const;
     std::vector<RecoveryPlan> recovery_options() const;
     bool isolate(const std::string& component);
@@ -98,7 +94,6 @@ private:
     DecisionEngine decision_{};
     AdaptationModel adaptation_{};
     AttentionModel attention_model_{};
-    AttentionState attention_memory_{};
     ThreatModel threat_model_{};
     ResilienceModel resilience_{};
     EvolutionModel evolution_{};
