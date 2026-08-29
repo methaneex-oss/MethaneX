@@ -5,6 +5,7 @@
 
 namespace jarvis::core {
 
+// Layer 1 self-state is deliberately a state model, not a policy engine.
 void SelfStateModel::touch() noexcept {
     ++state_.revision;
 }
