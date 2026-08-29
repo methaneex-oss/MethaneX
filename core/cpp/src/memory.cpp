@@ -89,8 +89,6 @@ Memory::Memory(std::size_t working_limit, std::filesystem::path journal_path)
 std::uint64_t Memory::append(Event event) {
     std::unique_lock lock(mutex_);
 
-    // External callers may provide a stale sequence. Never permit it to
-    // create duplicate/out-of-order continuity records.
     if (event.sequence == 0 || event.sequence < next_sequence_) event.sequence = next_sequence_;
     const auto assigned_sequence = event.sequence;
     if (assigned_sequence == std::numeric_limits<std::uint64_t>::max()) return 0;
@@ -113,26 +111,22 @@ void Memory::load() {
         if (!read_event(in, event)) break;
         if (event.sequence == 0 || (previous_sequence != 0 && event.sequence <= previous_sequence)) break;
         previous_sequence = event.sequence;
-        if (event.sequence == std::numeric_limits<std::uint64_t>::max()) {
-            continuity_.push_back(std::move(event));
-            valid_end = static_cast<std::uintmax_t>(in.tellg());
-            next_sequence_ = std::numeric_limits<std::uint64_t>::max();
-            break;
-        }
-        next_sequence_ = std::max(next_sequence_, event.sequence + 1);
         continuity_.push_back(std::move(event));
-        event = Event{};
         const auto position = in.tellg();
         if (position < 0) break;
         valid_end = static_cast<std::uintmax_t>(position);
+        if (previous_sequence == std::numeric_limits<std::uint64_t>::max()) {
+            next_sequence_ = std::numeric_limits<std::uint64_t>::max();
+            break;
+        }
+        next_sequence_ = std::max(next_sequence_, previous_sequence + 1);
+        event = Event{};
     }
     in.close();
 
     std::error_code error;
     const auto file_size = std::filesystem::file_size(journal_path_, error);
-    if (!error && file_size > valid_end) {
-        std::filesystem::resize_file(journal_path_, valid_end, error);
-    }
+    if (!error && file_size > valid_end) std::filesystem::resize_file(journal_path_, valid_end, error);
 }
 
 bool Memory::persist(const Event& event) const {
@@ -140,11 +134,24 @@ bool Memory::persist(const Event& event) const {
     if (!journal_path_.parent_path().empty()) std::filesystem::create_directories(journal_path_.parent_path(), error);
     if (error) return false;
 
+    std::uintmax_t original_size = 0;
+    if (std::filesystem::exists(journal_path_, error)) {
+        if (error) return false;
+        original_size = std::filesystem::file_size(journal_path_, error);
+        if (error) return false;
+    }
+
     std::ofstream out(journal_path_, std::ios::binary | std::ios::app);
     if (!out) return false;
     write_event(out, event);
     out.flush();
-    return static_cast<bool>(out);
+    const bool ok = static_cast<bool>(out);
+    out.close();
+    if (ok) return true;
+
+    std::error_code rollback_error;
+    std::filesystem::resize_file(journal_path_, original_size, rollback_error);
+    return false;
 }
 
 std::optional<Event> Memory::latest() const {
