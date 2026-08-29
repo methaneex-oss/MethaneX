@@ -24,7 +24,6 @@ int main() {
     std::filesystem::create_directories(root, ec);
     const auto journal = root / "continuity.bin";
 
-    // Persistence and restart continuity.
     {
         Brain first(journal);
         const auto observed = first.observe(event(0, "test", "observation", "persistent", 42.0));
@@ -48,27 +47,26 @@ int main() {
 
     Brain brain(root / "main.bin");
 
-    // Memory must repair stale caller-provided sequence numbers rather than
-    // permitting duplicate or out-of-order continuity records.
-    assert(brain.memory().append(event(100, "sequence", "manual", "sequence", 1.0)) == 100);
-    assert(brain.memory().append(event(1, "sequence", "manual", "sequence", 2.0)) == 101);
-    const auto ordered = brain.memory().all();
+    // Memory sequence normalization is tested through Memory's public API;
+    // Brain intentionally exposes memory as read-only to preserve invariants.
+    Memory sequence_memory(256, root / "sequence.bin");
+    assert(sequence_memory.append(event(100, "sequence", "manual", "sequence", 1.0)) == 100);
+    assert(sequence_memory.append(event(1, "sequence", "manual", "sequence", 2.0)) == 101);
+    const auto ordered = sequence_memory.all();
     assert(ordered.size() == 2);
     assert(ordered[0].sequence == 100 && ordered[1].sequence == 101);
-    assert(brain.memory().next_sequence() == 102);
+    assert(sequence_memory.next_sequence() == 102);
 
-    // Invalid/ambiguous input must not crash the cognitive core.
     assert(brain.learn(Evidence{"", "", Scalar{}, -5.0}) == 0.0);
     assert(brain.predict("", Scalar{1.0}, 2.0).key.empty());
-    assert(brain.resolve_prediction("missing", Scalar{1.0}) == false);
-    assert(brain.isolate("") == false);
-    assert(brain.recover("", 2.0) == false);
+    assert(!brain.resolve_prediction("missing", Scalar{1.0}));
+    assert(!brain.isolate(""));
+    assert(!brain.recover("", 2.0));
     const auto before_invalid = brain.state().events_seen;
     const auto empty_observation = brain.observe(Event{0, 0, "", "", {}});
     assert(empty_observation.novelty == 0.0);
     assert(brain.state().events_seen == before_invalid + 1);
 
-    // Memory ranking and bounded retrieval.
     for (int i = 0; i < 20; ++i) {
         brain.observe(event(0, "memory", "observation",
                             i % 2 ? "target" : "noise", static_cast<double>(i + 1)));
@@ -82,7 +80,6 @@ int main() {
     assert(brain.memory().by_kind("observation", 2).size() == 2);
     assert(brain.memory().by_source("memory", 2).size() == 2);
 
-    // Learning, causal simulation and observability.
     const auto learned = brain.learn(Evidence{"trusted", "temperature", Scalar{25.0}, 0.9});
     assert(learned >= 0.0 && learned <= 1.0);
     assert(brain.knowledge_source("trusted") != nullptr);
@@ -104,7 +101,6 @@ int main() {
     (void)brain.attention();
     (void)brain.threat();
 
-    // Establish a degraded component before exercising isolation/recovery.
     brain.observe(Event{0, 0, "memory", "observation",
                         {{"health", Scalar{0.2}}, {"mode", Scalar{std::string("degraded")}}}});
     assert(brain.isolate("memory"));
