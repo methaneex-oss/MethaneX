@@ -44,7 +44,7 @@ public:
     void set_uncertainty(double uncertainty);
     void set_goals(std::vector<GoalState> goals);
     void set_resource_pressure(std::string resource, double pressure);
-    void synchronize_cycle(std::uint64_t cycle, std::uint64_t events_seen);
+    void advance_cycle(std::uint64_t events_seen);
     SelfState snapshot() const;
 
 private:
