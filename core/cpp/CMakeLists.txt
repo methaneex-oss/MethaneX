@@ -21,6 +21,7 @@ add_library(jarvis_core STATIC
     src/knowledge.cpp
     src/self_model.cpp
     src/self_state.cpp
+    src/representation.cpp
 )
 
 target_include_directories(jarvis_core PUBLIC include)
