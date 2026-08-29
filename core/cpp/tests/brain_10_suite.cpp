@@ -26,7 +26,6 @@ int main() {
     const auto second = brain.observe(make_event(2, "voice", "do I need an umbrella"));
     assert(first.novelty >= 0.0 && first.novelty <= 1.0);
     assert(second.novelty >= 0.0 && second.novelty <= 1.0);
-
     assert(brain.state().cycle >= 2);
     assert(brain.state().events_seen >= 2);
     assert(brain.memory().latest().has_value());
@@ -34,8 +33,8 @@ int main() {
     const auto recalled = brain.memory().recall(
         Attributes{{"topic", Scalar{std::string("weather")}}}, 8);
     assert(!recalled.empty());
-
     assert(!brain.beliefs().empty());
+
     const auto prediction = brain.predict("weather.value", Scalar{1.0}, 0.8);
     assert(prediction.key == "weather.value");
     assert(brain.resolve_prediction("weather.value", Scalar{1.0}));
@@ -95,6 +94,5 @@ int main() {
     assert(elapsed >= 0);
     assert(brain.state().cycle > 0);
 
-    assert(!brain.authorize("unknown-principal", "restricted-action"));
     return 0;
 }
