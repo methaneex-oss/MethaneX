@@ -36,6 +36,20 @@ Brain::Brain(std::filesystem::path journal_path)
     for (const auto& event : history) replay(event);
     state_.events_seen = static_cast<std::uint64_t>(history.size());
     if (!history.empty()) state_.cycle = history.back().sequence;
+    sync_self_state();
+}
+
+void Brain::sync_self_state() {
+    self_state_model_.set_activity(state_.events_seen == 0 ? "idle" : "cognitive_processing");
+    self_state_model_.set_workload(std::clamp(
+        std::min(1.0, static_cast<double>(state_.events_seen % 1000) / 1000.0), 0.0, 1.0));
+    self_state_model_.set_uncertainty(std::clamp(1.0 - state_.attention, 0.0, 1.0));
+    self_state_model_.set_health(CognitiveHealth{
+        std::clamp(1.0 - state_.threat * 0.5, 0.0, 1.0),
+        1.0,
+        std::clamp(1.0 - state_.novelty * 0.1, 0.0, 1.0),
+        1.0});
+    self_state_model_.advance_cycle(state_.events_seen);
 }
 
 void Brain::replay(const Event& event) {
@@ -182,6 +196,7 @@ Observation Brain::observe(Event event) {
     state_.cycle = event.sequence;
     replay(event);
     state_.novelty = novelty;
+    sync_self_state();
     return Observation{std::move(event), novelty};
 }
 
@@ -196,6 +211,7 @@ double Brain::learn(const Evidence& evidence) {
     ++state_.events_seen;
     state_.cycle = event.sequence;
     replay(event);
+    sync_self_state();
     if (const auto* metric = knowledge_.source_metric(evidence.source)) return metric->reliability;
     return reliability;
 }
@@ -221,6 +237,7 @@ Prediction Brain::predict(std::string key, Scalar value, double confidence) {
     predictions_[prediction.key] = prediction;
     ++state_.events_seen;
     state_.cycle = event.sequence;
+    sync_self_state();
     return prediction;
 }
 
@@ -229,18 +246,17 @@ bool Brain::resolve_prediction(const std::string& key, const Scalar& actual) {
     const auto it = predictions_.find(key);
     if (it == predictions_.end() || it->second.resolved) return false;
     const double error = it->second.predicted == actual ? 0.0 : 1.0;
-
     Event event{0, now_ns(), "brain", "prediction_outcome",
         {{"key", key}, {"actual", actual}, {"error", error}}};
     event.sequence = memory_.append(event);
     if (event.sequence == 0) return false;
-
     it->second.resolved = true;
     it->second.error = error;
     if (const auto predicted = std::get_if<double>(&it->second.predicted))
         if (const auto observed = std::get_if<double>(&actual)) adaptation_.observe(key, *predicted, *observed);
     ++state_.events_seen;
     state_.cycle = event.sequence;
+    sync_self_state();
     return error == 0.0;
 }
 
@@ -318,6 +334,7 @@ bool Brain::isolate(const std::string& component) {
     }
     ++state_.events_seen;
     state_.cycle = event.sequence;
+    sync_self_state();
     return true;
 }
 
@@ -333,6 +350,7 @@ bool Brain::recover(const std::string& component, double restored_health) {
     }
     ++state_.events_seen;
     state_.cycle = event.sequence;
+    sync_self_state();
     return true;
 }
 
@@ -345,6 +363,7 @@ void Brain::register_evolution_parameter(std::string key, double initial) {
     if (event.sequence == 0) return;
     ++state_.events_seen;
     state_.cycle = event.sequence;
+    sync_self_state();
 }
 
 void Brain::observe_evolution_fitness(const std::string& key, double fitness) {
@@ -357,6 +376,7 @@ void Brain::observe_evolution_fitness(const std::string& key, double fitness) {
     if (event.sequence == 0) return;
     ++state_.events_seen;
     state_.cycle = event.sequence;
+    sync_self_state();
 }
 
 std::vector<EvolutionProposal> Brain::evolution_options() const {
@@ -377,6 +397,7 @@ bool Brain::adopt_evolution(const EvolutionProposal& proposal) {
     }
     ++state_.events_seen;
     state_.cycle = event.sequence;
+    sync_self_state();
     return true;
 }
 
@@ -391,10 +412,11 @@ bool Brain::rollback_evolution(const std::string& key) {
     }
     ++state_.events_seen;
     state_.cycle = event.sequence;
+    sync_self_state();
     return true;
 }
 
-void Brain::observe_capability(const std::string& name, double availability, double performance) {
+void Brain::observe_capability(std::string name, double availability, double performance) {
     std::unique_lock lock(mutex_);
     if (name.empty()) return;
     const double a = std::clamp(availability, 0.0, 1.0);
@@ -406,6 +428,7 @@ void Brain::observe_capability(const std::string& name, double availability, dou
     if (event.sequence == 0) return;
     ++state_.events_seen;
     state_.cycle = event.sequence;
+    sync_self_state();
 }
 
 bool Brain::isolate_capability(const std::string& name) {
@@ -419,6 +442,7 @@ bool Brain::isolate_capability(const std::string& name) {
     }
     ++state_.events_seen;
     state_.cycle = event.sequence;
+    sync_self_state();
     return true;
 }
 
@@ -436,6 +460,7 @@ bool Brain::restore_capability(const std::string& name, double availability, dou
     }
     ++state_.events_seen;
     state_.cycle = event.sequence;
+    sync_self_state();
     return true;
 }
 
@@ -443,6 +468,7 @@ BrainSnapshot Brain::snapshot() const {
     std::shared_lock lock(mutex_);
     BrainSnapshot result;
     result.state = state_;
+    result.self_state = self_state_model_.snapshot();
     result.beliefs.reserve(beliefs_.size());
     result.predictions.reserve(predictions_.size());
     for (const auto& [_, belief] : beliefs_) result.beliefs.push_back(belief);
