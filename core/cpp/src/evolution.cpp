@@ -33,7 +33,7 @@ std::vector<EvolutionProposal> EvolutionModel::propose() const {
         const double direction = p.fitness >= 0.0 ? 1.0 : -1.0;
         const double proposed = std::clamp(p.value + direction * magnitude, -1.0, 1.0);
         const double gain = std::abs(p.fitness) * magnitude;
-        if (gain > 0.0) {
+        if (gain > 0.0 && proposed != p.value) {
             result.push_back(EvolutionProposal{key, p.value, proposed, gain, confidence});
         }
     }
@@ -44,8 +44,8 @@ bool EvolutionModel::adopt(const EvolutionProposal& proposal) {
     auto it = parameters_.find(proposal.key);
     if (it == parameters_.end() || !std::isfinite(proposal.proposed) ||
         !std::isfinite(proposal.expected_gain) || !std::isfinite(proposal.confidence)) return false;
-    if (proposal.current != it->second.value || proposal.expected_gain <= 0.0 ||
-        proposal.confidence <= 0.0) return false;
+    if (proposal.current != it->second.value || proposal.proposed == proposal.current ||
+        proposal.expected_gain <= 0.0 || proposal.confidence <= 0.0) return false;
     it->second.previous_value = it->second.value;
     it->second.value = std::clamp(proposal.proposed, -1.0, 1.0);
     return true;
