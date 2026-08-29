@@ -15,11 +15,26 @@ struct AttentionSignal {
     double urgency{0.0};
 };
 
+struct AttentionPolicy {
+    double novelty_weight{1.0};
+    double uncertainty_weight{1.0};
+    double urgency_weight{1.0};
+};
+
 class AttentionModel {
 public:
+    AttentionModel() = default;
+
     AttentionSignal score(const Event& event, double novelty, double strongest_belief) const;
     std::vector<AttentionSignal> focus(const std::vector<Event>& events,
                                        double strongest_belief) const;
+
+    void reinforce(const AttentionSignal& signal, double reward);
+    void suppress(const AttentionSignal& signal, double penalty);
+    AttentionPolicy policy() const noexcept;
+
+private:
+    AttentionPolicy policy_{};
 };
 
 } // namespace jarvis::core
