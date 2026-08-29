@@ -2,12 +2,14 @@
 
 #include "event.hpp"
 
+#include <array>
 #include <cstddef>
 #include <cstdint>
 #include <filesystem>
 #include <optional>
 #include <shared_mutex>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 namespace jarvis::core {
@@ -26,10 +28,9 @@ struct MemoryRecord {
     double confidence{0.5};
 };
 
-// Memory is continuity: working context stays fast, while the durable event
-// sequence remains recoverable across restarts. Tier assignment and retrieval
-// are deterministic and provider-independent; higher cognition may promote
-// records without changing the underlying event journal.
+// Memory is continuity. Tier selection, salience and retrieval are learned
+// from memory feedback rather than encoded as event-kind rules or fixed
+// cognitive weights.
 class Memory {
 public:
     explicit Memory(std::size_t working_limit = 256,
@@ -59,6 +60,7 @@ private:
     bool persist(const Event& event) const;
     static double default_salience(const Event& event) noexcept;
     static double default_confidence(const Event& event) noexcept;
+    static std::size_t tier_index(MemoryTier tier) noexcept;
 
     mutable std::shared_mutex mutex_;
     std::vector<Event> continuity_;
@@ -66,6 +68,7 @@ private:
     std::size_t working_limit_;
     std::uint64_t next_sequence_{1};
     std::filesystem::path journal_path_;
+    std::unordered_map<std::string, std::array<double, 4>> learned_tiers_;
 };
 
 } // namespace jarvis::core
