@@ -21,6 +21,7 @@ struct CognitiveHealth {
 };
 
 struct SelfState {
+    std::uint64_t revision{0};
     std::uint64_t cycle{0};
     std::uint64_t events_seen{0};
     std::string activity;
@@ -43,6 +44,7 @@ public:
     SelfState snapshot() const;
 
 private:
+    void touch() noexcept;
     SelfState state_{};
 };
 
