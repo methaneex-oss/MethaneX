@@ -20,10 +20,7 @@ void SelfStateModel::set_health(CognitiveHealth health) {
     health.memory = std::clamp(health.memory, 0.0, 1.0);
     health.reasoning = std::clamp(health.reasoning, 0.0, 1.0);
     health.execution = std::clamp(health.execution, 0.0, 1.0);
-    if (state_.health.overall == health.overall &&
-        state_.health.memory == health.memory &&
-        state_.health.reasoning == health.reasoning &&
-        state_.health.execution == health.execution) return;
+    if (state_.health == health) return;
     state_.health = health;
     touch();
 }
@@ -57,9 +54,9 @@ void SelfStateModel::set_resource_pressure(std::string resource, double pressure
     touch();
 }
 
-void SelfStateModel::advance_cycle(std::uint64_t events_seen) {
-    if (state_.events_seen == events_seen) return;
-    ++state_.cycle;
+void SelfStateModel::synchronize_cycle(std::uint64_t cycle, std::uint64_t events_seen) {
+    if (state_.cycle == cycle && state_.events_seen == events_seen) return;
+    state_.cycle = cycle;
     state_.events_seen = events_seen;
     touch();
 }
