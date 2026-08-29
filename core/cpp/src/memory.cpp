@@ -3,11 +3,15 @@
 #include <algorithm>
 #include <cstdint>
 #include <fstream>
+#include <limits>
 #include <mutex>
 #include <utility>
 
 namespace jarvis::core {
 namespace {
+
+constexpr std::uint64_t kMaxSerializedSize = 1ULL << 30;
+constexpr std::uint64_t kMaxAttributes = 1ULL << 20;
 
 void write_string(std::ostream& out, const std::string& value) {
     const auto size = static_cast<std::uint64_t>(value.size());
@@ -18,8 +22,9 @@ void write_string(std::ostream& out, const std::string& value) {
 bool read_string(std::istream& in, std::string& value) {
     std::uint64_t size{};
     if (!in.read(reinterpret_cast<char*>(&size), sizeof(size))) return false;
-    if (size > (1ULL << 30)) return false;
+    if (size > kMaxSerializedSize) return false;
     value.resize(static_cast<std::size_t>(size));
+    if (size == 0) return true;
     return static_cast<bool>(in.read(value.data(), static_cast<std::streamsize>(size)));
 }
 
@@ -63,13 +68,13 @@ bool read_event(std::istream& in, Event& event) {
     if (!in.read(reinterpret_cast<char*>(&event.timestamp_ns), sizeof(event.timestamp_ns))) return false;
     if (!read_string(in, event.source) || !read_string(in, event.kind)) return false;
     std::uint64_t count{};
-    if (!in.read(reinterpret_cast<char*>(&count), sizeof(count)) || count > (1ULL << 20)) return false;
+    if (!in.read(reinterpret_cast<char*>(&count), sizeof(count)) || count > kMaxAttributes) return false;
     event.data.clear();
     for (std::uint64_t i = 0; i < count; ++i) {
         std::string key;
         Scalar value;
         if (!read_string(in, key) || !read_scalar(in, value)) return false;
-        event.data.emplace(std::move(key), std::move(value));
+        event.data.insert_or_assign(std::move(key), std::move(value));
     }
     return true;
 }
@@ -83,11 +88,16 @@ Memory::Memory(std::size_t working_limit, std::filesystem::path journal_path)
 
 std::uint64_t Memory::append(Event event) {
     std::unique_lock lock(mutex_);
-    if (event.sequence == 0) event.sequence = next_sequence_;
+
+    // External callers may provide a stale sequence. Never permit it to
+    // create duplicate/out-of-order continuity records.
+    if (event.sequence == 0 || event.sequence < next_sequence_) event.sequence = next_sequence_;
     const auto assigned_sequence = event.sequence;
+    if (assigned_sequence == std::numeric_limits<std::uint64_t>::max()) return 0;
+
     if (!persist(event)) return 0;
     continuity_.push_back(std::move(event));
-    next_sequence_ = std::max(next_sequence_, assigned_sequence + 1);
+    next_sequence_ = assigned_sequence + 1;
     return assigned_sequence;
 }
 
@@ -103,6 +113,12 @@ void Memory::load() {
         if (!read_event(in, event)) break;
         if (event.sequence == 0 || (previous_sequence != 0 && event.sequence <= previous_sequence)) break;
         previous_sequence = event.sequence;
+        if (event.sequence == std::numeric_limits<std::uint64_t>::max()) {
+            continuity_.push_back(std::move(event));
+            valid_end = static_cast<std::uintmax_t>(in.tellg());
+            next_sequence_ = std::numeric_limits<std::uint64_t>::max();
+            break;
+        }
         next_sequence_ = std::max(next_sequence_, event.sequence + 1);
         continuity_.push_back(std::move(event));
         event = Event{};
