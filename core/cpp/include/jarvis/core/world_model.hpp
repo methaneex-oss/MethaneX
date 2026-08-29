@@ -1,6 +1,7 @@
 #pragma once
 
 #include "event.hpp"
+#include <cstdint>
 #include <optional>
 #include <shared_mutex>
 #include <string>
@@ -14,6 +15,9 @@ struct Fact {
     Scalar value;
     double confidence{0.5};
     std::uint64_t observations{1};
+    std::uint64_t first_sequence{0};
+    std::uint64_t updated_sequence{0};
+    bool disputed{false};
 };
 
 struct Relation {
@@ -21,6 +25,8 @@ struct Relation {
     std::string type;
     std::string to;
     double confidence{0.5};
+    std::uint64_t updated_sequence{0};
+    bool disputed{false};
 };
 
 class WorldModel {
@@ -30,6 +36,8 @@ public:
     std::optional<Fact> query(const std::string& subject, const std::string& predicate) const;
     std::vector<Relation> relations_from(const std::string& subject) const;
     std::vector<Fact> facts() const;
+    std::vector<Fact> disputed_facts() const;
+    void clear();
 
 private:
     std::vector<Fact> facts_;
