@@ -1,6 +1,7 @@
 #include "jarvis/core/memory.hpp"
 
 #include <algorithm>
+#include <cmath>
 #include <cstdint>
 #include <fstream>
 #include <limits>
@@ -150,15 +151,18 @@ bool Memory::persist(const Event& event) const {
 }
 
 MemoryTier Memory::tier_of(const Event& event) const noexcept {
-    if (event.kind == "action" || event.kind == "procedure" || event.kind == "skill") return MemoryTier::Procedural;
-    if (event.kind == "learning" || event.kind == "belief" || event.kind == "knowledge") return MemoryTier::Semantic;
-    if (event.kind == "observation" || event.kind == "prediction" || event.kind == "prediction_outcome") return MemoryTier::Working;
-    return MemoryTier::Episodic;
+    const auto it = learned_tiers_.find(event.kind);
+    if (it == learned_tiers_.end()) return MemoryTier::Episodic;
+    const auto& scores = it->second;
+    const auto best = std::max_element(scores.begin(), scores.end());
+    return static_cast<MemoryTier>(std::distance(scores.begin(), best));
 }
 
 double Memory::default_salience(const Event& event) noexcept {
-    if (event.kind == "alert" || event.kind == "threat" || event.kind == "failure") return 1.0;
-    if (event.kind == "learning" || event.kind == "action") return 0.8;
+    const auto it = event.data.find("salience");
+    if (it != event.data.end()) {
+        if (const auto p = std::get_if<double>(&it->second)) return std::clamp(*p, 0.0, 1.0);
+    }
     return 0.5;
 }
 
@@ -168,6 +172,10 @@ double Memory::default_confidence(const Event& event) noexcept {
         if (const auto p = std::get_if<double>(&it->second)) return std::clamp(*p, 0.0, 1.0);
     }
     return 0.5;
+}
+
+std::size_t Memory::tier_index(MemoryTier tier) noexcept {
+    return static_cast<std::size_t>(tier);
 }
 
 std::optional<Event> Memory::latest() const { std::shared_lock lock(mutex_); if (continuity_.empty()) return std::nullopt; return continuity_.back(); }
@@ -194,11 +202,19 @@ std::vector<MemoryRecord> Memory::recall_ranked(const Attributes& query, std::si
             if (it->second == value) matches += 1.0;
         }
         if (overlap == 0.0) continue;
-        const double key_similarity = matches / static_cast<double>(query.size());
-        const double overlap_ratio = overlap / static_cast<double>(query.size());
-        const double recency = 0.5 + 0.5 * static_cast<double>(index + 1) / static_cast<double>(metadata_.size());
-        const double score = 0.45 * key_similarity + 0.15 * overlap_ratio + 0.20 * recency +
-                             0.15 * record.salience + 0.05 * record.confidence;
+        const double denominator = static_cast<double>(query.size());
+        const double key_similarity = matches / denominator;
+        const double overlap_ratio = overlap / denominator;
+        const double recency = static_cast<double>(index + 1) / static_cast<double>(metadata_.size());
+        const double components[] = {
+            std::max(key_similarity, std::numeric_limits<double>::min()),
+            std::max(overlap_ratio, std::numeric_limits<double>::min()),
+            std::max(recency, std::numeric_limits<double>::min()),
+            std::max(record.salience, std::numeric_limits<double>::min()),
+            std::max(record.confidence, std::numeric_limits<double>::min())};
+        double product = 1.0;
+        for (const double component : components) product *= component;
+        const double score = std::pow(product, 1.0 / static_cast<double>(std::size(components)));
         ranked.push_back({score, index});
     }
     const auto count = std::min(limit, ranked.size());
@@ -206,7 +222,7 @@ std::vector<MemoryRecord> Memory::recall_ranked(const Attributes& query, std::si
         [](const Scored& a, const Scored& b) { return a.score != b.score ? a.score > b.score : a.index > b.index; });
     std::vector<MemoryRecord> result;
     result.reserve(count);
-    for (std::size_t i = 0; i < count; ++i) result.push_back(ranked[i].index < metadata_.size() ? metadata_[ranked[i].index] : MemoryRecord{});
+    for (std::size_t i = 0; i < count; ++i) result.push_back(metadata_[ranked[i].index]);
     return result;
 }
 
@@ -237,20 +253,21 @@ bool Memory::promote(std::uint64_t sequence, MemoryTier tier, double salience, d
     it->tier = tier;
     it->salience = std::clamp(salience, 0.0, 1.0);
     it->confidence = std::clamp(confidence, 0.0, 1.0);
+    auto& scores = learned_tiers_[it->event.kind];
+    scores[tier_index(tier)] += 1.0;
     return true;
 }
 
 bool Memory::forget_working(std::size_t keep) {
     std::unique_lock lock(mutex_);
-    std::size_t working_count = 0;
-    for (const auto& record : metadata_) if (record.tier == MemoryTier::Working) ++working_count;
-    if (working_count <= keep) return true;
-    const auto remove_count = working_count - keep;
-    std::size_t removed = 0;
-    for (auto& record : metadata_) {
-        if (removed >= remove_count) break;
-        if (record.tier == MemoryTier::Working) { record.tier = MemoryTier::Episodic; ++removed; }
-    }
+    std::vector<MemoryRecord*> working;
+    for (auto& record : metadata_) if (record.tier == MemoryTier::Working) working.push_back(&record);
+    if (working.size() <= keep) return true;
+    std::sort(working.begin(), working.end(), [](const MemoryRecord* a, const MemoryRecord* b) {
+        return a->event.sequence < b->event.sequence;
+    });
+    const auto remove_count = working.size() - keep;
+    for (std::size_t i = 0; i < remove_count; ++i) working[i]->tier = MemoryTier::Episodic;
     return true;
 }
 
