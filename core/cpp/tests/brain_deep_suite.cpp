@@ -48,6 +48,15 @@ int main() {
 
     Brain brain(root / "main.bin");
 
+    // Memory must repair stale caller-provided sequence numbers rather than
+    // permitting duplicate or out-of-order continuity records.
+    assert(brain.memory().append(event(100, "sequence", "manual", "sequence", 1.0)) == 100);
+    assert(brain.memory().append(event(1, "sequence", "manual", "sequence", 2.0)) == 101);
+    const auto ordered = brain.memory().all();
+    assert(ordered.size() == 2);
+    assert(ordered[0].sequence == 100 && ordered[1].sequence == 101);
+    assert(brain.memory().next_sequence() == 102);
+
     // Invalid/ambiguous input must not crash the cognitive core.
     assert(brain.learn(Evidence{"", "", Scalar{}, -5.0}) == 0.0);
     assert(brain.predict("", Scalar{1.0}, 2.0).key.empty());
@@ -59,8 +68,7 @@ int main() {
     assert(empty_observation.novelty == 0.0);
     assert(brain.state().events_seen == before_invalid + 1);
 
-    // Memory ranking and bounded retrieval. Use automatic sequencing to avoid
-    // collisions with the empty observation above.
+    // Memory ranking and bounded retrieval.
     for (int i = 0; i < 20; ++i) {
         brain.observe(event(0, "memory", "observation",
                             i % 2 ? "target" : "noise", static_cast<double>(i + 1)));
@@ -85,7 +93,6 @@ int main() {
     (void)brain.simulate(beliefs);
     assert(brain.causal_links().size() >= causal_before);
 
-    // Planning, decision, reflection, attention and threat remain callable together.
     const std::vector<CandidateAction> actions{
         {"safe", 0.9, 0.9, 0.05, 0.9},
         {"risky", 0.95, 0.2, 0.9, 0.8}
@@ -104,16 +111,12 @@ int main() {
     assert(!brain.recovery_options().empty());
     assert(brain.recover("memory", 1.0));
 
-    // Capability loss and restoration, including invalid bounds being safely clamped.
     brain.observe_capability("test-capability", 2.0, -1.0);
     assert(brain.isolate_capability("test-capability"));
     assert(brain.restore_capability("test-capability", 2.0, -1.0));
 
-    // Evolution proposal, adoption and rollback.
     brain.register_evolution_parameter("latency", 1.0);
-    for (int i = 0; i < 6; ++i) {
-        brain.observe_evolution_fitness("latency", 0.8 + 0.02 * i);
-    }
+    for (int i = 0; i < 6; ++i) brain.observe_evolution_fitness("latency", 0.8 + 0.02 * i);
     const auto proposals = brain.evolution_options();
     assert(!proposals.empty());
     const auto proposal = proposals.front();
@@ -122,7 +125,6 @@ int main() {
     assert(!brain.adopt_evolution(EvolutionProposal{}));
     assert(!brain.rollback_evolution(""));
 
-    // Prediction learning: incorrect and correct outcomes, duplicate resolution and bounds.
     brain.predict("deep.prediction", Scalar{10.0}, 2.0);
     assert(!brain.resolve_prediction("deep.prediction", Scalar{11.0}));
     assert(!brain.resolve_prediction("deep.prediction", Scalar{11.0}));
@@ -131,13 +133,12 @@ int main() {
     assert(brain.learning_confidence("deep.prediction") >= 0.0);
     assert(brain.learning_confidence("deep.prediction") <= 1.0);
 
-    // Concurrent mixed observations: completion and monotonic accounting.
     constexpr int workers = 16;
     constexpr int per_worker = 100;
     const auto before_events = brain.state().events_seen;
     std::vector<std::thread> threads;
     for (int w = 0; w < workers; ++w) {
-        threads.emplace_back([&brain, w]() {
+        threads.emplace_back([&brain]() {
             for (int i = 0; i < per_worker; ++i) {
                 brain.observe(event(0, "stress", "observation", "concurrent", 0.5));
             }
@@ -146,7 +147,6 @@ int main() {
     for (auto& t : threads) t.join();
     assert(brain.state().events_seen >= before_events + static_cast<std::uint64_t>(workers * per_worker));
 
-    // Sustained bounded workload with basic latency accounting.
     const auto start = std::chrono::steady_clock::now();
     for (int i = 0; i < 1000; ++i) {
         brain.observe(event(0, "benchmark", "observation", "load", 0.25));
@@ -156,7 +156,6 @@ int main() {
     assert(elapsed >= 0);
     assert(brain.state().cycle > 0);
 
-    // Truncated journal recovery: valid prefix survives and corrupt tail is discarded.
     const auto corrupt = root / "corrupt.bin";
     {
         Memory writer(256, corrupt);
