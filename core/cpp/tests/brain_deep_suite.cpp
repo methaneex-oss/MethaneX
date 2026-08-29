@@ -47,8 +47,6 @@ int main() {
 
     Brain brain(root / "main.bin");
 
-    // Memory sequence normalization is tested through Memory's public API;
-    // Brain intentionally exposes memory as read-only to preserve invariants.
     Memory sequence_memory(256, root / "sequence.bin");
     assert(sequence_memory.append(event(100, "sequence", "manual", "sequence", 1.0)) == 100);
     assert(sequence_memory.append(event(1, "sequence", "manual", "sequence", 2.0)) == 101);
@@ -107,15 +105,16 @@ int main() {
     assert(!brain.recovery_options().empty());
     assert(brain.recover("memory", 1.0));
 
-    brain.observe_capability("test-capability", 2.0, -1.0);
+    brain.observe_capability("test-capability", 1.0, 1.0);
     assert(brain.isolate_capability("test-capability"));
-    assert(brain.restore_capability("test-capability", 2.0, -1.0));
+    assert(brain.restore_capability("test-capability", 1.0, 1.0));
 
-    brain.register_evolution_parameter("latency", 1.0);
+    brain.register_evolution_parameter("latency", 0.5);
     for (int i = 0; i < 6; ++i) brain.observe_evolution_fitness("latency", 0.8 + 0.02 * i);
     const auto proposals = brain.evolution_options();
     assert(!proposals.empty());
     const auto proposal = proposals.front();
+    assert(proposal.proposed != proposal.current);
     assert(brain.adopt_evolution(proposal));
     assert(brain.rollback_evolution(proposal.key));
     assert(!brain.adopt_evolution(EvolutionProposal{}));
@@ -135,18 +134,16 @@ int main() {
     std::vector<std::thread> threads;
     for (int w = 0; w < workers; ++w) {
         threads.emplace_back([&brain]() {
-            for (int i = 0; i < per_worker; ++i) {
+            for (int i = 0; i < per_worker; ++i)
                 brain.observe(event(0, "stress", "observation", "concurrent", 0.5));
-            }
         });
     }
     for (auto& t : threads) t.join();
     assert(brain.state().events_seen >= before_events + static_cast<std::uint64_t>(workers * per_worker));
 
     const auto start = std::chrono::steady_clock::now();
-    for (int i = 0; i < 1000; ++i) {
+    for (int i = 0; i < 1000; ++i)
         brain.observe(event(0, "benchmark", "observation", "load", 0.25));
-    }
     const auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
         std::chrono::steady_clock::now() - start).count();
     assert(elapsed >= 0);
