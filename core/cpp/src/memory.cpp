@@ -4,6 +4,7 @@
 #include <cmath>
 #include <cstdint>
 #include <fstream>
+#include <iterator>
 #include <limits>
 #include <mutex>
 #include <utility>
@@ -58,7 +59,10 @@ void write_event(std::ostream& out, const Event& event) {
     write_string(out, event.kind);
     const auto count = static_cast<std::uint64_t>(event.data.size());
     out.write(reinterpret_cast<const char*>(&count), sizeof(count));
-    for (const auto& [key, value] : event.data) { write_string(out, key); write_scalar(out, value); }
+    for (const auto& [key, value] : event.data) {
+        write_string(out, key);
+        write_scalar(out, value);
+    }
 }
 
 bool read_event(std::istream& in, Event& event) {
@@ -69,7 +73,8 @@ bool read_event(std::istream& in, Event& event) {
     if (!in.read(reinterpret_cast<char*>(&count), sizeof(count)) || count > kMaxAttributes) return false;
     event.data.clear();
     for (std::uint64_t i = 0; i < count; ++i) {
-        std::string key; Scalar value;
+        std::string key;
+        Scalar value;
         if (!read_string(in, key) || !read_scalar(in, value)) return false;
         event.data.insert_or_assign(std::move(key), std::move(value));
     }
@@ -79,7 +84,9 @@ bool read_event(std::istream& in, Event& event) {
 } // namespace
 
 Memory::Memory(std::size_t working_limit, std::filesystem::path journal_path)
-    : working_limit_(std::max<std::size_t>(1, working_limit)), journal_path_(std::move(journal_path)) { load(); }
+    : working_limit_(std::max<std::size_t>(1, working_limit)), journal_path_(std::move(journal_path)) {
+    load();
+}
 
 std::uint64_t Memory::append(Event event) {
     std::unique_lock lock(mutex_);
@@ -98,19 +105,26 @@ void Memory::load() {
     std::ifstream in(journal_path_, std::ios::binary);
     if (!in) return;
     std::uintmax_t valid_end = 0;
-    Event event; std::uint64_t previous_sequence = 0;
+    Event event;
+    std::uint64_t previous_sequence = 0;
     while (true) {
         if (!read_event(in, event)) break;
         if (event.sequence == 0 || (previous_sequence != 0 && event.sequence <= previous_sequence)) break;
         previous_sequence = event.sequence;
         metadata_.push_back(MemoryRecord{event, tier_of(event), default_salience(event), default_confidence(event)});
         continuity_.push_back(std::move(event));
-        const auto position = in.tellg(); if (position < 0) break;
+        const auto position = in.tellg();
+        if (position < 0) break;
         valid_end = static_cast<std::uintmax_t>(position);
-        if (previous_sequence == std::numeric_limits<std::uint64_t>::max()) { next_sequence_ = previous_sequence; break; }
-        next_sequence_ = std::max(next_sequence_, previous_sequence + 1); event = Event{};
+        if (previous_sequence == std::numeric_limits<std::uint64_t>::max()) {
+            next_sequence_ = previous_sequence;
+            break;
+        }
+        next_sequence_ = std::max(next_sequence_, previous_sequence + 1);
+        event = Event{};
     }
-    in.close(); std::error_code error;
+    in.close();
+    std::error_code error;
     const auto file_size = std::filesystem::file_size(journal_path_, error);
     if (!error && file_size > valid_end) std::filesystem::resize_file(journal_path_, valid_end, error);
 }
@@ -120,10 +134,22 @@ bool Memory::persist(const Event& event) const {
     if (!journal_path_.parent_path().empty()) std::filesystem::create_directories(journal_path_.parent_path(), error);
     if (error) return false;
     std::uintmax_t original_size = 0;
-    if (std::filesystem::exists(journal_path_, error)) { if (error) return false; original_size = std::filesystem::file_size(journal_path_, error); if (error) return false; }
-    std::ofstream out(journal_path_, std::ios::binary | std::ios::app); if (!out) return false;
-    write_event(out, event); out.flush(); const bool ok = static_cast<bool>(out); out.close();
-    if (ok) return true; std::error_code rollback_error; std::filesystem::resize_file(journal_path_, original_size, rollback_error); return false;
+    if (std::filesystem::exists(journal_path_, error)) {
+        if (error) return false;
+        original_size = std::filesystem::file_size(journal_path_, error);
+        if (error) return false;
+    }
+    std::ofstream out(journal_path_, std::ios::binary | std::ios::app);
+    if (!out) return false;
+    write_event(out, event);
+    out.flush();
+    const bool ok = static_cast<bool>(out);
+    out.close();
+    if (ok) return true;
+
+    std::error_code rollback_error;
+    std::filesystem::resize_file(journal_path_, original_size, rollback_error);
+    return false;
 }
 
 MemoryTier Memory::tier_of(const Event& event) const noexcept {
@@ -135,30 +161,52 @@ MemoryTier Memory::tier_of(const Event& event) const noexcept {
 
 double Memory::default_salience(const Event& event) noexcept {
     const auto it = event.data.find("salience");
-    if (it != event.data.end()) if (const auto p = std::get_if<double>(&it->second)) return std::clamp(*p, 0.0, 1.0);
+    if (it != event.data.end()) {
+        if (const auto p = std::get_if<double>(&it->second)) return std::clamp(*p, 0.0, 1.0);
+    }
     return 0.5;
 }
 
 double Memory::default_confidence(const Event& event) noexcept {
     const auto it = event.data.find("reliability");
-    if (it != event.data.end()) if (const auto p = std::get_if<double>(&it->second)) return std::clamp(*p, 0.0, 1.0);
+    if (it != event.data.end()) {
+        if (const auto p = std::get_if<double>(&it->second)) return std::clamp(*p, 0.0, 1.0);
+    }
     return 0.5;
 }
 
-std::size_t Memory::tier_index(MemoryTier tier) noexcept { return static_cast<std::size_t>(tier); }
-std::optional<Event> Memory::latest() const { std::shared_lock lock(mutex_); if (continuity_.empty()) return std::nullopt; return continuity_.back(); }
+std::size_t Memory::tier_index(MemoryTier tier) noexcept {
+    return static_cast<std::size_t>(tier);
+}
+
+std::optional<Event> Memory::latest() const {
+    std::shared_lock lock(mutex_);
+    if (continuity_.empty()) return std::nullopt;
+    return continuity_.back();
+}
 
 std::vector<Event> Memory::recent(std::size_t limit) const {
-    std::shared_lock lock(mutex_); const auto count = std::min(limit == 0 ? working_limit_ : limit, continuity_.size());
+    std::shared_lock lock(mutex_);
+    const auto count = std::min(limit == 0 ? working_limit_ : limit, continuity_.size());
     return std::vector<Event>(continuity_.end() - static_cast<std::ptrdiff_t>(count), continuity_.end());
 }
 
 std::vector<MemoryRecord> Memory::recall_ranked(const Attributes& query, std::size_t limit) const {
-    std::shared_lock lock(mutex_); if (query.empty() || metadata_.empty() || limit == 0) return {};
-    struct Scored { double score; std::size_t index; }; std::vector<Scored> ranked; ranked.reserve(metadata_.size());
+    std::shared_lock lock(mutex_);
+    if (query.empty() || metadata_.empty() || limit == 0) return {};
+    struct Scored { double score; std::size_t index; };
+    std::vector<Scored> ranked;
+    ranked.reserve(metadata_.size());
     for (std::size_t index = 0; index < metadata_.size(); ++index) {
-        const auto& record = metadata_[index]; double matches = 0.0, overlap = 0.0;
-        for (const auto& [key, value] : query) { const auto it = record.event.data.find(key); if (it == record.event.data.end()) continue; overlap += 1.0; if (it->second == value) matches += 1.0; }
+        const auto& record = metadata_[index];
+        double matches = 0.0;
+        double overlap = 0.0;
+        for (const auto& [key, value] : query) {
+            const auto it = record.event.data.find(key);
+            if (it == record.event.data.end()) continue;
+            overlap += 1.0;
+            if (it->second == value) matches += 1.0;
+        }
         if (overlap == 0.0) continue;
         const double denominator = static_cast<double>(query.size());
         const double components[] = {
@@ -167,36 +215,100 @@ std::vector<MemoryRecord> Memory::recall_ranked(const Attributes& query, std::si
             std::max(static_cast<double>(index + 1) / static_cast<double>(metadata_.size()), std::numeric_limits<double>::min()),
             std::max(record.salience, std::numeric_limits<double>::min()),
             std::max(record.confidence, std::numeric_limits<double>::min())};
-        double product = 1.0; for (const double component : components) product *= component;
-        ranked.push_back({std::pow(product, 0.2), index});
+        double product = 1.0;
+        for (const double component : components) product *= component;
+        ranked.push_back({std::pow(product, 1.0 / static_cast<double>(std::size(components))), index});
     }
     const auto count = std::min(limit, ranked.size());
-    std::partial_sort(ranked.begin(), ranked.begin() + static_cast<std::ptrdiff_t>(count), ranked.end(), [](const Scored&a,const Scored&b){return a.score!=b.score?a.score>b.score:a.index>b.index;});
-    std::vector<MemoryRecord> result; result.reserve(count); for (std::size_t i=0;i<count;++i) result.push_back(metadata_[ranked[i].index]); return result;
+    std::partial_sort(ranked.begin(), ranked.begin() + static_cast<std::ptrdiff_t>(count), ranked.end(),
+        [](const Scored& a, const Scored& b) { return a.score != b.score ? a.score > b.score : a.index > b.index; });
+    std::vector<MemoryRecord> result;
+    result.reserve(count);
+    for (std::size_t i = 0; i < count; ++i) result.push_back(metadata_[ranked[i].index]);
+    return result;
 }
 
-std::vector<Event> Memory::recall(const Attributes& query, std::size_t limit) const { const auto ranked=recall_ranked(query,limit); std::vector<Event> result; result.reserve(ranked.size()); for(const auto&record:ranked)result.push_back(record.event); return result; }
+std::vector<Event> Memory::recall(const Attributes& query, std::size_t limit) const {
+    const auto ranked = recall_ranked(query, limit);
+    std::vector<Event> result;
+    result.reserve(ranked.size());
+    for (const auto& record : ranked) result.push_back(record.event);
+    return result;
+}
 
 std::vector<MemoryRecord> Memory::salient(std::size_t limit, MemoryTier tier) const {
-    std::shared_lock lock(mutex_); std::vector<MemoryRecord> result; for(const auto&record:metadata_)if(record.tier==tier)result.push_back(record);
-    std::sort(result.begin(),result.end(),[](const MemoryRecord&a,const MemoryRecord&b){return a.salience!=b.salience?a.salience>b.salience:a.event.sequence>b.event.sequence;}); if(result.size()>limit)result.resize(limit); return result;
+    std::shared_lock lock(mutex_);
+    std::vector<MemoryRecord> result;
+    for (const auto& record : metadata_) if (record.tier == tier) result.push_back(record);
+    std::sort(result.begin(), result.end(), [](const MemoryRecord& a, const MemoryRecord& b) {
+        if (a.salience != b.salience) return a.salience > b.salience;
+        return a.event.sequence > b.event.sequence;
+    });
+    if (result.size() > limit) result.resize(limit);
+    return result;
 }
 
 bool Memory::promote(std::uint64_t sequence, MemoryTier tier, double salience, double confidence) {
-    std::unique_lock lock(mutex_); const auto it=std::find_if(metadata_.begin(),metadata_.end(),[sequence](const MemoryRecord&r){return r.event.sequence==sequence;}); if(it==metadata_.end())return false;
-    it->tier=tier; it->salience=std::clamp(salience,0.0,1.0); it->confidence=std::clamp(confidence,0.0,1.0); learned_tiers_[it->event.kind][tier_index(tier)] += 1.0; return true;
+    std::unique_lock lock(mutex_);
+    const auto it = std::find_if(metadata_.begin(), metadata_.end(), [sequence](const MemoryRecord& r) { return r.event.sequence == sequence; });
+    if (it == metadata_.end()) return false;
+    it->tier = tier;
+    it->salience = std::clamp(salience, 0.0, 1.0);
+    it->confidence = std::clamp(confidence, 0.0, 1.0);
+    learned_tiers_[it->event.kind][tier_index(tier)] += 1.0;
+    return true;
 }
 
 bool Memory::forget_working(std::size_t keep) {
-    std::unique_lock lock(mutex_); std::vector<MemoryRecord*> working; for(auto&record:metadata_)if(record.tier==MemoryTier::Working)working.push_back(&record); if(working.size()<=keep)return true;
-    std::sort(working.begin(),working.end(),[](const MemoryRecord*a,const MemoryRecord*b){return a->event.sequence<b->event.sequence;}); const auto remove_count=working.size()-keep; for(std::size_t i=0;i<remove_count;++i)working[i]->tier=MemoryTier::Episodic; return true;
+    std::unique_lock lock(mutex_);
+    std::vector<MemoryRecord*> working;
+    for (auto& record : metadata_) if (record.tier == MemoryTier::Working) working.push_back(&record);
+    if (working.size() <= keep) return true;
+    std::sort(working.begin(), working.end(), [](const MemoryRecord* a, const MemoryRecord* b) { return a->event.sequence < b->event.sequence; });
+    const auto remove_count = working.size() - keep;
+    for (std::size_t i = 0; i < remove_count; ++i) working[i]->tier = MemoryTier::Episodic;
+    return true;
 }
 
 std::vector<Event> Memory::all() const { std::shared_lock lock(mutex_); return continuity_; }
-std::vector<Event> Memory::by_source(const std::string& source,std::size_t limit) const { std::shared_lock lock(mutex_); std::vector<Event>result; for(auto it=continuity_.rbegin();it!=continuity_.rend();++it){if(it->source==source)result.push_back(*it);if(limit!=0&&result.size()>=limit)break;}std::reverse(result.begin(),result.end());return result; }
-std::vector<Event> Memory::by_kind(const std::string& kind,std::size_t limit) const { std::shared_lock lock(mutex_); std::vector<Event>result; for(auto it=continuity_.rbegin();it!=continuity_.rend();++it){if(it->kind==kind)result.push_back(*it);if(limit!=0&&result.size()>=limit)break;}std::reverse(result.begin(),result.end());return result; }
-std::size_t Memory::size() const noexcept { std::shared_lock lock(mutex_); return continuity_.size(); }
-std::size_t Memory::working_size() const noexcept { std::shared_lock lock(mutex_); std::size_t count=0;for(const auto&record:metadata_)if(record.tier==MemoryTier::Working)++count;return count; }
-std::uint64_t Memory::next_sequence() const noexcept { std::shared_lock lock(mutex_); return next_sequence_; }
+
+std::vector<Event> Memory::by_source(const std::string& source, std::size_t limit) const {
+    std::shared_lock lock(mutex_);
+    std::vector<Event> result;
+    for (auto it = continuity_.rbegin(); it != continuity_.rend(); ++it) {
+        if (it->source == source) result.push_back(*it);
+        if (limit != 0 && result.size() >= limit) break;
+    }
+    std::reverse(result.begin(), result.end());
+    return result;
+}
+
+std::vector<Event> Memory::by_kind(const std::string& kind, std::size_t limit) const {
+    std::shared_lock lock(mutex_);
+    std::vector<Event> result;
+    for (auto it = continuity_.rbegin(); it != continuity_.rend(); ++it) {
+        if (it->kind == kind) result.push_back(*it);
+        if (limit != 0 && result.size() >= limit) break;
+    }
+    std::reverse(result.begin(), result.end());
+    return result;
+}
+
+std::size_t Memory::size() const noexcept {
+    std::shared_lock lock(mutex_);
+    return continuity_.size();
+}
+
+std::size_t Memory::working_size() const noexcept {
+    std::shared_lock lock(mutex_);
+    std::size_t count = 0;
+    for (const auto& record : metadata_) if (record.tier == MemoryTier::Working) ++count;
+    return count;
+}
+
+std::uint64_t Memory::next_sequence() const noexcept {
+    std::shared_lock lock(mutex_);
+    return next_sequence_;
+}
 
 } // namespace jarvis::core
