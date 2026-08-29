@@ -11,6 +11,8 @@ struct GoalState {
     std::string id;
     double priority{0.0};
     bool active{false};
+
+    friend bool operator==(const GoalState&, const GoalState&) = default;
 };
 
 struct CognitiveHealth {
@@ -18,6 +20,8 @@ struct CognitiveHealth {
     double memory{1.0};
     double reasoning{1.0};
     double execution{1.0};
+
+    friend bool operator==(const CognitiveHealth&, const CognitiveHealth&) = default;
 };
 
 struct SelfState {
@@ -40,7 +44,7 @@ public:
     void set_uncertainty(double uncertainty);
     void set_goals(std::vector<GoalState> goals);
     void set_resource_pressure(std::string resource, double pressure);
-    void advance_cycle(std::uint64_t events_seen);
+    void synchronize_cycle(std::uint64_t cycle, std::uint64_t events_seen);
     SelfState snapshot() const;
 
 private:
