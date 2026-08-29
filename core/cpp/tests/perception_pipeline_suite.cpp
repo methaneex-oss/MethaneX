@@ -23,7 +23,7 @@ public:
         result.modality = Modality::text;
         SemanticNode node;
         node.id = "provider-node-" + std::to_string(static_cast<int>(confidence_ * 100));
-        node.kind = RepresentationKind::concept;
+        node.kind = RepresentationKind::concept_node;
         node.label = "provider-result";
         node.confidence = confidence_;
         node.evidence.push_back(EvidenceSpan{input.source, context.sequence, confidence_});
@@ -58,7 +58,7 @@ int main() {
     auto provider_result = pipeline.process(provider_input, PerceptionContext{42, "session", {}});
     assert(provider_result.sequence == 42);
     assert(provider_result.nodes.size() == 1);
-    assert(provider_result.nodes.front().kind == RepresentationKind::concept);
+    assert(provider_result.nodes.front().kind == RepresentationKind::concept_node);
     assert(provider_result.confidence == 0.9);
     assert(pipeline.validate(provider_result));
 
