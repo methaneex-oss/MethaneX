@@ -15,6 +15,7 @@
 #include "reflection.hpp"
 #include "knowledge.hpp"
 #include "self_model.hpp"
+#include "self_state.hpp"
 
 #include <cstdint>
 #include <filesystem>
@@ -36,6 +37,7 @@ struct BrainState {
 
 struct BrainSnapshot {
     BrainState state{};
+    SelfState self_state{};
     std::vector<Belief> beliefs;
     std::vector<Prediction> predictions;
     std::vector<CausalLink> causal_links;
@@ -67,10 +69,11 @@ public:
     std::vector<EvolutionProposal> evolution_options() const;
     bool adopt_evolution(const EvolutionProposal& proposal);
     bool rollback_evolution(const std::string& key);
-    void observe_capability(const std::string& name, double availability, double performance);
+    void observe_capability(std::string name, double availability, double performance);
     bool isolate_capability(const std::string& name);
     bool restore_capability(const std::string& name, double availability, double performance);
     const SelfModel& self_model() const noexcept { return self_model_; }
+    const SelfStateModel& self_state_model() const noexcept { return self_state_model_; }
     const WorldModel& world() const noexcept { return world_; }
     const Memory& memory() const noexcept { return memory_; }
     BrainSnapshot snapshot() const;
@@ -79,6 +82,7 @@ public:
 private:
     static double compute_novelty(const Event& event, const std::vector<Event>& history);
     void replay(const Event& event);
+    void sync_self_state();
 
     mutable std::shared_mutex mutex_;
     BrainState state_{};
@@ -97,6 +101,7 @@ private:
     ReflectionModel reflection_model_{};
     KnowledgeModel knowledge_{};
     SelfModel self_model_{};
+    SelfStateModel self_state_model_{};
     AttentionSignal attention_state_{};
     ThreatAssessment threat_state_{};
 };
