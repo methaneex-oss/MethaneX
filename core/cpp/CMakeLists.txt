@@ -19,6 +19,7 @@ add_library(jarvis_core STATIC
     src/evolution.cpp
     src/planning.cpp
     src/reasoning.cpp
+    src/action_model.cpp
     src/reflection.cpp
     src/knowledge.cpp
     src/self_model.cpp
