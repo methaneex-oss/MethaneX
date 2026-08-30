@@ -38,6 +38,10 @@ add_executable(jarvis_reasoning_architecture_suite reasoning_architecture_suite.
 target_link_libraries(jarvis_reasoning_architecture_suite PRIVATE jarvis_core)
 target_compile_features(jarvis_reasoning_architecture_suite PRIVATE cxx_std_20)
 
+add_executable(jarvis_decision_planning_architecture_suite decision_planning_architecture_suite.cpp)
+target_link_libraries(jarvis_decision_planning_architecture_suite PRIVATE jarvis_core)
+target_compile_features(jarvis_decision_planning_architecture_suite PRIVATE cxx_std_20)
+
 include(CTest)
 if(BUILD_TESTING)
     add_test(NAME jarvis_brain_contract COMMAND jarvis_brain_contract)
@@ -50,4 +54,5 @@ if(BUILD_TESTING)
     add_test(NAME jarvis_memory_architecture_suite COMMAND jarvis_memory_architecture_suite)
     add_test(NAME jarvis_attention_architecture_suite COMMAND jarvis_attention_architecture_suite)
     add_test(NAME jarvis_reasoning_architecture_suite COMMAND jarvis_reasoning_architecture_suite)
+    add_test(NAME jarvis_decision_planning_architecture_suite COMMAND jarvis_decision_planning_architecture_suite)
 endif()
