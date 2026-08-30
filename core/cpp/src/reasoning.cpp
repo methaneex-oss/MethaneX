@@ -12,10 +12,7 @@ namespace {
 
 bool same_value(const Scalar& a, const Scalar& b) noexcept { return a == b; }
 
-struct ParsedLink {
-    std::string key;
-    Scalar value;
-};
+struct ParsedLink { std::string key; Scalar value; };
 
 std::optional<ParsedLink> parse_link_side(const std::string& side) {
     const auto separator = side.find('=');
@@ -60,22 +57,24 @@ std::vector<Belief> ReasoningEngine::infer(const std::vector<Belief>& premises,
     for (const auto& belief : premises) known[belief.key] = belief.value;
 
     for (std::size_t step = 0; step < max_steps; ++step) {
-        bool changed = false;
+        const auto snapshot = known;
+        std::vector<Belief> frontier;
         for (const auto& link : causal_links) {
             const auto cause = parse_link_side(link.cause);
             const auto effect = parse_link_side(link.effect);
             if (!cause || !effect || link.strength <= 0.0) continue;
-            const auto known_cause = known.find(cause->key);
-            if (known_cause == known.end() || !same_value(known_cause->second, cause->value)) continue;
-            const auto known_effect = known.find(effect->key);
-            if (known_effect != known.end()) continue;
-            known.emplace(effect->key, effect->value);
-            result.push_back(Belief{effect->key, effect->value,
-                                    std::clamp(link.strength, 0.0, 1.0),
-                                    link.observations, 0});
-            changed = true;
+            const auto known_cause = snapshot.find(cause->key);
+            if (known_cause == snapshot.end() || !same_value(known_cause->second, cause->value)) continue;
+            if (snapshot.find(effect->key) != snapshot.end()) continue;
+            if (known.find(effect->key) != known.end()) continue;
+            frontier.push_back(Belief{effect->key, effect->value,
+                                      std::clamp(link.strength, 0.0, 1.0),
+                                      link.observations, 0});
         }
-        if (!changed) break;
+        if (frontier.empty()) break;
+        for (const auto& belief : frontier) {
+            if (known.emplace(belief.key, belief.value).second) result.push_back(belief);
+        }
     }
     return result;
 }
@@ -89,7 +88,6 @@ ReasoningResult ReasoningEngine::solve(const ReasoningProblem& problem) const {
         result.explanation = "No premises were supplied.";
         return result;
     }
-
     if (!consistent(problem.premises)) {
         result.kind = ReasoningKind::contradiction;
         result.valid = false;
@@ -97,7 +95,6 @@ ReasoningResult ReasoningEngine::solve(const ReasoningProblem& problem) const {
         result.explanation = "Premises contain incompatible values for the same belief key.";
         return result;
     }
-
     const auto conclusions = infer(problem.premises, problem.causal_links, problem.max_steps);
     result.conclusions = conclusions;
     result.valid = true;
