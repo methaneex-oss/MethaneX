@@ -2,8 +2,16 @@
 
 #include <algorithm>
 #include <cmath>
+#include <utility>
 
 namespace jarvis::core {
+
+namespace {
+Goal* find_goal(std::vector<Goal>& goals, const std::string& id) noexcept {
+    for (auto& goal : goals) if (goal.id == id) return &goal;
+    return nullptr;
+}
+}
 
 bool GoalModel::create(Goal goal) {
     if (goal.id.empty() || goal.description.empty() || !std::isfinite(goal.priority) ||
@@ -15,7 +23,7 @@ bool GoalModel::create(Goal goal) {
 }
 
 bool GoalModel::activate(const std::string& id) {
-    Goal* goal = const_cast<Goal*>(get(id));
+    Goal* goal = find_goal(goals_, id);
     if (goal == nullptr || goal->status == GoalStatus::completed || goal->status == GoalStatus::abandoned) return false;
     for (const auto& prerequisite : goal->prerequisites) {
         const Goal* dependency = get(prerequisite);
@@ -26,7 +34,7 @@ bool GoalModel::activate(const std::string& id) {
 }
 
 bool GoalModel::update_progress(const std::string& id, double progress) {
-    Goal* goal = const_cast<Goal*>(get(id));
+    Goal* goal = find_goal(goals_, id);
     if (goal == nullptr || !std::isfinite(progress) || progress < 0.0 || progress > 1.0 ||
         goal->status == GoalStatus::completed || goal->status == GoalStatus::abandoned) return false;
     goal->progress = progress;
@@ -34,19 +42,17 @@ bool GoalModel::update_progress(const std::string& id, double progress) {
     return true;
 }
 
-bool GoalModel::complete(const std::string& id) {
-    return update_progress(id, 1.0);
-}
+bool GoalModel::complete(const std::string& id) { return update_progress(id, 1.0); }
 
 bool GoalModel::abandon(const std::string& id) {
-    Goal* goal = const_cast<Goal*>(get(id));
+    Goal* goal = find_goal(goals_, id);
     if (goal == nullptr || goal->status == GoalStatus::completed || goal->status == GoalStatus::abandoned) return false;
     goal->status = GoalStatus::abandoned;
     return true;
 }
 
 bool GoalModel::set_priority(const std::string& id, double priority) {
-    Goal* goal = const_cast<Goal*>(get(id));
+    Goal* goal = find_goal(goals_, id);
     if (goal == nullptr || !std::isfinite(priority)) return false;
     goal->priority = std::clamp(priority, 0.0, 1.0);
     return true;
