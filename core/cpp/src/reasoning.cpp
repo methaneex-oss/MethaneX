@@ -1,9 +1,11 @@
 #include "jarvis/core/reasoning.hpp"
 
 #include <algorithm>
-#include <cmath>
-#include <limits>
+#include <cstdint>
+#include <optional>
+#include <string>
 #include <unordered_map>
+#include <variant>
 
 namespace jarvis::core {
 namespace {
@@ -66,12 +68,11 @@ std::vector<Belief> ReasoningEngine::infer(const std::vector<Belief>& premises,
             const auto known_cause = known.find(cause->key);
             if (known_cause == known.end() || !same_value(known_cause->second, cause->value)) continue;
             const auto known_effect = known.find(effect->key);
-            if (known_effect != known.end()) {
-                if (!same_value(known_effect->second, effect->value)) continue;
-                continue;
-            }
+            if (known_effect != known.end()) continue;
             known.emplace(effect->key, effect->value);
-            result.push_back(Belief{effect->key, effect->value, std::clamp(link.strength, 0.0, 1.0), link.observations, 0});
+            result.push_back(Belief{effect->key, effect->value,
+                                    std::clamp(link.strength, 0.0, 1.0),
+                                    link.observations, 0});
             changed = true;
         }
         if (!changed) break;
