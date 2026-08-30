@@ -2,14 +2,12 @@
 
 #include <cassert>
 #include <cstdint>
-#include <string>
 #include <vector>
 
 using namespace jarvis::core;
 
 int main() {
     ReasoningEngine engine;
-
     const Belief enabled{"system.enabled", true, 0.95, 3, 1};
     const Belief ready{"system.ready", true, 0.9, 2, 2};
     const Belief safe{"system.safe", true, 0.8, 1, 3};
@@ -46,8 +44,11 @@ int main() {
     assert(stable.kind == ReasoningKind::consistency);
     assert(stable.conclusions.size() == 1);
 
+    // max_steps bounds inference depth: the first causal edge is allowed,
+    // but the second edge requires another step.
     const auto bounded = engine.infer({enabled}, links, 1);
     assert(bounded.size() == 2);
+    assert(bounded[1].key == "system.ready");
 
     return 0;
 }
