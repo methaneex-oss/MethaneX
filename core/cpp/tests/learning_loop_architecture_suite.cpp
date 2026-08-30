@@ -32,9 +32,22 @@ int main() {
     assert(invalid.proposals.empty());
     assert(evolution.parameter("forecast")->observations == before_invalid);
 
+    const auto* before_nan_metric = adaptation.metric("forecast");
+    assert(before_nan_metric != nullptr);
+    const auto before_nan_observations = before_nan_metric->observations;
+    const auto before_nan_estimate = before_nan_metric->estimate;
+    const auto before_nan_error = before_nan_metric->mean_error;
+
     const auto nan_cycle = loop.process(
         LearningFeedback{"forecast", NAN, 0.5, 0.5}, adaptation, evolution);
-    assert(nan_cycle.adaptation.observations == cycle.adaptation.observations);
+    assert(nan_cycle.adopted == 0);
+    assert(nan_cycle.proposals.empty());
+
+    const auto* after_nan_metric = adaptation.metric("forecast");
+    assert(after_nan_metric != nullptr);
+    assert(after_nan_metric->observations == before_nan_observations);
+    assert(after_nan_metric->estimate == before_nan_estimate);
+    assert(after_nan_metric->mean_error == before_nan_error);
     assert(std::isfinite(nan_cycle.confidence));
 
     const auto* metric = adaptation.metric("forecast");
