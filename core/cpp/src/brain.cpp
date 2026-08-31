@@ -3,7 +3,9 @@
 
 #include <algorithm>
 #include <chrono>
+#include <cmath>
 #include <mutex>
+#include <sstream>
 #include <utility>
 
 namespace jarvis::core {
@@ -26,6 +28,46 @@ double double_value(const Attributes& data, const std::string& key, double fallb
     if (const auto value = std::get_if<double>(&it->second)) return *value;
     if (const auto value = std::get_if<std::int64_t>(&it->second)) return static_cast<double>(*value);
     return fallback;
+}
+
+std::uint64_t integer_value(const Attributes& data, const std::string& key, std::uint64_t fallback = 0) {
+    const auto it = data.find(key);
+    if (it == data.end()) return fallback;
+    if (const auto value = std::get_if<std::int64_t>(&it->second)) return *value < 0 ? fallback : static_cast<std::uint64_t>(*value);
+    if (const auto value = std::get_if<double>(&it->second)) return *value < 0.0 ? fallback : static_cast<std::uint64_t>(*value);
+    return fallback;
+}
+
+std::string join_ids(const std::vector<std::string>& ids) {
+    std::ostringstream out;
+    for (std::size_t i = 0; i < ids.size(); ++i) {
+        if (i != 0) out << '\x1f';
+        out << ids[i];
+    }
+    return out.str();
+}
+
+std::vector<std::string> split_ids(const std::string& value) {
+    std::vector<std::string> result;
+    std::size_t start = 0;
+    while (start <= value.size()) {
+        const auto end = value.find('\x1f', start);
+        const auto token = value.substr(start, end == std::string::npos ? std::string::npos : end - start);
+        if (!token.empty()) result.push_back(token);
+        if (end == std::string::npos) break;
+        start = end + 1;
+    }
+    return result;
+}
+
+GoalStatus goal_status_value(std::int64_t value) {
+    switch (value) {
+        case 0: return GoalStatus::pending;
+        case 1: return GoalStatus::active;
+        case 2: return GoalStatus::completed;
+        case 3: return GoalStatus::abandoned;
+        default: return GoalStatus::pending;
+    }
 }
 
 } // namespace
@@ -54,6 +96,38 @@ void Brain::sync_self_state() {
 
 void Brain::replay(const Event& event) {
     state_.cycle = std::max(state_.cycle, event.sequence);
+
+    if (event.kind == "goal_create") {
+        const auto* id = string_value(event.data, "id");
+        const auto* description = string_value(event.data, "description");
+        if (id == nullptr || description == nullptr) return;
+        Goal goal{*id, *description,
+                  double_value(event.data, "priority"),
+                  double_value(event.data, "progress"),
+                  integer_value(event.data, "created_cycle"),
+                  integer_value(event.data, "deadline_cycle"),
+                  goal_status_value(static_cast<std::int64_t>(integer_value(event.data, "status"))),
+                  string_value(event.data, "prerequisites") ? split_ids(*string_value(event.data, "prerequisites")) : std::vector<std::string>{},
+                  string_value(event.data, "subgoals") ? split_ids(*string_value(event.data, "subgoals")) : std::vector<std::string>{}};
+        goals_model_.create(std::move(goal));
+        return;
+    }
+    if (event.kind == "goal_activate") {
+        if (const auto* id = string_value(event.data, "id")) goals_model_.activate(*id);
+        return;
+    }
+    if (event.kind == "goal_progress") {
+        if (const auto* id = string_value(event.data, "id")) goals_model_.update_progress(*id, double_value(event.data, "progress"));
+        return;
+    }
+    if (event.kind == "goal_abandon") {
+        if (const auto* id = string_value(event.data, "id")) goals_model_.abandon(*id);
+        return;
+    }
+    if (event.kind == "goal_priority") {
+        if (const auto* id = string_value(event.data, "id")) goals_model_.set_priority(*id, double_value(event.data, "priority"));
+        return;
+    }
 
     if (event.kind == "prediction") {
         const auto* key = string_value(event.data, "key");
@@ -464,6 +538,82 @@ bool Brain::restore_capability(const std::string& name, double availability, dou
     return true;
 }
 
+bool Brain::append_goal_event(const Event& event) {
+    Event persisted = event;
+    persisted.timestamp_ns = persisted.timestamp_ns == 0 ? now_ns() : persisted.timestamp_ns;
+    persisted.sequence = memory_.append(persisted);
+    if (persisted.sequence == 0) return false;
+    ++state_.events_seen;
+    state_.cycle = persisted.sequence;
+    sync_self_state();
+    return true;
+}
+
+bool Brain::create_goal(Goal goal) {
+    std::unique_lock lock(mutex_);
+    if (!goals_model_.create(goal)) return false;
+    Event event{0, now_ns(), "brain", "goal_create",
+        {{"id", goal.id}, {"description", goal.description}, {"priority", goal.priority},
+         {"progress", goal.progress}, {"created_cycle", static_cast<std::int64_t>(goal.created_cycle)},
+         {"deadline_cycle", static_cast<std::int64_t>(goal.deadline_cycle)},
+         {"status", static_cast<std::int64_t>(goal.status)},
+         {"prerequisites", join_ids(goal.prerequisites)}, {"subgoals", join_ids(goal.subgoals)}}};
+    if (!append_goal_event(event)) {
+        goals_model_.abandon(goal.id);
+        return false;
+    }
+    return true;
+}
+
+bool Brain::activate_goal(const std::string& id) {
+    std::unique_lock lock(mutex_);
+    if (!goals_model_.activate(id)) return false;
+    Event event{0, now_ns(), "brain", "goal_activate", {{"id", id}}};
+    if (!append_goal_event(event)) return false;
+    return true;
+}
+
+bool Brain::update_goal_progress(const std::string& id, double progress) {
+    std::unique_lock lock(mutex_);
+    if (!goals_model_.update_progress(id, progress)) return false;
+    Event event{0, now_ns(), "brain", "goal_progress", {{"id", id}, {"progress", progress}}};
+    if (!append_goal_event(event)) return false;
+    return true;
+}
+
+bool Brain::complete_goal(const std::string& id) { return update_goal_progress(id, 1.0); }
+
+bool Brain::abandon_goal(const std::string& id) {
+    std::unique_lock lock(mutex_);
+    if (!goals_model_.abandon(id)) return false;
+    Event event{0, now_ns(), "brain", "goal_abandon", {{"id", id}}};
+    if (!append_goal_event(event)) return false;
+    return true;
+}
+
+bool Brain::set_goal_priority(const std::string& id, double priority) {
+    std::unique_lock lock(mutex_);
+    if (!goals_model_.set_priority(id, priority)) return false;
+    Event event{0, now_ns(), "brain", "goal_priority", {{"id", id}, {"priority", priority}}};
+    if (!append_goal_event(event)) return false;
+    return true;
+}
+
+const Goal* Brain::goal(const std::string& id) const noexcept {
+    std::shared_lock lock(mutex_);
+    return goals_model_.get(id);
+}
+
+std::vector<Goal> Brain::goals() const {
+    std::shared_lock lock(mutex_);
+    return goals_model_.all();
+}
+
+std::vector<Goal> Brain::eligible_goals() const {
+    std::shared_lock lock(mutex_);
+    return goals_model_.eligible(state_.cycle);
+}
+
 BrainSnapshot Brain::snapshot() const {
     std::shared_lock lock(mutex_);
     BrainSnapshot result;
@@ -474,6 +624,7 @@ BrainSnapshot Brain::snapshot() const {
     for (const auto& [_, belief] : beliefs_) result.beliefs.push_back(belief);
     for (const auto& [_, prediction] : predictions_) result.predictions.push_back(prediction);
     result.causal_links = causal_.links();
+    result.goals = goals_model_.all();
     return result;
 }
 
