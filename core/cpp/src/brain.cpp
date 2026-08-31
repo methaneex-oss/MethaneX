@@ -567,36 +567,45 @@ bool Brain::create_goal(Goal goal) {
 
 bool Brain::activate_goal(const std::string& id) {
     std::unique_lock lock(mutex_);
-    if (!goals_model_.activate(id)) return false;
+    const Goal* goal = goals_model_.get(id);
+    if (goal == nullptr || goal->status == GoalStatus::completed || goal->status == GoalStatus::abandoned) return false;
+    for (const auto& prerequisite : goal->prerequisites) {
+        const Goal* dependency = goals_model_.get(prerequisite);
+        if (dependency == nullptr || dependency->status != GoalStatus::completed) return false;
+    }
     Event event{0, now_ns(), "brain", "goal_activate", {{"id", id}}};
     if (!append_goal_event(event)) return false;
-    return true;
+    return goals_model_.activate(id);
 }
 
 bool Brain::update_goal_progress(const std::string& id, double progress) {
     std::unique_lock lock(mutex_);
-    if (!goals_model_.update_progress(id, progress)) return false;
+    const Goal* goal = goals_model_.get(id);
+    if (goal == nullptr || goal->status == GoalStatus::completed || goal->status == GoalStatus::abandoned ||
+        !std::isfinite(progress) || progress < 0.0 || progress > 1.0) return false;
     Event event{0, now_ns(), "brain", "goal_progress", {{"id", id}, {"progress", progress}}};
     if (!append_goal_event(event)) return false;
-    return true;
+    return goals_model_.update_progress(id, progress);
 }
 
 bool Brain::complete_goal(const std::string& id) { return update_goal_progress(id, 1.0); }
 
 bool Brain::abandon_goal(const std::string& id) {
     std::unique_lock lock(mutex_);
-    if (!goals_model_.abandon(id)) return false;
+    const Goal* goal = goals_model_.get(id);
+    if (goal == nullptr || goal->status == GoalStatus::completed || goal->status == GoalStatus::abandoned) return false;
     Event event{0, now_ns(), "brain", "goal_abandon", {{"id", id}}};
     if (!append_goal_event(event)) return false;
-    return true;
+    return goals_model_.abandon(id);
 }
 
 bool Brain::set_goal_priority(const std::string& id, double priority) {
     std::unique_lock lock(mutex_);
-    if (!goals_model_.set_priority(id, priority)) return false;
-    Event event{0, now_ns(), "brain", "goal_priority", {{"id", id}, {"priority", priority}}};
+    const Goal* goal = goals_model_.get(id);
+    if (goal == nullptr || !std::isfinite(priority)) return false;
+    Event event{0, now_ns(), "brain", "goal_priority", {{"id", id}, {"priority", std::clamp(priority, 0.0, 1.0)}}};
     if (!append_goal_event(event)) return false;
-    return true;
+    return goals_model_.set_priority(id, priority);
 }
 
 const Goal* Brain::goal(const std::string& id) const noexcept {
