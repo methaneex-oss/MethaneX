@@ -16,6 +16,7 @@
 #include "knowledge.hpp"
 #include "self_model.hpp"
 #include "self_state.hpp"
+#include "goals.hpp"
 
 #include <cstdint>
 #include <filesystem>
@@ -41,6 +42,7 @@ struct BrainSnapshot {
     std::vector<Belief> beliefs;
     std::vector<Prediction> predictions;
     std::vector<CausalLink> causal_links;
+    std::vector<Goal> goals;
 };
 
 class Brain {
@@ -72,6 +74,17 @@ public:
     void observe_capability(std::string name, double availability, double performance);
     bool isolate_capability(const std::string& name);
     bool restore_capability(const std::string& name, double availability, double performance);
+
+    bool create_goal(Goal goal);
+    bool activate_goal(const std::string& id);
+    bool update_goal_progress(const std::string& id, double progress);
+    bool complete_goal(const std::string& id);
+    bool abandon_goal(const std::string& id);
+    bool set_goal_priority(const std::string& id, double priority);
+    const Goal* goal(const std::string& id) const noexcept;
+    std::vector<Goal> goals() const;
+    std::vector<Goal> eligible_goals() const;
+
     const SelfModel& self_model() const noexcept { return self_model_; }
     const SelfStateModel& self_state_model() const noexcept { return self_state_model_; }
     const WorldModel& world() const noexcept { return world_; }
@@ -83,6 +96,7 @@ private:
     static double compute_novelty(const Event& event, const std::vector<Event>& history);
     void replay(const Event& event);
     void sync_self_state();
+    bool append_goal_event(const Event& event);
 
     mutable std::shared_mutex mutex_;
     BrainState state_{};
@@ -102,6 +116,7 @@ private:
     KnowledgeModel knowledge_{};
     SelfModel self_model_{};
     SelfStateModel self_state_model_{};
+    GoalModel goals_model_{};
     AttentionSignal attention_state_{};
     ThreatAssessment threat_state_{};
 };
