@@ -50,6 +50,10 @@ add_executable(jarvis_learning_loop_architecture_suite learning_loop_architectur
 target_link_libraries(jarvis_learning_loop_architecture_suite PRIVATE jarvis_core)
 target_compile_features(jarvis_learning_loop_architecture_suite PRIVATE cxx_std_20)
 
+add_executable(jarvis_goals_architecture_suite goals_architecture_suite.cpp)
+target_link_libraries(jarvis_goals_architecture_suite PRIVATE jarvis_core)
+target_compile_features(jarvis_goals_architecture_suite PRIVATE cxx_std_20)
+
 include(CTest)
 if(BUILD_TESTING)
     add_test(NAME jarvis_brain_contract COMMAND jarvis_brain_contract)
@@ -65,4 +69,5 @@ if(BUILD_TESTING)
     add_test(NAME jarvis_decision_planning_architecture_suite COMMAND jarvis_decision_planning_architecture_suite)
     add_test(NAME jarvis_action_model_architecture_suite COMMAND jarvis_action_model_architecture_suite)
     add_test(NAME jarvis_learning_loop_architecture_suite COMMAND jarvis_learning_loop_architecture_suite)
+    add_test(NAME jarvis_goals_architecture_suite COMMAND jarvis_goals_architecture_suite)
 endif()
