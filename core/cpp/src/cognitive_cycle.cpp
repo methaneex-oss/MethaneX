@@ -32,7 +32,7 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     }
 
     result.context.observation = brain_.observe(input.observation);
-    result.context.memories = brain_.memory().salient(input.memory_limit);
+    result.context.memories = brain_.memory().recall_ranked(input.observation.data, input.memory_limit);
     result.context.beliefs = brain_.beliefs();
     result.context.causal_links = brain_.causal_links();
 
