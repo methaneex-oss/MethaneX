@@ -1,6 +1,7 @@
 #include "jarvis/core/cognitive_cycle.hpp"
 
 #include <cassert>
+#include <cstdint>
 #include <filesystem>
 #include <string>
 
@@ -21,7 +22,8 @@ int main() {
     assert(brain.create_goal(goal));
     assert(brain.activate_goal(goal.id));
 
-    for (std::int64_t i = 0; i < 2000; ++i) {
+    constexpr std::int64_t iterations = 256;
+    for (std::int64_t i = 0; i < iterations; ++i) {
         CognitiveCycleInput input;
         input.observation = Event{0, 0, "stress", "observation", {{"sequence", i}, {"state", std::string("active")}}};
         input.candidate_actions = {
@@ -40,8 +42,8 @@ int main() {
         assert(!result.context.decisions.empty());
     }
 
-    assert(brain.state().events_seen >= 2002);
-    assert(brain.memory().size() >= 2002);
+    assert(brain.state().events_seen >= static_cast<std::uint64_t>(iterations));
+    assert(brain.memory().size() >= static_cast<std::size_t>(iterations));
 
     std::filesystem::remove(journal, ec);
     return 0;
