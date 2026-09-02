@@ -62,6 +62,10 @@ add_executable(jarvis_cognitive_cycle_stress_suite cognitive_cycle_stress_suite.
 target_link_libraries(jarvis_cognitive_cycle_stress_suite PRIVATE jarvis_core)
 target_compile_features(jarvis_cognitive_cycle_stress_suite PRIVATE cxx_std_20)
 
+add_executable(jarvis_cognitive_runtime_suite cognitive_runtime_suite.cpp)
+target_link_libraries(jarvis_cognitive_runtime_suite PRIVATE jarvis_core)
+target_compile_features(jarvis_cognitive_runtime_suite PRIVATE cxx_std_20)
+
 include(CTest)
 if(BUILD_TESTING)
     add_test(NAME jarvis_brain_contract COMMAND jarvis_brain_contract)
@@ -80,4 +84,5 @@ if(BUILD_TESTING)
     add_test(NAME jarvis_goals_architecture_suite COMMAND jarvis_goals_architecture_suite)
     add_test(NAME jarvis_cognitive_cycle_suite COMMAND jarvis_cognitive_cycle_suite)
     add_test(NAME jarvis_cognitive_cycle_stress_suite COMMAND jarvis_cognitive_cycle_stress_suite)
+    add_test(NAME jarvis_cognitive_runtime_suite COMMAND jarvis_cognitive_runtime_suite)
 endif()
