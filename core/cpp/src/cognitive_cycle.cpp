@@ -1,7 +1,6 @@
 #include "jarvis/core/cognitive_cycle.hpp"
 
 #include <algorithm>
-#include <cmath>
 
 namespace jarvis::core {
 
@@ -72,7 +71,6 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
         planned_actions.push_back(step.action);
     }
 
-    const double uncertainty = std::clamp(1.0 - result.context.reasoning.confidence, 0.0, 1.0);
     result.context.decisions = brain_.choose(planned_actions);
     if (result.context.decisions.empty()) {
         result.status = CognitiveCycleStatus::no_action;
@@ -80,8 +78,6 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
         return result;
     }
 
-    result.context.action_assessments = action_model_.assess(result.context.decisions);
-    (void)uncertainty;
     result.context.reflection = brain_.reflect();
     result.status = CognitiveCycleStatus::completed;
     return result;
