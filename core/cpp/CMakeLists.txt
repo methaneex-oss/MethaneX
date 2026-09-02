@@ -30,6 +30,7 @@ add_library(jarvis_core STATIC
     src/world_state.cpp
     src/goals.cpp
     src/cognitive_cycle.cpp
+    src/cognitive_runtime.cpp
 )
 
 target_include_directories(jarvis_core PUBLIC include)
