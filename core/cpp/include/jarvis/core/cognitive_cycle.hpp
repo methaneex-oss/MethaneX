@@ -1,10 +1,10 @@
 #pragma once
 
-#include "action_model.hpp"
 #include "brain.hpp"
 #include "reasoning.hpp"
 
 #include <cstddef>
+#include <cstdint>
 #include <optional>
 #include <string>
 #include <vector>
@@ -37,7 +37,6 @@ struct CognitiveCycleContext {
     Goal selected_goal;
     Plan plan;
     std::vector<Decision> decisions;
-    std::vector<ActionAssessment> action_assessments;
     Reflection reflection;
 };
 
@@ -60,7 +59,6 @@ private:
                                     const std::vector<Goal>& eligible) const;
 
     Brain& brain_;
-    ActionModel action_model_{};
 };
 
 } // namespace jarvis::core
