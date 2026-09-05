@@ -39,11 +39,36 @@ struct CandidateAction {
     double expected_value{0.0};
     double risk{0.0};
     double reversibility{1.0};
+    double resource_cost{0.0};
+    double expected_consequence{0.0};
+    double urgency{0.0};
+};
+
+enum class DecisionOutcome : std::uint8_t {
+    act,
+    defer,
+    observe,
+    ask_clarify,
+    recommend,
+    reject,
+    escalate,
+};
+
+struct DecisionContext {
+    double goal_priority{0.0};
+    double goal_progress{0.0};
+    double plan_expected_value{0.0};
+    double plan_risk{0.0};
+    double resource_budget{0.0};
+    double uncertainty{0.0};
+    double threat{0.0};
+    double deadline_pressure{0.0};
 };
 
 struct Decision {
     CandidateAction action;
     double score{0.0};
+    DecisionOutcome outcome{DecisionOutcome::defer};
 };
 
 } // namespace jarvis::core
