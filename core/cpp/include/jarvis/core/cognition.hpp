@@ -33,6 +33,16 @@ struct CausalLink {
     std::uint64_t observations{0};
 };
 
+enum class DecisionOutcome : std::uint8_t {
+    act,
+    defer,
+    observe,
+    ask_clarify,
+    recommend,
+    reject,
+    escalate,
+};
+
 struct CandidateAction {
     std::string name;
     double utility{0.0};
@@ -42,16 +52,7 @@ struct CandidateAction {
     double resource_cost{0.0};
     double expected_consequence{0.0};
     double urgency{0.0};
-};
-
-enum class DecisionOutcome : std::uint8_t {
-    act,
-    defer,
-    observe,
-    ask_clarify,
-    recommend,
-    reject,
-    escalate,
+    DecisionOutcome preferred_outcome{DecisionOutcome::act};
 };
 
 struct DecisionContext {
