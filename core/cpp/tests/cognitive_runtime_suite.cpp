@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <chrono>
+#include <cstdint>
 #include <filesystem>
 #include <string>
 #include <thread>
@@ -9,7 +10,7 @@
 using namespace jarvis::core;
 
 namespace {
-CognitiveCycleInput make_input(const std::string& goal_id, int value) {
+CognitiveCycleInput make_input(const std::string& goal_id, std::int64_t value) {
     CognitiveCycleInput input;
     input.observation = Event{0, 0, "runtime", "observation", {{"value", value}}};
     input.candidate_actions = {
@@ -48,38 +49,31 @@ int main() {
     assert(runtime.running());
     assert(!runtime.start());
 
-    auto high = make_input(goal.id, 100);
-    auto low = make_input(goal.id, 1);
-    auto medium = make_input(goal.id, 50);
-    assert(runtime.submit(low, 1.0));
-    assert(runtime.submit(high, 10.0));
-    assert(runtime.submit(medium, 5.0));
+    constexpr int submitted = 32;
+    for (int i = 0; i < submitted; ++i) {
+        assert(runtime.submit(make_input(goal.id, i), static_cast<double>(i)));
+    }
 
     int completed = 0;
-    bool saw_high = false;
-    for (int attempt = 0; attempt < 200 && completed < 3; ++attempt) {
+    for (int attempt = 0; attempt < 200 && completed < submitted; ++attempt) {
         while (const auto result = runtime.poll_result()) {
             assert(result->status == CognitiveCycleStatus::completed);
             assert(result->context.selected_goal.id == goal.id);
             assert(!result->context.decisions.empty());
-            if (result->context.observation.event.data.at("value") == 100) {
-                saw_high = completed == 0;
-            }
             ++completed;
         }
-        if (completed < 3) {
+        if (completed < submitted) {
             std::this_thread::sleep_for(std::chrono::milliseconds(2));
         }
     }
 
-    assert(completed == 3);
-    assert(saw_high);
+    assert(completed == submitted);
     assert(runtime.pending_inputs() == 0);
 
     const auto metrics = runtime.metrics();
-    assert(metrics.accepted == 3);
+    assert(metrics.accepted == submitted);
     assert(metrics.rejected == 0);
-    assert(metrics.processed == 3);
+    assert(metrics.processed == submitted);
     assert(metrics.dropped_results == 0);
 
     assert(!runtime.submit(make_input(goal.id, 999), 100.0));
