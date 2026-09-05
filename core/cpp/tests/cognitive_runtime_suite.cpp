@@ -48,28 +48,47 @@ int main() {
     assert(runtime.running());
     assert(!runtime.start());
 
-    constexpr int submitted = 32;
-    for (int i = 0; i < submitted; ++i) {
-        assert(runtime.submit(make_input(goal.id, i)));
-    }
+    auto high = make_input(goal.id, 100);
+    auto low = make_input(goal.id, 1);
+    auto medium = make_input(goal.id, 50);
+    assert(runtime.submit(low, 1.0));
+    assert(runtime.submit(high, 10.0));
+    assert(runtime.submit(medium, 5.0));
 
     int completed = 0;
-    for (int attempt = 0; attempt < 200 && completed < submitted; ++attempt) {
+    bool saw_high = false;
+    for (int attempt = 0; attempt < 200 && completed < 3; ++attempt) {
         while (const auto result = runtime.poll_result()) {
             assert(result->status == CognitiveCycleStatus::completed);
             assert(result->context.selected_goal.id == goal.id);
             assert(!result->context.decisions.empty());
+            if (result->context.observation.event.data.at("value") == 100) {
+                saw_high = completed == 0;
+            }
             ++completed;
         }
-        if (completed < submitted) {
+        if (completed < 3) {
             std::this_thread::sleep_for(std::chrono::milliseconds(2));
         }
     }
 
-    assert(completed == submitted);
+    assert(completed == 3);
+    assert(saw_high);
     assert(runtime.pending_inputs() == 0);
+
+    const auto metrics = runtime.metrics();
+    assert(metrics.accepted == 3);
+    assert(metrics.rejected == 0);
+    assert(metrics.processed == 3);
+    assert(metrics.dropped_results == 0);
+
+    assert(!runtime.submit(make_input(goal.id, 999), 100.0));
+    assert(runtime.metrics().rejected == 1);
+
     runtime.stop();
     assert(!runtime.running());
+    assert(!runtime.submit(make_input(goal.id, 1000), 100.0));
+    assert(runtime.metrics().rejected == 2);
 
     std::filesystem::remove(journal, ec);
     return 0;
