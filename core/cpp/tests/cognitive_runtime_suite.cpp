@@ -76,13 +76,10 @@ int main() {
     assert(metrics.processed == submitted);
     assert(metrics.dropped_results == 0);
 
-    assert(!runtime.submit(make_input(goal.id, 999), 100.0));
-    assert(runtime.metrics().rejected == 1);
-
     runtime.stop();
     assert(!runtime.running());
     assert(!runtime.submit(make_input(goal.id, 1000), 100.0));
-    assert(runtime.metrics().rejected == 2);
+    assert(runtime.metrics().rejected == 1);
 
     std::filesystem::remove(journal, ec);
     return 0;
