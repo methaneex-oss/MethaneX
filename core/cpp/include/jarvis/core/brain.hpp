@@ -85,6 +85,7 @@ public:
     std::vector<Goal> goals() const;
     std::vector<Goal> eligible_goals() const;
 
+    const DecisionEngine& decision_engine() const noexcept { return decision_; }
     const SelfModel& self_model() const noexcept { return self_model_; }
     const SelfStateModel& self_state_model() const noexcept { return self_state_model_; }
     const WorldModel& world() const noexcept { return world_; }
