@@ -71,7 +71,20 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
         planned_actions.push_back(step.action);
     }
 
-    result.context.decisions = brain_.choose(planned_actions);
+    const auto self_state = brain_.self_state_model().snapshot();
+    result.context.decision_context = DecisionContext{
+        selected->priority,
+        selected->progress,
+        result.context.plan.expected_value,
+        result.context.plan.risk,
+        input.resource_budget,
+        self_state.uncertainty,
+        brain_.threat().score,
+        input.deadline_pressure,
+    };
+
+    result.context.decisions = brain_.decision_engine().decide(
+        planned_actions, result.context.decision_context);
     if (result.context.decisions.empty()) {
         result.status = CognitiveCycleStatus::no_action;
         result.context.reflection = brain_.reflect();
