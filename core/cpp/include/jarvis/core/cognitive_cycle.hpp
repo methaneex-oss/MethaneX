@@ -25,6 +25,8 @@ struct CognitiveCycleInput {
     std::size_t planning_horizon{1};
     std::size_t memory_limit{8};
     std::size_t reasoning_steps{8};
+    double resource_budget{0.0};
+    double deadline_pressure{0.0};
 };
 
 struct CognitiveCycleContext {
@@ -36,6 +38,7 @@ struct CognitiveCycleContext {
     std::vector<Goal> eligible_goals;
     Goal selected_goal;
     Plan plan;
+    DecisionContext decision_context;
     std::vector<Decision> decisions;
     Reflection reflection;
 };
