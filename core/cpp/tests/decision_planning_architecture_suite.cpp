@@ -103,6 +103,19 @@ int main() {
     assert(plan.expected_value >= 0.0);
     assert(plan.risk >= 0.0 && plan.risk <= 1.0);
 
+    const PlanningContext urgent_context{1.0, 0.0, 0.0, 0.1, 10.0, 1.0};
+    const auto contextual_plan = planner.build(actions, 2, urgent_context);
+    assert(contextual_plan.steps.size() == 2);
+    assert(std::isfinite(contextual_plan.steps.front().expected_score));
+
+    const PlanningContext constrained_context{1.0, 0.0, 0.0, 0.1, 0.1, 0.0};
+    const auto constrained_plan = planner.build({
+        {"cheap", 0.4, 0.4, 0.0, 1.0, 0.1},
+        {"expensive", 0.9, 0.9, 0.0, 1.0, 10.0}
+    }, 1, constrained_context);
+    assert(constrained_plan.steps.size() == 1);
+    assert(constrained_plan.steps.front().action.name == "cheap");
+
     assert(planner.build(actions, 0).steps.empty());
     assert(planner.build({}, 3).steps.empty());
 
