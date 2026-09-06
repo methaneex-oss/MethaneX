@@ -8,6 +8,15 @@
 
 namespace jarvis::core {
 
+struct PlanningContext {
+    double goal_priority{0.0};
+    double goal_progress{0.0};
+    double threat{0.0};
+    double uncertainty{0.0};
+    double resource_budget{0.0};
+    double deadline_pressure{0.0};
+};
+
 struct PlanStep {
     CandidateAction action;
     double expected_score{0.0};
@@ -22,6 +31,8 @@ struct Plan {
 class Planner {
 public:
     Plan build(const std::vector<CandidateAction>& actions, std::size_t horizon) const;
+    Plan build(const std::vector<CandidateAction>& actions, std::size_t horizon,
+               const PlanningContext& context) const;
 };
 
 } // namespace jarvis::core
