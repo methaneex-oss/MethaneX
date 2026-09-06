@@ -57,6 +57,8 @@ public:
     std::vector<CausalLink> causal_links() const;
     std::vector<Decision> choose(const std::vector<CandidateAction>& actions) const;
     Plan plan(const std::vector<CandidateAction>& actions, std::size_t horizon) const;
+    Plan plan(const std::vector<CandidateAction>& actions, std::size_t horizon,
+              const PlanningContext& context) const;
     Reflection reflect() const;
     const KnowledgeMetric* knowledge_source(const std::string& source) const noexcept;
     const AdaptiveMetric* learning_metric(const std::string& key) const noexcept;
