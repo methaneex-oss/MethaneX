@@ -58,7 +58,23 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
         return result;
     }
 
-    result.context.plan = brain_.plan(input.candidate_actions, input.planning_horizon);
+    const auto self_state = brain_.self_state_model().snapshot();
+    const double goal_priority = std::clamp(selected->priority, 0.0, 1.0);
+    const double goal_progress = std::clamp(selected->progress, 0.0, 1.0);
+    const double threat = std::clamp(brain_.threat().score, 0.0, 1.0);
+    const double uncertainty = std::clamp(self_state.uncertainty, 0.0, 1.0);
+    const double deadline_pressure = std::clamp(input.deadline_pressure, 0.0, 1.0);
+
+    const PlanningContext planning_context{
+        goal_priority,
+        goal_progress,
+        threat,
+        uncertainty,
+        input.resource_budget,
+        deadline_pressure,
+    };
+    result.context.plan = brain_.plan(input.candidate_actions, input.planning_horizon,
+                                      planning_context);
     if (result.context.plan.steps.empty()) {
         result.status = CognitiveCycleStatus::no_action;
         result.context.reflection = brain_.reflect();
@@ -71,16 +87,15 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
         planned_actions.push_back(step.action);
     }
 
-    const auto self_state = brain_.self_state_model().snapshot();
     result.context.decision_context = DecisionContext{
-        selected->priority,
-        selected->progress,
+        goal_priority,
+        goal_progress,
         result.context.plan.expected_value,
         result.context.plan.risk,
         input.resource_budget,
-        self_state.uncertainty,
-        brain_.threat().score,
-        input.deadline_pressure,
+        uncertainty,
+        threat,
+        deadline_pressure,
     };
 
     result.context.decisions = brain_.decision_engine().decide(
