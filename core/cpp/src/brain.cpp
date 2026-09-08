@@ -350,7 +350,30 @@ std::vector<CausalLink> Brain::causal_links() const {
 
 std::vector<Decision> Brain::choose(const std::vector<CandidateAction>& actions) const {
     std::shared_lock lock(mutex_);
-    return decision_.rank(actions, self_state_model_.snapshot().uncertainty, threat_state_.score);
+    const auto self = self_state_model_.snapshot();
+    return decision_.rank(actions, self.uncertainty, threat_state_.score);
+}
+
+Plan Brain::plan(const std::vector<CandidateAction>& actions, std::size_t horizon) const {
+    std::shared_lock lock(mutex_);
+    return planner_.build(actions, horizon);
+}
+
+Plan Brain::plan(const std::vector<CandidateAction>& actions, std::size_t horizon,
+                 const PlanningContext& context) const {
+    std::shared_lock lock(mutex_);
+    return planner_.build(actions, horizon, context);
+}
+
+Reflection Brain::reflect() const {
+    std::shared_lock lock(mutex_);
+    std::vector<Belief> beliefs;
+    beliefs.reserve(beliefs_.size());
+    for (const auto& [_, belief] : beliefs_) beliefs.push_back(belief);
+    std::vector<Prediction> predictions;
+    predictions.reserve(predictions_.size());
+    for (const auto& [_, prediction] : predictions_) predictions.push_back(prediction);
+    return reflection_model_.evaluate(beliefs, predictions);
 }
 
 AttentionSignal Brain::attention() const {
@@ -464,28 +487,6 @@ std::vector<Goal> Brain::eligible_goals() const {
     return goals_model_.eligible(state_.cycle);
 }
 
-Plan Brain::plan(const std::vector<CandidateAction>& actions, std::size_t horizon) const {
-    std::shared_lock lock(mutex_);
-    return planner_.build(actions, horizon);
-}
-
-Plan Brain::plan(const std::vector<CandidateAction>& actions, std::size_t horizon,
-                 const PlanningContext& context) const {
-    std::shared_lock lock(mutex_);
-    return planner_.build(actions, horizon, context);
-}
-
-Reflection Brain::reflect() const {
-    std::shared_lock lock(mutex_);
-    std::vector<Belief> beliefs;
-    beliefs.reserve(beliefs_.size());
-    for (const auto& [_, belief] : beliefs_) beliefs.push_back(belief);
-    std::vector<Prediction> predictions;
-    predictions.reserve(predictions_.size());
-    for (const auto& [_, prediction] : predictions_) predictions.push_back(prediction);
-    return reflection_model_.evaluate(beliefs, predictions);
-}
-
 void Brain::observe_capability(std::string name, double availability, double performance) {
     std::unique_lock lock(mutex_);
     if (name.empty()) return;
@@ -560,8 +561,7 @@ bool Brain::recover(const std::string& component, double restored_health) {
 void Brain::register_evolution_parameter(std::string key, double initial) {
     std::unique_lock lock(mutex_);
     if (key.empty()) return;
-    Event event{0, now_ns(), "brain", "evolution_register",
-                {{"key", key}, {"initial", initial}}};
+    Event event{0, now_ns(), "brain", "evolution_register", {{"key", key}, {"initial", initial}}};
     event.sequence = memory_.append(event);
     if (event.sequence == 0) return;
     evolution_.register_parameter(key, initial);
@@ -573,8 +573,7 @@ void Brain::register_evolution_parameter(std::string key, double initial) {
 void Brain::observe_evolution_fitness(const std::string& key, double fitness) {
     std::unique_lock lock(mutex_);
     if (key.empty()) return;
-    Event event{0, now_ns(), "brain", "evolution_fitness",
-                {{"key", key}, {"fitness", fitness}}};
+    Event event{0, now_ns(), "brain", "evolution_fitness", {{"key", key}, {"fitness", fitness}}};
     event.sequence = memory_.append(event);
     if (event.sequence == 0) return;
     evolution_.observe_fitness(key, fitness);
@@ -630,21 +629,46 @@ bool Brain::append_goal_event(const Event& event) {
 
 BrainSnapshot Brain::snapshot() const {
     std::shared_lock lock(mutex_);
-    BrainSnapshot snapshot{};
-    snapshot.state = state_;
-    snapshot.self_state = self_state_model_.snapshot();
-    snapshot.beliefs.reserve(beliefs_.size());
-    for (const auto& [_, belief] : beliefs_) snapshot.beliefs.push_back(belief);
-    snapshot.predictions.reserve(predictions_.size());
-    for (const auto& [_, prediction] : predictions_) snapshot.predictions.push_back(prediction);
-    snapshot.causal_links = causal_.links();
-    snapshot.goals = goals_model_.all();
-    return snapshot;
+    BrainSnapshot result{};
+    result.state = state_;
+    result.self_state = self_state_model_.snapshot();
+    result.beliefs.reserve(beliefs_.size());
+    for (const auto& [_, belief] : beliefs_) result.beliefs.push_back(belief);
+    result.predictions.reserve(predictions_.size());
+    for (const auto& [_, prediction] : predictions_) result.predictions.push_back(prediction);
+    result.causal_links = causal_.links();
+    result.goals = goals_model_.all();
+    return result;
 }
 
 BrainState Brain::state() const {
     std::shared_lock lock(mutex_);
     return state_;
+}
+
+// Novelty is intentionally derived from the event data rather than a fixed
+// topic list. Empty observations carry no information; otherwise novelty is
+// the complement of the best similarity found in the supplied recent history.
+double Brain::compute_novelty(const Event& event, const std::vector<Event>& history) {
+    if (event.data.empty()) return 0.0;
+    if (history.empty()) return 1.0;
+
+    double best_similarity = 0.0;
+    for (const auto& previous : history) {
+        if (previous.data.empty()) continue;
+        std::size_t matches = 0;
+        std::size_t comparable = 0;
+        for (const auto& [key, value] : event.data) {
+            const auto it = previous.data.find(key);
+            if (it == previous.data.end()) continue;
+            ++comparable;
+            if (it->second == value) ++matches;
+        }
+        if (comparable != 0)
+            best_similarity = std::max(best_similarity,
+                                       static_cast<double>(matches) / static_cast<double>(comparable));
+    }
+    return std::clamp(1.0 - best_similarity, 0.0, 1.0);
 }
 
 } // namespace jarvis::core
