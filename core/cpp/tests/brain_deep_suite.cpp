@@ -28,21 +28,28 @@ int main() {
         Brain first(journal);
         const auto observed = first.observe(event(0, "test", "observation", "persistent", 42.0));
         assert(observed.event.sequence == 1);
+        assert(observed.novelty == 1.0);
         assert(first.memory().size() == 1);
         assert(first.memory().next_sequence() == 2);
+        assert(first.create_goal(Goal{"persisted-goal", "survive restart", 0.8, 0.0, 0, 0, GoalStatus::pending, {}, {}}));
         const auto snap = first.snapshot();
-        assert(snap.state.events_seen == 1);
+        assert(snap.state.events_seen == 2);
         assert(!snap.beliefs.empty());
+        assert(!snap.goals.empty());
     }
     {
         Brain restarted(journal);
-        assert(restarted.memory().size() == 1);
+        assert(restarted.memory().size() == 2);
         const auto latest = restarted.memory().latest();
         assert(latest.has_value());
-        assert(latest->kind == "observation");
-        assert(restarted.memory().next_sequence() == 2);
-        assert(restarted.state().events_seen == 1);
+        assert(latest->kind == "goal_create");
+        assert(restarted.memory().next_sequence() == 3);
+        assert(restarted.state().events_seen == 2);
         assert(!restarted.beliefs().empty());
+        const auto persisted_goal = restarted.goal("persisted-goal");
+        assert(persisted_goal != nullptr);
+        assert(persisted_goal->created_cycle == 2);
+        assert(persisted_goal->priority == 0.8);
     }
 
     Brain brain(root / "main.bin");
@@ -69,6 +76,8 @@ int main() {
         brain.observe(event(0, "memory", "observation",
                             i % 2 ? "target" : "noise", static_cast<double>(i + 1)));
     }
+    const auto repeated = brain.observe(event(0, "memory", "observation", "target", 20.0));
+    assert(repeated.novelty > 0.0 && repeated.novelty <= 1.0);
     const auto recalled = brain.memory().recall(
         Attributes{{"topic", Scalar{std::string("target")}}}, 3);
     assert(recalled.size() == 3);
@@ -81,6 +90,7 @@ int main() {
     const auto learned = brain.learn(Evidence{"trusted", "temperature", Scalar{25.0}, 0.9});
     assert(learned >= 0.0 && learned <= 1.0);
     assert(brain.knowledge_source("trusted") != nullptr);
+    assert(brain.learning_metric("temperature") == nullptr);
     const auto causal_before = brain.causal_links().size();
     brain.observe(event(0, "sensor", "observation", "temperature", 26.0));
     const auto beliefs = brain.beliefs();
