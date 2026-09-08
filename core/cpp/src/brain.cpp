@@ -338,6 +338,21 @@ bool Brain::resolve_prediction(const std::string& key, const Scalar& actual) {
     return error == 0.0;
 }
 
+const KnowledgeMetric* Brain::knowledge_source(const std::string& source) const noexcept {
+    std::shared_lock lock(mutex_);
+    return knowledge_.source_metric(source);
+}
+
+const AdaptiveMetric* Brain::learning_metric(const std::string& key) const noexcept {
+    std::shared_lock lock(mutex_);
+    return adaptation_.metric(key);
+}
+
+double Brain::learning_confidence(const std::string& key) const noexcept {
+    std::shared_lock lock(mutex_);
+    return std::clamp(adaptation_.confidence(key), 0.0, 1.0);
+}
+
 std::vector<std::pair<std::string, Scalar>> Brain::simulate(const std::vector<Belief>& assumptions) const {
     std::shared_lock lock(mutex_);
     return causal_.predict(assumptions);
@@ -646,9 +661,6 @@ BrainState Brain::state() const {
     return state_;
 }
 
-// Novelty is intentionally derived from the event data rather than a fixed
-// topic list. Empty observations carry no information; otherwise novelty is
-// the complement of the best similarity found in the supplied recent history.
 double Brain::compute_novelty(const Event& event, const std::vector<Event>& history) {
     if (event.data.empty()) return 0.0;
     if (history.empty()) return 1.0;
