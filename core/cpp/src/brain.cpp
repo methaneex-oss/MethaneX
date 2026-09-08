@@ -120,6 +120,10 @@ void Brain::replay(const Event& event) {
         if (const auto* id = string_value(event.data, "id")) goals_model_.update_progress(*id, double_value(event.data, "progress"));
         return;
     }
+    if (event.kind == "goal_complete") {
+        if (const auto* id = string_value(event.data, "id")) goals_model_.complete(*id);
+        return;
+    }
     if (event.kind == "goal_abandon") {
         if (const auto* id = string_value(event.data, "id")) goals_model_.abandon(*id);
         return;
@@ -334,9 +338,34 @@ bool Brain::resolve_prediction(const std::string& key, const Scalar& actual) {
     return error == 0.0;
 }
 
-const KnowledgeMetric* Brain::knowledge_source(const std::string& source) const noexcept {
+std::vector<std::pair<std::string, Scalar>> Brain::simulate(const std::vector<Belief>& assumptions) const {
     std::shared_lock lock(mutex_);
-    return knowledge_.source_metric(source);
+    return causal_.predict(assumptions);
+}
+
+std::vector<CausalLink> Brain::causal_links() const {
+    std::shared_lock lock(mutex_);
+    return causal_.links();
+}
+
+std::vector<Decision> Brain::choose(const std::vector<CandidateAction>& actions) const {
+    std::shared_lock lock(mutex_);
+    return decision_.rank(actions, self_state_model_.snapshot().uncertainty, threat_state_.score);
+}
+
+AttentionSignal Brain::attention() const {
+    std::shared_lock lock(mutex_);
+    return attention_state_;
+}
+
+ThreatAssessment Brain::threat() const {
+    std::shared_lock lock(mutex_);
+    return threat_state_;
+}
+
+std::vector<RecoveryPlan> Brain::recovery_options() const {
+    std::shared_lock lock(mutex_);
+    return resilience_.required_recovery();
 }
 
 bool Brain::create_goal(Goal goal) {
@@ -374,8 +403,19 @@ bool Brain::update_goal_progress(const std::string& id, double progress) {
     std::unique_lock lock(mutex_);
     const double bounded = std::clamp(progress, 0.0, 1.0);
     if (!goals_model_.update_progress(id, bounded)) return false;
-    Event event{0, now_ns(), "brain", "goal_progress",
-                {{"id", id}, {"progress", bounded}}};
+    Event event{0, now_ns(), "brain", "goal_progress", {{"id", id}, {"progress", bounded}}};
+    event.sequence = memory_.append(event);
+    if (event.sequence == 0) return false;
+    ++state_.events_seen;
+    state_.cycle = event.sequence;
+    sync_self_state();
+    return true;
+}
+
+bool Brain::complete_goal(const std::string& id) {
+    std::unique_lock lock(mutex_);
+    if (!goals_model_.complete(id)) return false;
+    Event event{0, now_ns(), "brain", "goal_complete", {{"id", id}}};
     event.sequence = memory_.append(event);
     if (event.sequence == 0) return false;
     ++state_.events_seen;
@@ -409,6 +449,16 @@ bool Brain::set_goal_priority(const std::string& id, double priority) {
     return true;
 }
 
+const Goal* Brain::goal(const std::string& id) const noexcept {
+    std::shared_lock lock(mutex_);
+    return goals_model_.get(id);
+}
+
+std::vector<Goal> Brain::goals() const {
+    std::shared_lock lock(mutex_);
+    return goals_model_.all();
+}
+
 std::vector<Goal> Brain::eligible_goals() const {
     std::shared_lock lock(mutex_);
     return goals_model_.eligible(state_.cycle);
@@ -425,31 +475,31 @@ Plan Brain::plan(const std::vector<CandidateAction>& actions, std::size_t horizo
     return planner_.build(actions, horizon, context);
 }
 
-std::vector<Decision> Brain::decide(const std::vector<CandidateAction>& actions,
-                                    const DecisionContext& context) const {
-    std::shared_lock lock(mutex_);
-    return decision_model_.decide(actions, context);
-}
-
 Reflection Brain::reflect() const {
     std::shared_lock lock(mutex_);
-    return reflection_model_.reflect(state_, beliefs_, predictions_);
+    std::vector<Belief> beliefs;
+    beliefs.reserve(beliefs_.size());
+    for (const auto& [_, belief] : beliefs_) beliefs.push_back(belief);
+    std::vector<Prediction> predictions;
+    predictions.reserve(predictions_.size());
+    for (const auto& [_, prediction] : predictions_) predictions.push_back(prediction);
+    return reflection_model_.evaluate(beliefs, predictions);
 }
 
-bool Brain::observe_capability(std::string name, double availability, double performance) {
+void Brain::observe_capability(std::string name, double availability, double performance) {
     std::unique_lock lock(mutex_);
-    if (name.empty()) return false;
+    if (name.empty()) return;
+    const double bounded_availability = std::clamp(availability, 0.0, 1.0);
+    const double bounded_performance = std::clamp(performance, 0.0, 1.0);
     Event event{0, now_ns(), "brain", "capability_observe",
-        {{"name", name}, {"availability", std::clamp(availability, 0.0, 1.0)},
-         {"performance", std::clamp(performance, 0.0, 1.0)}}};
+        {{"name", name}, {"availability", bounded_availability},
+         {"performance", bounded_performance}}};
     event.sequence = memory_.append(event);
-    if (event.sequence == 0) return false;
-    self_model_.observe_capability(name, std::clamp(availability, 0.0, 1.0),
-                                   std::clamp(performance, 0.0, 1.0));
+    if (event.sequence == 0) return;
+    self_model_.observe_capability(name, bounded_availability, bounded_performance);
     ++state_.events_seen;
     state_.cycle = event.sequence;
     sync_self_state();
-    return true;
 }
 
 bool Brain::isolate_capability(const std::string& name) {
@@ -505,6 +555,96 @@ bool Brain::recover(const std::string& component, double restored_health) {
     state_.cycle = event.sequence;
     sync_self_state();
     return true;
+}
+
+void Brain::register_evolution_parameter(std::string key, double initial) {
+    std::unique_lock lock(mutex_);
+    if (key.empty()) return;
+    Event event{0, now_ns(), "brain", "evolution_register",
+                {{"key", key}, {"initial", initial}}};
+    event.sequence = memory_.append(event);
+    if (event.sequence == 0) return;
+    evolution_.register_parameter(key, initial);
+    ++state_.events_seen;
+    state_.cycle = event.sequence;
+    sync_self_state();
+}
+
+void Brain::observe_evolution_fitness(const std::string& key, double fitness) {
+    std::unique_lock lock(mutex_);
+    if (key.empty()) return;
+    Event event{0, now_ns(), "brain", "evolution_fitness",
+                {{"key", key}, {"fitness", fitness}}};
+    event.sequence = memory_.append(event);
+    if (event.sequence == 0) return;
+    evolution_.observe_fitness(key, fitness);
+    ++state_.events_seen;
+    state_.cycle = event.sequence;
+    sync_self_state();
+}
+
+std::vector<EvolutionProposal> Brain::evolution_options() const {
+    std::shared_lock lock(mutex_);
+    return evolution_.propose();
+}
+
+bool Brain::adopt_evolution(const EvolutionProposal& proposal) {
+    std::unique_lock lock(mutex_);
+    if (proposal.key.empty() || !evolution_.adopt(proposal)) return false;
+    Event event{0, now_ns(), "brain", "evolution_adopt",
+        {{"key", proposal.key}, {"current", proposal.current}, {"proposed", proposal.proposed},
+         {"expected_gain", proposal.expected_gain}, {"confidence", proposal.confidence}}};
+    event.sequence = memory_.append(event);
+    if (event.sequence == 0) {
+        evolution_.rollback(proposal.key);
+        return false;
+    }
+    ++state_.events_seen;
+    state_.cycle = event.sequence;
+    sync_self_state();
+    return true;
+}
+
+bool Brain::rollback_evolution(const std::string& key) {
+    std::unique_lock lock(mutex_);
+    if (key.empty() || !evolution_.rollback(key)) return false;
+    Event event{0, now_ns(), "brain", "evolution_rollback", {{"key", key}}};
+    event.sequence = memory_.append(event);
+    if (event.sequence == 0) return false;
+    ++state_.events_seen;
+    state_.cycle = event.sequence;
+    sync_self_state();
+    return true;
+}
+
+bool Brain::append_goal_event(const Event& event) {
+    Event persisted = event;
+    persisted.timestamp_ns = persisted.timestamp_ns == 0 ? now_ns() : persisted.timestamp_ns;
+    persisted.sequence = memory_.append(persisted);
+    if (persisted.sequence == 0) return false;
+    ++state_.events_seen;
+    state_.cycle = persisted.sequence;
+    sync_self_state();
+    return true;
+}
+
+BrainSnapshot Brain::snapshot() const {
+    std::shared_lock lock(mutex_);
+    BrainSnapshot snapshot{};
+    snapshot.state = state_;
+    snapshot.self_state = self_state_model_.snapshot();
+    snapshot.beliefs.reserve(beliefs_.size());
+    for (const auto& [_, belief] : beliefs_) snapshot.beliefs.push_back(belief);
+    snapshot.predictions.reserve(predictions_.size());
+    for (const auto& [_, prediction] : predictions_) snapshot.predictions.push_back(prediction);
+    snapshot.causal_links = causal_.links();
+    snapshot.goals = goals_model_.all();
+    return snapshot;
+}
+
+BrainState Brain::state() const {
+    std::shared_lock lock(mutex_);
+    return state_;
 }
 
 } // namespace jarvis::core
