@@ -3,7 +3,7 @@
 #include "cognition.hpp"
 
 #include <cstddef>
-#include <string>
+
 #include <vector>
 
 namespace jarvis::core {
@@ -15,6 +15,17 @@ struct PlanningContext {
     double uncertainty{0.0};
     double resource_budget{0.0};
     double deadline_pressure{0.0};
+};
+
+struct PlanningPolicy {
+    double utility_weight{1.0};
+    double expected_value_weight{1.0};
+    double goal_weight{1.0};
+    double urgency_weight{1.0};
+    double reversibility_weight{0.25};
+    double threat_weight{0.25};
+    double risk_weight{1.0};
+    double resource_weight{0.5};
 };
 
 struct PlanStep {
@@ -30,9 +41,17 @@ struct Plan {
 
 class Planner {
 public:
+    explicit Planner(PlanningPolicy policy = {}) : policy_(policy) {}
+
     Plan build(const std::vector<CandidateAction>& actions, std::size_t horizon) const;
     Plan build(const std::vector<CandidateAction>& actions, std::size_t horizon,
                const PlanningContext& context) const;
+
+    void set_policy(PlanningPolicy policy) noexcept { policy_ = policy; }
+    PlanningPolicy policy() const noexcept { return policy_; }
+
+private:
+    PlanningPolicy policy_{};
 };
 
 } // namespace jarvis::core
