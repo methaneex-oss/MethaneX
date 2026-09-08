@@ -6,6 +6,7 @@
 #include "cognition.hpp"
 #include "causal_model.hpp"
 #include "decision.hpp"
+#include "action_model.hpp"
 #include "adaptation.hpp"
 #include "attention.hpp"
 #include "threat.hpp"
@@ -59,6 +60,8 @@ public:
     Plan plan(const std::vector<CandidateAction>& actions, std::size_t horizon) const;
     Plan plan(const std::vector<CandidateAction>& actions, std::size_t horizon,
               const PlanningContext& context) const;
+    std::vector<ActionAssessment> assess_actions(const std::vector<Decision>& decisions,
+                                                  ActionConstraints constraints = {}) const;
     Reflection reflect() const;
     const KnowledgeMetric* knowledge_source(const std::string& source) const noexcept;
     const AdaptiveMetric* learning_metric(const std::string& key) const noexcept;
@@ -88,6 +91,7 @@ public:
     std::vector<Goal> eligible_goals() const;
 
     const DecisionEngine& decision_engine() const noexcept { return decision_; }
+    const ActionModel& action_model() const noexcept { return action_model_; }
     const SelfModel& self_model() const noexcept { return self_model_; }
     const SelfStateModel& self_state_model() const noexcept { return self_state_model_; }
     const WorldModel& world() const noexcept { return world_; }
@@ -109,6 +113,7 @@ private:
     std::unordered_map<std::string, Prediction> predictions_;
     CausalModel causal_{};
     DecisionEngine decision_{};
+    ActionModel action_model_{};
     AdaptationModel adaptation_{};
     AttentionModel attention_model_{};
     ThreatModel threat_model_{};
