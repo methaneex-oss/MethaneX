@@ -249,7 +249,9 @@ void Brain::replay(const Event& event) {
 
     if (event.kind == "observation") {
         const auto history = memory_.recent(2);
-        const double novelty = history.size() > 1 ? compute_novelty(event, {history.front()}) : 1.0;
+        std::vector<Event> previous;
+        if (history.size() > 1) previous.push_back(history[1]);
+        const double novelty = compute_novelty(event, previous);
         double strongest = 0.0;
         for (const auto& [_, belief] : beliefs_) strongest = std::max(strongest, belief.confidence);
         attention_state_ = attention_model_.score(event, novelty, strongest);
@@ -409,6 +411,10 @@ std::vector<RecoveryPlan> Brain::recovery_options() const {
 bool Brain::create_goal(Goal goal) {
     std::unique_lock lock(mutex_);
     if (goal.id.empty() || goal.description.empty()) return false;
+    goal.priority = std::clamp(goal.priority, 0.0, 1.0);
+    goal.progress = std::clamp(goal.progress, 0.0, 1.0);
+    const std::uint64_t created_cycle = state_.cycle + 1;
+    goal.created_cycle = created_cycle;
     Event event{0, now_ns(), "brain", "goal_create",
         {{"id", goal.id}, {"description", goal.description}, {"priority", goal.priority},
          {"progress", goal.progress}, {"created_cycle", static_cast<std::int64_t>(goal.created_cycle)},
@@ -418,7 +424,7 @@ bool Brain::create_goal(Goal goal) {
     event.sequence = memory_.append(event);
     if (event.sequence == 0) return false;
     goal.created_cycle = event.sequence;
-    goals_model_.create(std::move(goal));
+    if (!goals_model_.create(std::move(goal))) return false;
     ++state_.events_seen;
     state_.cycle = event.sequence;
     sync_self_state();
