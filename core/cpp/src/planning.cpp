@@ -24,7 +24,7 @@ double score_action(const CandidateAction& action, const PlanningContext& contex
     const double reversibility = unit(action.reversibility);
     const double cost = nonnegative(action.resource_cost);
     const double budget = nonnegative(context.resource_budget);
-    const double cost_ratio = budget > 0.0 ? std::min(1.0, cost / budget) : 0.0;
+    const double cost_ratio = budget > 0.0 ? cost / budget : (cost > 0.0 ? 1.0 : 0.0);
     const double goal_priority = unit(context.goal_priority);
     const double goal_progress = unit(context.goal_progress);
     const double threat = unit(context.threat);
