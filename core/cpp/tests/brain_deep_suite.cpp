@@ -76,8 +76,8 @@ int main() {
         brain.observe(event(0, "memory", "observation",
                             i % 2 ? "target" : "noise", static_cast<double>(i + 1)));
     }
-    const auto repeated = brain.observe(event(0, "memory", "observation", "target", 20.0));
-    assert(repeated.novelty > 0.0 && repeated.novelty <= 1.0);
+    const auto changed_target = brain.observe(event(0, "memory", "observation", "target", 21.0));
+    assert(changed_target.novelty > 0.0 && changed_target.novelty <= 1.0);
     const auto recalled = brain.memory().recall(
         Attributes{{"topic", Scalar{std::string("target")}}}, 3);
     assert(recalled.size() == 3);
