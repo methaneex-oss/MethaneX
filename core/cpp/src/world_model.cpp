@@ -25,26 +25,37 @@ void WorldModel::observe(const Fact& incoming) {
         it->updated_sequence = std::max(it->updated_sequence, fact.updated_sequence);
         return;
     }
+
     it->disputed = true;
-    if (fact.confidence > it->confidence) {
-        fact.disputed = true;
-        if (fact.first_sequence == 0) fact.first_sequence = fact.updated_sequence;
-        *it = std::move(fact);
-    }
+    fact.disputed = true;
+    if (fact.first_sequence == 0) fact.first_sequence = fact.updated_sequence;
+    disputed_facts_.push_back(fact);
+    if (fact.confidence > it->confidence) *it = std::move(fact);
 }
 
 void WorldModel::relate(const Relation& incoming) {
     std::unique_lock lock(mutex_);
     Relation relation = incoming;
     relation.confidence = std::clamp(relation.confidence, 0.0, 1.0);
-    const auto it = std::find_if(relations_.begin(), relations_.end(), [&](const Relation& current) {
+
+    const auto exact = std::find_if(relations_.begin(), relations_.end(), [&](const Relation& current) {
         return current.from == relation.from && current.type == relation.type && current.to == relation.to;
     });
-    if (it == relations_.end()) relations_.push_back(std::move(relation));
-    else {
-        it->confidence = std::max(it->confidence, relation.confidence);
-        it->updated_sequence = std::max(it->updated_sequence, relation.updated_sequence);
+    if (exact != relations_.end()) {
+        exact->confidence = std::max(exact->confidence, relation.confidence);
+        exact->updated_sequence = std::max(exact->updated_sequence, relation.updated_sequence);
+        return;
     }
+
+    const auto conflict = std::find_if(relations_.begin(), relations_.end(), [&](const Relation& current) {
+        return current.from == relation.from && current.type == relation.type && current.to != relation.to;
+    });
+    if (conflict != relations_.end()) {
+        conflict->disputed = true;
+        relation.disputed = true;
+        disputed_relations_.push_back(relation);
+    }
+    relations_.push_back(std::move(relation));
 }
 
 std::optional<Fact> WorldModel::query(const std::string& subject, const std::string& predicate) const {
@@ -70,15 +81,24 @@ std::vector<Fact> WorldModel::facts() const {
 
 std::vector<Fact> WorldModel::disputed_facts() const {
     std::shared_lock lock(mutex_);
-    std::vector<Fact> result;
+    std::vector<Fact> result = disputed_facts_;
     for (const auto& fact : facts_) if (fact.disputed) result.push_back(fact);
+    return result;
+}
+
+std::vector<Relation> WorldModel::disputed_relations() const {
+    std::shared_lock lock(mutex_);
+    std::vector<Relation> result = disputed_relations_;
+    for (const auto& relation : relations_) if (relation.disputed) result.push_back(relation);
     return result;
 }
 
 void WorldModel::clear() {
     std::unique_lock lock(mutex_);
     facts_.clear();
+    disputed_facts_.clear();
     relations_.clear();
+    disputed_relations_.clear();
 }
 
 } // namespace jarvis::core
