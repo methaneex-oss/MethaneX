@@ -34,6 +34,7 @@ int main() {
     input.reasoning_steps = 4;
     input.resource_budget = 10.0;
     input.deadline_pressure = 0.5;
+    input.action_constraints = ActionConstraints{0.5, false};
 
     const auto result = cycle.run(input);
     assert(result.status == CognitiveCycleStatus::completed);
@@ -48,6 +49,19 @@ int main() {
     assert(result.context.decision_context.plan_expected_value == result.context.plan.expected_value);
     assert(result.context.decision_context.resource_budget == input.resource_budget);
     assert(result.context.decision_context.deadline_pressure == input.deadline_pressure);
+    assert(result.context.action_assessments.size() == result.context.decisions.size());
+    assert(result.context.action_assessments.front().action.name == result.context.decisions.front().action.name);
+    assert(result.context.action_assessments.front().permitted);
+
+    CognitiveCycleInput constrained = input;
+    constrained.action_constraints = ActionConstraints{0.05, false};
+    const auto constrained_result = cycle.run(constrained);
+    assert(constrained_result.status == CognitiveCycleStatus::completed);
+    assert(!constrained_result.context.action_assessments.empty());
+    for (const auto& assessment : constrained_result.context.action_assessments) {
+        assert(assessment.disposition == ActionDisposition::reject);
+        assert(!assessment.permitted);
+    }
 
     const auto learned = cycle.learn_from_outcome(Evidence{"sensor", "temperature", 43.0, 0.9});
     assert(learned >= 0.0 && learned <= 1.0);
