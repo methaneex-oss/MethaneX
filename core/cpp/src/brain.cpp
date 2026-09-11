@@ -571,6 +571,7 @@ bool Brain::restore_capability(const std::string& name, double availability, dou
     ++state_.events_seen;
     state_.cycle = event.sequence;
     sync_self_state();
+    return true;
 }
 
 bool Brain::isolate(const std::string& component) {
