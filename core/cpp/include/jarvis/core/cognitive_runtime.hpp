@@ -15,6 +15,7 @@ namespace jarvis::core {
 struct CognitiveRuntimeConfig {
     std::size_t input_capacity{256};
     std::size_t result_capacity{256};
+    std::size_t feedback_capacity{256};
     bool drain_on_stop{true};
 };
 
@@ -23,6 +24,15 @@ struct CognitiveRuntimeMetrics {
     std::uint64_t rejected{0};
     std::uint64_t processed{0};
     std::uint64_t dropped_results{0};
+    std::uint64_t feedback_accepted{0};
+    std::uint64_t feedback_rejected{0};
+    std::uint64_t feedback_processed{0};
+};
+
+struct CognitiveFeedback {
+    std::string prediction_key;
+    Scalar actual;
+    std::optional<Evidence> evidence;
 };
 
 class CognitiveRuntime {
@@ -40,8 +50,15 @@ public:
     // Priority is supplied by the producer/cognitive layer. Higher values run first;
     // equal priorities remain FIFO. No phrase-to-behavior mapping is embedded here.
     bool submit(CognitiveCycleInput input, double priority = 0.0);
+
+    // Feedback is applied before subsequent cognitive work whenever queued. A feedback
+    // item may resolve a prediction, assimilate evidence, or do both. It never executes
+    // an external action; the runtime only closes the perception/outcome learning loop.
+    bool submit_feedback(CognitiveFeedback feedback);
+
     std::optional<CognitiveCycleResult> poll_result();
     std::size_t pending_inputs() const;
+    std::size_t pending_feedback() const;
     std::size_t pending_results() const;
     CognitiveRuntimeMetrics metrics() const;
 
@@ -53,6 +70,7 @@ private:
     };
 
     void worker_loop();
+    void process_feedback(CognitiveFeedback feedback);
 
     Brain& brain_;
     CognitiveRuntimeConfig config_;
@@ -61,6 +79,7 @@ private:
     mutable std::mutex mutex_;
     std::condition_variable condition_;
     std::deque<WorkItem> inputs_;
+    std::deque<CognitiveFeedback> feedback_;
     std::deque<CognitiveCycleResult> results_;
     CognitiveRuntimeMetrics metrics_{};
     std::thread worker_;
