@@ -54,10 +54,14 @@ public:
     std::size_t working_size() const noexcept;
     std::uint64_t next_sequence() const noexcept;
     const std::filesystem::path& journal_path() const noexcept { return journal_path_; }
+    const std::filesystem::path& metadata_path() const noexcept { return metadata_path_; }
 
 private:
     void load();
+    void load_metadata();
     bool persist(const Event& event) const;
+    bool persist_metadata(const MemoryRecord& record) const;
+    bool persist_metadata_snapshot() const;
     static double default_salience(const Event& event) noexcept;
     static double default_confidence(const Event& event) noexcept;
     static std::size_t tier_index(MemoryTier tier) noexcept;
@@ -68,6 +72,7 @@ private:
     std::size_t working_limit_;
     std::uint64_t next_sequence_{1};
     std::filesystem::path journal_path_;
+    std::filesystem::path metadata_path_;
     std::unordered_map<std::string, std::array<double, 4>> learned_tiers_;
 };
 
