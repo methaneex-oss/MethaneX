@@ -63,6 +63,24 @@ int main() {
         assert(!assessment.permitted);
     }
 
+    const auto prediction = brain.predict("temperature_next", 43.0, 0.8);
+    assert(!prediction.key.empty());
+    const auto before_reflection = brain.reflect();
+    const auto feedback = cycle.process_outcome(
+        prediction.key,
+        Scalar{45.0},
+        Evidence{"sensor", "temperature", Scalar{45.0}, 0.9});
+    assert(feedback.prediction_resolved);
+    assert(feedback.learned_reliability >= 0.0 && feedback.learned_reliability <= 1.0);
+    assert(feedback.reflection.prediction_accuracy <= before_reflection.prediction_accuracy ||
+           feedback.reflection.prediction_accuracy == 0.0);
+    const auto metric = brain.learning_metric("temperature");
+    assert(metric != nullptr);
+    assert(metric->observations > 0);
+
+    const auto duplicate_feedback = cycle.process_outcome(prediction.key, Scalar{45.0});
+    assert(!duplicate_feedback.prediction_resolved);
+
     const auto learned = cycle.learn_from_outcome(Evidence{"sensor", "temperature", 43.0, 0.9});
     assert(learned >= 0.0 && learned <= 1.0);
 
