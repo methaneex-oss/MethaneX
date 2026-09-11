@@ -8,8 +8,10 @@ using namespace jarvis::core;
 
 int main() {
     const auto path = std::filesystem::temp_directory_path() / "jarvis_memory_phase4.bin";
+    const auto metadata_path = std::filesystem::path(path.string() + ".meta");
     std::error_code ec;
     std::filesystem::remove(path, ec);
+    std::filesystem::remove(metadata_path, ec);
 
     Memory memory(3, path);
     const auto a = memory.append(Event{0, 1, "sensor", "observation", {{"topic", std::string("temperature")}}});
@@ -43,6 +45,16 @@ int main() {
     assert(restored.recent(2).size() == 2);
     assert(restored.by_kind("learning", 1).size() == 1);
 
+    const auto restored_semantic = restored.salient(2, MemoryTier::Semantic);
+    assert(restored_semantic.size() == 2);
+    assert(restored_semantic[0].event.sequence == a);
+    assert(restored_semantic[0].salience == 0.95);
+    assert(restored_semantic[0].confidence == 0.8);
+    assert(restored.tier_of(Event{0, 0, "", "learning", {}}) == MemoryTier::Semantic);
+    assert(restored.tier_of(Event{0, 0, "", "action", {}}) == MemoryTier::Procedural);
+    assert(restored.working_size() == 0);
+
     std::filesystem::remove(path, ec);
+    std::filesystem::remove(metadata_path, ec);
     return 0;
 }
