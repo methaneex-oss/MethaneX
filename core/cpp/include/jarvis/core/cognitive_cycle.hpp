@@ -2,6 +2,7 @@
 
 #include "brain.hpp"
 #include "reasoning.hpp"
+#include "action_model.hpp"
 
 #include <cstddef>
 #include <cstdint>
@@ -27,6 +28,7 @@ struct CognitiveCycleInput {
     std::size_t reasoning_steps{8};
     double resource_budget{0.0};
     double deadline_pressure{0.0};
+    ActionConstraints action_constraints{};
 };
 
 struct CognitiveCycleContext {
@@ -40,6 +42,7 @@ struct CognitiveCycleContext {
     Plan plan;
     DecisionContext decision_context;
     std::vector<Decision> decisions;
+    std::vector<ActionAssessment> action_assessments;
     Reflection reflection;
 };
 
