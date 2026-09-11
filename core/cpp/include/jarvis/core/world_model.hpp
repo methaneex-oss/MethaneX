@@ -37,11 +37,14 @@ public:
     std::vector<Relation> relations_from(const std::string& subject) const;
     std::vector<Fact> facts() const;
     std::vector<Fact> disputed_facts() const;
+    std::vector<Relation> disputed_relations() const;
     void clear();
 
 private:
     std::vector<Fact> facts_;
+    std::vector<Fact> disputed_facts_;
     std::vector<Relation> relations_;
+    std::vector<Relation> disputed_relations_;
     mutable std::shared_mutex mutex_;
 };
 
