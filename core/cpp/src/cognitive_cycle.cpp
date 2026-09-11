@@ -125,4 +125,19 @@ bool CognitiveCycle::resolve_prediction(const std::string& key, const Scalar& ac
     return brain_.resolve_prediction(key, actual);
 }
 
+CognitiveFeedbackResult CognitiveCycle::process_outcome(
+    const std::optional<std::string>& prediction_key,
+    const Scalar& actual,
+    const std::optional<Evidence>& evidence) const {
+    CognitiveFeedbackResult result;
+    if (prediction_key.has_value() && !prediction_key->empty()) {
+        result.prediction_resolved = resolve_prediction(*prediction_key, actual);
+    }
+    if (evidence.has_value()) {
+        result.learned_reliability = learn_from_outcome(*evidence);
+    }
+    result.reflection = brain_.reflect();
+    return result;
+}
+
 } // namespace jarvis::core
