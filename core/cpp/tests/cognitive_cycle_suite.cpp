@@ -70,15 +70,16 @@ int main() {
         prediction.key,
         Scalar{45.0},
         Evidence{"sensor", "temperature", Scalar{45.0}, 0.9});
-    // resolve_prediction reports prediction correctness; a resolved prediction can
-    // still be incorrect, and that error is what feeds adaptation and learning.
+    // resolve_prediction reports prediction correctness; an incorrect prediction
+    // is still resolved and its error feeds adaptation and learning.
     assert(!feedback.prediction_resolved);
     assert(feedback.learned_reliability >= 0.0 && feedback.learned_reliability <= 1.0);
     assert(feedback.reflection.prediction_accuracy <= before_reflection.prediction_accuracy ||
            feedback.reflection.prediction_accuracy == 0.0);
-    const auto metric = brain.learning_metric("temperature");
+    const auto metric = brain.learning_metric("temperature_next");
     assert(metric != nullptr);
     assert(metric->observations > 0);
+    assert(brain.knowledge_source("sensor") != nullptr);
 
     const auto duplicate_feedback = cycle.process_outcome(prediction.key, Scalar{45.0});
     assert(!duplicate_feedback.prediction_resolved);
