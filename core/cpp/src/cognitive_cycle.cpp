@@ -109,7 +109,7 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     // Action assessment is the final cognitive gate before an external action layer.
     // It evaluates the selected decisions against explicit execution constraints but
     // does not authorize or execute anything; authorization remains outside the cycle.
-    result.context.action_assessments = brain_.assess_actions(
+    result.context.action_assessments = brain_.action_model().assess(
         result.context.decisions, input.action_constraints);
 
     result.context.reflection = brain_.reflect();
