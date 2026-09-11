@@ -38,6 +38,10 @@ add_executable(jarvis_world_self_model_phase4_suite world_self_model_phase4_suit
 target_link_libraries(jarvis_world_self_model_phase4_suite PRIVATE jarvis_core)
 target_compile_features(jarvis_world_self_model_phase4_suite PRIVATE cxx_std_20)
 
+add_executable(jarvis_self_model_health_phase4_suite self_model_health_phase4_suite.cpp)
+target_link_libraries(jarvis_self_model_health_phase4_suite PRIVATE jarvis_core)
+target_compile_features(jarvis_self_model_health_phase4_suite PRIVATE cxx_std_20)
+
 add_executable(jarvis_attention_architecture_suite attention_architecture_suite.cpp)
 target_link_libraries(jarvis_attention_architecture_suite PRIVATE jarvis_core)
 target_compile_features(jarvis_attention_architecture_suite PRIVATE cxx_std_20)
@@ -86,6 +90,7 @@ if(BUILD_TESTING)
     add_test(NAME jarvis_memory_architecture_suite COMMAND jarvis_memory_architecture_suite)
     add_test(NAME jarvis_knowledge_memory_phase3_suite COMMAND jarvis_knowledge_memory_phase3_suite)
     add_test(NAME jarvis_world_self_model_phase4_suite COMMAND jarvis_world_self_model_phase4_suite)
+    add_test(NAME jarvis_self_model_health_phase4_suite COMMAND jarvis_self_model_health_phase4_suite)
     add_test(NAME jarvis_attention_architecture_suite COMMAND jarvis_attention_architecture_suite)
     add_test(NAME jarvis_reasoning_architecture_suite COMMAND jarvis_reasoning_architecture_suite)
     add_test(NAME jarvis_decision_planning_architecture_suite COMMAND jarvis_decision_planning_architecture_suite)
