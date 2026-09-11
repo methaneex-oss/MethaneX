@@ -51,6 +51,12 @@ struct CognitiveCycleResult {
     CognitiveCycleContext context;
 };
 
+struct CognitiveFeedbackResult {
+    bool prediction_resolved{false};
+    double learned_reliability{0.0};
+    Reflection reflection;
+};
+
 class CognitiveCycle {
 public:
     explicit CognitiveCycle(Brain& brain) noexcept : brain_(brain) {}
@@ -59,6 +65,10 @@ public:
 
     double learn_from_outcome(const Evidence& evidence) const;
     bool resolve_prediction(const std::string& key, const Scalar& actual) const;
+    CognitiveFeedbackResult process_outcome(
+        const std::optional<std::string>& prediction_key,
+        const Scalar& actual,
+        const std::optional<Evidence>& evidence = std::nullopt) const;
 
 private:
     std::optional<Goal> select_goal(const CognitiveCycleInput& input,
