@@ -53,7 +53,6 @@ void WorldModel::relate(const Relation& incoming) {
     if (conflict != relations_.end()) {
         conflict->disputed = true;
         relation.disputed = true;
-        disputed_relations_.push_back(relation);
     }
     relations_.push_back(std::move(relation));
 }
@@ -88,7 +87,7 @@ std::vector<Fact> WorldModel::disputed_facts() const {
 
 std::vector<Relation> WorldModel::disputed_relations() const {
     std::shared_lock lock(mutex_);
-    std::vector<Relation> result = disputed_relations_;
+    std::vector<Relation> result;
     for (const auto& relation : relations_) if (relation.disputed) result.push_back(relation);
     return result;
 }
