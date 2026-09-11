@@ -70,7 +70,9 @@ int main() {
         prediction.key,
         Scalar{45.0},
         Evidence{"sensor", "temperature", Scalar{45.0}, 0.9});
-    assert(feedback.prediction_resolved);
+    // resolve_prediction reports prediction correctness; a resolved prediction can
+    // still be incorrect, and that error is what feeds adaptation and learning.
+    assert(!feedback.prediction_resolved);
     assert(feedback.learned_reliability >= 0.0 && feedback.learned_reliability <= 1.0);
     assert(feedback.reflection.prediction_accuracy <= before_reflection.prediction_accuracy ||
            feedback.reflection.prediction_accuracy == 0.0);
