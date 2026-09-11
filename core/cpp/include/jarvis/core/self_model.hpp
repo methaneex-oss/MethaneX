@@ -13,6 +13,12 @@ struct CapabilityState {
     bool isolated{false};
 };
 
+struct SelfCapabilityHealth {
+    double availability{1.0};
+    double performance{1.0};
+    double overall{1.0};
+};
+
 class SelfModel {
 public:
     void observe_capability(const std::string& name, double availability, double performance);
@@ -20,6 +26,7 @@ public:
     bool restore(const std::string& name, double availability, double performance);
     const CapabilityState* capability(const std::string& name) const noexcept;
     std::vector<CapabilityState> capabilities() const;
+    SelfCapabilityHealth health() const noexcept;
 
 private:
     std::unordered_map<std::string, CapabilityState> capabilities_;
