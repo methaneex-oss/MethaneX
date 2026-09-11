@@ -14,6 +14,8 @@ namespace {
 
 constexpr std::uint64_t kMaxSerializedSize = 1ULL << 30;
 constexpr std::uint64_t kMaxAttributes = 1ULL << 20;
+constexpr std::uint64_t kMetadataMagic = 0x4a41525649534d31ULL; // "JARVISM1"
+constexpr std::uint64_t kMaxMetadataRecords = 1ULL << 20;
 
 void write_string(std::ostream& out, const std::string& value) {
     const auto size = static_cast<std::uint64_t>(value.size());
@@ -81,11 +83,37 @@ bool read_event(std::istream& in, Event& event) {
     return true;
 }
 
+void write_metadata_record(std::ostream& out, const MemoryRecord& record) {
+    out.write(reinterpret_cast<const char*>(&record.event.sequence), sizeof(record.event.sequence));
+    const auto tier = static_cast<std::uint8_t>(record.tier);
+    out.write(reinterpret_cast<const char*>(&tier), sizeof(tier));
+    out.write(reinterpret_cast<const char*>(&record.salience), sizeof(record.salience));
+    out.write(reinterpret_cast<const char*>(&record.confidence), sizeof(record.confidence));
+}
+
+bool read_metadata_record(std::istream& in, std::uint64_t& sequence, MemoryTier& tier,
+                          double& salience, double& confidence) {
+    if (!in.read(reinterpret_cast<char*>(&sequence), sizeof(sequence))) return false;
+    std::uint8_t raw_tier{};
+    if (!in.read(reinterpret_cast<char*>(&raw_tier), sizeof(raw_tier))) return false;
+    if (raw_tier > static_cast<std::uint8_t>(MemoryTier::Procedural)) return false;
+    if (!in.read(reinterpret_cast<char*>(&salience), sizeof(salience)) ||
+        !in.read(reinterpret_cast<char*>(&confidence), sizeof(confidence))) return false;
+    if (!std::isfinite(salience) || !std::isfinite(confidence)) return false;
+    tier = static_cast<MemoryTier>(raw_tier);
+    salience = std::clamp(salience, 0.0, 1.0);
+    confidence = std::clamp(confidence, 0.0, 1.0);
+    return true;
+}
+
 } // namespace
 
 Memory::Memory(std::size_t working_limit, std::filesystem::path journal_path)
-    : working_limit_(std::max<std::size_t>(1, working_limit)), journal_path_(std::move(journal_path)) {
+    : working_limit_(std::max<std::size_t>(1, working_limit)),
+      journal_path_(std::move(journal_path)),
+      metadata_path_(journal_path_.string() + ".meta") {
     load();
+    load_metadata();
 }
 
 std::uint64_t Memory::append(Event event) {
@@ -111,7 +139,7 @@ void Memory::load() {
         if (!read_event(in, event)) break;
         if (event.sequence == 0 || (previous_sequence != 0 && event.sequence <= previous_sequence)) break;
         previous_sequence = event.sequence;
-        metadata_.push_back(MemoryRecord{event, tier_of(event), default_salience(event), default_confidence(event)});
+        metadata_.push_back(MemoryRecord{event, MemoryTier::Episodic, default_salience(event), default_confidence(event)});
         continuity_.push_back(std::move(event));
         const auto position = in.tellg();
         if (position < 0) break;
@@ -127,6 +155,38 @@ void Memory::load() {
     std::error_code error;
     const auto file_size = std::filesystem::file_size(journal_path_, error);
     if (!error && file_size > valid_end) std::filesystem::resize_file(journal_path_, valid_end, error);
+}
+
+void Memory::load_metadata() {
+    std::unique_lock lock(mutex_);
+    std::ifstream in(metadata_path_, std::ios::binary);
+    if (!in) return;
+
+    std::uint64_t magic{};
+    std::uint64_t count{};
+    if (!in.read(reinterpret_cast<char*>(&magic), sizeof(magic)) || magic != kMetadataMagic ||
+        !in.read(reinterpret_cast<char*>(&count), sizeof(count)) || count > kMaxMetadataRecords) {
+        return;
+    }
+
+    std::unordered_map<std::uint64_t, std::size_t> indexes;
+    indexes.reserve(metadata_.size());
+    for (std::size_t i = 0; i < metadata_.size(); ++i) indexes.emplace(metadata_[i].event.sequence, i);
+
+    for (std::uint64_t i = 0; i < count; ++i) {
+        std::uint64_t sequence{};
+        MemoryTier tier{};
+        double salience{};
+        double confidence{};
+        if (!read_metadata_record(in, sequence, tier, salience, confidence)) return;
+        const auto index = indexes.find(sequence);
+        if (index == indexes.end()) continue;
+        auto& record = metadata_[index->second];
+        record.tier = tier;
+        record.salience = salience;
+        record.confidence = confidence;
+        learned_tiers_[record.event.kind][tier_index(tier)] += 1.0;
+    }
 }
 
 bool Memory::persist(const Event& event) const {
@@ -150,6 +210,44 @@ bool Memory::persist(const Event& event) const {
     std::error_code rollback_error;
     std::filesystem::resize_file(journal_path_, original_size, rollback_error);
     return false;
+}
+
+bool Memory::persist_metadata(const MemoryRecord& record) const {
+    std::ofstream out(metadata_path_, std::ios::binary | std::ios::app);
+    if (!out) return false;
+    write_metadata_record(out, record);
+    out.flush();
+    return static_cast<bool>(out);
+}
+
+bool Memory::persist_metadata_snapshot() const {
+    std::error_code error;
+    if (!metadata_path_.parent_path().empty()) std::filesystem::create_directories(metadata_path_.parent_path(), error);
+    if (error) return false;
+
+    const auto temporary = metadata_path_.string() + ".tmp";
+    {
+        std::ofstream out(temporary, std::ios::binary | std::ios::trunc);
+        if (!out) return false;
+        const auto count = static_cast<std::uint64_t>(metadata_.size());
+        out.write(reinterpret_cast<const char*>(&kMetadataMagic), sizeof(kMetadataMagic));
+        out.write(reinterpret_cast<const char*>(&count), sizeof(count));
+        for (const auto& record : metadata_) write_metadata_record(out, record);
+        out.flush();
+        if (!out) {
+            out.close();
+            std::filesystem::remove(temporary, error);
+            return false;
+        }
+    }
+
+    std::filesystem::rename(temporary, metadata_path_, error);
+    if (error) {
+        std::error_code remove_error;
+        std::filesystem::remove(temporary, remove_error);
+        return false;
+    }
+    return true;
 }
 
 MemoryTier Memory::tier_of(const Event& event) const noexcept {
@@ -252,11 +350,24 @@ bool Memory::promote(std::uint64_t sequence, MemoryTier tier, double salience, d
     std::unique_lock lock(mutex_);
     const auto it = std::find_if(metadata_.begin(), metadata_.end(), [sequence](const MemoryRecord& r) { return r.event.sequence == sequence; });
     if (it == metadata_.end()) return false;
+
+    const auto previous_tier = it->tier;
+    const auto previous_salience = it->salience;
+    const auto previous_confidence = it->confidence;
+    const auto previous_learned = learned_tiers_;
+
     it->tier = tier;
     it->salience = std::clamp(salience, 0.0, 1.0);
     it->confidence = std::clamp(confidence, 0.0, 1.0);
     learned_tiers_[it->event.kind][tier_index(tier)] += 1.0;
-    return true;
+
+    if (persist_metadata_snapshot()) return true;
+
+    it->tier = previous_tier;
+    it->salience = previous_salience;
+    it->confidence = previous_confidence;
+    learned_tiers_ = previous_learned;
+    return false;
 }
 
 bool Memory::forget_working(std::size_t keep) {
@@ -266,8 +377,11 @@ bool Memory::forget_working(std::size_t keep) {
     if (working.size() <= keep) return true;
     std::sort(working.begin(), working.end(), [](const MemoryRecord* a, const MemoryRecord* b) { return a->event.sequence < b->event.sequence; });
     const auto remove_count = working.size() - keep;
+    const auto previous = metadata_;
     for (std::size_t i = 0; i < remove_count; ++i) working[i]->tier = MemoryTier::Episodic;
-    return true;
+    if (persist_metadata_snapshot()) return true;
+    metadata_ = previous;
+    return false;
 }
 
 std::vector<Event> Memory::all() const { std::shared_lock lock(mutex_); return continuity_; }
