@@ -82,15 +82,31 @@ Brain::Brain(std::filesystem::path journal_path)
 }
 
 void Brain::sync_self_state() {
+    const auto goals = goals_model_.all();
+    std::vector<GoalState> active_goals;
+    active_goals.reserve(goals.size());
+    for (const auto& goal : goals) {
+        if (goal.status == GoalStatus::active) {
+            active_goals.push_back(GoalState{goal.id, goal.priority, true});
+        }
+    }
+    self_state_model_.set_goals(std::move(active_goals));
+
+    const auto capability_health = self_model_.health();
     self_state_model_.set_activity(state_.events_seen == 0 ? "idle" : "cognitive_processing");
     self_state_model_.set_workload(std::clamp(
-        std::min(1.0, static_cast<double>(state_.events_seen % 1000) / 1000.0), 0.0, 1.0));
+        std::max(state_.threat, 1.0 - capability_health.overall), 0.0, 1.0));
     self_state_model_.set_uncertainty(std::clamp(1.0 - state_.attention, 0.0, 1.0));
     self_state_model_.set_health(CognitiveHealth{
-        std::clamp(1.0 - state_.threat * 0.5, 0.0, 1.0),
-        1.0,
+        std::clamp(capability_health.overall * (1.0 - state_.threat * 0.5), 0.0, 1.0),
+        capability_health.overall,
         std::clamp(1.0 - state_.novelty * 0.1, 0.0, 1.0),
-        1.0});
+        capability_health.overall});
+    for (const auto& capability : self_model_.capabilities()) {
+        self_state_model_.set_resource_pressure(
+            capability.name,
+            std::clamp(1.0 - (capability.availability * capability.performance), 0.0, 1.0));
+    }
     self_state_model_.advance_cycle(state_.events_seen);
 }
 
@@ -240,6 +256,13 @@ void Brain::replay(const Event& event) {
             it->second.updated_sequence = event.sequence;
         }
         world_.observe(Fact{event.source, key, value, reliability, 1});
+
+        const auto subject = string_value(event.data, "subject");
+        const auto predicate = string_value(event.data, "predicate");
+        const auto object = string_value(event.data, "object");
+        if (subject != nullptr && predicate != nullptr && object != nullptr) {
+            world_.relate(Relation{*subject, *predicate, *object, reliability, event.sequence, false});
+        }
     }
 
     std::vector<Belief> after;
@@ -548,7 +571,6 @@ bool Brain::restore_capability(const std::string& name, double availability, dou
     ++state_.events_seen;
     state_.cycle = event.sequence;
     sync_self_state();
-    return true;
 }
 
 bool Brain::isolate(const std::string& component) {
@@ -637,29 +659,16 @@ bool Brain::rollback_evolution(const std::string& key) {
     return true;
 }
 
-bool Brain::append_goal_event(const Event& event) {
-    Event persisted = event;
-    persisted.timestamp_ns = persisted.timestamp_ns == 0 ? now_ns() : persisted.timestamp_ns;
-    persisted.sequence = memory_.append(persisted);
-    if (persisted.sequence == 0) return false;
-    ++state_.events_seen;
-    state_.cycle = persisted.sequence;
-    sync_self_state();
-    return true;
-}
-
 BrainSnapshot Brain::snapshot() const {
     std::shared_lock lock(mutex_);
-    BrainSnapshot result{};
-    result.state = state_;
-    result.self_state = self_state_model_.snapshot();
-    result.beliefs.reserve(beliefs_.size());
-    for (const auto& [_, belief] : beliefs_) result.beliefs.push_back(belief);
-    result.predictions.reserve(predictions_.size());
-    for (const auto& [_, prediction] : predictions_) result.predictions.push_back(prediction);
-    result.causal_links = causal_.links();
-    result.goals = goals_model_.all();
-    return result;
+    BrainSnapshot snapshot;
+    snapshot.state = state_;
+    snapshot.self_state = self_state_model_.snapshot();
+    for (const auto& [_, belief] : beliefs_) snapshot.beliefs.push_back(belief);
+    for (const auto& [_, prediction] : predictions_) snapshot.predictions.push_back(prediction);
+    snapshot.causal_links = causal_.links();
+    snapshot.goals = goals_model_.all();
+    return snapshot;
 }
 
 BrainState Brain::state() const {
@@ -667,26 +676,8 @@ BrainState Brain::state() const {
     return state_;
 }
 
-double Brain::compute_novelty(const Event& event, const std::vector<Event>& history) {
-    if (event.data.empty()) return 0.0;
-    if (history.empty()) return 1.0;
-
-    double best_similarity = 0.0;
-    for (const auto& previous : history) {
-        if (previous.data.empty()) continue;
-        std::size_t matches = 0;
-        std::size_t comparable = 0;
-        for (const auto& [key, value] : event.data) {
-            const auto it = previous.data.find(key);
-            if (it == previous.data.end()) continue;
-            ++comparable;
-            if (it->second == value) ++matches;
-        }
-        if (comparable != 0)
-            best_similarity = std::max(best_similarity,
-                                       static_cast<double>(matches) / static_cast<double>(comparable));
-    }
-    return std::clamp(1.0 - best_similarity, 0.0, 1.0);
+bool Brain::append_goal_event(const Event& event) {
+    return memory_.append(event) != 0;
 }
 
 } // namespace jarvis::core
