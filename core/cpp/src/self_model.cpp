@@ -41,4 +41,18 @@ std::vector<CapabilityState> SelfModel::capabilities() const {
     return result;
 }
 
+SelfCapabilityHealth SelfModel::health() const noexcept {
+    if (capabilities_.empty()) return {};
+    double availability = 0.0;
+    double performance = 0.0;
+    for (const auto& [_, state] : capabilities_) {
+        availability += state.availability;
+        performance += state.performance;
+    }
+    const double count = static_cast<double>(capabilities_.size());
+    availability /= count;
+    performance /= count;
+    return SelfCapabilityHealth{availability, performance, std::clamp(availability * performance, 0.0, 1.0)};
+}
+
 } // namespace jarvis::core
