@@ -2,6 +2,8 @@
 
 #include <algorithm>
 #include <cmath>
+#include <set>
+#include <utility>
 
 namespace jarvis::core {
 namespace {
@@ -16,6 +18,7 @@ bool same_pair(const Association& association, const std::string& left, const st
 void AssociationModel::observe(const std::vector<Belief>& before,
                                const std::vector<Belief>& after,
                                std::uint64_t sequence) {
+    std::set<std::pair<std::string, std::string>> processed;
     for (const auto& current : after) {
         const auto prior = std::find_if(before.begin(), before.end(), [&](const Belief& belief) {
             return belief.key == current.key;
@@ -24,12 +27,15 @@ void AssociationModel::observe(const std::vector<Belief>& before,
 
         for (const auto& other : after) {
             if (other.key == current.key || other.confidence <= 0.0) continue;
+            const auto pair = std::minmax(current.key, other.key);
+            if (!processed.emplace(pair).second) continue;
+
             const double evidence = std::clamp(current.confidence * other.confidence, 0.0, 1.0);
             auto it = std::find_if(associations_.begin(), associations_.end(), [&](const Association& item) {
                 return same_pair(item, current.key, other.key);
             });
             if (it == associations_.end()) {
-                associations_.push_back(Association{current.key, other.key, evidence, evidence, 1, sequence});
+                associations_.push_back(Association{pair.first, pair.second, evidence, evidence, 1, sequence});
                 continue;
             }
             it->strength = std::clamp(it->strength + (evidence - it->strength) * 0.15, 0.0, 1.0);
