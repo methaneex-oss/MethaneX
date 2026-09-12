@@ -1,6 +1,7 @@
 #include "jarvis/core/causal_model.hpp"
 
 #include <algorithm>
+#include <cmath>
 #include <string>
 #include <type_traits>
 #include <unordered_map>
