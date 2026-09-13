@@ -17,7 +17,9 @@ bool same_pair(const Association& association, const std::string& left, const st
 
 void AssociationModel::observe(const std::vector<Belief>& before,
                                const std::vector<Belief>& after,
-                               std::uint64_t sequence) {
+                               std::uint64_t sequence,
+                               double observation_reliability) {
+    const double transition_reliability = std::clamp(observation_reliability, 0.0, 1.0);
     std::set<std::pair<std::string, std::string>> processed;
     for (const auto& current : after) {
         const auto prior = std::find_if(before.begin(), before.end(), [&](const Belief& belief) {
@@ -30,7 +32,14 @@ void AssociationModel::observe(const std::vector<Belief>& before,
             const auto pair = std::minmax(current.key, other.key);
             if (!processed.emplace(pair).second) continue;
 
-            const double evidence = std::clamp(current.confidence * other.confidence, 0.0, 1.0);
+            // A contradictory observation can lower the stored belief confidence.
+            // That is a belief-update consequence, not evidence that the observation
+            // itself was unreliable. Use transition reliability for changed values and
+            // the retained confidence for unchanged context, then take the weakest
+            // participant as the association evidence.
+            const double current_evidence = transition_reliability;
+            const double other_evidence = other.key == prior->key ? transition_reliability : other.confidence;
+            const double evidence = std::clamp(std::min(current_evidence, other_evidence), 0.0, 1.0);
             auto it = std::find_if(associations_.begin(), associations_.end(), [&](const Association& item) {
                 return same_pair(item, current.key, other.key);
             });
