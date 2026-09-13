@@ -11,6 +11,7 @@ add_library(jarvis_core STATIC
     src/memory.cpp
     src/world_model.cpp
     src/causal_model.cpp
+    src/association_model.cpp
     src/decision.cpp
     src/adaptation.cpp
     src/attention.cpp

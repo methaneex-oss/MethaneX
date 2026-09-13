@@ -4,6 +4,7 @@
 #include "memory.hpp"
 #include "world_model.hpp"
 #include "cognition.hpp"
+#include "association_model.hpp"
 #include "causal_model.hpp"
 #include "decision.hpp"
 #include "action_model.hpp"
@@ -55,6 +56,9 @@ public:
     Prediction predict(std::string key, Scalar value, double confidence);
     bool resolve_prediction(const std::string& key, const Scalar& actual);
     std::vector<std::pair<std::string, Scalar>> simulate(const std::vector<Belief>& assumptions) const;
+    SimulationResult simulate(const std::vector<Belief>& assumptions, std::size_t horizon) const;
+    std::vector<Association> associations() const;
+    std::vector<Association> associated_with(const std::string& key, double minimum_strength = 0.5) const;
     std::vector<CausalLink> causal_links() const;
     std::vector<Decision> choose(const std::vector<CandidateAction>& actions) const;
     Plan plan(const std::vector<CandidateAction>& actions, std::size_t horizon) const;
@@ -111,6 +115,7 @@ private:
     Memory memory_;
     std::unordered_map<std::string, Belief> beliefs_;
     std::unordered_map<std::string, Prediction> predictions_;
+    AssociationModel association_{};
     CausalModel causal_{};
     DecisionEngine decision_{};
     ActionModel action_model_{};
