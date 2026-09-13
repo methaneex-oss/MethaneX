@@ -19,8 +19,13 @@ struct Association {
 
 class AssociationModel {
 public:
+    // Observation reliability is supplied separately from belief confidence because
+    // a newly observed value may temporarily lower belief confidence when it conflicts
+    // with prior evidence. Associations should reflect the reliability of the
+    // transition evidence rather than treating that contradiction penalty as evidence
+    // that the observation itself was unreliable.
     void observe(const std::vector<Belief>& before, const std::vector<Belief>& after,
-                 std::uint64_t sequence);
+                 std::uint64_t sequence, double observation_reliability = 1.0);
     std::vector<Association> all() const;
     std::vector<Association> related(const std::string& key, double minimum_strength = 0.5) const;
 
