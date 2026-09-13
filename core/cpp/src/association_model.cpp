@@ -13,6 +13,13 @@ bool same_pair(const Association& association, const std::string& left, const st
            (association.left == right && association.right == left);
 }
 
+bool changed(const std::vector<Belief>& before, const Belief& current) {
+    const auto prior = std::find_if(before.begin(), before.end(), [&](const Belief& belief) {
+        return belief.key == current.key;
+    });
+    return prior != before.end() && prior->value != current.value;
+}
+
 }
 
 void AssociationModel::observe(const std::vector<Belief>& before,
@@ -22,23 +29,21 @@ void AssociationModel::observe(const std::vector<Belief>& before,
     const double transition_reliability = std::clamp(observation_reliability, 0.0, 1.0);
     std::set<std::pair<std::string, std::string>> processed;
     for (const auto& current : after) {
-        const auto prior = std::find_if(before.begin(), before.end(), [&](const Belief& belief) {
-            return belief.key == current.key;
-        });
-        if (prior == before.end() || prior->value == current.value) continue;
+        if (!changed(before, current)) continue;
 
         for (const auto& other : after) {
             if (other.key == current.key || other.confidence <= 0.0) continue;
             const auto pair = std::minmax(current.key, other.key);
             if (!processed.emplace(pair).second) continue;
 
-            // A contradictory observation can lower the stored belief confidence.
-            // That is a belief-update consequence, not evidence that the observation
-            // itself was unreliable. Use transition reliability for changed values and
-            // the retained confidence for unchanged context, then take the weakest
-            // participant as the association evidence.
+            // A contradictory observation can lower stored belief confidence. That is
+            // a belief-update consequence, not evidence that the observation itself was
+            // unreliable. Changed participants therefore use transition reliability;
+            // unchanged context uses its retained belief confidence.
             const double current_evidence = transition_reliability;
-            const double other_evidence = other.key == prior->key ? transition_reliability : other.confidence;
+            const double other_evidence = changed(before, other)
+                ? transition_reliability
+                : other.confidence;
             const double evidence = std::clamp(std::min(current_evidence, other_evidence), 0.0, 1.0);
             auto it = std::find_if(associations_.begin(), associations_.end(), [&](const Association& item) {
                 return same_pair(item, current.key, other.key);
