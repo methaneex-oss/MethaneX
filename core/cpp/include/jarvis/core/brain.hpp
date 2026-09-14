@@ -19,6 +19,8 @@
 #include "self_model.hpp"
 #include "self_state.hpp"
 #include "goals.hpp"
+#include "intent.hpp"
+#include "strategy.hpp"
 
 #include <cstdint>
 #include <filesystem>
@@ -72,6 +74,8 @@ public:
     double learning_confidence(const std::string& key) const noexcept;
     AttentionSignal attention() const;
     ThreatAssessment threat() const;
+    Intent intent() const;
+    StrategyContext strategy() const;
     std::vector<RecoveryPlan> recovery_options() const;
     bool isolate(const std::string& component);
     bool recover(const std::string& component, double restored_health);
@@ -130,6 +134,10 @@ private:
     SelfModel self_model_{};
     SelfStateModel self_state_model_{};
     GoalModel goals_model_{};
+    IntentModel intent_model_{};
+    StrategyModel strategy_model_{};
+    Intent intent_state_{};
+    StrategyContext strategy_state_{};
     AttentionSignal attention_state_{};
     ThreatAssessment threat_state_{};
 };
