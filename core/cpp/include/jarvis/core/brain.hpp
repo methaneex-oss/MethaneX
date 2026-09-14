@@ -22,6 +22,7 @@
 #include "intent.hpp"
 #include "strategy.hpp"
 
+#include <algorithm>
 #include <cstdint>
 #include <filesystem>
 #include <shared_mutex>
@@ -62,7 +63,29 @@ public:
     std::vector<Association> associations() const;
     std::vector<Association> associated_with(const std::string& key, double minimum_strength = 0.5) const;
     std::vector<CausalLink> causal_links() const;
-    std::vector<Decision> choose(const std::vector<CandidateAction>& actions) const;
+
+    std::vector<Decision> choose(const std::vector<CandidateAction>& actions) const {
+        std::shared_lock lock(mutex_);
+        const auto self = self_state_model_.snapshot();
+        const auto eligible = goals_model_.eligible(state_.cycle);
+        const auto selected_intent = intent_model_.select(eligible, threat_state_.score,
+                                                           self.uncertainty, state_.cycle);
+        const auto strategy = strategy_model_.formulate(selected_intent, attention_state_,
+                                                        threat_state_.score, self.uncertainty);
+        const auto plan = planner_.build(actions, 1, strategy.planning);
+
+        DecisionContext context;
+        context.goal_priority = strategy.planning.goal_priority;
+        context.goal_progress = strategy.planning.goal_progress;
+        context.plan_expected_value = plan.expected_value;
+        context.plan_risk = plan.risk;
+        context.resource_budget = strategy.planning.resource_budget;
+        context.uncertainty = strategy.planning.uncertainty;
+        context.threat = strategy.planning.threat;
+        context.deadline_pressure = strategy.planning.deadline_pressure;
+        return decision_.decide(actions, context);
+    }
+
     Plan plan(const std::vector<CandidateAction>& actions, std::size_t horizon) const;
     Plan plan(const std::vector<CandidateAction>& actions, std::size_t horizon,
               const PlanningContext& context) const;
@@ -74,8 +97,20 @@ public:
     double learning_confidence(const std::string& key) const noexcept;
     AttentionSignal attention() const;
     ThreatAssessment threat() const;
-    Intent intent() const;
-    StrategyContext strategy() const;
+    Intent intent() const {
+        std::shared_lock lock(mutex_);
+        return intent_model_.select(goals_model_.eligible(state_.cycle), threat_state_.score,
+                                    self_state_model_.snapshot().uncertainty, state_.cycle);
+    }
+    StrategyContext strategy() const {
+        std::shared_lock lock(mutex_);
+        const auto self = self_state_model_.snapshot();
+        const auto current_intent = intent_model_.select(goals_model_.eligible(state_.cycle),
+                                                         threat_state_.score, self.uncertainty,
+                                                         state_.cycle);
+        return strategy_model_.formulate(current_intent, attention_state_,
+                                         threat_state_.score, self.uncertainty);
+    }
     std::vector<RecoveryPlan> recovery_options() const;
     bool isolate(const std::string& component);
     bool recover(const std::string& component, double restored_health);
@@ -136,8 +171,6 @@ private:
     GoalModel goals_model_{};
     IntentModel intent_model_{};
     StrategyModel strategy_model_{};
-    Intent intent_state_{};
-    StrategyContext strategy_state_{};
     AttentionSignal attention_state_{};
     ThreatAssessment threat_state_{};
 };
