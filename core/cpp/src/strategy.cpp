@@ -11,7 +11,7 @@ StrategyContext StrategyModel::formulate(const Intent& intent, const AttentionSi
     result.intent = intent;
     result.attention = std::clamp(attention.salience, 0.0, 1.0);
     result.planning.goal_priority = intent.priority;
-    result.planning.goal_progress = 1.0 - intent.priority * intent.confidence;
+    result.planning.goal_progress = std::clamp(intent.progress, 0.0, 1.0);
     result.planning.threat = std::clamp(threat, 0.0, 1.0);
     result.planning.uncertainty = std::clamp(uncertainty, 0.0, 1.0);
     result.planning.resource_budget = std::max(0.0, resource_budget);
