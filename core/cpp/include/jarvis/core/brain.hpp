@@ -8,6 +8,7 @@
 #include "causal_model.hpp"
 #include "decision.hpp"
 #include "action_model.hpp"
+#include "action_execution.hpp"
 #include "adaptation.hpp"
 #include "attention.hpp"
 #include "threat.hpp"
@@ -24,6 +25,7 @@
 
 #include <cstdint>
 #include <filesystem>
+#include <functional>
 #include <shared_mutex>
 #include <string>
 #include <unordered_map>
@@ -70,6 +72,20 @@ public:
               const PlanningContext& context) const;
     std::vector<ActionAssessment> assess_actions(const std::vector<Decision>& decisions,
                                                   ActionConstraints constraints = {}) const;
+    ActionExecutionResult execute_action(const ActionAssessment& assessment,
+                                          std::function<bool(const CandidateAction&)> execute,
+                                          std::function<bool(const CandidateAction&)> verify,
+                                          std::function<bool(const CandidateAction&)> rollback = {}) {
+        ActionExecutionRequest request{assessment, std::move(execute), std::move(verify), std::move(rollback)};
+        const auto result = ActionExecutor{}.run(request);
+        const double reliability = result.status == ActionExecutionStatus::verified ? 1.0 :
+                                   result.status == ActionExecutionStatus::rolled_back ? 0.25 : 0.5;
+        if (!result.action.name.empty()) {
+            learn(Evidence{"action_executor", "action." + result.action.name,
+                           std::string(result.reason), reliability});
+        }
+        return result;
+    }
     Reflection reflect() const;
     const KnowledgeMetric* knowledge_source(const std::string& source) const noexcept;
     const AdaptiveMetric* learning_metric(const std::string& key) const noexcept;
