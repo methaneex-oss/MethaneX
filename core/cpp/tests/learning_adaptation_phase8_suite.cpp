@@ -30,30 +30,30 @@ int main() {
     assert(cycle2.adaptation.mean_error < cycle.adaptation.mean_error);
     assert(second.created_sequence != 0);
 
-    for (int i = 0; i < 6; ++i) {
+    for (int i = 0; i < 10; ++i) {
         brain.predict("forecast", Scalar{0.9}, 0.9);
         const auto experience = brain.learn_from_prediction("forecast", Scalar{0.9}, 0.8);
         assert(experience.adaptation.observations == static_cast<std::uint64_t>(i + 3));
     }
     const auto* parameter = brain.evolution_parameter("forecast");
     assert(parameter != nullptr);
-    assert(parameter->observations == 8);
+    assert(parameter->observations == 12);
     assert(parameter->value > 0.5);
 
     const auto invalid = brain.learn_from_prediction("", Scalar{0.5}, 0.8);
     assert(invalid.adaptation.observations == 0);
     assert(invalid.adopted == 0);
 
-    assert(brain.memory().all().size() >= 16);
+    assert(brain.memory().all().size() >= 24);
 
     Brain restored(path);
     const auto* metric = restored.learning_metric("forecast");
     assert(metric != nullptr);
-    assert(metric->observations == 8);
+    assert(metric->observations == 12);
     assert(std::isfinite(metric->mean_error));
     const auto* restored_parameter = restored.evolution_parameter("forecast");
     assert(restored_parameter != nullptr);
-    assert(restored_parameter->observations == 8);
+    assert(restored_parameter->observations == 12);
     assert(restored_parameter->value > 0.5);
 
     std::filesystem::remove(path, ec);
