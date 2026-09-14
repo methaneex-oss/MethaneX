@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cognition.hpp"
+#include "goals.hpp"
 
 #include <cstdint>
 #include <string>
