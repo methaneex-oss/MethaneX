@@ -31,6 +31,8 @@ add_library(jarvis_core STATIC
     src/perception_pipeline.cpp
     src/world_state.cpp
     src/goals.cpp
+    src/intent.cpp
+    src/strategy.cpp
     src/cognitive_cycle.cpp
     src/cognitive_runtime.cpp
 )

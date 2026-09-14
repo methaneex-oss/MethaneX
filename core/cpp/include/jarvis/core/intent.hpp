@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cognition.hpp"
+#include "goals.hpp"
 
 #include <cstdint>
 #include <string>
@@ -12,6 +12,7 @@ struct Intent {
     std::string id;
     std::string description;
     double priority{0.0};
+    double progress{0.0};
     double confidence{0.0};
     double urgency{0.0};
     double uncertainty{0.0};
