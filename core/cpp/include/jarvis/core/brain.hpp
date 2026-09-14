@@ -25,6 +25,7 @@
 
 #include <cstdint>
 #include <filesystem>
+#include <functional>
 #include <shared_mutex>
 #include <string>
 #include <unordered_map>
