@@ -92,6 +92,7 @@ public:
     const KnowledgeMetric* knowledge_source(const std::string& source) const noexcept;
     const AdaptiveMetric* learning_metric(const std::string& key) const noexcept;
     double learning_confidence(const std::string& key) const noexcept;
+    const StrategyParameter* evolution_parameter(const std::string& key) const noexcept;
     AttentionSignal attention() const;
     ThreatAssessment threat() const;
     Intent intent() const {
