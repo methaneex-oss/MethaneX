@@ -2,6 +2,7 @@
 
 #include "intent.hpp"
 #include "planning.hpp"
+#include "attention.hpp"
 
 namespace jarvis::core {
 
