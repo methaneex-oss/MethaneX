@@ -8,6 +8,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_library(jarvis_core STATIC
     src/brain.cpp
     src/brain_novelty.cpp
+    src/brain_learning.cpp
     src/memory.cpp
     src/world_model.cpp
     src/causal_model.cpp
