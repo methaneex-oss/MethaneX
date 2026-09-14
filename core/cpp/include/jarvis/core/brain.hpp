@@ -24,9 +24,13 @@
 #include "intent.hpp"
 #include "strategy.hpp"
 
+#include <algorithm>
+#include <chrono>
+#include <cmath>
 #include <cstdint>
 #include <filesystem>
 #include <functional>
+#include <mutex>
 #include <shared_mutex>
 #include <string>
 #include <unordered_map>
@@ -57,7 +61,64 @@ public:
     explicit Brain(std::filesystem::path journal_path = "data/brain/continuity.bin");
     Observation observe(Event event);
     double learn(const Evidence& evidence);
-    LearningCycle learn_from_prediction(const std::string& key, const Scalar& actual, double fitness);
+    LearningCycle learn_from_prediction(const std::string& key, const Scalar& actual, double fitness) {
+        std::unique_lock lock(mutex_);
+        LearningCycle cycle{};
+        if (key.empty() || !std::isfinite(fitness)) return cycle;
+        const auto prediction_it = predictions_.find(key);
+        if (prediction_it == predictions_.end() || prediction_it->second.resolved) return cycle;
+        const auto predicted = std::get_if<double>(&prediction_it->second.predicted);
+        const auto observed = std::get_if<double>(&actual);
+        if (predicted == nullptr || observed == nullptr || !std::isfinite(*predicted) ||
+            !std::isfinite(*observed)) return cycle;
+
+        const double error = prediction_it->second.predicted == actual ? 0.0 : 1.0;
+        const auto now_ns = []() noexcept {
+            return static_cast<std::uint64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(
+                std::chrono::system_clock::now().time_since_epoch()).count());
+        };
+        Event outcome{0, now_ns(), "brain", "prediction_outcome",
+                      {{"key", key}, {"actual", actual}, {"error", error}}};
+        outcome.sequence = memory_.append(outcome);
+        if (outcome.sequence == 0) return cycle;
+        prediction_it->second.resolved = true;
+        prediction_it->second.error = error;
+        ++state_.events_seen;
+        state_.cycle = outcome.sequence;
+
+        const double bounded_fitness = std::clamp(fitness, -1.0, 1.0);
+        Event fitness_event{0, now_ns(), "learning_loop", "evolution_fitness",
+                            {{"key", key}, {"fitness", bounded_fitness}}};
+        fitness_event.sequence = memory_.append(fitness_event);
+        if (fitness_event.sequence == 0) return cycle;
+        ++state_.events_seen;
+        state_.cycle = fitness_event.sequence;
+
+        cycle = learning_loop_.process(
+            LearningFeedback{key, std::clamp(*predicted, 0.0, 1.0),
+                              std::clamp(*observed, 0.0, 1.0), bounded_fitness},
+            adaptation_, evolution_);
+
+        for (const auto& proposal : cycle.proposals) {
+            if (proposal.key != key || proposal.current == proposal.proposed) continue;
+            const auto* parameter = evolution_.parameter(key);
+            if (parameter == nullptr || parameter->value != proposal.proposed) continue;
+            Event adoption{0, now_ns(), "learning_loop", "evolution_adopt",
+                           {{"key", key},
+                            {"current", proposal.current},
+                            {"proposed", proposal.proposed},
+                            {"expected_gain", proposal.expected_gain},
+                            {"confidence", proposal.confidence}}};
+            adoption.sequence = memory_.append(adoption);
+            if (adoption.sequence != 0) {
+                ++state_.events_seen;
+                state_.cycle = adoption.sequence;
+            }
+            break;
+        }
+        sync_self_state();
+        return cycle;
+    }
     std::vector<Belief> beliefs() const;
     Prediction predict(std::string key, Scalar value, double confidence);
     bool resolve_prediction(const std::string& key, const Scalar& actual);
@@ -92,7 +153,10 @@ public:
     const KnowledgeMetric* knowledge_source(const std::string& source) const noexcept;
     const AdaptiveMetric* learning_metric(const std::string& key) const noexcept;
     double learning_confidence(const std::string& key) const noexcept;
-    const StrategyParameter* evolution_parameter(const std::string& key) const noexcept;
+    const StrategyParameter* evolution_parameter(const std::string& key) const noexcept {
+        std::shared_lock lock(mutex_);
+        return evolution_.parameter(key);
+    }
     AttentionSignal attention() const;
     ThreatAssessment threat() const;
     Intent intent() const {
