@@ -19,6 +19,8 @@
 #include "self_model.hpp"
 #include "self_state.hpp"
 #include "goals.hpp"
+#include "intent.hpp"
+#include "strategy.hpp"
 
 #include <cstdint>
 #include <filesystem>
@@ -60,7 +62,9 @@ public:
     std::vector<Association> associations() const;
     std::vector<Association> associated_with(const std::string& key, double minimum_strength = 0.5) const;
     std::vector<CausalLink> causal_links() const;
+
     std::vector<Decision> choose(const std::vector<CandidateAction>& actions) const;
+
     Plan plan(const std::vector<CandidateAction>& actions, std::size_t horizon) const;
     Plan plan(const std::vector<CandidateAction>& actions, std::size_t horizon,
               const PlanningContext& context) const;
@@ -72,6 +76,20 @@ public:
     double learning_confidence(const std::string& key) const noexcept;
     AttentionSignal attention() const;
     ThreatAssessment threat() const;
+    Intent intent() const {
+        std::shared_lock lock(mutex_);
+        return intent_model_.select(goals_model_.eligible(state_.cycle), threat_state_.score,
+                                    self_state_model_.snapshot().uncertainty, state_.cycle);
+    }
+    StrategyContext strategy() const {
+        std::shared_lock lock(mutex_);
+        const auto self = self_state_model_.snapshot();
+        const auto current_intent = intent_model_.select(goals_model_.eligible(state_.cycle),
+                                                         threat_state_.score, self.uncertainty,
+                                                         state_.cycle);
+        return strategy_model_.formulate(current_intent, attention_state_,
+                                         threat_state_.score, self.uncertainty);
+    }
     std::vector<RecoveryPlan> recovery_options() const;
     bool isolate(const std::string& component);
     bool recover(const std::string& component, double restored_health);
@@ -130,6 +148,8 @@ private:
     SelfModel self_model_{};
     SelfStateModel self_state_model_{};
     GoalModel goals_model_{};
+    IntentModel intent_model_{};
+    StrategyModel strategy_model_{};
     AttentionSignal attention_state_{};
     ThreatAssessment threat_state_{};
 };
