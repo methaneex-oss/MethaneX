@@ -1,5 +1,7 @@
 #include "jarvis/core/self_testing.hpp"
 
+#include <utility>
+
 namespace jarvis::core {
 
 SelfTestReport SelfTestingModel::run(const std::vector<DiagnosticCheck>& checks) const {
