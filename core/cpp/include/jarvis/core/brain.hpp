@@ -10,6 +10,7 @@
 #include "action_model.hpp"
 #include "action_execution.hpp"
 #include "adaptation.hpp"
+#include "learning_loop.hpp"
 #include "attention.hpp"
 #include "threat.hpp"
 #include "resilience.hpp"
@@ -56,6 +57,7 @@ public:
     explicit Brain(std::filesystem::path journal_path = "data/brain/continuity.bin");
     Observation observe(Event event);
     double learn(const Evidence& evidence);
+    LearningCycle learn_from_prediction(const std::string& key, const Scalar& actual, double fitness);
     std::vector<Belief> beliefs() const;
     Prediction predict(std::string key, Scalar value, double confidence);
     bool resolve_prediction(const std::string& key, const Scalar& actual);
@@ -154,6 +156,7 @@ private:
     DecisionEngine decision_{};
     ActionModel action_model_{};
     AdaptationModel adaptation_{};
+    LearningLoop learning_loop_{};
     AttentionModel attention_model_{};
     ThreatModel threat_model_{};
     ResilienceModel resilience_{};
