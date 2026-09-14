@@ -16,7 +16,7 @@ int main() {
     Brain brain(journal);
     assert(brain.create_goal(Goal{"observe", "Maintain situational awareness", 0.35, 0.0, 0, 0,
                                  GoalStatus::pending, {}, {}}));
-    assert(brain.create_goal(Goal{"critical", "Protect critical state", 0.95, 0.0, 0, 3,
+    assert(brain.create_goal(Goal{"critical", "Protect critical state", 0.95, 0.0, 0, 20,
                                  GoalStatus::pending, {}, {}}));
     assert(brain.activate_goal("observe"));
     assert(brain.activate_goal("critical"));
