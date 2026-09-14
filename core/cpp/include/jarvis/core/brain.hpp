@@ -20,6 +20,7 @@
 #include "knowledge.hpp"
 #include "self_model.hpp"
 #include "self_state.hpp"
+#include "self_testing.hpp"
 #include "goals.hpp"
 #include "intent.hpp"
 #include "strategy.hpp"
@@ -176,6 +177,61 @@ public:
     std::vector<RecoveryPlan> recovery_options() const;
     bool isolate(const std::string& component);
     bool recover(const std::string& component, double restored_health);
+    SelfTestReport self_test() const {
+        std::shared_lock lock(mutex_);
+        const auto history = memory_.all();
+        std::vector<DiagnosticCheck> checks;
+        checks.push_back(DiagnosticCheck{"journal", "sequence-monotonic", [history] {
+            std::uint64_t previous = 0;
+            for (const auto& event : history) {
+                if (event.sequence == 0 || (previous != 0 && event.sequence <= previous)) return false;
+                previous = event.sequence;
+            }
+            return true;
+        }});
+        checks.push_back(DiagnosticCheck{"journal", "state-event-count", [this, history] {
+            return state_.events_seen == history.size();
+        }});
+        checks.push_back(DiagnosticCheck{"beliefs", "confidence-bounds", [this] {
+            for (const auto& [_, belief] : beliefs_)
+                if (!std::isfinite(belief.confidence) || belief.confidence < 0.0 || belief.confidence > 1.0) return false;
+            return true;
+        }});
+        checks.push_back(DiagnosticCheck{"predictions", "prediction-consistency", [this] {
+            for (const auto& [key, prediction] : predictions_)
+                if (key.empty() || prediction.key != key || !std::isfinite(prediction.confidence) ||
+                    prediction.confidence < 0.0 || prediction.confidence > 1.0 ||
+                    (prediction.resolved && (prediction.error < 0.0 || prediction.error > 1.0))) return false;
+            return true;
+        }});
+        checks.push_back(DiagnosticCheck{"self-model", "health-bounds", [this] {
+            const auto health = self_model_.health();
+            return std::isfinite(health.overall) && health.overall >= 0.0 && health.overall <= 1.0;
+        }});
+        checks.push_back(DiagnosticCheck{"cognition", "state-finiteness", [this] {
+            return std::isfinite(state_.novelty) && std::isfinite(state_.attention) && std::isfinite(state_.threat);
+        }});
+        return self_testing_model_.run(checks);
+    }
+    SelfHealingResult self_heal(const std::string& component,
+                                std::function<bool(const std::string&)> repair,
+                                std::function<bool(const std::string&)> verify) {
+        if (component.empty() || !repair || !verify) {
+            return SelfHealingResult{component, HealingState::RecoveryFailed, "component and repair/verify callbacks are required"};
+        }
+        if (!isolate(component)) {
+            return SelfHealingResult{component, HealingState::RecoveryFailed, "component could not be isolated"};
+        }
+        const auto result = self_testing_model_.heal(
+            component,
+            [&] { return repair(component); },
+            [&] { return verify(component); });
+        if (result.state != HealingState::Recovered) return result;
+        if (!recover(component, 1.0)) {
+            return SelfHealingResult{component, HealingState::RecoveryFailed, "repair verified but recovery state could not be restored"};
+        }
+        return result;
+    }
     void register_evolution_parameter(std::string key, double initial);
     void observe_evolution_fitness(const std::string& key, double fitness);
     std::vector<EvolutionProposal> evolution_options() const;
@@ -231,6 +287,7 @@ private:
     KnowledgeModel knowledge_{};
     SelfModel self_model_{};
     SelfStateModel self_state_model_{};
+    SelfTestingModel self_testing_model_{};
     GoalModel goals_model_{};
     IntentModel intent_model_{};
     StrategyModel strategy_model_{};
