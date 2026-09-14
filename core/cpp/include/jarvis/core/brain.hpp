@@ -22,7 +22,6 @@
 #include "intent.hpp"
 #include "strategy.hpp"
 
-#include <algorithm>
 #include <cstdint>
 #include <filesystem>
 #include <shared_mutex>
@@ -64,27 +63,7 @@ public:
     std::vector<Association> associated_with(const std::string& key, double minimum_strength = 0.5) const;
     std::vector<CausalLink> causal_links() const;
 
-    std::vector<Decision> choose(const std::vector<CandidateAction>& actions) const {
-        std::shared_lock lock(mutex_);
-        const auto self = self_state_model_.snapshot();
-        const auto eligible = goals_model_.eligible(state_.cycle);
-        const auto selected_intent = intent_model_.select(eligible, threat_state_.score,
-                                                           self.uncertainty, state_.cycle);
-        const auto strategy = strategy_model_.formulate(selected_intent, attention_state_,
-                                                        threat_state_.score, self.uncertainty);
-        const auto plan = planner_.build(actions, 1, strategy.planning);
-
-        DecisionContext context;
-        context.goal_priority = strategy.planning.goal_priority;
-        context.goal_progress = strategy.planning.goal_progress;
-        context.plan_expected_value = plan.expected_value;
-        context.plan_risk = plan.risk;
-        context.resource_budget = strategy.planning.resource_budget;
-        context.uncertainty = strategy.planning.uncertainty;
-        context.threat = strategy.planning.threat;
-        context.deadline_pressure = strategy.planning.deadline_pressure;
-        return decision_.decide(actions, context);
-    }
+    std::vector<Decision> choose(const std::vector<CandidateAction>& actions) const;
 
     Plan plan(const std::vector<CandidateAction>& actions, std::size_t horizon) const;
     Plan plan(const std::vector<CandidateAction>& actions, std::size_t horizon,
