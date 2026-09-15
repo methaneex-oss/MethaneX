@@ -12,7 +12,7 @@ double finite_priority(double value) noexcept {
     return std::isfinite(value) ? value : 0.0;
 }
 
-CognitiveWorkspace make_workspace(const CognitiveCycleResult& result) {
+CognitiveWorkspace make_workspace(const CognitiveCycleResult& result, const Brain& brain) {
     CognitiveWorkspace workspace;
     workspace.observation = result.context.observation;
     workspace.memories = result.context.memories;
@@ -26,6 +26,13 @@ CognitiveWorkspace make_workspace(const CognitiveCycleResult& result) {
     workspace.decision_context = result.context.decision_context;
     workspace.decisions = result.context.decisions;
     workspace.action_assessments = result.context.action_assessments;
+
+    const auto intent = brain.intent();
+    if (!intent.id.empty()) {
+        workspace.intent = intent;
+        workspace.strategy = brain.strategy();
+    }
+    workspace.reflection = result.context.reflection;
     return workspace;
 }
 
@@ -115,7 +122,7 @@ void CognitiveRuntime::worker_loop() {
 
         try {
             auto result = cycle_.run(item.input);
-            auto workspace = make_workspace(result);
+            auto workspace = make_workspace(result, brain_);
             workspace.cycle = brain_.state().cycle;
             workspace_.replace(std::move(workspace));
 
