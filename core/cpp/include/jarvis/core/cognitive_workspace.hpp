@@ -4,7 +4,9 @@
 #include "cognition.hpp"
 #include "event.hpp"
 #include "intent.hpp"
+#include "memory.hpp"
 #include "reasoning.hpp"
+#include "reflection.hpp"
 #include "strategy.hpp"
 
 #include <cstdint>
