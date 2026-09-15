@@ -36,6 +36,7 @@ struct CognitiveCycleContext {
     std::vector<MemoryRecord> memories;
     std::vector<Belief> beliefs;
     std::vector<CausalLink> causal_links;
+    std::vector<Prediction> predictions;
     ReasoningResult reasoning;
     std::vector<Goal> eligible_goals;
     Goal selected_goal;
