@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cognitive_cycle.hpp"
+#include "cognitive_workspace.hpp"
 
 #include <condition_variable>
 #include <cstddef>
@@ -44,6 +45,7 @@ public:
     std::size_t pending_inputs() const;
     std::size_t pending_results() const;
     CognitiveRuntimeMetrics metrics() const;
+    CognitiveWorkspace workspace() const;
 
 private:
     struct WorkItem {
@@ -57,6 +59,7 @@ private:
     Brain& brain_;
     CognitiveRuntimeConfig config_;
     CognitiveCycle cycle_;
+    CognitiveWorkspaceStore workspace_;
 
     mutable std::mutex mutex_;
     std::condition_variable condition_;
