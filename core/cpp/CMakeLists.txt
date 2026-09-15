@@ -37,6 +37,7 @@ add_library(jarvis_core STATIC
     src/self_testing.cpp
     src/cognitive_cycle.cpp
     src/cognitive_runtime.cpp
+    src/cognitive_workspace.cpp
 )
 
 target_include_directories(jarvis_core PUBLIC include)
