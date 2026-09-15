@@ -39,7 +39,7 @@ CognitiveWorkspace make_workspace(const CognitiveCycleResult& result, const Brai
 } // namespace
 
 CognitiveRuntime::CognitiveRuntime(Brain& brain, CognitiveRuntimeConfig config)
-    : brain_(brain), config_(config), cycle_(brain) {}
+    : brain_(brain), config_(config), cycle_(brain), trigger_(config_.trigger) {}
 
 CognitiveRuntime::~CognitiveRuntime() { stop(); }
 
@@ -68,6 +68,20 @@ bool CognitiveRuntime::running() const {
 }
 
 bool CognitiveRuntime::submit(CognitiveCycleInput input, double priority) {
+    return enqueue(std::move(input), finite_priority(priority));
+}
+
+bool CognitiveRuntime::submit(CognitiveCycleInput input, const CognitiveTriggerSignals& signals) {
+    const auto decision = trigger_.evaluate(signals);
+    if (!decision.should_cognize) {
+        std::lock_guard lock(mutex_);
+        ++metrics_.trigger_rejected;
+        return false;
+    }
+    return enqueue(std::move(input), decision.priority);
+}
+
+bool CognitiveRuntime::enqueue(CognitiveCycleInput input, double priority) {
     {
         std::lock_guard lock(mutex_);
         if (!running_ || stopping_ || config_.input_capacity == 0 || inputs_.size() >= config_.input_capacity) {
