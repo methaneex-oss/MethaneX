@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cognitive_cycle.hpp"
+#include "cognitive_trigger.hpp"
 #include "cognitive_workspace.hpp"
 
 #include <condition_variable>
@@ -17,11 +18,13 @@ struct CognitiveRuntimeConfig {
     std::size_t input_capacity{256};
     std::size_t result_capacity{256};
     bool drain_on_stop{true};
+    CognitiveTriggerConfig trigger{};
 };
 
 struct CognitiveRuntimeMetrics {
     std::uint64_t accepted{0};
     std::uint64_t rejected{0};
+    std::uint64_t trigger_rejected{0};
     std::uint64_t processed{0};
     std::uint64_t dropped_results{0};
 };
@@ -38,9 +41,15 @@ public:
     void stop();
     bool running() const;
 
-    // Priority is supplied by the producer/cognitive layer. Higher values run first;
-    // equal priorities remain FIFO. No phrase-to-behavior mapping is embedded here.
+    // Direct submission remains available to explicit callers that have already
+    // decided cognition should run. Higher priority values run first; equal
+    // priorities remain FIFO.
     bool submit(CognitiveCycleInput input, double priority = 0.0);
+
+    // Event-driven submission evaluates normalized upstream cognitive signals.
+    // The trigger never interprets event contents or phrases.
+    bool submit(CognitiveCycleInput input, const CognitiveTriggerSignals& signals);
+
     std::optional<CognitiveCycleResult> poll_result();
     std::size_t pending_inputs() const;
     std::size_t pending_results() const;
@@ -54,11 +63,13 @@ private:
         std::uint64_t sequence{0};
     };
 
+    bool enqueue(CognitiveCycleInput input, double priority);
     void worker_loop();
 
     Brain& brain_;
     CognitiveRuntimeConfig config_;
     CognitiveCycle cycle_;
+    CognitiveTriggerPolicy trigger_;
     CognitiveWorkspaceStore workspace_;
 
     mutable std::mutex mutex_;
