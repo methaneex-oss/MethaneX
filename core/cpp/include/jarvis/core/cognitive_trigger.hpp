@@ -1,16 +1,18 @@
 #pragma once
 
-#include <cstddef>
-
 namespace jarvis::core {
 
 struct CognitiveTriggerConfig {
     double novelty_threshold{0.5};
     double urgency_threshold{0.5};
     double uncertainty_threshold{0.5};
-    std::size_t max_events_per_window{64};
+    double novelty_weight{1.0};
+    double urgency_weight{1.0};
+    double uncertainty_weight{1.0};
 };
 
+// Normalized signals produced upstream by the cognitive system. The trigger
+// does not interpret event attributes or map phrases to behavior.
 struct CognitiveTriggerSignals {
     double novelty{0.0};
     double urgency{0.0};
