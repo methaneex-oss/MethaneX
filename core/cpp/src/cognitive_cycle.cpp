@@ -1,6 +1,7 @@
 #include "jarvis/core/cognitive_cycle.hpp"
 
 #include <algorithm>
+#include <string>
 
 namespace jarvis::core {
 
@@ -41,6 +42,23 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     problem.causal_links = result.context.causal_links;
     problem.max_steps = input.reasoning_steps;
     result.context.reasoning = ReasoningEngine{}.solve(problem);
+
+    // Project the current belief state through the causal model and persist the
+    // resulting predictions. Keys are cycle-scoped so every prediction remains
+    // independently resolvable by the outcome/learning layer.
+    if (!result.context.causal_links.empty()) {
+        const auto simulation = brain_.simulate(result.context.beliefs, input.planning_horizon);
+        const std::string prefix = "cycle." + std::to_string(result.context.observation.event.sequence) + ".";
+        result.context.predictions.reserve(simulation.predictions.size());
+        for (const auto& projected : simulation.predictions) {
+            if (projected.key.empty()) continue;
+            const auto prediction = brain_.predict(
+                prefix + projected.key,
+                projected.value,
+                std::clamp(projected.confidence, 0.0, 1.0));
+            if (!prediction.key.empty()) result.context.predictions.push_back(prediction);
+        }
+    }
 
     result.context.eligible_goals = brain_.eligible_goals();
     const auto selected = select_goal(input, result.context.eligible_goals);
