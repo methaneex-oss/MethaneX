@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <cmath>
+#include <limits>
 
 using namespace jarvis::core;
 
@@ -30,6 +31,14 @@ int main() {
     assert(std::abs(improved.improvement - 0.20) < 1e-12);
     assert(improved.confidence > 0.99);
     assert(improved.outcome == ExperimentOutcome::Improved);
+
+    const auto noisy = EvolutionExperimentRunner::run(
+        experiment,
+        [](double) { return 0.70; },
+        [](double) { return 0.70; },
+        4);
+    assert(noisy.outcome == ExperimentOutcome::Neutral);
+    assert(noisy.confidence == 0.0);
 
     const auto degraded = EvolutionExperimentRunner::run(
         experiment,
