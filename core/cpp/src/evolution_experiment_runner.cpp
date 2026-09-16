@@ -14,7 +14,12 @@ EvolutionTrialStatistics collect(const EvolutionExperimentRunner::FitnessEvaluat
     double mean = 0.0;
     double m2 = 0.0;
     for (std::size_t i = 0; i < trials; ++i) {
-        const double value = evaluator(parameter);
+        double value = 0.0;
+        try {
+            value = evaluator(parameter);
+        } catch (...) {
+            return {};
+        }
         if (!std::isfinite(value)) return {};
         const double delta = value - mean;
         mean += delta / static_cast<double>(i + 1);
