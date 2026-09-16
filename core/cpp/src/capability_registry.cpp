@@ -1,6 +1,7 @@
 #include "jarvis/core/capability_registry.hpp"
 
 #include <algorithm>
+#include <mutex>
 #include <utility>
 
 namespace jarvis::core {
