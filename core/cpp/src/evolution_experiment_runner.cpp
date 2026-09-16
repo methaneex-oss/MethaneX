@@ -1,5 +1,6 @@
 #include "jarvis/core/evolution_experiment_runner.hpp"
 
+#include <algorithm>
 #include <cmath>
 
 namespace jarvis::core {
@@ -37,8 +38,9 @@ EvolutionExperimentRun EvolutionExperimentRunner::run(
     EvolutionExperimentRun result;
     if (experiment.id.empty() || experiment.proposal.key.empty() || trials == 0 ||
         !std::isfinite(experiment.proposal.current) || !std::isfinite(experiment.proposal.proposed) ||
-        !std::isfinite(experiment.minimum_improvement) || experiment.minimum_improvement < 0.0 ||
-        !baseline_evaluator || !candidate_evaluator) {
+        !std::isfinite(experiment.proposal.confidence) || experiment.proposal.confidence < 0.0 ||
+        experiment.proposal.confidence > 1.0 || !std::isfinite(experiment.minimum_improvement) ||
+        experiment.minimum_improvement < 0.0 || !baseline_evaluator || !candidate_evaluator) {
         return result;
     }
 
