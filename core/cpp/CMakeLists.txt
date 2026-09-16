@@ -39,6 +39,7 @@ add_library(jarvis_core STATIC
     src/cognitive_trigger.cpp
     src/cognitive_runtime.cpp
     src/cognitive_workspace.cpp
+    src/capability_registry.cpp
 )
 
 target_include_directories(jarvis_core PUBLIC include)
