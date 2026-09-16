@@ -30,7 +30,7 @@ int main() {
     assert(result.has_value());
     const auto workspace = runtime.workspace();
     assert(workspace.observation.has_value());
-    assert(workspace.observation->event.type == "workspace");
+    assert(workspace.observation->event.kind == "workspace");
     assert(workspace.cycle == brain.state().cycle);
 
     runtime.stop();

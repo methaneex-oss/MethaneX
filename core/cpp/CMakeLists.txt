@@ -36,6 +36,7 @@ add_library(jarvis_core STATIC
     src/strategy.cpp
     src/self_testing.cpp
     src/cognitive_cycle.cpp
+    src/cognitive_trigger.cpp
     src/cognitive_runtime.cpp
     src/cognitive_workspace.cpp
 )
