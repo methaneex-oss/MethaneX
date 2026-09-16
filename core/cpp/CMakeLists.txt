@@ -20,6 +20,7 @@ add_library(jarvis_core STATIC
     src/resilience.cpp
     src/evolution.cpp
     src/evolution_experiment.cpp
+    src/evolution_experiment_runner.cpp
     src/planning.cpp
     src/reasoning.cpp
     src/action_model.cpp
