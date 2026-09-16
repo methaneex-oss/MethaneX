@@ -3,6 +3,7 @@
 #include <cassert>
 #include <cmath>
 #include <limits>
+#include <stdexcept>
 
 using namespace jarvis::core;
 
@@ -54,6 +55,13 @@ int main() {
         3);
     assert(invalid.outcome == ExperimentOutcome::Invalid);
     assert(invalid.baseline.trials == 0);
+
+    const auto throws = EvolutionExperimentRunner::run(
+        experiment,
+        [](double) -> double { throw std::runtime_error("failed trial"); },
+        [](double) { return 0.90; },
+        3);
+    assert(throws.outcome == ExperimentOutcome::Invalid);
 
     const auto zero_trials = EvolutionExperimentRunner::run(
         experiment, [](double) { return 1.0; }, [](double) { return 1.0; }, 0);
