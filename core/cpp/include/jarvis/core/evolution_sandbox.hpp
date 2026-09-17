@@ -18,6 +18,7 @@ struct SandboxResult {
     bool completed{false};
     bool timed_out{false};
     bool output_limited{false};
+    bool isolated{false};
     double fitness{0.0};
     std::string error;
 };
