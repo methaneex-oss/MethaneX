@@ -16,6 +16,7 @@ struct EvolutionExperiment {
     double minimum_improvement{0.0};
     double confidence{0.0};
     ExperimentOutcome outcome{ExperimentOutcome::Pending};
+    bool candidate_executed{false};
 };
 
 class EvolutionExperimentEngine {
