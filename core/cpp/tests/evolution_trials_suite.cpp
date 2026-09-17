@@ -2,7 +2,7 @@
 
 #include <cassert>
 #include <cmath>
-#include <vector>
+#include <limits>
 
 using namespace jarvis::core;
 
@@ -15,6 +15,11 @@ int main() {
     assert(std::abs(candidate.mean - 0.80) < 1e-12);
     assert(candidate.standard_error >= 0.0);
     assert(EvolutionTrials::supports_adoption(baseline, candidate, 0.05, 0.5));
+
+    const auto single = EvolutionTrials::summarize({1.0});
+    assert(single.count == 1);
+    assert(single.confidence == 0.0);
+    assert(!EvolutionTrials::supports_adoption(single, candidate, 0.01, 0.5));
 
     const auto invalid = EvolutionTrials::summarize({0.7, std::numeric_limits<double>::quiet_NaN()});
     assert(invalid.count == 0);
