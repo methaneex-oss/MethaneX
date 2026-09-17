@@ -20,7 +20,10 @@ SandboxResult EvolutionSandbox::run(const EvolutionProposal& proposal,
 
     try {
         result = executor(proposal, limits_);
-        if (!std::isfinite(result.fitness)) {
+        if (!result.isolated) {
+            result.completed = false;
+            result.error = "candidate executor did not prove isolation";
+        } else if (!std::isfinite(result.fitness)) {
             result.completed = false;
             result.error = "executor returned non-finite fitness";
         }
