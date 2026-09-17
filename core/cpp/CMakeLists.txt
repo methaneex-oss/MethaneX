@@ -22,6 +22,7 @@ add_library(jarvis_core STATIC
     src/evolution_experiment.cpp
     src/evolution_sandbox.cpp
     src/evolution_experiment_runner.cpp
+    src/evolution_history.cpp
     src/planning.cpp
     src/reasoning.cpp
     src/action_model.cpp
