@@ -15,6 +15,8 @@
 #include "threat.hpp"
 #include "resilience.hpp"
 #include "evolution.hpp"
+#include "evolution_experiment.hpp"
+#include "evolution_controller.hpp"
 #include "planning.hpp"
 #include "reflection.hpp"
 #include "knowledge.hpp"
@@ -237,6 +239,11 @@ public:
     std::vector<EvolutionProposal> evolution_options() const;
     bool adopt_evolution(const EvolutionProposal& proposal);
     bool rollback_evolution(const std::string& key);
+    bool adopt_evolution_experiment(EvolutionExperiment& experiment);
+    CanaryDecision observe_evolution_canary(const std::string& parameter_key,
+                                            const std::string& experiment_id,
+                                            CanaryObservation observation);
+    std::vector<EvolutionHistoryRecord> evolution_history() const;
     void observe_capability(std::string name, double availability, double performance);
     bool isolate_capability(const std::string& name);
     bool restore_capability(const std::string& name, double availability, double performance);
@@ -282,6 +289,8 @@ private:
     ThreatModel threat_model_{};
     ResilienceModel resilience_{};
     EvolutionModel evolution_{};
+    EvolutionHistory evolution_history_{};
+    EvolutionController evolution_controller_;
     Planner planner_{};
     ReflectionModel reflection_model_{};
     KnowledgeModel knowledge_{};
