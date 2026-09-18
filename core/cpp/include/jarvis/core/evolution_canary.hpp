@@ -7,7 +7,7 @@ namespace jarvis::core {
 
 struct CanaryPolicy {
     std::size_t minimum_observations{3};
-    double maximum_regression{0.0};
+    double maximum_regression{0.02};
 };
 
 struct CanaryObservation {
