@@ -1,10 +1,15 @@
 #include "jarvis/core/evolution_canary.hpp"
 
+#include <algorithm>
 #include <cmath>
 
 namespace jarvis::core {
 
-EvolutionCanary::EvolutionCanary(CanaryPolicy policy) : policy_(policy) {}
+EvolutionCanary::EvolutionCanary(CanaryPolicy policy) : policy_(policy) {
+    if (policy_.minimum_observations == 0) policy_.minimum_observations = 1;
+    if (!std::isfinite(policy_.maximum_regression) || policy_.maximum_regression < 0.0)
+        policy_.maximum_regression = 0.02;
+}
 
 CanaryDecision EvolutionCanary::observe(CanaryObservation observation) noexcept {
     if (!std::isfinite(observation.baseline_fitness) ||
