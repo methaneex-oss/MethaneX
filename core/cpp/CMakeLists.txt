@@ -21,6 +21,7 @@ add_library(jarvis_core STATIC
     src/evolution.cpp
     src/evolution_safety.cpp
     src/evolution_experiment.cpp
+    src/evolution_experiment_coordinator.cpp
     src/evolution_sandbox.cpp
     src/evolution_experiment_runner.cpp
     src/evolution_history.cpp
