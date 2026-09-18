@@ -1,5 +1,6 @@
 #include "jarvis/core/evolution_trials.hpp"
 
+#include <algorithm>
 #include <cmath>
 #include <limits>
 
