@@ -29,6 +29,7 @@ add_library(jarvis_core STATIC
     src/evolution_learning.cpp
     src/evolution_scheduler.cpp
     src/evolution_monitor.cpp
+    src/evolution_canary.cpp
     src/planning.cpp
     src/reasoning.cpp
     src/action_model.cpp
