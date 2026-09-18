@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cstdint>
 #include <sstream>
+#include <exception>
 
 namespace jarvis::core {
 namespace {
@@ -37,7 +38,15 @@ EvolutionOrchestrationResult EvolutionOrchestrator::run(
         return result;
     }
 
-    const auto candidates = EvolutionCandidateValidator::validate(generator(opportunity));
+    std::vector<EvolutionProposal> generated;
+    try {
+        generated = generator(opportunity);
+    } catch (const std::exception&) {
+        return result;
+    } catch (...) {
+        return result;
+    }
+    const auto candidates = EvolutionCandidateValidator::validate(generated);
     if (candidates.empty()) return result;
 
     const auto ranked = EvolutionStrategy::rank(candidates, history);
