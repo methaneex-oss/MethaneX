@@ -18,7 +18,9 @@ std::string join_ids(const std::vector<std::string>& ids) { std::ostringstream o
 std::vector<std::string> split_ids(const std::string& value) { std::vector<std::string> result; std::size_t start = 0; while (start <= value.size()) { const auto end = value.find('\x1f', start); const auto token = value.substr(start, end == std::string::npos ? std::string::npos : end - start); if (!token.empty()) result.push_back(token); if (end == std::string::npos) break; start = end + 1; } return result; }
 GoalStatus goal_status_value(std::int64_t value) { switch (value) { case 0: return GoalStatus::pending; case 1: return GoalStatus::active; case 2: return GoalStatus::completed; case 3: return GoalStatus::abandoned; default: return GoalStatus::pending; } }
 }
-Brain::Brain(std::filesystem::path journal_path) : memory_(256, std::move(journal_path)) { const auto history = memory_.all(); for (const auto& event : history) replay(event); state_.events_seen = static_cast<std::uint64_t>(history.size()); if (!history.empty()) state_.cycle = history.back().sequence; sync_self_state(); }
+Brain::Brain(std::filesystem::path journal_path)
+    : memory_(256, std::move(journal_path)),
+      evolution_controller_(evolution_, evolution_history_) { const auto history = memory_.all(); for (const auto& event : history) replay(event); state_.events_seen = static_cast<std::uint64_t>(history.size()); if (!history.empty()) state_.cycle = history.back().sequence; sync_self_state(); }
 void Brain::sync_self_state() { const auto goals = goals_model_.all(); std::vector<GoalState> active_goals; active_goals.reserve(goals.size()); for (const auto& goal : goals) if (goal.status == GoalStatus::active) active_goals.push_back(GoalState{goal.id, goal.priority, true}); self_state_model_.set_goals(std::move(active_goals)); const auto capability_health = self_model_.health(); self_state_model_.set_activity(state_.events_seen == 0 ? "idle" : "cognitive_processing"); self_state_model_.set_workload(std::clamp(std::max(state_.threat, 1.0 - capability_health.overall), 0.0, 1.0)); self_state_model_.set_uncertainty(std::clamp(1.0 - state_.attention, 0.0, 1.0)); self_state_model_.set_health(CognitiveHealth{std::clamp(capability_health.overall * (1.0 - state_.threat * 0.5), 0.0, 1.0), capability_health.overall, std::clamp(1.0 - state_.novelty * 0.1, 0.0, 1.0), capability_health.overall}); for (const auto& capability : self_model_.capabilities()) self_state_model_.set_resource_pressure(capability.name, std::clamp(1.0 - (capability.availability * capability.performance), 0.0, 1.0)); self_state_model_.advance_cycle(state_.events_seen); }
 void Brain::replay(const Event& event) {
     state_.cycle = std::max(state_.cycle, event.sequence);
@@ -30,6 +32,16 @@ void Brain::replay(const Event& event) {
     if (event.kind == "goal_priority") { if (const auto* id = string_value(event.data, "id")) goals_model_.set_priority(*id, double_value(event.data, "priority")); return; }
     if (event.kind == "prediction") { const auto* key = string_value(event.data, "key"); const auto value = event.data.find("value"); if (key == nullptr || value == event.data.end()) return; predictions_[*key] = Prediction{*key, value->second, std::clamp(double_value(event.data, "confidence"), 0.0, 1.0), event.sequence, false, 0.0}; return; }
     if (event.kind == "prediction_outcome") { const auto* key = string_value(event.data, "key"); if (key == nullptr) return; const auto prediction = predictions_.find(*key); if (prediction == predictions_.end()) return; prediction->second.resolved = true; prediction->second.error = std::clamp(double_value(event.data, "error", 1.0), 0.0, 1.0); const auto actual = event.data.find("actual"); if (actual != event.data.end()) if (const auto predicted = std::get_if<double>(&prediction->second.predicted)) if (const auto observed = std::get_if<double>(&actual->second)) adaptation_.observe(*key, *predicted, *observed); return; }
+    if (event.kind == "evolution_evaluated") {
+        const auto* id = string_value(event.data, "experiment_id");
+        const auto* key = string_value(event.data, "key");
+        if (id != nullptr && key != nullptr) evolution_history_.append(EvolutionHistoryRecord{
+            *id, *key, EvolutionRecordAction::Evaluated,
+            static_cast<ExperimentOutcome>(integer_value(event.data, "outcome")),
+            double_value(event.data, "baseline"), double_value(event.data, "candidate"),
+            double_value(event.data, "confidence"), 0, "replayed", {}});
+        return;
+    }
     if (event.kind == "evolution_register") { if (const auto* key = string_value(event.data, "key")) evolution_.register_parameter(*key, double_value(event.data, "initial")); return; }
     if (event.kind == "evolution_fitness") { if (const auto* key = string_value(event.data, "key")) evolution_.observe_fitness(*key, double_value(event.data, "fitness")); return; }
     if (event.kind == "evolution_adopt") { if (const auto* key = string_value(event.data, "key")) evolution_.adopt(EvolutionProposal{*key, double_value(event.data, "current"), double_value(event.data, "proposed"), double_value(event.data, "expected_gain"), double_value(event.data, "confidence")}); return; }
@@ -86,6 +98,46 @@ void Brain::observe_evolution_fitness(const std::string& key, double fitness) { 
 std::vector<EvolutionProposal> Brain::evolution_options() const { std::shared_lock lock(mutex_); return evolution_.propose(); }
 bool Brain::adopt_evolution(const EvolutionProposal& proposal) { std::unique_lock lock(mutex_); if (proposal.key.empty() || !evolution_.adopt(proposal)) return false; Event event{0, now_ns(), "brain", "evolution_adopt", {{"key", proposal.key}, {"current", proposal.current}, {"proposed", proposal.proposed}, {"expected_gain", proposal.expected_gain}, {"confidence", proposal.confidence}}}; event.sequence = memory_.append(event); if (event.sequence == 0) { evolution_.rollback(proposal.key); return false; } ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); return true; }
 bool Brain::rollback_evolution(const std::string& key) { std::unique_lock lock(mutex_); if (key.empty() || !evolution_.rollback(key)) return false; Event event{0, now_ns(), "brain", "evolution_rollback", {{"key", key}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return false; ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); return true; }
+bool Brain::adopt_evolution_experiment(EvolutionExperiment& experiment) {
+    std::unique_lock lock(mutex_);
+    if (!evolution_controller_.adopt(experiment)) return false;
+    Event event{0, now_ns(), "brain", "evolution_adopt",
+                {{"key", experiment.proposal.key}, {"current", experiment.proposal.current},
+                 {"proposed", experiment.proposal.proposed}, {"expected_gain", experiment.proposal.expected_gain},
+                 {"confidence", experiment.proposal.confidence}}};
+    event.sequence = memory_.append(event);
+    if (event.sequence == 0) {
+        evolution_.rollback(experiment.proposal.key);
+        return false;
+    }
+    ++state_.events_seen;
+    state_.cycle = event.sequence;
+    sync_self_state();
+    return true;
+}
+CanaryDecision Brain::observe_evolution_canary(const std::string& parameter_key,
+                                               const std::string& experiment_id,
+                                               CanaryObservation observation) {
+    std::unique_lock lock(mutex_);
+    const auto decision = evolution_controller_.observe_canary(parameter_key, experiment_id, observation);
+    if (decision.rollback) {
+        Event event{0, now_ns(), "brain", "evolution_rollback",
+                    {{"key", parameter_key}, {"experiment_id", experiment_id},
+                     {"reason", decision.reason}, {"observed_delta", decision.mean_delta}}};
+        event.sequence = memory_.append(event);
+        if (event.sequence != 0) {
+            ++state_.events_seen;
+            state_.cycle = event.sequence;
+            sync_self_state();
+        }
+    }
+    return decision;
+}
+std::vector<EvolutionHistoryRecord> Brain::evolution_history() const {
+    std::shared_lock lock(mutex_);
+    return evolution_history_.records();
+}
+
 BrainSnapshot Brain::snapshot() const { std::shared_lock lock(mutex_); BrainSnapshot snapshot; snapshot.state = state_; snapshot.self_state = self_state_model_.snapshot(); for (const auto& [_, belief] : beliefs_) snapshot.beliefs.push_back(belief); for (const auto& [_, prediction] : predictions_) snapshot.predictions.push_back(prediction); snapshot.causal_links = causal_.links(); snapshot.goals = goals_model_.all(); return snapshot; }
 BrainState Brain::state() const { std::shared_lock lock(mutex_); return state_; }
 bool Brain::append_goal_event(const Event& event) { Event persisted = event; persisted.timestamp_ns = persisted.timestamp_ns == 0 ? now_ns() : persisted.timestamp_ns; persisted.sequence = memory_.append(persisted); if (persisted.sequence == 0) return false; ++state_.events_seen; state_.cycle = persisted.sequence; sync_self_state(); return true; }
