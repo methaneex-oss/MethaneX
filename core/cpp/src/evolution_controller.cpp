@@ -1,4 +1,5 @@
 #include "jarvis/core/evolution_controller.hpp"
+#include "jarvis/core/evolution_rollback.hpp"
 
 namespace jarvis::core {
 
