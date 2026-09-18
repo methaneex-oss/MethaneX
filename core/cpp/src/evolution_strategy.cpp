@@ -1,4 +1,5 @@
 #include "jarvis/core/evolution_strategy.hpp"
+#include "jarvis/core/evolution_learning.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -17,21 +18,19 @@ std::vector<EvolutionCandidateScore> EvolutionStrategy::rank(
         std::size_t failures = 0;
         for (const auto& record : records) {
             if (record.action == EvolutionRecordAction::Adopted &&
-                record.outcome == ExperimentOutcome::Improved) {
-                ++successes;
-            } else if (record.action == EvolutionRecordAction::Rejected ||
-                       record.action == EvolutionRecordAction::RolledBack ||
-                       record.outcome == ExperimentOutcome::Degraded) {
-                ++failures;
-            }
+                record.outcome == ExperimentOutcome::Improved) ++successes;
+            else if (record.action == EvolutionRecordAction::Rejected ||
+                     record.action == EvolutionRecordAction::RolledBack ||
+                     record.outcome == ExperimentOutcome::Degraded) ++failures;
         }
 
+        const auto insight = EvolutionLearning::analyze_failures(proposal.key, history);
         const double prior = static_cast<double>(records.size());
-        const double empirical_success = (static_cast<double>(successes) + 1.0) /
-                                          (prior + 2.0);
+        const double empirical_success = (static_cast<double>(successes) + 1.0) / (prior + 2.0);
         const double novelty = 1.0 / (1.0 + prior);
         const double confidence = std::clamp(proposal.confidence, 0.0, 1.0);
-        const double score = confidence * 0.50 + empirical_success * 0.35 + novelty * 0.15;
+        const double score = confidence * 0.45 + empirical_success * 0.30 +
+                             novelty * 0.15 + (1.0 - insight.caution) * 0.10;
 
         ranked.push_back(EvolutionCandidateScore{
             proposal.key, score, records.size(), successes, failures});
