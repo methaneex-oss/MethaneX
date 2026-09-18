@@ -29,6 +29,15 @@ std::vector<EvolutionHistoryRecord> EvolutionHistory::for_parameter(const std::s
     return result;
 }
 
+std::vector<EvolutionHistoryRecord> EvolutionHistory::for_experiment(const std::string& id) const {
+    std::lock_guard lock(mutex_);
+    std::vector<EvolutionHistoryRecord> result;
+    for (const auto& record : records_) {
+        if (record.experiment_id == id) result.push_back(record);
+    }
+    return result;
+}
+
 std::size_t EvolutionHistory::size() const {
     std::lock_guard lock(mutex_);
     return records_.size();
