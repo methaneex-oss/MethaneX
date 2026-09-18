@@ -19,6 +19,7 @@ add_library(jarvis_core STATIC
     src/threat.cpp
     src/resilience.cpp
     src/evolution.cpp
+    src/evolution_safety.cpp
     src/evolution_experiment.cpp
     src/evolution_sandbox.cpp
     src/evolution_experiment_runner.cpp
