@@ -20,6 +20,8 @@ struct EvolutionHistoryRecord {
     double candidate_fitness{0.0};
     double confidence{0.0};
     std::uint64_t sequence{0};
+    std::string reason;
+    std::string parent_experiment_id;
 };
 
 class EvolutionHistory {
@@ -27,6 +29,7 @@ public:
     bool append(EvolutionHistoryRecord record);
     std::vector<EvolutionHistoryRecord> records() const;
     std::vector<EvolutionHistoryRecord> for_parameter(const std::string& key) const;
+    std::vector<EvolutionHistoryRecord> for_experiment(const std::string& id) const;
     std::size_t size() const;
 
 private:
