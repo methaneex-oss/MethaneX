@@ -1,5 +1,6 @@
 #include "jarvis/core/evolution_experiment_coordinator.hpp"
 
+#include <algorithm>
 #include <cmath>
 
 namespace jarvis::core {
