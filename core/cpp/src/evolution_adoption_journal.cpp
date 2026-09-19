@@ -53,14 +53,11 @@ bool EvolutionAdoptionJournal::rollback(const std::string& id, std::string reaso
     return true;
 }
 
-AdoptionRecord* EvolutionAdoptionJournal::get(const std::string& id) noexcept {
+std::optional<AdoptionRecord> EvolutionAdoptionJournal::get(const std::string& id) const {
+    std::lock_guard lock(mutex_);
     auto it = records_.find(id);
-    return it == records_.end() ? nullptr : &it->second;
-}
-
-const AdoptionRecord* EvolutionAdoptionJournal::get(const std::string& id) const noexcept {
-    auto it = records_.find(id);
-    return it == records_.end() ? nullptr : &it->second;
+    if (it == records_.end()) return std::nullopt;
+    return it->second;
 }
 
 std::vector<AdoptionRecord> EvolutionAdoptionJournal::records() const {
