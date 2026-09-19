@@ -21,7 +21,7 @@ int main() {
     assert(ok.exit_code == 0);
     assert(ok.output == "isolated");
 
-    const auto limited = backend.run({"/bin/sh", {"-c", "printf 123456789"}, ""});
+    const auto limited = backend.run({"/bin/sh", {"-c", "head -c 2048 /dev/zero"}, ""});
     assert(limited.started);
     assert(limited.isolated);
     assert(limited.output_limited);
@@ -33,7 +33,6 @@ int main() {
     assert(timed.timed_out);
     assert(!timed.completed);
 
-    // Strict optional features fail closed when the host cannot enforce them.
     ProcessIsolationBackend strict(ProcessIsolationLimits{
         SandboxLimits{std::chrono::milliseconds{500}, 1024},
         true, false, false, true, 64 * 1024 * 1024, 2, 1024 * 1024});
