@@ -6,52 +6,32 @@
 #if defined(__unix__) || defined(__APPLE__)
 int main() {
     using namespace jarvis::core;
-
     ProcessIsolationBackend backend(ProcessIsolationLimits{
-        SandboxLimits{std::chrono::milliseconds{500}, 1024},
-        false, false, false, true, false,
-        64 * 1024 * 1024,
-        2,
-        1024 * 1024});
-
+        SandboxLimits{std::chrono::milliseconds{500}, 1024}, false, false, false, true, false,
+        64 * 1024 * 1024, 2, 1024 * 1024});
     const auto ok = backend.run({"/bin/sh", {"-c", "printf isolated"}, ""});
-    assert(ok.started);
-    assert(ok.isolated);
-    assert(ok.completed);
-    assert(ok.exit_code == 0);
+    assert(ok.started && ok.isolated && ok.completed && ok.exit_code == 0);
     assert(ok.output == "isolated");
-
     const auto limited = backend.run({"/bin/sh", {"-c", "head -c 2048 /dev/zero"}, ""});
-    assert(limited.started);
-    assert(limited.isolated);
-    assert(limited.output_limited);
-    assert(!limited.completed);
-
+    assert(limited.started && limited.isolated && limited.output_limited && !limited.completed);
     const auto timed = backend.run({"/bin/sh", {"-c", "sleep 2"}, ""});
-    assert(timed.started);
-    assert(timed.isolated);
-    assert(timed.timed_out);
-    assert(!timed.completed);
-
+    assert(timed.started && timed.isolated && timed.timed_out && !timed.completed);
     ProcessIsolationBackend strict(ProcessIsolationLimits{
-        SandboxLimits{std::chrono::milliseconds{500}, 1024},
-        true, false, false, true, false, 64 * 1024 * 1024, 2, 1024 * 1024});
+        SandboxLimits{std::chrono::milliseconds{500}, 1024}, true, false, false, true, false,
+        64 * 1024 * 1024, 2, 1024 * 1024});
     const auto strict_result = strict.run({"/bin/sh", {"-c", "printf strict"}, ""});
 #if defined(__linux__)
-    if (strict_result.completed) assert(strict_result.isolated);
-    else assert(strict_result.exit_code == 125 || strict_result.error == "required isolation feature unavailable");
+    if (!strict_result.completed)
+        assert(strict_result.exit_code == 125 || strict_result.error == "required isolation feature unavailable");
 #else
     assert(!strict_result.completed);
 #endif
-
 #if defined(__linux__)
     ProcessIsolationBackend no_network(ProcessIsolationLimits{
-        SandboxLimits{std::chrono::milliseconds{500}, 1024},
-        false, false, false, true, true, 64 * 1024 * 1024, 2, 1024 * 1024});
+        SandboxLimits{std::chrono::milliseconds{500}, 1024}, false, false, false, true, true,
+        64 * 1024 * 1024, 2, 1024 * 1024});
     const auto network = no_network.run({"/bin/sh", {"-c", "python3 -c 'import socket; socket.socket()'"}, ""});
-    assert(network.started);
-    assert(network.isolated);
-    assert(!network.completed);
+    assert(network.started && network.isolated && !network.completed);
 #endif
     return 0;
 }
@@ -60,8 +40,7 @@ int main() {
     using namespace jarvis::core;
     ProcessIsolationBackend backend;
     const auto result = backend.run({"unsupported", {}, ""});
-    assert(!result.started);
-    assert(!result.isolated);
+    assert(!result.started && !result.isolated);
     return 0;
 }
 #endif
