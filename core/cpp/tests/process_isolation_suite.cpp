@@ -9,6 +9,7 @@ int main() {
 
     ProcessIsolationBackend backend(ProcessIsolationLimits{
         SandboxLimits{std::chrono::milliseconds{500}, 1024},
+        false, false, false, true,
         64 * 1024 * 1024,
         2,
         1024 * 1024});
@@ -20,7 +21,7 @@ int main() {
     assert(ok.exit_code == 0);
     assert(ok.output == "isolated");
 
-    const auto limited = backend.run({"/bin/sh", {"-c", "printf 123456789"}, ""});
+    const auto limited = backend.run({"/bin/sh", {"-c", "head -c 2048 /dev/zero"}, ""});
     assert(limited.started);
     assert(limited.isolated);
     assert(limited.output_limited);
@@ -31,6 +32,17 @@ int main() {
     assert(timed.isolated);
     assert(timed.timed_out);
     assert(!timed.completed);
+
+    ProcessIsolationBackend strict(ProcessIsolationLimits{
+        SandboxLimits{std::chrono::milliseconds{500}, 1024},
+        true, false, false, true, 64 * 1024 * 1024, 2, 1024 * 1024});
+    const auto strict_result = strict.run({"/bin/sh", {"-c", "printf strict"}, ""});
+#if defined(__linux__)
+    if (strict_result.completed) assert(strict_result.isolated);
+    else assert(strict_result.exit_code == 125 || strict_result.error == "required isolation feature unavailable");
+#else
+    assert(!strict_result.completed);
+#endif
     return 0;
 }
 #else

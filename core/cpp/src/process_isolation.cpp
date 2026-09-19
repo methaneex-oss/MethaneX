@@ -5,6 +5,7 @@
 #include <chrono>
 #include <cstring>
 #include <string>
+#include <cstdlib>
 
 #if defined(__unix__) || defined(__APPLE__)
 #include <fcntl.h>
@@ -14,6 +15,10 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#if defined(__linux__)
+#include <sched.h>
+#include <sys/prctl.h>
+#endif
 #endif
 
 namespace jarvis::core {
@@ -58,6 +63,31 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
         close(pipe_fds[1]);
 
         (void)setpgid(0, 0);
+
+#if defined(__linux__)
+        if (limits_.require_network_isolation && unshare(CLONE_NEWNET) != 0) _exit(125);
+#endif
+#if defined(__linux__)
+        if (limits_.require_no_new_privileges && prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0) != 0) _exit(125);
+#elif defined(__APPLE__)
+        if (limits_.require_no_new_privileges) _exit(125);
+#endif
+#if defined(__unix__) || defined(__APPLE__)
+        if (limits_.require_privilege_drop) {
+            if (geteuid() == 0) {
+                if (setgid(65534) != 0 || setuid(65534) != 0) _exit(125);
+            } else if (geteuid() != getuid() || getegid() != getgid()) {
+                _exit(125);
+            }
+        }
+#endif
+        if (limits_.require_filesystem_isolation) {
+#if defined(__unix__) || defined(__APPLE__)
+            if (command.working_directory.empty() || geteuid() != 0 || chroot(command.working_directory.c_str()) != 0 || chdir("/") != 0) _exit(125);
+#else
+            _exit(125);
+#endif
+        }
 
         struct rlimit memory_limit{limits_.max_memory_bytes, limits_.max_memory_bytes};
         struct rlimit cpu_limit{limits_.max_cpu_seconds, limits_.max_cpu_seconds};
@@ -139,6 +169,7 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
 
     result.output = std::move(output);
     result.completed = !result.timed_out && !result.output_limited && result.exit_code == 0;
+    if (!result.completed && result.exit_code == 125) result.error = "required isolation feature unavailable";
     if (!result.completed && result.error.empty()) {
         if (result.timed_out) result.error = "process timeout";
         else if (result.output_limited) result.error = "process output limit exceeded";
