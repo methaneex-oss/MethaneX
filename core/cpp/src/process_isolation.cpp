@@ -18,10 +18,84 @@
 #if defined(__linux__)
 #include <sched.h>
 #include <sys/prctl.h>
+#include <linux/filter.h>
+#include <linux/seccomp.h>
+#include <sys/syscall.h>
 #endif
 #endif
 
 namespace jarvis::core {
+
+#if defined(__linux__)
+namespace {
+
+bool install_network_syscall_block() noexcept {
+    // The filter is deliberately narrow: deny creation/use of network sockets while
+    // leaving ordinary process execution and IPC primitives available to the candidate.
+    const sock_filter filter[] = {
+        BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct seccomp_data, arch)),
+#if defined(__x86_64__)
+        BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, AUDIT_ARCH_X86_64, 0, 1),
+#elif defined(__aarch64__)
+        BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, AUDIT_ARCH_AARCH64, 0, 1),
+#else
+        BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_KILL_PROCESS),
+#endif
+        BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_KILL_PROCESS),
+        BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct seccomp_data, nr)),
+#ifdef __NR_socket
+        BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, __NR_socket, 0, 1),
+        BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ERRNO | EPERM),
+#endif
+#ifdef __NR_socketpair
+        BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, __NR_socketpair, 0, 1),
+        BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ERRNO | EPERM),
+#endif
+#ifdef __NR_connect
+        BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, __NR_connect, 0, 1),
+        BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ERRNO | EPERM),
+#endif
+#ifdef __NR_bind
+        BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, __NR_bind, 0, 1),
+        BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ERRNO | EPERM),
+#endif
+#ifdef __NR_listen
+        BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, __NR_listen, 0, 1),
+        BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ERRNO | EPERM),
+#endif
+#ifdef __NR_accept
+        BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, __NR_accept, 0, 1),
+        BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ERRNO | EPERM),
+#endif
+#ifdef __NR_accept4
+        BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, __NR_accept4, 0, 1),
+        BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ERRNO | EPERM),
+#endif
+#ifdef __NR_sendto
+        BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, __NR_sendto, 0, 1),
+        BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ERRNO | EPERM),
+#endif
+#ifdef __NR_sendmsg
+        BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, __NR_sendmsg, 0, 1),
+        BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ERRNO | EPERM),
+#endif
+#ifdef __NR_recvfrom
+        BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, __NR_recvfrom, 0, 1),
+        BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ERRNO | EPERM),
+#endif
+#ifdef __NR_recvmsg
+        BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, __NR_recvmsg, 0, 1),
+        BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ERRNO | EPERM),
+#endif
+        BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ALLOW),
+    };
+    const sock_fprog program{static_cast<unsigned short>(sizeof(filter) / sizeof(filter[0])),
+                             const_cast<sock_filter*>(filter)};
+    return prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &program, 0, 0) == 0;
+}
+
+} // namespace
+#endif
 
 ProcessIsolationBackend::ProcessIsolationBackend(ProcessIsolationLimits limits) : limits_(limits) {
     if (limits_.sandbox.timeout.count() <= 0) limits_.sandbox.timeout = std::chrono::milliseconds{1000};
@@ -61,16 +135,15 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
         (void)dup2(pipe_fds[1], STDOUT_FILENO);
         (void)dup2(pipe_fds[1], STDERR_FILENO);
         close(pipe_fds[1]);
-
         (void)setpgid(0, 0);
 
 #if defined(__linux__)
         if (limits_.require_network_isolation && unshare(CLONE_NEWNET) != 0) _exit(125);
-#endif
-#if defined(__linux__)
         if (limits_.require_no_new_privileges && prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0) != 0) _exit(125);
+        if (limits_.require_network_syscall_block && !install_network_syscall_block()) _exit(125);
 #elif defined(__APPLE__)
         if (limits_.require_no_new_privileges) _exit(125);
+        if (limits_.require_network_syscall_block) _exit(125);
 #endif
 #if defined(__unix__) || defined(__APPLE__)
         if (limits_.require_privilege_drop) {
@@ -101,8 +174,7 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
         std::vector<char*> argv;
         argv.reserve(command.arguments.size() + 2);
         argv.push_back(const_cast<char*>(command.executable.c_str()));
-        for (const auto& argument : command.arguments)
-            argv.push_back(const_cast<char*>(argument.c_str()));
+        for (const auto& argument : command.arguments) argv.push_back(const_cast<char*>(argument.c_str()));
         argv.push_back(nullptr);
         execvp(command.executable.c_str(), argv.data());
         _exit(127);
@@ -111,7 +183,6 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
     close(pipe_fds[1]);
     result.started = true;
     result.isolated = true;
-
     const auto deadline = std::chrono::steady_clock::now() + limits_.sandbox.timeout;
     std::string output;
     output.reserve(std::min<std::size_t>(limits_.sandbox.max_output_bytes, 4096));
@@ -125,7 +196,6 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
             result.timed_out = true;
             break;
         }
-
         struct pollfd descriptor{pipe_fds[0], POLLIN, 0};
         const auto remaining = std::chrono::duration_cast<std::chrono::milliseconds>(deadline - now);
         const int wait_ms = static_cast<int>(std::max<long long>(1, remaining.count()));
@@ -146,7 +216,6 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
                 output.append(buffer, static_cast<std::size_t>(bytes));
             }
         }
-
         int status = 0;
         const pid_t waited = waitpid(pid, &status, WNOHANG);
         if (waited == pid) {
@@ -166,7 +235,6 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
             else if (WIFSIGNALED(status)) result.exit_code = 128 + WTERMSIG(status);
         }
     }
-
     result.output = std::move(output);
     result.completed = !result.timed_out && !result.output_limited && result.exit_code == 0;
     if (!result.completed && result.exit_code == 125) result.error = "required isolation feature unavailable";
