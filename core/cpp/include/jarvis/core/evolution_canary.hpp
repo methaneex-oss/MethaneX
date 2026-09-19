@@ -19,6 +19,7 @@ struct CanaryDecision {
     bool rollback{false};
     bool sufficient_evidence{false};
     double mean_delta{0.0};
+    double worst_delta{0.0};
     std::string reason;
 };
 
@@ -32,6 +33,7 @@ private:
     CanaryPolicy policy_;
     std::size_t observations_{0};
     double delta_sum_{0.0};
+    double worst_delta_{0.0};
 };
 
 } // namespace jarvis::core
