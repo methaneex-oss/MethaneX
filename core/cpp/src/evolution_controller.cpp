@@ -5,25 +5,33 @@ namespace jarvis::core {
 
 EvolutionController::EvolutionController(EvolutionModel& model, EvolutionHistory& history,
                                          EvolutionSafetyPolicy policy)
-    : model_(model), history_(history), policy_(policy), canary_{} {}
+    : model_(model), history_(history), policy_(policy), canary_{}, adoption_journal_{} {}
 
 bool EvolutionController::record_evaluation(const EvolutionExperiment& experiment) {
-    return history_.append(EvolutionHistoryRecord{
+    const bool staged = adoption_journal_.stage(experiment);
+    const bool recorded = history_.append(EvolutionHistoryRecord{
         experiment.id, experiment.proposal.key, EvolutionRecordAction::Evaluated,
         experiment.outcome, experiment.baseline_fitness, experiment.candidate_fitness,
         experiment.confidence, 0, "evaluation", {}});
+    return staged && recorded;
 }
 
 bool EvolutionController::adopt(EvolutionExperiment& experiment) {
     if (!experiment.candidate_executed) return false;
+    if (!adoption_journal_.stage(experiment)) return false;
     if (!EvolutionSafetyGate::approve(experiment, policy_)) {
+        adoption_journal_.reject(experiment.id, "safety_gate_rejected");
         history_.append(EvolutionHistoryRecord{
             experiment.id, experiment.proposal.key, EvolutionRecordAction::Rejected,
             experiment.outcome, experiment.baseline_fitness, experiment.candidate_fitness,
             experiment.confidence, 0, "safety_gate_rejected", {}});
         return false;
     }
-    if (!model_.adopt(experiment.proposal)) return false;
+    if (!model_.adopt(experiment.proposal)) {
+        adoption_journal_.reject(experiment.id, "model_adoption_failed");
+        return false;
+    }
+    if (!adoption_journal_.commit(experiment.id, "adopted")) return false;
     canary_.reset();
     canary_.observe(CanaryObservation{experiment.baseline_fitness, experiment.candidate_fitness});
     return history_.append(EvolutionHistoryRecord{
@@ -47,10 +55,12 @@ bool EvolutionController::rollback(const std::string& parameter_key,
                                     const std::string& reason,
                                     double observed_delta) {
     if (!model_.rollback(parameter_key)) return false;
-    return history_.append(EvolutionHistoryRecord{
+    const bool journaled = adoption_journal_.rollback(experiment_id, reason);
+    const bool recorded = history_.append(EvolutionHistoryRecord{
         experiment_id, parameter_key, EvolutionRecordAction::RolledBack,
         ExperimentOutcome::Degraded, 0.0, observed_delta, 0.0, 0,
         reason, experiment_id});
+    return journaled && recorded;
 }
 
 } // namespace jarvis::core
