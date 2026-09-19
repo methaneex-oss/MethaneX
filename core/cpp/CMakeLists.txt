@@ -30,6 +30,8 @@ add_library(jarvis_core STATIC
     src/evolution_experiment_runner.cpp
     src/evolution_history.cpp
     src/evolution_controller.cpp
+    src/evolution_adoption.cpp
+    src/evolution_adoption_journal.cpp
     src/evolution_strategy.cpp
     src/evolution_trials.cpp
     src/evolution_learning.cpp
