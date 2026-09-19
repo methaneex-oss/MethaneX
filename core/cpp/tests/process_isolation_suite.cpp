@@ -31,6 +31,18 @@ int main() {
     assert(timed.isolated);
     assert(timed.timed_out);
     assert(!timed.completed);
+
+    // Strict optional features fail closed when the host cannot enforce them.
+    ProcessIsolationBackend strict(ProcessIsolationLimits{
+        SandboxLimits{std::chrono::milliseconds{500}, 1024},
+        true, false, false, true, 64 * 1024 * 1024, 2, 1024 * 1024});
+    const auto strict_result = strict.run({"/bin/sh", {"-c", "printf strict"}, ""});
+#if defined(__linux__)
+    if (strict_result.completed) assert(strict_result.isolated);
+    else assert(strict_result.exit_code == 125 || strict_result.error == "required isolation feature unavailable");
+#else
+    assert(!strict_result.completed);
+#endif
     return 0;
 }
 #else
