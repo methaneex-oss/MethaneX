@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cerrno>
 #include <chrono>
+#include <cstddef>
 #include <cstring>
 #include <string>
 #include <cstdlib>
@@ -18,6 +19,7 @@
 #if defined(__linux__)
 #include <sched.h>
 #include <sys/prctl.h>
+#include <linux/audit.h>
 #include <linux/filter.h>
 #include <linux/seccomp.h>
 #include <sys/syscall.h>
@@ -30,14 +32,12 @@ namespace jarvis::core {
 namespace {
 
 bool install_network_syscall_block() noexcept {
-    // The filter is deliberately narrow: deny creation/use of network sockets while
-    // leaving ordinary process execution and IPC primitives available to the candidate.
     const sock_filter filter[] = {
         BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct seccomp_data, arch)),
 #if defined(__x86_64__)
-        BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, AUDIT_ARCH_X86_64, 0, 1),
+        BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, AUDIT_ARCH_X86_64, 1, 0),
 #elif defined(__aarch64__)
-        BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, AUDIT_ARCH_AARCH64, 0, 1),
+        BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, AUDIT_ARCH_AARCH64, 1, 0),
 #else
         BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_KILL_PROCESS),
 #endif
