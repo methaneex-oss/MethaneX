@@ -9,6 +9,7 @@ int main() {
 
     ProcessIsolationBackend backend(ProcessIsolationLimits{
         SandboxLimits{std::chrono::milliseconds{500}, 1024},
+        false, false, false, true,
         64 * 1024 * 1024,
         2,
         1024 * 1024});
