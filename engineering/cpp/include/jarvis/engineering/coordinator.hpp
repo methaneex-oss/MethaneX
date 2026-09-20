@@ -1,6 +1,7 @@
 #pragma once
 
 #include "agent.hpp"
+#include "execution.hpp"
 
 #include <vector>
 
@@ -24,7 +25,9 @@ public:
 
     AgentResult dispatch(
         const EngineeringTask& task,
-        EngineeringAgent& agent) const;
+        EngineeringAgent& agent,
+        const EngineeringAuthorizer& authorizer,
+        EngineeringExecutionBoundary& boundary) const;
 
 private:
     static int risk_rank(AgentRisk risk) noexcept;
