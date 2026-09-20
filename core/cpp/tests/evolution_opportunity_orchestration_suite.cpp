@@ -20,8 +20,12 @@ int main() {
     assert(opportunities.front().score >= 0.5);
 
     EvolutionSandbox sandbox;
-    EvolutionOrchestrator orchestrator;
+    EvolutionModel model;
     EvolutionHistory history;
+    EvolutionSafetyPolicy safety;
+    safety.minimum_confidence = 0.75;
+    EvolutionController controller(model, history, safety);
+    EvolutionOrchestrator orchestrator;
     const auto now = std::chrono::steady_clock::now();
 
     const auto result = orchestrator.run(
@@ -40,12 +44,16 @@ int main() {
             return SandboxResult{true, true, false, false, true,
                                  proposal.key == "fast" ? 0.8 : 0.6, {}};
         },
-        history, now, now - std::chrono::seconds(2), true);
+        history, now, now - std::chrono::seconds(2), true, &controller);
 
     assert(result.schedule.allowed);
     assert(result.experiments.size() == 2);
+    assert(result.adopted == 2);
     assert(result.experiments[0].candidate_executed);
     assert(result.experiments[0].outcome == ExperimentOutcome::Improved);
+    assert(result.lifecycle[0] == EvolutionLifecycleState::Adopted);
+    assert(result.lifecycle[1] == EvolutionLifecycleState::Adopted);
+    assert(model.parameter("fast") == nullptr);
 
     const auto blocked = orchestrator.run(
         opportunities.front(),
