@@ -21,11 +21,21 @@ public:
     }
 };
 
+class DenyAuthorizer final : public EngineeringAuthorizer {
+public:
+    bool authorize(const EngineeringTask&, const AgentDescriptor&) const override {
+        return false;
+    }
+};
+
 } // namespace
 
 int main() {
     TestAgent agent;
     EngineeringCoordinator coordinator;
+    DirectExecutionBoundary boundary;
+    AllowAllAuthorizer allow;
+    DenyAuthorizer deny;
 
     EngineeringTask task{
         "review-1", "review source",
@@ -41,9 +51,13 @@ int main() {
     assert(ranked.front().eligible);
     assert(ranked.front().score > 0.0);
 
-    const auto result = coordinator.dispatch(task, agent);
+    const auto result = coordinator.dispatch(task, agent, allow, boundary);
     assert(result.accepted);
     assert(result.agent_id == "agent.review");
+
+    const auto denied = coordinator.dispatch(task, agent, deny, boundary);
+    assert(!denied.accepted);
+    assert(denied.reason == "execution authorization denied");
 
     EngineeringTask impossible = task;
     impossible.required_capabilities = {"security.audit"};
