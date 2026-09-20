@@ -21,6 +21,8 @@ int main() {
 
     EvolutionSandbox sandbox;
     EvolutionModel model;
+    model.register_parameter("slow", 0.0);
+    model.register_parameter("fast", 0.0);
     EvolutionHistory history;
     EvolutionSafetyPolicy safety;
     safety.minimum_confidence = 0.75;
