@@ -1,6 +1,7 @@
 #pragma once
 
 #include "jarvis/core/evolution_adoption.hpp"
+#include "jarvis/core/evolution_adoption_journal.hpp"
 #include "jarvis/core/evolution_canary.hpp"
 #include "jarvis/core/evolution_history.hpp"
 
@@ -19,12 +20,14 @@ public:
     bool rollback(const std::string& parameter_key, const std::string& experiment_id,
                   const std::string& reason = "manual_rollback",
                   double observed_delta = 0.0);
+    const EvolutionAdoptionJournal& adoption_journal() const noexcept { return adoption_journal_; }
 
 private:
     EvolutionModel& model_;
     EvolutionHistory& history_;
     EvolutionSafetyPolicy policy_;
     EvolutionCanary canary_;
+    EvolutionAdoptionJournal adoption_journal_;
 };
 
 } // namespace jarvis::core
