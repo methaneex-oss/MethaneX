@@ -1,4 +1,5 @@
 #include "jarvis/core/action_authorization.hpp"
+#include "jarvis/core/action_execution.hpp"
 
 #include <cassert>
 
