@@ -149,11 +149,31 @@ void CognitiveRuntime::worker_loop() {
                 results_.push_back(std::move(result));
             }
             ++metrics_.processed;
-        } catch (const std::exception&) {
+        } catch (const std::exception& error) {
+            CognitiveCycleResult result;
+            result.status = CognitiveCycleStatus::failed;
+            result.error = error.what();
             std::lock_guard lock(mutex_);
+            if (config_.result_capacity != 0) {
+                if (results_.size() >= config_.result_capacity) {
+                    results_.pop_front();
+                    ++metrics_.dropped_results;
+                }
+                results_.push_back(std::move(result));
+            }
             ++metrics_.processed;
         } catch (...) {
+            CognitiveCycleResult result;
+            result.status = CognitiveCycleStatus::failed;
+            result.error = "unknown_cognitive_runtime_failure";
             std::lock_guard lock(mutex_);
+            if (config_.result_capacity != 0) {
+                if (results_.size() >= config_.result_capacity) {
+                    results_.pop_front();
+                    ++metrics_.dropped_results;
+                }
+                results_.push_back(std::move(result));
+            }
             ++metrics_.processed;
         }
     }

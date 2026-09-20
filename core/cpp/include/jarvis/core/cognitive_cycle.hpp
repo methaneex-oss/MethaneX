@@ -17,6 +17,7 @@ enum class CognitiveCycleStatus : std::uint8_t {
     no_goal,
     no_action,
     invalid_goal,
+    failed,
 };
 
 struct CognitiveCycleInput {
@@ -50,6 +51,7 @@ struct CognitiveCycleContext {
 struct CognitiveCycleResult {
     CognitiveCycleStatus status{CognitiveCycleStatus::no_goal};
     CognitiveCycleContext context;
+    std::string error;
 };
 
 struct CognitiveFeedbackResult {
