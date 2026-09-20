@@ -31,7 +31,11 @@ bool EvolutionController::adopt(EvolutionExperiment& experiment) {
         adoption_journal_.reject(experiment.id, "model_adoption_failed");
         return false;
     }
-    if (!adoption_journal_.commit(experiment.id, "adopted")) return false;
+    if (!adoption_journal_.commit(experiment.id, "adopted")) {
+        model_.rollback(experiment.proposal.key);
+        adoption_journal_.reject(experiment.id, "adoption_commit_failed");
+        return false;
+    }
     canary_.reset();
     canary_.observe(CanaryObservation{experiment.baseline_fitness, experiment.candidate_fitness});
     return history_.append(EvolutionHistoryRecord{
