@@ -50,13 +50,10 @@ int main() {
 
     assert(result.schedule.allowed);
     assert(result.experiments.size() == 2);
-    assert(result.experiments.size() == 2);
     assert(result.experiments[0].candidate_executed);
     assert(result.experiments[0].outcome == ExperimentOutcome::Improved);
     assert(result.experiments[0].confidence >= 0.75);
     assert(result.adopted == 1);
-    assert(result.experiments[0].candidate_executed);
-    assert(result.experiments[0].outcome == ExperimentOutcome::Improved);
     assert(result.lifecycle[0] == EvolutionLifecycleState::Adopted);
     assert(result.lifecycle[1] == EvolutionLifecycleState::Superseded);
     const auto* fast = model.parameter("fast");
