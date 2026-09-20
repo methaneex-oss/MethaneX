@@ -24,6 +24,7 @@ struct WorkerLimits {
 
 struct WorkerRequest {
     EngineeringTask task;
+    std::string executable;
     std::string working_directory;
     std::vector<std::string> arguments;
     WorkerLimits limits{};
@@ -38,6 +39,11 @@ struct WorkerResponse {
 };
 
 using WorkerLauncher = std::function<WorkerResponse(const WorkerRequest&)>;
+
+class ProcessWorkerLauncher {
+public:
+    WorkerResponse operator()(const WorkerRequest& request) const;
+};
 
 class WorkerBackedAgent final : public EngineeringAgent {
 public:
