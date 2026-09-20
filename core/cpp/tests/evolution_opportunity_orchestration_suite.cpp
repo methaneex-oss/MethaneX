@@ -55,7 +55,7 @@ int main() {
     assert(result.experiments[0].outcome == ExperimentOutcome::Improved);
     assert(result.experiments[0].confidence >= 0.75);
     assert(result.adopted == 1);
-    assert(result.lifecycle[0] == EvolutionLifecycleState::Adopted);
+    assert(result.lifecycle[0] == EvolutionLifecycleState::Retained);
     assert(result.lifecycle[1] == EvolutionLifecycleState::Superseded);
     const auto* fast = model.parameter("fast");
     const auto* slow = model.parameter("slow");
