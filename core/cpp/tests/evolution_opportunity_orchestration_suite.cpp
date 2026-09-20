@@ -50,6 +50,10 @@ int main() {
 
     assert(result.schedule.allowed);
     assert(result.experiments.size() == 2);
+    assert(result.experiments.size() == 2);
+    assert(result.experiments[0].candidate_executed);
+    assert(result.experiments[0].outcome == ExperimentOutcome::Improved);
+    assert(result.experiments[0].confidence >= 0.75);
     assert(result.adopted == 1);
     assert(result.experiments[0].candidate_executed);
     assert(result.experiments[0].outcome == ExperimentOutcome::Improved);
@@ -59,7 +63,6 @@ int main() {
     const auto* slow = model.parameter("slow");
     assert(fast != nullptr && fast->value != fast->baseline);
     assert(slow != nullptr && slow->value == slow->baseline);
-    assert(model.parameter("fast") == nullptr);
 
     const auto blocked = orchestrator.run(
         opportunities.front(),
