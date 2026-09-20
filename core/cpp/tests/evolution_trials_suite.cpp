@@ -14,14 +14,28 @@ int main() {
     assert(candidate.count == 4);
     assert(std::abs(candidate.mean - 0.80) < 1e-12);
     assert(candidate.standard_error >= 0.0);
-    assert(EvolutionTrials::supports_adoption(baseline, candidate, 0.05, 0.5));
+    assert(candidate.confidence == 0.95);
+    assert(candidate.confidence_interval_low < candidate.mean);
+    assert(candidate.confidence_interval_high > candidate.mean);
+
+    const double low = EvolutionTrials::difference_confidence_interval_low(
+        baseline, candidate, 0.95);
+    const double high = EvolutionTrials::difference_confidence_interval_high(
+        baseline, candidate, 0.95);
+    assert(low > 0.0);
+    assert(high > low);
+    assert(EvolutionTrials::supports_adoption(baseline, candidate, 0.05, 0.95));
+
+    const auto noisy_candidate = EvolutionTrials::summarize({0.50, 1.10, 0.45, 1.05});
+    assert(!EvolutionTrials::supports_adoption(baseline, noisy_candidate, 0.05, 0.95));
 
     const auto single = EvolutionTrials::summarize({1.0});
     assert(single.count == 1);
     assert(single.confidence == 0.0);
     assert(!EvolutionTrials::supports_adoption(single, candidate, 0.01, 0.5));
 
-    const auto invalid = EvolutionTrials::summarize({0.7, std::numeric_limits<double>::quiet_NaN()});
+    const auto invalid = EvolutionTrials::summarize(
+        {0.7, std::numeric_limits<double>::quiet_NaN()});
     assert(invalid.count == 0);
     assert(!EvolutionTrials::supports_adoption(baseline, invalid, 0.01, 0.1));
     return 0;
