@@ -8,6 +8,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_library(jarvis_engineering STATIC
     src/agent.cpp
     src/coordinator.cpp
+    src/execution.cpp
 )
 
 target_include_directories(jarvis_engineering PUBLIC include)
