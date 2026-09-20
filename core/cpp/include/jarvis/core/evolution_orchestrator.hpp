@@ -1,6 +1,7 @@
 #pragma once
 
 #include "jarvis/core/evolution_candidate_generator.hpp"
+#include "jarvis/core/evolution_controller.hpp"
 #include "jarvis/core/evolution_experiment_coordinator.hpp"
 #include "jarvis/core/evolution_scheduler.hpp"
 #include "jarvis/core/evolution_strategy.hpp"
@@ -12,9 +13,20 @@
 
 namespace jarvis::core {
 
+enum class EvolutionLifecycleState {
+    Scheduled,
+    CandidateEvaluated,
+    SafetyRejected,
+    Adopted,
+    EvaluationRejected
+};
+
 struct EvolutionOrchestrationResult {
     EvolutionScheduleDecision schedule;
     std::vector<EvolutionExperiment> experiments;
+    std::vector<EvolutionLifecycleState> lifecycle;
+    std::size_t adopted{0};
+    std::size_t rejected{0};
 };
 
 class EvolutionOrchestrator {
@@ -30,7 +42,8 @@ public:
         const EvolutionHistory& history,
         std::chrono::steady_clock::time_point now,
         std::chrono::steady_clock::time_point last_run,
-        bool system_idle) const noexcept;
+        bool system_idle,
+        EvolutionController* controller = nullptr) const noexcept;
 
 private:
     EvolutionScheduler scheduler_;
