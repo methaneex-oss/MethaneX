@@ -39,6 +39,8 @@ public:
 
     static double welch_degrees_of_freedom(const TrialStatistics& baseline,
                                             const TrialStatistics& candidate) noexcept;
+    static double standardized_effect_size(const TrialStatistics& baseline,
+                                           const TrialStatistics& candidate) noexcept;
 };
 
 } // namespace jarvis::core
