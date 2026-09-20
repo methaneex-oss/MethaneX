@@ -145,6 +145,23 @@ double EvolutionTrials::difference_confidence_interval_high(
     return (candidate.mean - baseline.mean) + critical * standard_error;
 }
 
+double EvolutionTrials::standardized_effect_size(
+    const TrialStatistics& baseline, const TrialStatistics& candidate) noexcept {
+    if (!valid_statistics(baseline) || !valid_statistics(candidate)) {
+        return std::numeric_limits<double>::quiet_NaN();
+    }
+    const double pooled_variance =
+        ((static_cast<double>(baseline.count - 1) * baseline.variance) +
+         (static_cast<double>(candidate.count - 1) * candidate.variance)) /
+        static_cast<double>(baseline.count + candidate.count - 2);
+    if (pooled_variance == 0.0) {
+        const double delta = candidate.mean - baseline.mean;
+        if (delta == 0.0) return 0.0;
+        return std::copysign(std::numeric_limits<double>::infinity(), delta);
+    }
+    return (candidate.mean - baseline.mean) / std::sqrt(pooled_variance);
+}
+
 bool EvolutionTrials::supports_adoption(const TrialStatistics& baseline,
                                          const TrialStatistics& candidate,
                                          double minimum_gain,
