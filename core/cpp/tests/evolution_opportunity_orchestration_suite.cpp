@@ -50,11 +50,15 @@ int main() {
 
     assert(result.schedule.allowed);
     assert(result.experiments.size() == 2);
-    assert(result.adopted == 2);
+    assert(result.adopted == 1);
     assert(result.experiments[0].candidate_executed);
     assert(result.experiments[0].outcome == ExperimentOutcome::Improved);
     assert(result.lifecycle[0] == EvolutionLifecycleState::Adopted);
-    assert(result.lifecycle[1] == EvolutionLifecycleState::Adopted);
+    assert(result.lifecycle[1] == EvolutionLifecycleState::Superseded);
+    const auto* fast = model.parameter("fast");
+    const auto* slow = model.parameter("slow");
+    assert(fast != nullptr && fast->value != fast->baseline);
+    assert(slow != nullptr && slow->value == slow->baseline);
     assert(model.parameter("fast") == nullptr);
 
     const auto blocked = orchestrator.run(
