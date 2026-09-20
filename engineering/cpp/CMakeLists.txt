@@ -9,6 +9,7 @@ add_library(jarvis_engineering STATIC
     src/agent.cpp
     src/coordinator.cpp
     src/execution.cpp
+    src/worker.cpp
 )
 
 target_include_directories(jarvis_engineering PUBLIC include)
@@ -24,12 +25,11 @@ include(CTest)
 if(BUILD_TESTING)
     add_executable(jarvis_engineering_agent_suite tests/agent_suite.cpp)
     target_link_libraries(jarvis_engineering_agent_suite PRIVATE jarvis_engineering)
-    target_compile_features(jarvis_engineering_agent_suite PRIVATE cxx_std_20)
-
     add_executable(jarvis_engineering_coordinator_suite tests/coordinator_suite.cpp)
     target_link_libraries(jarvis_engineering_coordinator_suite PRIVATE jarvis_engineering)
-    target_compile_features(jarvis_engineering_coordinator_suite PRIVATE cxx_std_20)
-
+    add_executable(jarvis_engineering_worker_suite tests/worker_suite.cpp)
+    target_link_libraries(jarvis_engineering_worker_suite PRIVATE jarvis_engineering)
     add_test(NAME jarvis_engineering_agent_suite COMMAND jarvis_engineering_agent_suite)
     add_test(NAME jarvis_engineering_coordinator_suite COMMAND jarvis_engineering_coordinator_suite)
+    add_test(NAME jarvis_engineering_worker_suite COMMAND jarvis_engineering_worker_suite)
 endif()
