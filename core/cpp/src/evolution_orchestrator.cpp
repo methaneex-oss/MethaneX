@@ -126,6 +126,8 @@ EvolutionOrchestrationResult EvolutionOrchestrator::run(
     }
 
     auto& selected = result.experiments[winner];
+    // The controller owns the safety gate and adoption journal. Evaluation has already
+    // been recorded above; adoption is attempted exactly once for the empirical winner.
     if (controller->adopt(selected)) {
         result.lifecycle[winner] = EvolutionLifecycleState::Adopted;
         ++result.adopted;
