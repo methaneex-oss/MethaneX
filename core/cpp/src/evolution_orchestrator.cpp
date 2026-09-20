@@ -65,6 +65,7 @@ EvolutionOrchestrationResult EvolutionOrchestrator::run(
         experiment.id = experiment_id(opportunity, *proposal_it, index);
         const auto batch = EvolutionExperimentCoordinator::run(
             experiment, sandbox, baseline_executor, candidate_executor, trial_config_);
+        if (batch.executed) experiment.candidate_executed = true;
 
         if (!batch.executed) {
             result.lifecycle.push_back(EvolutionLifecycleState::EvaluationRejected);
