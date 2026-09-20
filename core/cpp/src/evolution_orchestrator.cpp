@@ -63,6 +63,7 @@ EvolutionOrchestrationResult EvolutionOrchestrator::run(
 
         EvolutionExperiment experiment;
         experiment.id = experiment_id(opportunity, *proposal_it, index);
+        experiment.proposal = *proposal_it;
         const auto batch = EvolutionExperimentCoordinator::run(
             experiment, sandbox, baseline_executor, candidate_executor, trial_config_);
         if (batch.executed) experiment.candidate_executed = true;
@@ -105,9 +106,7 @@ EvolutionOrchestrationResult EvolutionOrchestrator::run(
 
     if (winner == result.experiments.size()) {
         for (std::size_t i = 0; i < result.experiments.size(); ++i) {
-            if (result.lifecycle[i] == EvolutionLifecycleState::CandidateEvaluated) {
-                ++result.rejected;
-            }
+            if (result.lifecycle[i] == EvolutionLifecycleState::CandidateEvaluated) ++result.rejected;
         }
         return result;
     }
@@ -127,13 +126,10 @@ EvolutionOrchestrationResult EvolutionOrchestrator::run(
     }
 
     auto& selected = result.experiments[winner];
-    // The controller owns the safety gate and adoption journal. Evaluation has already
-    // been recorded above; adoption is attempted exactly once for the empirical winner.
     if (controller->adopt(selected)) {
         result.lifecycle[winner] = EvolutionLifecycleState::Canarying;
-        const std::size_t required = 3;
         CanaryDecision canary{};
-        for (std::size_t i = 0; i < required; ++i) {
+        for (std::size_t i = 0; i < 3; ++i) {
             canary = controller->observe_canary(
                 selected.proposal.key, selected.id,
                 CanaryObservation{selected.baseline_fitness, selected.candidate_fitness});
