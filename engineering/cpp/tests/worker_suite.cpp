@@ -51,9 +51,9 @@ int main() {
             return WorkerResponse{WorkerExit::timed_out, -1, "", "", "worker timed out"};
         }};
 
-    const auto timeout = failed.execute(task());
-    assert(!timeout.accepted);
-    assert(timeout.reason == "worker timed out");
+    const auto injected_timeout = failed.execute(task());
+    assert(!injected_timeout.accepted);
+    assert(injected_timeout.reason == "worker timed out");
 
 #if !defined(_WIN32)
     const auto fixture = std::filesystem::temp_directory_path() / "jarvis-engineering-worker-fixture";
@@ -82,10 +82,10 @@ int main() {
     assert(failed_process.exit_code == 7);
     assert(failed_process.stdout_text == "bad");
 
-    WorkerRequest timeout = echo;
-    timeout.arguments = {"-c", "sleep 2"};
-    timeout.limits.timeout = std::chrono::milliseconds(100);
-    const auto timed_out = launcher(timeout);
+    WorkerRequest timeout_request = echo;
+    timeout_request.arguments = {"-c", "sleep 2"};
+    timeout_request.limits.timeout = std::chrono::milliseconds(100);
+    const auto timed_out = launcher(timeout_request);
     assert(timed_out.exit == WorkerExit::timed_out);
 
     WorkerRequest output = echo;
