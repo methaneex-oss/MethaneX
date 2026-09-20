@@ -1,6 +1,7 @@
 #pragma once
 
 #include "action_model.hpp"
+#include "action_authorization.hpp"
 
 #include <functional>
 #include <string>
@@ -22,6 +23,7 @@ struct ActionExecutionRequest {
     std::function<bool(const CandidateAction&)> execute;
     std::function<bool(const CandidateAction&)> verify;
     std::function<bool(const CandidateAction&)> rollback;
+    ActionAuthorizationContext authorization{};
 };
 
 struct ActionExecutionResult {
