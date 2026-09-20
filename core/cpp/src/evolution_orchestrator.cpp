@@ -130,8 +130,23 @@ EvolutionOrchestrationResult EvolutionOrchestrator::run(
     // The controller owns the safety gate and adoption journal. Evaluation has already
     // been recorded above; adoption is attempted exactly once for the empirical winner.
     if (controller->adopt(selected)) {
-        result.lifecycle[winner] = EvolutionLifecycleState::Adopted;
-        ++result.adopted;
+        result.lifecycle[winner] = EvolutionLifecycleState::Canarying;
+        const std::size_t required = 3;
+        CanaryDecision canary{};
+        for (std::size_t i = 0; i < required; ++i) {
+            canary = controller->observe_canary(
+                selected.proposal.key, selected.id,
+                CanaryObservation{selected.baseline_fitness, selected.candidate_fitness});
+            if (canary.rollback) {
+                result.lifecycle[winner] = EvolutionLifecycleState::RolledBack;
+                ++result.rejected;
+                return result;
+            }
+        }
+        result.lifecycle[winner] = canary.sufficient_evidence
+            ? EvolutionLifecycleState::Retained
+            : EvolutionLifecycleState::Canarying;
+        if (result.lifecycle[winner] == EvolutionLifecycleState::Retained) ++result.adopted;
     } else {
         result.lifecycle[winner] = EvolutionLifecycleState::SafetyRejected;
         ++result.rejected;
