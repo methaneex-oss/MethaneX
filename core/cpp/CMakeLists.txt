@@ -43,6 +43,7 @@ add_library(jarvis_core STATIC
     src/reasoning.cpp
     src/action_model.cpp
     src/action_execution.cpp
+    src/action_authorization.cpp
     src/learning_loop.cpp
     src/reflection.cpp
     src/knowledge.cpp
