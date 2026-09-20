@@ -1,7 +1,6 @@
 #include "jarvis/engineering/coordinator.hpp"
 
 #include <algorithm>
-#include <cmath>
 
 namespace jarvis::engineering {
 
@@ -40,12 +39,13 @@ std::vector<AgentCandidate> EngineeringCoordinator::discover(
     if (!valid_task(task)) return result;
 
     for (const auto& agent : agents) {
-        const bool capabilities = contains_all(agent.capabilities, task.required_capabilities);
-        const bool permissions = satisfies_permissions(agent, task);
-        const bool artifacts = satisfies_artifacts(agent, task);
-        const bool availability = agent.availability != AgentAvailability::unavailable;
-        const bool risk = risk_rank(agent.risk) <= risk_rank(task.maximum_risk);
-        const bool cost = agent.estimated_cost <= task.maximum_cost;
+        const bool valid = valid_descriptor(agent);
+        const bool capabilities = valid && contains_all(agent.capabilities, task.required_capabilities);
+        const bool permissions = valid && satisfies_permissions(agent, task);
+        const bool artifacts = valid && satisfies_artifacts(agent, task);
+        const bool availability = valid && agent.availability != AgentAvailability::unavailable;
+        const bool risk = valid && risk_rank(agent.risk) <= risk_rank(task.maximum_risk);
+        const bool cost = valid && agent.estimated_cost <= task.maximum_cost;
         result.push_back(AgentCandidate{agent, 0.0,
                                         capabilities && permissions && artifacts &&
                                         availability && risk && cost});
@@ -73,7 +73,9 @@ std::vector<AgentCandidate> EngineeringCoordinator::rank(
 
 AgentResult EngineeringCoordinator::dispatch(
     const EngineeringTask& task,
-    EngineeringAgent& agent) const {
+    EngineeringAgent& agent,
+    const EngineeringAuthorizer& authorizer,
+    EngineeringExecutionBoundary& boundary) const {
     const auto descriptor = agent.descriptor();
     if (!valid_task(task) || !valid_descriptor(descriptor)) {
         return AgentResult{false, descriptor.id, task.id, "invalid task or agent descriptor", {}, {}};
@@ -84,7 +86,14 @@ AgentResult EngineeringCoordinator::dispatch(
         return AgentResult{false, descriptor.id, task.id, "agent is not eligible for task", {}, {}};
     }
 
-    return agent.execute(task);
+    if (!authorizer.authorize(task, descriptor)) {
+        return AgentResult{false, descriptor.id, task.id, "execution authorization denied", {}, {}};
+    }
+
+    auto result = boundary.run(task, agent);
+    if (result.agent_id.empty()) result.agent_id = descriptor.id;
+    if (result.task_id.empty()) result.task_id = task.id;
+    return result;
 }
 
 } // namespace jarvis::engineering
