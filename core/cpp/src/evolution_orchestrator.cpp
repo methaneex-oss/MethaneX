@@ -65,38 +65,73 @@ EvolutionOrchestrationResult EvolutionOrchestrator::run(
         experiment.id = experiment_id(opportunity, *proposal_it, index);
         const auto batch = EvolutionExperimentCoordinator::run(
             experiment, sandbox, baseline_executor, candidate_executor, trial_config_);
+
         if (!batch.executed) {
             result.lifecycle.push_back(EvolutionLifecycleState::EvaluationRejected);
             ++result.rejected;
-            result.experiments.push_back(std::move(experiment));
-            continue;
-        }
-
-        result.lifecycle.push_back(EvolutionLifecycleState::CandidateEvaluated);
-        if (controller == nullptr) {
-            if (experiment.outcome == ExperimentOutcome::Improved) {
-                ++result.adopted;
-                result.lifecycle.back() = EvolutionLifecycleState::Adopted;
-            } else {
-                ++result.rejected;
-            }
         } else {
+            result.lifecycle.push_back(EvolutionLifecycleState::CandidateEvaluated);
+        }
+        result.experiments.push_back(std::move(experiment));
+    }
+
+    if (result.experiments.empty()) return result;
+
+    // Evaluate every candidate first, then adopt at most one empirical winner.
+    // This prevents multiple simultaneous changes from sharing one canary stream.
+    std::size_t winner = result.experiments.size();
+    double winner_gain = 0.0;
+    for (std::size_t i = 0; i < result.experiments.size(); ++i) {
+        auto& experiment = result.experiments[i];
+        if (experiment.outcome != ExperimentOutcome::Improved) continue;
+        const double gain = experiment.candidate_fitness - experiment.baseline_fitness;
+        if (winner == result.experiments.size() || gain > winner_gain ||
+            (gain == winner_gain && experiment.confidence > result.experiments[winner].confidence)) {
+            winner = i;
+            winner_gain = gain;
+        }
+    }
+
+    for (std::size_t i = 0; i < result.experiments.size(); ++i) {
+        auto& experiment = result.experiments[i];
+        if (controller != nullptr && experiment.candidate_executed) {
             if (!controller->record_evaluation(experiment)) {
-                result.lifecycle.back() = EvolutionLifecycleState::EvaluationRejected;
-                ++result.rejected;
-            } else if (experiment.outcome != ExperimentOutcome::Improved) {
-                result.lifecycle.back() = EvolutionLifecycleState::SafetyRejected;
-                ++result.rejected;
-            } else if (controller->adopt(experiment)) {
-                result.lifecycle.back() = EvolutionLifecycleState::Adopted;
-                ++result.adopted;
-            } else {
-                result.lifecycle.back() = EvolutionLifecycleState::SafetyRejected;
+                result.lifecycle[i] = EvolutionLifecycleState::EvaluationRejected;
                 ++result.rejected;
             }
         }
+    }
 
-        result.experiments.push_back(std::move(experiment));
+    if (winner == result.experiments.size()) {
+        for (std::size_t i = 0; i < result.experiments.size(); ++i) {
+            if (result.lifecycle[i] == EvolutionLifecycleState::CandidateEvaluated) {
+                ++result.rejected;
+            }
+        }
+        return result;
+    }
+
+    for (std::size_t i = 0; i < result.experiments.size(); ++i) {
+        if (i == winner) continue;
+        if (result.lifecycle[i] == EvolutionLifecycleState::CandidateEvaluated) {
+            result.lifecycle[i] = EvolutionLifecycleState::Superseded;
+            ++result.rejected;
+        }
+    }
+
+    if (controller == nullptr) {
+        result.lifecycle[winner] = EvolutionLifecycleState::Superseded;
+        ++result.rejected;
+        return result;
+    }
+
+    auto& selected = result.experiments[winner];
+    if (controller->adopt(selected)) {
+        result.lifecycle[winner] = EvolutionLifecycleState::Adopted;
+        ++result.adopted;
+    } else {
+        result.lifecycle[winner] = EvolutionLifecycleState::SafetyRejected;
+        ++result.rejected;
     }
 
     return result;
