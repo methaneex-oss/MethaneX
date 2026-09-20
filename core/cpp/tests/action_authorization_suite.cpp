@@ -28,5 +28,18 @@ int main() {
     assert(!risky.authorized);
     assert(risky.reason == "authorization_risk_exceeded");
 
+    bool executed = false;
+    ActionExecutionRequest request{
+        assessment,
+        [&](const CandidateAction&) { executed = true; return true; },
+        [](const CandidateAction&) { return true; },
+        {},
+        ActionAuthorizationContext{{}, 1.0, false},
+    };
+    const auto execution = ActionExecutor{}.run(request);
+    assert(execution.status == ActionExecutionStatus::rejected);
+    assert(execution.reason == "authorization_permission_denied");
+    assert(!executed);
+
     return 0;
 }
