@@ -51,6 +51,7 @@ int main() {
     assert(result.schedule.allowed);
     assert(result.experiments.size() == 2);
     assert(result.experiments[0].candidate_executed);
+    assert(result.experiments[1].candidate_executed);
     assert(result.experiments[0].outcome == ExperimentOutcome::Improved);
     assert(result.experiments[0].confidence >= 0.75);
     assert(result.adopted == 1);
