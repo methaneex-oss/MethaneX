@@ -20,7 +20,7 @@ int main() {
 
         EvolutionExperiment experiment{
             "brain-evolution-1", proposals.front(), 0.70, 0.90, 0.01, 0.95,
-            ExperimentOutcome::Improved, true};
+            0.19, 0.21, 2.0, ExperimentOutcome::Improved, true};
         assert(brain.adopt_evolution_experiment(experiment));
         assert(!brain.evolution_history().empty());
 
