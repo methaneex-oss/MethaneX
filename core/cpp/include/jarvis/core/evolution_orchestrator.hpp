@@ -18,6 +18,7 @@ enum class EvolutionLifecycleState {
     CandidateEvaluated,
     SafetyRejected,
     Adopted,
+    Superseded,
     EvaluationRejected
 };
 
