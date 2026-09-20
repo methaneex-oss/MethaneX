@@ -1,9 +1,9 @@
 #include "jarvis/core/evolution_orchestrator.hpp"
 
 #include <algorithm>
-#include <cstdint>
-#include <sstream>
 #include <exception>
+#include <sstream>
+#include <utility>
 
 namespace jarvis::core {
 namespace {
@@ -30,7 +30,8 @@ EvolutionOrchestrationResult EvolutionOrchestrator::run(
     const EvolutionHistory& history,
     std::chrono::steady_clock::time_point now,
     std::chrono::steady_clock::time_point last_run,
-    bool system_idle) const noexcept {
+    bool system_idle,
+    EvolutionController* controller) const noexcept {
     EvolutionOrchestrationResult result;
     result.schedule = scheduler_.evaluate(now, last_run, system_idle);
     if (!result.schedule.allowed || opportunity.id.empty() || !generator ||
@@ -41,17 +42,17 @@ EvolutionOrchestrationResult EvolutionOrchestrator::run(
     std::vector<EvolutionProposal> generated;
     try {
         generated = generator(opportunity);
-    } catch (const std::exception&) {
-        return result;
     } catch (...) {
         return result;
     }
+
     const auto candidates = EvolutionCandidateValidator::validate(generated);
     if (candidates.empty()) return result;
 
     const auto ranked = EvolutionStrategy::rank(candidates, history);
     const std::size_t limit = std::min(result.schedule.trial_budget, ranked.size());
     result.experiments.reserve(limit);
+    result.lifecycle.reserve(limit);
 
     for (std::size_t index = 0; index < limit; ++index) {
         const auto& ranked_candidate = ranked[index];
@@ -62,11 +63,42 @@ EvolutionOrchestrationResult EvolutionOrchestrator::run(
 
         EvolutionExperiment experiment;
         experiment.id = experiment_id(opportunity, *proposal_it, index);
-        experiment.proposal = *proposal_it;
-        EvolutionExperimentCoordinator::run(
+        const auto batch = EvolutionExperimentCoordinator::run(
             experiment, sandbox, baseline_executor, candidate_executor, trial_config_);
+        if (!batch.executed) {
+            result.lifecycle.push_back(EvolutionLifecycleState::EvaluationRejected);
+            ++result.rejected;
+            result.experiments.push_back(std::move(experiment));
+            continue;
+        }
+
+        result.lifecycle.push_back(EvolutionLifecycleState::CandidateEvaluated);
+        if (controller == nullptr) {
+            if (experiment.outcome == ExperimentOutcome::Improved) {
+                ++result.adopted;
+                result.lifecycle.back() = EvolutionLifecycleState::Adopted;
+            } else {
+                ++result.rejected;
+            }
+        } else {
+            if (!controller->record_evaluation(experiment)) {
+                result.lifecycle.back() = EvolutionLifecycleState::EvaluationRejected;
+                ++result.rejected;
+            } else if (experiment.outcome != ExperimentOutcome::Improved) {
+                result.lifecycle.back() = EvolutionLifecycleState::SafetyRejected;
+                ++result.rejected;
+            } else if (controller->adopt(experiment)) {
+                result.lifecycle.back() = EvolutionLifecycleState::Adopted;
+                ++result.adopted;
+            } else {
+                result.lifecycle.back() = EvolutionLifecycleState::SafetyRejected;
+                ++result.rejected;
+            }
+        }
+
         result.experiments.push_back(std::move(experiment));
     }
+
     return result;
 }
 
