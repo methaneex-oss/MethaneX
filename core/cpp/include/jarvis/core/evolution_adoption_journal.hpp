@@ -5,6 +5,7 @@
 
 #include <cstdint>
 #include <mutex>
+#include <optional>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -31,8 +32,7 @@ public:
     bool commit(const std::string& experiment_id, std::string reason = "adopted");
     bool reject(const std::string& experiment_id, std::string reason = "rejected");
     bool rollback(const std::string& experiment_id, std::string reason = "rolled_back");
-    AdoptionRecord* get(const std::string& experiment_id) noexcept;
-    const AdoptionRecord* get(const std::string& experiment_id) const noexcept;
+    std::optional<AdoptionRecord> get(const std::string& experiment_id) const;
     std::vector<AdoptionRecord> records() const;
 
 private:
