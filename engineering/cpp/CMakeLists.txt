@@ -18,6 +18,7 @@ add_library(jarvis_engineering STATIC
     src/model_agent.cpp
     src/model_router.cpp
     src/model_assessment_agent.cpp
+    src/message_bus.cpp
 )
 
 target_include_directories(jarvis_engineering PUBLIC include)
@@ -55,6 +56,8 @@ if(BUILD_TESTING)
     target_link_libraries(jarvis_engineering_model_assessment_suite PRIVATE jarvis_engineering)
     add_executable(jarvis_engineering_cognition_flow_suite tests/engineering_cognition_flow_suite.cpp)
     target_link_libraries(jarvis_engineering_cognition_flow_suite PRIVATE jarvis_engineering)
+    add_executable(jarvis_engineering_message_bus_suite tests/message_bus_suite.cpp)
+    target_link_libraries(jarvis_engineering_message_bus_suite PRIVATE jarvis_engineering)
     add_test(NAME jarvis_engineering_agent_suite COMMAND jarvis_engineering_agent_suite)
     add_test(NAME jarvis_engineering_coordinator_suite COMMAND jarvis_engineering_coordinator_suite)
     add_test(NAME jarvis_engineering_worker_suite COMMAND jarvis_engineering_worker_suite)
@@ -67,4 +70,5 @@ if(BUILD_TESTING)
     add_test(NAME jarvis_engineering_model_router_suite COMMAND jarvis_engineering_model_router_suite)
     add_test(NAME jarvis_engineering_model_assessment_suite COMMAND jarvis_engineering_model_assessment_suite)
     add_test(NAME jarvis_engineering_cognition_flow_suite COMMAND jarvis_engineering_cognition_flow_suite)
+    add_test(NAME jarvis_engineering_message_bus_suite COMMAND jarvis_engineering_message_bus_suite)
 endif()
