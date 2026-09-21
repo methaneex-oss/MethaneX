@@ -10,6 +10,7 @@ add_library(jarvis_engineering STATIC
     src/coordinator.cpp
     src/execution.cpp
     src/worker.cpp
+    src/pipeline.cpp
 )
 
 target_include_directories(jarvis_engineering PUBLIC include)
@@ -29,7 +30,10 @@ if(BUILD_TESTING)
     target_link_libraries(jarvis_engineering_coordinator_suite PRIVATE jarvis_engineering)
     add_executable(jarvis_engineering_worker_suite tests/worker_suite.cpp)
     target_link_libraries(jarvis_engineering_worker_suite PRIVATE jarvis_engineering)
+    add_executable(jarvis_engineering_pipeline_suite tests/pipeline_suite.cpp)
+    target_link_libraries(jarvis_engineering_pipeline_suite PRIVATE jarvis_engineering)
     add_test(NAME jarvis_engineering_agent_suite COMMAND jarvis_engineering_agent_suite)
     add_test(NAME jarvis_engineering_coordinator_suite COMMAND jarvis_engineering_coordinator_suite)
     add_test(NAME jarvis_engineering_worker_suite COMMAND jarvis_engineering_worker_suite)
+    add_test(NAME jarvis_engineering_pipeline_suite COMMAND jarvis_engineering_pipeline_suite)
 endif()
