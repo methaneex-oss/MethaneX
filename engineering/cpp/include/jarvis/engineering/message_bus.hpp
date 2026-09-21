@@ -88,6 +88,7 @@ public:
     AgentCommunicationEndpoint& operator=(const AgentCommunicationEndpoint&) = delete;
 
     bool registered() const noexcept;
+    const std::string& agent_id() const noexcept;
 
     MessageBusResult send(
         std::string message_id,
