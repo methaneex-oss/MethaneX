@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.24)
 project(jarvis_engineering LANGUAGES CXX)
 
+find_package(CURL REQUIRED)
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -19,10 +21,12 @@ add_library(jarvis_engineering STATIC
     src/model_router.cpp
     src/model_assessment_agent.cpp
     src/huggingface_provider.cpp
+    src/curl_http_transport.cpp
 )
 
 target_include_directories(jarvis_engineering PUBLIC include)
 target_compile_features(jarvis_engineering PUBLIC cxx_std_20)
+target_link_libraries(jarvis_engineering PUBLIC CURL::libcurl)
 
 if (MSVC)
     target_compile_options(jarvis_engineering PRIVATE /W4 /permissive-)
@@ -58,6 +62,8 @@ if(BUILD_TESTING)
     target_link_libraries(jarvis_engineering_cognition_flow_suite PRIVATE jarvis_engineering)
     add_executable(jarvis_engineering_huggingface_provider_suite tests/huggingface_provider_suite.cpp)
     target_link_libraries(jarvis_engineering_huggingface_provider_suite PRIVATE jarvis_engineering)
+    add_executable(jarvis_engineering_curl_http_transport_suite tests/curl_http_transport_suite.cpp)
+    target_link_libraries(jarvis_engineering_curl_http_transport_suite PRIVATE jarvis_engineering)
     add_test(NAME jarvis_engineering_agent_suite COMMAND jarvis_engineering_agent_suite)
     add_test(NAME jarvis_engineering_coordinator_suite COMMAND jarvis_engineering_coordinator_suite)
     add_test(NAME jarvis_engineering_worker_suite COMMAND jarvis_engineering_worker_suite)
@@ -71,4 +77,5 @@ if(BUILD_TESTING)
     add_test(NAME jarvis_engineering_model_assessment_suite COMMAND jarvis_engineering_model_assessment_suite)
     add_test(NAME jarvis_engineering_cognition_flow_suite COMMAND jarvis_engineering_cognition_flow_suite)
     add_test(NAME jarvis_engineering_huggingface_provider_suite COMMAND jarvis_engineering_huggingface_provider_suite)
+    add_test(NAME jarvis_engineering_curl_http_transport_suite COMMAND jarvis_engineering_curl_http_transport_suite)
 endif()
