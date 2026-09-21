@@ -3,6 +3,8 @@
 
 #include <cassert>
 #include <filesystem>
+#include <cstdint>
+#include <string>
 
 using namespace jarvis::core;
 
