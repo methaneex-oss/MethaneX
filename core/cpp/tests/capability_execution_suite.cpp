@@ -1,4 +1,5 @@
 #include "jarvis/core/capability_execution.hpp"
+#include "jarvis/core/brain.hpp"
 
 #include <cassert>
 #include <filesystem>
@@ -46,5 +47,28 @@ int main() {
     assert(denied.status == CapabilityExecutionStatus::rejected);
     assert(denied.reason == "authorization_permission_denied");
 
+    const auto path = std::filesystem::temp_directory_path() / "jarvis_capability_execution_brain.bin";
+    std::error_code ec;
+    std::filesystem::remove(path, ec);
+    Brain brain(path);
+    bool brain_called = false;
+    CapabilityProvider brain_provider{capability.id, [&](const CapabilityExecutionRequest& request) {
+        brain_called = true;
+        assert(request.input == "repository=MethaneX");
+        return CapabilityExecutionResult::success(request.capability.id, "brain_provider_ok", "provider.test");
+    }};
+    const auto brain_result = brain.execute_capability(
+        capability, "repository=MethaneX", {"repository.read"}, 0.5, std::move(brain_provider));
+    assert(brain_called);
+    assert(brain_result.status == CapabilityExecutionStatus::succeeded);
+    assert(brain_result.output == "brain_provider_ok");
+    assert(brain_result.provider == "provider.test");
+    assert(brain.memory().size() == 1);
+    const auto events = brain.memory().by_kind("capability_execution");
+    assert(events.size() == 1);
+    assert(std::get<std::string>(events.front().data.at("capability_id")) == "repo.inspect");
+    assert(std::get<std::string>(events.front().data.at("provider")) == "provider.test");
+    assert(std::get<std::int64_t>(events.front().data.at("status")) == static_cast<std::int64_t>(CapabilityExecutionStatus::succeeded));
+    std::filesystem::remove(path, ec);
     return 0;
 }
