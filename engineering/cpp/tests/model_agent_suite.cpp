@@ -41,7 +41,7 @@ public:
         return {true, {}, {}, {}};
     }
 
-    WorkspaceResult commit(std::string_view id, std::string_view, std::string_view) override {
+    WorkspaceResult commit(std::string_view id, std::string_view) override {
         return {true, std::string(id), {}, {AgentArtifact{"git.commit", "commit-1", "commit-1"}}};
     }
 
