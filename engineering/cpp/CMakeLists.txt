@@ -20,7 +20,6 @@ add_library(jarvis_engineering STATIC
     src/model_assessment_agent.cpp
     src/huggingface_provider.cpp
     src/openai_astra_provider.cpp
-    src/huggingface_provider.cpp
 )
 
 target_include_directories(jarvis_engineering PUBLIC include)
@@ -56,8 +55,6 @@ if(BUILD_TESTING)
     target_link_libraries(jarvis_engineering_model_router_suite PRIVATE jarvis_engineering)
     add_executable(jarvis_engineering_model_assessment_suite tests/model_assessment_agent_suite.cpp)
     target_link_libraries(jarvis_engineering_model_assessment_suite PRIVATE jarvis_engineering)
-    add_executable(jarvis_engineering_huggingface_provider_suite tests/huggingface_provider_suite.cpp)
-    target_link_libraries(jarvis_engineering_huggingface_provider_suite PRIVATE jarvis_engineering)
     add_executable(jarvis_engineering_openai_astra_provider_suite tests/openai_astra_provider_suite.cpp)
     target_link_libraries(jarvis_engineering_openai_astra_provider_suite PRIVATE jarvis_engineering)
     add_executable(jarvis_engineering_cognition_flow_suite tests/engineering_cognition_flow_suite.cpp)
