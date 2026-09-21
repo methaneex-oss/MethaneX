@@ -1,7 +1,5 @@
 #include "jarvis/engineering/huggingface_provider.hpp"
 
-#include <algorithm>
-#include <cctype>
 #include <cmath>
 #include <utility>
 
@@ -39,14 +37,13 @@ std::string HuggingFaceModelProvider::escape_json(std::string_view value) {
     escaped.reserve(value.size() + 16);
     for (const char ch : value) {
         switch (ch) {
-        case '"': escaped += "\""; break;
-        case '\': escaped += "\\"; break;
-        case '': escaped += "\b"; break;
-        case '': escaped += "\f"; break;
-        case '
-': escaped += "\n"; break;
-        case '': escaped += "\r"; break;
-        case '	': escaped += "\t"; break;
+        case '"': escaped += "\\""; break;
+        case '\': escaped += "\\\\"; break;
+        case '\b': escaped += "\\b"; break;
+        case '\f': escaped += "\\f"; break;
+        case '\n': escaped += "\\n"; break;
+        case '\r': escaped += "\\r"; break;
+        case '\t': escaped += "\\t"; break;
         default:
             if (static_cast<unsigned char>(ch) < 0x20) {
                 escaped += ' ';
@@ -61,22 +58,22 @@ std::string HuggingFaceModelProvider::escape_json(std::string_view value) {
 std::string HuggingFaceModelProvider::build_request_body(
     const HuggingFaceModelConfig& config,
     const ModelRequest& request) {
-    std::string body = "{"model":"" + escape_json(config.model) +
-        "","messages":[{"role":"user","content":"" +
+    return "{\"model\":\"" + escape_json(config.model) +
+        "\",\"messages\":[{\"role\":\"user\",\"content\":\"" +
         escape_json(request.objective + "\n\n" + request.context) +
-        ""}],"stream":false}";
-    return body;
+        "\"}],\"stream\":false}";
 }
 
 std::string HuggingFaceModelProvider::extract_json_string(
     std::string_view json,
     std::string_view key,
     std::size_t from) {
-    const std::string marker = """ + std::string(key) + "":"";
+    const std::string marker = "\"" + std::string(key) + "\":\"";
     const std::size_t begin = json.find(marker, from);
     if (begin == std::string_view::npos) {
         return {};
     }
+
     const std::size_t value_begin = begin + marker.size();
     std::string value;
     bool escaped = false;
@@ -84,16 +81,17 @@ std::string HuggingFaceModelProvider::extract_json_string(
         const char ch = json[i];
         if (escaped) {
             switch (ch) {
-            case 'n': value += '
-'; break;
-            case 'r': value += ''; break;
-            case 't': value += '	'; break;
+            case 'n': value += '\n'; break;
+            case 'r': value += '\r'; break;
+            case 't': value += '\t'; break;
+            case 'b': value += '\b'; break;
+            case 'f': value += '\f'; break;
             case '"': value += '"'; break;
-            case '\': value += '\'; break;
+            case '\': value += '\\'; break;
             default: value += ch; break;
             }
             escaped = false;
-        } else if (ch == '\') {
+        } else if (ch == '\\') {
             escaped = true;
         } else if (ch == '"') {
             return value;
@@ -126,13 +124,15 @@ ModelResponse HuggingFaceModelProvider::generate(const ModelRequest& request) {
     if (response.status_code == 429 || response.status_code == 408 ||
         response.status_code >= 500) {
         return {ModelProviderStatus::unavailable, "hugging-face", config_.model,
-                {}, {}, {}, response.error.empty() ? "hugging-face temporarily unavailable"
-                                                     : response.error};
+                {}, {}, {}, response.error.empty()
+                    ? "hugging-face temporarily unavailable"
+                    : response.error};
     }
     if (response.status_code < 200 || response.status_code >= 300) {
         return {ModelProviderStatus::failed, "hugging-face", config_.model,
-                {}, {}, {}, response.error.empty() ? "hugging-face request failed"
-                                                     : response.error};
+                {}, {}, {}, response.error.empty()
+                    ? "hugging-face request failed"
+                    : response.error};
     }
 
     const std::string output = extract_json_string(response.body, "content");
