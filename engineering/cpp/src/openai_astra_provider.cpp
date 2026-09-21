@@ -1,5 +1,6 @@
 #include "jarvis/engineering/openai_astra_provider.hpp"
 
+#include <cctype>
 #include <cmath>
 #include <cstddef>
 #include <utility>
@@ -75,6 +76,32 @@ std::size_t find_matching_object(std::string_view json, std::size_t start) {
     return std::string_view::npos;
 }
 
+std::size_t find_key_value_start(
+    std::string_view json,
+    std::string_view key,
+    std::size_t from) {
+    const std::string marker = """ + std::string(key) + """;
+    const std::size_t key_begin = json.find(marker, from);
+    if (key_begin == std::string_view::npos) {
+        return std::string_view::npos;
+    }
+
+    std::size_t cursor = key_begin + marker.size();
+    while (cursor < json.size() &&
+           std::isspace(static_cast<unsigned char>(json[cursor]))) {
+        ++cursor;
+    }
+    if (cursor >= json.size() || json[cursor] != ':') {
+        return std::string_view::npos;
+    }
+    ++cursor;
+    while (cursor < json.size() &&
+           std::isspace(static_cast<unsigned char>(json[cursor]))) {
+        ++cursor;
+    }
+    return cursor;
+}
+
 } // namespace
 
 OpenAIAstraModelProvider::OpenAIAstraModelProvider(
@@ -114,13 +141,13 @@ std::string OpenAIAstraModelProvider::escape_json(std::string_view value) {
     escaped.reserve(value.size() + 16);
     for (const char ch : value) {
         switch (ch) {
-        case '"': escaped += "\\\""; break;
-        case '\\': escaped += "\\\\"; break;
-        case '\b': escaped += "\\b"; break;
-        case '\f': escaped += "\\f"; break;
-        case '\n': escaped += "\\n"; break;
-        case '\r': escaped += "\\r"; break;
-        case '\t': escaped += "\\t"; break;
+        case '"': escaped += "\""; break;
+        case '\\': escaped += "\\"; break;
+        case '\b': escaped += "\b"; break;
+        case '\f': escaped += "\f"; break;
+        case '\n': escaped += "\n"; break;
+        case '\r': escaped += "\r"; break;
+        case '\t': escaped += "\t"; break;
         default:
             if (static_cast<unsigned char>(ch) < 0x20) {
                 escaped += ' ';
@@ -140,36 +167,35 @@ std::string OpenAIAstraModelProvider::build_request_body(
         "\n\nEngineering context:\n" + request.context;
 
     return "{"
-           "\"model\":\"" + escape_json(config.model) + "\","
-           "\"store\":false,"
-           "\"reasoning\":{\"effort\":\"" +
-               escape_json(config.reasoning_effort) + "\"},"
-           "\"instructions\":\"Return a structured engineering result. "
+           ""model":"" + escape_json(config.model) + "","
+           ""store":false,"
+           ""reasoning":{"effort":"" +
+               escape_json(config.reasoning_effort) + ""},"
+           ""instructions":"Return a structured engineering result. "
            "File changes must contain complete replacement file contents. "
-           "Do not modify files outside the requested objective.\","
-           "\"input\":[{\"role\":\"user\",\"content\":[{"
-           "\"type\":\"input_text\",\"text\":\"" +
+           "Do not modify files outside the requested objective.","
+           ""input":[{"role":"user","content":[{"
+           ""type":"input_text","text":"" +
                escape_json(input) +
-           "\"}]}],"
-           "\"text\":{\"format\":{\"type\":\"json_schema\","
-           "\"name\":\"engineering_result\",\"strict\":true,"
-           "\"schema\":" + std::string(kSchema) + "}}}";
+           ""}]}],"
+           ""text":{"format":{"type":"json_schema","
+           ""name":"engineering_result","strict":true,"
+           ""schema":" + std::string(kSchema) + "}}}";
 }
 
 std::string OpenAIAstraModelProvider::extract_json_string(
     std::string_view json,
     std::string_view key,
     std::size_t from) {
-    const std::string marker = "\"" + std::string(key) + "\":\"";
-    const std::size_t begin = json.find(marker, from);
-    if (begin == std::string_view::npos) {
+    const std::size_t value_begin = find_key_value_start(json, key, from);
+    if (value_begin == std::string_view::npos ||
+        value_begin >= json.size() || json[value_begin] != '"') {
         return {};
     }
 
-    const std::size_t value_begin = begin + marker.size();
     std::string value;
     bool escaped = false;
-    for (std::size_t i = value_begin; i < json.size(); ++i) {
+    for (std::size_t i = value_begin + 1; i < json.size(); ++i) {
         const char ch = json[i];
         if (escaped) {
             switch (ch) {
@@ -196,15 +222,20 @@ std::string OpenAIAstraModelProvider::extract_json_string(
 
 std::vector<ModelFileChange> OpenAIAstraModelProvider::extract_file_changes(
     std::string_view json) {
-    const std::string marker = "\"file_changes\":[";
-    const std::size_t array_begin = json.find(marker);
-    if (array_begin == std::string_view::npos) {
+    const std::size_t value_begin =
+        find_key_value_start(json, "file_changes", 0);
+    if (value_begin == std::string_view::npos ||
+        value_begin >= json.size() || json[value_begin] != '[') {
         return {};
     }
 
-    std::size_t cursor = array_begin + marker.size();
+    std::size_t cursor = value_begin + 1;
     std::vector<ModelFileChange> changes;
     while (cursor < json.size() && json[cursor] != ']') {
+        while (cursor < json.size() &&
+               std::isspace(static_cast<unsigned char>(json[cursor]))) {
+            ++cursor;
+        }
         const std::size_t object_begin = json.find('{', cursor);
         if (object_begin == std::string_view::npos) {
             break;
