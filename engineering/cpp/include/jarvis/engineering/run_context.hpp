@@ -8,7 +8,8 @@
 namespace jarvis::engineering {
 
 struct EngineeringStageFeedback {
-    EngineeringStage stage;
+    std::size_t stage_index{0};
+    std::string stage_name;
     AgentResult result;
 };
 
