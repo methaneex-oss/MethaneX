@@ -44,6 +44,7 @@ EngineeringRunResult EngineeringPipeline::run(
             run_result.reason = "engineering workspace open failed";
             return run_result;
         }
+        run_result.context.workspace_id = workspace_id;
     }
 
     const auto close_workspace = [&]() {
@@ -126,9 +127,6 @@ EngineeringRunResult EngineeringPipeline::run(
             run_result.artifacts.end(), committed.artifacts.begin(), committed.artifacts.end());
     }
 
-    run_result.context.workspace_id = workspace != nullptr
-        ? "engineering-run-" + run_result.run_id
-        : std::string{};
     close_workspace();
     run_result.status = EngineeringRunStatus::completed;
     run_result.reason = "engineering pipeline completed";
