@@ -16,9 +16,9 @@ public:
     virtual ~GitWorkspaceDriver() = default;
     virtual bool create_branch(std::string_view branch,
                                std::string_view base_ref) = 0;
-    virtual bool record_file(std::string_view branch,
-                             std::string_view path,
-                             std::string_view content) = 0;
+    virtual bool write_file(std::string_view branch,
+                            std::string_view path,
+                            std::string_view content) = 0;
     virtual bool commit(std::string_view branch,
                         std::string_view message,
                         std::string& commit_id) = 0;
@@ -32,6 +32,10 @@ public:
 
     WorkspaceResult open(std::string_view workspace_id,
                          std::string_view branch) override;
+    WorkspaceResult write_file(std::string_view workspace_id,
+                               std::string_view path,
+                               std::string_view content,
+                               std::string_view digest) override;
     WorkspaceResult record_file(std::string_view workspace_id,
                                 std::string_view path,
                                 std::string_view digest) override;
