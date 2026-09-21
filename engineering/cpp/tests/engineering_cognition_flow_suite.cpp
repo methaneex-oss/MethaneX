@@ -33,7 +33,7 @@ public:
         assert(request.context.find("prior.artifact=workspace.file") != std::string::npos);
         if (calls == 1) {
             return {ModelProviderStatus::failed, "test", "review", "review requires revision",
-                    {}, {}, {{"review", "requires_revision"}}};
+                    {}, {{"review", "requires_revision"}}, "review requires revision"};
         }
         return {ModelProviderStatus::succeeded, "test", "review",
                 "implementation verified", {}, {}, {}};
