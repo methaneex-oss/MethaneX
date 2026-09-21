@@ -34,7 +34,7 @@ AgentDescriptor ModelBackedEngineeringAgent::descriptor() const {
 }
 
 bool ModelBackedEngineeringAgent::safe_relative_path(std::string_view path) noexcept {
-    if (path.empty() || path.front() == '/' || path.front() == '\') {
+    if (path.empty() || path.front() == '/' || path.front() == '\\') {
         return false;
     }
     if (path.find(':') != std::string_view::npos) {
