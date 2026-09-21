@@ -25,7 +25,7 @@ int main() {
     assert(captured.headers.size() == 2);
     assert(captured.headers[0].first == "Authorization");
     assert(captured.headers[0].second == "Bearer secret");
-    assert(captured.body.find(""model":"openai/gpt-oss-120b:fastest"") != std::string::npos);
+    assert(captured.body.find("\"model\":\"openai/gpt-oss-120b:fastest\"") != std::string::npos);
     assert(captured.body.find("prior evidence") != std::string::npos);
 
     const auto denied = HuggingFaceModelProvider(
