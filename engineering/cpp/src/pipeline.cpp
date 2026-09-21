@@ -125,6 +125,8 @@ EngineeringRunResult EngineeringPipeline::run(
         }
         run_result.artifacts.insert(
             run_result.artifacts.end(), committed.artifacts.begin(), committed.artifacts.end());
+        run_result.context.artifacts.insert(
+            run_result.context.artifacts.end(), committed.artifacts.begin(), committed.artifacts.end());
     }
 
     close_workspace();
