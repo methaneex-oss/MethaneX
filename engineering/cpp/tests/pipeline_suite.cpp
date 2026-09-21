@@ -1,6 +1,9 @@
 #include "jarvis/engineering/pipeline.hpp"
 
 #include <cassert>
+#include <string>
+#include <utility>
+#include <vector>
 
 using namespace jarvis::engineering;
 
@@ -38,6 +41,54 @@ public:
     }
 };
 
+class SharedWorkspace final : public EngineeringWorkspace {
+public:
+    WorkspaceResult open(std::string_view id, std::string_view branch) override {
+        ++opens;
+        opened_id = std::string(id);
+        opened_branch = std::string(branch);
+        return {true, opened_id, opened_branch, {}};
+    }
+
+    WorkspaceResult write_file(std::string_view id, std::string_view path,
+                               std::string_view, std::string_view digest) override {
+        ++writes;
+        assert(id == opened_id);
+        assert(!path.empty());
+        assert(!digest.empty());
+        return {true, std::string(id), {}, {AgentArtifact{"workspace.file", std::string(path), std::string(digest)}}};
+    }
+
+    WorkspaceResult record_file(std::string_view, std::string_view, std::string_view) override {
+        return {true, {}, {}, {}};
+    }
+
+    WorkspaceResult commit(std::string_view id, std::string_view message) override {
+        ++commits;
+        assert(id == opened_id);
+        assert(!message.empty());
+        return {true, std::string(id), {}, {AgentArtifact{"git.commit", "commit-1", "commit-1"}}};
+    }
+
+    bool close(std::string_view id) override {
+        ++closes;
+        assert(id == opened_id);
+        return true;
+    }
+
+    int opens{0};
+    int writes{0};
+    int commits{0};
+    int closes{0};
+    std::string opened_id;
+    std::string opened_branch;
+};
+
+EngineeringTask task(std::string id, std::string capability) {
+    return {std::move(id), "implement change", {std::move(capability)}, {"workspace.read"},
+            {"source"}, {"report"}, AgentRisk::low, 1.0};
+}
+
 } // namespace
 
 int main() {
@@ -47,14 +98,8 @@ int main() {
     DirectExecutionBoundary boundary;
     AllowAllAuthorizer allow;
 
-    const EngineeringTask implementation_task{
-        "implement-1", "implement change",
-        {"code.implementation"}, {"workspace.read"},
-        {"source"}, {"report"}, AgentRisk::low, 1.0};
-    const EngineeringTask review_task{
-        "review-1", "review change",
-        {"code.review"}, {"workspace.read"},
-        {"source"}, {"report"}, AgentRisk::low, 1.0};
+    const auto implementation_task = task("implement-1", "code.implementation");
+    const auto review_task = task("review-1", "code.review");
 
     const auto result = pipeline.run(
         "run-1",
@@ -71,6 +116,35 @@ int main() {
     assert(implementation.calls == 1);
     assert(review.calls == 1);
 
+    SharedWorkspace shared;
+    const auto shared_result = pipeline.run(
+        "run-shared",
+        {{EngineeringStage::implementation, implementation_task, implementation.descriptor().id},
+         {EngineeringStage::verification, review_task, review.descriptor().id}},
+        {&implementation, &review},
+        allow,
+        boundary,
+        &shared);
+
+    assert(shared_result.status == EngineeringRunStatus::completed);
+    assert(shared.opens == 1);
+    assert(shared.commits == 1);
+    assert(shared.closes == 1);
+    assert(shared.writes == 0);
+    assert(shared_result.artifacts.size() == 1);
+    assert(implementation.calls == 2);
+    assert(review.calls == 2);
+
+    const auto out_of_order = pipeline.run(
+        "run-order",
+        {{EngineeringStage::review, review_task, review.descriptor().id},
+         {EngineeringStage::implementation, implementation_task, implementation.descriptor().id}},
+        {&implementation, &review},
+        allow,
+        boundary);
+    assert(out_of_order.status == EngineeringRunStatus::failed);
+    assert(out_of_order.reason == "engineering stages out of order");
+
     const auto denied = pipeline.run(
         "run-2",
         {{EngineeringStage::implementation, implementation_task, implementation.descriptor().id}},
@@ -78,7 +152,7 @@ int main() {
         DenyAuthorizer{},
         boundary);
     assert(denied.status == EngineeringRunStatus::failed);
-    assert(implementation.calls == 1);
+    assert(implementation.calls == 2);
 
     const auto missing = pipeline.run(
         "run-3",
