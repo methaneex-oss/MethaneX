@@ -1,5 +1,7 @@
 #include "jarvis/engineering/external_model_provider.hpp"
 
+#include <utility>
+
 namespace jarvis::engineering {
 
 ExternalEngineeringModelProvider::ExternalEngineeringModelProvider(
