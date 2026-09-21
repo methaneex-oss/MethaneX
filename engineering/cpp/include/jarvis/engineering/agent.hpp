@@ -26,6 +26,17 @@ struct AgentDescriptor {
     bool supports_concurrency{false};
 };
 
+struct AgentArtifact {
+    std::string type;
+    std::string location;
+    std::string digest;
+};
+
+struct AgentEvidence {
+    std::string kind;
+    std::string value;
+};
+
 struct EngineeringTask {
     std::string id;
     std::string objective;
@@ -40,17 +51,6 @@ struct EngineeringTask {
     std::vector<std::string> workspace_files;
     std::vector<AgentArtifact> prior_stage_artifacts;
     std::vector<AgentEvidence> prior_stage_evidence;
-};
-
-struct AgentArtifact {
-    std::string type;
-    std::string location;
-    std::string digest;
-};
-
-struct AgentEvidence {
-    std::string kind;
-    std::string value;
 };
 
 struct AgentResult {
