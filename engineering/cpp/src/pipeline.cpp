@@ -27,7 +27,8 @@ EngineeringRunResult EngineeringPipeline::run(
     const std::vector<EngineeringAgent*>& agents,
     const EngineeringAuthorizer& authorizer,
     EngineeringExecutionBoundary& boundary,
-    EngineeringWorkspace* workspace) const {
+    EngineeringWorkspace* workspace,
+    bool select_agents) const {
     EngineeringRunResult run_result;
     run_result.run_id = std::move(run_id);
 
@@ -55,7 +56,7 @@ EngineeringRunResult EngineeringPipeline::run(
     EngineeringCoordinator coordinator;
 
     for (const auto& stage : stages) {
-        if (!valid_task(stage.task) || stage.agent_id.empty()) {
+        if (!valid_task(stage.task) || (!select_agents && stage.agent_id.empty())) {
             run_result.reason = "invalid engineering stage";
             close_workspace();
             return run_result;
@@ -75,14 +76,18 @@ EngineeringRunResult EngineeringPipeline::run(
             task.manage_workspace = false;
         }
 
-        auto* agent = find_agent(agents, stage.agent_id);
-        if (agent == nullptr) {
-            run_result.reason = "engineering agent not found";
-            close_workspace();
-            return run_result;
+        AgentResult result;
+        if (select_agents) {
+            result = coordinator.dispatch_selected(task, agents, authorizer, boundary);
+        } else {
+            auto* agent = find_agent(agents, stage.agent_id);
+            if (agent == nullptr) {
+                run_result.reason = "engineering agent not found";
+                close_workspace();
+                return run_result;
+            }
+            result = coordinator.dispatch(task, *agent, authorizer, boundary);
         }
-
-        auto result = coordinator.dispatch(task, *agent, authorizer, boundary);
         run_result.artifacts.insert(
             run_result.artifacts.end(), result.artifacts.begin(), result.artifacts.end());
         run_result.stages.push_back(EngineeringStageResult{stage.stage, result});
