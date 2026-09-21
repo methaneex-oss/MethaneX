@@ -53,6 +53,7 @@ struct CandidateAction {
     double expected_consequence{0.0};
     double urgency{0.0};
     DecisionOutcome preferred_outcome{DecisionOutcome::act};
+    std::vector<std::string> required_permissions;
 };
 
 struct DecisionContext {

@@ -141,8 +141,9 @@ public:
     ActionExecutionResult execute_action(const ActionAssessment& assessment,
                                           std::function<bool(const CandidateAction&)> execute,
                                           std::function<bool(const CandidateAction&)> verify,
-                                          std::function<bool(const CandidateAction&)> rollback = {}) {
-        ActionExecutionRequest request{assessment, std::move(execute), std::move(verify), std::move(rollback)};
+                                          std::function<bool(const CandidateAction&)> rollback = {},
+                                          ActionAuthorizationContext authorization = {}) {
+        ActionExecutionRequest request{assessment, std::move(execute), std::move(verify), std::move(rollback), std::move(authorization)};
         const auto result = ActionExecutor{}.run(request);
         const double reliability = result.status == ActionExecutionStatus::verified ? 1.0 :
                                    result.status == ActionExecutionStatus::rolled_back ? 0.25 : 0.5;

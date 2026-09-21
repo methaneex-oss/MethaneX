@@ -1,15 +1,16 @@
 #include "jarvis/core/action_execution.hpp"
+#include "jarvis/core/action_authorization.hpp"
 
 namespace jarvis::core {
 
 ActionExecutionResult ActionExecutor::run(const ActionExecutionRequest& request) const {
     ActionExecutionResult result;
     result.action = request.assessment.action;
-    result.authorized = request.assessment.permitted &&
-                        request.assessment.disposition == ActionDisposition::execute;
+    const auto authorization = ActionAuthorizer{}.authorize(request.assessment, request.authorization);
+    result.authorized = authorization.authorized;
     if (!result.authorized) {
         result.status = ActionExecutionStatus::rejected;
-        result.reason = request.assessment.reason.empty() ? "action_not_authorized" : request.assessment.reason;
+        result.reason = authorization.reason;
         return result;
     }
 
