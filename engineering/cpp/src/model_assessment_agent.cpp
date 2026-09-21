@@ -51,6 +51,12 @@ AgentResult ModelAssessmentAgent::execute(const EngineeringTask& task) {
     }
 
     std::string context = "workspace: " + task.workspace_id + "\n";
+    for (const auto& artifact : task.prior_stage_artifacts) {
+        context += "prior.artifact=" + artifact.type + "|" + artifact.location + "|" + artifact.digest + "\n";
+    }
+    for (const auto& evidence : task.prior_stage_evidence) {
+        context += "prior.evidence=" + evidence.kind + "|" + evidence.value + "\n";
+    }
     constexpr std::size_t max_context = 1024 * 1024;
 
     for (const auto& path : task.workspace_files) {
