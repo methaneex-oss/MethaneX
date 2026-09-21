@@ -101,22 +101,9 @@ EngineeringRunResult EngineeringPipeline::run(
             if (message_bus != nullptr && !select_agents) {
                 for (const auto& endpoint : communication_endpoints) {
                     if (endpoint->registered() &&
-                        endpoint->pending() == 0) {
-                        // The endpoint matching the explicit stage agent is attached below.
-                    }
-                }
-                for (const auto& endpoint : communication_endpoints) {
-                    if (endpoint->registered()) {
-                        // Agent IDs are unique by contract; match through the endpoint-owned route.
-                    }
-                }
-                auto* stage_agent = find_agent(agents, stage.agent_id);
-                if (stage_agent != nullptr) {
-                    for (const auto& endpoint : communication_endpoints) {
-                        if (endpoint->registered()) {
-                            // Endpoint identity is not exposed; explicit stage agents can still
-                            // communicate through the bus supplied by the run context.
-                        }
+                        endpoint->agent_id() == stage.agent_id) {
+                        task.communication = endpoint.get();
+                        break;
                     }
                 }
             }
