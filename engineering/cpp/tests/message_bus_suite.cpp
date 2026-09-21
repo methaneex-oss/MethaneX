@@ -129,14 +129,19 @@ int main() {
     assert(peer_messages.front().sender_id == "implementation");
     assert(peer_messages.front().payload == "please inspect");
 
-    const auto wrong_run = implementation.send(
+    const auto wrong_run = bus.send(AgentMessage{
         "peer-2",
+        0,
+        "run-3",
+        "workspace-2",
+        "external",
         "review",
         "task-peer",
         AgentMessageType::feedback,
-        "different run");
+        "different run"
+    });
     assert(wrong_run.accepted);
-    // Same endpoint identity filters cross-run traffic before it enters the inbox.
+    // Endpoint identity filters cross-run traffic before it enters the inbox.
     assert(review.pending() == 0);
 
     assert(bus.unregister_agent("reviewer").accepted);
