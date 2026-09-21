@@ -90,6 +90,20 @@ AgentResult ModelBackedEngineeringAgent::execute(const EngineeringTask& task) {
     for (const auto& evidence : task.prior_stage_evidence) {
         context += "\nprior.evidence=" + evidence.kind + "|" + evidence.value;
     }
+    if (task.communication != nullptr) {
+        for (const auto& message : task.communication->drain()) {
+            context += "\nincoming.message=" + message.sender_id + "|" +
+                       message.correlation_id + "|" + message.payload;
+        }
+        for (const auto& target : task.communication_targets) {
+            task.communication->send(
+                "task-" + task.id + "-started-" + target,
+                target,
+                task.id,
+                AgentMessageType::status,
+                "task started");
+        }
+    }
 
     ModelRequest request{
         task.objective,
@@ -103,6 +117,16 @@ AgentResult ModelBackedEngineeringAgent::execute(const EngineeringTask& task) {
 
     const auto response = provider_.generate(request);
     if (response.status != ModelProviderStatus::succeeded) {
+        if (task.communication != nullptr) {
+            for (const auto& target : task.communication_targets) {
+                task.communication->send(
+                    "task-" + task.id + "-failed-" + target,
+                    target,
+                    task.id,
+                    AgentMessageType::error,
+                    response.reason.empty() ? "model generation failed" : response.reason);
+            }
+        }
         return {false, descriptor_.id, task.id,
                 response.reason.empty() ? "model generation failed" : response.reason,
                 {}, response.evidence};
@@ -153,6 +177,17 @@ AgentResult ModelBackedEngineeringAgent::execute(const EngineeringTask& task) {
 
         if (!workspace_.close(workspace_id)) {
             return {false, descriptor_.id, task.id, "workspace close failed", artifacts, response.evidence};
+        }
+    }
+
+    if (task.communication != nullptr) {
+        for (const auto& target : task.communication_targets) {
+            task.communication->send(
+                "task-" + task.id + "-completed-" + target,
+                target,
+                task.id,
+                AgentMessageType::result,
+                "task completed with " + std::to_string(artifacts.size()) + " artifacts");
         }
     }
 

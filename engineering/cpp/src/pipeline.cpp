@@ -1,5 +1,6 @@
 #include "jarvis/engineering/pipeline.hpp"
 
+#include <memory>
 #include <utility>
 
 namespace jarvis::engineering {
@@ -29,7 +30,8 @@ EngineeringRunResult EngineeringPipeline::run(
     EngineeringExecutionBoundary& boundary,
     EngineeringWorkspace* workspace,
     bool select_agents,
-    EngineeringRunPolicy policy) const {
+    EngineeringRunPolicy policy,
+    AgentMessageBus* message_bus) const {
     EngineeringRunResult run_result;
     run_result.run_id = std::move(run_id);
     run_result.context.run_id = run_result.run_id;
@@ -57,6 +59,19 @@ EngineeringRunResult EngineeringPipeline::run(
     EngineeringStage previous_stage = EngineeringStage::implementation;
     bool first_stage = true;
     EngineeringCoordinator coordinator;
+    std::vector<std::unique_ptr<AgentCommunicationEndpoint>> communication_endpoints;
+    if (message_bus != nullptr) {
+        communication_endpoints.reserve(agents.size());
+        const std::string communication_workspace = run_result.context.workspace_id;
+        for (auto* agent : agents) {
+            if (agent == nullptr) continue;
+            communication_endpoints.push_back(std::make_unique<AgentCommunicationEndpoint>(
+                *message_bus,
+                agent->descriptor().id,
+                run_result.run_id,
+                communication_workspace));
+        }
+    }
 
     for (const auto& stage : stages) {
         if (!valid_task(stage.task) || (!select_agents && stage.agent_id.empty())) {
@@ -83,6 +98,15 @@ EngineeringRunResult EngineeringPipeline::run(
             }
             task.prior_stage_artifacts = run_result.context.artifacts;
             task.prior_stage_evidence = run_result.context.evidence;
+            if (message_bus != nullptr && !select_agents) {
+                for (const auto& endpoint : communication_endpoints) {
+                    if (endpoint->registered() &&
+                        endpoint->agent_id() == stage.agent_id) {
+                        task.communication = endpoint.get();
+                        break;
+                    }
+                }
+            }
 
             if (select_agents) {
                 result = coordinator.dispatch_selected(task, agents, authorizer, boundary);

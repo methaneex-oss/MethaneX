@@ -108,6 +108,42 @@ int main() {
         }
     }
 
+    AgentCommunicationEndpoint implementation(
+        bus, "implementation", "run-2", "workspace-2");
+    AgentCommunicationEndpoint review(
+        bus, "review", "run-2", "workspace-2");
+    assert(implementation.registered());
+    assert(review.registered());
+
+    const auto peer_message = implementation.send(
+        "peer-1",
+        "review",
+        "task-peer",
+        AgentMessageType::request,
+        "please inspect");
+    assert(peer_message.accepted);
+    assert(review.pending() == 1);
+
+    const auto peer_messages = review.drain();
+    assert(peer_messages.size() == 1);
+    assert(peer_messages.front().sender_id == "implementation");
+    assert(peer_messages.front().payload == "please inspect");
+
+    const auto wrong_run = bus.send(AgentMessage{
+        "peer-2",
+        0,
+        "run-3",
+        "workspace-2",
+        "external",
+        "review",
+        "task-peer",
+        AgentMessageType::feedback,
+        "different run"
+    });
+    assert(wrong_run.accepted);
+    // Endpoint identity filters cross-run traffic before it enters the inbox.
+    assert(review.pending() == 0);
+
     assert(bus.unregister_agent("reviewer").accepted);
     assert(!bus.unregister_agent("reviewer").accepted);
     return 0;

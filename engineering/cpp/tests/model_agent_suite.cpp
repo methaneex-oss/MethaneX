@@ -11,12 +11,14 @@ namespace {
 class FakeModel final : public EngineeringModelProvider {
 public:
     ModelResponse response;
+    ModelRequest last_request;
 
     ModelDescriptor descriptor() const override {
         return {"fake", "test", "coder", {"source"}, 0.1, 0.9};
     }
 
-    ModelResponse generate(const ModelRequest&) override {
+    ModelResponse generate(const ModelRequest& request) override {
+        last_request = request;
         return response;
     }
 };
@@ -67,12 +69,25 @@ int main() {
     model.response = {ModelProviderStatus::succeeded, "test", "coder", "done",
                       {{"src/example.cpp", "int answer() { return 42; }"}}, {}, {}};
     ModelBackedEngineeringAgent agent(descriptor, model, workspace);
+    AgentMessageBus bus;
+    AgentCommunicationEndpoint sender(bus, "agent-1", "run-1", "");
+    AgentCommunicationEndpoint peer(bus, "peer", "run-1", "");
+    assert(sender.registered());
+    assert(peer.registered());
 
-    const auto result = agent.execute(task());
+    assert(peer.send("inbound-1", "agent-1", "task-1",
+                     AgentMessageType::feedback, "review says inspect edge case").accepted);
+    auto communication_task = task();
+    communication_task.communication = &sender;
+    communication_task.communication_targets = {"peer"};
+
+    const auto result = agent.execute(communication_task);
     assert(result.accepted);
     assert(workspace.writes.size() == 1);
     assert(workspace.closed);
     assert(!result.artifacts.empty());
+    assert(model.last_request.context.find("incoming.message=peer|task-1|review says inspect edge case") != std::string::npos);
+    assert(peer.pending() == 2);
 
     model.response.file_changes.front().path = "../escape.cpp";
     const auto rejected = agent.execute(task());
