@@ -1,6 +1,7 @@
 #include "jarvis/engineering/model_router.hpp"
 
 #include <cassert>
+#include <utility>
 
 using namespace jarvis::engineering;
 
