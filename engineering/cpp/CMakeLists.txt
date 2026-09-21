@@ -13,6 +13,7 @@ add_library(jarvis_engineering STATIC
     src/pipeline.cpp
     src/workspace.cpp
     src/git_workspace.cpp
+    src/model_provider.cpp
 )
 
 target_include_directories(jarvis_engineering PUBLIC include)
@@ -37,11 +38,14 @@ if(BUILD_TESTING)
     add_executable(jarvis_engineering_workspace_suite tests/workspace_suite.cpp)
     target_link_libraries(jarvis_engineering_workspace_suite PRIVATE jarvis_engineering)
     add_executable(jarvis_engineering_git_workspace_suite tests/git_workspace_suite.cpp)
+    add_executable(jarvis_engineering_model_provider_suite tests/model_provider_suite.cpp)
     target_link_libraries(jarvis_engineering_git_workspace_suite PRIVATE jarvis_engineering)
+    target_link_libraries(jarvis_engineering_model_provider_suite PRIVATE jarvis_engineering)
     add_test(NAME jarvis_engineering_agent_suite COMMAND jarvis_engineering_agent_suite)
     add_test(NAME jarvis_engineering_coordinator_suite COMMAND jarvis_engineering_coordinator_suite)
     add_test(NAME jarvis_engineering_worker_suite COMMAND jarvis_engineering_worker_suite)
     add_test(NAME jarvis_engineering_pipeline_suite COMMAND jarvis_engineering_pipeline_suite)
     add_test(NAME jarvis_engineering_workspace_suite COMMAND jarvis_engineering_workspace_suite)
     add_test(NAME jarvis_engineering_git_workspace_suite COMMAND jarvis_engineering_git_workspace_suite)
+    add_test(NAME jarvis_engineering_model_provider_suite COMMAND jarvis_engineering_model_provider_suite)
 endif()
