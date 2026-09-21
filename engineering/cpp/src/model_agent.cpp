@@ -90,6 +90,20 @@ AgentResult ModelBackedEngineeringAgent::execute(const EngineeringTask& task) {
     for (const auto& evidence : task.prior_stage_evidence) {
         context += "\nprior.evidence=" + evidence.kind + "|" + evidence.value;
     }
+    if (task.communication != nullptr) {
+        for (const auto& message : task.communication->drain()) {
+            context += "\nincoming.message=" + message.sender_id + "|" +
+                       message.correlation_id + "|" + message.payload;
+        }
+        for (const auto& target : task.communication_targets) {
+            task.communication->send(
+                "task-" + task.id + "-started-" + target,
+                target,
+                task.id,
+                AgentMessageType::status,
+                "task started");
+        }
+    }
 
     ModelRequest request{
         task.objective,
