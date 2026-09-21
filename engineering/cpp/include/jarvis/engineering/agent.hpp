@@ -38,6 +38,8 @@ struct EngineeringTask {
     std::string workspace_id;
     bool manage_workspace{true};
     std::vector<std::string> workspace_files;
+    std::vector<AgentArtifact> prior_stage_artifacts;
+    std::vector<AgentEvidence> prior_stage_evidence;
 };
 
 struct AgentArtifact {
