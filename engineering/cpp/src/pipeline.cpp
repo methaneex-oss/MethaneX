@@ -56,7 +56,7 @@ EngineeringRunResult EngineeringPipeline::run(
     EngineeringCoordinator coordinator;
 
     for (const auto& stage : stages) {
-        if (!valid_task(stage.task) || stage.agent_id.empty()) {
+        if (!valid_task(stage.task) || (!select_agents && stage.agent_id.empty())) {
             run_result.reason = "invalid engineering stage";
             close_workspace();
             return run_result;
@@ -74,13 +74,6 @@ EngineeringRunResult EngineeringPipeline::run(
         if (workspace != nullptr) {
             task.workspace_id = "engineering-run-" + run_result.run_id;
             task.manage_workspace = false;
-        }
-
-        auto* agent = find_agent(agents, stage.agent_id);
-        if (agent == nullptr) {
-            run_result.reason = "engineering agent not found";
-            close_workspace();
-            return run_result;
         }
 
         AgentResult result;
