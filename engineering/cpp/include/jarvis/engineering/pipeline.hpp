@@ -54,7 +54,8 @@ public:
         EngineeringExecutionBoundary& boundary,
         EngineeringWorkspace* workspace = nullptr,
         bool select_agents = false,
-        EngineeringRunPolicy policy = {}) const;
+        EngineeringRunPolicy policy = {},
+        AgentMessageBus* message_bus = nullptr) const;
 
 private:
     static EngineeringAgent* find_agent(
