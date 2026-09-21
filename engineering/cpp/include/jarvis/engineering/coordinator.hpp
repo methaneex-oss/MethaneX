@@ -29,6 +29,12 @@ public:
         const EngineeringAuthorizer& authorizer,
         EngineeringExecutionBoundary& boundary) const;
 
+    AgentResult dispatch_selected(
+        const EngineeringTask& task,
+        const std::vector<EngineeringAgent*>& agents,
+        const EngineeringAuthorizer& authorizer,
+        EngineeringExecutionBoundary& boundary) const;
+
 private:
     static int risk_rank(AgentRisk risk) noexcept;
     static bool satisfies_permissions(
