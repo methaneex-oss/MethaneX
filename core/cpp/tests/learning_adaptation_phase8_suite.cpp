@@ -19,6 +19,9 @@ int main() {
     const auto first = brain.predict("forecast", Scalar{0.5}, 0.9);
     assert(first.created_sequence != 0);
     const auto cycle = brain.learn_from_prediction("forecast", Scalar{0.9}, 0.8);
+    const auto outcomes = brain.memory().by_kind("prediction_outcome");
+    assert(!outcomes.empty());
+    assert(std::get<double>(outcomes.back().data.at("error")) == 0.4);
     assert(cycle.adaptation.observations == 1);
     assert(cycle.adaptation.mean_error >= 0.0 && cycle.adaptation.mean_error <= 1.0);
     assert(cycle.confidence >= 0.0 && cycle.confidence <= 1.0);

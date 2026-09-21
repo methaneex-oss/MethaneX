@@ -77,7 +77,12 @@ public:
         if (predicted == nullptr || observed == nullptr || !std::isfinite(*predicted) ||
             !std::isfinite(*observed)) return cycle;
 
-        const double error = prediction_it->second.predicted == actual ? 0.0 : 1.0;
+        double error = prediction_it->second.predicted == actual ? 0.0 : 1.0;
+        if (const auto predicted_value = std::get_if<double>(&prediction_it->second.predicted)) {
+            if (const auto actual_value = std::get_if<double>(&actual)) {
+                error = std::clamp(std::abs(*actual_value - *predicted_value), 0.0, 1.0);
+            }
+        }
         const auto now_ns = []() noexcept {
             return static_cast<std::uint64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(
                 std::chrono::system_clock::now().time_since_epoch()).count());
