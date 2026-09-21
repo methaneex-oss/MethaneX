@@ -31,6 +31,10 @@ public:
         ++calls;
         assert(request.context.find("int answer = 42;") != std::string::npos);
         assert(request.context.find("prior.artifact=workspace.file") != std::string::npos);
+        if (calls == 1) {
+            return {ModelProviderStatus::failed, "test", "review", "review requires revision",
+                    {}, {{"review", "requires_revision"}}, "review requires revision"};
+        }
         return {ModelProviderStatus::succeeded, "test", "review",
                 "implementation verified", {}, {}, {}};
     }
@@ -87,12 +91,14 @@ int main() {
         &workspace);
 
     assert(result.status == EngineeringRunStatus::completed);
-    assert(result.stages.size() == 3);
+    assert(result.stages.size() == 4);
+    assert(result.stages[1].attempt == 1);
+    assert(result.stages[2].attempt == 2);
     assert(result.artifacts.size() == 2);
-    assert(assessment_model.calls == 2);
-    assert(result.context.stages.size() == 3);
+    assert(assessment_model.calls == 3);
+    assert(result.context.stages.size() == 4);
     assert(result.context.artifacts.size() == 2);
-    assert(result.context.evidence.size() >= 2);
+    assert(result.context.evidence.size() >= 3);
     assert(result.context.workspace_id == "engineering-run-flow-1");
     return 0;
 }

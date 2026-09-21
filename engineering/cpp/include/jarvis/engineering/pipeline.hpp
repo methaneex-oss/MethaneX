@@ -3,6 +3,7 @@
 #include "coordinator.hpp"
 #include "workspace.hpp"
 #include "run_context.hpp"
+#include "run_policy.hpp"
 
 #include <cstdint>
 #include <string>
@@ -31,6 +32,7 @@ enum class EngineeringRunStatus : std::uint8_t {
 struct EngineeringStageResult {
     EngineeringStage stage{EngineeringStage::implementation};
     AgentResult result;
+    std::size_t attempt{0};
 };
 
 struct EngineeringRunResult {
@@ -51,7 +53,8 @@ public:
         const EngineeringAuthorizer& authorizer,
         EngineeringExecutionBoundary& boundary,
         EngineeringWorkspace* workspace = nullptr,
-        bool select_agents = false) const;
+        bool select_agents = false,
+        EngineeringRunPolicy policy = {}) const;
 
 private:
     static EngineeringAgent* find_agent(
