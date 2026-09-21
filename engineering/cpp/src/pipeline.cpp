@@ -28,12 +28,13 @@ EngineeringRunResult EngineeringPipeline::run(
     const EngineeringAuthorizer& authorizer,
     EngineeringExecutionBoundary& boundary,
     EngineeringWorkspace* workspace,
-    bool select_agents) const {
+    bool select_agents,
+    EngineeringRunPolicy policy) const {
     EngineeringRunResult run_result;
     run_result.run_id = std::move(run_id);
     run_result.context.run_id = run_result.run_id;
 
-    if (run_result.run_id.empty() || stages.empty()) {
+    if (run_result.run_id.empty() || stages.empty() || policy.max_attempts_per_stage == 0) {
         run_result.reason = "invalid engineering run";
         return run_result;
     }
@@ -72,37 +73,48 @@ EngineeringRunResult EngineeringPipeline::run(
         previous_stage = stage.stage;
         first_stage = false;
 
-        auto task = stage.task;
-        if (workspace != nullptr) {
-            task.workspace_id = "engineering-run-" + run_result.run_id;
-            task.manage_workspace = false;
-        }
-        task.prior_stage_artifacts = run_result.context.artifacts;
-        task.prior_stage_evidence = run_result.context.evidence;
-
         AgentResult result;
-        if (select_agents) {
-            result = coordinator.dispatch_selected(task, agents, authorizer, boundary);
-        } else {
-            auto* agent = find_agent(agents, stage.agent_id);
-            if (agent == nullptr) {
-                run_result.reason = "engineering agent not found";
-                close_workspace();
-                return run_result;
+        bool accepted = false;
+        for (std::size_t attempt = 1; attempt <= policy.max_attempts_per_stage; ++attempt) {
+            auto task = stage.task;
+            if (workspace != nullptr) {
+                task.workspace_id = "engineering-run-" + run_result.run_id;
+                task.manage_workspace = false;
             }
-            result = coordinator.dispatch(task, *agent, authorizer, boundary);
-        }
-        run_result.artifacts.insert(
-            run_result.artifacts.end(), result.artifacts.begin(), result.artifacts.end());
-        run_result.stages.push_back(EngineeringStageResult{stage.stage, result});
-        run_result.context.stages.push_back(EngineeringStageFeedback{
-            run_result.context.stages.size(), std::to_string(static_cast<int>(stage.stage)), result});
-        run_result.context.artifacts.insert(
-            run_result.context.artifacts.end(), result.artifacts.begin(), result.artifacts.end());
-        run_result.context.evidence.insert(
-            run_result.context.evidence.end(), result.evidence.begin(), result.evidence.end());
+            task.prior_stage_artifacts = run_result.context.artifacts;
+            task.prior_stage_evidence = run_result.context.evidence;
 
-        if (!result.accepted) {
+            if (select_agents) {
+                result = coordinator.dispatch_selected(task, agents, authorizer, boundary);
+            } else {
+                auto* agent = find_agent(agents, stage.agent_id);
+                if (agent == nullptr) {
+                    result = AgentResult{false, stage.agent_id, task.id,
+                                         "engineering agent not found", {}, {}};
+                } else {
+                    result = coordinator.dispatch(task, *agent, authorizer, boundary);
+                }
+            }
+
+            run_result.artifacts.insert(
+                run_result.artifacts.end(), result.artifacts.begin(), result.artifacts.end());
+            run_result.stages.push_back(EngineeringStageResult{stage.stage, result, attempt});
+            run_result.context.stages.push_back(EngineeringStageFeedback{
+                run_result.context.stages.size(), std::to_string(static_cast<int>(stage.stage)), result});
+            run_result.context.artifacts.insert(
+                run_result.context.artifacts.end(), result.artifacts.begin(), result.artifacts.end());
+            run_result.context.evidence.insert(
+                run_result.context.evidence.end(), result.evidence.begin(), result.evidence.end());
+
+            if (result.accepted) {
+                accepted = true;
+                break;
+            }
+
+            if (!policy.retry_rejected_stages || attempt == policy.max_attempts_per_stage) break;
+        }
+
+        if (!accepted) {
             run_result.status = EngineeringRunStatus::failed;
             run_result.reason = result.reason.empty() ? "engineering stage failed" : result.reason;
             close_workspace();
