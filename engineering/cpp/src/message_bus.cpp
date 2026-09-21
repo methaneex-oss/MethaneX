@@ -104,6 +104,10 @@ bool AgentCommunicationEndpoint::registered() const noexcept {
     return registered_;
 }
 
+const std::string& AgentCommunicationEndpoint::agent_id() const noexcept {
+    return agent_id_;
+}
+
 MessageBusResult AgentCommunicationEndpoint::send(
     std::string message_id,
     std::string recipient_id,
