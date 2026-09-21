@@ -37,6 +37,7 @@ struct EngineeringTask {
     double maximum_cost{0.0};
     std::string workspace_id;
     bool manage_workspace{true};
+    std::vector<std::string> workspace_files;
 };
 
 struct AgentArtifact {
