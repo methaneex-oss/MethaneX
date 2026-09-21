@@ -30,6 +30,7 @@ public:
     ModelResponse generate(const ModelRequest& request) override {
         ++calls;
         assert(request.context.find("int answer = 42;") != std::string::npos);
+        assert(request.context.find("prior.artifact=workspace.file") != std::string::npos);
         return {ModelProviderStatus::succeeded, "test", "review",
                 "implementation verified", {}, {}, {}};
     }
@@ -89,5 +90,9 @@ int main() {
     assert(result.stages.size() == 3);
     assert(result.artifacts.size() == 2);
     assert(assessment_model.calls == 2);
+    assert(result.context.stages.size() == 3);
+    assert(result.context.artifacts.size() == 2);
+    assert(result.context.evidence.size() >= 2);
+    assert(result.context.workspace_id == "engineering-run-flow-1");
     return 0;
 }

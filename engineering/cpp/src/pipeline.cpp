@@ -31,6 +31,7 @@ EngineeringRunResult EngineeringPipeline::run(
     bool select_agents) const {
     EngineeringRunResult run_result;
     run_result.run_id = std::move(run_id);
+    run_result.context.run_id = run_result.run_id;
 
     if (run_result.run_id.empty() || stages.empty()) {
         run_result.reason = "invalid engineering run";
@@ -43,6 +44,7 @@ EngineeringRunResult EngineeringPipeline::run(
             run_result.reason = "engineering workspace open failed";
             return run_result;
         }
+        run_result.context.workspace_id = workspace_id;
     }
 
     const auto close_workspace = [&]() {
@@ -75,6 +77,8 @@ EngineeringRunResult EngineeringPipeline::run(
             task.workspace_id = "engineering-run-" + run_result.run_id;
             task.manage_workspace = false;
         }
+        task.prior_stage_artifacts = run_result.context.artifacts;
+        task.prior_stage_evidence = run_result.context.evidence;
 
         AgentResult result;
         if (select_agents) {
@@ -91,6 +95,12 @@ EngineeringRunResult EngineeringPipeline::run(
         run_result.artifacts.insert(
             run_result.artifacts.end(), result.artifacts.begin(), result.artifacts.end());
         run_result.stages.push_back(EngineeringStageResult{stage.stage, result});
+        run_result.context.stages.push_back(EngineeringStageFeedback{
+            run_result.context.stages.size(), std::to_string(static_cast<int>(stage.stage)), result});
+        run_result.context.artifacts.insert(
+            run_result.context.artifacts.end(), result.artifacts.begin(), result.artifacts.end());
+        run_result.context.evidence.insert(
+            run_result.context.evidence.end(), result.evidence.begin(), result.evidence.end());
 
         if (!result.accepted) {
             run_result.status = EngineeringRunStatus::failed;
@@ -115,6 +125,8 @@ EngineeringRunResult EngineeringPipeline::run(
         }
         run_result.artifacts.insert(
             run_result.artifacts.end(), committed.artifacts.begin(), committed.artifacts.end());
+        run_result.context.artifacts.insert(
+            run_result.context.artifacts.end(), committed.artifacts.begin(), committed.artifacts.end());
     }
 
     close_workspace();

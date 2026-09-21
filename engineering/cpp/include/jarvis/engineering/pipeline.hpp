@@ -2,6 +2,7 @@
 
 #include "coordinator.hpp"
 #include "workspace.hpp"
+#include "run_context.hpp"
 
 #include <cstdint>
 #include <string>
@@ -38,6 +39,7 @@ struct EngineeringRunResult {
     std::string reason;
     std::vector<EngineeringStageResult> stages;
     std::vector<AgentArtifact> artifacts;
+    EngineeringRunContext context;
 };
 
 class EngineeringPipeline {
