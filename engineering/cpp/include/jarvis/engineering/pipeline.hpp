@@ -48,7 +48,8 @@ public:
         const std::vector<EngineeringAgent*>& agents,
         const EngineeringAuthorizer& authorizer,
         EngineeringExecutionBoundary& boundary,
-        EngineeringWorkspace* workspace = nullptr) const;
+        EngineeringWorkspace* workspace = nullptr,
+        bool select_agents = false) const;
 
 private:
     static EngineeringAgent* find_agent(
