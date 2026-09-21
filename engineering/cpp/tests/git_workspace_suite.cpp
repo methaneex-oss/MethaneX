@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <string>
+#include <unordered_map>
 
 using namespace jarvis::engineering;
 
@@ -20,7 +21,17 @@ public:
         recorded_branch = std::string(branch);
         recorded_path = std::string(path);
         recorded_content = std::string(content);
+        files[std::string(path)] = std::string(content);
         return allow_file;
+    }
+
+    bool read_file(std::string_view branch, std::string_view path,
+                   std::string& content) override {
+        read_branch = std::string(branch);
+        const auto it = files.find(std::string(path));
+        if (it == files.end()) return false;
+        content = it->second;
+        return allow_read;
     }
 
     bool commit(std::string_view branch, std::string_view message,
@@ -39,12 +50,15 @@ public:
 
     bool allow_branch{true};
     bool allow_file{true};
+    bool allow_read{true};
     bool allow_commit{true};
     bool allow_close{true};
     std::string created_branch, created_base;
     std::string recorded_branch, recorded_path, recorded_content;
+    std::string read_branch;
     std::string committed_branch, committed_message;
     std::string closed_branch;
+    std::unordered_map<std::string, std::string> files;
 };
 
 } // namespace
@@ -63,6 +77,11 @@ int main() {
     assert(git.recorded_branch == "agent/run-1");
     assert(git.recorded_path == "src/change.cpp");
     assert(git.recorded_content == "int x = 1;");
+
+    const auto read = workspace.read_file("run-1", "src/change.cpp");
+    assert(read.accepted);
+    assert(read.content == "int x = 1;");
+    assert(git.read_branch == "agent/run-1");
 
     const auto metadata = workspace.record_file("run-1", "src/change.cpp", "digest-1");
     assert(metadata.accepted);

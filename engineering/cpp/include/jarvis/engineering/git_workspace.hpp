@@ -19,6 +19,9 @@ public:
     virtual bool write_file(std::string_view branch,
                             std::string_view path,
                             std::string_view content) = 0;
+    virtual bool read_file(std::string_view branch,
+                           std::string_view path,
+                           std::string& content) = 0;
     virtual bool commit(std::string_view branch,
                         std::string_view message,
                         std::string& commit_id) = 0;
@@ -39,6 +42,8 @@ public:
     WorkspaceResult record_file(std::string_view workspace_id,
                                 std::string_view path,
                                 std::string_view digest) override;
+    WorkspaceResult read_file(std::string_view workspace_id,
+                              std::string_view path) override;
     WorkspaceResult commit(std::string_view workspace_id,
                            std::string_view message) override;
     bool close(std::string_view workspace_id) override;
