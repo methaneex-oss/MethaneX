@@ -97,7 +97,57 @@ std::vector<Association> Brain::associations() const { std::shared_lock lock(mut
 std::vector<Association> Brain::associated_with(const std::string& key, double minimum_strength) const { std::shared_lock lock(mutex_); return association_.related(key, minimum_strength); }
 std::vector<CausalLink> Brain::causal_links() const { std::shared_lock lock(mutex_); return causal_.links(); }
 std::vector<Decision> Brain::choose(const std::vector<CandidateAction>& actions) const { std::shared_lock lock(mutex_); const auto self = self_state_model_.snapshot(); const auto eligible = goals_model_.eligible(state_.cycle); const auto selected_intent = intent_model_.select(eligible, threat_state_.score, self.uncertainty, state_.cycle); const auto strategy = strategy_model_.formulate(selected_intent, attention_state_, threat_state_.score, self.uncertainty); const auto plan = planner_.build(actions, 1, strategy.planning); DecisionContext context; context.goal_priority = strategy.planning.goal_priority; context.goal_progress = strategy.planning.goal_progress; context.plan_expected_value = plan.expected_value; context.plan_risk = plan.risk; context.resource_budget = strategy.planning.resource_budget; context.uncertainty = strategy.planning.uncertainty; context.threat = strategy.planning.threat; context.deadline_pressure = strategy.planning.deadline_pressure; return decision_.decide(actions, context); }
-std::vector<CapabilityCandidate> Brain::evaluate_capabilities(\n    const std::vector<CapabilityDescriptor>& capabilities, CapabilityConstraints constraints) const {\n    std::shared_lock lock(mutex_);\n    return CapabilityEvaluator{}.evaluate(capabilities, constraints);\n}\n\nCapabilityExecutionResult Brain::execute_capability(\n    const CapabilityDescriptor& capability, std::string input,\n    std::vector<std::string> granted_permissions, double maximum_risk,\n    CapabilityProvider provider) {\n    if (provider.capability_id.empty() || !provider.execute) {\n        return {CapabilityExecutionStatus::rejected, capability.id, {}, {},\n                "capability_provider_required"};\n    }\n    if (provider.capability_id != capability.id) {\n        return {CapabilityExecutionStatus::rejected, capability.id, {}, {},\n                "capability_provider_mismatch"};\n    }\n\n    CapabilityExecutionBoundary boundary;\n    if (!boundary.register_provider(std::move(provider))) {\n        return {CapabilityExecutionStatus::rejected, capability.id, {}, {},\n                "capability_provider_registration_failed"};\n    }\n\n    const auto result = boundary.execute(\n        CapabilityExecutionRequest{capability, std::move(input),\n                                   std::move(granted_permissions), maximum_risk});\n    if (!capability.id.empty()) {\n        const double reliability =\n            result.status == CapabilityExecutionStatus::succeeded ? 1.0 :\n            result.status == CapabilityExecutionStatus::unavailable ? 0.25 : 0.0;\n        std::unique_lock lock(mutex_);\n        Event event{0, now_ns(), result.provider.empty() ? "capability_executor" : result.provider,\n                    "capability_execution",\n                    {{"capability_id", capability.id},\n                     {"status", static_cast<std::int64_t>(result.status)},\n                     {"provider", result.provider},\n                     {"reason", result.reason},\n                     {"output", result.output},\n                     {"reliability", reliability}}};\n        event.sequence = memory_.append(event);\n        if (event.sequence != 0) {\n            ++state_.events_seen;\n            state_.cycle = event.sequence;\n            sync_self_state();\n        }\n    }\n    return result;\n}\nPlan Brain::plan(const std::vector<CandidateAction>& actions, std::size_t horizon) const { std::shared_lock lock(mutex_); return planner_.build(actions, horizon); }
+std::vector<CapabilityCandidate> Brain::evaluate_capabilities(
+    const std::vector<CapabilityDescriptor>& capabilities, CapabilityConstraints constraints) const {
+    std::shared_lock lock(mutex_);
+    return CapabilityEvaluator{}.evaluate(capabilities, constraints);
+}
+
+CapabilityExecutionResult Brain::execute_capability(
+    const CapabilityDescriptor& capability, std::string input,
+    std::vector<std::string> granted_permissions, double maximum_risk,
+    CapabilityProvider provider) {
+    if (provider.capability_id.empty() || !provider.execute) {
+        return {CapabilityExecutionStatus::rejected, capability.id, {}, {},
+                "capability_provider_required"};
+    }
+    if (provider.capability_id != capability.id) {
+        return {CapabilityExecutionStatus::rejected, capability.id, {}, {},
+                "capability_provider_mismatch"};
+    }
+
+    CapabilityExecutionBoundary boundary;
+    if (!boundary.register_provider(std::move(provider))) {
+        return {CapabilityExecutionStatus::rejected, capability.id, {}, {},
+                "capability_provider_registration_failed"};
+    }
+
+    const auto result = boundary.execute(
+        CapabilityExecutionRequest{capability, std::move(input),
+                                   std::move(granted_permissions), maximum_risk});
+    if (!capability.id.empty()) {
+        const double reliability =
+            result.status == CapabilityExecutionStatus::succeeded ? 1.0 :
+            result.status == CapabilityExecutionStatus::unavailable ? 0.25 : 0.0;
+        std::unique_lock lock(mutex_);
+        Event event{0, now_ns(), result.provider.empty() ? "capability_executor" : result.provider,
+                    "capability_execution",
+                    {{"capability_id", capability.id},
+                     {"status", static_cast<std::int64_t>(result.status)},
+                     {"provider", result.provider},
+                     {"reason", result.reason},
+                     {"output", result.output},
+                     {"reliability", reliability}}};
+        event.sequence = memory_.append(event);
+        if (event.sequence != 0) {
+            ++state_.events_seen;
+            state_.cycle = event.sequence;
+            sync_self_state();
+        }
+    }
+    return result;
+}
+Plan Brain::plan(const std::vector<CandidateAction>& actions, std::size_t horizon) const { std::shared_lock lock(mutex_); return planner_.build(actions, horizon); }
 Plan Brain::plan(const std::vector<CandidateAction>& actions, std::size_t horizon, const PlanningContext& context) const { std::shared_lock lock(mutex_); return planner_.build(actions, horizon, context); }
 Reflection Brain::reflect() const { std::shared_lock lock(mutex_); std::vector<Belief> beliefs; beliefs.reserve(beliefs_.size()); for (const auto& [_, belief] : beliefs_) beliefs.push_back(belief); std::vector<Prediction> predictions; predictions.reserve(predictions_.size()); for (const auto& [_, prediction] : predictions_) predictions.push_back(prediction); return reflection_model_.evaluate(beliefs, predictions); }
 AttentionSignal Brain::attention() const { std::shared_lock lock(mutex_); return attention_state_; }
