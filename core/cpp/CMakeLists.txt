@@ -62,6 +62,7 @@ add_library(jarvis_core STATIC
     src/cognitive_workspace.cpp
     src/capability_registry.cpp
     src/capability_evaluator.cpp
+    src/capability_execution.cpp
 )
 
 target_include_directories(jarvis_core PUBLIC include)

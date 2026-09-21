@@ -9,6 +9,8 @@
 #include "decision.hpp"
 #include "action_model.hpp"
 #include "action_execution.hpp"
+#include "capability_evaluator.hpp"
+#include "capability_execution.hpp"
 #include "adaptation.hpp"
 #include "learning_loop.hpp"
 #include "attention.hpp"
@@ -138,6 +140,15 @@ public:
               const PlanningContext& context) const;
     std::vector<ActionAssessment> assess_actions(const std::vector<Decision>& decisions,
                                                   ActionConstraints constraints = {}) const;
+    std::vector<CapabilityCandidate> evaluate_capabilities(
+        const std::vector<CapabilityDescriptor>& capabilities,
+        CapabilityConstraints constraints = {}) const;
+    CapabilityExecutionResult execute_capability(
+        const CapabilityDescriptor& capability,
+        std::string input,
+        std::vector<std::string> granted_permissions = {},
+        double maximum_risk = 1.0,
+        CapabilityProvider provider = {});
     ActionExecutionResult execute_action(const ActionAssessment& assessment,
                                           std::function<bool(const CandidateAction&)> execute,
                                           std::function<bool(const CandidateAction&)> verify,
