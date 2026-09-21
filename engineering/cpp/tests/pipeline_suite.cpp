@@ -135,6 +135,20 @@ int main() {
     assert(implementation.calls == 2);
     assert(review.calls == 2);
 
+    const auto selected_result = pipeline.run(
+        "run-selected",
+        {{EngineeringStage::implementation, implementation_task, ""},
+         {EngineeringStage::review, review_task, ""}},
+        {&review, &implementation},
+        allow,
+        boundary,
+        nullptr,
+        true);
+    assert(selected_result.status == EngineeringRunStatus::completed);
+    assert(selected_result.stages.size() == 2);
+    assert(implementation.calls == 3);
+    assert(review.calls == 3);
+
     const auto out_of_order = pipeline.run(
         "run-order",
         {{EngineeringStage::review, review_task, review.descriptor().id},
@@ -152,7 +166,7 @@ int main() {
         DenyAuthorizer{},
         boundary);
     assert(denied.status == EngineeringRunStatus::failed);
-    assert(implementation.calls == 2);
+    assert(implementation.calls == 3);
 
     const auto missing = pipeline.run(
         "run-3",
