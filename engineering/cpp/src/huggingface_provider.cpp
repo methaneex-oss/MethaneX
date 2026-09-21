@@ -37,8 +37,8 @@ std::string HuggingFaceModelProvider::escape_json(std::string_view value) {
     escaped.reserve(value.size() + 16);
     for (const char ch : value) {
         switch (ch) {
-        case '"': escaped += "\\""; break;
-        case '\': escaped += "\\\\"; break;
+        case '"': escaped += "\\\""; break;
+        case '\\': escaped += "\\\\"; break;
         case '\b': escaped += "\\b"; break;
         case '\f': escaped += "\\f"; break;
         case '\n': escaped += "\\n"; break;
@@ -87,7 +87,7 @@ std::string HuggingFaceModelProvider::extract_json_string(
             case 'b': value += '\b'; break;
             case 'f': value += '\f'; break;
             case '"': value += '"'; break;
-            case '\': value += '\\'; break;
+            case '\\': value += '\\'; break;
             default: value += ch; break;
             }
             escaped = false;
