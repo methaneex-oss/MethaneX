@@ -1,28 +1,12 @@
 #pragma once
 
+#include "http_transport.hpp"
 #include "model_provider.hpp"
 
-#include <functional>
 #include <string>
 #include <string_view>
-#include <unordered_map>
 
 namespace jarvis::engineering {
-
-struct HttpRequest {
-    std::string method;
-    std::string url;
-    std::vector<std::pair<std::string, std::string>> headers;
-    std::string body;
-};
-
-struct HttpResponse {
-    int status_code{0};
-    std::string body;
-    std::string error;
-};
-
-using HttpTransport = std::function<HttpResponse(const HttpRequest&)>;
 
 struct HuggingFaceModelConfig {
     std::string model{"openai/gpt-oss-120b:fastest"};
