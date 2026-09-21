@@ -16,6 +16,7 @@ add_library(jarvis_engineering STATIC
     src/model_provider.cpp
     src/model_coordinator.cpp
     src/model_agent.cpp
+    src/model_router.cpp
 )
 
 target_include_directories(jarvis_engineering PUBLIC include)
@@ -43,10 +44,12 @@ if(BUILD_TESTING)
     add_executable(jarvis_engineering_model_provider_suite tests/model_provider_suite.cpp)
     add_executable(jarvis_engineering_model_coordinator_suite tests/model_coordinator_suite.cpp)
     add_executable(jarvis_engineering_model_agent_suite tests/model_agent_suite.cpp)
+    add_executable(jarvis_engineering_model_router_suite tests/model_router_suite.cpp)
     target_link_libraries(jarvis_engineering_git_workspace_suite PRIVATE jarvis_engineering)
     target_link_libraries(jarvis_engineering_model_provider_suite PRIVATE jarvis_engineering)
     target_link_libraries(jarvis_engineering_model_coordinator_suite PRIVATE jarvis_engineering)
     target_link_libraries(jarvis_engineering_model_agent_suite PRIVATE jarvis_engineering)
+    target_link_libraries(jarvis_engineering_model_router_suite PRIVATE jarvis_engineering)
     add_test(NAME jarvis_engineering_agent_suite COMMAND jarvis_engineering_agent_suite)
     add_test(NAME jarvis_engineering_coordinator_suite COMMAND jarvis_engineering_coordinator_suite)
     add_test(NAME jarvis_engineering_worker_suite COMMAND jarvis_engineering_worker_suite)
@@ -56,4 +59,5 @@ if(BUILD_TESTING)
     add_test(NAME jarvis_engineering_model_provider_suite COMMAND jarvis_engineering_model_provider_suite)
     add_test(NAME jarvis_engineering_model_coordinator_suite COMMAND jarvis_engineering_model_coordinator_suite)
     add_test(NAME jarvis_engineering_model_agent_suite COMMAND jarvis_engineering_model_agent_suite)
+    add_test(NAME jarvis_engineering_model_router_suite COMMAND jarvis_engineering_model_router_suite)
 endif()
