@@ -55,7 +55,7 @@ std::size_t find_matching_object(std::string_view json, std::size_t start) {
         if (in_string) {
             if (escaped) {
                 escaped = false;
-            } else if (ch == '\\\\') {
+            } else if (ch == '\\') {
                 escaped = true;
             } else if (ch == '"') {
                 in_string = false;
@@ -115,12 +115,12 @@ std::string OpenAIAstraModelProvider::escape_json(std::string_view value) {
     for (const char ch : value) {
         switch (ch) {
         case '"': escaped += "\\\""; break;
-        case '\\\\': escaped += "\\\\\\\\"; break;
-        case '\\b': escaped += "\\\\b"; break;
-        case '\\f': escaped += "\\\\f"; break;
-        case '\\n': escaped += "\\\\n"; break;
-        case '\\r': escaped += "\\\\r"; break;
-        case '\\t': escaped += "\\\\t"; break;
+        case '\\': escaped += "\\\\"; break;
+        case '\b': escaped += "\\b"; break;
+        case '\f': escaped += "\\f"; break;
+        case '\n': escaped += "\\n"; break;
+        case '\r': escaped += "\\r"; break;
+        case '\t': escaped += "\\t"; break;
         default:
             if (static_cast<unsigned char>(ch) < 0x20) {
                 escaped += ' ';
@@ -136,31 +136,31 @@ std::string OpenAIAstraModelProvider::build_request_body(
     const OpenAIAstraModelConfig& config,
     const ModelRequest& request) {
     const std::string input =
-        "Engineering objective:\\n" + request.objective +
-        "\\n\\nEngineering context:\\n" + request.context;
+        "Engineering objective:\n" + request.objective +
+        "\n\nEngineering context:\n" + request.context;
 
     return "{"
-           "\\"model\\":\\"" + escape_json(config.model) + "\\","
-           "\\"store\\":false,"
-           "\\"reasoning\\":{\\"effort\\":\\"" +
-               escape_json(config.reasoning_effort) + "\\"},"
-           "\\"instructions\\":\\"Return a structured engineering result. "
+           "\"model\":\"" + escape_json(config.model) + "\","
+           "\"store\":false,"
+           "\"reasoning\":{\"effort\":\"" +
+               escape_json(config.reasoning_effort) + "\"},"
+           "\"instructions\":\"Return a structured engineering result. "
            "File changes must contain complete replacement file contents. "
-           "Do not modify files outside the requested objective.\\","
-           "\\"input\\":[{\\"role\\":\\"user\\",\\"content\\":[{"
-           "\\"type\\":\\"input_text\\",\\"text\\":\\"" +
+           "Do not modify files outside the requested objective.\","
+           "\"input\":[{\"role\":\"user\",\"content\":[{"
+           "\"type\":\"input_text\",\"text\":\"" +
                escape_json(input) +
-           "\\"}]}],"
-           "\\"text\\":{\\"format\\":{\\"type\\":\\"json_schema\\","
-           "\\"name\\":\\"engineering_result\\",\\"strict\\":true,"
-           "\\"schema\\":" + std::string(kSchema) + "}}}";
+           "\"}]}],"
+           "\"text\":{\"format\":{\"type\":\"json_schema\","
+           "\"name\":\"engineering_result\",\"strict\":true,"
+           "\"schema\":" + std::string(kSchema) + "}}}";
 }
 
 std::string OpenAIAstraModelProvider::extract_json_string(
     std::string_view json,
     std::string_view key,
     std::size_t from) {
-    const std::string marker = "\\"" + std::string(key) + "\\":\\"";
+    const std::string marker = "\"" + std::string(key) + "\":\"";
     const std::size_t begin = json.find(marker, from);
     if (begin == std::string_view::npos) {
         return {};
@@ -173,17 +173,17 @@ std::string OpenAIAstraModelProvider::extract_json_string(
         const char ch = json[i];
         if (escaped) {
             switch (ch) {
-            case 'n': value += '\\n'; break;
-            case 'r': value += '\\r'; break;
-            case 't': value += '\\t'; break;
-            case 'b': value += '\\b'; break;
-            case 'f': value += '\\f'; break;
+            case 'n': value += '\n'; break;
+            case 'r': value += '\r'; break;
+            case 't': value += '\t'; break;
+            case 'b': value += '\b'; break;
+            case 'f': value += '\f'; break;
             case '"': value += '"'; break;
-            case '\\\\': value += '\\\\'; break;
+            case '\\': value += '\\'; break;
             default: value += ch; break;
             }
             escaped = false;
-        } else if (ch == '\\\\') {
+        } else if (ch == '\\') {
             escaped = true;
         } else if (ch == '"') {
             return value;
@@ -196,7 +196,7 @@ std::string OpenAIAstraModelProvider::extract_json_string(
 
 std::vector<ModelFileChange> OpenAIAstraModelProvider::extract_file_changes(
     std::string_view json) {
-    const std::string marker = "\\"file_changes\\":[";
+    const std::string marker = "\"file_changes\":[";
     const std::size_t array_begin = json.find(marker);
     if (array_begin == std::string_view::npos) {
         return {};
@@ -204,7 +204,7 @@ std::vector<ModelFileChange> OpenAIAstraModelProvider::extract_file_changes(
 
     std::size_t cursor = array_begin + marker.size();
     std::vector<ModelFileChange> changes;
-    while (cursor < json.size()) {
+    while (cursor < json.size() && json[cursor] != ']') {
         const std::size_t object_begin = json.find('{', cursor);
         if (object_begin == std::string_view::npos) {
             break;
@@ -223,9 +223,6 @@ std::vector<ModelFileChange> OpenAIAstraModelProvider::extract_file_changes(
         }
         changes.push_back({path, content});
         cursor = object_end + 1;
-        if (json[cursor] == ']') {
-            break;
-        }
     }
     return changes;
 }
