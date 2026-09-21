@@ -82,10 +82,18 @@ AgentResult ModelBackedEngineeringAgent::execute(const EngineeringTask& task) {
         return {false, descriptor_.id, task.id, "invalid model, agent, or task", {}, {}};
     }
 
+    std::string context = "engineering task: " + task.id +
+        (task.workspace_id.empty() ? std::string{} : " workspace: " + task.workspace_id);
+    for (const auto& artifact : task.prior_stage_artifacts) {
+        context += "\nprior.artifact=" + artifact.type + "|" + artifact.location + "|" + artifact.digest;
+    }
+    for (const auto& evidence : task.prior_stage_evidence) {
+        context += "\nprior.evidence=" + evidence.kind + "|" + evidence.value;
+    }
+
     ModelRequest request{
         task.objective,
-        "engineering task: " + task.id +
-            (task.workspace_id.empty() ? std::string{} : " workspace: " + task.workspace_id),
+        std::move(context),
         task.expected_artifacts,
         1024 * 1024
     };
