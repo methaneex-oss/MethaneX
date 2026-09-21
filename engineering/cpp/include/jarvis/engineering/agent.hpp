@@ -35,6 +35,8 @@ struct EngineeringTask {
     std::vector<std::string> expected_artifacts;
     AgentRisk maximum_risk{AgentRisk::high};
     double maximum_cost{0.0};
+    std::string workspace_id;
+    bool manage_workspace{true};
 };
 
 struct AgentArtifact {

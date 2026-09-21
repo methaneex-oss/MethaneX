@@ -1,6 +1,7 @@
 #pragma once
 
 #include "coordinator.hpp"
+#include "workspace.hpp"
 
 #include <cstdint>
 #include <string>
@@ -36,6 +37,7 @@ struct EngineeringRunResult {
     std::string run_id;
     std::string reason;
     std::vector<EngineeringStageResult> stages;
+    std::vector<AgentArtifact> artifacts;
 };
 
 class EngineeringPipeline {
@@ -45,7 +47,8 @@ public:
         const std::vector<EngineeringStageTask>& stages,
         const std::vector<EngineeringAgent*>& agents,
         const EngineeringAuthorizer& authorizer,
-        EngineeringExecutionBoundary& boundary) const;
+        EngineeringExecutionBoundary& boundary,
+        EngineeringWorkspace* workspace = nullptr) const;
 
 private:
     static EngineeringAgent* find_agent(

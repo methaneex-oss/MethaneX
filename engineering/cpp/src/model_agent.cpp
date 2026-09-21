@@ -84,7 +84,8 @@ AgentResult ModelBackedEngineeringAgent::execute(const EngineeringTask& task) {
 
     ModelRequest request{
         task.objective,
-        "engineering task: " + task.id,
+        "engineering task: " + task.id +
+            (task.workspace_id.empty() ? std::string{} : " workspace: " + task.workspace_id),
         task.expected_artifacts,
         1024 * 1024
     };
@@ -102,48 +103,58 @@ AgentResult ModelBackedEngineeringAgent::execute(const EngineeringTask& task) {
         return {false, descriptor_.id, task.id, "model output limit exceeded", {}, response.evidence};
     }
 
-    const std::string workspace_id = "engineering-" + task.id;
-    const std::string branch = "agent/" + task.id;
-    const auto opened = workspace_.open(workspace_id, branch);
-    if (!opened.accepted) {
-        return {false, descriptor_.id, task.id, opened.reason, opened.artifacts, response.evidence};
+    const bool owns_workspace = task.manage_workspace;
+    const std::string workspace_id = task.workspace_id.empty()
+        ? "engineering-" + task.id
+        : task.workspace_id;
+
+    if (owns_workspace) {
+        const auto opened = workspace_.open(workspace_id, "agent/" + task.id);
+        if (!opened.accepted) {
+            return {false, descriptor_.id, task.id, opened.reason, opened.artifacts, response.evidence};
+        }
     }
 
-    std::vector<AgentArtifact> artifacts = opened.artifacts;
+    std::vector<AgentArtifact> artifacts;
     for (const auto& change : response.file_changes) {
         if (!safe_relative_path(change.path)) {
-            workspace_.close(workspace_id);
+            if (owns_workspace) workspace_.close(workspace_id);
             return {false, descriptor_.id, task.id, "unsafe model file path", artifacts, response.evidence};
         }
         const auto written = workspace_.write_file(
             workspace_id, change.path, change.content, digest(change.content));
         if (!written.accepted) {
-            workspace_.close(workspace_id);
+            if (owns_workspace) workspace_.close(workspace_id);
             return {false, descriptor_.id, task.id, written.reason, artifacts, response.evidence};
         }
         artifacts.insert(artifacts.end(), written.artifacts.begin(), written.artifacts.end());
     }
 
     if (response.file_changes.empty()) {
-        workspace_.close(workspace_id);
+        if (owns_workspace) workspace_.close(workspace_id);
         return {false, descriptor_.id, task.id, "model produced no file changes", artifacts, response.evidence};
     }
 
-    const auto committed = workspace_.commit(workspace_id, "engineering: " + task.objective);
-    if (!committed.accepted) {
-        workspace_.close(workspace_id);
-        return {false, descriptor_.id, task.id, committed.reason, artifacts, response.evidence};
-    }
-    artifacts.insert(artifacts.end(), committed.artifacts.begin(), committed.artifacts.end());
+    if (owns_workspace) {
+        const auto committed = workspace_.commit(workspace_id, "engineering: " + task.objective);
+        if (!committed.accepted) {
+            workspace_.close(workspace_id);
+            return {false, descriptor_.id, task.id, committed.reason, artifacts, response.evidence};
+        }
+        artifacts.insert(artifacts.end(), committed.artifacts.begin(), committed.artifacts.end());
 
-    if (!workspace_.close(workspace_id)) {
-        return {false, descriptor_.id, task.id, "workspace close failed", artifacts, response.evidence};
+        if (!workspace_.close(workspace_id)) {
+            return {false, descriptor_.id, task.id, "workspace close failed", artifacts, response.evidence};
+        }
     }
 
     auto evidence = response.evidence;
     evidence.push_back({"model.provider", model.provider});
     evidence.push_back({"model.id", model.id});
     evidence.push_back({"model.model", model.model});
+    if (!task.workspace_id.empty()) {
+        evidence.push_back({"workspace.id", task.workspace_id});
+    }
     return {true, descriptor_.id, task.id, "model-backed engineering task completed",
             artifacts, evidence};
 }
