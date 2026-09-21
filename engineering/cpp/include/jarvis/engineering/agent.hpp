@@ -1,5 +1,7 @@
 #pragma once
 
+#include "message_bus.hpp"
+
 #include <cstdint>
 #include <string>
 #include <string_view>
@@ -51,6 +53,7 @@ struct EngineeringTask {
     std::vector<std::string> workspace_files;
     std::vector<AgentArtifact> prior_stage_artifacts;
     std::vector<AgentEvidence> prior_stage_evidence;
+    AgentCommunicationEndpoint* communication{nullptr};
 };
 
 struct AgentResult {
