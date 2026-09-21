@@ -54,6 +54,7 @@ struct EngineeringTask {
     std::vector<AgentArtifact> prior_stage_artifacts;
     std::vector<AgentEvidence> prior_stage_evidence;
     AgentCommunicationEndpoint* communication{nullptr};
+    std::vector<std::string> communication_targets;
 };
 
 struct AgentResult {
