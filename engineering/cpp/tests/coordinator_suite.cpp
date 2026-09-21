@@ -55,6 +55,10 @@ int main() {
     assert(result.accepted);
     assert(result.agent_id == "agent.review");
 
+    const auto selected = coordinator.dispatch_selected(task, {&agent}, allow, boundary);
+    assert(selected.accepted);
+    assert(selected.agent_id == "agent.review");
+
     const auto denied = coordinator.dispatch(task, agent, deny, boundary);
     assert(!denied.accepted);
     assert(denied.reason == "execution authorization denied");
@@ -62,5 +66,8 @@ int main() {
     EngineeringTask impossible = task;
     impossible.required_capabilities = {"security.audit"};
     assert(!coordinator.discover(impossible, {agent.descriptor()}).front().eligible);
+    const auto no_agent = coordinator.dispatch_selected(impossible, {&agent}, allow, boundary);
+    assert(!no_agent.accepted);
+    assert(no_agent.reason == "no eligible engineering agent");
     return 0;
 }
