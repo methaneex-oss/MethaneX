@@ -14,6 +14,22 @@ WorkspaceResult GitEngineeringWorkspace::open(std::string_view workspace_id,
     return {true, std::string(workspace_id), {}, {}};
 }
 
+WorkspaceResult GitEngineeringWorkspace::write_file(std::string_view workspace_id,
+                                                    std::string_view path,
+                                                    std::string_view content,
+                                                    std::string_view digest) {
+    const auto it = workspaces_.find(std::string(workspace_id));
+    if (it == workspaces_.end() || !it->second.open || path.empty() || content.empty() || digest.empty()) {
+        return {false, std::string(workspace_id), "workspace unavailable or invalid file", {}};
+    }
+    if (!driver_.write_file(it->second.branch, path, content)) {
+        return {false, std::string(workspace_id), "git file write failed", {}};
+    }
+    it->second.has_changes = true;
+    return {true, std::string(workspace_id), {},
+            {AgentArtifact{"workspace.file", std::string(path), std::string(digest)}}};
+}
+
 WorkspaceResult GitEngineeringWorkspace::record_file(std::string_view workspace_id,
                                                      std::string_view path,
                                                      std::string_view digest) {
@@ -21,10 +37,6 @@ WorkspaceResult GitEngineeringWorkspace::record_file(std::string_view workspace_
     if (it == workspaces_.end() || !it->second.open || path.empty() || digest.empty()) {
         return {false, std::string(workspace_id), "workspace unavailable or invalid file", {}};
     }
-    if (!driver_.record_file(it->second.branch, path, digest)) {
-        return {false, std::string(workspace_id), "git file update failed", {}};
-    }
-    it->second.has_changes = true;
     return {true, std::string(workspace_id), {},
             {AgentArtifact{"workspace.file", std::string(path), std::string(digest)}}};
 }
