@@ -1,8 +1,5 @@
 #include "jarvis/engineering/workspace.hpp"
 
-#include <unordered_map>
-#include <utility>
-
 namespace jarvis::engineering {
 
 WorkspaceResult InMemoryEngineeringWorkspace::open(std::string_view workspace_id,
@@ -12,6 +9,16 @@ WorkspaceResult InMemoryEngineeringWorkspace::open(std::string_view workspace_id
     }
     workspaces_.emplace(std::string(workspace_id), WorkspaceState{std::string(branch), {}, true});
     return {true, std::string(workspace_id), {}, {}};
+}
+
+WorkspaceResult InMemoryEngineeringWorkspace::write_file(std::string_view workspace_id,
+                                                         std::string_view path,
+                                                         std::string_view content,
+                                                         std::string_view digest) {
+    if (content.empty()) {
+        return {false, std::string(workspace_id), "empty file content", {}};
+    }
+    return record_file(workspace_id, path, digest);
 }
 
 WorkspaceResult InMemoryEngineeringWorkspace::record_file(std::string_view workspace_id,
