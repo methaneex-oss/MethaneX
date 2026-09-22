@@ -1,0 +1,5 @@
+#include "jarvis/engineering/openai_astra_provider.hpp"
+#include <cassert>
+#include <string>
+using namespace jarvis::engineering;
+int main(){HttpRequest captured;OpenAIAstraModelProvider provider({"gpt-6-astra","test-token","https://api.openai.com/v1/responses","high",0.5,0.95},[&](const HttpRequest& request){captured=request;return HttpResponse{200,R"JSON({"output":[{"type":"message","content":[{"type":"output_text","text":"{\"summary\":\"implemented\",\"file_changes\":[{\"path\":\"src/example.cpp\",\"content\":\"int answer() { return 42; }\"}],\"evidence\":[{\"key\":\"test\",\"value\":\"passed\"}]}"}]}]})JSON",{}};});const auto response=provider.generate({"implement feature","existing architecture",{"source"},4096});assert(response.status==ModelProviderStatus::succeeded);assert(response.file_changes.size()==1);assert(response.file_changes.front().path=="src/example.cpp");assert(response.file_changes.front().content=="int answer() { return 42; }");assert(captured.body.find("\"type\":\"json_schema\"")!=std::string::npos);assert(captured.body.find("\"reasoning\":{\"effort\":\"high\"}")!=std::string::npos);return 0;}
