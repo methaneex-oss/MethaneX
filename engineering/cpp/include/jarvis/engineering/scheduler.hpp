@@ -46,6 +46,11 @@ struct EngineeringScheduleResult {
     std::vector<EngineeringNodeResult> nodes;
 };
 
+struct EngineeringSchedulerPolicy {
+    std::size_t maximum_parallel_agents{4};
+    bool allow_parallel_execution{true};
+};
+
 class EngineeringScheduler {
 public:
     EngineeringSchedule plan(
@@ -56,7 +61,8 @@ public:
         const std::vector<EngineeringStageTask>& stages,
         const std::vector<EngineeringAgent*>& agents,
         const EngineeringAuthorizer& authorizer,
-        EngineeringExecutionBoundary& boundary) const;
+        EngineeringExecutionBoundary& boundary,
+        EngineeringSchedulerPolicy policy = {}) const;
 
 private:
     static bool disjoint_workspace_files(

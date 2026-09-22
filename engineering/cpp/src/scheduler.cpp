@@ -1,8 +1,11 @@
 #include "jarvis/engineering/scheduler.hpp"
 
 #include <algorithm>
+#include <exception>
+#include <future>
 #include <unordered_map>
 #include <unordered_set>
+#include <utility>
 
 namespace jarvis::engineering {
 
@@ -142,11 +145,16 @@ EngineeringScheduleResult EngineeringScheduler::execute(
     const std::vector<EngineeringStageTask>& stages,
     const std::vector<EngineeringAgent*>& agents,
     const EngineeringAuthorizer& authorizer,
-    EngineeringExecutionBoundary& boundary) const {
+    EngineeringExecutionBoundary& boundary,
+    EngineeringSchedulerPolicy policy) const {
     EngineeringScheduleResult result;
     const auto schedule = plan(stages, agents);
     if (schedule.status != EngineeringScheduleStatus::valid) {
         result.reason = schedule.reason;
+        return result;
+    }
+    if (policy.maximum_parallel_agents == 0) {
+        result.reason = "maximum parallel agents must be greater than zero";
         return result;
     }
 
@@ -158,6 +166,7 @@ EngineeringScheduleResult EngineeringScheduler::execute(
     for (std::size_t i = 0; i < tasks.size(); ++i) by_id.emplace(tasks[i].task.id, i);
 
     for (const auto& wave : schedule.waves) {
+        std::vector<std::size_t> runnable;
         for (const auto index : wave.stage_indices) {
             std::vector<std::string> blockers;
             for (const auto& dependency_id : tasks[index].task.dependencies) {
@@ -166,41 +175,81 @@ EngineeringScheduleResult EngineeringScheduler::execute(
                     blockers.push_back(dependency_id);
                 }
             }
-
             if (!blockers.empty()) {
                 statuses[index] = EngineeringNodeStatus::blocked;
                 result.nodes.push_back(
                     {index, EngineeringNodeStatus::blocked, {}, std::move(blockers)});
-                continue;
-            }
-
-            EngineeringAgent* agent = nullptr;
-            if (!tasks[index].agent_id.empty()) {
-                agent = find_agent(agents, tasks[index].agent_id);
-            }
-            AgentResult dispatch_result;
-            if (agent != nullptr) {
-                dispatch_result = EngineeringCoordinator{}.dispatch(
-                    tasks[index].task, *agent, authorizer, boundary);
             } else {
-                dispatch_result = EngineeringCoordinator{}.dispatch_selected(
-                    tasks[index].task, agents, authorizer, boundary);
+                runnable.push_back(index);
+            }
+        }
+
+        const bool can_parallelize =
+            policy.allow_parallel_execution &&
+            boundary.supports_concurrency() &&
+            wave.parallel_safe;
+
+        const std::size_t batch_limit =
+            can_parallelize ? policy.maximum_parallel_agents : 1U;
+
+        for (std::size_t offset = 0; offset < runnable.size(); offset += batch_limit) {
+            const auto end = std::min(runnable.size(), offset + batch_limit);
+            std::vector<std::future<AgentResult>> futures;
+            futures.reserve(end - offset);
+
+            for (std::size_t position = offset; position < end; ++position) {
+                const auto index = runnable[position];
+                futures.push_back(std::async(
+                    std::launch::async,
+                    [&tasks, &agents, &authorizer, &boundary, index]() {
+                        try {
+                            const auto& stage = tasks[index];
+                            EngineeringAgent* agent =
+                                stage.agent_id.empty()
+                                    ? nullptr
+                                    : find_agent(agents, stage.agent_id);
+                            if (agent != nullptr) {
+                                return EngineeringCoordinator{}.dispatch(
+                                    stage.task, *agent, authorizer, boundary);
+                            }
+                            return EngineeringCoordinator{}.dispatch_selected(
+                                stage.task, agents, authorizer, boundary);
+                        } catch (const std::exception& error) {
+                            return AgentResult{
+                                false, {}, tasks[index].task.id,
+                                std::string("scheduler execution exception: ") + error.what(),
+                                {}, {}};
+                        } catch (...) {
+                            return AgentResult{
+                                false, {}, tasks[index].task.id,
+                                "scheduler execution unknown exception", {}, {}};
+                        }
+                    }));
             }
 
-            const auto node_status = dispatch_result.accepted
-                ? EngineeringNodeStatus::completed
-                : EngineeringNodeStatus::rejected;
-            statuses[index] = node_status;
-            result.nodes.push_back(
-                {index, node_status, dispatch_result, {}});
+            for (std::size_t position = offset; position < end; ++position) {
+                const auto index = runnable[position];
+                AgentResult dispatch_result;
+                try {
+                    dispatch_result = futures[position - offset].get();
+                } catch (const std::exception& error) {
+                    dispatch_result = {
+                        false, {}, tasks[index].task.id,
+                        std::string("scheduler future exception: ") + error.what(), {}, {}};
+                } catch (...) {
+                    dispatch_result = {
+                        false, {}, tasks[index].task.id,
+                        "scheduler future unknown exception", {}, {}};
+                }
 
-            if (dispatch_result.accepted) {
-                for (const auto& artifact : dispatch_result.artifacts) {
-                    tasks[index].task.prior_stage_artifacts.push_back(artifact);
-                }
-                for (const auto& evidence : dispatch_result.evidence) {
-                    tasks[index].task.prior_stage_evidence.push_back(evidence);
-                }
+                const auto node_status = dispatch_result.accepted
+                    ? EngineeringNodeStatus::completed
+                    : EngineeringNodeStatus::rejected;
+                statuses[index] = node_status;
+                result.nodes.push_back({index, node_status, dispatch_result, {}});
+
+                if (!dispatch_result.accepted) continue;
+
                 for (std::size_t dependent = 0; dependent < tasks.size(); ++dependent) {
                     if (!contains(tasks[dependent].task.dependencies, tasks[index].task.id)) {
                         continue;
