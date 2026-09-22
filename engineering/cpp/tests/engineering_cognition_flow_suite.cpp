@@ -32,6 +32,7 @@ public:
         assert(request.context.find("int answer = 42;") != std::string::npos);
         assert(request.context.find("prior.artifact=workspace.file") != std::string::npos);
         if (calls == 1) {
+            assert(request.context.find("incoming.message=agent.implementation") != std::string::npos);
             return {ModelProviderStatus::failed, "test", "review", "review requires revision",
                     {}, {{"review", "requires_revision"}}, "review requires revision"};
         }
@@ -79,6 +80,7 @@ int main() {
     EngineeringPipeline pipeline;
     DirectExecutionBoundary boundary;
     Authorizer authorizer;
+    AgentMessageBus message_bus;
 
     const auto result = pipeline.run(
         "flow-1",
@@ -88,7 +90,10 @@ int main() {
         {&implementation, &review},
         authorizer,
         boundary,
-        &workspace);
+        &workspace,
+        false,
+        {},
+        &message_bus);
 
     assert(result.status == EngineeringRunStatus::completed);
     assert(result.stages.size() == 4);
