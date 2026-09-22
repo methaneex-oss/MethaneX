@@ -89,7 +89,6 @@ AgentConversationResponse EngineeringAgentGateway::send(
     const std::string full_context = build_context(session, context);
 
     if (message_bus_ != nullptr) {
-        AgentMessageBusResult_UNUSED:
         message_bus_->send(AgentMessage{
             "conversation-" + session_id + "-" + agent_id + "-query",
             0,
