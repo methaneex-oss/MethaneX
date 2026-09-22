@@ -25,6 +25,10 @@ struct AgentConsoleMessage {
 class AgentConsole {
 public:
     explicit AgentConsole(AgentMessageBus& bus, std::string operator_id = "operator");
+    ~AgentConsole();
+
+    AgentConsole(const AgentConsole&) = delete;
+    AgentConsole& operator=(const AgentConsole&) = delete;
 
     MessageBusResult send(
         std::string run_id,
