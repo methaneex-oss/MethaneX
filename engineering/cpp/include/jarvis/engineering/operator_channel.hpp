@@ -3,13 +3,15 @@
 #include "message_bus.hpp"
 
 #include <cstddef>
+#include <deque>
+#include <mutex>
 #include <string>
 #include <vector>
 
 namespace jarvis::engineering {
 
-// A user-facing communication boundary. It deliberately speaks only in
-// normalized AgentMessage values; it does not decide which agent should act.
+// User-facing communication boundary. It transports normalized messages only;
+// agent selection and engineering decisions remain outside this boundary.
 class EngineeringOperatorChannel final {
 public:
     EngineeringOperatorChannel(
