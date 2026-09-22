@@ -13,7 +13,7 @@
 using namespace jarvis::engineering;
 
 int main() {
-    AgentMessageBus bus({32});
+    AgentMessageBus bus({64});
 
     std::vector<AgentMessage> received;
     std::mutex received_mutex;
@@ -32,8 +32,7 @@ int main() {
 
     AgentMessage message{
         "message-1", 0, "run-1", "workspace-1", "implementation", "reviewer",
-        "task-1", AgentMessageType::review, "inspect this"
-    };
+        "task-1", AgentMessageType::review, "inspect this"};
     const auto delivered = bus.send(message);
     assert(delivered.accepted);
     assert(delivered.sequence == 1);
@@ -48,7 +47,7 @@ int main() {
 
     AgentMessage oversized = message;
     oversized.message_id = "message-oversized";
-    oversized.payload.assign(33, 'x');
+    oversized.payload.assign(65, 'x');
     assert(!bus.send(oversized).accepted);
 
     AgentMessage unknown = message;
@@ -70,8 +69,7 @@ int main() {
                 AgentMessage concurrent{
                     "concurrent-" + std::to_string(thread_index) + "-" + std::to_string(i),
                     0, "run-1", "workspace-1", "builder-" + std::to_string(thread_index),
-                    "reviewer", "task-concurrent", AgentMessageType::status, "ok"
-                };
+                    "reviewer", "task-concurrent", AgentMessageType::status, "ok"};
                 assert(bus.send(std::move(concurrent)).accepted);
             }
         });
@@ -104,8 +102,7 @@ int main() {
 
     const auto wrong_run = bus.send(AgentMessage{
         "peer-2", 0, "run-3", "workspace-2", "external", "review", "task-peer",
-        AgentMessageType::feedback, "different run"
-    });
+        AgentMessageType::feedback, "different run"});
     assert(wrong_run.accepted);
     assert(review.pending() == 0);
 
