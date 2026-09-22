@@ -3,6 +3,7 @@
 #include "message_bus.hpp"
 
 #include <cstddef>
+#include <cstdint>
 #include <functional>
 #include <string>
 #include <vector>
