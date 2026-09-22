@@ -52,8 +52,14 @@ public:
             assert(task.communication != nullptr);
             const auto messages = task.communication->drain();
             assert(!messages.empty());
-            assert(messages.front().sender_id == expected_sender_);
-            saw_peer_result_ = true;
+            for (const auto& message : messages) {
+                if (message.sender_id == expected_sender_ &&
+                    message.type == AgentMessageType::result) {
+                    saw_peer_result_ = true;
+                    break;
+                }
+            }
+            assert(saw_peer_result_);
         }
         return AgentResult{true, id_, task.id, "stage completed",
             {{"report", id_ + ".report", id_}}, {{"stage", id_}}};
