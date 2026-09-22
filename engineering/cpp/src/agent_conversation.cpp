@@ -20,14 +20,14 @@ AgentConversationBridge::AgentConversationBridge(
     }
 
     const auto result = bus_.register_agent(
-        kHumanConversationEndpoint,
+        std::string{kHumanConversationEndpoint},
         [this](const AgentMessage& message) { receive(message); });
     registered_ = result.accepted;
 }
 
 AgentConversationBridge::~AgentConversationBridge() {
     if (registered_) {
-        bus_.unregister_agent(kHumanConversationEndpoint);
+        bus_.unregister_agent(std::string{kHumanConversationEndpoint});
     }
 }
 
@@ -56,7 +56,7 @@ ConversationResult AgentConversationBridge::send_to_agent(
         0,
         run_id_,
         workspace_id_,
-        kHumanConversationEndpoint,
+        std::string{kHumanConversationEndpoint},
         std::move(agent_id),
         conversation_id_,
         type,
