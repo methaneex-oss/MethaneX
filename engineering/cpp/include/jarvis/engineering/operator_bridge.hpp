@@ -58,8 +58,8 @@ public:
 private:
     bool allows(AgentMessageType type) const noexcept;
 
-    AgentConversation conversation_;
     AgentOperatorBridgePolicy policy_;
+    AgentConversation conversation_;
 };
 
 } // namespace jarvis::engineering
