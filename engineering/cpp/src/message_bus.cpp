@@ -51,15 +51,30 @@ AgentCommunicationEndpoint::AgentCommunicationEndpoint(
     AgentMessageBus& bus, std::string agent_id, std::string run_id,
     std::string workspace_id, std::size_t maximum_pending_messages)
     : bus_(bus), agent_id_(std::move(agent_id)), run_id_(std::move(run_id)),
-      workspace_id_(std::move(workspace_id)),
-      maximum_pending_messages_(maximum_pending_messages) {
-    if (agent_id_.empty() || run_id_.empty() || maximum_pending_messages_ == 0) return;
+      workspace_id_(std::move(workspace_id)), state_(std::make_shared<State>()) {
+    state_->maximum_pending_messages = maximum_pending_messages;
+    if (agent_id_.empty() || run_id_.empty() || maximum_pending_messages == 0) {
+        state_->accepting = false;
+        return;
+    }
+
+    const auto state = state_;
+    const auto run_id_copy = run_id_;
+    const auto workspace_id_copy = workspace_id_;
     const auto result = bus_.register_agent(
-        agent_id_, [this](const AgentMessage& message) { receive(message); });
+        agent_id_, [state, run_id_copy, workspace_id_copy](const AgentMessage& message) {
+            AgentCommunicationEndpoint::receive(
+                state, message, run_id_copy, workspace_id_copy);
+        });
     registered_ = result.accepted;
+    if (!registered_) state_->accepting = false;
 }
 
 AgentCommunicationEndpoint::~AgentCommunicationEndpoint() {
+    {
+        std::lock_guard lock(state_->mutex);
+        state_->accepting = false;
+    }
     if (registered_) bus_.unregister_agent(agent_id_);
 }
 
@@ -77,28 +92,33 @@ MessageBusResult AgentCommunicationEndpoint::send(
                                   std::move(correlation_id), type, std::move(payload)});
 }
 
-void AgentCommunicationEndpoint::receive(const AgentMessage& message) {
-    if (message.run_id != run_id_ ||
-        (!workspace_id_.empty() && message.workspace_id != workspace_id_)) return;
-    std::lock_guard lock(mutex_);
-    if (pending_messages_.size() >= maximum_pending_messages_) pending_messages_.pop_front();
-    pending_messages_.push_back(message);
+void AgentCommunicationEndpoint::receive(
+    const std::shared_ptr<State>& state, const AgentMessage& message,
+    const std::string& run_id, const std::string& workspace_id) {
+    if (message.run_id != run_id ||
+        (!workspace_id.empty() && message.workspace_id != workspace_id)) return;
+    std::lock_guard lock(state->mutex);
+    if (!state->accepting) return;
+    if (state->pending_messages.size() >= state->maximum_pending_messages) {
+        state->pending_messages.pop_front();
+    }
+    state->pending_messages.push_back(message);
 }
 
 std::vector<AgentMessage> AgentCommunicationEndpoint::drain() {
-    std::lock_guard lock(mutex_);
+    std::lock_guard lock(state_->mutex);
     std::vector<AgentMessage> messages;
-    messages.reserve(pending_messages_.size());
-    while (!pending_messages_.empty()) {
-        messages.push_back(std::move(pending_messages_.front()));
-        pending_messages_.pop_front();
+    messages.reserve(state_->pending_messages.size());
+    while (!state_->pending_messages.empty()) {
+        messages.push_back(std::move(state_->pending_messages.front()));
+        state_->pending_messages.pop_front();
     }
     return messages;
 }
 
 std::size_t AgentCommunicationEndpoint::pending() const noexcept {
-    std::lock_guard lock(mutex_);
-    return pending_messages_.size();
+    std::lock_guard lock(state_->mutex);
+    return state_->pending_messages.size();
 }
 
 } // namespace jarvis::engineering
