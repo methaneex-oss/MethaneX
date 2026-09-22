@@ -1,11 +1,12 @@
 #pragma once
 
+#include "agent_conversation.hpp"
 #include "model_provider.hpp"
 #include "workspace.hpp"
 
 namespace jarvis::engineering {
 
-class ModelBackedEngineeringAgent final : public EngineeringAgent {
+class ModelBackedEngineeringAgent final : public EngineeringAgent,\n                                       public ConversationalEngineeringAgent {
 public:
     ModelBackedEngineeringAgent(
         AgentDescriptor descriptor,
@@ -13,7 +14,7 @@ public:
         EngineeringWorkspace& workspace) noexcept;
 
     AgentDescriptor descriptor() const override;
-    AgentResult execute(const EngineeringTask& task) override;
+    AgentResult execute(const EngineeringTask& task) override;\n    AgentConversationResponse converse(\n        const AgentConversationRequest& request) override;
 
 private:
     static bool safe_relative_path(std::string_view path) noexcept;
