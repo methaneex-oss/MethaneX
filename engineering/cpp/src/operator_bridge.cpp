@@ -11,7 +11,8 @@ AgentOperatorBridge::AgentOperatorBridge(
     std::string run_id,
     std::string workspace_id,
     AgentOperatorBridgePolicy policy)
-    : conversation_(
+    : policy_(std::move(policy)),
+      conversation_(
           bus,
           std::move(operator_id),
           std::move(run_id),
@@ -23,8 +24,7 @@ AgentOperatorBridge::AgentOperatorBridge(
               if (!allows(type)) return false;
               return !policy_.authorize || policy_.authorize(sender, recipient, type);
           },
-          AgentConversationPolicy{policy.maximum_pending_messages}),
-      policy_(std::move(policy)) {}
+          AgentConversationPolicy{policy_.maximum_pending_messages}) {}
 
 bool AgentOperatorBridge::connected() const noexcept { return conversation_.connected(); }
 const std::string& AgentOperatorBridge::operator_id() const noexcept {
