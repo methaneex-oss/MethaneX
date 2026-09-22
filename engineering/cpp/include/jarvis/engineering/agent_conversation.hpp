@@ -3,7 +3,11 @@
 #include "message_bus.hpp"
 
 #include <cstddef>
+#include <cstdint>
+#include <deque>
+#include <mutex>
 #include <string>
+#include <string_view>
 #include <vector>
 
 namespace jarvis::engineering {
