@@ -29,16 +29,8 @@ int main() {
     assert(!duplicate.accepted);
 
     AgentMessage message{
-        "message-1",
-        0,
-        "run-1",
-        "workspace-1",
-        "implementation",
-        "reviewer",
-        "task-1",
-        AgentMessageType::review,
-        "inspect this"
-    };
+        "message-1", 0, "run-1", "workspace-1", "implementation", "reviewer",
+        "task-1", AgentMessageType::review, "inspect this"};
     const auto delivered = bus.send(message);
     assert(delivered.accepted);
     assert(delivered.sequence == 1);
@@ -75,52 +67,33 @@ int main() {
             for (std::size_t i = 0; i < messages_per_thread; ++i) {
                 AgentMessage concurrent{
                     "concurrent-" + std::to_string(thread_index) + "-" + std::to_string(i),
-                    0,
-                    "run-1",
-                    "workspace-1",
-                    "builder-" + std::to_string(thread_index),
-                    "reviewer",
-                    "task-concurrent",
-                    AgentMessageType::status,
-                    "ok"
-                };
+                    0, "run-1", "workspace-1",
+                    "builder-" + std::to_string(thread_index), "reviewer",
+                    "task-concurrent", AgentMessageType::status, "ok"};
                 assert(bus.send(std::move(concurrent)).accepted);
             }
         });
     }
 
-    for (auto& worker : workers) {
-        worker.join();
-    }
+    for (auto& worker : workers) worker.join();
 
     {
         std::lock_guard lock(received_mutex);
         assert(received.size() == 1 + threads * messages_per_thread);
-
         std::vector<std::uint64_t> sequences;
         sequences.reserve(received.size());
-        for (const auto& item : received) {
-            sequences.push_back(item.sequence);
-        }
+        for (const auto& item : received) sequences.push_back(item.sequence);
         std::sort(sequences.begin(), sequences.end());
-        for (std::size_t i = 0; i < sequences.size(); ++i) {
-            assert(sequences[i] == i + 1);
-        }
+        for (std::size_t i = 0; i < sequences.size(); ++i) assert(sequences[i] == i + 1);
     }
 
-    AgentCommunicationEndpoint implementation(
-        bus, "implementation", "run-2", "workspace-2");
-    AgentCommunicationEndpoint review(
-        bus, "review", "run-2", "workspace-2");
+    AgentCommunicationEndpoint implementation(bus, "implementation", "run-2", "workspace-2");
+    AgentCommunicationEndpoint review(bus, "review", "run-2", "workspace-2");
     assert(implementation.registered());
     assert(review.registered());
 
     const auto peer_message = implementation.send(
-        "peer-1",
-        "review",
-        "task-peer",
-        AgentMessageType::request,
-        "please inspect");
+        "peer-1", "review", "task-peer", AgentMessageType::request, "please inspect");
     assert(peer_message.accepted);
     assert(review.pending() == 1);
 
@@ -130,19 +103,34 @@ int main() {
     assert(peer_messages.front().payload == "please inspect");
 
     const auto wrong_run = bus.send(AgentMessage{
-        "peer-2",
-        0,
-        "run-3",
-        "workspace-2",
-        "external",
-        "review",
-        "task-peer",
-        AgentMessageType::feedback,
-        "different run"
-    });
+        "peer-2", 0, "run-3", "workspace-2", "external", "review", "task-peer",
+        AgentMessageType::feedback, "different run"});
     assert(wrong_run.accepted);
-    // Endpoint identity filters cross-run traffic before it enters the inbox.
     assert(review.pending() == 0);
+
+    AgentOperatorEndpoint operator_endpoint(
+        bus, "operator:primary", "run-2", "workspace-2");
+    assert(operator_endpoint.registered());
+
+    const auto operator_request = operator_endpoint.send_to_agent(
+        "operator-1", "implementation", "task-peer", AgentMessageType::request,
+        "Explain your current work and report blockers.");
+    assert(operator_request.accepted);
+    assert(implementation.pending() == 1);
+    const auto operator_messages = implementation.drain();
+    assert(operator_messages.size() == 1);
+    assert(operator_messages.front().sender_id == "operator:primary");
+    assert(operator_messages.front().payload == "Explain your current work and report blockers.");
+
+    const auto agent_reply = implementation.send(
+        "agent-reply-1", "operator:primary", "task-peer", AgentMessageType::result,
+        "Current work is progressing; no blocker.");
+    assert(agent_reply.accepted);
+    assert(operator_endpoint.pending() == 1);
+    const auto operator_replies = operator_endpoint.receive();
+    assert(operator_replies.size() == 1);
+    assert(operator_replies.front().sender_id == "implementation");
+    assert(operator_replies.front().payload == "Current work is progressing; no blocker.");
 
     assert(bus.unregister_agent("reviewer").accepted);
     assert(!bus.unregister_agent("reviewer").accepted);
