@@ -1,7 +1,10 @@
 #include "jarvis/engineering/scheduler.hpp"
 
+#include <atomic>
 #include <cassert>
+#include <chrono>
 #include <string>
+#include <thread>
 #include <utility>
 #include <vector>
 
@@ -36,6 +39,38 @@ private:
     bool concurrent_;
     bool accept_;
     bool saw_prior_artifact_{false};
+};
+
+class ParallelSchedulerAgent final : public EngineeringAgent {
+public:
+    ParallelSchedulerAgent(
+        std::string id,
+        std::atomic<int>& active,
+        std::atomic<int>& maximum_active)
+        : id_(std::move(id)), active_(active), maximum_active_(maximum_active) {}
+
+    AgentDescriptor descriptor() const override {
+        return AgentDescriptor{
+            id_, id_, "test", "parallel scheduler fixture",
+            {"engineering"}, {"workspace.read"}, {"source"}, {"report"},
+            0.1, 1.0, AgentRisk::low, AgentAvailability::available, true};
+    }
+
+    AgentResult execute(const EngineeringTask& task) override {
+        const int current = active_.fetch_add(1) + 1;
+        int observed = maximum_active_.load();
+        while (current > observed &&
+               !maximum_active_.compare_exchange_weak(observed, current)) {
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(40));
+        active_.fetch_sub(1);
+        return {true, id_, task.id, "parallel ok", {}, {}};
+    }
+
+private:
+    std::string id_;
+    std::atomic<int>& active_;
+    std::atomic<int>& maximum_active_;
 };
 
 EngineeringStageTask stage(
@@ -110,6 +145,19 @@ int main() {
     assert(execution.nodes[0].status == EngineeringNodeStatus::completed);
     assert(execution.nodes[1].status == EngineeringNodeStatus::completed);
     assert(consumer.saw_prior_artifact());
+
+    std::atomic<int> active{0};
+    std::atomic<int> maximum_active{0};
+    ParallelSchedulerAgent parallel_a("parallel.a", active, maximum_active);
+    ParallelSchedulerAgent parallel_b("parallel.b", active, maximum_active);
+    const auto concurrent_execution = scheduler.execute(
+        {stage("parallel.a", "parallel.a", {}, {"src/parallel_a.cpp"}),
+         stage("parallel.b", "parallel.b", {}, {"src/parallel_b.cpp"})},
+        {&parallel_a, &parallel_b}, authorizer, boundary,
+        EngineeringSchedulerPolicy{2, true});
+    assert(concurrent_execution.accepted);
+    assert(concurrent_execution.nodes.size() == 2);
+    assert(maximum_active.load() == 2);
 
     SchedulerAgent failing("failing", true, false);
     SchedulerAgent blocked("blocked", true);
