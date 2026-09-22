@@ -27,6 +27,7 @@ struct EngineeringSchedule {
 };
 
 enum class EngineeringNodeStatus : std::uint8_t {
+    pending,
     completed,
     rejected,
     blocked
