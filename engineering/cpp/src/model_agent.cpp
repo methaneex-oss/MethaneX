@@ -76,6 +76,9 @@ std::size_t ModelBackedEngineeringAgent::response_bytes(const ModelResponse& res
     return total;
 }
 
+ModelBackedEngineeringAgent::ModelBackedEngineeringAgent(
+    ModelBackedEngineeringAgent&&) noexcept = default;
+
 AgentResult ModelBackedEngineeringAgent::execute(const EngineeringTask& task) {
     const auto model = provider_.descriptor();
     if (!valid_model_descriptor(model) || !valid_task(task)) {
@@ -89,6 +92,10 @@ AgentResult ModelBackedEngineeringAgent::execute(const EngineeringTask& task) {
     }
     for (const auto& evidence : task.prior_stage_evidence) {
         context += "\nprior.evidence=" + evidence.kind + "|" + evidence.value;
+    }
+    for (const auto& message : task.incoming_messages) {
+        context += "\nincoming.message=" + message.sender_id + "|" +
+                   message.correlation_id + "|" + message.payload;
     }
     if (task.communication != nullptr) {
         for (const auto& message : task.communication->drain()) {
