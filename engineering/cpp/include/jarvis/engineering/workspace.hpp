@@ -31,6 +31,7 @@ public:
                                         std::string_view digest) = 0;
     virtual WorkspaceResult read_file(std::string_view workspace_id,
                                       std::string_view path) {
+        (void)path;
         return {false, std::string(workspace_id), "workspace read not supported", {}, {}};
     }
     virtual WorkspaceResult commit(std::string_view workspace_id,
