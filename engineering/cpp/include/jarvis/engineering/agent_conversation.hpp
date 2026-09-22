@@ -2,21 +2,11 @@
 
 #include "message_bus.hpp"
 
+#include <cstdint>
 #include <string>
 #include <vector>
 
 namespace jarvis::engineering {
-
-enum class EngineeringConversationActor : std::uint8_t {
-    operator_user,
-    assistant,
-    agent
-};
-
-struct EngineeringConversationMessage {
-    AgentMessage message;
-    EngineeringConversationActor sender_type{EngineeringConversationActor::agent};
-};
 
 class EngineeringAgentConversation {
 public:
@@ -38,13 +28,6 @@ public:
     MessageBusResult send_from_assistant(
         std::string agent_id,
         std::string correlation_id,
-        std::string content);
-
-    MessageBusResult send_from_agent(
-        std::string agent_id,
-        std::string recipient_id,
-        std::string correlation_id,
-        AgentMessageType type,
         std::string content);
 
     std::vector<AgentMessage> drain_operator();
