@@ -34,6 +34,43 @@ private:
     std::string capability_;
 };
 
+class CommunicatingAgent final : public EngineeringAgent {
+public:
+    CommunicatingAgent(std::string id, std::string capability, std::string expected_sender)
+        : id_(std::move(id)), capability_(std::move(capability)),
+          expected_sender_(std::move(expected_sender)) {}
+
+    AgentDescriptor descriptor() const override {
+        return AgentDescriptor{id_, id_, "test", "communication fixture",
+            {capability_}, {"workspace.read"}, {"source"}, {"report"}, 0.1, 1.0,
+            AgentRisk::low, AgentAvailability::available, true};
+    }
+
+    AgentResult execute(const EngineeringTask& task) override {
+        ++calls;
+        if (communication_required_) {
+            assert(task.communication != nullptr);
+            const auto messages = task.communication->drain();
+            assert(!messages.empty());
+            assert(messages.front().sender_id == expected_sender_);
+            saw_peer_result_ = true;
+        }
+        return AgentResult{true, id_, task.id, "stage completed",
+            {{"report", id_ + ".report", id_}}, {{"stage", id_}}};
+    }
+
+    void require_peer_message() noexcept { communication_required_ = true; }
+    bool saw_peer_result() const noexcept { return saw_peer_result_; }
+    int calls{0};
+
+private:
+    std::string id_;
+    std::string capability_;
+    std::string expected_sender_;
+    bool communication_required_{false};
+    bool saw_peer_result_{false};
+};
+
 class DenyAuthorizer final : public EngineeringAuthorizer {
 public:
     bool authorize(const EngineeringTask&, const AgentDescriptor&) const override {
@@ -148,6 +185,35 @@ int main() {
     assert(selected_result.stages.size() == 2);
     assert(implementation.calls == 3);
     assert(review.calls == 3);
+
+    AgentMessageBus bus({4096});
+    CommunicatingAgent communicating_implementation(
+        "agent.comm-implementation", "code.implementation", "");
+    CommunicatingAgent communicating_review(
+        "agent.comm-review", "code.review", "agent.comm-implementation");
+    communicating_review.require_peer_message();
+
+    const auto communication_result = pipeline.run(
+        "run-communication",
+        {{EngineeringStage::implementation,
+          task("communication-implementation", "code.implementation"),
+          communicating_implementation.descriptor().id},
+         {EngineeringStage::review,
+          task("communication-review", "code.review"),
+          communicating_review.descriptor().id}},
+        {&communicating_implementation, &communicating_review},
+        allow,
+        boundary,
+        nullptr,
+        false,
+        {},
+        &bus);
+
+    assert(communication_result.status == EngineeringRunStatus::completed);
+    assert(communication_result.stages.size() == 2);
+    assert(communicating_review.saw_peer_result());
+    assert(communicating_implementation.calls == 1);
+    assert(communicating_review.calls == 1);
 
     const auto out_of_order = pipeline.run(
         "run-order",
