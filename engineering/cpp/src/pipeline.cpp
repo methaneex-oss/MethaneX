@@ -12,6 +12,29 @@ int stage_rank(EngineeringStage stage) noexcept {
     return static_cast<int>(stage);
 }
 
+const char* stage_name(EngineeringStage stage) noexcept {
+    switch (stage) {
+    case EngineeringStage::implementation: return "implementation";
+    case EngineeringStage::review: return "review";
+    case EngineeringStage::verification: return "verification";
+    }
+    return "unknown";
+}
+
+std::string result_payload(EngineeringStage stage, std::size_t attempt, const AgentResult& result) {
+    std::string payload = "stage=" + std::string(stage_name(stage)) +
+                          ";attempt=" + std::to_string(attempt) +
+                          ";accepted=" + (result.accepted ? "true" : "false") +
+                          ";reason=" + result.reason;
+    for (const auto& artifact : result.artifacts) {
+        payload += ";artifact=" + artifact.type + "|" + artifact.location + "|" + artifact.digest;
+    }
+    for (const auto& evidence : result.evidence) {
+        payload += ";evidence=" + evidence.kind + "|" + evidence.value;
+    }
+    return payload;
+}
+
 } // namespace
 
 EngineeringAgent* EngineeringPipeline::find_agent(
@@ -61,6 +84,7 @@ EngineeringRunResult EngineeringPipeline::run(
     bool first_stage = true;
     EngineeringCoordinator coordinator;
     std::vector<std::unique_ptr<AgentCommunicationEndpoint>> communication_endpoints;
+    std::unique_ptr<AgentCommunicationEndpoint> orchestrator_endpoint;
     if (message_bus != nullptr) {
         communication_endpoints.reserve(agents.size());
         const std::string communication_workspace = run_result.context.workspace_id;
@@ -72,9 +96,43 @@ EngineeringRunResult EngineeringPipeline::run(
                 run_result.run_id,
                 communication_workspace));
         }
+        orchestrator_endpoint = std::make_unique<AgentCommunicationEndpoint>(
+            *message_bus,
+            "engineering-orchestrator-" + run_result.run_id,
+            run_result.run_id,
+            communication_workspace);
     }
 
-    for (const auto& stage : stages) {
+    const auto endpoint_for = [&](const std::string& agent_id) -> AgentCommunicationEndpoint* {
+        for (const auto& endpoint : communication_endpoints) {
+            if (endpoint->registered() && endpoint->agent_id() == agent_id) return endpoint.get();
+        }
+        return nullptr;
+    };
+
+    const auto broadcast_result = [&](const std::string& sender_id,
+                                      EngineeringStage stage,
+                                      std::size_t attempt,
+                                      const AgentResult& result) -> std::string {
+        if (message_bus == nullptr) return {};
+        auto* sender = endpoint_for(sender_id);
+        if (sender == nullptr) return "sender communication endpoint unavailable";
+        const auto payload = result_payload(stage, attempt, result);
+        for (const auto& endpoint : communication_endpoints) {
+            if (!endpoint->registered() || endpoint->agent_id() == sender_id) continue;
+            const auto delivery = sender->send(
+                run_result.run_id + "-stage-" + std::to_string(run_result.stages.size()) +
+                    "-attempt-" + std::to_string(attempt) + "-result-" + endpoint->agent_id(),
+                endpoint->agent_id(),
+                "task-" + std::to_string(run_result.stages.size()),
+                result.accepted ? AgentMessageType::result : AgentMessageType::feedback,
+                payload);
+            if (!delivery.accepted) return delivery.reason;
+        }
+        return {};
+    };
+
+    for (const auto& stage : stages)
         if (!valid_task(stage.task) || (!select_agents && stage.agent_id.empty())) {
             run_result.reason = "invalid engineering stage";
             close_workspace();
@@ -133,6 +191,30 @@ EngineeringRunResult EngineeringPipeline::run(
                 }
             }
 
+            if (message_bus != nullptr && orchestrator_endpoint != nullptr && !selected_agent_id.empty()) {
+                if (endpoint_for(selected_agent_id) == nullptr) {
+                    result = AgentResult{false, selected_agent_id, task.id,
+                                         "selected agent communication endpoint unavailable", {}, {}};
+                    run_result.stages.push_back(EngineeringStageResult{stage.stage, result, attempt});
+                    break;
+                }
+                const auto request = orchestrator_endpoint->send(
+                    run_result.run_id + "-stage-" + std::to_string(run_result.stages.size()) +
+                        "-attempt-" + std::to_string(attempt) + "-request",
+                    selected_agent_id,
+                    task.id,
+                    AgentMessageType::request,
+                    "stage=" + std::string(stage_name(stage.stage)) +
+                        ";attempt=" + std::to_string(attempt) +
+                        ";objective=" + task.objective);
+                if (!request.accepted) {
+                    result = AgentResult{false, selected_agent_id, task.id,
+                                         "agent request delivery failed: " + request.reason, {}, {}};
+                    run_result.stages.push_back(EngineeringStageResult{stage.stage, result, attempt});
+                    break;
+                }
+            }
+
             if (select_agents) {
                 result = coordinator.dispatch_selected(task, agents, authorizer, boundary);
             } else {
@@ -143,6 +225,16 @@ EngineeringRunResult EngineeringPipeline::run(
                 } else {
                     result = coordinator.dispatch(task, *agent, authorizer, boundary);
                 }
+            }
+
+            const auto communication_error = broadcast_result(
+                result.agent_id.empty() ? selected_agent_id : result.agent_id,
+                stage.stage,
+                attempt,
+                result);
+            if (!communication_error.empty() && result.accepted) {
+                result.accepted = false;
+                result.reason = "agent result delivery failed: " + communication_error;
             }
 
             run_result.artifacts.insert(
