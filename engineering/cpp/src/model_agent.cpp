@@ -76,9 +76,6 @@ std::size_t ModelBackedEngineeringAgent::response_bytes(const ModelResponse& res
     return total;
 }
 
-ModelBackedEngineeringAgent::ModelBackedEngineeringAgent(
-    ModelBackedEngineeringAgent&&) noexcept = default;
-
 AgentResult ModelBackedEngineeringAgent::execute(const EngineeringTask& task) {
     const auto model = provider_.descriptor();
     if (!valid_model_descriptor(model) || !valid_task(task)) {
