@@ -31,7 +31,10 @@ private:
     EngineeringAgent& agent_;
     const EngineeringAuthorizer& authorizer_;
     EngineeringExecutionBoundary& boundary_;
+    AgentMessageBus& bus_;
     std::string workspace_id_;
+    std::string agent_endpoint_id_;
+    AgentCommunicationEndpoint agent_endpoint_;
     HumanAgentChannel human_;
 };
 
