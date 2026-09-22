@@ -89,6 +89,8 @@ public:
 
     bool registered() const noexcept;
     const std::string& agent_id() const noexcept;
+    const std::string& run_id() const noexcept;
+    const std::string& workspace_id() const noexcept;
 
     MessageBusResult send(
         std::string message_id,
