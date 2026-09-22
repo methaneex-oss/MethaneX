@@ -13,6 +13,18 @@ struct AgentCandidate {
     bool eligible{false};
 };
 
+struct AgentDispatchStep {
+    std::string agent_id;
+    AgentResult result;
+};
+
+struct AgentDispatchPlan {
+    std::vector<AgentCandidate> candidates;
+    std::vector<AgentDispatchStep> completed;
+    bool accepted{false};
+    std::string reason;
+};
+
 class EngineeringCoordinator {
 public:
     std::vector<AgentCandidate> discover(
@@ -31,6 +43,12 @@ public:
 
     AgentResult dispatch_selected(
         const EngineeringTask& task,
+        const std::vector<EngineeringAgent*>& agents,
+        const EngineeringAuthorizer& authorizer,
+        EngineeringExecutionBoundary& boundary) const;
+
+    AgentDispatchPlan dispatch_sequence(
+        EngineeringTask task,
         const std::vector<EngineeringAgent*>& agents,
         const EngineeringAuthorizer& authorizer,
         EngineeringExecutionBoundary& boundary) const;
