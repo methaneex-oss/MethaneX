@@ -54,6 +54,7 @@ public:
     MessageBusResult unregister_agent(const std::string& agent_id);
     MessageBusResult send(AgentMessage message);
     std::size_t registered_agents() const noexcept;
+    std::vector<std::string> registered_agent_ids() const;
 private:
     struct Subscriber { AgentMessageHandler handler; };
     MessageBusConfig config_;
