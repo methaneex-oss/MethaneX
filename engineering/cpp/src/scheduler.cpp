@@ -152,7 +152,7 @@ EngineeringScheduleResult EngineeringScheduler::execute(
 
     std::vector<EngineeringStageTask> tasks = stages;
     std::vector<EngineeringNodeStatus> statuses(
-        tasks.size(), EngineeringNodeStatus::completed);
+        tasks.size(), EngineeringNodeStatus::pending);
     std::unordered_map<std::string, std::size_t> by_id;
     by_id.reserve(tasks.size());
     for (std::size_t i = 0; i < tasks.size(); ++i) by_id.emplace(tasks[i].task.id, i);
@@ -200,9 +200,6 @@ EngineeringScheduleResult EngineeringScheduler::execute(
                 }
                 for (const auto& evidence : dispatch_result.evidence) {
                     tasks[index].task.prior_stage_evidence.push_back(evidence);
-                }
-                for (const auto dependent : schedule.waves) {
-                    (void)dependent;
                 }
                 for (std::size_t dependent = 0; dependent < tasks.size(); ++dependent) {
                     if (!contains(tasks[dependent].task.dependencies, tasks[index].task.id)) {
