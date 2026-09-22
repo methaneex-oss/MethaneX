@@ -1,6 +1,7 @@
 #include "jarvis/engineering/scheduler.hpp"
 
 #include <algorithm>
+#include <exception>
 #include <future>
 #include <unordered_map>
 #include <unordered_set>
@@ -21,27 +22,6 @@ EngineeringAgent* find_agent(
         if (agent != nullptr && agent->descriptor().id == id) return agent;
     }
     return nullptr;
-}
-
-AgentResult dispatch_task(
-    const EngineeringTask& task,
-    const std::vector<EngineeringAgent*>& agents,
-    const EngineeringAuthorizer& authorizer,
-    EngineeringExecutionBoundary& boundary) {
-    try {
-        EngineeringAgent* agent = nullptr;
-        if (!task.id.empty()) {
-            // The task's preferred agent is carried by the stage wrapper, so this
-            // helper is used only after the caller has resolved the agent.
-        }
-        (void)agent;
-        (void)agents;
-        (void)authorizer;
-        (void)boundary;
-        return {false, {}, task.id, "unresolved scheduler dispatch", {}, {}};
-    } catch (...) {
-        return {false, {}, task.id, "scheduler dispatch exception", {}, {}};
-    }
 }
 
 } // namespace
