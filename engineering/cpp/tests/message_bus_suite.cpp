@@ -1,4 +1,5 @@
 #include "jarvis/engineering/message_bus.hpp"
+#include "jarvis/engineering/operator_console.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -143,6 +144,36 @@ int main() {
     assert(wrong_run.accepted);
     // Endpoint identity filters cross-run traffic before it enters the inbox.
     assert(review.pending() == 0);
+
+    // Human/operator communication uses the same bus and correlation model.
+    EngineeringOperatorEndpoint operator_endpoint(
+        bus, "operator:human", "run-2", "workspace-2");
+    assert(operator_endpoint.registered());
+
+    const auto operator_request = operator_endpoint.ask(
+        "review", "operator-msg-1", "task-peer", "Review the current implementation.");
+    assert(operator_request.accepted);
+    assert(review.pending() == 1);
+
+    const auto operator_messages = review.drain();
+    assert(operator_messages.size() == 1);
+    assert(operator_messages.front().sender_id == "operator:human");
+    assert(operator_messages.front().correlation_id == "task-peer");
+    assert(operator_messages.front().type == AgentMessageType::request);
+
+    const auto agent_reply = review.send(
+        "agent-reply-1",
+        "operator:human",
+        "task-peer",
+        AgentMessageType::result,
+        "Review completed.");
+    assert(agent_reply.accepted);
+    assert(operator_endpoint.pending() == 1);
+
+    const auto operator_replies = operator_endpoint.drain();
+    assert(operator_replies.size() == 1);
+    assert(operator_replies.front().sender_id == "review");
+    assert(operator_replies.front().payload == "Review completed.");
 
     assert(bus.unregister_agent("reviewer").accepted);
     assert(!bus.unregister_agent("reviewer").accepted);
