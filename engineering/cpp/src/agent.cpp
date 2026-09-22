@@ -5,18 +5,6 @@
 
 namespace jarvis::engineering {
 
-namespace {
-
-bool contains_all(const std::vector<std::string>& available,
-                  const std::vector<std::string>& required) noexcept {
-    return std::all_of(required.begin(), required.end(), [&](const std::string& item) {
-        return !item.empty() &&
-               std::find(available.begin(), available.end(), item) != available.end();
-    });
-}
-
-} // namespace
-
 bool valid_descriptor(const AgentDescriptor& descriptor) noexcept {
     return !descriptor.id.empty() &&
            !descriptor.name.empty() &&
