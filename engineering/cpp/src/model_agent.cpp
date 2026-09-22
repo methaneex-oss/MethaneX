@@ -1,4 +1,5 @@
 #include "jarvis/engineering/model_agent.hpp"
+#include "jarvis/engineering/agent_charter.hpp"
 
 #include <algorithm>
 #include <cstdint>
@@ -82,8 +83,26 @@ AgentResult ModelBackedEngineeringAgent::execute(const EngineeringTask& task) {
         return {false, descriptor_.id, task.id, "invalid model, agent, or task", {}, {}};
     }
 
+    const auto charter = default_engineering_charter(descriptor_);
     std::string context = "engineering task: " + task.id +
         (task.workspace_id.empty() ? std::string{} : " workspace: " + task.workspace_id);
+    context += "\nagent.mission=" + charter.mission;
+    context += "\nagent.ownership=" + charter.ownership;
+    for (const auto& item : charter.allowed_paths) {
+        context += "\nagent.allowed_path=" + item;
+    }
+    for (const auto& item : charter.forbidden_operations) {
+        context += "\nagent.forbidden=" + item;
+    }
+    for (const auto& item : charter.preserved_contracts) {
+        context += "\nagent.preserve=" + item;
+    }
+    for (const auto& item : charter.mandatory_tests) {
+        context += "\nagent.test_requirement=" + item;
+    }
+    for (const auto& item : charter.completion_requirements) {
+        context += "\nagent.completion=" + item;
+    }
     for (const auto& artifact : task.prior_stage_artifacts) {
         context += "\nprior.artifact=" + artifact.type + "|" + artifact.location + "|" + artifact.digest;
     }
