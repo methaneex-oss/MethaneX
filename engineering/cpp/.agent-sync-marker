@@ -1,1 +1,0 @@
-Engineering agent synchronization is provided through the provider-neutral AgentMessageBus. This marker intentionally contains no runtime behavior.
