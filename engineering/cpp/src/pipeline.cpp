@@ -132,7 +132,7 @@ EngineeringRunResult EngineeringPipeline::run(
         return {};
     };
 
-    for (const auto& stage : stages)
+    for (const auto& stage : stages) {
         if (!valid_task(stage.task) || (!select_agents && stage.agent_id.empty())) {
             run_result.reason = "invalid engineering stage";
             close_workspace();
