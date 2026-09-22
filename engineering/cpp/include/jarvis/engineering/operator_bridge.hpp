@@ -32,11 +32,18 @@ public:
     const std::string& run_id() const noexcept;
     const std::string& workspace_id() const noexcept;
 
+    // Direct operator-to-agent messaging.
     MessageBusResult send(const OperatorMessage& message);
+
+    // Lets a transport present the currently connected agent endpoints to the
+    // operator without embedding agent-specific routing rules.
+    std::vector<std::string> available_agents() const;
+
     std::vector<AgentMessage> receive();
     std::size_t pending() const noexcept;
 
 private:
+    AgentMessageBus& bus_;
     AgentConversation conversation_;
 };
 
