@@ -53,7 +53,9 @@ AgentCommunicationEndpoint::AgentCommunicationEndpoint(
     : bus_(bus), agent_id_(std::move(agent_id)), run_id_(std::move(run_id)),
       workspace_id_(std::move(workspace_id)), state_(std::make_shared<State>()) {
     state_->maximum_pending_messages = maximum_pending_messages;
-    if (agent_id_.empty() || run_id_.empty() || maximum_pending_messages == 0) {
+    // An empty run id is a deliberate receive-only wildcard used by the
+    // operator endpoint. Normal agent endpoints must provide a run id.
+    if (agent_id_.empty() || maximum_pending_messages == 0) {
         state_->accepting = false;
         return;
     }
@@ -86,7 +88,9 @@ const std::string& AgentCommunicationEndpoint::workspace_id() const noexcept { r
 MessageBusResult AgentCommunicationEndpoint::send(
     std::string message_id, std::string recipient_id, std::string correlation_id,
     AgentMessageType type, std::string payload) {
-    if (!registered_) return {false, 0, "communication endpoint is not registered"};
+    if (!registered_ || run_id_.empty()) {
+        return {false, 0, "communication endpoint is receive-only"};
+    }
     return bus_.send(AgentMessage{std::move(message_id), 0, run_id_, workspace_id_,
                                   agent_id_, std::move(recipient_id),
                                   std::move(correlation_id), type, std::move(payload)});
@@ -95,7 +99,7 @@ MessageBusResult AgentCommunicationEndpoint::send(
 void AgentCommunicationEndpoint::receive(
     const std::shared_ptr<State>& state, const AgentMessage& message,
     const std::string& run_id, const std::string& workspace_id) {
-    if (message.run_id != run_id ||
+    if ((!run_id.empty() && message.run_id != run_id) ||
         (!workspace_id.empty() && message.workspace_id != workspace_id)) return;
     std::lock_guard lock(state->mutex);
     if (!state->accepting) return;
