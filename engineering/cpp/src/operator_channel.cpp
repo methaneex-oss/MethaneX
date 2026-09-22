@@ -8,7 +8,7 @@ OperatorChannel::OperatorChannel(AgentMessageBus& bus, std::string operator_id,
                                  std::size_t maximum_pending_messages)
     : bus_(bus),
       operator_id_(std::move(operator_id)),
-      endpoint_(bus_, operator_id_, "operator", "", maximum_pending_messages) {}
+      endpoint_(bus_, operator_id_, "", "", maximum_pending_messages) {}
 
 MessageBusResult OperatorChannel::send_to_agent(
     const std::string& agent_id,
@@ -17,10 +17,10 @@ MessageBusResult OperatorChannel::send_to_agent(
     const std::string& correlation_id,
     AgentMessageType type,
     const std::string& payload) {
-    (void)run_id;
-    (void)workspace_id;
-    return endpoint_.send("operator-" + std::to_string(next_message_id_++),
-                          agent_id, correlation_id, type, payload);
+    return bus_.send(AgentMessage{
+        "operator-" + std::to_string(next_message_id_++), 0,
+        run_id, workspace_id, operator_id_, agent_id, correlation_id,
+        type, payload});
 }
 
 std::vector<MessageBusResult> OperatorChannel::send_to_agents(
