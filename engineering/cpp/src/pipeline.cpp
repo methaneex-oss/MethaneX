@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <utility>
+#include <vector>
 
 namespace jarvis::engineering {
 
@@ -98,11 +99,35 @@ EngineeringRunResult EngineeringPipeline::run(
             }
             task.prior_stage_artifacts = run_result.context.artifacts;
             task.prior_stage_evidence = run_result.context.evidence;
-            if (message_bus != nullptr && !select_agents) {
+
+            std::string selected_agent_id = stage.agent_id;
+            if (select_agents) {
+                const auto ranked = coordinator.rank(task, [&]() {
+                    std::vector<AgentDescriptor> descriptors;
+                    descriptors.reserve(agents.size());
+                    for (auto* agent : agents) {
+                        if (agent != nullptr) descriptors.push_back(agent->descriptor());
+                    }
+                    return descriptors;
+                }());
+                for (const auto& candidate : ranked) {
+                    if (candidate.eligible) {
+                        selected_agent_id = candidate.agent.id;
+                        break;
+                    }
+                }
+            }
+
+            if (message_bus != nullptr && !selected_agent_id.empty()) {
                 for (const auto& endpoint : communication_endpoints) {
-                    if (endpoint->registered() &&
-                        endpoint->agent_id() == stage.agent_id) {
+                    if (endpoint->registered() && endpoint->agent_id() == selected_agent_id) {
                         task.communication = endpoint.get();
+                        task.communication_targets.clear();
+                        for (const auto& peer : communication_endpoints) {
+                            if (peer->registered() && peer->agent_id() != selected_agent_id) {
+                                task.communication_targets.push_back(peer->agent_id());
+                            }
+                        }
                         break;
                     }
                 }
