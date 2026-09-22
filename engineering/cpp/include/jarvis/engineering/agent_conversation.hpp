@@ -8,11 +8,8 @@
 
 namespace jarvis::engineering {
 
-// Boundary for human/operator or supervising-agent conversations with engineering agents.
-// Transport/UI is deliberately outside this layer; all traffic uses the same typed bus.
 struct AgentConversationPolicy {
     std::size_t maximum_pending_messages{256};
-    std::size_t maximum_payload_bytes{64 * 1024};
 };
 
 class AgentConversation {
@@ -31,13 +28,13 @@ public:
         AgentConversationPolicy policy = {});
 
     ~AgentConversation();
-
     AgentConversation(const AgentConversation&) = delete;
     AgentConversation& operator=(const AgentConversation&) = delete;
 
     bool connected() const noexcept;
     const std::string& participant_id() const noexcept;
     const std::string& run_id() const noexcept;
+    const std::string& workspace_id() const noexcept;
 
     MessageBusResult send(
         const std::string& recipient_id,
