@@ -13,6 +13,9 @@ bool EvolutionController::record_evaluation(const EvolutionExperiment& experimen
         experiment.id, experiment.proposal.key, EvolutionRecordAction::Evaluated,
         experiment.outcome, experiment.baseline_fitness, experiment.candidate_fitness,
         experiment.confidence, 0, "evaluation", {}});
+    if (staged && !recorded) {
+        adoption_journal_.reject(experiment.id, "evaluation_history_failed");
+    }
     return staged && recorded;
 }
 
@@ -36,12 +39,20 @@ bool EvolutionController::adopt(EvolutionExperiment& experiment) {
         adoption_journal_.reject(experiment.id, "adoption_commit_failed");
         return false;
     }
-    canary_.reset();
-    canary_.observe(CanaryObservation{experiment.baseline_fitness, experiment.candidate_fitness});
-    return history_.append(EvolutionHistoryRecord{
+
+    const bool recorded = history_.append(EvolutionHistoryRecord{
         experiment.id, experiment.proposal.key, EvolutionRecordAction::Adopted,
         experiment.outcome, experiment.baseline_fitness, experiment.candidate_fitness,
         experiment.confidence, 0, "adopted", {}});
+    if (!recorded) {
+        model_.rollback(experiment.proposal.key);
+        adoption_journal_.rollback(experiment.id, "adoption_history_failed");
+        return false;
+    }
+
+    canary_.reset();
+    canary_.observe(CanaryObservation{experiment.baseline_fitness, experiment.candidate_fitness});
+    return true;
 }
 
 CanaryDecision EvolutionController::observe_canary(const std::string& parameter_key,
