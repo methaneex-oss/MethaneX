@@ -3,6 +3,8 @@
 #include "message_bus.hpp"
 
 #include <cstddef>
+#include <deque>
+#include <mutex>
 #include <string>
 #include <vector>
 
