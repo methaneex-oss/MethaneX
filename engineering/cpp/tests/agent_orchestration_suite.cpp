@@ -25,7 +25,7 @@ public:
 
 class Boundary final : public EngineeringExecutionBoundary {
 public:
-    AgentResult execute(const EngineeringTask& task, EngineeringAgent& agent) override {
+    AgentResult run(const EngineeringTask& task, EngineeringAgent& agent) override {
         return agent.execute(task);
     }
 };
