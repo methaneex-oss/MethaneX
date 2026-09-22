@@ -9,7 +9,7 @@ class StubAgent final : public EngineeringAgent {
 public:
     explicit StubAgent(std::string id) : id_(std::move(id)) {}
     AgentDescriptor descriptor() const override {
-        return {id_, id_, "test", "", {"implement"}, {"workspace"}, {}, {"source"}, 0.0, 0.9, AgentRisk::low, AgentAvailability::available, false};
+        return {id_, id_, "test", "", {"implement"}, {"workspace"}, {"source"}, {"source"}, 0.0, 0.9, AgentRisk::low, AgentAvailability::available, false};
     }
     AgentResult execute(const EngineeringTask& task) override {
         return {true, id_, task.id, "ok", {{"source", id_ + ".cpp", id_}}, {{"stage", id_}}};
