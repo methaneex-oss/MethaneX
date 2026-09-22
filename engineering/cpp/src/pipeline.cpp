@@ -11,6 +11,15 @@ int stage_rank(EngineeringStage stage) noexcept {
     return static_cast<int>(stage);
 }
 
+std::string stage_name(EngineeringStage stage) {
+    switch (stage) {
+    case EngineeringStage::implementation: return "implementation";
+    case EngineeringStage::review: return "review";
+    case EngineeringStage::verification: return "verification";
+    }
+    return "unknown";
+}
+
 } // namespace
 
 EngineeringAgent* EngineeringPipeline::find_agent(
@@ -73,6 +82,15 @@ EngineeringRunResult EngineeringPipeline::run(
         }
     }
 
+    const auto endpoint_for = [&](const std::string& agent_id) -> AgentCommunicationEndpoint* {
+        for (const auto& endpoint : communication_endpoints) {
+            if (endpoint->registered() && endpoint->agent_id() == agent_id) {
+                return endpoint.get();
+            }
+        }
+        return nullptr;
+    };
+
     for (const auto& stage : stages) {
         if (!valid_task(stage.task) || (!select_agents && stage.agent_id.empty())) {
             run_result.reason = "invalid engineering stage";
@@ -98,13 +116,13 @@ EngineeringRunResult EngineeringPipeline::run(
             }
             task.prior_stage_artifacts = run_result.context.artifacts;
             task.prior_stage_evidence = run_result.context.evidence;
+
+            AgentCommunicationEndpoint* endpoint = nullptr;
             if (message_bus != nullptr && !select_agents) {
-                for (const auto& endpoint : communication_endpoints) {
-                    if (endpoint->registered() &&
-                        endpoint->agent_id() == stage.agent_id) {
-                        task.communication = endpoint.get();
-                        break;
-                    }
+                endpoint = endpoint_for(stage.agent_id);
+                task.communication = endpoint;
+                if (endpoint != nullptr) {
+                    task.incoming_messages = endpoint->drain();
                 }
             }
 
@@ -143,6 +161,33 @@ EngineeringRunResult EngineeringPipeline::run(
             run_result.reason = result.reason.empty() ? "engineering stage failed" : result.reason;
             close_workspace();
             return run_result;
+        }
+
+        // Publish a normalized stage result so downstream agents can communicate
+        // through the same provider-neutral channel without the pipeline knowing
+        // anything about their vendors or model providers.
+        if (message_bus != nullptr && !select_agents) {
+            const auto sender = endpoint_for(stage.agent_id);
+            if (sender != nullptr) {
+                for (const auto& next_stage : stages) {
+                    if (&next_stage == &stage) continue;
+                    if (stage_rank(next_stage.stage) <= stage_rank(stage.stage)) continue;
+                    const auto recipient = endpoint_for(next_stage.agent_id);
+                    if (recipient == nullptr) continue;
+                    const std::string payload =
+                        "stage=" + stage_name(stage.stage) +
+                        ";accepted=true;task=" + result.task_id +
+                        ";artifacts=" + std::to_string(result.artifacts.size()) +
+                        ";evidence=" + std::to_string(result.evidence.size());
+                    sender->send(
+                        "stage-result-" + result.task_id + "-" + std::to_string(run_result.stages.size()),
+                        recipient->agent_id(),
+                        result.task_id,
+                        AgentMessageType::result,
+                        payload);
+                    break;
+                }
+            }
         }
     }
 
