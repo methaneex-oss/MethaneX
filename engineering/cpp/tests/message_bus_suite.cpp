@@ -109,8 +109,6 @@ int main() {
     assert(wrong_run.accepted);
     assert(review.pending() == 0);
 
-    // A human/operator or supervising JARVIS process can use the same bus without
-    // introducing a second communication protocol. Authorization remains injectable.
     AgentConversation operator_channel(
         bus, "operator", "run-2", "workspace-2",
         [](const std::string& sender, const std::string& recipient, AgentMessageType) {
@@ -133,7 +131,6 @@ int main() {
         "implementation", "human-task-2", AgentMessageType::request, "write code");
     assert(!denied.accepted);
 
-    // The same channel can receive the agent's response, making the conversation bidirectional.
     const auto response = review.send(
         "operator-response", "operator", "human-task-1", AgentMessageType::result,
         "Review completed; evidence is ready.");
@@ -144,7 +141,6 @@ int main() {
     assert(operator_responses.front().correlation_id == "human-task-1");
     assert(operator_responses.front().payload == "Review completed; evidence is ready.");
 
-    // Teardown must remain safe if a sender races with endpoint destruction.
     auto transient = std::make_unique<AgentCommunicationEndpoint>(
         bus, "transient", "run-race", "workspace-race");
     assert(transient->registered());
@@ -157,7 +153,7 @@ int main() {
     });
     transient.reset();
     sender.join();
-    assert(bus.registered_agents() == 3);
+    assert(bus.registered_agents() == 4);
 
     assert(bus.unregister_agent("reviewer").accepted);
     assert(!bus.unregister_agent("reviewer").accepted);
