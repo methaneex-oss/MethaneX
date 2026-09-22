@@ -51,6 +51,21 @@ AgentResult ModelAssessmentAgent::execute(const EngineeringTask& task) {
     }
 
     std::string context = "workspace: " + task.workspace_id + "\n";
+    if (task.communication != nullptr) {
+        for (const auto& message : task.communication->drain()) {
+            context += "incoming.message=" + message.sender_id + "|" +
+                       message.correlation_id + "|" + message.payload + "\n";
+        }
+        for (const auto& target : task.communication_targets) {
+            task.communication->send(
+                "task-" + task.id + "-started-" + target,
+                target,
+                task.id,
+                AgentMessageType::status,
+                "assessment task started");
+        }
+    }
+
     for (const auto& artifact : task.prior_stage_artifacts) {
         context += "prior.artifact=" + artifact.type + "|" + artifact.location + "|" + artifact.digest + "\n";
     }
@@ -90,6 +105,16 @@ AgentResult ModelAssessmentAgent::execute(const EngineeringTask& task) {
 
     const auto response = provider_.generate(request);
     if (response.status != ModelProviderStatus::succeeded) {
+        if (task.communication != nullptr) {
+            for (const auto& target : task.communication_targets) {
+                task.communication->send(
+                    "task-" + task.id + "-failed-" + target,
+                    target,
+                    task.id,
+                    AgentMessageType::error,
+                    response.reason.empty() ? "model assessment failed" : response.reason);
+            }
+        }
         return {false, descriptor_.id, task.id,
                 response.reason.empty() ? "model assessment failed" : response.reason,
                 {}, response.evidence};
@@ -106,6 +131,17 @@ AgentResult ModelAssessmentAgent::execute(const EngineeringTask& task) {
     evidence.push_back({"assessment.output", response.output});
     evidence.push_back({"assessment.model", model.id});
     evidence.push_back({"assessment.provider", model.provider});
+
+    if (task.communication != nullptr) {
+        for (const auto& target : task.communication_targets) {
+            task.communication->send(
+                "task-" + task.id + "-completed-" + target,
+                target,
+                task.id,
+                AgentMessageType::result,
+                "assessment completed with evidence");
+        }
+    }
 
     return {true, descriptor_.id, task.id,
             "engineering assessment completed", {}, std::move(evidence)};
