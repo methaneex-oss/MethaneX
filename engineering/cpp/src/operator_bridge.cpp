@@ -20,7 +20,7 @@ AgentOperatorBridge::AgentOperatorBridge(
           [this](const std::string& sender,
                  const std::string& recipient,
                  AgentMessageType type) {
-              if (sender != operator_id()) return false;
+              if (sender != this->operator_id()) return false;
               if (!allows(type)) return false;
               return !policy_.authorize || policy_.authorize(sender, recipient, type);
           },
