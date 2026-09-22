@@ -71,6 +71,46 @@ private:
     bool saw_peer_result_{false};
 };
 
+class CommunicatingAgent final : public EngineeringAgent {
+public:
+    CommunicatingAgent(std::string id, std::string capability, std::string expected_sender)
+        : id_(std::move(id)), capability_(std::move(capability)),
+          expected_sender_(std::move(expected_sender)) {}
+
+    AgentDescriptor descriptor() const override {
+        return AgentDescriptor{
+            id_, id_, "test", "communication fixture",
+            {capability_}, {"workspace.read"}, {"source"}, {"report"}, 0.1, 1.0,
+            AgentRisk::low, AgentAvailability::available, true};
+    }
+
+    AgentResult execute(const EngineeringTask& task) override {
+        ++calls;
+        if (communication_required_) {
+            assert(task.communication != nullptr);
+            const auto messages = task.communication->drain();
+            assert(!messages.empty());
+            assert(messages.front().sender_id == expected_sender_);
+            saw_peer_result_ = true;
+        }
+        return AgentResult{
+            true, id_, task.id, "stage completed",
+            {{"report", id_ + ".report", id_}},
+            {{"stage", id_}}};
+    }
+
+    void require_peer_message() noexcept { communication_required_ = true; }
+    bool saw_peer_result() const noexcept { return saw_peer_result_; }
+    int calls{0};
+
+private:
+    std::string id_;
+    std::string capability_;
+    std::string expected_sender_;
+    bool communication_required_{false};
+    bool saw_peer_result_{false};
+};
+
 class DenyAuthorizer final : public EngineeringAuthorizer {
 public:
     bool authorize(const EngineeringTask&, const AgentDescriptor&) const override {
