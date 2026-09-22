@@ -1,5 +1,6 @@
 #include "jarvis/engineering/message_bus.hpp"
 
+#include <algorithm>
 #include <utility>
 
 namespace jarvis::engineering {
@@ -45,6 +46,15 @@ MessageBusResult AgentMessageBus::send(AgentMessage message) {
 std::size_t AgentMessageBus::registered_agents() const noexcept {
     std::lock_guard lock(mutex_);
     return subscribers_.size();
+}
+
+std::vector<std::string> AgentMessageBus::registered_agent_ids() const {
+    std::lock_guard lock(mutex_);
+    std::vector<std::string> ids;
+    ids.reserve(subscribers_.size());
+    for (const auto& [id, _] : subscribers_) ids.push_back(id);
+    std::sort(ids.begin(), ids.end());
+    return ids;
 }
 
 AgentCommunicationEndpoint::AgentCommunicationEndpoint(
