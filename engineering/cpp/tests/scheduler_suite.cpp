@@ -3,6 +3,7 @@
 #include <cassert>
 #include <string>
 #include <utility>
+#include <vector>
 
 using namespace jarvis::engineering;
 
@@ -10,8 +11,8 @@ namespace {
 
 class SchedulerAgent final : public EngineeringAgent {
 public:
-    explicit SchedulerAgent(std::string id, bool concurrent)
-        : id_(std::move(id)), concurrent_(concurrent) {}
+    explicit SchedulerAgent(std::string id, bool concurrent, bool accept = true)
+        : id_(std::move(id)), concurrent_(concurrent), accept_(accept) {}
 
     AgentDescriptor descriptor() const override {
         return AgentDescriptor{
@@ -21,12 +22,20 @@ public:
     }
 
     AgentResult execute(const EngineeringTask& task) override {
-        return {true, id_, task.id, "ok", {}, {}};
+        saw_prior_artifact_ = !task.prior_stage_artifacts.empty();
+        if (!accept_) return {false, id_, task.id, "intentional failure", {}, {}};
+        return {true, id_, task.id, "ok",
+                {{"report", "memory/report", "digest"}},
+                {{"scheduler", "executed"}}};
     }
+
+    bool saw_prior_artifact() const noexcept { return saw_prior_artifact_; }
 
 private:
     std::string id_;
     bool concurrent_;
+    bool accept_;
+    bool saw_prior_artifact_{false};
 };
 
 EngineeringStageTask stage(
@@ -87,6 +96,33 @@ int main() {
         {&a, &b});
     assert(cycle.status == EngineeringScheduleStatus::invalid);
     assert(cycle.reason == "engineering stage dependency cycle detected");
+
+    AllowAllAuthorizer authorizer;
+    DirectExecutionBoundary boundary;
+    SchedulerAgent producer("producer", true);
+    SchedulerAgent consumer("consumer", true);
+    const auto execution = scheduler.execute(
+        {stage("producer", "producer", {}, {"src/producer.cpp"}),
+         stage("consumer", "consumer", {"producer"}, {"src/consumer.cpp"})},
+        {&producer, &consumer}, authorizer, boundary);
+    assert(execution.accepted);
+    assert(execution.nodes.size() == 2);
+    assert(execution.nodes[0].status == EngineeringNodeStatus::completed);
+    assert(execution.nodes[1].status == EngineeringNodeStatus::completed);
+    assert(consumer.saw_prior_artifact());
+
+    SchedulerAgent failing("failing", true, false);
+    SchedulerAgent blocked("blocked", true);
+    const auto failed = scheduler.execute(
+        {stage("failing", "failing", {}, {"src/failing.cpp"}),
+         stage("blocked", "blocked", {"failing"}, {"src/blocked.cpp"})},
+        {&failing, &blocked}, authorizer, boundary);
+    assert(!failed.accepted);
+    assert(failed.nodes.size() == 2);
+    assert(failed.nodes[0].status == EngineeringNodeStatus::rejected);
+    assert(failed.nodes[1].status == EngineeringNodeStatus::blocked);
+    assert(failed.nodes[1].blocking_dependencies.size() == 1);
+    assert(failed.nodes[1].blocking_dependencies[0] == "failing");
 
     return 0;
 }
