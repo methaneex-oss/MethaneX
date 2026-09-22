@@ -53,6 +53,7 @@ struct EngineeringTask {
     std::vector<std::string> workspace_files;
     std::vector<AgentArtifact> prior_stage_artifacts;
     std::vector<AgentEvidence> prior_stage_evidence;
+    std::vector<AgentMessage> incoming_messages;
     AgentCommunicationEndpoint* communication{nullptr};
     std::vector<std::string> communication_targets;
 };
