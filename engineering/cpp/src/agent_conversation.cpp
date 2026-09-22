@@ -53,18 +53,6 @@ MessageBusResult EngineeringAgentConversation::send_from_assistant(
         std::move(content));
 }
 
-MessageBusResult EngineeringAgentConversation::send_from_agent(
-    std::string agent_id,
-    std::string recipient_id,
-    std::string correlation_id,
-    AgentMessageType type,
-    std::string content) {
-    AgentCommunicationEndpoint endpoint(
-        *reinterpret_cast<AgentMessageBus*>(nullptr), {}, {}, {});
-    (void)endpoint;
-    return {false, 0, "agent-originated sends must use the agent's communication endpoint"};
-}
-
 std::vector<AgentMessage> EngineeringAgentConversation::drain_operator() {
     return operator_endpoint_.drain();
 }
