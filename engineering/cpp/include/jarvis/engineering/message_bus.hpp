@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <deque>
 #include <functional>
+#include <memory>
 #include <mutex>
 #include <string>
 #include <unordered_map>
@@ -80,14 +81,23 @@ public:
     std::vector<AgentMessage> drain();
     std::size_t pending() const noexcept;
 private:
-    void receive(const AgentMessage& message);
+    struct State {
+        mutable std::mutex mutex;
+        std::deque<AgentMessage> pending_messages;
+        std::size_t maximum_pending_messages{256};
+        bool accepting{true};
+    };
+
+    static void receive(const std::shared_ptr<State>& state,
+                        const AgentMessage& message,
+                        const std::string& run_id,
+                        const std::string& workspace_id);
+
     AgentMessageBus& bus_;
     std::string agent_id_;
     std::string run_id_;
     std::string workspace_id_;
-    std::size_t maximum_pending_messages_;
-    mutable std::mutex mutex_;
-    std::deque<AgentMessage> pending_messages_;
+    std::shared_ptr<State> state_;
     bool registered_{false};
 };
 

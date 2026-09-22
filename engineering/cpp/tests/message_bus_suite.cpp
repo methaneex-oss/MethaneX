@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <memory>
 #include <mutex>
 #include <string>
 #include <thread>
@@ -136,6 +137,20 @@ int main() {
     assert(operator_responses.front().sender_id == "review");
     assert(operator_responses.front().correlation_id == "human-task-1");
     assert(operator_responses.front().payload == "Review completed; evidence is ready.");
+
+    auto transient = std::make_unique<AgentCommunicationEndpoint>(
+        bus, "transient", "run-race", "workspace-race");
+    assert(transient->registered());
+    std::thread sender([&] {
+        for (std::size_t i = 0; i < 1000; ++i) {
+            bus.send(AgentMessage{
+                "race-" + std::to_string(i), 0, "run-race", "workspace-race", "sender",
+                "transient", "race", AgentMessageType::status, "payload"});
+        }
+    });
+    transient.reset();
+    sender.join();
+    assert(bus.registered_agents() == 4);
 
     assert(bus.unregister_agent("reviewer").accepted);
     assert(!bus.unregister_agent("reviewer").accepted);
