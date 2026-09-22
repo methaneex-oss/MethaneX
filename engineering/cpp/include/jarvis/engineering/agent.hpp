@@ -51,6 +51,7 @@ struct EngineeringTask {
     std::string workspace_id;
     bool manage_workspace{true};
     std::vector<std::string> workspace_files;
+    std::vector<std::string> dependencies;
     std::vector<AgentArtifact> prior_stage_artifacts;
     std::vector<AgentEvidence> prior_stage_evidence;
     AgentCommunicationEndpoint* communication{nullptr};
