@@ -1,5 +1,6 @@
 #include "jarvis/engineering/operator_bridge.hpp"
 
+#include <algorithm>
 #include <cassert>
 #include <string>
 
@@ -23,6 +24,10 @@ int main() {
     assert(operator_bridge.operator_id() == "operator");
     assert(operator_bridge.run_id() == "run-operator");
     assert(operator_bridge.workspace_id() == "workspace-operator");
+
+    const auto available = operator_bridge.available_agents();
+    assert(std::find(available.begin(), available.end(), "builder") != available.end());
+    assert(std::find(available.begin(), available.end(), "operator") == available.end());
 
     const auto request = operator_bridge.send({
         "builder", "task-1", AgentMessageType::request, "Implement the requested change."
