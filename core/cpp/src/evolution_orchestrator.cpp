@@ -79,28 +79,31 @@ EvolutionOrchestrationResult EvolutionOrchestrator::run(
 
     if (result.experiments.empty()) return result;
 
-    // Evaluate every candidate first, then adopt at most one empirical winner.
-    // This prevents multiple simultaneous changes from sharing one canary stream.
+    // Persist evaluation evidence before selecting a winner. A candidate whose
+    // evidence cannot be recorded is not eligible for adoption.
+    if (controller != nullptr) {
+        for (std::size_t i = 0; i < result.experiments.size(); ++i) {
+            auto& experiment = result.experiments[i];
+            if (experiment.candidate_executed && !controller->record_evaluation(experiment)) {
+                result.lifecycle[i] = EvolutionLifecycleState::EvaluationRejected;
+                ++result.rejected;
+            }
+        }
+    }
+
+    // Evaluate every successfully recorded candidate first, then adopt at most
+    // one empirical winner so multiple changes never share one canary stream.
     std::size_t winner = result.experiments.size();
     double winner_gain = 0.0;
     for (std::size_t i = 0; i < result.experiments.size(); ++i) {
-        auto& experiment = result.experiments[i];
-        if (experiment.outcome != ExperimentOutcome::Improved) continue;
+        const auto& experiment = result.experiments[i];
+        if (result.lifecycle[i] != EvolutionLifecycleState::CandidateEvaluated ||
+            experiment.outcome != ExperimentOutcome::Improved) continue;
         const double gain = experiment.candidate_fitness - experiment.baseline_fitness;
         if (winner == result.experiments.size() || gain > winner_gain ||
             (gain == winner_gain && experiment.confidence > result.experiments[winner].confidence)) {
             winner = i;
             winner_gain = gain;
-        }
-    }
-
-    for (std::size_t i = 0; i < result.experiments.size(); ++i) {
-        auto& experiment = result.experiments[i];
-        if (controller != nullptr && experiment.candidate_executed) {
-            if (!controller->record_evaluation(experiment)) {
-                result.lifecycle[i] = EvolutionLifecycleState::EvaluationRejected;
-                ++result.rejected;
-            }
         }
     }
 

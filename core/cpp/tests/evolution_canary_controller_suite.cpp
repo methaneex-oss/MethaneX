@@ -15,7 +15,7 @@ int main() {
     EvolutionExperiment experiment{
         "exp-canary",
         EvolutionProposal{"reasoning.weight", 0.4, 0.5, 0.1, 0.95},
-        0.70, 0.84, 0.05, 0.95, ExperimentOutcome::Improved, true};
+        0.70, 0.84, 0.05, 0.95, 0.10, 0.15, 1.4, ExperimentOutcome::Improved, true};
 
     assert(controller.record_evaluation(experiment));
     assert(controller.adopt(experiment));

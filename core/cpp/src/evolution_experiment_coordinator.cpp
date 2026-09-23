@@ -12,10 +12,13 @@ EvolutionTrialBatch EvolutionExperimentCoordinator::run(
     const CandidateExecutor& candidate_executor,
     EvolutionTrialConfig config) noexcept {
     EvolutionTrialBatch batch;
+    const double evidence_confidence = std::max(config.minimum_confidence, experiment.proposal.confidence);
     if (config.baseline_trials == 0 || config.candidate_trials == 0 ||
         !std::isfinite(config.minimum_improvement) || config.minimum_improvement < 0.0 ||
-        !std::isfinite(config.minimum_confidence) || config.minimum_confidence < 0.0 ||
-        config.minimum_confidence > 1.0) {
+        !std::isfinite(config.minimum_confidence) || config.minimum_confidence <= 0.0 ||
+        config.minimum_confidence >= 1.0 ||
+        !std::isfinite(evidence_confidence) || evidence_confidence <= 0.0 ||
+        evidence_confidence >= 1.0) {
         experiment.outcome = ExperimentOutcome::Invalid;
         return batch;
     }
@@ -53,13 +56,25 @@ EvolutionTrialBatch EvolutionExperimentCoordinator::run(
     experiment.baseline_fitness = batch.baseline.mean;
     experiment.candidate_fitness = batch.candidate.mean;
     experiment.minimum_improvement = config.minimum_improvement;
-    experiment.confidence = std::min(batch.baseline.confidence, batch.candidate.confidence);
+    experiment.confidence = evidence_confidence;
+    experiment.confidence_interval_low = EvolutionTrials::difference_confidence_interval_low(
+        batch.baseline, batch.candidate, evidence_confidence);
+    experiment.confidence_interval_high = EvolutionTrials::difference_confidence_interval_high(
+        batch.baseline, batch.candidate, evidence_confidence);
+    experiment.effect_size = EvolutionTrials::standardized_effect_size(
+        batch.baseline, batch.candidate);
+    if (!std::isfinite(experiment.confidence_interval_low) ||
+        !std::isfinite(experiment.confidence_interval_high) ||
+        (std::isnan(experiment.effect_size))) {
+        experiment.outcome = ExperimentOutcome::Invalid;
+        return batch;
+    }
     experiment.candidate_executed = true;
     batch.executed = true;
 
     if (!EvolutionTrials::supports_adoption(batch.baseline, batch.candidate,
                                             config.minimum_improvement,
-                                            config.minimum_confidence)) {
+                                            evidence_confidence)) {
         const double gain = batch.candidate.mean - batch.baseline.mean;
         experiment.outcome = gain < -config.minimum_improvement
             ? ExperimentOutcome::Degraded

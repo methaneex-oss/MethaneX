@@ -8,7 +8,7 @@ int main() {
     EvolutionExperiment experiment{
         "trial-batch",
         EvolutionProposal{"planner.weight", 0.4, 0.5, 0.1, 0.9},
-        0.0, 0.0, 0.05, 0.0, ExperimentOutcome::Pending, false};
+        0.0, 0.0, 0.05, 0.0, 0.0, 0.0, 0.0, ExperimentOutcome::Pending, false};
 
     EvolutionSandbox sandbox;
     const CandidateExecutor baseline = [](const EvolutionProposal&, const SandboxLimits&) {
