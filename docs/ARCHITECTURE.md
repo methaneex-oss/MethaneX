@@ -16,7 +16,7 @@ Attention ───────→ Working Context
 Belief Revision ←→ World Model
     ↓                     ↓
 Causal Model ←────── Prediction
-    ↓                     ↓
+    ↓
 Simulation / Counterfactuals
     ↓
 Planning / Decision
@@ -40,7 +40,9 @@ Learning is outcome-driven. Predictions can be resolved against observed results
 
 ## Evolution
 
-Evolution is intended to be evidence-driven rather than scheduled. The system can compare observed performance, identify opportunities for improvement, formulate changes and retain successful adaptations. Evolution must remain observable, reversible and integrity-preserving.
+Evolution is intended to be evidence-driven rather than scheduled. The C++ core owns the lifecycle, deterministic evidence gates, orchestration, history and reversible adoption semantics. Statistical/ML-heavy learning may be supplied by Python through an explicit provider boundary rather than embedding model-specific intelligence into the native core.
+
+Evolution must remain observable, reversible and integrity-preserving.
 
 ## Resilience
 
@@ -48,4 +50,13 @@ The brain maintains awareness of component health and capability availability. F
 
 ## Language boundaries
 
-The cognitive substrate is intentionally polyglot. Native computation, memory and low-level systems concerns can use C++; concurrency- and safety-sensitive services can use Rust; integration contracts can use TypeScript; Python can be used where its ecosystem is the technically appropriate choice. Components communicate through explicit contracts rather than language-specific assumptions.
+The cognitive substrate is intentionally polyglot:
+
+- **C++** — cognitive state, deterministic reasoning primitives, memory/state structures, orchestration, lifecycle coordination and other native low-latency substrate work.
+- **Rust** — security-sensitive runtime services, process/sandbox enforcement, privilege boundaries, concurrency-sensitive infrastructure and other components where memory safety is a primary requirement.
+- **Python** — scientific/ML-heavy learning, statistical experimentation, model evaluation and optimization where its ecosystem provides a real technical advantage.
+- **TypeScript** — integration contracts, external interfaces and orchestration-facing adapters.
+
+C++ must not become the owner of OS-level isolation/security enforcement merely because the cognitive core needs to request an isolated execution. The core requests an execution through an explicit provider boundary; the runtime responsible for enforcement owns the actual security mechanism.
+
+Components communicate through explicit contracts rather than language-specific assumptions. A language is not selected because it is convenient; it is selected because the responsibility belongs there.
