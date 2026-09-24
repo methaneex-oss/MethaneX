@@ -4,15 +4,14 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <deque>
+#include <memory>
 #include <mutex>
 #include <string>
 #include <vector>
 
 namespace jarvis::engineering {
 
-// Human-facing bridge to the same agent message bus used for agent-to-agent
-// communication. It deliberately carries opaque payloads: interpretation
-// remains the responsibility of the receiving agent/cognitive layer.
 struct AgentConsoleMessage {
     std::string message_id;
     std::uint64_t sequence{0};
@@ -48,18 +47,19 @@ public:
     std::size_t pending() const noexcept;
 
 private:
-    static void receive_message(const std::shared_ptr<struct State>& state,
+    struct State {
+        mutable std::mutex mutex;
+        std::deque<AgentConsoleMessage> pending;
+        std::size_t maximum_pending_messages{256};
+        bool accepting{true};
+    };
+
+    static void receive_message(const std::shared_ptr<State>& state,
                                 const AgentMessage& message,
                                 const std::string& console_id);
 
     AgentMessageBus& bus_;
     std::string console_id_;
-    struct State {
-        mutable std::mutex mutex;
-        std::vector<AgentConsoleMessage> pending;
-        std::size_t maximum_pending_messages{256};
-        bool accepting{true};
-    };
     std::shared_ptr<State> state_;
     bool registered_{false};
 };
