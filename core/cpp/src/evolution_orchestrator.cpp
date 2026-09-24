@@ -35,9 +35,7 @@ EvolutionOrchestrationResult EvolutionOrchestrator::run(
     EvolutionOrchestrationResult result;
     result.schedule = scheduler_.evaluate(now, last_run, system_idle);
     if (!result.schedule.allowed || opportunity.id.empty() || !generator ||
-        !baseline_executor || !candidate_executor) {
-        return result;
-    }
+        !baseline_executor || !candidate_executor) return result;
 
     std::vector<EvolutionProposal> generated;
     try {
@@ -67,25 +65,33 @@ EvolutionOrchestrationResult EvolutionOrchestrator::run(
         const auto batch = EvolutionExperimentCoordinator::run(
             experiment, sandbox, baseline_executor, candidate_executor, trial_config_);
         if (batch.executed) experiment.candidate_executed = true;
-
-        if (!batch.executed) {
-            result.lifecycle.push_back(EvolutionLifecycleState::EvaluationRejected);
-            ++result.rejected;
-        } else {
-            result.lifecycle.push_back(EvolutionLifecycleState::CandidateEvaluated);
-        }
+        result.lifecycle.push_back(batch.executed
+            ? EvolutionLifecycleState::CandidateEvaluated
+            : EvolutionLifecycleState::EvaluationRejected);
+        if (!batch.executed) ++result.rejected;
         result.experiments.push_back(std::move(experiment));
     }
 
     if (result.experiments.empty()) return result;
 
-    // Evaluate every candidate first, then adopt at most one empirical winner.
-    // This prevents multiple simultaneous changes from sharing one canary stream.
+    // Persist every completed evaluation before selecting a winner. A candidate whose
+    // provenance cannot be recorded is never eligible for adoption.
+    for (std::size_t i = 0; i < result.experiments.size(); ++i) {
+        auto& experiment = result.experiments[i];
+        if (controller == nullptr || !experiment.candidate_executed) continue;
+        if (!controller->record_evaluation(experiment)) {
+            result.lifecycle[i] = EvolutionLifecycleState::EvaluationRejected;
+            ++result.rejected;
+        }
+    }
+
+    // Select one empirical winner only after evaluation provenance has succeeded.
     std::size_t winner = result.experiments.size();
     double winner_gain = 0.0;
     for (std::size_t i = 0; i < result.experiments.size(); ++i) {
-        auto& experiment = result.experiments[i];
-        if (experiment.outcome != ExperimentOutcome::Improved) continue;
+        const auto& experiment = result.experiments[i];
+        if (result.lifecycle[i] != EvolutionLifecycleState::CandidateEvaluated ||
+            experiment.outcome != ExperimentOutcome::Improved) continue;
         const double gain = experiment.candidate_fitness - experiment.baseline_fitness;
         if (winner == result.experiments.size() || gain > winner_gain ||
             (gain == winner_gain && experiment.confidence > result.experiments[winner].confidence)) {
@@ -94,19 +100,11 @@ EvolutionOrchestrationResult EvolutionOrchestrator::run(
         }
     }
 
-    for (std::size_t i = 0; i < result.experiments.size(); ++i) {
-        auto& experiment = result.experiments[i];
-        if (controller != nullptr && experiment.candidate_executed) {
-            if (!controller->record_evaluation(experiment)) {
-                result.lifecycle[i] = EvolutionLifecycleState::EvaluationRejected;
-                ++result.rejected;
-            }
-        }
-    }
-
     if (winner == result.experiments.size()) {
         for (std::size_t i = 0; i < result.experiments.size(); ++i) {
-            if (result.lifecycle[i] == EvolutionLifecycleState::CandidateEvaluated) ++result.rejected;
+            if (result.lifecycle[i] == EvolutionLifecycleState::CandidateEvaluated) {
+                ++result.rejected;
+            }
         }
         return result;
     }
@@ -126,28 +124,30 @@ EvolutionOrchestrationResult EvolutionOrchestrator::run(
     }
 
     auto& selected = result.experiments[winner];
-    if (controller->adopt(selected)) {
-        result.lifecycle[winner] = EvolutionLifecycleState::Canarying;
-        CanaryDecision canary{};
-        for (std::size_t i = 0; i < 3; ++i) {
-            canary = controller->observe_canary(
-                selected.proposal.key, selected.id,
-                CanaryObservation{selected.baseline_fitness, selected.candidate_fitness});
-            if (canary.rollback) {
-                result.lifecycle[winner] = EvolutionLifecycleState::RolledBack;
-                ++result.rejected;
-                return result;
-            }
-        }
-        result.lifecycle[winner] = canary.sufficient_evidence
-            ? EvolutionLifecycleState::Retained
-            : EvolutionLifecycleState::Canarying;
-        if (result.lifecycle[winner] == EvolutionLifecycleState::Retained) ++result.adopted;
-    } else {
+    if (!controller->adopt(selected)) {
         result.lifecycle[winner] = EvolutionLifecycleState::SafetyRejected;
         ++result.rejected;
+        return result;
     }
 
+    result.lifecycle[winner] = EvolutionLifecycleState::Canarying;
+    CanaryDecision canary{};
+    const std::size_t canary_budget = controller->canary_minimum_observations();
+    for (std::size_t i = 0; i < canary_budget; ++i) {
+        canary = controller->observe_canary(
+            selected.proposal.key, selected.id,
+            CanaryObservation{selected.baseline_fitness, selected.candidate_fitness});
+        if (canary.rollback) {
+            result.lifecycle[winner] = EvolutionLifecycleState::RolledBack;
+            ++result.rejected;
+            return result;
+        }
+    }
+
+    result.lifecycle[winner] = canary.sufficient_evidence
+        ? EvolutionLifecycleState::Retained
+        : EvolutionLifecycleState::Canarying;
+    if (result.lifecycle[winner] == EvolutionLifecycleState::Retained) ++result.adopted;
     return result;
 }
 
