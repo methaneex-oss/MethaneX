@@ -29,6 +29,8 @@ public:
     CanaryDecision observe(CanaryObservation observation) noexcept;
     CanaryDecision evaluate() const noexcept;
     void reset() noexcept;
+    std::size_t minimum_observations() const noexcept { return policy_.minimum_observations; }
+
 private:
     CanaryPolicy policy_;
     std::size_t observations_{0};
