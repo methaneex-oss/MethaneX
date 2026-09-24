@@ -1,0 +1,54 @@
+name: JARVIS Engineering Layer
+
+on:
+  push:
+    paths:
+      - "engineering/**"
+      - ".github/workflows/engineering.yml"
+  pull_request:
+    paths:
+      - "engineering/**"
+      - ".github/workflows/engineering.yml"
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: engineering/cpp
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON
+      - name: Build
+        run: cmake --build build --parallel
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+
+  asan-ubsan:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: engineering/cpp
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure sanitizers
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON -DCMAKE_CXX_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer"
+      - name: Build
+        run: cmake --build build --parallel
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+
+  tsan:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: engineering/cpp
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure ThreadSanitizer
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON -DCMAKE_CXX_FLAGS="-fsanitize=thread -fno-omit-frame-pointer"
+      - name: Build
+        run: cmake --build build --parallel
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
