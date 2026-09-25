@@ -26,6 +26,7 @@ CognitiveWorkspace make_workspace(const CognitiveCycleResult& result, const Brai
     workspace.decision_context = result.context.decision_context;
     workspace.decisions = result.context.decisions;
     workspace.action_assessments = result.context.action_assessments;
+    workspace.action_execution_results = result.context.action_execution_results;
 
     const auto intent = brain.intent();
     if (!intent.id.empty()) {
@@ -36,10 +37,42 @@ CognitiveWorkspace make_workspace(const CognitiveCycleResult& result, const Brai
     return workspace;
 }
 
+std::optional<Evidence> evidence_for_action(const ActionExecutionResult& result) {
+    if (result.action.name.empty()) return std::nullopt;
+
+    double reliability = 0.0;
+    switch (result.status) {
+        case ActionExecutionStatus::verified:
+            reliability = 1.0;
+            break;
+        case ActionExecutionStatus::executed:
+            reliability = 0.75;
+            break;
+        case ActionExecutionStatus::rolled_back:
+            reliability = 0.25;
+            break;
+        case ActionExecutionStatus::failed:
+            reliability = 0.0;
+            break;
+        case ActionExecutionStatus::rejected:
+        case ActionExecutionStatus::prepared:
+        case ActionExecutionStatus::cancelled:
+            reliability = 0.0;
+            break;
+    }
+
+    return Evidence{
+        "action_executor",
+        "action." + result.action.name,
+        result.reason,
+        reliability,
+    };
+}
+
 } // namespace
 
 CognitiveRuntime::CognitiveRuntime(Brain& brain, CognitiveRuntimeConfig config)
-    : brain_(brain), config_(config), cycle_(brain), trigger_(config_.trigger) {}
+    : brain_(brain), config_(std::move(config)), cycle_(brain), trigger_(config_.trigger) {}
 
 CognitiveRuntime::~CognitiveRuntime() { stop(); }
 
@@ -81,6 +114,29 @@ bool CognitiveRuntime::submit(CognitiveCycleInput input, const CognitiveTriggerS
     return enqueue(std::move(input), decision.priority);
 }
 
+bool CognitiveRuntime::submit_feedback(CognitiveFeedback feedback) {
+    const bool has_prediction = !feedback.prediction_key.empty();
+    const bool has_evidence = feedback.evidence.has_value() && !feedback.evidence->key.empty();
+    if (!has_prediction && !has_evidence) {
+        std::lock_guard lock(mutex_);
+        ++metrics_.feedback_rejected;
+        return false;
+    }
+
+    {
+        std::lock_guard lock(mutex_);
+        if (!running_ || stopping_ || config_.feedback_capacity == 0 ||
+            feedback_.size() >= config_.feedback_capacity) {
+            ++metrics_.feedback_rejected;
+            return false;
+        }
+        feedback_.push_back(std::move(feedback));
+        ++metrics_.feedback_accepted;
+    }
+    condition_.notify_one();
+    return true;
+}
+
 bool CognitiveRuntime::enqueue(CognitiveCycleInput input, double priority) {
     {
         std::lock_guard lock(mutex_);
@@ -98,6 +154,85 @@ bool CognitiveRuntime::enqueue(CognitiveCycleInput input, double priority) {
     return true;
 }
 
+void CognitiveRuntime::process_feedback(CognitiveFeedback feedback) {
+    try {
+        (void)cycle_.process_outcome(
+            feedback.prediction_key.empty()
+                ? std::nullopt
+                : std::optional<std::string>{feedback.prediction_key},
+            feedback.actual,
+            feedback.evidence);
+    } catch (...) {
+        // Outcome processing is deliberately non-fatal to the continuous worker.
+    }
+
+    std::lock_guard lock(mutex_);
+    ++metrics_.feedback_processed;
+}
+
+void CognitiveRuntime::execute_actions(CognitiveCycleResult& result) {
+    for (const auto& assessment : result.context.action_assessments) {
+        if (assessment.disposition != ActionDisposition::execute) continue;
+
+        ActionExecutionResult execution;
+        try {
+            if (!config_.action_adapter.execute) {
+                execution.action = assessment.action;
+                execution.status = ActionExecutionStatus::rejected;
+                execution.authorized = false;
+                execution.reason = "action_adapter_unavailable";
+            } else {
+                ActionExecutionRequest request{
+                    assessment,
+                    config_.action_adapter.execute,
+                    config_.action_adapter.verify,
+                    config_.action_adapter.rollback,
+                    config_.action_adapter.authorization,
+                };
+                execution = ActionExecutor{}.run(request);
+            }
+        } catch (...) {
+            execution.action = assessment.action;
+            execution.status = ActionExecutionStatus::failed;
+            execution.reason = "action_boundary_exception";
+        }
+
+        result.context.action_execution_results.push_back(execution);
+
+        {
+            std::lock_guard lock(mutex_);
+            ++metrics_.action_attempted;
+            if (execution.status == ActionExecutionStatus::rejected) {
+                ++metrics_.action_rejected;
+            } else if (execution.status == ActionExecutionStatus::verified) {
+                ++metrics_.action_succeeded;
+            } else {
+                ++metrics_.action_failed;
+            }
+        }
+
+        if (const auto evidence = evidence_for_action(execution); evidence.has_value()) {
+            (void)submit_feedback(CognitiveFeedback{"", evidence->value, evidence});
+        }
+    }
+}
+
+void CognitiveRuntime::publish_result(CognitiveCycleResult result) {
+    auto workspace = make_workspace(result, brain_);
+    workspace.cycle = brain_.state().cycle;
+    workspace_.replace(std::move(workspace));
+
+    std::lock_guard lock(mutex_);
+    if (config_.result_capacity != 0) {
+        if (results_.size() >= config_.result_capacity) {
+            results_.pop_front();
+            ++metrics_.dropped_results;
+        }
+        results_.push_back(std::move(result));
+    }
+    ++metrics_.processed;
+}
+
 std::optional<CognitiveCycleResult> CognitiveRuntime::poll_result() {
     std::lock_guard lock(mutex_);
     if (results_.empty()) return std::nullopt;
@@ -109,6 +244,11 @@ std::optional<CognitiveCycleResult> CognitiveRuntime::poll_result() {
 std::size_t CognitiveRuntime::pending_inputs() const {
     std::lock_guard lock(mutex_);
     return inputs_.size();
+}
+
+std::size_t CognitiveRuntime::pending_feedback() const {
+    std::lock_guard lock(mutex_);
+    return feedback_.size();
 }
 
 std::size_t CognitiveRuntime::pending_results() const {
@@ -126,60 +266,56 @@ CognitiveWorkspace CognitiveRuntime::workspace() const { return workspace_.snaps
 void CognitiveRuntime::worker_loop() {
     for (;;) {
         WorkItem item;
+        std::optional<CognitiveFeedback> feedback;
+
         {
             std::unique_lock lock(mutex_);
-            condition_.wait(lock, [this] { return stopping_ || !inputs_.empty(); });
-            if (inputs_.empty() && stopping_) break;
-            item = std::move(inputs_.front());
-            inputs_.pop_front();
+            condition_.wait(lock, [this] {
+                return stopping_ || !feedback_.empty() || !inputs_.empty();
+            });
+
+            if (feedback_.empty() && inputs_.empty() && stopping_) break;
+
+            // Completed outcomes must be assimilated before queued cognition so
+            // the next cycle observes the latest learned state.
+            if (!feedback_.empty()) {
+                feedback = std::move(feedback_.front());
+                feedback_.pop_front();
+            } else {
+                item = std::move(inputs_.front());
+                inputs_.pop_front();
+            }
+        }
+
+        if (feedback.has_value()) {
+            process_feedback(std::move(*feedback));
+            continue;
         }
 
         try {
             auto result = cycle_.run(item.input);
-            auto workspace = make_workspace(result, brain_);
-            workspace.cycle = brain_.state().cycle;
-            workspace_.replace(std::move(workspace));
-
-            std::lock_guard lock(mutex_);
-            if (config_.result_capacity != 0) {
-                if (results_.size() >= config_.result_capacity) {
-                    results_.pop_front();
-                    ++metrics_.dropped_results;
-                }
-                results_.push_back(std::move(result));
+            if (result.status == CognitiveCycleStatus::completed) {
+                execute_actions(result);
             }
-            ++metrics_.processed;
+            publish_result(std::move(result));
         } catch (const std::exception& error) {
             CognitiveCycleResult result;
             result.status = CognitiveCycleStatus::failed;
             result.error = error.what();
-            std::lock_guard lock(mutex_);
-            if (config_.result_capacity != 0) {
-                if (results_.size() >= config_.result_capacity) {
-                    results_.pop_front();
-                    ++metrics_.dropped_results;
-                }
-                results_.push_back(std::move(result));
-            }
-            ++metrics_.processed;
+            publish_result(std::move(result));
         } catch (...) {
             CognitiveCycleResult result;
             result.status = CognitiveCycleStatus::failed;
             result.error = "unknown_cognitive_runtime_failure";
-            std::lock_guard lock(mutex_);
-            if (config_.result_capacity != 0) {
-                if (results_.size() >= config_.result_capacity) {
-                    results_.pop_front();
-                    ++metrics_.dropped_results;
-                }
-                results_.push_back(std::move(result));
-            }
-            ++metrics_.processed;
+            publish_result(std::move(result));
         }
     }
 
     std::lock_guard lock(mutex_);
-    if (!config_.drain_on_stop) inputs_.clear();
+    if (!config_.drain_on_stop) {
+        inputs_.clear();
+        feedback_.clear();
+    }
     running_ = false;
     stopping_ = false;
 }
