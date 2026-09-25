@@ -33,6 +33,14 @@ bool wait_for_results(CognitiveRuntime& runtime, int expected, int attempts = 30
     return completed == expected;
 }
 
+bool wait_for_feedback(CognitiveRuntime& runtime, std::uint64_t expected, int attempts = 300) {
+    for (int attempt = 0; attempt < attempts; ++attempt) {
+        if (runtime.metrics().feedback_processed >= expected) return true;
+        std::this_thread::sleep_for(std::chrono::milliseconds(2));
+    }
+    return runtime.metrics().feedback_processed >= expected;
+}
+
 } // namespace
 
 int main() {
@@ -98,11 +106,11 @@ int main() {
     assert(executed == static_cast<int>(action_result->context.action_execution_results.size()));
     assert(verified == executed);
 
-    for (int attempt = 0; attempt < 300 && runtime.pending_feedback() != 0; ++attempt) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(2));
-    }
+    const auto expected_action_feedback = static_cast<std::uint64_t>(
+        action_result->context.action_execution_results.size());
+    assert(wait_for_feedback(runtime, expected_action_feedback));
     assert(runtime.pending_feedback() == 0);
-    assert(runtime.metrics().feedback_processed >= action_result->context.action_execution_results.size());
+    assert(runtime.metrics().feedback_processed >= expected_action_feedback);
     assert(runtime.workspace().action_execution_results.size() ==
            action_result->context.action_execution_results.size());
 
@@ -169,6 +177,7 @@ int main() {
     // feedback cannot terminate or mutate the worker.
     const auto prediction = brain.predict("runtime.prediction", 0.75, 0.9);
     assert(!prediction.key.empty());
+    const auto feedback_before = runtime.metrics().feedback_processed;
     assert(runtime.submit_feedback(CognitiveFeedback{
         prediction.key,
         0.75,
@@ -177,9 +186,7 @@ int main() {
     assert(runtime.submit(make_input(goal.id, 5), 1.0));
     assert(!runtime.submit_feedback(CognitiveFeedback{}));
 
-    for (int attempt = 0; attempt < 300 && runtime.pending_feedback() != 0; ++attempt) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(2));
-    }
+    assert(wait_for_feedback(runtime, feedback_before + 1));
     assert(runtime.pending_feedback() == 0);
     assert(runtime.running());
 
