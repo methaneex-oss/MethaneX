@@ -1,6 +1,7 @@
 #include "jarvis/core/cognitive_runtime.hpp"
 
 #include <algorithm>
+#include <chrono>
 #include <cmath>
 #include <exception>
 #include <utility>
@@ -10,6 +11,42 @@ namespace {
 
 double finite_priority(double value) noexcept {
     return std::isfinite(value) ? value : 0.0;
+}
+
+const char* execution_status_name(ActionExecutionStatus status) noexcept {
+    switch (status) {
+        case ActionExecutionStatus::rejected: return "rejected";
+        case ActionExecutionStatus::prepared: return "prepared";
+        case ActionExecutionStatus::executed: return "executed";
+        case ActionExecutionStatus::verified: return "verified";
+        case ActionExecutionStatus::failed: return "failed";
+        case ActionExecutionStatus::cancelled: return "cancelled";
+        case ActionExecutionStatus::rolled_back: return "rolled_back";
+    }
+    return "unknown";
+}
+
+void observe_action_outcome(Brain& brain, const ActionExecutionResult& result) {
+    if (result.action.name.empty()) return;
+
+    const auto timestamp = static_cast<std::uint64_t>(
+        std::chrono::duration_cast<std::chrono::nanoseconds>(
+            std::chrono::system_clock::now().time_since_epoch()).count());
+    brain.observe(Event{
+        0,
+        timestamp,
+        "action_executor",
+        "action_outcome",
+        {
+            {"action", result.action.name},
+            {"status", std::string(execution_status_name(result.status))},
+            {"authorized", result.authorized},
+            {"executed", result.executed},
+            {"verified", result.verified},
+            {"rolled_back", result.rolled_back},
+            {"reason", result.reason},
+        },
+    });
 }
 
 CognitiveWorkspace make_workspace(const CognitiveCycleResult& result, const Brain& brain) {
@@ -198,6 +235,7 @@ void CognitiveRuntime::execute_actions(CognitiveCycleResult& result) {
         }
 
         result.context.action_execution_results.push_back(execution);
+        observe_action_outcome(brain_, execution);
 
         {
             std::lock_guard lock(mutex_);
