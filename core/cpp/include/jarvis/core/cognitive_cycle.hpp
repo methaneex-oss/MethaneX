@@ -3,6 +3,7 @@
 #include "brain.hpp"
 #include "reasoning.hpp"
 #include "action_model.hpp"
+#include "action_execution.hpp"
 
 #include <cstddef>
 #include <cstdint>
@@ -45,6 +46,7 @@ struct CognitiveCycleContext {
     DecisionContext decision_context;
     std::vector<Decision> decisions;
     std::vector<ActionAssessment> action_assessments;
+    std::vector<ActionExecutionResult> action_execution_results;
     Reflection reflection;
 };
 
