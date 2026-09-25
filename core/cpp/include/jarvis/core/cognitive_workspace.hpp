@@ -1,6 +1,7 @@
 #pragma once
 
 #include "action_model.hpp"
+#include "action_execution.hpp"
 #include "cognition.hpp"
 #include "event.hpp"
 #include "intent.hpp"
@@ -30,6 +31,7 @@ struct CognitiveWorkspace {
     DecisionContext decision_context;
     std::vector<Decision> decisions;
     std::vector<ActionAssessment> action_assessments;
+    std::vector<ActionExecutionResult> action_execution_results;
     std::optional<Intent> intent;
     std::optional<StrategyContext> strategy;
     Reflection reflection;
