@@ -106,6 +106,18 @@ int main() {
     assert(executed == static_cast<int>(action_result->context.action_execution_results.size()));
     assert(verified == executed);
 
+    // Execution is a perception boundary, not merely a learning side effect:
+    // the concrete outcome is persisted as an observation that later cognition
+    // can retrieve through the existing Memory/Brain path.
+    const auto action_observations = brain.memory().by_kind("action_outcome");
+    assert(action_observations.size() == action_result->context.action_execution_results.size());
+    for (const auto& observation : action_observations) {
+        assert(observation.source == "action_executor");
+        assert(observation.data.find("action") != observation.data.end());
+        assert(observation.data.find("status") != observation.data.end());
+        assert(observation.data.find("verified") != observation.data.end());
+    }
+
     const auto expected_action_feedback = static_cast<std::uint64_t>(
         action_result->context.action_execution_results.size());
     assert(wait_for_feedback(runtime, expected_action_feedback));
@@ -214,6 +226,8 @@ int main() {
         }
     }
     assert(persisted);
+    const auto restored_action_observations = restored.memory().by_kind("action_outcome");
+    assert(restored_action_observations.size() >= action_observations.size());
     const auto* action_knowledge = restored.knowledge_source("action_executor");
     assert(action_knowledge != nullptr);
     assert(action_knowledge->observations >= 1);
