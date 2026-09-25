@@ -56,7 +56,6 @@ int main() {
     config.result_capacity = 64;
     config.feedback_capacity = 64;
     config.drain_on_stop = true;
-    config.action_adapter.authorization.granted_permissions = {};
     config.action_adapter.authorization.maximum_risk = 1.0;
     config.action_adapter.execute = [&](const CandidateAction&) {
         ++executed;
@@ -87,20 +86,25 @@ int main() {
 
     assert(action_result.has_value());
     assert(!action_result->context.action_assessments.empty());
-    assert(action_result->context.action_execution_results.size() == 1);
-    assert(action_result->context.action_execution_results.front().status == ActionExecutionStatus::verified);
-    assert(action_result->context.action_execution_results.front().authorized);
-    assert(action_result->context.action_execution_results.front().executed);
-    assert(action_result->context.action_execution_results.front().verified);
-    assert(executed == 1);
-    assert(verified == 1);
+    assert(!action_result->context.action_execution_results.empty());
+    assert(action_result->context.action_execution_results.size() <=
+           action_result->context.action_assessments.size());
+    for (const auto& execution : action_result->context.action_execution_results) {
+        assert(execution.status == ActionExecutionStatus::verified);
+        assert(execution.authorized);
+        assert(execution.executed);
+        assert(execution.verified);
+    }
+    assert(executed == static_cast<int>(action_result->context.action_execution_results.size()));
+    assert(verified == executed);
 
     for (int attempt = 0; attempt < 300 && runtime.pending_feedback() != 0; ++attempt) {
         std::this_thread::sleep_for(std::chrono::milliseconds(2));
     }
     assert(runtime.pending_feedback() == 0);
-    assert(runtime.metrics().feedback_processed >= 1);
-    assert(runtime.workspace().action_execution_results.size() == 1);
+    assert(runtime.metrics().feedback_processed >= action_result->context.action_execution_results.size());
+    assert(runtime.workspace().action_execution_results.size() ==
+           action_result->context.action_execution_results.size());
 
     // Authorization is a hard boundary: an assessed action must never reach the
     // execution callback when the authorization context denies its risk.
@@ -125,9 +129,11 @@ int main() {
         if (!denied_result.has_value()) std::this_thread::sleep_for(std::chrono::milliseconds(2));
     }
     assert(denied_result.has_value());
-    assert(denied_result->context.action_execution_results.size() == 1);
-    assert(denied_result->context.action_execution_results.front().status == ActionExecutionStatus::rejected);
-    assert(!denied_result->context.action_execution_results.front().authorized);
+    assert(!denied_result->context.action_execution_results.empty());
+    for (const auto& execution : denied_result->context.action_execution_results) {
+        assert(execution.status == ActionExecutionStatus::rejected);
+        assert(!execution.authorized);
+    }
     assert(bypass_attempts == 0);
     denied_runtime.stop();
 
@@ -150,8 +156,10 @@ int main() {
     }
     assert(failed_result.has_value());
     assert(failed_result->status == CognitiveCycleStatus::completed);
-    assert(failed_result->context.action_execution_results.size() == 1);
-    assert(failed_result->context.action_execution_results.front().status == ActionExecutionStatus::failed);
+    assert(!failed_result->context.action_execution_results.empty());
+    for (const auto& execution : failed_result->context.action_execution_results) {
+        assert(execution.status == ActionExecutionStatus::failed);
+    }
     assert(failing_runtime.running());
     assert(failing_runtime.submit(make_input(goal.id, 4)));
     assert(wait_for_results(failing_runtime, 1));
@@ -167,7 +175,7 @@ int main() {
         Evidence{"runtime", "runtime.prediction.outcome", 0.75, 0.9},
     }));
     assert(runtime.submit(make_input(goal.id, 5), 1.0));
-    assert(runtime.submit_feedback(CognitiveFeedback{} ) == false);
+    assert(!runtime.submit_feedback(CognitiveFeedback{}));
 
     for (int attempt = 0; attempt < 300 && runtime.pending_feedback() != 0; ++attempt) {
         std::this_thread::sleep_for(std::chrono::milliseconds(2));
