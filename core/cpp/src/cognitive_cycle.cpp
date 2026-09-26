@@ -83,6 +83,20 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     const double uncertainty = std::clamp(self_state.uncertainty, 0.0, 1.0);
     const double deadline_pressure = std::clamp(input.deadline_pressure, 0.0, 1.0);
 
+    // Feed learned action reliability back into planning. The source is scoped to
+    // the action identity by the runtime feedback path, so one action's history
+    // cannot silently overwrite another action's learned reliability. Unknown
+    // actions remain unchanged until JARVIS has evidence about them.
+    std::vector<CandidateAction> learned_actions = input.candidate_actions;
+    for (auto& action : learned_actions) {
+        if (action.name.empty()) continue;
+        const auto* metric = brain_.knowledge_source("action_executor." + action.name);
+        if (metric == nullptr || metric->observations == 0) continue;
+        const double reliability = std::clamp(metric->reliability, 0.0, 1.0);
+        action.expected_value *= (0.5 + 0.5 * reliability);
+        action.risk = std::clamp(action.risk + (1.0 - reliability) * 0.5, 0.0, 1.0);
+    }
+
     const PlanningContext planning_context{
         goal_priority,
         goal_progress,
@@ -91,7 +105,7 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
         input.resource_budget,
         deadline_pressure,
     };
-    result.context.plan = brain_.plan(input.candidate_actions, input.planning_horizon,
+    result.context.plan = brain_.plan(learned_actions, input.planning_horizon,
                                       planning_context);
     if (result.context.plan.steps.empty()) {
         result.status = CognitiveCycleStatus::no_action;
