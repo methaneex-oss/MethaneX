@@ -116,40 +116,50 @@ int main() {
          {"context_one", false, 0.9, 3, 12},
          {"context_two", false, 0.9, 3, 12}},
         12);
-    // A later experience is deliberately an exception: gamma shares only
-    // one contextual neighbor with the alpha/beta pattern, so it must not be
-    // absorbed into the same concept hypothesis.
+    // A later experience is deliberately an exception: alpha and beta remain
+    // stable while their learned contexts change. The first exception weakens
+    // coherence without erasing the hypothesis immediately.
     concept_model.observe(
         {{"alpha", true, 0.9, 3, 12},
          {"beta", true, 0.9, 3, 12},
          {"context_one", false, 0.9, 3, 12},
-         {"context_two", false, 0.9, 3, 12},
-         {"gamma", false, 0.9, 3, 12}},
+         {"context_two", false, 0.9, 3, 12}},
         {{"alpha", true, 0.9, 4, 13},
          {"beta", true, 0.9, 4, 13},
          {"context_one", true, 0.9, 4, 13},
-         {"context_two", false, 0.9, 4, 13},
-         {"gamma", true, 0.9, 4, 13}},
+         {"context_two", true, 0.9, 4, 13}},
         13);
 
-    const auto concepts = concept_model.concept_candidates(0.5, 2);
-    bool found_shared_structure = false;
-    bool found_over_merged_concept = false;
-    bool gamma_absorbed = false;
-    for (const auto& concept : concepts) {
+    const auto weakened_concepts = concept_model.concept_candidates(0.5, 2);
+    double weakened_coherence = 0.0;
+    for (const auto& concept : weakened_concepts) {
         const auto has_alpha = std::find(concept.members.begin(), concept.members.end(), "alpha") != concept.members.end();
         const auto has_beta = std::find(concept.members.begin(), concept.members.end(), "beta") != concept.members.end();
-        const auto has_gamma = std::find(concept.members.begin(), concept.members.end(), "gamma") != concept.members.end();
-        if (has_alpha && has_beta && concept.coherence > 0.0) {
-            found_shared_structure = true;
-            assert(concept.members.size() == 2);
-        }
-        if (concept.members.size() > 2) found_over_merged_concept = true;
-        if (has_gamma && has_alpha && has_beta) gamma_absorbed = true;
+        if (has_alpha && has_beta) weakened_coherence = concept.coherence;
     }
-    assert(found_shared_structure);
-    assert(!found_over_merged_concept);
-    assert(!gamma_absorbed);
+    assert(weakened_coherence > 0.0);
+    assert(weakened_coherence < 1.0);
+
+    // Repeated counter-evidence eventually removes the hypothesis from the
+    // trusted-strength view rather than forcing the old abstraction to survive.
+    for (std::uint64_t sequence = 14; sequence <= 20; ++sequence) {
+        concept_model.observe(
+            {{"alpha", true, 0.9, sequence - 1, sequence - 1},
+             {"beta", true, 0.9, sequence - 1, sequence - 1},
+             {"context_one", false, 0.9, sequence - 1, sequence - 1},
+             {"context_two", false, 0.9, sequence - 1, sequence - 1}},
+            {{"alpha", true, 0.9, sequence, sequence},
+             {"beta", true, 0.9, sequence, sequence},
+             {"context_one", true, 0.9, sequence, sequence},
+             {"context_two", true, 0.9, sequence, sequence}},
+            sequence);
+    }
+    const auto revised_concepts = concept_model.concept_candidates(0.5, 2);
+    for (const auto& concept : revised_concepts) {
+        const auto has_alpha = std::find(concept.members.begin(), concept.members.end(), "alpha") != concept.members.end();
+        const auto has_beta = std::find(concept.members.begin(), concept.members.end(), "beta") != concept.members.end();
+        assert(!(has_alpha && has_beta));
+    }
 
     const auto simulated = brain.simulate({Belief{"temperature", 30.0, 0.95, 2, 2}}, 2);
     assert(simulated.depth == 2);
