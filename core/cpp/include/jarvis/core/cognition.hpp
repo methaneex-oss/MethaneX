@@ -15,6 +15,7 @@ struct Belief {
     double confidence{0.5};
     std::uint64_t observations{0};
     std::uint64_t updated_sequence{0};
+    bool disputed{false};
 };
 
 struct Prediction {
