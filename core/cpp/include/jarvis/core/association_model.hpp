@@ -15,6 +15,7 @@ struct Association {
     double confidence{0.0};
     std::uint64_t observations{0};
     std::uint64_t last_sequence{0};
+    std::uint64_t contradictory_observations{0};
 };
 
 // A derived contextual relationship is deliberately distinct from a learned
