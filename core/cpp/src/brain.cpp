@@ -32,44 +32,11 @@ void Brain::replay(const Event& event) {
     if (event.kind == "goal_priority") { if (const auto* id = string_value(event.data, "id")) goals_model_.set_priority(*id, double_value(event.data, "priority")); return; }
     if (event.kind == "prediction") { const auto* key = string_value(event.data, "key"); const auto value = event.data.find("value"); if (key == nullptr || value == event.data.end()) return; predictions_[*key] = Prediction{*key, value->second, std::clamp(double_value(event.data, "confidence"), 0.0, 1.0), event.sequence, false, 0.0}; return; }
     if (event.kind == "prediction_outcome") { const auto* key = string_value(event.data, "key"); if (key == nullptr) return; const auto prediction = predictions_.find(*key); if (prediction == predictions_.end()) return; prediction->second.resolved = true; prediction->second.error = std::clamp(double_value(event.data, "error", 1.0), 0.0, 1.0); const auto actual = event.data.find("actual"); if (actual != event.data.end()) if (const auto predicted = std::get_if<double>(&prediction->second.predicted)) if (const auto observed = std::get_if<double>(&actual->second)) adaptation_.observe(*key, *predicted, *observed); return; }
-    if (event.kind == "evolution_evaluated") {
-        const auto* id = string_value(event.data, "experiment_id");
-        const auto* key = string_value(event.data, "key");
-        if (id != nullptr && key != nullptr) evolution_history_.append(EvolutionHistoryRecord{
-            *id, *key, EvolutionRecordAction::Evaluated,
-            static_cast<ExperimentOutcome>(integer_value(event.data, "outcome")),
-            double_value(event.data, "baseline"), double_value(event.data, "candidate"),
-            double_value(event.data, "confidence"), 0, "replayed", {}});
-        return;
-    }
+    if (event.kind == "evolution_evaluated") { const auto* id = string_value(event.data, "experiment_id"); const auto* key = string_value(event.data, "key"); if (id != nullptr && key != nullptr) evolution_history_.append(EvolutionHistoryRecord{*id, *key, EvolutionRecordAction::Evaluated, static_cast<ExperimentOutcome>(integer_value(event.data, "outcome")), double_value(event.data, "baseline"), double_value(event.data, "candidate"), double_value(event.data, "confidence"), 0, "replayed", {}}); return; }
     if (event.kind == "evolution_register") { if (const auto* key = string_value(event.data, "key")) evolution_.register_parameter(*key, double_value(event.data, "initial")); return; }
     if (event.kind == "evolution_fitness") { if (const auto* key = string_value(event.data, "key")) evolution_.observe_fitness(*key, double_value(event.data, "fitness")); return; }
-    if (event.kind == "evolution_adopt") {
-        const auto* key = string_value(event.data, "key");
-        if (key != nullptr) {
-            const EvolutionProposal proposal{*key, double_value(event.data, "current"), double_value(event.data, "proposed"),
-                                             double_value(event.data, "expected_gain"), double_value(event.data, "confidence")};
-            evolution_.adopt(proposal);
-            evolution_history_.append(EvolutionHistoryRecord{
-                string_value(event.data, "experiment_id") ? *string_value(event.data, "experiment_id") : "replayed",
-                *key, EvolutionRecordAction::Adopted, ExperimentOutcome::Improved,
-                double_value(event.data, "baseline", proposal.current), double_value(event.data, "candidate", proposal.proposed),
-                proposal.confidence, 0, "replayed", {}});
-        }
-        return;
-    }
-    if (event.kind == "evolution_rollback") {
-        const auto* key = string_value(event.data, "key");
-        if (key != nullptr) {
-            evolution_.rollback(*key);
-            evolution_history_.append(EvolutionHistoryRecord{
-                string_value(event.data, "experiment_id") ? *string_value(event.data, "experiment_id") : "replayed",
-                *key, EvolutionRecordAction::RolledBack, ExperimentOutcome::Degraded,
-                double_value(event.data, "baseline", 0.0), double_value(event.data, "candidate", double_value(event.data, "observed_delta", 0.0)),
-                0.0, 0, string_value(event.data, "reason") ? *string_value(event.data, "reason") : "replayed", {}});
-        }
-        return;
-    }
+    if (event.kind == "evolution_adopt") { const auto* key = string_value(event.data, "key"); if (key != nullptr) { const EvolutionProposal proposal{*key, double_value(event.data, "current"), double_value(event.data, "proposed"), double_value(event.data, "expected_gain"), double_value(event.data, "confidence")}; evolution_.adopt(proposal); evolution_history_.append(EvolutionHistoryRecord{string_value(event.data, "experiment_id") ? *string_value(event.data, "experiment_id") : "replayed", *key, EvolutionRecordAction::Adopted, ExperimentOutcome::Improved, double_value(event.data, "baseline", proposal.current), double_value(event.data, "candidate", proposal.proposed), proposal.confidence, 0, "replayed", {}}); } return; }
+    if (event.kind == "evolution_rollback") { const auto* key = string_value(event.data, "key"); if (key != nullptr) { evolution_.rollback(*key); evolution_history_.append(EvolutionHistoryRecord{string_value(event.data, "experiment_id") ? *string_value(event.data, "experiment_id") : "replayed", *key, EvolutionRecordAction::RolledBack, ExperimentOutcome::Degraded, double_value(event.data, "baseline", 0.0), double_value(event.data, "candidate", double_value(event.data, "observed_delta", 0.0)), 0.0, 0, string_value(event.data, "reason") ? *string_value(event.data, "reason") : "replayed", {}}); } return; }
     if (event.kind == "resilience_isolate") { if (const auto* component = string_value(event.data, "component")) resilience_.isolate(*component); return; }
     if (event.kind == "resilience_recover") { if (const auto* component = string_value(event.data, "component")) resilience_.recover(*component, double_value(event.data, "health")); return; }
     if (event.kind == "capability_observe") { if (const auto* name = string_value(event.data, "name")) self_model_.observe_capability(*name, double_value(event.data, "availability"), double_value(event.data, "performance")); return; }
@@ -95,57 +62,13 @@ std::vector<std::pair<std::string, Scalar>> Brain::simulate(const std::vector<Be
 SimulationResult Brain::simulate(const std::vector<Belief>& assumptions, std::size_t horizon) const { std::shared_lock lock(mutex_); return causal_.simulate(assumptions, horizon); }
 std::vector<Association> Brain::associations() const { std::shared_lock lock(mutex_); return association_.all(); }
 std::vector<Association> Brain::associated_with(const std::string& key, double minimum_strength) const { std::shared_lock lock(mutex_); return association_.related(key, minimum_strength); }
+std::vector<AssociationInference> Brain::contextual_associations(const std::string& key, std::size_t max_hops, double minimum_strength) const { std::shared_lock lock(mutex_); return association_.contextual(key, max_hops, minimum_strength); }
 std::vector<CausalLink> Brain::causal_links() const { std::shared_lock lock(mutex_); return causal_.links(); }
 std::vector<Decision> Brain::choose(const std::vector<CandidateAction>& actions) const { std::shared_lock lock(mutex_); const auto self = self_state_model_.snapshot(); const auto eligible = goals_model_.eligible(state_.cycle); const auto selected_intent = intent_model_.select(eligible, threat_state_.score, self.uncertainty, state_.cycle); const auto strategy = strategy_model_.formulate(selected_intent, attention_state_, threat_state_.score, self.uncertainty); const auto plan = planner_.build(actions, 1, strategy.planning); DecisionContext context; context.goal_priority = strategy.planning.goal_priority; context.goal_progress = strategy.planning.goal_progress; context.plan_expected_value = plan.expected_value; context.plan_risk = plan.risk; context.resource_budget = strategy.planning.resource_budget; context.uncertainty = strategy.planning.uncertainty; context.threat = strategy.planning.threat; context.deadline_pressure = strategy.planning.deadline_pressure; return decision_.decide(actions, context); }
 std::vector<CapabilityCandidate> Brain::evaluate_capabilities(
     const std::vector<CapabilityDescriptor>& capabilities, CapabilityConstraints constraints) const {
     std::shared_lock lock(mutex_);
     return CapabilityEvaluator{}.evaluate(capabilities, constraints);
-}
-
-CapabilityExecutionResult Brain::execute_capability(
-    const CapabilityDescriptor& capability, std::string input,
-    std::vector<std::string> granted_permissions, double maximum_risk,
-    CapabilityProvider provider) {
-    if (provider.capability_id.empty() || !provider.execute) {
-        return {CapabilityExecutionStatus::rejected, capability.id, {}, {},
-                "capability_provider_required"};
-    }
-    if (provider.capability_id != capability.id) {
-        return {CapabilityExecutionStatus::rejected, capability.id, {}, {},
-                "capability_provider_mismatch"};
-    }
-
-    CapabilityExecutionBoundary boundary;
-    if (!boundary.register_provider(std::move(provider))) {
-        return {CapabilityExecutionStatus::rejected, capability.id, {}, {},
-                "capability_provider_registration_failed"};
-    }
-
-    const auto result = boundary.execute(
-        CapabilityExecutionRequest{capability, std::move(input),
-                                   std::move(granted_permissions), maximum_risk});
-    if (!capability.id.empty()) {
-        const double reliability =
-            result.status == CapabilityExecutionStatus::succeeded ? 1.0 :
-            result.status == CapabilityExecutionStatus::unavailable ? 0.25 : 0.0;
-        std::unique_lock lock(mutex_);
-        Event event{0, now_ns(), result.provider.empty() ? "capability_executor" : result.provider,
-                    "capability_execution",
-                    {{"capability_id", capability.id},
-                     {"status", static_cast<std::int64_t>(result.status)},
-                     {"provider", result.provider},
-                     {"reason", result.reason},
-                     {"output", result.output},
-                     {"reliability", reliability}}};
-        event.sequence = memory_.append(event);
-        if (event.sequence != 0) {
-            ++state_.events_seen;
-            state_.cycle = event.sequence;
-            sync_self_state();
-        }
-    }
-    return result;
 }
 Plan Brain::plan(const std::vector<CandidateAction>& actions, std::size_t horizon) const { std::shared_lock lock(mutex_); return planner_.build(actions, horizon); }
 Plan Brain::plan(const std::vector<CandidateAction>& actions, std::size_t horizon, const PlanningContext& context) const { std::shared_lock lock(mutex_); return planner_.build(actions, horizon, context); }
@@ -172,46 +95,9 @@ void Brain::observe_evolution_fitness(const std::string& key, double fitness) { 
 std::vector<EvolutionProposal> Brain::evolution_options() const { std::shared_lock lock(mutex_); return evolution_.propose(); }
 bool Brain::adopt_evolution(const EvolutionProposal& proposal) { std::unique_lock lock(mutex_); if (proposal.key.empty() || !evolution_.adopt(proposal)) return false; Event event{0, now_ns(), "brain", "evolution_adopt", {{"key", proposal.key}, {"current", proposal.current}, {"proposed", proposal.proposed}, {"expected_gain", proposal.expected_gain}, {"confidence", proposal.confidence}}}; event.sequence = memory_.append(event); if (event.sequence == 0) { evolution_.rollback(proposal.key); return false; } ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); return true; }
 bool Brain::rollback_evolution(const std::string& key) { std::unique_lock lock(mutex_); if (key.empty() || !evolution_.rollback(key)) return false; Event event{0, now_ns(), "brain", "evolution_rollback", {{"key", key}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return false; ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); return true; }
-bool Brain::adopt_evolution_experiment(EvolutionExperiment& experiment) {
-    std::unique_lock lock(mutex_);
-    if (!evolution_controller_.adopt(experiment)) return false;
-    Event event{0, now_ns(), "brain", "evolution_adopt",
-                {{"key", experiment.proposal.key}, {"current", experiment.proposal.current},
-                 {"proposed", experiment.proposal.proposed}, {"expected_gain", experiment.proposal.expected_gain},
-                 {"confidence", experiment.proposal.confidence}}};
-    event.sequence = memory_.append(event);
-    if (event.sequence == 0) {
-        evolution_.rollback(experiment.proposal.key);
-        return false;
-    }
-    ++state_.events_seen;
-    state_.cycle = event.sequence;
-    sync_self_state();
-    return true;
-}
-CanaryDecision Brain::observe_evolution_canary(const std::string& parameter_key,
-                                               const std::string& experiment_id,
-                                               CanaryObservation observation) {
-    std::unique_lock lock(mutex_);
-    const auto decision = evolution_controller_.observe_canary(parameter_key, experiment_id, observation);
-    if (decision.rollback) {
-        Event event{0, now_ns(), "brain", "evolution_rollback",
-                    {{"key", parameter_key}, {"experiment_id", experiment_id},
-                     {"reason", decision.reason}, {"observed_delta", decision.mean_delta}}};
-        event.sequence = memory_.append(event);
-        if (event.sequence != 0) {
-            ++state_.events_seen;
-            state_.cycle = event.sequence;
-            sync_self_state();
-        }
-    }
-    return decision;
-}
-std::vector<EvolutionHistoryRecord> Brain::evolution_history() const {
-    std::shared_lock lock(mutex_);
-    return evolution_history_.records();
-}
-
+bool Brain::adopt_evolution_experiment(EvolutionExperiment& experiment) { std::unique_lock lock(mutex_); if (!evolution_controller_.adopt(experiment)) return false; Event event{0, now_ns(), "brain", "evolution_adopt", {{"key", experiment.proposal.key}, {"current", experiment.proposal.current}, {"proposed", experiment.proposal.proposed}, {"expected_gain", experiment.proposal.expected_gain}, {"confidence", experiment.proposal.confidence}}}; event.sequence = memory_.append(event); if (event.sequence == 0) { evolution_.rollback(experiment.proposal.key); return false; } ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); return true; }
+CanaryDecision Brain::observe_evolution_canary(const std::string& parameter_key, const std::string& experiment_id, CanaryObservation observation) { std::unique_lock lock(mutex_); const auto decision = evolution_controller_.observe_canary(parameter_key, experiment_id, observation); if (decision.rollback) { Event event{0, now_ns(), "brain", "evolution_rollback", {{"key", parameter_key}, {"experiment_id", experiment_id}, {"reason", decision.reason}, {"observed_delta", decision.mean_delta}}}; event.sequence = memory_.append(event); if (event.sequence != 0) { ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); } } return decision; }
+std::vector<EvolutionHistoryRecord> Brain::evolution_history() const { std::shared_lock lock(mutex_); return evolution_history_.records(); }
 BrainSnapshot Brain::snapshot() const { std::shared_lock lock(mutex_); BrainSnapshot snapshot; snapshot.state = state_; snapshot.self_state = self_state_model_.snapshot(); for (const auto& [_, belief] : beliefs_) snapshot.beliefs.push_back(belief); for (const auto& [_, prediction] : predictions_) snapshot.predictions.push_back(prediction); snapshot.causal_links = causal_.links(); snapshot.goals = goals_model_.all(); return snapshot; }
 BrainState Brain::state() const { std::shared_lock lock(mutex_); return state_; }
 bool Brain::append_goal_event(const Event& event) { Event persisted = event; persisted.timestamp_ns = persisted.timestamp_ns == 0 ? now_ns() : persisted.timestamp_ns; persisted.sequence = memory_.append(persisted); if (persisted.sequence == 0) return false; ++state_.events_seen; state_.cycle = persisted.sequence; sync_self_state(); return true; }
