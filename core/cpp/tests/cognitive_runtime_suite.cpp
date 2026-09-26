@@ -21,14 +21,36 @@ CognitiveCycleInput make_input(const std::string& goal_id, std::int64_t value) {
     input.planning_horizon = 2;
     input.memory_limit = 4;
     input.reasoning_steps = 4;
+    // Runtime action execution tests exercise the adapter boundary directly;
+    // keep the cognitive assessment permissive so the adapter is actually reached.
+    input.action_constraints = ActionConstraints{1.0, false};
     return input;
 }
+
+bool wait_for_results(CognitiveRuntime& runtime, int expected, int attempts = 300) {
+    int completed = 0;
+    for (int attempt = 0; attempt < attempts && completed < expected; ++attempt) {
+        while (runtime.poll_result().has_value()) ++completed;
+        if (completed < expected) std::this_thread::sleep_for(std::chrono::milliseconds(2));
+    }
+    return completed == expected;
 }
+
+bool wait_for_feedback(CognitiveRuntime& runtime, std::uint64_t expected, int attempts = 300) {
+    for (int attempt = 0; attempt < attempts; ++attempt) {
+        if (runtime.metrics().feedback_processed >= expected) return true;
+        std::this_thread::sleep_for(std::chrono::milliseconds(2));
+    }
+    return runtime.metrics().feedback_processed >= expected;
+}
+
+} // namespace
 
 int main() {
     const auto journal = std::filesystem::temp_directory_path() / "jarvis_cognitive_runtime_suite.bin";
     std::error_code ec;
     std::filesystem::remove(journal, ec);
+    std::filesystem::remove(journal.string() + ".meta", ec);
 
     Brain brain(journal);
     Goal goal;
@@ -38,10 +60,22 @@ int main() {
     assert(brain.create_goal(goal));
     assert(brain.activate_goal(goal.id));
 
+    int executed = 0;
+    int verified = 0;
     CognitiveRuntimeConfig config;
     config.input_capacity = 64;
     config.result_capacity = 64;
+    config.feedback_capacity = 64;
     config.drain_on_stop = true;
+    config.action_adapter.authorization.maximum_risk = 1.0;
+    config.action_adapter.execute = [&](const CandidateAction&) {
+        ++executed;
+        return true;
+    };
+    config.action_adapter.verify = [&](const CandidateAction&) {
+        ++verified;
+        return true;
+    };
 
     CognitiveRuntime runtime(brain, config);
     assert(!runtime.running());
@@ -49,38 +83,154 @@ int main() {
     assert(runtime.running());
     assert(!runtime.start());
 
-    constexpr int submitted = 32;
-    for (int i = 0; i < submitted; ++i) {
-        assert(runtime.submit(make_input(goal.id, i), static_cast<double>(i)));
-    }
-
-    int completed = 0;
-    for (int attempt = 0; attempt < 200 && completed < submitted; ++attempt) {
+    assert(runtime.submit(make_input(goal.id, 1), 1.0));
+    std::optional<CognitiveCycleResult> action_result;
+    for (int attempt = 0; attempt < 300 && !action_result.has_value(); ++attempt) {
         while (const auto result = runtime.poll_result()) {
-            assert(result->status == CognitiveCycleStatus::completed);
-            assert(result->context.selected_goal.id == goal.id);
-            assert(!result->context.decisions.empty());
-            ++completed;
+            if (result->status == CognitiveCycleStatus::completed) {
+                action_result = *result;
+                break;
+            }
         }
-        if (completed < submitted) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(2));
-        }
+        if (!action_result.has_value()) std::this_thread::sleep_for(std::chrono::milliseconds(2));
     }
 
-    assert(completed == submitted);
-    assert(runtime.pending_inputs() == 0);
+    assert(action_result.has_value());
+    assert(!action_result->context.action_assessments.empty());
+    assert(!action_result->context.action_execution_results.empty());
+    assert(action_result->context.action_execution_results.size() <=
+           action_result->context.action_assessments.size());
+    for (const auto& execution : action_result->context.action_execution_results) {
+        assert(execution.status == ActionExecutionStatus::verified);
+        assert(execution.authorized);
+        assert(execution.executed);
+        assert(execution.verified);
+    }
+    assert(executed == static_cast<int>(action_result->context.action_execution_results.size()));
+    assert(verified == executed);
 
-    const auto metrics = runtime.metrics();
-    assert(metrics.accepted == submitted);
-    assert(metrics.rejected == 0);
-    assert(metrics.processed == submitted);
-    assert(metrics.dropped_results == 0);
+    const auto action_observations = brain.memory().by_kind("action_outcome");
+    assert(action_observations.size() == action_result->context.action_execution_results.size());
+    for (const auto& observation : action_observations) {
+        assert(observation.source == "action_executor");
+        assert(observation.data.find("action") != observation.data.end());
+        assert(observation.data.find("status") != observation.data.end());
+        assert(observation.data.find("verified") != observation.data.end());
+    }
+
+    const auto expected_action_feedback = static_cast<std::uint64_t>(
+        action_result->context.action_execution_results.size());
+    assert(wait_for_feedback(runtime, expected_action_feedback));
+    assert(runtime.pending_feedback() == 0);
+    assert(runtime.metrics().feedback_processed >= expected_action_feedback);
+    assert(runtime.workspace().action_execution_results.size() ==
+           action_result->context.action_execution_results.size());
+
+    // Authorization is a hard boundary: an assessed action must never reach the
+    // execution callback when the authorization context denies its risk.
+    int bypass_attempts = 0;
+    CognitiveRuntimeConfig denied_config;
+    denied_config.result_capacity = 8;
+    denied_config.feedback_capacity = 8;
+    denied_config.action_adapter.authorization.maximum_risk = 0.0;
+    denied_config.action_adapter.execute = [&](const CandidateAction&) {
+        ++bypass_attempts;
+        return true;
+    };
+    denied_config.action_adapter.verify = [](const CandidateAction&) { return true; };
+
+    CognitiveRuntime denied_runtime(brain, denied_config);
+    assert(denied_runtime.start());
+    assert(denied_runtime.submit(make_input(goal.id, 2)));
+
+    std::optional<CognitiveCycleResult> denied_result;
+    for (int attempt = 0; attempt < 300 && !denied_result.has_value(); ++attempt) {
+        if (const auto result = denied_runtime.poll_result()) denied_result = *result;
+        if (!denied_result.has_value()) std::this_thread::sleep_for(std::chrono::milliseconds(2));
+    }
+    assert(denied_result.has_value());
+    assert(!denied_result->context.action_execution_results.empty());
+    for (const auto& execution : denied_result->context.action_execution_results) {
+        assert(execution.status == ActionExecutionStatus::rejected);
+        assert(!execution.authorized);
+    }
+    assert(bypass_attempts == 0);
+    denied_runtime.stop();
+
+    // Execution failure is observable but non-fatal to the cognitive worker.
+    CognitiveRuntimeConfig failing_config;
+    failing_config.result_capacity = 8;
+    failing_config.feedback_capacity = 8;
+    failing_config.action_adapter.authorization.maximum_risk = 1.0;
+    failing_config.action_adapter.execute = [](const CandidateAction&) { return false; };
+    failing_config.action_adapter.verify = [](const CandidateAction&) { return true; };
+
+    CognitiveRuntime failing_runtime(brain, failing_config);
+    assert(failing_runtime.start());
+    assert(failing_runtime.submit(make_input(goal.id, 3)));
+
+    std::optional<CognitiveCycleResult> failed_result;
+    for (int attempt = 0; attempt < 300 && !failed_result.has_value(); ++attempt) {
+        if (const auto result = failing_runtime.poll_result()) failed_result = *result;
+        if (!failed_result.has_value()) std::this_thread::sleep_for(std::chrono::milliseconds(2));
+    }
+    assert(failed_result.has_value());
+    assert(failed_result->status == CognitiveCycleStatus::completed);
+    assert(!failed_result->context.action_execution_results.empty());
+    for (const auto& execution : failed_result->context.action_execution_results) {
+        assert(execution.status == ActionExecutionStatus::failed);
+    }
+    assert(failing_runtime.running());
+    assert(failing_runtime.submit(make_input(goal.id, 4)));
+    assert(wait_for_results(failing_runtime, 1));
+    failing_runtime.stop();
+
+    const auto prediction = brain.predict("runtime.prediction", 0.75, 0.9);
+    assert(!prediction.key.empty());
+    const auto feedback_before = runtime.metrics().feedback_processed;
+    assert(runtime.submit_feedback(CognitiveFeedback{
+        prediction.key,
+        0.75,
+        Evidence{"runtime", "runtime.prediction.outcome", 0.75, 0.9},
+    }));
+    assert(runtime.submit(make_input(goal.id, 5), 1.0));
+    assert(!runtime.submit_feedback(CognitiveFeedback{}));
+
+    assert(wait_for_feedback(runtime, feedback_before + 1));
+    assert(runtime.pending_feedback() == 0);
+    assert(runtime.running());
+
+    bool resolved = false;
+    for (const auto& current : brain.snapshot().predictions) {
+        if (current.key == prediction.key) {
+            resolved = current.resolved && current.error == 0.0;
+            break;
+        }
+    }
+    assert(resolved);
+    assert(runtime.metrics().feedback_rejected == 1);
 
     runtime.stop();
     assert(!runtime.running());
     assert(!runtime.submit(make_input(goal.id, 1000), 100.0));
     assert(runtime.metrics().rejected == 1);
 
+    Brain restored(journal);
+    bool persisted = false;
+    for (const auto& current : restored.snapshot().predictions) {
+        if (current.key == prediction.key) {
+            persisted = current.resolved && current.error == 0.0;
+            break;
+        }
+    }
+    assert(persisted);
+    const auto restored_action_observations = restored.memory().by_kind("action_outcome");
+    assert(restored_action_observations.size() >= action_observations.size());
+    const auto* action_knowledge = restored.knowledge_source("action_executor");
+    assert(action_knowledge != nullptr);
+    assert(action_knowledge->observations >= 1);
+
     std::filesystem::remove(journal, ec);
+    std::filesystem::remove(journal.string() + ".meta", ec);
     return 0;
 }

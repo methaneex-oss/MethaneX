@@ -5,6 +5,7 @@
 #include <optional>
 #include <string>
 #include <unordered_map>
+#include <utility>
 #include <variant>
 
 namespace jarvis::core {
@@ -53,8 +54,20 @@ std::vector<Belief> ReasoningEngine::infer(const std::vector<Belief>& premises,
     std::vector<Belief> result = premises;
     if (max_steps == 0) return result;
 
-    std::unordered_map<std::string, Scalar> known;
-    for (const auto& belief : premises) known[belief.key] = belief.value;
+    struct KnownBelief {
+        Scalar value;
+        double confidence;
+    };
+    std::unordered_map<std::string, KnownBelief> known;
+    for (const auto& belief : premises) {
+        // A disputed belief is retained as evidence, but it is not an
+        // authoritative premise for deduction. This prevents contradictions
+        // in the world model from silently becoming certain conclusions.
+        if (!belief.disputed) {
+            known[belief.key] = KnownBelief{
+                belief.value, std::clamp(belief.confidence, 0.0, 1.0)};
+        }
+    }
 
     for (std::size_t step = 0; step < max_steps; ++step) {
         const auto snapshot = known;
@@ -64,16 +77,24 @@ std::vector<Belief> ReasoningEngine::infer(const std::vector<Belief>& premises,
             const auto effect = parse_link_side(link.effect);
             if (!cause || !effect || link.strength <= 0.0) continue;
             const auto known_cause = snapshot.find(cause->key);
-            if (known_cause == snapshot.end() || !same_value(known_cause->second, cause->value)) continue;
+            if (known_cause == snapshot.end() ||
+                !same_value(known_cause->second.value, cause->value)) continue;
             if (snapshot.find(effect->key) != snapshot.end()) continue;
             if (known.find(effect->key) != known.end()) continue;
-            frontier.push_back(Belief{effect->key, effect->value,
-                                      std::clamp(link.strength, 0.0, 1.0),
-                                      link.observations, 0});
+            frontier.push_back(Belief{
+                effect->key,
+                effect->value,
+                std::min(known_cause->second.confidence,
+                         std::clamp(link.strength, 0.0, 1.0)),
+                link.observations,
+                0});
         }
         if (frontier.empty()) break;
         for (const auto& belief : frontier) {
-            if (known.emplace(belief.key, belief.value).second) result.push_back(belief);
+            if (known.emplace(belief.key,
+                               KnownBelief{belief.value, belief.confidence}).second) {
+                result.push_back(belief);
+            }
         }
     }
     return result;
@@ -97,18 +118,30 @@ ReasoningResult ReasoningEngine::solve(const ReasoningProblem& problem) const {
     }
     const auto conclusions = infer(problem.premises, problem.causal_links, problem.max_steps);
     result.conclusions = conclusions;
+
+    double premise_confidence = 0.0;
+    bool has_authoritative_premise = false;
+    for (const auto& premise : problem.premises) {
+        if (premise.disputed) continue;
+        premise_confidence = has_authoritative_premise
+            ? std::min(premise_confidence, std::clamp(premise.confidence, 0.0, 1.0))
+            : std::clamp(premise.confidence, 0.0, 1.0);
+        has_authoritative_premise = true;
+    }
     result.valid = true;
     result.kind = conclusions.size() > problem.premises.size()
         ? ReasoningKind::deduction : ReasoningKind::consistency;
     if (result.kind == ReasoningKind::deduction) {
-        double confidence = 1.0;
+        double confidence = has_authoritative_premise ? premise_confidence : 0.0;
         for (std::size_t i = problem.premises.size(); i < conclusions.size(); ++i)
             confidence = std::min(confidence, conclusions[i].confidence);
         result.confidence = std::clamp(confidence, 0.0, 1.0);
         result.explanation = "Conclusions were derived from supplied premises and observed causal links.";
     } else {
-        result.confidence = 1.0;
-        result.explanation = "Premises are internally consistent; no supported new conclusion was derivable.";
+        result.confidence = has_authoritative_premise ? premise_confidence : 0.0;
+        result.explanation = has_authoritative_premise
+            ? "Premises are internally consistent; no supported new conclusion was derivable."
+            : "No authoritative premise was available for deduction.";
     }
     return result;
 }
