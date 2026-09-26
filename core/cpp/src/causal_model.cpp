@@ -42,7 +42,14 @@ std::pair<std::string, Scalar> decode_effect(const std::string& encoded) {
     return {encoded.substr(0, separator), decode(encoded.substr(separator + 1))};
 }
 
+const Belief* find_belief(const std::vector<Belief>& beliefs, const std::string& key) {
+    const auto it = std::find_if(beliefs.begin(), beliefs.end(), [&](const Belief& belief) {
+        return belief.key == key;
+    });
+    return it == beliefs.end() ? nullptr : &*it;
 }
+
+} // namespace
 
 void CausalModel::observe_transition(const std::vector<Belief>& before,
                                      const std::vector<Belief>& after) {
@@ -69,6 +76,33 @@ void CausalModel::observe_transition(const std::vector<Belief>& before,
                 it->strength = std::clamp(it->strength + (1.0 - it->strength) * 0.20, 0.0, 1.0);
                 ++it->observations;
             }
+        }
+    }
+}
+
+void CausalModel::observe_outcome(const std::vector<Belief>& before,
+                                  const std::vector<Belief>& after) {
+    if (before.empty() || links_.empty()) return;
+
+    const auto simulation = simulate(before, 1);
+    for (const auto& prediction : simulation.predictions) {
+        const auto* actual = find_belief(after, prediction.key);
+        const bool matched = actual != nullptr && actual->value == prediction.value;
+        if (matched) continue;
+
+        // A failed prediction is negative evidence. Do not erase the hypothesis:
+        // the same relationship may still hold conditionally. Instead weaken it
+        // with a bounded update so repeated counterexamples can overturn stale
+        // knowledge without one anomaly destroying accumulated experience.
+        for (auto& link : links_) {
+            const auto [effect_key, effect_value] = decode_effect(link.effect);
+            if (effect_key != prediction.key || prediction.depth != 1) continue;
+            if (std::find_if(before.begin(), before.end(), [&](const Belief& belief) {
+                    return link.cause == encode(belief.key, belief.value);
+                }) == before.end()) continue;
+
+            link.strength = std::max(0.0, link.strength * 0.80);
+            ++link.observations;
         }
     }
 }
