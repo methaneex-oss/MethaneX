@@ -87,6 +87,45 @@ int main() {
     }
     assert(brain_found_power);
 
+    // Concept formation is derived from repeated shared context. The test does
+    // not name a semantic category; it only verifies that the graph discovers
+    // two experiences with the same contextual structure.
+    AssociationModel concept_model;
+    const std::vector<Belief> concept_before{
+        {"alpha", false, 0.9, 1, 10},
+        {"beta", false, 0.9, 1, 10},
+        {"context_one", false, 0.9, 1, 10},
+        {"context_two", false, 0.9, 1, 10},
+    };
+    concept_model.observe(
+        concept_before,
+        {{"alpha", true, 0.9, 2, 11},
+         {"beta", false, 0.9, 2, 11},
+         {"context_one", true, 0.9, 2, 11},
+         {"context_two", false, 0.9, 2, 11}},
+        11);
+    concept_model.observe(
+        {{"alpha", true, 0.9, 2, 11},
+         {"beta", false, 0.9, 2, 11},
+         {"context_one", true, 0.9, 2, 11},
+         {"context_two", false, 0.9, 2, 11}},
+        {{"alpha", true, 0.9, 3, 12},
+         {"beta", true, 0.9, 3, 12},
+         {"context_one", true, 0.9, 3, 12},
+         {"context_two", true, 0.9, 3, 12}},
+        12);
+    const auto concepts = concept_model.concept_candidates(0.5, 2);
+    bool found_shared_structure = false;
+    for (const auto& concept : concepts) {
+        const auto has_alpha = std::find(concept.members.begin(), concept.members.end(), "alpha") != concept.members.end();
+        const auto has_beta = std::find(concept.members.begin(), concept.members.end(), "beta") != concept.members.end();
+        if (has_alpha && has_beta && concept.coherence > 0.0) {
+            found_shared_structure = true;
+            break;
+        }
+    }
+    assert(found_shared_structure);
+
     const auto simulated = brain.simulate({Belief{"temperature", 30.0, 0.95, 2, 2}}, 2);
     assert(simulated.depth == 2);
 
