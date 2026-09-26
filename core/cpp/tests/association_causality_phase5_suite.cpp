@@ -26,8 +26,14 @@ int main() {
 
     CausalModel causal;
     causal.observe_transition(before, after);
+    // One experience creates a hypothesis but does not authorize prediction.
+    const auto first = causal.simulate({Belief{"temperature", 30.0, 0.95, 2, 2}}, 1);
+    assert(first.depth == 1);
+    assert(first.predictions.empty());
+
+    // Repeated experience strengthens the same hypothesis enough to predict.
+    causal.observe_transition(before, after);
     const auto one_step = causal.simulate({Belief{"temperature", 30.0, 0.95, 2, 2}}, 1);
-    assert(one_step.depth == 1);
     assert(!one_step.predictions.empty());
     assert(one_step.confidence >= 0.5);
 
@@ -48,7 +54,9 @@ int main() {
 
     const auto simulated = brain.simulate({Belief{"temperature", 30.0, 0.95, 2, 2}}, 2);
     assert(simulated.depth == 2);
-    assert(!simulated.predictions.empty());
+    // The Brain has only one transition, so the causal hypothesis remains
+    // below the trust threshold instead of being treated as learned knowledge.
+    assert(simulated.predictions.empty());
 
     std::filesystem::remove(path, ec);
     std::filesystem::remove(std::filesystem::path(path.string() + ".meta"), ec);
