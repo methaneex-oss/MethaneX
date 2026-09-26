@@ -20,6 +20,14 @@ int main() {
         {"system.ready=true", "system.safe=true", 0.8, 5}
     };
 
+    // Disputed evidence remains observable but must not authorize deduction.
+    // The same causal link is valid when its premise is authoritative and inert
+    // when that premise is explicitly disputed.
+    const Belief disputed_enabled{"system.enabled", true, 0.95, 3, 1, true};
+    const auto disputed_inferred = engine.infer({disputed_enabled}, links, 8);
+    assert(disputed_inferred.size() == 1);
+    assert(disputed_inferred.front().disputed);
+
     const auto inferred = engine.infer({enabled}, links, 8);
     assert(inferred.size() == 3);
     assert(inferred[1].key == "system.ready");
