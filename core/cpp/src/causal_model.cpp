@@ -53,6 +53,11 @@ const Belief* find_belief(const std::vector<Belief>& beliefs, const std::string&
 
 void CausalModel::observe_transition(const std::vector<Belief>& before,
                                      const std::vector<Belief>& after) {
+    // Existing Brain wiring calls observe_transition for every experience.
+    // Evaluate the old model against the new outcome before learning from that
+    // same transition, so prediction errors can weaken stale hypotheses.
+    observe_outcome(before, after);
+
     for (const auto& current : after) {
         const auto prior = std::find_if(before.begin(), before.end(), [&](const Belief& belief) {
             return belief.key == current.key;
@@ -96,6 +101,7 @@ void CausalModel::observe_outcome(const std::vector<Belief>& before,
         // knowledge without one anomaly destroying accumulated experience.
         for (auto& link : links_) {
             const auto [effect_key, effect_value] = decode_effect(link.effect);
+            (void)effect_value;
             if (effect_key != prediction.key || prediction.depth != 1) continue;
             if (std::find_if(before.begin(), before.end(), [&](const Belief& belief) {
                     return link.cause == encode(belief.key, belief.value);
