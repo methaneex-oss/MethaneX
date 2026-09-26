@@ -89,6 +89,25 @@ int main() {
     }
     assert(brain_found_power);
 
+    // Association state is not a second persistence store: Brain reconstruction replays
+    // the observation journal and must rebuild the same learned relationships.
+    const auto persisted_associations = brain.associations();
+    Brain reconstructed(path);
+    const auto replayed_associations = reconstructed.associations();
+    assert(replayed_associations.size() == persisted_associations.size());
+    for (const auto& persisted : persisted_associations) {
+        const auto it = std::find_if(
+            replayed_associations.begin(), replayed_associations.end(),
+            [&](const auto& candidate) {
+                return candidate.left == persisted.left && candidate.right == persisted.right;
+            });
+        assert(it != replayed_associations.end());
+        assert(it->observations == persisted.observations);
+        assert(it->contradictory_observations == persisted.contradictory_observations);
+        assert(std::abs(it->strength - persisted.strength) < 1e-12);
+        assert(std::abs(it->confidence - persisted.confidence) < 1e-12);
+    }
+
     // Concept formation is derived from repeated shared context. The test does
     // not name a semantic category; it only verifies that the graph discovers
     // two experiences with the same contextual structure.
