@@ -99,7 +99,7 @@ std::optional<Evidence> evidence_for_action(const ActionExecutionResult& result)
     }
 
     return Evidence{
-        "action_executor",
+        "action_executor." + result.action.name,
         "action." + result.action.name,
         result.reason,
         reliability,
