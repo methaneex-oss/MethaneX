@@ -131,6 +131,55 @@ int main() {
     assert(restored_metric != nullptr);
     assert(restored_metric->reliability == 0.0);
 
+    // Conflicting observations become explicit disputed evidence and raise
+    // planning uncertainty. Under elevated uncertainty, the reversible action
+    // should outrank a slightly more valuable but irreversible action.
+    const auto dispute_journal = std::filesystem::temp_directory_path() / "jarvis_cognitive_dispute_suite.bin";
+    std::filesystem::remove(dispute_journal, ec);
+    std::filesystem::remove(dispute_journal.string() + ".meta", ec);
+    Brain dispute_brain(dispute_journal);
+    CognitiveCycle dispute_cycle(dispute_brain);
+
+    Goal dispute_goal;
+    dispute_goal.id = "respond";
+    dispute_goal.description = "Respond to uncertain sensor state";
+    dispute_goal.priority = 1.0;
+    assert(dispute_brain.create_goal(dispute_goal));
+    assert(dispute_brain.activate_goal(dispute_goal.id));
+
+    CognitiveCycleInput dispute_input;
+    dispute_input.observation = Event{0, 0, "sensor", "observation", {{"temperature", 20.0}}};
+    dispute_input.candidate_actions = {
+        CandidateAction{"commit", 0.0, 0.50, 0.0, 0.0, 0.0, 0.0, 0.0},
+        CandidateAction{"inspect", 0.0, 0.47, 0.0, 1.0, 0.0, 0.0, 0.0},
+    };
+    dispute_input.goal_id = dispute_goal.id;
+    dispute_input.planning_horizon = 1;
+    dispute_input.reasoning_steps = 2;
+    dispute_input.resource_budget = 1.0;
+    dispute_input.action_constraints = ActionConstraints{1.0, false};
+
+    const auto clear_result = dispute_cycle.run(dispute_input);
+    assert(clear_result.status == CognitiveCycleStatus::completed);
+    assert(clear_result.context.plan.steps.front().action.name == "commit");
+    const double clear_uncertainty = clear_result.context.decision_context.uncertainty;
+
+    dispute_input.observation = Event{0, 0, "sensor", "observation", {{"temperature", 80.0}}};
+    const auto disputed_result = dispute_cycle.run(dispute_input);
+    assert(disputed_result.status == CognitiveCycleStatus::completed);
+    assert(disputed_result.context.plan.steps.front().action.name == "inspect");
+    assert(disputed_result.context.decision_context.uncertainty > clear_uncertainty);
+    bool found_disputed_temperature = false;
+    for (const auto& belief : disputed_result.context.beliefs) {
+        if (belief.key == "temperature") {
+            found_disputed_temperature = belief.disputed;
+            assert(belief.confidence < 0.5);
+        }
+    }
+    assert(found_disputed_temperature);
+
+    std::filesystem::remove(dispute_journal, ec);
+    std::filesystem::remove(dispute_journal.string() + ".meta", ec);
     std::filesystem::remove(journal, ec);
     std::filesystem::remove(journal.string() + ".meta", ec);
     return 0;
