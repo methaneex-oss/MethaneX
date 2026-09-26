@@ -18,6 +18,13 @@ struct Belief {
     bool disputed{false};
 };
 
+// Provenance linking a prediction to the experience-derived hypotheses that
+// influenced its confidence. These are evidence, not authoritative beliefs.
+struct PredictionContext {
+    std::vector<std::string> concept_members;
+    double evidence_strength{0.0};
+};
+
 struct Prediction {
     std::string key;
     Scalar predicted;
@@ -25,6 +32,7 @@ struct Prediction {
     std::uint64_t created_sequence{0};
     bool resolved{false};
     double error{0.0};
+    PredictionContext context{};
 };
 
 struct CausalLink {
