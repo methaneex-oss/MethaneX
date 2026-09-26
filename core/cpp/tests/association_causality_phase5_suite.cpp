@@ -24,6 +24,30 @@ int main() {
     assert(related.front().observations == 1);
     assert(related.front().strength >= 0.5);
 
+    // Generalization is structural, not hard-coded: temperature -> fan and
+    // fan -> power imply a weak contextual path temperature -> power, but do
+    // not manufacture a direct temperature/power association.
+    const std::vector<Belief> before_power{
+        {"fan", false, 0.9, 2, 2},
+        {"power", 100.0, 0.9, 2, 2},
+    };
+    const std::vector<Belief> after_power{
+        {"fan", true, 0.9, 3, 3},
+        {"power", 120.0, 0.9, 3, 3},
+    };
+    associations.observe(before_power, after_power, 3);
+    const auto contextual = associations.contextual("temperature", 2, 0.20);
+    assert(!contextual.empty());
+    bool found_power = false;
+    for (const auto& inference : contextual) {
+        if (inference.key == "power") {
+            found_power = true;
+            assert(inference.hops == 2);
+            assert(inference.strength < related.front().strength);
+        }
+    }
+    assert(found_power);
+
     CausalModel causal;
     causal.observe_transition(before, after);
     // One experience creates a hypothesis but does not authorize prediction.
