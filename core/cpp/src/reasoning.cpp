@@ -54,7 +54,12 @@ std::vector<Belief> ReasoningEngine::infer(const std::vector<Belief>& premises,
     if (max_steps == 0) return result;
 
     std::unordered_map<std::string, Scalar> known;
-    for (const auto& belief : premises) known[belief.key] = belief.value;
+    for (const auto& belief : premises) {
+        // A disputed belief is retained as evidence, but it is not an
+        // authoritative premise for deduction. This prevents contradictions
+        // in the world model from silently becoming certain conclusions.
+        if (!belief.disputed) known[belief.key] = belief.value;
+    }
 
     for (std::size_t step = 0; step < max_steps; ++step) {
         const auto snapshot = known;
