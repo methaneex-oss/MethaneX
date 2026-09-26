@@ -1,6 +1,7 @@
 #include "jarvis/core/cognitive_cycle.hpp"
 
 #include <cassert>
+#include <cmath>
 #include <filesystem>
 #include <string>
 
@@ -60,7 +61,8 @@ int main() {
     const auto adapted = cycle.run(input);
     assert(adapted.status == CognitiveCycleStatus::completed);
     assert(adapted.context.plan.steps.front().action.name == "inspect");
-    assert(adapted.context.plan.steps.front().action.risk < input.candidate_actions.front().risk);
+    assert(adapted.context.plan.steps.front().action.risk > input.candidate_actions.front().risk);
+    assert(adapted.context.plan.steps.front().action.expected_value < input.candidate_actions.front().expected_value);
 
     assert(adapted.context.observation.event.sequence != 0);
     assert(!adapted.context.beliefs.empty());
@@ -94,8 +96,6 @@ int main() {
         prediction.key,
         Scalar{45.0},
         Evidence{"sensor", "temperature", Scalar{45.0}, 0.9});
-    // resolve_prediction reports prediction correctness; an incorrect prediction
-    // is still resolved and its error feeds adaptation and learning.
     assert(!feedback.prediction_resolved);
     assert(feedback.learned_reliability >= 0.0 && feedback.learned_reliability <= 1.0);
     assert(feedback.reflection.prediction_accuracy <= before_reflection.prediction_accuracy ||
