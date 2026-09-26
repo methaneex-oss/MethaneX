@@ -116,17 +116,40 @@ int main() {
          {"context_one", false, 0.9, 3, 12},
          {"context_two", false, 0.9, 3, 12}},
         12);
+    // A later experience is deliberately an exception: gamma shares only
+    // one contextual neighbor with the alpha/beta pattern, so it must not be
+    // absorbed into the same concept hypothesis.
+    concept_model.observe(
+        {{"alpha", true, 0.9, 3, 12},
+         {"beta", true, 0.9, 3, 12},
+         {"context_one", false, 0.9, 3, 12},
+         {"context_two", false, 0.9, 3, 12},
+         {"gamma", false, 0.9, 3, 12}},
+        {{"alpha", true, 0.9, 4, 13},
+         {"beta", true, 0.9, 4, 13},
+         {"context_one", true, 0.9, 4, 13},
+         {"context_two", false, 0.9, 4, 13},
+         {"gamma", true, 0.9, 4, 13}},
+        13);
+
     const auto concepts = concept_model.concept_candidates(0.5, 2);
     bool found_shared_structure = false;
+    bool found_over_merged_concept = false;
+    bool gamma_absorbed = false;
     for (const auto& concept : concepts) {
         const auto has_alpha = std::find(concept.members.begin(), concept.members.end(), "alpha") != concept.members.end();
         const auto has_beta = std::find(concept.members.begin(), concept.members.end(), "beta") != concept.members.end();
+        const auto has_gamma = std::find(concept.members.begin(), concept.members.end(), "gamma") != concept.members.end();
         if (has_alpha && has_beta && concept.coherence > 0.0) {
             found_shared_structure = true;
-            break;
+            assert(concept.members.size() == 2);
         }
+        if (concept.members.size() > 2) found_over_merged_concept = true;
+        if (has_gamma && has_alpha && has_beta) gamma_absorbed = true;
     }
     assert(found_shared_structure);
+    assert(!found_over_merged_concept);
+    assert(!gamma_absorbed);
 
     const auto simulated = brain.simulate({Belief{"temperature", 30.0, 0.95, 2, 2}}, 2);
     assert(simulated.depth == 2);
