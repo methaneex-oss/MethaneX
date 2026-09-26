@@ -74,7 +74,7 @@ int main() {
     Brain brain(path);
     brain.observe(Event{0, 1, "sensor", "observation", {{"temperature", 20.0}, {"fan", false}}});
     brain.observe(Event{0, 2, "sensor", "observation", {{"temperature", 30.0}, {"fan", true}}});
-    brain.observe(Event{0, 3, "sensor", "observation", {{"temperature", 30.0}, {"fan", false}, {"power", 120.0}}});
+    brain.observe(Event{0, 3, "sensor", "observation", {{"temperature", 30.0}, {"fan", false}, {"power", 140.0}}});
     assert(!brain.associations().empty());
     assert(!brain.associated_with("temperature").empty());
     assert(!brain.causal_links().empty());
@@ -104,17 +104,17 @@ int main() {
         {{"alpha", true, 0.9, 2, 11},
          {"beta", false, 0.9, 2, 11},
          {"context_one", true, 0.9, 2, 11},
-         {"context_two", false, 0.9, 2, 11}},
+         {"context_two", true, 0.9, 2, 11}},
         11);
     concept_model.observe(
         {{"alpha", true, 0.9, 2, 11},
          {"beta", false, 0.9, 2, 11},
          {"context_one", true, 0.9, 2, 11},
-         {"context_two", false, 0.9, 2, 11}},
+         {"context_two", true, 0.9, 2, 11}},
         {{"alpha", true, 0.9, 3, 12},
          {"beta", true, 0.9, 3, 12},
-         {"context_one", true, 0.9, 3, 12},
-         {"context_two", true, 0.9, 3, 12}},
+         {"context_one", false, 0.9, 3, 12},
+         {"context_two", false, 0.9, 3, 12}},
         12);
     const auto concepts = concept_model.concept_candidates(0.5, 2);
     bool found_shared_structure = false;
