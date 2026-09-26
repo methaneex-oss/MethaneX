@@ -33,32 +33,59 @@ void AssociationModel::observe(const std::vector<Belief>& before,
                                std::uint64_t sequence,
                                double observation_reliability) {
     const double transition_reliability = std::clamp(observation_reliability, 0.0, 1.0);
+    std::set<std::string> changed_keys;
+    std::set<std::string> present_keys;
+    for (const auto& current : after) {
+        present_keys.insert(current.key);
+        if (changed(before, current)) changed_keys.insert(current.key);
+    }
+
+    // A learned relationship needs both positive evidence and a way to react
+    // when the same entities repeatedly stop changing together. This is bounded
+    // counter-evidence, not an assumption that one exception erases learning.
+    for (auto& association : associations_) {
+        if (present_keys.count(association.left) == 0 ||
+            present_keys.count(association.right) == 0) {
+            continue;
+        }
+        const bool left_changed = changed_keys.count(association.left) != 0;
+        const bool right_changed = changed_keys.count(association.right) != 0;
+        if (left_changed == right_changed) continue;
+
+        ++association.contradictory_observations;
+        association.strength = std::clamp(
+            association.strength * 0.85, 0.0, 1.0);
+        association.confidence = std::clamp(
+            association.confidence * 0.90, 0.0, 1.0);
+        association.last_sequence = sequence;
+    }
+
     std::vector<const Belief*> changed_beliefs;
     changed_beliefs.reserve(after.size());
     for (const auto& current : after) {
         if (changed(before, current)) changed_beliefs.push_back(&current);
     }
 
-    // Associations represent co-changing evidence, not mere co-presence in the
-    // same observation. Pairing every changed belief with every stable belief
-    // creates a dense graph and makes later structural concept formation unable
-    // to distinguish a real recurring relationship from incidental context.
+    // Positive evidence is limited to pairs that actually co-change. Stable
+    // co-presence is not treated as an association.
     for (std::size_t i = 0; i < changed_beliefs.size(); ++i) {
         const auto& current = *changed_beliefs[i];
         for (std::size_t j = i + 1; j < changed_beliefs.size(); ++j) {
             const auto& other = *changed_beliefs[j];
             const auto pair = std::minmax(current.key, other.key);
-
-            const double evidence = std::clamp(transition_reliability, 0.0, 1.0);
+            const double evidence = transition_reliability;
             auto it = std::find_if(associations_.begin(), associations_.end(), [&](const Association& item) {
                 return same_pair(item, current.key, other.key);
             });
             if (it == associations_.end()) {
-                associations_.push_back(Association{pair.first, pair.second, evidence, evidence, 1, sequence});
+                associations_.push_back(
+                    Association{pair.first, pair.second, evidence, evidence, 1, sequence, 0});
                 continue;
             }
-            it->strength = std::clamp(it->strength + (evidence - it->strength) * 0.15, 0.0, 1.0);
-            it->confidence = std::clamp(it->confidence + (evidence - it->confidence) * 0.10, 0.0, 1.0);
+            it->strength = std::clamp(
+                it->strength + (evidence - it->strength) * 0.15, 0.0, 1.0);
+            it->confidence = std::clamp(
+                it->confidence + (evidence - it->confidence) * 0.10, 0.0, 1.0);
             ++it->observations;
             it->last_sequence = sequence;
         }
