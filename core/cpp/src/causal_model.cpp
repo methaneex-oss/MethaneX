@@ -60,9 +60,13 @@ void CausalModel::observe_transition(const std::vector<Belief>& before,
                 return link.cause == cause && link.effect == consequence;
             });
             if (it == links_.end()) {
-                links_.push_back(CausalLink{cause, consequence, 0.55, 1});
+                // One co-occurrence is a hypothesis, not knowledge. Keep it
+                // below the prediction threshold until experience confirms it.
+                links_.push_back(CausalLink{cause, consequence, 0.40, 1});
             } else {
-                it->strength = std::clamp(it->strength + (1.0 - it->strength) * 0.08, 0.0, 1.0);
+                // Repeated matching transitions strengthen the hypothesis with
+                // diminishing returns: experience builds competence gradually.
+                it->strength = std::clamp(it->strength + (1.0 - it->strength) * 0.20, 0.0, 1.0);
                 ++it->observations;
             }
         }
