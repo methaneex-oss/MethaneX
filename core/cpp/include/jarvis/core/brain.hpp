@@ -136,6 +136,12 @@ public:
     SimulationResult simulate(const std::vector<Belief>& assumptions, std::size_t horizon) const;
     std::vector<Association> associations() const;
     std::vector<Association> associated_with(const std::string& key, double minimum_strength = 0.5) const;
+    // Contextual associations are derived hypotheses, not direct facts. They are
+    // exposed separately so downstream cognition can use them as weak evidence
+    // without promoting an indirect path into an authoritative belief.
+    std::vector<AssociationInference> contextual_associations(
+        const std::string& key, std::size_t max_hops = 2,
+        double minimum_strength = 0.25) const;
     std::vector<CausalLink> causal_links() const;
 
     std::vector<Decision> choose(const std::vector<CandidateAction>& actions) const;
