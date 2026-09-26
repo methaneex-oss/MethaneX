@@ -131,14 +131,24 @@ int main() {
         13);
 
     const auto weakened_concepts = concept_model.concept_candidates(0.5, 2);
-    double weakened_coherence = 0.0;
+    bool hypothesis_survived = false;
     for (const auto& concept : weakened_concepts) {
         const auto has_alpha = std::find(concept.members.begin(), concept.members.end(), "alpha") != concept.members.end();
         const auto has_beta = std::find(concept.members.begin(), concept.members.end(), "beta") != concept.members.end();
-        if (has_alpha && has_beta) weakened_coherence = concept.coherence;
+        if (has_alpha && has_beta) hypothesis_survived = true;
     }
-    assert(weakened_coherence > 0.0);
-    assert(weakened_coherence < 1.0);
+    assert(hypothesis_survived);
+    const auto weakened_associations = concept_model.related("alpha", 0.0);
+    bool found_weakened_context = false;
+    for (const auto& association : weakened_associations) {
+        if ((association.left == "alpha" && association.right == "context_one") ||
+            (association.left == "context_one" && association.right == "alpha")) {
+            found_weakened_context = true;
+            assert(association.contradictory_observations == 1);
+            assert(association.strength < 1.0);
+        }
+    }
+    assert(found_weakened_context);
 
     // Repeated counter-evidence eventually removes the hypothesis from the
     // trusted-strength view rather than forcing the old abstraction to survive.
