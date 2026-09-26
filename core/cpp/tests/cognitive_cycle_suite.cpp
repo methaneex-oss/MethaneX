@@ -10,6 +10,7 @@ int main() {
     const auto journal = std::filesystem::temp_directory_path() / "jarvis_cognitive_cycle_suite.bin";
     std::error_code ec;
     std::filesystem::remove(journal, ec);
+    std::filesystem::remove(journal.string() + ".meta", ec);
 
     Brain brain(journal);
     CognitiveCycle cycle(brain);
@@ -36,22 +37,45 @@ int main() {
     input.deadline_pressure = 0.5;
     input.action_constraints = ActionConstraints{0.5, false};
 
-    const auto result = cycle.run(input);
-    assert(result.status == CognitiveCycleStatus::completed);
-    assert(result.context.observation.event.sequence != 0);
-    assert(!result.context.beliefs.empty());
-    assert(!result.context.eligible_goals.empty());
-    assert(result.context.selected_goal.id == goal.id);
-    assert(!result.context.plan.steps.empty());
-    assert(!result.context.decisions.empty());
-    assert(result.context.decisions.front().action.name == result.context.plan.steps.front().action.name);
-    assert(result.context.decision_context.goal_priority == goal.priority);
-    assert(result.context.decision_context.plan_expected_value == result.context.plan.expected_value);
-    assert(result.context.decision_context.resource_budget == input.resource_budget);
-    assert(result.context.decision_context.deadline_pressure == input.deadline_pressure);
-    assert(result.context.action_assessments.size() == result.context.decisions.size());
-    assert(result.context.action_assessments.front().action.name == result.context.decisions.front().action.name);
-    assert(result.context.action_assessments.front().permitted);
+    // Before there is action-specific experience, planning uses the supplied
+    // candidate values unchanged.
+    const auto initial = cycle.run(input);
+    assert(initial.status == CognitiveCycleStatus::completed);
+    assert(initial.context.plan.steps.front().action.name == "stabilize");
+    assert(brain.knowledge_source("action_executor.stabilize") == nullptr);
+
+    // Feed a failed outcome back through the same Brain learning path. The next
+    // cognitive cycle must change its plan because the learned state changed.
+    assert(brain.learn(Evidence{
+        "action_executor.stabilize",
+        "action.stabilize",
+        std::string("failed"),
+        0.0,
+    }) >= 0.0);
+    const auto learned_metric = brain.knowledge_source("action_executor.stabilize");
+    assert(learned_metric != nullptr);
+    assert(learned_metric->observations == 1);
+    assert(learned_metric->reliability == 0.0);
+
+    const auto adapted = cycle.run(input);
+    assert(adapted.status == CognitiveCycleStatus::completed);
+    assert(adapted.context.plan.steps.front().action.name == "inspect");
+    assert(adapted.context.plan.steps.front().action.risk < input.candidate_actions.front().risk);
+
+    assert(adapted.context.observation.event.sequence != 0);
+    assert(!adapted.context.beliefs.empty());
+    assert(!adapted.context.eligible_goals.empty());
+    assert(adapted.context.selected_goal.id == goal.id);
+    assert(!adapted.context.plan.steps.empty());
+    assert(!adapted.context.decisions.empty());
+    assert(adapted.context.decisions.front().action.name == adapted.context.plan.steps.front().action.name);
+    assert(adapted.context.decision_context.goal_priority == goal.priority);
+    assert(adapted.context.decision_context.plan_expected_value == adapted.context.plan.expected_value);
+    assert(adapted.context.decision_context.resource_budget == input.resource_budget);
+    assert(adapted.context.decision_context.deadline_pressure == input.deadline_pressure);
+    assert(adapted.context.action_assessments.size() == adapted.context.decisions.size());
+    assert(adapted.context.action_assessments.front().action.name == adapted.context.decisions.front().action.name);
+    assert(adapted.context.action_assessments.front().permitted);
 
     CognitiveCycleInput constrained = input;
     constrained.action_constraints = ActionConstraints{0.05, false};
@@ -92,6 +116,12 @@ int main() {
     const auto invalid_result = cycle.run(invalid);
     assert(invalid_result.status == CognitiveCycleStatus::invalid_goal);
 
+    Brain restored(journal);
+    const auto restored_metric = restored.knowledge_source("action_executor.stabilize");
+    assert(restored_metric != nullptr);
+    assert(restored_metric->reliability == 0.0);
+
     std::filesystem::remove(journal, ec);
+    std::filesystem::remove(journal.string() + ".meta", ec);
     return 0;
 }
