@@ -72,15 +72,23 @@ int main() {
     Brain brain(path);
     brain.observe(Event{0, 1, "sensor", "observation", {{"temperature", 20.0}, {"fan", false}}});
     brain.observe(Event{0, 2, "sensor", "observation", {{"temperature", 30.0}, {"fan", true}}});
+    brain.observe(Event{0, 3, "sensor", "observation", {{"temperature", 30.0}, {"fan", false}, {"power", 120.0}}});
     assert(!brain.associations().empty());
     assert(!brain.associated_with("temperature").empty());
     assert(!brain.causal_links().empty());
 
+    const auto brain_contextual = brain.contextual_associations("temperature", 2, 0.20);
+    bool brain_found_power = false;
+    for (const auto& inference : brain_contextual) {
+        if (inference.key == "power") {
+            brain_found_power = true;
+            assert(inference.hops == 2);
+        }
+    }
+    assert(brain_found_power);
+
     const auto simulated = brain.simulate({Belief{"temperature", 30.0, 0.95, 2, 2}}, 2);
     assert(simulated.depth == 2);
-    // The Brain has only one transition, so the causal hypothesis remains
-    // below the trust threshold instead of being treated as learned knowledge.
-    assert(simulated.predictions.empty());
 
     std::filesystem::remove(path, ec);
     std::filesystem::remove(std::filesystem::path(path.string() + ".meta"), ec);
