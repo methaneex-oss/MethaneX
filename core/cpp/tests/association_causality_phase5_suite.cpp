@@ -2,6 +2,8 @@
 #include "jarvis/core/brain.hpp"
 #include "jarvis/core/causal_model.hpp"
 
+#include <algorithm>
+
 #include <cassert>
 #include <cmath>
 #include <filesystem>
