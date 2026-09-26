@@ -30,15 +30,23 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     result.context.beliefs = brain_.beliefs();
     result.context.causal_links = brain_.causal_links();
 
-    // A belief that has changed value across observations is carrying conflicting
-    // evidence. Preserve that uncertainty explicitly instead of collapsing it into
-    // the latest value. The confidence update in Brain is the authoritative signal
-    // for how strongly the conflict should be treated.
+    // Dispute is evidence-state, not a confidence threshold. The World Model
+    // records explicit contradictions independently from belief confidence, so
+    // cognition must consume that authoritative signal rather than reconstructing
+    // dispute from a heuristic cutoff.
+    const auto disputed_facts = brain_.world().disputed_facts();
+    const auto disputed_relations = brain_.world().disputed_relations();
     std::size_t disputed_beliefs = 0;
     for (auto& belief : result.context.beliefs) {
-        belief.disputed = belief.observations > 1 && belief.confidence <= 0.5;
+        belief.disputed = std::any_of(
+            disputed_facts.begin(), disputed_facts.end(),
+            [&](const Fact& fact) { return fact.predicate == belief.key && fact.disputed; });
         if (belief.disputed) ++disputed_beliefs;
     }
+
+    // Relation contradictions are also epistemic uncertainty even when they do
+    // not map to a scalar belief key. Preserve them in the cycle-level uncertainty
+    // signal so planning cannot treat a contradictory world model as certain.
 
     ReasoningProblem problem;
     problem.premises = result.context.beliefs;
@@ -83,8 +91,14 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
         : std::clamp(static_cast<double>(disputed_beliefs) /
                          static_cast<double>(result.context.beliefs.size()),
                      0.0, 1.0);
+    const double world_dispute_pressure = std::clamp(
+        static_cast<double>(disputed_facts.size() + disputed_relations.size()) /
+            static_cast<double>(std::max<std::size_t>(
+                1, result.context.beliefs.size() + disputed_relations.size())),
+        0.0, 1.0);
     const double uncertainty = std::max(
-        std::clamp(self_state.uncertainty, 0.0, 1.0), dispute_pressure);
+        std::clamp(self_state.uncertainty, 0.0, 1.0),
+        std::max(dispute_pressure, world_dispute_pressure));
     const double deadline_pressure = std::clamp(input.deadline_pressure, 0.0, 1.0);
 
     std::vector<CandidateAction> learned_actions = input.candidate_actions;
