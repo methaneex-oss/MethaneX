@@ -30,6 +30,16 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     result.context.beliefs = brain_.beliefs();
     result.context.causal_links = brain_.causal_links();
 
+    // A belief that has changed value across observations is carrying conflicting
+    // evidence. Preserve that uncertainty explicitly instead of collapsing it into
+    // the latest value. The confidence update in Brain is the authoritative signal
+    // for how strongly the conflict should be treated.
+    std::size_t disputed_beliefs = 0;
+    for (auto& belief : result.context.beliefs) {
+        belief.disputed = belief.observations > 1 && belief.confidence <= 0.5;
+        if (belief.disputed) ++disputed_beliefs;
+    }
+
     ReasoningProblem problem;
     problem.premises = result.context.beliefs;
     problem.causal_links = result.context.causal_links;
@@ -68,7 +78,13 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     const double goal_priority = std::clamp(selected->priority, 0.0, 1.0);
     const double goal_progress = std::clamp(selected->progress, 0.0, 1.0);
     const double threat = std::clamp(brain_.threat().score, 0.0, 1.0);
-    const double uncertainty = std::clamp(self_state.uncertainty, 0.0, 1.0);
+    const double dispute_pressure = result.context.beliefs.empty()
+        ? 0.0
+        : std::clamp(static_cast<double>(disputed_beliefs) /
+                         static_cast<double>(result.context.beliefs.size()),
+                     0.0, 1.0);
+    const double uncertainty = std::max(
+        std::clamp(self_state.uncertainty, 0.0, 1.0), dispute_pressure);
     const double deadline_pressure = std::clamp(input.deadline_pressure, 0.0, 1.0);
 
     std::vector<CandidateAction> learned_actions = input.candidate_actions;
