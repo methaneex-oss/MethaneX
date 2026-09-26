@@ -26,6 +26,14 @@ struct AssociationInference {
     std::size_t hops{0};
 };
 
+// A concept candidate is a derived cluster of experiences that repeatedly share
+// the same contextual neighbors. It is not an asserted semantic category.
+struct ConceptCandidate {
+    std::vector<std::string> members;
+    double coherence{0.0};
+    std::uint64_t supporting_observations{0};
+};
+
 class AssociationModel {
 public:
     // Observation reliability is supplied separately from belief confidence because
@@ -44,6 +52,9 @@ public:
     std::vector<AssociationInference> contextual(const std::string& key,
                                                   std::size_t max_hops = 2,
                                                   double minimum_strength = 0.25) const;
+    std::vector<ConceptCandidate> concept_candidates(
+        double minimum_strength = 0.5,
+        std::size_t minimum_shared_contexts = 2) const;
 
 private:
     std::vector<Association> associations_;
