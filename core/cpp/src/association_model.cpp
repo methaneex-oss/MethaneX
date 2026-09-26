@@ -33,24 +33,23 @@ void AssociationModel::observe(const std::vector<Belief>& before,
                                std::uint64_t sequence,
                                double observation_reliability) {
     const double transition_reliability = std::clamp(observation_reliability, 0.0, 1.0);
-    std::set<std::pair<std::string, std::string>> processed;
+    std::vector<const Belief*> changed_beliefs;
+    changed_beliefs.reserve(after.size());
     for (const auto& current : after) {
-        if (!changed(before, current)) continue;
+        if (changed(before, current)) changed_beliefs.push_back(&current);
+    }
 
-        for (const auto& other : after) {
-            if (other.key == current.key || other.confidence <= 0.0) continue;
+    // Associations represent co-changing evidence, not mere co-presence in the
+    // same observation. Pairing every changed belief with every stable belief
+    // creates a dense graph and makes later structural concept formation unable
+    // to distinguish a real recurring relationship from incidental context.
+    for (std::size_t i = 0; i < changed_beliefs.size(); ++i) {
+        const auto& current = *changed_beliefs[i];
+        for (std::size_t j = i + 1; j < changed_beliefs.size(); ++j) {
+            const auto& other = *changed_beliefs[j];
             const auto pair = std::minmax(current.key, other.key);
-            if (!processed.emplace(pair).second) continue;
 
-            // A contradictory observation can lower stored belief confidence. That is
-            // a belief-update consequence, not evidence that the observation itself was
-            // unreliable. Changed participants therefore use transition reliability;
-            // unchanged context uses its retained belief confidence.
-            const double current_evidence = transition_reliability;
-            const double other_evidence = changed(before, other)
-                ? transition_reliability
-                : other.confidence;
-            const double evidence = std::clamp(std::min(current_evidence, other_evidence), 0.0, 1.0);
+            const double evidence = std::clamp(transition_reliability, 0.0, 1.0);
             auto it = std::find_if(associations_.begin(), associations_.end(), [&](const Association& item) {
                 return same_pair(item, current.key, other.key);
             });
