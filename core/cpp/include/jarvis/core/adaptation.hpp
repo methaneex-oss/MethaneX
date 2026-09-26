@@ -9,6 +9,7 @@ namespace jarvis::core {
 struct AdaptiveMetric {
     double estimate{0.5};
     double mean_error{1.0};
+    double recent_error{1.0};
     std::uint64_t observations{0};
 };
 
