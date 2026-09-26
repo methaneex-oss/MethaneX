@@ -50,7 +50,15 @@ int main() {
     const auto stable = engine.solve(ReasoningProblem{{ready}, {}, 8});
     assert(stable.valid);
     assert(stable.kind == ReasoningKind::consistency);
+    assert(stable.confidence == 0.9);
     assert(stable.conclusions.size() == 1);
+
+    const auto disputed_solve = engine.solve(
+        ReasoningProblem{{disputed_enabled}, links, 8});
+    assert(disputed_solve.valid);
+    assert(disputed_solve.kind == ReasoningKind::consistency);
+    assert(disputed_solve.confidence == 0.0);
+    assert(disputed_solve.conclusions.size() == 1);
 
     // max_steps bounds inference depth: the first causal edge is allowed,
     // but the second edge requires another step.
