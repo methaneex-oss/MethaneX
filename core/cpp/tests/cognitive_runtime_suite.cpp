@@ -21,6 +21,9 @@ CognitiveCycleInput make_input(const std::string& goal_id, std::int64_t value) {
     input.planning_horizon = 2;
     input.memory_limit = 4;
     input.reasoning_steps = 4;
+    // Runtime action execution tests exercise the adapter boundary directly;
+    // keep the cognitive assessment permissive so the adapter is actually reached.
+    input.action_constraints = ActionConstraints{1.0, false};
     return input;
 }
 
@@ -106,9 +109,6 @@ int main() {
     assert(executed == static_cast<int>(action_result->context.action_execution_results.size()));
     assert(verified == executed);
 
-    // Execution is a perception boundary, not merely a learning side effect:
-    // the concrete outcome is persisted as an observation that later cognition
-    // can retrieve through the existing Memory/Brain path.
     const auto action_observations = brain.memory().by_kind("action_outcome");
     assert(action_observations.size() == action_result->context.action_execution_results.size());
     for (const auto& observation : action_observations) {
@@ -185,8 +185,6 @@ int main() {
     assert(wait_for_results(failing_runtime, 1));
     failing_runtime.stop();
 
-    // Feedback is processed before subsequent queued cognition and invalid
-    // feedback cannot terminate or mutate the worker.
     const auto prediction = brain.predict("runtime.prediction", 0.75, 0.9);
     assert(!prediction.key.empty());
     const auto feedback_before = runtime.metrics().feedback_processed;
