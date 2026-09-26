@@ -142,6 +142,9 @@ public:
     std::vector<AssociationInference> contextual_associations(
         const std::string& key, std::size_t max_hops = 2,
         double minimum_strength = 0.25) const;
+    std::vector<ConceptCandidate> concept_candidates(
+        double minimum_strength = 0.5,
+        std::size_t minimum_shared_contexts = 2) const;
     std::vector<CausalLink> causal_links() const;
 
     std::vector<Decision> choose(const std::vector<CandidateAction>& actions) const;
