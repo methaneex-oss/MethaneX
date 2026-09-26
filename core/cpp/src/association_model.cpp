@@ -151,61 +151,31 @@ std::vector<ConceptCandidate> AssociationModel::concept_candidates(
     for (const auto& [node, _] : neighbors) nodes.push_back(node);
     std::sort(nodes.begin(), nodes.end());
 
-    // Two experiences become candidates for the same learned concept only when
-    // they repeatedly share independent contextual neighbors. This is a
-    // structural hypothesis, not a semantic label supplied by the program.
-    std::unordered_map<std::string, std::set<std::string>> candidate_graph;
+    // Keep concept hypotheses pairwise instead of collapsing them through
+    // connected components. A transitive graph relationship is not enough to
+    // assert that every node belongs to one abstraction. Later evidence can
+    // therefore preserve overlapping concepts and exceptions independently.
     for (std::size_t i = 0; i < nodes.size(); ++i) {
         for (std::size_t j = i + 1; j < nodes.size(); ++j) {
             const auto& lhs = neighbors[nodes[i]];
             const auto& rhs = neighbors[nodes[j]];
+
             std::size_t shared = 0;
             for (const auto& neighbor : lhs) {
                 if (rhs.count(neighbor) != 0) ++shared;
             }
-            if (shared >= minimum_shared_contexts) {
-                candidate_graph[nodes[i]].insert(nodes[j]);
-                candidate_graph[nodes[j]].insert(nodes[i]);
-            }
-        }
-    }
+            if (shared < minimum_shared_contexts) continue;
 
-    std::set<std::string> visited;
-    for (const auto& [start, _] : candidate_graph) {
-        if (visited.count(start) != 0) continue;
-        std::vector<std::string> members;
-        std::vector<std::string> stack{start};
-        while (!stack.empty()) {
-            const auto node = stack.back();
-            stack.pop_back();
-            if (!visited.insert(node).second) continue;
-            members.push_back(node);
-            for (const auto& next : candidate_graph[node])
-                if (visited.count(next) == 0) stack.push_back(next);
-        }
-        if (members.size() < 2) continue;
+            const double coherence =
+                static_cast<double>(shared) /
+                static_cast<double>(std::max<std::size_t>(1, std::min(lhs.size(), rhs.size())));
 
-        double coherence = 0.0;
-        std::size_t pairs = 0;
-        for (std::size_t i = 0; i < members.size(); ++i) {
-            for (std::size_t j = i + 1; j < members.size(); ++j) {
-                const auto& lhs = neighbors[members[i]];
-                const auto& rhs = neighbors[members[j]];
-                std::size_t shared = 0;
-                for (const auto& neighbor : lhs)
-                    if (rhs.count(neighbor) != 0) ++shared;
-                coherence += static_cast<double>(shared) /
-                             static_cast<double>(std::max<std::size_t>(
-                                 1, std::min(lhs.size(), rhs.size())));
-                ++pairs;
-            }
+            result.push_back(ConceptCandidate{
+                {nodes[i], nodes[j]},
+                coherence,
+                observations[nodes[i]] + observations[nodes[j]]
+            });
         }
-        coherence = pairs == 0 ? 0.0 : coherence / static_cast<double>(pairs);
-
-        std::uint64_t support = 0;
-        for (const auto& member : members) support += observations[member];
-        std::sort(members.begin(), members.end());
-        result.push_back(ConceptCandidate{std::move(members), coherence, support});
     }
 
     std::sort(result.begin(), result.end(), [](const ConceptCandidate& lhs,
