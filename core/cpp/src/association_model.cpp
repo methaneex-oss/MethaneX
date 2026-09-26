@@ -3,7 +3,9 @@
 #include <algorithm>
 #include <cmath>
 #include <set>
+#include <unordered_map>
 #include <utility>
+#include <vector>
 
 namespace jarvis::core {
 namespace {
@@ -18,6 +20,10 @@ bool changed(const std::vector<Belief>& before, const Belief& current) {
         return belief.key == current.key;
     });
     return prior != before.end() && prior->value != current.value;
+}
+
+std::string other_endpoint(const Association& association, const std::string& key) {
+    return association.left == key ? association.right : association.left;
 }
 
 }
@@ -75,6 +81,52 @@ std::vector<Association> AssociationModel::related(const std::string& key,
     std::sort(result.begin(), result.end(), [](const Association& lhs, const Association& rhs) {
         if (lhs.strength != rhs.strength) return lhs.strength > rhs.strength;
         return lhs.observations > rhs.observations;
+    });
+    return result;
+}
+
+std::vector<AssociationInference> AssociationModel::contextual(const std::string& key,
+                                                                std::size_t max_hops,
+                                                                double minimum_strength) const {
+    std::vector<AssociationInference> result;
+    if (key.empty() || max_hops == 0 || associations_.empty()) return result;
+
+    const double threshold = std::clamp(minimum_strength, 0.0, 1.0);
+    std::unordered_map<std::string, double> best_strength;
+    std::unordered_map<std::string, std::size_t> best_hops;
+    std::vector<std::pair<std::string, double>> frontier{{key, 1.0}};
+
+    for (std::size_t hop = 1; hop <= max_hops && !frontier.empty(); ++hop) {
+        std::vector<std::pair<std::string, double>> next;
+        for (const auto& [current, path_strength] : frontier) {
+            for (const auto& association : associations_) {
+                if (association.left != current && association.right != current) continue;
+                const auto neighbor = other_endpoint(association, current);
+                if (neighbor == key) continue;
+
+                const double candidate = path_strength * std::clamp(association.strength, 0.0, 1.0);
+                if (candidate < threshold) continue;
+
+                const auto it = best_strength.find(neighbor);
+                if (it == best_strength.end() || candidate > it->second) {
+                    best_strength[neighbor] = candidate;
+                    best_hops[neighbor] = hop;
+                    next.emplace_back(neighbor, candidate);
+                }
+            }
+        }
+        frontier = std::move(next);
+    }
+
+    result.reserve(best_strength.size());
+    for (const auto& [neighbor, strength] : best_strength)
+        result.push_back(AssociationInference{neighbor, strength, best_hops[neighbor]});
+
+    std::sort(result.begin(), result.end(), [](const AssociationInference& lhs,
+                                               const AssociationInference& rhs) {
+        if (lhs.strength != rhs.strength) return lhs.strength > rhs.strength;
+        if (lhs.hops != rhs.hops) return lhs.hops < rhs.hops;
+        return lhs.key < rhs.key;
     });
     return result;
 }
