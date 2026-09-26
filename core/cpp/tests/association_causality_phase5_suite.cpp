@@ -26,9 +26,6 @@ int main() {
     assert(related.front().observations == 1);
     assert(related.front().strength >= 0.5);
 
-    // Generalization is structural, not hard-coded: temperature -> fan and
-    // fan -> power imply a weak contextual path temperature -> power, but do
-    // not manufacture a direct temperature/power association.
     const std::vector<Belief> before_power{
         {"fan", false, 0.9, 2, 2},
         {"power", 100.0, 0.9, 2, 2},
@@ -52,12 +49,10 @@ int main() {
 
     CausalModel causal;
     causal.observe_transition(before, after);
-    // One experience creates a hypothesis but does not authorize prediction.
     const auto first = causal.simulate({Belief{"temperature", 30.0, 0.95, 2, 2}}, 1);
     assert(first.depth == 1);
     assert(first.predictions.empty());
 
-    // Repeated experience strengthens the same hypothesis enough to predict.
     causal.observe_transition(before, after);
     const auto one_step = causal.simulate({Belief{"temperature", 30.0, 0.95, 2, 2}}, 1);
     assert(!one_step.predictions.empty());
@@ -108,9 +103,6 @@ int main() {
         assert(std::abs(it->confidence - persisted.confidence) < 1e-12);
     }
 
-    // Concept formation is derived from repeated shared context. The test does
-    // not name a semantic category; it only verifies that the graph discovers
-    // two experiences with the same contextual structure.
     AssociationModel concept_model;
     const std::vector<Belief> concept_before{
         {"alpha", false, 0.9, 1, 10},
@@ -135,9 +127,6 @@ int main() {
          {"context_one", false, 0.9, 3, 12},
          {"context_two", false, 0.9, 3, 12}},
         12);
-    // A later experience is deliberately an exception: alpha and beta remain
-    // stable while their learned contexts change. The first exception weakens
-    // coherence without erasing the hypothesis immediately.
     concept_model.observe(
         {{"alpha", true, 0.9, 3, 12},
          {"beta", true, 0.9, 3, 12},
@@ -169,8 +158,6 @@ int main() {
     }
     assert(found_weakened_context);
 
-    // Repeated counter-evidence eventually removes the hypothesis from the
-    // trusted-strength view rather than forcing the old abstraction to survive.
     for (std::uint64_t sequence = 14; sequence <= 20; ++sequence) {
         concept_model.observe(
             {{"alpha", true, 0.9, sequence - 1, sequence - 1},
@@ -189,6 +176,42 @@ int main() {
         const auto has_beta = std::find(concept.members.begin(), concept.members.end(), "beta") != concept.members.end();
         assert(!(has_alpha && has_beta));
     }
+
+    // RED: learned concepts must be retrievable through Brain and become
+    // contextual evidence for prediction without changing authoritative beliefs.
+    const auto concept_path = std::filesystem::temp_directory_path() / "jarvis_phase5_concept_context.bin";
+    std::filesystem::remove(concept_path, ec);
+    std::filesystem::remove(std::filesystem::path(concept_path.string() + ".meta"), ec);
+    Brain concept_brain(concept_path);
+    concept_brain.observe(Event{0, 10, "sensor", "observation", {{"alpha", false}, {"beta", false}, {"context_one", false}, {"context_two", false}}});
+    concept_brain.observe(Event{0, 11, "sensor", "observation", {{"alpha", true}, {"beta", false}, {"context_one", true}, {"context_two", true}}});
+    concept_brain.observe(Event{0, 12, "sensor", "observation", {{"alpha", true}, {"beta", true}, {"context_one", false}, {"context_two", false}}});
+    const auto contextual_concepts = concept_brain.contextual_concepts("alpha", 0.5, 2);
+    bool found_alpha_beta = false;
+    for (const auto& concept : contextual_concepts) {
+        const auto has_alpha = std::find(concept.members.begin(), concept.members.end(), "alpha") != concept.members.end();
+        const auto has_beta = std::find(concept.members.begin(), concept.members.end(), "beta") != concept.members.end();
+        if (has_alpha && has_beta) {
+            found_alpha_beta = true;
+            assert(concept.coherence > 0.0);
+        }
+    }
+    assert(found_alpha_beta);
+    const auto beliefs_before_prediction = concept_brain.beliefs();
+    const auto prediction = concept_brain.predict("alpha", 1.0, 0.8);
+    assert(prediction.context.evidence_strength > 0.0);
+    assert(std::find(prediction.context.concept_members.begin(), prediction.context.concept_members.end(), "alpha") != prediction.context.concept_members.end());
+    assert(std::find(prediction.context.concept_members.begin(), prediction.context.concept_members.end(), "beta") != prediction.context.concept_members.end());
+    const auto beliefs_after_prediction = concept_brain.beliefs();
+    assert(beliefs_after_prediction.size() == beliefs_before_prediction.size());
+    for (const auto& before_belief : beliefs_before_prediction) {
+        const auto it = std::find_if(beliefs_after_prediction.begin(), beliefs_after_prediction.end(), [&](const auto& candidate) { return candidate.key == before_belief.key; });
+        assert(it != beliefs_after_prediction.end());
+        assert(it->value == before_belief.value);
+        assert(std::abs(it->confidence - before_belief.confidence) < 1e-12);
+    }
+    std::filesystem::remove(concept_path, ec);
+    std::filesystem::remove(std::filesystem::path(concept_path.string() + ".meta"), ec);
 
     const auto simulated = brain.simulate({Belief{"temperature", 30.0, 0.95, 2, 2}}, 2);
     assert(simulated.depth == 2);
