@@ -131,4 +131,92 @@ std::vector<AssociationInference> AssociationModel::contextual(const std::string
     return result;
 }
 
+std::vector<ConceptCandidate> AssociationModel::concept_candidates(
+    double minimum_strength, std::size_t minimum_shared_contexts) const {
+    std::vector<ConceptCandidate> result;
+    if (associations_.empty() || minimum_shared_contexts == 0) return result;
+
+    const double threshold = std::clamp(minimum_strength, 0.0, 1.0);
+    std::unordered_map<std::string, std::set<std::string>> neighbors;
+    std::unordered_map<std::string, std::uint64_t> observations;
+    for (const auto& association : associations_) {
+        if (association.strength < threshold) continue;
+        neighbors[association.left].insert(association.right);
+        neighbors[association.right].insert(association.left);
+        observations[association.left] += association.observations;
+        observations[association.right] += association.observations;
+    }
+
+    std::vector<std::string> nodes;
+    nodes.reserve(neighbors.size());
+    for (const auto& [node, _] : neighbors) nodes.push_back(node);
+    std::sort(nodes.begin(), nodes.end());
+
+    // Two experiences become candidates for the same learned concept only when
+    // they repeatedly share independent contextual neighbors. This is a
+    // structural hypothesis, not a semantic label supplied by the program.
+    std::unordered_map<std::string, std::set<std::string>> candidate_graph;
+    for (std::size_t i = 0; i < nodes.size(); ++i) {
+        for (std::size_t j = i + 1; j < nodes.size(); ++j) {
+            const auto& lhs = neighbors[nodes[i]];
+            const auto& rhs = neighbors[nodes[j]];
+            std::size_t shared = 0;
+            for (const auto& neighbor : lhs) {
+                if (rhs.count(neighbor) != 0) ++shared;
+            }
+            if (shared >= minimum_shared_contexts) {
+                candidate_graph[nodes[i]].insert(nodes[j]);
+                candidate_graph[nodes[j]].insert(nodes[i]);
+            }
+        }
+    }
+
+    std::set<std::string> visited;
+    for (const auto& [start, _] : candidate_graph) {
+        if (visited.count(start) != 0) continue;
+        std::vector<std::string> members;
+        std::vector<std::string> stack{start};
+        while (!stack.empty()) {
+            const auto node = stack.back();
+            stack.pop_back();
+            if (!visited.insert(node).second) continue;
+            members.push_back(node);
+            for (const auto& next : candidate_graph[node])
+                if (visited.count(next) == 0) stack.push_back(next);
+        }
+        if (members.size() < 2) continue;
+
+        double coherence = 0.0;
+        std::size_t pairs = 0;
+        for (std::size_t i = 0; i < members.size(); ++i) {
+            for (std::size_t j = i + 1; j < members.size(); ++j) {
+                const auto& lhs = neighbors[members[i]];
+                const auto& rhs = neighbors[members[j]];
+                std::size_t shared = 0;
+                for (const auto& neighbor : lhs)
+                    if (rhs.count(neighbor) != 0) ++shared;
+                coherence += static_cast<double>(shared) /
+                             static_cast<double>(std::max<std::size_t>(
+                                 1, std::min(lhs.size(), rhs.size())));
+                ++pairs;
+            }
+        }
+        coherence = pairs == 0 ? 0.0 : coherence / static_cast<double>(pairs);
+
+        std::uint64_t support = 0;
+        for (const auto& member : members) support += observations[member];
+        std::sort(members.begin(), members.end());
+        result.push_back(ConceptCandidate{std::move(members), coherence, support});
+    }
+
+    std::sort(result.begin(), result.end(), [](const ConceptCandidate& lhs,
+                                               const ConceptCandidate& rhs) {
+        if (lhs.coherence != rhs.coherence) return lhs.coherence > rhs.coherence;
+        if (lhs.supporting_observations != rhs.supporting_observations)
+            return lhs.supporting_observations > rhs.supporting_observations;
+        return lhs.members < rhs.members;
+    });
+    return result;
+}
+
 } // namespace jarvis::core
