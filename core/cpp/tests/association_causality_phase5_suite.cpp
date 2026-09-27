@@ -84,8 +84,6 @@ int main() {
     }
     assert(brain_found_power);
 
-    // Association state is not a second persistence store: Brain reconstruction replays
-    // the observation journal and must rebuild the same learned relationships.
     const auto persisted_associations = brain.associations();
     Brain reconstructed(path);
     const auto replayed_associations = reconstructed.associations();
@@ -177,7 +175,6 @@ int main() {
         assert(!(has_alpha && has_beta));
     }
 
-    // Learned concepts are contextual evidence, not authoritative beliefs.
     const auto concept_path = std::filesystem::temp_directory_path() / "jarvis_phase5_concept_context.bin";
     std::filesystem::remove(concept_path, ec);
     std::filesystem::remove(std::filesystem::path(concept_path.string() + ".meta"), ec);
@@ -209,6 +206,40 @@ int main() {
         assert(it->value == before_belief.value);
         assert(std::abs(it->confidence - before_belief.confidence) < 1e-12);
     }
+
+    const auto associations_before_success = concept_brain.associated_with("alpha", 0.0);
+    double alpha_beta_before_success = 0.0;
+    for (const auto& association : associations_before_success) {
+        if ((association.left == "alpha" && association.right == "beta") ||
+            (association.left == "beta" && association.right == "alpha")) {
+            alpha_beta_before_success = association.strength;
+        }
+    }
+    assert(alpha_beta_before_success > 0.0);
+    concept_brain.learn_from_prediction("alpha", 1.0, 1.0);
+    const auto associations_after_success = concept_brain.associated_with("alpha", 0.0);
+    double alpha_beta_after_success = 0.0;
+    for (const auto& association : associations_after_success) {
+        if ((association.left == "alpha" && association.right == "beta") ||
+            (association.left == "beta" && association.right == "alpha")) {
+            alpha_beta_after_success = association.strength;
+        }
+    }
+    assert(alpha_beta_after_success > alpha_beta_before_success);
+
+    const auto failed_prediction = concept_brain.predict_with_context("alpha", 1.0, 0.8);
+    assert(failed_prediction.context.evidence_strength > 0.0);
+    concept_brain.learn_from_prediction("alpha", 0.0, -1.0);
+    const auto associations_after_failure = concept_brain.associated_with("alpha", 0.0);
+    double alpha_beta_after_failure = 0.0;
+    for (const auto& association : associations_after_failure) {
+        if ((association.left == "alpha" && association.right == "beta") ||
+            (association.left == "beta" && association.right == "alpha")) {
+            alpha_beta_after_failure = association.strength;
+        }
+    }
+    assert(alpha_beta_after_failure < alpha_beta_after_success);
+
     std::filesystem::remove(concept_path, ec);
     std::filesystem::remove(std::filesystem::path(concept_path.string() + ".meta"), ec);
 
