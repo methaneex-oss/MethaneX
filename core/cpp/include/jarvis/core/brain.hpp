@@ -72,7 +72,25 @@ public:
     Prediction predict(std::string key, Scalar value, double confidence);
     Prediction predict_with_context(std::string key, Scalar value, double confidence, double minimum_strength = 0.5, std::size_t minimum_shared_contexts = 2);
     bool resolve_prediction(const std::string& key, const Scalar& actual);
-    bool assimilate_goal_outcome(const GoalOutcomeEvidence& evidence);
+    bool assimilate_goal_outcome(const GoalOutcomeEvidence& evidence) {
+        std::unique_lock lock(mutex_);
+        if (evidence.goal_id.empty()) return false;
+        const auto* existing = goals_model_.get(evidence.goal_id);
+        if (existing == nullptr || existing->status == GoalStatus::completed || existing->status == GoalStatus::abandoned) return false;
+        GoalOutcomeEvidence normalized = evidence;
+        normalized.normalize();
+        const double before = existing->progress;
+        const double after = std::clamp(normalized.progress_after, 0.0, 1.0);
+        Event event{0, 0, "goal_feedback", "goal_progress", {{"id", normalized.goal_id}, {"progress", after}, {"previous_progress", before}, {"delta", after - before}, {"completed", normalized.completed}, {"confidence", normalized.confidence}}};
+        event.sequence = memory_.append(event);
+        if (event.sequence == 0) return false;
+        if (!goals_model_.update_progress(normalized.goal_id, after)) return false;
+        if (normalized.completed) goals_model_.complete(normalized.goal_id);
+        ++state_.events_seen;
+        state_.cycle = event.sequence;
+        sync_self_state();
+        return true;
+    }
     std::vector<std::pair<std::string, Scalar>> simulate(const std::vector<Belief>& assumptions) const;
     SimulationResult simulate(const std::vector<Belief>& assumptions, std::size_t horizon) const;
     std::vector<Association> associations() const;
