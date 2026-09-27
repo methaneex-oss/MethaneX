@@ -81,13 +81,20 @@ public:
         normalized.normalize();
         const double before = existing->progress;
         const double after = std::clamp(normalized.progress_after, 0.0, 1.0);
-        Event event{0, 0, "goal_feedback", "goal_progress", {{"id", normalized.goal_id}, {"progress", after}, {"previous_progress", before}, {"delta", after - before}, {"completed", normalized.completed}, {"confidence", normalized.confidence}}};
-        event.sequence = memory_.append(event);
-        if (event.sequence == 0) return false;
+        Event progress_event{0, 0, "goal_feedback", "goal_progress", {{"id", normalized.goal_id}, {"progress", after}, {"previous_progress", before}, {"delta", after - before}, {"completed", normalized.completed}, {"confidence", normalized.confidence}}};
+        progress_event.sequence = memory_.append(progress_event);
+        if (progress_event.sequence == 0) return false;
         if (!goals_model_.update_progress(normalized.goal_id, after)) return false;
-        if (normalized.completed) goals_model_.complete(normalized.goal_id);
         ++state_.events_seen;
-        state_.cycle = event.sequence;
+        state_.cycle = progress_event.sequence;
+        if (normalized.completed) {
+            Event completion_event{0, 0, "goal_feedback", "goal_complete", {{"id", normalized.goal_id}}};
+            completion_event.sequence = memory_.append(completion_event);
+            if (completion_event.sequence == 0) return false;
+            if (!goals_model_.complete(normalized.goal_id)) return false;
+            ++state_.events_seen;
+            state_.cycle = completion_event.sequence;
+        }
         sync_self_state();
         return true;
     }
