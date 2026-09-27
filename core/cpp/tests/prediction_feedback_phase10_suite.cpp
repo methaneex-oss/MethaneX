@@ -24,6 +24,29 @@ int main() {
     assert(contextual_prediction.context.evidence_strength > 0.0);
     const double learned_context_confidence = contextual_prediction.confidence;
     assert(learned_context_confidence > 0.2);
+
+    // Generalization must work for a novel key by relational structure rather than
+    // by a preloaded semantic label or exact-key lookup.
+    brain.observe(Event{0, 5, "sensor", "observation",
+                         {{"alpha", false}, {"beta", false},
+                          {"context_one", false}, {"context_two", false},
+                          {"gamma", false}}});
+    brain.observe(Event{0, 6, "sensor", "observation",
+                         {{"alpha", false}, {"beta", false},
+                          {"context_one", true}, {"context_two", true},
+                          {"gamma", true}}});
+    const auto generalized = brain.generalized_concepts("gamma", 0.5, 2, 0.5);
+    bool matched_learned_pattern = false;
+    for (const auto& match : generalized) {
+        if (match.concept_members == contextual_prediction.context.concept_members &&
+            match.matched_contexts.size() >= 2 &&
+            match.similarity >= 0.5 &&
+            match.evidence_strength > 0.0) {
+            matched_learned_pattern = true;
+            break;
+        }
+    }
+    assert(matched_learned_pattern);
     assert(brain.resolve_prediction("alpha", 1.0));
 
     Brain restored_context(path);
