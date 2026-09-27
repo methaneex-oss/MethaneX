@@ -46,7 +46,6 @@ void AssociationModel::observe(const std::vector<Belief>& before,
         const bool left_changed = changed_keys.count(association.left) != 0;
         const bool right_changed = changed_keys.count(association.right) != 0;
         if (left_changed == right_changed) continue;
-
         ++association.contradictory_observations;
         association.strength = std::clamp(association.strength * 0.85, 0.0, 1.0);
         association.confidence = std::clamp(association.confidence * 0.90, 0.0, 1.0);
@@ -72,10 +71,8 @@ void AssociationModel::observe(const std::vector<Belief>& before,
                     Association{pair.first, pair.second, evidence, evidence, 1, sequence, 0});
                 continue;
             }
-            it->strength = std::clamp(
-                it->strength + (evidence - it->strength) * 0.15, 0.0, 1.0);
-            it->confidence = std::clamp(
-                it->confidence + (evidence - it->confidence) * 0.10, 0.0, 1.0);
+            it->strength = std::clamp(it->strength + (evidence - it->strength) * 0.15, 0.0, 1.0);
+            it->confidence = std::clamp(it->confidence + (evidence - it->confidence) * 0.10, 0.0, 1.0);
             ++it->observations;
             it->last_sequence = sequence;
         }
@@ -84,8 +81,7 @@ void AssociationModel::observe(const std::vector<Belief>& before,
 
 std::vector<Association> AssociationModel::all() const { return associations_; }
 
-std::vector<Association> AssociationModel::related(const std::string& key,
-                                                    double minimum_strength) const {
+std::vector<Association> AssociationModel::related(const std::string& key, double minimum_strength) const {
     std::vector<Association> result;
     const double threshold = std::clamp(minimum_strength, 0.0, 1.0);
     for (const auto& association : associations_) {
@@ -104,12 +100,10 @@ std::vector<AssociationInference> AssociationModel::contextual(const std::string
                                                                 double minimum_strength) const {
     std::vector<AssociationInference> result;
     if (key.empty() || max_hops == 0 || associations_.empty()) return result;
-
     const double threshold = std::clamp(minimum_strength, 0.0, 1.0);
     std::unordered_map<std::string, double> best_strength;
     std::unordered_map<std::string, std::size_t> best_hops;
     std::vector<std::pair<std::string, double>> frontier{{key, 1.0}};
-
     for (std::size_t hop = 1; hop <= max_hops && !frontier.empty(); ++hop) {
         std::vector<std::pair<std::string, double>> next;
         for (const auto& [current, path_strength] : frontier) {
@@ -129,13 +123,10 @@ std::vector<AssociationInference> AssociationModel::contextual(const std::string
         }
         frontier = std::move(next);
     }
-
     result.reserve(best_strength.size());
     for (const auto& [neighbor, strength] : best_strength)
         result.push_back(AssociationInference{neighbor, strength, best_hops[neighbor]});
-
-    std::sort(result.begin(), result.end(), [](const AssociationInference& lhs,
-                                               const AssociationInference& rhs) {
+    std::sort(result.begin(), result.end(), [](const AssociationInference& lhs, const AssociationInference& rhs) {
         if (lhs.strength != rhs.strength) return lhs.strength > rhs.strength;
         if (lhs.hops != rhs.hops) return lhs.hops < rhs.hops;
         return lhs.key < rhs.key;
@@ -147,42 +138,38 @@ std::vector<ConceptCandidate> AssociationModel::concept_candidates(
     double minimum_strength, std::size_t minimum_shared_contexts) const {
     std::vector<ConceptCandidate> result;
     if (associations_.empty() || minimum_shared_contexts == 0) return result;
-
     const double threshold = std::clamp(minimum_strength, 0.0, 1.0);
     std::unordered_map<std::string, std::set<std::string>> neighbors;
     std::unordered_map<std::string, std::uint64_t> observations;
+    std::unordered_map<std::string, std::uint64_t> contradictions;
     for (const auto& association : associations_) {
         if (association.strength < threshold) continue;
         neighbors[association.left].insert(association.right);
         neighbors[association.right].insert(association.left);
         observations[association.left] += association.observations;
         observations[association.right] += association.observations;
+        contradictions[association.left] += association.contradictory_observations;
+        contradictions[association.right] += association.contradictory_observations;
     }
-
     std::vector<std::string> nodes;
     nodes.reserve(neighbors.size());
     for (const auto& [node, _] : neighbors) nodes.push_back(node);
     std::sort(nodes.begin(), nodes.end());
-
     for (std::size_t i = 0; i < nodes.size(); ++i) {
         for (std::size_t j = i + 1; j < nodes.size(); ++j) {
             const auto& lhs = neighbors[nodes[i]];
             const auto& rhs = neighbors[nodes[j]];
             std::size_t shared = 0;
-            for (const auto& neighbor : lhs)
-                if (rhs.count(neighbor) != 0) ++shared;
+            for (const auto& neighbor : lhs) if (rhs.count(neighbor) != 0) ++shared;
             if (shared < minimum_shared_contexts) continue;
-
-            const double coherence =
-                static_cast<double>(shared) /
+            const double coherence = static_cast<double>(shared) /
                 static_cast<double>(std::max<std::size_t>(1, std::min(lhs.size(), rhs.size())));
             result.push_back(ConceptCandidate{{nodes[i], nodes[j]}, coherence,
-                                              observations[nodes[i]] + observations[nodes[j]]});
+                                              observations[nodes[i]] + observations[nodes[j]],
+                                              contradictions[nodes[i]] + contradictions[nodes[j]]});
         }
     }
-
-    std::sort(result.begin(), result.end(), [](const ConceptCandidate& lhs,
-                                               const ConceptCandidate& rhs) {
+    std::sort(result.begin(), result.end(), [](const ConceptCandidate& lhs, const ConceptCandidate& rhs) {
         if (lhs.coherence != rhs.coherence) return lhs.coherence > rhs.coherence;
         if (lhs.supporting_observations != rhs.supporting_observations)
             return lhs.supporting_observations > rhs.supporting_observations;
@@ -198,14 +185,12 @@ void AssociationModel::apply_prediction_feedback(const std::vector<std::string>&
     if (concept_members.size() < 2) return;
     const double evidence = std::clamp(evidence_strength, 0.0, 1.0);
     const double learning_rate = successful ? 0.12 * evidence : 0.18 * evidence;
-
     for (std::size_t i = 0; i < concept_members.size(); ++i) {
         for (std::size_t j = i + 1; j < concept_members.size(); ++j) {
             auto it = std::find_if(associations_.begin(), associations_.end(), [&](const Association& item) {
                 return same_pair(item, concept_members[i], concept_members[j]);
             });
             if (it == associations_.end()) continue;
-
             if (successful) {
                 it->strength = std::clamp(it->strength + (1.0 - it->strength) * learning_rate, 0.0, 1.0);
                 it->confidence = std::clamp(it->confidence + (1.0 - it->confidence) * (learning_rate * 0.8), 0.0, 1.0);
