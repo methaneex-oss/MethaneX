@@ -80,18 +80,17 @@ public:
         GoalOutcomeEvidence normalized = evidence;
         normalized.normalize();
         const double before = existing->progress;
-        const double after = std::clamp(normalized.progress_after, 0.0, 1.0);
-        Event progress_event{0, 0, "goal_feedback", "goal_progress", {{"id", normalized.goal_id}, {"progress", after}, {"previous_progress", before}, {"delta", after - before}, {"completed", normalized.completed}, {"confidence", normalized.confidence}}};
+        const double after = normalized.completed ? 1.0 : std::clamp(normalized.progress_after, 0.0, 1.0);
+        Event progress_event{0, 0, "goal_feedback", "goal_progress", {{"id", normalized.goal_id}, {"progress", after}, {"previous_progress", before}, {"delta", after - before}, {"completed", normalized.completed || after >= 1.0}, {"confidence", normalized.confidence}}};
         progress_event.sequence = memory_.append(progress_event);
         if (progress_event.sequence == 0) return false;
         if (!goals_model_.update_progress(normalized.goal_id, after)) return false;
         ++state_.events_seen;
         state_.cycle = progress_event.sequence;
-        if (normalized.completed) {
+        if (normalized.completed || after >= 1.0) {
             Event completion_event{0, 0, "goal_feedback", "goal_complete", {{"id", normalized.goal_id}}};
             completion_event.sequence = memory_.append(completion_event);
             if (completion_event.sequence == 0) return false;
-            if (!goals_model_.complete(normalized.goal_id)) return false;
             ++state_.events_seen;
             state_.cycle = completion_event.sequence;
         }
