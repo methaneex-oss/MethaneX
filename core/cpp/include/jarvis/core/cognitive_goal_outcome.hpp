@@ -1,7 +1,5 @@
 #pragma once
 
-#include "cognitive_cycle.hpp"
-
 #include <algorithm>
 #include <cstdint>
 #include <string>
@@ -43,7 +41,7 @@ struct GoalProgressModel {
         progress = std::clamp(evidence.progress_after, 0.0, 1.0);
         const auto observations = positive_outcomes + negative_outcomes;
         if (observations == 1) confidence = evidence.confidence;
-        else confidence = std::clamp(
+        else if (observations > 1) confidence = std::clamp(
             ((confidence * static_cast<double>(observations - 1)) + evidence.confidence) /
             static_cast<double>(observations), 0.0, 1.0);
     }
