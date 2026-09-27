@@ -33,7 +33,17 @@ Prediction Brain::predict_with_context(std::string key, Scalar value, double con
         }
     }
 
-    Prediction prediction{std::move(key), std::move(value), std::clamp(confidence, 0.0, 1.0),
+    // Learned concepts are contextual evidence, not truth. Their coherence
+    // therefore modulates the confidence of the prediction rather than
+    // replacing the predicted value or mutating authoritative beliefs.
+    const double base_confidence = std::clamp(confidence, 0.0, 1.0);
+    const double contextual_confidence =
+        context.evidence_strength > 0.0
+            ? 1.0 - ((1.0 - base_confidence) * (1.0 - context.evidence_strength))
+            : base_confidence;
+
+    Prediction prediction{std::move(key), std::move(value),
+                          std::clamp(contextual_confidence, 0.0, 1.0),
                           state_.cycle, false, 0.0, std::move(context)};
     Event event{0, prediction_now_ns(), "brain", "prediction",
                 {{"key", prediction.key},
