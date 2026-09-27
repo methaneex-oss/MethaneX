@@ -131,6 +131,9 @@ public:
     }
     std::vector<Belief> beliefs() const;
     Prediction predict(std::string key, Scalar value, double confidence);
+    Prediction predict_with_context(std::string key, Scalar value, double confidence,
+                                    double minimum_strength = 0.5,
+                                    std::size_t minimum_shared_contexts = 2);
     bool resolve_prediction(const std::string& key, const Scalar& actual);
     std::vector<std::pair<std::string, Scalar>> simulate(const std::vector<Belief>& assumptions) const;
     SimulationResult simulate(const std::vector<Belief>& assumptions, std::size_t horizon) const;
