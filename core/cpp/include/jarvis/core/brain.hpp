@@ -57,7 +57,7 @@ public:
         const auto prediction_it = predictions_.find(key); if (prediction_it == predictions_.end() || prediction_it->second.resolved) return cycle;
         const auto predicted = std::get_if<double>(&prediction_it->second.predicted); const auto observed = std::get_if<double>(&actual);
         if (predicted == nullptr || observed == nullptr || !std::isfinite(*predicted) || !std::isfinite(*observed)) return cycle;
-        double error = std::clamp(std::abs(*observed - *predicted), 0.0, 1.0);
+        const double error = std::clamp(std::abs(*observed - *predicted), 0.0, 1.0);
         Event outcome{0, 0, "brain", "prediction_outcome", {{"key", key}, {"actual", actual}, {"error", error}}}; outcome.sequence = memory_.append(outcome); if (outcome.sequence == 0) return cycle;
         replay(outcome); ++state_.events_seen; state_.cycle = outcome.sequence;
         const double bounded_fitness = std::clamp(fitness, -1.0, 1.0);
@@ -94,8 +94,10 @@ public:
         if (!result.action.name.empty()) {
             Event action_event{0, 0, "brain", "action_outcome", {{"action", result.action.name}, {"status", static_cast<std::int64_t>(result.status)}, {"authorized", result.authorized}, {"executed", result.executed}, {"verified", result.verified}, {"rolled_back", result.rolled_back}, {"reason", result.reason}, {"reliability", reliability}}};
             action_event.sequence = memory_.append(action_event);
-            if (action_event.sequence != 0) { ++state_.events_seen; state_.cycle = action_event.sequence; knowledge_.assimilate(Evidence{"action_executor", "action." + result.action.name, Scalar{result.reason}, reliability}); }
-            learn(Evidence{"action_executor", "action." + result.action.name, Scalar{result.reason}, reliability});
+            if (action_event.sequence != 0) { ++state_.events_seen; state_.cycle = action_event.sequence; }
+            Event learning_event{0, 0, "action_executor", "learning", {{"action." + result.action.name, Scalar{result.reason}}, {"reliability", reliability}}};
+            learning_event.sequence = memory_.append(learning_event);
+            if (learning_event.sequence != 0) { ++state_.events_seen; state_.cycle = learning_event.sequence; replay(learning_event); }
         }
         sync_self_state(); return result;
     }
