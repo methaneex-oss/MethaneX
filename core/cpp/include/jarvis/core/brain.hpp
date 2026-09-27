@@ -151,6 +151,10 @@ public:
     std::vector<ConceptCandidate> contextual_concepts(
         const std::string& key, double minimum_strength = 0.5,
         std::size_t minimum_shared_contexts = 2) const;
+    std::vector<ConceptMatch> generalized_concepts(
+        const std::string& key, double minimum_strength = 0.5,
+        std::size_t minimum_shared_contexts = 2,
+        double minimum_similarity = 0.5) const;
     std::vector<CausalLink> causal_links() const;
 
     std::vector<Decision> choose(const std::vector<CandidateAction>& actions) const;
