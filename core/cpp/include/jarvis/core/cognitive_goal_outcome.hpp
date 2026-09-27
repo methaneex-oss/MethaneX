@@ -3,17 +3,11 @@
 #include "cognitive_cycle.hpp"
 
 #include <algorithm>
-#include <cmath>
 #include <cstdint>
 #include <string>
-#include <vector>
 
 namespace jarvis::core {
 
-// Goal progress is an observed cognitive state, not a hard-coded success label.
-// The runtime records evidence about whether an outcome moved the active goal
-// toward completion so future goal selection can use experience rather than
-// merely action-level success.
 struct GoalOutcomeEvidence {
     std::string goal_id;
     double progress_before{0.0};
@@ -47,11 +41,11 @@ struct GoalProgressModel {
         else if (evidence.delta < 0.0) ++negative_outcomes;
         if (evidence.completed) ++completed_outcomes;
         progress = std::clamp(evidence.progress_after, 0.0, 1.0);
-        confidence = std::clamp(
-            (confidence * static_cast<double>(positive_outcomes + negative_outcomes - 1) +
-             evidence.confidence) /
-                static_cast<double>(positive_outcomes + negative_outcomes),
-            0.0, 1.0);
+        const auto observations = positive_outcomes + negative_outcomes;
+        if (observations == 1) confidence = evidence.confidence;
+        else confidence = std::clamp(
+            ((confidence * static_cast<double>(observations - 1)) + evidence.confidence) /
+            static_cast<double>(observations), 0.0, 1.0);
     }
 };
 
