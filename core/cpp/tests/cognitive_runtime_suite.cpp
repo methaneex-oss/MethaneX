@@ -210,6 +210,25 @@ int main() {
     assert(resolved);
     assert(runtime.metrics().feedback_rejected == 1);
 
+    // Goal progress is a separate observed outcome from action success.
+    const feedback_goal_before = runtime.metrics().feedback_processed;
+    assert(runtime.submit_feedback(CognitiveFeedback{
+        "", 0.0, std::nullopt, goal.id, 0.4, 0.8}));
+    assert(wait_for_feedback(runtime, feedback_goal_before + 1));
+    const* goal_after_progress = brain.goal(goal.id);
+    assert(goal_after_progress != nullptr);
+    assert(goal_after_progress->progress == 0.4);
+    assert(goal_after_progress->status == GoalStatus::active);
+
+    const feedback_goal_complete = runtime.metrics().feedback_processed;
+    assert(runtime.submit_feedback(CognitiveFeedback{
+        "", 0.0, std::nullopt, goal.id, 1.0, 0.95}));
+    assert(wait_for_feedback(runtime, feedback_goal_complete + 1));
+    const auto* completed_goal = brain.goal(goal.id);
+    assert(completed_goal != nullptr);
+    assert(completed_goal->progress == 1.0);
+    assert(completed_goal->status == GoalStatus::completed);
+
     runtime.stop();
     assert(!runtime.running());
     assert(!runtime.submit(make_input(goal.id, 1000), 100.0));
