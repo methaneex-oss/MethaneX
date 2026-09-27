@@ -215,7 +215,7 @@ int main() {
     assert(runtime.submit_feedback(CognitiveFeedback{
         "", 0.0, std::nullopt, goal.id, 0.4, 0.8}));
     assert(wait_for_feedback(runtime, feedback_goal_before + 1));
-    const* goal_after_progress = brain.goal(goal.id);
+    const auto* goal_after_progress = brain.goal(goal.id);
     assert(goal_after_progress != nullptr);
     assert(goal_after_progress->progress == 0.4);
     assert(goal_after_progress->status == GoalStatus::active);
