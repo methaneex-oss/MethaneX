@@ -50,6 +50,9 @@ struct CognitiveFeedback {
     std::string prediction_key;
     Scalar actual;
     std::optional<Evidence> evidence;
+    std::optional<std::string> goal_id;
+    std::optional<double> goal_progress;
+    double goal_confidence{0.0};
 };
 
 class CognitiveRuntime {
@@ -64,17 +67,8 @@ public:
     void stop();
     bool running() const;
 
-    // Direct submission remains available to explicit callers that have already
-    // decided cognition should run. Higher priority values run first; equal
-    // priorities remain FIFO.
     bool submit(CognitiveCycleInput input, double priority = 0.0);
-
-    // Event-driven submission evaluates normalized upstream cognitive signals.
-    // The trigger never interprets event contents or phrases.
     bool submit(CognitiveCycleInput input, const CognitiveTriggerSignals& signals);
-
-    // Outcome feedback is deliberately separate from normal cognitive input so
-    // completed outcomes can update the Brain before subsequent cognition runs.
     bool submit_feedback(CognitiveFeedback feedback);
 
     std::optional<CognitiveCycleResult> poll_result();
