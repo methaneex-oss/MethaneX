@@ -40,34 +40,24 @@ void AssociationModel::observe(const std::vector<Belief>& before,
         if (changed(before, current)) changed_keys.insert(current.key);
     }
 
-    // A learned relationship needs both positive evidence and a way to react
-    // when the same entities repeatedly stop changing together. This is bounded
-    // counter-evidence, not an assumption that one exception erases learning.
     for (auto& association : associations_) {
         if (present_keys.count(association.left) == 0 ||
-            present_keys.count(association.right) == 0) {
-            continue;
-        }
+            present_keys.count(association.right) == 0) continue;
         const bool left_changed = changed_keys.count(association.left) != 0;
         const bool right_changed = changed_keys.count(association.right) != 0;
         if (left_changed == right_changed) continue;
 
         ++association.contradictory_observations;
-        association.strength = std::clamp(
-            association.strength * 0.85, 0.0, 1.0);
-        association.confidence = std::clamp(
-            association.confidence * 0.90, 0.0, 1.0);
+        association.strength = std::clamp(association.strength * 0.85, 0.0, 1.0);
+        association.confidence = std::clamp(association.confidence * 0.90, 0.0, 1.0);
         association.last_sequence = sequence;
     }
 
     std::vector<const Belief*> changed_beliefs;
     changed_beliefs.reserve(after.size());
-    for (const auto& current : after) {
+    for (const auto& current : after)
         if (changed(before, current)) changed_beliefs.push_back(&current);
-    }
 
-    // Positive evidence is limited to pairs that actually co-change. Stable
-    // co-presence is not treated as an association.
     for (std::size_t i = 0; i < changed_beliefs.size(); ++i) {
         const auto& current = *changed_beliefs[i];
         for (std::size_t j = i + 1; j < changed_beliefs.size(); ++j) {
@@ -92,9 +82,7 @@ void AssociationModel::observe(const std::vector<Belief>& before,
     }
 }
 
-std::vector<Association> AssociationModel::all() const {
-    return associations_;
-}
+std::vector<Association> AssociationModel::all() const { return associations_; }
 
 std::vector<Association> AssociationModel::related(const std::string& key,
                                                     double minimum_strength) const {
@@ -129,10 +117,8 @@ std::vector<AssociationInference> AssociationModel::contextual(const std::string
                 if (association.left != current && association.right != current) continue;
                 const auto neighbor = other_endpoint(association, current);
                 if (neighbor == key) continue;
-
                 const double candidate = path_strength * std::clamp(association.strength, 0.0, 1.0);
                 if (candidate < threshold) continue;
-
                 const auto it = best_strength.find(neighbor);
                 if (it == best_strength.end() || candidate > it->second) {
                     best_strength[neighbor] = candidate;
@@ -178,30 +164,20 @@ std::vector<ConceptCandidate> AssociationModel::concept_candidates(
     for (const auto& [node, _] : neighbors) nodes.push_back(node);
     std::sort(nodes.begin(), nodes.end());
 
-    // Keep concept hypotheses pairwise instead of collapsing them through
-    // connected components. A transitive graph relationship is not enough to
-    // assert that every node belongs to one abstraction. Later evidence can
-    // therefore preserve overlapping concepts and exceptions independently.
     for (std::size_t i = 0; i < nodes.size(); ++i) {
         for (std::size_t j = i + 1; j < nodes.size(); ++j) {
             const auto& lhs = neighbors[nodes[i]];
             const auto& rhs = neighbors[nodes[j]];
-
             std::size_t shared = 0;
-            for (const auto& neighbor : lhs) {
+            for (const auto& neighbor : lhs)
                 if (rhs.count(neighbor) != 0) ++shared;
-            }
             if (shared < minimum_shared_contexts) continue;
 
             const double coherence =
                 static_cast<double>(shared) /
                 static_cast<double>(std::max<std::size_t>(1, std::min(lhs.size(), rhs.size())));
-
-            result.push_back(ConceptCandidate{
-                {nodes[i], nodes[j]},
-                coherence,
-                observations[nodes[i]] + observations[nodes[j]]
-            });
+            result.push_back(ConceptCandidate{{nodes[i], nodes[j]}, coherence,
+                                              observations[nodes[i]] + observations[nodes[j]]});
         }
     }
 
@@ -213,6 +189,34 @@ std::vector<ConceptCandidate> AssociationModel::concept_candidates(
         return lhs.members < rhs.members;
     });
     return result;
+}
+
+void AssociationModel::apply_prediction_feedback(const std::vector<std::string>& concept_members,
+                                                 bool successful,
+                                                 double evidence_strength,
+                                                 std::uint64_t sequence) {
+    if (concept_members.size() < 2) return;
+    const double evidence = std::clamp(evidence_strength, 0.0, 1.0);
+    const double learning_rate = successful ? 0.12 * evidence : 0.18 * evidence;
+
+    for (std::size_t i = 0; i < concept_members.size(); ++i) {
+        for (std::size_t j = i + 1; j < concept_members.size(); ++j) {
+            auto it = std::find_if(associations_.begin(), associations_.end(), [&](const Association& item) {
+                return same_pair(item, concept_members[i], concept_members[j]);
+            });
+            if (it == associations_.end()) continue;
+
+            if (successful) {
+                it->strength = std::clamp(it->strength + (1.0 - it->strength) * learning_rate, 0.0, 1.0);
+                it->confidence = std::clamp(it->confidence + (1.0 - it->confidence) * (learning_rate * 0.8), 0.0, 1.0);
+            } else {
+                it->strength = std::clamp(it->strength * (1.0 - learning_rate), 0.0, 1.0);
+                it->confidence = std::clamp(it->confidence * (1.0 - learning_rate * 0.7), 0.0, 1.0);
+                ++it->contradictory_observations;
+            }
+            it->last_sequence = sequence;
+        }
+    }
 }
 
 } // namespace jarvis::core
