@@ -80,12 +80,12 @@ Prediction Brain::predict_with_context(std::string key, Scalar value, double con
     event.sequence = memory_.append(event);
     if (event.sequence == 0) return Prediction{};
 
-    prediction.created_sequence = event.sequence;
-    predictions_[prediction.key] = prediction;
+    replay(event);
     ++state_.events_seen;
     state_.cycle = event.sequence;
     sync_self_state();
-    return prediction;
+    const it = predictions_.find(prediction.key);
+    return it == predictions_.end() ? Prediction{} : it->second;
 }
 
 } // namespace jarvis::core
