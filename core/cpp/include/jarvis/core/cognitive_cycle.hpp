@@ -58,6 +58,7 @@ struct CognitiveCycleResult {
 
 struct CognitiveFeedbackResult {
     bool prediction_resolved{false};
+    bool goal_progress_assimilated{false};
     double learned_reliability{0.0};
     Reflection reflection;
 };
@@ -73,7 +74,10 @@ public:
     CognitiveFeedbackResult process_outcome(
         const std::optional<std::string>& prediction_key,
         const Scalar& actual,
-        const std::optional<Evidence>& evidence = std::nullopt) const;
+        const std::optional<Evidence>& evidence = std::nullopt,
+        const std::optional<std::string>& goal_id = std::nullopt,
+        const std::optional<double>& goal_progress = std::nullopt,
+        double goal_confidence = 0.0) const;
 
 private:
     std::optional<Goal> select_goal(const CognitiveCycleInput& input,
