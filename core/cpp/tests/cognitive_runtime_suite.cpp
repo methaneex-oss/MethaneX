@@ -243,6 +243,11 @@ int main() {
         }
     }
     assert(persisted);
+    const auto* restored_goal = restored.goal(goal.id);
+    assert(restored_goal != nullptr);
+    assert(restored_goal->progress == 1.0);
+    assert(restored_goal->status == GoalStatus::completed);
+
     const auto restored_action_observations = restored.memory().by_kind("action_outcome");
     assert(restored_action_observations.size() >= action_observations.size());
     const auto* action_knowledge = restored.knowledge_source("action_executor");
