@@ -109,6 +109,61 @@ int main() {
     (void)brain.attention();
     (void)brain.threat();
 
+    // Experience-derived structure must generalize to a novel key through
+    // relational evidence rather than an exact-key lookup.
+    const auto concept_journal = root / "concepts.bin";
+    Brain concept_brain(concept_journal);
+    concept_brain.observe(Event{0, 0, "experience", "observation",
+                                {{"alpha", Scalar{false}}, {"beta", Scalar{false}},
+                                 {"context_one", Scalar{false}}, {"context_two", Scalar{false}}}});
+    concept_brain.observe(Event{0, 0, "experience", "observation",
+                                {{"alpha", Scalar{true}}, {"beta", Scalar{true}},
+                                 {"context_one", Scalar{true}}, {"context_two", Scalar{true}}}});
+    concept_brain.observe(Event{0, 0, "experience", "observation",
+                                {{"alpha", Scalar{false}}, {"beta", Scalar{false}},
+                                 {"context_one", Scalar{false}}, {"context_two", Scalar{false}}}});
+    concept_brain.observe(Event{0, 0, "experience", "observation",
+                                {{"alpha", Scalar{true}}, {"beta", Scalar{true}},
+                                 {"context_one", Scalar{true}}, {"context_two", Scalar{true}}}});
+    const auto contextual = concept_brain.predict_with_context("alpha", Scalar{1.0}, 0.2, 0.5, 2);
+    assert(!contextual.context.concept_members.empty());
+    assert(contextual.context.evidence_strength > 0.0);
+    concept_brain.observe(Event{0, 0, "experience", "observation",
+                                {{"gamma", Scalar{true}}, {"context_one", Scalar{true}},
+                                 {"context_two", Scalar{true}}}});
+    const auto matches = concept_brain.generalized_concepts("gamma", 0.5, 2, 0.5);
+    bool generalized = false;
+    for (const auto& match : matches) {
+        if (match.concept_members == contextual.context.concept_members &&
+            match.matched_contexts.size() >= 2 && match.similarity >= 0.5 &&
+            match.evidence_strength > 0.0) {
+            generalized = true;
+            break;
+        }
+    }
+    assert(generalized);
+
+    const auto prediction_journal = root / "prediction-replay.bin";
+    {
+        Brain first(prediction_journal);
+        const auto prediction = first.predict_with_context("replay.prediction", Scalar{10.0}, 0.3);
+        assert(prediction.created_sequence > 0);
+        assert(first.resolve_prediction("replay.prediction", Scalar{10.0}));
+    }
+    {
+        Brain restarted(prediction_journal);
+        const auto snapshot = restarted.snapshot();
+        bool restored = false;
+        for (const auto& prediction : snapshot.predictions) {
+            if (prediction.key == "replay.prediction") {
+                restored = prediction.resolved && prediction.error == 0.0 &&
+                           prediction.confidence >= 0.3;
+                break;
+            }
+        }
+        assert(restored);
+    }
+
     brain.observe(Event{0, 0, "memory", "observation",
                         {{"health", Scalar{0.2}}, {"mode", Scalar{std::string("degraded")}}}});
     assert(brain.isolate("memory"));
