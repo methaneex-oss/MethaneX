@@ -30,10 +30,6 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     result.context.beliefs = brain_.beliefs();
     result.context.causal_links = brain_.causal_links();
 
-    // Dispute is evidence-state, not a confidence threshold. The World Model
-    // records explicit contradictions independently from belief confidence, so
-    // cognition must consume that authoritative signal rather than reconstructing
-    // dispute from a heuristic cutoff.
     const auto disputed_facts = brain_.world().disputed_facts();
     const auto disputed_relations = brain_.world().disputed_relations();
     std::size_t disputed_beliefs = 0;
@@ -43,10 +39,6 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
             [&](const Fact& fact) { return fact.predicate == belief.key && fact.disputed; });
         if (belief.disputed) ++disputed_beliefs;
     }
-
-    // Relation contradictions are also epistemic uncertainty even when they do
-    // not map to a scalar belief key. Preserve them in the cycle-level uncertainty
-    // signal so planning cannot treat a contradictory world model as certain.
 
     ReasoningProblem problem;
     problem.premises = result.context.beliefs;
@@ -104,16 +96,12 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     std::vector<CandidateAction> learned_actions = input.candidate_actions;
     for (auto& action : learned_actions) {
         if (action.name.empty()) continue;
-
         if (const auto* metric = brain_.knowledge_source("action_executor." + action.name);
             metric != nullptr && metric->observations > 0) {
             const double reliability = std::clamp(metric->reliability, 0.0, 1.0);
             action.expected_value *= (0.5 + 0.5 * reliability);
             action.risk = std::clamp(action.risk + (1.0 - reliability) * 0.5, 0.0, 1.0);
         }
-
-        // Capability health belongs to cognitive state. A known degraded or
-        // isolated capability therefore changes the action's planning profile.
         if (const auto* capability = brain_.self_state_model().capability(action.name);
             capability != nullptr) {
             const double availability = std::clamp(capability->availability, 0.0, 1.0);
@@ -175,11 +163,28 @@ bool CognitiveCycle::resolve_prediction(const std::string& key, const Scalar& ac
 CognitiveFeedbackResult CognitiveCycle::process_outcome(
     const std::optional<std::string>& prediction_key,
     const Scalar& actual,
-    const std::optional<Evidence>& evidence) const {
+    const std::optional<Evidence>& evidence,
+    const std::optional<std::string>& goal_id,
+    const std::optional<double>& goal_progress,
+    double goal_confidence) const {
     CognitiveFeedbackResult result;
     if (prediction_key.has_value() && !prediction_key->empty())
         result.prediction_resolved = resolve_prediction(*prediction_key, actual);
     if (evidence.has_value()) result.learned_reliability = learn_from_outcome(*evidence);
+    if (goal_id.has_value() && goal_progress.has_value()) {
+        GoalOutcomeEvidence goal_evidence{
+            *goal_id,
+            0.0,
+            std::clamp(*goal_progress, 0.0, 1.0),
+            0.0,
+            *goal_progress >= 1.0,
+            std::clamp(goal_confidence, 0.0, 1.0),
+            brain_.state().cycle,
+        };
+        if (const auto* goal = brain_.goal(*goal_id); goal != nullptr)
+            goal_evidence.progress_before = goal->progress;
+        result.goal_progress_assimilated = brain_.assimilate_goal_outcome(goal_evidence);
+    }
     result.reflection = brain_.reflect();
     return result;
 }
