@@ -177,8 +177,7 @@ int main() {
         assert(!(has_alpha && has_beta));
     }
 
-    // RED: learned concepts must be retrievable through Brain and become
-    // contextual evidence for prediction without changing authoritative beliefs.
+    // Learned concepts are contextual evidence, not authoritative beliefs.
     const auto concept_path = std::filesystem::temp_directory_path() / "jarvis_phase5_concept_context.bin";
     std::filesystem::remove(concept_path, ec);
     std::filesystem::remove(std::filesystem::path(concept_path.string() + ".meta"), ec);
@@ -198,7 +197,7 @@ int main() {
     }
     assert(found_alpha_beta);
     const auto beliefs_before_prediction = concept_brain.beliefs();
-    const auto prediction = concept_brain.predict("alpha", 1.0, 0.8);
+    const auto prediction = concept_brain.predict_with_context("alpha", 1.0, 0.8);
     assert(prediction.context.evidence_strength > 0.0);
     assert(std::find(prediction.context.concept_members.begin(), prediction.context.concept_members.end(), "alpha") != prediction.context.concept_members.end());
     assert(std::find(prediction.context.concept_members.begin(), prediction.context.concept_members.end(), "beta") != prediction.context.concept_members.end());
