@@ -194,8 +194,10 @@ int main() {
     }
     assert(found_alpha_beta);
     const auto beliefs_before_prediction = concept_brain.beliefs();
-    const auto prediction = concept_brain.predict_with_context("alpha", 1.0, 0.8);
+    const auto prediction = concept_brain.predict_with_context("alpha", 1.0, 0.2);
     assert(prediction.context.evidence_strength > 0.0);
+    assert(prediction.confidence > 0.2);
+    assert(prediction.confidence <= 1.0);
     assert(std::find(prediction.context.concept_members.begin(), prediction.context.concept_members.end(), "alpha") != prediction.context.concept_members.end());
     assert(std::find(prediction.context.concept_members.begin(), prediction.context.concept_members.end(), "beta") != prediction.context.concept_members.end());
     const auto beliefs_after_prediction = concept_brain.beliefs();
