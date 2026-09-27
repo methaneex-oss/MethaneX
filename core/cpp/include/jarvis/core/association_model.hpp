@@ -57,6 +57,15 @@ public:
         double minimum_strength = 0.5,
         std::size_t minimum_shared_contexts = 2) const;
 
+    // Apply falsifiable outcome evidence to the exact learned hypothesis that
+    // influenced a prediction. A successful prediction reinforces the hypothesis;
+    // a failed prediction weakens it and records contradiction. This does not
+    // manufacture a new semantic fact and does not touch authoritative beliefs.
+    void apply_prediction_feedback(const std::vector<std::string>& concept_members,
+                                   bool successful,
+                                   double evidence_strength,
+                                   std::uint64_t sequence);
+
 private:
     std::vector<Association> associations_;
 };
