@@ -12,6 +12,31 @@ int main() {
     std::filesystem::remove(path.string() + ".meta", ec);
 
     Brain brain(path);
+
+    // Build an experience-derived concept from repeated co-change, then ensure
+    // its provenance survives journal replay and can still receive outcome feedback.
+    brain.observe(Event{0, 1, "sensor", "observation", {{"alpha", false}, {"beta", false}, {"context_one", false}, {"context_two", false}}});
+    brain.observe(Event{0, 2, "sensor", "observation", {{"alpha", true}, {"beta", true}, {"context_one", true}, {"context_two", true}}});
+    brain.observe(Event{0, 3, "sensor", "observation", {{"alpha", false}, {"beta", false}, {"context_one", false}, {"context_two", false}}});
+    brain.observe(Event{0, 4, "sensor", "observation", {{"alpha", true}, {"beta", true}, {"context_one", true}, {"context_two", true}}});
+    const auto contextual_prediction = brain.predict_with_context("alpha", 1.0, 0.2, 0.5, 2);
+    assert(!contextual_prediction.context.concept_members.empty());
+    assert(contextual_prediction.context.evidence_strength > 0.0);
+    const double learned_context_confidence = contextual_prediction.confidence;
+    assert(learned_context_confidence > 0.2);
+    assert(brain.resolve_prediction("alpha", 1.0));
+
+    Brain restored_context(path);
+    bool provenance_restored = false;
+    for (const auto& current : restored_context.snapshot().predictions) {
+        if (current.key == "alpha" && current.created_sequence == contextual_prediction.created_sequence) {
+            provenance_restored = current.context.concept_members == contextual_prediction.context.concept_members &&
+                                  current.context.evidence_strength == contextual_prediction.context.evidence_strength &&
+                                  current.resolved && current.error == 0.0;
+            break;
+        }
+    }
+    assert(provenance_restored);
     Goal goal;
     goal.id = "stabilize";
     goal.description = "Stabilize the observed system";
