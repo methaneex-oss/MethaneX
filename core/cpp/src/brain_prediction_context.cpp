@@ -40,17 +40,25 @@ Prediction Brain::predict_with_context(std::string key, Scalar value, double con
     std::unique_lock lock(mutex_);
     if (key.empty()) return Prediction{};
 
-    const auto candidates = association_.concept_candidates(
-        std::clamp(minimum_strength, 0.0, 1.0), minimum_shared_contexts);
-
+    const double threshold = std::clamp(minimum_strength, 0.0, 1.0);
     PredictionContext context{};
+
+    // Prefer direct concept membership. If the key is novel, transfer only the
+    // learned relational evidence that its observed context structurally matches.
+    const auto candidates = association_.concept_candidates(threshold, minimum_shared_contexts);
     for (const auto& candidate : candidates) {
-        if (std::find(candidate.members.begin(), candidate.members.end(), key) == candidate.members.end()) {
-            continue;
-        }
+        if (std::find(candidate.members.begin(), candidate.members.end(), key) == candidate.members.end()) continue;
         if (candidate.coherence > context.evidence_strength) {
             context.evidence_strength = candidate.coherence;
             context.concept_members = candidate.members;
+        }
+    }
+    if (context.concept_members.empty()) {
+        const auto matches = association_.generalized_concepts(
+            key, threshold, minimum_shared_contexts, 0.5);
+        if (!matches.empty()) {
+            context.evidence_strength = matches.front().evidence_strength;
+            context.concept_members = matches.front().concept_members;
         }
     }
 
