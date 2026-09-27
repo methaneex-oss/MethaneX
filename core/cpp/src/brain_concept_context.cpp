@@ -1,6 +1,7 @@
 #include "jarvis/core/brain.hpp"
 
 #include <algorithm>
+#include <unordered_set>
 
 namespace jarvis::core {
 
