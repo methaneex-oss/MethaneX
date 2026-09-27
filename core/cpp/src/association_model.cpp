@@ -178,6 +178,55 @@ std::vector<ConceptCandidate> AssociationModel::concept_candidates(
     return result;
 }
 
+
+std::vector<ConceptMatch> AssociationModel::generalized_concepts(
+    const std::string& key, double minimum_strength,
+    std::size_t minimum_shared_contexts, double minimum_similarity) const {
+    std::vector<ConceptMatch> result;
+    if (key.empty() || minimum_shared_contexts == 0) return result;
+    const double threshold = std::clamp(minimum_strength, 0.0, 1.0);
+    const double similarity_threshold = std::clamp(minimum_similarity, 0.0, 1.0);
+
+    std::set<std::string> key_contexts;
+    for (const auto& association : associations_) {
+        if (association.strength < threshold) continue;
+        if (association.left == key) key_contexts.insert(association.right);
+        else if (association.right == key) key_contexts.insert(association.left);
+    }
+    if (key_contexts.size() < minimum_shared_contexts) return result;
+
+    const auto candidates = concept_candidates(threshold, minimum_shared_contexts);
+    for (const auto& candidate : candidates) {
+        std::set<std::string> concept_contexts;
+        for (const auto& member : candidate.members) {
+            for (const auto& association : associations_) {
+                if (association.strength < threshold) continue;
+                if (association.left == member && std::find(candidate.members.begin(), candidate.members.end(), association.right) == candidate.members.end())
+                    concept_contexts.insert(association.right);
+                else if (association.right == member && std::find(candidate.members.begin(), candidate.members.end(), association.left) == candidate.members.end())
+                    concept_contexts.insert(association.left);
+            }
+        }
+        std::vector<std::string> matched;
+        std::set_intersection(key_contexts.begin(), key_contexts.end(),
+                              concept_contexts.begin(), concept_contexts.end(),
+                              std::back_inserter(matched));
+        if (matched.size() < minimum_shared_contexts) continue;
+        const std::size_t union_size = key_contexts.size() + concept_contexts.size() - matched.size();
+        const double similarity = static_cast<double>(matched.size()) /
+            static_cast<double>(std::max<std::size_t>(1, union_size));
+        if (similarity < similarity_threshold) continue;
+        result.push_back(ConceptMatch{candidate.members, std::move(matched), similarity,
+                                      std::clamp(candidate.coherence * similarity, 0.0, 1.0)});
+    }
+    std::sort(result.begin(), result.end(), [](const ConceptMatch& lhs, const ConceptMatch& rhs) {
+        if (lhs.similarity != rhs.similarity) return lhs.similarity > rhs.similarity;
+        if (lhs.evidence_strength != rhs.evidence_strength) return lhs.evidence_strength > rhs.evidence_strength;
+        return lhs.concept_members < rhs.concept_members;
+    });
+    return result;
+}
+
 void AssociationModel::apply_prediction_feedback(const std::vector<std::string>& concept_members,
                                                  bool successful,
                                                  double evidence_strength,
