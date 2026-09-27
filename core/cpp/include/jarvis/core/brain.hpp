@@ -26,6 +26,7 @@
 #include "self_state.hpp"
 #include "self_testing.hpp"
 #include "goals.hpp"
+#include "cognitive_goal_outcome.hpp"
 #include "intent.hpp"
 #include "strategy.hpp"
 
@@ -71,6 +72,7 @@ public:
     Prediction predict(std::string key, Scalar value, double confidence);
     Prediction predict_with_context(std::string key, Scalar value, double confidence, double minimum_strength = 0.5, std::size_t minimum_shared_contexts = 2);
     bool resolve_prediction(const std::string& key, const Scalar& actual);
+    bool assimilate_goal_outcome(const GoalOutcomeEvidence& evidence);
     std::vector<std::pair<std::string, Scalar>> simulate(const std::vector<Belief>& assumptions) const;
     SimulationResult simulate(const std::vector<Belief>& assumptions, std::size_t horizon) const;
     std::vector<Association> associations() const;
