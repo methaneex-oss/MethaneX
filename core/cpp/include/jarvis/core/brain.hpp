@@ -96,6 +96,15 @@ public:
         ++state_.events_seen;
         state_.cycle = outcome.sequence;
 
+        // Close the cognitive loop: the exact learned hypothesis that influenced
+        // the prediction receives falsifiable outcome evidence. This changes the
+        // learned association state, never the authoritative belief state.
+        association_.apply_prediction_feedback(
+            prediction_it->second.context.concept_members,
+            error <= 0.0,
+            prediction_it->second.context.evidence_strength,
+            outcome.sequence);
+
         const double bounded_fitness = std::clamp(fitness, -1.0, 1.0);
         Event fitness_event{0, now_ns(), "learning_loop", "evolution_fitness",
                             {{"key", key}, {"fitness", bounded_fitness}}};
