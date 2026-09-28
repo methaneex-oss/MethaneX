@@ -60,6 +60,26 @@ int main() {
         }
     }
     assert(provenance_restored);
+
+    // Stable semantic prediction keys must accumulate learning across separate
+    // experiences. The key identifies the variable; each prediction event keeps
+    // its own journal sequence, while adaptation remains keyed by the variable.
+    const auto first_prediction = brain.predict("temperature", Scalar{30.0}, 0.8);
+    assert(first_prediction.key == "temperature");
+    assert(!brain.resolve_prediction("temperature", Scalar{32.0}));
+    const auto* metric_after_first = brain.learning_metric("temperature");
+    assert(metric_after_first != nullptr);
+    assert(metric_after_first->observations == 1);
+
+    const auto second_prediction = brain.predict("temperature", Scalar{31.0}, 0.8);
+    assert(second_prediction.key == "temperature");
+    assert(second_prediction.created_sequence != first_prediction.created_sequence);
+    assert(!second_prediction.resolved);
+    assert(brain.resolve_prediction("temperature", Scalar{31.0}));
+    const auto* metric_after_second = brain.learning_metric("temperature");
+    assert(metric_after_second != nullptr);
+    assert(metric_after_second->observations == 2);
+
     Goal goal;
     goal.id = "stabilize";
     goal.description = "Stabilize the observed system";
