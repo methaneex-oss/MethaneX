@@ -34,11 +34,13 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     result.context.reasoning = ReasoningEngine{}.solve(problem);
     if (!result.context.causal_links.empty()) {
         const auto simulation = brain_.simulate(result.context.beliefs, input.planning_horizon);
-        const std::string prefix = "cycle." + std::to_string(result.context.observation.event.sequence) + ".";
         result.context.predictions.reserve(simulation.predictions.size());
         for (const auto& projected : simulation.predictions) {
             if (projected.key.empty()) continue;
-            const auto prediction = brain_.predict(prefix + projected.key, projected.value, std::clamp(projected.confidence, 0.0, 1.0));
+            // Prediction keys are stable semantic variables, not cycle identifiers.
+            // A stable key is required for prediction-error statistics to accumulate
+            // across experiences and influence future cognition.
+            const auto prediction = brain_.predict(projected.key, projected.value, std::clamp(projected.confidence, 0.0, 1.0));
             if (!prediction.key.empty()) result.context.predictions.push_back(prediction);
         }
     }
