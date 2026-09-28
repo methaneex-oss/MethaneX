@@ -42,15 +42,7 @@ struct CausalLink {
     std::uint64_t observations{0};
 };
 
-enum class DecisionOutcome : std::uint8_t {
-    act,
-    defer,
-    observe,
-    ask_clarify,
-    recommend,
-    reject,
-    escalate,
-};
+enum class DecisionOutcome : std::uint8_t { act, defer, observe, ask_clarify, recommend, reject, escalate };
 
 struct CandidateAction {
     std::string name;
@@ -76,10 +68,6 @@ struct DecisionContext {
     double deadline_pressure{0.0};
 };
 
-struct Decision {
-    CandidateAction action;
-    double score{0.0};
-    DecisionOutcome outcome{DecisionOutcome::defer};
-};
+struct Decision { CandidateAction action; double score{0.0}; DecisionOutcome outcome{DecisionOutcome::defer}; };
 
 } // namespace jarvis::core
