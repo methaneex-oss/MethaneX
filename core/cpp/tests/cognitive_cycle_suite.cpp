@@ -43,9 +43,7 @@ int main() {
     assert(initial.context.plan.steps.front().action.name == "stabilize");
     assert(brain.knowledge_source("action_executor.stabilize") == nullptr);
 
-    assert(brain.learn(Evidence{
-        "action_executor.stabilize", "action.stabilize", std::string("failed"), 0.0,
-    }) >= 0.0);
+    assert(brain.learn(Evidence{"action_executor.stabilize", "action.stabilize", std::string("failed"), 0.0}) >= 0.0);
     const auto learned_metric = brain.knowledge_source("action_executor.stabilize");
     assert(learned_metric != nullptr);
     assert(learned_metric->observations == 1);
@@ -57,24 +55,20 @@ int main() {
     assert(adapted.context.plan.steps.front().action.risk > input.candidate_actions.front().risk);
     assert(adapted.context.plan.steps.front().action.expected_value < input.candidate_actions.front().expected_value);
 
-    // Self-model state is part of cognition. Degrading the currently preferred
-    // capability must alter planning without changing the caller's candidates.
-    brain.self_state_model().observe_capability("inspect", 0.0, 0.0);
+    brain.observe_capability("inspect", 0.0, 0.0);
     const auto capability_adapted = cycle.run(input);
     assert(capability_adapted.status == CognitiveCycleStatus::completed);
     assert(capability_adapted.context.plan.steps.front().action.name == "stabilize");
     assert(capability_adapted.context.plan.steps.front().action.expected_value > 0.0);
     assert(capability_adapted.context.plan.steps.front().action.risk < 1.0);
-    assert(brain.self_state_model().restore("inspect", 1.0, 1.0));
+    assert(brain.restore_capability("inspect", 1.0, 1.0));
 
-    // Isolation is stronger than degradation: an isolated capability is removed
-    // from viable planning rather than merely penalized.
-    brain.self_state_model().observe_capability("stabilize", 1.0, 1.0);
-    assert(brain.self_state_model().isolate("stabilize"));
+    brain.observe_capability("stabilize", 1.0, 1.0);
+    assert(brain.isolate_capability("stabilize"));
     const auto isolated = cycle.run(input);
     assert(isolated.status == CognitiveCycleStatus::completed);
     assert(isolated.context.plan.steps.front().action.name == "inspect");
-    assert(brain.self_state_model().restore("stabilize", 1.0, 1.0));
+    assert(brain.restore_capability("stabilize", 1.0, 1.0));
 
     assert(adapted.context.observation.event.sequence != 0);
     assert(!adapted.context.beliefs.empty());
@@ -96,28 +90,21 @@ int main() {
     const auto constrained_result = cycle.run(constrained);
     assert(constrained_result.status == CognitiveCycleStatus::completed);
     assert(!constrained_result.context.action_assessments.empty());
-    for (const auto& assessment : constrained_result.context.action_assessments) {
-        assert(assessment.disposition == ActionDisposition::reject);
-        assert(!assessment.permitted);
-    }
+    for (const auto& assessment : constrained_result.context.action_assessments) { assert(assessment.disposition == ActionDisposition::reject); assert(!assessment.permitted); }
 
     const auto prediction = brain.predict("temperature_next", 43.0, 0.8);
     assert(!prediction.key.empty());
     const auto before_reflection = brain.reflect();
-    const auto feedback = cycle.process_outcome(
-        prediction.key, Scalar{45.0}, Evidence{"sensor", "temperature", Scalar{45.0}, 0.9});
+    const auto feedback = cycle.process_outcome(prediction.key, Scalar{45.0}, Evidence{"sensor", "temperature", Scalar{45.0}, 0.9});
     assert(!feedback.prediction_resolved);
     assert(feedback.learned_reliability >= 0.0 && feedback.learned_reliability <= 1.0);
-    assert(feedback.reflection.prediction_accuracy <= before_reflection.prediction_accuracy ||
-           feedback.reflection.prediction_accuracy == 0.0);
+    assert(feedback.reflection.prediction_accuracy <= before_reflection.prediction_accuracy || feedback.reflection.prediction_accuracy == 0.0);
     const auto metric = brain.learning_metric("temperature_next");
     assert(metric != nullptr);
     assert(metric->observations > 0);
     assert(brain.knowledge_source("sensor") != nullptr);
-
     const auto duplicate_feedback = cycle.process_outcome(prediction.key, Scalar{45.0});
     assert(!duplicate_feedback.prediction_resolved);
-
     const auto learned = cycle.learn_from_outcome(Evidence{"sensor", "temperature", 43.0, 0.9});
     assert(learned >= 0.0 && learned <= 1.0);
 
@@ -131,22 +118,17 @@ int main() {
     assert(restored_metric != nullptr);
     assert(restored_metric->reliability == 0.0);
 
-    // Conflicting observations become explicit disputed evidence and raise
-    // planning uncertainty. Under elevated uncertainty, the reversible action
-    // should outrank a slightly more valuable but irreversible action.
     const auto dispute_journal = std::filesystem::temp_directory_path() / "jarvis_cognitive_dispute_suite.bin";
     std::filesystem::remove(dispute_journal, ec);
     std::filesystem::remove(dispute_journal.string() + ".meta", ec);
     Brain dispute_brain(dispute_journal);
     CognitiveCycle dispute_cycle(dispute_brain);
-
     Goal dispute_goal;
     dispute_goal.id = "respond";
     dispute_goal.description = "Respond to uncertain sensor state";
     dispute_goal.priority = 1.0;
     assert(dispute_brain.create_goal(dispute_goal));
     assert(dispute_brain.activate_goal(dispute_goal.id));
-
     CognitiveCycleInput dispute_input;
     dispute_input.observation = Event{0, 0, "sensor", "observation", {{"temperature", 20.0}}};
     dispute_input.candidate_actions = {
@@ -158,24 +140,17 @@ int main() {
     dispute_input.reasoning_steps = 2;
     dispute_input.resource_budget = 1.0;
     dispute_input.action_constraints = ActionConstraints{1.0, false};
-
     const auto clear_result = dispute_cycle.run(dispute_input);
     assert(clear_result.status == CognitiveCycleStatus::completed);
     assert(clear_result.context.plan.steps.front().action.name == "commit");
     const double clear_uncertainty = clear_result.context.decision_context.uncertainty;
-
     dispute_input.observation = Event{0, 0, "sensor", "observation", {{"temperature", 80.0}}};
     const auto disputed_result = dispute_cycle.run(dispute_input);
     assert(disputed_result.status == CognitiveCycleStatus::completed);
     assert(disputed_result.context.plan.steps.front().action.name == "inspect");
     assert(disputed_result.context.decision_context.uncertainty > clear_uncertainty);
     bool found_disputed_temperature = false;
-    for (const auto& belief : disputed_result.context.beliefs) {
-        if (belief.key == "temperature") {
-            found_disputed_temperature = belief.disputed;
-            assert(belief.confidence < 0.5);
-        }
-    }
+    for (const auto& belief : disputed_result.context.beliefs) if (belief.key == "temperature") { found_disputed_temperature = belief.disputed; assert(belief.confidence < 0.5); }
     assert(found_disputed_temperature);
 
     std::filesystem::remove(dispute_journal, ec);
