@@ -84,8 +84,6 @@ public:
         Event progress_event{0, 0, "goal_feedback", "goal_progress", {{"id", normalized.goal_id}, {"progress", after}, {"previous_progress", before}, {"delta", after - before}, {"completed", normalized.completed || after >= 1.0}, {"confidence", normalized.confidence}}};
         progress_event.sequence = memory_.append(progress_event);
         if (progress_event.sequence == 0) return false;
-        // Journal replay is the single authoritative state transition path.
-        // This keeps live execution and restart recovery semantically identical.
         replay(progress_event);
         ++state_.events_seen;
         state_.cycle = progress_event.sequence;
@@ -106,7 +104,7 @@ public:
     std::vector<Association> associated_with(const std::string& key, double minimum_strength = 0.5) const;
     std::vector<AssociationInference> contextual_associations(const std::string& key, std::size_t max_hops = 2, double minimum_strength = 0.25) const;
     std::vector<ConceptCandidate> concept_candidates(double minimum_strength = 0.5, std::size_t minimum_shared_contexts = 2) const;
-    std::vector<ConceptCandidate> contextual_concepts(const std::string& key, double minimum_strength = 0.5, std::size_t minimum_shared_contexts = 2) const;
+    std::vector<ConceptMatch> contextual_concepts(const std::string& key, double minimum_strength = 0.5, std::size_t minimum_shared_contexts = 2) const;
     std::vector<ConceptMatch> generalized_concepts(const std::string& key, double minimum_strength = 0.5, std::size_t minimum_shared_contexts = 2, double minimum_similarity = 0.5) const;
     std::vector<CausalLink> causal_links() const;
     std::vector<Decision> choose(const std::vector<CandidateAction>& actions) const;
