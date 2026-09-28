@@ -3,7 +3,6 @@
 #include "jarvis/core/causal_model.hpp"
 
 #include <algorithm>
-
 #include <cassert>
 #include <cmath>
 #include <filesystem>
@@ -12,39 +11,20 @@ using namespace jarvis::core;
 
 int main() {
     AssociationModel associations;
-    const std::vector<Belief> before{
-        {"temperature", 20.0, 0.9, 1, 1},
-        {"fan", false, 0.9, 1, 1},
-    };
-    const std::vector<Belief> after{
-        {"temperature", 30.0, 0.95, 2, 2},
-        {"fan", true, 0.9, 2, 2},
-    };
+    const std::vector<Belief> before{{"temperature", 20.0, 0.9, 1, 1}, {"fan", false, 0.9, 1, 1}};
+    const std::vector<Belief> after{{"temperature", 30.0, 0.95, 2, 2}, {"fan", true, 0.9, 2, 2}};
     associations.observe(before, after, 2);
     const auto related = associations.related("temperature", 0.5);
     assert(!related.empty());
     assert(related.front().observations == 1);
     assert(related.front().strength >= 0.5);
-
-    const std::vector<Belief> before_power{
-        {"fan", false, 0.9, 2, 2},
-        {"power", 100.0, 0.9, 2, 2},
-    };
-    const std::vector<Belief> after_power{
-        {"fan", true, 0.9, 3, 3},
-        {"power", 120.0, 0.9, 3, 3},
-    };
+    const std::vector<Belief> before_power{{"fan", false, 0.9, 2, 2}, {"power", 100.0, 0.9, 2, 2}};
+    const std::vector<Belief> after_power{{"fan", true, 0.9, 3, 3}, {"power", 120.0, 0.9, 3, 3}};
     associations.observe(before_power, after_power, 3);
     const auto contextual = associations.contextual("temperature", 2, 0.20);
     assert(!contextual.empty());
     bool found_power = false;
-    for (const auto& inference : contextual) {
-        if (inference.key == "power") {
-            found_power = true;
-            assert(inference.hops == 2);
-            assert(inference.strength < related.front().strength);
-        }
-    }
+    for (const auto& inference : contextual) if (inference.key == "power") { found_power = true; assert(inference.hops == 2); assert(inference.strength < related.front().strength); }
     assert(found_power);
 
     CausalModel causal;
@@ -52,12 +32,10 @@ int main() {
     const auto first = causal.simulate({Belief{"temperature", 30.0, 0.95, 2, 2}}, 1);
     assert(first.depth == 1);
     assert(first.predictions.empty());
-
     causal.observe_transition(before, after);
     const auto one_step = causal.simulate({Belief{"temperature", 30.0, 0.95, 2, 2}}, 1);
     assert(!one_step.predictions.empty());
     assert(one_step.confidence >= 0.5);
-
     const auto bounded = causal.simulate({Belief{"temperature", 30.0, 0.95, 2, 2}}, 100);
     assert(bounded.depth == 8);
 
@@ -65,7 +43,6 @@ int main() {
     std::error_code ec;
     std::filesystem::remove(path, ec);
     std::filesystem::remove(std::filesystem::path(path.string() + ".meta"), ec);
-
     Brain brain(path);
     brain.observe(Event{0, 1, "sensor", "observation", {{"temperature", 20.0}, {"fan", false}}});
     brain.observe(Event{0, 2, "sensor", "observation", {{"temperature", 30.0}, {"fan", true}}});
@@ -73,27 +50,16 @@ int main() {
     assert(!brain.associations().empty());
     assert(!brain.associated_with("temperature").empty());
     assert(!brain.causal_links().empty());
-
     const auto brain_contextual = brain.contextual_associations("temperature", 2, 0.20);
     bool brain_found_power = false;
-    for (const auto& inference : brain_contextual) {
-        if (inference.key == "power") {
-            brain_found_power = true;
-            assert(inference.hops == 2);
-        }
-    }
+    for (const auto& inference : brain_contextual) if (inference.key == "power") { brain_found_power = true; assert(inference.hops == 2); }
     assert(brain_found_power);
-
     const auto persisted_associations = brain.associations();
     Brain reconstructed(path);
     const auto replayed_associations = reconstructed.associations();
     assert(replayed_associations.size() == persisted_associations.size());
     for (const auto& persisted : persisted_associations) {
-        const auto it = std::find_if(
-            replayed_associations.begin(), replayed_associations.end(),
-            [&](const auto& candidate) {
-                return candidate.left == persisted.left && candidate.right == persisted.right;
-            });
+        const auto it = std::find_if(replayed_associations.begin(), replayed_associations.end(), [&](const auto& candidate) { return candidate.left == persisted.left && candidate.right == persisted.right; });
         assert(it != replayed_associations.end());
         assert(it->observations == persisted.observations);
         assert(it->contradictory_observations == persisted.contradictory_observations);
@@ -102,76 +68,28 @@ int main() {
     }
 
     AssociationModel concept_model;
-    const std::vector<Belief> concept_before{
-        {"alpha", false, 0.9, 1, 10},
-        {"beta", false, 0.9, 1, 10},
-        {"context_one", false, 0.9, 1, 10},
-        {"context_two", false, 0.9, 1, 10},
-    };
-    concept_model.observe(
-        concept_before,
-        {{"alpha", true, 0.9, 2, 11},
-         {"beta", false, 0.9, 2, 11},
-         {"context_one", true, 0.9, 2, 11},
-         {"context_two", true, 0.9, 2, 11}},
-        11);
-    concept_model.observe(
-        {{"alpha", true, 0.9, 2, 11},
-         {"beta", false, 0.9, 2, 11},
-         {"context_one", true, 0.9, 2, 11},
-         {"context_two", true, 0.9, 2, 11}},
-        {{"alpha", true, 0.9, 3, 12},
-         {"beta", true, 0.9, 3, 12},
-         {"context_one", false, 0.9, 3, 12},
-         {"context_two", false, 0.9, 3, 12}},
-        12);
-    concept_model.observe(
-        {{"alpha", true, 0.9, 3, 12},
-         {"beta", true, 0.9, 3, 12},
-         {"context_one", false, 0.9, 3, 12},
-         {"context_two", false, 0.9, 3, 12}},
-        {{"alpha", true, 0.9, 4, 13},
-         {"beta", true, 0.9, 4, 13},
-         {"context_one", true, 0.9, 4, 13},
-         {"context_two", true, 0.9, 4, 13}},
-        13);
+    const std::vector<Belief> concept_before{{"alpha", false, 0.9, 1, 10}, {"beta", false, 0.9, 1, 10}, {"context_one", false, 0.9, 1, 10}, {"context_two", false, 0.9, 1, 10}};
+    concept_model.observe(concept_before, {{"alpha", true, 0.9, 2, 11}, {"beta", false, 0.9, 2, 11}, {"context_one", true, 0.9, 2, 11}, {"context_two", true, 0.9, 2, 11}}, 11);
+    concept_model.observe({{"alpha", true, 0.9, 2, 11}, {"beta", false, 0.9, 2, 11}, {"context_one", true, 0.9, 2, 11}, {"context_two", true, 0.9, 2, 11}}, {{"alpha", true, 0.9, 3, 12}, {"beta", true, 0.9, 3, 12}, {"context_one", false, 0.9, 3, 12}, {"context_two", false, 0.9, 3, 12}}, 12);
+    concept_model.observe({{"alpha", true, 0.9, 3, 12}, {"beta", true, 0.9, 3, 12}, {"context_one", false, 0.9, 3, 12}, {"context_two", false, 0.9, 3, 12}}, {{"alpha", true, 0.9, 4, 13}, {"beta", true, 0.9, 4, 13}, {"context_one", true, 0.9, 4, 13}, {"context_two", true, 0.9, 4, 13}}, 13);
 
     const auto weakened_concepts = concept_model.concept_candidates(0.5, 2);
     bool hypothesis_survived = false;
-    for (const auto& concept : weakened_concepts) {
-        const auto has_alpha = std::find(concept.members.begin(), concept.members.end(), "alpha") != concept.members.end();
-        const auto has_beta = std::find(concept.members.begin(), concept.members.end(), "beta") != concept.members.end();
+    for (const auto& candidate : weakened_concepts) {
+        const auto has_alpha = std::find(candidate.members.begin(), candidate.members.end(), "alpha") != candidate.members.end();
+        const auto has_beta = std::find(candidate.members.begin(), candidate.members.end(), "beta") != candidate.members.end();
         if (has_alpha && has_beta) hypothesis_survived = true;
     }
     assert(hypothesis_survived);
     const auto weakened_associations = concept_model.related("alpha", 0.0);
     bool found_weakened_context = false;
-    for (const auto& association : weakened_associations) {
-        if ((association.left == "alpha" && association.right == "context_one") ||
-            (association.left == "context_one" && association.right == "alpha")) {
-            found_weakened_context = true;
-            assert(association.contradictory_observations == 1);
-            assert(association.strength < 1.0);
-        }
-    }
+    for (const auto& association : weakened_associations) if ((association.left == "alpha" && association.right == "context_one") || (association.left == "context_one" && association.right == "alpha")) { found_weakened_context = true; assert(association.contradictory_observations == 1); assert(association.strength < 1.0); }
     assert(found_weakened_context);
-
-    for (std::uint64_t sequence = 14; sequence <= 20; ++sequence) {
-        concept_model.observe(
-            {{"alpha", true, 0.9, sequence - 1, sequence - 1},
-             {"beta", true, 0.9, sequence - 1, sequence - 1},
-             {"context_one", false, 0.9, sequence - 1, sequence - 1},
-             {"context_two", false, 0.9, sequence - 1, sequence - 1}},
-            {{"alpha", true, 0.9, sequence, sequence},
-             {"beta", true, 0.9, sequence, sequence},
-             {"context_one", true, 0.9, sequence, sequence},
-             {"context_two", true, 0.9, sequence, sequence}},
-            sequence);
-    }
+    for (std::uint64_t sequence = 14; sequence <= 20; ++sequence) concept_model.observe({{"alpha", true, 0.9, sequence - 1, sequence - 1}, {"beta", true, 0.9, sequence - 1, sequence - 1}, {"context_one", false, 0.9, sequence - 1, sequence - 1}, {"context_two", false, 0.9, sequence - 1, sequence - 1}}, {{"alpha", true, 0.9, sequence, sequence}, {"beta", true, 0.9, sequence, sequence}, {"context_one", true, 0.9, sequence, sequence}, {"context_two", true, 0.9, sequence, sequence}}, sequence);
     const auto revised_concepts = concept_model.concept_candidates(0.5, 2);
-    for (const auto& concept : revised_concepts) {
-        const auto has_alpha = std::find(concept.members.begin(), concept.members.end(), "alpha") != concept.members.end();
-        const auto has_beta = std::find(concept.members.begin(), concept.members.end(), "beta") != concept.members.end();
+    for (const auto& candidate : revised_concepts) {
+        const auto has_alpha = std::find(candidate.members.begin(), candidate.members.end(), "alpha") != candidate.members.end();
+        const auto has_beta = std::find(candidate.members.begin(), candidate.members.end(), "beta") != candidate.members.end();
         assert(!(has_alpha && has_beta));
     }
 
@@ -184,20 +102,16 @@ int main() {
     concept_brain.observe(Event{0, 12, "sensor", "observation", {{"alpha", true}, {"beta", true}, {"context_one", false}, {"context_two", false}}});
     const auto contextual_concepts = concept_brain.contextual_concepts("alpha", 0.5, 2);
     bool found_alpha_beta = false;
-    for (const auto& concept : contextual_concepts) {
-        const auto has_alpha = std::find(concept.members.begin(), concept.members.end(), "alpha") != concept.members.end();
-        const auto has_beta = std::find(concept.members.begin(), concept.members.end(), "beta") != concept.members.end();
-        if (has_alpha && has_beta) {
-            found_alpha_beta = true;
-            assert(concept.coherence > 0.0);
-        }
+    for (const auto& candidate : contextual_concepts) {
+        const auto has_alpha = std::find(candidate.members.begin(), candidate.members.end(), "alpha") != candidate.members.end();
+        const auto has_beta = std::find(candidate.members.begin(), candidate.members.end(), "beta") != candidate.members.end();
+        if (has_alpha && has_beta) { found_alpha_beta = true; assert(candidate.coherence > 0.0); }
     }
     assert(found_alpha_beta);
     const auto beliefs_before_prediction = concept_brain.beliefs();
     const auto prediction = concept_brain.predict_with_context("alpha", 1.0, 0.2);
     assert(prediction.context.evidence_strength > 0.0);
-    assert(prediction.confidence > 0.2);
-    assert(prediction.confidence <= 1.0);
+    assert(prediction.confidence > 0.2 && prediction.confidence <= 1.0);
     assert(std::find(prediction.context.concept_members.begin(), prediction.context.concept_members.end(), "alpha") != prediction.context.concept_members.end());
     assert(std::find(prediction.context.concept_members.begin(), prediction.context.concept_members.end(), "beta") != prediction.context.concept_members.end());
     const auto beliefs_after_prediction = concept_brain.beliefs();
@@ -208,46 +122,27 @@ int main() {
         assert(it->value == before_belief.value);
         assert(std::abs(it->confidence - before_belief.confidence) < 1e-12);
     }
-
     const auto associations_before_success = concept_brain.associated_with("alpha", 0.0);
     double alpha_beta_before_success = 0.0;
-    for (const auto& association : associations_before_success) {
-        if ((association.left == "alpha" && association.right == "beta") ||
-            (association.left == "beta" && association.right == "alpha")) {
-            alpha_beta_before_success = association.strength;
-        }
-    }
+    for (const auto& association : associations_before_success) if ((association.left == "alpha" && association.right == "beta") || (association.left == "beta" && association.right == "alpha")) alpha_beta_before_success = association.strength;
     assert(alpha_beta_before_success > 0.0);
     concept_brain.learn_from_prediction("alpha", 1.0, 1.0);
     const auto associations_after_success = concept_brain.associated_with("alpha", 0.0);
     double alpha_beta_after_success = 0.0;
-    for (const auto& association : associations_after_success) {
-        if ((association.left == "alpha" && association.right == "beta") ||
-            (association.left == "beta" && association.right == "alpha")) {
-            alpha_beta_after_success = association.strength;
-        }
-    }
+    for (const auto& association : associations_after_success) if ((association.left == "alpha" && association.right == "beta") || (association.left == "beta" && association.right == "alpha")) alpha_beta_after_success = association.strength;
     assert(alpha_beta_after_success > alpha_beta_before_success);
-
     const auto failed_prediction = concept_brain.predict_with_context("alpha", 1.0, 0.8);
     assert(failed_prediction.context.evidence_strength > 0.0);
     concept_brain.learn_from_prediction("alpha", 0.0, -1.0);
     const auto associations_after_failure = concept_brain.associated_with("alpha", 0.0);
     double alpha_beta_after_failure = 0.0;
-    for (const auto& association : associations_after_failure) {
-        if ((association.left == "alpha" && association.right == "beta") ||
-            (association.left == "beta" && association.right == "alpha")) {
-            alpha_beta_after_failure = association.strength;
-        }
-    }
+    for (const auto& association : associations_after_failure) if ((association.left == "alpha" && association.right == "beta") || (association.left == "beta" && association.right == "alpha")) alpha_beta_after_failure = association.strength;
     assert(alpha_beta_after_failure < alpha_beta_after_success);
 
     std::filesystem::remove(concept_path, ec);
     std::filesystem::remove(std::filesystem::path(concept_path.string() + ".meta"), ec);
-
     const auto simulated = brain.simulate({Belief{"temperature", 30.0, 0.95, 2, 2}}, 2);
     assert(simulated.depth == 2);
-
     std::filesystem::remove(path, ec);
     std::filesystem::remove(std::filesystem::path(path.string() + ".meta"), ec);
     return 0;
