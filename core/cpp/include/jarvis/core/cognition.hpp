@@ -18,8 +18,6 @@ struct Belief {
     bool disputed{false};
 };
 
-// Provenance linking a prediction to the experience-derived hypotheses that
-// influenced its confidence. These are evidence, not authoritative beliefs.
 struct PredictionContext {
     std::vector<std::string> concept_members;
     double evidence_strength{0.0};
