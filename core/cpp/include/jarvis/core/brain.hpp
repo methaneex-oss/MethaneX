@@ -104,7 +104,7 @@ public:
     std::vector<Association> associated_with(const std::string& key, double minimum_strength = 0.5) const;
     std::vector<AssociationInference> contextual_associations(const std::string& key, std::size_t max_hops = 2, double minimum_strength = 0.25) const;
     std::vector<ConceptCandidate> concept_candidates(double minimum_strength = 0.5, std::size_t minimum_shared_contexts = 2) const;
-    std::vector<ConceptMatch> contextual_concepts(const std::string& key, double minimum_strength = 0.5, std::size_t minimum_shared_contexts = 2) const;
+    std::vector<ConceptCandidate> contextual_concepts(const std::string& key, double minimum_strength = 0.5, std::size_t minimum_shared_contexts = 2) const;
     std::vector<ConceptMatch> generalized_concepts(const std::string& key, double minimum_strength = 0.5, std::size_t minimum_shared_contexts = 2, double minimum_similarity = 0.5) const;
     std::vector<CausalLink> causal_links() const;
     std::vector<Decision> choose(const std::vector<CandidateAction>& actions) const;
@@ -113,30 +113,16 @@ public:
     std::vector<ActionAssessment> assess_actions(const std::vector<Decision>& decisions, ActionConstraints constraints = {}) const;
     std::vector<CapabilityCandidate> evaluate_capabilities(const std::vector<CapabilityDescriptor>& capabilities, CapabilityConstraints constraints = {}) const;
     CapabilityExecutionResult execute_capability(const CapabilityDescriptor& capability, std::string input, std::vector<std::string> granted_permissions = {}, double maximum_risk = 1.0, CapabilityProvider provider = {});
-    ActionExecutionResult execute_action(const ActionAssessment& assessment, std::function<bool(const CandidateAction&)> execute, std::function<bool(const CandidateAction&)> verify, std::function<bool(const CandidateAction&)> rollback = {}, ActionAuthorizationContext authorization = {}) {
-        std::unique_lock lock(mutex_);
-        ActionExecutionRequest request{assessment, std::move(execute), std::move(verify), std::move(rollback), std::move(authorization)};
-        const auto result = ActionExecutor{}.run(request);
-        const double reliability = result.status == ActionExecutionStatus::verified ? 1.0 : result.status == ActionExecutionStatus::rolled_back ? 0.25 : 0.5;
-        if (!result.action.name.empty()) {
-            Event action_event{0, 0, "brain", "action_outcome", {{"action", result.action.name}, {"status", static_cast<std::int64_t>(result.status)}, {"authorized", result.authorized}, {"executed", result.executed}, {"verified", result.verified}, {"rolled_back", result.rolled_back}, {"reason", result.reason}, {"reliability", reliability}}};
-            action_event.sequence = memory_.append(action_event);
-            if (action_event.sequence != 0) { ++state_.events_seen; state_.cycle = action_event.sequence; }
-            Event learning_event{0, 0, "action_executor", "learning", {{"action." + result.action.name, Scalar{result.reason}}, {"reliability", reliability}}};
-            learning_event.sequence = memory_.append(learning_event);
-            if (learning_event.sequence != 0) { ++state_.events_seen; state_.cycle = learning_event.sequence; replay(learning_event); }
-        }
-        sync_self_state(); return result;
-    }
+    ActionExecutionResult execute_action(const ActionAssessment& assessment, std::function<bool(const CandidateAction&)> execute, std::function<bool(const CandidateAction&)> verify, std::function<bool(const CandidateAction&)> rollback = {}, ActionAuthorizationContext authorization = {});
     Reflection reflect() const;
     const KnowledgeMetric* knowledge_source(const std::string& source) const noexcept;
     const AdaptiveMetric* learning_metric(const std::string& key) const noexcept;
     double learning_confidence(const std::string& key) const noexcept;
-    const StrategyParameter* evolution_parameter(const std::string& key) const noexcept { std::shared_lock lock(mutex_); return evolution_.parameter(key); }
+    const StrategyParameter* evolution_parameter(const std::string& key) const noexcept;
     AttentionSignal attention() const;
     ThreatAssessment threat() const;
-    Intent intent() const { std::shared_lock lock(mutex_); return intent_model_.select(goals_model_.eligible(state_.cycle), threat_state_.score, self_state_model_.snapshot().uncertainty, state_.cycle); }
-    StrategyContext strategy() const { std::shared_lock lock(mutex_); const auto self = self_state_model_.snapshot(); const auto current_intent = intent_model_.select(goals_model_.eligible(state_.cycle), threat_state_.score, self.uncertainty, state_.cycle); return strategy_model_.formulate(current_intent, attention_state_, threat_state_.score, self.uncertainty); }
+    Intent intent() const;
+    StrategyContext strategy() const;
     std::vector<RecoveryPlan> recovery_options() const;
     bool isolate(const std::string& component); bool recover(const std::string& component, double restored_health); SelfTestReport self_test() const;
     SelfHealingResult self_heal(const std::string& component, std::function<bool(const std::string&)> repair, std::function<bool(const std::string&)> verify);
