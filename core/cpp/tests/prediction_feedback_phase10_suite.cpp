@@ -25,8 +25,6 @@ int main() {
     const double learned_context_confidence = contextual_prediction.confidence;
     assert(learned_context_confidence > 0.2);
 
-    // Generalization must work for a novel key by relational structure rather than
-    // by a preloaded semantic label or exact-key lookup.
     brain.observe(Event{0, 5, "sensor", "observation",
                          {{"alpha", false}, {"beta", false},
                           {"context_one", false}, {"context_two", false},
@@ -79,6 +77,34 @@ int main() {
     const auto* metric_after_second = brain.learning_metric("temperature");
     assert(metric_after_second != nullptr);
     assert(metric_after_second->observations == 2);
+
+    // Two unresolved predictions for the same semantic key must coexist. Their
+    // journal identities are distinct and neither prediction may overwrite the other.
+    const auto concurrent_first = brain.predict("pressure", Scalar{100.0}, 0.8);
+    const auto concurrent_second = brain.predict("pressure", Scalar{110.0}, 0.8);
+    assert(concurrent_first.created_sequence != 0);
+    assert(concurrent_second.created_sequence != 0);
+    assert(concurrent_first.created_sequence != concurrent_second.created_sequence);
+    std::size_t pressure_instances = 0;
+    for (const auto& current : brain.snapshot().predictions) {
+        if (current.key == "pressure" &&
+            (current.created_sequence == concurrent_first.created_sequence ||
+             current.created_sequence == concurrent_second.created_sequence)) {
+            ++pressure_instances;
+        }
+    }
+    assert(pressure_instances == 2);
+    assert(!brain.resolve_prediction("pressure", Scalar{111.0}));
+    std::size_t unresolved_pressure_instances = 0;
+    for (const auto& current : brain.snapshot().predictions) {
+        if (current.key == "pressure" &&
+            (current.created_sequence == concurrent_first.created_sequence ||
+             current.created_sequence == concurrent_second.created_sequence) &&
+            !current.resolved) {
+            ++unresolved_pressure_instances;
+        }
+    }
+    assert(unresolved_pressure_instances == 1);
 
     Goal goal;
     goal.id = "stabilize";
