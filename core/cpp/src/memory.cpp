@@ -14,6 +14,7 @@ namespace {
 
 constexpr std::uint64_t kMaxSerializedSize = 1ULL << 30;
 constexpr std::uint64_t kMaxAttributes = 1ULL << 20;
+constexpr std::uint64_t kMetadataMagicV1 = 0x4a41525649534d31ULL; // "JARVISM1"
 constexpr std::uint64_t kMetadataMagic = 0x4a41525649534d32ULL; // "JARVISM2"
 constexpr std::uint64_t kMaxMetadataRecords = 1ULL << 20;
 
@@ -125,7 +126,7 @@ std::uint64_t Memory::append(Event event) {
     const auto assigned_sequence = event.sequence;
     if (assigned_sequence == std::numeric_limits<std::uint64_t>::max()) return 0;
     if (!persist(event)) return 0;
-    metadata_.push_back(MemoryRecord{event, tier_of(event), default_salience(event), default_confidence(event)});
+    metadata_.push_back(MemoryRecord{event, tier_of(event), default_salience(event), default_confidence(event), 0.0});
     continuity_.push_back(std::move(event));
     next_sequence_ = assigned_sequence + 1;
     return assigned_sequence;
@@ -142,7 +143,7 @@ void Memory::load() {
         if (!read_event(in, event)) break;
         if (event.sequence == 0 || (previous_sequence != 0 && event.sequence <= previous_sequence)) break;
         previous_sequence = event.sequence;
-        metadata_.push_back(MemoryRecord{event, MemoryTier::Episodic, default_salience(event), default_confidence(event)});
+        metadata_.push_back(MemoryRecord{event, MemoryTier::Episodic, default_salience(event), default_confidence(event), 0.0});
         continuity_.push_back(std::move(event));
         const auto position = in.tellg();
         if (position < 0) break;
@@ -167,7 +168,7 @@ void Memory::load_metadata() {
 
     std::uint64_t magic{};
     std::uint64_t count{};
-    if (!in.read(reinterpret_cast<char*>(&magic), sizeof(magic)) || magic != kMetadataMagic ||
+    if (!in.read(reinterpret_cast<char*>(&magic), sizeof(magic)) || (magic != kMetadataMagic && magic != kMetadataMagicV1) ||
         !in.read(reinterpret_cast<char*>(&count), sizeof(count)) || count > kMaxMetadataRecords) {
         return;
     }
@@ -182,7 +183,18 @@ void Memory::load_metadata() {
         double salience{};
         double confidence{};
         double consolidation{};
-        if (!read_metadata_record(in, sequence, tier, salience, confidence, consolidation)) return;
+        if (magic == kMetadataMagic) {
+            if (!read_metadata_record(in, sequence, tier, salience, confidence, consolidation)) return;
+        } else {
+            if (!in.read(reinterpret_cast<char*>(&sequence), sizeof(sequence))) return;
+            std::uint8_t raw_tier{};
+            if (!in.read(reinterpret_cast<char*>(&raw_tier), sizeof(raw_tier)) || raw_tier > static_cast<std::uint8_t>(MemoryTier::Procedural)) return;
+            if (!in.read(reinterpret_cast<char*>(&salience), sizeof(salience)) || !in.read(reinterpret_cast<char*>(&confidence), sizeof(confidence))) return;
+            if (!std::isfinite(salience) || !std::isfinite(confidence)) return;
+            tier = static_cast<MemoryTier>(raw_tier);
+            salience = std::clamp(salience, 0.0, 1.0);
+            confidence = std::clamp(confidence, 0.0, 1.0);
+        }
         const auto index = indexes.find(sequence);
         if (index == indexes.end()) continue;
         auto& record = metadata_[index->second];
