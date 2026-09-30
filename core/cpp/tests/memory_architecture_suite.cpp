@@ -28,6 +28,11 @@ int main() {
     assert(memory.promote(a, MemoryTier::Semantic, 0.95, 0.8));
     assert(memory.promote(b, MemoryTier::Semantic, 0.9, 0.9));
     assert(memory.promote(c, MemoryTier::Procedural, 0.8, 0.8));
+    assert(memory.consolidate(a, 1.0, 1.0, 1.0, 0.9));
+    const auto consolidated = memory.recall_ranked({{"topic", std::string("temperature")}}, 1);
+    assert(consolidated.size() == 1);
+    assert(consolidated.front().event.sequence == a);
+    assert(consolidated.front().consolidation > 0.0);
     assert(memory.tier_of(Event{0, 0, "", "learning", {}}) == MemoryTier::Semantic);
     assert(memory.tier_of(Event{0, 0, "", "action", {}}) == MemoryTier::Procedural);
     assert(memory.salient(2, MemoryTier::Semantic).size() == 2);
@@ -50,6 +55,9 @@ int main() {
     assert(restored_semantic[0].event.sequence == a);
     assert(restored_semantic[0].salience == 0.95);
     assert(restored_semantic[0].confidence == 0.8);
+    const auto restored_consolidated = restored.recall_ranked({{"topic", std::string("temperature")}}, 1);
+    assert(restored_consolidated.size() == 1);
+    assert(restored_consolidated.front().consolidation > 0.0);
     assert(restored.tier_of(Event{0, 0, "", "learning", {}}) == MemoryTier::Semantic);
     assert(restored.tier_of(Event{0, 0, "", "action", {}}) == MemoryTier::Procedural);
     assert(restored.working_size() == 0);
