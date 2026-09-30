@@ -61,7 +61,7 @@ double Brain::learning_confidence(const std::string& key) const noexcept { std::
 std::vector<LearnedAssociation> Brain::developmental_associations() const { std::shared_lock lock(mutex_); return developmental_learning_.associations(); }
 std::vector<LearnedStrategy> Brain::developmental_strategies() const { std::shared_lock lock(mutex_); return developmental_learning_.strategies(); }
 const LearnedStrategy* Brain::developmental_best_strategy(const std::string& context) const noexcept { std::shared_lock lock(mutex_); return developmental_learning_.best_strategy(context); }
-double Brain::learning_confidence(const std::string& key) const noexcept { std::shared_lock lock(mutex_); return std::clamp(adaptation_.confidence(key), 0.0, 1.0); }
+
 std::vector<std::pair<std::string, Scalar>> Brain::simulate(const std::vector<Belief>& assumptions) const { std::shared_lock lock(mutex_); return causal_.predict(assumptions); }
 SimulationResult Brain::simulate(const std::vector<Belief>& assumptions, std::size_t horizon) const { std::shared_lock lock(mutex_); return causal_.simulate(assumptions, horizon); }
 std::vector<Association> Brain::associations() const { std::shared_lock lock(mutex_); return association_.all(); }
