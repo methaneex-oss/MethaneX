@@ -57,6 +57,7 @@ add_library(jarvis_core STATIC
     src/goals.cpp
     src/intent.cpp
     src/strategy.cpp
+    src/developmental_learning.cpp
     src/self_testing.cpp
     src/cognitive_cycle.cpp
     src/cognitive_trigger.cpp
