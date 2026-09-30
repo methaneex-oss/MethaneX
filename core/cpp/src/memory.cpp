@@ -14,7 +14,7 @@ namespace {
 
 constexpr std::uint64_t kMaxSerializedSize = 1ULL << 30;
 constexpr std::uint64_t kMaxAttributes = 1ULL << 20;
-constexpr std::uint64_t kMetadataMagic = 0x4a41525649534d31ULL; // "JARVISM1"
+constexpr std::uint64_t kMetadataMagic = 0x4a41525649534d32ULL; // "JARVISM2"
 constexpr std::uint64_t kMaxMetadataRecords = 1ULL << 20;
 
 void write_string(std::ostream& out, const std::string& value) {
@@ -89,20 +89,23 @@ void write_metadata_record(std::ostream& out, const MemoryRecord& record) {
     out.write(reinterpret_cast<const char*>(&tier), sizeof(tier));
     out.write(reinterpret_cast<const char*>(&record.salience), sizeof(record.salience));
     out.write(reinterpret_cast<const char*>(&record.confidence), sizeof(record.confidence));
+    out.write(reinterpret_cast<const char*>(&record.consolidation), sizeof(record.consolidation));
 }
 
 bool read_metadata_record(std::istream& in, std::uint64_t& sequence, MemoryTier& tier,
-                          double& salience, double& confidence) {
+                          double& salience, double& confidence, double& consolidation) {
     if (!in.read(reinterpret_cast<char*>(&sequence), sizeof(sequence))) return false;
     std::uint8_t raw_tier{};
     if (!in.read(reinterpret_cast<char*>(&raw_tier), sizeof(raw_tier))) return false;
     if (raw_tier > static_cast<std::uint8_t>(MemoryTier::Procedural)) return false;
     if (!in.read(reinterpret_cast<char*>(&salience), sizeof(salience)) ||
-        !in.read(reinterpret_cast<char*>(&confidence), sizeof(confidence))) return false;
-    if (!std::isfinite(salience) || !std::isfinite(confidence)) return false;
+        !in.read(reinterpret_cast<char*>(&confidence), sizeof(confidence)) ||
+        !in.read(reinterpret_cast<char*>(&consolidation), sizeof(consolidation))) return false;
+    if (!std::isfinite(salience) || !std::isfinite(confidence) || !std::isfinite(consolidation)) return false;
     tier = static_cast<MemoryTier>(raw_tier);
     salience = std::clamp(salience, 0.0, 1.0);
     confidence = std::clamp(confidence, 0.0, 1.0);
+    consolidation = std::clamp(consolidation, 0.0, 1.0);
     return true;
 }
 
@@ -178,13 +181,15 @@ void Memory::load_metadata() {
         MemoryTier tier{};
         double salience{};
         double confidence{};
-        if (!read_metadata_record(in, sequence, tier, salience, confidence)) return;
+        double consolidation{};
+        if (!read_metadata_record(in, sequence, tier, salience, confidence, consolidation)) return;
         const auto index = indexes.find(sequence);
         if (index == indexes.end()) continue;
         auto& record = metadata_[index->second];
         record.tier = tier;
         record.salience = salience;
         record.confidence = confidence;
+        record.consolidation = consolidation;
         learned_tiers_[record.event.kind][tier_index(tier)] += 1.0;
     }
 }
@@ -354,11 +359,13 @@ bool Memory::promote(std::uint64_t sequence, MemoryTier tier, double salience, d
     const auto previous_tier = it->tier;
     const auto previous_salience = it->salience;
     const auto previous_confidence = it->confidence;
+    const auto previous_consolidation = it->consolidation;
     const auto previous_learned = learned_tiers_;
 
     it->tier = tier;
     it->salience = std::clamp(salience, 0.0, 1.0);
     it->confidence = std::clamp(confidence, 0.0, 1.0);
+    it->consolidation = std::max(it->consolidation, 0.0);
     learned_tiers_[it->event.kind][tier_index(tier)] += 1.0;
 
     if (persist_metadata_snapshot()) return true;
@@ -366,6 +373,59 @@ bool Memory::promote(std::uint64_t sequence, MemoryTier tier, double salience, d
     it->tier = previous_tier;
     it->salience = previous_salience;
     it->confidence = previous_confidence;
+    it->consolidation = previous_consolidation;
+    learned_tiers_ = previous_learned;
+    return false;
+}
+
+bool Memory::consolidate(std::uint64_t sequence, double salience, double novelty, double error, double confidence) {
+    std::unique_lock lock(mutex_);
+    if (!std::isfinite(salience) || !std::isfinite(novelty) || !std::isfinite(error) || !std::isfinite(confidence)) return false;
+    const auto it = std::find_if(metadata_.begin(), metadata_.end(),
+        [sequence](const MemoryRecord& r) { return r.event.sequence == sequence; });
+    if (it == metadata_.end()) return false;
+
+    salience = std::clamp(salience, 0.0, 1.0);
+    novelty = std::clamp(novelty, 0.0, 1.0);
+    error = std::clamp(error, 0.0, 1.0);
+    confidence = std::clamp(confidence, 0.0, 1.0);
+
+    double recurrence = 0.0;
+    std::size_t matches = 0;
+    for (const auto& record : metadata_) {
+        if (record.event.sequence == sequence) continue;
+        if (record.event.source == it->event.source && record.event.kind == it->event.kind) {
+            ++matches;
+        }
+    }
+    recurrence = 1.0 - std::exp(-static_cast<double>(matches));
+
+    // Consolidation is an evidence accumulator: salience, novelty, prediction
+    // error, confidence and recurrence contribute without encoding domain facts.
+    const double evidence = std::clamp(
+        0.30 * salience +
+        0.20 * novelty +
+        0.25 * error +
+        0.15 * confidence +
+        0.10 * recurrence, 0.0, 1.0);
+
+    const auto previous = *it;
+    const auto previous_learned = learned_tiers_;
+    it->salience = std::clamp(0.70 * it->salience + 0.30 * salience, 0.0, 1.0);
+    it->confidence = std::clamp(0.70 * it->confidence + 0.30 * confidence, 0.0, 1.0);
+    it->consolidation = std::clamp(0.65 * it->consolidation + 0.35 * evidence, 0.0, 1.0);
+
+    MemoryTier target = it->tier;
+    if (it->consolidation >= 0.80) target = MemoryTier::Semantic;
+    else if (it->consolidation >= 0.55) target = MemoryTier::Episodic;
+    else target = MemoryTier::Working;
+    if (target != it->tier) {
+        learned_tiers_[it->event.kind][tier_index(target)] += 1.0;
+        it->tier = target;
+    }
+
+    if (persist_metadata_snapshot()) return true;
+    *it = previous;
     learned_tiers_ = previous_learned;
     return false;
 }
