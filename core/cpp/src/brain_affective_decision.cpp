@@ -6,6 +6,14 @@
 namespace jarvis::core {
 namespace {
 
+double attribute_value(const Attributes& data, const char* key, double fallback) noexcept {
+    const auto it = data.find(key);
+    if (it == data.end()) return fallback;
+    if (const auto* value = std::get_if<double>(&it->second)) return *value;
+    if (const auto* value = std::get_if<std::int64_t>(&it->second)) return static_cast<double>(*value);
+    return fallback;
+}
+
 double unit(double value) noexcept {
     return std::clamp(std::isfinite(value) ? value : 0.0, 0.0, 1.0);
 }
@@ -16,14 +24,14 @@ double signed_unit(double value) noexcept {
 
 AffectiveSignal signal_from_event(const Event& event) noexcept {
     double outcome = 0.0;
-    double error = unit(double_value(event.data, "error", 0.0));
-    double novelty = unit(double_value(event.data, "novelty", 0.0));
-    double salience = unit(double_value(event.data, "salience", 0.0));
-    double uncertainty = unit(double_value(event.data, "uncertainty", error));
-    double confidence = unit(double_value(event.data, "confidence", 1.0 - error));
+    double error = unit(attribute_value(event.data, "error", 0.0));
+    double novelty = unit(attribute_value(event.data, "novelty", 0.0));
+    double salience = unit(attribute_value(event.data, "salience", 0.0));
+    double uncertainty = unit(attribute_value(event.data, "uncertainty", error));
+    double confidence = unit(attribute_value(event.data, "confidence", 1.0 - error));
 
     if (event.kind == "action_outcome" || event.kind == "learning") {
-        const double reliability = unit(double_value(event.data, "reliability", confidence));
+        const double reliability = unit(attribute_value(event.data, "reliability", confidence));
         outcome = 2.0 * reliability - 1.0;
         error = 1.0 - reliability;
         confidence = reliability;
@@ -33,11 +41,9 @@ AffectiveSignal signal_from_event(const Event& event) noexcept {
         outcome = 1.0;
         salience = std::max(salience, 0.8);
     } else if (event.kind == "goal_progress") {
-        const double delta = double_value(event.data, "delta", 0.0);
+        const double delta = attribute_value(event.data, "delta", 0.0);
         outcome = signed_unit(delta);
-        confidence = unit(double_value(event.data, "confidence", confidence));
-    } else if (event.kind == "observation") {
-        outcome = 0.0;
+        confidence = unit(attribute_value(event.data, "confidence", confidence));
     }
 
     return {signed_unit(outcome), error, novelty, salience, uncertainty, confidence};
@@ -52,9 +58,7 @@ std::vector<Decision> Brain::choose_with_affect(const std::vector<CandidateActio
     // the rest of the brain. This makes the decision signal replayable rather
     // than depending on an opaque process-local emotion variable.
     AffectiveStateModel model;
-    for (const auto& event : memory_.all()) {
-        model.update(signal_from_event(event));
-    }
+    for (const auto& event : memory_.all()) model.update(signal_from_event(event));
     const auto affect = model.state();
 
     DecisionContext context;
