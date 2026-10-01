@@ -18,6 +18,7 @@ add_library(jarvis_core STATIC
     src/adaptation.cpp
     src/attention.cpp
     src/attention_state.cpp
+    src/affective_state.cpp
     src/threat.cpp
     src/resilience.cpp
     src/evolution.cpp
