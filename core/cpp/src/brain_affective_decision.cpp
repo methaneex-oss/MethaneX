@@ -18,32 +18,32 @@ double unit(double value) noexcept { return std::clamp(std::isfinite(value) ? va
 double signed_unit(double value) noexcept { return std::clamp(std::isfinite(value) ? value : 0.0, -1.0, 1.0); }
 
 AffectiveSignal signal_from_event(const Event& event) noexcept {
-    double outcome = 0.0;
-    double error = unit(attribute_value(event.data, "error", 0.0));
-    double novelty = unit(attribute_value(event.data, "novelty", 0.0));
-    double salience = unit(attribute_value(event.data, "salience", 0.0));
-    double uncertainty = unit(attribute_value(event.data, "uncertainty", error));
-    double confidence = unit(attribute_value(event.data, "confidence", 1.0 - error));
+    const double error = unit(attribute_value(event.data, "error", 0.0));
+    const double novelty = unit(attribute_value(event.data, "novelty", 0.0));
+    const double salience = unit(attribute_value(event.data, "salience", 0.0));
+    const double uncertainty = unit(attribute_value(event.data, "uncertainty", error));
+    const double confidence = unit(attribute_value(event.data, "confidence", 1.0 - error));
 
-    if (event.kind == "action_outcome" || event.kind == "learning") {
-        const double reliability = unit(attribute_value(event.data, "reliability", confidence));
-        outcome = 2.0 * reliability - 1.0;
-        error = 1.0 - reliability;
-        confidence = reliability;
-    } else if (event.kind == "prediction_outcome") {
+    // Events describe evidence, not emotional categories. If a producer knows
+    // the experienced utility it may provide it explicitly. Otherwise the
+    // model uses generic evidence dimensions rather than event-type semantics.
+    const auto outcome_it = event.data.find("outcome");
+    const auto utility_it = event.data.find("utility");
+    double outcome = 0.0;
+    if (outcome_it != event.data.end()) outcome = signed_unit(attribute_value(event.data, "outcome", 0.0));
+    else if (utility_it != event.data.end()) outcome = signed_unit(attribute_value(event.data, "utility", 0.0));
+    else if (event.data.find("reliability") != event.data.end()) {
+        outcome = 2.0 * confidence - 1.0;
+    } else if (event.data.find("error") != event.data.end()) {
         outcome = 1.0 - 2.0 * error;
-    } else if (event.kind == "goal_complete") {
-        outcome = 1.0;
-        salience = std::max(salience, 0.8);
-    } else if (event.kind == "goal_progress") {
-        outcome = signed_unit(attribute_value(event.data, "delta", 0.0));
     }
-    return {signed_unit(outcome), error, novelty, salience, uncertainty, confidence};
+    return {outcome, error, novelty, salience, uncertainty, confidence};
 }
 
-double utility_from_event(const Event& event, const AffectiveSignal& signal) noexcept {
-    if (event.kind == "goal_progress") return signed_unit(attribute_value(event.data, "delta", signal.outcome));
-    return signal.outcome;
+bool has_outcome_evidence(const Event& event) noexcept {
+    return event.data.find("outcome") != event.data.end() ||
+           event.data.find("utility") != event.data.end() ||
+           event.data.find("reliability") != event.data.end();
 }
 
 } // namespace
@@ -51,18 +51,18 @@ double utility_from_event(const Event& event, const AffectiveSignal& signal) noe
 std::vector<Decision> Brain::choose_with_affect(const std::vector<CandidateAction>& actions) const {
     std::shared_lock lock(mutex_);
 
-    // Rebuild both affect and its learned appraisal from the experience
-    // journal. The learned mapping therefore develops from consequences and
-    // remains reproducible after restart; it is not a hidden process variable.
+    // Reconstruct affect and learned appraisal exclusively from persistent
+    // evidence. No event kind is treated as an emotion and no action is
+    // prescribed by an affective label.
     AffectiveStateModel affect_model;
     AffectiveLearningModel appraisal_model;
     for (const auto& event : memory_.all()) {
         const auto signal = signal_from_event(event);
         const auto before = affect_model.state();
         const auto after = affect_model.update(signal);
-        if (event.kind == "prediction_outcome" || event.kind == "action_outcome" ||
-            event.kind == "learning" || event.kind == "goal_progress" || event.kind == "goal_complete") {
-            appraisal_model.learn(signal, before, after, utility_from_event(event, signal));
+        if (has_outcome_evidence(event)) {
+            const double utility = signed_unit(attribute_value(event.data, "utility", signal.outcome));
+            appraisal_model.learn(signal, before, after, utility);
         }
     }
 
@@ -77,8 +77,6 @@ std::vector<Decision> Brain::choose_with_affect(const std::vector<CandidateActio
     context.tension = affect.tension;
     context.stability = affect.stability;
 
-    // Learned appraisal influences the strength of uncertainty/tension
-    // weighting, but does not select an action directly.
     context.affective_uncertainty = std::clamp(
         context.affective_uncertainty * (0.75 + 0.25 * appraisal.uncertainty_weight), 0.0, 1.0);
     context.tension = std::clamp(
