@@ -21,8 +21,9 @@ int main() {
     assert(neutral.size() == 2);
 
     brain.observe(Event{0, 0, "test", "observation", {{"novelty", 1.0}, {"salience", 1.0}, {"uncertainty", 1.0}}});
+    const ActionAssessment assessment{reversible, ActionDisposition::execute, true, 1.0, "test"};
     brain.execute_action(
-        ActionAssessment{reversible, 0.0, true, {}},
+        assessment,
         [](const CandidateAction&) { return false; },
         [](const CandidateAction&) { return false; });
 
