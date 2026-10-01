@@ -7,6 +7,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_library(jarvis_core STATIC
     src/brain.cpp
+    src/brain_concept_context.cpp
+    src/brain_prediction_context.cpp
     src/brain_novelty.cpp
     src/memory.cpp
     src/world_model.cpp
@@ -55,6 +57,7 @@ add_library(jarvis_core STATIC
     src/goals.cpp
     src/intent.cpp
     src/strategy.cpp
+    src/developmental_learning.cpp
     src/self_testing.cpp
     src/cognitive_cycle.cpp
     src/cognitive_trigger.cpp
