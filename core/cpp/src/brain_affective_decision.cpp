@@ -23,20 +23,11 @@ AffectiveSignal signal_from_event(const Event& event) noexcept {
     const double salience = unit(attribute_value(event.data, "salience", 0.0));
     const double uncertainty = unit(attribute_value(event.data, "uncertainty", error));
     const double confidence = unit(attribute_value(event.data, "confidence", 1.0 - error));
-
-    // Events describe evidence, not emotional categories. If a producer knows
-    // the experienced utility it may provide it explicitly. Otherwise the
-    // model uses generic evidence dimensions rather than event-type semantics.
-    const auto outcome_it = event.data.find("outcome");
-    const auto utility_it = event.data.find("utility");
     double outcome = 0.0;
-    if (outcome_it != event.data.end()) outcome = signed_unit(attribute_value(event.data, "outcome", 0.0));
-    else if (utility_it != event.data.end()) outcome = signed_unit(attribute_value(event.data, "utility", 0.0));
-    else if (event.data.find("reliability") != event.data.end()) {
-        outcome = 2.0 * confidence - 1.0;
-    } else if (event.data.find("error") != event.data.end()) {
-        outcome = 1.0 - 2.0 * error;
-    }
+    if (event.data.find("outcome") != event.data.end()) outcome = signed_unit(attribute_value(event.data, "outcome", 0.0));
+    else if (event.data.find("utility") != event.data.end()) outcome = signed_unit(attribute_value(event.data, "utility", 0.0));
+    else if (event.data.find("reliability") != event.data.end()) outcome = 2.0 * confidence - 1.0;
+    else if (event.data.find("error") != event.data.end()) outcome = 1.0 - 2.0 * error;
     return {outcome, error, novelty, salience, uncertainty, confidence};
 }
 
@@ -46,17 +37,16 @@ bool has_outcome_evidence(const Event& event) noexcept {
            event.data.find("reliability") != event.data.end();
 }
 
-} // namespace
+struct ReconstructedAffect {
+    AffectiveState state{};
+    AffectiveAppraisal appraisal{};
+    std::uint64_t updates{0};
+};
 
-std::vector<Decision> Brain::choose_with_affect(const std::vector<CandidateAction>& actions) const {
-    std::shared_lock lock(mutex_);
-
-    // Reconstruct affect and learned appraisal exclusively from persistent
-    // evidence. No event kind is treated as an emotion and no action is
-    // prescribed by an affective label.
+ReconstructedAffect reconstruct_affect(const Memory& memory) {
     AffectiveStateModel affect_model;
     AffectiveLearningModel appraisal_model;
-    for (const auto& event : memory_.all()) {
+    for (const auto& event : memory.all()) {
         const auto signal = signal_from_event(event);
         const auto before = affect_model.state();
         const auto after = affect_model.update(signal);
@@ -65,23 +55,41 @@ std::vector<Decision> Brain::choose_with_affect(const std::vector<CandidateActio
             appraisal_model.learn(signal, before, after, utility);
         }
     }
+    return {affect_model.state(), appraisal_model.appraisal(), appraisal_model.updates()};
+}
 
-    const auto affect = affect_model.state();
-    const auto appraisal = appraisal_model.appraisal();
+} // namespace
+
+std::vector<Decision> Brain::choose_with_affect(const std::vector<CandidateAction>& actions) const {
+    std::shared_lock lock(mutex_);
+    const auto reconstructed = reconstruct_affect(memory_);
+    const auto& affect = reconstructed.state;
+    const auto& appraisal = reconstructed.appraisal;
+
     DecisionContext context;
     context.uncertainty = std::clamp(1.0 - state_.attention, 0.0, 1.0);
     context.threat = std::clamp(state_.threat, 0.0, 1.0);
     context.valence = affect.valence;
     context.arousal = affect.arousal;
-    context.affective_uncertainty = affect.uncertainty;
-    context.tension = affect.tension;
+    context.affective_uncertainty = std::clamp(affect.uncertainty * (0.75 + 0.25 * appraisal.uncertainty_weight), 0.0, 1.0);
+    context.tension = std::clamp(affect.tension * (0.75 + 0.25 * appraisal.tension_error_weight), 0.0, 1.0);
     context.stability = affect.stability;
-
-    context.affective_uncertainty = std::clamp(
-        context.affective_uncertainty * (0.75 + 0.25 * appraisal.uncertainty_weight), 0.0, 1.0);
-    context.tension = std::clamp(
-        context.tension * (0.75 + 0.25 * appraisal.tension_error_weight), 0.0, 1.0);
     return decision_.decide(actions, context);
+}
+
+AffectiveState Brain::affective_state() const {
+    std::shared_lock lock(mutex_);
+    return reconstruct_affect(memory_).state;
+}
+
+AffectiveAppraisal Brain::affective_appraisal() const {
+    std::shared_lock lock(mutex_);
+    return reconstruct_affect(memory_).appraisal;
+}
+
+std::uint64_t Brain::affective_learning_updates() const {
+    std::shared_lock lock(mutex_);
+    return reconstruct_affect(memory_).updates;
 }
 
 } // namespace jarvis::core
