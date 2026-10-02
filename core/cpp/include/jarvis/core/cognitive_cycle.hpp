@@ -39,6 +39,8 @@ struct CognitiveCycleContext {
     std::vector<Belief> beliefs;
     std::vector<CausalLink> causal_links;
     std::vector<Prediction> predictions;
+    AffectiveState affective_state;
+    AffectiveAppraisal affective_appraisal;
     ReasoningResult reasoning;
     std::vector<Goal> eligible_goals;
     Goal selected_goal;
@@ -60,6 +62,8 @@ struct CognitiveFeedbackResult {
     bool prediction_resolved{false};
     bool goal_progress_assimilated{false};
     double learned_reliability{0.0};
+    AffectiveState affective_state;
+    AffectiveAppraisal affective_appraisal;
     Reflection reflection;
 };
 
