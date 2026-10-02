@@ -1,10 +1,8 @@
 cmake_minimum_required(VERSION 3.24)
 project(jarvis_core LANGUAGES CXX)
-
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-
 add_library(jarvis_core STATIC
     src/brain.cpp
     src/brain_affective_decision.cpp
@@ -70,19 +68,20 @@ add_library(jarvis_core STATIC
     src/capability_evaluator.cpp
     src/capability_execution.cpp
 )
-
 target_include_directories(jarvis_core PUBLIC include)
 target_compile_features(jarvis_core PUBLIC cxx_std_20)
-
 if (MSVC)
     target_compile_options(jarvis_core PRIVATE /W4 /permissive-)
 else()
     target_compile_options(jarvis_core PRIVATE -Wall -Wextra -Wpedantic)
 endif()
-
 include(CTest)
 if(BUILD_TESTING)
     add_subdirectory(tests)
+    add_executable(jarvis_affective_state_suite tests/affective_state_suite.cpp)
+    target_link_libraries(jarvis_affective_state_suite PRIVATE jarvis_core)
+    target_compile_features(jarvis_affective_state_suite PRIVATE cxx_std_20)
+    add_test(NAME jarvis_affective_state_suite COMMAND jarvis_affective_state_suite)
     add_executable(jarvis_affective_decision_suite tests/affective_decision_suite.cpp)
     target_link_libraries(jarvis_affective_decision_suite PRIVATE jarvis_core)
     target_compile_features(jarvis_affective_decision_suite PRIVATE cxx_std_20)
