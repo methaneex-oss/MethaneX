@@ -3,12 +3,9 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdint>
-#include <string>
 
 namespace jarvis::core {
 
-// Continuous internal valuation state. It is not an emotion label or an
-// action rule: downstream cognition consumes these dimensions as signals.
 struct AffectiveState {
     double valence{0.0};
     double arousal{0.0};
@@ -27,9 +24,19 @@ struct AffectiveSignal {
     double confidence{0.5};
 };
 
+struct AffectiveAppraisalWeights {
+    double outcome_weight{0.45};
+    double error_weight{0.25};
+    double novelty_weight{0.45};
+    double salience_weight{0.35};
+    double uncertainty_weight{0.60};
+    double tension_error_weight{0.55};
+};
+
 class AffectiveStateModel {
 public:
     AffectiveState update(const AffectiveSignal& signal, double dt = 1.0) noexcept;
+    AffectiveState update(const AffectiveSignal& signal, const AffectiveAppraisalWeights& learned, double dt = 1.0) noexcept;
     AffectiveState decay(double dt = 1.0) noexcept;
     AffectiveState state() const noexcept { return state_; }
     void restore(AffectiveState state) noexcept { state_ = sanitize(state); }
