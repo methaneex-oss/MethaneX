@@ -23,6 +23,8 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     result.context.memories = brain_.memory().recall_ranked(input.observation.data, input.memory_limit);
     result.context.beliefs = brain_.beliefs();
     result.context.causal_links = brain_.causal_links();
+    result.context.affective_state = brain_.affective_state();
+    result.context.affective_appraisal = brain_.affective_appraisal();
     const auto disputed_facts = brain_.world().disputed_facts();
     const auto disputed_relations = brain_.world().disputed_relations();
     std::size_t disputed_beliefs = 0;
@@ -37,9 +39,6 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
         result.context.predictions.reserve(simulation.predictions.size());
         for (const auto& projected : simulation.predictions) {
             if (projected.key.empty()) continue;
-            // Prediction keys are stable semantic variables, not cycle identifiers.
-            // A stable key is required for prediction-error statistics to accumulate
-            // across experiences and influence future cognition.
             const auto prediction = brain_.predict(projected.key, projected.value, std::clamp(projected.confidence, 0.0, 1.0));
             if (!prediction.key.empty()) result.context.predictions.push_back(prediction);
         }
@@ -76,7 +75,24 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     std::vector<CandidateAction> planned_actions;
     planned_actions.reserve(result.context.plan.steps.size());
     for (const auto& step : result.context.plan.steps) planned_actions.push_back(step.action);
-    result.context.decision_context = DecisionContext{goal_priority, goal_progress, result.context.plan.expected_value, result.context.plan.risk, input.resource_budget, uncertainty, threat, deadline_pressure};
+    const auto& affect = result.context.affective_state;
+    const auto& appraisal = result.context.affective_appraisal;
+    const double affective_uncertainty = std::clamp(affect.uncertainty * (0.75 + 0.25 * appraisal.uncertainty_weight), 0.0, 1.0);
+    const double tension = std::clamp(affect.tension * (0.75 + 0.25 * appraisal.tension_error_weight), 0.0, 1.0);
+    result.context.decision_context = DecisionContext{
+        goal_priority,
+        goal_progress,
+        result.context.plan.expected_value,
+        result.context.plan.risk,
+        input.resource_budget,
+        uncertainty,
+        threat,
+        deadline_pressure,
+        affect.valence,
+        affect.arousal,
+        affective_uncertainty,
+        tension,
+        affect.stability};
     result.context.decisions = brain_.decision_engine().decide(planned_actions, result.context.decision_context);
     if (result.context.decisions.empty()) { result.status = CognitiveCycleStatus::no_action; result.context.reflection = brain_.reflect(); return result; }
     result.context.action_assessments = brain_.action_model().assess(result.context.decisions, input.action_constraints);
@@ -99,6 +115,8 @@ CognitiveFeedbackResult CognitiveCycle::process_outcome(const std::optional<std:
         if (const auto* goal = brain_.goal(*goal_id); goal != nullptr) goal_evidence.progress_before = goal->progress;
         result.goal_progress_assimilated = brain_.assimilate_goal_outcome(goal_evidence);
     }
+    result.affective_state = brain_.affective_state();
+    result.affective_appraisal = brain_.affective_appraisal();
     result.reflection = brain_.reflect();
     return result;
 }
