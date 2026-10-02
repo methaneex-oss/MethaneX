@@ -13,7 +13,6 @@ double attribute_value(const Attributes& data, const char* key, double fallback)
     if (const auto* value = std::get_if<std::int64_t>(&it->second)) return static_cast<double>(*value);
     return fallback;
 }
-
 double unit(double value) noexcept { return std::clamp(std::isfinite(value) ? value : 0.0, 0.0, 1.0); }
 double signed_unit(double value) noexcept { return std::clamp(std::isfinite(value) ? value : 0.0, -1.0, 1.0); }
 
@@ -39,11 +38,9 @@ AffectiveSignal signal_from_event(const Event& event) noexcept {
 }
 
 bool has_outcome_evidence(const Event& event) noexcept {
-    return event.kind == "prediction_outcome" || event.kind == "action_outcome" ||
-           event.kind == "goal_complete" || event.kind == "goal_abandon" || event.kind == "goal_progress" ||
-           event.data.find("outcome") != event.data.end() ||
-           event.data.find("utility") != event.data.end() ||
-           event.data.find("reliability") != event.data.end();
+    return event.kind == "prediction_outcome" || event.kind == "action_outcome" || event.kind == "goal_complete" ||
+           event.kind == "goal_abandon" || event.kind == "goal_progress" || event.data.find("outcome") != event.data.end() ||
+           event.data.find("utility") != event.data.end() || event.data.find("reliability") != event.data.end();
 }
 
 double observed_utility(const Event& event, const AffectiveSignal& signal) noexcept {
@@ -53,11 +50,7 @@ double observed_utility(const Event& event, const AffectiveSignal& signal) noexc
     return signed_unit(attribute_value(event.data, "utility", signal.outcome));
 }
 
-struct ReconstructedAffect {
-    AffectiveState state{};
-    AffectiveAppraisal appraisal{};
-    std::uint64_t updates{0};
-};
+struct ReconstructedAffect { AffectiveState state{}; AffectiveAppraisal appraisal{}; std::uint64_t updates{0}; };
 
 ReconstructedAffect reconstruct_affect(const Memory& memory) {
     AffectiveStateModel affect_model;
@@ -65,7 +58,10 @@ ReconstructedAffect reconstruct_affect(const Memory& memory) {
     for (const auto& event : memory.all()) {
         const auto signal = signal_from_event(event);
         const auto before = affect_model.state();
-        const auto after = affect_model.update(signal);
+        const auto learned = appraisal_model.appraisal();
+        const AffectiveAppraisalWeights weights{learned.outcome_weight, learned.error_weight, learned.novelty_weight,
+                                                learned.salience_weight, learned.uncertainty_weight, learned.tension_error_weight};
+        const auto after = affect_model.update(signal, weights);
         if (has_outcome_evidence(event)) appraisal_model.learn(signal, before, after, observed_utility(event, signal));
     }
     return {affect_model.state(), appraisal_model.appraisal(), appraisal_model.updates()};
@@ -78,13 +74,11 @@ std::vector<Decision> Brain::choose_with_affect(const std::vector<CandidateActio
     const auto reconstructed = reconstruct_affect(memory_);
     const auto& affect = reconstructed.state;
     const auto& appraisal = reconstructed.appraisal;
-
     const auto self = self_state_model_.snapshot();
     const auto eligible = goals_model_.eligible(state_.cycle);
     const auto selected_intent = intent_model_.select(eligible, threat_state_.score, self.uncertainty, state_.cycle);
     const auto strategy = strategy_model_.formulate(selected_intent, attention_state_, threat_state_.score, self.uncertainty);
     const auto plan = planner_.build(actions, 1, strategy.planning);
-
     DecisionContext context;
     context.goal_priority = strategy.planning.goal_priority;
     context.goal_progress = strategy.planning.goal_progress;
@@ -102,19 +96,8 @@ std::vector<Decision> Brain::choose_with_affect(const std::vector<CandidateActio
     return decision_.decide(actions, context);
 }
 
-AffectiveState Brain::affective_state() const {
-    std::shared_lock lock(mutex_);
-    return reconstruct_affect(memory_).state;
-}
-
-AffectiveAppraisal Brain::affective_appraisal() const {
-    std::shared_lock lock(mutex_);
-    return reconstruct_affect(memory_).appraisal;
-}
-
-std::uint64_t Brain::affective_learning_updates() const {
-    std::shared_lock lock(mutex_);
-    return reconstruct_affect(memory_).updates;
-}
+AffectiveState Brain::affective_state() const { std::shared_lock lock(mutex_); return reconstruct_affect(memory_).state; }
+AffectiveAppraisal Brain::affective_appraisal() const { std::shared_lock lock(mutex_); return reconstruct_affect(memory_).appraisal; }
+std::uint64_t Brain::affective_learning_updates() const { std::shared_lock lock(mutex_); return reconstruct_affect(memory_).updates; }
 
 } // namespace jarvis::core
