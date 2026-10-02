@@ -15,6 +15,7 @@ add_library(jarvis_core STATIC
     src/association_model.cpp
     src/decision.cpp
     src/adaptation.cpp
+    src/learning_loop.cpp
     src/attention.cpp
     src/attention_state.cpp
     src/affective_state.cpp
@@ -47,7 +48,6 @@ add_library(jarvis_core STATIC
     src/action_model.cpp
     src/action_execution.cpp
     src/action_authorization.cpp
-    src/learning_loop.cpp
     src/reflection.cpp
     src/knowledge.cpp
     src/self_model.cpp
@@ -94,4 +94,8 @@ if(BUILD_TESTING)
     target_link_libraries(jarvis_affective_learning_suite PRIVATE jarvis_core)
     target_compile_features(jarvis_affective_learning_suite PRIVATE cxx_std_20)
     add_test(NAME jarvis_affective_learning_suite COMMAND jarvis_affective_learning_suite)
+    add_executable(jarvis_affective_decision_learning_suite tests/affective_decision_learning_suite.cpp)
+    target_link_libraries(jarvis_affective_decision_learning_suite PRIVATE jarvis_core)
+    target_compile_features(jarvis_affective_decision_learning_suite PRIVATE cxx_std_20)
+    add_test(NAME jarvis_affective_decision_learning_suite COMMAND jarvis_affective_decision_learning_suite)
 endif()
