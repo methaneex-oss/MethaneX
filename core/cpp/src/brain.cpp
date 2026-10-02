@@ -86,7 +86,51 @@ std::vector<ConceptCandidate> Brain::concept_candidates(double minimum_strength,
 std::vector<ConceptCandidate> Brain::contextual_concepts(const std::string& key, double minimum_strength, std::size_t minimum_shared_contexts) const { std::shared_lock lock(mutex_); return association_.generalized_concepts(key, minimum_strength, minimum_shared_contexts); }
 std::vector<ConceptMatch> Brain::generalized_concepts(const std::string& key, double minimum_strength, std::size_t minimum_shared_contexts, double minimum_similarity) const { std::shared_lock lock(mutex_); return association_.generalized_concepts(key, minimum_strength, minimum_shared_contexts, minimum_similarity); }
 std::vector<CausalLink> Brain::causal_links() const { std::shared_lock lock(mutex_); return causal_.links(); }
-std::vector<Decision> Brain::choose(const std::vector<CandidateAction>& actions) const { std::shared_lock lock(mutex_); const auto self = self_state_model_.snapshot(); const auto eligible = goals_model_.eligible(state_.cycle); const auto selected_intent = intent_model_.select(eligible, threat_state_.score, self.uncertainty, state_.cycle); const auto strategy = strategy_model_.formulate(selected_intent, attention_state_, threat_state_.score, self.uncertainty); const auto plan = planner_.build(actions, 1, strategy.planning); DecisionContext context; context.goal_priority = strategy.planning.goal_priority; context.goal_progress = strategy.planning.goal_progress; context.plan_expected_value = plan.expected_value; context.plan_risk = plan.risk; context.resource_budget = strategy.planning.resource_budget; context.uncertainty = strategy.planning.uncertainty; context.threat = strategy.planning.threat; context.deadline_pressure = strategy.planning.deadline_pressure; return decision_.decide(actions, context); }
+std::vector<Decision> Brain::choose(const std::vector<CandidateAction>& actions) const {
+    std::shared_lock lock(mutex_);
+    const auto self = self_state_model_.snapshot();
+    const auto eligible = goals_model_.eligible(state_.cycle);
+    const auto selected_intent = intent_model_.select(eligible, threat_state_.score, self.uncertainty, state_.cycle);
+    const auto strategy = strategy_model_.formulate(selected_intent, attention_state_, threat_state_.score, self.uncertainty);
+    const auto plan = planner_.build(actions, 1, strategy.planning);
+    DecisionContext context;
+    context.goal_priority = strategy.planning.goal_priority;
+    context.goal_progress = strategy.planning.goal_progress;
+    context.plan_expected_value = plan.expected_value;
+    context.plan_risk = plan.risk;
+    context.resource_budget = strategy.planning.resource_budget;
+    context.uncertainty = strategy.planning.uncertainty;
+    context.threat = strategy.planning.threat;
+    context.deadline_pressure = strategy.planning.deadline_pressure;
+    return decision_.decide(actions, context);
+}
+
+std::vector<Decision> Brain::choose_with_affect(const std::vector<CandidateAction>& actions) const {
+    std::shared_lock lock(mutex_);
+    const auto self = self_state_model_.snapshot();
+    const auto eligible = goals_model_.eligible(state_.cycle);
+    const auto selected_intent = intent_model_.select(eligible, threat_state_.score, self.uncertainty, state_.cycle);
+    const auto strategy = strategy_model_.formulate(selected_intent, attention_state_, threat_state_.score, self.uncertainty);
+    const auto plan = planner_.build(actions, 1, strategy.planning);
+    const auto affect = affective_state_model_.state();
+    const auto appraisal = affective_learning_model_.appraisal();
+    DecisionContext context;
+    context.goal_priority = strategy.planning.goal_priority;
+    context.goal_progress = strategy.planning.goal_progress;
+    context.plan_expected_value = plan.expected_value;
+    context.plan_risk = plan.risk;
+    context.resource_budget = strategy.planning.resource_budget;
+    context.uncertainty = strategy.planning.uncertainty;
+    context.threat = strategy.planning.threat;
+    context.deadline_pressure = strategy.planning.deadline_pressure;
+    context.valence = affect.valence * appraisal.outcome_weight;
+    context.arousal = affect.arousal * appraisal.novelty_weight;
+    context.affective_uncertainty = affect.uncertainty * appraisal.uncertainty_weight;
+    context.tension = affect.tension * appraisal.tension_error_weight;
+    context.stability = affect.stability;
+    return decision_.decide(actions, context);
+}
+
 std::vector<ActionAssessment> Brain::assess_actions(const std::vector<Decision>& decisions, ActionConstraints constraints) const { std::shared_lock lock(mutex_); return action_model_.assess(decisions, constraints); }
 std::vector<CapabilityCandidate> Brain::evaluate_capabilities(const std::vector<CapabilityDescriptor>& capabilities, CapabilityConstraints constraints) const { std::shared_lock lock(mutex_); return CapabilityEvaluator{}.evaluate(capabilities, constraints); }
 CapabilityExecutionResult Brain::execute_capability(const CapabilityDescriptor& capability, std::string input, std::vector<std::string> granted_permissions, double maximum_risk, CapabilityProvider provider) {
