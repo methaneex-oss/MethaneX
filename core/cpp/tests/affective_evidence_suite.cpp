@@ -14,12 +14,12 @@ int main() {
     std::filesystem::remove(path.string() + ".meta", ec);
 
     Brain brain(path);
-    brain.observe(Event{0, 0, "sensor", "arbitrary_experience", {
-        {"novelty", 0.8}, {"salience", 0.9}, {"uncertainty", 0.2},
-        {"confidence", 0.8}, {"outcome", 0.9}, {"utility", 0.9}}});
-    brain.observe(Event{0, 0, "sensor", "another_experience", {
-        {"novelty", 0.7}, {"salience", 0.8}, {"uncertainty", 0.9},
-        {"confidence", 0.2}, {"outcome", -0.9}, {"utility", -0.9}}});
+    brain.observe(Event{0, 0, "sensor", "prediction_outcome", {
+        {"key", std::string("temperature")}, {"error", 0.1}, {"novelty", 0.8},
+        {"salience", 0.9}, {"confidence", 0.8}, {"utility", 0.9}}});
+    brain.observe(Event{0, 0, "sensor", "action_outcome", {
+        {"action", std::string("probe")}, {"context", std::string("temperature")},
+        {"reliability", 0.2}, {"novelty", 0.7}, {"salience", 0.8}, {"utility", -0.9}}});
 
     const auto affect = brain.affective_state();
     const auto appraisal = brain.affective_appraisal();
