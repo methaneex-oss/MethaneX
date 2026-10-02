@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 add_library(jarvis_core STATIC
     src/brain.cpp
+    src/brain_affective_decision.cpp
     src/brain_concept_context.cpp
     src/brain_prediction_context.cpp
     src/brain_novelty.cpp
