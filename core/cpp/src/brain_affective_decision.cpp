@@ -32,9 +32,16 @@ AffectiveSignal signal_from_event(const Event& event) noexcept {
 }
 
 bool has_outcome_evidence(const Event& event) noexcept {
-    return event.data.find("outcome") != event.data.end() ||
+    return event.kind == "prediction_outcome" || event.kind == "action_outcome" ||
+           event.data.find("outcome") != event.data.end() ||
            event.data.find("utility") != event.data.end() ||
            event.data.find("reliability") != event.data.end();
+}
+
+double observed_utility(const Event& event, const AffectiveSignal& signal) noexcept {
+    if (event.kind == "prediction_outcome") return 1.0 - 2.0 * signal.prediction_error;
+    if (event.kind == "action_outcome") return 2.0 * signal.confidence - 1.0;
+    return signed_unit(attribute_value(event.data, "utility", signal.outcome));
 }
 
 struct ReconstructedAffect {
@@ -50,10 +57,7 @@ ReconstructedAffect reconstruct_affect(const Memory& memory) {
         const auto signal = signal_from_event(event);
         const auto before = affect_model.state();
         const auto after = affect_model.update(signal);
-        if (has_outcome_evidence(event)) {
-            const double utility = signed_unit(attribute_value(event.data, "utility", signal.outcome));
-            appraisal_model.learn(signal, before, after, utility);
-        }
+        if (has_outcome_evidence(event)) appraisal_model.learn(signal, before, after, observed_utility(event, signal));
     }
     return {affect_model.state(), appraisal_model.appraisal(), appraisal_model.updates()};
 }
