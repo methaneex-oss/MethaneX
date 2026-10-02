@@ -61,8 +61,8 @@ Prediction Brain::predict_with_context(std::string key, Scalar value, double con
     ++state_.events_seen;
     state_.cycle = event.sequence;
     sync_self_state();
-    const auto it = predictions_.find(prediction.key);
-    return it == predictions_.end() ? Prediction{} : it->second;
+    const auto* stored = find_prediction(event.sequence);
+    return stored == nullptr ? Prediction{} : *stored;
 }
 
 } // namespace jarvis::core
