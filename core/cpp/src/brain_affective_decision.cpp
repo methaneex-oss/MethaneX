@@ -44,35 +44,36 @@ double observed_utility(const Event& event, const AffectiveSignal& signal) noexc
     return signed_unit(attribute_value(event.data, "utility", signal.outcome));
 }
 
-struct ReconstructedAffect {
-    AffectiveState state{};
-    AffectiveAppraisal appraisal{};
-    std::uint64_t updates{0};
-};
-
-ReconstructedAffect reconstruct_affect(const Memory& memory) {
-    AffectiveStateModel affect_model;
-    AffectiveLearningModel appraisal_model;
-    for (const auto& event : memory.all()) {
-        const auto signal = signal_from_event(event);
-        const auto before = affect_model.state();
-        const auto after = affect_model.update(signal);
-        if (has_outcome_evidence(event)) appraisal_model.learn(signal, before, after, observed_utility(event, signal));
-    }
-    return {affect_model.state(), appraisal_model.appraisal(), appraisal_model.updates()};
-}
-
 } // namespace
+
+void Brain::process_affective_experience(const Event& event) {
+    const auto signal = signal_from_event(event);
+    const auto before = affective_state_model_.state();
+    const auto after = affective_state_model_.update(signal);
+    if (has_outcome_evidence(event))
+        affective_learning_model_.learn(signal, before, after, observed_utility(event, signal));
+}
 
 std::vector<Decision> Brain::choose_with_affect(const std::vector<CandidateAction>& actions) const {
     std::shared_lock lock(mutex_);
-    const auto reconstructed = reconstruct_affect(memory_);
-    const auto& affect = reconstructed.state;
-    const auto& appraisal = reconstructed.appraisal;
+    const auto affect = affective_state_model_.state();
+    const auto appraisal = affective_learning_model_.appraisal();
+
+    const auto self = self_state_model_.snapshot();
+    const auto eligible = goals_model_.eligible(state_.cycle);
+    const auto selected_intent = intent_model_.select(eligible, threat_state_.score, self.uncertainty, state_.cycle);
+    const auto strategy = strategy_model_.formulate(selected_intent, attention_state_, threat_state_.score, self.uncertainty);
+    const auto plan = planner_.build(actions, 1, strategy.planning);
 
     DecisionContext context;
-    context.uncertainty = std::clamp(1.0 - state_.attention, 0.0, 1.0);
-    context.threat = std::clamp(state_.threat, 0.0, 1.0);
+    context.goal_priority = strategy.planning.goal_priority;
+    context.goal_progress = strategy.planning.goal_progress;
+    context.plan_expected_value = plan.expected_value;
+    context.plan_risk = plan.risk;
+    context.resource_budget = strategy.planning.resource_budget;
+    context.uncertainty = strategy.planning.uncertainty;
+    context.threat = strategy.planning.threat;
+    context.deadline_pressure = strategy.planning.deadline_pressure;
     context.valence = affect.valence;
     context.arousal = affect.arousal;
     context.affective_uncertainty = std::clamp(affect.uncertainty * (0.75 + 0.25 * appraisal.uncertainty_weight), 0.0, 1.0);
@@ -83,17 +84,17 @@ std::vector<Decision> Brain::choose_with_affect(const std::vector<CandidateActio
 
 AffectiveState Brain::affective_state() const {
     std::shared_lock lock(mutex_);
-    return reconstruct_affect(memory_).state;
+    return affective_state_model_.state();
 }
 
 AffectiveAppraisal Brain::affective_appraisal() const {
     std::shared_lock lock(mutex_);
-    return reconstruct_affect(memory_).appraisal;
+    return affective_learning_model_.appraisal();
 }
 
 std::uint64_t Brain::affective_learning_updates() const {
     std::shared_lock lock(mutex_);
-    return reconstruct_affect(memory_).updates;
+    return affective_learning_model_.updates();
 }
 
 } // namespace jarvis::core
