@@ -34,6 +34,62 @@ void Brain::consolidate_experience(const Event& event, double error) {
     memory_.consolidate(event.sequence, salience, novelty, error, confidence);
 }
 
+void Brain::process_affective_experience(const Event& event) {
+    const auto before = affective_state_model_.state();
+    AffectiveSignal signal{};
+    double utility = 0.0;
+    bool relevant = false;
+
+    if (event.kind == "prediction_outcome") {
+        const double error = std::clamp(double_value(event.data, "error", 1.0), 0.0, 1.0);
+        signal.outcome = 1.0 - error;
+        signal.prediction_error = error;
+        signal.novelty = std::clamp(double_value(event.data, "novelty", state_.novelty), 0.0, 1.0);
+        signal.salience = std::clamp(double_value(event.data, "salience", attention_state_.salience), 0.0, 1.0);
+        signal.confidence = std::clamp(1.0 - error, 0.0, 1.0);
+        utility = signal.outcome;
+        relevant = true;
+    } else if (event.kind == "action_outcome") {
+        const double reliability = std::clamp(double_value(event.data, "reliability", 0.5), 0.0, 1.0);
+        signal.outcome = 2.0 * reliability - 1.0;
+        signal.prediction_error = 1.0 - reliability;
+        signal.novelty = std::clamp(double_value(event.data, "novelty", state_.novelty), 0.0, 1.0);
+        signal.salience = std::clamp(double_value(event.data, "salience", attention_state_.salience), 0.0, 1.0);
+        signal.confidence = reliability;
+        utility = signal.outcome;
+        relevant = true;
+    } else if (event.kind == "learning") {
+        signal.outcome = 2.0 * std::clamp(double_value(event.data, "reliability", 0.5), 0.0, 1.0) - 1.0;
+        signal.confidence = std::clamp(double_value(event.data, "reliability", 0.5), 0.0, 1.0);
+        signal.novelty = state_.novelty;
+        signal.salience = attention_state_.salience;
+        utility = signal.outcome;
+        relevant = true;
+    } else if (event.kind == "observation") {
+        signal.outcome = 0.0;
+        signal.prediction_error = 0.0;
+        signal.novelty = std::clamp(double_value(event.data, "novelty", state_.novelty), 0.0, 1.0);
+        signal.salience = std::clamp(double_value(event.data, "salience", attention_state_.salience), 0.0, 1.0);
+        signal.uncertainty = std::clamp(1.0 - attention_state_.salience, 0.0, 1.0);
+        signal.confidence = 0.5;
+        utility = 0.0;
+        relevant = true;
+    } else if (event.kind == "goal_progress" || event.kind == "goal_complete") {
+        const double progress = event.kind == "goal_complete" ? 1.0 : std::clamp(double_value(event.data, "progress", 0.0), 0.0, 1.0);
+        signal.outcome = 2.0 * progress - 1.0;
+        signal.prediction_error = 1.0 - progress;
+        signal.novelty = state_.novelty;
+        signal.salience = attention_state_.salience;
+        signal.confidence = progress;
+        utility = signal.outcome;
+        relevant = true;
+    }
+
+    if (!relevant) return;
+    const auto after = affective_state_model_.update(signal);
+    affective_learning_model_.learn(signal, before, after, utility);
+}
+
 void Brain::sync_self_state() { const auto goals = goals_model_.all(); std::vector<GoalState> active_goals; active_goals.reserve(goals.size()); for (const auto& goal : goals) if (goal.status == GoalStatus::active) active_goals.push_back(GoalState{goal.id, goal.priority, true}); self_state_model_.set_goals(std::move(active_goals)); const auto capability_health = self_model_.health(); self_state_model_.set_activity(state_.events_seen == 0 ? "idle" : "cognitive_processing"); self_state_model_.set_workload(std::clamp(std::max(state_.threat, 1.0 - capability_health.overall), 0.0, 1.0)); self_state_model_.set_uncertainty(std::clamp(1.0 - state_.attention, 0.0, 1.0)); self_state_model_.set_health(CognitiveHealth{std::clamp(capability_health.overall * (1.0 - state_.threat * 0.5), 0.0, 1.0), capability_health.overall, std::clamp(1.0 - state_.novelty * 0.1, 0.0, 1.0), capability_health.overall}); for (const auto& capability : self_model_.capabilities()) self_state_model_.set_resource_pressure(capability.name, std::clamp(1.0 - (capability.availability * capability.performance), 0.0, 1.0)); self_state_model_.advance_cycle(state_.events_seen); }
 void Brain::replay(const Event& event) {
     state_.cycle = std::max(state_.cycle, event.sequence);
@@ -73,6 +129,10 @@ bool Brain::resolve_prediction(std::uint64_t prediction_sequence, const Scalar& 
 const KnowledgeMetric* Brain::knowledge_source(const std::string& source) const noexcept { std::shared_lock lock(mutex_); return knowledge_.source_metric(source); }
 const AdaptiveMetric* Brain::learning_metric(const std::string& key) const noexcept { std::shared_lock lock(mutex_); return adaptation_.metric(key); }
 double Brain::learning_confidence(const std::string& key) const noexcept { std::shared_lock lock(mutex_); return std::clamp(adaptation_.confidence(key), 0.0, 1.0); }
+AffectiveState Brain::affective_state() const { std::shared_lock lock(mutex_); return affective_state_model_.state(); }
+AffectiveAppraisal Brain::affective_appraisal() const { std::shared_lock lock(mutex_); return affective_learning_model_.appraisal(); }
+std::uint64_t Brain::affective_learning_updates() const { std::shared_lock lock(mutex_); return affective_learning_model_.updates(); }
+
 std::vector<LearnedAssociation> Brain::developmental_associations() const { std::shared_lock lock(mutex_); return developmental_learning_.associations(); }
 std::vector<LearnedStrategy> Brain::developmental_strategies() const { std::shared_lock lock(mutex_); return developmental_learning_.strategies(); }
 const LearnedStrategy* Brain::developmental_best_strategy(const std::string& context) const noexcept { std::shared_lock lock(mutex_); return developmental_learning_.best_strategy(context); }
