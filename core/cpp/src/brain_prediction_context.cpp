@@ -15,18 +15,6 @@ std::string join_prediction_context_ids(const std::vector<std::string>& ids) {
     for (std::size_t i = 0; i < ids.size(); ++i) { if (i != 0) out << '\x1f'; out << ids[i]; }
     return out.str();
 }
-std::vector<std::string> split_prediction_context_ids(const std::string& value) {
-    std::vector<std::string> result;
-    std::size_t start = 0;
-    while (start <= value.size()) {
-        const auto end = value.find('\x1f', start);
-        const auto token = value.substr(start, end == std::string::npos ? std::string::npos : end - start);
-        if (!token.empty()) result.push_back(token);
-        if (end == std::string::npos) break;
-        start = end + 1;
-    }
-    return result;
-}
 }
 
 Prediction Brain::predict_with_context(std::string key, Scalar value, double confidence,
