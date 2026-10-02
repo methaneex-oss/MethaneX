@@ -17,6 +17,21 @@ struct AffectiveAppraisal {
     double tension_error_weight{0.55};
 };
 
+// Outcome evidence separates what was expected from what actually happened.
+// The learner uses the resulting consequence error to adapt appraisal sensitivity;
+// it does not encode semantic emotion rules.
+struct AffectiveOutcomeEvidence {
+    double expected_consequence{0.0};
+    double actual_consequence{0.0};
+    double consequence_error{0.0};
+    double utility{0.0};
+    double prediction_error{0.0};
+    double novelty{0.0};
+    double salience{0.0};
+    double uncertainty{0.0};
+    double confidence{0.5};
+};
+
 class AffectiveLearningModel {
 public:
     AffectiveAppraisal appraisal() const noexcept { return appraisal_; }
@@ -31,21 +46,46 @@ public:
         return signal;
     }
 
+    void learn(const AffectiveOutcomeEvidence& evidence) noexcept {
+        const double expected = clamp_signed(evidence.expected_consequence);
+        const double actual = clamp_signed(evidence.actual_consequence);
+        const double consequence_error = clamp_signed(std::isfinite(evidence.consequence_error)
+            ? evidence.consequence_error
+            : actual - expected);
+        const double utility = clamp_signed(evidence.utility);
+        const double magnitude = std::abs(consequence_error);
+        const double rate = 0.03 + 0.12 * magnitude;
+        const double relevance = 0.25 + 0.75 * std::clamp(
+            0.35 * clamp_unit(evidence.salience) +
+            0.25 * clamp_unit(evidence.novelty) +
+            0.20 * clamp_unit(evidence.confidence) +
+            0.20 * clamp_unit(evidence.uncertainty), 0.0, 1.0);
+
+        appraisal_.outcome_weight = adapt_sensitivity(appraisal_.outcome_weight, std::abs(expected), std::abs(utility), rate, relevance);
+        appraisal_.error_weight = adapt_sensitivity(appraisal_.error_weight, clamp_unit(evidence.prediction_error), magnitude, rate, relevance);
+        appraisal_.novelty_weight = adapt_sensitivity(appraisal_.novelty_weight, clamp_unit(evidence.novelty), magnitude, rate, relevance);
+        appraisal_.salience_weight = adapt_sensitivity(appraisal_.salience_weight, clamp_unit(evidence.salience), magnitude, rate, relevance);
+        appraisal_.uncertainty_weight = adapt_sensitivity(appraisal_.uncertainty_weight, clamp_unit(evidence.uncertainty), magnitude, rate, relevance);
+        appraisal_.tension_error_weight = adapt_sensitivity(appraisal_.tension_error_weight, clamp_unit(evidence.prediction_error), magnitude, rate, relevance);
+        ++updates_;
+    }
+
+    // Compatibility adapter for persisted callers that only have the affective
+    // transition and observed utility. New integrations should supply explicit
+    // expected/actual consequence evidence.
     void learn(const AffectiveSignal& signal, const AffectiveState& before,
                const AffectiveState& after, double observed_utility) noexcept {
-        const double utility = clamp_signed(observed_utility);
-        const double prediction = std::clamp(after.valence - before.valence, -1.0, 1.0);
-        const double error = utility - prediction;
-        const double rate = 0.05 + 0.10 * std::abs(error);
-        const double relevance = 0.25 + 0.75 * std::clamp((signal.salience + signal.novelty) * 0.5, 0.0, 1.0);
-
-        appraisal_.outcome_weight = adapt(appraisal_.outcome_weight, signal.outcome, utility, rate, relevance);
-        appraisal_.error_weight = adapt(appraisal_.error_weight, signal.prediction_error, std::abs(error), rate, relevance);
-        appraisal_.novelty_weight = adapt(appraisal_.novelty_weight, signal.novelty, std::abs(error), rate, relevance);
-        appraisal_.salience_weight = adapt(appraisal_.salience_weight, signal.salience, std::abs(error), rate, relevance);
-        appraisal_.uncertainty_weight = adapt(appraisal_.uncertainty_weight, signal.uncertainty, std::abs(error), rate, relevance);
-        appraisal_.tension_error_weight = adapt(appraisal_.tension_error_weight, signal.prediction_error, std::abs(error), rate, relevance);
-        ++updates_;
+        const double expected = std::clamp(after.valence - before.valence, -1.0, 1.0);
+        learn(AffectiveOutcomeEvidence{
+            expected,
+            clamp_signed(observed_utility),
+            clamp_signed(observed_utility - expected),
+            observed_utility,
+            signal.prediction_error,
+            signal.novelty,
+            signal.salience,
+            signal.uncertainty,
+            signal.confidence});
     }
 
     std::uint64_t updates() const noexcept { return updates_; }
@@ -57,9 +97,13 @@ private:
         if (!std::isfinite(value) || !std::isfinite(baseline) || baseline <= 0.0) return 1.0;
         return std::clamp(value / baseline, 0.25, 2.0);
     }
-    static double adapt(double weight, double feature, double target, double rate, double relevance) noexcept {
-        const double prediction = weight * std::clamp(feature, 0.0, 1.0);
-        const double next = weight + rate * relevance * (target - prediction) * (0.5 + 0.5 * std::abs(feature));
+    static double adapt_sensitivity(double weight, double feature, double target,
+                                    double rate, double relevance) noexcept {
+        feature = clamp_unit(feature);
+        target = clamp_unit(target);
+        const double prediction = std::clamp(weight, 0.0, 2.0) * feature;
+        const double error = target - prediction;
+        const double next = weight + rate * relevance * error * feature;
         return std::clamp(std::isfinite(next) ? next : weight, 0.0, 2.0);
     }
 
