@@ -179,7 +179,20 @@ std::vector<Association> Brain::associations() const { std::shared_lock lock(mut
 std::vector<Association> Brain::associated_with(const std::string& key, double minimum_strength) const { std::shared_lock lock(mutex_); return association_.related(key, minimum_strength); }
 std::vector<AssociationInference> Brain::contextual_associations(const std::string& key, std::size_t max_hops, double minimum_strength) const { std::shared_lock lock(mutex_); return association_.contextual(key, max_hops, minimum_strength); }
 std::vector<ConceptCandidate> Brain::concept_candidates(double minimum_strength, std::size_t minimum_shared_contexts) const { std::shared_lock lock(mutex_); return association_.concept_candidates(minimum_strength, minimum_shared_contexts); }
-std::vector<ConceptCandidate> Brain::contextual_concepts(const std::string& key, double minimum_strength, std::size_t minimum_shared_contexts) const { std::shared_lock lock(mutex_); return association_.generalized_concepts(key, minimum_strength, minimum_shared_contexts); }
+std::vector<ConceptCandidate> Brain::contextual_concepts(const std::string& key, double minimum_strength, std::size_t minimum_shared_contexts) const {
+    std::shared_lock lock(mutex_);
+    const auto matches = association_.generalized_concepts(key, minimum_strength, minimum_shared_contexts);
+    std::vector<ConceptCandidate> result;
+    result.reserve(matches.size());
+    for (const auto& match : matches) {
+        result.push_back(ConceptCandidate{
+            match.concept_members,
+            match.similarity,
+            static_cast<std::uint64_t>(match.matched_contexts.size()),
+            0});
+    }
+    return result;
+}
 std::vector<ConceptMatch> Brain::generalized_concepts(const std::string& key, double minimum_strength, std::size_t minimum_shared_contexts, double minimum_similarity) const { std::shared_lock lock(mutex_); return association_.generalized_concepts(key, minimum_strength, minimum_shared_contexts, minimum_similarity); }
 std::vector<CausalLink> Brain::causal_links() const { std::shared_lock lock(mutex_); return causal_.links(); }
 std::vector<Decision> Brain::choose(const std::vector<CandidateAction>& actions) const {
