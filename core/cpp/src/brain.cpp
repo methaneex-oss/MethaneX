@@ -462,6 +462,7 @@ CapabilityExecutionResult Brain::execute_capability(const CapabilityDescriptor& 
 Plan Brain::plan(const std::vector<CandidateAction>& actions, std::size_t horizon) const { std::shared_lock lock(mutex_); return planner_.build(actions, horizon); }
 Plan Brain::plan(const std::vector<CandidateAction>& actions, std::size_t horizon, const PlanningContext& context) const { std::shared_lock lock(mutex_); return planner_.build(actions, horizon, context); }
 Reflection Brain::reflect() const { std::shared_lock lock(mutex_); std::vector<Belief> beliefs; beliefs.reserve(beliefs_.size()); for (const auto& [_, belief] : beliefs_) beliefs.push_back(belief); std::vector<Prediction> predictions; predictions.reserve(predictions_.size()); for (const auto& prediction : predictions_) predictions.push_back(prediction); return reflection_model_.evaluate(beliefs, predictions); }
+AttentionPolicy Brain::attention_policy() const { std::shared_lock lock(mutex_); return attention_model_.policy(); }
 AttentionSignal Brain::attention() const { std::shared_lock lock(mutex_); return attention_state_; }
 ThreatAssessment Brain::threat() const { std::shared_lock lock(mutex_); return threat_state_; }
 std::vector<RecoveryPlan> Brain::recovery_options() const { std::shared_lock lock(mutex_); return resilience_.required_recovery(); }
