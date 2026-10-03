@@ -29,6 +29,17 @@ ActionExecutionResult Brain::execute_action(
         result.status == ActionExecutionStatus::verified ? 1.0 :
         result.status == ActionExecutionStatus::executed ? 0.75 :
         result.status == ActionExecutionStatus::rolled_back ? 0.25 : 0.0;
+    const auto affect = affective_state_model_.state();
+    // Affective state contributes to memory significance through continuous
+    // evidence. It does not map named emotions to actions.
+    const double affective_salience = std::clamp(
+        0.70 * attention_state_.salience +
+        0.15 * affect.arousal +
+        0.15 * affect.tension,
+        0.0, 1.0);
+    const double affective_confidence = std::clamp(
+        assessment.confidence * (0.75 + 0.25 * affect.stability),
+        0.0, 1.0);
     Attributes data{
         {"action", result.action.name},
         {"context", context},
@@ -42,9 +53,13 @@ ActionExecutionResult Brain::execute_action(
         {"actual_consequence", result.outcome.actual_consequence},
         {"consequence_error", result.outcome.consequence_error},
         {"reliability", reliability},
-        {"salience", std::clamp(attention_state_.salience, 0.0, 1.0)},
+        {"salience", affective_salience},
         {"novelty", std::clamp(state_.novelty, 0.0, 1.0)},
-        {"confidence", std::clamp(assessment.confidence, 0.0, 1.0)},
+        {"confidence", affective_confidence},
+        {"affective_arousal", affect.arousal},
+        {"affective_uncertainty", affect.uncertainty},
+        {"affective_tension", affect.tension},
+        {"affective_stability", affect.stability},
         {"reason", result.reason},
     };
 
@@ -71,9 +86,9 @@ ActionExecutionResult Brain::execute_action(
              {"utility", result.outcome.actual_consequence},
              {"prediction_error", std::clamp(std::abs(result.outcome.consequence_error), 0.0, 1.0)},
              {"novelty", std::clamp(state_.novelty, 0.0, 1.0)},
-             {"salience", std::clamp(attention_state_.salience, 0.0, 1.0)},
+             {"salience", affective_salience},
              {"uncertainty", std::clamp(1.0 - assessment.confidence, 0.0, 1.0)},
-             {"confidence", std::clamp(assessment.confidence, 0.0, 1.0)},
+             {"confidence", affective_confidence},
              {"source_action_sequence", static_cast<std::int64_t>(event.sequence)}}};
         affective_event.sequence = memory_.append(affective_event);
         if (affective_event.sequence != 0) {
