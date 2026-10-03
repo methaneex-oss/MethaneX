@@ -79,11 +79,30 @@ int main() {
     Brain brain(journal);
     assert(brain.create_goal(Goal{"goal-alpha", "protect the system", 0.8, 0.0, 0, 0, GoalStatus::pending, {}, {}}));
     assert(brain.activate_goal("goal-alpha"));
+
+    const auto before_appraisal = brain.affective_appraisal();
+    auto learning_assessment = permitted;
+    learning_assessment.action.expected_consequence = 0.9;
     const auto result = brain.execute_action(
-        permitted,
+        learning_assessment,
         [](const CandidateAction&) { return true; },
-        [](const CandidateAction&) { return true; });
+        [](const CandidateAction&) { return true; },
+        {},
+        [](const CandidateAction&) { return -0.4; });
     assert(result.status == ActionExecutionStatus::verified);
+    assert(result.outcome.observed);
+    assert(std::abs(result.outcome.consequence_error + 1.3) < 1e-9);
+
+    const auto after_appraisal = brain.affective_appraisal();
+    assert(brain.affective_learning_updates() > 0);
+    assert(
+        std::abs(after_appraisal.outcome_weight - before_appraisal.outcome_weight) > 1e-12 ||
+        std::abs(after_appraisal.error_weight - before_appraisal.error_weight) > 1e-12 ||
+        std::abs(after_appraisal.novelty_weight - before_appraisal.novelty_weight) > 1e-12 ||
+        std::abs(after_appraisal.salience_weight - before_appraisal.salience_weight) > 1e-12 ||
+        std::abs(after_appraisal.uncertainty_weight - before_appraisal.uncertainty_weight) > 1e-12 ||
+        std::abs(after_appraisal.tension_error_weight - before_appraisal.tension_error_weight) > 1e-12);
+
     const auto learned = brain.beliefs();
     bool saw_action_feedback = false;
     for (const auto& belief : learned) {
@@ -100,6 +119,7 @@ int main() {
     assert(strategies.front().value > 0.0);
     const auto* best = brain.developmental_best_strategy("goal-alpha");
     assert(best != nullptr && best->action == "protect");
+
     Brain restored(journal);
     const auto restored_strategies = restored.developmental_strategies();
     assert(restored_strategies.size() == 1);
