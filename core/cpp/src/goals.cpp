@@ -38,6 +38,7 @@ bool GoalModel::update_progress(const std::string& id, double progress) {
     if (goal == nullptr || !std::isfinite(progress) || progress < 0.0 || progress > 1.0 ||
         goal->status == GoalStatus::completed || goal->status == GoalStatus::abandoned) return false;
     goal->progress = progress;
+    if (progress >= 1.0) goal->status = GoalStatus::completed;
     return true;
 }
 
