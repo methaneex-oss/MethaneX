@@ -1,6 +1,7 @@
 #include "jarvis/core/brain.hpp"
 
 #include <cassert>
+#include <cmath>
 #include <filesystem>
 #include <iostream>
 
@@ -20,7 +21,28 @@ int main() {
     const auto neutral = brain.choose_with_affect(actions);
     assert(neutral.size() == 2);
 
-    brain.observe(Event{0, 0, "test", "observation", {{"novelty", 1.0}, {"salience", 1.0}, {"uncertainty", 1.0}}});
+    const auto observation = brain.observe(Event{
+        0, 0, "test", "observation",
+        {{"novelty", 1.0}, {"salience", 1.0}, {"uncertainty", 1.0}, {"outcome", -1.0}, {"confidence", 0.1}}});
+    const auto affected_state = brain.affective_state();
+    assert(affected_state.updates > 0);
+    assert(std::isfinite(affected_state.valence));
+    assert(std::isfinite(affected_state.arousal));
+    assert(std::isfinite(affected_state.uncertainty));
+    assert(std::isfinite(affected_state.tension));
+
+    const auto consolidated = brain.memory().salient(8);
+    bool found_observation = false;
+    for (const auto& record : consolidated) {
+        if (record.event.sequence == observation.event.sequence) {
+            found_observation = true;
+            assert(record.salience >= 0.0 && record.salience <= 1.0);
+            assert(record.salience > 0.0);
+            break;
+        }
+    }
+    assert(found_observation);
+
     const ActionAssessment assessment{reversible, ActionDisposition::execute, true, 1.0, "test"};
     brain.execute_action(
         assessment,
@@ -32,6 +54,13 @@ int main() {
     assert(affected.front().action.name == "reversible");
 
     Brain restored(path);
+    const auto restored_state = restored.affective_state();
+    assert(restored_state.updates == affected_state.updates + 1);
+    assert(std::isfinite(restored_state.valence));
+    assert(std::isfinite(restored_state.arousal));
+    assert(std::isfinite(restored_state.uncertainty));
+    assert(std::isfinite(restored_state.tension));
+
     const auto replayed = restored.choose_with_affect(actions);
     assert(replayed.size() == 2);
     assert(replayed.front().action.name == affected.front().action.name);
