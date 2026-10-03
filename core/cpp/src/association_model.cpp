@@ -112,7 +112,9 @@ std::vector<AssociationInference> AssociationModel::contextual(const std::string
                 if (association.left != current && association.right != current) continue;
                 const auto neighbor = other_endpoint(association, current);
                 if (neighbor == key) continue;
-                const double candidate = path_strength * std::clamp(association.strength, 0.0, 1.0);
+                const double hop_decay = std::pow(0.85, static_cast<double>(hop - 1));
+                const double candidate = path_strength *
+                    std::clamp(association.strength, 0.0, 1.0) * hop_decay;
                 if (candidate < threshold) continue;
                 const auto it = best_strength.find(neighbor);
                 if (it == best_strength.end() || candidate > it->second) {
