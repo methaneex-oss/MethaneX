@@ -21,16 +21,15 @@ std::vector<ActionAssessment> ActionModel::assess(
 
     for (const auto& decision : decisions) {
         const double risk = unit(decision.action.risk);
-        const double reversibility = unit(decision.action.reversibility);
         const double confidence = unit(1.0 - risk) * unit(decision.score >= 0.0 ? 1.0 : 0.0);
         ActionAssessment assessment{decision.action, ActionDisposition::recommend, false, confidence, {}};
 
         if (risk > constraints.maximum_risk) {
             assessment.disposition = ActionDisposition::reject;
             assessment.reason = "Action exceeds the configured risk constraint.";
-        } else if (constraints.require_reversible && reversibility <= 0.0) {
+        } else if (constraints.require_reversible && unit(decision.action.reversibility) < 1.0) {
             assessment.disposition = ActionDisposition::clarify;
-            assessment.reason = "Action is not reversible under the supplied execution constraints.";
+            assessment.reason = "Action requires reversibility that is not guaranteed.";
         } else if (confidence >= 0.75) {
             assessment.disposition = ActionDisposition::execute;
             assessment.permitted = true;
