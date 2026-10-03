@@ -58,7 +58,6 @@ void Brain::process_affective_experience(const Event& event) {
         const auto actual = event.data.find("actual_consequence");
         const auto consequence_error = event.data.find("consequence_error");
         if (expected != event.data.end() && actual != event.data.end() && consequence_error != event.data.end()) {
-            const double expected_value = double_value(event.data, "expected_consequence");
             const double actual_value = double_value(event.data, "actual_consequence");
             const double error = double_value(event.data, "consequence_error");
             const double reliability = std::clamp(double_value(event.data, "reliability", 0.5), 0.0, 1.0);
