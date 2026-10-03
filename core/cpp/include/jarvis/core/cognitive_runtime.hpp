@@ -20,6 +20,7 @@ struct CognitiveActionAdapter {
     std::function<bool(const CandidateAction&)> execute;
     std::function<bool(const CandidateAction&)> verify;
     std::function<bool(const CandidateAction&)> rollback;
+    std::function<double(const CandidateAction&)> observe_consequence;
 };
 
 struct CognitiveRuntimeConfig {
