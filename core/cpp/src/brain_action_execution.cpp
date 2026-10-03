@@ -56,6 +56,33 @@ ActionExecutionResult Brain::execute_action(
         replay(event);
         consolidate_experience(event, std::clamp(std::abs(result.outcome.consequence_error), 0.0, 1.0));
 
+        // Persist the appraisal evidence separately from the authoritative
+        // action outcome. Replay therefore reconstructs learned appraisal
+        // parameters exactly once, without coupling parameter learning to
+        // execution-status replay.
+        Event affective_event{
+            0,
+            0,
+            "affective_learner",
+            "affective_learning",
+            {{"expected_consequence", result.outcome.expected_consequence},
+             {"actual_consequence", result.outcome.actual_consequence},
+             {"consequence_error", result.outcome.consequence_error},
+             {"utility", result.outcome.actual_consequence},
+             {"prediction_error", std::clamp(std::abs(result.outcome.consequence_error), 0.0, 1.0)},
+             {"novelty", std::clamp(state_.novelty, 0.0, 1.0)},
+             {"salience", std::clamp(attention_state_.salience, 0.0, 1.0)},
+             {"uncertainty", std::clamp(1.0 - assessment.confidence, 0.0, 1.0)},
+             {"confidence", std::clamp(assessment.confidence, 0.0, 1.0)},
+             {"source_action_sequence", static_cast<std::int64_t>(event.sequence)}}};
+        affective_event.sequence = memory_.append(affective_event);
+        if (affective_event.sequence != 0) {
+            ++state_.events_seen;
+            state_.cycle = affective_event.sequence;
+            replay(affective_event);
+            consolidate_experience(affective_event, std::clamp(std::abs(result.outcome.consequence_error), 0.0, 1.0));
+        }
+
         // The consequence becomes a separate learning experience. This keeps
         // the authoritative action outcome immutable while giving the
         // knowledge/adaptation systems a persisted training event they can
