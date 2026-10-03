@@ -100,7 +100,13 @@ void Brain::process_affective_experience(const Event& event) {
 
     if (!relevant) return;
     const auto after = affective_state_model_.update(signal);
+    const auto observed = event.data.find("observed");
+    const bool has_observed_consequence =
+        observed != event.data.end() &&
+        std::get_if<bool>(&observed->second) != nullptr &&
+        *std::get_if<bool>(&observed->second);
     if (event.kind == "action_outcome" &&
+        has_observed_consequence &&
         event.data.find("expected_consequence") != event.data.end() &&
         event.data.find("actual_consequence") != event.data.end() &&
         event.data.find("consequence_error") != event.data.end()) {
