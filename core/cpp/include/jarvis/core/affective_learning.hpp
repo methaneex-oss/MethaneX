@@ -18,8 +18,8 @@ struct AffectiveAppraisal {
 };
 
 // Outcome evidence separates what was expected from what actually happened.
-// The learner uses the resulting consequence error to adapt appraisal sensitivity;
-// it does not encode semantic emotion rules.
+// The learner uses consequence error to adapt appraisal sensitivity; it does
+// not encode semantic emotion rules.
 struct AffectiveOutcomeEvidence {
     double expected_consequence{0.0};
     double actual_consequence{0.0};
@@ -49,9 +49,10 @@ public:
     void learn(const AffectiveOutcomeEvidence& evidence) noexcept {
         const double expected = clamp_signed(evidence.expected_consequence);
         const double actual = clamp_signed(evidence.actual_consequence);
-        const double consequence_error = clamp_signed(std::isfinite(evidence.consequence_error)
-            ? evidence.consequence_error
-            : actual - expected);
+        const double consequence_error = clamp_signed(
+            std::isfinite(evidence.consequence_error)
+                ? evidence.consequence_error
+                : actual - expected);
         const double utility = clamp_signed(evidence.utility);
         const double magnitude = std::abs(consequence_error);
         const double rate = 0.03 + 0.12 * magnitude;
@@ -70,17 +71,21 @@ public:
         ++updates_;
     }
 
-    // Compatibility adapter for persisted callers that only have the affective
-    // transition and observed utility. New integrations should supply explicit
-    // expected/actual consequence evidence.
-    void learn(const AffectiveSignal& signal, const AffectiveState& before,
-               const AffectiveState& after, double observed_utility) noexcept {
-        const double expected = std::clamp(after.valence - before.valence, -1.0, 1.0);
+    // Compatibility adapter for callers that have not yet persisted explicit
+    // expected/actual consequence fields. The adapter reconstructs an expected
+    // consequence from the observed consequence and prediction-error magnitude;
+    // it no longer derives the expectation from the affective state transition.
+    void learn(const AffectiveSignal& signal, const AffectiveState& /*before*/,
+               const AffectiveState& /*after*/, double observed_utility) noexcept {
+        const double actual = clamp_signed(observed_utility);
+        const double signed_error = std::copysign(clamp_unit(signal.prediction_error),
+                                                   actual == 0.0 ? 1.0 : actual);
+        const double expected = clamp_signed(actual - signed_error);
         learn(AffectiveOutcomeEvidence{
             expected,
-            clamp_signed(observed_utility),
-            clamp_signed(observed_utility - expected),
-            observed_utility,
+            actual,
+            clamp_signed(actual - expected),
+            actual,
             signal.prediction_error,
             signal.novelty,
             signal.salience,
