@@ -130,14 +130,36 @@ int main() {
         const auto local_decisions = first.choose({CandidateAction{"persist-action", 0.9, 0.9, 0.05, 0.9}});
         const auto local_assessments = first.assess_actions(local_decisions);
         assert(!local_assessments.empty());
-        const auto result = first.execute_action(local_assessments.front(), [](const CandidateAction&) { return true; }, [](const CandidateAction&) { return true; });
+        auto assessment = local_assessments.front();
+        assessment.action.expected_consequence = 0.8;
+        const auto result = first.execute_action(
+            assessment,
+            [](const CandidateAction&) { return true; },
+            [](const CandidateAction&) { return true; },
+            {},
+            [](const CandidateAction&) { return -0.7; });
         assert(result.verified);
+        assert(result.outcome.observed);
+        assert(result.outcome.expected_consequence == 0.8);
+        assert(result.outcome.actual_consequence == -0.7);
+        assert(first.memory().by_kind("affective_learning", 1).size() == 1);
+        assert(first.affective_learning_updates() > 0);
+        const auto learned_appraisal = first.affective_appraisal();
     }
     {
         Brain restarted(action_journal);
         assert(restarted.memory().by_kind("action_outcome", 1).size() == 1);
         assert(restarted.memory().by_kind("learning", 1).size() == 1);
+        assert(restarted.memory().by_kind("affective_learning", 1).size() == 1);
         assert(restarted.knowledge_source("action_executor") != nullptr);
+        assert(restarted.affective_learning_updates() == 1);
+        const auto restored_appraisal = restarted.affective_appraisal();
+        assert(restored_appraisal.error_weight == learned_appraisal.error_weight);
+        assert(restored_appraisal.outcome_weight == learned_appraisal.outcome_weight);
+        assert(restored_appraisal.novelty_weight == learned_appraisal.novelty_weight);
+        assert(restored_appraisal.salience_weight == learned_appraisal.salience_weight);
+        assert(restored_appraisal.uncertainty_weight == learned_appraisal.uncertainty_weight);
+        assert(restored_appraisal.tension_error_weight == learned_appraisal.tension_error_weight);
     }
 
     const auto concept_journal = root / "concepts.bin";
