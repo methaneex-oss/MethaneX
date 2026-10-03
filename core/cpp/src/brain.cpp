@@ -398,7 +398,8 @@ bool Brain::assimilate_goal_outcome(const GoalOutcomeEvidence& raw_evidence) {
     replay(progress_event);
 
     if (evidence.completed) {
-        if (!goals_model_.complete(evidence.goal_id)) return false;
+        const auto* completed_goal = goals_model_.get(evidence.goal_id);
+        if (completed_goal == nullptr || completed_goal->status != GoalStatus::completed) return false;
         Event complete_event{
             0, now_ns(), "brain", "goal_complete",
             {{"id", evidence.goal_id},
