@@ -247,6 +247,7 @@ bool Brain::assimilate_goal_outcome(const GoalOutcomeEvidence& raw_evidence) {
     evidence.normalize();
     evidence.progress_after = std::max(before, evidence.progress_after);
     evidence.completed = evidence.completed || evidence.progress_after >= 1.0;
+    evidence.normalize();
 
     if (!goals_model_.update_progress(evidence.goal_id, evidence.progress_after)) return false;
     Event progress_event{
