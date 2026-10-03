@@ -3,6 +3,7 @@
 #include "brain.hpp"
 #include "reasoning.hpp"
 #include "action_model.hpp"
+#include "action_execution.hpp"
 
 #include <cstddef>
 #include <cstdint>
@@ -38,6 +39,8 @@ struct CognitiveCycleContext {
     std::vector<Belief> beliefs;
     std::vector<CausalLink> causal_links;
     std::vector<Prediction> predictions;
+    AffectiveState affective_state;
+    AffectiveAppraisal affective_appraisal;
     ReasoningResult reasoning;
     std::vector<Goal> eligible_goals;
     Goal selected_goal;
@@ -45,6 +48,7 @@ struct CognitiveCycleContext {
     DecisionContext decision_context;
     std::vector<Decision> decisions;
     std::vector<ActionAssessment> action_assessments;
+    std::vector<ActionExecutionResult> action_execution_results;
     Reflection reflection;
 };
 
@@ -56,7 +60,10 @@ struct CognitiveCycleResult {
 
 struct CognitiveFeedbackResult {
     bool prediction_resolved{false};
+    bool goal_progress_assimilated{false};
     double learned_reliability{0.0};
+    AffectiveState affective_state;
+    AffectiveAppraisal affective_appraisal;
     Reflection reflection;
 };
 
@@ -71,7 +78,10 @@ public:
     CognitiveFeedbackResult process_outcome(
         const std::optional<std::string>& prediction_key,
         const Scalar& actual,
-        const std::optional<Evidence>& evidence = std::nullopt) const;
+        const std::optional<Evidence>& evidence = std::nullopt,
+        const std::optional<std::string>& goal_id = std::nullopt,
+        const std::optional<double>& goal_progress = std::nullopt,
+        double goal_confidence = 0.0) const;
 
 private:
     std::optional<Goal> select_goal(const CognitiveCycleInput& input,

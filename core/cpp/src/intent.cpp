@@ -9,7 +9,9 @@ Intent IntentModel::select(const std::vector<Goal>& goals, double threat,
     const Goal* best = nullptr;
     double best_score = -1.0;
     for (const auto& goal : goals) {
-        if (goal.status != GoalStatus::active && goal.status != GoalStatus::pending) continue;
+        // Intent represents a currently committed objective. Pending goals remain
+        // eligible for activation by the goal system but are not yet an intent.
+        if (goal.status != GoalStatus::active) continue;
         const double deadline = goal.deadline_cycle == 0
             ? 0.0
             : goal.deadline_cycle > cycle

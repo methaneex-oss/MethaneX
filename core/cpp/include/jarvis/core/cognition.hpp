@@ -15,6 +15,12 @@ struct Belief {
     double confidence{0.5};
     std::uint64_t observations{0};
     std::uint64_t updated_sequence{0};
+    bool disputed{false};
+};
+
+struct PredictionContext {
+    std::vector<std::string> concept_members;
+    double evidence_strength{0.0};
 };
 
 struct Prediction {
@@ -24,6 +30,7 @@ struct Prediction {
     std::uint64_t created_sequence{0};
     bool resolved{false};
     double error{0.0};
+    PredictionContext context{};
 };
 
 struct CausalLink {
@@ -33,15 +40,7 @@ struct CausalLink {
     std::uint64_t observations{0};
 };
 
-enum class DecisionOutcome : std::uint8_t {
-    act,
-    defer,
-    observe,
-    ask_clarify,
-    recommend,
-    reject,
-    escalate,
-};
+enum class DecisionOutcome : std::uint8_t { act, defer, observe, ask_clarify, recommend, reject, escalate };
 
 struct CandidateAction {
     std::string name;
@@ -65,12 +64,13 @@ struct DecisionContext {
     double uncertainty{0.0};
     double threat{0.0};
     double deadline_pressure{0.0};
+    double valence{0.0};
+    double arousal{0.0};
+    double affective_uncertainty{0.0};
+    double tension{0.0};
+    double stability{1.0};
 };
 
-struct Decision {
-    CandidateAction action;
-    double score{0.0};
-    DecisionOutcome outcome{DecisionOutcome::defer};
-};
+struct Decision { CandidateAction action; double score{0.0}; DecisionOutcome outcome{DecisionOutcome::defer}; };
 
 } // namespace jarvis::core

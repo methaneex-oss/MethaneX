@@ -1,0 +1,29 @@
+name: JARVIS Core Verification
+
+on:
+  push:
+    branches:
+      - feat/jarvis-affective-state
+      - feat/jarvis-cognitive-action-loop
+  pull_request:
+    branches:
+      - main
+      - feat/jarvis-affective-state
+      - feat/jarvis-cognitive-action-loop
+
+jobs:
+  cpp-core:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure
+        run: cmake -S core/cpp -B core/cpp/build -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON
+
+      - name: Build
+        run: cmake --build core/cpp/build --parallel
+
+      - name: Test
+        working-directory: core/cpp/build
+        run: ctest --output-on-failure

@@ -6,35 +6,22 @@
 namespace jarvis::core {
 namespace {
 
-double finite_or_zero(double value) noexcept {
-    return std::isfinite(value) ? value : 0.0;
-}
-
-double bounded_weight(double value) noexcept {
-    return std::max(0.0, finite_or_zero(value));
-}
-
-double bounded_unit(double value) noexcept {
-    return std::clamp(finite_or_zero(value), 0.0, 1.0);
-}
-
-double bounded_nonnegative(double value) noexcept {
-    return std::max(0.0, finite_or_zero(value));
-}
+double finite_or_zero(double value) noexcept { return std::isfinite(value) ? value : 0.0; }
+double bounded_weight(double value) noexcept { return std::max(0.0, finite_or_zero(value)); }
+double bounded_unit(double value) noexcept { return std::clamp(finite_or_zero(value), 0.0, 1.0); }
+double bounded_nonnegative(double value) noexcept { return std::max(0.0, finite_or_zero(value)); }
+double bounded_signed(double value) noexcept { return std::clamp(finite_or_zero(value), -1.0, 1.0); }
 
 } // namespace
 
-std::vector<Decision> DecisionEngine::rank(const std::vector<CandidateAction>& actions,
-                                           double uncertainty,
-                                           double threat) const {
+std::vector<Decision> DecisionEngine::rank(const std::vector<CandidateAction>& actions, double uncertainty, double threat) const {
     DecisionContext context;
     context.uncertainty = uncertainty;
     context.threat = threat;
     return decide(actions, context);
 }
 
-std::vector<Decision> DecisionEngine::decide(const std::vector<CandidateAction>& actions,
-                                             const DecisionContext& context) const {
+std::vector<Decision> DecisionEngine::decide(const std::vector<CandidateAction>& actions, const DecisionContext& context) const {
     const double uncertainty = bounded_unit(context.uncertainty);
     const double threat = bounded_unit(context.threat);
     const double goal_priority = bounded_unit(context.goal_priority);
@@ -43,6 +30,11 @@ std::vector<Decision> DecisionEngine::decide(const std::vector<CandidateAction>&
     const double plan_risk = bounded_unit(context.plan_risk);
     const double budget = bounded_nonnegative(context.resource_budget);
     const double deadline_pressure = bounded_unit(context.deadline_pressure);
+    const double valence = bounded_signed(context.valence);
+    const double arousal = bounded_unit(context.arousal);
+    const double affective_uncertainty = bounded_unit(context.affective_uncertainty);
+    const double tension = bounded_unit(context.tension);
+    const double stability = bounded_unit(context.stability);
 
     const double utility_weight = bounded_weight(policy_.utility_weight);
     const double value_weight = bounded_weight(policy_.expected_value_weight);
@@ -54,6 +46,11 @@ std::vector<Decision> DecisionEngine::decide(const std::vector<CandidateAction>&
     const double resource_weight = bounded_weight(policy_.resource_weight);
     const double consequence_weight = bounded_weight(policy_.consequence_weight);
     const double urgency_weight = bounded_weight(policy_.urgency_weight);
+    const double valence_weight = bounded_weight(policy_.valence_weight);
+    const double arousal_weight = bounded_weight(policy_.arousal_weight);
+    const double affective_uncertainty_weight = bounded_weight(policy_.affective_uncertainty_weight);
+    const double tension_weight = bounded_weight(policy_.tension_weight);
+    const double stability_weight = bounded_weight(policy_.stability_weight);
 
     std::vector<Decision> result;
     result.reserve(actions.size());
@@ -65,23 +62,26 @@ std::vector<Decision> DecisionEngine::decide(const std::vector<CandidateAction>&
         const double resource_cost = bounded_nonnegative(action.resource_cost);
         const double consequence = bounded_unit(action.expected_consequence);
         const double urgency = bounded_unit(action.urgency);
-
         const double goal_alignment = goal_priority * (1.0 - goal_progress);
         const double plan_alignment = plan_value - plan_risk;
         const double exploration = uncertainty * reversibility;
         const double threat_bias = threat * (1.0 - risk);
-        const double resource_cost_score = budget > 0.0
-            ? std::min(1.0, resource_cost / budget) : 0.0;
+        const double resource_cost_score = budget > 0.0 ? std::min(1.0, resource_cost / budget) : 0.0;
+        const double affective_exploration = affective_uncertainty * reversibility * (1.0 - stability);
+        const double affective_urgency = arousal * urgency * (1.0 - stability);
+        const double affective_value = valence * expected_value;
         const double score = utility_weight * utility
-            + value_weight * expected_value
+            + value_weight * (expected_value + valence_weight * affective_value)
             + goal_weight * goal_alignment
             + plan_value_weight * plan_alignment
-            + uncertainty_weight * exploration
+            + uncertainty_weight * (exploration + affective_uncertainty_weight * affective_exploration)
             + threat_weight * threat_bias
-            + urgency_weight * (deadline_pressure * urgency)
+            + urgency_weight * (deadline_pressure * urgency + arousal_weight * affective_urgency)
+            + stability_weight * stability * reversibility
             - risk_weight * risk * (1.0 - reversibility)
             - resource_weight * resource_cost_score
-            - consequence_weight * consequence;
+            - consequence_weight * consequence
+            - tension_weight * tension * risk;
 
         const double safe_score = finite_or_zero(score);
         result.push_back({action, safe_score, classify(action, safe_score, context)});
@@ -94,25 +94,14 @@ std::vector<Decision> DecisionEngine::decide(const std::vector<CandidateAction>&
     return result;
 }
 
-DecisionOutcome DecisionEngine::classify(const CandidateAction& action, double score,
-                                          const DecisionContext& context) const noexcept {
-    const double uncertainty = bounded_unit(context.uncertainty);
+DecisionOutcome DecisionEngine::classify(const CandidateAction& action, double score, const DecisionContext& context) const noexcept {
+    const double uncertainty = bounded_unit(context.uncertainty + context.affective_uncertainty * bounded_weight(policy_.affective_uncertainty_weight));
     const double threat = bounded_unit(context.threat);
     const double risk = bounded_unit(action.risk);
-
-    if (threat >= bounded_unit(policy_.escalate_threat_threshold) &&
-        risk >= bounded_unit(policy_.escalate_risk_threshold)) {
-        return DecisionOutcome::escalate;
-    }
-    if (uncertainty >= bounded_unit(policy_.clarify_uncertainty_threshold)) {
-        return DecisionOutcome::ask_clarify;
-    }
-    if (score <= finite_or_zero(policy_.reject_threshold)) {
-        return DecisionOutcome::reject;
-    }
-    if (score >= finite_or_zero(policy_.act_threshold)) {
-        return action.preferred_outcome;
-    }
+    if (threat >= bounded_unit(policy_.escalate_threat_threshold) && risk >= bounded_unit(policy_.escalate_risk_threshold)) return DecisionOutcome::escalate;
+    if (uncertainty >= bounded_unit(policy_.clarify_uncertainty_threshold)) return DecisionOutcome::ask_clarify;
+    if (score <= finite_or_zero(policy_.reject_threshold)) return DecisionOutcome::reject;
+    if (score >= finite_or_zero(policy_.act_threshold)) return action.preferred_outcome;
     return DecisionOutcome::defer;
 }
 

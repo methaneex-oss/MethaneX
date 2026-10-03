@@ -17,6 +17,11 @@ struct DecisionPolicy {
     double resource_weight{1.0};
     double consequence_weight{1.0};
     double urgency_weight{0.5};
+    double valence_weight{0.25};
+    double arousal_weight{0.10};
+    double affective_uncertainty_weight{0.50};
+    double tension_weight{0.50};
+    double stability_weight{0.25};
 
     double act_threshold{0.5};
     double reject_threshold{-0.5};

@@ -1,12 +1,13 @@
 cmake_minimum_required(VERSION 3.24)
 project(jarvis_core LANGUAGES CXX)
-
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-
 add_library(jarvis_core STATIC
     src/brain.cpp
+    src/brain_restored_api.cpp
+    src/brain_action_execution.cpp
+    src/brain_prediction_context.cpp
     src/brain_novelty.cpp
     src/memory.cpp
     src/world_model.cpp
@@ -14,8 +15,11 @@ add_library(jarvis_core STATIC
     src/association_model.cpp
     src/decision.cpp
     src/adaptation.cpp
+    src/learning_loop.cpp
     src/attention.cpp
     src/attention_state.cpp
+    src/affective_state.cpp
+    src/affective_learning.cpp
     src/threat.cpp
     src/resilience.cpp
     src/evolution.cpp
@@ -44,7 +48,6 @@ add_library(jarvis_core STATIC
     src/action_model.cpp
     src/action_execution.cpp
     src/action_authorization.cpp
-    src/learning_loop.cpp
     src/reflection.cpp
     src/knowledge.cpp
     src/self_model.cpp
@@ -55,6 +58,7 @@ add_library(jarvis_core STATIC
     src/goals.cpp
     src/intent.cpp
     src/strategy.cpp
+    src/developmental_learning.cpp
     src/self_testing.cpp
     src/cognitive_cycle.cpp
     src/cognitive_trigger.cpp
@@ -64,16 +68,13 @@ add_library(jarvis_core STATIC
     src/capability_evaluator.cpp
     src/capability_execution.cpp
 )
-
 target_include_directories(jarvis_core PUBLIC include)
 target_compile_features(jarvis_core PUBLIC cxx_std_20)
-
 if (MSVC)
     target_compile_options(jarvis_core PRIVATE /W4 /permissive-)
 else()
     target_compile_options(jarvis_core PRIVATE -Wall -Wextra -Wpedantic)
 endif()
-
 include(CTest)
 if(BUILD_TESTING)
     add_subdirectory(tests)

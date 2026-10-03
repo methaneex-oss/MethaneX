@@ -18,58 +18,160 @@ std::string join_ids(const std::vector<std::string>& ids) { std::ostringstream o
 std::vector<std::string> split_ids(const std::string& value) { std::vector<std::string> result; std::size_t start = 0; while (start <= value.size()) { const auto end = value.find('\x1f', start); const auto token = value.substr(start, end == std::string::npos ? std::string::npos : end - start); if (!token.empty()) result.push_back(token); if (end == std::string::npos) break; start = end + 1; } return result; }
 GoalStatus goal_status_value(std::int64_t value) { switch (value) { case 0: return GoalStatus::pending; case 1: return GoalStatus::active; case 2: return GoalStatus::completed; case 3: return GoalStatus::abandoned; default: return GoalStatus::pending; } }
 }
-Brain::Brain(std::filesystem::path journal_path)
-    : memory_(256, std::move(journal_path)),
-      evolution_controller_(evolution_, evolution_history_) { const auto history = memory_.all(); for (const auto& event : history) replay(event); state_.events_seen = static_cast<std::uint64_t>(history.size()); if (!history.empty()) state_.cycle = history.back().sequence; sync_self_state(); }
+Brain::Brain(std::filesystem::path journal_path) : memory_(256, std::move(journal_path)), evolution_controller_(evolution_, evolution_history_) { const auto history = memory_.all(); for (const auto& event : history) replay(event); state_.events_seen = static_cast<std::uint64_t>(history.size()); if (!history.empty()) state_.cycle = history.back().sequence; sync_self_state(); }
+void Brain::consolidate_experience(const Event& event, double error) {
+    double salience = attention_state_.salience;
+    double novelty = state_.novelty;
+    double confidence = 0.5;
+    if (const auto it = event.data.find("salience"); it != event.data.end())
+        if (const auto* value = std::get_if<double>(&it->second)) salience = *value;
+    if (const auto it = event.data.find("novelty"); it != event.data.end())
+        if (const auto* value = std::get_if<double>(&it->second)) novelty = *value;
+    if (const auto it = event.data.find("reliability"); it != event.data.end())
+        if (const auto* value = std::get_if<double>(&it->second)) confidence = *value;
+    if (const auto it = event.data.find("confidence"); it != event.data.end())
+        if (const auto* value = std::get_if<double>(&it->second)) confidence = *value;
+    memory_.consolidate(event.sequence, salience, novelty, error, confidence);
+}
+
+void Brain::process_affective_experience(const Event& event) {
+    const auto before = affective_state_model_.state();
+    AffectiveSignal signal{};
+    double utility = 0.0;
+    bool relevant = false;
+
+    if (event.kind == "prediction_outcome") {
+        const double error = std::clamp(double_value(event.data, "error", 1.0), 0.0, 1.0);
+        signal.outcome = 1.0 - error;
+        signal.prediction_error = error;
+        signal.novelty = std::clamp(double_value(event.data, "novelty", state_.novelty), 0.0, 1.0);
+        signal.salience = std::clamp(double_value(event.data, "salience", attention_state_.salience), 0.0, 1.0);
+        signal.confidence = std::clamp(1.0 - error, 0.0, 1.0);
+        utility = signal.outcome;
+        relevant = true;
+    } else if (event.kind == "action_outcome") {
+        const auto expected = event.data.find("expected_consequence");
+        const auto actual = event.data.find("actual_consequence");
+        const auto consequence_error = event.data.find("consequence_error");
+        if (expected != event.data.end() && actual != event.data.end() && consequence_error != event.data.end()) {
+            const double actual_value = double_value(event.data, "actual_consequence");
+            const double error = double_value(event.data, "consequence_error");
+            const double reliability = std::clamp(double_value(event.data, "reliability", 0.5), 0.0, 1.0);
+            signal.outcome = std::clamp(actual_value, -1.0, 1.0);
+            signal.prediction_error = std::clamp(std::abs(error), 0.0, 1.0);
+            signal.novelty = std::clamp(double_value(event.data, "novelty", state_.novelty), 0.0, 1.0);
+            signal.salience = std::clamp(double_value(event.data, "salience", attention_state_.salience), 0.0, 1.0);
+            signal.confidence = reliability;
+            utility = actual_value;
+            relevant = true;
+        } else {
+            const double reliability = std::clamp(double_value(event.data, "reliability", 0.5), 0.0, 1.0);
+            signal.outcome = 2.0 * reliability - 1.0;
+            signal.prediction_error = 1.0 - reliability;
+            signal.novelty = std::clamp(double_value(event.data, "novelty", state_.novelty), 0.0, 1.0);
+            signal.salience = std::clamp(double_value(event.data, "salience", attention_state_.salience), 0.0, 1.0);
+            signal.confidence = reliability;
+            utility = signal.outcome;
+            relevant = true;
+        }
+    } else if (event.kind == "learning") {
+        signal.outcome = 2.0 * std::clamp(double_value(event.data, "reliability", 0.5), 0.0, 1.0) - 1.0;
+        signal.confidence = std::clamp(double_value(event.data, "reliability", 0.5), 0.0, 1.0);
+        signal.novelty = state_.novelty;
+        signal.salience = attention_state_.salience;
+        utility = signal.outcome;
+        relevant = true;
+    } else if (event.kind == "observation") {
+        return;
+    } else if (event.kind == "goal_progress" || event.kind == "goal_complete") {
+        const double progress = event.kind == "goal_complete" ? 1.0 : std::clamp(double_value(event.data, "progress", 0.0), 0.0, 1.0);
+        signal.outcome = 2.0 * progress - 1.0;
+        signal.prediction_error = 1.0 - progress;
+        signal.novelty = state_.novelty;
+        signal.salience = attention_state_.salience;
+        signal.confidence = progress;
+        utility = signal.outcome;
+        relevant = true;
+    }
+
+    if (!relevant) return;
+
+    // Learned appraisal parameters must sit on the causal path into the next
+    // affective state. Without this modulation, the learner could change its
+    // parameters indefinitely while cognition continued to consume the raw
+    // hand-authored signal. That would be parameter drift, not developmental
+    // influence.
+    signal = affective_learning_model_.modulate(signal);
+    const auto after = affective_state_model_.update(signal);
+    const auto observed = event.data.find("observed");
+    const bool has_observed_consequence =
+        observed != event.data.end() &&
+        std::get_if<bool>(&observed->second) != nullptr &&
+        *std::get_if<bool>(&observed->second);
+    if (event.kind == "action_outcome" &&
+        has_observed_consequence &&
+        event.data.find("expected_consequence") != event.data.end() &&
+        event.data.find("actual_consequence") != event.data.end() &&
+        event.data.find("consequence_error") != event.data.end()) {
+        affective_learning_model_.learn(AffectiveOutcomeEvidence{
+            double_value(event.data, "expected_consequence"),
+            double_value(event.data, "actual_consequence"),
+            double_value(event.data, "consequence_error"),
+            utility,
+            signal.prediction_error,
+            signal.novelty,
+            signal.salience,
+            signal.uncertainty,
+            signal.confidence});
+    } else {
+        affective_learning_model_.learn(signal, before, after, utility);
+    }
+}
+
 void Brain::sync_self_state() { const auto goals = goals_model_.all(); std::vector<GoalState> active_goals; active_goals.reserve(goals.size()); for (const auto& goal : goals) if (goal.status == GoalStatus::active) active_goals.push_back(GoalState{goal.id, goal.priority, true}); self_state_model_.set_goals(std::move(active_goals)); const auto capability_health = self_model_.health(); self_state_model_.set_activity(state_.events_seen == 0 ? "idle" : "cognitive_processing"); self_state_model_.set_workload(std::clamp(std::max(state_.threat, 1.0 - capability_health.overall), 0.0, 1.0)); self_state_model_.set_uncertainty(std::clamp(1.0 - state_.attention, 0.0, 1.0)); self_state_model_.set_health(CognitiveHealth{std::clamp(capability_health.overall * (1.0 - state_.threat * 0.5), 0.0, 1.0), capability_health.overall, std::clamp(1.0 - state_.novelty * 0.1, 0.0, 1.0), capability_health.overall}); for (const auto& capability : self_model_.capabilities()) self_state_model_.set_resource_pressure(capability.name, std::clamp(1.0 - (capability.availability * capability.performance), 0.0, 1.0)); self_state_model_.advance_cycle(state_.events_seen); }
 void Brain::replay(const Event& event) {
     state_.cycle = std::max(state_.cycle, event.sequence);
+    process_affective_experience(event);
     if (event.kind == "goal_create") { const auto* id = string_value(event.data, "id"); const auto* description = string_value(event.data, "description"); if (id == nullptr || description == nullptr) return; Goal goal{*id, *description, double_value(event.data, "priority"), double_value(event.data, "progress"), integer_value(event.data, "created_cycle"), integer_value(event.data, "deadline_cycle"), goal_status_value(static_cast<std::int64_t>(integer_value(event.data, "status"))), string_value(event.data, "prerequisites") ? split_ids(*string_value(event.data, "prerequisites")) : std::vector<std::string>{}, string_value(event.data, "subgoals") ? split_ids(*string_value(event.data, "subgoals")) : std::vector<std::string>{}}; goals_model_.create(std::move(goal)); return; }
     if (event.kind == "goal_activate") { if (const auto* id = string_value(event.data, "id")) goals_model_.activate(*id); return; }
     if (event.kind == "goal_progress") { if (const auto* id = string_value(event.data, "id")) goals_model_.update_progress(*id, double_value(event.data, "progress")); return; }
     if (event.kind == "goal_complete") { if (const auto* id = string_value(event.data, "id")) goals_model_.complete(*id); return; }
     if (event.kind == "goal_abandon") { if (const auto* id = string_value(event.data, "id")) goals_model_.abandon(*id); return; }
     if (event.kind == "goal_priority") { if (const auto* id = string_value(event.data, "id")) goals_model_.set_priority(*id, double_value(event.data, "priority")); return; }
-    if (event.kind == "prediction") { const auto* key = string_value(event.data, "key"); const auto value = event.data.find("value"); if (key == nullptr || value == event.data.end()) return; predictions_[*key] = Prediction{*key, value->second, std::clamp(double_value(event.data, "confidence"), 0.0, 1.0), event.sequence, false, 0.0}; return; }
-    if (event.kind == "prediction_outcome") { const auto* key = string_value(event.data, "key"); if (key == nullptr) return; const auto prediction = predictions_.find(*key); if (prediction == predictions_.end()) return; prediction->second.resolved = true; prediction->second.error = std::clamp(double_value(event.data, "error", 1.0), 0.0, 1.0); const auto actual = event.data.find("actual"); if (actual != event.data.end()) if (const auto predicted = std::get_if<double>(&prediction->second.predicted)) if (const auto observed = std::get_if<double>(&actual->second)) adaptation_.observe(*key, *predicted, *observed); return; }
-    if (event.kind == "evolution_evaluated") {
-        const auto* id = string_value(event.data, "experiment_id");
-        const auto* key = string_value(event.data, "key");
-        if (id != nullptr && key != nullptr) evolution_history_.append(EvolutionHistoryRecord{
-            *id, *key, EvolutionRecordAction::Evaluated,
-            static_cast<ExperimentOutcome>(integer_value(event.data, "outcome")),
-            double_value(event.data, "baseline"), double_value(event.data, "candidate"),
-            double_value(event.data, "confidence"), 0, "replayed", {}});
+    if (event.kind == "prediction") { const auto* key = string_value(event.data, "key"); const auto value = event.data.find("value"); if (key == nullptr || value == event.data.end()) return; PredictionContext context{}; if (const auto* members = string_value(event.data, "concept_members")) context.concept_members = split_ids(*members); context.evidence_strength = std::clamp(double_value(event.data, "evidence_strength"), 0.0, 1.0); predictions_.push_back(Prediction{*key, value->second, std::clamp(double_value(event.data, "confidence"), 0.0, 1.0), event.sequence, false, 0.0, std::move(context)}); return; }
+    if (event.kind == "prediction_outcome") { const auto* key = string_value(event.data, "key"); if (key == nullptr) return; const auto prediction_sequence = integer_value(event.data, "prediction_sequence", 0); Prediction* prediction = prediction_sequence != 0 ? find_prediction(prediction_sequence) : find_latest_unresolved_prediction(*key); if (prediction == nullptr || prediction->resolved) return; prediction->resolved = true; prediction->error = std::clamp(double_value(event.data, "error", 1.0), 0.0, 1.0); const auto actual = event.data.find("actual"); if (actual != event.data.end()) if (const auto predicted = std::get_if<double>(&prediction->predicted)) if (const auto observed = std::get_if<double>(&actual->second)) { adaptation_.observe(*key, *predicted, *observed); association_.apply_prediction_feedback(prediction->context.concept_members, prediction->error <= 0.0, prediction->context.evidence_strength, event.sequence); developmental_learning_.observe_association(*key, "prediction_outcome", LearningSignal{prediction->error, 1.0 - prediction->error, std::clamp(double_value(event.data, "salience", prediction->confidence), 0.0, 1.0), std::clamp(double_value(event.data, "novelty", state_.novelty), 0.0, 1.0)}); const AttentionSignal signal{*key, std::clamp(double_value(event.data, "salience", prediction->confidence), 0.0, 1.0), std::clamp(double_value(event.data, "novelty", state_.novelty), 0.0, 1.0), 1.0 - prediction->confidence, 0.0}; if (prediction->error > 0.0) attention_model_.reinforce(signal, prediction->error); else attention_model_.suppress(signal, 0.1); } return; }
+    if (event.kind == "action_outcome") {
+        const auto* action = string_value(event.data, "action");
+        const auto* context = string_value(event.data, "context");
+        if (action == nullptr || context == nullptr || action->empty() || context->empty()) return;
+        const double reliability = std::clamp(double_value(event.data, "reliability", 0.5), 0.0, 1.0);
+        const auto status = static_cast<ActionExecutionStatus>(integer_value(event.data, "status"));
+        const char* status_name = "unknown";
+        switch (status) {
+            case ActionExecutionStatus::rejected: status_name = "rejected"; break;
+            case ActionExecutionStatus::prepared: status_name = "prepared"; break;
+            case ActionExecutionStatus::executed: status_name = "executed"; break;
+            case ActionExecutionStatus::verified: status_name = "verified"; break;
+            case ActionExecutionStatus::failed: status_name = "failed"; break;
+            case ActionExecutionStatus::cancelled: status_name = "cancelled"; break;
+            case ActionExecutionStatus::rolled_back: status_name = "rolled_back"; break;
+        }
+        const std::string belief_key = "action." + *action;
+        beliefs_[belief_key] = Belief{belief_key, std::string(status_name), reliability, 1, event.sequence, false};
+        const auto observed = event.data.find("observed");
+        const bool has_observed_consequence = observed != event.data.end() && std::get_if<bool>(&observed->second) != nullptr && *std::get_if<bool>(&observed->second);
+        const double prediction_error = has_observed_consequence ? std::clamp(std::abs(double_value(event.data, "consequence_error")), 0.0, 1.0) : 1.0 - reliability;
+        const double reward = has_observed_consequence ? std::clamp(double_value(event.data, "actual_consequence"), -1.0, 1.0) : (2.0 * reliability - 1.0);
+        developmental_learning_.observe_strategy(*context, *action, LearningSignal{prediction_error, reward, std::clamp(double_value(event.data, "salience", 0.0), 0.0, 1.0), std::clamp(double_value(event.data, "novelty", state_.novelty), 0.0, 1.0)});
+        const AttentionSignal signal{*action, std::clamp(double_value(event.data, "salience", 0.0), 0.0, 1.0), std::clamp(double_value(event.data, "novelty", state_.novelty), 0.0, 1.0), prediction_error, 0.0};
+        if (reward > 0.0) attention_model_.reinforce(signal, reward); else if (reward < 0.0) attention_model_.suppress(signal, -reward);
         return;
     }
+    if (event.kind == "evolution_evaluated") { const auto* id = string_value(event.data, "experiment_id"); const auto* key = string_value(event.data, "key"); if (id != nullptr && key != nullptr) evolution_history_.append(EvolutionHistoryRecord{*id, *key, EvolutionRecordAction::Evaluated, static_cast<ExperimentOutcome>(integer_value(event.data, "outcome")), double_value(event.data, "baseline"), double_value(event.data, "candidate"), double_value(event.data, "confidence"), 0, "replayed", {}}); return; }
     if (event.kind == "evolution_register") { if (const auto* key = string_value(event.data, "key")) evolution_.register_parameter(*key, double_value(event.data, "initial")); return; }
     if (event.kind == "evolution_fitness") { if (const auto* key = string_value(event.data, "key")) evolution_.observe_fitness(*key, double_value(event.data, "fitness")); return; }
-    if (event.kind == "evolution_adopt") {
-        const auto* key = string_value(event.data, "key");
-        if (key != nullptr) {
-            const EvolutionProposal proposal{*key, double_value(event.data, "current"), double_value(event.data, "proposed"),
-                                             double_value(event.data, "expected_gain"), double_value(event.data, "confidence")};
-            evolution_.adopt(proposal);
-            evolution_history_.append(EvolutionHistoryRecord{
-                string_value(event.data, "experiment_id") ? *string_value(event.data, "experiment_id") : "replayed",
-                *key, EvolutionRecordAction::Adopted, ExperimentOutcome::Improved,
-                double_value(event.data, "baseline", proposal.current), double_value(event.data, "candidate", proposal.proposed),
-                proposal.confidence, 0, "replayed", {}});
-        }
-        return;
-    }
-    if (event.kind == "evolution_rollback") {
-        const auto* key = string_value(event.data, "key");
-        if (key != nullptr) {
-            evolution_.rollback(*key);
-            evolution_history_.append(EvolutionHistoryRecord{
-                string_value(event.data, "experiment_id") ? *string_value(event.data, "experiment_id") : "replayed",
-                *key, EvolutionRecordAction::RolledBack, ExperimentOutcome::Degraded,
-                double_value(event.data, "baseline", 0.0), double_value(event.data, "candidate", double_value(event.data, "observed_delta", 0.0)),
-                0.0, 0, string_value(event.data, "reason") ? *string_value(event.data, "reason") : "replayed", {}});
-        }
-        return;
-    }
+    if (event.kind == "evolution_adopt") { const auto* key = string_value(event.data, "key"); if (key != nullptr) { const EvolutionProposal proposal{*key, double_value(event.data, "current"), double_value(event.data, "proposed"), double_value(event.data, "expected_gain"), double_value(event.data, "confidence")}; evolution_.adopt(proposal); evolution_history_.append(EvolutionHistoryRecord{string_value(event.data, "experiment_id") ? *string_value(event.data, "experiment_id") : "replayed", *key, EvolutionRecordAction::Adopted, ExperimentOutcome::Improved, double_value(event.data, "baseline", proposal.current), double_value(event.data, "candidate", proposal.proposed), proposal.confidence, 0, "replayed", {}}); } return; }
+    if (event.kind == "evolution_rollback") { const auto* key = string_value(event.data, "key"); if (key != nullptr) { evolution_.rollback(*key); evolution_history_.append(EvolutionHistoryRecord{string_value(event.data, "experiment_id") ? *string_value(event.data, "experiment_id") : "replayed", *key, EvolutionRecordAction::RolledBack, ExperimentOutcome::Degraded, double_value(event.data, "baseline", 0.0), double_value(event.data, "candidate", double_value(event.data, "observed_delta", 0.0)), 0.0, 0, string_value(event.data, "reason") ? *string_value(event.data, "reason") : "replayed", {}}); } return; }
     if (event.kind == "resilience_isolate") { if (const auto* component = string_value(event.data, "component")) resilience_.isolate(*component); return; }
     if (event.kind == "resilience_recover") { if (const auto* component = string_value(event.data, "component")) resilience_.recover(*component, double_value(event.data, "health")); return; }
     if (event.kind == "capability_observe") { if (const auto* name = string_value(event.data, "name")) self_model_.observe_capability(*name, double_value(event.data, "availability"), double_value(event.data, "performance")); return; }
@@ -79,140 +181,45 @@ void Brain::replay(const Event& event) {
     const double reliability = event.kind == "learning" ? std::clamp(double_value(event.data, "reliability", 0.5), 0.0, 1.0) : 0.7;
     if (event.kind == "learning") for (const auto& [key, value] : event.data) if (key != "reliability") { knowledge_.assimilate(Evidence{event.source, key, value, reliability}); break; }
     std::vector<Belief> before; before.reserve(beliefs_.size()); for (const auto& [_, belief] : beliefs_) before.push_back(belief);
-    for (const auto& [key, value] : event.data) { if (event.kind == "learning" && key == "reliability") continue; const auto it = beliefs_.find(key); if (it == beliefs_.end()) beliefs_.emplace(key, Belief{key, value, reliability, 1, event.sequence}); else { const bool same = it->second.value == value; it->second.value = value; it->second.confidence = same ? std::min(0.999, it->second.confidence + (1.0 - it->second.confidence) * reliability) : std::max(0.05, it->second.confidence * (1.0 - reliability)); ++it->second.observations; it->second.updated_sequence = event.sequence; } world_.observe(Fact{event.source, key, value, reliability, 1}); const auto subject = string_value(event.data, "subject"); const auto predicate = string_value(event.data, "predicate"); const auto object = string_value(event.data, "object"); if (subject != nullptr && predicate != nullptr && object != nullptr) world_.relate(Relation{*subject, *predicate, *object, reliability, event.sequence, false}); }
+    for (const auto& [key, value] : event.data) { if (event.kind == "learning" && key == "reliability") continue; const auto it = beliefs_.find(key); if (it == beliefs_.end()) beliefs_.emplace(key, Belief{key, value, reliability, 1, event.sequence}); else { const bool same = it->second.value == value; it->second.value = value; it->second.confidence = same ? std::min(0.999, it->second.confidence + (1.0 - it->second.confidence) * reliability) : std::max(0.05, it->second.confidence * (1.0 - reliability)); it->second.disputed = !same && it->second.observations > 0; ++it->second.observations; it->second.updated_sequence = event.sequence; } world_.observe(Fact{event.source, key, value, reliability, 1}); const auto subject = string_value(event.data, "subject"); const auto predicate = string_value(event.data, "predicate"); const auto object = string_value(event.data, "object"); if (subject != nullptr && predicate != nullptr && object != nullptr) world_.relate(Relation{*subject, *predicate, *object, reliability, event.sequence, false}); }
     std::vector<Belief> after; after.reserve(beliefs_.size()); for (const auto& [_, belief] : beliefs_) after.push_back(belief); causal_.observe_transition(before, after); association_.observe(before, after, event.sequence);
-    if (event.kind == "observation") { const auto history = memory_.recent(2); std::vector<Event> previous; if (history.size() > 1) previous.push_back(history[1]); const double novelty = compute_novelty(event, previous); double strongest = 0.0; for (const auto& [_, belief] : beliefs_) strongest = std::max(strongest, belief.confidence); attention_state_ = attention_model_.score(event, novelty, strongest); threat_state_ = threat_model_.assess(event); state_.novelty = novelty; state_.attention = attention_state_.salience; state_.threat = threat_state_.score; const auto health = event.data.find("health"); if (health != event.data.end()) resilience_.observe(event.source, std::clamp(double_value(event.data, "health", 1.0), 0.0, 1.0)); }
+    if (event.kind == "observation") { const auto history = memory_.recent(2); std::vector<Event> previous; if (history.size() > 1) previous.push_back(history[1]); const double novelty = compute_novelty(event, previous); double strongest = 0.0; for (const auto& [_, belief] : beliefs_) strongest = std::max(strongest, belief.confidence); attention_state_ = attention_model_.score(event, novelty, strongest); threat_state_ = threat_model_.assess(event); state_.novelty = novelty; state_.attention = attention_state_.salience; state_.threat = threat_state_.score; const auto health = event.data.find("health"); if (health != event.data.end()) resilience_.observe(event.source, std::clamp(double_value(event.data, "health", 1.0), 0.0, 1.0)); process_affective_experience(event); }
 }
-Observation Brain::observe(Event event) { std::unique_lock lock(mutex_); event.timestamp_ns = event.timestamp_ns == 0 ? now_ns() : event.timestamp_ns; const auto previous = memory_.recent(1); const double novelty = compute_novelty(event, previous); event.sequence = memory_.append(event); if (event.sequence == 0) return Observation{}; ++state_.events_seen; state_.cycle = event.sequence; replay(event); state_.novelty = novelty; sync_self_state(); return Observation{std::move(event), novelty}; }
+Observation Brain::observe(Event event) { std::unique_lock lock(mutex_); event.timestamp_ns = event.timestamp_ns == 0 ? now_ns() : event.timestamp_ns; const auto previous = memory_.recent(1); const double novelty = compute_novelty(event, previous); event.sequence = memory_.append(event); if (event.sequence == 0) return Observation{}; ++state_.events_seen; state_.cycle = event.sequence; replay(event); state_.novelty = novelty; consolidate_experience(event); sync_self_state(); return Observation{std::move(event), novelty}; }
 double Brain::learn(const Evidence& evidence) { std::unique_lock lock(mutex_); if (evidence.key.empty()) return 0.0; const double reliability = std::clamp(evidence.reliability, 0.0, 1.0); Event event{0, now_ns(), evidence.source, "learning", {{evidence.key, evidence.value}, {"reliability", reliability}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return 0.0; ++state_.events_seen; state_.cycle = event.sequence; replay(event); sync_self_state(); if (const auto* metric = knowledge_.source_metric(evidence.source)) return metric->reliability; return reliability; }
-std::vector<Belief> Brain::beliefs() const { std::shared_lock lock(mutex_); std::vector<Belief> result; result.reserve(beliefs_.size()); for (const auto& [_, belief] : beliefs_) result.push_back(belief); return result; }
-Prediction Brain::predict(std::string key, Scalar value, double confidence) { std::unique_lock lock(mutex_); if (key.empty()) return Prediction{}; Prediction prediction{std::move(key), std::move(value), std::clamp(confidence, 0.0, 1.0), state_.cycle, false, 0.0}; Event event{0, now_ns(), "brain", "prediction", {{"key", prediction.key}, {"value", prediction.predicted}, {"confidence", prediction.confidence}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return Prediction{}; prediction.created_sequence = event.sequence; predictions_[prediction.key] = prediction; ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); return prediction; }
-bool Brain::resolve_prediction(const std::string& key, const Scalar& actual) { std::unique_lock lock(mutex_); const auto it = predictions_.find(key); if (it == predictions_.end() || it->second.resolved) return false; double error = it->second.predicted == actual ? 0.0 : 1.0; if (const auto predicted = std::get_if<double>(&it->second.predicted)) if (const auto observed = std::get_if<double>(&actual)) error = std::clamp(std::abs(*observed - *predicted), 0.0, 1.0); Event event{0, now_ns(), "brain", "prediction_outcome", {{"key", key}, {"actual", actual}, {"error", error}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return false; it->second.resolved = true; it->second.error = error; if (const auto predicted = std::get_if<double>(&it->second.predicted)) if (const auto observed = std::get_if<double>(&actual)) adaptation_.observe(key, *predicted, *observed); ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); return error == 0.0; }
-const KnowledgeMetric* Brain::knowledge_source(const std::string& source) const noexcept { std::shared_lock lock(mutex_); return knowledge_.source_metric(source); }
-const AdaptiveMetric* Brain::learning_metric(const std::string& key) const noexcept { std::shared_lock lock(mutex_); return adaptation_.metric(key); }
-double Brain::learning_confidence(const std::string& key) const noexcept { std::shared_lock lock(mutex_); return std::clamp(adaptation_.confidence(key), 0.0, 1.0); }
-std::vector<std::pair<std::string, Scalar>> Brain::simulate(const std::vector<Belief>& assumptions) const { std::shared_lock lock(mutex_); return causal_.predict(assumptions); }
-SimulationResult Brain::simulate(const std::vector<Belief>& assumptions, std::size_t horizon) const { std::shared_lock lock(mutex_); return causal_.simulate(assumptions, horizon); }
-std::vector<Association> Brain::associations() const { std::shared_lock lock(mutex_); return association_.all(); }
-std::vector<Association> Brain::associated_with(const std::string& key, double minimum_strength) const { std::shared_lock lock(mutex_); return association_.related(key, minimum_strength); }
-std::vector<CausalLink> Brain::causal_links() const { std::shared_lock lock(mutex_); return causal_.links(); }
-std::vector<Decision> Brain::choose(const std::vector<CandidateAction>& actions) const { std::shared_lock lock(mutex_); const auto self = self_state_model_.snapshot(); const auto eligible = goals_model_.eligible(state_.cycle); const auto selected_intent = intent_model_.select(eligible, threat_state_.score, self.uncertainty, state_.cycle); const auto strategy = strategy_model_.formulate(selected_intent, attention_state_, threat_state_.score, self.uncertainty); const auto plan = planner_.build(actions, 1, strategy.planning); DecisionContext context; context.goal_priority = strategy.planning.goal_priority; context.goal_progress = strategy.planning.goal_progress; context.plan_expected_value = plan.expected_value; context.plan_risk = plan.risk; context.resource_budget = strategy.planning.resource_budget; context.uncertainty = strategy.planning.uncertainty; context.threat = strategy.planning.threat; context.deadline_pressure = strategy.planning.deadline_pressure; return decision_.decide(actions, context); }
-std::vector<CapabilityCandidate> Brain::evaluate_capabilities(
-    const std::vector<CapabilityDescriptor>& capabilities, CapabilityConstraints constraints) const {
-    std::shared_lock lock(mutex_);
-    return CapabilityEvaluator{}.evaluate(capabilities, constraints);
-}
+LearningCycle Brain::learn_from_prediction(const std::string& key, const Scalar& actual, double fitness) {
+    std::unique_lock lock(mutex_);
+    LearningCycle cycle{};
+    if (key.empty()) return cycle;
 
-CapabilityExecutionResult Brain::execute_capability(
-    const CapabilityDescriptor& capability, std::string input,
-    std::vector<std::string> granted_permissions, double maximum_risk,
-    CapabilityProvider provider) {
-    if (provider.capability_id.empty() || !provider.execute) {
-        return {CapabilityExecutionStatus::rejected, capability.id, {}, {},
-                "capability_provider_required"};
-    }
-    if (provider.capability_id != capability.id) {
-        return {CapabilityExecutionStatus::rejected, capability.id, {}, {},
-                "capability_provider_mismatch"};
-    }
+    const auto* prediction = find_latest_unresolved_prediction(key);
+    if (prediction == nullptr) return cycle;
 
-    CapabilityExecutionBoundary boundary;
-    if (!boundary.register_provider(std::move(provider))) {
-        return {CapabilityExecutionStatus::rejected, capability.id, {}, {},
-                "capability_provider_registration_failed"};
-    }
-
-    const auto result = boundary.execute(
-        CapabilityExecutionRequest{capability, std::move(input),
-                                   std::move(granted_permissions), maximum_risk});
-    if (!capability.id.empty()) {
-        const double reliability =
-            result.status == CapabilityExecutionStatus::succeeded ? 1.0 :
-            result.status == CapabilityExecutionStatus::unavailable ? 0.25 : 0.0;
-        std::unique_lock lock(mutex_);
-        Event event{0, now_ns(), result.provider.empty() ? "capability_executor" : result.provider,
-                    "capability_execution",
-                    {{"capability_id", capability.id},
-                     {"status", static_cast<std::int64_t>(result.status)},
-                     {"provider", result.provider},
-                     {"reason", result.reason},
-                     {"output", result.output},
-                     {"reliability", reliability}}};
-        event.sequence = memory_.append(event);
-        if (event.sequence != 0) {
-            ++state_.events_seen;
-            state_.cycle = event.sequence;
-            sync_self_state();
+    double predicted_value = 0.0;
+    double actual_value = 0.0;
+    if (const auto predicted = std::get_if<double>(&prediction->predicted)) {
+        if (const auto observed = std::get_if<double>(&actual)) {
+            predicted_value = *predicted;
+            actual_value = *observed;
+        } else {
+            return cycle;
+        }
+    } else {
+        if (prediction->predicted == actual) {
+            predicted_value = 0.0;
+            actual_value = 0.0;
+        } else {
+            return cycle;
         }
     }
-    return result;
-}
-Plan Brain::plan(const std::vector<CandidateAction>& actions, std::size_t horizon) const { std::shared_lock lock(mutex_); return planner_.build(actions, horizon); }
-Plan Brain::plan(const std::vector<CandidateAction>& actions, std::size_t horizon, const PlanningContext& context) const { std::shared_lock lock(mutex_); return planner_.build(actions, horizon, context); }
-Reflection Brain::reflect() const { std::shared_lock lock(mutex_); std::vector<Belief> beliefs; beliefs.reserve(beliefs_.size()); for (const auto& [_, belief] : beliefs_) beliefs.push_back(belief); std::vector<Prediction> predictions; predictions.reserve(predictions_.size()); for (const auto& [_, prediction] : predictions_) predictions.push_back(prediction); return reflection_model_.evaluate(beliefs, predictions); }
-AttentionSignal Brain::attention() const { std::shared_lock lock(mutex_); return attention_state_; }
-ThreatAssessment Brain::threat() const { std::shared_lock lock(mutex_); return threat_state_; }
-std::vector<RecoveryPlan> Brain::recovery_options() const { std::shared_lock lock(mutex_); return resilience_.required_recovery(); }
-bool Brain::create_goal(Goal goal) { std::unique_lock lock(mutex_); if (goal.id.empty() || goal.description.empty()) return false; goal.priority = std::clamp(goal.priority, 0.0, 1.0); goal.progress = std::clamp(goal.progress, 0.0, 1.0); const std::uint64_t created_cycle = state_.cycle + 1; goal.created_cycle = created_cycle; Event event{0, now_ns(), "brain", "goal_create", {{"id", goal.id}, {"description", goal.description}, {"priority", goal.priority}, {"progress", goal.progress}, {"created_cycle", static_cast<std::int64_t>(goal.created_cycle)}, {"deadline_cycle", static_cast<std::int64_t>(goal.deadline_cycle)}, {"status", static_cast<std::int64_t>(goal.status)}, {"prerequisites", join_ids(goal.prerequisites)}, {"subgoals", join_ids(goal.subgoals)}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return false; goal.created_cycle = event.sequence; if (!goals_model_.create(std::move(goal))) return false; ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); return true; }
-bool Brain::activate_goal(const std::string& id) { std::unique_lock lock(mutex_); if (!goals_model_.activate(id)) return false; Event event{0, now_ns(), "brain", "goal_activate", {{"id", id}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return false; ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); return true; }
-bool Brain::update_goal_progress(const std::string& id, double progress) { std::unique_lock lock(mutex_); const double bounded = std::clamp(progress, 0.0, 1.0); if (!goals_model_.update_progress(id, bounded)) return false; Event event{0, now_ns(), "brain", "goal_progress", {{"id", id}, {"progress", bounded}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return false; ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); return true; }
-bool Brain::complete_goal(const std::string& id) { std::unique_lock lock(mutex_); if (!goals_model_.complete(id)) return false; Event event{0, now_ns(), "brain", "goal_complete", {{"id", id}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return false; ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); return true; }
-bool Brain::abandon_goal(const std::string& id) { std::unique_lock lock(mutex_); if (!goals_model_.abandon(id)) return false; Event event{0, now_ns(), "brain", "goal_abandon", {{"id", id}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return false; ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); return true; }
-bool Brain::set_goal_priority(const std::string& id, double priority) { std::unique_lock lock(mutex_); const double bounded = std::clamp(priority, 0.0, 1.0); if (!goals_model_.set_priority(id, bounded)) return false; Event event{0, now_ns(), "brain", "goal_priority", {{"id", id}, {"priority", bounded}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return false; ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); return true; }
-const Goal* Brain::goal(const std::string& id) const noexcept { std::shared_lock lock(mutex_); return goals_model_.get(id); }
-std::vector<Goal> Brain::goals() const { std::shared_lock lock(mutex_); return goals_model_.all(); }
-std::vector<Goal> Brain::eligible_goals() const { std::shared_lock lock(mutex_); return goals_model_.eligible(state_.cycle); }
-void Brain::observe_capability(std::string name, double availability, double performance) { std::unique_lock lock(mutex_); if (name.empty()) return; const double bounded_availability = std::clamp(availability, 0.0, 1.0); const double bounded_performance = std::clamp(performance, 0.0, 1.0); Event event{0, now_ns(), "brain", "capability_observe", {{"name", name}, {"availability", bounded_availability}, {"performance", bounded_performance}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return; self_model_.observe_capability(name, bounded_availability, bounded_performance); ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); }
-bool Brain::isolate_capability(const std::string& name) { std::unique_lock lock(mutex_); if (name.empty() || !self_model_.isolate(name)) return false; Event event{0, now_ns(), "brain", "capability_isolate", {{"name", name}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return false; ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); return true; }
-bool Brain::restore_capability(const std::string& name, double availability, double performance) { std::unique_lock lock(mutex_); const double bounded_availability = std::clamp(availability, 0.0, 1.0); const double bounded_performance = std::clamp(performance, 0.0, 1.0); if (name.empty() || !self_model_.restore(name, bounded_availability, bounded_performance)) return false; Event event{0, now_ns(), "brain", "capability_restore", {{"name", name}, {"availability", bounded_availability}, {"performance", bounded_performance}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return false; ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); return true; }
-bool Brain::isolate(const std::string& component) { std::unique_lock lock(mutex_); if (component.empty() || !resilience_.isolate(component)) return false; Event event{0, now_ns(), "brain", "resilience_isolate", {{"component", component}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return false; ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); return true; }
-bool Brain::recover(const std::string& component, double restored_health) { std::unique_lock lock(mutex_); const double health = std::clamp(restored_health, 0.0, 1.0); if (component.empty() || !resilience_.recover(component, health)) return false; Event event{0, now_ns(), "brain", "resilience_recover", {{"component", component}, {"health", health}}}; event.sequence = memory_.append(event); if (event.sequence == 0) { resilience_.isolate(component); return false; } ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); return true; }
-void Brain::register_evolution_parameter(std::string key, double initial) { std::unique_lock lock(mutex_); if (key.empty()) return; Event event{0, now_ns(), "brain", "evolution_register", {{"key", key}, {"initial", initial}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return; evolution_.register_parameter(key, initial); ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); }
-void Brain::observe_evolution_fitness(const std::string& key, double fitness) { std::unique_lock lock(mutex_); if (key.empty()) return; Event event{0, now_ns(), "brain", "evolution_fitness", {{"key", key}, {"fitness", fitness}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return; evolution_.observe_fitness(key, fitness); ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); }
-std::vector<EvolutionProposal> Brain::evolution_options() const { std::shared_lock lock(mutex_); return evolution_.propose(); }
-bool Brain::adopt_evolution(const EvolutionProposal& proposal) { std::unique_lock lock(mutex_); if (proposal.key.empty() || !evolution_.adopt(proposal)) return false; Event event{0, now_ns(), "brain", "evolution_adopt", {{"key", proposal.key}, {"current", proposal.current}, {"proposed", proposal.proposed}, {"expected_gain", proposal.expected_gain}, {"confidence", proposal.confidence}}}; event.sequence = memory_.append(event); if (event.sequence == 0) { evolution_.rollback(proposal.key); return false; } ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); return true; }
-bool Brain::rollback_evolution(const std::string& key) { std::unique_lock lock(mutex_); if (key.empty() || !evolution_.rollback(key)) return false; Event event{0, now_ns(), "brain", "evolution_rollback", {{"key", key}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return false; ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); return true; }
-bool Brain::adopt_evolution_experiment(EvolutionExperiment& experiment) {
-    std::unique_lock lock(mutex_);
-    if (!evolution_controller_.adopt(experiment)) return false;
-    Event event{0, now_ns(), "brain", "evolution_adopt",
-                {{"key", experiment.proposal.key}, {"current", experiment.proposal.current},
-                 {"proposed", experiment.proposal.proposed}, {"expected_gain", experiment.proposal.expected_gain},
-                 {"confidence", experiment.proposal.confidence}}};
-    event.sequence = memory_.append(event);
-    if (event.sequence == 0) {
-        evolution_.rollback(experiment.proposal.key);
-        return false;
-    }
-    ++state_.events_seen;
-    state_.cycle = event.sequence;
-    sync_self_state();
-    return true;
-}
-CanaryDecision Brain::observe_evolution_canary(const std::string& parameter_key,
-                                               const std::string& experiment_id,
-                                               CanaryObservation observation) {
-    std::unique_lock lock(mutex_);
-    const auto decision = evolution_controller_.observe_canary(parameter_key, experiment_id, observation);
-    if (decision.rollback) {
-        Event event{0, now_ns(), "brain", "evolution_rollback",
-                    {{"key", parameter_key}, {"experiment_id", experiment_id},
-                     {"reason", decision.reason}, {"observed_delta", decision.mean_delta}}};
-        event.sequence = memory_.append(event);
-        if (event.sequence != 0) {
-            ++state_.events_seen;
-            state_.cycle = event.sequence;
-            sync_self_state();
-        }
-    }
-    return decision;
-}
-std::vector<EvolutionHistoryRecord> Brain::evolution_history() const {
-    std::shared_lock lock(mutex_);
-    return evolution_history_.records();
+
+    const double error = prediction->predicted == actual ? 0.0 : std::clamp(std::abs(actual_value - predicted_value), 0.0, 1.0);
+    Event outcome{0, now_ns(), "brain", "prediction_outcome", {{"key", prediction->key}, {"prediction_sequence", static_cast<std::int64_t>(prediction->created_sequence)}, {"actual", actual}, {"error", error}, {"salience", attention_state_.salience}, {"novelty", state_.novelty}}};
+    outcome.sequence = memory_.append(outcome); if (outcome.sequence == 0) return cycle; ++state_.events_seen; state_.cycle = outcome.sequence; replay(outcome);
+    if (const auto* metric = adaptation_.metric(key); metric != nullptr) cycle.adaptation = *metric;
+    evolution_.observe_fitness(key, std::clamp(fitness, -1.0, 1.0));
+    Event fitness_event{0, now_ns(), "brain", "evolution_fitness", {{"key", key}, {"fitness", std::clamp(fitness, -1.0, 1.0)}}};
+    fitness_event.sequence = memory_.append(fitness_event); if (fitness_event.sequence == 0) return cycle; ++state_.events_seen; state_.cycle = fitness_event.sequence; replay(fitness_event); cycle.proposals = evolution_.propose(); sync_self_state(); return cycle;
 }
 
-BrainSnapshot Brain::snapshot() const { std::shared_lock lock(mutex_); BrainSnapshot snapshot; snapshot.state = state_; snapshot.self_state = self_state_model_.snapshot(); for (const auto& [_, belief] : beliefs_) snapshot.beliefs.push_back(belief); for (const auto& [_, prediction] : predictions_) snapshot.predictions.push_back(prediction); snapshot.causal_links = causal_.links(); snapshot.goals = goals_model_.all(); return snapshot; }
-BrainState Brain::state() const { std::shared_lock lock(mutex_); return state_; }
-bool Brain::append_goal_event(const Event& event) { Event persisted = event; persisted.timestamp_ns = persisted.timestamp_ns == 0 ? now_ns() : persisted.timestamp_ns; persisted.sequence = memory_.append(persisted); if (persisted.sequence == 0) return false; ++state_.events_seen; state_.cycle = persisted.sequence; sync_self_state(); return true; }
-}
+} // namespace jarvis::core
