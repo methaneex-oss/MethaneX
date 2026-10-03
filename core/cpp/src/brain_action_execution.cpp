@@ -54,8 +54,27 @@ ActionExecutionResult Brain::execute_action(
         ++state_.events_seen;
         state_.cycle = event.sequence;
         replay(event);
-
         consolidate_experience(event, std::clamp(std::abs(result.outcome.consequence_error), 0.0, 1.0));
+
+        // The consequence becomes a separate learning experience. This keeps
+        // the authoritative action outcome immutable while giving the
+        // knowledge/adaptation systems a persisted training event they can
+        // replay after restart.
+        Event learning_event{
+            0,
+            0,
+            "action_executor",
+            "learning",
+            {{"action_executor." + result.action.name, reliability},
+             {"reliability", reliability},
+             {"source_action_sequence", static_cast<std::int64_t>(event.sequence)}}};
+        learning_event.sequence = memory_.append(learning_event);
+        if (learning_event.sequence != 0) {
+            ++state_.events_seen;
+            state_.cycle = learning_event.sequence;
+            replay(learning_event);
+            consolidate_experience(learning_event, 1.0 - reliability);
+        }
         sync_self_state();
     }
 
