@@ -380,7 +380,6 @@ bool Brain::assimilate_goal_outcome(const GoalOutcomeEvidence& raw_evidence) {
     const double before = std::clamp(current->progress, 0.0, 1.0);
     evidence.progress_before = before;
     evidence.normalize();
-    evidence.progress_after = std::max(before, evidence.progress_after);
     evidence.completed = evidence.completed || evidence.progress_after >= 1.0;
     evidence.normalize();
 
