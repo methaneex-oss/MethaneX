@@ -125,6 +125,7 @@ int main() {
     assert(brain.memory().by_kind("action_outcome", 2).size() == 2);
 
     const auto action_journal = root / "action-replay.bin";
+    AffectiveAppraisal learned_appraisal{};
     {
         Brain first(action_journal);
         const auto local_decisions = first.choose({CandidateAction{"persist-action", 0.9, 0.9, 0.05, 0.9}});
@@ -144,7 +145,7 @@ int main() {
         assert(result.outcome.actual_consequence == -0.7);
         assert(first.memory().by_kind("affective_learning", 1).size() == 1);
         assert(first.affective_learning_updates() > 0);
-        const auto learned_appraisal = first.affective_appraisal();
+        learned_appraisal = first.affective_appraisal();
     }
     {
         Brain restarted(action_journal);
