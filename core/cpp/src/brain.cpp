@@ -142,10 +142,19 @@ void Brain::replay(const Event& event) {
         const auto* context = string_value(event.data, "context");
         if (action == nullptr || context == nullptr || action->empty() || context->empty()) return;
         const double reliability = std::clamp(double_value(event.data, "reliability", 0.5), 0.0, 1.0);
-        if (const auto* status = string_value(event.data, "status")) {
-            const std::string belief_key = "action." + *action;
-            beliefs_[belief_key] = Belief{belief_key, *status, reliability, 1, event.sequence, false};
+        const auto status = static_cast<ActionExecutionStatus>(integer_value(event.data, "status"));
+        const char* status_name = "unknown";
+        switch (status) {
+            case ActionExecutionStatus::rejected: status_name = "rejected"; break;
+            case ActionExecutionStatus::prepared: status_name = "prepared"; break;
+            case ActionExecutionStatus::executed: status_name = "executed"; break;
+            case ActionExecutionStatus::verified: status_name = "verified"; break;
+            case ActionExecutionStatus::failed: status_name = "failed"; break;
+            case ActionExecutionStatus::cancelled: status_name = "cancelled"; break;
+            case ActionExecutionStatus::rolled_back: status_name = "rolled_back"; break;
         }
+        const std::string belief_key = "action." + *action;
+        beliefs_[belief_key] = Belief{belief_key, std::string(status_name), reliability, 1, event.sequence, false};
         const auto observed = event.data.find("observed");
         const bool has_observed_consequence =
             observed != event.data.end() &&
