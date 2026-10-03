@@ -22,6 +22,10 @@ struct AffectiveSignal {
     double salience{0.0};
     double uncertainty{0.0};
     double confidence{0.5};
+    // Separate error channel for learned tension appraisal. Keeping it distinct
+    // prevents the tension-specific learned parameter from becoming decorative
+    // or being conflated with general prediction-error sensitivity.
+    double tension_error{0.0};
 };
 
 struct AffectiveAppraisalWeights {
