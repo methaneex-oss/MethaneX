@@ -1,6 +1,8 @@
 #include "jarvis/core/action_execution.hpp"
 #include "jarvis/core/action_authorization.hpp"
 
+#include <cmath>
+
 namespace jarvis::core {
 
 ActionExecutionResult ActionExecutor::run(const ActionExecutionRequest& request) const {
@@ -51,13 +53,13 @@ ActionExecutionResult ActionExecutor::run(const ActionExecutionRequest& request)
             result.verified = true;
             result.status = ActionExecutionStatus::verified;
             result.reason = "verified";
-            return result;
+        } else {
+            result.status = ActionExecutionStatus::failed;
+            result.reason = "verification_failed";
         }
-        result.status = ActionExecutionStatus::failed;
-        result.reason = "verification_failed";
     }
 
-    if (request.rollback) {
+    if (request.rollback && result.status == ActionExecutionStatus::failed) {
         bool rolled_back = false;
         try {
             rolled_back = request.rollback(result.action);
@@ -70,6 +72,24 @@ ActionExecutionResult ActionExecutor::run(const ActionExecutionRequest& request)
             result.reason = "verification_failed_rolled_back";
         }
     }
+
+    // Consequence observation is deliberately independent of execution status:
+    // a failed or rolled-back action can still produce a real-world consequence.
+    if (request.observe_consequence && result.executed) {
+        try {
+            const double actual = request.observe_consequence(result.action);
+            if (std::isfinite(actual)) {
+                result.outcome.observed = true;
+                result.outcome.actual_consequence = std::clamp(actual, -1.0, 1.0);
+                result.outcome.consequence_error = std::clamp(
+                    result.outcome.actual_consequence - result.action.expected_consequence,
+                    -2.0, 2.0);
+            }
+        } catch (...) {
+            result.outcome = ActionOutcome{};
+        }
+    }
+
     return result;
 }
 
