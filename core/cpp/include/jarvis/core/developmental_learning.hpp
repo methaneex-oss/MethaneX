@@ -14,6 +14,11 @@ struct LearningSignal {
     double reward{0.0};
     double salience{0.0};
     double novelty{0.0};
+    // Continuous affective significance supplied by the cognitive experience
+    // pipeline. It changes learning sensitivity; it is not an emotion label or
+    // an action command. Default zero preserves replay compatibility for older
+    // callers and journal-derived evidence.
+    double affective_significance{0.0};
 };
 
 struct LearnedAssociation {
