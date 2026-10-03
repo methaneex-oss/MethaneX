@@ -238,7 +238,15 @@ LearningCycle Brain::learn_from_prediction(const std::string& key, const Scalar&
         cycle.confidence = std::clamp(adaptation_.confidence(key), 0.0, 1.0);
     }
 
-    evolution_.observe_fitness(key, std::clamp(fitness, -1.0, 1.0));
+    const double bounded_fitness = std::clamp(fitness, -1.0, 1.0);
+    Event fitness_event{
+        0, now_ns(), "brain", "evolution_fitness",
+        {{"key", key}, {"fitness", bounded_fitness}}};
+    fitness_event.sequence = memory_.append(fitness_event);
+    if (fitness_event.sequence == 0) return cycle;
+    ++state_.events_seen;
+    state_.cycle = fitness_event.sequence;
+    replay(fitness_event);
     cycle.proposals = evolution_.propose();
     for (const auto& proposal : cycle.proposals) {
         if (proposal.key != key || proposal.confidence < 0.75 || proposal.expected_gain <= 0.0)
