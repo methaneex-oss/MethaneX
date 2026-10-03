@@ -31,7 +31,14 @@ void Brain::consolidate_experience(const Event& event, double error) {
         if (const auto* value = std::get_if<double>(&it->second)) confidence = *value;
     if (const auto it = event.data.find("confidence"); it != event.data.end())
         if (const auto* value = std::get_if<double>(&it->second)) confidence = *value;
-    memory_.consolidate(event.sequence, salience, novelty, error, confidence);
+    const auto affect = affective_state_model_.state();
+    // Affective variables contribute as generic evidence, not semantic emotion
+    // categories: arousal and tension increase significance, while uncertainty
+    // reduces confidence in the resulting consolidation.
+    salience = std::clamp(0.75 * salience + 0.15 * affect.arousal + 0.10 * affect.tension, 0.0, 1.0);
+    confidence = std::clamp(confidence * (1.0 - 0.25 * affect.uncertainty) + 0.10 * affect.stability, 0.0, 1.0);
+    const double affective_error = std::max(error, affect.uncertainty * 0.25 + affect.tension * 0.25);
+    memory_.consolidate(event.sequence, salience, novelty, affective_error, confidence);
 }
 
 void Brain::process_affective_experience(const Event& event) {
@@ -75,16 +82,21 @@ void Brain::process_affective_experience(const Event& event) {
             relevant = true;
         }
     } else if (event.kind == "affective_learning") {
-        const double actual = double_value(event.data, "actual_consequence");
-        const double error = double_value(event.data, "consequence_error");
-        signal.outcome = std::clamp(actual, -1.0, 1.0);
-        signal.prediction_error = std::clamp(std::abs(error), 0.0, 1.0);
-        signal.novelty = std::clamp(double_value(event.data, "novelty", state_.novelty), 0.0, 1.0);
-        signal.salience = std::clamp(double_value(event.data, "salience", attention_state_.salience), 0.0, 1.0);
-        signal.uncertainty = std::clamp(double_value(event.data, "uncertainty", 0.0), 0.0, 1.0);
-        signal.confidence = std::clamp(double_value(event.data, "confidence", 0.5), 0.0, 1.0);
-        utility = actual;
-        relevant = true;
+        // This is a persisted parameter-learning event, not another experience.
+        // The originating action_outcome already updated affective state. Replaying
+        // this event must therefore update appraisal parameters exactly once without
+        // applying the same consequence to state a second time.
+        affective_learning_model_.learn(AffectiveOutcomeEvidence{
+            double_value(event.data, "expected_consequence"),
+            double_value(event.data, "actual_consequence"),
+            double_value(event.data, "consequence_error"),
+            double_value(event.data, "utility", double_value(event.data, "actual_consequence")),
+            double_value(event.data, "prediction_error"),
+            double_value(event.data, "novelty", state_.novelty),
+            double_value(event.data, "salience", attention_state_.salience),
+            double_value(event.data, "uncertainty"),
+            double_value(event.data, "confidence", 0.5)});
+        return;
     } else if (event.kind == "learning") {
         signal.outcome = 2.0 * std::clamp(double_value(event.data, "reliability", 0.5), 0.0, 1.0) - 1.0;
         signal.confidence = std::clamp(double_value(event.data, "reliability", 0.5), 0.0, 1.0);
@@ -106,31 +118,9 @@ void Brain::process_affective_experience(const Event& event) {
     }
 
     if (!relevant) return;
-
-    // Learned appraisal parameters must sit on the causal path into the next
-    // affective state. Without this modulation, the learner could change its
-    // parameters indefinitely while cognition continued to consume the raw
-    // hand-authored signal. That would be parameter drift, not developmental
-    // influence.
     signal = affective_learning_model_.modulate(signal);
     const auto after = affective_state_model_.update(signal);
-    const auto observed = event.data.find("observed");
-    const bool has_observed_consequence =
-        observed != event.data.end() &&
-        std::get_if<bool>(&observed->second) != nullptr &&
-        *std::get_if<bool>(&observed->second);
-    if (event.kind == "affective_learning") {
-        affective_learning_model_.learn(AffectiveOutcomeEvidence{
-            double_value(event.data, "expected_consequence"),
-            double_value(event.data, "actual_consequence"),
-            double_value(event.data, "consequence_error"),
-            utility,
-            signal.prediction_error,
-            signal.novelty,
-            signal.salience,
-            signal.uncertainty,
-            signal.confidence});
-    } else if (event.kind != "action_outcome") {
+    if (event.kind != "action_outcome") {
         affective_learning_model_.learn(signal, before, after, utility);
     }
 }
@@ -139,7 +129,7 @@ void Brain::sync_self_state() { const auto goals = goals_model_.all(); std::vect
 void Brain::replay(const Event& event) {
     state_.cycle = std::max(state_.cycle, event.sequence);
     process_affective_experience(event);
-    if (event.kind == "goal_create") { const auto* id = string_value(event.data, "id"); const auto* description = string_value(event.data, "description"); if (id == nullptr || description == nullptr) return; Goal goal{*id, *description, double_value(event.data, "priority"), double_value(event.data, "progress"), integer_value(event.data, "created_cycle"), integer_value(event.data, "deadline_cycle"), goal_status_value(static_cast<std::int64_t>(integer_value(event.data, "status"))), string_value(event.data, "prerequisites") ? split_ids(*string_value(event.data, "prerequisites")) : std::vector<std::string>{}, string_value(event.data, "subgoals") ? split_ids(*string_value(event.data, "subgoals")) : std::vector<std::string>{}}; goals_model_.create(std::move(goal)); return; }
+    if (event.kind == "goal_create") { const auto* id = string_value(event.data, "id"); const auto* description = string_value(event.data, "description"); if (id == nullptr || description == nullptr) return; Goal goal{*id, *description, double_value(event.data, "priority"), double_value(event.data, "progress"), integer_value(event.data, "created_cycle"), integer_value(event.data, "deadline_cycle"), goal_status_value(static_cast<std::int64_t>(integer_value(event.data, "status"))), string_value(event.data, "prerequisites") ? split_ids(*string_value(event.data, "prerequisites")) : std::vector<std::string>{}, string_value(event.data, "subgoals") ? split_ids(*string_value(event.data, "subgoals")) : std::vector<std::vector<std::string>>{}}; goals_model_.create(std::move(goal)); return; }
     if (event.kind == "goal_activate") { if (const auto* id = string_value(event.data, "id")) goals_model_.activate(*id); return; }
     if (event.kind == "goal_progress") { if (const auto* id = string_value(event.data, "id")) goals_model_.update_progress(*id, double_value(event.data, "progress")); return; }
     if (event.kind == "goal_complete") { if (const auto* id = string_value(event.data, "id")) goals_model_.complete(*id); return; }
@@ -166,7 +156,7 @@ void Brain::replay(const Event& event) {
         const std::string belief_key = "action." + *action;
         beliefs_[belief_key] = Belief{belief_key, std::string(status_name), reliability, 1, event.sequence, false};
         const auto observed = event.data.find("observed");
-        const bool has_observed_consequence = observed != event.data.end() && std::get_if<bool>(&observed->second) != nullptr && *std::get_if<bool>(&observed->second);
+        const bool has_observed_consequence = observed != event.data.end() && std::get_if<bool>(&observed->second) != nullptr && *std::get_if<bool>(observed->second);
         const double prediction_error = has_observed_consequence ? std::clamp(std::abs(double_value(event.data, "consequence_error")), 0.0, 1.0) : 1.0 - reliability;
         const double reward = has_observed_consequence ? std::clamp(double_value(event.data, "actual_consequence"), -1.0, 1.0) : (2.0 * reliability - 1.0);
         developmental_learning_.observe_strategy(*context, *action, LearningSignal{prediction_error, reward, std::clamp(double_value(event.data, "salience", 0.0), 0.0, 1.0), std::clamp(double_value(event.data, "novelty", state_.novelty), 0.0, 1.0)});
