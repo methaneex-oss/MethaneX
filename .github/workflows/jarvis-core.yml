@@ -3,9 +3,12 @@ name: JARVIS Core Verification
 on:
   push:
     branches:
+      - feat/jarvis-affective-state
       - feat/jarvis-cognitive-action-loop
   pull_request:
     branches:
+      - main
+      - feat/jarvis-affective-state
       - feat/jarvis-cognitive-action-loop
 
 jobs:
