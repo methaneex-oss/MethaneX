@@ -101,7 +101,23 @@ void Brain::process_affective_experience(const Event& event) {
 
     if (!relevant) return;
     const auto after = affective_state_model_.update(signal);
-    affective_learning_model_.learn(signal, before, after, utility);
+    if (event.kind == "action_outcome" &&
+        event.data.find("expected_consequence") != event.data.end() &&
+        event.data.find("actual_consequence") != event.data.end() &&
+        event.data.find("consequence_error") != event.data.end()) {
+        affective_learning_model_.learn(AffectiveOutcomeEvidence{
+            double_value(event.data, "expected_consequence"),
+            double_value(event.data, "actual_consequence"),
+            double_value(event.data, "consequence_error"),
+            utility,
+            signal.prediction_error,
+            signal.novelty,
+            signal.salience,
+            signal.uncertainty,
+            signal.confidence});
+    } else {
+        affective_learning_model_.learn(signal, before, after, utility);
+    }
 }
 
 void Brain::sync_self_state() { const auto goals = goals_model_.all(); std::vector<GoalState> active_goals; active_goals.reserve(goals.size()); for (const auto& goal : goals) if (goal.status == GoalStatus::active) active_goals.push_back(GoalState{goal.id, goal.priority, true}); self_state_model_.set_goals(std::move(active_goals)); const auto capability_health = self_model_.health(); self_state_model_.set_activity(state_.events_seen == 0 ? "idle" : "cognitive_processing"); self_state_model_.set_workload(std::clamp(std::max(state_.threat, 1.0 - capability_health.overall), 0.0, 1.0)); self_state_model_.set_uncertainty(std::clamp(1.0 - state_.attention, 0.0, 1.0)); self_state_model_.set_health(CognitiveHealth{std::clamp(capability_health.overall * (1.0 - state_.threat * 0.5), 0.0, 1.0), capability_health.overall, std::clamp(1.0 - state_.novelty * 0.1, 0.0, 1.0), capability_health.overall}); for (const auto& capability : self_model_.capabilities()) self_state_model_.set_resource_pressure(capability.name, std::clamp(1.0 - (capability.availability * capability.performance), 0.0, 1.0)); self_state_model_.advance_cycle(state_.events_seen); }
