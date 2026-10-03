@@ -35,6 +35,7 @@ int main() {
         [&](const CandidateAction&) { executed = true; return true; },
         [](const CandidateAction&) { return true; },
         {},
+        {},
         ActionAuthorizationContext{{}, 1.0, false},
     };
     const auto execution = ActionExecutor{}.run(request);
