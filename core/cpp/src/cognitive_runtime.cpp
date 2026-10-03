@@ -24,16 +24,6 @@ const char* execution_status_name(ActionExecutionStatus status) noexcept {
     return "unknown";
 }
 
-void observe_action_outcome(Brain& brain, const ActionExecutionResult& result) {
-    if (result.action.name.empty()) return;
-    const auto timestamp = static_cast<std::uint64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count());
-    brain.observe(Event{0, timestamp, "action_executor", "action_outcome", {
-        {"action", result.action.name}, {"status", std::string(execution_status_name(result.status))},
-        {"authorized", result.authorized}, {"executed", result.executed}, {"verified", result.verified},
-        {"rolled_back", result.rolled_back}, {"reason", result.reason},
-    }});
-}
-
 CognitiveWorkspace make_workspace(const CognitiveCycleResult& result, const Brain& brain) {
     CognitiveWorkspace workspace;
     workspace.observation = result.context.observation;
@@ -164,9 +154,13 @@ void CognitiveRuntime::execute_actions(CognitiveCycleResult& result) {
                 execution.authorized = false;
                 execution.reason = "action_adapter_unavailable";
             } else {
-                execution = ActionExecutor{}.run(ActionExecutionRequest{
-                    assessment, config_.action_adapter.execute, config_.action_adapter.verify,
-                    config_.action_adapter.rollback, config_.action_adapter.authorization});
+                execution = brain_.execute_action(
+                    assessment,
+                    config_.action_adapter.execute,
+                    config_.action_adapter.verify,
+                    config_.action_adapter.rollback,
+                    config_.action_adapter.observe_consequence,
+                    config_.action_adapter.authorization);
             }
         } catch (...) {
             execution.action = assessment.action;
@@ -174,7 +168,6 @@ void CognitiveRuntime::execute_actions(CognitiveCycleResult& result) {
             execution.reason = "action_boundary_exception";
         }
         result.context.action_execution_results.push_back(execution);
-        observe_action_outcome(brain_, execution);
         {
             std::lock_guard lock(mutex_);
             ++metrics_.action_attempted;
