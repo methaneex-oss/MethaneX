@@ -209,13 +209,13 @@ const Prediction* Brain::find_latest_unresolved_prediction(const std::string& ke
 
 Prediction* Brain::find_prediction(std::uint64_t sequence) noexcept {
     for (auto& prediction : predictions_)
-        if (prediction.sequence == sequence) return &prediction;
+        if (prediction.created_sequence == sequence) return &prediction;
     return nullptr;
 }
 
 const Prediction* Brain::find_prediction(std::uint64_t sequence) const noexcept {
     for (const auto& prediction : predictions_)
-        if (prediction.sequence == sequence) return &prediction;
+        if (prediction.created_sequence == sequence) return &prediction;
     return nullptr;
 }
 
