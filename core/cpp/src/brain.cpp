@@ -195,6 +195,91 @@ std::vector<ConceptCandidate> Brain::contextual_concepts(const std::string& key,
 }
 std::vector<ConceptMatch> Brain::generalized_concepts(const std::string& key, double minimum_strength, std::size_t minimum_shared_contexts, double minimum_similarity) const { std::shared_lock lock(mutex_); return association_.generalized_concepts(key, minimum_strength, minimum_shared_contexts, minimum_similarity); }
 std::vector<CausalLink> Brain::causal_links() const { std::shared_lock lock(mutex_); return causal_.links(); }
+Prediction* Brain::find_latest_unresolved_prediction(const std::string& key) noexcept {
+    for (auto it = predictions_.rbegin(); it != predictions_.rend(); ++it)
+        if (!it->resolved && it->key == key) return &*it;
+    return nullptr;
+}
+
+const Prediction* Brain::find_latest_unresolved_prediction(const std::string& key) const noexcept {
+    for (auto it = predictions_.rbegin(); it != predictions_.rend(); ++it)
+        if (!it->resolved && it->key == key) return &*it;
+    return nullptr;
+}
+
+Prediction* Brain::find_prediction(std::uint64_t sequence) noexcept {
+    for (auto& prediction : predictions_)
+        if (prediction.sequence == sequence) return &prediction;
+    return nullptr;
+}
+
+const Prediction* Brain::find_prediction(std::uint64_t sequence) const noexcept {
+    for (const auto& prediction : predictions_)
+        if (prediction.sequence == sequence) return &prediction;
+    return nullptr;
+}
+
+Intent Brain::intent() const {
+    std::shared_lock lock(mutex_);
+    const auto self = self_state_model_.snapshot();
+    return intent_model_.select(goals_model_.eligible(state_.cycle), threat_state_.score, self.uncertainty, state_.cycle);
+}
+
+StrategyContext Brain::strategy() const {
+    std::shared_lock lock(mutex_);
+    const auto self = self_state_model_.snapshot();
+    const auto selected_intent = intent_model_.select(
+        goals_model_.eligible(state_.cycle), threat_state_.score, self.uncertainty, state_.cycle);
+    return strategy_model_.formulate(selected_intent, attention_state_, threat_state_.score, self.uncertainty);
+}
+
+bool Brain::assimilate_goal_outcome(const GoalOutcomeEvidence& raw_evidence) {
+    GoalOutcomeEvidence evidence = raw_evidence;
+    evidence.normalize();
+    if (evidence.goal_id.empty()) return false;
+
+    std::unique_lock lock(mutex_);
+    const auto* current = goals_model_.get(evidence.goal_id);
+    if (current == nullptr) return false;
+
+    const double before = std::clamp(current->progress, 0.0, 1.0);
+    evidence.progress_before = before;
+    evidence.normalize();
+    evidence.progress_after = std::max(before, evidence.progress_after);
+    evidence.completed = evidence.completed || evidence.progress_after >= 1.0;
+
+    if (!goals_model_.update_progress(evidence.goal_id, evidence.progress_after)) return false;
+    Event progress_event{
+        0, now_ns(), "brain", "goal_progress",
+        {{"id", evidence.goal_id},
+         {"progress", evidence.progress_after},
+         {"confidence", evidence.confidence},
+         {"delta", evidence.delta},
+         {"sequence", static_cast<std::int64_t>(evidence.sequence)}}};
+    progress_event.sequence = memory_.append(progress_event);
+    if (progress_event.sequence == 0) return false;
+    ++state_.events_seen;
+    state_.cycle = progress_event.sequence;
+    replay(progress_event);
+
+    if (evidence.completed) {
+        if (!goals_model_.complete(evidence.goal_id)) return false;
+        Event complete_event{
+            0, now_ns(), "brain", "goal_complete",
+            {{"id", evidence.goal_id},
+             {"confidence", evidence.confidence},
+             {"sequence", static_cast<std::int64_t>(evidence.sequence)}}};
+        complete_event.sequence = memory_.append(complete_event);
+        if (complete_event.sequence == 0) return false;
+        ++state_.events_seen;
+        state_.cycle = complete_event.sequence;
+        replay(complete_event);
+    }
+
+    sync_self_state();
+    return true;
+}
+
 std::vector<Decision> Brain::choose(const std::vector<CandidateAction>& actions) const {
     std::shared_lock lock(mutex_);
     const auto self = self_state_model_.snapshot();
@@ -251,58 +336,6 @@ CapabilityExecutionResult Brain::execute_capability(const CapabilityDescriptor& 
     if (!capability.id.empty()) { const double reliability = result.status == CapabilityExecutionStatus::succeeded ? 1.0 : result.status == CapabilityExecutionStatus::unavailable ? 0.25 : 0.0; std::unique_lock lock(mutex_); Event event{0, now_ns(), result.provider.empty() ? "capability_executor" : result.provider, "capability_execution", {{"capability_id", capability.id}, {"status", static_cast<std::int64_t>(result.status)}, {"provider", result.provider}, {"reason", result.reason}, {"output", result.output}, {"reliability", reliability}}}; event.sequence = memory_.append(event); if (event.sequence != 0) { ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); } }
     return result;
 }
-ActionExecutionResult Brain::execute_action(const ActionAssessment& assessment,
-                                                       std::function<bool(const CandidateAction&)> execute,
-                                                       std::function<bool(const CandidateAction&)> verify,
-                                                       std::function<bool(const CandidateAction&)> rollback,
-                                                       std::function<double(const CandidateAction&)> observe_consequence,
-                                                       ActionAuthorizationContext authorization) {
-    ActionExecutionResult result = ActionExecutor{}.run(
-        ActionExecutionRequest{assessment, std::move(execute), std::move(verify), std::move(rollback),
-                               std::move(observe_consequence), std::move(authorization)});
-
-    std::unique_lock lock(mutex_);
-    const auto eligible = goals_model_.eligible(state_.cycle);
-    const std::string context = eligible.empty() ? "global" : eligible.front().id;
-
-    const double reliability =
-        result.status == ActionExecutionStatus::verified ? 1.0 :
-        result.status == ActionExecutionStatus::executed ? 0.75 :
-        result.status == ActionExecutionStatus::rolled_back ? 0.25 :
-        result.status == ActionExecutionStatus::failed ? 0.0 : 0.0;
-
-    Attributes data{
-        {"action", result.action.name},
-        {"context", context},
-        {"status", static_cast<std::int64_t>(result.status)},
-        {"authorized", result.authorized},
-        {"executed", result.executed},
-        {"verified", result.verified},
-        {"rolled_back", result.rolled_back},
-        {"observed", result.outcome.observed},
-        {"reliability", reliability},
-        {"expected_consequence", result.outcome.expected_consequence},
-        {"actual_consequence", result.outcome.actual_consequence},
-        {"consequence_error", result.outcome.consequence_error},
-        {"salience", std::clamp(attention_state_.salience, 0.0, 1.0)},
-        {"novelty", std::clamp(state_.novelty, 0.0, 1.0)},
-        {"confidence", std::clamp(assessment.confidence, 0.0, 1.0)},
-        {"reason", result.reason}
-    };
-
-    Event event{0, now_ns(), "brain", "action_outcome", std::move(data)};
-    event.sequence = memory_.append(event);
-    if (event.sequence == 0) {
-        return result;
-    }
-
-    ++state_.events_seen;
-    state_.cycle = event.sequence;
-    replay(event);
-    sync_self_state();
-    return result;
-}
-
 Plan Brain::plan(const std::vector<CandidateAction>& actions, std::size_t horizon) const { std::shared_lock lock(mutex_); return planner_.build(actions, horizon); }
 Plan Brain::plan(const std::vector<CandidateAction>& actions, std::size_t horizon, const PlanningContext& context) const { std::shared_lock lock(mutex_); return planner_.build(actions, horizon, context); }
 Reflection Brain::reflect() const { std::shared_lock lock(mutex_); std::vector<Belief> beliefs; beliefs.reserve(beliefs_.size()); for (const auto& [_, belief] : beliefs_) beliefs.push_back(belief); std::vector<Prediction> predictions; predictions.reserve(predictions_.size()); for (const auto& prediction : predictions_) predictions.push_back(prediction); return reflection_model_.evaluate(beliefs, predictions); }
