@@ -24,6 +24,17 @@ int main() {
     assert(learned.error_weight >= 0.0 && learned.error_weight <= 2.0);
     assert(learned.tension_error_weight >= 0.0 && learned.tension_error_weight <= 2.0);
 
+    // Learned appraisal must actually modulate future evidence. A changing
+    // parameter that never reaches the affective state is not developmental
+    // influence; this checks the causal connection directly.
+    const AffectiveSignal probe{0.7, 0.8, 0.6, 0.9, 0.5, 0.8};
+    const auto modulated = learner.modulate(probe);
+    assert(modulated.outcome != probe.outcome ||
+           modulated.prediction_error != probe.prediction_error ||
+           modulated.novelty != probe.novelty ||
+           modulated.salience != probe.salience ||
+           modulated.uncertainty != probe.uncertainty);
+
     AffectiveLearningModel repeated_success;
     const auto success_initial = repeated_success.appraisal();
     const AffectiveOutcomeEvidence expected_success{
