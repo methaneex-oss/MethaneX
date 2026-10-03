@@ -11,19 +11,6 @@ namespace {
 
 double finite_priority(double value) noexcept { return std::isfinite(value) ? value : 0.0; }
 
-const char* execution_status_name(ActionExecutionStatus status) noexcept {
-    switch (status) {
-        case ActionExecutionStatus::rejected: return "rejected";
-        case ActionExecutionStatus::prepared: return "prepared";
-        case ActionExecutionStatus::executed: return "executed";
-        case ActionExecutionStatus::verified: return "verified";
-        case ActionExecutionStatus::failed: return "failed";
-        case ActionExecutionStatus::cancelled: return "cancelled";
-        case ActionExecutionStatus::rolled_back: return "rolled_back";
-    }
-    return "unknown";
-}
-
 CognitiveWorkspace make_workspace(const CognitiveCycleResult& result, const Brain& brain) {
     CognitiveWorkspace workspace;
     workspace.observation = result.context.observation;
