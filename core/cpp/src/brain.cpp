@@ -232,6 +232,58 @@ CapabilityExecutionResult Brain::execute_capability(const CapabilityDescriptor& 
     if (!capability.id.empty()) { const double reliability = result.status == CapabilityExecutionStatus::succeeded ? 1.0 : result.status == CapabilityExecutionStatus::unavailable ? 0.25 : 0.0; std::unique_lock lock(mutex_); Event event{0, now_ns(), result.provider.empty() ? "capability_executor" : result.provider, "capability_execution", {{"capability_id", capability.id}, {"status", static_cast<std::int64_t>(result.status)}, {"provider", result.provider}, {"reason", result.reason}, {"output", result.output}, {"reliability", reliability}}}; event.sequence = memory_.append(event); if (event.sequence != 0) { ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); } }
     return result;
 }
+ActionExecutionResult Brain::execute_action(const ActionAssessment& assessment,
+                                                       std::function<bool(const CandidateAction&)> execute,
+                                                       std::function<bool(const CandidateAction&)> verify,
+                                                       std::function<bool(const CandidateAction&)> rollback,
+                                                       std::function<double(const CandidateAction&)> observe_consequence,
+                                                       ActionAuthorizationContext authorization) {
+    ActionExecutionResult result = ActionExecutor{}.run(
+        ActionExecutionRequest{assessment, std::move(execute), std::move(verify), std::move(rollback),
+                               std::move(observe_consequence), std::move(authorization)});
+
+    std::unique_lock lock(mutex_);
+    const auto eligible = goals_model_.eligible(state_.cycle);
+    const std::string context = eligible.empty() ? "global" : eligible.front().id;
+
+    const double reliability =
+        result.status == ActionExecutionStatus::verified ? 1.0 :
+        result.status == ActionExecutionStatus::executed ? 0.75 :
+        result.status == ActionExecutionStatus::rolled_back ? 0.25 :
+        result.status == ActionExecutionStatus::failed ? 0.0 : 0.0;
+
+    Attributes data{
+        {"action", result.action.name},
+        {"context", context},
+        {"status", static_cast<std::int64_t>(result.status)},
+        {"authorized", result.authorized},
+        {"executed", result.executed},
+        {"verified", result.verified},
+        {"rolled_back", result.rolled_back},
+        {"observed", result.outcome.observed},
+        {"reliability", reliability},
+        {"expected_consequence", result.outcome.expected_consequence},
+        {"actual_consequence", result.outcome.actual_consequence},
+        {"consequence_error", result.outcome.consequence_error},
+        {"salience", std::clamp(attention_state_.salience, 0.0, 1.0)},
+        {"novelty", std::clamp(state_.novelty, 0.0, 1.0)},
+        {"confidence", std::clamp(assessment.confidence, 0.0, 1.0)},
+        {"reason", result.reason}
+    };
+
+    Event event{0, now_ns(), "brain", "action_outcome", std::move(data)};
+    event.sequence = memory_.append(event);
+    if (event.sequence == 0) {
+        return result;
+    }
+
+    ++state_.events_seen;
+    state_.cycle = event.sequence;
+    replay(event);
+    sync_self_state();
+    return result;
+}
+
 Plan Brain::plan(const std::vector<CandidateAction>& actions, std::size_t horizon) const { std::shared_lock lock(mutex_); return planner_.build(actions, horizon); }
 Plan Brain::plan(const std::vector<CandidateAction>& actions, std::size_t horizon, const PlanningContext& context) const { std::shared_lock lock(mutex_); return planner_.build(actions, horizon, context); }
 Reflection Brain::reflect() const { std::shared_lock lock(mutex_); std::vector<Belief> beliefs; beliefs.reserve(beliefs_.size()); for (const auto& [_, belief] : beliefs_) beliefs.push_back(belief); std::vector<Prediction> predictions; predictions.reserve(predictions_.size()); for (const auto& prediction : predictions_) predictions.push_back(prediction); return reflection_model_.evaluate(beliefs, predictions); }
