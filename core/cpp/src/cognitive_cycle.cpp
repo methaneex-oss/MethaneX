@@ -65,7 +65,9 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
         if (action.name.empty()) continue;
         if (const auto* metric = brain_.knowledge_source("action_executor." + action.name); metric != nullptr && metric->observations > 0) {
             const double reliability = std::clamp(metric->reliability, 0.0, 1.0);
-            action.expected_value *= (0.5 + 0.5 * reliability);
+            // Learned reliability is allowed to materially alter future planning,
+            // while retaining a non-zero floor so one failure does not erase an action.
+            action.expected_value *= (0.25 + 0.75 * reliability);
             action.risk = std::clamp(action.risk + (1.0 - reliability) * 0.5, 0.0, 1.0);
         }
     }
