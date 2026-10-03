@@ -13,6 +13,7 @@ struct AttentionSignal {
     double novelty{0.0};
     double uncertainty{0.0};
     double urgency{0.0};
+    double internal_activation{0.0};
 };
 
 // Policy is supplied as learned/runtime state. No cognitive weighting is
@@ -21,15 +22,20 @@ struct AttentionPolicy {
     double novelty_weight{1.0};
     double uncertainty_weight{1.0};
     double urgency_weight{1.0};
+    double internal_activation_weight{1.0};
 };
 
 class AttentionModel {
 public:
     explicit AttentionModel(AttentionPolicy policy = {}) : policy_(policy) {}
 
-    AttentionSignal score(const Event& event, double novelty, double strongest_belief) const;
+    AttentionSignal score(const Event& event,
+                          double novelty,
+                          double strongest_belief,
+                          double internal_activation = 0.0) const;
     std::vector<AttentionSignal> focus(const std::vector<Event>& events,
-                                       double strongest_belief) const;
+                                       double strongest_belief,
+                                       double internal_activation = 0.0) const;
 
     void reinforce(const AttentionSignal& signal, double reward);
     void suppress(const AttentionSignal& signal, double penalty);
