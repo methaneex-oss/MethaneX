@@ -22,7 +22,10 @@ double DevelopmentalLearning::learning_rate(const LearningSignal& signal) noexce
     const double reward = std::clamp(std::abs(signal.reward), 0.0, 1.0);
     const double salience = std::clamp(signal.salience, 0.0, 1.0);
     const double novelty = std::clamp(signal.novelty, 0.0, 1.0);
-    return std::clamp(0.10 + 0.35 * error + 0.25 * reward + 0.20 * salience + 0.10 * novelty, 0.05, 0.95);
+    const double affect = std::clamp(signal.affective_significance, 0.0, 1.0);
+    return std::clamp(0.10 + 0.30 * error + 0.20 * reward + 0.15 * salience +
+                          0.10 * novelty + 0.15 * affect,
+                      0.05, 0.95);
 }
 
 void DevelopmentalLearning::observe_association(std::string left, std::string right, const LearningSignal& signal) {
