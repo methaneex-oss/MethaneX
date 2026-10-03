@@ -19,11 +19,12 @@ enum class ActionExecutionStatus : std::uint8_t {
 };
 
 // An execution outcome is deliberately separated from authorization and
-// verification. The executor records what the action was expected to cause
-// and, when a consequence observer is supplied, what actually happened. This
-// gives cognitive/learning layers evidence without embedding semantic emotion
-// rules in the executor.
+// verification. The executor records the action's expectation and, when a
+// consequence observer is supplied, what actually happened. This keeps the
+// complete expectation/outcome evidence available to cognitive learning layers
+// without embedding semantic emotion rules in the executor.
 struct ActionOutcome {
+    double expected_consequence{0.0};
     bool observed{false};
     double actual_consequence{0.0};
     double consequence_error{0.0};
