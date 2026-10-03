@@ -23,21 +23,28 @@ ActionExecutionResult Brain::execute_action(
     const auto result = ActionExecutor{}.run(request);
 
     std::unique_lock lock(mutex_);
+    const auto eligible = goals_model_.eligible(state_.cycle);
+    const std::string context = eligible.empty() ? "global" : eligible.front().id;
+    const double reliability =
+        result.status == ActionExecutionStatus::verified ? 1.0 :
+        result.status == ActionExecutionStatus::executed ? 0.75 :
+        result.status == ActionExecutionStatus::rolled_back ? 0.25 : 0.0;
     Attributes data{
         {"action", result.action.name},
-        {"context", std::string("action:") + result.action.name},
+        {"context", context},
         {"status", static_cast<std::int64_t>(result.status)},
         {"authorized", result.authorized},
         {"executed", result.executed},
         {"verified", result.verified},
         {"rolled_back", result.rolled_back},
-        {"expected_consequence", result.action.expected_consequence},
+        {"observed", result.outcome.observed},
+        {"expected_consequence", result.outcome.expected_consequence},
         {"actual_consequence", result.outcome.actual_consequence},
         {"consequence_error", result.outcome.consequence_error},
-        {"outcome_observed", result.outcome.observed},
-        {"reliability", result.outcome.observed
-            ? std::clamp(0.5 + 0.25 * result.outcome.consequence_error, 0.0, 1.0)
-            : 0.5},
+        {"reliability", reliability},
+        {"salience", std::clamp(attention_state_.salience, 0.0, 1.0)},
+        {"novelty", std::clamp(state_.novelty, 0.0, 1.0)},
+        {"confidence", std::clamp(assessment.confidence, 0.0, 1.0)},
         {"reason", result.reason},
     };
 
@@ -47,28 +54,6 @@ ActionExecutionResult Brain::execute_action(
         ++state_.events_seen;
         state_.cycle = event.sequence;
         replay(event);
-
-        // The action event carries complete consequence evidence. Feed that
-        // representation directly into appraisal learning rather than making
-        // the learner infer expectation from an affective-state transition.
-        if (result.outcome.observed) {
-            const double expected = std::clamp(result.action.expected_consequence, -1.0, 1.0);
-            const double actual = std::clamp(result.outcome.actual_consequence, -1.0, 1.0);
-            const double error = std::clamp(result.outcome.consequence_error, -2.0, 2.0);
-            const double novelty = std::clamp(state_.novelty, 0.0, 1.0);
-            const double salience = std::clamp(attention_state_.salience, 0.0, 1.0);
-            const double confidence = std::clamp(1.0 - std::abs(error) / 2.0, 0.0, 1.0);
-            affective_learning_model_.learn(AffectiveOutcomeEvidence{
-                expected,
-                actual,
-                error,
-                actual,
-                std::clamp(std::abs(error), 0.0, 1.0),
-                novelty,
-                salience,
-                std::clamp(1.0 - confidence, 0.0, 1.0),
-                confidence});
-        }
 
         consolidate_experience(event, std::clamp(std::abs(result.outcome.consequence_error), 0.0, 1.0));
         sync_self_state();
