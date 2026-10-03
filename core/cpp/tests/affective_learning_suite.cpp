@@ -33,7 +33,27 @@ int main() {
            modulated.prediction_error != probe.prediction_error ||
            modulated.novelty != probe.novelty ||
            modulated.salience != probe.salience ||
-           modulated.uncertainty != probe.uncertainty);
+           modulated.uncertainty != probe.uncertainty ||
+           modulated.tension_error != probe.tension_error);
+    assert(std::isfinite(modulated.tension_error));
+    assert(modulated.tension_error >= 0.0 && modulated.tension_error <= 1.0);
+
+    // The tension-specific learned parameter must have a causal effect separate
+    // from general prediction-error sensitivity.
+    AffectiveLearningModel high_tension;
+    for (int i = 0; i < 20; ++i) high_tension.learn(expected_failure);
+    const auto high_tension_signal = high_tension.modulate(probe);
+    assert(high_tension_signal.tension_error != probe.prediction_error ||
+           high_tension_signal.tension_error != modulated.tension_error);
+
+    AffectiveStateModel state;
+    const auto before = state.state();
+    const auto default_after = state.update(probe);
+    AffectiveStateModel weighted_state;
+    AffectiveAppraisalWeights weights{};
+    weights.tension_error_weight = 2.0;
+    const auto weighted_after = weighted_state.update(probe, weights);
+    assert(weighted_after.tension != default_after.tension);
 
     AffectiveLearningModel repeated_success;
     const auto success_initial = repeated_success.appraisal();
@@ -51,12 +71,9 @@ int main() {
 
     // Explicit outcome evidence is the primary learning path. The legacy adapter
     // remains covered for persisted callers during the transition.
-    AffectiveStateModel state;
-    const auto before = state.state();
-    const AffectiveSignal signal{0.9, 0.1, 0.8, 0.9, 0.1, 0.9};
-    const auto after = state.update(signal);
+    const auto legacy_before = state.state();
     AffectiveLearningModel legacy;
-    legacy.learn(signal, before, after, 1.0);
+    legacy.learn(probe, before, legacy_before, 1.0);
     assert(legacy.updates() == 1);
 
     std::cout << "affective_learning_suite: PASS\n";
