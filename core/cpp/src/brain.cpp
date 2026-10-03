@@ -50,14 +50,35 @@ void Brain::process_affective_experience(const Event& event) {
         utility = signal.outcome;
         relevant = true;
     } else if (event.kind == "action_outcome") {
-        const double reliability = std::clamp(double_value(event.data, "reliability", 0.5), 0.0, 1.0);
-        signal.outcome = 2.0 * reliability - 1.0;
-        signal.prediction_error = 1.0 - reliability;
-        signal.novelty = std::clamp(double_value(event.data, "novelty", state_.novelty), 0.0, 1.0);
-        signal.salience = std::clamp(double_value(event.data, "salience", attention_state_.salience), 0.0, 1.0);
-        signal.confidence = reliability;
-        utility = signal.outcome;
-        relevant = true;
+        // Action outcomes with explicit consequence evidence are learned through the
+        // same expectation-vs-observation mechanism used by the live action path.
+        // Do not derive a second affective signal from reliability: doing so would
+        // double-count the same experience.
+        const auto expected = event.data.find("expected_consequence");
+        const auto actual = event.data.find("actual_consequence");
+        const auto consequence_error = event.data.find("consequence_error");
+        if (expected != event.data.end() && actual != event.data.end() && consequence_error != event.data.end()) {
+            const double expected_value = double_value(event.data, "expected_consequence");
+            const double actual_value = double_value(event.data, "actual_consequence");
+            const double error = double_value(event.data, "consequence_error");
+            const double reliability = std::clamp(double_value(event.data, "reliability", 0.5), 0.0, 1.0);
+            signal.outcome = std::clamp(actual_value, -1.0, 1.0);
+            signal.prediction_error = std::clamp(std::abs(error), 0.0, 1.0);
+            signal.novelty = std::clamp(double_value(event.data, "novelty", state_.novelty), 0.0, 1.0);
+            signal.salience = std::clamp(double_value(event.data, "salience", attention_state_.salience), 0.0, 1.0);
+            signal.confidence = reliability;
+            utility = actual_value;
+            relevant = true;
+        } else {
+            const double reliability = std::clamp(double_value(event.data, "reliability", 0.5), 0.0, 1.0);
+            signal.outcome = 2.0 * reliability - 1.0;
+            signal.prediction_error = 1.0 - reliability;
+            signal.novelty = std::clamp(double_value(event.data, "novelty", state_.novelty), 0.0, 1.0);
+            signal.salience = std::clamp(double_value(event.data, "salience", attention_state_.salience), 0.0, 1.0);
+            signal.confidence = reliability;
+            utility = signal.outcome;
+            relevant = true;
+        }
     } else if (event.kind == "learning") {
         signal.outcome = 2.0 * std::clamp(double_value(event.data, "reliability", 0.5), 0.0, 1.0) - 1.0;
         signal.confidence = std::clamp(double_value(event.data, "reliability", 0.5), 0.0, 1.0);
