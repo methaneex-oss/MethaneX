@@ -42,6 +42,18 @@ int main() {
     const auto affect_before_cycle = brain.affective_state();
     assert(brain.affective_learning_updates() > 0);
 
+    const CandidateAction probe{"probe", 0.0, 1.0, 0.2, 1.0, 0.0, 0.0, 0.0};
+    const auto score_before_experience = brain.choose_with_affect({probe}).front().score;
+    for (int i = 0; i < 8; ++i) {
+        brain.observe(Event{
+            0, 0, "developmental_test", "observation",
+            {{"novelty", 0.8}, {"salience", 0.8}, {"outcome", -1.0}, {"confidence", 0.2}, {"prediction_error", 0.8}}});
+    }
+    const auto score_after_experience = brain.choose_with_affect({probe}).front().score;
+    assert(std::isfinite(score_before_experience));
+    assert(std::isfinite(score_after_experience));
+    assert(std::abs(score_after_experience - score_before_experience) > 1e-9);
+
     CognitiveCycle cycle(brain);
     const CognitiveCycleInput input{
         Event{0, 0, "test", "observation", {{"novelty", 0.6}, {"salience", 0.8}}},
