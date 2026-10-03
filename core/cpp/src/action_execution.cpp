@@ -9,6 +9,7 @@ namespace jarvis::core {
 ActionExecutionResult ActionExecutor::run(const ActionExecutionRequest& request) const {
     ActionExecutionResult result;
     result.action = request.assessment.action;
+    result.outcome.expected_consequence = result.action.expected_consequence;
     const auto authorization = ActionAuthorizer{}.authorize(request.assessment, request.authorization);
     result.authorized = authorization.authorized;
     if (!result.authorized) {
@@ -83,11 +84,12 @@ ActionExecutionResult ActionExecutor::run(const ActionExecutionRequest& request)
                 result.outcome.observed = true;
                 result.outcome.actual_consequence = std::clamp(actual, -1.0, 1.0);
                 result.outcome.consequence_error = std::clamp(
-                    result.outcome.actual_consequence - result.action.expected_consequence,
+                    result.outcome.actual_consequence - result.outcome.expected_consequence,
                     -2.0, 2.0);
             }
         } catch (...) {
             result.outcome = ActionOutcome{};
+            result.outcome.expected_consequence = result.action.expected_consequence;
         }
     }
 
