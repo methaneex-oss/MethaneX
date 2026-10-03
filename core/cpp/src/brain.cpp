@@ -74,6 +74,17 @@ void Brain::process_affective_experience(const Event& event) {
             utility = signal.outcome;
             relevant = true;
         }
+    } else if (event.kind == "affective_learning") {
+        const double actual = double_value(event.data, "actual_consequence");
+        const double error = double_value(event.data, "consequence_error");
+        signal.outcome = std::clamp(actual, -1.0, 1.0);
+        signal.prediction_error = std::clamp(std::abs(error), 0.0, 1.0);
+        signal.novelty = std::clamp(double_value(event.data, "novelty", state_.novelty), 0.0, 1.0);
+        signal.salience = std::clamp(double_value(event.data, "salience", attention_state_.salience), 0.0, 1.0);
+        signal.uncertainty = std::clamp(double_value(event.data, "uncertainty", 0.0), 0.0, 1.0);
+        signal.confidence = std::clamp(double_value(event.data, "confidence", 0.5), 0.0, 1.0);
+        utility = actual;
+        relevant = true;
     } else if (event.kind == "learning") {
         signal.outcome = 2.0 * std::clamp(double_value(event.data, "reliability", 0.5), 0.0, 1.0) - 1.0;
         signal.confidence = std::clamp(double_value(event.data, "reliability", 0.5), 0.0, 1.0);
@@ -108,11 +119,7 @@ void Brain::process_affective_experience(const Event& event) {
         observed != event.data.end() &&
         std::get_if<bool>(&observed->second) != nullptr &&
         *std::get_if<bool>(&observed->second);
-    if (event.kind == "action_outcome" &&
-        has_observed_consequence &&
-        event.data.find("expected_consequence") != event.data.end() &&
-        event.data.find("actual_consequence") != event.data.end() &&
-        event.data.find("consequence_error") != event.data.end()) {
+    if (event.kind == "affective_learning") {
         affective_learning_model_.learn(AffectiveOutcomeEvidence{
             double_value(event.data, "expected_consequence"),
             double_value(event.data, "actual_consequence"),
@@ -123,7 +130,7 @@ void Brain::process_affective_experience(const Event& event) {
             signal.salience,
             signal.uncertainty,
             signal.confidence});
-    } else {
+    } else if (event.kind != "action_outcome") {
         affective_learning_model_.learn(signal, before, after, utility);
     }
 }
