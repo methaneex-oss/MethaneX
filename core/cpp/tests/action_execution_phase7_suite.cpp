@@ -23,9 +23,10 @@ int main() {
     assert(verified.status == ActionExecutionStatus::verified);
     assert(verified.authorized && verified.executed && verified.verified);
     assert(!rolled_back);
+    assert(std::abs(verified.outcome.expected_consequence - permitted.action.expected_consequence) < 1e-9);
 
-    // Explicit consequence observation preserves the action's expectation and
-    // derives prediction error from the real observed consequence. No semantic
+    // Explicit consequence observation preserves the expectation and derives
+    // prediction error from the real observed consequence. No semantic
     // emotion mapping is involved.
     auto consequence_action = permitted;
     consequence_action.action.expected_consequence = 0.8;
@@ -36,6 +37,7 @@ int main() {
         {},
         [](const CandidateAction&) { return 0.2; }});
     assert(consequence.outcome.observed);
+    assert(std::abs(consequence.outcome.expected_consequence - 0.8) < 1e-9);
     assert(std::abs(consequence.outcome.actual_consequence - 0.2) < 1e-9);
     assert(std::abs(consequence.outcome.consequence_error + 0.6) < 1e-9);
     assert(std::abs(consequence.action.expected_consequence - 0.8) < 1e-9);
@@ -49,6 +51,7 @@ int main() {
     assert(failing_execution);
     assert(failed.status == ActionExecutionStatus::failed);
     assert(!failed.executed);
+    assert(std::abs(failed.outcome.expected_consequence - permitted.action.expected_consequence) < 1e-9);
 
     const auto rejected = ActionExecutor{}.run(ActionExecutionRequest{
         ActionAssessment{permitted.action, ActionDisposition::reject, false, 0.1, "risk_limit"},
@@ -57,6 +60,7 @@ int main() {
         {}});
     assert(rejected.status == ActionExecutionStatus::rejected);
     assert(!rejected.authorized);
+    assert(std::abs(rejected.outcome.expected_consequence - permitted.action.expected_consequence) < 1e-9);
 
     bool verify_failed = false;
     bool rollback_called = false;
