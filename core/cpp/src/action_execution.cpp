@@ -1,6 +1,7 @@
 #include "jarvis/core/action_execution.hpp"
 #include "jarvis/core/action_authorization.hpp"
 
+#include <algorithm>
 #include <cmath>
 
 namespace jarvis::core {
