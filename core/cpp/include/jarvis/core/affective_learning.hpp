@@ -43,6 +43,7 @@ public:
         signal.novelty = clamp_unit(raw.novelty * ratio(appraisal_.novelty_weight, 0.45));
         signal.salience = clamp_unit(raw.salience * ratio(appraisal_.salience_weight, 0.35));
         signal.uncertainty = clamp_unit(raw.uncertainty * ratio(appraisal_.uncertainty_weight, 0.60));
+        signal.tension_error = clamp_unit(raw.prediction_error * ratio(appraisal_.tension_error_weight, 0.55));
         return signal;
     }
 
