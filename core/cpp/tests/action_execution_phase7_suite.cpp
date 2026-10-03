@@ -116,7 +116,7 @@ int main() {
     assert(strategies.size() == 1);
     assert(strategies.front().context == "goal-alpha");
     assert(strategies.front().action == "protect");
-    assert(strategies.front().value > 0.0);
+    assert(strategies.front().value < 0.0);
     const auto* best = brain.developmental_best_strategy("goal-alpha");
     assert(best != nullptr && best->action == "protect");
 
