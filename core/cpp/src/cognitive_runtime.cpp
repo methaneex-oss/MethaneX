@@ -84,7 +84,54 @@ bool CognitiveRuntime::submit_feedback(CognitiveFeedback feedback) {
 
 bool CognitiveRuntime::enqueue(CognitiveCycleInput input, double priority) { { std::lock_guard lock(mutex_); if (!running_ || stopping_ || config_.input_capacity == 0 || inputs_.size() >= config_.input_capacity) { ++metrics_.rejected; return false; } WorkItem item{std::move(input), finite_priority(priority), ++next_sequence_}; const auto position = std::find_if(inputs_.begin(), inputs_.end(), [&](const WorkItem& queued) { return item.priority > queued.priority; }); inputs_.insert(position, std::move(item)); ++metrics_.accepted; } condition_.notify_one(); return true; }
 void CognitiveRuntime::process_feedback(CognitiveFeedback feedback) { try { (void)cycle_.process_outcome(feedback.prediction_key.empty() ? std::nullopt : std::optional<std::string>{feedback.prediction_key}, feedback.actual, feedback.evidence, feedback.goal_id, feedback.goal_progress, feedback.goal_confidence); } catch (...) {} std::lock_guard lock(mutex_); ++metrics_.feedback_processed; }
-void CognitiveRuntime::execute_actions(CognitiveCycleResult& result) { for (const auto& assessment : result.context.action_assessments) { if (assessment.disposition != ActionDisposition::execute) continue; ActionExecutionResult execution; try { if (!config_.action_adapter.execute) { execution.action = assessment.action; execution.status = ActionExecutionStatus::rejected; execution.authorized = false; execution.reason = "action_adapter_unavailable"; } else execution = brain_.execute_action(assessment, config_.action_adapter.execute, config_.action_adapter.verify, config_.action_adapter.rollback, config_.action_adapter.observe_consequence, config_.action_adapter.authorization); } catch (...) { execution.action = assessment.action; execution.status = ActionExecutionStatus::failed; execution.reason = "action_boundary_exception"; } result.context.action_execution_results.push_back(execution); { std::lock_guard lock(mutex_); ++metrics_.action_attempted; if (execution.status == ActionExecutionStatus::rejected) ++metrics_.action_rejected; else if (execution.status == ActionExecutionStatus::verified) ++metrics_.action_succeeded; else ++metrics_.action_failed; } if (const auto evidence = evidence_for_action(execution); evidence.has_value()) (void)submit_feedback(CognitiveFeedback{"", evidence->value, evidence, result.context.selected_goal.id.empty() ? std::nullopt : std::optional<std::string>{result.context.selected_goal.id}, std::nullopt, 0.0}); } }
+void CognitiveRuntime::execute_actions(CognitiveCycleResult& result) {
+    for (const auto& assessment : result.context.action_assessments) {
+        if (assessment.action.name.empty()) continue;
+
+        ActionExecutionResult execution;
+        // Preserve a result for every assessed action. The executor is only invoked
+        // for dispositions that reached the execution boundary; rejected/clarify/
+        // recommend decisions are still observable as cognitive outcomes rather
+        // than disappearing from the runtime trace.
+        if (assessment.disposition != ActionDisposition::execute) {
+            execution.action = assessment.action;
+            execution.status = ActionExecutionStatus::rejected;
+            execution.authorized = false;
+            execution.reason = assessment.reason.empty() ? "action_not_executable" : assessment.reason;
+        } else {
+            try {
+                if (!config_.action_adapter.execute) {
+                    execution.action = assessment.action;
+                    execution.status = ActionExecutionStatus::rejected;
+                    execution.authorized = false;
+                    execution.reason = "action_adapter_unavailable";
+                } else {
+                    execution = brain_.execute_action(assessment, config_.action_adapter.execute,
+                                                      config_.action_adapter.verify,
+                                                      config_.action_adapter.rollback,
+                                                      config_.action_adapter.observe_consequence,
+                                                      config_.action_adapter.authorization);
+                }
+            } catch (...) {
+                execution.action = assessment.action;
+                execution.status = ActionExecutionStatus::failed;
+                execution.reason = "action_boundary_exception";
+            }
+        }
+        result.context.action_execution_results.push_back(execution);
+        {
+            std::lock_guard lock(mutex_);
+            ++metrics_.action_attempted;
+            if (execution.status == ActionExecutionStatus::rejected) ++metrics_.action_rejected;
+            else if (execution.status == ActionExecutionStatus::verified) ++metrics_.action_succeeded;
+            else ++metrics_.action_failed;
+        }
+        if (const auto evidence = evidence_for_action(execution); evidence.has_value())
+            (void)submit_feedback(CognitiveFeedback{"", evidence->value, evidence,
+                                                   result.context.selected_goal.id.empty() ? std::nullopt : std::optional<std::string>{result.context.selected_goal.id},
+                                                   std::nullopt, 0.0});
+    }
+}
 void CognitiveRuntime::publish_result(CognitiveCycleResult result) { auto workspace = make_workspace(result, brain_); workspace.cycle = brain_.state().cycle; workspace_.replace(std::move(workspace)); std::lock_guard lock(mutex_); if (config_.result_capacity != 0) { if (results_.size() >= config_.result_capacity) { results_.pop_front(); ++metrics_.dropped_results; } results_.push_back(std::move(result)); } ++metrics_.processed; }
 std::optional<CognitiveCycleResult> CognitiveRuntime::poll_result() { std::lock_guard lock(mutex_); if (results_.empty()) return std::nullopt; auto result = std::move(results_.front()); results_.pop_front(); return result; }
 std::size_t CognitiveRuntime::pending_inputs() const { std::lock_guard lock(mutex_); return inputs_.size(); }
