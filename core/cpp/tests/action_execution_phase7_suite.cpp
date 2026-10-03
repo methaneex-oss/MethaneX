@@ -2,6 +2,7 @@
 #include "jarvis/core/action_execution.hpp"
 
 #include <cassert>
+#include <cmath>
 #include <filesystem>
 
 using namespace jarvis::core;
@@ -22,6 +23,22 @@ int main() {
     assert(verified.status == ActionExecutionStatus::verified);
     assert(verified.authorized && verified.executed && verified.verified);
     assert(!rolled_back);
+
+    // Explicit consequence observation preserves the action's expectation and
+    // derives prediction error from the real observed consequence. No semantic
+    // emotion mapping is involved.
+    auto consequence_action = permitted;
+    consequence_action.action.expected_consequence = 0.8;
+    const auto consequence = ActionExecutor{}.run(ActionExecutionRequest{
+        consequence_action,
+        [](const CandidateAction&) { return true; },
+        [](const CandidateAction&) { return true; },
+        {},
+        [](const CandidateAction&) { return 0.2; }});
+    assert(consequence.outcome.observed);
+    assert(std::abs(consequence.outcome.actual_consequence - 0.2) < 1e-9);
+    assert(std::abs(consequence.outcome.consequence_error + 0.6) < 1e-9);
+    assert(std::abs(consequence.action.expected_consequence - 0.8) < 1e-9);
 
     bool failing_execution = false;
     const auto failed = ActionExecutor{}.run(ActionExecutionRequest{
