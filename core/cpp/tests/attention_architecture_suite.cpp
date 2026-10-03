@@ -33,6 +33,19 @@ void test_policy_adapts_from_feedback() {
     assert(after.urgency_weight >= before.urgency_weight);
 }
 
+void test_internal_activation_enters_attention_and_learns() {
+    AttentionModel model;
+    const auto neutral = model.score(event_with_urgency(0.0), 0.0, 1.0, 0.0);
+    const auto activated = model.score(event_with_urgency(0.0), 0.0, 1.0, 1.0);
+    assert(activated.internal_activation == 1.0);
+    assert(activated.salience > neutral.salience);
+
+    const auto before = model.policy();
+    model.reinforce(activated, 1.0);
+    const auto after = model.policy();
+    assert(after.internal_activation_weight > before.internal_activation_weight);
+}
+
 void test_attention_state_ranks_and_learns() {
     AttentionState state;
     state.ingest(AttentionSignal{"routine", 0.2, 0.1, 0.1, 0.0}, 1);
@@ -55,6 +68,7 @@ void test_attention_state_ranks_and_learns() {
 int main() {
     test_salience_is_feature_driven();
     test_policy_adapts_from_feedback();
+    test_internal_activation_enters_attention_and_learns();
     test_attention_state_ranks_and_learns();
     std::cout << "attention_architecture_suite: PASS\n";
     return 0;
