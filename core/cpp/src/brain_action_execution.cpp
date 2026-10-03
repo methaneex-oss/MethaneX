@@ -1,5 +1,8 @@
 #include "jarvis/core/brain.hpp"
 
+#include <algorithm>
+#include <cmath>
+
 namespace jarvis::core {
 
 ActionExecutionResult Brain::execute_action(
@@ -44,6 +47,29 @@ ActionExecutionResult Brain::execute_action(
         ++state_.events_seen;
         state_.cycle = event.sequence;
         replay(event);
+
+        // The action event carries complete consequence evidence. Feed that
+        // representation directly into appraisal learning rather than making
+        // the learner infer expectation from an affective-state transition.
+        if (result.outcome.observed) {
+            const double expected = std::clamp(result.action.expected_consequence, -1.0, 1.0);
+            const double actual = std::clamp(result.outcome.actual_consequence, -1.0, 1.0);
+            const double error = std::clamp(result.outcome.consequence_error, -2.0, 2.0);
+            const double novelty = std::clamp(state_.novelty, 0.0, 1.0);
+            const double salience = std::clamp(attention_state_.salience, 0.0, 1.0);
+            const double confidence = std::clamp(1.0 - std::abs(error) / 2.0, 0.0, 1.0);
+            affective_learning_model_.learn(AffectiveOutcomeEvidence{
+                expected,
+                actual,
+                error,
+                actual,
+                std::clamp(std::abs(error), 0.0, 1.0),
+                novelty,
+                salience,
+                std::clamp(1.0 - confidence, 0.0, 1.0),
+                confidence});
+        }
+
         consolidate_experience(event, std::clamp(std::abs(result.outcome.consequence_error), 0.0, 1.0));
         sync_self_state();
     }
