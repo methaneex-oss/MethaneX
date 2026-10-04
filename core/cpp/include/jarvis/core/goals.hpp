@@ -23,6 +23,9 @@ struct Goal {
     GoalStatus status{GoalStatus::pending};
     std::vector<std::string> prerequisites;
     std::vector<std::string> subgoals;
+    // Persistent, experience-derived momentum used to adapt future goal
+    // appraisal. It is reconstructed by replaying progress events.
+    double outcome_momentum{0.0};
 };
 
 class GoalModel {
