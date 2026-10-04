@@ -169,7 +169,17 @@ int main() {
     Brain high_affect(developmental_high);
     low_affect.observe(Event{0, 0, "neutral", "observation", {{"outcome", Scalar{0.0}}, {"prediction_error", Scalar{0.0}}, {"novelty", Scalar{0.0}}, {"salience", Scalar{0.0}}, {"confidence", Scalar{1.0}}}});
     high_affect.observe(Event{0, 0, "surprise", "observation", {{"outcome", Scalar{-1.0}}, {"prediction_error", Scalar{1.0}}, {"novelty", Scalar{1.0}}, {"salience", Scalar{1.0}}, {"confidence", Scalar{0.0}}}});
-    const Event developmental_outcome{0, 0, "executor", "action_outcome", {{"action", Scalar{std::string("same-action")}, {"context", Scalar{std::string("same-context")}}, {"status", Scalar{static_cast<std::int64_t>(ActionExecutionStatus::verified)}}, {"reliability", Scalar{0.8}}, {"observed", Scalar{true}}, {"consequence_error", Scalar{0.2}}, {"actual_consequence", Scalar{0.6}}, {"salience", Scalar{0.5}}, {"novelty", Scalar{0.4}}}};
+    const Event developmental_outcome{
+        0, 0, "executor", "action_outcome",
+        {{"action", Scalar{std::string("same-action")}},
+         {"context", Scalar{std::string("same-context")}},
+         {"status", Scalar{static_cast<std::int64_t>(ActionExecutionStatus::verified)}},
+         {"reliability", Scalar{0.8}},
+         {"observed", Scalar{true}},
+         {"consequence_error", Scalar{0.2}},
+         {"actual_consequence", Scalar{0.6}},
+         {"salience", Scalar{0.5}},
+         {"novelty", Scalar{0.4}}}};
     low_affect.observe(developmental_outcome);
     high_affect.observe(developmental_outcome);
     const auto* low_strategy = low_affect.developmental_best_strategy("same-context");
