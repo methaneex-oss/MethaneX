@@ -15,6 +15,13 @@ struct PlanningContext {
     double uncertainty{0.0};
     double resource_budget{0.0};
     double deadline_pressure{0.0};
+    // Continuous internal-state signals. These influence appraisal/weighting,
+    // never directly select or reject an action.
+    double valence{0.0};
+    double arousal{0.0};
+    double affective_uncertainty{0.0};
+    double tension{0.0};
+    double stability{1.0};
 };
 
 struct PlanningPolicy {
@@ -26,6 +33,10 @@ struct PlanningPolicy {
     double threat_weight{0.25};
     double risk_weight{1.0};
     double resource_weight{0.5};
+    double affective_value_weight{0.25};
+    double affective_uncertainty_weight{0.25};
+    double tension_weight{0.25};
+    double stability_weight{0.25};
 };
 
 struct PlanStep {
