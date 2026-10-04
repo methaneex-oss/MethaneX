@@ -41,9 +41,6 @@ int main() {
     assert(activated_plan.steps.size() == 1);
     assert(activated_plan.steps.front().action.name == "safe");
 
-    // The same active objective receives a different appraisal when internal
-    // affective evidence changes. This is a change in intent valuation, not an
-    // emotion-specific goal rule.
     IntentModel intent_model;
     const std::vector<Goal> goals{activated_goal};
     const auto neutral_intent = intent_model.select_with_affect(
@@ -57,9 +54,9 @@ int main() {
            neutral_intent.uncertainty != affected_intent.uncertainty);
     assert(affected_intent.uncertainty >= neutral_intent.uncertainty);
 
-    // The Brain-level affective planning path consumes the appraisal-modified
-    // intent, so the resulting planning score changes for the same action set.
-    assert(calm_plan.steps.front().score != activated_plan.steps.front().score);
+    // PlanStep exposes expected_score, not a raw score. The affective planning
+    // pathway must alter that actual planning quantity.
+    assert(calm_plan.steps.front().expected_score != activated_plan.steps.front().expected_score);
 
     const auto explicit_context = PlanningContext{
         0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
