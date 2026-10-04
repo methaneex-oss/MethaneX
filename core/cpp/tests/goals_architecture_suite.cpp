@@ -21,6 +21,11 @@ int main() {
 
     assert(!goals.activate("deep"));
     assert(goals.activate("foundation"));
+    assert(goals.update_progress("foundation", 0.4));
+    const double reinforced_priority = goals.get("foundation")->priority;
+    assert(reinforced_priority > 0.5);
+    assert(goals.update_progress("foundation", 0.1));
+    assert(goals.get("foundation")->priority < reinforced_priority);
     assert(goals.update_progress("foundation", 1.0));
     assert(goals.get("foundation")->status == GoalStatus::completed);
     assert(goals.activate("deep"));
@@ -38,6 +43,7 @@ int main() {
     std::error_code ec;
     std::filesystem::remove(journal, ec);
 
+    double child_priority_after_learning = 0.0;
     {
         Brain brain(journal);
         assert(brain.create_goal(Goal{"root", "Establish a root goal", 0.6, 0.0, 0, 0,
@@ -49,9 +55,14 @@ int main() {
         assert(brain.eligible_goals().front().id == "root");
         assert(!brain.activate_goal("child"));
         assert(brain.activate_goal("root"));
+        assert(brain.update_goal_progress("root", 0.8));
         assert(brain.complete_goal("root"));
         assert(brain.activate_goal("child"));
+        const double initial_child_priority = brain.goal("child")->priority;
         assert(brain.update_goal_progress("child", 0.5));
+        child_priority_after_learning = brain.goal("child")->priority;
+        assert(child_priority_after_learning > initial_child_priority);
+        assert(brain.goal("child")->outcome_momentum > 0.0);
         assert(brain.goal("child")->status == GoalStatus::active);
     }
 
@@ -61,6 +72,8 @@ int main() {
         assert(restored.goal("root")->status == GoalStatus::completed);
         assert(restored.goal("child")->status == GoalStatus::active);
         assert(std::abs(restored.goal("child")->progress - 0.5) < 1e-12);
+        assert(std::abs(restored.goal("child")->priority - child_priority_after_learning) < 1e-12);
+        assert(std::abs(restored.goal("child")->outcome_momentum - 0.1) < 1e-12);
         const auto eligible = restored.eligible_goals();
         assert(eligible.size() == 1);
         assert(eligible.front().id == "child");
