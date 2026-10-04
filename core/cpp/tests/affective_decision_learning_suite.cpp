@@ -25,6 +25,9 @@ int main() {
     assert(learned.error_weight >= 0.0 && learned.error_weight <= 2.0);
     assert(learned.uncertainty_weight >= 0.0 && learned.uncertainty_weight <= 2.0);
     assert(learned.error_weight != initial.error_weight || learned.uncertainty_weight != initial.uncertainty_weight);
+    assert(learner.calibration().observations == 1);
+    assert(learner.calibration().mean_absolute_error > 0.0);
+    assert(learner.calibration().learning_rate_scale > 1.0);
 
     const auto path = std::filesystem::temp_directory_path() / "jarvis_affective_decision_suite.bin";
     std::error_code ec;
@@ -57,6 +60,11 @@ int main() {
     assert(std::abs(score_after_experience - score_before_experience) > 1e-9);
     assert(std::abs(attention_after_experience.internal_activation_weight - attention_before_experience.internal_activation_weight) > 1e-12);
 
+    const auto calibration = brain.affective_calibration();
+    assert(calibration.observations == brain.affective_learning_updates());
+    assert(calibration.mean_absolute_error >= 0.0 && calibration.mean_absolute_error <= 1.0);
+    assert(calibration.learning_rate_scale >= 0.50 && calibration.learning_rate_scale <= 1.50);
+
     CognitiveCycle cycle(brain);
     const CognitiveCycleInput input{
         Event{0, 0, "test", "observation", {{"novelty", 0.6}, {"salience", 0.8}}},
@@ -76,17 +84,22 @@ int main() {
     assert(!result.context.decisions.empty());
     assert(std::isfinite(affect_before_cycle.valence));
 
-    // The learned appraisal/state and adaptive attention policy are reconstructed from persistent experience.
+    // The learned appraisal/state, calibration and adaptive attention policy are reconstructed from persistent experience.
     const auto learned_appraisal = brain.affective_appraisal();
+    const auto learned_calibration = brain.affective_calibration();
     const auto learned_updates = brain.affective_learning_updates();
     const auto learned_attention = brain.attention_policy();
     Brain replayed(path);
     const auto replayed_appraisal = replayed.affective_appraisal();
+    const auto replayed_calibration = replayed.affective_calibration();
     const auto replayed_state = replayed.affective_state();
     const auto replayed_attention = replayed.attention_policy();
     assert(replayed.affective_learning_updates() == learned_updates);
     assert(std::abs(replayed_appraisal.error_weight - learned_appraisal.error_weight) < 1e-12);
     assert(std::abs(replayed_appraisal.uncertainty_weight - learned_appraisal.uncertainty_weight) < 1e-12);
+    assert(std::abs(replayed_calibration.mean_absolute_error - learned_calibration.mean_absolute_error) < 1e-12);
+    assert(std::abs(replayed_calibration.learning_rate_scale - learned_calibration.learning_rate_scale) < 1e-12);
+    assert(replayed_calibration.observations == learned_calibration.observations);
     assert(std::abs(replayed_state.valence - brain.affective_state().valence) < 1e-12);
     assert(std::abs(replayed_state.tension - brain.affective_state().tension) < 1e-12);
     assert(std::abs(replayed_attention.internal_activation_weight - learned_attention.internal_activation_weight) < 1e-12);
