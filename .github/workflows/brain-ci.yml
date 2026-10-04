@@ -2,7 +2,9 @@ name: Brain CI
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - feat/jarvis-affective-state
     paths:
       - 'core/cpp/**'
       - '.github/workflows/brain-ci.yml'
