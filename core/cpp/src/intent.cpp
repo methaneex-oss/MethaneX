@@ -40,4 +40,32 @@ Intent IntentModel::select(const std::vector<Goal>& goals, double threat,
     return intent;
 }
 
+Intent IntentModel::select_with_affect(const std::vector<Goal>& goals, double threat,
+                                       double uncertainty, double valence,
+                                       double arousal, double affective_uncertainty,
+                                       double tension, double stability,
+                                       std::uint64_t cycle) const {
+    Intent intent = select(goals, threat, uncertainty, cycle);
+    if (intent.id.empty()) return intent;
+
+    const double affective_drive = std::clamp(
+        valence + 0.25 * arousal - 0.25 * affective_uncertainty - 0.25 * tension,
+        -1.0, 1.0);
+    const double progress_need = std::clamp(1.0 - intent.progress, 0.0, 1.0);
+
+    // Affect changes the appraisal of an already selected objective. It does not
+    // contain an emotion-to-goal rule and cannot create an intent by itself.
+    intent.priority = std::clamp(
+        intent.priority + 0.15 * affective_drive * progress_need,
+        0.0, 1.0);
+    intent.urgency = std::clamp(
+        intent.urgency + 0.10 * std::max(0.0, arousal + tension) * (1.0 - stability),
+        0.0, 1.0);
+    intent.uncertainty = std::clamp(
+        intent.uncertainty + 0.20 * affective_uncertainty,
+        0.0, 1.0);
+    intent.confidence = std::clamp(1.0 - intent.uncertainty, 0.0, 1.0);
+    return intent;
+}
+
 } // namespace jarvis::core
