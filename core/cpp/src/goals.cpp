@@ -18,6 +18,7 @@ bool GoalModel::create(Goal goal) {
         !std::isfinite(goal.progress) || goal.progress < 0.0 || goal.progress > 1.0) return false;
     if (get(goal.id) != nullptr) return false;
     goal.priority = std::clamp(goal.priority, 0.0, 1.0);
+    goal.outcome_momentum = std::clamp(std::isfinite(goal.outcome_momentum) ? goal.outcome_momentum : 0.0, -1.0, 1.0);
     goals_.push_back(std::move(goal));
     return true;
 }
@@ -37,6 +38,18 @@ bool GoalModel::update_progress(const std::string& id, double progress) {
     Goal* goal = find_goal(goals_, id);
     if (goal == nullptr || !std::isfinite(progress) || progress < 0.0 || progress > 1.0 ||
         goal->status == GoalStatus::completed || goal->status == GoalStatus::abandoned) return false;
+
+    const double delta = progress - goal->progress;
+
+    // Generic outcome-dependent adaptation: repeated progress reinforces the
+    // goal's current priority, while regressions reduce it. The EMA prevents a
+    // single noisy outcome from dominating future intent formation.
+    goal->outcome_momentum = std::clamp(
+        0.8 * goal->outcome_momentum + 0.2 * std::clamp(delta, -1.0, 1.0),
+        -1.0, 1.0);
+    const double adaptation = 0.10 * goal->outcome_momentum;
+    goal->priority = std::clamp(goal->priority + adaptation, 0.0, 1.0);
+
     goal->progress = progress;
     if (progress >= 1.0) goal->status = GoalStatus::completed;
     return true;
