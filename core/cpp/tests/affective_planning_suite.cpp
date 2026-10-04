@@ -18,10 +18,14 @@ int main() {
     };
 
     Brain calm(root / "calm.bin");
+    Goal calm_goal{"goal", "complete objective", 0.80, 0.10, 0, 0, GoalStatus::active};
+    assert(calm.create_goal(calm_goal));
     const auto calm_plan = calm.plan_with_affect(actions, 1);
     assert(calm_plan.steps.size() == 1);
 
     Brain activated(root / "activated.bin");
+    Goal activated_goal{"goal", "complete objective", 0.80, 0.10, 0, 0, GoalStatus::active};
+    assert(activated.create_goal(activated_goal));
     activated.observe(Event{
         0, 0, "experience", "observation",
         {{"outcome", Scalar{-1.0}},
@@ -37,9 +41,26 @@ int main() {
     assert(activated_plan.steps.size() == 1);
     assert(activated_plan.steps.front().action.name == "safe");
 
-    // The same world/action evidence is evaluated differently because the
-    // internal affective state changes appraisal weighting, not because an
-    // emotion-specific action rule was installed.
+    // The same active objective receives a different appraisal when internal
+    // affective evidence changes. This is a change in intent valuation, not an
+    // emotion-specific goal rule.
+    IntentModel intent_model;
+    const std::vector<Goal> goals{activated_goal};
+    const auto neutral_intent = intent_model.select_with_affect(
+        goals, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1);
+    const auto affected_intent = intent_model.select_with_affect(
+        goals, 0.0, 0.0,
+        state.valence, state.arousal, state.uncertainty,
+        state.tension, state.stability, 1);
+    assert(neutral_intent.id == affected_intent.id);
+    assert(neutral_intent.priority != affected_intent.priority ||
+           neutral_intent.uncertainty != affected_intent.uncertainty);
+    assert(affected_intent.uncertainty >= neutral_intent.uncertainty);
+
+    // The Brain-level affective planning path consumes the appraisal-modified
+    // intent, so the resulting planning score changes for the same action set.
+    assert(calm_plan.steps.front().score != activated_plan.steps.front().score);
+
     const auto explicit_context = PlanningContext{
         0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
         -1.0, 1.0, 1.0, 1.0, 0.0};
