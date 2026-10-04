@@ -1,5 +1,6 @@
 #include "jarvis/core/brain.hpp"
 #include "jarvis/core/goals.hpp"
+#include "jarvis/core/intent.hpp"
 
 #include <cassert>
 #include <cmath>
@@ -38,6 +39,20 @@ int main() {
     assert(!goals.abandon("deep"));
     assert(goals.eligible(10).empty());
     assert(goals.all().size() == 2);
+
+    IntentModel intent_model;
+    Goal positive{"positive", "Learn from progress", 0.6, 0.2, 0, 0,
+                   GoalStatus::active, {}, {}};
+    Goal negative{"negative", "Learn from regression", 0.6, 0.2, 0, 0,
+                   GoalStatus::active, {}, {}};
+    positive.outcome_momentum = 0.8;
+    negative.outcome_momentum = -0.8;
+    const auto learned_positive = intent_model.select({positive, negative}, 0.0, 0.1, 1);
+    assert(learned_positive.id == "positive");
+    negative.outcome_momentum = 0.8;
+    positive.outcome_momentum = -0.8;
+    const auto learned_negative = intent_model.select({positive, negative}, 0.0, 0.1, 1);
+    assert(learned_negative.id == "negative");
 
     const auto journal = std::filesystem::temp_directory_path() / "jarvis_goal_integration_test.bin";
     std::error_code ec;
