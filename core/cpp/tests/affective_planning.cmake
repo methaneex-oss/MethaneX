@@ -1,4 +1,4 @@
-add_executable(jarvis_affective_planning_suite affective_planning_suite.cpp)
+add_executable(jarvis_affective_planning_suite ${CMAKE_CURRENT_LIST_DIR}/affective_planning_suite.cpp)
 target_link_libraries(jarvis_affective_planning_suite PRIVATE jarvis_core)
 target_compile_features(jarvis_affective_planning_suite PRIVATE cxx_std_20)
 add_test(NAME jarvis_affective_planning_suite COMMAND jarvis_affective_planning_suite)
