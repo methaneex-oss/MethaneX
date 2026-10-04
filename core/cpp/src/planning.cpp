@@ -14,6 +14,10 @@ double unit(double value) noexcept {
     return std::clamp(finite_or_zero(value), 0.0, 1.0);
 }
 
+double signed_unit(double value) noexcept {
+    return std::clamp(finite_or_zero(value), -1.0, 1.0);
+}
+
 double nonnegative(double value) noexcept {
     return std::max(0.0, finite_or_zero(value));
 }
@@ -32,13 +36,32 @@ double score_action(const CandidateAction& action, const PlanningContext& contex
     const double deadline = unit(context.deadline_pressure);
     const double remaining_goal = 1.0 - goal_progress;
 
+    // Affective dimensions are continuous appraisal signals. They modulate
+    // existing planning terms rather than directly selecting an action.
+    const double valence = signed_unit(context.valence);
+    const double arousal = unit(context.arousal);
+    const double affective_uncertainty = unit(context.affective_uncertainty);
+    const double tension = unit(context.tension);
+    const double stability = unit(context.stability);
+    const double affective_utility = policy.affective_value_weight * valence *
+                                      finite_or_zero(action.expected_value);
+    const double affective_reversibility = policy.affective_uncertainty_weight *
+                                            affective_uncertainty * reversibility;
+    const double affective_risk_penalty = policy.tension_weight * tension *
+                                          risk * (1.0 - reversibility);
+    const double stability_modifier = 1.0 + policy.stability_weight *
+                                      (1.0 - stability) * arousal;
+
     return policy.utility_weight * finite_or_zero(action.utility)
         + policy.expected_value_weight * finite_or_zero(action.expected_value)
             * (1.0 + policy.goal_weight * goal_priority * remaining_goal)
+        + affective_utility
         + policy.urgency_weight * deadline * unit(action.urgency)
         + policy.reversibility_weight * uncertainty * reversibility
+        + affective_reversibility
         + policy.threat_weight * threat * (1.0 - risk)
-        - policy.risk_weight * risk * (1.0 - reversibility)
+        - policy.risk_weight * stability_modifier * risk * (1.0 - reversibility)
+        - affective_risk_penalty
         - policy.resource_weight * cost_ratio;
 }
 
