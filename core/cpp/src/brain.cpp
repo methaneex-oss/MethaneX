@@ -20,17 +20,11 @@ GoalStatus goal_status_value(std::int64_t value) { switch (value) { case 0: retu
 }
 Brain::Brain(std::filesystem::path journal_path) : memory_(256, std::move(journal_path)), evolution_controller_(evolution_, evolution_history_) { const auto history = memory_.all(); for (const auto& event : history) replay(event); state_.events_seen = static_cast<std::uint64_t>(history.size()); if (!history.empty()) state_.cycle = history.back().sequence; sync_self_state(); }
 void Brain::consolidate_experience(const Event& event, double error) {
-    double salience = attention_state_.salience;
-    double novelty = state_.novelty;
-    double confidence = 0.5;
-    if (const auto it = event.data.find("salience"); it != event.data.end())
-        if (const auto* value = std::get_if<double>(&it->second)) salience = *value;
-    if (const auto it = event.data.find("novelty"); it != event.data.end())
-        if (const auto* value = std::get_if<double>(&it->second)) novelty = *value;
-    if (const auto it = event.data.find("reliability"); it != event.data.end())
-        if (const auto* value = std::get_if<double>(&it->second)) confidence = *value;
-    if (const auto it = event.data.find("confidence"); it != event.data.end())
-        if (const auto* value = std::get_if<double>(&it->second)) confidence = *value;
+    double salience = attention_state_.salience; double novelty = state_.novelty; double confidence = 0.5;
+    if (const auto it = event.data.find("salience"); it != event.data.end()) if (const auto* value = std::get_if<double>(&it->second)) salience = *value;
+    if (const auto it = event.data.find("novelty"); it != event.data.end()) if (const auto* value = std::get_if<double>(&it->second)) novelty = *value;
+    if (const auto it = event.data.find("reliability"); it != event.data.end()) if (const auto* value = std::get_if<double>(&it->second)) confidence = *value;
+    if (const auto it = event.data.find("confidence"); it != event.data.end()) if (const auto* value = std::get_if<double>(&it->second)) confidence = *value;
     const auto affect = affective_state_model_.state();
     const double affective_significance = std::clamp(0.25 * std::abs(affect.valence) + 0.25 * affect.arousal + 0.25 * affect.uncertainty + 0.25 * affect.tension, 0.0, 1.0);
     salience = std::max(std::clamp(salience, 0.0, 1.0), affective_significance);
@@ -85,7 +79,6 @@ void Brain::replay(const Event& event) {
         const double novelty = compute_novelty(event, previous); double strongest = 0.0; for (const auto& [_, belief] : beliefs_) strongest = std::max(strongest, belief.confidence);
         threat_state_ = threat_model_.assess(event); state_.novelty = novelty; state_.threat = threat_state_.score;
         const auto health = event.data.find("health"); if (health != event.data.end()) resilience_.observe(event.source, std::clamp(double_value(event.data, "health", 1.0), 0.0, 1.0));
-        process_affective_experience(event);
         const auto affect = affective_state_model_.state();
         const double internal_activation = std::clamp(0.25 * std::abs(affect.valence) + 0.25 * affect.arousal + 0.25 * affect.uncertainty + 0.25 * affect.tension, 0.0, 1.0);
         attention_state_ = attention_model_.score(event, novelty, strongest, internal_activation);
