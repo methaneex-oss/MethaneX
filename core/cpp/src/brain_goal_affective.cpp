@@ -37,31 +37,8 @@ bool Brain::assimilate_goal_outcome_with_affect(const GoalOutcomeEvidence& raw_e
     state_.cycle = progress_event.sequence;
     replay(progress_event);
 
-    const AffectiveSignal signal{
-        actual,
-        prediction_error,
-        novelty,
-        salience,
-        uncertainty,
-        evidence.confidence
-    };
-    const auto before = affective_state_model_.state();
-    affective_state_model_.update(signal, 1.0);
-    const auto after = affective_state_model_.state();
-
-    const AffectiveOutcomeEvidence affective_evidence{
-        expected,
-        actual,
-        consequence_error,
-        actual,
-        prediction_error,
-        novelty,
-        salience,
-        uncertainty,
-        evidence.confidence
-    };
-    affective_learning_model_.learn(affective_evidence);
-
+    // The journal is authoritative. Persist the consequence evidence and let
+    // replay apply both affective-state and appraisal-learning transitions once.
     Event affective_event{0, 0, "brain", "affective_learning", {
         {"goal_id", evidence.goal_id},
         {"expected_consequence", expected},
@@ -72,9 +49,7 @@ bool Brain::assimilate_goal_outcome_with_affect(const GoalOutcomeEvidence& raw_e
         {"novelty", novelty},
         {"salience", salience},
         {"uncertainty", uncertainty},
-        {"confidence", evidence.confidence},
-        {"valence_before", before.valence},
-        {"valence_after", after.valence}
+        {"confidence", evidence.confidence}
     }};
     affective_event.sequence = memory_.append(affective_event);
     if (affective_event.sequence == 0) return false;
