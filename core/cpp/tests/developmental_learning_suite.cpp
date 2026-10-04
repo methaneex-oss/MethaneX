@@ -49,6 +49,13 @@ int main() {
     assert(high_affect.best_strategy("context")->confidence >
            low_affect.best_strategy("context")->confidence);
 
+    // Legacy four-field evidence now derives deterministic affective
+    // significance from prediction error, reward, salience and novelty.
+    const LearningSignal derived{0.9, -0.8, 0.7, 0.6};
+    const LearningSignal neutral{0.0, 0.0, 0.0, 0.0};
+    assert(derived.affective_significance > neutral.affective_significance);
+    assert(derived.affective_significance <= 1.0);
+
     learning.consolidate(0.05);
     std::cout << "developmental learning suite passed\n";
     return 0;
