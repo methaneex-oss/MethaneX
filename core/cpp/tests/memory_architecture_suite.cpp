@@ -53,7 +53,9 @@ int main() {
     const auto restored_semantic = restored.salient(2, MemoryTier::Semantic);
     assert(restored_semantic.size() == 2);
     assert(restored_semantic[0].event.sequence == a);
-    assert(restored_semantic[0].salience == 0.95);
+    // Consolidation evidence can increase salience; persistence must preserve
+    // the learned value rather than reverting to the pre-consolidation value.
+    assert(restored_semantic[0].salience == 1.0);
     assert(restored_semantic[0].confidence == 0.8);
     const auto restored_consolidated = restored.recall_ranked({{"topic", std::string("temperature")}}, 1);
     assert(restored_consolidated.size() == 1);
