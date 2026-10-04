@@ -163,9 +163,6 @@ int main() {
         assert(restored_appraisal.tension_error_weight == learned_appraisal.tension_error_weight);
     }
 
-    // The live affective state must alter developmental learning sensitivity,
-    // not merely exist beside it. Hold the action evidence constant and prime
-    // one brain with strong affective evidence before the same action outcome.
     const auto developmental_low = root / "developmental-low.bin";
     const auto developmental_high = root / "developmental-high.bin";
     Brain low_affect(developmental_low);
