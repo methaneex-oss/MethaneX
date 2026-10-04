@@ -17,9 +17,6 @@ struct AffectiveAppraisal {
     double tension_error_weight{0.55};
 };
 
-// Outcome evidence separates what was expected from what actually happened.
-// The learner uses consequence error to adapt appraisal sensitivity; it does
-// not encode semantic emotion rules.
 struct AffectiveOutcomeEvidence {
     double expected_consequence{0.0};
     double actual_consequence{0.0};
@@ -32,9 +29,21 @@ struct AffectiveOutcomeEvidence {
     double confidence{0.5};
 };
 
+// Meta-learning state describes how well the current appraisal model is
+// calibrated to experienced consequences. It is itself derived from evidence;
+// it does not encode semantic emotions or prescribe actions.
+struct AffectiveCalibration {
+    double mean_absolute_error{0.0};
+    double learning_rate_scale{1.0};
+    std::uint64_t observations{0};
+};
+
 class AffectiveLearningModel {
 public:
     AffectiveAppraisal appraisal() const noexcept { return appraisal_; }
+    AffectiveCalibration calibration() const noexcept {
+        return {mean_absolute_error_, learning_rate_scale_, updates_};
+    }
 
     AffectiveSignal modulate(const AffectiveSignal& raw) const noexcept {
         AffectiveSignal signal = raw;
@@ -56,12 +65,21 @@ public:
                 : actual - expected);
         const double utility = clamp_signed(evidence.utility);
         const double magnitude = std::abs(consequence_error);
-        const double rate = 0.03 + 0.12 * magnitude;
         const double relevance = 0.25 + 0.75 * std::clamp(
             0.35 * clamp_unit(evidence.salience) +
             0.25 * clamp_unit(evidence.novelty) +
             0.20 * clamp_unit(evidence.confidence) +
             0.20 * clamp_unit(evidence.uncertainty), 0.0, 1.0);
+
+        // The appraisal learner adapts its own step sensitivity from observed
+        // calibration error. Persistent mismatch increases learning pressure;
+        // accurate appraisal gradually relaxes it. This is meta-learning, not
+        // an emotion-specific rule.
+        mean_absolute_error_ += 0.10 * (magnitude - mean_absolute_error_);
+        mean_absolute_error_ = clamp_unit(mean_absolute_error_);
+        learning_rate_scale_ = std::clamp(
+            0.75 + 0.75 * mean_absolute_error_, 0.50, 1.50);
+        const double rate = (0.03 + 0.12 * magnitude) * learning_rate_scale_;
 
         appraisal_.outcome_weight = adapt_sensitivity(appraisal_.outcome_weight, std::abs(expected), std::abs(utility), rate, relevance);
         appraisal_.error_weight = adapt_sensitivity(appraisal_.error_weight, clamp_unit(evidence.prediction_error), magnitude, rate, relevance);
@@ -114,6 +132,8 @@ private:
     }
 
     AffectiveAppraisal appraisal_{};
+    double mean_absolute_error_{0.0};
+    double learning_rate_scale_{1.0};
     std::uint64_t updates_{0};
 };
 
