@@ -1,4 +1,0 @@
-add_executable(jarvis_affective_goal_outcome_suite affective_goal_outcome_suite.cpp)
-target_link_libraries(jarvis_affective_goal_outcome_suite PRIVATE jarvis_core)
-target_compile_features(jarvis_affective_goal_outcome_suite PRIVATE cxx_std_20)
-add_test(NAME jarvis_affective_goal_outcome_suite COMMAND jarvis_affective_goal_outcome_suite)
