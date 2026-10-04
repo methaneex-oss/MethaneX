@@ -1,7 +1,6 @@
 #pragma once
 
 #include <algorithm>
-#include <cmath>
 #include <cstdint>
 #include <string>
 
@@ -11,11 +10,6 @@ struct GoalOutcomeEvidence {
     std::string goal_id;
     double progress_before{0.0};
     double progress_after{0.0};
-    // Expected progress is a prediction about the consequence of the goal
-    // attempt. Keeping it separate from progress_before lets goal outcomes
-    // contribute genuine prediction-error evidence instead of treating every
-    // outcome as equally surprising.
-    double expected_progress{0.0};
     double delta{0.0};
     bool completed{false};
     double confidence{0.0};
@@ -24,9 +18,6 @@ struct GoalOutcomeEvidence {
     void normalize() noexcept {
         progress_before = std::clamp(progress_before, 0.0, 1.0);
         progress_after = std::clamp(progress_after, 0.0, 1.0);
-        expected_progress = std::clamp(
-            std::isfinite(expected_progress) ? expected_progress : progress_before,
-            0.0, 1.0);
         delta = progress_after - progress_before;
         confidence = std::clamp(confidence, 0.0, 1.0);
         completed = completed || progress_after >= 1.0;
