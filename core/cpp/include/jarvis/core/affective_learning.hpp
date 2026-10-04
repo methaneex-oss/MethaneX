@@ -45,6 +45,15 @@ public:
         return {mean_absolute_error_, learning_rate_scale_, updates_};
     }
 
+    // Confidence is not an emotion label. It is a learned estimate of how much
+    // the appraisal machinery should trust its own consequence-sensitive
+    // interpretation. As calibration error accumulates, affective prediction
+    // error contributes less strongly to state dynamics until calibration
+    // improves again.
+    double influence_confidence() const noexcept {
+        return clamp_unit(1.0 - mean_absolute_error_);
+    }
+
     AffectiveSignal modulate(const AffectiveSignal& raw) const noexcept {
         AffectiveSignal signal = raw;
         signal.outcome = clamp_signed(raw.outcome * ratio(appraisal_.outcome_weight, 0.45));
@@ -53,6 +62,7 @@ public:
         signal.salience = clamp_unit(raw.salience * ratio(appraisal_.salience_weight, 0.35));
         signal.uncertainty = clamp_unit(raw.uncertainty * ratio(appraisal_.uncertainty_weight, 0.60));
         signal.tension_error = clamp_unit(raw.prediction_error * ratio(appraisal_.tension_error_weight, 0.55));
+        signal.confidence = clamp_unit(raw.confidence * influence_confidence());
         return signal;
     }
 
