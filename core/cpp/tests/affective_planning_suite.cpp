@@ -1,6 +1,7 @@
 #include "jarvis/core/brain.hpp"
 
 #include <cassert>
+#include <cmath>
 #include <filesystem>
 #include <string>
 #include <vector>
@@ -56,7 +57,10 @@ int main() {
 
     // PlanStep exposes expected_score, not a raw score. The affective planning
     // pathway must alter that actual planning quantity.
-    assert(calm_plan.steps.front().expected_score != activated_plan.steps.front().expected_score);
+    assert(std::abs(calm_plan.steps.front().expected_score -
+                    activated_plan.steps.front().expected_score) > 1e-12);
+    assert(std::isfinite(calm_plan.steps.front().expected_score));
+    assert(std::isfinite(activated_plan.steps.front().expected_score));
 
     const auto explicit_context = PlanningContext{
         0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
@@ -64,6 +68,7 @@ int main() {
     Planner planner;
     const auto explicit_plan = planner.build(actions, 1, explicit_context);
     assert(explicit_plan.steps.front().action.name == "safe");
+    assert(std::isfinite(explicit_plan.steps.front().expected_score));
 
     std::filesystem::remove_all(root);
     return 0;
