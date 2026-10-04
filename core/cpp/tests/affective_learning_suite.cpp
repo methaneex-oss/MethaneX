@@ -9,12 +9,14 @@ using namespace jarvis::core;
 int main() {
     AffectiveLearningModel learner;
     const auto initial = learner.appraisal();
+    const auto initial_calibration = learner.calibration();
 
     const AffectiveOutcomeEvidence expected_failure{
         0.8, -0.7, -1.0, -0.7, 0.9, 0.7, 0.9, 0.4, 0.8};
     for (int i = 0; i < 20; ++i) learner.learn(expected_failure);
 
     const auto learned = learner.appraisal();
+    const auto learned_calibration = learner.calibration();
     assert(learner.updates() == 20);
     assert(std::isfinite(learned.outcome_weight));
     assert(std::isfinite(learned.error_weight));
@@ -23,6 +25,11 @@ int main() {
            learned.tension_error_weight != initial.tension_error_weight);
     assert(learned.error_weight >= 0.0 && learned.error_weight <= 2.0);
     assert(learned.tension_error_weight >= 0.0 && learned.tension_error_weight <= 2.0);
+    assert(learned_calibration.observations == 20);
+    assert(learned_calibration.mean_absolute_error > initial_calibration.mean_absolute_error);
+    assert(learned_calibration.learning_rate_scale > initial_calibration.learning_rate_scale);
+    assert(learned_calibration.learning_rate_scale >= 0.50 &&
+           learned_calibration.learning_rate_scale <= 1.50);
 
     // Learned appraisal must actually modulate future evidence. A changing
     // parameter that never reaches the affective state is not developmental
@@ -68,6 +75,16 @@ int main() {
            success_learned.tension_error_weight != learned.tension_error_weight);
     assert(success_learned.error_weight != success_initial.error_weight ||
            success_learned.outcome_weight != success_initial.outcome_weight);
+
+    // The calibration mechanism is experience-dependent: accurate evidence
+    // should not require the same learning pressure as persistently surprising
+    // evidence.
+    AffectiveLearningModel accurate;
+    const AffectiveOutcomeEvidence accurate_evidence{
+        0.5, 0.5, 0.0, 0.5, 0.0, 0.1, 0.5, 0.1, 0.95};
+    for (int i = 0; i < 20; ++i) accurate.learn(accurate_evidence);
+    assert(accurate.calibration().mean_absolute_error < learned_calibration.mean_absolute_error);
+    assert(accurate.calibration().learning_rate_scale < learned_calibration.learning_rate_scale);
 
     // Explicit outcome evidence is the primary learning path. The legacy adapter
     // remains covered for persisted callers during the transition.
