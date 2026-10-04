@@ -10,6 +10,7 @@ add_library(jarvis_core STATIC
     src/brain_prediction_context.cpp
     src/brain_novelty.cpp
     src/brain_affective_planning.cpp
+    src/brain_goal_affective.cpp
     src/memory.cpp
     src/world_model.cpp
     src/causal_model.cpp
