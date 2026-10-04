@@ -18,7 +18,12 @@ Intent IntentModel::select(const std::vector<Goal>& goals, double threat,
                 ? 1.0 / (1.0 + static_cast<double>(goal.deadline_cycle - cycle))
                 : 1.0;
         const double progress_need = std::clamp(1.0 - goal.progress, 0.0, 1.0);
-        const double score = std::max(0.0, goal.priority) * (0.5 + 0.5 * progress_need) + deadline * 0.25;
+        // Outcome momentum is learned from prior progress/regression. It is a
+        // bounded appraisal modifier, not a hardcoded preference for any goal.
+        const double learned_momentum = std::clamp(goal.outcome_momentum, -1.0, 1.0);
+        const double score = std::max(0.0, goal.priority) * (0.5 + 0.5 * progress_need)
+                           + 0.20 * learned_momentum * (0.5 + 0.5 * progress_need)
+                           + deadline * 0.25;
         if (score > best_score) { best_score = score; best = &goal; }
     }
     if (!best) return {};
@@ -26,7 +31,7 @@ Intent IntentModel::select(const std::vector<Goal>& goals, double threat,
     Intent intent;
     intent.id = best->id;
     intent.description = best->description;
-    intent.priority = std::clamp(best->priority, 0.0, 1.0);
+    intent.priority = std::clamp(best->priority + 0.10 * best->outcome_momentum, 0.0, 1.0);
     intent.progress = std::clamp(best->progress, 0.0, 1.0);
     const double deadline_urgency = best->deadline_cycle == 0
         ? 0.0
