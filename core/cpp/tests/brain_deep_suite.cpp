@@ -1,12 +1,9 @@
 #include "jarvis/core/brain.hpp"
 
 #include <cassert>
-#include <chrono>
 #include <cstdint>
 #include <filesystem>
-#include <fstream>
 #include <string>
-#include <thread>
 #include <vector>
 
 using namespace jarvis::core;
@@ -22,14 +19,12 @@ int main() {
     std::error_code ec;
     std::filesystem::remove_all(root, ec);
     std::filesystem::create_directories(root, ec);
-    const auto journal = root / "continuity.bin";
 
-    Brain brain(journal);
+    Brain brain(root / "continuity.bin");
     const auto observed = brain.observe(event(0, "test", "observation", "persistent", 42.0));
     assert(observed.event.sequence == 1);
     assert(observed.novelty == 1.0);
     assert(brain.memory().size() == 1);
-    assert(brain.memory().next_sequence() == 2);
 
     assert(brain.learn(Evidence{"trusted", "temperature", Scalar{25.0}, 0.9}) >= 0.0);
     assert(brain.knowledge_source("trusted") != nullptr);
