@@ -23,6 +23,12 @@ class IntentModel {
 public:
     Intent select(const std::vector<Goal>& goals, double threat,
                   double uncertainty, std::uint64_t cycle) const;
+
+    Intent select_with_affect(const std::vector<Goal>& goals, double threat,
+                               double uncertainty, double valence,
+                               double arousal, double affective_uncertainty,
+                               double tension, double stability,
+                               std::uint64_t cycle) const;
 };
 
 } // namespace jarvis::core
