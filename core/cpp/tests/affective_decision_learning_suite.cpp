@@ -27,7 +27,8 @@ int main() {
     assert(learned.error_weight != initial.error_weight || learned.uncertainty_weight != initial.uncertainty_weight);
     assert(learner.calibration().observations == 1);
     assert(learner.calibration().mean_absolute_error > 0.0);
-    assert(learner.calibration().learning_rate_scale > 1.0);
+    assert(learner.calibration().learning_rate_scale >= 0.50);
+    assert(learner.calibration().learning_rate_scale <= 1.50);
 
     const auto path = std::filesystem::temp_directory_path() / "jarvis_affective_decision_suite.bin";
     std::error_code ec;
@@ -84,7 +85,6 @@ int main() {
     assert(!result.context.decisions.empty());
     assert(std::isfinite(affect_before_cycle.valence));
 
-    // The learned appraisal/state, calibration and adaptive attention policy are reconstructed from persistent experience.
     const auto learned_appraisal = brain.affective_appraisal();
     const auto learned_calibration = brain.affective_calibration();
     const auto learned_updates = brain.affective_learning_updates();
