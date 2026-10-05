@@ -117,6 +117,29 @@ int main() {
         assert(std::isfinite(affect.arousal));
     }
 
+    // Learned strategy must affect actual action selection, not merely remain
+    // queryable as metadata. The learned route starts with a lower base utility
+    // and only wins because prior consequences changed developmental value.
+    const auto selection_journal = root / "selection.bin";
+    Brain selector(selection_journal);
+    assert(selector.create_goal(Goal{"navigation", "navigate", 1.0, 0.0, 0, 0,
+                                     GoalStatus::pending, {}, {}}));
+    assert(selector.activate_goal("navigation"));
+    for (int i = 0; i < 8; ++i) {
+        selector.observe(strategy_outcome("navigation", "route_a", 0.9, 0.1, 0.8, 0.2));
+        selector.observe(strategy_outcome("navigation", "route_b", -0.8, 0.9, 0.8, 0.2));
+    }
+
+    CandidateAction learned_route{"route_a", 0.0, 0.0, 0.1, 1.0};
+    CandidateAction unlearned_route{"route_b", 0.15, 0.15, 0.1, 1.0};
+    const auto base_selection = selector.choose({learned_route, unlearned_route});
+    const auto learned_selection = selector.choose_with_developmental_learning(
+        {learned_route, unlearned_route});
+    assert(!base_selection.empty());
+    assert(!learned_selection.empty());
+    assert(base_selection.front().action.name == "route_b");
+    assert(learned_selection.front().action.name == "route_a");
+
     std::filesystem::remove_all(root, ec);
     return 0;
 }
