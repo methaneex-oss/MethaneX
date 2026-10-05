@@ -61,6 +61,27 @@ int main() {
     assert(std::abs(score_after_experience - score_before_experience) > 1e-9);
     assert(std::abs(attention_after_experience.internal_activation_weight - attention_before_experience.internal_activation_weight) > 1e-12);
 
+    // Affective activation is not merely exposed to memory: it participates in
+    // consolidation evidence. Compare a neutral observation against a later
+    // consequential observation with otherwise equivalent low explicit salience.
+    brain.observe(Event{
+        0, 0, "memory_bridge", "observation",
+        {{"topic", std::string{"neutral"}}, {"novelty", 0.0}, {"salience", 0.0}, {"outcome", 0.0}, {"confidence", 0.5}}});
+    const auto neutral_records = brain.memory().recall_ranked(
+        Attributes{{"topic", Scalar{std::string{"neutral"}}}}, 1);
+    assert(neutral_records.size() == 1);
+    const double neutral_consolidation = neutral_records.front().consolidation;
+
+    brain.observe(Event{
+        0, 0, "memory_bridge", "observation",
+        {{"topic", std::string{"affective"}}, {"novelty", 0.9}, {"salience", 0.0}, {"outcome", -1.0}, {"confidence", 0.1}, {"prediction_error", 0.9}}});
+    const auto affective_records = brain.memory().recall_ranked(
+        Attributes{{"topic", Scalar{std::string{"affective"}}}}, 1);
+    assert(affective_records.size() == 1);
+    const double affective_consolidation = affective_records.front().consolidation;
+    assert(affective_consolidation > neutral_consolidation);
+    assert(affective_records.front().salience > neutral_records.front().salience);
+
     const auto calibration = brain.affective_calibration();
     assert(calibration.observations == brain.affective_learning_updates());
     assert(calibration.mean_absolute_error >= 0.0 && calibration.mean_absolute_error <= 1.0);
