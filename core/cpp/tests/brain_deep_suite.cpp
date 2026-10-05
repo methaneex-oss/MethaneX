@@ -1,6 +1,7 @@
 #include "jarvis/core/brain.hpp"
 
 #include <cassert>
+#include <cmath>
 #include <cstdint>
 #include <filesystem>
 #include <string>
@@ -47,6 +48,8 @@ int main() {
     assert(brain.memory().by_kind("action_outcome", 1).size() == 1);
     assert(brain.memory().by_kind("learning", 1).size() == 1);
 
+    const auto affect_before_failure = brain.affective_state();
+    const auto learning_before_failure = brain.affective_learning_updates();
     const auto failed_action = brain.execute_action(
         executable,
         [](const CandidateAction&) { return false; },
@@ -54,6 +57,26 @@ int main() {
     assert(failed_action.authorized);
     assert(!failed_action.executed);
     assert(brain.memory().by_kind("action_outcome", 2).size() == 2);
+
+    // Failed execution is part of the cognitive experience stream. It must
+    // reach affective processing and affective learning, not remain test-local.
+    const auto affect_after_failure = brain.affective_state();
+    assert(std::isfinite(affect_after_failure.valence));
+    assert(std::isfinite(affect_after_failure.tension));
+    assert(brain.affective_learning_updates() > learning_before_failure);
+    assert(affect_after_failure.valence != affect_before_failure.valence ||
+           affect_after_failure.tension != affect_before_failure.tension ||
+           affect_after_failure.arousal != affect_before_failure.arousal ||
+           affect_after_failure.uncertainty != affect_before_failure.uncertainty);
+
+    // The learned affective appraisal must be visible to future decisions.
+    const CandidateAction probe{"probe", 0.0, 1.0, 0.2, 1.0};
+    const auto before_decision = brain.choose_with_affect({probe}).front().score;
+    brain.observe(event(0, "feedback", "observation", "consequence", -1.0));
+    const auto after_decision = brain.choose_with_affect({probe}).front().score;
+    assert(std::isfinite(before_decision));
+    assert(std::isfinite(after_decision));
+    assert(before_decision != after_decision);
 
     std::filesystem::remove_all(root, ec);
     return 0;
