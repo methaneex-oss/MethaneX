@@ -140,6 +140,13 @@ int main() {
     assert(base_selection.front().action.name == "route_b");
     assert(learned_selection.front().action.name == "route_a");
 
+    // The learned action preference must survive restart and journal replay.
+    Brain replayed_selector(selection_journal);
+    const auto replayed_selection = replayed_selector.choose_with_developmental_learning(
+        {learned_route, unlearned_route});
+    assert(!replayed_selection.empty());
+    assert(replayed_selection.front().action.name == "route_a");
+
     std::filesystem::remove_all(root, ec);
     return 0;
 }
