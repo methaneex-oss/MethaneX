@@ -15,6 +15,21 @@ static Event event(std::uint64_t seq, std::string source, std::string kind,
                  {{"topic", Scalar{std::move(topic)}}, {"value", Scalar{value}}}};
 }
 
+static Event strategy_outcome(std::string context, std::string action,
+                              double consequence, double error, double salience,
+                              double novelty) {
+    return Event{0, 0, "developmental-test", "action_outcome",
+                 {{"action", Scalar{std::move(action)}},
+                  {"context", Scalar{std::move(context)}},
+                  {"status", Scalar{static_cast<std::int64_t>(ActionExecutionStatus::verified)}},
+                  {"observed", Scalar{true}},
+                  {"actual_consequence", Scalar{consequence}},
+                  {"consequence_error", Scalar{error}},
+                  {"reliability", Scalar{0.95}},
+                  {"salience", Scalar{salience}},
+                  {"novelty", Scalar{novelty}}}};
+}
+
 int main() {
     const auto root = std::filesystem::temp_directory_path() / "jarvis_brain_deep_suite";
     std::error_code ec;
@@ -58,8 +73,6 @@ int main() {
     assert(!failed_action.executed);
     assert(brain.memory().by_kind("action_outcome", 2).size() == 2);
 
-    // Failed execution is part of the cognitive experience stream. It must
-    // reach affective processing and affective learning, not remain test-local.
     const auto affect_after_failure = brain.affective_state();
     assert(std::isfinite(affect_after_failure.valence));
     assert(std::isfinite(affect_after_failure.tension));
@@ -69,7 +82,6 @@ int main() {
            affect_after_failure.arousal != affect_before_failure.arousal ||
            affect_after_failure.uncertainty != affect_before_failure.uncertainty);
 
-    // The learned affective appraisal must be visible to future decisions.
     const CandidateAction probe{"probe", 0.0, 1.0, 0.2, 1.0};
     const auto before_decision = brain.choose_with_affect({probe}).front().score;
     brain.observe(event(0, "feedback", "observation", "consequence", -1.0));
@@ -77,6 +89,33 @@ int main() {
     assert(std::isfinite(before_decision));
     assert(std::isfinite(after_decision));
     assert(before_decision != after_decision);
+
+    // Developmental learning must be reconstructable from the journal.
+    const auto developmental_journal = root / "developmental.bin";
+    {
+        Brain learner(developmental_journal);
+        for (int i = 0; i < 8; ++i) {
+            learner.observe(strategy_outcome("navigation", "route_a", 0.9, 0.1, 0.8, 0.2));
+            learner.observe(strategy_outcome("navigation", "route_b", -0.8, 0.9, 0.8, 0.2));
+        }
+        const auto* best = learner.developmental_best_strategy("navigation");
+        assert(best != nullptr);
+        assert(best->action == "route_a");
+        assert(best->uses == 8);
+        assert(learner.developmental_strategies().size() == 2);
+    }
+    {
+        Brain replayed(developmental_journal);
+        const auto strategies = replayed.developmental_strategies();
+        assert(strategies.size() == 2);
+        const auto* best = replayed.developmental_best_strategy("navigation");
+        assert(best != nullptr);
+        assert(best->action == "route_a");
+        assert(best->uses == 8);
+        const auto affect = replayed.affective_state();
+        assert(std::isfinite(affect.valence));
+        assert(std::isfinite(affect.arousal));
+    }
 
     std::filesystem::remove_all(root, ec);
     return 0;
