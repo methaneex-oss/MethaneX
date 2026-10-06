@@ -61,6 +61,7 @@ public:
 private:
     void load();
     void load_metadata();
+    void rebuild_learned_tiers();
     bool persist(const Event& event) const;
     bool persist_metadata(const MemoryRecord& record) const;
     bool persist_metadata_snapshot() const;
