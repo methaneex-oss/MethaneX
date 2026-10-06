@@ -104,7 +104,30 @@ std::vector<EvolutionProposal> Brain::evolution_options() const { std::shared_lo
 bool Brain::adopt_evolution(const EvolutionProposal& proposal) { std::unique_lock lock(mutex_); if (proposal.key.empty() || evolution_.parameter(proposal.key) == nullptr) return false; Event event{0, 0, "brain", "evolution_adopt", {{"key", proposal.key}, {"current", proposal.current}, {"proposed", proposal.proposed}, {"expected_gain", proposal.expected_gain}, {"confidence", proposal.confidence}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return false; replay(event); ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); return true; }
 bool Brain::rollback_evolution(const std::string& key) { std::unique_lock lock(mutex_); if (key.empty() || evolution_.parameter(key) == nullptr) return false; if (evolution_.parameter(key)->value == evolution_.parameter(key)->baseline) return false; Event event{0, 0, "brain", "evolution_rollback", {{"key", key}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return false; if (!evolution_.rollback(key)) return false; ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); return true; }
 bool Brain::adopt_evolution_experiment(EvolutionExperiment& experiment) { std::unique_lock lock(mutex_); if (!evolution_controller_.adopt(experiment)) return false; Event event{0, 0, "brain", "evolution_adopt", {{"key", experiment.proposal.key}, {"current", experiment.proposal.current}, {"proposed", experiment.proposal.proposed}, {"expected_gain", experiment.proposal.expected_gain}, {"confidence", experiment.proposal.confidence}}}; event.sequence = memory_.append(event); if (event.sequence == 0) { evolution_.rollback(experiment.proposal.key); return false; } ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); return true; }
-CanaryDecision Brain::observe_evolution_canary(const std::string& parameter_key, const std::string& experiment_id, CanaryObservation observation) { std::unique_lock lock(mutex_); const auto decision = evolution_controller_.observe_canary(parameter_key, experiment_id, observation); if (decision.rollback) { Event event{0, 0, "brain", "evolution_rollback", {{"key", parameter_key}, {"experiment_id", experiment_id}, {"reason", decision.reason}, {"observed_delta", decision.mean_delta}}}; event.sequence = memory_.append(event); if (event.sequence != 0) { ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); } } return decision; }
+CanaryDecision Brain::observe_evolution_canary(const std::string& parameter_key, const std::string& experiment_id, CanaryObservation observation) {
+    std::unique_lock lock(mutex_);
+    const auto decision = evolution_controller_.observe_canary_for_brain(observation);
+    if (!decision.rollback) return decision;
+
+    Event event{0, 0, "brain", "evolution_rollback",
+                {{"key", parameter_key},
+                 {"experiment_id", experiment_id},
+                 {"reason", decision.reason},
+                 {"observed_delta", decision.mean_delta}}};
+    event.sequence = memory_.append(event);
+    if (event.sequence == 0) return CanaryDecision{false, decision.sufficient_evidence, decision.mean_delta,
+                                                   decision.worst_delta, "rollback_not_persisted"};
+    if (!evolution_controller_.rollback(parameter_key, experiment_id, decision.reason,
+                                         decision.mean_delta)) {
+        return CanaryDecision{false, decision.sufficient_evidence, decision.mean_delta,
+                              decision.worst_delta, "rollback_failed"};
+    }
+    ++state_.events_seen;
+    state_.cycle = event.sequence;
+    sync_self_state();
+    return decision;
+}
+
 std::vector<EvolutionHistoryRecord> Brain::evolution_history() const { std::shared_lock lock(mutex_); return evolution_history_.records(); }
 BrainSnapshot Brain::snapshot() const { std::shared_lock lock(mutex_); BrainSnapshot snapshot; snapshot.state = state_; snapshot.self_state = self_state_model_.snapshot(); for (const auto& [_, belief] : beliefs_) snapshot.beliefs.push_back(belief); for (const auto& prediction : predictions_) snapshot.predictions.push_back(prediction); snapshot.causal_links = causal_.links(); snapshot.goals = goals_model_.all(); return snapshot; }
 BrainState Brain::state() const { std::shared_lock lock(mutex_); return state_; }
