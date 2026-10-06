@@ -56,7 +56,9 @@ int main() {
     const auto action_result = brain.execute_action(
         executable,
         [](const CandidateAction& action) { return action.name == "safe"; },
-        [](const CandidateAction& action) { return action.name == "safe"; });
+        [](const CandidateAction& action) { return action.name == "safe"; },
+        {},
+        [](const CandidateAction& action) { return action.name == "safe" ? 0.8 : 0.0; });
     assert(action_result.authorized);
     assert(action_result.executed);
     assert(action_result.verified);
@@ -74,6 +76,7 @@ int main() {
     assert(brain.memory().by_kind("action_outcome", 2).size() == 2);
     // No consequence observer means the action result must not train the
     // consequence-sensitive affective calibration model.
+    assert(learning_before_failure > 0);
     assert(brain.affective_learning_updates() == learning_before_failure);
 
     const auto affect_after_failure = brain.affective_state();
