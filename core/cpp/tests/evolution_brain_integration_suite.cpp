@@ -47,6 +47,12 @@ int main() {
         assert(parameter != nullptr);
         assert(parameter->value == parameter->baseline);
         assert(parameter->observations == 3);
+        assert(parameter->value == parameter->baseline);
+
+        Brain direct(path);
+        const auto* direct_parameter = direct.evolution_parameter("planner.weight");
+        assert(direct_parameter != nullptr);
+        assert(direct_parameter->value == direct_parameter->baseline);
     }
 
     std::filesystem::remove(path, ec);
