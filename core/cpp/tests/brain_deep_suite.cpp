@@ -69,6 +69,29 @@ int main() {
     // The derived learning event must not re-appraise the same experience.
     assert(brain.affective_state().updates == affect_before_action.updates + 1);
 
+    // Replay must reconstruct the same learned state produced by live processing.
+    {
+        Brain replayed_action(root / "continuity.bin");
+        const auto live_affect = brain.affective_state();
+        const auto replay_affect = replayed_action.affective_state();
+        const auto live_calibration = brain.affective_calibration();
+        const auto replay_calibration = replayed_action.affective_calibration();
+        const auto live_attention = brain.attention();
+        const auto replay_attention = replayed_action.attention();
+        assert(std::abs(live_affect.valence - replay_affect.valence) < 1e-12);
+        assert(std::abs(live_affect.arousal - replay_affect.arousal) < 1e-12);
+        assert(std::abs(live_affect.uncertainty - replay_affect.uncertainty) < 1e-12);
+        assert(std::abs(live_affect.tension - replay_affect.tension) < 1e-12);
+        assert(std::abs(live_affect.stability - replay_affect.stability) < 1e-12);
+        assert(live_affect.updates == replay_affect.updates);
+        assert(std::abs(live_calibration.mean_absolute_error - replay_calibration.mean_absolute_error) < 1e-12);
+        assert(std::abs(live_calibration.learning_rate_scale - replay_calibration.learning_rate_scale) < 1e-12);
+        assert(live_calibration.observations == replay_calibration.observations);
+        assert(std::abs(live_attention.salience - replay_attention.salience) < 1e-12);
+        assert(std::abs(live_attention.novelty - replay_attention.novelty) < 1e-12);
+        assert(std::abs(live_attention.uncertainty - replay_attention.uncertainty) < 1e-12);
+    }
+
     const auto affect_before_failure = brain.affective_state();
     const auto learning_before_failure = brain.affective_learning_updates();
     const auto failed_action = brain.execute_action(
