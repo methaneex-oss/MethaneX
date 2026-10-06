@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <filesystem>
+#include <algorithm>
 
 using namespace jarvis::core;
 
@@ -33,6 +34,23 @@ int main() {
         assert(brain.adopt_evolution_experiment(experiment));
         assert(!brain.evolution_history().empty());
 
+        brain.register_evolution_parameter("direct.rollback", 0.2);
+        brain.observe_evolution_fitness("direct.rollback", 0.9);
+        brain.observe_evolution_fitness("direct.rollback", 0.9);
+        const auto direct_proposals = brain.evolution_options();
+        const auto direct_it = std::find_if(
+            direct_proposals.begin(), direct_proposals.end(),
+            [](const EvolutionProposal& proposal) { return proposal.key == "direct.rollback"; });
+        assert(direct_it != direct_proposals.end());
+        assert(brain.adopt_evolution(*direct_it));
+        const auto* adopted_direct = brain.evolution_parameter("direct.rollback");
+        assert(adopted_direct != nullptr);
+        assert(adopted_direct->value != adopted_direct->baseline);
+        assert(brain.rollback_evolution("direct.rollback"));
+        const auto* rolled_direct = brain.evolution_parameter("direct.rollback");
+        assert(rolled_direct != nullptr);
+        assert(rolled_direct->value == rolled_direct->baseline);
+
         brain.observe_evolution_canary("planner.weight", "brain-evolution-1", {0.90, 0.89});
         brain.observe_evolution_canary("planner.weight", "brain-evolution-1", {0.90, 0.88});
         const auto decision = brain.observe_evolution_canary(
@@ -48,6 +66,10 @@ int main() {
         assert(parameter->value == parameter->baseline);
         assert(parameter->observations == 3);
         assert(parameter->value == parameter->baseline);
+        const auto* direct = restarted.evolution_parameter("direct.rollback");
+        assert(direct != nullptr);
+        assert(direct->value == direct->baseline);
+        assert(direct->observations == 2);
 
         Brain direct(path);
         const auto* direct_parameter = direct.evolution_parameter("planner.weight");
