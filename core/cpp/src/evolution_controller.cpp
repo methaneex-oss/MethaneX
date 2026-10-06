@@ -55,6 +55,10 @@ bool EvolutionController::adopt(EvolutionExperiment& experiment) {
     return true;
 }
 
+CanaryDecision EvolutionController::observe_canary_for_brain(const CanaryObservation& observation) noexcept {
+    return canary_.observe(observation);
+}
+
 CanaryDecision EvolutionController::observe_canary(const std::string& parameter_key,
                                                    const std::string& experiment_id,
                                                    const CanaryObservation& observation) {
