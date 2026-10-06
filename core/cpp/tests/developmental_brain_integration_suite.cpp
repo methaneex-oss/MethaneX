@@ -174,7 +174,6 @@ int main() {
 
     std::filesystem::remove(path, ec);
     std::filesystem::remove(path.string() + ".meta", ec);
-    std::cout << "developmental brain integration suite passed
-";
+    std::cout << "developmental brain integration suite passed\n";
     return 0;
 }
