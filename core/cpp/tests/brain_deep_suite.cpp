@@ -196,6 +196,46 @@ int main() {
     assert(!replayed_selection.empty());
     assert(replayed_selection.front().action.name == "route_a");
 
+    // Goal, capability, and resilience mutations are journal-first and must
+    // reconstruct the same durable state after restart.
+    const auto state_journal = root / "state_transactions.bin";
+    {
+        Brain stateful(state_journal);
+        assert(stateful.create_goal(Goal{"transaction-goal", "test durable goal", 0.5, 0.0, 0, 0,
+                                         GoalStatus::pending, {}, {}}));
+        assert(stateful.activate_goal("transaction-goal"));
+        assert(stateful.update_goal_progress("transaction-goal", 0.4));
+        const auto* live_goal = stateful.goal("transaction-goal");
+        assert(live_goal != nullptr);
+        assert(live_goal->progress == 0.4);
+        assert(live_goal->outcome_momentum > 0.0);
+        assert(stateful.set_goal_priority("transaction-goal", 0.8));
+
+        stateful.observe_capability("planner", 0.9, 0.8);
+        assert(stateful.isolate_capability("planner"));
+        assert(stateful.restore_capability("planner", 0.7, 0.6));
+
+        assert(stateful.observe(Event{0, 0, "health", "observation",
+                                      {{"health", Scalar{0.8}}}}).event.sequence != 0);
+        assert(stateful.isolate("health"));
+        assert(stateful.recover("health", 0.95));
+        assert(stateful.recovery_options().empty());
+    }
+    {
+        Brain replayed(state_journal);
+        const auto* replayed_goal = replayed.goal("transaction-goal");
+        assert(replayed_goal != nullptr);
+        assert(replayed_goal->progress == 0.4);
+        assert(replayed_goal->priority == 0.8);
+        assert(replayed_goal->outcome_momentum > 0.0);
+
+        const auto replayed_self = replayed.snapshot().self_state;
+        const auto pressure = replayed_self.resource_pressure.find("planner");
+        assert(pressure != replayed_self.resource_pressure.end());
+        assert(pressure->second > 0.0);
+        assert(replayed.recovery_options().empty());
+    }
+
     std::filesystem::remove_all(root, ec);
     return 0;
 }
