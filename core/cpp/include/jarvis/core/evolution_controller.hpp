@@ -17,6 +17,7 @@ public:
     CanaryDecision observe_canary(const std::string& parameter_key,
                                   const std::string& experiment_id,
                                   const CanaryObservation& observation);
+    CanaryDecision observe_canary_for_brain(const CanaryObservation& observation) noexcept;
     bool rollback(const std::string& parameter_key, const std::string& experiment_id,
                   const std::string& reason = "manual_rollback",
                   double observed_delta = 0.0);
