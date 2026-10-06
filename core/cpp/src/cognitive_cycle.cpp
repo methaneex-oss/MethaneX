@@ -71,6 +71,30 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
             action.risk = std::clamp(action.risk + (1.0 - reliability) * 0.5, 0.0, 1.0);
         }
     }
+
+    // Developmental strategy evidence is applied before planning so the learned
+    // change can propagate through the normal planner and decision engine.
+    const std::string developmental_context =
+        input.developmental_context.empty() ? selected->id : input.developmental_context;
+    if (const auto* learned = brain_.developmental_best_strategy(developmental_context);
+        learned != nullptr) {
+        for (auto& action : learned_actions) {
+            if (action.name == learned->action) {
+                const double influence = std::clamp(
+                    learned->value * learned->confidence, -1.0, 1.0);
+                action.utility += influence;
+            }
+        }
+    } else if (const auto* related = brain_.developmental_best_related_strategy(developmental_context);
+               related != nullptr) {
+        for (auto& action : learned_actions) {
+            if (action.name == related->action) {
+                const double influence = std::clamp(
+                    related->value * related->confidence * 0.5, -1.0, 1.0);
+                action.utility += influence;
+            }
+        }
+    }
     const PlanningContext planning_context{goal_priority, goal_progress, threat, uncertainty, input.resource_budget, deadline_pressure};
     result.context.plan = brain_.plan(learned_actions, input.planning_horizon, planning_context);
     if (result.context.plan.steps.empty()) { result.status = CognitiveCycleStatus::no_action; result.context.reflection = brain_.reflect(); return result; }
