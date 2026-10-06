@@ -71,8 +71,8 @@ int main() {
         assert(direct->value == direct->baseline);
         assert(direct->observations == 2);
 
-        Brain direct(path);
-        const auto* direct_parameter = direct.evolution_parameter("planner.weight");
+        Brain restarted_again(path);
+        const auto* direct_parameter = restarted_again.evolution_parameter("planner.weight");
         assert(direct_parameter != nullptr);
         assert(direct_parameter->value == direct_parameter->baseline);
     }
