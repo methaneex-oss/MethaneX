@@ -75,6 +75,7 @@ ActionExecutionResult Brain::execute_action(
         // action outcome. Replay therefore reconstructs learned appraisal
         // parameters exactly once, without coupling parameter learning to
         // execution-status replay.
+        if (result.outcome.observed) {
         Event affective_event{
             0,
             0,
@@ -96,6 +97,7 @@ ActionExecutionResult Brain::execute_action(
             state_.cycle = affective_event.sequence;
             replay(affective_event);
             consolidate_experience(affective_event, std::clamp(std::abs(result.outcome.consequence_error), 0.0, 1.0));
+        }
         }
 
         // The consequence becomes a separate learning experience. This keeps
