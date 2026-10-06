@@ -111,7 +111,8 @@ ActionExecutionResult Brain::execute_action(
             "learning",
             {{"action_executor." + result.action.name, reliability},
              {"reliability", reliability},
-             {"source_action_sequence", static_cast<std::int64_t>(event.sequence)}}};
+             {"source_action_sequence", static_cast<std::int64_t>(event.sequence)},
+             {"affective_relevant", false}}};
         learning_event.sequence = memory_.append(learning_event);
         if (learning_event.sequence != 0) {
             ++state_.events_seen;
