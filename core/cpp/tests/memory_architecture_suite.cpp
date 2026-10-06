@@ -37,6 +37,16 @@ int main() {
     assert(memory.tier_of(Event{0, 0, "", "action", {}}) == MemoryTier::Procedural);
     assert(memory.salient(2, MemoryTier::Semantic).size() == 2);
 
+    // Consolidated memories should outrank otherwise equivalent, newer traces.
+    const old_experience = memory.append(Event{0, 5, "sensor", "experience", {{"topic", std::string("navigation")}}});
+    const recent_experience = memory.append(Event{0, 6, "sensor", "experience", {{"topic", std::string("navigation")}}});
+    assert(old_experience == 5 && recent_experience == 6);
+    for (int i = 0; i < 8; ++i)
+        assert(memory.consolidate(old_experience, 0.5, 1.0, 1.0, 0.5));
+    const auto experience_ranked = memory.recall_ranked({{"topic", std::string("navigation")}}, 2);
+    assert(experience_ranked.size() == 2);
+    assert(experience_ranked.front().event.sequence == old_experience);
+
     const auto working = memory.append(Event{0, 4, "sensor", "transient", {{"topic", std::string("noise")}}});
     assert(working == 4);
     assert(memory.promote(working, MemoryTier::Working, 0.4, 0.4));
