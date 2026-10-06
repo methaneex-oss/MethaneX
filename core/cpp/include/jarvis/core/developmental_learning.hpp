@@ -9,23 +9,13 @@
 
 namespace jarvis::core {
 
-// DevelopmentalLearning supplies mechanisms for acquiring behavior from experience.
-// It deliberately contains no domain-specific "if X then Y" behavioral rules.
 struct LearningSignal {
     double prediction_error{0.0};
     double reward{0.0};
     double salience{0.0};
     double novelty{0.0};
-    // Continuous affective significance supplied by the cognitive experience
-    // pipeline. It changes learning sensitivity; it is not an emotion label or
-    // an action command. Default zero preserves replay compatibility for older
-    // callers and journal-derived evidence.
     double affective_significance{0.0};
 
-    // Legacy four-signal construction remains source-compatible while deriving
-    // a bounded affective significance from the same experience evidence. This
-    // gives older journal/replay paths a deterministic affective learning signal
-    // without introducing an emotion category or a fixed action rule.
     LearningSignal() = default;
     LearningSignal(double prediction_error_value,
                    double reward_value,
@@ -86,10 +76,9 @@ public:
     std::vector<LearnedStrategy> strategies() const;
 
     const LearnedStrategy* best_strategy(const std::string& context) const noexcept;
+    const LearnedStrategy* best_related_strategy(const std::string& context,
+                                                 double minimum_similarity = 0.5) const noexcept;
 
-    // Bounded consolidation prevents unbounded growth while preserving highly
-    // salient/repeated experiences. Forgetting is based on learned state, not
-    // hard-coded domain meanings.
     void consolidate(double retention_threshold = 0.05);
 
 private:
