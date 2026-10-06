@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <filesystem>
+#include <cmath>
 
 using namespace jarvis::core;
 
@@ -15,7 +16,7 @@ int main() {
         brain.register_evolution_parameter("planner.weight", 0.4);
         brain.predict("planner.weight", Scalar{0.4}, 0.9);
         const auto learning_cycle = brain.learn_from_prediction("planner.weight", Scalar{0.6}, 0.8);
-        assert(learning_cycle.adaptation.has_value() || true);
+        assert(std::isfinite(learning_cycle.adaptation.confidence));
         const auto* after_prediction = brain.evolution_parameter("planner.weight");
         assert(after_prediction != nullptr);
         assert(after_prediction->observations == 1);
