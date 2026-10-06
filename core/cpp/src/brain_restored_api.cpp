@@ -103,7 +103,24 @@ void Brain::observe_evolution_fitness(const std::string& key, double fitness) { 
 std::vector<EvolutionProposal> Brain::evolution_options() const { std::shared_lock lock(mutex_); return evolution_.propose(); }
 bool Brain::adopt_evolution(const EvolutionProposal& proposal) { std::unique_lock lock(mutex_); if (proposal.key.empty() || evolution_.parameter(proposal.key) == nullptr) return false; Event event{0, 0, "brain", "evolution_adopt", {{"key", proposal.key}, {"current", proposal.current}, {"proposed", proposal.proposed}, {"expected_gain", proposal.expected_gain}, {"confidence", proposal.confidence}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return false; replay(event); ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); return true; }
 bool Brain::rollback_evolution(const std::string& key) { std::unique_lock lock(mutex_); if (key.empty() || evolution_.parameter(key) == nullptr) return false; if (evolution_.parameter(key)->value == evolution_.parameter(key)->baseline) return false; Event event{0, 0, "brain", "evolution_rollback", {{"key", key}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return false; if (!evolution_.rollback(key)) return false; ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); return true; }
-bool Brain::adopt_evolution_experiment(EvolutionExperiment& experiment) { std::unique_lock lock(mutex_); if (!evolution_controller_.adopt(experiment)) return false; Event event{0, 0, "brain", "evolution_adopt", {{"key", experiment.proposal.key}, {"current", experiment.proposal.current}, {"proposed", experiment.proposal.proposed}, {"expected_gain", experiment.proposal.expected_gain}, {"confidence", experiment.proposal.confidence}}}; event.sequence = memory_.append(event); if (event.sequence == 0) { evolution_.rollback(experiment.proposal.key); return false; } ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); return true; }
+bool Brain::adopt_evolution_experiment(EvolutionExperiment& experiment) {
+    std::unique_lock lock(mutex_);
+    if (!evolution_controller_.validate_adoption_for_brain(experiment)) return false;
+    Event event{0, 0, "brain", "evolution_adopt",
+                {{"key", experiment.proposal.key},
+                 {"current", experiment.proposal.current},
+                 {"proposed", experiment.proposal.proposed},
+                 {"expected_gain", experiment.proposal.expected_gain},
+                 {"confidence", experiment.proposal.confidence}}};
+    event.sequence = memory_.append(event);
+    if (event.sequence == 0) return false;
+    if (!evolution_controller_.adopt_for_brain(experiment)) return false;
+    ++state_.events_seen;
+    state_.cycle = event.sequence;
+    sync_self_state();
+    return true;
+}
+
 CanaryDecision Brain::observe_evolution_canary(const std::string& parameter_key, const std::string& experiment_id, CanaryObservation observation) {
     std::unique_lock lock(mutex_);
     const auto decision = evolution_controller_.observe_canary_for_brain(observation);
