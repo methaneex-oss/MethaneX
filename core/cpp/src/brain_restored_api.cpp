@@ -35,7 +35,41 @@ Prediction* Brain::find_prediction(std::uint64_t sequence) noexcept { for (auto&
 const Prediction* Brain::find_prediction(std::uint64_t sequence) const noexcept { for (const auto& prediction : predictions_) if (prediction.created_sequence == sequence) return &prediction; return nullptr; }
 Intent Brain::intent() const { std::shared_lock lock(mutex_); const auto self = self_state_model_.snapshot(); return intent_model_.select(goals_model_.eligible(state_.cycle), threat_state_.score, self.uncertainty, state_.cycle); }
 StrategyContext Brain::strategy() const { std::shared_lock lock(mutex_); const auto self = self_state_model_.snapshot(); const auto selected_intent = intent_model_.select(goals_model_.eligible(state_.cycle), threat_state_.score, self.uncertainty, state_.cycle); return strategy_model_.formulate(selected_intent, attention_state_, threat_state_.score, self.uncertainty); }
-bool Brain::assimilate_goal_outcome(const GoalOutcomeEvidence& raw_evidence) { GoalOutcomeEvidence evidence = raw_evidence; evidence.normalize(); if (evidence.goal_id.empty()) return false; std::unique_lock lock(mutex_); const auto* current = goals_model_.get(evidence.goal_id); if (current == nullptr) return false; evidence.progress_before = std::clamp(current->progress, 0.0, 1.0); evidence.normalize(); evidence.completed = evidence.completed || evidence.progress_after >= 1.0; evidence.normalize(); Event progress_event{0, 0, "brain", "goal_progress", {{"id", evidence.goal_id}, {"progress", evidence.progress_after}, {"confidence", evidence.confidence}, {"delta", evidence.delta}, {"sequence", static_cast<std::int64_t>(evidence.sequence)}}}; progress_event.sequence = memory_.append(progress_event); if (progress_event.sequence == 0) return false; ++state_.events_seen; state_.cycle = progress_event.sequence; replay(progress_event); if (evidence.completed) { Event complete_event{0, 0, "brain", "goal_complete", {{"id", evidence.goal_id}, {"confidence", evidence.confidence}, {"sequence", static_cast<std::int64_t>(evidence.sequence)}}}; complete_event.sequence = memory_.append(complete_event); if (complete_event.sequence == 0) return false; ++state_.events_seen; state_.cycle = complete_event.sequence; replay(complete_event); } sync_self_state(); return true; }
+bool Brain::assimilate_goal_outcome(const GoalOutcomeEvidence& raw_evidence) {
+    GoalOutcomeEvidence evidence = raw_evidence;
+    evidence.normalize();
+    if (evidence.goal_id.empty()) return false;
+    std::unique_lock lock(mutex_);
+    const auto* current = goals_model_.get(evidence.goal_id);
+    if (current == nullptr) return false;
+    evidence.progress_before = std::clamp(current->progress, 0.0, 1.0);
+    evidence.normalize();
+    evidence.completed = evidence.completed || evidence.progress_after >= 1.0;
+    evidence.normalize();
+
+    Event event;
+    if (evidence.completed) {
+        event = Event{0, 0, "brain", "goal_complete",
+                      {{"id", evidence.goal_id},
+                       {"confidence", evidence.confidence},
+                       {"delta", evidence.delta},
+                       {"sequence", static_cast<std::int64_t>(evidence.sequence)}}};
+    } else {
+        event = Event{0, 0, "brain", "goal_progress",
+                      {{"id", evidence.goal_id},
+                       {"progress", evidence.progress_after},
+                       {"confidence", evidence.confidence},
+                       {"delta", evidence.delta},
+                       {"sequence", static_cast<std::int64_t>(evidence.sequence)}}};
+    }
+    event.sequence = memory_.append(event);
+    if (event.sequence == 0) return false;
+    replay(event);
+    ++state_.events_seen;
+    state_.cycle = event.sequence;
+    sync_self_state();
+    return true;
+}
 std::vector<Decision> Brain::choose(const std::vector<CandidateAction>& actions) const { std::shared_lock lock(mutex_); const auto self = self_state_model_.snapshot(); const auto eligible = goals_model_.eligible(state_.cycle); const auto selected_intent = intent_model_.select(eligible, threat_state_.score, self.uncertainty, state_.cycle); const auto strategy = strategy_model_.formulate(selected_intent, attention_state_, threat_state_.score, self.uncertainty); const auto learned = developmental_learning_.best_strategy(eligible.empty() ? "global" : eligible.front().id); std::vector<CandidateAction> developmentally_weighted = actions; if (learned != nullptr) { for (auto& candidate : developmentally_weighted) { if (candidate.name == learned->action) { const double influence = std::clamp(learned->value * learned->confidence, -1.0, 1.0); candidate.utility += 0.25 * influence; candidate.expected_value += 0.25 * influence; } } } const auto plan = planner_.build(developmentally_weighted, 1, strategy.planning); DecisionContext context; context.goal_priority = strategy.planning.goal_priority; context.goal_progress = strategy.planning.goal_progress; context.plan_expected_value = plan.expected_value; context.plan_risk = plan.risk; context.resource_budget = strategy.planning.resource_budget; context.uncertainty = strategy.planning.uncertainty; context.threat = strategy.planning.threat; context.deadline_pressure = strategy.planning.deadline_pressure; return decision_.decide(developmentally_weighted, context); }
 std::vector<Decision> Brain::choose_with_affect(const std::vector<CandidateAction>& actions) const { std::shared_lock lock(mutex_); const auto self = self_state_model_.snapshot(); const auto eligible = goals_model_.eligible(state_.cycle); const auto selected_intent = intent_model_.select(eligible, threat_state_.score, self.uncertainty, state_.cycle); const auto strategy = strategy_model_.formulate(selected_intent, attention_state_, threat_state_.score, self.uncertainty); const auto learned = developmental_learning_.best_strategy(eligible.empty() ? "global" : eligible.front().id); std::vector<CandidateAction> developmentally_weighted = actions; if (learned != nullptr) { for (auto& candidate : developmentally_weighted) { if (candidate.name == learned->action) { const double influence = std::clamp(learned->value * learned->confidence, -1.0, 1.0); candidate.utility += 0.25 * influence; candidate.expected_value += 0.25 * influence; } } } const auto plan = planner_.build(developmentally_weighted, 1, strategy.planning); const auto affect = affective_state_model_.state(); const auto appraisal = affective_learning_model_.appraisal(); DecisionContext context; context.goal_priority = strategy.planning.goal_priority; context.goal_progress = strategy.planning.goal_progress; context.plan_expected_value = plan.expected_value; context.plan_risk = plan.risk; context.resource_budget = strategy.planning.resource_budget; context.uncertainty = strategy.planning.uncertainty; context.threat = strategy.planning.threat; context.deadline_pressure = strategy.planning.deadline_pressure; context.valence = affect.valence * appraisal.outcome_weight; context.arousal = affect.arousal * appraisal.novelty_weight; context.affective_uncertainty = affect.uncertainty * appraisal.uncertainty_weight; context.tension = affect.tension * appraisal.tension_error_weight; context.stability = affect.stability; return decision_.decide(developmentally_weighted, context); }
 std::vector<ActionAssessment> Brain::assess_actions(const std::vector<Decision>& decisions, ActionConstraints constraints) const { std::shared_lock lock(mutex_); return action_model_.assess(decisions, constraints); }
