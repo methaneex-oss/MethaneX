@@ -73,17 +73,5 @@ struct Decision {
 };
 
 struct SimulationResult { std::vector<std::pair<std::string, Scalar>> states; double confidence{0.0}; };
-struct PlanningContext {
-    std::vector<Belief> assumptions;
-    double risk_tolerance{1.0};
-    double minimum_confidence{0.0};
-    double valence{0.0};
-    double arousal{0.0};
-    double affective_uncertainty{0.0};
-    double tension{0.0};
-    double stability{1.0};
-};
-struct PlanStep { CandidateAction action; double expected_score{0.0}; };
-struct Plan { std::vector<PlanStep> steps; double expected_value{0.0}; double confidence{0.0}; };
 
 } // namespace jarvis::core
