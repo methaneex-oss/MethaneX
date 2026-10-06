@@ -53,6 +53,7 @@ int main() {
     const auto assessments = brain.assess_actions(decisions, ActionConstraints{0.5, false});
     assert(!assessments.empty());
     const auto& executable = assessments.front();
+    const auto affect_before_action = brain.affective_state();
     const auto action_result = brain.execute_action(
         executable,
         [](const CandidateAction& action) { return action.name == "safe"; },
@@ -65,6 +66,8 @@ int main() {
     assert(brain.memory().by_kind("action_outcome", 1).size() == 1);
     assert(brain.memory().by_kind("affective_learning", 1).size() == 1);
     assert(brain.memory().by_kind("learning", 1).size() == 1);
+    // The derived learning event must not re-appraise the same experience.
+    assert(brain.affective_state().updates == affect_before_action.updates + 1);
 
     const auto affect_before_failure = brain.affective_state();
     const auto learning_before_failure = brain.affective_learning_updates();
