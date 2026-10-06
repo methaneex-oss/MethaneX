@@ -33,7 +33,6 @@ int main() {
             ExperimentOutcome::Improved, true};
         assert(brain.adopt_evolution_experiment(experiment));
         assert(!brain.evolution_history().empty());
-        const auto live_history_size = brain.evolution_history().size();
 
         brain.register_evolution_parameter("direct.rollback", 0.2);
         brain.observe_evolution_fitness("direct.rollback", 0.9);
