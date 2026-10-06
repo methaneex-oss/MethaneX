@@ -1,4 +1,5 @@
 #include "jarvis/core/brain.hpp"
+#include "jarvis/core/cognitive_cycle.hpp"
 
 #include <algorithm>
 #include <cassert>
