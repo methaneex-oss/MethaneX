@@ -125,8 +125,9 @@ const LearnedStrategy* DevelopmentalLearning::best_related_strategy(const std::s
     for (const auto& [_, strategy] : strategies_) {
         const double similarity = context_similarity(context, strategy.context);
         if (similarity < threshold) continue;
-        const double score = similarity * std::max(0.0, strategy.confidence) *
-                             (0.5 + 0.5 * std::abs(std::clamp(strategy.value, -1.0, 1.0)));
+        const double value = std::clamp(strategy.value, -1.0, 1.0);
+        const double positive_value = 0.5 * (value + 1.0);
+        const double score = similarity * std::max(0.0, strategy.confidence) * positive_value;
         if (best == nullptr || score > best_score) {
             best = &strategy;
             best_score = score;
