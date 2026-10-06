@@ -81,6 +81,11 @@ int main() {
     assert(adapted.context.decision_context.plan_expected_value == adapted.context.plan.expected_value);
     assert(adapted.context.decision_context.resource_budget == input.resource_budget);
     assert(adapted.context.decision_context.deadline_pressure == input.deadline_pressure);
+    assert(std::isfinite(adapted.context.decision_context.valence));
+    assert(std::isfinite(adapted.context.decision_context.arousal));
+    assert(std::isfinite(adapted.context.decision_context.affective_uncertainty));
+    assert(std::isfinite(adapted.context.decision_context.tension));
+    assert(std::isfinite(adapted.context.decision_context.stability));
     assert(adapted.context.action_assessments.size() == adapted.context.decisions.size());
     assert(adapted.context.action_assessments.front().action.name == adapted.context.decisions.front().action.name);
     assert(adapted.context.action_assessments.front().permitted);
