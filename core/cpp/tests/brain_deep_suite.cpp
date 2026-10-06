@@ -69,6 +69,20 @@ int main() {
     // The derived learning event must not re-appraise the same experience.
     assert(brain.affective_state().updates == affect_before_action.updates + 1);
 
+    // Derived affective-learning evidence is keyed to its source action and must not train twice.
+    const auto affective_records = brain.memory().by_kind("affective_learning", 1);
+    assert(affective_records.size() == 1);
+    const duplicate_source = affective_records.front().data.find("source_action_sequence");
+    assert(duplicate_source != affective_records.front().data.end());
+    const auto affect_before_duplicate = brain.affective_state();
+    const auto calibration_before_duplicate = brain.affective_calibration();
+    brain.observe(affective_records.front());
+    const auto affect_after_duplicate = brain.affective_state();
+    const auto calibration_after_duplicate = brain.affective_calibration();
+    assert(affect_after_duplicate.updates == affect_before_duplicate.updates);
+    assert(calibration_after_duplicate.observations == calibration_before_duplicate.observations);
+    assert(std::abs(calibration_after_duplicate.mean_absolute_error - calibration_before_duplicate.mean_absolute_error) < 1e-12);
+
     // Replay must reconstruct the same learned state produced by live processing.
     {
         Brain replayed_action(root / "continuity.bin");
