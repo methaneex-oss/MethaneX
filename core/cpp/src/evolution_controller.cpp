@@ -55,6 +55,15 @@ bool EvolutionController::adopt(EvolutionExperiment& experiment) {
     return true;
 }
 
+bool EvolutionController::validate_adoption_for_brain(const EvolutionExperiment& experiment) const noexcept {
+    return experiment.candidate_executed && EvolutionSafetyGate::approve(experiment, policy_);
+}
+
+bool EvolutionController::adopt_for_brain(EvolutionExperiment& experiment) noexcept {
+    if (!validate_adoption_for_brain(experiment)) return false;
+    return model_.adopt(experiment.proposal);
+}
+
 CanaryDecision EvolutionController::observe_canary_for_brain(const CanaryObservation& observation) noexcept {
     return canary_.observe(observation);
 }
