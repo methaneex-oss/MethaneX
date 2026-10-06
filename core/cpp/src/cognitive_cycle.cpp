@@ -132,11 +132,11 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
         uncertainty,
         threat,
         deadline_pressure,
-        affect.valence,
-        affect.arousal,
+        valence,
+        arousal,
         affective_uncertainty,
         tension,
-        affect.stability};
+        stability};
     result.context.decisions = brain_.decision_engine().decide(planned_actions, result.context.decision_context);
     if (result.context.decisions.empty()) { result.status = CognitiveCycleStatus::no_action; result.context.reflection = brain_.reflect(); return result; }
     result.context.action_assessments = brain_.action_model().assess(result.context.decisions, input.action_constraints);
