@@ -123,10 +123,6 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     std::vector<CandidateAction> planned_actions;
     planned_actions.reserve(result.context.plan.steps.size());
     for (const auto& step : result.context.plan.steps) planned_actions.push_back(step.action);
-    const auto& affect = result.context.affective_state;
-    const auto& appraisal = result.context.affective_appraisal;
-    const double affective_uncertainty = std::clamp(affect.uncertainty * (0.75 + 0.25 * appraisal.uncertainty_weight), 0.0, 1.0);
-    const double tension = std::clamp(affect.tension * (0.75 + 0.25 * appraisal.tension_error_weight), 0.0, 1.0);
     result.context.decision_context = DecisionContext{
         goal_priority,
         goal_progress,
