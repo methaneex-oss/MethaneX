@@ -25,6 +25,9 @@ struct CognitiveCycleInput {
     Event observation;
     std::vector<CandidateAction> candidate_actions;
     std::optional<std::string> goal_id;
+    // Optional structural context for developmental generalization. When omitted,
+    // the selected goal id remains the backward-compatible context.
+    std::string developmental_context;
     std::size_t planning_horizon{1};
     std::size_t memory_limit{8};
     std::size_t reasoning_steps{8};
