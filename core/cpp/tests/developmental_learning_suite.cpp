@@ -49,6 +49,14 @@ int main() {
     assert(high_affect.best_strategy("context")->confidence >
            low_affect.best_strategy("context")->confidence);
 
+    // Prediction error should increase adaptation strength without turning
+    // a positive outcome into a negative learned value.
+    DevelopmentalLearning surprising_success;
+    surprising_success.observe_strategy("surprise", "successful-action", LearningSignal{1.0, 1.0, 0.8, 0.2});
+    const auto* surprising = surprising_success.best_strategy("surprise");
+    assert(surprising != nullptr);
+    assert(surprising->value > 0.0);
+
     // Related retrieval must prefer genuinely positive learned value over a
     // more similar but strongly negative strategy. Negative value remains
     // usable when it is the only relevant evidence, but must not outrank
