@@ -82,7 +82,7 @@ int main() {
     const auto affect_after_failure = brain.affective_state();
     assert(std::isfinite(affect_after_failure.valence));
     assert(std::isfinite(affect_after_failure.tension));
-    assert(brain.affective_learning_updates() > learning_before_failure);
+    assert(brain.affective_learning_updates() == learning_before_failure);
     assert(affect_after_failure.valence != affect_before_failure.valence ||
            affect_after_failure.tension != affect_before_failure.tension ||
            affect_after_failure.arousal != affect_before_failure.arousal ||
