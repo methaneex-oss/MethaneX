@@ -72,6 +72,9 @@ int main() {
     assert(failed_action.authorized);
     assert(!failed_action.executed);
     assert(brain.memory().by_kind("action_outcome", 2).size() == 2);
+    // No consequence observer means the action result must not train the
+    // consequence-sensitive affective calibration model.
+    assert(brain.affective_learning_updates() == learning_before_failure);
 
     const auto affect_after_failure = brain.affective_state();
     assert(std::isfinite(affect_after_failure.valence));
