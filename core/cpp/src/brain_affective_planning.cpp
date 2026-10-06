@@ -68,7 +68,13 @@ std::vector<Decision> Brain::choose_with_developmental_learning(
             }
         }
     }
-    const auto plan = planner_.build(adapted_actions, 1, strategy.planning);
+    auto planning_context = strategy.planning;
+    planning_context.valence = valence;
+    planning_context.arousal = arousal;
+    planning_context.affective_uncertainty = affective_uncertainty;
+    planning_context.tension = tension;
+    planning_context.stability = stability;
+    const auto plan = planner_.build(adapted_actions, 1, planning_context);
     DecisionContext context_data;
     context_data.goal_priority = strategy.planning.goal_priority;
     context_data.goal_progress = strategy.planning.goal_progress;
@@ -116,7 +122,13 @@ std::vector<Decision> Brain::choose_with_developmental_learning(
             }
         }
     }
-    const auto plan = planner_.build(adapted_actions, 1, strategy.planning);
+    auto planning_context = strategy.planning;
+    planning_context.valence = valence;
+    planning_context.arousal = arousal;
+    planning_context.affective_uncertainty = affective_uncertainty;
+    planning_context.tension = tension;
+    planning_context.stability = stability;
+    const auto plan = planner_.build(adapted_actions, 1, planning_context);
     DecisionContext context_data;
     context_data.goal_priority = strategy.planning.goal_priority;
     context_data.goal_progress = strategy.planning.goal_progress;
