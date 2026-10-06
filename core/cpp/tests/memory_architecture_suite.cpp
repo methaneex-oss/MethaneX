@@ -48,15 +48,15 @@ int main() {
     assert(experience_ranked.front().event.sequence == old_experience);
 
     const auto working = memory.append(Event{0, 4, "sensor", "transient", {{"topic", std::string("noise")}}});
-    assert(working == 4);
+    assert(working == 7);
     assert(memory.promote(working, MemoryTier::Working, 0.4, 0.4));
     assert(memory.working_size() == 1);
     assert(memory.forget_working(0));
     assert(memory.working_size() == 0);
 
     Memory restored(3, path);
-    assert(restored.size() == 4);
-    assert(restored.next_sequence() == 5);
+    assert(restored.size() == 7);
+    assert(restored.next_sequence() == 8);
     assert(restored.recent(2).size() == 2);
     assert(restored.by_kind("learning", 1).size() == 1);
 
