@@ -51,6 +51,7 @@ public:
     bool adopt(const EvolutionProposal& proposal);
     bool rollback(const std::string& key);
     bool restore_baseline(const std::string& key) noexcept;
+    bool restore_previous(const std::string& key) noexcept;
     const StrategyParameter* parameter(const std::string& key) const noexcept;
     const EvolutionPolicy& policy() const noexcept { return policy_; }
 
