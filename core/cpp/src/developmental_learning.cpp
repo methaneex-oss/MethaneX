@@ -62,7 +62,10 @@ double DevelopmentalLearning::learning_rate(const LearningSignal& signal) noexce
 void DevelopmentalLearning::observe_association(std::string left, std::string right, const LearningSignal& signal) {
     if (left.empty() || right.empty()) return;
     const double rate = learning_rate(signal);
-    const double evidence = bounded(signal.reward - signal.prediction_error);
+    // Prediction error controls how strongly experience is learned; it is not
+    // itself a signed outcome. Keep reward as the learned target so a
+    // surprising positive outcome does not become a negative association.
+    const double evidence = bounded(signal.reward);
     auto& association = associations_[association_id(left, right)];
     if (association.observations == 0) {
         association.left = std::move(left);
@@ -77,7 +80,10 @@ void DevelopmentalLearning::observe_association(std::string left, std::string ri
 void DevelopmentalLearning::observe_strategy(std::string context, std::string action, const LearningSignal& signal) {
     if (context.empty() || action.empty()) return;
     const double rate = learning_rate(signal);
-    const double target = bounded(signal.reward - signal.prediction_error);
+    // Prediction error is a learning-strength signal, not a penalty on the
+    // outcome target. A successful but surprising action should remain learned
+    // as successful while the error increases adaptation rate.
+    const double target = bounded(signal.reward);
     auto& strategy = strategies_[strategy_id(context, action)];
     if (strategy.uses == 0) {
         strategy.context = std::move(context);
