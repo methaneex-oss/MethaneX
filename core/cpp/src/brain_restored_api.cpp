@@ -115,6 +115,10 @@ bool Brain::adopt_evolution_experiment(EvolutionExperiment& experiment) {
     event.sequence = memory_.append(event);
     if (event.sequence == 0) return false;
     if (!evolution_controller_.adopt_for_brain(experiment)) return false;
+    evolution_history_.append(EvolutionHistoryRecord{
+        experiment.id, experiment.proposal.key, EvolutionRecordAction::Adopted,
+        experiment.outcome, experiment.baseline_fitness, experiment.candidate_fitness,
+        experiment.confidence, 0, "adopted", {}});
     ++state_.events_seen;
     state_.cycle = event.sequence;
     sync_self_state();
