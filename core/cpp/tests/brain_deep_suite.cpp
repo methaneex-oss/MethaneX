@@ -125,25 +125,26 @@ int main() {
     assert(selector.create_goal(Goal{"navigation", "navigate", 1.0, 0.0, 0, 0,
                                      GoalStatus::pending, {}, {}}));
     assert(selector.activate_goal("navigation"));
+    CandidateAction learned_route{"route_a", 0.0, 0.0, 0.1, 1.0};
+    CandidateAction unlearned_route{"route_b", 0.15, 0.15, 0.1, 1.0};
+    const auto before_learning = selector.choose({learned_route, unlearned_route});
+    assert(!before_learning.empty());
+    assert(before_learning.front().action.name == "route_b");
+
     for (int i = 0; i < 8; ++i) {
         selector.observe(strategy_outcome("navigation", "route_a", 0.9, 0.1, 0.8, 0.2));
         selector.observe(strategy_outcome("navigation", "route_b", -0.8, 0.9, 0.8, 0.2));
     }
 
-    CandidateAction learned_route{"route_a", 0.0, 0.0, 0.1, 1.0};
-    CandidateAction unlearned_route{"route_b", 0.15, 0.15, 0.1, 1.0};
-    const auto base_selection = selector.choose({learned_route, unlearned_route});
-    const auto learned_selection = selector.choose_with_developmental_learning(
-        {learned_route, unlearned_route});
-    assert(!base_selection.empty());
+    // The ordinary decision path now consumes the learned developmental
+    // strategy. No separate "developmental decision" API is required.
+    const auto learned_selection = selector.choose({learned_route, unlearned_route});
     assert(!learned_selection.empty());
-    assert(base_selection.front().action.name == "route_b");
     assert(learned_selection.front().action.name == "route_a");
 
     // The learned action preference must survive restart and journal replay.
     Brain replayed_selector(selection_journal);
-    const auto replayed_selection = replayed_selector.choose_with_developmental_learning(
-        {learned_route, unlearned_route});
+    const auto replayed_selection = replayed_selector.choose({learned_route, unlearned_route});
     assert(!replayed_selection.empty());
     assert(replayed_selection.front().action.name == "route_a");
 
