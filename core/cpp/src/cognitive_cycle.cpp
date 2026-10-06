@@ -95,7 +95,29 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
             }
         }
     }
-    const PlanningContext planning_context{goal_priority, goal_progress, threat, uncertainty, input.resource_budget, deadline_pressure};
+    const auto& affect = result.context.affective_state;
+    const auto& appraisal = result.context.affective_appraisal;
+    const double affective_uncertainty = std::clamp(
+        affect.uncertainty * (0.75 + 0.25 * appraisal.uncertainty_weight), 0.0, 1.0);
+    const double tension = std::clamp(
+        affect.tension * (0.75 + 0.25 * appraisal.tension_error_weight), 0.0, 1.0);
+    const double valence = std::clamp(
+        affect.valence * appraisal.outcome_weight, -1.0, 1.0);
+    const double arousal = std::clamp(
+        affect.arousal * appraisal.novelty_weight, 0.0, 1.0);
+    const double stability = std::clamp(affect.stability, 0.0, 1.0);
+    const PlanningContext planning_context{
+        goal_priority,
+        goal_progress,
+        threat,
+        uncertainty,
+        input.resource_budget,
+        deadline_pressure,
+        valence,
+        arousal,
+        affective_uncertainty,
+        tension,
+        stability};
     result.context.plan = brain_.plan(learned_actions, input.planning_horizon, planning_context);
     if (result.context.plan.steps.empty()) { result.status = CognitiveCycleStatus::no_action; result.context.reflection = brain_.reflect(); return result; }
     std::vector<CandidateAction> planned_actions;
