@@ -1,7 +1,9 @@
 #include "jarvis/core/developmental_learning.hpp"
 
 #include <algorithm>
+#include <cctype>
 #include <cmath>
+#include <unordered_set>
 
 namespace jarvis::core {
 namespace {
@@ -10,6 +12,35 @@ std::string association_id(const std::string& left, const std::string& right) {
 }
 std::string strategy_id(const std::string& context, const std::string& action) {
     return context + '\x1f' + action;
+}
+
+std::vector<std::string> context_tokens(const std::string& context) {
+    std::vector<std::string> tokens;
+    std::string token;
+    for (const unsigned char character : context) {
+        if (std::isalnum(character)) {
+            token.push_back(static_cast<char>(std::tolower(character)));
+        } else if (!token.empty()) {
+            tokens.push_back(std::move(token));
+            token.clear();
+        }
+    }
+    if (!token.empty()) tokens.push_back(std::move(token));
+    return tokens;
+}
+
+double context_similarity(const std::string& left, const std::string& right) noexcept {
+    if (left == right && !left.empty()) return 1.0;
+    const auto left_tokens = context_tokens(left);
+    const auto right_tokens = context_tokens(right);
+    if (left_tokens.empty() || right_tokens.empty()) return 0.0;
+
+    std::unordered_set<std::string> left_set(left_tokens.begin(), left_tokens.end());
+    std::unordered_set<std::string> right_set(right_tokens.begin(), right_tokens.end());
+    std::size_t intersection = 0;
+    for (const auto& token : left_set) if (right_set.contains(token)) ++intersection;
+    const std::size_t union_size = left_set.size() + right_set.size() - intersection;
+    return union_size == 0 ? 0.0 : static_cast<double>(intersection) / static_cast<double>(union_size);
 }
 }
 
@@ -81,6 +112,24 @@ const LearnedStrategy* DevelopmentalLearning::best_strategy(const std::string& c
         if (best == nullptr || strategy.value > best->value ||
             (strategy.value == best->value && strategy.confidence > best->confidence)) {
             best = &strategy;
+        }
+    }
+    return best;
+}
+
+const LearnedStrategy* DevelopmentalLearning::best_related_strategy(const std::string& context,
+                                                                      double minimum_similarity) const noexcept {
+    const double threshold = std::clamp(std::isfinite(minimum_similarity) ? minimum_similarity : 0.5, 0.0, 1.0);
+    const LearnedStrategy* best = nullptr;
+    double best_score = -1.0;
+    for (const auto& [_, strategy] : strategies_) {
+        const double similarity = context_similarity(context, strategy.context);
+        if (similarity < threshold) continue;
+        const double score = similarity * std::max(0.0, strategy.confidence) *
+                             (0.5 + 0.5 * std::abs(std::clamp(strategy.value, -1.0, 1.0)));
+        if (best == nullptr || score > best_score) {
+            best = &strategy;
+            best_score = score;
         }
     }
     return best;
