@@ -49,6 +49,17 @@ int main() {
     assert(high_affect.best_strategy("context")->confidence >
            low_affect.best_strategy("context")->confidence);
 
+    // Related retrieval must prefer genuinely positive learned value over a
+    // more similar but strongly negative strategy. Negative value remains
+    // usable when it is the only relevant evidence, but must not outrank
+    // positive evidence merely because of magnitude.
+    DevelopmentalLearning related;
+    related.observe_strategy("navigation route", "good-route", LearningSignal{0.0, 1.0, 0.8, 0.2});
+    related.observe_strategy("navigation", "bad-route", LearningSignal{1.0, -1.0, 0.8, 0.2});
+    const auto* related_best = related.best_related_strategy("navigation route variant");
+    assert(related_best != nullptr);
+    assert(related_best->action == "good-route");
+
     // Legacy four-field evidence now derives deterministic affective
     // significance from prediction error, reward, salience and novelty.
     const LearningSignal derived{0.9, -0.8, 0.7, 0.6};
