@@ -53,6 +53,7 @@ int main() {
     assert(memory.working_size() == 1);
     assert(memory.forget_working(0));
     assert(memory.working_size() == 0);
+    assert(memory.tier_of(Event{0, 0, "", "transient", {}}) == MemoryTier::Episodic);
 
     Memory restored(3, path);
     assert(restored.size() == 7);
@@ -73,6 +74,7 @@ int main() {
     assert(restored.tier_of(Event{0, 0, "", "learning", {}}) == MemoryTier::Semantic);
     assert(restored.tier_of(Event{0, 0, "", "action", {}}) == MemoryTier::Procedural);
     assert(restored.working_size() == 0);
+    assert(restored.tier_of(Event{0, 0, "", "transient", {}}) == MemoryTier::Episodic);
 
     std::filesystem::remove(path, ec);
     std::filesystem::remove(metadata_path, ec);
