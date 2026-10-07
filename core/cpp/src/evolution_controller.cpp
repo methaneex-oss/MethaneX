@@ -50,8 +50,9 @@ bool EvolutionController::adopt(EvolutionExperiment& experiment) {
         return false;
     }
 
-    canary_.reset();
-    canary_.observe(CanaryObservation{experiment.baseline_fitness, experiment.candidate_fitness});
+    canaries_.erase(experiment.id);
+    canaries_[experiment.id].observe(
+        CanaryObservation{experiment.baseline_fitness, experiment.candidate_fitness});
     return true;
 }
 
