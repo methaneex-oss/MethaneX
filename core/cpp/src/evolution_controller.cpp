@@ -138,7 +138,10 @@ bool EvolutionController::validate_adoption_for_brain(const EvolutionExperiment&
 bool EvolutionController::adopt_for_brain(EvolutionExperiment& experiment) noexcept {
     if (!validate_adoption_for_brain(experiment)) return false;
     if (!adoption_journal_.stage(experiment)) return false;
-    if (!model_.adopt(experiment.proposal)) return false;
+    if (!model_.adopt(experiment.proposal)) {
+        adoption_journal_.reject(experiment.id, "model_adoption_failed");
+        return false;
+    }
     if (!adoption_journal_.commit(experiment.id, "adopted")) {
         model_.restore_previous(experiment.proposal.key);
         adoption_journal_.reject(experiment.id, "adoption_commit_failed");
