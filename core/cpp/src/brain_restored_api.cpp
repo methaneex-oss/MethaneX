@@ -131,6 +131,7 @@ bool Brain::adopt_evolution_experiment(EvolutionExperiment& experiment) {
 
 CanaryDecision Brain::observe_evolution_canary(const std::string& parameter_key, const std::string& experiment_id, CanaryObservation observation) {
     std::unique_lock lock(mutex_);
+    if (parameter_key.empty() || experiment_id.empty()) return CanaryDecision{false, false, 0.0, 0.0, "experiment_required"};
     const auto preview = evolution_controller_.preview_canary_for_brain(experiment_id, observation);
     if (preview.reason == "invalid_observation") return preview;
 
