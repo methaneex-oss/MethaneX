@@ -102,7 +102,20 @@ bool Brain::register_evolution_parameter(std::string key, double initial) { std:
 void Brain::observe_evolution_fitness(const std::string& key, double fitness) { std::unique_lock lock(mutex_); if (key.empty()) return; Event event{0, 0, "brain", "evolution_fitness", {{"key", key}, {"fitness", fitness}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return; replay(event); ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); }
 std::vector<EvolutionProposal> Brain::evolution_options() const { std::shared_lock lock(mutex_); return evolution_.propose(); }
 bool Brain::adopt_evolution(const EvolutionProposal& proposal) { std::unique_lock lock(mutex_); if (proposal.key.empty() || evolution_.parameter(proposal.key) == nullptr) return false; Event event{0, 0, "brain", "evolution_adopt", {{"key", proposal.key}, {"current", proposal.current}, {"proposed", proposal.proposed}, {"expected_gain", proposal.expected_gain}, {"confidence", proposal.confidence}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return false; replay(event); ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); return true; }
-bool Brain::rollback_evolution(const std::string& key) { std::unique_lock lock(mutex_); if (key.empty() || evolution_.parameter(key) == nullptr) return false; if (evolution_.parameter(key)->value == evolution_.parameter(key)->baseline) return false; Event event{0, 0, "brain", "evolution_rollback", {{"key", key}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return false; if (!evolution_.rollback(key)) return false; ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); return true; }
+bool Brain::rollback_evolution(const std::string& key) {
+    std::unique_lock lock(mutex_);
+    if (key.empty()) return false;
+    const auto* parameter = evolution_.parameter(key);
+    if (parameter == nullptr || parameter->value == parameter->baseline) return false;
+    Event event{0, 0, "brain", "evolution_rollback", {{"key", key}}};
+    event.sequence = memory_.append(event);
+    if (event.sequence == 0) return false;
+    if (!evolution_.rollback(key)) return false;
+    ++state_.events_seen;
+    state_.cycle = event.sequence;
+    sync_self_state();
+    return true;
+}
 bool Brain::record_evolution_evaluation(EvolutionExperiment& experiment) {
     std::unique_lock lock(mutex_);
     if (!evolution_controller_.validate_evaluation_for_brain(experiment)) return false;
