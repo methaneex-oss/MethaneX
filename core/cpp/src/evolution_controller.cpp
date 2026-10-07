@@ -61,7 +61,18 @@ bool EvolutionController::validate_adoption_for_brain(const EvolutionExperiment&
 
 bool EvolutionController::adopt_for_brain(EvolutionExperiment& experiment) noexcept {
     if (!validate_adoption_for_brain(experiment)) return false;
-    return model_.adopt(experiment.proposal);
+    if (!adoption_journal_.stage(experiment)) return false;
+    if (!model_.adopt(experiment.proposal)) return false;
+    if (!adoption_journal_.commit(experiment.id, "adopted")) {
+        model_.rollback(experiment.proposal.key);
+        adoption_journal_.reject(experiment.id, "adoption_commit_failed");
+        return false;
+    }
+    return true;
+}
+
+CanaryDecision EvolutionController::preview_canary_for_brain(const CanaryObservation& observation) const noexcept {
+    return canary_.preview(observation);
 }
 
 CanaryDecision EvolutionController::observe_canary_for_brain(const CanaryObservation& observation) noexcept {
