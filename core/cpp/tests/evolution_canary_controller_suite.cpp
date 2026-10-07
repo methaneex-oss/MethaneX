@@ -30,6 +30,29 @@ int main() {
 
     const auto* restored = model.parameter("reasoning.weight");
     assert(restored != nullptr && restored->value == restored->baseline);
+
+    EvolutionModel isolated_model;
+    isolated_model.register_parameter("planner.weight", 0.4);
+    EvolutionHistory isolated_history;
+    EvolutionController isolated(isolated_model, isolated_history, policy);
+    EvolutionExperiment second{
+        "exp-second",
+        EvolutionProposal{"planner.weight", 0.4, 0.5, 0.1, 0.95},
+        0.70, 0.84, 0.05, 0.95, ExperimentOutcome::Improved, true};
+    assert(isolated.record_evaluation(second));
+    assert(isolated.adopt(second));
+    const auto preview = isolated.preview_canary_for_brain("exp-second", {0.84, 0.83});
+    assert(!preview.sufficient_evidence);
+    const auto first = isolated.observe_canary_for_brain("exp-second", {0.84, 0.83});
+    assert(!first.sufficient_evidence);
+    const auto second_decision = isolated.observe_canary_for_brain("exp-other", {0.84, 0.70});
+    assert(!second_decision.sufficient_evidence);
+    const auto second_continued = isolated.observe_canary_for_brain("exp-second", {0.84, 0.82});
+    assert(!second_continued.sufficient_evidence);
+    const auto third = isolated.observe_canary_for_brain("exp-second", {0.84, 0.80});
+    assert(third.sufficient_evidence);
+    assert(!third.rollback);
+
     const auto records = history.for_experiment("exp-canary");
     assert(records.size() >= 2);
     assert(records.back().action == EvolutionRecordAction::RolledBack);
