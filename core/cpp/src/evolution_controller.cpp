@@ -11,15 +11,32 @@ EvolutionController::EvolutionController(EvolutionModel& model, EvolutionHistory
     : model_(model), history_(history), policy_(policy), canaries_{}, adoption_journal_{} {}
 
 bool EvolutionController::record_evaluation(const EvolutionExperiment& experiment) {
-    const bool staged = adoption_journal_.stage(experiment);
-    const bool recorded = history_.append(EvolutionHistoryRecord{
-        experiment.id, experiment.proposal.key, EvolutionRecordAction::Evaluated,
-        experiment.outcome, experiment.baseline_fitness, experiment.candidate_fitness,
-        experiment.confidence, 0, "evaluation", {}});
-    if (staged && !recorded) {
-        adoption_journal_.reject(experiment.id, "evaluation_history_failed");
+    if (experiment.id.empty() || experiment.proposal.key.empty() ||
+        !experiment.candidate_executed ||
+        !std::isfinite(experiment.baseline_fitness) ||
+        !std::isfinite(experiment.candidate_fitness) ||
+        !std::isfinite(experiment.confidence) ||
+        !std::isfinite(experiment.proposal.current) ||
+        !std::isfinite(experiment.proposal.proposed) ||
+        !std::isfinite(experiment.proposal.expected_gain) ||
+        experiment.confidence < 0.0 || experiment.confidence > 1.0 ||
+        experiment.outcome == ExperimentOutcome::Pending) {
+        return false;
     }
-    return staged && recorded;
+
+    for (const auto& record : history_.for_experiment(experiment.id)) {
+        if (record.action == EvolutionRecordAction::Evaluated) return true;
+    }
+
+    if (!adoption_journal_.stage(experiment)) return false;
+    if (history_.append(EvolutionHistoryRecord{
+            experiment.id, experiment.proposal.key, EvolutionRecordAction::Evaluated,
+            experiment.outcome, experiment.baseline_fitness, experiment.candidate_fitness,
+            experiment.confidence, 0, "evaluation", {}})) {
+        return true;
+    }
+    adoption_journal_.reject(experiment.id, "evaluation_history_failed");
+    return false;
 }
 
 bool EvolutionController::validate_evaluation_for_brain(
