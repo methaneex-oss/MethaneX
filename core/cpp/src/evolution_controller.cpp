@@ -56,7 +56,9 @@ bool EvolutionController::adopt(EvolutionExperiment& experiment) {
 }
 
 bool EvolutionController::validate_adoption_for_brain(const EvolutionExperiment& experiment) const noexcept {
-    return experiment.candidate_executed && EvolutionSafetyGate::approve(experiment, policy_);
+    return !experiment.id.empty() && experiment.candidate_executed &&
+           EvolutionSafetyGate::approve(experiment, policy_) &&
+           model_.evaluate(experiment.proposal).eligible;
 }
 
 bool EvolutionController::adopt_for_brain(EvolutionExperiment& experiment) noexcept {
