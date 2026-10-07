@@ -22,6 +22,49 @@ bool EvolutionController::record_evaluation(const EvolutionExperiment& experimen
     return staged && recorded;
 }
 
+bool EvolutionController::validate_evaluation_for_brain(
+    const EvolutionExperiment& experiment) const noexcept {
+    if (experiment.id.empty() || experiment.proposal.key.empty() ||
+        !experiment.candidate_executed ||
+        !std::isfinite(experiment.baseline_fitness) ||
+        !std::isfinite(experiment.candidate_fitness) ||
+        !std::isfinite(experiment.confidence) ||
+        experiment.confidence < 0.0 || experiment.confidence > 1.0 ||
+        experiment.outcome == ExperimentOutcome::Pending ||
+        adoption_journal_.get(experiment.id).has_value()) {
+        return false;
+    }
+    return true;
+}
+
+bool EvolutionController::record_evaluation_for_brain(
+    const EvolutionExperiment& experiment) noexcept {
+    if (!validate_evaluation_for_brain(experiment)) return false;
+    if (!adoption_journal_.stage(experiment)) return false;
+    if (history_.append(EvolutionHistoryRecord{
+            experiment.id, experiment.proposal.key, EvolutionRecordAction::Evaluated,
+            experiment.outcome, experiment.baseline_fitness, experiment.candidate_fitness,
+            experiment.confidence, 0, "evaluation", {}})) {
+        return true;
+    }
+    adoption_journal_.reject(experiment.id, "evaluation_history_failed");
+    return false;
+}
+
+bool EvolutionController::replay_evaluation(
+    const EvolutionExperiment& experiment) noexcept {
+    if (experiment.id.empty() || experiment.proposal.key.empty()) return false;
+    const auto records = history_.for_experiment(experiment.id);
+    for (const auto& record : records) {
+        if (record.action == EvolutionRecordAction::Evaluated) return true;
+    }
+    if (!adoption_journal_.stage(experiment)) return false;
+    return history_.append(EvolutionHistoryRecord{
+        experiment.id, experiment.proposal.key, EvolutionRecordAction::Evaluated,
+        experiment.outcome, experiment.baseline_fitness, experiment.candidate_fitness,
+        experiment.confidence, 0, "replayed", {}});
+}
+
 bool EvolutionController::adopt(EvolutionExperiment& experiment) {
     if (!experiment.candidate_executed) return false;
     if (!adoption_journal_.stage(experiment)) return false;
