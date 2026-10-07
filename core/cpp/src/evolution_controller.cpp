@@ -158,8 +158,10 @@ bool EvolutionController::rollback_for_brain(
     const std::string& reason,
     double observed_delta) noexcept {
     if (!validate_rollback_for_brain(parameter_key, experiment_id)) return false;
-    if (!model_.rollback(parameter_key)) return false;
     if (!adoption_journal_.rollback(experiment_id, reason)) return false;
+    if (!model_.rollback(parameter_key)) {
+        return false;
+    }
     return history_.append(EvolutionHistoryRecord{
         experiment_id, parameter_key, EvolutionRecordAction::RolledBack,
         ExperimentOutcome::Degraded, 0.0, observed_delta, 0.0, 0,
