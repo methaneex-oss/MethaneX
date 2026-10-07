@@ -127,28 +127,50 @@ bool Brain::adopt_evolution_experiment(EvolutionExperiment& experiment) {
 
 CanaryDecision Brain::observe_evolution_canary(const std::string& parameter_key, const std::string& experiment_id, CanaryObservation observation) {
     std::unique_lock lock(mutex_);
-    const auto decision = evolution_controller_.observe_canary_for_brain(observation);
-    if (!decision.rollback) return decision;
+    const auto preview = evolution_controller_.preview_canary_for_brain(observation);
+    if (preview.reason == "invalid_observation") return preview;
 
-    Event event{0, 0, "brain", "evolution_rollback",
-                {{"key", parameter_key},
-                 {"experiment_id", experiment_id},
-                 {"reason", decision.reason},
-                 {"observed_delta", decision.mean_delta}}};
-    event.sequence = memory_.append(event);
-    if (event.sequence == 0) return CanaryDecision{false, decision.sufficient_evidence, decision.mean_delta,
-                                                   decision.worst_delta, "rollback_not_persisted"};
+    Event observation_event{0, 0, "brain", "evolution_canary",
+                            {{"key", parameter_key},
+                             {"experiment_id", experiment_id},
+                             {"baseline", observation.baseline_fitness},
+                             {"candidate", observation.candidate_fitness}}};
+    observation_event.sequence = memory_.append(observation_event);
+    if (observation_event.sequence == 0) {
+        return CanaryDecision{false, preview.sufficient_evidence, preview.mean_delta,
+                              preview.worst_delta, "observation_not_persisted"};
+    }
+    const auto decision = evolution_controller_.observe_canary_for_brain(observation);
+    ++state_.events_seen;
+    state_.cycle = observation_event.sequence;
+
+    if (!decision.rollback) {
+        sync_self_state();
+        return decision;
+    }
+
+    Event rollback_event{0, 0, "brain", "evolution_rollback",
+                         {{"key", parameter_key},
+                          {"experiment_id", experiment_id},
+                          {"reason", decision.reason},
+                          {"observed_delta", decision.mean_delta}}};
+    rollback_event.sequence = memory_.append(rollback_event);
+    if (rollback_event.sequence == 0) {
+        sync_self_state();
+        return CanaryDecision{false, decision.sufficient_evidence, decision.mean_delta,
+                              decision.worst_delta, "rollback_not_persisted"};
+    }
     if (!evolution_controller_.rollback(parameter_key, experiment_id, decision.reason,
                                          decision.mean_delta)) {
+        sync_self_state();
         return CanaryDecision{false, decision.sufficient_evidence, decision.mean_delta,
                               decision.worst_delta, "rollback_failed"};
     }
     ++state_.events_seen;
-    state_.cycle = event.sequence;
+    state_.cycle = rollback_event.sequence;
     sync_self_state();
     return decision;
 }
-
 std::vector<EvolutionHistoryRecord> Brain::evolution_history() const { std::shared_lock lock(mutex_); return evolution_history_.records(); }
 BrainSnapshot Brain::snapshot() const { std::shared_lock lock(mutex_); BrainSnapshot snapshot; snapshot.state = state_; snapshot.self_state = self_state_model_.snapshot(); for (const auto& [_, belief] : beliefs_) snapshot.beliefs.push_back(belief); for (const auto& prediction : predictions_) snapshot.predictions.push_back(prediction); snapshot.causal_links = causal_.links(); snapshot.goals = goals_model_.all(); return snapshot; }
 BrainState Brain::state() const { std::shared_lock lock(mutex_); return state_; }
