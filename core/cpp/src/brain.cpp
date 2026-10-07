@@ -64,8 +64,64 @@ void Brain::replay(const Event& event) {
     if (event.kind == "evolution_evaluated") { const auto* id = string_value(event.data, "experiment_id"); const auto* key = string_value(event.data, "key"); if (id != nullptr && key != nullptr) evolution_history_.append(EvolutionHistoryRecord{*id, *key, EvolutionRecordAction::Evaluated, static_cast<ExperimentOutcome>(integer_value(event.data, "outcome")), double_value(event.data, "baseline"), double_value(event.data, "candidate"), double_value(event.data, "confidence"), 0, "replayed", {}}); return; }
     if (event.kind == "evolution_register") { if (const auto* key = string_value(event.data, "key")) evolution_.register_parameter(*key, double_value(event.data, "initial")); return; }
     if (event.kind == "evolution_fitness") { if (const auto* key = string_value(event.data, "key")) evolution_.observe_fitness(*key, double_value(event.data, "fitness")); return; }
-    if (event.kind == "evolution_adopt") { const auto* key = string_value(event.data, "key"); if (key != nullptr) { const EvolutionProposal proposal{*key, double_value(event.data, "current"), double_value(event.data, "proposed"), double_value(event.data, "expected_gain"), double_value(event.data, "confidence")}; evolution_.adopt(proposal); evolution_history_.append(EvolutionHistoryRecord{string_value(event.data, "experiment_id") ? *string_value(event.data, "experiment_id") : "replayed", *key, EvolutionRecordAction::Adopted, ExperimentOutcome::Improved, double_value(event.data, "baseline", proposal.current), double_value(event.data, "candidate", proposal.proposed), proposal.confidence, 0, "replayed", {}}); } return; }
-    if (event.kind == "evolution_rollback") { const auto* key = string_value(event.data, "key"); if (key != nullptr) { evolution_.rollback(*key); evolution_history_.append(EvolutionHistoryRecord{string_value(event.data, "experiment_id") ? *string_value(event.data, "experiment_id") : "replayed", *key, EvolutionRecordAction::RolledBack, ExperimentOutcome::Degraded, double_value(event.data, "baseline", 0.0), double_value(event.data, "candidate", double_value(event.data, "observed_delta", 0.0)), 0.0, 0, string_value(event.data, "reason") ? *string_value(event.data, "reason") : "replayed", {}}); } return; }
+    if (event.kind == "evolution_canary") {
+        const auto baseline = double_value(event.data, "baseline");
+        const auto candidate = double_value(event.data, "candidate");
+        if (std::isfinite(baseline) && std::isfinite(candidate))
+            evolution_controller_.observe_canary_for_brain(CanaryObservation{baseline, candidate});
+        return;
+    }
+    if (event.kind == "evolution_adopt") {
+        const auto* key = string_value(event.data, "key");
+        if (key != nullptr) {
+            const auto* experiment_id = string_value(event.data, "experiment_id");
+            const EvolutionProposal proposal{*key, double_value(event.data, "current"),
+                                             double_value(event.data, "proposed"),
+                                             double_value(event.data, "expected_gain"),
+                                             double_value(event.data, "confidence")};
+            if (experiment_id != nullptr && !experiment_id->empty()) {
+                EvolutionExperiment experiment{
+                    *experiment_id,
+                    proposal,
+                    double_value(event.data, "baseline", proposal.current),
+                    double_value(event.data, "candidate", proposal.proposed),
+                    0.0,
+                    proposal.confidence,
+                    static_cast<ExperimentOutcome>(integer_value(event.data, "outcome")),
+                    true};
+                if (evolution_controller_.adoption_journal().stage(experiment)) {
+                    if (evolution_.adopt(proposal))
+                        evolution_controller_.adoption_journal().commit(*experiment_id, "replayed");
+                }
+                evolution_history_.append(EvolutionHistoryRecord{
+                    *experiment_id, *key, EvolutionRecordAction::Adopted,
+                    experiment.outcome, experiment.baseline_fitness,
+                    experiment.candidate_fitness, experiment.confidence, 0,
+                    "replayed", {}});
+            } else {
+                evolution_.adopt(proposal);
+            }
+        }
+        return;
+    }
+    if (event.kind == "evolution_rollback") {
+        const auto* key = string_value(event.data, "key");
+        if (key != nullptr) {
+            evolution_.rollback(*key);
+            const auto* experiment_id = string_value(event.data, "experiment_id");
+            if (experiment_id != nullptr && !experiment_id->empty()) {
+                const auto reason = string_value(event.data, "reason");
+                evolution_controller_.adoption_journal().rollback(
+                    *experiment_id, reason != nullptr ? *reason : "replayed");
+                evolution_history_.append(EvolutionHistoryRecord{
+                    *experiment_id, *key, EvolutionRecordAction::RolledBack,
+                    ExperimentOutcome::Degraded, 0.0,
+                    double_value(event.data, "observed_delta"), 0.0, 0,
+                    reason != nullptr ? *reason : "replayed", *experiment_id});
+            }
+        }
+        return;
+    }
     if (event.kind == "resilience_isolate") { if (const auto* component = string_value(event.data, "component")) resilience_.isolate(*component); return; }
     if (event.kind == "resilience_recover") { if (const auto* component = string_value(event.data, "component")) resilience_.recover(*component, double_value(event.data, "health")); return; }
     if (event.kind == "capability_observe") { if (const auto* name = string_value(event.data, "name")) self_model_.observe_capability(*name, double_value(event.data, "availability"), double_value(event.data, "performance")); return; }
