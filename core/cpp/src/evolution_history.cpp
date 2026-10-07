@@ -10,6 +10,13 @@ bool EvolutionHistory::append(EvolutionHistoryRecord record) {
         !std::isfinite(record.confidence) || record.confidence < 0.0 || record.confidence > 1.0) return false;
 
     std::lock_guard lock(mutex_);
+    for (const auto& existing : records_) {
+        if (existing.experiment_id == record.experiment_id &&
+            existing.parameter_key == record.parameter_key &&
+            existing.action == record.action) {
+            return true;
+        }
+    }
     record.sequence = next_sequence_++;
     records_.push_back(std::move(record));
     return true;
