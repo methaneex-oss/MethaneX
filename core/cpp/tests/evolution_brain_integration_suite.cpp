@@ -74,7 +74,13 @@ int main() {
         const auto pending_canary_again = brain.observe_evolution_canary(
             "canary.persist", "canary-persist-1", {0.90, 0.88});
         assert(!pending_canary_again.sufficient_evidence);
-        assert(brain.evolution_history().size() == 2);
+        EvolutionExperiment replayable{
+            "replay-evaluation-1",
+            EvolutionProposal{"canary.persist", 0.3, 0.4, 0.1, 0.90},
+            0.70, 0.82, 0.01, 0.90, ExperimentOutcome::Improved, true};
+        assert(brain.record_evolution_evaluation(replayable));
+        assert(!brain.record_evolution_evaluation(replayable));
+        assert(brain.evolution_history().size() == 4);
     }
 
     {
@@ -90,12 +96,20 @@ int main() {
         assert(direct->observations == 2);
 
         const auto restarted_history = restarted.evolution_history();
-        assert(restarted_history.size() == 3);
+        assert(restarted_history.size() == 4);
         assert(restarted_history.front().experiment_id == "brain-evolution-1");
         assert(restarted_history.front().action == EvolutionRecordAction::Evaluated);
         assert(restarted_history[1].action == EvolutionRecordAction::Adopted);
         assert(restarted_history.back().experiment_id == "brain-evolution-1");
-        assert(restarted_history.back().action == EvolutionRecordAction::RolledBack);
+        assert(restarted_history.back().experiment_id == "replay-evaluation-1");
+        assert(restarted_history.back().action == EvolutionRecordAction::Evaluated);
+        EvolutionExperiment replayed{
+            "replay-evaluation-1",
+            EvolutionProposal{"canary.persist", 0.3, 0.4, 0.1, 0.90},
+            0.70, 0.82, 0.01, 0.90, ExperimentOutcome::Improved, true};
+        assert(restarted.adopt_evolution_experiment(replayed));
+        const auto* replayed_parameter = restarted.evolution_parameter("canary.persist");
+        assert(replayed_parameter != nullptr && replayed_parameter->value == 0.4);
 
         const auto persisted_canary = restarted.observe_evolution_canary(
             "canary.persist", "canary-persist-1", {0.90, 0.80});
