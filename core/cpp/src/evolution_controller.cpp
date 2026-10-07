@@ -123,7 +123,7 @@ bool EvolutionController::adopt_for_brain(EvolutionExperiment& experiment) noexc
     if (!adoption_journal_.stage(experiment)) return false;
     if (!model_.adopt(experiment.proposal)) return false;
     if (!adoption_journal_.commit(experiment.id, "adopted")) {
-        model_.rollback(experiment.proposal.key);
+        model_.restore_previous(experiment.proposal.key);
         adoption_journal_.reject(experiment.id, "adoption_commit_failed");
         return false;
     }
