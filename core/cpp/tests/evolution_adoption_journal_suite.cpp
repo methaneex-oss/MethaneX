@@ -25,6 +25,11 @@ int main(){ EvolutionAdoptionJournal j; EvolutionExperiment e{}; e.id="exp-1"; e
  experiment.outcome=ExperimentOutcome::Improved;
  experiment.candidate_executed=true;
  assert(controller.record_evaluation(experiment));
+ assert(controller.record_evaluation(experiment));
+ EvolutionExperiment pending=experiment;
+ pending.id="exp-pending";
+ pending.outcome=ExperimentOutcome::Pending;
+ assert(!controller.record_evaluation(pending));
  assert(controller.adopt(experiment));
  const auto* adopted_parameter=model.parameter("transactional");
  assert(adopted_parameter && adopted_parameter->value==experiment.proposal.proposed);
