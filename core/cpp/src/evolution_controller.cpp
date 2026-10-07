@@ -29,6 +29,9 @@ bool EvolutionController::validate_evaluation_for_brain(
         !std::isfinite(experiment.baseline_fitness) ||
         !std::isfinite(experiment.candidate_fitness) ||
         !std::isfinite(experiment.confidence) ||
+        !std::isfinite(experiment.proposal.current) ||
+        !std::isfinite(experiment.proposal.proposed) ||
+        !std::isfinite(experiment.proposal.expected_gain) ||
         experiment.confidence < 0.0 || experiment.confidence > 1.0 ||
         experiment.outcome == ExperimentOutcome::Pending ||
         adoption_journal_.get(experiment.id).has_value()) {
