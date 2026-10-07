@@ -5,6 +5,8 @@
 #include "jarvis/core/evolution_canary.hpp"
 #include "jarvis/core/evolution_history.hpp"
 
+#include <unordered_map>
+
 namespace jarvis::core {
 
 class EvolutionController {
@@ -17,8 +19,10 @@ public:
     CanaryDecision observe_canary(const std::string& parameter_key,
                                   const std::string& experiment_id,
                                   const CanaryObservation& observation);
-    CanaryDecision preview_canary_for_brain(const CanaryObservation& observation) const noexcept;
-    CanaryDecision observe_canary_for_brain(const CanaryObservation& observation) noexcept;
+    CanaryDecision preview_canary_for_brain(const std::string& experiment_id,
+                                             const CanaryObservation& observation) const noexcept;
+    CanaryDecision observe_canary_for_brain(const std::string& experiment_id,
+                                            const CanaryObservation& observation) noexcept;
     bool validate_adoption_for_brain(const EvolutionExperiment& experiment) const noexcept;
     bool adopt_for_brain(EvolutionExperiment& experiment) noexcept;
     bool replay_adoption(const EvolutionExperiment& experiment) noexcept;
@@ -32,7 +36,7 @@ private:
     EvolutionModel& model_;
     EvolutionHistory& history_;
     EvolutionSafetyPolicy policy_;
-    EvolutionCanary canary_;
+    std::unordered_map<std::string, EvolutionCanary> canaries_;
     EvolutionAdoptionJournal adoption_journal_;
 };
 
