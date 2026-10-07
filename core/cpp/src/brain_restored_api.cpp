@@ -105,7 +105,12 @@ bool Brain::adopt_evolution(const EvolutionProposal& proposal) { std::unique_loc
 bool Brain::rollback_evolution(const std::string& key) { std::unique_lock lock(mutex_); if (key.empty() || evolution_.parameter(key) == nullptr) return false; if (evolution_.parameter(key)->value == evolution_.parameter(key)->baseline) return false; Event event{0, 0, "brain", "evolution_rollback", {{"key", key}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return false; if (!evolution_.rollback(key)) return false; ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); return true; }
 bool Brain::adopt_evolution_experiment(EvolutionExperiment& experiment) {
     std::unique_lock lock(mutex_);
-    if (!evolution_controller_.validate_adoption_for_brain(experiment)) return false;
+    if (experiment.id.empty() || experiment.proposal.key.empty() ||
+        !std::isfinite(experiment.baseline_fitness) ||
+        !std::isfinite(experiment.candidate_fitness) ||
+        !std::isfinite(experiment.confidence) || experiment.confidence < 0.0 ||
+        experiment.confidence > 1.0 ||
+        !evolution_controller_.validate_adoption_for_brain(experiment)) return false;
     Event event{0, 0, "brain", "evolution_adopt",
                 {{"key", experiment.proposal.key},
                  {"current", experiment.proposal.current},
