@@ -21,6 +21,8 @@ public:
     CanaryDecision observe_canary_for_brain(const CanaryObservation& observation) noexcept;
     bool validate_adoption_for_brain(const EvolutionExperiment& experiment) const noexcept;
     bool adopt_for_brain(EvolutionExperiment& experiment) noexcept;
+    bool replay_adoption(const EvolutionExperiment& experiment) noexcept;
+    bool replay_rollback(const std::string& experiment_id, const std::string& reason) noexcept;
     bool rollback(const std::string& parameter_key, const std::string& experiment_id,
                   const std::string& reason = "manual_rollback",
                   double observed_delta = 0.0);
