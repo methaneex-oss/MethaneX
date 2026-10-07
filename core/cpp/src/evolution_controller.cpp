@@ -71,6 +71,17 @@ bool EvolutionController::adopt_for_brain(EvolutionExperiment& experiment) noexc
     return true;
 }
 
+bool EvolutionController::replay_adoption(const EvolutionExperiment& experiment) noexcept {
+    if (experiment.id.empty() || !adoption_journal_.stage(experiment)) return false;
+    return adoption_journal_.commit(experiment.id, "replayed");
+}
+
+bool EvolutionController::replay_rollback(const std::string& experiment_id,
+                                           const std::string& reason) noexcept {
+    if (experiment_id.empty()) return false;
+    return adoption_journal_.rollback(experiment_id, reason);
+}
+
 CanaryDecision EvolutionController::preview_canary_for_brain(const CanaryObservation& observation) const noexcept {
     return canary_.preview(observation);
 }
