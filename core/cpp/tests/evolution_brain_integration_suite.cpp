@@ -32,11 +32,16 @@ int main() {
         EvolutionExperiment experiment{
             "brain-evolution-1", proposals.front(), 0.70, 0.90, 0.01, 0.95,
             ExperimentOutcome::Improved, true};
+        assert(brain.record_evolution_evaluation(experiment));
+        const evaluated_history = brain.evolution_history();
+        assert(evaluated_history.size() == 1);
+        assert(evaluated_history.front().action == EvolutionRecordAction::Evaluated);
         assert(brain.adopt_evolution_experiment(experiment));
         const auto live_history = brain.evolution_history();
-        assert(live_history.size() == 1);
-        assert(live_history.front().experiment_id == "brain-evolution-1");
-        assert(live_history.front().action == EvolutionRecordAction::Adopted);
+        assert(live_history.size() == 2);
+        assert(live_history.front().action == EvolutionRecordAction::Evaluated);
+        assert(live_history.back().experiment_id == "brain-evolution-1");
+        assert(live_history.back().action == EvolutionRecordAction::Adopted);
 
         assert(brain.register_evolution_parameter("direct.rollback", 0.2));
         brain.observe_evolution_fitness("direct.rollback", 0.9);
@@ -85,8 +90,10 @@ int main() {
         assert(direct->observations == 2);
 
         const auto restarted_history = restarted.evolution_history();
-        assert(restarted_history.size() == 2);
+        assert(restarted_history.size() == 3);
         assert(restarted_history.front().experiment_id == "brain-evolution-1");
+        assert(restarted_history.front().action == EvolutionRecordAction::Evaluated);
+        assert(restarted_history[1].action == EvolutionRecordAction::Adopted);
         assert(restarted_history.back().experiment_id == "brain-evolution-1");
         assert(restarted_history.back().action == EvolutionRecordAction::RolledBack);
 
