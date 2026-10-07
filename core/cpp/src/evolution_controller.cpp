@@ -1,6 +1,9 @@
 #include "jarvis/core/evolution_controller.hpp"
 #include "jarvis/core/evolution_rollback.hpp"
 
+#include <algorithm>
+#include <cmath>
+
 namespace jarvis::core {
 
 EvolutionController::EvolutionController(EvolutionModel& model, EvolutionHistory& history,
@@ -55,9 +58,17 @@ bool EvolutionController::adopt(EvolutionExperiment& experiment) {
 }
 
 bool EvolutionController::validate_adoption_for_brain(const EvolutionExperiment& experiment) const noexcept {
-    return !experiment.id.empty() && experiment.candidate_executed &&
-           EvolutionSafetyGate::approve(experiment, policy_) &&
-           model_.evaluate(experiment.proposal).eligible;
+    if (experiment.id.empty() || !experiment.candidate_executed ||
+        !EvolutionSafetyGate::approve(experiment, policy_)) return false;
+    if (adoption_journal_.get(experiment.id).has_value()) return false;
+    const auto evaluation = model_.evaluate(experiment.proposal);
+    if (!evaluation.eligible) return false;
+    const auto& policy = model_.policy();
+    const double bounded_proposed =
+        std::clamp(experiment.proposal.proposed, policy.parameter_minimum,
+                   policy.parameter_maximum);
+    return std::isfinite(bounded_proposed) &&
+           bounded_proposed != experiment.proposal.current;
 }
 
 bool EvolutionController::adopt_for_brain(EvolutionExperiment& experiment) noexcept {
