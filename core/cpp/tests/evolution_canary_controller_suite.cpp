@@ -53,6 +53,29 @@ int main() {
     assert(third.sufficient_evidence);
     assert(!third.rollback);
 
+    EvolutionModel replay_model;
+    replay_model.register_parameter("replay.weight", 0.4);
+    EvolutionHistory replay_history;
+    EvolutionController replay_controller(replay_model, replay_history, policy);
+    EvolutionExperiment replay_experiment{
+        "exp-replay",
+        EvolutionProposal{"replay.weight", 0.4, 0.5, 0.1, 0.95},
+        0.70, 0.84, 0.05, 0.95, ExperimentOutcome::Improved, true};
+    assert(replay_controller.replay_evaluation(replay_experiment));
+    assert(replay_controller.replay_evaluation(replay_experiment));
+    assert(replay_history.for_experiment("exp-replay").size() == 1);
+    assert(replay_controller.adoption_journal().get("exp-replay")->state == AdoptionState::Pending);
+    assert(replay_model.adopt(replay_experiment.proposal));
+    assert(replay_controller.replay_adoption(replay_experiment));
+    assert(replay_controller.replay_adoption(replay_experiment));
+    assert(replay_history.for_experiment("exp-replay").size() == 1);
+    assert(replay_controller.adoption_journal().get("exp-replay")->state == AdoptionState::Adopted);
+    assert(replay_model.rollback("replay.weight"));
+    assert(replay_controller.replay_rollback("exp-replay", "replayed"));
+    assert(replay_controller.replay_rollback("exp-replay", "replayed"));
+    assert(replay_history.for_experiment("exp-replay").size() == 1);
+    assert(replay_controller.adoption_journal().get("exp-replay")->state == AdoptionState::RolledBack);
+
     const auto records = history.for_experiment("exp-canary");
     assert(records.size() >= 2);
     assert(records.back().action == EvolutionRecordAction::RolledBack);
