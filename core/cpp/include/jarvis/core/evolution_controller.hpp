@@ -17,6 +17,7 @@ public:
     CanaryDecision observe_canary(const std::string& parameter_key,
                                   const std::string& experiment_id,
                                   const CanaryObservation& observation);
+    CanaryDecision preview_canary_for_brain(const CanaryObservation& observation) const noexcept;
     CanaryDecision observe_canary_for_brain(const CanaryObservation& observation) noexcept;
     bool validate_adoption_for_brain(const EvolutionExperiment& experiment) const noexcept;
     bool adopt_for_brain(EvolutionExperiment& experiment) noexcept;
