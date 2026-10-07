@@ -181,6 +181,12 @@ CanaryDecision Brain::observe_evolution_canary(const std::string& parameter_key,
         return decision;
     }
 
+    if (!evolution_controller_.validate_rollback_for_brain(parameter_key, experiment_id)) {
+        sync_self_state();
+        return CanaryDecision{false, decision.sufficient_evidence, decision.mean_delta,
+                              decision.worst_delta, "rollback_not_available"};
+    }
+
     Event rollback_event{0, 0, "brain", "evolution_rollback",
                          {{"key", parameter_key},
                           {"experiment_id", experiment_id},
@@ -192,8 +198,8 @@ CanaryDecision Brain::observe_evolution_canary(const std::string& parameter_key,
         return CanaryDecision{false, decision.sufficient_evidence, decision.mean_delta,
                               decision.worst_delta, "rollback_not_persisted"};
     }
-    if (!evolution_controller_.rollback(parameter_key, experiment_id, decision.reason,
-                                         decision.mean_delta)) {
+    if (!evolution_controller_.rollback_for_brain(parameter_key, experiment_id, decision.reason,
+                                                decision.mean_delta)) {
         sync_self_state();
         return CanaryDecision{false, decision.sufficient_evidence, decision.mean_delta,
                               decision.worst_delta, "rollback_failed"};
