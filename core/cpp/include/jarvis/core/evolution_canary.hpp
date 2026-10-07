@@ -27,6 +27,7 @@ class EvolutionCanary {
 public:
     explicit EvolutionCanary(CanaryPolicy policy = {});
     CanaryDecision observe(CanaryObservation observation) noexcept;
+    CanaryDecision preview(CanaryObservation observation) const noexcept;
     CanaryDecision evaluate() const noexcept;
     void reset() noexcept;
 private:
