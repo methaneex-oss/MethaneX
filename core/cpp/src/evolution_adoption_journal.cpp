@@ -6,7 +6,11 @@ bool EvolutionAdoptionJournal::stage(const EvolutionExperiment& experiment) {
     if (experiment.id.empty() || experiment.proposal.key.empty()) return false;
     std::lock_guard lock(mutex_);
     auto& r = records_[experiment.id];
-    if (r.revision != 0 && r.state == AdoptionState::Adopted) return true;
+    if (r.revision != 0) {
+        if (r.state == AdoptionState::Adopted || r.state == AdoptionState::Pending)
+            return r.parameter_key == experiment.proposal.key;
+        return false;
+    }
     r.experiment_id = experiment.id;
     r.parameter_key = experiment.proposal.key;
     r.baseline_fitness = experiment.baseline_fitness;
