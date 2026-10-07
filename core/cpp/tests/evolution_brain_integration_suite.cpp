@@ -74,9 +74,10 @@ int main() {
         const auto pending_canary_again = brain.observe_evolution_canary(
             "canary.persist", "canary-persist-1", {0.90, 0.88});
         assert(!pending_canary_again.sufficient_evidence);
+        assert(brain.register_evolution_parameter("replay.persist", 0.3));
         EvolutionExperiment replayable{
             "replay-evaluation-1",
-            EvolutionProposal{"canary.persist", 0.3, 0.4, 0.1, 0.90},
+            EvolutionProposal{"replay.persist", 0.3, 0.4, 0.1, 0.90},
             0.70, 0.82, 0.01, 0.90, ExperimentOutcome::Improved, true};
         assert(brain.record_evolution_evaluation(replayable));
         assert(!brain.record_evolution_evaluation(replayable));
@@ -100,12 +101,11 @@ int main() {
         assert(restarted_history.front().experiment_id == "brain-evolution-1");
         assert(restarted_history.front().action == EvolutionRecordAction::Evaluated);
         assert(restarted_history[1].action == EvolutionRecordAction::Adopted);
-        assert(restarted_history.back().experiment_id == "brain-evolution-1");
         assert(restarted_history.back().experiment_id == "replay-evaluation-1");
         assert(restarted_history.back().action == EvolutionRecordAction::Evaluated);
         EvolutionExperiment replayed{
             "replay-evaluation-1",
-            EvolutionProposal{"canary.persist", 0.3, 0.4, 0.1, 0.90},
+            EvolutionProposal{"replay.persist", 0.3, 0.4, 0.1, 0.90},
             0.70, 0.82, 0.01, 0.90, ExperimentOutcome::Improved, true};
         assert(restarted.adopt_evolution_experiment(replayed));
         const auto* replayed_parameter = restarted.evolution_parameter("canary.persist");
