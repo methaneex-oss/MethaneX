@@ -32,7 +32,10 @@ int main() {
             "brain-evolution-1", proposals.front(), 0.70, 0.90, 0.01, 0.95,
             ExperimentOutcome::Improved, true};
         assert(brain.adopt_evolution_experiment(experiment));
-        assert(!brain.evolution_history().empty());
+        const auto live_history = brain.evolution_history();
+        assert(live_history.size() == 1);
+        assert(live_history.front().experiment_id == "brain-evolution-1");
+        assert(live_history.front().action == EvolutionRecordAction::Adopted);
 
         brain.register_evolution_parameter("direct.rollback", 0.2);
         brain.observe_evolution_fitness("direct.rollback", 0.9);
@@ -57,6 +60,15 @@ int main() {
             "planner.weight", "brain-evolution-1", {0.90, 0.84});
         assert(decision.sufficient_evidence);
         assert(decision.rollback);
+
+        brain.register_evolution_parameter("canary.persist", 0.3);
+        const auto pending_canary = brain.observe_evolution_canary(
+            "canary.persist", "canary-persist-1", {0.90, 0.89});
+        assert(!pending_canary.sufficient_evidence);
+        const auto pending_canary_again = brain.observe_evolution_canary(
+            "canary.persist", "canary-persist-1", {0.90, 0.88});
+        assert(!pending_canary_again.sufficient_evidence);
+        assert(brain.evolution_history().size() == 2);
     }
 
     {
@@ -70,6 +82,17 @@ int main() {
         assert(direct != nullptr);
         assert(direct->value == direct->baseline);
         assert(direct->observations == 2);
+
+        const auto restarted_history = restarted.evolution_history();
+        assert(restarted_history.size() == 2);
+        assert(restarted_history.front().experiment_id == "brain-evolution-1");
+        assert(restarted_history.back().experiment_id == "brain-evolution-1");
+        assert(restarted_history.back().action == EvolutionRecordAction::RolledBack);
+
+        const auto persisted_canary = restarted.observe_evolution_canary(
+            "canary.persist", "canary-persist-1", {0.90, 0.80});
+        assert(persisted_canary.sufficient_evidence);
+        assert(persisted_canary.rollback);
 
         Brain restarted_again(path);
         const auto* direct_parameter = restarted_again.evolution_parameter("planner.weight");
