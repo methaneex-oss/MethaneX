@@ -196,14 +196,9 @@ bool EvolutionController::rollback(const std::string& parameter_key,
                                     const std::string& experiment_id,
                                     const std::string& reason,
                                     double observed_delta) {
-    if (!model_.rollback(parameter_key)) return false;
-    const bool journaled = adoption_journal_.rollback(experiment_id, reason);
-    const bool recorded = history_.append(EvolutionHistoryRecord{
-        experiment_id, parameter_key, EvolutionRecordAction::RolledBack,
-        ExperimentOutcome::Degraded, 0.0, observed_delta, 0.0, 0,
-        reason, experiment_id});
-    if (journaled && recorded) canaries_.erase(experiment_id);
-    return journaled && recorded;
+    if (!rollback_for_brain(parameter_key, experiment_id, reason, observed_delta)) return false;
+    canaries_.erase(experiment_id);
+    return true;
 }
 
 } // namespace jarvis::core
