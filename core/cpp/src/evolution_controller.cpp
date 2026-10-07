@@ -106,7 +106,8 @@ bool EvolutionController::adopt(EvolutionExperiment& experiment) {
 bool EvolutionController::validate_adoption_for_brain(const EvolutionExperiment& experiment) const noexcept {
     if (experiment.id.empty() || !experiment.candidate_executed ||
         !EvolutionSafetyGate::approve(experiment, policy_)) return false;
-    if (adoption_journal_.get(experiment.id).has_value()) return false;
+    if (const auto record = adoption_journal_.get(experiment.id);
+        record.has_value() && record->state != AdoptionState::Pending) return false;
     const auto evaluation = model_.evaluate(experiment.proposal);
     if (!evaluation.eligible) return false;
     const auto& policy = model_.policy();
