@@ -13,7 +13,8 @@ int main() {
 
     {
         Brain brain(path);
-        brain.register_evolution_parameter("planner.weight", 0.4);
+        assert(brain.register_evolution_parameter("planner.weight", 0.4));
+        assert(!brain.register_evolution_parameter("planner.weight", 0.4));
         brain.predict("planner.weight", Scalar{0.4}, 0.9);
         const auto learning_cycle = brain.learn_from_prediction("planner.weight", Scalar{0.6}, 0.8);
         assert(learning_cycle.adaptation.observations == 1);
@@ -37,7 +38,7 @@ int main() {
         assert(live_history.front().experiment_id == "brain-evolution-1");
         assert(live_history.front().action == EvolutionRecordAction::Adopted);
 
-        brain.register_evolution_parameter("direct.rollback", 0.2);
+        assert(brain.register_evolution_parameter("direct.rollback", 0.2));
         brain.observe_evolution_fitness("direct.rollback", 0.9);
         brain.observe_evolution_fitness("direct.rollback", 0.9);
         const auto direct_proposals = brain.evolution_options();
@@ -61,7 +62,7 @@ int main() {
         assert(decision.sufficient_evidence);
         assert(decision.rollback);
 
-        brain.register_evolution_parameter("canary.persist", 0.3);
+        assert(brain.register_evolution_parameter("canary.persist", 0.3));
         const auto pending_canary = brain.observe_evolution_canary(
             "canary.persist", "canary-persist-1", {0.90, 0.89});
         assert(!pending_canary.sufficient_evidence);
