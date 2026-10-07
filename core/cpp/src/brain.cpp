@@ -61,7 +61,27 @@ void Brain::replay(const Event& event) {
         const double reliability = std::clamp(double_value(event.data, "reliability", 0.5), 0.0, 1.0); const auto status = static_cast<ActionExecutionStatus>(integer_value(event.data, "status")); const char* status_name = "unknown"; switch (status) { case ActionExecutionStatus::rejected: status_name = "rejected"; break; case ActionExecutionStatus::prepared: status_name = "prepared"; break; case ActionExecutionStatus::executed: status_name = "executed"; break; case ActionExecutionStatus::verified: status_name = "verified"; break; case ActionExecutionStatus::failed: status_name = "failed"; break; case ActionExecutionStatus::cancelled: status_name = "cancelled"; break; case ActionExecutionStatus::rolled_back: status_name = "rolled_back"; break; }
         const std::string belief_key = "action." + *action; beliefs_[belief_key] = Belief{belief_key, std::string(status_name), reliability, 1, event.sequence, false}; const auto observed = event.data.find("observed"); const bool has_observed_consequence = observed != event.data.end() && std::get_if<bool>(&observed->second) != nullptr && *std::get_if<bool>(&observed->second); const double prediction_error = has_observed_consequence ? std::clamp(std::abs(double_value(event.data, "consequence_error")), 0.0, 1.0) : 1.0 - reliability; const double reward = has_observed_consequence ? std::clamp(double_value(event.data, "actual_consequence"), -1.0, 1.0) : (2.0 * reliability - 1.0); const auto affect = affective_state_model_.state(); const double affective_significance = std::clamp(0.25 * std::abs(affect.valence) + 0.25 * affect.arousal + 0.25 * affect.uncertainty + 0.25 * affect.tension, 0.0, 1.0); developmental_learning_.observe_strategy(*context, *action, LearningSignal{prediction_error, reward, std::clamp(double_value(event.data, "salience", 0.0), 0.0, 1.0), std::clamp(double_value(event.data, "novelty", state_.novelty), 0.0, 1.0), affective_significance}); const AttentionSignal signal{*action, std::clamp(double_value(event.data, "salience", 0.0), 0.0, 1.0), std::clamp(double_value(event.data, "novelty", state_.novelty), 0.0, 1.0), prediction_error, 0.0}; if (reward > 0.0) attention_model_.reinforce(signal, reward); else if (reward < 0.0) attention_model_.suppress(signal, -reward); return;
     }
-    if (event.kind == "evolution_evaluated") { const auto* id = string_value(event.data, "experiment_id"); const auto* key = string_value(event.data, "key"); if (id != nullptr && key != nullptr) evolution_history_.append(EvolutionHistoryRecord{*id, *key, EvolutionRecordAction::Evaluated, static_cast<ExperimentOutcome>(integer_value(event.data, "outcome")), double_value(event.data, "baseline"), double_value(event.data, "candidate"), double_value(event.data, "confidence"), 0, "replayed", {}}); return; }
+    if (event.kind == "evolution_evaluated") {
+        const auto* id = string_value(event.data, "experiment_id");
+        const auto* key = string_value(event.data, "key");
+        if (id != nullptr && key != nullptr) {
+            EvolutionExperiment experiment{
+                *id,
+                EvolutionProposal{*key,
+                                  double_value(event.data, "current"),
+                                  double_value(event.data, "proposed"),
+                                  double_value(event.data, "expected_gain"),
+                                  double_value(event.data, "confidence")},
+                double_value(event.data, "baseline"),
+                double_value(event.data, "candidate"),
+                0.0,
+                double_value(event.data, "confidence"),
+                static_cast<ExperimentOutcome>(integer_value(event.data, "outcome")),
+                true};
+            evolution_controller_.replay_evaluation(experiment);
+        }
+        return;
+    }
     if (event.kind == "evolution_register") { if (const auto* key = string_value(event.data, "key")) evolution_.register_parameter(*key, double_value(event.data, "initial")); return; }
     if (event.kind == "evolution_fitness") { if (const auto* key = string_value(event.data, "key")) evolution_.observe_fitness(*key, double_value(event.data, "fitness")); return; }
     if (event.kind == "evolution_canary") {
