@@ -68,7 +68,9 @@ void Brain::replay(const Event& event) {
         const auto baseline = double_value(event.data, "baseline");
         const auto candidate = double_value(event.data, "candidate");
         if (std::isfinite(baseline) && std::isfinite(candidate))
-            evolution_controller_.observe_canary_for_brain(CanaryObservation{baseline, candidate});
+            evolution_controller_.observe_canary_for_brain(
+                string_value(event.data, "experiment_id") ? *string_value(event.data, "experiment_id") : "",
+                CanaryObservation{baseline, candidate});
         return;
     }
     if (event.kind == "evolution_adopt") {
