@@ -111,6 +111,13 @@ EvolutionOrchestrationResult EvolutionOrchestrator::run(
         return result;
     }
 
+    // A durable evaluation record is part of the adoption precondition.
+    // Never mutate the model from an experiment whose evaluation could not be recorded.
+    if (result.lifecycle[winner] != EvolutionLifecycleState::CandidateEvaluated) {
+        ++result.rejected;
+        return result;
+    }
+
     for (std::size_t i = 0; i < result.experiments.size(); ++i) {
         if (i == winner) continue;
         if (result.lifecycle[i] == EvolutionLifecycleState::CandidateEvaluated) {
