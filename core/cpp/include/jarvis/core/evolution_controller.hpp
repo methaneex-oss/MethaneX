@@ -15,6 +15,9 @@ public:
                         EvolutionSafetyPolicy policy = {});
 
     bool record_evaluation(const EvolutionExperiment& experiment);
+    bool validate_evaluation_for_brain(const EvolutionExperiment& experiment) const noexcept;
+    bool record_evaluation_for_brain(const EvolutionExperiment& experiment) noexcept;
+    bool replay_evaluation(const EvolutionExperiment& experiment) noexcept;
     bool adopt(EvolutionExperiment& experiment);
     CanaryDecision observe_canary(const std::string& parameter_key,
                                   const std::string& experiment_id,
