@@ -5,7 +5,7 @@ namespace jarvis::core {
 
 EvolutionController::EvolutionController(EvolutionModel& model, EvolutionHistory& history,
                                          EvolutionSafetyPolicy policy)
-    : model_(model), history_(history), policy_(policy), canary_{}, adoption_journal_{} {}
+    : model_(model), history_(history), policy_(policy), canaries_{}, adoption_journal_{} {}
 
 bool EvolutionController::record_evaluation(const EvolutionExperiment& experiment) {
     const bool staged = adoption_journal_.stage(experiment);
@@ -84,18 +84,24 @@ bool EvolutionController::replay_rollback(const std::string& experiment_id,
     return adoption_journal_.rollback(experiment_id, reason);
 }
 
-CanaryDecision EvolutionController::preview_canary_for_brain(const CanaryObservation& observation) const noexcept {
-    return canary_.preview(observation);
+CanaryDecision EvolutionController::preview_canary_for_brain(
+    const std::string& experiment_id, const CanaryObservation& observation) const noexcept {
+    if (experiment_id.empty()) return CanaryDecision{false, false, 0.0, 0.0, "experiment_required"};
+    const auto it = canaries_.find(experiment_id);
+    if (it == canaries_.end()) return EvolutionCanary{}.preview(observation);
+    return it->second.preview(observation);
 }
 
-CanaryDecision EvolutionController::observe_canary_for_brain(const CanaryObservation& observation) noexcept {
-    return canary_.observe(observation);
+CanaryDecision EvolutionController::observe_canary_for_brain(
+    const std::string& experiment_id, const CanaryObservation& observation) noexcept {
+    if (experiment_id.empty()) return {false, false, 0.0, 0.0, "experiment_required"};
+    return canaries_[experiment_id].observe(observation);
 }
 
 CanaryDecision EvolutionController::observe_canary(const std::string& parameter_key,
                                                    const std::string& experiment_id,
                                                    const CanaryObservation& observation) {
-    const auto decision = canary_.observe(observation);
+    const auto decision = observe_canary_for_brain(experiment_id, observation);
     if (EvolutionRollback::should_rollback(decision)) {
         rollback(parameter_key, experiment_id, decision.reason, decision.mean_delta);
     }
@@ -112,6 +118,7 @@ bool EvolutionController::rollback(const std::string& parameter_key,
         experiment_id, parameter_key, EvolutionRecordAction::RolledBack,
         ExperimentOutcome::Degraded, 0.0, observed_delta, 0.0, 0,
         reason, experiment_id});
+    if (journaled && recorded) canaries_.erase(experiment_id);
     return journaled && recorded;
 }
 
