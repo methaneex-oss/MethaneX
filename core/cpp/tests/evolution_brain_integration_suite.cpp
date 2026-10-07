@@ -116,6 +116,10 @@ int main() {
         assert(persisted_canary.sufficient_evidence);
         assert(persisted_canary.rollback);
 
+        const rollback_history = restarted.evolution_history();
+        assert(!rollback_history.empty());
+        assert(rollback_history.back().action == EvolutionRecordAction::RolledBack);
+
         Brain restarted_again(path);
         const auto* direct_parameter = restarted_again.evolution_parameter("planner.weight");
         assert(direct_parameter != nullptr);
