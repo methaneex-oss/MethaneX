@@ -108,7 +108,7 @@ int main() {
             EvolutionProposal{"replay.persist", 0.3, 0.4, 0.1, 0.90},
             0.70, 0.82, 0.01, 0.90, ExperimentOutcome::Improved, true};
         assert(restarted.adopt_evolution_experiment(replayed));
-        const auto* replayed_parameter = restarted.evolution_parameter("canary.persist");
+        const auto* replayed_parameter = restarted.evolution_parameter("replay.persist");
         assert(replayed_parameter != nullptr && replayed_parameter->value == 0.4);
 
         const auto persisted_canary = restarted.observe_evolution_canary(
