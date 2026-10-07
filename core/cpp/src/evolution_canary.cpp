@@ -23,6 +23,15 @@ CanaryDecision EvolutionCanary::observe(CanaryObservation observation) noexcept 
     return evaluate();
 }
 
+CanaryDecision EvolutionCanary::preview(CanaryObservation observation) const noexcept {
+    if (!std::isfinite(observation.baseline_fitness) ||
+        !std::isfinite(observation.candidate_fitness)) {
+        return {false, observations_ >= policy_.minimum_observations, 0.0, worst_delta_, "invalid_observation"};
+    }
+    EvolutionCanary candidate = *this;
+    return candidate.observe(observation);
+}
+
 CanaryDecision EvolutionCanary::evaluate() const noexcept {
     if (observations_ == 0) return {false, false, 0.0, 0.0, "no_observations"};
     const double mean_delta = delta_sum_ / static_cast<double>(observations_);
