@@ -141,6 +141,31 @@ bool EvolutionController::replay_rollback(const std::string& experiment_id,
     return adoption_journal_.rollback(experiment_id, reason);
 }
 
+bool EvolutionController::validate_rollback_for_brain(
+    const std::string& parameter_key,
+    const std::string& experiment_id) const noexcept {
+    if (parameter_key.empty() || experiment_id.empty()) return false;
+    const auto* parameter = model_.parameter(parameter_key);
+    if (parameter == nullptr || parameter->value == parameter->baseline) return false;
+    const auto record = adoption_journal_.get(experiment_id);
+    return record.has_value() && record->state == AdoptionState::Adopted &&
+           record->parameter_key == parameter_key;
+}
+
+bool EvolutionController::rollback_for_brain(
+    const std::string& parameter_key,
+    const std::string& experiment_id,
+    const std::string& reason,
+    double observed_delta) noexcept {
+    if (!validate_rollback_for_brain(parameter_key, experiment_id)) return false;
+    if (!model_.rollback(parameter_key)) return false;
+    if (!adoption_journal_.rollback(experiment_id, reason)) return false;
+    return history_.append(EvolutionHistoryRecord{
+        experiment_id, parameter_key, EvolutionRecordAction::RolledBack,
+        ExperimentOutcome::Degraded, 0.0, observed_delta, 0.0, 0,
+        reason, experiment_id});
+}
+
 CanaryDecision EvolutionController::preview_canary_for_brain(
     const std::string& experiment_id, const CanaryObservation& observation) const noexcept {
     if (experiment_id.empty()) return CanaryDecision{false, false, 0.0, 0.0, "experiment_required"};
