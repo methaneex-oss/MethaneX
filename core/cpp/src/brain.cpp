@@ -89,10 +89,8 @@ void Brain::replay(const Event& event) {
                     proposal.confidence,
                     static_cast<ExperimentOutcome>(integer_value(event.data, "outcome")),
                     true};
-                if (evolution_controller_.adoption_journal().stage(experiment)) {
-                    if (evolution_.adopt(proposal))
-                        evolution_controller_.adoption_journal().commit(*experiment_id, "replayed");
-                }
+                if (evolution_.adopt(proposal))
+                    evolution_controller_.replay_adoption(experiment);
                 evolution_history_.append(EvolutionHistoryRecord{
                     *experiment_id, *key, EvolutionRecordAction::Adopted,
                     experiment.outcome, experiment.baseline_fitness,
@@ -111,7 +109,7 @@ void Brain::replay(const Event& event) {
             const auto* experiment_id = string_value(event.data, "experiment_id");
             if (experiment_id != nullptr && !experiment_id->empty()) {
                 const auto reason = string_value(event.data, "reason");
-                evolution_controller_.adoption_journal().rollback(
+                evolution_controller_.replay_rollback(
                     *experiment_id, reason != nullptr ? *reason : "replayed");
                 evolution_history_.append(EvolutionHistoryRecord{
                     *experiment_id, *key, EvolutionRecordAction::RolledBack,
