@@ -39,6 +39,7 @@ public:
     bool rollback(const std::string& parameter_key, const std::string& experiment_id,
                   const std::string& reason = "manual_rollback",
                   double observed_delta = 0.0);
+    std::optional<std::string> adopted_experiment_for_parameter(const std::string& parameter_key) const noexcept;
     const EvolutionAdoptionJournal& adoption_journal() const noexcept { return adoption_journal_; }
 
 private:
