@@ -64,6 +64,13 @@ int main() {
     assert(fast != nullptr && slow != nullptr);
     assert((fast->value != fast->baseline) != (slow->value != slow->baseline));
     assert((fast->value != fast->baseline) || (slow->value != slow->baseline));
+    const auto fast_adoption = controller.adoption_journal().get(result.experiments[0].id);
+    const auto slow_adoption = controller.adoption_journal().get(result.experiments[1].id);
+    const auto adopted_id = fast->value != fast->baseline ? result.experiments[0].id : result.experiments[1].id;
+    const auto adopted_record = controller.adoption_journal().get(adopted_id);
+    assert(adopted_record.has_value() && adopted_record->state == AdoptionState::Adopted);
+    assert(history.for_experiment(adopted_id).size() == 2);
+    assert(fast_adoption.has_value() || slow_adoption.has_value());
 
     const auto blocked = orchestrator.run(
         opportunities.front(),
