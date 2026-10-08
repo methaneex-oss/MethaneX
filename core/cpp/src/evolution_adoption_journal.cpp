@@ -57,6 +57,18 @@ bool EvolutionAdoptionJournal::rollback(const std::string& id, std::string reaso
     return true;
 }
 
+bool EvolutionAdoptionJournal::restore_pending(const std::string& id, std::string reason) {
+    std::lock_guard lock(mutex_);
+    auto it = records_.find(id);
+    if (it == records_.end()) return false;
+    if (it->second.state == AdoptionState::Pending) return true;
+    if (it->second.state != AdoptionState::Adopted) return false;
+    it->second.state = AdoptionState::Pending;
+    it->second.reason = std::move(reason);
+    it->second.revision = next_revision_++;
+    return true;
+}
+
 bool EvolutionAdoptionJournal::restore_adopted(const std::string& id, std::string reason) {
     std::lock_guard lock(mutex_);
     auto it = records_.find(id);
