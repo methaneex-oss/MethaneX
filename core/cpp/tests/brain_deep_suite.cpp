@@ -226,7 +226,7 @@ int main() {
         // The initially preferred route fails in the real execution path.
         const auto failed = developing.execute_action(
             initial.context.action_assessments.front(),
-            [](const CandidateAction&) { return false; },
+            [](const CandidateAction&) { return true; },
             [](const CandidateAction&) { return false; },
             {},
             [](const CandidateAction&) { return -0.8; });
