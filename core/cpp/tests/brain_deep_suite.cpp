@@ -196,6 +196,92 @@ int main() {
     assert(!replayed_selection.empty());
     assert(replayed_selection.front().action.name == "route_a");
 
+    // Development must emerge from real action consequences, not only from
+    // direct strategy-training events. A failed action should change later
+    // selection, and the learned preference must survive replay.
+    const auto developmental_action_journal = root / "developmental_action.bin";
+    {
+        Brain developing(developmental_action_journal);
+        CognitiveCycle cycle(developing);
+        assert(developing.create_goal(Goal{"navigation", "navigate safely", 1.0, 0.0, 0, 0,
+                                           GoalStatus::pending, {}, {}}));
+        assert(developing.activate_goal("navigation"));
+
+        const CandidateAction route_a{"route_a", 0.0, 0.0, 0.1, 1.0};
+        const CandidateAction route_b{"route_b", 0.15, 0.15, 0.1, 1.0};
+        CognitiveCycleInput input;
+        input.observation = Event{0, 0, "navigator", "observation", {{"route_state", std::string("unknown")}}};
+        input.candidate_actions = {route_a, route_b};
+        input.goal_id = "navigation";
+        input.developmental_context = "navigation";
+        input.planning_horizon = 1;
+        input.resource_budget = 1.0;
+        input.action_constraints = ActionConstraints{1.0, false};
+
+        const auto initial = cycle.run(input);
+        assert(initial.status == CognitiveCycleStatus::completed);
+        assert(!initial.context.action_assessments.empty());
+        assert(initial.context.action_assessments.front().action.name == "route_b");
+
+        // The initially preferred route fails in the real execution path.
+        const auto failed = developing.execute_action(
+            initial.context.action_assessments.front(),
+            [](const CandidateAction&) { return false; },
+            [](const CandidateAction&) { return false; },
+            {},
+            [](const CandidateAction&) { return -0.8; });
+        assert(failed.authorized);
+        assert(!failed.executed);
+        assert(failed.outcome.observed);
+
+        const auto after_failure = cycle.run(input);
+        assert(after_failure.status == CognitiveCycleStatus::completed);
+        assert(after_failure.context.plan.steps.front().action.name == "route_a");
+
+        // Reinforce the alternative through the same action/consequence path.
+        for (int i = 0; i < 3; ++i) {
+            const auto result = developing.execute_action(
+                after_failure.context.action_assessments.front(),
+                [](const CandidateAction& action) { return action.name == "route_a"; },
+                [](const CandidateAction& action) { return action.name == "route_a"; },
+                {},
+                [](const CandidateAction&) { return 0.9; });
+            assert(result.authorized);
+            assert(result.executed);
+            assert(result.verified);
+            assert(result.outcome.observed);
+        }
+
+        const auto developed = cycle.run(input);
+        assert(developed.status == CognitiveCycleStatus::completed);
+        assert(developed.context.plan.steps.front().action.name == "route_a");
+        const auto* learned_route = developing.developmental_best_strategy("navigation");
+        assert(learned_route != nullptr);
+        assert(learned_route->action == "route_a");
+        assert(learned_route->uses >= 3);
+    }
+    {
+        Brain replayed(developmental_action_journal);
+        CognitiveCycle cycle(replayed);
+        CognitiveCycleInput input;
+        input.observation = Event{0, 0, "navigator", "observation", {{"route_state", std::string("unknown")}}};
+        input.candidate_actions = {
+            CandidateAction{"route_a", 0.0, 0.0, 0.1, 1.0},
+            CandidateAction{"route_b", 0.15, 0.15, 0.1, 1.0},
+        };
+        input.goal_id = "navigation";
+        input.developmental_context = "navigation";
+        input.planning_horizon = 1;
+        input.resource_budget = 1.0;
+        input.action_constraints = ActionConstraints{1.0, false};
+        const auto replayed_cycle = cycle.run(input);
+        assert(replayed_cycle.status == CognitiveCycleStatus::completed);
+        assert(replayed_cycle.context.plan.steps.front().action.name == "route_a");
+        const auto* learned_route = replayed.developmental_best_strategy("navigation");
+        assert(learned_route != nullptr);
+        assert(learned_route->action == "route_a");
+    }
+
     // Goal, capability, and resilience mutations are journal-first and must
     // reconstruct the same durable state after restart.
     const auto state_journal = root / "state_transactions.bin";
