@@ -35,7 +35,8 @@ bool EvolutionController::record_evaluation(const EvolutionExperiment& experimen
             experiment.confidence, 0, "evaluation", {}})) {
         return true;
     }
-    adoption_journal_.reject(experiment.id, "evaluation_history_failed");
+    // Keep the evaluation Pending when history persistence fails so a later
+    // durable replay can retry it; a failed write must not consume the experiment.
     return false;
 }
 
@@ -67,7 +68,7 @@ bool EvolutionController::record_evaluation_for_brain(
             experiment.confidence, 0, "evaluation", {}})) {
         return true;
     }
-    adoption_journal_.reject(experiment.id, "evaluation_history_failed");
+    // Keep the staged evaluation Pending so event replay can retry history persistence.
     return false;
 }
 
@@ -179,15 +180,16 @@ bool EvolutionController::rollback_for_brain(
     double observed_delta) noexcept {
     if (!validate_rollback_for_brain(parameter_key, experiment_id)) return false;
     if (!model_.rollback(parameter_key)) return false;
+    if (!adoption_journal_.rollback(experiment_id, reason)) {
+        model_.restore_previous(parameter_key);
+        return false;
+    }
     if (!history_.append(EvolutionHistoryRecord{
         experiment_id, parameter_key, EvolutionRecordAction::RolledBack,
         ExperimentOutcome::Degraded, 0.0, observed_delta, 0.0, 0,
         reason, experiment_id})) {
         model_.restore_previous(parameter_key);
-        return false;
-    }
-    if (!adoption_journal_.rollback(experiment_id, reason)) {
-        model_.restore_previous(parameter_key);
+        adoption_journal_.restore_adopted(experiment_id, "rollback_history_failed");
         return false;
     }
     return true;
