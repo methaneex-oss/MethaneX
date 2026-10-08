@@ -43,7 +43,7 @@ Prediction Brain::predict_with_context(std::string key, Scalar value, double con
     if (const auto* metric = adaptation_.metric(key); metric != nullptr && metric->observations > 0) {
         if (auto* numeric = std::get_if<double>(&value)) {
             const double learned_confidence = adaptation_.confidence(key);
-            *numeric = std::clamp(*numeric + learned_confidence * (metric->estimate - *numeric), 0.0, 1.0);
+            *numeric += learned_confidence * (metric->estimate - *numeric);
             calibrated_confidence = std::clamp(base_confidence + (1.0 - base_confidence) * 0.5 * learned_confidence, 0.0, 1.0);
         }
     }
