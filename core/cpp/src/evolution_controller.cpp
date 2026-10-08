@@ -219,6 +219,21 @@ bool EvolutionController::rollback_for_brain(
     return true;
 }
 
+std::optional<std::string> EvolutionController::adopted_experiment_for_parameter(
+    const std::string& parameter_key) const noexcept {
+    if (parameter_key.empty()) return std::nullopt;
+    std::optional<std::string> selected;
+    std::uint64_t selected_revision = 0;
+    for (const auto& record : adoption_journal_.records()) {
+        if (record.parameter_key == parameter_key && record.state == AdoptionState::Adopted &&
+            record.revision >= selected_revision) {
+            selected = record.experiment_id;
+            selected_revision = record.revision;
+        }
+    }
+    return selected;
+}
+
 CanaryDecision EvolutionController::preview_canary_for_brain(
     const std::string& experiment_id, const CanaryObservation& observation) const noexcept {
     if (experiment_id.empty()) return CanaryDecision{false, false, 0.0, 0.0, "experiment_required"};
