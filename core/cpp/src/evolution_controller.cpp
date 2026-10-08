@@ -110,9 +110,6 @@ bool EvolutionController::adopt(EvolutionExperiment& experiment) {
         return false;
     }
 
-    // Keep the journal Pending while the model and lifecycle history are being
-    // established. This gives a failed history write a recoverable state and
-    // lets the model restore the exact pre-adoption value.
     if (!model_.adopt(experiment.proposal)) {
         adoption_journal_.reject(experiment.id, "model_adoption_failed");
         history_.append(EvolutionHistoryRecord{
@@ -122,18 +119,20 @@ bool EvolutionController::adopt(EvolutionExperiment& experiment) {
         return false;
     }
 
+    // Complete the controller-local transaction before publishing lifecycle history.
+    // If either step fails, restore the exact pre-adoption model value.
+    if (!adoption_journal_.commit(experiment.id, "adopted")) {
+        model_.restore_previous(experiment.proposal.key);
+        adoption_journal_.restore_pending(experiment.id, "adoption_commit_failed");
+        return false;
+    }
+
     if (!history_.append(EvolutionHistoryRecord{
             experiment.id, experiment.proposal.key, EvolutionRecordAction::Adopted,
             experiment.outcome, experiment.baseline_fitness, experiment.candidate_fitness,
             experiment.confidence, 0, "adopted", {}})) {
         model_.restore_previous(experiment.proposal.key);
-        return false;
-    }
-
-    if (!adoption_journal_.commit(experiment.id, "adopted")) {
-        // commit() is expected to be deterministic after stage(), but retain
-        // compensation if that invariant is ever violated.
-        model_.restore_previous(experiment.proposal.key);
+        adoption_journal_.restore_adopted(experiment.id, "adoption_history_failed");
         return false;
     }
 
