@@ -32,6 +32,9 @@ public:
     bool commit(const std::string& experiment_id, std::string reason = "adopted");
     bool reject(const std::string& experiment_id, std::string reason = "rejected");
     bool rollback(const std::string& experiment_id, std::string reason = "rolled_back");
+    // Compensation used when a post-rollback persistence step fails.
+    bool restore_adopted(const std::string& experiment_id,
+                         std::string reason = "rollback_compensated");
     std::optional<AdoptionRecord> get(const std::string& experiment_id) const;
     std::vector<AdoptionRecord> records() const;
 
