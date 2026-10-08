@@ -39,8 +39,16 @@ Prediction Brain::predict_with_context(std::string key, Scalar value, double con
         }
     }
     const double base_confidence = std::clamp(confidence, 0.0, 1.0);
+    double calibrated_confidence = base_confidence;
+    if (const auto* metric = adaptation_.metric(key); metric != nullptr && metric->observations > 0) {
+        if (auto* numeric = std::get_if<double>(&value)) {
+            const double learned_confidence = adaptation_.confidence(key);
+            *numeric = std::clamp(*numeric + learned_confidence * (metric->estimate - *numeric), 0.0, 1.0);
+            calibrated_confidence = std::clamp(base_confidence + (1.0 - base_confidence) * 0.5 * learned_confidence, 0.0, 1.0);
+        }
+    }
     const double contextual_confidence = context.evidence_strength > 0.0
-        ? 1.0 - ((1.0 - base_confidence) * (1.0 - context.evidence_strength)) : base_confidence;
+        ? 1.0 - ((1.0 - calibrated_confidence) * (1.0 - context.evidence_strength)) : calibrated_confidence;
     Prediction prediction{std::move(key), std::move(value), std::clamp(contextual_confidence, 0.0, 1.0), state_.cycle, false, 0.0, context};
     Event event{0, prediction_now_ns(), "brain", "prediction", {{"key", prediction.key}, {"value", prediction.predicted}, {"confidence", prediction.confidence}, {"concept_members", join_prediction_context_ids(context.concept_members)}, {"evidence_strength", context.evidence_strength}}};
     event.sequence = memory_.append(event);
