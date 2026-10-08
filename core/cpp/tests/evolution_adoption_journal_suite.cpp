@@ -47,6 +47,27 @@ int main(){ EvolutionAdoptionJournal j; EvolutionExperiment e{}; e.id="exp-1"; e
  assert(controller.rollback("transactional", experiment.id, "test_rollback", 0.6));
  const auto* rolled_parameter=model.parameter("transactional");
  assert(rolled_parameter && rolled_parameter->value==rolled_parameter->baseline);
+ const auto rolled_record=controller.adoption_journal().get(experiment.id);
+ assert(rolled_record && rolled_record->state==AdoptionState::RolledBack);
+ assert(controller_history.for_experiment(experiment.id).back().action==EvolutionRecordAction::RolledBack);
+
+ EvolutionModel replay_compensation_model;
+ replay_compensation_model.register_parameter("replay-compensation", 0.15);
+ replay_compensation_model.observe_fitness("replay-compensation", 0.9);
+ replay_compensation_model.observe_fitness("replay-compensation", 0.9);
+ EvolutionHistory replay_compensation_history;
+ EvolutionController replay_compensation_controller(replay_compensation_model, replay_compensation_history, test_policy);
+ EvolutionExperiment replay_compensation_experiment=experiment;
+ replay_compensation_experiment.id="exp-replay-compensation";
+ replay_compensation_experiment.proposal.key="replay-compensation";
+ replay_compensation_experiment.proposal.current=0.15;
+ replay_compensation_experiment.proposal.proposed=0.25;
+ assert(replay_compensation_controller.record_evaluation(replay_compensation_experiment));
+ assert(replay_compensation_model.adopt(replay_compensation_experiment.proposal));
+ assert(replay_compensation_controller.replay_adoption(replay_compensation_experiment));
+ assert(replay_compensation_model.rollback("replay-compensation"));
+ assert(replay_compensation_controller.replay_rollback("exp-replay-compensation","replayed"));
+ assert(replay_compensation_model.parameter("replay-compensation")->value==replay_compensation_model.parameter("replay-compensation")->baseline);
 
  EvolutionModel compensation_model;
  compensation_model.register_parameter("compensation", 0.1);
