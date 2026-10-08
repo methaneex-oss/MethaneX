@@ -43,6 +43,23 @@ int main() {
         assert(live_history.back().experiment_id == "brain-evolution-1");
         assert(live_history.back().action == EvolutionRecordAction::Adopted);
 
+        assert(brain.register_evolution_parameter("manual.rollback", 0.25));
+        EvolutionExperiment manual_rollback{
+            "manual-rollback-1",
+            EvolutionProposal{"manual.rollback", 0.25, 0.35, 0.1, 0.90},
+            0.70, 0.85, 0.01, 0.90, ExperimentOutcome::Improved, true};
+        assert(brain.record_evolution_evaluation(manual_rollback));
+        assert(brain.adopt_evolution_experiment(manual_rollback));
+        const auto* adopted_manual = brain.evolution_parameter("manual.rollback");
+        assert(adopted_manual != nullptr && adopted_manual->value == 0.35);
+        assert(brain.rollback_evolution("manual.rollback"));
+        const auto* rolled_manual = brain.evolution_parameter("manual.rollback");
+        assert(rolled_manual != nullptr && rolled_manual->value == rolled_manual->baseline);
+        const auto manual_history = brain.evolution_history();
+        assert(manual_history.size() == 5);
+        assert(manual_history.back().experiment_id == "manual-rollback-1");
+        assert(manual_history.back().action == EvolutionRecordAction::RolledBack);
+
         assert(brain.register_evolution_parameter("direct.rollback", 0.2));
         brain.observe_evolution_fitness("direct.rollback", 0.9);
         brain.observe_evolution_fitness("direct.rollback", 0.9);
@@ -81,7 +98,7 @@ int main() {
             0.70, 0.82, 0.01, 0.90, ExperimentOutcome::Improved, true};
         assert(brain.record_evolution_evaluation(replayable));
         assert(!brain.record_evolution_evaluation(replayable));
-        assert(brain.evolution_history().size() == 4);
+        assert(brain.evolution_history().size() == 6);
     }
 
     {
@@ -95,9 +112,13 @@ int main() {
         assert(direct != nullptr);
         assert(direct->value == direct->baseline);
         assert(direct->observations == 2);
+        const auto* manual = restarted.evolution_parameter("manual.rollback");
+        assert(manual != nullptr);
+        assert(manual->value == manual->baseline);
+        assert(manual->observations == 0);
 
         const auto restarted_history = restarted.evolution_history();
-        assert(restarted_history.size() == 4);
+        assert(restarted_history.size() == 6);
         assert(restarted_history.front().experiment_id == "brain-evolution-1");
         assert(restarted_history.front().action == EvolutionRecordAction::Evaluated);
         assert(restarted_history[1].action == EvolutionRecordAction::Adopted);
