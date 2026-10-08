@@ -30,6 +30,17 @@ int main(){ EvolutionAdoptionJournal j; EvolutionExperiment e{}; e.id="exp-1"; e
  pending.id="exp-pending";
  pending.outcome=ExperimentOutcome::Pending;
  assert(!controller.record_evaluation(pending));
+
+ EvolutionExperiment unsafe=experiment;
+ unsafe.id="exp-unsafe";
+ unsafe.confidence=0.1;
+ assert(!controller.adopt(unsafe));
+ const auto unsafe_journal=controller.adoption_journal().get("exp-unsafe");
+ assert(unsafe_journal && unsafe_journal->state==AdoptionState::Rejected);
+ const auto unsafe_history=controller_history.for_experiment("exp-unsafe");
+ assert(unsafe_history.size()==1);
+ assert(unsafe_history.front().action==EvolutionRecordAction::Rejected);
+ assert(unsafe_history.front().reason=="safety_gate_rejected");
  assert(controller.adopt(experiment));
  const auto* adopted_parameter=model.parameter("transactional");
  assert(adopted_parameter && adopted_parameter->value==experiment.proposal.proposed);
