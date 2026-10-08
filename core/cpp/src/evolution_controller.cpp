@@ -115,6 +115,10 @@ bool EvolutionController::adopt(EvolutionExperiment& experiment) {
     // lets the model restore the exact pre-adoption value.
     if (!model_.adopt(experiment.proposal)) {
         adoption_journal_.reject(experiment.id, "model_adoption_failed");
+        history_.append(EvolutionHistoryRecord{
+            experiment.id, experiment.proposal.key, EvolutionRecordAction::Rejected,
+            experiment.outcome, experiment.baseline_fitness, experiment.candidate_fitness,
+            experiment.confidence, 0, "model_adoption_failed", {}});
         return false;
     }
 
@@ -162,6 +166,10 @@ bool EvolutionController::adopt_for_brain(EvolutionExperiment& experiment) noexc
     if (!adoption_journal_.commit(experiment.id, "adopted")) {
         model_.restore_previous(experiment.proposal.key);
         adoption_journal_.reject(experiment.id, "adoption_commit_failed");
+        history_.append(EvolutionHistoryRecord{
+            experiment.id, experiment.proposal.key, EvolutionRecordAction::Rejected,
+            experiment.outcome, experiment.baseline_fitness, experiment.candidate_fitness,
+            experiment.confidence, 0, "adoption_commit_failed", {}});
         return false;
     }
     return true;
