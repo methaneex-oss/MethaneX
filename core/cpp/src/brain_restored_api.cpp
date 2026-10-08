@@ -170,9 +170,12 @@ bool Brain::adopt_evolution_experiment(EvolutionExperiment& experiment) {
                  {"outcome", static_cast<std::int64_t>(experiment.outcome)},
                  {"baseline", experiment.baseline_fitness},
                  {"candidate", experiment.candidate_fitness}}};
-    event.sequence = memory_.append(event);
-    if (event.sequence == 0) return false;
     if (!evolution_controller_.adopt_for_brain(experiment)) return false;
+    event.sequence = memory_.append(event);
+    if (event.sequence == 0) {
+        evolution_controller_.compensate_adoption_for_brain(experiment);
+        return false;
+    }
     evolution_history_.append(EvolutionHistoryRecord{
         experiment.id, experiment.proposal.key, EvolutionRecordAction::Adopted,
         experiment.outcome, experiment.baseline_fitness, experiment.candidate_fitness,
