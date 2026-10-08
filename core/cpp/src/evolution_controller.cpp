@@ -25,7 +25,12 @@ bool EvolutionController::record_evaluation(const EvolutionExperiment& experimen
     }
 
     for (const auto& record : history_.for_experiment(experiment.id)) {
-        if (record.action == EvolutionRecordAction::Evaluated) return true;
+        if (record.action == EvolutionRecordAction::Evaluated) {
+            const auto journal = adoption_journal_.get(experiment.id);
+            return journal.has_value() &&
+                   (journal->state == AdoptionState::Pending ||
+                    journal->state == AdoptionState::Adopted);
+        }
     }
 
     if (!adoption_journal_.stage(experiment)) return false;
@@ -76,9 +81,16 @@ bool EvolutionController::replay_evaluation(
     const EvolutionExperiment& experiment) noexcept {
     if (experiment.id.empty() || experiment.proposal.key.empty()) return false;
     const auto records = history_.for_experiment(experiment.id);
+    bool evaluated = false;
     for (const auto& record : records) {
-        if (record.action == EvolutionRecordAction::Evaluated) return true;
+        if (record.action == EvolutionRecordAction::Evaluated) {
+            evaluated = true;
+            break;
+        }
     }
+    // Replay repairs the in-memory journal even when the durable history entry
+    // predates a process restart that lost controller-local state.
+    if (evaluated) return adoption_journal_.stage(experiment);
     if (!adoption_journal_.stage(experiment)) return false;
     return history_.append(EvolutionHistoryRecord{
         experiment.id, experiment.proposal.key, EvolutionRecordAction::Evaluated,
