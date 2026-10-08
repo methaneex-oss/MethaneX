@@ -8,9 +8,10 @@ namespace jarvis::core {
 AdaptiveMetric AdaptationModel::observe(const std::string& key, double predicted, double actual) {
     auto& metric = metrics_[key];
     if (!std::isfinite(predicted) || !std::isfinite(actual)) return metric;
-    const double p = std::clamp(predicted, 0.0, 1.0);
-    const double a = std::clamp(actual, 0.0, 1.0);
-    const double error = std::abs(a - p);
+    const double p = predicted;
+    const double a = actual;
+    const double scale = std::max({1.0, std::abs(p), std::abs(a)});
+    const double error = std::clamp(std::abs(a - p) / scale, 0.0, 1.0);
     ++metric.observations;
 
     // Keep both long-term experience and a recency-sensitive signal. The former
@@ -24,7 +25,7 @@ AdaptiveMetric AdaptationModel::observe(const std::string& key, double predicted
     metric.estimate += (a - metric.estimate) * recent_rate;
     metric.mean_error = std::clamp(metric.mean_error, 0.0, 1.0);
     metric.recent_error = std::clamp(metric.recent_error, 0.0, 1.0);
-    metric.estimate = std::clamp(metric.estimate, 0.0, 1.0);
+    if (!std::isfinite(metric.estimate)) metric.estimate = a;
     return metric;
 }
 
