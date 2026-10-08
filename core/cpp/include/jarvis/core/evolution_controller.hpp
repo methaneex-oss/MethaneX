@@ -5,6 +5,7 @@
 #include "jarvis/core/evolution_canary.hpp"
 #include "jarvis/core/evolution_history.hpp"
 
+#include <optional>
 #include <unordered_map>
 
 namespace jarvis::core {
