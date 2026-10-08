@@ -29,6 +29,7 @@ public:
                                             const CanaryObservation& observation) noexcept;
     bool validate_adoption_for_brain(const EvolutionExperiment& experiment) const noexcept;
     bool adopt_for_brain(EvolutionExperiment& experiment) noexcept;
+    bool compensate_adoption_for_brain(const EvolutionExperiment& experiment) noexcept;
     bool replay_adoption(const EvolutionExperiment& experiment) noexcept;
     bool validate_rollback_for_brain(const std::string& parameter_key,
                                      const std::string& experiment_id) const noexcept;
