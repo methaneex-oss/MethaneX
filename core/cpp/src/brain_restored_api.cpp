@@ -107,10 +107,24 @@ bool Brain::rollback_evolution(const std::string& key) {
     if (key.empty()) return false;
     const auto* parameter = evolution_.parameter(key);
     if (parameter == nullptr || parameter->value == parameter->baseline) return false;
-    Event event{0, 0, "brain", "evolution_rollback", {{"key", key}}};
+
+    const auto experiment_id = evolution_controller_.adopted_experiment_for_parameter(key);
+    Event event{0, 0, "brain", "evolution_rollback",
+                {{"key", key},
+                 {"reason", "manual_rollback"},
+                 {"observed_delta", 0.0}}};
+    if (experiment_id.has_value()) event.data.emplace("experiment_id", *experiment_id);
     event.sequence = memory_.append(event);
     if (event.sequence == 0) return false;
-    if (!evolution_.rollback(key)) return false;
+
+    if (experiment_id.has_value()) {
+        if (!evolution_controller_.rollback_for_brain(key, *experiment_id,
+                                                       "manual_rollback", 0.0)) {
+            return false;
+        }
+    } else if (!evolution_.rollback(key)) {
+        return false;
+    }
     ++state_.events_seen;
     state_.cycle = event.sequence;
     sync_self_state();
