@@ -174,6 +174,16 @@ bool EvolutionController::adopt_for_brain(EvolutionExperiment& experiment) noexc
     return true;
 }
 
+bool EvolutionController::compensate_adoption_for_brain(
+    const EvolutionExperiment& experiment) noexcept {
+    if (experiment.id.empty() || experiment.proposal.key.empty()) return false;
+    const auto record = adoption_journal_.get(experiment.id);
+    if (!record.has_value() || record->state != AdoptionState::Adopted ||
+        record->parameter_key != experiment.proposal.key) return false;
+    if (!model_.restore_previous(experiment.proposal.key)) return false;
+    return adoption_journal_.restore_pending(experiment.id, "adoption_persistence_failed");
+}
+
 bool EvolutionController::replay_adoption(const EvolutionExperiment& experiment) noexcept {
     if (experiment.id.empty() || !adoption_journal_.stage(experiment)) return false;
     return adoption_journal_.commit(experiment.id, "replayed");
