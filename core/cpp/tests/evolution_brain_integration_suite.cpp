@@ -117,6 +117,16 @@ int main() {
         assert(manual->value == manual->baseline);
         assert(manual->observations == 0);
 
+        // Replaying the durable adoption event must be idempotent after restart.
+        const auto adoption_events = restarted.memory().query("evolution_adopt");
+        assert(!adoption_events.empty());
+        const auto before_replay = restarted.evolution_parameter("manual.rollback");
+        assert(before_replay != nullptr);
+        restarted.replay_event_for_test(adoption_events.back());
+        const auto after_replay = restarted.evolution_parameter("manual.rollback");
+        assert(after_replay != nullptr);
+        assert(after_replay->value == before_replay->value);
+
         const auto restarted_history = restarted.evolution_history();
         assert(restarted_history.size() == 7);
         assert(restarted_history.front().experiment_id == "brain-evolution-1");
