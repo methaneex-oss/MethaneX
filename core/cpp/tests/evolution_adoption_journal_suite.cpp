@@ -44,6 +44,12 @@ int main(){ EvolutionAdoptionJournal j; EvolutionExperiment e{}; e.id="exp-1"; e
  assert(controller.adopt(experiment));
  const auto* adopted_parameter=model.parameter("transactional");
  assert(adopted_parameter && adopted_parameter->value==experiment.proposal.proposed);
+ assert(controller.compensate_adoption_for_brain(experiment));
+ const auto* compensated_parameter=model.parameter("transactional");
+ assert(compensated_parameter && compensated_parameter->value==compensated_parameter->baseline);
+ const auto compensated_journal=controller.adoption_journal().get(experiment.id);
+ assert(compensated_journal && compensated_journal->state==AdoptionState::Pending);
+ assert(controller.adopt(experiment));
  assert(controller.rollback("transactional", experiment.id, "test_rollback", 0.6));
  const auto* rolled_parameter=model.parameter("transactional");
  assert(rolled_parameter && rolled_parameter->value==rolled_parameter->baseline);
