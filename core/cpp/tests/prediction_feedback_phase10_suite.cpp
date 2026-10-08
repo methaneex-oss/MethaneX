@@ -59,6 +59,19 @@ int main() {
     }
     assert(provenance_restored);
 
+    // Real-valued predictions must learn in their native scale; adaptation must not
+    // silently collapse values such as temperature into a normalized [0,1] range.
+    for (int i = 0; i < 6; ++i) {
+        const auto prediction = brain.predict("real_temperature", Scalar{20.0}, 0.7);
+        assert(prediction.created_sequence != 0);
+        assert(!brain.resolve_prediction(prediction.created_sequence, Scalar{30.0}));
+    }
+    const auto real_prediction = brain.predict("real_temperature", Scalar{20.0}, 0.7);
+    const auto real_value = std::get_if<double>(&real_prediction.predicted);
+    assert(real_value != nullptr);
+    assert(*real_value > 20.0);
+    assert(*real_value < 30.0);
+
     // Stable semantic prediction keys must accumulate learning across separate
     // experiences. The key identifies the variable; each prediction event keeps
     // its own journal sequence, while adaptation remains keyed by the variable.
