@@ -165,7 +165,7 @@ bool EvolutionController::adopt_for_brain(EvolutionExperiment& experiment) noexc
     }
     if (!adoption_journal_.commit(experiment.id, "adopted")) {
         model_.restore_previous(experiment.proposal.key);
-        adoption_journal_.reject(experiment.id, "adoption_commit_failed");
+        adoption_journal_.restore_pending(experiment.id, "adoption_commit_failed");
         history_.append(EvolutionHistoryRecord{
             experiment.id, experiment.proposal.key, EvolutionRecordAction::Rejected,
             experiment.outcome, experiment.baseline_fitness, experiment.candidate_fitness,
