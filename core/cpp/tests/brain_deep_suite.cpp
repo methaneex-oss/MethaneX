@@ -108,6 +108,8 @@ int main() {
 
     const auto affect_before_failure = brain.affective_state();
     const auto learning_before_failure = brain.affective_learning_updates();
+    const auto* learned_safe_before_unknown = brain.developmental_best_strategy("navigation");
+    const auto learned_safe_uses_before_unknown = learned_safe_before_unknown == nullptr ? 0ULL : learned_safe_before_unknown->uses;
     const auto failed_action = brain.execute_action(
         executable,
         [](const CandidateAction&) { return false; },
@@ -120,6 +122,8 @@ int main() {
     // consequence-sensitive affective calibration model.
     assert(learning_before_failure > 0);
     assert(brain.affective_learning_updates() == learning_before_failure);
+    const auto* learned_safe_after_unknown = brain.developmental_best_strategy("navigation");
+    assert((learned_safe_after_unknown == nullptr ? 0ULL : learned_safe_after_unknown->uses) == learned_safe_uses_before_unknown);
 
     const auto affect_after_failure = brain.affective_state();
     assert(std::isfinite(affect_after_failure.valence));
