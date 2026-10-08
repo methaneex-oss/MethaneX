@@ -108,7 +108,7 @@ int main() {
 
     const auto affect_before_failure = brain.affective_state();
     const auto learning_before_failure = brain.affective_learning_updates();
-    const auto* learned_safe_before_unknown = brain.developmental_best_strategy("navigation");
+    const auto* learned_safe_before_unknown = brain.developmental_best_strategy("global");
     const auto learned_safe_uses_before_unknown = learned_safe_before_unknown == nullptr ? 0ULL : learned_safe_before_unknown->uses;
     const auto failed_action = brain.execute_action(
         executable,
@@ -122,7 +122,7 @@ int main() {
     // consequence-sensitive affective calibration model.
     assert(learning_before_failure > 0);
     assert(brain.affective_learning_updates() == learning_before_failure);
-    const auto* learned_safe_after_unknown = brain.developmental_best_strategy("navigation");
+    const auto* learned_safe_after_unknown = brain.developmental_best_strategy("global");
     assert((learned_safe_after_unknown == nullptr ? 0ULL : learned_safe_after_unknown->uses) == learned_safe_uses_before_unknown);
 
     const auto affect_after_failure = brain.affective_state();
@@ -150,7 +150,7 @@ int main() {
             learner.observe(strategy_outcome("navigation", "route_a", 0.9, 0.1, 0.8, 0.2));
             learner.observe(strategy_outcome("navigation", "route_b", -0.8, 0.9, 0.8, 0.2));
         }
-        const auto* best = learner.developmental_best_strategy("navigation");
+        const auto* best = learner.developmental_best_strategy("global");
         assert(best != nullptr);
         assert(best->action == "route_a");
         assert(best->uses == 8);
@@ -160,7 +160,7 @@ int main() {
         Brain replayed(developmental_journal);
         const auto strategies = replayed.developmental_strategies();
         assert(strategies.size() == 2);
-        const auto* best = replayed.developmental_best_strategy("navigation");
+        const auto* best = replayed.developmental_best_strategy("global");
         assert(best != nullptr);
         assert(best->action == "route_a");
         assert(best->uses == 8);
@@ -259,7 +259,7 @@ int main() {
         const auto developed = cycle.run(input);
         assert(developed.status == CognitiveCycleStatus::completed);
         assert(developed.context.plan.steps.front().action.name == "route_a");
-        const auto* learned_route = developing.developmental_best_strategy("navigation");
+        const auto* learned_route = developing.developmental_best_strategy("global");
         assert(learned_route != nullptr);
         assert(learned_route->action == "route_a");
         assert(learned_route->uses >= 3);
@@ -281,7 +281,7 @@ int main() {
         const auto replayed_cycle = cycle.run(input);
         assert(replayed_cycle.status == CognitiveCycleStatus::completed);
         assert(replayed_cycle.context.plan.steps.front().action.name == "route_a");
-        const auto* learned_route = replayed.developmental_best_strategy("navigation");
+        const auto* learned_route = replayed.developmental_best_strategy("global");
         assert(learned_route != nullptr);
         assert(learned_route->action == "route_a");
     }
