@@ -21,6 +21,13 @@ int main() {
     assert(controller.adopt(experiment));
     const auto* adopted = model.parameter("reasoning.weight");
     assert(adopted != nullptr && adopted->value != adopted->baseline);
+    const auto adoption_record = controller.adoption_journal().get("exp-canary");
+    assert(adoption_record.has_value());
+    assert(adoption_record->state == AdoptionState::Adopted);
+    const auto adoption_history = history.for_experiment("exp-canary");
+    assert(adoption_history.size() == 2);
+    assert(adoption_history.front().action == EvolutionRecordAction::Evaluated);
+    assert(adoption_history.back().action == EvolutionRecordAction::Adopted);
 
     controller.observe_canary("reasoning.weight", "exp-canary", {0.84, 0.82});
     controller.observe_canary("reasoning.weight", "exp-canary", {0.84, 0.80});
