@@ -264,6 +264,26 @@ int main() {
     assert(std::abs(integer_metric->mean_error - (1.0 / 3.0)) < 1e-12);
     assert(std::abs(integer_metric->estimate - 30.0) < 1e-12);
 
+    // The higher-level learning API must emit the same normalized error as
+    // direct resolution; otherwise replay validation would discard its event.
+    const auto direct_learning_prediction =
+        brain.predict("direct_learning_scale", Scalar{20.0}, 0.8);
+    assert(direct_learning_prediction.created_sequence != 0);
+    const auto direct_learning_cycle =
+        brain.learn_from_prediction("direct_learning_scale", Scalar{30.0}, 0.7);
+    assert(direct_learning_cycle.adaptation.observations == 1);
+    assert(std::abs(direct_learning_cycle.adaptation.mean_error - (1.0 / 3.0)) < 1e-12);
+    assert(std::abs(direct_learning_cycle.adaptation.estimate - 30.0) < 1e-12);
+    bool direct_learning_resolved = false;
+    for (const auto& current : brain.snapshot().predictions) {
+        if (current.created_sequence == direct_learning_prediction.created_sequence) {
+            direct_learning_resolved = current.resolved &&
+                std::abs(current.error - (1.0 / 3.0)) < 1e-12;
+            break;
+        }
+    }
+    assert(direct_learning_resolved);
+
     // Categorical outcomes still train association and attention systems even
     // when numeric adaptation cannot be applied.
     const auto categorical_prediction =
@@ -518,6 +538,12 @@ int main() {
     assert(restored_real_metric != nullptr);
     assert(restored_real_metric->observations == real_prediction_sequences.size());
     assert(std::abs(restored_real_metric->estimate - 30.0) < 1e-12);
+    const auto* restored_direct_learning_metric =
+        restored.learning_metric("direct_learning_scale");
+    assert(restored_direct_learning_metric != nullptr);
+    assert(restored_direct_learning_metric->observations == 1);
+    assert(std::abs(restored_direct_learning_metric->mean_error - (1.0 / 3.0)) < 1e-12);
+    assert(std::abs(restored_direct_learning_metric->estimate - 30.0) < 1e-12);
     const auto* restored_policy_metric = restored.learning_metric("policy_temperature");
     assert(restored_policy_metric != nullptr);
     assert(restored_policy_metric->observations == 8);
