@@ -446,6 +446,12 @@ int main() {
     assert(cross_type_metric != nullptr);
     assert(cross_type_metric->observations == 1);
     assert(std::abs(cross_type_metric->estimate - 20.0) < 1e-12);
+    const auto guarded_prediction = brain.predict("nonfinite_guard", Scalar{12.0}, 0.8);
+    const auto updates_before_guard = brain.affective_state().updates;
+    assert(!brain.resolve_prediction(guarded_prediction.created_sequence,
+                                     Scalar{std::numeric_limits<double>::quiet_NaN()}));
+    assert(brain.affective_state().updates == updates_before_guard);
+    assert(brain.learning_metric("nonfinite_guard") == nullptr);
 
     // Stable semantic prediction keys must accumulate learning across separate
     // experiences. The key identifies the variable; each prediction event keeps
