@@ -559,6 +559,10 @@ int main() {
         }
     }
     assert(cross_type_resolution_replayed);
+    const auto* restored_cross_type_metric = restored.learning_metric("cross_type_numeric");
+    assert(restored_cross_type_metric != nullptr);
+    assert(restored_cross_type_metric->observations == 1);
+    assert(std::abs(restored_cross_type_metric->estimate - 20.0) < 1e-12);
 
     const auto* restored_real_metric = restored.learning_metric("real_temperature");
     assert(restored_real_metric != nullptr);
