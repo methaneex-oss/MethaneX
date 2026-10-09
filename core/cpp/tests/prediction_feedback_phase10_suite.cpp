@@ -45,6 +45,21 @@ int main() {
     assert(brain.predict("invalid_forecast",
                          Scalar{std::numeric_limits<double>::infinity()}, 0.8).key.empty());
     assert(brain.snapshot().predictions.size() == snapshot_before_invalid_prediction);
+    assert(brain.predict("invalid_confidence", Scalar{1.0},
+                         std::numeric_limits<double>::quiet_NaN()).key.empty());
+    assert(brain.predict("invalid_confidence", Scalar{1.0},
+                         std::numeric_limits<double>::infinity()).key.empty());
+    assert(brain.predict_with_context(
+        "invalid_context", Scalar{std::numeric_limits<double>::quiet_NaN()}, 0.8).key.empty());
+    assert(brain.predict_with_context(
+        "invalid_context", Scalar{std::numeric_limits<double>::infinity()}, 0.8).key.empty());
+    assert(brain.predict_with_context(
+        "invalid_context", Scalar{1.0},
+        std::numeric_limits<double>::infinity()).key.empty());
+    assert(brain.predict_with_context(
+        "invalid_context", Scalar{1.0}, 0.8,
+        std::numeric_limits<double>::infinity()).key.empty());
+    assert(brain.snapshot().predictions.size() == snapshot_before_invalid_prediction);
 
     // Integer forecasts must receive the same learned calibration as doubles.
     const auto integer_prediction = brain.predict("integer_temperature", Scalar{std::int64_t{20}}, 0.8);
