@@ -53,9 +53,9 @@ void calibrate_contextual_numeric_prediction(Scalar& value, double estimate, dou
 
 Prediction Brain::predict_with_context(std::string key, Scalar value, double confidence,
                                        double minimum_strength, std::size_t minimum_shared_contexts) {
-    // NaN confidence/threshold values bypass std::clamp comparisons and
-    // otherwise contaminate contextual prediction state.
-    if (std::isnan(confidence) || std::isnan(minimum_strength)) return Prediction{};
+    // Non-finite confidence or thresholds are invalid evidence, not values
+    // to silently saturate through std::clamp.
+    if (!std::isfinite(confidence) || !std::isfinite(minimum_strength)) return Prediction{};
     if (key.empty()) return Prediction{};
     if (const auto* numeric = std::get_if<double>(&value);
         numeric != nullptr && !std::isfinite(*numeric)) return Prediction{};
