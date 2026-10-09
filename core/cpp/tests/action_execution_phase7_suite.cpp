@@ -1,4 +1,5 @@
 #include "jarvis/core/brain.hpp"
+#include "jarvis/core/cognitive_cycle.hpp"
 #include "jarvis/core/action_execution.hpp"
 
 #include <cassert>
@@ -80,6 +81,28 @@ int main() {
     assert(brain.create_goal(Goal{"goal-alpha", "protect the system", 0.8, 0.0, 0, 0, GoalStatus::pending, {}, {}}));
     assert(brain.activate_goal("goal-alpha"));
 
+    // Establish the pre-learning behavior with two close candidates. The
+    // baseline should prefer protect before consequence evidence exists.
+    CognitiveCycle cognitive_cycle(brain);
+    CognitiveCycleInput cognitive_input;
+    cognitive_input.observation = Event{0, 0, "sensor", "observation", {{"context", "goal-alpha"}}};
+    cognitive_input.goal_id = "goal-alpha";
+    cognitive_input.developmental_context = "goal-alpha";
+    cognitive_input.planning_horizon = 1;
+    cognitive_input.resource_budget = 10.0;
+    CandidateAction protect_action = permitted.action;
+    protect_action.utility = 0.80;
+    protect_action.expected_value = 0.80;
+    CandidateAction wait_action = permitted.action;
+    wait_action.name = "wait";
+    wait_action.utility = 0.78;
+    wait_action.expected_value = 0.80;
+    cognitive_input.candidate_actions = {protect_action, wait_action};
+    const auto baseline_cycle = cognitive_cycle.run(cognitive_input);
+    assert(baseline_cycle.status == CognitiveCycleStatus::completed);
+    assert(!baseline_cycle.context.plan.steps.empty());
+    assert(baseline_cycle.context.plan.steps.front().action.name == "protect");
+
     const auto before_appraisal = brain.affective_appraisal();
     auto learning_assessment = permitted;
     learning_assessment.action.expected_consequence = 0.9;
@@ -120,11 +143,30 @@ int main() {
     const auto* best = brain.developmental_best_strategy("goal-alpha");
     assert(best != nullptr && best->action == "protect");
 
+    // The same evidence must alter actual planning, not merely fill a memory
+    // structure: the negative observed consequence demotes protect below wait.
+    const auto learned_cycle_result = cognitive_cycle.run(cognitive_input);
+    assert(learned_cycle_result.status == CognitiveCycleStatus::completed);
+    assert(!learned_cycle_result.context.plan.steps.empty());
+    assert(learned_cycle_result.context.plan.steps.front().action.name == "wait");
+    bool protect_utility_was_reduced = false;
+    for (const auto& step : learned_cycle_result.context.plan.steps) {
+        if (step.action.name == "protect") {
+            protect_utility_was_reduced = step.action.utility < protect_action.utility;
+        }
+    }
+    assert(protect_utility_was_reduced);
+
     Brain restored(journal);
     const auto restored_strategies = restored.developmental_strategies();
     assert(restored_strategies.size() == 1);
     assert(restored_strategies.front().context == "goal-alpha");
     assert(restored_strategies.front().action == "protect");
+    CognitiveCycle restored_cycle(restored);
+    const auto replayed_behavior = restored_cycle.run(cognitive_input);
+    assert(replayed_behavior.status == CognitiveCycleStatus::completed);
+    assert(!replayed_behavior.context.plan.steps.empty());
+    assert(replayed_behavior.context.plan.steps.front().action.name == "wait");
     std::filesystem::remove(journal, ec);
     return 0;
 }
