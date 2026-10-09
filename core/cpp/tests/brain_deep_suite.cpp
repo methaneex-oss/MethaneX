@@ -45,7 +45,37 @@ int main() {
     assert(brain.learn(Evidence{"trusted", "temperature", Scalar{25.0}, 0.9}) >= 0.0);
     assert(brain.knowledge_source("trusted") != nullptr);
 
-    // Prediction learning must change future predictions, not merely record an error.\n    // The first forecasts use the supplied prior; repeated outcomes teach the\n    // adaptation model, and a later forecast is pulled toward the learned estimate.\n    const auto prediction_journal = root / "prediction_learning.bin";\n    {\n        Brain predictor(prediction_journal);\n        for (int i = 0; i < 8; ++i) {\n            const auto prediction = predictor.predict("temperature", Scalar{0.2}, 0.5);\n            assert(prediction.created_sequence != 0);\n            assert(!predictor.resolve_prediction(prediction.created_sequence, Scalar{0.8}));\n        }\n        const auto* metric = predictor.learning_metric("temperature");\n        assert(metric != nullptr);\n        assert(metric->observations == 8);\n        const auto learned_prediction = predictor.predict("temperature", Scalar{0.2}, 0.5);\n        const auto learned_value = std::get_if<double>(&learned_prediction.predicted);\n        assert(learned_value != nullptr);\n        assert(*learned_value > 0.2);\n        assert(*learned_value < 0.8);\n    }\n    {\n        Brain replayed_predictor(prediction_journal);\n        const auto replayed_prediction = replayed_predictor.predict("temperature", Scalar{0.2}, 0.5);\n        const auto replayed_value = std::get_if<double>(&replayed_prediction.predicted);\n        assert(replayed_value != nullptr);\n        assert(*replayed_value > 0.2);\n        assert(*replayed_value < 0.8);\n        assert(replayed_predictor.learning_metric("temperature")->observations == 9);\n    }\n\n    const std::vector<CandidateAction> actions{{"safe", 0.9, 0.9, 0.05, 0.9}, {"risky", 0.95, 0.2, 0.9, 0.8}};
+    // Prediction learning must change future predictions, not merely record an error.
+    // The first forecasts use the supplied prior; repeated outcomes teach the
+    // adaptation model, and a later forecast is pulled toward the learned estimate.
+    const auto prediction_journal = root / "prediction_learning.bin";
+    {
+        Brain predictor(prediction_journal);
+        for (int i = 0; i < 8; ++i) {
+            const auto prediction = predictor.predict("temperature", Scalar{0.2}, 0.5);
+            assert(prediction.created_sequence != 0);
+            assert(!predictor.resolve_prediction(prediction.created_sequence, Scalar{0.8}));
+        }
+        const auto* metric = predictor.learning_metric("temperature");
+        assert(metric != nullptr);
+        assert(metric->observations == 8);
+        const auto learned_prediction = predictor.predict("temperature", Scalar{0.2}, 0.5);
+        const auto learned_value = std::get_if<double>(&learned_prediction.predicted);
+        assert(learned_value != nullptr);
+        assert(*learned_value > 0.2);
+        assert(*learned_value < 0.8);
+    }
+    {
+        Brain replayed_predictor(prediction_journal);
+        const auto replayed_prediction = replayed_predictor.predict("temperature", Scalar{0.2}, 0.5);
+        const auto replayed_value = std::get_if<double>(&replayed_prediction.predicted);
+        assert(replayed_value != nullptr);
+        assert(*replayed_value > 0.2);
+        assert(*replayed_value < 0.8);
+        assert(replayed_predictor.learning_metric("temperature")->observations == 9);
+    }
+
+    const std::vector<CandidateAction> actions{{"safe", 0.9, 0.9, 0.05, 0.9}, {"risky", 0.95, 0.2, 0.9, 0.8}};
     const auto decisions = brain.choose(actions);
     assert(!decisions.empty());
     assert(!brain.plan(actions, 4).steps.empty());
