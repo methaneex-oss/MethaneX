@@ -19,8 +19,10 @@ std::string join_prediction_context_ids(const std::vector<std::string>& ids) {
 
 Prediction Brain::predict_with_context(std::string key, Scalar value, double confidence,
                                        double minimum_strength, std::size_t minimum_shared_contexts) {
-    std::unique_lock lock(mutex_);
     if (key.empty()) return Prediction{};
+    if (const auto* numeric = std::get_if<double>(&value);
+        numeric != nullptr && !std::isfinite(*numeric)) return Prediction{};
+    std::unique_lock lock(mutex_);
     const double threshold = std::clamp(minimum_strength, 0.0, 1.0);
     PredictionContext context{};
     const auto candidates = association_.concept_candidates(threshold, minimum_shared_contexts);
