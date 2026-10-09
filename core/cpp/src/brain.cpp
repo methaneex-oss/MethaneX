@@ -25,6 +25,30 @@ bool numeric_value(const Scalar& value, long double& result) {
     }
     return false;
 }
+bool valid_prediction_outcome_event(const Event& event, const Prediction* prediction) {
+    const auto* key = string_value(event.data, "key");
+    const auto actual = event.data.find("actual");
+    if (key == nullptr || key->empty() || actual == event.data.end() ||
+        prediction == nullptr || prediction->resolved || prediction->key != *key) return false;
+    if (const auto* value = std::get_if<double>(&actual->second);
+        value != nullptr && !std::isfinite(*value)) return false;
+    if (const auto* value = std::get_if<double>(&prediction->predicted);
+        value != nullptr && !std::isfinite(*value)) return false;
+
+    const double error = double_value(event.data, "error", 1.0);
+    if (!std::isfinite(error) || error < 0.0 || error > 1.0) return false;
+    double expected_error = prediction->predicted == actual->second ? 0.0 : 1.0;
+    long double predicted_numeric = 0.0L;
+    long double actual_numeric = 0.0L;
+    if (numeric_value(prediction->predicted, predicted_numeric) &&
+        numeric_value(actual->second, actual_numeric)) {
+        const long double scale = std::max({
+            1.0L, std::abs(predicted_numeric), std::abs(actual_numeric)});
+        expected_error = std::clamp(static_cast<double>(
+            std::abs(actual_numeric - predicted_numeric) / scale), 0.0, 1.0);
+    }
+    return std::abs(error - expected_error) <= 1e-12;
+}
 std::uint64_t integer_value(const Attributes& data, const std::string& key, std::uint64_t fallback = 0) { const auto it = data.find(key); if (it == data.end()) return fallback; if (const auto value = std::get_if<std::int64_t>(&it->second)) return *value < 0 ? fallback : static_cast<std::uint64_t>(*value); if (const auto value = std::get_if<double>(&it->second)) return *value < 0.0 ? fallback : static_cast<std::uint64_t>(*value); return fallback; }
 std::string join_ids(const std::vector<std::string>& ids) { std::ostringstream out; for (std::size_t i = 0; i < ids.size(); ++i) { if (i != 0) out << '\x1f'; out << ids[i]; } return out.str(); }
 std::vector<std::string> split_ids(const std::string& value) { std::vector<std::string> result; std::size_t start = 0; while (start <= value.size()) { const auto end = value.find('\x1f', start); const auto token = value.substr(start, end == std::string::npos ? std::string::npos : end - start); if (!token.empty()) result.push_back(token); if (end == std::string::npos) break; start = end + 1; } return result; }
@@ -76,35 +100,12 @@ void Brain::replay(const Event& event) {
     // duplicate or malformed outcome can alter affect even when prediction
     // resolution itself is rejected below.
     if (event.kind == "prediction_outcome") {
-        const auto* key = string_value(event.data, "key");
-        const auto actual = event.data.find("actual");
         const auto sequence = integer_value(event.data, "prediction_sequence", 0);
-        if (key == nullptr || key->empty() || actual == event.data.end()) return;
-        Prediction* prediction = sequence != 0
+        const auto* key = string_value(event.data, "key");
+        const Prediction* prediction = sequence != 0
             ? find_prediction(sequence)
-            : find_latest_unresolved_prediction(*key);
-        if (prediction == nullptr || prediction->resolved || prediction->key != *key) return;
-        if (const auto* value = std::get_if<double>(&actual->second);
-            value != nullptr && !std::isfinite(*value)) return;
-        if (const auto* value = std::get_if<double>(&prediction->predicted);
-            value != nullptr && !std::isfinite(*value)) return;
-        const double error = double_value(event.data, "error", 1.0);
-        if (!std::isfinite(error) || error < 0.0 || error > 1.0) return;
-
-        // The journaled error must agree with the prediction and observation.
-        // Otherwise affect/attention could learn one surprise value while
-        // numeric adaptation learns from a different actual observation.
-        double expected_error = prediction->predicted == actual->second ? 0.0 : 1.0;
-        long double predicted_numeric = 0.0L;
-        long double actual_numeric = 0.0L;
-        if (numeric_value(prediction->predicted, predicted_numeric) &&
-            numeric_value(actual->second, actual_numeric)) {
-            const long double scale = std::max({
-                1.0L, std::abs(predicted_numeric), std::abs(actual_numeric)});
-            expected_error = std::clamp(static_cast<double>(
-                std::abs(actual_numeric - predicted_numeric) / scale), 0.0, 1.0);
-        }
-        if (std::abs(error - expected_error) > 1e-12) return;
+            : (key == nullptr ? nullptr : find_latest_unresolved_prediction(*key));
+        if (!valid_prediction_outcome_event(event, prediction)) return;
     }
 
     process_affective_experience(event);
@@ -300,7 +301,29 @@ void Brain::replay(const Event& event) {
         if (outcome > 0.0) attention_model_.reinforce(attention_state_, std::clamp(outcome, 0.0, 1.0)); else if (outcome < 0.0) attention_model_.suppress(attention_state_, std::clamp(-outcome, 0.0, 1.0));
     }
 }
-Observation Brain::observe(Event event) { std::unique_lock lock(mutex_); event.timestamp_ns = event.timestamp_ns == 0 ? now_ns() : event.timestamp_ns; const auto previous = memory_.recent(1); const double novelty = compute_novelty(event, previous); event.sequence = memory_.append(event); if (event.sequence == 0) return Observation{}; ++state_.events_seen; state_.cycle = event.sequence; replay(event); state_.novelty = novelty; consolidate_experience(event); sync_self_state(); return Observation{std::move(event), novelty}; }
+Observation Brain::observe(Event event) {
+    std::unique_lock lock(mutex_);
+    if (event.kind == "prediction_outcome") {
+        const auto sequence = integer_value(event.data, "prediction_sequence", 0);
+        const auto* key = string_value(event.data, "key");
+        const Prediction* prediction = sequence != 0
+            ? find_prediction(sequence)
+            : (key == nullptr ? nullptr : find_latest_unresolved_prediction(*key));
+        if (!valid_prediction_outcome_event(event, prediction)) return Observation{};
+    }
+    event.timestamp_ns = event.timestamp_ns == 0 ? now_ns() : event.timestamp_ns;
+    const auto previous = memory_.recent(1);
+    const double novelty = compute_novelty(event, previous);
+    event.sequence = memory_.append(event);
+    if (event.sequence == 0) return Observation{};
+    ++state_.events_seen;
+    state_.cycle = event.sequence;
+    replay(event);
+    state_.novelty = novelty;
+    consolidate_experience(event);
+    sync_self_state();
+    return Observation{std::move(event), novelty};
+}
 double Brain::learn(const Evidence& evidence) { std::unique_lock lock(mutex_); if (evidence.key.empty()) return 0.0; const double reliability = std::clamp(evidence.reliability, 0.0, 1.0); Event event{0, now_ns(), evidence.source, "learning", {{evidence.key, evidence.value}, {"reliability", reliability}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return 0.0; ++state_.events_seen; state_.cycle = event.sequence; replay(event); sync_self_state(); if (const auto* metric = knowledge_.source_metric(evidence.source)) return metric->reliability; return reliability; }
 LearningCycle Brain::learn_from_prediction(const std::string& key, const Scalar& actual, double fitness) {
     std::unique_lock lock(mutex_); LearningCycle cycle{}; if (key.empty()) return cycle; const auto* prediction = find_latest_unresolved_prediction(key); if (prediction == nullptr) return cycle; double predicted_value = 0.0; double actual_value = 0.0; if (const auto predicted = std::get_if<double>(&prediction->predicted)) { if (const auto observed = std::get_if<double>(&actual)) { predicted_value = *predicted; actual_value = *observed; } else return cycle; } else { if (prediction->predicted == actual) { predicted_value = 0.0; actual_value = 0.0; } else return cycle; } const double error = prediction->predicted == actual ? 0.0 : std::clamp(std::abs(actual_value - predicted_value), 0.0, 1.0); Event outcome{0, now_ns(), "brain", "prediction_outcome", {{"key", prediction->key}, {"prediction_sequence", static_cast<std::int64_t>(prediction->created_sequence)}, {"actual", actual}, {"error", error}, {"salience", attention_state_.salience}, {"novelty", state_.novelty}}}; outcome.sequence = memory_.append(outcome); if (outcome.sequence == 0) return cycle; ++state_.events_seen; state_.cycle = outcome.sequence; replay(outcome); if (const auto* metric = adaptation_.metric(key); metric != nullptr) cycle.adaptation = *metric; Event fitness_event{0, now_ns(), "brain", "evolution_fitness", {{"key", key}, {"fitness", std::clamp(fitness, -1.0, 1.0)}}}; fitness_event.sequence = memory_.append(fitness_event); if (fitness_event.sequence == 0) return cycle; ++state_.events_seen; state_.cycle = fitness_event.sequence; replay(fitness_event); cycle.proposals = evolution_.propose(); sync_self_state(); return cycle;
