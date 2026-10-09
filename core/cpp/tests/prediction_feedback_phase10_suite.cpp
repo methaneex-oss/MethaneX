@@ -547,6 +547,15 @@ int main() {
     }
     assert(persisted);
 
+    bool cross_type_resolution_replayed = false;
+    for (const auto& current : restored.snapshot().predictions) {
+        if (current.key == "cross_type_numeric") {
+            cross_type_resolution_replayed = current.resolved && current.error == 0.0;
+            break;
+        }
+    }
+    assert(cross_type_resolution_replayed);
+
     const auto* restored_real_metric = restored.learning_metric("real_temperature");
     assert(restored_real_metric != nullptr);
     assert(restored_real_metric->observations == real_prediction_sequences.size());
