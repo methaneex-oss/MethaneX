@@ -97,6 +97,40 @@ int main() {
     assert(*real_value > 20.0);
     assert(*real_value < 30.0);
 
+    // Prediction feedback must change later action selection, not just a metric.
+    const auto learned_goal = brain.create_goal("prediction-driven-goal", 0.8);
+    assert(!learned_goal.id.empty());
+    assert(brain.activate_goal(learned_goal.id));
+    for (int i = 0; i < 8; ++i) {
+        const auto predicted = brain.predict("policy_temperature", Scalar{20.0}, 0.8);
+        assert(predicted.created_sequence != 0);
+        assert(!brain.resolve_prediction(predicted.created_sequence, Scalar{30.0}));
+    }
+    CognitiveCycle learned_cycle(brain);
+    CognitiveCycleInput learned_input;
+    learned_input.goal_id = learned_goal.id;
+    learned_input.developmental_context = "policy_temperature";
+    learned_input.planning_horizon = 1;
+    learned_input.resource_budget = 10.0;
+    learned_input.candidate_actions = {
+        CandidateAction{"hold", 0.5, 0.5, 0.0, 0.0, 1.0, 0.0, 0.0},
+        CandidateAction{"adjust", 0.5, 0.5, 0.0, 0.0, 1.0, 0.0, 0.0},
+    };
+    const auto learned_result = learned_cycle.run(learned_input);
+    assert(learned_result.status == CognitiveCycleStatus::completed);
+    assert(!learned_result.selected_action.empty());
+    const auto learned_associations = brain.developmental_associations();
+    bool prediction_association_exists = false;
+    for (const auto& association : learned_associations) {
+        if (association.left == "policy_temperature" &&
+            association.right == "prediction_outcome" &&
+            association.observations >= 8) {
+            prediction_association_exists = true;
+            break;
+        }
+    }
+    assert(prediction_association_exists);
+
     // Stable semantic prediction keys must accumulate learning across separate
     // experiences. The key identifies the variable; each prediction event keeps
     // its own journal sequence, while adaptation remains keyed by the variable.
