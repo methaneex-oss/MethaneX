@@ -141,6 +141,46 @@ int main() {
     assert(real_metric != nullptr);
     assert(real_metric->observations == real_prediction_sequences.size());
 
+    // Numeric scalar types share numeric error semantics: a floating prediction
+    // of 20.0 is correct when the observed value is the integer 20.
+    const auto mixed_numeric_prediction =
+        brain.predict("mixed_numeric_outcome", Scalar{20.0}, 0.8);
+    assert(mixed_numeric_prediction.created_sequence != 0);
+    assert(brain.resolve_prediction(mixed_numeric_prediction.created_sequence,
+                                   Scalar{std::int64_t{20}}));
+    const auto* mixed_numeric_metric = brain.learning_metric("mixed_numeric_outcome");
+    assert(mixed_numeric_metric != nullptr);
+    assert(mixed_numeric_metric->observations == 1);
+
+    // Integer-valued predictions must also update numeric adaptation.
+    const auto integer_prediction =
+        brain.predict("integer_outcome", Scalar{std::int64_t{20}}, 0.8);
+    assert(integer_prediction.created_sequence != 0);
+    assert(!brain.resolve_prediction(integer_prediction.created_sequence,
+                                     Scalar{std::int64_t{30}}));
+    const auto* integer_metric = brain.learning_metric("integer_outcome");
+    assert(integer_metric != nullptr);
+    assert(integer_metric->observations == 1);
+    assert(std::abs(integer_metric->mean_error - (1.0 / 3.0)) < 1e-12);
+
+    // Categorical outcomes still train association and attention systems even
+    // when numeric adaptation cannot be applied.
+    const auto categorical_prediction =
+        brain.predict("door_state", Scalar{std::string("closed")}, 0.8);
+    assert(categorical_prediction.created_sequence != 0);
+    assert(!brain.resolve_prediction(categorical_prediction.created_sequence,
+                                     Scalar{std::string("open")}));
+    bool categorical_association_learned = false;
+    for (const auto& association : brain.developmental_associations()) {
+        if (association.left == "door_state" &&
+            association.right == "prediction_outcome" &&
+            association.observations == 1) {
+            categorical_association_learned = true;
+            break;
+        }
+    }
+    assert(categorical_association_learned);
+
     // Invalid numeric outcomes must not enter the journal or mutate any learning
     // subsystem; the prediction remains available for a later valid observation.
     const auto invalid_outcome_prediction =
