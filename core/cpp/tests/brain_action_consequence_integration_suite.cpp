@@ -1,4 +1,4 @@
-#include "jarvis/core/brain.hpp"
+#include "jarvis/core/cognitive_cycle.hpp"
 
 #include <cassert>
 #include <cmath>
@@ -10,21 +10,47 @@ int main() {
     const auto journal = std::filesystem::temp_directory_path() / "jarvis_brain_action_consequence_integration.bin";
     std::error_code ec;
     std::filesystem::remove(journal, ec);
+    std::filesystem::remove(journal.string() + ".meta", ec);
 
     Brain brain(journal);
+    Goal goal;
+    goal.id = "consequence-development";
+    goal.description = "Prefer actions with better observed consequences";
+    goal.priority = 0.8;
+    assert(brain.create_goal(goal));
+    assert(brain.activate_goal(goal.id));
+
+    CognitiveCycle cycle(brain);
+    CognitiveCycleInput input;
+    input.goal_id = goal.id;
+    input.developmental_context = goal.id;
+    input.planning_horizon = 1;
+    input.resource_budget = 10.0;
+    input.observation = Event{0, 1, "sensor", "observation", {{"temperature", 20.0}}};
+    CandidateAction calibrate;
+    calibrate.name = "calibrate";
+    calibrate.utility = 0.8;
+    calibrate.expected_value = 0.8;
+    calibrate.confidence = 0.9;
+    calibrate.risk = 0.1;
+    calibrate.reversibility = 1.0;
+    CandidateAction wait;
+    wait.name = "wait";
+    wait.utility = 0.8;
+    wait.expected_value = 0.8;
+    wait.confidence = 0.9;
+    wait.risk = 0.1;
+    wait.reversibility = 1.0;
+    input.candidate_actions = {calibrate, wait};
+
+    const auto before_learning = cycle.run(input);
+    assert(before_learning.status == CognitiveCycleStatus::completed);
+    assert(!before_learning.context.plan.steps.empty());
+    assert(before_learning.context.plan.steps.front().action.name == "calibrate");
 
     ActionAssessment assessment;
-    assessment.action = CandidateAction{
-        "calibrate",
-        0.8,
-        0.8,
-        0.1,
-        1.0,
-        0.1,
-        0.8,
-        0.0,
-        DecisionOutcome::act,
-        {}};
+    assessment.action = calibrate;
+    assessment.action.expected_consequence = 0.8;
     assessment.disposition = ActionDisposition::execute;
     assessment.permitted = true;
     assessment.confidence = 0.9;
@@ -57,8 +83,28 @@ int main() {
     assert(saw_action_outcome);
     assert(brain.affective_learning_updates() > 0);
 
+    const auto* learned_strategy = brain.developmental_best_strategy(goal.id);
+    assert(learned_strategy != nullptr);
+    assert(learned_strategy->action == "calibrate");
+    assert(learned_strategy->value < 0.0);
+    input.observation = Event{0, 2, "sensor", "observation", {{"temperature", 21.0}}};
+    const auto after_learning = cycle.run(input);
+    assert(after_learning.status == CognitiveCycleStatus::completed);
+    assert(!after_learning.context.plan.steps.empty());
+    assert(after_learning.context.plan.steps.front().action.name == "wait");
+
     Brain restored(journal);
     assert(restored.affective_learning_updates() > 0);
+    const auto* restored_strategy = restored.developmental_best_strategy(goal.id);
+    assert(restored_strategy != nullptr);
+    assert(restored_strategy->action == "calibrate");
+    assert(restored_strategy->value < 0.0);
+    CognitiveCycle restored_cycle(restored);
+    input.observation = Event{0, 3, "sensor", "observation", {{"temperature", 22.0}}};
+    const auto after_restart = restored_cycle.run(input);
+    assert(after_restart.status == CognitiveCycleStatus::completed);
+    assert(!after_restart.context.plan.steps.empty());
+    assert(after_restart.context.plan.steps.front().action.name == "wait");
     bool restored_action_outcome = false;
     for (const auto& event : restored.memory().all()) {
         if (event.kind == "action_outcome") {
@@ -69,5 +115,6 @@ int main() {
     assert(restored_action_outcome);
 
     std::filesystem::remove(journal, ec);
+    std::filesystem::remove(journal.string() + ".meta", ec);
     return 0;
 }
