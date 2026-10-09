@@ -3,6 +3,18 @@
 namespace jarvis::core {
 namespace {
 std::string join_ids(const std::vector<std::string>& ids) { std::string out; for (std::size_t i = 0; i < ids.size(); ++i) { if (i != 0) out.push_back('\x1f'); out += ids[i]; } return out; }
+bool numeric_value(const Scalar& value, long double& result) {
+    if (const auto* integer = std::get_if<std::int64_t>(&value)) {
+        result = static_cast<long double>(*integer);
+        return true;
+    }
+    if (const auto* numeric = std::get_if<double>(&value);
+        numeric != nullptr && std::isfinite(*numeric)) {
+        result = static_cast<long double>(*numeric);
+        return true;
+    }
+    return false;
+}
 }
 
 std::vector<Belief> Brain::beliefs() const { std::shared_lock lock(mutex_); std::vector<Belief> result; result.reserve(beliefs_.size()); for (const auto& [_, belief] : beliefs_) result.push_back(belief); return result; }
@@ -28,11 +40,15 @@ bool Brain::resolve_prediction(std::uint64_t prediction_sequence, const Scalar& 
         predicted != nullptr && !std::isfinite(*predicted)) return false;
 
     double error = prediction->predicted == actual ? 0.0 : 1.0;
-    if (const auto* predicted = std::get_if<double>(&prediction->predicted)) {
-        if (const auto* observed = std::get_if<double>(&actual)) {
-            const double scale = std::max({1.0, std::abs(*predicted), std::abs(*observed)});
-            error = std::clamp(std::abs(*observed - *predicted) / scale, 0.0, 1.0);
-        }
+    long double predicted_numeric = 0.0L;
+    long double actual_numeric = 0.0L;
+    if (numeric_value(prediction->predicted, predicted_numeric) &&
+        numeric_value(actual, actual_numeric)) {
+        const long double scale = std::max({
+            1.0L, std::abs(predicted_numeric), std::abs(actual_numeric)});
+        const long double relative_error =
+            std::abs(actual_numeric - predicted_numeric) / scale;
+        error = std::clamp(static_cast<double>(relative_error), 0.0, 1.0);
     }
     Event event{0, 0, "brain", "prediction_outcome",
         {{"key", prediction->key},
