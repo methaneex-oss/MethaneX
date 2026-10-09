@@ -178,6 +178,19 @@ int main() {
     assert(*real_value > 20.0);
     assert(*real_value < 30.0);
 
+    // Convex interpolation must remain finite even when finite inputs have
+    // opposite signs near the floating-point range limit.
+    const double extreme = -std::numeric_limits<double>::max();
+    const auto extreme_prediction = brain.predict("real_temperature", Scalar{extreme}, 0.7);
+    const auto extreme_value = std::get_if<double>(&extreme_prediction.predicted);
+    assert(extreme_value != nullptr);
+    assert(std::isfinite(*extreme_value));
+    const auto extreme_contextual = brain.predict_with_context(
+        "real_temperature", Scalar{extreme}, 0.7, 0.5, 2);
+    const auto extreme_contextual_value = std::get_if<double>(&extreme_contextual.predicted);
+    assert(extreme_contextual_value != nullptr);
+    assert(std::isfinite(*extreme_contextual_value));
+
     // Prediction feedback must update the developmental model and remain available to later cognition.
     const Goal learned_goal{"prediction-driven-goal", "Test prediction-driven adaptation", 0.8};
     assert(brain.create_goal(learned_goal));
