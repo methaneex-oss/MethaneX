@@ -4,6 +4,7 @@
 #include <chrono>
 #include <cmath>
 #include <sstream>
+#include <limits>
 
 namespace jarvis::core {
 namespace {
@@ -14,6 +15,39 @@ std::string join_prediction_context_ids(const std::vector<std::string>& ids) {
     std::ostringstream out;
     for (std::size_t i = 0; i < ids.size(); ++i) { if (i != 0) out << '\x1f'; out << ids[i]; }
     return out.str();
+}
+bool prediction_numeric_value(const Scalar& value, long double& result) {
+    if (const auto* integer = std::get_if<std::int64_t>(&value)) {
+        result = static_cast<long double>(*integer);
+        return true;
+    }
+    if (const auto* numeric = std::get_if<double>(&value);
+        numeric != nullptr && std::isfinite(*numeric)) {
+        result = static_cast<long double>(*numeric);
+        return true;
+    }
+    return false;
+}
+void calibrate_contextual_numeric_prediction(Scalar& value, double estimate, double weight) {
+    long double prior = 0.0L;
+    if (!prediction_numeric_value(value, prior) || !std::isfinite(estimate)) return;
+    const long double blended =
+        (1.0L - static_cast<long double>(weight)) * prior +
+        static_cast<long double>(weight) * static_cast<long double>(estimate);
+    if (auto* numeric = std::get_if<double>(&value)) {
+        *numeric = static_cast<double>(blended);
+        return;
+    }
+    if (auto* integer = std::get_if<std::int64_t>(&value)) {
+        const long double rounded = std::round(blended);
+        const long double lower = static_cast<long double>(
+            std::numeric_limits<std::int64_t>::lowest());
+        const long double upper = static_cast<long double>(
+            std::numeric_limits<std::int64_t>::max());
+        if (rounded <= lower) *integer = std::numeric_limits<std::int64_t>::lowest();
+        else if (rounded >= upper) *integer = std::numeric_limits<std::int64_t>::max();
+        else *integer = static_cast<std::int64_t>(rounded);
+    }
 }
 }
 
@@ -46,10 +80,10 @@ Prediction Brain::predict_with_context(std::string key, Scalar value, double con
     const double base_confidence = std::clamp(confidence, 0.0, 1.0);
     double calibrated_confidence = base_confidence;
     if (const auto* metric = adaptation_.metric(key); metric != nullptr && metric->observations > 0) {
-        if (auto* numeric = std::get_if<double>(&value)) {
-            const double learned_confidence = adaptation_.confidence(key);
-            *numeric = (1.0 - learned_confidence) * *numeric +
-                       learned_confidence * metric->estimate;
+        const double learned_confidence = adaptation_.confidence(key);
+        long double predicted_numeric = 0.0L;
+        if (prediction_numeric_value(value, predicted_numeric)) {
+            calibrate_contextual_numeric_prediction(value, metric->estimate, learned_confidence);
             calibrated_confidence = std::clamp(base_confidence + (1.0 - base_confidence) * 0.5 * learned_confidence, 0.0, 1.0);
         }
     }
