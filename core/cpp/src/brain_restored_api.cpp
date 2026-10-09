@@ -42,8 +42,9 @@ void calibrate_numeric_prediction(Scalar& value, double estimate, double weight)
 
 std::vector<Belief> Brain::beliefs() const { std::shared_lock lock(mutex_); std::vector<Belief> result; result.reserve(beliefs_.size()); for (const auto& [_, belief] : beliefs_) result.push_back(belief); return result; }
 Prediction Brain::predict(std::string key, Scalar value, double confidence) {
-    // NaN bypasses ordinary clamp comparisons and can leak into journal state.
-    if (std::isnan(confidence)) return Prediction{};
+    // Non-finite confidence cannot be meaningful evidence and must not enter
+    // a journal as prediction metadata.
+    if (!std::isfinite(confidence)) return Prediction{};
     if (key.empty()) return Prediction{};
     if (const auto* numeric = std::get_if<double>(&value);
         numeric != nullptr && !std::isfinite(*numeric)) return Prediction{};
