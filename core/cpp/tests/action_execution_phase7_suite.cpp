@@ -162,6 +162,9 @@ int main() {
     assert(restored_strategies.size() == 1);
     assert(restored_strategies.front().context == "goal-alpha");
     assert(restored_strategies.front().action == "protect");
+    assert(std::abs(restored_strategies.front().value - strategies.front().value) < 1e-12);
+    assert(std::abs(restored_strategies.front().confidence - strategies.front().confidence) < 1e-12);
+    assert(restored_strategies.front().uses == strategies.front().uses);
     CognitiveCycle restored_cycle(restored);
     const auto replayed_behavior = restored_cycle.run(cognitive_input);
     assert(replayed_behavior.status == CognitiveCycleStatus::completed);
