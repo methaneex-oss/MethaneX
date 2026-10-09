@@ -144,6 +144,32 @@ int main() {
     assert(affect_after_mismatch.updates == affect_before_mismatch.updates);
     assert(std::abs(affect_after_mismatch.valence - affect_before_mismatch.valence) < 1e-12);
 
+    // Even correctly identified feedback is invalid if its error is non-finite.
+    // Reject it before affect, adaptation, association, or prediction state changes.
+    const auto malformed_prediction =
+        brain.predict("malformed_feedback_guard", Scalar{25.0}, 0.8);
+    assert(malformed_prediction.created_sequence != 0);
+    const auto affect_before_malformed = brain.affective_state();
+    brain.observe(Event{0, 0, "test", "prediction_outcome",
+        {{"key", malformed_prediction.key},
+         {"prediction_sequence", static_cast<std::int64_t>(malformed_prediction.created_sequence)},
+         {"actual", Scalar{30.0}},
+         {"error", std::numeric_limits<double>::quiet_NaN()},
+         {"salience", 0.5},
+         {"novelty", 0.1}}});
+    const auto affect_after_malformed = brain.affective_state();
+    assert(affect_after_malformed.updates == affect_before_malformed.updates);
+    assert(std::abs(affect_after_malformed.valence - affect_before_malformed.valence) < 1e-12);
+    assert(brain.learning_metric("malformed_feedback_guard") == nullptr);
+    bool malformed_prediction_unresolved = false;
+    for (const auto& current : brain.snapshot().predictions) {
+        if (current.created_sequence == malformed_prediction.created_sequence) {
+            malformed_prediction_unresolved = !current.resolved;
+            break;
+        }
+    }
+    assert(malformed_prediction_unresolved);
+
     Brain restored_context(path);
     bool provenance_restored = false;
     for (const auto& current : restored_context.snapshot().predictions) {
