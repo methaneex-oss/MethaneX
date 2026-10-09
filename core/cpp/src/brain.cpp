@@ -13,6 +13,18 @@ namespace {
 std::uint64_t now_ns() noexcept { return static_cast<std::uint64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count()); }
 const std::string* string_value(const Attributes& data, const std::string& key) { const auto it = data.find(key); return it == data.end() ? nullptr : std::get_if<std::string>(&it->second); }
 double double_value(const Attributes& data, const std::string& key, double fallback = 0.0) { const auto it = data.find(key); if (it == data.end()) return fallback; if (const auto value = std::get_if<double>(&it->second)) return *value; if (const auto value = std::get_if<std::int64_t>(&it->second)) return static_cast<double>(*value); return fallback; }
+bool numeric_value(const Scalar& value, long double& result) {
+    if (const auto* integer = std::get_if<std::int64_t>(&value)) {
+        result = static_cast<long double>(*integer);
+        return true;
+    }
+    if (const auto* numeric = std::get_if<double>(&value);
+        numeric != nullptr && std::isfinite(*numeric)) {
+        result = static_cast<long double>(*numeric);
+        return true;
+    }
+    return false;
+}
 std::uint64_t integer_value(const Attributes& data, const std::string& key, std::uint64_t fallback = 0) { const auto it = data.find(key); if (it == data.end()) return fallback; if (const auto value = std::get_if<std::int64_t>(&it->second)) return *value < 0 ? fallback : static_cast<std::uint64_t>(*value); if (const auto value = std::get_if<double>(&it->second)) return *value < 0.0 ? fallback : static_cast<std::uint64_t>(*value); return fallback; }
 std::string join_ids(const std::vector<std::string>& ids) { std::ostringstream out; for (std::size_t i = 0; i < ids.size(); ++i) { if (i != 0) out << '\x1f'; out << ids[i]; } return out.str(); }
 std::vector<std::string> split_ids(const std::string& value) { std::vector<std::string> result; std::size_t start = 0; while (start <= value.size()) { const auto end = value.find('\x1f', start); const auto token = value.substr(start, end == std::string::npos ? std::string::npos : end - start); if (!token.empty()) result.push_back(token); if (end == std::string::npos) break; start = end + 1; } return result; }
@@ -67,7 +79,59 @@ void Brain::replay(const Event& event) {
     if (event.kind == "goal_abandon") { if (const auto* id = string_value(event.data, "id")) goals_model_.abandon(*id); return; }
     if (event.kind == "goal_priority") { if (const auto* id = string_value(event.data, "id")) goals_model_.set_priority(*id, double_value(event.data, "priority")); return; }
     if (event.kind == "prediction") { const auto* key = string_value(event.data, "key"); const auto value = event.data.find("value"); if (key == nullptr || value == event.data.end()) return; PredictionContext context{}; if (const auto* members = string_value(event.data, "concept_members")) context.concept_members = split_ids(*members); context.evidence_strength = std::clamp(double_value(event.data, "evidence_strength"), 0.0, 1.0); predictions_.push_back(Prediction{*key, value->second, std::clamp(double_value(event.data, "confidence"), 0.0, 1.0), event.sequence, false, 0.0, std::move(context)}); return; }
-    if (event.kind == "prediction_outcome") { const auto* key = string_value(event.data, "key"); if (key == nullptr) return; const auto prediction_sequence = integer_value(event.data, "prediction_sequence", 0); Prediction* prediction = prediction_sequence != 0 ? find_prediction(prediction_sequence) : find_latest_unresolved_prediction(*key); if (prediction == nullptr || prediction->resolved) return; prediction->resolved = true; prediction->error = std::clamp(double_value(event.data, "error", 1.0), 0.0, 1.0); const auto actual = event.data.find("actual"); if (actual != event.data.end()) if (const auto predicted = std::get_if<double>(&prediction->predicted)) if (const auto observed = std::get_if<double>(&actual->second)) { adaptation_.observe(*key, *predicted, *observed); association_.apply_prediction_feedback(prediction->context.concept_members, prediction->error <= 0.0, prediction->context.evidence_strength, event.sequence); const auto affect = affective_state_model_.state(); const double affective_significance = std::clamp(0.25 * std::abs(affect.valence) + 0.25 * affect.arousal + 0.25 * affect.uncertainty + 0.25 * affect.tension, 0.0, 1.0); developmental_learning_.observe_association(*key, "prediction_outcome", LearningSignal{prediction->error, 1.0 - prediction->error, std::clamp(double_value(event.data, "salience", prediction->confidence), 0.0, 1.0), std::clamp(double_value(event.data, "novelty", state_.novelty), 0.0, 1.0), affective_significance}); const AttentionSignal signal{*key, std::clamp(double_value(event.data, "salience", prediction->confidence), 0.0, 1.0), std::clamp(double_value(event.data, "novelty", state_.novelty), 0.0, 1.0), 1.0 - prediction->confidence, 0.0}; if (prediction->error > 0.0) attention_model_.reinforce(signal, prediction->error); else attention_model_.suppress(signal, 0.1); } return; }
+    if (event.kind == "prediction_outcome") {
+        const auto* key = string_value(event.data, "key");
+        if (key == nullptr) return;
+        const auto prediction_sequence = integer_value(event.data, "prediction_sequence", 0);
+        Prediction* prediction = prediction_sequence != 0
+            ? find_prediction(prediction_sequence)
+            : find_latest_unresolved_prediction(*key);
+        if (prediction == nullptr || prediction->resolved) return;
+
+        prediction->resolved = true;
+        prediction->error = std::clamp(double_value(event.data, "error", 1.0), 0.0, 1.0);
+        const auto actual = event.data.find("actual");
+        if (actual != event.data.end()) {
+            long double predicted_numeric = 0.0L;
+            long double actual_numeric = 0.0L;
+            if (numeric_value(prediction->predicted, predicted_numeric) &&
+                numeric_value(actual->second, actual_numeric)) {
+                adaptation_.observe(*key,
+                                    static_cast<double>(predicted_numeric),
+                                    static_cast<double>(actual_numeric));
+            }
+
+            // Every observed outcome teaches associations, developmental memory,
+            // and attention. Numeric adaptation is an additional path, not a
+            // prerequisite for learning from categorical or boolean outcomes.
+            association_.apply_prediction_feedback(
+                prediction->context.concept_members,
+                prediction->error <= 0.0,
+                prediction->context.evidence_strength,
+                event.sequence);
+            const auto affect = affective_state_model_.state();
+            const double affective_significance = std::clamp(
+                0.25 * std::abs(affect.valence) + 0.25 * affect.arousal +
+                0.25 * affect.uncertainty + 0.25 * affect.tension, 0.0, 1.0);
+            developmental_learning_.observe_association(
+                *key, "prediction_outcome",
+                LearningSignal{
+                    prediction->error,
+                    1.0 - prediction->error,
+                    std::clamp(double_value(event.data, "salience", prediction->confidence), 0.0, 1.0),
+                    std::clamp(double_value(event.data, "novelty", state_.novelty), 0.0, 1.0),
+                    affective_significance});
+            const AttentionSignal signal{
+                *key,
+                std::clamp(double_value(event.data, "salience", prediction->confidence), 0.0, 1.0),
+                std::clamp(double_value(event.data, "novelty", state_.novelty), 0.0, 1.0),
+                1.0 - prediction->confidence,
+                0.0};
+            if (prediction->error > 0.0) attention_model_.reinforce(signal, prediction->error);
+            else attention_model_.suppress(signal, 0.1);
+        }
+        return;
+    }
     if (event.kind == "action_outcome") {
         const auto* action = string_value(event.data, "action"); const auto* context = string_value(event.data, "context"); if (action == nullptr || context == nullptr || action->empty() || context->empty()) return;
         const double reliability = std::clamp(double_value(event.data, "reliability", 0.5), 0.0, 1.0); const auto status = static_cast<ActionExecutionStatus>(integer_value(event.data, "status")); const char* status_name = "unknown"; switch (status) { case ActionExecutionStatus::rejected: status_name = "rejected"; break; case ActionExecutionStatus::prepared: status_name = "prepared"; break; case ActionExecutionStatus::executed: status_name = "executed"; break; case ActionExecutionStatus::verified: status_name = "verified"; break; case ActionExecutionStatus::failed: status_name = "failed"; break; case ActionExecutionStatus::cancelled: status_name = "cancelled"; break; case ActionExecutionStatus::rolled_back: status_name = "rolled_back"; break; }
