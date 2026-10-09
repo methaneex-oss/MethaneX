@@ -12,6 +12,18 @@ AdaptiveMetric AdaptationModel::observe(const std::string& key, double predicted
     const double a = actual;
     const double scale = std::max({1.0, std::abs(p), std::abs(a)});
     const double error = std::clamp(std::abs(a - p) / scale, 0.0, 1.0);
+
+    // The first actual observation establishes the variable's scale and level.
+    // A generic prior such as 0.5 is suitable for bounded probabilities, but
+    // biases physical quantities toward zero when reused for real-valued data.
+    if (metric.observations == 0) {
+        metric.estimate = a;
+        metric.mean_error = error;
+        metric.recent_error = error;
+        metric.observations = 1;
+        return metric;
+    }
+
     ++metric.observations;
 
     // Keep both long-term experience and a recency-sensitive signal. The former
