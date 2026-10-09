@@ -442,6 +442,10 @@ int main() {
         }
     }
     assert(cross_type_resolved_exactly);
+    const auto* cross_type_metric = brain.learning_metric("cross_type_numeric");
+    assert(cross_type_metric != nullptr);
+    assert(cross_type_metric->observations == 1);
+    assert(std::abs(cross_type_metric->estimate - 20.0) < 1e-12);
 
     // Stable semantic prediction keys must accumulate learning across separate
     // experiences. The key identifies the variable; each prediction event keeps
