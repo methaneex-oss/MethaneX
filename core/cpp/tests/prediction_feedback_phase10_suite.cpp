@@ -4,6 +4,7 @@
 #include <cmath>
 #include <cstdint>
 #include <filesystem>
+#include <limits>
 #include <vector>
 
 using namespace jarvis::core;
@@ -91,6 +92,27 @@ int main() {
     const auto* real_metric = brain.learning_metric("real_temperature");
     assert(real_metric != nullptr);
     assert(real_metric->observations == real_prediction_sequences.size());
+
+    // Invalid numeric outcomes must not enter the journal or mutate any learning
+    // subsystem; the prediction remains available for a later valid observation.
+    const auto invalid_outcome_prediction =
+        brain.predict("invalid_outcome_guard", Scalar{25.0}, 0.8);
+    assert(invalid_outcome_prediction.created_sequence != 0);
+    const auto affect_before_invalid = brain.affective_state();
+    const auto invalid_actual = std::numeric_limits<double>::quiet_NaN();
+    assert(!brain.resolve_prediction(invalid_outcome_prediction.created_sequence,
+                                     Scalar{invalid_actual}));
+    const auto affect_after_invalid = brain.affective_state();
+    assert(affect_after_invalid.updates == affect_before_invalid.updates);
+    bool invalid_prediction_still_unresolved = false;
+    for (const auto& current : brain.snapshot().predictions) {
+        if (current.created_sequence == invalid_outcome_prediction.created_sequence) {
+            invalid_prediction_still_unresolved = !current.resolved;
+            break;
+        }
+    }
+    assert(invalid_prediction_still_unresolved);
+    assert(brain.learning_metric("invalid_outcome_guard") == nullptr);
     const auto real_prediction = brain.predict("real_temperature", Scalar{20.0}, 0.7);
     const auto real_value = std::get_if<double>(&real_prediction.predicted);
     assert(real_value != nullptr);
