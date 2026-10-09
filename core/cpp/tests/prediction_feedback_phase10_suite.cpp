@@ -162,6 +162,7 @@ int main() {
     assert(integer_metric != nullptr);
     assert(integer_metric->observations == 1);
     assert(std::abs(integer_metric->mean_error - (1.0 / 3.0)) < 1e-12);
+    assert(std::abs(integer_metric->estimate - 30.0) < 1e-12);
 
     // Categorical outcomes still train association and attention systems even
     // when numeric adaptation cannot be applied.
@@ -392,6 +393,7 @@ int main() {
     const auto* restored_real_metric = restored.learning_metric("real_temperature");
     assert(restored_real_metric != nullptr);
     assert(restored_real_metric->observations == real_prediction_sequences.size());
+    assert(std::abs(restored_real_metric->estimate - 30.0) < 1e-12);
     const auto* restored_policy_metric = restored.learning_metric("policy_temperature");
     assert(restored_policy_metric != nullptr);
     assert(restored_policy_metric->observations == 8);
