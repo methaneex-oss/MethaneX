@@ -478,6 +478,18 @@ int main() {
     assert(*after_restart_value > 20.0);
     assert(*after_restart_value < 30.0);
 
+    const auto restored_integer = restored.predict(
+        "integer_temperature", Scalar{std::int64_t{20}}, 0.8);
+    const auto restored_integer_value = std::get_if<std::int64_t>(&restored_integer.predicted);
+    assert(restored_integer_value != nullptr);
+    assert(*restored_integer_value > 20 && *restored_integer_value < 30);
+    const auto restored_contextual_integer = restored.predict_with_context(
+        "contextual_integer_temperature", Scalar{std::int64_t{20}}, 0.8, 0.5, 2);
+    const auto restored_contextual_integer_value =
+        std::get_if<std::int64_t>(&restored_contextual_integer.predicted);
+    assert(restored_contextual_integer_value != nullptr);
+    assert(*restored_contextual_integer_value > 20 && *restored_contextual_integer_value < 30);
+
     std::filesystem::remove(path, ec);
     std::filesystem::remove(path.string() + ".meta", ec);
     return 0;
