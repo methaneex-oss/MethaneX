@@ -170,6 +170,28 @@ int main() {
     }
     assert(malformed_prediction_unresolved);
 
+    // A finite error can still be corrupt if it disagrees with the recorded
+    // prediction/actual pair. Replay must not accept internally inconsistent
+    // feedback merely because the error lies inside [0, 1].
+    const auto affect_before_inconsistent = brain.affective_state();
+    brain.observe(Event{0, 0, "test", "prediction_outcome",
+        {{"key", malformed_prediction.key},
+         {"prediction_sequence", static_cast<std::int64_t>(malformed_prediction.created_sequence)},
+         {"actual", Scalar{30.0}},
+         {"error", 0.99},
+         {"salience", 0.5},
+         {"novelty", 0.1}}});
+    assert(brain.affective_state().updates == affect_before_inconsistent.updates);
+    assert(brain.learning_metric("malformed_feedback_guard") == nullptr);
+    bool inconsistent_prediction_unresolved = false;
+    for (const auto& current : brain.snapshot().predictions) {
+        if (current.created_sequence == malformed_prediction.created_sequence) {
+            inconsistent_prediction_unresolved = !current.resolved;
+            break;
+        }
+    }
+    assert(inconsistent_prediction_unresolved);
+
     Brain restored_context(path);
     bool provenance_restored = false;
     for (const auto& current : restored_context.snapshot().predictions) {
