@@ -88,7 +88,7 @@ int main() {
     cognitive_input.observation = Event{0, 0, "sensor", "observation", {{"context", "goal-alpha"}}};
     cognitive_input.goal_id = "goal-alpha";
     cognitive_input.developmental_context = "goal-alpha";
-    cognitive_input.planning_horizon = 1;
+    cognitive_input.planning_horizon = 2;
     cognitive_input.resource_budget = 10.0;
     CandidateAction protect_action = permitted.action;
     protect_action.utility = 0.80;
