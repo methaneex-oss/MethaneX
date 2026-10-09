@@ -172,6 +172,23 @@ int main() {
                                    Scalar{invalid_predicted_value}, 0.8);
     assert(invalid_contextual_prediction.key.empty());
     assert(brain.snapshot().predictions.size() == prediction_count_before_invalid_input);
+
+    // NaN confidence and contextual thresholds must be rejected before they
+    // can contaminate confidence calibration or journal replay.
+    const double nan = std::numeric_limits<double>::quiet_NaN();
+    const auto nan_confidence_prediction = brain.predict("nan_confidence_guard", Scalar{10.0}, nan);
+    assert(nan_confidence_prediction.key.empty());
+    const auto nan_context_confidence_prediction =
+        brain.predict_with_context("nan_context_confidence_guard", Scalar{10.0}, nan);
+    assert(nan_context_confidence_prediction.key.empty());
+    const auto nan_threshold_prediction =
+        brain.predict_with_context("nan_threshold_guard", Scalar{10.0}, 0.8, nan, 2);
+    assert(nan_threshold_prediction.key.empty());
+    assert(brain.snapshot().predictions.size() == prediction_count_before_invalid_input);
+    assert(brain.learning_metric("nan_confidence_guard") == nullptr);
+    assert(brain.learning_metric("nan_context_confidence_guard") == nullptr);
+    assert(brain.learning_metric("nan_threshold_guard") == nullptr);
+
     const auto real_prediction = brain.predict("real_temperature", Scalar{20.0}, 0.7);
     const auto real_value = std::get_if<double>(&real_prediction.predicted);
     assert(real_value != nullptr);
