@@ -430,6 +430,19 @@ int main() {
     }
     assert(prediction_association_exists);
 
+    // Cross-type numeric equality is mathematical equality, not variant identity.
+    const auto cross_type_prediction = brain.predict("cross_type_numeric", Scalar{20.0}, 0.8);
+    assert(cross_type_prediction.created_sequence != 0);
+    assert(brain.resolve_prediction(cross_type_prediction.created_sequence, Scalar{std::int64_t{20}}));
+    bool cross_type_resolved_exactly = false;
+    for (const auto& current : brain.snapshot().predictions) {
+        if (current.created_sequence == cross_type_prediction.created_sequence) {
+            cross_type_resolved_exactly = current.resolved && current.error == 0.0;
+            break;
+        }
+    }
+    assert(cross_type_resolved_exactly);
+
     // Stable semantic prediction keys must accumulate learning across separate
     // experiences. The key identifies the variable; each prediction event keeps
     // its own journal sequence, while adaptation remains keyed by the variable.
