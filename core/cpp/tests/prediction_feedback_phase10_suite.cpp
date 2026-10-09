@@ -1,7 +1,10 @@
 #include "jarvis/core/cognitive_cycle.hpp"
 
 #include <cassert>
+#include <cmath>
+#include <cstdint>
 #include <filesystem>
+#include <vector>
 
 using namespace jarvis::core;
 
@@ -61,11 +64,30 @@ int main() {
 
     // Real-valued predictions must learn in their native scale; adaptation must not
     // silently collapse values such as temperature into a normalized [0,1] range.
+    std::vector<std::uint64_t> real_prediction_sequences;
     for (int i = 0; i < 6; ++i) {
         const auto prediction = brain.predict("real_temperature", Scalar{20.0}, 0.7);
         assert(prediction.created_sequence != 0);
+        real_prediction_sequences.push_back(prediction.created_sequence);
         assert(!brain.resolve_prediction(prediction.created_sequence, Scalar{30.0}));
     }
+    for (const auto sequence : real_prediction_sequences) {
+        bool found = false;
+        for (const auto& current : brain.snapshot().predictions) {
+            if (current.created_sequence == sequence) {
+                assert(current.resolved);
+                assert(std::isfinite(current.error));
+                assert(current.error > 0.0);
+                assert(current.error < 1.0);
+                found = true;
+                break;
+            }
+        }
+        assert(found);
+    }
+    const auto* real_metric = brain.learning_metric("real_temperature");
+    assert(real_metric != nullptr);
+    assert(real_metric->observations == real_prediction_sequences.size());
     const auto real_prediction = brain.predict("real_temperature", Scalar{20.0}, 0.7);
     const auto real_value = std::get_if<double>(&real_prediction.predicted);
     assert(real_value != nullptr);
@@ -172,6 +194,15 @@ int main() {
         }
     }
     assert(persisted);
+
+    const auto* restored_real_metric = restored.learning_metric("real_temperature");
+    assert(restored_real_metric != nullptr);
+    assert(restored_real_metric->observations == real_prediction_sequences.size());
+    const auto after_restart = restored.predict("real_temperature", Scalar{20.0}, 0.7);
+    const auto after_restart_value = std::get_if<double>(&after_restart.predicted);
+    assert(after_restart_value != nullptr);
+    assert(*after_restart_value > 20.0);
+    assert(*after_restart_value < 30.0);
 
     std::filesystem::remove(path, ec);
     std::filesystem::remove(path.string() + ".meta", ec);
