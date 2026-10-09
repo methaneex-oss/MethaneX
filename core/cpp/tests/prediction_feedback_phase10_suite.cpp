@@ -91,6 +91,8 @@ int main() {
     const auto* real_metric = brain.learning_metric("real_temperature");
     assert(real_metric != nullptr);
     assert(real_metric->observations == real_prediction_sequences.size());
+    const auto live_affect = brain.affective_state();
+    const auto live_attention = brain.attention();
     const auto real_prediction = brain.predict("real_temperature", Scalar{20.0}, 0.7);
     const auto real_value = std::get_if<double>(&real_prediction.predicted);
     assert(real_value != nullptr);
@@ -235,6 +237,17 @@ int main() {
     const auto* restored_real_metric = restored.learning_metric("real_temperature");
     assert(restored_real_metric != nullptr);
     assert(restored_real_metric->observations == real_prediction_sequences.size());
+    const auto restored_affect = restored.affective_state();
+    const auto restored_attention = restored.attention();
+    assert(restored_affect.updates == live_affect.updates);
+    assert(std::abs(restored_affect.valence - live_affect.valence) < 1e-12);
+    assert(std::abs(restored_affect.arousal - live_affect.arousal) < 1e-12);
+    assert(std::abs(restored_affect.uncertainty - live_affect.uncertainty) < 1e-12);
+    assert(std::abs(restored_affect.tension - live_affect.tension) < 1e-12);
+    assert(std::abs(restored_affect.stability - live_affect.stability) < 1e-12);
+    assert(std::abs(restored_attention.salience - live_attention.salience) < 1e-12);
+    assert(std::abs(restored_attention.novelty - live_attention.novelty) < 1e-12);
+    assert(std::abs(restored_attention.uncertainty - live_attention.uncertainty) < 1e-12);
     const auto after_restart = restored.predict("real_temperature", Scalar{20.0}, 0.7);
     const auto after_restart_value = std::get_if<double>(&after_restart.predicted);
     assert(after_restart_value != nullptr);
