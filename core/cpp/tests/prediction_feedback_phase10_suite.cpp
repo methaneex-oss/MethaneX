@@ -98,8 +98,8 @@ int main() {
     assert(*real_value < 30.0);
 
     // Prediction feedback must change later action selection, not just a metric.
-    const auto learned_goal = brain.create_goal("prediction-driven-goal", 0.8);
-    assert(!learned_goal.id.empty());
+    const Goal learned_goal{"prediction-driven-goal", "Test prediction-driven adaptation", 0.8};
+    assert(brain.create_goal(learned_goal));
     assert(brain.activate_goal(learned_goal.id));
     for (int i = 0; i < 8; ++i) {
         const auto predicted = brain.predict("policy_temperature", Scalar{20.0}, 0.8);
@@ -118,7 +118,7 @@ int main() {
     };
     const auto learned_result = learned_cycle.run(learned_input);
     assert(learned_result.status == CognitiveCycleStatus::completed);
-    assert(!learned_result.selected_action.empty());
+    assert(!learned_result.context.decisions.empty());
     const auto learned_associations = brain.developmental_associations();
     bool prediction_association_exists = false;
     for (const auto& association : learned_associations) {
