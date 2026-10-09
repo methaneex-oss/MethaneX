@@ -30,6 +30,12 @@ bool valid_prediction_outcome_event(const Event& event, const Prediction* predic
     const auto actual = event.data.find("actual");
     if (key == nullptr || key->empty() || actual == event.data.end() ||
         prediction == nullptr || prediction->resolved || prediction->key != *key) return false;
+    const auto sequence = event.data.find("prediction_sequence");
+    if (sequence != event.data.end()) {
+        const auto* value = std::get_if<std::int64_t>(&sequence->second);
+        if (value == nullptr || *value <= 0 ||
+            static_cast<std::uint64_t>(*value) != prediction->created_sequence) return false;
+    }
     if (const auto* value = std::get_if<double>(&actual->second);
         value != nullptr && !std::isfinite(*value)) return false;
     if (const auto* value = std::get_if<double>(&prediction->predicted);
