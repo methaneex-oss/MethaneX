@@ -90,6 +90,21 @@ void Brain::replay(const Event& event) {
             value != nullptr && !std::isfinite(*value)) return;
         const double error = double_value(event.data, "error", 1.0);
         if (!std::isfinite(error) || error < 0.0 || error > 1.0) return;
+
+        // The journaled error must agree with the prediction and observation.
+        // Otherwise affect/attention could learn one surprise value while
+        // numeric adaptation learns from a different actual observation.
+        double expected_error = prediction->predicted == actual->second ? 0.0 : 1.0;
+        long double predicted_numeric = 0.0L;
+        long double actual_numeric = 0.0L;
+        if (numeric_value(prediction->predicted, predicted_numeric) &&
+            numeric_value(actual->second, actual_numeric)) {
+            const long double scale = std::max({
+                1.0L, std::abs(predicted_numeric), std::abs(actual_numeric)});
+            expected_error = std::clamp(static_cast<double>(
+                std::abs(actual_numeric - predicted_numeric) / scale), 0.0, 1.0);
+        }
+        if (std::abs(error - expected_error) > 1e-12) return;
     }
 
     process_affective_experience(event);
