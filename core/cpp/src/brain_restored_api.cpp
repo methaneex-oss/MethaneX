@@ -7,6 +7,8 @@ std::string join_ids(const std::vector<std::string>& ids) { std::string out; for
 
 std::vector<Belief> Brain::beliefs() const { std::shared_lock lock(mutex_); std::vector<Belief> result; result.reserve(beliefs_.size()); for (const auto& [_, belief] : beliefs_) result.push_back(belief); return result; }
 Prediction Brain::predict(std::string key, Scalar value, double confidence) {
+    // NaN bypasses ordinary clamp comparisons and can leak into journal state.
+    if (std::isnan(confidence)) return Prediction{};
     if (key.empty()) return Prediction{};
     if (const auto* numeric = std::get_if<double>(&value);
         numeric != nullptr && !std::isfinite(*numeric)) return Prediction{};
