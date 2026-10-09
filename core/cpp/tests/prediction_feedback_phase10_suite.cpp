@@ -113,6 +113,17 @@ int main() {
     }
     assert(invalid_prediction_still_unresolved);
     assert(brain.learning_metric("invalid_outcome_guard") == nullptr);
+
+    const auto prediction_count_before_invalid_input = brain.snapshot().predictions.size();
+    const auto invalid_predicted_value = std::numeric_limits<double>::infinity();
+    const auto invalid_plain_prediction =
+        brain.predict("invalid_prediction_guard", Scalar{invalid_predicted_value}, 0.8);
+    assert(invalid_plain_prediction.key.empty());
+    const auto invalid_contextual_prediction =
+        brain.predict_with_context("invalid_contextual_prediction_guard",
+                                   Scalar{invalid_predicted_value}, 0.8);
+    assert(invalid_contextual_prediction.key.empty());
+    assert(brain.snapshot().predictions.size() == prediction_count_before_invalid_input);
     const auto real_prediction = brain.predict("real_temperature", Scalar{20.0}, 0.7);
     const auto real_value = std::get_if<double>(&real_prediction.predicted);
     assert(real_value != nullptr);
