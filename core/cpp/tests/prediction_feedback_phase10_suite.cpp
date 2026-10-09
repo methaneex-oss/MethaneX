@@ -69,7 +69,10 @@ int main() {
         const auto prediction = brain.predict("real_temperature", Scalar{20.0}, 0.7);
         assert(prediction.created_sequence != 0);
         real_prediction_sequences.push_back(prediction.created_sequence);
+        const auto affect_before_feedback = brain.affective_state();
         assert(!brain.resolve_prediction(prediction.created_sequence, Scalar{30.0}));
+        const auto affect_after_feedback = brain.affective_state();
+        assert(affect_after_feedback.updates == affect_before_feedback.updates + 1);
     }
     for (const auto sequence : real_prediction_sequences) {
         bool found = false;
