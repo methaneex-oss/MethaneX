@@ -116,8 +116,11 @@ void Brain::replay(const Event& event) {
             developmental_learning_.observe_association(
                 *key, "prediction_outcome",
                 LearningSignal{
+                    // Prediction accuracy is not task utility. With no explicit
+                    // reward evidence, record surprise and relevance but do not
+                    // manufacture a positive developmental reward.
                     prediction->error,
-                    1.0 - prediction->error,
+                    0.0,
                     std::clamp(double_value(event.data, "salience", prediction->confidence), 0.0, 1.0),
                     std::clamp(double_value(event.data, "novelty", state_.novelty), 0.0, 1.0),
                     affective_significance});
