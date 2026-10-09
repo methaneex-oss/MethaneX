@@ -17,6 +17,24 @@ int main() {
 
     Brain brain(path);
 
+    // A numeric prediction mismatch is surprise, not evidence of positive utility.
+    const auto affect_semantics_path =
+        std::filesystem::temp_directory_path() / "jarvis_prediction_affect_semantics.bin";
+    std::filesystem::remove(affect_semantics_path, ec);
+    std::filesystem::remove(affect_semantics_path.string() + ".meta", ec);
+    {
+        Brain affect_semantics(affect_semantics_path);
+        const auto predicted = affect_semantics.predict("temperature", Scalar{20.0}, 0.8);
+        assert(predicted.created_sequence != 0);
+        assert(!affect_semantics.resolve_prediction(predicted.created_sequence, Scalar{30.0}));
+        assert(affect_semantics.affective_state().valence < 0.0);
+        Brain affect_replay(affect_semantics_path);
+        assert(std::abs(affect_replay.affective_state().valence -
+                        affect_semantics.affective_state().valence) < 1e-12);
+    }
+    std::filesystem::remove(affect_semantics_path, ec);
+    std::filesystem::remove(affect_semantics_path.string() + ".meta", ec);
+
     // Build an experience-derived concept from repeated co-change, then ensure
     // its provenance survives journal replay and can still receive outcome feedback.
     brain.observe(Event{0, 1, "sensor", "observation", {{"alpha", false}, {"beta", false}, {"context_one", false}, {"context_two", false}}});
