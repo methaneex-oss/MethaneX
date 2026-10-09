@@ -3,6 +3,7 @@
 #include <cassert>
 #include <cmath>
 #include <filesystem>
+#include <limits>
 
 using namespace jarvis::core;
 
@@ -82,6 +83,34 @@ int main() {
     }
     assert(saw_action_outcome);
     assert(brain.affective_learning_updates() > 0);
+
+    // A successful execution with no valid consequence observation is not
+    // evidence that the action was neutral or beneficial.
+    ActionAssessment unobserved_assessment;
+    unobserved_assessment.action = wait;
+    unobserved_assessment.disposition = ActionDisposition::execute;
+    unobserved_assessment.permitted = true;
+    unobserved_assessment.confidence = 0.9;
+    bool unobserved_executed = false;
+    const auto unobserved_result = brain.execute_action(
+        unobserved_assessment,
+        [&](const CandidateAction&) { unobserved_executed = true; return true; },
+        [&](const CandidateAction&) { return unobserved_executed; },
+        {},
+        [](const CandidateAction&) {
+            return std::numeric_limits<double>::quiet_NaN();
+        });
+    assert(unobserved_result.executed);
+    assert(unobserved_result.verified);
+    assert(!unobserved_result.outcome.observed);
+    bool unobserved_strategy_created = false;
+    for (const auto& strategy : brain.developmental_strategies()) {
+        if (strategy.context == goal.id && strategy.action == "wait") {
+            unobserved_strategy_created = true;
+            break;
+        }
+    }
+    assert(!unobserved_strategy_created);
 
     const auto* learned_strategy = brain.developmental_best_strategy(goal.id);
     assert(learned_strategy != nullptr);
