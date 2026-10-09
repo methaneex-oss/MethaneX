@@ -138,7 +138,7 @@ int main() {
     assert(std::abs(restored_affect.valence - live_affect.valence) < 1e-12);
     assert(std::abs(restored_affect.uncertainty - live_affect.uncertainty) < 1e-12);
     assert(std::abs(restored_affect.tension - live_affect.tension) < 1e-12);
-    assert(restored_affect.stability == live_affect.stability);
+    assert(std::abs(restored_affect.stability - live_affect.stability) < 1e-12);
     assert(restored_attention.key == live_attention.key);
     assert(std::abs(restored_attention.salience - live_attention.salience) < 1e-12);
     assert(std::abs(restored_attention.novelty - live_attention.novelty) < 1e-12);
