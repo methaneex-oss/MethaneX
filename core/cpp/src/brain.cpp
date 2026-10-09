@@ -332,7 +332,58 @@ Observation Brain::observe(Event event) {
 }
 double Brain::learn(const Evidence& evidence) { std::unique_lock lock(mutex_); if (evidence.key.empty()) return 0.0; const double reliability = std::clamp(evidence.reliability, 0.0, 1.0); Event event{0, now_ns(), evidence.source, "learning", {{evidence.key, evidence.value}, {"reliability", reliability}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return 0.0; ++state_.events_seen; state_.cycle = event.sequence; replay(event); sync_self_state(); if (const auto* metric = knowledge_.source_metric(evidence.source)) return metric->reliability; return reliability; }
 LearningCycle Brain::learn_from_prediction(const std::string& key, const Scalar& actual, double fitness) {
-    std::unique_lock lock(mutex_); LearningCycle cycle{}; if (key.empty()) return cycle; const auto* prediction = find_latest_unresolved_prediction(key); if (prediction == nullptr) return cycle; double predicted_value = 0.0; double actual_value = 0.0; if (const auto predicted = std::get_if<double>(&prediction->predicted)) { if (const auto observed = std::get_if<double>(&actual)) { predicted_value = *predicted; actual_value = *observed; } else return cycle; } else { if (prediction->predicted == actual) { predicted_value = 0.0; actual_value = 0.0; } else return cycle; } const double error = prediction->predicted == actual ? 0.0 : std::clamp(std::abs(actual_value - predicted_value), 0.0, 1.0); Event outcome{0, now_ns(), "brain", "prediction_outcome", {{"key", prediction->key}, {"prediction_sequence", static_cast<std::int64_t>(prediction->created_sequence)}, {"actual", actual}, {"error", error}, {"salience", attention_state_.salience}, {"novelty", state_.novelty}}}; outcome.sequence = memory_.append(outcome); if (outcome.sequence == 0) return cycle; ++state_.events_seen; state_.cycle = outcome.sequence; replay(outcome); if (const auto* metric = adaptation_.metric(key); metric != nullptr) cycle.adaptation = *metric; Event fitness_event{0, now_ns(), "brain", "evolution_fitness", {{"key", key}, {"fitness", std::clamp(fitness, -1.0, 1.0)}}}; fitness_event.sequence = memory_.append(fitness_event); if (fitness_event.sequence == 0) return cycle; ++state_.events_seen; state_.cycle = fitness_event.sequence; replay(fitness_event); cycle.proposals = evolution_.propose(); sync_self_state(); return cycle;
+    std::unique_lock lock(mutex_);
+    LearningCycle cycle{};
+    if (key.empty() || !std::isfinite(fitness)) return cycle;
+
+    const auto* prediction = find_latest_unresolved_prediction(key);
+    if (prediction == nullptr) return cycle;
+    if (const auto* value = std::get_if<double>(&actual);
+        value != nullptr && !std::isfinite(*value)) return cycle;
+    if (const auto* value = std::get_if<double>(&prediction->predicted);
+        value != nullptr && !std::isfinite(*value)) return cycle;
+
+    double error = prediction->predicted == actual ? 0.0 : 1.0;
+    long double predicted_numeric = 0.0L;
+    long double actual_numeric = 0.0L;
+    if (numeric_value(prediction->predicted, predicted_numeric) &&
+        numeric_value(actual, actual_numeric)) {
+        const long double scale = std::max({
+            1.0L, std::abs(predicted_numeric), std::abs(actual_numeric)});
+        error = std::clamp(static_cast<double>(
+            std::abs(actual_numeric - predicted_numeric) / scale), 0.0, 1.0);
+    } else if (prediction->predicted != actual) {
+        // Preserve the legacy contract for categorical learning: this API
+        // requires an interpretable matching outcome when no numeric error
+        // can be computed. General categorical feedback uses resolve_prediction.
+        return cycle;
+    }
+
+    Event outcome{0, now_ns(), "brain", "prediction_outcome",
+                  {{"key", prediction->key},
+                   {"prediction_sequence", static_cast<std::int64_t>(prediction->created_sequence)},
+                   {"actual", actual},
+                   {"error", error},
+                   {"salience", attention_state_.salience},
+                   {"novelty", state_.novelty}}};
+    outcome.sequence = memory_.append(outcome);
+    if (outcome.sequence == 0) return cycle;
+    ++state_.events_seen;
+    state_.cycle = outcome.sequence;
+    replay(outcome);
+    if (const auto* metric = adaptation_.metric(key); metric != nullptr)
+        cycle.adaptation = *metric;
+
+    Event fitness_event{0, now_ns(), "brain", "evolution_fitness",
+                        {{"key", key}, {"fitness", std::clamp(fitness, -1.0, 1.0)}}};
+    fitness_event.sequence = memory_.append(fitness_event);
+    if (fitness_event.sequence == 0) return cycle;
+    ++state_.events_seen;
+    state_.cycle = fitness_event.sequence;
+    replay(fitness_event);
+    cycle.proposals = evolution_.propose();
+    sync_self_state();
+    return cycle;
 }
 
 } // namespace jarvis::core
