@@ -150,13 +150,16 @@ int main() {
         brain.predict("malformed_feedback_guard", Scalar{25.0}, 0.8);
     assert(malformed_prediction.created_sequence != 0);
     const auto affect_before_malformed = brain.affective_state();
-    brain.observe(Event{0, 0, "test", "prediction_outcome",
+    const auto events_before_malformed = brain.state().events_seen;
+    const auto malformed_feedback = brain.observe(Event{0, 0, "test", "prediction_outcome",
         {{"key", malformed_prediction.key},
          {"prediction_sequence", static_cast<std::int64_t>(malformed_prediction.created_sequence)},
          {"actual", Scalar{30.0}},
          {"error", std::numeric_limits<double>::quiet_NaN()},
          {"salience", 0.5},
          {"novelty", 0.1}}});
+    assert(malformed_feedback.event.sequence == 0);
+    assert(brain.state().events_seen == events_before_malformed);
     const auto affect_after_malformed = brain.affective_state();
     assert(affect_after_malformed.updates == affect_before_malformed.updates);
     assert(std::abs(affect_after_malformed.valence - affect_before_malformed.valence) < 1e-12);
@@ -174,13 +177,16 @@ int main() {
     // prediction/actual pair. Replay must not accept internally inconsistent
     // feedback merely because the error lies inside [0, 1].
     const auto affect_before_inconsistent = brain.affective_state();
-    brain.observe(Event{0, 0, "test", "prediction_outcome",
+    const auto events_before_inconsistent = brain.state().events_seen;
+    const auto inconsistent_feedback = brain.observe(Event{0, 0, "test", "prediction_outcome",
         {{"key", malformed_prediction.key},
          {"prediction_sequence", static_cast<std::int64_t>(malformed_prediction.created_sequence)},
          {"actual", Scalar{30.0}},
          {"error", 0.99},
          {"salience", 0.5},
          {"novelty", 0.1}}});
+    assert(inconsistent_feedback.event.sequence == 0);
+    assert(brain.state().events_seen == events_before_inconsistent);
     assert(brain.affective_state().updates == affect_before_inconsistent.updates);
     assert(brain.learning_metric("malformed_feedback_guard") == nullptr);
     bool inconsistent_prediction_unresolved = false;
