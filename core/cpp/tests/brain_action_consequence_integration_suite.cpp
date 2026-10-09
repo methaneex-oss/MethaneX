@@ -91,6 +91,7 @@ int main() {
     unobserved_assessment.disposition = ActionDisposition::execute;
     unobserved_assessment.permitted = true;
     unobserved_assessment.confidence = 0.9;
+    const auto affect_before_unobserved = brain.affective_state();
     bool unobserved_executed = false;
     const auto unobserved_result = brain.execute_action(
         unobserved_assessment,
@@ -103,6 +104,9 @@ int main() {
     assert(unobserved_result.executed);
     assert(unobserved_result.verified);
     assert(!unobserved_result.outcome.observed);
+    const auto affect_after_unobserved = brain.affective_state();
+    assert(std::abs(affect_after_unobserved.valence - affect_before_unobserved.valence) < 1e-12);
+    assert(affect_after_unobserved.uncertainty > affect_before_unobserved.uncertainty);
     bool unobserved_strategy_created = false;
     for (const auto& strategy : brain.developmental_strategies()) {
         if (strategy.context == goal.id && strategy.action == "wait") {
