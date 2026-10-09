@@ -276,6 +276,9 @@ int main() {
         if (association.left == "policy_temperature" &&
             association.right == "prediction_outcome" &&
             association.observations >= 8) {
+            // Surprise is learning relevance, not positive task utility.
+            assert(association.observations == 8);
+            assert(std::abs(association.strength) < 1e-12);
             prediction_association_exists = true;
             break;
         }
