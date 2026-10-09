@@ -46,6 +46,23 @@ int main() {
                          Scalar{std::numeric_limits<double>::infinity()}, 0.8).key.empty());
     assert(brain.snapshot().predictions.size() == snapshot_before_invalid_prediction);
 
+    // Integer forecasts must receive the same learned calibration as doubles.
+    const auto integer_prediction = brain.predict("integer_temperature", Scalar{std::int64_t{20}}, 0.8);
+    assert(integer_prediction.created_sequence != 0);
+    assert(!brain.resolve_prediction(integer_prediction.created_sequence, Scalar{std::int64_t{30}}));
+    const auto calibrated_integer = brain.predict("integer_temperature", Scalar{std::int64_t{20}}, 0.8);
+    const auto integer_value = std::get_if<std::int64_t>(&calibrated_integer.predicted);
+    assert(integer_value != nullptr);
+    assert(*integer_value > 20 && *integer_value < 30);
+
+    const auto contextual_integer = brain.predict_with_context("contextual_integer_temperature", Scalar{std::int64_t{20}}, 0.8, 0.5, 2);
+    assert(contextual_integer.created_sequence != 0);
+    assert(!brain.resolve_prediction(contextual_integer.created_sequence, Scalar{std::int64_t{30}}));
+    const auto calibrated_contextual_integer = brain.predict_with_context("contextual_integer_temperature", Scalar{std::int64_t{20}}, 0.8, 0.5, 2);
+    const auto contextual_integer_value = std::get_if<std::int64_t>(&calibrated_contextual_integer.predicted);
+    assert(contextual_integer_value != nullptr);
+    assert(*contextual_integer_value > 20 && *contextual_integer_value < 30);
+
     // A numeric prediction mismatch is surprise, not evidence of positive utility.
     const auto affect_semantics_path =
         std::filesystem::temp_directory_path() / "jarvis_prediction_affect_semantics.bin";
