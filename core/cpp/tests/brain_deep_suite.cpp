@@ -257,16 +257,24 @@ int main() {
         assert(!initial.context.action_assessments.empty());
         assert(initial.context.action_assessments.front().action.name == "route_b");
 
-        // The initially preferred route fails in the real execution path.
+        // Isolate consequence learning from execution reliability: route_b
+        // executes and verifies successfully, but its observed consequence is bad.
+        // Both routes therefore have identical execution reliability; only the
+        // signed consequence evidence should reverse the preferred plan.
         const auto failed = developing.execute_action(
             initial.context.action_assessments.front(),
             [](const CandidateAction&) { return true; },
-            [](const CandidateAction&) { return false; },
+            [](const CandidateAction&) { return true; },
             {},
             [](const CandidateAction&) { return -0.8; });
         assert(failed.authorized);
-        assert(!failed.executed);
+        assert(failed.executed);
+        assert(failed.verified);
         assert(failed.outcome.observed);
+        assert(std::abs(failed.outcome.actual_consequence + 0.8) < 1e-12);
+        const auto* route_b_reliability = developing.knowledge_source("action_executor.route_b");
+        assert(route_b_reliability != nullptr);
+        assert(std::abs(route_b_reliability->reliability - 1.0) < 1e-12);
 
         const auto after_failure = cycle.run(input);
         assert(after_failure.status == CognitiveCycleStatus::completed);
@@ -289,10 +297,23 @@ int main() {
         const auto developed = cycle.run(input);
         assert(developed.status == CognitiveCycleStatus::completed);
         assert(developed.context.plan.steps.front().action.name == "route_a");
-        const auto* learned_route = developing.developmental_best_strategy("global");
+        const auto* learned_route = developing.developmental_best_strategy("navigation");
         assert(learned_route != nullptr);
         assert(learned_route->action == "route_a");
         assert(learned_route->uses >= 3);
+        const auto strategies = developing.developmental_strategies();
+        bool negative_route_b = false;
+        bool positive_route_a = false;
+        for (const auto& strategy : strategies) {
+            if (strategy.context != "navigation") continue;
+            if (strategy.action == "route_b") negative_route_b = strategy.value < 0.0;
+            if (strategy.action == "route_a") positive_route_a = strategy.value > 0.0;
+        }
+        assert(negative_route_b);
+        assert(positive_route_a);
+        const auto* route_a_reliability = developing.knowledge_source("action_executor.route_a");
+        assert(route_a_reliability != nullptr);
+        assert(std::abs(route_a_reliability->reliability - route_b_reliability->reliability) < 1e-12);
     }
     {
         Brain replayed(developmental_action_journal);
@@ -311,9 +332,19 @@ int main() {
         const auto replayed_cycle = cycle.run(input);
         assert(replayed_cycle.status == CognitiveCycleStatus::completed);
         assert(replayed_cycle.context.plan.steps.front().action.name == "route_a");
-        const auto* learned_route = replayed.developmental_best_strategy("global");
+        const auto* learned_route = replayed.developmental_best_strategy("navigation");
         assert(learned_route != nullptr);
         assert(learned_route->action == "route_a");
+        const auto replayed_strategies = replayed.developmental_strategies();
+        bool replayed_negative_route_b = false;
+        bool replayed_positive_route_a = false;
+        for (const auto& strategy : replayed_strategies) {
+            if (strategy.context != "navigation") continue;
+            if (strategy.action == "route_b") replayed_negative_route_b = strategy.value < 0.0;
+            if (strategy.action == "route_a") replayed_positive_route_a = strategy.value > 0.0;
+        }
+        assert(replayed_negative_route_b);
+        assert(replayed_positive_route_a);
     }
 
     // Goal, capability, and resilience mutations are journal-first and must
