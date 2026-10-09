@@ -91,8 +91,6 @@ int main() {
     const auto* real_metric = brain.learning_metric("real_temperature");
     assert(real_metric != nullptr);
     assert(real_metric->observations == real_prediction_sequences.size());
-    const auto live_affect = brain.affective_state();
-    const auto live_attention = brain.attention();
     const auto real_prediction = brain.predict("real_temperature", Scalar{20.0}, 0.7);
     const auto real_value = std::get_if<double>(&real_prediction.predicted);
     assert(real_value != nullptr);
@@ -223,6 +221,9 @@ int main() {
         }
     }
     assert(resolved);
+
+    const auto live_affect = brain.affective_state();
+    const auto live_attention = brain.attention();
 
     Brain restored(path);
     bool persisted = false;
