@@ -452,6 +452,14 @@ int main() {
                                      Scalar{std::numeric_limits<double>::quiet_NaN()}));
     assert(brain.affective_state().updates == updates_before_guard);
     assert(brain.learning_metric("nonfinite_guard") == nullptr);
+    bool guarded_prediction_unresolved = false;
+    for (const auto& current : brain.snapshot().predictions) {
+        if (current.created_sequence == guarded_prediction.created_sequence) {
+            guarded_prediction_unresolved = !current.resolved;
+            break;
+        }
+    }
+    assert(guarded_prediction_unresolved);
 
     // Stable semantic prediction keys must accumulate learning across separate
     // experiences. The key identifies the variable; each prediction event keeps
