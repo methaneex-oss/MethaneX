@@ -113,6 +113,20 @@ int main() {
     assert(std::abs(affect_after_duplicate.valence - affect_before_duplicate.valence) < 1e-12);
     assert(std::abs(affect_after_duplicate.arousal - affect_before_duplicate.arousal) < 1e-12);
 
+    // A sequence/key mismatch is invalid feedback too; it cannot resolve another
+    // prediction or alter affect before the identity check.
+    const auto affect_before_mismatch = brain.affective_state();
+    brain.observe(Event{0, 0, "test", "prediction_outcome",
+        {{"key", std::string("not-alpha")},
+         {"prediction_sequence", static_cast<std::int64_t>(contextual_prediction.created_sequence)},
+         {"actual", Scalar{0.5}},
+         {"error", 0.5},
+         {"salience", 0.5},
+         {"novelty", 0.1}}});
+    const auto affect_after_mismatch = brain.affective_state();
+    assert(affect_after_mismatch.updates == affect_before_mismatch.updates);
+    assert(std::abs(affect_after_mismatch.valence - affect_before_mismatch.valence) < 1e-12);
+
     Brain restored_context(path);
     bool provenance_restored = false;
     for (const auto& current : restored_context.snapshot().predictions) {
