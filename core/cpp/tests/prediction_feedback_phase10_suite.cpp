@@ -101,6 +101,7 @@ int main() {
                 assert(std::isfinite(current.error));
                 assert(current.error > 0.0);
                 assert(current.error < 1.0);
+                assert(std::abs(current.error - (1.0 / 3.0)) < 1e-12);
                 found = true;
                 break;
             }
