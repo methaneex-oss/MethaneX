@@ -656,6 +656,69 @@ int main() {
     assert(*restored_contextual_integer_value > 20 && *restored_contextual_integer_value < 30);
     assert(*restored_contextual_integer_value == *contextual_integer_value);
 
+    // End-to-end developmental check: an unexpected outcome increases
+    // affective tension, changes the next planning choice, and that changed
+    // behavior is reconstructed by replay.
+    const auto behavior_path =
+        std::filesystem::temp_directory_path() / "jarvis_phase10_affective_behavior.bin";
+    std::filesystem::remove(behavior_path, ec);
+    std::filesystem::remove(behavior_path.string() + ".meta", ec);
+    Brain behavior_brain(behavior_path);
+    Goal behavior_goal;
+    behavior_goal.id = "affective-risk-calibration";
+    behavior_goal.description = "Choose an action under changing uncertainty";
+    behavior_goal.priority = 0.0;
+    assert(behavior_brain.create_goal(behavior_goal));
+    assert(behavior_brain.activate_goal(behavior_goal.id));
+
+    CognitiveCycleInput behavior_input;
+    behavior_input.goal_id = behavior_goal.id;
+    behavior_input.planning_horizon = 1;
+    behavior_input.resource_budget = 1.0;
+    behavior_input.observation =
+        Event{0, 0, "sensor", "observation",
+              {{"confidence", 1.0}, {"outcome", 0.0},
+               {"prediction_error", 0.0}, {"novelty", 0.0},
+               {"salience", 0.0}}};
+    behavior_input.candidate_actions = {
+        CandidateAction{"measured_risk", 0.102, 0.0, 1.0, 0.1, 0.0, 0.0, 0.0},
+        CandidateAction{"safe_fallback", 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0},
+    };
+
+    CognitiveCycle behavior_cycle(behavior_brain);
+    const auto before_outcome = behavior_cycle.run(behavior_input);
+    assert(before_outcome.status == CognitiveCycleStatus::completed);
+    assert(!before_outcome.context.plan.steps.empty());
+    assert(before_outcome.context.plan.steps.front().action.name == "measured_risk");
+
+    const auto risk_prediction =
+        behavior_brain.predict("risk_signal", Scalar{false}, 0.9);
+    assert(risk_prediction.created_sequence != 0);
+    assert(!behavior_brain.resolve_prediction(risk_prediction.created_sequence,
+                                              Scalar{true}));
+    const auto affect_after_surprise = behavior_brain.affective_state();
+    assert(affect_after_surprise.tension > 0.0);
+
+    const auto after_outcome = behavior_cycle.run(behavior_input);
+    assert(after_outcome.status == CognitiveCycleStatus::completed);
+    assert(!after_outcome.context.plan.steps.empty());
+    assert(after_outcome.context.plan.steps.front().action.name == "safe_fallback");
+
+    Brain replayed_behavior(behavior_path);
+    CognitiveCycle replayed_behavior_cycle(replayed_behavior);
+    const auto live_future = behavior_cycle.run(behavior_input);
+    const auto replayed_future = replayed_behavior_cycle.run(behavior_input);
+    assert(live_future.status == CognitiveCycleStatus::completed);
+    assert(replayed_future.status == CognitiveCycleStatus::completed);
+    assert(!live_future.context.plan.steps.empty());
+    assert(!replayed_future.context.plan.steps.empty());
+    assert(live_future.context.plan.steps.front().action.name ==
+           replayed_future.context.plan.steps.front().action.name);
+    assert(std::abs(live_future.context.decision_context.tension -
+                    replayed_future.context.decision_context.tension) < 1e-12);
+
+    std::filesystem::remove(behavior_path, ec);
+    std::filesystem::remove(behavior_path.string() + ".meta", ec);
     std::filesystem::remove(path, ec);
     std::filesystem::remove(path.string() + ".meta", ec);
     return 0;
