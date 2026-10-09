@@ -126,8 +126,14 @@ int main() {
     assert(!after_learning.context.plan.steps.empty());
     assert(after_learning.context.plan.steps.front().action.name == "wait");
 
+    const auto live_affect = brain.affective_state();
     Brain restored(journal);
     assert(restored.affective_learning_updates() > 0);
+    const auto restored_affect = restored.affective_state();
+    assert(restored_affect.updates == live_affect.updates);
+    assert(std::abs(restored_affect.valence - live_affect.valence) < 1e-12);
+    assert(std::abs(restored_affect.uncertainty - live_affect.uncertainty) < 1e-12);
+    assert(std::abs(restored_affect.tension - live_affect.tension) < 1e-12);
     const auto* restored_strategy = restored.developmental_best_strategy(goal.id);
     assert(restored_strategy != nullptr);
     assert(restored_strategy->action == "calibrate");
