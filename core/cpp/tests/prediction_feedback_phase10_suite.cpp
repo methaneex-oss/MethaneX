@@ -98,6 +98,21 @@ int main() {
     assert(matched_learned_pattern);
     assert(brain.resolve_prediction("alpha", 1.0));
 
+    // A duplicate outcome event must not mutate affect after its prediction has
+    // already been resolved; replay validation must precede affective appraisal.
+    const auto affect_before_duplicate = brain.affective_state();
+    brain.observe(Event{0, 0, "test", "prediction_outcome",
+        {{"key", std::string("alpha")},
+         {"prediction_sequence", static_cast<std::int64_t>(contextual_prediction.created_sequence)},
+         {"actual", Scalar{1.0}},
+         {"error", 0.0},
+         {"salience", 0.5},
+         {"novelty", 0.1}}});
+    const auto affect_after_duplicate = brain.affective_state();
+    assert(affect_after_duplicate.updates == affect_before_duplicate.updates);
+    assert(std::abs(affect_after_duplicate.valence - affect_before_duplicate.valence) < 1e-12);
+    assert(std::abs(affect_after_duplicate.arousal - affect_before_duplicate.arousal) < 1e-12);
+
     Brain restored_context(path);
     bool provenance_restored = false;
     for (const auto& current : restored_context.snapshot().predictions) {
