@@ -17,6 +17,35 @@ int main() {
 
     Brain brain(path);
 
+    // Invalid numeric values must not become journal events or adaptation evidence.
+    const auto invalid_prediction = brain.predict("invalid_numeric", Scalar{42.0}, 0.8);
+    assert(invalid_prediction.created_sequence != 0);
+    assert(!brain.resolve_prediction(invalid_prediction.created_sequence,
+                                     Scalar{std::numeric_limits<double>::quiet_NaN()}));
+    assert(!brain.resolve_prediction(invalid_prediction.created_sequence,
+                                     Scalar{std::numeric_limits<double>::infinity()}));
+    bool invalid_target_still_unresolved = false;
+    for (const auto& current : brain.snapshot().predictions) {
+        if (current.created_sequence == invalid_prediction.created_sequence) {
+            invalid_target_still_unresolved = !current.resolved;
+            break;
+        }
+    }
+    assert(invalid_target_still_unresolved);
+    assert(brain.learning_metric("invalid_numeric") == nullptr);
+    assert(!brain.resolve_prediction(invalid_prediction.created_sequence, Scalar{43.0}));
+    const auto* valid_metric_after_recovery = brain.learning_metric("invalid_numeric");
+    assert(valid_metric_after_recovery != nullptr);
+    assert(valid_metric_after_recovery->observations == 1);
+
+    // Non-finite predictions are rejected before journal append.
+    const auto snapshot_before_invalid_prediction = brain.snapshot().predictions.size();
+    assert(brain.predict("invalid_forecast",
+                         Scalar{std::numeric_limits<double>::quiet_NaN()}, 0.8).key.empty());
+    assert(brain.predict("invalid_forecast",
+                         Scalar{std::numeric_limits<double>::infinity()}, 0.8).key.empty());
+    assert(brain.snapshot().predictions.size() == snapshot_before_invalid_prediction);
+
     // A numeric prediction mismatch is surprise, not evidence of positive utility.
     const auto affect_semantics_path =
         std::filesystem::temp_directory_path() / "jarvis_prediction_affect_semantics.bin";
