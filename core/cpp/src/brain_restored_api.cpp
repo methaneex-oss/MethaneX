@@ -1,5 +1,7 @@
 #include "jarvis/core/brain.hpp"
 
+#include <limits>
+
 namespace jarvis::core {
 namespace {
 std::string join_ids(const std::vector<std::string>& ids) { std::string out; for (std::size_t i = 0; i < ids.size(); ++i) { if (i != 0) out.push_back('\x1f'); out += ids[i]; } return out; }
@@ -15,6 +17,27 @@ bool numeric_value(const Scalar& value, long double& result) {
     }
     return false;
 }
+void calibrate_numeric_prediction(Scalar& value, double estimate, double weight) {
+    long double prior = 0.0L;
+    if (!numeric_value(value, prior) || !std::isfinite(estimate)) return;
+    const long double blended =
+        (1.0L - static_cast<long double>(weight)) * prior +
+        static_cast<long double>(weight) * static_cast<long double>(estimate);
+    if (auto* numeric = std::get_if<double>(&value)) {
+        *numeric = static_cast<double>(blended);
+        return;
+    }
+    if (auto* integer = std::get_if<std::int64_t>(&value)) {
+        const long double rounded = std::round(blended);
+        const long double lower = static_cast<long double>(
+            std::numeric_limits<std::int64_t>::lowest());
+        const long double upper = static_cast<long double>(
+            std::numeric_limits<std::int64_t>::max());
+        if (rounded <= lower) *integer = std::numeric_limits<std::int64_t>::lowest();
+        else if (rounded >= upper) *integer = std::numeric_limits<std::int64_t>::max();
+        else *integer = static_cast<std::int64_t>(rounded);
+    }
+}
 }
 
 std::vector<Belief> Brain::beliefs() const { std::shared_lock lock(mutex_); std::vector<Belief> result; result.reserve(beliefs_.size()); for (const auto& [_, belief] : beliefs_) result.push_back(belief); return result; }
@@ -24,8 +47,14 @@ Prediction Brain::predict(std::string key, Scalar value, double confidence) {
     if (key.empty()) return Prediction{};
     if (const auto* numeric = std::get_if<double>(&value);
         numeric != nullptr && !std::isfinite(*numeric)) return Prediction{};
-    std::unique_lock lock(mutex_); const double base_confidence = std::clamp(confidence, 0.0, 1.0); double calibrated_confidence = base_confidence; if (const auto* metric = adaptation_.metric(key); metric != nullptr && metric->observations > 0) { if (auto* numeric = std::get_if<double>(&value)) { const double learned_confidence = adaptation_.confidence(key); *numeric = (1.0 - learned_confidence) * *numeric +
-                       learned_confidence * metric->estimate; calibrated_confidence = std::clamp(base_confidence + (1.0 - base_confidence) * 0.5 * learned_confidence, 0.0, 1.0); } } Prediction prediction{std::move(key), std::move(value), calibrated_confidence, 0, false, 0.0}; Event event{0, 0, "brain", "prediction", {{"key", prediction.key}, {"value", prediction.predicted}, {"confidence", prediction.confidence}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return Prediction{}; replay(event); ++state_.events_seen; state_.cycle = event.sequence; consolidate_experience(event); const auto* stored = find_prediction(event.sequence); sync_self_state(); return stored == nullptr ? Prediction{} : *stored; }
+    std::unique_lock lock(mutex_); const double base_confidence = std::clamp(confidence, 0.0, 1.0); double calibrated_confidence = base_confidence; if (const auto* metric = adaptation_.metric(key); metric != nullptr && metric->observations > 0) {
+        const double learned_confidence = adaptation_.confidence(key);
+        long double predicted_numeric = 0.0L;
+        if (numeric_value(value, predicted_numeric)) {
+            calibrate_numeric_prediction(value, metric->estimate, learned_confidence);
+            calibrated_confidence = std::clamp(base_confidence + (1.0 - base_confidence) * 0.5 * learned_confidence, 0.0, 1.0);
+        }
+    } Prediction prediction{std::move(key), std::move(value), calibrated_confidence, 0, false, 0.0}; Event event{0, 0, "brain", "prediction", {{"key", prediction.key}, {"value", prediction.predicted}, {"confidence", prediction.confidence}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return Prediction{}; replay(event); ++state_.events_seen; state_.cycle = event.sequence; consolidate_experience(event); const auto* stored = find_prediction(event.sequence); sync_self_state(); return stored == nullptr ? Prediction{} : *stored; }
 bool Brain::resolve_prediction(const std::string& key, const Scalar& actual) { std::uint64_t prediction_sequence = 0; { std::shared_lock lock(mutex_); const auto* prediction = find_latest_unresolved_prediction(key); if (prediction == nullptr) return false; prediction_sequence = prediction->created_sequence; } return resolve_prediction(prediction_sequence, actual); }
 bool Brain::resolve_prediction(std::uint64_t prediction_sequence, const Scalar& actual) {
     // Non-finite numeric outcomes are not observations. Reject them before they
