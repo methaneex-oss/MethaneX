@@ -392,6 +392,27 @@ int main() {
     const auto* restored_real_metric = restored.learning_metric("real_temperature");
     assert(restored_real_metric != nullptr);
     assert(restored_real_metric->observations == real_prediction_sequences.size());
+    const auto* restored_policy_metric = restored.learning_metric("policy_temperature");
+    assert(restored_policy_metric != nullptr);
+    assert(restored_policy_metric->observations == 8);
+    bool policy_association_replayed = false;
+    for (const auto& association : restored.developmental_associations()) {
+        if (association.left == "policy_temperature" &&
+            association.right == "prediction_outcome") {
+            assert(association.observations == 8);
+            assert(std::abs(association.strength) < 1e-12);
+            policy_association_replayed = true;
+            break;
+        }
+    }
+    assert(policy_association_replayed);
+    const auto restored_policy_prediction =
+        restored.predict("policy_temperature", Scalar{20.0}, 0.8);
+    const auto restored_policy_value =
+        std::get_if<double>(&restored_policy_prediction.predicted);
+    assert(restored_policy_value != nullptr);
+    assert(*restored_policy_value > 20.0);
+    assert(*restored_policy_value < 30.0);
     const auto restored_affect = restored.affective_state();
     const auto restored_attention = restored.attention();
     assert(restored_affect.updates == live_affect.updates);
