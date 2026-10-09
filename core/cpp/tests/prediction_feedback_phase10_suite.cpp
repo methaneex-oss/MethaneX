@@ -97,7 +97,7 @@ int main() {
     assert(*real_value > 20.0);
     assert(*real_value < 30.0);
 
-    // Prediction feedback must change later action selection, not just a metric.
+    // Prediction feedback must update the developmental model and remain available to later cognition.
     const Goal learned_goal{"prediction-driven-goal", "Test prediction-driven adaptation", 0.8};
     assert(brain.create_goal(learned_goal));
     assert(brain.activate_goal(learned_goal.id));
