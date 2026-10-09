@@ -249,6 +249,30 @@ int main() {
     assert(invalid_prediction_still_unresolved);
     assert(brain.learning_metric("invalid_outcome_guard") == nullptr);
 
+    // Infinity is invalid for the same reason as NaN: neither is an observed
+    // consequence, and rejection must leave the prediction available.
+    const auto affect_before_infinity = brain.affective_state();
+    assert(!brain.resolve_prediction(
+        invalid_outcome_prediction.created_sequence,
+        Scalar{std::numeric_limits<double>::infinity()}));
+    assert(brain.affective_state().updates == affect_before_infinity.updates);
+    bool unresolved_after_infinity = false;
+    for (const auto& current : brain.snapshot().predictions) {
+        if (current.created_sequence == invalid_outcome_prediction.created_sequence) {
+            unresolved_after_infinity = !current.resolved;
+            break;
+        }
+    }
+    assert(unresolved_after_infinity);
+    assert(brain.learning_metric("invalid_outcome_guard") == nullptr);
+
+    // A later valid observation can still resolve the same prediction.
+    assert(!brain.resolve_prediction(invalid_outcome_prediction.created_sequence,
+                                     Scalar{30.0}));
+    const auto* valid_after_invalid_metric = brain.learning_metric("invalid_outcome_guard");
+    assert(valid_after_invalid_metric != nullptr);
+    assert(valid_after_invalid_metric->observations == 1);
+
     const auto prediction_count_before_invalid_input = brain.snapshot().predictions.size();
     const auto invalid_predicted_value = std::numeric_limits<double>::infinity();
     const auto invalid_plain_prediction =
