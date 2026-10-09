@@ -71,6 +71,27 @@ void Brain::process_affective_experience(const Event& event) {
 void Brain::sync_self_state() { const auto goals = goals_model_.all(); std::vector<GoalState> active_goals; active_goals.reserve(goals.size()); for (const auto& goal : goals) if (goal.status == GoalStatus::active) active_goals.push_back(GoalState{goal.id, goal.priority, true}); self_state_model_.set_goals(std::move(active_goals)); const auto capability_health = self_model_.health(); self_state_model_.set_activity(state_.events_seen == 0 ? "idle" : "cognitive_processing"); self_state_model_.set_workload(std::clamp(std::max(state_.threat, 1.0 - capability_health.overall), 0.0, 1.0)); self_state_model_.set_uncertainty(std::clamp(1.0 - state_.attention, 0.0, 1.0)); self_state_model_.set_health(CognitiveHealth{std::clamp(capability_health.overall * (1.0 - state_.threat * 0.5), 0.0, 1.0), capability_health.overall, std::clamp(1.0 - state_.novelty * 0.1, 0.0, 1.0), capability_health.overall}); for (const auto& capability : self_model_.capabilities()) self_state_model_.set_resource_pressure(capability.name, std::clamp(1.0 - (capability.availability * capability.performance), 0.0, 1.0)); self_state_model_.advance_cycle(state_.events_seen); }
 void Brain::replay(const Event& event) {
     state_.cycle = std::max(state_.cycle, event.sequence);
+
+    // Validate prediction feedback before any subsystem mutates. Otherwise a
+    // duplicate or malformed outcome can alter affect even when prediction
+    // resolution itself is rejected below.
+    if (event.kind == "prediction_outcome") {
+        const auto* key = string_value(event.data, "key");
+        const auto actual = event.data.find("actual");
+        const auto sequence = integer_value(event.data, "prediction_sequence", 0);
+        if (key == nullptr || key->empty() || actual == event.data.end()) return;
+        Prediction* prediction = sequence != 0
+            ? find_prediction(sequence)
+            : find_latest_unresolved_prediction(*key);
+        if (prediction == nullptr || prediction->resolved || prediction->key != *key) return;
+        if (const auto* value = std::get_if<double>(&actual->second);
+            value != nullptr && !std::isfinite(*value)) return;
+        if (const auto* value = std::get_if<double>(&prediction->predicted);
+            value != nullptr && !std::isfinite(*value)) return;
+        const double error = double_value(event.data, "error", 1.0);
+        if (!std::isfinite(error) || error < 0.0 || error > 1.0) return;
+    }
+
     process_affective_experience(event);
     if (event.kind == "goal_create") { const auto* id = string_value(event.data, "id"); const auto* description = string_value(event.data, "description"); if (id == nullptr || description == nullptr) return; Goal goal{*id, *description, double_value(event.data, "priority"), double_value(event.data, "progress"), event.sequence, integer_value(event.data, "deadline_cycle"), goal_status_value(static_cast<std::int64_t>(integer_value(event.data, "status"))), string_value(event.data, "prerequisites") ? split_ids(*string_value(event.data, "prerequisites")) : std::vector<std::string>{}, string_value(event.data, "subgoals") ? split_ids(*string_value(event.data, "subgoals")) : std::vector<std::string>{}}; goals_model_.create(std::move(goal)); return; }
     if (event.kind == "goal_activate") { if (const auto* id = string_value(event.data, "id")) goals_model_.activate(*id); return; }
