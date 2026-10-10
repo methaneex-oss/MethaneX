@@ -110,6 +110,10 @@ int main() {
         "extreme", 1.0, std::numeric_limits<double>::infinity());
     assert(invalid_sample.observations == 2);
     assert(std::isfinite(invalid_sample.estimate));
+    const auto invalid_first_sample = extreme_model.observe(
+        "never_observed", 1.0, std::numeric_limits<double>::quiet_NaN());
+    assert(invalid_first_sample.observations == 0);
+    assert(extreme_model.metric("never_observed") == nullptr);
 
     std::filesystem::remove(path, ec);
     std::filesystem::remove(path.string() + ".meta", ec);
