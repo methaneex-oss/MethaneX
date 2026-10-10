@@ -24,7 +24,9 @@ ActionExecutionResult Brain::execute_action(
 
     std::unique_lock lock(mutex_);
     const auto eligible = goals_model_.eligible(state_.cycle);
-    const std::string context = eligible.empty() ? "global" : eligible.front().id;
+    const std::string context = !assessment.developmental_context.empty()
+        ? assessment.developmental_context
+        : (eligible.empty() ? "global" : eligible.front().id);
     const double reliability =
         result.status == ActionExecutionStatus::verified ? 1.0 :
         result.status == ActionExecutionStatus::executed ? 0.75 :
