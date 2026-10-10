@@ -43,6 +43,22 @@ bool valid_prediction_outcome_event(const Event& event, const Prediction* predic
 
     const double error = double_value(event.data, "error", 1.0);
     if (!std::isfinite(error) || error < 0.0 || error > 1.0) return false;
+
+    // These fields are consumed by affective processing before the remaining
+    // learning handlers run. Reject malformed metadata at the journal boundary
+    // rather than allowing NaN to contaminate affect or attention state.
+    const auto valid_optional_unit = [&](const char* name) {
+        const auto field = event.data.find(name);
+        if (field == event.data.end()) return true;
+        if (const auto* value = std::get_if<double>(&field->second))
+            return std::isfinite(*value) && *value >= 0.0 && *value <= 1.0;
+        if (const auto* value = std::get_if<std::int64_t>(&field->second))
+            return *value == 0 || *value == 1;
+        return false;
+    };
+    if (!valid_optional_unit("salience") || !valid_optional_unit("novelty"))
+        return false;
+
     double expected_error = prediction->predicted == actual->second ? 0.0 : 1.0;
     long double predicted_numeric = 0.0L;
     long double actual_numeric = 0.0L;
