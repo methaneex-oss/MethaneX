@@ -30,7 +30,7 @@ std::vector<std::string> context_tokens(const std::string& context) {
     return tokens;
 }
 
-double context_similarity(const std::string& left, const std::string& right) noexcept {
+double context_similarity(const std::string& left, const std::string& right) {
     if (left == right && !left.empty()) return 1.0;
     const auto left_tokens = context_tokens(left);
     const auto right_tokens = context_tokens(right);
