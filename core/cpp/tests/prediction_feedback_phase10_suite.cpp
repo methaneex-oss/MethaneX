@@ -617,6 +617,12 @@ int main() {
     const auto* restored_real_metric = restored.learning_metric("real_temperature");
     assert(restored_real_metric != nullptr);
     assert(restored_real_metric->observations == real_prediction_sequences.size());
+    const auto* restored_mixed_numeric_metric =
+        restored.learning_metric("mixed_numeric_equivalence");
+    assert(restored_mixed_numeric_metric != nullptr);
+    assert(restored_mixed_numeric_metric->observations == 1);
+    assert(restored_mixed_numeric_metric->mean_error == 0.0);
+    assert(std::abs(restored_mixed_numeric_metric->estimate - 30.0) < 1e-12);
     assert(std::abs(restored_real_metric->estimate - 30.0) < 1e-12);
     const auto* restored_direct_learning_metric =
         restored.learning_metric("direct_learning_scale");
