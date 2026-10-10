@@ -81,6 +81,9 @@ int main() {
         if (event.kind != "action_outcome") continue;
         saw_action_outcome = true;
         assert(std::get<std::string>(event.data.at("action")) == "calibrate");
+        // The exact decision context must survive into the authoritative
+        // outcome event so replay learns from the same developmental context.
+        assert(std::get<std::string>(event.data.at("context")) == "system stabilization");
         assert(std::abs(std::get<double>(event.data.at("expected_consequence")) - 0.8) < 1e-9);
         assert(std::abs(std::get<double>(event.data.at("actual_consequence")) + 0.2) < 1e-9);
         assert(std::abs(std::get<double>(event.data.at("consequence_error")) + 1.0) < 1e-9);
@@ -165,10 +168,10 @@ int main() {
     assert(after_restart.context.plan.steps.front().action.name == "wait");
     bool restored_action_outcome = false;
     for (const auto& event : restored.memory().all()) {
-        if (event.kind == "action_outcome") {
-            restored_action_outcome = true;
-            break;
-        }
+        if (event.kind != "action_outcome") continue;
+        restored_action_outcome = true;
+        assert(std::get<std::string>(event.data.at("context")) == "system stabilization");
+        assert(std::get<std::string>(event.data.at("action")) == "calibrate");
     }
     assert(restored_action_outcome);
 
