@@ -546,6 +546,9 @@ int main() {
     const auto* valid_guard_metric = brain.learning_metric("nonfinite_guard");
     assert(valid_guard_metric != nullptr);
     assert(valid_guard_metric->observations == 1);
+    const auto normalized_outcomes = brain.memory().by_kind("prediction_outcome");
+    assert(!normalized_outcomes.empty());
+    assert(std::get<std::int64_t>(normalized_outcomes.back().data.at("error_model")) == 2);
     const auto events_before_duplicate = brain.state().events_seen;
     const auto duplicate_outcome = brain.observe(Event{
         0, 0, "external", "prediction_outcome",
