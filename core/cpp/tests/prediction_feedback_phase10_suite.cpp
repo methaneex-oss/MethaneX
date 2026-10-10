@@ -514,6 +514,18 @@ int main() {
     assert(brain.affective_state().updates == affect_before_forgery.updates);
     assert(brain.learning_metric("nonfinite_guard") == nullptr);
 
+    const auto forged_legacy_outcome = brain.observe(Event{
+        0, 0, "external", "prediction_outcome",
+        {{"key", std::string{"nonfinite_guard"}},
+         {"prediction_sequence", static_cast<std::int64_t>(guarded_prediction.created_sequence)},
+         {"actual", Scalar{30.0}},
+         {"error", 1.0},
+         {"salience", 0.5},
+         {"novelty", 0.0}}});
+    assert(forged_legacy_outcome.event.sequence == 0);
+    assert(brain.state().events_seen == events_before_forgery);
+    assert(brain.affective_state().updates == affect_before_forgery.updates);
+
     const auto malformed_metadata = brain.observe(Event{
         0, 0, "external", "prediction_outcome",
         {{"key", std::string{"nonfinite_guard"}},
