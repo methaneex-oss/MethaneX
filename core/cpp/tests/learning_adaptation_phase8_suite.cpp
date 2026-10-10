@@ -23,6 +23,7 @@ int main() {
     const auto outcomes = brain.memory().by_kind("prediction_outcome");
     assert(!outcomes.empty());
     assert(std::get<double>(outcomes.back().data.at("error")) == 0.4);
+    assert(std::get<std::int64_t>(outcomes.back().data.at("error_model")) == 2);
     assert(cycle.adaptation.observations == 1);
     assert(cycle.adaptation.mean_error >= 0.0 && cycle.adaptation.mean_error <= 1.0);
     assert(cycle.adaptation.recent_error >= 0.0 && cycle.adaptation.recent_error <= 1.0);
