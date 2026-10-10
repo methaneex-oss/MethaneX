@@ -68,6 +68,18 @@ int main() {
     assert(related_best != nullptr);
     assert(related_best->action == "good-route");
 
+    // If all related experiences were harmful, retrieval must preserve the
+    // negative signal and prefer the less harmful alternative rather than
+    // treating every negative outcome as a tied zero.
+    DevelopmentalLearning negative_only;
+    negative_only.observe_strategy("navigation route", "very-bad-route",
+                                   LearningSignal{1.0, -1.0, 0.8, 0.2});
+    negative_only.observe_strategy("navigation variant", "less-bad-route",
+                                   LearningSignal{0.5, -0.3, 0.8, 0.2});
+    const auto* least_harmful = negative_only.best_related_strategy("navigation route variant");
+    assert(least_harmful != nullptr);
+    assert(least_harmful->action == "less-bad-route");
+
     // Legacy four-field evidence now derives deterministic affective
     // significance from prediction error, reward, salience and novelty.
     const LearningSignal derived{0.9, -0.8, 0.7, 0.6};
