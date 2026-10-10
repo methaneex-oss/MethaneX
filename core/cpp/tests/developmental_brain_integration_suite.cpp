@@ -172,6 +172,58 @@ int main() {
                score_for(restored_cycle_result.context.decisions, "other-action"));
     }
 
+    // The ordinary Brain decision APIs must generalize learned behavior too;
+    // generalization is not restricted to CognitiveCycle or an opt-in API.
+    const auto generalization_path =
+        std::filesystem::temp_directory_path() / "jarvis_developmental_standard_decision.bin";
+    std::filesystem::remove(generalization_path, ec);
+    std::filesystem::remove(generalization_path.string() + ".meta", ec);
+    const std::vector<CandidateAction> generalization_actions{
+        {"learned-action", 0.5, 0.5, 0.9, 0.2, 1.0, 0.0, 0.5, 0.0, 0.0},
+        {"other-action", 0.5, 0.5, 0.9, 0.2, 1.0, 0.0, 0.5, 0.0, 0.0},
+    };
+    {
+        Brain generalized(generalization_path);
+        for (int i = 0; i < 5; ++i) {
+            generalized.observe(Event{0, 0, "environment", "action_outcome",
+                {{"action", std::string("learned-action")},
+                 {"context", std::string("navigation route")},
+                 {"observed", true},
+                 {"expected_consequence", 1.0},
+                 {"actual_consequence", 1.0},
+                 {"consequence_error", 0.0},
+                 {"reliability", 1.0},
+                 {"salience", 0.8},
+                 {"novelty", 0.2}}});
+        }
+        Goal related_goal{"navigation-route-variant",
+                          "navigate using a related route", 0.9, 0.0,
+                          0, 0, GoalStatus::pending, {}, {}};
+        assert(generalized.create_goal(related_goal));
+        assert(generalized.activate_goal(related_goal.id));
+
+        const auto standard_decisions = generalized.choose(generalization_actions);
+        assert(score_for(standard_decisions, "learned-action") >
+               score_for(standard_decisions, "other-action"));
+        const auto affective_decisions =
+            generalized.choose_with_affect(generalization_actions);
+        assert(score_for(affective_decisions, "learned-action") >
+               score_for(affective_decisions, "other-action"));
+    }
+    {
+        Brain restored_generalized(generalization_path);
+        const auto standard_decisions =
+            restored_generalized.choose(generalization_actions);
+        assert(score_for(standard_decisions, "learned-action") >
+               score_for(standard_decisions, "other-action"));
+        const auto affective_decisions =
+            restored_generalized.choose_with_affect(generalization_actions);
+        assert(score_for(affective_decisions, "learned-action") >
+               score_for(affective_decisions, "other-action"));
+    }
+    std::filesystem::remove(generalization_path, ec);
+    std::filesystem::remove(generalization_path.string() + ".meta", ec);
+
     std::filesystem::remove(path, ec);
     std::filesystem::remove(path.string() + ".meta", ec);
     std::cout << "developmental brain integration suite passed\n";
