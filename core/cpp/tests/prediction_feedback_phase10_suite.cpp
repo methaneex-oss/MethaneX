@@ -246,6 +246,28 @@ int main() {
     }
     assert(provenance_restored);
 
+    // Invalid numeric outcomes must never enter the journal or poison learned state.
+    const auto nonfinite_prediction =
+        brain.predict("nonfinite_probe", Scalar{5.0}, 0.8);
+    assert(nonfinite_prediction.created_sequence != 0);
+    assert(!brain.resolve_prediction(nonfinite_prediction.created_sequence,
+                                     Scalar{std::numeric_limits<double>::quiet_NaN()}));
+    assert(!brain.resolve_prediction(nonfinite_prediction.created_sequence,
+                                     Scalar{std::numeric_limits<double>::infinity()}));
+    bool nonfinite_still_unresolved = false;
+    for (const auto& current : brain.snapshot().predictions) {
+        if (current.created_sequence == nonfinite_prediction.created_sequence) {
+            nonfinite_still_unresolved = !current.resolved;
+            break;
+        }
+    }
+    assert(nonfinite_still_unresolved);
+    assert(brain.learning_metric("nonfinite_probe") == nullptr);
+    assert(brain.resolve_prediction(nonfinite_prediction.created_sequence, Scalar{5.0}));
+    const auto* finite_probe_metric = brain.learning_metric("nonfinite_probe");
+    assert(finite_probe_metric != nullptr);
+    assert(finite_probe_metric->observations == 1);
+
     // Real-valued predictions must learn in their native scale; adaptation must not
     // silently collapse values such as temperature into a normalized [0,1] range.
     std::vector<std::uint64_t> real_prediction_sequences;
