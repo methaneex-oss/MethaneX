@@ -68,6 +68,11 @@ int main() {
     assert(related_best != nullptr);
     assert(related_best->action == "good-route");
 
+    // Generalization must be bounded by context similarity. A strategy learned
+    // for navigation must not leak into an unrelated task merely because it
+    // is the only experience currently stored.
+    assert(related.best_related_strategy("orbital cooking", 0.5) == nullptr);
+
     // If all related experiences were harmful, retrieval must preserve the
     // negative signal and prefer the less harmful alternative rather than
     // treating every negative outcome as a tied zero.
