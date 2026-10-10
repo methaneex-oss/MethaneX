@@ -61,6 +61,27 @@ int main() {
         std::numeric_limits<double>::infinity()).key.empty());
     assert(brain.snapshot().predictions.size() == snapshot_before_invalid_prediction);
 
+    // Numeric meaning is independent of the Scalar storage alternative:
+    // integer 30 and floating-point 30.0 are the same observed quantity.
+    const auto mixed_numeric_prediction =
+        brain.predict("mixed_numeric_equivalence", Scalar{std::int64_t{30}}, 0.8);
+    assert(mixed_numeric_prediction.created_sequence != 0);
+    assert(brain.resolve_prediction(mixed_numeric_prediction.created_sequence,
+                                    Scalar{30.0}));
+    bool mixed_numeric_resolved_exactly = false;
+    for (const auto& current : brain.snapshot().predictions) {
+        if (current.created_sequence == mixed_numeric_prediction.created_sequence) {
+            mixed_numeric_resolved_exactly = current.resolved && current.error == 0.0;
+            break;
+        }
+    }
+    assert(mixed_numeric_resolved_exactly);
+    const auto* mixed_numeric_metric = brain.learning_metric("mixed_numeric_equivalence");
+    assert(mixed_numeric_metric != nullptr);
+    assert(mixed_numeric_metric->observations == 1);
+    assert(mixed_numeric_metric->mean_error == 0.0);
+    assert(std::abs(mixed_numeric_metric->estimate - 30.0) < 1e-12);
+
     // Integer forecasts must receive the same learned calibration as doubles.
     const auto integer_prediction = brain.predict("integer_temperature", Scalar{std::int64_t{20}}, 0.8);
     assert(integer_prediction.created_sequence != 0);
