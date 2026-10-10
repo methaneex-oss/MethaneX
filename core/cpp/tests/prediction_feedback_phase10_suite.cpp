@@ -686,6 +686,26 @@ int main() {
     }
     assert(unresolved_pressure_instances == 1);
 
+    // Resolve the older prediction by its journal identity. Key-based resolution
+    // above must have resolved only the latest instance; sequence-based feedback
+    // must now resolve the remaining instance without touching the first outcome.
+    assert(!brain.resolve_prediction(concurrent_first.created_sequence, Scalar{105.0}));
+    std::size_t resolved_pressure_instances = 0;
+    for (const auto& current : brain.snapshot().predictions) {
+        if (current.key == "pressure" &&
+            (current.created_sequence == concurrent_first.created_sequence ||
+             current.created_sequence == concurrent_second.created_sequence) &&
+            current.resolved) {
+            ++resolved_pressure_instances;
+        }
+    }
+    assert(resolved_pressure_instances == 2);
+    const auto* pressure_metric = brain.learning_metric("pressure");
+    assert(pressure_metric != nullptr);
+    assert(pressure_metric->observations == 2);
+    assert(std::isfinite(pressure_metric->estimate));
+    assert(pressure_metric->estimate > 105.0 && pressure_metric->estimate < 111.0);
+
     Goal goal;
     goal.id = "stabilize";
     goal.description = "Stabilize the observed system";
@@ -746,6 +766,24 @@ int main() {
         }
     }
     assert(legacy_feedback_replayed);
+    // Both same-key prediction identities and their accumulated calibration must
+    // survive restart, not merely the latest key-level resolution.
+    std::size_t replayed_pressure_instances = 0;
+    for (const auto& current : restored.snapshot().predictions) {
+        if (current.key == "pressure" &&
+            (current.created_sequence == concurrent_first.created_sequence ||
+             current.created_sequence == concurrent_second.created_sequence)) {
+            assert(current.resolved);
+            ++replayed_pressure_instances;
+        }
+    }
+    assert(replayed_pressure_instances == 2);
+    const auto* replayed_pressure_metric = restored.learning_metric("pressure");
+    assert(replayed_pressure_metric != nullptr);
+    assert(replayed_pressure_metric->observations == 2);
+    assert(std::abs(replayed_pressure_metric->estimate -
+                    brain.learning_metric("pressure")->estimate) < 1e-12);
+
     bool persisted = false;
     for (const auto& current : restored.snapshot().predictions) {
         if (current.key == prediction.key) {
