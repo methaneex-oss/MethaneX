@@ -78,7 +78,8 @@ bool valid_prediction_outcome_event(const Event& event, const Prediction* predic
     // Only historical Brain-authored records may use the older binary
     // mismatch error. Unversioned external events must satisfy current math.
     return std::abs(error - expected_error) <= 1e-12 ||
-           (event.source == "brain" && expected_error > 0.0 && error == 1.0);
+           (event.source == "brain" &&
+            prediction->predicted != actual->second && error == 1.0);
 }
 std::uint64_t integer_value(const Attributes& data, const std::string& key, std::uint64_t fallback = 0) { const auto it = data.find(key); if (it == data.end()) return fallback; if (const auto value = std::get_if<std::int64_t>(&it->second)) return *value < 0 ? fallback : static_cast<std::uint64_t>(*value); if (const auto value = std::get_if<double>(&it->second)) return *value < 0.0 ? fallback : static_cast<std::uint64_t>(*value); return fallback; }
 std::string join_ids(const std::vector<std::string>& ids) { std::ostringstream out; for (std::size_t i = 0; i < ids.size(); ++i) { if (i != 0) out << '\x1f'; out << ids[i]; } return out.str(); }
