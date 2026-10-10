@@ -4,6 +4,7 @@
 #include <cmath>
 #include <cstdint>
 #include <filesystem>
+#include <limits>
 
 using namespace jarvis::core;
 
@@ -78,6 +79,37 @@ int main() {
     assert(restored_parameter != nullptr);
     assert(restored_parameter->observations == 16);
     assert(restored_parameter->value > 0.5);
+
+    // Finite inputs near the floating-point limits must still produce a
+    // gradual estimate update instead of overflowing the delta and snapping
+    // directly to the latest observation.
+    AdaptationModel extreme_model;
+    const double limit = std::numeric_limits<double>::max();
+    const auto extreme_first = extreme_model.observe("extreme", -limit, -limit);
+    assert(extreme_first.observations == 1);
+    assert(extreme_first.estimate == -limit);
+    const auto extreme_second = extreme_model.observe("extreme", -limit, limit);
+    assert(extreme_second.observations == 2);
+    assert(std::isfinite(extreme_second.estimate));
+    assert(extreme_second.estimate < 0.0);
+    assert(extreme_second.estimate > -limit);
+    assert(extreme_second.mean_error >= 0.0 && extreme_second.mean_error <= 1.0);
+    assert(extreme_second.recent_error >= 0.0 && extreme_second.recent_error <= 1.0);
+
+    // Same-sign extreme values must remain finite as well.
+    AdaptationModel same_sign_model;
+    const auto same_sign_first = same_sign_model.observe("extreme", limit, limit);
+    const auto same_sign_second = same_sign_model.observe("extreme", limit, limit);
+    assert(same_sign_first.estimate == limit);
+    assert(same_sign_second.observations == 2);
+    assert(std::isfinite(same_sign_second.estimate));
+    assert(same_sign_second.estimate == limit);
+
+    // Invalid samples are ignored and cannot poison or increment the metric.
+    const auto invalid_sample = extreme_model.observe(
+        "extreme", 1.0, std::numeric_limits<double>::infinity());
+    assert(invalid_sample.observations == 2);
+    assert(std::isfinite(invalid_sample.estimate));
 
     std::filesystem::remove(path, ec);
     std::filesystem::remove(path.string() + ".meta", ec);
