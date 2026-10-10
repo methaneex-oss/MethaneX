@@ -140,6 +140,12 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     result.context.decisions = brain_.decision_engine().decide(planned_actions, result.context.decision_context);
     if (result.context.decisions.empty()) { result.status = CognitiveCycleStatus::no_action; result.context.reflection = brain_.reflect(); return result; }
     result.context.action_assessments = brain_.action_model().assess(result.context.decisions, input.action_constraints);
+    // Preserve the exact context used for learned decision bias through the
+    // authorization/execution boundary; otherwise outcome learning falls back
+    // to the goal ID and cannot update the context that shaped this decision.
+    for (auto& assessment : result.context.action_assessments) {
+        assessment.developmental_context = developmental_context;
+    }
     result.context.reflection = brain_.reflect();
     result.status = CognitiveCycleStatus::completed;
     return result;
