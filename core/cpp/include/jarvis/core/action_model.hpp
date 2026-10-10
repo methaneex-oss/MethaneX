@@ -20,6 +20,9 @@ struct ActionAssessment {
     bool permitted{false};
     double confidence{0.0};
     std::string reason;
+    // Context used by the decision that produced this assessment. Carry it
+    // into outcome learning so consequences train the same representation.
+    std::string developmental_context;
 };
 
 class ActionModel {
