@@ -514,6 +514,19 @@ int main() {
     assert(brain.affective_state().updates == affect_before_forgery.updates);
     assert(brain.learning_metric("nonfinite_guard") == nullptr);
 
+    const auto malformed_metadata = brain.observe(Event{
+        0, 0, "external", "prediction_outcome",
+        {{"key", std::string{"nonfinite_guard"}},
+         {"prediction_sequence", static_cast<std::int64_t>(guarded_prediction.created_sequence)},
+         {"actual", Scalar{30.0}},
+         {"error", 0.6},
+         {"salience", 0.5},
+         {"novelty", Scalar{std::numeric_limits<double>::quiet_NaN()}}}});
+    assert(malformed_metadata.event.sequence == 0);
+    assert(brain.state().events_seen == events_before_forgery);
+    assert(brain.affective_state().updates == affect_before_forgery.updates);
+    assert(brain.learning_metric("nonfinite_guard") == nullptr);
+
     // The valid relative error for 12 -> 30 is 0.6. A duplicate after the
     // legitimate resolution must not replay affect or count adaptation twice.
     assert(!brain.resolve_prediction(guarded_prediction.created_sequence, Scalar{30.0}));
