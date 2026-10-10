@@ -80,14 +80,17 @@ bool Brain::resolve_prediction(std::uint64_t prediction_sequence, const Scalar& 
             std::abs(actual_numeric - predicted_numeric) / scale;
         error = std::clamp(static_cast<double>(relative_error), 0.0, 1.0);
     }
+    const auto finite_unit = [](double value) {
+        return std::isfinite(value) ? std::clamp(value, 0.0, 1.0) : 0.0;
+    };
     Event event{0, 0, "brain", "prediction_outcome",
         {{"key", prediction->key},
          {"prediction_sequence", static_cast<std::int64_t>(prediction_sequence)},
          {"actual", actual},
          {"error", error},
          {"error_model", std::int64_t{2}},
-         {"salience", attention_state_.salience},
-         {"novelty", state_.novelty}}};
+         {"salience", finite_unit(attention_state_.salience)},
+         {"novelty", finite_unit(state_.novelty)}}};
     event.sequence = memory_.append(event);
     if (event.sequence == 0) return false;
     replay(event);
