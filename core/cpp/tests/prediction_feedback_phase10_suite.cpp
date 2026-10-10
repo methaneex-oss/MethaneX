@@ -548,6 +548,33 @@ int main() {
     assert(brain.affective_state().updates == after_valid_guard_feedback.updates);
     assert(brain.learning_metric("nonfinite_guard")->observations == 1);
 
+    // Legacy journals encoded every non-exact prediction as error 1.0.
+    // They must remain replayable, while newly generated outcomes carry a
+    // versioned normalized error model.
+    const auto legacy_prediction =
+        brain.predict("legacy_error_model", Scalar{12.0}, 0.8);
+    const auto legacy_feedback = brain.observe(Event{
+        0, 0, "legacy_journal", "prediction_outcome",
+        {{"key", std::string{"legacy_error_model"}},
+         {"prediction_sequence", static_cast<std::int64_t>(legacy_prediction.created_sequence)},
+         {"actual", Scalar{30.0}},
+         {"error", 1.0},
+         {"salience", 0.5},
+         {"novelty", 0.0}}});
+    assert(legacy_feedback.event.sequence != 0);
+    bool legacy_prediction_resolved = false;
+    for (const auto& current : brain.snapshot().predictions) {
+        if (current.created_sequence == legacy_prediction.created_sequence) {
+            legacy_prediction_resolved = current.resolved && current.error == 1.0;
+            break;
+        }
+    }
+    assert(legacy_prediction_resolved);
+    const auto* legacy_metric = brain.learning_metric("legacy_error_model");
+    assert(legacy_metric != nullptr);
+    assert(legacy_metric->observations == 1);
+    assert(std::abs(legacy_metric->estimate - 30.0) < 1e-12);
+
     // Stable semantic prediction keys must accumulate learning across separate
     // experiences. The key identifies the variable; each prediction event keeps
     // its own journal sequence, while adaptation remains keyed by the variable.
