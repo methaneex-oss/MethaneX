@@ -554,7 +554,7 @@ int main() {
     const auto legacy_prediction =
         brain.predict("legacy_error_model", Scalar{12.0}, 0.8);
     const auto legacy_feedback = brain.observe(Event{
-        0, 0, "legacy_journal", "prediction_outcome",
+        0, 0, "brain", "prediction_outcome",
         {{"key", std::string{"legacy_error_model"}},
          {"prediction_sequence", static_cast<std::int64_t>(legacy_prediction.created_sequence)},
          {"actual", Scalar{30.0}},
