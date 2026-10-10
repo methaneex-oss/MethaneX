@@ -85,6 +85,35 @@ int main() {
     assert(least_harmful != nullptr);
     assert(least_harmful->action == "less-bad-route");
 
+    // Strategy values must change with repeated experience rather than
+    // freezing after the first observation. Contradictory evidence should
+    // reverse the preference, and later evidence should be able to revise it.
+    DevelopmentalLearning changing_experience;
+    changing_experience.observe_strategy(
+        "bridge repair", "reinforce bridge",
+        LearningSignal{0.1, 0.9, 0.7, 0.2});
+    const auto* initial_strategy = changing_experience.best_strategy("bridge repair");
+    assert(initial_strategy != nullptr);
+    assert(initial_strategy->value > 0.0);
+    assert(initial_strategy->uses == 1);
+
+    changing_experience.observe_strategy(
+        "bridge repair", "reinforce bridge",
+        LearningSignal{0.9, -0.9, 0.7, 0.2});
+    const auto* revised_negative = changing_experience.best_strategy("bridge repair");
+    assert(revised_negative != nullptr);
+    assert(revised_negative->value < 0.0);
+    assert(revised_negative->uses == 2);
+
+    changing_experience.observe_strategy(
+        "bridge repair", "reinforce bridge",
+        LearningSignal{0.8, 0.9, 0.7, 0.2});
+    const auto* revised_positive = changing_experience.best_strategy("bridge repair");
+    assert(revised_positive != nullptr);
+    assert(revised_positive->value > 0.0);
+    assert(revised_positive->uses == 3);
+    assert(revised_positive->confidence > initial_strategy->confidence);
+
     // Legacy four-field evidence now derives deterministic affective
     // significance from prediction error, reward, salience and novelty.
     const LearningSignal derived{0.9, -0.8, 0.7, 0.6};
