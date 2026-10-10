@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <limits>
 
 namespace jarvis::core {
 
@@ -34,7 +35,20 @@ AdaptiveMetric AdaptationModel::observe(const std::string& key, double predicted
     const double recent_rate = std::clamp(
         0.35 / std::sqrt(static_cast<double>(metric.observations)), 0.05, 0.35);
     metric.recent_error += (error - metric.recent_error) * recent_rate;
-    metric.estimate += (a - metric.estimate) * recent_rate;
+
+    // Use a convex blend instead of (actual - estimate) * rate: subtracting
+    // opposite-sign finite values near DBL_MAX can overflow before scaling.
+    // The weighted terms stay within the representable range, and long double
+    // preserves headroom on platforms where it has a wider exponent range.
+    const long double weight = static_cast<long double>(recent_rate);
+    const long double blended_estimate =
+        (1.0L - weight) * static_cast<long double>(metric.estimate) +
+        weight * static_cast<long double>(a);
+    const long double limit =
+        static_cast<long double>(std::numeric_limits<double>::max());
+    metric.estimate = static_cast<double>(
+        std::clamp(blended_estimate, -limit, limit));
+
     metric.mean_error = std::clamp(metric.mean_error, 0.0, 1.0);
     metric.recent_error = std::clamp(metric.recent_error, 0.0, 1.0);
     if (!std::isfinite(metric.estimate)) metric.estimate = a;
