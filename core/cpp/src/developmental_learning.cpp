@@ -127,13 +127,17 @@ const LearnedStrategy* DevelopmentalLearning::best_related_strategy(const std::s
                                                                       double minimum_similarity) const noexcept {
     const double threshold = std::clamp(std::isfinite(minimum_similarity) ? minimum_similarity : 0.5, 0.0, 1.0);
     const LearnedStrategy* best = nullptr;
-    double best_score = -1.0;
+    double best_score = -std::numeric_limits<double>::infinity();
     for (const auto& [_, strategy] : strategies_) {
         const double similarity = context_similarity(context, strategy.context);
         if (similarity < threshold) continue;
         const double value = std::clamp(strategy.value, -1.0, 1.0);
-        const double positive_value = 0.5 * (value + 1.0);
-        const double score = similarity * std::max(0.0, strategy.confidence) * positive_value;
+        // Preserve the sign of learned outcomes. Mapping values into [0, 1]
+        // makes every negative outcome indistinguishable during retrieval,
+        // so a harmful strategy can win arbitrarily when all evidence is bad.
+        // Signed utility ranks positive evidence first and, when all relevant
+        // evidence is negative, prefers the less harmful learned alternative.
+        const double score = similarity * std::clamp(strategy.confidence, 0.0, 1.0) * value;
         if (best == nullptr || score > best_score) {
             best = &strategy;
             best_score = score;
