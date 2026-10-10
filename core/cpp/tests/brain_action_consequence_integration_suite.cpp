@@ -24,7 +24,7 @@ int main() {
     CognitiveCycle cycle(brain);
     CognitiveCycleInput input;
     input.goal_id = goal.id;
-    input.developmental_context = goal.id;
+    input.developmental_context = "system stabilization";
     input.planning_horizon = 1;
     input.resource_budget = 10.0;
     input.observation = Event{0, 1, "sensor", "observation", {{"temperature", 20.0}}};
@@ -55,6 +55,10 @@ int main() {
     assessment.disposition = ActionDisposition::execute;
     assessment.permitted = true;
     assessment.confidence = 0.9;
+    assert(!before_learning.context.action_assessments.empty());
+    assessment.developmental_context =
+        before_learning.context.action_assessments.front().developmental_context;
+    assert(assessment.developmental_context == "system stabilization");
 
     bool executed = false;
     const auto result = brain.execute_action(
@@ -109,14 +113,14 @@ int main() {
     assert(affect_after_unobserved.uncertainty > affect_before_unobserved.uncertainty);
     bool unobserved_strategy_created = false;
     for (const auto& strategy : brain.developmental_strategies()) {
-        if (strategy.context == goal.id && strategy.action == "wait") {
+        if (strategy.context == "system stabilization" && strategy.action == "wait") {
             unobserved_strategy_created = true;
             break;
         }
     }
     assert(!unobserved_strategy_created);
 
-    const auto* learned_strategy = brain.developmental_best_strategy(goal.id);
+    const auto* learned_strategy = brain.developmental_best_strategy("system stabilization");
     assert(learned_strategy != nullptr);
     assert(learned_strategy->action == "calibrate");
     assert(learned_strategy->value < 0.0);
@@ -145,7 +149,7 @@ int main() {
     assert(std::abs(restored_attention.uncertainty - live_attention.uncertainty) < 1e-12);
     assert(std::abs(restored_attention.urgency - live_attention.urgency) < 1e-12);
     assert(std::abs(restored_attention.internal_activation - live_attention.internal_activation) < 1e-12);
-    const auto* restored_strategy = restored.developmental_best_strategy(goal.id);
+    const auto* restored_strategy = restored.developmental_best_strategy("system stabilization");
     assert(restored_strategy != nullptr);
     assert(restored_strategy->action == live_strategy->action);
     assert(std::abs(restored_strategy->value - live_strategy->value) < 1e-12);
