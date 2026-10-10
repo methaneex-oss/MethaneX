@@ -132,7 +132,7 @@ int main() {
 
     const auto live_affect = brain.affective_state();
     const auto live_attention = brain.attention();
-    const auto* live_strategy = brain.developmental_best_strategy(goal.id);
+    const auto* live_strategy = brain.developmental_best_strategy("system stabilization");
     assert(live_strategy != nullptr);
     Brain restored(journal);
     assert(restored.affective_learning_updates() > 0);
