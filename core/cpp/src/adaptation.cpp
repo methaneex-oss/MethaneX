@@ -7,8 +7,11 @@
 namespace jarvis::core {
 
 AdaptiveMetric AdaptationModel::observe(const std::string& key, double predicted, double actual) {
+    if (!std::isfinite(predicted) || !std::isfinite(actual)) {
+        const auto existing = metrics_.find(key);
+        return existing == metrics_.end() ? AdaptiveMetric{} : existing->second;
+    }
     auto& metric = metrics_[key];
-    if (!std::isfinite(predicted) || !std::isfinite(actual)) return metric;
     const double p = predicted;
     const double a = actual;
     const double scale = std::max({1.0, std::abs(p), std::abs(a)});
