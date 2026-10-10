@@ -85,6 +85,7 @@ bool Brain::resolve_prediction(std::uint64_t prediction_sequence, const Scalar& 
          {"prediction_sequence", static_cast<std::int64_t>(prediction_sequence)},
          {"actual", actual},
          {"error", error},
+         {"error_model", std::int64_t{2}},
          {"salience", attention_state_.salience},
          {"novelty", state_.novelty}}};
     event.sequence = memory_.append(event);
