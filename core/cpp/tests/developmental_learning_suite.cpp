@@ -96,6 +96,7 @@ int main() {
     assert(initial_strategy != nullptr);
     assert(initial_strategy->value > 0.0);
     assert(initial_strategy->uses == 1);
+    const double initial_confidence = initial_strategy->confidence;
 
     changing_experience.observe_strategy(
         "bridge repair", "reinforce bridge",
@@ -112,7 +113,7 @@ int main() {
     assert(revised_positive != nullptr);
     assert(revised_positive->value > 0.0);
     assert(revised_positive->uses == 3);
-    assert(revised_positive->confidence > initial_strategy->confidence);
+    assert(revised_positive->confidence > initial_confidence);
 
     // Legacy four-field evidence now derives deterministic affective
     // significance from prediction error, reward, salience and novelty.
