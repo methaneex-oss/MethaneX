@@ -685,6 +685,18 @@ int main() {
     const auto live_attention = brain.attention();
 
     Brain restored(path);
+    const auto* restored_legacy_metric = restored.learning_metric("legacy_error_model");
+    assert(restored_legacy_metric != nullptr);
+    assert(restored_legacy_metric->observations == 1);
+    assert(std::abs(restored_legacy_metric->estimate - 30.0) < 1e-12);
+    bool legacy_feedback_replayed = false;
+    for (const auto& current : restored.snapshot().predictions) {
+        if (current.key == "legacy_error_model") {
+            legacy_feedback_replayed = current.resolved && current.error == 1.0;
+            break;
+        }
+    }
+    assert(legacy_feedback_replayed);
     bool persisted = false;
     for (const auto& current : restored.snapshot().predictions) {
         if (current.key == prediction.key) {
