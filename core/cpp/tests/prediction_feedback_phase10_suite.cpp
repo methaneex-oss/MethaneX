@@ -497,6 +497,44 @@ int main() {
     }
     assert(guarded_prediction_unresolved);
 
+    // Malformed or duplicate feedback must be rejected before it can mutate
+    // affect, attention, adaptation, or the journal.
+    const auto events_before_forgery = brain.state().events_seen;
+    const auto affect_before_forgery = brain.affective_state();
+    const auto forged_outcome = brain.observe(Event{
+        0, 0, "external", "prediction_outcome",
+        {{"key", std::string{"nonfinite_guard"}},
+         {"prediction_sequence", static_cast<std::int64_t>(guarded_prediction.created_sequence)},
+         {"actual", Scalar{30.0}},
+         {"error", 0.0},
+         {"salience", 0.5},
+         {"novelty", 0.0}}});
+    assert(forged_outcome.event.sequence == 0);
+    assert(brain.state().events_seen == events_before_forgery);
+    assert(brain.affective_state().updates == affect_before_forgery.updates);
+    assert(brain.learning_metric("nonfinite_guard") == nullptr);
+
+    // The valid relative error for 12 -> 30 is 0.6. A duplicate after the
+    // legitimate resolution must not replay affect or count adaptation twice.
+    assert(!brain.resolve_prediction(guarded_prediction.created_sequence, Scalar{30.0}));
+    const auto after_valid_guard_feedback = brain.affective_state();
+    const auto* valid_guard_metric = brain.learning_metric("nonfinite_guard");
+    assert(valid_guard_metric != nullptr);
+    assert(valid_guard_metric->observations == 1);
+    const auto events_before_duplicate = brain.state().events_seen;
+    const auto duplicate_outcome = brain.observe(Event{
+        0, 0, "external", "prediction_outcome",
+        {{"key", std::string{"nonfinite_guard"}},
+         {"prediction_sequence", static_cast<std::int64_t>(guarded_prediction.created_sequence)},
+         {"actual", Scalar{30.0}},
+         {"error", 0.6},
+         {"salience", 0.5},
+         {"novelty", 0.0}}});
+    assert(duplicate_outcome.event.sequence == 0);
+    assert(brain.state().events_seen == events_before_duplicate);
+    assert(brain.affective_state().updates == after_valid_guard_feedback.updates);
+    assert(brain.learning_metric("nonfinite_guard")->observations == 1);
+
     // Stable semantic prediction keys must accumulate learning across separate
     // experiences. The key identifies the variable; each prediction event keeps
     // its own journal sequence, while adaptation remains keyed by the variable.
