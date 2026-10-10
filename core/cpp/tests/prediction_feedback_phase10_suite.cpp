@@ -268,6 +268,32 @@ int main() {
     assert(finite_probe_metric != nullptr);
     assert(finite_probe_metric->observations == 1);
 
+    // Replay must reject malformed outcome metadata without resolving a prediction
+    // or changing affective state from an event that fails validation.
+    const auto malformed_prediction =
+        brain.predict("malformed_probe", Scalar{2.0}, 0.8);
+    assert(malformed_prediction.created_sequence != 0);
+    const auto affect_before_malformed = brain.affective_state();
+    brain.observe(Event{0, 0, "external", "prediction_outcome",
+        {{"key", std::string{"malformed_probe"}},
+         {"prediction_sequence", static_cast<std::int64_t>(malformed_prediction.created_sequence)},
+         {"actual", Scalar{3.0}},
+         {"error", 0.5},
+         {"error_model", std::int64_t{2}},
+         {"salience", std::numeric_limits<double>::quiet_NaN()},
+         {"novelty", 0.0}}});
+    const auto affect_after_malformed = brain.affective_state();
+    assert(affect_after_malformed.updates == affect_before_malformed.updates);
+    bool malformed_still_unresolved = false;
+    for (const auto& current : brain.snapshot().predictions) {
+        if (current.created_sequence == malformed_prediction.created_sequence) {
+            malformed_still_unresolved = !current.resolved;
+            break;
+        }
+    }
+    assert(malformed_still_unresolved);
+    assert(brain.resolve_prediction(malformed_prediction.created_sequence, Scalar{2.0}));
+
     // Real-valued predictions must learn in their native scale; adaptation must not
     // silently collapse values such as temperature into a normalized [0,1] range.
     std::vector<std::uint64_t> real_prediction_sequences;
