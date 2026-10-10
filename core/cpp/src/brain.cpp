@@ -402,6 +402,7 @@ LearningCycle Brain::learn_from_prediction(const std::string& key, const Scalar&
                    {"prediction_sequence", static_cast<std::int64_t>(prediction->created_sequence)},
                    {"actual", actual},
                    {"error", error},
+                   {"error_model", std::int64_t{2}},
                    {"salience", attention_state_.salience},
                    {"novelty", state_.novelty}}};
     outcome.sequence = memory_.append(outcome);
