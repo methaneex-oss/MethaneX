@@ -143,6 +143,7 @@ std::vector<LearnedAssociation> Brain::developmental_associations() const { std:
 std::vector<LearnedStrategy> Brain::developmental_strategies() const { std::shared_lock lock(mutex_); return developmental_learning_.strategies(); }
 const LearnedStrategy* Brain::developmental_best_strategy(const std::string& context) const noexcept { std::shared_lock lock(mutex_); return developmental_learning_.best_strategy(context); }
 const LearnedStrategy* Brain::developmental_best_related_strategy(const std::string& context, double minimum_similarity) const { std::shared_lock lock(mutex_); return developmental_learning_.best_related_strategy(context, minimum_similarity); }
+std::vector<RelatedLearnedStrategy> Brain::developmental_related_strategies(const std::string& context, double minimum_similarity) const { std::shared_lock lock(mutex_); return developmental_learning_.related_strategies(context, minimum_similarity); }
 std::vector<std::pair<std::string, Scalar>> Brain::simulate(const std::vector<Belief>& assumptions) const { std::shared_lock lock(mutex_); return causal_.predict(assumptions); }
 SimulationResult Brain::simulate(const std::vector<Belief>& assumptions, std::size_t horizon) const { std::shared_lock lock(mutex_); return causal_.simulate(assumptions, horizon); }
 std::vector<Association> Brain::associations() const { std::shared_lock lock(mutex_); return association_.all(); }
