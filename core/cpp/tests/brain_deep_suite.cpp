@@ -460,6 +460,35 @@ int main() {
     assert(tied_strategy != nullptr);
     assert(tied_strategy->context == "indoor sensor uncertainty");
     assert(tied_strategy->action == "route_a");
+    const auto all_tied_strategies =
+        tie_breaker.related_strategies("sensor uncertainty response");
+    assert(all_tied_strategies.size() == 2);
+    assert(all_tied_strategies[0].strategy.context == "indoor sensor uncertainty");
+    assert(all_tied_strategies[1].strategy.context == "outdoor sensor uncertainty");
+    assert(std::abs(all_tied_strategies[0].similarity - 0.5) < 1e-12);
+    assert(std::abs(all_tied_strategies[1].similarity - 0.5) < 1e-12);
+
+    // Retrieval must retain both favorable and unfavorable contextual evidence,
+    // rather than collapsing competing experiences into one global winner.
+    DevelopmentalLearning competing_evidence;
+    competing_evidence.observe_strategy(
+        "indoor sensor uncertainty", "route_a",
+        LearningSignal{0.1, -0.9, 0.8, 0.2, 0.3});
+    competing_evidence.observe_strategy(
+        "outdoor sensor uncertainty", "route_b", tied_signal);
+    const auto competing = competing_evidence.related_strategies(
+        "sensor uncertainty response");
+    assert(competing.size() == 2);
+    bool saw_negative_route_a = false;
+    bool saw_positive_route_b = false;
+    for (const auto& evidence : competing) {
+        if (evidence.strategy.action == "route_a")
+            saw_negative_route_a = evidence.strategy.value < 0.0;
+        if (evidence.strategy.action == "route_b")
+            saw_positive_route_b = evidence.strategy.value > 0.0;
+    }
+    assert(saw_negative_route_a);
+    assert(saw_positive_route_b);
 
     // Lexical overlap must not erase negation. "safe route" and "not safe route"
     // share most tokens, but the learned strategy must not cross that polarity boundary.
