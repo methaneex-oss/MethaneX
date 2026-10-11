@@ -1115,7 +1115,7 @@ int main() {
     // an action that looked preferable before experience should lose utility
     // after its observed outcome is negative.
     CognitiveCycleInput negative_strategy_input = strategy_input;
-    negative_strategy_input.developmental_context = "hazardous sensor state";
+    negative_strategy_input.developmental_context = "hazardous engine state";
     const auto before_negative_experience = strategy_cycle.run(negative_strategy_input);
     assert(before_negative_experience.status == CognitiveCycleStatus::completed);
     assert(before_negative_experience.context.plan.steps.front().action.name ==
@@ -1124,7 +1124,7 @@ int main() {
     const auto negative_strategy_experience = strategy_brain.observe(Event{
         0, 0, "executor", "action_outcome",
         {{"action", std::string("measured_risk")},
-         {"context", std::string("hazardous sensor state")},
+         {"context", std::string("hazardous engine state")},
          {"status", std::int64_t{4}},
          {"reliability", 1.0},
          {"expected_consequence", 0.0},
@@ -1135,7 +1135,7 @@ int main() {
          {"novelty", 0.8}}});
     assert(negative_strategy_experience.event.sequence != 0);
     const auto* learned_harmful_strategy =
-        strategy_brain.developmental_best_strategy("hazardous sensor state");
+        strategy_brain.developmental_best_strategy("hazardous engine state");
     assert(learned_harmful_strategy != nullptr);
     assert(learned_harmful_strategy->action == "measured_risk");
     assert(learned_harmful_strategy->value < 0.0);
@@ -1149,7 +1149,7 @@ int main() {
     CognitiveCycle replayed_negative_strategy_cycle(replayed_negative_strategy_brain);
     const auto* replayed_harmful_strategy =
         replayed_negative_strategy_brain.developmental_best_strategy(
-            "hazardous sensor state");
+            "hazardous engine state");
     assert(replayed_harmful_strategy != nullptr);
     assert(replayed_harmful_strategy->action == "measured_risk");
     assert(replayed_harmful_strategy->value < 0.0);
