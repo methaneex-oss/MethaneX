@@ -45,6 +45,11 @@
 #include <utility>
 #include <vector>
 namespace jarvis::core {
+enum class PredictionFeedbackStatus : std::uint8_t {
+ rejected,
+ resolved_correctly,
+ resolved_with_error,
+};
 struct BrainState { std::uint64_t cycle{0}; std::uint64_t events_seen{0}; double novelty{0.0}; double attention{0.0}; double threat{0.0}; };
 struct BrainSnapshot { BrainState state{}; SelfState self_state{}; AffectiveState affective_state{}; std::vector<Belief> beliefs; std::vector<Prediction> predictions; std::vector<CausalLink> causal_links; std::vector<Goal> goals; };
 class Brain {
@@ -52,7 +57,7 @@ public:
  explicit Brain(std::filesystem::path journal_path = "data/brain/continuity.bin");
  Observation observe(Event event); double learn(const Evidence& evidence);
  LearningCycle learn_from_prediction(const std::string& key, const Scalar& actual, double fitness);
- std::vector<Belief> beliefs() const; Prediction predict(std::string key, Scalar value, double confidence); Prediction predict_with_context(std::string key, Scalar value, double confidence, double minimum_strength = 0.5, std::size_t minimum_shared_contexts = 2); bool resolve_prediction(const std::string& key, const Scalar& actual); bool resolve_prediction(std::uint64_t prediction_sequence, const Scalar& actual);
+ std::vector<Belief> beliefs() const; Prediction predict(std::string key, Scalar value, double confidence); Prediction predict_with_context(std::string key, Scalar value, double confidence, double minimum_strength = 0.5, std::size_t minimum_shared_contexts = 2); PredictionFeedbackStatus resolve_prediction_feedback(const std::string& key, const Scalar& actual); PredictionFeedbackStatus resolve_prediction_feedback(std::uint64_t prediction_sequence, const Scalar& actual); bool resolve_prediction(const std::string& key, const Scalar& actual); bool resolve_prediction(std::uint64_t prediction_sequence, const Scalar& actual);
  bool assimilate_goal_outcome(const GoalOutcomeEvidence& evidence);
  std::vector<std::pair<std::string, Scalar>> simulate(const std::vector<Belief>& assumptions) const; SimulationResult simulate(const std::vector<Belief>& assumptions, std::size_t horizon) const;
  std::vector<Association> associations() const; std::vector<Association> associated_with(const std::string& key, double minimum_strength = 0.5) const; std::vector<AssociationInference> contextual_associations(const std::string& key, std::size_t max_hops = 2, double minimum_strength = 0.25) const; std::vector<ConceptCandidate> concept_candidates(double minimum_strength = 0.5, std::size_t minimum_shared_contexts = 2) const; std::vector<ConceptCandidate> contextual_concepts(const std::string& key, double minimum_strength = 0.5, std::size_t minimum_shared_contexts = 2) const; std::vector<ConceptMatch> generalized_concepts(const std::string& key, double minimum_strength = 0.5, std::size_t minimum_shared_contexts = 2, double minimum_similarity = 0.5) const;
