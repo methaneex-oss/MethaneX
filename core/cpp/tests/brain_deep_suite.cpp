@@ -461,6 +461,15 @@ int main() {
     assert(tied_strategy->context == "indoor sensor uncertainty");
     assert(tied_strategy->action == "route_a");
 
+    // Lexical overlap must not erase negation. "safe route" and "not safe route"
+    // share most tokens, but the learned strategy must not cross that polarity boundary.
+    DevelopmentalLearning polarity_guard;
+    polarity_guard.observe_strategy("safe route", "take_route", tied_signal);
+    assert(polarity_guard.best_related_strategy("not safe route") == nullptr);
+    DevelopmentalLearning unsafe_guard;
+    unsafe_guard.observe_strategy("safe route", "take_route", tied_signal);
+    assert(unsafe_guard.best_related_strategy("unsafe route") == nullptr);
+
     // Goal, capability, and resilience mutations are journal-first and must
     // reconstruct the same durable state after restart.
     const auto state_journal = root / "state_transactions.bin";
