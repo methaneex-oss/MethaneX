@@ -802,10 +802,8 @@ int main() {
         brain.predict("cycle_sequence_identity", Scalar{20.0}, 0.8);
     assert(older_same_key.created_sequence != 0);
     assert(newer_same_key.created_sequence != 0);
-    const auto sequence_targeted_feedback = cycle.process_outcome(
-        std::optional<std::string>{"cycle_sequence_identity"}, Scalar{12.0},
-        std::nullopt, std::nullopt, std::nullopt, 0.0,
-        older_same_key.created_sequence);
+    const auto sequence_targeted_feedback =
+        cycle.process_outcome(older_same_key, Scalar{12.0});
     assert(sequence_targeted_feedback.prediction_resolved);
     bool older_resolved = false;
     bool newer_still_unresolved = false;
