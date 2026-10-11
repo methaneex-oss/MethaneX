@@ -750,6 +750,31 @@ int main() {
     }
     assert(resolved);
 
+    // A mismatch is still accepted feedback: the forecast is resolved and
+    // the error becomes learning evidence. "resolved" must not mean "correct".
+    const auto imperfect_prediction =
+        brain.predict("process_outcome_mismatch", Scalar{10.0}, 0.8);
+    assert(imperfect_prediction.created_sequence != 0);
+    const auto imperfect_feedback =
+        cycle.process_outcome("process_outcome_mismatch", Scalar{15.0});
+    assert(imperfect_feedback.prediction_resolved);
+    bool imperfect_outcome_persisted = false;
+    for (const auto& current : brain.snapshot().predictions) {
+        if (current.created_sequence == imperfect_prediction.created_sequence) {
+            imperfect_outcome_persisted = current.resolved &&
+                std::abs(current.error - (1.0 / 3.0)) < 1e-12;
+            break;
+        }
+    }
+    assert(imperfect_outcome_persisted);
+
+    // Rejected duplicate feedback must not be reported as a second resolution.
+    const auto events_before_duplicate_feedback = brain.state().events_seen;
+    const auto duplicate_feedback =
+        cycle.process_outcome("process_outcome_mismatch", Scalar{15.0});
+    assert(!duplicate_feedback.prediction_resolved);
+    assert(brain.state().events_seen == events_before_duplicate_feedback);
+
     const auto live_affect = brain.affective_state();
     const auto live_attention = brain.attention();
 
