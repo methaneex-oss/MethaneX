@@ -1101,6 +1101,68 @@ int main() {
     assert(replayed_strategy_choice.context.plan.steps.front().action.name ==
            after_strategy_experience.context.plan.steps.front().action.name);
 
+    // A learned strategy should transfer to a genuinely related context, but
+    // not require an exact string match to influence the normal planner.
+    CognitiveCycleInput related_strategy_input = strategy_input;
+    related_strategy_input.developmental_context =
+        "uncertain sensor state in noisy environment";
+    const auto generalized_strategy_choice = strategy_cycle.run(related_strategy_input);
+    assert(generalized_strategy_choice.status == CognitiveCycleStatus::completed);
+    assert(generalized_strategy_choice.context.plan.steps.front().action.name ==
+           "safe_fallback");
+
+    // The same decision pathway must also learn from harmful consequences:
+    // an action that looked preferable before experience should lose utility
+    // after its observed outcome is negative.
+    CognitiveCycleInput negative_strategy_input = strategy_input;
+    negative_strategy_input.developmental_context = "hazardous sensor state";
+    const auto before_negative_experience = strategy_cycle.run(negative_strategy_input);
+    assert(before_negative_experience.status == CognitiveCycleStatus::completed);
+    assert(before_negative_experience.context.plan.steps.front().action.name ==
+           "measured_risk");
+
+    const auto negative_strategy_experience = strategy_brain.observe(Event{
+        0, 0, "executor", "action_outcome",
+        {{"action", std::string("measured_risk")},
+         {"context", std::string("hazardous sensor state")},
+         {"status", std::int64_t{4}},
+         {"reliability", 1.0},
+         {"expected_consequence", 0.0},
+         {"observed", true},
+         {"actual_consequence", -1.0},
+         {"consequence_error", 0.9},
+         {"salience", 0.9},
+         {"novelty", 0.8}}});
+    assert(negative_strategy_experience.event.sequence != 0);
+    const auto* learned_harmful_strategy =
+        strategy_brain.developmental_best_strategy("hazardous sensor state");
+    assert(learned_harmful_strategy != nullptr);
+    assert(learned_harmful_strategy->action == "measured_risk");
+    assert(learned_harmful_strategy->value < 0.0);
+
+    const auto after_negative_experience = strategy_cycle.run(negative_strategy_input);
+    assert(after_negative_experience.status == CognitiveCycleStatus::completed);
+    assert(after_negative_experience.context.plan.steps.front().action.name ==
+           "safe_fallback");
+
+    Brain replayed_negative_strategy_brain(strategy_path);
+    CognitiveCycle replayed_negative_strategy_cycle(replayed_negative_strategy_brain);
+    const auto* replayed_harmful_strategy =
+        replayed_negative_strategy_brain.developmental_best_strategy(
+            "hazardous sensor state");
+    assert(replayed_harmful_strategy != nullptr);
+    assert(replayed_harmful_strategy->action == "measured_risk");
+    assert(replayed_harmful_strategy->value < 0.0);
+    assert(std::abs(replayed_harmful_strategy->value -
+                    learned_harmful_strategy->value) < 1e-12);
+    const auto replayed_negative_choice =
+        replayed_negative_strategy_cycle.run(negative_strategy_input);
+    assert(replayed_negative_choice.status == CognitiveCycleStatus::completed);
+    assert(replayed_negative_choice.context.plan.steps.front().action.name ==
+           "safe_fallback");
+    assert(replayed_negative_choice.context.plan.steps.front().action.name ==
+           after_negative_experience.context.plan.steps.front().action.name);
+
     std::filesystem::remove(strategy_path, ec);
     std::filesystem::remove(strategy_path.string() + ".meta", ec);
     std::filesystem::remove(behavior_path, ec);
