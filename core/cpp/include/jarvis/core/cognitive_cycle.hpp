@@ -78,6 +78,16 @@ public:
 
     double learn_from_outcome(const Evidence& evidence) const;
     bool resolve_prediction(const std::string& key, const Scalar& actual) const;
+    // Prefer this overload when the originating Prediction is available: its
+    // journal sequence prevents feedback from resolving a newer same-key forecast.
+    CognitiveFeedbackResult process_outcome(
+        const Prediction& prediction,
+        const Scalar& actual,
+        const std::optional<Evidence>& evidence = std::nullopt,
+        const std::optional<std::string>& goal_id = std::nullopt,
+        const std::optional<double>& goal_progress = std::nullopt,
+        double goal_confidence = 0.0) const;
+
     CognitiveFeedbackResult process_outcome(
         const std::optional<std::string>& prediction_key,
         const Scalar& actual,
