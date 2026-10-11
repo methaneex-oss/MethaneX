@@ -67,6 +67,11 @@ struct LearnedStrategy {
     std::uint64_t uses{0};
 };
 
+struct RelatedLearnedStrategy {
+    LearnedStrategy strategy;
+    double similarity{0.0};
+};
+
 class DevelopmentalLearning {
 public:
     void observe_association(std::string left, std::string right, const LearningSignal& signal);
@@ -78,6 +83,8 @@ public:
     const LearnedStrategy* best_strategy(const std::string& context) const noexcept;
     const LearnedStrategy* best_related_strategy(const std::string& context,
                                                  double minimum_similarity = 0.5) const;
+    std::vector<RelatedLearnedStrategy> related_strategies(
+        const std::string& context, double minimum_similarity = 0.5) const;
 
     void consolidate(double retention_threshold = 0.05);
 
