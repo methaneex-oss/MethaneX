@@ -1025,9 +1025,9 @@ int main() {
     assert(std::abs(live_future.context.decision_context.tension -
                     replayed_future.context.decision_context.tension) < 1e-12);
 
-    // A distinct consequence-learning path: the brain should acquire a useful
-    // strategy from an observed action outcome, let it change planning, and
-    // reconstruct that learned preference from the journal after restart.
+    // End-to-end consequence learning: one observed action outcome updates
+    // the brain's affective state and developmental strategy; the acquired
+    // strategy must influence later planning and survive journal replay.
     const auto strategy_path =
         std::filesystem::temp_directory_path() / "jarvis_phase10_developmental_strategy.bin";
     std::filesystem::remove(strategy_path, ec);
@@ -1064,7 +1064,6 @@ int main() {
         0, 0, "executor", "action_outcome",
         {{"action", std::string("safe_fallback")},
          {"context", std::string("uncertain sensor state")},
-         {"affective_relevant", false},
          {"status", std::int64_t{3}},
          {"reliability", 1.0},
          {"expected_consequence", 0.0},
