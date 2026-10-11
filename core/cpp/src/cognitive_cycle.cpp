@@ -154,11 +154,16 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
 double CognitiveCycle::learn_from_outcome(const Evidence& evidence) const { return brain_.learn(evidence); }
 bool CognitiveCycle::resolve_prediction(const std::string& key, const Scalar& actual) const { return brain_.resolve_prediction(key, actual); }
 
-CognitiveFeedbackResult CognitiveCycle::process_outcome(const std::optional<std::string>& prediction_key, const Scalar& actual,
-                                                        const std::optional<Evidence>& evidence, const std::optional<std::string>& goal_id,
-                                                        const std::optional<double>& goal_progress, double goal_confidence) const {
+CognitiveFeedbackResult CognitiveCycle::process_outcome(
+    const std::optional<std::string>& prediction_key, const Scalar& actual,
+    const std::optional<Evidence>& evidence, const std::optional<std::string>& goal_id,
+    const std::optional<double>& goal_progress, double goal_confidence,
+    std::optional<std::uint64_t> prediction_sequence) const {
     CognitiveFeedbackResult result;
-    if (prediction_key.has_value() && !prediction_key->empty()) {
+    if (prediction_sequence.has_value()) {
+        const auto feedback = brain_.resolve_prediction_feedback(*prediction_sequence, actual);
+        result.prediction_resolved = feedback != PredictionFeedbackStatus::rejected;
+    } else if (prediction_key.has_value() && !prediction_key->empty()) {
         const auto feedback = brain_.resolve_prediction_feedback(*prediction_key, actual);
         result.prediction_resolved = feedback != PredictionFeedbackStatus::rejected;
     }
