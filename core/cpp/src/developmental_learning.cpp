@@ -50,11 +50,18 @@ double DevelopmentalLearning::bounded(double value) noexcept {
 }
 
 double DevelopmentalLearning::learning_rate(const LearningSignal& signal) noexcept {
-    const double error = std::clamp(std::abs(signal.prediction_error), 0.0, 1.0);
-    const double reward = std::clamp(std::abs(signal.reward), 0.0, 1.0);
-    const double salience = std::clamp(signal.salience, 0.0, 1.0);
-    const double novelty = std::clamp(signal.novelty, 0.0, 1.0);
-    const double affect = std::clamp(signal.affective_significance, 0.0, 1.0);
+    // Ignore non-finite sensor/appraisal values instead of allowing NaN to
+    // poison the learning rate and permanently corrupt stored values.
+    const auto unit_signal = [](double value) noexcept {
+        return std::clamp(std::isfinite(value) ? value : 0.0, 0.0, 1.0);
+    };
+    const double error = unit_signal(std::isfinite(signal.prediction_error)
+                                         ? std::abs(signal.prediction_error) : 0.0);
+    const double reward = unit_signal(std::isfinite(signal.reward)
+                                          ? std::abs(signal.reward) : 0.0);
+    const double salience = unit_signal(signal.salience);
+    const double novelty = unit_signal(signal.novelty);
+    const double affect = unit_signal(signal.affective_significance);
     return std::clamp(0.10 + 0.30 * error + 0.20 * reward + 0.15 * salience +
                           0.10 * novelty + 0.15 * affect,
                       0.05, 0.95);
