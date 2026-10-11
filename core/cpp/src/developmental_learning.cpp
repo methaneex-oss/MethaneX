@@ -19,7 +19,7 @@ std::vector<std::string> context_tokens(const std::string& context) {
     std::vector<std::string> tokens;
     std::string token;
     for (const unsigned char character : context) {
-        if (std::isalnum(character)) {
+        if (std::isalnum(character) || character == '\'') {
             token.push_back(static_cast<char>(std::tolower(character)));
         } else if (!token.empty()) {
             tokens.push_back(std::move(token));
