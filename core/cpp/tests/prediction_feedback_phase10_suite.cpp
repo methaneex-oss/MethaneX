@@ -1059,6 +1059,7 @@ int main() {
     assert(before_strategy_experience.status == CognitiveCycleStatus::completed);
     assert(before_strategy_experience.context.plan.steps.front().action.name == "measured_risk");
     assert(strategy_brain.developmental_best_strategy("uncertain sensor state") == nullptr);
+    const auto affect_before_strategy_experience = strategy_brain.affective_state();
 
     const auto strategy_experience = strategy_brain.observe(Event{
         0, 0, "executor", "action_outcome",
@@ -1073,6 +1074,9 @@ int main() {
          {"salience", 0.8},
          {"novelty", 0.5}}});
     assert(strategy_experience.event.sequence != 0);
+    const auto affect_after_strategy_experience = strategy_brain.affective_state();
+    assert(affect_after_strategy_experience.updates > affect_before_strategy_experience.updates);
+    assert(affect_after_strategy_experience.valence > affect_before_strategy_experience.valence);
     const auto* learned_strategy =
         strategy_brain.developmental_best_strategy("uncertain sensor state");
     assert(learned_strategy != nullptr);
