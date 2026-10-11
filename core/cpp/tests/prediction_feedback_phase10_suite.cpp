@@ -1064,6 +1064,7 @@ int main() {
         0, 0, "executor", "action_outcome",
         {{"action", std::string("safe_fallback")},
          {"context", std::string("uncertain sensor state")},
+         {"affective_relevant", false},
          {"status", std::int64_t{3}},
          {"reliability", 1.0},
          {"expected_consequence", 0.0},
