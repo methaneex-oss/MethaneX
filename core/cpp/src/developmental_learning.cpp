@@ -30,10 +30,22 @@ std::vector<std::string> context_tokens(const std::string& context) {
     return tokens;
 }
 
+bool has_negation(const std::vector<std::string>& tokens) {
+    // Conservative guard: contexts with different polarity should not transfer
+    // strategies solely because they share the same descriptive words.
+    static const std::unordered_set<std::string> negators{
+        "no", "not", "never", "neither", "nor", "without", "cannot", "can't",
+        "dont", "don't", "doesnt", "doesn't", "isnt", "isn't", "unsafe",
+        "untrue", "false"};
+    return std::any_of(tokens.begin(), tokens.end(),
+                       [](const std::string& token) { return negators.contains(token); });
+}
+
 double context_similarity(const std::string& left, const std::string& right) {
     if (left == right && !left.empty()) return 1.0;
     const auto left_tokens = context_tokens(left);
     const auto right_tokens = context_tokens(right);
+    if (has_negation(left_tokens) != has_negation(right_tokens)) return 0.0;
     if (left_tokens.empty() || right_tokens.empty()) return 0.0;
 
     std::unordered_set<std::string> left_set(left_tokens.begin(), left_tokens.end());
