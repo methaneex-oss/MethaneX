@@ -2,7 +2,7 @@
 
 #include <cassert>
 #include <cmath>
-#include <iostream>
+#include <iostream>\n#include <limits>
 
 using namespace jarvis::core;
 
@@ -56,6 +56,38 @@ int main() {
     const auto* surprising = surprising_success.best_strategy("surprise");
     assert(surprising != nullptr);
     assert(surprising->value > 0.0);
+
+    // Malformed/non-finite appraisal values must not poison persistent
+    // learning state. They are ignored as modifiers, and learned values stay
+    // finite so later valid experience can still update them.
+    DevelopmentalLearning resilient_to_invalid_signals;
+    const double nan = std::numeric_limits<double>::quiet_NaN();
+    const double infinity = std::numeric_limits<double>::infinity();
+    resilient_to_invalid_signals.observe_strategy(
+        "sensor calibration", "recalibrate",
+        LearningSignal{nan, 0.8, infinity, nan, nan});
+    const auto* after_invalid_signal =
+        resilient_to_invalid_signals.best_strategy("sensor calibration");
+    assert(after_invalid_signal != nullptr);
+    assert(std::isfinite(after_invalid_signal->value));
+    assert(std::isfinite(after_invalid_signal->confidence));
+    assert(after_invalid_signal->value > 0.0);
+    resilient_to_invalid_signals.observe_strategy(
+        "sensor calibration", "recalibrate",
+        LearningSignal{0.2, -0.5, 0.4, 0.1, 0.2});
+    const auto* after_valid_signal =
+        resilient_to_invalid_signals.best_strategy("sensor calibration");
+    assert(after_valid_signal != nullptr);
+    assert(std::isfinite(after_valid_signal->value));
+    assert(std::isfinite(after_valid_signal->confidence));
+    assert(after_valid_signal->uses == 2);
+
+    resilient_to_invalid_signals.observe_association(
+        "sensor", "drift", LearningSignal{nan, infinity, nan, nan, nan});
+    const auto resilient_associations =
+        resilient_to_invalid_signals.associations();
+    assert(resilient_associations.size() == 1);
+    assert(std::isfinite(resilient_associations.front().strength));
 
     // Related retrieval must prefer genuinely positive learned value over a
     // more similar but strongly negative strategy. Negative value remains
