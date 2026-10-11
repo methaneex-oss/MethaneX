@@ -1025,6 +1025,80 @@ int main() {
     assert(std::abs(live_future.context.decision_context.tension -
                     replayed_future.context.decision_context.tension) < 1e-12);
 
+    // A distinct consequence-learning path: the brain should acquire a useful
+    // strategy from an observed action outcome, let it change planning, and
+    // reconstruct that learned preference from the journal after restart.
+    const auto strategy_path =
+        std::filesystem::temp_directory_path() / "jarvis_phase10_developmental_strategy.bin";
+    std::filesystem::remove(strategy_path, ec);
+    std::filesystem::remove(strategy_path.string() + ".meta", ec);
+    Brain strategy_brain(strategy_path);
+    Goal strategy_goal;
+    strategy_goal.id = "respond-to-uncertainty";
+    strategy_goal.description = "Respond appropriately to uncertain conditions";
+    strategy_goal.priority = 0.0;
+    assert(strategy_brain.create_goal(strategy_goal));
+    assert(strategy_brain.activate_goal(strategy_goal.id));
+
+    CognitiveCycleInput strategy_input;
+    strategy_input.goal_id = strategy_goal.id;
+    strategy_input.developmental_context = "uncertain sensor state";
+    strategy_input.planning_horizon = 1;
+    strategy_input.resource_budget = 1.0;
+    strategy_input.observation =
+        Event{0, 0, "sensor", "observation",
+              {{"confidence", 1.0}, {"outcome", 0.0},
+               {"prediction_error", 0.0}, {"novelty", 0.0},
+               {"salience", 0.0}}};
+    strategy_input.candidate_actions = {
+        CandidateAction{"measured_risk", 0.102, 0.0, 1.0, 0.1, 0.0, 0.0, 0.0},
+        CandidateAction{"safe_fallback", 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0},
+    };
+    CognitiveCycle strategy_cycle(strategy_brain);
+    const auto before_strategy_experience = strategy_cycle.run(strategy_input);
+    assert(before_strategy_experience.status == CognitiveCycleStatus::completed);
+    assert(before_strategy_experience.context.plan.steps.front().action.name == "measured_risk");
+    assert(strategy_brain.developmental_best_strategy("uncertain sensor state") == nullptr);
+
+    const auto strategy_experience = strategy_brain.observe(Event{
+        0, 0, "executor", "action_outcome",
+        {{"action", std::string("safe_fallback")},
+         {"context", std::string("uncertain sensor state")},
+         {"status", std::int64_t{3}},
+         {"reliability", 1.0},
+         {"expected_consequence", 0.0},
+         {"observed", true},
+         {"actual_consequence", 1.0},
+         {"consequence_error", 0.1},
+         {"salience", 0.8},
+         {"novelty", 0.5}}});
+    assert(strategy_experience.event.sequence != 0);
+    const auto* learned_strategy =
+        strategy_brain.developmental_best_strategy("uncertain sensor state");
+    assert(learned_strategy != nullptr);
+    assert(learned_strategy->action == "safe_fallback");
+    assert(learned_strategy->value > 0.0);
+    assert(learned_strategy->confidence > 0.0);
+
+    const auto after_strategy_experience = strategy_cycle.run(strategy_input);
+    assert(after_strategy_experience.status == CognitiveCycleStatus::completed);
+    assert(after_strategy_experience.context.plan.steps.front().action.name == "safe_fallback");
+
+    Brain replayed_strategy_brain(strategy_path);
+    CognitiveCycle replayed_strategy_cycle(replayed_strategy_brain);
+    const auto* replayed_strategy =
+        replayed_strategy_brain.developmental_best_strategy("uncertain sensor state");
+    assert(replayed_strategy != nullptr);
+    assert(replayed_strategy->action == "safe_fallback");
+    assert(std::abs(replayed_strategy->value - learned_strategy->value) < 1e-12);
+    const auto replayed_strategy_choice = replayed_strategy_cycle.run(strategy_input);
+    assert(replayed_strategy_choice.status == CognitiveCycleStatus::completed);
+    assert(replayed_strategy_choice.context.plan.steps.front().action.name == "safe_fallback");
+    assert(replayed_strategy_choice.context.plan.steps.front().action.name ==
+           after_strategy_experience.context.plan.steps.front().action.name);
+
+    std::filesystem::remove(strategy_path, ec);
+    std::filesystem::remove(strategy_path.string() + ".meta", ec);
     std::filesystem::remove(behavior_path, ec);
     std::filesystem::remove(behavior_path.string() + ".meta", ec);
     std::filesystem::remove(path, ec);
