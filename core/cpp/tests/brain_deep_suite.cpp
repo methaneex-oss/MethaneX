@@ -470,6 +470,10 @@ int main() {
     unsafe_guard.observe_strategy("safe route", "take_route", tied_signal);
     assert(unsafe_guard.best_related_strategy("unsafe route") == nullptr);
 
+    DevelopmentalLearning contraction_guard;
+    contraction_guard.observe_strategy("approach obstacle", "approach", tied_signal);
+    assert(contraction_guard.best_related_strategy("can't approach obstacle") == nullptr);
+
     // Goal, capability, and resilience mutations are journal-first and must
     // reconstruct the same durable state after restart.
     const auto state_journal = root / "state_transactions.bin";
