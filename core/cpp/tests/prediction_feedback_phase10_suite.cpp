@@ -793,6 +793,37 @@ int main() {
     assert(!duplicate_feedback.prediction_resolved);
     assert(brain.state().events_seen == events_before_duplicate_feedback);
 
+    // When several forecasts share a semantic key, cycle feedback must be able
+    // to target the exact forecast that produced the outcome rather than the
+    // latest unresolved forecast for that key.
+    const auto older_same_key =
+        brain.predict("cycle_sequence_identity", Scalar{10.0}, 0.8);
+    const auto newer_same_key =
+        brain.predict("cycle_sequence_identity", Scalar{20.0}, 0.8);
+    assert(older_same_key.created_sequence != 0);
+    assert(newer_same_key.created_sequence != 0);
+    const auto sequence_targeted_feedback = cycle.process_outcome(
+        std::optional<std::string>{"cycle_sequence_identity"}, Scalar{12.0},
+        std::nullopt, std::nullopt, std::nullopt, 0.0,
+        older_same_key.created_sequence);
+    assert(sequence_targeted_feedback.prediction_resolved);
+    bool older_resolved = false;
+    bool newer_still_unresolved = false;
+    for (const auto& current : brain.snapshot().predictions) {
+        if (current.created_sequence == older_same_key.created_sequence) {
+            older_resolved = current.resolved &&
+                std::abs(current.error - (1.0 / 6.0)) < 1e-12;
+        }
+        if (current.created_sequence == newer_same_key.created_sequence) {
+            newer_still_unresolved = !current.resolved;
+        }
+    }
+    assert(older_resolved);
+    assert(newer_still_unresolved);
+    assert(brain.resolve_prediction_feedback(newer_same_key.created_sequence,
+                                             Scalar{20.0}) ==
+           PredictionFeedbackStatus::resolved_correctly);
+
     const auto live_affect = brain.affective_state();
     const auto live_attention = brain.attention();
 
