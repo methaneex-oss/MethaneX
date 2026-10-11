@@ -85,12 +85,28 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
                 action.utility += influence;
             }
         }
-    } else if (const auto* related = brain_.developmental_best_related_strategy(developmental_context);
-               related != nullptr) {
+    } else {
+        // Generalize from the full set of sufficiently similar experiences, not
+        // one globally winning memory. For each candidate action, combine its
+        // signed evidence weighted by context similarity and confidence. The
+        // weighted mean prevents many overlapping memories from amplifying a
+        // preference without bound; clamping keeps transfer influence bounded.
+        const auto related = brain_.developmental_related_strategies(developmental_context);
         for (auto& action : learned_actions) {
-            if (action.name == related->action) {
+            double weighted_evidence = 0.0;
+            double total_weight = 0.0;
+            for (const auto& evidence : related) {
+                if (evidence.strategy.action != action.name) continue;
+                const double weight = std::clamp(evidence.similarity, 0.0, 1.0) *
+                                      std::clamp(evidence.strategy.confidence, 0.0, 1.0);
+                if (weight <= 0.0) continue;
+                weighted_evidence += weight *
+                    std::clamp(evidence.strategy.value, -1.0, 1.0);
+                total_weight += weight;
+            }
+            if (total_weight > 0.0) {
                 const double influence = std::clamp(
-                    related->value * related->confidence * 0.5, -1.0, 1.0);
+                    (weighted_evidence / total_weight) * 0.5, -0.5, 0.5);
                 action.utility += influence;
             }
         }
