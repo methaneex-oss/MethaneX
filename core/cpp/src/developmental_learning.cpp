@@ -136,6 +136,7 @@ const LearnedStrategy* DevelopmentalLearning::best_related_strategy(const std::s
     const double threshold = std::clamp(std::isfinite(minimum_similarity) ? minimum_similarity : 0.5, 0.0, 1.0);
     const LearnedStrategy* best = nullptr;
     double best_score = -std::numeric_limits<double>::infinity();
+    double best_similarity = -1.0;
     for (const auto& [_, strategy] : strategies_) {
         const double similarity = context_similarity(context, strategy.context);
         if (similarity < threshold) continue;
@@ -146,9 +147,19 @@ const LearnedStrategy* DevelopmentalLearning::best_related_strategy(const std::s
         // Signed utility ranks positive evidence first and, when all relevant
         // evidence is negative, prefers the less harmful learned alternative.
         const double score = similarity * std::clamp(strategy.confidence, 0.0, 1.0) * value;
-        if (best == nullptr || score > best_score) {
+        // strategies_ is unordered: equal scores must not make action selection
+        // depend on hash iteration order. Prefer the more similar context, then
+        // use stable lexical ordering so replay and fresh runs agree on ties.
+        const bool stable_tie_break =
+            best != nullptr && score == best_score &&
+            (similarity > best_similarity ||
+             (similarity == best_similarity &&
+              (strategy.context < best->context ||
+               (strategy.context == best->context && strategy.action < best->action))));
+        if (best == nullptr || score > best_score || stable_tie_break) {
             best = &strategy;
             best_score = score;
+            best_similarity = similarity;
         }
     }
     return best;
