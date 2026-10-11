@@ -177,6 +177,29 @@ const LearnedStrategy* DevelopmentalLearning::best_related_strategy(const std::s
     return best;
 }
 
+
+std::vector<RelatedLearnedStrategy> DevelopmentalLearning::related_strategies(
+    const std::string& context, double minimum_similarity) const {
+    const double threshold = std::clamp(
+        std::isfinite(minimum_similarity) ? minimum_similarity : 0.5, 0.0, 1.0);
+    std::vector<RelatedLearnedStrategy> result;
+    for (const auto& [_, strategy] : strategies_) {
+        const double similarity = context_similarity(context, strategy.context);
+        if (similarity < threshold) continue;
+        result.push_back(RelatedLearnedStrategy{strategy, similarity});
+    }
+    std::sort(result.begin(), result.end(), [](const auto& left, const auto& right) {
+        const double left_score = left.similarity * left.strategy.confidence * left.strategy.value;
+        const double right_score = right.similarity * right.strategy.confidence * right.strategy.value;
+        if (left_score != right_score) return left_score > right_score;
+        if (left.similarity != right.similarity) return left.similarity > right.similarity;
+        if (left.strategy.context != right.strategy.context)
+            return left.strategy.context < right.strategy.context;
+        return left.strategy.action < right.strategy.action;
+    });
+    return result;
+}
+
 void DevelopmentalLearning::consolidate(double retention_threshold) {
     const double threshold = std::clamp(retention_threshold, 0.0, 1.0);
     for (auto it = associations_.begin(); it != associations_.end();) {
