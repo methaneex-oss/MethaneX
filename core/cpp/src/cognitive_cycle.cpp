@@ -158,7 +158,10 @@ CognitiveFeedbackResult CognitiveCycle::process_outcome(const std::optional<std:
                                                         const std::optional<Evidence>& evidence, const std::optional<std::string>& goal_id,
                                                         const std::optional<double>& goal_progress, double goal_confidence) const {
     CognitiveFeedbackResult result;
-    if (prediction_key.has_value() && !prediction_key->empty()) result.prediction_resolved = resolve_prediction(*prediction_key, actual);
+    if (prediction_key.has_value() && !prediction_key->empty()) {
+        const auto feedback = brain_.resolve_prediction_feedback(*prediction_key, actual);
+        result.prediction_resolved = feedback != PredictionFeedbackStatus::rejected;
+    }
     if (evidence.has_value()) result.learned_reliability = learn_from_outcome(*evidence);
     if (goal_id.has_value() && goal_progress.has_value()) {
         GoalOutcomeEvidence goal_evidence{*goal_id, 0.0, std::clamp(*goal_progress, 0.0, 1.0), 0.0, *goal_progress >= 1.0, std::clamp(goal_confidence, 0.0, 1.0), brain_.state().cycle};
