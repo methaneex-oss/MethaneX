@@ -155,6 +155,14 @@ double CognitiveCycle::learn_from_outcome(const Evidence& evidence) const { retu
 bool CognitiveCycle::resolve_prediction(const std::string& key, const Scalar& actual) const { return brain_.resolve_prediction(key, actual); }
 
 CognitiveFeedbackResult CognitiveCycle::process_outcome(
+    const Prediction& prediction, const Scalar& actual,
+    const std::optional<Evidence>& evidence, const std::optional<std::string>& goal_id,
+    const std::optional<double>& goal_progress, double goal_confidence) const {
+    return process_outcome(prediction.key, actual, evidence, goal_id, goal_progress,
+                           goal_confidence, prediction.created_sequence);
+}
+
+CognitiveFeedbackResult CognitiveCycle::process_outcome(
     const std::optional<std::string>& prediction_key, const Scalar& actual,
     const std::optional<Evidence>& evidence, const std::optional<std::string>& goal_id,
     const std::optional<double>& goal_progress, double goal_confidence,
