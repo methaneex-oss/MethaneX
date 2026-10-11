@@ -768,6 +768,24 @@ int main() {
     }
     assert(imperfect_outcome_persisted);
 
+    // The explicit status API distinguishes an accepted but inaccurate forecast
+    // from rejected feedback, while the legacy bool API remains correctness-based.
+    const auto status_error_prediction =
+        brain.predict("explicit_feedback_status", Scalar{5.0}, 0.8);
+    assert(status_error_prediction.created_sequence != 0);
+    assert(brain.resolve_prediction_feedback(status_error_prediction.created_sequence,
+                                             Scalar{6.0}) ==
+           PredictionFeedbackStatus::resolved_with_error);
+    assert(brain.resolve_prediction_feedback(status_error_prediction.created_sequence,
+                                             Scalar{6.0}) ==
+           PredictionFeedbackStatus::rejected);
+    const auto status_correct_prediction =
+        brain.predict("explicit_feedback_correct", Scalar{7.0}, 0.8);
+    assert(status_correct_prediction.created_sequence != 0);
+    assert(brain.resolve_prediction_feedback(status_correct_prediction.created_sequence,
+                                             Scalar{7.0}) ==
+           PredictionFeedbackStatus::resolved_correctly);
+
     // Rejected duplicate feedback must not be reported as a second resolution.
     const auto events_before_duplicate_feedback = brain.state().events_seen;
     const auto duplicate_feedback =
@@ -808,6 +826,23 @@ int main() {
     assert(replayed_pressure_metric->observations == 2);
     assert(std::abs(replayed_pressure_metric->estimate -
                     brain.learning_metric("pressure")->estimate) < 1e-12);
+
+    // The mismatched forecast's accepted outcome, normalized error, and learned
+    // estimate must all reconstruct from the journal after restart.
+    bool imperfect_feedback_replayed = false;
+    for (const auto& current : restored.snapshot().predictions) {
+        if (current.created_sequence == imperfect_prediction.created_sequence) {
+            imperfect_feedback_replayed = current.resolved &&
+                std::abs(current.error - (1.0 / 3.0)) < 1e-12;
+            break;
+        }
+    }
+    assert(imperfect_feedback_replayed);
+    const auto* replayed_imperfect_metric =
+        restored.learning_metric("process_outcome_mismatch");
+    assert(replayed_imperfect_metric != nullptr);
+    assert(replayed_imperfect_metric->observations == 1);
+    assert(std::abs(replayed_imperfect_metric->estimate - 15.0) < 1e-12);
 
     bool persisted = false;
     for (const auto& current : restored.snapshot().predictions) {
