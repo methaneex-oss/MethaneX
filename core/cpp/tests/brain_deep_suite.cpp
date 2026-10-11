@@ -1,4 +1,4 @@
-#include "jarvis/core/brain.hpp"
+#include "jarvis/core/cognitive_cycle.hpp"
 
 #include <cassert>
 #include <cmath>
@@ -345,6 +345,108 @@ int main() {
         }
         assert(replayed_negative_route_b);
         assert(replayed_positive_route_a);
+    }
+
+    // Generalization must transfer consequence learning to a related context,
+    // alter the real cognitive-cycle choice, and reconstruct the same bias on replay.
+    // The query shares two of four unique tokens with the learned context (Jaccard 0.5).
+    const auto generalized_journal = root / "developmental_generalization.bin";
+    const CandidateAction generalized_route_a{"route_a", 0.0, 0.0, 0.1, 1.0};
+    const CandidateAction generalized_route_b{"route_b", 0.05, 0.05, 0.1, 1.0};
+    CognitiveCycleInput generalized_input;
+    generalized_input.observation = Event{0, 0, "sensor", "observation",
+        {{"state", std::string("uncertain")}}};
+    generalized_input.candidate_actions = {generalized_route_a, generalized_route_b};
+    generalized_input.goal_id = "generalization-goal";
+    generalized_input.developmental_context = "sensor uncertainty response";
+    generalized_input.planning_horizon = 1;
+    generalized_input.resource_budget = 1.0;
+    generalized_input.action_constraints = ActionConstraints{1.0, false};
+    {
+        Brain learner(generalized_journal);
+        CognitiveCycle cycle(learner);
+        assert(learner.create_goal(Goal{"generalization-goal", "respond to uncertain sensors",
+                                        1.0, 0.0, 0, 0, GoalStatus::pending, {}, {}}));
+        assert(learner.activate_goal("generalization-goal"));
+        const auto before = cycle.run(generalized_input);
+        assert(before.status == CognitiveCycleStatus::completed);
+        assert(before.context.plan.steps.front().action.name == "route_b");
+        assert(learner.developmental_best_strategy("sensor uncertainty response") == nullptr);
+        assert(learner.developmental_best_related_strategy("sensor uncertainty response") == nullptr);
+
+        const auto experience = learner.observe(strategy_outcome(
+            "indoor sensor uncertainty", "route_a", 0.9, 0.1, 0.8, 0.2));
+        assert(experience.event.sequence != 0);
+        assert(learner.developmental_best_strategy("sensor uncertainty response") == nullptr);
+        const auto* generalized = learner.developmental_best_related_strategy(
+            "sensor uncertainty response");
+        assert(generalized != nullptr);
+        assert(generalized->context == "indoor sensor uncertainty");
+        assert(generalized->action == "route_a");
+        assert(generalized->value > 0.0);
+        const auto after = cycle.run(generalized_input);
+        assert(after.status == CognitiveCycleStatus::completed);
+        assert(after.context.plan.steps.front().action.name == "route_a");
+    }
+    {
+        Brain replayed(generalized_journal);
+        CognitiveCycle cycle(replayed);
+        const auto* generalized = replayed.developmental_best_related_strategy(
+            "sensor uncertainty response");
+        assert(generalized != nullptr);
+        assert(generalized->context == "indoor sensor uncertainty");
+        assert(generalized->action == "route_a");
+        assert(generalized->value > 0.0);
+        const auto after_replay = cycle.run(generalized_input);
+        assert(after_replay.status == CognitiveCycleStatus::completed);
+        assert(after_replay.context.plan.steps.front().action.name == "route_a");
+    }
+
+    // Negative consequences must also generalize: a previously attractive action
+    // is demoted in a related context instead of being reinforced by mere success
+    // of execution. This checks the sign of the learned consequence, not reliability.
+    const auto generalized_negative_journal = root / "developmental_negative_generalization.bin";
+    {
+        Brain learner(generalized_negative_journal);
+        CognitiveCycle cycle(learner);
+        assert(learner.create_goal(Goal{"generalization-goal", "respond to uncertain sensors",
+                                        1.0, 0.0, 0, 0, GoalStatus::pending, {}, {}}));
+        assert(learner.activate_goal("generalization-goal"));
+        CognitiveCycleInput input = generalized_input;
+        input.candidate_actions = {
+            CandidateAction{"route_a", 0.0, 0.0, 0.1, 1.0},
+            CandidateAction{"route_b", 0.2, 0.2, 0.1, 1.0}};
+        const auto before = cycle.run(input);
+        assert(before.status == CognitiveCycleStatus::completed);
+        assert(before.context.plan.steps.front().action.name == "route_b");
+
+        const auto experience = learner.observe(strategy_outcome(
+            "indoor sensor uncertainty", "route_b", -0.9, 0.1, 0.8, 0.2));
+        assert(experience.event.sequence != 0);
+        const auto* generalized = learner.developmental_best_related_strategy(
+            "sensor uncertainty response");
+        assert(generalized != nullptr);
+        assert(generalized->action == "route_b");
+        assert(generalized->value < 0.0);
+        const auto after = cycle.run(input);
+        assert(after.status == CognitiveCycleStatus::completed);
+        assert(after.context.plan.steps.front().action.name == "route_a");
+    }
+    {
+        Brain replayed(generalized_negative_journal);
+        CognitiveCycle cycle(replayed);
+        CognitiveCycleInput input = generalized_input;
+        input.candidate_actions = {
+            CandidateAction{"route_a", 0.0, 0.0, 0.1, 1.0},
+            CandidateAction{"route_b", 0.2, 0.2, 0.1, 1.0}};
+        const auto* generalized = replayed.developmental_best_related_strategy(
+            "sensor uncertainty response");
+        assert(generalized != nullptr);
+        assert(generalized->action == "route_b");
+        assert(generalized->value < 0.0);
+        const auto after_replay = cycle.run(input);
+        assert(after_replay.status == CognitiveCycleStatus::completed);
+        assert(after_replay.context.plan.steps.front().action.name == "route_a");
     }
 
     // Goal, capability, and resilience mutations are journal-first and must
