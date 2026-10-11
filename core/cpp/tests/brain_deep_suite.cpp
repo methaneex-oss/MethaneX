@@ -415,7 +415,7 @@ int main() {
         CognitiveCycleInput input = generalized_input;
         input.candidate_actions = {
             CandidateAction{"route_a", 0.0, 0.0, 0.1, 1.0},
-            CandidateAction{"route_b", 0.2, 0.2, 0.1, 1.0}};
+            CandidateAction{"route_b", 0.1, 0.1, 0.1, 1.0}};
         const auto before = cycle.run(input);
         assert(before.status == CognitiveCycleStatus::completed);
         assert(before.context.plan.steps.front().action.name == "route_b");
@@ -438,7 +438,7 @@ int main() {
         CognitiveCycleInput input = generalized_input;
         input.candidate_actions = {
             CandidateAction{"route_a", 0.0, 0.0, 0.1, 1.0},
-            CandidateAction{"route_b", 0.2, 0.2, 0.1, 1.0}};
+            CandidateAction{"route_b", 0.1, 0.1, 0.1, 1.0}};
         const auto* generalized = replayed.developmental_best_related_strategy(
             "sensor uncertainty response");
         assert(generalized != nullptr);
