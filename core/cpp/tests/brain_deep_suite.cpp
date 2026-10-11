@@ -449,6 +449,18 @@ int main() {
         assert(after_replay.context.plan.steps.front().action.name == "route_a");
     }
 
+    // Equal generalized evidence must resolve ties deterministically rather
+    // than inheriting unordered-map iteration order.
+    DevelopmentalLearning tie_breaker;
+    const LearningSignal tied_signal{0.1, 0.9, 0.8, 0.2, 0.3};
+    tie_breaker.observe_strategy("outdoor sensor uncertainty", "route_b", tied_signal);
+    tie_breaker.observe_strategy("indoor sensor uncertainty", "route_a", tied_signal);
+    const auto* tied_strategy =
+        tie_breaker.best_related_strategy("sensor uncertainty response");
+    assert(tied_strategy != nullptr);
+    assert(tied_strategy->context == "indoor sensor uncertainty");
+    assert(tied_strategy->action == "route_a");
+
     // Goal, capability, and resilience mutations are journal-first and must
     // reconstruct the same durable state after restart.
     const auto state_journal = root / "state_transactions.bin";
