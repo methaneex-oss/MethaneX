@@ -328,20 +328,20 @@ int main() {
 
     // Numeric scalar types share numeric error semantics: a floating prediction
     // of 20.0 is correct when the observed value is the integer 20.
-    const auto mixed_numeric_prediction =
+    const auto mixed_numeric_outcome_prediction =
         brain.predict("mixed_numeric_outcome", Scalar{20.0}, 0.8);
-    assert(mixed_numeric_prediction.created_sequence != 0);
-    assert(brain.resolve_prediction(mixed_numeric_prediction.created_sequence,
+    assert(mixed_numeric_outcome_prediction.created_sequence != 0);
+    assert(brain.resolve_prediction(mixed_numeric_outcome_prediction.created_sequence,
                                    Scalar{std::int64_t{20}}));
-    const auto* mixed_numeric_metric = brain.learning_metric("mixed_numeric_outcome");
-    assert(mixed_numeric_metric != nullptr);
-    assert(mixed_numeric_metric->observations == 1);
+    const auto* mixed_numeric_outcome_metric = brain.learning_metric("mixed_numeric_outcome");
+    assert(mixed_numeric_outcome_metric != nullptr);
+    assert(mixed_numeric_outcome_metric->observations == 1);
 
     // Integer-valued predictions must also update numeric adaptation.
-    const auto integer_prediction =
+    const auto integer_outcome_prediction =
         brain.predict("integer_outcome", Scalar{std::int64_t{20}}, 0.8);
-    assert(integer_prediction.created_sequence != 0);
-    assert(!brain.resolve_prediction(integer_prediction.created_sequence,
+    assert(integer_outcome_prediction.created_sequence != 0);
+    assert(!brain.resolve_prediction(integer_outcome_prediction.created_sequence,
                                      Scalar{std::int64_t{30}}));
     const auto* integer_metric = brain.learning_metric("integer_outcome");
     assert(integer_metric != nullptr);
@@ -809,12 +809,12 @@ int main() {
     const auto* restored_real_metric = restored.learning_metric("real_temperature");
     assert(restored_real_metric != nullptr);
     assert(restored_real_metric->observations == real_prediction_sequences.size());
-    const auto* restored_mixed_numeric_metric =
+    const auto* restored_mixed_numeric_outcome_metric =
         restored.learning_metric("mixed_numeric_equivalence");
-    assert(restored_mixed_numeric_metric != nullptr);
-    assert(restored_mixed_numeric_metric->observations == 1);
-    assert(restored_mixed_numeric_metric->mean_error == 0.0);
-    assert(std::abs(restored_mixed_numeric_metric->estimate - 30.0) < 1e-12);
+    assert(restored_mixed_numeric_outcome_metric != nullptr);
+    assert(restored_mixed_numeric_outcome_metric->observations == 1);
+    assert(restored_mixed_numeric_outcome_metric->mean_error == 0.0);
+    assert(std::abs(restored_mixed_numeric_outcome_metric->estimate - 30.0) < 1e-12);
     assert(std::abs(restored_real_metric->estimate - 30.0) < 1e-12);
     const auto* restored_direct_learning_metric =
         restored.learning_metric("direct_learning_scale");
