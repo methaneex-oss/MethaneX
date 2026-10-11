@@ -449,6 +449,62 @@ int main() {
         assert(after_replay.context.plan.steps.front().action.name == "route_a");
     }
 
+    // Related evidence for competing actions must be evaluated together.
+    // A weak positive memory for route_a must not hide a stronger harmful
+    // outcome for route_b merely because the positive score ranks higher.
+    const auto competing_journal = root / "developmental_competing_evidence.bin";
+    CognitiveCycleInput competing_input = generalized_input;
+    competing_input.candidate_actions = {
+        CandidateAction{"route_a", 0.0, 0.0, 0.1, 1.0},
+        CandidateAction{"route_b", 0.1, 0.1, 0.1, 1.0}};
+    competing_input.developmental_context = "sensor uncertainty response";
+    {
+        Brain learner(competing_journal);
+        CognitiveCycle cycle(learner);
+        assert(learner.create_goal(Goal{"generalization-goal", "respond to uncertain sensors",
+                                        1.0, 0.0, 0, 0, GoalStatus::pending, {}, {}}));
+        assert(learner.activate_goal("generalization-goal"));
+        const auto before = cycle.run(competing_input);
+        assert(before.status == CognitiveCycleStatus::completed);
+        assert(before.context.plan.steps.front().action.name == "route_b");
+        assert(learner.observe(strategy_outcome(
+            "indoor sensor uncertainty", "route_a", 0.05, 0.1, 0.2, 0.1)).event.sequence != 0);
+        assert(learner.observe(strategy_outcome(
+            "indoor sensor response", "route_b", -0.9, 0.8, 0.9, 0.8)).event.sequence != 0);
+        const auto related = learner.developmental_related_strategies(
+            "sensor uncertainty response");
+        bool saw_positive_a = false;
+        bool saw_negative_b = false;
+        for (const auto& evidence : related) {
+            if (evidence.strategy.action == "route_a" && evidence.strategy.value > 0.0)
+                saw_positive_a = true;
+            if (evidence.strategy.action == "route_b" && evidence.strategy.value < 0.0)
+                saw_negative_b = true;
+        }
+        assert(saw_positive_a && saw_negative_b);
+        const auto after = cycle.run(competing_input);
+        assert(after.status == CognitiveCycleStatus::completed);
+        assert(after.context.plan.steps.front().action.name == "route_a");
+    }
+    {
+        Brain replayed(competing_journal);
+        CognitiveCycle cycle(replayed);
+        const auto related = replayed.developmental_related_strategies(
+            "sensor uncertainty response");
+        bool saw_positive_a = false;
+        bool saw_negative_b = false;
+        for (const auto& evidence : related) {
+            if (evidence.strategy.action == "route_a" && evidence.strategy.value > 0.0)
+                saw_positive_a = true;
+            if (evidence.strategy.action == "route_b" && evidence.strategy.value < 0.0)
+                saw_negative_b = true;
+        }
+        assert(saw_positive_a && saw_negative_b);
+        const auto after_replay = cycle.run(competing_input);
+        assert(after_replay.status == CognitiveCycleStatus::completed);
+        assert(after_replay.context.plan.steps.front().action.name == "route_a");
+    }
+
     // Equal generalized evidence must resolve ties deterministically rather
     // than inheriting unordered-map iteration order.
     DevelopmentalLearning tie_breaker;
