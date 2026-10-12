@@ -60,10 +60,10 @@ bool valid_action_outcome_event(const Event& event) {
         *std::get_if<bool>(&observed->second);
     if (!has_observed_consequence) return true;
 
-    // Observed outcomes are only useful as strategy/affect evidence when the
-    // entire expected-vs-actual comparison is present and finite.
-    return event.data.find("expected_consequence") != event.data.end() &&
-           event.data.find("actual_consequence") != event.data.end() &&
+    // Strategy learning needs the observed consequence and its error. The
+    // expected consequence is optional for legacy strategy-only events; affective
+    // appraisal separately requires it before treating the event as a comparison.
+    return event.data.find("actual_consequence") != event.data.end() &&
            event.data.find("consequence_error") != event.data.end();
 }
 bool valid_prediction_outcome_event(const Event& event, const Prediction* prediction) {
