@@ -505,6 +505,36 @@ int main() {
         assert(after_replay.context.plan.steps.front().action.name == "route_a");
     }
 
+    // Exact-context evidence must also compare actions, rather than applying
+    // only the single highest-valued strategy and ignoring contrary experience.
+    const auto exact_competing_journal = root / "developmental_exact_competing.bin";
+    CognitiveCycleInput exact_competing_input = competing_input;
+    exact_competing_input.developmental_context = "sensor uncertainty response";
+    {
+        Brain learner(exact_competing_journal);
+        CognitiveCycle cycle(learner);
+        assert(learner.create_goal(Goal{"exact-generalization-goal", "respond to uncertain sensors",
+                                        1.0, 0.0, 0, 0, GoalStatus::pending, {}, {}}));
+        assert(learner.activate_goal("exact-generalization-goal"));
+        const auto before = cycle.run(exact_competing_input);
+        assert(before.status == CognitiveCycleStatus::completed);
+        assert(before.context.plan.steps.front().action.name == "route_b");
+        assert(learner.observe(strategy_outcome(
+            "sensor uncertainty response", "route_a", 0.9, 0.1, 0.2, 0.1)).event.sequence != 0);
+        assert(learner.observe(strategy_outcome(
+            "sensor uncertainty response", "route_b", -0.9, 0.8, 0.9, 0.8)).event.sequence != 0);
+        const auto after = cycle.run(exact_competing_input);
+        assert(after.status == CognitiveCycleStatus::completed);
+        assert(after.context.plan.steps.front().action.name == "route_a");
+    }
+    {
+        Brain replayed(exact_competing_journal);
+        CognitiveCycle cycle(replayed);
+        const auto after_replay = cycle.run(exact_competing_input);
+        assert(after_replay.status == CognitiveCycleStatus::completed);
+        assert(after_replay.context.plan.steps.front().action.name == "route_a");
+    }
+
     // Equal generalized evidence must resolve ties deterministically rather
     // than inheriting unordered-map iteration order.
     DevelopmentalLearning tie_breaker;
