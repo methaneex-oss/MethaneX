@@ -76,21 +76,37 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     // change can propagate through the normal planner and decision engine.
     const std::string developmental_context =
         input.developmental_context.empty() ? selected->id : input.developmental_context;
-    if (const auto* learned = brain_.developmental_best_strategy(developmental_context);
-        learned != nullptr) {
+    const auto stored_strategies = brain_.developmental_strategies();
+    const bool has_exact_context = std::any_of(
+        stored_strategies.begin(), stored_strategies.end(),
+        [&](const LearnedStrategy& strategy) {
+            return strategy.context == developmental_context;
+        });
+    if (has_exact_context) {
+        // Keep direct experience stronger than generalization, but still weigh
+        // all actions observed in this exact context. A single "best" strategy
+        // must not erase direct evidence that another action had bad outcomes.
         for (auto& action : learned_actions) {
-            if (action.name == learned->action) {
-                const double influence = std::clamp(
-                    learned->value * learned->confidence, -1.0, 1.0);
-                action.utility += influence;
+            double weighted_evidence = 0.0;
+            double total_weight = 0.0;
+            for (const auto& strategy : stored_strategies) {
+                if (strategy.context != developmental_context ||
+                    strategy.action != action.name) continue;
+                const double weight = std::clamp(strategy.confidence, 0.0, 1.0);
+                weighted_evidence += weight * std::clamp(strategy.value, -1.0, 1.0);
+                total_weight += weight;
+            }
+            if (total_weight > 0.0) {
+                // Divide by at least one so low-confidence evidence stays weak.
+                action.utility += std::clamp(
+                    weighted_evidence / std::max(1.0, total_weight), -1.0, 1.0);
             }
         }
     } else {
-        // Generalize from the full set of sufficiently similar experiences, not
-        // one globally winning memory. For each candidate action, combine its
-        // signed evidence weighted by context similarity and confidence. The
-        // weighted mean prevents many overlapping memories from amplifying a
-        // preference without bound; clamping keeps transfer influence bounded.
+        // Generalize from all sufficiently similar experiences. Confidence and
+        // similarity scale the transferred evidence itself (not just its rank),
+        // and normalization prevents many overlapping memories from amplifying
+        // a preference without bound.
         const auto related = brain_.developmental_related_strategies(developmental_context);
         for (auto& action : learned_actions) {
             double weighted_evidence = 0.0;
@@ -106,7 +122,7 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
             }
             if (total_weight > 0.0) {
                 const double influence = std::clamp(
-                    (weighted_evidence / total_weight) * 0.5, -0.5, 0.5);
+                    (weighted_evidence / std::max(1.0, total_weight)) * 0.5, -0.5, 0.5);
                 action.utility += influence;
             }
         }
