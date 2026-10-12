@@ -1101,6 +1101,61 @@ int main() {
     assert(replayed_strategy_choice.context.plan.steps.front().action.name ==
            after_strategy_experience.context.plan.steps.front().action.name);
 
+    // Invalid action-consequence evidence must be rejected before it can
+    // contaminate affect, attention, developmental strategy learning, or replay.
+    const auto malformed_action_path =
+        std::filesystem::temp_directory_path() / "jarvis_phase10_malformed_action_outcome.bin";
+    std::filesystem::remove(malformed_action_path, ec);
+    std::filesystem::remove(malformed_action_path.string() + ".meta", ec);
+    {
+        Brain guarded_action_brain(malformed_action_path);
+        const auto before_state = guarded_action_brain.affective_state();
+        const auto before_strategies = guarded_action_brain.developmental_strategies().size();
+        const auto before_events = guarded_action_brain.state().events_seen;
+        const auto malformed_consequence = guarded_action_brain.observe(Event{
+            0, 0, "executor", "action_outcome",
+            {{"action", std::string("safe_fallback")},
+             {"context", std::string("uncertain sensor state")},
+             {"status", std::int64_t{3}},
+             {"reliability", 0.9},
+             {"expected_consequence", 0.0},
+             {"observed", true},
+             {"actual_consequence", std::numeric_limits<double>::quiet_NaN()},
+             {"consequence_error", 0.2},
+             {"salience", 0.8},
+             {"novelty", 0.5}}});
+        assert(malformed_consequence.event.sequence == 0);
+        assert(guarded_action_brain.state().events_seen == before_events);
+        assert(guarded_action_brain.affective_state().updates == before_state.updates);
+        assert(std::abs(guarded_action_brain.affective_state().valence -
+                        before_state.valence) < 1e-12);
+        assert(guarded_action_brain.developmental_strategies().size() == before_strategies);
+
+        const auto malformed_metadata = guarded_action_brain.observe(Event{
+            0, 0, "executor", "action_outcome",
+            {{"action", std::string("safe_fallback")},
+             {"context", std::string("uncertain sensor state")},
+             {"status", std::int64_t{3}},
+             {"reliability", 0.9},
+             {"expected_consequence", 0.0},
+             {"observed", true},
+             {"actual_consequence", 1.0},
+             {"consequence_error", 0.2},
+             {"salience", std::numeric_limits<double>::quiet_NaN()},
+             {"novelty", 0.5}}});
+        assert(malformed_metadata.event.sequence == 0);
+        assert(guarded_action_brain.state().events_seen == before_events);
+        assert(guarded_action_brain.affective_state().updates == before_state.updates);
+        assert(guarded_action_brain.developmental_strategies().size() == before_strategies);
+    }
+    {
+        Brain replayed_guarded_action(malformed_action_path);
+        assert(replayed_guarded_action.developmental_strategies().empty());
+        assert(replayed_guarded_action.affective_state().updates == 0);
+    }
+    std::filesystem::remove(malformed_action_path, ec);
+    std::filesystem::remove(malformed_action_path.string() + ".meta", ec);
+
     // A learned strategy should transfer to a genuinely related context, but
     // not require an exact string match to influence the normal planner.
     CognitiveCycleInput related_strategy_input = strategy_input;
