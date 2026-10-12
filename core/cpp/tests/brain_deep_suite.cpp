@@ -509,6 +509,7 @@ int main() {
     // only the single highest-valued strategy and ignoring contrary experience.
     const auto exact_competing_journal = root / "developmental_exact_competing.bin";
     CognitiveCycleInput exact_competing_input = competing_input;
+    exact_competing_input.goal_id = "exact-generalization-goal";
     exact_competing_input.developmental_context = "sensor uncertainty response";
     {
         Brain learner(exact_competing_journal);
