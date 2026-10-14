@@ -1022,6 +1022,9 @@ int main() {
     assert(attention_policy_after_feedback.uncertainty_weight >
            attention_policy_before_feedback.uncertainty_weight);
     assert(attention_policy_after_feedback.uncertainty_weight <= 4.0);
+    assert(attention_policy_after_feedback.prediction_error_weight >
+           attention_policy_before_feedback.prediction_error_weight);
+    assert(attention_policy_after_feedback.prediction_error_weight <= 4.0);
 
     const auto after_outcome = behavior_cycle.run(behavior_input);
     assert(after_outcome.status == CognitiveCycleStatus::completed);
@@ -1039,6 +1042,8 @@ int main() {
                     attention_policy_after_feedback.urgency_weight) < 1e-12);
     assert(std::abs(replayed_attention_policy.internal_activation_weight -
                     attention_policy_after_feedback.internal_activation_weight) < 1e-12);
+    assert(std::abs(replayed_attention_policy.prediction_error_weight -
+                    attention_policy_after_feedback.prediction_error_weight) < 1e-12);
     const auto live_future = behavior_cycle.run(behavior_input);
     const auto replayed_future = replayed_behavior_cycle.run(behavior_input);
     assert(live_future.status == CognitiveCycleStatus::completed);
