@@ -25,6 +25,7 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     result.context.causal_links = brain_.causal_links();
     result.context.affective_state = brain_.affective_state();
     result.context.affective_appraisal = brain_.affective_appraisal();
+    result.context.attention = brain_.attention();
     const auto disputed_facts = brain_.world().disputed_facts();
     const auto disputed_relations = brain_.world().disputed_relations();
     std::size_t disputed_beliefs = 0;
@@ -58,7 +59,14 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     const double threat = std::clamp(brain_.threat().score, 0.0, 1.0);
     const double dispute_pressure = result.context.beliefs.empty() ? 0.0 : std::clamp(static_cast<double>(disputed_beliefs) / static_cast<double>(result.context.beliefs.size()), 0.0, 1.0);
     const double world_dispute_pressure = std::clamp(static_cast<double>(disputed_facts.size() + disputed_relations.size()) / static_cast<double>(std::max<std::size_t>(1, result.context.beliefs.size() + disputed_relations.size())), 0.0, 1.0);
-    const double uncertainty = std::max(std::clamp(self_state.uncertainty, 0.0, 1.0), std::max(dispute_pressure, world_dispute_pressure));
+    // Attention only raises planning uncertainty when the attended signal is itself
+    // uncertain. Salience gates the contribution so a low-priority ambiguous signal
+    // does not dominate the cycle, while learned attention policy can affect later plans.
+    const double attended_uncertainty = std::clamp(
+        result.context.attention.salience * result.context.attention.uncertainty, 0.0, 1.0);
+    const double uncertainty = std::max(
+        std::clamp(self_state.uncertainty, 0.0, 1.0),
+        std::max({dispute_pressure, world_dispute_pressure, attended_uncertainty}));
     const double deadline_pressure = std::clamp(input.deadline_pressure, 0.0, 1.0);
     std::vector<CandidateAction> learned_actions = input.candidate_actions;
     for (auto& action : learned_actions) {
