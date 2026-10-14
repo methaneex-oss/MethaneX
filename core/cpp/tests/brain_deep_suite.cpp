@@ -65,7 +65,7 @@ int main() {
     attention_input.resource_budget = 1.0;
     attention_input.candidate_actions = {
         CandidateAction{"reversible_action", 0.0, 0.100, 1.0, 0.0, 1.0, 0.0},
-        CandidateAction{"irreversible_action", 0.0, 0.115, 1.0, 0.0, 0.0, 0.0},
+        CandidateAction{"irreversible_action", 0.0, 0.110, 1.0, 0.0, 0.0, 0.0},
     };
     attention_input.observation = Event{0, 0, "sensor", "observation",
         {{"confidence", 0.7}, {"sensor_state", std::string("uncertain")},
@@ -76,6 +76,11 @@ int main() {
         assert(low_attention.create_goal(Goal{"attention-causal-goal", "act under uncertainty",
             0.5, 0.0, 0, 0, GoalStatus::pending, {}, {}}));
         assert(low_attention.activate_goal("attention-causal-goal"));
+        for (int i = 0; i < 12; ++i) {
+            assert(low_attention.observe(Event{0, 0, "sensor", "observation",
+                {{"confidence", 0.7}, {"sensor_state", std::string("uncertain")},
+                 {"urgency", 0.0}}}).event.sequence != 0);
+        }
         CognitiveCycle cycle(low_attention);
         low_attention_result = cycle.run(attention_input);
         assert(low_attention_result.status == CognitiveCycleStatus::completed);
@@ -88,6 +93,11 @@ int main() {
         assert(high_attention.create_goal(Goal{"attention-causal-goal", "act under uncertainty",
             0.5, 0.0, 0, 0, GoalStatus::pending, {}, {}}));
         assert(high_attention.activate_goal("attention-causal-goal"));
+        for (int i = 0; i < 12; ++i) {
+            assert(high_attention.observe(Event{0, 0, "sensor", "observation",
+                {{"confidence", 0.7}, {"sensor_state", std::string("uncertain")},
+                 {"urgency", 0.0}}}).event.sequence != 0);
+        }
         CognitiveCycle cycle(high_attention);
         const auto high_attention_result = cycle.run(attention_input);
         assert(high_attention_result.status == CognitiveCycleStatus::completed);
