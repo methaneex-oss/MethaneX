@@ -1026,6 +1026,17 @@ int main() {
            attention_policy_before_feedback.prediction_error_weight);
     assert(attention_policy_after_feedback.prediction_error_weight <= 4.0);
 
+    // The acquired weight must change salience for later prediction-error
+    // evidence, not merely persist as a counter in the policy.
+    const Event error_cue{0, 0, "sensor", "observation",
+                          {{"prediction_error", 1.0}}};
+    AttentionModel untrained_attention;
+    AttentionModel adapted_attention(attention_policy_after_feedback);
+    const auto untrained_error_signal = untrained_attention.score(error_cue, 0.0, 1.0);
+    const auto adapted_error_signal = adapted_attention.score(error_cue, 0.0, 1.0);
+    assert(adapted_error_signal.prediction_error == 1.0);
+    assert(adapted_error_signal.salience > untrained_error_signal.salience);
+
     const auto after_outcome = behavior_cycle.run(behavior_input);
     assert(after_outcome.status == CognitiveCycleStatus::completed);
     assert(!after_outcome.context.plan.steps.empty());
