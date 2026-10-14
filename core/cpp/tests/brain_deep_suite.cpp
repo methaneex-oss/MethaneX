@@ -64,8 +64,8 @@ int main() {
     attention_input.planning_horizon = 1;
     attention_input.resource_budget = 1.0;
     attention_input.candidate_actions = {
-        CandidateAction{"measured_action", 0.4, 0.2, 0.1, 1.0},
-        CandidateAction{"fallback_action", 0.2, 0.0, 0.1, 1.0},
+        CandidateAction{"reversible_action", 0.0, 0.100, 1.0, 0.0, 1.0, 0.0},
+        CandidateAction{"irreversible_action", 0.0, 0.115, 1.0, 0.0, 0.0, 0.0},
     };
     attention_input.observation = Event{0, 0, "sensor", "observation",
         {{"confidence", 0.7}, {"sensor_state", std::string("uncertain")},
@@ -79,6 +79,8 @@ int main() {
         CognitiveCycle cycle(low_attention);
         low_attention_result = cycle.run(attention_input);
         assert(low_attention_result.status == CognitiveCycleStatus::completed);
+        assert(low_attention_result.context.plan.steps.front().action.name ==
+               "irreversible_action");
     }
     attention_input.observation.data["urgency"] = Scalar{1.0};
     {
@@ -99,6 +101,8 @@ int main() {
         // a diagnostic attention score.
         assert(high_attention_result.context.plan.steps.size() == 1);
         assert(low_attention_result.context.plan.steps.size() == 1);
+        assert(high_attention_result.context.plan.steps.front().action.name ==
+               "reversible_action");
         assert(high_attention_result.context.decision_context.uncertainty <= 1.0);
     }
     {
