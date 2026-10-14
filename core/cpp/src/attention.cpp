@@ -30,9 +30,9 @@ AttentionSignal AttentionModel::score(const Event& event,
     }
     const double prediction_error = std::clamp(
         event.kind == "prediction_outcome"
-            ? (event.data.contains("error") && std::get_if<double>(&event.data.at("error")) != nullptr
+            ? (event.data.find("error") != event.data.end() && std::get_if<double>(&event.data.at("error")) != nullptr
                    ? *std::get_if<double>(&event.data.at("error")) : 0.0)
-            : (event.data.contains("prediction_error") && std::get_if<double>(&event.data.at("prediction_error")) != nullptr
+            : (event.data.find("prediction_error") != event.data.end() && std::get_if<double>(&event.data.at("prediction_error")) != nullptr
                    ? *std::get_if<double>(&event.data.at("prediction_error")) : 0.0),
         0.0, 1.0);
     const double total = normalized_weight(policy_.novelty_weight)
