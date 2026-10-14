@@ -15,6 +15,16 @@ double adaptive_component(double feature, double weight, double total_weight) no
     return std::clamp(feature, 0.0, 1.0) * normalized_weight(weight) / total_weight;
 }
 
+double event_numeric_value(const Event& event, const char* key) noexcept {
+    const auto it = event.data.find(key);
+    if (it == event.data.end()) return 0.0;
+    if (const auto* value = std::get_if<double>(&it->second)) return *value;
+    if (const auto* value = std::get_if<std::int64_t>(&it->second))
+        return static_cast<double>(*value);
+    if (const auto* value = std::get_if<bool>(&it->second)) return *value ? 1.0 : 0.0;
+    return 0.0;
+}
+
 } // namespace
 
 AttentionSignal AttentionModel::score(const Event& event,
@@ -29,11 +39,7 @@ AttentionSignal AttentionModel::score(const Event& event,
         else if (const auto p = std::get_if<bool>(&it->second)) urgency = *p ? 1.0 : 0.0;
     }
     const double prediction_error = std::clamp(
-        event.kind == "prediction_outcome"
-            ? (event.data.find("error") != event.data.end() && std::get_if<double>(&event.data.at("error")) != nullptr
-                   ? *std::get_if<double>(&event.data.at("error")) : 0.0)
-            : (event.data.find("prediction_error") != event.data.end() && std::get_if<double>(&event.data.at("prediction_error")) != nullptr
-                   ? *std::get_if<double>(&event.data.at("prediction_error")) : 0.0),
+        event_numeric_value(event, event.kind == "prediction_outcome" ? "error" : "prediction_error"),
         0.0, 1.0);
     const double total = normalized_weight(policy_.novelty_weight)
         + normalized_weight(policy_.uncertainty_weight)
