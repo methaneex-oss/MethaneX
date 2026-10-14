@@ -59,14 +59,18 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     const double threat = std::clamp(brain_.threat().score, 0.0, 1.0);
     const double dispute_pressure = result.context.beliefs.empty() ? 0.0 : std::clamp(static_cast<double>(disputed_beliefs) / static_cast<double>(result.context.beliefs.size()), 0.0, 1.0);
     const double world_dispute_pressure = std::clamp(static_cast<double>(disputed_facts.size() + disputed_relations.size()) / static_cast<double>(std::max<std::size_t>(1, result.context.beliefs.size() + disputed_relations.size())), 0.0, 1.0);
-    // Attention only raises planning uncertainty when the attended signal is itself
-    // uncertain. Salience gates the contribution so a low-priority ambiguous signal
-    // does not dominate the cycle, while learned attention policy can affect later plans.
+    // Attention contributes only to the degree that the attended signal is
+    // uncertain. Combine it with the self-model's uncertainty as independent
+    // sources of uncertainty instead of taking max(): max() silently discarded
+    // attention whenever the self-model already had a larger value, preventing
+    // learned attention from influencing otherwise identical downstream plans.
     const double attended_uncertainty = std::clamp(
         result.context.attention.salience * result.context.attention.uncertainty, 0.0, 1.0);
+    const double self_uncertainty = std::clamp(self_state.uncertainty, 0.0, 1.0);
+    const double combined_uncertainty =
+        1.0 - (1.0 - self_uncertainty) * (1.0 - attended_uncertainty);
     const double uncertainty = std::max(
-        std::clamp(self_state.uncertainty, 0.0, 1.0),
-        std::max({dispute_pressure, world_dispute_pressure, attended_uncertainty}));
+        combined_uncertainty, std::max(dispute_pressure, world_dispute_pressure));
     const double deadline_pressure = std::clamp(input.deadline_pressure, 0.0, 1.0);
     std::vector<CandidateAction> learned_actions = input.candidate_actions;
     for (auto& action : learned_actions) {
