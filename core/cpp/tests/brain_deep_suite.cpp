@@ -71,6 +71,8 @@ int main() {
         {{"confidence", 0.7}, {"sensor_state", std::string("uncertain")},
          {"urgency", 0.0}}};
     CognitiveCycleResult low_attention_result;
+    CognitiveCycleResult low_attention_replay_reference;
+    CognitiveCycleResult high_attention_replay_reference;
     {
         Brain low_attention(low_attention_journal);
         assert(low_attention.create_goal(Goal{"attention-causal-goal", "act under uncertainty",
@@ -85,6 +87,12 @@ int main() {
         low_attention_result = cycle.run(attention_input);
         assert(low_attention_result.status == CognitiveCycleStatus::completed);
         assert(low_attention_result.context.plan.steps.front().action.name ==
+               "irreversible_action");
+        // Compare replay against the next live cycle, after the same journal
+        // history, rather than against the earlier cycle that created it.
+        low_attention_replay_reference = cycle.run(attention_input);
+        assert(low_attention_replay_reference.status == CognitiveCycleStatus::completed);
+        assert(low_attention_replay_reference.context.plan.steps.front().action.name ==
                "irreversible_action");
     }
     attention_input.observation.data["urgency"] = Scalar{1.0};
@@ -114,6 +122,10 @@ int main() {
         assert(high_attention_result.context.plan.steps.front().action.name ==
                "reversible_action");
         assert(high_attention_result.context.decision_context.uncertainty <= 1.0);
+        high_attention_replay_reference = cycle.run(attention_input);
+        assert(high_attention_replay_reference.status == CognitiveCycleStatus::completed);
+        assert(high_attention_replay_reference.context.plan.steps.front().action.name ==
+               "reversible_action");
     }
     {
         Brain replayed_low_attention(low_attention_journal);
@@ -128,9 +140,9 @@ int main() {
         assert(replayed_result.context.plan.steps.front().action.name ==
                "irreversible_action");
         assert(std::abs(replayed_result.context.attention.salience -
-                        low_attention_result.context.attention.salience) < 1e-12);
+                        low_attention_replay_reference.context.attention.salience) < 1e-12);
         assert(std::abs(replayed_result.context.decision_context.uncertainty -
-                        low_attention_result.context.decision_context.uncertainty) < 1e-12);
+                        low_attention_replay_reference.context.decision_context.uncertainty) < 1e-12);
     }
     {
         Brain replayed_high_attention(high_attention_journal);
@@ -145,9 +157,9 @@ int main() {
         assert(replayed_result.context.plan.steps.front().action.name ==
                "reversible_action");
         assert(std::abs(replayed_result.context.attention.salience -
-                        high_attention_result.context.attention.salience) < 1e-12);
+                        high_attention_replay_reference.context.attention.salience) < 1e-12);
         assert(std::abs(replayed_result.context.decision_context.uncertainty -
-                        high_attention_result.context.decision_context.uncertainty) < 1e-12);
+                        high_attention_replay_reference.context.decision_context.uncertainty) < 1e-12);
     }
     std::filesystem::remove(low_attention_journal, ec);
     std::filesystem::remove((low_attention_journal.string() + ".meta"), ec);
