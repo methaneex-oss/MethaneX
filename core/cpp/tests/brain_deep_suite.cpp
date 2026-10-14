@@ -88,6 +88,12 @@ int main() {
         assert(low_attention_result.status == CognitiveCycleStatus::completed);
         assert(low_attention_result.context.plan.steps.front().action.name ==
                "irreversible_action");
+        assert(!low_attention_result.context.decisions.empty());
+        assert(low_attention_result.context.decisions.front().action.name ==
+               "irreversible_action");
+        assert(!low_attention_result.context.action_assessments.empty());
+        assert(low_attention_result.context.action_assessments.front().action.name ==
+               "irreversible_action");
         // Compare replay against the next live cycle, after the same journal
         // history, rather than against the earlier cycle that created it.
         low_attention_replay_reference = cycle.run(attention_input);
@@ -121,6 +127,12 @@ int main() {
         assert(low_attention_result.context.plan.steps.size() == 1);
         assert(high_attention_result.context.plan.steps.front().action.name ==
                "reversible_action");
+        assert(!high_attention_result.context.decisions.empty());
+        assert(high_attention_result.context.decisions.front().action.name ==
+               "reversible_action");
+        assert(!high_attention_result.context.action_assessments.empty());
+        assert(high_attention_result.context.action_assessments.front().action.name ==
+               "reversible_action");
         assert(high_attention_result.context.decision_context.uncertainty <= 1.0);
         high_attention_replay_reference = cycle.run(attention_input);
         assert(high_attention_replay_reference.status == CognitiveCycleStatus::completed);
@@ -139,6 +151,12 @@ int main() {
         assert(replayed_result.context.plan.steps.size() == 1);
         assert(replayed_result.context.plan.steps.front().action.name ==
                "irreversible_action");
+        assert(!replayed_result.context.decisions.empty());
+        assert(replayed_result.context.decisions.front().action.name ==
+               "irreversible_action");
+        assert(!replayed_result.context.action_assessments.empty());
+        assert(replayed_result.context.action_assessments.front().action.name ==
+               "irreversible_action");
         assert(std::abs(replayed_result.context.attention.salience -
                         low_attention_replay_reference.context.attention.salience) < 1e-12);
         assert(std::abs(replayed_result.context.decision_context.uncertainty -
@@ -155,6 +173,12 @@ int main() {
         // the downstream action choice and the numeric state that caused it.
         assert(replayed_result.context.plan.steps.size() == 1);
         assert(replayed_result.context.plan.steps.front().action.name ==
+               "reversible_action");
+        assert(!replayed_result.context.decisions.empty());
+        assert(replayed_result.context.decisions.front().action.name ==
+               "reversible_action");
+        assert(!replayed_result.context.action_assessments.empty());
+        assert(replayed_result.context.action_assessments.front().action.name ==
                "reversible_action");
         assert(std::abs(replayed_result.context.attention.salience -
                         high_attention_replay_reference.context.attention.salience) < 1e-12);
