@@ -122,6 +122,11 @@ int main() {
         assert(replayed_result.status == CognitiveCycleStatus::completed);
         assert(std::isfinite(replayed_result.context.attention.salience));
         assert(std::isfinite(replayed_result.context.decision_context.uncertainty));
+        // Replay must retain the learned attention policy strongly enough to
+        // reproduce the downstream action choice, not just finite diagnostics.
+        assert(replayed_result.context.plan.steps.size() == 1);
+        assert(replayed_result.context.plan.steps.front().action.name ==
+               "reversible_action");
     }
     std::filesystem::remove(low_attention_journal, ec);
     std::filesystem::remove((low_attention_journal.string() + ".meta"), ec);
