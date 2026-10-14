@@ -28,17 +28,26 @@ AttentionSignal AttentionModel::score(const Event& event,
         else if (const auto p = std::get_if<std::int64_t>(&it->second)) urgency = std::clamp(static_cast<double>(*p), 0.0, 1.0);
         else if (const auto p = std::get_if<bool>(&it->second)) urgency = *p ? 1.0 : 0.0;
     }
+    const double prediction_error = std::clamp(
+        event.kind == "prediction_outcome"
+            ? (event.data.contains("error") && std::get_if<double>(&event.data.at("error")) != nullptr
+                   ? *std::get_if<double>(&event.data.at("error")) : 0.0)
+            : (event.data.contains("prediction_error") && std::get_if<double>(&event.data.at("prediction_error")) != nullptr
+                   ? *std::get_if<double>(&event.data.at("prediction_error")) : 0.0),
+        0.0, 1.0);
     const double total = normalized_weight(policy_.novelty_weight)
         + normalized_weight(policy_.uncertainty_weight)
         + normalized_weight(policy_.urgency_weight)
-        + normalized_weight(policy_.internal_activation_weight);
+        + normalized_weight(policy_.internal_activation_weight)
+        + normalized_weight(policy_.prediction_error_weight);
     const double salience = std::clamp(
         adaptive_component(novelty, policy_.novelty_weight, total)
         + adaptive_component(uncertainty, policy_.uncertainty_weight, total)
         + adaptive_component(urgency, policy_.urgency_weight, total)
-        + adaptive_component(internal_activation, policy_.internal_activation_weight, total), 0.0, 1.0);
+        + adaptive_component(internal_activation, policy_.internal_activation_weight, total)
+        + adaptive_component(prediction_error, policy_.prediction_error_weight, total), 0.0, 1.0);
     return AttentionSignal{event.kind, salience, novelty, uncertainty, urgency,
-                           std::clamp(internal_activation, 0.0, 1.0)};
+                           std::clamp(internal_activation, 0.0, 1.0), prediction_error};
 }
 
 std::vector<AttentionSignal> AttentionModel::focus(const std::vector<Event>& events,
@@ -61,6 +70,8 @@ void AttentionModel::reinforce(const AttentionSignal& signal, double reward) {
     policy_.urgency_weight = std::clamp(policy_.urgency_weight + r * signal.urgency, 0.0, 4.0);
     policy_.internal_activation_weight = std::clamp(
         policy_.internal_activation_weight + r * signal.internal_activation, 0.0, 4.0);
+    policy_.prediction_error_weight = std::clamp(
+        policy_.prediction_error_weight + r * signal.prediction_error, 0.0, 4.0);
 }
 
 void AttentionModel::suppress(const AttentionSignal& signal, double penalty) {
@@ -71,6 +82,8 @@ void AttentionModel::suppress(const AttentionSignal& signal, double penalty) {
     policy_.urgency_weight = std::max(0.0, policy_.urgency_weight - p * signal.urgency);
     policy_.internal_activation_weight = std::max(
         0.0, policy_.internal_activation_weight - p * signal.internal_activation);
+    policy_.prediction_error_weight = std::max(
+        0.0, policy_.prediction_error_weight - p * signal.prediction_error);
 }
 
 AttentionPolicy AttentionModel::policy() const noexcept {
