@@ -14,6 +14,7 @@ struct AttentionSignal {
     double uncertainty{0.0};
     double urgency{0.0};
     double internal_activation{0.0};
+    double prediction_error{0.0};
 };
 
 // Policy is supplied as learned/runtime state. No cognitive weighting is
@@ -23,6 +24,7 @@ struct AttentionPolicy {
     double uncertainty_weight{1.0};
     double urgency_weight{1.0};
     double internal_activation_weight{1.0};
+    double prediction_error_weight{1.0};
 };
 
 class AttentionModel {
