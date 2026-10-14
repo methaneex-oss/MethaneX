@@ -116,17 +116,38 @@ int main() {
         assert(high_attention_result.context.decision_context.uncertainty <= 1.0);
     }
     {
+        Brain replayed_low_attention(low_attention_journal);
+        CognitiveCycle cycle(replayed_low_attention);
+        auto low_input = attention_input;
+        low_input.observation.data["urgency"] = Scalar{0.0};
+        const auto replayed_result = cycle.run(low_input);
+        assert(replayed_result.status == CognitiveCycleStatus::completed);
+        assert(std::isfinite(replayed_result.context.attention.salience));
+        assert(std::isfinite(replayed_result.context.decision_context.uncertainty));
+        assert(replayed_result.context.plan.steps.size() == 1);
+        assert(replayed_result.context.plan.steps.front().action.name ==
+               "irreversible_action");
+        assert(std::abs(replayed_result.context.attention.salience -
+                        low_attention_result.context.attention.salience) < 1e-12);
+        assert(std::abs(replayed_result.context.decision_context.uncertainty -
+                        low_attention_result.context.decision_context.uncertainty) < 1e-12);
+    }
+    {
         Brain replayed_high_attention(high_attention_journal);
         CognitiveCycle cycle(replayed_high_attention);
         const auto replayed_result = cycle.run(attention_input);
         assert(replayed_result.status == CognitiveCycleStatus::completed);
         assert(std::isfinite(replayed_result.context.attention.salience));
         assert(std::isfinite(replayed_result.context.decision_context.uncertainty));
-        // Replay must retain the learned attention policy strongly enough to
-        // reproduce the downstream action choice, not just finite diagnostics.
+        // Replay must retain the attention policy strongly enough to reproduce
+        // the downstream action choice and the numeric state that caused it.
         assert(replayed_result.context.plan.steps.size() == 1);
         assert(replayed_result.context.plan.steps.front().action.name ==
                "reversible_action");
+        assert(std::abs(replayed_result.context.attention.salience -
+                        high_attention_result.context.attention.salience) < 1e-12);
+        assert(std::abs(replayed_result.context.decision_context.uncertainty -
+                        high_attention_result.context.decision_context.uncertainty) < 1e-12);
     }
     std::filesystem::remove(low_attention_journal, ec);
     std::filesystem::remove((low_attention_journal.string() + ".meta"), ec);
