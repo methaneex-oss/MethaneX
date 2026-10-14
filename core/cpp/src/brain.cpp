@@ -379,12 +379,35 @@ void Brain::replay(const Event& event) {
     std::vector<Belief> after; after.reserve(beliefs_.size()); for (const auto& [_, belief] : beliefs_) after.push_back(belief); causal_.observe_transition(before, after); association_.observe(before, after, event.sequence);
     if (event.kind == "observation") {
         const auto history = memory_.recent(2); std::vector<Event> previous; if (history.size() > 1) previous.push_back(history[1]);
-        const double novelty = compute_novelty(event, previous); double strongest = 0.0; for (const auto& [_, belief] : beliefs_) strongest = std::max(strongest, belief.confidence);
+        const double novelty = compute_novelty(event, previous);
+        // Estimate confidence from evidence relevant to this observation. A
+        // globally strong, unrelated belief must not suppress uncertainty here.
+        double relevant_confidence = 0.5;
+        const auto explicit_confidence = event.data.find("confidence");
+        if (explicit_confidence != event.data.end()) {
+            relevant_confidence = std::clamp(
+                double_value(event.data, "confidence", 0.5), 0.0, 1.0);
+        } else {
+            double confidence_sum = 0.0;
+            std::size_t relevant_count = 0;
+            for (const auto& [key, value] : event.data) {
+                (void)value;
+                if (key == "novelty" || key == "salience" || key == "urgency" ||
+                    key == "prediction_error" || key == "outcome" || key == "health" ||
+                    key == "subject" || key == "predicate" || key == "object") continue;
+                const auto belief = beliefs_.find(key);
+                if (belief == beliefs_.end()) continue;
+                confidence_sum += std::clamp(belief->second.confidence, 0.0, 1.0);
+                ++relevant_count;
+            }
+            if (relevant_count != 0)
+                relevant_confidence = confidence_sum / static_cast<double>(relevant_count);
+        }
         threat_state_ = threat_model_.assess(event); state_.novelty = novelty; state_.threat = threat_state_.score;
         const auto health = event.data.find("health"); if (health != event.data.end()) resilience_.observe(event.source, std::clamp(double_value(event.data, "health", 1.0), 0.0, 1.0));
         const auto affect = affective_state_model_.state();
         const double internal_activation = std::clamp(0.25 * std::abs(affect.valence) + 0.25 * affect.arousal + 0.25 * affect.uncertainty + 0.25 * affect.tension, 0.0, 1.0);
-        attention_state_ = attention_model_.score(event, novelty, strongest, internal_activation);
+        attention_state_ = attention_model_.score(event, novelty, relevant_confidence, internal_activation);
         state_.attention = attention_state_.salience;
         const double outcome = double_value(event.data, "outcome", 0.0);
         if (outcome > 0.0) attention_model_.reinforce(attention_state_, std::clamp(outcome, 0.0, 1.0)); else if (outcome < 0.0) attention_model_.suppress(attention_state_, std::clamp(-outcome, 0.0, 1.0));
