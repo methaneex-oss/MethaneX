@@ -1007,6 +1007,7 @@ int main() {
            before_outcome.context.attention.salience *
                before_outcome.context.attention.uncertainty);
 
+    const auto attention_policy_before_feedback = behavior_brain.attention_policy();
     const auto risk_prediction =
         behavior_brain.predict("risk_signal", Scalar{false}, 0.9);
     assert(risk_prediction.created_sequence != 0);
@@ -1015,6 +1016,13 @@ int main() {
     const auto affect_after_surprise = behavior_brain.affective_state();
     assert(affect_after_surprise.tension > 0.0);
 
+    // Prediction error updates the attention policy itself, not just the current
+    // attended signal. That learned policy must be reconstructed from the journal.
+    const auto attention_policy_after_feedback = behavior_brain.attention_policy();
+    assert(attention_policy_after_feedback.uncertainty_weight >
+           attention_policy_before_feedback.uncertainty_weight);
+    assert(attention_policy_after_feedback.uncertainty_weight <= 4.0);
+
     const auto after_outcome = behavior_cycle.run(behavior_input);
     assert(after_outcome.status == CognitiveCycleStatus::completed);
     assert(!after_outcome.context.plan.steps.empty());
@@ -1022,6 +1030,15 @@ int main() {
 
     Brain replayed_behavior(behavior_path);
     CognitiveCycle replayed_behavior_cycle(replayed_behavior);
+    const auto replayed_attention_policy = replayed_behavior.attention_policy();
+    assert(std::abs(replayed_attention_policy.uncertainty_weight -
+                    attention_policy_after_feedback.uncertainty_weight) < 1e-12);
+    assert(std::abs(replayed_attention_policy.novelty_weight -
+                    attention_policy_after_feedback.novelty_weight) < 1e-12);
+    assert(std::abs(replayed_attention_policy.urgency_weight -
+                    attention_policy_after_feedback.urgency_weight) < 1e-12);
+    assert(std::abs(replayed_attention_policy.internal_activation_weight -
+                    attention_policy_after_feedback.internal_activation_weight) < 1e-12);
     const auto live_future = behavior_cycle.run(behavior_input);
     const auto replayed_future = replayed_behavior_cycle.run(behavior_input);
     assert(live_future.status == CognitiveCycleStatus::completed);
