@@ -367,7 +367,7 @@ void Brain::replay(const Event& event) {
     if (event.kind == "capability_restore") { if (const auto* name = string_value(event.data, "name")) self_model_.restore(*name, double_value(event.data, "availability"), double_value(event.data, "performance")); return; }
     if (event.kind != "observation" && event.kind != "learning") return;
     if (event.kind == "learning") {
-        const source = integer_value(event.data, "source_action_sequence", 0);
+        const auto source = integer_value(event.data, "source_action_sequence", 0);
         if (source != 0 && !processed_derived_learning_sources_.insert(source).second) return;
     }
     const double reliability = event.kind == "learning" ? std::clamp(double_value(event.data, "reliability", 0.5), 0.0, 1.0) : 0.7;
