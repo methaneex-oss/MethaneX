@@ -1049,6 +1049,12 @@ int main() {
            replayed_future.context.plan.steps.front().action.name);
     assert(std::abs(live_future.context.decision_context.tension -
                     replayed_future.context.decision_context.tension) < 1e-12);
+    assert(std::abs(live_future.context.attention.salience -
+                    replayed_future.context.attention.salience) < 1e-12);
+    assert(std::abs(live_future.context.attention.uncertainty -
+                    replayed_future.context.attention.uncertainty) < 1e-12);
+    assert(std::abs(live_future.context.decision_context.uncertainty -
+                    replayed_future.context.decision_context.uncertainty) < 1e-12);
 
     // End-to-end consequence learning: one observed action outcome updates
     // the brain's affective state and developmental strategy; the acquired
