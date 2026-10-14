@@ -55,6 +55,65 @@ int main() {
         assert(std::abs(replayed_attention.attention().uncertainty - 0.3) < 1e-12);
     }
 
+    // Isolate attention's causal path into the actual planning context:
+    // same goal, evidence confidence, and actions; only urgency differs.
+    const auto low_attention_journal = root / "low_attention_planning.bin";
+    const auto high_attention_journal = root / "high_attention_planning.bin";
+    CognitiveCycleInput attention_input;
+    attention_input.goal_id = "attention-causal-goal";
+    attention_input.planning_horizon = 1;
+    attention_input.resource_budget = 1.0;
+    attention_input.candidate_actions = {
+        CandidateAction{"measured_action", 0.4, 0.2, 0.1, 1.0},
+        CandidateAction{"fallback_action", 0.2, 0.0, 0.1, 1.0},
+    };
+    attention_input.observation = Event{0, 0, "sensor", "observation",
+        {{"confidence", 0.7}, {"sensor_state", std::string("uncertain")},
+         {"urgency", 0.0}}};
+    CognitiveCycleResult low_attention_result;
+    {
+        Brain low_attention(low_attention_journal);
+        assert(low_attention.create_goal(Goal{"attention-causal-goal", "act under uncertainty",
+            0.5, 0.0, 0, 0, GoalStatus::pending, {}, {}}));
+        assert(low_attention.activate_goal("attention-causal-goal"));
+        CognitiveCycle cycle(low_attention);
+        low_attention_result = cycle.run(attention_input);
+        assert(low_attention_result.status == CognitiveCycleStatus::completed);
+    }
+    attention_input.observation.data["urgency"] = Scalar{1.0};
+    {
+        Brain high_attention(high_attention_journal);
+        assert(high_attention.create_goal(Goal{"attention-causal-goal", "act under uncertainty",
+            0.5, 0.0, 0, 0, GoalStatus::pending, {}, {}}));
+        assert(high_attention.activate_goal("attention-causal-goal"));
+        CognitiveCycle cycle(high_attention);
+        const auto high_attention_result = cycle.run(attention_input);
+        assert(high_attention_result.status == CognitiveCycleStatus::completed);
+        assert(high_attention_result.context.attention.salience >
+               low_attention_result.context.attention.salience);
+        assert(std::abs(high_attention_result.context.attention.uncertainty -
+                        low_attention_result.context.attention.uncertainty) < 1e-12);
+        assert(high_attention_result.context.decision_context.uncertainty >
+               low_attention_result.context.decision_context.uncertainty);
+        // The planner and decision engine receive the changed value, not merely
+        // a diagnostic attention score.
+        assert(high_attention_result.context.plan.steps.size() == 1);
+        assert(low_attention_result.context.plan.steps.size() == 1);
+        assert(high_attention_result.context.decision_context.uncertainty <= 1.0);
+    }
+    {
+        Brain replayed_high_attention(high_attention_journal);
+        CognitiveCycle cycle(replayed_high_attention);
+        const auto replayed_result = cycle.run(attention_input);
+        assert(replayed_result.status == CognitiveCycleStatus::completed);
+        assert(std::isfinite(replayed_result.context.attention.salience));
+        assert(std::isfinite(replayed_result.context.decision_context.uncertainty));
+    }
+    std::filesystem::remove(low_attention_journal, ec);
+    std::filesystem::remove((low_attention_journal.string() + ".meta"), ec);
+    std::filesystem::remove(high_attention_journal, ec);
+    std::filesystem::remove((high_attention_journal.string() + ".meta"), ec);
+
     Brain brain(root / "continuity.bin");
     const auto observed = brain.observe(event(0, "test", "observation", "persistent", 42.0));
     assert(observed.event.sequence == 1);
