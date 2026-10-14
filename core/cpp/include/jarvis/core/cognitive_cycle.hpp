@@ -44,6 +44,7 @@ struct CognitiveCycleContext {
     std::vector<Prediction> predictions;
     AffectiveState affective_state;
     AffectiveAppraisal affective_appraisal;
+    AttentionSignal attention;
     ReasoningResult reasoning;
     std::vector<Goal> eligible_goals;
     Goal selected_goal;
