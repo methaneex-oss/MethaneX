@@ -998,6 +998,14 @@ int main() {
     assert(before_outcome.status == CognitiveCycleStatus::completed);
     assert(!before_outcome.context.plan.steps.empty());
     assert(before_outcome.context.plan.steps.front().action.name == "measured_risk");
+    // The attended signal is part of the cognitive-cycle context, and its
+    // salience-weighted uncertainty must reach the planner rather than stop at
+    // an attention-state counter.
+    assert(std::isfinite(before_outcome.context.attention.salience));
+    assert(std::isfinite(before_outcome.context.attention.uncertainty));
+    assert(before_outcome.context.decision_context.uncertainty + 1e-12 >=
+           before_outcome.context.attention.salience *
+               before_outcome.context.attention.uncertainty);
 
     const auto risk_prediction =
         behavior_brain.predict("risk_signal", Scalar{false}, 0.9);
