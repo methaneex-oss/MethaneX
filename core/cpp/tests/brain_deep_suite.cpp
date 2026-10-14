@@ -36,6 +36,25 @@ int main() {
     std::filesystem::remove_all(root, ec);
     std::filesystem::create_directories(root, ec);
 
+    // Attention uncertainty must follow evidence relevant to the current
+    // observation, not an unrelated belief with very high confidence.
+    const auto attention_relevance_journal = root / "attention_relevance.bin";
+    {
+        Brain attentive(attention_relevance_journal);
+        for (int i = 0; i < 12; ++i) {
+            assert(attentive.observe(Event{0, 0, "sensor", "observation",
+                {{"established_signal", Scalar{std::string("stable")}}}}).event.sequence != 0);
+        }
+        assert(attentive.observe(Event{0, 0, "sensor", "observation",
+            {{"new_signal", Scalar{std::string("unfamiliar")}}}}).event.sequence != 0);
+        // A new belief begins at 0.7 confidence, so its uncertainty is 0.3.
+        assert(std::abs(attentive.attention().uncertainty - 0.3) < 1e-12);
+    }
+    {
+        Brain replayed_attention(attention_relevance_journal);
+        assert(std::abs(replayed_attention.attention().uncertainty - 0.3) < 1e-12);
+    }
+
     Brain brain(root / "continuity.bin");
     const auto observed = brain.observe(event(0, "test", "observation", "persistent", 42.0));
     assert(observed.event.sequence == 1);
