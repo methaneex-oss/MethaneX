@@ -256,7 +256,7 @@ int main() {
     // Derived affective-learning evidence is keyed to its source action and must not train twice.
     const auto affective_records = brain.memory().by_kind("affective_learning", 1);
     assert(affective_records.size() == 1);
-    const duplicate_source = affective_records.front().data.find("source_action_sequence");
+    const auto duplicate_source = affective_records.front().data.find("source_action_sequence");
     assert(duplicate_source != affective_records.front().data.end());
     const auto affect_before_duplicate = brain.affective_state();
     const auto calibration_before_duplicate = brain.affective_calibration();
