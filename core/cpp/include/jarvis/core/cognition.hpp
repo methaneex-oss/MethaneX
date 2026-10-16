@@ -1,19 +1,14 @@
 #pragma once
 
+#include "event.hpp"
+
 #include <cstdint>
 #include <string>
 #include <utility>
-#include <variant>
 #include <vector>
-#include <unordered_map>
 
 namespace jarvis::core {
 
-using Scalar = std::variant<std::monostate, double, std::int64_t, bool, std::string>;
-using Attributes = std::unordered_map<std::string, Scalar>;
-
-struct Event { std::uint64_t sequence{0}; std::uint64_t timestamp{0}; std::string source; std::string kind; Attributes data; };
-struct Observation { Event event; double novelty{0.0}; };
 struct Evidence { std::string source; std::string key; Scalar value; double confidence{0.0}; };
 struct Belief { std::string key; Scalar value; double confidence{0.0}; std::uint64_t observations{0}; std::uint64_t updated_sequence{0}; };
 struct Prediction { std::string key; Scalar predicted; double confidence{0.0}; std::uint64_t created_sequence{0}; bool resolved{false}; double error{0.0}; };
@@ -72,6 +67,5 @@ struct Decision {
     std::string rationale;
 };
 
-struct SimulationResult { std::vector<std::pair<std::string, Scalar>> states; double confidence{0.0}; };
 
 } // namespace jarvis::core
