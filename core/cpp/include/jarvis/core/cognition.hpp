@@ -53,10 +53,11 @@ struct CandidateAction {
     double reversibility{1.0};
     double resource_cost{0.0};
     double expected_consequence{0.0};
+    // Preserve the original aggregate-initialization position for compatibility.
+    DecisionOutcome preferred_outcome{DecisionOutcome::act};
     double urgency{0.0};
     double novelty{0.0};
     double uncertainty{0.0};
-    DecisionOutcome preferred_outcome{DecisionOutcome::act};
     std::vector<std::string> required_permissions;
 };
 
