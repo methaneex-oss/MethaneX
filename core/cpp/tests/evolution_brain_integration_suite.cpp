@@ -33,7 +33,7 @@ int main() {
             "brain-evolution-1", proposals.front(), 0.70, 0.90, 0.01, 0.95,
             ExperimentOutcome::Improved, true};
         assert(brain.record_evolution_evaluation(experiment));
-        const evaluated_history = brain.evolution_history();
+        const auto evaluated_history = brain.evolution_history();
         assert(evaluated_history.size() == 1);
         assert(evaluated_history.front().action == EvolutionRecordAction::Evaluated);
         assert(brain.adopt_evolution_experiment(experiment));
@@ -137,7 +137,7 @@ int main() {
         assert(persisted_canary.sufficient_evidence);
         assert(persisted_canary.rollback);
 
-        const rollback_history = restarted.evolution_history();
+        const auto rollback_history = restarted.evolution_history();
         assert(!rollback_history.empty());
         assert(rollback_history.back().action == EvolutionRecordAction::RolledBack);
 
