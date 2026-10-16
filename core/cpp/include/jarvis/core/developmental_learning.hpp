@@ -82,7 +82,7 @@ public:
 
     const LearnedStrategy* best_strategy(const std::string& context) const noexcept;
     const LearnedStrategy* best_related_strategy(const std::string& context,
-                                                 double minimum_similarity = 0.5) const;
+                                                 double minimum_similarity = 0.5) const noexcept;
     std::vector<RelatedLearnedStrategy> related_strategies(
         const std::string& context, double minimum_similarity = 0.5) const;
 

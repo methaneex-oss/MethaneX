@@ -9,9 +9,20 @@
 
 namespace jarvis::core {
 
-struct Evidence { std::string source; std::string key; Scalar value; double confidence{0.0}; };
-struct Belief { std::string key; Scalar value; double confidence{0.0}; std::uint64_t observations{0}; std::uint64_t updated_sequence{0}; };
-struct Prediction { std::string key; Scalar predicted; double confidence{0.0}; std::uint64_t created_sequence{0}; bool resolved{false}; double error{0.0}; };
+struct Belief { std::string key; Scalar value; double confidence{0.0}; std::uint64_t observations{0}; std::uint64_t updated_sequence{0}; bool disputed{false}; };
+struct PredictionContext {
+    std::vector<std::string> concept_members;
+    double evidence_strength{0.0};
+};
+struct Prediction {
+    std::string key;
+    Scalar predicted;
+    double confidence{0.0};
+    std::uint64_t created_sequence{0};
+    bool resolved{false};
+    double error{0.0};
+    PredictionContext context{};
+};
 struct CausalLink { std::string cause; std::string effect; double strength{0.0}; std::uint64_t observations{0}; };
 
 enum class DecisionOutcome : std::uint8_t {
