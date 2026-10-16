@@ -4,7 +4,7 @@
 
 namespace jarvis::core {
 
-double KnowledgeModel::assimilate(const Evidence& evidence) {
+double KnowledgeModel::assimilate(const KnowledgeEvidence& evidence) {
     auto& metric = sources_[evidence.source];
     const double reliability = std::clamp(evidence.reliability, 0.0, 1.0);
     if (metric.observations == 0) {
