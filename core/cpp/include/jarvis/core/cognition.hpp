@@ -12,10 +12,6 @@ namespace jarvis::core {
 struct Evidence { std::string source; std::string key; Scalar value; double confidence{0.0}; };
 struct Belief { std::string key; Scalar value; double confidence{0.0}; std::uint64_t observations{0}; std::uint64_t updated_sequence{0}; };
 struct Prediction { std::string key; Scalar predicted; double confidence{0.0}; std::uint64_t created_sequence{0}; bool resolved{false}; double error{0.0}; };
-struct Association { std::string left; std::string right; double strength{0.0}; std::uint64_t observations{0}; };
-struct AssociationInference { std::string key; double strength{0.0}; std::size_t hops{0}; };
-struct ConceptCandidate { std::string key; double strength{0.0}; std::size_t shared_contexts{0}; };
-struct ConceptMatch { std::string key; double similarity{0.0}; double strength{0.0}; };
 struct CausalLink { std::string cause; std::string effect; double strength{0.0}; std::uint64_t observations{0}; };
 
 enum class DecisionOutcome : std::uint8_t {
