@@ -9,6 +9,15 @@
 
 namespace jarvis::core {
 
+// Evidence from experience used by the Brain's general learning loop.
+// Kept distinct from KnowledgeEvidence, which tracks source reliability.
+struct Evidence {
+    std::string source;
+    std::string key;
+    Scalar value;
+    double reliability{0.0};
+};
+
 struct Belief { std::string key; Scalar value; double confidence{0.0}; std::uint64_t observations{0}; std::uint64_t updated_sequence{0}; bool disputed{false}; };
 struct PredictionContext {
     std::vector<std::string> concept_members;
