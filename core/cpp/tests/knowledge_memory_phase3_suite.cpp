@@ -9,14 +9,14 @@ using namespace jarvis::core;
 int main() {
     KnowledgeModel knowledge;
 
-    const auto first = knowledge.assimilate(Evidence{"sensor-a", "temperature", 20.0, 0.8});
+    const auto first = knowledge.assimilate(KnowledgeEvidence{"sensor-a", "temperature", 20.0, 0.8});
     assert(std::abs(first - 0.8) < 1e-12);
     const auto* metric = knowledge.source_metric("sensor-a");
     assert(metric != nullptr);
     assert(metric->observations == 1);
     assert(std::abs(metric->reliability - 0.8) < 1e-12);
 
-    const auto second = knowledge.assimilate(Evidence{"sensor-a", "temperature", 21.0, 0.4});
+    const auto second = knowledge.assimilate(KnowledgeEvidence{"sensor-a", "temperature", 21.0, 0.4});
     assert(std::abs(second - 0.6) < 1e-12);
     metric = knowledge.source_metric("sensor-a");
     assert(metric != nullptr);
