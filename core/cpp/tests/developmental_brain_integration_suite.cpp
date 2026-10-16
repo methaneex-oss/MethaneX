@@ -47,8 +47,8 @@ int main() {
         assert(brain.activate_goal(goal.id));
 
         const std::vector<CandidateAction> actions{
-            {"learned-action", 0.5, 0.5, 0.9, 0.2, 1.0, 0.0, 0.5, 0.0, 0.0},
-            {"other-action", 0.5, 0.5, 0.9, 0.2, 1.0, 0.0, 0.5, 0.0, 0.0},
+            {"learned-action", 0.5, 0.5, 0.9, 0.2, 1.0, 0.0, 0.5, DecisionOutcome::act, 0.0},
+            {"other-action", 0.5, 0.5, 0.9, 0.2, 1.0, 0.0, 0.5, DecisionOutcome::act, 0.0},
         };
 
         const auto before = brain.choose_with_developmental_learning(actions);
@@ -141,14 +141,14 @@ int main() {
         assert(learned->uses >= 5);
 
         const std::vector<CandidateAction> actions{
-            {"learned-action", 0.5, 0.5, 0.9, 0.2, 1.0, 0.0, 0.5, 0.0, 0.0},
-            {"other-action", 0.5, 0.5, 0.9, 0.2, 1.0, 0.0, 0.5, 0.0, 0.0},
+            {"learned-action", 0.5, 0.5, 0.9, 0.2, 1.0, 0.0, 0.5, DecisionOutcome::act, 0.0},
+            {"other-action", 0.5, 0.5, 0.9, 0.2, 1.0, 0.0, 0.5, DecisionOutcome::act, 0.0},
         };
         const auto restored_decisions = restored.choose_with_developmental_learning(actions);
         assert(score_for(restored_decisions, "learned-action") >
                score_for(restored_decisions, "other-action"));
 
-        const restored_related = restored.choose_with_developmental_learning(
+        const auto restored_related = restored.choose_with_developmental_learning(
             actions, "developmental-context/variant");
         assert(score_for(restored_related, "learned-action") >
                score_for(restored_related, "other-action"));
@@ -179,8 +179,8 @@ int main() {
     std::filesystem::remove(generalization_path, ec);
     std::filesystem::remove(generalization_path.string() + ".meta", ec);
     const std::vector<CandidateAction> generalization_actions{
-        {"learned-action", 0.5, 0.5, 0.9, 0.2, 1.0, 0.0, 0.5, 0.0, 0.0},
-        {"other-action", 0.5, 0.5, 0.9, 0.2, 1.0, 0.0, 0.5, 0.0, 0.0},
+        {"learned-action", 0.5, 0.5, 0.9, 0.2, 1.0, 0.0, 0.5, DecisionOutcome::act, 0.0},
+        {"other-action", 0.5, 0.5, 0.9, 0.2, 1.0, 0.0, 0.5, DecisionOutcome::act, 0.0},
     };
     {
         Brain generalized(generalization_path);
