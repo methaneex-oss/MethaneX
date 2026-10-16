@@ -8,7 +8,7 @@
 
 namespace jarvis::core {
 
-struct Evidence {
+struct KnowledgeEvidence {
     std::string source;
     std::string key;
     Scalar value;
@@ -22,7 +22,7 @@ struct KnowledgeMetric {
 
 class KnowledgeModel {
 public:
-    double assimilate(const Evidence& evidence);
+    double assimilate(const KnowledgeEvidence& evidence);
     void score_source(const std::string& source, bool correct);
     const KnowledgeMetric* source_metric(const std::string& source) const noexcept;
 
