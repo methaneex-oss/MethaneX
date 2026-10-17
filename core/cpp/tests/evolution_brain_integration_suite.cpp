@@ -85,6 +85,12 @@ int main() {
         assert(decision.rollback);
 
         assert(brain.register_evolution_parameter("canary.persist", 0.3));
+        EvolutionExperiment canary_experiment{
+            "canary-persist-1",
+            EvolutionProposal{"canary.persist", 0.3, 0.4, 0.1, 0.90},
+            0.70, 0.85, 0.01, 0.90, ExperimentOutcome::Improved, true};
+        assert(brain.record_evolution_evaluation(canary_experiment));
+        assert(brain.adopt_evolution_experiment(canary_experiment));
         const auto pending_canary = brain.observe_evolution_canary(
             "canary.persist", "canary-persist-1", {0.90, 0.89});
         assert(!pending_canary.sufficient_evidence);
@@ -98,7 +104,7 @@ int main() {
             0.70, 0.82, 0.01, 0.90, ExperimentOutcome::Improved, true};
         assert(brain.record_evolution_evaluation(replayable));
         assert(!brain.record_evolution_evaluation(replayable));
-        assert(brain.evolution_history().size() == 7);
+        assert(brain.evolution_history().size() == 9);
     }
 
     {
@@ -118,7 +124,7 @@ int main() {
         assert(manual->observations == 0);
 
         const auto restarted_history = restarted.evolution_history();
-        assert(restarted_history.size() == 7);
+        assert(restarted_history.size() == 9);
         assert(restarted_history.front().experiment_id == "brain-evolution-1");
         assert(restarted_history.front().action == EvolutionRecordAction::Evaluated);
         assert(restarted_history[1].action == EvolutionRecordAction::Adopted);
