@@ -756,7 +756,7 @@ int main() {
     const auto predictions = brain.snapshot().predictions;
     bool resolved = false;
     for (const auto& current : predictions) {
-        if (current.key == prediction.key) {
+        if (current.created_sequence == prediction.created_sequence) {
             resolved = current.resolved && current.error == 0.0;
             break;
         }
