@@ -14,9 +14,14 @@ int main() {
     std::filesystem::remove(path.string() + ".meta", ec);
 
     Brain brain(path);
-    brain.observe(Event{0, 0, "sensor", "prediction_outcome", {
-        {"key", std::string("temperature")}, {"error", 0.1}, {"novelty", 0.8},
-        {"salience", 0.9}, {"confidence", 0.8}, {"utility", 0.9}}});
+    // Prediction outcomes must resolve a real forecast; a synthetic event
+    // without a prediction sequence is intentionally rejected by Brain replay.
+    const auto temperature_prediction =
+        brain.predict("temperature", Scalar{20.0}, 0.8);
+    assert(temperature_prediction.created_sequence != 0);
+    assert(brain.resolve_prediction_feedback(
+               temperature_prediction.created_sequence, Scalar{22.0}) ==
+           PredictionFeedbackStatus::resolved_with_error);
     brain.observe(Event{0, 0, "sensor", "action_outcome", {
         {"action", std::string("probe")}, {"context", std::string("temperature")},
         {"reliability", 0.2}, {"novelty", 0.7}, {"salience", 0.8}, {"utility", -0.9}}});
