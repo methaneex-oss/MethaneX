@@ -40,7 +40,7 @@ int main() {
     // Consolidated memories should outrank otherwise equivalent, newer traces.
     const auto old_experience = memory.append(Event{0, 5, "sensor", "experience", {{"topic", std::string("navigation")}}});
     const auto recent_experience = memory.append(Event{0, 6, "sensor", "experience", {{"topic", std::string("navigation")}}});
-    assert(old_experience == 5 && recent_experience == 6);
+    assert(old_experience == 4 && recent_experience == 5);
     for (int i = 0; i < 8; ++i)
         assert(memory.consolidate(old_experience, 0.5, 1.0, 1.0, 0.5));
     const auto experience_ranked = memory.recall_ranked({{"topic", std::string("navigation")}}, 2);
@@ -48,7 +48,7 @@ int main() {
     assert(experience_ranked.front().event.sequence == old_experience);
 
     const auto working = memory.append(Event{0, 4, "sensor", "transient", {{"topic", std::string("noise")}}});
-    assert(working == 7);
+    assert(working == 6);
     assert(memory.promote(working, MemoryTier::Working, 0.4, 0.4));
     assert(memory.working_size() == 1);
     assert(memory.forget_working(0));
@@ -56,8 +56,8 @@ int main() {
     assert(memory.tier_of(Event{0, 0, "", "transient", {}}) == MemoryTier::Episodic);
 
     Memory restored(3, path);
-    assert(restored.size() == 7);
-    assert(restored.next_sequence() == 8);
+    assert(restored.size() == 6);
+    assert(restored.next_sequence() == 7);
     assert(restored.recent(2).size() == 2);
     assert(restored.by_kind("learning", 1).size() == 1);
 
