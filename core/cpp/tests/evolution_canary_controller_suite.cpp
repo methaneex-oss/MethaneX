@@ -56,7 +56,7 @@ int main() {
     assert(!second_decision.sufficient_evidence);
     const auto second_continued = isolated.observe_canary_for_brain("exp-second", {0.84, 0.82});
     assert(!second_continued.sufficient_evidence);
-    const auto third = isolated.observe_canary_for_brain("exp-second", {0.84, 0.80});
+    const auto third = isolated.observe_canary_for_brain("exp-second", {0.84, 0.82});
     assert(third.sufficient_evidence);
     assert(!third.rollback);
 
