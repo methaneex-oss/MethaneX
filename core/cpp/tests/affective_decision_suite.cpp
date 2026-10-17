@@ -8,8 +8,8 @@ using namespace jarvis::core;
 
 int main() {
     DecisionEngine engine;
-    CandidateAction reversible{"reversible", 0.4, 0.2, 0.2, 1.0, 0.1, 0.1, 0.4};
-    CandidateAction irreversible{"irreversible", 0.4, 0.2, 0.2, 0.1, 0.1, 0.1, 0.4};
+    CandidateAction reversible{"reversible", 0.4, 0.2, 0.2, 0.2, 1.0, 0.1, 0.4};
+    CandidateAction irreversible{"irreversible", 0.4, 0.2, 0.2, 0.8, 0.1, 0.1, 0.4};
     const std::vector<CandidateAction> actions{reversible, irreversible};
 
     DecisionContext stable{};
