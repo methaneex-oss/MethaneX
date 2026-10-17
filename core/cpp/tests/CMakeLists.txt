@@ -246,3 +246,17 @@ if(BUILD_TESTING)
     add_test(NAME jarvis_experience_memory_test COMMAND jarvis_experience_memory_test)
     add_test(NAME jarvis_brain_action_consequence_integration_suite COMMAND jarvis_brain_action_consequence_integration_suite)
 endif()
+# These executable suites use assert() as their test assertion mechanism. Keep
+# assertions enabled in Release builds as well: otherwise NDEBUG removes the
+# checks (and any setup expressions inside them), producing false passes and
+# crashes unrelated to the code under test.
+get_property(JARVIS_TEST_TARGETS DIRECTORY PROPERTY BUILDSYSTEM_TARGETS)
+foreach(JARVIS_TEST_TARGET IN LISTS JARVIS_TEST_TARGETS)
+    get_target_property(JARVIS_TEST_TARGET_TYPE ${JARVIS_TEST_TARGET} TYPE)
+    if(JARVIS_TEST_TARGET_TYPE STREQUAL "EXECUTABLE")
+        target_compile_options(${JARVIS_TEST_TARGET} PRIVATE
+            $<$<CXX_COMPILER_ID:GNU,Clang>:-UNDEBUG>
+            $<$<CXX_COMPILER_ID:MSVC>:/UNDEBUG>
+        )
+    endif()
+endforeach()
