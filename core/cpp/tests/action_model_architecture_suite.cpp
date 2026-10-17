@@ -9,9 +9,9 @@ using namespace jarvis::core;
 int main() {
     ActionModel model;
     const std::vector<Decision> decisions{
-        {{"safe", 0.9, 0.8, 0.1, 1.0}, 2.0},
-        {{"risky", 0.9, 0.8, 0.9, 0.2}, 2.0},
-        {{"negative", -0.1, 0.0, 0.1, 1.0}, -0.1}
+        {{"safe", 0.9, 0.8, 0.9, 0.1, 1.0}, 2.0},
+        {{"risky", 0.9, 0.8, 0.9, 0.9, 0.2}, 2.0},
+        {{"negative", -0.1, 0.0, 0.8, 0.1, 1.0}, -0.1}
     };
 
     const auto assessments = model.assess(decisions, ActionConstraints{0.5, false});
