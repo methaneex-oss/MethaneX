@@ -750,7 +750,7 @@ int main() {
     assert(!prediction.resolved);
     assert(prediction.confidence >= 0.0 && prediction.confidence <= 1.0);
 
-    const auto feedback = cycle.process_outcome(prediction.key, prediction.predicted);
+    const auto feedback = cycle.process_outcome(prediction, prediction.predicted);
     assert(feedback.prediction_resolved);
 
     const auto predictions = brain.snapshot().predictions;
