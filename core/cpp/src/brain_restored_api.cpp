@@ -171,26 +171,30 @@ bool Brain::assimilate_goal_outcome(const GoalOutcomeEvidence& raw_evidence) {
     evidence.completed = evidence.completed || evidence.progress_after >= 1.0;
     evidence.normalize();
 
-    Event event;
-    if (evidence.completed) {
-        event = Event{0, 0, "brain", "goal_complete",
-                      {{"id", evidence.goal_id},
-                       {"confidence", evidence.confidence},
-                       {"delta", evidence.delta},
-                       {"sequence", static_cast<std::int64_t>(evidence.sequence)}}};
-    } else {
-        event = Event{0, 0, "brain", "goal_progress",
-                      {{"id", evidence.goal_id},
-                       {"progress", evidence.progress_after},
-                       {"confidence", evidence.confidence},
-                       {"delta", evidence.delta},
-                       {"sequence", static_cast<std::int64_t>(evidence.sequence)}}};
-    }
-    event.sequence = memory_.append(event);
-    if (event.sequence == 0) return false;
-    replay(event);
+    Event progress_event{0, 0, "brain", "goal_progress",
+                         {{"id", evidence.goal_id},
+                          {"progress", evidence.progress_after},
+                          {"confidence", evidence.confidence},
+                          {"delta", evidence.delta},
+                          {"sequence", static_cast<std::int64_t>(evidence.sequence)}}};
+    progress_event.sequence = memory_.append(progress_event);
+    if (progress_event.sequence == 0) return false;
+    replay(progress_event);
     ++state_.events_seen;
-    state_.cycle = event.sequence;
+    state_.cycle = progress_event.sequence;
+
+    if (evidence.completed) {
+        Event completion_event{0, 0, "brain", "goal_complete",
+                               {{"id", evidence.goal_id},
+                                {"confidence", evidence.confidence},
+                                {"delta", evidence.delta},
+                                {"sequence", static_cast<std::int64_t>(evidence.sequence)}}};
+        completion_event.sequence = memory_.append(completion_event);
+        if (completion_event.sequence == 0) return false;
+        replay(completion_event);
+        ++state_.events_seen;
+        state_.cycle = completion_event.sequence;
+    }
     sync_self_state();
     return true;
 }
