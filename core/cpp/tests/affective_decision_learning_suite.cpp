@@ -2,6 +2,7 @@
 #include "jarvis/core/brain.hpp"
 #include "jarvis/core/cognitive_cycle.hpp"
 
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <filesystem>
@@ -100,9 +101,18 @@ int main() {
         {}};
     const auto result = cycle.run(input);
     assert(result.status == CognitiveCycleStatus::completed);
-    assert(result.context.decision_context.valence == result.context.affective_state.valence);
-    assert(result.context.decision_context.arousal == result.context.affective_state.arousal);
-    assert(result.context.decision_context.stability == result.context.affective_state.stability);
+    // Decision context carries appraisal-modulated affect, not a raw copy:
+    // learned appraisal weights are part of the affect-to-decision pathway.
+    assert(result.context.decision_context.valence ==
+           std::clamp(result.context.affective_state.valence *
+                          result.context.affective_appraisal.outcome_weight,
+                      -1.0, 1.0));
+    assert(result.context.decision_context.arousal ==
+           std::clamp(result.context.affective_state.arousal *
+                          result.context.affective_appraisal.novelty_weight,
+                      0.0, 1.0));
+    assert(result.context.decision_context.stability ==
+           result.context.affective_state.stability);
     assert(!result.context.decisions.empty());
     assert(std::isfinite(affect_before_cycle.valence));
 
