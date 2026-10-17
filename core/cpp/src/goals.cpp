@@ -41,13 +41,14 @@ bool GoalModel::update_progress(const std::string& id, double progress) {
 
     const double delta = progress - goal->progress;
 
-    // Generic outcome-dependent adaptation: repeated progress reinforces the
-    // goal's current priority, while regressions reduce it. The EMA prevents a
-    // single noisy outcome from dominating future intent formation.
+    // Priority responds to the direction of the observed progress change;
+    // the smoothed momentum is retained separately for intent appraisal. Using
+    // the lagging EMA alone can make a new regression increase priority because
+    // older positive momentum outweighs the latest negative outcome.
     goal->outcome_momentum = std::clamp(
         0.8 * goal->outcome_momentum + 0.2 * std::clamp(delta, -1.0, 1.0),
         -1.0, 1.0);
-    const double adaptation = 0.10 * goal->outcome_momentum;
+    const double adaptation = 0.10 * std::clamp(delta, -1.0, 1.0);
     goal->priority = std::clamp(goal->priority + adaptation, 0.0, 1.0);
 
     goal->progress = progress;
