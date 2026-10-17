@@ -888,7 +888,7 @@ int main() {
 
     bool persisted = false;
     for (const auto& current : restored.snapshot().predictions) {
-        if (current.key == prediction.key) {
+        if (current.created_sequence == prediction.created_sequence) {
             persisted = current.resolved && current.error == 0.0;
             break;
         }
