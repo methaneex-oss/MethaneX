@@ -428,6 +428,11 @@ Observation Brain::observe(Event event) {
     event.timestamp_ns = event.timestamp_ns == 0 ? now_ns() : event.timestamp_ns;
     const auto previous = memory_.recent(1);
     const double novelty = compute_novelty(event, previous);
+    // Persist the novelty appraisal with the experience. Replay must consume
+    // the same evidence as the live pass; falling back to mutable state_.novelty
+    // makes affective updates depend on whether the event is observed live or
+    // reconstructed after restart.
+    event.data.try_emplace("novelty", novelty);
     event.sequence = memory_.append(event);
     if (event.sequence == 0) return Observation{};
     ++state_.events_seen;
