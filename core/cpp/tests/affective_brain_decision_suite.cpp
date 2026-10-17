@@ -14,8 +14,8 @@ int main() {
     std::filesystem::remove(path.string() + ".meta", ec);
 
     Brain brain(path);
-    CandidateAction reversible{"reversible", 0.3, 0.2, 0.2, 1.0, 0.1, 0.1, 0.4};
-    CandidateAction irreversible{"irreversible", 0.3, 0.2, 0.2, 0.1, 0.1, 0.1, 0.4};
+    CandidateAction reversible{"reversible", 0.3, 0.2, 0.2, 0.2, 1.0, 0.1, 0.4};
+    CandidateAction irreversible{"irreversible", 0.3, 0.2, 0.2, 0.8, 0.1, 0.1, 0.4};
     const std::vector<CandidateAction> actions{reversible, irreversible};
 
     const auto neutral = brain.choose_with_affect(actions);
