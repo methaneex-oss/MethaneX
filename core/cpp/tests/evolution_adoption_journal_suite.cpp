@@ -11,11 +11,11 @@ int main(){ EvolutionAdoptionJournal j; EvolutionExperiment e{}; e.id="exp-1"; e
  model.observe_fitness("transactional", 0.8);
  model.observe_fitness("transactional", 0.8);
  EvolutionHistory controller_history;
- EvolutionSafetyPolicy test_policy{};
- test_policy.minimum_confidence=0.8;
- EvolutionController controller(model, controller_history, test_policy);
  auto proposals=model.propose();
  assert(!proposals.empty());
+ EvolutionSafetyPolicy test_policy{};
+ test_policy.minimum_confidence=proposals.front().confidence;
+ EvolutionController controller(model, controller_history, test_policy);
  EvolutionExperiment experiment{};
  experiment.id="exp-controller";
  experiment.proposal=proposals.front();
