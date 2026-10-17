@@ -664,7 +664,9 @@ int main() {
     assert(second_prediction.key == "temperature");
     assert(second_prediction.created_sequence != first_prediction.created_sequence);
     assert(!second_prediction.resolved);
-    assert(brain.resolve_prediction("temperature", Scalar{31.0}));
+    // A semantic-key lookup resolves the latest forecast, which may have adapted
+    // after the first observation; a recorded non-exact forecast is not success.
+    assert(!brain.resolve_prediction("temperature", Scalar{31.0}));
     const auto* metric_after_second = brain.learning_metric("temperature");
     assert(metric_after_second != nullptr);
     assert(metric_after_second->observations == 2);
