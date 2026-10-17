@@ -315,7 +315,18 @@ int main() {
                 assert(std::isfinite(current.error));
                 assert(current.error > 0.0);
                 assert(current.error < 1.0);
-                assert(std::abs(current.error - (1.0 / 3.0)) < 1e-12);
+                long double predicted_value = 0.0L;
+                if (const auto* value = std::get_if<double>(&current.predicted)) {
+                    predicted_value = *value;
+                } else if (const auto* value = std::get_if<std::int64_t>(&current.predicted)) {
+                    predicted_value = static_cast<long double>(*value);
+                } else {
+                    assert(false && "real-valued temperature prediction must remain numeric");
+                }
+                const double expected_error = static_cast<double>(
+                    std::abs(30.0L - predicted_value) /
+                    std::max({1.0L, std::abs(30.0L), std::abs(predicted_value)}));
+                assert(std::abs(current.error - expected_error) < 1e-12);
                 found = true;
                 break;
             }
