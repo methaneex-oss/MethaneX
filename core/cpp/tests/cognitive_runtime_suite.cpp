@@ -14,8 +14,8 @@ CognitiveCycleInput make_input(const std::string& goal_id, std::int64_t value) {
     CognitiveCycleInput input;
     input.observation = Event{0, 0, "runtime", "observation", {{"value", value}}};
     input.candidate_actions = {
-        CandidateAction{"continue", 1.0, 0.9, 0.1, 1.0},
-        CandidateAction{"inspect", 0.6, 0.5, 0.2, 1.0},
+        CandidateAction{"continue", 1.0, 0.9, 0.1, 0.1},
+        CandidateAction{"inspect", 0.6, 0.5, 0.2, 0.2},
     };
     input.goal_id = goal_id;
     input.planning_horizon = 2;
