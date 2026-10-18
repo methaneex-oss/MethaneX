@@ -72,8 +72,12 @@ std::vector<Decision> DecisionEngine::decide(const std::vector<CandidateAction>&
         const double affective_value = valence * expected_value;
         const double score = utility_weight * utility
             + value_weight * (expected_value + valence_weight * affective_value)
-            + goal_weight * goal_alignment
-            + plan_value_weight * plan_alignment
+            // Context-wide goal/plan bonuses must modulate action value rather
+            // than shift every candidate's absolute score equally. A shared
+            // additive bonus can turn a harmful action into an accepted one
+            // and makes act/reject thresholds depend on unrelated context.
+            + goal_weight * goal_alignment * expected_value
+            + plan_value_weight * plan_alignment * expected_value
             + uncertainty_weight * (exploration + affective_uncertainty_weight * affective_exploration)
             + threat_weight * threat_bias
             + urgency_weight * (deadline_pressure * urgency + arousal_weight * affective_urgency)
