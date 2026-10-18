@@ -1,6 +1,7 @@
 #include "jarvis/core/evolution_opportunity.hpp"
 #include "jarvis/core/evolution_orchestrator.hpp"
 
+#include <algorithm>
 #include <cassert>
 #include <chrono>
 #include <vector>
@@ -66,7 +67,15 @@ int main() {
     assert((fast->value != fast->baseline) || (slow->value != slow->baseline));
     const auto fast_adoption = controller.adoption_journal().get(result.experiments[0].id);
     const auto slow_adoption = controller.adoption_journal().get(result.experiments[1].id);
-    const auto adopted_id = fast->value != fast->baseline ? result.experiments[0].id : result.experiments[1].id;
+    const std::string adopted_key =
+        fast->value != fast->baseline ? "fast" : "slow";
+    const auto adopted_experiment = std::find_if(
+        result.experiments.begin(), result.experiments.end(),
+        [&](const EvolutionExperiment& experiment) {
+            return experiment.proposal.key == adopted_key;
+        });
+    assert(adopted_experiment != result.experiments.end());
+    const auto adopted_id = adopted_experiment->id;
     const auto adopted_record = controller.adoption_journal().get(adopted_id);
     assert(adopted_record.has_value() && adopted_record->state == AdoptionState::Adopted);
     assert(history.for_experiment(adopted_id).size() == 2);
