@@ -60,7 +60,11 @@ std::vector<Decision> DecisionEngine::decide(const std::vector<CandidateAction>&
         const double risk = bounded_unit(action.risk);
         const double reversibility = bounded_unit(action.reversibility);
         const double resource_cost = bounded_nonnegative(action.resource_cost);
-        const double consequence = bounded_unit(action.expected_consequence);
+        // Expected consequence uses the same signed utility scale as the
+        // observed actual_consequence: beneficial outcomes are positive and
+        // harmful outcomes are negative. Reward predicted benefit rather than
+        // penalizing it as though every consequence were a cost.
+        const double consequence = bounded_signed(action.expected_consequence);
         const double urgency = bounded_unit(action.urgency);
         const double goal_alignment = goal_priority * (1.0 - goal_progress);
         const double plan_alignment = plan_value - plan_risk;
@@ -86,7 +90,7 @@ std::vector<Decision> DecisionEngine::decide(const std::vector<CandidateAction>&
             // high-risk action risk-free.
             - risk_weight * risk * (1.0 - 0.5 * reversibility)
             - resource_weight * resource_cost_score
-            - consequence_weight * consequence
+            + consequence_weight * consequence
             - tension_weight * tension * risk * (1.0 - 0.5 * reversibility);
 
         const double safe_score = finite_or_zero(score);
