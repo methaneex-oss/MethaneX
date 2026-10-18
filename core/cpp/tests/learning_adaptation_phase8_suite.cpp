@@ -52,6 +52,9 @@ int main() {
     // but recent prediction errors must reduce confidence quickly.
     const auto* before_change = brain.learning_metric("forecast");
     assert(before_change != nullptr);
+    // learning_metric returns a pointer to the live metric. Capture the value,
+    // not the pointer, before later observations mutate that same object.
+    const double recent_error_before_change = before_change->recent_error;
     const double stable_confidence = brain.learning_confidence("forecast");
     for (int i = 0; i < 4; ++i) {
         brain.predict("forecast", Scalar{0.9}, 0.9);
@@ -60,7 +63,7 @@ int main() {
     const auto* after_change = brain.learning_metric("forecast");
     assert(after_change != nullptr);
     assert(after_change->observations == 16);
-    assert(after_change->recent_error > before_change->recent_error);
+    assert(after_change->recent_error > recent_error_before_change);
     assert(brain.learning_confidence("forecast") < stable_confidence);
     assert(after_change->mean_error < 0.5);
 
