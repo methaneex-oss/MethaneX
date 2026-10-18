@@ -38,12 +38,12 @@ int main() {
     assert(memory.salient(2, MemoryTier::Semantic).size() == 2);
 
     // Consolidated memories should outrank otherwise equivalent, newer traces.
-    const auto old_experience = memory.append(Event{0, 5, "sensor", "experience", {{"topic", std::string("navigation")}}});
-    const auto recent_experience = memory.append(Event{0, 6, "sensor", "experience", {{"topic", std::string("navigation")}}});
+    const auto old_experience = memory.append(Event{0, 5, "sensor", "experience", {{"topic", std::string("navigation-experience")}}});
+    const auto recent_experience = memory.append(Event{0, 6, "sensor", "experience", {{"topic", std::string("navigation-experience")}}});
     assert(old_experience == 4 && recent_experience == 5);
     for (int i = 0; i < 8; ++i)
         assert(memory.consolidate(old_experience, 0.5, 1.0, 1.0, 0.5));
-    const auto experience_ranked = memory.recall_ranked({{"topic", std::string("navigation")}}, 2);
+    const auto experience_ranked = memory.recall_ranked({{"topic", std::string("navigation-experience")}}, 2);
     assert(experience_ranked.size() == 2);
     assert(experience_ranked.front().event.sequence == old_experience);
 
