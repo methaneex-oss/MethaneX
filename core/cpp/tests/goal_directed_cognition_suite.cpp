@@ -23,8 +23,8 @@ int main() {
     assert(intent.confidence >= 0.0 && intent.confidence <= 1.0);
 
     const std::vector<CandidateAction> actions{
-        CandidateAction{"safe_protect", 0.8, 0.9, 0.1, 1.0, 0.1, 0.05, 0.8},
-        CandidateAction{"dangerous_protect", 1.0, 1.0, 0.9, 0.2, 0.2, 0.8, 0.8}
+        CandidateAction{"safe_protect", 0.8, 0.9, 0.1, 0.1, 1.0, 0.05, 0.8},
+        CandidateAction{"dangerous_protect", 1.0, 1.0, 0.9, 0.9, 0.2, 0.8, 0.8}
     };
     const auto context = PlanningContext{
         intent.priority, intent.progress, intent.urgency,
