@@ -74,7 +74,10 @@ std::vector<Decision> Brain::choose_with_developmental_learning(
     planning_context.affective_uncertainty = affective_uncertainty;
     planning_context.tension = tension;
     planning_context.stability = stability;
-    const auto plan = planner_.build(adapted_actions, 1, planning_context);
+    // Keep shared plan context grounded in the unmodified candidate set.
+    // Otherwise improving one learned action changes plan_expected_value for
+    // every candidate and unintentionally raises unrelated actions' scores.
+    const auto plan = planner_.build(actions, 1, planning_context);
     DecisionContext context_data;
     context_data.goal_priority = strategy.planning.goal_priority;
     context_data.goal_progress = strategy.planning.goal_progress;
@@ -128,7 +131,10 @@ std::vector<Decision> Brain::choose_with_developmental_learning(
     planning_context.affective_uncertainty = affective_uncertainty;
     planning_context.tension = tension;
     planning_context.stability = stability;
-    const auto plan = planner_.build(adapted_actions, 1, planning_context);
+    // Keep shared plan context grounded in the unmodified candidate set.
+    // Otherwise improving one learned action changes plan_expected_value for
+    // every candidate and unintentionally raises unrelated actions' scores.
+    const auto plan = planner_.build(actions, 1, planning_context);
     DecisionContext context_data;
     context_data.goal_priority = strategy.planning.goal_priority;
     context_data.goal_progress = strategy.planning.goal_progress;
