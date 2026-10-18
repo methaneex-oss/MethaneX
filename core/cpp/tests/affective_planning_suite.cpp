@@ -14,8 +14,8 @@ int main() {
     std::filesystem::create_directories(root);
 
     const std::vector<CandidateAction> actions{
-        {"safe", 0.45, 0.45, 0.10, 1.0},
-        {"risky", 0.45, 0.90, 0.85, 0.0},
+        {"safe", 0.45, 0.45, 0.10, 0.1, 1.0},
+        {"risky", 0.45, 0.90, 0.85, 0.9, 0.2},
     };
 
     Brain calm(root / "calm.bin");
