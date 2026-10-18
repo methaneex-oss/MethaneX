@@ -47,8 +47,11 @@ double score_action(const CandidateAction& action, const PlanningContext& contex
                                       finite_or_zero(action.expected_value);
     const double affective_reversibility = policy.affective_uncertainty_weight *
                                             affective_uncertainty * reversibility;
+    // Reversibility mitigates downside; it does not erase the probability or
+    // magnitude of harm. Fully reversible actions still retain half their risk.
+    const double effective_risk = risk * (1.0 - 0.5 * reversibility);
     const double affective_risk_penalty = policy.tension_weight * tension *
-                                          risk * (1.0 - reversibility);
+                                          effective_risk;
     const double stability_modifier = 1.0 + policy.stability_weight *
                                       (1.0 - stability) * arousal;
 
@@ -60,7 +63,7 @@ double score_action(const CandidateAction& action, const PlanningContext& contex
         + policy.reversibility_weight * uncertainty * reversibility
         + affective_reversibility
         + policy.threat_weight * threat * (1.0 - risk)
-        - policy.risk_weight * stability_modifier * risk * (1.0 - reversibility)
+        - policy.risk_weight * stability_modifier * effective_risk
         - affective_risk_penalty
         - policy.resource_weight * cost_ratio;
 }
