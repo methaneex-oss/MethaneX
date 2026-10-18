@@ -20,7 +20,10 @@ bool changed(const std::vector<Belief>& before, const Belief& current) {
     const auto prior = std::find_if(before.begin(), before.end(), [&](const Belief& belief) {
         return belief.key == current.key;
     });
-    return prior != before.end() && prior->value != current.value;
+    // A newly introduced belief is a real state transition from unknown to
+    // observed. Include it alongside changed known beliefs so co-occurring
+    // discoveries can become associations instead of being silently ignored.
+    return prior == before.end() || prior->value != current.value;
 }
 
 std::string other_endpoint(const Association& association, const std::string& key) {
