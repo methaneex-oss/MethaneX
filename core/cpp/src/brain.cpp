@@ -383,8 +383,7 @@ void Brain::replay(const Event& event) {
         if (event.kind == "learning" && key == "reliability") continue;
         if (event.kind == "observation" &&
             (key == "novelty" || key == "salience" || key == "urgency" ||
-             key == "prediction_error" || key == "outcome" || key == "confidence" ||
-             key == "health" || key == "subject" || key == "predicate" || key == "object"))
+             key == "prediction_error" || key == "outcome" || key == "confidence"))
             continue;
         const auto it = beliefs_.find(key); if (it == beliefs_.end()) beliefs_.emplace(key, Belief{key, value, reliability, 1, event.sequence}); else { const bool same = it->second.value == value; it->second.value = value; it->second.confidence = same ? std::min(0.999, it->second.confidence + (1.0 - it->second.confidence) * reliability) : std::max(0.05, it->second.confidence * (1.0 - reliability)); it->second.disputed = !same && it->second.observations > 0; ++it->second.observations; it->second.updated_sequence = event.sequence; } world_.observe(Fact{event.source, key, value, reliability, 1}); const auto subject = string_value(event.data, "subject"); const auto predicate = string_value(event.data, "predicate"); const auto object = string_value(event.data, "object"); if (subject != nullptr && predicate != nullptr && object != nullptr) world_.relate(Relation{*subject, *predicate, *object, reliability, event.sequence, false}); }
     std::vector<Belief> after; after.reserve(beliefs_.size()); for (const auto& [_, belief] : beliefs_) after.push_back(belief); causal_.observe_transition(before, after); association_.observe(before, after, event.sequence);
