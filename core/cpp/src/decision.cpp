@@ -82,10 +82,12 @@ std::vector<Decision> DecisionEngine::decide(const std::vector<CandidateAction>&
             + threat_weight * threat_bias
             + urgency_weight * (deadline_pressure * urgency + arousal_weight * affective_urgency)
             + stability_weight * stability * reversibility
-            - risk_weight * risk * (1.0 - reversibility)
+            // Reversibility reduces expected downside but cannot make a
+            // high-risk action risk-free.
+            - risk_weight * risk * (1.0 - 0.5 * reversibility)
             - resource_weight * resource_cost_score
             - consequence_weight * consequence
-            - tension_weight * tension * risk;
+            - tension_weight * tension * risk * (1.0 - 0.5 * reversibility);
 
         const double safe_score = finite_or_zero(score);
         result.push_back({action, safe_score, classify(action, safe_score, context)});
