@@ -55,6 +55,9 @@ int main() {
     assert(memory.working_size() == 0);
     assert(memory.tier_of(Event{0, 0, "", "transient", {}}) == MemoryTier::Episodic);
 
+    const auto semantic_before_restart = memory.salient(2, MemoryTier::Semantic);
+    assert(semantic_before_restart.size() == 2);
+
     Memory restored(3, path);
     assert(restored.size() == 6);
     assert(restored.next_sequence() == 7);
@@ -67,7 +70,7 @@ int main() {
     // Consolidation evidence can increase salience; persistence must preserve
     // the learned value rather than reverting to the pre-consolidation value.
     assert(restored_semantic[0].salience == 1.0);
-    assert(restored_semantic[0].confidence == 0.8);
+    assert(restored_semantic[0].confidence == semantic_before_restart[0].confidence);
     const auto restored_consolidated = restored.recall_ranked({{"topic", std::string("temperature")}}, 1);
     assert(restored_consolidated.size() == 1);
     assert(restored_consolidated.front().consolidation > 0.0);
