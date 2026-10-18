@@ -79,7 +79,13 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
             const double reliability = std::clamp(metric->reliability, 0.0, 1.0);
             // Learned reliability is allowed to materially alter future planning,
             // while retaining a non-zero floor so one failure does not erase an action.
-            action.expected_value *= (0.25 + 0.75 * reliability);
+            const double learned_reliability = 0.25 + 0.75 * reliability;
+            // Consequence evidence must affect the action's overall learned
+            // utility as well as its forecast value. Otherwise a repeatedly
+            // unsuccessful action can keep winning solely on its original
+            // hand-authored utility score.
+            action.utility *= learned_reliability;
+            action.expected_value *= learned_reliability;
             action.risk = std::clamp(action.risk + (1.0 - reliability) * 0.5, 0.0, 1.0);
         }
     }
