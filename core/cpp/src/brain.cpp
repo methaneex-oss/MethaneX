@@ -388,8 +388,23 @@ void Brain::replay(const Event& event) {
         const auto it = beliefs_.find(key); if (it == beliefs_.end()) beliefs_.emplace(key, Belief{key, value, reliability, 1, event.sequence}); else { const bool same = it->second.value == value; it->second.value = value; it->second.confidence = same ? std::min(0.999, it->second.confidence + (1.0 - it->second.confidence) * reliability) : std::max(0.05, it->second.confidence * (1.0 - reliability)); it->second.disputed = !same && it->second.observations > 0; ++it->second.observations; it->second.updated_sequence = event.sequence; } world_.observe(Fact{event.source, key, value, reliability, 1}); const auto subject = string_value(event.data, "subject"); const auto predicate = string_value(event.data, "predicate"); const auto object = string_value(event.data, "object"); if (subject != nullptr && predicate != nullptr && object != nullptr) world_.relate(Relation{*subject, *predicate, *object, reliability, event.sequence, false}); }
     std::vector<Belief> after; after.reserve(beliefs_.size()); for (const auto& [_, belief] : beliefs_) after.push_back(belief); causal_.observe_transition(before, after); association_.observe(before, after, event.sequence);
     if (event.kind == "observation") {
-        const auto history = memory_.recent(2); std::vector<Event> previous; if (history.size() > 1) previous.push_back(history[1]);
-        const double novelty = compute_novelty(event, previous);
+        // Brain::observe persists the novelty appraisal with the event. During
+        // startup replay Memory already contains the complete journal, so
+        // memory_.recent() describes the journal tail, not the prefix preceding
+        // this event. Recomputing here from that tail makes attention and later
+        // affective learning depend on restart-time journal contents.
+        double novelty = 0.0;
+        const auto stored_novelty = event.data.find("novelty");
+        if (stored_novelty != event.data.end()) {
+            novelty = std::clamp(double_value(event.data, "novelty", 0.0), 0.0, 1.0);
+        } else {
+            // Compatibility fallback for historical observations written before
+            // novelty was persisted. Do not allow malformed values to propagate.
+            const auto history = memory_.recent(2);
+            std::vector<Event> previous;
+            if (history.size() > 1) previous.push_back(history[1]);
+            novelty = std::clamp(compute_novelty(event, previous), 0.0, 1.0);
+        }
         // Estimate confidence from evidence relevant to this observation. A
         // globally strong, unrelated belief must not suppress uncertainty here.
         double relevant_confidence = 0.5;
