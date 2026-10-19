@@ -106,21 +106,26 @@ ActionExecutionResult Brain::execute_action(
         // the authoritative action outcome immutable while giving the
         // knowledge/adaptation systems a persisted training event they can
         // replay after restart.
-        Event learning_event{
-            0,
-            0,
-            "action_executor",
-            "learning",
-            {{"action_executor." + result.action.name, reliability},
-             {"reliability", reliability},
-             {"source_action_sequence", static_cast<std::int64_t>(event.sequence)},
-             {"affective_relevant", false}}};
-        learning_event.sequence = memory_.append(learning_event);
-        if (learning_event.sequence != 0) {
-            ++state_.events_seen;
-            state_.cycle = learning_event.sequence;
-            replay(learning_event);
-            consolidate_experience(learning_event, 1.0 - reliability);
+        // Authorization rejection is not evidence that an executor failed:
+        // the action never crossed the execution boundary. Preserve the outcome
+        // record, but do not train capability reliability from a non-attempt.
+        if (result.status != ActionExecutionStatus::rejected) {
+            Event learning_event{
+                0,
+                0,
+                "action_executor",
+                "learning",
+                {{"action_executor." + result.action.name, reliability},
+                 {"reliability", reliability},
+                 {"source_action_sequence", static_cast<std::int64_t>(event.sequence)},
+                 {"affective_relevant", false}}};
+            learning_event.sequence = memory_.append(learning_event);
+            if (learning_event.sequence != 0) {
+                ++state_.events_seen;
+                state_.cycle = learning_event.sequence;
+                replay(learning_event);
+                consolidate_experience(learning_event, 1.0 - reliability);
+            }
         }
         sync_self_state();
     }
