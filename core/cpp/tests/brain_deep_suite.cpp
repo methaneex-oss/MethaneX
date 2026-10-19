@@ -4,6 +4,7 @@
 #include <cmath>
 #include <cstdint>
 #include <filesystem>
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -73,6 +74,7 @@ int main() {
     CognitiveCycleResult low_attention_result;
     CognitiveCycleResult low_attention_replay_reference;
     CognitiveCycleResult high_attention_replay_reference;
+    AttentionPolicy low_attention_policy_reference{};
     {
         Brain low_attention(low_attention_journal);
         assert(low_attention.create_goal(Goal{"attention-causal-goal", "act under uncertainty",
@@ -100,6 +102,7 @@ int main() {
         assert(low_attention_replay_reference.status == CognitiveCycleStatus::completed);
         assert(low_attention_replay_reference.context.plan.steps.front().action.name ==
                "irreversible_action");
+        low_attention_policy_reference = low_attention.attention_policy();
     }
     attention_input.observation.data["urgency"] = Scalar{1.0};
     {
@@ -157,6 +160,23 @@ int main() {
         assert(!replayed_result.context.action_assessments.empty());
         assert(replayed_result.context.action_assessments.front().action.name ==
                "irreversible_action");
+        const auto replay_policy = replayed_low_attention.attention_policy();
+        std::cerr << "ATTENTION_REPLAY live_salience=" << low_attention_replay_reference.context.attention.salience
+                  << " replay_salience=" << replayed_result.context.attention.salience
+                  << " live_novelty=" << low_attention_replay_reference.context.attention.novelty
+                  << " replay_novelty=" << replayed_result.context.attention.novelty
+                  << " live_uncertainty=" << low_attention_replay_reference.context.attention.uncertainty
+                  << " replay_uncertainty=" << replayed_result.context.attention.uncertainty
+                  << " policy_novelty=" << low_attention_policy_reference.novelty_weight
+                  << "/" << replay_policy.novelty_weight
+                  << " policy_uncertainty=" << low_attention_policy_reference.uncertainty_weight
+                  << "/" << replay_policy.uncertainty_weight
+                  << " policy_urgency=" << low_attention_policy_reference.urgency_weight
+                  << "/" << replay_policy.urgency_weight
+                  << " policy_activation=" << low_attention_policy_reference.internal_activation_weight
+                  << "/" << replay_policy.internal_activation_weight
+                  << " policy_prediction_error=" << low_attention_policy_reference.prediction_error_weight
+                  << "/" << replay_policy.prediction_error_weight << '\\n';
         assert(std::abs(replayed_result.context.attention.salience -
                         low_attention_replay_reference.context.attention.salience) < 1e-12);
         assert(std::abs(replayed_result.context.decision_context.uncertainty -
