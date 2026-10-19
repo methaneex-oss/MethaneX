@@ -1262,6 +1262,14 @@ int main() {
 
     Brain replayed_negative_strategy_brain(strategy_path);
     CognitiveCycle replayed_negative_strategy_cycle(replayed_negative_strategy_brain);
+    // Distinguish journal replay loss from strategy reconstruction loss:
+    // both observed outcomes must be present in the loaded continuity journal.
+    const auto replayed_action_outcomes =
+        replayed_negative_strategy_brain.memory().by_kind("action_outcome");
+    assert(replayed_action_outcomes.size() >= 2);
+    const auto replayed_strategies =
+        replayed_negative_strategy_brain.developmental_strategies();
+    assert(replayed_strategies.size() >= 2);
     const auto* replayed_harmful_strategy =
         replayed_negative_strategy_brain.developmental_best_strategy(
             "hazardous engine state");
