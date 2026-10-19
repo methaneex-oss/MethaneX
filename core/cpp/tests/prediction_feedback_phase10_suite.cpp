@@ -1148,7 +1148,22 @@ int main() {
     assert(after_strategy_experience.status == CognitiveCycleStatus::completed);
     assert(after_strategy_experience.context.plan.steps.front().action.name == "safe_fallback");
 
-    Brain replayed_strategy_brain(strategy_path);
+    // Replay in an isolated journal copy. Two Brain instances writing to
+    // the same append-only journal maintain independent sequence counters and
+    // can interleave duplicate sequences, which is not a valid replay test.
+    const auto replay_strategy_path =
+        std::filesystem::temp_directory_path() /
+        "jarvis_phase10_developmental_strategy_replay.bin";
+    std::filesystem::remove(replay_strategy_path, ec);
+    std::filesystem::remove(replay_strategy_path.string() + ".meta", ec);
+    std::filesystem::copy_file(strategy_path, replay_strategy_path,
+                               std::filesystem::copy_options::overwrite_existing, ec);
+    assert(!ec);
+    std::filesystem::copy_file(strategy_path.string() + ".meta",
+                               replay_strategy_path.string() + ".meta",
+                               std::filesystem::copy_options::overwrite_existing, ec);
+    assert(!ec);
+    Brain replayed_strategy_brain(replay_strategy_path);
     CognitiveCycle replayed_strategy_cycle(replayed_strategy_brain);
     const auto* replayed_strategy =
         replayed_strategy_brain.developmental_best_strategy("uncertain sensor state");
@@ -1260,7 +1275,19 @@ int main() {
     assert(after_negative_experience.context.plan.steps.front().action.name ==
            "safe_fallback");
 
-    Brain replayed_negative_strategy_brain(strategy_path);
+    const auto replayed_negative_strategy_path =
+        std::filesystem::temp_directory_path() /
+        "jarvis_phase10_developmental_strategy_negative_replay.bin";
+    std::filesystem::remove(replayed_negative_strategy_path, ec);
+    std::filesystem::remove(replayed_negative_strategy_path.string() + ".meta", ec);
+    std::filesystem::copy_file(strategy_path, replayed_negative_strategy_path,
+                               std::filesystem::copy_options::overwrite_existing, ec);
+    assert(!ec);
+    std::filesystem::copy_file(strategy_path.string() + ".meta",
+                               replayed_negative_strategy_path.string() + ".meta",
+                               std::filesystem::copy_options::overwrite_existing, ec);
+    assert(!ec);
+    Brain replayed_negative_strategy_brain(replayed_negative_strategy_path);
     CognitiveCycle replayed_negative_strategy_cycle(replayed_negative_strategy_brain);
     // Distinguish journal replay loss from strategy reconstruction loss:
     // both observed outcomes must be present in the loaded continuity journal.
@@ -1288,6 +1315,10 @@ int main() {
 
     std::filesystem::remove(strategy_path, ec);
     std::filesystem::remove(strategy_path.string() + ".meta", ec);
+    std::filesystem::remove(replay_strategy_path, ec);
+    std::filesystem::remove(replay_strategy_path.string() + ".meta", ec);
+    std::filesystem::remove(replayed_negative_strategy_path, ec);
+    std::filesystem::remove(replayed_negative_strategy_path.string() + ".meta", ec);
     std::filesystem::remove(behavior_path, ec);
     std::filesystem::remove(behavior_path.string() + ".meta", ec);
     std::filesystem::remove(path, ec);
