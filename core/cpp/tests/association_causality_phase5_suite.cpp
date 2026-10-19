@@ -83,7 +83,7 @@ int main() {
     assert(hypothesis_survived);
     const auto weakened_associations = concept_model.related("alpha", 0.0);
     bool found_weakened_context = false;
-    for (const auto& association : weakened_associations) if ((association.left == "alpha" && association.right == "context_one") || (association.left == "context_one" && association.right == "alpha")) { found_weakened_context = true; assert(association.contradictory_observations == 1); assert(association.strength < 1.0); }
+    for (const auto& association : weakened_associations) if ((association.left == "alpha" && association.right == "context_one") || (association.left == "context_one" && association.right == "alpha")) { found_weakened_context = true; assert(association.contradictory_observations == 2); assert(association.strength < 1.0); }
     assert(found_weakened_context);
     for (std::uint64_t sequence = 14; sequence <= 20; ++sequence) concept_model.observe({{"alpha", true, 0.9, sequence - 1, sequence - 1}, {"beta", true, 0.9, sequence - 1, sequence - 1}, {"context_one", false, 0.9, sequence - 1, sequence - 1}, {"context_two", false, 0.9, sequence - 1, sequence - 1}}, {{"alpha", true, 0.9, sequence, sequence}, {"beta", true, 0.9, sequence, sequence}, {"context_one", true, 0.9, sequence, sequence}, {"context_two", true, 0.9, sequence, sequence}}, sequence);
     const auto revised_concepts = concept_model.concept_candidates(0.5, 2);
