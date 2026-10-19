@@ -230,13 +230,22 @@ std::vector<ConceptMatch> AssociationModel::generalized_concepts(
                 concept_contexts = std::move(shared);
             }
         }
+        // A key that is related to a concept's members will often have
+        // direct links to those members as well as links to the shared
+        // contexts. Those member links are not counter-evidence against the
+        // concept match: compare the key and concept on contextual neighbors
+        // only, excluding the candidate members from both sides.
+        auto key_contextual_neighbors = key_contexts;
+        for (const auto& candidate_member : candidate.members)
+            key_contextual_neighbors.erase(candidate_member);
+
         std::vector<std::string> matched;
-        std::set_intersection(key_contexts.begin(), key_contexts.end(),
+        std::set_intersection(key_contextual_neighbors.begin(), key_contextual_neighbors.end(),
                               concept_contexts.begin(), concept_contexts.end(),
                               std::back_inserter(matched));
         if (matched.size() < minimum_shared_contexts) continue;
 
-        const std::size_t union_size = key_contexts.size() + concept_contexts.size() - matched.size();
+        const std::size_t union_size = key_contextual_neighbors.size() + concept_contexts.size() - matched.size();
         const double similarity = static_cast<double>(matched.size()) /
             static_cast<double>(std::max<std::size_t>(1, union_size));
         if (similarity < similarity_threshold) continue;
