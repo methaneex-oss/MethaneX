@@ -192,24 +192,45 @@ std::vector<ConceptMatch> AssociationModel::generalized_concepts(
     const double threshold = std::clamp(minimum_strength, 0.0, 1.0);
     const double similarity_threshold = std::clamp(minimum_similarity, 0.0, 1.0);
 
-    std::set<std::string> key_contexts;
-    for (const auto& association : associations_) {
-        if (association.strength < threshold) continue;
-        if (association.left == key) key_contexts.insert(association.right);
-        else if (association.right == key) key_contexts.insert(association.left);
-    }
+    // A concept candidate is a pair of entities with shared relational
+    // neighbors. Those shared neighbors are the concept's defining contexts;
+    // they are not external neighbors of the pair. Keeping only external
+    // neighbors here discards the very evidence that formed the concept.
+    const auto neighbors_of = [&](const std::string& member) {
+        std::set<std::string> neighbors;
+        for (const auto& association : associations_) {
+            if (association.strength < threshold) continue;
+            if (association.left == member) neighbors.insert(association.right);
+            else if (association.right == member) neighbors.insert(association.left);
+        }
+        return neighbors;
+    };
+
+    const auto key_contexts = neighbors_of(key);
     if (key_contexts.size() < minimum_shared_contexts) return result;
 
     const auto candidates = concept_candidates(threshold, minimum_shared_contexts);
     for (const auto& candidate : candidates) {
+        if (std::find(candidate.members.begin(), candidate.members.end(), key) != candidate.members.end())
+            continue;
+
         std::set<std::string> concept_contexts;
+        bool first_member = true;
         for (const auto& member : candidate.members) {
-            for (const auto& association : associations_) {
-                if (association.strength < threshold) continue;
-                if (association.left == member && std::find(candidate.members.begin(), candidate.members.end(), association.right) == candidate.members.end())
-                    concept_contexts.insert(association.right);
-                else if (association.right == member && std::find(candidate.members.begin(), candidate.members.end(), association.left) == candidate.members.end())
-                    concept_contexts.insert(association.left);
+            auto member_contexts = neighbors_of(member);
+            // The members themselves are not contextual evidence for their
+            // own concept; only common neighbors establish the pattern.
+            for (const auto& candidate_member : candidate.members)
+                member_contexts.erase(candidate_member);
+            if (first_member) {
+                concept_contexts = std::move(member_contexts);
+                first_member = false;
+            } else {
+                std::set<std::string> shared;
+                std::set_intersection(concept_contexts.begin(), concept_contexts.end(),
+                                      member_contexts.begin(), member_contexts.end(),
+                                      std::inserter(shared, shared.begin()));
+                concept_contexts = std::move(shared);
             }
         }
         std::vector<std::string> matched;
@@ -217,6 +238,7 @@ std::vector<ConceptMatch> AssociationModel::generalized_concepts(
                               concept_contexts.begin(), concept_contexts.end(),
                               std::back_inserter(matched));
         if (matched.size() < minimum_shared_contexts) continue;
+
         const std::size_t union_size = key_contexts.size() + concept_contexts.size() - matched.size();
         const double similarity = static_cast<double>(matched.size()) /
             static_cast<double>(std::max<std::size_t>(1, union_size));
