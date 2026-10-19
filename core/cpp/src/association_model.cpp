@@ -211,9 +211,6 @@ std::vector<ConceptMatch> AssociationModel::generalized_concepts(
 
     const auto candidates = concept_candidates(threshold, minimum_shared_contexts);
     for (const auto& candidate : candidates) {
-        if (std::find(candidate.members.begin(), candidate.members.end(), key) != candidate.members.end())
-            continue;
-
         std::set<std::string> concept_contexts;
         bool first_member = true;
         for (const auto& member : candidate.members) {
