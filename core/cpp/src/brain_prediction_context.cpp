@@ -62,19 +62,24 @@ Prediction Brain::predict_with_context(std::string key, Scalar value, double con
     std::unique_lock lock(mutex_);
     const double threshold = std::clamp(minimum_strength, 0.0, 1.0);
     PredictionContext context{};
-    const auto candidates = association_.concept_candidates(threshold, minimum_shared_contexts);
-    for (const auto& candidate : candidates) {
-        if (std::find(candidate.members.begin(), candidate.members.end(), key) == candidate.members.end()) continue;
-        if (candidate.coherence > context.evidence_strength) {
-            context.evidence_strength = candidate.coherence;
-            context.concept_members = candidate.members;
-        }
-    }
-    if (context.concept_members.empty()) {
-        const auto matches = association_.generalized_concepts(key, threshold, minimum_shared_contexts, 0.5);
-        if (!matches.empty()) {
-            context.evidence_strength = matches.front().evidence_strength;
-            context.concept_members = matches.front().concept_members;
+    // Prefer a concept inferred from shared contextual neighbors over any
+    // arbitrary graph pair that happens to contain the key. Direct pairs are a
+    // fallback for keys with no sufficiently supported generalized match.
+    const auto matches = association_.generalized_concepts(
+        key, threshold, minimum_shared_contexts, 0.5);
+    if (!matches.empty()) {
+        context.evidence_strength = matches.front().evidence_strength;
+        context.concept_members = matches.front().concept_members;
+    } else {
+        const auto candidates = association_.concept_candidates(
+            threshold, minimum_shared_contexts);
+        for (const auto& candidate : candidates) {
+            if (std::find(candidate.members.begin(), candidate.members.end(), key) ==
+                candidate.members.end()) continue;
+            if (candidate.coherence > context.evidence_strength) {
+                context.evidence_strength = candidate.coherence;
+                context.concept_members = candidate.members;
+            }
         }
     }
     const double base_confidence = std::clamp(confidence, 0.0, 1.0);
