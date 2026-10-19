@@ -166,14 +166,17 @@ int main() {
     assert(after_restart.status == CognitiveCycleStatus::completed);
     assert(!after_restart.context.plan.steps.empty());
     assert(after_restart.context.plan.steps.front().action.name == "wait");
-    bool restored_action_outcome = false;
+    bool restored_calibrate_outcome = false;
     for (const auto& event : restored.memory().all()) {
-        if (event.kind != "action_outcome") continue;
-        restored_action_outcome = true;
+        if (event.kind != "action_outcome" ||
+            std::get<std::string>(event.data.at("action")) != "calibrate") continue;
+        restored_calibrate_outcome = true;
         assert(std::get<std::string>(event.data.at("context")) == "system stabilization");
-        assert(std::get<std::string>(event.data.at("action")) == "calibrate");
     }
-    assert(restored_action_outcome);
+    // A separate direct execution above intentionally had no developmental
+    // context, so its event uses the documented goal/global fallback. Verify
+    // context preservation only for actions planned in this cycle.
+    assert(restored_calibrate_outcome);
 
     std::filesystem::remove(journal, ec);
     std::filesystem::remove(journal.string() + ".meta", ec);
