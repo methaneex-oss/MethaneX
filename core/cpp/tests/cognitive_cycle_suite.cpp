@@ -140,7 +140,7 @@ int main() {
     dispute_input.observation = Event{0, 0, "sensor", "observation", {{"temperature", 20.0}}};
     dispute_input.candidate_actions = {
         CandidateAction{"commit", 0.0, 0.50, 0.0, 0.0, 0.0, 0.0, 0.0},
-        CandidateAction{"inspect", 0.0, 0.47, 0.0, 1.0, 0.0, 0.0, 0.0},
+        CandidateAction{"inspect", 0.0, 0.47, 0.0, 0.1, 1.0, 0.0, 0.0},
     };
     dispute_input.goal_id = dispute_goal.id;
     dispute_input.planning_horizon = 1;
