@@ -53,7 +53,6 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     }
     result.context.selected_goal = *selected;
     if (input.candidate_actions.empty()) { result.status = CognitiveCycleStatus::no_action; result.context.reflection = brain_.reflect(); return result; }
-    const auto self_state = brain_.self_state_model().snapshot();
     const double goal_priority = std::clamp(selected->priority, 0.0, 1.0);
     const double goal_progress = std::clamp(selected->progress, 0.0, 1.0);
     const double threat = std::clamp(brain_.threat().score, 0.0, 1.0);
