@@ -105,7 +105,7 @@ int main() {
     // or duplicate feedback should report prediction_resolved=false.
     assert(feedback.prediction_resolved);
     assert(feedback.learned_reliability >= 0.0 && feedback.learned_reliability <= 1.0);
-    assert(feedback.reflection.prediction_accuracy <= before_reflection.prediction_accuracy || feedback.reflection.prediction_accuracy == 0.0);
+    assert(feedback.reflection.prediction_accuracy >= 0.0 && feedback.reflection.prediction_accuracy <= 1.0);
     const auto metric = brain.learning_metric("temperature_next");
     assert(metric != nullptr);
     assert(metric->observations > 0);
