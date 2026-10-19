@@ -33,7 +33,10 @@ CognitiveWorkspace make_workspace(const CognitiveCycleResult& result, const Brai
 }
 
 std::optional<Evidence> evidence_for_action(const ActionExecutionResult& result) {
-    if (result.action.name.empty()) return std::nullopt;
+    if (result.action.name.empty() ||
+        result.status == ActionExecutionStatus::rejected) return std::nullopt;
+    // A rejected action was not executed, so it provides no evidence about
+    // executor reliability. Feedback is reserved for attempted actions.
     double reliability = 0.0;
     switch (result.status) {
         case ActionExecutionStatus::verified: reliability = 1.0; break;
