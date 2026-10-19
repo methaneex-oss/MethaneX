@@ -73,6 +73,18 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
         combined_uncertainty, std::max(dispute_pressure, world_dispute_pressure));
     const double deadline_pressure = std::clamp(input.deadline_pressure, 0.0, 1.0);
     std::vector<CandidateAction> learned_actions = input.candidate_actions;
+    // Do not plan with a capability that the self-model has marked unavailable
+    // or isolated. Capability observations describe current operational ability,
+    // not merely a preference to be traded off against utility.
+    learned_actions.erase(
+        std::remove_if(learned_actions.begin(), learned_actions.end(),
+            [&](const CandidateAction& action) {
+                if (action.name.empty()) return true;
+                const auto* capability = brain_.self_model().capability(action.name);
+                return capability != nullptr &&
+                       (capability->isolated || capability->availability <= 0.0);
+            }),
+        learned_actions.end());
     for (auto& action : learned_actions) {
         if (action.name.empty()) continue;
         if (const auto* metric = brain_.knowledge_source("action_executor." + action.name); metric != nullptr && metric->observations > 0) {
