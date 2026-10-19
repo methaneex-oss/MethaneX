@@ -20,6 +20,9 @@ public:
     bool rollback(const std::string& parameter_key, const std::string& experiment_id,
                   const std::string& reason = "manual_rollback",
                   double observed_delta = 0.0);
+    std::size_t canary_minimum_observations() const noexcept {
+        return canary_.minimum_observations();
+    }
     const EvolutionAdoptionJournal& adoption_journal() const noexcept { return adoption_journal_; }
 
 private:
