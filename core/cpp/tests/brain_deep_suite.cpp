@@ -65,7 +65,7 @@ int main() {
     attention_input.resource_budget = 1.0;
     attention_input.candidate_actions = {
         CandidateAction{"reversible_action", 0.0, 0.100, 1.0, 0.0, 1.0, 0.0},
-        CandidateAction{"irreversible_action", 0.0, 0.210, 1.0, 0.0, 0.0, 0.0},
+        CandidateAction{"irreversible_action", 0.0, 0.290, 1.0, 0.0, 0.0, 0.0},
     };
     attention_input.observation = Event{0, 0, "sensor", "observation",
         {{"confidence", 0.7}, {"sensor_state", std::string("uncertain")},
