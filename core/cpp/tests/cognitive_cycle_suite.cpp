@@ -28,7 +28,7 @@ int main() {
     input.observation = Event{0, 0, "sensor", "observation", {{"temperature", 42.0}, {"status", std::string("unstable")}}};
     input.candidate_actions = {
         CandidateAction{"stabilize", 0.9, 0.8, 0.2, 0.1, 1.0, 0.0, 0.8},
-        CandidateAction{"inspect", 0.6, 0.5, 0.1, 0.4, 0.5, 0.0, 0.4, DecisionOutcome::recommend},
+        CandidateAction{"inspect", 0.6, 0.5, 0.1, 0.2, 0.5, 0.0, 0.4, DecisionOutcome::recommend},
     };
     input.goal_id = goal.id;
     input.planning_horizon = 2;
