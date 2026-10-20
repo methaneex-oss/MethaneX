@@ -500,7 +500,7 @@ int main() {
         }
         assert(negative_route_b);
         assert(positive_route_a);
-        const auto* route_a_reliability = developing.knowledge_source("action_executor.route_a");
+        const auto* route_a_reliability = developing.knowledge_source("action_executor");
         assert(route_a_reliability != nullptr);
         assert(std::abs(route_a_reliability->reliability - route_b_reliability->reliability) < 1e-12);
     }
