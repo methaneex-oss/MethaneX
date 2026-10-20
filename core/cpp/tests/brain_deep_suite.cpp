@@ -259,7 +259,8 @@ int main() {
         assert(replayed_value != nullptr);
         assert(*replayed_value > 0.2);
         assert(*replayed_value < 0.8);
-        assert(replayed_predictor.learning_metric("temperature")->observations == 9);
+        // Forecasting consumes learned calibration but is not new outcome evidence.
+        assert(replayed_predictor.learning_metric("temperature")->observations == 8);
     }
 
     const std::vector<CandidateAction> actions{{"safe", 0.9, 0.9, 0.05, 0.9}, {"risky", 0.95, 0.2, 0.9, 0.8}};
