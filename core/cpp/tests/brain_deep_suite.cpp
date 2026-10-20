@@ -430,8 +430,8 @@ int main() {
                                            GoalStatus::pending, {}, {}}));
         assert(developing.activate_goal("navigation"));
 
-        const CandidateAction route_a{"route_a", 0.0, 0.0, 0.1, 1.0};
-        const CandidateAction route_b{"route_b", 0.15, 0.15, 0.1, 1.0};
+        const CandidateAction route_a{"route_a", 0.0, 0.0, 0.1, 0.1, 1.0};
+        const CandidateAction route_b{"route_b", 0.15, 0.15, 0.1, 0.1, 1.0};
         CognitiveCycleInput input;
         input.observation = Event{0, 0, "navigator", "observation", {{"route_state", std::string("unknown")}}};
         input.candidate_actions = {route_a, route_b};
@@ -510,8 +510,8 @@ int main() {
         CognitiveCycleInput input;
         input.observation = Event{0, 0, "navigator", "observation", {{"route_state", std::string("unknown")}}};
         input.candidate_actions = {
-            CandidateAction{"route_a", 0.0, 0.0, 0.1, 1.0},
-            CandidateAction{"route_b", 0.15, 0.15, 0.1, 1.0},
+            CandidateAction{"route_a", 0.0, 0.0, 0.1, 0.1, 1.0},
+            CandidateAction{"route_b", 0.15, 0.15, 0.1, 0.1, 1.0},
         };
         input.goal_id = "navigation";
         input.developmental_context = "navigation";
