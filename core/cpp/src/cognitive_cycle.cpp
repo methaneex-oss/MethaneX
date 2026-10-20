@@ -149,7 +149,7 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
             }
             if (total_weight > 0.0) {
                 const double influence = std::clamp(
-                    (weighted_evidence / std::max(1.0, total_weight)) * 0.5, -0.5, 0.5);
+                    weighted_evidence / std::max(1.0, total_weight), -1.0, 1.0);
                 action.utility += influence;
             }
         }
