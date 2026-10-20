@@ -124,9 +124,14 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
                 total_weight += weight;
             }
             if (total_weight > 0.0) {
-                // Divide by at least one so low-confidence evidence stays weak.
-                action.utility += std::clamp(
+                // Learned consequences update both action preference and its
+                // expected outcome. Updating utility alone can leave a harmful
+                // action ranked first because its stale forecast still dominates.
+                const double influence = std::clamp(
                     weighted_evidence / std::max(1.0, total_weight), -1.0, 1.0);
+                action.utility += influence;
+                action.expected_value = std::clamp(
+                    action.expected_value + influence, -1.0, 1.0);
             }
         }
     } else {
@@ -150,7 +155,12 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
             if (total_weight > 0.0) {
                 const double influence = std::clamp(
                     1.25 * weighted_evidence / std::max(1.0, total_weight), -1.0, 1.0);
+                // Transfer signed consequence evidence into the forecast as well
+                // as preference; otherwise the original expected value can
+                // overpower a learned negative outcome in the planner.
                 action.utility += influence;
+                action.expected_value = std::clamp(
+                    action.expected_value + influence, -1.0, 1.0);
             }
         }
     }
