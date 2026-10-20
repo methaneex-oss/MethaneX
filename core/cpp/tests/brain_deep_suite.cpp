@@ -326,6 +326,7 @@ int main() {
 
     const auto affect_before_failure = brain.affective_state();
     const auto learning_before_failure = brain.affective_learning_updates();
+    const auto affective_records_before_failure = brain.memory().by_kind("affective_learning", 16).size();
     const auto* learned_safe_before_unknown = brain.developmental_best_strategy("global");
     const auto learned_safe_uses_before_unknown = learned_safe_before_unknown == nullptr ? 0ULL : learned_safe_before_unknown->uses;
     const auto failed_action = brain.execute_action(
@@ -335,7 +336,7 @@ int main() {
     assert(failed_action.authorized);
     assert(!failed_action.executed);
     assert(brain.memory().by_kind("action_outcome", 2).size() == 2);
-    assert(brain.memory().by_kind("affective_learning", 2).size() == 1);
+    assert(brain.memory().by_kind("affective_learning", 16).size() == affective_records_before_failure);
     // No consequence observer means the action result must not train the
     // consequence-sensitive affective calibration model.
     assert(learning_before_failure > 0);
