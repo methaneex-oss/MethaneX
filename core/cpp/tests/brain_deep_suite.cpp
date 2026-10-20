@@ -369,7 +369,7 @@ int main() {
             learner.observe(strategy_outcome("navigation", "route_a", 0.9, 0.1, 0.8, 0.2));
             learner.observe(strategy_outcome("navigation", "route_b", -0.8, 0.9, 0.8, 0.2));
         }
-        const auto* best = learner.developmental_best_strategy("global");
+        const auto* best = learner.developmental_best_strategy("navigation");
         assert(best != nullptr);
         assert(best->action == "route_a");
         assert(best->uses == 8);
@@ -379,7 +379,7 @@ int main() {
         Brain replayed(developmental_journal);
         const auto strategies = replayed.developmental_strategies();
         assert(strategies.size() == 2);
-        const auto* best = replayed.developmental_best_strategy("global");
+        const auto* best = replayed.developmental_best_strategy("navigation");
         assert(best != nullptr);
         assert(best->action == "route_a");
         assert(best->uses == 8);
