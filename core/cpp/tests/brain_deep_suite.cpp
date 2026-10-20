@@ -461,7 +461,7 @@ int main() {
         assert(failed.verified);
         assert(failed.outcome.observed);
         assert(std::abs(failed.outcome.actual_consequence + 0.8) < 1e-12);
-        const auto* route_b_reliability = developing.knowledge_source("action_executor.route_b");
+        const auto* route_b_reliability = developing.knowledge_source("action_executor");
         assert(route_b_reliability != nullptr);
         assert(std::abs(route_b_reliability->reliability - 1.0) < 1e-12);
 
