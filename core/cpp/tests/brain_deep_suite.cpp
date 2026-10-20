@@ -263,7 +263,7 @@ int main() {
         assert(replayed_predictor.learning_metric("temperature")->observations == 8);
     }
 
-    const std::vector<CandidateAction> actions{{"safe", 0.9, 0.9, 0.05, 0.9}, {"risky", 0.95, 0.2, 0.9, 0.8}};
+    const std::vector<CandidateAction> actions{{"safe", 0.9, 0.9, 0.95, 0.1, 1.0}, {"risky", 0.95, 0.2, 0.9, 0.9, 0.2}};
     const auto decisions = brain.choose(actions);
     assert(!decisions.empty());
     assert(!brain.plan(actions, 4).steps.empty());
