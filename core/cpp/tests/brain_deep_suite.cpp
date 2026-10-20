@@ -161,22 +161,16 @@ int main() {
         assert(replayed_result.context.action_assessments.front().action.name ==
                "irreversible_action");
         const auto replay_policy = replayed_low_attention.attention_policy();
-        std::cerr << "ATTENTION_REPLAY live_salience=" << low_attention_replay_reference.context.attention.salience
-                  << " replay_salience=" << replayed_result.context.attention.salience
-                  << " live_novelty=" << low_attention_replay_reference.context.attention.novelty
-                  << " replay_novelty=" << replayed_result.context.attention.novelty
-                  << " live_uncertainty=" << low_attention_replay_reference.context.attention.uncertainty
-                  << " replay_uncertainty=" << replayed_result.context.attention.uncertainty
-                  << " policy_novelty=" << low_attention_policy_reference.novelty_weight
-                  << "/" << replay_policy.novelty_weight
-                  << " policy_uncertainty=" << low_attention_policy_reference.uncertainty_weight
-                  << "/" << replay_policy.uncertainty_weight
-                  << " policy_urgency=" << low_attention_policy_reference.urgency_weight
-                  << "/" << replay_policy.urgency_weight
-                  << " policy_activation=" << low_attention_policy_reference.internal_activation_weight
-                  << "/" << replay_policy.internal_activation_weight
-                  << " policy_prediction_error=" << low_attention_policy_reference.prediction_error_weight
-                  << "/" << replay_policy.prediction_error_weight << '\n';
+        assert(std::abs(replay_policy.novelty_weight -
+                        low_attention_policy_reference.novelty_weight) < 1e-12);
+        assert(std::abs(replay_policy.uncertainty_weight -
+                        low_attention_policy_reference.uncertainty_weight) < 1e-12);
+        assert(std::abs(replay_policy.urgency_weight -
+                        low_attention_policy_reference.urgency_weight) < 1e-12);
+        assert(std::abs(replay_policy.internal_activation_weight -
+                        low_attention_policy_reference.internal_activation_weight) < 1e-12);
+        assert(std::abs(replay_policy.prediction_error_weight -
+                        low_attention_policy_reference.prediction_error_weight) < 1e-12);
         // The live reference above is the preceding cycle, while constructing
         // replay then running cycle.run() adds another observation to the journal.
         // Its salience can therefore differ slightly as affect is updated by that
@@ -184,8 +178,14 @@ int main() {
         // not numeric salience across different history lengths.
         assert(replayed_result.context.attention.salience >= 0.0 &&
                replayed_result.context.attention.salience <= 1.0);
+        // Decision uncertainty is derived from the current cycle's attention
+        // salience. The replayed cycle adds a new observation, so compare the
+        // value against that same cycle's inputs rather than an earlier cycle.
+        const double replayed_attended_uncertainty =
+            replayed_result.context.attention.salience *
+            replayed_result.context.attention.uncertainty;
         assert(std::abs(replayed_result.context.decision_context.uncertainty -
-                        low_attention_replay_reference.context.decision_context.uncertainty) < 1e-12);
+                        replayed_attended_uncertainty) < 1e-12);
     }
     {
         Brain replayed_high_attention(high_attention_journal);
@@ -207,8 +207,11 @@ int main() {
                "reversible_action");
         assert(std::abs(replayed_result.context.attention.salience -
                         high_attention_replay_reference.context.attention.salience) < 1e-12);
+        const double replayed_attended_uncertainty =
+            replayed_result.context.attention.salience *
+            replayed_result.context.attention.uncertainty;
         assert(std::abs(replayed_result.context.decision_context.uncertainty -
-                        high_attention_replay_reference.context.decision_context.uncertainty) < 1e-12);
+                        replayed_attended_uncertainty) < 1e-12);
     }
     std::filesystem::remove(low_attention_journal, ec);
     std::filesystem::remove((low_attention_journal.string() + ".meta"), ec);
