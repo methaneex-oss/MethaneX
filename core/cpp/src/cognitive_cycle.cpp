@@ -84,15 +84,28 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
         learned_actions.end());
     for (auto& action : learned_actions) {
         if (action.name.empty()) continue;
-        if (const auto* metric = brain_.knowledge_source("action_executor." + action.name); metric != nullptr && metric->observations > 0) {
-            const double reliability = std::clamp(metric->reliability, 0.0, 1.0);
-            // Learned reliability is allowed to materially alter future planning,
-            // while retaining a non-zero floor so one failure does not erase an action.
+
+        // Prefer outcome-derived executor reliability when available. Otherwise,
+        // use the self-model's learned capability performance so capability
+        // evidence also affects planning before a separate executor metric exists.
+        double reliability = 1.0;
+        bool has_reliability_evidence = false;
+        if (const auto* metric = brain_.knowledge_source("action_executor." + action.name);
+            metric != nullptr && metric->observations > 0) {
+            reliability = std::clamp(std::isfinite(metric->reliability)
+                                         ? metric->reliability : 0.0, 0.0, 1.0);
+            has_reliability_evidence = true;
+        } else if (const auto* capability = brain_.self_model().capability(action.name);
+                   capability != nullptr) {
+            reliability = std::clamp(std::isfinite(capability->performance)
+                                         ? capability->performance : 0.0, 0.0, 1.0);
+            has_reliability_evidence = true;
+        }
+
+        if (has_reliability_evidence) {
+            // Retain a non-zero floor so one poor estimate does not erase an
+            // action entirely; evidence instead changes utility, forecast, and risk.
             const double learned_reliability = 0.25 + 0.75 * reliability;
-            // Consequence evidence must affect the action's overall learned
-            // utility as well as its forecast value. Otherwise a repeatedly
-            // unsuccessful action can keep winning solely on its original
-            // hand-authored utility score.
             action.utility *= learned_reliability;
             action.expected_value *= learned_reliability;
             action.risk = std::clamp(action.risk + (1.0 - reliability) * 0.5, 0.0, 1.0);
