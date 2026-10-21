@@ -281,13 +281,20 @@ void Brain::replay(const Event& event) {
             // successful execution is positive capability evidence, while a
             // failed attempt or rollback is negative strategy evidence.
             const double execution_outcome = std::clamp(2.0 * reliability - 1.0, -1.0, 1.0);
+            // For executor-generated events, operational reliability describes
+            // whether the action succeeded; it is not confidence in the evidence
+            // that the attempt failed or succeeded. Use explicit evidence
+            // confidence when present, while retaining legacy event semantics.
+            const double evidence_reliability = std::clamp(
+                double_value(event.data, "evidence_reliability", reliability),
+                0.0, 1.0);
             developmental_learning_.observe_strategy(
                 *context, *action,
                 LearningSignal{1.0 - reliability, execution_outcome,
                     std::clamp(double_value(event.data, "salience", 0.0), 0.0, 1.0),
                     std::clamp(double_value(event.data, "novelty", 0.0), 0.0, 1.0),
                     affective_significance,
-                    reliability});
+                    evidence_reliability});
         } const AttentionSignal signal{*action, std::clamp(double_value(event.data, "salience", 0.0), 0.0, 1.0), std::clamp(double_value(event.data, "novelty", 0.0), 0.0, 1.0), prediction_error, 0.0, 0.0, prediction_error}; if (has_observed_consequence && reward > 0.0) attention_model_.reinforce(signal, reward); else if (has_observed_consequence && reward < 0.0) attention_model_.suppress(signal, -reward); return;
     }
     if (event.kind == "evolution_evaluated") {
