@@ -329,6 +329,7 @@ int main() {
     const auto affective_records_before_failure = brain.memory().by_kind("affective_learning", 16).size();
     const auto* learned_safe_before_unknown = brain.developmental_best_strategy("global");
     const auto learned_safe_uses_before_unknown = learned_safe_before_unknown == nullptr ? 0ULL : learned_safe_before_unknown->uses;
+    const double learned_safe_value_before_unknown = learned_safe_before_unknown == nullptr ? 0.0 : learned_safe_before_unknown->value;
     const auto failed_action = brain.execute_action(
         executable,
         [](const CandidateAction&) { return false; },
@@ -342,7 +343,11 @@ int main() {
     assert(learning_before_failure > 0);
     assert(brain.affective_learning_updates() == learning_before_failure);
     const auto* learned_safe_after_unknown = brain.developmental_best_strategy("global");
-    assert((learned_safe_after_unknown == nullptr ? 0ULL : learned_safe_after_unknown->uses) == learned_safe_uses_before_unknown);
+    // A failed attempt is strategy-reliability evidence even without a
+    // consequence observer; it must not be mistaken for observed task utility.
+    assert(learned_safe_after_unknown != nullptr);
+    assert(learned_safe_after_unknown->uses == learned_safe_uses_before_unknown + 1);
+    assert(learned_safe_after_unknown->value < learned_safe_value_before_unknown);
 
     const auto affect_after_failure = brain.affective_state();
     assert(std::isfinite(affect_after_failure.valence));
