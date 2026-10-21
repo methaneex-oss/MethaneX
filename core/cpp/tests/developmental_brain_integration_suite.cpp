@@ -162,6 +162,17 @@ int main() {
         assert(restored_failed_capability != nullptr);
         assert(restored_failed_capability->performance < 1.0);
         assert(restored_failed_capability->availability == 1.0);
+        const auto restored_strategies = restored.developmental_strategies();
+        const auto restored_failed_strategy = std::find_if(
+            restored_strategies.begin(), restored_strategies.end(),
+            [](const LearnedStrategy& strategy) {
+                return strategy.context == "developmental-context" &&
+                       strategy.action == "other-action";
+            });
+        assert(restored_failed_strategy != restored_strategies.end());
+        assert(restored_failed_strategy->value < 0.0);
+        assert(restored_failed_strategy->uses >= 5);
+
         const auto snapshot = restored.snapshot();
         assert(snapshot.predictions.size() == 2);
         for (const auto& prediction : snapshot.predictions) assert(prediction.resolved);
