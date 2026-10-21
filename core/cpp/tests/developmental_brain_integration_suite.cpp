@@ -332,6 +332,52 @@ int main() {
     std::filesystem::remove(recovery_path, ec);
     std::filesystem::remove(recovery_path.string() + ".meta", ec);
 
+    // The Brain event path must preserve consequence reliability when it
+    // updates developmental strategies. Weakly supported success is not
+    // equivalent to a directly verified success.
+    const auto reliability_path =
+        std::filesystem::temp_directory_path() / "jarvis_developmental_reliability.bin";
+    std::filesystem::remove(reliability_path, ec);
+    std::filesystem::remove(reliability_path.string() + ".meta", ec);
+    {
+        Brain reliability_brain(reliability_path);
+        for (int i = 0; i < 4; ++i) {
+            assert(reliability_brain.observe(Event{0, 0, "reliability-test", "action_outcome",
+                {{"action", std::string("high-confidence-action")},
+                 {"context", std::string("same context")},
+                 {"status", static_cast<std::int64_t>(ActionExecutionStatus::verified)},
+                 {"observed", true},
+                 {"expected_consequence", 1.0},
+                 {"actual_consequence", 1.0},
+                 {"consequence_error", 0.0},
+                 {"reliability", 1.0},
+                 {"salience", 0.8},
+                 {"novelty", 0.2}}}).event.sequence != 0);
+            assert(reliability_brain.observe(Event{0, 0, "reliability-test", "action_outcome",
+                {{"action", std::string("low-confidence-action")},
+                 {"context", std::string("same context")},
+                 {"status", static_cast<std::int64_t>(ActionExecutionStatus::verified)},
+                 {"observed", true},
+                 {"expected_consequence", 1.0},
+                 {"actual_consequence", 1.0},
+                 {"consequence_error", 0.0},
+                 {"reliability", 0.1},
+                 {"salience", 0.8},
+                 {"novelty", 0.2}}}).event.sequence != 0);
+        }
+        const auto strategies = reliability_brain.developmental_strategies();
+        const auto high_strategy = std::find_if(strategies.begin(), strategies.end(),
+            [](const LearnedStrategy& strategy) { return strategy.action == "high-confidence-action"; });
+        const auto low_strategy = std::find_if(strategies.begin(), strategies.end(),
+            [](const LearnedStrategy& strategy) { return strategy.action == "low-confidence-action"; });
+        assert(high_strategy != strategies.end());
+        assert(low_strategy != strategies.end());
+        assert(high_strategy->value > low_strategy->value);
+        assert(high_strategy->confidence > low_strategy->confidence);
+    }
+    std::filesystem::remove(reliability_path, ec);
+    std::filesystem::remove(reliability_path.string() + ".meta", ec);
+
     std::filesystem::remove(path, ec);
     std::filesystem::remove(path.string() + ".meta", ec);
     std::cout << "developmental brain integration suite passed\n";
