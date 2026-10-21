@@ -3,6 +3,57 @@
 #include <algorithm>
 
 namespace jarvis::core {
+namespace {
+
+// Use the same evidence aggregation as CognitiveCycle: direct experiences
+// take precedence over generalization, but all observed actions in the chosen
+// context contribute. This prevents one "best" record from hiding contrary
+// outcomes for another action, and weights transfer by actual similarity.
+void apply_developmental_evidence(std::vector<CandidateAction>& actions,
+                                  const DevelopmentalLearning& learning,
+                                  const std::string& context) {
+    const auto strategies = learning.strategies();
+    const bool has_exact_context = std::any_of(
+        strategies.begin(), strategies.end(),
+        [&](const LearnedStrategy& strategy) {
+            return strategy.context == context;
+        });
+
+    const auto related = has_exact_context
+        ? std::vector<RelatedLearnedStrategy>{}
+        : learning.related_strategies(context);
+
+    for (auto& action : actions) {
+        double weighted_evidence = 0.0;
+        double total_weight = 0.0;
+        if (has_exact_context) {
+            for (const auto& evidence : strategies) {
+                if (evidence.context != context || evidence.action != action.name)
+                    continue;
+                const double weight = std::clamp(evidence.confidence, 0.0, 1.0);
+                weighted_evidence += weight * std::clamp(evidence.value, -1.0, 1.0);
+                total_weight += weight;
+            }
+        } else {
+            for (const auto& evidence : related) {
+                if (evidence.strategy.action != action.name) continue;
+                const double weight =
+                    std::clamp(evidence.similarity, 0.0, 1.0) *
+                    std::clamp(evidence.strategy.confidence, 0.0, 1.0);
+                if (weight <= 0.0) continue;
+                weighted_evidence += weight *
+                    std::clamp(evidence.strategy.value, -1.0, 1.0);
+                total_weight += weight;
+            }
+        }
+        if (total_weight <= 0.0) continue;
+        const double influence = std::clamp(
+            weighted_evidence / std::max(1.0, total_weight), -1.0, 1.0);
+        action.utility += influence;
+        action.expected_value = std::clamp(
+            action.expected_value + influence, -1.0, 1.0);
+    }
+}
 
 Plan Brain::plan_with_affect(const std::vector<CandidateAction>& actions, std::size_t horizon) const {
     std::shared_lock lock(mutex_);
@@ -56,18 +107,8 @@ std::vector<Decision> Brain::choose_with_developmental_learning(
         state_.cycle);
     const auto strategy = strategy_model_.formulate(
         selected_intent, attention_state_, threat_state_.score, self.uncertainty);
-    const auto exact = developmental_learning_.best_strategy(context);
-    const auto learned = exact != nullptr ? exact : developmental_learning_.best_related_strategy(context);
     std::vector<CandidateAction> adapted_actions = actions;
-    if (learned != nullptr) {
-        const double similarity = exact == learned ? 1.0 : 0.5;
-        for (auto& action : adapted_actions) {
-            if (learned->action == action.name) {
-                const double influence = std::clamp(learned->value * learned->confidence * similarity, -1.0, 1.0);
-                action.utility += influence;
-            }
-        }
-    }
+    apply_developmental_evidence(adapted_actions, developmental_learning_, context);
     auto planning_context = strategy.planning;
     planning_context.valence = valence;
     planning_context.arousal = arousal;
@@ -113,18 +154,8 @@ std::vector<Decision> Brain::choose_with_developmental_learning(
         state_.cycle);
     const auto strategy = strategy_model_.formulate(
         selected_intent, attention_state_, threat_state_.score, self.uncertainty);
-    const auto exact = developmental_learning_.best_strategy(context);
-    const auto learned = exact != nullptr ? exact : developmental_learning_.best_related_strategy(context);
     std::vector<CandidateAction> adapted_actions = actions;
-    if (learned != nullptr) {
-        const double similarity = exact == learned ? 1.0 : 0.5;
-        for (auto& action : adapted_actions) {
-            if (learned->action == action.name) {
-                const double influence = std::clamp(learned->value * learned->confidence * similarity, -1.0, 1.0);
-                action.utility += influence;
-            }
-        }
-    }
+    apply_developmental_evidence(adapted_actions, developmental_learning_, context);
     auto planning_context = strategy.planning;
     planning_context.valence = valence;
     planning_context.arousal = arousal;
