@@ -272,7 +272,7 @@ void Brain::replay(const Event& event) {
                     std::clamp(double_value(event.data, "salience", 0.0), 0.0, 1.0),
                     std::clamp(double_value(event.data, "novelty", 0.0), 0.0, 1.0),
                     affective_significance,
-                    1.0});
+                    reliability});
         } else if (status != ActionExecutionStatus::rejected &&
                    status != ActionExecutionStatus::prepared) {
             // When no consequence observer is available, execution/verification
