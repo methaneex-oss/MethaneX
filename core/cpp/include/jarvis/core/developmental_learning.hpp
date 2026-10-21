@@ -15,6 +15,8 @@ struct LearningSignal {
     double salience{0.0};
     double novelty{0.0};
     double affective_significance{0.0};
+    // Reliability weights how much an observation should change learned values.
+    double reliability{1.0};
 
     LearningSignal() = default;
     LearningSignal(double prediction_error_value,
@@ -32,12 +34,14 @@ struct LearningSignal {
                    double reward_value,
                    double salience_value,
                    double novelty_value,
-                   double affective_significance_value)
+                   double affective_significance_value,
+                   double reliability_value = 1.0)
         : prediction_error(prediction_error_value),
           reward(reward_value),
           salience(salience_value),
           novelty(novelty_value),
-          affective_significance(affective_significance_value) {}
+          affective_significance(affective_significance_value),
+          reliability(reliability_value) {}
 
 private:
     static double derive_affective_significance(double prediction_error_value,
