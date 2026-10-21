@@ -267,6 +267,71 @@ int main() {
     std::filesystem::remove(generalization_path, ec);
     std::filesystem::remove(generalization_path.string() + ".meta", ec);
 
+    // Strategy learning must recover when later evidence contradicts earlier failures.
+    // This exercises the real execution -> outcome journal -> learner -> replay path.
+    const auto recovery_path =
+        std::filesystem::temp_directory_path() / "jarvis_developmental_recovery.bin";
+    std::filesystem::remove(recovery_path, ec);
+    std::filesystem::remove(recovery_path.string() + ".meta", ec);
+    double failed_strategy_value = 0.0;
+    {
+        Brain recovering(recovery_path);
+        Goal recovery_goal{"recovery-context", "learn from changed outcomes", 0.9, 0.0,
+                           0, 0, GoalStatus::pending, {}, {}};
+        assert(recovering.create_goal(recovery_goal));
+        assert(recovering.activate_goal(recovery_goal.id));
+        const CandidateAction recoverable{
+            "recoverable-action", 0.5, 0.5, 0.9, 0.1, 1.0, 0.0, 0.5};
+        const ActionAssessment assessment{
+            recoverable, ActionDisposition::execute, true, 0.9,
+            "recovery learning test", recovery_goal.id};
+
+        for (int i = 0; i < 5; ++i) {
+            const auto failed = recovering.execute_action(
+                assessment,
+                [](const CandidateAction&) { return false; },
+                [](const CandidateAction&) { return false; });
+            assert(failed.status == ActionExecutionStatus::failed);
+        }
+        const auto* failed_strategy =
+            recovering.developmental_best_strategy(recovery_goal.id);
+        assert(failed_strategy != nullptr);
+        assert(failed_strategy->action == "recoverable-action");
+        assert(failed_strategy->value < 0.0);
+        failed_strategy_value = failed_strategy->value;
+
+        for (int i = 0; i < 5; ++i) {
+            const auto recovered = recovering.execute_action(
+                assessment,
+                [](const CandidateAction&) { return true; },
+                [](const CandidateAction&) { return true; },
+                {},
+                [](const CandidateAction&) { return 1.0; });
+            assert(recovered.status == ActionExecutionStatus::verified);
+            assert(recovered.outcome.observed);
+            assert(recovered.outcome.actual_consequence == 1.0);
+        }
+        const auto* recovered_strategy =
+            recovering.developmental_best_strategy(recovery_goal.id);
+        assert(recovered_strategy != nullptr);
+        assert(recovered_strategy->action == "recoverable-action");
+        assert(recovered_strategy->uses == 10);
+        assert(recovered_strategy->value > failed_strategy_value);
+        assert(recovered_strategy->value > 0.0);
+    }
+    {
+        Brain recovered_after_restart(recovery_path);
+        const auto* recovered_strategy =
+            recovered_after_restart.developmental_best_strategy("recovery-context");
+        assert(recovered_strategy != nullptr);
+        assert(recovered_strategy->action == "recoverable-action");
+        assert(recovered_strategy->uses == 10);
+        assert(recovered_strategy->value > 0.0);
+        assert(recovered_strategy->value > failed_strategy_value);
+    }
+    std::filesystem::remove(recovery_path, ec);
+    std::filesystem::remove(recovery_path.string() + ".meta", ec);
+
     std::filesystem::remove(path, ec);
     std::filesystem::remove(path.string() + ".meta", ec);
     std::cout << "developmental brain integration suite passed\n";
