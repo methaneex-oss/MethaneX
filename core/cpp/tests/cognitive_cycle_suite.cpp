@@ -126,6 +126,50 @@ int main() {
     assert(restored_metric->reliability == 0.0);
 
     const auto dispute_journal = std::filesystem::temp_directory_path() / "jarvis_cognitive_dispute_suite.bin";
+    // Self-model performance must affect future action selection even when
+    // no action_executor knowledge metric exists yet. Reversing the observed
+    // competence estimates should reverse the preferred action.
+    const auto competence_journal = std::filesystem::temp_directory_path() / "jarvis_cognitive_competence_suite.bin";
+    std::filesystem::remove(competence_journal, ec);
+    std::filesystem::remove(competence_journal.string() + ".meta", ec);
+    {
+        Brain competence_brain(competence_journal);
+        CognitiveCycle competence_cycle(competence_brain);
+        Goal competence_goal;
+        competence_goal.id = "competence-goal";
+        competence_goal.description = "Choose the more reliable capability";
+        competence_goal.priority = 1.0;
+        assert(competence_brain.create_goal(competence_goal));
+        assert(competence_brain.activate_goal(competence_goal.id));
+
+        CognitiveCycleInput competence_input;
+        competence_input.observation = Event{0, 0, "sensor", "observation",
+            {{"condition", std::string("stable")}}};
+        competence_input.candidate_actions = {
+            CandidateAction{"weak", 0.9, 0.9, 0.9, 0.1, 1.0, 0.0, 0.8},
+            CandidateAction{"competent", 0.55, 0.6, 0.9, 0.1, 1.0, 0.0, 0.6},
+        };
+        competence_input.goal_id = competence_goal.id;
+        competence_input.planning_horizon = 1;
+        competence_input.resource_budget = 1.0;
+
+        competence_brain.observe_capability("weak", 1.0, 0.0);
+        competence_brain.observe_capability("competent", 1.0, 1.0);
+        auto competence_result = competence_cycle.run(competence_input);
+        assert(competence_result.status == CognitiveCycleStatus::completed);
+        assert(competence_result.context.plan.steps.front().action.name == "competent");
+        assert(competence_brain.knowledge_source("action_executor.weak") == nullptr);
+
+        competence_brain.observe_capability("weak", 1.0, 1.0);
+        competence_brain.observe_capability("competent", 1.0, 0.0);
+        competence_input.observation = Event{0, 0, "sensor", "observation",
+            {{"condition", std::string("changed")}}};
+        competence_result = competence_cycle.run(competence_input);
+        assert(competence_result.status == CognitiveCycleStatus::completed);
+        assert(competence_result.context.plan.steps.front().action.name == "weak");
+    }
+    std::filesystem::remove(competence_journal, ec);
+    std::filesystem::remove(competence_journal.string() + ".meta", ec);
     std::filesystem::remove(dispute_journal, ec);
     std::filesystem::remove(dispute_journal.string() + ".meta", ec);
     Brain dispute_brain(dispute_journal);
