@@ -50,6 +50,7 @@ bool valid_action_outcome_event(const Event& event) {
         !valid_finite_numeric("actual_consequence") ||
         !valid_finite_numeric("consequence_error") ||
         !valid_optional_unit("reliability") ||
+        !valid_optional_unit("evidence_reliability") ||
         !valid_optional_unit("salience") ||
         !valid_optional_unit("novelty")) return false;
 
