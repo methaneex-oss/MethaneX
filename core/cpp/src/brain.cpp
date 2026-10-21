@@ -286,7 +286,8 @@ void Brain::replay(const Event& event) {
                 LearningSignal{1.0 - reliability, execution_outcome,
                     std::clamp(double_value(event.data, "salience", 0.0), 0.0, 1.0),
                     std::clamp(double_value(event.data, "novelty", 0.0), 0.0, 1.0),
-                    affective_significance});
+                    affective_significance,
+                    reliability});
         } const AttentionSignal signal{*action, std::clamp(double_value(event.data, "salience", 0.0), 0.0, 1.0), std::clamp(double_value(event.data, "novelty", 0.0), 0.0, 1.0), prediction_error, 0.0, 0.0, prediction_error}; if (has_observed_consequence && reward > 0.0) attention_model_.reinforce(signal, reward); else if (has_observed_consequence && reward < 0.0) attention_model_.suppress(signal, -reward); return;
     }
     if (event.kind == "evolution_evaluated") {
