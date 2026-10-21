@@ -12,6 +12,20 @@ void SelfModel::observe_capability(const std::string& name, double availability,
     state.isolated = false;
 }
 
+void SelfModel::update_performance(const std::string& name, double observed_performance) {
+    if (name.empty()) return;
+    const double evidence = std::clamp(observed_performance, 0.0, 1.0);
+    auto it = capabilities_.find(name);
+    if (it == capabilities_.end()) {
+        capabilities_.emplace(name, CapabilityState{name, 1.0, evidence, false});
+        return;
+    }
+    // Performance is an estimate that new evidence revises. Availability and
+    // isolation are separate safety/operational dimensions and remain untouched.
+    it->second.performance = std::clamp(
+        0.75 * it->second.performance + 0.25 * evidence, 0.0, 1.0);
+}
+
 bool SelfModel::isolate(const std::string& name) {
     auto it = capabilities_.find(name);
     if (it == capabilities_.end()) return false;

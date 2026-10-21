@@ -22,6 +22,8 @@ struct SelfCapabilityHealth {
 class SelfModel {
 public:
     void observe_capability(const std::string& name, double availability, double performance);
+    // Update performance from an execution result without overriding availability or isolation.
+    void update_performance(const std::string& name, double observed_performance);
     bool isolate(const std::string& name);
     bool restore(const std::string& name, double availability, double performance);
     const CapabilityState* capability(const std::string& name) const noexcept;

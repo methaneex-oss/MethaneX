@@ -83,6 +83,15 @@ int main() {
             assert(!result.executed);
         }
 
+        // Observed execution results update capability performance, not just
+        // strategy preference. This estimate is reconstructed from the journal.
+        const auto* failed_capability = brain.self_model().capability("other-action");
+        const auto* successful_capability = brain.self_model().capability("learned-action");
+        assert(failed_capability != nullptr);
+        assert(successful_capability != nullptr);
+        assert(failed_capability->performance < successful_capability->performance);
+        assert(failed_capability->availability == 1.0);
+
         const auto learned = brain.developmental_best_strategy(goal.id);
         assert(learned != nullptr);
         assert(learned->action == "learned-action");
@@ -135,6 +144,10 @@ int main() {
 
     {
         Brain restored(path);
+        const auto* restored_failed_capability = restored.self_model().capability("other-action");
+        assert(restored_failed_capability != nullptr);
+        assert(restored_failed_capability->performance < 1.0);
+        assert(restored_failed_capability->availability == 1.0);
         const auto snapshot = restored.snapshot();
         assert(snapshot.predictions.size() == 2);
         for (const auto& prediction : snapshot.predictions) assert(prediction.resolved);
