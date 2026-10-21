@@ -1,6 +1,7 @@
 #include "jarvis/core/cognitive_cycle.hpp"
 
 #include <algorithm>
+#include <cmath>
 #include <string>
 
 namespace jarvis::core {
