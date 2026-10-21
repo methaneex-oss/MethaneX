@@ -92,6 +92,20 @@ int main() {
         assert(failed_capability->performance < successful_capability->performance);
         assert(failed_capability->availability == 1.0);
 
+        // Failed execution/verification is negative evidence about strategy
+        // reliability even when no consequence observer is configured. It must
+        // be learned without pretending that a real-world consequence was seen.
+        const auto strategies_after_execution = brain.developmental_strategies();
+        const auto failed_strategy = std::find_if(
+            strategies_after_execution.begin(), strategies_after_execution.end(),
+            [&](const LearnedStrategy& strategy) {
+                return strategy.context == goal.id &&
+                       strategy.action == "other-action";
+            });
+        assert(failed_strategy != strategies_after_execution.end());
+        assert(failed_strategy->value < 0.0);
+        assert(failed_strategy->uses >= 5);
+
         const auto learned = brain.developmental_best_strategy(goal.id);
         assert(learned != nullptr);
         assert(learned->action == "learned-action");
