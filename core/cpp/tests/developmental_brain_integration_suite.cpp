@@ -378,6 +378,46 @@ int main() {
     std::filesystem::remove(reliability_path, ec);
     std::filesystem::remove(reliability_path.string() + ".meta", ec);
 
+    // Execution-only feedback has no observed world consequence, but its
+    // reliability must still limit how strongly capability evidence changes
+    // developmental strategy values.
+    const auto execution_path =
+        std::filesystem::temp_directory_path() / "jarvis_execution_reliability.bin";
+    std::filesystem::remove(execution_path, ec);
+    std::filesystem::remove(execution_path.string() + ".meta", ec);
+    {
+        Brain execution_brain(execution_path);
+        for (int i = 0; i < 4; ++i) {
+            assert(execution_brain.observe(Event{0, 0, "execution-reliability-test", "action_outcome",
+                {{"action", std::string("reliable-execution")},
+                 {"context", std::string("execution context")},
+                 {"status", static_cast<std::int64_t>(ActionExecutionStatus::verified)},
+                 {"observed", false},
+                 {"reliability", 1.0},
+                 {"salience", 0.5},
+                 {"novelty", 0.1}}}).event.sequence != 0);
+            assert(execution_brain.observe(Event{0, 0, "execution-reliability-test", "action_outcome",
+                {{"action", std::string("uncertain-execution")},
+                 {"context", std::string("execution context")},
+                 {"status", static_cast<std::int64_t>(ActionExecutionStatus::failed)},
+                 {"observed", false},
+                 {"reliability", 0.1},
+                 {"salience", 0.5},
+                 {"novelty", 0.1}}}).event.sequence != 0);
+        }
+        const auto strategies = execution_brain.developmental_strategies();
+        const auto reliable = std::find_if(strategies.begin(), strategies.end(),
+            [](const LearnedStrategy& strategy) { return strategy.action == "reliable-execution"; });
+        const auto uncertain = std::find_if(strategies.begin(), strategies.end(),
+            [](const LearnedStrategy& strategy) { return strategy.action == "uncertain-execution"; });
+        assert(reliable != strategies.end());
+        assert(uncertain != strategies.end());
+        assert(reliable->value > uncertain->value);
+        assert(reliable->confidence > uncertain->confidence);
+    }
+    std::filesystem::remove(execution_path, ec);
+    std::filesystem::remove(execution_path.string() + ".meta", ec);
+
     std::filesystem::remove(path, ec);
     std::filesystem::remove(path.string() + ".meta", ec);
     std::cout << "developmental brain integration suite passed\n";
