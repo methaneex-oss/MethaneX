@@ -55,6 +55,9 @@ ActionExecutionResult Brain::execute_action(
         {"actual_consequence", result.outcome.actual_consequence},
         {"consequence_error", result.outcome.consequence_error},
         {"reliability", reliability},
+        // Confidence in the observed execution record is distinct from whether
+        // execution succeeded. Failed attempts are still reliable negative evidence.
+        {"evidence_reliability", affective_confidence},
         {"salience", affective_salience},
         {"novelty", std::clamp(state_.novelty, 0.0, 1.0)},
         {"confidence", affective_confidence},
