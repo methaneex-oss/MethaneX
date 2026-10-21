@@ -147,6 +147,35 @@ int main() {
     assert(revised_positive->uses == 3);
     assert(revised_positive->confidence > initial_confidence);
 
+    // Outcome confidence must control both the learned value and the
+    // amount of adaptation. A weakly supported success must not be treated
+    // like a directly verified one; zero-confidence evidence must not create
+    // a strategy or association.
+    DevelopmentalLearning reliable_evidence;
+    DevelopmentalLearning uncertain_evidence;
+    reliable_evidence.observe_strategy(
+        "robot arm", "grasp object",
+        LearningSignal{0.2, 1.0, 0.5, 0.2, 0.5, 1.0});
+    uncertain_evidence.observe_strategy(
+        "robot arm", "grasp object",
+        LearningSignal{0.2, 1.0, 0.5, 0.2, 0.5, 0.1});
+    const auto* reliable_strategy = reliable_evidence.best_strategy("robot arm");
+    const auto* uncertain_strategy = uncertain_evidence.best_strategy("robot arm");
+    assert(reliable_strategy != nullptr);
+    assert(uncertain_strategy != nullptr);
+    assert(reliable_strategy->value > uncertain_strategy->value);
+    assert(reliable_strategy->confidence > uncertain_strategy->confidence);
+
+    DevelopmentalLearning untrusted_evidence;
+    untrusted_evidence.observe_strategy(
+        "robot arm", "grasp object",
+        LearningSignal{1.0, -1.0, 1.0, 1.0, 1.0, 0.0});
+    untrusted_evidence.observe_association(
+        "robot arm", "object moved",
+        LearningSignal{1.0, 1.0, 1.0, 1.0, 1.0, 0.0});
+    assert(untrusted_evidence.strategies().empty());
+    assert(untrusted_evidence.associations().empty());
+
     // Legacy four-field evidence now derives deterministic affective
     // significance from prediction error, reward, salience and novelty.
     const LearningSignal derived{0.9, -0.8, 0.7, 0.6};
