@@ -74,18 +74,25 @@ double DevelopmentalLearning::learning_rate(const LearningSignal& signal) noexce
     const double salience = unit_signal(signal.salience);
     const double novelty = unit_signal(signal.novelty);
     const double affect = unit_signal(signal.affective_significance);
-    return std::clamp(0.10 + 0.30 * error + 0.20 * reward + 0.15 * salience +
-                          0.10 * novelty + 0.15 * affect,
-                      0.05, 0.95);
+    const double reliability = unit_signal(signal.reliability);
+    if (reliability <= 0.0) return 0.0;
+    const double base_rate = std::clamp(
+        0.10 + 0.30 * error + 0.20 * reward + 0.15 * salience +
+            0.10 * novelty + 0.15 * affect,
+        0.05, 0.95);
+    return base_rate * reliability;
 }
 
 void DevelopmentalLearning::observe_association(std::string left, std::string right, const LearningSignal& signal) {
     if (left.empty() || right.empty()) return;
     const double rate = learning_rate(signal);
+    if (rate <= 0.0) return;
+    const double reliability = std::clamp(
+        std::isfinite(signal.reliability) ? signal.reliability : 0.0, 0.0, 1.0);
     // Prediction error controls how strongly experience is learned; it is not
     // itself a signed outcome. Keep reward as the learned target so a
     // surprising positive outcome does not become a negative association.
-    const double evidence = bounded(signal.reward);
+    const double evidence = bounded(signal.reward) * reliability;
     auto& association = associations_[association_id(left, right)];
     if (association.observations == 0) {
         association.left = std::move(left);
@@ -100,10 +107,13 @@ void DevelopmentalLearning::observe_association(std::string left, std::string ri
 void DevelopmentalLearning::observe_strategy(std::string context, std::string action, const LearningSignal& signal) {
     if (context.empty() || action.empty()) return;
     const double rate = learning_rate(signal);
+    if (rate <= 0.0) return;
+    const double reliability = std::clamp(
+        std::isfinite(signal.reliability) ? signal.reliability : 0.0, 0.0, 1.0);
     // Prediction error is a learning-strength signal, not a penalty on the
-    // outcome target. A successful but surprising action should remain learned
-    // as successful while the error increases adaptation rate.
-    const double target = bounded(signal.reward);
+    // outcome target. Reliability shrinks uncertain outcomes toward neutral
+    // and independently limits how much this experience changes the estimate.
+    const double target = bounded(signal.reward) * reliability;
     auto& strategy = strategies_[strategy_id(context, action)];
     if (strategy.uses == 0) {
         strategy.context = std::move(context);
