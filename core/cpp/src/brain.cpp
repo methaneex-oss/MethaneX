@@ -247,7 +247,8 @@ void Brain::replay(const Event& event) {
                     0.0,
                     std::clamp(double_value(event.data, "salience", prediction->confidence), 0.0, 1.0),
                     std::clamp(double_value(event.data, "novelty", 0.0), 0.0, 1.0),
-                    affective_significance});
+                    affective_significance,
+                    std::clamp(double_value(event.data, "reliability", 0.5), 0.0, 1.0)});
             const AttentionSignal signal{
                 *key,
                 std::clamp(double_value(event.data, "salience", prediction->confidence), 0.0, 1.0),
@@ -270,7 +271,8 @@ void Brain::replay(const Event& event) {
                 LearningSignal{prediction_error, reward,
                     std::clamp(double_value(event.data, "salience", 0.0), 0.0, 1.0),
                     std::clamp(double_value(event.data, "novelty", 0.0), 0.0, 1.0),
-                    affective_significance});
+                    affective_significance,
+                    1.0});
         } else if (status != ActionExecutionStatus::rejected &&
                    status != ActionExecutionStatus::prepared) {
             // When no consequence observer is available, execution/verification
