@@ -55,6 +55,8 @@ void apply_developmental_evidence(std::vector<CandidateAction>& actions,
     }
 }
 
+} // namespace
+
 Plan Brain::plan_with_affect(const std::vector<CandidateAction>& actions, std::size_t horizon) const {
     std::shared_lock lock(mutex_);
 
