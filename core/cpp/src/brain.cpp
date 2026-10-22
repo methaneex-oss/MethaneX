@@ -325,7 +325,33 @@ void Brain::replay(const Event& event) {
                     std::clamp(double_value(event.data, "novelty", 0.0), 0.0, 1.0),
                     affective_significance,
                     evidence_reliability});
-        } const AttentionSignal signal{*action, std::clamp(double_value(event.data, "salience", 0.0), 0.0, 1.0), std::clamp(double_value(event.data, "novelty", 0.0), 0.0, 1.0), prediction_error, 0.0, 0.0, prediction_error}; if (has_observed_consequence && reward > 0.0) attention_model_.reinforce(signal, reward); else if (has_observed_consequence && reward < 0.0) attention_model_.suppress(signal, -reward); return;
+        } // Attention tracks learning relevance, not whether an outcome was pleasant.
+        // Suppressing the global feature weights after a harmful consequence made
+        // the brain less sensitive to the very surprise it needed to investigate.
+        // Keep consequence prediction error separate from execution reliability;
+        // an absent consequence is uncertainty, not a failed prediction.
+        const double consequence_error_signal = has_observed_consequence
+            ? prediction_error : 0.0;
+        const double evidence_uncertainty = has_observed_consequence
+            ? 1.0 - std::clamp(
+                double_value(event.data, "evidence_reliability", reliability),
+                0.0, 1.0)
+            : 1.0;
+        const AttentionSignal signal{
+            *action,
+            std::clamp(double_value(event.data, "salience", 0.0), 0.0, 1.0),
+            std::clamp(double_value(event.data, "novelty", 0.0), 0.0, 1.0),
+            evidence_uncertainty,
+            0.0,
+            0.0,
+            consequence_error_signal};
+        const double learning_relevance = std::max({
+            has_observed_consequence ? std::abs(reward) : 0.0,
+            evidence_uncertainty,
+            consequence_error_signal});
+        if (learning_relevance > 0.0)
+            attention_model_.reinforce(signal, learning_relevance);
+        return;
     }
     if (event.kind == "evolution_evaluated") {
         const auto* id = string_value(event.data, "experiment_id");
