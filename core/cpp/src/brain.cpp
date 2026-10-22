@@ -169,7 +169,17 @@ void Brain::process_affective_experience(const Event& event) {
         utility = 0.0;
         relevant = true;
     }
-    else if (event.kind == "action_outcome") { const auto expected = event.data.find("expected_consequence"); const auto actual = event.data.find("actual_consequence"); const auto consequence_error = event.data.find("consequence_error"); const auto observed = event.data.find("observed"); const bool has_observed_consequence = observed != event.data.end() && std::get_if<bool>(&observed->second) != nullptr && *std::get_if<bool>(&observed->second); if (has_observed_consequence && expected != event.data.end() && actual != event.data.end() && consequence_error != event.data.end()) { const double actual_value = double_value(event.data, "actual_consequence"); const double error = double_value(event.data, "consequence_error"); const double reliability = std::clamp(double_value(event.data, "reliability", 0.5), 0.0, 1.0); signal.outcome = std::clamp(actual_value, -1.0, 1.0); signal.prediction_error = std::clamp(std::abs(error), 0.0, 1.0); signal.novelty = std::clamp(double_value(event.data, "novelty", 0.0), 0.0, 1.0); signal.salience = std::clamp(double_value(event.data, "salience", attention_state_.salience), 0.0, 1.0); signal.confidence = reliability; utility = actual_value; relevant = true; } else {
+    else if (event.kind == "action_outcome") { const auto expected = event.data.find("expected_consequence"); const auto actual = event.data.find("actual_consequence"); const auto consequence_error = event.data.find("consequence_error"); const auto observed = event.data.find("observed"); const bool has_observed_consequence = observed != event.data.end() && std::get_if<bool>(&observed->second) != nullptr && *std::get_if<bool>(&observed->second); if (has_observed_consequence && expected != event.data.end() && actual != event.data.end() && consequence_error != event.data.end()) { const double actual_value = double_value(event.data, "actual_consequence"); const double error = double_value(event.data, "consequence_error"); const double reliability = std::clamp(
+            double_value(event.data, "evidence_reliability",
+                         double_value(event.data, "reliability", 0.5)),
+            0.0, 1.0);
+        signal.outcome = std::clamp(actual_value, -1.0, 1.0);
+        signal.prediction_error = std::clamp(std::abs(error), 0.0, 1.0);
+        signal.novelty = std::clamp(double_value(event.data, "novelty", 0.0), 0.0, 1.0);
+        signal.salience = std::clamp(double_value(event.data, "salience", attention_state_.salience), 0.0, 1.0);
+        signal.confidence = reliability;
+        utility = actual_value;
+        relevant = true; } else {
             // Execution reliability is not consequence utility. If no valid
             // consequence was observed, keep valence neutral and represent the
             // missing outcome as uncertainty rather than inventing reward.
