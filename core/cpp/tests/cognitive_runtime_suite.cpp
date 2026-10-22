@@ -173,6 +173,29 @@ int main() {
     assert(resolved);
     assert(runtime.metrics().feedback_rejected == 1);
 
+    // Repeated prediction keys must not cause stale feedback to resolve the
+    // newest prediction. Route the outcome by its originating sequence.
+    const auto earlier_same_key = brain.predict("runtime.repeated", 0.1, 0.9);
+    const auto later_same_key = brain.predict("runtime.repeated", 0.9, 0.9);
+    assert(earlier_same_key.created_sequence != later_same_key.created_sequence);
+    const auto repeated_feedback_before = runtime.metrics().feedback_processed;
+    CognitiveFeedback earlier_feedback{
+        earlier_same_key.key, 0.1,
+        Evidence{"runtime", "runtime.repeated.outcome", 0.1, 0.9}};
+    earlier_feedback.prediction_sequence = earlier_same_key.created_sequence;
+    assert(runtime.submit_feedback(earlier_feedback));
+    assert(wait_for_feedback(runtime, repeated_feedback_before + 1));
+    bool earlier_resolved = false;
+    bool later_still_unresolved = false;
+    for (const auto& current : brain.snapshot().predictions) {
+        if (current.created_sequence == earlier_same_key.created_sequence)
+            earlier_resolved = current.resolved && current.error == 0.0;
+        if (current.created_sequence == later_same_key.created_sequence)
+            later_still_unresolved = !current.resolved;
+    }
+    assert(earlier_resolved);
+    assert(later_still_unresolved);
+
     const auto feedback_goal_before = runtime.metrics().feedback_processed;
     assert(runtime.submit_feedback(CognitiveFeedback{"", 0.0, std::nullopt, goal.id, 0.4, 0.8}));
     assert(wait_for_feedback(runtime, feedback_goal_before + 1));
