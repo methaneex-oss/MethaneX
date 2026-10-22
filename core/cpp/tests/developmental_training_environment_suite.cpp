@@ -143,7 +143,7 @@ int main() {
         // conditions reverse. The first choice should reflect prior experience,
         // but subsequent real consequences must revise the local strategy rather
         // than making the transferred belief permanent.
-        constexpr std::int64_t reversal_episode_count = 6;
+        constexpr std::int64_t reversal_episode_count = 10;
         for (std::int64_t offset = 0; offset < reversal_episode_count; ++offset) {
             current_episode = episode_count + offset;
             current_context = "navigation/route-variant";
