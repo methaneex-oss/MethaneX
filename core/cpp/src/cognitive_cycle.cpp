@@ -125,6 +125,17 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
         input.developmental_context.empty() ? selected->id : input.developmental_context;
     const auto stored_strategies = brain_.developmental_strategies();
     const auto related_strategies = brain_.developmental_related_strategies(developmental_context);
+    // A transferred strategy is a prior, not a prohibition. When the current
+    // context has no direct evidence for a candidate, reserve some utility for
+    // information gain. This lets a surprising local outcome trigger trials of
+    // alternatives that were poor in a related context instead of trapping the
+    // learner in a self-confirming transfer loop. The bonus affects exploration
+    // value only; it does not fabricate a positive predicted consequence.
+    const double exploration_pressure = std::clamp(
+        std::max({result.context.attention.uncertainty,
+                  result.context.affective_state.uncertainty,
+                  result.context.affective_state.tension}),
+        0.0, 1.0);
 
     // Use exact-context experience whenever that action has been tried locally.
     // For actions with no local evidence, still allow bounded transfer from
@@ -173,6 +184,11 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
             action.utility += influence;
             action.expected_value = std::clamp(
                 action.expected_value + influence, -1.0, 1.0);
+            // Weak transferred evidence should not prevent a useful probe when
+            // local evidence is absent. A high surprise/uncertainty signal
+            // increases this information-gathering incentive.
+            action.utility += 0.75 * exploration_pressure *
+                (1.0 - std::clamp(transferred_weight, 0.0, 1.0));
         }
     }
     const auto& affect = result.context.affective_state;
