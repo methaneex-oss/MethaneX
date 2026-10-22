@@ -92,7 +92,11 @@ void DevelopmentalLearning::observe_association(std::string left, std::string ri
     // Prediction error controls how strongly experience is learned; it is not
     // itself a signed outcome. Keep reward as the learned target so a
     // surprising positive outcome does not become a negative association.
-    const double evidence = bounded(signal.reward) * reliability;
+    // Reliability already scales learning_rate(). Applying it to the target
+    // as well would discount evidence twice, and the first observation would
+    // bypass the learning rate entirely. Keep the outcome target unbiased;
+    // confidence and update magnitude carry evidence reliability separately.
+    const double evidence = bounded(signal.reward);
     auto& association = associations_[association_id(left, right)];
     if (association.observations == 0) {
         association.left = std::move(left);
@@ -113,7 +117,10 @@ void DevelopmentalLearning::observe_strategy(std::string context, std::string ac
     // Prediction error is a learning-strength signal, not a penalty on the
     // outcome target. Reliability shrinks uncertain outcomes toward neutral
     // and independently limits how much this experience changes the estimate.
-    const double target = bounded(signal.reward) * reliability;
+    // learning_rate() already weights the update by evidence reliability.
+    // Keep the target itself unbiased so confidence controls influence rather
+    // than silently changing the observed outcome's valence.
+    const double target = bounded(signal.reward);
     auto& strategy = strategies_[strategy_id(context, action)];
     if (strategy.uses == 0) {
         strategy.context = std::move(context);
