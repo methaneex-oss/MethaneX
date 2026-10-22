@@ -159,6 +159,11 @@ int main() {
     assert(runtime.submit_feedback(CognitiveFeedback{prediction.key, 0.75, Evidence{"runtime", "runtime.prediction.outcome", 0.75, 0.9}}));
     assert(runtime.submit(make_input(goal.id, 5), 1.0));
     assert(!runtime.submit_feedback(CognitiveFeedback{}));
+    // Drain the cycle's own action feedback before measuring the separately
+    // submitted goal-feedback event; otherwise an earlier queued action result
+    // can satisfy the counter and make the goal assertion race the worker.
+    assert(wait_for_results(runtime, 1));
+    assert(wait_for_feedback(runtime, runtime.metrics().feedback_accepted));
     assert(wait_for_feedback(runtime, feedback_before + 1));
     assert(runtime.pending_feedback() == 0);
     assert(runtime.running());
