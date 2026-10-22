@@ -45,33 +45,7 @@ int main() {
     assert(initial.context.action_assessments.front().developmental_context != goal.id);
     assert(brain.knowledge_source("action_executor.stabilize") == nullptr);
 
-    // Numeric-only observations must participate in developmental context.
-    // Coarse magnitude bands retain useful state differences without encoding
-    // the exact sensor value; explicit caller contexts still take precedence.
-    CognitiveCycleInput numeric_context_input = input;
-    numeric_context_input.observation =
-        Event{0, 0, "sensor", "observation", {{"temperature", 42.0}}};
-    const auto numeric_context_result = cycle.run(numeric_context_input);
-    assert(numeric_context_result.status == CognitiveCycleStatus::completed);
-    const auto numeric_context =
-        numeric_context_result.context.action_assessments.front().developmental_context;
-    assert(numeric_context != goal.id);
-    assert(numeric_context.find("temperature") != std::string::npos);
-    assert(numeric_context.find("scale") != std::string::npos);
 
-    numeric_context_input.observation =
-        Event{0, 0, "sensor", "observation", {{"temperature", 80.0}}};
-    const auto higher_numeric_context_result = cycle.run(numeric_context_input);
-    assert(higher_numeric_context_result.status == CognitiveCycleStatus::completed);
-    const auto higher_numeric_context =
-        higher_numeric_context_result.context.action_assessments.front().developmental_context;
-    assert(higher_numeric_context != numeric_context);
-
-    numeric_context_input.developmental_context = "caller-defined-context";
-    const auto explicit_context_result = cycle.run(numeric_context_input);
-    assert(explicit_context_result.status == CognitiveCycleStatus::completed);
-    assert(explicit_context_result.context.action_assessments.front().developmental_context ==
-           "caller-defined-context");
 
     assert(brain.learn(Evidence{"action_executor.stabilize", "action.stabilize", std::string("failed"), 0.0}) >= 0.0);
     const auto learned_metric = brain.knowledge_source("action_executor.stabilize");
@@ -297,6 +271,56 @@ int main() {
     }
     std::filesystem::remove(generalization_gap_journal, ec);
     std::filesystem::remove(generalization_gap_journal.string() + ".meta", ec);
+
+    // Isolate context inference checks from the preceding action-learning
+    // scenario so sensor observations cannot perturb its decision assertions.
+    const auto context_journal =
+        std::filesystem::temp_directory_path() / "jarvis_cognitive_context_suite.bin";
+    std::filesystem::remove(context_journal, ec);
+    std::filesystem::remove(context_journal.string() + ".meta", ec);
+    {
+        Brain context_brain(context_journal);
+        Goal context_goal;
+        context_goal.id = "numeric-context-goal";
+        context_goal.description = "Classify numeric observations for learning";
+        context_goal.priority = 1.0;
+        assert(context_brain.create_goal(context_goal));
+        assert(context_brain.activate_goal(context_goal.id));
+        CognitiveCycleInput numeric_context_input;
+        numeric_context_input.observation =
+            Event{0, 0, "sensor", "observation", {{"temperature", 42.0}}};
+        numeric_context_input.candidate_actions = {
+            CandidateAction{"inspect", 0.6, 0.5, 0.1, 0.2, 0.5, 0.0, 0.4},
+        };
+        numeric_context_input.goal_id = context_goal.id;
+        numeric_context_input.planning_horizon = 1;
+        const auto numeric_context_result =
+            CognitiveCycle(context_brain).run(numeric_context_input);
+        assert(numeric_context_result.status == CognitiveCycleStatus::completed);
+        const auto numeric_context =
+            numeric_context_result.context.action_assessments.front().developmental_context;
+        assert(numeric_context != context_goal.id);
+        assert(numeric_context.find("temperature") != std::string::npos);
+        assert(numeric_context.find("scale") != std::string::npos);
+
+        numeric_context_input.observation =
+            Event{0, 0, "sensor", "observation", {{"temperature", 80.0}}};
+        const auto higher_numeric_context_result =
+            CognitiveCycle(context_brain).run(numeric_context_input);
+        assert(higher_numeric_context_result.status == CognitiveCycleStatus::completed);
+        const auto higher_numeric_context =
+            higher_numeric_context_result.context.action_assessments.front().developmental_context;
+        assert(higher_numeric_context != numeric_context);
+
+        numeric_context_input.developmental_context = "caller-defined-context";
+        const auto explicit_context_result =
+            CognitiveCycle(context_brain).run(numeric_context_input);
+        assert(explicit_context_result.status == CognitiveCycleStatus::completed);
+        assert(explicit_context_result.context.action_assessments.front().developmental_context ==
+               "caller-defined-context");
+    }
+    std::filesystem::remove(context_journal, ec);
+    std::filesystem::remove(context_journal.string() + ".meta", ec);
 
     std::filesystem::remove(dispute_journal, ec);
     std::filesystem::remove(dispute_journal.string() + ".meta", ec);
