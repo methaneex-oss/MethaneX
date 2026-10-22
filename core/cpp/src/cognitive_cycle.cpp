@@ -81,8 +81,12 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     // A featureless observation still needs continuity. Exact-attribute recall
     // cannot rank anything when the observation has no data, so use salient
     // episodic traces rather than silently giving the cycle an empty memory.
-    if (result.context.memories.empty() && input.observation.data.empty() &&
-        input.memory_limit > 0) {
+    if (result.context.memories.empty() && input.memory_limit > 0) {
+        // Attribute recall can also fail for a featureful observation when its
+        // keys do not overlap the stored episode schema (for example, a new
+        // sensor feature versus an action_outcome record). Preserve continuity
+        // in that case too; downstream consumers still validate exact context,
+        // action, observation, and evidence quality before using an episode.
         result.context.memories =
             brain_.memory().salient(input.memory_limit, MemoryTier::Episodic);
     }
