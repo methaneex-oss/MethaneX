@@ -1,5 +1,6 @@
 #include "jarvis/core/cognitive_cycle.hpp"
 
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <cstdint>
@@ -126,6 +127,15 @@ int main() {
     const auto contextual_prediction = brain.predict_with_context("alpha", 1.0, 0.2, 0.5, 2);
     assert(!contextual_prediction.context.concept_members.empty());
     assert(contextual_prediction.context.evidence_strength > 0.0);
+    const auto contextual_memory = brain.memory().recall_ranked(
+        {{"key", Scalar{std::string("alpha")}}}, 64);
+    const auto contextual_memory_record = std::find_if(
+        contextual_memory.begin(), contextual_memory.end(),
+        [&contextual_prediction](const MemoryRecord& record) {
+            return record.event.sequence == contextual_prediction.created_sequence;
+        });
+    assert(contextual_memory_record != contextual_memory.end());
+    assert(contextual_memory_record->consolidation > 0.0);
     const double learned_context_confidence = contextual_prediction.confidence;
     assert(learned_context_confidence > 0.2);
 

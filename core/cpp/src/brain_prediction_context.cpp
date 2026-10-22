@@ -101,6 +101,9 @@ Prediction Brain::predict_with_context(std::string key, Scalar value, double con
     replay(event);
     ++state_.events_seen;
     state_.cycle = event.sequence;
+    // Match the ordinary prediction path: contextual predictions are durable
+    // experiences too, so their memory salience/confidence must be consolidated.
+    consolidate_experience(event);
     sync_self_state();
     const auto* stored = find_prediction(event.sequence);
     return stored == nullptr ? Prediction{} : *stored;
