@@ -69,6 +69,46 @@ int main() {
     }
     assert(restored_activated);
 
+    // Evidence confidence is not task reward. Two neutral facts with
+    // different reliability should differ in uncertainty, not valence.
+    const auto high_path =
+        std::filesystem::temp_directory_path() / "jarvis_learning_high_confidence.bin";
+    const auto low_path =
+        std::filesystem::temp_directory_path() / "jarvis_learning_low_confidence.bin";
+    std::filesystem::remove(high_path, ec);
+    std::filesystem::remove(high_path.string() + ".meta", ec);
+    std::filesystem::remove(low_path, ec);
+    std::filesystem::remove(low_path.string() + ".meta", ec);
+    AffectiveState high_state;
+    AffectiveState low_state;
+    {
+        Brain high_brain(high_path);
+        Brain low_brain(low_path);
+        assert(high_brain.observe(Event{0, 0, "sensor", "learning", {
+            {"evidence_key", std::string("temperature")},
+            {"evidence_value", Scalar{22.0}}, {"reliability", 0.95}}}).event.sequence != 0);
+        assert(low_brain.observe(Event{0, 0, "sensor", "learning", {
+            {"evidence_key", std::string("temperature")},
+            {"evidence_value", Scalar{22.0}}, {"reliability", 0.15}}}).event.sequence != 0);
+        high_state = high_brain.affective_state();
+        low_state = low_brain.affective_state();
+        assert(std::abs(high_state.valence) < 1e-9);
+        assert(std::abs(low_state.valence) < 1e-9);
+        assert(low_state.uncertainty > high_state.uncertainty);
+    }
+    {
+        Brain restored_high(high_path);
+        Brain restored_low(low_path);
+        assert(std::abs(restored_high.affective_state().valence - high_state.valence) < 1e-9);
+        assert(std::abs(restored_low.affective_state().valence - low_state.valence) < 1e-9);
+        assert(restored_low.affective_state().uncertainty >
+               restored_high.affective_state().uncertainty);
+    }
+    std::filesystem::remove(high_path, ec);
+    std::filesystem::remove(high_path.string() + ".meta", ec);
+    std::filesystem::remove(low_path, ec);
+    std::filesystem::remove(low_path.string() + ".meta", ec);
+
     std::filesystem::remove(path, ec);
     std::filesystem::remove(path.string() + ".meta", ec);
     std::cout << "affective_evidence_suite: PASS\n";
