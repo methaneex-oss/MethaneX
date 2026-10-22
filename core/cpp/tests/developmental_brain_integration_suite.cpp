@@ -566,7 +566,8 @@ int main() {
         assert(learned_event != learning_events.end());
         learning_sequence = learned_event->sequence;
         const auto records = evidence_brain.memory().recall_ranked(
-            {{"observed-state", Scalar{std::string("stable")}}}, 8);
+            {{"evidence_key", Scalar{std::string("observed-state")}},
+             {"evidence_value", Scalar{std::string("stable")}}}, 8);
         const auto consolidated = std::find_if(
             records.begin(), records.end(),
             [learning_sequence](const MemoryRecord& record) {
@@ -594,7 +595,8 @@ int main() {
         assert(!restored_evidence.world().query(
             "generic-evidence-test", "salience").has_value());
         const auto records = restored_evidence.memory().recall_ranked(
-            {{"observed-state", Scalar{std::string("stable")}}}, 8);
+            {{"evidence_key", Scalar{std::string("observed-state")}},
+             {"evidence_value", Scalar{std::string("stable")}}}, 8);
         const auto consolidated = std::find_if(
             records.begin(), records.end(),
             [learning_sequence](const MemoryRecord& record) {
