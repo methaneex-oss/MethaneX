@@ -278,13 +278,21 @@ void Brain::replay(const Event& event) {
         const auto* action = string_value(event.data, "action"); const auto* context = string_value(event.data, "context"); if (action == nullptr || context == nullptr || action->empty() || context->empty()) return;
         const double reliability = std::clamp(double_value(event.data, "reliability", 0.5), 0.0, 1.0); const auto status = static_cast<ActionExecutionStatus>(integer_value(event.data, "status")); if (status != ActionExecutionStatus::rejected) self_model_.update_performance(*action, reliability); const char* status_name = "unknown"; switch (status) { case ActionExecutionStatus::rejected: status_name = "rejected"; break; case ActionExecutionStatus::prepared: status_name = "prepared"; break; case ActionExecutionStatus::executed: status_name = "executed"; break; case ActionExecutionStatus::verified: status_name = "verified"; break; case ActionExecutionStatus::failed: status_name = "failed"; break; case ActionExecutionStatus::cancelled: status_name = "cancelled"; break; case ActionExecutionStatus::rolled_back: status_name = "rolled_back"; break; }
         const std::string belief_key = "action." + *action; beliefs_[belief_key] = Belief{belief_key, std::string(status_name), reliability, 1, event.sequence, false}; const auto observed = event.data.find("observed"); const bool has_observed_consequence = observed != event.data.end() && std::get_if<bool>(&observed->second) != nullptr && *std::get_if<bool>(&observed->second); const double prediction_error = has_observed_consequence ? std::clamp(std::abs(double_value(event.data, "consequence_error")), 0.0, 1.0) : 1.0 - reliability; const double reward = has_observed_consequence ? std::clamp(double_value(event.data, "actual_consequence"), -1.0, 1.0) : 0.0; const auto affect = affective_state_model_.state(); const double affective_significance = std::clamp(0.25 * std::abs(affect.valence) + 0.25 * affect.arousal + 0.25 * affect.uncertainty + 0.25 * affect.tension, 0.0, 1.0); if (has_observed_consequence) {
+            // Consequence quality and executor status are different evidence
+            // dimensions. An action may fail verification after it has already
+            // changed the world; when its consequence was observed, retain that
+            // outcome as learning evidence instead of dropping it because the
+            // operational status maps to zero reliability.
+            const double consequence_confidence = std::clamp(
+                double_value(event.data, "evidence_reliability", reliability),
+                0.0, 1.0);
             developmental_learning_.observe_strategy(
                 *context, *action,
                 LearningSignal{prediction_error, reward,
                     std::clamp(double_value(event.data, "salience", 0.0), 0.0, 1.0),
                     std::clamp(double_value(event.data, "novelty", 0.0), 0.0, 1.0),
                     affective_significance,
-                    reliability});
+                    consequence_confidence});
         } else if (status != ActionExecutionStatus::rejected &&
                    status != ActionExecutionStatus::prepared) {
             // When no consequence observer is available, execution/verification
