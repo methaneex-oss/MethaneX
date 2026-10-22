@@ -109,7 +109,13 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
             const double learned_reliability = 0.25 + 0.75 * reliability;
             action.utility *= learned_reliability;
             action.expected_value *= learned_reliability;
-            action.risk = std::clamp(action.risk + (1.0 - reliability) * 0.5, 0.0, 1.0);
+            // Reliability should inform risk, not create a self-sealing failure
+            // loop. A single failed attempt can be an executor outage; if its
+            // penalty pushes action confidence below the execution threshold,
+            // that action can never be tried again to gather corrective evidence.
+            // Keep the risk adjustment bounded while still letting poor
+            // reliability reduce utility and increase risk.
+            action.risk = std::clamp(action.risk + (1.0 - reliability) * 0.1, 0.0, 1.0);
         }
     }
 
