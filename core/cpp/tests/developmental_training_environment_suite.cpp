@@ -252,7 +252,7 @@ int main() {
         // The original useful strategy still generalizes to a different related
         // context that has no direct experience of its own.
         CognitiveCycleInput related_probe = training_input(goal.id, 102);
-        related_probe.developmental_context = "navigation/route-alternative";
+        related_probe.developmental_context = "navigation/route-selection alternate";
         const auto generalized = CognitiveCycle(restored).run(related_probe);
         assert(generalized.status == CognitiveCycleStatus::completed);
         assert(!generalized.context.plan.steps.empty());
