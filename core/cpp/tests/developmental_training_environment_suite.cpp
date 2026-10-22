@@ -55,8 +55,15 @@ int main() {
     config.feedback_capacity = 32;
     config.drain_on_stop = true;
     config.action_adapter.authorization.maximum_risk = 1.0;
+    // Inject one infrastructure/executor failure. The brain must not mistake
+    // a failed attempt for evidence that the selected route has bad consequences.
+    bool inject_one_executor_failure = true;
     config.action_adapter.execute = [&](const CandidateAction& action) {
         executed_actions.push_back(action.name);
+        if (inject_one_executor_failure) {
+            inject_one_executor_failure = false;
+            return false;
+        }
         return true;
     };
     config.action_adapter.verify = [](const CandidateAction&) { return true; };
@@ -86,6 +93,24 @@ int main() {
             assert(result.status == CognitiveCycleStatus::completed);
             assert(!result.context.plan.steps.empty());
             episode_actions.push_back(result.context.plan.steps.front().action.name);
+
+            if (episode == 0) {
+                assert(runtime.running());
+                bool observed_executor_failure = false;
+                for (const auto& execution : result.context.action_execution_results) {
+                    if (execution.status == ActionExecutionStatus::failed) {
+                        observed_executor_failure = true;
+                        break;
+                    }
+                }
+                assert(observed_executor_failure);
+                // No consequence was observed because execution never succeeded.
+                // Therefore this attempt must not create a negative route strategy.
+                for (const auto& strategy : brain.developmental_strategies()) {
+                    assert(!(strategy.context == "navigation/route-selection" &&
+                             strategy.action == "bad-route"));
+                }
+            }
         }
         runtime.stop();
 
