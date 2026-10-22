@@ -55,15 +55,12 @@ int main() {
     config.feedback_capacity = 32;
     config.drain_on_stop = true;
     config.action_adapter.authorization.maximum_risk = 1.0;
-    // Inject one infrastructure/executor failure. The brain must not mistake
-    // a failed attempt for evidence that the selected route has bad consequences.
-    bool inject_one_executor_failure = true;
+    // Episode zero simulates a total executor outage. Even if the plan contains
+    // multiple actions, none can produce a real-world consequence in that episode.
+    std::int64_t current_episode = -1;
     config.action_adapter.execute = [&](const CandidateAction& action) {
         executed_actions.push_back(action.name);
-        if (inject_one_executor_failure) {
-            inject_one_executor_failure = false;
-            return false;
-        }
+        if (current_episode == 0) return false;
         return true;
     };
     config.action_adapter.verify = [](const CandidateAction&) { return true; };
@@ -88,6 +85,7 @@ int main() {
 
         constexpr std::int64_t episode_count = 8;
         for (std::int64_t episode = 0; episode < episode_count; ++episode) {
+            current_episode = episode;
             assert(runtime.submit(training_input(goal.id, episode), 1.0));
             const auto result = await_result(runtime);
             assert(result.status == CognitiveCycleStatus::completed);
@@ -104,11 +102,14 @@ int main() {
                     }
                 }
                 assert(observed_executor_failure);
-                // No consequence was observed because execution never succeeded.
-                // Therefore this attempt must not create a negative route strategy.
+                // Every execution failed, so the episode produced no action
+                // consequence evidence and must not teach a route preference.
+                assert(!result.context.action_execution_results.empty());
+                for (const auto& execution : result.context.action_execution_results) {
+                    assert(execution.status == ActionExecutionStatus::failed);
+                }
                 for (const auto& strategy : brain.developmental_strategies()) {
-                    assert(!(strategy.context == "navigation/route-selection" &&
-                             strategy.action == "bad-route"));
+                    assert(strategy.context != "navigation/route-selection");
                 }
             }
         }
