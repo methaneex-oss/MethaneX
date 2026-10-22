@@ -351,11 +351,33 @@ int main() {
                 {{"action", std::string("sensor-adaptation-action")},
                  {"salience", 1.0}}});
         }
+        // Recent outcomes for the same action in unrelated contexts must not
+        // evict the older outcome that matches this developmental situation.
+        for (int i = 0; i < 3; ++i) {
+            experienced.memory().append(Event{0, 0, "legacy-journal", "action_outcome",
+                {{"action", std::string("sensor-adaptation-action")},
+                 {"context", std::string("unrelated-developmental-context")},
+                 {"observed", true},
+                 {"actual_consequence", -1.0},
+                 {"consequence_error", 1.0},
+                 {"reliability", 1.0},
+                 {"evidence_reliability", 1.0},
+                 {"salience", 1.0}}});
+        }
         const auto targeted_outcomes = experienced.memory().recall_ranked(
             {{"action", Scalar{std::string("sensor-adaptation-action")}}},
             1, "action_outcome");
         assert(targeted_outcomes.size() == 1);
         assert(targeted_outcomes.front().event.kind == "action_outcome");
+        assert(targeted_outcomes.front().event.data.at("context") ==
+               Scalar{std::string("unrelated-developmental-context")});
+        const auto contextual_outcomes = experienced.memory().recall_ranked(
+            {{"action", Scalar{std::string("sensor-adaptation-action")}},
+             {"context", Scalar{std::string("featureful-episodic-context")}}},
+            1, "action_outcome");
+        assert(contextual_outcomes.size() == 1);
+        assert(contextual_outcomes.front().event.data.at("context") ==
+               Scalar{std::string("featureful-episodic-context")});
         CognitiveCycle cycle(experienced);
         CognitiveCycleInput input;
         input.observation = featureful_observation;
@@ -367,7 +389,14 @@ int main() {
         assert(result.status == CognitiveCycleStatus::completed);
         assert(std::any_of(result.context.memories.begin(), result.context.memories.end(),
                            [](const MemoryRecord& memory) {
-                               return memory.event.kind == "action_outcome";
+                               const auto context = memory.event.data.find("context");
+                               const auto actual = memory.event.data.find("actual_consequence");
+                               const auto* consequence = actual == memory.event.data.end()
+                                   ? nullptr : std::get_if<double>(&actual->second);
+                               return memory.event.kind == "action_outcome" &&
+                                      context != memory.event.data.end() &&
+                                      context->second == Scalar{std::string("featureful-episodic-context")} &&
+                                      consequence != nullptr && *consequence > 0.0;
                            }));
         score_with_episode = score_for(result.context.decisions, featureful_action.name);
         assert(score_with_episode > -1.0e8);
