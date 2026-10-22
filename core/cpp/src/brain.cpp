@@ -637,8 +637,7 @@ double Brain::learn(const Evidence& evidence) {
     const double reliability = std::clamp(evidence.reliability, 0.0, 1.0);
     const auto history = memory_.recent(256);
     Event event{0, now_ns(), evidence.source, "learning",
-        {{evidence.key, evidence.value},
-         {"evidence_key", evidence.key},
+        {{"evidence_key", evidence.key},
          {"evidence_value", evidence.value},
          {"reliability", reliability},
          {"salience", std::clamp(attention_state_.salience, 0.0, 1.0)},
