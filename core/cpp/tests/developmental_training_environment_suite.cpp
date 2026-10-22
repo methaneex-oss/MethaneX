@@ -17,9 +17,12 @@ CognitiveCycleInput training_input(const std::string& goal_id, std::int64_t epis
                               {{"episode", episode},
                                {"task", std::string("reach_destination")}}};
     // The environment offers both actions. It does not choose for the brain.
+    // Keep the actions executable even after a negative strategy update.
+    // Otherwise the action model can switch to "recommend" for every option,
+    // preventing the brain from collecting the next outcome needed to learn.
     input.candidate_actions = {
-        CandidateAction{"bad-route", 0.5, 0.5, 0.9, 0.1},
-        CandidateAction{"good-route", 0.5, 0.5, 0.9, 0.1},
+        CandidateAction{"bad-route", 1.5, 0.5, 0.9, 0.1},
+        CandidateAction{"good-route", 1.5, 0.5, 0.9, 0.1},
     };
     input.goal_id = goal_id;
     input.developmental_context = "navigation/route-selection";
