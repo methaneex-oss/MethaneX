@@ -92,7 +92,8 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
         for (const auto& action : input.candidate_actions) {
             if (action.name.empty()) continue;
             const auto action_memories = brain_.memory().recall_ranked(
-                {{"action", Scalar{action.name}}}, input.memory_limit);
+                {{"action", Scalar{action.name}}}, input.memory_limit,
+                "action_outcome");
             for (const auto& memory : action_memories) {
                 if (memory.event.kind != "action_outcome") continue;
                 const auto already_present = std::find_if(
