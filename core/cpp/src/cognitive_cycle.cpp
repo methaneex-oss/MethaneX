@@ -78,6 +78,14 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     if (input.planning_horizon == 0) { result.status = CognitiveCycleStatus::no_action; return result; }
     result.context.observation = brain_.observe(input.observation);
     result.context.memories = brain_.memory().recall_ranked(input.observation.data, input.memory_limit);
+    // A featureless observation still needs continuity. Exact-attribute recall
+    // cannot rank anything when the observation has no data, so use salient
+    // episodic traces rather than silently giving the cycle an empty memory.
+    if (result.context.memories.empty() && input.observation.data.empty() &&
+        input.memory_limit > 0) {
+        result.context.memories =
+            brain_.memory().salient(input.memory_limit, MemoryTier::Episodic);
+    }
     result.context.beliefs = brain_.beliefs();
     result.context.causal_links = brain_.causal_links();
     result.context.affective_state = brain_.affective_state();
