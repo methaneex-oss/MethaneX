@@ -176,12 +176,19 @@ int main() {
 
     const auto live_affect = brain.affective_state();
     const auto live_attention = brain.attention();
+    const auto live_attention_policy = brain.attention_policy();
     const auto* live_strategy = brain.developmental_best_strategy("system stabilization");
     assert(live_strategy != nullptr);
     Brain restored(journal);
     assert(restored.affective_learning_updates() > 0);
     const auto restored_affect = restored.affective_state();
     const auto restored_attention = restored.attention();
+    const auto restored_attention_policy = restored.attention_policy();
+    assert(std::abs(restored_attention_policy.novelty_weight - live_attention_policy.novelty_weight) < 1e-12);
+    assert(std::abs(restored_attention_policy.uncertainty_weight - live_attention_policy.uncertainty_weight) < 1e-12);
+    assert(std::abs(restored_attention_policy.urgency_weight - live_attention_policy.urgency_weight) < 1e-12);
+    assert(std::abs(restored_attention_policy.internal_activation_weight - live_attention_policy.internal_activation_weight) < 1e-12);
+    assert(std::abs(restored_attention_policy.prediction_error_weight - live_attention_policy.prediction_error_weight) < 1e-12);
     assert(restored_affect.updates == live_affect.updates);
     assert(std::abs(restored_affect.valence - live_affect.valence) < 1e-12);
     assert(std::abs(restored_affect.uncertainty - live_affect.uncertainty) < 1e-12);
