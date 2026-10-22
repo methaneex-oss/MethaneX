@@ -418,6 +418,32 @@ int main() {
     std::filesystem::remove(execution_path, ec);
     std::filesystem::remove(execution_path.string() + ".meta", ec);
 
+    // Malformed execution metadata must not become a learned experience.
+    // Unknown enum values cannot masquerade as verified actions.
+    const auto malformed_path =
+        std::filesystem::temp_directory_path() / "jarvis_developmental_malformed_outcome.bin";
+    std::filesystem::remove(malformed_path, ec);
+    std::filesystem::remove(malformed_path.string() + ".meta", ec);
+    {
+        Brain guarded(malformed_path);
+        const auto rejected = guarded.observe(Event{0, 0, "malformed-test", "action_outcome",
+            {{"action", std::string("untrusted-action")},
+             {"context", std::string("critical repair")},
+             {"status", static_cast<std::int64_t>(999)},
+             {"observed", false},
+             {"reliability", 1.0}}});
+        assert(rejected.event.sequence == 0);
+        assert(guarded.developmental_strategies().empty());
+        assert(guarded.self_model().capability("untrusted-action") == nullptr);
+    }
+    {
+        Brain restored_guarded(malformed_path);
+        assert(restored_guarded.developmental_strategies().empty());
+        assert(restored_guarded.self_model().capability("untrusted-action") == nullptr);
+    }
+    std::filesystem::remove(malformed_path, ec);
+    std::filesystem::remove(malformed_path.string() + ".meta", ec);
+
     std::filesystem::remove(path, ec);
     std::filesystem::remove(path.string() + ".meta", ec);
     std::cout << "developmental brain integration suite passed\n";
