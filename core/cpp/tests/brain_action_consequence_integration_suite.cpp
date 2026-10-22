@@ -98,37 +98,6 @@ int main() {
     assert(attention_after_harmful_outcome.prediction_error_weight >
            initial_attention_policy.prediction_error_weight);
 
-    // Verification failure does not erase a consequence already observed after
-    // execution. Operational reliability and consequence evidence are separate:
-    // the former affects capability health, while the latter teaches the
-    // context-specific strategy about what actually happened.
-    ActionAssessment partial_failure;
-    partial_failure.action = wait;
-    partial_failure.action.expected_consequence = 0.5;
-    partial_failure.disposition = ActionDisposition::execute;
-    partial_failure.permitted = true;
-    partial_failure.confidence = 0.9;
-    partial_failure.developmental_context = "system stabilization";
-    bool partial_failure_executed = false;
-    const auto partial_result = brain.execute_action(
-        partial_failure,
-        [&](const CandidateAction&) { partial_failure_executed = true; return true; },
-        [](const CandidateAction&) { return false; },
-        {},
-        [](const CandidateAction&) { return -0.7; });
-    assert(partial_result.executed);
-    assert(!partial_result.verified);
-    assert(partial_result.outcome.observed);
-    bool learned_observed_failure_consequence = false;
-    for (const auto& strategy : brain.developmental_strategies()) {
-        if (strategy.context == "system stabilization" &&
-            strategy.action == "wait" && strategy.uses > 0 &&
-            strategy.value < 0.0) {
-            learned_observed_failure_consequence = true;
-        }
-    }
-    assert(learned_observed_failure_consequence);
-
     // A successful execution with no valid consequence observation is not
     // evidence that the action was neutral or beneficial.
     ActionAssessment unobserved_assessment;
@@ -173,6 +142,38 @@ int main() {
     assert(after_learning.status == CognitiveCycleStatus::completed);
     assert(!after_learning.context.plan.steps.empty());
     assert(after_learning.context.plan.steps.front().action.name == "wait");
+
+    // Verification failure does not erase a consequence already observed after
+    // execution. Operational reliability and consequence evidence are separate:
+    // the former affects capability health, while the latter teaches the
+    // context-specific strategy about what actually happened.
+    ActionAssessment partial_failure;
+    partial_failure.action = wait;
+    partial_failure.action.expected_consequence = 0.5;
+    partial_failure.disposition = ActionDisposition::execute;
+    partial_failure.permitted = true;
+    partial_failure.confidence = 0.9;
+    partial_failure.developmental_context = "system stabilization";
+    bool partial_failure_executed = false;
+    const auto partial_result = brain.execute_action(
+        partial_failure,
+        [&](const CandidateAction&) { partial_failure_executed = true; return true; },
+        [](const CandidateAction&) { return false; },
+        {},
+        [](const CandidateAction&) { return -0.7; });
+    assert(partial_result.executed);
+    assert(!partial_result.verified);
+    assert(partial_result.outcome.observed);
+    bool learned_observed_failure_consequence = false;
+    for (const auto& strategy : brain.developmental_strategies()) {
+        if (strategy.context == "system stabilization" &&
+            strategy.action == "wait" && strategy.uses > 0 &&
+            strategy.value < 0.0) {
+            learned_observed_failure_consequence = true;
+        }
+    }
+    assert(learned_observed_failure_consequence);
+
 
     const auto live_affect = brain.affective_state();
     const auto live_attention = brain.attention();
