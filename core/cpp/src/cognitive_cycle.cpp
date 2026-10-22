@@ -217,6 +217,32 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     // change can propagate through the normal planner and decision engine.
     const std::string developmental_context =
         infer_developmental_context(input, *selected);
+
+    // Action-only recall can still be crowded out by recent outcomes from
+    // different situations involving the same action. Retrieve exact-context
+    // outcomes separately after the selected goal determines the context, then
+    // merge them into the same evidence set. This preserves local experience
+    // without preventing the broader strategy learner from transferring across
+    // related contexts.
+    if (input.memory_limit > 0) {
+        for (const auto& action : input.candidate_actions) {
+            if (action.name.empty()) continue;
+            const auto contextual_memories = brain_.memory().recall_ranked(
+                {{"action", Scalar{action.name}},
+                 {"context", Scalar{developmental_context}}},
+                input.memory_limit, "action_outcome");
+            for (const auto& memory : contextual_memories) {
+                const auto already_present = std::find_if(
+                    result.context.memories.begin(), result.context.memories.end(),
+                    [&](const MemoryRecord& existing) {
+                        return existing.event.sequence == memory.event.sequence;
+                    });
+                if (already_present == result.context.memories.end())
+                    result.context.memories.push_back(memory);
+            }
+        }
+    }
+
     const auto stored_strategies = brain_.developmental_strategies();
     const auto related_strategies = brain_.developmental_related_strategies(developmental_context);
     // A transferred strategy is a prior, not a prohibition. When the current
