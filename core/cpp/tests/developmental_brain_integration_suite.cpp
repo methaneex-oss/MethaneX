@@ -531,6 +531,50 @@ int main() {
     std::filesystem::remove(numeric_path, ec);
     std::filesystem::remove(numeric_path.string() + ".meta", ec);
 
+    // Memory confidence must follow evidence quality, not action execution
+    // reliability. A reliably observed failed attempt remains useful evidence.
+    const auto evidence_confidence_path =
+        std::filesystem::temp_directory_path() / "jarvis_evidence_confidence.bin";
+    std::filesystem::remove(evidence_confidence_path, ec);
+    std::filesystem::remove(evidence_confidence_path.string() + ".meta", ec);
+    std::uint64_t failed_action_sequence = 0;
+    {
+        Brain evidence_confidence_brain(evidence_confidence_path);
+        const auto observation = evidence_confidence_brain.observe(
+            Event{0, 0, "confidence-integration-test", "action_outcome",
+                {{"action", std::string("failed-but-observed")},
+                 {"context", std::string("sensor-repair")},
+                 {"status", static_cast<std::int64_t>(ActionExecutionStatus::failed)},
+                 {"observed", false},
+                 {"reliability", 0.1},
+                 {"evidence_reliability", 0.9},
+                 {"salience", 0.8},
+                 {"novelty", 0.3}}});
+        assert(observation.event.sequence != 0);
+        failed_action_sequence = observation.event.sequence;
+        const auto records = evidence_confidence_brain.memory().recall_ranked(
+            {{"action", Scalar{std::string("failed-but-observed")}}}, 8);
+        const auto record = std::find_if(records.begin(), records.end(),
+            [failed_action_sequence](const MemoryRecord& item) {
+                return item.event.sequence == failed_action_sequence;
+            });
+        assert(record != records.end());
+        assert(record->confidence > 0.85);
+    }
+    {
+        Brain restored_evidence_confidence(evidence_confidence_path);
+        const auto records = restored_evidence_confidence.memory().recall_ranked(
+            {{"action", Scalar{std::string("failed-but-observed")}}}, 8);
+        const auto record = std::find_if(records.begin(), records.end(),
+            [failed_action_sequence](const MemoryRecord& item) {
+                return item.event.sequence == failed_action_sequence;
+            });
+        assert(record != records.end());
+        assert(record->confidence > 0.85);
+    }
+    std::filesystem::remove(evidence_confidence_path, ec);
+    std::filesystem::remove(evidence_confidence_path.string() + ".meta", ec);
+
     // Generic evidence must enter the same coordinated experience pathway:
     // durable evidence -> knowledge/affective processing -> memory consolidation.
     const auto evidence_path =

@@ -154,8 +154,17 @@ void Brain::consolidate_experience(const Event& event, double error) {
     double salience = attention_state_.salience; double novelty = state_.novelty; double confidence = 0.5;
     if (const auto it = event.data.find("salience"); it != event.data.end()) if (const auto* value = std::get_if<double>(&it->second)) salience = *value;
     if (const auto it = event.data.find("novelty"); it != event.data.end()) if (const auto* value = std::get_if<double>(&it->second)) novelty = *value;
-    if (const auto it = event.data.find("reliability"); it != event.data.end()) if (const auto* value = std::get_if<double>(&it->second)) confidence = *value;
-    if (const auto it = event.data.find("confidence"); it != event.data.end()) if (const auto* value = std::get_if<double>(&it->second)) confidence = *value;
+    // Evidence confidence is distinct from operational execution reliability.
+    // A failed action can be highly certain evidence that an attempted strategy
+    // failed; do not down-rank that experience merely because execution reliability
+    // was low. Preserve legacy confidence/reliability fallbacks when the explicit
+    // evidence-confidence field is absent.
+    if (const auto it = event.data.find("reliability"); it != event.data.end())
+        if (const auto* value = std::get_if<double>(&it->second)) confidence = *value;
+    if (const auto it = event.data.find("confidence"); it != event.data.end())
+        if (const auto* value = std::get_if<double>(&it->second)) confidence = *value;
+    if (const auto it = event.data.find("evidence_reliability"); it != event.data.end())
+        if (const auto* value = std::get_if<double>(&it->second)) confidence = *value;
     const auto affect = affective_state_model_.state();
     const double affective_significance = std::clamp(0.25 * std::abs(affect.valence) + 0.25 * affect.arousal + 0.25 * affect.uncertainty + 0.25 * affect.tension, 0.0, 1.0);
     salience = std::max(std::clamp(salience, 0.0, 1.0), affective_significance);
