@@ -230,6 +230,60 @@ int main() {
                score_for(restored_cycle_result.context.decisions, "other-action"));
     }
 
+    // Episodic outcomes are a bounded decision fallback when no learned
+    // strategy exists (for example, imported/legacy journals). Directly append
+    // traces to memory so this test isolates episodic retrieval from Brain's
+    // normal outcome handler and proves memories themselves affect action choice.
+    const auto episodic_path =
+        std::filesystem::temp_directory_path() / "jarvis_episodic_decision_fallback.bin";
+    std::filesystem::remove(episodic_path, ec);
+    std::filesystem::remove(episodic_path.string() + ".meta", ec);
+    {
+        Brain episodic_brain(episodic_path);
+        Goal episodic_goal{"episodic-fallback-goal", "use prior episodic outcomes",
+                           0.9, 0.0, 0, 0, GoalStatus::pending, {}, {}};
+        assert(episodic_brain.create_goal(episodic_goal));
+        assert(episodic_brain.activate_goal(episodic_goal.id));
+        episodic_brain.memory().append(Event{0, 0, "legacy-journal", "action_outcome",
+            {{"action", std::string("episodically-good")},
+             {"context", std::string("episodic-only-context")},
+             {"observed", true},
+             {"actual_consequence", 1.0},
+             {"consequence_error", 0.0},
+             {"reliability", 1.0},
+             {"evidence_reliability", 1.0},
+             {"salience", 1.0}}});
+        episodic_brain.memory().append(Event{0, 0, "legacy-journal", "action_outcome",
+            {{"action", std::string("episodically-bad")},
+             {"context", std::string("episodic-only-context")},
+             {"observed", true},
+             {"actual_consequence", -1.0},
+             {"consequence_error", 1.0},
+             {"reliability", 1.0},
+             {"evidence_reliability", 1.0},
+             {"salience", 1.0}}});
+        const std::vector<CandidateAction> episodic_actions{
+            {"episodically-good", 0.5, 0.5, 0.9, 0.2, 1.0, 0.0, 0.5, DecisionOutcome::act, 0.0},
+            {"episodically-bad", 0.5, 0.5, 0.9, 0.2, 1.0, 0.0, 0.5, DecisionOutcome::act, 0.0},
+        };
+        CognitiveCycle episodic_cycle(episodic_brain);
+        CognitiveCycleInput episodic_input;
+        episodic_input.observation = Event{0, 0, "environment", "observation", {}};
+        episodic_input.candidate_actions = episodic_actions;
+        episodic_input.goal_id = episodic_goal.id;
+        episodic_input.developmental_context = "episodic-only-context";
+        episodic_input.memory_limit = 16;
+        const auto episodic_result = episodic_cycle.run(episodic_input);
+        assert(episodic_result.status == CognitiveCycleStatus::completed);
+        assert(std::any_of(episodic_result.context.memories.begin(),
+                           episodic_result.context.memories.end(),
+                           [](const MemoryRecord& memory) {
+                               return memory.event.kind == "action_outcome";
+                           }));
+        assert(score_for(episodic_result.context.decisions, "episodically-good") >
+               score_for(episodic_result.context.decisions, "episodically-bad"));
+    }
+
     // The ordinary Brain decision APIs must generalize learned behavior too;
     // generalization is not restricted to CognitiveCycle or an opt-in API.
     const auto generalization_path =
