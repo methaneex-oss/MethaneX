@@ -181,6 +181,9 @@ target_compile_features(jarvis_experience_memory_test PRIVATE cxx_std_20)
 add_executable(jarvis_brain_action_consequence_integration_suite brain_action_consequence_integration_suite.cpp)
 target_link_libraries(jarvis_brain_action_consequence_integration_suite PRIVATE jarvis_core)
 target_compile_features(jarvis_brain_action_consequence_integration_suite PRIVATE cxx_std_20)
+add_executable(jarvis_developmental_training_environment_suite developmental_training_environment_suite.cpp)
+target_link_libraries(jarvis_developmental_training_environment_suite PRIVATE jarvis_core)
+target_compile_features(jarvis_developmental_training_environment_suite PRIVATE cxx_std_20)
 
 include(CTest)
 if(BUILD_TESTING)
@@ -245,6 +248,7 @@ if(BUILD_TESTING)
     add_test(NAME jarvis_goal_outcome_model_suite COMMAND jarvis_goal_outcome_model_suite)
     add_test(NAME jarvis_experience_memory_test COMMAND jarvis_experience_memory_test)
     add_test(NAME jarvis_brain_action_consequence_integration_suite COMMAND jarvis_brain_action_consequence_integration_suite)
+    add_test(NAME jarvis_developmental_training_environment_suite COMMAND jarvis_developmental_training_environment_suite)
 endif()
 # These executable suites use assert() as their test assertion mechanism. Keep
 # assertions enabled in Release builds as well: otherwise NDEBUG removes the
