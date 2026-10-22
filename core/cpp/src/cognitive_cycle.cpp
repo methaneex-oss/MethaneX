@@ -184,12 +184,13 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
             action.utility += influence;
             action.expected_value = std::clamp(
                 action.expected_value + influence, -1.0, 1.0);
-            // Weak transferred evidence should not prevent a useful probe when
-            // local evidence is absent. A high surprise/uncertainty signal
-            // increases this information-gathering incentive.
-            action.utility += 0.75 * exploration_pressure *
-                (1.0 - std::clamp(transferred_weight, 0.0, 1.0));
         }
+        // Exploration is needed precisely when local evidence is absent. Apply
+        // the information-gathering incentive even if no related memory matched;
+        // otherwise a sparse memory system can never discover an alternative.
+        // Existing local evidence bypasses this branch and remains authoritative.
+        action.utility += 0.75 * exploration_pressure *
+            (1.0 - std::clamp(transferred_weight, 0.0, 1.0));
     }
     const auto& affect = result.context.affective_state;
     const auto& appraisal = result.context.affective_appraisal;
