@@ -148,7 +148,7 @@ int main() {
     // the former affects capability health, while the latter teaches the
     // context-specific strategy about what actually happened.
     ActionAssessment partial_failure;
-    partial_failure.action = wait;
+    partial_failure.action.name = "stabilize";
     partial_failure.action.expected_consequence = 0.5;
     partial_failure.disposition = ActionDisposition::execute;
     partial_failure.permitted = true;
@@ -167,7 +167,7 @@ int main() {
     bool learned_observed_failure_consequence = false;
     for (const auto& strategy : brain.developmental_strategies()) {
         if (strategy.context == "system stabilization" &&
-            strategy.action == "wait" && strategy.uses > 0 &&
+            strategy.action == "stabilize" && strategy.uses > 0 &&
             strategy.value < 0.0) {
             learned_observed_failure_consequence = true;
         }
