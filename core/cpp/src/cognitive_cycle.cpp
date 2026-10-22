@@ -248,6 +248,67 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
             action.utility += influence;
             action.expected_value = std::clamp(
                 action.expected_value + influence, -1.0, 1.0);
+        } else {
+            // Episodic fallback: older or imported journals may contain outcome
+            // traces without a corresponding developmental-strategy record.
+            // Use those traces only when neither direct nor transferred strategy
+            // evidence exists for this action, preventing the same experience
+            // from being counted once as a strategy and again as an episode.
+            double episodic_value = 0.0;
+            double episodic_weight = 0.0;
+            for (const auto& memory : result.context.memories) {
+                const auto& event = memory.event;
+                if (event.kind != "action_outcome") continue;
+                const auto action_it = event.data.find("action");
+                const auto context_it = event.data.find("context");
+                const auto observed_it = event.data.find("observed");
+                const auto actual_it = event.data.find("actual_consequence");
+                if (action_it == event.data.end() || context_it == event.data.end() ||
+                    observed_it == event.data.end() || actual_it == event.data.end()) continue;
+                const auto* remembered_action = std::get_if<std::string>(&action_it->second);
+                const auto* remembered_context = std::get_if<std::string>(&context_it->second);
+                const auto* observed = std::get_if<bool>(&observed_it->second);
+                if (remembered_action == nullptr || remembered_context == nullptr ||
+                    observed == nullptr || !*observed ||
+                    *remembered_action != action.name ||
+                    *remembered_context != developmental_context) continue;
+                double reward = 0.0;
+                if (const auto* value = std::get_if<double>(&actual_it->second)) {
+                    reward = *value;
+                } else if (const auto* value = std::get_if<std::int64_t>(&actual_it->second)) {
+                    reward = static_cast<double>(*value);
+                } else {
+                    continue;
+                }
+                if (!std::isfinite(reward)) continue;
+                double reliability = std::clamp(memory.confidence, 0.0, 1.0);
+                const auto evidence_it = event.data.find("evidence_reliability");
+                const auto reliability_it = event.data.find("reliability");
+                const auto selected_reliability =
+                    evidence_it != event.data.end() ? evidence_it : reliability_it;
+                if (selected_reliability != event.data.end()) {
+                    if (const auto* value = std::get_if<double>(&selected_reliability->second)) {
+                        if (!std::isfinite(*value)) continue;
+                        reliability *= std::clamp(*value, 0.0, 1.0);
+                    } else if (const auto* value = std::get_if<std::int64_t>(&selected_reliability->second)) {
+                        reliability *= std::clamp(static_cast<double>(*value), 0.0, 1.0);
+                    } else {
+                        continue;
+                    }
+                }
+                const double weight = reliability;
+                episodic_value += weight * std::clamp(reward, -1.0, 1.0);
+                episodic_weight += weight;
+            }
+            if (episodic_weight > 0.0) {
+                // Keep episodic-only influence deliberately weaker than an
+                // explicitly learned strategy; this is a fallback prior.
+                const double influence = std::clamp(
+                    0.5 * episodic_value / episodic_weight, -0.5, 0.5);
+                action.utility += influence;
+                action.expected_value = std::clamp(
+                    action.expected_value + influence, -1.0, 1.0);
+            }
         }
         // Exploration is needed precisely when local evidence is absent. Apply
         // the information-gathering incentive even if no related memory matched;
