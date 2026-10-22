@@ -343,6 +343,19 @@ int main() {
              {"reliability", 1.0},
              {"evidence_reliability", 1.0},
              {"salience", 1.0}}});
+        // Same-action non-outcome records are newer and salient. A plain
+        // top-1 action recall would return one of them, then discard it after
+        // ranking and miss the older outcome. Kind filtering must happen first.
+        for (int i = 0; i < 3; ++i) {
+            experienced.memory().append(Event{0, 0, "executor", "action_attempt",
+                {{"action", std::string("sensor-adaptation-action")},
+                 {"salience", 1.0}}});
+        }
+        const auto targeted_outcomes = experienced.memory().recall_ranked(
+            {{"action", Scalar{std::string("sensor-adaptation-action")}}},
+            1, "action_outcome");
+        assert(targeted_outcomes.size() == 1);
+        assert(targeted_outcomes.front().event.kind == "action_outcome");
         CognitiveCycle cycle(experienced);
         CognitiveCycleInput input;
         input.observation = featureful_observation;
