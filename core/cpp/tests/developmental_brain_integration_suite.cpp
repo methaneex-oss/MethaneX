@@ -278,9 +278,21 @@ int main() {
              {"reliability", 1.0},
              {"evidence_reliability", 1.0},
              {"salience", 1.0}}});
+        // A recorded but unobserved consequence is not reward evidence and must
+        // not make an action look successful merely because a value was stored.
+        episodic_brain.memory().append(Event{0, 0, "legacy-journal", "action_outcome",
+            {{"action", std::string("episodically-unobserved")},
+             {"context", std::string("episodic-only-context")},
+             {"observed", false},
+             {"actual_consequence", 1.0},
+             {"consequence_error", 0.0},
+             {"reliability", 1.0},
+             {"evidence_reliability", 1.0},
+             {"salience", 1.0}}});
         const std::vector<CandidateAction> episodic_actions{
             {"episodically-good", 0.5, 0.5, 0.9, 0.2, 1.0, 0.0, 0.5, DecisionOutcome::act, 0.0},
             {"episodically-bad", 0.5, 0.5, 0.9, 0.2, 1.0, 0.0, 0.5, DecisionOutcome::act, 0.0},
+            {"episodically-unobserved", 0.5, 0.5, 0.9, 0.2, 1.0, 0.0, 0.5, DecisionOutcome::act, 0.0},
         };
         CognitiveCycle episodic_cycle(episodic_brain);
         CognitiveCycleInput episodic_input;
@@ -298,6 +310,8 @@ int main() {
                            }));
         assert(score_for(episodic_result.context.decisions, "episodically-good") >
                score_for(episodic_result.context.decisions, "episodically-bad"));
+        assert(score_for(episodic_result.context.decisions, "episodically-good") >
+               score_for(episodic_result.context.decisions, "episodically-unobserved"));
     }
 
     // The ordinary Brain decision APIs must generalize learned behavior too;
