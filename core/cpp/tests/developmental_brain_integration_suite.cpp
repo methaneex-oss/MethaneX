@@ -543,6 +543,17 @@ int main() {
         const double accepted = evidence_brain.learn(
             Evidence{"generic-evidence-test", "observed-state", Scalar{std::string("stable")}, 0.9});
         assert(accepted > 0.0);
+        const auto fact = evidence_brain.world().query(
+            "generic-evidence-test", "observed-state");
+        assert(fact.has_value());
+        assert(fact->value == Scalar{std::string("stable")});
+        // Appraisal and confidence metadata must not become world knowledge.
+        assert(!evidence_brain.world().query(
+            "generic-evidence-test", "novelty").has_value());
+        assert(!evidence_brain.world().query(
+            "generic-evidence-test", "salience").has_value());
+        assert(!evidence_brain.world().query(
+            "generic-evidence-test", "reliability").has_value());
         const auto learning_events = evidence_brain.memory().by_kind("learning");
         assert(!learning_events.empty());
         const auto learned_event = std::find_if(
@@ -574,6 +585,14 @@ int main() {
                        event.data.contains("novelty") &&
                        event.data.contains("salience");
             }));
+        const auto restored_fact = restored_evidence.world().query(
+            "generic-evidence-test", "observed-state");
+        assert(restored_fact.has_value());
+        assert(restored_fact->value == Scalar{std::string("stable")});
+        assert(!restored_evidence.world().query(
+            "generic-evidence-test", "novelty").has_value());
+        assert(!restored_evidence.world().query(
+            "generic-evidence-test", "salience").has_value());
         const auto records = restored_evidence.memory().recall_ranked(
             {{"observed-state", Scalar{std::string("stable")}}}, 8);
         const auto consolidated = std::find_if(

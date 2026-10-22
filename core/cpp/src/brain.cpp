@@ -475,21 +475,79 @@ void Brain::replay(const Event& event) {
         const auto source = integer_value(event.data, "source_action_sequence", 0);
         if (source != 0 && !processed_derived_learning_sources_.insert(source).second) return;
     }
-    const double reliability = event.kind == "learning" ? std::clamp(double_value(event.data, "reliability", 0.5), 0.0, 1.0) : 0.7;
-    if (event.kind == "learning") for (const auto& [key, value] : event.data) if (key != "reliability") { knowledge_.assimilate(KnowledgeEvidence{event.source, key, value, reliability}); break; }
-    std::vector<Belief> before; before.reserve(beliefs_.size()); for (const auto& [_, belief] : beliefs_) before.push_back(belief);
-    for (const auto& [key, value] : event.data) {
-        // Appraisal and execution metadata describe an experience; they are not
-        // world facts. In particular, observe() persists computed novelty into
-        // the event so replay can reproduce affect, but that must not create a
-        // synthetic "novelty" belief or contaminate association/causal learning.
-        if (event.kind == "learning" && key == "reliability") continue;
-        if (event.kind == "observation" &&
-            (key == "novelty" || key == "salience" || key == "urgency" ||
-             key == "prediction_error" || key == "outcome" || key == "confidence"))
-            continue;
-        const auto it = beliefs_.find(key); if (it == beliefs_.end()) beliefs_.emplace(key, Belief{key, value, reliability, 1, event.sequence}); else { const bool same = it->second.value == value; it->second.value = value; it->second.confidence = same ? std::min(0.999, it->second.confidence + (1.0 - it->second.confidence) * reliability) : std::max(0.05, it->second.confidence * (1.0 - reliability)); it->second.disputed = !same && it->second.observations > 0; ++it->second.observations; it->second.updated_sequence = event.sequence; } world_.observe(Fact{event.source, key, value, reliability, 1}); const auto subject = string_value(event.data, "subject"); const auto predicate = string_value(event.data, "predicate"); const auto object = string_value(event.data, "object"); if (subject != nullptr && predicate != nullptr && object != nullptr) world_.relate(Relation{*subject, *predicate, *object, reliability, event.sequence, false}); }
-    std::vector<Belief> after; after.reserve(beliefs_.size()); for (const auto& [_, belief] : beliefs_) after.push_back(belief); causal_.observe_transition(before, after); association_.observe(before, after, event.sequence);
+    const double reliability = event.kind == "learning"
+        ? std::clamp(double_value(event.data, "reliability", 0.5), 0.0, 1.0)
+        : 0.7;
+
+    // A learning event carries one evidence item plus appraisal metadata. Read
+    // its explicit payload rather than taking the first unordered-map entry;
+    // otherwise replay can assimilate salience/novelty as knowledge or learn a
+    // different fact depending on hash iteration order.
+    std::vector<std::pair<std::string, Scalar>> facts;
+    if (event.kind == "learning") {
+        const auto* evidence_key = string_value(event.data, "evidence_key");
+        const auto evidence_value = event.data.find("evidence_value");
+        if (evidence_key != nullptr && !evidence_key->empty() &&
+            evidence_value != event.data.end()) {
+            facts.emplace_back(*evidence_key, evidence_value->second);
+            knowledge_.assimilate(
+                KnowledgeEvidence{event.source, *evidence_key,
+                                  evidence_value->second, reliability});
+        } else {
+            // Backward compatibility for journal entries written before the
+            // explicit evidence payload was introduced.
+            for (const auto& [key, value] : event.data) {
+                if (key == "reliability" || key == "salience" || key == "novelty" ||
+                    key == "confidence" || key == "evidence_key" ||
+                    key == "evidence_value" || key == "source_action_sequence")
+                    continue;
+                facts.emplace_back(key, value);
+                knowledge_.assimilate(KnowledgeEvidence{event.source, key, value, reliability});
+                break;
+            }
+        }
+    } else {
+        for (const auto& [key, value] : event.data) {
+            // Appraisal metadata describes an experience; it is not a world fact.
+            if (key == "novelty" || key == "salience" || key == "urgency" ||
+                key == "prediction_error" || key == "outcome" || key == "confidence")
+                continue;
+            facts.emplace_back(key, value);
+        }
+    }
+
+    std::vector<Belief> before;
+    before.reserve(beliefs_.size());
+    for (const auto& [_, belief] : beliefs_) before.push_back(belief);
+    for (const auto& [key, value] : facts) {
+        const auto it = beliefs_.find(key);
+        if (it == beliefs_.end()) {
+            beliefs_.emplace(key, Belief{key, value, reliability, 1, event.sequence});
+        } else {
+            const bool same = it->second.value == value;
+            it->second.value = value;
+            it->second.confidence = same
+                ? std::min(0.999, it->second.confidence +
+                      (1.0 - it->second.confidence) * reliability)
+                : std::max(0.05, it->second.confidence * (1.0 - reliability));
+            it->second.disputed = !same && it->second.observations > 0;
+            ++it->second.observations;
+            it->second.updated_sequence = event.sequence;
+        }
+        world_.observe(Fact{event.source, key, value, reliability, 1});
+    }
+    const auto subject = string_value(event.data, "subject");
+    const auto predicate = string_value(event.data, "predicate");
+    const auto object = string_value(event.data, "object");
+    if (subject != nullptr && predicate != nullptr && object != nullptr)
+        world_.relate(Relation{*subject, *predicate, *object, reliability,
+                               event.sequence, false});
+
+    std::vector<Belief> after;
+    after.reserve(beliefs_.size());
+    for (const auto& [_, belief] : beliefs_) after.push_back(belief);
+    causal_.observe_transition(before, after);
+    association_.observe(before, after, event.sequence);
     if (event.kind == "observation") {
         // Brain::observe persists the novelty appraisal with the event. During
         // startup replay Memory already contains the complete journal, so
@@ -571,7 +629,38 @@ Observation Brain::observe(Event event) {
     sync_self_state();
     return Observation{std::move(event), novelty};
 }
-double Brain::learn(const Evidence& evidence) { std::unique_lock lock(mutex_); if (evidence.key.empty() || evidence.source.empty() || !std::isfinite(evidence.reliability)) return 0.0; const double reliability = std::clamp(evidence.reliability, 0.0, 1.0); const auto history = memory_.recent(256); Event event{0, now_ns(), evidence.source, "learning", {{evidence.key, evidence.value}, {"reliability", reliability}, {"salience", std::clamp(attention_state_.salience, 0.0, 1.0)}, {"novelty", compute_novelty(Event{0, 0, evidence.source, "learning", {{evidence.key, evidence.value}, {"reliability", reliability}}}, history)}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return 0.0; ++state_.events_seen; state_.cycle = event.sequence; replay(event); state_.novelty = std::clamp(double_value(event.data, "novelty", state_.novelty), 0.0, 1.0); consolidate_experience(event); sync_self_state(); if (const auto* metric = knowledge_.source_metric(evidence.source)) return metric->reliability; return reliability; }
+double Brain::learn(const Evidence& evidence) {
+    std::unique_lock lock(mutex_);
+    if (evidence.key.empty() || evidence.source.empty() ||
+        !std::isfinite(evidence.reliability)) return 0.0;
+
+    const double reliability = std::clamp(evidence.reliability, 0.0, 1.0);
+    const auto history = memory_.recent(256);
+    Event event{0, now_ns(), evidence.source, "learning",
+        {{evidence.key, evidence.value},
+         {"evidence_key", evidence.key},
+         {"evidence_value", evidence.value},
+         {"reliability", reliability},
+         {"salience", std::clamp(attention_state_.salience, 0.0, 1.0)},
+         {"novelty", compute_novelty(
+             Event{0, 0, evidence.source, "learning",
+                   {{"evidence_key", evidence.key},
+                    {"evidence_value", evidence.value},
+                    {"reliability", reliability}}},
+             history)}}};
+    event.sequence = memory_.append(event);
+    if (event.sequence == 0) return 0.0;
+    ++state_.events_seen;
+    state_.cycle = event.sequence;
+    replay(event);
+    state_.novelty = std::clamp(
+        double_value(event.data, "novelty", state_.novelty), 0.0, 1.0);
+    consolidate_experience(event);
+    sync_self_state();
+    if (const auto* metric = knowledge_.source_metric(evidence.source))
+        return metric->reliability;
+    return reliability;
+}
 LearningCycle Brain::learn_from_prediction(const std::string& key, const Scalar& actual, double fitness) {
     std::unique_lock lock(mutex_);
     LearningCycle cycle{};
