@@ -154,6 +154,21 @@ int main() {
         assert(cycle_result.status == CognitiveCycleStatus::completed);
         assert(score_for(cycle_result.context.decisions, "learned-action") >
                score_for(cycle_result.context.decisions, "other-action"));
+
+        // A featureless observation must not sever continuity: the cycle should
+        // recover salient prior episodes when attribute-based recall has no query.
+        auto featureless_input = cycle_input;
+        featureless_input.observation =
+            Event{0, 0, "environment", "observation", {}};
+        featureless_input.memory_limit = 8;
+        const auto featureless_result = cycle.run(featureless_input);
+        assert(featureless_result.status == CognitiveCycleStatus::completed);
+        assert(!featureless_result.context.memories.empty());
+        assert(std::any_of(featureless_result.context.memories.begin(),
+                           featureless_result.context.memories.end(),
+                           [](const MemoryRecord& memory) {
+                               return memory.event.kind == "action_outcome";
+                           }));
     }
 
     {
