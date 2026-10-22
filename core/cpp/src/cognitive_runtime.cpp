@@ -86,7 +86,7 @@ bool CognitiveRuntime::submit_feedback(CognitiveFeedback feedback) {
 }
 
 bool CognitiveRuntime::enqueue(CognitiveCycleInput input, double priority) { { std::lock_guard lock(mutex_); if (!running_ || stopping_ || config_.input_capacity == 0 || inputs_.size() >= config_.input_capacity) { ++metrics_.rejected; return false; } WorkItem item{std::move(input), finite_priority(priority), ++next_sequence_}; const auto position = std::find_if(inputs_.begin(), inputs_.end(), [&](const WorkItem& queued) { return item.priority > queued.priority; }); inputs_.insert(position, std::move(item)); ++metrics_.accepted; } condition_.notify_one(); return true; }
-void CognitiveRuntime::process_feedback(CognitiveFeedback feedback) { try { (void)cycle_.process_outcome(feedback.prediction_key.empty() ? std::nullopt : std::optional<std::string>{feedback.prediction_key}, feedback.actual, feedback.evidence, feedback.goal_id, feedback.goal_progress, feedback.goal_confidence); } catch (...) {} std::lock_guard lock(mutex_); ++metrics_.feedback_processed; }
+void CognitiveRuntime::process_feedback(CognitiveFeedback feedback) { try { (void)cycle_.process_outcome(feedback.prediction_key.empty() ? std::nullopt : std::optional<std::string>{feedback.prediction_key}, feedback.actual, feedback.evidence, feedback.goal_id, feedback.goal_progress, feedback.goal_confidence, feedback.prediction_sequence); } catch (...) {} std::lock_guard lock(mutex_); ++metrics_.feedback_processed; }
 void CognitiveRuntime::execute_actions(CognitiveCycleResult& result) {
     for (const auto& assessment : result.context.action_assessments) {
         if (assessment.action.name.empty()) continue;
