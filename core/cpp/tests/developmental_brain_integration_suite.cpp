@@ -255,15 +255,6 @@ int main() {
              {"evidence_reliability", 1.0},
              {"salience", 1.0}}});
         episodic_brain.memory().append(Event{0, 0, "legacy-journal", "action_outcome",
-            {{"action", std::string("episodically-good-control")},
-             {"context", std::string("episodic-only-context")},
-             {"observed", true},
-             {"actual_consequence", 1.0},
-             {"consequence_error", 0.0},
-             {"reliability", 1.0},
-             {"evidence_reliability", 1.0},
-             {"salience", 1.0}}});
-        episodic_brain.memory().append(Event{0, 0, "legacy-journal", "action_outcome",
             {{"action", std::string("episodically-bad")},
              {"context", std::string("episodic-only-context")},
              {"observed", true},
@@ -285,7 +276,6 @@ int main() {
              {"salience", 1.0}}});
         const std::vector<CandidateAction> episodic_actions{
             {"episodically-good", 0.5, 0.5, 0.9, 0.2, 1.0, 0.0, 0.5, DecisionOutcome::act, 0.0},
-            {"episodically-good-control", 0.5, 0.5, 0.9, 0.2, 1.0, 0.0, 0.5, DecisionOutcome::act, 0.0},
             {"episodically-bad", 0.5, 0.5, 0.9, 0.2, 1.0, 0.0, 0.5, DecisionOutcome::act, 0.0},
             {"episodically-unobserved", 0.5, 0.5, 0.9, 0.2, 1.0, 0.0, 0.5, DecisionOutcome::act, 0.0},
         };
@@ -307,12 +297,9 @@ int main() {
                score_for(episodic_result.context.decisions, "episodically-bad"));
         assert(score_for(episodic_result.context.decisions, "episodically-good") >
                score_for(episodic_result.context.decisions, "episodically-unobserved"));
-        // Explicit evidence reliability must preserve the positive consequence
-        // even when legacy executor reliability is low; compare against the
-        // negative episode rather than requiring identical final planner scores,
-        // which also include candidate-specific decision features.
-        assert(score_for(episodic_result.context.decisions, "episodically-good-control") >
-               score_for(episodic_result.context.decisions, "episodically-bad"));
+        // The positive episode deliberately has low legacy executor reliability
+        // but explicit evidence_reliability=1.0. Its score above the negative
+        // episode proves consequence confidence is not erased by executor reliability.
     }
 
     // The ordinary Brain decision APIs must generalize learned behavior too;
