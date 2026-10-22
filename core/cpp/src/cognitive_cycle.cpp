@@ -81,15 +81,36 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     // appear nonempty, suppressing the episodic continuity fallback.
     result.context.memories =
         brain_.memory().recall_ranked(input.observation.data, input.memory_limit);
-    // A featureless observation still needs continuity. Exact-attribute recall
-    // cannot rank anything when the observation has no data, so use salient
-    // episodic traces rather than silently giving the cycle an empty memory.
+
+    // Observation similarity and action experience are separate retrieval
+    // channels. A nonempty observation match must not hide the exact action
+    // outcomes needed to evaluate candidate actions, especially after a sensor
+    // schema changes or unrelated observations dominate the generic top-k.
+    // Retrieve a bounded set per candidate and merge by durable sequence so
+    // later planning can validate action, context, observation and evidence.
+    if (input.memory_limit > 0) {
+        for (const auto& action : input.candidate_actions) {
+            if (action.name.empty()) continue;
+            const auto action_memories = brain_.memory().recall_ranked(
+                {{"action", Scalar{action.name}}}, input.memory_limit);
+            for (const auto& memory : action_memories) {
+                if (memory.event.kind != "action_outcome") continue;
+                const auto already_present = std::find_if(
+                    result.context.memories.begin(), result.context.memories.end(),
+                    [&](const MemoryRecord& existing) {
+                        return existing.event.sequence == memory.event.sequence;
+                    });
+                if (already_present == result.context.memories.end())
+                    result.context.memories.push_back(memory);
+            }
+        }
+    }
+
+    // A featureless observation or an unseen action still needs continuity.
+    // Use salient episodic traces only when neither retrieval channel found
+    // anything; targeted action recall above prevents unrelated matches from
+    // suppressing a useful episode for a known candidate.
     if (result.context.memories.empty() && input.memory_limit > 0) {
-        // Attribute recall can also fail for a featureful observation when its
-        // keys do not overlap the stored episode schema (for example, a new
-        // sensor feature versus an action_outcome record). Preserve continuity
-        // in that case too; downstream consumers still validate exact context,
-        // action, observation, and evidence quality before using an episode.
         result.context.memories =
             brain_.memory().salient(input.memory_limit, MemoryTier::Episodic);
     }
