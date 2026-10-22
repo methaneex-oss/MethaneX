@@ -170,21 +170,6 @@ int main() {
                                return memory.event.kind == "action_outcome";
                            }));
 
-        // Conflicting episodic traces must not double-count or override an
-        // already available related strategy for the same candidate action.
-        brain.memory().append(Event{0, 0, "legacy-journal", "action_outcome",
-            {{"action", std::string("learned-action")},
-             {"context", std::string("developmental-context/variant")},
-             {"observed", true},
-             {"actual_consequence", -1.0},
-             {"consequence_error", 1.0},
-             {"reliability", 1.0},
-             {"evidence_reliability", 1.0},
-             {"salience", 1.0}}});
-        const auto strategy_precedence_result = cycle.run(featureless_input);
-        assert(strategy_precedence_result.status == CognitiveCycleStatus::completed);
-        assert(score_for(strategy_precedence_result.context.decisions, "learned-action") >
-               score_for(strategy_precedence_result.context.decisions, "other-action"));
     }
 
     {
@@ -766,6 +751,68 @@ int main() {
     }
     std::filesystem::remove(evidence_path, ec);
     std::filesystem::remove(evidence_path.string() + ".meta", ec);
+
+    // Strategy evidence and episodic fallback must remain coordinated without
+    // contaminating the restart/replay fixture above. Seed one durable positive
+    // strategy, then add a conflicting in-memory episode after Brain has replayed
+    // the journal; the existing generalized strategy must remain authoritative.
+    const auto precedence_path =
+        std::filesystem::temp_directory_path() / "jarvis_episodic_strategy_precedence.bin";
+    std::filesystem::remove(precedence_path, ec);
+    std::filesystem::remove(precedence_path.string() + ".meta", ec);
+    {
+        Memory seed_memory(256, precedence_path);
+        seed_memory.append(Event{0, 0, "legacy-journal", "action_outcome",
+            {{"action", std::string("learned-action")},
+             {"context", std::string("developmental-context")},
+             {"status", std::int64_t(3)},
+             {"observed", true},
+             {"actual_consequence", 1.0},
+             {"consequence_error", 0.0},
+             {"reliability", 1.0},
+             {"evidence_reliability", 1.0},
+             {"salience", 1.0}}});
+    }
+    {
+        Brain precedence_brain(precedence_path);
+        const auto strategies = precedence_brain.developmental_strategies();
+        assert(std::any_of(strategies.begin(), strategies.end(),
+            [](const LearnedStrategy& strategy) {
+                return strategy.context == "developmental-context" &&
+                       strategy.action == "learned-action" &&
+                       strategy.value > 0.0;
+            }));
+        Goal precedence_goal{"episodic-precedence-goal", "preserve learned strategy",
+                             0.9, 0.0, 0, 0, GoalStatus::pending, {}, {}};
+        assert(precedence_brain.create_goal(precedence_goal));
+        assert(precedence_brain.activate_goal(precedence_goal.id));
+        precedence_brain.memory().append(Event{0, 0, "legacy-journal", "action_outcome",
+            {{"action", std::string("learned-action")},
+             {"context", std::string("developmental-context/variant")},
+             {"observed", true},
+             {"actual_consequence", -1.0},
+             {"consequence_error", 1.0},
+             {"reliability", 1.0},
+             {"evidence_reliability", 1.0},
+             {"salience", 1.0}}});
+        const std::vector<CandidateAction> precedence_actions{
+            {"learned-action", 0.5, 0.5, 0.9, 0.2, 1.0, 0.0, 0.5, DecisionOutcome::act, 0.0},
+            {"other-action", 0.5, 0.5, 0.9, 0.2, 1.0, 0.0, 0.5, DecisionOutcome::act, 0.0},
+        };
+        CognitiveCycle precedence_cycle(precedence_brain);
+        CognitiveCycleInput precedence_input;
+        precedence_input.observation = Event{0, 0, "environment", "observation", {}};
+        precedence_input.candidate_actions = precedence_actions;
+        precedence_input.goal_id = precedence_goal.id;
+        precedence_input.developmental_context = "developmental-context/variant";
+        precedence_input.memory_limit = 16;
+        const auto precedence_result = precedence_cycle.run(precedence_input);
+        assert(precedence_result.status == CognitiveCycleStatus::completed);
+        assert(score_for(precedence_result.context.decisions, "learned-action") >
+               score_for(precedence_result.context.decisions, "other-action"));
+    }
+    std::filesystem::remove(precedence_path, ec);
+    std::filesystem::remove(precedence_path.string() + ".meta", ec);
 
     std::filesystem::remove(path, ec);
     std::filesystem::remove(path.string() + ".meta", ec);
