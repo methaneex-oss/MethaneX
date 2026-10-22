@@ -204,6 +204,70 @@ int main() {
     for (const auto& belief : disputed_result.context.beliefs) if (belief.key == "temperature") { found_disputed_temperature = belief.disputed; assert(belief.confidence < 0.5); }
     assert(found_disputed_temperature);
 
+    // Partial direct experience must not suppress transfer for an action
+    // that has not yet been tried in the current context. The exact context
+    // knows one route is harmful; a related context knows the alternative works.
+    const auto generalization_gap_journal =
+        std::filesystem::temp_directory_path() / "jarvis_cognitive_generalization_gap_suite.bin";
+    std::filesystem::remove(generalization_gap_journal, ec);
+    std::filesystem::remove(generalization_gap_journal.string() + ".meta", ec);
+    {
+        Brain generalization_brain(generalization_gap_journal);
+        constexpr int evidence_count = 6;
+        for (int i = 0; i < evidence_count; ++i) {
+            assert(generalization_brain.observe(Event{0, 0, "generalization-gap", "action_outcome",
+                {{"action", std::string("good-route")},
+                 {"context", std::string("navigation route")},
+                 {"status", static_cast<std::int64_t>(ActionExecutionStatus::verified)},
+                 {"observed", true},
+                 {"expected_consequence", 1.0},
+                 {"actual_consequence", 1.0},
+                 {"consequence_error", 0.0},
+                 {"reliability", 1.0},
+                 {"salience", 0.8},
+                 {"novelty", 0.2}}}).event.sequence != 0);
+            assert(generalization_brain.observe(Event{0, 0, "generalization-gap", "action_outcome",
+                {{"action", std::string("bad-route")},
+                 {"context", std::string("navigation route variant")},
+                 {"status", static_cast<std::int64_t>(ActionExecutionStatus::verified)},
+                 {"observed", true},
+                 {"expected_consequence", 1.0},
+                 {"actual_consequence", -1.0},
+                 {"consequence_error", 2.0},
+                 {"reliability", 1.0},
+                 {"salience", 0.8},
+                 {"novelty", 0.2}}}).event.sequence != 0);
+        }
+
+        Goal generalization_goal;
+        generalization_goal.id = "generalization-gap-goal";
+        generalization_goal.description = "Choose the better route using direct and transferred experience";
+        generalization_goal.priority = 1.0;
+        assert(generalization_brain.create_goal(generalization_goal));
+        assert(generalization_brain.activate_goal(generalization_goal.id));
+
+        CognitiveCycleInput generalization_input;
+        generalization_input.observation = Event{0, 0, "sensor", "observation",
+            {{"condition", std::string("new navigation condition")}}};
+        generalization_input.candidate_actions = {
+            CandidateAction{"bad-route", 1.0, 1.0, 0.9, 0.1},
+            CandidateAction{"good-route", 0.0, 0.0, 0.9, 0.1},
+        };
+        generalization_input.goal_id = generalization_goal.id;
+        generalization_input.developmental_context = "navigation route variant";
+        generalization_input.planning_horizon = 1;
+        generalization_input.resource_budget = 10.0;
+
+        const auto generalized_decision = CognitiveCycle(generalization_brain).run(generalization_input);
+        assert(generalized_decision.status == CognitiveCycleStatus::completed);
+        assert(!generalized_decision.context.plan.steps.empty());
+        // Without fallback transfer, the untried good route has no local bias
+        // and loses to the initially preferred bad route.
+        assert(generalized_decision.context.plan.steps.front().action.name == "good-route");
+    }
+    std::filesystem::remove(generalization_gap_journal, ec);
+    std::filesystem::remove(generalization_gap_journal.string() + ".meta", ec);
+
     std::filesystem::remove(dispute_journal, ec);
     std::filesystem::remove(dispute_journal.string() + ".meta", ec);
     std::filesystem::remove(journal, ec);
