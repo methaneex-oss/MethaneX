@@ -45,6 +45,34 @@ int main() {
     assert(initial.context.action_assessments.front().developmental_context != goal.id);
     assert(brain.knowledge_source("action_executor.stabilize") == nullptr);
 
+    // Numeric-only observations must participate in developmental context.
+    // Coarse magnitude bands retain useful state differences without encoding
+    // the exact sensor value; explicit caller contexts still take precedence.
+    CognitiveCycleInput numeric_context_input = input;
+    numeric_context_input.observation =
+        Event{0, 0, "sensor", "observation", {{"temperature", 42.0}}};
+    const auto numeric_context_result = cycle.run(numeric_context_input);
+    assert(numeric_context_result.status == CognitiveCycleStatus::completed);
+    const auto numeric_context =
+        numeric_context_result.context.action_assessments.front().developmental_context;
+    assert(numeric_context != goal.id);
+    assert(numeric_context.find("temperature") != std::string::npos);
+    assert(numeric_context.find("scale") != std::string::npos);
+
+    numeric_context_input.observation =
+        Event{0, 0, "sensor", "observation", {{"temperature", 80.0}}};
+    const auto higher_numeric_context_result = cycle.run(numeric_context_input);
+    assert(higher_numeric_context_result.status == CognitiveCycleStatus::completed);
+    const auto higher_numeric_context =
+        higher_numeric_context_result.context.action_assessments.front().developmental_context;
+    assert(higher_numeric_context != numeric_context);
+
+    numeric_context_input.developmental_context = "caller-defined-context";
+    const auto explicit_context_result = cycle.run(numeric_context_input);
+    assert(explicit_context_result.status == CognitiveCycleStatus::completed);
+    assert(explicit_context_result.context.action_assessments.front().developmental_context ==
+           "caller-defined-context");
+
     assert(brain.learn(Evidence{"action_executor.stabilize", "action.stabilize", std::string("failed"), 0.0}) >= 0.0);
     const auto learned_metric = brain.knowledge_source("action_executor.stabilize");
     assert(learned_metric != nullptr);

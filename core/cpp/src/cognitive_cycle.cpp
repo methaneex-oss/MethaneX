@@ -2,7 +2,9 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstdint>
 #include <string>
+#include <vector>
 
 namespace jarvis::core {
 namespace {
@@ -11,26 +13,51 @@ std::string infer_developmental_context(const CognitiveCycleInput& input,
                                         const Goal& goal) {
     if (!input.developmental_context.empty()) return input.developmental_context;
 
-    // When callers do not provide a structural context, ground learning in
-    // observable features rather than collapsing every situation for a goal
-    // into one undifferentiated strategy bucket. Numeric readings are omitted
-    // from the label so nearby numeric states can still share experience.
+    // Build a stable, feature-grounded context for downstream memory retrieval
+    // and strategy transfer. Numeric features use logarithmic magnitude bands:
+    // this preserves coarse state information without memorizing raw readings.
     std::string context = "observation " + input.observation.kind;
     if (!input.observation.source.empty()) context += " source " + input.observation.source;
-    bool has_descriptive_feature = false;
-    for (const auto& [key, value] : input.observation.data) {
+    bool has_context_feature = false;
+    std::vector<std::pair<std::string, const Scalar*>> features;
+    features.reserve(input.observation.data.size());
+    for (const auto& [key, value] : input.observation.data)
+        features.emplace_back(key, &value);
+    std::sort(features.begin(), features.end(),
+              [](const auto& left, const auto& right) { return left.first < right.first; });
+
+    for (const auto& [key, value_ptr] : features) {
+        const auto& value = *value_ptr;
         context += " " + key;
         if (const auto* text_value = std::get_if<std::string>(&value)) {
             if (!text_value->empty()) {
                 context += " " + *text_value;
-                has_descriptive_feature = true;
+                has_context_feature = true;
             }
         } else if (const auto* boolean_value = std::get_if<bool>(&value)) {
             context += *boolean_value ? " true" : " false";
-            has_descriptive_feature = true;
+            has_context_feature = true;
+        } else {
+            double numeric = 0.0;
+            if (const auto* numeric_value = std::get_if<double>(&value)) {
+                numeric = *numeric_value;
+            } else if (const auto* integer_value = std::get_if<std::int64_t>(&value)) {
+                numeric = static_cast<double>(*integer_value);
+            } else {
+                continue;
+            }
+            if (!std::isfinite(numeric)) continue;
+            has_context_feature = true;
+            if (numeric == 0.0) {
+                context += " zero";
+            } else {
+                context += numeric < 0.0 ? " negative" : " positive";
+                context += " scale " +
+                    std::to_string(std::ilogb(std::abs(numeric)));
+            }
         }
     }
-    return has_descriptive_feature ? context : goal.id;
+    return has_context_feature ? context : goal.id;
 }
 
 } // namespace
