@@ -302,6 +302,76 @@ int main() {
         // episode proves consequence confidence is not erased by executor reliability.
     }
 
+    // Featureful observations can still miss episode attributes when sensor
+    // schemas change. Salient episodic recall must then alter the same action's
+    // score relative to an otherwise identical brain without that experience.
+    const auto featureful_memory_path =
+        std::filesystem::temp_directory_path() / "jarvis_featureful_episodic_recall.bin";
+    const auto featureful_baseline_path =
+        std::filesystem::temp_directory_path() / "jarvis_featureful_episodic_baseline.bin";
+    std::filesystem::remove(featureful_memory_path, ec);
+    std::filesystem::remove(featureful_memory_path.string() + ".meta", ec);
+    std::filesystem::remove(featureful_baseline_path, ec);
+    std::filesystem::remove(featureful_baseline_path.string() + ".meta", ec);
+    const CandidateAction featureful_action{
+        "sensor-adaptation-action", 0.5, 0.5, 0.9, 0.2, 1.0, 0.0, 0.5,
+        DecisionOutcome::act, 0.0};
+    const Event featureful_observation{
+        0, 0, "environment", "observation",
+        {{"new_sensor_schema", std::string("temperature-v2")}}};
+    double score_with_episode = -1.0e9;
+    {
+        Brain experienced(featureful_memory_path);
+        Goal goal{"featureful-episodic-goal", "use experience across sensor schemas",
+                  0.9, 0.0, 0, 0, GoalStatus::pending, {}, {}};
+        assert(experienced.create_goal(goal));
+        assert(experienced.activate_goal(goal.id));
+        experienced.memory().append(Event{0, 0, "legacy-journal", "action_outcome",
+            {{"action", std::string("sensor-adaptation-action")},
+             {"context", std::string("featureful-episodic-context")},
+             {"observed", true},
+             {"actual_consequence", 1.0},
+             {"consequence_error", 0.0},
+             {"reliability", 1.0},
+             {"evidence_reliability", 1.0},
+             {"salience", 1.0}}});
+        CognitiveCycle cycle(experienced);
+        CognitiveCycleInput input;
+        input.observation = featureful_observation;
+        input.candidate_actions = {featureful_action};
+        input.goal_id = goal.id;
+        input.developmental_context = "featureful-episodic-context";
+        input.memory_limit = 8;
+        const auto result = cycle.run(input);
+        assert(result.status == CognitiveCycleStatus::completed);
+        assert(std::any_of(result.context.memories.begin(), result.context.memories.end(),
+                           [](const MemoryRecord& memory) {
+                               return memory.event.kind == "action_outcome";
+                           }));
+        score_with_episode = score_for(result.context.decisions, featureful_action.name);
+        assert(score_with_episode > -1.0e8);
+    }
+    {
+        Brain inexperienced(featureful_baseline_path);
+        Goal goal{"featureful-episodic-goal", "use experience across sensor schemas",
+                  0.9, 0.0, 0, 0, GoalStatus::pending, {}, {}};
+        assert(inexperienced.create_goal(goal));
+        assert(inexperienced.activate_goal(goal.id));
+        CognitiveCycle cycle(inexperienced);
+        CognitiveCycleInput input;
+        input.observation = featureful_observation;
+        input.candidate_actions = {featureful_action};
+        input.goal_id = goal.id;
+        input.developmental_context = "featureful-episodic-context";
+        input.memory_limit = 8;
+        const auto result = cycle.run(input);
+        assert(result.status == CognitiveCycleStatus::completed);
+        const double score_without_episode =
+            score_for(result.context.decisions, featureful_action.name);
+        assert(score_without_episode > -1.0e8);
+        assert(score_with_episode > score_without_episode);
+    }
+
     // The ordinary Brain decision APIs must generalize learned behavior too;
     // generalization is not restricted to CognitiveCycle or an opt-in API.
     const auto generalization_path =
