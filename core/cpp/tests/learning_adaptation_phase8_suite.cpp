@@ -4,6 +4,7 @@
 #include <cmath>
 #include <cstdint>
 #include <filesystem>
+#include <algorithm>
 #include <limits>
 
 using namespace jarvis::core;
@@ -23,6 +24,15 @@ int main() {
     const auto outcomes = brain.memory().by_kind("prediction_outcome");
     assert(!outcomes.empty());
     assert(std::get<double>(outcomes.back().data.at("error")) == 0.4);
+    const auto consolidated_outcomes = brain.memory().recall_ranked(
+        {{"key", Scalar{std::string("forecast")}}}, 32);
+    const auto consolidated_outcome = std::find_if(
+        consolidated_outcomes.begin(), consolidated_outcomes.end(),
+        [&outcomes](const MemoryRecord& record) {
+            return record.event.sequence == outcomes.back().sequence;
+        });
+    assert(consolidated_outcome != consolidated_outcomes.end());
+    assert(consolidated_outcome->consolidation > 0.0);
     assert(std::get<std::int64_t>(outcomes.back().data.at("error_model")) == 2);
     assert(cycle.adaptation.observations == 1);
     assert(cycle.adaptation.mean_error >= 0.0 && cycle.adaptation.mean_error <= 1.0);

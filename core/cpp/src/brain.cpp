@@ -701,6 +701,11 @@ LearningCycle Brain::learn_from_prediction(const std::string& key, const Scalar&
     ++state_.events_seen;
     state_.cycle = outcome.sequence;
     replay(outcome);
+    // Keep the legacy prediction-learning API on the same durable experience
+    // path as resolve_prediction_feedback: replay updates cognitive models,
+    // while consolidation makes this outcome retrievable by learned salience,
+    // novelty, error, and confidence after restart.
+    consolidate_experience(outcome, error);
     if (const auto* metric = adaptation_.metric(key); metric != nullptr)
         cycle.adaptation = *metric;
 
