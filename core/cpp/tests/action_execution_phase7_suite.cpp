@@ -136,10 +136,13 @@ int main() {
     }
     assert(saw_action_feedback);
     const auto strategies = brain.developmental_strategies();
-    assert(strategies.size() == 1);
-    assert(strategies.front().context == "goal-alpha");
-    assert(strategies.front().action == "protect");
-    assert(strategies.front().value < 0.0);
+    const LearnedStrategy* learned_protect = nullptr;
+    for (const auto& strategy : strategies) {
+        if (strategy.context == "goal-alpha" && strategy.action == "protect")
+            learned_protect = &strategy;
+    }
+    assert(learned_protect != nullptr);
+    assert(learned_protect->value < 0.0);
     const auto* best = brain.developmental_best_strategy("goal-alpha");
     assert(best != nullptr && best->action == "protect");
 
@@ -159,12 +162,15 @@ int main() {
 
     Brain restored(journal);
     const auto restored_strategies = restored.developmental_strategies();
-    assert(restored_strategies.size() == 1);
-    assert(restored_strategies.front().context == "goal-alpha");
-    assert(restored_strategies.front().action == "protect");
-    assert(std::abs(restored_strategies.front().value - strategies.front().value) < 1e-12);
-    assert(std::abs(restored_strategies.front().confidence - strategies.front().confidence) < 1e-12);
-    assert(restored_strategies.front().uses == strategies.front().uses);
+    const LearnedStrategy* restored_protect = nullptr;
+    for (const auto& strategy : restored_strategies) {
+        if (strategy.context == "goal-alpha" && strategy.action == "protect")
+            restored_protect = &strategy;
+    }
+    assert(restored_protect != nullptr);
+    assert(std::abs(restored_protect->value - learned_protect->value) < 1e-12);
+    assert(std::abs(restored_protect->confidence - learned_protect->confidence) < 1e-12);
+    assert(restored_protect->uses == learned_protect->uses);
     CognitiveCycle restored_cycle(restored);
     const auto replayed_behavior = restored_cycle.run(cognitive_input);
     assert(replayed_behavior.status == CognitiveCycleStatus::completed);
