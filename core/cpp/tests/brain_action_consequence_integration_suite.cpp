@@ -49,6 +49,8 @@ int main() {
     assert(!before_learning.context.plan.steps.empty());
     assert(before_learning.context.plan.steps.front().action.name == "calibrate");
 
+    const auto initial_attention_policy = brain.attention_policy();
+
     ActionAssessment assessment;
     assessment.action = calibrate;
     assessment.action.expected_consequence = 0.8;
@@ -90,6 +92,11 @@ int main() {
     }
     assert(saw_action_outcome);
     assert(brain.affective_learning_updates() > 0);
+    const auto attention_after_harmful_outcome = brain.attention_policy();
+    // A harmful surprise must increase attention to prediction error rather
+    // than suppressing the feature globally because its valence was negative.
+    assert(attention_after_harmful_outcome.prediction_error_weight >
+           initial_attention_policy.prediction_error_weight);
 
     // Verification failure does not erase a consequence already observed after
     // execution. Operational reliability and consequence evidence are separate:
