@@ -26,6 +26,17 @@ bool numeric_value(const Scalar& value, long double& result) {
     return false;
 }
 bool valid_action_outcome_event(const Event& event) {
+    // Outcome events are trusted learning input. Reject an explicitly supplied
+    // execution status outside the enum instead of interpreting unknown values
+    // as successful/failed evidence during replay.
+    const auto status = event.data.find("status");
+    if (status != event.data.end()) {
+        const auto* value = std::get_if<std::int64_t>(&status->second);
+        if (value == nullptr || *value < 0 ||
+            *value > static_cast<std::int64_t>(ActionExecutionStatus::rolled_back))
+            return false;
+    }
+
     const auto valid_finite_numeric = [&](const char* name) {
         const auto field = event.data.find(name);
         if (field == event.data.end()) return true;
