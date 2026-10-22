@@ -105,6 +105,7 @@ int main() {
 
     const auto before_appraisal = brain.affective_appraisal();
     auto learning_assessment = permitted;
+    learning_assessment.developmental_context = "goal-alpha";
     learning_assessment.action.expected_consequence = 0.9;
     const auto result = brain.execute_action(
         learning_assessment,
