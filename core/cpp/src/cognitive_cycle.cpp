@@ -238,6 +238,7 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
                 std::clamp(evidence.strategy.value, -1.0, 1.0);
             transferred_weight += weight;
         }
+        double episodic_weight = 0.0;
         if (transferred_weight > 0.0) {
             // Transfer is bounded and weaker than direct evidence. Normalize
             // overlapping memories so duplicate related contexts cannot amplify
@@ -255,7 +256,6 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
             // evidence exists for this action, preventing the same experience
             // from being counted once as a strategy and again as an episode.
             double episodic_value = 0.0;
-            double episodic_weight = 0.0;
             for (const auto& memory : result.context.memories) {
                 const auto& event = memory.event;
                 if (event.kind != "action_outcome") continue;
@@ -323,8 +323,15 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
         // the information-gathering incentive even if no related memory matched;
         // otherwise a sparse memory system can never discover an alternative.
         // Existing local evidence bypasses this branch and remains authoritative.
+        // Episodic outcomes are local evidence too. Do not grant a fully
+        // untried-action exploration bonus to a candidate whose own observed
+        // outcomes were just used to bias its score; that bonus can otherwise
+        // cancel the memory signal and make recall look behaviorally inert.
+        const double local_evidence_weight = std::max(
+            std::clamp(transferred_weight, 0.0, 1.0),
+            std::clamp(episodic_weight, 0.0, 1.0));
         action.utility += 0.75 * exploration_pressure *
-            (1.0 - std::clamp(transferred_weight, 0.0, 1.0));
+            (1.0 - local_evidence_weight);
     }
     const auto& affect = result.context.affective_state;
     const auto& appraisal = result.context.affective_appraisal;
