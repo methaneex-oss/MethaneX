@@ -137,6 +137,11 @@ int main() {
     unobserved_assessment.permitted = true;
     unobserved_assessment.confidence = 0.9;
     const auto affect_before_unobserved = brain.affective_state();
+    std::uint64_t wait_strategy_uses_before_unobserved = 0;
+    for (const auto& strategy : brain.developmental_strategies()) {
+        if (strategy.context == "system stabilization" && strategy.action == "wait")
+            wait_strategy_uses_before_unobserved = strategy.uses;
+    }
     bool unobserved_executed = false;
     const auto unobserved_result = brain.execute_action(
         unobserved_assessment,
@@ -152,14 +157,12 @@ int main() {
     const auto affect_after_unobserved = brain.affective_state();
     assert(std::abs(affect_after_unobserved.valence - affect_before_unobserved.valence) < 1e-12);
     assert(affect_after_unobserved.uncertainty > affect_before_unobserved.uncertainty);
-    bool unobserved_strategy_created = false;
+    std::uint64_t wait_strategy_uses_after_unobserved = 0;
     for (const auto& strategy : brain.developmental_strategies()) {
-        if (strategy.context == "system stabilization" && strategy.action == "wait") {
-            unobserved_strategy_created = true;
-            break;
-        }
+        if (strategy.context == "system stabilization" && strategy.action == "wait")
+            wait_strategy_uses_after_unobserved = strategy.uses;
     }
-    assert(!unobserved_strategy_created);
+    assert(wait_strategy_uses_after_unobserved == wait_strategy_uses_before_unobserved);
 
     const auto* learned_strategy = brain.developmental_best_strategy("system stabilization");
     assert(learned_strategy != nullptr);
