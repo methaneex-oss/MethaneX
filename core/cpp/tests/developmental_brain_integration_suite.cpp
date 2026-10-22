@@ -449,6 +449,88 @@ int main() {
     std::filesystem::remove(malformed_path, ec);
     std::filesystem::remove(malformed_path.string() + ".meta", ec);
 
+    // Inferred numeric context must complete the full perception -> strategy
+    // learning -> later decision loop and survive journal replay.
+    const auto numeric_path =
+        std::filesystem::temp_directory_path() / "jarvis_numeric_context_learning.bin";
+    std::filesystem::remove(numeric_path, ec);
+    std::filesystem::remove(numeric_path.string() + ".meta", ec);
+    const std::vector<CandidateAction> numeric_actions{
+        {"learned-action", 0.5, 0.5, 0.9, 0.2, 1.0, 0.0, 0.5},
+        {"other-action", 0.5, 0.5, 0.9, 0.2, 1.0, 0.0, 0.5},
+    };
+    {
+        Brain numeric_brain(numeric_path);
+        Goal numeric_goal{"numeric-sensor-goal",
+                          "learn from numeric sensor consequences", 0.9, 0.0,
+                          0, 0, GoalStatus::pending, {}, {}};
+        assert(numeric_brain.create_goal(numeric_goal));
+        assert(numeric_brain.activate_goal(numeric_goal.id));
+        CognitiveCycle numeric_cycle(numeric_brain);
+        CognitiveCycleInput numeric_input;
+        numeric_input.observation =
+            Event{0, 0, "sensor", "observation", {{"temperature", 42.0}}};
+        numeric_input.candidate_actions = numeric_actions;
+        numeric_input.goal_id = numeric_goal.id;
+        numeric_input.planning_horizon = 1;
+        numeric_input.resource_budget = 10.0;
+
+        const auto before_numeric_learning = numeric_cycle.run(numeric_input);
+        assert(before_numeric_learning.status == CognitiveCycleStatus::completed);
+        const auto learned_assessment = std::find_if(
+            before_numeric_learning.context.action_assessments.begin(),
+            before_numeric_learning.context.action_assessments.end(),
+            [](const ActionAssessment& assessment) {
+                return assessment.action.name == "learned-action";
+            });
+        assert(learned_assessment !=
+               before_numeric_learning.context.action_assessments.end());
+        const std::string inferred_context = learned_assessment->developmental_context;
+        assert(inferred_context.find("temperature") != std::string::npos);
+        assert(inferred_context.find("scale") != std::string::npos);
+
+        for (int i = 0; i < 5; ++i) {
+            const auto outcome = numeric_brain.execute_action(
+                *learned_assessment,
+                [](const CandidateAction&) { return true; },
+                [](const CandidateAction&) { return true; },
+                {},
+                [](const CandidateAction&) { return 1.0; });
+            assert(outcome.verified);
+        }
+
+        const auto after_numeric_learning = numeric_cycle.run(numeric_input);
+        assert(after_numeric_learning.status == CognitiveCycleStatus::completed);
+        assert(score_for(after_numeric_learning.context.decisions, "learned-action") >
+               score_for(after_numeric_learning.context.decisions, "other-action"));
+
+        // A nearby numeric state has a different exact context, but can reuse
+        // the learned strategy through bounded feature similarity.
+        numeric_input.observation =
+            Event{0, 0, "sensor", "observation", {{"temperature", 80.0}}};
+        const auto related_numeric_result = numeric_cycle.run(numeric_input);
+        assert(related_numeric_result.status == CognitiveCycleStatus::completed);
+        assert(score_for(related_numeric_result.context.decisions, "learned-action") >
+               score_for(related_numeric_result.context.decisions, "other-action"));
+    }
+    {
+        Brain restored_numeric(numeric_path);
+        CognitiveCycle restored_numeric_cycle(restored_numeric);
+        CognitiveCycleInput restored_input;
+        restored_input.observation =
+            Event{0, 0, "sensor", "observation", {{"temperature", 42.0}}};
+        restored_input.candidate_actions = numeric_actions;
+        restored_input.goal_id = "numeric-sensor-goal";
+        restored_input.planning_horizon = 1;
+        restored_input.resource_budget = 10.0;
+        const auto restored_result = restored_numeric_cycle.run(restored_input);
+        assert(restored_result.status == CognitiveCycleStatus::completed);
+        assert(score_for(restored_result.context.decisions, "learned-action") >
+               score_for(restored_result.context.decisions, "other-action"));
+    }
+    std::filesystem::remove(numeric_path, ec);
+    std::filesystem::remove(numeric_path.string() + ".meta", ec);
+
     std::filesystem::remove(path, ec);
     std::filesystem::remove(path.string() + ".meta", ec);
     std::cout << "developmental brain integration suite passed\n";
