@@ -5,6 +5,35 @@
 #include <string>
 
 namespace jarvis::core {
+namespace {
+
+std::string infer_developmental_context(const CognitiveCycleInput& input,
+                                        const Goal& goal) {
+    if (!input.developmental_context.empty()) return input.developmental_context;
+
+    // When callers do not provide a structural context, ground learning in
+    // observable features rather than collapsing every situation for a goal
+    // into one undifferentiated strategy bucket. Numeric readings are omitted
+    // from the label so nearby numeric states can still share experience.
+    std::string context = "observation " + input.observation.kind;
+    if (!input.observation.source.empty()) context += " source " + input.observation.source;
+    bool has_descriptive_feature = false;
+    for (const auto& [key, value] : input.observation.data) {
+        context += " " + key;
+        if (const auto* text_value = std::get_if<std::string>(&value)) {
+            if (!text_value->empty()) {
+                context += " " + *text_value;
+                has_descriptive_feature = true;
+            }
+        } else if (const auto* boolean_value = std::get_if<bool>(&value)) {
+            context += *boolean_value ? " true" : " false";
+            has_descriptive_feature = true;
+        }
+    }
+    return has_descriptive_feature ? context : goal.id;
+}
+
+} // namespace
 
 std::optional<Goal> CognitiveCycle::select_goal(const CognitiveCycleInput& input,
                                                 const std::vector<Goal>& eligible) const {
@@ -122,7 +151,7 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     // Developmental strategy evidence is applied before planning so the learned
     // change can propagate through the normal planner and decision engine.
     const std::string developmental_context =
-        input.developmental_context.empty() ? selected->id : input.developmental_context;
+        infer_developmental_context(input, *selected);
     const auto stored_strategies = brain_.developmental_strategies();
     const auto related_strategies = brain_.developmental_related_strategies(developmental_context);
     // A transferred strategy is a prior, not a prohibition. When the current

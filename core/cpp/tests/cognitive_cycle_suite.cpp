@@ -41,6 +41,8 @@ int main() {
     const auto initial = cycle.run(input);
     assert(initial.status == CognitiveCycleStatus::completed);
     assert(initial.context.plan.steps.front().action.name == "stabilize");
+    assert(initial.context.action_assessments.front().developmental_context.find("unstable") != std::string::npos);
+    assert(initial.context.action_assessments.front().developmental_context != goal.id);
     assert(brain.knowledge_source("action_executor.stabilize") == nullptr);
 
     assert(brain.learn(Evidence{"action_executor.stabilize", "action.stabilize", std::string("failed"), 0.0}) >= 0.0);
