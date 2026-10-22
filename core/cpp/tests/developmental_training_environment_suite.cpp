@@ -86,7 +86,14 @@ int main() {
         constexpr std::int64_t episode_count = 8;
         for (std::int64_t episode = 0; episode < episode_count; ++episode) {
             current_episode = episode;
-            assert(runtime.submit(training_input(goal.id, episode), 1.0));
+            auto input = training_input(goal.id, episode);
+            // A system-wide executor outage is infrastructure evidence, not
+            // evidence that the selected route is intrinsically bad. Keep that
+            // episode in its own context so it cannot poison route learning.
+            if (episode == 0) {
+                input.developmental_context = "infrastructure/executor-outage";
+            }
+            assert(runtime.submit(input, 1.0));
             const auto result = await_result(runtime);
             assert(result.status == CognitiveCycleStatus::completed);
             assert(!result.context.plan.steps.empty());
@@ -102,12 +109,18 @@ int main() {
                     }
                 }
                 assert(observed_executor_failure);
-                // Every execution failed, so the episode produced no action
-                // consequence evidence and must not teach a route preference.
+                // Every execution failed before a consequence could be observed.
+                // The failure may inform the outage context, but must not create
+                // a route preference in the navigation context.
                 assert(!result.context.action_execution_results.empty());
                 for (const auto& execution : result.context.action_execution_results) {
                     assert(execution.status == ActionExecutionStatus::failed);
+                    assert(!execution.outcome.observed);
                 }
+                const auto* outage_strategy =
+                    brain.developmental_best_strategy("infrastructure/executor-outage");
+                assert(outage_strategy != nullptr);
+                assert(outage_strategy->value < 0.0);
                 for (const auto& strategy : brain.developmental_strategies()) {
                     assert(strategy.context != "navigation/route-selection");
                 }
