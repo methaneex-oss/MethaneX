@@ -326,6 +326,14 @@ int main() {
                   0.9, 0.0, 0, 0, GoalStatus::pending, {}, {}};
         assert(experienced.create_goal(goal));
         assert(experienced.activate_goal(goal.id));
+        // Fill the generic observation-recall top-1 with unrelated memories
+        // that share the current sensor key. A nonempty generic result must not
+        // suppress candidate-specific retrieval of the older action outcome.
+        for (int i = 0; i < 3; ++i) {
+            experienced.memory().append(Event{0, 0, "environment", "observation",
+                {{"new_sensor_schema", std::string("unrelated-sensor-state")},
+                 {"salience", 0.9}}});
+        }
         experienced.memory().append(Event{0, 0, "legacy-journal", "action_outcome",
             {{"action", std::string("sensor-adaptation-action")},
              {"context", std::string("featureful-episodic-context")},
@@ -341,7 +349,7 @@ int main() {
         input.candidate_actions = {featureful_action};
         input.goal_id = goal.id;
         input.developmental_context = "featureful-episodic-context";
-        input.memory_limit = 8;
+        input.memory_limit = 1;
         const auto result = cycle.run(input);
         assert(result.status == CognitiveCycleStatus::completed);
         assert(std::any_of(result.context.memories.begin(), result.context.memories.end(),
