@@ -58,19 +58,26 @@ int main() {
     // Episode zero simulates a total executor outage. Even if the plan contains
     // multiple actions, none can produce a real-world consequence in that episode.
     std::int64_t current_episode = -1;
+    std::string current_context = "navigation/route-selection";
     config.action_adapter.execute = [&](const CandidateAction& action) {
         executed_actions.push_back(action.name);
         if (current_episode == 0) return false;
         return true;
     };
     config.action_adapter.verify = [](const CandidateAction&) { return true; };
-    config.action_adapter.observe_consequence = [](const CandidateAction& action) {
-        // Deterministic world physics: the brain must discover which route works
-        // by acting and observing consequences, not by receiving the answer.
-        return action.name == "good-route" ? 1.0 : -1.0;
+    config.action_adapter.observe_consequence = [&](const CandidateAction& action) {
+        // The environment initially rewards good-route. In the related route
+        // variant the conditions change, so the same action becomes harmful.
+        // The brain is not told which route is now better; it must infer this
+        // from the consequences of its own actions.
+        const bool original_route_works = action.name == "good-route";
+        const bool route_works = current_context == "navigation/route-variant"
+            ? !original_route_works : original_route_works;
+        return route_works ? 1.0 : -1.0;
     };
 
     std::vector<std::string> episode_actions;
+    std::vector<std::string> reversal_actions;
     {
         Brain brain(journal);
         Goal goal;
@@ -93,6 +100,7 @@ int main() {
             if (episode == 0) {
                 input.developmental_context = "infrastructure/executor-outage";
             }
+            current_context = input.developmental_context;
             assert(runtime.submit(input, 1.0));
             const auto result = await_result(runtime);
             assert(result.status == CognitiveCycleStatus::completed);
@@ -126,14 +134,40 @@ int main() {
                 }
             }
         }
+
+        // Contradictory-evidence milestone: a strategy learned in the original
+        // context initially transfers to a related context. There, environmental
+        // conditions reverse. The first choice should reflect prior experience,
+        // but subsequent real consequences must revise the local strategy rather
+        // than making the transferred belief permanent.
+        constexpr std::int64_t reversal_episode_count = 6;
+        for (std::int64_t offset = 0; offset < reversal_episode_count; ++offset) {
+            current_episode = episode_count + offset;
+            current_context = "navigation/route-variant";
+            auto input = training_input(goal.id, current_episode);
+            input.developmental_context = current_context;
+            assert(runtime.submit(input, 1.0));
+            const auto result = await_result(runtime);
+            assert(result.status == CognitiveCycleStatus::completed);
+            assert(!result.context.plan.steps.empty());
+            reversal_actions.push_back(result.context.plan.steps.front().action.name);
+            assert(!result.context.action_execution_results.empty());
+            bool consequence_observed = false;
+            for (const auto& execution : result.context.action_execution_results) {
+                consequence_observed = consequence_observed || execution.outcome.observed;
+            }
+            assert(consequence_observed);
+        }
         runtime.stop();
 
         // These are behavioral acceptance criteria, not just checks that
         // events were stored: the same brain must change its later choice.
         assert(episode_actions.front() == "bad-route");
         assert(episode_actions.back() == "good-route");
-        assert(runtime.metrics().processed == episode_count);
+        assert(runtime.metrics().processed == episode_count + reversal_episode_count);
         assert(runtime.metrics().action_succeeded > 0);
+        assert(reversal_actions.front() == "good-route");
+        assert(reversal_actions.back() == "bad-route");
 
         const auto strategies = brain.developmental_strategies();
         bool learned_good_route = false;
