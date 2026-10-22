@@ -531,6 +531,62 @@ int main() {
     std::filesystem::remove(numeric_path, ec);
     std::filesystem::remove(numeric_path.string() + ".meta", ec);
 
+    // Generic evidence must enter the same coordinated experience pathway:
+    // durable evidence -> knowledge/affective processing -> memory consolidation.
+    const auto evidence_path =
+        std::filesystem::temp_directory_path() / "jarvis_generic_evidence_consolidation.bin";
+    std::filesystem::remove(evidence_path, ec);
+    std::filesystem::remove(evidence_path.string() + ".meta", ec);
+    std::uint64_t learning_sequence = 0;
+    {
+        Brain evidence_brain(evidence_path);
+        const double accepted = evidence_brain.learn(
+            Evidence{"generic-evidence-test", "observed-state", Scalar{std::string("stable")}, 0.9});
+        assert(accepted > 0.0);
+        const auto learning_events = evidence_brain.memory().by_kind("learning");
+        assert(!learning_events.empty());
+        const auto learned_event = std::find_if(
+            learning_events.begin(), learning_events.end(),
+            [](const Event& event) {
+                return event.source == "generic-evidence-test" &&
+                       event.data.contains("novelty") &&
+                       event.data.contains("salience");
+            });
+        assert(learned_event != learning_events.end());
+        learning_sequence = learned_event->sequence;
+        const auto records = evidence_brain.memory().recall_ranked(
+            {{"observed-state", Scalar{std::string("stable")}}}, 8);
+        const auto consolidated = std::find_if(
+            records.begin(), records.end(),
+            [learning_sequence](const MemoryRecord& record) {
+                return record.event.sequence == learning_sequence;
+            });
+        assert(consolidated != records.end());
+        assert(consolidated->consolidation > 0.0);
+        assert(evidence_brain.affective_learning_updates() > 0);
+    }
+    {
+        Brain restored_evidence(evidence_path);
+        const auto events = restored_evidence.memory().by_kind("learning");
+        assert(std::any_of(events.begin(), events.end(),
+            [learning_sequence](const Event& event) {
+                return event.sequence == learning_sequence &&
+                       event.data.contains("novelty") &&
+                       event.data.contains("salience");
+            }));
+        const auto records = restored_evidence.memory().recall_ranked(
+            {{"observed-state", Scalar{std::string("stable")}}}, 8);
+        const auto consolidated = std::find_if(
+            records.begin(), records.end(),
+            [learning_sequence](const MemoryRecord& record) {
+                return record.event.sequence == learning_sequence;
+            });
+        assert(consolidated != records.end());
+        assert(consolidated->consolidation > 0.0);
+    }
+    std::filesystem::remove(evidence_path, ec);
+    std::filesystem::remove(evidence_path.string() + ".meta", ec);
+
     std::filesystem::remove(path, ec);
     std::filesystem::remove(path.string() + ".meta", ec);
     std::cout << "developmental brain integration suite passed\n";
