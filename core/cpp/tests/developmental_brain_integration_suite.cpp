@@ -169,6 +169,22 @@ int main() {
                            [](const MemoryRecord& memory) {
                                return memory.event.kind == "action_outcome";
                            }));
+
+        // Conflicting episodic traces must not double-count or override an
+        // already available related strategy for the same candidate action.
+        brain.memory().append(Event{0, 0, "legacy-journal", "action_outcome",
+            {{"action", std::string("learned-action")},
+             {"context", std::string("developmental-context/variant")},
+             {"observed", true},
+             {"actual_consequence", -1.0},
+             {"consequence_error", 1.0},
+             {"reliability", 1.0},
+             {"evidence_reliability", 1.0},
+             {"salience", 1.0}}});
+        const auto strategy_precedence_result = cycle.run(featureless_input);
+        assert(strategy_precedence_result.status == CognitiveCycleStatus::completed);
+        assert(score_for(strategy_precedence_result.context.decisions, "learned-action") >
+               score_for(strategy_precedence_result.context.decisions, "other-action"));
     }
 
     {
