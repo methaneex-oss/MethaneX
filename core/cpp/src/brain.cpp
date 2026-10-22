@@ -111,6 +111,16 @@ bool valid_prediction_outcome_event(const Event& event, const Prediction* predic
     };
     if (!valid_optional_unit("salience") || !valid_optional_unit("novelty"))
         return false;
+    const auto utility = event.data.find("outcome_utility");
+    if (utility != event.data.end()) {
+        if (const auto* value = std::get_if<double>(&utility->second)) {
+            if (!std::isfinite(*value) || *value < -1.0 || *value > 1.0) return false;
+        } else if (const auto* value = std::get_if<std::int64_t>(&utility->second)) {
+            if (*value < -1 || *value > 1) return false;
+        } else {
+            return false;
+        }
+    }
 
     double expected_error = prediction->predicted == actual->second ? 0.0 : 1.0;
     long double predicted_numeric = 0.0L;
@@ -161,12 +171,19 @@ void Brain::process_affective_experience(const Event& event) {
         // Prediction error is unsigned surprise, not outcome utility. Without
         // explicit task-specific utility evidence, a mismatch must not be
         // interpreted as a positive reward merely because 1 - error is positive.
-        signal.outcome = 0.0;
+        const auto explicit_utility = event.data.find("outcome_utility");
+        const bool has_explicit_utility = explicit_utility != event.data.end();
+        const double observed_utility = has_explicit_utility
+            ? std::clamp(double_value(event.data, "outcome_utility"), -1.0, 1.0)
+            : 0.0;
+        signal.outcome = observed_utility;
         signal.prediction_error = error;
         signal.novelty = std::clamp(double_value(event.data, "novelty", 0.0), 0.0, 1.0);
         signal.salience = std::clamp(double_value(event.data, "salience", attention_state_.salience), 0.0, 1.0);
-        signal.confidence = std::clamp(1.0 - error, 0.0, 1.0);
-        utility = 0.0;
+        // Explicit utility is trusted outcome evidence; prediction confidence
+        // remains separate and cannot erase the supplied outcome's valence.
+        signal.confidence = has_explicit_utility ? 1.0 : std::clamp(1.0 - error, 0.0, 1.0);
+        utility = observed_utility;
         relevant = true;
     }
     else if (event.kind == "action_outcome") { const auto expected = event.data.find("expected_consequence"); const auto actual = event.data.find("actual_consequence"); const auto consequence_error = event.data.find("consequence_error"); const auto observed = event.data.find("observed"); const bool has_observed_consequence = observed != event.data.end() && std::get_if<bool>(&observed->second) != nullptr && *std::get_if<bool>(&observed->second); if (has_observed_consequence && expected != event.data.end() && actual != event.data.end() && consequence_error != event.data.end()) { const double actual_value = double_value(event.data, "actual_consequence"); const double error = double_value(event.data, "consequence_error"); const double reliability = std::clamp(
@@ -262,11 +279,10 @@ void Brain::replay(const Event& event) {
             developmental_learning_.observe_association(
                 *key, "prediction_outcome",
                 LearningSignal{
-                    // Prediction accuracy is not task utility. With no explicit
-                    // reward evidence, record surprise and relevance but do not
-                    // manufacture a positive developmental reward.
+                    // Prediction error is unsigned surprise. Only explicit
+                    // environmental utility supplies a signed learning target.
                     prediction->error,
-                    0.0,
+                    std::clamp(double_value(event.data, "outcome_utility", 0.0), -1.0, 1.0),
                     std::clamp(double_value(event.data, "salience", prediction->confidence), 0.0, 1.0),
                     std::clamp(double_value(event.data, "novelty", 0.0), 0.0, 1.0),
                     affective_significance,

@@ -87,7 +87,8 @@ public:
         const std::optional<Evidence>& evidence = std::nullopt,
         const std::optional<std::string>& goal_id = std::nullopt,
         const std::optional<double>& goal_progress = std::nullopt,
-        double goal_confidence = 0.0) const;
+        double goal_confidence = 0.0,
+        std::optional<double> outcome_utility = std::nullopt) const;
 
     CognitiveFeedbackResult process_outcome(
         const std::optional<std::string>& prediction_key,
@@ -96,7 +97,8 @@ public:
         const std::optional<std::string>& goal_id = std::nullopt,
         const std::optional<double>& goal_progress = std::nullopt,
         double goal_confidence = 0.0,
-        std::optional<std::uint64_t> prediction_sequence = std::nullopt) const;
+        std::optional<std::uint64_t> prediction_sequence = std::nullopt,
+        std::optional<double> outcome_utility = std::nullopt) const;
 
 private:
     std::optional<Goal> select_goal(const CognitiveCycleInput& input,

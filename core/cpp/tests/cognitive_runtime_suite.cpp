@@ -1,5 +1,6 @@
 #include "jarvis/core/cognitive_runtime.hpp"
 
+#include <algorithm>
 #include <cassert>
 #include <chrono>
 #include <cstdint>
@@ -196,6 +197,26 @@ int main() {
     assert(earlier_resolved);
     assert(later_still_unresolved);
 
+    // Task utility is explicit signed appraisal, not a proxy for prediction
+    // accuracy. It must flow through runtime feedback into persistent learning.
+    const auto utility_prediction = brain.predict("runtime.utility", std::int64_t{5}, 0.8);
+    assert(!utility_prediction.key.empty());
+    const auto utility_feedback_before = runtime.metrics().feedback_processed;
+    CognitiveFeedback utility_feedback{utility_prediction.key, std::int64_t{5}};
+    utility_feedback.prediction_sequence = utility_prediction.created_sequence;
+    utility_feedback.outcome_utility = -0.8;
+    assert(runtime.submit_feedback(utility_feedback));
+    assert(wait_for_feedback(runtime, utility_feedback_before + 1));
+    const auto learned_associations = brain.developmental_associations();
+    const auto utility_association = std::find_if(
+        learned_associations.begin(), learned_associations.end(),
+        [](const LearnedAssociation& association) {
+            return association.left == "runtime.utility" &&
+                   association.right == "prediction_outcome";
+        });
+    assert(utility_association != learned_associations.end());
+    assert(utility_association->strength < 0.0);
+
     const auto feedback_goal_before = runtime.metrics().feedback_processed;
     assert(runtime.submit_feedback(CognitiveFeedback{"", 0.0, std::nullopt, goal.id, 0.4, 0.8}));
     assert(wait_for_feedback(runtime, feedback_goal_before + 1));
@@ -221,6 +242,15 @@ int main() {
     bool persisted = false;
     for (const auto& current : restored.snapshot().predictions) if (current.key == prediction.key) { persisted = current.resolved && current.error == 0.0; break; }
     assert(persisted);
+    const auto restored_associations = restored.developmental_associations();
+    const auto restored_utility_association = std::find_if(
+        restored_associations.begin(), restored_associations.end(),
+        [](const LearnedAssociation& association) {
+            return association.left == "runtime.utility" &&
+                   association.right == "prediction_outcome";
+        });
+    assert(restored_utility_association != restored_associations.end());
+    assert(restored_utility_association->strength < 0.0);
     const auto* restored_goal = restored.goal(goal.id);
     assert(restored_goal != nullptr);
     assert(restored_goal->progress == 1.0);

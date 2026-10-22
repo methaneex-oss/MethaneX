@@ -57,6 +57,8 @@ struct CognitiveFeedback {
     // Bind feedback to the exact prediction that produced it. Keys may recur
     // across cycles, so key-only resolution can assign an old outcome to a newer forecast.
     std::optional<std::uint64_t> prediction_sequence;
+    // Optional task utility in [-1, 1], distinct from prediction accuracy.
+    std::optional<double> outcome_utility;
 };
 
 class CognitiveRuntime {

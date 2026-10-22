@@ -57,7 +57,8 @@ Prediction Brain::predict(std::string key, Scalar value, double confidence) {
         }
     } Prediction prediction{std::move(key), std::move(value), calibrated_confidence, 0, false, 0.0}; Event event{0, 0, "brain", "prediction", {{"key", prediction.key}, {"value", prediction.predicted}, {"confidence", prediction.confidence}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return Prediction{}; replay(event); ++state_.events_seen; state_.cycle = event.sequence; consolidate_experience(event); const auto* stored = find_prediction(event.sequence); sync_self_state(); return stored == nullptr ? Prediction{} : *stored; }
 PredictionFeedbackStatus Brain::resolve_prediction_feedback(
-    const std::string& key, const Scalar& actual) {
+    const std::string& key, const Scalar& actual,
+    std::optional<double> outcome_utility) {
     if (key.empty()) return PredictionFeedbackStatus::rejected;
     std::uint64_t prediction_sequence = 0;
     {
@@ -66,15 +67,21 @@ PredictionFeedbackStatus Brain::resolve_prediction_feedback(
         if (prediction == nullptr) return PredictionFeedbackStatus::rejected;
         prediction_sequence = prediction->created_sequence;
     }
-    return resolve_prediction_feedback(prediction_sequence, actual);
+    return resolve_prediction_feedback(prediction_sequence, actual, outcome_utility);
 }
 
 PredictionFeedbackStatus Brain::resolve_prediction_feedback(
-    std::uint64_t prediction_sequence, const Scalar& actual) {
+    std::uint64_t prediction_sequence, const Scalar& actual,
+    std::optional<double> outcome_utility) {
     // Non-finite numeric outcomes are not observations. Reject them before they
     // enter the journal, otherwise NaN/Inf can poison replay and learned estimates.
     if (const auto* observed = std::get_if<double>(&actual);
         observed != nullptr && !std::isfinite(*observed)) {
+        return PredictionFeedbackStatus::rejected;
+    }
+    if (outcome_utility.has_value() &&
+        (!std::isfinite(*outcome_utility) || *outcome_utility < -1.0 ||
+         *outcome_utility > 1.0)) {
         return PredictionFeedbackStatus::rejected;
     }
 
@@ -110,6 +117,9 @@ PredictionFeedbackStatus Brain::resolve_prediction_feedback(
          {"error_model", std::int64_t{2}},
          {"salience", finite_unit(attention_state_.salience)},
          {"novelty", finite_unit(state_.novelty)}}};
+    // Prediction accuracy and task utility are distinct signals. Only attach
+    // utility when the environment explicitly supplies an appraisal.
+    if (outcome_utility.has_value()) event.data["outcome_utility"] = *outcome_utility;
     event.sequence = memory_.append(event);
     if (event.sequence == 0) return PredictionFeedbackStatus::rejected;
     replay(event);

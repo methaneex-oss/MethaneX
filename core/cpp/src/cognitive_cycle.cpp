@@ -254,22 +254,24 @@ bool CognitiveCycle::resolve_prediction(const std::string& key, const Scalar& ac
 CognitiveFeedbackResult CognitiveCycle::process_outcome(
     const Prediction& prediction, const Scalar& actual,
     const std::optional<Evidence>& evidence, const std::optional<std::string>& goal_id,
-    const std::optional<double>& goal_progress, double goal_confidence) const {
+    const std::optional<double>& goal_progress, double goal_confidence,
+    std::optional<double> outcome_utility) const {
     return process_outcome(prediction.key, actual, evidence, goal_id, goal_progress,
-                           goal_confidence, prediction.created_sequence);
+                           goal_confidence, prediction.created_sequence, outcome_utility);
 }
 
 CognitiveFeedbackResult CognitiveCycle::process_outcome(
     const std::optional<std::string>& prediction_key, const Scalar& actual,
     const std::optional<Evidence>& evidence, const std::optional<std::string>& goal_id,
     const std::optional<double>& goal_progress, double goal_confidence,
-    std::optional<std::uint64_t> prediction_sequence) const {
+    std::optional<std::uint64_t> prediction_sequence,
+    std::optional<double> outcome_utility) const {
     CognitiveFeedbackResult result;
     if (prediction_sequence.has_value()) {
-        const auto feedback = brain_.resolve_prediction_feedback(*prediction_sequence, actual);
+        const auto feedback = brain_.resolve_prediction_feedback(*prediction_sequence, actual, outcome_utility);
         result.prediction_resolved = feedback != PredictionFeedbackStatus::rejected;
     } else if (prediction_key.has_value() && !prediction_key->empty()) {
-        const auto feedback = brain_.resolve_prediction_feedback(*prediction_key, actual);
+        const auto feedback = brain_.resolve_prediction_feedback(*prediction_key, actual, outcome_utility);
         result.prediction_resolved = feedback != PredictionFeedbackStatus::rejected;
     }
     if (evidence.has_value()) result.learned_reliability = learn_from_outcome(*evidence);
