@@ -4,6 +4,7 @@
 #include <chrono>
 #include <cstdint>
 #include <filesystem>
+#include <iostream>
 #include <string>
 #include <thread>
 #include <vector>
@@ -158,6 +159,27 @@ int main() {
             bool consequence_observed = false;
             for (const auto& execution : result.context.action_execution_results) {
                 consequence_observed = consequence_observed || execution.outcome.observed;
+            }
+            if (!consequence_observed) {
+                std::cerr << "reversal episode " << offset << " selected "
+                          << reversal_actions.back() << "\\n";
+                for (const auto& assessment : result.context.action_assessments) {
+                    std::cerr << "assessment " << assessment.action.name
+                              << " disposition=" << static_cast<int>(assessment.disposition)
+                              << " confidence=" << assessment.confidence
+                              << " risk=" << assessment.action.risk
+                              << " utility=" << assessment.action.utility
+                              << " expected=" << assessment.action.expected_value
+                              << " reason=" << assessment.reason << "\\n";
+                }
+                for (const auto& execution : result.context.action_execution_results) {
+                    std::cerr << "execution " << execution.action.name
+                              << " status=" << static_cast<int>(execution.status)
+                              << " authorized=" << execution.authorized
+                              << " executed=" << execution.executed
+                              << " observed=" << execution.outcome.observed
+                              << " reason=" << execution.reason << "\\n";
+                }
             }
             assert(consequence_observed);
         }
