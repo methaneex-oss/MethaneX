@@ -372,8 +372,13 @@ int main() {
             [](const LearnedStrategy& strategy) { return strategy.action == "low-confidence-action"; });
         assert(high_strategy != strategies.end());
         assert(low_strategy != strategies.end());
-        assert(high_strategy->value > low_strategy->value);
+        // Both actions have the same observed positive outcome. Reliability
+        // changes how strongly evidence is trusted, not the outcome's valence;
+        // confidence (and therefore effective influence) should carry the gap.
+        assert(std::abs(high_strategy->value - low_strategy->value) < 1e-9);
         assert(high_strategy->confidence > low_strategy->confidence);
+        assert(high_strategy->value * high_strategy->confidence >
+               low_strategy->value * low_strategy->confidence);
     }
     std::filesystem::remove(reliability_path, ec);
     std::filesystem::remove(reliability_path.string() + ".meta", ec);
