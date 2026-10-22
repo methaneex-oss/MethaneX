@@ -165,6 +165,24 @@ int main() {
         assert(!decision.context.plan.steps.empty());
         assert(decision.context.plan.steps.front().action.name == "good-route");
         assert(restored.developmental_best_strategy("navigation/route-selection") != nullptr);
+
+        // Generalization acceptance: after restart, experience learned in the
+        // original context must improve choice in a related but unseen context.
+        CognitiveCycleInput related_probe = training_input(goal.id, 101);
+        related_probe.developmental_context = "navigation/route-variant";
+        const auto generalized = CognitiveCycle(restored).run(related_probe);
+        assert(generalized.status == CognitiveCycleStatus::completed);
+        assert(!generalized.context.plan.steps.empty());
+        assert(generalized.context.plan.steps.front().action.name == "good-route");
+
+        // Transfer must remain bounded: navigation experience must not dictate
+        // a choice in an unrelated task where the candidates are otherwise tied.
+        CognitiveCycleInput unrelated_probe = training_input(goal.id, 102);
+        unrelated_probe.developmental_context = "orbital/cooking";
+        const auto unrelated = CognitiveCycle(restored).run(unrelated_probe);
+        assert(unrelated.status == CognitiveCycleStatus::completed);
+        assert(!unrelated.context.plan.steps.empty());
+        assert(unrelated.context.plan.steps.front().action.name == "bad-route");
     }
 
     std::filesystem::remove(journal, ec);
