@@ -171,15 +171,30 @@ int main() {
 
         const auto strategies = brain.developmental_strategies();
         bool learned_good_route = false;
+        bool revised_variant_good_route = false;
+        bool learned_variant_bad_route = false;
         for (const auto& strategy : strategies) {
             if (strategy.context == "navigation/route-selection" &&
                 strategy.action == "good-route" && strategy.value > 0.0 &&
                 strategy.uses > 0) {
                 learned_good_route = true;
-                break;
+            }
+            if (strategy.context == "navigation/route-variant" &&
+                strategy.action == "good-route" && strategy.value < 0.0 &&
+                strategy.uses > 0) {
+                revised_variant_good_route = true;
+            }
+            if (strategy.context == "navigation/route-variant" &&
+                strategy.action == "bad-route" && strategy.value > 0.0 &&
+                strategy.uses > 0) {
+                learned_variant_bad_route = true;
             }
         }
+        // The original context keeps its useful knowledge while the related
+        // context learns the exception from its own contradictory outcomes.
         assert(learned_good_route);
+        assert(revised_variant_good_route);
+        assert(learned_variant_bad_route);
         assert(!brain.memory().by_kind("action_outcome").empty());
     }
 
@@ -200,10 +215,19 @@ int main() {
         assert(decision.context.plan.steps.front().action.name == "good-route");
         assert(restored.developmental_best_strategy("navigation/route-selection") != nullptr);
 
-        // Generalization acceptance: after restart, experience learned in the
-        // original context must improve choice in a related but unseen context.
-        CognitiveCycleInput related_probe = training_input(goal.id, 101);
-        related_probe.developmental_context = "navigation/route-variant";
+        // The exception learned from contradictory outcomes is context-specific
+        // and survives replay: the route variant now prefers bad-route.
+        CognitiveCycleInput revised_probe = training_input(goal.id, 101);
+        revised_probe.developmental_context = "navigation/route-variant";
+        const auto revised = CognitiveCycle(restored).run(revised_probe);
+        assert(revised.status == CognitiveCycleStatus::completed);
+        assert(!revised.context.plan.steps.empty());
+        assert(revised.context.plan.steps.front().action.name == "bad-route");
+
+        // The original useful strategy still generalizes to a different related
+        // context that has no direct experience of its own.
+        CognitiveCycleInput related_probe = training_input(goal.id, 102);
+        related_probe.developmental_context = "navigation/route-alternative";
         const auto generalized = CognitiveCycle(restored).run(related_probe);
         assert(generalized.status == CognitiveCycleStatus::completed);
         assert(!generalized.context.plan.steps.empty());
@@ -211,7 +235,7 @@ int main() {
 
         // Transfer must remain bounded: navigation experience must not dictate
         // a choice in an unrelated task where the candidates are otherwise tied.
-        CognitiveCycleInput unrelated_probe = training_input(goal.id, 102);
+        CognitiveCycleInput unrelated_probe = training_input(goal.id, 103);
         unrelated_probe.developmental_context = "orbital/cooking";
         // Use unseen action names so global capability reliability learned for
         // the route actions cannot confound this context-transfer check.
