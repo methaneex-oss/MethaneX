@@ -179,10 +179,16 @@ int main() {
         // a choice in an unrelated task where the candidates are otherwise tied.
         CognitiveCycleInput unrelated_probe = training_input(goal.id, 102);
         unrelated_probe.developmental_context = "orbital/cooking";
+        // Use unseen action names so global capability reliability learned for
+        // the route actions cannot confound this context-transfer check.
+        unrelated_probe.candidate_actions = {
+            CandidateAction{"unrelated-first", 0.5, 0.5, 0.9, 0.1},
+            CandidateAction{"unrelated-second", 0.5, 0.5, 0.9, 0.1},
+        };
         const auto unrelated = CognitiveCycle(restored).run(unrelated_probe);
         assert(unrelated.status == CognitiveCycleStatus::completed);
         assert(!unrelated.context.plan.steps.empty());
-        assert(unrelated.context.plan.steps.front().action.name == "bad-route");
+        assert(unrelated.context.plan.steps.front().action.name == "unrelated-first");
     }
 
     std::filesystem::remove(journal, ec);
