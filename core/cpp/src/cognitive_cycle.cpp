@@ -281,7 +281,16 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
                     continue;
                 }
                 if (!std::isfinite(reward)) continue;
-                double reliability = std::clamp(memory.confidence, 0.0, 1.0);
+                // Memory's default confidence is initialized from the event's
+                // operational reliability. Multiplying that metadata by the same
+                // event field again would square the evidence weight; worse, it
+                // would let executor failure erase a confidently observed world
+                // consequence. Prefer explicit evidence confidence, then legacy
+                // reliability, and use memory metadata only when the event has
+                // neither field.
+                double reliability = std::clamp(
+                    std::isfinite(memory.confidence) ? memory.confidence : 0.0,
+                    0.0, 1.0);
                 const auto evidence_it = event.data.find("evidence_reliability");
                 const auto reliability_it = event.data.find("reliability");
                 const auto selected_reliability =
@@ -289,9 +298,9 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
                 if (selected_reliability != event.data.end()) {
                     if (const auto* value = std::get_if<double>(&selected_reliability->second)) {
                         if (!std::isfinite(*value)) continue;
-                        reliability *= std::clamp(*value, 0.0, 1.0);
+                        reliability = std::clamp(*value, 0.0, 1.0);
                     } else if (const auto* value = std::get_if<std::int64_t>(&selected_reliability->second)) {
-                        reliability *= std::clamp(static_cast<double>(*value), 0.0, 1.0);
+                        reliability = std::clamp(static_cast<double>(*value), 0.0, 1.0);
                     } else {
                         continue;
                     }
