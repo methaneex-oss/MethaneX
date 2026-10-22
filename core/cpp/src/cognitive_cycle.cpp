@@ -118,64 +118,55 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     const std::string developmental_context =
         input.developmental_context.empty() ? selected->id : input.developmental_context;
     const auto stored_strategies = brain_.developmental_strategies();
-    const bool has_exact_context = std::any_of(
-        stored_strategies.begin(), stored_strategies.end(),
-        [&](const LearnedStrategy& strategy) {
-            return strategy.context == developmental_context;
-        });
-    if (has_exact_context) {
-        // Keep direct experience stronger than generalization, but still weigh
-        // all actions observed in this exact context. A single "best" strategy
-        // must not erase direct evidence that another action had bad outcomes.
-        for (auto& action : learned_actions) {
-            double weighted_evidence = 0.0;
-            double total_weight = 0.0;
-            for (const auto& strategy : stored_strategies) {
-                if (strategy.context != developmental_context ||
-                    strategy.action != action.name) continue;
-                const double weight = std::clamp(strategy.confidence, 0.0, 1.0);
-                weighted_evidence += weight * std::clamp(strategy.value, -1.0, 1.0);
-                total_weight += weight;
-            }
-            if (total_weight > 0.0) {
-                // Learned consequences update both action preference and its
-                // expected outcome. Updating utility alone can leave a harmful
-                // action ranked first because its stale forecast still dominates.
-                const double influence = std::clamp(
-                    weighted_evidence / std::max(1.0, total_weight), -1.0, 1.0);
-                action.utility += influence;
-                action.expected_value = std::clamp(
-                    action.expected_value + influence, -1.0, 1.0);
-            }
+    const auto related_strategies = brain_.developmental_related_strategies(developmental_context);
+
+    // Use exact-context experience whenever that action has been tried locally.
+    // For actions with no local evidence, still allow bounded transfer from
+    // related contexts. An exact-context observation for one action must not
+    // disable generalization for every other candidate action.
+    for (auto& action : learned_actions) {
+        double direct_evidence = 0.0;
+        double direct_weight = 0.0;
+        for (const auto& strategy : stored_strategies) {
+            if (strategy.context != developmental_context ||
+                strategy.action != action.name) continue;
+            const double weight = std::clamp(strategy.confidence, 0.0, 1.0);
+            direct_evidence += weight * std::clamp(strategy.value, -1.0, 1.0);
+            direct_weight += weight;
         }
-    } else {
-        // Generalize from all sufficiently similar experiences. Confidence and
-        // similarity scale the transferred evidence itself (not just its rank),
-        // and normalization prevents many overlapping memories from amplifying
-        // a preference without bound.
-        const auto related = brain_.developmental_related_strategies(developmental_context);
-        for (auto& action : learned_actions) {
-            double weighted_evidence = 0.0;
-            double total_weight = 0.0;
-            for (const auto& evidence : related) {
-                if (evidence.strategy.action != action.name) continue;
-                const double weight = std::clamp(evidence.similarity, 0.0, 1.0) *
-                                      std::clamp(evidence.strategy.confidence, 0.0, 1.0);
-                if (weight <= 0.0) continue;
-                weighted_evidence += weight *
-                    std::clamp(evidence.strategy.value, -1.0, 1.0);
-                total_weight += weight;
-            }
-            if (total_weight > 0.0) {
-                const double influence = std::clamp(
-                    1.25 * weighted_evidence / std::max(1.0, total_weight), -1.0, 1.0);
-                // Transfer signed consequence evidence into the forecast as well
-                // as preference; otherwise the original expected value can
-                // overpower a learned negative outcome in the planner.
-                action.utility += influence;
-                action.expected_value = std::clamp(
-                    action.expected_value + influence, -1.0, 1.0);
-            }
+
+        if (direct_weight > 0.0) {
+            // Direct experience remains stronger than generalization for an
+            // action already tried in this context.
+            const double influence = std::clamp(
+                direct_evidence / std::max(1.0, direct_weight), -1.0, 1.0);
+            action.utility += influence;
+            action.expected_value = std::clamp(
+                action.expected_value + influence, -1.0, 1.0);
+            continue;
+        }
+
+        double transferred_evidence = 0.0;
+        double transferred_weight = 0.0;
+        for (const auto& evidence : related_strategies) {
+            if (evidence.strategy.action != action.name) continue;
+            const double weight = std::clamp(evidence.similarity, 0.0, 1.0) *
+                                  std::clamp(evidence.strategy.confidence, 0.0, 1.0);
+            if (weight <= 0.0) continue;
+            transferred_evidence += weight *
+                std::clamp(evidence.strategy.value, -1.0, 1.0);
+            transferred_weight += weight;
+        }
+        if (transferred_weight > 0.0) {
+            // Transfer is bounded and weaker than direct evidence. Normalize
+            // overlapping memories so duplicate related contexts cannot amplify
+            // the same preference without bound.
+            const double influence = std::clamp(
+                1.25 * transferred_evidence / std::max(1.0, transferred_weight),
+                -1.0, 1.0);
+            action.utility += influence;
+            action.expected_value = std::clamp(
+                action.expected_value + influence, -1.0, 1.0);
         }
     }
     const auto& affect = result.context.affective_state;
