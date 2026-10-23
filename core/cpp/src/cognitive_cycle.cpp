@@ -133,6 +133,28 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
         PerceptionInput{observed_event.timestamp_ns, observed_event.source,
                         observed_event.kind, observed_event.data},
         PerceptionContext{observed_event.sequence, {}, {}});
+    // A perception provider may extract stable features that are absent from
+    // the raw sensor payload. Use those features as additional retrieval cues,
+    // not as asserted beliefs: this lets structured perception reconnect the
+    // present situation with prior experience without treating a hypothesis as
+    // a fact. The current observation is excluded because it is already journaled.
+    if (input.memory_limit > 0) {
+        for (const auto& node : result.context.representation.nodes) {
+            if (node.attributes.empty()) continue;
+            const auto perceptual_memories = brain_.memory().recall_ranked(
+                node.attributes, input.memory_limit);
+            for (const auto& memory : perceptual_memories) {
+                if (memory.event.sequence == observed_event.sequence) continue;
+                const auto already_present = std::find_if(
+                    result.context.memories.begin(), result.context.memories.end(),
+                    [&](const MemoryRecord& existing) {
+                        return existing.event.sequence == memory.event.sequence;
+                    });
+                if (already_present == result.context.memories.end())
+                    result.context.memories.push_back(memory);
+            }
+        }
+    }
     result.context.beliefs = brain_.beliefs();
     result.context.causal_links = brain_.causal_links();
     result.context.affective_state = brain_.affective_state();
