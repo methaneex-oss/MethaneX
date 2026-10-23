@@ -92,6 +92,38 @@ bool valid_action_outcome_event(const Event& event) {
     return event.data.find("actual_consequence") != event.data.end() &&
            event.data.find("consequence_error") != event.data.end();
 }
+bool valid_affective_learning_event(const Event& event) {
+    // Affective appraisal updates are persisted learning input. Validate them
+    // before recording a source as consumed or mutating calibration.
+    const auto source = event.data.find("source_action_sequence");
+    const auto* source_sequence = source == event.data.end()
+        ? nullptr : std::get_if<std::int64_t>(&source->second);
+    if (source_sequence == nullptr || *source_sequence <= 0) return false;
+
+    const auto finite_numeric = [&](const char* name, bool required) {
+        const auto field = event.data.find(name);
+        if (field == event.data.end()) return !required;
+        if (const auto* value = std::get_if<double>(&field->second))
+            return std::isfinite(*value);
+        return std::get_if<std::int64_t>(&field->second) != nullptr;
+    };
+    const auto unit_value = [&](const char* name) {
+        const auto field = event.data.find(name);
+        if (field == event.data.end()) return true;
+        if (const auto* value = std::get_if<double>(&field->second))
+            return std::isfinite(*value) && *value >= 0.0 && *value <= 1.0;
+        if (const auto* value = std::get_if<std::int64_t>(&field->second))
+            return *value == 0 || *value == 1;
+        return false;
+    };
+    return finite_numeric("expected_consequence", true) &&
+           finite_numeric("actual_consequence", true) &&
+           finite_numeric("consequence_error", true) &&
+           finite_numeric("utility", true) &&
+           finite_numeric("prediction_error", true) &&
+           unit_value("novelty") && unit_value("salience") &&
+           unit_value("uncertainty") && unit_value("confidence");
+}
 bool valid_prediction_outcome_event(const Event& event, const Prediction* prediction) {
     const auto* key = string_value(event.data, "key");
     const auto actual = event.data.find("actual");
@@ -272,6 +304,9 @@ void Brain::replay(const Event& event) {
     }
     if (event.kind == "action_outcome" &&
         !valid_action_outcome_event(event)) return;
+
+    if (event.kind == "affective_learning" &&
+        !valid_affective_learning_event(event)) return;
 
     process_affective_experience(event);
     if (event.kind == "goal_create") { const auto* id = string_value(event.data, "id"); const auto* description = string_value(event.data, "description"); if (id == nullptr || description == nullptr) return; Goal goal{*id, *description, double_value(event.data, "priority"), double_value(event.data, "progress"), event.sequence, integer_value(event.data, "deadline_cycle"), goal_status_value(static_cast<std::int64_t>(integer_value(event.data, "status"))), string_value(event.data, "prerequisites") ? split_ids(*string_value(event.data, "prerequisites")) : std::vector<std::string>{}, string_value(event.data, "subgoals") ? split_ids(*string_value(event.data, "subgoals")) : std::vector<std::string>{}}; goals_model_.create(std::move(goal)); return; }
@@ -650,6 +685,8 @@ Observation Brain::observe(Event event) {
     }
     if (event.kind == "action_outcome" &&
         !valid_action_outcome_event(event)) return Observation{};
+    if (event.kind == "affective_learning" &&
+        !valid_affective_learning_event(event)) return Observation{};
     event.timestamp_ns = event.timestamp_ns == 0 ? now_ns() : event.timestamp_ns;
     const auto previous = memory_.recent(1);
     const double novelty = compute_novelty(event, previous);
