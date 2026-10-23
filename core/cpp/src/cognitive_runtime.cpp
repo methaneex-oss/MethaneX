@@ -14,6 +14,7 @@ double finite_priority(double value) noexcept { return std::isfinite(value) ? va
 CognitiveWorkspace make_workspace(const CognitiveCycleResult& result, const Brain& brain) {
     CognitiveWorkspace workspace;
     workspace.observation = result.context.observation;
+    workspace.representation = result.context.representation;
     workspace.memories = result.context.memories;
     workspace.beliefs = result.context.beliefs;
     workspace.causal_links = result.context.causal_links;
