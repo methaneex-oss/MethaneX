@@ -112,6 +112,14 @@ int main() {
     assert(action_result.has_value());
     assert(action_result->context.representation.nodes.size() == 1);
     assert(action_result->context.representation.nodes.front().label == "runtime-provider-active");
+    // Provider output must be traceable to the committed experience, not the
+    // caller's usually-zero sequence placeholder.
+    const auto observed_sequence = action_result->context.observation.event.sequence;
+    assert(observed_sequence != 0);
+    assert(action_result->context.representation.sequence == observed_sequence);
+    assert(action_result->context.representation.nodes.front().evidence.size() == 1);
+    assert(action_result->context.representation.nodes.front().evidence.front().sequence ==
+           observed_sequence);
     assert(!action_result->context.action_assessments.empty());
     assert(!action_result->context.action_execution_results.empty());
     assert(action_result->context.action_execution_results.size() <= action_result->context.action_assessments.size());
