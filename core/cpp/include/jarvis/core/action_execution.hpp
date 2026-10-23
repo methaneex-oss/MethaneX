@@ -4,6 +4,7 @@
 #include "action_authorization.hpp"
 
 #include <functional>
+#include <optional>
 #include <string>
 
 namespace jarvis::core {
@@ -35,7 +36,7 @@ struct ActionExecutionRequest {
     std::function<bool(const CandidateAction&)> execute;
     std::function<bool(const CandidateAction&)> verify;
     std::function<bool(const CandidateAction&)> rollback;
-    std::function<double(const CandidateAction&)> observe_consequence;
+    std::function<std::optional<double>(const CandidateAction&)> observe_consequence;
     ActionAuthorizationContext authorization{};
 };
 
