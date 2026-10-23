@@ -289,6 +289,53 @@ void Brain::process_affective_experience(const Event& event) {
     signal = affective_learning_model_.modulate(signal); const auto after = affective_state_model_.update(signal); if (event.kind != "action_outcome") affective_learning_model_.learn(signal, before, after, utility);
 }
 void Brain::sync_self_state() { const auto goals = goals_model_.all(); std::vector<GoalState> active_goals; active_goals.reserve(goals.size()); for (const auto& goal : goals) if (goal.status == GoalStatus::active) active_goals.push_back(GoalState{goal.id, goal.priority, true}); self_state_model_.set_goals(std::move(active_goals)); const auto capability_health = self_model_.health(); self_state_model_.set_activity(state_.events_seen == 0 ? "idle" : "cognitive_processing"); self_state_model_.set_workload(std::clamp(std::max(state_.threat, 1.0 - capability_health.overall), 0.0, 1.0)); self_state_model_.set_uncertainty(std::clamp(1.0 - state_.attention, 0.0, 1.0)); self_state_model_.set_health(CognitiveHealth{std::clamp(capability_health.overall * (1.0 - state_.threat * 0.5), 0.0, 1.0), capability_health.overall, std::clamp(1.0 - state_.novelty * 0.1, 0.0, 1.0), capability_health.overall}); for (const auto& capability : self_model_.capabilities()) self_state_model_.set_resource_pressure(capability.name, std::clamp(1.0 - (capability.availability * capability.performance), 0.0, 1.0)); self_state_model_.advance_cycle(state_.events_seen); }
+bool Brain::valid_affective_learning_source(const Event& event) const {
+    const auto source = event.data.find("source_action_sequence");
+    const auto* sequence = source == event.data.end()
+        ? nullptr : std::get_if<std::int64_t>(&source->second);
+    if (sequence == nullptr || *sequence <= 0) return false;
+
+    const auto history = memory_.all();
+    const auto source_event = std::find_if(
+        history.begin(), history.end(), [sequence](const Event& candidate) {
+            return candidate.sequence == static_cast<std::uint64_t>(*sequence);
+        });
+    if (source_event == history.end() || source_event->kind != "action_outcome" ||
+        !valid_action_outcome_event(*source_event)) return false;
+
+    const auto observed = source_event->data.find("observed");
+    if (observed == source_event->data.end()) return false;
+    const auto* observed_value = std::get_if<bool>(&observed->second);
+    if (observed_value == nullptr || !*observed_value) return false;
+
+    // The appraisal update must describe the same consequence as its
+    // authoritative action event, not an unrelated or fabricated source.
+    for (const char* field : {"expected_consequence", "actual_consequence",
+                              "consequence_error"}) {
+        const auto source_value = source_event->data.find(field);
+        const auto learning_value = event.data.find(field);
+        if (source_value == source_event->data.end() ||
+            learning_value == event.data.end()) return false;
+        const auto number = [](const Scalar& value, double& out) {
+            if (const auto* d = std::get_if<double>(&value)) {
+                out = *d;
+                return std::isfinite(out);
+            }
+            if (const auto* i = std::get_if<std::int64_t>(&value)) {
+                out = static_cast<double>(*i);
+                return true;
+            }
+            return false;
+        };
+        double source_number = 0.0;
+        double learning_number = 0.0;
+        if (!number(source_value->second, source_number) ||
+            !number(learning_value->second, learning_number) ||
+            std::abs(source_number - learning_number) > 1e-12) return false;
+    }
+    return true;
+}
+
 void Brain::replay(const Event& event) {
     state_.cycle = std::max(state_.cycle, event.sequence);
 
