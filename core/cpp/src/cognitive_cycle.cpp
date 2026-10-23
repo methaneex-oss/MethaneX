@@ -74,6 +74,17 @@ std::optional<Goal> CognitiveCycle::select_goal(const CognitiveCycleInput& input
         if (it == eligible.end()) return std::nullopt;
         return *it;
     }
+
+    // When the caller has not committed this cycle to a specific goal, let the
+    // learned intent mechanism choose among active objectives. Goal-list order
+    // is a deterministic fallback for systems that have only pending goals.
+    const auto intent = brain_.intent();
+    if (!intent.id.empty()) {
+        const auto selected = std::find_if(
+            eligible.begin(), eligible.end(),
+            [&](const Goal& goal) { return goal.id == intent.id; });
+        if (selected != eligible.end()) return *selected;
+    }
     return eligible.front();
 }
 
@@ -232,8 +243,22 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     }
     result.context.selected_goal = *selected;
     if (input.candidate_actions.empty()) { result.status = CognitiveCycleStatus::no_action; return result; }
-    const double goal_priority = std::clamp(selected->priority, 0.0, 1.0);
-    const double goal_progress = std::clamp(selected->progress, 0.0, 1.0);
+    // Reuse the strategy model's appraisal when its intent matches the goal
+    // actually selected for this cycle. Explicit caller-selected goals remain
+    // authoritative; a different internally preferred intent must not override
+    // them.
+    const auto strategy_context = brain_.strategy();
+    const bool strategy_matches_goal =
+        !strategy_context.intent.id.empty() &&
+        strategy_context.intent.id == selected->id;
+    const double goal_priority = std::clamp(
+        strategy_matches_goal ? strategy_context.planning.goal_priority
+                              : selected->priority,
+        0.0, 1.0);
+    const double goal_progress = std::clamp(
+        strategy_matches_goal ? strategy_context.planning.goal_progress
+                              : selected->progress,
+        0.0, 1.0);
     const double threat = std::clamp(brain_.threat().score, 0.0, 1.0);
     const double dispute_pressure = result.context.beliefs.empty() ? 0.0 : std::clamp(static_cast<double>(disputed_beliefs) / static_cast<double>(result.context.beliefs.size()), 0.0, 1.0);
     const double world_dispute_pressure = std::clamp(static_cast<double>(disputed_facts.size() + disputed_relations.size()) / static_cast<double>(std::max<std::size_t>(1, result.context.beliefs.size() + disputed_relations.size())), 0.0, 1.0);
@@ -251,7 +276,10 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
         world_dispute_pressure,
         result.context.reflection.uncertainty,
         prediction_uncertainty});
-    const double deadline_pressure = std::clamp(input.deadline_pressure, 0.0, 1.0);
+    const double strategy_deadline_pressure = strategy_matches_goal
+        ? strategy_context.planning.deadline_pressure : 0.0;
+    const double deadline_pressure = std::clamp(
+        std::max(input.deadline_pressure, strategy_deadline_pressure), 0.0, 1.0);
     std::vector<CandidateAction> learned_actions = input.candidate_actions;
     // Do not plan with a capability that the self-model has marked unavailable
     // or isolated. Capability observations describe current operational ability,
