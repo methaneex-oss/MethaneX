@@ -5,6 +5,7 @@
 #include "action_model.hpp"
 #include "action_execution.hpp"
 #include "representation.hpp"
+#include "perception_pipeline.hpp"
 
 #include <cstddef>
 #include <cstdint>
@@ -79,6 +80,11 @@ class CognitiveCycle {
 public:
     explicit CognitiveCycle(Brain& brain) noexcept : brain_(brain) {}
 
+    // Providers are configured before a runtime starts; observations then share
+    // the same extensible perception path on every cognitive cycle.
+    PerceptionPipeline& perception_pipeline() noexcept { return perception_pipeline_; }
+    const PerceptionPipeline& perception_pipeline() const noexcept { return perception_pipeline_; }
+
     CognitiveCycleResult run(const CognitiveCycleInput& input) const;
 
     double learn_from_outcome(const Evidence& evidence) const;
@@ -109,6 +115,7 @@ private:
                                     const std::vector<Goal>& eligible) const;
 
     Brain& brain_;
+    PerceptionPipeline perception_pipeline_{};
 };
 
 } // namespace jarvis::core
