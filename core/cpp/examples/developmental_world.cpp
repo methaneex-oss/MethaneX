@@ -100,10 +100,6 @@ int main(int argc, char** argv) {
     for (int episode = 0; episode < total_episodes; ++episode) {
         condition = episode < 8 ? "clear" : "flooded";
         auto input = make_input(goal_id, episode, condition);
-        if (episode == 0) {
-            // Separate a simulated executor outage from route-quality evidence.
-            config.action_adapter.execute = [](const CandidateAction&) { return true; };
-        }
         if (!runtime.submit(input, 1.0)) {
             std::cerr << "Environment could not submit episode " << episode << '\n';
             runtime.stop();
