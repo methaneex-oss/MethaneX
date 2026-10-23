@@ -115,6 +115,10 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
         result.context.memories =
             brain_.memory().salient(input.memory_limit, MemoryTier::Episodic);
     }
+    // Normalize the incoming experience once at the cycle boundary so every
+    // downstream mechanism can share a structured, evidence-linked view while
+    // retaining the original event for durable memory and replay.
+    result.context.representation = RepresentationEngine{}.normalize(input.observation);
     result.context.observation = brain_.observe(input.observation);
     result.context.beliefs = brain_.beliefs();
     result.context.causal_links = brain_.causal_links();
