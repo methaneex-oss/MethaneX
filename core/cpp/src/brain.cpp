@@ -26,6 +26,15 @@ bool numeric_value(const Scalar& value, long double& result) {
     return false;
 }
 bool valid_action_outcome_event(const Event& event) {
+    // An outcome without an action/context identity cannot be connected to a
+    // strategy or a decision context. Reject it before affective processing so
+    // malformed records cannot alter global state while being ignored by the
+    // action-specific handler later in replay.
+    const auto* action = string_value(event.data, "action");
+    const auto* context = string_value(event.data, "context");
+    if (action == nullptr || action->empty() ||
+        context == nullptr || context->empty()) return false;
+
     // Outcome events are trusted learning input. Reject an explicitly supplied
     // execution status outside the enum instead of interpreting unknown values
     // as successful/failed evidence during replay.
