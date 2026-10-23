@@ -206,6 +206,19 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
             if (!prediction.key.empty()) result.context.predictions.push_back(prediction);
         }
     }
+    // Prediction confidence is evidence about how uncertain the projected
+    // world state remains. Feed it into planning rather than leaving predictions
+    // as a side-channel for inspection only.
+    double prediction_uncertainty = 0.0;
+    if (!result.context.predictions.empty()) {
+        for (const auto& prediction : result.context.predictions) {
+            prediction_uncertainty += 1.0 -
+                std::clamp(prediction.confidence, 0.0, 1.0);
+        }
+        prediction_uncertainty /= static_cast<double>(
+            result.context.predictions.size());
+    }
+
     // Reflection is the brain's metacognitive readout of its current evidence.
     // Compute it before planning so uncertainty discovered by reflection can
     // influence this cycle's risk/exploration balance, rather than being only
@@ -236,7 +249,8 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
         attended_uncertainty,
         dispute_pressure,
         world_dispute_pressure,
-        result.context.reflection.uncertainty});
+        result.context.reflection.uncertainty,
+        prediction_uncertainty});
     const double deadline_pressure = std::clamp(input.deadline_pressure, 0.0, 1.0);
     std::vector<CandidateAction> learned_actions = input.candidate_actions;
     // Do not plan with a capability that the self-model has marked unavailable
@@ -329,7 +343,8 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
         std::max({result.context.attention.uncertainty,
                   result.context.affective_state.uncertainty,
                   result.context.affective_state.tension,
-                  result.context.reflection.uncertainty}),
+                  result.context.reflection.uncertainty,
+                  prediction_uncertainty}),
         0.0, 1.0);
 
     // Use exact-context experience whenever that action has been tried locally.
