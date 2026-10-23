@@ -196,8 +196,7 @@ void CognitiveRuntime::execute_actions(CognitiveCycleResult& result) {
         }
         if (const auto evidence = evidence_for_action(execution); evidence.has_value())
             (void)submit_feedback(CognitiveFeedback{"", evidence->value, evidence,
-                                                   result.context.selected_goal.id.empty() ? std::nullopt : std::optional<std::string>{result.context.selected_goal.id},
-                                                   std::nullopt, 0.0});
+                                                   std::nullopt, std::nullopt, 0.0});
     }
 }
 void CognitiveRuntime::publish_result(CognitiveCycleResult result) { auto workspace = make_workspace(result, brain_); workspace.cycle = brain_.state().cycle; workspace_.replace(std::move(workspace)); std::lock_guard lock(mutex_); if (config_.result_capacity != 0) { if (results_.size() >= config_.result_capacity) { results_.pop_front(); ++metrics_.dropped_results; } results_.push_back(std::move(result)); } ++metrics_.processed; }
