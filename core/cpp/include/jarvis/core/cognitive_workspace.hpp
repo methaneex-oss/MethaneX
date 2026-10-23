@@ -8,6 +8,7 @@
 #include "memory.hpp"
 #include "reasoning.hpp"
 #include "reflection.hpp"
+#include "representation.hpp"
 #include "strategy.hpp"
 
 #include <cstdint>
@@ -20,6 +21,7 @@ namespace jarvis::core {
 struct CognitiveWorkspace {
     std::uint64_t cycle{0};
     std::optional<Observation> observation;
+    PerceptualRepresentation representation;
     std::vector<MemoryRecord> memories;
     std::vector<Belief> beliefs;
     std::vector<CausalLink> causal_links;
