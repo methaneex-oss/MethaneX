@@ -141,8 +141,18 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     if (input.memory_limit > 0) {
         for (const auto& node : result.context.representation.nodes) {
             if (node.attributes.empty()) continue;
+
+            // Normalized attribute nodes store their observed value under the
+            // generic "value" slot. Recall needs the semantic label as the key
+            // as well; querying only {"value": ...} discards the feature that
+            // connects this perception to prior raw experiences.
+            Attributes retrieval_cues = node.attributes;
+            if (const auto value = node.attributes.find("value");
+                value != node.attributes.end() && !node.label.empty()) {
+                retrieval_cues.insert_or_assign(node.label, value->second);
+            }
             const auto perceptual_memories = brain_.memory().recall_ranked(
-                node.attributes, input.memory_limit);
+                retrieval_cues, input.memory_limit);
             for (const auto& memory : perceptual_memories) {
                 if (memory.event.sequence == observed_event.sequence) continue;
                 const auto already_present = std::find_if(
