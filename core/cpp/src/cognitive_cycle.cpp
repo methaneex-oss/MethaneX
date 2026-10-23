@@ -195,15 +195,19 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
             if (!prediction.key.empty()) result.context.predictions.push_back(prediction);
         }
     }
+    // Reflection is the brain's metacognitive readout of its current evidence.
+    // Compute it before planning so uncertainty discovered by reflection can
+    // influence this cycle's risk/exploration balance, rather than being only
+    // a report attached after the decision has already been made.
+    result.context.reflection = brain_.reflect();
     result.context.eligible_goals = brain_.eligible_goals();
     const auto selected = select_goal(input, result.context.eligible_goals);
     if (!selected.has_value()) {
         result.status = input.goal_id.has_value() ? CognitiveCycleStatus::invalid_goal : CognitiveCycleStatus::no_goal;
-        result.context.reflection = brain_.reflect();
         return result;
     }
     result.context.selected_goal = *selected;
-    if (input.candidate_actions.empty()) { result.status = CognitiveCycleStatus::no_action; result.context.reflection = brain_.reflect(); return result; }
+    if (input.candidate_actions.empty()) { result.status = CognitiveCycleStatus::no_action; return result; }
     const double goal_priority = std::clamp(selected->priority, 0.0, 1.0);
     const double goal_progress = std::clamp(selected->progress, 0.0, 1.0);
     const double threat = std::clamp(brain_.threat().score, 0.0, 1.0);
@@ -217,8 +221,11 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     // without treating low salience itself as a second, contradictory estimate.
     const double attended_uncertainty = std::clamp(
         result.context.attention.salience * result.context.attention.uncertainty, 0.0, 1.0);
-    const double uncertainty = std::max(
-        attended_uncertainty, std::max(dispute_pressure, world_dispute_pressure));
+    const double uncertainty = std::max({
+        attended_uncertainty,
+        dispute_pressure,
+        world_dispute_pressure,
+        result.context.reflection.uncertainty});
     const double deadline_pressure = std::clamp(input.deadline_pressure, 0.0, 1.0);
     std::vector<CandidateAction> learned_actions = input.candidate_actions;
     // Do not plan with a capability that the self-model has marked unavailable
@@ -469,7 +476,7 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
         tension,
         stability};
     result.context.plan = brain_.plan(learned_actions, input.planning_horizon, planning_context);
-    if (result.context.plan.steps.empty()) { result.status = CognitiveCycleStatus::no_action; result.context.reflection = brain_.reflect(); return result; }
+    if (result.context.plan.steps.empty()) { result.status = CognitiveCycleStatus::no_action; return result; }
     std::vector<CandidateAction> planned_actions;
     planned_actions.reserve(result.context.plan.steps.size());
     for (const auto& step : result.context.plan.steps) planned_actions.push_back(step.action);
@@ -488,7 +495,7 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
         tension,
         stability};
     result.context.decisions = brain_.decision_engine().decide(planned_actions, result.context.decision_context);
-    if (result.context.decisions.empty()) { result.status = CognitiveCycleStatus::no_action; result.context.reflection = brain_.reflect(); return result; }
+    if (result.context.decisions.empty()) { result.status = CognitiveCycleStatus::no_action; return result; }
     result.context.action_assessments = brain_.action_model().assess(result.context.decisions, input.action_constraints);
     // Preserve the exact context used for learned decision bias through the
     // authorization/execution boundary; otherwise outcome learning falls back
@@ -496,7 +503,6 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     for (auto& assessment : result.context.action_assessments) {
         assessment.developmental_context = developmental_context;
     }
-    result.context.reflection = brain_.reflect();
     result.status = CognitiveCycleStatus::completed;
     return result;
 }
