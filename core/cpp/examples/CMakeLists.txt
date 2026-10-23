@@ -1,0 +1,3 @@
+add_executable(jarvis_developmental_world developmental_world.cpp)
+target_link_libraries(jarvis_developmental_world PRIVATE jarvis_core)
+target_compile_features(jarvis_developmental_world PRIVATE cxx_std_20)
