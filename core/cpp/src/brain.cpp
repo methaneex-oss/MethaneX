@@ -593,7 +593,11 @@ void Brain::replay(const Event& event) {
     if (event.kind == "capability_observe") { if (const auto* name = string_value(event.data, "name")) self_model_.observe_capability(*name, double_value(event.data, "availability"), double_value(event.data, "performance")); return; }
     if (event.kind == "capability_isolate") { if (const auto* name = string_value(event.data, "name")) self_model_.isolate(*name); return; }
     if (event.kind == "capability_restore") { if (const auto* name = string_value(event.data, "name")) self_model_.restore(*name, double_value(event.data, "availability"), double_value(event.data, "performance")); return; }
-    if (event.kind != "observation" && event.kind != "learning") return;
+    // Explicit internal-event handlers above have already consumed their
+    // event types. A remaining event is new external experience, even when its
+    // modality-specific kind is not literally "observation"; whitelisting that
+    // one string would silently discard new sensors and environment events.
+    if (event.kind == "affective_learning") return;
     if (event.kind == "learning") {
         const auto source = integer_value(event.data, "source_action_sequence", 0);
         if (source != 0 && !processed_derived_learning_sources_.insert(source).second) return;
@@ -671,7 +675,7 @@ void Brain::replay(const Event& event) {
     for (const auto& [_, belief] : beliefs_) after.push_back(belief);
     causal_.observe_transition(before, after);
     association_.observe(before, after, event.sequence);
-    if (event.kind == "observation") {
+    if (event.kind != "learning") {
         // Brain::observe persists the novelty appraisal with the event. During
         // startup replay Memory already contains the complete journal, so
         // memory_.recent() describes the journal tail, not the prefix preceding
