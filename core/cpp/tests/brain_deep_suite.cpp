@@ -122,10 +122,10 @@ int main() {
                low_attention_result.context.attention.salience);
         assert(std::abs(high_attention_result.context.attention.uncertainty -
                         low_attention_result.context.attention.uncertainty) < 1e-12);
-        assert(high_attention_result.context.decision_context.uncertainty >
-               low_attention_result.context.decision_context.uncertainty);
-        // The planner and decision engine receive the changed value, not merely
-        // a diagnostic attention score.
+        assert(high_attention_result.context.decision_context.deadline_pressure >
+               low_attention_result.context.decision_context.deadline_pressure);
+        // The planner and decision engine receive urgency through the strategy
+        // context, not merely as a diagnostic attention score.
         assert(high_attention_result.context.plan.steps.size() == 1);
         assert(low_attention_result.context.plan.steps.size() == 1);
         assert(high_attention_result.context.plan.steps.front().action.name ==
