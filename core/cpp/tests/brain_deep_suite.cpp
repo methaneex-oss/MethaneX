@@ -180,14 +180,15 @@ int main() {
         // not numeric salience across different history lengths.
         assert(replayed_result.context.attention.salience >= 0.0 &&
                replayed_result.context.attention.salience <= 1.0);
-        // Decision uncertainty is derived from the current cycle's attention
-        // salience. The replayed cycle adds a new observation, so compare the
-        // value against that same cycle's inputs rather than an earlier cycle.
+        // Attention contributes to decision uncertainty, but calibrated
+        // perceptual confidence, reflection, and disputed evidence may provide
+        // a stronger uncertainty estimate. The integrated value must not fall
+        // below the attention-derived component.
         const double replayed_attended_uncertainty =
             replayed_result.context.attention.salience *
             replayed_result.context.attention.uncertainty;
-        assert(std::abs(replayed_result.context.decision_context.uncertainty -
-                        replayed_attended_uncertainty) < 1e-12);
+        assert(replayed_result.context.decision_context.uncertainty + 1e-12 >=
+               replayed_attended_uncertainty);
     }
     {
         Brain replayed_high_attention(high_attention_journal);
