@@ -725,6 +725,20 @@ int main() {
         assert(rejected.event.sequence == 0);
         assert(guarded.developmental_strategies().empty());
         assert(guarded.self_model().capability("untrusted-action") == nullptr);
+
+        // A malformed observed flag must be rejected rather than silently
+        // interpreted as "no consequence observed" and learned as execution
+        // reliability evidence.
+        const auto malformed_observed = guarded.observe(Event{
+            0, 0, "malformed-test", "action_outcome",
+            {{"action", std::string("malformed-observation-action")},
+             {"context", std::string("critical repair")},
+             {"status", static_cast<std::int64_t>(ActionExecutionStatus::verified)},
+             {"observed", std::string("true")},
+             {"reliability", 1.0}}});
+        assert(malformed_observed.event.sequence == 0);
+        assert(guarded.developmental_strategies().empty());
+        assert(guarded.self_model().capability("malformed-observation-action") == nullptr);
     }
     {
         Brain restored_guarded(malformed_path);
