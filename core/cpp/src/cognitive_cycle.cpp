@@ -230,7 +230,7 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
             const auto contextual_memories = brain_.memory().recall_ranked(
                 {{"action", Scalar{action.name}},
                  {"context", Scalar{developmental_context}}},
-                input.memory_limit, "action_outcome");
+                input.memory_limit, "action_outcome", true);
             for (const auto& memory : contextual_memories) {
                 const auto already_present = std::find_if(
                     result.context.memories.begin(), result.context.memories.end(),
