@@ -84,7 +84,7 @@ int main() {
         assert(low_attention.activate_goal("attention-causal-goal"));
         for (int i = 0; i < 12; ++i) {
             assert(low_attention.observe(Event{0, 0, "sensor", "observation",
-                {{"confidence", 0.7}, {"sensor_state", std::string("uncertain")},
+                {{"confidence", 1.0}, {"sensor_state", std::string("uncertain")},
                  {"urgency", 0.0}}}).event.sequence != 0);
         }
         CognitiveCycle cycle(low_attention);
@@ -114,7 +114,7 @@ int main() {
         assert(high_attention.activate_goal("attention-causal-goal"));
         for (int i = 0; i < 12; ++i) {
             assert(high_attention.observe(Event{0, 0, "sensor", "observation",
-                {{"confidence", 0.7}, {"sensor_state", std::string("uncertain")},
+                {{"confidence", 1.0}, {"sensor_state", std::string("uncertain")},
                  {"urgency", 0.0}}}).event.sequence != 0);
         }
         CognitiveCycle cycle(high_attention);
