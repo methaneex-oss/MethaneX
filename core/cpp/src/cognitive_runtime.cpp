@@ -86,17 +86,38 @@ bool CognitiveRuntime::submit(CognitiveCycleInput input, const CognitiveTriggerS
 bool CognitiveRuntime::submit_feedback(CognitiveFeedback feedback) {
     const bool has_prediction = !feedback.prediction_key.empty() ||
                                 feedback.prediction_sequence.has_value();
-    const bool has_evidence = feedback.evidence.has_value() && !feedback.evidence->key.empty();
-    const bool has_goal = feedback.goal_id.has_value() && !feedback.goal_id->empty() && feedback.goal_progress.has_value() && std::isfinite(*feedback.goal_progress);
-    if (!has_prediction && !has_evidence && !has_goal) { std::lock_guard lock(mutex_); ++metrics_.feedback_rejected; return false; }
+    const bool has_evidence = feedback.evidence.has_value();
+    const bool has_goal = feedback.goal_id.has_value() ||
+                          feedback.goal_progress.has_value();
+    const auto reject_feedback = [this]() {
+        std::lock_guard lock(mutex_);
+        ++metrics_.feedback_rejected;
+        return false;
+    };
+
+    // Validate payloads before queueing. The producer thread must not inspect
+    // mutable Brain state while the runtime worker may be updating goals.
+    if (!has_prediction && !has_evidence && !has_goal) return reject_feedback();
+    if (has_prediction) {
+        if (const auto* numeric = std::get_if<double>(&feedback.actual);
+            numeric != nullptr && !std::isfinite(*numeric)) return reject_feedback();
+    }
+    if (has_evidence) {
+        const auto& evidence = *feedback.evidence;
+        if (evidence.key.empty() || evidence.source.empty() ||
+            !std::isfinite(evidence.reliability)) return reject_feedback();
+        if (const auto* numeric = std::get_if<double>(&evidence.value);
+            numeric != nullptr && !std::isfinite(*numeric)) return reject_feedback();
+    }
+    if (has_goal &&
+        (!feedback.goal_id.has_value() || feedback.goal_id->empty() ||
+         !feedback.goal_progress.has_value() ||
+         !std::isfinite(*feedback.goal_progress) ||
+         !std::isfinite(feedback.goal_confidence))) return reject_feedback();
     if (feedback.outcome_utility.has_value() &&
         (!has_prediction || !std::isfinite(*feedback.outcome_utility) ||
          *feedback.outcome_utility < -1.0 || *feedback.outcome_utility > 1.0)) {
-        std::lock_guard lock(mutex_); ++metrics_.feedback_rejected; return false;
-    }
-    if (has_goal) {
-        const auto* goal = brain_.goal(*feedback.goal_id);
-        if (goal == nullptr || goal->status == GoalStatus::completed || goal->status == GoalStatus::abandoned) { std::lock_guard lock(mutex_); ++metrics_.feedback_rejected; return false; }
+        return reject_feedback();
     }
     { std::lock_guard lock(mutex_); if (!running_ || stopping_ || config_.feedback_capacity == 0 || feedback_.size() >= config_.feedback_capacity) { ++metrics_.feedback_rejected; return false; } feedback_.push_back(std::move(feedback)); ++metrics_.feedback_accepted; }
     condition_.notify_one(); return true;
@@ -106,25 +127,22 @@ bool CognitiveRuntime::enqueue(CognitiveCycleInput input, double priority) { { s
 void CognitiveRuntime::process_feedback(CognitiveFeedback feedback) {
     bool failed = false;
     try {
-        const auto outcome = cycle_.process_outcome(
+        const auto result = cycle_.process_outcome(
             feedback.prediction_key.empty()
                 ? std::nullopt
                 : std::optional<std::string>{feedback.prediction_key},
             feedback.actual, feedback.evidence, feedback.goal_id,
             feedback.goal_progress, feedback.goal_confidence,
             feedback.prediction_sequence, feedback.outcome_utility);
-        const bool requested_prediction =
-            !feedback.prediction_key.empty() ||
-            feedback.prediction_sequence.has_value();
-        const bool requested_goal =
-            feedback.goal_id.has_value() &&
-            feedback.goal_progress.has_value();
-        // A feedback item can be syntactically accepted yet fail to teach
-        // anything because its prediction is stale or its goal can no longer
-        // assimilate progress. Keep queue acceptance distinct from learning
-        // completion so runtime metrics reflect the actual cognitive outcome.
-        failed = (requested_prediction && !outcome.prediction_resolved) ||
-                 (requested_goal && !outcome.goal_progress_assimilated);
+
+        const bool requested_prediction = !feedback.prediction_key.empty() ||
+                                          feedback.prediction_sequence.has_value();
+        const bool requested_goal = feedback.goal_id.has_value() ||
+                                    feedback.goal_progress.has_value();
+        // A non-throwing call can still reject stale prediction feedback or fail
+        // to assimilate a goal outcome. Do not count those as successful updates.
+        failed = (requested_prediction && !result.prediction_resolved) ||
+                 (requested_goal && !result.goal_progress_assimilated);
     } catch (...) {
         // Keep the worker alive, but do not report a failed learning update as
         // successfully processed. Expose the failure through runtime metrics.

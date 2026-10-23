@@ -69,6 +69,17 @@ bool wait_for_feedback(CognitiveRuntime& runtime, std::uint64_t expected, int at
     return runtime.metrics().feedback_processed >= expected;
 }
 
+bool wait_for_feedback_completion(CognitiveRuntime& runtime, std::uint64_t expected,
+                                  int attempts = 300) {
+    for (int attempt = 0; attempt < attempts; ++attempt) {
+        const auto metrics = runtime.metrics();
+        if (metrics.feedback_processed + metrics.feedback_failed >= expected) return true;
+        std::this_thread::sleep_for(std::chrono::milliseconds(2));
+    }
+    const auto metrics = runtime.metrics();
+    return metrics.feedback_processed + metrics.feedback_failed >= expected;
+}
+
 } // namespace
 
 int main() {
@@ -287,6 +298,28 @@ int main() {
     assert(completed_goal != nullptr);
     assert(completed_goal->progress == 1.0);
     assert(completed_goal->status == GoalStatus::completed);
+
+    // A stale sequence must be recorded as failed feedback, not a successful
+    // no-op. This verifies the asynchronous result, not only enqueue validation.
+    assert(wait_for_feedback_completion(runtime, runtime.metrics().feedback_accepted));
+    const auto before_stale = runtime.metrics();
+    CognitiveFeedback stale_feedback;
+    stale_feedback.prediction_sequence = UINT64_MAX;
+    stale_feedback.actual = 1.0;
+    assert(runtime.submit_feedback(stale_feedback));
+    const auto stale_accepted = runtime.metrics().feedback_accepted;
+    assert(wait_for_feedback_completion(runtime, stale_accepted));
+    const auto after_stale = runtime.metrics();
+    assert(after_stale.feedback_failed == before_stale.feedback_failed + 1);
+    assert(after_stale.feedback_processed == before_stale.feedback_processed);
+
+    const auto rejected_before_malformed = runtime.metrics().feedback_rejected;
+    CognitiveFeedback malformed_feedback;
+    malformed_feedback.prediction_sequence = prediction.created_sequence;
+    malformed_feedback.actual = 0.75;
+    malformed_feedback.evidence = Evidence{"", "invalid", 0.75, 0.9};
+    assert(!runtime.submit_feedback(malformed_feedback));
+    assert(runtime.metrics().feedback_rejected == rejected_before_malformed + 1);
 
     runtime.stop();
     assert(!runtime.running());
