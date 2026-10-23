@@ -328,7 +328,8 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     const double exploration_pressure = std::clamp(
         std::max({result.context.attention.uncertainty,
                   result.context.affective_state.uncertainty,
-                  result.context.affective_state.tension}),
+                  result.context.affective_state.tension,
+                  result.context.reflection.uncertainty}),
         0.0, 1.0);
 
     // Use exact-context experience whenever that action has been tried locally.
