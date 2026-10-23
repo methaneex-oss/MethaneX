@@ -1,9 +1,11 @@
 #include "jarvis/engineering/task_ledger.hpp"
 
+#include <atomic>
 #include <cassert>
 #include <filesystem>
 #include <fstream>
 #include <string>
+#include <thread>
 
 using namespace jarvis::engineering;
 
@@ -92,6 +94,38 @@ int main() {
         assert(coordinator.create(new_task));
         assert(peer.get("visible-task").has_value());
         assert(peer.list().size() == 2);
+
+        // Race two independent ledger instances with the same observed version.
+        // Exactly one agent may claim the task; the loser must reload after the
+        // winner's append and reject its stale compare-and-swap.
+        EngineeringTask race_task{"race-task", "claim a task without duplication", {"review"},
+            {"repo.read"}, {"source"}, {"report"}, AgentRisk::low, 1.0};
+        assert(coordinator.create(race_task));
+        std::atomic<unsigned> ready{0};
+        std::atomic<bool> start{false};
+        bool coordinator_claimed = false;
+        bool peer_claimed = false;
+        std::thread first([&] {
+            ready.fetch_add(1, std::memory_order_release);
+            while (!start.load(std::memory_order_acquire)) std::this_thread::yield();
+            coordinator_claimed = coordinator.claim("race-task", 1, "racing-agent-a", "rev-1");
+        });
+        std::thread second([&] {
+            ready.fetch_add(1, std::memory_order_release);
+            while (!start.load(std::memory_order_acquire)) std::this_thread::yield();
+            peer_claimed = peer.claim("race-task", 1, "racing-agent-b", "rev-1");
+        });
+        while (ready.load(std::memory_order_acquire) != 2) std::this_thread::yield();
+        start.store(true, std::memory_order_release);
+        first.join();
+        second.join();
+        assert(coordinator_claimed != peer_claimed);
+        const auto race_result = coordinator.get("race-task");
+        assert(race_result && race_result->version == 2);
+        assert(race_result->status == EngineeringTaskStatus::claimed);
+        assert(race_result->assigned_agent_id ==
+               (coordinator_claimed ? "racing-agent-a" : "racing-agent-b"));
+        assert(peer.list().size() == 3);
     }
     std::filesystem::remove(shared_path, ec);
     std::filesystem::remove(shared_path.string() + ".lock", ec);
