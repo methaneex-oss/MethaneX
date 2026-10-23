@@ -34,6 +34,8 @@ struct EngineeringTask {
     std::vector<std::string> expected_artifacts;
     AgentRisk maximum_risk{AgentRisk::high};
     double maximum_cost{0.0};
+    // Dependencies refer to other durable task IDs and must complete before claim.
+    std::vector<std::string> dependencies;
 };
 
 struct AgentArtifact { std::string type; std::string location; std::string digest; };
