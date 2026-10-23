@@ -931,6 +931,27 @@ int main() {
     std::filesystem::remove(affective_learning_path, ec);
     std::filesystem::remove(affective_learning_path.string() + ".meta", ec);
 
+    {
+        Brain affective_learning_brain(affective_learning_path);
+        const auto updates_before = affective_learning_brain.affective_learning_updates();
+        const auto events_before = affective_learning_brain.memory().all().size();
+        const auto rejected = affective_learning_brain.observe(
+            Event{0, 0, "affective-learning-test", "affective_learning",
+                {{"source_action_sequence", std::int64_t{8}},
+                 {"expected_consequence", 0.0},
+                 {"actual_consequence", 1.0},
+                 {"consequence_error", 1.0},
+                 {"utility", 1.0},
+                 {"prediction_error", 1.2},
+                 {"novelty", 0.2},
+                 {"salience", 0.8},
+                 {"uncertainty", 0.1},
+                 {"confidence", 0.9}}});
+        assert(rejected.event.sequence == 0);
+        assert(affective_learning_brain.memory().all().size() == events_before);
+        assert(affective_learning_brain.affective_learning_updates() == updates_before);
+    }
+
     // Generic evidence must enter the same coordinated experience pathway:
     // durable evidence -> knowledge/affective processing -> memory consolidation.
     const auto evidence_path =
