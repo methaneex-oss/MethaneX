@@ -28,11 +28,17 @@ int main() {
     }
 
     Event explicit_confidence{44, 125, "sensor", "observation",
-                              {{"temperature", 18.0}, {"confidence", 0.2}}};
+                              {{"temperature", 18.0}, {"confidence", 0.2},
+                               {"novelty", 0.8}, {"salience", 0.6},
+                               {"world_step", std::int64_t{12}}}};
     const auto grounded = engine.normalize(explicit_confidence);
     assert(std::abs(grounded.confidence - 0.2) < 1e-12);
-    for (const auto& node : grounded.nodes)
-        assert(std::abs(node.confidence - 0.2) < 1e-12);
+    assert(grounded.nodes.size() == 1);
+    assert(grounded.nodes.front().label == "temperature");
+    assert(std::abs(grounded.nodes.front().confidence - 0.2) < 1e-12);
+    assert(std::get<double>(grounded.metadata.at("novelty")) == 0.8);
+    assert(std::get<double>(grounded.metadata.at("salience")) == 0.6);
+    assert(std::get<std::int64_t>(grounded.metadata.at("world_step")) == 12);
 
     Event empty{43, 124, "unknown", "", {}};
     const auto unknown = engine.normalize(empty);
