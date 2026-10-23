@@ -69,7 +69,7 @@ int main() {
         CandidateAction{"irreversible_action", 0.0, 0.150, 1.0, 0.0, 0.0, 0.0},
     };
     attention_input.observation = Event{0, 0, "sensor", "observation",
-        {{"confidence", 0.7}, {"sensor_state", std::string("uncertain")},
+        {{"confidence", 1.0}, {"sensor_state", std::string("uncertain")},
          {"urgency", 0.0}}};
     CognitiveCycleResult low_attention_result;
     CognitiveCycleResult low_attention_replay_reference;
