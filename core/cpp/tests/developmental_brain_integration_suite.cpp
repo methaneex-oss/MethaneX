@@ -433,6 +433,48 @@ int main() {
         assert(score_with_episode > score_without_episode);
     }
 
+    // A contextless legacy outcome must not penalize an action in a known,
+    // unrelated developmental context. Compare two otherwise equivalent
+    // candidates in the same cycle so incidental brain-state differences cancel.
+    const auto contextless_isolation_path =
+        std::filesystem::temp_directory_path() / "jarvis_contextless_episode_isolation.bin";
+    std::filesystem::remove(contextless_isolation_path, ec);
+    std::filesystem::remove(contextless_isolation_path.string() + ".meta", ec);
+    {
+        Brain isolated(contextless_isolation_path);
+        Goal goal{"contextless-isolation-goal", "avoid cross-context memory leakage",
+                  0.9, 0.0, 0, 0, GoalStatus::pending, {}, {}};
+        assert(isolated.create_goal(goal));
+        assert(isolated.activate_goal(goal.id));
+        isolated.memory().append(Event{0, 0, "legacy-journal", "action_outcome",
+            {{"action", std::string("contextless-negative-action")},
+             {"observed", true},
+             {"actual_consequence", -1.0},
+             {"reliability", 1.0},
+             {"evidence_reliability", 1.0},
+             {"salience", 1.0}}});
+        const std::vector<CandidateAction> isolation_actions{
+            {"contextless-negative-action", 0.5, 0.5, 0.9, 0.2, 1.0, 0.0, 0.5},
+            {"neutral-action", 0.5, 0.5, 0.9, 0.2, 1.0, 0.0, 0.5},
+        };
+        CognitiveCycle cycle(isolated);
+        CognitiveCycleInput input;
+        input.observation = Event{0, 0, "environment", "observation", {}};
+        input.candidate_actions = isolation_actions;
+        input.goal_id = goal.id;
+        input.developmental_context = "known-but-unrelated-context";
+        input.memory_limit = 8;
+        const auto result = cycle.run(input);
+        assert(result.status == CognitiveCycleStatus::completed);
+        const double contextless_action_score =
+            score_for(result.context.decisions, "contextless-negative-action");
+        const double neutral_action_score =
+            score_for(result.context.decisions, "neutral-action");
+        assert(std::abs(contextless_action_score - neutral_action_score) < 1e-9);
+    }
+    std::filesystem::remove(contextless_isolation_path, ec);
+    std::filesystem::remove(contextless_isolation_path.string() + ".meta", ec);
+
     // The ordinary Brain decision APIs must generalize learned behavior too;
     // generalization is not restricted to CognitiveCycle or an opt-in API.
     const auto generalization_path =
