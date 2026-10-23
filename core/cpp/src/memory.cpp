@@ -114,7 +114,7 @@ std::size_t Memory::tier_index(MemoryTier tier) noexcept { return static_cast<st
 std::optional<Event> Memory::latest() const { std::shared_lock lock(mutex_); if (continuity_.empty()) return std::nullopt; return continuity_.back(); }
 std::vector<Event> Memory::recent(std::size_t limit) const { std::shared_lock lock(mutex_); const auto count = std::min(limit == 0 ? working_limit_ : limit, continuity_.size()); return std::vector<Event>(continuity_.end() - static_cast<std::ptrdiff_t>(count), continuity_.end()); }
 std::vector<MemoryRecord> Memory::recall_ranked(
-    const Attributes& query, std::size_t limit, const std::string& kind) const {
+    const Attributes& query, std::size_t limit, const std::string& kind, bool require_exact_match) const {
     std::shared_lock lock(mutex_);
     if (query.empty() || metadata_.empty() || limit == 0) return {};
 
@@ -133,13 +133,21 @@ std::vector<MemoryRecord> Memory::recall_ranked(
 
         double matches = 0.0;
         double overlap = 0.0;
+        bool exact_match = true;
         for (const auto& [key, value] : query) {
             const auto it = record.event.data.find(key);
-            if (it == record.event.data.end()) continue;
+            if (it == record.event.data.end()) {
+                exact_match = false;
+                continue;
+            }
             overlap += 1.0;
-            if (it->second == value) matches += 1.0;
+            if (it->second == value) {
+                matches += 1.0;
+            } else {
+                exact_match = false;
+            }
         }
-        if (overlap == 0.0) continue;
+        if (overlap == 0.0 || (require_exact_match && !exact_match)) continue;
         const double denominator = static_cast<double>(query.size());
         const double components[] = {
             std::max(matches / denominator, std::numeric_limits<double>::min()),
