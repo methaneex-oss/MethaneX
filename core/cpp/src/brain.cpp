@@ -120,7 +120,7 @@ bool valid_affective_learning_event(const Event& event) {
            finite_numeric("actual_consequence", true) &&
            finite_numeric("consequence_error", true) &&
            finite_numeric("utility", true) &&
-           finite_numeric("prediction_error", true) &&
+           unit_value("prediction_error") &&
            unit_value("novelty") && unit_value("salience") &&
            unit_value("uncertainty") && unit_value("confidence");
 }
