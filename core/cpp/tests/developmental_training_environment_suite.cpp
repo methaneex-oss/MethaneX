@@ -98,7 +98,7 @@ int main() {
         // The environment owns the transition rules. The brain receives
         // only the observation and the consequence of the action it selected.
         const auto outcome = world.step(action.name);
-        return outcome.consequence.value_or(0.0);
+        return outcome.consequence;
     };
 
     std::vector<std::string> episode_actions;
