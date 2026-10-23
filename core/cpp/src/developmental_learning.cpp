@@ -120,7 +120,10 @@ void DevelopmentalLearning::observe_strategy(std::string context, std::string ac
     if (strategy.uses == 0) {
         strategy.context = std::move(context);
         strategy.action = std::move(action);
-        strategy.value = target;
+        // The first observation must obey the same learning-rate contract as
+        // subsequent observations. Starting directly at target bypasses
+        // reliability, surprise, salience, and novelty weighting on first use.
+        strategy.value = bounded(target * rate);
         strategy.confidence = rate;
     } else {
         strategy.value = bounded(strategy.value + rate * (target - strategy.value));
