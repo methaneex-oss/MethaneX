@@ -137,7 +137,7 @@ void CognitiveRuntime::process_feedback(CognitiveFeedback feedback) {
 
         const bool requested_prediction = !feedback.prediction_key.empty() ||
                                           feedback.prediction_sequence.has_value();
-        const bool requested_goal = feedback.goal_id.has_value() ||
+        const bool requested_goal = feedback.goal_id.has_value() &&
                                     feedback.goal_progress.has_value();
         // A non-throwing call can still reject stale prediction feedback or fail
         // to assimilate a goal outcome. Do not count those as successful updates.
