@@ -35,6 +35,17 @@ double confidence_for(const Event& event, double fallback) {
     return fallback;
 }
 
+bool is_appraisal_metadata(const std::string& key) {
+    // These fields describe evidence quality or the learner's appraisal of an
+    // experience. They should remain available for audit/replay, but must not
+    // become semantic features that distort recall or developmental context.
+    return key == "_external_observation" || key == "confidence" ||
+           key == "reliability" || key == "evidence_reliability" ||
+           key == "novelty" || key == "salience" || key == "urgency" ||
+           key == "prediction_error" || key == "outcome" ||
+           key == "world_step";
+}
+
 } // namespace
 
 PerceptualRepresentation RepresentationEngine::normalize(const Event& event) const {
@@ -53,6 +64,10 @@ PerceptualRepresentation RepresentationEngine::normalize(const Event& event) con
     const double base_confidence = confidence_for(event, default_confidence);
     result.nodes.reserve(event.data.size());
     for (const auto& [key, value] : event.data) {
+        if (is_appraisal_metadata(key)) {
+            result.metadata.insert_or_assign(key, value);
+            continue;
+        }
         SemanticNode node;
         node.id = node_id(event.sequence, key);
         node.kind = RepresentationKind::attribute;
@@ -62,7 +77,9 @@ PerceptualRepresentation RepresentationEngine::normalize(const Event& event) con
         node.evidence.push_back(EvidenceSpan{event.source, event.sequence, base_confidence});
         result.nodes.push_back(std::move(node));
     }
-    result.confidence = base_confidence;
+    // A metadata-only event is auditable, but it has supplied no semantic
+    // feature for downstream reasoning or action selection.
+    result.confidence = result.nodes.empty() ? 0.0 : base_confidence;
     return result;
 }
 
