@@ -81,5 +81,36 @@ int main() {
 
     std::filesystem::remove(path, ec);
     std::filesystem::remove(metadata_path, ec);
+
+    // Newly appended experience must update the learned tier distribution.
+    // Otherwise later experiences of the same kind cannot inherit the learned
+    // placement until some unrelated promotion/consolidation rebuilds it.
+    const auto learning_path = std::filesystem::temp_directory_path() / "jarvis_memory_learned_tiers.bin";
+    const auto learning_metadata_path = std::filesystem::path(learning_path.string() + ".meta");
+    std::filesystem::remove(learning_path, ec);
+    std::filesystem::remove(learning_metadata_path, ec);
+    {
+        Memory developmental_memory(8, learning_path);
+        const auto first = developmental_memory.append(
+            Event{0, 1, "experience", "learned-kind", {{"episode", std::int64_t{1}}}});
+        assert(first != 0);
+        assert(developmental_memory.promote(first, MemoryTier::Semantic, 0.9, 0.9));
+        const auto second = developmental_memory.append(
+            Event{0, 2, "experience", "learned-kind", {{"episode", std::int64_t{2}}}});
+        assert(second != 0);
+        const auto semantic_experiences = developmental_memory.salient(8, MemoryTier::Semantic);
+        assert(semantic_experiences.size() == 2);
+        assert(semantic_experiences.front().event.sequence == second);
+    }
+    {
+        // Rebuild the learned distribution from journal records if the
+        // separately persisted metadata is missing.
+        std::filesystem::remove(learning_metadata_path, ec);
+        Memory reconstructed_memory(8, learning_path);
+        assert(reconstructed_memory.tier_of(
+            Event{0, 0, "experience", "learned-kind", {}}) == MemoryTier::Episodic);
+    }
+    std::filesystem::remove(learning_path, ec);
+    std::filesystem::remove(learning_metadata_path, ec);
     return 0;
 }
