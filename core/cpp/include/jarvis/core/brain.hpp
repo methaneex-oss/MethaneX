@@ -67,7 +67,7 @@ public:
                                       std::function<bool(const CandidateAction&)> execute,
                                       std::function<bool(const CandidateAction&)> verify,
                                       std::function<bool(const CandidateAction&)> rollback = {},
-                                      std::function<double(const CandidateAction&)> observe_consequence = {},
+                                      std::function<std::optional<double>(const CandidateAction&)> observe_consequence = {},
                                       ActionAuthorizationContext authorization = {});
  Plan plan(const std::vector<CandidateAction>& actions, std::size_t horizon) const; Plan plan(const std::vector<CandidateAction>& actions, std::size_t horizon, const PlanningContext& context) const; Plan plan_with_affect(const std::vector<CandidateAction>& actions, std::size_t horizon) const; std::vector<ActionAssessment> assess_actions(const std::vector<Decision>& decisions, ActionConstraints constraints = {}) const; std::vector<CapabilityCandidate> evaluate_capabilities(const std::vector<CapabilityDescriptor>& capabilities, CapabilityConstraints constraints = {}) const; CapabilityExecutionResult execute_capability(const CapabilityDescriptor& capability, std::string input, std::vector<std::string> granted_permissions = {}, double maximum_risk = 1.0, CapabilityProvider provider = {});
  Reflection reflect() const; const KnowledgeMetric* knowledge_source(const std::string& source) const noexcept; const AdaptiveMetric* learning_metric(const std::string& key) const noexcept; double learning_confidence(const std::string& key) const noexcept;
