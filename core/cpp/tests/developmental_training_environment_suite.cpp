@@ -1,4 +1,5 @@
 #include "jarvis/core/cognitive_runtime.hpp"
+#include "jarvis/core/developmental_environment.hpp"
 
 #include <cassert>
 #include <chrono>
@@ -14,14 +15,10 @@ using namespace jarvis::core;
 
 namespace {
 CognitiveCycleInput training_input(const std::string& goal_id, std::int64_t episode,
-                                   const std::string& route_condition = "clear") {
+                                   const DevelopmentalEnvironment& world) {
     CognitiveCycleInput input;
-    input.observation = Event{0, 0, "training_environment", "observation",
-                              {{"episode", episode},
-                               {"task", std::string("reach_destination")},
-                               {"route_condition", route_condition},
-                               {"bridge_status", std::string(route_condition == "flooded" ? "closed" : "open")},
-                               {"visibility", std::string(route_condition == "flooded" ? "poor" : "clear")}}};
+    input.observation = world.observe();
+    input.observation.data.insert_or_assign("episode", episode);
     // The environment offers both actions. It does not choose for the brain.
     // Keep the actions executable even after a negative strategy update.
     // Otherwise the action model can switch to "recommend" for every option,
@@ -31,7 +28,7 @@ CognitiveCycleInput training_input(const std::string& goal_id, std::int64_t epis
         CandidateAction{"good-route", 2.5, 0.5, 0.9, 0.1},
     };
     input.goal_id = goal_id;
-    input.developmental_context = "navigation/route-selection";
+    input.developmental_context = world.context();
     input.planning_horizon = 1;
     input.memory_limit = 8;
     input.reasoning_steps = 4;
@@ -58,6 +55,25 @@ int main() {
     std::filesystem::remove(journal.string() + ".meta", ec);
 
     std::vector<std::string> executed_actions;
+    DevelopmentalEnvironment world(
+        "reach_destination", "navigation/route-selection",
+        {{"route_condition", std::string("clear")},
+         {"bridge_status", std::string("open")},
+         {"visibility", std::string("clear")}},
+        [](const std::string& action, const Attributes& state)
+            -> std::optional<DevelopmentalTransition> {
+            if (action != "good-route" && action != "bad-route") return std::nullopt;
+            const auto condition = std::get<std::string>(state.at("route_condition"));
+            const bool original_route_works = action == "good-route";
+            const bool route_works = condition == "flooded"
+                ? !original_route_works : original_route_works;
+            return DevelopmentalTransition{route_works ? 1.0 : -1.0, std::nullopt};
+        });
+    auto set_world_condition = [&](const std::string& condition) {
+        world.set_state({{"route_condition", condition},
+                         {"bridge_status", std::string(condition == "flooded" ? "closed" : "open")},
+                         {"visibility", std::string(condition == "flooded" ? "poor" : "clear")}});
+    };
     CognitiveRuntimeConfig config;
     config.input_capacity = 32;
     config.result_capacity = 32;
@@ -71,19 +87,18 @@ int main() {
     std::string current_route_condition = "clear";
     config.action_adapter.execute = [&](const CandidateAction& action) {
         executed_actions.push_back(action.name);
-        if (current_episode == 0) return false;
+        if (current_episode == 0) {
+            (void)world.step(action.name, false);
+            return false;
+        }
         return true;
     };
     config.action_adapter.verify = [](const CandidateAction&) { return true; };
     config.action_adapter.observe_consequence = [&](const CandidateAction& action) {
-        // The environment initially rewards good-route. In the related route
-        // variant the conditions change, so the same action becomes harmful.
-        // The brain is not told which route is now better; it must infer this
-        // from the consequences of its own actions.
-        const bool original_route_works = action.name == "good-route";
-        const bool route_works = current_route_condition == "flooded"
-            ? !original_route_works : original_route_works;
-        return route_works ? 1.0 : -1.0;
+        // The environment owns the transition rules. The brain receives
+        // only the observation and the consequence of the action it selected.
+        const auto outcome = world.step(action.name);
+        return outcome.consequence.value_or(0.0);
     };
 
     std::vector<std::string> episode_actions;
@@ -104,13 +119,12 @@ int main() {
         for (std::int64_t episode = 0; episode < episode_count; ++episode) {
             current_episode = episode;
             current_route_condition = "clear";
-            auto input = training_input(goal.id, episode, current_route_condition);
-            // A system-wide executor outage is infrastructure evidence, not
-            // evidence that the selected route is intrinsically bad. Keep that
-            // episode in its own context so it cannot poison route learning.
-            if (episode == 0) {
-                input.developmental_context = "infrastructure/executor-outage";
-            }
+            set_world_condition(current_route_condition);
+            // Keep an executor outage separate from route selection: failed
+            // execution produces no observed world consequence.
+            world.set_context(episode == 0 ? "infrastructure/executor-outage"
+                                           : "navigation/route-selection");
+            auto input = training_input(goal.id, episode, world);
             current_context = input.developmental_context;
             assert(runtime.submit(input, 1.0));
             const auto result = await_result(runtime);
@@ -178,8 +192,9 @@ int main() {
             current_episode = episode_count + offset;
             current_context = "navigation/route-variant";
             current_route_condition = "flooded";
-            auto input = training_input(goal.id, current_episode, current_route_condition);
-            input.developmental_context = current_context;
+            set_world_condition(current_route_condition);
+            world.set_context(current_context);
+            auto input = training_input(goal.id, current_episode, world);
             assert(runtime.submit(input, 1.0));
             const auto result = await_result(runtime);
             assert(result.status == CognitiveCycleStatus::completed);
@@ -263,7 +278,9 @@ int main() {
         goal.priority = 1.0;
         assert(restored.goal(goal.id) != nullptr);
 
-        CognitiveCycleInput probe = training_input(goal.id, 100);
+        world.set_context("navigation/route-selection");
+        set_world_condition("clear");
+        CognitiveCycleInput probe = training_input(goal.id, 100, world);
         const auto decision = CognitiveCycle(restored).run(probe);
         assert(decision.status == CognitiveCycleStatus::completed);
         assert(!decision.context.plan.steps.empty());
@@ -272,8 +289,9 @@ int main() {
 
         // The exception learned from contradictory outcomes is context-specific
         // and survives replay: the route variant now prefers bad-route.
-        CognitiveCycleInput revised_probe = training_input(goal.id, 101, "flooded");
-        revised_probe.developmental_context = "navigation/route-variant";
+        world.set_context("navigation/route-variant");
+        set_world_condition("flooded");
+        CognitiveCycleInput revised_probe = training_input(goal.id, 101, world);
         const auto revised = CognitiveCycle(restored).run(revised_probe);
         assert(revised.status == CognitiveCycleStatus::completed);
         assert(!revised.context.plan.steps.empty());
@@ -281,7 +299,9 @@ int main() {
 
         // The original useful strategy still generalizes to a different related
         // context that has no direct experience of its own.
-        CognitiveCycleInput related_probe = training_input(goal.id, 102);
+        world.set_context("navigation/route-selection alternate");
+        set_world_condition("clear");
+        CognitiveCycleInput related_probe = training_input(goal.id, 102, world);
         related_probe.developmental_context = "navigation/route-selection alternate";
         const auto generalized = CognitiveCycle(restored).run(related_probe);
         assert(generalized.status == CognitiveCycleStatus::completed);
@@ -292,7 +312,9 @@ int main() {
 
         // Transfer must remain bounded: navigation experience must not dictate
         // a choice in an unrelated task where the candidates are otherwise tied.
-        CognitiveCycleInput unrelated_probe = training_input(goal.id, 103);
+        world.set_context("orbital/cooking");
+        set_world_condition("clear");
+        CognitiveCycleInput unrelated_probe = training_input(goal.id, 103, world);
         unrelated_probe.developmental_context = "orbital/cooking";
         // Use unseen action names so global capability reliability learned for
         // the route actions cannot confound this context-transfer check.
