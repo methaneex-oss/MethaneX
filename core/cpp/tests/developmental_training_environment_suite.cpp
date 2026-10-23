@@ -116,6 +116,11 @@ int main() {
             const auto result = await_result(runtime);
             assert(result.status == CognitiveCycleStatus::completed);
             assert(!result.context.plan.steps.empty());
+            // The selected observation must expose the environment state that
+            // the action/outcome loop is testing, not just an episode counter.
+            assert(std::get<std::string>(result.context.observation.event.data.at("route_condition")) == current_route_condition);
+            assert(result.context.observation.event.data.contains("bridge_status"));
+            assert(result.context.observation.event.data.contains("visibility"));
             episode_actions.push_back(result.context.plan.steps.front().action.name);
             std::cout << "[experience] episode=" << episode
                       << " condition=" << current_route_condition
@@ -179,6 +184,9 @@ int main() {
             const auto result = await_result(runtime);
             assert(result.status == CognitiveCycleStatus::completed);
             assert(!result.context.plan.steps.empty());
+            assert(std::get<std::string>(result.context.observation.event.data.at("route_condition")) == current_route_condition);
+            assert(result.context.observation.event.data.contains("bridge_status"));
+            assert(result.context.observation.event.data.contains("visibility"));
             reversal_actions.push_back(result.context.plan.steps.front().action.name);
             std::cout << "[contradiction] episode=" << current_episode
                       << " condition=" << current_route_condition
