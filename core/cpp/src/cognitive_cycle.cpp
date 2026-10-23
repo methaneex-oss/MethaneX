@@ -119,14 +119,20 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
         result.context.memories =
             brain_.memory().salient(input.memory_limit, MemoryTier::Episodic);
     }
-    // Normalize the incoming experience once at the cycle boundary so every
-    // downstream mechanism can share a structured, evidence-linked view while
-    // retaining the original event for durable memory and replay.
-    result.context.representation = perception_pipeline_.process(
-        PerceptionInput{input.observation.timestamp_ns, input.observation.source,
-                        input.observation.kind, input.observation.data},
-        PerceptionContext{input.observation.sequence, {}, {}});
+    // Record the original experience first so perception providers can attach
+    // semantic evidence to its durable journal sequence. Caller-supplied events
+    // commonly have sequence zero; passing that through would make an otherwise
+    // valid representation impossible to trace back to the experience that
+    // produced it. Memory retrieval above intentionally remains pre-observation.
     result.context.observation = brain_.observe(input.observation);
+    const auto& observed_event = result.context.observation.event;
+    // Normalize once at the cycle boundary. Providers receive the committed
+    // event (including its assigned sequence and persisted novelty appraisal),
+    // while the original event remains the source of durable memory and replay.
+    result.context.representation = perception_pipeline_.process(
+        PerceptionInput{observed_event.timestamp_ns, observed_event.source,
+                        observed_event.kind, observed_event.data},
+        PerceptionContext{observed_event.sequence, {}, {}});
     result.context.beliefs = brain_.beliefs();
     result.context.causal_links = brain_.causal_links();
     result.context.affective_state = brain_.affective_state();
