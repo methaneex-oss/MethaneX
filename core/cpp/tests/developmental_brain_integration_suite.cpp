@@ -351,6 +351,17 @@ int main() {
                 {{"action", std::string("sensor-adaptation-action")},
                  {"salience", 1.0}}});
         }
+        // Legacy outcome records may omit context entirely. They are useful
+        // for broad action recall but must never masquerade as exact local
+        // evidence when the current context is known.
+        experienced.memory().append(Event{0, 0, "legacy-journal", "action_outcome",
+            {{"action", std::string("sensor-adaptation-action")},
+             {"observed", true},
+             {"actual_consequence", -1.0},
+             {"consequence_error", 1.0},
+             {"reliability", 1.0},
+             {"evidence_reliability", 1.0},
+             {"salience", 1.0}}});
         // Recent outcomes for the same action in unrelated contexts must not
         // evict the older outcome that matches this developmental situation.
         for (int i = 0; i < 3; ++i) {
