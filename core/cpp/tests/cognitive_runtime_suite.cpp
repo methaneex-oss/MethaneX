@@ -29,6 +29,7 @@ public:
         node.kind = RepresentationKind::concept_node;
         node.label = "runtime-provider-active";
         node.attributes.emplace("semantic_state", std::string("recognized"));
+        node.attributes.emplace("value", std::string("recognized"));
         node.confidence = 0.95;
         node.evidence.push_back(EvidenceSpan{input.source, context.sequence, 0.95});
         result.nodes.push_back(std::move(node));
@@ -87,6 +88,10 @@ int main() {
         0, 0, "prior-environment", "observation",
         {{"semantic_state", std::string("recognized")}}});
     assert(prior_experience.event.sequence != 0);
+    const auto semantic_label_experience = brain.observe(Event{
+        0, 0, "prior-environment", "observation",
+        {{"runtime-provider-active", std::string("recognized")}}});
+    assert(semantic_label_experience.event.sequence != 0);
 
     int executed = 0;
     int verified = 0;
@@ -129,6 +134,11 @@ int main() {
                        action_result->context.memories.end(),
                        [&](const MemoryRecord& memory) {
                            return memory.event.sequence == prior_experience.event.sequence;
+                       }));
+    assert(std::any_of(action_result->context.memories.begin(),
+                       action_result->context.memories.end(),
+                       [&](const MemoryRecord& memory) {
+                           return memory.event.sequence == semantic_label_experience.event.sequence;
                        }));
     assert(!action_result->context.action_assessments.empty());
     assert(!action_result->context.action_execution_results.empty());
