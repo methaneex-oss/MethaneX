@@ -16,14 +16,18 @@ CognitiveWorkspace make_workspace(const CognitiveCycleResult& result, const Brai
     workspace.observation = result.context.observation;
     workspace.representation = result.context.representation;
     workspace.memories = result.context.memories;
-    workspace.beliefs = result.context.beliefs;
-    workspace.causal_links = result.context.causal_links;
-    workspace.predictions = result.context.predictions;
-    workspace.affective_state = result.context.affective_state;
-    workspace.affective_appraisal = result.context.affective_appraisal;
-    workspace.attention = result.context.attention;
+    // The cycle context preserves the evidence used to make this decision.
+    // The shared workspace represents the brain's current state, which may
+    // already have changed while executing actions and learning their outcomes.
+    const auto current = brain.snapshot();
+    workspace.beliefs = current.beliefs;
+    workspace.causal_links = current.causal_links;
+    workspace.predictions = current.predictions;
+    workspace.affective_state = brain.affective_state();
+    workspace.affective_appraisal = brain.affective_appraisal();
+    workspace.attention = brain.attention();
     workspace.reasoning = result.context.reasoning;
-    workspace.goals = result.context.eligible_goals;
+    workspace.goals = brain.eligible_goals();
     if (!result.context.selected_goal.id.empty()) workspace.selected_goal = result.context.selected_goal;
     workspace.plan = result.context.plan;
     workspace.decision_context = result.context.decision_context;
@@ -32,7 +36,7 @@ CognitiveWorkspace make_workspace(const CognitiveCycleResult& result, const Brai
     workspace.action_execution_results = result.context.action_execution_results;
     const auto intent = brain.intent();
     if (!intent.id.empty()) { workspace.intent = intent; workspace.strategy = brain.strategy(); }
-    workspace.reflection = result.context.reflection;
+    workspace.reflection = brain.reflect();
     return workspace;
 }
 
