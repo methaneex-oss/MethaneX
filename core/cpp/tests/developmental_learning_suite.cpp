@@ -164,10 +164,10 @@ int main() {
     const auto* uncertain_strategy = uncertain_evidence.best_strategy("robot arm");
     assert(reliable_strategy != nullptr);
     assert(uncertain_strategy != nullptr);
-    // Reliability changes the amount of trust and the update rate, not the
-    // meaning/sign of the observed outcome. Downstream planning weights the
-    // value by confidence, so compare effective evidence rather than raw target.
-    assert(std::abs(reliable_strategy->value - uncertain_strategy->value) < 1e-12);
+    // Reliability changes the update magnitude from the first observation,
+    // as well as confidence. Equally positive outcomes with weaker evidence
+    // must not initialize the strategy to the same learned value.
+    assert(reliable_strategy->value > uncertain_strategy->value);
     assert(reliable_strategy->confidence > uncertain_strategy->confidence);
     assert(reliable_strategy->value * reliable_strategy->confidence >
            uncertain_strategy->value * uncertain_strategy->confidence);
