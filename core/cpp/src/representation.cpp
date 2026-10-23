@@ -1,7 +1,8 @@
 #include "jarvis/core/representation.hpp"
 
 #include <algorithm>
-#include <functional>
+#include <cmath>
+#include <cstdint>
 
 namespace jarvis::core {
 namespace {
@@ -17,7 +18,21 @@ Modality modality_for(const std::string& source, const std::string& kind) {
 }
 
 std::string node_id(std::uint64_t sequence, const std::string& key) {
-    return "n:" + std::to_string(sequence) + ":" + std::to_string(std::hash<std::string>{}(key));
+    // Semantic identifiers are used by downstream experience links. Avoid
+    // std::hash: it is not a cross-process identity contract and can collide.
+    // A length-prefixed key is deterministic and unambiguous.
+    return "n:" + std::to_string(sequence) + ":" +
+           std::to_string(key.size()) + ":" + key;
+}
+
+double confidence_for(const Event& event, double fallback) {
+    const auto it = event.data.find("confidence");
+    if (it == event.data.end()) return fallback;
+    if (const auto* value = std::get_if<double>(&it->second))
+        return std::isfinite(*value) ? std::clamp(*value, 0.0, 1.0) : 0.0;
+    if (const auto* value = std::get_if<std::int64_t>(&it->second))
+        return std::clamp(static_cast<double>(*value), 0.0, 1.0);
+    return fallback;
 }
 
 } // namespace
@@ -34,7 +49,8 @@ PerceptualRepresentation RepresentationEngine::normalize(const Event& event) con
         return result;
     }
 
-    const double base_confidence = result.modality == Modality::unknown ? 0.35 : 0.7;
+    const double default_confidence = result.modality == Modality::unknown ? 0.35 : 0.7;
+    const double base_confidence = confidence_for(event, default_confidence);
     result.nodes.reserve(event.data.size());
     for (const auto& [key, value] : event.data) {
         SemanticNode node;
@@ -51,16 +67,20 @@ PerceptualRepresentation RepresentationEngine::normalize(const Event& event) con
 }
 
 bool RepresentationEngine::validate(const PerceptualRepresentation& representation) const noexcept {
-    if (representation.confidence < 0.0 || representation.confidence > 1.0) return false;
+    if (!std::isfinite(representation.confidence) ||
+        representation.confidence < 0.0 || representation.confidence > 1.0) return false;
     for (const auto& node : representation.nodes) {
         if (node.id.empty() || node.label.empty()) return false;
-        if (node.confidence < 0.0 || node.confidence > 1.0) return false;
+        if (!std::isfinite(node.confidence) ||
+            node.confidence < 0.0 || node.confidence > 1.0) return false;
         for (const auto& evidence : node.evidence)
-            if (evidence.confidence < 0.0 || evidence.confidence > 1.0) return false;
+            if (!std::isfinite(evidence.confidence) ||
+                evidence.confidence < 0.0 || evidence.confidence > 1.0) return false;
     }
     for (const auto& relation : representation.relations) {
         if (relation.id.empty() || relation.subject_id.empty() || relation.predicate.empty() || relation.object_id.empty()) return false;
-        if (relation.confidence < 0.0 || relation.confidence > 1.0) return false;
+        if (!std::isfinite(relation.confidence) ||
+            relation.confidence < 0.0 || relation.confidence > 1.0) return false;
     }
     return true;
 }
