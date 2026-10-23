@@ -17,6 +17,16 @@ static double score_for(const std::vector<Decision>& decisions, const std::strin
 }
 
 int main() {
+    // Reflection must account for unresolved counter-evidence even when the
+    // current value itself was learned with high confidence.
+    ReflectionModel reflection_model;
+    const auto trusted_reflection = reflection_model.evaluate(
+        {Belief{"stable-fact", true, 0.95, 3, 1, false}}, {}, 0.0, 1.0, 0);
+    const auto disputed_reflection = reflection_model.evaluate(
+        {Belief{"disputed-fact", true, 0.95, 3, 1, true}}, {}, 0.0, 1.0, 0);
+    assert(disputed_reflection.uncertainty > trusted_reflection.uncertainty);
+    assert(disputed_reflection.uncertainty == 1.0);
+
     const auto path = std::filesystem::temp_directory_path() / "jarvis_developmental_brain_integration.bin";
     std::error_code ec;
     std::filesystem::remove(path, ec);
