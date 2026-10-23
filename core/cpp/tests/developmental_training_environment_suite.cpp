@@ -4,6 +4,8 @@
 #include <chrono>
 #include <cstdint>
 #include <filesystem>
+#include <iostream>
+#include <iomanip>
 #include <string>
 #include <thread>
 #include <vector>
@@ -109,6 +111,22 @@ int main() {
             assert(result.status == CognitiveCycleStatus::completed);
             assert(!result.context.plan.steps.empty());
             episode_actions.push_back(result.context.plan.steps.front().action.name);
+            std::cout << "[experience] episode=" << episode
+                      << " context=" << input.developmental_context
+                      << " selected=" << episode_actions.back();
+            if (result.context.action_execution_results.empty()) {
+                std::cout << " outcome=none";
+            } else {
+                for (const auto& execution : result.context.action_execution_results) {
+                    std::cout << " | " << execution.action.name
+                              << " status=" << static_cast<int>(execution.status)
+                              << " observed=" << std::boolalpha << execution.outcome.observed;
+                    if (execution.outcome.observed) {
+                        std::cout << " consequence=" << execution.outcome.actual_consequence;
+                    }
+                }
+            }
+            std::cout << '\\n';
 
             if (episode == 0) {
                 assert(runtime.running());
@@ -154,6 +172,17 @@ int main() {
             assert(result.status == CognitiveCycleStatus::completed);
             assert(!result.context.plan.steps.empty());
             reversal_actions.push_back(result.context.plan.steps.front().action.name);
+            std::cout << "[contradiction] episode=" << current_episode
+                      << " context=" << current_context
+                      << " selected=" << reversal_actions.back();
+            for (const auto& execution : result.context.action_execution_results) {
+                std::cout << " | " << execution.action.name
+                          << " observed=" << std::boolalpha << execution.outcome.observed;
+                if (execution.outcome.observed) {
+                    std::cout << " consequence=" << execution.outcome.actual_consequence;
+                }
+            }
+            std::cout << '\\n';
             assert(!result.context.action_execution_results.empty());
             bool consequence_observed = false;
             for (const auto& execution : result.context.action_execution_results) {
@@ -199,6 +228,12 @@ int main() {
         assert(revised_variant_good_route);
         assert(learned_variant_bad_route);
         assert(!brain.memory().by_kind("action_outcome").empty());
+        std::cout << "[learned-state] route-selection good-route="
+                  << brain.developmental_best_strategy("navigation/route-selection")->value
+                  << " route-variant bad-route="
+                  << brain.developmental_best_strategy("navigation/route-variant")->value
+                  << " action_outcomes=" << brain.memory().by_kind("action_outcome").size()
+                  << " processed_episodes=" << runtime.metrics().processed << '\\n';
     }
 
     // The second phase starts a fresh Brain from the same persistent journal.
@@ -235,6 +270,8 @@ int main() {
         assert(generalized.status == CognitiveCycleStatus::completed);
         assert(!generalized.context.plan.steps.empty());
         assert(generalized.context.plan.steps.front().action.name == "good-route");
+        std::cout << "[restart-probe] original=good-route revised=bad-route generalized=good-route"
+                  << " restored_events=" << restored.memory().all().size() << '\\n';
 
         // Transfer must remain bounded: navigation experience must not dictate
         // a choice in an unrelated task where the candidates are otherwise tied.
