@@ -174,7 +174,14 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     const auto disputed_relations = brain_.world().disputed_relations();
     std::size_t disputed_beliefs = 0;
     for (auto& belief : result.context.beliefs) {
-        belief.disputed = std::any_of(disputed_facts.begin(), disputed_facts.end(), [&](const Fact& fact) { return fact.predicate == belief.key && fact.disputed; });
+        // The belief store may already mark a conflict that is not represented
+        // as a predicate in the current world-model fact set. Merge evidence
+        // from both sources instead of erasing that conflict during reasoning.
+        belief.disputed = belief.disputed ||
+            std::any_of(disputed_facts.begin(), disputed_facts.end(),
+                [&](const Fact& fact) {
+                    return fact.predicate == belief.key && fact.disputed;
+                });
         if (belief.disputed) ++disputed_beliefs;
     }
     ReasoningProblem problem{result.context.beliefs, result.context.causal_links, input.reasoning_steps};
