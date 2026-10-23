@@ -2,6 +2,7 @@
 
 #include "event.hpp"
 
+#include <cmath>
 #include <cstdint>
 #include <functional>
 #include <optional>
