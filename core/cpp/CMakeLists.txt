@@ -82,7 +82,7 @@ if(BUILD_TESTING)
     include(${CMAKE_CURRENT_SOURCE_DIR}/tests/affective_planning.cmake)
 endif()
 
-option(JARVIS_BUILD_EXAMPLES "Build runnable JARVIS examples" OFF)
+option(JARVIS_BUILD_EXAMPLES "Build runnable JARVIS examples" ON)
 if(JARVIS_BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif()
