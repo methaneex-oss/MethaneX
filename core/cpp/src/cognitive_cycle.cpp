@@ -122,7 +122,10 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     // Normalize the incoming experience once at the cycle boundary so every
     // downstream mechanism can share a structured, evidence-linked view while
     // retaining the original event for durable memory and replay.
-    result.context.representation = RepresentationEngine{}.normalize(input.observation);
+    result.context.representation = perception_pipeline_.process(
+        PerceptionInput{input.observation.timestamp_ns, input.observation.source,
+                        input.observation.kind, input.observation.data},
+        PerceptionContext{input.observation.sequence, {}, {}});
     result.context.observation = brain_.observe(input.observation);
     result.context.beliefs = brain_.beliefs();
     result.context.causal_links = brain_.causal_links();
