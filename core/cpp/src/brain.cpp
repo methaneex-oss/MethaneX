@@ -644,6 +644,13 @@ void Brain::replay(const Event& event, bool external_observation) {
             if (key == "_external_observation" || key == "novelty" || key == "salience" || key == "urgency" ||
                 key == "prediction_error" || key == "outcome" || key == "confidence")
                 continue;
+            // The developmental environment adds these fields to describe the
+            // episode, not the world state. Keep them in episodic memory for
+            // traceability, but do not turn them into beliefs or causal facts.
+            if (event.source == "developmental_environment" &&
+                event.kind == "observation" &&
+                (key == "task" || key == "context" || key == "world_step"))
+                continue;
             facts.emplace_back(key, value);
         }
     }
