@@ -354,7 +354,8 @@ void Brain::replay(const Event& event) {
         !valid_action_outcome_event(event)) return;
 
     if (event.kind == "affective_learning" &&
-        !valid_affective_learning_event(event)) return;
+        (!valid_affective_learning_event(event) ||
+         !valid_affective_learning_source(event))) return;
 
     process_affective_experience(event);
     if (event.kind == "goal_create") { const auto* id = string_value(event.data, "id"); const auto* description = string_value(event.data, "description"); if (id == nullptr || description == nullptr) return; Goal goal{*id, *description, double_value(event.data, "priority"), double_value(event.data, "progress"), event.sequence, integer_value(event.data, "deadline_cycle"), goal_status_value(static_cast<std::int64_t>(integer_value(event.data, "status"))), string_value(event.data, "prerequisites") ? split_ids(*string_value(event.data, "prerequisites")) : std::vector<std::string>{}, string_value(event.data, "subgoals") ? split_ids(*string_value(event.data, "subgoals")) : std::vector<std::string>{}}; goals_model_.create(std::move(goal)); return; }
@@ -734,7 +735,8 @@ Observation Brain::observe(Event event) {
     if (event.kind == "action_outcome" &&
         !valid_action_outcome_event(event)) return Observation{};
     if (event.kind == "affective_learning" &&
-        !valid_affective_learning_event(event)) return Observation{};
+        (!valid_affective_learning_event(event) ||
+         !valid_affective_learning_source(event))) return Observation{};
     event.timestamp_ns = event.timestamp_ns == 0 ? now_ns() : event.timestamp_ns;
     const auto previous = memory_.recent(1);
     const double novelty = compute_novelty(event, previous);
