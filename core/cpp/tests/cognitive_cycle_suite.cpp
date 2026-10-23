@@ -407,6 +407,38 @@ int main() {
     std::filesystem::remove(context_journal, ec);
     std::filesystem::remove(context_journal.string() + ".meta", ec);
 
+    // Perceptual confidence is part of the evidence used by planning.
+    // A low-confidence interpretation must raise decision uncertainty rather
+    // than remain a display-only property of the representation.
+    const auto perception_confidence_journal =
+        std::filesystem::temp_directory_path() / "jarvis_cognitive_perception_confidence_suite.bin";
+    std::filesystem::remove(perception_confidence_journal, ec);
+    std::filesystem::remove(perception_confidence_journal.string() + ".meta", ec);
+    {
+        Brain perception_brain(perception_confidence_journal);
+        Goal perception_goal;
+        perception_goal.id = "interpret-observation";
+        perception_goal.description = "Interpret uncertain sensory evidence";
+        perception_goal.priority = 1.0;
+        assert(perception_brain.create_goal(perception_goal));
+        assert(perception_brain.activate_goal(perception_goal.id));
+
+        CognitiveCycleInput perception_input;
+        perception_input.observation = Event{0, 0, "sensor", "observation",
+            {{"reading", 17.0}, {"confidence", 0.1}}};
+        perception_input.candidate_actions = {
+            CandidateAction{"inspect", 0.6, 0.5, 0.1, 0.2},
+        };
+        perception_input.goal_id = perception_goal.id;
+        perception_input.planning_horizon = 1;
+        const auto perception_result = CognitiveCycle(perception_brain).run(perception_input);
+        assert(perception_result.status == CognitiveCycleStatus::completed);
+        assert(std::abs(perception_result.context.representation.confidence - 0.1) < 1e-12);
+        assert(perception_result.context.decision_context.uncertainty >= 0.9);
+    }
+    std::filesystem::remove(perception_confidence_journal, ec);
+    std::filesystem::remove(perception_confidence_journal.string() + ".meta", ec);
+
     std::filesystem::remove(dispute_journal, ec);
     std::filesystem::remove(dispute_journal.string() + ".meta", ec);
     std::filesystem::remove(journal, ec);
