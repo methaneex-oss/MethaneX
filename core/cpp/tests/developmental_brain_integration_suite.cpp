@@ -739,6 +739,20 @@ int main() {
         assert(malformed_observed.event.sequence == 0);
         assert(guarded.developmental_strategies().empty());
         assert(guarded.self_model().capability("malformed-observation-action") == nullptr);
+
+        // An outcome with no context identity must not update affect or learning
+        // state before the action-specific replay handler rejects it.
+        const auto missing_context = guarded.observe(Event{
+            0, 0, "malformed-test", "action_outcome",
+            {{"action", std::string("missing-context-action")},
+             {"observed", true},
+             {"actual_consequence", 1.0},
+             {"consequence_error", 0.0},
+             {"status", static_cast<std::int64_t>(ActionExecutionStatus::verified)},
+             {"reliability", 1.0}}});
+        assert(missing_context.event.sequence == 0);
+        assert(guarded.developmental_strategies().empty());
+        assert(guarded.self_model().capability("missing-context-action") == nullptr);
     }
     {
         Brain restored_guarded(malformed_path);
