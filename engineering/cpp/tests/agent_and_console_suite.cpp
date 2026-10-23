@@ -39,7 +39,15 @@ int main(){Builder builder; EngineeringCoordinator c; DirectExecutionBoundary bo
         assert(record->result_revision == "rev-2");
     }
     std::filesystem::remove(task_journal, task_ec);
-AgentMessageBus bus; EngineeringOperatorConsole console(bus,"operator","run-1","workspace-1",[](const std::string&s,const std::string&r,AgentMessageType t){return s=="operator"&&r=="builder"&&t==AgentMessageType::request;}); AgentCommunicationEndpoint peer(bus,"builder","run-1","workspace-1"); assert(console.connected()&&peer.registered()); auto sent=console.send({"m1","task-1","builder",AgentMessageType::request,"inspect and build"}); assert(sent.accepted); auto incoming=peer.drain(); assert(incoming.size()==1&&incoming.front().sender_id=="operator"); auto reply=peer.send("m2","operator","task-1",AgentMessageType::result,"build complete"); assert(reply.accepted); auto received=console.receive(); assert(received.size()==1&&received.front().sender_id=="builder");
+AgentMessageBus bus; EngineeringOperatorConsole console(bus,"operator","run-1","workspace-1",[](const std::string&s,const std::string&r,AgentMessageType t){return s=="operator"&&r=="builder"&&t==AgentMessageType::request;}); AgentCommunicationEndpoint peer(bus,"builder","run-1","workspace-1"); assert(console.connected()&&peer.registered()); auto sent=console.send({"m1","task-1","builder",AgentMessageType::request,"inspect and build"}); assert(sent.accepted);
+    // Retrying a message after an uncertain acknowledgement must not enqueue it twice.
+    auto duplicate=console.send({"m1","task-1","builder",AgentMessageType::request,"inspect and build"});
+    assert(duplicate.accepted&&duplicate.sequence==sent.sequence);
+    auto conflicting_duplicate=console.send({"m1","task-1","builder",AgentMessageType::request,"different payload"});
+    assert(!conflicting_duplicate.accepted);
+    auto incoming=peer.drain(); assert(incoming.size()==1&&incoming.front().sender_id=="operator");
+    auto duplicate_after_drain=console.send({"m1","task-1","builder",AgentMessageType::request,"inspect and build"});
+    assert(duplicate_after_drain.accepted&&peer.pending()==0); auto reply=peer.send("m2","operator","task-1",AgentMessageType::result,"build complete"); assert(reply.accepted); auto received=console.receive(); assert(received.size()==1&&received.front().sender_id=="builder");
     // Bounded queues apply backpressure instead of silently evicting earlier
     // work. A rejected message remains the sender's responsibility to retry.
     AgentCommunicationEndpoint bounded(bus,"bounded","run-1","workspace-1",1);
@@ -52,8 +60,14 @@ AgentMessageBus bus; EngineeringOperatorConsole console(bus,"operator","run-1","
     assert(overflow.reason.find("backpressure")!=std::string::npos);
     auto preserved=bounded.drain();
     assert(preserved.size()==1&&preserved.front().message_id=="m3");
+    // Rejected messages are not marked as delivered; the same ID can be retried
+    // after the receiver drains its queue.
+    auto retry_overflow=bounded_sender.send("m4","bounded","task-3",AgentMessageType::request,"second");
+    assert(retry_overflow.accepted);
+    auto recovered=bounded.drain();
+    assert(recovered.size()==1&&recovered.front().message_id=="m4");
     auto after_drain=bounded_sender.send("m5","bounded","task-4",AgentMessageType::request,"third");
     assert(after_drain.accepted);
-    auto recovered=bounded.drain();
-    assert(recovered.size()==1&&recovered.front().message_id=="m5");
+    auto final_message=bounded.drain();
+    assert(final_message.size()==1&&final_message.front().message_id=="m5");
     return 0; }
