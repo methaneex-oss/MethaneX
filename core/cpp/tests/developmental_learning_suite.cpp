@@ -164,10 +164,10 @@ int main() {
     const auto* uncertain_strategy = uncertain_evidence.best_strategy("robot arm");
     assert(reliable_strategy != nullptr);
     assert(uncertain_strategy != nullptr);
-    // Reliability changes the update magnitude from the first observation,
-    // as well as confidence. Equally positive outcomes with weaker evidence
-    // must not initialize the strategy to the same learned value.
-    assert(reliable_strategy->value > uncertain_strategy->value);
+    // The first observed outcome remains an unbiased target. Reliability
+    // changes confidence, which controls downstream influence; later evidence
+    // updates the value using the reliability-weighted learning rate.
+    assert(std::abs(reliable_strategy->value - uncertain_strategy->value) < 1e-12);
     assert(reliable_strategy->confidence > uncertain_strategy->confidence);
     assert(reliable_strategy->value * reliable_strategy->confidence >
            uncertain_strategy->value * uncertain_strategy->confidence);
