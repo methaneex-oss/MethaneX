@@ -10,15 +10,16 @@ AgentMessageBus bus; EngineeringOperatorConsole console(bus,"operator","run-1","
     // Bounded queues apply backpressure instead of silently evicting earlier
     // work. A rejected message remains the sender's responsibility to retry.
     AgentCommunicationEndpoint bounded(bus,"bounded","run-1","workspace-1",1);
-    assert(bounded.registered());
-    auto first=console.send({"m3","task-2","bounded",AgentMessageType::request,"first"});
+    AgentCommunicationEndpoint bounded_sender(bus,"bounded-sender","run-1","workspace-1");
+    assert(bounded.registered()&&bounded_sender.registered());
+    auto first=bounded_sender.send("m3","bounded","task-2",AgentMessageType::request,"first");
     assert(first.accepted);
-    auto overflow=console.send({"m4","task-3","bounded",AgentMessageType::request,"second"});
+    auto overflow=bounded_sender.send("m4","bounded","task-3",AgentMessageType::request,"second");
     assert(!overflow.accepted);
     assert(overflow.reason.find("backpressure")!=std::string::npos);
     auto preserved=bounded.drain();
     assert(preserved.size()==1&&preserved.front().message_id=="m3");
-    auto after_drain=console.send({"m5","task-4","bounded",AgentMessageType::request,"third"});
+    auto after_drain=bounded_sender.send("m5","bounded","task-4",AgentMessageType::request,"third");
     assert(after_drain.accepted);
     auto recovered=bounded.drain();
     assert(recovered.size()==1&&recovered.front().message_id=="m5");
