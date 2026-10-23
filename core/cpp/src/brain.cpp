@@ -217,7 +217,7 @@ void Brain::consolidate_experience(const Event& event, double error) {
     salience = std::max(std::clamp(salience, 0.0, 1.0), affective_significance);
     memory_.consolidate(event.sequence, salience, novelty, error, std::clamp(confidence, 0.0, 1.0));
 }
-void Brain::process_affective_experience(const Event& event) {
+void Brain::process_affective_experience(const Event& event, bool external_observation) {
     if (const auto it = event.data.find("affective_relevant");
         it != event.data.end() && std::get_if<bool>(&it->second) != nullptr &&
         !*std::get_if<bool>(&it->second)) return;
@@ -357,7 +357,7 @@ void Brain::replay(const Event& event, bool external_observation) {
         (!valid_affective_learning_event(event) ||
          !valid_affective_learning_source(event))) return;
 
-    process_affective_experience(event);
+    process_affective_experience(event, external_observation);
     if (event.kind == "goal_create") { const auto* id = string_value(event.data, "id"); const auto* description = string_value(event.data, "description"); if (id == nullptr || description == nullptr) return; Goal goal{*id, *description, double_value(event.data, "priority"), double_value(event.data, "progress"), event.sequence, integer_value(event.data, "deadline_cycle"), goal_status_value(static_cast<std::int64_t>(integer_value(event.data, "status"))), string_value(event.data, "prerequisites") ? split_ids(*string_value(event.data, "prerequisites")) : std::vector<std::string>{}, string_value(event.data, "subgoals") ? split_ids(*string_value(event.data, "subgoals")) : std::vector<std::string>{}}; goals_model_.create(std::move(goal)); return; }
     if (event.kind == "goal_activate") { if (const auto* id = string_value(event.data, "id")) goals_model_.activate(*id); return; }
     if (event.kind == "goal_progress") { if (const auto* id = string_value(event.data, "id")) { const double progress = double_value(event.data, "progress"); if (progress < 1.0) goals_model_.update_progress(*id, progress); } return; }
