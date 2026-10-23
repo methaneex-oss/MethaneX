@@ -30,6 +30,8 @@ int main() {
     assert(!outage.executed);
     assert(!outage.observed);
     assert(!outage.consequence);
+    assert(std::get<std::string>(outage.state_before.at("route_condition")) == "clear");
+    assert(std::get<std::string>(outage.state_after.at("route_condition")) == "clear");
 
     const auto success = world.step("good-route");
     assert(success.executed && success.observed);
@@ -84,6 +86,8 @@ int main() {
     assert(neutral_but_observed.executed);
     assert(neutral_but_observed.observed);
     assert(neutral_but_observed.consequence && *neutral_but_observed.consequence == 0.0);
+    assert(std::get<std::string>(neutral_but_observed.state_before.at("gate_status")) == "closed");
+    assert(std::get<std::string>(neutral_but_observed.state_after.at("gate_status")) == "open");
     assert(std::get<std::string>(stateful_world.observe().data.at("gate_status")) == "open");
 
     const auto state_dependent_success = stateful_world.step("cross-gate");
@@ -93,6 +97,8 @@ int main() {
     assert(unknown_after_state_change.executed);
     assert(!unknown_after_state_change.observed);
     assert(!unknown_after_state_change.consequence);
+    assert(std::get<std::string>(unknown_after_state_change.state_before.at("gate_status")) == "open");
+    assert(std::get<std::string>(unknown_after_state_change.state_after.at("gate_status")) == "open");
 
     std::cout << "[world] observations=2 steps=" << world.step_count()
               << " outage=unobserved contradiction=observed\n";
