@@ -13,11 +13,15 @@
 using namespace jarvis::core;
 
 namespace {
-CognitiveCycleInput training_input(const std::string& goal_id, std::int64_t episode) {
+CognitiveCycleInput training_input(const std::string& goal_id, std::int64_t episode,
+                                   const std::string& route_condition = "clear") {
     CognitiveCycleInput input;
     input.observation = Event{0, 0, "training_environment", "observation",
                               {{"episode", episode},
-                               {"task", std::string("reach_destination")}}};
+                               {"task", std::string("reach_destination")},
+                               {"route_condition", route_condition},
+                               {"bridge_status", std::string(route_condition == "flooded" ? "closed" : "open")},
+                               {"visibility", std::string(route_condition == "flooded" ? "poor" : "clear")}}};
     // The environment offers both actions. It does not choose for the brain.
     // Keep the actions executable even after a negative strategy update.
     // Otherwise the action model can switch to "recommend" for every option,
@@ -64,6 +68,7 @@ int main() {
     // multiple actions, none can produce a real-world consequence in that episode.
     std::int64_t current_episode = -1;
     std::string current_context = "navigation/route-selection";
+    std::string current_route_condition = "clear";
     config.action_adapter.execute = [&](const CandidateAction& action) {
         executed_actions.push_back(action.name);
         if (current_episode == 0) return false;
@@ -76,7 +81,7 @@ int main() {
         // The brain is not told which route is now better; it must infer this
         // from the consequences of its own actions.
         const bool original_route_works = action.name == "good-route";
-        const bool route_works = current_context == "navigation/route-variant"
+        const bool route_works = current_route_condition == "flooded"
             ? !original_route_works : original_route_works;
         return route_works ? 1.0 : -1.0;
     };
@@ -98,7 +103,8 @@ int main() {
         constexpr std::int64_t episode_count = 8;
         for (std::int64_t episode = 0; episode < episode_count; ++episode) {
             current_episode = episode;
-            auto input = training_input(goal.id, episode);
+            current_route_condition = "clear";
+            auto input = training_input(goal.id, episode, current_route_condition);
             // A system-wide executor outage is infrastructure evidence, not
             // evidence that the selected route is intrinsically bad. Keep that
             // episode in its own context so it cannot poison route learning.
@@ -112,6 +118,7 @@ int main() {
             assert(!result.context.plan.steps.empty());
             episode_actions.push_back(result.context.plan.steps.front().action.name);
             std::cout << "[experience] episode=" << episode
+                      << " condition=" << current_route_condition
                       << " context=" << input.developmental_context
                       << " selected=" << episode_actions.back();
             if (result.context.action_execution_results.empty()) {
@@ -165,7 +172,8 @@ int main() {
         for (std::int64_t offset = 0; offset < reversal_episode_count; ++offset) {
             current_episode = episode_count + offset;
             current_context = "navigation/route-variant";
-            auto input = training_input(goal.id, current_episode);
+            current_route_condition = "flooded";
+            auto input = training_input(goal.id, current_episode, current_route_condition);
             input.developmental_context = current_context;
             assert(runtime.submit(input, 1.0));
             const auto result = await_result(runtime);
@@ -173,6 +181,7 @@ int main() {
             assert(!result.context.plan.steps.empty());
             reversal_actions.push_back(result.context.plan.steps.front().action.name);
             std::cout << "[contradiction] episode=" << current_episode
+                      << " condition=" << current_route_condition
                       << " context=" << current_context
                       << " selected=" << reversal_actions.back();
             for (const auto& execution : result.context.action_execution_results) {
@@ -255,7 +264,7 @@ int main() {
 
         // The exception learned from contradictory outcomes is context-specific
         // and survives replay: the route variant now prefers bad-route.
-        CognitiveCycleInput revised_probe = training_input(goal.id, 101);
+        CognitiveCycleInput revised_probe = training_input(goal.id, 101, "flooded");
         revised_probe.developmental_context = "navigation/route-variant";
         const auto revised = CognitiveCycle(restored).run(revised_probe);
         assert(revised.status == CognitiveCycleStatus::completed);
