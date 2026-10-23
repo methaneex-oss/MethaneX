@@ -53,13 +53,14 @@ public:
 
 private:
     bool load();
+    bool load_locked() const;
     bool append_record(const EngineeringTaskRecord& record);
     bool commit_record(EngineeringTaskRecord record);
     bool dependencies_completed(const EngineeringTask& task) const;
     std::filesystem::path journal_path_;
     mutable std::mutex mutex_;
-    std::unordered_map<std::string, EngineeringTaskRecord> records_;
-    bool ready_{true};
+    mutable std::unordered_map<std::string, EngineeringTaskRecord> records_;
+    mutable bool ready_{true};
 };
 
 } // namespace jarvis::engineering

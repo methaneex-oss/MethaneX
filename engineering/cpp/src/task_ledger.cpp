@@ -8,9 +8,76 @@
 #include <limits>
 #include <sstream>
 #include <system_error>
+#ifdef _WIN32
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#include <windows.h>
+#else
+#include <fcntl.h>
+#include <sys/file.h>
+#include <unistd.h>
+#endif
 
 namespace jarvis::engineering {
 namespace {
+
+class JournalFileLock {
+public:
+    explicit JournalFileLock(const std::filesystem::path& journal_path) {
+        auto lock_path = journal_path;
+        lock_path += ".lock";
+#ifdef _WIN32
+        handle_ = CreateFileW(lock_path.c_str(), GENERIC_READ | GENERIC_WRITE,
+                              FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr,
+                              OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+        if (handle_ == INVALID_HANDLE_VALUE) return;
+        if (LockFileEx(handle_, LOCKFILE_EXCLUSIVE_LOCK, 0, MAXDWORD, MAXDWORD,
+                       &overlapped_) != 0) {
+            locked_ = true;
+        } else {
+            CloseHandle(handle_);
+            handle_ = INVALID_HANDLE_VALUE;
+        }
+#else
+        descriptor_ = ::open(lock_path.c_str(), O_CREAT | O_RDWR, 0600);
+        if (descriptor_ < 0) return;
+        if (::flock(descriptor_, LOCK_EX) == 0) {
+            locked_ = true;
+        } else {
+            ::close(descriptor_);
+            descriptor_ = -1;
+        }
+#endif
+    }
+
+    ~JournalFileLock() {
+#ifdef _WIN32
+        if (handle_ != INVALID_HANDLE_VALUE) {
+            if (locked_) UnlockFileEx(handle_, 0, MAXDWORD, MAXDWORD, &overlapped_);
+            CloseHandle(handle_);
+        }
+#else
+        if (descriptor_ >= 0) {
+            if (locked_) ::flock(descriptor_, LOCK_UN);
+            ::close(descriptor_);
+        }
+#endif
+    }
+
+    JournalFileLock(const JournalFileLock&) = delete;
+    JournalFileLock& operator=(const JournalFileLock&) = delete;
+    bool locked() const noexcept { return locked_; }
+
+private:
+#ifdef _WIN32
+    HANDLE handle_{INVALID_HANDLE_VALUE};
+    OVERLAPPED overlapped_{};
+#else
+    int descriptor_{-1};
+#endif
+    bool locked_{false};
+};
 
 std::string hex_encode(const std::string& value) {
     static constexpr char digits[] = "0123456789abcdef";
@@ -188,6 +255,12 @@ bool EngineeringTaskLedger::ready() const noexcept {
 }
 
 bool EngineeringTaskLedger::load() {
+    JournalFileLock file_lock(journal_path_);
+    return file_lock.locked() && load_locked();
+}
+
+bool EngineeringTaskLedger::load_locked() const {
+    records_.clear();
     std::ifstream input(journal_path_, std::ios::binary);
     if (!input) {
         std::error_code ec;
@@ -202,7 +275,7 @@ bool EngineeringTaskLedger::load() {
     std::size_t begin = 0;
     while (begin < contents.size()) {
         const auto end = contents.find('\n', begin);
-        if (end == std::string::npos) break; // ignore a torn final append
+        if (end == std::string::npos) break;
         const auto line = contents.substr(begin, end - begin);
         begin = end + 1;
         if (line.empty()) continue;
@@ -256,7 +329,11 @@ bool EngineeringTaskLedger::dependencies_completed(const EngineeringTask& task) 
 
 bool EngineeringTaskLedger::create(EngineeringTask task) {
     std::lock_guard lock(mutex_);
-    if (!ready_ || !valid_task(task) || records_.contains(task.id)) return false;
+    if (!ready_) return false;
+    JournalFileLock file_lock(journal_path_);
+    if (!file_lock.locked()) return false;
+    if (!load_locked()) { ready_ = false; return false; }
+    if (!valid_task(task) || records_.contains(task.id)) return false;
     std::vector<std::string> unique;
     for (const auto& dependency : task.dependencies) {
         if (dependency.empty() || dependency == task.id ||
@@ -272,6 +349,10 @@ bool EngineeringTaskLedger::create(EngineeringTask task) {
 bool EngineeringTaskLedger::claim(const std::string& id, std::uint64_t expected,
                                   const std::string& agent, const std::string& revision) {
     std::lock_guard lock(mutex_);
+    if (!ready_) return false;
+    JournalFileLock file_lock(journal_path_);
+    if (!file_lock.locked()) return false;
+    if (!load_locked()) { ready_ = false; return false; }
     auto it = records_.find(id);
     if (!ready_ || it == records_.end() || it->second.version != expected ||
         it->second.status != EngineeringTaskStatus::queued || agent.empty() ||
@@ -287,6 +368,10 @@ bool EngineeringTaskLedger::claim(const std::string& id, std::uint64_t expected,
 bool EngineeringTaskLedger::start(const std::string& id, std::uint64_t expected,
                                   const std::string& agent) {
     std::lock_guard lock(mutex_);
+    if (!ready_) return false;
+    JournalFileLock file_lock(journal_path_);
+    if (!file_lock.locked()) return false;
+    if (!load_locked()) { ready_ = false; return false; }
     auto it = records_.find(id);
     if (!ready_ || it == records_.end() || it->second.version != expected ||
         it->second.status != EngineeringTaskStatus::claimed ||
@@ -301,6 +386,10 @@ bool EngineeringTaskLedger::complete(const std::string& id, std::uint64_t expect
                                      const std::string& agent, const std::string& revision,
                                      std::vector<AgentEvidence> evidence, std::string detail) {
     std::lock_guard lock(mutex_);
+    if (!ready_) return false;
+    JournalFileLock file_lock(journal_path_);
+    if (!file_lock.locked()) return false;
+    if (!load_locked()) { ready_ = false; return false; }
     auto it = records_.find(id);
     if (!ready_ || it == records_.end() || it->second.version != expected ||
         it->second.status != EngineeringTaskStatus::running ||
@@ -318,6 +407,10 @@ bool EngineeringTaskLedger::fail(const std::string& id, std::uint64_t expected,
                                  const std::string& agent, std::string detail,
                                  std::vector<AgentEvidence> evidence) {
     std::lock_guard lock(mutex_);
+    if (!ready_) return false;
+    JournalFileLock file_lock(journal_path_);
+    if (!file_lock.locked()) return false;
+    if (!load_locked()) { ready_ = false; return false; }
     auto it = records_.find(id);
     if (!ready_ || it == records_.end() || it->second.version != expected ||
         (it->second.status != EngineeringTaskStatus::running &&
@@ -334,6 +427,10 @@ bool EngineeringTaskLedger::fail(const std::string& id, std::uint64_t expected,
 bool EngineeringTaskLedger::block(const std::string& id, std::uint64_t expected,
                                   const std::string& agent, std::string detail) {
     std::lock_guard lock(mutex_);
+    if (!ready_) return false;
+    JournalFileLock file_lock(journal_path_);
+    if (!file_lock.locked()) return false;
+    if (!load_locked()) { ready_ = false; return false; }
     auto it = records_.find(id);
     if (!ready_ || it == records_.end() || it->second.version != expected ||
         (it->second.status != EngineeringTaskStatus::running &&
@@ -349,6 +446,10 @@ bool EngineeringTaskLedger::block(const std::string& id, std::uint64_t expected,
 bool EngineeringTaskLedger::requeue(const std::string& id, std::uint64_t expected,
                                     const std::string& actor, std::string detail) {
     std::lock_guard lock(mutex_);
+    if (!ready_) return false;
+    JournalFileLock file_lock(journal_path_);
+    if (!file_lock.locked()) return false;
+    if (!load_locked()) { ready_ = false; return false; }
     auto it = records_.find(id);
     if (!ready_ || it == records_.end() || it->second.version != expected ||
         (it->second.status != EngineeringTaskStatus::blocked &&
@@ -365,6 +466,10 @@ bool EngineeringTaskLedger::requeue(const std::string& id, std::uint64_t expecte
 
 std::optional<EngineeringTaskRecord> EngineeringTaskLedger::get(const std::string& id) const {
     std::lock_guard lock(mutex_);
+    if (!ready_) return std::nullopt;
+    JournalFileLock file_lock(journal_path_);
+    if (!file_lock.locked()) return std::nullopt;
+    if (!load_locked()) { ready_ = false; return std::nullopt; }
     const auto it = records_.find(id);
     if (it == records_.end()) return std::nullopt;
     return it->second;
@@ -372,6 +477,10 @@ std::optional<EngineeringTaskRecord> EngineeringTaskLedger::get(const std::strin
 
 std::vector<EngineeringTaskRecord> EngineeringTaskLedger::list() const {
     std::lock_guard lock(mutex_);
+    if (!ready_) return {};
+    JournalFileLock file_lock(journal_path_);
+    if (!file_lock.locked()) return {};
+    if (!load_locked()) { ready_ = false; return {}; }
     std::vector<EngineeringTaskRecord> out;
     out.reserve(records_.size());
     for (const auto& item : records_) out.push_back(item.second);

@@ -65,5 +65,35 @@ int main() {
         assert(recovered.get("implement")->version == 6);
     }
     std::filesystem::remove(path, ec);
+
+    // Independently constructed agent processes can hold stale local snapshots.
+    // Mutations must refresh under a shared journal lock before compare-and-swap.
+    const auto shared_path =
+        std::filesystem::temp_directory_path() / "engineering_task_ledger_shared.log";
+    std::filesystem::remove(shared_path, ec);
+    std::filesystem::remove(shared_path.string() + ".lock", ec);
+    {
+        EngineeringTaskLedger coordinator(shared_path);
+        EngineeringTask shared_task{"shared-task", "coordinate a shared task", {"review"},
+            {"repo.read"}, {"source"}, {"report"}, AgentRisk::low, 1.0};
+        assert(coordinator.create(shared_task));
+        EngineeringTaskLedger peer(shared_path);
+        assert(peer.get("shared-task")->version == 1);
+
+        assert(coordinator.claim("shared-task", 1, "agent-a", "rev-1"));
+        assert(!peer.claim("shared-task", 1, "agent-b", "rev-1"));
+        const auto peer_view = peer.get("shared-task");
+        assert(peer_view && peer_view->version == 2);
+        assert(peer_view->status == EngineeringTaskStatus::claimed);
+        assert(peer_view->assigned_agent_id == "agent-a");
+
+        EngineeringTask new_task{"visible-task", "share newly created task", {"review"},
+            {"repo.read"}, {"source"}, {"report"}, AgentRisk::low, 1.0};
+        assert(coordinator.create(new_task));
+        assert(peer.get("visible-task").has_value());
+        assert(peer.list().size() == 2);
+    }
+    std::filesystem::remove(shared_path, ec);
+    std::filesystem::remove(shared_path.string() + ".lock", ec);
     return 0;
 }
