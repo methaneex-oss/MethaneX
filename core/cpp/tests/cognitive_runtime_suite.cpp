@@ -7,10 +7,34 @@
 #include <filesystem>
 #include <string>
 #include <thread>
+#include <memory>
 
 using namespace jarvis::core;
 
 namespace {
+class RuntimePerceptionProvider final : public PerceptionProvider {
+public:
+    bool supports(const PerceptionInput& input) const noexcept override {
+        return input.source == "runtime";
+    }
+
+    PerceptualRepresentation perceive(const PerceptionInput& input,
+                                      const PerceptionContext& context) const override {
+        PerceptualRepresentation result;
+        result.sequence = context.sequence;
+        result.modality = Modality::sensor;
+        result.confidence = 0.95;
+        SemanticNode node;
+        node.id = "runtime-perception";
+        node.kind = RepresentationKind::concept_node;
+        node.label = "runtime-provider-active";
+        node.confidence = 0.95;
+        node.evidence.push_back(EvidenceSpan{input.source, context.sequence, 0.95});
+        result.nodes.push_back(std::move(node));
+        return result;
+    }
+};
+
 CognitiveCycleInput make_input(const std::string& goal_id, std::int64_t value) {
     CognitiveCycleInput input;
     input.observation = Event{0, 0, "runtime", "observation", {{"value", value}}};
@@ -67,6 +91,7 @@ int main() {
     config.feedback_capacity = 64;
     config.drain_on_stop = true;
     config.action_adapter.authorization.maximum_risk = 1.0;
+    config.perception_providers.push_back(std::make_shared<RuntimePerceptionProvider>());
     config.action_adapter.execute = [&](const CandidateAction&) { ++executed; return true; };
     config.action_adapter.verify = [&](const CandidateAction&) { ++verified; return true; };
 
@@ -85,6 +110,8 @@ int main() {
         if (!action_result.has_value()) std::this_thread::sleep_for(std::chrono::milliseconds(2));
     }
     assert(action_result.has_value());
+    assert(action_result->context.representation.nodes.size() == 1);
+    assert(action_result->context.representation.nodes.front().label == "runtime-provider-active");
     assert(!action_result->context.action_assessments.empty());
     assert(!action_result->context.action_execution_results.empty());
     assert(action_result->context.action_execution_results.size() <= action_result->context.action_assessments.size());
