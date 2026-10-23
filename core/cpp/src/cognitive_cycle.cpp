@@ -187,7 +187,18 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     ReasoningProblem problem{result.context.beliefs, result.context.causal_links, input.reasoning_steps};
     result.context.reasoning = ReasoningEngine{}.solve(problem);
     if (!result.context.causal_links.empty()) {
-        const auto simulation = brain_.simulate(result.context.beliefs, input.planning_horizon);
+        // Feed supported deductions into forward simulation. Keeping reasoning
+        // as a display-only side result would leave the causal predictor and
+        // planner blind to conclusions already derived from current evidence.
+        // Contradictory reasoning has no trusted conclusions, so fall back to
+        // the observed belief set rather than simulating from an empty premise.
+        const auto& simulation_assumptions =
+            result.context.reasoning.valid &&
+                    !result.context.reasoning.conclusions.empty()
+                ? result.context.reasoning.conclusions
+                : result.context.beliefs;
+        const auto simulation = brain_.simulate(
+            simulation_assumptions, input.planning_horizon);
         result.context.predictions.reserve(simulation.predictions.size());
         for (const auto& projected : simulation.predictions) {
             if (projected.key.empty()) continue;
