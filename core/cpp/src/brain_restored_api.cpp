@@ -175,7 +175,13 @@ bool Brain::assimilate_goal_outcome(const GoalOutcomeEvidence& raw_evidence) {
     if (evidence.goal_id.empty()) return false;
     std::unique_lock lock(mutex_);
     const auto* current = goals_model_.get(evidence.goal_id);
-    if (current == nullptr) return false;
+    if (current == nullptr || current->status == GoalStatus::completed ||
+        current->status == GoalStatus::abandoned) {
+        // Terminal goals cannot assimilate progress updates. Reject before
+        // journaling so asynchronous feedback reports an actual failure instead
+        // of counting a no-op as a successful learning update.
+        return false;
+    }
     evidence.progress_before = std::clamp(current->progress, 0.0, 1.0);
     evidence.normalize();
     evidence.completed = evidence.completed || evidence.progress_after >= 1.0;
