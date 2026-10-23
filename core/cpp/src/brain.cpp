@@ -641,7 +641,7 @@ void Brain::replay(const Event& event, bool external_observation) {
     } else {
         for (const auto& [key, value] : event.data) {
             // Appraisal metadata describes an experience; it is not a world fact.
-            if (key == "novelty" || key == "salience" || key == "urgency" ||
+            if (key == "_external_observation" || key == "novelty" || key == "salience" || key == "urgency" ||
                 key == "prediction_error" || key == "outcome" || key == "confidence")
                 continue;
             facts.emplace_back(key, value);
@@ -710,7 +710,7 @@ void Brain::replay(const Event& event, bool external_observation) {
             std::size_t relevant_count = 0;
             for (const auto& [key, value] : event.data) {
                 (void)value;
-                if (key == "novelty" || key == "salience" || key == "urgency" ||
+                if (key == "_external_observation" || key == "novelty" || key == "salience" || key == "urgency" ||
                     key == "prediction_error" || key == "outcome" || key == "health" ||
                     key == "subject" || key == "predicate" || key == "object") continue;
                 const auto belief = beliefs_.find(key);
