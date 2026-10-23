@@ -1,6 +1,7 @@
 #include "jarvis/core/reflection.hpp"
 
 #include <algorithm>
+#include <cstddef>
 #include <cmath>
 
 namespace jarvis::core {
@@ -13,9 +14,20 @@ Reflection ReflectionModel::evaluate(const std::vector<Belief>& beliefs,
     Reflection result{};
     if (!beliefs.empty()) {
         double confidence = 0.0;
-        for (const auto& belief : beliefs) confidence += belief.confidence;
+        std::size_t disputed_count = 0;
+        for (const auto& belief : beliefs) {
+            confidence += std::clamp(
+                std::isfinite(belief.confidence) ? belief.confidence : 0.0,
+                0.0, 1.0);
+            if (belief.disputed) ++disputed_count;
+        }
         confidence /= static_cast<double>(beliefs.size());
-        result.uncertainty = 1.0 - confidence;
+        // A disputed belief can retain high confidence in its latest value,
+        // but that confidence must not hide unresolved counter-evidence from
+        // reflection. Keep confidence and contradiction as separate signals.
+        const double contradiction_pressure =
+            static_cast<double>(disputed_count) / static_cast<double>(beliefs.size());
+        result.uncertainty = std::max(1.0 - confidence, contradiction_pressure);
     }
 
     std::size_t resolved = 0;
