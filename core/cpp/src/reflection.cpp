@@ -28,6 +28,10 @@ Reflection ReflectionModel::evaluate(const std::vector<Belief>& beliefs,
         const double contradiction_pressure =
             static_cast<double>(disputed_count) / static_cast<double>(beliefs.size());
         result.uncertainty = std::max(1.0 - confidence, contradiction_pressure);
+    } else {
+        // No stored beliefs means the world model has no grounded belief
+        // evidence yet; an empty model is not the same as a certain model.
+        result.uncertainty = 1.0;
     }
 
     std::size_t resolved = 0;
