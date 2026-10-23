@@ -374,7 +374,7 @@ int main() {
         const auto contextual_outcomes = experienced.memory().recall_ranked(
             {{"action", Scalar{std::string("sensor-adaptation-action")}},
              {"context", Scalar{std::string("featureful-episodic-context")}}},
-            1, "action_outcome");
+            1, "action_outcome", true);
         assert(contextual_outcomes.size() == 1);
         assert(contextual_outcomes.front().event.data.at("context") ==
                Scalar{std::string("featureful-episodic-context")});
