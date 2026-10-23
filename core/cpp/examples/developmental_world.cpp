@@ -1,9 +1,11 @@
 #include "jarvis/core/cognitive_runtime.hpp"
 
 #include <chrono>
+#include <cstdint>
 #include <filesystem>
 #include <iostream>
 #include <string>
+#include <stdexcept>
 #include <thread>
 
 using namespace jarvis::core;
