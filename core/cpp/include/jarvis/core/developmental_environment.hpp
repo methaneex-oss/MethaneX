@@ -23,6 +23,9 @@ struct DevelopmentalStepResult {
     bool executed{false};
     bool observed{false};
     std::optional<double> consequence;
+    // Snapshot the world around the action so a trial can be audited/replayed.
+    Attributes state_before;
+    Attributes state_after;
     std::uint64_t step{0};
 };
 
@@ -57,6 +60,8 @@ public:
         DevelopmentalStepResult result;
         result.action = action;
         result.executed = execution_succeeded;
+        result.state_before = state_;
+        result.state_after = state_;
         result.step = ++step_;
 
         // An execution failure is not evidence about the action's consequence.
@@ -68,6 +73,7 @@ public:
         result.observed = true;
         result.consequence = transition->consequence;
         if (transition->next_state) state_ = *transition->next_state;
+        result.state_after = state_;
         return result;
     }
 
