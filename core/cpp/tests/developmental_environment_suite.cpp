@@ -61,6 +61,39 @@ int main() {
     assert(!unknown.consequence);
     assert(world.step_count() == 6);
 
+    // Exercise a state-changing action, not only externally injected changes.
+    // A measured neutral consequence (0.0) is still observed evidence; an
+    // unsupported action remains unknown and must not be conflated with neutral.
+    DevelopmentalEnvironment stateful_world(
+        "operate_gate", "facility/access",
+        {{"gate_status", std::string("closed")}},
+        [](const std::string& action, const Attributes& state)
+            -> std::optional<DevelopmentalTransition> {
+            if (action == "open-gate") {
+                return DevelopmentalTransition{
+                    0.0, Attributes{{"gate_status", std::string("open")}}};
+            }
+            if (action == "cross-gate") {
+                const bool open = std::get<std::string>(state.at("gate_status")) == "open";
+                return DevelopmentalTransition{open ? 1.0 : -1.0, std::nullopt};
+            }
+            return std::nullopt;
+        });
+
+    const auto neutral_but_observed = stateful_world.step("open-gate");
+    assert(neutral_but_observed.executed);
+    assert(neutral_but_observed.observed);
+    assert(neutral_but_observed.consequence && *neutral_but_observed.consequence == 0.0);
+    assert(std::get<std::string>(stateful_world.observe().data.at("gate_status")) == "open");
+
+    const auto state_dependent_success = stateful_world.step("cross-gate");
+    assert(state_dependent_success.observed && state_dependent_success.consequence);
+    assert(*state_dependent_success.consequence == 1.0);
+    const auto unknown_after_state_change = stateful_world.step("unknown-gate-action");
+    assert(unknown_after_state_change.executed);
+    assert(!unknown_after_state_change.observed);
+    assert(!unknown_after_state_change.consequence);
+
     std::cout << "[world] observations=2 steps=" << world.step_count()
               << " outage=unobserved contradiction=observed\n";
     return 0;
