@@ -176,10 +176,8 @@ int main() {
     std::filesystem::remove(competence_journal, ec);
     std::filesystem::remove(competence_journal.string() + ".meta", ec);
     // Intent selection is part of the integrated cognitive cycle, not only a
-    // workspace display. When no goal is specified by the caller, learned
-    // progress momentum can select an active objective that differs from the
-    // goal model's priority/order fallback; strategy appraisal then influences
-    // the planning context for that same objective.
+    // workspace display. With no caller-selected goal, intent appraisal may
+    // choose a lower-progress objective instead of the goal-list fallback.
     const auto intent_journal =
         std::filesystem::temp_directory_path() / "jarvis_cognitive_intent_strategy_suite.bin";
     std::filesystem::remove(intent_journal, ec);
@@ -197,10 +195,9 @@ int main() {
 
         Goal developing;
         developing.id = "developing-objective";
-        developing.description = "Advance an objective with stronger learned momentum";
+        developing.description = "Advance an objective with more progress remaining";
         developing.priority = 0.8;
         developing.progress = 0.0;
-        developing.outcome_momentum = 0.5;
         developing.created_cycle = 1;
         assert(intent_brain.create_goal(developing));
         assert(intent_brain.activate_goal(developing.id));
@@ -216,11 +213,51 @@ int main() {
         const auto intent_result = CognitiveCycle(intent_brain).run(intent_input);
         assert(intent_result.status == CognitiveCycleStatus::completed);
         assert(intent_result.context.selected_goal.id == developing.id);
-        assert(std::abs(intent_result.context.decision_context.goal_priority - 0.85) < 1e-9);
+        assert(intent_result.context.decision_context.goal_priority == developing.priority);
         assert(intent_result.context.decision_context.goal_progress == 0.0);
     }
     std::filesystem::remove(intent_journal, ec);
     std::filesystem::remove(intent_journal.string() + ".meta", ec);
+
+    // Strategy appraisal must carry experience-derived goal momentum into the
+    // main planning path, rather than existing only as a standalone model.
+    const auto strategy_journal =
+        std::filesystem::temp_directory_path() / "jarvis_cognitive_strategy_feedback_suite.bin";
+    std::filesystem::remove(strategy_journal, ec);
+    std::filesystem::remove(strategy_journal.string() + ".meta", ec);
+    {
+        Brain strategy_brain(strategy_journal);
+        Goal progressing;
+        progressing.id = "experience-shaped-goal";
+        progressing.description = "Learn from changing progress";
+        progressing.priority = 0.5;
+        assert(strategy_brain.create_goal(progressing));
+        assert(strategy_brain.activate_goal(progressing.id));
+        assert(strategy_brain.assimilate_goal_outcome(
+            GoalOutcomeEvidence{progressing.id, 0.0, 0.5, 0.0, false, 0.9, 1}));
+        assert(strategy_brain.assimilate_goal_outcome(
+            GoalOutcomeEvidence{progressing.id, 0.5, 0.75, 0.0, false, 0.9, 2}));
+        const auto* experienced_goal = strategy_brain.goal(progressing.id);
+        assert(experienced_goal != nullptr);
+        const double unappraised_priority = experienced_goal->priority;
+        assert(experienced_goal->outcome_momentum > 0.0);
+
+        CognitiveCycleInput strategy_input;
+        strategy_input.observation =
+            Event{0, 0, "sensor", "observation", {{"state", std::string("stable")}}};
+        strategy_input.candidate_actions = {
+            CandidateAction{"continue", 0.8, 0.8, 0.1, 0.1},
+        };
+        strategy_input.planning_horizon = 1;
+        strategy_input.resource_budget = 10.0;
+        const auto strategy_result = CognitiveCycle(strategy_brain).run(strategy_input);
+        assert(strategy_result.status == CognitiveCycleStatus::completed);
+        assert(strategy_result.context.selected_goal.id == progressing.id);
+        assert(strategy_result.context.decision_context.goal_priority >
+               unappraised_priority);
+    }
+    std::filesystem::remove(strategy_journal, ec);
+    std::filesystem::remove(strategy_journal.string() + ".meta", ec);
 
     std::filesystem::remove(dispute_journal, ec);
     std::filesystem::remove(dispute_journal.string() + ".meta", ec);
