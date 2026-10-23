@@ -657,10 +657,10 @@ int main() {
             [](const LearnedStrategy& strategy) { return strategy.action == "low-confidence-action"; });
         assert(high_strategy != strategies.end());
         assert(low_strategy != strategies.end());
-        // Both actions have the same observed positive outcome. Reliability
-        // changes how strongly evidence is trusted, not the outcome's valence;
-        // confidence (and therefore effective influence) should carry the gap.
-        assert(std::abs(high_strategy->value - low_strategy->value) < 1e-9);
+        // Both actions have the same observed positive outcome, but the
+        // first observation must respect evidence reliability instead of
+        // initializing every strategy directly at its target value.
+        assert(high_strategy->value > low_strategy->value);
         assert(high_strategy->confidence > low_strategy->confidence);
         assert(high_strategy->value * high_strategy->confidence >
                low_strategy->value * low_strategy->confidence);
