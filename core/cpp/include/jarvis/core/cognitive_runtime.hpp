@@ -30,6 +30,9 @@ struct CognitiveRuntimeConfig {
     bool drain_on_stop{true};
     CognitiveTriggerConfig trigger{};
     CognitiveActionAdapter action_adapter{};
+    // Optional perception providers are installed before the worker starts.
+    // Appended to preserve existing aggregate initialization.
+    std::vector<std::shared_ptr<const PerceptionProvider>> perception_providers;
 };
 
 struct CognitiveRuntimeMetrics {
