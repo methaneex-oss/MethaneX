@@ -48,6 +48,7 @@ struct CognitiveRuntimeMetrics {
     std::uint64_t feedback_accepted{0};
     std::uint64_t feedback_rejected{0};
     std::uint64_t feedback_processed{0};
+    std::uint64_t feedback_failed{0};
 };
 
 struct CognitiveFeedback {
