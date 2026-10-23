@@ -15,6 +15,16 @@ static bool wait_feedback(CognitiveRuntime& runtime, std::uint64_t target) {
     return false;
 }
 
+static bool wait_feedback_completion(CognitiveRuntime& runtime, std::uint64_t target) {
+    for (int i = 0; i < 300; ++i) {
+        const auto metrics = runtime.metrics();
+        if (metrics.feedback_processed + metrics.feedback_failed >= target) return true;
+        std::this_thread::sleep_for(std::chrono::milliseconds(2));
+    }
+    const auto metrics = runtime.metrics();
+    return metrics.feedback_processed + metrics.feedback_failed >= target;
+}
+
 int main() {
     const auto journal = std::filesystem::temp_directory_path() / "jarvis_runtime_goal_feedback.bin";
     std::error_code ec;
@@ -49,7 +59,16 @@ int main() {
     assert(brain.memory().by_kind("goal_progress", 2).size() == 2);
     assert(brain.memory().by_kind("goal_complete", 1).size() == 1);
 
-    assert(!runtime.submit_feedback(CognitiveFeedback{"", Scalar{0.0}, std::nullopt, goal.id, 0.5, 0.5}));
+    // Submission validates payload shape without racing the worker's Brain state.
+    // A regressive goal update is therefore rejected during assimilation and
+    // surfaced through feedback_failed rather than synchronously at enqueue time.
+    const auto before_regression = runtime.metrics();
+    assert(runtime.submit_feedback(CognitiveFeedback{"", Scalar{0.0}, std::nullopt, goal.id, 0.5, 0.5}));
+    const auto accepted_regression = runtime.metrics().feedback_accepted;
+    assert(wait_feedback_completion(runtime, accepted_regression));
+    const auto after_regression = runtime.metrics();
+    assert(after_regression.feedback_failed == before_regression.feedback_failed + 1);
+    assert(after_regression.feedback_processed == before_regression.feedback_processed);
     runtime.stop();
 
     Brain restored(journal);
