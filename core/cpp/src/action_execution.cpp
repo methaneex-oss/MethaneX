@@ -79,10 +79,10 @@ ActionExecutionResult ActionExecutor::run(const ActionExecutionRequest& request)
     // a failed or rolled-back action can still produce a real-world consequence.
     if (request.observe_consequence && result.executed) {
         try {
-            const double actual = request.observe_consequence(result.action);
-            if (std::isfinite(actual)) {
+            const auto actual = request.observe_consequence(result.action);
+            if (actual.has_value() && std::isfinite(*actual)) {
                 result.outcome.observed = true;
-                result.outcome.actual_consequence = std::clamp(actual, -1.0, 1.0);
+                result.outcome.actual_consequence = std::clamp(*actual, -1.0, 1.0);
                 result.outcome.consequence_error = std::clamp(
                     result.outcome.actual_consequence - result.outcome.expected_consequence,
                     -2.0, 2.0);
