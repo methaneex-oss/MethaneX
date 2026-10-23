@@ -94,6 +94,19 @@ int main() {
         const auto first = developmental_memory.append(
             Event{0, 1, "experience", "learned-kind", {{"episode", std::int64_t{1}}}});
         assert(first != 0);
+        const auto outcome = developmental_memory.append(
+            Event{0, 2, "brain", "action_outcome",
+                  {{"action", std::string("calibrate")},
+                   {"context", std::string("stabilization")},
+                   {"reliability", 0.1},
+                   {"evidence_reliability", 0.9}}});
+        assert(outcome != 0);
+        const auto recalled_outcome = developmental_memory.recall_ranked(
+            {{"action", std::string("calibrate")}}, 1, "action_outcome", true);
+        assert(recalled_outcome.size() == 1);
+        // Operational execution reliability must not drown out reliable
+        // evidence about the consequence actually observed.
+        assert(recalled_outcome.front().confidence > 0.8);
         assert(developmental_memory.promote(first, MemoryTier::Semantic, 0.9, 0.9));
         const auto second = developmental_memory.append(
             Event{0, 2, "experience", "learned-kind", {{"episode", std::int64_t{2}}}});
