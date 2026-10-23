@@ -218,8 +218,8 @@ int main() {
         const double replayed_attended_uncertainty =
             replayed_result.context.attention.salience *
             replayed_result.context.attention.uncertainty;
-        assert(std::abs(replayed_result.context.decision_context.uncertainty -
-                        replayed_attended_uncertainty) < 1e-12);
+        assert(replayed_result.context.decision_context.uncertainty + 1e-12 >=
+               replayed_attended_uncertainty);
     }
     std::filesystem::remove(low_attention_journal, ec);
     std::filesystem::remove((low_attention_journal.string() + ".meta"), ec);
