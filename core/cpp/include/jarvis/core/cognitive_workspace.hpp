@@ -2,6 +2,8 @@
 
 #include "action_model.hpp"
 #include "action_execution.hpp"
+#include "affective_learning.hpp"
+#include "attention.hpp"
 #include "cognition.hpp"
 #include "event.hpp"
 #include "intent.hpp"
@@ -26,6 +28,9 @@ struct CognitiveWorkspace {
     std::vector<Belief> beliefs;
     std::vector<CausalLink> causal_links;
     std::vector<Prediction> predictions;
+    AffectiveState affective_state;
+    AffectiveAppraisal affective_appraisal;
+    AttentionSignal attention;
     ReasoningResult reasoning;
     std::vector<Goal> goals;
     std::optional<Goal> selected_goal;
