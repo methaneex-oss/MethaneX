@@ -804,6 +804,11 @@ int main() {
 
         const auto before_numeric_learning = numeric_cycle.run(numeric_input);
         assert(before_numeric_learning.status == CognitiveCycleStatus::completed);
+        assert(before_numeric_learning.context.representation.modality == Modality::sensor);
+        assert(!before_numeric_learning.context.representation.nodes.empty());
+        assert(std::any_of(before_numeric_learning.context.representation.nodes.begin(),
+                           before_numeric_learning.context.representation.nodes.end(),
+            [](const SemanticNode& node) { return node.label == "temperature"; }));
         const auto learned_assessment = std::find_if(
             before_numeric_learning.context.action_assessments.begin(),
             before_numeric_learning.context.action_assessments.end(),
