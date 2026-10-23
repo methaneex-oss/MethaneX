@@ -31,6 +31,8 @@ int main() {
     const auto workspace = runtime.workspace();
     assert(workspace.observation.has_value());
     assert(workspace.observation->event.kind == "workspace");
+    assert(!workspace.representation.nodes.empty());
+    assert(workspace.attention.key == "workspace");
     assert(workspace.cycle == brain.state().cycle);
 
     runtime.stop();
