@@ -43,6 +43,7 @@ struct AgentEvidence { std::string kind; std::string value; };
 struct AgentResult {
     bool accepted{false}; std::string agent_id; std::string task_id; std::string reason;
     std::vector<AgentArtifact> artifacts; std::vector<AgentEvidence> evidence;
+    std::string revision;
 };
 
 class EngineeringAgent {
