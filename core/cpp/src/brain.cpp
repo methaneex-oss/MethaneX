@@ -283,7 +283,7 @@ void Brain::process_affective_experience(const Event& event) {
         utility = signal.outcome;
         relevant = true;
     }
-    else if (event.kind == "observation") { const double confidence = std::clamp(double_value(event.data, "confidence", 0.5), 0.0, 1.0); signal.outcome = std::clamp(double_value(event.data, "outcome", 0.0), -1.0, 1.0); signal.prediction_error = std::clamp(double_value(event.data, "prediction_error", 0.0), 0.0, 1.0); signal.novelty = std::clamp(double_value(event.data, "novelty", 0.0), 0.0, 1.0); signal.salience = std::clamp(double_value(event.data, "salience", attention_state_.salience), 0.0, 1.0); signal.uncertainty = 1.0 - confidence; signal.confidence = confidence; utility = signal.outcome; relevant = true; }
+    else if (event.kind == "observation" || external_observation) { const double confidence = std::clamp(double_value(event.data, "confidence", 0.5), 0.0, 1.0); signal.outcome = std::clamp(double_value(event.data, "outcome", 0.0), -1.0, 1.0); signal.prediction_error = std::clamp(double_value(event.data, "prediction_error", 0.0), 0.0, 1.0); signal.novelty = std::clamp(double_value(event.data, "novelty", 0.0), 0.0, 1.0); signal.salience = std::clamp(double_value(event.data, "salience", attention_state_.salience), 0.0, 1.0); signal.uncertainty = 1.0 - confidence; signal.confidence = confidence; utility = signal.outcome; relevant = true; }
     else if (event.kind == "goal_progress" || event.kind == "goal_complete") { const double progress = event.kind == "goal_complete" ? 1.0 : std::clamp(double_value(event.data, "progress", 0.0), 0.0, 1.0); signal.outcome = 2.0 * progress - 1.0; signal.prediction_error = 1.0 - progress; signal.novelty = state_.novelty; signal.salience = attention_state_.salience; signal.confidence = progress; utility = signal.outcome; relevant = true; }
     if (!relevant) return;
     signal = affective_learning_model_.modulate(signal); const auto after = affective_state_model_.update(signal); if (event.kind != "action_outcome") affective_learning_model_.learn(signal, before, after, utility);
@@ -336,7 +336,7 @@ bool Brain::valid_affective_learning_source(const Event& event) const {
     return true;
 }
 
-void Brain::replay(const Event& event) {
+void Brain::replay(const Event& event, bool external_observation) {
     state_.cycle = std::max(state_.cycle, event.sequence);
 
     // Validate prediction feedback before any subsystem mutates. Otherwise a
@@ -753,7 +753,7 @@ Observation Brain::observe(Event event) {
     if (event.sequence == 0) return Observation{};
     ++state_.events_seen;
     state_.cycle = event.sequence;
-    replay(event);
+    replay(event, true);
     state_.novelty = novelty;
     consolidate_experience(event);
     sync_self_state();
