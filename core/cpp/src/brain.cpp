@@ -66,9 +66,13 @@ bool valid_action_outcome_event(const Event& event) {
         !valid_optional_unit("novelty")) return false;
 
     const auto observed = event.data.find("observed");
+    // If supplied, observed must be an actual boolean. Treating malformed
+    // metadata as "not observed" would silently downgrade a corrupt world
+    // consequence into execution-only evidence and train the wrong pathway.
+    if (observed != event.data.end() &&
+        std::get_if<bool>(&observed->second) == nullptr) return false;
     const bool has_observed_consequence =
         observed != event.data.end() &&
-        std::get_if<bool>(&observed->second) != nullptr &&
         *std::get_if<bool>(&observed->second);
     if (!has_observed_consequence) return true;
 
