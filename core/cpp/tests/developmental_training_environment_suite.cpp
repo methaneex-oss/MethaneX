@@ -14,11 +14,10 @@
 using namespace jarvis::core;
 
 namespace {
-CognitiveCycleInput training_input(const std::string& goal_id, std::int64_t episode,
+CognitiveCycleInput training_input(const std::string& goal_id,
                                    const DevelopmentalEnvironment& world) {
     CognitiveCycleInput input;
     input.observation = world.observe();
-    input.observation.data.insert_or_assign("episode", episode);
     // The environment offers both actions. It does not choose for the brain.
     // Keep the actions executable even after a negative strategy update.
     // Otherwise the action model can switch to "recommend" for every option,
@@ -124,7 +123,7 @@ int main() {
             // execution produces no observed world consequence.
             world.set_context(episode == 0 ? "infrastructure/executor-outage"
                                            : "navigation/route-selection");
-            auto input = training_input(goal.id, episode, world);
+            auto input = training_input(goal.id, world);
             current_context = input.developmental_context;
             assert(runtime.submit(input, 1.0));
             const auto result = await_result(runtime);
@@ -194,7 +193,7 @@ int main() {
             current_route_condition = "flooded";
             set_world_condition(current_route_condition);
             world.set_context(current_context);
-            auto input = training_input(goal.id, current_episode, world);
+            auto input = training_input(goal.id, world);
             assert(runtime.submit(input, 1.0));
             const auto result = await_result(runtime);
             assert(result.status == CognitiveCycleStatus::completed);
@@ -232,6 +231,17 @@ int main() {
         assert(runtime.metrics().action_succeeded > 0);
         assert(reversal_actions.front() == "good-route");
         assert(reversal_actions.back() == "bad-route");
+
+        // Environment task/context/step labels remain available in the
+        // episodic journal, but are not treated as changing world facts.
+        const auto learned_beliefs = brain.beliefs();
+        for (const auto& belief : learned_beliefs) {
+            assert(belief.key != "task");
+            assert(belief.key != "context");
+            assert(belief.key != "world_step");
+        }
+        assert(!brain.memory().by_kind("observation").empty());
+        assert(!learned_beliefs.empty());
 
         const auto strategies = brain.developmental_strategies();
         bool learned_good_route = false;
@@ -280,7 +290,7 @@ int main() {
 
         world.set_context("navigation/route-selection");
         set_world_condition("clear");
-        CognitiveCycleInput probe = training_input(goal.id, 100, world);
+        CognitiveCycleInput probe = training_input(goal.id, world);
         const auto decision = CognitiveCycle(restored).run(probe);
         assert(decision.status == CognitiveCycleStatus::completed);
         assert(!decision.context.plan.steps.empty());
@@ -291,7 +301,7 @@ int main() {
         // and survives replay: the route variant now prefers bad-route.
         world.set_context("navigation/route-variant");
         set_world_condition("flooded");
-        CognitiveCycleInput revised_probe = training_input(goal.id, 101, world);
+        CognitiveCycleInput revised_probe = training_input(goal.id, world);
         const auto revised = CognitiveCycle(restored).run(revised_probe);
         assert(revised.status == CognitiveCycleStatus::completed);
         assert(!revised.context.plan.steps.empty());
@@ -301,7 +311,7 @@ int main() {
         // context that has no direct experience of its own.
         world.set_context("navigation/route-selection alternate");
         set_world_condition("clear");
-        CognitiveCycleInput related_probe = training_input(goal.id, 102, world);
+        CognitiveCycleInput related_probe = training_input(goal.id, world);
         related_probe.developmental_context = "navigation/route-selection alternate";
         const auto generalized = CognitiveCycle(restored).run(related_probe);
         assert(generalized.status == CognitiveCycleStatus::completed);
@@ -314,7 +324,7 @@ int main() {
         // a choice in an unrelated task where the candidates are otherwise tied.
         world.set_context("orbital/cooking");
         set_world_condition("clear");
-        CognitiveCycleInput unrelated_probe = training_input(goal.id, 103, world);
+        CognitiveCycleInput unrelated_probe = training_input(goal.id, world);
         unrelated_probe.developmental_context = "orbital/cooking";
         // Use unseen action names so global capability reliability learned for
         // the route actions cannot confound this context-transfer check.
