@@ -957,6 +957,7 @@ int main() {
     assert(*restored_policy_value < 30.0);
     const auto restored_affect = restored.affective_state();
     const auto restored_attention = restored.attention();
+    std::cerr << "affect updates live=" << live_affect.updates << " restored=" << restored_affect.updates << "\n";
     assert(restored_affect.updates == live_affect.updates);
     assert(std::abs(restored_affect.valence - live_affect.valence) < 1e-12);
     assert(std::abs(restored_affect.arousal - live_affect.arousal) < 1e-12);
