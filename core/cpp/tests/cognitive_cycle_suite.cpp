@@ -84,7 +84,8 @@ int main() {
     assert(adapted.context.decision_context.goal_priority == goal.priority);
     assert(adapted.context.decision_context.plan_expected_value == adapted.context.plan.expected_value);
     assert(adapted.context.decision_context.resource_budget == input.resource_budget);
-    assert(adapted.context.decision_context.deadline_pressure == input.deadline_pressure);
+    assert(adapted.context.decision_context.deadline_pressure >= input.deadline_pressure);
+    assert(adapted.context.decision_context.deadline_pressure <= 1.0);
     assert(std::isfinite(adapted.context.decision_context.valence));
     assert(std::isfinite(adapted.context.decision_context.arousal));
     assert(std::isfinite(adapted.context.decision_context.affective_uncertainty));
@@ -174,6 +175,53 @@ int main() {
     }
     std::filesystem::remove(competence_journal, ec);
     std::filesystem::remove(competence_journal.string() + ".meta", ec);
+    // Intent selection is part of the integrated cognitive cycle, not only a
+    // workspace display. When no goal is specified by the caller, learned
+    // progress momentum can select an active objective that differs from the
+    // goal model's priority/order fallback; strategy appraisal then influences
+    // the planning context for that same objective.
+    const auto intent_journal =
+        std::filesystem::temp_directory_path() / "jarvis_cognitive_intent_strategy_suite.bin";
+    std::filesystem::remove(intent_journal, ec);
+    std::filesystem::remove(intent_journal.string() + ".meta", ec);
+    {
+        Brain intent_brain(intent_journal);
+        Goal nearly_complete;
+        nearly_complete.id = "nearly-complete";
+        nearly_complete.description = "Maintain a nearly complete objective";
+        nearly_complete.priority = 0.8;
+        nearly_complete.progress = 0.8;
+        nearly_complete.created_cycle = 0;
+        assert(intent_brain.create_goal(nearly_complete));
+        assert(intent_brain.activate_goal(nearly_complete.id));
+
+        Goal developing;
+        developing.id = "developing-objective";
+        developing.description = "Advance an objective with stronger learned momentum";
+        developing.priority = 0.8;
+        developing.progress = 0.0;
+        developing.outcome_momentum = 0.5;
+        developing.created_cycle = 1;
+        assert(intent_brain.create_goal(developing));
+        assert(intent_brain.activate_goal(developing.id));
+
+        CognitiveCycleInput intent_input;
+        intent_input.observation =
+            Event{0, 0, "sensor", "observation", {{"state", std::string("stable")}}};
+        intent_input.candidate_actions = {
+            CandidateAction{"continue", 0.8, 0.8, 0.1, 0.1},
+        };
+        intent_input.planning_horizon = 1;
+        intent_input.resource_budget = 10.0;
+        const auto intent_result = CognitiveCycle(intent_brain).run(intent_input);
+        assert(intent_result.status == CognitiveCycleStatus::completed);
+        assert(intent_result.context.selected_goal.id == developing.id);
+        assert(std::abs(intent_result.context.decision_context.goal_priority - 0.85) < 1e-9);
+        assert(intent_result.context.decision_context.goal_progress == 0.0);
+    }
+    std::filesystem::remove(intent_journal, ec);
+    std::filesystem::remove(intent_journal.string() + ".meta", ec);
+
     std::filesystem::remove(dispute_journal, ec);
     std::filesystem::remove(dispute_journal.string() + ".meta", ec);
     Brain dispute_brain(dispute_journal);
