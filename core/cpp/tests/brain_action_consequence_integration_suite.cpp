@@ -133,6 +133,24 @@ int main() {
     }
     assert(wait_strategy_uses_after_unobserved == wait_strategy_uses_before_unobserved);
 
+    // A missing observation is distinct from a numeric zero consequence.
+    // The adapter can now report "unknown" without inventing neutral feedback.
+    ActionAssessment unknown_assessment;
+    unknown_assessment.action.name = "unknown-outcome";
+    unknown_assessment.disposition = ActionDisposition::execute;
+    unknown_assessment.permitted = true;
+    unknown_assessment.confidence = 0.9;
+    bool unknown_executed = false;
+    const auto unknown_result = brain.execute_action(
+        unknown_assessment,
+        [&](const CandidateAction&) { unknown_executed = true; return true; },
+        [&](const CandidateAction&) { return unknown_executed; },
+        {},
+        [](const CandidateAction&) -> std::optional<double> { return std::nullopt; });
+    assert(unknown_result.executed);
+    assert(unknown_result.verified);
+    assert(!unknown_result.outcome.observed);
+
     const auto* learned_strategy = brain.developmental_best_strategy("system stabilization");
     assert(learned_strategy != nullptr);
     assert(learned_strategy->action == "calibrate");
