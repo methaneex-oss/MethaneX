@@ -10,7 +10,8 @@ namespace jarvis::core {
 namespace {
 
 std::string infer_developmental_context(const CognitiveCycleInput& input,
-                                        const Goal& goal) {
+                                        const Goal& goal,
+                                        const PerceptualRepresentation& representation) {
     if (!input.developmental_context.empty()) return input.developmental_context;
 
     // Build a stable, feature-grounded context for downstream memory retrieval
@@ -20,9 +21,12 @@ std::string infer_developmental_context(const CognitiveCycleInput& input,
     if (!input.observation.source.empty()) context += " source " + input.observation.source;
     bool has_context_feature = false;
     std::vector<std::pair<std::string, const Scalar*>> features;
-    features.reserve(input.observation.data.size());
-    for (const auto& [key, value] : input.observation.data)
-        features.emplace_back(key, &value);
+    features.reserve(representation.nodes.size());
+    for (const auto& node : representation.nodes) {
+        const auto value = node.attributes.find("value");
+        if (value != node.attributes.end())
+            features.emplace_back(node.label, &value->second);
+    }
     std::sort(features.begin(), features.end(),
               [](const auto& left, const auto& right) { return left.first < right.first; });
 
@@ -220,7 +224,7 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     // Developmental strategy evidence is applied before planning so the learned
     // change can propagate through the normal planner and decision engine.
     const std::string developmental_context =
-        infer_developmental_context(input, *selected);
+        infer_developmental_context(input, *selected, result.context.representation);
 
     // Action-only recall can still be crowded out by recent outcomes from
     // different situations involving the same action. Retrieve exact-context
