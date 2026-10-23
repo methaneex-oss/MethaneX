@@ -753,6 +753,20 @@ int main() {
         assert(missing_context.event.sequence == 0);
         assert(guarded.developmental_strategies().empty());
         assert(guarded.self_model().capability("missing-context-action") == nullptr);
+
+        // Confidence is consumed by memory consolidation, so non-finite values
+        // must be rejected before append rather than poisoning stored rankings.
+        const auto malformed_confidence = guarded.observe(Event{
+            0, 0, "malformed-test", "action_outcome",
+            {{"action", std::string("malformed-confidence-action")},
+             {"context", std::string("critical repair")},
+             {"status", static_cast<std::int64_t>(ActionExecutionStatus::verified)},
+             {"observed", false},
+             {"reliability", 1.0},
+             {"confidence", std::nan("")}}});
+        assert(malformed_confidence.event.sequence == 0);
+        assert(guarded.developmental_strategies().empty());
+        assert(guarded.self_model().capability("malformed-confidence-action") == nullptr);
     }
     {
         Brain restored_guarded(malformed_path);
