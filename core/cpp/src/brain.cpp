@@ -357,7 +357,12 @@ void Brain::replay(const Event& event, bool external_observation) {
         (!valid_affective_learning_event(event) ||
          !valid_affective_learning_source(event))) return;
 
-    process_affective_experience(event, external_observation);
+    const auto persisted_external = event.data.find("_external_observation");
+    const bool was_externally_observed =
+        persisted_external != event.data.end() &&
+        std::get_if<bool>(&persisted_external->second) != nullptr &&
+        *std::get_if<bool>(&persisted_external->second);
+    process_affective_experience(event, external_observation || was_externally_observed);
     if (event.kind == "goal_create") { const auto* id = string_value(event.data, "id"); const auto* description = string_value(event.data, "description"); if (id == nullptr || description == nullptr) return; Goal goal{*id, *description, double_value(event.data, "priority"), double_value(event.data, "progress"), event.sequence, integer_value(event.data, "deadline_cycle"), goal_status_value(static_cast<std::int64_t>(integer_value(event.data, "status"))), string_value(event.data, "prerequisites") ? split_ids(*string_value(event.data, "prerequisites")) : std::vector<std::string>{}, string_value(event.data, "subgoals") ? split_ids(*string_value(event.data, "subgoals")) : std::vector<std::string>{}}; goals_model_.create(std::move(goal)); return; }
     if (event.kind == "goal_activate") { if (const auto* id = string_value(event.data, "id")) goals_model_.activate(*id); return; }
     if (event.kind == "goal_progress") { if (const auto* id = string_value(event.data, "id")) { const double progress = double_value(event.data, "progress"); if (progress < 1.0) goals_model_.update_progress(*id, progress); } return; }
@@ -749,6 +754,9 @@ Observation Brain::observe(Event event) {
     // makes affective updates depend on whether the event is observed live or
     // reconstructed after restart.
     event.data.try_emplace("novelty", novelty);
+    // External observation is part of the experience, not a transient call flag.
+    // Persist it so affective appraisal replays identically after restart.
+    event.data.insert_or_assign("_external_observation", true);
     event.sequence = memory_.append(event);
     if (event.sequence == 0) return Observation{};
     ++state_.events_seen;
