@@ -270,12 +270,20 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     // without treating low salience itself as a second, contradictory estimate.
     const double attended_uncertainty = std::clamp(
         result.context.attention.salience * result.context.attention.uncertainty, 0.0, 1.0);
+    // Sensory confidence must influence the decision, not remain metadata
+    // attached to a representation. A provider's low-confidence interpretation
+    // (or an observation with no usable features) should increase uncertainty
+    // and make information-gathering actions more valuable.
+    const double perceptual_uncertainty = result.context.representation.nodes.empty()
+        ? 1.0
+        : 1.0 - std::clamp(result.context.representation.confidence, 0.0, 1.0);
     const double uncertainty = std::max({
         attended_uncertainty,
         dispute_pressure,
         world_dispute_pressure,
         result.context.reflection.uncertainty,
-        prediction_uncertainty});
+        prediction_uncertainty,
+        perceptual_uncertainty});
     const double strategy_deadline_pressure = strategy_matches_goal
         ? strategy_context.planning.deadline_pressure : 0.0;
     const double deadline_pressure = std::clamp(
@@ -372,7 +380,8 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
                   result.context.affective_state.uncertainty,
                   result.context.affective_state.tension,
                   result.context.reflection.uncertainty,
-                  prediction_uncertainty}),
+                  prediction_uncertainty,
+                  perceptual_uncertainty}),
         0.0, 1.0);
 
     // Use exact-context experience whenever that action has been tried locally.
