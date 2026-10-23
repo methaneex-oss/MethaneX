@@ -46,7 +46,7 @@ public:
     std::vector<Event> by_kind(const std::string& kind, std::size_t limit = 0) const;
 
     MemoryTier tier_of(const Event& event) const noexcept;
-    std::vector<MemoryRecord> recall_ranked(const Attributes& query, std::size_t limit = 8, const std::string& kind = {}) const;
+    std::vector<MemoryRecord> recall_ranked(const Attributes& query, std::size_t limit = 8, const std::string& kind = {}, bool require_exact_match = false) const;
     std::vector<MemoryRecord> salient(std::size_t limit = 8, MemoryTier tier = MemoryTier::Episodic) const;
     bool promote(std::uint64_t sequence, MemoryTier tier, double salience, double confidence);
     bool consolidate(std::uint64_t sequence, double salience, double novelty, double error, double confidence);
