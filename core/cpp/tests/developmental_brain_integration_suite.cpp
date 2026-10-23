@@ -902,6 +902,35 @@ int main() {
     std::filesystem::remove(evidence_confidence_path, ec);
     std::filesystem::remove(evidence_confidence_path.string() + ".meta", ec);
 
+    // Malformed persisted appraisal evidence must be rejected before it
+    // consumes the action's exactly-once learning key or updates calibration.
+    const auto affective_learning_path =
+        std::filesystem::temp_directory_path() / "jarvis_invalid_affective_learning.bin";
+    std::filesystem::remove(affective_learning_path, ec);
+    std::filesystem::remove(affective_learning_path.string() + ".meta", ec);
+    {
+        Brain affective_learning_brain(affective_learning_path);
+        const auto updates_before = affective_learning_brain.affective_learning_updates();
+        const auto events_before = affective_learning_brain.memory().all().size();
+        const auto rejected = affective_learning_brain.observe(
+            Event{0, 0, "affective-learning-test", "affective_learning",
+                {{"source_action_sequence", std::int64_t{7}},
+                 {"expected_consequence", 0.0},
+                 {"actual_consequence", 1.0},
+                 {"consequence_error", 1.0},
+                 {"utility", 1.0},
+                 {"prediction_error", 1.0},
+                 {"novelty", 0.2},
+                 {"salience", 0.8},
+                 {"uncertainty", 0.1},
+                 {"confidence", std::nan("")}}});
+        assert(rejected.event.sequence == 0);
+        assert(affective_learning_brain.memory().all().size() == events_before);
+        assert(affective_learning_brain.affective_learning_updates() == updates_before);
+    }
+    std::filesystem::remove(affective_learning_path, ec);
+    std::filesystem::remove(affective_learning_path.string() + ".meta", ec);
+
     // Generic evidence must enter the same coordinated experience pathway:
     // durable evidence -> knowledge/affective processing -> memory consolidation.
     const auto evidence_path =
