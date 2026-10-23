@@ -47,14 +47,32 @@ Reflection ReflectionModel::evaluate(const std::vector<Belief>& beliefs,
         0.5, 1.5);
     result.affective_observations = affective_observations;
 
-    // Reflection treats appraisal calibration as another source of uncertainty.
-    // It does not prescribe a response. A poorly calibrated appraisal model
-    // simply lowers the current coherence estimate and records an observation
-    // that higher-level cognition can use when allocating further processing.
-    const double affective_reliability = 1.0 - result.affective_calibration_error;
-    result.coherence = std::clamp(
-        (1.0 - result.uncertainty + result.prediction_accuracy + affective_reliability) / 3.0,
-        0.0, 1.0);
+    // Coherence is evidence-weighted, not a default claim of competence.
+    // A newborn or newly restarted brain may have no resolved predictions or
+    // calibrated appraisals yet; treating those missing measurements as perfect
+    // would inflate confidence, while treating them as failed measurements
+    // would unfairly penalize learning that has not happened. Average only
+    // dimensions for which experience exists.
+    double coherence_sum = 0.0;
+    std::size_t coherence_evidence = 0;
+    if (!beliefs.empty()) {
+        coherence_sum += 1.0 - result.uncertainty;
+        ++coherence_evidence;
+    }
+    if (resolved > 0) {
+        coherence_sum += result.prediction_accuracy;
+        ++coherence_evidence;
+    }
+    if (result.affective_observations > 0) {
+        coherence_sum += 1.0 - result.affective_calibration_error;
+        ++coherence_evidence;
+    }
+    result.coherence = coherence_evidence == 0
+        ? 0.0
+        : std::clamp(coherence_sum / static_cast<double>(coherence_evidence),
+                     0.0, 1.0);
+    if (coherence_evidence == 0)
+        result.observations.emplace_back("insufficient experience to assess cognitive coherence");
 
     if (result.uncertainty > result.coherence)
         result.observations.emplace_back("uncertainty dominates current cognitive state");
