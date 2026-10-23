@@ -106,13 +106,25 @@ bool CognitiveRuntime::enqueue(CognitiveCycleInput input, double priority) { { s
 void CognitiveRuntime::process_feedback(CognitiveFeedback feedback) {
     bool failed = false;
     try {
-        (void)cycle_.process_outcome(
+        const auto outcome = cycle_.process_outcome(
             feedback.prediction_key.empty()
                 ? std::nullopt
                 : std::optional<std::string>{feedback.prediction_key},
             feedback.actual, feedback.evidence, feedback.goal_id,
             feedback.goal_progress, feedback.goal_confidence,
             feedback.prediction_sequence, feedback.outcome_utility);
+        const bool requested_prediction =
+            !feedback.prediction_key.empty() ||
+            feedback.prediction_sequence.has_value();
+        const bool requested_goal =
+            feedback.goal_id.has_value() &&
+            feedback.goal_progress.has_value();
+        // A feedback item can be syntactically accepted yet fail to teach
+        // anything because its prediction is stale or its goal can no longer
+        // assimilate progress. Keep queue acceptance distinct from learning
+        // completion so runtime metrics reflect the actual cognitive outcome.
+        failed = (requested_prediction && !outcome.prediction_resolved) ||
+                 (requested_goal && !outcome.goal_progress_assimilated);
     } catch (...) {
         // Keep the worker alive, but do not report a failed learning update as
         // successfully processed. Expose the failure through runtime metrics.
