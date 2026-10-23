@@ -54,7 +54,10 @@ std::optional<Evidence> evidence_for_action(const ActionExecutionResult& result)
 } // namespace
 
 CognitiveRuntime::CognitiveRuntime(Brain& brain, CognitiveRuntimeConfig config)
-    : brain_(brain), config_(std::move(config)), cycle_(brain), trigger_(config_.trigger) {}
+    : brain_(brain), config_(std::move(config)), cycle_(brain), trigger_(config_.trigger) {
+    for (const auto& provider : config_.perception_providers)
+        cycle_.perception_pipeline().add_provider(provider);
+}
 CognitiveRuntime::~CognitiveRuntime() { stop(); }
 
 bool CognitiveRuntime::start() {
