@@ -113,7 +113,7 @@ int main() {
         assert(second != 0);
         const auto semantic_experiences = developmental_memory.salient(8, MemoryTier::Semantic);
         assert(semantic_experiences.size() == 2);
-        assert(semantic_experiences.front().event.sequence == second);
+        assert(semantic_experiences.back().event.sequence == second);
     }
     {
         // Rebuild the learned distribution from journal records if the
