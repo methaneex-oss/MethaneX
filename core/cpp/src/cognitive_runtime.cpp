@@ -19,6 +19,9 @@ CognitiveWorkspace make_workspace(const CognitiveCycleResult& result, const Brai
     workspace.beliefs = result.context.beliefs;
     workspace.causal_links = result.context.causal_links;
     workspace.predictions = result.context.predictions;
+    workspace.affective_state = result.context.affective_state;
+    workspace.affective_appraisal = result.context.affective_appraisal;
+    workspace.attention = result.context.attention;
     workspace.reasoning = result.context.reasoning;
     workspace.goals = result.context.eligible_goals;
     if (!result.context.selected_goal.id.empty()) workspace.selected_goal = result.context.selected_goal;
