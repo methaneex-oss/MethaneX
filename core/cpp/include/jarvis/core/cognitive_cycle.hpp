@@ -4,6 +4,7 @@
 #include "reasoning.hpp"
 #include "action_model.hpp"
 #include "action_execution.hpp"
+#include "representation.hpp"
 
 #include <cstddef>
 #include <cstdint>
@@ -37,6 +38,9 @@ struct CognitiveCycleInput {
 };
 
 struct CognitiveCycleContext {
+    // Shared structured perception result for reasoning, memory, and later
+    // developmental mechanisms; preserve the original observation as evidence.
+    PerceptualRepresentation representation;
     Observation observation;
     std::vector<MemoryRecord> memories;
     std::vector<Belief> beliefs;
