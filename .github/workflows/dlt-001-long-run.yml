@@ -1,0 +1,87 @@
+name: DLT-001 Long-Running Developmental Learning Trial
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feat/jarvis-affective-state
+    paths:
+      - 'core/cpp/tests/dlt_001_long_run.cpp'
+      - 'core/cpp/tests/dlt_001_trial.cpp'
+      - 'core/cpp/tests/CMakeLists.txt'
+      - '.github/workflows/dlt-001-long-run.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dlt-001-long-run-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  developmental-learning-trial:
+    name: DLT-001 · 2-hour monitored run
+    runs-on: ubuntu-latest
+    timeout-minutes: 130
+    steps:
+      - name: Checkout exact trial revision
+        uses: actions/checkout@v6
+
+      - name: Initialize persistent run evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dlt-001-results
+          {
+            echo '{'
+            echo '  "trial": "DLT-001",'
+            echo '  "mode": "long-running developmental-learning trial",'
+            echo '  "duration_seconds": 7200,'
+            echo '  "checkpoint_interval_seconds": 60,'
+            echo '  "seed": 20261024,'
+            echo '  "commit": "${GITHUB_SHA}",'
+            echo '  "run_id": "${GITHUB_RUN_ID}",'
+            echo '  "run_attempt": "${GITHUB_RUN_ATTEMPT}",'
+            echo '  "started_at_utc": "'"$(date -u +%Y-%m-%dT%H:%M:%SZ)"'"'
+            echo '}'
+          } > dlt-001-results/run_metadata.json
+          echo "[DLT-001] workflow_run_id=${GITHUB_RUN_ID} commit=${GITHUB_SHA}" | tee dlt-001-results/workflow.log
+
+      - name: Configure native brain
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmake -S core/cpp -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON 2>&1 | tee dlt-001-results/configure.log
+
+      - name: Build acceptance test and long-run executable
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmake --build build --parallel --target jarvis_dlt_001_trial jarvis_dlt_001_long_run 2>&1 | tee dlt-001-results/build.log
+
+      - name: Gate the long run on the existing DLT-001 acceptance test
+        shell: bash
+        run: |
+          set -euo pipefail
+          ctest --test-dir build -R '^jarvis_dlt_001_trial$' --output-on-failure --timeout 30 2>&1 | tee dlt-001-results/acceptance-test.log
+
+      - name: Run for two hours with one-minute checkpoints
+        shell: bash
+        run: |
+          set -euo pipefail
+          executable="$(find build -type f -name jarvis_dlt_001_long_run -executable -print -quit)"
+          if [[ -z "$executable" ]]; then
+            echo "Could not locate jarvis_dlt_001_long_run executable" | tee -a dlt-001-results/trial.log
+            exit 1
+          fi
+          echo "[DLT-001] long_run_started_at_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)" | tee -a dlt-001-results/workflow.log
+          "$executable" 7200 60 dlt-001-results 2>&1 | tee dlt-001-results/console.log
+
+      - name: Preserve logs, checkpoints, and brain journal
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: DLT-001-${{ github.run_id }}-${{ github.run_attempt }}
+          path: dlt-001-results/
+          if-no-files-found: warn
+          retention-days: 90
