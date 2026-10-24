@@ -3,6 +3,7 @@
 #include "action_model.hpp"
 #include "action_authorization.hpp"
 
+#include <cstdint>
 #include <functional>
 #include <optional>
 #include <string>
@@ -49,6 +50,10 @@ struct ActionExecutionResult {
     bool rolled_back{false};
     ActionOutcome outcome{};
     std::string reason;
+    // If a consequence observer was available, expose the forecast that was
+    // made before execution so delayed observations can resolve the exact item.
+    std::optional<std::uint64_t> consequence_prediction_sequence;
+    std::string consequence_prediction_key;
 };
 
 class ActionExecutor {

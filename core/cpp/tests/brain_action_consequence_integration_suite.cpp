@@ -1,5 +1,6 @@
 #include "jarvis/core/cognitive_cycle.hpp"
 
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <filesystem>
@@ -77,6 +78,23 @@ int main() {
     assert(std::abs(result.action.expected_consequence - 0.8) < 1e-9);
     assert(std::abs(result.outcome.actual_consequence + 0.2) < 1e-9);
     assert(std::abs(result.outcome.consequence_error + 1.0) < 1e-9);
+    assert(result.consequence_prediction_sequence.has_value());
+    assert(!result.consequence_prediction_key.empty());
+
+    const auto prediction_snapshot = brain.snapshot().predictions;
+    const auto action_prediction = std::find_if(
+        prediction_snapshot.begin(), prediction_snapshot.end(),
+        [&](const Prediction& prediction) {
+            return prediction.created_sequence ==
+                   *result.consequence_prediction_sequence;
+        });
+    assert(action_prediction != prediction_snapshot.end());
+    assert(action_prediction->key == result.consequence_prediction_key);
+    assert(action_prediction->resolved);
+    const auto* action_prediction_metric =
+        brain.learning_metric(result.consequence_prediction_key);
+    assert(action_prediction_metric != nullptr);
+    assert(action_prediction_metric->observations > 0);
 
     bool saw_action_outcome = false;
     for (const auto& event : brain.memory().all()) {
@@ -89,6 +107,13 @@ int main() {
         assert(std::abs(std::get<double>(event.data.at("expected_consequence")) - 0.8) < 1e-9);
         assert(std::abs(std::get<double>(event.data.at("actual_consequence")) + 0.2) < 1e-9);
         assert(std::abs(std::get<double>(event.data.at("consequence_error")) + 1.0) < 1e-9);
+        assert(std::get<std::int64_t>(
+                   event.data.at("consequence_prediction_sequence")) ==
+               static_cast<std::int64_t>(
+                   *result.consequence_prediction_sequence));
+        assert(std::get<std::string>(
+                   event.data.at("consequence_prediction_key")) ==
+               result.consequence_prediction_key);
     }
     assert(saw_action_outcome);
     assert(brain.affective_learning_updates() > 0);
@@ -225,6 +250,17 @@ int main() {
     assert(std::abs(restored_strategy->value - live_strategy->value) < 1e-12);
     assert(std::abs(restored_strategy->confidence - live_strategy->confidence) < 1e-12);
     assert(restored_strategy->uses == live_strategy->uses);
+    const auto* restored_action_prediction_metric =
+        restored.learning_metric(result.consequence_prediction_key);
+    assert(restored_action_prediction_metric != nullptr);
+    assert(restored_action_prediction_metric->observations > 0);
+    const auto restored_action_forecast = restored.predict(
+        result.consequence_prediction_key, Scalar{0.8}, 0.9);
+    const auto* restored_action_forecast_value =
+        std::get_if<double>(&restored_action_forecast.predicted);
+    assert(restored_action_forecast_value != nullptr);
+    assert(*restored_action_forecast_value < 0.8 &&
+           *restored_action_forecast_value > -0.2);
     assert(restored_strategy->action == "calibrate");
     assert(restored_strategy->value < 0.0);
     CognitiveCycle restored_cycle(restored);

@@ -20,13 +20,40 @@ ActionExecutionResult Brain::execute_action(
     request.observe_consequence = std::move(observe_consequence);
     request.authorization = std::move(authorization);
 
-    const auto result = ActionExecutor{}.run(request);
-
-    std::unique_lock lock(mutex_);
-    const auto eligible = goals_model_.eligible(state_.cycle);
+    // A measured consequence is also a prediction-learning opportunity. Issue
+    // the forecast before the executor runs, and only when authorization and a
+    // consequence observer are available. The context is part of the key so
+    // feedback from a different situation cannot calibrate this forecast.
+    const auto eligible = this->eligible_goals();
     const std::string context = !assessment.developmental_context.empty()
         ? assessment.developmental_context
         : (eligible.empty() ? "global" : eligible.front().id);
+    const auto authorization_check =
+        ActionAuthorizer{}.authorize(assessment, request.authorization);
+    Prediction consequence_prediction;
+    std::string consequence_prediction_key;
+    if (authorization_check.authorized && request.observe_consequence &&
+        !assessment.action.name.empty() &&
+        std::isfinite(assessment.action.expected_consequence)) {
+        consequence_prediction_key =
+            "action_consequence|" + context + "|" + assessment.action.name;
+        consequence_prediction = predict(
+            consequence_prediction_key,
+            Scalar{assessment.action.expected_consequence},
+            assessment.confidence);
+        if (consequence_prediction.created_sequence == 0)
+            consequence_prediction_key.clear();
+    }
+
+    auto result = ActionExecutor{}.run(request);
+    if (consequence_prediction.created_sequence != 0) {
+        result.consequence_prediction_sequence =
+            consequence_prediction.created_sequence;
+        result.consequence_prediction_key = consequence_prediction.key;
+    }
+
+    bool outcome_persisted = false;
+    std::unique_lock lock(mutex_);
     const double reliability =
         result.status == ActionExecutionStatus::verified ? 1.0 :
         result.status == ActionExecutionStatus::executed ? 0.75 :
@@ -68,9 +95,18 @@ ActionExecutionResult Brain::execute_action(
         {"reason", result.reason},
     };
 
+    if (result.consequence_prediction_sequence.has_value() &&
+        !result.consequence_prediction_key.empty()) {
+        data.emplace("consequence_prediction_sequence",
+                     static_cast<std::int64_t>(
+                         *result.consequence_prediction_sequence));
+        data.emplace("consequence_prediction_key",
+                     result.consequence_prediction_key);
+    }
     Event event{0, 0, "action_executor", "action_outcome", std::move(data)};
     event.sequence = memory_.append(event);
     if (event.sequence != 0) {
+        outcome_persisted = true;
         ++state_.events_seen;
         state_.cycle = event.sequence;
         replay(event);
@@ -131,6 +167,17 @@ ActionExecutionResult Brain::execute_action(
             }
         }
         sync_self_state();
+    }
+
+    // Resolve only after releasing the Brain lock: prediction feedback re-enters
+    // the same journal/replay path. Missing observations leave the forecast
+    // unresolved and its sequence available to a later feedback producer.
+    lock.unlock();
+    if (outcome_persisted && result.outcome.observed &&
+        result.consequence_prediction_sequence.has_value()) {
+        (void)resolve_prediction_feedback(
+            *result.consequence_prediction_sequence,
+            Scalar{result.outcome.actual_consequence});
     }
 
     return result;
