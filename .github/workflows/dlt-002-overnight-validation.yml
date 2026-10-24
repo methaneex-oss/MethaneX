@@ -1,0 +1,112 @@
+name: DLT-002 Persistent Learning and Overnight Brain Validation
+
+on:
+  workflow_dispatch:
+    inputs:
+      soak_minutes:
+        description: "Duration of repeated full-suite soak (minutes; up to 300)"
+        required: true
+        default: "300"
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dlt-002-overnight-validation
+  cancel-in-progress: false
+
+jobs:
+  brain-validation:
+    name: Full brain suite and persistent-learning soak
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - name: Checkout exact revision
+        uses: actions/checkout@v6
+
+      - name: Initialize evidence directory and run metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dlt-002-results
+          {
+            echo '{'
+            echo '  "trial": "DLT-002",'
+            echo '  "purpose": "full cognitive test suite plus cross-process developmental-learning persistence and repeated soak",'
+            echo "  \"commit\": \"${GITHUB_SHA}\","
+            echo "  \"run_id\": \"${GITHUB_RUN_ID}\","
+            echo "  \"run_attempt\": \"${GITHUB_RUN_ATTEMPT}\","
+            echo "  \"soak_minutes\": \"${{ inputs.soak_minutes }}\","
+            echo '  "started_at_utc": "'"$(date -u +%Y-%m-%dT%H:%M:%SZ)"'"'
+            echo '}'
+          } > dlt-002-results/run_metadata.json
+          echo "[DLT-002] run_id=${GITHUB_RUN_ID} commit=${GITHUB_SHA}" | tee dlt-002-results/trial.log
+
+      - name: Configure native brain in Release with assertions enabled
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmake -S core/cpp -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON 2>&1 | tee dlt-002-results/configure.log
+
+      - name: Build all registered brain test targets
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmake --build build --parallel 2>&1 | tee dlt-002-results/build.log
+
+      - name: Verify learning survives an actual process restart
+        shell: bash
+        run: |
+          set -euo pipefail
+          executable="$(find build -type f -name jarvis_dlt_002_persistence -executable -print -quit)"
+          test -n "$executable"
+          journal="$RUNNER_TEMP/dlt-002-process-restart.bin"
+          "$executable" train "$journal" 2>&1 | tee dlt-002-results/persistence-train.log
+          # Separate executable invocation: the trainer process has exited.
+          "$executable" verify "$journal" 2>&1 | tee dlt-002-results/persistence-verify.log
+
+      - name: Run complete registered CTest suite once as the acceptance gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          ctest --test-dir build --output-on-failure --timeout 120 --output-junit dlt-002-results/acceptance-junit.xml 2>&1 | tee dlt-002-results/acceptance-suite.log
+          echo "[DLT-002] initial_full_suite=PASS" | tee -a dlt-002-results/trial.log
+
+      - name: Repeat full suite and persistence checks throughout the soak
+        shell: bash
+        env:
+          SOAK_MINUTES: ${{ inputs.soak_minutes }}
+        run: |
+          set -euo pipefail
+          if ! [[ "$SOAK_MINUTES" =~ ^[0-9]+$ ]] || (( SOAK_MINUTES < 1 || SOAK_MINUTES > 300 )); then
+            echo "soak_minutes must be an integer from 1 through 300" | tee -a dlt-002-results/trial.log
+            exit 64
+          fi
+          executable="$(find build -type f -name jarvis_dlt_002_persistence -executable -print -quit)"
+          journal="$RUNNER_TEMP/dlt-002-process-restart.bin"
+          end_at=$(( $(date +%s) + SOAK_MINUTES * 60 ))
+          iteration=0
+          next_checkpoint=$(( $(date +%s) + 600 ))
+          while (( $(date +%s) < end_at )); do
+            iteration=$((iteration + 1))
+            echo "[DLT-002] iteration=$iteration started_at_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)" | tee -a dlt-002-results/soak.log
+            ctest --test-dir build --output-on-failure --timeout 120 2>&1 | tee -a dlt-002-results/soak.log
+            "$executable" train "$journal" 2>&1 | tee -a dlt-002-results/soak.log
+            "$executable" verify "$journal" 2>&1 | tee -a dlt-002-results/soak.log
+            now=$(date +%s)
+            if (( now >= next_checkpoint )); then
+              echo "[DLT-002] checkpoint elapsed_seconds=$((now - (end_at - SOAK_MINUTES * 60))) iteration=$iteration status=PASS" | tee -a dlt-002-results/checkpoints.log
+              next_checkpoint=$((now + 600))
+            fi
+          done
+          echo "[DLT-002] soak_status=COMPLETED iterations=$iteration completed_at_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)" | tee -a dlt-002-results/trial.log
+
+      - name: Preserve test evidence even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: DLT-002-${{ github.run_id }}-${{ github.run_attempt }}
+          path: dlt-002-results/
+          if-no-files-found: warn
+          retention-days: 90
