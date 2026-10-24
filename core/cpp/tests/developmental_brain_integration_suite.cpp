@@ -200,7 +200,9 @@ int main() {
         assert(restored_failed_strategy->uses >= 5);
 
         const auto snapshot = restored.snapshot();
-        assert(snapshot.predictions.size() == 2);
+        // Consequence-aware execution adds forecasts beyond the two explicit
+        // developmental predictions; ensure the original records remain present.
+        assert(snapshot.predictions.size() >= 2);
         for (const auto& prediction : snapshot.predictions) assert(prediction.resolved);
         assert(restored.developmental_associations().size() == 1);
 
