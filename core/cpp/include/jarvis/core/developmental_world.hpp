@@ -119,7 +119,7 @@ public:
         if (terminal_) return result;
         for (const auto& action : actions_) {
             if (action.resource_cost > resources_) continue;
-            if (action.available && !action.available(state_)) continue;
+            if (!action_is_available(action, state_)) continue;
             result.push_back(action.name);
         }
         return result;
@@ -158,7 +158,7 @@ public:
             return result;
         }
         const auto& action = actions_[found->second];
-        if (action.available && !action.available(state_)) {
+        if (!action_is_available(action, state_)) {
             result.reason = "action_unavailable_in_current_state";
             return result;
         }
@@ -234,6 +234,18 @@ public:
     const DevelopmentalWorldConfig& config() const noexcept { return config_; }
 
 private:
+    static bool action_is_available(const DevelopmentalWorldAction& action,
+                                    const Attributes& state) noexcept {
+        if (!action.available) return true;
+        try {
+            return action.available(state);
+        } catch (...) {
+            // A broken precondition must fail closed: never execute an action
+            // when the world cannot establish that it is available.
+            return false;
+        }
+    }
+
     DevelopmentalWorldConfig config_;
     Attributes state_;
     std::vector<DevelopmentalWorldAction> actions_;
