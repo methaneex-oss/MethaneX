@@ -304,6 +304,25 @@ int main() {
         assert(with_history.status == CognitiveCycleStatus::completed);
         assert(std::abs(with_history.context.plan.steps.front().action.expected_consequence - 0.8) < 1e-12);
     }
+    // The learned expectation must come back from the durable journal, not
+    // merely survive in the original Brain instance's in-memory state.
+    {
+        Brain reopened_expectation_brain(expectation_journal);
+        CognitiveCycleInput persisted_input;
+        persisted_input.observation = Event{0, 0, "sensor", "observation",
+            {{"status", std::string("stable")}, {"location", std::string("test-area")}}};
+        persisted_input.candidate_actions = {
+            CandidateAction{"probe-route", 0.8, 0.7, 0.8, 0.1, 1.0, 0.0, 0.25},
+        };
+        persisted_input.goal_id = "learn-consequence";
+        persisted_input.planning_horizon = 1;
+        persisted_input.memory_limit = 16;
+
+        const auto after_restart =
+            CognitiveCycle(reopened_expectation_brain).run(persisted_input);
+        assert(after_restart.status == CognitiveCycleStatus::completed);
+        assert(std::abs(after_restart.context.plan.steps.front().action.expected_consequence - 0.8) < 1e-12);
+    }
     std::filesystem::remove(expectation_journal, ec);
     std::filesystem::remove(expectation_journal.string() + ".meta", ec);
 
