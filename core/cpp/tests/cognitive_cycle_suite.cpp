@@ -130,6 +130,19 @@ int main() {
     assert(restored_metric != nullptr);
     assert(restored_metric->reliability == 0.0);
 
+    // Prediction feedback must survive journal replay and calibrate a later
+    // forecast, not merely update the original Brain instance.
+    const auto restored_prediction_metric =
+        restored.learning_metric("temperature_next");
+    assert(restored_prediction_metric != nullptr);
+    assert(restored_prediction_metric->observations > 0);
+    const auto restored_forecast =
+        restored.predict("temperature_next", Scalar{43.0}, 0.8);
+    const auto* restored_forecast_value =
+        std::get_if<double>(&restored_forecast.predicted);
+    assert(restored_forecast_value != nullptr);
+    assert(*restored_forecast_value > 43.0 && *restored_forecast_value < 45.0);
+
     const auto dispute_journal = std::filesystem::temp_directory_path() / "jarvis_cognitive_dispute_suite.bin";
     // Self-model performance must affect future action selection even when
     // no action_executor knowledge metric exists yet. Reversing the observed
