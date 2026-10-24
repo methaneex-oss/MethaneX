@@ -8,6 +8,13 @@ on:
         required: true
         default: "300"
         type: string
+  push:
+    branches:
+      - feat/jarvis-affective-state
+    paths:
+      - 'core/cpp/tests/dlt_002_persistence.cpp'
+      - 'core/cpp/tests/CMakeLists.txt'
+      - '.github/workflows/dlt-002-overnight-validation.yml'
 
 permissions:
   contents: read
@@ -37,7 +44,7 @@ jobs:
             echo "  \"commit\": \"${GITHUB_SHA}\","
             echo "  \"run_id\": \"${GITHUB_RUN_ID}\","
             echo "  \"run_attempt\": \"${GITHUB_RUN_ATTEMPT}\","
-            echo "  \"soak_minutes\": \"${{ inputs.soak_minutes }}\","
+            echo "  \"soak_minutes\": \"${{ inputs.soak_minutes || '5' }}\","
             echo '  "started_at_utc": "'"$(date -u +%Y-%m-%dT%H:%M:%SZ)"'"'
             echo '}'
           } > dlt-002-results/run_metadata.json
