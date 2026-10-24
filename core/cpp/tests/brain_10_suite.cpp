@@ -3,6 +3,7 @@
 #include <cassert>
 #include <chrono>
 #include <cstdint>
+#include <filesystem>
 #include <string>
 #include <thread>
 #include <vector>
@@ -18,7 +19,16 @@ static Event make_event(std::uint64_t seq, const std::string& source,
 }
 
 int main() {
-    Brain brain;
+    // This suite asserts a fresh brain at startup. Use a unique journal so
+    // prior CTest iterations or other suites cannot leak persisted state in.
+    const auto journal_path = std::filesystem::temp_directory_path() /
+        ("jarvis-brain-10-suite-" +
+         std::to_string(std::chrono::steady_clock::now().time_since_epoch().count()) +
+         ".bin");
+    std::error_code cleanup_error;
+    std::filesystem::remove(journal_path, cleanup_error);
+    std::filesystem::remove(journal_path.string() + ".meta", cleanup_error);
+    Brain brain(journal_path);
     assert(brain.state().cycle == 0);
     assert(brain.state().events_seen == 0);
 
@@ -94,5 +104,7 @@ int main() {
     assert(elapsed >= 0);
     assert(brain.state().cycle > 0);
 
+    std::filesystem::remove(journal_path, cleanup_error);
+    std::filesystem::remove(journal_path.string() + ".meta", cleanup_error);
     return 0;
 }
