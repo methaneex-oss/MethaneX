@@ -129,6 +129,12 @@ int main() {
             const auto result = await_result(runtime);
             assert(result.status == CognitiveCycleStatus::completed);
             assert(!result.context.plan.steps.empty());
+            // One-step plans must execute only the selected action, not every
+            // candidate assessment. Otherwise the learner receives outcomes for
+            // actions it did not choose.
+            assert(result.context.action_execution_results.size() == 1);
+            assert(result.context.action_execution_results.front().action.name ==
+                   result.context.plan.steps.front().action.name);
             // The selected observation must expose the environment state that
             // the action/outcome loop is testing, not just an episode counter.
             assert(std::get<std::string>(result.context.observation.event.data.at("route_condition")) == current_route_condition);
@@ -198,6 +204,11 @@ int main() {
             const auto result = await_result(runtime);
             assert(result.status == CognitiveCycleStatus::completed);
             assert(!result.context.plan.steps.empty());
+            // The environment should return one consequence for the action
+            // actually selected by this one-step plan.
+            assert(result.context.action_execution_results.size() == 1);
+            assert(result.context.action_execution_results.front().action.name ==
+                   result.context.plan.steps.front().action.name);
             assert(std::get<std::string>(result.context.observation.event.data.at("route_condition")) == current_route_condition);
             assert(result.context.observation.event.data.contains("bridge_status"));
             assert(result.context.observation.event.data.contains("visibility"));
