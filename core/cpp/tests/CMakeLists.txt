@@ -193,6 +193,9 @@ target_compile_features(jarvis_developmental_world_suite PRIVATE cxx_std_20)
 add_executable(jarvis_developmental_world_integration_suite developmental_world_integration_suite.cpp)
 target_link_libraries(jarvis_developmental_world_integration_suite PRIVATE jarvis_core)
 target_compile_features(jarvis_developmental_world_integration_suite PRIVATE cxx_std_20)
+add_executable(jarvis_dlt_001_trial dlt_001_trial.cpp)
+target_link_libraries(jarvis_dlt_001_trial PRIVATE jarvis_core)
+target_compile_features(jarvis_dlt_001_trial PRIVATE cxx_std_20)
 
 include(CTest)
 if(BUILD_TESTING)
@@ -261,6 +264,7 @@ if(BUILD_TESTING)
     add_test(NAME jarvis_developmental_environment_suite COMMAND jarvis_developmental_environment_suite)
     add_test(NAME jarvis_developmental_world_suite COMMAND jarvis_developmental_world_suite)
     add_test(NAME jarvis_developmental_world_integration_suite COMMAND jarvis_developmental_world_integration_suite)
+    add_test(NAME jarvis_dlt_001_trial COMMAND jarvis_dlt_001_trial)
 endif()
 # These executable suites use assert() as their test assertion mechanism. Keep
 # assertions enabled in Release builds as well: otherwise NDEBUG removes the
