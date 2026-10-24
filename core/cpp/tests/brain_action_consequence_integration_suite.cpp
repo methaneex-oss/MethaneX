@@ -259,8 +259,9 @@ int main() {
     const auto* restored_action_forecast_value =
         std::get_if<double>(&restored_action_forecast.predicted);
     assert(restored_action_forecast_value != nullptr);
+    // Full-confidence evidence may converge exactly to the observed consequence.
     assert(*restored_action_forecast_value < 0.8 &&
-           *restored_action_forecast_value > -0.2);
+           *restored_action_forecast_value >= -0.2 - 1e-12);
     assert(restored_strategy->action == "calibrate");
     assert(restored_strategy->value < 0.0);
     CognitiveCycle restored_cycle(restored);
