@@ -25,6 +25,13 @@ int main() {
         visible.erase("hidden_route_quality");
         return visible;
     };
+    config.dynamics = [](const Attributes&, std::mt19937_64& random) {
+        std::bernoulli_distribution storm(0.5);
+        const bool stormy = storm(random);
+        return DevelopmentalWorldTick{
+            {{"weather", std::string(stormy ? "storm" : "clear")}},
+            {stormy ? "weather_changed_storm" : "weather_changed_clear"}, false};
+    };
 
     DevelopmentalWorld world(config);
     assert(world.add_action(DevelopmentalWorldAction{
@@ -91,7 +98,11 @@ int main() {
     assert(inspection.consequence && *inspection.consequence == 0.0);
     assert(inspection.resources_after == 4.5);
     assert(std::get<bool>(world.true_state().at("bridge_inspected")));
-    assert(inspection.events.size() == 2);
+    assert(inspection.events.size() == 3);
+    assert(inspection.events.back() == "weather_changed_storm" ||
+           inspection.events.back() == "weather_changed_clear");
+    assert(std::get<std::string>(inspection.state_after.at("weather")) == "storm" ||
+           std::get<std::string>(inspection.state_after.at("weather")) == "clear");
 
     // State changes alter which actions are available and what follows.
     const auto opened = world.step("open-bridge");
