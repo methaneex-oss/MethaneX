@@ -75,8 +75,8 @@ int main(int argc, char** argv) {
     if (!episodes || !checkpoints || !report)
         throw std::runtime_error("Could not create DLT-001 output files");
 
-    episodes << "episode,elapsed_seconds,phase,route_condition,selected_action,consequence,cycle_status,observation_count,outcome_count\n";
-    checkpoints << "elapsed_seconds,phase,episodes,clear_good,clear_bad,flooded_good,flooded_bad,total_reward,good_route_value,bad_route_value,observations,outcomes\n";
+    episodes << "episode,elapsed_seconds,phase,route_condition,selected_action,consequence,cycle_status,observation_count,outcome_count,prediction_count,prediction_outcome_count\n";
+    checkpoints << "elapsed_seconds,phase,episodes,clear_good,clear_bad,flooded_good,flooded_bad,total_reward,good_route_value,bad_route_value,observations,outcomes,predictions,prediction_outcomes\n";
     episodes << std::unitbuf;
     checkpoints << std::unitbuf;
     report << std::unitbuf;
@@ -208,7 +208,9 @@ int main(int argc, char** argv) {
                      << (flooded ? "flooded" : "clear") << ',' << selected << ','
                      << *last_step->consequence << ",completed,"
                      << brain.memory().by_kind("observation").size() << ','
-                     << brain.memory().by_kind("action_outcome").size() << '\n';
+                     << brain.memory().by_kind("action_outcome").size() << ','
+                     << brain.memory().by_kind("prediction").size() << ','
+                     << brain.memory().by_kind("prediction_outcome").size() << '\n';
             std::cout << "[DLT-001] episode=" << episode << " elapsed_seconds=" << cycle_elapsed
                       << " phase=" << active_phase << " action=" << selected
                       << " consequence=" << *last_step->consequence << std::endl;
@@ -219,19 +221,24 @@ int main(int argc, char** argv) {
                 const auto checkpoint_elapsed = std::chrono::duration_cast<std::chrono::seconds>(now - started).count();
                 const auto observation_count = brain.memory().by_kind("observation").size();
                 const auto outcome_count = brain.memory().by_kind("action_outcome").size();
+                const auto prediction_count = brain.memory().by_kind("prediction").size();
+                const auto prediction_outcome_count = brain.memory().by_kind("prediction_outcome").size();
                 const auto good_value = strategy_value(brain, "navigation/route-selection", "good-route");
                 const auto bad_value = strategy_value(brain, "navigation/route-selection", "bad-route");
                 checkpoints << checkpoint_elapsed << ',' << active_phase << ',' << episode << ','
                             << clear_good << ',' << clear_bad << ',' << flooded_good << ','
                             << flooded_bad << ',' << total_reward << ',' << good_value << ','
-                            << bad_value << ',' << observation_count << ',' << outcome_count << '\n';
+                            << bad_value << ',' << observation_count << ',' << outcome_count << ','
+                            << prediction_count << ',' << prediction_outcome_count << '\n';
                 report << "[DLT-001] checkpoint elapsed_seconds=" << checkpoint_elapsed
                        << " phase=" << active_phase << " episodes=" << episode
                        << " clear_good=" << clear_good << " clear_bad=" << clear_bad
                        << " flooded_good=" << flooded_good << " flooded_bad=" << flooded_bad
                        << " total_reward=" << total_reward << " good_route_value=" << good_value
                        << " bad_route_value=" << bad_value << " observations=" << observation_count
-                       << " outcomes=" << outcome_count << '\n';
+                       << " outcomes=" << outcome_count
+                       << " predictions=" << prediction_count
+                       << " prediction_outcomes=" << prediction_outcome_count << '\n';
                 std::cout << "[DLT-001] checkpoint elapsed_seconds=" << checkpoint_elapsed
                           << " phase=" << active_phase << " episodes=" << episode
                           << " total_reward=" << total_reward
@@ -257,7 +264,9 @@ int main(int argc, char** argv) {
                << " good_route_value=" << strategy_value(brain, "navigation/route-selection", "good-route")
                << " bad_route_value=" << strategy_value(brain, "navigation/route-selection", "bad-route")
                << " observation_memories=" << brain.memory().by_kind("observation").size()
-               << " outcome_memories=" << brain.memory().by_kind("action_outcome").size() << '\n';
+               << " outcome_memories=" << brain.memory().by_kind("action_outcome").size()
+               << " prediction_memories=" << brain.memory().by_kind("prediction").size()
+               << " prediction_outcome_memories=" << brain.memory().by_kind("prediction_outcome").size() << '\n';
         if (!completed) exit_code = 2;
     } catch (const std::exception& ex) {
         report << "[DLT-001] status=FAILED episode=" << episode << " error=" << ex.what() << '\n';
