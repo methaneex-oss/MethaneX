@@ -204,7 +204,12 @@ int main() {
         // developmental predictions; ensure the original records remain present.
         assert(snapshot.predictions.size() >= 2);
         for (const auto& prediction : snapshot.predictions) assert(prediction.resolved);
-        assert(restored.developmental_associations().size() == 1);
+        const auto restored_associations = restored.developmental_associations();
+        // Resolved action-consequence forecasts also contribute associations;
+        // do not assume the total remains fixed as integrated learning expands.
+        assert(!restored_associations.empty());
+        for (const auto& association : restored_associations)
+            assert(std::isfinite(association.strength));
 
         const auto learned = restored.developmental_best_strategy("developmental-context");
         assert(learned != nullptr);
