@@ -151,7 +151,7 @@ int main() {
                     }
                 }
             }
-            std::cout << '\\n';
+            std::cout << '\n';
 
             if (episode == 0) {
                 assert(runtime.running());
@@ -213,7 +213,7 @@ int main() {
                     std::cout << " consequence=" << execution.outcome.actual_consequence;
                 }
             }
-            std::cout << '\\n';
+            std::cout << '\n';
             assert(!result.context.action_execution_results.empty());
             bool consequence_observed = false;
             for (const auto& execution : result.context.action_execution_results) {
@@ -275,7 +275,7 @@ int main() {
                   << " route-variant bad-route="
                   << brain.developmental_best_strategy("navigation/route-variant")->value
                   << " action_outcomes=" << brain.memory().by_kind("action_outcome").size()
-                  << " processed_episodes=" << runtime.metrics().processed << '\\n';
+                  << " processed_episodes=" << runtime.metrics().processed << '\n';
     }
 
     // The second phase starts a fresh Brain from the same persistent journal.
@@ -318,7 +318,7 @@ int main() {
         assert(!generalized.context.plan.steps.empty());
         assert(generalized.context.plan.steps.front().action.name == "good-route");
         std::cout << "[restart-probe] original=good-route revised=bad-route generalized=good-route"
-                  << " restored_events=" << restored.memory().all().size() << '\\n';
+                  << " restored_events=" << restored.memory().all().size() << '\n';
 
         // Transfer must remain bounded: navigation experience must not dictate
         // a choice in an unrelated task where the candidates are otherwise tied.
