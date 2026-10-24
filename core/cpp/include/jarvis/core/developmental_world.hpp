@@ -34,6 +34,12 @@ struct DevelopmentalWorldAction {
         const Attributes&, std::mt19937_64&)> transition;
 };
 
+struct DevelopmentalWorldTick {
+    Attributes state_updates;
+    std::vector<std::string> events;
+    bool terminal{false};
+};
+
 struct DevelopmentalWorldConfig {
     std::string task;
     std::string context;
@@ -44,6 +50,9 @@ struct DevelopmentalWorldConfig {
     // Optional partial-observation boundary. The transition function still
     // receives true world state; the brain only receives this filtered view.
     std::function<Attributes(const Attributes&)> observation_filter;
+    // Exogenous world changes (weather, moving objects, outages, other actors)
+    // occur after an accepted action and are driven by the world's seeded RNG.
+    std::function<DevelopmentalWorldTick(const Attributes&, std::mt19937_64&)> dynamics;
 };
 
 struct DevelopmentalWorldObservation {
@@ -173,15 +182,30 @@ public:
         resources_ = std::max(0.0, resources_ - action.resource_cost);
         for (const auto& [key, value] : transition->state_updates)
             state_.insert_or_assign(key, value);
-        terminal_ = transition->terminal || step_ >= config_.max_steps;
+        result.events = std::move(transition->events);
+        terminal_ = transition->terminal;
+        if (config_.dynamics && !terminal_) {
+            try {
+                auto tick = config_.dynamics(state_, random_);
+                for (const auto& [key, value] : tick.state_updates)
+                    state_.insert_or_assign(key, value);
+                result.events.insert(result.events.end(), tick.events.begin(), tick.events.end());
+                terminal_ = tick.terminal;
+            } catch (...) {
+                // The action consequence remains valid; expose the world-model
+                // fault as an event instead of silently inventing another outcome.
+                result.events.push_back("world_dynamics_failed");
+                result.reason = "observed_consequence_world_dynamics_failed";
+            }
+        }
+        terminal_ = terminal_ || step_ >= config_.max_steps;
         result.executed = true;
         result.observed = true;
         result.consequence = transition->consequence;
-        result.events = std::move(transition->events);
         result.resources_after = resources_;
         result.state_after = state_;
         result.terminal = terminal_;
-        result.reason = "observed_consequence";
+        if (result.reason.empty()) result.reason = "observed_consequence";
         return result;
     }
 
