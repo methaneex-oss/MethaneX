@@ -367,6 +367,66 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
         }
     }
 
+    // Calibrate action consequence expectations from observed outcomes in the
+    // exact developmental context. This is evidence-derived, not a fixed action
+    // mapping: without valid local observations the caller's prior is preserved.
+    for (auto& action : learned_actions) {
+        double weighted_consequence = 0.0;
+        double evidence_weight = 0.0;
+        for (const auto& memory : result.context.memories) {
+            const auto& event = memory.event;
+            if (event.kind != "action_outcome") continue;
+            const auto action_it = event.data.find("action");
+            const auto context_it = event.data.find("context");
+            const auto observed_it = event.data.find("observed");
+            const auto actual_it = event.data.find("actual_consequence");
+            if (action_it == event.data.end() || context_it == event.data.end() ||
+                observed_it == event.data.end() || actual_it == event.data.end()) continue;
+            const auto* remembered_action = std::get_if<std::string>(&action_it->second);
+            const auto* remembered_context = std::get_if<std::string>(&context_it->second);
+            const auto* observed = std::get_if<bool>(&observed_it->second);
+            if (remembered_action == nullptr || remembered_context == nullptr ||
+                observed == nullptr || !*observed ||
+                *remembered_action != action.name ||
+                *remembered_context != developmental_context) continue;
+
+            double consequence = 0.0;
+            if (const auto* value = std::get_if<double>(&actual_it->second)) {
+                consequence = *value;
+            } else if (const auto* value = std::get_if<std::int64_t>(&actual_it->second)) {
+                consequence = static_cast<double>(*value);
+            } else {
+                continue;
+            }
+            if (!std::isfinite(consequence)) continue;
+
+            double reliability = std::clamp(
+                std::isfinite(memory.confidence) ? memory.confidence : 0.0,
+                0.0, 1.0);
+            const auto evidence_it = event.data.find("evidence_reliability");
+            const auto reliability_it = event.data.find("reliability");
+            const auto selected_reliability =
+                evidence_it != event.data.end() ? evidence_it : reliability_it;
+            if (selected_reliability != event.data.end()) {
+                if (const auto* value = std::get_if<double>(&selected_reliability->second)) {
+                    if (!std::isfinite(*value)) continue;
+                    reliability = std::clamp(*value, 0.0, 1.0);
+                } else if (const auto* value = std::get_if<std::int64_t>(&selected_reliability->second)) {
+                    reliability = std::clamp(static_cast<double>(*value), 0.0, 1.0);
+                } else {
+                    continue;
+                }
+            }
+            if (reliability <= 0.0) continue;
+            weighted_consequence += reliability * std::clamp(consequence, -1.0, 1.0);
+            evidence_weight += reliability;
+        }
+        if (evidence_weight > 0.0) {
+            action.expected_consequence = std::clamp(
+                weighted_consequence / evidence_weight, -1.0, 1.0);
+        }
+    }
+
     const auto stored_strategies = brain_.developmental_strategies();
     const auto related_strategies = brain_.developmental_related_strategies(developmental_context);
     // A transferred strategy is a prior, not a prohibition. When the current
