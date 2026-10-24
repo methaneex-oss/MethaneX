@@ -259,6 +259,54 @@ int main() {
     std::filesystem::remove(strategy_journal, ec);
     std::filesystem::remove(strategy_journal.string() + ".meta", ec);
 
+    // Consequence expectations start from caller input when no matching
+    // experience exists, then become grounded in observed local outcomes.
+    const auto expectation_journal =
+        std::filesystem::temp_directory_path() / "jarvis_cognitive_expectation_suite.bin";
+    std::filesystem::remove(expectation_journal, ec);
+    std::filesystem::remove(expectation_journal.string() + ".meta", ec);
+    {
+        Brain expectation_brain(expectation_journal);
+        Goal expectation_goal;
+        expectation_goal.id = "learn-consequence";
+        expectation_goal.description = "Learn action consequences from experience";
+        expectation_goal.priority = 1.0;
+        assert(expectation_brain.create_goal(expectation_goal));
+        assert(expectation_brain.activate_goal(expectation_goal.id));
+
+        CognitiveCycleInput expectation_input;
+        expectation_input.observation = Event{0, 0, "sensor", "observation",
+            {{"status", std::string("stable")}, {"location", std::string("test-area")}}};
+        expectation_input.candidate_actions = {
+            CandidateAction{"probe-route", 0.8, 0.7, 0.8, 0.1, 1.0, 0.0, 0.25},
+        };
+        expectation_input.goal_id = expectation_goal.id;
+        expectation_input.planning_horizon = 1;
+        expectation_input.memory_limit = 16;
+
+        CognitiveCycle expectation_cycle(expectation_brain);
+        const auto without_history = expectation_cycle.run(expectation_input);
+        assert(without_history.status == CognitiveCycleStatus::completed);
+        assert(std::abs(without_history.context.plan.steps.front().action.expected_consequence - 0.25) < 1e-12);
+        const auto context = without_history.context.action_assessments.front().developmental_context;
+
+        assert(expectation_brain.observe(Event{0, 0, "executor", "action_outcome",
+            {{"action", std::string("probe-route")},
+             {"context", context},
+             {"observed", true},
+             {"expected_consequence", 0.25},
+             {"actual_consequence", 0.8},
+             {"consequence_error", 0.55},
+             {"evidence_reliability", 1.0},
+             {"reliability", 1.0}}}).event.sequence != 0);
+
+        const auto with_history = expectation_cycle.run(expectation_input);
+        assert(with_history.status == CognitiveCycleStatus::completed);
+        assert(std::abs(with_history.context.plan.steps.front().action.expected_consequence - 0.8) < 1e-12);
+    }
+    std::filesystem::remove(expectation_journal, ec);
+    std::filesystem::remove(expectation_journal.string() + ".meta", ec);
+
     std::filesystem::remove(dispute_journal, ec);
     std::filesystem::remove(dispute_journal.string() + ".meta", ec);
     Brain dispute_brain(dispute_journal);
