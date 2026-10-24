@@ -8,8 +8,6 @@ on:
     paths:
       - 'core/cpp/tests/dlt_001_long_run.cpp'
       - 'core/cpp/tests/dlt_001_trial.cpp'
-      - 'core/cpp/tests/CMakeLists.txt'
-      - '.github/workflows/dlt-001-long-run.yml'
 
 permissions:
   contents: read
@@ -39,9 +37,9 @@ jobs:
             echo '  "duration_seconds": 7200,'
             echo '  "checkpoint_interval_seconds": 60,'
             echo '  "seed": 20261024,'
-            echo '  "commit": "${GITHUB_SHA}",'
-            echo '  "run_id": "${GITHUB_RUN_ID}",'
-            echo '  "run_attempt": "${GITHUB_RUN_ATTEMPT}",'
+            echo "  \"commit\": \"${GITHUB_SHA}\","
+            echo "  \"run_id\": \"${GITHUB_RUN_ID}\","
+            echo "  \"run_attempt\": \"${GITHUB_RUN_ATTEMPT}\","
             echo '  "started_at_utc": "'"$(date -u +%Y-%m-%dT%H:%M:%SZ)"'"'
             echo '}'
           } > dlt-001-results/run_metadata.json
