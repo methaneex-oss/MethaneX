@@ -287,8 +287,10 @@ int main() {
     assert(brain.memory().by_kind("action_outcome", 1).size() == 1);
     assert(brain.memory().by_kind("affective_learning", 1).size() == 1);
     assert(brain.memory().by_kind("learning", 1).size() == 1);
-    // The derived learning event must not re-appraise the same experience.
-    assert(brain.affective_state().updates == affect_before_action.updates + 1);
+    // The action outcome trains affective appraisal, and explicit forecast
+    // feedback updates prediction-error appraisal through a separate pathway.
+    // The derived capability-learning event must not add a third appraisal.
+    assert(brain.affective_state().updates == affect_before_action.updates + 2);
 
     // Derived affective-learning evidence is keyed to its source action and must not train twice.
     const auto affective_records = brain.memory().by_kind("affective_learning", 1);
