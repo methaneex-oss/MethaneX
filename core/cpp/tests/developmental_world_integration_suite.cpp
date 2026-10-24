@@ -1,6 +1,7 @@
 #include "jarvis/core/cognitive_runtime.hpp"
 #include "jarvis/core/developmental_world.hpp"
 
+#include <algorithm>
 #include <cassert>
 #include <chrono>
 #include <filesystem>
