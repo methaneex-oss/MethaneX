@@ -153,14 +153,28 @@ void CognitiveRuntime::process_feedback(CognitiveFeedback feedback) {
     else ++metrics_.feedback_processed;
 }
 void CognitiveRuntime::execute_actions(CognitiveCycleResult& result) {
-    for (const auto& assessment : result.context.action_assessments) {
+    // Candidate assessments are alternatives for the planner to compare, not a
+    // batch of commands to execute. Execute only actions that appear in the
+    // selected plan, in plan order; otherwise one "trial" can secretly execute
+    // every alternative and feed the learner outcomes for actions it never chose.
+    std::vector<bool> consumed(result.context.action_assessments.size(), false);
+    for (const auto& planned_step : result.context.plan.steps) {
+        const auto assessment_index = [&]() -> std::optional<std::size_t> {
+            for (std::size_t i = 0; i < result.context.action_assessments.size(); ++i) {
+                if (consumed[i]) continue;
+                if (result.context.action_assessments[i].action.name == planned_step.action.name)
+                    return i;
+            }
+            return std::nullopt;
+        }();
+        if (!assessment_index.has_value()) continue;
+        consumed[*assessment_index] = true;
+        const auto& assessment = result.context.action_assessments[*assessment_index];
         if (assessment.action.name.empty()) continue;
 
         ActionExecutionResult execution;
-        // Preserve a result for every assessed action. The executor is only invoked
-        // for dispositions that reached the execution boundary; rejected/clarify/
-        // recommend decisions are still observable as cognitive outcomes rather
-        // than disappearing from the runtime trace.
+        // The selected action's disposition remains observable even when it is
+        // rejected/clarified/recommended rather than reaching the executor.
         if (assessment.disposition != ActionDisposition::execute) {
             execution.action = assessment.action;
             execution.status = ActionExecutionStatus::rejected;
