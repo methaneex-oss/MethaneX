@@ -142,6 +142,19 @@ int main() {
         std::get_if<double>(&restored_forecast.predicted);
     assert(restored_forecast_value != nullptr);
     assert(*restored_forecast_value > 43.0 && *restored_forecast_value < 45.0);
+    const double first_restored_error = std::abs(45.0 - *restored_forecast_value);
+    assert(restored.resolve_prediction_feedback(
+               restored_forecast.created_sequence, Scalar{45.0}) ==
+           PredictionFeedbackStatus::resolved_with_error);
+    const auto refined_forecast =
+        restored.predict("temperature_next", Scalar{43.0}, 0.8);
+    const auto* refined_forecast_value =
+        std::get_if<double>(&refined_forecast.predicted);
+    assert(refined_forecast_value != nullptr);
+    assert(std::abs(45.0 - *refined_forecast_value) < first_restored_error);
+    const auto* refined_metric = restored.learning_metric("temperature_next");
+    assert(refined_metric != nullptr);
+    assert(refined_metric->observations > restored_prediction_metric->observations);
 
     const auto dispute_journal = std::filesystem::temp_directory_path() / "jarvis_cognitive_dispute_suite.bin";
     // Self-model performance must affect future action selection even when
