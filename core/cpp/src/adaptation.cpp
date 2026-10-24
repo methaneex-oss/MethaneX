@@ -70,7 +70,13 @@ double AdaptationModel::confidence(const std::string& key) const noexcept {
     const double stable_accuracy = 1.0 - value->mean_error;
     const double recent_accuracy = 1.0 - value->recent_error;
     const double accuracy = std::min(stable_accuracy, recent_accuracy);
-    return std::clamp(accuracy * experience, 0.0, 1.0);
+    // A surprising first observation is still evidence. If confidence were
+    // exactly zero whenever the first forecast is maximally wrong, numeric
+    // calibration would never move toward the observed value and the model
+    // could not learn from its own mistakes. Keep a small evidence-weighted
+    // update floor while preserving lower confidence for inaccurate forecasts.
+    const double evidence_weight = 0.25 + 0.75 * accuracy;
+    return std::clamp(evidence_weight * experience, 0.0, 1.0);
 }
 
 } // namespace jarvis::core
