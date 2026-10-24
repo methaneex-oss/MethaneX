@@ -197,6 +197,11 @@ add_executable(jarvis_dlt_001_trial dlt_001_trial.cpp)
 target_link_libraries(jarvis_dlt_001_trial PRIVATE jarvis_core)
 target_compile_features(jarvis_dlt_001_trial PRIVATE cxx_std_20)
 
+# Long-running DLT-001 is invoked explicitly by its dedicated workflow, not CTest.
+add_executable(jarvis_dlt_001_long_run dlt_001_long_run.cpp)
+target_link_libraries(jarvis_dlt_001_long_run PRIVATE jarvis_core)
+target_compile_features(jarvis_dlt_001_long_run PRIVATE cxx_std_20)
+
 include(CTest)
 if(BUILD_TESTING)
     add_test(NAME jarvis_brain_contract COMMAND jarvis_brain_contract)
