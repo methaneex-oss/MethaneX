@@ -53,7 +53,10 @@ int main() {
         }}));
 
     assert(world.add_action(DevelopmentalWorldAction{
-        "open-bridge", 1.0, {},
+        "open-bridge", 1.0,
+        [](const Attributes& state) {
+            return std::get<std::string>(state.at("bridge")) == "closed";
+        },
         [](const Attributes&, std::mt19937_64&) -> std::optional<DevelopmentalWorldTransition> {
             return DevelopmentalWorldTransition{
                 0.0, {{"bridge", std::string("open")}}, {"bridge_opened"}, false};
