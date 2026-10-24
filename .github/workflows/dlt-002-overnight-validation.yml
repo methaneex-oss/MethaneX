@@ -83,7 +83,7 @@ jobs:
       - name: Repeat full suite and persistence checks throughout the soak
         shell: bash
         env:
-          SOAK_MINUTES: ${{ inputs.soak_minutes }}
+          SOAK_MINUTES: ${{ inputs.soak_minutes || '5' }}
         run: |
           set -euo pipefail
           if ! [[ "$SOAK_MINUTES" =~ ^[0-9]+$ ]] || (( SOAK_MINUTES < 1 || SOAK_MINUTES > 300 )); then
