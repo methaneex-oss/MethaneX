@@ -197,6 +197,11 @@ add_executable(jarvis_dlt_001_trial dlt_001_trial.cpp)
 target_link_libraries(jarvis_dlt_001_trial PRIVATE jarvis_core)
 target_compile_features(jarvis_dlt_001_trial PRIVATE cxx_std_20)
 
+# DLT-002 persistence test is invoked twice as separate processes by its dedicated workflow.
+add_executable(jarvis_dlt_002_persistence dlt_002_persistence.cpp)
+target_link_libraries(jarvis_dlt_002_persistence PRIVATE jarvis_core)
+target_compile_features(jarvis_dlt_002_persistence PRIVATE cxx_std_20)
+
 # Long-running DLT-001 is invoked explicitly by its dedicated workflow, not CTest.
 add_executable(jarvis_dlt_001_long_run dlt_001_long_run.cpp)
 target_link_libraries(jarvis_dlt_001_long_run PRIVATE jarvis_core)
