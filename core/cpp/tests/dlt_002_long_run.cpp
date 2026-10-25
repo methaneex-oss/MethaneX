@@ -108,16 +108,32 @@ int main(int argc, char** argv) {
 
     std::filesystem::create_directories(output_dir);
     const auto journal = output_dir / "brain-journal.bin";
-    std::error_code ec;
-    std::filesystem::remove(journal, ec);
-    std::filesystem::remove(journal.string() + ".meta", ec);
+    const auto journal_meta = std::filesystem::path(journal.string() + ".meta");
+    const auto episodes_path = output_dir / "episodes.csv";
+    const auto checkpoints_path = output_dir / "checkpoints.csv";
+    const auto report_path = output_dir / "trial.log";
+
+    // DLT-002 is intentionally a single uninterrupted trial. This executable
+    // does not restore phase clocks, RNG streams, world state, or aggregate
+    // metrics, so it must never silently delete a journal or truncate evidence
+    // from an earlier/partial run. An interrupted trial is incomplete; preserve
+    // its files and start a separately identified experiment instead.
+    for (const auto& protected_path : {
+             journal, journal_meta, episodes_path, checkpoints_path, report_path}) {
+        if (std::filesystem::exists(protected_path)) {
+            throw std::runtime_error(
+                "Refusing to overwrite existing DLT-002 state/evidence: " +
+                protected_path.string() +
+                ". This executable cannot safely resume a partial trial.");
+        }
+    }
 
     std::signal(SIGINT, request_stop);
     std::signal(SIGTERM, request_stop);
 
-    std::ofstream episodes(output_dir / "episodes.csv", std::ios::trunc);
-    std::ofstream checkpoints(output_dir / "checkpoints.csv", std::ios::trunc);
-    std::ofstream report(output_dir / "trial.log", std::ios::trunc);
+    std::ofstream episodes(episodes_path, std::ios::out);
+    std::ofstream checkpoints(checkpoints_path, std::ios::out);
+    std::ofstream report(report_path, std::ios::out);
     if (!episodes || !checkpoints || !report)
         throw std::runtime_error("Could not create DLT-002 output files");
     episodes << "episode,elapsed_seconds,phase,context,latent_condition_evaluation_only,expected_action_evaluation_only,selected_action,optimal_action_selected,consequence,observation_count,outcome_count,prediction_count,prediction_outcome_count,generalization_probe_episode_index,generalization_transfer_source_context,generalization_transfer_source_action,generalization_transfer_source_similarity,generalization_initial_window_episode,generalization_initial_window_optimal\n";
