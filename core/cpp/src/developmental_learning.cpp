@@ -160,6 +160,20 @@ double context_similarity(const std::string& left, const std::string& right) {
     // to one token in a flat Jaccard set: that artificially scores sibling
     // contexts below the default transfer threshold.
     if (left.find('/') != std::string::npos && right.find('/') != std::string::npos) {
+        // Featureless inferred observations have no value evidence to justify
+        // generalization. Their goal suffix preserves identity for exact recall,
+        // but their shared kind/source prefix alone must not make unrelated
+        // experiences appear similar enough to transfer a strategy.
+        const auto is_featureless_observation = [](const std::string& context) {
+            return context.rfind("observation/", 0) == 0 &&
+                   context.find("/goal/") != std::string::npos &&
+                   context.find("/values/") == std::string::npos;
+        };
+        if ((is_featureless_observation(left) ||
+             is_featureless_observation(right)) && left != right) {
+            return 0.0;
+        }
+
         // Automatically inferred observation contexts encode a stable feature
         // schema before "/values/". Transfer between different schemas is unsafe:
         // matching only the sensor/source prefix can make an action learned for
