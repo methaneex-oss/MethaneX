@@ -528,6 +528,8 @@ int main() {
         assert(numeric_context != context_goal.id);
         assert(numeric_context.find("temperature") != std::string::npos);
         assert(numeric_context.find("scale") != std::string::npos);
+        assert(numeric_context.find("/features/") != std::string::npos);
+        assert(numeric_context.find("/values/") != std::string::npos);
 
         numeric_context_input.observation =
             Event{0, 0, "sensor", "observation", {{"temperature", 80.0}}};
@@ -537,6 +539,15 @@ int main() {
         const auto higher_numeric_context =
             higher_numeric_context_result.context.action_assessments.front().developmental_context;
         assert(higher_numeric_context != numeric_context);
+        // A changed observation changes the value leaves, not the identity and
+        // feature schema prefix. The hierarchical learner can now transfer a
+        // cautious prior between these related automatically inferred contexts.
+        const auto numeric_value_boundary = numeric_context.find("/values/");
+        const auto higher_value_boundary = higher_numeric_context.find("/values/");
+        assert(numeric_value_boundary != std::string::npos);
+        assert(higher_value_boundary != std::string::npos);
+        assert(numeric_context.substr(0, numeric_value_boundary) ==
+               higher_numeric_context.substr(0, higher_value_boundary));
 
         numeric_context_input.developmental_context = "caller-defined-context";
         const auto explicit_context_result =
