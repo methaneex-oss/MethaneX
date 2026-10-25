@@ -275,6 +275,17 @@ if(BUILD_TESTING)
     add_test(NAME jarvis_developmental_world_suite COMMAND jarvis_developmental_world_suite)
     add_test(NAME jarvis_developmental_world_integration_suite COMMAND jarvis_developmental_world_integration_suite)
     add_test(NAME jarvis_dlt_001_trial COMMAND jarvis_dlt_001_trial)
+    # Exercise DLT-002 in CI as two OS processes: train first, then restore and
+    # verify the journal in a fresh process. The fixture dependency guarantees
+    # ordering and prevents verification against a missing/failed training run.
+    add_test(NAME jarvis_dlt_002_persistence_train
+        COMMAND jarvis_dlt_002_persistence train ${CMAKE_CURRENT_BINARY_DIR}/dlt-002-ctest.bin)
+    set_tests_properties(jarvis_dlt_002_persistence_train PROPERTIES
+        FIXTURES_SETUP dlt002_persistence)
+    add_test(NAME jarvis_dlt_002_persistence_verify
+        COMMAND jarvis_dlt_002_persistence verify ${CMAKE_CURRENT_BINARY_DIR}/dlt-002-ctest.bin)
+    set_tests_properties(jarvis_dlt_002_persistence_verify PROPERTIES
+        FIXTURES_REQUIRED dlt002_persistence)
 endif()
 # These executable suites use assert() as their test assertion mechanism. Keep
 # assertions enabled in Release builds as well: otherwise NDEBUG removes the
