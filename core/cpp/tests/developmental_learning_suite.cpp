@@ -256,9 +256,17 @@ int main() {
         confidence_weighted_choice.best_strategy("same situation");
     assert(confidence_weighted_best != nullptr);
     assert(confidence_weighted_best->action == "reliably-supported-action");
-    assert(confidence_weighted_best->value == 0.6);
-    assert(confidence_weighted_best->confidence >
-           confidence_weighted_choice.strategies().front().confidence * 0.0);
+    assert(std::abs(confidence_weighted_best->value - 0.6) < 1e-12);
+    const auto confidence_weighted_strategies =
+        confidence_weighted_choice.strategies();
+    const auto weakly_supported = std::find_if(
+        confidence_weighted_strategies.begin(),
+        confidence_weighted_strategies.end(),
+        [](const LearnedStrategy& strategy) {
+            return strategy.action == "weakly-supported-action";
+        });
+    assert(weakly_supported != confidence_weighted_strategies.end());
+    assert(confidence_weighted_best->confidence > weakly_supported->confidence);
 
     // Legacy four-field evidence now derives deterministic affective
     // significance from prediction error, reward, salience and novelty.
