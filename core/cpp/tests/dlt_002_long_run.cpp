@@ -146,9 +146,9 @@ int main(int argc, char** argv) {
                     const bool matches =
                         (condition == "alpha" && action_name == "route-alpha") ||
                         (condition == "beta" && action_name == "route-beta");
-                    // Consequences are noisy: 15% of outcomes contradict the
+                    // Consequences are noisy: 20% of outcomes contradict the
                     // underlying action/condition relationship.
-                    const bool flip = std::generate_canonical<double, 10>(random) < 0.15;
+                    const bool flip = std::generate_canonical<double, 10>(random) < 0.20;
                     const bool succeeds = matches != flip;
                     return DevelopmentalWorldTransition{
                         succeeds ? 1.0 : -1.0,
@@ -200,8 +200,8 @@ int main(int argc, char** argv) {
     std::string active_phase = "clear-baseline";
     report << "[DLT-002] status=STARTED duration_seconds=" << duration_seconds
            << " checkpoint_seconds=" << checkpoint_seconds
-           << " seed=20261025 noise_rate=0.15 phases=4\n"
-           << "[DLT-002] protocol=partial observation; noisy outcomes; clear mapping; flooded mapping; tunnel mapping; clear context then reverses while visible cues stay the same\n";
+           << " seed=20261025 noise_rate=0.20 phases=4\n"
+           << "[DLT-002] protocol=partial observation; 20% noisy outcomes; clear mapping; flooded mapping; tunnel mapping; clear context then reverses while visible cues stay the same; adaptation latency is first 20-choice window with at least 15 correct latent-condition matches; evaluation labels are withheld from the brain\n";
 
     int exit_code = 0;
     try {
