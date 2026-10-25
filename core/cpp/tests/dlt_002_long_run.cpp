@@ -113,8 +113,8 @@ int main(int argc, char** argv) {
     std::ofstream report(output_dir / "trial.log", std::ios::trunc);
     if (!episodes || !checkpoints || !report)
         throw std::runtime_error("Could not create DLT-002 output files");
-    episodes << "episode,elapsed_seconds,phase,context,latent_condition_evaluation_only,selected_action,consequence,observation_count,outcome_count,prediction_count,prediction_outcome_count\n";
-    checkpoints << "elapsed_seconds,phase,episodes,total_reward,route_alpha_selected,route_beta_selected,positive_outcomes,negative_outcomes,observations,outcomes,predictions,prediction_outcomes,resolved_predictions,mean_absolute_prediction_error,clear_alpha_value,clear_beta_value,flooded_alpha_value,flooded_beta_value,tunnel_alpha_value,tunnel_beta_value\n";
+    episodes << "episode,elapsed_seconds,phase,context,latent_condition_evaluation_only,selected_action,consequence,observation_count,outcome_count,prediction_count,prediction_outcome_count,evaluation_correct_action\n";
+    checkpoints << "elapsed_seconds,phase,episodes,total_reward,phase_route_alpha_selected,phase_route_beta_selected,phase_positive_outcomes,phase_negative_outcomes,observations,outcomes,predictions,prediction_outcomes,resolved_predictions,mean_absolute_prediction_error,phase_correct_action_selections,phase_action_accuracy,rolling_window_size,rolling_window_correct,rolling_window_accuracy,adaptation_latency_episodes,phase_mean_reward,phase_positive_rate,clear_alpha_value,clear_beta_value,flooded_alpha_value,flooded_beta_value,tunnel_alpha_value,tunnel_beta_value\n";
     episodes << std::unitbuf;
     checkpoints << std::unitbuf;
     report << std::unitbuf;
@@ -146,9 +146,9 @@ int main(int argc, char** argv) {
                     const bool matches =
                         (condition == "alpha" && action_name == "route-alpha") ||
                         (condition == "beta" && action_name == "route-beta");
-                    // Consequences are noisy: 15% of outcomes contradict the
+                    // Consequences are noisy: 20% of outcomes contradict the
                     // underlying action/condition relationship.
-                    const bool flip = std::generate_canonical<double, 10>(random) < 0.15;
+                    const bool flip = std::generate_canonical<double, 10>(random) < 0.20;
                     const bool succeeds = matches != flip;
                     return DevelopmentalWorldTransition{
                         succeeds ? 1.0 : -1.0,
@@ -185,14 +185,23 @@ int main(int argc, char** argv) {
     const auto finish = started + std::chrono::seconds(duration_seconds);
     auto next_checkpoint = started + std::chrono::seconds(checkpoint_seconds);
     std::array<std::array<std::uint64_t, 2>, 4> action_counts{};
+    std::array<std::uint64_t, 4> correct_action_counts{};
+    std::array<std::uint64_t, 4> phase_positive_counts{};
+    std::array<double, 4> phase_rewards{};
+    std::array<std::array<bool, 20>, 4> rolling_correct{};
+    std::array<std::size_t, 4> rolling_sizes{};
+    std::array<std::size_t, 4> rolling_next{};
+    std::array<std::uint64_t, 4> rolling_correct_counts{};
+    std::array<std::int64_t, 4> adaptation_latency_episodes{};
+    adaptation_latency_episodes.fill(-1);
     std::uint64_t positive = 0, negative = 0;
     std::uint64_t episode = 0;
     double total_reward = 0.0;
     std::string active_phase = "clear-baseline";
     report << "[DLT-002] status=STARTED duration_seconds=" << duration_seconds
            << " checkpoint_seconds=" << checkpoint_seconds
-           << " seed=20261025 noise_rate=0.15 phases=4\n"
-           << "[DLT-002] protocol=partial observation; noisy outcomes; clear mapping; flooded mapping; tunnel mapping; clear context then reverses while visible cues stay the same\n";
+           << " seed=20261025 noise_rate=0.20 phases=4\n"
+           << "[DLT-002] protocol=partial observation; 20% noisy outcomes; clear mapping; flooded mapping; tunnel mapping; clear context then reverses while visible cues stay the same; adaptation latency is first 20-choice window with at least 15 correct latent-condition matches; evaluation labels are withheld from the brain\n";
 
     int exit_code = 0;
     try {
@@ -233,6 +242,31 @@ int main(int argc, char** argv) {
                 std::min<std::int64_t>(3, elapsed / std::max<std::int64_t>(1, duration_seconds / 4)));
             const auto action_index = selected == "route-alpha" ? 0U : 1U;
             ++action_counts[phase_index][action_index];
+            const bool evaluation_correct =
+                (std::string(phase.latent_condition) == "alpha" && selected == "route-alpha") ||
+                (std::string(phase.latent_condition) == "beta" && selected == "route-beta");
+            if (evaluation_correct) ++correct_action_counts[phase_index];
+            const auto rolling_slot = rolling_next[phase_index];
+            if (rolling_sizes[phase_index] == rolling_correct[phase_index].size()) {
+                if (rolling_correct[phase_index][rolling_slot])
+                    --rolling_correct_counts[phase_index];
+            } else {
+                ++rolling_sizes[phase_index];
+            }
+            rolling_correct[phase_index][rolling_slot] = evaluation_correct;
+            if (evaluation_correct) ++rolling_correct_counts[phase_index];
+            rolling_next[phase_index] =
+                (rolling_slot + 1) % rolling_correct[phase_index].size();
+            const auto phase_episode_number =
+                action_counts[phase_index][0] + action_counts[phase_index][1];
+            if (adaptation_latency_episodes[phase_index] < 0 &&
+                rolling_sizes[phase_index] == rolling_correct[phase_index].size() &&
+                rolling_correct_counts[phase_index] >= 15) {
+                adaptation_latency_episodes[phase_index] =
+                    static_cast<std::int64_t>(phase_episode_number);
+            }
+            phase_rewards[phase_index] += *last_step->consequence;
+            if (*last_step->consequence > 0.0) ++phase_positive_counts[phase_index];
             total_reward += *last_step->consequence;
             if (*last_step->consequence > 0.0) ++positive;
             else if (*last_step->consequence < 0.0) ++negative;
@@ -246,7 +280,8 @@ int main(int argc, char** argv) {
             episodes << episode << ',' << cycle_elapsed << ',' << phase.name << ','
                      << phase.context << ',' << phase.latent_condition << ',' << selected << ','
                      << *last_step->consequence << ',' << observations << ',' << outcomes << ','
-                     << predictions << ',' << prediction_outcomes << '\n';
+                     << predictions << ',' << prediction_outcomes << ','
+                     << (evaluation_correct ? 1 : 0) << '\n';
             ++episode;
 
             const auto now = std::chrono::steady_clock::now();
@@ -255,9 +290,31 @@ int main(int argc, char** argv) {
                 checkpoints << std::chrono::duration_cast<std::chrono::seconds>(now - started).count()
                     << ',' << phase.name << ',' << episode << ',' << total_reward << ','
                     << action_counts[phase_index][0] << ',' << action_counts[phase_index][1] << ','
-                    << positive << ',' << negative << ',' << observations << ',' << outcomes << ','
-                    << predictions << ',' << prediction_outcomes << ',' << prediction_quality.resolved
+                    << phase_positive_counts[phase_index] << ','
+                    << (action_counts[phase_index][0] + action_counts[phase_index][1] - phase_positive_counts[phase_index]) << ','
+                    << observations << ',' << outcomes << ',' << predictions << ','
+                    << prediction_outcomes << ',' << prediction_quality.resolved
                     << ',' << prediction_quality.mean_absolute_error << ','
+                    << correct_action_counts[phase_index] << ','
+                    << (action_counts[phase_index][0] + action_counts[phase_index][1] > 0
+                            ? static_cast<double>(correct_action_counts[phase_index]) /
+                                  static_cast<double>(action_counts[phase_index][0] + action_counts[phase_index][1])
+                            : 0.0) << ','
+                    << rolling_sizes[phase_index] << ','
+                    << rolling_correct_counts[phase_index] << ','
+                    << (rolling_sizes[phase_index] > 0
+                            ? static_cast<double>(rolling_correct_counts[phase_index]) /
+                                  static_cast<double>(rolling_sizes[phase_index])
+                            : 0.0) << ','
+                    << adaptation_latency_episodes[phase_index] << ','
+                    << (action_counts[phase_index][0] + action_counts[phase_index][1] > 0
+                            ? phase_rewards[phase_index] /
+                                  static_cast<double>(action_counts[phase_index][0] + action_counts[phase_index][1])
+                            : 0.0) << ','
+                    << (action_counts[phase_index][0] + action_counts[phase_index][1] > 0
+                            ? static_cast<double>(phase_positive_counts[phase_index]) /
+                                  static_cast<double>(action_counts[phase_index][0] + action_counts[phase_index][1])
+                            : 0.0) << ','
                     << strategy_value(brain, "navigation/clear", "route-alpha") << ','
                     << strategy_value(brain, "navigation/clear", "route-beta") << ','
                     << strategy_value(brain, "navigation/flooded", "route-alpha") << ','
@@ -273,6 +330,25 @@ int main(int argc, char** argv) {
                     << " prediction_outcomes=" << prediction_outcomes
                     << " resolved_predictions=" << prediction_quality.resolved
                     << " mean_absolute_prediction_error=" << prediction_quality.mean_absolute_error
+                    << " phase_correct_action_selections=" << correct_action_counts[phase_index]
+                    << " phase_action_accuracy="
+                    << (action_counts[phase_index][0] + action_counts[phase_index][1] > 0
+                            ? static_cast<double>(correct_action_counts[phase_index]) /
+                                  static_cast<double>(action_counts[phase_index][0] + action_counts[phase_index][1])
+                            : 0.0)
+                    << " rolling_window_size=" << rolling_sizes[phase_index]
+                    << " rolling_window_correct=" << rolling_correct_counts[phase_index]
+                    << " rolling_window_accuracy="
+                    << (rolling_sizes[phase_index] > 0
+                            ? static_cast<double>(rolling_correct_counts[phase_index]) /
+                                  static_cast<double>(rolling_sizes[phase_index])
+                            : 0.0)
+                    << " adaptation_latency_episodes=" << adaptation_latency_episodes[phase_index]
+                    << " phase_mean_reward="
+                    << (action_counts[phase_index][0] + action_counts[phase_index][1] > 0
+                            ? phase_rewards[phase_index] /
+                                  static_cast<double>(action_counts[phase_index][0] + action_counts[phase_index][1])
+                            : 0.0)
                     << " clear_alpha_value=" << strategy_value(brain, "navigation/clear", "route-alpha")
                     << " clear_beta_value=" << strategy_value(brain, "navigation/clear", "route-beta")
                     << " flooded_alpha_value=" << strategy_value(brain, "navigation/flooded", "route-alpha")
@@ -305,6 +381,19 @@ int main(int argc, char** argv) {
             << " flooded_beta_value=" << strategy_value(brain, "navigation/flooded", "route-beta")
             << " tunnel_alpha_value=" << strategy_value(brain, "navigation/tunnel", "route-alpha")
             << " tunnel_beta_value=" << strategy_value(brain, "navigation/tunnel", "route-beta") << '\n';
+        for (std::size_t i = 0; i < action_counts.size(); ++i) {
+            const auto phase_total = action_counts[i][0] + action_counts[i][1];
+            report << "[DLT-002] phase_summary index=" << i
+                   << " episodes=" << phase_total
+                   << " correct_action_selections=" << correct_action_counts[i]
+                   << " adaptation_latency_episodes=" << adaptation_latency_episodes[i]
+                   << " action_accuracy="
+                   << (phase_total > 0 ? static_cast<double>(correct_action_counts[i]) /
+                                             static_cast<double>(phase_total) : 0.0)
+                   << " mean_reward="
+                   << (phase_total > 0 ? phase_rewards[i] / static_cast<double>(phase_total) : 0.0)
+                   << " positive_outcomes=" << phase_positive_counts[i] << '\n';
+        }
         if (!completed) exit_code = 2;
     } catch (const std::exception& ex) {
         report << "[DLT-002] status=FAILED episode=" << episode << " error=" << ex.what() << '\n';

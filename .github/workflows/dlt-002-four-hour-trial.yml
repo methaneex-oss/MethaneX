@@ -14,7 +14,7 @@ jobs:
   developmental-learning-trial:
     name: DLT-002 · 4-hour partial-observation and reversal run
     runs-on: ubuntu-latest
-    timeout-minutes: 250
+    timeout-minutes: 270
     steps:
       - name: Checkout exact trial revision
         uses: actions/checkout@v6
@@ -23,7 +23,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p dlt-002-results
+          mkdir -p dlt-002-results dlt-002-smoke-results
           {
             echo '{'
             echo '  "trial": "DLT-002",'
@@ -31,7 +31,7 @@ jobs:
             echo '  "duration_seconds": 14400,'
             echo '  "checkpoint_interval_seconds": 60,'
             echo '  "seed": 20261025,'
-            echo '  "noise_rate": 0.15,'
+            echo '  "noise_rate": 0.20,'
             echo "  \"commit\": \"${GITHUB_SHA}\","
             echo "  \"run_id\": \"${GITHUB_RUN_ID}\","
             echo "  \"run_attempt\": \"${GITHUB_RUN_ATTEMPT}\","
@@ -66,6 +66,17 @@ jobs:
           "${persistence_executable}" verify dlt-002-results/persistence-check.bin 2>&1 | tee -a dlt-002-results/acceptance-test.log
           rm -f dlt-002-results/persistence-check.bin dlt-002-results/persistence-check.bin.meta
 
+      - name: Smoke-test the long-run executable before the expensive run
+        shell: bash
+        run: |
+          set -euo pipefail
+          executable="$(find build -type f -name jarvis_dlt_002_long_run -executable -print -quit)"
+          if [[ -z "${executable}" ]]; then
+            echo "Could not locate jarvis_dlt_002_long_run executable" | tee -a dlt-002-results/trial.log
+            exit 1
+          fi
+          "${executable}" 60 15 dlt-002-smoke-results 2>&1 | tee dlt-002-results/smoke-test.log
+
       - name: Run four-hour DLT-002 with one-minute checkpoints
         shell: bash
         run: |
@@ -83,6 +94,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: DLT-002-${{ github.run_id }}-${{ github.run_attempt }}
-          path: dlt-002-results/
+          path: |
+            dlt-002-results/
+            dlt-002-smoke-results/
           if-no-files-found: warn
           retention-days: 90
