@@ -121,7 +121,7 @@ int main(int argc, char** argv) {
     if (!episodes || !checkpoints || !report)
         throw std::runtime_error("Could not create DLT-002 output files");
     episodes << "episode,elapsed_seconds,phase,context,latent_condition_evaluation_only,expected_action_evaluation_only,selected_action,optimal_action_selected,consequence,observation_count,outcome_count,prediction_count,prediction_outcome_count\n";
-    checkpoints << "elapsed_seconds,phase,episodes,total_reward,current_phase_route_alpha_selected,current_phase_route_beta_selected,positive_outcomes,negative_outcomes,optimal_action_selections,nonoptimal_action_selections,current_phase_decision_accuracy,observations,outcomes,predictions,prediction_outcomes,resolved_predictions,mean_absolute_prediction_error,clear_route_one_value,clear_route_two_value,flooded_route_one_value,flooded_route_two_value,tunnel_route_one_value,tunnel_route_two_value,canyon_route_one_value,canyon_route_two_value\n";
+    checkpoints << "elapsed_seconds,phase,episodes,total_reward,current_phase_route_one_selected,current_phase_route_two_selected,positive_outcomes,negative_outcomes,optimal_action_selections,nonoptimal_action_selections,current_phase_decision_accuracy,observations,outcomes,predictions,prediction_outcomes,resolved_predictions,mean_absolute_prediction_error,clear_route_one_value,clear_route_two_value,flooded_route_one_value,flooded_route_two_value,tunnel_route_one_value,tunnel_route_two_value,canyon_route_one_value,canyon_route_two_value\n";
     episodes << std::unitbuf;
     checkpoints << std::unitbuf;
     report << std::unitbuf;
