@@ -1,0 +1,80 @@
+name: DLT-002 Four-Hour Developmental Learning Challenge
+
+on:
+  # Manual dispatch only. Never start a multi-hour run from a code push.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dlt-002-four-hour-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  developmental-learning-challenge:
+    name: DLT-002 · 4-hour challenge
+    runs-on: ubuntu-latest
+    timeout-minutes: 250
+    steps:
+      - name: Checkout exact trial revision
+        uses: actions/checkout@v6
+
+      - name: Initialize run evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dlt-002-results
+          {
+            echo '{'
+            echo '  "trial": "DLT-002",'
+            echo '  "mode": "four-hour developmental learning challenge",'
+            echo '  "duration_seconds": 14400,'
+            echo '  "checkpoint_interval_seconds": 60,'
+            echo '  "seed": 20261025,'
+            echo "  \"commit\": \"${GITHUB_SHA}\","
+            echo "  \"run_id\": \"${GITHUB_RUN_ID}\","
+            echo "  \"run_attempt\": \"${GITHUB_RUN_ATTEMPT}\","
+            echo '  "started_at_utc": "'"$(date -u +%Y-%m-%dT%H:%M:%SZ)"'"'
+            echo '}'
+          } > dlt-002-results/run_metadata.json
+          echo "[DLT-002] workflow_run_id=${GITHUB_RUN_ID} commit=${GITHUB_SHA}" | tee dlt-002-results/workflow.log
+
+      - name: Configure native brain
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmake -S core/cpp -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON 2>&1 | tee dlt-002-results/configure.log
+
+      - name: Build persistence gate and challenge executable
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmake --build build --parallel --target jarvis_dlt_002_persistence jarvis_dlt_002_long_run 2>&1 | tee dlt-002-results/build.log
+
+      - name: Gate the four-hour run on cross-process persistence and prediction-feedback checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          ctest --test-dir build -R '^jarvis_dlt_002_persistence_(train|verify)$' --output-on-failure --timeout 60 2>&1 | tee dlt-002-results/acceptance-test.log
+
+      - name: Run the four-hour DLT-002 challenge with one-minute checkpoints
+        shell: bash
+        run: |
+          set -euo pipefail
+          executable="$(find build -type f -name jarvis_dlt_002_long_run -executable -print -quit)"
+          if [[ -z "$executable" ]]; then
+            echo "Could not locate jarvis_dlt_002_long_run executable" | tee -a dlt-002-results/trial.log
+            exit 1
+          fi
+          echo "[DLT-002] long_run_started_at_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)" | tee -a dlt-002-results/workflow.log
+          "$executable" 14400 60 dlt-002-results 2>&1 | tee dlt-002-results/console.log
+
+      - name: Preserve trial logs, checkpoints, episode records, and brain journal
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: DLT-002-${{ github.run_id }}-${{ github.run_attempt }}
+          path: dlt-002-results/
+          if-no-files-found: warn
+          retention-days: 90
