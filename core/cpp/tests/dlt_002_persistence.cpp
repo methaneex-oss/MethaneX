@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <cmath>
+#include <cstdint>
 #include <filesystem>
 #include <iostream>
 #include <string>
@@ -11,6 +12,9 @@ using namespace jarvis::core;
 
 namespace {
 constexpr const char* goal_id = "dlt-002-persistence-goal";
+constexpr const char* clear_context = "navigation/clear";
+constexpr const char* flooded_context = "navigation/flooded";
+constexpr const char* tunnel_context = "navigation/tunnel";
 
 void record_experience(Brain& brain, const std::string& context,
                        const std::string& action, double consequence) {
@@ -69,6 +73,51 @@ double strategy_value(const Brain& brain, const std::string& context,
     if (uses) *uses = 0;
     return 0.0;
 }
+
+void assert_strategy_signs(const Brain& brain) {
+    // Clear originally favored good-route, but that relationship was later
+    // reversed. Flooded remains bad-route-favoring, while tunnel retains the
+    // original clear-world mapping. These differences must remain context-local.
+    assert(strategy_value(brain, clear_context, "good-route") < 0.0);
+    assert(strategy_value(brain, clear_context, "bad-route") > 0.0);
+    assert(strategy_value(brain, flooded_context, "good-route") < 0.0);
+    assert(strategy_value(brain, flooded_context, "bad-route") > 0.0);
+    assert(strategy_value(brain, tunnel_context, "good-route") > 0.0);
+    assert(strategy_value(brain, tunnel_context, "bad-route") < 0.0);
+}
+
+void assert_prediction_feedback(const Brain& brain) {
+    const auto predictions = brain.memory().by_kind("prediction");
+    const auto outcomes = brain.memory().by_kind("prediction_outcome");
+    assert(predictions.size() == 60);
+    assert(outcomes.size() == predictions.size());
+
+    // Every forecast created by an observed action must be resolved, not merely
+    // counted. Its calibration must also reflect the context-specific outcomes.
+    const auto snapshot = brain.snapshot();
+    assert(snapshot.predictions.size() == predictions.size());
+    for (const auto& prediction : snapshot.predictions) assert(prediction.resolved);
+
+    const auto* clear_good =
+        brain.learning_metric("action_consequence|navigation/clear|good-route");
+    const auto* clear_bad =
+        brain.learning_metric("action_consequence|navigation/clear|bad-route");
+    const auto* flooded_good =
+        brain.learning_metric("action_consequence|navigation/flooded|good-route");
+    const auto* flooded_bad =
+        brain.learning_metric("action_consequence|navigation/flooded|bad-route");
+    const auto* tunnel_good =
+        brain.learning_metric("action_consequence|navigation/tunnel|good-route");
+    const auto* tunnel_bad =
+        brain.learning_metric("action_consequence|navigation/tunnel|bad-route");
+
+    assert(clear_good && clear_good->observations >= 18 && clear_good->estimate < 0.0);
+    assert(clear_bad && clear_bad->observations >= 18 && clear_bad->estimate > 0.0);
+    assert(flooded_good && flooded_good->observations >= 6 && flooded_good->estimate < 0.0);
+    assert(flooded_bad && flooded_bad->observations >= 6 && flooded_bad->estimate > 0.0);
+    assert(tunnel_good && tunnel_good->observations >= 6 && tunnel_good->estimate > 0.0);
+    assert(tunnel_bad && tunnel_bad->observations >= 6 && tunnel_bad->estimate < 0.0);
+}
 } // namespace
 
 int main(int argc, char** argv) {
@@ -87,64 +136,84 @@ int main(int argc, char** argv) {
         Brain brain(journal);
         Goal goal;
         goal.id = goal_id;
-        goal.description = "Choose actions using context-sensitive accumulated experience";
+        goal.description = "Learn context-sensitive action consequences, revise one context, and preserve the others";
         goal.priority = 1.0;
         assert(brain.create_goal(goal));
         assert(brain.activate_goal(goal.id));
 
-        // Train through observed consequences only. The same actions have
-        // opposing outcomes in two contexts; no route choice is prescribed.
+        // Phase A: acquire three context-specific action/outcome mappings.
+        // Clear and tunnel share a mapping; flooded has the opposite mapping.
+        // No route choice is passed into the learner as a prescribed answer:
+        // each update is based on an observed action consequence.
         for (int repetition = 0; repetition < 6; ++repetition) {
-            record_experience(brain, "navigation/clear", "good-route", 1.0);
-            record_experience(brain, "navigation/clear", "bad-route", -1.0);
-            record_experience(brain, "navigation/flooded", "good-route", -1.0);
-            record_experience(brain, "navigation/flooded", "bad-route", 1.0);
+            record_experience(brain, clear_context, "good-route", 1.0);
+            record_experience(brain, clear_context, "bad-route", -1.0);
+            record_experience(brain, flooded_context, "good-route", -1.0);
+            record_experience(brain, flooded_context, "bad-route", 1.0);
+            record_experience(brain, tunnel_context, "good-route", 1.0);
+            record_experience(brain, tunnel_context, "bad-route", -1.0);
         }
 
-        assert(strategy_value(brain, "navigation/clear", "good-route") > 0.0);
-        assert(strategy_value(brain, "navigation/clear", "bad-route") < 0.0);
-        assert(strategy_value(brain, "navigation/flooded", "good-route") < 0.0);
-        assert(strategy_value(brain, "navigation/flooded", "bad-route") > 0.0);
-        assert(!brain.memory().by_kind("action_outcome").empty());
+        // Phase B: only the clear context changes. Repeat enough contradictory
+        // evidence to require revising its learned preference without erasing
+        // the flooded or tunnel mappings. This is harder than merely replaying
+        // a fixed pair of context/action associations.
+        for (int repetition = 0; repetition < 12; ++repetition) {
+            record_experience(brain, clear_context, "good-route", -1.0);
+            record_experience(brain, clear_context, "bad-route", 1.0);
+        }
+
+        assert_strategy_signs(brain);
+        assert_prediction_feedback(brain);
+        assert(brain.memory().by_kind("action_outcome").size() == 60);
 
         std::cout << "[DLT-002] TRAINED outcomes="
                   << brain.memory().by_kind("action_outcome").size()
+                  << " predictions=" << brain.memory().by_kind("prediction").size()
+                  << " prediction_outcomes=" << brain.memory().by_kind("prediction_outcome").size()
+                  << " clear_context_reversed=true untouched_contexts_preserved=true"
                   << " journal=" << journal.string() << '\n';
         return 0;
     }
 
     if (mode == "verify") {
         // This executable is invoked in a second OS process by the workflow.
-        // Constructing Brain here proves the learned state is restored from
-        // the on-disk journal, rather than retained in the trainer's memory.
+        // The process that trained the brain has exited; all assertions below
+        // therefore test journal restoration, not surviving in-memory objects.
         Brain restored(journal);
         assert(restored.goal(goal_id) != nullptr);
-        assert(!restored.memory().by_kind("action_outcome").empty());
+        assert(restored.memory().by_kind("action_outcome").size() == 60);
+        assert_strategy_signs(restored);
+        assert_prediction_feedback(restored);
 
-        std::uint64_t clear_good_uses = 0;
+        std::uint64_t clear_bad_uses = 0;
         std::uint64_t flooded_bad_uses = 0;
-        assert(strategy_value(restored, "navigation/clear", "good-route",
-                              &clear_good_uses) > 0.0);
-        assert(strategy_value(restored, "navigation/clear", "bad-route") < 0.0);
-        assert(strategy_value(restored, "navigation/flooded", "good-route") < 0.0);
-        assert(strategy_value(restored, "navigation/flooded", "bad-route",
-                              &flooded_bad_uses) > 0.0);
-        assert(clear_good_uses > 0 && flooded_bad_uses > 0);
+        std::uint64_t tunnel_good_uses = 0;
+        assert(strategy_value(restored, clear_context, "bad-route", &clear_bad_uses) > 0.0);
+        assert(strategy_value(restored, flooded_context, "bad-route", &flooded_bad_uses) > 0.0);
+        assert(strategy_value(restored, tunnel_context, "good-route", &tunnel_good_uses) > 0.0);
+        assert(clear_bad_uses > 0 && flooded_bad_uses > 0 && tunnel_good_uses > 0);
 
-        const auto clear = CognitiveCycle(restored).run(make_input("navigation/clear"));
+        const auto clear = CognitiveCycle(restored).run(make_input(clear_context));
         assert(clear.status == CognitiveCycleStatus::completed);
         assert(!clear.context.plan.steps.empty());
-        assert(clear.context.plan.steps.front().action.name == "good-route");
+        assert(clear.context.plan.steps.front().action.name == "bad-route");
 
-        const auto flooded = CognitiveCycle(restored).run(make_input("navigation/flooded"));
+        const auto flooded = CognitiveCycle(restored).run(make_input(flooded_context));
         assert(flooded.status == CognitiveCycleStatus::completed);
         assert(!flooded.context.plan.steps.empty());
         assert(flooded.context.plan.steps.front().action.name == "bad-route");
 
+        const auto tunnel = CognitiveCycle(restored).run(make_input(tunnel_context));
+        assert(tunnel.status == CognitiveCycleStatus::completed);
+        assert(!tunnel.context.plan.steps.empty());
+        assert(tunnel.context.plan.steps.front().action.name == "good-route");
+
         std::cout << "[DLT-002] PASS process_restart=verified "
-                  << "clear_choice=good-route flooded_choice=bad-route "
-                  << "restored_outcomes="
-                  << restored.memory().by_kind("action_outcome").size() << '\n';
+                  << "clear_choice=bad-route flooded_choice=bad-route tunnel_choice=good-route "
+                  << "restored_outcomes=" << restored.memory().by_kind("action_outcome").size()
+                  << " resolved_predictions=" << restored.memory().by_kind("prediction_outcome").size()
+                  << " context_specific_revision=verified\n";
 
         std::error_code ec;
         std::filesystem::remove(journal, ec);
