@@ -3,6 +3,12 @@ name: DLT-002 Four-Hour Developmental Learning Challenge
 on:
   # Manual dispatch only. Never start a multi-hour run from a code push.
   workflow_dispatch:
+    inputs:
+      seed:
+        description: "Deterministic seed for hidden environment mapping and outcome noise"
+        required: true
+        default: "20261026"
+        type: string
 
 permissions:
   contents: read
@@ -22,8 +28,14 @@ jobs:
 
       - name: Initialize run evidence
         shell: bash
+        env:
+          TRIAL_SEED: ${{ inputs.seed || '20261026' }}
         run: |
           set -euo pipefail
+          if ! [[ "$TRIAL_SEED" =~ ^[0-9]+$ ]]; then
+            echo "seed must be a non-negative integer"
+            exit 64
+          fi
           mkdir -p dlt-002-results
           {
             echo '{'
@@ -31,7 +43,7 @@ jobs:
             echo '  "mode": "six-phase four-hour developmental learning challenge with partial observation, 20% noisy outcomes, two context reversals, and unseen-context transfer",'
             echo '  "duration_seconds": 14400,'
             echo '  "checkpoint_interval_seconds": 60,'
-            echo '  "seed": 20261026,'
+            echo "  \"seed\": ${TRIAL_SEED},"
             echo "  \"commit\": \"${GITHUB_SHA}\","
             echo "  \"run_id\": \"${GITHUB_RUN_ID}\","
             echo "  \"run_attempt\": \"${GITHUB_RUN_ATTEMPT}\","
@@ -60,6 +72,8 @@ jobs:
 
       - name: Smoke-test all six phases before spending four hours
         shell: bash
+        env:
+          TRIAL_SEED: ${{ inputs.seed || '20261026' }}
         run: |
           set -euo pipefail
           executable="$(find build -type f -name jarvis_dlt_002_long_run -executable -print -quit)"
@@ -68,7 +82,7 @@ jobs:
             exit 1
           fi
           smoke_dir="dlt-002-results/smoke"
-          "$executable" 60 5 "$smoke_dir" 2>&1 | tee dlt-002-results/smoke-console.log
+          "$executable" 60 5 "$smoke_dir" "$TRIAL_SEED" 2>&1 | tee dlt-002-results/smoke-console.log
           grep -q 'status=COMPLETED' "$smoke_dir/trial.log"
           for phase in clear-baseline flooded tunnel clear-reversal generalization-probe flooded-reversal; do
             if ! grep -q "$phase" "$smoke_dir/episodes.csv"; then
@@ -80,6 +94,8 @@ jobs:
 
       - name: Run the four-hour DLT-002 challenge with one-minute checkpoints
         shell: bash
+        env:
+          TRIAL_SEED: ${{ inputs.seed || '20261026' }}
         run: |
           set -euo pipefail
           executable="$(find build -type f -name jarvis_dlt_002_long_run -executable -print -quit)"
@@ -88,7 +104,7 @@ jobs:
             exit 1
           fi
           echo "[DLT-002] long_run_started_at_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)" | tee -a dlt-002-results/workflow.log
-          "$executable" 14400 60 dlt-002-results 2>&1 | tee dlt-002-results/console.log
+          "$executable" 14400 60 dlt-002-results "$TRIAL_SEED" 2>&1 | tee dlt-002-results/console.log
 
       - name: Preserve trial logs, checkpoints, episode records, and brain journal
         if: always()
