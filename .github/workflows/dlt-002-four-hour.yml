@@ -104,7 +104,7 @@ jobs:
             exit 1
           fi
           echo "[DLT-002] long_run_started_at_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)" | tee -a dlt-002-results/workflow.log
-          $executable" 21300 60 dlt-002-results "$TRIAL_SEED" 2>&1 | tee dlt-002-results/console.log
+          "$executable" 21300 60 dlt-002-results "$TRIAL_SEED" 2>&1 | tee dlt-002-results/console.log
 
       - name: Preserve trial logs, checkpoints, episode records, and brain journal
         if: always()
