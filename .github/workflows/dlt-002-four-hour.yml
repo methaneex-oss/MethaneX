@@ -28,10 +28,10 @@ jobs:
           {
             echo '{'
             echo '  "trial": "DLT-002",'
-            echo '  "mode": "four-hour developmental learning challenge",'
+            echo '  "mode": "five-phase four-hour developmental learning challenge with partial observation, 20% noisy outcomes, reversal, and unseen-context transfer",'
             echo '  "duration_seconds": 14400,'
             echo '  "checkpoint_interval_seconds": 60,'
-            echo '  "seed": 20261025,'
+            echo '  "seed": 20261026,'
             echo "  \"commit\": \"${GITHUB_SHA}\","
             echo "  \"run_id\": \"${GITHUB_RUN_ID}\","
             echo "  \"run_attempt\": \"${GITHUB_RUN_ATTEMPT}\","
