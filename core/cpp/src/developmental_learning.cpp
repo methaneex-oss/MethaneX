@@ -87,7 +87,8 @@ double context_similarity(const std::string& left, const std::string& right) {
         if ((left_values != std::string::npos) !=
             (right_values != std::string::npos)) return 0.0;
         if (left_values != std::string::npos &&
-            left.substr(0, left_values) != right.substr(0, right_values)) {
+            context_path_segments(left.substr(0, left_values)) !=
+                context_path_segments(right.substr(0, right_values))) {
             return 0.0;
         }
 
