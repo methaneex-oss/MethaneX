@@ -29,18 +29,20 @@ struct Phase {
     const char* visibility;
 };
 
-// The fourth phase reverses the first while retaining its context and visible
-// cues. The fifth phase introduces an unseen context to probe transfer rather
-// than only replaying learned context/action mappings. route_condition is
+// Phase four reverses the original clear context; phase five probes transfer in
+// an unseen context. The final phase reverses the flooded context a second time
+// while preserving its context and visible cues. This tests repeated revision
+// and interference, not just one successful reversal. route_condition is
 // withheld from the brain throughout.
 Phase phase_for(std::int64_t elapsed, std::int64_t duration) {
-    const auto phase_length = std::max<std::int64_t>(1, duration / 5);
-    switch (std::min<std::int64_t>(4, elapsed / phase_length)) {
+    const auto phase_length = std::max<std::int64_t>(1, duration / 6);
+    switch (std::min<std::int64_t>(5, elapsed / phase_length)) {
     case 0: return {"clear-baseline", "navigation/clear", "alpha", "open", "clear"};
     case 1: return {"flooded", "navigation/flooded", "beta", "closed", "poor"};
     case 2: return {"tunnel", "navigation/tunnel", "alpha", "closed", "clear"};
     case 3: return {"clear-reversal", "navigation/clear", "beta", "open", "clear"};
-    default: return {"generalization-probe", "navigation/canyon", "beta", "open", "poor"};
+    case 4: return {"generalization-probe", "navigation/canyon", "beta", "open", "poor"};
+    default: return {"flooded-reversal", "navigation/flooded", "alpha", "closed", "poor"};
     }
 }
 
@@ -187,7 +189,7 @@ int main(int argc, char** argv) {
     const auto started = std::chrono::steady_clock::now();
     const auto finish = started + std::chrono::seconds(duration_seconds);
     auto next_checkpoint = started + std::chrono::seconds(checkpoint_seconds);
-    std::array<std::array<std::uint64_t, 2>, 5> action_counts{};
+    std::array<std::array<std::uint64_t, 2>, 6> action_counts{};
     std::uint64_t positive = 0, negative = 0;
     std::uint64_t optimal_action_selections = 0, nonoptimal_action_selections = 0;
     std::uint64_t episode = 0;
@@ -195,8 +197,8 @@ int main(int argc, char** argv) {
     std::string active_phase = "clear-baseline";
     report << "[DLT-002] status=STARTED duration_seconds=" << duration_seconds
            << " checkpoint_seconds=" << checkpoint_seconds
-           << " seed=20261026 noise_rate=0.20 phases=5\n"
-           << "[DLT-002] protocol=partial observation; noisy outcomes; clear mapping; flooded mapping; tunnel mapping; clear context then reverses while visible cues stay the same\n";
+           << " seed=20261026 noise_rate=0.20 phases=6\n"
+           << "[DLT-002] protocol=partial observation; 20% noisy outcomes; context-local mapping; clear-context reversal; unseen-context transfer; second reversal in flooded context with unchanged visible cues\n";
 
     int exit_code = 0;
     try {
@@ -234,7 +236,7 @@ int main(int argc, char** argv) {
                 throw std::runtime_error("Selected action or observed consequence evidence is inconsistent");
 
             const auto phase_index = static_cast<std::size_t>(
-                std::min<std::int64_t>(4, elapsed / std::max<std::int64_t>(1, duration_seconds / 5)));
+                std::min<std::int64_t>(5, elapsed / std::max<std::int64_t>(1, duration_seconds / 6)));
             const auto action_index = selected == "route-alpha" ? 0U : 1U;
             ++action_counts[phase_index][action_index];
             const std::string expected_action = std::string(phase.latent_condition) == "alpha"
