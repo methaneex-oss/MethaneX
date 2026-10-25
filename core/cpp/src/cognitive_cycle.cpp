@@ -9,16 +9,26 @@
 namespace jarvis::core {
 namespace {
 
+std::string context_path_segment(std::string value) {
+    // A feature value is data inside one hierarchy level, never a new level.
+    // Prevent embedded separators from changing the meaning of the context path.
+    std::replace(value.begin(), value.end(), '/', '_');
+    return value;
+}
+
 std::string infer_developmental_context(const CognitiveCycleInput& input,
                                         const Goal& goal,
                                         const PerceptualRepresentation& representation) {
     if (!input.developmental_context.empty()) return input.developmental_context;
 
-    // Build a stable, feature-grounded context for downstream memory retrieval
-    // and strategy transfer. Numeric features use logarithmic magnitude bands:
-    // this preserves coarse state information without memorizing raw readings.
-    std::string context = "observation " + input.observation.kind;
-    if (!input.observation.source.empty()) context += " source " + input.observation.source;
+    // Keep the situation's identity (observation kind, source and feature schema)
+    // ahead of observed values. This gives developmental learning a meaningful
+    // hierarchy: changing a value changes the leaf evidence, not the identity of
+    // the entire situation. Numeric leaves use logarithmic magnitude bands.
+    std::string context = "observation/" + context_path_segment(input.observation.kind);
+    if (!input.observation.source.empty())
+        context += "/source/" + context_path_segment(input.observation.source);
+
     bool has_context_feature = false;
     std::vector<std::pair<std::string, const Scalar*>> features;
     features.reserve(representation.nodes.size());
@@ -30,17 +40,18 @@ std::string infer_developmental_context(const CognitiveCycleInput& input,
     std::sort(features.begin(), features.end(),
               [](const auto& left, const auto& right) { return left.first < right.first; });
 
+    std::vector<std::string> labels;
+    std::vector<std::string> values;
+    labels.reserve(features.size());
+    values.reserve(features.size());
     for (const auto& [key, value_ptr] : features) {
         const auto& value = *value_ptr;
-        context += " " + key;
+        std::string descriptor;
         if (const auto* text_value = std::get_if<std::string>(&value)) {
-            if (!text_value->empty()) {
-                context += " " + *text_value;
-                has_context_feature = true;
-            }
+            if (text_value->empty()) continue;
+            descriptor = *text_value;
         } else if (const auto* boolean_value = std::get_if<bool>(&value)) {
-            context += *boolean_value ? " true" : " false";
-            has_context_feature = true;
+            descriptor = *boolean_value ? "true" : "false";
         } else {
             double numeric = 0.0;
             if (const auto* numeric_value = std::get_if<double>(&value)) {
@@ -51,17 +62,25 @@ std::string infer_developmental_context(const CognitiveCycleInput& input,
                 continue;
             }
             if (!std::isfinite(numeric)) continue;
-            has_context_feature = true;
             if (numeric == 0.0) {
-                context += " zero";
+                descriptor = "zero";
             } else {
-                context += numeric < 0.0 ? " negative" : " positive";
-                context += " scale " +
+                descriptor = numeric < 0.0 ? "negative" : "positive";
+                descriptor += "-scale-" +
                     std::to_string(std::ilogb(std::abs(numeric)));
             }
         }
+        labels.push_back(context_path_segment(key));
+        values.push_back(context_path_segment(std::move(descriptor)));
+        has_context_feature = true;
     }
-    return has_context_feature ? context : goal.id;
+
+    if (!has_context_feature) return goal.id;
+    context += "/features";
+    for (const auto& label : labels) context += "/" + label;
+    context += "/values";
+    for (const auto& value : values) context += "/" + value;
+    return context;
 }
 
 } // namespace
