@@ -101,6 +101,23 @@ int main() {
     assert(related_best != nullptr);
     assert(related_best->action == "good-route");
 
+    // Slash-delimited contexts are hierarchical: a shared parent permits
+    // cautious transfer to a sibling context without inventing the outcome.
+    DevelopmentalLearning hierarchical_contexts;
+    hierarchical_contexts.observe_strategy(
+        "navigation/clear", "route-one",
+        LearningSignal{0.0, 0.8, 0.8, 0.2});
+    const auto* sibling_strategy =
+        hierarchical_contexts.best_related_strategy("navigation/canyon");
+    assert(sibling_strategy != nullptr);
+    assert(sibling_strategy->action == "route-one");
+    const auto sibling_matches =
+        hierarchical_contexts.related_strategies("navigation/canyon");
+    assert(sibling_matches.size() == 1);
+    assert(std::abs(sibling_matches.front().similarity - 0.5) < 1e-12);
+    // Hierarchical similarity must still reject a different top-level domain.
+    assert(hierarchical_contexts.best_related_strategy("orbital/cooking") == nullptr);
+
     // Generalization must be bounded by context similarity. A strategy learned
     // for navigation must not leak into an unrelated task merely because it
     // is the only experience currently stored.
