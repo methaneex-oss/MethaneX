@@ -1,4 +1,4 @@
-name: DLT-002 Four-Hour Developmental Learning Challenge
+name: DLT-002 Overnight Developmental Learning Trial
 
 on:
   # Manual dispatch only. Never start a multi-hour run from a code push.
@@ -14,14 +14,14 @@ permissions:
   contents: read
 
 concurrency:
-  group: dlt-002-four-hour-${{ github.ref }}
+  group: dlt-002-overnight-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
   developmental-learning-challenge:
-    name: DLT-002 · 4-hour challenge
+    name: DLT-002 · 355-minute learning trial
     runs-on: ubuntu-latest
-    timeout-minutes: 250
+    timeout-minutes: 360
     steps:
       - name: Checkout exact trial revision
         uses: actions/checkout@v6
@@ -40,8 +40,8 @@ jobs:
           {
             echo '{'
             echo '  "trial": "DLT-002",'
-            echo '  "mode": "six-phase four-hour developmental learning challenge with partial observation, 20% noisy outcomes, two context reversals, and unseen-context transfer",'
-            echo '  "duration_seconds": 14400,'
+            echo '  "mode": "six-phase overnight developmental learning challenge with partial observation, 20% noisy outcomes, two context reversals, and unseen-context transfer",'
+            echo '  "duration_seconds": 21300,'
             echo '  "checkpoint_interval_seconds": 60,'
             echo "  \"seed\": ${TRIAL_SEED},"
             echo "  \"commit\": \"${GITHUB_SHA}\","
@@ -64,13 +64,13 @@ jobs:
           set -euo pipefail
           cmake --build build --parallel --target jarvis_dlt_002_persistence jarvis_dlt_002_long_run 2>&1 | tee dlt-002-results/build.log
 
-      - name: Gate the four-hour run on cross-process persistence and prediction-feedback checks
+      - name: Gate the overnight run on cross-process persistence and prediction-feedback checks
         shell: bash
         run: |
           set -euo pipefail
           ctest --test-dir build -R '^jarvis_dlt_002_persistence_(train|verify)$' --output-on-failure --timeout 60 2>&1 | tee dlt-002-results/acceptance-test.log
 
-      - name: Smoke-test all six phases before spending four hours
+      - name: Smoke-test all six phases before the overnight trial
         shell: bash
         env:
           TRIAL_SEED: ${{ inputs.seed || '20261026' }}
@@ -92,7 +92,7 @@ jobs:
           done
           echo "[DLT-002] six_phase_smoke_test=PASS duration_seconds=60" | tee -a dlt-002-results/workflow.log
 
-      - name: Run the four-hour DLT-002 challenge with one-minute checkpoints
+      - name: Run the 355-minute DLT-002 challenge with one-minute checkpoints
         shell: bash
         env:
           TRIAL_SEED: ${{ inputs.seed || '20261026' }}
@@ -104,7 +104,7 @@ jobs:
             exit 1
           fi
           echo "[DLT-002] long_run_started_at_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)" | tee -a dlt-002-results/workflow.log
-          "$executable" 14400 60 dlt-002-results "$TRIAL_SEED" 2>&1 | tee dlt-002-results/console.log
+          $executable" 21300 60 dlt-002-results "$TRIAL_SEED" 2>&1 | tee dlt-002-results/console.log
 
       - name: Preserve trial logs, checkpoints, episode records, and brain journal
         if: always()
