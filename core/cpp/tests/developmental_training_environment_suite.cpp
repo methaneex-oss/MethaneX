@@ -327,22 +327,6 @@ int main() {
         const auto generalized = CognitiveCycle(restored).run(related_probe);
         assert(generalized.status == CognitiveCycleStatus::completed);
         assert(!generalized.context.plan.steps.empty());
-        for (const auto& evidence : restored.developmental_related_strategies(
-                 "navigation/route-selection alternate")) {
-            std::cout << "[transfer-debug] context=" << evidence.strategy.context
-                      << " action=" << evidence.strategy.action
-                      << " value=" << evidence.strategy.value
-                      << " confidence=" << evidence.strategy.confidence
-                      << " similarity=" << evidence.similarity << '\\n';
-        }
-        for (const auto& decision : generalized.context.decisions) {
-            std::cout << "[transfer-debug] decision=" << decision.action.name
-                      << " score=" << decision.score
-                      << " utility=" << decision.action.utility
-                      << " expected=" << decision.action.expected_value << '\\n';
-        }
-        std::cout << "[transfer-debug] selected="
-                  << generalized.context.plan.steps.front().action.name << '\\n';
         assert(generalized.context.plan.steps.front().action.name == "good-route");
         std::cout << "[restart-probe] original=good-route revised=bad-route generalized=good-route"
                   << " restored_events=" << restored.memory().all().size() << '\n';
