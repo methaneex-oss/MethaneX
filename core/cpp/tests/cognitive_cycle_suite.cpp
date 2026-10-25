@@ -580,7 +580,7 @@ int main() {
         inferred_transfer_input.observation =
             Event{0, 0, "sensor", "observation", {{"temperature", 80.0}}};
         inferred_transfer_input.candidate_actions = {
-            CandidateAction{"inspect", 0.2, 0.2, 0.1, 0.2, 0.5, 0.0, 0.4},
+            CandidateAction{"inspect", 0.55, 0.55, 0.1, 0.2, 0.5, 0.0, 0.4},
             CandidateAction{"ignore", 0.6, 0.6, 0.1, 0.2, 0.5, 0.0, 0.4},
         };
         const auto inferred_transfer_result =
