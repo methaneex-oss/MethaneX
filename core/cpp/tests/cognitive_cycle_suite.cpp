@@ -566,6 +566,31 @@ int main() {
         assert(explicit_context_result.status == CognitiveCycleStatus::completed);
         assert(explicit_context_result.context.action_assessments.front().developmental_context ==
                "caller-defined-context");
+
+        // Featureless observations still need situation identity. Falling back
+        // to the goal ID alone would pool unrelated experiences under one goal.
+        numeric_context_input.developmental_context.clear();
+        numeric_context_input.observation =
+            Event{0, 0, "sensor-a", "status", {}};
+        const auto featureless_a =
+            CognitiveCycle(context_brain).run(numeric_context_input);
+        assert(featureless_a.status == CognitiveCycleStatus::completed);
+        const auto featureless_context_a =
+            featureless_a.context.action_assessments.front().developmental_context;
+        assert(featureless_context_a != context_goal.id);
+        assert(featureless_context_a.find("status") != std::string::npos);
+        assert(featureless_context_a.find("sensor-a") != std::string::npos);
+
+        numeric_context_input.observation =
+            Event{0, 0, "sensor-b", "alarm", {}};
+        const auto featureless_b =
+            CognitiveCycle(context_brain).run(numeric_context_input);
+        assert(featureless_b.status == CognitiveCycleStatus::completed);
+        const auto featureless_context_b =
+            featureless_b.context.action_assessments.front().developmental_context;
+        assert(featureless_context_b != featureless_context_a);
+        assert(featureless_context_b.find("alarm") != std::string::npos);
+        assert(featureless_context_b.find("sensor-b") != std::string::npos);
     }
     std::filesystem::remove(context_journal, ec);
     std::filesystem::remove(context_journal.string() + ".meta", ec);
