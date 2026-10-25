@@ -1,6 +1,7 @@
 #include "jarvis/core/developmental_learning.hpp"
 
 #include <algorithm>
+#include <charconv>
 #include <cctype>
 #include <cmath>
 #include <limits>
@@ -74,6 +75,77 @@ std::vector<std::string> context_path_segments(const std::string& context) {
     return segments;
 }
 
+std::vector<std::string> context_path_values(const std::string& context) {
+    const auto marker = context.find("/values/");
+    if (marker == std::string::npos) return {};
+    std::vector<std::string> values;
+    std::size_t start = marker + 8;
+    while (start <= context.size()) {
+        const auto separator = context.find('/', start);
+        const auto end = separator == std::string::npos ? context.size() : separator;
+        std::string value = context.substr(start, end - start);
+        std::transform(value.begin(), value.end(), value.begin(),
+                       [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+        values.push_back(std::move(value));
+        if (separator == std::string::npos) break;
+        start = separator + 1;
+    }
+    return values;
+}
+
+double inferred_value_similarity(const std::string& left, const std::string& right) {
+    if (left == right) return 1.0;
+
+    // Numeric descriptors are logarithmic bands. Adjacent bands are related,
+    // but a farther band should contribute progressively less similarity.
+    const auto numeric_band = [](const std::string& value,
+                                 std::string& sign, int& scale) {
+        const auto marker = value.find("-scale-");
+        if (marker == std::string::npos) return false;
+        sign = value.substr(0, marker);
+        if (sign != "positive" && sign != "negative") return false;
+        const auto number = value.data() + marker + 7;
+        const auto finish = value.data() + value.size();
+        const auto parsed = std::from_chars(number, finish, scale);
+        return parsed.ec == std::errc{} && parsed.ptr == finish;
+    };
+    std::string left_sign;
+    std::string right_sign;
+    int left_scale = 0;
+    int right_scale = 0;
+    if (numeric_band(left, left_sign, left_scale) &&
+        numeric_band(right, right_sign, right_scale)) {
+        if (left_sign != right_sign) return 0.0;
+        const auto distance = std::abs(static_cast<long long>(left_scale) -
+                                       static_cast<long long>(right_scale));
+        return 1.0 / (1.0 + static_cast<double>(distance));
+    }
+
+    // For categorical/text values, compare the value itself rather than the
+    // shared context hierarchy. This prevents schema labels from inflating
+    // similarity between observations whose actual values are unrelated.
+    const auto left_tokens = context_tokens(left);
+    const auto right_tokens = context_tokens(right);
+    if (left_tokens.empty() || right_tokens.empty()) return 0.0;
+    std::unordered_set<std::string> left_set(left_tokens.begin(), left_tokens.end());
+    std::unordered_set<std::string> right_set(right_tokens.begin(), right_tokens.end());
+    std::size_t intersection = 0;
+    for (const auto& token : left_set) if (right_set.contains(token)) ++intersection;
+    const std::size_t union_size = left_set.size() + right_set.size() - intersection;
+    return union_size == 0 ? 0.0 :
+        static_cast<double>(intersection) / static_cast<double>(union_size);
+}
+
+double inferred_context_value_similarity(const std::string& left, const std::string& right) {
+    const auto left_values = context_path_values(left);
+    const auto right_values = context_path_values(right);
+    if (left_values.empty() || left_values.size() != right_values.size()) return 0.0;
+    double total = 0.0;
+    for (std::size_t i = 0; i < left_values.size(); ++i)
+        total += inferred_value_similarity(left_values[i], right_values[i]);
+    return total / static_cast<double>(left_values.size());
+}
+
 double context_similarity(const std::string& left, const std::string& right) {
     if (left == right && !left.empty()) return 1.0;
     const auto left_tokens = context_tokens(left);
@@ -102,6 +174,9 @@ double context_similarity(const std::string& left, const std::string& right) {
                 context_path_segments(right.substr(0, right_values))) {
             return 0.0;
         }
+
+        if (left_values != std::string::npos)
+            return inferred_context_value_similarity(left, right);
 
         const auto left_segments = context_path_segments(left);
         const auto right_segments = context_path_segments(right);
