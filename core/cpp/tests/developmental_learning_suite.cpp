@@ -118,6 +118,22 @@ int main() {
     // Hierarchical similarity must still reject a different top-level domain.
     assert(hierarchical_contexts.best_related_strategy("orbital/cooking") == nullptr);
 
+    // Multiword context leaves preserve phrase-level similarity. An alternate
+    // route-selection context should inherit the route-selection prior, but not
+    // the route-variant exception merely because both share "navigation".
+    DevelopmentalLearning phrase_hierarchy;
+    phrase_hierarchy.observe_strategy(
+        "navigation/route-selection", "good-route",
+        LearningSignal{0.0, 0.9, 0.8, 0.2});
+    phrase_hierarchy.observe_strategy(
+        "navigation/route-variant", "bad-route",
+        LearningSignal{1.0, -0.9, 0.8, 0.2});
+    const auto phrase_matches =
+        phrase_hierarchy.related_strategies("navigation/route-selection alternate");
+    assert(phrase_matches.size() == 1);
+    assert(phrase_matches.front().strategy.action == "good-route");
+    assert(phrase_matches.front().similarity > 0.5);
+
     // Automatically inferred observation contexts encode their feature schema
     // before the value leaves. Different values for the same observed feature
     // may transfer; a different feature schema must not inherit that strategy
