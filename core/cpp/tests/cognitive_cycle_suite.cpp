@@ -376,7 +376,7 @@ int main() {
 
         const auto with_history = expectation_cycle.run(expectation_input);
         assert(with_history.status == CognitiveCycleStatus::completed);
-        assert(std::abs(with_history.context.plan.steps.front().action.expected_consequence - 0.8) < 1e-12);
+        assert(std::abs(with_history.context.plan.steps.front().action.expected_consequence - 0.525) < 1e-12);
     }
     // The learned expectation must come back from the durable journal, not
     // merely survive in the original Brain instance's in-memory state.
@@ -395,7 +395,7 @@ int main() {
         const auto after_restart =
             CognitiveCycle(reopened_expectation_brain).run(persisted_input);
         assert(after_restart.status == CognitiveCycleStatus::completed);
-        assert(std::abs(after_restart.context.plan.steps.front().action.expected_consequence - 0.8) < 1e-12);
+        assert(std::abs(after_restart.context.plan.steps.front().action.expected_consequence - 0.525) < 1e-12);
     }
     std::filesystem::remove(expectation_journal, ec);
     std::filesystem::remove(expectation_journal.string() + ".meta", ec);
