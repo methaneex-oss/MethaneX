@@ -281,6 +281,19 @@ int main() {
     assert(derived.affective_significance > neutral.affective_significance);
     assert(derived.affective_significance <= 1.0);
 
+    // Non-finite consolidation thresholds must fall back to the default
+    // retention policy rather than accidentally disabling forgetting.
+    DevelopmentalLearning invalid_consolidation_threshold;
+    invalid_consolidation_threshold.observe_strategy(
+        "transient context", "weak trace",
+        LearningSignal{0.0, 0.01, 0.0, 0.0});
+    invalid_consolidation_threshold.consolidate(
+        std::numeric_limits<double>::quiet_NaN());
+    if (!invalid_consolidation_threshold.strategies().empty()) {
+        std::cerr << "non-finite consolidation threshold bypassed forgetting\n";
+        return 1;
+    }
+
     learning.consolidate(0.05);
     std::cout << "developmental learning suite passed\n";
     return 0;
