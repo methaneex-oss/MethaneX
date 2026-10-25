@@ -1,4 +1,5 @@
 #include "jarvis/core/cognitive_cycle.hpp"
+#include "jarvis/core/developmental_learning.hpp"
 
 #include <cassert>
 #include <cmath>
@@ -548,6 +549,16 @@ int main() {
         assert(higher_value_boundary != std::string::npos);
         assert(numeric_context.substr(0, numeric_value_boundary) ==
                higher_numeric_context.substr(0, higher_value_boundary));
+
+        DevelopmentalLearning context_transfer;
+        context_transfer.observe_strategy(
+            numeric_context, "inspect",
+            LearningSignal{0.8, 0.8, 0.5, 0.5, 0.5, 1.0});
+        const auto* transferred =
+            context_transfer.best_related_strategy(higher_numeric_context);
+        assert(transferred != nullptr);
+        assert(transferred->action == "inspect");
+        assert(transferred->context == numeric_context);
 
         numeric_context_input.developmental_context = "caller-defined-context";
         const auto explicit_context_result =
