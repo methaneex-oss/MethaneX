@@ -307,11 +307,30 @@ std::vector<LearnedStrategy> DevelopmentalLearning::strategies() const {
 
 const LearnedStrategy* DevelopmentalLearning::best_strategy(const std::string& context) const noexcept {
     const LearnedStrategy* best = nullptr;
+    double best_score = -std::numeric_limits<double>::infinity();
     for (const auto& [_, strategy] : strategies_) {
         if (strategy.context != context) continue;
-        if (best == nullptr || strategy.value > best->value ||
-            (strategy.value == best->value && strategy.confidence > best->confidence)) {
+
+        // Rank an exact-context strategy by confidence-weighted learned utility,
+        // matching related-context retrieval. A single weakly supported success
+        // must not outrank a better-supported alternative solely because its
+        // unweighted value is larger. Confidence scales influence; it does not
+        // rewrite the observed outcome stored in strategy.value.
+        const double value = std::clamp(
+            std::isfinite(strategy.value) ? strategy.value : 0.0, -1.0, 1.0);
+        const double confidence = std::clamp(
+            std::isfinite(strategy.confidence) ? strategy.confidence : 0.0, 0.0, 1.0);
+        const double score = value * confidence;
+
+        // The container is unordered. Stable tie-breaking keeps retrieval
+        // reproducible across runs and journal replay.
+        const bool stable_tie_break =
+            best != nullptr && score == best_score &&
+            (strategy.action < best->action ||
+             (strategy.action == best->action && strategy.context < best->context));
+        if (best == nullptr || score > best_score || stable_tie_break) {
             best = &strategy;
+            best_score = score;
         }
     }
     return best;
