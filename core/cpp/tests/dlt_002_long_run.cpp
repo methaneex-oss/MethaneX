@@ -120,7 +120,7 @@ int main(int argc, char** argv) {
     std::ofstream report(output_dir / "trial.log", std::ios::trunc);
     if (!episodes || !checkpoints || !report)
         throw std::runtime_error("Could not create DLT-002 output files");
-    episodes << "episode,elapsed_seconds,phase,context,latent_condition_evaluation_only,expected_action_evaluation_only,selected_action,optimal_action_selected,consequence,observation_count,outcome_count,prediction_count,prediction_outcome_count\n";
+    episodes << "episode,elapsed_seconds,phase,context,latent_condition_evaluation_only,expected_action_evaluation_only,selected_action,optimal_action_selected,consequence,observation_count,outcome_count,prediction_count,prediction_outcome_count,generalization_probe_episode_index,generalization_transfer_source_context,generalization_transfer_source_action,generalization_transfer_source_similarity,generalization_initial_window_episode,generalization_initial_window_optimal\n";
     checkpoints << "elapsed_seconds,phase,episodes,total_reward,current_phase_route_one_selected,current_phase_route_two_selected,positive_outcomes,negative_outcomes,optimal_action_selections,nonoptimal_action_selections,current_phase_decision_accuracy,observations,outcomes,predictions,prediction_outcomes,resolved_predictions,mean_absolute_prediction_error,clear_route_one_value,clear_route_two_value,flooded_route_one_value,flooded_route_two_value,tunnel_route_one_value,tunnel_route_two_value,canyon_route_one_value,canyon_route_two_value\n";
     episodes << std::unitbuf;
     checkpoints << std::unitbuf;
@@ -202,6 +202,13 @@ int main(int argc, char** argv) {
     std::uint64_t positive = 0, negative = 0;
     std::uint64_t optimal_action_selections = 0, nonoptimal_action_selections = 0;
     std::uint64_t episode = 0;
+    std::uint64_t generalization_probe_episodes = 0;
+    std::uint64_t generalization_initial_window_optimal = 0;
+    constexpr std::uint64_t generalization_initial_window_size = 10;
+    std::string generalization_transfer_source_context;
+    std::string generalization_transfer_source_action;
+    double generalization_transfer_source_similarity = 0.0;
+    bool generalization_transfer_source_checked = false;
     double total_reward = 0.0;
     std::string active_phase = "clear-baseline";
     report << "[DLT-002] status=STARTED duration_seconds=" << duration_seconds
@@ -229,6 +236,20 @@ int main(int argc, char** argv) {
                 {"visibility", std::string(phase.visibility)},
             }, 100.0);
             last_step.reset();
+
+            // Record related experience before the first action in the held-out
+            // context. This is diagnostic only: evaluation labels never enter
+            // the brain and the retrieval threshold/learning rule is unchanged.
+            if (std::string(phase.name) == "generalization-probe" &&
+                !generalization_transfer_source_checked) {
+                const auto related = brain.developmental_related_strategies(phase.context);
+                if (!related.empty()) {
+                    generalization_transfer_source_context = related.front().strategy.context;
+                    generalization_transfer_source_action = related.front().strategy.action;
+                    generalization_transfer_source_similarity = related.front().similarity;
+                }
+                generalization_transfer_source_checked = true;
+            }
 
             const auto input = make_input(goal, world);
             if (!runtime.submit(input, 1.0))
@@ -268,11 +289,36 @@ int main(int argc, char** argv) {
             const auto outcomes = brain.memory().by_kind("action_outcome").size();
             const auto predictions = brain.memory().by_kind("prediction").size();
             const auto prediction_outcomes = brain.memory().by_kind("prediction_outcome").size();
+            const bool in_generalization_probe =
+                std::string(phase.name) == "generalization-probe";
+            std::uint64_t probe_episode_index = 0;
+            std::string transfer_source_context;
+            std::string transfer_source_action;
+            double transfer_source_similarity = 0.0;
+            std::string initial_window_episode;
+            std::string initial_window_optimal;
+            if (in_generalization_probe) {
+                probe_episode_index = ++generalization_probe_episodes;
+                if (probe_episode_index <= generalization_initial_window_size) {
+                    if (optimal_action_selected) ++generalization_initial_window_optimal;
+                    initial_window_episode = std::to_string(probe_episode_index);
+                    initial_window_optimal = optimal_action_selected ? "1" : "0";
+                }
+                if (probe_episode_index == 1 && !generalization_transfer_source_context.empty()) {
+                    transfer_source_context = generalization_transfer_source_context;
+                    transfer_source_action = generalization_transfer_source_action;
+                    transfer_source_similarity = generalization_transfer_source_similarity;
+                }
+            }
             episodes << episode << ',' << cycle_elapsed << ',' << phase.name << ','
                      << phase.context << ',' << phase.latent_condition << ',' << expected_action << ','
                      << selected << ',' << (optimal_action_selected ? 1 : 0) << ','
                      << *last_step->consequence << ',' << observations << ',' << outcomes << ','
-                     << predictions << ',' << prediction_outcomes << '\n';
+                     << predictions << ',' << prediction_outcomes << ','
+                     << (in_generalization_probe ? std::to_string(probe_episode_index) : "") << ','
+                     << transfer_source_context << ',' << transfer_source_action << ','
+                     << (transfer_source_context.empty() ? "" : std::to_string(transfer_source_similarity)) << ','
+                     << initial_window_episode << ',' << initial_window_optimal << '\n';
             ++episode;
 
             const auto now = std::chrono::steady_clock::now();
@@ -334,6 +380,13 @@ int main(int argc, char** argv) {
             << " outcome_memories=" << brain.memory().by_kind("action_outcome").size()
             << " prediction_memories=" << brain.memory().by_kind("prediction").size()
             << " prediction_outcome_memories=" << brain.memory().by_kind("prediction_outcome").size()
+            << " generalization_probe_episodes=" << generalization_probe_episodes
+            << " generalization_transfer_source_found=" << (!generalization_transfer_source_context.empty())
+            << " generalization_transfer_source_context=" << (generalization_transfer_source_context.empty() ? "NONE" : generalization_transfer_source_context)
+            << " generalization_transfer_source_action=" << (generalization_transfer_source_action.empty() ? "NONE" : generalization_transfer_source_action)
+            << " generalization_transfer_source_similarity=" << generalization_transfer_source_similarity
+            << " generalization_initial_window_size=" << std::min(generalization_probe_episodes, generalization_initial_window_size)
+            << " generalization_initial_window_optimal=" << generalization_initial_window_optimal
             << " resolved_predictions=" << final_prediction_quality.resolved
             << " mean_absolute_prediction_error=" << final_prediction_quality.mean_absolute_error
             << " clear_route_one_value=" << strategy_value(brain, "navigation/clear", "route-one")
