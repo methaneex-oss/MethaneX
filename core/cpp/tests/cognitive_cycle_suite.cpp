@@ -517,7 +517,7 @@ int main() {
         numeric_context_input.observation =
             Event{0, 0, "sensor", "observation", {{"temperature", 42.0}}};
         numeric_context_input.candidate_actions = {
-            CandidateAction{"inspect", 0.6, 0.5, 0.1, 0.2, 0.5, 0.0, 0.4},
+            CandidateAction{"inspect", 0.6, 0.5, 0.9, 0.2, 0.5, 0.0, 0.4},
         };
         numeric_context_input.goal_id = context_goal.id;
         numeric_context_input.planning_horizon = 1;
