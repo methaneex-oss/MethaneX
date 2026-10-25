@@ -29,15 +29,18 @@ struct Phase {
     const char* visibility;
 };
 
-// The final phase deliberately reverses the first phase while retaining its
-// context and visible cues. route_condition is withheld from the brain.
+// The fourth phase reverses the first while retaining its context and visible
+// cues. The fifth phase introduces an unseen context to probe transfer rather
+// than only replaying learned context/action mappings. route_condition is
+// withheld from the brain throughout.
 Phase phase_for(std::int64_t elapsed, std::int64_t duration) {
-    const auto phase_length = std::max<std::int64_t>(1, duration / 4);
-    switch (std::min<std::int64_t>(3, elapsed / phase_length)) {
+    const auto phase_length = std::max<std::int64_t>(1, duration / 5);
+    switch (std::min<std::int64_t>(4, elapsed / phase_length)) {
     case 0: return {"clear-baseline", "navigation/clear", "alpha", "open", "clear"};
     case 1: return {"flooded", "navigation/flooded", "beta", "closed", "poor"};
     case 2: return {"tunnel", "navigation/tunnel", "alpha", "closed", "clear"};
-    default: return {"clear-reversal", "navigation/clear", "beta", "open", "clear"};
+    case 3: return {"clear-reversal", "navigation/clear", "beta", "open", "clear"};
+    default: return {"generalization-probe", "navigation/canyon", "beta", "open", "poor"};
     }
 }
 
@@ -114,7 +117,7 @@ int main(int argc, char** argv) {
     if (!episodes || !checkpoints || !report)
         throw std::runtime_error("Could not create DLT-002 output files");
     episodes << "episode,elapsed_seconds,phase,context,latent_condition_evaluation_only,expected_action_evaluation_only,selected_action,optimal_action_selected,consequence,observation_count,outcome_count,prediction_count,prediction_outcome_count\n";
-    checkpoints << "elapsed_seconds,phase,episodes,total_reward,current_phase_route_alpha_selected,current_phase_route_beta_selected,positive_outcomes,negative_outcomes,optimal_action_selections,nonoptimal_action_selections,current_phase_decision_accuracy,observations,outcomes,predictions,prediction_outcomes,resolved_predictions,mean_absolute_prediction_error,clear_alpha_value,clear_beta_value,flooded_alpha_value,flooded_beta_value,tunnel_alpha_value,tunnel_beta_value\n";
+    checkpoints << "elapsed_seconds,phase,episodes,total_reward,current_phase_route_alpha_selected,current_phase_route_beta_selected,positive_outcomes,negative_outcomes,optimal_action_selections,nonoptimal_action_selections,current_phase_decision_accuracy,observations,outcomes,predictions,prediction_outcomes,resolved_predictions,mean_absolute_prediction_error,clear_alpha_value,clear_beta_value,flooded_alpha_value,flooded_beta_value,tunnel_alpha_value,tunnel_beta_value,canyon_alpha_value,canyon_beta_value\n";
     episodes << std::unitbuf;
     checkpoints << std::unitbuf;
     report << std::unitbuf;
@@ -128,7 +131,7 @@ int main(int argc, char** argv) {
         {"visibility", std::string("clear")},
     };
     world_config.initial_resources = 100.0;
-    world_config.random_seed = 20261025;
+    world_config.random_seed = 20261026;
     world_config.max_steps = 4;
     world_config.observation_filter = [](const Attributes& state) {
         Attributes visible = state;
@@ -146,9 +149,9 @@ int main(int argc, char** argv) {
                     const bool matches =
                         (condition == "alpha" && action_name == "route-alpha") ||
                         (condition == "beta" && action_name == "route-beta");
-                    // Consequences are noisy: 15% of outcomes contradict the
+                    // Consequences are noisy: 20% of outcomes contradict the
                     // underlying action/condition relationship.
-                    const bool flip = std::generate_canonical<double, 10>(random) < 0.15;
+                    const bool flip = std::generate_canonical<double, 10>(random) < 0.20;
                     const bool succeeds = matches != flip;
                     return DevelopmentalWorldTransition{
                         succeeds ? 1.0 : -1.0,
@@ -184,7 +187,7 @@ int main(int argc, char** argv) {
     const auto started = std::chrono::steady_clock::now();
     const auto finish = started + std::chrono::seconds(duration_seconds);
     auto next_checkpoint = started + std::chrono::seconds(checkpoint_seconds);
-    std::array<std::array<std::uint64_t, 2>, 4> action_counts{};
+    std::array<std::array<std::uint64_t, 2>, 5> action_counts{};
     std::uint64_t positive = 0, negative = 0;
     std::uint64_t optimal_action_selections = 0, nonoptimal_action_selections = 0;
     std::uint64_t episode = 0;
@@ -192,7 +195,7 @@ int main(int argc, char** argv) {
     std::string active_phase = "clear-baseline";
     report << "[DLT-002] status=STARTED duration_seconds=" << duration_seconds
            << " checkpoint_seconds=" << checkpoint_seconds
-           << " seed=20261025 noise_rate=0.15 phases=4\n"
+           << " seed=20261026 noise_rate=0.20 phases=5\n"
            << "[DLT-002] protocol=partial observation; noisy outcomes; clear mapping; flooded mapping; tunnel mapping; clear context then reverses while visible cues stay the same\n";
 
     int exit_code = 0;
@@ -231,7 +234,7 @@ int main(int argc, char** argv) {
                 throw std::runtime_error("Selected action or observed consequence evidence is inconsistent");
 
             const auto phase_index = static_cast<std::size_t>(
-                std::min<std::int64_t>(3, elapsed / std::max<std::int64_t>(1, duration_seconds / 4)));
+                std::min<std::int64_t>(4, elapsed / std::max<std::int64_t>(1, duration_seconds / 5)));
             const auto action_index = selected == "route-alpha" ? 0U : 1U;
             ++action_counts[phase_index][action_index];
             const std::string expected_action = std::string(phase.latent_condition) == "alpha"
@@ -277,7 +280,9 @@ int main(int argc, char** argv) {
                     << strategy_value(brain, "navigation/flooded", "route-alpha") << ','
                     << strategy_value(brain, "navigation/flooded", "route-beta") << ','
                     << strategy_value(brain, "navigation/tunnel", "route-alpha") << ','
-                    << strategy_value(brain, "navigation/tunnel", "route-beta") << '\n';
+                    << strategy_value(brain, "navigation/tunnel", "route-beta") << ','
+                    << strategy_value(brain, "navigation/canyon", "route-alpha") << ','
+                    << strategy_value(brain, "navigation/canyon", "route-beta") << '\n';
                 report << "[DLT-002] checkpoint elapsed_seconds="
                     << std::chrono::duration_cast<std::chrono::seconds>(now - started).count()
                     << " phase=" << phase.name << " episodes=" << episode
@@ -295,7 +300,9 @@ int main(int argc, char** argv) {
                     << " flooded_alpha_value=" << strategy_value(brain, "navigation/flooded", "route-alpha")
                     << " flooded_beta_value=" << strategy_value(brain, "navigation/flooded", "route-beta")
                     << " tunnel_alpha_value=" << strategy_value(brain, "navigation/tunnel", "route-alpha")
-                    << " tunnel_beta_value=" << strategy_value(brain, "navigation/tunnel", "route-beta") << '\n';
+                    << " tunnel_beta_value=" << strategy_value(brain, "navigation/tunnel", "route-beta")
+                    << " canyon_alpha_value=" << strategy_value(brain, "navigation/canyon", "route-alpha")
+                    << " canyon_beta_value=" << strategy_value(brain, "navigation/canyon", "route-beta") << '\n';
                 next_checkpoint = now + std::chrono::seconds(checkpoint_seconds);
             }
             std::this_thread::sleep_for(std::chrono::seconds(1));
