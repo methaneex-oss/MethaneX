@@ -118,6 +118,20 @@ int main() {
     // Hierarchical similarity must still reject a different top-level domain.
     assert(hierarchical_contexts.best_related_strategy("orbital/cooking") == nullptr);
 
+    // Automatically inferred observation contexts encode their feature schema
+    // before the value leaves. Different values for the same observed feature
+    // may transfer; a different feature schema must not inherit that strategy
+    // merely because the observation kind and sensor source happen to match.
+    DevelopmentalLearning schema_guard;
+    schema_guard.observe_strategy(
+        "observation/observation/source/sensor/features/temperature/values/positive-scale-5",
+        "inspect-temperature", LearningSignal{0.0, 0.8, 0.5, 0.2});
+    assert(schema_guard.best_related_strategy(
+        "observation/observation/source/sensor/features/temperature/values/positive-scale-6") != nullptr);
+    assert(schema_guard.best_related_strategy(
+        "observation/observation/source/sensor/features/humidity/values/positive-scale-5") == nullptr);
+    assert(schema_guard.best_related_strategy("observation/sensor") == nullptr);
+
     // Generalization must be bounded by context similarity. A strategy learned
     // for navigation must not leak into an unrelated task merely because it
     // is the only experience currently stored.
