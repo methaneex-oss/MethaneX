@@ -77,6 +77,20 @@ double context_similarity(const std::string& left, const std::string& right) {
     // to one token in a flat Jaccard set: that artificially scores sibling
     // contexts below the default transfer threshold.
     if (left.find('/') != std::string::npos && right.find('/') != std::string::npos) {
+        // Automatically inferred observation contexts encode a stable feature
+        // schema before "/values/". Transfer between different schemas is unsafe:
+        // matching only the sensor/source prefix can make an action learned for
+        // one feature appear relevant to a different feature. Require the same
+        // identity and feature schema, then compare the value-bearing leaves.
+        const auto left_values = left.find("/values/");
+        const auto right_values = right.find("/values/");
+        if ((left_values != std::string::npos) !=
+            (right_values != std::string::npos)) return 0.0;
+        if (left_values != std::string::npos &&
+            left.substr(0, left_values) != right.substr(0, right_values)) {
+            return 0.0;
+        }
+
         const auto left_segments = context_path_segments(left);
         const auto right_segments = context_path_segments(right);
         if (left_segments.empty() || right_segments.empty()) return 0.0;
