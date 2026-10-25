@@ -27,11 +27,11 @@ jobs:
           {
             echo '{'
             echo '  "trial": "DLT-002",'
-            echo '  "mode": "four-hour contextual reversal under partial observation and noisy consequences",'
+            echo '  "mode": "five-phase four-hour challenge with partial observation, 20% noisy consequences, contextual reversal, and unseen-context transfer probe",'
             echo '  "duration_seconds": 14400,'
             echo '  "checkpoint_interval_seconds": 60,'
-            echo '  "seed": 20261025,'
-            echo '  "noise_rate": 0.15,'
+            echo '  "seed": 20261026,'
+            echo '  "noise_rate": 0.20,'
             echo "  \"commit\": \"${GITHUB_SHA}\","
             echo "  \"run_id\": \"${GITHUB_RUN_ID}\","
             echo "  \"run_attempt\": \"${GITHUB_RUN_ATTEMPT}\","
