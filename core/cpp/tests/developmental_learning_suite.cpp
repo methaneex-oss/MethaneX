@@ -242,6 +242,24 @@ int main() {
     assert(untrusted_evidence.strategies().empty());
     assert(untrusted_evidence.associations().empty());
 
+    // Exact-context retrieval must rank learned utility by evidence confidence.
+    // A flashy but weakly supported success must not beat a more reliable,
+    // still-positive alternative merely because its raw reward was larger.
+    DevelopmentalLearning confidence_weighted_choice;
+    confidence_weighted_choice.observe_strategy(
+        "same situation", "weakly-supported-action",
+        LearningSignal{0.2, 1.0, 0.5, 0.2, 0.5, 0.1});
+    confidence_weighted_choice.observe_strategy(
+        "same situation", "reliably-supported-action",
+        LearningSignal{0.2, 0.6, 0.5, 0.2, 0.5, 1.0});
+    const auto* confidence_weighted_best =
+        confidence_weighted_choice.best_strategy("same situation");
+    assert(confidence_weighted_best != nullptr);
+    assert(confidence_weighted_best->action == "reliably-supported-action");
+    assert(confidence_weighted_best->value == 0.6);
+    assert(confidence_weighted_best->confidence >
+           confidence_weighted_choice.strategies().front().confidence * 0.0);
+
     // Legacy four-field evidence now derives deterministic affective
     // significance from prediction error, reward, salience and novelty.
     const LearningSignal derived{0.9, -0.8, 0.7, 0.6};
