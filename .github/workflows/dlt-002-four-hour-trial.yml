@@ -1,0 +1,88 @@
+name: DLT-002 Four-Hour Contextual Reversal Trial
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dlt-002-four-hour-trial
+  cancel-in-progress: false
+
+jobs:
+  developmental-learning-trial:
+    name: DLT-002 · 4-hour partial-observation and reversal run
+    runs-on: ubuntu-latest
+    timeout-minutes: 250
+    steps:
+      - name: Checkout exact trial revision
+        uses: actions/checkout@v6
+
+      - name: Initialize persistent run evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dlt-002-results
+          {
+            echo '{'
+            echo '  "trial": "DLT-002",'
+            echo '  "mode": "four-hour contextual reversal under partial observation and noisy consequences",'
+            echo '  "duration_seconds": 14400,'
+            echo '  "checkpoint_interval_seconds": 60,'
+            echo '  "seed": 20261025,'
+            echo '  "noise_rate": 0.15,'
+            echo "  \"commit\": \"${GITHUB_SHA}\","
+            echo "  \"run_id\": \"${GITHUB_RUN_ID}\","
+            echo "  \"run_attempt\": \"${GITHUB_RUN_ATTEMPT}\","
+            echo '  "started_at_utc": "'"$(date -u +%Y-%m-%dT%H:%M:%SZ)"'"'
+            echo '}'
+          } > dlt-002-results/run_metadata.json
+          echo "[DLT-002] workflow_run_id=${GITHUB_RUN_ID} commit=${GITHUB_SHA}" | tee dlt-002-results/workflow.log
+
+      - name: Configure native brain
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmake -S core/cpp -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON 2>&1 | tee dlt-002-results/configure.log
+
+      - name: Build DLT acceptance and long-run executables
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmake --build build --parallel --target jarvis_dlt_001_trial jarvis_dlt_002_persistence jarvis_dlt_002_long_run 2>&1 | tee dlt-002-results/build.log
+
+      - name: Gate the long run on short acceptance tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          ctest --test-dir build -R '^jarvis_dlt_001_trial$' --output-on-failure --timeout 30 2>&1 | tee dlt-002-results/acceptance-test.log
+          persistence_executable="$(find build -type f -name jarvis_dlt_002_persistence -executable -print -quit)"
+          if [[ -z "${persistence_executable}" ]]; then
+            echo "Could not locate jarvis_dlt_002_persistence executable"
+            exit 1
+          fi
+          "${persistence_executable}" train dlt-002-results/persistence-check.bin 2>&1 | tee -a dlt-002-results/acceptance-test.log
+          "${persistence_executable}" verify dlt-002-results/persistence-check.bin 2>&1 | tee -a dlt-002-results/acceptance-test.log
+          rm -f dlt-002-results/persistence-check.bin dlt-002-results/persistence-check.bin.meta
+
+      - name: Run four-hour DLT-002 with one-minute checkpoints
+        shell: bash
+        run: |
+          set -euo pipefail
+          executable="$(find build -type f -name jarvis_dlt_002_long_run -executable -print -quit)"
+          if [[ -z "${executable}" ]]; then
+            echo "Could not locate jarvis_dlt_002_long_run executable" | tee -a dlt-002-results/trial.log
+            exit 1
+          fi
+          echo "[DLT-002] long_run_started_at_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)" | tee -a dlt-002-results/workflow.log
+          "${executable}" 14400 60 dlt-002-results 2>&1 | tee dlt-002-results/console.log
+
+      - name: Preserve logs, checkpoints, and brain journal
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: DLT-002-${{ github.run_id }}-${{ github.run_attempt }}
+          path: dlt-002-results/
+          if-no-files-found: warn
+          retention-days: 90
