@@ -28,7 +28,7 @@ jobs:
           {
             echo '{'
             echo '  "trial": "DLT-002",'
-            echo '  "mode": "five-phase four-hour developmental learning challenge with partial observation, 20% noisy outcomes, reversal, and unseen-context transfer",'
+            echo '  "mode": "six-phase four-hour developmental learning challenge with partial observation, 20% noisy outcomes, two context reversals, and unseen-context transfer",'
             echo '  "duration_seconds": 14400,'
             echo '  "checkpoint_interval_seconds": 60,'
             echo '  "seed": 20261026,'
