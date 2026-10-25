@@ -113,8 +113,8 @@ int main(int argc, char** argv) {
     std::ofstream report(output_dir / "trial.log", std::ios::trunc);
     if (!episodes || !checkpoints || !report)
         throw std::runtime_error("Could not create DLT-002 output files");
-    episodes << "episode,elapsed_seconds,phase,context,latent_condition_evaluation_only,selected_action,consequence,observation_count,outcome_count,prediction_count,prediction_outcome_count\n";
-    checkpoints << "elapsed_seconds,phase,episodes,total_reward,route_alpha_selected,route_beta_selected,positive_outcomes,negative_outcomes,observations,outcomes,predictions,prediction_outcomes,resolved_predictions,mean_absolute_prediction_error,clear_alpha_value,clear_beta_value,flooded_alpha_value,flooded_beta_value,tunnel_alpha_value,tunnel_beta_value\n";
+    episodes << "episode,elapsed_seconds,phase,context,latent_condition_evaluation_only,expected_action_evaluation_only,selected_action,optimal_action_selected,consequence,observation_count,outcome_count,prediction_count,prediction_outcome_count\n";
+    checkpoints << "elapsed_seconds,phase,episodes,total_reward,current_phase_route_alpha_selected,current_phase_route_beta_selected,positive_outcomes,negative_outcomes,optimal_action_selections,nonoptimal_action_selections,current_phase_decision_accuracy,observations,outcomes,predictions,prediction_outcomes,resolved_predictions,mean_absolute_prediction_error,clear_alpha_value,clear_beta_value,flooded_alpha_value,flooded_beta_value,tunnel_alpha_value,tunnel_beta_value\n";
     episodes << std::unitbuf;
     checkpoints << std::unitbuf;
     report << std::unitbuf;
@@ -186,6 +186,7 @@ int main(int argc, char** argv) {
     auto next_checkpoint = started + std::chrono::seconds(checkpoint_seconds);
     std::array<std::array<std::uint64_t, 2>, 4> action_counts{};
     std::uint64_t positive = 0, negative = 0;
+    std::uint64_t optimal_action_selections = 0, nonoptimal_action_selections = 0;
     std::uint64_t episode = 0;
     double total_reward = 0.0;
     std::string active_phase = "clear-baseline";
@@ -233,6 +234,16 @@ int main(int argc, char** argv) {
                 std::min<std::int64_t>(3, elapsed / std::max<std::int64_t>(1, duration_seconds / 4)));
             const auto action_index = selected == "route-alpha" ? 0U : 1U;
             ++action_counts[phase_index][action_index];
+            const std::string expected_action = std::string(phase.latent_condition) == "alpha"
+                ? "route-alpha" : "route-beta";
+            const bool optimal_action_selected = selected == expected_action;
+            if (optimal_action_selected) ++optimal_action_selections;
+            else ++nonoptimal_action_selections;
+            const auto phase_selections = action_counts[phase_index][0] + action_counts[phase_index][1];
+            const auto phase_optimal_selections = action_counts[phase_index][
+                expected_action == "route-alpha" ? 0U : 1U];
+            const double phase_decision_accuracy = phase_selections == 0 ? 0.0 :
+                static_cast<double>(phase_optimal_selections) / static_cast<double>(phase_selections);
             total_reward += *last_step->consequence;
             if (*last_step->consequence > 0.0) ++positive;
             else if (*last_step->consequence < 0.0) ++negative;
@@ -244,7 +255,8 @@ int main(int argc, char** argv) {
             const auto predictions = brain.memory().by_kind("prediction").size();
             const auto prediction_outcomes = brain.memory().by_kind("prediction_outcome").size();
             episodes << episode << ',' << cycle_elapsed << ',' << phase.name << ','
-                     << phase.context << ',' << phase.latent_condition << ',' << selected << ','
+                     << phase.context << ',' << phase.latent_condition << ',' << expected_action << ','
+                     << selected << ',' << (optimal_action_selected ? 1 : 0) << ','
                      << *last_step->consequence << ',' << observations << ',' << outcomes << ','
                      << predictions << ',' << prediction_outcomes << '\n';
             ++episode;
@@ -255,7 +267,9 @@ int main(int argc, char** argv) {
                 checkpoints << std::chrono::duration_cast<std::chrono::seconds>(now - started).count()
                     << ',' << phase.name << ',' << episode << ',' << total_reward << ','
                     << action_counts[phase_index][0] << ',' << action_counts[phase_index][1] << ','
-                    << positive << ',' << negative << ',' << observations << ',' << outcomes << ','
+                    << positive << ',' << negative << ',' << optimal_action_selections << ','
+                    << nonoptimal_action_selections << ',' << phase_decision_accuracy << ','
+                    << observations << ',' << outcomes << ','
                     << predictions << ',' << prediction_outcomes << ',' << prediction_quality.resolved
                     << ',' << prediction_quality.mean_absolute_error << ','
                     << strategy_value(brain, "navigation/clear", "route-alpha") << ','
@@ -268,7 +282,10 @@ int main(int argc, char** argv) {
                     << std::chrono::duration_cast<std::chrono::seconds>(now - started).count()
                     << " phase=" << phase.name << " episodes=" << episode
                     << " total_reward=" << total_reward << " positive=" << positive
-                    << " negative=" << negative << " observations=" << observations
+                    << " negative=" << negative << " optimal_action_selections=" << optimal_action_selections
+                    << " nonoptimal_action_selections=" << nonoptimal_action_selections
+                    << " current_phase_decision_accuracy=" << phase_decision_accuracy
+                    << " observations=" << observations
                     << " outcomes=" << outcomes << " predictions=" << predictions
                     << " prediction_outcomes=" << prediction_outcomes
                     << " resolved_predictions=" << prediction_quality.resolved
@@ -292,7 +309,9 @@ int main(int argc, char** argv) {
         report << "[DLT-002] status=" << (completed ? "COMPLETED" : "INTERRUPTED")
             << " elapsed_seconds=" << elapsed_seconds << " episodes=" << episode
             << " total_reward=" << total_reward << " positive=" << positive
-            << " negative=" << negative << " observation_memories="
+            << " negative=" << negative << " optimal_action_selections=" << optimal_action_selections
+            << " nonoptimal_action_selections=" << nonoptimal_action_selections
+            << " observation_memories="
             << brain.memory().by_kind("observation").size()
             << " outcome_memories=" << brain.memory().by_kind("action_outcome").size()
             << " prediction_memories=" << brain.memory().by_kind("prediction").size()
