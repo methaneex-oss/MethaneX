@@ -19,7 +19,7 @@ concurrency:
 
 jobs:
   developmental-learning-challenge:
-    name: DLT-002 · 345-minute learning trial
+    name: DLT-002 · 300-minute learning trial
     runs-on: ubuntu-latest
     timeout-minutes: 360
     steps:
@@ -41,7 +41,7 @@ jobs:
             echo '{'
             echo '  "trial": "DLT-002",'
             echo '  "mode": "six-phase overnight developmental learning challenge with partial observation, 20% noisy outcomes, two context reversals, and unseen-context transfer",'
-            echo '  "duration_seconds": 20700,'
+            echo '  "duration_seconds": 18000,'
             echo '  "checkpoint_interval_seconds": 60,'
             echo '  "timezone": "Africa/Lagos",'
             echo '  "target_finish_window_wat": "2026-10-26T06:00:00+01:00/2026-10-26T09:00:00+01:00",'
@@ -116,7 +116,7 @@ jobs:
           done
           echo "[DLT-002] six_phase_smoke_test=PASS duration_seconds=60" | tee -a dlt-002-results/workflow.log
 
-      - name: Run the 345-minute DLT-002 challenge with one-minute checkpoints
+      - name: Run the 300-minute DLT-002 challenge with one-minute checkpoints
         shell: bash
         env:
           TRIAL_SEED: ${{ inputs.seed || '20261026' }}
@@ -128,7 +128,7 @@ jobs:
             exit 1
           fi
           echo "[DLT-002] long_run_started_at_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)" | tee -a dlt-002-results/workflow.log
-          "$executable" 20700 60 dlt-002-results "$TRIAL_SEED" 2>&1 | tee dlt-002-results/console.log
+          "$executable" 18000 60 dlt-002-results "$TRIAL_SEED" 2>&1 | tee dlt-002-results/console.log
 
       - name: Preserve trial logs, checkpoints, episode records, and brain journal
         if: always()
