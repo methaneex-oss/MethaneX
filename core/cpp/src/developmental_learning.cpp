@@ -41,12 +41,55 @@ bool has_negation(const std::vector<std::string>& tokens) {
                        [](const std::string& token) { return negators.contains(token); });
 }
 
+std::vector<std::string> context_path_segments(const std::string& context) {
+    std::vector<std::string> segments;
+    std::size_t start = 0;
+    while (start <= context.size()) {
+        const auto separator = context.find('/', start);
+        const auto end = separator == std::string::npos ? context.size() : separator;
+        std::size_t first = start;
+        std::size_t last = end;
+        while (first < last && std::isspace(static_cast<unsigned char>(context[first]))) ++first;
+        while (last > first && std::isspace(static_cast<unsigned char>(context[last - 1]))) --last;
+        std::string segment = context.substr(first, last - first);
+        std::transform(segment.begin(), segment.end(), segment.begin(),
+                       [](unsigned char character) {
+                           return static_cast<char>(std::tolower(character));
+                       });
+        if (!segment.empty()) segments.push_back(std::move(segment));
+        if (separator == std::string::npos) break;
+        start = separator + 1;
+    }
+    return segments;
+}
+
 double context_similarity(const std::string& left, const std::string& right) {
     if (left == right && !left.empty()) return 1.0;
     const auto left_tokens = context_tokens(left);
     const auto right_tokens = context_tokens(right);
     if (has_negation(left_tokens) != has_negation(right_tokens)) return 0.0;
     if (left_tokens.empty() || right_tokens.empty()) return 0.0;
+
+    // Slash-delimited contexts express a hierarchy (for example,
+    // navigation/clear and navigation/canyon). Shared parent segments are
+    // meaningful evidence for cautious transfer, while the distinct leaf
+    // segments preserve context specificity. Do not reduce a shared parent
+    // to one token in a flat Jaccard set: that artificially scores sibling
+    // contexts below the default transfer threshold.
+    if (left.find('/') != std::string::npos && right.find('/') != std::string::npos) {
+        const auto left_segments = context_path_segments(left);
+        const auto right_segments = context_path_segments(right);
+        if (left_segments.empty() || right_segments.empty()) return 0.0;
+        std::size_t common_prefix = 0;
+        while (common_prefix < left_segments.size() &&
+               common_prefix < right_segments.size() &&
+               left_segments[common_prefix] == right_segments[common_prefix]) {
+            ++common_prefix;
+        }
+        const auto maximum_depth = std::max(left_segments.size(), right_segments.size());
+        return maximum_depth == 0 ? 0.0 :
+            static_cast<double>(common_prefix) / static_cast<double>(maximum_depth);
+    }
 
     std::unordered_set<std::string> left_set(left_tokens.begin(), left_tokens.end());
     std::unordered_set<std::string> right_set(right_tokens.begin(), right_tokens.end());
