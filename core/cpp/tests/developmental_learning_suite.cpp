@@ -148,6 +148,19 @@ int main() {
         "observation/observation/source/sensor/features/humidity/values/positive-scale-5") == nullptr);
     assert(schema_guard.best_related_strategy("observation/sensor") == nullptr);
 
+    // Featureless inferred contexts have no value evidence for transfer. Shared
+    // observation/source prefixes must not leak a strategy across goal identities.
+    DevelopmentalLearning featureless_contexts;
+    featureless_contexts.observe_strategy(
+        "observation/status/source/sensor-a/goal/goal-one",
+        "inspect", LearningSignal{0.0, 0.8, 0.5, 0.2});
+    assert(featureless_contexts.best_related_strategy(
+        "observation/status/source/sensor-a/goal/goal-two") == nullptr);
+    assert(featureless_contexts.best_related_strategy(
+        "observation/status/source/sensor-b/goal/goal-one") == nullptr);
+    assert(featureless_contexts.best_related_strategy(
+        "observation/status/source/sensor-a/goal/goal-one") != nullptr);
+
     // Generalization must be bounded by context similarity. A strategy learned
     // for navigation must not leak into an unrelated task merely because it
     // is the only experience currently stored.
