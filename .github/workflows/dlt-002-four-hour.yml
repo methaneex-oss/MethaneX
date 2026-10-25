@@ -19,7 +19,7 @@ concurrency:
 
 jobs:
   developmental-learning-challenge:
-    name: DLT-002 · 355-minute learning trial
+    name: DLT-002 · 345-minute learning trial
     runs-on: ubuntu-latest
     timeout-minutes: 360
     steps:
@@ -41,8 +41,11 @@ jobs:
             echo '{'
             echo '  "trial": "DLT-002",'
             echo '  "mode": "six-phase overnight developmental learning challenge with partial observation, 20% noisy outcomes, two context reversals, and unseen-context transfer",'
-            echo '  "duration_seconds": 21300,'
+            echo '  "duration_seconds": 20700,'
             echo '  "checkpoint_interval_seconds": 60,'
+            echo '  "timezone": "Africa/Lagos",'
+            echo '  "target_finish_window_wat": "2026-10-26T06:00:00+01:00/2026-10-26T09:00:00+01:00",'
+            echo '  "execution_model": "single uninterrupted job; interrupted runs are incomplete and cannot be resumed safely",'
             echo "  \"seed\": ${TRIAL_SEED},"
             echo "  \"commit\": \"${GITHUB_SHA}\","
             echo "  \"run_id\": \"${GITHUB_RUN_ID}\","
@@ -63,6 +66,27 @@ jobs:
         run: |
           set -euo pipefail
           cmake --build build --parallel --target jarvis_dlt_002_persistence jarvis_dlt_002_long_run 2>&1 | tee dlt-002-results/build.log
+
+      - name: Verify existing trial state is never overwritten
+        shell: bash
+        env:
+          TRIAL_SEED: ${{ inputs.seed || '20261026' }}
+        run: |
+          set -euo pipefail
+          executable="$(find build -type f -name jarvis_dlt_002_long_run -executable -print -quit)"
+          test -n "$executable"
+          guard_dir="dlt-002-results/overwrite-guard"
+          mkdir -p "$guard_dir"
+          printf 'preserve-existing-state' > "$guard_dir/brain-journal.bin"
+          if "$executable" 1 1 "$guard_dir" "$TRIAL_SEED" > dlt-002-results/overwrite-guard.log 2>&1; then
+            echo "Executable accepted an existing journal; refusing unsafe trial setup"
+            exit 1
+          fi
+          grep -q 'status=REFUSED_OVERWRITE' dlt-002-results/overwrite-guard.log
+          test "$(cat "$guard_dir/brain-journal.bin")" = 'preserve-existing-state'
+          test ! -e "$guard_dir/episodes.csv"
+          rm -rf "$guard_dir"
+          echo "[DLT-002] overwrite_guard=PASS existing_journal_preserved=true" | tee -a dlt-002-results/workflow.log
 
       - name: Gate the overnight run on cross-process persistence and prediction-feedback checks
         shell: bash
@@ -92,7 +116,7 @@ jobs:
           done
           echo "[DLT-002] six_phase_smoke_test=PASS duration_seconds=60" | tee -a dlt-002-results/workflow.log
 
-      - name: Run the 355-minute DLT-002 challenge with one-minute checkpoints
+      - name: Run the 345-minute DLT-002 challenge with one-minute checkpoints
         shell: bash
         env:
           TRIAL_SEED: ${{ inputs.seed || '20261026' }}
@@ -104,7 +128,7 @@ jobs:
             exit 1
           fi
           echo "[DLT-002] long_run_started_at_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)" | tee -a dlt-002-results/workflow.log
-          "$executable" 21300 60 dlt-002-results "$TRIAL_SEED" 2>&1 | tee dlt-002-results/console.log
+          "$executable" 20700 60 dlt-002-results "$TRIAL_SEED" 2>&1 | tee dlt-002-results/console.log
 
       - name: Preserve trial logs, checkpoints, episode records, and brain journal
         if: always()
