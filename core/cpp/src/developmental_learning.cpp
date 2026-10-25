@@ -52,11 +52,22 @@ std::vector<std::string> context_path_segments(const std::string& context) {
         while (first < last && std::isspace(static_cast<unsigned char>(context[first]))) ++first;
         while (last > first && std::isspace(static_cast<unsigned char>(context[last - 1]))) --last;
         std::string segment = context.substr(first, last - first);
-        std::transform(segment.begin(), segment.end(), segment.begin(),
-                       [](unsigned char character) {
-                           return static_cast<char>(std::tolower(character));
-                       });
-        if (!segment.empty()) segments.push_back(std::move(segment));
+        // A slash defines a context level, while spaces separate words within
+        // that level. Keep those words visible to prefix comparison so
+        // "route-selection alternate" remains close to "route-selection"
+        // without also treating it as equally close to "route-variant".
+        std::string word;
+        for (const unsigned char character : segment) {
+            if (std::isspace(character)) {
+                if (!word.empty()) {
+                    segments.push_back(std::move(word));
+                    word.clear();
+                }
+            } else {
+                word.push_back(static_cast<char>(std::tolower(character)));
+            }
+        }
+        if (!word.empty()) segments.push_back(std::move(word));
         if (separator == std::string::npos) break;
         start = separator + 1;
     }
