@@ -75,7 +75,14 @@ std::string infer_developmental_context(const CognitiveCycleInput& input,
         has_context_feature = true;
     }
 
-    if (!has_context_feature) return goal.id;
+    if (!has_context_feature) {
+        // Preserve observation identity even when perception has no usable
+        // features. Falling back to goal.id alone collapses distinct
+        // featureless situations into one learned context and leaks strategies
+        // between unrelated observations that happen to serve the same goal.
+        context += "/goal/" + context_path_segment(goal.id);
+        return context;
+    }
     context += "/features";
     for (const auto& label : labels) context += "/" + label;
     context += "/values";
