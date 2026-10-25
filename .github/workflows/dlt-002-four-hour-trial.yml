@@ -31,7 +31,7 @@ jobs:
             echo '  "duration_seconds": 14400,'
             echo '  "checkpoint_interval_seconds": 60,'
             echo '  "seed": 20261025,'
-            echo '  "noise_rate": 0.15,'
+            echo '  "noise_rate": 0.20,'
             echo "  \"commit\": \"${GITHUB_SHA}\","
             echo "  \"run_id\": \"${GITHUB_RUN_ID}\","
             echo "  \"run_attempt\": \"${GITHUB_RUN_ATTEMPT}\","
