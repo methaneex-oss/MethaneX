@@ -394,7 +394,11 @@ std::vector<RelatedLearnedStrategy> DevelopmentalLearning::related_strategies(
 }
 
 void DevelopmentalLearning::consolidate(double retention_threshold) {
-    const double threshold = std::clamp(retention_threshold, 0.0, 1.0);
+    // Invalid caller input must not silently disable forgetting. Match the
+    // documented default threshold when a non-finite value is supplied.
+    const double threshold = std::clamp(
+        std::isfinite(retention_threshold) ? retention_threshold : 0.05,
+        0.0, 1.0);
     for (auto it = associations_.begin(); it != associations_.end();) {
         const double retention = std::clamp(std::abs(it->second.strength) * 0.7 +
                                             std::min(1.0, it->second.observations / 10.0) * 0.3,
