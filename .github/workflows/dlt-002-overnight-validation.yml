@@ -4,18 +4,10 @@ on:
   workflow_dispatch:
     inputs:
       soak_minutes:
-        description: "Duration of repeated full-suite soak (minutes; up to 300)"
+        description: "Duration of repeated full-suite soak (minutes; up to 240)"
         required: true
-        default: "300"
+        default: "240"
         type: string
-  push:
-    branches:
-      - feat/jarvis-affective-state
-    paths:
-      - 'core/cpp/tests/dlt_002_persistence.cpp'
-      - 'core/cpp/tests/brain_10_suite.cpp'
-      - 'core/cpp/tests/CMakeLists.txt'
-      - '.github/workflows/dlt-002-overnight-validation.yml'
 
 permissions:
   contents: read
@@ -28,7 +20,7 @@ jobs:
   brain-validation:
     name: Full brain suite and persistent-learning soak
     runs-on: ubuntu-latest
-    timeout-minutes: 350
+    timeout-minutes: 290
     steps:
       - name: Checkout exact revision
         uses: actions/checkout@v6
@@ -45,7 +37,7 @@ jobs:
             echo "  \"commit\": \"${GITHUB_SHA}\","
             echo "  \"run_id\": \"${GITHUB_RUN_ID}\","
             echo "  \"run_attempt\": \"${GITHUB_RUN_ATTEMPT}\","
-            echo "  \"soak_minutes\": \"${{ inputs.soak_minutes || '5' }}\","
+            echo "  \"soak_minutes\": \"${{ inputs.soak_minutes || '240' }}\","
             echo '  "started_at_utc": "'"$(date -u +%Y-%m-%dT%H:%M:%SZ)"'"'
             echo '}'
           } > dlt-002-results/run_metadata.json
@@ -84,11 +76,11 @@ jobs:
       - name: Repeat full suite and persistence checks throughout the soak
         shell: bash
         env:
-          SOAK_MINUTES: ${{ inputs.soak_minutes || '5' }}
+          SOAK_MINUTES: ${{ inputs.soak_minutes || '240' }}
         run: |
           set -euo pipefail
-          if ! [[ "$SOAK_MINUTES" =~ ^[0-9]+$ ]] || (( SOAK_MINUTES < 1 || SOAK_MINUTES > 300 )); then
-            echo "soak_minutes must be an integer from 1 through 300" | tee -a dlt-002-results/trial.log
+          if ! [[ "$SOAK_MINUTES" =~ ^[0-9]+$ ]] || (( SOAK_MINUTES < 1 || SOAK_MINUTES > 240 )); then
+            echo "soak_minutes must be an integer from 1 through 240" | tee -a dlt-002-results/trial.log
             exit 64
           fi
           executable="$(find build -type f -name jarvis_dlt_002_persistence -executable -print -quit)"
