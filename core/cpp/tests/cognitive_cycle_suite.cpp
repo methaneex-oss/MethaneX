@@ -102,6 +102,52 @@ int main() {
     assert(!constrained_result.context.action_assessments.empty());
     for (const auto& assessment : constrained_result.context.action_assessments) { assert(assessment.disposition == ActionDisposition::reject); assert(!assessment.permitted); }
 
+    // One observed consequence must revise an expectation without making a
+    // single potentially noisy sample authoritative. Repeated reliable evidence
+    // should then move the estimate further toward the experienced outcome.
+    const std::string smoothing_context = "navigation/smoothing-check";
+    auto record_smoothing_outcome = [&]() {
+        ActionAssessment assessment;
+        assessment.action.name = "smoothed-route";
+        assessment.action.expected_consequence = -0.4;
+        assessment.disposition = ActionDisposition::execute;
+        assessment.permitted = true;
+        assessment.confidence = 0.9;
+        assessment.developmental_context = smoothing_context;
+        const auto execution = brain.execute_action(
+            assessment,
+            [](const CandidateAction&) { return true; },
+            [](const CandidateAction&) { return true; },
+            {},
+            [](const CandidateAction&) -> std::optional<double> { return 1.0; });
+        assert(execution.authorized && execution.executed && execution.outcome.observed);
+    };
+    auto smoothed_estimate = [&]() {
+        CognitiveCycleInput smoothing_input = input;
+        smoothing_input.developmental_context = smoothing_context;
+        smoothing_input.observation = Event{
+            0, 0, "smoothing-test", "observation",
+            {{"condition", std::string("same-context")}}};
+        smoothing_input.candidate_actions = {
+            CandidateAction{"smoothed-route", 0.9, 0.8, 0.9, 0.1, 1.0, 0.0, -0.4}};
+        smoothing_input.memory_limit = 8;
+        const auto result = cycle.run(smoothing_input);
+        assert(result.status == CognitiveCycleStatus::completed);
+        for (const auto& assessment : result.context.action_assessments) {
+            if (assessment.action.name == "smoothed-route")
+                return assessment.action.expected_consequence;
+        }
+        assert(false && "smoothed-route assessment missing");
+        return 0.0;
+    };
+    record_smoothing_outcome();
+    const double after_one_outcome = smoothed_estimate();
+    assert(after_one_outcome > -0.4 && after_one_outcome < 0.8);
+    for (int i = 0; i < 3; ++i) record_smoothing_outcome();
+    const double after_repeated_outcomes = smoothed_estimate();
+    assert(after_repeated_outcomes > after_one_outcome + 0.15);
+    assert(after_repeated_outcomes < 1.0);
+
     const auto prediction = brain.predict("temperature_next", 43.0, 0.8);
     assert(!prediction.key.empty());
     const auto before_reflection = brain.reflect();

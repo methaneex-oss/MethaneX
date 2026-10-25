@@ -422,8 +422,19 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
             evidence_weight += reliability;
         }
         if (evidence_weight > 0.0) {
+            // Treat the caller's expectation as a weak prior, not as a value to
+            // discard after one observation. A single noisy consequence should
+            // influence learning without fully replacing the prior; repeated
+            // reliable experience progressively dominates it. This is a
+            // statistical regularizer, not an action-to-outcome rule.
+            constexpr double prior_observation_weight = 1.0;
+            const double prior_consequence =
+                std::clamp(action.expected_consequence, -1.0, 1.0);
             action.expected_consequence = std::clamp(
-                weighted_consequence / evidence_weight, -1.0, 1.0);
+                (prior_observation_weight * prior_consequence +
+                 weighted_consequence) /
+                    (prior_observation_weight + evidence_weight),
+                -1.0, 1.0);
         }
     }
 
