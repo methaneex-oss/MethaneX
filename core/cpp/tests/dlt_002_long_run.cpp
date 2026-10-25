@@ -11,6 +11,7 @@
 #include <fstream>
 #include <iostream>
 #include <optional>
+#include <random>
 #include <stdexcept>
 #include <string>
 #include <thread>
@@ -101,6 +102,7 @@ int main(int argc, char** argv) {
     const auto duration_seconds = argc > 1 ? std::stoll(argv[1]) : 14400LL;
     const auto checkpoint_seconds = argc > 2 ? std::stoll(argv[2]) : 60LL;
     const std::filesystem::path output_dir = argc > 3 ? argv[3] : "dlt-002-results";
+    const auto seed = argc > 4 ? std::stoull(argv[4]) : 20261026ULL;
     if (duration_seconds <= 0 || checkpoint_seconds <= 0)
         throw std::invalid_argument("duration and checkpoint interval must be positive");
 
@@ -119,7 +121,7 @@ int main(int argc, char** argv) {
     if (!episodes || !checkpoints || !report)
         throw std::runtime_error("Could not create DLT-002 output files");
     episodes << "episode,elapsed_seconds,phase,context,latent_condition_evaluation_only,expected_action_evaluation_only,selected_action,optimal_action_selected,consequence,observation_count,outcome_count,prediction_count,prediction_outcome_count\n";
-    checkpoints << "elapsed_seconds,phase,episodes,total_reward,current_phase_route_alpha_selected,current_phase_route_beta_selected,positive_outcomes,negative_outcomes,optimal_action_selections,nonoptimal_action_selections,current_phase_decision_accuracy,observations,outcomes,predictions,prediction_outcomes,resolved_predictions,mean_absolute_prediction_error,clear_alpha_value,clear_beta_value,flooded_alpha_value,flooded_beta_value,tunnel_alpha_value,tunnel_beta_value,canyon_alpha_value,canyon_beta_value\n";
+    checkpoints << "elapsed_seconds,phase,episodes,total_reward,current_phase_route_alpha_selected,current_phase_route_beta_selected,positive_outcomes,negative_outcomes,optimal_action_selections,nonoptimal_action_selections,current_phase_decision_accuracy,observations,outcomes,predictions,prediction_outcomes,resolved_predictions,mean_absolute_prediction_error,clear_route_one_value,clear_route_two_value,flooded_route_one_value,flooded_route_two_value,tunnel_route_one_value,tunnel_route_two_value,canyon_route_one_value,canyon_route_two_value\n";
     episodes << std::unitbuf;
     checkpoints << std::unitbuf;
     report << std::unitbuf;
@@ -133,7 +135,14 @@ int main(int argc, char** argv) {
         {"visibility", std::string("clear")},
     };
     world_config.initial_resources = 100.0;
-    world_config.random_seed = 20261026;
+    world_config.random_seed = seed;
+    // Randomize the latent-state/action relationship per seed. This mapping belongs
+    // to the environment and evaluation only; it is never supplied to the brain.
+    std::mt19937_64 mapping_random(seed ^ 0x9E3779B97F4A7C15ULL);
+    std::bernoulli_distribution choose_first_action_for_alpha(0.5);
+    const std::string alpha_action = choose_first_action_for_alpha(mapping_random)
+        ? "route-one" : "route-two";
+    const std::string beta_action = alpha_action == "route-one" ? "route-two" : "route-one";
     world_config.max_steps = 4;
     world_config.observation_filter = [](const Attributes& state) {
         Attributes visible = state;
@@ -142,15 +151,15 @@ int main(int argc, char** argv) {
     };
     DevelopmentalWorld world(world_config);
 
-    for (const auto& action_name : {std::string("route-alpha"), std::string("route-beta")}) {
+    for (const auto& action_name : {std::string("route-one"), std::string("route-two")}) {
         if (!world.add_action(DevelopmentalWorldAction{
                 action_name, 1.0, {},
-                [action_name](const Attributes& state, std::mt19937_64& random)
+                [action_name, alpha_action, beta_action](const Attributes& state, std::mt19937_64& random)
                     -> std::optional<DevelopmentalWorldTransition> {
                     const auto condition = std::get<std::string>(state.at("route_condition"));
                     const bool matches =
-                        (condition == "alpha" && action_name == "route-alpha") ||
-                        (condition == "beta" && action_name == "route-beta");
+                        (condition == "alpha" && action_name == alpha_action) ||
+                        (condition == "beta" && action_name == beta_action);
                     // Consequences are noisy: 20% of outcomes contradict the
                     // underlying action/condition relationship.
                     const bool flip = std::generate_canonical<double, 10>(random) < 0.20;
@@ -197,7 +206,7 @@ int main(int argc, char** argv) {
     std::string active_phase = "clear-baseline";
     report << "[DLT-002] status=STARTED duration_seconds=" << duration_seconds
            << " checkpoint_seconds=" << checkpoint_seconds
-           << " seed=20261026 noise_rate=0.20 phases=6\n"
+           << " seed=" << seed << " noise_rate=0.20 phases=6\n"
            << "[DLT-002] protocol=partial observation; 20% noisy outcomes; context-local mapping; clear-context reversal; unseen-context transfer; second reversal in flooded context with unchanged visible cues\n";
 
     int exit_code = 0;
@@ -237,16 +246,16 @@ int main(int argc, char** argv) {
 
             const auto phase_index = static_cast<std::size_t>(
                 std::min<std::int64_t>(5, elapsed / std::max<std::int64_t>(1, duration_seconds / 6)));
-            const auto action_index = selected == "route-alpha" ? 0U : 1U;
+            const auto action_index = selected == "route-one" ? 0U : 1U;
             ++action_counts[phase_index][action_index];
             const std::string expected_action = std::string(phase.latent_condition) == "alpha"
-                ? "route-alpha" : "route-beta";
+                ? alpha_action : beta_action;
             const bool optimal_action_selected = selected == expected_action;
             if (optimal_action_selected) ++optimal_action_selections;
             else ++nonoptimal_action_selections;
             const auto phase_selections = action_counts[phase_index][0] + action_counts[phase_index][1];
             const auto phase_optimal_selections = action_counts[phase_index][
-                expected_action == "route-alpha" ? 0U : 1U];
+                expected_action == "route-one" ? 0U : 1U];
             const double phase_decision_accuracy = phase_selections == 0 ? 0.0 :
                 static_cast<double>(phase_optimal_selections) / static_cast<double>(phase_selections);
             total_reward += *last_step->consequence;
@@ -277,14 +286,14 @@ int main(int argc, char** argv) {
                     << observations << ',' << outcomes << ','
                     << predictions << ',' << prediction_outcomes << ',' << prediction_quality.resolved
                     << ',' << prediction_quality.mean_absolute_error << ','
-                    << strategy_value(brain, "navigation/clear", "route-alpha") << ','
-                    << strategy_value(brain, "navigation/clear", "route-beta") << ','
-                    << strategy_value(brain, "navigation/flooded", "route-alpha") << ','
-                    << strategy_value(brain, "navigation/flooded", "route-beta") << ','
-                    << strategy_value(brain, "navigation/tunnel", "route-alpha") << ','
-                    << strategy_value(brain, "navigation/tunnel", "route-beta") << ','
-                    << strategy_value(brain, "navigation/canyon", "route-alpha") << ','
-                    << strategy_value(brain, "navigation/canyon", "route-beta") << '\n';
+                    << strategy_value(brain, "navigation/clear", "route-one") << ','
+                    << strategy_value(brain, "navigation/clear", "route-two") << ','
+                    << strategy_value(brain, "navigation/flooded", "route-one") << ','
+                    << strategy_value(brain, "navigation/flooded", "route-two") << ','
+                    << strategy_value(brain, "navigation/tunnel", "route-one") << ','
+                    << strategy_value(brain, "navigation/tunnel", "route-two") << ','
+                    << strategy_value(brain, "navigation/canyon", "route-one") << ','
+                    << strategy_value(brain, "navigation/canyon", "route-two") << '\n';
                 report << "[DLT-002] checkpoint elapsed_seconds="
                     << std::chrono::duration_cast<std::chrono::seconds>(now - started).count()
                     << " phase=" << phase.name << " episodes=" << episode
@@ -297,14 +306,14 @@ int main(int argc, char** argv) {
                     << " prediction_outcomes=" << prediction_outcomes
                     << " resolved_predictions=" << prediction_quality.resolved
                     << " mean_absolute_prediction_error=" << prediction_quality.mean_absolute_error
-                    << " clear_alpha_value=" << strategy_value(brain, "navigation/clear", "route-alpha")
-                    << " clear_beta_value=" << strategy_value(brain, "navigation/clear", "route-beta")
-                    << " flooded_alpha_value=" << strategy_value(brain, "navigation/flooded", "route-alpha")
-                    << " flooded_beta_value=" << strategy_value(brain, "navigation/flooded", "route-beta")
-                    << " tunnel_alpha_value=" << strategy_value(brain, "navigation/tunnel", "route-alpha")
-                    << " tunnel_beta_value=" << strategy_value(brain, "navigation/tunnel", "route-beta")
-                    << " canyon_alpha_value=" << strategy_value(brain, "navigation/canyon", "route-alpha")
-                    << " canyon_beta_value=" << strategy_value(brain, "navigation/canyon", "route-beta") << '\n';
+                    << " clear_route_one_value=" << strategy_value(brain, "navigation/clear", "route-one")
+                    << " clear_route_two_value=" << strategy_value(brain, "navigation/clear", "route-two")
+                    << " flooded_route_one_value=" << strategy_value(brain, "navigation/flooded", "route-one")
+                    << " flooded_route_two_value=" << strategy_value(brain, "navigation/flooded", "route-two")
+                    << " tunnel_route_one_value=" << strategy_value(brain, "navigation/tunnel", "route-one")
+                    << " tunnel_route_two_value=" << strategy_value(brain, "navigation/tunnel", "route-two")
+                    << " canyon_route_one_value=" << strategy_value(brain, "navigation/canyon", "route-one")
+                    << " canyon_route_two_value=" << strategy_value(brain, "navigation/canyon", "route-two") << '\n';
                 next_checkpoint = now + std::chrono::seconds(checkpoint_seconds);
             }
             std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -327,12 +336,12 @@ int main(int argc, char** argv) {
             << " prediction_outcome_memories=" << brain.memory().by_kind("prediction_outcome").size()
             << " resolved_predictions=" << final_prediction_quality.resolved
             << " mean_absolute_prediction_error=" << final_prediction_quality.mean_absolute_error
-            << " clear_alpha_value=" << strategy_value(brain, "navigation/clear", "route-alpha")
-            << " clear_beta_value=" << strategy_value(brain, "navigation/clear", "route-beta")
-            << " flooded_alpha_value=" << strategy_value(brain, "navigation/flooded", "route-alpha")
-            << " flooded_beta_value=" << strategy_value(brain, "navigation/flooded", "route-beta")
-            << " tunnel_alpha_value=" << strategy_value(brain, "navigation/tunnel", "route-alpha")
-            << " tunnel_beta_value=" << strategy_value(brain, "navigation/tunnel", "route-beta") << '\n';
+            << " clear_route_one_value=" << strategy_value(brain, "navigation/clear", "route-one")
+            << " clear_route_two_value=" << strategy_value(brain, "navigation/clear", "route-two")
+            << " flooded_route_one_value=" << strategy_value(brain, "navigation/flooded", "route-one")
+            << " flooded_route_two_value=" << strategy_value(brain, "navigation/flooded", "route-two")
+            << " tunnel_route_one_value=" << strategy_value(brain, "navigation/tunnel", "route-one")
+            << " tunnel_route_two_value=" << strategy_value(brain, "navigation/tunnel", "route-two") << '\n';
         if (!completed) exit_code = 2;
     } catch (const std::exception& ex) {
         report << "[DLT-002] status=FAILED episode=" << episode << " error=" << ex.what() << '\n';
