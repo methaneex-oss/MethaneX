@@ -114,7 +114,7 @@ int main(int argc, char** argv) {
     if (!episodes || !checkpoints || !report)
         throw std::runtime_error("Could not create DLT-002 output files");
     episodes << "episode,elapsed_seconds,phase,context,latent_condition_evaluation_only,selected_action,consequence,observation_count,outcome_count,prediction_count,prediction_outcome_count\n";
-    checkpoints << "elapsed_seconds,phase,episodes,total_reward,route_alpha_selected,route_beta_selected,positive_outcomes,negative_outcomes,observations,outcomes,predictions,prediction_outcomes,clear_alpha_value,clear_beta_value,flooded_alpha_value,flooded_beta_value,tunnel_alpha_value,tunnel_beta_value\n";
+    checkpoints << "elapsed_seconds,phase,episodes,total_reward,route_alpha_selected,route_beta_selected,positive_outcomes,negative_outcomes,observations,outcomes,predictions,prediction_outcomes,resolved_predictions,mean_absolute_prediction_error,clear_alpha_value,clear_beta_value,flooded_alpha_value,flooded_beta_value,tunnel_alpha_value,tunnel_beta_value\n";
     episodes << std::unitbuf;
     checkpoints << std::unitbuf;
     report << std::unitbuf;
