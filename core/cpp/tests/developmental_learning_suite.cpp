@@ -255,9 +255,6 @@ int main() {
         LearningSignal{0.2, 0.6, 0.5, 0.2, 0.5, 1.0});
     const auto* confidence_weighted_best =
         confidence_weighted_choice.best_strategy("same situation");
-    assert(confidence_weighted_best != nullptr);
-    assert(confidence_weighted_best->action == "reliably-supported-action");
-    assert(std::abs(confidence_weighted_best->value - 0.6) < 1e-12);
     const auto confidence_weighted_strategies =
         confidence_weighted_choice.strategies();
     const auto weakly_supported = std::find_if(
@@ -266,8 +263,16 @@ int main() {
         [](const LearnedStrategy& strategy) {
             return strategy.action == "weakly-supported-action";
         });
-    assert(weakly_supported != confidence_weighted_strategies.end());
-    assert(confidence_weighted_best->confidence > weakly_supported->confidence);
+    // Keep this acceptance check active in Release builds, where NDEBUG
+    // disables assert(). This case must fail CI if confidence is ignored.
+    if (confidence_weighted_best == nullptr ||
+        confidence_weighted_best->action != "reliably-supported-action" ||
+        std::abs(confidence_weighted_best->value - 0.6) >= 1e-12 ||
+        weakly_supported == confidence_weighted_strategies.end() ||
+        confidence_weighted_best->confidence <= weakly_supported->confidence) {
+        std::cerr << "confidence-weighted exact-context strategy selection failed\n";
+        return 1;
+    }
 
     // Legacy four-field evidence now derives deterministic affective
     // significance from prediction error, reward, salience and novelty.
