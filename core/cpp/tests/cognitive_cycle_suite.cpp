@@ -560,6 +560,35 @@ int main() {
         assert(transferred->action == "inspect");
         assert(transferred->context == numeric_context);
 
+        // Verify the full brain loop, not only the standalone similarity
+        // helper: an observed consequence in an automatically inferred
+        // context must affect a later decision in a related inferred context.
+        bool inferred_action_executed = false;
+        const auto inferred_learning_result = context_brain.execute_action(
+            numeric_context_result.context.action_assessments.front(),
+            [&](const CandidateAction&) {
+                inferred_action_executed = true;
+                return true;
+            },
+            [&](const CandidateAction&) { return inferred_action_executed; },
+            {},
+            [](const CandidateAction&) { return 0.8; });
+        assert(inferred_learning_result.executed);
+        assert(inferred_learning_result.outcome.observed);
+
+        CognitiveCycleInput inferred_transfer_input = numeric_context_input;
+        inferred_transfer_input.observation =
+            Event{0, 0, "sensor", "observation", {{"temperature", 80.0}}};
+        inferred_transfer_input.candidate_actions = {
+            CandidateAction{"inspect", 0.2, 0.2, 0.1, 0.2, 0.5, 0.0, 0.4},
+            CandidateAction{"ignore", 0.6, 0.6, 0.1, 0.2, 0.5, 0.0, 0.4},
+        };
+        const auto inferred_transfer_result =
+            CognitiveCycle(context_brain).run(inferred_transfer_input);
+        assert(inferred_transfer_result.status == CognitiveCycleStatus::completed);
+        assert(!inferred_transfer_result.context.plan.steps.empty());
+        assert(inferred_transfer_result.context.plan.steps.front().action.name == "inspect");
+
         numeric_context_input.developmental_context = "caller-defined-context";
         const auto explicit_context_result =
             CognitiveCycle(context_brain).run(numeric_context_input);
