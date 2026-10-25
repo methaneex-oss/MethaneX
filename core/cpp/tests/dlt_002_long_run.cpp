@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <array>
 #include <chrono>
+#include <cmath>
 #include <csignal>
 #include <cstdint>
 #include <filesystem>
@@ -69,6 +70,25 @@ double strategy_value(const Brain& brain, const std::string& context,
     for (const auto& strategy : brain.developmental_strategies())
         if (strategy.context == context && strategy.action == action) return strategy.value;
     return 0.0;
+}
+
+struct PredictionMetrics {
+    std::uint64_t resolved{0};
+    double mean_absolute_error{0.0};
+};
+
+PredictionMetrics prediction_metrics(const Brain& brain) {
+    const auto predictions = brain.snapshot().predictions;
+    PredictionMetrics metrics;
+    double absolute_error_sum = 0.0;
+    for (const auto& prediction : predictions) {
+        if (!prediction.resolved || !std::isfinite(prediction.error)) continue;
+        ++metrics.resolved;
+        absolute_error_sum += std::abs(prediction.error);
+    }
+    if (metrics.resolved > 0)
+        metrics.mean_absolute_error = absolute_error_sum / static_cast<double>(metrics.resolved);
+    return metrics;
 }
 } // namespace
 
@@ -231,11 +251,13 @@ int main(int argc, char** argv) {
 
             const auto now = std::chrono::steady_clock::now();
             if (now >= next_checkpoint || now >= finish || stop_requested) {
+                const auto prediction_quality = prediction_metrics(brain);
                 checkpoints << std::chrono::duration_cast<std::chrono::seconds>(now - started).count()
                     << ',' << phase.name << ',' << episode << ',' << total_reward << ','
                     << action_counts[phase_index][0] << ',' << action_counts[phase_index][1] << ','
                     << positive << ',' << negative << ',' << observations << ',' << outcomes << ','
-                    << predictions << ',' << prediction_outcomes << ','
+                    << predictions << ',' << prediction_outcomes << ',' << prediction_quality.resolved
+                    << ',' << prediction_quality.mean_absolute_error << ','
                     << strategy_value(brain, "navigation/clear", "route-alpha") << ','
                     << strategy_value(brain, "navigation/clear", "route-beta") << ','
                     << strategy_value(brain, "navigation/flooded", "route-alpha") << ','
@@ -249,6 +271,8 @@ int main(int argc, char** argv) {
                     << " negative=" << negative << " observations=" << observations
                     << " outcomes=" << outcomes << " predictions=" << predictions
                     << " prediction_outcomes=" << prediction_outcomes
+                    << " resolved_predictions=" << prediction_quality.resolved
+                    << " mean_absolute_prediction_error=" << prediction_quality.mean_absolute_error
                     << " clear_alpha_value=" << strategy_value(brain, "navigation/clear", "route-alpha")
                     << " clear_beta_value=" << strategy_value(brain, "navigation/clear", "route-beta")
                     << " flooded_alpha_value=" << strategy_value(brain, "navigation/flooded", "route-alpha")
@@ -264,6 +288,7 @@ int main(int argc, char** argv) {
         const auto elapsed_seconds = std::chrono::duration_cast<std::chrono::seconds>(
             std::chrono::steady_clock::now() - started).count();
         const bool completed = !stop_requested && std::chrono::steady_clock::now() >= finish;
+        const auto final_prediction_quality = prediction_metrics(brain);
         report << "[DLT-002] status=" << (completed ? "COMPLETED" : "INTERRUPTED")
             << " elapsed_seconds=" << elapsed_seconds << " episodes=" << episode
             << " total_reward=" << total_reward << " positive=" << positive
@@ -272,6 +297,8 @@ int main(int argc, char** argv) {
             << " outcome_memories=" << brain.memory().by_kind("action_outcome").size()
             << " prediction_memories=" << brain.memory().by_kind("prediction").size()
             << " prediction_outcome_memories=" << brain.memory().by_kind("prediction_outcome").size()
+            << " resolved_predictions=" << final_prediction_quality.resolved
+            << " mean_absolute_prediction_error=" << final_prediction_quality.mean_absolute_error
             << " clear_alpha_value=" << strategy_value(brain, "navigation/clear", "route-alpha")
             << " clear_beta_value=" << strategy_value(brain, "navigation/clear", "route-beta")
             << " flooded_alpha_value=" << strategy_value(brain, "navigation/flooded", "route-alpha")
