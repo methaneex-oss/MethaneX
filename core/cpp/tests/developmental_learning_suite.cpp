@@ -1,5 +1,6 @@
 #include "jarvis/core/developmental_learning.hpp"
 
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <iostream>
