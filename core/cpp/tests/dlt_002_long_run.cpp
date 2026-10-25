@@ -121,10 +121,10 @@ int main(int argc, char** argv) {
     for (const auto& protected_path : {
              journal, journal_meta, episodes_path, checkpoints_path, report_path}) {
         if (std::filesystem::exists(protected_path)) {
-            throw std::runtime_error(
-                "Refusing to overwrite existing DLT-002 state/evidence: " +
-                protected_path.string() +
-                ". This executable cannot safely resume a partial trial.");
+            std::cerr << "[DLT-002] status=REFUSED_OVERWRITE protected_path="
+                      << protected_path.string()
+                      << " reason=unsafe_resume_not_supported" << std::endl;
+            return 64;
         }
     }
 
