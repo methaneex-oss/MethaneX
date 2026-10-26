@@ -1,0 +1,169 @@
+name: JARVIS Learning Mechanisms Probe
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - ".github/workflows/jarvis-learning-mechanisms.yml"
+  workflow_dispatch:
+    inputs:
+      source_ref:
+        description: "Brain branch or commit to test"
+        required: true
+        default: "feat/jarvis-affective-state"
+        type: string
+      duration_minutes:
+        description: "Changing-environment learning trial duration"
+        required: true
+        default: "10"
+        type: choice
+        options: ["10", "15", "20", "30"]
+      seed:
+        description: "Reproducible environment seed"
+        required: true
+        default: "20261026"
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: jarvis-learning-mechanisms-${{ github.event.pull_request.number || inputs.source_ref || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  learning-mechanisms:
+    name: Explicit learning mechanism gates + integrated trial
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      SOURCE_REF: ${{ inputs.source_ref || 'feat/jarvis-affective-state' }}
+      TRIAL_MINUTES: ${{ inputs.duration_minutes || '10' }}
+      TRIAL_SEED: ${{ inputs.seed || '20261026' }}
+    steps:
+      - name: Checkout the brain revision under test
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.source_ref || 'feat/jarvis-affective-state' }}
+
+      - name: Record exact revision and validate inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! [[ "$TRIAL_MINUTES" =~ ^(10|15|20|30)$ ]]; then
+            echo "TRIAL_MINUTES must be 10, 15, 20, or 30"
+            exit 64
+          fi
+          if ! [[ "$TRIAL_SEED" =~ ^[0-9]+$ ]]; then
+            echo "TRIAL_SEED must be a non-negative integer"
+            exit 64
+          fi
+          mkdir -p learning-probe-results
+          {
+            echo "probe=JARVIS Learning Mechanisms Probe"
+            echo "source_ref=$SOURCE_REF"
+            echo "tested_commit=$(git rev-parse HEAD)"
+            echo "trial_minutes=$TRIAL_MINUTES"
+            echo "seed=$TRIAL_SEED"
+            echo "started_at_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          } | tee learning-probe-results/metadata.txt
+          printf "mechanism\ttest\tstatus\n" > learning-probe-results/mechanism-gates.tsv
+
+      - name: Configure the native C++20 brain
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmake -S core/cpp -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON 2>&1 | tee learning-probe-results/configure.log
+
+      - name: Build brain and all registered mechanism suites
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmake --build build --parallel 2 2>&1 | tee learning-probe-results/build.log
+
+      - name: Test each learning mechanism explicitly
+        shell: bash
+        run: |
+          set -euo pipefail
+          run_gate() {
+            local mechanism="$1"
+            local test_name="$2"
+            local log="learning-probe-results/${test_name}.log"
+            echo "::group::${mechanism} — ${test_name}"
+            if ctest --test-dir build -R "^${test_name}$" --output-on-failure --timeout 120 2>&1 | tee "$log"; then
+              printf "%s\t%s\tPASS\n" "$mechanism" "$test_name" | tee -a learning-probe-results/mechanism-gates.tsv
+              echo "::endgroup::"
+            else
+              printf "%s\t%s\tFAIL\n" "$mechanism" "$test_name" | tee -a learning-probe-results/mechanism-gates.tsv
+              echo "::endgroup::"
+              return 1
+            fi
+          }
+
+          run_gate "experience memory and consolidation" "jarvis_memory_architecture_suite"
+          run_gate "knowledge and evidence assimilation" "jarvis_knowledge_memory_phase3_suite"
+          run_gate "novelty and attention-guided learning" "jarvis_attention_learning_brain_suite"
+          run_gate "general learning-loop adaptation and evolution proposals" "jarvis_learning_loop_architecture_suite"
+          run_gate "association learning and causal transition learning" "jarvis_association_causality_phase5_suite"
+          run_gate "prediction error and adaptation" "jarvis_learning_adaptation_phase8_suite"
+          run_gate "prediction resolution, validation, and feedback" "jarvis_prediction_feedback_phase10_suite"
+          run_gate "learning from failed evolution experiments" "jarvis_evolution_learning_suite"
+          run_gate "evolution proposals interacting with the brain" "jarvis_evolution_brain_integration_suite"
+          run_gate "evolution adoption and journal evidence" "jarvis_evolution_adoption_journal_suite"
+          run_gate "contextual strategy and association learning" "jarvis_developmental_learning_suite"
+          run_gate "affective appraisal learning and calibration" "jarvis_affective_learning_suite"
+          run_gate "affective evidence, salience, and memory influence" "jarvis_affective_evidence_suite"
+          run_gate "affective signals influencing decisions" "jarvis_affective_decision_learning_suite"
+          run_gate "integrated developmental brain behavior" "jarvis_developmental_brain_integration_suite"
+          run_gate "experience records and memory retrieval" "jarvis_experience_memory_test"
+          run_gate "action consequences feeding back into the brain" "jarvis_brain_action_consequence_integration_suite"
+          run_gate "learned action selection, revision, persistence, and transfer" "jarvis_developmental_training_environment_suite"
+          run_gate "cross-process persistence and restored learning state" "jarvis_dlt_002_persistence_verify"
+
+      - name: Run the integrated changing-environment learning trial
+        shell: bash
+        run: |
+          set -euo pipefail
+          executable="$(find build -type f -name jarvis_dlt_002_long_run -executable -print -quit)"
+          test -n "$executable"
+          duration_seconds=$((TRIAL_MINUTES * 60))
+          trial_dir="learning-probe-results/integrated-trial"
+          "$executable" "$duration_seconds" 30 "$trial_dir" "$TRIAL_SEED" 2>&1 | tee learning-probe-results/integrated-trial-console.log
+
+          grep -q 'status=COMPLETED' "$trial_dir/trial.log"
+          for phase in clear-baseline flooded tunnel clear-reversal generalization-probe flooded-reversal; do
+            grep -q "$phase" "$trial_dir/episodes.csv" || {
+              echo "Missing expected phase: $phase"
+              exit 1
+            }
+          done
+          awk -F, 'NR > 1 && $16 + 0 > 0 { found=1 } END { exit !found }' "$trial_dir/checkpoints.csv" || {
+            echo "No resolved prediction evidence found"
+            exit 1
+          }
+          echo "integrated_trial=PASS duration_seconds=$duration_seconds six_phases=PASS resolved_prediction_evidence=PASS" | tee learning-probe-results/integrated-trial-summary.txt
+
+      - name: Summarize evidence
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Learning mechanism gate results"
+            echo
+            if test -f learning-probe-results/mechanism-gates.tsv; then
+              echo 'Mechanism | Test | Status'
+              echo '|---|---|---|'
+              tail -n +2 learning-probe-results/mechanism-gates.tsv | awk -F '\t' '{printf "| %s | `%s` | %s |\n", $1, $2, $3}'
+            fi
+            echo
+            echo "Exact tested commit: $(git rev-parse HEAD)"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Preserve logs and trial evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: JARVIS-Learning-Probe-${{ github.run_id }}-${{ github.run_attempt }}
+          path: learning-probe-results/
+          if-no-files-found: warn
+          retention-days: 90
