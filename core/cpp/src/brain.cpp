@@ -686,7 +686,7 @@ void Brain::replay(const Event& event, bool external_observation) {
     after.reserve(beliefs_.size());
     for (const auto& [_, belief] : beliefs_) after.push_back(belief);
     causal_.observe_transition(before, after);
-    association_.observe(before, after, event.sequence);
+    association_.observe(before, after, event.sequence, reliability);
     if (event.kind != "learning") {
         // Brain::observe persists the novelty appraisal with the event. During
         // startup replay Memory already contains the complete journal, so
