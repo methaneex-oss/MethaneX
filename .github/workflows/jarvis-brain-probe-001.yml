@@ -1,0 +1,134 @@
+name: JARVIS Brain Probe 001 — Contextual Learning and Prediction Feedback
+
+on:
+  # Short, focused probes are separate from the broader DLT runs.
+  workflow_dispatch:
+    inputs:
+      duration_minutes:
+        description: "Probe duration in minutes (5–30); this is not a DLT run"
+        required: true
+        default: "10"
+        type: choice
+        options:
+          - "5"
+          - "10"
+          - "15"
+          - "20"
+          - "30"
+      seed:
+        description: "Seed for the partially observed, noisy environment"
+        required: true
+        default: "20261026"
+        type: string
+  # Creating/updating this workflow on the development branch runs the default
+  # 10-minute probe, without touching either DLT workflow or trial source.
+  push:
+    branches:
+      - feat/jarvis-affective-state
+    paths:
+      - ".github/workflows/jarvis-brain-probe-001.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: jarvis-brain-probe-001-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  brain-probe:
+    name: JBP-001 · Contextual learning and prediction feedback
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout exact revision
+        uses: actions/checkout@v6
+
+      - name: Validate probe configuration and initialize evidence
+        shell: bash
+        env:
+          PROBE_MINUTES: ${{ inputs.duration_minutes || '10' }}
+          PROBE_SEED: ${{ inputs.seed || '20261026' }}
+        run: |
+          set -euo pipefail
+          if ! [[ "$PROBE_MINUTES" =~ ^(5|10|15|20|30)$ ]]; then
+            echo "duration_minutes must be one of 5, 10, 15, 20, or 30"
+            exit 64
+          fi
+          if ! [[ "$PROBE_SEED" =~ ^[0-9]+$ ]]; then
+            echo "seed must be a non-negative integer"
+            exit 64
+          fi
+          mkdir -p jbp-001-results
+          {
+            echo '{'
+            echo '  "test_series": "JARVIS Brain Probe (JBP)",'
+            echo '  "probe": "JBP-001",'
+            echo '  "name": "Contextual Learning and Prediction Feedback",'
+            echo '  "purpose": "Short focused probe; not a Developmental Learning Trial (DLT)",'
+            echo "  \"duration_minutes\": $PROBE_MINUTES,"
+            echo "  \"seed\": $PROBE_SEED,"
+            echo "  \"commit\": \"${GITHUB_SHA}\","
+            echo "  \"run_id\": \"${GITHUB_RUN_ID}\","
+            echo '  "started_at_utc": "'"$(date -u +%Y-%m-%dT%H:%M:%SZ)"'"'
+            echo '}'
+          } > jbp-001-results/run_metadata.json
+          echo "[JBP-001] run_id=${GITHUB_RUN_ID} commit=${GITHUB_SHA} duration_minutes=$PROBE_MINUTES seed=$PROBE_SEED" | tee jbp-001-results/probe.log
+
+      - name: Configure native JARVIS brain
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmake -S core/cpp -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON 2>&1 | tee jbp-001-results/configure.log
+
+      - name: Build persistence gate and changing-environment runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmake --build build --parallel --target jarvis_dlt_002_persistence jarvis_dlt_002_long_run 2>&1 | tee jbp-001-results/build.log
+
+      - name: Verify learned context and prediction feedback survive a process restart
+        shell: bash
+        run: |
+          set -euo pipefail
+          ctest --test-dir build -R '^jarvis_dlt_002_persistence_(train|verify)$' --output-on-failure --timeout 60 2>&1 | tee jbp-001-results/persistence-gate.log
+          echo "[JBP-001] cross_process_persistence=PASS context_revision=PASS resolved_prediction_feedback=PASS" | tee -a jbp-001-results/probe.log
+
+      - name: Run short six-phase challenge with partial observation and noisy outcomes
+        shell: bash
+        env:
+          PROBE_MINUTES: ${{ inputs.duration_minutes || '10' }}
+          PROBE_SEED: ${{ inputs.seed || '20261026' }}
+        run: |
+          set -euo pipefail
+          executable="$(find build -type f -name jarvis_dlt_002_long_run -executable -print -quit)"
+          test -n "$executable"
+          duration_seconds=$((PROBE_MINUTES * 60))
+          probe_dir="jbp-001-results/challenge"
+          "$executable" "$duration_seconds" 30 "$probe_dir" "$PROBE_SEED" 2>&1 | tee jbp-001-results/challenge-console.log
+
+          grep -q 'status=COMPLETED' "$probe_dir/trial.log"
+          for phase in clear-baseline flooded tunnel clear-reversal generalization-probe flooded-reversal; do
+            if ! grep -q "$phase" "$probe_dir/episodes.csv"; then
+              echo "[JBP-001] missing_expected_phase=$phase" | tee -a jbp-001-results/probe.log
+              exit 1
+            fi
+          done
+
+          # Confirm prediction feedback is present and at least some forecasts
+          # were actually resolved; event totals alone are not accepted as proof.
+          if ! awk -F, 'NR > 1 && $15 + 0 > 0 { found=1 } END { exit !found }' "$probe_dir/checkpoints.csv"; then
+            echo "[JBP-001] no_resolved_prediction_evidence" | tee -a jbp-001-results/probe.log
+            exit 1
+          fi
+
+          echo "[JBP-001] challenge=PASS duration_seconds=$duration_seconds all_six_phases=PASS resolved_prediction_evidence=PASS" | tee -a jbp-001-results/probe.log
+
+      - name: Preserve probe evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: JBP-001-${{ github.run_id }}-${{ github.run_attempt }}
+          path: jbp-001-results/
+          if-no-files-found: warn
+          retention-days: 90
