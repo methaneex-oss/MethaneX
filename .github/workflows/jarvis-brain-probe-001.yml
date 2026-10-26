@@ -117,7 +117,7 @@ jobs:
 
           # Confirm prediction feedback is present and at least some forecasts
           # were actually resolved; event totals alone are not accepted as proof.
-          if ! awk -F, 'NR > 1 && $15 + 0 > 0 { found=1 } END { exit !found }' "$probe_dir/checkpoints.csv"; then
+          if ! awk -F, 'NR > 1 && $16 + 0 > 0 { found=1 } END { exit !found }' "$probe_dir/checkpoints.csv"; then
             echo "[JBP-001] no_resolved_prediction_evidence" | tee -a jbp-001-results/probe.log
             exit 1
           fi
