@@ -14,6 +14,17 @@ int main() {
     const std::vector<Belief> before{{"temperature", 20.0, 0.9, 1, 1}, {"fan", false, 0.9, 1, 1}};
     const std::vector<Belief> after{{"temperature", 30.0, 0.95, 2, 2}, {"fan", true, 0.9, 2, 2}};
     associations.observe(before, after, 2);
+
+    // Association strength must reflect the reliability of the experience
+    // that produced the co-change, rather than treating every observation as
+    // fully reliable.
+    AssociationModel low_reliability_associations;
+    low_reliability_associations.observe(before, after, 2, 0.05);
+    const auto low_reliability_related =
+        low_reliability_associations.related("temperature", 0.0);
+    assert(!low_reliability_related.empty());
+    assert(low_reliability_related.front().strength <= 0.05 + 1e-12);
+    assert(low_reliability_related.front().confidence <= 0.05 + 1e-12);
     const auto related = associations.related("temperature", 0.5);
     assert(!related.empty());
     assert(related.front().observations == 1);
