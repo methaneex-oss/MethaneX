@@ -20,14 +20,6 @@ on:
         required: true
         default: "20261026"
         type: string
-  # Creating/updating this workflow on the development branch runs the default
-  # 10-minute probe, without touching either DLT workflow or trial source.
-  push:
-    branches:
-      - feat/jarvis-affective-state
-    paths:
-      - ".github/workflows/jarvis-brain-probe-001.yml"
-
 permissions:
   contents: read
 
