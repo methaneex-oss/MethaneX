@@ -6,6 +6,7 @@
 #include <cassert>
 #include <chrono>
 #include <cstdint>
+#include <cstdlib>
 #include <filesystem>
 #include <iostream>
 #include <optional>
@@ -145,7 +146,7 @@ bool run_mode(const std::filesystem::path& journal, std::uint64_t seed,
     }
 
     auto episode = [&](const std::string& weather, std::uint64_t index,
-                       bool expected_amber) -> bool {
+                       bool expected_amber) -> std::optional<bool> {
         world.set_context(weather == "clear" ? "sim/clear" : "sim/storm");
         world.reset_episode(Attributes{
             {"weather", weather},
@@ -154,15 +155,15 @@ bool run_mode(const std::filesystem::path& journal, std::uint64_t seed,
         });
         last_step.reset();
         const auto input = make_input(goal, world);
-        if (!runtime.submit(input, 1.0)) return false;
+        if (!runtime.submit(input, 1.0)) return std::nullopt;
         const auto result = await_result(runtime);
         if (result.status != CognitiveCycleStatus::completed ||
             result.context.plan.steps.empty() ||
             result.context.action_execution_results.size() != 1 ||
-            !last_step.has_value() || !last_step->executed) return false;
+            !last_step.has_value() || !last_step->executed) return std::nullopt;
         const auto& selected = result.context.plan.steps.front().action.name;
         if (selected != result.context.action_execution_results.front().action.name)
-            return false;
+            return std::nullopt;
         const bool selected_amber = selected == "choice-amber";
         // The evaluator records correctness after the learner has committed to an action.
         return selected_amber == expected_amber;
@@ -170,37 +171,56 @@ bool run_mode(const std::filesystem::path& journal, std::uint64_t seed,
 
     TrialResult clear_eval, storm_eval;
     if (!verify_only) {
-        // Acquisition: alternate contexts so the learner must retain separate
-        // context-sensitive strategies instead of one global action preference.
+        // Acquisition: alternate contexts and evaluate the final 20 episodes.
+        std::uint64_t acquisition_clear_correct = 0, acquisition_storm_correct = 0;
         for (std::uint64_t i = 0; i < 80; ++i) {
-            if (!episode("clear", i, clear_prefers_amber) ||
-                !episode("storm", i, storm_initial_prefers_amber)) {
+            const auto clear_result = episode("clear", i, clear_prefers_amber);
+            const auto storm_result = episode("storm", i, storm_initial_prefers_amber);
+            if (!clear_result || !storm_result) {
                 runtime.stop();
-                std::cerr << "JBP-003 status=FAIL stage=acquisition episode=" << i << "\n";
+                std::cerr << "JBP-003 status=FAIL stage=acquisition_execution episode=" << i << "\\n";
                 return false;
             }
+            if (i >= 60) {
+                acquisition_clear_correct += *clear_result;
+                acquisition_storm_correct += *storm_result;
+            }
+        }
+        std::cout << "JBP-003 stage=acquisition clear_last20="
+                  << acquisition_clear_correct << "/20 storm_last20="
+                  << acquisition_storm_correct << "/20\\n";
+        if (acquisition_clear_correct < 12 || acquisition_storm_correct < 12) {
+            runtime.stop();
+            std::cerr << "JBP-003 status=FAIL stage=acquisition required_each=12/20\\n";
+            return false;
         }
 
-        // Adaptation: only the storm rule changes. The clear-world rule is invariant.
+        // Adaptation: only the storm rule changes; clear remains an unrelated control.
         storm_reversed = true;
         std::uint64_t storm_correct = 0, clear_correct = 0;
         for (std::uint64_t i = 0; i < 60; ++i) {
-            storm_correct += episode("storm", 100 + i, !storm_initial_prefers_amber);
-            clear_correct += episode("clear", 200 + i, clear_prefers_amber);
+            const auto storm_result = episode("storm", 100 + i, !storm_initial_prefers_amber);
+            const auto clear_result = episode("clear", 200 + i, clear_prefers_amber);
+            if (!storm_result || !clear_result) {
+                runtime.stop();
+                std::cerr << "JBP-003 status=FAIL stage=adaptation_execution episode=" << i << "\\n";
+                return false;
+            }
+            storm_correct += *storm_result;
+            clear_correct += *clear_result;
         }
         std::cout << "JBP-003 stage=adaptation storm_correct=" << storm_correct
-                  << "/60 clear_control_correct=" << clear_correct << "/60\n";
+                  << "/60 clear_control_correct=" << clear_correct << "/60\\n";
         if (storm_correct < 36 || clear_correct < 36) {
             runtime.stop();
-            std::cerr << "JBP-003 status=FAIL stage=adaptation"
-                      << " required_each=36/60\n";
+            std::cerr << "JBP-003 status=FAIL stage=adaptation required_each=36/60\\n";
             return false;
         }
         runtime.stop();
         std::cout << "JBP-003 stage=training status=PASS"
                   << " seed=" << seed
                   << " clear_rule=hidden storm_rule_reversed=true"
-                  << " noise_rate=0.15 episodes=280\n";
+                  << " noise_rate=0.15 episodes=280\\n";
         return true;
     }
 
@@ -208,11 +228,16 @@ bool run_mode(const std::filesystem::path& journal, std::uint64_t seed,
     // must still drive the correct choice from restored learned state.
     storm_reversed = true;
     for (std::uint64_t i = 0; i < 20; ++i) {
-        const bool clear_correct = episode("clear", 1000 + i, clear_prefers_amber);
-        const bool storm_correct = episode("storm", 2000 + i, !storm_initial_prefers_amber);
-        clear_eval.correct += clear_correct;
+        const auto clear_correct = episode("clear", 1000 + i, clear_prefers_amber);
+        const auto storm_correct = episode("storm", 2000 + i, !storm_initial_prefers_amber);
+        if (!clear_correct || !storm_correct) {
+            runtime.stop();
+            std::cerr << "JBP-003 status=FAIL stage=restart_execution episode=" << i << "\\n";
+            return false;
+        }
+        clear_eval.correct += *clear_correct;
         clear_eval.total++;
-        storm_eval.correct += storm_correct;
+        storm_eval.correct += *storm_correct;
         storm_eval.total++;
     }
     runtime.stop();
@@ -241,9 +266,14 @@ int main(int argc, char** argv) {
         std::cerr << "mode must be train or verify\n";
         return 64;
     }
-    if (std::filesystem::exists(journal)) {
-        std::cerr << "JBP-003 status=REFUSED_OVERWRITE path=" << journal.string() << "\n";
+    if (mode == "train" && std::filesystem::exists(journal)) {
+        std::cerr << "JBP-003 status=REFUSED_OVERWRITE path=" << journal.string() << "\\n";
         return 64;
+    }
+    if (mode == "verify" && !std::filesystem::exists(journal)) {
+        std::cerr << "JBP-003 status=FAIL reason=training_journal_missing path="
+                  << journal.string() << "\\n";
+        return 66;
     }
     const bool ok = run_mode(journal, seed, mode == "verify");
     return ok ? 0 : 1;
