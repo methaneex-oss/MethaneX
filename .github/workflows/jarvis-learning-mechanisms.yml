@@ -251,6 +251,13 @@ jobs:
               raise SystemExit(f"Invalid prediction lifecycle counts: predictions={predictions}, resolved={resolved}")
           if unresolved_actions != 0:
               raise SystemExit(f"{unresolved_actions} observed action-consequence forecasts remained unresolved")
+          if resolved + unresolved_actions + unresolved_other != predictions:
+              raise SystemExit(
+                  "Prediction lifecycle counts do not reconcile: "
+                  f"predictions={predictions}, resolved={resolved}, "
+                  f"unresolved_action_consequences={unresolved_actions}, "
+                  f"unresolved_other={unresolved_other}"
+              )
           if unresolved_other < 0 or not math.isfinite(mae) or mae < 0:
               raise SystemExit("Invalid unresolved-prediction count or prediction error")
           print(
