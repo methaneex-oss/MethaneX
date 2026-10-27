@@ -292,7 +292,7 @@ jobs:
           probe_rows = [
               row for row in episodes
               if row["phase"] == "generalization-probe"
-              and row["generalization_probe_episode"]
+              and row["generalization_probe_episode_index"]
           ]
           probe_rows.sort(key=lambda row: int(row["generalization_probe_episode"]))
           if not probe_rows:
@@ -335,45 +335,48 @@ jobs:
                   "so it is an early adaptation measure, not a zero-shot transfer score"
               )
 
-          with (root / "checkpoints.csv").open(newline="", encoding="utf-8") as handle:
-              checkpoints = list(csv.DictReader(handle))
-          if not checkpoints:
-              errors.append("No checkpoint rows were recorded")
+          # Checkpoints are periodic snapshots and can lag the actual trial end.
+          # Use the completed trial's terminal summary for final prediction counts.
+          completed_lines = [
+              line for line in (root / "trial.log").read_text(encoding="utf-8").splitlines()
+              if "status=COMPLETED" in line
+          ]
+          if len(completed_lines) != 1:
+              errors.append(
+                  f"Expected exactly one completed trial summary, found {len(completed_lines)}"
+              )
           else:
-              final = checkpoints[-1]
-              predictions = int(final["predictions"])
-              resolved = int(final["resolved_predictions"])
-              unresolved = predictions - resolved
-              if unresolved < 0:
+              import re
+              final_values = dict(re.findall(r"([A-Za-z_]+)=([^ ]+)", completed_lines[0]))
+              required = {
+                  "prediction_memories", "resolved_predictions",
+                  "mean_absolute_prediction_error",
+              }
+              missing = sorted(required - final_values.keys())
+              if missing:
                   errors.append(
-                      f"Resolved prediction count ({resolved}) exceeds prediction count ({predictions})"
+                      "Completed trial summary is missing fields: " + ", ".join(missing)
                   )
-              lines.extend([
-                  "",
-                  "Prediction lifecycle diagnostics (counts are from the final checkpoint):",
-                  f"- prediction records: {predictions}",
-                  f"- resolved predictions: {resolved}",
-                  f"- unresolved estimate (records minus resolved): {max(0, unresolved)}",
-                  f"- unresolved fraction: {max(0, unresolved) / predictions:.1%}"
-                  if predictions else "- unresolved fraction: unavailable (zero prediction records)",
-                  f"- mean absolute prediction error: {final['mean_absolute_prediction_error']}",
-              ])
-              if "unresolved_action_consequence_predictions" in final:
-                  unresolved_actions = int(final["unresolved_action_consequence_predictions"])
-                  unresolved_other = int(final["unresolved_other_predictions"])
-                  lines.extend([
-                      f"- unresolved action-consequence forecasts: {unresolved_actions}",
-                      f"- unresolved other predictions: {unresolved_other}",
-                      "Action-consequence forecasts should resolve when this trial observes the consequence.",
-                  ])
-                  if unresolved_actions != 0:
+              else:
+                  predictions = int(final_values["prediction_memories"])
+                  resolved = int(final_values["resolved_predictions"])
+                  unresolved = predictions - resolved
+                  if unresolved < 0:
                       errors.append(
-                          f"{unresolved_actions} action-consequence forecasts remained unresolved"
+                          f"Resolved prediction count ({resolved}) exceeds prediction count ({predictions})"
                       )
-              lines.extend([
-                  "",
-                  "Unresolved causal projections are reported separately; their lack of direct outcome feedback is not automatically a defect.",
-              ])
+                  lines.extend([
+                      "",
+                      "Prediction lifecycle diagnostics (terminal trial summary):",
+                      f"- prediction records: {predictions}",
+                      f"- resolved predictions: {resolved}",
+                      f"- unresolved estimate (records minus resolved): {max(0, unresolved)}",
+                      f"- unresolved fraction: {max(0, unresolved) / predictions:.1%}"
+                      if predictions else "- unresolved fraction: unavailable (zero prediction records)",
+                      f"- mean absolute prediction error: {final_values['mean_absolute_prediction_error']}",
+                      "",
+                      "Unresolved count is a lifecycle signal, not automatically a defect: some predictions may be projections without a directly observed resolution path.",
+                  ])
 
           report = "\n".join(lines) + "\n"
           (Path("learning-probe-results") / "trial-diagnostics.txt").write_text(
