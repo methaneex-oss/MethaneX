@@ -130,7 +130,7 @@ jobs:
                           + final.get("unresolved_other_predictions", "unknown")
                       )
 
-          text = "\\n".join(report) + "\\n"
+          text = "\n".join(report) + "\n"
           print(text)
           summary = Path(__import__("os").environ["GITHUB_STEP_SUMMARY"])
           with summary.open("a", encoding="utf-8") as handle:
