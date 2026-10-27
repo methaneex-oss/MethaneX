@@ -35,7 +35,7 @@ jobs:
   learning-mechanisms:
     name: Explicit learning mechanism gates + integrated trial
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 120
     env:
       SOURCE_REF: ${{ inputs.source_ref || 'feat/jarvis-affective-state' }}
       TRIAL_MINUTES: ${{ inputs.duration_minutes || '10' }}
@@ -54,8 +54,8 @@ jobs:
             echo "TRIAL_MINUTES must be 10, 15, 20, or 30"
             exit 64
           fi
-          if ! [[ "$TRIAL_SEED" =~ ^[0-9]+$ ]]; then
-            echo "TRIAL_SEED must be a non-negative integer"
+          if ! [[ "$TRIAL_SEED" =~ ^[0-9]+$ ]] || (( TRIAL_SEED > 9223372036854775805 )); then
+            echo "TRIAL_SEED must be an integer from 0 through 9223372036854775805 so two additional seeds can be derived safely"
             exit 64
           fi
           mkdir -p learning-probe-results
