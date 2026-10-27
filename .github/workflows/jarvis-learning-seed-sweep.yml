@@ -1,0 +1,148 @@
+name: JARVIS DLT-002 Multi-Seed Learning Sweep
+
+on:
+  push:
+    branches:
+      - feat/jarvis-affective-state
+    paths:
+      - 'core/cpp/tests/dlt_002_long_run.cpp'
+      - '.github/workflows/jarvis-learning-seed-sweep.yml'
+  workflow_dispatch:
+    inputs:
+      duration_minutes:
+        description: "Minutes per independent seed"
+        type: choice
+        options: ["10", "15", "20", "30"]
+        default: "10"
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  seed-trial:
+    name: "DLT-002 seed ${{ matrix.seed }}"
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        seed: [20261026, 20261027, 20261028]
+    env:
+      DURATION_MINUTES: ${{ inputs.duration_minutes || '10' }}
+      TRIAL_SEED: ${{ matrix.seed }}
+    steps:
+      - name: Checkout exact brain revision
+        uses: actions/checkout@v4
+
+      - name: Record trial identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "seed-results-${TRIAL_SEED}"
+          {
+            echo "seed=${TRIAL_SEED}"
+            echo "duration_minutes=${DURATION_MINUTES}"
+            echo "commit=$(git rev-parse HEAD)"
+            echo "branch=${GITHUB_REF_NAME}"
+            echo "started_at_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          } | tee "seed-results-${TRIAL_SEED}/metadata.txt"
+
+      - name: Configure native C++20 brain
+        run: cmake -S core/cpp -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON
+
+      - name: Build DLT-002 trial executable
+        run: cmake --build build --target jarvis_dlt_002_long_run --parallel 2
+
+      - name: Run independent changing-environment trial
+        shell: bash
+        run: |
+          set -euo pipefail
+          executable="$(find build -type f -name jarvis_dlt_002_long_run -executable -print -quit)"
+          test -n "$executable"
+          duration_seconds=$((DURATION_MINUTES * 60))
+          output_dir="seed-results-${TRIAL_SEED}/integrated-trial"
+          mkdir -p "$output_dir"
+          "$executable" "$duration_seconds" 30 "$output_dir" "$TRIAL_SEED" 2>&1 | tee "seed-results-${TRIAL_SEED}/console.log"
+
+      - name: Summarize behavioral and prediction evidence
+        if: always()
+        shell: bash
+        run: |
+          python3 - "seed-results-${TRIAL_SEED}" <<'PY'
+          import csv
+          import sys
+          from pathlib import Path
+
+          root = Path(sys.argv[1])
+          trial = root / "integrated-trial"
+          report = ["## DLT-002 seed trial", f"- Seed: {root.name.removeprefix('seed-results-')}"]
+          episodes_path = trial / "episodes.csv"
+          if episodes_path.exists():
+              with episodes_path.open(newline="", encoding="utf-8") as handle:
+                  rows = list(csv.DictReader(handle))
+              report.append(f"- Episodes recorded: {len(rows)}")
+              for phase in (
+                  "clear-baseline", "flooded", "tunnel",
+                  "clear-reversal", "generalization-probe", "flooded-reversal",
+              ):
+                  phase_rows = [row for row in rows if row.get("phase") == phase]
+                  correct = sum(row.get("optimal_action_selected") == "1" for row in phase_rows)
+                  report.append(
+                      f"- {phase}: {correct}/{len(phase_rows)} optimal "
+                      f"({correct / len(phase_rows):.1%})" if phase_rows
+                      else f"- {phase}: no recorded episodes"
+                  )
+              probe = sorted(
+                  (row for row in rows if row.get("phase") == "generalization-probe"
+                   and row.get("generalization_probe_episode_index")),
+                  key=lambda row: int(row["generalization_probe_episode_index"]),
+              )
+              if probe:
+                  report.append(
+                      "- First unseen-context decision before canyon outcome feedback: "
+                      + ("optimal" if probe[0].get("optimal_action_selected") == "1" else "not optimal")
+                  )
+                  early = probe[:10]
+                  early_correct = sum(row.get("optimal_action_selected") == "1" for row in early)
+                  report.append(
+                      f"- First {len(early)} unseen-context decisions (includes feedback after earlier decisions): "
+                      f"{early_correct}/{len(early)} optimal"
+                  )
+          else:
+              report.append("- Episode evidence unavailable; trial may have failed before starting.")
+
+          checkpoints_path = trial / "checkpoints.csv"
+          if checkpoints_path.exists():
+              with checkpoints_path.open(newline="", encoding="utf-8") as handle:
+                  checkpoints = list(csv.DictReader(handle))
+              if checkpoints:
+                  final = checkpoints[-1]
+                  report.append(f"- Prediction records: {final.get('predictions', 'unknown')}")
+                  report.append(f"- Resolved predictions: {final.get('resolved_predictions', 'unknown')}")
+                  if "unresolved_action_consequence_predictions" in final:
+                      report.append(
+                          "- Unresolved action-consequence forecasts: "
+                          + final["unresolved_action_consequence_predictions"]
+                      )
+                      report.append(
+                          "- Unresolved other predictions: "
+                          + final.get("unresolved_other_predictions", "unknown")
+                      )
+
+          text = "\n".join(report) + "\n"
+          print(text)
+          summary = Path(__import__("os").environ["GITHUB_STEP_SUMMARY"])
+          with summary.open("a", encoding="utf-8") as handle:
+              handle.write(text)
+          (root / "summary.txt").write_text(text, encoding="utf-8")
+          PY
+
+      - name: Preserve raw trial evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: JARVIS-DLT-002-seed-${{ matrix.seed }}-${{ github.run_id }}
+          path: seed-results-${{ matrix.seed }}/
+          if-no-files-found: warn
+          retention-days: 90
