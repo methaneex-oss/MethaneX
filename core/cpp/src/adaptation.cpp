@@ -35,8 +35,7 @@ AdaptiveMetric AdaptationModel::observe(const std::string& key, double predicted
     // A sustained run of large errors is stronger evidence that the generating
     // process changed. This is generic change responsiveness, not a stimulus-to-
     // response rule: the evidence is the prediction error sequence itself.
-    const double prior_recent_error = metric.recent_error;
-    const bool surprising = error >= 0.75 && error > prior_recent_error + 0.20;
+    const bool surprising = error >= 0.75;
     if (surprising) {
         if (metric.consecutive_surprises < std::numeric_limits<std::uint32_t>::max())
             ++metric.consecutive_surprises;
