@@ -44,6 +44,8 @@ public:
     std::vector<Event> all() const;
     std::vector<Event> by_source(const std::string& source, std::size_t limit = 0) const;
     std::vector<Event> by_kind(const std::string& kind, std::size_t limit = 0) const;
+    // Constant-time durable cursor for lifecycle work that needs the latest event of a kind.
+    std::uint64_t latest_sequence_by_kind(const std::string& kind) const noexcept;
 
     MemoryTier tier_of(const Event& event) const noexcept;
     std::vector<MemoryRecord> recall_ranked(const Attributes& query, std::size_t limit = 8, const std::string& kind = {}, bool require_exact_match = false) const;
@@ -77,6 +79,7 @@ private:
     std::filesystem::path journal_path_;
     std::filesystem::path metadata_path_;
     std::unordered_map<std::string, std::array<double, 4>> learned_tiers_;
+    std::unordered_map<std::string, std::uint64_t> latest_sequence_by_kind_;
 };
 
 } // namespace jarvis::core
