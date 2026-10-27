@@ -350,6 +350,8 @@ jobs:
               final_values = dict(re.findall(r"([A-Za-z_]+)=([^ ]+)", completed_lines[0]))
               required = {
                   "prediction_memories", "resolved_predictions",
+                  "unresolved_action_consequence_predictions",
+                  "unresolved_other_predictions",
                   "mean_absolute_prediction_error",
               }
               missing = sorted(required - final_values.keys())
@@ -365,6 +367,8 @@ jobs:
                       errors.append(
                           f"Resolved prediction count ({resolved}) exceeds prediction count ({predictions})"
                       )
+                  unresolved_actions = int(final_values["unresolved_action_consequence_predictions"])
+                  unresolved_other = int(final_values["unresolved_other_predictions"])
                   lines.extend([
                       "",
                       "Prediction lifecycle diagnostics (terminal trial summary):",
@@ -373,10 +377,16 @@ jobs:
                       f"- unresolved estimate (records minus resolved): {max(0, unresolved)}",
                       f"- unresolved fraction: {max(0, unresolved) / predictions:.1%}"
                       if predictions else "- unresolved fraction: unavailable (zero prediction records)",
+                      f"- unresolved action-consequence forecasts: {unresolved_actions}",
+                      f"- unresolved other predictions: {unresolved_other}",
                       f"- mean absolute prediction error: {final_values['mean_absolute_prediction_error']}",
                       "",
-                      "Unresolved count is a lifecycle signal, not automatically a defect: some predictions may be projections without a directly observed resolution path.",
+                      "Unresolved causal projections are reported separately; their lack of direct outcome feedback is not automatically a defect.",
                   ])
+                  if unresolved_actions != 0:
+                      errors.append(
+                          f"{unresolved_actions} action-consequence forecasts remained unresolved"
+                      )
 
           report = "\n".join(lines) + "\n"
           (Path("learning-probe-results") / "trial-diagnostics.txt").write_text(
