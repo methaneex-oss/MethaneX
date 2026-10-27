@@ -199,26 +199,47 @@ jobs:
           probe_rows = [
               row for row in episodes
               if row["phase"] == "generalization-probe"
+              and row["generalization_probe_episode"]
+          ]
+          probe_rows.sort(key=lambda row: int(row["generalization_probe_episode"]))
+          if not probe_rows:
+              errors.append("No decisions were recorded in the unseen generalization context")
+              lines.append("- First unseen-context decision: unavailable")
+          else:
+              first = probe_rows[0]
+              first_correct = first["optimal_action_selected"] == "1"
+              lines.append(
+                  f"- First decision in unseen context (before any canyon outcome feedback): "
+                  f"{'optimal' if first_correct else 'not optimal'} "
+                  f"({'1/1' if first_correct else '0/1'}); this is the cleanest local zero-experience transfer observation"
+              )
+
+          initial_window_rows = [
+              row for row in episodes
+              if row["phase"] == "generalization-probe"
               and row["generalization_initial_window_episode"]
           ]
-          probe_rows.sort(key=lambda row: int(row["generalization_initial_window_episode"]))
-          if len(probe_rows) < 10:
+          initial_window_rows.sort(
+              key=lambda row: int(row["generalization_initial_window_episode"])
+          )
+          if len(initial_window_rows) < 10:
               errors.append(
-                  f"Only {len(probe_rows)} labeled initial generalization-window episodes; expected 10"
+                  f"Only {len(initial_window_rows)} labeled early generalization episodes; expected 10"
               )
               lines.append(
-                  f"- Initial generalization window: {len(probe_rows)}/10 recorded; "
-                  "transfer estimate unavailable"
+                  f"- Early generalization/adaptation window: {len(initial_window_rows)}/10 recorded; "
+                  "estimate unavailable"
               )
           else:
-              first_ten = probe_rows[:10]
-              transfer_correct = sum(
+              first_ten = initial_window_rows[:10]
+              early_correct = sum(
                   row["generalization_initial_window_optimal"] == "1"
                   for row in first_ten
               )
               lines.append(
-                  f"- Initial 10 generalization decisions: {transfer_correct}/10 "
-                  f"optimal ({transfer_correct / 10:.1%}); descriptive, not a pass threshold"
+                  f"- First 10 decisions in unseen context: {early_correct}/10 optimal "
+                  f"({early_correct / 10:.1%}); this window includes feedback after earlier decisions, "
+                  "so it is an early adaptation measure, not a zero-shot transfer score"
               )
 
           with (root / "checkpoints.csv").open(newline="", encoding="utf-8") as handle:
