@@ -269,6 +269,71 @@ jobs:
             echo "integrated_trial=PASS seed=$seed duration_seconds=$duration_seconds"
           done
 
+      - name: Run matched outcome-feedback-disabled control
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          executable="$(find build -type f -name jarvis_dlt_002_long_run -executable -print -quit)"
+          test -n "$executable"
+          duration_seconds=$((TRIAL_MINUTES * 60))
+          control_dir="learning-probe-results/no-feedback-control"
+          "$executable" "$duration_seconds" 30 "$control_dir" "$TRIAL_SEED" no-feedback 2>&1 | tee learning-probe-results/no-feedback-control-console.log
+          grep -q 'status=COMPLETED' "$control_dir/trial.log"
+          grep -q 'feedback_mode=no-feedback' "$control_dir/trial.log"
+          python3 - "$control_dir" <<'PY'
+          import csv
+          import re
+          import sys
+          from pathlib import Path
+
+          trial = Path(sys.argv[1])
+          phases = (
+              "clear-baseline", "flooded", "tunnel",
+              "clear-reversal", "generalization-probe", "flooded-reversal",
+          )
+          with (trial / "episodes.csv").open(newline="", encoding="utf-8") as handle:
+              reader = csv.DictReader(handle)
+              required = {
+                  "phase", "optimal_action_selected",
+                  "generalization_initial_window_episode",
+                  "generalization_initial_window_optimal",
+              }
+              missing = required - set(reader.fieldnames or ())
+              if missing:
+                  raise SystemExit("Missing control episode columns: " + ", ".join(sorted(missing)))
+              episodes = list(reader)
+          if not episodes:
+              raise SystemExit("No-feedback control episode CSV is empty")
+          for phase in phases:
+              rows = [row for row in episodes if row["phase"] == phase]
+              if len(rows) < 5:
+                  raise SystemExit(f"No-feedback {phase} has only {len(rows)} episodes")
+              if any(row["optimal_action_selected"] not in ("0", "1") for row in rows):
+                  raise SystemExit(f"No-feedback {phase} has invalid evaluation labels")
+          early = [
+              row for row in episodes
+              if row["phase"] == "generalization-probe"
+              and row["generalization_initial_window_episode"]
+          ]
+          early.sort(key=lambda row: int(row["generalization_initial_window_episode"]))
+          if len(early) < 10 or [int(row["generalization_initial_window_episode"]) for row in early[:10]] != list(range(1, 11)):
+              raise SystemExit("No-feedback control is missing the first ten generalization decisions")
+          terminal = [
+              line for line in (trial / "trial.log").read_text(encoding="utf-8").splitlines()
+              if "status=COMPLETED" in line
+          ]
+          if len(terminal) != 1:
+              raise SystemExit(f"Expected one completed control summary, found {len(terminal)}")
+          values = dict(re.findall(r"([A-Za-z_]+)=([^ ]+)", terminal[0]))
+          if values.get("feedback_mode") != "no-feedback":
+              raise SystemExit("Control terminal summary does not identify no-feedback mode")
+          if int(values.get("unresolved_action_consequence_predictions", "0")) <= 0:
+              raise SystemExit("Control did not demonstrate withheld consequence feedback")
+          accuracy = sum(row["optimal_action_selected"] == "1" for row in episodes) / len(episodes)
+          print(f"no_feedback_control=PASS episodes={len(episodes)} optimal_action_accuracy={accuracy:.4f}")
+          PY
+
       - name: Compare phase performance across all three seeds
         if: success()
         shell: bash
@@ -314,6 +379,39 @@ jobs:
               values = scores[phase]
               if values:
                   lines.append(f"- {phase}: {sum(values) / len(values):.1%} across {len(values)} trials")
+
+          # Same seed and duration as the primary run, but the brain receives no
+          # action-consequence values. This isolates consequence-feedback learning
+          # more directly than a fixed-route reference, without claiming that all
+          # other learning mechanisms have been disabled.
+          control = root / "no-feedback-control"
+          with (trials[0][1] / "episodes.csv").open(newline="", encoding="utf-8") as handle:
+              primary_rows = list(csv.DictReader(handle))
+          with (control / "episodes.csv").open(newline="", encoding="utf-8") as handle:
+              control_rows = list(csv.DictReader(handle))
+          if not primary_rows or not control_rows:
+              raise SystemExit("Primary or no-feedback control episode data is empty")
+          primary_accuracy = sum(row["optimal_action_selected"] == "1" for row in primary_rows) / len(primary_rows)
+          control_accuracy = sum(row["optimal_action_selected"] == "1" for row in control_rows) / len(control_rows)
+          lines.extend([
+              "", "### Same-seed outcome-feedback control", "",
+              f"- Feedback enabled: {sum(row['optimal_action_selected'] == '1' for row in primary_rows)}/{len(primary_rows)} ({primary_accuracy:.1%})",
+              f"- Consequence feedback withheld: {sum(row['optimal_action_selected'] == '1' for row in control_rows)}/{len(control_rows)} ({control_accuracy:.1%})",
+              f"- Difference: {(primary_accuracy - control_accuracy) * 100:+.1f} percentage points",
+              "",
+              "The control uses the same seed, randomized latent action mapping, task, and duration. It still receives observations and can update execution-reliability/self-model mechanisms; it is specifically an outcome-feedback-disabled control, not a fully learning-disabled brain.",
+              "",
+              "| Phase | Feedback enabled | Feedback withheld |",
+              "| --- | ---: | ---: |",
+          ])
+          for phase in phases:
+              primary_phase = [row for row in primary_rows if row["phase"] == phase]
+              control_phase = [row for row in control_rows if row["phase"] == phase]
+              if not primary_phase or not control_phase:
+                  raise SystemExit(f"Missing matched control phase: {phase}")
+              primary_score = sum(row["optimal_action_selected"] == "1" for row in primary_phase) / len(primary_phase)
+              control_score = sum(row["optimal_action_selected"] == "1" for row in control_phase) / len(control_phase)
+              lines.append(f"| {phase} | {primary_score:.1%} ({len(primary_phase)}) | {control_score:.1%} ({len(control_phase)}) |")
 
           lines.extend(["", "### Fixed-action reference baselines", "",
                         "These are evaluation-only comparisons using the same recorded episode labels, not additional brain runs. They measure whether adaptation beats a policy that always chooses one route."])
