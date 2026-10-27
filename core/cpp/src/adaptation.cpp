@@ -30,20 +30,42 @@ AdaptiveMetric AdaptationModel::observe(const std::string& key, double predicted
 
     ++metric.observations;
 
-    // Keep both long-term experience and a recency-sensitive signal. The former
-    // prevents one surprising observation from erasing learned competence; the
-    // latter lets JARVIS adapt quickly when the environment actually changes.
+    // Keep both long-term experience and a recency-sensitive signal. A single
+    // surprise is common in noisy environments, so it must not erase competence.
+    // A sustained run of large errors is stronger evidence that the generating
+    // process changed. This is generic change responsiveness, not a stimulus-to-
+    // response rule: the evidence is the prediction error sequence itself.
+    const double prior_recent_error = metric.recent_error;
+    const bool surprising = error >= 0.75 && error > prior_recent_error + 0.20;
+    if (surprising) {
+        if (metric.consecutive_surprises < std::numeric_limits<std::uint32_t>::max())
+            ++metric.consecutive_surprises;
+    } else {
+        metric.consecutive_surprises = 0;
+    }
+
     const double rate = 1.0 / static_cast<double>(metric.observations);
     metric.mean_error += (error - metric.mean_error) * rate;
     const double recent_rate = std::clamp(
         0.35 / std::sqrt(static_cast<double>(metric.observations)), 0.05, 0.35);
     metric.recent_error += (error - metric.recent_error) * recent_rate;
 
+    // Under ordinary experience, keep the conservative recency rate. Three
+    // consecutive large surprises permit a modest acceleration; four or more
+    // permit a stronger update. The streak resets as soon as the observations
+    // stop being surprising, limiting overreaction to isolated noisy outcomes.
+    double estimate_rate = recent_rate;
+    if (metric.consecutive_surprises >= 4) {
+        estimate_rate = std::max(estimate_rate, 0.30);
+    } else if (metric.consecutive_surprises >= 3) {
+        estimate_rate = std::max(estimate_rate, 0.15);
+    }
+
     // Use a convex blend instead of (actual - estimate) * rate: subtracting
     // opposite-sign finite values near DBL_MAX can overflow before scaling.
     // The weighted terms stay within the representable range, and long double
     // preserves headroom on platforms where it has a wider exponent range.
-    const long double weight = static_cast<long double>(recent_rate);
+    const long double weight = static_cast<long double>(estimate_rate);
     const long double blended_estimate =
         (1.0L - weight) * static_cast<long double>(metric.estimate) +
         weight * static_cast<long double>(a);
