@@ -230,7 +230,19 @@ jobs:
               values = scores[phase]
               if values:
                   lines.append(f"- {phase}: {sum(values) / len(values):.1%} across {len(values)} trials")
-          lines.extend(["", "Limit: there is no matched learning-disabled control group yet, so these trials measure robustness and adaptation patterns but do not isolate learning's causal contribution.", ""])
+
+          lines.extend(["", "### Fixed-action reference baselines", "",
+                        "These are evaluation-only comparisons using the same recorded episode labels, not additional brain runs. They measure whether adaptation beats a policy that always chooses one route."])
+          for action in ("route-one", "route-two"):
+              per_seed = []
+              for _, trial in trials:
+                  with (trial / "episodes.csv").open(newline="", encoding="utf-8") as handle:
+                      rows = list(csv.DictReader(handle))
+                  if rows:
+                      per_seed.append(sum(row["expected_action_evaluation_only"] == action for row in rows) / len(rows))
+              if per_seed:
+                  lines.append(f"- Always choose {action}: mean optimal-action rate {sum(per_seed) / len(per_seed):.1%} across {len(per_seed)} trials")
+          lines.extend(["", "Limit: fixed-action references are not a matched learning-disabled brain. A causal comparison still requires a controlled baseline that runs the same task without updating from outcomes.", ""])
           report = "\n".join(lines)
           (root / "three-seed-comparison.txt").write_text(report, encoding="utf-8")
           print(report)
