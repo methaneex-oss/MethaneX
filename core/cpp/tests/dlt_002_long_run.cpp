@@ -452,11 +452,14 @@ int main(int argc, char** argv) {
             << " tunnel_route_one_value=" << strategy_value(brain, "navigation/tunnel", "route-one")
             << " tunnel_route_two_value=" << strategy_value(brain, "navigation/tunnel", "route-two") << '\n';
         if (!completed) exit_code = 2;
-        // This fixture observes every executed action's consequence. An
-        // unresolved action-consequence forecast therefore indicates a broken
-        // feedback path. Other causal projections may lack a directly observed
-        // matching outcome and are reported separately, not failed here.
-        if (completed && final_prediction_quality.unresolved_action_consequence != 0) {
+        // In feedback-enabled mode, every executed action's consequence is
+        // returned to Brain, so unresolved action-consequence forecasts indicate
+        // a broken feedback path. In no-feedback control mode, unresolved action
+        // forecasts are expected because the outcome is deliberately withheld.
+        // Other causal projections may lack a directly observed matching
+        // outcome in either mode and are reported separately.
+        if (completed && feedback_enabled &&
+            final_prediction_quality.unresolved_action_consequence != 0) {
             report << "[DLT-002] status=FAILED unresolved_action_consequence_predictions="
                    << final_prediction_quality.unresolved_action_consequence << '\n';
             exit_code = 3;
