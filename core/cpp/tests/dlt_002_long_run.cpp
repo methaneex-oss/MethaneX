@@ -223,6 +223,8 @@ int main(int argc, char** argv) {
     runtime_config.action_adapter.verify = [](const CandidateAction&) { return true; };
     runtime_config.action_adapter.observe_consequence = [&](const CandidateAction& action) {
         last_step = world.step(action.name);
+        // In the control mode the world still executes and records the true
+        // consequence for evaluation, but deliberately withholds it from Brain.
         if (!feedback_enabled) return std::optional<double>{};
         return last_step->consequence;
     };
