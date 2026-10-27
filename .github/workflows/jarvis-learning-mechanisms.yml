@@ -1,6 +1,13 @@
 name: JARVIS Learning Mechanisms Probe
 
 on:
+  # Validate changes to the probe itself without launching a trial on ordinary
+  # brain commits. The trial remains manually dispatchable for other changes.
+  push:
+    branches:
+      - test/learning-trial-evidence-diagnostics
+    paths:
+      - '.github/workflows/jarvis-learning-mechanisms.yml'
   pull_request:
     branches: [main]
     paths:
