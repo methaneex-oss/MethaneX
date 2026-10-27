@@ -2,7 +2,7 @@ name: JBP-002 Deep Learning and Persistent Knowledge Challenge
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, "feat/jarvis-affective-state"]
     paths:
       - ".github/workflows/jbp-002-deep-learning.yml"
       - "core/cpp/tests/jbp_002_deep_learning_suite.cpp"
