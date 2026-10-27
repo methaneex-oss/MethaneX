@@ -93,6 +93,36 @@ std::string selected_action(Brain& brain, const std::string& context) {
     return result.context.plan.steps.front().action.name;
 }
 
+void assert_affective_learning(const Brain& brain) {
+    const auto state = brain.affective_state();
+    assert(state.updates > 0);
+    assert(std::isfinite(state.valence) && state.valence >= -1.0 && state.valence <= 1.0);
+    assert(std::isfinite(state.arousal) && state.arousal >= 0.0 && state.arousal <= 1.0);
+    assert(std::isfinite(state.uncertainty) && state.uncertainty >= 0.0 && state.uncertainty <= 1.0);
+    assert(std::isfinite(state.tension) && state.tension >= 0.0 && state.tension <= 1.0);
+    assert(std::isfinite(state.stability) && state.stability >= 0.0 && state.stability <= 1.0);
+
+    // The task deliberately supplies repeated consequences that contradict
+    // the initial zero-valued forecasts. The affective appraisal model should
+    // calibrate from that evidence, and replay after process restart must
+    // reconstruct the learned calibration rather than only restoring outcomes.
+    const auto calibration = brain.affective_calibration();
+    assert(calibration.observations > 0);
+    assert(calibration.observations == brain.affective_learning_updates());
+    assert(std::isfinite(calibration.mean_absolute_error));
+    assert(calibration.mean_absolute_error > 0.0 && calibration.mean_absolute_error <= 1.0);
+    assert(std::isfinite(calibration.learning_rate_scale));
+    assert(calibration.learning_rate_scale > 1.0 && calibration.learning_rate_scale <= 1.5);
+
+    const auto appraisal = brain.affective_appraisal();
+    assert(std::isfinite(appraisal.outcome_weight));
+    assert(std::isfinite(appraisal.error_weight));
+    assert(std::isfinite(appraisal.novelty_weight));
+    assert(std::isfinite(appraisal.salience_weight));
+    assert(std::isfinite(appraisal.uncertainty_weight));
+    assert(std::isfinite(appraisal.tension_error_weight));
+}
+
 void assert_prediction_feedback(const Brain& brain) {
     const auto predictions = brain.memory().by_kind("prediction");
     const auto outcomes = brain.memory().by_kind("prediction_outcome");
@@ -191,6 +221,7 @@ int main(int argc, char** argv) {
 
         assert_strategy_signs(brain);
         assert_prediction_feedback(brain);
+        assert_affective_learning(brain);
         assert(brain.memory().by_kind("action_outcome").size() == 60);
 
         std::cout << "[DLT-002] TRAINED outcomes="
@@ -211,6 +242,7 @@ int main(int argc, char** argv) {
         assert(restored.memory().by_kind("action_outcome").size() == 60);
         assert_strategy_signs(restored);
         assert_prediction_feedback(restored);
+        assert_affective_learning(restored);
 
         std::uint64_t clear_bad_uses = 0;
         std::uint64_t flooded_bad_uses = 0;
