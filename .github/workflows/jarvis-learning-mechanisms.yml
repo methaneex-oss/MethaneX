@@ -264,8 +264,22 @@ jobs:
                   f"- unresolved fraction: {max(0, unresolved) / predictions:.1%}"
                   if predictions else "- unresolved fraction: unavailable (zero prediction records)",
                   f"- mean absolute prediction error: {final['mean_absolute_prediction_error']}",
+              ])
+              if "unresolved_action_consequence_predictions" in final:
+                  unresolved_actions = int(final["unresolved_action_consequence_predictions"])
+                  unresolved_other = int(final["unresolved_other_predictions"])
+                  lines.extend([
+                      f"- unresolved action-consequence forecasts: {unresolved_actions}",
+                      f"- unresolved other predictions: {unresolved_other}",
+                      "Action-consequence forecasts should resolve when this trial observes the consequence.",
+                  ])
+                  if unresolved_actions != 0:
+                      errors.append(
+                          f"{unresolved_actions} action-consequence forecasts remained unresolved"
+                      )
+              lines.extend([
                   "",
-                  "The unresolved estimate is a prompt for lifecycle investigation, not itself a defect finding.",
+                  "Unresolved causal projections are reported separately; their lack of direct outcome feedback is not automatically a defect.",
               ])
 
           report = "\n".join(lines) + "\n"
