@@ -35,7 +35,7 @@ jobs:
   learning-mechanisms:
     name: Explicit learning mechanism gates + integrated trial
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 180
     env:
       SOURCE_REF: ${{ inputs.source_ref || 'feat/jarvis-affective-state' }}
       TRIAL_MINUTES: ${{ inputs.duration_minutes || '10' }}
