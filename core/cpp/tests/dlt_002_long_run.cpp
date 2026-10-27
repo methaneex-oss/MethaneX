@@ -79,7 +79,10 @@ double strategy_value(const Brain& brain, const std::string& context,
 }
 
 struct PredictionMetrics {
+    std::uint64_t total{0};
     std::uint64_t resolved{0};
+    std::uint64_t unresolved_action_consequence{0};
+    std::uint64_t unresolved_other{0};
     double mean_absolute_error{0.0};
 };
 
@@ -88,7 +91,15 @@ PredictionMetrics prediction_metrics(const Brain& brain) {
     PredictionMetrics metrics;
     double absolute_error_sum = 0.0;
     for (const auto& prediction : predictions) {
-        if (!prediction.resolved || !std::isfinite(prediction.error)) continue;
+        ++metrics.total;
+        if (!prediction.resolved) {
+            if (prediction.key.rfind("action_consequence|", 0) == 0)
+                ++metrics.unresolved_action_consequence;
+            else
+                ++metrics.unresolved_other;
+            continue;
+        }
+        if (!std::isfinite(prediction.error)) continue;
         ++metrics.resolved;
         absolute_error_sum += std::abs(prediction.error);
     }
@@ -137,7 +148,7 @@ int main(int argc, char** argv) {
     if (!episodes || !checkpoints || !report)
         throw std::runtime_error("Could not create DLT-002 output files");
     episodes << "episode,elapsed_seconds,phase,context,latent_condition_evaluation_only,expected_action_evaluation_only,selected_action,optimal_action_selected,consequence,observation_count,outcome_count,prediction_count,prediction_outcome_count,generalization_probe_episode_index,generalization_transfer_source_context,generalization_transfer_source_action,generalization_transfer_source_similarity,generalization_initial_window_episode,generalization_initial_window_optimal\n";
-    checkpoints << "elapsed_seconds,phase,episodes,total_reward,current_phase_route_one_selected,current_phase_route_two_selected,positive_outcomes,negative_outcomes,optimal_action_selections,nonoptimal_action_selections,current_phase_decision_accuracy,observations,outcomes,predictions,prediction_outcomes,resolved_predictions,mean_absolute_prediction_error,clear_route_one_value,clear_route_two_value,flooded_route_one_value,flooded_route_two_value,tunnel_route_one_value,tunnel_route_two_value,canyon_route_one_value,canyon_route_two_value\n";
+    checkpoints << "elapsed_seconds,phase,episodes,total_reward,current_phase_route_one_selected,current_phase_route_two_selected,positive_outcomes,negative_outcomes,optimal_action_selections,nonoptimal_action_selections,current_phase_decision_accuracy,observations,outcomes,predictions,prediction_outcomes,resolved_predictions,mean_absolute_prediction_error,clear_route_one_value,clear_route_two_value,flooded_route_one_value,flooded_route_two_value,tunnel_route_one_value,tunnel_route_two_value,canyon_route_one_value,canyon_route_two_value,unresolved_action_consequence_predictions,unresolved_other_predictions\n";
     episodes << std::unitbuf;
     checkpoints << std::unitbuf;
     report << std::unitbuf;
@@ -355,7 +366,9 @@ int main(int argc, char** argv) {
                     << strategy_value(brain, "navigation/tunnel", "route-one") << ','
                     << strategy_value(brain, "navigation/tunnel", "route-two") << ','
                     << strategy_value(brain, "navigation/canyon", "route-one") << ','
-                    << strategy_value(brain, "navigation/canyon", "route-two") << '\n';
+                    << strategy_value(brain, "navigation/canyon", "route-two") << ','
+                    << prediction_quality.unresolved_action_consequence << ','
+                    << prediction_quality.unresolved_other << '\n';
                 report << "[DLT-002] checkpoint elapsed_seconds="
                     << std::chrono::duration_cast<std::chrono::seconds>(now - started).count()
                     << " phase=" << phase.name << " episodes=" << episode
@@ -367,6 +380,8 @@ int main(int argc, char** argv) {
                     << " outcomes=" << outcomes << " predictions=" << predictions
                     << " prediction_outcomes=" << prediction_outcomes
                     << " resolved_predictions=" << prediction_quality.resolved
+                    << " unresolved_action_consequence_predictions=" << prediction_quality.unresolved_action_consequence
+                    << " unresolved_other_predictions=" << prediction_quality.unresolved_other
                     << " mean_absolute_prediction_error=" << prediction_quality.mean_absolute_error
                     << " clear_route_one_value=" << strategy_value(brain, "navigation/clear", "route-one")
                     << " clear_route_two_value=" << strategy_value(brain, "navigation/clear", "route-two")
@@ -404,6 +419,8 @@ int main(int argc, char** argv) {
             << " generalization_initial_window_size=" << std::min(generalization_probe_episodes, generalization_initial_window_size)
             << " generalization_initial_window_optimal=" << generalization_initial_window_optimal
             << " resolved_predictions=" << final_prediction_quality.resolved
+            << " unresolved_action_consequence_predictions=" << final_prediction_quality.unresolved_action_consequence
+            << " unresolved_other_predictions=" << final_prediction_quality.unresolved_other
             << " mean_absolute_prediction_error=" << final_prediction_quality.mean_absolute_error
             << " clear_route_one_value=" << strategy_value(brain, "navigation/clear", "route-one")
             << " clear_route_two_value=" << strategy_value(brain, "navigation/clear", "route-two")
@@ -412,6 +429,15 @@ int main(int argc, char** argv) {
             << " tunnel_route_one_value=" << strategy_value(brain, "navigation/tunnel", "route-one")
             << " tunnel_route_two_value=" << strategy_value(brain, "navigation/tunnel", "route-two") << '\n';
         if (!completed) exit_code = 2;
+        // This fixture observes every executed action's consequence. An
+        // unresolved action-consequence forecast therefore indicates a broken
+        // feedback path. Other causal projections may lack a directly observed
+        // matching outcome and are reported separately, not failed here.
+        if (completed && final_prediction_quality.unresolved_action_consequence != 0) {
+            report << "[DLT-002] status=FAILED unresolved_action_consequence_predictions="
+                   << final_prediction_quality.unresolved_action_consequence << '\n';
+            exit_code = 3;
+        }
     } catch (const std::exception& ex) {
         report << "[DLT-002] status=FAILED episode=" << episode << " error=" << ex.what() << '\n';
         std::cerr << "[DLT-002] status=FAILED episode=" << episode << " error=" << ex.what() << std::endl;
