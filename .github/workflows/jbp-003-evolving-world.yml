@@ -1,5 +1,6 @@
 name: JBP-003 Evolving Virtual World Challenge
 # Re-run the behavioral challenge after failure-localization instrumentation.
+# The world transition callback captures generated action names by value.
 
 on:
   pull_request:
