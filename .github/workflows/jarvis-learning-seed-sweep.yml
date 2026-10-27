@@ -82,6 +82,23 @@ jobs:
               with episodes_path.open(newline="", encoding="utf-8") as handle:
                   rows = list(csv.DictReader(handle))
               report.append(f"- Episodes recorded: {len(rows)}")
+              learner_correct = sum(row.get("optimal_action_selected") == "1" for row in rows)
+              route_one_correct = sum(
+                  row.get("expected_action_evaluation_only") == "route-one" for row in rows
+              )
+              route_two_correct = sum(
+                  row.get("expected_action_evaluation_only") == "route-two" for row in rows
+              )
+              total = len(rows)
+              if total:
+                  best_fixed = max(route_one_correct, route_two_correct)
+                  report.extend([
+                      f"- Learning-enabled policy: {learner_correct}/{total} optimal ({learner_correct / total:.1%})",
+                      f"- Fixed-policy control, always route-one: {route_one_correct}/{total} ({route_one_correct / total:.1%})",
+                      f"- Fixed-policy control, always route-two: {route_two_correct}/{total} ({route_two_correct / total:.1%})",
+                      f"- Best fixed-policy baseline: {best_fixed}/{total} ({best_fixed / total:.1%}); learner difference: {(learner_correct - best_fixed) / total:+.1%}",
+                      "- Control is a fixed action policy, not a matched brain with learning disabled.",
+                  ])
               for phase in (
                   "clear-baseline", "flooded", "tunnel",
                   "clear-reversal", "generalization-probe", "flooded-reversal",
