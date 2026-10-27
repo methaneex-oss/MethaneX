@@ -270,11 +270,34 @@ int main() {
     assert(restored_strategy->action == "calibrate");
     assert(restored_strategy->value < 0.0);
     CognitiveCycle restored_cycle(restored);
+
+    // A causal/world-variable forecast must receive feedback from the next
+    // observation that actually updates that variable. Without this link,
+    // simulation forecasts accumulate as permanently unresolved "other"
+    // predictions and never train prediction calibration or downstream systems.
+    const auto observation_forecast =
+        restored.predict("temperature", Scalar{23.0}, 0.8);
+    assert(observation_forecast.created_sequence != 0);
+    assert(!observation_forecast.resolved);
+
     input.observation = Event{0, 3, "sensor", "observation", {{"temperature", 22.0}}};
     const auto after_restart = restored_cycle.run(input);
     assert(after_restart.status == CognitiveCycleStatus::completed);
     assert(!after_restart.context.plan.steps.empty());
     assert(after_restart.context.plan.steps.front().action.name == "wait");
+
+    const auto predictions_after_observation = restored.snapshot().predictions;
+    const auto resolved_observation_forecast = std::find_if(
+        predictions_after_observation.begin(), predictions_after_observation.end(),
+        [&](const Prediction& prediction) {
+            return prediction.created_sequence == observation_forecast.created_sequence;
+        });
+    assert(resolved_observation_forecast != predictions_after_observation.end());
+    assert(resolved_observation_forecast->resolved);
+    assert(resolved_observation_forecast->error > 0.0);
+    const auto* temperature_metric = restored.learning_metric("temperature");
+    assert(temperature_metric != nullptr);
+    assert(temperature_metric->observations == 1);
     bool restored_calibrate_outcome = false;
     for (const auto& event : restored.memory().all()) {
         if (event.kind != "action_outcome" ||
