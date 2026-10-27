@@ -54,6 +54,8 @@ struct ActionExecutionResult {
     // made before execution so delayed observations can resolve the exact item.
     std::optional<std::uint64_t> consequence_prediction_sequence;
     std::string consequence_prediction_key;
+    // Exact calibrated forecast issued before action execution, when numeric.
+    std::optional<double> consequence_prediction_value;
 };
 
 class ActionExecutor {
