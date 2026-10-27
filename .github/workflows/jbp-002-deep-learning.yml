@@ -66,7 +66,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          ./build/core/cpp/tests/jarvis_jbp_002_deep_learning_suite 2>&1 | tee jbp-002-results/deep-learning.log
+          executable="$(find build -type f -name jarvis_jbp_002_deep_learning_suite -executable -print -quit)"
+          test -n "$executable"
+          "$executable" 2>&1 | tee jbp-002-results/deep-learning.log
 
       - name: Verify persistence in separate operating-system processes
         shell: bash
