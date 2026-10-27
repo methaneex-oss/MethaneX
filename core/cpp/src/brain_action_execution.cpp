@@ -50,6 +50,11 @@ ActionExecutionResult Brain::execute_action(
         result.consequence_prediction_sequence =
             consequence_prediction.created_sequence;
         result.consequence_prediction_key = consequence_prediction.key;
+        if (const auto* numeric = std::get_if<double>(&consequence_prediction.predicted)) {
+            result.consequence_prediction_value = *numeric;
+        } else if (const auto* integer = std::get_if<std::int64_t>(&consequence_prediction.predicted)) {
+            result.consequence_prediction_value = static_cast<double>(*integer);
+        }
     }
 
     bool outcome_persisted = false;
