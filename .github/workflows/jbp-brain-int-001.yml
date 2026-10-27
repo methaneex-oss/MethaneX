@@ -1,0 +1,100 @@
+name: JBP BRAIN-INT-001 Integrated Feedback and Persistence
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_ref:
+        description: "Brain branch or commit to test"
+        required: true
+        default: "feat/jarvis-affective-state"
+        type: string
+      smoke_minutes:
+        description: "Short integrated changing-environment run"
+        required: true
+        default: "5"
+        type: choice
+        options: ["3", "5", "8"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: jbp-brain-int-001-${{ inputs.source_ref || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  integrated-feedback:
+    name: Consequence feedback, prediction resolution, memory restore
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      SOURCE_REF: ${{ inputs.source_ref || 'feat/jarvis-affective-state' }}
+      SMOKE_MINUTES: ${{ inputs.smoke_minutes || '5' }}
+    steps:
+      - name: Checkout exact brain revision
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.source_ref || 'feat/jarvis-affective-state' }}
+
+      - name: Record experiment metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p jbp-brain-int-001-results
+          {
+            echo "trial=JBP BRAIN-INT-001"
+            echo "source_ref=$SOURCE_REF"
+            echo "tested_commit=$(git rev-parse HEAD)"
+            echo "smoke_minutes=$SMOKE_MINUTES"
+            echo "run_id=$GITHUB_RUN_ID"
+            echo "started_at_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          } | tee jbp-brain-int-001-results/metadata.txt
+
+      - name: Configure native C++20 brain
+        shell: bash
+        run: cmake -S core/cpp -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON 2>&1 | tee jbp-brain-int-001-results/configure.log
+
+      - name: Build integrated feedback and persistence targets
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmake --build build --parallel 2 --target             jarvis_brain_action_consequence_integration_suite             jarvis_developmental_brain_integration_suite             jarvis_prediction_feedback_phase10_suite             jarvis_developmental_training_environment_suite             jarvis_developmental_learning_suite             jarvis_dlt_002_long_run             jarvis_dlt_002_persistence 2>&1 | tee jbp-brain-int-001-results/build.log
+
+      - name: Run high-value causal integration gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          ctest --test-dir build --output-on-failure --timeout 120             -R '^(jarvis_brain_action_consequence_integration_suite|jarvis_developmental_brain_integration_suite|jarvis_prediction_feedback_phase10_suite|jarvis_developmental_training_environment_suite|jarvis_developmental_learning_suite)$'             2>&1 | tee jbp-brain-int-001-results/integration-tests.log
+
+      - name: Verify learned state across a real process boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          executable="$(find build -type f -name jarvis_dlt_002_persistence -executable -print -quit)"
+          test -n "$executable"
+          journal="$RUNNER_TEMP/jbp-brain-int-001.bin"
+          "$executable" train "$journal" 2>&1 | tee jbp-brain-int-001-results/persistence-train.log
+          "$executable" verify "$journal" 2>&1 | tee jbp-brain-int-001-results/persistence-verify-fresh-process.log
+
+      - name: Run short integrated adaptation and reversal challenge
+        shell: bash
+        run: |
+          set -euo pipefail
+          executable="$(find build -type f -name jarvis_dlt_002_long_run -executable -print -quit)"
+          test -n "$executable"
+          seconds=$((SMOKE_MINUTES * 60))
+          "$executable" "$seconds" 30 jbp-brain-int-001-results/integrated-trial 20261027 2>&1 | tee jbp-brain-int-001-results/trial-console.log
+          grep -q 'status=COMPLETED' jbp-brain-int-001-results/integrated-trial/trial.log
+          for phase in clear-baseline flooded tunnel clear-reversal generalization-probe flooded-reversal; do
+            grep -q "$phase" jbp-brain-int-001-results/integrated-trial/episodes.csv || { echo "Missing phase: $phase"; exit 1; }
+          done
+          echo "integrated_trial=PASS duration_seconds=$seconds" | tee jbp-brain-int-001-results/summary.txt
+
+      - name: Preserve logs and evidence on success or failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: JBP-BRAIN-INT-001-${{ github.run_id }}-${{ github.run_attempt }}
+          path: jbp-brain-int-001-results/
+          if-no-files-found: warn
+          retention-days: 90
