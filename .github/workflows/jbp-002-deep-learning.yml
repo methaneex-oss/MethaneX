@@ -1,0 +1,102 @@
+name: JBP-002 Deep Learning and Persistent Knowledge Challenge
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - ".github/workflows/jbp-002-deep-learning.yml"
+      - "core/cpp/tests/jbp_002_deep_learning_suite.cpp"
+      - "core/cpp/tests/CMakeLists.txt"
+      - "core/cpp/include/jarvis/core/association_model.hpp"
+      - "core/cpp/include/jarvis/core/brain.hpp"
+      - "core/cpp/src/**"
+  workflow_dispatch:
+    inputs:
+      source_ref:
+        description: "Exact branch or commit to test"
+        required: true
+        default: "test/jbp-002-deep-learning-persistence"
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: jbp-002-deep-learning-${{ github.event.pull_request.number || inputs.source_ref || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deep-learning-probe:
+    name: JBP-002 · generated multi-hop learning and persistence
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout exact tested revision
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.source_ref || github.event.pull_request.head.sha || github.sha }}
+
+      - name: Initialize evidence metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p jbp-002-results
+          {
+            echo "test=JBP-002"
+            echo "purpose=generated multi-hop association learning, contradictory evidence, and journal restoration"
+            echo "workflow_run_id=${GITHUB_RUN_ID}"
+            echo "run_attempt=${GITHUB_RUN_ATTEMPT}"
+            echo "tested_commit=$(git rev-parse HEAD)"
+            echo "started_at_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          } | tee jbp-002-results/metadata.txt
+
+      - name: Configure native C++ brain
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmake -S core/cpp -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON 2>&1 | tee jbp-002-results/configure.log
+
+      - name: Build deep-learning probe and cross-process persistence gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmake --build build --parallel 2 --target jarvis_jbp_002_deep_learning_suite jarvis_dlt_002_persistence 2>&1 | tee jbp-002-results/build.log
+
+      - name: Run generated multi-hop learning, counterevidence, and restart probe
+        shell: bash
+        run: |
+          set -euo pipefail
+          ./build/core/cpp/tests/jarvis_jbp_002_deep_learning_suite 2>&1 | tee jbp-002-results/deep-learning.log
+
+      - name: Verify persistence in separate operating-system processes
+        shell: bash
+        run: |
+          set -euo pipefail
+          executable="$(find build -type f -name jarvis_dlt_002_persistence -executable -print -quit)"
+          test -n "$executable"
+          journal="$RUNNER_TEMP/jbp-002-process-restart.bin"
+          "$executable" train "$journal" 2>&1 | tee jbp-002-results/persistence-train.log
+          "$executable" verify "$journal" 2>&1 | tee jbp-002-results/persistence-verify.log
+
+      - name: Record scope limitations
+        if: always()
+        shell: bash
+        run: |
+          cat > jbp-002-results/scope.txt <<'EOF'
+          This initial JBP-002 slice tests generated multi-hop association acquisition,
+          counterevidence recording, journal restoration, and a separate-process
+          persistence gate. It does NOT establish natural-language acquisition,
+          visual recognition, general-purpose multi-million-operation reasoning,
+          or broad self-improvement. Those require additional task adapters and
+          separate evidence; no such capability is inferred from this result.
+          EOF
+          cat jbp-002-results/scope.txt
+
+      - name: Preserve raw test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: JBP-002-${{ github.run_id }}-${{ github.run_attempt }}
+          path: jbp-002-results/
+          if-no-files-found: warn
+          retention-days: 90
