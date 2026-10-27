@@ -51,6 +51,7 @@ struct TrialResult {
 
 bool run_mode(const std::filesystem::path& journal, std::uint64_t seed,
               bool verify_only) {
+    std::cerr << "JBP-003 debug=run_mode_started verify_only=" << verify_only << "\\n";
     std::mt19937_64 generator(seed ^ 0xD1B54A32D192ED03ULL);
     std::bernoulli_distribution choose_amber(0.5);
     const bool clear_prefers_amber = choose_amber(generator);
@@ -76,6 +77,7 @@ bool run_mode(const std::filesystem::path& journal, std::uint64_t seed,
         return visible;
     };
     DevelopmentalWorld world(world_config);
+    std::cerr << "JBP-003 debug=world_constructed\\n";
 
     for (const auto& action_name : {std::string("choice-amber"), std::string("choice-violet")}) {
         const bool amber = action_name == "choice-amber";
@@ -107,6 +109,7 @@ bool run_mode(const std::filesystem::path& journal, std::uint64_t seed,
         }
     }
 
+    std::cerr << "JBP-003 debug=actions_registered\\n";
     std::optional<DevelopmentalWorldStep> last_step;
     CognitiveRuntimeConfig runtime_config;
     runtime_config.input_capacity = 16;
@@ -120,12 +123,16 @@ bool run_mode(const std::filesystem::path& journal, std::uint64_t seed,
     };
     runtime_config.action_adapter.verify = [](const CandidateAction&) { return true; };
     runtime_config.action_adapter.observe_consequence = [&](const CandidateAction& action) {
+        std::cerr << "JBP-003 debug=consequence_callback action=" << action.name << "\\n";
         last_step = world.step(action.name);
+        std::cerr << "JBP-003 debug=world_step_done executed=" << last_step->executed << "\\n";
         if (verify_only || !last_step) return std::optional<double>{};
         return last_step->consequence;
     };
 
+    std::cerr << "JBP-003 debug=before_brain_constructor\\n";
     Brain brain(journal);
+    std::cerr << "JBP-003 debug=brain_constructed\\n";
     Goal goal;
     goal.id = "jbp-003-adaptive-world-goal";
     goal.description = "Maximize progress in a partially observed changing world";
@@ -139,12 +146,14 @@ bool run_mode(const std::filesystem::path& journal, std::uint64_t seed,
         return false;
     }
 
+    std::cerr << "JBP-003 debug=goal_activated\\n";
     CognitiveRuntime runtime(brain, runtime_config);
     if (!runtime.start()) {
         std::cerr << "JBP-003 status=FAIL reason=runtime_start\n";
         return false;
     }
 
+    std::cerr << "JBP-003 debug=runtime_started\\n";
     auto episode = [&](const std::string& weather, std::uint64_t index,
                        bool expected_amber) -> std::optional<bool> {
         world.set_context(weather == "clear" ? "sim/clear" : "sim/storm");
@@ -156,7 +165,9 @@ bool run_mode(const std::filesystem::path& journal, std::uint64_t seed,
         last_step.reset();
         const auto input = make_input(goal, world);
         if (!runtime.submit(input, 1.0)) return std::nullopt;
+        std::cerr << "JBP-003 debug=episode_submitted weather=" << weather << " index=" << index << "\\n";
         const auto result = await_result(runtime);
+        std::cerr << "JBP-003 debug=episode_result_received weather=" << weather << " index=" << index << "\\n";
         if (result.status != CognitiveCycleStatus::completed ||
             result.context.plan.steps.empty() ||
             result.context.action_execution_results.size() != 1 ||
