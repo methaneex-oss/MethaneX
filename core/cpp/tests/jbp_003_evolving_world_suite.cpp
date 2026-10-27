@@ -83,7 +83,7 @@ bool run_mode(const std::filesystem::path& journal, std::uint64_t seed,
         const bool amber = action_name == "choice-amber";
         if (!world.add_action(DevelopmentalWorldAction{
                 action_name, 1.0, {},
-                [&, amber](const Attributes& state, std::mt19937_64& random)
+                [&, amber, action_name](const Attributes& state, std::mt19937_64& random)
                     -> std::optional<DevelopmentalWorldTransition> {
                     const auto weather = std::get<std::string>(state.at("weather"));
                     bool preferred_amber = clear_prefers_amber;
