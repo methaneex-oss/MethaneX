@@ -151,7 +151,7 @@ int main(int argc, char** argv) {
     std::ofstream report(report_path, std::ios::out);
     if (!episodes || !checkpoints || !report)
         throw std::runtime_error("Could not create DLT-002 output files");
-    episodes << "episode,elapsed_seconds,phase,context,latent_condition_evaluation_only,expected_action_evaluation_only,selected_action,optimal_action_selected,consequence,observation_count,outcome_count,prediction_count,prediction_outcome_count,generalization_probe_episode_index,generalization_transfer_source_context,generalization_transfer_source_action,generalization_transfer_source_similarity,generalization_initial_window_episode,generalization_initial_window_optimal\n";
+    episodes << "episode,elapsed_seconds,phase,context,latent_condition_evaluation_only,expected_action_evaluation_only,selected_action,optimal_action_selected,consequence,observation_count,outcome_count,prediction_count,prediction_outcome_count,generalization_probe_episode_index,generalization_transfer_source_context,generalization_transfer_source_action,generalization_transfer_source_similarity,generalization_initial_window_episode,generalization_initial_window_optimal,predicted_consequence_evaluation_only,actual_consequence_evaluation_only,brain_received_consequence_feedback\n";
     checkpoints << "elapsed_seconds,phase,episodes,total_reward,current_phase_route_one_selected,current_phase_route_two_selected,positive_outcomes,negative_outcomes,optimal_action_selections,nonoptimal_action_selections,current_phase_decision_accuracy,observations,outcomes,predictions,prediction_outcomes,resolved_predictions,mean_absolute_prediction_error,clear_route_one_value,clear_route_two_value,flooded_route_one_value,flooded_route_two_value,tunnel_route_one_value,tunnel_route_two_value,canyon_route_one_value,canyon_route_two_value,unresolved_action_consequence_predictions,unresolved_other_predictions\n";
     episodes << std::unitbuf;
     checkpoints << std::unitbuf;
@@ -354,7 +354,10 @@ int main(int argc, char** argv) {
                      << (in_generalization_probe ? std::to_string(probe_episode_index) : "") << ','
                      << transfer_source_context << ',' << transfer_source_action << ','
                      << (transfer_source_context.empty() ? "" : std::to_string(transfer_source_similarity)) << ','
-                     << initial_window_episode << ',' << initial_window_optimal << '\n';
+                     << initial_window_episode << ',' << initial_window_optimal << ','
+                     << execution.outcome.expected_consequence << ','
+                     << *last_step->consequence << ','
+                     << (execution.outcome.observed ? 1 : 0) << '\n';
             ++episode;
 
             const auto now = std::chrono::steady_clock::now();
