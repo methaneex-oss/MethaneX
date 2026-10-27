@@ -156,12 +156,57 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
         result.context.memories =
             brain_.memory().salient(input.memory_limit, MemoryTier::Episodic);
     }
+    // Capture forecasts made since the previous observation. The next actual
+    // observation can resolve a forecast only when it contains the same world
+    // variable; action-consequence forecasts have their own authoritative
+    // execution-feedback path and are deliberately excluded here.
+    std::vector<Prediction> forecasts_since_last_observation;
+    std::uint64_t previous_observation_sequence = 0;
+    if (input.observation.kind == "observation") {
+        const auto prior_observations = brain_.memory().by_kind("observation");
+        for (const auto& event : prior_observations)
+            previous_observation_sequence = std::max(previous_observation_sequence, event.sequence);
+        for (const auto& prediction : brain_.snapshot().predictions) {
+            if (prediction.resolved ||
+                prediction.created_sequence <= previous_observation_sequence ||
+                prediction.key.rfind("action_consequence|", 0) == 0)
+                continue;
+            forecasts_since_last_observation.push_back(prediction);
+        }
+    }
+
     // Record the original experience first so perception providers can attach
     // semantic evidence to its durable journal sequence. Caller-supplied events
     // commonly have sequence zero; passing that through would make an otherwise
     // valid representation impossible to trace back to the experience that
     // produced it. Memory retrieval above intentionally remains pre-observation.
     result.context.observation = brain_.observe(input.observation);
+    const auto& committed_observation = result.context.observation.event;
+
+    // Resolve only forecasts made after the preceding observation and before
+    // this one. A matching, newly updated belief supplies observed evidence;
+    // metadata and unchanged beliefs cannot resolve a forecast. This connects
+    // causal projections to the same durable prediction-error learning path as
+    // action consequences without inventing counterfactual outcomes for actions
+    // the brain did not take.
+    if (input.observation.kind == "observation" &&
+        committed_observation.sequence != 0 &&
+        !forecasts_since_last_observation.empty()) {
+        const auto updated_beliefs = brain_.beliefs();
+        for (const auto& prediction : forecasts_since_last_observation) {
+            if (prediction.created_sequence >= committed_observation.sequence) continue;
+            const auto actual = std::find_if(
+                updated_beliefs.begin(), updated_beliefs.end(),
+                [&](const Belief& belief) {
+                    return belief.key == prediction.key &&
+                           belief.updated_sequence == committed_observation.sequence &&
+                           belief.value.index() == prediction.predicted.index();
+                });
+            if (actual != updated_beliefs.end())
+                (void)brain_.resolve_prediction_feedback(
+                    prediction.created_sequence, actual->value);
+        }
+    }
     const auto& observed_event = result.context.observation.event;
     // Normalize once at the cycle boundary. Providers receive the committed
     // event (including its assigned sequence and persisted novelty appraisal),
