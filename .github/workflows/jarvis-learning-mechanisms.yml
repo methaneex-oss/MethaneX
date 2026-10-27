@@ -386,6 +386,20 @@ jobs:
                   raise SystemExit("No forecast rows available for MAE comparison")
               return sum(errors) / len(errors)
 
+          def forecast_calibration(rows):
+              # Outcomes are intentionally noisy (20% flips). Per-episode MAE
+              # penalizes a valid expected-value forecast for stochastic outcomes,
+              # so also compare aggregate forecast means with realized outcome means.
+              if not rows:
+                  raise SystemExit("No forecast rows available for calibration")
+              predicted = [float(row["predicted_consequence_evaluation_only"]) for row in rows]
+              actual = [float(row["actual_consequence_evaluation_only"]) for row in rows]
+              if not all(math.isfinite(value) for value in predicted + actual):
+                  raise SystemExit("Non-finite forecast or environment outcome in calibration data")
+              predicted_mean = sum(predicted) / len(predicted)
+              actual_mean = sum(actual) / len(actual)
+              return predicted_mean, actual_mean, abs(predicted_mean - actual_mean)
+
           lines = ["## Three-seed DLT-002 comparison", "",
                    "Decision accuracy is measured against evaluation-only labels; it is not proof of general intelligence.", ""]
           scores = {phase: [] for phase in phases}
@@ -425,6 +439,25 @@ jobs:
                       values.append(forecast_mae(rows))
               if values:
                   lines.append(f"- {phase}: {sum(values) / len(values):.4f} across {len(values)} trials")
+
+          lines.extend(["", "### Aggregate forecast calibration (less sensitive to outcome noise)", "",
+                        "Per-episode MAE is retained above, but a noisy realized outcome is not the same as a wrong expected-value forecast. Aggregate calibration compares mean forecast with mean realized consequence; smaller gaps indicate better calibration over the phase."])
+          for phase in phases:
+              values = []
+              for _, trial in trials:
+                  with (trial / "episodes.csv").open(newline="", encoding="utf-8") as handle:
+                      rows = [row for row in csv.DictReader(handle) if row["phase"] == phase]
+                  if rows:
+                      values.append(forecast_calibration(rows))
+              if values:
+                  predicted_mean = sum(value[0] for value in values) / len(values)
+                  actual_mean = sum(value[1] for value in values) / len(values)
+                  gap = sum(value[2] for value in values) / len(values)
+                  lines.append(
+                      f"- {phase}: mean forecast={predicted_mean:.3f}, "
+                      f"mean realized consequence={actual_mean:.3f}, "
+                      f"absolute calibration gap={gap:.3f} across {len(values)} trials"
+                  )
 
           # Same seed and duration as the primary run, but the brain receives no
           # action-consequence values. This isolates consequence-feedback learning
