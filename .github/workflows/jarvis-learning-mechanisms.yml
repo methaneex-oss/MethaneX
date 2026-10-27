@@ -415,6 +415,17 @@ jobs:
               if values:
                   lines.append(f"- {phase}: {sum(values) / len(values):.1%} across {len(values)} trials")
 
+          lines.extend(["", "### Mean phase forecast MAE across feedback-enabled seeds", ""])
+          for phase in phases:
+              values = []
+              for _, trial in trials:
+                  with (trial / "episodes.csv").open(newline="", encoding="utf-8") as handle:
+                      rows = [row for row in csv.DictReader(handle) if row["phase"] == phase]
+                  if rows:
+                      values.append(forecast_mae(rows))
+              if values:
+                  lines.append(f"- {phase}: {sum(values) / len(values):.4f} across {len(values)} trials")
+
           # Same seed and duration as the primary run, but the brain receives no
           # action-consequence values. This isolates consequence-feedback learning
           # more directly than a fixed-route reference, without claiming that all
@@ -469,7 +480,7 @@ jobs:
                       per_seed.append(sum(row["expected_action_evaluation_only"] == action for row in rows) / len(rows))
               if per_seed:
                   lines.append(f"- Always choose {action}: mean optimal-action rate {sum(per_seed) / len(per_seed):.1%} across {len(per_seed)} trials")
-          lines.extend(["", "Limit: fixed-action references are not a matched learning-disabled brain. A causal comparison still requires a controlled baseline that runs the same task without updating from outcomes.", ""])
+          lines.extend(["", "Limit: fixed-action references are simple baselines. The matched control suppresses consequence feedback but not all learning mechanisms, so it supports a narrower claim about consequence-feedback contribution rather than a full learning-disabled causal estimate.", ""])
           report = "\n".join(lines)
           (root / "three-seed-comparison.txt").write_text(report, encoding="utf-8")
           print(report)
