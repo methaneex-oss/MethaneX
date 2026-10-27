@@ -301,26 +301,13 @@ int main(int argc, char** argv) {
                 !last_step || !last_step->observed || !last_step->consequence)
                 throw std::runtime_error("Selected action or observed consequence evidence is inconsistent");
 
-            // Measure the prediction actually stored by Brain after its own
-            // numeric calibration, not merely the planner's uncalibrated prior.
-            if (!execution.consequence_prediction_sequence)
-                throw std::runtime_error("Action consequence prediction sequence is missing");
-            const auto prediction_snapshot = brain.snapshot();
-            const auto prediction_it = std::find_if(
-                prediction_snapshot.predictions.begin(), prediction_snapshot.predictions.end(),
-                [&](const Prediction& prediction) {
-                    return prediction.created_sequence == *execution.consequence_prediction_sequence;
-                });
-            if (prediction_it == prediction_snapshot.predictions.end())
-                throw std::runtime_error("Action consequence prediction was not found in brain snapshot");
-            double predicted_consequence_evaluation_only = 0.0;
-            if (const auto* value = std::get_if<double>(&prediction_it->predicted)) {
-                predicted_consequence_evaluation_only = *value;
-            } else if (const auto* value = std::get_if<std::int64_t>(&prediction_it->predicted)) {
-                predicted_consequence_evaluation_only = static_cast<double>(*value);
-            } else {
-                throw std::runtime_error("Action consequence prediction is not numeric");
-            }
+            // Record the prediction value actually calibrated and issued by
+            // Brain, not merely the planner's uncalibrated action prior.
+            if (!execution.consequence_prediction_sequence ||
+                !execution.consequence_prediction_value)
+                throw std::runtime_error("Calibrated action consequence prediction is missing");
+            const double predicted_consequence_evaluation_only =
+                *execution.consequence_prediction_value;
             if (!std::isfinite(predicted_consequence_evaluation_only))
                 throw std::runtime_error("Action consequence prediction is non-finite");
 
