@@ -152,6 +152,22 @@ int main() {
     assert(after_reversal.estimate < 0.0);
     assert(after_reversal.estimate < before_reversal - 0.7);
 
+    // The detector must still respond when ordinary stochastic outcomes have
+    // already raised the recent-error baseline. A regime change is identified
+    // by a sustained run of large errors, not by comparing each error only to
+    // an error baseline that may itself be elevated by noise.
+    AdaptationModel noisy_baseline;
+    (void)noisy_baseline.observe("signal", 0.8, 0.8);
+    for (int i = 0; i < 40; ++i)
+        (void)noisy_baseline.observe("signal", 0.8, (i % 2 == 0) ? -1.0 : 1.0);
+    assert(noisy_baseline.metric("signal")->recent_error > 0.25);
+    const double before_noisy_reversal = noisy_baseline.metric("signal")->estimate;
+    AdaptiveMetric after_noisy_reversal;
+    for (int i = 0; i < 6; ++i)
+        after_noisy_reversal = noisy_baseline.observe("signal", 0.8, -1.0);
+    assert(after_noisy_reversal.consecutive_surprises >= 4);
+    assert(after_noisy_reversal.estimate < before_noisy_reversal - 0.5);
+
     std::filesystem::remove(path, ec);
     std::filesystem::remove(path.string() + ".meta", ec);
     return 0;
