@@ -182,6 +182,83 @@ jobs:
               echo "Seed $seed has no resolved prediction evidence"
               exit 1
             }
+            # Validate every repeated seed, not just the primary run. This
+            # prevents a truncated or malformed seed from silently lowering
+            # the reported mean or being counted as a successful replicate.
+            python3 - "$trial_dir" <<'PY'
+            import csv
+            import math
+            import re
+            import sys
+            from pathlib import Path
+
+            trial = Path(sys.argv[1])
+            phases = (
+                "clear-baseline", "flooded", "tunnel",
+                "clear-reversal", "generalization-probe", "flooded-reversal",
+            )
+            required_columns = {
+                "phase", "optimal_action_selected",
+                "generalization_initial_window_episode",
+                "generalization_initial_window_optimal",
+            }
+            with (trial / "episodes.csv").open(newline="", encoding="utf-8") as handle:
+                reader = csv.DictReader(handle)
+                missing_columns = required_columns - set(reader.fieldnames or ())
+                if missing_columns:
+                    raise SystemExit("Missing episode columns: " + ", ".join(sorted(missing_columns)))
+                episodes = list(reader)
+            if not episodes:
+                raise SystemExit("Episode CSV is empty")
+            for phase in phases:
+                rows = [row for row in episodes if row["phase"] == phase]
+                if len(rows) < 5:
+                    raise SystemExit(f"{phase} has {len(rows)} episodes; minimum is 5")
+                if any(row["optimal_action_selected"] not in ("0", "1") for row in rows):
+                    raise SystemExit(f"{phase} contains invalid evaluation outcomes")
+            early = [
+                row for row in episodes
+                if row["phase"] == "generalization-probe"
+                and row["generalization_initial_window_episode"]
+            ]
+            early.sort(key=lambda row: int(row["generalization_initial_window_episode"]))
+            if len(early) < 10 or [int(row["generalization_initial_window_episode"]) for row in early[:10]] != list(range(1, 11)):
+                raise SystemExit("The first ten generalization decisions are missing or non-contiguous")
+            if any(row["generalization_initial_window_optimal"] not in ("0", "1") for row in early[:10]):
+                raise SystemExit("The initial generalization window has invalid labels")
+
+            terminal = [
+                line for line in (trial / "trial.log").read_text(encoding="utf-8").splitlines()
+                if "status=COMPLETED" in line
+            ]
+            if len(terminal) != 1:
+                raise SystemExit(f"Expected one terminal completion record, found {len(terminal)}")
+            values = dict(re.findall(r"([A-Za-z_]+)=([^ ]+)", terminal[0]))
+            required_values = {
+                "prediction_memories", "resolved_predictions",
+                "unresolved_action_consequence_predictions",
+                "unresolved_other_predictions", "mean_absolute_prediction_error",
+            }
+            missing_values = required_values - values.keys()
+            if missing_values:
+                raise SystemExit("Terminal summary missing: " + ", ".join(sorted(missing_values)))
+            predictions = int(values["prediction_memories"])
+            resolved = int(values["resolved_predictions"])
+            unresolved_actions = int(values["unresolved_action_consequence_predictions"])
+            unresolved_other = int(values["unresolved_other_predictions"])
+            mae = float(values["mean_absolute_prediction_error"])
+            if predictions <= 0 or resolved <= 0 or resolved > predictions:
+                raise SystemExit(f"Invalid prediction lifecycle counts: predictions={predictions}, resolved={resolved}")
+            if unresolved_actions != 0:
+                raise SystemExit(f"{unresolved_actions} observed action-consequence forecasts remained unresolved")
+            if unresolved_other < 0 or not math.isfinite(mae) or mae < 0:
+                raise SystemExit("Invalid unresolved-prediction count or prediction error")
+            print(
+                f"validated_seed={trial.name} episodes={len(episodes)} "
+                f"predictions={predictions} resolved={resolved} "
+                f"unresolved_action_consequences={unresolved_actions} mae={mae:.6f}"
+            )
+            PY
             echo "integrated_trial=PASS seed=$seed duration_seconds=$duration_seconds"
           done
 
