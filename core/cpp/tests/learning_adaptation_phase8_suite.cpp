@@ -1,4 +1,5 @@
 #include "jarvis/core/brain.hpp"
+#include "jarvis/core/adaptation.hpp"
 
 #include <cassert>
 #include <cmath>
@@ -62,8 +63,6 @@ int main() {
     // but recent prediction errors must reduce confidence quickly.
     const auto* before_change = brain.learning_metric("forecast");
     assert(before_change != nullptr);
-    // learning_metric returns a pointer to the live metric. Capture the value,
-    // not the pointer, before later observations mutate that same object.
     const double recent_error_before_change = before_change->recent_error;
     const double stable_confidence = brain.learning_confidence("forecast");
     for (int i = 0; i < 4; ++i) {
@@ -128,6 +127,30 @@ int main() {
         "never_observed", 1.0, std::numeric_limits<double>::quiet_NaN());
     assert(invalid_first_sample.observations == 0);
     assert(extreme_model.metric("never_observed") == nullptr);
+
+    // A single noisy surprise must not erase a stable estimate, but sustained
+    // surprising evidence should accelerate adaptation after a regime change.
+    AdaptationModel isolated_noise;
+    (void)isolated_noise.observe("signal", 0.8, 0.8);
+    for (int i = 0; i < 40; ++i)
+        (void)isolated_noise.observe("signal", 0.8, 0.8);
+    const double stable_estimate = isolated_noise.metric("signal")->estimate;
+    (void)isolated_noise.observe("signal", 0.8, -1.0);
+    const auto recovered = isolated_noise.observe("signal", 0.8, 0.8);
+    assert(recovered.consecutive_surprises == 0);
+    assert(recovered.estimate > stable_estimate - 0.25);
+
+    AdaptationModel regime_change;
+    (void)regime_change.observe("signal", 0.8, 0.8);
+    for (int i = 0; i < 40; ++i)
+        (void)regime_change.observe("signal", 0.8, 0.8);
+    const double before_reversal = regime_change.metric("signal")->estimate;
+    AdaptiveMetric after_reversal;
+    for (int i = 0; i < 6; ++i)
+        after_reversal = regime_change.observe("signal", 0.8, -1.0);
+    assert(after_reversal.consecutive_surprises >= 4);
+    assert(after_reversal.estimate < 0.0);
+    assert(after_reversal.estimate < before_reversal - 0.7);
 
     std::filesystem::remove(path, ec);
     std::filesystem::remove(path.string() + ".meta", ec);
