@@ -159,6 +159,87 @@ jobs:
           }
           echo "integrated_trial=PASS duration_seconds=$duration_seconds six_phases=PASS resolved_prediction_evidence=PASS" | tee learning-probe-results/integrated-trial-summary.txt
 
+      - name: Repeat integrated trial with two additional seeds
+        shell: bash
+        run: |
+          set -euo pipefail
+          executable="$(find build -type f -name jarvis_dlt_002_long_run -executable -print -quit)"
+          test -n "$executable"
+          duration_seconds=$((TRIAL_MINUTES * 60))
+          mkdir -p learning-probe-results/integrated-trials
+          for offset in 1 2; do
+            seed=$((TRIAL_SEED + offset))
+            trial_dir="learning-probe-results/integrated-trials/seed-$seed"
+            "$executable" "$duration_seconds" 30 "$trial_dir" "$seed" 2>&1 | tee "learning-probe-results/integrated-trial-seed-$seed-console.log"
+            grep -q 'status=COMPLETED' "$trial_dir/trial.log"
+            for phase in clear-baseline flooded tunnel clear-reversal generalization-probe flooded-reversal; do
+              grep -q "$phase" "$trial_dir/episodes.csv" || {
+                echo "Seed $seed missing expected phase: $phase"
+                exit 1
+              }
+            done
+            awk -F, 'NR > 1 && $16 + 0 > 0 { found=1 } END { exit !found }' "$trial_dir/checkpoints.csv" || {
+              echo "Seed $seed has no resolved prediction evidence"
+              exit 1
+            }
+            echo "integrated_trial=PASS seed=$seed duration_seconds=$duration_seconds"
+          done
+
+      - name: Compare phase performance across all three seeds
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import csv
+          from pathlib import Path
+
+          root = Path("learning-probe-results")
+          trials = [("primary", root / "integrated-trial")]
+          trials.extend(
+              (path.name, path)
+              for path in sorted((root / "integrated-trials").glob("seed-*"))
+          )
+          phases = ["clear-baseline", "flooded", "tunnel", "clear-reversal",
+                    "generalization-probe", "flooded-reversal"]
+          lines = ["## Three-seed DLT-002 comparison", "",
+                   "Decision accuracy is measured against evaluation-only labels; it is not proof of general intelligence.", ""]
+          scores = {phase: [] for phase in phases}
+          for label, trial in trials:
+              with (trial / "episodes.csv").open(newline="", encoding="utf-8") as handle:
+                  episodes = list(csv.DictReader(handle))
+              lines.append(f"### {label}")
+              for phase in phases:
+                  rows = [row for row in episodes if row["phase"] == phase]
+                  correct = sum(row["optimal_action_selected"] == "1" for row in rows)
+                  score = correct / len(rows) if rows else 0.0
+                  lines.append(f"- {phase}: {correct}/{len(rows)} ({score:.1%})")
+                  if rows:
+                      scores[phase].append(score)
+              early = sorted(
+                  (row for row in episodes if row["phase"] == "generalization-probe"
+                   and row["generalization_initial_window_episode"]),
+                  key=lambda row: int(row["generalization_initial_window_episode"]),
+              )
+              if len(early) >= 10:
+                  correct = sum(row["generalization_initial_window_optimal"] == "1" for row in early[:10])
+                  lines.append(f"- First ten unseen-context decisions: {correct}/10 ({correct / 10:.1%})")
+              lines.append("")
+          lines.extend(["### Mean phase accuracy across seeds", ""])
+          for phase in phases:
+              values = scores[phase]
+              if values:
+                  lines.append(f"- {phase}: {sum(values) / len(values):.1%} across {len(values)} trials")
+          lines.extend(["", "Limit: there is no matched learning-disabled control group yet, so these trials measure robustness and adaptation patterns but do not isolate learning's causal contribution.", ""])
+          report = "\n".join(lines)
+          (root / "three-seed-comparison.txt").write_text(report, encoding="utf-8")
+          print(report)
+          with open(__import__("os").environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
+              summary.write(report + "\n")
+          if len(trials) != 3:
+              raise SystemExit(f"Expected 3 trials, found {len(trials)}")
+          PY
+
       - name: Analyze integrated trial evidence
         if: success()
         shell: bash
