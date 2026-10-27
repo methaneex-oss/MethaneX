@@ -159,6 +159,117 @@ jobs:
           }
           echo "integrated_trial=PASS duration_seconds=$duration_seconds six_phases=PASS resolved_prediction_evidence=PASS" | tee learning-probe-results/integrated-trial-summary.txt
 
+      - name: Analyze integrated trial evidence
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import csv
+          import sys
+          from pathlib import Path
+
+          root = Path("learning-probe-results/integrated-trial")
+          phases = [
+              "clear-baseline", "flooded", "tunnel",
+              "clear-reversal", "generalization-probe", "flooded-reversal",
+          ]
+          errors = []
+          lines = [
+              "DLT-002 trial diagnostics",
+              "These are descriptive measurements, not proof of general-purpose learning.",
+              "",
+              "Phase decision accuracy (evaluation labels are used only by this analyzer):",
+          ]
+
+          with (root / "episodes.csv").open(newline="", encoding="utf-8") as handle:
+              episodes = list(csv.DictReader(handle))
+
+          for phase in phases:
+              phase_rows = [row for row in episodes if row["phase"] == phase]
+              correct = sum(row["optimal_action_selected"] == "1" for row in phase_rows)
+              accuracy = correct / len(phase_rows) if phase_rows else 0.0
+              lines.append(
+                  f"- {phase}: {correct}/{len(phase_rows)} optimal actions "
+                  f"({accuracy:.1%})"
+              )
+              if len(phase_rows) < 5:
+                  errors.append(f"{phase} has only {len(phase_rows)} episodes; minimum is 5")
+
+          probe_rows = [
+              row for row in episodes
+              if row["phase"] == "generalization-probe"
+              and row["generalization_initial_window_episode"]
+          ]
+          probe_rows.sort(key=lambda row: int(row["generalization_initial_window_episode"]))
+          if len(probe_rows) < 10:
+              errors.append(
+                  f"Only {len(probe_rows)} labeled initial generalization-window episodes; expected 10"
+              )
+              lines.append(
+                  f"- Initial generalization window: {len(probe_rows)}/10 recorded; "
+                  "transfer estimate unavailable"
+              )
+          else:
+              first_ten = probe_rows[:10]
+              transfer_correct = sum(
+                  row["generalization_initial_window_optimal"] == "1"
+                  for row in first_ten
+              )
+              lines.append(
+                  f"- Initial 10 generalization decisions: {transfer_correct}/10 "
+                  f"optimal ({transfer_correct / 10:.1%}); descriptive, not a pass threshold"
+              )
+
+          with (root / "checkpoints.csv").open(newline="", encoding="utf-8") as handle:
+              checkpoints = list(csv.DictReader(handle))
+          if not checkpoints:
+              errors.append("No checkpoint rows were recorded")
+          else:
+              final = checkpoints[-1]
+              predictions = int(final["predictions"])
+              resolved = int(final["resolved_predictions"])
+              unresolved = predictions - resolved
+              if unresolved < 0:
+                  errors.append(
+                      f"Resolved prediction count ({resolved}) exceeds prediction count ({predictions})"
+                  )
+              lines.extend([
+                  "",
+                  "Prediction lifecycle diagnostics (counts are from the final checkpoint):",
+                  f"- prediction records: {predictions}",
+                  f"- resolved predictions: {resolved}",
+                  f"- unresolved estimate (records minus resolved): {max(0, unresolved)}",
+                  f"- unresolved fraction: {max(0, unresolved) / predictions:.1%}"
+                  if predictions else "- unresolved fraction: unavailable (zero prediction records)",
+                  f"- mean absolute prediction error: {final['mean_absolute_prediction_error']}",
+                  "",
+                  "The unresolved estimate is a prompt for lifecycle investigation, not itself a defect finding.",
+              ])
+
+          report = "\n".join(lines) + "\n"
+          (Path("learning-probe-results") / "trial-diagnostics.txt").write_text(
+              report, encoding="utf-8"
+          )
+          print(report)
+          with open(Path.cwd() / ".github-step-summary-temp", "w", encoding="utf-8") as handle:
+              handle.write("## Integrated trial diagnostics\n\n")
+              handle.write(report)
+              if errors:
+                  handle.write("\n### Evidence integrity failures\n")
+                  handle.write("\n".join(f"- {error}" for error in errors))
+                  handle.write("\n")
+          with open(__import__("os").environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
+              summary.write(Path(".github-step-summary-temp").read_text(encoding="utf-8"))
+          Path(".github-step-summary-temp").unlink(missing_ok=True)
+
+          if errors:
+              print("Evidence integrity checks failed:", file=sys.stderr)
+              for error in errors:
+                  print(f"- {error}", file=sys.stderr)
+              sys.exit(1)
+          PY
+
       - name: Summarize evidence
         if: always()
         shell: bash
