@@ -294,7 +294,7 @@ jobs:
               if row["phase"] == "generalization-probe"
               and row["generalization_probe_episode_index"]
           ]
-          probe_rows.sort(key=lambda row: int(row["generalization_probe_episode"]))
+          probe_rows.sort(key=lambda row: int(row["generalization_probe_episode_index"]))
           if not probe_rows:
               errors.append("No decisions were recorded in the unseen generalization context")
               lines.append("- First unseen-context decision: unavailable")
