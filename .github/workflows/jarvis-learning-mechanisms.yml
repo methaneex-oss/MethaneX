@@ -201,6 +201,9 @@ jobs:
               "phase", "optimal_action_selected",
               "generalization_initial_window_episode",
               "generalization_initial_window_optimal",
+              "predicted_consequence_evaluation_only",
+              "actual_consequence_evaluation_only",
+              "brain_received_consequence_feedback",
           }
           with (trial / "episodes.csv").open(newline="", encoding="utf-8") as handle:
               reader = csv.DictReader(handle)
@@ -216,6 +219,13 @@ jobs:
                   raise SystemExit(f"{phase} has {len(rows)} episodes; minimum is 5")
               if any(row["optimal_action_selected"] not in ("0", "1") for row in rows):
                   raise SystemExit(f"{phase} contains invalid evaluation outcomes")
+              for row in rows:
+                  if row["brain_received_consequence_feedback"] != "1":
+                      raise SystemExit(f"{phase} contains an episode without expected consequence feedback")
+                  predicted = float(row["predicted_consequence_evaluation_only"])
+                  actual = float(row["actual_consequence_evaluation_only"])
+                  if not math.isfinite(predicted) or not math.isfinite(actual):
+                      raise SystemExit(f"{phase} contains non-finite consequence evidence")
           early = [
               row for row in episodes
               if row["phase"] == "generalization-probe"
@@ -283,6 +293,7 @@ jobs:
           grep -q 'feedback_mode=no-feedback' "$control_dir/trial.log"
           python3 - "$control_dir" <<'PY'
           import csv
+          import math
           import re
           import sys
           from pathlib import Path
@@ -298,6 +309,9 @@ jobs:
                   "phase", "optimal_action_selected",
                   "generalization_initial_window_episode",
                   "generalization_initial_window_optimal",
+                  "predicted_consequence_evaluation_only",
+                  "actual_consequence_evaluation_only",
+                  "brain_received_consequence_feedback",
               }
               missing = required - set(reader.fieldnames or ())
               if missing:
@@ -311,6 +325,13 @@ jobs:
                   raise SystemExit(f"No-feedback {phase} has only {len(rows)} episodes")
               if any(row["optimal_action_selected"] not in ("0", "1") for row in rows):
                   raise SystemExit(f"No-feedback {phase} has invalid evaluation labels")
+              for row in rows:
+                  if row["brain_received_consequence_feedback"] != "0":
+                      raise SystemExit(f"No-feedback {phase} leaked consequence feedback to Brain")
+                  predicted = float(row["predicted_consequence_evaluation_only"])
+                  actual = float(row["actual_consequence_evaluation_only"])
+                  if not math.isfinite(predicted) or not math.isfinite(actual):
+                      raise SystemExit(f"No-feedback {phase} has non-finite forecast evidence")
           early = [
               row for row in episodes
               if row["phase"] == "generalization-probe"
@@ -341,6 +362,7 @@ jobs:
           set -euo pipefail
           python3 - <<'PY'
           import csv
+          import math
           from pathlib import Path
 
           root = Path("learning-probe-results")
@@ -351,6 +373,19 @@ jobs:
           )
           phases = ["clear-baseline", "flooded", "tunnel", "clear-reversal",
                     "generalization-probe", "flooded-reversal"]
+
+          def forecast_mae(rows):
+              errors = []
+              for row in rows:
+                  predicted = float(row["predicted_consequence_evaluation_only"])
+                  actual = float(row["actual_consequence_evaluation_only"])
+                  if not math.isfinite(predicted) or not math.isfinite(actual):
+                      raise SystemExit("Non-finite forecast or environment outcome in comparison data")
+                  errors.append(abs(actual - predicted) / max(1.0, abs(predicted), abs(actual)))
+              if not errors:
+                  raise SystemExit("No forecast rows available for MAE comparison")
+              return sum(errors) / len(errors)
+
           lines = ["## Three-seed DLT-002 comparison", "",
                    "Decision accuracy is measured against evaluation-only labels; it is not proof of general intelligence.", ""]
           scores = {phase: [] for phase in phases}
@@ -393,16 +428,20 @@ jobs:
               raise SystemExit("Primary or no-feedback control episode data is empty")
           primary_accuracy = sum(row["optimal_action_selected"] == "1" for row in primary_rows) / len(primary_rows)
           control_accuracy = sum(row["optimal_action_selected"] == "1" for row in control_rows) / len(control_rows)
+          primary_mae = forecast_mae(primary_rows)
+          control_mae = forecast_mae(control_rows)
           lines.extend([
               "", "### Same-seed outcome-feedback control", "",
               f"- Feedback enabled: {sum(row['optimal_action_selected'] == '1' for row in primary_rows)}/{len(primary_rows)} ({primary_accuracy:.1%})",
               f"- Consequence feedback withheld: {sum(row['optimal_action_selected'] == '1' for row in control_rows)}/{len(control_rows)} ({control_accuracy:.1%})",
               f"- Difference: {(primary_accuracy - control_accuracy) * 100:+.1f} percentage points",
+              f"- Feedback-enabled forecast MAE: {primary_mae:.4f}",
+              f"- Feedback-withheld forecast MAE (evaluation-only): {control_mae:.4f}",
               "",
-              "The control uses the same seed, randomized latent action mapping, task, and duration. It still receives observations and can update execution-reliability/self-model mechanisms; it is specifically an outcome-feedback-disabled control, not a fully learning-disabled brain.",
+              "The control uses the same seed, randomized latent action mapping, task, and duration. It still receives observations and can update execution-reliability/self-model mechanisms; it is specifically an outcome-feedback-disabled control, not a fully learning-disabled brain. Control forecast errors are calculated after the run from evaluation-only outcomes and are never returned to the brain.",
               "",
-              "| Phase | Feedback enabled | Feedback withheld |",
-              "| --- | ---: | ---: |",
+              "| Phase | Enabled accuracy | Withheld accuracy | Enabled forecast MAE | Withheld forecast MAE |",
+              "| --- | ---: | ---: | ---: | ---: |",
           ])
           for phase in phases:
               primary_phase = [row for row in primary_rows if row["phase"] == phase]
@@ -411,7 +450,13 @@ jobs:
                   raise SystemExit(f"Missing matched control phase: {phase}")
               primary_score = sum(row["optimal_action_selected"] == "1" for row in primary_phase) / len(primary_phase)
               control_score = sum(row["optimal_action_selected"] == "1" for row in control_phase) / len(control_phase)
-              lines.append(f"| {phase} | {primary_score:.1%} ({len(primary_phase)}) | {control_score:.1%} ({len(control_phase)}) |")
+              primary_phase_mae = forecast_mae(primary_phase)
+              control_phase_mae = forecast_mae(control_phase)
+              lines.append(
+                  f"| {phase} | {primary_score:.1%} ({len(primary_phase)}) | "
+                  f"{control_score:.1%} ({len(control_phase)}) | "
+                  f"{primary_phase_mae:.4f} | {control_phase_mae:.4f} |"
+              )
 
           lines.extend(["", "### Fixed-action reference baselines", "",
                         "These are evaluation-only comparisons using the same recorded episode labels, not additional brain runs. They measure whether adaptation beats a policy that always chooses one route."])
