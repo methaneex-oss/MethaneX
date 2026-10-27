@@ -3,6 +3,12 @@ name: JBP MEM-001 Memory Persistence Trial
 on:
   # Manual dispatch only. This is a bounded 30-minute memory validation run.
   workflow_dispatch:
+    inputs:
+      source_ref:
+        description: "Brain branch or commit to test"
+        required: true
+        default: "feat/jarvis-affective-state"
+        type: string
 
 permissions:
   contents: read
@@ -17,8 +23,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
-      - name: Checkout exact trial revision
+      - name: Checkout exact brain revision under test
         uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.source_ref || 'feat/jarvis-affective-state' }}
 
       - name: Initialize trial evidence
         shell: bash
@@ -29,6 +37,8 @@ jobs:
           {
             "trial": "JBP MEM-001",
             "purpose": "memory retrieval, memory architecture regression, and cross-process journal persistence",
+            "source_ref": "${{ inputs.source_ref || 'feat/jarvis-affective-state' }}",
+            "tested_commit": "$(git rev-parse HEAD)",
             "soak_duration_seconds": 1800,
             "checkpoint_interval_seconds": 300,
             "execution_model": "single job; every persistence verification occurs in a separate process",
