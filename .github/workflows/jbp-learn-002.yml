@@ -1,0 +1,204 @@
+name: JBP LEARN-002 Short-Horizon Learning Stress Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_ref:
+        description: "Brain branch or commit to test"
+        required: true
+        default: "feat/jarvis-affective-state"
+        type: string
+      duration_minutes:
+        description: "Duration per controlled run"
+        required: true
+        default: "8"
+        type: choice
+        options: ["5", "8", "10"]
+      seed:
+        description: "Primary reproducible environment seed"
+        required: true
+        default: "20261027"
+        type: string
+  pull_request:
+    branches: [main]
+    paths:
+      - ".github/workflows/jbp-learn-002.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: jbp-learn-002-${{ github.event.pull_request.number || inputs.source_ref || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  stress-run:
+    name: "Learning stress · ${{ matrix.feedback_mode }} · seed offset ${{ matrix.seed_offset }}"
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        include:
+          - feedback_mode: enabled
+            seed_offset: 0
+            label: feedback-primary
+          - feedback_mode: no-feedback
+            seed_offset: 0
+            label: control-primary
+          - feedback_mode: enabled
+            seed_offset: 1
+            label: feedback-replication
+          - feedback_mode: no-feedback
+            seed_offset: 1
+            label: control-replication
+    env:
+      SOURCE_REF: ${{ inputs.source_ref || 'feat/jarvis-affective-state' }}
+      TRIAL_MINUTES: ${{ inputs.duration_minutes || '8' }}
+      TRIAL_SEED: ${{ inputs.seed || '20261027' }}
+      FEEDBACK_MODE: ${{ matrix.feedback_mode }}
+      SEED_OFFSET: ${{ matrix.seed_offset }}
+      RUN_LABEL: ${{ matrix.label }}
+    steps:
+      - name: Checkout exact brain revision under test
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.source_ref || 'feat/jarvis-affective-state' }}
+
+      - name: Validate configuration and record tested revision
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$TRIAL_MINUTES" =~ ^(5|8|10)$ ]] || { echo "duration must be 5, 8, or 10 minutes"; exit 64; }
+          [[ "$TRIAL_SEED" =~ ^[0-9]+$ ]] || { echo "seed must be a non-negative integer"; exit 64; }
+          seed=$((TRIAL_SEED + SEED_OFFSET))
+          mkdir -p "jbp-learn-002-results/$RUN_LABEL"
+          cd "jbp-learn-002-results/$RUN_LABEL"
+          cat > metadata.json <<EOF
+          {
+            "test": "JBP LEARN-002",
+            "run_label": "$RUN_LABEL",
+            "feedback_mode": "$FEEDBACK_MODE",
+            "duration_minutes": $TRIAL_MINUTES,
+            "duration_seconds": $((TRIAL_MINUTES * 60)),
+            "seed": $seed,
+            "seed_offset": $SEED_OFFSET,
+            "source_ref": "$SOURCE_REF",
+            "tested_commit": "$(git -C "$GITHUB_WORKSPACE" rev-parse HEAD)",
+            "evaluation_labels_withheld_from_brain": true,
+            "started_at_utc": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          }
+          EOF
+          echo "[JBP LEARN-002] label=$RUN_LABEL mode=$FEEDBACK_MODE seed=$seed duration_minutes=$TRIAL_MINUTES"
+
+      - name: Configure native C++ brain
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmake -S core/cpp -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON 2>&1 | tee "jbp-learn-002-results/$RUN_LABEL/configure.log"
+
+      - name: Build trial and persistence gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmake --build build --parallel --target jarvis_dlt_002_long_run jarvis_dlt_002_persistence 2>&1 | tee "jbp-learn-002-results/$RUN_LABEL/build.log"
+
+      - name: Gate on cross-process persistence acceptance
+        shell: bash
+        run: |
+          set -euo pipefail
+          ctest --test-dir build -R '^jarvis_dlt_002_persistence_(train|verify)$' --output-on-failure --timeout 90 2>&1 | tee "jbp-learn-002-results/$RUN_LABEL/persistence-gate.log"
+
+      - name: Run changing-context learning challenge
+        shell: bash
+        run: |
+          set -euo pipefail
+          executable="$(find build -type f -name jarvis_dlt_002_long_run -executable -print -quit)"
+          test -n "$executable"
+          seed=$((TRIAL_SEED + SEED_OFFSET))
+          duration_seconds=$((TRIAL_MINUTES * 60))
+          trial_dir="jbp-learn-002-results/$RUN_LABEL/trial"
+          "$executable" "$duration_seconds" 30 "$trial_dir" "$seed" "$FEEDBACK_MODE" 2>&1 | tee "jbp-learn-002-results/$RUN_LABEL/trial-console.log"
+          grep -q 'status=COMPLETED' "$trial_dir/trial.log"
+          for phase in clear-baseline flooded tunnel clear-reversal generalization-probe flooded-reversal; do
+            grep -q "$phase" "$trial_dir/episodes.csv" || { echo "Missing phase: $phase"; exit 1; }
+          done
+          test "$(awk 'END {print NR-1}' "$trial_dir/episodes.csv")" -ge 20
+          echo "[JBP LEARN-002] evidence_integrity=PASS all_six_phases=PASS episodes_at_least_20=PASS"
+
+      - name: Preserve run evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: JBP-LEARN-002-${{ matrix.label }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: jbp-learn-002-results/${{ matrix.label }}/
+          if-no-files-found: warn
+          retention-days: 90
+
+  compare-results:
+    name: Compare feedback against no-feedback controls
+    needs: stress-run
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Download all trial evidence
+        uses: actions/download-artifact@v4
+        with:
+          pattern: JBP-LEARN-002-*-${{ github.run_id }}-${{ github.run_attempt }}
+          path: stress-artifacts
+
+      - name: Compute phase and transfer measurements without imposing a pass score
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import csv, json, pathlib, statistics
+          root = pathlib.Path("stress-artifacts")
+          reports = []
+          for meta_path in root.glob("**/metadata.json"):
+              run_dir = meta_path.parent
+              meta = json.loads(meta_path.read_text())
+              episodes_path = run_dir / "trial" / "episodes.csv"
+              if not episodes_path.exists():
+                  reports.append({"run_label": meta.get("run_label"), "evidence": "MISSING_EPISODES"})
+                  continue
+              rows = list(csv.DictReader(episodes_path.open(newline="")))
+              phase_stats = {}
+              for phase in sorted({r["phase"] for r in rows}):
+                  selected = [r for r in rows if r["phase"] == phase]
+                  correct = [int(r["optimal_action_selected"]) for r in selected if r.get("optimal_action_selected") in ("0", "1")]
+                  phase_stats[phase] = {
+                      "episodes": len(selected),
+                      "optimal_action_rate": round(sum(correct) / len(correct), 4) if correct else None,
+                  }
+              probe = [r for r in rows if r["phase"] == "generalization-probe"]
+              initial = [int(r["generalization_initial_window_optimal"]) for r in probe if r.get("generalization_initial_window_optimal") in ("0", "1")]
+              reports.append({
+                  "run_label": meta.get("run_label"),
+                  "feedback_mode": meta.get("feedback_mode"),
+                  "seed": meta.get("seed"),
+                  "tested_commit": meta.get("tested_commit"),
+                  "episodes": len(rows),
+                  "overall_optimal_action_rate": round(statistics.mean(int(r["optimal_action_selected"]) for r in rows), 4) if rows else None,
+                  "generalization_first_window_n": len(initial),
+                  "generalization_first_window_optimal_rate": round(statistics.mean(initial), 4) if initial else None,
+                  "phase_metrics": phase_stats,
+                  "evidence": "PRESENT",
+              })
+          out = {"test": "JBP LEARN-002", "purpose": "descriptive comparison; no outcome score is treated as proof by itself", "runs": reports}
+          pathlib.Path("jbp-learn-002-summary.json").write_text(json.dumps(out, indent=2) + "\n")
+          print(json.dumps(out, indent=2))
+          if not reports:
+              raise SystemExit("No trial artifacts were downloaded; refusing to report an empty comparison as success")
+          PY
+
+      - name: Upload comparison summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: JBP-LEARN-002-SUMMARY-${{ github.run_id }}-${{ github.run_attempt }}
+          path: jbp-learn-002-summary.json
+          if-no-files-found: warn
+          retention-days: 90
