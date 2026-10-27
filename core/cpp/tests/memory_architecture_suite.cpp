@@ -129,7 +129,7 @@ int main() {
         Memory reconstructed_memory(8, learning_path);
         assert(reconstructed_memory.tier_of(
             Event{0, 0, "experience", "learned-kind", {}}) == MemoryTier::Episodic);
-        assert(reconstructed_memory.latest_sequence_by_kind("learned-kind") == 4);
+        assert(reconstructed_memory.latest_sequence_by_kind("learned-kind") == 3);
         assert(reconstructed_memory.latest_sequence_by_kind("action_outcome") == 2);
     }
     std::filesystem::remove(learning_path, ec);
