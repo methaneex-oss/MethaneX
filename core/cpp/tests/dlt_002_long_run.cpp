@@ -114,6 +114,10 @@ int main(int argc, char** argv) {
     const auto checkpoint_seconds = argc > 2 ? std::stoll(argv[2]) : 60LL;
     const std::filesystem::path output_dir = argc > 3 ? argv[3] : "dlt-002-results";
     const auto seed = argc > 4 ? std::stoull(argv[4]) : 20261026ULL;
+    const std::string feedback_mode = argc > 5 ? argv[5] : "enabled";
+    if (feedback_mode != "enabled" && feedback_mode != "no-feedback")
+        throw std::invalid_argument("feedback mode must be enabled or no-feedback");
+    const bool feedback_enabled = feedback_mode == "enabled";
     if (duration_seconds <= 0 || checkpoint_seconds <= 0)
         throw std::invalid_argument("duration and checkpoint interval must be positive");
 
@@ -219,6 +223,7 @@ int main(int argc, char** argv) {
     runtime_config.action_adapter.verify = [](const CandidateAction&) { return true; };
     runtime_config.action_adapter.observe_consequence = [&](const CandidateAction& action) {
         last_step = world.step(action.name);
+        if (!feedback_enabled) return std::optional<double>{};
         return last_step->consequence;
     };
 
@@ -240,7 +245,8 @@ int main(int argc, char** argv) {
     std::string active_phase = "clear-baseline";
     report << "[DLT-002] status=STARTED duration_seconds=" << duration_seconds
            << " checkpoint_seconds=" << checkpoint_seconds
-           << " seed=" << seed << " noise_rate=0.20 phases=6\n"
+           << " seed=" << seed << " feedback_mode=" << feedback_mode
+           << " noise_rate=0.20 phases=6\n"
            << "[DLT-002] protocol=partial observation; 20% noisy outcomes; context-local mapping; clear-context reversal; unseen-context transfer; second reversal in flooded context with unchanged visible cues\n";
 
     int exit_code = 0;
@@ -288,7 +294,8 @@ int main(int argc, char** argv) {
                 throw std::runtime_error("Cognitive cycle did not complete exactly one action");
             const auto& selected = result.context.plan.steps.front().action.name;
             const auto& execution = result.context.action_execution_results.front();
-            if (execution.action.name != selected || !execution.outcome.observed ||
+            if (execution.action.name != selected ||
+                execution.outcome.observed != feedback_enabled ||
                 !last_step || !last_step->observed || !last_step->consequence)
                 throw std::runtime_error("Selected action or observed consequence evidence is inconsistent");
 
@@ -402,6 +409,7 @@ int main(int argc, char** argv) {
         const bool completed = !stop_requested && std::chrono::steady_clock::now() >= finish;
         const auto final_prediction_quality = prediction_metrics(brain);
         report << "[DLT-002] status=" << (completed ? "COMPLETED" : "INTERRUPTED")
+            << " feedback_mode=" << feedback_mode
             << " elapsed_seconds=" << elapsed_seconds << " episodes=" << episode
             << " total_reward=" << total_reward << " positive=" << positive
             << " negative=" << negative << " optimal_action_selections=" << optimal_action_selections
