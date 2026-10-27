@@ -19,6 +19,9 @@ int main() {
     const auto c = memory.append(Event{0, 3, "agent", "action", {{"topic", std::string("navigation")}}});
     assert(a == 1 && b == 2 && c == 3);
     assert(memory.size() == 3);
+    assert(memory.latest_sequence_by_kind("observation") == a);
+    assert(memory.latest_sequence_by_kind("learning") == b);
+    assert(memory.latest_sequence_by_kind("missing-kind") == 0);
 
     const auto ranked = memory.recall_ranked({{"topic", std::string("physics")}}, 2);
     assert(!ranked.empty());
@@ -60,6 +63,8 @@ int main() {
 
     Memory restored(3, path);
     assert(restored.size() == 6);
+    assert(restored.latest_sequence_by_kind("observation") == a);
+    assert(restored.latest_sequence_by_kind("learning") == b);
     assert(restored.next_sequence() == 7);
     assert(restored.recent(2).size() == 2);
     assert(restored.by_kind("learning", 1).size() == 1);
@@ -111,6 +116,8 @@ int main() {
         const auto second = developmental_memory.append(
             Event{0, 2, "experience", "learned-kind", {{"episode", std::int64_t{2}}}});
         assert(second != 0);
+        assert(developmental_memory.latest_sequence_by_kind("learned-kind") == second);
+        assert(developmental_memory.latest_sequence_by_kind("action_outcome") == outcome);
         const auto semantic_experiences = developmental_memory.salient(8, MemoryTier::Semantic);
         assert(semantic_experiences.size() == 2);
         assert(semantic_experiences.back().event.sequence == second);
@@ -122,6 +129,8 @@ int main() {
         Memory reconstructed_memory(8, learning_path);
         assert(reconstructed_memory.tier_of(
             Event{0, 0, "experience", "learned-kind", {}}) == MemoryTier::Episodic);
+        assert(reconstructed_memory.latest_sequence_by_kind("learned-kind") == 4);
+        assert(reconstructed_memory.latest_sequence_by_kind("action_outcome") == 2);
     }
     std::filesystem::remove(learning_path, ec);
     std::filesystem::remove(learning_metadata_path, ec);
