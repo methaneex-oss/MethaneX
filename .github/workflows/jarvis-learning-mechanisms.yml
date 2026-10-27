@@ -252,16 +252,14 @@ jobs:
               report, encoding="utf-8"
           )
           print(report)
-          with open(Path.cwd() / ".github-step-summary-temp", "w", encoding="utf-8") as handle:
-              handle.write("## Integrated trial diagnostics\n\n")
-              handle.write(report)
+          import os
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
+              summary.write("## Integrated trial diagnostics\n\n")
+              summary.write(report)
               if errors:
-                  handle.write("\n### Evidence integrity failures\n")
-                  handle.write("\n".join(f"- {error}" for error in errors))
-                  handle.write("\n")
-          with open(__import__("os").environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
-              summary.write(Path(".github-step-summary-temp").read_text(encoding="utf-8"))
-          Path(".github-step-summary-temp").unlink(missing_ok=True)
+                  summary.write("\n### Evidence integrity failures\n")
+                  summary.write("\n".join(f"- {error}" for error in errors))
+                  summary.write("\n")
 
           if errors:
               print("Evidence integrity checks failed:", file=sys.stderr)
