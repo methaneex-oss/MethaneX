@@ -11,6 +11,9 @@ struct AdaptiveMetric {
     double mean_error{1.0};
     double recent_error{1.0};
     std::uint64_t observations{0};
+    // Derived from the ordered outcome journal during replay. A short streak
+    // of surprising observations helps distinguish regime changes from noise.
+    std::uint32_t consecutive_surprises{0};
 };
 
 class AdaptationModel {
