@@ -163,9 +163,8 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
     std::vector<Prediction> forecasts_since_last_observation;
     std::uint64_t previous_observation_sequence = 0;
     if (input.observation.kind == "observation") {
-        const auto prior_observations = brain_.memory().by_kind("observation");
-        for (const auto& event : prior_observations)
-            previous_observation_sequence = std::max(previous_observation_sequence, event.sequence);
+        previous_observation_sequence =
+            brain_.memory().latest_sequence_by_kind("observation");
         for (const auto& prediction : brain_.snapshot().predictions) {
             if (prediction.resolved ||
                 prediction.created_sequence <= previous_observation_sequence ||
