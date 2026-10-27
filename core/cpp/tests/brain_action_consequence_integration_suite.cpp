@@ -80,6 +80,7 @@ int main() {
     assert(std::abs(result.outcome.consequence_error + 1.0) < 1e-9);
     assert(result.consequence_prediction_sequence.has_value());
     assert(!result.consequence_prediction_key.empty());
+    assert(result.consequence_prediction_value.has_value());
 
     const auto prediction_snapshot = brain.snapshot().predictions;
     const auto action_prediction = std::find_if(
@@ -91,6 +92,9 @@ int main() {
     assert(action_prediction != prediction_snapshot.end());
     assert(action_prediction->key == result.consequence_prediction_key);
     assert(action_prediction->resolved);
+    const auto* stored_numeric = std::get_if<double>(&action_prediction->predicted);
+    assert(stored_numeric != nullptr);
+    assert(std::abs(*result.consequence_prediction_value - *stored_numeric) < 1e-9);
     const auto* action_prediction_metric =
         brain.learning_metric(result.consequence_prediction_key);
     assert(action_prediction_metric != nullptr);
