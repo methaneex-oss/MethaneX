@@ -7,9 +7,6 @@ target_compile_features(jarvis_brain_10_suite PRIVATE cxx_std_20)
 add_executable(jarvis_brain_deep_suite brain_deep_suite.cpp)
 target_link_libraries(jarvis_brain_deep_suite PRIVATE jarvis_core)
 target_compile_features(jarvis_brain_deep_suite PRIVATE cxx_std_20)
-add_executable(jarvis_jbp_003_evolving_world_suite jbp_003_evolving_world_suite.cpp)
-target_link_libraries(jarvis_jbp_003_evolving_world_suite PRIVATE jarvis_core)
-target_compile_features(jarvis_jbp_003_evolving_world_suite PRIVATE cxx_std_20)
 add_executable(jarvis_brain_failure_suite brain_failure_suite.cpp)
 target_link_libraries(jarvis_brain_failure_suite PRIVATE jarvis_core)
 target_compile_features(jarvis_brain_failure_suite PRIVATE cxx_std_20)
@@ -204,6 +201,12 @@ target_compile_features(jarvis_dlt_001_trial PRIVATE cxx_std_20)
 add_executable(jarvis_dlt_002_persistence dlt_002_persistence.cpp)
 target_link_libraries(jarvis_dlt_002_persistence PRIVATE jarvis_core)
 target_compile_features(jarvis_dlt_002_persistence PRIVATE cxx_std_20)
+
+# JBP-003 is invoked explicitly by its dedicated workflow; it requires train/verify
+# phases in separate operating-system processes and is not a single CTest invocation.
+add_executable(jarvis_jbp_003_evolving_world_suite jbp_003_evolving_world_suite.cpp)
+target_link_libraries(jarvis_jbp_003_evolving_world_suite PRIVATE jarvis_core)
+target_compile_features(jarvis_jbp_003_evolving_world_suite PRIVATE cxx_std_20)
 
 # Long-running DLT-001 is invoked explicitly by its dedicated workflow, not CTest.
 add_executable(jarvis_dlt_001_long_run dlt_001_long_run.cpp)
