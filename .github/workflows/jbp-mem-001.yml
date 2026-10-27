@@ -1,0 +1,140 @@
+name: JBP MEM-001 Memory Persistence Trial
+
+on:
+  # Manual dispatch only. This is a bounded 30-minute memory validation run.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: jbp-mem-001-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  memory-persistence-trial:
+    name: JBP MEM-001 · 30-minute memory and restart validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout exact trial revision
+        uses: actions/checkout@v6
+
+      - name: Initialize trial evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p jbp-mem-001-results
+          cat > jbp-mem-001-results/run_metadata.json <<EOF
+          {
+            "trial": "JBP MEM-001",
+            "purpose": "memory retrieval, memory architecture regression, and cross-process journal persistence",
+            "soak_duration_seconds": 1800,
+            "checkpoint_interval_seconds": 300,
+            "execution_model": "single job; every persistence verification occurs in a separate process",
+            "commit": "${GITHUB_SHA}",
+            "run_id": "${GITHUB_RUN_ID}",
+            "run_attempt": "${GITHUB_RUN_ATTEMPT}",
+            "started_at_utc": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          }
+          EOF
+          echo "[JBP MEM-001] run_id=${GITHUB_RUN_ID} commit=${GITHUB_SHA}" | tee jbp-mem-001-results/trial.log
+
+      - name: Configure native brain with assertions enabled
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmake -S core/cpp -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON 2>&1 | tee jbp-mem-001-results/configure.log
+
+      - name: Build memory and persistence test targets
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmake --build build --parallel --target \
+            jarvis_experience_memory_test \
+            jarvis_memory_architecture_suite \
+            jarvis_knowledge_memory_phase3_suite \
+            jarvis_dlt_002_persistence 2>&1 | tee jbp-mem-001-results/build.log
+
+      - name: Run initial memory acceptance gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          ctest --test-dir build --output-on-failure --timeout 120 \
+            -R '^(jarvis_experience_memory_test|jarvis_memory_architecture_suite|jarvis_knowledge_memory_phase3_suite)$' \
+            2>&1 | tee jbp-mem-001-results/acceptance-tests.log
+          executable="$(find build -type f -name jarvis_dlt_002_persistence -executable -print -quit)"
+          test -n "$executable"
+          journal="$RUNNER_TEMP/jbp-mem-001-initial.bin"
+          "$executable" train "$journal" 2>&1 | tee jbp-mem-001-results/persistence-train-initial.log
+          "$executable" verify "$journal" 2>&1 | tee jbp-mem-001-results/persistence-verify-initial.log
+          echo "[JBP MEM-001] initial_acceptance=PASS" | tee -a jbp-mem-001-results/trial.log
+
+      - name: Run 30-minute memory and process-restart soak
+        shell: bash
+        run: |
+          set -euo pipefail
+          executable="$(find build -type f -name jarvis_dlt_002_persistence -executable -print -quit)"
+          test -n "$executable"
+          duration_seconds=1800
+          start_epoch=$(date +%s)
+          end_epoch=$((start_epoch + duration_seconds))
+          next_checkpoint=$((start_epoch + 300))
+          iteration=0
+          echo "iteration,elapsed_seconds,memory_suites,persistence_train,persistence_fresh_process_verify,status" > jbp-mem-001-results/checkpoints.csv
+          echo "[JBP MEM-001] soak_started_at_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ) duration_seconds=$duration_seconds" | tee -a jbp-mem-001-results/trial.log
+
+          while (( $(date +%s) < end_epoch )); do
+            iteration=$((iteration + 1))
+            iter_start=$(date +%s)
+            journal="$RUNNER_TEMP/jbp-mem-001-${GITHUB_RUN_ID}-${iteration}.bin"
+            echo "[JBP MEM-001] iteration=$iteration started_at_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)" | tee -a jbp-mem-001-results/soak.log
+
+            ctest --test-dir build --output-on-failure --timeout 120 \
+              -R '^(jarvis_experience_memory_test|jarvis_memory_architecture_suite|jarvis_knowledge_memory_phase3_suite)$' \
+              2>&1 | tee -a jbp-mem-001-results/soak.log
+            "$executable" train "$journal" 2>&1 | tee -a jbp-mem-001-results/soak.log
+            # A second executable invocation proves the restored state survives
+            # the trainer process exiting; verify removes only this iteration's
+            # temporary journal after all persistence assertions pass.
+            "$executable" verify "$journal" 2>&1 | tee -a jbp-mem-001-results/soak.log
+
+            elapsed=$(( $(date +%s) - start_epoch ))
+            printf '%s,%s,PASS,PASS,PASS,PASS\n' "$iteration" "$elapsed" >> jbp-mem-001-results/checkpoints.csv
+            echo "[JBP MEM-001] iteration=$iteration elapsed_seconds=$elapsed status=PASS" | tee -a jbp-mem-001-results/trial.log
+
+            now=$(date +%s)
+            if (( now >= next_checkpoint )); then
+              echo "[JBP MEM-001] checkpoint_elapsed_seconds=$elapsed iterations=$iteration status=PASS" | tee -a jbp-mem-001-results/trial.log
+              next_checkpoint=$((now + 300))
+            fi
+
+            remaining=$((end_epoch - $(date +%s)))
+            if (( remaining > 0 )); then
+              sleep $(( remaining < 30 ? remaining : 30 ))
+            fi
+          done
+
+          elapsed=$(( $(date +%s) - start_epoch ))
+          cat > jbp-mem-001-results/summary.json <<EOF
+          {
+            "trial": "JBP MEM-001",
+            "status": "COMPLETED",
+            "target_duration_seconds": 1800,
+            "actual_elapsed_seconds": $elapsed,
+            "completed_iterations": $iteration,
+            "memory_suites": ["jarvis_experience_memory_test", "jarvis_memory_architecture_suite", "jarvis_knowledge_memory_phase3_suite"],
+            "persistence_check": "each iteration trained in one process and verified in a separate process",
+            "completed_at_utc": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          }
+          EOF
+          echo "[JBP MEM-001] status=COMPLETED elapsed_seconds=$elapsed iterations=$iteration" | tee -a jbp-mem-001-results/trial.log
+
+      - name: Preserve memory-test evidence on success or failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: JBP-MEM-001-${{ github.run_id }}-${{ github.run_attempt }}
+          path: jbp-mem-001-results/
+          if-no-files-found: warn
+          retention-days: 90
