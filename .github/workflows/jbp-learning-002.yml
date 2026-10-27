@@ -1,0 +1,107 @@
+name: JBP LEARNING-002 Adversarial Multi-Seed Stress
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_ref:
+        description: "Brain branch or commit to test"
+        required: true
+        default: "feat/jarvis-affective-state"
+        type: string
+      duration_minutes:
+        description: "Duration per independent seed (minutes)"
+        required: true
+        default: "10"
+        type: choice
+        options: ["5", "10", "12", "15"]
+      seed_base:
+        description: "Base seed; three independent runs use base, base+1, base+2"
+        required: true
+        default: "20261027"
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: jbp-learning-002-${{ inputs.source_ref || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  adversarial-learning:
+    name: Independent changing-world replication
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        seed_offset: [0, 1, 2]
+    env:
+      SOURCE_REF: ${{ inputs.source_ref || 'feat/jarvis-affective-state' }}
+      TRIAL_MINUTES: ${{ inputs.duration_minutes || '10' }}
+      SEED_BASE: ${{ inputs.seed_base || '20261027' }}
+    steps:
+      - name: Checkout brain revision under test
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.source_ref || 'feat/jarvis-affective-state' }}
+
+      - name: Validate and record exact experiment configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$TRIAL_MINUTES" =~ ^(5|10|12|15)$ ]] || { echo "Invalid duration"; exit 64; }
+          [[ "$SEED_BASE" =~ ^[0-9]+$ ]] || { echo "seed_base must be numeric"; exit 64; }
+          seed=$((SEED_BASE + ${{ matrix.seed_offset }}))
+          mkdir -p "jbp-learning-002-results/seed-$seed"
+          out="jbp-learning-002-results/seed-$seed"
+          {
+            echo "trial=JBP LEARNING-002"
+            echo "source_ref=$SOURCE_REF"
+            echo "tested_commit=$(git rev-parse HEAD)"
+            echo "duration_minutes=$TRIAL_MINUTES"
+            echo "seed=$seed"
+            echo "seed_offset=${{ matrix.seed_offset }}"
+            echo "started_at_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          } | tee "$out/metadata.txt"
+
+      - name: Configure native brain
+        shell: bash
+        run: cmake -S core/cpp -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON
+
+      - name: Build the integrated learning challenge
+        shell: bash
+        run: cmake --build build --parallel 2 --target jarvis_dlt_002_long_run
+
+      - name: Run independent partial-observation, noisy-outcome, reversal, and transfer challenge
+        shell: bash
+        run: |
+          set -euo pipefail
+          seed=$((SEED_BASE + ${{ matrix.seed_offset }}))
+          out="jbp-learning-002-results/seed-$seed"
+          executable="$(find build -type f -name jarvis_dlt_002_long_run -executable -print -quit)"
+          test -n "$executable"
+          seconds=$((TRIAL_MINUTES * 60))
+          echo "run_started_at_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ) duration_seconds=$seconds seed=$seed"
+          "$executable" "$seconds" 30 "$out/trial" "$seed" 2>&1 | tee "$out/console.log"
+          grep -q 'status=COMPLETED' "$out/trial/trial.log"
+          for phase in clear-baseline flooded tunnel clear-reversal generalization-probe flooded-reversal; do
+            grep -q "$phase" "$out/trial/episodes.csv" || { echo "Missing phase: $phase"; exit 1; }
+          done
+          test -s "$out/trial/checkpoints.csv"
+          {
+            echo "status=PASS"
+            echo "seed=$seed"
+            echo "duration_seconds=$seconds"
+            echo "six_phases=PASS"
+            echo "completed_at_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          } | tee "$out/summary.txt"
+
+      - name: Preserve per-seed evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: JBP-LEARNING-002-seed-${{ inputs.seed_base || '20261027' }}-${{ matrix.seed_offset }}-${{ github.run_id }}
+          path: jbp-learning-002-results/
+          if-no-files-found: warn
+          retention-days: 90
