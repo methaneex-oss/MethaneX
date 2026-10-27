@@ -1,13 +1,8 @@
 name: JARVIS Learning Mechanisms Probe
 
 on:
-  # Validate changes to the probe itself without launching a trial on ordinary
-  # brain commits. The trial remains manually dispatchable for other changes.
-  push:
-    branches:
-      - test/learning-trial-evidence-diagnostics
-    paths:
-      - '.github/workflows/jarvis-learning-mechanisms.yml'
+  # Validate probe changes through one PR run. Avoid duplicate push + PR trials;
+  # workflow_dispatch remains available for deliberately selected brain refs.
   pull_request:
     branches: [main]
     paths:
@@ -36,7 +31,7 @@ permissions:
 
 concurrency:
   group: jarvis-learning-mechanisms-${{ github.event.pull_request.number || inputs.source_ref || github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   learning-mechanisms:
@@ -566,6 +561,77 @@ jobs:
               )
               if len(phase_rows) < 5:
                   errors.append(f"{phase} has only {len(phase_rows)} episodes; minimum is 5")
+
+          # Measure adaptation latency after each reversal, not just final
+          # phase accuracy. Recovery is the first 10-episode window reaching
+          # at least 80% optimal actions; the window includes the outcome from
+          # its first episode onward, so this is a behavioral recovery measure.
+          recovery_window = 10
+          recovery_threshold = 0.80
+          for phase in ["clear-reversal", "flooded-reversal"]:
+              phase_rows = [row for row in episodes if row["phase"] == phase]
+              recovery = None
+              for start in range(max(0, len(phase_rows) - recovery_window + 1)):
+                  window = phase_rows[start:start + recovery_window]
+                  correct = sum(row["optimal_action_selected"] == "1" for row in window)
+                  accuracy = correct / recovery_window
+                  if accuracy >= recovery_threshold:
+                      recovery = (start + recovery_window, accuracy)
+                      break
+              if recovery is None:
+                  lines.append(
+                      f"- {phase} adaptation recovery: not reached; "
+                      f"no {recovery_window}-episode window met {recovery_threshold:.0%}"
+                  )
+              else:
+                  lines.append(
+                      f"- {phase} adaptation recovery: reached threshold by episode "
+                      f"{recovery[0]} of the phase ({recovery[0]} episodes observed; "
+                      f"window accuracy {recovery[1]:.0%})"
+                  )
+
+          # The environment-only consequence columns are for evaluation and are
+          # not passed into the brain. Aggregate calibration by phase is less
+          # sensitive to stochastic individual outcomes than raw per-episode MAE.
+          calibration_columns = {
+              "predicted_consequence_evaluation_only",
+              "actual_consequence_evaluation_only",
+              "brain_received_consequence_feedback",
+          }
+          if episodes and calibration_columns.issubset(episodes[0].keys()):
+              import math
+              import statistics
+              feedback_values = {row["brain_received_consequence_feedback"] for row in episodes}
+              if feedback_values != {"1"}:
+                  errors.append(
+                      "Feedback-enabled trial has unexpected feedback flags: "
+                      + ", ".join(sorted(feedback_values))
+                  )
+              lines.extend([
+                  "",
+                  "Prediction calibration by phase (evaluation-only outcomes):",
+                  "Forecast and realized means are compared at phase level; noisy individual outcomes can still differ from valid forecasts.",
+              ])
+              for phase in phases:
+                  rows = [row for row in episodes if row["phase"] == phase]
+                  try:
+                      predicted = [float(row["predicted_consequence_evaluation_only"]) for row in rows]
+                      actual = [float(row["actual_consequence_evaluation_only"]) for row in rows]
+                  except (KeyError, ValueError):
+                      errors.append(f"{phase} contains missing/non-numeric evaluation forecast data")
+                      continue
+                  if not rows or not all(math.isfinite(value) for value in predicted + actual):
+                      errors.append(f"{phase} has no valid finite evaluation forecast data")
+                      continue
+                  predicted_mean = statistics.fmean(predicted)
+                  actual_mean = statistics.fmean(actual)
+                  gap = abs(predicted_mean - actual_mean)
+                  mae = statistics.fmean(abs(p - a) for p, a in zip(predicted, actual))
+                  lines.append(
+                      f"- {phase}: n={len(rows)}, mean forecast={predicted_mean:.3f}, "
+                      f"mean realized={actual_mean:.3f}, aggregate calibration gap={gap:.3f}, "
+                      f"individual outcome MAE={mae:.3f}"
+                  )
 
           probe_rows = [
               row for row in episodes
