@@ -168,6 +168,11 @@ int main(int argc, char** argv) {
             record_experience(brain, tunnel_context, "bad-route", -1.0);
         }
 
+        // The learned preference must alter actual action selection, not only
+        // internal strategy values. Check behavior after acquisition, before
+        // introducing contradictory evidence.
+        assert(selected_action(brain, clear_context) == "good-route");
+
         // Phase B: only the clear context changes. Repeat enough contradictory
         // evidence to require revising its learned preference without erasing
         // the flooded or tunnel mappings. This is harder than merely replaying
@@ -177,15 +182,9 @@ int main(int argc, char** argv) {
             record_experience(brain, clear_context, "bad-route", 1.0);
         }
 
-        // The learned preference must alter actual action selection, not only
-        // internal strategy values. The cycle may emit causal projections that
-        // are not action-consequence forecasts, so lifecycle assertions below
-        // classify prediction types explicitly.
-        assert(selected_action(brain, clear_context) == "good-route");
-
-        // Phase B: reverse only clear. Verify behavior changes after contradictory
-        // experience while the other context-specific policies remain distinct.
-        // (The reversal experiences above have already been recorded.)
+        // After reversal, behavior must change in clear without collapsing
+        // the separate flooded and tunnel policies. Causal projections are not
+        // conflated with the action-consequence forecasts checked below.
         assert(selected_action(brain, clear_context) == "bad-route");
         assert(selected_action(brain, flooded_context) == "bad-route");
         assert(selected_action(brain, tunnel_context) == "good-route");
