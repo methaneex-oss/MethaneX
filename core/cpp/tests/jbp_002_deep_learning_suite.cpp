@@ -49,12 +49,21 @@ int main() {
     std::vector<bool> state(relation_count, false);
     {
         Brain brain(journal);
-        observe_state(brain, 1, keys, state);
+        std::uint64_t sequence = 1;
+
+        // Establish each entity's baseline separately. Presenting all entities
+        // as new in one event would make the existing association mechanism
+        // associate every pair at once and invalidate the multi-hop test.
+        for (const auto& key : keys) {
+            const auto result = brain.observe(Event{
+                0, sequence++, "jbp-002-generated-environment", "observation",
+                {{key, Scalar{false}}}});
+            assert(result.event.sequence != 0);
+        }
 
         // Train a multi-hop relational chain through incremental experience.
         // Each transition changes only a neighboring pair. No final answer,
         // chain length, or expected retrieval result is passed to Brain.
-        std::uint64_t sequence = 2;
         for (std::size_t edge = 0; edge + 1 < relation_count; ++edge) {
             state[edge] = !state[edge];
             state[edge + 1] = !state[edge + 1];
