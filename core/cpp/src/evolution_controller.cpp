@@ -64,7 +64,11 @@ bool EvolutionController::record_evaluation_for_brain(
 
 bool EvolutionController::replay_evaluation(
     const EvolutionExperiment& experiment) noexcept {
-    if (experiment.id.empty() || experiment.proposal.key.empty()) return false;
+    if (experiment.id.empty() || experiment.proposal.key.empty() ||
+        !experiment.isolation_verified()) return false;
+    auto verified = experiment;
+    if (EvolutionExperimentEngine::evaluate(verified) != experiment.outcome ||
+        !EvolutionSafetyGate::approve(verified, policy_)) return false;
     const auto records = history_.for_experiment(experiment.id);
     bool evaluated = false;
     for (const auto& record : records) {
