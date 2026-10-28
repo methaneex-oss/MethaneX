@@ -447,29 +447,10 @@ void Brain::replay(const Event& event, bool external_observation) {
                     std::clamp(double_value(event.data, "novelty", 0.0), 0.0, 1.0),
                     affective_significance,
                     consequence_confidence});
-        } else if (status != ActionExecutionStatus::rejected &&
-                   status != ActionExecutionStatus::prepared) {
-            // When no consequence observer is available, execution/verification
-            // still supplies evidence about the action's operational reliability.
-            // Keep that signal distinct from real-world consequence evidence:
-            // successful execution is positive capability evidence, while a
-            // failed attempt or rollback is negative strategy evidence.
-            const double execution_outcome = std::clamp(2.0 * reliability - 1.0, -1.0, 1.0);
-            // For executor-generated events, operational reliability describes
-            // whether the action succeeded; it is not confidence in the evidence
-            // that the attempt failed or succeeded. Use explicit evidence
-            // confidence when present, while retaining legacy event semantics.
-            const double evidence_reliability = std::clamp(
-                double_value(event.data, "evidence_reliability", reliability),
-                0.0, 1.0);
-            developmental_learning_.observe_strategy(
-                *context, *action,
-                LearningSignal{1.0 - reliability, execution_outcome,
-                    std::clamp(double_value(event.data, "salience", 0.0), 0.0, 1.0),
-                    std::clamp(double_value(event.data, "novelty", 0.0), 0.0, 1.0),
-                    affective_significance,
-                    evidence_reliability});
-        } // Attention tracks learning relevance, not whether an outcome was pleasant.
+        } // Without an observed consequence, update operational capability
+          // reliability above, but do not train the developmental action-value
+          // strategy. Execution success is not evidence that the action's
+          // environmental consequence was beneficial.
         // Suppressing the global feature weights after a harmful consequence made
         // the brain less sensitive to the very surprise it needed to investigate.
         // Keep consequence prediction error separate from execution reliability;
