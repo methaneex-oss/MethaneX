@@ -1,10 +1,25 @@
 #include "jarvis/core/brain.hpp"
+#include "jarvis/core/evolution_experiment_runner.hpp"
 
 #include <cassert>
 #include <filesystem>
 #include <algorithm>
 
 using namespace jarvis::core;
+
+namespace {
+void evaluate_in_isolated_sandbox(EvolutionExperiment& experiment) {
+    EvolutionSandbox sandbox;
+    const double measured_fitness = experiment.candidate_fitness;
+    const auto outcome = EvolutionExperimentRunner::run(
+        experiment, sandbox,
+        [measured_fitness](const EvolutionProposal&, const SandboxLimits&) {
+            return SandboxResult{true, true, false, false, true, measured_fitness, {}};
+        });
+    assert(outcome == ExperimentOutcome::Improved);
+    assert(experiment.isolation_verified());
+}
+} // namespace
 
 int main() {
     const std::filesystem::path path = "evolution_brain_integration_test.bin";
@@ -99,6 +114,7 @@ int main() {
         EvolutionExperiment experiment{
             "brain-evolution-1", proposals.front(), 0.70, 0.90, 0.01, 0.95,
             ExperimentOutcome::Improved, true};
+        evaluate_in_isolated_sandbox(experiment);
         assert(brain.record_evolution_evaluation(experiment));
         const auto evaluated_history = brain.evolution_history();
         assert(evaluated_history.size() == 1);
@@ -115,6 +131,7 @@ int main() {
             "manual-rollback-1",
             EvolutionProposal{"manual.rollback", 0.25, 0.35, 0.1, 0.90},
             0.70, 0.85, 0.01, 0.90, ExperimentOutcome::Improved, true};
+        evaluate_in_isolated_sandbox(manual_rollback);
         assert(brain.record_evolution_evaluation(manual_rollback));
         assert(brain.adopt_evolution_experiment(manual_rollback));
         const auto* adopted_manual = brain.evolution_parameter("manual.rollback");
@@ -157,6 +174,7 @@ int main() {
             "canary-persist-1",
             EvolutionProposal{"canary.persist", 0.3, 0.4, 0.1, 0.90},
             0.70, 0.85, 0.01, 0.90, ExperimentOutcome::Improved, true};
+        evaluate_in_isolated_sandbox(canary_experiment);
         assert(brain.record_evolution_evaluation(canary_experiment));
         assert(brain.adopt_evolution_experiment(canary_experiment));
         const auto pending_canary = brain.observe_evolution_canary(
@@ -170,6 +188,7 @@ int main() {
             "replay-evaluation-1",
             EvolutionProposal{"replay.persist", 0.3, 0.4, 0.1, 0.90},
             0.70, 0.82, 0.01, 0.90, ExperimentOutcome::Improved, true};
+        evaluate_in_isolated_sandbox(replayable);
         assert(brain.record_evolution_evaluation(replayable));
         assert(!brain.record_evolution_evaluation(replayable));
         assert(brain.evolution_history().size() == 9);
