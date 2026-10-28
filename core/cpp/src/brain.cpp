@@ -865,32 +865,9 @@ LearningCycle Brain::learn_from_prediction(const std::string& key, const Scalar&
     replay(fitness_event);
     cycle.proposals = evolution_.propose();
 
-    // Prediction feedback updates the fitness history, but proposals must also
-    // pass through the durable adoption path. Merely returning proposals leaves
-    // the learned parameter unchanged, so repeated experience never affects the
-    // mechanism that generated the proposal.
-    for (const auto& proposal : cycle.proposals) {
-        if (proposal.key != key || proposal.confidence < 0.75 ||
-            proposal.expected_gain <= 0.0) {
-            continue;
-        }
-        Event adoption{0, now_ns(), "brain", "evolution_adopt",
-                       {{"key", proposal.key},
-                        {"current", proposal.current},
-                        {"proposed", proposal.proposed},
-                        {"expected_gain", proposal.expected_gain},
-                        {"confidence", proposal.confidence}}};
-        adoption.sequence = memory_.append(adoption);
-        if (adoption.sequence == 0) break;
-        ++state_.events_seen;
-        state_.cycle = adoption.sequence;
-        replay(adoption);
-        const auto* adopted = evolution_.parameter(key);
-        if (adopted != nullptr && adopted->value == proposal.proposed) {
-            ++cycle.adopted;
-        }
-        break;
-    }
+    // Prediction feedback may generate evolution proposals, but proposal
+    // generation is not a candidate-vs-baseline experiment. Return proposals
+    // to the caller for explicit evaluation; never persist or adopt them here.
 
     sync_self_state();
     return cycle;
