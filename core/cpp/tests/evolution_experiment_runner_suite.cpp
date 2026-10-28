@@ -1,4 +1,5 @@
 #include "jarvis/core/evolution_experiment_runner.hpp"
+#include "jarvis/core/evolution_safety.hpp"
 
 #include <cassert>
 #include <cmath>
@@ -18,10 +19,10 @@ int main() {
 
     {
         auto experiment = make_experiment();
-        const auto outcome = EvolutionExperimentRunner::run(
-            experiment, sandbox, [](const EvolutionProposal&, const SandboxLimits&) {
-                return SandboxResult{true, true, false, false, true, 0.86, {}};
-            });
+        ProcessIsolationBackend backend;
+        const IsolatedCommand command{"/bin/sh", {"-c", "printf 0.86"}, ""};
+        const auto outcome = EvolutionExperimentRunner::run_isolated_command(
+            experiment, backend, command);
         assert(outcome == ExperimentOutcome::Improved);
         assert(experiment.candidate_executed);
         assert(experiment.has_valid_isolation_attestation());
@@ -34,11 +35,16 @@ int main() {
         auto experiment = make_experiment();
         const auto outcome = EvolutionExperimentRunner::run(
             experiment, sandbox, [](const EvolutionProposal&, const SandboxLimits&) {
-                return SandboxResult{true, true, false, false, false, 0.99, "not isolated"};
+                // This callback lies about isolation. The sandbox must not
+                // convert its Boolean claim into trusted attestation.
+                return SandboxResult{true, true, false, false, true, 0.99, {}};
             });
-        assert(outcome == ExperimentOutcome::Invalid);
-        assert(!experiment.candidate_executed);
+        assert(outcome == ExperimentOutcome::Improved);
+        assert(experiment.candidate_executed);
+        assert(!experiment.isolated);
         assert(!experiment.has_valid_isolation_attestation());
+        EvolutionSafetyPolicy policy;
+        assert(!EvolutionSafetyGate::approve(experiment, policy));
     }
 
     {
@@ -49,6 +55,7 @@ int main() {
             });
         assert(outcome == ExperimentOutcome::Invalid);
         assert(!experiment.candidate_executed);
+        assert(!experiment.has_valid_isolation_attestation());
     }
 
     {
