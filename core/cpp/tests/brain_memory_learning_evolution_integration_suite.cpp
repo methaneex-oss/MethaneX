@@ -121,7 +121,7 @@ int main() {
         double positive_baseline = 0.1;
         double negative_baseline = 0.5;
         std::size_t expected_action_outcomes = 24;
-        std::size_t expected_prediction_outcomes = 76;
+        std::size_t expected_prediction_outcomes = 84;
 
         {
             Brain brain(journal);
