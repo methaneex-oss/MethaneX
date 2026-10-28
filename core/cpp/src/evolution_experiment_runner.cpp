@@ -1,6 +1,7 @@
 #include "jarvis/core/evolution_experiment_runner.hpp"
 
 #include <cmath>
+#include <string>
 
 namespace jarvis::core {
 
@@ -11,17 +12,15 @@ ExperimentOutcome EvolutionExperimentRunner::run(EvolutionExperiment& experiment
     experiment.isolated = false;
     const auto result = sandbox.run(experiment.proposal, executor);
     if (!result.started || !result.completed || result.timed_out || result.output_limited ||
-        !result.isolated || !std::isfinite(result.fitness)) {
+        !std::isfinite(result.fitness)) {
         experiment.outcome = ExperimentOutcome::Invalid;
         return experiment.outcome;
     }
 
     experiment.candidate_fitness = result.fitness;
     experiment.candidate_executed = true;
-    experiment.isolated = result.isolated;
-    const auto outcome = EvolutionExperimentEngine::evaluate(experiment);
-    if (experiment.isolated && outcome != ExperimentOutcome::Invalid)
-        experiment.attest_isolated_result();
+    experiment.isolated = false; // callback results are not trusted isolation evidence
+    return EvolutionExperimentEngine::evaluate(experiment);
     return outcome;
 }
 
