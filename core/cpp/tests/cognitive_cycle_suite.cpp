@@ -46,6 +46,54 @@ int main() {
     assert(initial.context.action_assessments.front().developmental_context != goal.id);
     assert(brain.knowledge_source("action_executor.stabilize") == nullptr);
 
+    // Context serialization must not alias distinct observations. A lossy
+    // slash-to-underscore replacement would make these two situations share
+    // the same developmental strategy key, contaminating context-specific learning.
+    const auto context_encoding_journal =
+        std::filesystem::temp_directory_path() / "jarvis_context_encoding_suite.bin";
+    std::filesystem::remove(context_encoding_journal, ec);
+    std::filesystem::remove(context_encoding_journal.string() + ".meta", ec);
+    {
+        Brain context_brain(context_encoding_journal);
+        Goal context_goal;
+        context_goal.id = "context-encoding-goal";
+        context_goal.description = "Keep distinct observations separate";
+        context_goal.priority = 1.0;
+        assert(context_brain.create_goal(context_goal));
+        assert(context_brain.activate_goal(context_goal.id));
+        CognitiveCycle context_cycle(context_brain);
+
+        CognitiveCycleInput context_input;
+        context_input.goal_id = context_goal.id;
+        context_input.planning_horizon = 1;
+        context_input.resource_budget = 1.0;
+        context_input.candidate_actions = {
+            CandidateAction{"observe", 0.5, 0.5, 0.1, 0.1}};
+        context_input.observation = Event{
+            0, 0, "context-sensor", "observation",
+            {{"condition", std::string("north/south")}}};
+        const auto slash_result = context_cycle.run(context_input);
+        assert(slash_result.status == CognitiveCycleStatus::completed);
+        assert(!slash_result.context.action_assessments.empty());
+        const auto slash_context =
+            slash_result.context.action_assessments.front().developmental_context;
+
+        context_input.observation = Event{
+            0, 0, "context-sensor", "observation",
+            {{"condition", std::string("north_south")}}};
+        const auto underscore_result = context_cycle.run(context_input);
+        assert(underscore_result.status == CognitiveCycleStatus::completed);
+        assert(!underscore_result.context.action_assessments.empty());
+        const auto underscore_context =
+            underscore_result.context.action_assessments.front().developmental_context;
+
+        assert(slash_context != underscore_context);
+        assert(slash_context.find("north%2Fsouth") != std::string::npos);
+        assert(underscore_context.find("north_south") != std::string::npos);
+    }
+    std::filesystem::remove(context_encoding_journal, ec);
+    std::filesystem::remove(context_encoding_journal.string() + ".meta", ec);
+
 
 
     assert(brain.learn(Evidence{"action_executor.stabilize", "action.stabilize", std::string("failed"), 0.0}) >= 0.0);
