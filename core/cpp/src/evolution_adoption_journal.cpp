@@ -12,6 +12,7 @@ bool EvolutionAdoptionJournal::stage(const EvolutionExperiment& experiment) {
                    r.proposal_current == experiment.proposal.current &&
                    r.proposal_proposed == experiment.proposal.proposed &&
                    r.expected_gain == experiment.proposal.expected_gain &&
+                   r.proposal_confidence == experiment.proposal.confidence &&
                    r.minimum_improvement == experiment.minimum_improvement &&
                    r.baseline_fitness == experiment.baseline_fitness &&
                    r.candidate_fitness == experiment.candidate_fitness &&
@@ -28,6 +29,7 @@ bool EvolutionAdoptionJournal::stage(const EvolutionExperiment& experiment) {
     r.proposal_current = experiment.proposal.current;
     r.proposal_proposed = experiment.proposal.proposed;
     r.expected_gain = experiment.proposal.expected_gain;
+    r.proposal_confidence = experiment.proposal.confidence;
     r.minimum_improvement = experiment.minimum_improvement;
     r.outcome = experiment.outcome;
     r.isolation_verified = experiment.isolation_verified();
