@@ -257,7 +257,7 @@ void verify(const std::filesystem::path& path, int seed) {
     const auto history = restored.evolution_history();
     assert(std::any_of(history.begin(), history.end(),
         [](const EvolutionHistoryRecord& record) {
-            return record.key == "jbp004.integration.weight" &&
+            return record.parameter_key == "jbp004.integration.weight" &&
                    record.action == EvolutionRecordAction::Adopted;
         }));
 
