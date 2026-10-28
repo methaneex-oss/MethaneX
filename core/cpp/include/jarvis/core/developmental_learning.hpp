@@ -69,6 +69,8 @@ struct LearnedStrategy {
     double value{0.0};
     double confidence{0.0};
     std::uint64_t uses{0};
+    // Reconstructed from sequential prediction errors during journal replay.
+    std::uint32_t consecutive_surprises{0};
 };
 
 struct RelatedLearnedStrategy {
