@@ -1,0 +1,84 @@
+name: JBP-004 Memory, Learning, Persistence, and Evolution Integration
+
+on:
+  pull_request:
+    branches: ["feat/jarvis-affective-state", "main"]
+    paths:
+      - ".github/workflows/jbp-004-memory-learning-evolution.yml"
+      - "core/cpp/tests/jbp_004_memory_learning_evolution_suite.cpp"
+      - "core/cpp/tests/CMakeLists.txt"
+      - "core/cpp/include/jarvis/core/**"
+      - "core/cpp/src/**"
+  workflow_dispatch:
+    inputs:
+      seeds:
+        description: "Deterministic independent seeds"
+        required: true
+        default: "17 29 43"
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: jbp-004-memory-learning-evolution-\${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  integrated-simulation:
+    name: JBP-004 · simple, hard, and very-hard simulations
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - name: Checkout exact tested revision
+        uses: actions/checkout@v6
+        with:
+          ref: \${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Configure native cognitive architecture
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p jbp-004-results
+          echo "tested_commit=$(git rev-parse HEAD)" | tee jbp-004-results/metadata.txt
+          echo "started_at_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)" | tee -a jbp-004-results/metadata.txt
+          cmake -S core/cpp -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON 2>&1 | tee jbp-004-results/configure.log
+
+      - name: Build integrated simulation
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmake --build build --parallel 2 --target jarvis_jbp_004_memory_learning_evolution_suite 2>&1 | tee jbp-004-results/build.log
+
+      - name: Train and verify in separate operating-system processes
+        shell: bash
+        env:
+          SEEDS: \${{ inputs.seeds || '17 29 43' }}
+        run: |
+          set -euo pipefail
+          executable="$(find build -type f -name jarvis_jbp_004_memory_learning_evolution_suite -executable -print -quit)"
+          test -n "$executable"
+          for seed in $SEEDS; do
+            journal="$RUNNER_TEMP/jbp-004-$seed.bin"
+            echo "JBP-004 seed=$seed phase=train" | tee -a jbp-004-results/trials.log
+            "$executable" train "$journal" "$seed" 2>&1 | tee -a jbp-004-results/trials.log
+            cp "$journal" "jbp-004-results/journal-seed-$seed.bin"
+            cp "$journal.meta" "jbp-004-results/journal-seed-$seed.bin.meta"
+            echo "JBP-004 seed=$seed phase=fresh-process-verify" | tee -a jbp-004-results/trials.log
+            "$executable" verify "$journal" "$seed" 2>&1 | tee -a jbp-004-results/trials.log
+          done
+
+      - name: Run registered CTest train/restore fixture
+        shell: bash
+        run: |
+          set -euo pipefail
+          ctest --test-dir build -R '^jarvis_jbp_004_memory_learning_evolution_(train|verify)$' --output-on-failure --timeout 1800 2>&1 | tee jbp-004-results/ctest.log
+
+      - name: Preserve behavioral logs and journals
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: JBP-004-\${{ github.run_id }}-\${{ github.run_attempt }}
+          path: jbp-004-results/
+          if-no-files-found: warn
+          retention-days: 90
