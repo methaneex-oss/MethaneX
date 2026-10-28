@@ -296,8 +296,14 @@ if(BUILD_TESTING)
     set_tests_properties(jarvis_dlt_002_persistence_verify PROPERTIES
         FIXTURES_REQUIRED dlt002_persistence)
 
-    add_test(NAME jarvis_jbp_004_memory_learning_evolution_suite
+    add_test(NAME jarvis_jbp_004_memory_learning_evolution_train
+        COMMAND jarvis_jbp_004_memory_learning_evolution_suite train ${CMAKE_CURRENT_BINARY_DIR}/jbp-004-ctest.bin 17)
+    set_tests_properties(jarvis_jbp_004_memory_learning_evolution_train PROPERTIES
+        FIXTURES_SETUP jbp004_memory_learning_evolution)
+    add_test(NAME jarvis_jbp_004_memory_learning_evolution_verify
         COMMAND jarvis_jbp_004_memory_learning_evolution_suite verify ${CMAKE_CURRENT_BINARY_DIR}/jbp-004-ctest.bin 17)
+    set_tests_properties(jarvis_jbp_004_memory_learning_evolution_verify PROPERTIES
+        FIXTURES_REQUIRED jbp004_memory_learning_evolution)
 endif()
 # These executable suites use assert() as their test assertion mechanism. Keep
 # assertions enabled in Release builds as well: otherwise NDEBUG removes the
