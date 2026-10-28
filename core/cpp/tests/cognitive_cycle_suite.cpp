@@ -136,7 +136,7 @@ int main() {
         const auto label_marker = reserved_label_context.find("/values/");
         assert(label_marker != std::string::npos);
         assert(label_marker == reserved_label_context.rfind("/values/"));
-        assert(reserved_label_context.find("/features/%76alues/temperature/") !=
+        assert(reserved_label_context.find("/features/temperature/%76alues/values/") !=
                std::string::npos);
         assert(reserved_label_context.substr(0, label_marker) !=
                reserved_value_context.substr(0, structural_marker));
