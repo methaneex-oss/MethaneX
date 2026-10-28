@@ -319,11 +319,14 @@ bool Brain::adopt_evolution_experiment(EvolutionExperiment& experiment) {
                  {"current", experiment.proposal.current},
                  {"proposed", experiment.proposal.proposed},
                  {"expected_gain", experiment.proposal.expected_gain},
-                 {"confidence", experiment.proposal.confidence},
+                 {"proposal_confidence", experiment.proposal.confidence},
+                 {"confidence", experiment.confidence},
                  {"experiment_id", experiment.id},
                  {"outcome", static_cast<std::int64_t>(experiment.outcome)},
                  {"baseline", experiment.baseline_fitness},
-                 {"candidate", experiment.candidate_fitness}}};
+                 {"candidate", experiment.candidate_fitness},
+                 {"minimum_improvement", experiment.minimum_improvement},
+                 {"isolation_verified", experiment.isolation_verified()}}};
     if (!evolution_controller_.adopt_for_brain(experiment)) return false;
     event.sequence = memory_.append(event);
     if (event.sequence == 0) {
