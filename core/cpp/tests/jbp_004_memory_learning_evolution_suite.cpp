@@ -112,11 +112,39 @@ void assert_accuracy(Brain& brain, const Level& level, int level_index, int seed
                                      context, 30, level.actions);
         const int percent = correct * 100 / 30;
         if (percent < minimum_percent) {
+            const auto actions = candidates(level.actions);
+            std::array<int, 3> selected_counts{};
+            std::mt19937 diagnostic_random(static_cast<std::uint32_t>(
+                seed * 7919 + level_index * 101 + context * 17 + 991));
+            for (int trial = 0; trial < 30; ++trial) {
+                const int chosen = selected_action(
+                    brain, actions,
+                    "jbp-004/" + level.name + "/context/" +
+                        context_names[static_cast<std::size_t>(context)],
+                    diagnostic_random, 0.0);
+                ++selected_counts[static_cast<std::size_t>(chosen)];
+            }
+            const std::string failed_context = "jbp-004/" + level.name + "/context/" +
+                context_names[static_cast<std::size_t>(context)];
             std::cerr << "JBP-004 gate failed: level=" << level.name
                       << " context=" << context_names[static_cast<std::size_t>(context)]
+                      << " expected=" << action_names[static_cast<std::size_t>(
+                             mapping[static_cast<std::size_t>(context)])]
                       << " correct=" << correct << "/30 required_percent="
-                      << minimum_percent << "\n";
-            std::abort();
+                      << minimum_percent << " chosen_counts=";
+            for (int action = 0; action < level.actions; ++action)
+                std::cerr << action_names[static_cast<std::size_t>(action)] << ":"
+                          << selected_counts[static_cast<std::size_t>(action)] << " ";
+            std::cerr << "\n";
+            for (const auto& strategy : brain.developmental_strategies()) {
+                if (strategy.context == failed_context) {
+                    std::cerr << "  strategy action=" << strategy.action
+                              << " value=" << strategy.value
+                              << " confidence=" << strategy.confidence
+                              << " uses=" << strategy.uses << "\n";
+                }
+            }
+            std::exit(1);
         }
         std::cout << "JBP-004 level=" << level.name
                   << " context=" << context_names[static_cast<std::size_t>(context)]
