@@ -293,7 +293,9 @@ bool Brain::record_evolution_evaluation(EvolutionExperiment& experiment) {
                  {"outcome", static_cast<std::int64_t>(experiment.outcome)},
                  {"baseline", experiment.baseline_fitness},
                  {"candidate", experiment.candidate_fitness},
-                 {"confidence", experiment.confidence}}};
+                 {"confidence", experiment.confidence},
+                 {"minimum_improvement", experiment.minimum_improvement},
+                 {"isolated", experiment.isolated}}};
     event.sequence = memory_.append(event);
     if (event.sequence == 0) return false;
     if (!evolution_controller_.record_evaluation_for_brain(experiment)) return false;
