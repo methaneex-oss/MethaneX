@@ -447,10 +447,26 @@ void Brain::replay(const Event& event, bool external_observation) {
                     std::clamp(double_value(event.data, "novelty", 0.0), 0.0, 1.0),
                     affective_significance,
                     consequence_confidence});
-        } // Without an observed consequence, update operational capability
-          // reliability above, but do not train the developmental action-value
-          // strategy. Execution success is not evidence that the action's
-          // environmental consequence was beneficial.
+        } else if (status == ActionExecutionStatus::failed ||
+                   status == ActionExecutionStatus::rolled_back ||
+                   status == ActionExecutionStatus::cancelled) {
+            // Operational failure is negative evidence about execution
+            // reliability, not evidence about environmental utility. Preserve
+            // that narrow signal while never treating successful execution as
+            // a positive consequence when no observer reported an outcome.
+            const double evidence_reliability = std::clamp(
+                double_value(event.data, "evidence_reliability", reliability),
+                0.0, 1.0);
+            developmental_learning_.observe_strategy(
+                *context, *action,
+                LearningSignal{1.0 - reliability, -1.0,
+                    std::clamp(double_value(event.data, "salience", 0.0), 0.0, 1.0),
+                    std::clamp(double_value(event.data, "novelty", 0.0), 0.0, 1.0),
+                    affective_significance,
+                    evidence_reliability});
+        } // Unknown consequences do not imply a beneficial outcome. Successful
+          // execution updates operational capability reliability above, but
+          // action-value learning needs an observed consequence.
         // Suppressing the global feature weights after a harmful consequence made
         // the brain less sensitive to the very surprise it needed to investigate.
         // Keep consequence prediction error separate from execution reliability;
