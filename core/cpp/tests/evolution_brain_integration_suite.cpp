@@ -50,6 +50,7 @@ int main() {
             "legacy-rollback-protection-1",
             EvolutionProposal{"legacy.rollback", 0.25, 0.35, 0.1, 0.90},
             0.70, 0.85, 0.01, 0.90, ExperimentOutcome::Improved, true};
+        valid_adoption.isolated = true;
         assert(source.record_evolution_evaluation(valid_adoption));
         assert(source.adopt_evolution_experiment(valid_adoption));
         const auto* adopted = source.evolution_parameter("legacy.rollback");
@@ -99,6 +100,7 @@ int main() {
         EvolutionExperiment experiment{
             "brain-evolution-1", proposals.front(), 0.70, 0.90, 0.01, 0.95,
             ExperimentOutcome::Improved, true};
+        experiment.isolated = true;
         assert(brain.record_evolution_evaluation(experiment));
         const auto evaluated_history = brain.evolution_history();
         assert(evaluated_history.size() == 1);
@@ -115,6 +117,7 @@ int main() {
             "manual-rollback-1",
             EvolutionProposal{"manual.rollback", 0.25, 0.35, 0.1, 0.90},
             0.70, 0.85, 0.01, 0.90, ExperimentOutcome::Improved, true};
+        manual_rollback.isolated = true;
         assert(brain.record_evolution_evaluation(manual_rollback));
         assert(brain.adopt_evolution_experiment(manual_rollback));
         const auto* adopted_manual = brain.evolution_parameter("manual.rollback");
@@ -157,6 +160,7 @@ int main() {
             "canary-persist-1",
             EvolutionProposal{"canary.persist", 0.3, 0.4, 0.1, 0.90},
             0.70, 0.85, 0.01, 0.90, ExperimentOutcome::Improved, true};
+        canary_experiment.isolated = true;
         assert(brain.record_evolution_evaluation(canary_experiment));
         assert(brain.adopt_evolution_experiment(canary_experiment));
         const auto pending_canary = brain.observe_evolution_canary(
@@ -170,6 +174,7 @@ int main() {
             "replay-evaluation-1",
             EvolutionProposal{"replay.persist", 0.3, 0.4, 0.1, 0.90},
             0.70, 0.82, 0.01, 0.90, ExperimentOutcome::Improved, true};
+        replayable.isolated = true;
         assert(brain.record_evolution_evaluation(replayable));
         assert(!brain.record_evolution_evaluation(replayable));
         assert(brain.evolution_history().size() == 9);
@@ -202,6 +207,7 @@ int main() {
             "replay-evaluation-1",
             EvolutionProposal{"replay.persist", 0.3, 0.4, 0.1, 0.90},
             0.70, 0.82, 0.01, 0.90, ExperimentOutcome::Improved, true};
+        replayed.isolated = true;
         assert(restarted.adopt_evolution_experiment(replayed));
         const auto* replayed_parameter = restarted.evolution_parameter("replay.persist");
         assert(replayed_parameter != nullptr && replayed_parameter->value == 0.4);
