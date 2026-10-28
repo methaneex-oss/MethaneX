@@ -7,6 +7,7 @@
 #include <iterator>
 #include <limits>
 #include <mutex>
+#include <sstream>
 #include <utility>
 
 namespace jarvis::core {
@@ -17,6 +18,42 @@ constexpr std::uint64_t kMaxAttributes = 1ULL << 20;
 constexpr std::uint64_t kMetadataMagicV1 = 0x4a41525649534d31ULL;
 constexpr std::uint64_t kMetadataMagic = 0x4a41525649534d32ULL;
 constexpr std::uint64_t kMaxMetadataRecords = 1ULL << 20;
+constexpr std::uint64_t kJournalMagicV2 = 0x4a4152564a4e4c32ULL;
+constexpr std::uint64_t kMaxJournalFrameSize = 1ULL << 30;
+
+std::uint64_t checksum64(const std::string& bytes) {
+    std::uint64_t hash = 14695981039346656037ULL;
+    for (const unsigned char byte : bytes) {
+        hash ^= byte;
+        hash *= 1099511628211ULL;
+    }
+    return hash;
+}
+
+bool write_journal_header(std::ostream& out) {
+    out.write(reinterpret_cast<const char*>(&kJournalMagicV2), sizeof(kJournalMagicV2));
+    return static_cast<bool>(out);
+}
+
+bool write_framed_event(std::ostream& out, const Event& event) {
+    std::ostringstream encoded(std::ios::binary);
+    write_event(encoded, event);
+    if (!encoded) return false;
+    const std::string payload = encoded.str();
+    if (payload.size() > kMaxJournalFrameSize) return false;
+    const auto size = static_cast<std::uint64_t>(payload.size());
+    const auto checksum = checksum64(payload);
+    out.write(reinterpret_cast<const char*>(&size), sizeof(size));
+    out.write(reinterpret_cast<const char*>(&checksum), sizeof(checksum));
+    out.write(payload.data(), static_cast<std::streamsize>(payload.size()));
+    return static_cast<bool>(out);
+}
+
+bool decode_framed_event(const std::string& payload, Event& event) {
+    std::istringstream encoded(payload, std::ios::binary);
+    if (!read_event(encoded, event)) return false;
+    return encoded.peek() == std::char_traits<char>::eof();
+}
 
 void write_string(std::ostream& out, const std::string& value) { const auto size = static_cast<std::uint64_t>(value.size()); out.write(reinterpret_cast<const char*>(&size), sizeof(size)); out.write(value.data(), static_cast<std::streamsize>(value.size())); }
 bool read_string(std::istream& in, std::string& value) { std::uint64_t size{}; if (!in.read(reinterpret_cast<char*>(&size), sizeof(size))) return false; if (size > kMaxSerializedSize) return false; value.resize(static_cast<std::size_t>(size)); if (size == 0) return true; return static_cast<bool>(in.read(value.data(), static_cast<std::streamsize>(size))); }
@@ -31,7 +68,99 @@ bool read_metadata_record(std::istream& in, std::uint64_t& sequence, MemoryTier&
 
 Memory::Memory(std::size_t working_limit, std::filesystem::path journal_path) : working_limit_(std::max<std::size_t>(1, working_limit)), journal_path_(std::move(journal_path)), metadata_path_(journal_path_.string() + ".meta") { load(); load_metadata(); std::unique_lock lock(mutex_); rebuild_learned_tiers(); }
 std::uint64_t Memory::append(Event event) { std::unique_lock lock(mutex_); if (event.sequence == 0 || event.sequence < next_sequence_) event.sequence = next_sequence_; const auto assigned_sequence = event.sequence; if (assigned_sequence == std::numeric_limits<std::uint64_t>::max()) return 0; if (!persist(event)) return 0; const auto tier = tier_of(event); metadata_.push_back(MemoryRecord{event, tier, default_salience(event), default_confidence(event), 0.0}); learned_tiers_[event.kind][tier_index(tier)] += 1.0; latest_sequence_by_kind_.insert_or_assign(event.kind, assigned_sequence); continuity_.push_back(std::move(event)); next_sequence_ = assigned_sequence + 1; return assigned_sequence; }
-void Memory::load() { std::unique_lock lock(mutex_); std::ifstream in(journal_path_, std::ios::binary); if (!in) return; std::uintmax_t valid_end = 0; Event event; std::uint64_t previous_sequence = 0; while (true) { if (!read_event(in, event)) break; if (event.sequence == 0 || (previous_sequence != 0 && event.sequence <= previous_sequence)) break; previous_sequence = event.sequence; latest_sequence_by_kind_.insert_or_assign(event.kind, event.sequence); metadata_.push_back(MemoryRecord{event, MemoryTier::Episodic, default_salience(event), default_confidence(event), 0.0}); continuity_.push_back(std::move(event)); const auto position = in.tellg(); if (position < 0) break; valid_end = static_cast<std::uintmax_t>(position); if (previous_sequence == std::numeric_limits<std::uint64_t>::max()) { next_sequence_ = previous_sequence; break; } next_sequence_ = std::max(next_sequence_, previous_sequence + 1); event = Event{}; } in.close(); std::error_code error; const auto file_size = std::filesystem::file_size(journal_path_, error); if (!error && file_size > valid_end) std::filesystem::resize_file(journal_path_, valid_end, error); }
+void Memory::load() {
+    std::unique_lock lock(mutex_);
+    std::ifstream in(journal_path_, std::ios::binary);
+    if (!in) return;
+
+    std::uint64_t magic{};
+    if (!in.read(reinterpret_cast<char*>(&magic), sizeof(magic))) return;
+    const bool framed = magic == kJournalMagicV2;
+    if (!framed) {
+        in.clear();
+        in.seekg(0);
+    }
+
+    std::uintmax_t valid_end = framed ? sizeof(kJournalMagicV2) : 0;
+    std::uint64_t previous_sequence = 0;
+    while (true) {
+        Event event;
+        if (framed) {
+            std::uint64_t size{};
+            if (!in.read(reinterpret_cast<char*>(&size), sizeof(size))) break;
+            std::uint64_t checksum{};
+            if (!in.read(reinterpret_cast<char*>(&checksum), sizeof(checksum))) break;
+            if (size > kMaxJournalFrameSize) break;
+            std::string payload(static_cast<std::size_t>(size), '\\0');
+            if (size != 0 && !in.read(payload.data(), static_cast<std::streamsize>(size))) break;
+            const auto position = in.tellg();
+            if (position < 0) break;
+            valid_end = static_cast<std::uintmax_t>(position);
+
+            // A complete frame with a bad checksum or invalid event is isolated:
+            // its declared length still provides a safe boundary for later frames.
+            if (checksum64(payload) != checksum || !decode_framed_event(payload, event))
+                continue;
+        } else {
+            if (!read_event(in, event)) break;
+        }
+
+        if (event.sequence == 0 ||
+            (previous_sequence != 0 && event.sequence <= previous_sequence)) {
+            if (framed) continue;
+            break;
+        }
+        previous_sequence = event.sequence;
+        latest_sequence_by_kind_.insert_or_assign(event.kind, event.sequence);
+        metadata_.push_back(MemoryRecord{event, MemoryTier::Episodic,
+                                         default_salience(event), default_confidence(event), 0.0});
+        continuity_.push_back(std::move(event));
+        if (previous_sequence == std::numeric_limits<std::uint64_t>::max()) {
+            next_sequence_ = previous_sequence;
+            break;
+        }
+        next_sequence_ = std::max(next_sequence_, previous_sequence + 1);
+        if (!framed) {
+            const auto position = in.tellg();
+            if (position < 0) break;
+            valid_end = static_cast<std::uintmax_t>(position);
+        }
+    }
+    in.close();
+
+    std::error_code error;
+    const auto file_size = std::filesystem::file_size(journal_path_, error);
+    if (!error && file_size > valid_end) {
+        // Framed journals can recover past a corrupt complete frame. Only an
+        // incomplete trailing frame is truncated; interior corrupt frames are
+        // skipped without deleting subsequent records.
+        std::filesystem::resize_file(journal_path_, valid_end, error);
+    }
+
+    // Migrate legacy unframed journals after reading them. The replacement is
+    // atomic on the same filesystem; if migration fails, retain the old file.
+    if (!framed && !continuity_.empty()) {
+        const auto temporary = journal_path_.string() + ".v2.tmp";
+        bool ok = true;
+        {
+            std::ofstream out(temporary, std::ios::binary | std::ios::trunc);
+            ok = static_cast<bool>(out) && write_journal_header(out);
+            for (const auto& record : continuity_)
+                if (ok && !write_framed_event(out, record)) ok = false;
+            out.flush();
+            ok = ok && static_cast<bool>(out);
+        }
+        if (ok) {
+            std::filesystem::rename(temporary, journal_path_, error);
+            if (error) {
+                std::error_code remove_error;
+                std::filesystem::remove(temporary, remove_error);
+            }
+        } else {
+            std::filesystem::remove(temporary, error);
+        }
+    }
+}
 void Memory::rebuild_learned_tiers() { learned_tiers_.clear(); for (const auto& record : metadata_) learned_tiers_[record.event.kind][tier_index(record.tier)] += 1.0; }
 void Memory::load_metadata() {
     std::unique_lock lock(mutex_);
@@ -104,7 +233,34 @@ void Memory::load_metadata() {
 
     rebuild_learned_tiers();
 }
-bool Memory::persist(const Event& event) const { std::error_code error; if (!journal_path_.parent_path().empty()) std::filesystem::create_directories(journal_path_.parent_path(), error); if (error) return false; std::uintmax_t original_size = 0; if (std::filesystem::exists(journal_path_, error)) { if (error) return false; original_size = std::filesystem::file_size(journal_path_, error); if (error) return false; } std::ofstream out(journal_path_, std::ios::binary | std::ios::app); if (!out) return false; write_event(out, event); out.flush(); const bool ok = static_cast<bool>(out); out.close(); if (ok) return true; std::error_code rollback_error; std::filesystem::resize_file(journal_path_, original_size, rollback_error); return false; }
+bool Memory::persist(const Event& event) const {
+    std::error_code error;
+    if (!journal_path_.parent_path().empty())
+        std::filesystem::create_directories(journal_path_.parent_path(), error);
+    if (error) return false;
+
+    const bool exists = std::filesystem::exists(journal_path_, error);
+    if (error) return false;
+    const auto original_size = exists ? std::filesystem::file_size(journal_path_, error) : 0;
+    if (error) return false;
+
+    std::ofstream out(journal_path_, std::ios::binary | std::ios::app);
+    if (!out) return false;
+    if (original_size == 0 && !write_journal_header(out)) return false;
+    if (!write_framed_event(out, event)) {
+        out.close();
+        std::error_code rollback_error;
+        std::filesystem::resize_file(journal_path_, original_size, rollback_error);
+        return false;
+    }
+    out.flush();
+    const bool ok = static_cast<bool>(out);
+    out.close();
+    if (ok) return true;
+    std::error_code rollback_error;
+    std::filesystem::resize_file(journal_path_, original_size, rollback_error);
+    return false;
+}
 bool Memory::persist_metadata(const MemoryRecord& record) const { std::ofstream out(metadata_path_, std::ios::binary | std::ios::app); if (!out) return false; write_metadata_record(out, record); out.flush(); return static_cast<bool>(out); }
 bool Memory::persist_metadata_snapshot() const { std::error_code error; if (!metadata_path_.parent_path().empty()) std::filesystem::create_directories(metadata_path_.parent_path(), error); if (error) return false; const auto temporary = metadata_path_.string() + ".tmp"; { std::ofstream out(temporary, std::ios::binary | std::ios::trunc); if (!out) return false; const auto count = static_cast<std::uint64_t>(metadata_.size()); out.write(reinterpret_cast<const char*>(&kMetadataMagic), sizeof(kMetadataMagic)); out.write(reinterpret_cast<const char*>(&count), sizeof(count)); for (const auto& record : metadata_) write_metadata_record(out, record); out.flush(); if (!out) { out.close(); std::filesystem::remove(temporary, error); return false; } } std::filesystem::rename(temporary, metadata_path_, error); if (error) { std::error_code remove_error; std::filesystem::remove(temporary, remove_error); return false; } return true; }
 MemoryTier Memory::tier_of(const Event& event) const noexcept { const auto it = learned_tiers_.find(event.kind); if (it == learned_tiers_.end()) return MemoryTier::Episodic; const auto best = std::max_element(it->second.begin(), it->second.end()); return static_cast<MemoryTier>(std::distance(it->second.begin(), best)); }
