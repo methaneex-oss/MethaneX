@@ -1,4 +1,5 @@
 #include "jarvis/core/brain.hpp"
+#include "jarvis/core/evolution_safety.hpp"
 #include "jarvis/core/evolution_experiment_runner.hpp"
 
 #include <cassert>
@@ -165,6 +166,9 @@ int main() {
             0.70, 0.70, 0.01, 0.99, ExperimentOutcome::Improved, true};
         attest_isolated(equal_fitness);
         equal_fitness.outcome = ExperimentOutcome::Improved;
+        EvolutionSafetyPolicy non_isolation_policy;
+        non_isolation_policy.require_isolation = false;
+        assert(!EvolutionSafetyGate::approve(equal_fitness, non_isolation_policy));
         assert(!brain.record_evolution_evaluation(equal_fitness));
         assert(!brain.adopt_evolution_experiment(equal_fitness));
 
@@ -174,6 +178,7 @@ int main() {
             0.70, 0.74, 0.05, 0.99, ExperimentOutcome::Improved, true};
         attest_isolated(subthreshold);
         subthreshold.outcome = ExperimentOutcome::Improved;
+        assert(!EvolutionSafetyGate::approve(subthreshold, non_isolation_policy));
         assert(!brain.record_evolution_evaluation(subthreshold));
         assert(!brain.adopt_evolution_experiment(subthreshold));
 
