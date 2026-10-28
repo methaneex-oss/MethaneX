@@ -1,4 +1,4 @@
-name: JBP-004 Evolving Virtual World Challenge
+name: JBP-004 Unseen Combination Transfer Challenge
 # Re-run the behavioral challenge after failure-localization instrumentation.
 # The world transition callback captures generated action names by value.
 
@@ -66,18 +66,23 @@ jobs:
             journal="$RUNNER_TEMP/jbp-004-$seed.bin"
             echo "JBP-004 seed=$seed phase=train" | tee -a jbp-004-results/trials.log
             if "$executable" train "$journal" "$seed" 2>&1 | tee -a jbp-004-results/trials.log; then
-              echo "JBP-004 seed=$seed phase=fresh-process-verify" | tee -a jbp-004-results/trials.log
-              if "$executable" verify "$journal" "$seed" 2>&1 | tee -a jbp-004-results/trials.log; then
-                echo "JBP-004 seed=$seed overall=PASS" | tee -a jbp-004-results/trials.log
-              else
-                overall=1
-                echo "JBP-004 seed=$seed overall=FAIL verify" | tee -a jbp-004-results/trials.log
-              fi
-              cp "$journal" "jbp-004-results/journal-seed-$seed.bin"
-              test -s "$journal"
+              echo "JBP-004 seed=$seed training_gate=PASS" | tee -a jbp-004-results/trials.log
             else
               overall=1
-              echo "JBP-004 seed=$seed overall=FAIL train" | tee -a jbp-004-results/trials.log
+              echo "JBP-004 seed=$seed training_gate=FAIL" | tee -a jbp-004-results/trials.log
+            fi
+            if test -s "$journal"; then
+              echo "JBP-004 seed=$seed phase=fresh-process-verify" | tee -a jbp-004-results/trials.log
+              if "$executable" verify "$journal" "$seed" 2>&1 | tee -a jbp-004-results/trials.log; then
+                echo "JBP-004 seed=$seed verification_gate=PASS" | tee -a jbp-004-results/trials.log
+              else
+                overall=1
+                echo "JBP-004 seed=$seed verification_gate=FAIL" | tee -a jbp-004-results/trials.log
+              fi
+              cp "$journal" "jbp-004-results/journal-seed-$seed.bin"
+            else
+              overall=1
+              echo "JBP-004 seed=$seed journal_missing=true verification=SKIPPED" | tee -a jbp-004-results/trials.log
             fi
           done
           exit "$overall"
@@ -88,17 +93,16 @@ jobs:
         shell: bash
         run: |
           cat > jbp-004-results/scope.txt <<'EOF'
-          JBP-004 tests the existing native cognitive runtime in a generated,
-          partially observed virtual world. The evaluator randomizes the action
-          rule per seed and withholds the rule from the brain. The world includes
-          stochastic outcomes, separate contexts, a targeted reversal, an
-          unchanged-context control, and fresh-process journal restoration.
-          The verification phase withholds outcome feedback.
-          
-          A passing run is evidence only for this bounded task and these seeds.
-          It does not establish general intelligence, arbitrary concept learning,
-          language acquisition, visual recognition, or unrestricted self-improvement.
-          Any failed seed is a failed challenge; do not hide it in an aggregate.
+          JBP-004 evaluates compositional transfer in the existing native cognitive
+          runtime. Three combinations of weather and terrain are trained; the fourth
+          combination is withheld from training. The evaluator keeps the two-factor
+          parity rule hidden from the brain and injects 15% noisy outcomes.
+          Fresh-process verification withholds outcome feedback and scores familiar
+          combinations separately from the held-out transfer combination.
+
+          This bounded task does not establish general intelligence or arbitrary
+          concept learning. Every seed and every gate must be reported honestly.
+          Training-gate failure does not suppress verification if a journal exists.
           EOF
           cat jbp-004-results/scope.txt
 
