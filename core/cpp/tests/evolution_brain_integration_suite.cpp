@@ -158,6 +158,15 @@ int main() {
         assert(before_direct_adoption != nullptr);
         const double direct_baseline = before_direct_adoption->baseline;
         assert(!brain.adopt_evolution(*direct_it));
+        assert(brain.register_evolution_parameter("safety.missing-evaluation", 0.2));
+        EvolutionExperiment missing_evaluation{
+            "safety-missing-evaluation",
+            EvolutionProposal{"safety.missing-evaluation", 0.2, 0.3, 0.1, 0.99},
+            0.70, 0.82, 0.01, 0.99, ExperimentOutcome::Improved, true};
+        attest_isolated(missing_evaluation);
+        assert(!brain.adopt_evolution_experiment(missing_evaluation));
+        const auto* unchanged_missing = brain.evolution_parameter("safety.missing-evaluation");
+        assert(unchanged_missing != nullptr && unchanged_missing->value == 0.2);
         // An experiment cannot be adopted merely because the caller labels it
         // Improved; the outcome must be recomputed against its threshold.
         assert(brain.register_evolution_parameter("safety.equal-fitness", 0.2));
@@ -236,6 +245,8 @@ int main() {
         assert(parameter->value == parameter->baseline);
         assert(parameter->observations == 3);
         assert(parameter->value == parameter->baseline);
+        const auto* missing_evaluation = restarted.evolution_parameter("safety.missing-evaluation");
+        assert(missing_evaluation != nullptr && missing_evaluation->value == missing_evaluation->baseline);
         const auto* equal_fitness = restarted.evolution_parameter("safety.equal-fitness");
         assert(equal_fitness != nullptr && equal_fitness->value == equal_fitness->baseline);
         const auto* subthreshold = restarted.evolution_parameter("safety.subthreshold");
