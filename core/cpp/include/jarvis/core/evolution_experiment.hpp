@@ -33,13 +33,44 @@ struct EvolutionExperiment {
     double confidence{0.0};
     ExperimentOutcome outcome{ExperimentOutcome::Pending};
     bool candidate_executed{false};
-    bool isolation_verified() const noexcept { return isolation_attested_; }
+    bool isolation_verified() const noexcept {
+        return isolation_attested_ && attested_id_ == id &&
+               attested_proposal_.key == proposal.key &&
+               attested_proposal_.current == proposal.current &&
+               attested_proposal_.proposed == proposal.proposed &&
+               attested_proposal_.expected_gain == proposal.expected_gain &&
+               attested_proposal_.confidence == proposal.confidence &&
+               attested_baseline_fitness_ == baseline_fitness &&
+               attested_candidate_fitness_ == candidate_fitness &&
+               attested_minimum_improvement_ == minimum_improvement &&
+               attested_confidence_ == confidence &&
+               attested_outcome_ == outcome &&
+               attested_candidate_executed_ == candidate_executed;
+    }
 
 private:
-    // Only the sandbox runner can mint this process-local attestation. A caller
-    // cannot turn a hand-constructed experiment into isolated evidence by
-    // setting a public Boolean.
+    // The runner snapshots every adoption-relevant field after a successful
+    // isolated run. Mutating public experiment fields invalidates the evidence.
+    void attest_current_evaluation() noexcept {
+        attested_id_ = id;
+        attested_proposal_ = proposal;
+        attested_baseline_fitness_ = baseline_fitness;
+        attested_candidate_fitness_ = candidate_fitness;
+        attested_minimum_improvement_ = minimum_improvement;
+        attested_confidence_ = confidence;
+        attested_outcome_ = outcome;
+        attested_candidate_executed_ = candidate_executed;
+        isolation_attested_ = true;
+    }
     bool isolation_attested_{false};
+    std::string attested_id_;
+    EvolutionProposal attested_proposal_{};
+    double attested_baseline_fitness_{0.0};
+    double attested_candidate_fitness_{0.0};
+    double attested_minimum_improvement_{0.0};
+    double attested_confidence_{0.0};
+    ExperimentOutcome attested_outcome_{ExperimentOutcome::Pending};
+    bool attested_candidate_executed_{false};
     friend class EvolutionExperimentRunner;
     friend class EvolutionController;
     friend class Brain;
