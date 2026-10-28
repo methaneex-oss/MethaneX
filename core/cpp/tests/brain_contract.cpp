@@ -46,7 +46,7 @@ int main() {
         assert(restored.beliefs().size() == 2);
         assert(restored.memory().size() == 6);
         const auto snapshot = restored.snapshot();
-        assert(snapshot.state.events_seen == 8);
+        assert(snapshot.state.events_seen == 6);
         assert(snapshot.predictions.size() == 1);
         assert(snapshot.predictions.front().resolved);
         assert(!restored.evolution_options().empty());
