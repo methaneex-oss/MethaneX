@@ -306,3 +306,8 @@ foreach(JARVIS_TEST_TARGET IN LISTS JARVIS_TEST_TARGETS)
         )
     endif()
 endforeach()
+
+
+add_executable(jarvis_jbp_004_unseen_transfer_suite jbp_004_unseen_transfer_suite.cpp)
+target_link_libraries(jarvis_jbp_004_unseen_transfer_suite PRIVATE jarvis_core)
+target_compile_features(jarvis_jbp_004_unseen_transfer_suite PRIVATE cxx_std_20)
