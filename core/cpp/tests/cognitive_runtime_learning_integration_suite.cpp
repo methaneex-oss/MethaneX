@@ -29,7 +29,8 @@ bool wait_for_feedback(CognitiveRuntime& runtime, std::uint64_t expected,
     return runtime.metrics().feedback_processed >= expected;
 }
 
-CognitiveCycleInput make_input(const std::string& goal_id, std::int64_t observation) {
+CognitiveCycleInput make_input(const std::string& goal_id, std::int64_t observation,
+                               const std::string& developmental_context = "runtime-learning-context") {
     CognitiveCycleInput input;
     input.observation = Event{0, 0, "runtime-learning-world", "observation",
                               {{"state", observation}}};
@@ -53,7 +54,7 @@ CognitiveCycleInput make_input(const std::string& goal_id, std::int64_t observat
 
     input.candidate_actions = {calibrate, wait};
     input.goal_id = goal_id;
-    input.developmental_context = "runtime-learning-context";
+    input.developmental_context = developmental_context;
     input.planning_horizon = 1;
     input.resource_budget = 10.0;
     return input;
@@ -130,12 +131,39 @@ int main() {
     assert(executed_actions[1] == "wait");
     assert(wait_for_feedback(runtime, 2));
 
+    // Context-isolation control: a preference learned in one context must not
+    // blindly transfer to a semantically unrelated context. Both candidates
+    // have equal initial scores, so the unrelated context starts from the
+    // planner's ordinary deterministic tie-break rather than the learned
+    // preference for "wait" in runtime-learning-context.
+    assert(runtime.submit(make_input(goal.id, 200, "orchard-irrigation-context")));
+    const auto unrelated = wait_for_result(runtime);
+    assert(unrelated.has_value());
+    assert(unrelated->status == CognitiveCycleStatus::completed);
+    assert(unrelated->context.plan.steps.size() == 1);
+    assert(unrelated->context.plan.steps.front().action.name == "calibrate");
+    assert(unrelated->context.action_execution_results.size() == 1);
+    assert(unrelated->context.action_execution_results.front().action.name == "calibrate");
+    assert(unrelated->context.action_execution_results.front().outcome.observed);
+    assert(wait_for_feedback(runtime, 3));
+
+    const auto original_context_strategy =
+        brain.developmental_best_strategy("runtime-learning-context");
+    assert(original_context_strategy != nullptr);
+    assert(original_context_strategy->action == "wait");
+    assert(original_context_strategy->value > 0.0);
+    const auto unrelated_context_strategy =
+        brain.developmental_best_strategy("orchard-irrigation-context");
+    assert(unrelated_context_strategy != nullptr);
+    assert(unrelated_context_strategy->action == "calibrate");
+    assert(unrelated_context_strategy->value < 0.0);
+
     // Regime-change test: the environment now contradicts the old experience.
     // The runtime must collect new observed consequences and eventually revise
     // its choice, rather than freezing the first learned preference.
     environment_regime_changed = true;
     bool reversed = false;
-    std::uint64_t expected_feedback = 2;
+    std::uint64_t expected_feedback = 3;
     for (std::int64_t observation = 3; observation < 43; ++observation) {
         assert(runtime.submit(make_input(goal.id, observation)));
         const auto result = wait_for_result(runtime);
