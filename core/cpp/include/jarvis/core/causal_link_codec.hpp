@@ -65,7 +65,7 @@ decode_causal_side(const std::string& encoded) {
         };
 
         std::size_t key_size = 0;
-        if (!read_size(pos, key_size) || key_size > encoded.size() - pos)
+        if (!read_size(pos, key_size) || key_size == 0 || key_size > encoded.size() - pos)
             return std::nullopt;
         std::string key = encoded.substr(pos, key_size);
         pos += key_size;
