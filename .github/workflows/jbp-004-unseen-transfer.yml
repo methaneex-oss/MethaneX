@@ -59,7 +59,7 @@ jobs:
           SEEDS: ${{ inputs.seeds || '17 29 43' }}
         run: |
           set -euo pipefail
-          executable="$(find build -type f -name jarvis_jbp_003_evolving_world_suite -executable -print -quit)"
+          executable="$(find build -type f -name jarvis_jbp_004_unseen_transfer_suite -executable -print -quit)"
           test -n "$executable"
           overall=0
           for seed in $SEEDS; do
