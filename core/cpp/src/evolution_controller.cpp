@@ -163,7 +163,7 @@ bool EvolutionController::validate_adoption_for_brain(const EvolutionExperiment&
     if (evaluated == records.end()) return false;
 
     auto verified = experiment;
-    verified.isolation_attested_ = true; // backed by the matching recorded evaluation above
+    verified.attest_current_evaluation(); // backed by the matching recorded evaluation above
     if (EvolutionExperimentEngine::evaluate(verified) != experiment.outcome ||
         !EvolutionSafetyGate::approve(verified, policy_)) return false;
     const auto evaluation = model_.evaluate(experiment.proposal);
@@ -223,7 +223,7 @@ bool EvolutionController::replay_adoption(const EvolutionExperiment& experiment)
         recorded->outcome != experiment.outcome) return false;
     auto verified = experiment;
     verified.minimum_improvement = recorded->minimum_improvement;
-    verified.isolation_attested_ = true;
+    verified.attest_current_evaluation();
     if (EvolutionExperimentEngine::evaluate(verified) != verified.outcome ||
         !EvolutionSafetyGate::approve(verified, policy_) ||
         !adoption_journal_.stage(verified)) return false;
