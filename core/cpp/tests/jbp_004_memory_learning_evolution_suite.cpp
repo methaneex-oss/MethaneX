@@ -204,7 +204,11 @@ void train(const std::filesystem::path& path, int seed) {
                    std::isfinite(item.proposed) && item.proposed != item.current;
         });
     assert(proposal != proposals.end());
-    assert(brain.adopt_evolution(*proposal));
+    EvolutionExperiment experiment{
+        "jbp004-integration-" + std::to_string(seed), *proposal,
+        0.70, 0.85, 0.01, 0.90, ExperimentOutcome::Improved, true};
+    assert(brain.record_evolution_evaluation(experiment));
+    assert(brain.adopt_evolution_experiment(experiment));
     const auto* adopted = brain.evolution_parameter("jbp004.integration.weight");
     assert(adopted != nullptr && adopted->value == proposal->proposed);
 
