@@ -65,6 +65,7 @@ int main() {
             "legacy-rollback-protection-1",
             EvolutionProposal{"legacy.rollback", 0.25, 0.35, 0.1, 0.90},
             0.70, 0.85, 0.01, 0.90, ExperimentOutcome::Improved, true};
+        evaluate_in_isolated_sandbox(valid_adoption);
         assert(source.record_evolution_evaluation(valid_adoption));
         assert(source.adopt_evolution_experiment(valid_adoption));
         const auto* adopted = source.evolution_parameter("legacy.rollback");
