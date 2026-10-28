@@ -29,7 +29,7 @@ EvolutionTrialBatch EvolutionExperimentCoordinator::run(
     for (std::size_t i = 0; i < config.baseline_trials; ++i) {
         const auto result = sandbox.run(experiment.proposal, baseline_executor);
         if (!result.started || !result.completed || result.timed_out || result.output_limited ||
-            !result.isolated || !std::isfinite(result.fitness)) {
+            (config.require_isolation && !result.isolated) || !std::isfinite(result.fitness)) {
             experiment.outcome = ExperimentOutcome::Invalid;
             return batch;
         }
@@ -39,7 +39,8 @@ EvolutionTrialBatch EvolutionExperimentCoordinator::run(
 
     for (std::size_t i = 0; i < config.candidate_trials; ++i) {
         const auto result = sandbox.run(experiment.proposal, candidate_executor);
-        if (!result.completed || result.timed_out || result.output_limited || !std::isfinite(result.fitness)) {
+        if (!result.started || !result.completed || result.timed_out || result.output_limited ||
+            (config.require_isolation && !result.isolated) || !std::isfinite(result.fitness)) {
             experiment.outcome = ExperimentOutcome::Invalid;
             return batch;
         }
