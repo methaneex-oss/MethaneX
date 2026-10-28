@@ -138,6 +138,58 @@ int main() {
     assert(restored_strategy->value > 0.0);
     assert(restored_strategy->uses >= 2);
 
+    // No-feedback control: successful execution alone must not be mistaken for
+    // a beneficial consequence. Without an observation, the same alternatives
+    // should not acquire a consequence-driven preference.
+    const auto control_journal = std::filesystem::temp_directory_path() /
+                                 "jarvis_runtime_no_feedback_control.bin";
+    std::filesystem::remove(control_journal, ec);
+    std::filesystem::remove(control_journal.string() + ".meta", ec);
+    {
+        Brain control_brain(control_journal);
+        Goal control_goal;
+        control_goal.id = "runtime-no-feedback-goal";
+        control_goal.description = "Do not infer outcomes without observation";
+        control_goal.priority = 0.8;
+        assert(control_brain.create_goal(control_goal));
+        assert(control_brain.activate_goal(control_goal.id));
+
+        std::vector<std::string> control_executed;
+        CognitiveRuntimeConfig control_config;
+        control_config.result_capacity = 8;
+        control_config.feedback_capacity = 8;
+        control_config.drain_on_stop = true;
+        control_config.action_adapter.authorization.maximum_risk = 1.0;
+        control_config.action_adapter.execute = [&](const CandidateAction& action) {
+            control_executed.push_back(action.name);
+            return true;
+        };
+        control_config.action_adapter.verify = [](const CandidateAction&) { return true; };
+        // Deliberately leave observe_consequence unset: no observed outcome exists.
+        CognitiveRuntime control_runtime(control_brain, control_config);
+        assert(control_runtime.start());
+        assert(control_runtime.submit(make_input(control_goal.id, 1)));
+        const auto control_first = wait_for_result(control_runtime);
+        assert(control_first.has_value());
+        assert(control_first->status == CognitiveCycleStatus::completed);
+        assert(control_first->context.plan.steps.front().action.name == "calibrate");
+        assert(control_first->context.action_execution_results.size() == 1);
+        assert(!control_first->context.action_execution_results.front().outcome.observed);
+        assert(control_executed == std::vector<std::string>{"calibrate"});
+        assert(wait_for_feedback(control_runtime, 1));
+        assert(control_brain.developmental_best_strategy("runtime-learning-context") == nullptr);
+
+        assert(control_runtime.submit(make_input(control_goal.id, 2)));
+        const auto control_second = wait_for_result(control_runtime);
+        assert(control_second.has_value());
+        assert(control_second->status == CognitiveCycleStatus::completed);
+        assert(control_second->context.plan.steps.front().action.name == "calibrate");
+        assert(control_executed == (std::vector<std::string>{"calibrate", "calibrate"}));
+        control_runtime.stop();
+    }
+    std::filesystem::remove(control_journal, ec);
+    std::filesystem::remove(control_journal.string() + ".meta", ec);
+
     std::filesystem::remove(journal, ec);
     std::filesystem::remove(journal.string() + ".meta", ec);
     return 0;
