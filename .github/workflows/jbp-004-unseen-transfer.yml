@@ -1,0 +1,112 @@
+name: JBP-004 Evolving Virtual World Challenge
+# Re-run the behavioral challenge after failure-localization instrumentation.
+# The world transition callback captures generated action names by value.
+
+on:
+  pull_request:
+    branches: [main, "feat/jarvis-affective-state"]
+    paths:
+      - ".github/workflows/jbp-004-unseen-transfer.yml"
+      - "core/cpp/tests/jbp_004_unseen_transfer_suite.cpp"
+      - "core/cpp/tests/CMakeLists.txt"
+      - "core/cpp/include/jarvis/core/developmental_world.hpp"
+      - "core/cpp/include/jarvis/core/cognitive_runtime.hpp"
+      - "core/cpp/src/**"
+  workflow_dispatch:
+    inputs:
+      seeds:
+        description: "Space-separated deterministic seeds"
+        required: true
+        default: "17 29 43"
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: jbp-004-unseen-transfer-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  unseen-transfer:
+    name: JBP-004 · compositional transfer and persisted recall
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout exact tested revision
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Configure native cognitive architecture
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p jbp-004-results
+          echo "tested_commit=$(git rev-parse HEAD)" | tee jbp-004-results/metadata.txt
+          echo "started_at_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)" | tee -a jbp-004-results/metadata.txt
+          cmake -S core/cpp -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON 2>&1 | tee jbp-004-results/configure.log
+
+      - name: Build unseen-transfer challenge
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmake --build build --parallel 2 --target jarvis_jbp_004_unseen_transfer_suite 2>&1 | tee jbp-004-results/build.log
+
+      - name: Run independent-seed training and fresh-process recall
+        shell: bash
+        env:
+          SEEDS: ${{ inputs.seeds || '17 29 43' }}
+        run: |
+          set -euo pipefail
+          executable="$(find build -type f -name jarvis_jbp_003_evolving_world_suite -executable -print -quit)"
+          test -n "$executable"
+          overall=0
+          for seed in $SEEDS; do
+            journal="$RUNNER_TEMP/jbp-004-$seed.bin"
+            echo "JBP-004 seed=$seed phase=train" | tee -a jbp-004-results/trials.log
+            if "$executable" train "$journal" "$seed" 2>&1 | tee -a jbp-004-results/trials.log; then
+              echo "JBP-004 seed=$seed phase=fresh-process-verify" | tee -a jbp-004-results/trials.log
+              if "$executable" verify "$journal" "$seed" 2>&1 | tee -a jbp-004-results/trials.log; then
+                echo "JBP-004 seed=$seed overall=PASS" | tee -a jbp-004-results/trials.log
+              else
+                overall=1
+                echo "JBP-004 seed=$seed overall=FAIL verify" | tee -a jbp-004-results/trials.log
+              fi
+              cp "$journal" "jbp-004-results/journal-seed-$seed.bin"
+              test -s "$journal"
+            else
+              overall=1
+              echo "JBP-004 seed=$seed overall=FAIL train" | tee -a jbp-004-results/trials.log
+            fi
+          done
+          exit "$overall"
+          echo "completed_at_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)" | tee -a jbp-004-results/metadata.txt
+
+      - name: Record interpretation and limitations
+        if: always()
+        shell: bash
+        run: |
+          cat > jbp-004-results/scope.txt <<'EOF'
+          JBP-004 tests the existing native cognitive runtime in a generated,
+          partially observed virtual world. The evaluator randomizes the action
+          rule per seed and withholds the rule from the brain. The world includes
+          stochastic outcomes, separate contexts, a targeted reversal, an
+          unchanged-context control, and fresh-process journal restoration.
+          The verification phase withholds outcome feedback.
+          
+          A passing run is evidence only for this bounded task and these seeds.
+          It does not establish general intelligence, arbitrary concept learning,
+          language acquisition, visual recognition, or unrestricted self-improvement.
+          Any failed seed is a failed challenge; do not hide it in an aggregate.
+          EOF
+          cat jbp-004-results/scope.txt
+
+      - name: Preserve raw challenge evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: JBP-004-${{ github.run_id }}-${{ github.run_attempt }}
+          path: jbp-004-results/
+          if-no-files-found: warn
+          retention-days: 90
