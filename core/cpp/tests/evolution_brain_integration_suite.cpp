@@ -9,6 +9,73 @@ using namespace jarvis::core;
 int main() {
     const std::filesystem::path path = "evolution_brain_integration_test.bin";
     std::error_code ec;
+    // A persisted legacy adoption event without experiment evidence must
+    // not bypass the evaluation gate when a Brain reconstructs from disk.
+    const std::filesystem::path legacy_path = "evolution_legacy_adoption_test.bin";
+    std::filesystem::remove(legacy_path, ec);
+    std::filesystem::remove(legacy_path.string() + ".meta", ec);
+    {
+        Brain source(legacy_path);
+        assert(source.register_evolution_parameter("legacy.replay", 0.25));
+    }
+    {
+        Memory journal(256, legacy_path);
+        Event legacy_adoption{
+            0, 1, "legacy-test", "evolution_adopt",
+            {{"key", std::string("legacy.replay")},
+             {"current", 0.25},
+             {"proposed", 0.95},
+             {"expected_gain", 0.70},
+             {"confidence", 0.99}}};
+        assert(journal.append(legacy_adoption) != 0);
+    }
+    {
+        Brain restarted_legacy(legacy_path);
+        const auto* parameter = restarted_legacy.evolution_parameter("legacy.replay");
+        assert(parameter != nullptr);
+        assert(parameter->value == parameter->baseline);
+    }
+    std::filesystem::remove(legacy_path, ec);
+    std::filesystem::remove(legacy_path.string() + ".meta", ec);
+
+    // An unversioned legacy rollback must not undo a newer adoption during
+    // journal replay: it does not identify the experiment it belongs to.
+    const std::filesystem::path legacy_rollback_path = "evolution_legacy_rollback_test.bin";
+    std::filesystem::remove(legacy_rollback_path, ec);
+    std::filesystem::remove(legacy_rollback_path.string() + ".meta", ec);
+    {
+        Brain source(legacy_rollback_path);
+        assert(source.register_evolution_parameter("legacy.rollback", 0.25));
+        EvolutionExperiment valid_adoption{
+            "legacy-rollback-protection-1",
+            EvolutionProposal{"legacy.rollback", 0.25, 0.35, 0.1, 0.90},
+            0.70, 0.85, 0.01, 0.90, ExperimentOutcome::Improved, true};
+        assert(source.record_evolution_evaluation(valid_adoption));
+        assert(source.adopt_evolution_experiment(valid_adoption));
+        const auto* adopted = source.evolution_parameter("legacy.rollback");
+        assert(adopted != nullptr && adopted->value == 0.35);
+    }
+    {
+        Memory journal(256, legacy_rollback_path);
+        Event legacy_rollback{
+            0, 0, "legacy-test", "evolution_rollback",
+            {{"key", std::string("legacy.rollback")}}};
+        assert(journal.append(legacy_rollback) != 0);
+    }
+    {
+        Brain restarted_legacy(legacy_rollback_path);
+        const auto* parameter = restarted_legacy.evolution_parameter("legacy.rollback");
+        assert(parameter != nullptr);
+        assert(parameter->value == 0.35);
+        const auto history = restarted_legacy.evolution_history();
+        assert(std::any_of(history.begin(), history.end(), [](const EvolutionHistoryRecord& record) {
+            return record.experiment_id == "legacy-rollback-protection-1" &&
+                   record.action == EvolutionRecordAction::Adopted;
+        }));
+    }
+    std::filesystem::remove(legacy_rollback_path, ec);
+    std::filesystem::remove(legacy_rollback_path.string() + ".meta", ec);
+
     std::filesystem::remove(path, ec);
 
     {
@@ -68,14 +135,15 @@ int main() {
             direct_proposals.begin(), direct_proposals.end(),
             [](const EvolutionProposal& proposal) { return proposal.key == "direct.rollback"; });
         assert(direct_it != direct_proposals.end());
-        assert(brain.adopt_evolution(*direct_it));
-        const auto* adopted_direct = brain.evolution_parameter("direct.rollback");
-        assert(adopted_direct != nullptr);
-        assert(adopted_direct->value != adopted_direct->baseline);
-        assert(brain.rollback_evolution("direct.rollback"));
-        const auto* rolled_direct = brain.evolution_parameter("direct.rollback");
-        assert(rolled_direct != nullptr);
-        assert(rolled_direct->value == rolled_direct->baseline);
+        // A proposal without a recorded candidate-vs-baseline experiment
+        // must not mutate the parameter through the legacy convenience API.
+        const auto* before_direct_adoption = brain.evolution_parameter("direct.rollback");
+        assert(before_direct_adoption != nullptr);
+        const double direct_baseline = before_direct_adoption->baseline;
+        assert(!brain.adopt_evolution(*direct_it));
+        const auto* rejected_direct = brain.evolution_parameter("direct.rollback");
+        assert(rejected_direct != nullptr);
+        assert(rejected_direct->value == direct_baseline);
 
         brain.observe_evolution_canary("planner.weight", "brain-evolution-1", {0.90, 0.89});
         brain.observe_evolution_canary("planner.weight", "brain-evolution-1", {0.90, 0.88});

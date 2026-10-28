@@ -1,4 +1,5 @@
 #include "jarvis/core/causal_model.hpp"
+#include "jarvis/core/causal_link_codec.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -10,36 +11,12 @@ namespace jarvis::core {
 namespace {
 
 std::string encode(const std::string& key, const Scalar& value) {
-    return key + "=" + std::visit([](const auto& item) -> std::string {
-        using T = std::decay_t<decltype(item)>;
-        if constexpr (std::is_same_v<T, std::monostate>) return "null";
-        else if constexpr (std::is_same_v<T, bool>) return item ? "true" : "false";
-        else if constexpr (std::is_same_v<T, std::string>) return item;
-        else return std::to_string(item);
-    }, value);
-}
-
-Scalar decode(const std::string& text) {
-    if (text == "null") return std::monostate{};
-    if (text == "true") return true;
-    if (text == "false") return false;
-    try {
-        std::size_t consumed = 0;
-        const auto integer = std::stoll(text, &consumed);
-        if (consumed == text.size()) return static_cast<std::int64_t>(integer);
-    } catch (...) {}
-    try {
-        std::size_t consumed = 0;
-        const auto number = std::stod(text, &consumed);
-        if (consumed == text.size()) return number;
-    } catch (...) {}
-    return text;
+    return detail::encode_causal_side(key, value);
 }
 
 std::pair<std::string, Scalar> decode_effect(const std::string& encoded) {
-    const auto separator = encoded.find('=');
-    if (separator == std::string::npos) return {encoded, std::monostate{}};
-    return {encoded.substr(0, separator), decode(encoded.substr(separator + 1))};
+    const auto decoded = detail::decode_causal_side(encoded);
+    return decoded.value_or(std::make_pair(encoded, Scalar{std::monostate{}}));
 }
 
 const Belief* find_belief(const std::vector<Belief>& beliefs, const std::string& key) {

@@ -1,4 +1,5 @@
 #include "jarvis/core/reasoning.hpp"
+#include "jarvis/core/causal_link_codec.hpp"
 
 #include <algorithm>
 #include <cstdint>
@@ -16,24 +17,13 @@ bool same_value(const Scalar& a, const Scalar& b) noexcept { return a == b; }
 struct ParsedLink { std::string key; Scalar value; };
 
 std::optional<ParsedLink> parse_link_side(const std::string& side) {
-    const auto separator = side.find('=');
-    if (separator == std::string::npos || separator == 0) return std::nullopt;
-    const auto key = side.substr(0, separator);
-    const auto encoded = side.substr(separator + 1);
-    if (encoded == "null") return ParsedLink{key, std::monostate{}};
-    if (encoded == "true") return ParsedLink{key, true};
-    if (encoded == "false") return ParsedLink{key, false};
-    try {
-        std::size_t used = 0;
-        const auto integer = std::stoll(encoded, &used);
-        if (used == encoded.size()) return ParsedLink{key, static_cast<std::int64_t>(integer)};
-    } catch (...) {}
-    try {
-        std::size_t used = 0;
-        const auto number = std::stod(encoded, &used);
-        if (used == encoded.size()) return ParsedLink{key, number};
-    } catch (...) {}
-    return ParsedLink{key, encoded};
+    // Preserve the historical rejection of malformed legacy sides while
+    // accepting the versioned length-prefixed representation.
+    if (side.rfind("@2|", 0) != 0 && side.find('=') == std::string::npos)
+        return std::nullopt;
+    const auto decoded = detail::decode_causal_side(side);
+    if (!decoded) return std::nullopt;
+    return ParsedLink{decoded->first, decoded->second};
 }
 
 } // namespace

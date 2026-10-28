@@ -56,7 +56,8 @@ int main() {
     const auto* parameter = brain.evolution_parameter("forecast");
     assert(parameter != nullptr);
     assert(parameter->observations == 12);
-    assert(parameter->value > 0.5);
+    assert(parameter->value == parameter->baseline);
+    assert(!brain.evolution_options().empty());
 
     // Developmental adaptation must respond to a changed environment even after
     // a long history of successful predictions. Long-term experience is retained,
@@ -91,7 +92,7 @@ int main() {
     const auto* restored_parameter = restored.evolution_parameter("forecast");
     assert(restored_parameter != nullptr);
     assert(restored_parameter->observations == 16);
-    assert(restored_parameter->value > 0.5);
+    assert(restored_parameter->value == restored_parameter->baseline);
 
     // Finite inputs near the floating-point limits must still produce a
     // gradual estimate update instead of overflowing the delta and snapping

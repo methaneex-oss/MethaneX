@@ -29,8 +29,10 @@ int main() {
         brain.observe_evolution_fitness("strategy.rate", 0.9);
         const auto proposals = brain.evolution_options();
         assert(!proposals.empty());
-        assert(brain.adopt_evolution(proposals.front()));
-        assert(brain.rollback_evolution("strategy.rate"));
+        // Proposals are not adoption evidence; use the explicit experiment API
+        // to adopt, and do not roll back a parameter that was never adopted.
+        assert(!brain.adopt_evolution(proposals.front()));
+        assert(!brain.rollback_evolution("strategy.rate"));
 
         const auto reflection = brain.reflect();
         assert(reflection.prediction_accuracy >= 0.0 && reflection.prediction_accuracy <= 1.0);
@@ -39,12 +41,12 @@ int main() {
 
     {
         Brain restored(path);
-        assert(restored.state().events_seen == 8);
-        assert(restored.state().cycle == 8);
+        assert(restored.state().events_seen == 6);
+        assert(restored.state().cycle == 6);
         assert(restored.beliefs().size() == 2);
-        assert(restored.memory().size() == 8);
+        assert(restored.memory().size() == 6);
         const auto snapshot = restored.snapshot();
-        assert(snapshot.state.events_seen == 8);
+        assert(snapshot.state.events_seen == 6);
         assert(snapshot.predictions.size() == 1);
         assert(snapshot.predictions.front().resolved);
         assert(!restored.evolution_options().empty());

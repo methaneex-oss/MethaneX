@@ -140,6 +140,34 @@ int main() {
             assert(std::get<std::string>(result.context.observation.event.data.at("route_condition")) ==
                    (flooded ? "flooded" : "clear"));
 
+            // The world changes which route is useful halfway through the run.
+            // Verify the runtime's actual choice adapts from observed outcomes,
+            // rather than merely recording outcomes and surviving a restart.
+            if (!flooded && episode > 0) {
+                assert(selected == "route-north");
+                const auto* clear_strategy =
+                    brain.developmental_best_strategy("navigation/clear");
+                assert(clear_strategy != nullptr);
+                assert(clear_strategy->action == "route-north");
+                assert(clear_strategy->value > 0.0);
+            } else if (flooded && episode == 6) {
+                // New context has no prior strategy: first trial exposes the
+                // formerly good route's now-negative consequence.
+                assert(selected == "route-north");
+                const auto* flooded_strategy =
+                    brain.developmental_best_strategy("navigation/flooded");
+                assert(flooded_strategy != nullptr);
+                assert(flooded_strategy->action == "route-north");
+                assert(flooded_strategy->value < 0.0);
+            } else if (flooded && episode > 6) {
+                assert(selected == "route-south");
+                const auto* flooded_strategy =
+                    brain.developmental_best_strategy("navigation/flooded");
+                assert(flooded_strategy != nullptr);
+                assert(flooded_strategy->action == "route-south");
+                assert(flooded_strategy->value > 0.0);
+            }
+
             std::cout << "[world-trial] episode=" << episode
                       << " context=" << world.config().context
                       << " selected=" << selected

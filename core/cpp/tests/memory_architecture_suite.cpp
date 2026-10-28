@@ -2,6 +2,8 @@
 
 #include <cassert>
 #include <filesystem>
+#include <fstream>
+#include <cstdint>
 #include <string>
 
 using namespace jarvis::core;
@@ -134,5 +136,52 @@ int main() {
     }
     std::filesystem::remove(learning_path, ec);
     std::filesystem::remove(learning_metadata_path, ec);
+
+    // Legacy records have no safe resynchronization marker. Recovery must
+    // preserve the unreadable suffix before repairing the active journal,
+    // rather than silently deleting later records with the corrupt record.
+    const auto damaged_path = std::filesystem::temp_directory_path() / "jarvis_memory_corrupt_tail.bin";
+    const auto damaged_metadata = std::filesystem::path(damaged_path.string() + ".meta");
+    const auto quarantine_path = std::filesystem::path(damaged_path.string() + ".corrupt");
+    std::filesystem::remove(damaged_path, ec);
+    std::filesystem::remove(damaged_metadata, ec);
+    std::filesystem::remove(quarantine_path, ec);
+    std::uintmax_t first_record_end = 0;
+    std::uintmax_t original_size = 0;
+    {
+        Memory journal(8, damaged_path);
+        assert(journal.append(Event{0, 1, "test", "first", {{"value", std::int64_t{1}}}}) == 1);
+        first_record_end = std::filesystem::file_size(damaged_path);
+        assert(journal.append(Event{0, 2, "test", "second", {{"value", std::int64_t{2}}}}) == 2);
+        assert(journal.append(Event{0, 3, "test", "third", {{"value", std::int64_t{3}}}}) == 3);
+        original_size = std::filesystem::file_size(damaged_path);
+    }
+    {
+        std::fstream damaged(damaged_path, std::ios::binary | std::ios::in | std::ios::out);
+        assert(damaged);
+        damaged.seekp(static_cast<std::streamoff>(first_record_end));
+        const std::uint64_t invalid_sequence = 0;
+        damaged.write(reinterpret_cast<const char*>(&invalid_sequence), sizeof(invalid_sequence));
+        damaged.flush();
+        assert(damaged);
+    }
+    {
+        Memory recovered(8, damaged_path);
+        assert(recovered.size() == 1);
+        assert(recovered.latest()->kind == "first");
+        assert(std::filesystem::exists(quarantine_path));
+        assert(std::filesystem::file_size(quarantine_path) == original_size - first_record_end);
+        // Once the unreadable suffix is safely quarantined, the repaired
+        // active journal remains appendable and sequence continuity resumes.
+        assert(recovered.append(Event{0, 4, "test", "after-recovery", {{"value", std::int64_t{4}}}}) == 2);
+    }
+    {
+        Memory restarted(8, damaged_path);
+        assert(restarted.size() == 2);
+        assert(restarted.latest()->kind == "after-recovery");
+    }
+    std::filesystem::remove(damaged_path, ec);
+    std::filesystem::remove(damaged_metadata, ec);
+    std::filesystem::remove(quarantine_path, ec);
     return 0;
 }
