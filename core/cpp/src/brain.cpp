@@ -515,7 +515,8 @@ void Brain::replay(const Event& event, bool external_observation) {
                 event.data.find("isolated") != event.data.end() &&
                 std::get_if<bool>(&event.data.at("isolated")) != nullptr &&
                 *std::get_if<bool>(&event.data.at("isolated"));
-            if (experiment.isolated && experiment.candidate_executed)
+            if (experiment.isolated && experiment.candidate_executed &&
+                integer_value(event.data, "isolation_attestation_version") == 1)
                 experiment.attest_isolated_result();
             evolution_controller_.replay_evaluation(experiment);
         }
@@ -554,12 +555,17 @@ void Brain::replay(const Event& event, bool external_observation) {
                     event.data.find("isolated") != event.data.end() &&
                     std::get_if<bool>(&event.data.at("isolated")) != nullptr &&
                     *std::get_if<bool>(&event.data.at("isolated"));
-                if (experiment.isolated && experiment.candidate_executed)
+                if (experiment.isolated && experiment.candidate_executed &&
+                    integer_value(event.data, "isolation_attestation_version") == 1)
                     experiment.attest_isolated_result();
                 const auto adoption = evolution_controller_.adoption_journal().get(*experiment_id);
                 if (adoption.has_value() &&
                     (adoption->state == AdoptionState::Adopted ||
                      adoption->state == AdoptionState::RolledBack)) return;
+                // Journal replay is an adoption path too: validate the
+                // durable evaluation and isolation attestation before mutating
+                // the restored model, just as the live API does.
+                if (!evolution_controller_.validate_adoption_for_brain(experiment)) return;
                 if (!evolution_.adopt(proposal)) return;
                 if (!evolution_controller_.replay_adoption(experiment)) {
                     evolution_.restore_previous(*key);

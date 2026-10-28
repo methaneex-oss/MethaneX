@@ -24,6 +24,46 @@ int main() {
     // A persisted legacy adoption event without experiment evidence must
     // not bypass the evaluation gate when a Brain reconstructs from disk.
     const std::filesystem::path legacy_path = "evolution_legacy_adoption_test.bin";
+    // A forged replay event with isolated=true but no runner-issued
+    // attestation version must not authorize adoption after restart.
+    const std::filesystem::path forged_path = "evolution_forged_isolation_test.bin";
+    std::filesystem::remove(forged_path, ec);
+    std::filesystem::remove(forged_path.string() + ".meta", ec);
+    {
+        Brain source(forged_path);
+        assert(source.register_evolution_parameter("forged.isolation", 0.25));
+    }
+    {
+        Memory journal(256, forged_path);
+        Event forged_evaluation{
+            0, 1, "forged-test", "evolution_evaluated",
+            {{"experiment_id", std::string("forged-isolation-1")},
+             {"key", std::string("forged.isolation")},
+             {"current", 0.25}, {"proposed", 0.95}, {"expected_gain", 0.70},
+             {"proposal_confidence", 0.99}, {"baseline", 0.70}, {"candidate", 0.90},
+             {"minimum_improvement", 0.01}, {"confidence", 0.99},
+             {"outcome", static_cast<std::int64_t>(ExperimentOutcome::Improved)},
+             {"isolated", true}}};
+        assert(journal.append(forged_evaluation) != 0);
+        Event forged_adoption{
+            0, 2, "forged-test", "evolution_adopt",
+            {{"experiment_id", std::string("forged-isolation-1")},
+             {"key", std::string("forged.isolation")},
+             {"current", 0.25}, {"proposed", 0.95}, {"expected_gain", 0.70},
+             {"proposal_confidence", 0.99}, {"baseline", 0.70}, {"candidate", 0.90},
+             {"minimum_improvement", 0.01}, {"confidence", 0.99},
+             {"outcome", static_cast<std::int64_t>(ExperimentOutcome::Improved)},
+             {"isolated", true}}};
+        assert(journal.append(forged_adoption) != 0);
+    }
+    {
+        Brain restarted_forged(forged_path);
+        const auto* parameter = restarted_forged.evolution_parameter("forged.isolation");
+        assert(parameter != nullptr && parameter->value == parameter->baseline);
+    }
+    std::filesystem::remove(forged_path, ec);
+    std::filesystem::remove(forged_path.string() + ".meta", ec);
+
     std::filesystem::remove(legacy_path, ec);
     std::filesystem::remove(legacy_path.string() + ".meta", ec);
     {
