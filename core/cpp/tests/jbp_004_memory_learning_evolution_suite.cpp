@@ -87,7 +87,7 @@ std::vector<int> initial_mapping(int seed, int level_index, int contexts, int ac
 }
 
 void record_outcome(Brain& brain, const std::string& context,
-                    const std::string& action, double actual,
+                    const std::string& action, double predicted, double actual,
                     double reliability, int episode) {
     const auto observed = brain.observe(Event{
         0, 0, "jbp-004-generated-environment", "action_outcome",
@@ -95,9 +95,9 @@ void record_outcome(Brain& brain, const std::string& context,
          {"context", context},
          {"status", static_cast<std::int64_t>(ActionExecutionStatus::verified)},
          {"observed", true},
-         {"expected_consequence", 0.0},
+         {"expected_consequence", predicted},
          {"actual_consequence", actual},
-         {"consequence_error", std::abs(actual)},
+         {"consequence_error", std::abs(predicted - actual)},
          {"reliability", reliability},
          {"evidence_reliability", reliability},
          {"salience", 0.65},
@@ -169,9 +169,19 @@ void train(const std::filesystem::path& path, int seed) {
             const bool flipped = unit(random) < level.noise;
             const double actual = flipped ? -expected : expected;
             const double reliability = 0.9;
+            // Use the learner's own prior estimate as its prediction. The
+            // evaluator's hidden reward rule never enters the observation.
+            double predicted = 0.0;
+            for (const auto& strategy : brain.developmental_strategies()) {
+                if (strategy.context == context &&
+                    strategy.action == action_names[static_cast<std::size_t>(action_index)]) {
+                    predicted = strategy.value;
+                    break;
+                }
+            }
             record_outcome(brain, context,
                            action_names[static_cast<std::size_t>(action_index)],
-                           actual, reliability, episode);
+                           predicted, actual, reliability, episode);
         }
 
         assert_accuracy(brain, level, static_cast<int>(level_index), seed,
