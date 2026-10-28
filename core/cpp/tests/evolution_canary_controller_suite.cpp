@@ -1,5 +1,6 @@
 #include "jarvis/core/evolution_controller.hpp"
 #include "jarvis/core/evolution_experiment_runner.hpp"
+#include "jarvis/core/process_isolation.hpp"
 
 #include <cassert>
 
@@ -8,8 +9,8 @@ using namespace jarvis::core;
 namespace {
 void attest_isolated(EvolutionExperiment& experiment) {
     ProcessIsolationBackend backend;
-    const std::string fitness = std::to_string(experiment.candidate_fitness);
-    const IsolatedCommand command{"/bin/sh", {"-c", "printf " + fitness}, ""};
+    const IsolatedCommand command{
+        "/bin/sh", {"-c", "printf " + std::to_string(experiment.candidate_fitness)}, ""};
     EvolutionExperimentRunner::run_isolated_command(experiment, backend, command);
 }
 } // namespace
