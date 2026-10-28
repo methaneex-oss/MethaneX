@@ -172,7 +172,6 @@ bool run_mode(const std::filesystem::path& journal, std::uint64_t seed,
     const std::array<std::pair<std::string, std::string>, 3> trained_contexts{{
         {"clear", "flat"}, {"clear", "rugged"}, {"storm", "flat"}
     }};
-    const std::pair<std::string, std::string> held_out{"storm", "rugged"};
     auto expected_for = [&](const std::string& weather, const std::string& terrain) {
         const bool factor_parity = (weather == "storm") != (terrain == "rugged");
         return base_prefers_amber != factor_parity;
@@ -252,7 +251,7 @@ bool run_mode(const std::filesystem::path& journal, std::uint64_t seed,
 
 int main(int argc, char** argv) {
     if (argc != 4) {
-        std::cerr << "usage: jarvis_jbp_003_evolving_world_suite train|verify <journal> <seed>\n";
+        std::cerr << "usage: jarvis_jbp_004_unseen_transfer_suite train|verify <journal> <seed>\n";
         return 64;
     }
     const std::string mode = argv[1];
