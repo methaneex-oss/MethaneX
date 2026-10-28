@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <cassert>
 #include <chrono>
-#include <cmath>
 #include <filesystem>
 #include <optional>
 #include <string>
@@ -310,12 +309,11 @@ int main() {
             assert(execution.verified);
             assert(execution.status == ActionExecutionStatus::verified);
             assert(!execution.outcome.observed);
-            const auto* control_strategy =
-                control_brain.developmental_best_strategy("runtime-learning-context");
-            // Neutral execution evidence may be retained, but without an
-            // observed consequence it must not create positive/negative value.
-            assert(control_strategy == nullptr ||
-                   std::abs(control_strategy->value) < 1e-9);
+            // Capability reliability may update, but execution success
+            // without a consequence observation must not create a strategy
+            // preference in the developmental action-value mechanism.
+            assert(control_brain.developmental_best_strategy(
+                       "runtime-learning-context") == nullptr);
         }
         control_runtime.stop();
     }
