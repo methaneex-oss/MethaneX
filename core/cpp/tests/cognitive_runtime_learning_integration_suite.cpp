@@ -291,8 +291,11 @@ int main() {
         control_config.feedback_capacity = 8;
         control_config.drain_on_stop = true;
         control_config.action_adapter.authorization.maximum_risk = 1.0;
-        // No executor and no consequence observer: this control run cannot
-        // produce either operational or real-world outcome evidence.
+        // Operational execution and verification succeed, but there is no
+        // consequence observer. This isolates execution success from observed
+        // real-world utility: the runtime must not invent a preference.
+        control_config.action_adapter.execute = [](const CandidateAction&) { return true; };
+        control_config.action_adapter.verify = [](const CandidateAction&) { return true; };
         CognitiveRuntime control_runtime(control_brain, control_config);
         assert(control_runtime.start());
         assert(control_runtime.submit(make_input(control_goal.id, 1)));
