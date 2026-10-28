@@ -20,9 +20,13 @@ bool EvolutionController::record_evaluation(const EvolutionExperiment& experimen
         !std::isfinite(experiment.proposal.proposed) ||
         !std::isfinite(experiment.proposal.expected_gain) ||
         experiment.confidence < 0.0 || experiment.confidence > 1.0 ||
-        experiment.outcome == ExperimentOutcome::Pending) {
+        experiment.outcome == ExperimentOutcome::Pending ||
+        (policy_.require_isolation && !experiment.isolated)) {
         return false;
     }
+    EvolutionExperiment verified = experiment;
+    if (EvolutionExperimentEngine::evaluate(verified) != experiment.outcome ||
+        !EvolutionSafetyGate::approve(experiment, policy_)) return false;
 
     for (const auto& record : history_.for_experiment(experiment.id)) {
         if (record.action == EvolutionRecordAction::Evaluated) {
@@ -57,10 +61,13 @@ bool EvolutionController::validate_evaluation_for_brain(
         !std::isfinite(experiment.proposal.expected_gain) ||
         experiment.confidence < 0.0 || experiment.confidence > 1.0 ||
         experiment.outcome == ExperimentOutcome::Pending ||
+        (policy_.require_isolation && !experiment.isolated) ||
         adoption_journal_.get(experiment.id).has_value()) {
         return false;
     }
-    return true;
+    EvolutionExperiment verified = experiment;
+    return EvolutionExperimentEngine::evaluate(verified) == experiment.outcome &&
+           EvolutionSafetyGate::approve(experiment, policy_);
 }
 
 bool EvolutionController::record_evaluation_for_brain(
@@ -143,8 +150,32 @@ bool EvolutionController::adopt(EvolutionExperiment& experiment) {
 bool EvolutionController::validate_adoption_for_brain(const EvolutionExperiment& experiment) const noexcept {
     if (experiment.id.empty() || !experiment.candidate_executed ||
         !EvolutionSafetyGate::approve(experiment, policy_)) return false;
+
+    // Adoption is permitted only when durable history contains an evaluation
+    // for this exact experiment and the request still matches that evidence.
+    // A staged in-memory journal record alone is not evaluation evidence.
+    bool matching_evaluation = false;
+    for (const auto& record : history_.for_experiment(experiment.id)) {
+        if (record.action != EvolutionRecordAction::Evaluated) continue;
+        if (record.parameter_key != experiment.proposal.key ||
+            record.outcome != experiment.outcome ||
+            record.baseline_fitness != experiment.baseline_fitness ||
+            record.candidate_fitness != experiment.candidate_fitness ||
+            record.confidence != experiment.confidence) return false;
+        matching_evaluation = true;
+    }
+    if (!matching_evaluation) return false;
+
+    EvolutionExperiment independently_evaluated = experiment;
+    if (EvolutionExperimentEngine::evaluate(independently_evaluated) !=
+        experiment.outcome) return false;
+
     if (const auto record = adoption_journal_.get(experiment.id);
-        record.has_value() && record->state != AdoptionState::Pending) return false;
+        !record.has_value() || record->state != AdoptionState::Pending ||
+        record->parameter_key != experiment.proposal.key ||
+        record->baseline_fitness != experiment.baseline_fitness ||
+        record->candidate_fitness != experiment.candidate_fitness ||
+        record->confidence != experiment.confidence) return false;
     const auto evaluation = model_.evaluate(experiment.proposal);
     if (!evaluation.eligible) return false;
     const auto& policy = model_.policy();
