@@ -109,14 +109,6 @@ bool EvolutionController::adopt(EvolutionExperiment& experiment) {
     // Keep the direct controller API subject to the same durable-evaluation
     // invariant as Brain-mediated adoption.
     if (!validate_adoption_for_brain(experiment)) return false;
-    if (!EvolutionSafetyGate::approve(experiment, policy_)) {
-        adoption_journal_.reject(experiment.id, "safety_gate_rejected");
-        history_.append(EvolutionHistoryRecord{
-            experiment.id, experiment.proposal.key, EvolutionRecordAction::Rejected,
-            experiment.outcome, experiment.baseline_fitness, experiment.candidate_fitness,
-            experiment.confidence, 0, "safety_gate_rejected", {}});
-        return false;
-    }
 
     if (!model_.adopt(experiment.proposal)) {
         adoption_journal_.reject(experiment.id, "model_adoption_failed");
@@ -149,8 +141,7 @@ bool EvolutionController::adopt(EvolutionExperiment& experiment) {
 }
 
 bool EvolutionController::validate_adoption_for_brain(const EvolutionExperiment& experiment) const noexcept {
-    if (experiment.id.empty() || !experiment.candidate_executed ||
-        !EvolutionSafetyGate::approve(experiment, policy_)) return false;
+    if (experiment.id.empty() || !experiment.candidate_executed) return false;
 
     // Adoption is permitted only when durable history contains an evaluation
     // for this exact experiment and the request still matches that evidence.
@@ -171,8 +162,8 @@ bool EvolutionController::validate_adoption_for_brain(const EvolutionExperiment&
     if (EvolutionExperimentEngine::evaluate(independently_evaluated) !=
         experiment.outcome) return false;
 
-    if (const auto record = adoption_journal_.get(experiment.id);
-        !record.has_value() || record->state != AdoptionState::Pending ||
+    const auto record = adoption_journal_.get(experiment.id);
+    if (!record.has_value() || record->state != AdoptionState::Pending ||
         record->parameter_key != experiment.proposal.key ||
         record->baseline_fitness != experiment.baseline_fitness ||
         record->candidate_fitness != experiment.candidate_fitness ||
@@ -182,6 +173,13 @@ bool EvolutionController::validate_adoption_for_brain(const EvolutionExperiment&
         record->expected_gain != experiment.proposal.expected_gain ||
         record->minimum_improvement != experiment.minimum_improvement ||
         record->isolated != experiment.isolated) return false;
+
+    // On a restart, the caller's value object has no in-memory attestation.
+    // Re-attest a copy only after its fields match the durable evaluated record.
+    EvolutionExperiment verified = experiment;
+    if (record->isolated) verified.attest_isolated_result();
+    if (!EvolutionSafetyGate::approve(verified, policy_)) return false;
+
     const auto evaluation = model_.evaluate(experiment.proposal);
     if (!evaluation.eligible) return false;
     const auto& policy = model_.policy();
