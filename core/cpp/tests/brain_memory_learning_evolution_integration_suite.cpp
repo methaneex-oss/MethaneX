@@ -74,6 +74,27 @@ std::string selected_action(Brain& brain, const std::string& context) {
     return result.context.plan.steps.front().action.name;
 }
 
+void require_context_recall(const Brain& brain, const std::string& context,
+                           const std::string& action) {
+    const auto recalled = brain.memory().recall_ranked(
+        {{"context", std::string(context)}, {"action", std::string(action)}},
+        5, "action_outcome", true);
+    require(!recalled.empty(),
+            "memory could not retrieve the relevant action experience");
+    for (const auto& record : recalled) {
+        const auto context_it = record.event.data.find("context");
+        const auto action_it = record.event.data.find("action");
+        require(context_it != record.event.data.end() &&
+                    std::get_if<std::string>(&context_it->second) != nullptr &&
+                    std::get<std::string>(context_it->second) == context,
+                "memory retrieval leaked an unrelated context");
+        require(action_it != record.event.data.end() &&
+                    std::get_if<std::string>(&action_it->second) != nullptr &&
+                    std::get<std::string>(action_it->second) == action,
+                "memory retrieval returned the wrong action");
+    }
+}
+
 double strategy_value(const Brain& brain, const std::string& context,
                       const std::string& action) {
     for (const auto& strategy : brain.developmental_strategies()) {
@@ -169,6 +190,8 @@ int main() {
                     "storm-context revised strategy was not learned");
             require(strategy_value(brain, storm_context, "route-b") < 0.0,
                     "storm-context harmful strategy was not revised");
+            require_context_recall(brain, storm_context, "route-a");
+            require_context_recall(brain, clear_context, "route-a");
 
             // VERY HARD: prediction feedback drives adaptation and evolution
             // through the Brain API, not direct calls to EvolutionModel.
@@ -216,6 +239,8 @@ int main() {
                     "revised storm strategy was lost after restart");
             require(strategy_value(restored, storm_context, "route-b") < 0.0,
                     "storm-context negative evidence was lost after restart");
+            require_context_recall(restored, storm_context, "route-a");
+            require_context_recall(restored, clear_context, "route-a");
             require(selected_action(restored, clear_context) == "route-a",
                     "restored brain no longer selects the learned clear action");
             require(selected_action(restored, storm_context) == "route-a",
