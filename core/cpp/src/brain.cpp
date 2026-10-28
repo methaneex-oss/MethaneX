@@ -562,7 +562,9 @@ void Brain::replay(const Event& event, bool external_observation) {
                     experiment.candidate_fitness, experiment.confidence, 0,
                     "replayed", {}});
             } else {
-                evolution_.adopt(proposal);
+                // An unversioned legacy event has no experiment evidence.
+                // Ignore it rather than re-adopting an unevaluated proposal.
+                return;
             }
         }
         return;
