@@ -305,9 +305,10 @@ int main() {
         assert(control_first->context.plan.steps.front().action.name == "calibrate");
         assert(control_first->context.action_execution_results.size() == 1);
         assert(control_first->context.action_execution_results.front().status ==
-               ActionExecutionStatus::rejected);
-        assert(control_first->context.action_execution_results.front().reason ==
-               "action_adapter_unavailable");
+               ActionExecutionStatus::verified);
+        assert(control_first->context.action_execution_results.front().executed);
+        assert(control_first->context.action_execution_results.front().verified);
+        assert(!control_first->context.action_execution_results.front().outcome.observed);
         assert(control_brain.developmental_best_strategy("runtime-learning-context") == nullptr);
 
         assert(control_runtime.submit(make_input(control_goal.id, 2)));
@@ -317,7 +318,10 @@ int main() {
         assert(control_second->context.plan.steps.front().action.name == "calibrate");
         assert(control_second->context.action_execution_results.size() == 1);
         assert(control_second->context.action_execution_results.front().status ==
-               ActionExecutionStatus::rejected);
+               ActionExecutionStatus::verified);
+        assert(control_second->context.action_execution_results.front().executed);
+        assert(control_second->context.action_execution_results.front().verified);
+        assert(!control_second->context.action_execution_results.front().outcome.observed);
         assert(control_brain.developmental_best_strategy("runtime-learning-context") == nullptr);
         control_runtime.stop();
     }
