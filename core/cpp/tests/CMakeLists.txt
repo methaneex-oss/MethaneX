@@ -306,3 +306,12 @@ foreach(JARVIS_TEST_TARGET IN LISTS JARVIS_TEST_TARGETS)
         )
     endif()
 endforeach()
+
+if(BUILD_TESTING)
+    add_executable(jarvis_brain_memory_learning_evolution_integration_suite
+        brain_memory_learning_evolution_integration_suite.cpp)
+    target_link_libraries(jarvis_brain_memory_learning_evolution_integration_suite PRIVATE jarvis_core)
+    target_compile_features(jarvis_brain_memory_learning_evolution_integration_suite PRIVATE cxx_std_20)
+    add_test(NAME jarvis_brain_memory_learning_evolution_integration_suite
+        COMMAND jarvis_brain_memory_learning_evolution_integration_suite)
+endif()
