@@ -8,6 +8,7 @@ ExperimentOutcome EvolutionExperimentRunner::run(EvolutionExperiment& experiment
                                                   const EvolutionSandbox& sandbox,
                                                   const CandidateExecutor& executor) noexcept {
     experiment.candidate_executed = false;
+    experiment.isolated = false;
     const auto result = sandbox.run(experiment.proposal, executor);
     if (!result.started || !result.completed || result.timed_out || result.output_limited ||
         !result.isolated || !std::isfinite(result.fitness)) {
@@ -17,6 +18,7 @@ ExperimentOutcome EvolutionExperimentRunner::run(EvolutionExperiment& experiment
 
     experiment.candidate_fitness = result.fitness;
     experiment.candidate_executed = true;
+    experiment.isolated = result.isolated;
     return EvolutionExperimentEngine::evaluate(experiment);
 }
 
