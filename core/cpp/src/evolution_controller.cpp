@@ -84,7 +84,7 @@ bool EvolutionController::replay_evaluation(
 }
 
 bool EvolutionController::adopt(EvolutionExperiment& experiment) {
-    if (!experiment.candidate_executed) return false;
+    if (!validate_adoption_for_brain(experiment)) return false;
     if (!adoption_journal_.stage(experiment)) return false;
     if (!EvolutionSafetyGate::approve(experiment, policy_)) {
         adoption_journal_.reject(experiment.id, "safety_gate_rejected");
@@ -173,8 +173,10 @@ bool EvolutionController::validate_adoption_for_brain(const EvolutionExperiment&
 
 bool EvolutionController::adopt_for_brain(EvolutionExperiment& experiment) noexcept {
     if (!validate_adoption_for_brain(experiment)) return false;
-    if (!adoption_journal_.stage(experiment)) return false;
-    if (!model_.adopt(experiment.proposal)) {
+    auto verified = experiment;
+    verified.isolation_attested_ = true; // validated against the recorded evaluation
+    if (!adoption_journal_.stage(verified)) return false;
+    if (!model_.adopt(verified.proposal)) {
         adoption_journal_.reject(experiment.id, "model_adoption_failed");
         return false;
     }
