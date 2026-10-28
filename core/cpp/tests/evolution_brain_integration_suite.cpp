@@ -10,13 +10,10 @@ using namespace jarvis::core;
 
 namespace {
 void attest_isolated(EvolutionExperiment& experiment) {
-    EvolutionSandbox sandbox;
-    const double measured_fitness = experiment.candidate_fitness;
-    EvolutionExperimentRunner::run(
-        experiment, sandbox,
-        [measured_fitness](const EvolutionProposal&, const SandboxLimits&) {
-            return SandboxResult{true, true, false, false, true, measured_fitness, {}};
-        });
+    ProcessIsolationBackend backend;
+    const std::string fitness = std::to_string(experiment.candidate_fitness);
+    const IsolatedCommand command{"/bin/sh", {"-c", "printf " + fitness}, ""};
+    EvolutionExperimentRunner::run_isolated_command(experiment, backend, command);
 }
 } // namespace
 
