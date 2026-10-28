@@ -6,7 +6,6 @@
 #include <iostream>
 #include <stdexcept>
 #include <string>
-#include <system_error>
 #include <vector>
 
 using namespace jarvis::core;
@@ -77,7 +76,6 @@ double strategy_value(const Brain& brain, const std::string& context,
 }
 
 bool train(const std::filesystem::path& journal) {
-    std::error_code ec;
     if (std::filesystem::exists(journal) ||
         std::filesystem::exists(journal.string() + ".meta")) {
         std::cerr << "JBP-004 status=REFUSED_OVERWRITE\n";
