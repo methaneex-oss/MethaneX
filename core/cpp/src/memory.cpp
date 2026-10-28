@@ -21,6 +21,9 @@ constexpr std::uint64_t kMaxMetadataRecords = 1ULL << 20;
 constexpr std::uint64_t kJournalMagicV2 = 0x4a4152564a4e4c32ULL;
 constexpr std::uint64_t kMaxJournalFrameSize = 1ULL << 30;
 
+void write_event(std::ostream& out, const Event& event);
+bool read_event(std::istream& in, Event& event);
+
 std::uint64_t checksum64(const std::string& bytes) {
     std::uint64_t hash = 14695981039346656037ULL;
     for (const unsigned char byte : bytes) {
@@ -36,7 +39,7 @@ bool write_journal_header(std::ostream& out) {
 }
 
 bool write_framed_event(std::ostream& out, const Event& event) {
-    std::ostringstream encoded(std::ios::binary);
+    std::ostringstream encoded(std::ios::out | std::ios::binary);
     write_event(encoded, event);
     if (!encoded) return false;
     const std::string payload = encoded.str();
@@ -50,7 +53,7 @@ bool write_framed_event(std::ostream& out, const Event& event) {
 }
 
 bool decode_framed_event(const std::string& payload, Event& event) {
-    std::istringstream encoded(payload, std::ios::binary);
+    std::istringstream encoded(payload, std::ios::in | std::ios::binary);
     if (!read_event(encoded, event)) return false;
     return encoded.peek() == std::char_traits<char>::eof();
 }
@@ -243,6 +246,13 @@ bool Memory::persist(const Event& event) const {
     if (error) return false;
     const auto original_size = exists ? std::filesystem::file_size(journal_path_, error) : 0;
     if (error) return false;
+    if (original_size != 0) {
+        std::ifstream existing(journal_path_, std::ios::binary);
+        std::uint64_t magic{};
+        if (!existing.read(reinterpret_cast<char*>(&magic), sizeof(magic)) ||
+            magic != kJournalMagicV2)
+            return false;
+    }
 
     std::ofstream out(journal_path_, std::ios::binary | std::ios::app);
     if (!out) return false;
