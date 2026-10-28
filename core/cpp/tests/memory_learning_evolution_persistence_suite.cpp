@@ -1,4 +1,5 @@
 #include "jarvis/core/brain.hpp"
+#include "jarvis/core/evolution_experiment_runner.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -10,6 +11,16 @@
 using namespace jarvis::core;
 
 namespace {
+void attest_isolated(EvolutionExperiment& experiment) {
+    EvolutionSandbox sandbox;
+    const double measured_fitness = experiment.candidate_fitness;
+    EvolutionExperimentRunner::run(
+        experiment, sandbox,
+        [measured_fitness](const EvolutionProposal&, const SandboxLimits&) {
+            return SandboxResult{true, true, false, false, true, measured_fitness, {}};
+        });
+}
+
 bool check(bool condition, const char* message) {
     if (!condition) std::cerr << "integration failure: " << message << '\n';
     return condition;
@@ -119,6 +130,7 @@ int main() {
         EvolutionExperiment experiment{
             "integrated-learning-evolution-1", *proposal,
             0.70, 0.90, 0.01, 0.95, ExperimentOutcome::Improved, true};
+        attest_isolated(experiment);
         if (!check(brain.record_evolution_evaluation(experiment),
                    "evolution evaluation was journaled")) return 1;
         if (!check(brain.adopt_evolution_experiment(experiment),
