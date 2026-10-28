@@ -68,14 +68,15 @@ int main() {
             direct_proposals.begin(), direct_proposals.end(),
             [](const EvolutionProposal& proposal) { return proposal.key == "direct.rollback"; });
         assert(direct_it != direct_proposals.end());
-        assert(brain.adopt_evolution(*direct_it));
-        const auto* adopted_direct = brain.evolution_parameter("direct.rollback");
-        assert(adopted_direct != nullptr);
-        assert(adopted_direct->value != adopted_direct->baseline);
-        assert(brain.rollback_evolution("direct.rollback"));
-        const auto* rolled_direct = brain.evolution_parameter("direct.rollback");
-        assert(rolled_direct != nullptr);
-        assert(rolled_direct->value == rolled_direct->baseline);
+        // A proposal without a recorded candidate-vs-baseline experiment
+        // must not mutate the parameter through the legacy convenience API.
+        const auto* before_direct_adoption = brain.evolution_parameter("direct.rollback");
+        assert(before_direct_adoption != nullptr);
+        const double direct_baseline = before_direct_adoption->baseline;
+        assert(!brain.adopt_evolution(*direct_it));
+        const auto* rejected_direct = brain.evolution_parameter("direct.rollback");
+        assert(rejected_direct != nullptr);
+        assert(rejected_direct->value == direct_baseline);
 
         brain.observe_evolution_canary("planner.weight", "brain-evolution-1", {0.90, 0.89});
         brain.observe_evolution_canary("planner.weight", "brain-evolution-1", {0.90, 0.88});
