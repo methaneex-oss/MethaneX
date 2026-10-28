@@ -175,7 +175,12 @@ bool EvolutionController::validate_adoption_for_brain(const EvolutionExperiment&
         record->parameter_key != experiment.proposal.key ||
         record->baseline_fitness != experiment.baseline_fitness ||
         record->candidate_fitness != experiment.candidate_fitness ||
-        record->confidence != experiment.confidence) return false;
+        record->confidence != experiment.confidence ||
+        record->proposal_current != experiment.proposal.current ||
+        record->proposal_proposed != experiment.proposal.proposed ||
+        record->expected_gain != experiment.proposal.expected_gain ||
+        record->minimum_improvement != experiment.minimum_improvement ||
+        record->isolated != experiment.isolated) return false;
     const auto evaluation = model_.evaluate(experiment.proposal);
     if (!evaluation.eligible) return false;
     const auto& policy = model_.policy();
