@@ -168,6 +168,37 @@ int main() {
     assert(restored_strategy->value > 0.0);
     assert(restored_strategy->uses >= 2);
 
+    // Persistence must affect a real decision after restart, not merely expose
+    // a stored strategy through an inspection API.
+    {
+        std::vector<std::string> restored_executions;
+        CognitiveRuntimeConfig restored_config;
+        restored_config.result_capacity = 4;
+        restored_config.feedback_capacity = 4;
+        restored_config.drain_on_stop = true;
+        restored_config.action_adapter.authorization.maximum_risk = 1.0;
+        restored_config.action_adapter.execute = [&](const CandidateAction& action) {
+            restored_executions.push_back(action.name);
+            return true;
+        };
+        restored_config.action_adapter.verify = [](const CandidateAction&) { return true; };
+        restored_config.action_adapter.observe_consequence =
+            [](const CandidateAction& action) -> std::optional<double> {
+                return action.name == "calibrate" ? 0.8 : -0.8;
+            };
+        CognitiveRuntime restored_runtime(restored, restored_config);
+        assert(restored_runtime.start());
+        assert(restored_runtime.submit(make_input(goal.id, 100)));
+        const auto restored_decision = wait_for_result(restored_runtime);
+        assert(restored_decision.has_value());
+        assert(restored_decision->status == CognitiveCycleStatus::completed);
+        assert(restored_decision->context.plan.steps.size() == 1);
+        assert(restored_decision->context.plan.steps.front().action.name == "calibrate");
+        assert(restored_executions.size() == 1);
+        assert(restored_executions.front() == "calibrate");
+        restored_runtime.stop();
+    }
+
     // No-feedback control: successful execution alone must not be mistaken for
     // a beneficial consequence. Without an observation, the same alternatives
     // should not acquire a consequence-driven preference.
