@@ -8,7 +8,17 @@ bool EvolutionAdoptionJournal::stage(const EvolutionExperiment& experiment) {
     auto& r = records_[experiment.id];
     if (r.revision != 0) {
         if (r.state == AdoptionState::Adopted || r.state == AdoptionState::Pending)
-            return r.parameter_key == experiment.proposal.key;
+            return r.parameter_key == experiment.proposal.key &&
+                   r.proposal_current == experiment.proposal.current &&
+                   r.proposal_proposed == experiment.proposal.proposed &&
+                   r.expected_gain == experiment.proposal.expected_gain &&
+                   r.proposal_confidence == experiment.proposal.confidence &&
+                   r.minimum_improvement == experiment.minimum_improvement &&
+                   r.baseline_fitness == experiment.baseline_fitness &&
+                   r.candidate_fitness == experiment.candidate_fitness &&
+                   r.confidence == experiment.confidence &&
+                   r.outcome == experiment.outcome &&
+                   r.isolation_verified == experiment.isolation_verified();
         return false;
     }
     r.experiment_id = experiment.id;
@@ -16,6 +26,13 @@ bool EvolutionAdoptionJournal::stage(const EvolutionExperiment& experiment) {
     r.baseline_fitness = experiment.baseline_fitness;
     r.candidate_fitness = experiment.candidate_fitness;
     r.confidence = experiment.confidence;
+    r.proposal_current = experiment.proposal.current;
+    r.proposal_proposed = experiment.proposal.proposed;
+    r.expected_gain = experiment.proposal.expected_gain;
+    r.proposal_confidence = experiment.proposal.confidence;
+    r.minimum_improvement = experiment.minimum_improvement;
+    r.outcome = experiment.outcome;
+    r.isolation_verified = experiment.isolation_verified();
     r.state = AdoptionState::Pending;
     r.revision = next_revision_++;
     return true;

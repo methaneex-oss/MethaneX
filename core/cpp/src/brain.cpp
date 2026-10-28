@@ -507,13 +507,19 @@ void Brain::replay(const Event& event, bool external_observation) {
                                   double_value(event.data, "current"),
                                   double_value(event.data, "proposed"),
                                   double_value(event.data, "expected_gain"),
-                                  double_value(event.data, "confidence")},
+                                  double_value(event.data, "proposal_confidence")},
                 double_value(event.data, "baseline"),
                 double_value(event.data, "candidate"),
-                0.0,
+                double_value(event.data, "minimum_improvement", 0.0),
                 double_value(event.data, "confidence"),
                 static_cast<ExperimentOutcome>(integer_value(event.data, "outcome")),
                 true};
+            const auto isolation = event.data.find("isolation_verified");
+            if (isolation != event.data.end()) {
+                const auto* verified = std::get_if<bool>(&isolation->second);
+                if (verified != nullptr && *verified)
+                    experiment.attest_current_evaluation();
+            }
             evolution_controller_.replay_evaluation(experiment);
         }
         return;
@@ -536,17 +542,24 @@ void Brain::replay(const Event& event, bool external_observation) {
             const EvolutionProposal proposal{*key, double_value(event.data, "current"),
                                              double_value(event.data, "proposed"),
                                              double_value(event.data, "expected_gain"),
-                                             double_value(event.data, "confidence")};
+                                             double_value(event.data, "proposal_confidence",
+                                                          double_value(event.data, "confidence"))};
             if (experiment_id != nullptr && !experiment_id->empty()) {
                 EvolutionExperiment experiment{
                     *experiment_id,
                     proposal,
                     double_value(event.data, "baseline", proposal.current),
                     double_value(event.data, "candidate", proposal.proposed),
-                    0.0,
-                    proposal.confidence,
+                    double_value(event.data, "minimum_improvement", 0.0),
+                    double_value(event.data, "confidence", proposal.confidence),
                     static_cast<ExperimentOutcome>(integer_value(event.data, "outcome")),
                     true};
+                const auto isolation = event.data.find("isolation_verified");
+                if (isolation != event.data.end()) {
+                    const auto* verified = std::get_if<bool>(&isolation->second);
+                    if (verified != nullptr && *verified)
+                    experiment.attest_current_evaluation();
+                }
                 const auto adoption = evolution_controller_.adoption_journal().get(*experiment_id);
                 if (adoption.has_value() &&
                     (adoption->state == AdoptionState::Adopted ||

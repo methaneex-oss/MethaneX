@@ -291,8 +291,11 @@ int main() {
         control_config.feedback_capacity = 8;
         control_config.drain_on_stop = true;
         control_config.action_adapter.authorization.maximum_risk = 1.0;
-        // No executor and no consequence observer: this control run cannot
-        // produce either operational or real-world outcome evidence.
+        // Operational execution and verification succeed, but there is no
+        // consequence observer. This isolates execution success from observed
+        // real-world utility: the runtime must not invent a preference.
+        control_config.action_adapter.execute = [](const CandidateAction&) { return true; };
+        control_config.action_adapter.verify = [](const CandidateAction&) { return true; };
         CognitiveRuntime control_runtime(control_brain, control_config);
         assert(control_runtime.start());
         assert(control_runtime.submit(make_input(control_goal.id, 1)));
@@ -302,9 +305,10 @@ int main() {
         assert(control_first->context.plan.steps.front().action.name == "calibrate");
         assert(control_first->context.action_execution_results.size() == 1);
         assert(control_first->context.action_execution_results.front().status ==
-               ActionExecutionStatus::rejected);
-        assert(control_first->context.action_execution_results.front().reason ==
-               "action_adapter_unavailable");
+               ActionExecutionStatus::verified);
+        assert(control_first->context.action_execution_results.front().executed);
+        assert(control_first->context.action_execution_results.front().verified);
+        assert(!control_first->context.action_execution_results.front().outcome.observed);
         assert(control_brain.developmental_best_strategy("runtime-learning-context") == nullptr);
 
         assert(control_runtime.submit(make_input(control_goal.id, 2)));
@@ -314,7 +318,10 @@ int main() {
         assert(control_second->context.plan.steps.front().action.name == "calibrate");
         assert(control_second->context.action_execution_results.size() == 1);
         assert(control_second->context.action_execution_results.front().status ==
-               ActionExecutionStatus::rejected);
+               ActionExecutionStatus::verified);
+        assert(control_second->context.action_execution_results.front().executed);
+        assert(control_second->context.action_execution_results.front().verified);
+        assert(!control_second->context.action_execution_results.front().outcome.observed);
         assert(control_brain.developmental_best_strategy("runtime-learning-context") == nullptr);
         control_runtime.stop();
     }

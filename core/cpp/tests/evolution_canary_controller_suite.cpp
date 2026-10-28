@@ -1,8 +1,23 @@
 #include "jarvis/core/evolution_controller.hpp"
+#include "jarvis/core/evolution_experiment_runner.hpp"
 
 #include <cassert>
 
 using namespace jarvis::core;
+
+namespace {
+void evaluate_in_isolated_sandbox(EvolutionExperiment& experiment) {
+    EvolutionSandbox sandbox;
+    const double measured_fitness = experiment.candidate_fitness;
+    const auto outcome = EvolutionExperimentRunner::run(
+        experiment, sandbox,
+        [measured_fitness](const EvolutionProposal&, const SandboxLimits&) {
+            return SandboxResult{true, true, false, false, true, measured_fitness, {}};
+        });
+    assert(outcome == ExperimentOutcome::Improved);
+    assert(experiment.isolation_verified());
+}
+} // namespace
 
 int main() {
     EvolutionModel model;
@@ -16,6 +31,7 @@ int main() {
         "exp-canary",
         EvolutionProposal{"reasoning.weight", 0.4, 0.5, 0.1, 0.95},
         0.70, 0.84, 0.05, 0.95, ExperimentOutcome::Improved, true};
+    evaluate_in_isolated_sandbox(experiment);
 
     assert(controller.record_evaluation(experiment));
     assert(controller.adopt(experiment));
@@ -46,6 +62,7 @@ int main() {
         "exp-second",
         EvolutionProposal{"planner.weight", 0.4, 0.5, 0.1, 0.95},
         0.70, 0.84, 0.05, 0.95, ExperimentOutcome::Improved, true};
+    evaluate_in_isolated_sandbox(second);
     assert(isolated.record_evaluation(second));
     assert(isolated.adopt(second));
     const auto preview = isolated.preview_canary_for_brain("exp-second", {0.84, 0.83});
@@ -68,6 +85,7 @@ int main() {
         "exp-replay",
         EvolutionProposal{"replay.weight", 0.4, 0.5, 0.1, 0.95},
         0.70, 0.84, 0.05, 0.95, ExperimentOutcome::Improved, true};
+    evaluate_in_isolated_sandbox(replay_experiment);
     assert(replay_controller.replay_evaluation(replay_experiment));
     assert(replay_controller.replay_evaluation(replay_experiment));
     assert(replay_history.for_experiment("exp-replay").size() == 1);
