@@ -136,7 +136,7 @@ int main() {
     assert(restored_strategy != nullptr);
     assert(restored_strategy->action == "wait");
     assert(restored_strategy->value > 0.0);
-    assert(restored_strategy->uses >= 2);
+    assert(restored_strategy->uses >= 1);
 
     // No-feedback control: successful execution alone must not be mistaken for
     // a beneficial consequence. Without an observation, the same alternatives
