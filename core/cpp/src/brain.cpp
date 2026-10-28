@@ -447,29 +447,26 @@ void Brain::replay(const Event& event, bool external_observation) {
                     std::clamp(double_value(event.data, "novelty", 0.0), 0.0, 1.0),
                     affective_significance,
                     consequence_confidence});
-        } else if (status != ActionExecutionStatus::rejected &&
-                   status != ActionExecutionStatus::prepared) {
-            // When no consequence observer is available, execution/verification
-            // still supplies evidence about the action's operational reliability.
-            // Keep that signal distinct from real-world consequence evidence:
-            // successful execution is positive capability evidence, while a
-            // failed attempt or rollback is negative strategy evidence.
-            const double execution_outcome = std::clamp(2.0 * reliability - 1.0, -1.0, 1.0);
-            // For executor-generated events, operational reliability describes
-            // whether the action succeeded; it is not confidence in the evidence
-            // that the attempt failed or succeeded. Use explicit evidence
-            // confidence when present, while retaining legacy event semantics.
+        } else if (status == ActionExecutionStatus::failed ||
+                   status == ActionExecutionStatus::rolled_back ||
+                   status == ActionExecutionStatus::cancelled) {
+            // Operational failure is negative evidence about execution
+            // reliability, not evidence about environmental utility. Preserve
+            // that narrow signal while never treating successful execution as
+            // a positive consequence when no observer reported an outcome.
             const double evidence_reliability = std::clamp(
                 double_value(event.data, "evidence_reliability", reliability),
                 0.0, 1.0);
             developmental_learning_.observe_strategy(
                 *context, *action,
-                LearningSignal{1.0 - reliability, execution_outcome,
+                LearningSignal{1.0 - reliability, -1.0,
                     std::clamp(double_value(event.data, "salience", 0.0), 0.0, 1.0),
                     std::clamp(double_value(event.data, "novelty", 0.0), 0.0, 1.0),
                     affective_significance,
                     evidence_reliability});
-        } // Attention tracks learning relevance, not whether an outcome was pleasant.
+        } // Unknown consequences do not imply a beneficial outcome. Successful
+          // execution updates operational capability reliability above, but
+          // action-value learning needs an observed consequence.
         // Suppressing the global feature weights after a harmful consequence made
         // the brain less sensitive to the very surprise it needed to investigate.
         // Keep consequence prediction error separate from execution reliability;
@@ -507,13 +504,19 @@ void Brain::replay(const Event& event, bool external_observation) {
                                   double_value(event.data, "current"),
                                   double_value(event.data, "proposed"),
                                   double_value(event.data, "expected_gain"),
-                                  double_value(event.data, "confidence")},
+                                  double_value(event.data, "proposal_confidence", double_value(event.data, "confidence"))},
                 double_value(event.data, "baseline"),
                 double_value(event.data, "candidate"),
-                0.0,
+                double_value(event.data, "minimum_improvement"),
                 double_value(event.data, "confidence"),
                 static_cast<ExperimentOutcome>(integer_value(event.data, "outcome")),
                 true};
+            experiment.isolated =
+                event.data.find("isolated") != event.data.end() &&
+                std::get_if<bool>(&event.data.at("isolated")) != nullptr &&
+                *std::get_if<bool>(&event.data.at("isolated"));
+            if (experiment.isolated && experiment.candidate_executed)
+                experiment.attest_isolated_result();
             evolution_controller_.replay_evaluation(experiment);
         }
         return;
@@ -536,17 +539,23 @@ void Brain::replay(const Event& event, bool external_observation) {
             const EvolutionProposal proposal{*key, double_value(event.data, "current"),
                                              double_value(event.data, "proposed"),
                                              double_value(event.data, "expected_gain"),
-                                             double_value(event.data, "confidence")};
+                                             double_value(event.data, "proposal_confidence", double_value(event.data, "confidence"))};
             if (experiment_id != nullptr && !experiment_id->empty()) {
                 EvolutionExperiment experiment{
                     *experiment_id,
                     proposal,
                     double_value(event.data, "baseline", proposal.current),
                     double_value(event.data, "candidate", proposal.proposed),
-                    0.0,
-                    proposal.confidence,
+                    double_value(event.data, "minimum_improvement"),
+                    double_value(event.data, "confidence", proposal.confidence),
                     static_cast<ExperimentOutcome>(integer_value(event.data, "outcome")),
                     true};
+                experiment.isolated =
+                    event.data.find("isolated") != event.data.end() &&
+                    std::get_if<bool>(&event.data.at("isolated")) != nullptr &&
+                    *std::get_if<bool>(&event.data.at("isolated"));
+                if (experiment.isolated && experiment.candidate_executed)
+                    experiment.attest_isolated_result();
                 const auto adoption = evolution_controller_.adoption_journal().get(*experiment_id);
                 if (adoption.has_value() &&
                     (adoption->state == AdoptionState::Adopted ||
@@ -562,7 +571,9 @@ void Brain::replay(const Event& event, bool external_observation) {
                     experiment.candidate_fitness, experiment.confidence, 0,
                     "replayed", {}});
             } else {
-                evolution_.adopt(proposal);
+                // An unversioned legacy event has no experiment evidence.
+                // Ignore it rather than re-adopting an unevaluated proposal.
+                return;
             }
         }
         return;
@@ -588,7 +599,10 @@ void Brain::replay(const Event& event, bool external_observation) {
                     double_value(event.data, "observed_delta"), 0.0, 0,
                     reason != nullptr ? *reason : "replayed", *experiment_id});
             } else {
-                evolution_.rollback(*key);
+                // An unversioned legacy rollback cannot identify the adoption
+                // it is meant to reverse. Applying it to the current parameter
+                // could undo a newer, properly evaluated experiment during replay.
+                return;
             }
         }
         return;
@@ -863,32 +877,9 @@ LearningCycle Brain::learn_from_prediction(const std::string& key, const Scalar&
     replay(fitness_event);
     cycle.proposals = evolution_.propose();
 
-    // Prediction feedback updates the fitness history, but proposals must also
-    // pass through the durable adoption path. Merely returning proposals leaves
-    // the learned parameter unchanged, so repeated experience never affects the
-    // mechanism that generated the proposal.
-    for (const auto& proposal : cycle.proposals) {
-        if (proposal.key != key || proposal.confidence < 0.75 ||
-            proposal.expected_gain <= 0.0) {
-            continue;
-        }
-        Event adoption{0, now_ns(), "brain", "evolution_adopt",
-                       {{"key", proposal.key},
-                        {"current", proposal.current},
-                        {"proposed", proposal.proposed},
-                        {"expected_gain", proposal.expected_gain},
-                        {"confidence", proposal.confidence}}};
-        adoption.sequence = memory_.append(adoption);
-        if (adoption.sequence == 0) break;
-        ++state_.events_seen;
-        state_.cycle = adoption.sequence;
-        replay(adoption);
-        const auto* adopted = evolution_.parameter(key);
-        if (adopted != nullptr && adopted->value == proposal.proposed) {
-            ++cycle.adopted;
-        }
-        break;
-    }
+    // Prediction feedback may generate evolution proposals, but proposal
+    // generation is not a candidate-vs-baseline experiment. Return proposals
+    // to the caller for explicit evaluation; never persist or adopt them here.
 
     sync_self_state();
     return cycle;

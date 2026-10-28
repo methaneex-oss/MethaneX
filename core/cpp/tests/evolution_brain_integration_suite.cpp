@@ -1,4 +1,7 @@
 #include "jarvis/core/brain.hpp"
+#include "jarvis/core/evolution_safety.hpp"
+#include "jarvis/core/evolution_experiment_runner.hpp"
+#include "jarvis/core/process_isolation.hpp"
 
 #include <cassert>
 #include <filesystem>
@@ -6,9 +9,86 @@
 
 using namespace jarvis::core;
 
+namespace {
+void attest_isolated(EvolutionExperiment& experiment) {
+    ProcessIsolationBackend backend;
+    const IsolatedCommand command{
+        "/bin/sh", {"-c", "printf " + std::to_string(experiment.candidate_fitness)}, ""};
+    EvolutionExperimentRunner::run_isolated_command(experiment, backend, command);
+}
+} // namespace
+
 int main() {
     const std::filesystem::path path = "evolution_brain_integration_test.bin";
     std::error_code ec;
+    // A persisted legacy adoption event without experiment evidence must
+    // not bypass the evaluation gate when a Brain reconstructs from disk.
+    const std::filesystem::path legacy_path = "evolution_legacy_adoption_test.bin";
+    std::filesystem::remove(legacy_path, ec);
+    std::filesystem::remove(legacy_path.string() + ".meta", ec);
+    {
+        Brain source(legacy_path);
+        assert(source.register_evolution_parameter("legacy.replay", 0.25));
+    }
+    {
+        Memory journal(256, legacy_path);
+        Event legacy_adoption{
+            0, 1, "legacy-test", "evolution_adopt",
+            {{"key", std::string("legacy.replay")},
+             {"current", 0.25},
+             {"proposed", 0.95},
+             {"expected_gain", 0.70},
+             {"confidence", 0.99}}};
+        assert(journal.append(legacy_adoption) != 0);
+    }
+    {
+        Brain restarted_legacy(legacy_path);
+        const auto* parameter = restarted_legacy.evolution_parameter("legacy.replay");
+        assert(parameter != nullptr);
+        assert(parameter->value == parameter->baseline);
+    }
+    std::filesystem::remove(legacy_path, ec);
+    std::filesystem::remove(legacy_path.string() + ".meta", ec);
+
+    // An unversioned legacy rollback must not undo a newer adoption during
+    // journal replay: it does not identify the experiment it belongs to.
+    const std::filesystem::path legacy_rollback_path = "evolution_legacy_rollback_test.bin";
+    std::filesystem::remove(legacy_rollback_path, ec);
+    std::filesystem::remove(legacy_rollback_path.string() + ".meta", ec);
+    {
+        Brain source(legacy_rollback_path);
+        assert(source.register_evolution_parameter("legacy.rollback", 0.25));
+        EvolutionExperiment valid_adoption{
+            "legacy-rollback-protection-1",
+            EvolutionProposal{"legacy.rollback", 0.25, 0.35, 0.1, 0.90},
+            0.70, 0.85, 0.01, 0.90, ExperimentOutcome::Improved, true};
+        attest_isolated(valid_adoption);
+        assert(source.record_evolution_evaluation(valid_adoption));
+        assert(source.adopt_evolution_experiment(valid_adoption));
+        const auto* adopted = source.evolution_parameter("legacy.rollback");
+        assert(adopted != nullptr && adopted->value == 0.35);
+    }
+    {
+        Memory journal(256, legacy_rollback_path);
+        Event legacy_rollback{
+            0, 0, "legacy-test", "evolution_rollback",
+            {{"key", std::string("legacy.rollback")}}};
+        assert(journal.append(legacy_rollback) != 0);
+    }
+    {
+        Brain restarted_legacy(legacy_rollback_path);
+        const auto* parameter = restarted_legacy.evolution_parameter("legacy.rollback");
+        assert(parameter != nullptr);
+        assert(parameter->value == 0.35);
+        const auto history = restarted_legacy.evolution_history();
+        assert(std::any_of(history.begin(), history.end(), [](const EvolutionHistoryRecord& record) {
+            return record.experiment_id == "legacy-rollback-protection-1" &&
+                   record.action == EvolutionRecordAction::Adopted;
+        }));
+    }
+    std::filesystem::remove(legacy_rollback_path, ec);
+    std::filesystem::remove(legacy_rollback_path.string() + ".meta", ec);
+
     std::filesystem::remove(path, ec);
 
     {
@@ -32,6 +112,7 @@ int main() {
         EvolutionExperiment experiment{
             "brain-evolution-1", proposals.front(), 0.70, 0.90, 0.01, 0.95,
             ExperimentOutcome::Improved, true};
+        attest_isolated(experiment);
         assert(brain.record_evolution_evaluation(experiment));
         const auto evaluated_history = brain.evolution_history();
         assert(evaluated_history.size() == 1);
@@ -48,6 +129,7 @@ int main() {
             "manual-rollback-1",
             EvolutionProposal{"manual.rollback", 0.25, 0.35, 0.1, 0.90},
             0.70, 0.85, 0.01, 0.90, ExperimentOutcome::Improved, true};
+        attest_isolated(manual_rollback);
         assert(brain.record_evolution_evaluation(manual_rollback));
         assert(brain.adopt_evolution_experiment(manual_rollback));
         const auto* adopted_manual = brain.evolution_parameter("manual.rollback");
@@ -68,14 +150,59 @@ int main() {
             direct_proposals.begin(), direct_proposals.end(),
             [](const EvolutionProposal& proposal) { return proposal.key == "direct.rollback"; });
         assert(direct_it != direct_proposals.end());
-        assert(brain.adopt_evolution(*direct_it));
-        const auto* adopted_direct = brain.evolution_parameter("direct.rollback");
-        assert(adopted_direct != nullptr);
-        assert(adopted_direct->value != adopted_direct->baseline);
-        assert(brain.rollback_evolution("direct.rollback"));
-        const auto* rolled_direct = brain.evolution_parameter("direct.rollback");
-        assert(rolled_direct != nullptr);
-        assert(rolled_direct->value == rolled_direct->baseline);
+        // A proposal without a recorded candidate-vs-baseline experiment
+        // must not mutate the parameter through the legacy convenience API.
+        const auto* before_direct_adoption = brain.evolution_parameter("direct.rollback");
+        assert(before_direct_adoption != nullptr);
+        const double direct_baseline = before_direct_adoption->baseline;
+        assert(!brain.adopt_evolution(*direct_it));
+        assert(brain.register_evolution_parameter("safety.missing-evaluation", 0.2));
+        EvolutionExperiment missing_evaluation{
+            "safety-missing-evaluation",
+            EvolutionProposal{"safety.missing-evaluation", 0.2, 0.3, 0.1, 0.99},
+            0.70, 0.82, 0.01, 0.99, ExperimentOutcome::Improved, true};
+        attest_isolated(missing_evaluation);
+        assert(!brain.adopt_evolution_experiment(missing_evaluation));
+        const auto* unchanged_missing = brain.evolution_parameter("safety.missing-evaluation");
+        assert(unchanged_missing != nullptr && unchanged_missing->value == 0.2);
+        // An experiment cannot be adopted merely because the caller labels it
+        // Improved; the outcome must be recomputed against its threshold.
+        assert(brain.register_evolution_parameter("safety.equal-fitness", 0.2));
+        EvolutionExperiment equal_fitness{
+            "safety-equal-fitness", EvolutionProposal{"safety.equal-fitness", 0.2, 0.3, 0.1, 0.99},
+            0.70, 0.70, 0.01, 0.99, ExperimentOutcome::Improved, true};
+        attest_isolated(equal_fitness);
+        equal_fitness.outcome = ExperimentOutcome::Improved;
+        EvolutionSafetyPolicy non_isolation_policy;
+        non_isolation_policy.require_isolation = false;
+        assert(!EvolutionSafetyGate::approve(equal_fitness, non_isolation_policy));
+        assert(!brain.record_evolution_evaluation(equal_fitness));
+        assert(!brain.adopt_evolution_experiment(equal_fitness));
+
+        assert(brain.register_evolution_parameter("safety.subthreshold", 0.2));
+        EvolutionExperiment subthreshold{
+            "safety-subthreshold", EvolutionProposal{"safety.subthreshold", 0.2, 0.3, 0.1, 0.99},
+            0.70, 0.74, 0.05, 0.99, ExperimentOutcome::Improved, true};
+        attest_isolated(subthreshold);
+        subthreshold.outcome = ExperimentOutcome::Improved;
+        assert(!EvolutionSafetyGate::approve(subthreshold, non_isolation_policy));
+        assert(!brain.record_evolution_evaluation(subthreshold));
+        assert(!brain.adopt_evolution_experiment(subthreshold));
+
+        assert(brain.register_evolution_parameter("safety.mismatch", 0.2));
+        EvolutionExperiment mismatched{
+            "safety-mismatched-evaluation",
+            EvolutionProposal{"safety.mismatch", 0.2, 0.3, 0.1, 0.99},
+            0.70, 0.82, 0.01, 0.99, ExperimentOutcome::Improved, true};
+        attest_isolated(mismatched);
+        assert(brain.record_evolution_evaluation(mismatched));
+        mismatched.candidate_fitness = 0.90;
+        assert(!brain.adopt_evolution_experiment(mismatched));
+        const auto* unchanged_mismatch = brain.evolution_parameter("safety.mismatch");
+        assert(unchanged_mismatch != nullptr && unchanged_mismatch->value == 0.2);
+        const auto* rejected_direct = brain.evolution_parameter("direct.rollback");
+        assert(rejected_direct != nullptr);
+        assert(rejected_direct->value == direct_baseline);
 
         brain.observe_evolution_canary("planner.weight", "brain-evolution-1", {0.90, 0.89});
         brain.observe_evolution_canary("planner.weight", "brain-evolution-1", {0.90, 0.88});
@@ -89,6 +216,7 @@ int main() {
             "canary-persist-1",
             EvolutionProposal{"canary.persist", 0.3, 0.4, 0.1, 0.90},
             0.70, 0.85, 0.01, 0.90, ExperimentOutcome::Improved, true};
+        attest_isolated(canary_experiment);
         assert(brain.record_evolution_evaluation(canary_experiment));
         assert(brain.adopt_evolution_experiment(canary_experiment));
         const auto pending_canary = brain.observe_evolution_canary(
@@ -102,9 +230,10 @@ int main() {
             "replay-evaluation-1",
             EvolutionProposal{"replay.persist", 0.3, 0.4, 0.1, 0.90},
             0.70, 0.82, 0.01, 0.90, ExperimentOutcome::Improved, true};
+        attest_isolated(replayable);
         assert(brain.record_evolution_evaluation(replayable));
         assert(!brain.record_evolution_evaluation(replayable));
-        assert(brain.evolution_history().size() == 9);
+        assert(brain.evolution_history().size() == 10);
     }
 
     {
@@ -114,6 +243,14 @@ int main() {
         assert(parameter->value == parameter->baseline);
         assert(parameter->observations == 3);
         assert(parameter->value == parameter->baseline);
+        const auto* missing_evaluation = restarted.evolution_parameter("safety.missing-evaluation");
+        assert(missing_evaluation != nullptr && missing_evaluation->value == missing_evaluation->baseline);
+        const auto* equal_fitness = restarted.evolution_parameter("safety.equal-fitness");
+        assert(equal_fitness != nullptr && equal_fitness->value == equal_fitness->baseline);
+        const auto* subthreshold = restarted.evolution_parameter("safety.subthreshold");
+        assert(subthreshold != nullptr && subthreshold->value == subthreshold->baseline);
+        const auto* mismatch = restarted.evolution_parameter("safety.mismatch");
+        assert(mismatch != nullptr && mismatch->value == mismatch->baseline);
         const auto* direct = restarted.evolution_parameter("direct.rollback");
         assert(direct != nullptr);
         assert(direct->value == direct->baseline);
@@ -124,7 +261,7 @@ int main() {
         assert(manual->observations == 0);
 
         const auto restarted_history = restarted.evolution_history();
-        assert(restarted_history.size() == 9);
+        assert(restarted_history.size() == 10);
         assert(restarted_history.front().experiment_id == "brain-evolution-1");
         assert(restarted_history.front().action == EvolutionRecordAction::Evaluated);
         assert(restarted_history[1].action == EvolutionRecordAction::Adopted);
@@ -134,6 +271,7 @@ int main() {
             "replay-evaluation-1",
             EvolutionProposal{"replay.persist", 0.3, 0.4, 0.1, 0.90},
             0.70, 0.82, 0.01, 0.90, ExperimentOutcome::Improved, true};
+        replayed.isolated = true;
         assert(restarted.adopt_evolution_experiment(replayed));
         const auto* replayed_parameter = restarted.evolution_parameter("replay.persist");
         assert(replayed_parameter != nullptr && replayed_parameter->value == 0.4);

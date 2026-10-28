@@ -8,7 +8,7 @@ int main() {
     using namespace jarvis::core;
     ProcessIsolationBackend backend(ProcessIsolationLimits{
         SandboxLimits{std::chrono::milliseconds{500}, 1024}, false, false, false, true, false,
-        64 * 1024 * 1024, 2, 1024 * 1024});
+        256 * 1024 * 1024, 2, 1024 * 1024});
     const auto ok = backend.run({"/bin/sh", {"-c", "printf isolated"}, ""});
     assert(ok.started && ok.isolated && ok.completed && ok.exit_code == 0);
     assert(ok.output == "isolated");
@@ -18,7 +18,7 @@ int main() {
     assert(timed.started && timed.isolated && timed.timed_out && !timed.completed);
     ProcessIsolationBackend strict(ProcessIsolationLimits{
         SandboxLimits{std::chrono::milliseconds{500}, 1024}, true, false, false, true, false,
-        64 * 1024 * 1024, 2, 1024 * 1024});
+        256 * 1024 * 1024, 2, 1024 * 1024});
     const auto strict_result = strict.run({"/bin/sh", {"-c", "printf strict"}, ""});
 #if defined(__linux__)
     if (!strict_result.completed)
@@ -29,7 +29,7 @@ int main() {
 #if defined(__linux__)
     ProcessIsolationBackend no_network(ProcessIsolationLimits{
         SandboxLimits{std::chrono::milliseconds{500}, 1024}, false, false, false, true, true,
-        64 * 1024 * 1024, 2, 1024 * 1024});
+        256 * 1024 * 1024, 2, 1024 * 1024});
     const auto network = no_network.run({"/bin/sh", {"-c", "python3 -c 'import socket; socket.socket()'"}, ""});
     assert(network.started && network.isolated && !network.completed);
 #endif

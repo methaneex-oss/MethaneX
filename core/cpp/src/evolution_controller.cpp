@@ -20,9 +20,13 @@ bool EvolutionController::record_evaluation(const EvolutionExperiment& experimen
         !std::isfinite(experiment.proposal.proposed) ||
         !std::isfinite(experiment.proposal.expected_gain) ||
         experiment.confidence < 0.0 || experiment.confidence > 1.0 ||
-        experiment.outcome == ExperimentOutcome::Pending) {
+        experiment.outcome == ExperimentOutcome::Pending ||
+        experiment.outcome == ExperimentOutcome::Invalid ||
+        (policy_.require_isolation && !experiment.has_valid_isolation_attestation())) {
         return false;
     }
+    EvolutionExperiment verified = experiment;
+    if (EvolutionExperimentEngine::evaluate(verified) != experiment.outcome) return false;
 
     for (const auto& record : history_.for_experiment(experiment.id)) {
         if (record.action == EvolutionRecordAction::Evaluated) {
@@ -57,10 +61,13 @@ bool EvolutionController::validate_evaluation_for_brain(
         !std::isfinite(experiment.proposal.expected_gain) ||
         experiment.confidence < 0.0 || experiment.confidence > 1.0 ||
         experiment.outcome == ExperimentOutcome::Pending ||
+        experiment.outcome == ExperimentOutcome::Invalid ||
+        (policy_.require_isolation && !experiment.has_valid_isolation_attestation()) ||
         adoption_journal_.get(experiment.id).has_value()) {
         return false;
     }
-    return true;
+    EvolutionExperiment verified = experiment;
+    return EvolutionExperimentEngine::evaluate(verified) == experiment.outcome;
 }
 
 bool EvolutionController::record_evaluation_for_brain(
@@ -99,16 +106,9 @@ bool EvolutionController::replay_evaluation(
 }
 
 bool EvolutionController::adopt(EvolutionExperiment& experiment) {
-    if (!experiment.candidate_executed) return false;
-    if (!adoption_journal_.stage(experiment)) return false;
-    if (!EvolutionSafetyGate::approve(experiment, policy_)) {
-        adoption_journal_.reject(experiment.id, "safety_gate_rejected");
-        history_.append(EvolutionHistoryRecord{
-            experiment.id, experiment.proposal.key, EvolutionRecordAction::Rejected,
-            experiment.outcome, experiment.baseline_fitness, experiment.candidate_fitness,
-            experiment.confidence, 0, "safety_gate_rejected", {}});
-        return false;
-    }
+    // Keep the direct controller API subject to the same durable-evaluation
+    // invariant as Brain-mediated adoption.
+    if (!validate_adoption_for_brain(experiment)) return false;
 
     if (!model_.adopt(experiment.proposal)) {
         adoption_journal_.reject(experiment.id, "model_adoption_failed");
@@ -141,10 +141,46 @@ bool EvolutionController::adopt(EvolutionExperiment& experiment) {
 }
 
 bool EvolutionController::validate_adoption_for_brain(const EvolutionExperiment& experiment) const noexcept {
-    if (experiment.id.empty() || !experiment.candidate_executed ||
-        !EvolutionSafetyGate::approve(experiment, policy_)) return false;
-    if (const auto record = adoption_journal_.get(experiment.id);
-        record.has_value() && record->state != AdoptionState::Pending) return false;
+    if (experiment.id.empty() || !experiment.candidate_executed) return false;
+
+    // Adoption is permitted only when durable history contains an evaluation
+    // for this exact experiment and the request still matches that evidence.
+    // A staged in-memory journal record alone is not evaluation evidence.
+    bool matching_evaluation = false;
+    for (const auto& record : history_.for_experiment(experiment.id)) {
+        if (record.action != EvolutionRecordAction::Evaluated) continue;
+        if (record.parameter_key != experiment.proposal.key ||
+            record.outcome != experiment.outcome ||
+            record.baseline_fitness != experiment.baseline_fitness ||
+            record.candidate_fitness != experiment.candidate_fitness ||
+            record.confidence != experiment.confidence) return false;
+        matching_evaluation = true;
+    }
+    if (!matching_evaluation) return false;
+
+    EvolutionExperiment independently_evaluated = experiment;
+    if (EvolutionExperimentEngine::evaluate(independently_evaluated) !=
+        experiment.outcome) return false;
+
+    const auto record = adoption_journal_.get(experiment.id);
+    if (!record.has_value() || record->state != AdoptionState::Pending ||
+        record->parameter_key != experiment.proposal.key ||
+        record->baseline_fitness != experiment.baseline_fitness ||
+        record->candidate_fitness != experiment.candidate_fitness ||
+        record->confidence != experiment.confidence ||
+        record->proposal_current != experiment.proposal.current ||
+        record->proposal_proposed != experiment.proposal.proposed ||
+        record->expected_gain != experiment.proposal.expected_gain ||
+        record->proposal_confidence != experiment.proposal.confidence ||
+        record->minimum_improvement != experiment.minimum_improvement ||
+        record->isolated != experiment.isolated) return false;
+
+    // On a restart, the caller's value object has no in-memory attestation.
+    // Re-attest a copy only after its fields match the durable evaluated record.
+    EvolutionExperiment verified = experiment;
+    if (record->isolated) verified.attest_isolated_result();
+    if (!EvolutionSafetyGate::approve(verified, policy_)) return false;
+
     const auto evaluation = model_.evaluate(experiment.proposal);
     if (!evaluation.eligible) return false;
     const auto& policy = model_.policy();

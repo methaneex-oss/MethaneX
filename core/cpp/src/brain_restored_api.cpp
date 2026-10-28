@@ -245,7 +245,14 @@ bool Brain::recover(const std::string& component, double restored_health) { std:
 bool Brain::register_evolution_parameter(std::string key, double initial) { std::unique_lock lock(mutex_); if (key.empty() || !std::isfinite(initial)) return false; if (evolution_.parameter(key) != nullptr) return false; Event event{0, 0, "brain", "evolution_register", {{"key", key}, {"initial", initial}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return false; replay(event); ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); return evolution_.parameter(key) != nullptr; }
 void Brain::observe_evolution_fitness(const std::string& key, double fitness) { std::unique_lock lock(mutex_); if (key.empty()) return; Event event{0, 0, "brain", "evolution_fitness", {{"key", key}, {"fitness", fitness}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return; replay(event); ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); }
 std::vector<EvolutionProposal> Brain::evolution_options() const { std::shared_lock lock(mutex_); return evolution_.propose(); }
-bool Brain::adopt_evolution(const EvolutionProposal& proposal) { std::unique_lock lock(mutex_); if (proposal.key.empty() || evolution_.parameter(proposal.key) == nullptr) return false; Event event{0, 0, "brain", "evolution_adopt", {{"key", proposal.key}, {"current", proposal.current}, {"proposed", proposal.proposed}, {"expected_gain", proposal.expected_gain}, {"confidence", proposal.confidence}}}; event.sequence = memory_.append(event); if (event.sequence == 0) return false; replay(event); ++state_.events_seen; state_.cycle = event.sequence; sync_self_state(); return true; }
+bool Brain::adopt_evolution(const EvolutionProposal& proposal) {
+    // A proposal alone is not evidence that a candidate outperformed its
+    // baseline. Adoption must go through record_evolution_evaluation() and
+    // adopt_evolution_experiment(), which require a completed experiment and
+    // the controller's safety gate. Keep this legacy entry point fail-closed.
+    (void)proposal;
+    return false;
+}
 bool Brain::rollback_evolution(const std::string& key) {
     std::unique_lock lock(mutex_);
     if (key.empty()) return false;
@@ -283,10 +290,13 @@ bool Brain::record_evolution_evaluation(EvolutionExperiment& experiment) {
                  {"current", experiment.proposal.current},
                  {"proposed", experiment.proposal.proposed},
                  {"expected_gain", experiment.proposal.expected_gain},
+                 {"proposal_confidence", experiment.proposal.confidence},
                  {"outcome", static_cast<std::int64_t>(experiment.outcome)},
                  {"baseline", experiment.baseline_fitness},
                  {"candidate", experiment.candidate_fitness},
-                 {"confidence", experiment.confidence}}};
+                 {"confidence", experiment.confidence},
+                 {"minimum_improvement", experiment.minimum_improvement},
+                 {"isolated", experiment.isolated}}};
     event.sequence = memory_.append(event);
     if (event.sequence == 0) return false;
     if (!evolution_controller_.record_evaluation_for_brain(experiment)) return false;
@@ -309,7 +319,10 @@ bool Brain::adopt_evolution_experiment(EvolutionExperiment& experiment) {
                  {"current", experiment.proposal.current},
                  {"proposed", experiment.proposal.proposed},
                  {"expected_gain", experiment.proposal.expected_gain},
-                 {"confidence", experiment.proposal.confidence},
+                 {"proposal_confidence", experiment.proposal.confidence},
+                 {"confidence", experiment.confidence},
+                 {"minimum_improvement", experiment.minimum_improvement},
+                 {"isolated", experiment.isolated},
                  {"experiment_id", experiment.id},
                  {"outcome", static_cast<std::int64_t>(experiment.outcome)},
                  {"baseline", experiment.baseline_fitness},

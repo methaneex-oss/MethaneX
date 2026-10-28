@@ -685,9 +685,9 @@ int main() {
     std::filesystem::remove(reliability_path, ec);
     std::filesystem::remove(reliability_path.string() + ".meta", ec);
 
-    // Execution-only feedback has no observed world consequence, but its
-    // reliability must still limit how strongly capability evidence changes
-    // developmental strategy values.
+    // Execution success without a consequence observer is capability
+    // evidence, not positive task-utility evidence. Operational failures may
+    // still teach a negative strategy-reliability signal.
     const auto execution_path =
         std::filesystem::temp_directory_path() / "jarvis_execution_reliability.bin";
     std::filesystem::remove(execution_path, ec);
@@ -717,10 +717,10 @@ int main() {
             [](const LearnedStrategy& strategy) { return strategy.action == "reliable-execution"; });
         const auto uncertain = std::find_if(strategies.begin(), strategies.end(),
             [](const LearnedStrategy& strategy) { return strategy.action == "uncertain-execution"; });
-        assert(reliable != strategies.end());
+        assert(reliable == strategies.end());
         assert(uncertain != strategies.end());
-        assert(reliable->value > uncertain->value);
-        assert(reliable->confidence > uncertain->confidence);
+        assert(uncertain->value < 0.0);
+        assert(uncertain->uses == 4);
     }
     std::filesystem::remove(execution_path, ec);
     std::filesystem::remove(execution_path.string() + ".meta", ec);

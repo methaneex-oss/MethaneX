@@ -1,4 +1,5 @@
 #include "jarvis/core/reasoning.hpp"
+#include "jarvis/core/causal_link_codec.hpp"
 
 #include <cassert>
 #include <cstdint>
@@ -65,6 +66,30 @@ int main() {
     const auto bounded = engine.infer({enabled}, links, 1);
     assert(bounded.size() == 2);
     assert(bounded[1].key == "system.ready");
+
+    // The typed causal-link codec must preserve delimiter-bearing keys and
+    // string values without confusing textual values with booleans or numbers.
+    const CausalLink delimiter_link{
+        detail::encode_causal_side("sensor=mode|raw", Scalar{true}),
+        detail::encode_causal_side("result=value:raw", Scalar{std::string("true=123|:text")}),
+        0.9, 1};
+    const auto delimiter_inferred = engine.infer(
+        {Belief{"sensor=mode|raw", true, 0.95, 1, 9}}, {delimiter_link}, 2);
+    assert(delimiter_inferred.size() == 2);
+    assert(delimiter_inferred[1].key == "result=value:raw");
+    const auto* delimiter_text = std::get_if<std::string>(&delimiter_inferred[1].value);
+    assert(delimiter_text != nullptr && *delimiter_text == "true=123|:text");
+
+    // Legacy persisted key=value links remain readable.
+    const auto legacy_inferred = engine.infer(
+        {Belief{"legacy.enabled", true, 0.9, 1, 10}},
+        {CausalLink{"legacy.enabled=true", "legacy.ready=true", 0.8, 3}}, 1);
+    assert(legacy_inferred.size() == 2);
+    assert(legacy_inferred[1].key == "legacy.ready");
+    assert(std::get<bool>(legacy_inferred[1].value));
+
+    // Malformed versioned data must not be interpreted as a legacy side.
+    assert(!detail::decode_causal_side("@2|broken"));
 
     return 0;
 }
