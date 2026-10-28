@@ -18,8 +18,9 @@ std::string experiment_id(const EvolutionOpportunity& opportunity,
 
 } // namespace
 
-EvolutionOrchestrator::EvolutionOrchestrator(EvolutionSchedulePolicy policy)
-    : scheduler_(policy) {}
+EvolutionOrchestrator::EvolutionOrchestrator(EvolutionSchedulePolicy policy,
+                                             EvolutionTrialConfig trial_config)
+    : scheduler_(policy), trial_config_(trial_config) {}
 
 EvolutionOrchestrationResult EvolutionOrchestrator::run(
     const EvolutionOpportunity& opportunity,
