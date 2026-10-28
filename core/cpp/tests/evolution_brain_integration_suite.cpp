@@ -92,6 +92,67 @@ int main() {
     std::filesystem::remove(legacy_rollback_path, ec);
     std::filesystem::remove(legacy_rollback_path.string() + ".meta", ec);
 
+    // Fail-closed controls: a hand-constructed experiment is not isolated
+    // evidence, equal fitness cannot be labelled Improved, and sub-threshold
+    // gains cannot be adopted. Rejections must survive restart unchanged.
+    const std::filesystem::path invalid_evidence_path = "evolution_invalid_evidence_test.bin";
+    std::filesystem::remove(invalid_evidence_path, ec);
+    std::filesystem::remove(invalid_evidence_path.string() + ".meta", ec);
+    {
+        Brain guarded(invalid_evidence_path);
+        assert(guarded.register_evolution_parameter("guarded.unverified", 0.25));
+        assert(guarded.register_evolution_parameter("guarded.equal", 0.25));
+        assert(guarded.register_evolution_parameter("guarded.below-threshold", 0.25));
+
+        EvolutionExperiment unverified{
+            "unverified-evidence",
+            EvolutionProposal{"guarded.unverified", 0.25, 0.35, 0.1, 0.90},
+            0.70, 0.85, 0.01, 0.90, ExperimentOutcome::Improved, true};
+        assert(!guarded.record_evolution_evaluation(unverified));
+        assert(!guarded.adopt_evolution_experiment(unverified));
+
+        EvolutionExperiment equal_fitness{
+            "equal-fitness",
+            EvolutionProposal{"guarded.equal", 0.25, 0.35, 0.1, 0.90},
+            0.70, 0.70, 0.01, 0.90, ExperimentOutcome::Improved, true};
+        EvolutionSandbox sandbox;
+        const auto equal_outcome = EvolutionExperimentRunner::run(
+            equal_fitness, sandbox,
+            [](const EvolutionProposal&, const SandboxLimits&) {
+                return SandboxResult{true, true, false, false, true, 0.70, {}};
+            });
+        assert(equal_outcome == ExperimentOutcome::Neutral);
+        assert(!guarded.record_evolution_evaluation(equal_fitness));
+        assert(!guarded.adopt_evolution_experiment(equal_fitness));
+
+        EvolutionExperiment below_threshold{
+            "below-threshold",
+            EvolutionProposal{"guarded.below-threshold", 0.25, 0.35, 0.1, 0.90},
+            0.70, 0.705, 0.01, 0.90, ExperimentOutcome::Improved, true};
+        const auto below_outcome = EvolutionExperimentRunner::run(
+            below_threshold, sandbox,
+            [](const EvolutionProposal&, const SandboxLimits&) {
+                return SandboxResult{true, true, false, false, true, 0.705, {}};
+            });
+        assert(below_outcome == ExperimentOutcome::Neutral);
+        assert(!guarded.record_evolution_evaluation(below_threshold));
+        assert(!guarded.adopt_evolution_experiment(below_threshold));
+
+        for (const auto& key : {"guarded.unverified", "guarded.equal", "guarded.below-threshold"}) {
+            const auto* parameter = guarded.evolution_parameter(key);
+            assert(parameter != nullptr && parameter->value == parameter->baseline);
+        }
+    }
+    {
+        Brain restarted_guarded(invalid_evidence_path);
+        for (const auto& key : {"guarded.unverified", "guarded.equal", "guarded.below-threshold"}) {
+            const auto* parameter = restarted_guarded.evolution_parameter(key);
+            assert(parameter != nullptr && parameter->value == parameter->baseline);
+        }
+    }
+    std::filesystem::remove(invalid_evidence_path, ec);
+    std::filesystem::remove(invalid_evidence_path.string() + ".meta", ec);
+
     std::filesystem::remove(path, ec);
 
     {
@@ -120,6 +181,12 @@ int main() {
         const auto evaluated_history = brain.evolution_history();
         assert(evaluated_history.size() == 1);
         assert(evaluated_history.front().action == EvolutionRecordAction::Evaluated);
+        auto mismatched_request = experiment;
+        mismatched_request.proposal.proposed += 0.01;
+        assert(!brain.adopt_evolution_experiment(mismatched_request));
+        const auto* unchanged_after_mismatch = brain.evolution_parameter(experiment.proposal.key);
+        assert(unchanged_after_mismatch != nullptr &&
+               unchanged_after_mismatch->value == unchanged_after_mismatch->baseline);
         assert(brain.adopt_evolution_experiment(experiment));
         const auto live_history = brain.evolution_history();
         assert(live_history.size() == 2);
