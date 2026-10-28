@@ -507,7 +507,7 @@ void Brain::replay(const Event& event, bool external_observation) {
                                   double_value(event.data, "current"),
                                   double_value(event.data, "proposed"),
                                   double_value(event.data, "expected_gain"),
-                                  double_value(event.data, "confidence")},
+                                  double_value(event.data, "proposal_confidence", double_value(event.data, "confidence"))},
                 double_value(event.data, "baseline"),
                 double_value(event.data, "candidate"),
                 double_value(event.data, "minimum_improvement"),
@@ -539,17 +539,20 @@ void Brain::replay(const Event& event, bool external_observation) {
             const EvolutionProposal proposal{*key, double_value(event.data, "current"),
                                              double_value(event.data, "proposed"),
                                              double_value(event.data, "expected_gain"),
-                                             double_value(event.data, "confidence")};
+                                             double_value(event.data, "proposal_confidence", double_value(event.data, "confidence"))};
             if (experiment_id != nullptr && !experiment_id->empty()) {
                 EvolutionExperiment experiment{
                     *experiment_id,
                     proposal,
                     double_value(event.data, "baseline", proposal.current),
                     double_value(event.data, "candidate", proposal.proposed),
-                    0.0,
-                    proposal.confidence,
+                    double_value(event.data, "minimum_improvement"),
+                    double_value(event.data, "confidence", proposal.confidence),
                     static_cast<ExperimentOutcome>(integer_value(event.data, "outcome")),
-                    true};
+                    true,
+                    event.data.find("isolated") != event.data.end() &&
+                        std::get_if<bool>(&event.data.at("isolated")) != nullptr &&
+                        *std::get_if<bool>(&event.data.at("isolated"))};
                 const auto adoption = evolution_controller_.adoption_journal().get(*experiment_id);
                 if (adoption.has_value() &&
                     (adoption->state == AdoptionState::Adopted ||
