@@ -147,6 +147,24 @@ int main() {
             LearningSignal{0.8, 0.8, 0.5, 0.5, 0.5, 1.0});
         assert(context_marker_transfer.best_related_strategy(same_schema_context) != nullptr);
         assert(context_marker_transfer.best_related_strategy(reserved_label_context) == nullptr);
+
+        // Older journals already contain unescaped "values" labels/descriptors.
+        // Their context identity must still be decoded without rewriting history.
+        DevelopmentalLearning legacy_context_transfer;
+        const std::string legacy_reserved_value =
+            "observation/observation/source/context-sensor/features/"
+            "condition/temperature/values/values/positive-scale-5";
+        const std::string legacy_same_schema =
+            "observation/observation/source/context-sensor/features/"
+            "condition/temperature/values/values/positive-scale-6";
+        const std::string legacy_reserved_label =
+            "observation/observation/source/context-sensor/features/"
+            "condition/values/temperature/values/clear/clear/positive-scale-5";
+        legacy_context_transfer.observe_strategy(
+            legacy_reserved_value, "inspect",
+            LearningSignal{0.8, 0.8, 0.5, 0.5, 0.5, 1.0});
+        assert(legacy_context_transfer.best_related_strategy(legacy_same_schema) != nullptr);
+        assert(legacy_context_transfer.best_related_strategy(legacy_reserved_label) == nullptr);
     }
     std::filesystem::remove(context_encoding_journal, ec);
     std::filesystem::remove(context_encoding_journal.string() + ".meta", ec);
