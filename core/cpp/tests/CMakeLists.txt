@@ -212,6 +212,10 @@ add_executable(jarvis_dlt_002_long_run dlt_002_long_run.cpp)
 target_link_libraries(jarvis_dlt_002_long_run PRIVATE jarvis_core)
 target_compile_features(jarvis_dlt_002_long_run PRIVATE cxx_std_20)
 
+add_executable(jarvis_jbp_004_memory_learning_evolution_suite jbp_004_memory_learning_evolution_suite.cpp)
+target_link_libraries(jarvis_jbp_004_memory_learning_evolution_suite PRIVATE jarvis_core)
+target_compile_features(jarvis_jbp_004_memory_learning_evolution_suite PRIVATE cxx_std_20)
+
 include(CTest)
 if(BUILD_TESTING)
     add_test(NAME jarvis_brain_contract COMMAND jarvis_brain_contract)
@@ -291,6 +295,9 @@ if(BUILD_TESTING)
         COMMAND jarvis_dlt_002_persistence verify ${CMAKE_CURRENT_BINARY_DIR}/dlt-002-ctest.bin)
     set_tests_properties(jarvis_dlt_002_persistence_verify PROPERTIES
         FIXTURES_REQUIRED dlt002_persistence)
+
+    add_test(NAME jarvis_jbp_004_memory_learning_evolution_suite
+        COMMAND jarvis_jbp_004_memory_learning_evolution_suite verify ${CMAKE_CURRENT_BINARY_DIR}/jbp-004-ctest.bin 17)
 endif()
 # These executable suites use assert() as their test assertion mechanism. Keep
 # assertions enabled in Release builds as well: otherwise NDEBUG removes the
