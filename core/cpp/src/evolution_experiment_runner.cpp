@@ -18,9 +18,9 @@ ExperimentOutcome EvolutionExperimentRunner::run(EvolutionExperiment& experiment
 
     experiment.candidate_fitness = result.fitness;
     experiment.candidate_executed = true;
-    experiment.isolation_attested_ = true;
     const auto outcome = EvolutionExperimentEngine::evaluate(experiment);
-    if (outcome != ExperimentOutcome::Improved) experiment.isolation_attested_ = false;
+    if (outcome == ExperimentOutcome::Improved)
+        experiment.attest_current_evaluation();
     return outcome;
 }
 
