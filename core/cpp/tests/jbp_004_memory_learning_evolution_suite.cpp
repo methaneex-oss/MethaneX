@@ -130,12 +130,40 @@ void assert_accuracy(Brain& brain, const Level& level, int level_index, int seed
                       << " context=" << context_names[static_cast<std::size_t>(context)]
                       << " expected=" << action_names[static_cast<std::size_t>(
                              mapping[static_cast<std::size_t>(context)])]
+                      << " original_expected=" << action_names[static_cast<std::size_t>(
+                             initial_mapping(seed, level_index, level.contexts, level.actions)
+                                 [static_cast<std::size_t>(context)])]
                       << " correct=" << correct << "/30 required_percent="
                       << minimum_percent << " chosen_counts=";
             for (int action = 0; action < level.actions; ++action)
                 std::cerr << action_names[static_cast<std::size_t>(action)] << ":"
                           << selected_counts[static_cast<std::size_t>(action)] << " ";
             std::cerr << "\n";
+            std::array<std::array<int, 2>, 3> reward_counts{};
+            for (const auto& event : brain.memory().by_kind("action_outcome")) {
+                const auto ci = event.data.find("context");
+                const auto ai = event.data.find("action");
+                const auto ri = event.data.find("actual_consequence");
+                if (ci == event.data.end() || ai == event.data.end() ||
+                    ri == event.data.end()) continue;
+                const auto* event_context = std::get_if<std::string>(&ci->second);
+                const auto* event_action = std::get_if<std::string>(&ai->second);
+                const auto* reward = std::get_if<double>(&ri->second);
+                if (event_context == nullptr || *event_context != failed_context ||
+                    event_action == nullptr || reward == nullptr) continue;
+                const auto found = std::find(action_names.begin(), action_names.end(),
+                                             *event_action);
+                if (found == action_names.end()) continue;
+                const auto action_index = static_cast<std::size_t>(found - action_names.begin());
+                ++reward_counts[action_index][*reward > 0.0 ? 1 : 0];
+            }
+            for (int action = 0; action < level.actions; ++action) {
+                std::cerr << "  reward-count action="
+                          << action_names[static_cast<std::size_t>(action)]
+                          << " negative=" << reward_counts[static_cast<std::size_t>(action)][0]
+                          << " positive=" << reward_counts[static_cast<std::size_t>(action)][1]
+                          << "\n";
+            }
             for (const auto& strategy : brain.developmental_strategies()) {
                 if (strategy.context == failed_context) {
                     std::cerr << "  strategy action=" << strategy.action
