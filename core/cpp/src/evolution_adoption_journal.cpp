@@ -8,7 +8,15 @@ bool EvolutionAdoptionJournal::stage(const EvolutionExperiment& experiment) {
     auto& r = records_[experiment.id];
     if (r.revision != 0) {
         if (r.state == AdoptionState::Adopted || r.state == AdoptionState::Pending)
-            return r.parameter_key == experiment.proposal.key;
+            return r.parameter_key == experiment.proposal.key &&
+                   r.baseline_fitness == experiment.baseline_fitness &&
+                   r.candidate_fitness == experiment.candidate_fitness &&
+                   r.confidence == experiment.confidence &&
+                   r.proposal_current == experiment.proposal.current &&
+                   r.proposal_proposed == experiment.proposal.proposed &&
+                   r.expected_gain == experiment.proposal.expected_gain &&
+                   r.minimum_improvement == experiment.minimum_improvement &&
+                   r.isolated == experiment.isolated;
         return false;
     }
     r.experiment_id = experiment.id;
