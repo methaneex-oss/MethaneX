@@ -112,6 +112,48 @@ int main() {
     assert(first->context.action_execution_results.front().outcome.actual_consequence == -0.8);
     assert(wait_for_feedback(runtime, 1));
 
+    // Verify this runtime experience reached multiple mechanisms, not only the
+    // strategy table: the action-consequence prediction is resolved, its
+    // prediction-error metric records evidence, affective learning was updated,
+    // and episodic memory contains the authoritative outcome with its context.
+    const auto& first_execution = first->context.action_execution_results.front();
+    assert(first_execution.consequence_prediction_sequence.has_value());
+    assert(!first_execution.consequence_prediction_key.empty());
+    const auto first_prediction_snapshot = brain.snapshot().predictions;
+    const auto resolved_consequence_prediction = std::find_if(
+        first_prediction_snapshot.begin(), first_prediction_snapshot.end(),
+        [&](const Prediction& prediction) {
+            return prediction.created_sequence ==
+                   *first_execution.consequence_prediction_sequence;
+        });
+    assert(resolved_consequence_prediction != first_prediction_snapshot.end());
+    assert(resolved_consequence_prediction->resolved);
+    const auto* consequence_metric =
+        brain.learning_metric(first_execution.consequence_prediction_key);
+    assert(consequence_metric != nullptr);
+    assert(consequence_metric->observations > 0);
+    assert(brain.affective_learning_updates() > 0);
+    bool persisted_outcome_memory = false;
+    for (const auto& event : brain.memory().all()) {
+        if (event.kind != "action_outcome") continue;
+        const auto action = event.data.find("action");
+        const auto context = event.data.find("context");
+        const auto actual = event.data.find("actual_consequence");
+        if (action == event.data.end() || context == event.data.end() ||
+            actual == event.data.end()) continue;
+        const auto* action_name = std::get_if<std::string>(&action->second);
+        const auto* context_name = std::get_if<std::string>(&context->second);
+        const auto* actual_value = std::get_if<double>(&actual->second);
+        if (action_name != nullptr && context_name != nullptr &&
+            actual_value != nullptr && *action_name == "calibrate" &&
+            *context_name == "runtime-learning-context" &&
+            *actual_value == -0.8) {
+            persisted_outcome_memory = true;
+            break;
+        }
+    }
+    assert(persisted_outcome_memory);
+
     const auto learned = brain.developmental_best_strategy("runtime-learning-context");
     assert(learned != nullptr);
     assert(learned->action == "calibrate");
