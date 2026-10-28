@@ -17,6 +17,8 @@ struct EvolutionExperiment {
     double confidence{0.0};
     ExperimentOutcome outcome{ExperimentOutcome::Pending};
     bool candidate_executed{false};
+    // Set only by the sandbox runner after an isolated run completes.
+    bool isolated{false};
 };
 
 class EvolutionExperimentEngine {
