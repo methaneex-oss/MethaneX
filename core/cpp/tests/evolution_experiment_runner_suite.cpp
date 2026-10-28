@@ -24,6 +24,7 @@ int main() {
             });
         assert(outcome == ExperimentOutcome::Improved);
         assert(experiment.candidate_executed);
+        assert(experiment.isolation_verified());
         assert(std::abs(experiment.candidate_fitness - 0.86) < 1e-12);
     }
 
@@ -35,6 +36,7 @@ int main() {
             });
         assert(outcome == ExperimentOutcome::Invalid);
         assert(!experiment.candidate_executed);
+        assert(!experiment.isolation_verified());
     }
 
     {
