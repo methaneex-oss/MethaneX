@@ -16,6 +16,7 @@ int main() {
         "exp-canary",
         EvolutionProposal{"reasoning.weight", 0.4, 0.5, 0.1, 0.95},
         0.70, 0.84, 0.05, 0.95, ExperimentOutcome::Improved, true};
+    experiment.isolated = true;
 
     assert(controller.record_evaluation(experiment));
     assert(controller.adopt(experiment));
@@ -46,6 +47,7 @@ int main() {
         "exp-second",
         EvolutionProposal{"planner.weight", 0.4, 0.5, 0.1, 0.95},
         0.70, 0.84, 0.05, 0.95, ExperimentOutcome::Improved, true};
+    second.isolated = true;
     assert(isolated.record_evaluation(second));
     assert(isolated.adopt(second));
     const auto preview = isolated.preview_canary_for_brain("exp-second", {0.84, 0.83});
