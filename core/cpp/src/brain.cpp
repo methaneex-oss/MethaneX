@@ -517,7 +517,8 @@ void Brain::replay(const Event& event, bool external_observation) {
             const auto isolation = event.data.find("isolation_verified");
             if (isolation != event.data.end()) {
                 const auto* verified = std::get_if<bool>(&isolation->second);
-                experiment.isolation_attested_ = verified != nullptr && *verified;
+                if (verified != nullptr && *verified)
+                    experiment.attest_current_evaluation();
             }
             evolution_controller_.replay_evaluation(experiment);
         }
@@ -556,7 +557,8 @@ void Brain::replay(const Event& event, bool external_observation) {
                 const auto isolation = event.data.find("isolation_verified");
                 if (isolation != event.data.end()) {
                     const auto* verified = std::get_if<bool>(&isolation->second);
-                    experiment.isolation_attested_ = verified != nullptr && *verified;
+                    if (verified != nullptr && *verified)
+                    experiment.attest_current_evaluation();
                 }
                 const auto adoption = evolution_controller_.adoption_journal().get(*experiment_id);
                 if (adoption.has_value() &&
