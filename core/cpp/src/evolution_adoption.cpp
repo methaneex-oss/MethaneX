@@ -5,9 +5,13 @@ namespace jarvis::core {
 bool EvolutionAdoption::adopt(EvolutionModel& model,
                               const EvolutionExperiment& experiment,
                               const EvolutionSafetyPolicy& policy) noexcept {
-    if (!experiment.candidate_executed) return false;
-    if (!EvolutionSafetyGate::approve(experiment, policy)) return false;
-    return model.adopt(experiment.proposal);
+    // This low-level helper has no evaluation journal and therefore cannot
+    // establish that the proposal matches a recorded experiment. Keep it
+    // fail-closed; use EvolutionController after recording sandbox evidence.
+    (void)model;
+    (void)experiment;
+    (void)policy;
+    return false;
 }
 
 } // namespace jarvis::core
