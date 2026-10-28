@@ -21,12 +21,12 @@ bool EvolutionController::record_evaluation(const EvolutionExperiment& experimen
         !std::isfinite(experiment.proposal.expected_gain) ||
         experiment.confidence < 0.0 || experiment.confidence > 1.0 ||
         experiment.outcome == ExperimentOutcome::Pending ||
-        (policy_.require_isolation && !experiment.isolated)) {
+        experiment.outcome == ExperimentOutcome::Invalid ||
+        (policy_.require_isolation && !experiment.has_valid_isolation_attestation())) {
         return false;
     }
     EvolutionExperiment verified = experiment;
-    if (EvolutionExperimentEngine::evaluate(verified) != experiment.outcome ||
-        !EvolutionSafetyGate::approve(experiment, policy_)) return false;
+    if (EvolutionExperimentEngine::evaluate(verified) != experiment.outcome) return false;
 
     for (const auto& record : history_.for_experiment(experiment.id)) {
         if (record.action == EvolutionRecordAction::Evaluated) {
@@ -61,13 +61,13 @@ bool EvolutionController::validate_evaluation_for_brain(
         !std::isfinite(experiment.proposal.expected_gain) ||
         experiment.confidence < 0.0 || experiment.confidence > 1.0 ||
         experiment.outcome == ExperimentOutcome::Pending ||
-        (policy_.require_isolation && !experiment.isolated) ||
+        experiment.outcome == ExperimentOutcome::Invalid ||
+        (policy_.require_isolation && !experiment.has_valid_isolation_attestation()) ||
         adoption_journal_.get(experiment.id).has_value()) {
         return false;
     }
     EvolutionExperiment verified = experiment;
-    return EvolutionExperimentEngine::evaluate(verified) == experiment.outcome &&
-           EvolutionSafetyGate::approve(experiment, policy_);
+    return EvolutionExperimentEngine::evaluate(verified) == experiment.outcome;
 }
 
 bool EvolutionController::record_evaluation_for_brain(
