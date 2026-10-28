@@ -19,7 +19,7 @@ int main() {
     };
 
     const auto batch = EvolutionExperimentCoordinator::run(
-        experiment, sandbox, baseline, candidate, EvolutionTrialConfig{4, 4, 0.05, 0.5});
+        experiment, sandbox, baseline, candidate, EvolutionTrialConfig{4, 4, 0.05, 0.5, false});
 
     assert(batch.executed);
     assert(batch.baseline.count == 4);
