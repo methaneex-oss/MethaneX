@@ -171,7 +171,7 @@ void train(const std::filesystem::path& path, int seed) {
                 ? 1.0 : -1.0;
             const bool flipped = unit(random) < level.noise;
             const double actual = flipped ? -expected : expected;
-            const double reliability = flipped ? 0.65 : 0.95;
+            const double reliability = 0.9;
             record_outcome(brain, context,
                            action_names[static_cast<std::size_t>(action_index)],
                            actual, reliability, episode);
