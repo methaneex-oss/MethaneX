@@ -86,9 +86,12 @@ int main() {
         return true;
     };
     config.action_adapter.verify = [](const CandidateAction&) { return true; };
-    config.action_adapter.observe_consequence = [](const CandidateAction& action)
+    bool environment_regime_changed = false;
+    config.action_adapter.observe_consequence = [&](const CandidateAction& action)
         -> std::optional<double> {
-        return action.name == "calibrate" ? -0.8 : 0.8;
+        if (!environment_regime_changed)
+            return action.name == "calibrate" ? -0.8 : 0.8;
+        return action.name == "calibrate" ? 0.8 : -0.8;
     };
 
     CognitiveRuntime runtime(brain, config);
@@ -126,6 +129,33 @@ int main() {
     assert(executed_actions.size() == 2);
     assert(executed_actions[1] == "wait");
     assert(wait_for_feedback(runtime, 2));
+
+    // Regime-change test: the environment now contradicts the old experience.
+    // The runtime must collect new observed consequences and eventually revise
+    // its choice, rather than freezing the first learned preference.
+    environment_regime_changed = true;
+    bool reversed = false;
+    std::uint64_t expected_feedback = 2;
+    for (std::int64_t observation = 3; observation < 43; ++observation) {
+        assert(runtime.submit(make_input(goal.id, observation)));
+        const auto result = wait_for_result(runtime);
+        assert(result.has_value());
+        assert(result->status == CognitiveCycleStatus::completed);
+        assert(result->context.plan.steps.size() == 1);
+        assert(result->context.action_execution_results.size() == 1);
+        const auto& execution = result->context.action_execution_results.front();
+        assert(execution.outcome.observed);
+        ++expected_feedback;
+        assert(wait_for_feedback(runtime, expected_feedback));
+        if (result->context.plan.steps.front().action.name == "calibrate") {
+            assert(execution.outcome.actual_consequence == 0.8);
+            reversed = true;
+            break;
+        }
+        assert(result->context.plan.steps.front().action.name == "wait");
+        assert(execution.outcome.actual_consequence == -0.8);
+    }
+    assert(reversed);
 
     runtime.stop();
     assert(!runtime.running());
