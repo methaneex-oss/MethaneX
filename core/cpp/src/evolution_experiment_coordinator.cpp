@@ -22,15 +22,18 @@ EvolutionTrialBatch EvolutionExperimentCoordinator::run(
 
     std::vector<double> baseline;
     std::vector<double> candidate;
+    bool all_trials_isolated = true;
     baseline.reserve(config.baseline_trials);
     candidate.reserve(config.candidate_trials);
 
     for (std::size_t i = 0; i < config.baseline_trials; ++i) {
         const auto result = sandbox.run(experiment.proposal, baseline_executor);
-        if (!result.completed || result.timed_out || result.output_limited || !std::isfinite(result.fitness)) {
+        if (!result.started || !result.completed || result.timed_out || result.output_limited ||
+            !result.isolated || !std::isfinite(result.fitness)) {
             experiment.outcome = ExperimentOutcome::Invalid;
             return batch;
         }
+        all_trials_isolated = all_trials_isolated && result.isolated;
         baseline.push_back(result.fitness);
     }
 
@@ -40,6 +43,7 @@ EvolutionTrialBatch EvolutionExperimentCoordinator::run(
             experiment.outcome = ExperimentOutcome::Invalid;
             return batch;
         }
+        all_trials_isolated = all_trials_isolated && result.isolated;
         candidate.push_back(result.fitness);
     }
 
@@ -55,6 +59,7 @@ EvolutionTrialBatch EvolutionExperimentCoordinator::run(
     experiment.minimum_improvement = config.minimum_improvement;
     experiment.confidence = std::min(batch.baseline.confidence, batch.candidate.confidence);
     experiment.candidate_executed = true;
+    experiment.isolated = all_trials_isolated;
     batch.executed = true;
 
     if (!EvolutionTrials::supports_adoption(batch.baseline, batch.candidate,
@@ -65,10 +70,13 @@ EvolutionTrialBatch EvolutionExperimentCoordinator::run(
             ? ExperimentOutcome::Degraded
             : ExperimentOutcome::Neutral;
         batch.outcome = experiment.outcome;
+        if (experiment.isolated) experiment.attest_isolated_result();
         return batch;
     }
 
     batch.outcome = EvolutionExperimentEngine::evaluate(experiment);
+    if (experiment.isolated && batch.outcome != ExperimentOutcome::Invalid)
+        experiment.attest_isolated_result();
     return batch;
 }
 
