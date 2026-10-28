@@ -29,6 +29,16 @@ std::string context_path_segment(const std::string& value) {
     return encoded;
 }
 
+std::string context_feature_segment(const std::string& value) {
+    std::string encoded = context_path_segment(value);
+    // "/values/" is a structural delimiter in inferred contexts. A feature
+    // label or observed descriptor equal to "values" must not be mistaken for
+    // that delimiter by developmental-learning's context parser. Escape the
+    // first byte only for this reserved segment; ordinary values remain legible.
+    if (encoded == "values") return "%76alues";
+    return encoded;
+}
+
 std::string infer_developmental_context(const CognitiveCycleInput& input,
                                         const Goal& goal,
                                         const PerceptualRepresentation& representation) {
@@ -83,8 +93,8 @@ std::string infer_developmental_context(const CognitiveCycleInput& input,
                     std::to_string(std::ilogb(std::abs(numeric)));
             }
         }
-        labels.push_back(context_path_segment(key));
-        values.push_back(context_path_segment(std::move(descriptor)));
+        labels.push_back(context_feature_segment(key));
+        values.push_back(context_feature_segment(descriptor));
         has_context_feature = true;
     }
 
