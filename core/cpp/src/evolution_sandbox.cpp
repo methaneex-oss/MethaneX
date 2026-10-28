@@ -20,16 +20,20 @@ SandboxResult EvolutionSandbox::run(const EvolutionProposal& proposal,
 
     try {
         result = executor(proposal, limits_);
-        if (!result.isolated) {
-            result.completed = false;
-            result.error = "candidate executor did not prove isolation";
-        } else if (!std::isfinite(result.fitness)) {
+        // A callback-provided Boolean is not proof of process isolation. The
+        // callback API remains useful for deterministic simulations, but its
+        // results are never isolation-attested and cannot pass the default
+        // evolution safety policy. Use EvolutionExperimentRunner's
+        // run_isolated_command path for trusted process-boundary evidence.
+        result.isolated = false;
+        if (!std::isfinite(result.fitness)) {
             result.completed = false;
             result.error = "executor returned non-finite fitness";
         }
     } catch (...) {
         result.started = true;
         result.completed = false;
+        result.isolated = false;
         result.error = "candidate executor failed";
     }
     return result;

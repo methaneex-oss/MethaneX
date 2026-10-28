@@ -270,9 +270,8 @@ int main() {
         restored_runtime.stop();
     }
 
-    // No-feedback control: successful execution alone must not be mistaken for
-    // a beneficial consequence. Without an observation, the same alternatives
-    // should not acquire a consequence-driven preference.
+    // No-feedback control: successful and verified execution alone must not
+    // be mistaken for a beneficial real-world consequence.
     const auto control_journal = std::filesystem::temp_directory_path() /
                                  "jarvis_runtime_no_feedback_control.bin";
     std::filesystem::remove(control_journal, ec);
@@ -291,31 +290,31 @@ int main() {
         control_config.feedback_capacity = 8;
         control_config.drain_on_stop = true;
         control_config.action_adapter.authorization.maximum_risk = 1.0;
-        // No executor and no consequence observer: this control run cannot
-        // produce either operational or real-world outcome evidence.
+        control_config.action_adapter.execute =
+            [](const CandidateAction&) { return true; };
+        control_config.action_adapter.verify =
+            [](const CandidateAction&) { return true; };
+        // Deliberately omit observe_consequence: execution is successful, but
+        // the environmental consequence remains unknown.
         CognitiveRuntime control_runtime(control_brain, control_config);
         assert(control_runtime.start());
-        assert(control_runtime.submit(make_input(control_goal.id, 1)));
-        const auto control_first = wait_for_result(control_runtime);
-        assert(control_first.has_value());
-        assert(control_first->status == CognitiveCycleStatus::completed);
-        assert(control_first->context.plan.steps.front().action.name == "calibrate");
-        assert(control_first->context.action_execution_results.size() == 1);
-        assert(control_first->context.action_execution_results.front().status ==
-               ActionExecutionStatus::rejected);
-        assert(control_first->context.action_execution_results.front().reason ==
-               "action_adapter_unavailable");
-        assert(control_brain.developmental_best_strategy("runtime-learning-context") == nullptr);
-
-        assert(control_runtime.submit(make_input(control_goal.id, 2)));
-        const auto control_second = wait_for_result(control_runtime);
-        assert(control_second.has_value());
-        assert(control_second->status == CognitiveCycleStatus::completed);
-        assert(control_second->context.plan.steps.front().action.name == "calibrate");
-        assert(control_second->context.action_execution_results.size() == 1);
-        assert(control_second->context.action_execution_results.front().status ==
-               ActionExecutionStatus::rejected);
-        assert(control_brain.developmental_best_strategy("runtime-learning-context") == nullptr);
+        for (int episode = 1; episode <= 3; ++episode) {
+            assert(control_runtime.submit(make_input(control_goal.id, episode)));
+            const auto result = wait_for_result(control_runtime);
+            assert(result.has_value());
+            assert(result->status == CognitiveCycleStatus::completed);
+            assert(result->context.action_execution_results.size() == 1);
+            const auto& execution = result->context.action_execution_results.front();
+            assert(execution.executed);
+            assert(execution.verified);
+            assert(execution.status == ActionExecutionStatus::verified);
+            assert(!execution.outcome.observed);
+            // Capability reliability may update, but execution success
+            // without a consequence observation must not create a strategy
+            // preference in the developmental action-value mechanism.
+            assert(control_brain.developmental_best_strategy(
+                       "runtime-learning-context") == nullptr);
+        }
         control_runtime.stop();
     }
     std::filesystem::remove(control_journal, ec);

@@ -35,7 +35,8 @@ struct EvolutionOrchestrationResult {
 
 class EvolutionOrchestrator {
 public:
-    explicit EvolutionOrchestrator(EvolutionSchedulePolicy policy = {});
+    explicit EvolutionOrchestrator(EvolutionSchedulePolicy policy = {},
+                                   EvolutionTrialConfig trial_config = {});
 
     EvolutionOrchestrationResult run(
         const EvolutionOpportunity& opportunity,

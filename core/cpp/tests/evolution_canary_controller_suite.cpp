@@ -1,8 +1,19 @@
 #include "jarvis/core/evolution_controller.hpp"
+#include "jarvis/core/evolution_experiment_runner.hpp"
+#include "jarvis/core/process_isolation.hpp"
 
 #include <cassert>
 
 using namespace jarvis::core;
+
+namespace {
+void attest_isolated(EvolutionExperiment& experiment) {
+    ProcessIsolationBackend backend;
+    const IsolatedCommand command{
+        "/bin/sh", {"-c", "printf " + std::to_string(experiment.candidate_fitness)}, ""};
+    EvolutionExperimentRunner::run_isolated_command(experiment, backend, command);
+}
+} // namespace
 
 int main() {
     EvolutionModel model;
@@ -16,6 +27,7 @@ int main() {
         "exp-canary",
         EvolutionProposal{"reasoning.weight", 0.4, 0.5, 0.1, 0.95},
         0.70, 0.84, 0.05, 0.95, ExperimentOutcome::Improved, true};
+    attest_isolated(experiment);
 
     assert(controller.record_evaluation(experiment));
     assert(controller.adopt(experiment));
@@ -46,6 +58,7 @@ int main() {
         "exp-second",
         EvolutionProposal{"planner.weight", 0.4, 0.5, 0.1, 0.95},
         0.70, 0.84, 0.05, 0.95, ExperimentOutcome::Improved, true};
+    attest_isolated(second);
     assert(isolated.record_evaluation(second));
     assert(isolated.adopt(second));
     const auto preview = isolated.preview_canary_for_brain("exp-second", {0.84, 0.83});

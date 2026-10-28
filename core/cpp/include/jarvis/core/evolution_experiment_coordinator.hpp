@@ -14,6 +14,9 @@ struct EvolutionTrialConfig {
     std::size_t candidate_trials{4};
     double minimum_improvement{0.01};
     double minimum_confidence{0.75};
+    // False is for controlled simulation/testing only; adoption safety policy
+    // still independently decides whether non-isolated evidence is admissible.
+    bool require_isolation{true};
 };
 
 struct EvolutionTrialBatch {

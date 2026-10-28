@@ -116,6 +116,16 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
     result.error = "process isolation backend unsupported on this platform";
     return result;
 #else
+    // Prepare argv before fork. Allocating a std::vector in the child of a
+    // multithreaded process is not async-signal-safe and can deadlock under
+    // sanitizers if another thread held an allocator lock at fork time.
+    std::vector<char*> argv;
+    argv.reserve(command.arguments.size() + 2);
+    argv.push_back(const_cast<char*>(command.executable.c_str()));
+    for (const auto& argument : command.arguments)
+        argv.push_back(const_cast<char*>(argument.c_str()));
+    argv.push_back(nullptr);
+
     int pipe_fds[2] = {-1, -1};
     if (pipe(pipe_fds) != 0) {
         result.error = std::string("pipe failed: ") + std::strerror(errno);
@@ -171,12 +181,10 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
 
         if (!command.working_directory.empty() && chdir(command.working_directory.c_str()) != 0) _exit(126);
 
-        std::vector<char*> argv;
-        argv.reserve(command.arguments.size() + 2);
-        argv.push_back(const_cast<char*>(command.executable.c_str()));
-        for (const auto& argument : command.arguments) argv.push_back(const_cast<char*>(argument.c_str()));
-        argv.push_back(nullptr);
-        execvp(command.executable.c_str(), argv.data());
+        if (command.executable.find('/') != std::string::npos)
+            execv(command.executable.c_str(), argv.data());
+        else
+            execvp(command.executable.c_str(), argv.data());
         _exit(127);
     }
 

@@ -5,9 +5,12 @@ namespace jarvis::core {
 bool EvolutionAdoption::adopt(EvolutionModel& model,
                               const EvolutionExperiment& experiment,
                               const EvolutionSafetyPolicy& policy) noexcept {
-    if (!experiment.candidate_executed) return false;
-    if (!EvolutionSafetyGate::approve(experiment, policy)) return false;
-    return model.adopt(experiment.proposal);
+    // This stateless helper cannot verify durable, matching evaluation history.
+    // Fail closed; adoption must go through EvolutionController.
+    (void)model;
+    (void)experiment;
+    (void)policy;
+    return false;
 }
 
 } // namespace jarvis::core
