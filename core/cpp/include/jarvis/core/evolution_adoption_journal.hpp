@@ -26,6 +26,7 @@ struct AdoptionRecord {
     double proposal_current{0.0};
     double proposal_proposed{0.0};
     double expected_gain{0.0};
+    double proposal_confidence{0.0};
     double minimum_improvement{0.0};
     bool isolated{false};
     std::string reason;
