@@ -146,7 +146,7 @@ bool run_mode(const std::filesystem::path& journal, std::uint64_t seed,
 
     auto episode = [&](const std::string& weather, const std::string& terrain,
                        std::uint64_t index, bool expected_amber) -> std::optional<bool> {
-        world.set_context("sim/parity-task");
+        world.set_context("sim/parity-task/weather/" + weather + "/terrain/" + terrain);
         world.reset_episode(Attributes{
             {"weather", weather},
             {"terrain", terrain},
