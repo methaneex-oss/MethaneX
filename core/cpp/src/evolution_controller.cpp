@@ -106,8 +106,9 @@ bool EvolutionController::replay_evaluation(
 }
 
 bool EvolutionController::adopt(EvolutionExperiment& experiment) {
-    if (!experiment.candidate_executed) return false;
-    if (!adoption_journal_.stage(experiment)) return false;
+    // Keep the direct controller API subject to the same durable-evaluation
+    // invariant as Brain-mediated adoption.
+    if (!validate_adoption_for_brain(experiment)) return false;
     if (!EvolutionSafetyGate::approve(experiment, policy_)) {
         adoption_journal_.reject(experiment.id, "safety_gate_rejected");
         history_.append(EvolutionHistoryRecord{
