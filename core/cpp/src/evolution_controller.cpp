@@ -142,6 +142,7 @@ bool EvolutionController::validate_adoption_for_brain(const EvolutionExperiment&
         record->proposal_current != experiment.proposal.current ||
         record->proposal_proposed != experiment.proposal.proposed ||
         record->expected_gain != experiment.proposal.expected_gain ||
+        record->proposal_confidence != experiment.proposal.confidence ||
         record->minimum_improvement != experiment.minimum_improvement ||
         record->baseline_fitness != experiment.baseline_fitness ||
         record->candidate_fitness != experiment.candidate_fitness ||
