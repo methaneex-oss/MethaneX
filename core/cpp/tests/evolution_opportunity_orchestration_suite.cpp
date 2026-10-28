@@ -29,7 +29,7 @@ int main() {
     safety.minimum_confidence = 0.75;
     safety.require_isolation = false; // This suite exercises orchestration with simulated evaluators.
     EvolutionController controller(model, history, safety);
-    EvolutionOrchestrator orchestrator;
+    EvolutionOrchestrator orchestrator({}, EvolutionTrialConfig{4, 4, 0.01, 0.75, false});
     const auto now = std::chrono::steady_clock::now();
 
     const auto result = orchestrator.run(
