@@ -513,10 +513,11 @@ void Brain::replay(const Event& event, bool external_observation) {
                 double_value(event.data, "minimum_improvement"),
                 double_value(event.data, "confidence"),
                 static_cast<ExperimentOutcome>(integer_value(event.data, "outcome")),
-                true,
+                true};
+            experiment.isolated =
                 event.data.find("isolated") != event.data.end() &&
-                    std::get_if<bool>(&event.data.at("isolated")) != nullptr &&
-                    *std::get_if<bool>(&event.data.at("isolated"))};
+                std::get_if<bool>(&event.data.at("isolated")) != nullptr &&
+                *std::get_if<bool>(&event.data.at("isolated"));
             if (experiment.isolated && experiment.candidate_executed)
                 experiment.attest_isolated_result();
             evolution_controller_.replay_evaluation(experiment);
@@ -551,10 +552,11 @@ void Brain::replay(const Event& event, bool external_observation) {
                     double_value(event.data, "minimum_improvement"),
                     double_value(event.data, "confidence", proposal.confidence),
                     static_cast<ExperimentOutcome>(integer_value(event.data, "outcome")),
-                    true,
+                    true};
+                experiment.isolated =
                     event.data.find("isolated") != event.data.end() &&
-                        std::get_if<bool>(&event.data.at("isolated")) != nullptr &&
-                        *std::get_if<bool>(&event.data.at("isolated"))};
+                    std::get_if<bool>(&event.data.at("isolated")) != nullptr &&
+                    *std::get_if<bool>(&event.data.at("isolated"));
                 if (experiment.isolated && experiment.candidate_executed)
                     experiment.attest_isolated_result();
                 const auto adoption = evolution_controller_.adoption_journal().get(*experiment_id);
