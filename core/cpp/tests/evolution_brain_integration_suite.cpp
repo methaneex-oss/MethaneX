@@ -144,6 +144,35 @@ int main() {
         assert(before_direct_adoption != nullptr);
         const double direct_baseline = before_direct_adoption->baseline;
         assert(!brain.adopt_evolution(*direct_it));
+        // An experiment cannot be adopted merely because the caller labels it
+        // Improved; the outcome must be recomputed against its threshold.
+        assert(brain.register_evolution_parameter("safety.equal-fitness", 0.2));
+        EvolutionExperiment equal_fitness{
+            "safety-equal-fitness", EvolutionProposal{"safety.equal-fitness", 0.2, 0.3, 0.1, 0.99},
+            0.70, 0.70, 0.01, 0.99, ExperimentOutcome::Improved, true};
+        equal_fitness.isolated = true;
+        assert(!brain.record_evolution_evaluation(equal_fitness));
+        assert(!brain.adopt_evolution_experiment(equal_fitness));
+
+        assert(brain.register_evolution_parameter("safety.subthreshold", 0.2));
+        EvolutionExperiment subthreshold{
+            "safety-subthreshold", EvolutionProposal{"safety.subthreshold", 0.2, 0.3, 0.1, 0.99},
+            0.70, 0.74, 0.05, 0.99, ExperimentOutcome::Improved, true};
+        subthreshold.isolated = true;
+        assert(!brain.record_evolution_evaluation(subthreshold));
+        assert(!brain.adopt_evolution_experiment(subthreshold));
+
+        assert(brain.register_evolution_parameter("safety.mismatch", 0.2));
+        EvolutionExperiment mismatched{
+            "safety-mismatched-evaluation",
+            EvolutionProposal{"safety.mismatch", 0.2, 0.3, 0.1, 0.99},
+            0.70, 0.82, 0.01, 0.99, ExperimentOutcome::Improved, true};
+        mismatched.isolated = true;
+        assert(brain.record_evolution_evaluation(mismatched));
+        mismatched.candidate_fitness = 0.90;
+        assert(!brain.adopt_evolution_experiment(mismatched));
+        const auto* unchanged_mismatch = brain.evolution_parameter("safety.mismatch");
+        assert(unchanged_mismatch != nullptr && unchanged_mismatch->value == 0.2);
         const auto* rejected_direct = brain.evolution_parameter("direct.rollback");
         assert(rejected_direct != nullptr);
         assert(rejected_direct->value == direct_baseline);
@@ -187,6 +216,12 @@ int main() {
         assert(parameter->value == parameter->baseline);
         assert(parameter->observations == 3);
         assert(parameter->value == parameter->baseline);
+        const auto* equal_fitness = restarted.evolution_parameter("safety.equal-fitness");
+        assert(equal_fitness != nullptr && equal_fitness->value == equal_fitness->baseline);
+        const auto* subthreshold = restarted.evolution_parameter("safety.subthreshold");
+        assert(subthreshold != nullptr && subthreshold->value == subthreshold->baseline);
+        const auto* mismatch = restarted.evolution_parameter("safety.mismatch");
+        assert(mismatch != nullptr && mismatch->value == mismatch->baseline);
         const auto* direct = restarted.evolution_parameter("direct.rollback");
         assert(direct != nullptr);
         assert(direct->value == direct->baseline);
