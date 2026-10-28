@@ -290,6 +290,7 @@ bool Brain::record_evolution_evaluation(EvolutionExperiment& experiment) {
                  {"current", experiment.proposal.current},
                  {"proposed", experiment.proposal.proposed},
                  {"expected_gain", experiment.proposal.expected_gain},
+                 {"proposal_confidence", experiment.proposal.confidence},
                  {"outcome", static_cast<std::int64_t>(experiment.outcome)},
                  {"baseline", experiment.baseline_fitness},
                  {"candidate", experiment.candidate_fitness},
