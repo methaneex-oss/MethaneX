@@ -23,6 +23,11 @@ struct AdoptionRecord {
     double baseline_fitness{0.0};
     double candidate_fitness{0.0};
     double confidence{0.0};
+    double proposal_current{0.0};
+    double proposal_proposed{0.0};
+    double expected_gain{0.0};
+    double minimum_improvement{0.0};
+    bool isolated{false};
     std::string reason;
 };
 
