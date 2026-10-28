@@ -75,8 +75,36 @@ std::vector<std::string> context_path_segments(const std::string& context) {
     return segments;
 }
 
+std::size_t context_values_marker(const std::string& context) {
+    constexpr std::size_t marker_size = 8; // "/values/"
+    const auto features = context.find("/features/");
+    if (features == std::string::npos) return context.find("/values/");
+
+    // Older persisted contexts may contain a feature label or value literally
+    // named "values". In the inferred schema format, the real delimiter is the
+    // occurrence that divides an equal number of encoded feature labels and
+    // encoded values. Segment escaping guarantees neither side contains a raw
+    // slash inside an individual label/value, so this also disambiguates legacy
+    // records without rewriting the journal.
+    const std::size_t labels_start = features + 10; // "/features/"
+    auto marker = context.find("/values/", labels_start);
+    while (marker != std::string::npos) {
+        const auto label_path = context.substr(labels_start, marker - labels_start);
+        const auto value_path = context.substr(marker + marker_size);
+        if (!label_path.empty() && !value_path.empty()) {
+            const auto segment_count = [](const std::string& path) {
+                return static_cast<std::size_t>(
+                    1 + std::count(path.begin(), path.end(), '/'));
+            };
+            if (segment_count(label_path) == segment_count(value_path)) return marker;
+        }
+        marker = context.find("/values/", marker + 1);
+    }
+    return std::string::npos;
+}
+
 std::vector<std::string> context_path_values(const std::string& context) {
-    const auto marker = context.find("/values/");
+    const auto marker = context_values_marker(context);
     if (marker == std::string::npos) return {};
     std::vector<std::string> values;
     std::size_t start = marker + 8;
@@ -179,8 +207,8 @@ double context_similarity(const std::string& left, const std::string& right) {
         // matching only the sensor/source prefix can make an action learned for
         // one feature appear relevant to a different feature. Require the same
         // identity and feature schema, then compare the value-bearing leaves.
-        const auto left_values = left.find("/values/");
-        const auto right_values = right.find("/values/");
+        const auto left_values = context_values_marker(left);
+        const auto right_values = context_values_marker(right);
         if ((left_values != std::string::npos) !=
             (right_values != std::string::npos)) return 0.0;
         if (left_values != std::string::npos &&
