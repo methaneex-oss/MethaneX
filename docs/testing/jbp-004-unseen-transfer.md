@@ -13,7 +13,7 @@ Test whether the existing brain can acquire a reusable relationship from experie
 
 For each deterministic seed (default: 17, 29, 43), the evaluator generates a hidden base preference and uses two observable binary factors: weather (clear/storm) and terrain (flat/rugged). The preferred action follows a two-factor parity relationship. The environment supplies 15% noisy outcomes.
 
-The brain trains in exactly three combinations:
+The developmental context identifier remains identical for all trials; weather and terrain are the only factors that vary. This prevents the context label itself from acting as a combination-specific lookup key. The brain trains in exactly three combinations:
 
 - clear + flat
 - clear + rugged
