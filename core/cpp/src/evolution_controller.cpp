@@ -208,12 +208,25 @@ bool EvolutionController::compensate_adoption_for_brain(
 }
 
 bool EvolutionController::replay_adoption(const EvolutionExperiment& experiment) noexcept {
-    if (experiment.id.empty() || experiment.proposal.key.empty() ||
-        !experiment.isolation_verified()) return false;
+    if (experiment.id.empty() || experiment.proposal.key.empty()) return false;
+    const auto recorded = adoption_journal_.get(experiment.id);
+    if (!recorded.has_value() || recorded->state != AdoptionState::Pending ||
+        !recorded->isolation_verified ||
+        recorded->parameter_key != experiment.proposal.key ||
+        recorded->proposal_current != experiment.proposal.current ||
+        recorded->proposal_proposed != experiment.proposal.proposed ||
+        recorded->expected_gain != experiment.proposal.expected_gain ||
+        recorded->proposal_confidence != experiment.proposal.confidence ||
+        recorded->baseline_fitness != experiment.baseline_fitness ||
+        recorded->candidate_fitness != experiment.candidate_fitness ||
+        recorded->confidence != experiment.confidence ||
+        recorded->outcome != experiment.outcome) return false;
     auto verified = experiment;
-    if (EvolutionExperimentEngine::evaluate(verified) != experiment.outcome ||
+    verified.minimum_improvement = recorded->minimum_improvement;
+    verified.isolation_attested_ = true;
+    if (EvolutionExperimentEngine::evaluate(verified) != verified.outcome ||
         !EvolutionSafetyGate::approve(verified, policy_) ||
-        !adoption_journal_.stage(experiment)) return false;
+        !adoption_journal_.stage(verified)) return false;
     return adoption_journal_.commit(experiment.id, "replayed");
 }
 
