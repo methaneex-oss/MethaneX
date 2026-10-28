@@ -510,10 +510,15 @@ void Brain::replay(const Event& event, bool external_observation) {
                                   double_value(event.data, "confidence")},
                 double_value(event.data, "baseline"),
                 double_value(event.data, "candidate"),
-                0.0,
+                double_value(event.data, "minimum_improvement", 0.0),
                 double_value(event.data, "confidence"),
                 static_cast<ExperimentOutcome>(integer_value(event.data, "outcome")),
                 true};
+            const auto isolation = event.data.find("isolation_verified");
+            if (isolation != event.data.end()) {
+                const auto* verified = std::get_if<bool>(&isolation->second);
+                experiment.isolation_attested_ = verified != nullptr && *verified;
+            }
             evolution_controller_.replay_evaluation(experiment);
         }
         return;
