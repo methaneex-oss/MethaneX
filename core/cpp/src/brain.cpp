@@ -590,7 +590,10 @@ void Brain::replay(const Event& event, bool external_observation) {
                     double_value(event.data, "observed_delta"), 0.0, 0,
                     reason != nullptr ? *reason : "replayed", *experiment_id});
             } else {
-                evolution_.rollback(*key);
+                // An unversioned legacy rollback cannot identify the adoption
+                // it is meant to reverse. Applying it to the current parameter
+                // could undo a newer, properly evaluated experiment during replay.
+                return;
             }
         }
         return;
