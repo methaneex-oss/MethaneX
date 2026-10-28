@@ -21,7 +21,9 @@ std::optional<ParsedLink> parse_link_side(const std::string& side) {
     // accepting the versioned length-prefixed representation.
     if (side.rfind("@2|", 0) != 0 && side.find('=') == std::string::npos)
         return std::nullopt;
-    return detail::decode_causal_side(side);
+    const auto decoded = detail::decode_causal_side(side);
+    if (!decoded) return std::nullopt;
+    return ParsedLink{decoded->first, decoded->second};
 }
 
 } // namespace
