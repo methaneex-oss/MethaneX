@@ -82,6 +82,7 @@ private:
     ExperimentOutcome attested_outcome_{ExperimentOutcome::Pending};
 
     friend class EvolutionExperimentRunner;
+    friend class EvolutionExperimentCoordinator;
     friend class EvolutionController;
     friend class Brain;
 };
