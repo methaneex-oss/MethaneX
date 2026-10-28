@@ -19,11 +19,12 @@ struct EvolutionExperiment {
                         double baseline, double candidate, double minimum,
                         double confidence_value,
                         ExperimentOutcome outcome_value = ExperimentOutcome::Pending,
-                        bool executed = false)
+                        bool executed = false, bool isolated_value = false)
         : id(std::move(id_value)), proposal(std::move(proposal_value)),
           baseline_fitness(baseline), candidate_fitness(candidate),
           minimum_improvement(minimum), confidence(confidence_value),
-          outcome(outcome_value), candidate_executed(executed) {}
+          outcome(outcome_value), candidate_executed(executed),
+          isolated(isolated_value) {}
 
     std::string id;
     EvolutionProposal proposal;
