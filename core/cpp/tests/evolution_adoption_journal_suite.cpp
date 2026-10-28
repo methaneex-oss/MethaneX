@@ -15,6 +15,7 @@ int main(){ EvolutionAdoptionJournal j; EvolutionExperiment e{}; e.id="exp-1"; e
  assert(!proposals.empty());
  EvolutionSafetyPolicy test_policy{};
  test_policy.minimum_confidence=proposals.front().confidence;
+ test_policy.require_isolation=false; // This suite isolates journal transitions; sandbox attestation is tested separately.
  EvolutionController controller(model, controller_history, test_policy);
  EvolutionExperiment experiment{};
  experiment.id="exp-controller";
