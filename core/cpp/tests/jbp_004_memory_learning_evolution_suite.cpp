@@ -4,6 +4,7 @@
 #include <array>
 #include <cassert>
 #include <cmath>
+#include <cstdlib>
 #include <filesystem>
 #include <iostream>
 #include <random>
@@ -252,8 +253,8 @@ void verify(const std::filesystem::path& path, int seed) {
     assert(parameter != nullptr);
     assert(parameter->observations >= 2);
     assert(parameter->value != parameter->baseline);
-    assert(std::any_of(restored.evolution_history().begin(),
-                       restored.evolution_history().end(),
+    const auto history = restored.evolution_history();
+    assert(std::any_of(history.begin(), history.end(),
         [](const EvolutionHistoryRecord& record) {
             return record.key == "jbp004.integration.weight" &&
                    record.action == EvolutionRecordAction::Adopted;
