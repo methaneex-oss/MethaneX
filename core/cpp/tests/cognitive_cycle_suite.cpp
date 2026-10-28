@@ -90,6 +90,63 @@ int main() {
         assert(slash_context != underscore_context);
         assert(slash_context.find("north%2Fsouth") != std::string::npos);
         assert(underscore_context.find("north_south") != std::string::npos);
+
+        // The structural "/values/" marker must remain unambiguous even when
+        // a feature label or observed value is literally "values". These
+        // contexts are persisted and used by developmental-learning transfer.
+        context_input.observation = Event{
+            0, 0, "context-sensor", "observation",
+            {{"condition", std::string("values")},
+             {"temperature", 42.0}}};
+        const auto reserved_value_result = context_cycle.run(context_input);
+        assert(reserved_value_result.status == CognitiveCycleStatus::completed);
+        const auto reserved_value_context =
+            reserved_value_result.context.action_assessments.front().developmental_context;
+        const auto structural_marker = reserved_value_context.find("/values/");
+        assert(structural_marker != std::string::npos);
+        assert(structural_marker == reserved_value_context.rfind("/values/"));
+        assert(reserved_value_context.find("/features/condition/temperature/") !=
+               std::string::npos);
+
+        // Changing numeric values under the same feature schema may transfer a
+        // cautious prior; changing the schema must not. A literal "values"
+        // descriptor must not be parsed as a structural delimiter.
+        context_input.observation = Event{
+            0, 0, "context-sensor", "observation",
+            {{"condition", std::string("values")},
+             {"temperature", 80.0}}};
+        const auto same_schema_result = context_cycle.run(context_input);
+        assert(same_schema_result.status == CognitiveCycleStatus::completed);
+        const auto same_schema_context =
+            same_schema_result.context.action_assessments.front().developmental_context;
+        const auto same_schema_marker = same_schema_context.find("/values/");
+        assert(same_schema_marker != std::string::npos);
+        assert(same_schema_marker == same_schema_context.rfind("/values/"));
+        assert(reserved_value_context.substr(0, structural_marker) ==
+               same_schema_context.substr(0, same_schema_marker));
+
+        context_input.observation = Event{
+            0, 0, "context-sensor", "observation",
+            {{"values", std::string("clear")},
+             {"temperature", 42.0}}};
+        const auto reserved_label_result = context_cycle.run(context_input);
+        assert(reserved_label_result.status == CognitiveCycleStatus::completed);
+        const auto reserved_label_context =
+            reserved_label_result.context.action_assessments.front().developmental_context;
+        const auto label_marker = reserved_label_context.find("/values/");
+        assert(label_marker != std::string::npos);
+        assert(label_marker == reserved_label_context.rfind("/values/"));
+        assert(reserved_label_context.find("/features/%76alues/temperature/") !=
+               std::string::npos);
+        assert(reserved_label_context.substr(0, label_marker) !=
+               reserved_value_context.substr(0, structural_marker));
+
+        DevelopmentalLearning context_marker_transfer;
+        context_marker_transfer.observe_strategy(
+            reserved_value_context, "inspect",
+            LearningSignal{0.8, 0.8, 0.5, 0.5, 0.5, 1.0});
+        assert(context_marker_transfer.best_related_strategy(same_schema_context) != nullptr);
+        assert(context_marker_transfer.best_related_strategy(reserved_label_context) == nullptr);
     }
     std::filesystem::remove(context_encoding_journal, ec);
     std::filesystem::remove(context_encoding_journal.string() + ".meta", ec);
