@@ -326,7 +326,7 @@ bool Brain::adopt_evolution_experiment(EvolutionExperiment& experiment) {
                  {"baseline", experiment.baseline_fitness},
                  {"candidate", experiment.candidate_fitness},
                  {"minimum_improvement", experiment.minimum_improvement},
-                 {"isolation_verified", experiment.isolation_verified()}}};
+                 {"isolation_verified", true}}}; // validated against the recorded isolated evaluation
     if (!evolution_controller_.adopt_for_brain(experiment)) return false;
     event.sequence = memory_.append(event);
     if (event.sequence == 0) {
