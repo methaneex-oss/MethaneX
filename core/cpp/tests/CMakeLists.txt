@@ -306,3 +306,25 @@ foreach(JARVIS_TEST_TARGET IN LISTS JARVIS_TEST_TARGETS)
         )
     endif()
 endforeach()
+
+
+# JBP-004 runs training and verification in separate processes. It connects
+# context-specific consequence learning, prediction feedback, affective updates,
+# persistent memory retrieval, and guarded evolution/canary rollback.
+add_executable(jarvis_jbp_004_integrated_memory_evolution_suite
+    jbp_004_integrated_memory_evolution_suite.cpp)
+target_link_libraries(jarvis_jbp_004_integrated_memory_evolution_suite PRIVATE jarvis_core)
+target_compile_features(jarvis_jbp_004_integrated_memory_evolution_suite PRIVATE cxx_std_20)
+
+if(BUILD_TESTING)
+    add_test(NAME jarvis_jbp_004_integrated_memory_evolution_train
+        COMMAND jarvis_jbp_004_integrated_memory_evolution_suite train
+            ${CMAKE_CURRENT_BINARY_DIR}/jbp-004-integrated.bin)
+    set_tests_properties(jarvis_jbp_004_integrated_memory_evolution_train PROPERTIES
+        FIXTURES_SETUP jbp004_integrated_persistence)
+    add_test(NAME jarvis_jbp_004_integrated_memory_evolution_verify
+        COMMAND jarvis_jbp_004_integrated_memory_evolution_suite verify
+            ${CMAKE_CURRENT_BINARY_DIR}/jbp-004-integrated.bin)
+    set_tests_properties(jarvis_jbp_004_integrated_memory_evolution_verify PROPERTIES
+        FIXTURES_REQUIRED jbp004_integrated_persistence)
+endif()
