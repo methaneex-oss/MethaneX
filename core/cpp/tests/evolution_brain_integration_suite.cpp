@@ -206,7 +206,7 @@ int main() {
         replayable.isolated = true;
         assert(brain.record_evolution_evaluation(replayable));
         assert(!brain.record_evolution_evaluation(replayable));
-        assert(brain.evolution_history().size() == 9);
+        assert(brain.evolution_history().size() == 10);
     }
 
     {
@@ -232,7 +232,7 @@ int main() {
         assert(manual->observations == 0);
 
         const auto restarted_history = restarted.evolution_history();
-        assert(restarted_history.size() == 9);
+        assert(restarted_history.size() == 10);
         assert(restarted_history.front().experiment_id == "brain-evolution-1");
         assert(restarted_history.front().action == EvolutionRecordAction::Evaluated);
         assert(restarted_history[1].action == EvolutionRecordAction::Adopted);
