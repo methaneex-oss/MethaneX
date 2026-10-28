@@ -31,7 +31,58 @@ bool read_metadata_record(std::istream& in, std::uint64_t& sequence, MemoryTier&
 
 Memory::Memory(std::size_t working_limit, std::filesystem::path journal_path) : working_limit_(std::max<std::size_t>(1, working_limit)), journal_path_(std::move(journal_path)), metadata_path_(journal_path_.string() + ".meta") { load(); load_metadata(); std::unique_lock lock(mutex_); rebuild_learned_tiers(); }
 std::uint64_t Memory::append(Event event) { std::unique_lock lock(mutex_); if (event.sequence == 0 || event.sequence < next_sequence_) event.sequence = next_sequence_; const auto assigned_sequence = event.sequence; if (assigned_sequence == std::numeric_limits<std::uint64_t>::max()) return 0; if (!persist(event)) return 0; const auto tier = tier_of(event); metadata_.push_back(MemoryRecord{event, tier, default_salience(event), default_confidence(event), 0.0}); learned_tiers_[event.kind][tier_index(tier)] += 1.0; latest_sequence_by_kind_.insert_or_assign(event.kind, assigned_sequence); continuity_.push_back(std::move(event)); next_sequence_ = assigned_sequence + 1; return assigned_sequence; }
-void Memory::load() { std::unique_lock lock(mutex_); std::ifstream in(journal_path_, std::ios::binary); if (!in) return; std::uintmax_t valid_end = 0; Event event; std::uint64_t previous_sequence = 0; while (true) { if (!read_event(in, event)) break; if (event.sequence == 0 || (previous_sequence != 0 && event.sequence <= previous_sequence)) break; previous_sequence = event.sequence; latest_sequence_by_kind_.insert_or_assign(event.kind, event.sequence); metadata_.push_back(MemoryRecord{event, MemoryTier::Episodic, default_salience(event), default_confidence(event), 0.0}); continuity_.push_back(std::move(event)); const auto position = in.tellg(); if (position < 0) break; valid_end = static_cast<std::uintmax_t>(position); if (previous_sequence == std::numeric_limits<std::uint64_t>::max()) { next_sequence_ = previous_sequence; break; } next_sequence_ = std::max(next_sequence_, previous_sequence + 1); event = Event{}; } in.close(); std::error_code error; const auto file_size = std::filesystem::file_size(journal_path_, error); if (!error && file_size > valid_end) std::filesystem::resize_file(journal_path_, valid_end, error); }
+void Memory::load() {
+    std::unique_lock lock(mutex_);
+    std::ifstream in(journal_path_, std::ios::binary);
+    if (!in) return;
+    std::uintmax_t valid_end = 0;
+    Event event;
+    std::uint64_t previous_sequence = 0;
+    while (true) {
+        if (!read_event(in, event)) break;
+        if (event.sequence == 0 ||
+            (previous_sequence != 0 && event.sequence <= previous_sequence)) break;
+        previous_sequence = event.sequence;
+        latest_sequence_by_kind_.insert_or_assign(event.kind, event.sequence);
+        metadata_.push_back(MemoryRecord{
+            event, MemoryTier::Episodic, default_salience(event),
+            default_confidence(event), 0.0});
+        continuity_.push_back(std::move(event));
+        const auto position = in.tellg();
+        if (position < 0) break;
+        valid_end = static_cast<std::uintmax_t>(position);
+        if (previous_sequence == std::numeric_limits<std::uint64_t>::max()) {
+            next_sequence_ = previous_sequence;
+            break;
+        }
+        next_sequence_ = std::max(next_sequence_, previous_sequence + 1);
+        event = Event{};
+    }
+    in.close();
+
+    std::error_code error;
+    const auto file_size = std::filesystem::file_size(journal_path_, error);
+    if (error || file_size <= valid_end) return;
+
+    // The journal format has no per-record framing/checksum, so recovery cannot
+    // safely find later records after a corrupt middle record. Preserve the
+    // complete original before truncating to the verified prefix. If copying
+    // fails, leave the source untouched rather than destroy potentially
+    // recoverable records.
+    auto backup_path = std::filesystem::path(journal_path_.string() + ".recovery-backup");
+    for (std::uint64_t suffix = 1;
+         std::filesystem::exists(backup_path, error) && !error; ++suffix) {
+        backup_path = std::filesystem::path(
+            journal_path_.string() + ".recovery-backup." + std::to_string(suffix));
+    }
+    error.clear();
+    std::filesystem::copy_file(
+        journal_path_, backup_path, std::filesystem::copy_options::none, error);
+    if (error) return;
+
+    error.clear();
+    std::filesystem::resize_file(journal_path_, valid_end, error);
+}
 void Memory::rebuild_learned_tiers() { learned_tiers_.clear(); for (const auto& record : metadata_) learned_tiers_[record.event.kind][tier_index(record.tier)] += 1.0; }
 void Memory::load_metadata() {
     std::unique_lock lock(mutex_);
