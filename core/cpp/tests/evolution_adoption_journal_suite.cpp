@@ -27,6 +27,14 @@ int main(){ EvolutionAdoptionJournal j; EvolutionExperiment e{}; e.id="exp-1"; e
  experiment.candidate_executed=true;
  assert(controller.record_evaluation(experiment));
  assert(controller.record_evaluation(experiment));
+ EvolutionExperiment neutral=experiment;
+ neutral.id="exp-neutral";
+ neutral.minimum_improvement=0.1;
+ neutral.candidate_fitness=0.25;
+ neutral.outcome=ExperimentOutcome::Neutral;
+ assert(controller.record_evaluation(neutral));
+ assert(!controller.adopt(neutral));
+ assert(controller_history.for_experiment("exp-neutral").size()==1);
  EvolutionExperiment pending=experiment;
  pending.id="exp-pending";
  pending.outcome=ExperimentOutcome::Pending;
