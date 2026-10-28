@@ -507,7 +507,7 @@ void Brain::replay(const Event& event, bool external_observation) {
                                   double_value(event.data, "current"),
                                   double_value(event.data, "proposed"),
                                   double_value(event.data, "expected_gain"),
-                                  double_value(event.data, "confidence")},
+                                  double_value(event.data, "proposal_confidence")},
                 double_value(event.data, "baseline"),
                 double_value(event.data, "candidate"),
                 double_value(event.data, "minimum_improvement", 0.0),
