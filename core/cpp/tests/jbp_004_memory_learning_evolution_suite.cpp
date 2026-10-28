@@ -87,7 +87,7 @@ std::vector<int> initial_mapping(int seed, int level_index, int contexts, int ac
 }
 
 void record_outcome(Brain& brain, const std::string& context,
-                    const std::string& action, double expected, double actual,
+                    const std::string& action, double actual,
                     double reliability, int episode) {
     const auto observed = brain.observe(Event{
         0, 0, "jbp-004-generated-environment", "action_outcome",
@@ -95,9 +95,9 @@ void record_outcome(Brain& brain, const std::string& context,
          {"context", context},
          {"status", static_cast<std::int64_t>(ActionExecutionStatus::verified)},
          {"observed", true},
-         {"expected_consequence", expected},
+         {"expected_consequence", 0.0},
          {"actual_consequence", actual},
-         {"consequence_error", std::abs(expected - actual)},
+         {"consequence_error", std::abs(actual)},
          {"reliability", reliability},
          {"evidence_reliability", reliability},
          {"salience", 0.65},
@@ -174,7 +174,7 @@ void train(const std::filesystem::path& path, int seed) {
             const double reliability = flipped ? 0.65 : 0.95;
             record_outcome(brain, context,
                            action_names[static_cast<std::size_t>(action_index)],
-                           expected, actual, reliability, episode);
+                           actual, reliability, episode);
         }
 
         assert_accuracy(brain, level, static_cast<int>(level_index), seed,
