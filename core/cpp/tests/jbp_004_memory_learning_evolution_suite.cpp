@@ -146,15 +146,12 @@ void train(const std::filesystem::path& path, int seed) {
         const int second_reversal = level.episodes * 3 / 4;
         for (int episode = 0; episode < level.episodes; ++episode) {
             if (episode == first_reversal) {
+                // Measure pre-change acquisition before mutating the hidden world.
+                assert_accuracy(brain, level, static_cast<int>(level_index), seed,
+                                original_mapping, 60);
                 const int target = level.contexts > 1 ? 1 : 0;
                 mapping[static_cast<std::size_t>(target)] =
                     (mapping[static_cast<std::size_t>(target)] + 1) % level.actions;
-                if (level.reversals == 1) {
-                    const int baseline = evaluate(brain, level, static_cast<int>(level_index),
-                                                  seed, original_mapping, 0, 20, level.actions);
-                    std::cout << "JBP-004 acquisition level=" << level.name
-                              << " clear-control=" << baseline << "/20\n";
-                }
             }
             if (level.reversals > 1 && episode == second_reversal) {
                 const int target = level.contexts - 1;
