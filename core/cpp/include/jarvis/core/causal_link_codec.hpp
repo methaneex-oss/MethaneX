@@ -8,6 +8,7 @@
 #include <string>
 #include <utility>
 #include <variant>
+#include <type_traits>
 #include <sstream>
 #include <iomanip>
 #include <limits>
