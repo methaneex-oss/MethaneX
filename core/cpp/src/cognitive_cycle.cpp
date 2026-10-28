@@ -9,11 +9,24 @@
 namespace jarvis::core {
 namespace {
 
-std::string context_path_segment(std::string value) {
-    // A feature value is data inside one hierarchy level, never a new level.
-    // Prevent embedded separators from changing the meaning of the context path.
-    std::replace(value.begin(), value.end(), '/', '_');
-    return value;
+std::string context_path_segment(const std::string& value) {
+    // Context segments are persisted as part of a hierarchical key. Lossy
+    // replacement (for example, '/' -> '_') aliases distinct observations and
+    // can transfer a learned strategy into an unrelated context. Escape both
+    // the separator and escape marker so encoding is reversible and collision-free.
+    constexpr char hex[] = "0123456789ABCDEF";
+    std::string encoded;
+    encoded.reserve(value.size());
+    for (const unsigned char ch : value) {
+        if (ch == '/' || ch == '%') {
+            encoded.push_back('%');
+            encoded.push_back(hex[(ch >> 4) & 0x0F]);
+            encoded.push_back(hex[ch & 0x0F]);
+        } else {
+            encoded.push_back(static_cast<char>(ch));
+        }
+    }
+    return encoded;
 }
 
 std::string infer_developmental_context(const CognitiveCycleInput& input,
