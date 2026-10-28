@@ -1,8 +1,10 @@
 #include "jarvis/core/cognitive_cycle.hpp"
 
+#include <algorithm>
 #include <cmath>
 #include <filesystem>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 #include <system_error>
 #include <vector>
