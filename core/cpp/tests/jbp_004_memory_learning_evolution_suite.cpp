@@ -210,7 +210,9 @@ void train(const std::filesystem::path& path, int seed) {
                     (mapping[static_cast<std::size_t>(target)] + 1) % level.actions;
             }
             if (level.reversals > 1 && episode == second_reversal) {
-                const int target = level.contexts - 1;
+                // Reverse the same context a second time; the remaining context
+                // is a retention control rather than another changing target.
+                const int target = level.contexts > 1 ? 1 : 0;
                 mapping[static_cast<std::size_t>(target)] =
                     (mapping[static_cast<std::size_t>(target)] + 1) % level.actions;
             }
@@ -297,7 +299,7 @@ void verify(const std::filesystem::path& path, int seed) {
         mapping[static_cast<std::size_t>(level.contexts > 1 ? 1 : 0)] =
             (mapping[static_cast<std::size_t>(level.contexts > 1 ? 1 : 0)] + 1) % level.actions;
         if (level.reversals > 1) {
-            const int target = level.contexts - 1;
+            const int target = level.contexts > 1 ? 1 : 0;
             mapping[static_cast<std::size_t>(target)] =
                 (mapping[static_cast<std::size_t>(target)] + 1) % level.actions;
         }
