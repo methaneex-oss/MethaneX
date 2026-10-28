@@ -19,7 +19,10 @@ ExperimentOutcome EvolutionExperimentRunner::run(EvolutionExperiment& experiment
     experiment.candidate_fitness = result.fitness;
     experiment.candidate_executed = true;
     experiment.isolated = result.isolated;
-    return EvolutionExperimentEngine::evaluate(experiment);
+    const auto outcome = EvolutionExperimentEngine::evaluate(experiment);
+    if (experiment.isolated && outcome != ExperimentOutcome::Invalid)
+        experiment.attest_isolated_result();
+    return outcome;
 }
 
 } // namespace jarvis::core
