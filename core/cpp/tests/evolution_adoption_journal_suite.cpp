@@ -36,12 +36,14 @@ int main(){ EvolutionAdoptionJournal j; EvolutionExperiment e{}; e.id="exp-1"; e
  unsafe.id="exp-unsafe";
  unsafe.confidence=0.1;
  assert(!controller.adopt(unsafe));
+ // An unrecorded or mutated experiment is rejected before it can create a
+ // pending adoption record or alter the model.
  const auto unsafe_journal=controller.adoption_journal().get("exp-unsafe");
- assert(unsafe_journal && unsafe_journal->state==AdoptionState::Rejected);
+ assert(!unsafe_journal.has_value());
  const auto unsafe_history=controller_history.for_experiment("exp-unsafe");
- assert(unsafe_history.size()==1);
- assert(unsafe_history.front().action==EvolutionRecordAction::Rejected);
- assert(unsafe_history.front().reason=="safety_gate_rejected");
+ assert(unsafe_history.empty());
+ assert(model.parameter("transactional")->value ==
+        model.parameter("transactional")->baseline);
  assert(controller.adopt(experiment));
  const auto* adopted_parameter=model.parameter("transactional");
  assert(adopted_parameter && adopted_parameter->value==experiment.proposal.proposed);
