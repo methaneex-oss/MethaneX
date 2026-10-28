@@ -38,6 +38,44 @@ int main() {
     std::filesystem::remove(legacy_path, ec);
     std::filesystem::remove(legacy_path.string() + ".meta", ec);
 
+    // An unversioned legacy rollback must not undo a newer adoption during
+    // journal replay: it does not identify the experiment it belongs to.
+    const std::filesystem::path legacy_rollback_path = "evolution_legacy_rollback_test.bin";
+    std::filesystem::remove(legacy_rollback_path, ec);
+    std::filesystem::remove(legacy_rollback_path.string() + ".meta", ec);
+    {
+        Brain source(legacy_rollback_path);
+        assert(source.register_evolution_parameter("legacy.rollback", 0.25));
+        EvolutionExperiment valid_adoption{
+            "legacy-rollback-protection-1",
+            EvolutionProposal{"legacy.rollback", 0.25, 0.35, 0.1, 0.90},
+            0.70, 0.85, 0.01, 0.90, ExperimentOutcome::Improved, true};
+        assert(source.record_evolution_evaluation(valid_adoption));
+        assert(source.adopt_evolution_experiment(valid_adoption));
+        const auto* adopted = source.evolution_parameter("legacy.rollback");
+        assert(adopted != nullptr && adopted->value == 0.35);
+    }
+    {
+        Memory journal(256, legacy_rollback_path);
+        Event legacy_rollback{
+            0, 0, "legacy-test", "evolution_rollback",
+            {{"key", std::string("legacy.rollback")}}};
+        assert(journal.append(legacy_rollback) != 0);
+    }
+    {
+        Brain restarted_legacy(legacy_rollback_path);
+        const auto* parameter = restarted_legacy.evolution_parameter("legacy.rollback");
+        assert(parameter != nullptr);
+        assert(parameter->value == 0.35);
+        const auto history = restarted_legacy.evolution_history();
+        assert(std::any_of(history.begin(), history.end(), [](const EvolutionHistoryRecord& record) {
+            return record.experiment_id == "legacy-rollback-protection-1" &&
+                   record.action == EvolutionRecordAction::Adopted;
+        }));
+    }
+    std::filesystem::remove(legacy_rollback_path, ec);
+    std::filesystem::remove(legacy_rollback_path.string() + ".meta", ec);
+
     std::filesystem::remove(path, ec);
 
     {
