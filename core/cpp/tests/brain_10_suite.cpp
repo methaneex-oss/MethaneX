@@ -75,8 +75,14 @@ int main() {
     assert(!proposals.empty());
     const auto proposal = proposals.front();
     assert(proposal.proposed != proposal.current);
-    assert(brain.adopt_evolution(proposal));
-    assert(brain.rollback_evolution(proposal.key));
+    const auto* before_unverified_adoption = brain.evolution_parameter(proposal.key);
+    assert(before_unverified_adoption != nullptr);
+    const double proposal_baseline = before_unverified_adoption->baseline;
+    assert(!brain.adopt_evolution(proposal));
+    const auto* after_unverified_adoption = brain.evolution_parameter(proposal.key);
+    assert(after_unverified_adoption != nullptr);
+    assert(after_unverified_adoption->value == proposal_baseline);
+    assert(!brain.rollback_evolution(proposal.key));
     assert(!brain.adopt_evolution(EvolutionProposal{}));
     assert(!brain.rollback_evolution(""));
 
