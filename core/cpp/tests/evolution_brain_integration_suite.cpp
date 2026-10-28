@@ -9,6 +9,35 @@ using namespace jarvis::core;
 int main() {
     const std::filesystem::path path = "evolution_brain_integration_test.bin";
     std::error_code ec;
+    // A persisted legacy adoption event without experiment evidence must
+    // not bypass the evaluation gate when a Brain reconstructs from disk.
+    const std::filesystem::path legacy_path = "evolution_legacy_adoption_test.bin";
+    std::filesystem::remove(legacy_path, ec);
+    std::filesystem::remove(legacy_path.string() + ".meta", ec);
+    {
+        Brain source(legacy_path);
+        assert(source.register_evolution_parameter("legacy.replay", 0.25));
+    }
+    {
+        Memory journal(256, legacy_path);
+        Event legacy_adoption{
+            0, 1, "legacy-test", "evolution_adopt",
+            {{"key", std::string("legacy.replay")},
+             {"current", 0.25},
+             {"proposed", 0.95},
+             {"expected_gain", 0.70},
+             {"confidence", 0.99}}};
+        assert(journal.append(legacy_adoption) != 0);
+    }
+    {
+        Brain restarted_legacy(legacy_path);
+        const auto* parameter = restarted_legacy.evolution_parameter("legacy.replay");
+        assert(parameter != nullptr);
+        assert(parameter->value == parameter->baseline);
+    }
+    std::filesystem::remove(legacy_path, ec);
+    std::filesystem::remove(legacy_path.string() + ".meta", ec);
+
     std::filesystem::remove(path, ec);
 
     {
