@@ -22,14 +22,13 @@ namespace {
 std::string evaluator_path;
 std::string baseline_artifact_path;
 std::string candidate_artifact_path;
-void attest_isolated(EvolutionExperiment& experiment) {
+void write_artifacts(const EvolutionExperiment& experiment) {
     { std::ofstream out(baseline_artifact_path); out << std::setprecision(17) << experiment.proposal.current; }
     { std::ofstream out(candidate_artifact_path); out << std::setprecision(17) << experiment.proposal.proposed; }
-    ProcessIsolationLimits limits;
-    limits.require_no_new_privileges = true;
-        limits.require_privilege_drop = true;
-    limits.require_network_syscall_block = true;
-    ProcessIsolationBackend backend(limits);
+}
+void attest_isolated(EvolutionExperiment& experiment) {
+    write_artifacts(experiment);
+    ProcessIsolationBackend backend;
     IsolatedEvaluationProcedure procedure{
         IsolatedCommand{evaluator_path, {"--trusted-test-evaluator"}, ""},
         "brain-suite-local-evaluator-v1", "linear-fitness-v1",
@@ -212,8 +211,6 @@ int main(int argc, char** argv) {
     std::filesystem::remove(mismatched_replay_path, ec);
     std::filesystem::remove(mismatched_replay_path.string() + ".meta", ec);
     EvolutionExperiment valid_replay_evidence;
-    { std::ofstream out(baseline_artifact_path); out << std::setprecision(17) << 0.3; }
-    { std::ofstream out(candidate_artifact_path); out << std::setprecision(17) << 0.4; }
     {
         Brain source(mismatched_replay_path);
         assert(source.register_evolution_parameter("replay.mismatched-proposal", 0.3));
@@ -226,6 +223,7 @@ int main(int argc, char** argv) {
             IsolatedCommand{evaluator_path, {"--trusted-test-evaluator"}, ""},
             "brain-suite-local-evaluator-v1", "artifact-score-v1",
             baseline_artifact_path, candidate_artifact_path, detail::sha256_file(evaluator_path)};
+        write_artifacts(valid_replay_evidence);
         const auto batch = EvolutionExperimentCoordinator::run_isolated(
             valid_replay_evidence, backend, procedure, EvolutionTrialConfig{});
         assert(batch.executed && valid_replay_evidence.has_valid_evaluation_evidence());
@@ -266,8 +264,6 @@ int main(int argc, char** argv) {
     const std::filesystem::path lifecycle_path = "evolution_isolated_lifecycle_test.bin";
     std::filesystem::remove(lifecycle_path, ec);
     std::filesystem::remove(lifecycle_path.string() + ".meta", ec);
-    { std::ofstream out(baseline_artifact_path); out << "0.70"; }
-    { std::ofstream out(candidate_artifact_path); out << "0.80"; }
     {
         Brain source(lifecycle_path);
         assert(source.register_evolution_parameter("coordinator.lifecycle", 0.3));
@@ -282,14 +278,12 @@ int main(int argc, char** argv) {
         EvolutionExperiment experiment{
             "coordinator-lifecycle-1", generated.front(),
             0.0, 0.0, 0.01, 0.0, ExperimentOutcome::Pending, false};
-        ProcessIsolationLimits limits;
-        limits.require_no_new_privileges = true;
-        limits.require_network_syscall_block = true;
-        ProcessIsolationBackend backend(limits);
+        ProcessIsolationBackend backend;
         IsolatedEvaluationProcedure procedure{
             IsolatedCommand{evaluator_path, {"--trusted-test-evaluator"}, ""},
             "brain-suite-local-evaluator-v1", "artifact-score-v1",
             baseline_artifact_path, candidate_artifact_path, detail::sha256_file(evaluator_path)};
+        write_artifacts(experiment);
         const auto batch = EvolutionExperimentCoordinator::run_isolated(
             experiment, backend, procedure, EvolutionTrialConfig{});
         assert(batch.executed && batch.outcome == ExperimentOutcome::Improved);
