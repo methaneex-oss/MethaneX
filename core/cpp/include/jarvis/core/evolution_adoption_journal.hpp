@@ -41,6 +41,9 @@ public:
     bool stage(const EvolutionExperiment& experiment);
     bool commit(const std::string& experiment_id, std::string reason = "adopted");
     bool reject(const std::string& experiment_id, std::string reason = "rejected");
+    // Replay-only tombstone: an invalid adoption event must prevent a later
+    // event with the same experiment ID from retroactively authorizing adoption.
+    bool reject_unstaged(const EvolutionExperiment& experiment, std::string reason);
     bool rollback(const std::string& experiment_id, std::string reason = "rolled_back");
     // Compensation used when a post-adoption persistence step fails.
     bool restore_pending(const std::string& experiment_id,
