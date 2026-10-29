@@ -23,6 +23,7 @@ void attest_isolated(EvolutionExperiment& experiment) {
     { std::ofstream out(candidate_artifact_path); out << "0.80"; }
     ProcessIsolationLimits limits;
     limits.require_no_new_privileges = true;
+        limits.require_privilege_drop = true;
     limits.require_network_syscall_block = true;
     ProcessIsolationBackend backend(limits);
     IsolatedEvaluationProcedure procedure{
