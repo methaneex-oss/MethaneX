@@ -582,10 +582,20 @@ void Brain::replay(const Event& event, bool external_observation) {
                      adoption->state == AdoptionState::Rejected)) return;
                 // Replay must enforce the same durable-evaluation and adoption
                 // invariants as the live API before mutating the evolution model.
-                if (!evolution_controller_.validate_adoption_for_brain(experiment)) return;
-                if (!evolution_.adopt(proposal)) return;
+                if (!evolution_controller_.validate_adoption_for_brain(experiment)) {
+                    evolution_controller_.replay_rejection(
+                        experiment, "replay_adoption_validation_failed");
+                    return;
+                }
+                if (!evolution_.adopt(proposal)) {
+                    evolution_controller_.replay_rejection(
+                        experiment, "replay_model_adoption_failed");
+                    return;
+                }
                 if (!evolution_controller_.replay_adoption(experiment)) {
                     evolution_.restore_previous(*key);
+                    evolution_controller_.replay_rejection(
+                        experiment, "replay_adoption_journal_failed");
                     return;
                 }
                 evolution_history_.append(EvolutionHistoryRecord{
