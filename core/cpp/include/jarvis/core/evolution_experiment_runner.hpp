@@ -38,7 +38,8 @@ public:
     static ExperimentOutcome run_isolated_evaluation(
         EvolutionExperiment& experiment, const ProcessIsolationBackend& backend,
         const IsolatedEvaluationProcedure& procedure,
-        std::size_t trials, double minimum_confidence,
+        std::size_t baseline_trials, std::size_t candidate_trials,
+        double minimum_confidence,
         TrialStatistics* baseline_summary = nullptr,
         TrialStatistics* candidate_summary = nullptr) noexcept;
 };
