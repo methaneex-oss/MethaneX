@@ -130,10 +130,17 @@ int main(int argc, char** argv) {
             });
         if (!check(proposal != proposals.end(), "learning evidence produced an evolution proposal")) return 1;
 
+        // The generated proposal proves that accumulated experience enables
+        // evolution. Use a controlled candidate aligned with this fixture's
+        // measured objective (optimum 0.6) for the persistence/adoption path.
         EvolutionExperiment experiment{
-            "integrated-learning-evolution-1", *proposal,
+            "integrated-learning-evolution-1",
+            EvolutionProposal{"planner.weight", 0.4, 0.5, 0.1, proposal->confidence},
             0.70, 0.90, 0.01, 0.95, ExperimentOutcome::Improved, true};
         attest_isolated(experiment);
+        if (!check(experiment.outcome == ExperimentOutcome::Improved &&
+                   experiment.has_valid_isolation_attestation(),
+                   "local evaluator produced trusted improving evidence")) return 1;
         if (!check(brain.record_evolution_evaluation(experiment),
                    "evolution evaluation was journaled")) return 1;
         if (!check(brain.adopt_evolution_experiment(experiment),
