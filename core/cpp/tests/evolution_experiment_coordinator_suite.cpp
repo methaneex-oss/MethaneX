@@ -26,7 +26,8 @@ int main(int argc, char** argv) {
             "jarvis.test.fixture.v1", evaluator_executable,
             {"--test-evaluator-from-parameter"})) return 1;
     assert(EvolutionExperimentRunner::register_trusted_evaluator(
-        "jarvis.test.fixture.v1", evaluator_executable));
+        "jarvis.test.fixture.v1", evaluator_executable,
+        {"--test-evaluator-from-parameter"}));
     EvolutionExperiment experiment{
         "trial-batch",
         EvolutionProposal{"planner.weight", 0.4, 0.5, 0.1, 0.9},
