@@ -87,22 +87,7 @@ bool EvolutionController::record_evaluation_for_brain(
 bool EvolutionController::replay_evaluation(
     const EvolutionExperiment& experiment) noexcept {
     if (experiment.id.empty() || experiment.proposal.key.empty() ||
-        !experiment.candidate_executed ||
-        !std::isfinite(experiment.baseline_fitness) ||
-        !std::isfinite(experiment.candidate_fitness) ||
-        !std::isfinite(experiment.minimum_improvement) ||
-        experiment.minimum_improvement < 0.0 ||
-        !std::isfinite(experiment.confidence) ||
-        experiment.confidence < 0.0 || experiment.confidence > 1.0 ||
-        !std::isfinite(experiment.proposal.current) ||
-        !std::isfinite(experiment.proposal.proposed) ||
-        !std::isfinite(experiment.proposal.expected_gain) ||
-        !std::isfinite(experiment.proposal.confidence) ||
-        experiment.outcome == ExperimentOutcome::Pending ||
-        experiment.outcome == ExperimentOutcome::Invalid ||
-        (policy_.require_isolation && !experiment.has_valid_isolation_attestation()))
-        return false;
-
+        !experiment.has_valid_evaluation_evidence()) return false;
     EvolutionExperiment recomputed = experiment;
     if (EvolutionExperimentEngine::evaluate(recomputed) != experiment.outcome ||
         !EvolutionSafetyGate::approve(recomputed, policy_)) return false;
@@ -118,8 +103,6 @@ bool EvolutionController::replay_evaluation(
             record.confidence != experiment.confidence) return false;
         evaluated = true;
     }
-    // Rebuild only from a fully validated evaluation and never overwrite a
-    // rejected, rolled-back, or otherwise terminal experiment record.
     const auto existing = adoption_journal_.get(experiment.id);
     if (existing.has_value() &&
         existing->state != AdoptionState::Pending &&
@@ -200,13 +183,20 @@ bool EvolutionController::validate_adoption_for_brain(const EvolutionExperiment&
         record->expected_gain != experiment.proposal.expected_gain ||
         record->proposal_confidence != experiment.proposal.confidence ||
         record->minimum_improvement != experiment.minimum_improvement ||
-        record->isolated != experiment.isolated) return false;
+        record->isolated != experiment.isolated ||
+        record->evaluation_procedure_id != experiment.evaluation_procedure_id ||
+        record->evaluation_config_id != experiment.evaluation_config_id ||
+        record->baseline_artifact_digest != experiment.baseline_artifact_digest ||
+        record->candidate_artifact_digest != experiment.candidate_artifact_digest ||
+        record->evaluator_artifact_digest != experiment.evaluator_artifact_digest ||
+        record->baseline_trial_count != experiment.baseline_trial_count ||
+        record->candidate_trial_count != experiment.candidate_trial_count ||
+        record->evaluation_evidence_digest != experiment.evaluation_evidence_digest) return false;
 
-    // On a restart, the caller's value object has no in-memory attestation.
-    // Re-attest a copy only after its fields match the durable evaluated record.
-    EvolutionExperiment verified = experiment;
-    if (record->isolated) verified.attest_isolated_result();
-    if (!EvolutionSafetyGate::approve(verified, policy_)) return false;
+    // Replay must validate recomputable evidence; a persisted isolated Boolean
+    // never recreates the runner's in-memory attestation.
+    if (!experiment.has_valid_evaluation_evidence() ||
+        !EvolutionSafetyGate::approve(experiment, policy_)) return false;
 
     const auto evaluation = model_.evaluate(experiment.proposal);
     if (!evaluation.eligible) return false;
@@ -248,8 +238,12 @@ bool EvolutionController::compensate_adoption_for_brain(
 }
 
 bool EvolutionController::replay_adoption(const EvolutionExperiment& experiment) noexcept {
-    if (experiment.id.empty() || !adoption_journal_.stage(experiment)) return false;
-    return adoption_journal_.commit(experiment.id, "replayed");
+    if (!validate_adoption_for_brain(experiment)) return false;
+    if (!adoption_journal_.commit(experiment.id, "replayed")) return false;
+    return history_.append(EvolutionHistoryRecord{
+        experiment.id, experiment.proposal.key, EvolutionRecordAction::Adopted,
+        experiment.outcome, experiment.baseline_fitness, experiment.candidate_fitness,
+        experiment.confidence, 0, "replayed", {}});
 }
 
 bool EvolutionController::replay_rollback(const std::string& experiment_id,
