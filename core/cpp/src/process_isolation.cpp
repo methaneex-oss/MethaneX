@@ -7,6 +7,7 @@
 #include <cstring>
 #include <string>
 #include <cstdlib>
+#include <filesystem>
 
 #if defined(__unix__) || defined(__APPLE__)
 #include <fcntl.h>
@@ -122,13 +123,47 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
     std::string executable = command.executable;
     char* resolved = realpath(command.executable.c_str(), nullptr);
     if (resolved != nullptr) {
-        // This also handles a bare filename that exists in the caller's
-        // directory; do not let execvp reinterpret that identity through PATH.
         executable.assign(resolved);
         std::free(resolved);
     } else if (command.executable.find('/') != std::string::npos) {
         result.error = std::string("cannot resolve executable: ") + std::strerror(errno);
         return result;
+    } else {
+        // Resolve PATH in the parent as well. execvp() after chdir() would
+        // reinterpret relative PATH entries against the evaluator's working
+        // directory and could select an unregistered executable.
+        const char* configured_path = std::getenv("PATH");
+        const std::string search_path = configured_path == nullptr
+            ? "/bin:/usr/bin" : configured_path;
+        bool found = false;
+        std::size_t begin = 0;
+        while (begin <= search_path.size()) {
+            const auto end = search_path.find(':', begin);
+            const auto entry = search_path.substr(begin,
+                end == std::string::npos ? std::string::npos : end - begin);
+            const auto candidate = (entry.empty()
+                ? std::filesystem::current_path()
+                : std::filesystem::path(entry).is_absolute()
+                    ? std::filesystem::path(entry)
+                    : std::filesystem::current_path() / entry) / command.executable;
+            char* path_resolved = realpath(candidate.c_str(), nullptr);
+            if (path_resolved != nullptr) {
+                const bool executable_file = access(path_resolved, X_OK) == 0;
+                if (executable_file) {
+                    executable.assign(path_resolved);
+                    found = true;
+                    std::free(path_resolved);
+                    break;
+                }
+                std::free(path_resolved);
+            }
+            if (end == std::string::npos) break;
+            begin = end + 1;
+        }
+        if (!found) {
+            result.error = "cannot resolve executable through PATH";
+            return result;
+        }
     }
 
     // Build argv before fork: allocating in a multithreaded child is unsafe.
