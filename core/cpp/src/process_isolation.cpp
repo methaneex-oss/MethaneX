@@ -1,11 +1,11 @@
 #if defined(__linux__) && !defined(_DEFAULT_SOURCE)
 #define _DEFAULT_SOURCE
 #endif
-#if defined(__SANITIZE_THREAD__)
-#define JARVIS_TSAN_BUILD 1
+#if defined(__SANITIZE_THREAD__) || defined(__SANITIZE_ADDRESS__)
+#define JARVIS_SANITIZER_BUILD 1
 #elif defined(__has_feature)
-#if __has_feature(thread_sanitizer)
-#define JARVIS_TSAN_BUILD 1
+#if __has_feature(thread_sanitizer) || __has_feature(address_sanitizer)
+#define JARVIS_SANITIZER_BUILD 1
 #endif
 #endif
 
@@ -111,10 +111,10 @@ bool install_network_syscall_block() noexcept {
 #endif
 
 ProcessIsolationBackend::ProcessIsolationBackend(ProcessIsolationLimits limits) : limits_(limits) {
-#if defined(JARVIS_TSAN_BUILD)
-    // ThreadSanitizer reserves a very large virtual shadow address range. A
-    // small RLIMIT_AS prevents the instrumented evaluator from starting, so
-    // sanitizer builds keep CPU/file/output limits but do not cap address space.
+#if defined(JARVIS_SANITIZER_BUILD)
+    // AddressSanitizer and ThreadSanitizer reserve large virtual shadow address
+    // ranges. A small RLIMIT_AS prevents instrumented evaluators from starting,
+    // so sanitizer builds retain CPU/file/output limits but do not cap address space.
     limits_.max_memory_bytes = std::numeric_limits<std::size_t>::max();
 #endif
     if (limits_.sandbox.timeout.count() <= 0) limits_.sandbox.timeout = std::chrono::milliseconds{1000};
