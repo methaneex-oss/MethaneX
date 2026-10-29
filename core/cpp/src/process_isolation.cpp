@@ -26,6 +26,18 @@
 #endif
 #endif
 
+#if defined(__SANITIZE_ADDRESS__) || defined(__SANITIZE_THREAD__)
+#define JARVIS_SANITIZER_BUILD 1
+#elif defined(__has_feature)
+#if __has_feature(address_sanitizer) || __has_feature(thread_sanitizer)
+#define JARVIS_SANITIZER_BUILD 1
+#else
+#define JARVIS_SANITIZER_BUILD 0
+#endif
+#else
+#define JARVIS_SANITIZER_BUILD 0
+#endif
+
 namespace jarvis::core {
 
 #if defined(__linux__)
@@ -175,7 +187,11 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
         struct rlimit memory_limit{limits_.max_memory_bytes, limits_.max_memory_bytes};
         struct rlimit cpu_limit{limits_.max_cpu_seconds, limits_.max_cpu_seconds};
         struct rlimit file_limit{limits_.max_file_bytes, limits_.max_file_bytes};
+#if !JARVIS_SANITIZER_BUILD
+        // ASan/TSan reserve large virtual address ranges; RLIMIT_AS can prevent
+        // the instrumented evaluator from starting. Keep CPU/file limits active.
         (void)setrlimit(RLIMIT_AS, &memory_limit);
+#endif
         (void)setrlimit(RLIMIT_CPU, &cpu_limit);
         (void)setrlimit(RLIMIT_FSIZE, &file_limit);
 
