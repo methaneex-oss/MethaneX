@@ -48,6 +48,8 @@ double score_for(const std::vector<Decision>& decisions, const std::string& acti
 int main(int argc, char** argv) {
     if (test_support::run_evolution_evaluator_fixture(argc, argv)) return 0;
     evaluator_executable = std::filesystem::absolute(argv[0]).string();
+    if (!EvolutionExperimentRunner::register_trusted_evaluator(
+            "jarvis.test.fixture.v1", evaluator_executable)) return 1;
     const auto path = std::filesystem::temp_directory_path() /
                       "jarvis_memory_learning_evolution_integration.bin";
     std::error_code ec;
