@@ -212,6 +212,17 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_evaluation(
         candidate_values.push_back(fitness);
     }
 
+    // Recheck content identities after all child executions to detect a
+    // candidate/evaluator replacement during the measurement window.
+    if (detail::sha256_file(procedure.baseline_artifact_path) != baseline_digest ||
+        detail::sha256_file(procedure.candidate_artifact_path) != candidate_digest ||
+        detail::sha256_file(procedure.command.executable) != evaluator_digest) {
+        experiment.candidate_executed = false;
+        experiment.isolated = false;
+        experiment.outcome = ExperimentOutcome::Invalid;
+        return experiment.outcome;
+    }
+
     const auto baseline = EvolutionTrials::summarize(baseline_values);
     const auto candidate = EvolutionTrials::summarize(candidate_values);
     if (baseline.count < 2 || candidate.count < 2) return experiment.outcome;
