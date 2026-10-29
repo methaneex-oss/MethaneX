@@ -71,6 +71,7 @@ int main(int argc, char** argv) {
         // A matching executable hash is not enough: an arbitrary local command
         // that prints a number must fail the structured evaluation protocol.
         auto experiment = make_experiment();
+        write_artifacts(experiment);
         ProcessIsolationBackend backend;
         IsolatedEvaluationProcedure numeric_only{
             IsolatedCommand{"/bin/sh", {"-c", "printf 0.86"}, ""},
@@ -85,6 +86,7 @@ int main(int argc, char** argv) {
 
     {
         auto experiment = make_experiment();
+        write_artifacts(experiment);
         ProcessIsolationBackend backend;
         IsolatedEvaluationProcedure procedure{
             IsolatedCommand{argv[0], {"--trusted-test-evaluator"}, ""},
