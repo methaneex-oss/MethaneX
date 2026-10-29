@@ -8,6 +8,7 @@
 #include <filesystem>
 #include <fstream>
 #include <string>
+#include <system_error>
 
 using namespace jarvis::core;
 
@@ -72,8 +73,29 @@ int main(int argc, char** argv) {
         assert(experiment.has_valid_evaluation_evidence());
         assert(baseline.count == 4 && candidate.count == 4);
         assert(candidate.mean > baseline.mean);
+        const auto original_candidate_digest = experiment.candidate_artifact_digest;
+        experiment.candidate_artifact_digest += "tampered";
+        assert(!experiment.has_valid_isolation_attestation());
+        assert(!experiment.has_valid_evaluation_evidence());
+        experiment.candidate_artifact_digest = original_candidate_digest;
         experiment.candidate_fitness += 0.01;
         assert(!experiment.has_valid_isolation_attestation());
+        assert(!experiment.has_valid_evaluation_evidence());
+    }
+
+    {
+        auto experiment = make_experiment();
+        ProcessIsolationLimits limits;
+        limits.require_no_new_privileges = true;
+        limits.require_network_syscall_block = true;
+        ProcessIsolationBackend backend(limits);
+        IsolatedEvaluationProcedure untrusted{
+            IsolatedCommand{argv[0], {"--trusted-test-evaluator"}, ""},
+            "runner-suite-local-evaluator-v1", "linear-fitness-v1",
+            baseline_artifact_path, candidate_artifact_path, "wrong-pinned-digest"};
+        const auto outcome = EvolutionExperimentRunner::run_isolated_evaluation(
+            experiment, backend, untrusted, 4, 4, 0.5);
+        assert(outcome == ExperimentOutcome::Invalid);
         assert(!experiment.has_valid_evaluation_evidence());
     }
 
