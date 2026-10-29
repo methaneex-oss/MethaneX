@@ -150,9 +150,9 @@ int main(int argc, char** argv) {
         if (!check(brain.adopt_evolution_experiment(experiment),
                    "validated evolution candidate was adopted")) return 1;
         const auto* adopted = brain.evolution_parameter("planner.weight");
-        if (!check(adopted != nullptr && adopted->value == proposal->proposed,
+        if (!check(adopted != nullptr && adopted->value == experiment.proposal.proposed,
                    "adoption changed the registered parameter")) return 1;
-        adopted_value = proposal->proposed;
+        adopted_value = experiment.proposal.proposed;
 
         const auto before_restart = brain.snapshot();
         if (!check(!before_restart.predictions.empty() &&
