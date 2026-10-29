@@ -515,8 +515,12 @@ void Brain::replay(const Event& event, bool external_observation) {
                 event.data.find("isolated") != event.data.end() &&
                 std::get_if<bool>(&event.data.at("isolated")) != nullptr &&
                 *std::get_if<bool>(&event.data.at("isolated"));
-            if (experiment.isolated && experiment.candidate_executed)
-                experiment.attest_isolated_result();
+            if (const auto* procedure = string_value(event.data, "evaluation_procedure_id"))
+                experiment.evaluation_procedure_id = *procedure;
+            if (const auto* artifact = string_value(event.data, "baseline_artifact_id"))
+                experiment.baseline_artifact_id = *artifact;
+            if (const auto* artifact = string_value(event.data, "candidate_artifact_id"))
+                experiment.candidate_artifact_id = *artifact;
             evolution_controller_.replay_evaluation(experiment);
         }
         return;
@@ -554,12 +558,20 @@ void Brain::replay(const Event& event, bool external_observation) {
                     event.data.find("isolated") != event.data.end() &&
                     std::get_if<bool>(&event.data.at("isolated")) != nullptr &&
                     *std::get_if<bool>(&event.data.at("isolated"));
-                if (experiment.isolated && experiment.candidate_executed)
-                    experiment.attest_isolated_result();
+                if (const auto* procedure = string_value(event.data, "evaluation_procedure_id"))
+                    experiment.evaluation_procedure_id = *procedure;
+                if (const auto* artifact = string_value(event.data, "baseline_artifact_id"))
+                    experiment.baseline_artifact_id = *artifact;
+                if (const auto* artifact = string_value(event.data, "candidate_artifact_id"))
+                    experiment.candidate_artifact_id = *artifact;
                 const auto adoption = evolution_controller_.adoption_journal().get(*experiment_id);
                 if (adoption.has_value() &&
                     (adoption->state == AdoptionState::Adopted ||
-                     adoption->state == AdoptionState::RolledBack)) return;
+                     adoption->state == AdoptionState::RolledBack ||
+                     adoption->state == AdoptionState::Rejected)) return;
+                // Replay must enforce the same durable-evaluation and adoption
+                // invariants as the live API before mutating the evolution model.
+                if (!evolution_controller_.validate_adoption_for_brain(experiment)) return;
                 if (!evolution_.adopt(proposal)) return;
                 if (!evolution_controller_.replay_adoption(experiment)) {
                     evolution_.restore_previous(*key);

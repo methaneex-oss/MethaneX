@@ -3,6 +3,8 @@
 #include "jarvis/core/evolution_experiment.hpp"
 #include "jarvis/core/evolution_sandbox.hpp"
 #include "jarvis/core/evolution_trials.hpp"
+#include "jarvis/core/evolution_experiment_runner.hpp"
+#include "jarvis/core/process_isolation.hpp"
 
 #include <cstddef>
 #include <vector>
@@ -33,6 +35,15 @@ public:
                                    const CandidateExecutor& baseline_executor,
                                    const CandidateExecutor& candidate_executor,
                                    EvolutionTrialConfig config = {}) noexcept;
+
+    // Production path: both baseline and candidate measurements run through
+    // the same explicitly identified local evaluator procedure. Callback-only
+    // simulations remain available through run(), but cannot satisfy isolation.
+    static EvolutionTrialBatch run_isolated(
+        EvolutionExperiment& experiment,
+        const ProcessIsolationBackend& backend,
+        const IsolatedCommand& evaluator,
+        EvolutionTrialConfig config = {}) noexcept;
 };
 
 } // namespace jarvis::core

@@ -1,5 +1,6 @@
 #include "jarvis/core/brain.hpp"
 #include "jarvis/core/evolution_experiment_runner.hpp"
+#include "evolution_test_evaluator.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -11,10 +12,13 @@
 using namespace jarvis::core;
 
 namespace {
+std::string evaluator_executable;
 void attest_isolated(EvolutionExperiment& experiment) {
     ProcessIsolationBackend backend;
-    const std::string fitness = std::to_string(experiment.candidate_fitness);
-    const IsolatedCommand command{"/bin/sh", {"-c", "printf " + fitness}, ""};
+    const IsolatedCommand command{
+        evaluator_executable,
+        {"--test-evaluator"},
+        "", "jarvis.test.fixture.v1"};
     EvolutionExperimentRunner::run_isolated_command(experiment, backend, command);
 }
 
@@ -31,7 +35,9 @@ double score_for(const std::vector<Decision>& decisions, const std::string& acti
 }
 } // namespace
 
-int main() {
+int main(int argc, char** argv) {
+    if (test_support::run_evolution_evaluator_fixture(argc, argv)) return 0;
+    evaluator_executable = JARVIS_TEST_EVALUATOR_EXECUTABLE;
     const auto path = std::filesystem::temp_directory_path() /
                       "jarvis_memory_learning_evolution_integration.bin";
     std::error_code ec;
@@ -117,6 +123,10 @@ int main() {
         // candidate/adoption in the same journal as the learned experience.
         brain.observe_evolution_fitness("planner.weight", 0.9);
         brain.observe_evolution_fitness("planner.weight", 0.9);
+        // Raise evidence-backed proposal confidence above the default adoption
+        // threshold instead of trying to adopt after only three observations.
+        for (int i = 0; i < 10; ++i)
+            brain.observe_evolution_fitness("planner.weight", 0.9);
         const auto proposals = brain.evolution_options();
         const auto proposal = std::find_if(proposals.begin(), proposals.end(),
             [](const EvolutionProposal& candidate) {
@@ -124,18 +134,25 @@ int main() {
             });
         if (!check(proposal != proposals.end(), "learning evidence produced an evolution proposal")) return 1;
 
+        // The generated proposal proves that accumulated experience enables
+        // evolution. Use a controlled candidate aligned with this fixture's
+        // measured objective (optimum 0.6) for the persistence/adoption path.
         EvolutionExperiment experiment{
-            "integrated-learning-evolution-1", *proposal,
+            "integrated-learning-evolution-1",
+            EvolutionProposal{"planner.weight", 0.4, 0.5, 0.1, proposal->confidence},
             0.70, 0.90, 0.01, 0.95, ExperimentOutcome::Improved, true};
         attest_isolated(experiment);
+        if (!check(experiment.outcome == ExperimentOutcome::Improved &&
+                   experiment.has_valid_isolation_attestation(),
+                   "local evaluator produced trusted improving evidence")) return 1;
         if (!check(brain.record_evolution_evaluation(experiment),
                    "evolution evaluation was journaled")) return 1;
         if (!check(brain.adopt_evolution_experiment(experiment),
                    "validated evolution candidate was adopted")) return 1;
         const auto* adopted = brain.evolution_parameter("planner.weight");
-        if (!check(adopted != nullptr && adopted->value == proposal->proposed,
+        if (!check(adopted != nullptr && adopted->value == experiment.proposal.proposed,
                    "adoption changed the registered parameter")) return 1;
-        adopted_value = proposal->proposed;
+        adopted_value = experiment.proposal.proposed;
 
         const auto before_restart = brain.snapshot();
         if (!check(!before_restart.predictions.empty() &&

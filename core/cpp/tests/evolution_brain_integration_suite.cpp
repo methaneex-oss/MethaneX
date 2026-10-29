@@ -1,24 +1,31 @@
 #include "jarvis/core/brain.hpp"
 #include "jarvis/core/evolution_safety.hpp"
 #include "jarvis/core/evolution_experiment_runner.hpp"
+#include "evolution_test_evaluator.hpp"
 #include "jarvis/core/process_isolation.hpp"
 
 #include <cassert>
+#include <string>
 #include <filesystem>
 #include <algorithm>
 
 using namespace jarvis::core;
 
 namespace {
+std::string evaluator_executable;
 void attest_isolated(EvolutionExperiment& experiment) {
     ProcessIsolationBackend backend;
     const IsolatedCommand command{
-        "/bin/sh", {"-c", "printf " + std::to_string(experiment.candidate_fitness)}, ""};
+        evaluator_executable,
+        {"--test-evaluator"},
+        "", "jarvis.test.fixture.v1"};
     EvolutionExperimentRunner::run_isolated_command(experiment, backend, command);
 }
 } // namespace
 
-int main() {
+int main(int argc, char** argv) {
+    if (test_support::run_evolution_evaluator_fixture(argc, argv)) return 0;
+    evaluator_executable = JARVIS_TEST_EVALUATOR_EXECUTABLE;
     const std::filesystem::path path = "evolution_brain_integration_test.bin";
     std::error_code ec;
     // A persisted legacy adoption event without experiment evidence must
@@ -89,6 +96,94 @@ int main() {
     std::filesystem::remove(legacy_rollback_path, ec);
     std::filesystem::remove(legacy_rollback_path.string() + ".meta", ec);
 
+    // Replay must not apply an adoption without a valid matching evaluation,
+    // must recompute the outcome, and must reject isolation claims without provenance.
+    const std::filesystem::path replay_guard_path = "evolution_replay_guard_test.bin";
+    std::filesystem::remove(replay_guard_path, ec);
+    std::filesystem::remove(replay_guard_path.string() + ".meta", ec);
+    {
+        Brain source(replay_guard_path);
+        assert(source.register_evolution_parameter("replay.missing", 0.25));
+        assert(source.register_evolution_parameter("replay.equal", 0.25));
+        assert(source.register_evolution_parameter("replay.mismatch", 0.25));
+        assert(source.register_evolution_parameter("replay.no-provenance", 0.25));
+    }
+    {
+        Memory journal(256, replay_guard_path);
+        const auto append_evaluation = [&](const std::string& id, const std::string& key,
+                                           double proposed, double baseline, double candidate,
+                                           double threshold, ExperimentOutcome outcome,
+                                           bool include_provenance) {
+            const std::string procedure = "jarvis.test.fixture.v1";
+            const std::string separator(1, '\x1f');
+            const std::string baseline_artifact = include_provenance
+                ? EvolutionExperiment::artifact_fingerprint(
+                    key + separator + std::to_string(0.25) + separator + procedure) : "";
+            const std::string candidate_artifact = include_provenance
+                ? EvolutionExperiment::artifact_fingerprint(
+                    key + separator + std::to_string(proposed) + separator + procedure) : "";
+            Event event{0, 0, "replay-test", "evolution_evaluated",
+                {{"experiment_id", id}, {"key", key}, {"current", 0.25},
+                 {"proposed", proposed}, {"expected_gain", proposed - 0.25},
+                 {"proposal_confidence", 0.90},
+                 {"outcome", static_cast<std::int64_t>(outcome)},
+                 {"baseline", baseline}, {"candidate", candidate},
+                 {"confidence", 0.95}, {"minimum_improvement", threshold},
+                 {"isolated", true},
+                 {"evaluation_procedure_id", include_provenance ? procedure : ""},
+                 {"baseline_artifact_id", baseline_artifact},
+                 {"candidate_artifact_id", candidate_artifact}}};
+            assert(journal.append(event) != 0);
+        };
+        const auto append_adoption = [&](const std::string& id, const std::string& key,
+                                         double proposed, double baseline, double candidate,
+                                         double threshold, bool include_provenance) {
+            const std::string procedure = "jarvis.test.fixture.v1";
+            const std::string separator(1, '\x1f');
+            const std::string baseline_artifact = include_provenance
+                ? EvolutionExperiment::artifact_fingerprint(
+                    key + separator + std::to_string(0.25) + separator + procedure) : "";
+            const std::string candidate_artifact = include_provenance
+                ? EvolutionExperiment::artifact_fingerprint(
+                    key + separator + std::to_string(proposed) + separator + procedure) : "";
+            Event event{0, 0, "replay-test", "evolution_adopt",
+                {{"experiment_id", id}, {"key", key}, {"current", 0.25},
+                 {"proposed", proposed}, {"expected_gain", proposed - 0.25},
+                 {"proposal_confidence", 0.90}, {"outcome", static_cast<std::int64_t>(ExperimentOutcome::Improved)},
+                 {"baseline", baseline}, {"candidate", candidate}, {"confidence", 0.95},
+                 {"minimum_improvement", threshold}, {"isolated", true},
+                 {"evaluation_procedure_id", include_provenance ? procedure : ""},
+                 {"baseline_artifact_id", baseline_artifact},
+                 {"candidate_artifact_id", candidate_artifact}}};
+            assert(journal.append(event) != 0);
+        };
+        // Adoption event with an experiment ID but no preceding evaluation.
+        append_adoption("replay-missing-eval", "replay.missing", 0.35, 0.70, 0.85, 0.01, true);
+        // Equal fitness falsely labelled Improved must be rejected on replay.
+        append_evaluation("replay-equal-exp", "replay.equal", 0.35, 0.70, 0.70, 0.01,
+                          ExperimentOutcome::Improved, true);
+        append_adoption("replay-equal-exp", "replay.equal", 0.35, 0.70, 0.70, 0.01, true);
+        // Even with an evaluation, an adoption event cannot substitute a different proposal.
+        append_evaluation("replay-mismatch-exp", "replay.mismatch", 0.35, 0.70, 0.85, 0.01,
+                          ExperimentOutcome::Improved, true);
+        append_adoption("replay-mismatch-exp", "replay.mismatch", 0.45, 0.70, 0.85, 0.01, true);
+        // A persisted isolated=true flag without evaluator/artifact provenance is not evidence.
+        append_evaluation("replay-no-provenance-exp", "replay.no-provenance", 0.35, 0.70, 0.85,
+                          0.01, ExperimentOutcome::Improved, false);
+        append_adoption("replay-no-provenance-exp", "replay.no-provenance", 0.35, 0.70, 0.85,
+                        0.01, false);
+    }
+    {
+        Brain replayed(replay_guard_path);
+        for (const auto& key : {"replay.missing", "replay.equal", "replay.mismatch",
+                                "replay.no-provenance"}) {
+            const auto* parameter = replayed.evolution_parameter(key);
+            assert(parameter != nullptr && parameter->value == parameter->baseline);
+        }
+    }
+    std::filesystem::remove(replay_guard_path, ec);
+    std::filesystem::remove(replay_guard_path.string() + ".meta", ec);
+
     std::filesystem::remove(path, ec);
 
     {
@@ -103,16 +198,30 @@ int main() {
         assert(after_prediction->observations == 1);
         brain.observe_evolution_fitness("planner.weight", 0.9);
         brain.observe_evolution_fitness("planner.weight", 0.9);
+        // The adoption policy requires proposal confidence >= 0.75. Three
+        // observations are insufficient, so collect enough real evidence.
+        for (int i = 0; i < 10; ++i)
+            brain.observe_evolution_fitness("planner.weight", 0.9);
         const auto* after_fitness = brain.evolution_parameter("planner.weight");
         assert(after_fitness != nullptr);
-        assert(after_fitness->observations == 3);
+        assert(after_fitness->observations == 13);
         const auto proposals = brain.evolution_options();
         assert(!proposals.empty());
 
+        // Keep the generated proposal as evidence that learned observations
+        // enable evolution, then evaluate a controlled candidate on the same
+        // registered parameter. The fixture objective has its known optimum
+        // at 0.6, so 0.4 -> 0.5 is a measured improvement.
+        const auto generated = std::find_if(proposals.begin(), proposals.end(),
+            [](const EvolutionProposal& proposal) { return proposal.key == "planner.weight"; });
+        assert(generated != proposals.end());
         EvolutionExperiment experiment{
-            "brain-evolution-1", proposals.front(), 0.70, 0.90, 0.01, 0.95,
-            ExperimentOutcome::Improved, true};
+            "brain-evolution-1",
+            EvolutionProposal{"planner.weight", 0.4, 0.5, 0.1, generated->confidence},
+            0.70, 0.90, 0.01, 0.95, ExperimentOutcome::Improved, true};
         attest_isolated(experiment);
+        assert(experiment.outcome == ExperimentOutcome::Improved);
+        assert(experiment.has_valid_isolation_attestation());
         assert(brain.record_evolution_evaluation(experiment));
         const auto evaluated_history = brain.evolution_history();
         assert(evaluated_history.size() == 1);
@@ -171,7 +280,8 @@ int main() {
         EvolutionExperiment equal_fitness{
             "safety-equal-fitness", EvolutionProposal{"safety.equal-fitness", 0.2, 0.3, 0.1, 0.99},
             0.70, 0.70, 0.01, 0.99, ExperimentOutcome::Improved, true};
-        attest_isolated(equal_fitness);
+        // Preserve the deliberately equal fitness values: this case tests
+        // recomputation of caller-supplied outcome labels, not evaluator output.
         equal_fitness.outcome = ExperimentOutcome::Improved;
         EvolutionSafetyPolicy non_isolation_policy;
         non_isolation_policy.require_isolation = false;
@@ -183,7 +293,8 @@ int main() {
         EvolutionExperiment subthreshold{
             "safety-subthreshold", EvolutionProposal{"safety.subthreshold", 0.2, 0.3, 0.1, 0.99},
             0.70, 0.74, 0.05, 0.99, ExperimentOutcome::Improved, true};
-        attest_isolated(subthreshold);
+        // Keep the supplied sub-threshold measurements intact to verify that
+        // the safety gate recomputes the outcome rather than trusting the label.
         subthreshold.outcome = ExperimentOutcome::Improved;
         assert(!EvolutionSafetyGate::approve(subthreshold, non_isolation_policy));
         assert(!brain.record_evolution_evaluation(subthreshold));
