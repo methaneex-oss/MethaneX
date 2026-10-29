@@ -501,7 +501,7 @@ void Brain::replay(const Event& event, bool external_observation) {
         const auto* baseline_artifact = string_value(event.data, "baseline_artifact_id");
         const auto* candidate_artifact = string_value(event.data, "candidate_artifact_id");
         const auto isolated_field = event.data.find("isolated");
-        const auto outcome_value = integer_value(event.data, "outcome", -1);
+        const auto outcome_value = integer_value(event.data, "outcome", 0);
         // A persisted Boolean is not isolation evidence. Replay requires a
         // paired-evaluation identity and a recomputable outcome.
         if (id == nullptr || key == nullptr || procedure == nullptr || procedure->empty() ||
@@ -557,7 +557,7 @@ void Brain::replay(const Event& event, bool external_observation) {
         const auto* baseline_artifact = string_value(event.data, "baseline_artifact_id");
         const auto* candidate_artifact = string_value(event.data, "candidate_artifact_id");
         const auto isolated_field = event.data.find("isolated");
-        const auto outcome_value = integer_value(event.data, "outcome", -1);
+        const auto outcome_value = integer_value(event.data, "outcome", 0);
         if (procedure == nullptr || procedure->empty() ||
             baseline_artifact == nullptr || baseline_artifact->empty() ||
             candidate_artifact == nullptr || candidate_artifact->empty() ||
