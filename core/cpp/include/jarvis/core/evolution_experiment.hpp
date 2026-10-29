@@ -2,6 +2,8 @@
 
 #include "jarvis/core/evolution.hpp"
 
+#include <sstream>
+#include <iomanip>
 #include <string>
 #include <utility>
 
@@ -12,6 +14,13 @@ class EvolutionController;
 class Brain;
 
 enum class ExperimentOutcome { Pending, Improved, Neutral, Degraded, Invalid };
+
+inline std::string evolution_candidate_artifact_id(const EvolutionProposal& proposal) {
+    std::ostringstream out;
+    out << proposal.key << "|current=" << std::hexfloat << proposal.current
+        << "|proposed=" << std::hexfloat << proposal.proposed;
+    return out.str();
+}
 
 struct EvolutionExperiment {
     EvolutionExperiment() = default;
