@@ -11,10 +11,11 @@ struct IsolatedCommand {
     std::string executable;
     std::vector<std::string> arguments;
     std::string working_directory;
-    // Stable identifier assigned by the local application to a trusted
-    // evaluation procedure. Empty means this command is not an evaluator.
+    // Identifier registered by trusted application startup. A caller-supplied
+    // identifier alone does not register or authorize an executable.
     std::string evaluation_procedure_id;
-    // Pinned fingerprint of the trusted local evaluator executable.
+    // Pinned fingerprint of the trusted local evaluator executable. The runner
+    // compares it to the registered fingerprint before each measurement.
     std::string expected_executable_fingerprint;
 };
 
