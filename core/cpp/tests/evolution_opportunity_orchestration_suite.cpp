@@ -1,14 +1,34 @@
 #include "jarvis/core/evolution_opportunity.hpp"
 #include "jarvis/core/evolution_orchestrator.hpp"
+#include "evolution_test_evaluator.hpp"
 
 #include <algorithm>
 #include <cassert>
 #include <chrono>
+#include <filesystem>
+#include <string>
 #include <vector>
 
 using namespace jarvis::core;
 
-int main() {
+namespace {
+std::string evaluator_executable;
+IsolatedCommand evaluator_command() {
+    return IsolatedCommand{evaluator_executable,
+        {"--test-evaluator-from-parameter"}, "", "jarvis.test.fixture.v1",
+        EvolutionExperimentRunner::executable_fingerprint(evaluator_executable)};
+}
+} // namespace
+
+int main(int argc, char** argv) {
+    if (test_support::run_evolution_evaluator_fixture(argc, argv)) return 0;
+    evaluator_executable = std::filesystem::absolute(argv[0]).string();
+    if (!EvolutionExperimentRunner::register_trusted_evaluator(
+            "jarvis.test.fixture.v1", evaluator_executable,
+            {"--test-evaluator-from-parameter"})) return 1;
+    assert(EvolutionExperimentRunner::register_trusted_evaluator(
+        "jarvis.test.fixture.v1", evaluator_executable,
+        {"--test-evaluator-from-parameter"}));
     EvolutionOpportunityDetector detector;
     const auto opportunities = detector.detect({
         {"diagnostics", 0.9, 0.8, 0.9, 1.0, 0.4},
@@ -28,6 +48,7 @@ int main() {
     EvolutionSafetyPolicy safety;
     safety.minimum_confidence = 0.75;
     safety.require_isolation = false; // This suite exercises orchestration with simulated evaluators.
+    safety.allow_simulated_evidence = true;
     EvolutionController controller(model, history, safety);
     EvolutionOrchestrator orchestrator({}, EvolutionTrialConfig{4, 4, 0.01, 0.75, false});
     const auto now = std::chrono::steady_clock::now();
@@ -97,5 +118,37 @@ int main() {
         history, now, now, false);
 
     assert(!blocked.schedule.allowed);
+
+    // Production orchestration uses the isolated evaluator path with the
+    // default isolation policy; callback simulation above is a separate path.
+    EvolutionModel isolated_model;
+    isolated_model.register_parameter("slow", 0.0);
+    isolated_model.register_parameter("fast", 0.0);
+    EvolutionHistory isolated_history;
+    EvolutionSafetyPolicy isolated_safety;
+    isolated_safety.minimum_confidence = 0.75;
+    EvolutionController isolated_controller(isolated_model, isolated_history, isolated_safety);
+    EvolutionOrchestrator isolated_orchestrator; // Exercise default isolation/trial policy.
+    ProcessIsolationLimits isolated_limits;
+    isolated_limits.sandbox.timeout = std::chrono::milliseconds{5000};
+    isolated_limits.max_cpu_seconds = 10;
+    ProcessIsolationBackend isolated_backend(isolated_limits);
+    const auto isolated_result = isolated_orchestrator.run_isolated(
+        opportunities.front(),
+        [](const EvolutionOpportunity&) {
+            return std::vector<EvolutionProposal>{
+                {"slow", 0.0, 0.1, 0.2, 0.95},
+                {"fast", 0.0, 0.2, 0.3, 0.9},
+            };
+        },
+        isolated_backend, evaluator_command(), isolated_history,
+        now, now - std::chrono::seconds(2), true, &isolated_controller);
+    assert(isolated_result.schedule.allowed);
+    assert(isolated_result.experiments.size() == 2);
+    assert(isolated_result.adopted == 1);
+    assert(std::any_of(isolated_result.experiments.begin(), isolated_result.experiments.end(),
+        [](const EvolutionExperiment& experiment) {
+            return experiment.has_valid_isolation_attestation();
+        }));
     return 0;
 }

@@ -1,21 +1,43 @@
 #include "jarvis/core/evolution_controller.hpp"
 #include "jarvis/core/evolution_experiment_runner.hpp"
+#include "evolution_test_evaluator.hpp"
 #include "jarvis/core/process_isolation.hpp"
 
 #include <cassert>
+#include <chrono>
+#include <string>
+#include <filesystem>
 
 using namespace jarvis::core;
 
 namespace {
+std::string evaluator_executable;
 void attest_isolated(EvolutionExperiment& experiment) {
-    ProcessIsolationBackend backend;
+    if (!EvolutionExperimentRunner::register_trusted_evaluator(
+            "jarvis.test.fixture.v1", evaluator_executable,
+            {"--test-evaluator-from-parameter"})) {
+        experiment.outcome = ExperimentOutcome::Invalid;
+        return;
+    }
+    ProcessIsolationLimits isolation_limits;
+    isolation_limits.sandbox.timeout = std::chrono::milliseconds{5000};
+    isolation_limits.max_cpu_seconds = 10;
+    ProcessIsolationBackend backend(isolation_limits);
     const IsolatedCommand command{
-        "/bin/sh", {"-c", "printf " + std::to_string(experiment.candidate_fitness)}, ""};
+        evaluator_executable,
+        {"--test-evaluator-from-parameter"},
+        "", "jarvis.test.fixture.v1",
+        EvolutionExperimentRunner::executable_fingerprint(evaluator_executable)};
     EvolutionExperimentRunner::run_isolated_command(experiment, backend, command);
 }
 } // namespace
 
-int main() {
+int main(int argc, char** argv) {
+    if (test_support::run_evolution_evaluator_fixture(argc, argv)) return 0;
+    evaluator_executable = std::filesystem::absolute(argv[0]).string();
+    if (!EvolutionExperimentRunner::register_trusted_evaluator(
+            "jarvis.test.fixture.v1", evaluator_executable,
+            {"--test-evaluator-from-parameter"})) return 1;
     EvolutionModel model;
     model.register_parameter("reasoning.weight", 0.4);
     EvolutionHistory history;
@@ -81,6 +103,7 @@ int main() {
         "exp-replay",
         EvolutionProposal{"replay.weight", 0.4, 0.5, 0.1, 0.95},
         0.70, 0.84, 0.05, 0.95, ExperimentOutcome::Improved, true};
+    attest_isolated(replay_experiment);
     assert(replay_controller.replay_evaluation(replay_experiment));
     assert(replay_controller.replay_evaluation(replay_experiment));
     assert(replay_history.for_experiment("exp-replay").size() == 1);

@@ -1,24 +1,46 @@
 #include "jarvis/core/brain.hpp"
 #include "jarvis/core/evolution_safety.hpp"
 #include "jarvis/core/evolution_experiment_runner.hpp"
+#include "evolution_test_evaluator.hpp"
 #include "jarvis/core/process_isolation.hpp"
 
 #include <cassert>
+#include <chrono>
+#include <string>
 #include <filesystem>
 #include <algorithm>
+#include <iostream>
 
 using namespace jarvis::core;
 
 namespace {
+std::string evaluator_executable;
 void attest_isolated(EvolutionExperiment& experiment) {
-    ProcessIsolationBackend backend;
+    if (!EvolutionExperimentRunner::register_trusted_evaluator(
+            "jarvis.test.fixture.v1", evaluator_executable,
+            {"--test-evaluator-from-parameter"})) {
+        experiment.outcome = ExperimentOutcome::Invalid;
+        return;
+    }
+    ProcessIsolationLimits isolation_limits;
+    isolation_limits.sandbox.timeout = std::chrono::milliseconds{5000};
+    isolation_limits.max_cpu_seconds = 10;
+    ProcessIsolationBackend backend(isolation_limits);
     const IsolatedCommand command{
-        "/bin/sh", {"-c", "printf " + std::to_string(experiment.candidate_fitness)}, ""};
+        evaluator_executable,
+        {"--test-evaluator-from-parameter"},
+        "", "jarvis.test.fixture.v1",
+        EvolutionExperimentRunner::executable_fingerprint(evaluator_executable)};
     EvolutionExperimentRunner::run_isolated_command(experiment, backend, command);
 }
 } // namespace
 
-int main() {
+int main(int argc, char** argv) {
+    if (test_support::run_evolution_evaluator_fixture(argc, argv)) return 0;
+    evaluator_executable = std::filesystem::absolute(argv[0]).string();
+    if (!EvolutionExperimentRunner::register_trusted_evaluator(
+            "jarvis.test.fixture.v1", evaluator_executable,
+            {"--test-evaluator-from-parameter"})) return 1;
     const std::filesystem::path path = "evolution_brain_integration_test.bin";
     std::error_code ec;
     // A persisted legacy adoption event without experiment evidence must
@@ -89,6 +111,84 @@ int main() {
     std::filesystem::remove(legacy_rollback_path, ec);
     std::filesystem::remove(legacy_rollback_path.string() + ".meta", ec);
 
+    // Raw journal events must not bypass the live evaluation/adoption gate.
+    const std::filesystem::path replay_guard_path = "evolution_replay_guard_test.bin";
+    std::filesystem::remove(replay_guard_path, ec);
+    std::filesystem::remove(replay_guard_path.string() + ".meta", ec);
+    {
+        Brain source(replay_guard_path);
+        assert(source.register_evolution_parameter("replay.missing", 0.25));
+        assert(source.register_evolution_parameter("replay.equal", 0.25));
+        assert(source.register_evolution_parameter("replay.mismatch", 0.25));
+        assert(source.register_evolution_parameter("replay.no-provenance", 0.25));
+    }
+    {
+        Memory journal(256, replay_guard_path);
+        const auto append_event = [&](const std::string& kind, const std::string& id,
+                                      const std::string& key, double proposed,
+                                      double baseline, double candidate,
+                                      double threshold, ExperimentOutcome outcome,
+                                      bool include_provenance) {
+            const std::string procedure = "jarvis.test.fixture.v1";
+            const std::string separator(1, '\x1f');
+            const std::string evaluator_fingerprint = include_provenance
+                ? EvolutionExperimentRunner::executable_fingerprint(evaluator_executable) : "";
+            const std::string baseline_artifact = include_provenance
+                ? EvolutionExperiment::artifact_fingerprint(
+                    key + separator + EvolutionExperiment::format_parameter_value(0.25) + separator + procedure) : "";
+            const std::string candidate_artifact = include_provenance
+                ? EvolutionExperiment::artifact_fingerprint(
+                    key + separator + EvolutionExperiment::format_parameter_value(proposed) + separator + procedure) : "";
+            Event event{0, 0, "replay-test", kind,
+                {{"experiment_id", id}, {"key", key}, {"current", 0.25},
+                 {"proposed", proposed}, {"expected_gain", proposed - 0.25},
+                 {"proposal_confidence", 0.90},
+                 {"outcome", static_cast<std::int64_t>(outcome)},
+                 {"baseline", baseline}, {"candidate", candidate},
+                 {"confidence", 0.95}, {"minimum_improvement", threshold},
+                 {"isolated", true},
+                 {"evaluation_procedure_id", include_provenance ? procedure : ""},
+                 {"evaluator_executable_fingerprint", evaluator_fingerprint},
+                 {"baseline_artifact_id", baseline_artifact},
+                 {"candidate_artifact_id", candidate_artifact}}};
+            assert(journal.append(event) != 0);
+        };
+        // An adoption with an experiment ID but no evaluation must not apply.
+        append_event("evolution_adopt", "replay-missing-eval", "replay.missing",
+                     0.35, 0.70, 0.85, 0.01, ExperimentOutcome::Improved, true);
+        // A later valid evaluation must not rehabilitate an experiment already
+        // tombstoned by an invalid adoption event.
+        append_event("evolution_evaluated", "replay-missing-eval", "replay.missing",
+                     0.35, 0.70, 0.85, 0.01, ExperimentOutcome::Improved, true);
+        append_event("evolution_adopt", "replay-missing-eval", "replay.missing",
+                     0.35, 0.70, 0.85, 0.01, ExperimentOutcome::Improved, true);
+        // A correctly identified evaluation with a false Improved label must fail.
+        append_event("evolution_evaluated", "replay-equal-exp", "replay.equal",
+                     0.35, 0.70, 0.70, 0.01, ExperimentOutcome::Improved, true);
+        append_event("evolution_adopt", "replay-equal-exp", "replay.equal",
+                     0.35, 0.70, 0.70, 0.01, ExperimentOutcome::Improved, true);
+        // Adoption must match the exact proposal that was evaluated.
+        append_event("evolution_evaluated", "replay-mismatch-exp", "replay.mismatch",
+                     0.35, 0.70, 0.85, 0.01, ExperimentOutcome::Improved, true);
+        append_event("evolution_adopt", "replay-mismatch-exp", "replay.mismatch",
+                     0.45, 0.70, 0.85, 0.01, ExperimentOutcome::Improved, true);
+        // isolated=true alone is not a valid evaluation receipt.
+        append_event("evolution_evaluated", "replay-no-provenance-exp", "replay.no-provenance",
+                     0.35, 0.70, 0.85, 0.01, ExperimentOutcome::Improved, false);
+        append_event("evolution_adopt", "replay-no-provenance-exp", "replay.no-provenance",
+                     0.35, 0.70, 0.85, 0.01, ExperimentOutcome::Improved, false);
+    }
+    {
+        Brain replayed(replay_guard_path);
+        for (const auto& key : {"replay.missing", "replay.equal", "replay.mismatch",
+                                "replay.no-provenance"}) {
+            const auto* parameter = replayed.evolution_parameter(key);
+            assert(parameter != nullptr && parameter->value == parameter->baseline);
+        }
+    }
+    std::filesystem::remove(replay_guard_path, ec);
+    std::filesystem::remove(replay_guard_path.string() + ".meta", ec);
+
     std::filesystem::remove(path, ec);
 
     {
@@ -113,6 +213,23 @@ int main() {
             "brain-evolution-1", proposals.front(), 0.70, 0.90, 0.01, 0.95,
             ExperimentOutcome::Improved, true};
         attest_isolated(experiment);
+        if (!experiment.has_valid_isolation_attestation()) {
+            std::cerr << "invalid attestation: outcome=" << static_cast<int>(experiment.outcome)
+                      << " executed=" << experiment.candidate_executed
+                      << " isolated=" << experiment.isolated
+                      << " procedure=" << experiment.evaluation_procedure_id << '\n';
+        }
+        auto recomputed_experiment = experiment;
+        const auto recomputed_outcome = EvolutionExperimentEngine::evaluate(recomputed_experiment);
+        if (recomputed_outcome != experiment.outcome) {
+            std::cerr << "outcome mismatch: actual=" << static_cast<int>(experiment.outcome)
+                      << " recomputed=" << static_cast<int>(recomputed_outcome)
+                      << " baseline=" << experiment.baseline_fitness
+                      << " candidate=" << experiment.candidate_fitness
+                      << " threshold=" << experiment.minimum_improvement
+                      << " confidence=" << experiment.confidence
+                      << " proposal_confidence=" << experiment.proposal.confidence << '\n';
+        }
         assert(brain.record_evolution_evaluation(experiment));
         const auto evaluated_history = brain.evolution_history();
         assert(evaluated_history.size() == 1);
@@ -171,10 +288,12 @@ int main() {
         EvolutionExperiment equal_fitness{
             "safety-equal-fitness", EvolutionProposal{"safety.equal-fitness", 0.2, 0.3, 0.1, 0.99},
             0.70, 0.70, 0.01, 0.99, ExperimentOutcome::Improved, true};
-        attest_isolated(equal_fitness);
+        // Keep the deliberately equal fitness values intact: this test opts
+        // into simulated evidence to isolate outcome validation from attestation.
         equal_fitness.outcome = ExperimentOutcome::Improved;
         EvolutionSafetyPolicy non_isolation_policy;
         non_isolation_policy.require_isolation = false;
+        non_isolation_policy.allow_simulated_evidence = true; // Test outcome validation independently of attestation.
         assert(!EvolutionSafetyGate::approve(equal_fitness, non_isolation_policy));
         assert(!brain.record_evolution_evaluation(equal_fitness));
         assert(!brain.adopt_evolution_experiment(equal_fitness));
@@ -183,7 +302,8 @@ int main() {
         EvolutionExperiment subthreshold{
             "safety-subthreshold", EvolutionProposal{"safety.subthreshold", 0.2, 0.3, 0.1, 0.99},
             0.70, 0.74, 0.05, 0.99, ExperimentOutcome::Improved, true};
-        attest_isolated(subthreshold);
+        // As above, do not run the evaluator fixture, which replaces these
+        // intentionally sub-threshold measurements with measured values.
         subthreshold.outcome = ExperimentOutcome::Improved;
         assert(!EvolutionSafetyGate::approve(subthreshold, non_isolation_policy));
         assert(!brain.record_evolution_evaluation(subthreshold));
@@ -270,8 +390,23 @@ int main() {
         EvolutionExperiment replayed{
             "replay-evaluation-1",
             EvolutionProposal{"replay.persist", 0.3, 0.4, 0.1, 0.90},
-            0.70, 0.82, 0.01, 0.90, ExperimentOutcome::Improved, true};
+            0.3, 0.4, 0.01, 0.90, ExperimentOutcome::Improved, true};
         replayed.isolated = true;
+        replayed.evaluation_procedure_id = "jarvis.test.fixture.v1";
+        replayed.evaluator_executable_fingerprint =
+            EvolutionExperimentRunner::executable_fingerprint(evaluator_executable);
+        const std::string replay_separator(1, '\x1f');
+        replayed.baseline_artifact_id = EvolutionExperiment::artifact_fingerprint(
+            replayed.proposal.key + replay_separator +
+            EvolutionExperiment::format_parameter_value(replayed.proposal.current) + replay_separator +
+            replayed.evaluation_procedure_id);
+        replayed.candidate_artifact_id = EvolutionExperiment::artifact_fingerprint(
+            replayed.proposal.key + replay_separator +
+            EvolutionExperiment::format_parameter_value(replayed.proposal.proposed) + replay_separator +
+            replayed.evaluation_procedure_id);
+        // Restored journal data is not itself a live attestation. Revalidate
+        // the trusted evaluator identity and artifact binding before adoption.
+        assert(EvolutionExperimentRunner::restore_trusted_attestation(replayed));
         assert(restarted.adopt_evolution_experiment(replayed));
         const auto* replayed_parameter = restarted.evolution_parameter("replay.persist");
         assert(replayed_parameter != nullptr && replayed_parameter->value == 0.4);

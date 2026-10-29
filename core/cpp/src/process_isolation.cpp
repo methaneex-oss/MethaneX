@@ -26,6 +26,18 @@
 #endif
 #endif
 
+#if defined(__SANITIZE_ADDRESS__) || defined(__SANITIZE_THREAD__)
+#define JARVIS_SANITIZER_BUILD 1
+#elif defined(__has_feature)
+#if __has_feature(address_sanitizer) || __has_feature(thread_sanitizer)
+#define JARVIS_SANITIZER_BUILD 1
+#else
+#define JARVIS_SANITIZER_BUILD 0
+#endif
+#else
+#define JARVIS_SANITIZER_BUILD 0
+#endif
+
 namespace jarvis::core {
 
 #if defined(__linux__)
@@ -175,9 +187,14 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
         struct rlimit memory_limit{limits_.max_memory_bytes, limits_.max_memory_bytes};
         struct rlimit cpu_limit{limits_.max_cpu_seconds, limits_.max_cpu_seconds};
         struct rlimit file_limit{limits_.max_file_bytes, limits_.max_file_bytes};
-        (void)setrlimit(RLIMIT_AS, &memory_limit);
-        (void)setrlimit(RLIMIT_CPU, &cpu_limit);
-        (void)setrlimit(RLIMIT_FSIZE, &file_limit);
+#if !JARVIS_SANITIZER_BUILD
+        // ASan/TSan reserve large virtual address ranges; RLIMIT_AS can prevent
+        // the instrumented evaluator from starting. In normal builds, inability
+        // to enforce a requested resource limit fails closed.
+        if (setrlimit(RLIMIT_AS, &memory_limit) != 0) _exit(125);
+#endif
+        if (setrlimit(RLIMIT_CPU, &cpu_limit) != 0 ||
+            setrlimit(RLIMIT_FSIZE, &file_limit) != 0) _exit(125);
 
         if (!command.working_directory.empty() && chdir(command.working_directory.c_str()) != 0) _exit(126);
 
@@ -190,7 +207,9 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
 
     close(pipe_fds[1]);
     result.started = true;
-    result.isolated = true;
+    // Isolation is attested only after the child exits successfully. Any
+    // required control failure exits 125 and must not inherit a true flag.
+    result.isolated = false;
     const auto deadline = std::chrono::steady_clock::now() + limits_.sandbox.timeout;
     std::string output;
     output.reserve(std::min<std::size_t>(limits_.sandbox.max_output_bytes, 4096));
@@ -245,6 +264,11 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
     }
     result.output = std::move(output);
     result.completed = !result.timed_out && !result.output_limited && result.exit_code == 0;
+    // Isolation is a property of applied execution controls, not workload success.
+    // Exit 125 is reserved for setup/resource-control failures before exec;
+    // timeout, output-limit and ordinary nonzero exits occur after controlled
+    // execution starts and therefore retain isolation status.
+    result.isolated = result.started && result.exit_code != 125;
     if (!result.completed && result.exit_code == 125) result.error = "required isolation feature unavailable";
     if (!result.completed && result.error.empty()) {
         if (result.timed_out) result.error = "process timeout";

@@ -1,5 +1,6 @@
 #include "jarvis/core/brain.hpp"
 #include "jarvis/core/evolution_experiment_runner.hpp"
+#include "evolution_test_evaluator.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -11,10 +12,23 @@
 using namespace jarvis::core;
 
 namespace {
+std::string evaluator_executable;
 void attest_isolated(EvolutionExperiment& experiment) {
-    ProcessIsolationBackend backend;
-    const std::string fitness = std::to_string(experiment.candidate_fitness);
-    const IsolatedCommand command{"/bin/sh", {"-c", "printf " + fitness}, ""};
+    if (!EvolutionExperimentRunner::register_trusted_evaluator(
+            "jarvis.test.fixture.v1", evaluator_executable,
+            {"--test-evaluator-from-parameter"})) {
+        experiment.outcome = ExperimentOutcome::Invalid;
+        return;
+    }
+    ProcessIsolationLimits isolation_limits;
+    isolation_limits.sandbox.timeout = std::chrono::milliseconds{5000};
+    isolation_limits.max_cpu_seconds = 10;
+    ProcessIsolationBackend backend(isolation_limits);
+    const IsolatedCommand command{
+        evaluator_executable,
+        {"--test-evaluator-from-parameter"},
+        "", "jarvis.test.fixture.v1",
+        EvolutionExperimentRunner::executable_fingerprint(evaluator_executable)};
     EvolutionExperimentRunner::run_isolated_command(experiment, backend, command);
 }
 
@@ -31,7 +45,12 @@ double score_for(const std::vector<Decision>& decisions, const std::string& acti
 }
 } // namespace
 
-int main() {
+int main(int argc, char** argv) {
+    if (test_support::run_evolution_evaluator_fixture(argc, argv)) return 0;
+    evaluator_executable = std::filesystem::absolute(argv[0]).string();
+    if (!EvolutionExperimentRunner::register_trusted_evaluator(
+            "jarvis.test.fixture.v1", evaluator_executable,
+            {"--test-evaluator-from-parameter"})) return 1;
     const auto path = std::filesystem::temp_directory_path() /
                       "jarvis_memory_learning_evolution_integration.bin";
     std::error_code ec;
@@ -128,6 +147,23 @@ int main() {
             "integrated-learning-evolution-1", *proposal,
             0.70, 0.90, 0.01, 0.95, ExperimentOutcome::Improved, true};
         attest_isolated(experiment);
+        if (!experiment.has_valid_isolation_attestation()) {
+            std::cerr << "invalid attestation: outcome=" << static_cast<int>(experiment.outcome)
+                      << " executed=" << experiment.candidate_executed
+                      << " isolated=" << experiment.isolated
+                      << " procedure=" << experiment.evaluation_procedure_id << '\n';
+        }
+        auto recomputed_experiment = experiment;
+        const auto recomputed_outcome = EvolutionExperimentEngine::evaluate(recomputed_experiment);
+        if (recomputed_outcome != experiment.outcome) {
+            std::cerr << "outcome mismatch: actual=" << static_cast<int>(experiment.outcome)
+                      << " recomputed=" << static_cast<int>(recomputed_outcome)
+                      << " baseline=" << experiment.baseline_fitness
+                      << " candidate=" << experiment.candidate_fitness
+                      << " threshold=" << experiment.minimum_improvement
+                      << " confidence=" << experiment.confidence
+                      << " proposal_confidence=" << experiment.proposal.confidence << '\n';
+        }
         if (!check(brain.record_evolution_evaluation(experiment),
                    "evolution evaluation was journaled")) return 1;
         if (!check(brain.adopt_evolution_experiment(experiment),

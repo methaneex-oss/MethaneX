@@ -1,5 +1,6 @@
 // Cognitive core: persistent state, reasoning, adaptation, recovery and evolution.
 #include "jarvis/core/brain.hpp"
+#include "jarvis/core/evolution_experiment_runner.hpp"
 
 #include <algorithm>
 #include <chrono>
@@ -515,8 +516,18 @@ void Brain::replay(const Event& event, bool external_observation) {
                 event.data.find("isolated") != event.data.end() &&
                 std::get_if<bool>(&event.data.at("isolated")) != nullptr &&
                 *std::get_if<bool>(&event.data.at("isolated"));
-            if (experiment.isolated && experiment.candidate_executed)
-                experiment.attest_isolated_result();
+            if (const auto* procedure = string_value(event.data, "evaluation_procedure_id"))
+                experiment.evaluation_procedure_id = *procedure;
+            if (const auto* fingerprint = string_value(event.data, "evaluator_executable_fingerprint"))
+                experiment.evaluator_executable_fingerprint = *fingerprint;
+            if (const auto* artifact = string_value(event.data, "baseline_artifact_id"))
+                experiment.baseline_artifact_id = *artifact;
+            if (const auto* artifact = string_value(event.data, "candidate_artifact_id"))
+                experiment.candidate_artifact_id = *artifact;
+            // Persisted isolation flags are claims, not proof. Re-establish
+            // provenance only when the locally registered evaluator still matches.
+            if (!EvolutionExperimentRunner::restore_trusted_attestation(experiment))
+                experiment.isolated = false;
             evolution_controller_.replay_evaluation(experiment);
         }
         return;
@@ -554,15 +565,37 @@ void Brain::replay(const Event& event, bool external_observation) {
                     event.data.find("isolated") != event.data.end() &&
                     std::get_if<bool>(&event.data.at("isolated")) != nullptr &&
                     *std::get_if<bool>(&event.data.at("isolated"));
-                if (experiment.isolated && experiment.candidate_executed)
-                    experiment.attest_isolated_result();
+                if (const auto* procedure = string_value(event.data, "evaluation_procedure_id"))
+                    experiment.evaluation_procedure_id = *procedure;
+                if (const auto* fingerprint = string_value(event.data, "evaluator_executable_fingerprint"))
+                    experiment.evaluator_executable_fingerprint = *fingerprint;
+                if (const auto* artifact = string_value(event.data, "baseline_artifact_id"))
+                    experiment.baseline_artifact_id = *artifact;
+                if (const auto* artifact = string_value(event.data, "candidate_artifact_id"))
+                    experiment.candidate_artifact_id = *artifact;
+                if (!EvolutionExperimentRunner::restore_trusted_attestation(experiment))
+                    experiment.isolated = false;
                 const auto adoption = evolution_controller_.adoption_journal().get(*experiment_id);
                 if (adoption.has_value() &&
                     (adoption->state == AdoptionState::Adopted ||
-                     adoption->state == AdoptionState::RolledBack)) return;
-                if (!evolution_.adopt(proposal)) return;
+                     adoption->state == AdoptionState::RolledBack ||
+                     adoption->state == AdoptionState::Rejected)) return;
+                // Replay must enforce the same durable-evaluation and adoption
+                // invariants as the live API before mutating the evolution model.
+                if (!evolution_controller_.validate_adoption_for_brain(experiment)) {
+                    evolution_controller_.replay_rejection(
+                        experiment, "replay_adoption_validation_failed");
+                    return;
+                }
+                if (!evolution_.adopt(proposal)) {
+                    evolution_controller_.replay_rejection(
+                        experiment, "replay_model_adoption_failed");
+                    return;
+                }
                 if (!evolution_controller_.replay_adoption(experiment)) {
                     evolution_.restore_previous(*key);
+                    evolution_controller_.replay_rejection(
+                        experiment, "replay_adoption_journal_failed");
                     return;
                 }
                 evolution_history_.append(EvolutionHistoryRecord{
