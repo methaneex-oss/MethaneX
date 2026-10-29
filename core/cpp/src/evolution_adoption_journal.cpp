@@ -97,7 +97,8 @@ bool EvolutionAdoptionJournal::reject_unstaged(
     record.state = AdoptionState::Rejected;
     record.reason = std::move(reason);
     record.revision = next_revision_++;
-    records_.emplace(record.experiment_id, std::move(record));
+    const std::string rejected_id = record.experiment_id;
+    records_.emplace(rejected_id, std::move(record));
     return true;
 }
 
