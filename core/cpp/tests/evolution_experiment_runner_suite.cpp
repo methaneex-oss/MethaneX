@@ -3,6 +3,8 @@
 
 #include <cassert>
 #include <cmath>
+#include <iostream>
+#include <string>
 
 using namespace jarvis::core;
 
@@ -14,7 +16,17 @@ EvolutionExperiment make_experiment() {
 }
 }
 
-int main() {
+int main(int argc, char** argv) {
+    if (argc > 1 && std::string(argv[1]) == "--trusted-test-evaluator") {
+        if (argc != 14 || std::string(argv[2]) != "--jarvis-evaluate-v1") return 21;
+        const double value = std::stod(argv[6]);
+        const double fitness = 0.5 + 0.5 * value;
+        std::cout << "JARVIS_EVAL_V1\\t" << argv[3] << "\\t" << argv[4] << "\\t"
+                  << argv[5] << "\\t" << argv[6] << "\\t" << argv[7] << "\\t"
+                  << argv[8] << "\\t" << argv[10] << "\\t" << argv[11] << "\\t"
+                  << argv[12] << "\\t" << argv[13] << "\\t" << fitness;
+        return 0;
+    }
     EvolutionSandbox sandbox;
 
     {
@@ -23,12 +35,33 @@ int main() {
         const IsolatedCommand command{"/bin/sh", {"-c", "printf 0.86"}, ""};
         const auto outcome = EvolutionExperimentRunner::run_isolated_command(
             experiment, backend, command);
+        assert(outcome == ExperimentOutcome::Invalid);
+        assert(!experiment.candidate_executed);
+        assert(!experiment.has_valid_evaluation_evidence());
+    }
+
+    {
+        auto experiment = make_experiment();
+        ProcessIsolationLimits limits;
+        limits.require_no_new_privileges = true;
+        limits.require_network_syscall_block = true;
+        ProcessIsolationBackend backend(limits);
+        IsolatedEvaluationProcedure procedure{
+            IsolatedCommand{argv[0], {"--trusted-test-evaluator"}, ""},
+            "runner-suite-local-evaluator-v1", "linear-fitness-v1",
+            argv[0], argv[0]};
+        TrialStatistics baseline, candidate;
+        const auto outcome = EvolutionExperimentRunner::run_isolated_evaluation(
+            experiment, backend, procedure, 4, 4, 0.5, &baseline, &candidate);
         assert(outcome == ExperimentOutcome::Improved);
         assert(experiment.candidate_executed);
         assert(experiment.has_valid_isolation_attestation());
-        assert(std::abs(experiment.candidate_fitness - 0.86) < 1e-12);
+        assert(experiment.has_valid_evaluation_evidence());
+        assert(baseline.count == 4 && candidate.count == 4);
+        assert(candidate.mean > baseline.mean);
         experiment.candidate_fitness += 0.01;
         assert(!experiment.has_valid_isolation_attestation());
+        assert(!experiment.has_valid_evaluation_evidence());
     }
 
     {
