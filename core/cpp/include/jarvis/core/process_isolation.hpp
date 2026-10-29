@@ -11,6 +11,9 @@ struct IsolatedCommand {
     std::string executable;
     std::vector<std::string> arguments;
     std::string working_directory;
+    // Stable identifier assigned by the local application to a trusted
+    // evaluation procedure. Empty means this command is not an evaluator.
+    std::string evaluation_procedure_id;
 };
 
 struct ProcessIsolationLimits {
