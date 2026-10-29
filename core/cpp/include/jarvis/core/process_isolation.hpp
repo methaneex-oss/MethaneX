@@ -13,6 +13,18 @@ struct IsolatedCommand {
     std::string working_directory;
 };
 
+struct IsolatedEvaluationSpec {
+    // A local, project-controlled evaluator executable implementing the
+    // JARVIS_EVAL_V1 protocol. The same procedure measures baseline and
+    // candidate artifacts; stdout must bind each score to all supplied IDs.
+    IsolatedCommand evaluator;
+    std::string procedure_id;
+    std::string baseline_artifact_id;
+    std::string candidate_artifact_id;
+    double baseline_value{0.0};
+    double candidate_value{0.0};
+};
+
 struct ProcessIsolationLimits {
     SandboxLimits sandbox;
     // These features are opt-in because their availability depends on host privileges.
