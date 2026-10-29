@@ -260,6 +260,7 @@ int main(int argc, char** argv) {
         equal_fitness.outcome = ExperimentOutcome::Improved;
         EvolutionSafetyPolicy non_isolation_policy;
         non_isolation_policy.require_isolation = false;
+        non_isolation_policy.allow_simulated_evidence = true; // Test outcome validation independently of attestation.
         assert(!EvolutionSafetyGate::approve(equal_fitness, non_isolation_policy));
         assert(!brain.record_evolution_evaluation(equal_fitness));
         assert(!brain.adopt_evolution_experiment(equal_fitness));
