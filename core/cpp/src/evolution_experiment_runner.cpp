@@ -5,7 +5,9 @@
 #include <fstream>
 #include <algorithm>
 #include <map>
+#include <mutex>
 #include <sstream>
+#include <unordered_map>
 #include <string>
 
 namespace jarvis::core {
@@ -25,6 +27,13 @@ bool is_interpreter(const std::string& executable) {
            name == "zsh" || name == "fish" || name == "cmd.exe" ||
            name == "powershell" || name == "pwsh";
 }
+
+struct TrustedEvaluator {
+    std::string executable;
+    std::string fingerprint;
+};
+std::mutex trusted_evaluators_mutex;
+std::unordered_map<std::string, TrustedEvaluator> trusted_evaluators;
 
 bool parse_measurement(const ProcessIsolationResult& result,
                        const EvolutionExperiment& experiment,
@@ -106,6 +115,58 @@ bool run_measurement(const EvolutionExperiment& experiment,
 
 } // namespace
 
+bool EvolutionExperimentRunner::register_trusted_evaluator(
+    const std::string& procedure_id, const std::string& executable) noexcept {
+    if (!safe_field(procedure_id) || executable.empty() || is_interpreter(executable)) return false;
+    const auto digest = executable_fingerprint(executable);
+    if (digest.empty()) return false;
+    try {
+        std::lock_guard<std::mutex> lock(trusted_evaluators_mutex);
+        const auto existing = trusted_evaluators.find(procedure_id);
+        if (existing != trusted_evaluators.end())
+            return existing->second.executable == executable &&
+                   existing->second.fingerprint == digest;
+        trusted_evaluators.emplace(procedure_id, TrustedEvaluator{executable, digest});
+        return true;
+    } catch (...) {
+        return false;
+    }
+}
+
+bool EvolutionExperimentRunner::is_trusted_evaluator(
+    const std::string& procedure_id, const std::string& executable,
+    const std::string& expected_fingerprint) noexcept {
+    try {
+        std::lock_guard<std::mutex> lock(trusted_evaluators_mutex);
+        const auto existing = trusted_evaluators.find(procedure_id);
+        if (existing == trusted_evaluators.end() ||
+            existing->second.fingerprint != expected_fingerprint ||
+            (!executable.empty() && existing->second.executable != executable)) return false;
+        return executable_fingerprint(existing->second.executable) == existing->second.fingerprint;
+    } catch (...) {
+        return false;
+    }
+}
+
+bool EvolutionExperimentRunner::restore_trusted_attestation(
+    EvolutionExperiment& experiment) noexcept {
+    if (!experiment.candidate_executed || !experiment.isolated ||
+        !safe_field(experiment.id) || !safe_field(experiment.proposal.key) ||
+        !safe_field(experiment.evaluation_procedure_id) ||
+        !is_trusted_evaluator(experiment.evaluation_procedure_id, {},
+                              experiment.evaluator_executable_fingerprint)) return false;
+    const auto expected_baseline = fingerprint(
+        experiment.proposal.key + "\x1f" + std::to_string(experiment.proposal.current) +
+        "\x1f" + experiment.evaluation_procedure_id);
+    const auto expected_candidate = fingerprint(
+        experiment.proposal.key + "\x1f" + std::to_string(experiment.proposal.proposed) +
+        "\x1f" + experiment.evaluation_procedure_id);
+    if (experiment.baseline_artifact_id != expected_baseline ||
+        experiment.candidate_artifact_id != expected_candidate) return false;
+    experiment.attest_isolated_result();
+    return experiment.has_valid_isolation_attestation();
+}
+
 std::string EvolutionExperimentRunner::executable_fingerprint(
     const std::string& executable) noexcept {
     try {
@@ -156,7 +217,8 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_command(
         !safe_field(command.evaluation_procedure_id) ||
         command.expected_executable_fingerprint.empty() ||
         is_interpreter(command.executable) ||
-        executable_fingerprint(command.executable) != command.expected_executable_fingerprint)
+        !is_trusted_evaluator(command.evaluation_procedure_id, command.executable,
+                              command.expected_executable_fingerprint))
         return experiment.outcome;
     experiment.evaluator_executable_fingerprint = command.expected_executable_fingerprint;
 
