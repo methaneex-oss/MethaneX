@@ -264,7 +264,11 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
     }
     result.output = std::move(output);
     result.completed = !result.timed_out && !result.output_limited && result.exit_code == 0;
-    result.isolated = result.completed;
+    // Isolation is a property of applied execution controls, not workload success.
+    // Exit 125 is reserved for setup/resource-control failures before exec;
+    // timeout, output-limit and ordinary nonzero exits occur after controlled
+    // execution starts and therefore retain isolation status.
+    result.isolated = result.started && result.exit_code != 125;
     if (!result.completed && result.exit_code == 125) result.error = "required isolation feature unavailable";
     if (!result.completed && result.error.empty()) {
         if (result.timed_out) result.error = "process timeout";
