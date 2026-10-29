@@ -53,6 +53,14 @@ struct EvolutionExperiment {
         return std::to_string(hash);
     }
 
+    // Replay validation uses persisted procedure/artifact provenance. It does
+    // not recreate the runner's private in-memory attestation from a Boolean.
+    bool has_valid_persisted_evaluation_evidence() const noexcept {
+        return isolated && candidate_executed && has_provenance_fingerprint() &&
+               !baseline_artifact_id.empty() && !candidate_artifact_id.empty() &&
+               !evaluation_procedure_id.empty();
+    }
+
     bool has_valid_isolation_attestation() const noexcept {
         const auto separator = std::string(1, '\x1f');
         const bool provenance_valid = !evaluation_procedure_id.empty() &&
