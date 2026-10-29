@@ -85,8 +85,13 @@ bool parse_measurement(const ProcessIsolationResult& result,
     try {
         std::size_t used = 0;
         const double echoed_value = std::stod(*value, &used);
+        // The protocol intentionally serializes parameters in the canonical
+        // decimal form; compare that representation instead of requiring a
+        // lossy decimal round-trip to reproduce the original binary double.
         if (used != value->size() || !std::isfinite(echoed_value) ||
-            echoed_value != parameter_value) return false;
+            *value != EvolutionExperiment::format_parameter_value(parameter_value) ||
+            echoed_value != std::stod(EvolutionExperiment::format_parameter_value(parameter_value)))
+            return false;
         used = 0;
         fitness = std::stod(*measured, &used);
         return used == measured->size() && std::isfinite(fitness);
