@@ -302,6 +302,12 @@ int main(int argc, char** argv) {
             return record.experiment_id == "coordinator-lifecycle-1" &&
                    record.action == EvolutionRecordAction::Adopted;
         }));
+        EvolutionSafetyPolicy wrong_trust = test_policy;
+        wrong_trust.trusted_evaluator_digest = "untrusted-evaluator-digest";
+        Brain untrusted_restored(lifecycle_path, wrong_trust);
+        const auto* untrusted_parameter = untrusted_restored.evolution_parameter("coordinator.lifecycle");
+        assert(untrusted_parameter != nullptr);
+        assert(untrusted_parameter->value == untrusted_parameter->baseline);
     }
     std::filesystem::remove(lifecycle_path, ec);
     std::filesystem::remove(lifecycle_path.string() + ".meta", ec);
