@@ -12,9 +12,11 @@ using namespace jarvis::core;
 namespace {
 void attest_isolated(EvolutionExperiment& experiment) {
     ProcessIsolationBackend backend;
-    const IsolatedCommand command{
-        "/bin/sh", {"-c", "printf " + std::to_string(experiment.candidate_fitness)}, ""};
-    EvolutionExperimentRunner::run_isolated_command(experiment, backend, command);
+    std::vector<EvolutionFitnessCase> cases;
+    for (double feature : {1.0, 2.0, 3.0, 4.0})
+        cases.push_back(EvolutionFitnessCase{feature, experiment.proposal.proposed * feature});
+    EvolutionExperimentRunner::run_isolated_evaluation(
+        experiment, backend, cases, 0.75);
 }
 } // namespace
 
@@ -172,6 +174,7 @@ int main() {
             "safety-equal-fitness", EvolutionProposal{"safety.equal-fitness", 0.2, 0.3, 0.1, 0.99},
             0.70, 0.70, 0.01, 0.99, ExperimentOutcome::Improved, true};
         attest_isolated(equal_fitness);
+        equal_fitness.candidate_fitness = equal_fitness.baseline_fitness;
         equal_fitness.outcome = ExperimentOutcome::Improved;
         EvolutionSafetyPolicy non_isolation_policy;
         non_isolation_policy.require_isolation = false;
@@ -184,6 +187,7 @@ int main() {
             "safety-subthreshold", EvolutionProposal{"safety.subthreshold", 0.2, 0.3, 0.1, 0.99},
             0.70, 0.74, 0.05, 0.99, ExperimentOutcome::Improved, true};
         attest_isolated(subthreshold);
+        subthreshold.candidate_fitness = subthreshold.baseline_fitness + 0.01;
         subthreshold.outcome = ExperimentOutcome::Improved;
         assert(!EvolutionSafetyGate::approve(subthreshold, non_isolation_policy));
         assert(!brain.record_evolution_evaluation(subthreshold));
@@ -234,6 +238,9 @@ int main() {
         assert(brain.record_evolution_evaluation(replayable));
         assert(!brain.record_evolution_evaluation(replayable));
         assert(brain.evolution_history().size() == 10);
+        assert(brain.adopt_evolution_experiment(replayable));
+        const auto* adopted_replayable = brain.evolution_parameter("replay.persist");
+        assert(adopted_replayable != nullptr && adopted_replayable->value == 0.4);
     }
 
     {
@@ -261,18 +268,14 @@ int main() {
         assert(manual->observations == 0);
 
         const auto restarted_history = restarted.evolution_history();
-        assert(restarted_history.size() == 10);
+        assert(restarted_history.size() == 11);
         assert(restarted_history.front().experiment_id == "brain-evolution-1");
         assert(restarted_history.front().action == EvolutionRecordAction::Evaluated);
         assert(restarted_history[1].action == EvolutionRecordAction::Adopted);
+        assert(restarted_history[9].experiment_id == "replay-evaluation-1");
+        assert(restarted_history[9].action == EvolutionRecordAction::Evaluated);
         assert(restarted_history.back().experiment_id == "replay-evaluation-1");
-        assert(restarted_history.back().action == EvolutionRecordAction::Evaluated);
-        EvolutionExperiment replayed{
-            "replay-evaluation-1",
-            EvolutionProposal{"replay.persist", 0.3, 0.4, 0.1, 0.90},
-            0.70, 0.82, 0.01, 0.90, ExperimentOutcome::Improved, true};
-        replayed.isolated = true;
-        assert(restarted.adopt_evolution_experiment(replayed));
+        assert(restarted_history.back().action == EvolutionRecordAction::Adopted);
         const auto* replayed_parameter = restarted.evolution_parameter("replay.persist");
         assert(replayed_parameter != nullptr && replayed_parameter->value == 0.4);
 
