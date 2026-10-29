@@ -8,6 +8,7 @@ namespace jarvis::core {
 
 class EvolutionExperimentRunner {
 public:
+    static std::string executable_fingerprint(const std::string& executable) noexcept;
     static ExperimentOutcome run(EvolutionExperiment& experiment,
                                  const EvolutionSandbox& sandbox,
                                  const CandidateExecutor& executor) noexcept;
