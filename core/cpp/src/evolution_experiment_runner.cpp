@@ -13,7 +13,7 @@ std::string fingerprint(const std::string& value) {
 }
 
 bool safe_field(const std::string& value) {
-    return !value.empty() && value.find_first_of("\\r\\n") == std::string::npos;
+    return !value.empty() && value.find_first_of("\r\n") == std::string::npos;
 }
 
 bool parse_measurement(const ProcessIsolationResult& result,
@@ -30,7 +30,7 @@ bool parse_measurement(const ProcessIsolationResult& result,
     if (!std::getline(input, line) || line != "JARVIS_EVALUATION_V1") return false;
     std::map<std::string, std::string> fields;
     while (std::getline(input, line)) {
-        if (!line.empty() && line.back() == '\\r') line.pop_back();
+        if (!line.empty() && line.back() == '\r') line.pop_back();
         if (line.empty()) continue;
         const auto separator = line.find('=');
         if (separator == std::string::npos || separator == 0 ||
@@ -52,8 +52,8 @@ bool parse_measurement(const ProcessIsolationResult& result,
         procedure == nullptr || artifact == nullptr || measured == nullptr ||
         *id != experiment.id || *key != experiment.proposal.key ||
         *output_role != role || *procedure != procedure_id ||
-        *artifact != fingerprint(experiment.proposal.key + "\\x1f" +
-                                 std::to_string(parameter_value) + "\\x1f" + procedure_id))
+        *artifact != fingerprint(experiment.proposal.key + "\x1f" +
+                                 std::to_string(parameter_value) + "\x1f" + procedure_id))
         return false;
     try {
         std::size_t used = 0;
@@ -75,8 +75,8 @@ bool run_measurement(const EvolutionExperiment& experiment,
                      double parameter_value,
                      double& fitness) {
     IsolatedCommand invocation = command;
-    const auto artifact = fingerprint(experiment.proposal.key + "\\x1f" +
-                                      std::to_string(parameter_value) + "\\x1f" +
+    const auto artifact = fingerprint(experiment.proposal.key + "\x1f" +
+                                      std::to_string(parameter_value) + "\x1f" +
                                       command.evaluation_procedure_id);
     invocation.arguments.push_back("--jarvis-evaluation-v1");
     invocation.arguments.push_back("--experiment-id=" + experiment.id);
@@ -134,12 +134,12 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_command(
     experiment.candidate_fitness = candidate_fitness;
     experiment.evaluation_procedure_id = command.evaluation_procedure_id;
     experiment.baseline_artifact_id = fingerprint(
-        experiment.proposal.key + "\\x1f" +
-        std::to_string(experiment.proposal.current) + "\\x1f" +
+        experiment.proposal.key + "\x1f" +
+        std::to_string(experiment.proposal.current) + "\x1f" +
         command.evaluation_procedure_id);
     experiment.candidate_artifact_id = fingerprint(
-        experiment.proposal.key + "\\x1f" +
-        std::to_string(experiment.proposal.proposed) + "\\x1f" +
+        experiment.proposal.key + "\x1f" +
+        std::to_string(experiment.proposal.proposed) + "\x1f" +
         command.evaluation_procedure_id);
     experiment.candidate_executed = true;
     experiment.isolated = true;
