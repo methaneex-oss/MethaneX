@@ -38,6 +38,21 @@ int main() {
     for (const auto& inference : contextual) if (inference.key == "power") { found_power = true; assert(inference.hops == 2); assert(inference.strength < related.front().strength); }
     assert(found_power);
 
+    // Stable state variables must not become effects of unrelated changes.
+    const std::vector<Belief> before_with_stable{
+        {"temperature", 20.0, 0.9, 1, 1},
+        {"fan", false, 0.9, 1, 1},
+        {"clock.hour", std::int64_t{12}, 0.99, 5, 1}};
+    const std::vector<Belief> after_with_stable{
+        {"temperature", 30.0, 0.95, 2, 2},
+        {"fan", true, 0.9, 2, 2},
+        {"clock.hour", std::int64_t{12}, 0.99, 6, 2}};
+    CausalModel stable_effect_guard;
+    stable_effect_guard.observe_transition(before_with_stable, after_with_stable);
+    // Two changed variables can support reciprocal first-pass hypotheses;
+    // the unchanged clock fact must not add two spurious links.
+    assert(stable_effect_guard.links().size() == 2);
+
     CausalModel causal;
     causal.observe_transition(before, after);
     const auto first = causal.simulate({Belief{"temperature", 30.0, 0.95, 2, 2}}, 1);
