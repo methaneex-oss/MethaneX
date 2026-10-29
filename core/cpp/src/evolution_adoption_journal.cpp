@@ -17,7 +17,15 @@ bool EvolutionAdoptionJournal::stage(const EvolutionExperiment& experiment) {
                    r.expected_gain == experiment.proposal.expected_gain &&
                    r.proposal_confidence == experiment.proposal.confidence &&
                    r.minimum_improvement == experiment.minimum_improvement &&
-                   r.isolated == experiment.isolated;
+                   r.isolated == experiment.isolated &&
+                   r.evaluation_procedure_id == experiment.evaluation_procedure_id &&
+                   r.evaluation_config_id == experiment.evaluation_config_id &&
+                   r.baseline_artifact_digest == experiment.baseline_artifact_digest &&
+                   r.candidate_artifact_digest == experiment.candidate_artifact_digest &&
+                   r.evaluator_artifact_digest == experiment.evaluator_artifact_digest &&
+                   r.baseline_trial_count == experiment.baseline_trial_count &&
+                   r.candidate_trial_count == experiment.candidate_trial_count &&
+                   r.evaluation_evidence_digest == experiment.evaluation_evidence_digest;
         return false;
     }
     r.experiment_id = experiment.id;
@@ -31,6 +39,14 @@ bool EvolutionAdoptionJournal::stage(const EvolutionExperiment& experiment) {
     r.proposal_confidence = experiment.proposal.confidence;
     r.minimum_improvement = experiment.minimum_improvement;
     r.isolated = experiment.isolated;
+    r.evaluation_procedure_id = experiment.evaluation_procedure_id;
+    r.evaluation_config_id = experiment.evaluation_config_id;
+    r.baseline_artifact_digest = experiment.baseline_artifact_digest;
+    r.candidate_artifact_digest = experiment.candidate_artifact_digest;
+    r.evaluator_artifact_digest = experiment.evaluator_artifact_digest;
+    r.baseline_trial_count = experiment.baseline_trial_count;
+    r.candidate_trial_count = experiment.candidate_trial_count;
+    r.evaluation_evidence_digest = experiment.evaluation_evidence_digest;
     r.state = AdoptionState::Pending;
     r.revision = next_revision_++;
     return true;
