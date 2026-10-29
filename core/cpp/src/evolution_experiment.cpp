@@ -1,8 +1,7 @@
 #include "jarvis/core/evolution_experiment.hpp"
+#include "jarvis/core/evolution_digest.hpp"
 
 #include <cmath>
-#include <iomanip>
-#include <sstream>
 
 namespace jarvis::core {
 namespace {
@@ -12,16 +11,6 @@ std::string evidence_number(double value) {
     return out.str();
 }
 
-std::string evidence_hash(const std::string& value) {
-    std::uint64_t hash = 14695981039346656037ULL;
-    for (unsigned char byte : value) {
-        hash ^= byte;
-        hash *= 1099511628211ULL;
-    }
-    std::ostringstream out;
-    out << std::hex << std::setfill('0') << std::setw(16) << hash;
-    return out.str();
-}
 } // namespace
 
 bool EvolutionExperiment::has_valid_evaluation_evidence() const noexcept {
@@ -39,7 +28,7 @@ bool EvolutionExperiment::has_valid_evaluation_evidence() const noexcept {
         baseline_artifact_digest + "\n" + candidate_artifact_digest + "\n" +
         evaluator_artifact_digest + "\n" + std::to_string(baseline_trial_count) + "\n" +
         std::to_string(candidate_trial_count);
-    if (evidence_hash(evidence) != evaluation_evidence_digest) return false;
+    if (detail::sha256_hex(evidence) != evaluation_evidence_digest) return false;
     EvolutionExperiment recomputed = *this;
     return EvolutionExperimentEngine::evaluate(recomputed) == outcome;
 }
