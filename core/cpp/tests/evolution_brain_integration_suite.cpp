@@ -154,6 +154,12 @@ int main(int argc, char** argv) {
         // An adoption with an experiment ID but no evaluation must not apply.
         append_event("evolution_adopt", "replay-missing-eval", "replay.missing",
                      0.35, 0.70, 0.85, 0.01, ExperimentOutcome::Improved, true);
+        // A later valid evaluation must not rehabilitate an experiment already
+        // tombstoned by an invalid adoption event.
+        append_event("evolution_evaluated", "replay-missing-eval", "replay.missing",
+                     0.35, 0.70, 0.85, 0.01, ExperimentOutcome::Improved, true);
+        append_event("evolution_adopt", "replay-missing-eval", "replay.missing",
+                     0.35, 0.70, 0.85, 0.01, ExperimentOutcome::Improved, true);
         // A correctly identified evaluation with a false Improved label must fail.
         append_event("evolution_evaluated", "replay-equal-exp", "replay.equal",
                      0.35, 0.70, 0.70, 0.01, ExperimentOutcome::Improved, true);
