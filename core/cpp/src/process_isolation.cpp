@@ -299,7 +299,7 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
     }
     result.output = std::move(output);
     result.completed = !result.timed_out && !result.output_limited && result.exit_code == 0;
-    if (!result.completed && result.exit_code == 125) result.error = "required isolation feature unavailable";
+    if (!result.isolated && result.exit_code == 125) result.error = "required isolation feature unavailable";
     if (!result.completed && result.error.empty()) {
         if (result.timed_out) result.error = "process timeout";
         else if (result.output_limited) result.error = "process output limit exceeded";
