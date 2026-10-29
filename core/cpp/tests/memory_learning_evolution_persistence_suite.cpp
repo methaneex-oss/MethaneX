@@ -13,9 +13,16 @@ using namespace jarvis::core;
 
 namespace {
 std::string evaluator_executable;
+std::string test_procedure_id(const EvolutionExperiment& experiment) {
+    return "jarvis.test.fixture.v1/" + experiment.id;
+}
 void attest_isolated(EvolutionExperiment& experiment) {
+    const std::string procedure_id = test_procedure_id(experiment);
+    const std::vector<std::string> procedure_arguments{
+        "--test-evaluator", std::to_string(experiment.baseline_fitness),
+        std::to_string(experiment.candidate_fitness)};
     if (!EvolutionExperimentRunner::register_trusted_evaluator(
-            "jarvis.test.fixture.v1", evaluator_executable)) {
+            procedure_id, evaluator_executable, procedure_arguments)) {
         experiment.outcome = ExperimentOutcome::Invalid;
         return;
     }
@@ -24,10 +31,7 @@ void attest_isolated(EvolutionExperiment& experiment) {
     isolation_limits.max_cpu_seconds = 10;
     ProcessIsolationBackend backend(isolation_limits);
     const IsolatedCommand command{
-        evaluator_executable,
-        {"--test-evaluator", std::to_string(experiment.baseline_fitness),
-         std::to_string(experiment.candidate_fitness)},
-        "", "jarvis.test.fixture.v1",
+        evaluator_executable, procedure_arguments, "", procedure_id,
         EvolutionExperimentRunner::executable_fingerprint(evaluator_executable)};
     EvolutionExperimentRunner::run_isolated_command(experiment, backend, command);
 }
