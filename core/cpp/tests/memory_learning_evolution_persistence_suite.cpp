@@ -16,7 +16,7 @@ std::string evaluator_executable;
 void attest_isolated(EvolutionExperiment& experiment) {
     if (!EvolutionExperimentRunner::register_trusted_evaluator(
             "jarvis.test.fixture.v1", evaluator_executable,
-            {"--test-evaluator-from-parameter"})) {
+            {"--test-evaluator-fixed-role-fitness"})) {
         experiment.outcome = ExperimentOutcome::Invalid;
         return;
     }
@@ -26,7 +26,7 @@ void attest_isolated(EvolutionExperiment& experiment) {
     ProcessIsolationBackend backend(isolation_limits);
     const IsolatedCommand command{
         evaluator_executable,
-        {"--test-evaluator-from-parameter"},
+        {"--test-evaluator-fixed-role-fitness"},
         "", "jarvis.test.fixture.v1",
         EvolutionExperimentRunner::executable_fingerprint(evaluator_executable)};
     EvolutionExperimentRunner::run_isolated_command(experiment, backend, command);
@@ -50,7 +50,7 @@ int main(int argc, char** argv) {
     evaluator_executable = std::filesystem::absolute(argv[0]).string();
     if (!EvolutionExperimentRunner::register_trusted_evaluator(
             "jarvis.test.fixture.v1", evaluator_executable,
-            {"--test-evaluator-from-parameter"})) return 1;
+            {"--test-evaluator-fixed-role-fitness"})) return 1;
     const auto path = std::filesystem::temp_directory_path() /
                       "jarvis_memory_learning_evolution_integration.bin";
     std::error_code ec;
