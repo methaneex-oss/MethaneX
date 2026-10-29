@@ -83,6 +83,13 @@ EvolutionTrialBatch EvolutionExperimentCoordinator::run(
 }
 
 
+EvolutionTrialBatch EvolutionExperimentCoordinator::run(
+    EvolutionExperiment& experiment, const ProcessIsolationBackend& backend,
+    const IsolatedEvaluationProcedure& procedure,
+    EvolutionTrialConfig config) noexcept {
+    return run_isolated(experiment, backend, procedure, config);
+}
+
 EvolutionTrialBatch EvolutionExperimentCoordinator::run_isolated(
     EvolutionExperiment& experiment, const ProcessIsolationBackend& backend,
     const IsolatedEvaluationProcedure& procedure,
