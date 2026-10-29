@@ -5,11 +5,11 @@
 #include <filesystem>
 #include <fstream>
 #include <string>
+
+#if defined(__unix__) || defined(__APPLE__)
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <unistd.h>
-
-#if defined(__unix__) || defined(__APPLE__)
 int main() {
     using namespace jarvis::core;
     ProcessIsolationBackend backend(ProcessIsolationLimits{
