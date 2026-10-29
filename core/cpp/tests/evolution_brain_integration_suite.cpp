@@ -279,7 +279,7 @@ int main(int argc, char** argv) {\n    if (argc > 1 && std::string(argv[1]) == "
             "replay-evaluation-1",
             EvolutionProposal{"replay.persist", 0.3, 0.4, 0.1, 0.90},
             0.70, 0.82, 0.01, 0.90, ExperimentOutcome::Improved, true};
-        replayed.isolated = true;
+        attest_isolated(replayed);
         assert(restarted.adopt_evolution_experiment(replayed));
         const auto* replayed_parameter = restarted.evolution_parameter("replay.persist");
         assert(replayed_parameter != nullptr && replayed_parameter->value == 0.4);
