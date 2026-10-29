@@ -307,6 +307,10 @@ bool Brain::record_evolution_evaluation(EvolutionExperiment& experiment) {
                  {"candidate", experiment.candidate_fitness},
                  {"confidence", experiment.confidence},
                  {"minimum_improvement", experiment.minimum_improvement},
+                 {"evaluation_minimum_confidence", experiment.evaluation_minimum_confidence},
+                 {"evaluation_procedure", experiment.evaluation_procedure},
+                 {"evaluation_digest", experiment.evaluation_digest},
+                 {"evaluation_cases", encode_evaluation_cases(experiment.evaluation_cases)},
                  {"isolated", experiment.isolated}}};
     event.sequence = memory_.append(event);
     if (event.sequence == 0) return false;
@@ -333,6 +337,10 @@ bool Brain::adopt_evolution_experiment(EvolutionExperiment& experiment) {
                  {"proposal_confidence", experiment.proposal.confidence},
                  {"confidence", experiment.confidence},
                  {"minimum_improvement", experiment.minimum_improvement},
+                 {"evaluation_minimum_confidence", experiment.evaluation_minimum_confidence},
+                 {"evaluation_procedure", experiment.evaluation_procedure},
+                 {"evaluation_digest", experiment.evaluation_digest},
+                 {"evaluation_cases", encode_evaluation_cases(experiment.evaluation_cases)},
                  {"isolated", experiment.isolated},
                  {"experiment_id", experiment.id},
                  {"outcome", static_cast<std::int64_t>(experiment.outcome)},
