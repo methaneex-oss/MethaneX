@@ -89,6 +89,10 @@ int main(int argc, char** argv) {
         "exp-replay",
         EvolutionProposal{"replay.weight", 0.4, 0.5, 0.1, 0.95},
         0.70, 0.84, 0.05, 0.95, ExperimentOutcome::Improved, true};
+    // Replay must reconstruct evidence from a real local evaluator result;
+    // a caller-supplied isolated=true flag is intentionally insufficient.
+    attest_isolated(replay_experiment);
+    assert(replay_experiment.has_valid_isolation_attestation());
     assert(replay_controller.replay_evaluation(replay_experiment));
     assert(replay_controller.replay_evaluation(replay_experiment));
     assert(replay_history.for_experiment("exp-replay").size() == 1);
