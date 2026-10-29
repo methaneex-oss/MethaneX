@@ -68,6 +68,8 @@ int main(int argc, char** argv) {
         return 0;
     }
     evaluator_path = std::filesystem::absolute(argv[0]).string();
+    EvolutionSafetyPolicy test_policy;
+    test_policy.trusted_evaluator_digest = detail::sha256_file(evaluator_path);
     const auto temp = std::filesystem::temp_directory_path();
     baseline_artifact_path = (temp / "jarvis_memory_learning_baseline.txt").string();
     candidate_artifact_path = (temp / "jarvis_memory_learning_candidate.txt").string();
@@ -80,7 +82,7 @@ int main(int argc, char** argv) {
     double adopted_value = 0.0;
     std::size_t expected_outcomes = 0;
     {
-        Brain brain(path);
+        Brain brain(path, test_policy);
         if (!check(brain.register_evolution_parameter("planner.weight", 0.4),
                    "register evolution parameter")) return 1;
 
@@ -187,7 +189,7 @@ int main(int argc, char** argv) {
 
     // A new Brain instance forces journal replay; no live object state is reused.
     {
-        Brain restored(path);
+        Brain restored(path, test_policy);
         const auto* parameter = restored.evolution_parameter("planner.weight");
         if (!check(parameter != nullptr && parameter->value == adopted_value,
                    "adopted evolution parameter survived journal replay")) return 1;
