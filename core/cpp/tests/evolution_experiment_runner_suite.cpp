@@ -222,5 +222,24 @@ int main(int argc, char** argv) {
         assert(!experiment.candidate_executed);
     }
 
+    {
+        // Persisted fields can be forged even when they name a registered
+        // evaluator. A restored object must not regain trust from metadata
+        // alone; the evaluator must be run again until durable evidence is
+        // independently authenticated.
+        auto restored = make_experiment();
+        restored.candidate_executed = true;
+        restored.isolated = true;
+        restored.outcome = ExperimentOutcome::Improved;
+        restored.baseline_fitness = 0.1;
+        restored.candidate_fitness = 0.99;
+        restored.evaluation_procedure_id = "registered-but-not-measured";
+        restored.evaluator_executable_fingerprint = "forged-fingerprint";
+        restored.baseline_artifact_id = "forged-baseline";
+        restored.candidate_artifact_id = "forged-candidate";
+        assert(!EvolutionExperimentRunner::restore_trusted_attestation(restored));
+        assert(!restored.has_valid_isolation_attestation());
+    }
+
     return 0;
 }
