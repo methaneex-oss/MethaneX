@@ -247,6 +247,15 @@ bool EvolutionController::replay_adoption(const EvolutionExperiment& experiment)
     return adoption_journal_.commit(experiment.id, "replayed");
 }
 
+bool EvolutionController::replay_rejection(
+    const EvolutionExperiment& experiment, const std::string& reason) noexcept {
+    if (!adoption_journal_.reject_unstaged(experiment, reason)) return false;
+    return history_.append(EvolutionHistoryRecord{
+        experiment.id, experiment.proposal.key, EvolutionRecordAction::Rejected,
+        experiment.outcome, experiment.baseline_fitness, experiment.candidate_fitness,
+        experiment.confidence, 0, reason, {}});
+}
+
 bool EvolutionController::replay_rollback(const std::string& experiment_id,
                                            const std::string& reason) noexcept {
     if (experiment_id.empty()) return false;
