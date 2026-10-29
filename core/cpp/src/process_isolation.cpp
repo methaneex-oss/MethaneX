@@ -116,6 +116,8 @@ ProcessIsolationBackend::ProcessIsolationBackend(ProcessIsolationLimits limits) 
     // ranges. A small RLIMIT_AS prevents instrumented evaluators from starting,
     // so sanitizer builds retain CPU/file/output limits but do not cap address space.
     limits_.max_memory_bytes = std::numeric_limits<std::size_t>::max();
+    limits_.sandbox.timeout = std::max(limits_.sandbox.timeout, std::chrono::milliseconds{10000});
+    limits_.max_cpu_seconds = std::max<std::size_t>(limits_.max_cpu_seconds, 10);
 #endif
     if (limits_.sandbox.timeout.count() <= 0) limits_.sandbox.timeout = std::chrono::milliseconds{1000};
     if (limits_.sandbox.max_output_bytes == 0) limits_.sandbox.max_output_bytes = 64 * 1024;
