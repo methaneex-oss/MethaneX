@@ -28,6 +28,9 @@ struct AdoptionRecord {
     double expected_gain{0.0};
     double proposal_confidence{0.0};
     double minimum_improvement{0.0};
+    double evaluation_minimum_confidence{0.0};
+    std::string evaluation_procedure;
+    std::string evaluation_digest;
     bool isolated{false};
     std::string reason;
 };
