@@ -19,7 +19,7 @@ IsolatedCommand evaluator_command(const EvolutionExperiment& experiment) {
 
 int main(int argc, char** argv) {
     if (test_support::run_evolution_evaluator_fixture(argc, argv)) return 0;
-    evaluator_executable = std::filesystem::absolute(argv[0]).string();
+    evaluator_executable = JARVIS_TEST_EVALUATOR_EXECUTABLE;
     EvolutionExperiment experiment{
         "trial-batch",
         EvolutionProposal{"planner.weight", 0.4, 0.5, 0.1, 0.9},
