@@ -44,14 +44,14 @@ inline bool run_evolution_evaluator_fixture(int argc, char** argv) {
     const double parameter_value = std::stod(get("--parameter-value"));
     const double fitness = role == "baseline" ? baseline : candidate;
     if (!std::isfinite(parameter_value) || !std::isfinite(fitness)) return true;
-    std::cout << "JARVIS_EVALUATION_V1\\n"
-              << "experiment_id=" << get("--experiment-id") << "\\n"
-              << "parameter_key=" << get("--parameter-key") << "\\n"
-              << "parameter_value=" << get("--parameter-value") << "\\n"
-              << "role=" << role << "\\n"
-              << "procedure_id=" << get("--procedure-id") << "\\n"
-              << "artifact_id=" << get("--artifact-id") << "\\n"
-              << "fitness=" << fitness << "\\n";
+    std::cout << "JARVIS_EVALUATION_V1\n"
+              << "experiment_id=" << get("--experiment-id") << "\n"
+              << "parameter_key=" << get("--parameter-key") << "\n"
+              << "parameter_value=" << get("--parameter-value") << "\n"
+              << "role=" << role << "\n"
+              << "procedure_id=" << get("--procedure-id") << "\n"
+              << "artifact_id=" << get("--artifact-id") << "\n"
+              << "fitness=" << fitness << "\n";
     return true;
 }
 
