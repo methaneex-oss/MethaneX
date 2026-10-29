@@ -15,7 +15,8 @@ namespace {
 std::string evaluator_executable;
 void attest_isolated(EvolutionExperiment& experiment) {
     if (!EvolutionExperimentRunner::register_trusted_evaluator(
-            "jarvis.test.fixture.v1", evaluator_executable)) {
+            "jarvis.test.fixture.v1", evaluator_executable,
+            {"--test-evaluator-fixed-role-fitness"})) {
         experiment.outcome = ExperimentOutcome::Invalid;
         return;
     }
@@ -25,11 +26,20 @@ void attest_isolated(EvolutionExperiment& experiment) {
     ProcessIsolationBackend backend(isolation_limits);
     const IsolatedCommand command{
         evaluator_executable,
-        {"--test-evaluator", std::to_string(experiment.baseline_fitness),
-         std::to_string(experiment.candidate_fitness)},
+        {"--test-evaluator-fixed-role-fitness"},
         "", "jarvis.test.fixture.v1",
         EvolutionExperimentRunner::executable_fingerprint(evaluator_executable)};
-    EvolutionExperimentRunner::run_isolated_command(experiment, backend, command);
+    const auto outcome = EvolutionExperimentRunner::run_isolated_command(experiment, backend, command);
+    if (outcome == ExperimentOutcome::Invalid || !experiment.has_valid_isolation_attestation()) {
+        std::cerr << "fixture evaluation failed: outcome=" << static_cast<int>(outcome)
+                  << " executed=" << experiment.candidate_executed
+                  << " isolated=" << experiment.isolated
+                  << " attested=" << experiment.has_valid_isolation_attestation()
+                  << " baseline=" << experiment.baseline_fitness
+                  << " candidate=" << experiment.candidate_fitness
+                  << " confidence=" << experiment.confidence
+                  << " proposal_confidence=" << experiment.proposal.confidence << '\n';
+    }
 }
 
 bool check(bool condition, const char* message) {
@@ -49,7 +59,8 @@ int main(int argc, char** argv) {
     if (test_support::run_evolution_evaluator_fixture(argc, argv)) return 0;
     evaluator_executable = std::filesystem::absolute(argv[0]).string();
     if (!EvolutionExperimentRunner::register_trusted_evaluator(
-            "jarvis.test.fixture.v1", evaluator_executable)) return 1;
+            "jarvis.test.fixture.v1", evaluator_executable,
+            {"--test-evaluator-fixed-role-fitness"})) return 1;
     const auto path = std::filesystem::temp_directory_path() /
                       "jarvis_memory_learning_evolution_integration.bin";
     std::error_code ec;
@@ -144,7 +155,7 @@ int main(int argc, char** argv) {
 
         EvolutionExperiment experiment{
             "integrated-learning-evolution-1", *proposal,
-            0.70, 0.90, 0.01, 0.95, ExperimentOutcome::Improved, true};
+            0.70, 0.90, 0.0, 1.0, ExperimentOutcome::Improved, true};
         attest_isolated(experiment);
         if (!check(brain.record_evolution_evaluation(experiment),
                    "evolution evaluation was journaled")) return 1;

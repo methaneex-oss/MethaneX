@@ -143,17 +143,33 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
         result.error = std::string("pipe failed: ") + std::strerror(errno);
         return result;
     }
+    // Separate close-on-exec handshake: the parent must know that the child
+    // actually applied the required controls before exec, independently of
+    // whether the workload later exits, times out, or exceeds its output cap.
+    int isolation_fds[2] = {-1, -1};
+    if (pipe(isolation_fds) != 0 ||
+        fcntl(isolation_fds[1], F_SETFD, FD_CLOEXEC) != 0) {
+        result.error = std::string("isolation handshake pipe failed: ") + std::strerror(errno);
+        close(pipe_fds[0]);
+        close(pipe_fds[1]);
+        if (isolation_fds[0] >= 0) close(isolation_fds[0]);
+        if (isolation_fds[1] >= 0) close(isolation_fds[1]);
+        return result;
+    }
 
     const pid_t pid = fork();
     if (pid < 0) {
         result.error = std::string("fork failed: ") + std::strerror(errno);
         close(pipe_fds[0]);
         close(pipe_fds[1]);
+        close(isolation_fds[0]);
+        close(isolation_fds[1]);
         return result;
     }
 
     if (pid == 0) {
         close(pipe_fds[0]);
+        close(isolation_fds[0]);
         (void)dup2(pipe_fds[1], STDOUT_FILENO);
         (void)dup2(pipe_fds[1], STDERR_FILENO);
         close(pipe_fds[1]);
@@ -198,18 +214,37 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
 
         if (!command.working_directory.empty() && chdir(command.working_directory.c_str()) != 0) _exit(126);
 
+        const char isolation_ready = 'I';
+        if (write(isolation_fds[1], &isolation_ready, 1) != 1) _exit(125);
         if (command.executable.find('/') != std::string::npos)
             execv(command.executable.c_str(), argv.data());
         else
             execvp(command.executable.c_str(), argv.data());
+        const char exec_failed = 'E';
+        (void)write(isolation_fds[1], &exec_failed, 1);
         _exit(127);
     }
 
     close(pipe_fds[1]);
+    close(isolation_fds[1]);
     result.started = true;
-    // Isolation is attested only after the child exits successfully. Any
-    // required control failure exits 125 and must not inherit a true flag.
-    result.isolated = false;
+    char isolation_status[8]{};
+    std::size_t isolation_status_size = 0;
+    for (;;) {
+        char status_byte = 0;
+        const ssize_t bytes = read(isolation_fds[0], &status_byte, 1);
+        if (bytes == 0) break;
+        if (bytes < 0) {
+            if (errno == EINTR) continue;
+            break;
+        }
+        if (isolation_status_size < sizeof(isolation_status))
+            isolation_status[isolation_status_size++] = status_byte;
+        else
+            break;
+    }
+    close(isolation_fds[0]);
+    result.isolated = isolation_status_size == 1 && isolation_status[0] == 'I';
     const auto deadline = std::chrono::steady_clock::now() + limits_.sandbox.timeout;
     std::string output;
     output.reserve(std::min<std::size_t>(limits_.sandbox.max_output_bytes, 4096));
@@ -264,8 +299,7 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
     }
     result.output = std::move(output);
     result.completed = !result.timed_out && !result.output_limited && result.exit_code == 0;
-    result.isolated = result.completed;
-    if (!result.completed && result.exit_code == 125) result.error = "required isolation feature unavailable";
+    if (!result.isolated && result.exit_code == 125) result.error = "required isolation feature unavailable";
     if (!result.completed && result.error.empty()) {
         if (result.timed_out) result.error = "process timeout";
         else if (result.output_limited) result.error = "process output limit exceeded";

@@ -14,7 +14,8 @@ namespace {
 std::string evaluator_executable;
 void attest_isolated(EvolutionExperiment& experiment) {
     if (!EvolutionExperimentRunner::register_trusted_evaluator(
-            "jarvis.test.fixture.v1", evaluator_executable)) {
+            "jarvis.test.fixture.v1", evaluator_executable,
+            {"--test-evaluator-from-parameter"})) {
         experiment.outcome = ExperimentOutcome::Invalid;
         return;
     }
@@ -24,8 +25,7 @@ void attest_isolated(EvolutionExperiment& experiment) {
     ProcessIsolationBackend backend(isolation_limits);
     const IsolatedCommand command{
         evaluator_executable,
-        {"--test-evaluator", std::to_string(experiment.baseline_fitness),
-         std::to_string(experiment.candidate_fitness)},
+        {"--test-evaluator-from-parameter"},
         "", "jarvis.test.fixture.v1",
         EvolutionExperimentRunner::executable_fingerprint(evaluator_executable)};
     EvolutionExperimentRunner::run_isolated_command(experiment, backend, command);
@@ -36,7 +36,8 @@ int main(int argc, char** argv) {
     if (test_support::run_evolution_evaluator_fixture(argc, argv)) return 0;
     evaluator_executable = std::filesystem::absolute(argv[0]).string();
     if (!EvolutionExperimentRunner::register_trusted_evaluator(
-            "jarvis.test.fixture.v1", evaluator_executable)) return 1;
+            "jarvis.test.fixture.v1", evaluator_executable,
+            {"--test-evaluator-from-parameter"})) return 1;
     EvolutionModel model;
     model.register_parameter("reasoning.weight", 0.4);
     EvolutionHistory history;
@@ -102,6 +103,7 @@ int main(int argc, char** argv) {
         "exp-replay",
         EvolutionProposal{"replay.weight", 0.4, 0.5, 0.1, 0.95},
         0.70, 0.84, 0.05, 0.95, ExperimentOutcome::Improved, true};
+    attest_isolated(replay_experiment);
     assert(replay_controller.replay_evaluation(replay_experiment));
     assert(replay_controller.replay_evaluation(replay_experiment));
     assert(replay_history.for_experiment("exp-replay").size() == 1);
