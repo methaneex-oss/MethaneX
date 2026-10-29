@@ -122,7 +122,7 @@ int main(int argc, char** argv) {
     EvolutionSafetyPolicy isolated_safety;
     isolated_safety.minimum_confidence = 0.75;
     EvolutionController isolated_controller(isolated_model, isolated_history, isolated_safety);
-    EvolutionOrchestrator isolated_orchestrator({}, EvolutionTrialConfig{4, 4, 0.01, 0.75, true});
+    EvolutionOrchestrator isolated_orchestrator; // Exercise default isolation/trial policy.
     ProcessIsolationLimits isolated_limits;
     isolated_limits.sandbox.timeout = std::chrono::milliseconds{5000};
     isolated_limits.max_cpu_seconds = 10;
