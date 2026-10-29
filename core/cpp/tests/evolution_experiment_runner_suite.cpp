@@ -1,4 +1,5 @@
 #include "jarvis/core/evolution_experiment_runner.hpp"
+#include "jarvis/core/evolution_digest.hpp"
 #include "jarvis/core/evolution_safety.hpp"
 
 #include <cassert>
@@ -17,14 +18,15 @@ EvolutionExperiment make_experiment() {
 }
 
 int main(int argc, char** argv) {
+    assert(detail::sha256_hex("abc") == "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad");
     if (argc > 1 && std::string(argv[1]) == "--trusted-test-evaluator") {
         if (argc != 14 || std::string(argv[2]) != "--jarvis-evaluate-v1") return 21;
         const double value = std::stod(argv[6]);
-        const double fitness = 0.5 + 0.5 * value;
-        std::cout << "JARVIS_EVAL_V1\\t" << argv[3] << "\\t" << argv[4] << "\\t"
-                  << argv[5] << "\\t" << argv[6] << "\\t" << argv[7] << "\\t"
-                  << argv[8] << "\\t" << argv[10] << "\\t" << argv[11] << "\\t"
-                  << argv[12] << "\\t" << argv[13] << "\\t" << fitness;
+        const double fitness = 0.5 + 0.6 * value;
+        std::cout << "JARVIS_EVAL_V1\t" << argv[3] << "\t" << argv[4] << "\t"
+                  << argv[5] << "\t" << argv[6] << "\t" << argv[7] << "\t"
+                  << argv[8] << "\t" << argv[10] << "\t" << argv[11] << "\t"
+                  << argv[12] << "\t" << argv[13] << "\t" << fitness;
         return 0;
     }
     EvolutionSandbox sandbox;
@@ -49,7 +51,7 @@ int main(int argc, char** argv) {
         IsolatedEvaluationProcedure procedure{
             IsolatedCommand{argv[0], {"--trusted-test-evaluator"}, ""},
             "runner-suite-local-evaluator-v1", "linear-fitness-v1",
-            argv[0], argv[0]};
+            argv[0], argv[0], detail::sha256_file(argv[0])};
         TrialStatistics baseline, candidate;
         const auto outcome = EvolutionExperimentRunner::run_isolated_evaluation(
             experiment, backend, procedure, 4, 4, 0.5, &baseline, &candidate);
