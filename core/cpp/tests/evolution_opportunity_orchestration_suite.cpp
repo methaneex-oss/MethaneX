@@ -23,6 +23,8 @@ IsolatedCommand evaluator_command() {
 int main(int argc, char** argv) {
     if (test_support::run_evolution_evaluator_fixture(argc, argv)) return 0;
     evaluator_executable = std::filesystem::absolute(argv[0]).string();
+    assert(EvolutionExperimentRunner::register_trusted_evaluator(
+        "jarvis.test.fixture.v1", evaluator_executable));
     EvolutionOpportunityDetector detector;
     const auto opportunities = detector.detect({
         {"diagnostics", 0.9, 0.8, 0.9, 1.0, 0.4},
