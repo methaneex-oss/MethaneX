@@ -60,7 +60,7 @@ int main(int argc, char** argv) {
                   << argv[12] << "\t" << argv[13] << "\t" << fitness;
         return 0;
     }
-    evaluator_path = argv[0];
+    evaluator_path = std::filesystem::absolute(argv[0]).string();
     const auto temp = std::filesystem::temp_directory_path();
     baseline_artifact_path = (temp / "jarvis_brain_baseline_artifact.txt").string();
     candidate_artifact_path = (temp / "jarvis_brain_candidate_artifact.txt").string();
