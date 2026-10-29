@@ -34,7 +34,7 @@ inline bool run_evolution_evaluator_fixture(int argc, char** argv) {
         if (key == "--experiment-id" || key == "--parameter-key" ||
             key == "--parameter-value" || key == "--role" ||
             key == "--procedure-id" || key == "--evaluator-fingerprint" ||
-            key == "--artifact-id")
+            key == "--artifact-id" || key == "--trial-index")
             fields[key] = argument.substr(separator + 1);
     }
     const auto get = [&](const char* key) -> const std::string& {
