@@ -186,7 +186,10 @@ bool EvolutionController::validate_adoption_for_brain(const EvolutionExperiment&
         record->expected_gain != experiment.proposal.expected_gain ||
         record->proposal_confidence != experiment.proposal.confidence ||
         record->minimum_improvement != experiment.minimum_improvement ||
-        record->isolated != experiment.isolated) return false;
+        record->isolated != experiment.isolated ||
+        record->evaluation_procedure_id != experiment.evaluation_procedure_id ||
+        record->baseline_artifact_id != experiment.baseline_artifact_id ||
+        record->candidate_artifact_id != experiment.candidate_artifact_id) return false;
 
     // On a restart, the caller's value object has no in-memory attestation.
     // Re-attest a copy only after its fields match the durable evaluated record.
