@@ -3,7 +3,6 @@
 #include <cmath>
 #include <filesystem>
 #include <fstream>
-#include <iostream>
 #include <algorithm>
 #include <map>
 #include <mutex>
@@ -125,18 +124,8 @@ bool run_measurement(const EvolutionExperiment& experiment,
     invocation.arguments.push_back("--artifact-id=" + artifact);
     invocation.arguments.push_back("--trial-index=" + std::to_string(trial_index));
     const auto result = backend.run(invocation);
-    const bool valid = parse_measurement(result, experiment, command.evaluation_procedure_id,
-                                         role, parameter_value, trial_index, fitness);
-    if (!valid) {
-        // Report process status without echoing arbitrary evaluator output.
-        std::cerr << "Evolution evaluator rejected " << role
-                  << " measurement: started=" << result.started
-                  << " isolated=" << result.isolated
-                  << " completed=" << result.completed
-                  << " exit_code=" << result.exit_code
-                  << " error=" << result.error << '\n';
-    }
-    return valid;
+    return parse_measurement(result, experiment, command.evaluation_procedure_id,
+                             role, parameter_value, trial_index, fitness);
 }
 
 } // namespace
