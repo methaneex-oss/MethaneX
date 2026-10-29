@@ -559,7 +559,11 @@ void Brain::replay(const Event& event, bool external_observation) {
                 const auto adoption = evolution_controller_.adoption_journal().get(*experiment_id);
                 if (adoption.has_value() &&
                     (adoption->state == AdoptionState::Adopted ||
-                     adoption->state == AdoptionState::RolledBack)) return;
+                     adoption->state == AdoptionState::RolledBack ||
+                     adoption->state == AdoptionState::Rejected)) return;
+                // Replay must enforce the same durable-evaluation and adoption
+                // invariants as the live API before mutating the evolution model.
+                if (!evolution_controller_.validate_adoption_for_brain(experiment)) return;
                 if (!evolution_.adopt(proposal)) return;
                 if (!evolution_controller_.replay_adoption(experiment)) {
                     evolution_.restore_previous(*key);
