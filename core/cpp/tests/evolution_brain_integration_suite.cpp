@@ -6,6 +6,7 @@
 #include "jarvis/core/process_isolation.hpp"
 
 #include <cassert>
+#include <cmath>
 #include <filesystem>
 #include <algorithm>
 #include <iostream>
@@ -443,5 +444,7 @@ int main(int argc, char** argv) {
 
     std::filesystem::remove(path, ec);
     std::filesystem::remove(path.string() + ".meta", ec);
+    std::filesystem::remove(baseline_artifact_path, ec);
+    std::filesystem::remove(candidate_artifact_path, ec);
     return 0;
 }
