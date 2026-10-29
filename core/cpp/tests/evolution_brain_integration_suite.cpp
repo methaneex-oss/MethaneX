@@ -497,7 +497,9 @@ int main(int argc, char** argv) {
             "replay-evaluation-1",
             EvolutionProposal{"replay.persist", 0.3, 0.4, 0.1, 0.90},
             0.70, 0.82, 0.01, 0.90, ExperimentOutcome::Improved, true};
-        replayed.isolated = true;
+        // Re-run the same pinned local evaluation after restart to recreate
+        // an in-memory attestation; journal fields alone cannot authorize adoption.
+        attest_isolated(replayed);
         assert(restarted.adopt_evolution_experiment(replayed));
         const auto* replayed_parameter = restarted.evolution_parameter("replay.persist");
         assert(replayed_parameter != nullptr && replayed_parameter->value == 0.4);
