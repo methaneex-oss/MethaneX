@@ -19,9 +19,9 @@ struct ProcessIsolationLimits {
     // A requested feature that cannot be enforced causes execution to fail closed.
     bool require_network_isolation{false};
     bool require_filesystem_isolation{false};
-    bool require_privilege_drop{false};
+    bool require_privilege_drop{true};
     bool require_no_new_privileges{true};
-    bool require_network_syscall_block{false};
+    bool require_network_syscall_block{true};
     std::size_t max_memory_bytes{256 * 1024 * 1024};
     std::size_t max_cpu_seconds{2};
     std::size_t max_file_bytes{16 * 1024 * 1024};
