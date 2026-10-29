@@ -41,6 +41,7 @@ struct EvolutionExperiment {
     // Provenance produced by the registered local evaluator, persisted with
     // the evaluation event so replay can compare the same procedure/artifacts.
     std::string evaluation_procedure_id;
+    std::string evaluator_executable_fingerprint;
     std::string baseline_artifact_id;
     std::string candidate_artifact_id;
 
@@ -56,6 +57,7 @@ struct EvolutionExperiment {
     bool has_valid_isolation_attestation() const noexcept {
         const auto separator = std::string(1, '\x1f');
         const bool provenance_valid = !evaluation_procedure_id.empty() &&
+            !evaluator_executable_fingerprint.empty() &&
             baseline_artifact_id == artifact_fingerprint(
                 proposal.key + separator + std::to_string(proposal.current) +
                 separator + evaluation_procedure_id) &&
@@ -74,6 +76,7 @@ struct EvolutionExperiment {
                confidence == attested_confidence_ &&
                outcome == attested_outcome_ &&
                evaluation_procedure_id == attested_procedure_id_ &&
+               evaluator_executable_fingerprint == attested_evaluator_executable_fingerprint_ &&
                baseline_artifact_id == attested_baseline_artifact_id_ &&
                candidate_artifact_id == attested_candidate_artifact_id_ &&
                candidate_executed && isolated;
@@ -82,7 +85,7 @@ struct EvolutionExperiment {
 private:
     bool has_provenance_fingerprint() const noexcept {
         const auto separator = std::string(1, '\x1f');
-        return !evaluation_procedure_id.empty() &&
+        return !evaluation_procedure_id.empty() && !evaluator_executable_fingerprint.empty() &&
             baseline_artifact_id == artifact_fingerprint(
                 proposal.key + separator + std::to_string(proposal.current) +
                 separator + evaluation_procedure_id) &&
@@ -106,6 +109,7 @@ private:
         attested_confidence_ = confidence;
         attested_outcome_ = outcome;
         attested_procedure_id_ = evaluation_procedure_id;
+        attested_evaluator_executable_fingerprint_ = evaluator_executable_fingerprint;
         attested_baseline_artifact_id_ = baseline_artifact_id;
         attested_candidate_artifact_id_ = candidate_artifact_id;
     }
@@ -123,6 +127,7 @@ private:
     double attested_confidence_{0.0};
     ExperimentOutcome attested_outcome_{ExperimentOutcome::Pending};
     std::string attested_procedure_id_;
+    std::string attested_evaluator_executable_fingerprint_;
     std::string attested_baseline_artifact_id_;
     std::string attested_candidate_artifact_id_;
 
