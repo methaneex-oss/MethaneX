@@ -11,17 +11,22 @@ namespace jarvis::core::test_support {
 // Test-only compiled C++ evaluator. It exists to exercise the evaluator protocol;
 // production evaluation must use a locally registered evaluator for its workload.
 inline bool run_evolution_evaluator_fixture(int argc, char** argv) {
-    if (argc < 4 || std::string(argv[1]) != "--test-evaluator") return false;
+    if (argc < 2) return false;
+    const std::string mode(argv[1]);
+    const bool parameter_mode = mode == "--test-evaluator-from-parameter";
+    if (!parameter_mode && (argc < 4 || mode != "--test-evaluator")) return false;
     double baseline = 0.0;
     double candidate = 0.0;
     try {
-        baseline = std::stod(argv[2]);
-        candidate = std::stod(argv[3]);
+        if (!parameter_mode) {
+            baseline = std::stod(argv[2]);
+            candidate = std::stod(argv[3]);
+        }
     } catch (...) {
         return true;
     }
     std::map<std::string, std::string> fields;
-    for (int i = 4; i < argc; ++i) {
+    for (int i = parameter_mode ? 2 : 4; i < argc; ++i) {
         const std::string argument(argv[i]);
         const auto separator = argument.find('=');
         if (separator == std::string::npos) continue;
@@ -44,7 +49,8 @@ inline bool run_evolution_evaluator_fixture(int argc, char** argv) {
         (role != "baseline" && role != "candidate"))
         return true;
     const double parameter_value = std::stod(get("--parameter-value"));
-    const double fitness = role == "baseline" ? baseline : candidate;
+    const double fitness = parameter_mode ? parameter_value :
+        (role == "baseline" ? baseline : candidate);
     if (!std::isfinite(parameter_value) || !std::isfinite(fitness)) return true;
     std::cout << "JARVIS_EVALUATION_V1\n"
               << "experiment_id=" << get("--experiment-id") << "\n"
