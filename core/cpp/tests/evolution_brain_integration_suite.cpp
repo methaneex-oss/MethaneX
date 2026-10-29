@@ -211,11 +211,7 @@ int main(int argc, char** argv) {
             "mismatched-replay-1",
             EvolutionProposal{"replay.mismatched-proposal", 0.3, 0.4, 0.1, 0.8},
             0.0, 0.0, 0.01, 0.0, ExperimentOutcome::Pending, false};
-        ProcessIsolationLimits limits;
-        limits.require_no_new_privileges = true;
-        limits.require_privilege_drop = true;
-        limits.require_network_syscall_block = true;
-        ProcessIsolationBackend backend(limits);
+        ProcessIsolationBackend backend;
         IsolatedEvaluationProcedure procedure{
             IsolatedCommand{evaluator_path, {"--trusted-test-evaluator"}, ""},
             "brain-suite-local-evaluator-v1", "artifact-score-v1",
