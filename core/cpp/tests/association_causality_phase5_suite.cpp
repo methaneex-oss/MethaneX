@@ -60,7 +60,7 @@ int main() {
     assert(first.depth == 1);
     assert(first.predictions.empty());
     causal.observe_transition(before, after);
-    const auto one_step = causal.simulate({Belief{"temperature", 30.0, 0.95, 2, 2}}, 1);
+    const auto one_step = causal.simulate({Belief{"temperature", 20.0, 0.95, 1, 1}}, 1);
     assert(!one_step.predictions.empty());
     assert(one_step.confidence >= 0.5);
     const auto bounded = causal.simulate({Belief{"temperature", 20.0, 0.95, 1, 1}}, 100);
