@@ -288,9 +288,10 @@ ProcessIsolationEvaluationResult ProcessIsolationBackend::run_evaluator(
         close(pipe_fds[0]);
         (void)setpgid(0, 0);
         if (limits_.require_network_isolation && unshare(CLONE_NEWNET) != 0) _exit(125);
-        if (limits_.require_no_new_privileges &&
-            prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0) != 0) _exit(125);
-        if (limits_.require_network_syscall_block && !install_network_syscall_block()) _exit(125);
+        // Trusted evaluator children always run with no-new-privileges and a
+        // network-syscall deny filter, independent of caller-supplied flags.
+        if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0) != 0) _exit(125);
+        if (!install_network_syscall_block()) _exit(125);
         if (limits_.require_filesystem_isolation) _exit(125); // no chroot contract for callable evaluators
         if (limits_.require_privilege_drop) {
             if (geteuid() == 0) {
@@ -357,8 +358,7 @@ ProcessIsolationEvaluationResult ProcessIsolationBackend::run_evaluator(
                        received == sizeof(result.fitness) && std::isfinite(result.fitness);
     // No caller-supplied Boolean is used. A successful child execution is only
     // marked isolated when the required local restrictions were actually applied.
-    result.isolated = result.completed && limits_.require_no_new_privileges &&
-                      limits_.require_network_syscall_block;
+    result.isolated = result.completed; // no-new-privileges and syscall filter were mandatory above
     if (!result.completed) {
         if (result.timed_out) result.error = "local evaluator timed out";
         else if (WIFEXITED(status) && WEXITSTATUS(status) == 125)
