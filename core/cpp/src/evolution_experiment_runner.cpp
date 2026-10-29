@@ -1,8 +1,6 @@
 #include "jarvis/core/evolution_experiment_runner.hpp"
 
 #include <cmath>
-#include <cstdint>
-#include <iomanip>
 #include <map>
 #include <sstream>
 #include <string>
@@ -11,16 +9,7 @@ namespace jarvis::core {
 namespace {
 
 std::string fingerprint(const std::string& value) {
-    // Stable identity fingerprint, not a cryptographic signature. Trust comes
-    // from the locally configured evaluator procedure, not from this digest.
-    std::uint64_t hash = 14695981039346656037ULL;
-    for (const unsigned char byte : value) {
-        hash ^= byte;
-        hash *= 1099511628211ULL;
-    }
-    std::ostringstream out;
-    out << std::hex << std::setw(16) << std::setfill('0') << hash;
-    return out.str();
+    return EvolutionExperiment::artifact_fingerprint(value);
 }
 
 bool safe_field(const std::string& value) {
