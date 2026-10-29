@@ -29,6 +29,14 @@ struct AdoptionRecord {
     double proposal_confidence{0.0};
     double minimum_improvement{0.0};
     bool isolated{false};
+    std::string evaluation_procedure_id;
+    std::string evaluation_config_id;
+    std::string baseline_artifact_digest;
+    std::string candidate_artifact_digest;
+    std::string evaluator_artifact_digest;
+    std::size_t baseline_trial_count{0};
+    std::size_t candidate_trial_count{0};
+    std::string evaluation_evidence_digest;
     std::string reason;
 };
 
