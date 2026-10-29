@@ -253,6 +253,10 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_command(
         !is_trusted_evaluator(command.evaluation_procedure_id, command.executable,
                               command.expected_executable_fingerprint, command.arguments))
         return experiment.outcome;
+    // The response parser validates the evaluator identity against the active
+    // experiment. Populate the expected identity before either measurement;
+    // assigning it only after parsing makes every valid response look untrusted.
+    experiment.evaluation_procedure_id = command.evaluation_procedure_id;
     experiment.evaluator_executable_fingerprint = command.expected_executable_fingerprint;
 
     // The evaluator must measure both settings through the same named local
