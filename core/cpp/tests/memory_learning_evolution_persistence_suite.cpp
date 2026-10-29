@@ -147,6 +147,23 @@ int main(int argc, char** argv) {
             "integrated-learning-evolution-1", *proposal,
             0.70, 0.90, 0.01, 0.95, ExperimentOutcome::Improved, true};
         attest_isolated(experiment);
+        if (!experiment.has_valid_isolation_attestation()) {
+            std::cerr << "invalid attestation: outcome=" << static_cast<int>(experiment.outcome)
+                      << " executed=" << experiment.candidate_executed
+                      << " isolated=" << experiment.isolated
+                      << " procedure=" << experiment.evaluation_procedure_id << '\\n';
+        }
+        auto recomputed_experiment = experiment;
+        const auto recomputed_outcome = EvolutionExperimentEngine::evaluate(recomputed_experiment);
+        if (recomputed_outcome != experiment.outcome) {
+            std::cerr << "outcome mismatch: actual=" << static_cast<int>(experiment.outcome)
+                      << " recomputed=" << static_cast<int>(recomputed_outcome)
+                      << " baseline=" << experiment.baseline_fitness
+                      << " candidate=" << experiment.candidate_fitness
+                      << " threshold=" << experiment.minimum_improvement
+                      << " confidence=" << experiment.confidence
+                      << " proposal_confidence=" << experiment.proposal.confidence << '\\n';
+        }
         if (!check(brain.record_evolution_evaluation(experiment),
                    "evolution evaluation was journaled")) return 1;
         if (!check(brain.adopt_evolution_experiment(experiment),
