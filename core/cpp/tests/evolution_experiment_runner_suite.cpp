@@ -29,7 +29,7 @@ EvolutionExperiment make_experiment() {
 
 int main(int argc, char** argv) {
     if (test_support::run_evolution_evaluator_fixture(argc, argv)) return 0;
-    evaluator_executable = std::filesystem::absolute(argv[0]).string();
+    evaluator_executable = JARVIS_TEST_EVALUATOR_EXECUTABLE;
     EvolutionSandbox sandbox;
 
     {
