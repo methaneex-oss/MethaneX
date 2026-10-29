@@ -98,6 +98,78 @@ int main(int argc, char** argv) {
     std::filesystem::remove(legacy_rollback_path, ec);
     std::filesystem::remove(legacy_rollback_path.string() + ".meta", ec);
 
+    // Raw journal events must not bypass the live evaluation/adoption gate.
+    const std::filesystem::path replay_guard_path = "evolution_replay_guard_test.bin";
+    std::filesystem::remove(replay_guard_path, ec);
+    std::filesystem::remove(replay_guard_path.string() + ".meta", ec);
+    {
+        Brain source(replay_guard_path);
+        assert(source.register_evolution_parameter("replay.missing", 0.25));
+        assert(source.register_evolution_parameter("replay.equal", 0.25));
+        assert(source.register_evolution_parameter("replay.mismatch", 0.25));
+        assert(source.register_evolution_parameter("replay.no-provenance", 0.25));
+    }
+    {
+        Memory journal(256, replay_guard_path);
+        const auto append_event = [&](const std::string& kind, const std::string& id,
+                                      const std::string& key, double proposed,
+                                      double baseline, double candidate,
+                                      double threshold, ExperimentOutcome outcome,
+                                      bool include_provenance) {
+            const std::string procedure = "jarvis.test.fixture.v1";
+            const std::string separator(1, '\x1f');
+            const std::string evaluator_fingerprint = include_provenance
+                ? EvolutionExperimentRunner::executable_fingerprint(evaluator_executable) : "";
+            const std::string baseline_artifact = include_provenance
+                ? EvolutionExperiment::artifact_fingerprint(
+                    key + separator + std::to_string(0.25) + separator + procedure) : "";
+            const std::string candidate_artifact = include_provenance
+                ? EvolutionExperiment::artifact_fingerprint(
+                    key + separator + std::to_string(proposed) + separator + procedure) : "";
+            Event event{0, 0, "replay-test", kind,
+                {{"experiment_id", id}, {"key", key}, {"current", 0.25},
+                 {"proposed", proposed}, {"expected_gain", proposed - 0.25},
+                 {"proposal_confidence", 0.90},
+                 {"outcome", static_cast<std::int64_t>(outcome)},
+                 {"baseline", baseline}, {"candidate", candidate},
+                 {"confidence", 0.95}, {"minimum_improvement", threshold},
+                 {"isolated", true},
+                 {"evaluation_procedure_id", include_provenance ? procedure : ""},
+                 {"evaluator_executable_fingerprint", evaluator_fingerprint},
+                 {"baseline_artifact_id", baseline_artifact},
+                 {"candidate_artifact_id", candidate_artifact}}};
+            assert(journal.append(event) != 0);
+        };
+        // An adoption with an experiment ID but no evaluation must not apply.
+        append_event("evolution_adopt", "replay-missing-eval", "replay.missing",
+                     0.35, 0.70, 0.85, 0.01, ExperimentOutcome::Improved, true);
+        // A correctly identified evaluation with a false Improved label must fail.
+        append_event("evolution_evaluated", "replay-equal-exp", "replay.equal",
+                     0.35, 0.70, 0.70, 0.01, ExperimentOutcome::Improved, true);
+        append_event("evolution_adopt", "replay-equal-exp", "replay.equal",
+                     0.35, 0.70, 0.70, 0.01, ExperimentOutcome::Improved, true);
+        // Adoption must match the exact proposal that was evaluated.
+        append_event("evolution_evaluated", "replay-mismatch-exp", "replay.mismatch",
+                     0.35, 0.70, 0.85, 0.01, ExperimentOutcome::Improved, true);
+        append_event("evolution_adopt", "replay-mismatch-exp", "replay.mismatch",
+                     0.45, 0.70, 0.85, 0.01, ExperimentOutcome::Improved, true);
+        // isolated=true alone is not a valid evaluation receipt.
+        append_event("evolution_evaluated", "replay-no-provenance-exp", "replay.no-provenance",
+                     0.35, 0.70, 0.85, 0.01, ExperimentOutcome::Improved, false);
+        append_event("evolution_adopt", "replay-no-provenance-exp", "replay.no-provenance",
+                     0.35, 0.70, 0.85, 0.01, ExperimentOutcome::Improved, false);
+    }
+    {
+        Brain replayed(replay_guard_path);
+        for (const auto& key : {"replay.missing", "replay.equal", "replay.mismatch",
+                                "replay.no-provenance"}) {
+            const auto* parameter = replayed.evolution_parameter(key);
+            assert(parameter != nullptr && parameter->value == parameter->baseline);
+        }
+    }
+    std::filesystem::remove(replay_guard_path, ec);
+    std::filesystem::remove(replay_guard_path.string() + ".meta", ec);
+
     std::filesystem::remove(path, ec);
 
     {
