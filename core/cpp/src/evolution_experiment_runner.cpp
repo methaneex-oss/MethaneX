@@ -1,9 +1,8 @@
 #include "jarvis/core/evolution_experiment_runner.hpp"
+#include "jarvis/core/evolution_digest.hpp"
 
 #include <algorithm>
-#include <cstdint>
 #include <cmath>
-#include <fstream>
 #include <iomanip>
 #include <sstream>
 #include <string>
@@ -11,33 +10,6 @@
 
 namespace jarvis::core {
 namespace {
-
-std::string hash_file(const std::string& path) {
-    if (path.empty()) return {};
-    std::ifstream input(path, std::ios::binary);
-    if (!input) return {};
-    std::uint64_t hash = 14695981039346656037ULL;
-    char byte = 0;
-    while (input.get(byte)) {
-        hash ^= static_cast<unsigned char>(byte);
-        hash *= 1099511628211ULL;
-    }
-    if (!input.eof()) return {};
-    std::ostringstream out;
-    out << std::hex << std::setfill('0') << std::setw(16) << hash;
-    return out.str();
-}
-
-std::string stable_hash(const std::string& value) {
-    std::uint64_t hash = 14695981039346656037ULL;
-    for (unsigned char byte : value) {
-        hash ^= byte;
-        hash *= 1099511628211ULL;
-    }
-    std::ostringstream out;
-    out << std::hex << std::setfill('0') << std::setw(16) << hash;
-    return out.str();
-}
 
 std::string number(double value) {
     std::ostringstream out;
@@ -117,7 +89,7 @@ bool EvolutionExperiment::has_valid_evaluation_evidence() const noexcept {
         baseline_artifact_digest + "\n" + candidate_artifact_digest + "\n" +
         evaluator_artifact_digest + "\n" + std::to_string(baseline_trial_count) +
         "\n" + std::to_string(candidate_trial_count);
-    return stable_hash(evidence) == evaluation_evidence_digest;
+    return detail::sha256_hex(evidence) == evaluation_evidence_digest;
 }
 
 ExperimentOutcome EvolutionExperimentRunner::run(EvolutionExperiment& experiment,
@@ -181,12 +153,18 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_evaluation(
         minimum_confidence > 1.0 || procedure.command.executable.empty() ||
         procedure.procedure_id.empty() || procedure.configuration_id.empty() ||
         procedure.baseline_artifact_path.empty() ||
-        procedure.candidate_artifact_path.empty()) return experiment.outcome;
+        procedure.candidate_artifact_path.empty() ||
+        procedure.expected_evaluator_digest.empty() ||
+        !backend.limits().require_no_new_privileges ||
+        !backend.limits().require_network_syscall_block) return experiment.outcome;
 
-    const auto baseline_digest = hash_file(procedure.baseline_artifact_path);
-    const auto candidate_digest = hash_file(procedure.candidate_artifact_path);
-    const auto evaluator_digest = hash_file(procedure.command.executable);
-    if (baseline_digest.empty() || candidate_digest.empty() || evaluator_digest.empty())
+    const auto baseline_digest = detail::sha256_file(procedure.baseline_artifact_path);
+    const auto candidate_digest = detail::sha256_file(procedure.candidate_artifact_path);
+    const auto evaluator_digest = detail::sha256_file(procedure.command.executable);
+    // The expected digest is provisioned by trusted local configuration. An
+    // arbitrary executable cannot declare itself trusted by echoing its own hash.
+    if (baseline_digest.empty() || candidate_digest.empty() || evaluator_digest.empty() ||
+        evaluator_digest != procedure.expected_evaluator_digest)
         return experiment.outcome;
 
     std::vector<double> baseline_values;
