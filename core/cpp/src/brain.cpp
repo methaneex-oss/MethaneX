@@ -517,6 +517,8 @@ void Brain::replay(const Event& event, bool external_observation) {
                 *std::get_if<bool>(&event.data.at("isolated"));
             if (const auto* procedure = string_value(event.data, "evaluation_procedure_id"))
                 experiment.evaluation_procedure_id = *procedure;
+            if (const auto* fingerprint = string_value(event.data, "evaluator_executable_fingerprint"))
+                experiment.evaluator_executable_fingerprint = *fingerprint;
             if (const auto* artifact = string_value(event.data, "baseline_artifact_id"))
                 experiment.baseline_artifact_id = *artifact;
             if (const auto* artifact = string_value(event.data, "candidate_artifact_id"))
@@ -562,6 +564,8 @@ void Brain::replay(const Event& event, bool external_observation) {
                     *std::get_if<bool>(&event.data.at("isolated"));
                 if (const auto* procedure = string_value(event.data, "evaluation_procedure_id"))
                     experiment.evaluation_procedure_id = *procedure;
+                if (const auto* fingerprint = string_value(event.data, "evaluator_executable_fingerprint"))
+                    experiment.evaluator_executable_fingerprint = *fingerprint;
                 if (const auto* artifact = string_value(event.data, "baseline_artifact_id"))
                     experiment.baseline_artifact_id = *artifact;
                 if (const auto* artifact = string_value(event.data, "candidate_artifact_id"))
