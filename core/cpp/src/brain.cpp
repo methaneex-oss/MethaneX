@@ -1,5 +1,6 @@
 // Cognitive core: persistent state, reasoning, adaptation, recovery and evolution.
 #include "jarvis/core/brain.hpp"
+#include "jarvis/core/evolution_experiment_runner.hpp"
 
 #include <algorithm>
 #include <chrono>
@@ -13,6 +14,31 @@ namespace {
 std::uint64_t now_ns() noexcept { return static_cast<std::uint64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count()); }
 const std::string* string_value(const Attributes& data, const std::string& key) { const auto it = data.find(key); return it == data.end() ? nullptr : std::get_if<std::string>(&it->second); }
 double double_value(const Attributes& data, const std::string& key, double fallback = 0.0) { const auto it = data.find(key); if (it == data.end()) return fallback; if (const auto value = std::get_if<double>(&it->second)) return *value; if (const auto value = std::get_if<std::int64_t>(&it->second)) return static_cast<double>(*value); return fallback; }
+bool parse_evaluation_cases(const std::string& encoded,
+                            std::vector<EvolutionFitnessCase>& cases) {
+    cases.clear();
+    std::size_t begin = 0;
+    while (begin < encoded.size()) {
+        const auto end = encoded.find(';', begin);
+        const auto token_end = end == std::string::npos ? encoded.size() : end;
+        const auto comma = encoded.find(',', begin);
+        if (comma == std::string::npos || comma >= token_end) return false;
+        try {
+            std::size_t used_feature = 0;
+            std::size_t used_target = 0;
+            const double feature = std::stod(encoded.substr(begin, comma - begin), &used_feature);
+            const double target = std::stod(encoded.substr(comma + 1, token_end - comma - 1), &used_target);
+            if (used_feature != comma - begin || used_target != token_end - comma - 1 ||
+                !std::isfinite(feature) || !std::isfinite(target)) return false;
+            cases.push_back(EvolutionFitnessCase{feature, target});
+        } catch (...) {
+            return false;
+        }
+        if (end == std::string::npos) break;
+        begin = end + 1;
+    }
+    return cases.size() >= 2;
+}
 bool numeric_value(const Scalar& value, long double& result) {
     if (const auto* integer = std::get_if<std::int64_t>(&value)) {
         result = static_cast<long double>(*integer);
@@ -497,28 +523,34 @@ void Brain::replay(const Event& event, bool external_observation) {
     if (event.kind == "evolution_evaluated") {
         const auto* id = string_value(event.data, "experiment_id");
         const auto* key = string_value(event.data, "key");
-        if (id != nullptr && key != nullptr) {
-            EvolutionExperiment experiment{
-                *id,
-                EvolutionProposal{*key,
-                                  double_value(event.data, "current"),
-                                  double_value(event.data, "proposed"),
-                                  double_value(event.data, "expected_gain"),
-                                  double_value(event.data, "proposal_confidence", double_value(event.data, "confidence"))},
-                double_value(event.data, "baseline"),
-                double_value(event.data, "candidate"),
-                double_value(event.data, "minimum_improvement"),
-                double_value(event.data, "confidence"),
-                static_cast<ExperimentOutcome>(integer_value(event.data, "outcome")),
-                true};
-            experiment.isolated =
-                event.data.find("isolated") != event.data.end() &&
-                std::get_if<bool>(&event.data.at("isolated")) != nullptr &&
-                *std::get_if<bool>(&event.data.at("isolated"));
-            if (experiment.isolated && experiment.candidate_executed)
-                experiment.attest_isolated_result();
+        const auto* procedure = string_value(event.data, "evaluation_procedure");
+        const auto* digest = string_value(event.data, "evaluation_digest");
+        const auto* encoded_cases = string_value(event.data, "evaluation_cases");
+        if (id == nullptr || key == nullptr || procedure == nullptr ||
+            digest == nullptr || encoded_cases == nullptr) return;
+        EvolutionExperiment experiment{
+            *id,
+            EvolutionProposal{*key,
+                              double_value(event.data, "current"),
+                              double_value(event.data, "proposed"),
+                              double_value(event.data, "expected_gain"),
+                              double_value(event.data, "proposal_confidence", double_value(event.data, "confidence"))},
+            double_value(event.data, "baseline"),
+            double_value(event.data, "candidate"),
+            double_value(event.data, "minimum_improvement"),
+            double_value(event.data, "confidence"),
+            static_cast<ExperimentOutcome>(integer_value(event.data, "outcome")),
+            true};
+        experiment.evaluation_minimum_confidence =
+            double_value(event.data, "evaluation_minimum_confidence");
+        experiment.evaluation_procedure = *procedure;
+        experiment.evaluation_digest = *digest;
+        if (!parse_evaluation_cases(*encoded_cases, experiment.evaluation_cases)) return;
+        ProcessIsolationBackend backend;
+        // Never reconstruct trust from event["isolated"]. Re-run the exact
+        // local evaluator against the persisted held-out experience instead.
+        if (EvolutionExperimentRunner::revalidate_isolated_evaluation(experiment, backend))
             evolution_controller_.replay_evaluation(experiment);
-        }
         return;
     }
     if (event.kind == "evolution_register") { if (const auto* key = string_value(event.data, "key")) evolution_.register_parameter(*key, double_value(event.data, "initial")); return; }
@@ -534,48 +566,50 @@ void Brain::replay(const Event& event, bool external_observation) {
     }
     if (event.kind == "evolution_adopt") {
         const auto* key = string_value(event.data, "key");
-        if (key != nullptr) {
-            const auto* experiment_id = string_value(event.data, "experiment_id");
-            const EvolutionProposal proposal{*key, double_value(event.data, "current"),
-                                             double_value(event.data, "proposed"),
-                                             double_value(event.data, "expected_gain"),
-                                             double_value(event.data, "proposal_confidence", double_value(event.data, "confidence"))};
-            if (experiment_id != nullptr && !experiment_id->empty()) {
-                EvolutionExperiment experiment{
-                    *experiment_id,
-                    proposal,
-                    double_value(event.data, "baseline", proposal.current),
-                    double_value(event.data, "candidate", proposal.proposed),
-                    double_value(event.data, "minimum_improvement"),
-                    double_value(event.data, "confidence", proposal.confidence),
-                    static_cast<ExperimentOutcome>(integer_value(event.data, "outcome")),
-                    true};
-                experiment.isolated =
-                    event.data.find("isolated") != event.data.end() &&
-                    std::get_if<bool>(&event.data.at("isolated")) != nullptr &&
-                    *std::get_if<bool>(&event.data.at("isolated"));
-                if (experiment.isolated && experiment.candidate_executed)
-                    experiment.attest_isolated_result();
-                const auto adoption = evolution_controller_.adoption_journal().get(*experiment_id);
-                if (adoption.has_value() &&
-                    (adoption->state == AdoptionState::Adopted ||
-                     adoption->state == AdoptionState::RolledBack)) return;
-                if (!evolution_.adopt(proposal)) return;
-                if (!evolution_controller_.replay_adoption(experiment)) {
-                    evolution_.restore_previous(*key);
-                    return;
-                }
-                evolution_history_.append(EvolutionHistoryRecord{
-                    *experiment_id, *key, EvolutionRecordAction::Adopted,
-                    experiment.outcome, experiment.baseline_fitness,
-                    experiment.candidate_fitness, experiment.confidence, 0,
-                    "replayed", {}});
-            } else {
-                // An unversioned legacy event has no experiment evidence.
-                // Ignore it rather than re-adopting an unevaluated proposal.
-                return;
-            }
+        const auto* experiment_id = string_value(event.data, "experiment_id");
+        const auto* procedure = string_value(event.data, "evaluation_procedure");
+        const auto* digest = string_value(event.data, "evaluation_digest");
+        const auto* encoded_cases = string_value(event.data, "evaluation_cases");
+        if (key == nullptr || experiment_id == nullptr || experiment_id->empty() ||
+            procedure == nullptr || digest == nullptr || encoded_cases == nullptr) return;
+
+        EvolutionExperiment experiment{
+            *experiment_id,
+            EvolutionProposal{*key, double_value(event.data, "current"),
+                              double_value(event.data, "proposed"),
+                              double_value(event.data, "expected_gain"),
+                              double_value(event.data, "proposal_confidence", double_value(event.data, "confidence"))},
+            double_value(event.data, "baseline"),
+            double_value(event.data, "candidate"),
+            double_value(event.data, "minimum_improvement"),
+            double_value(event.data, "confidence"),
+            static_cast<ExperimentOutcome>(integer_value(event.data, "outcome")),
+            true};
+        experiment.evaluation_minimum_confidence =
+            double_value(event.data, "evaluation_minimum_confidence");
+        experiment.evaluation_procedure = *procedure;
+        experiment.evaluation_digest = *digest;
+        if (!parse_evaluation_cases(*encoded_cases, experiment.evaluation_cases)) return;
+        ProcessIsolationBackend backend;
+        if (!EvolutionExperimentRunner::revalidate_isolated_evaluation(experiment, backend))
+            return;
+
+        const auto adoption = evolution_controller_.adoption_journal().get(*experiment_id);
+        if (adoption.has_value() &&
+            (adoption->state == AdoptionState::Adopted ||
+             adoption->state == AdoptionState::RolledBack)) return;
+        // Apply the exact same live validation before mutating the parameter.
+        if (!evolution_controller_.validate_adoption_for_brain(experiment)) return;
+        if (!evolution_.adopt(experiment.proposal)) return;
+        if (!evolution_controller_.replay_adoption(experiment)) {
+            evolution_.restore_previous(*key);
+            return;
         }
+        evolution_history_.append(EvolutionHistoryRecord{
+            *experiment_id, *key, EvolutionRecordAction::Adopted,
+            experiment.outcome, experiment.baseline_fitness,
+            experiment.candidate_fitness, experiment.confidence, 0,
+            "replayed", {}});
         return;
     }
     if (event.kind == "evolution_rollback") {
