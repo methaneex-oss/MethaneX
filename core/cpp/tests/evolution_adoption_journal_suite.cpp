@@ -66,7 +66,8 @@ int main(int argc,char**argv){
  experiment.confidence=proposals.front().confidence;
  experiment.outcome=ExperimentOutcome::Improved;
  experiment.candidate_executed=true;
- assert(attest_isolated(experiment)==ExperimentOutcome::Improved);\n assert(controller.record_evaluation(experiment));
+ assert(attest_isolated(experiment)==ExperimentOutcome::Improved);
+ assert(controller.record_evaluation(experiment));
  assert(controller.record_evaluation(experiment));
  EvolutionExperiment neutral=experiment;
  neutral.id="exp-neutral";
