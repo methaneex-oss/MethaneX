@@ -35,11 +35,13 @@ bool EvolutionExperiment::has_valid_evaluation_evidence() const noexcept {
         evidence_number(proposal.expected_gain) + "\n" + evidence_number(proposal.confidence) + "\n" +
         evidence_number(baseline_fitness) + "\n" + evidence_number(candidate_fitness) + "\n" +
         evidence_number(minimum_improvement) + "\n" + evidence_number(confidence) + "\n" +
-        evaluation_procedure_id + "\n" + evaluation_config_id + "\n" +
+        std::to_string(static_cast<int>(outcome)) + "\n" + evaluation_procedure_id + "\n" + evaluation_config_id + "\n" +
         baseline_artifact_digest + "\n" + candidate_artifact_digest + "\n" +
         evaluator_artifact_digest + "\n" + std::to_string(baseline_trial_count) + "\n" +
         std::to_string(candidate_trial_count);
-    return evidence_hash(evidence) == evaluation_evidence_digest;
+    if (evidence_hash(evidence) != evaluation_evidence_digest) return false;
+    EvolutionExperiment recomputed = *this;
+    return EvolutionExperimentEngine::evaluate(recomputed) == outcome;
 }
 
 ExperimentOutcome EvolutionExperimentEngine::evaluate(EvolutionExperiment& experiment) noexcept {
