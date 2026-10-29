@@ -3,8 +3,10 @@
 #include "jarvis/core/evolution_experiment.hpp"
 #include "jarvis/core/evolution_sandbox.hpp"
 #include "jarvis/core/evolution_trials.hpp"
+#include "jarvis/core/process_isolation.hpp"
 
 #include <cstddef>
+#include <string>
 #include <vector>
 
 namespace jarvis::core {
@@ -28,6 +30,13 @@ struct EvolutionTrialBatch {
 
 class EvolutionExperimentCoordinator {
 public:
+    static EvolutionTrialBatch run_isolated(
+        EvolutionExperiment& experiment,
+        const ProcessIsolationBackend& backend,
+        const std::string& procedure_id,
+        const LocalFitnessProcedure& procedure,
+        EvolutionTrialConfig config = {}) noexcept;
+
     static EvolutionTrialBatch run(EvolutionExperiment& experiment,
                                    const EvolutionSandbox& sandbox,
                                    const CandidateExecutor& baseline_executor,
