@@ -57,6 +57,7 @@ int main(int argc,char**argv){
  EvolutionSafetyPolicy test_policy{};
  test_policy.minimum_confidence=proposals.front().confidence;
  test_policy.require_isolation=false; // This suite tests the policy branch; evaluation evidence remains runner-issued.
+ test_policy.trusted_evaluator_digest=detail::sha256_file(evaluator_path);
  EvolutionController controller(model, controller_history, test_policy);
  EvolutionExperiment experiment{};
  experiment.id="exp-controller";
