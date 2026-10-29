@@ -133,6 +133,7 @@ EvolutionTrialBatch EvolutionExperimentCoordinator::run_isolated(
     experiment.candidate_executed = true;
     experiment.isolated = true;
     experiment.evaluation_procedure_id = evidence.evaluation_procedure_id;
+    experiment.evaluator_executable_fingerprint = evidence.evaluator_executable_fingerprint;
     experiment.baseline_artifact_id = evidence.baseline_artifact_id;
     experiment.candidate_artifact_id = evidence.candidate_artifact_id;
     if (EvolutionTrials::supports_adoption(batch.baseline, batch.candidate,
