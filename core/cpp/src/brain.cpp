@@ -515,8 +515,14 @@ void Brain::replay(const Event& event, bool external_observation) {
                 event.data.find("isolated") != event.data.end() &&
                 std::get_if<bool>(&event.data.at("isolated")) != nullptr &&
                 *std::get_if<bool>(&event.data.at("isolated"));
-            if (experiment.isolated && experiment.candidate_executed)
-                experiment.attest_isolated_result();
+            if (const auto* value = string_value(event.data, "evaluation_procedure_id")) experiment.evaluation_procedure_id = *value;
+            if (const auto* value = string_value(event.data, "evaluation_config_id")) experiment.evaluation_config_id = *value;
+            if (const auto* value = string_value(event.data, "baseline_artifact_digest")) experiment.baseline_artifact_digest = *value;
+            if (const auto* value = string_value(event.data, "candidate_artifact_digest")) experiment.candidate_artifact_digest = *value;
+            if (const auto* value = string_value(event.data, "evaluator_artifact_digest")) experiment.evaluator_artifact_digest = *value;
+            if (const auto* value = string_value(event.data, "evaluation_evidence_digest")) experiment.evaluation_evidence_digest = *value;
+            experiment.baseline_trial_count = static_cast<std::size_t>(std::max<std::int64_t>(0, integer_value(event.data, "baseline_trial_count")));
+            experiment.candidate_trial_count = static_cast<std::size_t>(std::max<std::int64_t>(0, integer_value(event.data, "candidate_trial_count")));
             evolution_controller_.replay_evaluation(experiment);
         }
         return;
@@ -554,14 +560,21 @@ void Brain::replay(const Event& event, bool external_observation) {
                     event.data.find("isolated") != event.data.end() &&
                     std::get_if<bool>(&event.data.at("isolated")) != nullptr &&
                     *std::get_if<bool>(&event.data.at("isolated"));
-                if (experiment.isolated && experiment.candidate_executed)
-                    experiment.attest_isolated_result();
+                if (const auto* value = string_value(event.data, "evaluation_procedure_id")) experiment.evaluation_procedure_id = *value;
+                if (const auto* value = string_value(event.data, "evaluation_config_id")) experiment.evaluation_config_id = *value;
+                if (const auto* value = string_value(event.data, "baseline_artifact_digest")) experiment.baseline_artifact_digest = *value;
+                if (const auto* value = string_value(event.data, "candidate_artifact_digest")) experiment.candidate_artifact_digest = *value;
+                if (const auto* value = string_value(event.data, "evaluator_artifact_digest")) experiment.evaluator_artifact_digest = *value;
+                if (const auto* value = string_value(event.data, "evaluation_evidence_digest")) experiment.evaluation_evidence_digest = *value;
+                experiment.baseline_trial_count = static_cast<std::size_t>(std::max<std::int64_t>(0, integer_value(event.data, "baseline_trial_count")));
+                experiment.candidate_trial_count = static_cast<std::size_t>(std::max<std::int64_t>(0, integer_value(event.data, "candidate_trial_count")));
                 const auto adoption = evolution_controller_.adoption_journal().get(*experiment_id);
                 if (adoption.has_value() &&
                     (adoption->state == AdoptionState::Adopted ||
                      adoption->state == AdoptionState::RolledBack)) return;
                 // Apply the same evaluation/history/journal checks as live
                 // adoption before replay is allowed to mutate the parameter.
+                if (!evolution_controller_.validate_adoption_for_brain(experiment)) return;
                 if (!evolution_controller_.validate_adoption_for_brain(experiment)) return;
                 if (!evolution_.adopt(proposal)) return;
                 if (!evolution_controller_.replay_adoption(experiment)) {
