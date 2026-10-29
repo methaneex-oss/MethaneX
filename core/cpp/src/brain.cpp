@@ -560,6 +560,9 @@ void Brain::replay(const Event& event, bool external_observation) {
                 if (adoption.has_value() &&
                     (adoption->state == AdoptionState::Adopted ||
                      adoption->state == AdoptionState::RolledBack)) return;
+                // Apply the same evaluation/history/journal checks as live
+                // adoption before replay is allowed to mutate the parameter.
+                if (!evolution_controller_.validate_adoption_for_brain(experiment)) return;
                 if (!evolution_.adopt(proposal)) return;
                 if (!evolution_controller_.replay_adoption(experiment)) {
                     evolution_.restore_previous(*key);
