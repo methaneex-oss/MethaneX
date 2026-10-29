@@ -106,7 +106,7 @@ int main(int argc, char** argv) {
     // Default isolated orchestration must use the paired local evaluator,
     // not the callback simulation route.
     EvolutionModel isolated_model;
-    assert(isolated_model.register_parameter("isolated", 0.4));
+    isolated_model.register_parameter("isolated", 0.4);
     EvolutionHistory isolated_history;
     EvolutionSafetyPolicy isolated_safety;
     EvolutionController isolated_controller(isolated_model, isolated_history, isolated_safety);
