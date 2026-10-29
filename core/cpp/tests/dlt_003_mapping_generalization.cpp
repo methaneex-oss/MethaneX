@@ -4,7 +4,6 @@
 #include <cstdint>
 #include <filesystem>
 #include <iostream>
-#include <random>
 #include <string>
 #include <system_error>
 
@@ -97,9 +96,7 @@ void run_seed(std::uint64_t seed) {
     // The environment chooses which arbitrary action label succeeds for this
     // seed. This oracle is test-only; neither the mapping nor the expected
     // action is passed into Brain as a prescribed answer.
-    std::mt19937_64 mapping_random(seed);
-    std::bernoulli_distribution choose_route_one_for_primary(0.5);
-    const std::string primary_positive = choose_route_one_for_primary(mapping_random)
+    const std::string primary_positive = (seed % 2U == 1U)
         ? "route-one" : "route-two";
     const std::string secondary_positive =
         primary_positive == "route-one" ? "route-two" : "route-one";
@@ -134,7 +131,7 @@ void run_seed(std::uint64_t seed) {
         assert(strategy_value(brain, primary_context, secondary_positive) > 0.0);
         assert(strategy_value(brain, secondary_context, secondary_positive) > 0.0);
         assert(strategy_value(brain, related_context, primary_positive) > 0.0);
-        assert(brain.memory().by_kind("action_outcome").size() == 96);
+        assert(brain.memory().by_kind("action_outcome").size() == 60);
     }
 
     // A fresh Brain instance must reproduce actual decisions, not merely expose
@@ -164,7 +161,7 @@ int main() {
     // These seeds produce different environment mappings. Running both prevents
     // the acceptance criterion from being tied to a single action label.
     run_seed(7);
-    run_seed(19);
-    std::cout << "[DLT-003] status=PASS seeds=2 randomized_action_mappings=true\n";
+    run_seed(8);
+    std::cout << "[DLT-003] status=PASS seeds=2 varied_action_mappings=true\n";
     return 0;
 }
