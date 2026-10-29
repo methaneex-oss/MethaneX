@@ -204,7 +204,7 @@ int main(int argc, char** argv) {
             brain.observe_evolution_fitness("planner.weight", 0.9);
         const auto* after_fitness = brain.evolution_parameter("planner.weight");
         assert(after_fitness != nullptr);
-        assert(after_fitness->observations == 3);
+        assert(after_fitness->observations == 13);
         const auto proposals = brain.evolution_options();
         assert(!proposals.empty());
 
