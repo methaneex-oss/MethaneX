@@ -190,6 +190,7 @@ bool EvolutionController::validate_adoption_for_brain(const EvolutionExperiment&
         record->minimum_improvement != experiment.minimum_improvement ||
         record->isolated != experiment.isolated ||
         record->evaluation_procedure_id != experiment.evaluation_procedure_id ||
+        record->evaluator_executable_fingerprint != experiment.evaluator_executable_fingerprint ||
         record->baseline_artifact_id != experiment.baseline_artifact_id ||
         record->candidate_artifact_id != experiment.candidate_artifact_id) return false;
 
