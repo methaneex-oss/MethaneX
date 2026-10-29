@@ -521,8 +521,6 @@ void Brain::replay(const Event& event, bool external_observation) {
                 experiment.baseline_artifact_id = *artifact;
             if (const auto* artifact = string_value(event.data, "candidate_artifact_id"))
                 experiment.candidate_artifact_id = *artifact;
-            if (experiment.isolated && experiment.candidate_executed)
-                experiment.attest_isolated_result();
             evolution_controller_.replay_evaluation(experiment);
         }
         return;
@@ -566,8 +564,6 @@ void Brain::replay(const Event& event, bool external_observation) {
                     experiment.baseline_artifact_id = *artifact;
                 if (const auto* artifact = string_value(event.data, "candidate_artifact_id"))
                     experiment.candidate_artifact_id = *artifact;
-                if (experiment.isolated && experiment.candidate_executed)
-                    experiment.attest_isolated_result();
                 const auto adoption = evolution_controller_.adoption_journal().get(*experiment_id);
                 if (adoption.has_value() &&
                     (adoption->state == AdoptionState::Adopted ||
