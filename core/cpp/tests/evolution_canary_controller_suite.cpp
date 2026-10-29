@@ -15,8 +15,7 @@ void attest_isolated(EvolutionExperiment& experiment) {
     ProcessIsolationBackend backend;
     const IsolatedCommand command{
         evaluator_executable,
-        {"--test-evaluator", std::to_string(experiment.baseline_fitness),
-         std::to_string(experiment.candidate_fitness)},
+        {"--test-evaluator"},
         "", "jarvis.test.fixture.v1"};
     EvolutionExperimentRunner::run_isolated_command(experiment, backend, command);
 }
