@@ -86,19 +86,46 @@ bool EvolutionController::record_evaluation_for_brain(
 
 bool EvolutionController::replay_evaluation(
     const EvolutionExperiment& experiment) noexcept {
-    if (experiment.id.empty() || experiment.proposal.key.empty()) return false;
+    if (experiment.id.empty() || experiment.proposal.key.empty() ||
+        !experiment.candidate_executed ||
+        !std::isfinite(experiment.baseline_fitness) ||
+        !std::isfinite(experiment.candidate_fitness) ||
+        !std::isfinite(experiment.minimum_improvement) ||
+        experiment.minimum_improvement < 0.0 ||
+        !std::isfinite(experiment.confidence) ||
+        experiment.confidence < 0.0 || experiment.confidence > 1.0 ||
+        !std::isfinite(experiment.proposal.current) ||
+        !std::isfinite(experiment.proposal.proposed) ||
+        !std::isfinite(experiment.proposal.expected_gain) ||
+        !std::isfinite(experiment.proposal.confidence) ||
+        experiment.outcome == ExperimentOutcome::Pending ||
+        experiment.outcome == ExperimentOutcome::Invalid ||
+        (policy_.require_isolation && !experiment.has_valid_isolation_attestation()))
+        return false;
+
+    EvolutionExperiment recomputed = experiment;
+    if (EvolutionExperimentEngine::evaluate(recomputed) != experiment.outcome ||
+        !EvolutionSafetyGate::approve(recomputed, policy_)) return false;
+
     const auto records = history_.for_experiment(experiment.id);
     bool evaluated = false;
     for (const auto& record : records) {
-        if (record.action == EvolutionRecordAction::Evaluated) {
-            evaluated = true;
-            break;
-        }
+        if (record.action != EvolutionRecordAction::Evaluated) continue;
+        if (record.parameter_key != experiment.proposal.key ||
+            record.outcome != experiment.outcome ||
+            record.baseline_fitness != experiment.baseline_fitness ||
+            record.candidate_fitness != experiment.candidate_fitness ||
+            record.confidence != experiment.confidence) return false;
+        evaluated = true;
     }
-    // Replay repairs the in-memory journal even when the durable history entry
-    // predates a process restart that lost controller-local state.
-    if (evaluated) return adoption_journal_.stage(experiment);
+    // Rebuild only from a fully validated evaluation and never overwrite a
+    // rejected, rolled-back, or otherwise terminal experiment record.
+    const auto existing = adoption_journal_.get(experiment.id);
+    if (existing.has_value() &&
+        existing->state != AdoptionState::Pending &&
+        existing->state != AdoptionState::Adopted) return false;
     if (!adoption_journal_.stage(experiment)) return false;
+    if (evaluated) return true;
     return history_.append(EvolutionHistoryRecord{
         experiment.id, experiment.proposal.key, EvolutionRecordAction::Evaluated,
         experiment.outcome, experiment.baseline_fitness, experiment.candidate_fitness,
