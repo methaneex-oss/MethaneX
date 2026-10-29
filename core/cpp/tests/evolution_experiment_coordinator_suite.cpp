@@ -9,26 +9,11 @@ using namespace jarvis::core;
 namespace {
 std::string evaluator_executable;
 IsolatedCommand evaluator_command(const EvolutionExperiment& experiment) {
-    ProcessIsolationBackend backend;
-    const std::string script =
-        "baseline=\"$1\"; candidate=\"$2\"; shift 2; "
-        "for arg in \"$@\"; do case \"$arg\" in "
-        "--experiment-id=*) id=\"${arg#*=}\";; "
-        "--parameter-key=*) key=\"${arg#*=}\";; "
-        "--parameter-value=*) value=\"${arg#*=}\";; "
-        "--role=*) role=\"${arg#*=}\";; "
-        "--procedure-id=*) procedure=\"${arg#*=}\";; "
-        "--artifact-id=*) artifact=\"${arg#*=}\";; esac; done; "
-        "if [ \"$role\" = baseline ]; then fitness=\"$baseline\"; "
-        "else fitness=\"$candidate\"; fi; "
-        "printf 'JARVIS_EVALUATION_V1\\nexperiment_id=%s\\nparameter_key=%s\\nparameter_value=%s\\nrole=%s\\nprocedure_id=%s\\nartifact_id=%s\\nfitness=%s\\n' "
-        "\"$id\" \"$key\" \"$value\" \"$role\" \"$procedure\" \"$artifact\" \"$fitness\"";
-    const IsolatedCommand command{
+    return IsolatedCommand{
         evaluator_executable,
         {"--test-evaluator", std::to_string(experiment.baseline_fitness),
          std::to_string(experiment.candidate_fitness)},
         "", "jarvis.test.fixture.v1"};
-    return command;
 }
 }
 
