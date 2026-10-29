@@ -175,9 +175,11 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
         struct rlimit memory_limit{limits_.max_memory_bytes, limits_.max_memory_bytes};
         struct rlimit cpu_limit{limits_.max_cpu_seconds, limits_.max_cpu_seconds};
         struct rlimit file_limit{limits_.max_file_bytes, limits_.max_file_bytes};
-        (void)setrlimit(RLIMIT_AS, &memory_limit);
-        (void)setrlimit(RLIMIT_CPU, &cpu_limit);
-        (void)setrlimit(RLIMIT_FSIZE, &file_limit);
+        // A process is not accepted as isolated if its resource ceilings
+        // could not be installed. Fail closed instead of silently downgrading.
+        if (setrlimit(RLIMIT_AS, &memory_limit) != 0 ||
+            setrlimit(RLIMIT_CPU, &cpu_limit) != 0 ||
+            setrlimit(RLIMIT_FSIZE, &file_limit) != 0) _exit(125);
 
         if (!command.working_directory.empty() && chdir(command.working_directory.c_str()) != 0) _exit(126);
 
