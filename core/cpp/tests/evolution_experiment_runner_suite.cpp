@@ -23,10 +23,10 @@ int run_test_evaluator(int argc, char** argv) {
     if (procedure.empty() || parameter.empty() || artifact.empty() || value_text.empty()) return 2;
     const double value = std::stod(value_text);
     const double fitness = procedure == "equal-fitness" ? 0.70 : 0.70 + value - 0.40;
-    std::cout << "JARVIS_EVAL_V1\\nprocedure=" << procedure
-              << "\\nparameter=" << parameter << "\\nvalue=" << value_text
-              << "\\nartifact=" << artifact << "\\nfitness="
-              << std::setprecision(17) << fitness << "\\n";
+    std::cout << "JARVIS_EVAL_V1\nprocedure=" << procedure
+              << "\nparameter=" << parameter << "\nvalue=" << value_text
+              << "\nartifact=" << artifact << "\nfitness="
+              << std::setprecision(17) << fitness << "\n";
     return 0;
 }
 EvolutionExperiment make_experiment() {
