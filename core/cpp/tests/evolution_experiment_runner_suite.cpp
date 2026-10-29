@@ -55,6 +55,22 @@ int main(int argc, char** argv) {
     }
 
     {
+        // A matching executable hash is not enough: an arbitrary local command
+        // that prints a number must fail the structured evaluation protocol.
+        auto experiment = make_experiment();
+        ProcessIsolationBackend backend;
+        IsolatedEvaluationProcedure numeric_only{
+            IsolatedCommand{"/bin/sh", {"-c", "printf 0.86"}, ""},
+            "untrusted-shell-evaluator", "linear-fitness-v1",
+            baseline_artifact_path, candidate_artifact_path, detail::sha256_file("/bin/sh")};
+        const auto outcome = EvolutionExperimentRunner::run_isolated_evaluation(
+            experiment, backend, numeric_only, 4, 4, 0.5);
+        assert(outcome == ExperimentOutcome::Invalid);
+        assert(!experiment.candidate_executed);
+        assert(!experiment.has_valid_evaluation_evidence());
+    }
+
+    {
         auto experiment = make_experiment();
         ProcessIsolationBackend backend;
         IsolatedEvaluationProcedure procedure{
