@@ -13,9 +13,10 @@ EvolutionController::EvolutionController(EvolutionModel& model, EvolutionHistory
 bool EvolutionController::record_evaluation(const EvolutionExperiment& experiment) {
     if (experiment.id.empty() || experiment.proposal.key.empty() ||
         !experiment.candidate_executed ||
-        experiment.evaluation_procedure_id.empty() ||
-        experiment.baseline_artifact_id.empty() ||
-        experiment.candidate_artifact_id.empty() ||
+        (policy_.require_isolation &&
+         (experiment.evaluation_procedure_id.empty() ||
+          experiment.baseline_artifact_id.empty() ||
+          experiment.candidate_artifact_id.empty())) ||
         !std::isfinite(experiment.baseline_fitness) ||
         !std::isfinite(experiment.candidate_fitness) ||
         !std::isfinite(experiment.confidence) ||
@@ -56,9 +57,10 @@ bool EvolutionController::validate_evaluation_for_brain(
     const EvolutionExperiment& experiment) const noexcept {
     if (experiment.id.empty() || experiment.proposal.key.empty() ||
         !experiment.candidate_executed ||
-        experiment.evaluation_procedure_id.empty() ||
-        experiment.baseline_artifact_id.empty() ||
-        experiment.candidate_artifact_id.empty() ||
+        (policy_.require_isolation &&
+         (experiment.evaluation_procedure_id.empty() ||
+          experiment.baseline_artifact_id.empty() ||
+          experiment.candidate_artifact_id.empty())) ||
         !std::isfinite(experiment.baseline_fitness) ||
         !std::isfinite(experiment.candidate_fitness) ||
         !std::isfinite(experiment.confidence) ||
