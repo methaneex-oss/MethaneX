@@ -13,6 +13,9 @@ EvolutionController::EvolutionController(EvolutionModel& model, EvolutionHistory
 bool EvolutionController::record_evaluation(const EvolutionExperiment& experiment) {
     if (experiment.id.empty() || experiment.proposal.key.empty() ||
         !experiment.candidate_executed ||
+        experiment.evaluation_procedure_id.empty() ||
+        experiment.baseline_artifact_id.empty() ||
+        experiment.candidate_artifact_id.empty() ||
         !std::isfinite(experiment.baseline_fitness) ||
         !std::isfinite(experiment.candidate_fitness) ||
         !std::isfinite(experiment.confidence) ||
@@ -53,6 +56,9 @@ bool EvolutionController::validate_evaluation_for_brain(
     const EvolutionExperiment& experiment) const noexcept {
     if (experiment.id.empty() || experiment.proposal.key.empty() ||
         !experiment.candidate_executed ||
+        experiment.evaluation_procedure_id.empty() ||
+        experiment.baseline_artifact_id.empty() ||
+        experiment.candidate_artifact_id.empty() ||
         !std::isfinite(experiment.baseline_fitness) ||
         !std::isfinite(experiment.candidate_fitness) ||
         !std::isfinite(experiment.confidence) ||
@@ -86,7 +92,14 @@ bool EvolutionController::record_evaluation_for_brain(
 
 bool EvolutionController::replay_evaluation(
     const EvolutionExperiment& experiment) noexcept {
-    if (experiment.id.empty() || experiment.proposal.key.empty()) return false;
+    if (experiment.id.empty() || experiment.proposal.key.empty() ||
+        !experiment.candidate_executed || !experiment.isolated ||
+        experiment.evaluation_procedure_id.empty() ||
+        experiment.baseline_artifact_id.empty() ||
+        experiment.candidate_artifact_id.empty() ||
+        !experiment.has_valid_isolation_attestation()) return false;
+    EvolutionExperiment verified = experiment;
+    if (EvolutionExperimentEngine::evaluate(verified) != experiment.outcome) return false;
     const auto records = history_.for_experiment(experiment.id);
     bool evaluated = false;
     for (const auto& record : records) {
@@ -221,8 +234,13 @@ bool EvolutionController::compensate_adoption_for_brain(
 }
 
 bool EvolutionController::replay_adoption(const EvolutionExperiment& experiment) noexcept {
-    if (experiment.id.empty() || !adoption_journal_.stage(experiment)) return false;
-    return adoption_journal_.commit(experiment.id, "replayed");
+    if (!validate_adoption_for_brain(experiment)) return false;
+    if (!model_.adopt(experiment.proposal)) return false;
+    if (!adoption_journal_.commit(experiment.id, "replayed")) {
+        model_.restore_previous(experiment.proposal.key);
+        return false;
+    }
+    return true;
 }
 
 bool EvolutionController::replay_rollback(const std::string& experiment_id,
