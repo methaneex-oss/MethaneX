@@ -123,7 +123,10 @@ int main(int argc, char** argv) {
     isolated_safety.minimum_confidence = 0.75;
     EvolutionController isolated_controller(isolated_model, isolated_history, isolated_safety);
     EvolutionOrchestrator isolated_orchestrator({}, EvolutionTrialConfig{4, 4, 0.01, 0.75, true});
-    ProcessIsolationBackend isolated_backend;
+    ProcessIsolationLimits isolated_limits;
+    isolated_limits.sandbox.timeout = std::chrono::milliseconds{5000};
+    isolated_limits.max_cpu_seconds = 10;
+    ProcessIsolationBackend isolated_backend(isolated_limits);
     const auto isolated_result = isolated_orchestrator.run_isolated(
         opportunities.front(),
         [](const EvolutionOpportunity&) {
