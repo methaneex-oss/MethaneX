@@ -22,6 +22,7 @@ void attest_isolated(EvolutionExperiment& experiment) {
     }
     ProcessIsolationLimits isolation_limits;
     isolation_limits.sandbox.timeout = std::chrono::milliseconds{5000};
+    isolation_limits.max_memory_bytes = 1024ULL * 1024ULL * 1024ULL;
     isolation_limits.max_cpu_seconds = 10;
     ProcessIsolationBackend backend(isolation_limits);
     const IsolatedCommand command{
@@ -151,7 +152,7 @@ int main(int argc, char** argv) {
             std::cerr << "invalid attestation: outcome=" << static_cast<int>(experiment.outcome)
                       << " executed=" << experiment.candidate_executed
                       << " isolated=" << experiment.isolated
-                      << " procedure=" << experiment.evaluation_procedure_id << '\\n';
+                      << " procedure=" << experiment.evaluation_procedure_id << '\n';
         }
         auto recomputed_experiment = experiment;
         const auto recomputed_outcome = EvolutionExperimentEngine::evaluate(recomputed_experiment);
@@ -162,7 +163,7 @@ int main(int argc, char** argv) {
                       << " candidate=" << experiment.candidate_fitness
                       << " threshold=" << experiment.minimum_improvement
                       << " confidence=" << experiment.confidence
-                      << " proposal_confidence=" << experiment.proposal.confidence << '\\n';
+                      << " proposal_confidence=" << experiment.proposal.confidence << '\n';
         }
         if (!check(brain.record_evolution_evaluation(experiment),
                    "evolution evaluation was journaled")) return 1;
