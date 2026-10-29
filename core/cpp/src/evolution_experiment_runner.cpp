@@ -40,6 +40,7 @@ bool parse_measurement(const ProcessIsolationResult& result,
                        const std::string& procedure_id,
                        const std::string& role,
                        double parameter_value,
+                       std::size_t trial_index,
                        double& fitness) {
     if (!result.started || !result.isolated || !result.completed ||
         result.timed_out || result.output_limited || result.exit_code != 0) return false;
@@ -68,12 +69,14 @@ bool parse_measurement(const ProcessIsolationResult& result,
     const auto* evaluator_fingerprint = field("evaluator_fingerprint");
     const auto* artifact = field("artifact_id");
     const auto* measured = field("fitness");
+    const auto* trial = field("trial_index");
     if (id == nullptr || key == nullptr || value == nullptr || output_role == nullptr ||
         procedure == nullptr || evaluator_fingerprint == nullptr ||
-        artifact == nullptr || measured == nullptr ||
+        artifact == nullptr || measured == nullptr || trial == nullptr ||
         *id != experiment.id || *key != experiment.proposal.key ||
         *output_role != role || *procedure != procedure_id ||
         *evaluator_fingerprint != experiment.evaluator_executable_fingerprint ||
+        *trial != std::to_string(trial_index) ||
         *artifact != fingerprint(experiment.proposal.key + "\x1f" +
                                  std::to_string(parameter_value) + "\x1f" + procedure_id))
         return false;
@@ -95,6 +98,7 @@ bool run_measurement(const EvolutionExperiment& experiment,
                      const IsolatedCommand& command,
                      const std::string& role,
                      double parameter_value,
+                     std::size_t trial_index,
                      double& fitness) {
     // Recheck before each measurement so baseline/candidate cannot silently
     // use different evaluator binaries if the configured executable changes.
@@ -112,9 +116,10 @@ bool run_measurement(const EvolutionExperiment& experiment,
     invocation.arguments.push_back("--procedure-id=" + command.evaluation_procedure_id);
     invocation.arguments.push_back("--evaluator-fingerprint=" + command.expected_executable_fingerprint);
     invocation.arguments.push_back("--artifact-id=" + artifact);
+    invocation.arguments.push_back("--trial-index=" + std::to_string(trial_index));
     const auto result = backend.run(invocation);
     return parse_measurement(result, experiment, command.evaluation_procedure_id,
-                             role, parameter_value, fitness);
+                             role, parameter_value, trial_index, fitness);
 }
 
 } // namespace
@@ -235,9 +240,9 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_command(
     double baseline_fitness = 0.0;
     double candidate_fitness = 0.0;
     if (!run_measurement(experiment, backend, command, "baseline",
-                         experiment.proposal.current, baseline_fitness) ||
+                         experiment.proposal.current, command.trial_index, baseline_fitness) ||
         !run_measurement(experiment, backend, command, "candidate",
-                         experiment.proposal.proposed, candidate_fitness)) {
+                         experiment.proposal.proposed, command.trial_index, candidate_fitness)) {
         return experiment.outcome;
     }
 
