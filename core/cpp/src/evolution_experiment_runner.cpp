@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <filesystem>
+#include <fstream>
 #include <algorithm>
 #include <map>
 #include <sstream>
@@ -55,12 +56,15 @@ bool parse_measurement(const ProcessIsolationResult& result,
     const auto* value = field("parameter_value");
     const auto* output_role = field("role");
     const auto* procedure = field("procedure_id");
+    const auto* evaluator_fingerprint = field("evaluator_fingerprint");
     const auto* artifact = field("artifact_id");
     const auto* measured = field("fitness");
     if (id == nullptr || key == nullptr || value == nullptr || output_role == nullptr ||
-        procedure == nullptr || artifact == nullptr || measured == nullptr ||
+        procedure == nullptr || evaluator_fingerprint == nullptr ||
+        artifact == nullptr || measured == nullptr ||
         *id != experiment.id || *key != experiment.proposal.key ||
         *output_role != role || *procedure != procedure_id ||
+        *evaluator_fingerprint != experiment.evaluator_executable_fingerprint ||
         *artifact != fingerprint(experiment.proposal.key + "\x1f" +
                                  std::to_string(parameter_value) + "\x1f" + procedure_id))
         return false;
@@ -93,6 +97,7 @@ bool run_measurement(const EvolutionExperiment& experiment,
     invocation.arguments.push_back("--parameter-value=" + std::to_string(parameter_value));
     invocation.arguments.push_back("--role=" + role);
     invocation.arguments.push_back("--procedure-id=" + command.evaluation_procedure_id);
+    invocation.arguments.push_back("--evaluator-fingerprint=" + command.expected_executable_fingerprint);
     invocation.arguments.push_back("--artifact-id=" + artifact);
     const auto result = backend.run(invocation);
     return parse_measurement(result, experiment, command.evaluation_procedure_id,
@@ -100,6 +105,28 @@ bool run_measurement(const EvolutionExperiment& experiment,
 }
 
 } // namespace
+
+std::string EvolutionExperimentRunner::executable_fingerprint(
+    const std::string& executable) noexcept {
+    try {
+        std::ifstream input(executable, std::ios::binary);
+        if (!input) return {};
+        std::uint64_t hash = 14695981039346656037ULL;
+        char buffer[8192];
+        while (input) {
+            input.read(buffer, sizeof(buffer));
+            const auto count = input.gcount();
+            for (std::streamsize i = 0; i < count; ++i) {
+                hash ^= static_cast<unsigned char>(buffer[i]);
+                hash *= 1099511628211ULL;
+            }
+        }
+        if (input.bad()) return {};
+        return std::to_string(hash);
+    } catch (...) {
+        return {};
+    }
+}
 
 ExperimentOutcome EvolutionExperimentRunner::run(EvolutionExperiment& experiment,
                                                   const EvolutionSandbox& sandbox,
@@ -126,8 +153,12 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_command(
     experiment.isolated = false;
     experiment.outcome = ExperimentOutcome::Invalid;
     if (!safe_field(experiment.id) || !safe_field(experiment.proposal.key) ||
-        !safe_field(command.evaluation_procedure_id) || is_interpreter(command.executable))
+        !safe_field(command.evaluation_procedure_id) ||
+        command.expected_executable_fingerprint.empty() ||
+        is_interpreter(command.executable) ||
+        executable_fingerprint(command.executable) != command.expected_executable_fingerprint)
         return experiment.outcome;
+    experiment.evaluator_executable_fingerprint = command.expected_executable_fingerprint;
 
     // The evaluator must measure both settings through the same named local
     // procedure. A command that merely prints a numeric fitness is not evidence.
@@ -143,6 +174,7 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_command(
     experiment.baseline_fitness = baseline_fitness;
     experiment.candidate_fitness = candidate_fitness;
     experiment.evaluation_procedure_id = command.evaluation_procedure_id;
+    experiment.evaluator_executable_fingerprint = command.expected_executable_fingerprint;
     experiment.baseline_artifact_id = fingerprint(
         experiment.proposal.key + "\x1f" +
         std::to_string(experiment.proposal.current) + "\x1f" +
