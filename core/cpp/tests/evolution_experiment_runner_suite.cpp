@@ -75,6 +75,11 @@ int main(int argc, char** argv) {
         assert(!experiment.has_valid_isolation_attestation());
         assert(!experiment.has_valid_evaluation_evidence());
         experiment.candidate_artifact_digest = original_candidate_digest;
+        const double original_proposed = experiment.proposal.proposed;
+        experiment.proposal.proposed += 0.01;
+        assert(!experiment.has_valid_isolation_attestation());
+        assert(!experiment.has_valid_evaluation_evidence());
+        experiment.proposal.proposed = original_proposed;
         experiment.candidate_fitness += 0.01;
         assert(!experiment.has_valid_isolation_attestation());
         assert(!experiment.has_valid_evaluation_evidence());
