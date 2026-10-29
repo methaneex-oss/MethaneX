@@ -61,10 +61,10 @@ int main(int argc, char** argv) {
             squared_error += error * error;
         }
         const double fitness = 1.0 / (1.0 + squared_error / 4.0);
-        std::cout << "JARVIS_EVAL_V1\\t" << argv[3] << "\\t" << argv[4] << "\\t"
-                  << argv[5] << "\\t" << argv[6] << "\\t" << argv[7] << "\\t"
-                  << argv[8] << "\\t" << argv[10] << "\\t" << argv[11] << "\\t"
-                  << argv[12] << "\\t" << argv[13] << "\\t" << fitness;
+        std::cout << "JARVIS_EVAL_V1\t" << argv[3] << "\t" << argv[4] << "\t"
+                  << argv[5] << "\t" << argv[6] << "\t" << argv[7] << "\t"
+                  << argv[8] << "\t" << argv[10] << "\t" << argv[11] << "\t"
+                  << argv[12] << "\t" << argv[13] << "\t" << fitness;
         return 0;
     }
     evaluator_path = std::filesystem::absolute(argv[0]).string();
