@@ -189,11 +189,12 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
         struct rlimit file_limit{limits_.max_file_bytes, limits_.max_file_bytes};
 #if !JARVIS_SANITIZER_BUILD
         // ASan/TSan reserve large virtual address ranges; RLIMIT_AS can prevent
-        // the instrumented evaluator from starting. Keep CPU/file limits active.
-        (void)setrlimit(RLIMIT_AS, &memory_limit);
+        // the instrumented evaluator from starting. In normal builds, inability
+        // to enforce a requested resource limit fails closed.
+        if (setrlimit(RLIMIT_AS, &memory_limit) != 0) _exit(125);
 #endif
-        (void)setrlimit(RLIMIT_CPU, &cpu_limit);
-        (void)setrlimit(RLIMIT_FSIZE, &file_limit);
+        if (setrlimit(RLIMIT_CPU, &cpu_limit) != 0 ||
+            setrlimit(RLIMIT_FSIZE, &file_limit) != 0) _exit(125);
 
         if (!command.working_directory.empty() && chdir(command.working_directory.c_str()) != 0) _exit(126);
 
