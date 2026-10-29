@@ -1,12 +1,16 @@
 #include "jarvis/core/evolution_experiment_runner.hpp"
+#include "evolution_test_evaluator.hpp"
 #include "jarvis/core/evolution_safety.hpp"
 
 #include <cassert>
+#include <string>
+#include <filesystem>
 #include <cmath>
 
 using namespace jarvis::core;
 
 namespace {
+std::string evaluator_executable;
 void attest_isolated(EvolutionExperiment& experiment) {
     ProcessIsolationBackend backend;
     const std::string script =
@@ -23,9 +27,8 @@ void attest_isolated(EvolutionExperiment& experiment) {
         "printf 'JARVIS_EVALUATION_V1\\nexperiment_id=%s\\nparameter_key=%s\\nparameter_value=%s\\nrole=%s\\nprocedure_id=%s\\nartifact_id=%s\\nfitness=%s\\n' "
         "\"$id\" \"$key\" \"$value\" \"$role\" \"$procedure\" \"$artifact\" \"$fitness\"";
     const IsolatedCommand command{
-        "/bin/sh",
-        {"-c", script, "jarvis-test-evaluator",
-         std::to_string(experiment.baseline_fitness),
+        evaluator_executable,
+        {"--test-evaluator", std::to_string(experiment.baseline_fitness),
          std::to_string(experiment.candidate_fitness)},
         "", "jarvis.test.fixture.v1"};
     EvolutionExperimentRunner::run_isolated_command(experiment, backend, command);
@@ -38,7 +41,9 @@ EvolutionExperiment make_experiment() {
 }
 }
 
-int main() {
+int main(int argc, char** argv) {
+    if (test_support::run_evolution_evaluator_fixture(argc, argv)) return 0;
+    evaluator_executable = std::filesystem::absolute(argv[0]).string();
     EvolutionSandbox sandbox;
 
     {
