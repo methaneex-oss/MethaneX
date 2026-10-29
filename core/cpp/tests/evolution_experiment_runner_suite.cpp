@@ -7,6 +7,7 @@
 #include <iostream>
 #include <filesystem>
 #include <fstream>
+#include <iomanip>
 #include <string>
 #include <system_error>
 
@@ -20,6 +21,10 @@ EvolutionExperiment make_experiment() {
         "runner-test", EvolutionProposal{"strategy.weight", 0.4, 0.5, 0.1, 0.8},
         0.70, 0.0, 0.05, 0.95};
 }
+void write_artifacts(const EvolutionExperiment& experiment) {
+    { std::ofstream out(baseline_artifact_path); out << std::setprecision(17) << experiment.proposal.current; }
+    { std::ofstream out(candidate_artifact_path); out << std::setprecision(17) << experiment.proposal.proposed; }
+}
 }
 
 int main(int argc, char** argv) {
@@ -27,9 +32,19 @@ int main(int argc, char** argv) {
     if (argc > 1 && std::string(argv[1]) == "--trusted-test-evaluator") {
         if (argc != 14 || std::string(argv[2]) != "--jarvis-evaluate-v1") return 21;
         std::ifstream artifact(argv[9]);
-        std::string score_text;
-        if (!artifact || !(artifact >> score_text)) return 22;
-        const double fitness = std::stod(score_text);
+        std::string coefficient_text;
+        if (!artifact || !(artifact >> coefficient_text)) return 22;
+        const double coefficient = std::stod(coefficient_text);
+        const double evaluated_value = std::stod(argv[6]);
+        if (std::abs(coefficient - evaluated_value) > 1e-12) return 23;
+        // Evaluate this artifact on a small fixed held-out regression task;
+        // fitness is computed from measured prediction error, not a printed score.
+        double squared_error = 0.0;
+        for (double input = 1.0; input <= 4.0; input += 1.0) {
+            const double error = coefficient * input - 0.8 * input;
+            squared_error += error * error;
+        }
+        const double fitness = 1.0 / (1.0 + squared_error / 4.0);
         std::cout << "JARVIS_EVAL_V1\t" << argv[3] << "\t" << argv[4] << "\t"
                   << argv[5] << "\t" << argv[6] << "\t" << argv[7] << "\t"
                   << argv[8] << "\t" << argv[10] << "\t" << argv[11] << "\t"
@@ -39,8 +54,6 @@ int main(int argc, char** argv) {
     const auto temp = std::filesystem::temp_directory_path();
     baseline_artifact_path = (temp / "jarvis_runner_baseline_artifact.txt").string();
     candidate_artifact_path = (temp / "jarvis_runner_candidate_artifact.txt").string();
-    { std::ofstream out(baseline_artifact_path); out << "0.70"; }
-    { std::ofstream out(candidate_artifact_path); out << "0.80"; }
     EvolutionSandbox sandbox;
 
     {
@@ -103,6 +116,7 @@ int main(int argc, char** argv) {
 
     {
         auto experiment = make_experiment();
+        write_artifacts(experiment);
         ProcessIsolationLimits limits;
         limits.require_no_new_privileges = true;
         limits.require_network_syscall_block = true;
@@ -119,6 +133,7 @@ int main(int argc, char** argv) {
 
     {
         auto experiment = make_experiment();
+        write_artifacts(experiment);
         ProcessIsolationLimits weak_limits;
         weak_limits.require_no_new_privileges = false;
         weak_limits.require_privilege_drop = false;
