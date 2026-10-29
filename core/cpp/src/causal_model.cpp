@@ -43,6 +43,13 @@ void CausalModel::observe_transition(const std::vector<Belief>& before,
 
         for (const auto& effect : after) {
             if (effect.key == current.key) continue;
+            const auto prior_effect = std::find_if(before.begin(), before.end(),
+                [&](const Belief& belief) { return belief.key == effect.key; });
+            // A stable fact is context, not an observed consequence of this
+            // transition. Only changed/new effects can support a causal
+            // hypothesis; otherwise one changing variable spuriously links to
+            // every unchanged fact in the world state.
+            if (prior_effect != before.end() && prior_effect->value == effect.value) continue;
             const auto cause = encode(current.key, current.value);
             const auto consequence = encode(effect.key, effect.value);
             auto it = std::find_if(links_.begin(), links_.end(), [&](const CausalLink& link) {
