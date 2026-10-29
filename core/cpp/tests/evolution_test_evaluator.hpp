@@ -22,8 +22,8 @@ inline int run_evolution_test_evaluator(int argc, char** argv) {
     const double value = std::stod(value_text);
     double fitness = 0.70 + value - 0.40;
     if (procedure == "equal-fitness") fitness = 0.70;
-    if (procedure == "subthreshold" && artifact.find("candidate") != std::string::npos)
-        fitness = 0.74;
+    if (procedure == "subthreshold")
+        fitness = artifact.find("candidate") != std::string::npos ? 0.74 : 0.70;
     std::cout << "JARVIS_EVAL_V1\nprocedure=" << procedure
               << "\nparameter=" << parameter << "\nvalue=" << value_text
               << "\nartifact=" << artifact << "\nfitness="
