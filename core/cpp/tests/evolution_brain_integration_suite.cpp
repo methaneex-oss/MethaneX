@@ -22,6 +22,7 @@ namespace {
 std::string evaluator_path;
 std::string baseline_artifact_path;
 std::string candidate_artifact_path;
+EvolutionSafetyPolicy test_policy;
 void write_artifacts(const EvolutionExperiment& experiment) {
     { std::ofstream out(baseline_artifact_path); out << std::setprecision(17) << experiment.proposal.current; }
     { std::ofstream out(candidate_artifact_path); out << std::setprecision(17) << experiment.proposal.proposed; }
@@ -61,6 +62,7 @@ int main(int argc, char** argv) {
         return 0;
     }
     evaluator_path = std::filesystem::absolute(argv[0]).string();
+    test_policy.trusted_evaluator_digest = detail::sha256_file(evaluator_path);
     const auto temp = std::filesystem::temp_directory_path();
     baseline_artifact_path = (temp / "jarvis_brain_baseline_artifact.txt").string();
     candidate_artifact_path = (temp / "jarvis_brain_candidate_artifact.txt").string();
