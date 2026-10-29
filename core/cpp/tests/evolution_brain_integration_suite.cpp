@@ -9,6 +9,7 @@
 #include <string>
 #include <filesystem>
 #include <algorithm>
+#include <iostream>
 
 using namespace jarvis::core;
 
@@ -212,6 +213,23 @@ int main(int argc, char** argv) {
             "brain-evolution-1", proposals.front(), 0.70, 0.90, 0.01, 0.95,
             ExperimentOutcome::Improved, true};
         attest_isolated(experiment);
+        if (!experiment.has_valid_isolation_attestation()) {
+            std::cerr << "invalid attestation: outcome=" << static_cast<int>(experiment.outcome)
+                      << " executed=" << experiment.candidate_executed
+                      << " isolated=" << experiment.isolated
+                      << " procedure=" << experiment.evaluation_procedure_id << '\\n';
+        }
+        auto recomputed_experiment = experiment;
+        const auto recomputed_outcome = EvolutionExperimentEngine::evaluate(recomputed_experiment);
+        if (recomputed_outcome != experiment.outcome) {
+            std::cerr << "outcome mismatch: actual=" << static_cast<int>(experiment.outcome)
+                      << " recomputed=" << static_cast<int>(recomputed_outcome)
+                      << " baseline=" << experiment.baseline_fitness
+                      << " candidate=" << experiment.candidate_fitness
+                      << " threshold=" << experiment.minimum_improvement
+                      << " confidence=" << experiment.confidence
+                      << " proposal_confidence=" << experiment.proposal.confidence << '\\n';
+        }
         assert(brain.record_evolution_evaluation(experiment));
         const auto evaluated_history = brain.evolution_history();
         assert(evaluated_history.size() == 1);
