@@ -13,7 +13,7 @@ namespace jarvis::core::test_support {
 inline bool run_evolution_evaluator_fixture(int argc, char** argv) {
     if (argc < 2 || std::string(argv[1]) != "--test-evaluator") return false;
     std::map<std::string, std::string> fields;
-    for (int i = 4; i < argc; ++i) {
+    for (int i = 2; i < argc; ++i) {
         const std::string argument(argv[i]);
         const auto separator = argument.find('=');
         if (separator == std::string::npos) continue;
