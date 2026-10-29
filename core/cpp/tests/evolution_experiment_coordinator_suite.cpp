@@ -34,6 +34,7 @@ int main(int argc, char** argv) {
         return 0;
     }
 
+    const std::string evaluator_path = std::filesystem::absolute(argv[0]).string();
     EvolutionExperiment experiment{
         "trial-batch",
         EvolutionProposal{"planner.weight", 0.4, 0.5, 0.1, 0.8},
@@ -78,9 +79,9 @@ int main(int argc, char** argv) {
         0.0, 0.0, 0.05, 0.0, ExperimentOutcome::Pending, false};
     ProcessIsolationBackend backend;
     IsolatedEvaluationProcedure procedure{
-        IsolatedCommand{argv[0], {"--trusted-test-evaluator"}, ""},
+        IsolatedCommand{evaluator_path, {"--trusted-test-evaluator"}, ""},
         "coordinator-suite-local-evaluator-v1", "artifact-score-v1",
-        baseline_path, candidate_path, detail::sha256_file(argv[0])};
+        baseline_path, candidate_path, detail::sha256_file(evaluator_path)};
 
     // This uses the coordinator's default trial configuration (isolation on),
     // and measures both artifact states through the same pinned local evaluator.
