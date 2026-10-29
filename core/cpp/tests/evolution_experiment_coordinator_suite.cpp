@@ -44,6 +44,16 @@ int main(int argc, char** argv) {
     assert(experiment.candidate_executed);
     assert(experiment.outcome == ExperimentOutcome::Improved);
     assert(experiment.candidate_fitness > experiment.baseline_fitness);
+
+    EvolutionExperiment untrusted_callback_experiment{
+        "untrusted-callback",
+        EvolutionProposal{"planner.weight", 0.4, 0.5, 0.1, 0.9},
+        0.0, 0.0, 0.05, 0.0, ExperimentOutcome::Pending, false};
+    const auto untrusted_callback_batch = EvolutionExperimentCoordinator::run(
+        untrusted_callback_experiment, sandbox, baseline, candidate);
+    assert(!untrusted_callback_batch.executed);
+    assert(!untrusted_callback_experiment.candidate_executed);
+
     EvolutionExperiment isolated_experiment{
         "isolated-trial-batch",
         EvolutionProposal{"planner.weight", 0.4, 0.5, 0.1, 0.9},
