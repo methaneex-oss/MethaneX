@@ -133,8 +133,8 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_command(
 
 ExperimentOutcome EvolutionExperimentRunner::run_isolated_evaluation(
     EvolutionExperiment& experiment, const ProcessIsolationBackend& backend,
-    const IsolatedEvaluationProcedure& procedure, std::size_t trials,
-    double minimum_confidence, TrialStatistics* baseline_summary,
+    const IsolatedEvaluationProcedure& procedure, std::size_t baseline_trials,
+    std::size_t candidate_trials, double minimum_confidence, TrialStatistics* baseline_summary,
     TrialStatistics* candidate_summary) noexcept {
     experiment.candidate_executed = false;
     experiment.isolated = false;
@@ -147,7 +147,7 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_evaluation(
 
     if (experiment.id.empty() || experiment.proposal.key.empty() ||
         !std::isfinite(experiment.proposal.current) ||
-        !std::isfinite(experiment.proposal.proposed) || trials < 2 ||
+        !std::isfinite(experiment.proposal.proposed) || baseline_trials < 2 || candidate_trials < 2 ||
         !std::isfinite(minimum_confidence) || minimum_confidence < 0.0 ||
         minimum_confidence > 1.0 || procedure.command.executable.empty() ||
         procedure.procedure_id.empty() || procedure.configuration_id.empty() ||
@@ -162,9 +162,9 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_evaluation(
 
     std::vector<double> baseline_values;
     std::vector<double> candidate_values;
-    baseline_values.reserve(trials);
-    candidate_values.reserve(trials);
-    for (std::size_t i = 0; i < trials; ++i) {
+    baseline_values.reserve(baseline_trials);
+    candidate_values.reserve(candidate_trials);
+    for (std::size_t i = 0; i < baseline_trials; ++i) {
         double fitness = 0.0;
         if (!measure(experiment, backend, procedure, "baseline",
                      experiment.proposal.current, procedure.baseline_artifact_path,
