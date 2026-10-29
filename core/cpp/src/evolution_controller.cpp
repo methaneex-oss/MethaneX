@@ -86,19 +86,28 @@ bool EvolutionController::record_evaluation_for_brain(
 
 bool EvolutionController::replay_evaluation(
     const EvolutionExperiment& experiment) noexcept {
-    if (experiment.id.empty() || experiment.proposal.key.empty()) return false;
+    if (experiment.id.empty() || experiment.proposal.key.empty() ||
+        !experiment.has_valid_isolation_attestation()) return false;
+    EvolutionExperiment verified = experiment;
+    if (EvolutionExperimentEngine::evaluate(verified) != experiment.outcome ||
+        experiment.outcome == ExperimentOutcome::Invalid ||
+        experiment.outcome == ExperimentOutcome::Pending) return false;
+
     const auto records = history_.for_experiment(experiment.id);
     bool evaluated = false;
     for (const auto& record : records) {
-        if (record.action == EvolutionRecordAction::Evaluated) {
-            evaluated = true;
-            break;
-        }
+        if (record.action != EvolutionRecordAction::Evaluated) continue;
+        if (record.parameter_key != experiment.proposal.key ||
+            record.outcome != experiment.outcome ||
+            record.baseline_fitness != experiment.baseline_fitness ||
+            record.candidate_fitness != experiment.candidate_fitness ||
+            record.confidence != experiment.confidence) return false;
+        evaluated = true;
     }
-    // Replay repairs the in-memory journal even when the durable history entry
-    // predates a process restart that lost controller-local state.
-    if (evaluated) return adoption_journal_.stage(experiment);
+    // Never rebuild an attestation from a serialized Boolean. The caller must
+    // rerun the repository-owned evaluator before this boundary is reached.
     if (!adoption_journal_.stage(experiment)) return false;
+    if (evaluated) return true;
     return history_.append(EvolutionHistoryRecord{
         experiment.id, experiment.proposal.key, EvolutionRecordAction::Evaluated,
         experiment.outcome, experiment.baseline_fitness, experiment.candidate_fitness,
@@ -175,11 +184,10 @@ bool EvolutionController::validate_adoption_for_brain(const EvolutionExperiment&
         record->minimum_improvement != experiment.minimum_improvement ||
         record->isolated != experiment.isolated) return false;
 
-    // On a restart, the caller's value object has no in-memory attestation.
-    // Re-attest a copy only after its fields match the durable evaluated record.
-    EvolutionExperiment verified = experiment;
-    if (record->isolated) verified.attest_isolated_result();
-    if (!EvolutionSafetyGate::approve(verified, policy_)) return false;
+    // The replay boundary must receive fresh evidence from the trusted
+    // evaluator; a persisted isolated Boolean cannot recreate attestation.
+    if (!experiment.has_valid_isolation_attestation() ||
+        !EvolutionSafetyGate::approve(experiment, policy_)) return false;
 
     const auto evaluation = model_.evaluate(experiment.proposal);
     if (!evaluation.eligible) return false;
@@ -221,7 +229,9 @@ bool EvolutionController::compensate_adoption_for_brain(
 }
 
 bool EvolutionController::replay_adoption(const EvolutionExperiment& experiment) noexcept {
-    if (experiment.id.empty() || !adoption_journal_.stage(experiment)) return false;
+    if (experiment.id.empty() || !experiment.has_valid_isolation_attestation() ||
+        !EvolutionSafetyGate::approve(experiment, policy_) ||
+        !adoption_journal_.stage(experiment)) return false;
     return adoption_journal_.commit(experiment.id, "replayed");
 }
 
