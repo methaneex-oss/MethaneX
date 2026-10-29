@@ -8,7 +8,8 @@
 
 using namespace jarvis::core;
 
-int main(int argc, char** argv) {\n    if (argc > 1 && std::string(argv[1]) == "--test-evaluator")\n        return test_support::run_evolution_test_evaluator(argc, argv);
+int main(int argc, char** argv) {
+    if (argc > 1 && std::string(argv[1]) == "--test-evaluator")\n        return test_support::run_evolution_test_evaluator(argc, argv);
     EvolutionExperiment experiment{
         "trial-batch",
         EvolutionProposal{"planner.weight", 0.4, 0.5, 0.1, 0.9},
