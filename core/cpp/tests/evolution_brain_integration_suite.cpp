@@ -39,7 +39,7 @@ void attest_isolated(EvolutionExperiment& experiment) {
                   << " baseline=" << experiment.baseline_fitness
                   << " candidate=" << experiment.candidate_fitness
                   << " confidence=" << experiment.confidence
-                  << " proposal_confidence=" << experiment.proposal.confidence << '\\n';
+                  << " proposal_confidence=" << experiment.proposal.confidence << '\n';
     }
 }
 } // namespace
