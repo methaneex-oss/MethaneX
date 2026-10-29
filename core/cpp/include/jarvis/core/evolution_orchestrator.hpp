@@ -5,6 +5,7 @@
 #include "jarvis/core/evolution_experiment_coordinator.hpp"
 #include "jarvis/core/evolution_scheduler.hpp"
 #include "jarvis/core/evolution_strategy.hpp"
+#include "jarvis/core/process_isolation.hpp"
 
 #include <chrono>
 #include <cstddef>
@@ -48,7 +49,8 @@ public:
         std::chrono::steady_clock::time_point now,
         std::chrono::steady_clock::time_point last_run,
         bool system_idle,
-        EvolutionController* controller = nullptr) const noexcept;
+        EvolutionController* controller = nullptr,
+        const IsolatedEvaluationSpec* isolated_spec = nullptr) const noexcept;
 
 private:
     EvolutionScheduler scheduler_;
