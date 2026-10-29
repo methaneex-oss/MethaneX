@@ -81,4 +81,71 @@ EvolutionTrialBatch EvolutionExperimentCoordinator::run(
     return batch;
 }
 
+
+EvolutionTrialBatch EvolutionExperimentCoordinator::run_isolated(
+    EvolutionExperiment& experiment,
+    const ProcessIsolationBackend& backend,
+    const IsolatedCommand& evaluator,
+    EvolutionTrialConfig config) noexcept {
+    EvolutionTrialBatch batch;
+    if (!config.require_isolation || config.baseline_trials < 2 ||
+        config.candidate_trials < 2 || evaluator.evaluation_procedure_id.empty() ||
+        !std::isfinite(config.minimum_improvement) || config.minimum_improvement < 0.0 ||
+        !std::isfinite(config.minimum_confidence) || config.minimum_confidence < 0.0 ||
+        config.minimum_confidence > 1.0) {
+        experiment.outcome = ExperimentOutcome::Invalid;
+        return batch;
+    }
+
+    std::vector<double> baseline;
+    std::vector<double> candidate;
+    baseline.reserve(config.baseline_trials);
+    candidate.reserve(config.candidate_trials);
+    EvolutionExperiment evidence = experiment;
+    const auto trial_count = std::max(config.baseline_trials, config.candidate_trials);
+    for (std::size_t i = 0; i < trial_count; ++i) {
+        EvolutionExperiment measured = experiment;
+        const auto outcome = EvolutionExperimentRunner::run_isolated_command(
+            measured, backend, evaluator);
+        if (outcome == ExperimentOutcome::Invalid ||
+            !measured.has_valid_isolation_attestation()) {
+            experiment.outcome = ExperimentOutcome::Invalid;
+            experiment.candidate_executed = false;
+            experiment.isolated = false;
+            return batch;
+        }
+        if (i < config.baseline_trials) baseline.push_back(measured.baseline_fitness);
+        if (i < config.candidate_trials) candidate.push_back(measured.candidate_fitness);
+        evidence = std::move(measured);
+    }
+
+    batch.baseline = EvolutionTrials::summarize(baseline);
+    batch.candidate = EvolutionTrials::summarize(candidate);
+    if (batch.baseline.count < 2 || batch.candidate.count < 2) {
+        experiment.outcome = ExperimentOutcome::Invalid;
+        return batch;
+    }
+    experiment.baseline_fitness = batch.baseline.mean;
+    experiment.candidate_fitness = batch.candidate.mean;
+    experiment.minimum_improvement = config.minimum_improvement;
+    experiment.confidence = std::min(batch.baseline.confidence, batch.candidate.confidence);
+    experiment.candidate_executed = true;
+    experiment.isolated = true;
+    experiment.evaluation_procedure_id = evidence.evaluation_procedure_id;
+    experiment.baseline_artifact_id = evidence.baseline_artifact_id;
+    experiment.candidate_artifact_id = evidence.candidate_artifact_id;
+    if (EvolutionTrials::supports_adoption(batch.baseline, batch.candidate,
+                                           config.minimum_improvement,
+                                           config.minimum_confidence)) {
+        batch.outcome = EvolutionExperimentEngine::evaluate(experiment);
+    } else {
+        batch.outcome = batch.candidate.mean - batch.baseline.mean < -config.minimum_improvement
+            ? ExperimentOutcome::Degraded : ExperimentOutcome::Neutral;
+        experiment.outcome = batch.outcome;
+    }
+    if (batch.outcome != ExperimentOutcome::Invalid) experiment.attest_isolated_result();
+    batch.executed = batch.outcome != ExperimentOutcome::Invalid;
+    return batch;
+}
+
 } // namespace jarvis::core
