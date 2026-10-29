@@ -40,6 +40,7 @@ struct EvolutionExperiment {
     std::string evaluation_procedure_id;
     std::string baseline_artifact_id;
     std::string candidate_artifact_id;
+    std::string evaluation_command_identity;
 
     bool has_valid_isolation_attestation() const noexcept {
         return isolation_attested_ && id == attested_id_ &&
@@ -56,6 +57,7 @@ struct EvolutionExperiment {
                evaluation_procedure_id == attested_procedure_id_ &&
                baseline_artifact_id == attested_baseline_artifact_id_ &&
                candidate_artifact_id == attested_candidate_artifact_id_ &&
+               evaluation_command_identity == attested_command_identity_ &&
                candidate_executed && isolated;
     }
 
@@ -76,6 +78,7 @@ private:
         attested_procedure_id_ = evaluation_procedure_id;
         attested_baseline_artifact_id_ = baseline_artifact_id;
         attested_candidate_artifact_id_ = candidate_artifact_id;
+        attested_command_identity_ = evaluation_command_identity;
     }
 
     bool isolation_attested_{false};
@@ -93,6 +96,7 @@ private:
     std::string attested_procedure_id_;
     std::string attested_baseline_artifact_id_;
     std::string attested_candidate_artifact_id_;
+    std::string attested_command_identity_;
 
     friend class EvolutionExperimentRunner;
     friend class EvolutionExperimentCoordinator;
