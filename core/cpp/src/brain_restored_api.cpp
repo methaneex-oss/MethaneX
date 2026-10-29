@@ -298,6 +298,7 @@ bool Brain::record_evolution_evaluation(EvolutionExperiment& experiment) {
                  {"minimum_improvement", experiment.minimum_improvement},
                  {"isolated", experiment.isolated},
                  {"evaluation_procedure_id", experiment.evaluation_procedure_id},
+                 {"evaluator_executable_fingerprint", experiment.evaluator_executable_fingerprint},
                  {"baseline_artifact_id", experiment.baseline_artifact_id},
                  {"candidate_artifact_id", experiment.candidate_artifact_id}}};
     event.sequence = memory_.append(event);
