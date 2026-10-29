@@ -8,6 +8,15 @@ namespace jarvis::core {
 
 class EvolutionExperimentRunner {
 public:
+    // The application registers evaluator binaries during trusted startup.
+    // Runtime requests and replay records cannot establish trust by supplying
+    // their own executable fingerprint.
+    static bool register_trusted_evaluator(const std::string& procedure_id,
+                                           const std::string& executable) noexcept;
+    static bool is_trusted_evaluator(const std::string& procedure_id,
+                                     const std::string& executable,
+                                     const std::string& expected_fingerprint) noexcept;
+    static bool restore_trusted_attestation(EvolutionExperiment& experiment) noexcept;
     static std::string executable_fingerprint(const std::string& executable) noexcept;
     static ExperimentOutcome run(EvolutionExperiment& experiment,
                                  const EvolutionSandbox& sandbox,
