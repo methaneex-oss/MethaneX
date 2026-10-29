@@ -14,7 +14,8 @@ namespace {
 std::string evaluator_executable;
 void attest_isolated(EvolutionExperiment& experiment) {
     if (!EvolutionExperimentRunner::register_trusted_evaluator(
-            "jarvis.test.fixture.v1", evaluator_executable)) {
+            "jarvis.test.fixture.v1", evaluator_executable,
+            {"--test-evaluator-from-parameter"})) {
         experiment.outcome = ExperimentOutcome::Invalid;
         return;
     }
@@ -24,8 +25,7 @@ void attest_isolated(EvolutionExperiment& experiment) {
     ProcessIsolationBackend backend(isolation_limits);
     const IsolatedCommand command{
         evaluator_executable,
-        {"--test-evaluator", std::to_string(experiment.baseline_fitness),
-         std::to_string(experiment.candidate_fitness)},
+        {"--test-evaluator-from-parameter"},
         "", "jarvis.test.fixture.v1",
         EvolutionExperimentRunner::executable_fingerprint(evaluator_executable)};
     EvolutionExperimentRunner::run_isolated_command(experiment, backend, command);
@@ -42,9 +42,11 @@ int main(int argc, char** argv) {
     if (test_support::run_evolution_evaluator_fixture(argc, argv)) return 0;
     evaluator_executable = std::filesystem::absolute(argv[0]).string();
     if (!EvolutionExperimentRunner::register_trusted_evaluator(
-            "jarvis.test.fixture.v1", evaluator_executable)) return 1;
+            "jarvis.test.fixture.v1", evaluator_executable,
+            {"--test-evaluator-from-parameter"})) return 1;
     if (!EvolutionExperimentRunner::register_trusted_evaluator(
-            "jarvis.test.parameter-fitness.v1", evaluator_executable)) return 1;
+            "jarvis.test.parameter-fitness.v1", evaluator_executable,
+            {"--test-evaluator-from-parameter"})) return 1;
     EvolutionSandbox sandbox;
 
     {
@@ -64,7 +66,7 @@ int main(int argc, char** argv) {
         ProcessIsolationBackend backend;
         const IsolatedCommand unregistered_evaluator{
             evaluator_executable,
-            {"--test-evaluator", "0.70", "0.86"}, "",
+            {"--test-evaluator-from-parameter"}, "",
             "jarvis.unregistered.fixture.v1",
             EvolutionExperimentRunner::executable_fingerprint(evaluator_executable)};
         const auto rejected = EvolutionExperimentRunner::run_isolated_command(
@@ -81,8 +83,8 @@ int main(int argc, char** argv) {
         assert(experiment.outcome == ExperimentOutcome::Improved);
         assert(experiment.candidate_executed);
         assert(experiment.has_valid_isolation_attestation());
-        assert(std::abs(experiment.baseline_fitness - 0.70) < 1e-12);
-        assert(std::abs(experiment.candidate_fitness - 0.86) < 1e-12);
+        assert(std::abs(experiment.baseline_fitness - experiment.proposal.current) < 1e-12);
+        assert(std::abs(experiment.candidate_fitness - experiment.proposal.proposed) < 1e-12);
         experiment.candidate_fitness += 0.01;
         assert(!experiment.has_valid_isolation_attestation());
         experiment.candidate_fitness -= 0.01;
@@ -99,7 +101,7 @@ int main(int argc, char** argv) {
         ProcessIsolationBackend backend(isolation_limits);
         IsolatedCommand pinned{
             evaluator_executable,
-            {"--test-evaluator", "0.70", "0.86"},
+            {"--test-evaluator-from-parameter"},
             "", "jarvis.test.fixture.v1",
             EvolutionExperimentRunner::executable_fingerprint(evaluator_executable)};
         pinned.expected_executable_fingerprint = "wrong-executable-fingerprint";
@@ -132,7 +134,7 @@ int main(int argc, char** argv) {
         auto experiment = make_experiment();
         const IsolatedCommand unregistered{
             evaluator_executable,
-            {"--test-evaluator", "0.70", "0.86"},
+            {"--test-evaluator-from-parameter"},
             "", "jarvis.unregistered.fixture.v1",
             EvolutionExperimentRunner::executable_fingerprint(evaluator_executable)};
         ProcessIsolationLimits isolation_limits;
@@ -156,7 +158,7 @@ int main(int argc, char** argv) {
         ProcessIsolationBackend weak_backend(weak_limits);
         const IsolatedCommand command{
             evaluator_executable,
-            {"--test-evaluator", "0.70", "0.86"},
+            {"--test-evaluator-from-parameter"},
             "", "jarvis.test.fixture.v1",
             EvolutionExperimentRunner::executable_fingerprint(evaluator_executable)};
         const auto outcome = EvolutionExperimentRunner::run_isolated_command(
