@@ -1,4 +1,5 @@
 #include "jarvis/core/evolution_experiment_coordinator.hpp"
+#include "evolution_test_evaluator.hpp"
 
 #include <cassert>
 #include <string>
