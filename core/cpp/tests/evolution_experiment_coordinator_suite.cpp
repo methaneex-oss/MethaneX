@@ -59,6 +59,18 @@ int main(int argc, char** argv) {
     assert(!untrusted_callback_batch.executed);
     assert(!untrusted_callback_experiment.candidate_executed);
 
+    EvolutionExperiment mismatched_trials{
+        "mismatched-trials",
+        EvolutionProposal{"planner.weight", 0.4, 0.5, 0.1, 0.9},
+        0.0, 0.0, 0.05, 0.0, ExperimentOutcome::Pending, false};
+    EvolutionTrialConfig mismatched_trial_config;
+    mismatched_trial_config.baseline_trials = 3;
+    mismatched_trial_config.candidate_trials = 4;
+    const auto mismatched_batch = EvolutionExperimentCoordinator::run_isolated(
+        mismatched_trials, backend, evaluator_command(), mismatched_trial_config);
+    assert(mismatched_batch.outcome == ExperimentOutcome::Invalid);
+    assert(!mismatched_trials.candidate_executed);
+
     EvolutionExperiment isolated_experiment{
         "isolated-trial-batch",
         EvolutionProposal{"planner.weight", 0.4, 0.5, 0.1, 0.9},
