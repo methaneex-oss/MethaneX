@@ -66,7 +66,7 @@ std::string digest_cases(const EvolutionExperiment& experiment,
     mix_double(experiment.proposal.current);
     mix_double(experiment.proposal.proposed);
     mix_double(experiment.proposal.expected_gain);
-    mix_double(experiment.proposal.confidence);
+    mix_double(experiment.proposal.confidence);\n    mix_double(experiment.evaluation_minimum_confidence);
     for (const auto& item : cases) {
         mix_double(item.feature);
         mix_double(item.target);
@@ -133,7 +133,7 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_command(
 
 ExperimentOutcome EvolutionExperimentRunner::run_isolated_evaluation(
     EvolutionExperiment& experiment, const ProcessIsolationBackend& backend,
-    const std::vector<EvolutionFitnessCase>& cases) noexcept {
+    const std::vector<EvolutionFitnessCase>& cases,\n    double minimum_confidence) noexcept {
     experiment.candidate_executed = false;
     experiment.isolated = false;
     experiment.evaluation_procedure.clear();
@@ -187,7 +187,7 @@ bool EvolutionExperimentRunner::revalidate_isolated_evaluation(
         return false;
 
     EvolutionExperiment recomputed = experiment;
-    if (run_isolated_evaluation(recomputed, backend, cases) == ExperimentOutcome::Invalid)
+    if (run_isolated_evaluation(recomputed, backend, cases,\n                                experiment.evaluation_minimum_confidence) == ExperimentOutcome::Invalid)
         return false;
     if (recomputed.evaluation_procedure != stored_procedure ||
         recomputed.evaluation_digest != stored_digest ||
