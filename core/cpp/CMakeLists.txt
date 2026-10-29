@@ -3,6 +3,8 @@ project(jarvis_core LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+add_executable(jarvis_evolution_evaluator tools/evolution_evaluator_main.cpp)
+target_compile_features(jarvis_evolution_evaluator PRIVATE cxx_std_20)
 add_library(jarvis_core STATIC
     src/brain.cpp
     src/brain_restored_api.cpp
@@ -70,6 +72,8 @@ add_library(jarvis_core STATIC
     src/capability_execution.cpp
 )
 target_include_directories(jarvis_core PUBLIC include)
+add_dependencies(jarvis_core jarvis_evolution_evaluator)
+target_compile_definitions(jarvis_core PRIVATE JARVIS_EVOLUTION_EVALUATOR_PATH=\"$<TARGET_FILE:jarvis_evolution_evaluator>\")
 target_compile_features(jarvis_core PUBLIC cxx_std_20)
 if (MSVC)
     target_compile_options(jarvis_core PRIVATE /W4 /permissive-)
