@@ -54,7 +54,7 @@ struct EvolutionExperiment {
     }
 
     bool has_valid_isolation_attestation() const noexcept {
-        const auto separator = std::string(1, '\\x1f');
+        const auto separator = std::string(1, '\x1f');
         const bool provenance_valid = !evaluation_procedure_id.empty() &&
             baseline_artifact_id == artifact_fingerprint(
                 proposal.key + separator + std::to_string(proposal.current) +
@@ -81,7 +81,7 @@ struct EvolutionExperiment {
 
 private:
     bool has_provenance_fingerprint() const noexcept {
-        const auto separator = std::string(1, '\\x1f');
+        const auto separator = std::string(1, '\x1f');
         return !evaluation_procedure_id.empty() &&
             baseline_artifact_id == artifact_fingerprint(
                 proposal.key + separator + std::to_string(proposal.current) +
