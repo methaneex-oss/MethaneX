@@ -51,15 +51,18 @@ int main() {
                                        ("jarvis-isolation-path-shadow-" + suffix);
     std::filesystem::create_directory(path_directory);
     std::filesystem::create_directory(shadow_path_directory);
+    std::filesystem::create_directory(shadow_path_directory / path_directory.filename());
     const auto path_executable = path_directory / executable_name;
+    const auto shadow_path_executable =
+        shadow_path_directory / path_directory.filename() / executable_name;
     {
         std::ofstream trusted(path_executable);
         trusted << "#!/bin/sh\\necho path-original\\n";
-        std::ofstream shadow(shadow_path_directory / executable_name);
+        std::ofstream shadow(shadow_path_executable);
         shadow << "#!/bin/sh\\necho path-shadow\\n";
     }
     assert(::chmod(path_executable.c_str(), 0700) == 0);
-    assert(::chmod((shadow_path_directory / executable_name).c_str(), 0700) == 0);
+    assert(::chmod(shadow_path_executable.c_str(), 0700) == 0);
     const char* old_path_value = std::getenv("PATH");
     const std::string old_path = old_path_value == nullptr ? "" : old_path_value;
     assert(::setenv("PATH", path_directory.filename().c_str(), 1) == 0);
