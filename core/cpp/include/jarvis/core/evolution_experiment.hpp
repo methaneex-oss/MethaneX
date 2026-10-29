@@ -44,7 +44,12 @@ struct EvolutionExperiment {
     std::string evaluation_config_id;
     std::string baseline_artifact_digest;
     std::string candidate_artifact_digest;
+    std::string evaluator_artifact_digest;
+    std::size_t baseline_trial_count{0};
+    std::size_t candidate_trial_count{0};
     std::string evaluation_evidence_digest;
+
+    bool has_valid_evaluation_evidence() const noexcept;
 
     bool has_valid_isolation_attestation() const noexcept {
         return isolation_attested_ && id == attested_id_ &&
