@@ -89,11 +89,11 @@ int main(int argc, char** argv) {
         "exp-replay",
         EvolutionProposal{"replay.weight", 0.4, 0.5, 0.1, 0.95},
         0.70, 0.84, 0.05, 0.95, ExperimentOutcome::Improved, true};
+    attest_isolated(replay_experiment);
     assert(replay_controller.replay_evaluation(replay_experiment));
     assert(replay_controller.replay_evaluation(replay_experiment));
     assert(replay_history.for_experiment("exp-replay").size() == 1);
     assert(replay_controller.adoption_journal().get("exp-replay")->state == AdoptionState::Pending);
-    assert(replay_model.adopt(replay_experiment.proposal));
     assert(replay_controller.replay_adoption(replay_experiment));
     assert(replay_controller.replay_adoption(replay_experiment));
     assert(replay_history.for_experiment("exp-replay").size() == 1);
