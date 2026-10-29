@@ -48,7 +48,7 @@ struct EvolutionExperiment {
     // are serialized with the evaluation event so replay can recompute evidence.
     std::vector<EvolutionFitnessCase> evaluation_cases;
     std::string evaluation_procedure;
-    std::string evaluation_digest;
+    std::string evaluation_digest;\n    double evaluation_minimum_confidence{0.0};
     TrialStatistics baseline_statistics;
     TrialStatistics candidate_statistics;
 
@@ -82,7 +82,7 @@ private:
         attested_candidate_ = candidate_fitness;
         attested_minimum_ = minimum_improvement;
         attested_confidence_ = confidence;
-        attested_outcome_ = outcome;
+        attested_outcome_ = outcome;\n        attested_minimum_confidence_ = evaluation_minimum_confidence;
         attested_procedure_ = evaluation_procedure;
         attested_digest_ = evaluation_digest;
     }
@@ -99,7 +99,7 @@ private:
     double attested_minimum_{0.0};
     double attested_confidence_{0.0};
     ExperimentOutcome attested_outcome_{ExperimentOutcome::Pending};
-    std::string attested_procedure_;
+    double attested_minimum_confidence_{0.0};\n    std::string attested_procedure_;
     std::string attested_digest_;
 
     friend class EvolutionExperimentRunner;
