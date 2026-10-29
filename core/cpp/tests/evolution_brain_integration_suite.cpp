@@ -74,7 +74,7 @@ int main(int argc, char** argv) {
     std::filesystem::remove(legacy_path, ec);
     std::filesystem::remove(legacy_path.string() + ".meta", ec);
     {
-        Brain source(legacy_path);
+        Brain source(legacy_path, test_policy);
         assert(source.register_evolution_parameter("legacy.replay", 0.25));
     }
     {
@@ -89,7 +89,7 @@ int main(int argc, char** argv) {
         assert(journal.append(legacy_adoption) != 0);
     }
     {
-        Brain restarted_legacy(legacy_path);
+        Brain restarted_legacy(legacy_path, test_policy);
         const auto* parameter = restarted_legacy.evolution_parameter("legacy.replay");
         assert(parameter != nullptr);
         assert(parameter->value == parameter->baseline);
@@ -103,7 +103,7 @@ int main(int argc, char** argv) {
     std::filesystem::remove(missing_evaluation_path, ec);
     std::filesystem::remove(missing_evaluation_path.string() + ".meta", ec);
     {
-        Brain source(missing_evaluation_path);
+        Brain source(missing_evaluation_path, test_policy);
         assert(source.register_evolution_parameter("replay.no-evaluation", 0.25));
     }
     {
@@ -120,7 +120,7 @@ int main(int argc, char** argv) {
         assert(journal.append(adoption_without_evaluation) != 0);
     }
     {
-        Brain restarted(missing_evaluation_path);
+        Brain restarted(missing_evaluation_path, test_policy);
         const auto* parameter = restarted.evolution_parameter("replay.no-evaluation");
         assert(parameter != nullptr && parameter->value == parameter->baseline);
     }
@@ -132,7 +132,7 @@ int main(int argc, char** argv) {
     std::filesystem::remove(inconsistent_evaluation_path, ec);
     std::filesystem::remove(inconsistent_evaluation_path.string() + ".meta", ec);
     {
-        Brain source(inconsistent_evaluation_path);
+        Brain source(inconsistent_evaluation_path, test_policy);
         assert(source.register_evolution_parameter("replay.equal-fitness", 0.25));
     }
     {
@@ -161,7 +161,7 @@ int main(int argc, char** argv) {
         assert(journal.append(adoption_after_forged_evaluation) != 0);
     }
     {
-        Brain restarted(inconsistent_evaluation_path);
+        Brain restarted(inconsistent_evaluation_path, test_policy);
         const auto* parameter = restarted.evolution_parameter("replay.equal-fitness");
         assert(parameter != nullptr && parameter->value == parameter->baseline);
     }
@@ -174,7 +174,7 @@ int main(int argc, char** argv) {
     std::filesystem::remove(legacy_rollback_path, ec);
     std::filesystem::remove(legacy_rollback_path.string() + ".meta", ec);
     {
-        Brain source(legacy_rollback_path);
+        Brain source(legacy_rollback_path, test_policy);
         assert(source.register_evolution_parameter("legacy.rollback", 0.25));
         EvolutionExperiment valid_adoption{
             "legacy-rollback-protection-1",
@@ -194,7 +194,7 @@ int main(int argc, char** argv) {
         assert(journal.append(legacy_rollback) != 0);
     }
     {
-        Brain restarted_legacy(legacy_rollback_path);
+        Brain restarted_legacy(legacy_rollback_path, test_policy);
         const auto* parameter = restarted_legacy.evolution_parameter("legacy.rollback");
         assert(parameter != nullptr);
         assert(parameter->value == 0.35);
@@ -214,7 +214,7 @@ int main(int argc, char** argv) {
     std::filesystem::remove(mismatched_replay_path.string() + ".meta", ec);
     EvolutionExperiment valid_replay_evidence;
     {
-        Brain source(mismatched_replay_path);
+        Brain source(mismatched_replay_path, test_policy);
         assert(source.register_evolution_parameter("replay.mismatched-proposal", 0.3));
         valid_replay_evidence = EvolutionExperiment{
             "mismatched-replay-1",
@@ -254,7 +254,7 @@ int main(int argc, char** argv) {
         assert(journal.append(mismatched_adoption) != 0);
     }
     {
-        Brain restored(mismatched_replay_path);
+        Brain restored(mismatched_replay_path, test_policy);
         const auto* parameter = restored.evolution_parameter("replay.mismatched-proposal");
         assert(parameter != nullptr && parameter->value == parameter->baseline);
     }
@@ -267,7 +267,7 @@ int main(int argc, char** argv) {
     std::filesystem::remove(lifecycle_path, ec);
     std::filesystem::remove(lifecycle_path.string() + ".meta", ec);
     {
-        Brain source(lifecycle_path);
+        Brain source(lifecycle_path, test_policy);
         assert(source.register_evolution_parameter("coordinator.lifecycle", 0.3));
         const EvolutionOpportunity opportunity{
             "coordinator-lifecycle-opportunity", "test-evidence", 0.9, 0.9, 0.3, 0.4, 4, 1, 4};
@@ -294,7 +294,7 @@ int main(int argc, char** argv) {
         assert(source.adopt_evolution_experiment(experiment));
     }
     {
-        Brain restored(lifecycle_path);
+        Brain restored(lifecycle_path, test_policy);
         const auto* parameter = restored.evolution_parameter("coordinator.lifecycle");
         assert(parameter != nullptr && std::abs(parameter->value - 0.4) < 1e-12);
         const auto history = restored.evolution_history();
@@ -310,7 +310,7 @@ int main(int argc, char** argv) {
     std::filesystem::remove(path, ec);
 
     {
-        Brain brain(path);
+        Brain brain(path, test_policy);
         assert(brain.register_evolution_parameter("planner.weight", 0.4));
         assert(!brain.register_evolution_parameter("planner.weight", 0.4));
         brain.predict("planner.weight", Scalar{0.4}, 0.9);
@@ -457,7 +457,7 @@ int main(int argc, char** argv) {
     }
 
     {
-        Brain restarted(path);
+        Brain restarted(path, test_policy);
         const auto* parameter = restarted.evolution_parameter("planner.weight");
         assert(parameter != nullptr);
         assert(parameter->value == parameter->baseline);
@@ -505,7 +505,7 @@ int main(int argc, char** argv) {
         assert(!rollback_history.empty());
         assert(rollback_history.back().action == EvolutionRecordAction::RolledBack);
 
-        Brain restarted_again(path);
+        Brain restarted_again(path, test_policy);
         const auto* direct_parameter = restarted_again.evolution_parameter("planner.weight");
         assert(direct_parameter != nullptr);
         assert(direct_parameter->value == direct_parameter->baseline);
