@@ -82,6 +82,14 @@ private:
         attested_minimum_ = minimum_improvement;
         attested_confidence_ = confidence;
         attested_outcome_ = outcome;
+        attested_procedure_id_ = evaluation_procedure_id;
+        attested_config_id_ = evaluation_config_id;
+        attested_baseline_artifact_digest_ = baseline_artifact_digest;
+        attested_candidate_artifact_digest_ = candidate_artifact_digest;
+        attested_evaluator_artifact_digest_ = evaluator_artifact_digest;
+        attested_baseline_trial_count_ = baseline_trial_count;
+        attested_candidate_trial_count_ = candidate_trial_count;
+        attested_evidence_digest_ = evaluation_evidence_digest;
     }
 
     bool isolation_attested_{false};
@@ -96,6 +104,14 @@ private:
     double attested_minimum_{0.0};
     double attested_confidence_{0.0};
     ExperimentOutcome attested_outcome_{ExperimentOutcome::Pending};
+    std::string attested_procedure_id_;
+    std::string attested_config_id_;
+    std::string attested_baseline_artifact_digest_;
+    std::string attested_candidate_artifact_digest_;
+    std::string attested_evaluator_artifact_digest_;
+    std::size_t attested_baseline_trial_count_{0};
+    std::size_t attested_candidate_trial_count_{0};
+    std::string attested_evidence_digest_;
 
     friend class EvolutionExperimentRunner;
     friend class EvolutionExperimentCoordinator;
