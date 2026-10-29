@@ -21,14 +21,33 @@ int main() {
         auto experiment = make_experiment();
         ProcessIsolationBackend backend;
         const IsolatedCommand command{"/bin/sh", {"-c", "printf 0.86"}, ""};
-        const auto outcome = EvolutionExperimentRunner::run_isolated_command(
-            experiment, backend, command);
-        assert(outcome == ExperimentOutcome::Improved);
-        assert(experiment.candidate_executed);
-        assert(experiment.has_valid_isolation_attestation());
-        assert(std::abs(experiment.candidate_fitness - 0.86) < 1e-12);
-        experiment.candidate_fitness += 0.01;
+        // A command that merely prints a favorable number is not an evaluator.
+        assert(EvolutionExperimentRunner::run_isolated_command(
+            experiment, backend, command) == ExperimentOutcome::Invalid);
+        assert(!experiment.candidate_executed);
         assert(!experiment.has_valid_isolation_attestation());
+    }
+
+    {
+        auto experiment = make_experiment();
+        ProcessIsolationBackend backend;
+        const std::vector<EvolutionFitnessCase> cases{
+            {1.0, 0.5}, {2.0, 1.0}, {3.0, 1.5}, {4.0, 2.0}};
+        const auto outcome = EvolutionExperimentRunner::run_isolated_evaluation(
+            experiment, backend, cases, 0.75);
+        assert(outcome == ExperimentOutcome::Improved);
+        assert(experiment.candidate_executed && experiment.isolated);
+        assert(experiment.has_valid_isolation_attestation());
+        assert(experiment.evaluation_procedure == "linear-weight-mse-v1");
+        assert(!experiment.evaluation_digest.empty());
+        assert(experiment.baseline_statistics.count == cases.size());
+        assert(experiment.candidate_statistics.count == cases.size());
+
+        auto replayed = experiment;
+        assert(EvolutionExperimentRunner::revalidate_isolated_evaluation(replayed, backend));
+        replayed.candidate_fitness += 0.01;
+        assert(!replayed.has_valid_isolation_attestation());
+        assert(!EvolutionExperimentRunner::revalidate_isolated_evaluation(replayed, backend));
     }
 
     {
