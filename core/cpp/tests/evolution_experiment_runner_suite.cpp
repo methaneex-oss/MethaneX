@@ -14,6 +14,7 @@
 using namespace jarvis::core;
 
 namespace {
+std::string evaluator_path;
 std::string baseline_artifact_path;
 std::string candidate_artifact_path;
 EvolutionExperiment make_experiment() {
@@ -51,6 +52,7 @@ int main(int argc, char** argv) {
                   << argv[12] << "\t" << argv[13] << "\t" << fitness;
         return 0;
     }
+    evaluator_path = std::filesystem::absolute(argv[0]).string();
     const auto temp = std::filesystem::temp_directory_path();
     baseline_artifact_path = (temp / "jarvis_runner_baseline_artifact.txt").string();
     candidate_artifact_path = (temp / "jarvis_runner_candidate_artifact.txt").string();
@@ -89,9 +91,9 @@ int main(int argc, char** argv) {
         write_artifacts(experiment);
         ProcessIsolationBackend backend;
         IsolatedEvaluationProcedure procedure{
-            IsolatedCommand{argv[0], {"--trusted-test-evaluator"}, ""},
+            IsolatedCommand{evaluator_path, {"--trusted-test-evaluator"}, ""},
             "runner-suite-local-evaluator-v1", "linear-fitness-v1",
-            baseline_artifact_path, candidate_artifact_path, detail::sha256_file(argv[0])};
+            baseline_artifact_path, candidate_artifact_path, detail::sha256_file(evaluator_path)};
         TrialStatistics baseline, candidate;
         const auto outcome = EvolutionExperimentRunner::run_isolated_evaluation(
             experiment, backend, procedure, 4, 4, 0.5, &baseline, &candidate);
@@ -124,7 +126,7 @@ int main(int argc, char** argv) {
         limits.require_network_syscall_block = true;
         ProcessIsolationBackend backend(limits);
         IsolatedEvaluationProcedure untrusted{
-            IsolatedCommand{argv[0], {"--trusted-test-evaluator"}, ""},
+            IsolatedCommand{evaluator_path, {"--trusted-test-evaluator"}, ""},
             "runner-suite-local-evaluator-v1", "linear-fitness-v1",
             baseline_artifact_path, candidate_artifact_path, "wrong-pinned-digest"};
         const auto outcome = EvolutionExperimentRunner::run_isolated_evaluation(
@@ -142,9 +144,9 @@ int main(int argc, char** argv) {
         weak_limits.require_network_syscall_block = false;
         ProcessIsolationBackend weak_backend(weak_limits);
         IsolatedEvaluationProcedure weak_policy{
-            IsolatedCommand{argv[0], {"--trusted-test-evaluator"}, ""},
+            IsolatedCommand{evaluator_path, {"--trusted-test-evaluator"}, ""},
             "runner-suite-local-evaluator-v1", "linear-fitness-v1",
-            baseline_artifact_path, candidate_artifact_path, detail::sha256_file(argv[0])};
+            baseline_artifact_path, candidate_artifact_path, detail::sha256_file(evaluator_path)};
         const auto outcome = EvolutionExperimentRunner::run_isolated_evaluation(
             experiment, weak_backend, weak_policy, 4, 4, 0.5);
         assert(outcome == ExperimentOutcome::Invalid);
