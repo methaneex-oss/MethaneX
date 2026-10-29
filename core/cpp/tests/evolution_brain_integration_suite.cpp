@@ -27,7 +27,8 @@ void attest_isolated(EvolutionExperiment& experiment,
 } // namespace
 
 int main(int argc, char** argv) {
-    if (argc > 1 && std::string(argv[1]) == "--test-evaluator")\n        return test_support::run_evolution_test_evaluator(argc, argv);
+    if (argc > 1 && std::string(argv[1]) == "--test-evaluator")
+        return test_support::run_evolution_test_evaluator(argc, argv);
     const std::filesystem::path path = "evolution_brain_integration_test.bin";
     std::error_code ec;
     // A persisted legacy adoption event without experiment evidence must
