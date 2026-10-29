@@ -165,6 +165,20 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_evaluation(
     append_field(configuration_material, baseline_digest);
     append_field(configuration_material, candidate_digest);
     append_field(configuration_material, evaluator_digest);
+    append_field(configuration_material, std::to_string(baseline_trials));
+    append_field(configuration_material, std::to_string(candidate_trials));
+    append_field(configuration_material, number(minimum_confidence));
+    const auto& isolation = backend.limits();
+    append_field(configuration_material, std::to_string(isolation.sandbox.timeout.count()));
+    append_field(configuration_material, std::to_string(isolation.sandbox.max_output_bytes));
+    append_field(configuration_material, isolation.require_network_isolation ? "1" : "0");
+    append_field(configuration_material, isolation.require_filesystem_isolation ? "1" : "0");
+    append_field(configuration_material, isolation.require_privilege_drop ? "1" : "0");
+    append_field(configuration_material, isolation.require_no_new_privileges ? "1" : "0");
+    append_field(configuration_material, isolation.require_network_syscall_block ? "1" : "0");
+    append_field(configuration_material, std::to_string(isolation.max_memory_bytes));
+    append_field(configuration_material, std::to_string(isolation.max_cpu_seconds));
+    append_field(configuration_material, std::to_string(isolation.max_file_bytes));
     const std::string effective_config_id =
         procedure.configuration_id + ":" + detail::sha256_hex(configuration_material);
 
