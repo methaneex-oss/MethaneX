@@ -89,6 +89,7 @@ EvolutionTrialBatch EvolutionExperimentCoordinator::run_isolated(
     const IsolatedCommand& evaluator,
     EvolutionTrialConfig config) noexcept {
     EvolutionTrialBatch batch;
+    experiment.clear_isolation_attestation();
     if (!config.require_isolation || config.baseline_trials < 2 ||
         config.candidate_trials < 2 || evaluator.evaluation_procedure_id.empty() ||
         !std::isfinite(config.minimum_improvement) || config.minimum_improvement < 0.0 ||
