@@ -129,7 +129,8 @@ bool run_measurement(const EvolutionExperiment& experiment,
                   << " isolated=" << result.isolated
                   << " completed=" << result.completed
                   << " exit_code=" << result.exit_code
-                  << " error=" << result.error << '\\n';
+                  << " error=" << result.error
+                  << " output=[" << result.output << "]" << '\n';
     }
     return valid;
 }
