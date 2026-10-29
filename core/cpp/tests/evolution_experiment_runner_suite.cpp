@@ -3,6 +3,7 @@
 #include "jarvis/core/evolution_safety.hpp"
 
 #include <cassert>
+#include <chrono>
 #include <string>
 #include <filesystem>
 #include <cmath>
@@ -12,7 +13,10 @@ using namespace jarvis::core;
 namespace {
 std::string evaluator_executable;
 void attest_isolated(EvolutionExperiment& experiment) {
-    ProcessIsolationBackend backend;
+    ProcessIsolationLimits isolation_limits;
+    isolation_limits.sandbox.timeout = std::chrono::milliseconds{5000};
+    isolation_limits.max_cpu_seconds = 10;
+    ProcessIsolationBackend backend(isolation_limits);
     const IsolatedCommand command{
         evaluator_executable,
         {"--test-evaluator", std::to_string(experiment.baseline_fitness),
