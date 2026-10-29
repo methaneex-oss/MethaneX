@@ -190,21 +190,15 @@ bool EvolutionExperimentRunner::is_trusted_evaluator(
 
 bool EvolutionExperimentRunner::restore_trusted_attestation(
     EvolutionExperiment& experiment) noexcept {
-    if (!experiment.candidate_executed || !experiment.isolated ||
-        !safe_field(experiment.id) || !safe_field(experiment.proposal.key) ||
-        !safe_field(experiment.evaluation_procedure_id) ||
-        !is_trusted_evaluator(experiment.evaluation_procedure_id, {},
-                              experiment.evaluator_executable_fingerprint)) return false;
-    const auto expected_baseline = fingerprint(
-        experiment.proposal.key + "\x1f" + EvolutionExperiment::format_parameter_value(experiment.proposal.current) +
-        "\x1f" + experiment.evaluation_procedure_id);
-    const auto expected_candidate = fingerprint(
-        experiment.proposal.key + "\x1f" + EvolutionExperiment::format_parameter_value(experiment.proposal.proposed) +
-        "\x1f" + experiment.evaluation_procedure_id);
-    if (experiment.baseline_artifact_id != expected_baseline ||
-        experiment.candidate_artifact_id != expected_candidate) return false;
-    experiment.attest_isolated_result();
-    return experiment.has_valid_isolation_attestation();
+    // A registered evaluator and matching content fingerprints establish which
+    // executable is trusted; they do not authenticate historical fitness values.
+    // The persisted metadata is editable and the current fingerprint is an
+    // unkeyed FNV hash, so reconstructing this private attestation would let a
+    // forged journal invent baseline/candidate measurements. Fail closed until
+    // durable measurements have a cryptographically authenticated provenance
+    // record whose verification key is protected independently of the journal.
+    (void)experiment;
+    return false;
 }
 
 std::string EvolutionExperimentRunner::executable_fingerprint(
