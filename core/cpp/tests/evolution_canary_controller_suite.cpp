@@ -23,7 +23,8 @@ void attest_isolated(EvolutionExperiment& experiment) {
 } // namespace
 
 int main(int argc, char** argv) {
-    if (argc > 1 && std::string(argv[1]) == "--test-evaluator")\n        return test_support::run_evolution_test_evaluator(argc, argv);
+    if (argc > 1 && std::string(argv[1]) == "--test-evaluator")
+        return test_support::run_evolution_test_evaluator(argc, argv);
     EvolutionModel model;
     model.register_parameter("reasoning.weight", 0.4);
     EvolutionHistory history;
