@@ -13,6 +13,7 @@ EvolutionTrialBatch EvolutionExperimentCoordinator::run(
     const CandidateExecutor& candidate_executor,
     EvolutionTrialConfig config) noexcept {
     EvolutionTrialBatch batch;
+    experiment.clear_isolation_attestation();
     if (config.baseline_trials == 0 || config.candidate_trials == 0 ||
         !std::isfinite(config.minimum_improvement) || config.minimum_improvement < 0.0 ||
         !std::isfinite(config.minimum_confidence) || config.minimum_confidence < 0.0 ||
