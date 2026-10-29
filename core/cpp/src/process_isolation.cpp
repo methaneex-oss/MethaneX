@@ -190,7 +190,9 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
 
     close(pipe_fds[1]);
     result.started = true;
-    result.isolated = true;
+    // Isolation is attested only after the child exits successfully. Any
+    // required control failure exits 125 and must not inherit a true flag.
+    result.isolated = false;
     const auto deadline = std::chrono::steady_clock::now() + limits_.sandbox.timeout;
     std::string output;
     output.reserve(std::min<std::size_t>(limits_.sandbox.max_output_bytes, 4096));
@@ -245,6 +247,7 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
     }
     result.output = std::move(output);
     result.completed = !result.timed_out && !result.output_limited && result.exit_code == 0;
+    result.isolated = result.completed;
     if (!result.completed && result.exit_code == 125) result.error = "required isolation feature unavailable";
     if (!result.completed && result.error.empty()) {
         if (result.timed_out) result.error = "process timeout";
