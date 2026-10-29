@@ -90,6 +90,11 @@ bool EvolutionController::replay_evaluation(
     const EvolutionExperiment& experiment) noexcept {
     if (experiment.id.empty() || experiment.proposal.key.empty() ||
         !experiment.candidate_executed ||
+        // Journal metadata is not proof that the evaluator ran. Until persisted
+        // evidence has an independently authenticated signature, replay may
+        // repair bookkeeping only for an object carrying its live, private
+        // process-local isolation attestation.
+        (policy_.require_isolation && !experiment.has_valid_isolation_attestation()) ||
         !std::isfinite(experiment.baseline_fitness) ||
         !std::isfinite(experiment.candidate_fitness) ||
         !std::isfinite(experiment.confidence) ||
@@ -159,7 +164,10 @@ bool EvolutionController::adopt(EvolutionExperiment& experiment) {
 }
 
 bool EvolutionController::validate_adoption_for_brain(const EvolutionExperiment& experiment) const noexcept {
-    if (experiment.id.empty() || !experiment.candidate_executed) return false;
+    if (experiment.id.empty() || !experiment.candidate_executed ||
+        // Do not reconstruct trust from attacker-editable fitness metadata.
+        // A restored experiment must be re-evaluated in the isolated runner.
+        (policy_.require_isolation && !experiment.has_valid_isolation_attestation())) return false;
 
     // Adoption is permitted only when durable history contains an evaluation
     // for this exact experiment and the request still matches that evidence.
@@ -197,11 +205,10 @@ bool EvolutionController::validate_adoption_for_brain(const EvolutionExperiment&
         record->baseline_artifact_id != experiment.baseline_artifact_id ||
         record->candidate_artifact_id != experiment.candidate_artifact_id) return false;
 
-    // On a restart, the caller's value object has no in-memory attestation.
-    // Re-attest a copy only after its fields match the durable evaluated record.
-    EvolutionExperiment verified = experiment;
-    if (record->isolated) verified.attest_isolated_result();
-    if (!EvolutionSafetyGate::approve(verified, policy_)) return false;
+    // Never mint a new isolation attestation from a journal record: journal
+    // metadata and fitness values are not authenticated evidence. The caller
+    // must supply the original still-attested result or run a fresh evaluator.
+    if (!EvolutionSafetyGate::approve(experiment, policy_)) return false;
 
     const auto evaluation = model_.evaluate(experiment.proposal);
     if (!evaluation.eligible) return false;
