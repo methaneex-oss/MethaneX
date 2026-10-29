@@ -500,6 +500,7 @@ void Brain::replay(const Event& event, bool external_observation) {
         const auto* procedure = string_value(event.data, "evaluation_procedure_id");
         const auto* baseline_artifact = string_value(event.data, "baseline_artifact_id");
         const auto* candidate_artifact = string_value(event.data, "candidate_artifact_id");
+        const auto* command_identity = string_value(event.data, "evaluation_command_identity");
         const auto isolated_field = event.data.find("isolated");
         const auto outcome_value = integer_value(event.data, "outcome", 0);
         // A persisted Boolean is not isolation evidence. Replay requires a
@@ -507,6 +508,7 @@ void Brain::replay(const Event& event, bool external_observation) {
         if (id == nullptr || key == nullptr || procedure == nullptr || procedure->empty() ||
             baseline_artifact == nullptr || baseline_artifact->empty() ||
             candidate_artifact == nullptr || candidate_artifact->empty() ||
+            command_identity == nullptr || command_identity->empty() ||
             *baseline_artifact == *candidate_artifact ||
             isolated_field == event.data.end() ||
             std::get_if<bool>(&isolated_field->second) == nullptr ||
@@ -528,6 +530,7 @@ void Brain::replay(const Event& event, bool external_observation) {
         experiment.evaluation_procedure_id = *procedure;
         experiment.baseline_artifact_id = *baseline_artifact;
         experiment.candidate_artifact_id = *candidate_artifact;
+        experiment.evaluation_command_identity = *command_identity;
         EvolutionExperiment verified = experiment;
         if (EvolutionExperimentEngine::evaluate(verified) != experiment.outcome) return;
         experiment.attest_isolated_result();
