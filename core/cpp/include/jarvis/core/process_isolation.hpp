@@ -14,6 +14,8 @@ struct IsolatedCommand {
     // Stable identifier assigned by the local application to a trusted
     // evaluation procedure. Empty means this command is not an evaluator.
     std::string evaluation_procedure_id;
+    // Pinned fingerprint of the trusted local evaluator executable.
+    std::string expected_executable_fingerprint;
 };
 
 struct ProcessIsolationLimits {
