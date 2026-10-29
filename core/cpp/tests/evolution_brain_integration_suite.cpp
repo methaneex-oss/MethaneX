@@ -12,6 +12,8 @@
 #include <algorithm>
 #include <iostream>
 #include <fstream>
+#include <iomanip>
+#include <cmath>
 #include <string>
 
 using namespace jarvis::core;
@@ -21,8 +23,8 @@ std::string evaluator_path;
 std::string baseline_artifact_path;
 std::string candidate_artifact_path;
 void attest_isolated(EvolutionExperiment& experiment) {
-    { std::ofstream out(baseline_artifact_path); out << "0.70"; }
-    { std::ofstream out(candidate_artifact_path); out << "0.80"; }
+    { std::ofstream out(baseline_artifact_path); out << std::setprecision(17) << experiment.proposal.current; }
+    { std::ofstream out(candidate_artifact_path); out << std::setprecision(17) << experiment.proposal.proposed; }
     ProcessIsolationLimits limits;
     limits.require_no_new_privileges = true;
         limits.require_privilege_drop = true;
@@ -42,9 +44,17 @@ int main(int argc, char** argv) {
     if (argc > 1 && std::string(argv[1]) == "--trusted-test-evaluator") {
         if (argc != 14 || std::string(argv[2]) != "--jarvis-evaluate-v1") return 21;
         std::ifstream artifact(argv[9]);
-        std::string score_text;
-        if (!artifact || !(artifact >> score_text)) return 22;
-        const double fitness = std::stod(score_text);
+        std::string coefficient_text;
+        if (!artifact || !(artifact >> coefficient_text)) return 22;
+        const double coefficient = std::stod(coefficient_text);
+        const double evaluated_value = std::stod(argv[6]);
+        if (std::abs(coefficient - evaluated_value) > 1e-12) return 23;
+        double squared_error = 0.0;
+        for (double input = 1.0; input <= 4.0; input += 1.0) {
+            const double error = coefficient * input - 0.8 * input;
+            squared_error += error * error;
+        }
+        const double fitness = 1.0 / (1.0 + squared_error / 4.0);
         std::cout << "JARVIS_EVAL_V1\t" << argv[3] << "\t" << argv[4] << "\t"
                   << argv[5] << "\t" << argv[6] << "\t" << argv[7] << "\t"
                   << argv[8] << "\t" << argv[10] << "\t" << argv[11] << "\t"
@@ -202,8 +212,8 @@ int main(int argc, char** argv) {
     std::filesystem::remove(mismatched_replay_path, ec);
     std::filesystem::remove(mismatched_replay_path.string() + ".meta", ec);
     EvolutionExperiment valid_replay_evidence;
-    { std::ofstream out(baseline_artifact_path); out << "0.70"; }
-    { std::ofstream out(candidate_artifact_path); out << "0.80"; }
+    { std::ofstream out(baseline_artifact_path); out << std::setprecision(17) << 0.3; }
+    { std::ofstream out(candidate_artifact_path); out << std::setprecision(17) << 0.4; }
     {
         Brain source(mismatched_replay_path);
         assert(source.register_evolution_parameter("replay.mismatched-proposal", 0.3));
