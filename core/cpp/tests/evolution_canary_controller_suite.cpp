@@ -1,21 +1,28 @@
 #include "jarvis/core/evolution_controller.hpp"
 #include "jarvis/core/evolution_experiment_runner.hpp"
 #include "jarvis/core/process_isolation.hpp"
+#include "evolution_test_evaluator.hpp"
 
 #include <cassert>
+#include <string>
 
 using namespace jarvis::core;
 
 namespace {
 void attest_isolated(EvolutionExperiment& experiment) {
     ProcessIsolationBackend backend;
-    const IsolatedCommand command{
-        "/bin/sh", {"-c", "printf " + std::to_string(experiment.candidate_fitness)}, ""};
-    EvolutionExperimentRunner::run_isolated_command(experiment, backend, command);
+    const IsolatedEvaluationSpec spec{
+        IsolatedCommand{"/proc/self/exe", {"--test-evaluator"}, ""},
+        "local-test-procedure-v1",
+        "baseline:" + experiment.proposal.key + ":" + std::to_string(experiment.proposal.current),
+        "candidate:" + experiment.proposal.key + ":" + std::to_string(experiment.proposal.proposed),
+        experiment.proposal.current,
+        experiment.proposal.proposed};
+    EvolutionExperimentRunner::run_isolated_evaluation(experiment, backend, spec);
 }
 } // namespace
 
-int main() {
+int main(int argc, char** argv) {\n    if (argc > 1 && std::string(argv[1]) == "--test-evaluator")\n        return test_support::run_evolution_test_evaluator(argc, argv);
     EvolutionModel model;
     model.register_parameter("reasoning.weight", 0.4);
     EvolutionHistory history;
