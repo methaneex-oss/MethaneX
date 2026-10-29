@@ -7,6 +7,7 @@
 #include <cstring>
 #include <string>
 #include <cstdlib>
+#include <limits.h>
 
 #if defined(__unix__) || defined(__APPLE__)
 #include <fcntl.h>
@@ -128,12 +129,26 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
     result.error = "process isolation backend unsupported on this platform";
     return result;
 #else
+    // Resolve path-containing executable names before the child changes its
+    // working directory. Otherwise "./evaluator" can name a different binary
+    // after chdir than the one the trusted runner fingerprinted.
+    std::string executable = command.executable;
+    if (command.executable.find('/') != std::string::npos) {
+        char* resolved = realpath(command.executable.c_str(), nullptr);
+        if (resolved == nullptr) {
+            result.error = std::string("cannot resolve executable: ") + std::strerror(errno);
+            return result;
+        }
+        executable.assign(resolved);
+        std::free(resolved);
+    }
+
     // Prepare argv before fork. Allocating a std::vector in the child of a
     // multithreaded process is not async-signal-safe and can deadlock under
     // sanitizers if another thread held an allocator lock at fork time.
     std::vector<char*> argv;
     argv.reserve(command.arguments.size() + 2);
-    argv.push_back(const_cast<char*>(command.executable.c_str()));
+    argv.push_back(const_cast<char*>(executable.c_str()));
     for (const auto& argument : command.arguments)
         argv.push_back(const_cast<char*>(argument.c_str()));
     argv.push_back(nullptr);
@@ -157,6 +172,18 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
         (void)dup2(pipe_fds[1], STDOUT_FILENO);
         (void)dup2(pipe_fds[1], STDERR_FILENO);
         close(pipe_fds[1]);
+        // Only stdout/stderr are intentionally passed to the evaluator. Close
+        // every other inherited descriptor so a caller cannot leak connected
+        // sockets, files, or privileged handles into the isolated process.
+#if defined(__linux__) && defined(SYS_close_range)
+        if (syscall(SYS_close_range, 3U, ~0U, 0U) != 0) {
+            const long max_fd = sysconf(_SC_OPEN_MAX);
+            for (int fd = 3; fd < (max_fd > 0 ? max_fd : 1024); ++fd) close(fd);
+        }
+#else
+        const long max_fd = sysconf(_SC_OPEN_MAX);
+        for (int fd = 3; fd < (max_fd > 0 ? max_fd : 1024); ++fd) close(fd);
+#endif
         (void)setpgid(0, 0);
 
 #if defined(__linux__)
@@ -198,10 +225,10 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
 
         if (!command.working_directory.empty() && chdir(command.working_directory.c_str()) != 0) _exit(126);
 
-        if (command.executable.find('/') != std::string::npos)
-            execv(command.executable.c_str(), argv.data());
+        if (executable.find('/') != std::string::npos)
+            execv(executable.c_str(), argv.data());
         else
-            execvp(command.executable.c_str(), argv.data());
+            execvp(executable.c_str(), argv.data());
         _exit(127);
     }
 
