@@ -130,6 +130,24 @@ int main(int argc, char** argv) {
 
     {
         auto experiment = make_experiment();
+        const IsolatedCommand unregistered{
+            evaluator_executable,
+            {"--test-evaluator", "0.70", "0.86"},
+            "", "jarvis.unregistered.fixture.v1",
+            EvolutionExperimentRunner::executable_fingerprint(evaluator_executable)};
+        ProcessIsolationLimits isolation_limits;
+        isolation_limits.sandbox.timeout = std::chrono::milliseconds{5000};
+        isolation_limits.max_cpu_seconds = 10;
+        ProcessIsolationBackend backend(isolation_limits);
+        const auto outcome = EvolutionExperimentRunner::run_isolated_command(
+            experiment, backend, unregistered);
+        assert(outcome == ExperimentOutcome::Invalid);
+        assert(!experiment.candidate_executed);
+        assert(!experiment.has_valid_isolation_attestation());
+    }
+
+    {
+        auto experiment = make_experiment();
         experiment.candidate_fitness = 0.86;
         ProcessIsolationLimits weak_limits;
         weak_limits.require_no_new_privileges = false;
