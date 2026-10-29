@@ -99,7 +99,7 @@ bool EvolutionController::replay_evaluation(
         experiment.minimum_improvement < 0.0 ||
         experiment.outcome == ExperimentOutcome::Pending ||
         experiment.outcome == ExperimentOutcome::Invalid ||
-        (policy_.require_isolation && !experiment.has_valid_isolation_attestation())) return false;
+        (policy_.require_isolation && !experiment.has_valid_persisted_evaluation_evidence())) return false;
     EvolutionExperiment verified = experiment;
     if (EvolutionExperimentEngine::evaluate(verified) != experiment.outcome) return false;
     const auto records = history_.for_experiment(experiment.id);
