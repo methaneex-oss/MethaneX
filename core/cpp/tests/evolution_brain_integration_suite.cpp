@@ -353,6 +353,18 @@ int main(int argc, char** argv) {
             EvolutionProposal{"replay.persist", 0.3, 0.4, 0.1, 0.90},
             0.70, 0.82, 0.01, 0.90, ExperimentOutcome::Improved, true};
         replayed.isolated = true;
+        replayed.evaluation_procedure_id = "jarvis.test.fixture.v1";
+        replayed.evaluator_executable_fingerprint =
+            EvolutionExperimentRunner::executable_fingerprint(evaluator_executable);
+        const std::string replay_separator(1, '\x1f');
+        replayed.baseline_artifact_id = EvolutionExperiment::artifact_fingerprint(
+            replayed.proposal.key + replay_separator +
+            std::to_string(replayed.proposal.current) + replay_separator +
+            replayed.evaluation_procedure_id);
+        replayed.candidate_artifact_id = EvolutionExperiment::artifact_fingerprint(
+            replayed.proposal.key + replay_separator +
+            std::to_string(replayed.proposal.proposed) + replay_separator +
+            replayed.evaluation_procedure_id);
         assert(restarted.adopt_evolution_experiment(replayed));
         const auto* replayed_parameter = restarted.evolution_parameter("replay.persist");
         assert(replayed_parameter != nullptr && replayed_parameter->value == 0.4);
