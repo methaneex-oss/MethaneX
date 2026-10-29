@@ -128,15 +128,38 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
     result.error = "process isolation backend unsupported on this platform";
     return result;
 #else
-    // Resolve the executable before the child changes its working directory.
-    // Otherwise "./evaluator" can refer to a different file after chdir.
-    std::string executable = command.executable;
-    char* resolved = realpath(command.executable.c_str(), nullptr);
-    if (resolved != nullptr) {
-        executable.assign(resolved);
+    // Resolve the executable before fork/chdir. For a path containing '/',
+    // resolve that exact path; otherwise search PATH in the caller's context.
+    // Never let execvp search PATH after the child has changed directories.
+    std::string executable;
+    const auto resolve_path = [&](const std::string& candidate) -> std::string {
+        char* resolved = realpath(candidate.c_str(), nullptr);
+        if (resolved == nullptr) return {};
+        std::string canonical(resolved);
         std::free(resolved);
-    } else if (command.executable.find('/') != std::string::npos) {
-        result.error = std::string("cannot resolve executable: ") + std::strerror(errno);
+        if (access(canonical.c_str(), X_OK) != 0) return {};
+        return canonical;
+    };
+    if (command.executable.find('/') != std::string::npos) {
+        executable = resolve_path(command.executable);
+    } else {
+        const char* configured_path = std::getenv("PATH");
+        const std::string search_path = configured_path == nullptr
+            ? "/bin:/usr/bin" : configured_path;
+        std::size_t start = 0;
+        while (start <= search_path.size() && executable.empty()) {
+            const auto separator = search_path.find(':', start);
+            const auto end = separator == std::string::npos ? search_path.size() : separator;
+            const auto directory = search_path.substr(start, end - start);
+            const auto candidate = (directory.empty() ? std::string(".") : directory) +
+                                   "/" + command.executable;
+            executable = resolve_path(candidate);
+            if (separator == std::string::npos) break;
+            start = separator + 1;
+        }
+    }
+    if (executable.empty()) {
+        result.error = "cannot resolve executable in caller context";
         return result;
     }
 
@@ -219,10 +242,7 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
 
         if (!command.working_directory.empty() && chdir(command.working_directory.c_str()) != 0) _exit(126);
 
-        if (executable.find('/') != std::string::npos)
-            execv(executable.c_str(), argv.data());
-        else
-            execvp(executable.c_str(), argv.data());
+        execv(executable.c_str(), argv.data());
         _exit(127);
     }
 
