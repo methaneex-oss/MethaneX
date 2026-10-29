@@ -156,6 +156,7 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_evaluation(
         procedure.candidate_artifact_path.empty() ||
         procedure.expected_evaluator_digest.empty() ||
         !backend.limits().require_no_new_privileges ||
+        !backend.limits().require_privilege_drop ||
         !backend.limits().require_network_syscall_block) return experiment.outcome;
 
     const auto baseline_digest = detail::sha256_file(procedure.baseline_artifact_path);
