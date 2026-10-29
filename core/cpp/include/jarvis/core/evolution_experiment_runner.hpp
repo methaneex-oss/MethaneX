@@ -10,6 +10,8 @@ class EvolutionExperimentRunner {
 public:
     // Register evaluator identity at trusted application startup. Runtime
     // requests and journal records cannot establish trust by supplying a hash.
+    // The digest binds executable identity; authorization comes from this local
+    // registry, not from a digest supplied by an untrusted request or journal.
     static bool register_trusted_evaluator(const std::string& procedure_id,
                                            const std::string& executable) noexcept;
     static bool is_trusted_evaluator(const std::string& procedure_id,
