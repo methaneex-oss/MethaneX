@@ -29,9 +29,9 @@ int main() {
     std::filesystem::create_directory(alternate_directory);
     {
         std::ofstream original(original_executable);
-        original << "#!/bin/sh\nprintf original\\n\n";
+        original << "#!/bin/sh\necho original\n";
         std::ofstream shadow(alternate_directory / executable_name);
-        shadow << "#!/bin/sh\nprintf shadow\\n\n";
+        shadow << "#!/bin/sh\necho shadow\n";
     }
     assert(::chmod(original_executable.c_str(), 0700) == 0);
     assert(::chmod((alternate_directory / executable_name).c_str(), 0700) == 0);
