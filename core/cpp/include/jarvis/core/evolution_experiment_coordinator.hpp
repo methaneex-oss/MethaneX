@@ -2,7 +2,7 @@
 
 #include "jarvis/core/evolution_experiment.hpp"
 #include "jarvis/core/evolution_sandbox.hpp"
-#include "jarvis/core/evolution_trials.hpp"
+#include "jarvis/core/evolution_trials.hpp"\n#include "jarvis/core/process_isolation.hpp"
 
 #include <cstddef>
 #include <vector>
@@ -16,7 +16,7 @@ struct EvolutionTrialConfig {
     double minimum_confidence{0.75};
     // False is for controlled simulation/testing only; adoption safety policy
     // still independently decides whether non-isolated evidence is admissible.
-    bool require_isolation{true};
+    bool require_isolation{true};\n    // Production mode requires real held-out experience. Callback executors\n    // are simulation-only and are ignored while isolation is required.\n    std::vector<EvolutionFitnessCase> evaluation_cases;
 };
 
 struct EvolutionTrialBatch {
