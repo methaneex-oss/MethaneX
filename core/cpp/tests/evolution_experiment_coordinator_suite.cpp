@@ -67,6 +67,7 @@ int main(int argc, char** argv) {
         0.0, 0.0, 0.05, 0.0, ExperimentOutcome::Pending, false};
     ProcessIsolationLimits limits;
     limits.require_no_new_privileges = true;
+        limits.require_privilege_drop = true;
     limits.require_network_syscall_block = true;
     ProcessIsolationBackend backend(limits);
     IsolatedEvaluationProcedure procedure{
