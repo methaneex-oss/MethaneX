@@ -32,9 +32,32 @@ bool EvolutionController::record_evaluation(const EvolutionExperiment& experimen
     for (const auto& record : history_.for_experiment(experiment.id)) {
         if (record.action == EvolutionRecordAction::Evaluated) {
             const auto journal = adoption_journal_.get(experiment.id);
-            return journal.has_value() &&
+            return record.parameter_key == experiment.proposal.key &&
+                   record.outcome == experiment.outcome &&
+                   record.baseline_fitness == experiment.baseline_fitness &&
+                   record.candidate_fitness == experiment.candidate_fitness &&
+                   record.confidence == experiment.confidence &&
+                   journal.has_value() &&
                    (journal->state == AdoptionState::Pending ||
-                    journal->state == AdoptionState::Adopted);
+                    journal->state == AdoptionState::Adopted) &&
+                   journal->parameter_key == experiment.proposal.key &&
+                   journal->baseline_fitness == experiment.baseline_fitness &&
+                   journal->candidate_fitness == experiment.candidate_fitness &&
+                   journal->confidence == experiment.confidence &&
+                   journal->proposal_current == experiment.proposal.current &&
+                   journal->proposal_proposed == experiment.proposal.proposed &&
+                   journal->expected_gain == experiment.proposal.expected_gain &&
+                   journal->proposal_confidence == experiment.proposal.confidence &&
+                   journal->minimum_improvement == experiment.minimum_improvement &&
+                   journal->isolated == experiment.isolated &&
+                   journal->evaluation_procedure_id == experiment.evaluation_procedure_id &&
+                   journal->evaluation_config_id == experiment.evaluation_config_id &&
+                   journal->baseline_artifact_digest == experiment.baseline_artifact_digest &&
+                   journal->candidate_artifact_digest == experiment.candidate_artifact_digest &&
+                   journal->evaluator_artifact_digest == experiment.evaluator_artifact_digest &&
+                   journal->baseline_trial_count == experiment.baseline_trial_count &&
+                   journal->candidate_trial_count == experiment.candidate_trial_count &&
+                   journal->evaluation_evidence_digest == experiment.evaluation_evidence_digest;
         }
     }
 
