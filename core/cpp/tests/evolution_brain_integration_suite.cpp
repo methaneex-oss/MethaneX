@@ -195,6 +195,65 @@ int main(int argc, char** argv) {
     std::filesystem::remove(legacy_rollback_path, ec);
     std::filesystem::remove(legacy_rollback_path.string() + ".meta", ec);
 
+    // A valid evaluation followed by an adoption event that changes the
+    // proposed parameter must be rejected during replay.
+    const std::filesystem::path mismatched_replay_path = "evolution_mismatched_replay_test.bin";
+    std::filesystem::remove(mismatched_replay_path, ec);
+    std::filesystem::remove(mismatched_replay_path.string() + ".meta", ec);
+    EvolutionExperiment valid_replay_evidence;
+    { std::ofstream out(baseline_artifact_path); out << "0.70"; }
+    { std::ofstream out(candidate_artifact_path); out << "0.80"; }
+    {
+        Brain source(mismatched_replay_path);
+        assert(source.register_evolution_parameter("replay.mismatched-proposal", 0.3));
+        valid_replay_evidence = EvolutionExperiment{
+            "mismatched-replay-1",
+            EvolutionProposal{"replay.mismatched-proposal", 0.3, 0.4, 0.1, 0.8},
+            0.0, 0.0, 0.01, 0.0, ExperimentOutcome::Pending, false};
+        ProcessIsolationLimits limits;
+        limits.require_no_new_privileges = true;
+        limits.require_privilege_drop = true;
+        limits.require_network_syscall_block = true;
+        ProcessIsolationBackend backend(limits);
+        IsolatedEvaluationProcedure procedure{
+            IsolatedCommand{evaluator_path, {"--trusted-test-evaluator"}, ""},
+            "brain-suite-local-evaluator-v1", "artifact-score-v1",
+            baseline_artifact_path, candidate_artifact_path, detail::sha256_file(evaluator_path)};
+        const auto batch = EvolutionExperimentCoordinator::run_isolated(
+            valid_replay_evidence, backend, procedure, EvolutionTrialConfig{});
+        assert(batch.executed && valid_replay_evidence.has_valid_evaluation_evidence());
+        assert(source.record_evolution_evaluation(valid_replay_evidence));
+    }
+    {
+        Memory journal(256, mismatched_replay_path);
+        const auto& e = valid_replay_evidence;
+        Event mismatched_adoption{
+            0, 2, "forged-test", "evolution_adopt",
+            {{"experiment_id", e.id}, {"key", e.proposal.key},
+             {"current", e.proposal.current}, {"proposed", 0.45},
+             {"expected_gain", e.proposal.expected_gain},
+             {"proposal_confidence", e.proposal.confidence},
+             {"outcome", static_cast<std::int64_t>(e.outcome)},
+             {"baseline", e.baseline_fitness}, {"candidate", e.candidate_fitness},
+             {"confidence", e.confidence}, {"minimum_improvement", e.minimum_improvement},
+             {"isolated", true}, {"evaluation_procedure_id", e.evaluation_procedure_id},
+             {"evaluation_config_id", e.evaluation_config_id},
+             {"baseline_artifact_digest", e.baseline_artifact_digest},
+             {"candidate_artifact_digest", e.candidate_artifact_digest},
+             {"evaluator_artifact_digest", e.evaluator_artifact_digest},
+             {"baseline_trial_count", static_cast<std::int64_t>(e.baseline_trial_count)},
+             {"candidate_trial_count", static_cast<std::int64_t>(e.candidate_trial_count)},
+             {"evaluation_evidence_digest", e.evaluation_evidence_digest}}};
+        assert(journal.append(mismatched_adoption) != 0);
+    }
+    {
+        Brain restored(mismatched_replay_path);
+        const auto* parameter = restored.evolution_parameter("replay.mismatched-proposal");
+        assert(parameter != nullptr && parameter->value == parameter->baseline);
+    }
+    std::filesystem::remove(mismatched_replay_path, ec);
+    std::filesystem::remove(mismatched_replay_path.string() + ".meta", ec);
+
     // Full default-policy lifecycle through the isolated coordinator, durable
     // evaluation/adoption events, and a fresh Brain reconstructed from journal.
     const std::filesystem::path lifecycle_path = "evolution_isolated_lifecycle_test.bin";
