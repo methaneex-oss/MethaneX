@@ -22,7 +22,6 @@ void attest_isolated(EvolutionExperiment& experiment) {
     }
     ProcessIsolationLimits isolation_limits;
     isolation_limits.sandbox.timeout = std::chrono::milliseconds{5000};
-    isolation_limits.max_memory_bytes = 1024ULL * 1024ULL * 1024ULL;
     isolation_limits.max_cpu_seconds = 10;
     ProcessIsolationBackend backend(isolation_limits);
     const IsolatedCommand command{
