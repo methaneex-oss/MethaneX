@@ -120,14 +120,15 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
     // working directory, so "./evaluator" cannot silently select a different
     // file after chdir.
     std::string executable = command.executable;
-    if (command.executable.find('/') != std::string::npos) {
-        char* resolved = realpath(command.executable.c_str(), nullptr);
-        if (resolved == nullptr) {
-            result.error = std::string("cannot resolve executable: ") + std::strerror(errno);
-            return result;
-        }
+    char* resolved = realpath(command.executable.c_str(), nullptr);
+    if (resolved != nullptr) {
+        // This also handles a bare filename that exists in the caller's
+        // directory; do not let execvp reinterpret that identity through PATH.
         executable.assign(resolved);
         std::free(resolved);
+    } else if (command.executable.find('/') != std::string::npos) {
+        result.error = std::string("cannot resolve executable: ") + std::strerror(errno);
+        return result;
     }
 
     // Build argv before fork: allocating in a multithreaded child is unsafe.
