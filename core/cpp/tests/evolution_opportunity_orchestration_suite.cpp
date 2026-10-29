@@ -15,7 +15,7 @@ namespace {
 std::string evaluator_executable;
 IsolatedCommand evaluator_command() {
     return IsolatedCommand{evaluator_executable,
-        {"--test-evaluator", "0.50", "0.80"}, "", "jarvis.test.fixture.v1",
+        {"--test-evaluator-from-parameter"}, "", "jarvis.test.fixture.v1",
         EvolutionExperimentRunner::executable_fingerprint(evaluator_executable)};
 }
 } // namespace
@@ -24,9 +24,11 @@ int main(int argc, char** argv) {
     if (test_support::run_evolution_evaluator_fixture(argc, argv)) return 0;
     evaluator_executable = std::filesystem::absolute(argv[0]).string();
     if (!EvolutionExperimentRunner::register_trusted_evaluator(
-            "jarvis.test.fixture.v1", evaluator_executable)) return 1;
+            "jarvis.test.fixture.v1", evaluator_executable,
+            {"--test-evaluator-from-parameter"})) return 1;
     assert(EvolutionExperimentRunner::register_trusted_evaluator(
-        "jarvis.test.fixture.v1", evaluator_executable));
+        "jarvis.test.fixture.v1", evaluator_executable,
+        {"--test-evaluator-from-parameter"}));
     EvolutionOpportunityDetector detector;
     const auto opportunities = detector.detect({
         {"diagnostics", 0.9, 0.8, 0.9, 1.0, 0.4},
