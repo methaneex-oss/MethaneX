@@ -78,7 +78,7 @@ int main(int argc, char** argv) {
 
     // This uses the coordinator's default trial configuration (isolation on),
     // and measures both artifact states through the same pinned local evaluator.
-    const auto isolated = EvolutionExperimentCoordinator::run_isolated(
+    const auto isolated = EvolutionExperimentCoordinator::run(
         production_experiment, backend, procedure, EvolutionTrialConfig{});
     assert(isolated.executed);
     assert(isolated.baseline.count == 4 && isolated.candidate.count == 4);
