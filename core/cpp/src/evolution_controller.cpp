@@ -182,6 +182,9 @@ bool EvolutionController::validate_adoption_for_brain(const EvolutionExperiment&
         record->expected_gain != experiment.proposal.expected_gain ||
         record->proposal_confidence != experiment.proposal.confidence ||
         record->minimum_improvement != experiment.minimum_improvement ||
+        record->evaluation_minimum_confidence != experiment.evaluation_minimum_confidence ||
+        record->evaluation_procedure != experiment.evaluation_procedure ||
+        record->evaluation_digest != experiment.evaluation_digest ||
         record->isolated != experiment.isolated) return false;
 
     // The replay boundary must receive fresh evidence from the trusted
