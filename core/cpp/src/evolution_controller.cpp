@@ -175,11 +175,10 @@ bool EvolutionController::validate_adoption_for_brain(const EvolutionExperiment&
         record->minimum_improvement != experiment.minimum_improvement ||
         record->isolated != experiment.isolated) return false;
 
-    // On a restart, the caller's value object has no in-memory attestation.
-    // Re-attest a copy only after its fields match the durable evaluated record.
-    EvolutionExperiment verified = experiment;
-    if (record->isolated) verified.attest_isolated_result();
-    if (!EvolutionSafetyGate::approve(verified, policy_)) return false;
+    // Isolation attestations are ephemeral proof from the trusted runner.
+    // A durable Boolean cannot recreate that proof after restart; fail closed
+    // unless this exact request still carries a valid runner-issued attestation.
+    if (!EvolutionSafetyGate::approve(experiment, policy_)) return false;
 
     const auto evaluation = model_.evaluate(experiment.proposal);
     if (!evaluation.eligible) return false;
