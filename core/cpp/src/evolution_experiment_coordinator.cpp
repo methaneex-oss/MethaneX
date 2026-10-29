@@ -1,4 +1,4 @@
-#include "jarvis/core/evolution_experiment_coordinator.hpp"
+#include "jarvis/core/evolution_experiment_coordinator.hpp"\n#include "jarvis/core/evolution_experiment_runner.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -20,9 +20,30 @@ EvolutionTrialBatch EvolutionExperimentCoordinator::run(
         return batch;
     }
 
+    if (config.require_isolation) {
+        // Production path: ignore simulation callbacks and evaluate both values
+        // through the fixed, repository-owned worker on identical held-out data.
+        if (config.evaluation_cases.size() < 2 ||
+            config.evaluation_cases.size() < config.baseline_trials ||
+            config.evaluation_cases.size() < config.candidate_trials) {
+            experiment.outcome = ExperimentOutcome::Invalid;
+            return batch;
+        }
+        experiment.minimum_improvement = config.minimum_improvement;
+        ProcessIsolationBackend backend;
+        const auto outcome = EvolutionExperimentRunner::run_isolated_evaluation(
+            experiment, backend, config.evaluation_cases, config.minimum_confidence);
+        if (outcome == ExperimentOutcome::Invalid) return batch;
+        batch.baseline = experiment.baseline_statistics;
+        batch.candidate = experiment.candidate_statistics;
+        batch.executed = true;
+        batch.outcome = outcome;
+        return batch;
+    }
+
     std::vector<double> baseline;
     std::vector<double> candidate;
-    bool all_trials_isolated = true;
+    bool all_trials_isolated = false;
     baseline.reserve(config.baseline_trials);
     candidate.reserve(config.candidate_trials);
 
