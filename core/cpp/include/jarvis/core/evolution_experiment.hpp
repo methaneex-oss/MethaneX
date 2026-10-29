@@ -37,6 +37,14 @@ struct EvolutionExperiment {
     // Serialized result bit; the private snapshot below proves that this
     // instance's evaluated fields have not changed since sandbox attestation.
     bool isolated{false};
+    // Durable provenance fields written only by the trusted evaluation runner.
+    // These identify the procedure and both measured artifacts; the legacy
+    // isolated Boolean is not accepted as evidence by itself.
+    std::string evaluation_procedure_id;
+    std::string evaluation_config_id;
+    std::string baseline_artifact_digest;
+    std::string candidate_artifact_digest;
+    std::string evaluation_evidence_digest;
 
     bool has_valid_isolation_attestation() const noexcept {
         return isolation_attested_ && id == attested_id_ &&
@@ -49,7 +57,10 @@ struct EvolutionExperiment {
                candidate_fitness == attested_candidate_ &&
                minimum_improvement == attested_minimum_ &&
                confidence == attested_confidence_ &&
-               outcome == attested_outcome_ && candidate_executed && isolated;
+               outcome == attested_outcome_ && candidate_executed && isolated &&
+               !evaluation_procedure_id.empty() && !evaluation_config_id.empty() &&
+               !baseline_artifact_digest.empty() && !candidate_artifact_digest.empty() &&
+               !evaluation_evidence_digest.empty();
     }
 
 private:
