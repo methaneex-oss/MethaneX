@@ -80,7 +80,7 @@ bool parse_measurement(const ProcessIsolationResult& result,
         *evaluator_fingerprint != experiment.evaluator_executable_fingerprint ||
         *trial != std::to_string(trial_index) ||
         *artifact != fingerprint(experiment.proposal.key + "\x1f" +
-                                 std::to_string(parameter_value) + "\x1f" + procedure_id))
+                                 EvolutionExperiment::format_parameter_value(parameter_value) + "\x1f" + procedure_id))
         return false;
     try {
         std::size_t used = 0;
@@ -123,14 +123,13 @@ bool run_measurement(const EvolutionExperiment& experiment,
     const bool valid = parse_measurement(result, experiment, command.evaluation_procedure_id,
                                          role, parameter_value, trial_index, fitness);
     if (!valid) {
-        // Keep evaluator diagnostics bounded and avoid echoing arbitrary output.
+        // Report process status without echoing arbitrary evaluator output.
         std::cerr << "Evolution evaluator rejected " << role
                   << " measurement: started=" << result.started
                   << " isolated=" << result.isolated
                   << " completed=" << result.completed
                   << " exit_code=" << result.exit_code
-                  << " error=" << result.error
-                  << " output=[" << result.output << "]" << '\n';
+                  << " error=" << result.error << '\n';
     }
     return valid;
 }
@@ -197,10 +196,10 @@ bool EvolutionExperimentRunner::restore_trusted_attestation(
         !is_trusted_evaluator(experiment.evaluation_procedure_id, {},
                               experiment.evaluator_executable_fingerprint)) return false;
     const auto expected_baseline = fingerprint(
-        experiment.proposal.key + "\x1f" + std::to_string(experiment.proposal.current) +
+        experiment.proposal.key + "\x1f" + EvolutionExperiment::format_parameter_value(experiment.proposal.current) +
         "\x1f" + experiment.evaluation_procedure_id);
     const auto expected_candidate = fingerprint(
-        experiment.proposal.key + "\x1f" + std::to_string(experiment.proposal.proposed) +
+        experiment.proposal.key + "\x1f" + EvolutionExperiment::format_parameter_value(experiment.proposal.proposed) +
         "\x1f" + experiment.evaluation_procedure_id);
     if (experiment.baseline_artifact_id != expected_baseline ||
         experiment.candidate_artifact_id != expected_candidate) return false;
