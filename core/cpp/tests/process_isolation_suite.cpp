@@ -10,6 +10,7 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <sys/socket.h>
 int main() {
     using namespace jarvis::core;
     ProcessIsolationBackend backend(ProcessIsolationLimits{
@@ -48,6 +49,16 @@ int main() {
         {"-c", "test ! -e /proc/self/fd/" + std::to_string(inherited_fd)}, ""});
     ::close(inherited_fd);
     assert(fd_check.completed);
+
+    // A connected socket is especially important: read/write on an inherited
+    // socket bypasses filters that only deny socket/connect/send/recv syscalls.
+    int connected_sockets[2] = {-1, -1};
+    assert(::socketpair(AF_UNIX, SOCK_STREAM, 0, connected_sockets) == 0);
+    const auto socket_probe = backend.run({"/bin/sh",
+        {"-c", "printf leak >&" + std::to_string(connected_sockets[1])}, ""});
+    ::close(connected_sockets[0]);
+    ::close(connected_sockets[1]);
+    assert(socket_probe.started && socket_probe.isolated && !socket_probe.completed);
 #endif
     const auto limited = backend.run({"/bin/sh", {"-c", "head -c 2048 /dev/zero"}, ""});
     assert(limited.started && limited.isolated && limited.output_limited && !limited.completed);
