@@ -20,7 +20,8 @@ bool EvolutionAdoptionJournal::stage(const EvolutionExperiment& experiment) {
                    r.isolated == experiment.isolated &&
                    r.evaluation_procedure_id == experiment.evaluation_procedure_id &&
                    r.baseline_artifact_id == experiment.baseline_artifact_id &&
-                   r.candidate_artifact_id == experiment.candidate_artifact_id;
+                   r.candidate_artifact_id == experiment.candidate_artifact_id &&
+                   r.evaluation_command_identity == experiment.evaluation_command_identity;
         return false;
     }
     r.experiment_id = experiment.id;
@@ -37,6 +38,7 @@ bool EvolutionAdoptionJournal::stage(const EvolutionExperiment& experiment) {
     r.evaluation_procedure_id = experiment.evaluation_procedure_id;
     r.baseline_artifact_id = experiment.baseline_artifact_id;
     r.candidate_artifact_id = experiment.candidate_artifact_id;
+    r.evaluation_command_identity = experiment.evaluation_command_identity;
     r.state = AdoptionState::Pending;
     r.revision = next_revision_++;
     return true;
