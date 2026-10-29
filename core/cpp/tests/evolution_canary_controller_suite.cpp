@@ -17,7 +17,8 @@ void attest_isolated(EvolutionExperiment& experiment) {
         evaluator_executable,
         {"--test-evaluator", std::to_string(experiment.baseline_fitness),
          std::to_string(experiment.candidate_fitness)},
-        "", "jarvis.test.fixture.v1"};
+        "", "jarvis.test.fixture.v1",
+        EvolutionExperimentRunner::executable_fingerprint(evaluator_executable)};
     EvolutionExperimentRunner::run_isolated_command(experiment, backend, command);
 }
 } // namespace
