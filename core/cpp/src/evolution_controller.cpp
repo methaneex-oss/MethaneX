@@ -240,7 +240,53 @@ bool EvolutionController::compensate_adoption_for_brain(
 }
 
 bool EvolutionController::replay_adoption(const EvolutionExperiment& experiment) noexcept {
-    if (!validate_adoption_for_brain(experiment)) return false;
+    // Brain replay calls this after applying the proposal to the model. Recheck
+    // every evidence/journal invariant here, then verify the applied value and
+    // previous value instead of rerunning the pre-adoption eligibility check.
+    if (experiment.id.empty() || experiment.proposal.key.empty() ||
+        !experiment.candidate_executed ||
+        !experiment.has_valid_evaluation_evidence() ||
+        !EvolutionSafetyGate::approve(experiment, policy_)) return false;
+
+    bool matching_evaluation = false;
+    for (const auto& item : history_.for_experiment(experiment.id)) {
+        if (item.action == EvolutionRecordAction::Rejected ||
+            item.action == EvolutionRecordAction::RolledBack) return false;
+        if (item.action != EvolutionRecordAction::Evaluated) continue;
+        if (item.parameter_key != experiment.proposal.key ||
+            item.outcome != experiment.outcome ||
+            item.baseline_fitness != experiment.baseline_fitness ||
+            item.candidate_fitness != experiment.candidate_fitness ||
+            item.confidence != experiment.confidence) return false;
+        matching_evaluation = true;
+    }
+    if (!matching_evaluation) return false;
+
+    const auto record = adoption_journal_.get(experiment.id);
+    if (!record.has_value() || record->state != AdoptionState::Pending ||
+        record->parameter_key != experiment.proposal.key ||
+        record->baseline_fitness != experiment.baseline_fitness ||
+        record->candidate_fitness != experiment.candidate_fitness ||
+        record->confidence != experiment.confidence ||
+        record->proposal_current != experiment.proposal.current ||
+        record->proposal_proposed != experiment.proposal.proposed ||
+        record->expected_gain != experiment.proposal.expected_gain ||
+        record->proposal_confidence != experiment.proposal.confidence ||
+        record->minimum_improvement != experiment.minimum_improvement ||
+        record->isolated != experiment.isolated ||
+        record->evaluation_procedure_id != experiment.evaluation_procedure_id ||
+        record->evaluation_config_id != experiment.evaluation_config_id ||
+        record->baseline_artifact_digest != experiment.baseline_artifact_digest ||
+        record->candidate_artifact_digest != experiment.candidate_artifact_digest ||
+        record->evaluator_artifact_digest != experiment.evaluator_artifact_digest ||
+        record->baseline_trial_count != experiment.baseline_trial_count ||
+        record->candidate_trial_count != experiment.candidate_trial_count ||
+        record->evaluation_evidence_digest != experiment.evaluation_evidence_digest) return false;
+
+    const auto* parameter = model_.parameter(experiment.proposal.key);
+    if (parameter == nullptr || parameter->value != experiment.proposal.proposed ||
+        parameter->previous_value != experiment.proposal.current) return false;
+
     if (!adoption_journal_.commit(experiment.id, "replayed")) return false;
     return history_.append(EvolutionHistoryRecord{
         experiment.id, experiment.proposal.key, EvolutionRecordAction::Adopted,
