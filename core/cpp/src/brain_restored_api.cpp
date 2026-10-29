@@ -328,6 +328,7 @@ bool Brain::adopt_evolution_experiment(EvolutionExperiment& experiment) {
                  {"minimum_improvement", experiment.minimum_improvement},
                  {"isolated", experiment.isolated},
                  {"evaluation_procedure_id", experiment.evaluation_procedure_id},
+                 {"evaluator_executable_fingerprint", experiment.evaluator_executable_fingerprint},
                  {"baseline_artifact_id", experiment.baseline_artifact_id},
                  {"candidate_artifact_id", experiment.candidate_artifact_id},
                  {"experiment_id", experiment.id},
