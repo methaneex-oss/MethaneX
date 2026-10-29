@@ -246,7 +246,7 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_evaluation(
         number(experiment.proposal.expected_gain) + "\n" + number(experiment.proposal.confidence) + "\n" +
         number(experiment.baseline_fitness) + "\n" + number(experiment.candidate_fitness) + "\n" +
         number(experiment.minimum_improvement) + "\n" + number(experiment.confidence) + "\n" +
-        procedure.procedure_id + "\n" + procedure.configuration_id + "\n" +
+        std::to_string(static_cast<int>(experiment.outcome)) + "\n" + procedure.procedure_id + "\n" + procedure.configuration_id + "\n" +
         baseline_digest + "\n" + candidate_digest + "\n" + evaluator_digest + "\n" +
         std::to_string(baseline.count) + "\n" + std::to_string(candidate.count);
     experiment.evaluation_evidence_digest = stable_hash(evidence);
