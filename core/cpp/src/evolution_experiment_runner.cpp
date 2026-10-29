@@ -219,7 +219,9 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_command(
     experiment.candidate_executed = false;
     experiment.isolated = false;
     experiment.outcome = ExperimentOutcome::Invalid;
-    if (!safe_field(experiment.id) || !safe_field(experiment.proposal.key) ||
+    if (!backend.limits().require_no_new_privileges ||
+        !backend.limits().require_network_syscall_block ||
+        !safe_field(experiment.id) || !safe_field(experiment.proposal.key) ||
         !safe_field(command.evaluation_procedure_id) ||
         command.expected_executable_fingerprint.empty() ||
         is_interpreter(command.executable) ||
