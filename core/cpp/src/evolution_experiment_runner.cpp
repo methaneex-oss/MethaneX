@@ -1,6 +1,7 @@
 #include "jarvis/core/evolution_experiment_runner.hpp"
 
 #include <cmath>
+#include <filesystem>
 #include <iomanip>
 #include <limits>
 #include <sstream>
@@ -30,6 +31,17 @@ namespace {
 std::string numeric_argument(double value) {
     std::ostringstream out;
     out << std::setprecision(std::numeric_limits<double>::max_digits10) << value;
+    return out.str();
+}
+
+std::string command_identity(const IsolatedCommand& command) {
+    std::ostringstream out;
+    const auto field = [&](const std::string& value) {
+        out << value.size() << ':' << value;
+    };
+    field(command.executable);
+    field(command.working_directory);
+    for (const auto& argument : command.arguments) field(argument);
     return out.str();
 }
 
@@ -97,6 +109,7 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_evaluation(
     experiment.baseline_fitness = baseline;
     experiment.candidate_fitness = candidate;
     experiment.evaluation_procedure_id = spec.procedure_id;
+    experiment.evaluation_command_identity = command_identity(spec.evaluator);
     experiment.baseline_artifact_id = spec.baseline_artifact_id;
     experiment.candidate_artifact_id = spec.candidate_artifact_id;
     experiment.candidate_executed = true;
