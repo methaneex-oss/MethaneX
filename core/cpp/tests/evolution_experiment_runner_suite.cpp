@@ -68,6 +68,26 @@ int main(int argc, char** argv) {
 
     {
         auto experiment = make_experiment();
+        experiment.candidate_fitness = 0.86;
+        ProcessIsolationLimits isolation_limits;
+        isolation_limits.sandbox.timeout = std::chrono::milliseconds{5000};
+        isolation_limits.max_cpu_seconds = 10;
+        ProcessIsolationBackend backend(isolation_limits);
+        IsolatedCommand pinned{
+            evaluator_executable,
+            {"--test-evaluator", "0.70", "0.86"},
+            "", "jarvis.test.fixture.v1",
+            EvolutionExperimentRunner::executable_fingerprint(evaluator_executable)};
+        pinned.expected_executable_fingerprint = "wrong-executable-fingerprint";
+        const auto outcome = EvolutionExperimentRunner::run_isolated_command(
+            experiment, backend, pinned);
+        assert(outcome == ExperimentOutcome::Invalid);
+        assert(!experiment.candidate_executed);
+        assert(!experiment.has_valid_isolation_attestation());
+    }
+
+    {
+        auto experiment = make_experiment();
         const auto outcome = EvolutionExperimentRunner::run(
             experiment, sandbox, [](const EvolutionProposal&, const SandboxLimits&) {
                 // This callback lies about isolation. The sandbox must not
