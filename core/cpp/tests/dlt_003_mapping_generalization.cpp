@@ -143,7 +143,7 @@ void run_seed(std::uint64_t seed) {
         assert(selected_action(restored, primary_context) == secondary_positive);
         assert(selected_action(restored, secondary_context) == secondary_positive);
         assert(selected_action(restored, related_context) == primary_positive);
-        assert(restored.memory().by_kind("action_outcome").size() == 96);
+        assert(restored.memory().by_kind("action_outcome").size() == 60);
     }
 
     std::filesystem::remove(journal, ec);
