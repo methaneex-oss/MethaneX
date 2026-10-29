@@ -247,7 +247,11 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
     }
     result.output = std::move(output);
     result.completed = !result.timed_out && !result.output_limited && result.exit_code == 0;
-    result.isolated = result.completed;
+    // Isolation describes which controls were applied to the child, not whether
+    // its workload succeeded. A timed-out/output-limited child may still have
+    // run under the requested controls; control-setup failures (125) and exec
+    // failures (127) are never attested.
+    result.isolated = result.started && result.exit_code != 125 && result.exit_code != 127;
     if (!result.completed && result.exit_code == 125) result.error = "required isolation feature unavailable";
     if (!result.completed && result.error.empty()) {
         if (result.timed_out) result.error = "process timeout";
