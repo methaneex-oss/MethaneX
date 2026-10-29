@@ -56,11 +56,7 @@ int main(int argc, char** argv) {
 
     {
         auto experiment = make_experiment();
-        ProcessIsolationLimits limits;
-        limits.require_no_new_privileges = true;
-        limits.require_privilege_drop = true;
-        limits.require_network_syscall_block = true;
-        ProcessIsolationBackend backend(limits);
+        ProcessIsolationBackend backend;
         IsolatedEvaluationProcedure procedure{
             IsolatedCommand{argv[0], {"--trusted-test-evaluator"}, ""},
             "runner-suite-local-evaluator-v1", "linear-fitness-v1",
