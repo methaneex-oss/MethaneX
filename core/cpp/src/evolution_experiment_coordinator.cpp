@@ -114,8 +114,10 @@ EvolutionTrialBatch EvolutionExperimentCoordinator::run_isolated(
     const auto trial_count = std::max(config.baseline_trials, config.candidate_trials);
     for (std::size_t i = 0; i < trial_count; ++i) {
         EvolutionExperiment measured = experiment;
+        IsolatedCommand trial_evaluator = evaluator;
+        trial_evaluator.trial_index = i;
         const auto outcome = EvolutionExperimentRunner::run_isolated_command(
-            measured, backend, evaluator);
+            measured, backend, trial_evaluator);
         if (outcome == ExperimentOutcome::Invalid ||
             !measured.has_valid_isolation_attestation()) {
             experiment.outcome = ExperimentOutcome::Invalid;
