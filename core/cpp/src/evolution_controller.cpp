@@ -181,7 +181,9 @@ bool EvolutionController::adopt(EvolutionExperiment& experiment) {
 }
 
 bool EvolutionController::validate_adoption_for_brain(const EvolutionExperiment& experiment) const noexcept {
-    if (experiment.id.empty() || !experiment.candidate_executed) return false;
+    if (experiment.id.empty() || !experiment.candidate_executed ||
+        policy_.trusted_evaluator_digest.empty() ||
+        experiment.evaluator_artifact_digest != policy_.trusted_evaluator_digest) return false;
 
     // Adoption is permitted only when durable history contains an evaluation
     // for this exact experiment and the request still matches that evidence.
@@ -273,6 +275,8 @@ bool EvolutionController::replay_adoption(const EvolutionExperiment& experiment)
     // previous value instead of rerunning the pre-adoption eligibility check.
     if (experiment.id.empty() || experiment.proposal.key.empty() ||
         !experiment.candidate_executed ||
+        policy_.trusted_evaluator_digest.empty() ||
+        experiment.evaluator_artifact_digest != policy_.trusted_evaluator_digest ||
         !experiment.has_valid_evaluation_evidence() ||
         !EvolutionSafetyGate::approve(experiment, policy_)) return false;
 
