@@ -198,6 +198,10 @@ int main(int argc, char** argv) {
         assert(after_prediction->observations == 1);
         brain.observe_evolution_fitness("planner.weight", 0.9);
         brain.observe_evolution_fitness("planner.weight", 0.9);
+        // The adoption policy requires proposal confidence >= 0.75. Three
+        // observations are insufficient, so collect enough real evidence.
+        for (int i = 0; i < 10; ++i)
+            brain.observe_evolution_fitness("planner.weight", 0.9);
         const auto* after_fitness = brain.evolution_parameter("planner.weight");
         assert(after_fitness != nullptr);
         assert(after_fitness->observations == 3);
@@ -276,7 +280,8 @@ int main(int argc, char** argv) {
         EvolutionExperiment equal_fitness{
             "safety-equal-fitness", EvolutionProposal{"safety.equal-fitness", 0.2, 0.3, 0.1, 0.99},
             0.70, 0.70, 0.01, 0.99, ExperimentOutcome::Improved, true};
-        attest_isolated(equal_fitness);
+        // Preserve the deliberately equal fitness values: this case tests
+        // recomputation of caller-supplied outcome labels, not evaluator output.
         equal_fitness.outcome = ExperimentOutcome::Improved;
         EvolutionSafetyPolicy non_isolation_policy;
         non_isolation_policy.require_isolation = false;
