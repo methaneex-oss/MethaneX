@@ -17,10 +17,18 @@ std::string number(double value) {
     return out.str();
 }
 
+void append_field(std::string& target, const std::string& value) {
+    target += std::to_string(value.size());
+    target.push_back(':');
+    target += value;
+    target.push_back('\n');
+}
+
 bool parse_record(const std::string& output, const std::string& experiment_id,
                   const std::string& mode, const EvolutionProposal& proposal,
                   double evaluated_value, const std::string& artifact_digest,
                   const IsolatedEvaluationProcedure& procedure,
+                  const std::string& effective_config_id,
                   const std::string& evaluator_digest, double& fitness) {
     std::vector<std::string> fields;
     std::size_t start = 0;
@@ -36,7 +44,7 @@ bool parse_record(const std::string& output, const std::string& experiment_id,
         fields[1] != experiment_id || fields[2] != mode ||
         fields[3] != proposal.key || fields[4] != number(evaluated_value) ||
         fields[5] != number(proposal.current) || fields[6] != number(proposal.proposed) ||
-        fields[7] != artifact_digest || fields[8] != procedure.configuration_id ||
+        fields[7] != artifact_digest || fields[8] != effective_config_id ||
         fields[9] != procedure.procedure_id || fields[10] != evaluator_digest) return false;
     try {
         std::size_t used = 0;
@@ -51,18 +59,18 @@ bool measure(const EvolutionExperiment& experiment, const ProcessIsolationBacken
              const IsolatedEvaluationProcedure& procedure, const std::string& mode,
              double value, const std::string& artifact_path,
              const std::string& artifact_digest, const std::string& evaluator_digest,
-             double& fitness) {
+             const std::string& effective_config_id, double& fitness) {
     IsolatedCommand command = procedure.command;
     command.arguments.insert(command.arguments.end(), {
         "--jarvis-evaluate-v1", experiment.id, mode, experiment.proposal.key,
         number(value), number(experiment.proposal.current),
         number(experiment.proposal.proposed), artifact_path, artifact_digest,
-        procedure.configuration_id, procedure.procedure_id, evaluator_digest});
+        effective_config_id, procedure.procedure_id, evaluator_digest});
     const auto result = backend.run(command);
     if (!result.started || !result.isolated || !result.completed || result.timed_out ||
         result.output_limited || result.exit_code != 0) return false;
     return parse_record(result.output, experiment.id, mode, experiment.proposal, value,
-                        artifact_digest, procedure, evaluator_digest, fitness);
+                        artifact_digest, procedure, effective_config_id, evaluator_digest, fitness);
 }
 
 } // namespace
@@ -168,6 +176,23 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_evaluation(
         evaluator_digest != procedure.expected_evaluator_digest)
         return experiment.outcome;
 
+    // Bind command path, arguments, working directory, procedure/configuration
+    // identifiers, artifact paths, and content digests into one effective config ID.
+    std::string configuration_material;
+    append_field(configuration_material, procedure.configuration_id);
+    append_field(configuration_material, procedure.procedure_id);
+    append_field(configuration_material, procedure.command.executable);
+    append_field(configuration_material, procedure.command.working_directory);
+    for (const auto& argument : procedure.command.arguments)
+        append_field(configuration_material, argument);
+    append_field(configuration_material, procedure.baseline_artifact_path);
+    append_field(configuration_material, procedure.candidate_artifact_path);
+    append_field(configuration_material, baseline_digest);
+    append_field(configuration_material, candidate_digest);
+    append_field(configuration_material, evaluator_digest);
+    const std::string effective_config_id =
+        procedure.configuration_id + ":" + detail::sha256_hex(configuration_material);
+
     std::vector<double> baseline_values;
     std::vector<double> candidate_values;
     baseline_values.reserve(baseline_trials);
@@ -176,14 +201,14 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_evaluation(
         double fitness = 0.0;
         if (!measure(experiment, backend, procedure, "baseline",
                      experiment.proposal.current, procedure.baseline_artifact_path,
-                     baseline_digest, evaluator_digest, fitness)) return experiment.outcome;
+                     baseline_digest, evaluator_digest, effective_config_id, fitness)) return experiment.outcome;
         baseline_values.push_back(fitness);
     }
     for (std::size_t i = 0; i < candidate_trials; ++i) {
         double fitness = 0.0;
         if (!measure(experiment, backend, procedure, "candidate",
                      experiment.proposal.proposed, procedure.candidate_artifact_path,
-                     candidate_digest, evaluator_digest, fitness)) return experiment.outcome;
+                     candidate_digest, evaluator_digest, effective_config_id, fitness)) return experiment.outcome;
         candidate_values.push_back(fitness);
     }
 
@@ -214,7 +239,7 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_evaluation(
     }
 
     experiment.evaluation_procedure_id = procedure.procedure_id;
-    experiment.evaluation_config_id = procedure.configuration_id;
+    experiment.evaluation_config_id = effective_config_id;
     experiment.baseline_artifact_digest = baseline_digest;
     experiment.candidate_artifact_digest = candidate_digest;
     experiment.evaluator_artifact_digest = evaluator_digest;
@@ -225,7 +250,7 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_evaluation(
         number(experiment.proposal.expected_gain) + "\n" + number(experiment.proposal.confidence) + "\n" +
         number(experiment.baseline_fitness) + "\n" + number(experiment.candidate_fitness) + "\n" +
         number(experiment.minimum_improvement) + "\n" + number(experiment.confidence) + "\n" +
-        std::to_string(static_cast<int>(experiment.outcome)) + "\n" + procedure.procedure_id + "\n" + procedure.configuration_id + "\n" +
+        std::to_string(static_cast<int>(experiment.outcome)) + "\n" + procedure.procedure_id + "\n" + effective_config_id + "\n" +
         baseline_digest + "\n" + candidate_digest + "\n" + evaluator_digest + "\n" +
         std::to_string(baseline.count) + "\n" + std::to_string(candidate.count);
     experiment.evaluation_evidence_digest = detail::sha256_hex(evidence);
