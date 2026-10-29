@@ -32,7 +32,7 @@ void attest_isolated(EvolutionExperiment& experiment) {
     const auto outcome = EvolutionExperimentRunner::run_isolated_evaluation(
         experiment, backend, procedure, 4, 4, 0.5);
     if (outcome != ExperimentOutcome::Improved)
-        std::cerr << "integration failure: local candidate evaluation was not improved\\n";
+        std::cerr << "integration failure: local candidate evaluation was not improved\n";
 }
 bool check(bool condition, const char* message) {
     if (!condition) std::cerr << "integration failure: " << message << '\n';
@@ -242,6 +242,8 @@ int main(int argc, char** argv) {
 
     std::filesystem::remove(path, ec);
     std::filesystem::remove(path.string() + ".meta", ec);
+    std::filesystem::remove(baseline_artifact_path, ec);
+    std::filesystem::remove(candidate_artifact_path, ec);
     std::cout << "memory-learning-evolution persistence integration passed\n";
     return 0;
 }
