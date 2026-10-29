@@ -28,7 +28,8 @@ inline bool run_evolution_evaluator_fixture(int argc, char** argv) {
         const auto key = argument.substr(0, separator);
         if (key == "--experiment-id" || key == "--parameter-key" ||
             key == "--parameter-value" || key == "--role" ||
-            key == "--procedure-id" || key == "--artifact-id")
+            key == "--procedure-id" || key == "--evaluator-fingerprint" ||
+            key == "--artifact-id")
             fields[key] = argument.substr(separator + 1);
     }
     const auto get = [&](const char* key) -> const std::string& {
@@ -39,7 +40,8 @@ inline bool run_evolution_evaluator_fixture(int argc, char** argv) {
     const std::string role = get("--role");
     if (get("--experiment-id").empty() || get("--parameter-key").empty() ||
         get("--parameter-value").empty() || get("--procedure-id").empty() ||
-        get("--artifact-id").empty() || (role != "baseline" && role != "candidate"))
+        get("--evaluator-fingerprint").empty() || get("--artifact-id").empty() ||
+        (role != "baseline" && role != "candidate"))
         return true;
     const double parameter_value = std::stod(get("--parameter-value"));
     const double fitness = role == "baseline" ? baseline : candidate;
@@ -50,6 +52,7 @@ inline bool run_evolution_evaluator_fixture(int argc, char** argv) {
               << "parameter_value=" << get("--parameter-value") << "\n"
               << "role=" << role << "\n"
               << "procedure_id=" << get("--procedure-id") << "\n"
+              << "evaluator_fingerprint=" << get("--evaluator-fingerprint") << "\n"
               << "artifact_id=" << get("--artifact-id") << "\n"
               << "fitness=" << fitness << "\n";
     return true;
