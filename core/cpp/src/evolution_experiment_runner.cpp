@@ -135,6 +135,7 @@ std::string EvolutionExperimentRunner::executable_fingerprint(
 ExperimentOutcome EvolutionExperimentRunner::run(EvolutionExperiment& experiment,
                                                   const EvolutionSandbox& sandbox,
                                                   const CandidateExecutor& executor) noexcept {
+    experiment.clear_isolation_attestation();
     experiment.candidate_executed = false;
     experiment.isolated = false;
     const auto result = sandbox.run(experiment.proposal, executor);
@@ -153,6 +154,7 @@ ExperimentOutcome EvolutionExperimentRunner::run(EvolutionExperiment& experiment
 ExperimentOutcome EvolutionExperimentRunner::run_isolated_command(
     EvolutionExperiment& experiment, const ProcessIsolationBackend& backend,
     const IsolatedCommand& command) noexcept {
+    experiment.clear_isolation_attestation();
     experiment.candidate_executed = false;
     experiment.isolated = false;
     experiment.outcome = ExperimentOutcome::Invalid;
