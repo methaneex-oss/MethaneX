@@ -14,11 +14,12 @@ inline bool run_evolution_evaluator_fixture(int argc, char** argv) {
     if (argc < 2) return false;
     const std::string mode(argv[1]);
     const bool parameter_mode = mode == "--test-evaluator-from-parameter";
-    if (!parameter_mode && (argc < 4 || mode != "--test-evaluator")) return false;
+    const bool fixed_role_mode = mode == "--test-evaluator-fixed-role-fitness";
+    if (!parameter_mode && !fixed_role_mode && (argc < 4 || mode != "--test-evaluator")) return false;
     double baseline = 0.0;
     double candidate = 0.0;
     try {
-        if (!parameter_mode) {
+        if (!parameter_mode && !fixed_role_mode) {
             baseline = std::stod(argv[2]);
             candidate = std::stod(argv[3]);
         }
@@ -26,7 +27,7 @@ inline bool run_evolution_evaluator_fixture(int argc, char** argv) {
         return true;
     }
     std::map<std::string, std::string> fields;
-    for (int i = parameter_mode ? 2 : 4; i < argc; ++i) {
+    for (int i = (parameter_mode || fixed_role_mode) ? 2 : 4; i < argc; ++i) {
         const std::string argument(argv[i]);
         const auto separator = argument.find('=');
         if (separator == std::string::npos) continue;
@@ -53,6 +54,7 @@ inline bool run_evolution_evaluator_fixture(int argc, char** argv) {
     const auto trial_index = std::stoull(get("--trial-index"));
     const double trial_delta = static_cast<double>(trial_index) * 0.001;
     const double fitness = parameter_mode ? parameter_value + trial_delta :
+        fixed_role_mode ? (role == "baseline" ? 0.70 : 0.90) + trial_delta :
         (role == "baseline" ? baseline : candidate) + trial_delta;
     if (!std::isfinite(parameter_value) || !std::isfinite(fitness)) return true;
     std::cout << "JARVIS_EVALUATION_V1\n"
