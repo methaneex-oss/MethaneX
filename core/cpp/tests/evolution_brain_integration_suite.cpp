@@ -1,6 +1,7 @@
 #include "jarvis/core/brain.hpp"
 #include "jarvis/core/evolution_safety.hpp"
 #include "jarvis/core/evolution_experiment_runner.hpp"
+#include "jarvis/core/evolution_digest.hpp"
 #include "jarvis/core/process_isolation.hpp"
 
 #include <cassert>
@@ -21,7 +22,7 @@ void attest_isolated(EvolutionExperiment& experiment) {
     IsolatedEvaluationProcedure procedure{
         IsolatedCommand{evaluator_path, {"--trusted-test-evaluator"}, ""},
         "brain-suite-local-evaluator-v1", "linear-fitness-v1",
-        evaluator_path, evaluator_path};
+        evaluator_path, evaluator_path, detail::sha256_file(evaluator_path)};
     const auto outcome = EvolutionExperimentRunner::run_isolated_evaluation(
         experiment, backend, procedure, 4, 4, 0.5);
     assert(outcome == ExperimentOutcome::Improved);
@@ -32,11 +33,11 @@ int main(int argc, char** argv) {
     if (argc > 1 && std::string(argv[1]) == "--trusted-test-evaluator") {
         if (argc != 14 || std::string(argv[2]) != "--jarvis-evaluate-v1") return 21;
         const double value = std::stod(argv[6]);
-        const double fitness = 0.5 + 0.5 * value;
-        std::cout << "JARVIS_EVAL_V1\\t" << argv[3] << "\\t" << argv[4] << "\\t"
-                  << argv[5] << "\\t" << argv[6] << "\\t" << argv[7] << "\\t"
-                  << argv[8] << "\\t" << argv[10] << "\\t" << argv[11] << "\\t"
-                  << argv[12] << "\\t" << argv[13] << "\\t" << fitness;
+        const double fitness = 0.5 + 0.6 * value;
+        std::cout << "JARVIS_EVAL_V1\t" << argv[3] << "\t" << argv[4] << "\t"
+                  << argv[5] << "\t" << argv[6] << "\t" << argv[7] << "\t"
+                  << argv[8] << "\t" << argv[10] << "\t" << argv[11] << "\t"
+                  << argv[12] << "\t" << argv[13] << "\t" << fitness;
         return 0;
     }
     evaluator_path = argv[0];
