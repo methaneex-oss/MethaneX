@@ -1,10 +1,13 @@
 #include "jarvis/core/evolution_experiment_coordinator.hpp"
 
 #include <cassert>
+#include <string>
+#include <filesystem>
 
 using namespace jarvis::core;
 
 namespace {
+std::string evaluator_executable;
 IsolatedCommand evaluator_command(const EvolutionExperiment& experiment) {
     ProcessIsolationBackend backend;
     const std::string script =
@@ -21,16 +24,17 @@ IsolatedCommand evaluator_command(const EvolutionExperiment& experiment) {
         "printf 'JARVIS_EVALUATION_V1\\nexperiment_id=%s\\nparameter_key=%s\\nparameter_value=%s\\nrole=%s\\nprocedure_id=%s\\nartifact_id=%s\\nfitness=%s\\n' "
         "\"$id\" \"$key\" \"$value\" \"$role\" \"$procedure\" \"$artifact\" \"$fitness\"";
     const IsolatedCommand command{
-        "/bin/sh",
-        {"-c", script, "jarvis-test-evaluator",
-         std::to_string(experiment.baseline_fitness),
+        evaluator_executable,
+        {"--test-evaluator", std::to_string(experiment.baseline_fitness),
          std::to_string(experiment.candidate_fitness)},
         "", "jarvis.test.fixture.v1"};
     return command;
 }
 }
 
-int main() {
+int main(int argc, char** argv) {
+    if (test_support::run_evolution_evaluator_fixture(argc, argv)) return 0;
+    evaluator_executable = std::filesystem::absolute(argv[0]).string();
     EvolutionExperiment experiment{
         "trial-batch",
         EvolutionProposal{"planner.weight", 0.4, 0.5, 0.1, 0.9},
