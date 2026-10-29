@@ -57,6 +57,21 @@ int main(int argc, char** argv) {
 
     {
         auto experiment = make_experiment();
+        ProcessIsolationBackend backend;
+        const IsolatedCommand unregistered_evaluator{
+            evaluator_executable,
+            {"--test-evaluator", "0.70", "0.86"}, "",
+            "jarvis.unregistered.fixture.v1",
+            EvolutionExperimentRunner::executable_fingerprint(evaluator_executable)};
+        const auto rejected = EvolutionExperimentRunner::run_isolated_command(
+            experiment, backend, unregistered_evaluator);
+        assert(rejected == ExperimentOutcome::Invalid);
+        assert(!experiment.candidate_executed);
+        assert(!experiment.has_valid_isolation_attestation());
+    }
+
+    {
+        auto experiment = make_experiment();
         experiment.candidate_fitness = 0.86;
         attest_isolated(experiment);
         assert(experiment.outcome == ExperimentOutcome::Improved);
