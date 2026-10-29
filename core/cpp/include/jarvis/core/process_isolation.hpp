@@ -11,17 +11,24 @@ struct IsolatedCommand {
     std::string executable;
     std::vector<std::string> arguments;
     std::string working_directory;
+    // Stable identifier assigned by the local application to a trusted
+    // evaluation procedure. Empty means this command is not an evaluator.
+    std::string evaluation_procedure_id;
 };
 
 struct ProcessIsolationLimits {
     SandboxLimits sandbox;
-    // These features are opt-in because their availability depends on host privileges.
-    // A requested feature that cannot be enforced causes execution to fail closed.
+    // The default trusted-evaluation profile requires no-new-privileges and
+    // kernel-level network syscall blocking. Network namespaces, chroot-based
+    // filesystem isolation, and privilege dropping are optional capabilities;
+    // when explicitly required, inability to enforce them fails closed.
+    // "isolated" means every property required by this exact policy was applied,
+    // not merely that a child process was created.
     bool require_network_isolation{false};
     bool require_filesystem_isolation{false};
     bool require_privilege_drop{false};
     bool require_no_new_privileges{true};
-    bool require_network_syscall_block{false};
+    bool require_network_syscall_block{true};
     std::size_t max_memory_bytes{256 * 1024 * 1024};
     std::size_t max_cpu_seconds{2};
     std::size_t max_file_bytes{16 * 1024 * 1024};

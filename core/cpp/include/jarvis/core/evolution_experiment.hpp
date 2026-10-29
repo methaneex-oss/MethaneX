@@ -3,6 +3,7 @@
 #include "jarvis/core/evolution.hpp"
 
 #include <string>
+#include <cstdint>
 #include <utility>
 
 namespace jarvis::core {
@@ -37,9 +38,39 @@ struct EvolutionExperiment {
     // Serialized result bit; the private snapshot below proves that this
     // instance's evaluated fields have not changed since sandbox attestation.
     bool isolated{false};
+    // Provenance produced by the registered local evaluator, persisted with
+    // the evaluation event so replay can compare the same procedure/artifacts.
+    std::string evaluation_procedure_id;
+    std::string baseline_artifact_id;
+    std::string candidate_artifact_id;
+
+    static std::string artifact_fingerprint(const std::string& value) {
+        std::uint64_t hash = 14695981039346656037ULL;
+        for (const unsigned char byte : value) {
+            hash ^= byte;
+            hash *= 1099511628211ULL;
+        }
+        return std::to_string(hash);
+    }
+
+    // Replay validation uses persisted procedure/artifact provenance. It does
+    // not recreate the runner's private in-memory attestation from a Boolean.
+    bool has_valid_persisted_evaluation_evidence() const noexcept {
+        return isolated && candidate_executed && has_provenance_fingerprint() &&
+               !baseline_artifact_id.empty() && !candidate_artifact_id.empty() &&
+               !evaluation_procedure_id.empty();
+    }
 
     bool has_valid_isolation_attestation() const noexcept {
-        return isolation_attested_ && id == attested_id_ &&
+        const auto separator = std::string(1, '\x1f');
+        const bool provenance_valid = !evaluation_procedure_id.empty() &&
+            baseline_artifact_id == artifact_fingerprint(
+                proposal.key + separator + std::to_string(proposal.current) +
+                separator + evaluation_procedure_id) &&
+            candidate_artifact_id == artifact_fingerprint(
+                proposal.key + separator + std::to_string(proposal.proposed) +
+                separator + evaluation_procedure_id);
+        return provenance_valid && isolation_attested_ && id == attested_id_ &&
                proposal.key == attested_key_ &&
                proposal.current == attested_current_ &&
                proposal.proposed == attested_proposed_ &&
@@ -49,12 +80,28 @@ struct EvolutionExperiment {
                candidate_fitness == attested_candidate_ &&
                minimum_improvement == attested_minimum_ &&
                confidence == attested_confidence_ &&
-               outcome == attested_outcome_ && candidate_executed && isolated;
+               outcome == attested_outcome_ &&
+               evaluation_procedure_id == attested_procedure_id_ &&
+               baseline_artifact_id == attested_baseline_artifact_id_ &&
+               candidate_artifact_id == attested_candidate_artifact_id_ &&
+               candidate_executed && isolated;
     }
 
 private:
+    bool has_provenance_fingerprint() const noexcept {
+        const auto separator = std::string(1, '\x1f');
+        return !evaluation_procedure_id.empty() &&
+            baseline_artifact_id == artifact_fingerprint(
+                proposal.key + separator + std::to_string(proposal.current) +
+                separator + evaluation_procedure_id) &&
+            candidate_artifact_id == artifact_fingerprint(
+                proposal.key + separator + std::to_string(proposal.proposed) +
+                separator + evaluation_procedure_id);
+    }
+
     void attest_isolated_result() noexcept {
-        isolation_attested_ = isolated && candidate_executed;
+        isolation_attested_ = isolated && candidate_executed && !evaluation_procedure_id.empty() &&
+            has_provenance_fingerprint();
         attested_id_ = id;
         attested_key_ = proposal.key;
         attested_current_ = proposal.current;
@@ -66,6 +113,9 @@ private:
         attested_minimum_ = minimum_improvement;
         attested_confidence_ = confidence;
         attested_outcome_ = outcome;
+        attested_procedure_id_ = evaluation_procedure_id;
+        attested_baseline_artifact_id_ = baseline_artifact_id;
+        attested_candidate_artifact_id_ = candidate_artifact_id;
     }
 
     bool isolation_attested_{false};
@@ -80,6 +130,9 @@ private:
     double attested_minimum_{0.0};
     double attested_confidence_{0.0};
     ExperimentOutcome attested_outcome_{ExperimentOutcome::Pending};
+    std::string attested_procedure_id_;
+    std::string attested_baseline_artifact_id_;
+    std::string attested_candidate_artifact_id_;
 
     friend class EvolutionExperimentRunner;
     friend class EvolutionExperimentCoordinator;
