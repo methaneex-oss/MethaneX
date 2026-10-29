@@ -82,4 +82,31 @@ EvolutionTrialBatch EvolutionExperimentCoordinator::run(
     return batch;
 }
 
+
+EvolutionTrialBatch EvolutionExperimentCoordinator::run_isolated(
+    EvolutionExperiment& experiment, const ProcessIsolationBackend& backend,
+    const IsolatedEvaluationProcedure& procedure,
+    EvolutionTrialConfig config) noexcept {
+    EvolutionTrialBatch batch;
+    if (config.baseline_trials < 2 || config.candidate_trials < 2 ||
+        !std::isfinite(config.minimum_improvement) || config.minimum_improvement < 0.0 ||
+        !std::isfinite(config.minimum_confidence) || config.minimum_confidence < 0.0 ||
+        config.minimum_confidence > 1.0) {
+        experiment.outcome = ExperimentOutcome::Invalid;
+        return batch;
+    }
+
+    // Production evaluation measures both parameter states through the same
+    // local evaluator and binds evidence to the artifacts and evaluator binary.
+    experiment.minimum_improvement = config.minimum_improvement;
+    batch.outcome = EvolutionExperimentRunner::run_isolated_evaluation(
+        experiment, backend, procedure, config.baseline_trials,
+        config.candidate_trials, config.minimum_confidence,
+        &batch.baseline, &batch.candidate);
+    batch.executed = experiment.candidate_executed &&
+                     experiment.has_valid_evaluation_evidence();
+    if (!batch.executed) batch.outcome = ExperimentOutcome::Invalid;
+    return batch;
+}
+
 } // namespace jarvis::core
