@@ -293,7 +293,8 @@ int main(int argc, char** argv) {
         EvolutionExperiment subthreshold{
             "safety-subthreshold", EvolutionProposal{"safety.subthreshold", 0.2, 0.3, 0.1, 0.99},
             0.70, 0.74, 0.05, 0.99, ExperimentOutcome::Improved, true};
-        attest_isolated(subthreshold);
+        // Keep the supplied sub-threshold measurements intact to verify that
+        // the safety gate recomputes the outcome rather than trusting the label.
         subthreshold.outcome = ExperimentOutcome::Improved;
         assert(!EvolutionSafetyGate::approve(subthreshold, non_isolation_policy));
         assert(!brain.record_evolution_evaluation(subthreshold));
