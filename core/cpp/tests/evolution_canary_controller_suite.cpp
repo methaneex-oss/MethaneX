@@ -9,9 +9,11 @@ using namespace jarvis::core;
 namespace {
 void attest_isolated(EvolutionExperiment& experiment) {
     ProcessIsolationBackend backend;
-    const IsolatedCommand command{
-        "/bin/sh", {"-c", "printf " + std::to_string(experiment.candidate_fitness)}, ""};
-    EvolutionExperimentRunner::run_isolated_command(experiment, backend, command);
+    std::vector<EvolutionFitnessCase> cases;
+    for (double feature : {1.0, 2.0, 3.0, 4.0})
+        cases.push_back(EvolutionFitnessCase{feature, experiment.proposal.proposed * feature});
+    EvolutionExperimentRunner::run_isolated_evaluation(
+        experiment, backend, cases, 0.75);
 }
 } // namespace
 
@@ -81,6 +83,7 @@ int main() {
         "exp-replay",
         EvolutionProposal{"replay.weight", 0.4, 0.5, 0.1, 0.95},
         0.70, 0.84, 0.05, 0.95, ExperimentOutcome::Improved, true};
+    attest_isolated(replay_experiment);
     assert(replay_controller.replay_evaluation(replay_experiment));
     assert(replay_controller.replay_evaluation(replay_experiment));
     assert(replay_history.for_experiment("exp-replay").size() == 1);
