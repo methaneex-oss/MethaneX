@@ -1,6 +1,6 @@
 #include "jarvis/core/evolution_experiment.hpp"
 
-#include <cmath>
+#include <cmath>\n#include <algorithm>
 
 namespace jarvis::core {
 
@@ -24,7 +24,7 @@ ExperimentOutcome EvolutionExperimentEngine::evaluate(EvolutionExperiment& exper
 
     const double improvement = experiment.candidate_fitness - experiment.baseline_fitness;
     if (improvement > experiment.minimum_improvement &&
-        experiment.confidence >= proposal.confidence) {
+        experiment.confidence >= std::max(proposal.confidence,\n                                          experiment.evaluation_minimum_confidence)) {
         experiment.outcome = ExperimentOutcome::Improved;
     } else if (improvement < -experiment.minimum_improvement) {
         experiment.outcome = ExperimentOutcome::Degraded;
