@@ -143,6 +143,9 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_evaluation(
     experiment.evaluation_config_id.clear();
     experiment.baseline_artifact_digest.clear();
     experiment.candidate_artifact_digest.clear();
+    experiment.evaluator_artifact_digest.clear();
+    experiment.baseline_trial_count = 0;
+    experiment.candidate_trial_count = 0;
     experiment.evaluation_evidence_digest.clear();
 
     if (experiment.id.empty() || experiment.proposal.key.empty() ||
