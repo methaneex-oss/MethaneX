@@ -21,8 +21,10 @@ public:
                                  const EvolutionSandbox& sandbox,
                                  const CandidateExecutor& executor) noexcept;
 
-    // Executes the candidate command in the local process-isolation backend.
-    // Standard output must contain one finite numeric fitness value.
+    // Executes the pre-registered local evaluator twice in the process-isolation
+    // backend. Each response must identify the exact experiment, parameter value,
+    // role, procedure, evaluator binary fingerprint, artifact fingerprint, and
+    // finite measured fitness. A numeric-only response is rejected.
     static ExperimentOutcome run_isolated_command(
         EvolutionExperiment& experiment, const ProcessIsolationBackend& backend,
         const IsolatedCommand& command) noexcept;
