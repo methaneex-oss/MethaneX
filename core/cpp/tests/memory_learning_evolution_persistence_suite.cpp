@@ -123,6 +123,10 @@ int main(int argc, char** argv) {
         // candidate/adoption in the same journal as the learned experience.
         brain.observe_evolution_fitness("planner.weight", 0.9);
         brain.observe_evolution_fitness("planner.weight", 0.9);
+        // Raise evidence-backed proposal confidence above the default adoption
+        // threshold instead of trying to adopt after only three observations.
+        for (int i = 0; i < 10; ++i)
+            brain.observe_evolution_fitness("planner.weight", 0.9);
         const auto proposals = brain.evolution_options();
         const auto proposal = std::find_if(proposals.begin(), proposals.end(),
             [](const EvolutionProposal& candidate) {
