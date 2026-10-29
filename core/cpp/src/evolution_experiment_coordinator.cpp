@@ -98,7 +98,9 @@ EvolutionTrialBatch EvolutionExperimentCoordinator::run_isolated(
     experiment.isolated = false;
     experiment.outcome = ExperimentOutcome::Invalid;
     if (!config.require_isolation || config.baseline_trials < 2 ||
-        config.candidate_trials < 2 || evaluator.evaluation_procedure_id.empty() ||
+        config.candidate_trials < 2 ||
+        config.baseline_trials != config.candidate_trials ||
+        evaluator.evaluation_procedure_id.empty() ||
         !std::isfinite(config.minimum_improvement) || config.minimum_improvement < 0.0 ||
         !std::isfinite(config.minimum_confidence) || config.minimum_confidence < 0.0 ||
         config.minimum_confidence > 1.0) {
@@ -111,7 +113,8 @@ EvolutionTrialBatch EvolutionExperimentCoordinator::run_isolated(
     baseline.reserve(config.baseline_trials);
     candidate.reserve(config.candidate_trials);
     EvolutionExperiment evidence = experiment;
-    const auto trial_count = std::max(config.baseline_trials, config.candidate_trials);
+    // Paired measurements must use the same number of baseline and candidate trials.
+    const auto trial_count = config.baseline_trials;
     for (std::size_t i = 0; i < trial_count; ++i) {
         EvolutionExperiment measured = experiment;
         IsolatedCommand trial_evaluator = evaluator;
