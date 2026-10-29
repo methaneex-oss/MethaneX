@@ -22,8 +22,8 @@ bool EvolutionController::record_evaluation(const EvolutionExperiment& experimen
         experiment.confidence < 0.0 || experiment.confidence > 1.0 ||
         experiment.outcome == ExperimentOutcome::Pending ||
         experiment.outcome == ExperimentOutcome::Invalid ||
-        (policy_.require_isolation && (!experiment.has_valid_isolation_attestation() ||
-         !experiment.has_valid_evaluation_evidence()))) {
+        (!experiment.has_valid_isolation_attestation() ||
+         !experiment.has_valid_evaluation_evidence())) {
         return false;
     }
     EvolutionExperiment verified = experiment;
