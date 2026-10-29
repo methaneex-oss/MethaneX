@@ -6,19 +6,40 @@
 #include <cassert>
 #include <filesystem>
 #include <algorithm>
+#include <iostream>
+#include <string>
 
 using namespace jarvis::core;
 
 namespace {
+std::string evaluator_path;
 void attest_isolated(EvolutionExperiment& experiment) {
-    ProcessIsolationBackend backend;
-    const IsolatedCommand command{
-        "/bin/sh", {"-c", "printf " + std::to_string(experiment.candidate_fitness)}, ""};
-    EvolutionExperimentRunner::run_isolated_command(experiment, backend, command);
+    ProcessIsolationLimits limits;
+    limits.require_no_new_privileges = true;
+    limits.require_network_syscall_block = true;
+    ProcessIsolationBackend backend(limits);
+    IsolatedEvaluationProcedure procedure{
+        IsolatedCommand{evaluator_path, {"--trusted-test-evaluator"}, ""},
+        "brain-suite-local-evaluator-v1", "linear-fitness-v1",
+        evaluator_path, evaluator_path};
+    const auto outcome = EvolutionExperimentRunner::run_isolated_evaluation(
+        experiment, backend, procedure, 4, 4, 0.5);
+    assert(outcome == ExperimentOutcome::Improved);
 }
 } // namespace
 
-int main() {
+int main(int argc, char** argv) {
+    if (argc > 1 && std::string(argv[1]) == "--trusted-test-evaluator") {
+        if (argc != 14 || std::string(argv[2]) != "--jarvis-evaluate-v1") return 21;
+        const double value = std::stod(argv[6]);
+        const double fitness = 0.5 + 0.5 * value;
+        std::cout << "JARVIS_EVAL_V1\\t" << argv[3] << "\\t" << argv[4] << "\\t"
+                  << argv[5] << "\\t" << argv[6] << "\\t" << argv[7] << "\\t"
+                  << argv[8] << "\\t" << argv[10] << "\\t" << argv[11] << "\\t"
+                  << argv[12] << "\\t" << argv[13] << "\\t" << fitness;
+        return 0;
+    }
+    evaluator_path = argv[0];
     const std::filesystem::path path = "evolution_brain_integration_test.bin";
     std::error_code ec;
     // A persisted legacy adoption event without experiment evidence must
@@ -243,6 +264,7 @@ int main() {
             "safety-equal-fitness", EvolutionProposal{"safety.equal-fitness", 0.2, 0.3, 0.1, 0.99},
             0.70, 0.70, 0.01, 0.99, ExperimentOutcome::Improved, true};
         attest_isolated(equal_fitness);
+        equal_fitness.candidate_fitness = equal_fitness.baseline_fitness;
         equal_fitness.outcome = ExperimentOutcome::Improved;
         EvolutionSafetyPolicy non_isolation_policy;
         non_isolation_policy.require_isolation = false;
@@ -255,6 +277,7 @@ int main() {
             "safety-subthreshold", EvolutionProposal{"safety.subthreshold", 0.2, 0.3, 0.1, 0.99},
             0.70, 0.74, 0.05, 0.99, ExperimentOutcome::Improved, true};
         attest_isolated(subthreshold);
+        subthreshold.candidate_fitness = subthreshold.baseline_fitness + 0.01;
         subthreshold.outcome = ExperimentOutcome::Improved;
         assert(!EvolutionSafetyGate::approve(subthreshold, non_isolation_policy));
         assert(!brain.record_evolution_evaluation(subthreshold));
