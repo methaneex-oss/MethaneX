@@ -29,15 +29,15 @@ int main() {
     std::filesystem::create_directory(alternate);
     {
         std::ofstream first(original);
-        first << "#!/bin/sh\\necho original\\n";
+        first << "#!/bin/sh\necho original\n";
         std::ofstream second(alternate / executable_name);
-        second << "#!/bin/sh\\necho shadow\\n";
+        second << "#!/bin/sh\necho shadow\n";
     }
     assert(::chmod(original.c_str(), 0700) == 0);
     assert(::chmod((alternate / executable_name).c_str(), 0700) == 0);
     const auto path_identity = backend.run(
         {"./" + executable_name, {}, alternate.string()});
-    assert(path_identity.completed && path_identity.output == "original\\n");
+    assert(path_identity.completed && path_identity.output == "original\n");
     std::filesystem::remove(original);
     std::filesystem::remove_all(alternate);
 
