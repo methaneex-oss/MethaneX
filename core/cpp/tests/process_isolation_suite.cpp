@@ -38,6 +38,10 @@ int main() {
     const auto path_identity = backend.run(
         {"./" + executable_name, {}, alternate.string()});
     assert(path_identity.completed && path_identity.output == "original\n");
+    // Bare names must also be resolved through the caller's PATH before chdir.
+    const auto path_search = backend.run(
+        {"sh", {"-c", "printf path-resolved"}, alternate.string()});
+    assert(path_search.completed && path_search.output == "path-resolved");
     std::filesystem::remove(original);
     std::filesystem::remove_all(alternate);
 
