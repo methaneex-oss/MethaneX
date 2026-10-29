@@ -404,6 +404,9 @@ int main(int argc, char** argv) {
             replayed.proposal.key + replay_separator +
             EvolutionExperiment::format_parameter_value(replayed.proposal.proposed) + replay_separator +
             replayed.evaluation_procedure_id);
+        // Restored journal data is not itself a live attestation. Revalidate
+        // the trusted evaluator identity and artifact binding before adoption.
+        assert(EvolutionExperimentRunner::restore_trusted_attestation(replayed));
         assert(restarted.adopt_evolution_experiment(replayed));
         const auto* replayed_parameter = restarted.evolution_parameter("replay.persist");
         assert(replayed_parameter != nullptr && replayed_parameter->value == 0.4);
