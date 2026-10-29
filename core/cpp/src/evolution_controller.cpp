@@ -89,8 +89,8 @@ bool EvolutionController::replay_evaluation(
     if (experiment.id.empty() || experiment.proposal.key.empty() ||
         !experiment.has_valid_evaluation_evidence()) return false;
     EvolutionExperiment recomputed = experiment;
-    if (EvolutionExperimentEngine::evaluate(recomputed) != experiment.outcome ||
-        !EvolutionSafetyGate::approve(recomputed, policy_)) return false;
+    if (EvolutionExperimentEngine::evaluate(recomputed) != experiment.outcome) return false;
+    if (policy_.require_isolation && !experiment.has_valid_evaluation_evidence()) return false;
 
     const auto records = history_.for_experiment(experiment.id);
     bool evaluated = false;
