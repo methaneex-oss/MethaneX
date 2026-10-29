@@ -237,6 +237,20 @@ bool EvolutionController::compensate_adoption_for_brain(
 }
 
 bool EvolutionController::replay_adoption(const EvolutionExperiment& experiment) noexcept {
+    const auto existing = adoption_journal_.get(experiment.id);
+    if (existing.has_value() && existing->state == AdoptionState::Adopted) {
+        return existing->parameter_key == experiment.proposal.key &&
+               existing->baseline_fitness == experiment.baseline_fitness &&
+               existing->candidate_fitness == experiment.candidate_fitness &&
+               existing->confidence == experiment.confidence &&
+               existing->proposal_current == experiment.proposal.current &&
+               existing->proposal_proposed == experiment.proposal.proposed &&
+               existing->expected_gain == experiment.proposal.expected_gain &&
+               existing->minimum_improvement == experiment.minimum_improvement &&
+               existing->evaluation_procedure_id == experiment.evaluation_procedure_id &&
+               existing->baseline_artifact_id == experiment.baseline_artifact_id &&
+               existing->candidate_artifact_id == experiment.candidate_artifact_id;
+    }
     if (!validate_adoption_for_brain(experiment)) return false;
     if (!model_.adopt(experiment.proposal)) return false;
     if (!adoption_journal_.commit(experiment.id, "replayed")) {
