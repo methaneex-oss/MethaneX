@@ -575,17 +575,11 @@ void Brain::replay(const Event& event, bool external_observation) {
                 // Apply the same evaluation/history/journal checks as live
                 // adoption before replay is allowed to mutate the parameter.
                 if (!evolution_controller_.validate_adoption_for_brain(experiment)) return;
-                if (!evolution_controller_.validate_adoption_for_brain(experiment)) return;
                 if (!evolution_.adopt(proposal)) return;
                 if (!evolution_controller_.replay_adoption(experiment)) {
                     evolution_.restore_previous(*key);
                     return;
                 }
-                evolution_history_.append(EvolutionHistoryRecord{
-                    *experiment_id, *key, EvolutionRecordAction::Adopted,
-                    experiment.outcome, experiment.baseline_fitness,
-                    experiment.candidate_fitness, experiment.confidence, 0,
-                    "replayed", {}});
             } else {
                 // An unversioned legacy event has no experiment evidence.
                 // Ignore it rather than re-adopting an unevaluated proposal.
