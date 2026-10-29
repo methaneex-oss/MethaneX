@@ -17,6 +17,9 @@ bool EvolutionAdoptionJournal::stage(const EvolutionExperiment& experiment) {
                    r.expected_gain == experiment.proposal.expected_gain &&
                    r.proposal_confidence == experiment.proposal.confidence &&
                    r.minimum_improvement == experiment.minimum_improvement &&
+                   r.evaluation_minimum_confidence == experiment.evaluation_minimum_confidence &&
+                   r.evaluation_procedure == experiment.evaluation_procedure &&
+                   r.evaluation_digest == experiment.evaluation_digest &&
                    r.isolated == experiment.isolated;
         return false;
     }
@@ -30,6 +33,9 @@ bool EvolutionAdoptionJournal::stage(const EvolutionExperiment& experiment) {
     r.expected_gain = experiment.proposal.expected_gain;
     r.proposal_confidence = experiment.proposal.confidence;
     r.minimum_improvement = experiment.minimum_improvement;
+    r.evaluation_minimum_confidence = experiment.evaluation_minimum_confidence;
+    r.evaluation_procedure = experiment.evaluation_procedure;
+    r.evaluation_digest = experiment.evaluation_digest;
     r.isolated = experiment.isolated;
     r.state = AdoptionState::Pending;
     r.revision = next_revision_++;
