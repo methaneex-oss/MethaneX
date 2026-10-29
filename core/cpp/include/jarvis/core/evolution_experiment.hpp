@@ -4,6 +4,9 @@
 
 #include <string>
 #include <cstdint>
+#include <iomanip>
+#include <limits>
+#include <sstream>
 #include <utility>
 
 namespace jarvis::core {
@@ -45,6 +48,15 @@ struct EvolutionExperiment {
     std::string baseline_artifact_id;
     std::string candidate_artifact_id;
 
+    // Preserve the exact binary double value across the evaluator protocol.
+    // std::to_string(double) rounds to six decimals and can evaluate a different
+    // parameter than the one the evolution controller will later adopt.
+    static std::string format_parameter_value(double value) {
+        std::ostringstream stream;
+        stream << std::setprecision(std::numeric_limits<double>::max_digits10) << value;
+        return stream.str();
+    }
+
     static std::string artifact_fingerprint(const std::string& value) {
         std::uint64_t hash = 14695981039346656037ULL;
         for (const unsigned char byte : value) {
@@ -59,10 +71,10 @@ struct EvolutionExperiment {
         const bool provenance_valid = !evaluation_procedure_id.empty() &&
             !evaluator_executable_fingerprint.empty() &&
             baseline_artifact_id == artifact_fingerprint(
-                proposal.key + separator + std::to_string(proposal.current) +
+                proposal.key + separator + format_parameter_value(proposal.current) +
                 separator + evaluation_procedure_id) &&
             candidate_artifact_id == artifact_fingerprint(
-                proposal.key + separator + std::to_string(proposal.proposed) +
+                proposal.key + separator + format_parameter_value(proposal.proposed) +
                 separator + evaluation_procedure_id);
         return provenance_valid && isolation_attested_ && id == attested_id_ &&
                proposal.key == attested_key_ &&
