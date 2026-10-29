@@ -16,7 +16,8 @@ bool EvolutionController::record_evaluation(const EvolutionExperiment& experimen
         (policy_.require_isolation &&
          (experiment.evaluation_procedure_id.empty() ||
           experiment.baseline_artifact_id.empty() ||
-          experiment.candidate_artifact_id.empty())) ||
+          experiment.candidate_artifact_id.empty() ||
+          experiment.evaluation_command_identity.empty())) ||
         !std::isfinite(experiment.baseline_fitness) ||
         !std::isfinite(experiment.candidate_fitness) ||
         !std::isfinite(experiment.confidence) ||
@@ -99,6 +100,7 @@ bool EvolutionController::replay_evaluation(
         experiment.evaluation_procedure_id.empty() ||
         experiment.baseline_artifact_id.empty() ||
         experiment.candidate_artifact_id.empty() ||
+        experiment.evaluation_command_identity.empty() ||
         !experiment.has_valid_isolation_attestation()) return false;
     EvolutionExperiment verified = experiment;
     if (EvolutionExperimentEngine::evaluate(verified) != experiment.outcome) return false;
@@ -191,7 +193,8 @@ bool EvolutionController::validate_adoption_for_brain(const EvolutionExperiment&
         record->isolated != experiment.isolated ||
         record->evaluation_procedure_id != experiment.evaluation_procedure_id ||
         record->baseline_artifact_id != experiment.baseline_artifact_id ||
-        record->candidate_artifact_id != experiment.candidate_artifact_id) return false;
+        record->candidate_artifact_id != experiment.candidate_artifact_id ||
+        record->evaluation_command_identity != experiment.evaluation_command_identity) return false;
 
     // On a restart, the caller's value object has no in-memory attestation.
     // Re-attest a copy only after its fields match the durable evaluated record.
@@ -251,7 +254,8 @@ bool EvolutionController::replay_adoption(const EvolutionExperiment& experiment)
                existing->minimum_improvement == experiment.minimum_improvement &&
                existing->evaluation_procedure_id == experiment.evaluation_procedure_id &&
                existing->baseline_artifact_id == experiment.baseline_artifact_id &&
-               existing->candidate_artifact_id == experiment.candidate_artifact_id;
+               existing->candidate_artifact_id == experiment.candidate_artifact_id &&
+               existing->evaluation_command_identity == experiment.evaluation_command_identity;
     }
     if (!validate_adoption_for_brain(experiment)) return false;
     if (!model_.adopt(experiment.proposal)) return false;
