@@ -29,7 +29,17 @@ void attest_isolated(EvolutionExperiment& experiment) {
         {"--test-evaluator-fixed-role-fitness"},
         "", "jarvis.test.fixture.v1",
         EvolutionExperimentRunner::executable_fingerprint(evaluator_executable)};
-    EvolutionExperimentRunner::run_isolated_command(experiment, backend, command);
+    const auto outcome = EvolutionExperimentRunner::run_isolated_command(experiment, backend, command);
+    if (outcome == ExperimentOutcome::Invalid || !experiment.has_valid_isolation_attestation()) {
+        std::cerr << "fixture evaluation failed: outcome=" << static_cast<int>(outcome)
+                  << " executed=" << experiment.candidate_executed
+                  << " isolated=" << experiment.isolated
+                  << " attested=" << experiment.has_valid_isolation_attestation()
+                  << " baseline=" << experiment.baseline_fitness
+                  << " candidate=" << experiment.candidate_fitness
+                  << " confidence=" << experiment.confidence
+                  << " proposal_confidence=" << experiment.proposal.confidence << '\\n';
+    }
 }
 
 bool check(bool condition, const char* message) {
