@@ -2,6 +2,7 @@
 #include "evolution_test_evaluator.hpp"
 
 #include <cassert>
+#include <chrono>
 #include <string>
 #include <filesystem>
 
@@ -58,7 +59,10 @@ int main(int argc, char** argv) {
         "isolated-trial-batch",
         EvolutionProposal{"planner.weight", 0.4, 0.5, 0.1, 0.9},
         0.70, 0.80, 0.05, 0.0, ExperimentOutcome::Pending, false};
-    ProcessIsolationBackend backend;
+    ProcessIsolationLimits isolation_limits;
+    isolation_limits.sandbox.timeout = std::chrono::milliseconds{5000};
+    isolation_limits.max_cpu_seconds = 10;
+    ProcessIsolationBackend backend(isolation_limits);
     const auto isolated_batch = EvolutionExperimentCoordinator::run_isolated(
         isolated_experiment, backend, evaluator_command(isolated_experiment));
     assert(isolated_batch.executed);
