@@ -390,7 +390,7 @@ int main(int argc, char** argv) {
         EvolutionExperiment replayed{
             "replay-evaluation-1",
             EvolutionProposal{"replay.persist", 0.3, 0.4, 0.1, 0.90},
-            0.70, 0.82, 0.01, 0.90, ExperimentOutcome::Improved, true};
+            0.3, 0.4, 0.01, 0.90, ExperimentOutcome::Improved, true};
         replayed.isolated = true;
         replayed.evaluation_procedure_id = "jarvis.test.fixture.v1";
         replayed.evaluator_executable_fingerprint =
