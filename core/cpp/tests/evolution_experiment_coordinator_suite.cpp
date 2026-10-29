@@ -66,11 +66,7 @@ int main(int argc, char** argv) {
         "trial-batch-isolated",
         EvolutionProposal{"planner.weight", 0.4, 0.5, 0.1, 0.8},
         0.0, 0.0, 0.05, 0.0, ExperimentOutcome::Pending, false};
-    ProcessIsolationLimits limits;
-    limits.require_no_new_privileges = true;
-        limits.require_privilege_drop = true;
-    limits.require_network_syscall_block = true;
-    ProcessIsolationBackend backend(limits);
+    ProcessIsolationBackend backend;
     IsolatedEvaluationProcedure procedure{
         IsolatedCommand{argv[0], {"--trusted-test-evaluator"}, ""},
         "coordinator-suite-local-evaluator-v1", "artifact-score-v1",
