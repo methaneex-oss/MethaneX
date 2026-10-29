@@ -515,6 +515,12 @@ void Brain::replay(const Event& event, bool external_observation) {
                 event.data.find("isolated") != event.data.end() &&
                 std::get_if<bool>(&event.data.at("isolated")) != nullptr &&
                 *std::get_if<bool>(&event.data.at("isolated"));
+            if (const auto* procedure = string_value(event.data, "evaluation_procedure_id"))
+                experiment.evaluation_procedure_id = *procedure;
+            if (const auto* artifact = string_value(event.data, "baseline_artifact_id"))
+                experiment.baseline_artifact_id = *artifact;
+            if (const auto* artifact = string_value(event.data, "candidate_artifact_id"))
+                experiment.candidate_artifact_id = *artifact;
             if (experiment.isolated && experiment.candidate_executed)
                 experiment.attest_isolated_result();
             evolution_controller_.replay_evaluation(experiment);
@@ -554,6 +560,12 @@ void Brain::replay(const Event& event, bool external_observation) {
                     event.data.find("isolated") != event.data.end() &&
                     std::get_if<bool>(&event.data.at("isolated")) != nullptr &&
                     *std::get_if<bool>(&event.data.at("isolated"));
+                if (const auto* procedure = string_value(event.data, "evaluation_procedure_id"))
+                    experiment.evaluation_procedure_id = *procedure;
+                if (const auto* artifact = string_value(event.data, "baseline_artifact_id"))
+                    experiment.baseline_artifact_id = *artifact;
+                if (const auto* artifact = string_value(event.data, "candidate_artifact_id"))
+                    experiment.candidate_artifact_id = *artifact;
                 if (experiment.isolated && experiment.candidate_executed)
                     experiment.attest_isolated_result();
                 const auto adoption = evolution_controller_.adoption_journal().get(*experiment_id);
