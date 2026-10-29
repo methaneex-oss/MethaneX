@@ -63,9 +63,17 @@ struct EvolutionExperiment {
                minimum_improvement == attested_minimum_ &&
                confidence == attested_confidence_ &&
                outcome == attested_outcome_ && candidate_executed && isolated &&
+               evaluation_procedure_id == attested_procedure_id_ &&
+               evaluation_config_id == attested_config_id_ &&
+               baseline_artifact_digest == attested_baseline_artifact_digest_ &&
+               candidate_artifact_digest == attested_candidate_artifact_digest_ &&
+               evaluator_artifact_digest == attested_evaluator_artifact_digest_ &&
+               baseline_trial_count == attested_baseline_trial_count_ &&
+               candidate_trial_count == attested_candidate_trial_count_ &&
+               evaluation_evidence_digest == attested_evidence_digest_ &&
                !evaluation_procedure_id.empty() && !evaluation_config_id.empty() &&
                !baseline_artifact_digest.empty() && !candidate_artifact_digest.empty() &&
-               !evaluation_evidence_digest.empty();
+               !evaluator_artifact_digest.empty() && !evaluation_evidence_digest.empty();
     }
 
 private:
