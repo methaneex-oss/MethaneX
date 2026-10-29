@@ -21,7 +21,7 @@ IsolatedCommand evaluator_command() {
 
 int main(int argc, char** argv) {
     if (test_support::run_evolution_evaluator_fixture(argc, argv)) return 0;
-    evaluator_executable = std::filesystem::absolute(argv[0]).string();
+    evaluator_executable = JARVIS_TEST_EVALUATOR_EXECUTABLE;
     EvolutionOpportunityDetector detector;
     const auto opportunities = detector.detect({
         {"diagnostics", 0.9, 0.8, 0.9, 1.0, 0.4},
