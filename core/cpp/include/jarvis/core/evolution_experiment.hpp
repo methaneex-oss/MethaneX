@@ -8,6 +8,7 @@
 namespace jarvis::core {
 
 class EvolutionExperimentRunner;
+class EvolutionTrustedEvaluator;
 class EvolutionController;
 class Brain;
 
@@ -37,6 +38,8 @@ struct EvolutionExperiment {
     // Serialized result bit; the private snapshot below proves that this
     // instance's evaluated fields have not changed since sandbox attestation.
     bool isolated{false};
+    // Canonical, replay-verifiable result from the project-owned evaluator.
+    std::string evaluation_evidence;
 
     bool has_valid_isolation_attestation() const noexcept {
         return isolation_attested_ && id == attested_id_ &&
@@ -49,7 +52,8 @@ struct EvolutionExperiment {
                candidate_fitness == attested_candidate_ &&
                minimum_improvement == attested_minimum_ &&
                confidence == attested_confidence_ &&
-               outcome == attested_outcome_ && candidate_executed && isolated;
+               outcome == attested_outcome_ && candidate_executed && isolated &&
+               evaluation_evidence == attested_evaluation_evidence_ && !evaluation_evidence.empty();
     }
 
 private:
@@ -66,6 +70,7 @@ private:
         attested_minimum_ = minimum_improvement;
         attested_confidence_ = confidence;
         attested_outcome_ = outcome;
+        attested_evaluation_evidence_ = evaluation_evidence;
     }
 
     bool isolation_attested_{false};
@@ -80,8 +85,10 @@ private:
     double attested_minimum_{0.0};
     double attested_confidence_{0.0};
     ExperimentOutcome attested_outcome_{ExperimentOutcome::Pending};
+    std::string attested_evaluation_evidence_;
 
     friend class EvolutionExperimentRunner;
+    friend class EvolutionTrustedEvaluator;
     friend class EvolutionExperimentCoordinator;
     friend class EvolutionController;
     friend class Brain;
