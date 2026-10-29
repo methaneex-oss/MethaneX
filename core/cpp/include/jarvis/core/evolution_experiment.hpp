@@ -1,6 +1,7 @@
 #pragma once
 
 #include "jarvis/core/evolution.hpp"
+#include "jarvis/core/evolution_trials.hpp"
 
 #include <string>
 #include <utility>
@@ -48,6 +49,8 @@ struct EvolutionExperiment {
     std::vector<EvolutionFitnessCase> evaluation_cases;
     std::string evaluation_procedure;
     std::string evaluation_digest;
+    TrialStatistics baseline_statistics;
+    TrialStatistics candidate_statistics;
 
     bool has_valid_isolation_attestation() const noexcept {
         return isolation_attested_ && !evaluation_procedure.empty() &&
