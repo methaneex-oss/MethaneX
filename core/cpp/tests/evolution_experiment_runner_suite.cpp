@@ -98,6 +98,23 @@ int main(int argc, char** argv) {
 
     {
         auto experiment = make_experiment();
+        ProcessIsolationLimits weak_limits;
+        weak_limits.require_no_new_privileges = false;
+        weak_limits.require_privilege_drop = false;
+        weak_limits.require_network_syscall_block = false;
+        ProcessIsolationBackend weak_backend(weak_limits);
+        IsolatedEvaluationProcedure weak_policy{
+            IsolatedCommand{argv[0], {"--trusted-test-evaluator"}, ""},
+            "runner-suite-local-evaluator-v1", "linear-fitness-v1",
+            baseline_artifact_path, candidate_artifact_path, detail::sha256_file(argv[0])};
+        const auto outcome = EvolutionExperimentRunner::run_isolated_evaluation(
+            experiment, weak_backend, weak_policy, 4, 4, 0.5);
+        assert(outcome == ExperimentOutcome::Invalid);
+        assert(!experiment.has_valid_evaluation_evidence());
+    }
+
+    {
+        auto experiment = make_experiment();
         const auto outcome = EvolutionExperimentRunner::run(
             experiment, sandbox, [](const EvolutionProposal&, const SandboxLimits&) {
                 // This callback lies about isolation. The sandbox must not
