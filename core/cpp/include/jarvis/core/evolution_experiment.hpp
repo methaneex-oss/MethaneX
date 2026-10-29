@@ -44,8 +44,25 @@ struct EvolutionExperiment {
     std::string baseline_artifact_id;
     std::string candidate_artifact_id;
 
+    static std::string artifact_fingerprint(const std::string& value) {
+        std::uint64_t hash = 14695981039346656037ULL;
+        for (const unsigned char byte : value) {
+            hash ^= byte;
+            hash *= 1099511628211ULL;
+        }
+        return std::to_string(hash);
+    }
+
     bool has_valid_isolation_attestation() const noexcept {
-        return isolation_attested_ && id == attested_id_ &&
+        const auto separator = std::string(1, '\\x1f');
+        const bool provenance_valid = !evaluation_procedure_id.empty() &&
+            baseline_artifact_id == artifact_fingerprint(
+                proposal.key + separator + std::to_string(proposal.current) +
+                separator + evaluation_procedure_id) &&
+            candidate_artifact_id == artifact_fingerprint(
+                proposal.key + separator + std::to_string(proposal.proposed) +
+                separator + evaluation_procedure_id);
+        return provenance_valid && isolation_attested_ && id == attested_id_ &&
                proposal.key == attested_key_ &&
                proposal.current == attested_current_ &&
                proposal.proposed == attested_proposed_ &&
@@ -63,8 +80,20 @@ struct EvolutionExperiment {
     }
 
 private:
+    bool has_provenance_fingerprint() const noexcept {
+        const auto separator = std::string(1, '\\x1f');
+        return !evaluation_procedure_id.empty() &&
+            baseline_artifact_id == artifact_fingerprint(
+                proposal.key + separator + std::to_string(proposal.current) +
+                separator + evaluation_procedure_id) &&
+            candidate_artifact_id == artifact_fingerprint(
+                proposal.key + separator + std::to_string(proposal.proposed) +
+                separator + evaluation_procedure_id);
+    }
+
     void attest_isolated_result() noexcept {
-        isolation_attested_ = isolated && candidate_executed;
+        isolation_attested_ = isolated && candidate_executed && !evaluation_procedure_id.empty() &&
+            has_provenance_fingerprint();
         attested_id_ = id;
         attested_key_ = proposal.key;
         attested_current_ = proposal.current;
