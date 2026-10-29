@@ -3,6 +3,7 @@
 #include "jarvis/core/evolution_sandbox.hpp"
 
 #include <string>
+#include <cstddef>
 #include <vector>
 
 namespace jarvis::core {
@@ -17,6 +18,9 @@ struct IsolatedCommand {
     // Pinned fingerprint of the trusted local evaluator executable. The runner
     // compares it to the registered fingerprint before each measurement.
     std::string expected_executable_fingerprint;
+    // Paired-trial ordinal passed to the trusted evaluator so repeated
+    // measurements can use distinct deterministic seeds or world episodes.
+    std::size_t trial_index{0};
 };
 
 struct ProcessIsolationLimits {
