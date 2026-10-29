@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <filesystem>
 #include <iomanip>
 #include <sstream>
 #include <string>
@@ -137,6 +138,9 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_evaluation(
         procedure.procedure_id.empty() || procedure.configuration_id.empty() ||
         procedure.baseline_artifact_path.empty() ||
         procedure.candidate_artifact_path.empty() ||
+        !std::filesystem::path(procedure.command.executable).is_absolute() ||
+        !std::filesystem::path(procedure.baseline_artifact_path).is_absolute() ||
+        !std::filesystem::path(procedure.candidate_artifact_path).is_absolute() ||
         procedure.expected_evaluator_digest.empty() ||
         !backend.limits().require_no_new_privileges ||
         !backend.limits().require_privilege_drop ||
