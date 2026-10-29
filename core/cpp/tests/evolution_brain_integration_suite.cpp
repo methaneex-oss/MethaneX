@@ -135,10 +135,10 @@ int main(int argc, char** argv) {
                 ? EvolutionExperimentRunner::executable_fingerprint(evaluator_executable) : "";
             const std::string baseline_artifact = include_provenance
                 ? EvolutionExperiment::artifact_fingerprint(
-                    key + separator + std::to_string(0.25) + separator + procedure) : "";
+                    key + separator + EvolutionExperiment::format_parameter_value(0.25) + separator + procedure) : "";
             const std::string candidate_artifact = include_provenance
                 ? EvolutionExperiment::artifact_fingerprint(
-                    key + separator + std::to_string(proposed) + separator + procedure) : "";
+                    key + separator + EvolutionExperiment::format_parameter_value(proposed) + separator + procedure) : "";
             Event event{0, 0, "replay-test", kind,
                 {{"experiment_id", id}, {"key", key}, {"current", 0.25},
                  {"proposed", proposed}, {"expected_gain", proposed - 0.25},
@@ -396,11 +396,11 @@ int main(int argc, char** argv) {
         const std::string replay_separator(1, '\x1f');
         replayed.baseline_artifact_id = EvolutionExperiment::artifact_fingerprint(
             replayed.proposal.key + replay_separator +
-            std::to_string(replayed.proposal.current) + replay_separator +
+            EvolutionExperiment::format_parameter_value(replayed.proposal.current) + replay_separator +
             replayed.evaluation_procedure_id);
         replayed.candidate_artifact_id = EvolutionExperiment::artifact_fingerprint(
             replayed.proposal.key + replay_separator +
-            std::to_string(replayed.proposal.proposed) + replay_separator +
+            EvolutionExperiment::format_parameter_value(replayed.proposal.proposed) + replay_separator +
             replayed.evaluation_procedure_id);
         assert(restarted.adopt_evolution_experiment(replayed));
         const auto* replayed_parameter = restarted.evolution_parameter("replay.persist");
