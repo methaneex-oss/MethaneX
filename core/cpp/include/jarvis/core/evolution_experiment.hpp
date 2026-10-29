@@ -37,6 +37,19 @@ struct EvolutionExperiment {
     // Serialized result bit; the private snapshot below proves that this
     // instance's evaluated fields have not changed since sandbox attestation.
     bool isolated{false};
+    // Durable provenance fields written only by the trusted evaluation runner.
+    // These identify the procedure and both measured artifacts; the legacy
+    // isolated Boolean is not accepted as evidence by itself.
+    std::string evaluation_procedure_id;
+    std::string evaluation_config_id;
+    std::string baseline_artifact_digest;
+    std::string candidate_artifact_digest;
+    std::string evaluator_artifact_digest;
+    std::size_t baseline_trial_count{0};
+    std::size_t candidate_trial_count{0};
+    std::string evaluation_evidence_digest;
+
+    bool has_valid_evaluation_evidence() const noexcept;
 
     bool has_valid_isolation_attestation() const noexcept {
         return isolation_attested_ && id == attested_id_ &&
@@ -49,7 +62,18 @@ struct EvolutionExperiment {
                candidate_fitness == attested_candidate_ &&
                minimum_improvement == attested_minimum_ &&
                confidence == attested_confidence_ &&
-               outcome == attested_outcome_ && candidate_executed && isolated;
+               outcome == attested_outcome_ && candidate_executed && isolated &&
+               evaluation_procedure_id == attested_procedure_id_ &&
+               evaluation_config_id == attested_config_id_ &&
+               baseline_artifact_digest == attested_baseline_artifact_digest_ &&
+               candidate_artifact_digest == attested_candidate_artifact_digest_ &&
+               evaluator_artifact_digest == attested_evaluator_artifact_digest_ &&
+               baseline_trial_count == attested_baseline_trial_count_ &&
+               candidate_trial_count == attested_candidate_trial_count_ &&
+               evaluation_evidence_digest == attested_evidence_digest_ &&
+               !evaluation_procedure_id.empty() && !evaluation_config_id.empty() &&
+               !baseline_artifact_digest.empty() && !candidate_artifact_digest.empty() &&
+               !evaluator_artifact_digest.empty() && !evaluation_evidence_digest.empty();
     }
 
 private:
@@ -66,6 +90,14 @@ private:
         attested_minimum_ = minimum_improvement;
         attested_confidence_ = confidence;
         attested_outcome_ = outcome;
+        attested_procedure_id_ = evaluation_procedure_id;
+        attested_config_id_ = evaluation_config_id;
+        attested_baseline_artifact_digest_ = baseline_artifact_digest;
+        attested_candidate_artifact_digest_ = candidate_artifact_digest;
+        attested_evaluator_artifact_digest_ = evaluator_artifact_digest;
+        attested_baseline_trial_count_ = baseline_trial_count;
+        attested_candidate_trial_count_ = candidate_trial_count;
+        attested_evidence_digest_ = evaluation_evidence_digest;
     }
 
     bool isolation_attested_{false};
@@ -80,6 +112,14 @@ private:
     double attested_minimum_{0.0};
     double attested_confidence_{0.0};
     ExperimentOutcome attested_outcome_{ExperimentOutcome::Pending};
+    std::string attested_procedure_id_;
+    std::string attested_config_id_;
+    std::string attested_baseline_artifact_digest_;
+    std::string attested_candidate_artifact_digest_;
+    std::string attested_evaluator_artifact_digest_;
+    std::size_t attested_baseline_trial_count_{0};
+    std::size_t attested_candidate_trial_count_{0};
+    std::string attested_evidence_digest_;
 
     friend class EvolutionExperimentRunner;
     friend class EvolutionExperimentCoordinator;

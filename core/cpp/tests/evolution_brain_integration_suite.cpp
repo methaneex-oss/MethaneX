@@ -1,24 +1,71 @@
 #include "jarvis/core/brain.hpp"
 #include "jarvis/core/evolution_safety.hpp"
 #include "jarvis/core/evolution_experiment_runner.hpp"
+#include "jarvis/core/evolution_experiment_coordinator.hpp"
+#include "jarvis/core/evolution_candidate_generator.hpp"
+#include "jarvis/core/evolution_digest.hpp"
 #include "jarvis/core/process_isolation.hpp"
 
 #include <cassert>
+#include <cmath>
 #include <filesystem>
 #include <algorithm>
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+#include <cmath>
+#include <string>
 
 using namespace jarvis::core;
 
 namespace {
+std::string evaluator_path;
+std::string baseline_artifact_path;
+std::string candidate_artifact_path;
+EvolutionSafetyPolicy test_policy;
+void write_artifacts(const EvolutionExperiment& experiment) {
+    { std::ofstream out(baseline_artifact_path); out << std::setprecision(17) << experiment.proposal.current; }
+    { std::ofstream out(candidate_artifact_path); out << std::setprecision(17) << experiment.proposal.proposed; }
+}
 void attest_isolated(EvolutionExperiment& experiment) {
+    write_artifacts(experiment);
     ProcessIsolationBackend backend;
-    const IsolatedCommand command{
-        "/bin/sh", {"-c", "printf " + std::to_string(experiment.candidate_fitness)}, ""};
-    EvolutionExperimentRunner::run_isolated_command(experiment, backend, command);
+    IsolatedEvaluationProcedure procedure{
+        IsolatedCommand{evaluator_path, {"--trusted-test-evaluator"}, ""},
+        "brain-suite-local-evaluator-v1", "linear-fitness-v1",
+        baseline_artifact_path, candidate_artifact_path, detail::sha256_file(evaluator_path)};
+    const auto outcome = EvolutionExperimentRunner::run_isolated_evaluation(
+        experiment, backend, procedure, 4, 4, 0.5);
+    assert(outcome == ExperimentOutcome::Improved);
 }
 } // namespace
 
-int main() {
+int main(int argc, char** argv) {
+    if (argc > 1 && std::string(argv[1]) == "--trusted-test-evaluator") {
+        if (argc != 14 || std::string(argv[2]) != "--jarvis-evaluate-v1") return 21;
+        std::ifstream artifact(argv[9]);
+        std::string coefficient_text;
+        if (!artifact || !(artifact >> coefficient_text)) return 22;
+        const double coefficient = std::stod(coefficient_text);
+        const double evaluated_value = std::stod(argv[6]);
+        if (std::abs(coefficient - evaluated_value) > 1e-12) return 23;
+        double squared_error = 0.0;
+        for (double input = 1.0; input <= 4.0; input += 1.0) {
+            const double error = coefficient * input - 0.8 * input;
+            squared_error += error * error;
+        }
+        const double fitness = 1.0 / (1.0 + squared_error / 4.0);
+        std::cout << "JARVIS_EVAL_V1\t" << argv[3] << "\t" << argv[4] << "\t"
+                  << argv[5] << "\t" << argv[6] << "\t" << argv[7] << "\t"
+                  << argv[8] << "\t" << argv[10] << "\t" << argv[11] << "\t"
+                  << argv[12] << "\t" << argv[13] << "\t" << fitness;
+        return 0;
+    }
+    evaluator_path = std::filesystem::absolute(argv[0]).string();
+    test_policy.trusted_evaluator_digest = detail::sha256_file(evaluator_path);
+    const auto temp = std::filesystem::temp_directory_path();
+    baseline_artifact_path = (temp / "jarvis_brain_baseline_artifact.txt").string();
+    candidate_artifact_path = (temp / "jarvis_brain_candidate_artifact.txt").string();
     const std::filesystem::path path = "evolution_brain_integration_test.bin";
     std::error_code ec;
     // A persisted legacy adoption event without experiment evidence must
@@ -27,7 +74,7 @@ int main() {
     std::filesystem::remove(legacy_path, ec);
     std::filesystem::remove(legacy_path.string() + ".meta", ec);
     {
-        Brain source(legacy_path);
+        Brain source(legacy_path, test_policy);
         assert(source.register_evolution_parameter("legacy.replay", 0.25));
     }
     {
@@ -42,7 +89,7 @@ int main() {
         assert(journal.append(legacy_adoption) != 0);
     }
     {
-        Brain restarted_legacy(legacy_path);
+        Brain restarted_legacy(legacy_path, test_policy);
         const auto* parameter = restarted_legacy.evolution_parameter("legacy.replay");
         assert(parameter != nullptr);
         assert(parameter->value == parameter->baseline);
@@ -50,13 +97,84 @@ int main() {
     std::filesystem::remove(legacy_path, ec);
     std::filesystem::remove(legacy_path.string() + ".meta", ec);
 
+    // An experiment ID does not make an adoption event valid: replay must
+    // require a preceding, matching evaluation record.
+    const std::filesystem::path missing_evaluation_path = "evolution_missing_evaluation_test.bin";
+    std::filesystem::remove(missing_evaluation_path, ec);
+    std::filesystem::remove(missing_evaluation_path.string() + ".meta", ec);
+    {
+        Brain source(missing_evaluation_path, test_policy);
+        assert(source.register_evolution_parameter("replay.no-evaluation", 0.25));
+    }
+    {
+        Memory journal(256, missing_evaluation_path);
+        Event adoption_without_evaluation{
+            0, 2, "forged-test", "evolution_adopt",
+            {{"key", std::string("replay.no-evaluation")},
+             {"current", 0.25}, {"proposed", 0.95},
+             {"expected_gain", 0.70}, {"proposal_confidence", 0.99},
+             {"confidence", 0.99}, {"minimum_improvement", 0.05},
+             {"baseline", 0.70}, {"candidate", 0.95},
+             {"outcome", static_cast<std::int64_t>(ExperimentOutcome::Improved)},
+             {"isolated", true}, {"experiment_id", std::string("forged-no-evaluation")}}};
+        assert(journal.append(adoption_without_evaluation) != 0);
+    }
+    {
+        Brain restarted(missing_evaluation_path, test_policy);
+        const auto* parameter = restarted.evolution_parameter("replay.no-evaluation");
+        assert(parameter != nullptr && parameter->value == parameter->baseline);
+    }
+    std::filesystem::remove(missing_evaluation_path, ec);
+    std::filesystem::remove(missing_evaluation_path.string() + ".meta", ec);
+
+    // A forged "Improved" label cannot override equal measured fitness.
+    const std::filesystem::path inconsistent_evaluation_path = "evolution_inconsistent_evaluation_test.bin";
+    std::filesystem::remove(inconsistent_evaluation_path, ec);
+    std::filesystem::remove(inconsistent_evaluation_path.string() + ".meta", ec);
+    {
+        Brain source(inconsistent_evaluation_path, test_policy);
+        assert(source.register_evolution_parameter("replay.equal-fitness", 0.25));
+    }
+    {
+        Memory journal(256, inconsistent_evaluation_path);
+        Event forged_evaluation{
+            0, 2, "forged-test", "evolution_evaluated",
+            {{"experiment_id", std::string("forged-equal-fitness")},
+             {"key", std::string("replay.equal-fitness")},
+             {"current", 0.25}, {"proposed", 0.35},
+             {"expected_gain", 0.10}, {"proposal_confidence", 0.99},
+             {"baseline", 0.80}, {"candidate", 0.80},
+             {"minimum_improvement", 0.05}, {"confidence", 0.99},
+             {"outcome", static_cast<std::int64_t>(ExperimentOutcome::Improved)},
+             {"isolated", true}}};
+        assert(journal.append(forged_evaluation) != 0);
+        Event adoption_after_forged_evaluation{
+            0, 3, "forged-test", "evolution_adopt",
+            {{"experiment_id", std::string("forged-equal-fitness")},
+             {"key", std::string("replay.equal-fitness")},
+             {"current", 0.25}, {"proposed", 0.35},
+             {"expected_gain", 0.10}, {"proposal_confidence", 0.99},
+             {"baseline", 0.80}, {"candidate", 0.80},
+             {"minimum_improvement", 0.05}, {"confidence", 0.99},
+             {"outcome", static_cast<std::int64_t>(ExperimentOutcome::Improved)},
+             {"isolated", true}}};
+        assert(journal.append(adoption_after_forged_evaluation) != 0);
+    }
+    {
+        Brain restarted(inconsistent_evaluation_path, test_policy);
+        const auto* parameter = restarted.evolution_parameter("replay.equal-fitness");
+        assert(parameter != nullptr && parameter->value == parameter->baseline);
+    }
+    std::filesystem::remove(inconsistent_evaluation_path, ec);
+    std::filesystem::remove(inconsistent_evaluation_path.string() + ".meta", ec);
+
     // An unversioned legacy rollback must not undo a newer adoption during
     // journal replay: it does not identify the experiment it belongs to.
     const std::filesystem::path legacy_rollback_path = "evolution_legacy_rollback_test.bin";
     std::filesystem::remove(legacy_rollback_path, ec);
     std::filesystem::remove(legacy_rollback_path.string() + ".meta", ec);
     {
-        Brain source(legacy_rollback_path);
+        Brain source(legacy_rollback_path, test_policy);
         assert(source.register_evolution_parameter("legacy.rollback", 0.25));
         EvolutionExperiment valid_adoption{
             "legacy-rollback-protection-1",
@@ -76,7 +194,7 @@ int main() {
         assert(journal.append(legacy_rollback) != 0);
     }
     {
-        Brain restarted_legacy(legacy_rollback_path);
+        Brain restarted_legacy(legacy_rollback_path, test_policy);
         const auto* parameter = restarted_legacy.evolution_parameter("legacy.rollback");
         assert(parameter != nullptr);
         assert(parameter->value == 0.35);
@@ -89,10 +207,116 @@ int main() {
     std::filesystem::remove(legacy_rollback_path, ec);
     std::filesystem::remove(legacy_rollback_path.string() + ".meta", ec);
 
+    // A valid evaluation followed by an adoption event that changes the
+    // proposed parameter must be rejected during replay.
+    const std::filesystem::path mismatched_replay_path = "evolution_mismatched_replay_test.bin";
+    std::filesystem::remove(mismatched_replay_path, ec);
+    std::filesystem::remove(mismatched_replay_path.string() + ".meta", ec);
+    EvolutionExperiment valid_replay_evidence;
+    {
+        Brain source(mismatched_replay_path, test_policy);
+        assert(source.register_evolution_parameter("replay.mismatched-proposal", 0.3));
+        valid_replay_evidence = EvolutionExperiment{
+            "mismatched-replay-1",
+            EvolutionProposal{"replay.mismatched-proposal", 0.3, 0.4, 0.1, 0.8},
+            0.0, 0.0, 0.01, 0.0, ExperimentOutcome::Pending, false};
+        ProcessIsolationBackend backend;
+        IsolatedEvaluationProcedure procedure{
+            IsolatedCommand{evaluator_path, {"--trusted-test-evaluator"}, ""},
+            "brain-suite-local-evaluator-v1", "artifact-score-v1",
+            baseline_artifact_path, candidate_artifact_path, detail::sha256_file(evaluator_path)};
+        write_artifacts(valid_replay_evidence);
+        const auto batch = EvolutionExperimentCoordinator::run_isolated(
+            valid_replay_evidence, backend, procedure, EvolutionTrialConfig{});
+        assert(batch.executed && valid_replay_evidence.has_valid_evaluation_evidence());
+        assert(source.record_evolution_evaluation(valid_replay_evidence));
+    }
+    {
+        Memory journal(256, mismatched_replay_path);
+        const auto& e = valid_replay_evidence;
+        Event mismatched_adoption{
+            0, 2, "forged-test", "evolution_adopt",
+            {{"experiment_id", e.id}, {"key", e.proposal.key},
+             {"current", e.proposal.current}, {"proposed", 0.45},
+             {"expected_gain", e.proposal.expected_gain},
+             {"proposal_confidence", e.proposal.confidence},
+             {"outcome", static_cast<std::int64_t>(e.outcome)},
+             {"baseline", e.baseline_fitness}, {"candidate", e.candidate_fitness},
+             {"confidence", e.confidence}, {"minimum_improvement", e.minimum_improvement},
+             {"isolated", true}, {"evaluation_procedure_id", e.evaluation_procedure_id},
+             {"evaluation_config_id", e.evaluation_config_id},
+             {"baseline_artifact_digest", e.baseline_artifact_digest},
+             {"candidate_artifact_digest", e.candidate_artifact_digest},
+             {"evaluator_artifact_digest", e.evaluator_artifact_digest},
+             {"baseline_trial_count", static_cast<std::int64_t>(e.baseline_trial_count)},
+             {"candidate_trial_count", static_cast<std::int64_t>(e.candidate_trial_count)},
+             {"evaluation_evidence_digest", e.evaluation_evidence_digest}}};
+        assert(journal.append(mismatched_adoption) != 0);
+    }
+    {
+        Brain restored(mismatched_replay_path, test_policy);
+        const auto* parameter = restored.evolution_parameter("replay.mismatched-proposal");
+        assert(parameter != nullptr && parameter->value == parameter->baseline);
+    }
+    std::filesystem::remove(mismatched_replay_path, ec);
+    std::filesystem::remove(mismatched_replay_path.string() + ".meta", ec);
+
+    // Full default-policy lifecycle through the isolated coordinator, durable
+    // evaluation/adoption events, and a fresh Brain reconstructed from journal.
+    const std::filesystem::path lifecycle_path = "evolution_isolated_lifecycle_test.bin";
+    std::filesystem::remove(lifecycle_path, ec);
+    std::filesystem::remove(lifecycle_path.string() + ".meta", ec);
+    {
+        Brain source(lifecycle_path, test_policy);
+        assert(source.register_evolution_parameter("coordinator.lifecycle", 0.3));
+        const EvolutionOpportunity opportunity{
+            "coordinator-lifecycle-opportunity", "test-evidence", 0.9, 0.9, 0.3, 0.4, 4, 1, 4};
+        EvolutionCandidateGenerator generator = [](const EvolutionOpportunity&) {
+            return std::vector<EvolutionProposal>{
+                EvolutionProposal{"coordinator.lifecycle", 0.3, 0.4, 0.1, 0.8}};
+        };
+        const auto generated = EvolutionCandidateValidator::validate(generator(opportunity));
+        assert(generated.size() == 1);
+        EvolutionExperiment experiment{
+            "coordinator-lifecycle-1", generated.front(),
+            0.0, 0.0, 0.01, 0.0, ExperimentOutcome::Pending, false};
+        ProcessIsolationBackend backend;
+        IsolatedEvaluationProcedure procedure{
+            IsolatedCommand{evaluator_path, {"--trusted-test-evaluator"}, ""},
+            "brain-suite-local-evaluator-v1", "artifact-score-v1",
+            baseline_artifact_path, candidate_artifact_path, detail::sha256_file(evaluator_path)};
+        write_artifacts(experiment);
+        const auto batch = EvolutionExperimentCoordinator::run_isolated(
+            experiment, backend, procedure, EvolutionTrialConfig{});
+        assert(batch.executed && batch.outcome == ExperimentOutcome::Improved);
+        assert(experiment.has_valid_evaluation_evidence());
+        assert(source.record_evolution_evaluation(experiment));
+        assert(source.adopt_evolution_experiment(experiment));
+    }
+    {
+        Brain restored(lifecycle_path, test_policy);
+        const auto* parameter = restored.evolution_parameter("coordinator.lifecycle");
+        assert(parameter != nullptr && std::abs(parameter->value - 0.4) < 1e-12);
+        const auto history = restored.evolution_history();
+        assert(std::any_of(history.begin(), history.end(), [](const auto& record) {
+            return record.experiment_id == "coordinator-lifecycle-1" &&
+                   record.action == EvolutionRecordAction::Adopted;
+        }));
+        EvolutionSafetyPolicy wrong_trust = test_policy;
+        wrong_trust.trusted_evaluator_digest = "untrusted-evaluator-digest";
+        Brain untrusted_restored(lifecycle_path, wrong_trust);
+        const auto* untrusted_parameter = untrusted_restored.evolution_parameter("coordinator.lifecycle");
+        assert(untrusted_parameter != nullptr);
+        assert(untrusted_parameter->value == untrusted_parameter->baseline);
+    }
+    std::filesystem::remove(lifecycle_path, ec);
+    std::filesystem::remove(lifecycle_path.string() + ".meta", ec);
+    std::filesystem::remove(baseline_artifact_path, ec);
+    std::filesystem::remove(candidate_artifact_path, ec);
     std::filesystem::remove(path, ec);
 
     {
-        Brain brain(path);
+        Brain brain(path, test_policy);
         assert(brain.register_evolution_parameter("planner.weight", 0.4));
         assert(!brain.register_evolution_parameter("planner.weight", 0.4));
         brain.predict("planner.weight", Scalar{0.4}, 0.9);
@@ -172,6 +396,7 @@ int main() {
             "safety-equal-fitness", EvolutionProposal{"safety.equal-fitness", 0.2, 0.3, 0.1, 0.99},
             0.70, 0.70, 0.01, 0.99, ExperimentOutcome::Improved, true};
         attest_isolated(equal_fitness);
+        equal_fitness.candidate_fitness = equal_fitness.baseline_fitness;
         equal_fitness.outcome = ExperimentOutcome::Improved;
         EvolutionSafetyPolicy non_isolation_policy;
         non_isolation_policy.require_isolation = false;
@@ -184,6 +409,7 @@ int main() {
             "safety-subthreshold", EvolutionProposal{"safety.subthreshold", 0.2, 0.3, 0.1, 0.99},
             0.70, 0.74, 0.05, 0.99, ExperimentOutcome::Improved, true};
         attest_isolated(subthreshold);
+        subthreshold.candidate_fitness = subthreshold.baseline_fitness + 0.01;
         subthreshold.outcome = ExperimentOutcome::Improved;
         assert(!EvolutionSafetyGate::approve(subthreshold, non_isolation_policy));
         assert(!brain.record_evolution_evaluation(subthreshold));
@@ -237,7 +463,7 @@ int main() {
     }
 
     {
-        Brain restarted(path);
+        Brain restarted(path, test_policy);
         const auto* parameter = restarted.evolution_parameter("planner.weight");
         assert(parameter != nullptr);
         assert(parameter->value == parameter->baseline);
@@ -271,7 +497,9 @@ int main() {
             "replay-evaluation-1",
             EvolutionProposal{"replay.persist", 0.3, 0.4, 0.1, 0.90},
             0.70, 0.82, 0.01, 0.90, ExperimentOutcome::Improved, true};
-        replayed.isolated = true;
+        // Re-run the same pinned local evaluation after restart to recreate
+        // an in-memory attestation; journal fields alone cannot authorize adoption.
+        attest_isolated(replayed);
         assert(restarted.adopt_evolution_experiment(replayed));
         const auto* replayed_parameter = restarted.evolution_parameter("replay.persist");
         assert(replayed_parameter != nullptr && replayed_parameter->value == 0.4);
@@ -285,7 +513,7 @@ int main() {
         assert(!rollback_history.empty());
         assert(rollback_history.back().action == EvolutionRecordAction::RolledBack);
 
-        Brain restarted_again(path);
+        Brain restarted_again(path, test_policy);
         const auto* direct_parameter = restarted_again.evolution_parameter("planner.weight");
         assert(direct_parameter != nullptr);
         assert(direct_parameter->value == direct_parameter->baseline);
@@ -293,5 +521,7 @@ int main() {
 
     std::filesystem::remove(path, ec);
     std::filesystem::remove(path.string() + ".meta", ec);
+    std::filesystem::remove(baseline_artifact_path, ec);
+    std::filesystem::remove(candidate_artifact_path, ec);
     return 0;
 }

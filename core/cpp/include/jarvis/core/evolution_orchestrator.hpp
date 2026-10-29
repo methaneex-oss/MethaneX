@@ -50,6 +50,19 @@ public:
         bool system_idle,
         EvolutionController* controller = nullptr) const noexcept;
 
+    // Production route: baseline and candidate trials use the pinned local
+    // evaluator and enforced process isolation; callback simulation is separate.
+    EvolutionOrchestrationResult run_isolated(
+        const EvolutionOpportunity& opportunity,
+        const EvolutionCandidateGenerator& generator,
+        const ProcessIsolationBackend& backend,
+        const IsolatedEvaluationProcedure& procedure,
+        const EvolutionHistory& history,
+        std::chrono::steady_clock::time_point now,
+        std::chrono::steady_clock::time_point last_run,
+        bool system_idle,
+        EvolutionController* controller = nullptr) const noexcept;
+
 private:
     EvolutionScheduler scheduler_;
     EvolutionTrialConfig trial_config_{};

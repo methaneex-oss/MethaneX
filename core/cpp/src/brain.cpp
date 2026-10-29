@@ -196,7 +196,9 @@ std::string join_ids(const std::vector<std::string>& ids) { std::ostringstream o
 std::vector<std::string> split_ids(const std::string& value) { std::vector<std::string> result; std::size_t start = 0; while (start <= value.size()) { const auto end = value.find('\x1f', start); const auto token = value.substr(start, end == std::string::npos ? std::string::npos : end - start); if (!token.empty()) result.push_back(token); if (end == std::string::npos) break; start = end + 1; } return result; }
 GoalStatus goal_status_value(std::int64_t value) { switch (value) { case 0: return GoalStatus::pending; case 1: return GoalStatus::active; case 2: return GoalStatus::completed; case 3: return GoalStatus::abandoned; default: return GoalStatus::pending; } }
 }
-Brain::Brain(std::filesystem::path journal_path) : memory_(256, std::move(journal_path)), evolution_controller_(evolution_, evolution_history_) { const auto history = memory_.all(); for (const auto& event : history) replay(event); state_.events_seen = static_cast<std::uint64_t>(history.size()); if (!history.empty()) state_.cycle = history.back().sequence; sync_self_state(); }
+Brain::Brain(std::filesystem::path journal_path, EvolutionSafetyPolicy evolution_policy)
+    : memory_(256, std::move(journal_path)),
+      evolution_controller_(evolution_, evolution_history_, std::move(evolution_policy)) { const auto history = memory_.all(); for (const auto& event : history) replay(event); state_.events_seen = static_cast<std::uint64_t>(history.size()); if (!history.empty()) state_.cycle = history.back().sequence; sync_self_state(); }
 void Brain::consolidate_experience(const Event& event, double error) {
     double salience = attention_state_.salience; double novelty = state_.novelty; double confidence = 0.5;
     if (const auto it = event.data.find("salience"); it != event.data.end()) if (const auto* value = std::get_if<double>(&it->second)) salience = *value;
@@ -515,8 +517,14 @@ void Brain::replay(const Event& event, bool external_observation) {
                 event.data.find("isolated") != event.data.end() &&
                 std::get_if<bool>(&event.data.at("isolated")) != nullptr &&
                 *std::get_if<bool>(&event.data.at("isolated"));
-            if (experiment.isolated && experiment.candidate_executed)
-                experiment.attest_isolated_result();
+            if (const auto* value = string_value(event.data, "evaluation_procedure_id")) experiment.evaluation_procedure_id = *value;
+            if (const auto* value = string_value(event.data, "evaluation_config_id")) experiment.evaluation_config_id = *value;
+            if (const auto* value = string_value(event.data, "baseline_artifact_digest")) experiment.baseline_artifact_digest = *value;
+            if (const auto* value = string_value(event.data, "candidate_artifact_digest")) experiment.candidate_artifact_digest = *value;
+            if (const auto* value = string_value(event.data, "evaluator_artifact_digest")) experiment.evaluator_artifact_digest = *value;
+            if (const auto* value = string_value(event.data, "evaluation_evidence_digest")) experiment.evaluation_evidence_digest = *value;
+            experiment.baseline_trial_count = static_cast<std::size_t>(std::max<std::int64_t>(0, integer_value(event.data, "baseline_trial_count")));
+            experiment.candidate_trial_count = static_cast<std::size_t>(std::max<std::int64_t>(0, integer_value(event.data, "candidate_trial_count")));
             evolution_controller_.replay_evaluation(experiment);
         }
         return;
@@ -554,22 +562,26 @@ void Brain::replay(const Event& event, bool external_observation) {
                     event.data.find("isolated") != event.data.end() &&
                     std::get_if<bool>(&event.data.at("isolated")) != nullptr &&
                     *std::get_if<bool>(&event.data.at("isolated"));
-                if (experiment.isolated && experiment.candidate_executed)
-                    experiment.attest_isolated_result();
+                if (const auto* value = string_value(event.data, "evaluation_procedure_id")) experiment.evaluation_procedure_id = *value;
+                if (const auto* value = string_value(event.data, "evaluation_config_id")) experiment.evaluation_config_id = *value;
+                if (const auto* value = string_value(event.data, "baseline_artifact_digest")) experiment.baseline_artifact_digest = *value;
+                if (const auto* value = string_value(event.data, "candidate_artifact_digest")) experiment.candidate_artifact_digest = *value;
+                if (const auto* value = string_value(event.data, "evaluator_artifact_digest")) experiment.evaluator_artifact_digest = *value;
+                if (const auto* value = string_value(event.data, "evaluation_evidence_digest")) experiment.evaluation_evidence_digest = *value;
+                experiment.baseline_trial_count = static_cast<std::size_t>(std::max<std::int64_t>(0, integer_value(event.data, "baseline_trial_count")));
+                experiment.candidate_trial_count = static_cast<std::size_t>(std::max<std::int64_t>(0, integer_value(event.data, "candidate_trial_count")));
                 const auto adoption = evolution_controller_.adoption_journal().get(*experiment_id);
                 if (adoption.has_value() &&
                     (adoption->state == AdoptionState::Adopted ||
                      adoption->state == AdoptionState::RolledBack)) return;
+                // Apply the same evaluation/history/journal checks as live
+                // adoption before replay is allowed to mutate the parameter.
+                if (!evolution_controller_.validate_adoption_for_brain(experiment)) return;
                 if (!evolution_.adopt(proposal)) return;
                 if (!evolution_controller_.replay_adoption(experiment)) {
                     evolution_.restore_previous(*key);
                     return;
                 }
-                evolution_history_.append(EvolutionHistoryRecord{
-                    *experiment_id, *key, EvolutionRecordAction::Adopted,
-                    experiment.outcome, experiment.baseline_fitness,
-                    experiment.candidate_fitness, experiment.confidence, 0,
-                    "replayed", {}});
             } else {
                 // An unversioned legacy event has no experiment evidence.
                 // Ignore it rather than re-adopting an unevaluated proposal.

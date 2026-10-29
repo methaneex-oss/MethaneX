@@ -115,7 +115,8 @@ EvolutionOrchestrationResult EvolutionOrchestrator::run(
     // A durable evaluation record is part of the adoption precondition.
     // Never mutate the model from an experiment whose evaluation could not be recorded.
     if (result.lifecycle[winner] != EvolutionLifecycleState::CandidateEvaluated) {
-        ++result.rejected;
+        if (result.lifecycle[winner] != EvolutionLifecycleState::EvaluationRejected)
+            ++result.rejected;
         return result;
     }
 
@@ -156,6 +157,115 @@ EvolutionOrchestrationResult EvolutionOrchestrator::run(
         ++result.rejected;
     }
 
+    return result;
+}
+
+
+EvolutionOrchestrationResult EvolutionOrchestrator::run_isolated(
+    const EvolutionOpportunity& opportunity,
+    const EvolutionCandidateGenerator& generator,
+    const ProcessIsolationBackend& backend,
+    const IsolatedEvaluationProcedure& procedure,
+    const EvolutionHistory& history,
+    std::chrono::steady_clock::time_point now,
+    std::chrono::steady_clock::time_point last_run,
+    bool system_idle,
+    EvolutionController* controller) const noexcept {
+    EvolutionOrchestrationResult result;
+    result.schedule = scheduler_.evaluate(now, last_run, system_idle);
+    if (!result.schedule.allowed || opportunity.id.empty() || !generator) return result;
+
+    std::vector<EvolutionProposal> generated;
+    try { generated = generator(opportunity); } catch (...) { return result; }
+    const auto candidates = EvolutionCandidateValidator::validate(generated);
+    if (candidates.empty()) return result;
+
+    const auto ranked = EvolutionStrategy::rank(candidates, history);
+    const std::size_t limit = std::min(result.schedule.trial_budget, ranked.size());
+    result.experiments.reserve(limit);
+    result.lifecycle.reserve(limit);
+    for (std::size_t index = 0; index < limit; ++index) {
+        const auto& ranked_candidate = ranked[index];
+        const auto proposal_it = std::find_if(
+            candidates.begin(), candidates.end(),
+            [&](const auto& proposal) { return proposal.key == ranked_candidate.parameter_key; });
+        if (proposal_it == candidates.end()) continue;
+        EvolutionExperiment experiment;
+        experiment.id = experiment_id(opportunity, *proposal_it, index);
+        experiment.proposal = *proposal_it;
+        const auto batch = EvolutionExperimentCoordinator::run_isolated(
+            experiment, backend, procedure, trial_config_);
+        if (!batch.executed) {
+            result.lifecycle.push_back(EvolutionLifecycleState::EvaluationRejected);
+            ++result.rejected;
+        } else {
+            result.lifecycle.push_back(EvolutionLifecycleState::CandidateEvaluated);
+        }
+        result.experiments.push_back(std::move(experiment));
+    }
+    if (result.experiments.empty()) return result;
+
+    std::size_t winner = result.experiments.size();
+    double winner_gain = 0.0;
+    for (std::size_t i = 0; i < result.experiments.size(); ++i) {
+        const auto& experiment = result.experiments[i];
+        if (!experiment.has_valid_evaluation_evidence() ||
+            experiment.outcome != ExperimentOutcome::Improved) continue;
+        const double gain = experiment.candidate_fitness - experiment.baseline_fitness;
+        if (winner == result.experiments.size() || gain > winner_gain ||
+            (gain == winner_gain && experiment.confidence > result.experiments[winner].confidence)) {
+            winner = i;
+            winner_gain = gain;
+        }
+    }
+
+    for (std::size_t i = 0; i < result.experiments.size(); ++i) {
+        auto& experiment = result.experiments[i];
+        if (controller != nullptr && experiment.candidate_executed &&
+            !controller->record_evaluation(experiment)) {
+            result.lifecycle[i] = EvolutionLifecycleState::EvaluationRejected;
+            ++result.rejected;
+        }
+    }
+    if (winner == result.experiments.size()) return result;
+    if (result.lifecycle[winner] != EvolutionLifecycleState::CandidateEvaluated) {
+        if (result.lifecycle[winner] != EvolutionLifecycleState::EvaluationRejected)
+            ++result.rejected;
+        return result;
+    }
+    for (std::size_t i = 0; i < result.experiments.size(); ++i) {
+        if (i != winner && result.lifecycle[i] == EvolutionLifecycleState::CandidateEvaluated) {
+            result.lifecycle[i] = EvolutionLifecycleState::Superseded;
+            ++result.rejected;
+        }
+    }
+    if (controller == nullptr) {
+        result.lifecycle[winner] = EvolutionLifecycleState::Superseded;
+        ++result.rejected;
+        return result;
+    }
+
+    auto& selected = result.experiments[winner];
+    if (!controller->adopt(selected)) {
+        result.lifecycle[winner] = EvolutionLifecycleState::SafetyRejected;
+        ++result.rejected;
+        return result;
+    }
+    result.lifecycle[winner] = EvolutionLifecycleState::Canarying;
+    CanaryDecision canary{};
+    for (std::size_t i = 0; i < 3; ++i) {
+        canary = controller->observe_canary(
+            selected.proposal.key, selected.id,
+            CanaryObservation{selected.baseline_fitness, selected.candidate_fitness});
+        if (canary.rollback) {
+            result.lifecycle[winner] = EvolutionLifecycleState::RolledBack;
+            ++result.rejected;
+            return result;
+        }
+    }
+    result.lifecycle[winner] = canary.sufficient_evidence
+        ? EvolutionLifecycleState::Retained : EvolutionLifecycleState::Canarying;
+    if (result.lifecycle[winner] == EvolutionLifecycleState::Retained) ++result.adopted;
     return result;
 }
 

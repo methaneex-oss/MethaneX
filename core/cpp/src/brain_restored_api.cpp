@@ -296,7 +296,15 @@ bool Brain::record_evolution_evaluation(EvolutionExperiment& experiment) {
                  {"candidate", experiment.candidate_fitness},
                  {"confidence", experiment.confidence},
                  {"minimum_improvement", experiment.minimum_improvement},
-                 {"isolated", experiment.isolated}}};
+                 {"isolated", experiment.isolated},
+                 {"evaluation_procedure_id", experiment.evaluation_procedure_id},
+                 {"evaluation_config_id", experiment.evaluation_config_id},
+                 {"baseline_artifact_digest", experiment.baseline_artifact_digest},
+                 {"candidate_artifact_digest", experiment.candidate_artifact_digest},
+                 {"evaluator_artifact_digest", experiment.evaluator_artifact_digest},
+                 {"baseline_trial_count", static_cast<std::int64_t>(experiment.baseline_trial_count)},
+                 {"candidate_trial_count", static_cast<std::int64_t>(experiment.candidate_trial_count)},
+                 {"evaluation_evidence_digest", experiment.evaluation_evidence_digest}}};
     event.sequence = memory_.append(event);
     if (event.sequence == 0) return false;
     if (!evolution_controller_.record_evaluation_for_brain(experiment)) return false;
@@ -326,7 +334,15 @@ bool Brain::adopt_evolution_experiment(EvolutionExperiment& experiment) {
                  {"experiment_id", experiment.id},
                  {"outcome", static_cast<std::int64_t>(experiment.outcome)},
                  {"baseline", experiment.baseline_fitness},
-                 {"candidate", experiment.candidate_fitness}}};
+                 {"candidate", experiment.candidate_fitness},
+                 {"evaluation_procedure_id", experiment.evaluation_procedure_id},
+                 {"evaluation_config_id", experiment.evaluation_config_id},
+                 {"baseline_artifact_digest", experiment.baseline_artifact_digest},
+                 {"candidate_artifact_digest", experiment.candidate_artifact_digest},
+                 {"evaluator_artifact_digest", experiment.evaluator_artifact_digest},
+                 {"baseline_trial_count", static_cast<std::int64_t>(experiment.baseline_trial_count)},
+                 {"candidate_trial_count", static_cast<std::int64_t>(experiment.candidate_trial_count)},
+                 {"evaluation_evidence_digest", experiment.evaluation_evidence_digest}}};
     if (!evolution_controller_.adopt_for_brain(experiment)) return false;
     event.sequence = memory_.append(event);
     if (event.sequence == 0) {

@@ -1,3 +1,14 @@
+#if defined(__linux__) && !defined(_DEFAULT_SOURCE)
+#define _DEFAULT_SOURCE
+#endif
+#if defined(__SANITIZE_THREAD__) || defined(__SANITIZE_ADDRESS__)
+#define JARVIS_SANITIZER_BUILD 1
+#elif defined(__has_feature)
+#if __has_feature(thread_sanitizer) || __has_feature(address_sanitizer)
+#define JARVIS_SANITIZER_BUILD 1
+#endif
+#endif
+
 #include "jarvis/core/process_isolation.hpp"
 
 #include <algorithm>
@@ -7,12 +18,14 @@
 #include <cstring>
 #include <string>
 #include <cstdlib>
+#include <limits>
 
 #if defined(__unix__) || defined(__APPLE__)
 #include <fcntl.h>
 #include <poll.h>
 #include <signal.h>
 #include <sys/resource.h>
+#include <grp.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
@@ -98,6 +111,14 @@ bool install_network_syscall_block() noexcept {
 #endif
 
 ProcessIsolationBackend::ProcessIsolationBackend(ProcessIsolationLimits limits) : limits_(limits) {
+#if defined(JARVIS_SANITIZER_BUILD)
+    // AddressSanitizer and ThreadSanitizer reserve large virtual shadow address
+    // ranges. A small RLIMIT_AS prevents instrumented evaluators from starting,
+    // so sanitizer builds retain CPU/file/output limits but do not cap address space.
+    limits_.max_memory_bytes = std::numeric_limits<std::size_t>::max();
+    limits_.sandbox.timeout = std::max(limits_.sandbox.timeout, std::chrono::milliseconds{10000});
+    limits_.max_cpu_seconds = std::max<std::size_t>(limits_.max_cpu_seconds, 10);
+#endif
     if (limits_.sandbox.timeout.count() <= 0) limits_.sandbox.timeout = std::chrono::milliseconds{1000};
     if (limits_.sandbox.max_output_bytes == 0) limits_.sandbox.max_output_bytes = 64 * 1024;
     if (limits_.max_memory_bytes == 0) limits_.max_memory_bytes = 256 * 1024 * 1024;
@@ -158,7 +179,7 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
 #if defined(__unix__) || defined(__APPLE__)
         if (limits_.require_privilege_drop) {
             if (geteuid() == 0) {
-                if (setgid(65534) != 0 || setuid(65534) != 0) _exit(125);
+                if (setgroups(0, nullptr) != 0 || setgid(65534) != 0 || setuid(65534) != 0) _exit(125);
             } else if (geteuid() != getuid() || getegid() != getgid()) {
                 _exit(125);
             }
