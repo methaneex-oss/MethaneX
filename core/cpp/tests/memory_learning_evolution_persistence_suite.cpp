@@ -145,7 +145,7 @@ int main(int argc, char** argv) {
 
         EvolutionExperiment experiment{
             "integrated-learning-evolution-1", *proposal,
-            0.70, 0.90, 0.01, 0.95, ExperimentOutcome::Improved, true};
+            0.70, 0.90, 0.0, 1.0, ExperimentOutcome::Improved, true};
         attest_isolated(experiment);
         if (!check(brain.record_evolution_evaluation(experiment),
                    "evolution evaluation was journaled")) return 1;
