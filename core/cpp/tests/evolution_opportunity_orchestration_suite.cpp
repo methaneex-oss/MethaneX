@@ -42,6 +42,7 @@ int main(int argc, char** argv) {
     EvolutionSafetyPolicy safety;
     safety.minimum_confidence = 0.75;
     safety.require_isolation = false; // This suite exercises orchestration with simulated evaluators.
+    safety.allow_simulated_evidence = true;
     EvolutionController controller(model, history, safety);
     EvolutionOrchestrator orchestrator({}, EvolutionTrialConfig{4, 4, 0.01, 0.75, false});
     const auto now = std::chrono::steady_clock::now();
