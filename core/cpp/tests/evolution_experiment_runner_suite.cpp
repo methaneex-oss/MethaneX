@@ -38,7 +38,9 @@ int main(int argc, char** argv) {
     const auto temp = std::filesystem::temp_directory_path();
     baseline_artifact_path = (temp / "jarvis_runner_baseline_artifact.txt").string();
     candidate_artifact_path = (temp / "jarvis_runner_candidate_artifact.txt").string();
-    { std::ofstream out(baseline_artifact_path); out << "0.70"; }\n    { std::ofstream out(candidate_artifact_path); out << "0.80"; }\n    EvolutionSandbox sandbox;
+    { std::ofstream out(baseline_artifact_path); out << "0.70"; }
+    { std::ofstream out(candidate_artifact_path); out << "0.80"; }
+    EvolutionSandbox sandbox;
 
     {
         auto experiment = make_experiment();
