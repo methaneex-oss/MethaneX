@@ -1,6 +1,8 @@
 name: JARVIS Learning Mechanisms Probe
 
 on:
+  # Validate probe changes through one PR run. Avoid duplicate push + PR trials;
+  # workflow_dispatch remains available for deliberately selected brain refs.
   pull_request:
     branches: [main]
     paths:
@@ -29,13 +31,13 @@ permissions:
 
 concurrency:
   group: jarvis-learning-mechanisms-${{ github.event.pull_request.number || inputs.source_ref || github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   learning-mechanisms:
     name: Explicit learning mechanism gates + integrated trial
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 300
     env:
       SOURCE_REF: ${{ inputs.source_ref || 'feat/jarvis-affective-state' }}
       TRIAL_MINUTES: ${{ inputs.duration_minutes || '10' }}
@@ -54,8 +56,8 @@ jobs:
             echo "TRIAL_MINUTES must be 10, 15, 20, or 30"
             exit 64
           fi
-          if ! [[ "$TRIAL_SEED" =~ ^[0-9]+$ ]]; then
-            echo "TRIAL_SEED must be a non-negative integer"
+          if ! [[ "$TRIAL_SEED" =~ ^[0-9]+$ ]] || (( TRIAL_SEED > 9223372036854775805 )); then
+            echo "TRIAL_SEED must be an integer from 0 through 9223372036854775805 so two additional seeds can be derived safely"
             exit 64
           fi
           mkdir -p learning-probe-results
@@ -158,6 +160,598 @@ jobs:
             exit 1
           }
           echo "integrated_trial=PASS duration_seconds=$duration_seconds six_phases=PASS resolved_prediction_evidence=PASS" | tee learning-probe-results/integrated-trial-summary.txt
+
+      - name: Repeat integrated trial with two additional seeds
+        shell: bash
+        run: |
+          set -euo pipefail
+          executable="$(find build -type f -name jarvis_dlt_002_long_run -executable -print -quit)"
+          test -n "$executable"
+          duration_seconds=$((TRIAL_MINUTES * 60))
+          mkdir -p learning-probe-results/integrated-trials
+          for offset in 1 2; do
+            seed=$((TRIAL_SEED + offset))
+            trial_dir="learning-probe-results/integrated-trials/seed-$seed"
+            "$executable" "$duration_seconds" 30 "$trial_dir" "$seed" 2>&1 | tee "learning-probe-results/integrated-trial-seed-$seed-console.log"
+            grep -q 'status=COMPLETED' "$trial_dir/trial.log"
+            for phase in clear-baseline flooded tunnel clear-reversal generalization-probe flooded-reversal; do
+              grep -q "$phase" "$trial_dir/episodes.csv" || {
+                echo "Seed $seed missing expected phase: $phase"
+                exit 1
+              }
+            done
+            awk -F, 'NR > 1 && $16 + 0 > 0 { found=1 } END { exit !found }' "$trial_dir/checkpoints.csv" || {
+              echo "Seed $seed has no resolved prediction evidence"
+              exit 1
+            }
+            # Validate every repeated seed, not just the primary run. This
+            # prevents a truncated or malformed seed from silently lowering
+            # the reported mean or being counted as a successful replicate.
+            python3 - "$trial_dir" <<'PY'
+          import csv
+          import math
+          import re
+          import sys
+          from pathlib import Path
+
+          trial = Path(sys.argv[1])
+          phases = (
+              "clear-baseline", "flooded", "tunnel",
+              "clear-reversal", "generalization-probe", "flooded-reversal",
+          )
+          required_columns = {
+              "phase", "optimal_action_selected",
+              "generalization_initial_window_episode",
+              "generalization_initial_window_optimal",
+              "predicted_consequence_evaluation_only",
+              "actual_consequence_evaluation_only",
+              "brain_received_consequence_feedback",
+          }
+          with (trial / "episodes.csv").open(newline="", encoding="utf-8") as handle:
+              reader = csv.DictReader(handle)
+              missing_columns = required_columns - set(reader.fieldnames or ())
+              if missing_columns:
+                  raise SystemExit("Missing episode columns: " + ", ".join(sorted(missing_columns)))
+              episodes = list(reader)
+          if not episodes:
+              raise SystemExit("Episode CSV is empty")
+          for phase in phases:
+              rows = [row for row in episodes if row["phase"] == phase]
+              if len(rows) < 5:
+                  raise SystemExit(f"{phase} has {len(rows)} episodes; minimum is 5")
+              if any(row["optimal_action_selected"] not in ("0", "1") for row in rows):
+                  raise SystemExit(f"{phase} contains invalid evaluation outcomes")
+              for row in rows:
+                  if row["brain_received_consequence_feedback"] != "1":
+                      raise SystemExit(f"{phase} contains an episode without expected consequence feedback")
+                  predicted = float(row["predicted_consequence_evaluation_only"])
+                  actual = float(row["actual_consequence_evaluation_only"])
+                  if not math.isfinite(predicted) or not math.isfinite(actual):
+                      raise SystemExit(f"{phase} contains non-finite consequence evidence")
+          early = [
+              row for row in episodes
+              if row["phase"] == "generalization-probe"
+              and row["generalization_initial_window_episode"]
+          ]
+          early.sort(key=lambda row: int(row["generalization_initial_window_episode"]))
+          if len(early) < 10 or [int(row["generalization_initial_window_episode"]) for row in early[:10]] != list(range(1, 11)):
+              raise SystemExit("The first ten generalization decisions are missing or non-contiguous")
+          if any(row["generalization_initial_window_optimal"] not in ("0", "1") for row in early[:10]):
+              raise SystemExit("The initial generalization window has invalid labels")
+
+          terminal = [
+              line for line in (trial / "trial.log").read_text(encoding="utf-8").splitlines()
+              if "status=COMPLETED" in line
+          ]
+          if len(terminal) != 1:
+              raise SystemExit(f"Expected one terminal completion record, found {len(terminal)}")
+          values = dict(re.findall(r"([A-Za-z_]+)=([^ ]+)", terminal[0]))
+          required_values = {
+              "prediction_memories", "resolved_predictions",
+              "unresolved_action_consequence_predictions",
+              "unresolved_other_predictions", "mean_absolute_prediction_error",
+          }
+          missing_values = required_values - values.keys()
+          if missing_values:
+              raise SystemExit("Terminal summary missing: " + ", ".join(sorted(missing_values)))
+          predictions = int(values["prediction_memories"])
+          resolved = int(values["resolved_predictions"])
+          unresolved_actions = int(values["unresolved_action_consequence_predictions"])
+          unresolved_other = int(values["unresolved_other_predictions"])
+          mae = float(values["mean_absolute_prediction_error"])
+          if predictions <= 0 or resolved <= 0 or resolved > predictions:
+              raise SystemExit(f"Invalid prediction lifecycle counts: predictions={predictions}, resolved={resolved}")
+          if unresolved_actions != 0:
+              raise SystemExit(f"{unresolved_actions} observed action-consequence forecasts remained unresolved")
+          if resolved + unresolved_actions + unresolved_other != predictions:
+              raise SystemExit(
+                  "Prediction lifecycle counts do not reconcile: "
+                  f"predictions={predictions}, resolved={resolved}, "
+                  f"unresolved_action_consequences={unresolved_actions}, "
+                  f"unresolved_other={unresolved_other}"
+              )
+          if unresolved_other < 0 or not math.isfinite(mae) or mae < 0:
+              raise SystemExit("Invalid unresolved-prediction count or prediction error")
+          print(
+              f"validated_seed={trial.name} episodes={len(episodes)} "
+              f"predictions={predictions} resolved={resolved} "
+              f"unresolved_action_consequences={unresolved_actions} mae={mae:.6f}"
+          )
+          PY
+            echo "integrated_trial=PASS seed=$seed duration_seconds=$duration_seconds"
+          done
+
+      - name: Run matched outcome-feedback-disabled control
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          executable="$(find build -type f -name jarvis_dlt_002_long_run -executable -print -quit)"
+          test -n "$executable"
+          duration_seconds=$((TRIAL_MINUTES * 60))
+          control_dir="learning-probe-results/no-feedback-control"
+          "$executable" "$duration_seconds" 30 "$control_dir" "$TRIAL_SEED" no-feedback 2>&1 | tee learning-probe-results/no-feedback-control-console.log
+          grep -q 'status=COMPLETED' "$control_dir/trial.log"
+          grep -q 'feedback_mode=no-feedback' "$control_dir/trial.log"
+          python3 - "$control_dir" <<'PY'
+          import csv
+          import math
+          import re
+          import sys
+          from pathlib import Path
+
+          trial = Path(sys.argv[1])
+          phases = (
+              "clear-baseline", "flooded", "tunnel",
+              "clear-reversal", "generalization-probe", "flooded-reversal",
+          )
+          with (trial / "episodes.csv").open(newline="", encoding="utf-8") as handle:
+              reader = csv.DictReader(handle)
+              required = {
+                  "phase", "optimal_action_selected",
+                  "generalization_initial_window_episode",
+                  "generalization_initial_window_optimal",
+                  "predicted_consequence_evaluation_only",
+                  "actual_consequence_evaluation_only",
+                  "brain_received_consequence_feedback",
+              }
+              missing = required - set(reader.fieldnames or ())
+              if missing:
+                  raise SystemExit("Missing control episode columns: " + ", ".join(sorted(missing)))
+              episodes = list(reader)
+          if not episodes:
+              raise SystemExit("No-feedback control episode CSV is empty")
+          for phase in phases:
+              rows = [row for row in episodes if row["phase"] == phase]
+              if len(rows) < 5:
+                  raise SystemExit(f"No-feedback {phase} has only {len(rows)} episodes")
+              if any(row["optimal_action_selected"] not in ("0", "1") for row in rows):
+                  raise SystemExit(f"No-feedback {phase} has invalid evaluation labels")
+              for row in rows:
+                  if row["brain_received_consequence_feedback"] != "0":
+                      raise SystemExit(f"No-feedback {phase} leaked consequence feedback to Brain")
+                  predicted = float(row["predicted_consequence_evaluation_only"])
+                  actual = float(row["actual_consequence_evaluation_only"])
+                  if not math.isfinite(predicted) or not math.isfinite(actual):
+                      raise SystemExit(f"No-feedback {phase} has non-finite forecast evidence")
+          early = [
+              row for row in episodes
+              if row["phase"] == "generalization-probe"
+              and row["generalization_initial_window_episode"]
+          ]
+          early.sort(key=lambda row: int(row["generalization_initial_window_episode"]))
+          if len(early) < 10 or [int(row["generalization_initial_window_episode"]) for row in early[:10]] != list(range(1, 11)):
+              raise SystemExit("No-feedback control is missing the first ten generalization decisions")
+          terminal = [
+              line for line in (trial / "trial.log").read_text(encoding="utf-8").splitlines()
+              if "status=COMPLETED" in line
+          ]
+          if len(terminal) != 1:
+              raise SystemExit(f"Expected one completed control summary, found {len(terminal)}")
+          values = dict(re.findall(r"([A-Za-z_]+)=([^ ]+)", terminal[0]))
+          if values.get("feedback_mode") != "no-feedback":
+              raise SystemExit("Control terminal summary does not identify no-feedback mode")
+          if int(values.get("unresolved_action_consequence_predictions", "0")) <= 0:
+              raise SystemExit("Control did not demonstrate withheld consequence feedback")
+          accuracy = sum(row["optimal_action_selected"] == "1" for row in episodes) / len(episodes)
+          print(f"no_feedback_control=PASS episodes={len(episodes)} optimal_action_accuracy={accuracy:.4f}")
+          PY
+
+      - name: Compare phase performance across all three seeds
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import csv
+          import math
+          from pathlib import Path
+
+          root = Path("learning-probe-results")
+          trials = [("primary", root / "integrated-trial")]
+          trials.extend(
+              (path.name, path)
+              for path in sorted((root / "integrated-trials").glob("seed-*"))
+          )
+          phases = ["clear-baseline", "flooded", "tunnel", "clear-reversal",
+                    "generalization-probe", "flooded-reversal"]
+
+          def forecast_mae(rows):
+              errors = []
+              for row in rows:
+                  predicted = float(row["predicted_consequence_evaluation_only"])
+                  actual = float(row["actual_consequence_evaluation_only"])
+                  if not math.isfinite(predicted) or not math.isfinite(actual):
+                      raise SystemExit("Non-finite forecast or environment outcome in comparison data")
+                  errors.append(abs(actual - predicted) / max(1.0, abs(predicted), abs(actual)))
+              if not errors:
+                  raise SystemExit("No forecast rows available for MAE comparison")
+              return sum(errors) / len(errors)
+
+          def forecast_calibration(rows):
+              # Outcomes are intentionally noisy (20% flips). Per-episode MAE
+              # penalizes a valid expected-value forecast for stochastic outcomes,
+              # so also compare aggregate forecast means with realized outcome means.
+              if not rows:
+                  raise SystemExit("No forecast rows available for calibration")
+              predicted = [float(row["predicted_consequence_evaluation_only"]) for row in rows]
+              actual = [float(row["actual_consequence_evaluation_only"]) for row in rows]
+              if not all(math.isfinite(value) for value in predicted + actual):
+                  raise SystemExit("Non-finite forecast or environment outcome in calibration data")
+              predicted_mean = sum(predicted) / len(predicted)
+              actual_mean = sum(actual) / len(actual)
+              return predicted_mean, actual_mean, abs(predicted_mean - actual_mean)
+
+          lines = ["## Three-seed DLT-002 comparison", "",
+                   "Decision accuracy is measured against evaluation-only labels; it is not proof of general intelligence.", ""]
+          scores = {phase: [] for phase in phases}
+          for label, trial in trials:
+              with (trial / "episodes.csv").open(newline="", encoding="utf-8") as handle:
+                  episodes = list(csv.DictReader(handle))
+              lines.append(f"### {label}")
+              for phase in phases:
+                  rows = [row for row in episodes if row["phase"] == phase]
+                  correct = sum(row["optimal_action_selected"] == "1" for row in rows)
+                  score = correct / len(rows) if rows else 0.0
+                  lines.append(f"- {phase}: {correct}/{len(rows)} ({score:.1%})")
+                  if rows:
+                      scores[phase].append(score)
+              early = sorted(
+                  (row for row in episodes if row["phase"] == "generalization-probe"
+                   and row["generalization_initial_window_episode"]),
+                  key=lambda row: int(row["generalization_initial_window_episode"]),
+              )
+              if len(early) >= 10:
+                  correct = sum(row["generalization_initial_window_optimal"] == "1" for row in early[:10])
+                  lines.append(f"- First ten unseen-context decisions: {correct}/10 ({correct / 10:.1%})")
+              lines.append("")
+          lines.extend(["### Mean phase accuracy across seeds", ""])
+          for phase in phases:
+              values = scores[phase]
+              if values:
+                  lines.append(f"- {phase}: {sum(values) / len(values):.1%} across {len(values)} trials")
+
+          lines.extend(["", "### Mean phase forecast MAE across feedback-enabled seeds", ""])
+          for phase in phases:
+              values = []
+              for _, trial in trials:
+                  with (trial / "episodes.csv").open(newline="", encoding="utf-8") as handle:
+                      rows = [row for row in csv.DictReader(handle) if row["phase"] == phase]
+                  if rows:
+                      values.append(forecast_mae(rows))
+              if values:
+                  lines.append(f"- {phase}: {sum(values) / len(values):.4f} across {len(values)} trials")
+
+          lines.extend(["", "### Aggregate forecast calibration (less sensitive to outcome noise)", "",
+                        "Per-episode MAE is retained above, but a noisy realized outcome is not the same as a wrong expected-value forecast. Aggregate calibration compares mean forecast with mean realized consequence; smaller gaps indicate better calibration over the phase."])
+          for phase in phases:
+              values = []
+              for _, trial in trials:
+                  with (trial / "episodes.csv").open(newline="", encoding="utf-8") as handle:
+                      rows = [row for row in csv.DictReader(handle) if row["phase"] == phase]
+                  if rows:
+                      values.append(forecast_calibration(rows))
+              if values:
+                  predicted_mean = sum(value[0] for value in values) / len(values)
+                  actual_mean = sum(value[1] for value in values) / len(values)
+                  gap = sum(value[2] for value in values) / len(values)
+                  lines.append(
+                      f"- {phase}: mean forecast={predicted_mean:.3f}, "
+                      f"mean realized consequence={actual_mean:.3f}, "
+                      f"absolute calibration gap={gap:.3f} across {len(values)} trials"
+                  )
+
+          # Same seed and duration as the primary run, but the brain receives no
+          # action-consequence values. This isolates consequence-feedback learning
+          # more directly than a fixed-route reference, without claiming that all
+          # other learning mechanisms have been disabled.
+          control = root / "no-feedback-control"
+          with (trials[0][1] / "episodes.csv").open(newline="", encoding="utf-8") as handle:
+              primary_rows = list(csv.DictReader(handle))
+          with (control / "episodes.csv").open(newline="", encoding="utf-8") as handle:
+              control_rows = list(csv.DictReader(handle))
+          if not primary_rows or not control_rows:
+              raise SystemExit("Primary or no-feedback control episode data is empty")
+          primary_accuracy = sum(row["optimal_action_selected"] == "1" for row in primary_rows) / len(primary_rows)
+          control_accuracy = sum(row["optimal_action_selected"] == "1" for row in control_rows) / len(control_rows)
+          primary_mae = forecast_mae(primary_rows)
+          control_mae = forecast_mae(control_rows)
+          lines.extend([
+              "", "### Same-seed outcome-feedback control", "",
+              f"- Feedback enabled: {sum(row['optimal_action_selected'] == '1' for row in primary_rows)}/{len(primary_rows)} ({primary_accuracy:.1%})",
+              f"- Consequence feedback withheld: {sum(row['optimal_action_selected'] == '1' for row in control_rows)}/{len(control_rows)} ({control_accuracy:.1%})",
+              f"- Difference: {(primary_accuracy - control_accuracy) * 100:+.1f} percentage points",
+              f"- Feedback-enabled forecast MAE: {primary_mae:.4f}",
+              f"- Feedback-withheld forecast MAE (evaluation-only): {control_mae:.4f}",
+              "",
+              "The control uses the same seed, randomized latent action mapping, task, and duration. It still receives observations and can update execution-reliability/self-model mechanisms; it is specifically an outcome-feedback-disabled control, not a fully learning-disabled brain. Control forecast errors are calculated after the run from evaluation-only outcomes and are never returned to the brain.",
+              "",
+              "| Phase | Enabled accuracy | Withheld accuracy | Enabled forecast MAE | Withheld forecast MAE |",
+              "| --- | ---: | ---: | ---: | ---: |",
+          ])
+          for phase in phases:
+              primary_phase = [row for row in primary_rows if row["phase"] == phase]
+              control_phase = [row for row in control_rows if row["phase"] == phase]
+              if not primary_phase or not control_phase:
+                  raise SystemExit(f"Missing matched control phase: {phase}")
+              primary_score = sum(row["optimal_action_selected"] == "1" for row in primary_phase) / len(primary_phase)
+              control_score = sum(row["optimal_action_selected"] == "1" for row in control_phase) / len(control_phase)
+              primary_phase_mae = forecast_mae(primary_phase)
+              control_phase_mae = forecast_mae(control_phase)
+              lines.append(
+                  f"| {phase} | {primary_score:.1%} ({len(primary_phase)}) | "
+                  f"{control_score:.1%} ({len(control_phase)}) | "
+                  f"{primary_phase_mae:.4f} | {control_phase_mae:.4f} |"
+              )
+
+          lines.extend(["", "### Fixed-action reference baselines", "",
+                        "These are evaluation-only comparisons using the same recorded episode labels, not additional brain runs. They measure whether adaptation beats a policy that always chooses one route."])
+          for action in ("route-one", "route-two"):
+              per_seed = []
+              for _, trial in trials:
+                  with (trial / "episodes.csv").open(newline="", encoding="utf-8") as handle:
+                      rows = list(csv.DictReader(handle))
+                  if rows:
+                      per_seed.append(sum(row["expected_action_evaluation_only"] == action for row in rows) / len(rows))
+              if per_seed:
+                  lines.append(f"- Always choose {action}: mean optimal-action rate {sum(per_seed) / len(per_seed):.1%} across {len(per_seed)} trials")
+          lines.extend(["", "Limit: fixed-action references are simple baselines. The matched control suppresses consequence feedback but not all learning mechanisms, so it supports a narrower claim about consequence-feedback contribution rather than a full learning-disabled causal estimate.", ""])
+          report = "\n".join(lines)
+          (root / "three-seed-comparison.txt").write_text(report, encoding="utf-8")
+          print(report)
+          with open(__import__("os").environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
+              summary.write(report + "\n")
+          if len(trials) != 3:
+              raise SystemExit(f"Expected 3 trials, found {len(trials)}")
+          PY
+
+      - name: Analyze integrated trial evidence
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import csv
+          import sys
+          from pathlib import Path
+
+          root = Path("learning-probe-results/integrated-trial")
+          phases = [
+              "clear-baseline", "flooded", "tunnel",
+              "clear-reversal", "generalization-probe", "flooded-reversal",
+          ]
+          errors = []
+          lines = [
+              "DLT-002 trial diagnostics",
+              "These are descriptive measurements, not proof of general-purpose learning.",
+              "",
+              "Phase decision accuracy (evaluation labels are used only by this analyzer):",
+          ]
+
+          with (root / "episodes.csv").open(newline="", encoding="utf-8") as handle:
+              episodes = list(csv.DictReader(handle))
+
+          for phase in phases:
+              phase_rows = [row for row in episodes if row["phase"] == phase]
+              correct = sum(row["optimal_action_selected"] == "1" for row in phase_rows)
+              accuracy = correct / len(phase_rows) if phase_rows else 0.0
+              lines.append(
+                  f"- {phase}: {correct}/{len(phase_rows)} optimal actions "
+                  f"({accuracy:.1%})"
+              )
+              if len(phase_rows) < 5:
+                  errors.append(f"{phase} has only {len(phase_rows)} episodes; minimum is 5")
+
+          # Measure adaptation latency after each reversal, not just final
+          # phase accuracy. Recovery is the first 10-episode window reaching
+          # at least 80% optimal actions; the window includes the outcome from
+          # its first episode onward, so this is a behavioral recovery measure.
+          recovery_window = 10
+          recovery_threshold = 0.80
+          for phase in ["clear-reversal", "flooded-reversal"]:
+              phase_rows = [row for row in episodes if row["phase"] == phase]
+              recovery = None
+              for start in range(max(0, len(phase_rows) - recovery_window + 1)):
+                  window = phase_rows[start:start + recovery_window]
+                  correct = sum(row["optimal_action_selected"] == "1" for row in window)
+                  accuracy = correct / recovery_window
+                  if accuracy >= recovery_threshold:
+                      recovery = (start + recovery_window, accuracy)
+                      break
+              if recovery is None:
+                  lines.append(
+                      f"- {phase} adaptation recovery: not reached; "
+                      f"no {recovery_window}-episode window met {recovery_threshold:.0%}"
+                  )
+              else:
+                  lines.append(
+                      f"- {phase} adaptation recovery: reached threshold by episode "
+                      f"{recovery[0]} of the phase ({recovery[0]} episodes observed; "
+                      f"window accuracy {recovery[1]:.0%})"
+                  )
+
+          # The environment-only consequence columns are for evaluation and are
+          # not passed into the brain. Aggregate calibration by phase is less
+          # sensitive to stochastic individual outcomes than raw per-episode MAE.
+          calibration_columns = {
+              "predicted_consequence_evaluation_only",
+              "actual_consequence_evaluation_only",
+              "brain_received_consequence_feedback",
+          }
+          if episodes and calibration_columns.issubset(episodes[0].keys()):
+              import math
+              import statistics
+              feedback_values = {row["brain_received_consequence_feedback"] for row in episodes}
+              if feedback_values != {"1"}:
+                  errors.append(
+                      "Feedback-enabled trial has unexpected feedback flags: "
+                      + ", ".join(sorted(feedback_values))
+                  )
+              lines.extend([
+                  "",
+                  "Prediction calibration by phase (evaluation-only outcomes):",
+                  "Forecast and realized means are compared at phase level; noisy individual outcomes can still differ from valid forecasts.",
+              ])
+              for phase in phases:
+                  rows = [row for row in episodes if row["phase"] == phase]
+                  try:
+                      predicted = [float(row["predicted_consequence_evaluation_only"]) for row in rows]
+                      actual = [float(row["actual_consequence_evaluation_only"]) for row in rows]
+                  except (KeyError, ValueError):
+                      errors.append(f"{phase} contains missing/non-numeric evaluation forecast data")
+                      continue
+                  if not rows or not all(math.isfinite(value) for value in predicted + actual):
+                      errors.append(f"{phase} has no valid finite evaluation forecast data")
+                      continue
+                  predicted_mean = statistics.fmean(predicted)
+                  actual_mean = statistics.fmean(actual)
+                  gap = abs(predicted_mean - actual_mean)
+                  mae = statistics.fmean(abs(p - a) for p, a in zip(predicted, actual))
+                  lines.append(
+                      f"- {phase}: n={len(rows)}, mean forecast={predicted_mean:.3f}, "
+                      f"mean realized={actual_mean:.3f}, aggregate calibration gap={gap:.3f}, "
+                      f"individual outcome MAE={mae:.3f}"
+                  )
+
+          probe_rows = [
+              row for row in episodes
+              if row["phase"] == "generalization-probe"
+              and row["generalization_probe_episode_index"]
+          ]
+          probe_rows.sort(key=lambda row: int(row["generalization_probe_episode_index"]))
+          if not probe_rows:
+              errors.append("No decisions were recorded in the unseen generalization context")
+              lines.append("- First unseen-context decision: unavailable")
+          else:
+              first = probe_rows[0]
+              first_correct = first["optimal_action_selected"] == "1"
+              lines.append(
+                  f"- First decision in unseen context (before any canyon outcome feedback): "
+                  f"{'optimal' if first_correct else 'not optimal'} "
+                  f"({'1/1' if first_correct else '0/1'}); this is the cleanest local zero-experience transfer observation"
+              )
+
+          initial_window_rows = [
+              row for row in episodes
+              if row["phase"] == "generalization-probe"
+              and row["generalization_initial_window_episode"]
+          ]
+          initial_window_rows.sort(
+              key=lambda row: int(row["generalization_initial_window_episode"])
+          )
+          if len(initial_window_rows) < 10:
+              errors.append(
+                  f"Only {len(initial_window_rows)} labeled early generalization episodes; expected 10"
+              )
+              lines.append(
+                  f"- Early generalization/adaptation window: {len(initial_window_rows)}/10 recorded; "
+                  "estimate unavailable"
+              )
+          else:
+              first_ten = initial_window_rows[:10]
+              early_correct = sum(
+                  row["generalization_initial_window_optimal"] == "1"
+                  for row in first_ten
+              )
+              lines.append(
+                  f"- First 10 decisions in unseen context: {early_correct}/10 optimal "
+                  f"({early_correct / 10:.1%}); this window includes feedback after earlier decisions, "
+                  "so it is an early adaptation measure, not a zero-shot transfer score"
+              )
+
+          # Checkpoints are periodic snapshots and can lag the actual trial end.
+          # Use the completed trial's terminal summary for final prediction counts.
+          completed_lines = [
+              line for line in (root / "trial.log").read_text(encoding="utf-8").splitlines()
+              if "status=COMPLETED" in line
+          ]
+          if len(completed_lines) != 1:
+              errors.append(
+                  f"Expected exactly one completed trial summary, found {len(completed_lines)}"
+              )
+          else:
+              import re
+              final_values = dict(re.findall(r"([A-Za-z_]+)=([^ ]+)", completed_lines[0]))
+              required = {
+                  "prediction_memories", "resolved_predictions",
+                  "unresolved_action_consequence_predictions",
+                  "unresolved_other_predictions",
+                  "mean_absolute_prediction_error",
+              }
+              missing = sorted(required - final_values.keys())
+              if missing:
+                  errors.append(
+                      "Completed trial summary is missing fields: " + ", ".join(missing)
+                  )
+              else:
+                  predictions = int(final_values["prediction_memories"])
+                  resolved = int(final_values["resolved_predictions"])
+                  unresolved = predictions - resolved
+                  if unresolved < 0:
+                      errors.append(
+                          f"Resolved prediction count ({resolved}) exceeds prediction count ({predictions})"
+                      )
+                  unresolved_actions = int(final_values["unresolved_action_consequence_predictions"])
+                  unresolved_other = int(final_values["unresolved_other_predictions"])
+                  lines.extend([
+                      "",
+                      "Prediction lifecycle diagnostics (terminal trial summary):",
+                      f"- prediction records: {predictions}",
+                      f"- resolved predictions: {resolved}",
+                      f"- unresolved estimate (records minus resolved): {max(0, unresolved)}",
+                      f"- unresolved fraction: {max(0, unresolved) / predictions:.1%}"
+                      if predictions else "- unresolved fraction: unavailable (zero prediction records)",
+                      f"- unresolved action-consequence forecasts: {unresolved_actions}",
+                      f"- unresolved other predictions: {unresolved_other}",
+                      f"- mean absolute prediction error: {final_values['mean_absolute_prediction_error']}",
+                      "",
+                      "Unresolved causal projections are reported separately; their lack of direct outcome feedback is not automatically a defect.",
+                  ])
+                  if unresolved_actions != 0:
+                      errors.append(
+                          f"{unresolved_actions} action-consequence forecasts remained unresolved"
+                      )
+
+          report = "\n".join(lines) + "\n"
+          (Path("learning-probe-results") / "trial-diagnostics.txt").write_text(
+              report, encoding="utf-8"
+          )
+          print(report)
+          import os
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
+              summary.write("## Integrated trial diagnostics\n\n")
+              summary.write(report)
+              if errors:
+                  summary.write("\n### Evidence integrity failures\n")
+                  summary.write("\n".join(f"- {error}" for error in errors))
+                  summary.write("\n")
+
+          if errors:
+              print("Evidence integrity checks failed:", file=sys.stderr)
+              for error in errors:
+                  print(f"- {error}", file=sys.stderr)
+              sys.exit(1)
+          PY
 
       - name: Summarize evidence
         if: always()
