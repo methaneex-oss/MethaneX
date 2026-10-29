@@ -8,13 +8,18 @@
 #include <filesystem>
 #include <algorithm>
 #include <iostream>
+#include <fstream>
 #include <string>
 
 using namespace jarvis::core;
 
 namespace {
 std::string evaluator_path;
+std::string baseline_artifact_path;
+std::string candidate_artifact_path;
 void attest_isolated(EvolutionExperiment& experiment) {
+    { std::ofstream out(baseline_artifact_path); out << "0.70"; }
+    { std::ofstream out(candidate_artifact_path); out << "0.80"; }
     ProcessIsolationLimits limits;
     limits.require_no_new_privileges = true;
     limits.require_network_syscall_block = true;
@@ -22,7 +27,7 @@ void attest_isolated(EvolutionExperiment& experiment) {
     IsolatedEvaluationProcedure procedure{
         IsolatedCommand{evaluator_path, {"--trusted-test-evaluator"}, ""},
         "brain-suite-local-evaluator-v1", "linear-fitness-v1",
-        evaluator_path, evaluator_path, detail::sha256_file(evaluator_path)};
+        baseline_artifact_path, candidate_artifact_path, detail::sha256_file(evaluator_path)};
     const auto outcome = EvolutionExperimentRunner::run_isolated_evaluation(
         experiment, backend, procedure, 4, 4, 0.5);
     assert(outcome == ExperimentOutcome::Improved);
@@ -32,8 +37,10 @@ void attest_isolated(EvolutionExperiment& experiment) {
 int main(int argc, char** argv) {
     if (argc > 1 && std::string(argv[1]) == "--trusted-test-evaluator") {
         if (argc != 14 || std::string(argv[2]) != "--jarvis-evaluate-v1") return 21;
-        const double value = std::stod(argv[6]);
-        const double fitness = 0.5 + 0.6 * value;
+        std::ifstream artifact(argv[9]);
+        std::string score_text;
+        if (!artifact || !(artifact >> score_text)) return 22;
+        const double fitness = std::stod(score_text);
         std::cout << "JARVIS_EVAL_V1\t" << argv[3] << "\t" << argv[4] << "\t"
                   << argv[5] << "\t" << argv[6] << "\t" << argv[7] << "\t"
                   << argv[8] << "\t" << argv[10] << "\t" << argv[11] << "\t"
@@ -41,6 +48,9 @@ int main(int argc, char** argv) {
         return 0;
     }
     evaluator_path = argv[0];
+    const auto temp = std::filesystem::temp_directory_path();
+    baseline_artifact_path = (temp / "jarvis_brain_baseline_artifact.txt").string();
+    candidate_artifact_path = (temp / "jarvis_brain_candidate_artifact.txt").string();
     const std::filesystem::path path = "evolution_brain_integration_test.bin";
     std::error_code ec;
     // A persisted legacy adoption event without experiment evidence must
@@ -182,6 +192,8 @@ int main(int argc, char** argv) {
     std::filesystem::remove(legacy_rollback_path, ec);
     std::filesystem::remove(legacy_rollback_path.string() + ".meta", ec);
 
+    std::filesystem::remove(baseline_artifact_path, ec);
+    std::filesystem::remove(candidate_artifact_path, ec);
     std::filesystem::remove(path, ec);
 
     {
