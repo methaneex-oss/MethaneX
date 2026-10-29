@@ -1,13 +1,31 @@
 #include "jarvis/core/evolution_experiment_coordinator.hpp"
+#include "jarvis/core/evolution_digest.hpp"
 
 #include <cassert>
+#include <filesystem>
+#include <fstream>
+#include <iostream>
+#include <string>
 
 using namespace jarvis::core;
 
-int main() {
+int main(int argc, char** argv) {
+    if (argc > 1 && std::string(argv[1]) == "--trusted-test-evaluator") {
+        if (argc != 14 || std::string(argv[2]) != "--jarvis-evaluate-v1") return 21;
+        std::ifstream artifact(argv[9]);
+        std::string score_text;
+        if (!artifact || !(artifact >> score_text)) return 22;
+        const double fitness = std::stod(score_text);
+        std::cout << "JARVIS_EVAL_V1\t" << argv[3] << "\t" << argv[4] << "\t"
+                  << argv[5] << "\t" << argv[6] << "\t" << argv[7] << "\t"
+                  << argv[8] << "\t" << argv[10] << "\t" << argv[11] << "\t"
+                  << argv[12] << "\t" << argv[13] << "\t" << fitness;
+        return 0;
+    }
+
     EvolutionExperiment experiment{
         "trial-batch",
-        EvolutionProposal{"planner.weight", 0.4, 0.5, 0.1, 0.9},
+        EvolutionProposal{"planner.weight", 0.4, 0.5, 0.1, 0.8},
         0.0, 0.0, 0.05, 0.0, ExperimentOutcome::Pending, false};
 
     EvolutionSandbox sandbox;
@@ -18,14 +36,58 @@ int main() {
         return SandboxResult{true, true, false, false, true, 0.80, {}};
     };
 
-    const auto batch = EvolutionExperimentCoordinator::run(
-        experiment, sandbox, baseline, candidate, EvolutionTrialConfig{4, 4, 0.05, 0.5, false});
+    // Callback simulations remain useful, but the default production policy
+    // must never accept them as isolated evaluation evidence.
+    const auto simulated_rejected = EvolutionExperimentCoordinator::run(
+        experiment, sandbox, baseline, candidate, EvolutionTrialConfig{});
+    assert(!simulated_rejected.executed);
+    assert(!experiment.has_valid_evaluation_evidence());
 
-    assert(batch.executed);
-    assert(batch.baseline.count == 4);
-    assert(batch.candidate.count == 4);
-    assert(experiment.candidate_executed);
+    // Explicit simulation mode still works for unit testing.
+    experiment = EvolutionExperiment{
+        "trial-batch-simulation",
+        EvolutionProposal{"planner.weight", 0.4, 0.5, 0.1, 0.8},
+        0.0, 0.0, 0.05, 0.0, ExperimentOutcome::Pending, false};
+    const auto simulated = EvolutionExperimentCoordinator::run(
+        experiment, sandbox, baseline, candidate, EvolutionTrialConfig{4, 4, 0.05, 0.5, false});
+    assert(simulated.executed);
+    assert(simulated.baseline.count == 4 && simulated.candidate.count == 4);
     assert(experiment.outcome == ExperimentOutcome::Improved);
-    assert(experiment.candidate_fitness > experiment.baseline_fitness);
+    assert(!experiment.has_valid_evaluation_evidence());
+
+    const auto temp = std::filesystem::temp_directory_path();
+    const auto baseline_path = (temp / "jarvis_coordinator_baseline_artifact.txt").string();
+    const auto candidate_path = (temp / "jarvis_coordinator_candidate_artifact.txt").string();
+    { std::ofstream out(baseline_path); out << "0.70"; }
+    { std::ofstream out(candidate_path); out << "0.80"; }
+
+    EvolutionExperiment production_experiment{
+        "trial-batch-isolated",
+        EvolutionProposal{"planner.weight", 0.4, 0.5, 0.1, 0.8},
+        0.0, 0.0, 0.05, 0.0, ExperimentOutcome::Pending, false};
+    ProcessIsolationLimits limits;
+    limits.require_no_new_privileges = true;
+    limits.require_network_syscall_block = true;
+    ProcessIsolationBackend backend(limits);
+    IsolatedEvaluationProcedure procedure{
+        IsolatedCommand{argv[0], {"--trusted-test-evaluator"}, ""},
+        "coordinator-suite-local-evaluator-v1", "artifact-score-v1",
+        baseline_path, candidate_path, detail::sha256_file(argv[0])};
+
+    // This uses the coordinator's default trial configuration (isolation on),
+    // and measures both artifact states through the same pinned local evaluator.
+    const auto isolated = EvolutionExperimentCoordinator::run_isolated(
+        production_experiment, backend, procedure, EvolutionTrialConfig{});
+    assert(isolated.executed);
+    assert(isolated.baseline.count == 4 && isolated.candidate.count == 4);
+    assert(isolated.outcome == ExperimentOutcome::Improved);
+    assert(production_experiment.has_valid_evaluation_evidence());
+    assert(production_experiment.has_valid_isolation_attestation());
+    assert(production_experiment.baseline_artifact_digest !=
+           production_experiment.candidate_artifact_digest);
+
+    std::error_code ec;
+    std::filesystem::remove(baseline_path, ec);
+    std::filesystem::remove(candidate_path, ec);
     return 0;
 }
