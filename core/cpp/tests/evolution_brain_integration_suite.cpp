@@ -15,6 +15,11 @@ using namespace jarvis::core;
 namespace {
 std::string evaluator_executable;
 void attest_isolated(EvolutionExperiment& experiment) {
+    if (!EvolutionExperimentRunner::register_trusted_evaluator(
+            "jarvis.test.fixture.v1", evaluator_executable)) {
+        experiment.outcome = ExperimentOutcome::Invalid;
+        return;
+    }
     ProcessIsolationLimits isolation_limits;
     isolation_limits.sandbox.timeout = std::chrono::milliseconds{5000};
     isolation_limits.max_cpu_seconds = 10;
