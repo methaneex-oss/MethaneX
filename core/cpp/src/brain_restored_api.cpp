@@ -299,7 +299,8 @@ bool Brain::record_evolution_evaluation(EvolutionExperiment& experiment) {
                  {"isolated", experiment.isolated},
                  {"evaluation_procedure_id", experiment.evaluation_procedure_id},
                  {"baseline_artifact_id", experiment.baseline_artifact_id},
-                 {"candidate_artifact_id", experiment.candidate_artifact_id}}};
+                 {"candidate_artifact_id", experiment.candidate_artifact_id},
+                 {"evaluation_command_identity", experiment.evaluation_command_identity}}};
     event.sequence = memory_.append(event);
     if (event.sequence == 0) return false;
     if (!evolution_controller_.record_evaluation_for_brain(experiment)) return false;
@@ -329,6 +330,7 @@ bool Brain::adopt_evolution_experiment(EvolutionExperiment& experiment) {
                  {"evaluation_procedure_id", experiment.evaluation_procedure_id},
                  {"baseline_artifact_id", experiment.baseline_artifact_id},
                  {"candidate_artifact_id", experiment.candidate_artifact_id},
+                 {"evaluation_command_identity", experiment.evaluation_command_identity},
                  {"experiment_id", experiment.id},
                  {"outcome", static_cast<std::int64_t>(experiment.outcome)},
                  {"baseline", experiment.baseline_fitness},
