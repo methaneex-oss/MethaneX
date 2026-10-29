@@ -155,5 +155,8 @@ int main(int argc, char** argv) {
         assert(!experiment.candidate_executed);
     }
 
+    std::error_code ec;
+    std::filesystem::remove(baseline_artifact_path, ec);
+    std::filesystem::remove(candidate_artifact_path, ec);
     return 0;
 }
