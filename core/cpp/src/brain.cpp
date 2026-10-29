@@ -515,8 +515,9 @@ void Brain::replay(const Event& event, bool external_observation) {
                 event.data.find("isolated") != event.data.end() &&
                 std::get_if<bool>(&event.data.at("isolated")) != nullptr &&
                 *std::get_if<bool>(&event.data.at("isolated"));
-            if (experiment.isolated && experiment.candidate_executed)
-                experiment.attest_isolated_result();
+            // A serialized "isolated" flag is descriptive data, not trusted
+            // proof that the candidate ran inside the process-isolation boundary.
+            // Replay must never manufacture an in-memory isolation attestation.
             evolution_controller_.replay_evaluation(experiment);
         }
         return;
