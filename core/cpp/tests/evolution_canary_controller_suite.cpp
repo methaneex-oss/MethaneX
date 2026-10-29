@@ -119,6 +119,27 @@ int main(int argc, char** argv) {
     assert(replay_history.for_experiment("exp-replay").size() == 1);
     assert(replay_controller.adoption_journal().get("exp-replay")->state == AdoptionState::RolledBack);
 
+    // Adversarial replay: a newly reconstructed value object can carry
+    // plausible, self-consistent fitness metadata but has no private
+    // process-local evaluator attestation. Replay must fail closed and must
+    // not mutate the registered parameter.
+    EvolutionModel forged_model;
+    assert(forged_model.register_parameter("forged.weight", 0.4));
+    EvolutionHistory forged_history;
+    EvolutionController forged_controller(forged_model, forged_history, policy);
+    EvolutionExperiment forged_experiment{
+        "forged-replay",
+        EvolutionProposal{"forged.weight", 0.4, 0.9, 0.5, 0.95},
+        0.10, 0.99, 0.01, 0.99, ExperimentOutcome::Improved, true, true};
+    // The public isolated bit and matching numeric metadata are forgeable;
+    // the object's private attestation snapshot is intentionally absent.
+    assert(!forged_experiment.has_valid_isolation_attestation());
+    assert(!forged_controller.replay_evaluation(forged_experiment));
+    assert(!forged_controller.validate_adoption_for_brain(forged_experiment));
+    const auto* unchanged = forged_model.parameter("forged.weight");
+    assert(unchanged != nullptr && unchanged->value == 0.4);
+    assert(forged_history.for_experiment("forged-replay").empty());
+
     const auto records = history.for_experiment("exp-canary");
     assert(records.size() >= 2);
     assert(records.back().action == EvolutionRecordAction::RolledBack);
