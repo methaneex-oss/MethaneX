@@ -47,6 +47,31 @@ int main(int argc, char** argv) {
     if (!EvolutionExperimentRunner::register_trusted_evaluator(
             "jarvis.test.parameter-fitness.v1", evaluator_executable,
             {"--test-evaluator-from-parameter"})) return 1;
+
+    // Relative registrations are pinned to the resolved executable identity.
+    const auto original_directory = std::filesystem::current_path();
+    const auto relative_executable = std::filesystem::relative(
+        evaluator_executable, original_directory);
+    assert(!relative_executable.empty());
+    const auto relative_fingerprint =
+        EvolutionExperimentRunner::executable_fingerprint(relative_executable.string());
+    assert(EvolutionExperimentRunner::register_trusted_evaluator(
+        "jarvis.test.relative.fixture.v1", relative_executable.string(),
+        {"--test-evaluator-from-parameter"}));
+    assert(EvolutionExperimentRunner::is_trusted_evaluator(
+        "jarvis.test.relative.fixture.v1", relative_executable.string(),
+        relative_fingerprint, {"--test-evaluator-from-parameter"}));
+    const auto alternate_directory = std::filesystem::temp_directory_path() /
+        ("jarvis-relative-evaluator-" + std::to_string(
+            static_cast<long long>(std::chrono::steady_clock::now().time_since_epoch().count())));
+    std::filesystem::create_directory(alternate_directory);
+    std::filesystem::current_path(alternate_directory);
+    assert(!EvolutionExperimentRunner::is_trusted_evaluator(
+        "jarvis.test.relative.fixture.v1", relative_executable.string(),
+        relative_fingerprint, {"--test-evaluator-from-parameter"}));
+    std::filesystem::current_path(original_directory);
+    std::filesystem::remove_all(alternate_directory);
+
     EvolutionSandbox sandbox;
 
     {
