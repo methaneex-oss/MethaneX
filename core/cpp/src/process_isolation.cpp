@@ -116,6 +116,28 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
     result.error = "process isolation backend unsupported on this platform";
     return result;
 #else
+    // Resolve path-containing executable names before the child changes its
+    // working directory, so "./evaluator" cannot silently select a different
+    // file after chdir.
+    std::string executable = command.executable;
+    if (command.executable.find('/') != std::string::npos) {
+        char* resolved = realpath(command.executable.c_str(), nullptr);
+        if (resolved == nullptr) {
+            result.error = std::string("cannot resolve executable: ") + std::strerror(errno);
+            return result;
+        }
+        executable.assign(resolved);
+        std::free(resolved);
+    }
+
+    // Build argv before fork: allocating in a multithreaded child is unsafe.
+    std::vector<char*> argv;
+    argv.reserve(command.arguments.size() + 2);
+    argv.push_back(const_cast<char*>(executable.c_str()));
+    for (const auto& argument : command.arguments)
+        argv.push_back(const_cast<char*>(argument.c_str()));
+    argv.push_back(nullptr);
+
     int pipe_fds[2] = {-1, -1};
     if (pipe(pipe_fds) != 0) {
         result.error = std::string("pipe failed: ") + std::strerror(errno);
@@ -135,6 +157,17 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
         (void)dup2(pipe_fds[1], STDOUT_FILENO);
         (void)dup2(pipe_fds[1], STDERR_FILENO);
         close(pipe_fds[1]);
+        // Do not leak caller-owned descriptors (including connected sockets)
+        // into the evaluator. stdout/stderr are the only intentional handles.
+#if defined(__linux__) && defined(SYS_close_range)
+        if (syscall(SYS_close_range, 3U, ~0U, 0U) != 0) {
+            const long max_fd = sysconf(_SC_OPEN_MAX);
+            for (int fd = 3; fd < (max_fd > 0 ? max_fd : 1024); ++fd) close(fd);
+        }
+#else
+        const long max_fd = sysconf(_SC_OPEN_MAX);
+        for (int fd = 3; fd < (max_fd > 0 ? max_fd : 1024); ++fd) close(fd);
+#endif
         (void)setpgid(0, 0);
 
 #if defined(__linux__)
@@ -171,12 +204,10 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
 
         if (!command.working_directory.empty() && chdir(command.working_directory.c_str()) != 0) _exit(126);
 
-        std::vector<char*> argv;
-        argv.reserve(command.arguments.size() + 2);
-        argv.push_back(const_cast<char*>(command.executable.c_str()));
-        for (const auto& argument : command.arguments) argv.push_back(const_cast<char*>(argument.c_str()));
-        argv.push_back(nullptr);
-        execvp(command.executable.c_str(), argv.data());
+        if (executable.find('/') != std::string::npos)
+            execv(executable.c_str(), argv.data());
+        else
+            execvp(executable.c_str(), argv.data());
         _exit(127);
     }
 
