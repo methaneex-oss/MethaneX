@@ -19,6 +19,9 @@ struct IsolatedEvaluationProcedure {
     std::string configuration_id;
     std::string baseline_artifact_path;
     std::string candidate_artifact_path;
+    // Supplied by trusted local configuration, not derived from evaluator output.
+    // The runner refuses to execute an evaluator whose bytes do not match it.
+    std::string expected_evaluator_digest;
 };
 
 class EvolutionExperimentRunner {
