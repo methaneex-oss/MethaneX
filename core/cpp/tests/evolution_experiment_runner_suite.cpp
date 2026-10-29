@@ -5,6 +5,8 @@
 #include <cassert>
 #include <cmath>
 #include <iostream>
+#include <filesystem>
+#include <fstream>
 #include <string>
 
 using namespace jarvis::core;
@@ -29,7 +31,7 @@ int main(int argc, char** argv) {
                   << argv[12] << "\t" << argv[13] << "\t" << fitness;
         return 0;
     }
-    EvolutionSandbox sandbox;
+    const auto temp = std::filesystem::temp_directory_path();\n    baseline_artifact_path = (temp / "jarvis_runner_baseline_artifact.txt").string();\n    candidate_artifact_path = (temp / "jarvis_runner_candidate_artifact.txt").string();\n    { std::ofstream out(baseline_artifact_path); out << "0.70"; }\n    { std::ofstream out(candidate_artifact_path); out << "0.80"; }\n    EvolutionSandbox sandbox;
 
     {
         auto experiment = make_experiment();
@@ -51,7 +53,7 @@ int main(int argc, char** argv) {
         IsolatedEvaluationProcedure procedure{
             IsolatedCommand{argv[0], {"--trusted-test-evaluator"}, ""},
             "runner-suite-local-evaluator-v1", "linear-fitness-v1",
-            argv[0], argv[0], detail::sha256_file(argv[0])};
+            baseline_artifact_path, candidate_artifact_path, detail::sha256_file(argv[0])};
         TrialStatistics baseline, candidate;
         const auto outcome = EvolutionExperimentRunner::run_isolated_evaluation(
             experiment, backend, procedure, 4, 4, 0.5, &baseline, &candidate);
