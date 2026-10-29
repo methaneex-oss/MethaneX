@@ -66,6 +66,7 @@ int main(int argc, char** argv) {
     EvolutionHistory history;
     EvolutionSafetyPolicy policy;
     policy.minimum_confidence = 0.8;
+    policy.trusted_evaluator_digest = detail::sha256_file(evaluator_path);
 
     EvolutionController controller(model, history, policy);
     EvolutionExperiment experiment{
