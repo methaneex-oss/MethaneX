@@ -12,6 +12,8 @@
 using namespace jarvis::core;
 
 namespace {
+std::string baseline_artifact_path;
+std::string candidate_artifact_path;
 EvolutionExperiment make_experiment() {
     return EvolutionExperiment{
         "runner-test", EvolutionProposal{"strategy.weight", 0.4, 0.5, 0.1, 0.8},
@@ -23,15 +25,20 @@ int main(int argc, char** argv) {
     assert(detail::sha256_hex("abc") == "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad");
     if (argc > 1 && std::string(argv[1]) == "--trusted-test-evaluator") {
         if (argc != 14 || std::string(argv[2]) != "--jarvis-evaluate-v1") return 21;
-        const double value = std::stod(argv[6]);
-        const double fitness = 0.5 + 0.6 * value;
+        std::ifstream artifact(argv[9]);
+        std::string score_text;
+        if (!artifact || !(artifact >> score_text)) return 22;
+        const double fitness = std::stod(score_text);
         std::cout << "JARVIS_EVAL_V1\t" << argv[3] << "\t" << argv[4] << "\t"
                   << argv[5] << "\t" << argv[6] << "\t" << argv[7] << "\t"
                   << argv[8] << "\t" << argv[10] << "\t" << argv[11] << "\t"
                   << argv[12] << "\t" << argv[13] << "\t" << fitness;
         return 0;
     }
-    const auto temp = std::filesystem::temp_directory_path();\n    baseline_artifact_path = (temp / "jarvis_runner_baseline_artifact.txt").string();\n    candidate_artifact_path = (temp / "jarvis_runner_candidate_artifact.txt").string();\n    { std::ofstream out(baseline_artifact_path); out << "0.70"; }\n    { std::ofstream out(candidate_artifact_path); out << "0.80"; }\n    EvolutionSandbox sandbox;
+    const auto temp = std::filesystem::temp_directory_path();
+    baseline_artifact_path = (temp / "jarvis_runner_baseline_artifact.txt").string();
+    candidate_artifact_path = (temp / "jarvis_runner_candidate_artifact.txt").string();
+    { std::ofstream out(baseline_artifact_path); out << "0.70"; }\n    { std::ofstream out(candidate_artifact_path); out << "0.80"; }\n    EvolutionSandbox sandbox;
 
     {
         auto experiment = make_experiment();
