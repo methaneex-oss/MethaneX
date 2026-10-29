@@ -1,6 +1,7 @@
 #include "jarvis/core/evolution_experiment_runner.hpp"
 
 #include <algorithm>
+#include <cstdint>
 #include <cmath>
 #include <fstream>
 #include <iomanip>
@@ -94,6 +95,31 @@ bool measure(const EvolutionExperiment& experiment, const ProcessIsolationBacken
 
 } // namespace
 
+bool EvolutionExperiment::has_valid_evaluation_evidence() const noexcept {
+    if (!isolated || !candidate_executed || id.empty() || proposal.key.empty() ||
+        evaluation_procedure_id.empty() || evaluation_config_id.empty() ||
+        baseline_artifact_digest.empty() || candidate_artifact_digest.empty() ||
+        evaluator_artifact_digest.empty() || baseline_trial_count < 2 ||
+        candidate_trial_count < 2 || evaluation_evidence_digest.empty() ||
+        !std::isfinite(baseline_fitness) || !std::isfinite(candidate_fitness) ||
+        !std::isfinite(minimum_improvement) || minimum_improvement < 0.0 ||
+        !std::isfinite(confidence) || confidence < 0.0 || confidence > 1.0 ||
+        !std::isfinite(proposal.current) || !std::isfinite(proposal.proposed) ||
+        !std::isfinite(proposal.expected_gain) || !std::isfinite(proposal.confidence))
+        return false;
+
+    const std::string evidence = id + "\n" + proposal.key + "\n" +
+        number(proposal.current) + "\n" + number(proposal.proposed) + "\n" +
+        number(proposal.expected_gain) + "\n" + number(proposal.confidence) + "\n" +
+        number(baseline_fitness) + "\n" + number(candidate_fitness) + "\n" +
+        number(minimum_improvement) + "\n" + number(confidence) + "\n" +
+        evaluation_procedure_id + "\n" + evaluation_config_id + "\n" +
+        baseline_artifact_digest + "\n" + candidate_artifact_digest + "\n" +
+        evaluator_artifact_digest + "\n" + std::to_string(baseline_trial_count) +
+        "\n" + std::to_string(candidate_trial_count);
+    return stable_hash(evidence) == evaluation_evidence_digest;
+}
+
 ExperimentOutcome EvolutionExperimentRunner::run(EvolutionExperiment& experiment,
                                                   const EvolutionSandbox& sandbox,
                                                   const CandidateExecutor& executor) noexcept {
@@ -174,7 +200,7 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_evaluation(
                      baseline_digest, evaluator_digest, fitness)) return experiment.outcome;
         baseline_values.push_back(fitness);
     }
-    for (std::size_t i = 0; i < trials; ++i) {
+    for (std::size_t i = 0; i < candidate_trials; ++i) {
         double fitness = 0.0;
         if (!measure(experiment, backend, procedure, "candidate",
                      experiment.proposal.proposed, procedure.candidate_artifact_path,
@@ -190,7 +216,12 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_evaluation(
 
     experiment.baseline_fitness = baseline.mean;
     experiment.candidate_fitness = candidate.mean;
-    experiment.minimum_improvement = std::max(0.0, experiment.minimum_improvement);
+    if (!std::isfinite(experiment.minimum_improvement) || experiment.minimum_improvement < 0.0) {
+        experiment.candidate_executed = false;
+        experiment.isolated = false;
+        experiment.outcome = ExperimentOutcome::Invalid;
+        return experiment.outcome;
+    }
     experiment.confidence = std::min(baseline.confidence, candidate.confidence);
     experiment.candidate_executed = true;
     experiment.isolated = true;
