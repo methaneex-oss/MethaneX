@@ -27,11 +27,13 @@ struct IsolatedEvaluationSpec {
 
 struct ProcessIsolationLimits {
     SandboxLimits sandbox;
-    // These features are opt-in because their availability depends on host privileges.
-    // A requested feature that cannot be enforced causes execution to fail closed.
+    // Requested controls must be enforced or execution fails closed. The default
+    // evaluator is a trusted local C++ procedure (candidate values are data, not
+    // executable artifacts); filesystem chroot isolation remains opt-in because
+    // it requires a prepared root filesystem and suitable host privileges.
     bool require_network_isolation{false};
     bool require_filesystem_isolation{false};
-    bool require_privilege_drop{false};
+    bool require_privilege_drop{true};
     bool require_no_new_privileges{true};
     bool require_network_syscall_block{true};
     std::size_t max_memory_bytes{256 * 1024 * 1024};
