@@ -37,6 +37,11 @@ public:
 
     // Production path: only identity-bound measurements from the local evaluator
     // can satisfy the default isolation policy. Callback simulation stays separate.
+    static EvolutionTrialBatch run(
+        EvolutionExperiment& experiment, const ProcessIsolationBackend& backend,
+        const IsolatedEvaluationProcedure& procedure,
+        EvolutionTrialConfig config = {}) noexcept;
+
     static EvolutionTrialBatch run_isolated(
         EvolutionExperiment& experiment, const ProcessIsolationBackend& backend,
         const IsolatedEvaluationProcedure& procedure,
