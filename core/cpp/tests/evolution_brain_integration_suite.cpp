@@ -58,6 +58,38 @@ int main(int argc, char** argv) {\n    if (argc > 1 && std::string(argv[1]) == "
     std::filesystem::remove(legacy_path, ec);
     std::filesystem::remove(legacy_path.string() + ".meta", ec);
 
+    // A versioned adoption event still cannot apply a proposal without a
+    // preceding valid evaluation record, even if it claims isolation and
+    // includes superficial provenance fields.
+    const std::filesystem::path forged_path = "evolution_forged_replay_test.bin";
+    std::filesystem::remove(forged_path, ec);
+    std::filesystem::remove(forged_path.string() + ".meta", ec);
+    {
+        Brain source(forged_path);
+        assert(source.register_evolution_parameter("forged.replay", 0.25));
+    }
+    {
+        Memory journal(256, forged_path);
+        Event forged_adoption{
+            0, 1, "test", "evolution_adopt",
+            {{"key", std::string("forged.replay")}, {"current", 0.25},
+             {"proposed", 0.95}, {"expected_gain", 0.70}, {"confidence", 0.99},
+             {"proposal_confidence", 0.99}, {"experiment_id", std::string("forged-no-evaluation")},
+             {"outcome", static_cast<std::int64_t>(ExperimentOutcome::Improved)},
+             {"baseline", 0.70}, {"candidate", 0.95}, {"minimum_improvement", 0.01},
+             {"isolated", true}, {"evaluation_procedure_id", std::string("local-test-procedure-v1")},
+             {"baseline_artifact_id", std::string("baseline:forged")},
+             {"candidate_artifact_id", std::string("candidate:forged")}}};
+        assert(journal.append(forged_adoption) != 0);
+    }
+    {
+        Brain restarted_forged(forged_path);
+        const auto* parameter = restarted_forged.evolution_parameter("forged.replay");
+        assert(parameter != nullptr && parameter->value == parameter->baseline);
+    }
+    std::filesystem::remove(forged_path, ec);
+    std::filesystem::remove(forged_path.string() + ".meta", ec);
+
     // An unversioned legacy rollback must not undo a newer adoption during
     // journal replay: it does not identify the experiment it belongs to.
     const std::filesystem::path legacy_rollback_path = "evolution_legacy_rollback_test.bin";
