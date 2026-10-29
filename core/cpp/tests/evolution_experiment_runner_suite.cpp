@@ -108,6 +108,25 @@ int main(int argc, char** argv) {
 
     {
         auto experiment = make_experiment();
+        experiment.candidate_fitness = 0.86;
+        ProcessIsolationLimits weak_limits;
+        weak_limits.require_no_new_privileges = false;
+        weak_limits.require_network_syscall_block = false;
+        weak_limits.sandbox.timeout = std::chrono::milliseconds{5000};
+        ProcessIsolationBackend weak_backend(weak_limits);
+        const IsolatedCommand command{
+            evaluator_executable,
+            {"--test-evaluator", "0.70", "0.86"},
+            "", "jarvis.test.fixture.v1",
+            EvolutionExperimentRunner::executable_fingerprint(evaluator_executable)};
+        const auto outcome = EvolutionExperimentRunner::run_isolated_command(
+            experiment, weak_backend, command);
+        assert(outcome == ExperimentOutcome::Invalid);
+        assert(!experiment.has_valid_isolation_attestation());
+    }
+
+    {
+        auto experiment = make_experiment();
         const auto outcome = EvolutionExperimentRunner::run(
             experiment, sandbox, [](const EvolutionProposal&, const SandboxLimits&) {
                 // This callback lies about isolation. The sandbox must not
