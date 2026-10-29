@@ -133,7 +133,7 @@ int main(int argc, char** argv) {
     assert(replay_controller.adoption_journal().get("exp-replay")->state == AdoptionState::Pending);
     assert(replay_model.adopt(replay_experiment.proposal));
     assert(replay_controller.replay_adoption(replay_experiment));
-    assert(replay_controller.replay_adoption(replay_experiment));
+    assert(!replay_controller.replay_adoption(replay_experiment));
     assert(replay_history.for_experiment("exp-replay").size() == 2);
     assert(replay_controller.adoption_journal().get("exp-replay")->state == AdoptionState::Adopted);
     assert(replay_model.rollback("replay.weight"));
