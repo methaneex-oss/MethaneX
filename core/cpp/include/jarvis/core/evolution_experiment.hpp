@@ -83,6 +83,25 @@ struct EvolutionExperiment {
     }
 
 private:
+    void clear_isolation_attestation() noexcept {
+        isolation_attested_ = false;
+        attested_id_.clear();
+        attested_key_.clear();
+        attested_procedure_id_.clear();
+        attested_evaluator_executable_fingerprint_.clear();
+        attested_baseline_artifact_id_.clear();
+        attested_candidate_artifact_id_.clear();
+        attested_current_ = 0.0;
+        attested_proposed_ = 0.0;
+        attested_expected_gain_ = 0.0;
+        attested_proposal_confidence_ = 0.0;
+        attested_baseline_ = 0.0;
+        attested_candidate_ = 0.0;
+        attested_minimum_ = 0.0;
+        attested_confidence_ = 0.0;
+        attested_outcome_ = ExperimentOutcome::Pending;
+    }
+
     bool has_provenance_fingerprint() const noexcept {
         const auto separator = std::string(1, '\x1f');
         return !evaluation_procedure_id.empty() && !evaluator_executable_fingerprint.empty() &&
