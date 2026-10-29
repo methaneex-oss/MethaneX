@@ -163,9 +163,8 @@ EvolutionOrchestrationResult EvolutionOrchestrator::run(
 EvolutionOrchestrationResult EvolutionOrchestrator::run_isolated(
     const EvolutionOpportunity& opportunity,
     const EvolutionCandidateGenerator& generator,
-    const EvolutionSandbox& sandbox,
-    const CandidateExecutor& baseline_executor,
-    const CandidateExecutor& candidate_executor,
+    const ProcessIsolationBackend& backend,
+    const IsolatedCommand& evaluator,
     const EvolutionHistory& history,
     std::chrono::steady_clock::time_point now,
     std::chrono::steady_clock::time_point last_run,
