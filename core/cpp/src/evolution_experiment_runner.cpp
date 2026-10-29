@@ -87,6 +87,10 @@ bool run_measurement(const EvolutionExperiment& experiment,
                      const std::string& role,
                      double parameter_value,
                      double& fitness) {
+    // Recheck before each measurement so baseline/candidate cannot silently
+    // use different evaluator binaries if the configured executable changes.
+    if (EvolutionExperimentRunner::executable_fingerprint(command.executable) !=
+        command.expected_executable_fingerprint) return false;
     IsolatedCommand invocation = command;
     const auto artifact = fingerprint(experiment.proposal.key + "\x1f" +
                                       std::to_string(parameter_value) + "\x1f" +
