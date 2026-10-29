@@ -12,8 +12,7 @@ std::string evaluator_executable;
 IsolatedCommand evaluator_command(const EvolutionExperiment& experiment) {
     return IsolatedCommand{
         evaluator_executable,
-        {"--test-evaluator", std::to_string(experiment.baseline_fitness),
-         std::to_string(experiment.candidate_fitness)},
+        {"--test-evaluator"},
         "", "jarvis.test.fixture.v1"};
 }
 }
