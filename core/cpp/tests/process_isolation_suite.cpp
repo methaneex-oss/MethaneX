@@ -5,6 +5,7 @@
 #include <filesystem>
 #include <fstream>
 #include <string>
+#include <cstdlib>
 
 #if defined(__unix__) || defined(__APPLE__)
 #include <fcntl.h>
@@ -40,6 +41,35 @@ int main() {
     assert(path_identity.completed && path_identity.output == "original\n");
     std::filesystem::remove(original_executable);
     std::filesystem::remove_all(alternate_directory);
+
+    // A relative PATH entry must also be resolved before chdir. Otherwise a
+    // same-named executable in the target directory could replace the trusted
+    // executable even when the command itself contains no slash.
+    const auto path_directory = std::filesystem::current_path() /
+                                (".jarvis-isolation-path-" + suffix);
+    const auto shadow_path_directory = std::filesystem::temp_directory_path() /
+                                       ("jarvis-isolation-path-shadow-" + suffix);
+    std::filesystem::create_directory(path_directory);
+    std::filesystem::create_directory(shadow_path_directory);
+    const auto path_executable = path_directory / executable_name;
+    {
+        std::ofstream trusted(path_executable);
+        trusted << "#!/bin/sh\\necho path-original\\n";
+        std::ofstream shadow(shadow_path_directory / executable_name);
+        shadow << "#!/bin/sh\\necho path-shadow\\n";
+    }
+    assert(::chmod(path_executable.c_str(), 0700) == 0);
+    assert(::chmod((shadow_path_directory / executable_name).c_str(), 0700) == 0);
+    const char* old_path_value = std::getenv("PATH");
+    const std::string old_path = old_path_value == nullptr ? "" : old_path_value;
+    assert(::setenv("PATH", path_directory.filename().c_str(), 1) == 0);
+    const auto path_lookup = backend.run(
+        {executable_name, {}, shadow_path_directory.string()});
+    if (old_path_value != nullptr) assert(::setenv("PATH", old_path.c_str(), 1) == 0);
+    else assert(::unsetenv("PATH") == 0);
+    assert(path_lookup.completed && path_lookup.output == "path-original\\n");
+    std::filesystem::remove_all(path_directory);
+    std::filesystem::remove_all(shadow_path_directory);
 
 #if defined(__linux__)
     // An unrelated descriptor opened by the parent must not reach the child.
