@@ -288,7 +288,8 @@ int main(int argc, char** argv) {
         EvolutionExperiment equal_fitness{
             "safety-equal-fitness", EvolutionProposal{"safety.equal-fitness", 0.2, 0.3, 0.1, 0.99},
             0.70, 0.70, 0.01, 0.99, ExperimentOutcome::Improved, true};
-        attest_isolated(equal_fitness);
+        // Keep the deliberately equal fitness values intact: this test opts
+        // into simulated evidence to isolate outcome validation from attestation.
         equal_fitness.outcome = ExperimentOutcome::Improved;
         EvolutionSafetyPolicy non_isolation_policy;
         non_isolation_policy.require_isolation = false;
@@ -301,7 +302,8 @@ int main(int argc, char** argv) {
         EvolutionExperiment subthreshold{
             "safety-subthreshold", EvolutionProposal{"safety.subthreshold", 0.2, 0.3, 0.1, 0.99},
             0.70, 0.74, 0.05, 0.99, ExperimentOutcome::Improved, true};
-        attest_isolated(subthreshold);
+        // As above, do not run the evaluator fixture, which replaces these
+        // intentionally sub-threshold measurements with measured values.
         subthreshold.outcome = ExperimentOutcome::Improved;
         assert(!EvolutionSafetyGate::approve(subthreshold, non_isolation_policy));
         assert(!brain.record_evolution_evaluation(subthreshold));
