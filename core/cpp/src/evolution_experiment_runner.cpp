@@ -108,12 +108,12 @@ bool run_measurement(const EvolutionExperiment& experiment,
         command.expected_executable_fingerprint) return false;
     IsolatedCommand invocation = command;
     const auto artifact = fingerprint(experiment.proposal.key + "\x1f" +
-                                      std::to_string(parameter_value) + "\x1f" +
+                                      EvolutionExperiment::format_parameter_value(parameter_value) + "\x1f" +
                                       command.evaluation_procedure_id);
     invocation.arguments.push_back("--jarvis-evaluation-v1");
     invocation.arguments.push_back("--experiment-id=" + experiment.id);
     invocation.arguments.push_back("--parameter-key=" + experiment.proposal.key);
-    invocation.arguments.push_back("--parameter-value=" + std::to_string(parameter_value));
+    invocation.arguments.push_back("--parameter-value=" + EvolutionExperiment::format_parameter_value(parameter_value));
     invocation.arguments.push_back("--role=" + role);
     invocation.arguments.push_back("--procedure-id=" + command.evaluation_procedure_id);
     invocation.arguments.push_back("--evaluator-fingerprint=" + command.expected_executable_fingerprint);
@@ -287,11 +287,11 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_command(
     experiment.evaluator_executable_fingerprint = command.expected_executable_fingerprint;
     experiment.baseline_artifact_id = fingerprint(
         experiment.proposal.key + "\x1f" +
-        std::to_string(experiment.proposal.current) + "\x1f" +
+        EvolutionExperiment::format_parameter_value(experiment.proposal.current) + "\x1f" +
         command.evaluation_procedure_id);
     experiment.candidate_artifact_id = fingerprint(
         experiment.proposal.key + "\x1f" +
-        std::to_string(experiment.proposal.proposed) + "\x1f" +
+        EvolutionExperiment::format_parameter_value(experiment.proposal.proposed) + "\x1f" +
         command.evaluation_procedure_id);
     experiment.candidate_executed = true;
     experiment.isolated = true;
