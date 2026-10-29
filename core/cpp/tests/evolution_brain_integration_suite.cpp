@@ -209,7 +209,7 @@ int main(int argc, char** argv) {
         assert(!proposals.empty());
 
         EvolutionExperiment experiment{
-            "brain-evolution-1", proposals.front(), 0.70, 0.90, 0.01, 0.95,
+            "brain-evolution-1", proposals.front(), 0.70, 0.90, 0.0, 1.0,
             ExperimentOutcome::Improved, true};
         attest_isolated(experiment);
         assert(brain.record_evolution_evaluation(experiment));
