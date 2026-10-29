@@ -204,10 +204,20 @@ int main(int argc, char** argv) {
         const auto proposals = brain.evolution_options();
         assert(!proposals.empty());
 
+        // Keep the generated proposal as evidence that learned observations
+        // enable evolution, then evaluate a controlled candidate on the same
+        // registered parameter. The fixture objective has its known optimum
+        // at 0.6, so 0.4 -> 0.5 is a measured improvement.
+        const auto generated = std::find_if(proposals.begin(), proposals.end(),
+            [](const EvolutionProposal& proposal) { return proposal.key == "planner.weight"; });
+        assert(generated != proposals.end());
         EvolutionExperiment experiment{
-            "brain-evolution-1", proposals.front(), 0.70, 0.90, 0.01, 0.95,
-            ExperimentOutcome::Improved, true};
+            "brain-evolution-1",
+            EvolutionProposal{"planner.weight", 0.4, 0.5, 0.1, generated->confidence},
+            0.70, 0.90, 0.01, 0.95, ExperimentOutcome::Improved, true};
         attest_isolated(experiment);
+        assert(experiment.outcome == ExperimentOutcome::Improved);
+        assert(experiment.has_valid_isolation_attestation());
         assert(brain.record_evolution_evaluation(experiment));
         const auto evaluated_history = brain.evolution_history();
         assert(evaluated_history.size() == 1);
