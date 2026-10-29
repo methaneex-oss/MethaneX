@@ -118,10 +118,10 @@ private:
         const auto separator = std::string(1, '\x1f');
         return !evaluation_procedure_id.empty() && !evaluator_executable_fingerprint.empty() &&
             baseline_artifact_id == artifact_fingerprint(
-                proposal.key + separator + std::to_string(proposal.current) +
+                proposal.key + separator + EvolutionExperiment::format_parameter_value(proposal.current) +
                 separator + evaluation_procedure_id) &&
             candidate_artifact_id == artifact_fingerprint(
-                proposal.key + separator + std::to_string(proposal.proposed) +
+                proposal.key + separator + EvolutionExperiment::format_parameter_value(proposal.proposed) +
                 separator + evaluation_procedure_id);
     }
 
