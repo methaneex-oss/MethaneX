@@ -228,7 +228,7 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_evaluation(
         std::to_string(static_cast<int>(experiment.outcome)) + "\n" + procedure.procedure_id + "\n" + procedure.configuration_id + "\n" +
         baseline_digest + "\n" + candidate_digest + "\n" + evaluator_digest + "\n" +
         std::to_string(baseline.count) + "\n" + std::to_string(candidate.count);
-    experiment.evaluation_evidence_digest = stable_hash(evidence);
+    experiment.evaluation_evidence_digest = detail::sha256_hex(evidence);
     experiment.attest_isolated_result();
     return experiment.outcome;
 }
