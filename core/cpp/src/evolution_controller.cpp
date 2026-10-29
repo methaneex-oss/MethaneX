@@ -22,8 +22,10 @@ bool EvolutionController::record_evaluation(const EvolutionExperiment& experimen
         experiment.confidence < 0.0 || experiment.confidence > 1.0 ||
         experiment.outcome == ExperimentOutcome::Pending ||
         experiment.outcome == ExperimentOutcome::Invalid ||
-        (!experiment.has_valid_isolation_attestation() ||
-         !experiment.has_valid_evaluation_evidence())) {
+        policy_.trusted_evaluator_digest.empty() ||
+        experiment.evaluator_artifact_digest != policy_.trusted_evaluator_digest ||
+        !experiment.has_valid_isolation_attestation() ||
+        !experiment.has_valid_evaluation_evidence()) {
         return false;
     }
     EvolutionExperiment verified = experiment;
@@ -86,8 +88,10 @@ bool EvolutionController::validate_evaluation_for_brain(
         experiment.confidence < 0.0 || experiment.confidence > 1.0 ||
         experiment.outcome == ExperimentOutcome::Pending ||
         experiment.outcome == ExperimentOutcome::Invalid ||
-        (!experiment.has_valid_isolation_attestation() ||
-         !experiment.has_valid_evaluation_evidence()) ||
+        policy_.trusted_evaluator_digest.empty() ||
+        experiment.evaluator_artifact_digest != policy_.trusted_evaluator_digest ||
+        !experiment.has_valid_isolation_attestation() ||
+        !experiment.has_valid_evaluation_evidence() ||
         adoption_journal_.get(experiment.id).has_value()) {
         return false;
     }
@@ -112,10 +116,11 @@ bool EvolutionController::record_evaluation_for_brain(
 bool EvolutionController::replay_evaluation(
     const EvolutionExperiment& experiment) noexcept {
     if (experiment.id.empty() || experiment.proposal.key.empty() ||
+        policy_.trusted_evaluator_digest.empty() ||
+        experiment.evaluator_artifact_digest != policy_.trusted_evaluator_digest ||
         !experiment.has_valid_evaluation_evidence()) return false;
     EvolutionExperiment recomputed = experiment;
     if (EvolutionExperimentEngine::evaluate(recomputed) != experiment.outcome) return false;
-    if (policy_.require_isolation && !experiment.has_valid_evaluation_evidence()) return false;
 
     const auto records = history_.for_experiment(experiment.id);
     bool evaluated = false;
