@@ -1,6 +1,7 @@
 #include "jarvis/core/evolution_experiment_runner.hpp"
 
 #include <cmath>
+#include <cstdint>
 #include <iomanip>
 #include <map>
 #include <sstream>
@@ -142,6 +143,15 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_command(
 
     experiment.baseline_fitness = baseline_fitness;
     experiment.candidate_fitness = candidate_fitness;
+    experiment.evaluation_procedure_id = command.evaluation_procedure_id;
+    experiment.baseline_artifact_id = fingerprint(
+        experiment.proposal.key + "\\x1f" +
+        std::to_string(experiment.proposal.current) + "\\x1f" +
+        command.evaluation_procedure_id);
+    experiment.candidate_artifact_id = fingerprint(
+        experiment.proposal.key + "\\x1f" +
+        std::to_string(experiment.proposal.proposed) + "\\x1f" +
+        command.evaluation_procedure_id);
     experiment.candidate_executed = true;
     experiment.isolated = true;
     experiment.outcome = EvolutionExperimentEngine::evaluate(experiment);
