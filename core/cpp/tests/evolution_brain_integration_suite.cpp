@@ -2,6 +2,7 @@
 #include "jarvis/core/evolution_safety.hpp"
 #include "jarvis/core/evolution_experiment_runner.hpp"
 #include "jarvis/core/evolution_experiment_coordinator.hpp"
+#include "jarvis/core/evolution_candidate_generator.hpp"
 #include "jarvis/core/evolution_digest.hpp"
 #include "jarvis/core/process_isolation.hpp"
 
@@ -264,9 +265,16 @@ int main(int argc, char** argv) {
     {
         Brain source(lifecycle_path);
         assert(source.register_evolution_parameter("coordinator.lifecycle", 0.3));
+        const EvolutionOpportunity opportunity{
+            "coordinator-lifecycle-opportunity", "test-evidence", 0.9, 0.9, 0.3, 0.4, 4, 1, 4};
+        EvolutionCandidateGenerator generator = [](const EvolutionOpportunity&) {
+            return std::vector<EvolutionProposal>{
+                EvolutionProposal{"coordinator.lifecycle", 0.3, 0.4, 0.1, 0.8}};
+        };
+        const auto generated = EvolutionCandidateValidator::validate(generator(opportunity));
+        assert(generated.size() == 1);
         EvolutionExperiment experiment{
-            "coordinator-lifecycle-1",
-            EvolutionProposal{"coordinator.lifecycle", 0.3, 0.4, 0.1, 0.8},
+            "coordinator-lifecycle-1", generated.front(),
             0.0, 0.0, 0.01, 0.0, ExperimentOutcome::Pending, false};
         ProcessIsolationLimits limits;
         limits.require_no_new_privileges = true;
