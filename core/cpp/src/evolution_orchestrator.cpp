@@ -32,11 +32,12 @@ EvolutionOrchestrationResult EvolutionOrchestrator::run(
     std::chrono::steady_clock::time_point now,
     std::chrono::steady_clock::time_point last_run,
     bool system_idle,
-    EvolutionController* controller) const noexcept {
+    EvolutionController* controller,
+    const IsolatedEvaluationSpec* isolated_spec) const noexcept {
     EvolutionOrchestrationResult result;
     result.schedule = scheduler_.evaluate(now, last_run, system_idle);
     if (!result.schedule.allowed || opportunity.id.empty() || !generator ||
-        !baseline_executor || !candidate_executor) {
+        (isolated_spec == nullptr && (!baseline_executor || !candidate_executor))) {
         return result;
     }
 
@@ -65,8 +66,21 @@ EvolutionOrchestrationResult EvolutionOrchestrator::run(
         EvolutionExperiment experiment;
         experiment.id = experiment_id(opportunity, *proposal_it, index);
         experiment.proposal = *proposal_it;
-        const auto batch = EvolutionExperimentCoordinator::run(
-            experiment, sandbox, baseline_executor, candidate_executor, trial_config_);
+        EvolutionTrialBatch batch;
+        if (isolated_spec != nullptr) {
+            IsolatedEvaluationSpec spec = *isolated_spec;
+            spec.baseline_value = proposal_it->current;
+            spec.candidate_value = proposal_it->proposed;
+            spec.baseline_artifact_id = "baseline:" + proposal_it->key + ":" +
+                                        std::to_string(proposal_it->current);
+            spec.candidate_artifact_id = "candidate:" + proposal_it->key + ":" +
+                                         std::to_string(proposal_it->proposed);
+            batch = EvolutionExperimentCoordinator::run_isolated(
+                experiment, ProcessIsolationBackend{}, spec, trial_config_);
+        } else {
+            batch = EvolutionExperimentCoordinator::run(
+                experiment, sandbox, baseline_executor, candidate_executor, trial_config_);
+        }
         if (batch.executed) experiment.candidate_executed = true;
 
         if (!batch.executed) {
