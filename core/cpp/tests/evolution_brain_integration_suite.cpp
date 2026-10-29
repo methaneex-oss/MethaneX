@@ -1,6 +1,7 @@
 #include "jarvis/core/brain.hpp"
 #include "jarvis/core/evolution_safety.hpp"
 #include "jarvis/core/evolution_experiment_runner.hpp"
+#include "jarvis/core/evolution_experiment_coordinator.hpp"
 #include "jarvis/core/evolution_digest.hpp"
 #include "jarvis/core/process_isolation.hpp"
 
@@ -192,6 +193,47 @@ int main(int argc, char** argv) {
     std::filesystem::remove(legacy_rollback_path, ec);
     std::filesystem::remove(legacy_rollback_path.string() + ".meta", ec);
 
+    // Full default-policy lifecycle through the isolated coordinator, durable
+    // evaluation/adoption events, and a fresh Brain reconstructed from journal.
+    const std::filesystem::path lifecycle_path = "evolution_isolated_lifecycle_test.bin";
+    std::filesystem::remove(lifecycle_path, ec);
+    std::filesystem::remove(lifecycle_path.string() + ".meta", ec);
+    { std::ofstream out(baseline_artifact_path); out << "0.70"; }
+    { std::ofstream out(candidate_artifact_path); out << "0.80"; }
+    {
+        Brain source(lifecycle_path);
+        assert(source.register_evolution_parameter("coordinator.lifecycle", 0.3));
+        EvolutionExperiment experiment{
+            "coordinator-lifecycle-1",
+            EvolutionProposal{"coordinator.lifecycle", 0.3, 0.4, 0.1, 0.8},
+            0.0, 0.0, 0.01, 0.0, ExperimentOutcome::Pending, false};
+        ProcessIsolationLimits limits;
+        limits.require_no_new_privileges = true;
+        limits.require_network_syscall_block = true;
+        ProcessIsolationBackend backend(limits);
+        IsolatedEvaluationProcedure procedure{
+            IsolatedCommand{evaluator_path, {"--trusted-test-evaluator"}, ""},
+            "brain-suite-local-evaluator-v1", "artifact-score-v1",
+            baseline_artifact_path, candidate_artifact_path, detail::sha256_file(evaluator_path)};
+        const auto batch = EvolutionExperimentCoordinator::run_isolated(
+            experiment, backend, procedure, EvolutionTrialConfig{});
+        assert(batch.executed && batch.outcome == ExperimentOutcome::Improved);
+        assert(experiment.has_valid_evaluation_evidence());
+        assert(source.record_evolution_evaluation(experiment));
+        assert(source.adopt_evolution_experiment(experiment));
+    }
+    {
+        Brain restored(lifecycle_path);
+        const auto* parameter = restored.evolution_parameter("coordinator.lifecycle");
+        assert(parameter != nullptr && std::abs(parameter->value - 0.4) < 1e-12);
+        const auto history = restored.evolution_history();
+        assert(std::any_of(history.begin(), history.end(), [](const auto& record) {
+            return record.experiment_id == "coordinator-lifecycle-1" &&
+                   record.action == EvolutionRecordAction::Adopted;
+        }));
+    }
+    std::filesystem::remove(lifecycle_path, ec);
+    std::filesystem::remove(lifecycle_path.string() + ".meta", ec);
     std::filesystem::remove(baseline_artifact_path, ec);
     std::filesystem::remove(candidate_artifact_path, ec);
     std::filesystem::remove(path, ec);
