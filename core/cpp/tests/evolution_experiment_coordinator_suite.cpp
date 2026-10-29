@@ -1,4 +1,5 @@
 #include "jarvis/core/evolution_experiment_coordinator.hpp"
+#include "jarvis/core/evolution_orchestrator.hpp"
 #include "jarvis/core/evolution_digest.hpp"
 
 #include <cassert>
@@ -86,6 +87,30 @@ int main(int argc, char** argv) {
     assert(production_experiment.has_valid_isolation_attestation());
     assert(production_experiment.baseline_artifact_digest !=
            production_experiment.candidate_artifact_digest);
+
+    // The orchestrator's production entry point must route generated candidates
+    // through the same isolated evaluator, then record, adopt, and canary the winner.
+    EvolutionModel model;
+    model.register_parameter("planner.weight", 0.4);
+    EvolutionHistory history;
+    EvolutionController controller(model, history);
+    EvolutionCandidateGenerator generator = [](const EvolutionOpportunity&) {
+        return std::vector<EvolutionProposal>{
+            EvolutionProposal{"planner.weight", 0.4, 0.5, 0.1, 0.8}};
+    };
+    const EvolutionOpportunity opportunity{
+        "local-evaluator-opportunity", "unit-test", 0.9, 0.9, 0.4, 0.5, 8, 1, 8};
+    const auto now = std::chrono::steady_clock::now();
+    EvolutionOrchestrator orchestrator;
+    const auto orchestrated = orchestrator.run_isolated(
+        opportunity, generator, backend, procedure, history,
+        now, now - std::chrono::seconds(10), true, &controller);
+    assert(orchestrated.experiments.size() == 1);
+    assert(orchestrated.experiments.front().has_valid_evaluation_evidence());
+    assert(orchestrated.experiments.front().outcome == ExperimentOutcome::Improved);
+    assert(orchestrated.adopted == 1);
+    const auto* adopted_parameter = model.parameter("planner.weight");
+    assert(adopted_parameter != nullptr && adopted_parameter->value == 0.5);
 
     std::error_code ec;
     std::filesystem::remove(baseline_path, ec);
