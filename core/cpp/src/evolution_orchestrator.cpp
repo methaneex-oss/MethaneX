@@ -36,7 +36,8 @@ EvolutionOrchestrationResult EvolutionOrchestrator::run(
     EvolutionOrchestrationResult result;
     result.schedule = scheduler_.evaluate(now, last_run, system_idle);
     if (!result.schedule.allowed || opportunity.id.empty() || !generator ||
-        !baseline_executor || !candidate_executor) {
+        (!trial_config_.require_isolation &&
+         (!baseline_executor || !candidate_executor))) {
         return result;
     }
 
