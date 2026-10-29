@@ -1,6 +1,8 @@
 #include "jarvis/core/evolution_experiment_runner.hpp"
 
 #include <cmath>
+#include <filesystem>
+#include <algorithm>
 #include <map>
 #include <sstream>
 #include <string>
@@ -14,6 +16,13 @@ std::string fingerprint(const std::string& value) {
 
 bool safe_field(const std::string& value) {
     return !value.empty() && value.find_first_of("\r\n") == std::string::npos;
+}
+
+bool is_interpreter(const std::string& executable) {
+    const auto name = std::filesystem::path(executable).filename().string();
+    return name == "sh" || name == "bash" || name == "dash" ||
+           name == "zsh" || name == "fish" || name == "cmd.exe" ||
+           name == "powershell" || name == "pwsh";
 }
 
 bool parse_measurement(const ProcessIsolationResult& result,
@@ -117,7 +126,8 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_command(
     experiment.isolated = false;
     experiment.outcome = ExperimentOutcome::Invalid;
     if (!safe_field(experiment.id) || !safe_field(experiment.proposal.key) ||
-        !safe_field(command.evaluation_procedure_id)) return experiment.outcome;
+        !safe_field(command.evaluation_procedure_id) || is_interpreter(command.executable))
+        return experiment.outcome;
 
     // The evaluator must measure both settings through the same named local
     // procedure. A command that merely prints a numeric fitness is not evidence.
