@@ -100,7 +100,9 @@ int main(int argc, char** argv) {
     EvolutionModel model;
     model.register_parameter("planner.weight", 0.4);
     EvolutionHistory history;
-    EvolutionController controller(model, history);
+    EvolutionSafetyPolicy controller_policy;
+    controller_policy.trusted_evaluator_digest = detail::sha256_file(evaluator_path);
+    EvolutionController controller(model, history, controller_policy);
     EvolutionCandidateGenerator generator = [](const EvolutionOpportunity&) {
         return std::vector<EvolutionProposal>{
             EvolutionProposal{"planner.weight", 0.4, 0.5, 0.1, 0.8}};
