@@ -54,33 +54,23 @@ int main() {
     assert(result.experiments.size() == 2);
     assert(result.experiments[0].candidate_executed);
     assert(result.experiments[1].candidate_executed);
-    assert(result.experiments[0].outcome == ExperimentOutcome::Improved);
-    assert(result.experiments[0].confidence >= 0.75);
-    assert(result.adopted == 1);
-    assert((result.lifecycle[0] == EvolutionLifecycleState::Retained) !=
-           (result.lifecycle[1] == EvolutionLifecycleState::Retained));
-    assert((result.lifecycle[0] == EvolutionLifecycleState::Superseded) !=
-           (result.lifecycle[1] == EvolutionLifecycleState::Superseded));
+    assert(!result.experiments[0].has_valid_evaluation_evidence());
+    assert(!result.experiments[1].has_valid_evaluation_evidence());
+    // Callback simulations are useful for ranking/trial tests, but cannot
+    // create a production evaluation record or authorize an adoption.
+    assert(result.adopted == 0);
+    assert(result.rejected == 2);
+    assert(result.lifecycle[0] == EvolutionLifecycleState::EvaluationRejected);
+    assert(result.lifecycle[1] == EvolutionLifecycleState::EvaluationRejected);
     const auto* fast = model.parameter("fast");
     const auto* slow = model.parameter("slow");
     assert(fast != nullptr && slow != nullptr);
-    assert((fast->value != fast->baseline) != (slow->value != slow->baseline));
-    assert((fast->value != fast->baseline) || (slow->value != slow->baseline));
-    const auto fast_adoption = controller.adoption_journal().get(result.experiments[0].id);
-    const auto slow_adoption = controller.adoption_journal().get(result.experiments[1].id);
-    const std::string adopted_key =
-        fast->value != fast->baseline ? "fast" : "slow";
-    const auto adopted_experiment = std::find_if(
-        result.experiments.begin(), result.experiments.end(),
-        [&](const EvolutionExperiment& experiment) {
-            return experiment.proposal.key == adopted_key;
-        });
-    assert(adopted_experiment != result.experiments.end());
-    const auto adopted_id = adopted_experiment->id;
-    const auto adopted_record = controller.adoption_journal().get(adopted_id);
-    assert(adopted_record.has_value() && adopted_record->state == AdoptionState::Adopted);
-    assert(history.for_experiment(adopted_id).size() == 2);
-    assert(fast_adoption.has_value() || slow_adoption.has_value());
+    assert(fast->value == fast->baseline);
+    assert(slow->value == slow->baseline);
+    assert(!controller.adoption_journal().get(result.experiments[0].id).has_value());
+    assert(!controller.adoption_journal().get(result.experiments[1].id).has_value());
+    assert(history.for_experiment(result.experiments[0].id).empty());
+    assert(history.for_experiment(result.experiments[1].id).empty());
 
     const auto blocked = orchestrator.run(
         opportunities.front(),
