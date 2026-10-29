@@ -128,12 +128,45 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
     result.error = "process isolation backend unsupported on this platform";
     return result;
 #else
-    // Prepare argv before fork. Allocating a std::vector in the child of a
-    // multithreaded process is not async-signal-safe and can deadlock under
-    // sanitizers if another thread held an allocator lock at fork time.
+    // Resolve the executable before fork/chdir. For a path containing '/',
+    // resolve that exact path; otherwise search PATH in the caller's context.
+    // Never let execvp search PATH after the child has changed directories.
+    std::string executable;
+    const auto resolve_path = [&](const std::string& candidate) -> std::string {
+        char* resolved = realpath(candidate.c_str(), nullptr);
+        if (resolved == nullptr) return {};
+        std::string canonical(resolved);
+        std::free(resolved);
+        if (access(canonical.c_str(), X_OK) != 0) return {};
+        return canonical;
+    };
+    if (command.executable.find('/') != std::string::npos) {
+        executable = resolve_path(command.executable);
+    } else {
+        const char* configured_path = std::getenv("PATH");
+        const std::string search_path = configured_path == nullptr
+            ? "/bin:/usr/bin" : configured_path;
+        std::size_t start = 0;
+        while (start <= search_path.size() && executable.empty()) {
+            const auto separator = search_path.find(':', start);
+            const auto end = separator == std::string::npos ? search_path.size() : separator;
+            const auto directory = search_path.substr(start, end - start);
+            const auto candidate = (directory.empty() ? std::string(".") : directory) +
+                                   "/" + command.executable;
+            executable = resolve_path(candidate);
+            if (separator == std::string::npos) break;
+            start = separator + 1;
+        }
+    }
+    if (executable.empty()) {
+        result.error = "cannot resolve executable in caller context";
+        return result;
+    }
+
+    // Prepare argv before fork; avoid allocation in a multithreaded child.
     std::vector<char*> argv;
     argv.reserve(command.arguments.size() + 2);
-    argv.push_back(const_cast<char*>(command.executable.c_str()));
+    argv.push_back(const_cast<char*>(executable.c_str()));
     for (const auto& argument : command.arguments)
         argv.push_back(const_cast<char*>(argument.c_str()));
     argv.push_back(nullptr);
@@ -157,6 +190,17 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
         (void)dup2(pipe_fds[1], STDOUT_FILENO);
         (void)dup2(pipe_fds[1], STDERR_FILENO);
         close(pipe_fds[1]);
+        // stdout/stderr are the only intentional inherited handles. In
+        // particular, do not leak connected sockets or privileged file handles.
+#if defined(__linux__) && defined(SYS_close_range)
+        if (syscall(SYS_close_range, 3U, ~0U, 0U) != 0) {
+            const long max_fd = sysconf(_SC_OPEN_MAX);
+            for (int fd = 3; fd < (max_fd > 0 ? max_fd : 1024); ++fd) close(fd);
+        }
+#else
+        const long max_fd = sysconf(_SC_OPEN_MAX);
+        for (int fd = 3; fd < (max_fd > 0 ? max_fd : 1024); ++fd) close(fd);
+#endif
         (void)setpgid(0, 0);
 
 #if defined(__linux__)
@@ -198,10 +242,7 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
 
         if (!command.working_directory.empty() && chdir(command.working_directory.c_str()) != 0) _exit(126);
 
-        if (command.executable.find('/') != std::string::npos)
-            execv(command.executable.c_str(), argv.data());
-        else
-            execvp(command.executable.c_str(), argv.data());
+        execv(executable.c_str(), argv.data());
         _exit(127);
     }
 

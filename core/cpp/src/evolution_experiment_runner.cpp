@@ -3,6 +3,7 @@
 #include <cmath>
 #include <filesystem>
 #include <fstream>
+#include <system_error>
 #include <algorithm>
 #include <map>
 #include <mutex>
@@ -19,6 +20,13 @@ std::string fingerprint(const std::string& value) {
 
 bool safe_field(const std::string& value) {
     return !value.empty() && value.find_first_of("\r\n") == std::string::npos;
+}
+
+std::string canonical_executable_path(const std::string& executable) {
+    if (executable.empty()) return {};
+    std::error_code error;
+    const auto path = std::filesystem::canonical(executable, error);
+    return error ? std::string{} : path.string();
 }
 
 bool is_interpreter(const std::string& executable) {
@@ -133,17 +141,20 @@ bool run_measurement(const EvolutionExperiment& experiment,
 bool EvolutionExperimentRunner::register_trusted_evaluator(
     const std::string& procedure_id, const std::string& executable,
     const std::vector<std::string>& procedure_arguments) noexcept {
-    if (!safe_field(procedure_id) || executable.empty() || is_interpreter(executable)) return false;
-    const auto digest = executable_fingerprint(executable);
+    if (!safe_field(procedure_id) || executable.empty()) return false;
+    const auto canonical_executable = canonical_executable_path(executable);
+    if (canonical_executable.empty() || is_interpreter(canonical_executable)) return false;
+    const auto digest = executable_fingerprint(canonical_executable);
     if (digest.empty()) return false;
     try {
         std::lock_guard<std::mutex> lock(trusted_evaluators_mutex);
         const auto existing = trusted_evaluators.find(procedure_id);
         if (existing != trusted_evaluators.end())
-            return existing->second.executable == executable &&
+            return existing->second.executable == canonical_executable &&
                    existing->second.fingerprint == digest &&
                    existing->second.arguments == procedure_arguments;
-        trusted_evaluators.emplace(procedure_id, TrustedEvaluator{executable, digest, procedure_arguments});
+        trusted_evaluators.emplace(procedure_id, TrustedEvaluator{
+            canonical_executable, digest, procedure_arguments});
         return true;
     } catch (...) {
         return false;
@@ -157,8 +168,12 @@ bool EvolutionExperimentRunner::is_trusted_evaluator(
         std::lock_guard<std::mutex> lock(trusted_evaluators_mutex);
         const auto existing = trusted_evaluators.find(procedure_id);
         if (existing == trusted_evaluators.end() ||
-            existing->second.fingerprint != expected_fingerprint ||
-            (!executable.empty() && existing->second.executable != executable)) return false;
+            existing->second.fingerprint != expected_fingerprint) return false;
+        if (!executable.empty()) {
+            const auto canonical_executable = canonical_executable_path(executable);
+            if (canonical_executable.empty() ||
+                existing->second.executable != canonical_executable) return false;
+        }
         return executable_fingerprint(existing->second.executable) == existing->second.fingerprint;
     } catch (...) {
         return false;
@@ -174,8 +189,12 @@ bool EvolutionExperimentRunner::is_trusted_evaluator(
         const auto existing = trusted_evaluators.find(procedure_id);
         if (existing == trusted_evaluators.end() ||
             existing->second.fingerprint != expected_fingerprint ||
-            existing->second.arguments != procedure_arguments ||
-            (!executable.empty() && existing->second.executable != executable)) return false;
+            existing->second.arguments != procedure_arguments) return false;
+        if (!executable.empty()) {
+            const auto canonical_executable = canonical_executable_path(executable);
+            if (canonical_executable.empty() ||
+                existing->second.executable != canonical_executable) return false;
+        }
         return executable_fingerprint(existing->second.executable) == existing->second.fingerprint;
     } catch (...) {
         return false;
@@ -261,32 +280,39 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_command(
     // The response parser validates the evaluator identity against the active
     // experiment. Populate the expected identity before either measurement;
     // assigning it only after parsing makes every valid response look untrusted.
-    experiment.evaluation_procedure_id = command.evaluation_procedure_id;
-    experiment.evaluator_executable_fingerprint = command.expected_executable_fingerprint;
+    // Pin the canonical registered path once for both measurements. If the
+    // caller supplied a relative path and the process cwd has changed since
+    // registration, is_trusted_evaluator rejects it rather than reinterpreting it.
+    IsolatedCommand pinned_command = command;
+    pinned_command.executable = canonical_executable_path(command.executable);
+    if (pinned_command.executable.empty()) return experiment.outcome;
+
+    experiment.evaluation_procedure_id = pinned_command.evaluation_procedure_id;
+    experiment.evaluator_executable_fingerprint = pinned_command.expected_executable_fingerprint;
 
     // The evaluator must measure both settings through the same named local
     // procedure. A command that merely prints a numeric fitness is not evidence.
     double baseline_fitness = 0.0;
     double candidate_fitness = 0.0;
-    if (!run_measurement(experiment, backend, command, "baseline",
+    if (!run_measurement(experiment, backend, pinned_command, "baseline",
                          experiment.proposal.current, command.trial_index, baseline_fitness) ||
-        !run_measurement(experiment, backend, command, "candidate",
+        !run_measurement(experiment, backend, pinned_command, "candidate",
                          experiment.proposal.proposed, command.trial_index, candidate_fitness)) {
         return experiment.outcome;
     }
 
     experiment.baseline_fitness = baseline_fitness;
     experiment.candidate_fitness = candidate_fitness;
-    experiment.evaluation_procedure_id = command.evaluation_procedure_id;
-    experiment.evaluator_executable_fingerprint = command.expected_executable_fingerprint;
+    experiment.evaluation_procedure_id = pinned_command.evaluation_procedure_id;
+    experiment.evaluator_executable_fingerprint = pinned_command.expected_executable_fingerprint;
     experiment.baseline_artifact_id = fingerprint(
         experiment.proposal.key + "\x1f" +
         EvolutionExperiment::format_parameter_value(experiment.proposal.current) + "\x1f" +
-        command.evaluation_procedure_id);
+        pinned_command.evaluation_procedure_id);
     experiment.candidate_artifact_id = fingerprint(
         experiment.proposal.key + "\x1f" +
         EvolutionExperiment::format_parameter_value(experiment.proposal.proposed) + "\x1f" +
-        command.evaluation_procedure_id);
+        pinned_command.evaluation_procedure_id);
     experiment.candidate_executed = true;
     experiment.isolated = true;
     experiment.outcome = EvolutionExperimentEngine::evaluate(experiment);
