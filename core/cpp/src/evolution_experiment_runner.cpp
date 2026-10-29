@@ -31,6 +31,7 @@ bool is_interpreter(const std::string& executable) {
 struct TrustedEvaluator {
     std::string executable;
     std::string fingerprint;
+    std::vector<std::string> arguments;
 };
 std::mutex trusted_evaluators_mutex;
 std::unordered_map<std::string, TrustedEvaluator> trusted_evaluators;
@@ -125,7 +126,8 @@ bool run_measurement(const EvolutionExperiment& experiment,
 } // namespace
 
 bool EvolutionExperimentRunner::register_trusted_evaluator(
-    const std::string& procedure_id, const std::string& executable) noexcept {
+    const std::string& procedure_id, const std::string& executable,
+    const std::vector<std::string>& procedure_arguments) noexcept {
     if (!safe_field(procedure_id) || executable.empty() || is_interpreter(executable)) return false;
     const auto digest = executable_fingerprint(executable);
     if (digest.empty()) return false;
@@ -134,8 +136,9 @@ bool EvolutionExperimentRunner::register_trusted_evaluator(
         const auto existing = trusted_evaluators.find(procedure_id);
         if (existing != trusted_evaluators.end())
             return existing->second.executable == executable &&
-                   existing->second.fingerprint == digest;
-        trusted_evaluators.emplace(procedure_id, TrustedEvaluator{executable, digest});
+                   existing->second.fingerprint == digest &&
+                   existing->second.arguments == procedure_arguments;
+        trusted_evaluators.emplace(procedure_id, TrustedEvaluator{executable, digest, procedure_arguments});
         return true;
     } catch (...) {
         return false;
@@ -150,6 +153,23 @@ bool EvolutionExperimentRunner::is_trusted_evaluator(
         const auto existing = trusted_evaluators.find(procedure_id);
         if (existing == trusted_evaluators.end() ||
             existing->second.fingerprint != expected_fingerprint ||
+            (!executable.empty() && existing->second.executable != executable)) return false;
+        return executable_fingerprint(existing->second.executable) == existing->second.fingerprint;
+    } catch (...) {
+        return false;
+    }
+}
+
+bool EvolutionExperimentRunner::is_trusted_evaluator(
+    const std::string& procedure_id, const std::string& executable,
+    const std::string& expected_fingerprint,
+    const std::vector<std::string>& procedure_arguments) noexcept {
+    try {
+        std::lock_guard<std::mutex> lock(trusted_evaluators_mutex);
+        const auto existing = trusted_evaluators.find(procedure_id);
+        if (existing == trusted_evaluators.end() ||
+            existing->second.fingerprint != expected_fingerprint ||
+            existing->second.arguments != procedure_arguments ||
             (!executable.empty() && existing->second.executable != executable)) return false;
         return executable_fingerprint(existing->second.executable) == existing->second.fingerprint;
     } catch (...) {
@@ -231,7 +251,7 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_command(
         command.expected_executable_fingerprint.empty() ||
         is_interpreter(command.executable) ||
         !is_trusted_evaluator(command.evaluation_procedure_id, command.executable,
-                              command.expected_executable_fingerprint))
+                              command.expected_executable_fingerprint, command.arguments))
         return experiment.outcome;
     experiment.evaluator_executable_fingerprint = command.expected_executable_fingerprint;
 
