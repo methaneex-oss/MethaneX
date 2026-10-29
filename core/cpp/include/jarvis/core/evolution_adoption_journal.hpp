@@ -32,6 +32,7 @@ struct AdoptionRecord {
     std::string evaluation_procedure_id;
     std::string baseline_artifact_id;
     std::string candidate_artifact_id;
+    std::string evaluation_command_identity;
     std::string reason;
 };
 
