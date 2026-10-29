@@ -46,11 +46,14 @@ inline bool run_evolution_evaluator_fixture(int argc, char** argv) {
     if (get("--experiment-id").empty() || get("--parameter-key").empty() ||
         get("--parameter-value").empty() || get("--procedure-id").empty() ||
         get("--evaluator-fingerprint").empty() || get("--artifact-id").empty() ||
+        get("--trial-index").empty() ||
         (role != "baseline" && role != "candidate"))
         return true;
     const double parameter_value = std::stod(get("--parameter-value"));
-    const double fitness = parameter_mode ? parameter_value :
-        (role == "baseline" ? baseline : candidate);
+    const auto trial_index = std::stoull(get("--trial-index"));
+    const double trial_delta = static_cast<double>(trial_index) * 0.001;
+    const double fitness = parameter_mode ? parameter_value + trial_delta :
+        (role == "baseline" ? baseline : candidate) + trial_delta;
     if (!std::isfinite(parameter_value) || !std::isfinite(fitness)) return true;
     std::cout << "JARVIS_EVALUATION_V1\n"
               << "experiment_id=" << get("--experiment-id") << "\n"
@@ -60,6 +63,7 @@ inline bool run_evolution_evaluator_fixture(int argc, char** argv) {
               << "procedure_id=" << get("--procedure-id") << "\n"
               << "evaluator_fingerprint=" << get("--evaluator-fingerprint") << "\n"
               << "artifact_id=" << get("--artifact-id") << "\n"
+              << "trial_index=" << trial_index << "\n"
               << "fitness=" << fitness << "\n";
     return true;
 }
