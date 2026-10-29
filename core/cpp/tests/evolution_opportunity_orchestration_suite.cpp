@@ -1,14 +1,19 @@
 #include "jarvis/core/evolution_opportunity.hpp"
 #include "jarvis/core/evolution_orchestrator.hpp"
+#include "jarvis/core/process_isolation.hpp"
+#include "evolution_test_evaluator.hpp"
 
 #include <algorithm>
 #include <cassert>
 #include <chrono>
 #include <vector>
+#include <string>
 
 using namespace jarvis::core;
 
-int main() {
+int main(int argc, char** argv) {
+    if (argc > 1 && std::string(argv[1]) == "--test-evaluator")
+        return test_support::run_evolution_test_evaluator(argc, argv);
     EvolutionOpportunityDetector detector;
     const auto opportunities = detector.detect({
         {"diagnostics", 0.9, 0.8, 0.9, 1.0, 0.4},
@@ -97,5 +102,31 @@ int main() {
         history, now, now, false);
 
     assert(!blocked.schedule.allowed);
+
+    // Default isolated orchestration must use the paired local evaluator,
+    // not the callback simulation route.
+    EvolutionModel isolated_model;
+    isolated_model.register_parameter("isolated", 0.4);
+    EvolutionHistory isolated_history;
+    EvolutionSafetyPolicy isolated_safety;
+    EvolutionController isolated_controller(isolated_model, isolated_history, isolated_safety);
+    EvolutionOrchestrator isolated_orchestrator({}, EvolutionTrialConfig{4, 4, 0.01, 0.75, true});
+    const IsolatedEvaluationSpec local_evaluator{
+        IsolatedCommand{"/proc/self/exe", {"--test-evaluator"}, ""},
+        "local-test-procedure-v1", "unused-baseline", "unused-candidate", 0.4, 0.5};
+    const auto isolated_result = isolated_orchestrator.run(
+        opportunities.front(),
+        [](const EvolutionOpportunity&) {
+            return std::vector<EvolutionProposal>{{"isolated", 0.4, 0.5, 0.1, 0.8}};
+        },
+        sandbox, CandidateExecutor{}, CandidateExecutor{}, isolated_history,
+        now, now - std::chrono::seconds(2), true, &isolated_controller, &local_evaluator);
+    assert(isolated_result.schedule.allowed);
+    assert(isolated_result.experiments.size() == 1);
+    assert(isolated_result.experiments.front().has_valid_isolation_attestation());
+    assert(isolated_result.adopted == 1);
+    const auto* isolated_parameter = isolated_model.parameter("isolated");
+    assert(isolated_parameter != nullptr && isolated_parameter->value == 0.5);
+    assert(isolated_history.for_experiment(isolated_result.experiments.front().id).size() == 2);
     return 0;
 }

@@ -245,6 +245,9 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
     }
     result.output = std::move(output);
     result.completed = !result.timed_out && !result.output_limited && result.exit_code == 0;
+    // Exit 125 is the child-side fail-closed signal when a requested isolation
+    // control could not be installed. Do not label that run isolated.
+    if (result.exit_code == 125) result.isolated = false;
     if (!result.completed && result.exit_code == 125) result.error = "required isolation feature unavailable";
     if (!result.completed && result.error.empty()) {
         if (result.timed_out) result.error = "process timeout";

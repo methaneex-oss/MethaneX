@@ -3,6 +3,7 @@
 #include "jarvis/core/evolution_experiment.hpp"
 #include "jarvis/core/evolution_sandbox.hpp"
 #include "jarvis/core/evolution_trials.hpp"
+#include "jarvis/core/evolution_experiment_runner.hpp"
 
 #include <cstddef>
 #include <vector>
@@ -33,6 +34,12 @@ public:
                                    const CandidateExecutor& baseline_executor,
                                    const CandidateExecutor& candidate_executor,
                                    EvolutionTrialConfig config = {}) noexcept;
+
+    static EvolutionTrialBatch run_isolated(
+        EvolutionExperiment& experiment,
+        const ProcessIsolationBackend& backend,
+        const IsolatedEvaluationSpec& spec,
+        EvolutionTrialConfig config = {}) noexcept;
 };
 
 } // namespace jarvis::core

@@ -2,23 +2,33 @@
 #include "jarvis/core/evolution_safety.hpp"
 #include "jarvis/core/evolution_experiment_runner.hpp"
 #include "jarvis/core/process_isolation.hpp"
+#include "evolution_test_evaluator.hpp"
 
 #include <cassert>
 #include <filesystem>
 #include <algorithm>
+#include <string>
 
 using namespace jarvis::core;
 
 namespace {
-void attest_isolated(EvolutionExperiment& experiment) {
+void attest_isolated(EvolutionExperiment& experiment,
+                     const std::string& procedure = "local-test-procedure-v1") {
     ProcessIsolationBackend backend;
-    const IsolatedCommand command{
-        "/bin/sh", {"-c", "printf " + std::to_string(experiment.candidate_fitness)}, ""};
-    EvolutionExperimentRunner::run_isolated_command(experiment, backend, command);
+    const IsolatedEvaluationSpec spec{
+        IsolatedCommand{"/proc/self/exe", {"--test-evaluator"}, ""},
+        procedure,
+        "baseline:" + experiment.proposal.key + ":" + std::to_string(experiment.proposal.current),
+        "candidate:" + experiment.proposal.key + ":" + std::to_string(experiment.proposal.proposed),
+        experiment.proposal.current,
+        experiment.proposal.proposed};
+    EvolutionExperimentRunner::run_isolated_evaluation(experiment, backend, spec);
 }
 } // namespace
 
-int main() {
+int main(int argc, char** argv) {
+    if (argc > 1 && std::string(argv[1]) == "--test-evaluator")
+        return test_support::run_evolution_test_evaluator(argc, argv);
     const std::filesystem::path path = "evolution_brain_integration_test.bin";
     std::error_code ec;
     // A persisted legacy adoption event without experiment evidence must
@@ -49,6 +59,38 @@ int main() {
     }
     std::filesystem::remove(legacy_path, ec);
     std::filesystem::remove(legacy_path.string() + ".meta", ec);
+
+    // A versioned adoption event still cannot apply a proposal without a
+    // preceding valid evaluation record, even if it claims isolation and
+    // includes superficial provenance fields.
+    const std::filesystem::path forged_path = "evolution_forged_replay_test.bin";
+    std::filesystem::remove(forged_path, ec);
+    std::filesystem::remove(forged_path.string() + ".meta", ec);
+    {
+        Brain source(forged_path);
+        assert(source.register_evolution_parameter("forged.replay", 0.25));
+    }
+    {
+        Memory journal(256, forged_path);
+        Event forged_adoption{
+            0, 1, "test", "evolution_adopt",
+            {{"key", std::string("forged.replay")}, {"current", 0.25},
+             {"proposed", 0.95}, {"expected_gain", 0.70}, {"confidence", 0.99},
+             {"proposal_confidence", 0.99}, {"experiment_id", std::string("forged-no-evaluation")},
+             {"outcome", static_cast<std::int64_t>(ExperimentOutcome::Improved)},
+             {"baseline", 0.70}, {"candidate", 0.95}, {"minimum_improvement", 0.01},
+             {"isolated", true}, {"evaluation_procedure_id", std::string("local-test-procedure-v1")},
+             {"baseline_artifact_id", std::string("baseline:forged")},
+             {"candidate_artifact_id", std::string("candidate:forged")}}};
+        assert(journal.append(forged_adoption) != 0);
+    }
+    {
+        Brain restarted_forged(forged_path);
+        const auto* parameter = restarted_forged.evolution_parameter("forged.replay");
+        assert(parameter != nullptr && parameter->value == parameter->baseline);
+    }
+    std::filesystem::remove(forged_path, ec);
+    std::filesystem::remove(forged_path.string() + ".meta", ec);
 
     // An unversioned legacy rollback must not undo a newer adoption during
     // journal replay: it does not identify the experiment it belongs to.
@@ -171,7 +213,7 @@ int main() {
         EvolutionExperiment equal_fitness{
             "safety-equal-fitness", EvolutionProposal{"safety.equal-fitness", 0.2, 0.3, 0.1, 0.99},
             0.70, 0.70, 0.01, 0.99, ExperimentOutcome::Improved, true};
-        attest_isolated(equal_fitness);
+        attest_isolated(equal_fitness, "equal-fitness");
         equal_fitness.outcome = ExperimentOutcome::Improved;
         EvolutionSafetyPolicy non_isolation_policy;
         non_isolation_policy.require_isolation = false;
@@ -183,7 +225,7 @@ int main() {
         EvolutionExperiment subthreshold{
             "safety-subthreshold", EvolutionProposal{"safety.subthreshold", 0.2, 0.3, 0.1, 0.99},
             0.70, 0.74, 0.05, 0.99, ExperimentOutcome::Improved, true};
-        attest_isolated(subthreshold);
+        attest_isolated(subthreshold, "subthreshold");
         subthreshold.outcome = ExperimentOutcome::Improved;
         assert(!EvolutionSafetyGate::approve(subthreshold, non_isolation_policy));
         assert(!brain.record_evolution_evaluation(subthreshold));
@@ -271,7 +313,7 @@ int main() {
             "replay-evaluation-1",
             EvolutionProposal{"replay.persist", 0.3, 0.4, 0.1, 0.90},
             0.70, 0.82, 0.01, 0.90, ExperimentOutcome::Improved, true};
-        replayed.isolated = true;
+        attest_isolated(replayed);
         assert(restarted.adopt_evolution_experiment(replayed));
         const auto* replayed_parameter = restarted.evolution_parameter("replay.persist");
         assert(replayed_parameter != nullptr && replayed_parameter->value == 0.4);

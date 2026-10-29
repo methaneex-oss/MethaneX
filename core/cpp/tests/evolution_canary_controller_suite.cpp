@@ -1,21 +1,30 @@
 #include "jarvis/core/evolution_controller.hpp"
 #include "jarvis/core/evolution_experiment_runner.hpp"
 #include "jarvis/core/process_isolation.hpp"
+#include "evolution_test_evaluator.hpp"
 
 #include <cassert>
+#include <string>
 
 using namespace jarvis::core;
 
 namespace {
 void attest_isolated(EvolutionExperiment& experiment) {
     ProcessIsolationBackend backend;
-    const IsolatedCommand command{
-        "/bin/sh", {"-c", "printf " + std::to_string(experiment.candidate_fitness)}, ""};
-    EvolutionExperimentRunner::run_isolated_command(experiment, backend, command);
+    const IsolatedEvaluationSpec spec{
+        IsolatedCommand{"/proc/self/exe", {"--test-evaluator"}, ""},
+        "local-test-procedure-v1",
+        "baseline:" + experiment.proposal.key + ":" + std::to_string(experiment.proposal.current),
+        "candidate:" + experiment.proposal.key + ":" + std::to_string(experiment.proposal.proposed),
+        experiment.proposal.current,
+        experiment.proposal.proposed};
+    EvolutionExperimentRunner::run_isolated_evaluation(experiment, backend, spec);
 }
 } // namespace
 
-int main() {
+int main(int argc, char** argv) {
+    if (argc > 1 && std::string(argv[1]) == "--test-evaluator")
+        return test_support::run_evolution_test_evaluator(argc, argv);
     EvolutionModel model;
     model.register_parameter("reasoning.weight", 0.4);
     EvolutionHistory history;
@@ -81,11 +90,11 @@ int main() {
         "exp-replay",
         EvolutionProposal{"replay.weight", 0.4, 0.5, 0.1, 0.95},
         0.70, 0.84, 0.05, 0.95, ExperimentOutcome::Improved, true};
+    attest_isolated(replay_experiment);
     assert(replay_controller.replay_evaluation(replay_experiment));
     assert(replay_controller.replay_evaluation(replay_experiment));
     assert(replay_history.for_experiment("exp-replay").size() == 1);
     assert(replay_controller.adoption_journal().get("exp-replay")->state == AdoptionState::Pending);
-    assert(replay_model.adopt(replay_experiment.proposal));
     assert(replay_controller.replay_adoption(replay_experiment));
     assert(replay_controller.replay_adoption(replay_experiment));
     assert(replay_history.for_experiment("exp-replay").size() == 1);
