@@ -4,6 +4,7 @@
 
 #include <string>
 #include <utility>
+#include <vector>
 
 namespace jarvis::core {
 
@@ -12,6 +13,11 @@ class EvolutionController;
 class Brain;
 
 enum class ExperimentOutcome { Pending, Improved, Neutral, Degraded, Invalid };
+
+struct EvolutionFitnessCase {
+    double feature{0.0};
+    double target{0.0};
+};
 
 struct EvolutionExperiment {
     EvolutionExperiment() = default;
@@ -37,9 +43,15 @@ struct EvolutionExperiment {
     // Serialized result bit; the private snapshot below proves that this
     // instance's evaluated fields have not changed since sandbox attestation.
     bool isolated{false};
+    // Held-out experience used by the trusted native evaluator. These samples
+    // are serialized with the evaluation event so replay can recompute evidence.
+    std::vector<EvolutionFitnessCase> evaluation_cases;
+    std::string evaluation_procedure;
+    std::string evaluation_digest;
 
     bool has_valid_isolation_attestation() const noexcept {
-        return isolation_attested_ && id == attested_id_ &&
+        return isolation_attested_ && !evaluation_procedure.empty() &&
+               !evaluation_digest.empty() && id == attested_id_ &&
                proposal.key == attested_key_ &&
                proposal.current == attested_current_ &&
                proposal.proposed == attested_proposed_ &&
@@ -49,7 +61,9 @@ struct EvolutionExperiment {
                candidate_fitness == attested_candidate_ &&
                minimum_improvement == attested_minimum_ &&
                confidence == attested_confidence_ &&
-               outcome == attested_outcome_ && candidate_executed && isolated;
+               outcome == attested_outcome_ &&
+               evaluation_procedure == attested_procedure_ &&
+               evaluation_digest == attested_digest_ && candidate_executed && isolated;
     }
 
 private:
@@ -66,6 +80,8 @@ private:
         attested_minimum_ = minimum_improvement;
         attested_confidence_ = confidence;
         attested_outcome_ = outcome;
+        attested_procedure_ = evaluation_procedure;
+        attested_digest_ = evaluation_digest;
     }
 
     bool isolation_attested_{false};
@@ -80,6 +96,8 @@ private:
     double attested_minimum_{0.0};
     double attested_confidence_{0.0};
     ExperimentOutcome attested_outcome_{ExperimentOutcome::Pending};
+    std::string attested_procedure_;
+    std::string attested_digest_;
 
     friend class EvolutionExperimentRunner;
     friend class EvolutionExperimentCoordinator;
