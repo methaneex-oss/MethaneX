@@ -13,6 +13,7 @@
 #include <poll.h>
 #include <signal.h>
 #include <sys/resource.h>
+#include <grp.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
@@ -158,7 +159,7 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
 #if defined(__unix__) || defined(__APPLE__)
         if (limits_.require_privilege_drop) {
             if (geteuid() == 0) {
-                if (setgid(65534) != 0 || setuid(65534) != 0) _exit(125);
+                if (setgroups(0, nullptr) != 0 || setgid(65534) != 0 || setuid(65534) != 0) _exit(125);
             } else if (geteuid() != getuid() || getegid() != getgid()) {
                 _exit(125);
             }
