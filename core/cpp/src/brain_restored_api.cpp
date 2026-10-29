@@ -1,9 +1,20 @@
 #include "jarvis/core/brain.hpp"
 
 #include <limits>
+#include <iomanip>
+#include <sstream>
 
 namespace jarvis::core {
 namespace {
+std::string encode_evaluation_cases(const std::vector<EvolutionFitnessCase>& cases) {
+    std::ostringstream out;
+    out << std::setprecision(17);
+    for (std::size_t i = 0; i < cases.size(); ++i) {
+        if (i != 0) out << ';';
+        out << cases[i].feature << ',' << cases[i].target;
+    }
+    return out.str();
+}
 std::string join_ids(const std::vector<std::string>& ids) { std::string out; for (std::size_t i = 0; i < ids.size(); ++i) { if (i != 0) out.push_back('\x1f'); out += ids[i]; } return out; }
 bool numeric_value(const Scalar& value, long double& result) {
     if (const auto* integer = std::get_if<std::int64_t>(&value)) {
