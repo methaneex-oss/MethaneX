@@ -37,6 +37,10 @@ struct EvolutionExperiment {
     // Serialized result bit; the private snapshot below proves that this
     // instance's evaluated fields have not changed since sandbox attestation.
     bool isolated{false};
+    // Identifies the repository-owned C++ procedure that measured both sides.
+    std::string evaluation_procedure_id;
+    // Canonical identity of the proposed parameter artifact, derived by the runner.
+    std::string candidate_artifact_id;
 
     bool has_valid_isolation_attestation() const noexcept {
         return isolation_attested_ && id == attested_id_ &&
@@ -49,7 +53,11 @@ struct EvolutionExperiment {
                candidate_fitness == attested_candidate_ &&
                minimum_improvement == attested_minimum_ &&
                confidence == attested_confidence_ &&
-               outcome == attested_outcome_ && candidate_executed && isolated;
+               outcome == attested_outcome_ &&
+               evaluation_procedure_id == attested_procedure_id_ &&
+               candidate_artifact_id == attested_artifact_id_ &&
+               !evaluation_procedure_id.empty() && !candidate_artifact_id.empty() &&
+               candidate_executed && isolated;
     }
 
 private:
@@ -66,6 +74,8 @@ private:
         attested_minimum_ = minimum_improvement;
         attested_confidence_ = confidence;
         attested_outcome_ = outcome;
+        attested_procedure_id_ = evaluation_procedure_id;
+        attested_artifact_id_ = candidate_artifact_id;
     }
 
     bool isolation_attested_{false};
@@ -80,6 +90,8 @@ private:
     double attested_minimum_{0.0};
     double attested_confidence_{0.0};
     ExperimentOutcome attested_outcome_{ExperimentOutcome::Pending};
+    std::string attested_procedure_id_;
+    std::string attested_artifact_id_;
 
     friend class EvolutionExperimentRunner;
     friend class EvolutionExperimentCoordinator;
