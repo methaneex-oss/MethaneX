@@ -68,6 +68,39 @@ bool EvolutionAdoptionJournal::reject(const std::string& id, std::string reason)
     return true;
 }
 
+bool EvolutionAdoptionJournal::reject_unstaged(
+    const EvolutionExperiment& experiment, std::string reason) {
+    if (experiment.id.empty()) return false;
+    std::lock_guard lock(mutex_);
+    auto it = records_.find(experiment.id);
+    if (it != records_.end()) {
+        if (it->second.state == AdoptionState::Rejected) return true;
+        if (it->second.state != AdoptionState::Pending) return false;
+        it->second.state = AdoptionState::Rejected;
+        it->second.reason = std::move(reason);
+        it->second.revision = next_revision_++;
+        return true;
+    }
+    AdoptionRecord record;
+    record.experiment_id = experiment.id;
+    record.parameter_key = experiment.proposal.key;
+    record.proposal_current = experiment.proposal.current;
+    record.proposal_proposed = experiment.proposal.proposed;
+    record.expected_gain = experiment.proposal.expected_gain;
+    record.proposal_confidence = experiment.proposal.confidence;
+    record.minimum_improvement = experiment.minimum_improvement;
+    record.isolated = experiment.isolated;
+    record.evaluation_procedure_id = experiment.evaluation_procedure_id;
+    record.evaluator_executable_fingerprint = experiment.evaluator_executable_fingerprint;
+    record.baseline_artifact_id = experiment.baseline_artifact_id;
+    record.candidate_artifact_id = experiment.candidate_artifact_id;
+    record.state = AdoptionState::Rejected;
+    record.reason = std::move(reason);
+    record.revision = next_revision_++;
+    records_.emplace(record.experiment_id, std::move(record));
+    return true;
+}
+
 bool EvolutionAdoptionJournal::rollback(const std::string& id, std::string reason) {
     std::lock_guard lock(mutex_);
     auto it = records_.find(id);
