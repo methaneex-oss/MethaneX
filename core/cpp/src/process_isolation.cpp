@@ -5,6 +5,7 @@
 #include <chrono>
 #include <cstddef>
 #include <cstring>
+#include <cmath>
 #include <string>
 #include <cstdlib>
 
@@ -250,6 +251,121 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
         if (result.timed_out) result.error = "process timeout";
         else if (result.output_limited) result.error = "process output limit exceeded";
         else result.error = "isolated process failed";
+    }
+    return result;
+#endif
+}
+
+
+ProcessIsolationEvaluationResult ProcessIsolationBackend::run_evaluator(
+    const LocalFitnessProcedure& procedure, const EvolutionProposal& proposal,
+    double parameter_value) const noexcept {
+    ProcessIsolationEvaluationResult result;
+    if (!procedure || !std::isfinite(parameter_value) ||
+        !std::isfinite(proposal.current) || !std::isfinite(proposal.proposed)) {
+        result.error = "invalid local evaluation request";
+        return result;
+    }
+#if !defined(__unix__) || !defined(__linux__)
+    result.error = "trusted C++ evaluator isolation requires Linux";
+    return result;
+#else
+    // The evaluator is repository-owned C++ code inherited across fork, not an
+    // arbitrary executable whose stdout can claim any fitness value.
+    int pipe_fds[2] = {-1, -1};
+    if (pipe(pipe_fds) != 0) {
+        result.error = std::string("evaluator pipe failed: ") + std::strerror(errno);
+        return result;
+    }
+    const pid_t pid = fork();
+    if (pid < 0) {
+        result.error = std::string("evaluator fork failed: ") + std::strerror(errno);
+        close(pipe_fds[0]);
+        close(pipe_fds[1]);
+        return result;
+    }
+    if (pid == 0) {
+        close(pipe_fds[0]);
+        (void)setpgid(0, 0);
+        if (limits_.require_network_isolation && unshare(CLONE_NEWNET) != 0) _exit(125);
+        if (limits_.require_no_new_privileges &&
+            prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0) != 0) _exit(125);
+        if (limits_.require_network_syscall_block && !install_network_syscall_block()) _exit(125);
+        if (limits_.require_filesystem_isolation) _exit(125); // no chroot contract for callable evaluators
+        if (limits_.require_privilege_drop) {
+            if (geteuid() == 0) {
+                if (setgid(65534) != 0 || setuid(65534) != 0) _exit(125);
+            } else if (geteuid() != getuid() || getegid() != getgid()) {
+                _exit(125);
+            }
+        }
+        struct rlimit memory_limit{limits_.max_memory_bytes, limits_.max_memory_bytes};
+        struct rlimit cpu_limit{limits_.max_cpu_seconds, limits_.max_cpu_seconds};
+        struct rlimit file_limit{limits_.max_file_bytes, limits_.max_file_bytes};
+        (void)setrlimit(RLIMIT_AS, &memory_limit);
+        (void)setrlimit(RLIMIT_CPU, &cpu_limit);
+        (void)setrlimit(RLIMIT_FSIZE, &file_limit);
+        double fitness = 0.0;
+        try {
+            fitness = procedure(proposal, parameter_value);
+        } catch (...) {
+            _exit(124);
+        }
+        if (!std::isfinite(fitness)) _exit(123);
+        const auto* bytes = reinterpret_cast<const char*>(&fitness);
+        std::size_t written = 0;
+        while (written < sizeof(fitness)) {
+            const ssize_t count = write(pipe_fds[1], bytes + written, sizeof(fitness) - written);
+            if (count > 0) written += static_cast<std::size_t>(count);
+            else if (count < 0 && errno == EINTR) continue;
+            else _exit(122);
+        }
+        close(pipe_fds[1]);
+        _exit(0);
+    }
+
+    close(pipe_fds[1]);
+    result.started = true;
+    const auto deadline = std::chrono::steady_clock::now() + limits_.sandbox.timeout;
+    std::size_t received = 0;
+    char* bytes = reinterpret_cast<char*>(&result.fitness);
+    int status = 0;
+    bool reaped = false;
+    while (std::chrono::steady_clock::now() < deadline) {
+        struct pollfd descriptor{pipe_fds[0], POLLIN | POLLHUP, 0};
+        const auto remaining = std::chrono::duration_cast<std::chrono::milliseconds>(
+            deadline - std::chrono::steady_clock::now());
+        const int wait_ms = static_cast<int>(std::max<long long>(1, remaining.count()));
+        const int polled = poll(&descriptor, 1, std::min(wait_ms, 50));
+        if (polled > 0 && (descriptor.revents & (POLLIN | POLLHUP))) {
+            const ssize_t count = read(pipe_fds[0], bytes + received, sizeof(result.fitness) - received);
+            if (count > 0) received += static_cast<std::size_t>(count);
+        }
+        const pid_t waited = waitpid(pid, &status, WNOHANG);
+        if (waited == pid) { reaped = true; break; }
+        if (waited < 0 && errno != EINTR) break;
+        if (received == sizeof(result.fitness) && reaped) break;
+    }
+    if (!reaped) {
+        kill(-pid, SIGKILL);
+        kill(pid, SIGKILL);
+        result.timed_out = true;
+        (void)waitpid(pid, &status, 0);
+    }
+    close(pipe_fds[0]);
+    result.completed = reaped && WIFEXITED(status) && WEXITSTATUS(status) == 0 &&
+                       received == sizeof(result.fitness) && std::isfinite(result.fitness);
+    // No caller-supplied Boolean is used. A successful child execution is only
+    // marked isolated when the required local restrictions were actually applied.
+    result.isolated = result.completed && limits_.require_no_new_privileges &&
+                      limits_.require_network_syscall_block;
+    if (!result.completed) {
+        if (result.timed_out) result.error = "local evaluator timed out";
+        else if (WIFEXITED(status) && WEXITSTATUS(status) == 125)
+            result.error = "required evaluator isolation unavailable";
+        else result.error = "local evaluator failed or returned invalid fitness";
+    } else if (!result.isolated) {
+        result.error = "evaluation completed without required isolation profile";
     }
     return result;
 #endif
