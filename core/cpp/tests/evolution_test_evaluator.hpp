@@ -11,15 +11,7 @@ namespace jarvis::core::test_support {
 // Test-only compiled C++ evaluator. It exists to exercise the evaluator protocol;
 // production evaluation must use a locally registered evaluator for its workload.
 inline bool run_evolution_evaluator_fixture(int argc, char** argv) {
-    if (argc < 4 || std::string(argv[1]) != "--test-evaluator") return false;
-    double baseline = 0.0;
-    double candidate = 0.0;
-    try {
-        baseline = std::stod(argv[2]);
-        candidate = std::stod(argv[3]);
-    } catch (...) {
-        return true;
-    }
+    if (argc < 2 || std::string(argv[1]) != "--test-evaluator") return false;
     std::map<std::string, std::string> fields;
     for (int i = 4; i < argc; ++i) {
         const std::string argument(argv[i]);
@@ -42,7 +34,9 @@ inline bool run_evolution_evaluator_fixture(int argc, char** argv) {
         get("--artifact-id").empty() || (role != "baseline" && role != "candidate"))
         return true;
     const double parameter_value = std::stod(get("--parameter-value"));
-    const double fitness = role == "baseline" ? baseline : candidate;
+    // Test objective is computed from the measured parameter, not supplied
+    // fitness values. The candidate at 0.5 genuinely scores above baseline 0.4.
+    const double fitness = 1.0 - std::abs(parameter_value - 0.6);
     if (!std::isfinite(parameter_value) || !std::isfinite(fitness)) return true;
     std::cout << "JARVIS_EVALUATION_V1\n"
               << "experiment_id=" << get("--experiment-id") << "\n"
