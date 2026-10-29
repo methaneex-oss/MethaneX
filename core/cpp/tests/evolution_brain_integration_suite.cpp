@@ -2,23 +2,31 @@
 #include "jarvis/core/evolution_safety.hpp"
 #include "jarvis/core/evolution_experiment_runner.hpp"
 #include "jarvis/core/process_isolation.hpp"
+#include "evolution_test_evaluator.hpp"
 
 #include <cassert>
 #include <filesystem>
 #include <algorithm>
+#include <string>
 
 using namespace jarvis::core;
 
 namespace {
-void attest_isolated(EvolutionExperiment& experiment) {
+void attest_isolated(EvolutionExperiment& experiment,
+                     const std::string& procedure = "local-test-procedure-v1") {
     ProcessIsolationBackend backend;
-    const IsolatedCommand command{
-        "/bin/sh", {"-c", "printf " + std::to_string(experiment.candidate_fitness)}, ""};
-    EvolutionExperimentRunner::run_isolated_command(experiment, backend, command);
+    const IsolatedEvaluationSpec spec{
+        IsolatedCommand{"/proc/self/exe", {"--test-evaluator"}, ""},
+        procedure,
+        "baseline:" + experiment.proposal.key + ":" + std::to_string(experiment.proposal.current),
+        "candidate:" + experiment.proposal.key + ":" + std::to_string(experiment.proposal.proposed),
+        experiment.proposal.current,
+        experiment.proposal.proposed};
+    EvolutionExperimentRunner::run_isolated_evaluation(experiment, backend, spec);
 }
 } // namespace
 
-int main() {
+int main(int argc, char** argv) {\n    if (argc > 1 && std::string(argv[1]) == "--test-evaluator")\n        return test_support::run_evolution_test_evaluator(argc, argv);
     const std::filesystem::path path = "evolution_brain_integration_test.bin";
     std::error_code ec;
     // A persisted legacy adoption event without experiment evidence must
@@ -171,7 +179,7 @@ int main() {
         EvolutionExperiment equal_fitness{
             "safety-equal-fitness", EvolutionProposal{"safety.equal-fitness", 0.2, 0.3, 0.1, 0.99},
             0.70, 0.70, 0.01, 0.99, ExperimentOutcome::Improved, true};
-        attest_isolated(equal_fitness);
+        attest_isolated(equal_fitness, "equal-fitness");
         equal_fitness.outcome = ExperimentOutcome::Improved;
         EvolutionSafetyPolicy non_isolation_policy;
         non_isolation_policy.require_isolation = false;
@@ -183,7 +191,7 @@ int main() {
         EvolutionExperiment subthreshold{
             "safety-subthreshold", EvolutionProposal{"safety.subthreshold", 0.2, 0.3, 0.1, 0.99},
             0.70, 0.74, 0.05, 0.99, ExperimentOutcome::Improved, true};
-        attest_isolated(subthreshold);
+        attest_isolated(subthreshold, "subthreshold");
         subthreshold.outcome = ExperimentOutcome::Improved;
         assert(!EvolutionSafetyGate::approve(subthreshold, non_isolation_policy));
         assert(!brain.record_evolution_evaluation(subthreshold));
