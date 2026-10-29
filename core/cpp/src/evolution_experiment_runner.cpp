@@ -1,5 +1,6 @@
 #include "jarvis/core/evolution_experiment_runner.hpp"
 
+#include <algorithm>
 #include <cmath>
 #include <fstream>
 #include <iomanip>
@@ -123,6 +124,9 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_command(
     experiment.evaluation_config_id.clear();
     experiment.baseline_artifact_digest.clear();
     experiment.candidate_artifact_digest.clear();
+    experiment.evaluator_artifact_digest.clear();
+    experiment.baseline_trial_count = 0;
+    experiment.candidate_trial_count = 0;
     experiment.evaluation_evidence_digest.clear();
     return experiment.outcome;
 }
@@ -200,6 +204,9 @@ ExperimentOutcome EvolutionExperimentRunner::run_isolated_evaluation(
     experiment.evaluation_config_id = procedure.configuration_id;
     experiment.baseline_artifact_digest = baseline_digest;
     experiment.candidate_artifact_digest = candidate_digest;
+    experiment.evaluator_artifact_digest = evaluator_digest;
+    experiment.baseline_trial_count = baseline.count;
+    experiment.candidate_trial_count = candidate.count;
     const std::string evidence = experiment.id + "\n" + experiment.proposal.key + "\n" +
         number(experiment.proposal.current) + "\n" + number(experiment.proposal.proposed) + "\n" +
         number(experiment.proposal.expected_gain) + "\n" + number(experiment.proposal.confidence) + "\n" +
