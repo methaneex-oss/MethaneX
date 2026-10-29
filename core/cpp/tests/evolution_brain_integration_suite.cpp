@@ -50,6 +50,77 @@ int main() {
     std::filesystem::remove(legacy_path, ec);
     std::filesystem::remove(legacy_path.string() + ".meta", ec);
 
+    // An experiment ID does not make an adoption event valid: replay must
+    // require a preceding, matching evaluation record.
+    const std::filesystem::path missing_evaluation_path = "evolution_missing_evaluation_test.bin";
+    std::filesystem::remove(missing_evaluation_path, ec);
+    std::filesystem::remove(missing_evaluation_path.string() + ".meta", ec);
+    {
+        Brain source(missing_evaluation_path);
+        assert(source.register_evolution_parameter("replay.no-evaluation", 0.25));
+    }
+    {
+        Memory journal(256, missing_evaluation_path);
+        Event adoption_without_evaluation{
+            0, 2, "forged-test", "evolution_adopt",
+            {{"key", std::string("replay.no-evaluation")},
+             {"current", 0.25}, {"proposed", 0.95},
+             {"expected_gain", 0.70}, {"proposal_confidence", 0.99},
+             {"confidence", 0.99}, {"minimum_improvement", 0.05},
+             {"baseline", 0.70}, {"candidate", 0.95},
+             {"outcome", static_cast<std::int64_t>(ExperimentOutcome::Improved)},
+             {"isolated", true}, {"experiment_id", std::string("forged-no-evaluation")}}};
+        assert(journal.append(adoption_without_evaluation) != 0);
+    }
+    {
+        Brain restarted(missing_evaluation_path);
+        const auto* parameter = restarted.evolution_parameter("replay.no-evaluation");
+        assert(parameter != nullptr && parameter->value == parameter->baseline);
+    }
+    std::filesystem::remove(missing_evaluation_path, ec);
+    std::filesystem::remove(missing_evaluation_path.string() + ".meta", ec);
+
+    // A forged "Improved" label cannot override equal measured fitness.
+    const std::filesystem::path inconsistent_evaluation_path = "evolution_inconsistent_evaluation_test.bin";
+    std::filesystem::remove(inconsistent_evaluation_path, ec);
+    std::filesystem::remove(inconsistent_evaluation_path.string() + ".meta", ec);
+    {
+        Brain source(inconsistent_evaluation_path);
+        assert(source.register_evolution_parameter("replay.equal-fitness", 0.25));
+    }
+    {
+        Memory journal(256, inconsistent_evaluation_path);
+        Event forged_evaluation{
+            0, 2, "forged-test", "evolution_evaluated",
+            {{"experiment_id", std::string("forged-equal-fitness")},
+             {"key", std::string("replay.equal-fitness")},
+             {"current", 0.25}, {"proposed", 0.35},
+             {"expected_gain", 0.10}, {"proposal_confidence", 0.99},
+             {"baseline", 0.80}, {"candidate", 0.80},
+             {"minimum_improvement", 0.05}, {"confidence", 0.99},
+             {"outcome", static_cast<std::int64_t>(ExperimentOutcome::Improved)},
+             {"isolated", true}}};
+        assert(journal.append(forged_evaluation) != 0);
+        Event adoption_after_forged_evaluation{
+            0, 3, "forged-test", "evolution_adopt",
+            {{"experiment_id", std::string("forged-equal-fitness")},
+             {"key", std::string("replay.equal-fitness")},
+             {"current", 0.25}, {"proposed", 0.35},
+             {"expected_gain", 0.10}, {"proposal_confidence", 0.99},
+             {"baseline", 0.80}, {"candidate", 0.80},
+             {"minimum_improvement", 0.05}, {"confidence", 0.99},
+             {"outcome", static_cast<std::int64_t>(ExperimentOutcome::Improved)},
+             {"isolated", true}}};
+        assert(journal.append(adoption_after_forged_evaluation) != 0);
+    }
+    {
+        Brain restarted(inconsistent_evaluation_path);
+        const auto* parameter = restarted.evolution_parameter("replay.equal-fitness");
+        assert(parameter != nullptr && parameter->value == parameter->baseline);
+    }
+    std::filesystem::remove(inconsistent_evaluation_path, ec);
+    std::filesystem::remove(inconsistent_evaluation_path.string() + ".meta", ec);
+
     // An unversioned legacy rollback must not undo a newer adoption during
     // journal replay: it does not identify the experiment it belongs to.
     const std::filesystem::path legacy_rollback_path = "evolution_legacy_rollback_test.bin";
