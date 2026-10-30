@@ -30,6 +30,25 @@ long double evidence_weight(const Fact& fact) {
            static_cast<long double>(std::max<std::uint64_t>(1, fact.observations));
 }
 
+void accumulate_evidence(Relation& accumulated, const Relation& incoming) {
+    const auto previous_observations = std::max<std::uint64_t>(1, accumulated.observations);
+    const auto incoming_observations = std::max<std::uint64_t>(1, incoming.observations);
+    const long double total = static_cast<long double>(previous_observations) +
+                              static_cast<long double>(incoming_observations);
+    accumulated.confidence = std::clamp(static_cast<double>(
+        (static_cast<long double>(accumulated.confidence) * previous_observations +
+         static_cast<long double>(incoming.confidence) * incoming_observations) / total),
+        0.0, 1.0);
+    accumulated.observations = previous_observations + incoming_observations;
+    accumulated.updated_sequence = std::max(
+        accumulated.updated_sequence, incoming.updated_sequence);
+}
+
+long double evidence_weight(const Relation& relation) {
+    return static_cast<long double>(std::clamp(relation.confidence, 0.0, 1.0)) *
+           static_cast<long double>(std::max<std::uint64_t>(1, relation.observations));
+}
+
 } // namespace
 
 void WorldModel::observe(const Fact& incoming) {
@@ -107,24 +126,69 @@ void WorldModel::relate(const Relation& incoming) {
     std::unique_lock lock(mutex_);
     Relation relation = incoming;
     relation.confidence = std::clamp(relation.confidence, 0.0, 1.0);
+    relation.observations = std::max<std::uint64_t>(1, relation.observations);
 
     const auto exact = std::find_if(relations_.begin(), relations_.end(), [&](const Relation& current) {
         return current.from == relation.from && current.type == relation.type && current.to == relation.to;
     });
     if (exact != relations_.end()) {
-        exact->confidence = std::max(exact->confidence, relation.confidence);
-        exact->updated_sequence = std::max(exact->updated_sequence, relation.updated_sequence);
+        accumulate_evidence(*exact, relation);
+    } else {
+        relation.disputed = true;
+        relations_.push_back(std::move(relation));
+    }
+
+    // Conflicting destinations are competing hypotheses for one relation.
+    // Keep them disputed while support is tied; repeated evidence for one
+    // destination can resolve the relation and retire unsupported alternatives.
+    const auto same_relation = [&](const Relation& candidate) {
+        return candidate.from == relation.from && candidate.type == relation.type;
+    };
+    Relation* winner = nullptr;
+    long double strongest = -1.0L;
+    std::size_t strongest_count = 0;
+    for (auto& candidate : relations_) {
+        if (!same_relation(candidate)) continue;
+        const long double weight = evidence_weight(candidate);
+        if (weight > strongest) {
+            strongest = weight;
+            winner = &candidate;
+            strongest_count = 1;
+        } else if (weight == strongest) {
+            ++strongest_count;
+        }
+    }
+
+    if (strongest_count == 1) {
+        const std::string winning_from = winner->from;
+        const std::string winning_type = winner->type;
+        const std::string winning_to = winner->to;
+        for (auto& candidate : relations_) {
+            if (same_relation(candidate))
+                candidate.disputed = candidate.to != winning_to;
+        }
+        relations_.erase(
+            std::remove_if(relations_.begin(), relations_.end(),
+                [&](const Relation& candidate) {
+                    return candidate.from == winning_from &&
+                           candidate.type == winning_type &&
+                           candidate.to != winning_to;
+                }),
+            relations_.end());
+        winner = nullptr;
+        const auto resolved = std::find_if(relations_.begin(), relations_.end(),
+            [&](const Relation& candidate) {
+                return candidate.from == winning_from &&
+                       candidate.type == winning_type &&
+                       candidate.to == winning_to;
+            });
+        if (resolved != relations_.end()) resolved->disputed = false;
         return;
     }
 
-    const auto conflict = std::find_if(relations_.begin(), relations_.end(), [&](const Relation& current) {
-        return current.from == relation.from && current.type == relation.type && current.to != relation.to;
-    });
-    if (conflict != relations_.end()) {
-        conflict->disputed = true;
-        relation.disputed = true;
+    for (auto& candidate : relations_) {
+        if (same_relation(candidate)) candidate.disputed = true;
     }
-    relations_.push_back(std::move(relation));
 }
 
 std::optional<Fact> WorldModel::query(const std::string& subject, const std::string& predicate) const {
