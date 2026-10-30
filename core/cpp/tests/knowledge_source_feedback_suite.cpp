@@ -18,7 +18,7 @@ int main() {
     {
         Brain brain(journal);
         const auto observed = brain.observe(Event{0, 0, "sensor-a", "observation",
-            {{"temperature", Scalar{20.0}}}});
+            {{"temperature", Scalar{20.0}}, {"reliability", Scalar{0.99}}}});
         claim_sequence = observed.event.sequence;
         assert(claim_sequence != 0);
         const auto forged = brain.observe(Event{0, 0, "external-reviewer",
@@ -41,6 +41,8 @@ int main() {
             claim_sequence, "temperature", Scalar{20.0}, "sensor-a", true));
         assert(!brain.record_knowledge_source_feedback(
             claim_sequence, "temperature", Scalar{21.0}, "independent-reviewer", true));
+        assert(!brain.record_knowledge_source_feedback(
+            claim_sequence, "reliability", Scalar{0.99}, "independent-reviewer", true));
         assert(!brain.record_knowledge_source_feedback(
             claim_sequence + 100, "temperature", Scalar{20.0},
             "independent-reviewer", true));
