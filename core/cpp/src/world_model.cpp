@@ -95,8 +95,10 @@ void WorldModel::observe(const Fact& incoming) {
     Fact* winner = &*it;
     long double strongest = evidence_weight(*winner);
     std::size_t strongest_count = 1;
+    bool has_conflict = false;
     for (auto& candidate : disputed_facts_) {
         if (!same_fact(candidate)) continue;
+        has_conflict = true;
         const long double weight = evidence_weight(candidate);
         if (weight > strongest) {
             strongest = weight;
@@ -107,7 +109,15 @@ void WorldModel::observe(const Fact& incoming) {
         }
     }
 
-    if (strongest_count == 1) {
+    if (!has_conflict) {
+        it->disputed = false;
+        return;
+    }
+
+    // A single high-confidence observation can raise a contradiction; it
+    // cannot settle one. Require at least two observations for the uniquely
+    // strongest alternative before removing the dispute.
+    if (strongest_count == 1 && winner->observations >= 2) {
         if (winner != &*it) *it = *winner;
         it->disputed = false;
         disputed_facts_.erase(
@@ -150,8 +160,10 @@ void WorldModel::relate(const Relation& incoming) {
     Relation* winner = nullptr;
     long double strongest = -1.0L;
     std::size_t strongest_count = 0;
+    std::size_t relation_count = 0;
     for (auto& candidate : relations_) {
         if (!same_relation(candidate)) continue;
+        ++relation_count;
         const long double weight = evidence_weight(candidate);
         if (weight > strongest) {
             strongest = weight;
@@ -162,7 +174,14 @@ void WorldModel::relate(const Relation& incoming) {
         }
     }
 
-    if (strongest_count == 1) {
+    if (relation_count == 1) {
+        if (winner != nullptr) winner->disputed = false;
+        return;
+    }
+
+    // As with facts, retain an unresolved relation after a single contrary
+    // observation. Repeated support must establish a unique winner.
+    if (strongest_count == 1 && winner != nullptr && winner->observations >= 2) {
         const std::string winning_from = winner->from;
         const std::string winning_type = winner->type;
         const std::string winning_to = winner->to;
