@@ -237,12 +237,12 @@ int main(int argc, char** argv) {
         restored.evaluator_executable_fingerprint =
             EvolutionExperimentRunner::executable_fingerprint(evaluator_executable);
         restored.baseline_artifact_id = EvolutionExperiment::artifact_fingerprint(
-            restored.proposal.key + "\\x1f" +
-            EvolutionExperiment::format_parameter_value(restored.proposal.current) + "\\x1f" +
+            restored.proposal.key + "\x1f" +
+            EvolutionExperiment::format_parameter_value(restored.proposal.current) + "\x1f" +
             restored.evaluation_procedure_id);
         restored.candidate_artifact_id = EvolutionExperiment::artifact_fingerprint(
-            restored.proposal.key + "\\x1f" +
-            EvolutionExperiment::format_parameter_value(restored.proposal.proposed) + "\\x1f" +
+            restored.proposal.key + "\x1f" +
+            EvolutionExperiment::format_parameter_value(restored.proposal.proposed) + "\x1f" +
             restored.evaluation_procedure_id);
         // All public provenance fields now match the registered evaluator and
         // expected artifact identities, but the fabricated fitness values were
