@@ -1112,10 +1112,45 @@ int main() {
             {{"door-state", std::string("closed")}, {"confidence", 0.9}}});
         assert(corroboration.event.sequence != 0);
         verify_resolved_fact(contradiction_brain);
+
+        const auto verify_resolved_relation = [](const Brain& candidate) {
+            const auto relations = candidate.world().relations_from("door");
+            assert(relations.size() == 1);
+            assert(relations.front().type == "opens_into");
+            assert(relations.front().to == "room-b");
+            assert(!relations.front().disputed);
+            assert(candidate.world().disputed_relations().empty());
+        };
+        const auto room_a = contradiction_brain.observe(Event{
+            0, 4, "contradiction-resolution-test", "observation",
+            {{"subject", std::string("door")},
+             {"predicate", std::string("opens_into")},
+             {"object", std::string("room-a")}}});
+        assert(room_a.event.sequence != 0);
+        const auto room_b = contradiction_brain.observe(Event{
+            0, 5, "contradiction-resolution-test", "observation",
+            {{"subject", std::string("door")},
+             {"predicate", std::string("opens_into")},
+             {"object", std::string("room-b")}}});
+        assert(room_b.event.sequence != 0);
+        assert(contradiction_brain.world().disputed_relations().size() == 2);
+        const auto room_b_corroboration = contradiction_brain.observe(Event{
+            0, 6, "contradiction-resolution-test", "observation",
+            {{"subject", std::string("door")},
+             {"predicate", std::string("opens_into")},
+             {"object", std::string("room-b")}}});
+        assert(room_b_corroboration.event.sequence != 0);
+        verify_resolved_relation(contradiction_brain);
     }
     {
         Brain contradiction_replay(contradiction_path);
         verify_resolved_fact(contradiction_replay);
+        const auto relations = contradiction_replay.world().relations_from("door");
+        assert(relations.size() == 1);
+        assert(relations.front().type == "opens_into");
+        assert(relations.front().to == "room-b");
+        assert(!relations.front().disputed);
+        assert(contradiction_replay.world().disputed_relations().empty());
     }
     std::filesystem::remove(contradiction_path, ec);
     std::filesystem::remove(contradiction_path.string() + ".meta", ec);
