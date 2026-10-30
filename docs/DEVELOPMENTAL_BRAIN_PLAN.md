@@ -96,9 +96,11 @@ Work in this order. A later item must not be used to avoid an unresolved earlier
 - `KnowledgeModel::score_source` also updates that same average using a boolean correctness outcome.
 - `KnowledgeModel::assess(key)` groups claims by distinct source and value, but selects/assesses using distinct-source counts; it never reads `sources_[source].reliability`.
 - `ClaimEvidence` stores source, key, value, and observation count, but not per-claim evidence quality or calibrated source-trust snapshots.
-- Repository search found `score_source` in its declaration, implementation, and the isolated knowledge unit test; no production call site was found.
-- `core/cpp/tests/knowledge_memory_phase3_suite.cpp` tests metric arithmetic and distinct-source counting, but does not prove learned source reliability affects assessment.
-- The brain replays ordinary observations and explicit learning events into `KnowledgeModel::assimilate`; no source-accuracy feedback loop was established by the inspected paths.
+- The current implementation separates incoming observation quality (`reliability`) from empirical source calibration (`empirical_accuracy`, `calibration_observations`).
+- `KnowledgeModel::assess(key)` now applies calibrated trust to each source's claim weight after at least three explicit calibration outcomes. Repeated observations by one source do not add independent source weight, and conflicting values remain disputed rather than being erased by a weighted lead.
+- `Brain::record_knowledge_source_feedback(...)` now appends a `knowledge_source_feedback` journal event linked to a specific earlier claim sequence, key, value, source, and evaluator. Replay validates that link, rejects self-evaluation and malformed feedback, deduplicates feedback, and calls `KnowledgeModel::score_source`.
+- The caller remains responsible for evaluator independence and ground-truth provenance. The evaluator string is audit metadata, not cryptographic proof or independent truth verification.
+- `core/cpp/tests/knowledge_memory_phase3_suite.cpp` covers separation of the metrics, calibration weighting, repetition, and conflict preservation. These model-level tests do not alone prove the Brain feedback journal lifecycle or fresh-process restoration.
 
 **Required engineering work:**
 
