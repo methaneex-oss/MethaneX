@@ -689,6 +689,17 @@ void Brain::replay(const Event& event, bool external_observation) {
         }
         world_.observe(Fact{event.source, key, value, reliability, 1,
                             event.sequence, event.sequence, false});
+        // A changed value is initially disputed in the single-current-value
+        // belief map. Once the source-scoped world model has enough post-conflict
+        // evidence to resolve that exact value, clear the transient dispute flag
+        // so reasoning does not retain a stale contradiction forever.
+        const auto resolved_fact = world_.query(event.source, key);
+        if (resolved_fact.has_value() && !resolved_fact->disputed &&
+            resolved_fact->value == value) {
+            const auto belief = beliefs_.find(key);
+            if (belief != beliefs_.end() && belief->second.value == value)
+                belief->second.disputed = false;
+        }
     }
     const auto subject = string_value(event.data, "subject");
     const auto predicate = string_value(event.data, "predicate");
