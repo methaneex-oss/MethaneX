@@ -406,8 +406,8 @@ bool is_internal_brain_event(const std::string& kind) {
            kind == "evolution_rollback" || kind == "goal_abandon" ||
            kind == "goal_activate" || kind == "goal_complete" ||
            kind == "goal_create" || kind == "goal_priority" ||
-           kind == "goal_progress" || kind == "learning" ||
-           kind == "prediction" || kind == "prediction_outcome" ||
+           kind == "goal_progress" || kind == "knowledge_source_feedback" ||
+           kind == "learning" || kind == "prediction" || kind == "prediction_outcome" ||
            kind == "resilience_isolate" || kind == "resilience_recover";
 }
 
@@ -428,6 +428,41 @@ void Brain::replay(const Event& event, bool external_observation) {
             : (key == nullptr ? nullptr : find_latest_unresolved_prediction(*key));
         if (!valid_prediction_outcome_event(event, prediction)) return;
     }
+    if (event.kind == "knowledge_source_feedback") {
+        const auto sequence = integer_value(event.data, "claim_sequence", 0);
+        const auto* source = string_value(event.data, "claim_source");
+        const auto* key = string_value(event.data, "claim_key");
+        const auto* evaluator = string_value(event.data, "evaluator");
+        const auto value_it = event.data.find("claim_value");
+        const auto correct_it = event.data.find("correct");
+        if (sequence == 0 || sequence >= event.sequence || source == nullptr ||
+            source->empty() || key == nullptr || key->empty() ||
+            evaluator == nullptr || evaluator->empty() || *evaluator != event.source ||
+            *evaluator == *source || value_it == event.data.end() ||
+            correct_it == event.data.end() ||
+            std::get_if<bool>(&correct_it->second) == nullptr) return;
+        const auto history = memory_.all();
+        const auto target = std::find_if(history.begin(), history.end(),
+            [&](const Event& candidate) { return candidate.sequence == sequence; });
+        if (target == history.end() || target->sequence >= event.sequence ||
+            target->source != *source) return;
+        bool matching_claim = false;
+        if (target->kind == "learning") {
+            const auto* evidence_key = string_value(target->data, "evidence_key");
+            const auto evidence_value = target->data.find("evidence_value");
+            matching_claim = evidence_key != nullptr && *evidence_key == *key &&
+                evidence_value != target->data.end() && evidence_value->second == value_it->second;
+        } else {
+            const auto fact = target->data.find(*key);
+            matching_claim = fact != target->data.end() && fact->second == value_it->second;
+        }
+        if (!matching_claim) return;
+        const std::string feedback_id = std::to_string(sequence) + "|" + *evaluator;
+        if (!processed_knowledge_feedback_.insert(feedback_id).second) return;
+        knowledge_.score_source(*source, *std::get_if<bool>(&correct_it->second));
+        return;
+    }
+
     if (event.kind == "action_outcome" &&
         !valid_action_outcome_event(event)) return;
 
