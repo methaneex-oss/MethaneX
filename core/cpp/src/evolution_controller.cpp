@@ -163,7 +163,8 @@ bool EvolutionController::validate_adoption_for_brain(const EvolutionExperiment&
     // the trusted evaluator. The runner must have authenticated this exact
     // evidence (or restored its HMAC) before the controller can authorize it.
     if (experiment.id.empty() || !experiment.candidate_executed ||
-        !experiment.has_valid_isolation_attestation()) return false;
+        (!experiment.has_valid_isolation_attestation() &&
+         (policy_.require_isolation || !policy_.allow_simulated_evidence))) return false;
 
     // Adoption is permitted only when durable history contains an evaluation
     // for this exact experiment and the request still matches that evidence.
