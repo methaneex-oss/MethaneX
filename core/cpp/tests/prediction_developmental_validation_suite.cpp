@@ -82,12 +82,16 @@ int main() {
                    PredictionFeedbackStatus::resolved_with_error);
         }
         const auto after_shift = brain.predict("stable.sensor", Scalar{20.0}, 0.8);
-        forecast_after_regime_change = numeric_prediction(after_shift);
-        assert(std::abs(45.0 - forecast_after_regime_change) <
+        const double pre_final_feedback = numeric_prediction(after_shift);
+        assert(std::abs(45.0 - pre_final_feedback) <
                std::abs(45.0 - forecast_before_regime_change));
         assert(brain.resolve_prediction_feedback(
                    after_shift.created_sequence, Scalar{45.0}) ==
                PredictionFeedbackStatus::resolved_with_error);
+        // Compare restart against a forecast generated from the fully updated
+        // metric, not the forecast that preceded the final update.
+        const auto post_shift = brain.predict("stable.sensor", Scalar{20.0}, 0.8);
+        forecast_after_regime_change = numeric_prediction(post_shift);
     }
 
     // Reconstruct a new Brain from the journal and require its next forecast
