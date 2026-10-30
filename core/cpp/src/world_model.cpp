@@ -46,6 +46,7 @@ void accumulate_evidence(Relation& accumulated, const Relation& incoming) {
          static_cast<long double>(incoming.confidence) * incoming_observations) / total),
         0.0, 1.0);
     accumulated.observations = previous_observations + incoming_observations;
+    accumulated.latest_evidence_confidence = incoming.latest_evidence_confidence;
     if (accumulated.first_sequence == 0 ||
         (incoming.first_sequence != 0 &&
          incoming.first_sequence < accumulated.first_sequence)) {
@@ -160,6 +161,7 @@ void WorldModel::relate(const Relation& incoming) {
     std::unique_lock lock(mutex_);
     Relation relation = incoming;
     relation.confidence = std::clamp(relation.confidence, 0.0, 1.0);
+    relation.latest_evidence_confidence = relation.confidence;
     relation.observations = std::max<std::uint64_t>(1, relation.observations);
     if (relation.first_sequence == 0)
         relation.first_sequence = relation.updated_sequence;
@@ -214,8 +216,20 @@ void WorldModel::relate(const Relation& incoming) {
     }
 
     // Do not let evidence collected before the conflict settle it. The
-    // leading relation must be observed again after the latest alternative.
+    // leading relation must be observed again after the latest alternative,
+    // and that newest observation must itself outweigh every alternative's
+    // aggregate mean reliability. Aggregate support alone can be inflated by
+    // repeated weak observations and must not erase a live conflict.
+    double strongest_competing_confidence = 0.0;
+    if (winner != nullptr) {
+        for (const auto& candidate : relations_) {
+            if (same_relation(candidate) && candidate.to != winner->to)
+                strongest_competing_confidence = std::max(
+                    strongest_competing_confidence, candidate.confidence);
+        }
+    }
     if (strongest_count == 1 && winner != nullptr &&
+        winner->latest_evidence_confidence > strongest_competing_confidence &&
         !has_unsequenced_conflict && latest_conflict_sequence != 0 &&
         winner->updated_sequence > latest_conflict_sequence) {
         const std::string winning_from = winner->from;
