@@ -1069,6 +1069,92 @@ int main() {
     std::filesystem::remove(evidence_path, ec);
     std::filesystem::remove(evidence_path.string() + ".meta", ec);
 
+    // Contradictory observations must remain disputed while evidence is
+    // balanced, then become usable again when repeated reliable evidence
+    // supports one value. The same resolution must be reconstructed on replay.
+    const auto contradiction_path =
+        std::filesystem::temp_directory_path() / "jarvis_fact_contradiction_resolution.bin";
+    std::filesystem::remove(contradiction_path, ec);
+    std::filesystem::remove(contradiction_path.string() + ".meta", ec);
+    const auto verify_resolved_fact = [](const Brain& candidate) {
+        const auto fact = candidate.world().query(
+            "contradiction-resolution-test", "door-state");
+        assert(fact.has_value());
+        assert(fact->value == Scalar{std::string("closed")});
+        assert(!fact->disputed);
+        assert(candidate.world().disputed_facts().empty());
+        const auto beliefs = candidate.beliefs();
+        const auto belief = std::find_if(
+            beliefs.begin(), beliefs.end(),
+            [](const Belief& item) { return item.key == "door-state"; });
+        assert(belief != beliefs.end());
+        assert(belief->value == Scalar{std::string("closed")});
+        assert(!belief->disputed);
+    };
+    {
+        Brain contradiction_brain(contradiction_path);
+        const auto open = contradiction_brain.observe(Event{
+            0, 1, "contradiction-resolution-test", "observation",
+            {{"door-state", std::string("open")}, {"confidence", 0.9}}});
+        assert(open.event.sequence != 0);
+        const auto closed = contradiction_brain.observe(Event{
+            0, 2, "contradiction-resolution-test", "observation",
+            {{"door-state", std::string("closed")}, {"confidence", 0.9}}});
+        assert(closed.event.sequence != 0);
+        const auto contested = contradiction_brain.world().query(
+            "contradiction-resolution-test", "door-state");
+        assert(contested.has_value());
+        assert(contested->disputed);
+        assert(!contradiction_brain.world().disputed_facts().empty());
+
+        const auto corroboration = contradiction_brain.observe(Event{
+            0, 3, "contradiction-resolution-test", "observation",
+            {{"door-state", std::string("closed")}, {"confidence", 0.9}}});
+        assert(corroboration.event.sequence != 0);
+        verify_resolved_fact(contradiction_brain);
+
+        const auto verify_resolved_relation = [](const Brain& candidate) {
+            const auto relations = candidate.world().relations_from("door");
+            assert(relations.size() == 1);
+            assert(relations.front().type == "opens_into");
+            assert(relations.front().to == "room-b");
+            assert(!relations.front().disputed);
+            assert(candidate.world().disputed_relations().empty());
+        };
+        const auto room_a = contradiction_brain.observe(Event{
+            0, 4, "contradiction-resolution-test", "observation",
+            {{"subject", std::string("door")},
+             {"predicate", std::string("opens_into")},
+             {"object", std::string("room-a")}}});
+        assert(room_a.event.sequence != 0);
+        const auto room_b = contradiction_brain.observe(Event{
+            0, 5, "contradiction-resolution-test", "observation",
+            {{"subject", std::string("door")},
+             {"predicate", std::string("opens_into")},
+             {"object", std::string("room-b")}}});
+        assert(room_b.event.sequence != 0);
+        assert(contradiction_brain.world().disputed_relations().size() == 2);
+        const auto room_b_corroboration = contradiction_brain.observe(Event{
+            0, 6, "contradiction-resolution-test", "observation",
+            {{"subject", std::string("door")},
+             {"predicate", std::string("opens_into")},
+             {"object", std::string("room-b")}}});
+        assert(room_b_corroboration.event.sequence != 0);
+        verify_resolved_relation(contradiction_brain);
+    }
+    {
+        Brain contradiction_replay(contradiction_path);
+        verify_resolved_fact(contradiction_replay);
+        const auto relations = contradiction_replay.world().relations_from("door");
+        assert(relations.size() == 1);
+        assert(relations.front().type == "opens_into");
+        assert(relations.front().to == "room-b");
+        assert(!relations.front().disputed);
+        assert(contradiction_replay.world().disputed_relations().empty());
+    }
+    std::filesystem::remove(contradiction_path, ec);
+    std::filesystem::remove(contradiction_path.string() + ".meta", ec);
+
     // Strategy evidence and episodic fallback must remain coordinated without
     // contaminating the restart/replay fixture above. Seed one durable positive
     // strategy, then add a conflicting in-memory episode after Brain has replayed
