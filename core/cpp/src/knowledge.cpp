@@ -1,10 +1,13 @@
 #include "jarvis/core/knowledge.hpp"
 
 #include <algorithm>
+#include <cmath>
 
 namespace jarvis::core {
 
 double KnowledgeModel::assimilate(const KnowledgeEvidence& evidence) {
+    if (evidence.source.empty() || evidence.key.empty() ||
+        !std::isfinite(evidence.reliability)) return 0.0;
     auto& metric = sources_[evidence.source];
     const double reliability = std::clamp(evidence.reliability, 0.0, 1.0);
     if (metric.observations == 0) {
@@ -33,6 +36,7 @@ double KnowledgeModel::assimilate(const KnowledgeEvidence& evidence) {
 }
 
 void KnowledgeModel::score_source(const std::string& source, bool correct) {
+    if (source.empty()) return;
     auto& metric = sources_[source];
     const double observation = correct ? 1.0 : 0.0;
     metric.reliability = (metric.reliability * static_cast<double>(metric.observations) + observation) /
@@ -68,8 +72,8 @@ std::optional<KnowledgeAssessment> KnowledgeModel::assess(const std::string& key
     }
     if (candidates.empty()) return std::nullopt;
 
-    // A candidate is selected only when evidence identifies one value. A
-    // disagreement remains disputed; source count is not treated as truth.
+    // Never select a winner from disputed evidence. This avoids insertion-order
+    // dependence when competing candidates have equal or unequal support.
     const auto strongest = std::max_element(
         candidates.begin(), candidates.end(), [](const auto& left, const auto& right) {
             return left.sources.size() < right.sources.size();
@@ -79,8 +83,8 @@ std::optional<KnowledgeAssessment> KnowledgeModel::assess(const std::string& key
     if (candidates.size() == 1) result.candidate = strongest->value;
     result.supporting_sources = strongest->sources.size();
     result.observations = strongest->observations;
-    for (const auto& candidate : candidates) {
-        if (candidate.value != strongest->value)
+    if (candidates.size() > 1) {
+        for (const auto& candidate : candidates)
             result.conflicting_sources += candidate.sources.size();
     }
     if (candidates.size() > 1) {
