@@ -1069,6 +1069,57 @@ int main() {
     std::filesystem::remove(evidence_path, ec);
     std::filesystem::remove(evidence_path.string() + ".meta", ec);
 
+    // Contradictory observations must remain disputed while evidence is
+    // balanced, then become usable again when repeated reliable evidence
+    // supports one value. The same resolution must be reconstructed on replay.
+    const auto contradiction_path =
+        std::filesystem::temp_directory_path() / "jarvis_fact_contradiction_resolution.bin";
+    std::filesystem::remove(contradiction_path, ec);
+    std::filesystem::remove(contradiction_path.string() + ".meta", ec);
+    const auto verify_resolved_fact = [](const Brain& candidate) {
+        const auto fact = candidate.world().query(
+            "contradiction-resolution-test", "door-state");
+        assert(fact.has_value());
+        assert(fact->value == Scalar{std::string("closed")});
+        assert(!fact->disputed);
+        assert(candidate.world().disputed_facts().empty());
+        const auto beliefs = candidate.beliefs();
+        const auto belief = std::find_if(
+            beliefs.begin(), beliefs.end(),
+            [](const Belief& item) { return item.key == "door-state"; });
+        assert(belief != beliefs.end());
+        assert(belief->value == Scalar{std::string("closed")});
+        assert(!belief->disputed);
+    };
+    {
+        Brain contradiction_brain(contradiction_path);
+        const auto open = contradiction_brain.observe(Event{
+            0, 1, "contradiction-resolution-test", "observation",
+            {{"door-state", std::string("open")}, {"confidence", 0.9}}});
+        assert(open.event.sequence != 0);
+        const auto closed = contradiction_brain.observe(Event{
+            0, 2, "contradiction-resolution-test", "observation",
+            {{"door-state", std::string("closed")}, {"confidence", 0.9}}});
+        assert(closed.event.sequence != 0);
+        const auto contested = contradiction_brain.world().query(
+            "contradiction-resolution-test", "door-state");
+        assert(contested.has_value());
+        assert(contested->disputed);
+        assert(!contradiction_brain.world().disputed_facts().empty());
+
+        const auto corroboration = contradiction_brain.observe(Event{
+            0, 3, "contradiction-resolution-test", "observation",
+            {{"door-state", std::string("closed")}, {"confidence", 0.9}}});
+        assert(corroboration.event.sequence != 0);
+        verify_resolved_fact(contradiction_brain);
+    }
+    {
+        Brain contradiction_replay(contradiction_path);
+        verify_resolved_fact(contradiction_replay);
+    }
+    std::filesystem::remove(contradiction_path, ec);
+    std::filesystem::remove(contradiction_path.string() + ".meta", ec);
+
     // Strategy evidence and episodic fallback must remain coordinated without
     // contaminating the restart/replay fixture above. Seed one durable positive
     // strategy, then add a conflicting in-memory episode after Brain has replayed
