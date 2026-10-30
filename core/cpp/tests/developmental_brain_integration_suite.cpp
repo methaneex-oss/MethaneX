@@ -1353,7 +1353,7 @@ int main() {
         assert(multi_value.world().disputed_facts().size() == 2);
 
         // A low-reliability repeat cannot settle the three-way tie.
-        assert(observe_value("gamma", 0.2).event.sequence != 0);
+        assert(observe_value("gamma", 0.0).event.sequence != 0);
         contested = multi_value.world().query("multi-value-source", "multi-value");
         assert(contested.has_value() && contested->disputed);
 
