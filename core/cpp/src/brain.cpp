@@ -395,15 +395,14 @@ bool Brain::valid_affective_learning_source(const Event& event) const {
 }
 
 void Brain::replay(const Event& event, bool external_observation) {
+    // Validate observations before any subsystem mutates or advances state.
+    if (event.kind == "observation" && !valid_observation_event(event))
+        return;
     state_.cycle = std::max(state_.cycle, event.sequence);
 
     // Validate prediction feedback before any subsystem mutates. Otherwise a
     // duplicate or malformed outcome can alter affect even when prediction
     // resolution itself is rejected below.
-    if (event.kind == "observation" && !valid_observation_event(event))
-        return;
-    if (event.kind == "observation" && !valid_observation_event(event))
-        return Observation{};
     if (event.kind == "prediction_outcome") {
         const auto sequence = integer_value(event.data, "prediction_sequence", 0);
         const auto* key = string_value(event.data, "key");
@@ -836,6 +835,8 @@ void Brain::replay(const Event& event, bool external_observation) {
 }
 Observation Brain::observe(Event event) {
     std::unique_lock lock(mutex_);
+    if (event.kind == "observation" && !valid_observation_event(event))
+        return Observation{};
     if (event.kind == "prediction_outcome") {
         const auto sequence = integer_value(event.data, "prediction_sequence", 0);
         const auto* key = string_value(event.data, "key");
