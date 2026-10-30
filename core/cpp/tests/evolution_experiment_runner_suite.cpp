@@ -222,5 +222,31 @@ int main(int argc, char** argv) {
         assert(!experiment.candidate_executed);
     }
 
+
+    {
+        // A journal editor can copy the registered evaluator identity and
+        // recompute public artifact fingerprints without running the evaluator.
+        // Fabricated fitness values must not recreate the private attestation.
+        auto restored = make_experiment();
+        restored.candidate_executed = true;
+        restored.isolated = true;
+        restored.outcome = ExperimentOutcome::Improved;
+        restored.baseline_fitness = 0.1;
+        restored.candidate_fitness = 0.99;
+        restored.evaluation_procedure_id = "jarvis.test.fixture.v1";
+        restored.evaluator_executable_fingerprint =
+            EvolutionExperimentRunner::executable_fingerprint(evaluator_executable);
+        restored.baseline_artifact_id = EvolutionExperiment::artifact_fingerprint(
+            restored.proposal.key + "\x1f" +
+            EvolutionExperiment::format_parameter_value(restored.proposal.current) + "\x1f" +
+            restored.evaluation_procedure_id);
+        restored.candidate_artifact_id = EvolutionExperiment::artifact_fingerprint(
+            restored.proposal.key + "\x1f" +
+            EvolutionExperiment::format_parameter_value(restored.proposal.proposed) + "\x1f" +
+            restored.evaluation_procedure_id);
+        assert(!EvolutionExperimentRunner::restore_trusted_attestation(restored));
+        assert(!restored.has_valid_isolation_attestation());
+    }
+
     return 0;
 }
