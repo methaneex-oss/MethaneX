@@ -1,6 +1,7 @@
 #include "jarvis/core/knowledge.hpp"
 
 #include <cassert>
+#include <limits>
 #include <cmath>
 #include <string>
 
@@ -66,6 +67,28 @@ int main() {
     assert(claim->supporting_sources == 3);
     assert(claim->conflicting_sources == 1);
     assert(!assessment.assess("unknown-claim").has_value());
+
+    // Invalid evidence must not enter source metrics or claim history.
+    const auto metric_before = assessment.source_metric("sensor-a")->observations;
+    const auto invalid_reliability =
+        assessment.assimilate(KnowledgeEvidence{"sensor-a", "surface-risk",
+            std::string("hazardous"), std::numeric_limits<double>::quiet_NaN()});
+    assert(invalid_reliability == 0.0);
+    assert(assessment.source_metric("sensor-a")->observations == metric_before);
+
+    // Dispute counts include every source attached to every competing value,
+    // not only sources opposing whichever candidate happens to win max_element.
+    KnowledgeModel tied;
+    tied.assimilate(KnowledgeEvidence{"a1", "claim", std::string("left"), 0.8});
+    tied.assimilate(KnowledgeEvidence{"a2", "claim", std::string("left"), 0.8});
+    tied.assimilate(KnowledgeEvidence{"b1", "claim", std::string("right"), 0.8});
+    tied.assimilate(KnowledgeEvidence{"b2", "claim", std::string("right"), 0.8});
+    const auto tied_assessment = tied.assess("claim");
+    assert(tied_assessment.has_value());
+    assert(tied_assessment->status == KnowledgeStatus::disputed);
+    assert(!tied_assessment->candidate.has_value());
+    assert(tied_assessment->supporting_sources + tied_assessment->conflicting_sources == 4);
+
 
     return 0;
 }
