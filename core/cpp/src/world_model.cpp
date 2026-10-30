@@ -60,6 +60,8 @@ void WorldModel::observe(const Fact& incoming) {
         return current.subject == fact.subject && current.predicate == fact.predicate;
     });
     if (it == facts_.end()) {
+        if (fact.first_sequence == 0)
+            fact.first_sequence = fact.updated_sequence;
         facts_.push_back(std::move(fact));
         return;
     }
@@ -96,9 +98,17 @@ void WorldModel::observe(const Fact& incoming) {
     long double strongest = evidence_weight(*winner);
     std::size_t strongest_count = 1;
     bool has_conflict = false;
+    bool has_unsequenced_conflict = false;
+    std::uint64_t latest_conflict_sequence = 0;
     for (auto& candidate : disputed_facts_) {
         if (!same_fact(candidate)) continue;
         has_conflict = true;
+        if (candidate.first_sequence == 0) {
+            has_unsequenced_conflict = true;
+        } else {
+            latest_conflict_sequence = std::max(
+                latest_conflict_sequence, candidate.first_sequence);
+        }
         const long double weight = evidence_weight(candidate);
         if (weight > strongest) {
             strongest = weight;
@@ -114,10 +124,12 @@ void WorldModel::observe(const Fact& incoming) {
         return;
     }
 
-    // A single high-confidence observation can raise a contradiction; it
-    // cannot settle one. Require at least two observations for the uniquely
-    // strongest alternative before removing the dispute.
-    if (strongest_count == 1 && winner->observations >= 2) {
+    // A previously strong value cannot dismiss a new contradiction using
+    // only its pre-conflict history. The winning alternative must be observed
+    // again after the latest competing value was first introduced.
+    if (strongest_count == 1 && !has_unsequenced_conflict &&
+        latest_conflict_sequence != 0 &&
+        winner->updated_sequence > latest_conflict_sequence) {
         if (winner != &*it) *it = *winner;
         it->disputed = false;
         disputed_facts_.erase(
@@ -137,6 +149,8 @@ void WorldModel::relate(const Relation& incoming) {
     Relation relation = incoming;
     relation.confidence = std::clamp(relation.confidence, 0.0, 1.0);
     relation.observations = std::max<std::uint64_t>(1, relation.observations);
+    if (relation.first_sequence == 0)
+        relation.first_sequence = relation.updated_sequence;
 
     const std::string relation_from = relation.from;
     const std::string relation_type = relation.type;
@@ -161,9 +175,17 @@ void WorldModel::relate(const Relation& incoming) {
     long double strongest = -1.0L;
     std::size_t strongest_count = 0;
     std::size_t relation_count = 0;
+    bool has_unsequenced_conflict = false;
+    std::uint64_t latest_conflict_sequence = 0;
     for (auto& candidate : relations_) {
         if (!same_relation(candidate)) continue;
         ++relation_count;
+        if (candidate.first_sequence == 0) {
+            has_unsequenced_conflict = true;
+        } else {
+            latest_conflict_sequence = std::max(
+                latest_conflict_sequence, candidate.first_sequence);
+        }
         const long double weight = evidence_weight(candidate);
         if (weight > strongest) {
             strongest = weight;
@@ -179,9 +201,11 @@ void WorldModel::relate(const Relation& incoming) {
         return;
     }
 
-    // As with facts, retain an unresolved relation after a single contrary
-    // observation. Repeated support must establish a unique winner.
-    if (strongest_count == 1 && winner != nullptr && winner->observations >= 2) {
+    // Do not let evidence collected before the conflict settle it. The
+    // leading relation must be observed again after the latest alternative.
+    if (strongest_count == 1 && winner != nullptr &&
+        !has_unsequenced_conflict && latest_conflict_sequence != 0 &&
+        winner->updated_sequence > latest_conflict_sequence) {
         const std::string winning_from = winner->from;
         const std::string winning_type = winner->type;
         const std::string winning_to = winner->to;
