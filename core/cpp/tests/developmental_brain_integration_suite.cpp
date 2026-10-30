@@ -1141,6 +1141,38 @@ int main() {
              {"object", std::string("room-b")}}});
         assert(room_b_corroboration.event.sequence != 0);
         verify_resolved_relation(contradiction_brain);
+
+        // A strong value learned before a contradiction must not settle the
+        // new conflict by relying only on its old observations. It needs fresh
+        // corroboration after the competing value has appeared.
+        const auto new_fact_conflict = contradiction_brain.observe(Event{
+            0, 7, "contradiction-resolution-test", "observation",
+            {{"door-state", std::string("open")}, {"confidence", 0.9}}});
+        assert(new_fact_conflict.event.sequence != 0);
+        const auto still_contested_fact = contradiction_brain.world().query(
+            "contradiction-resolution-test", "door-state");
+        assert(still_contested_fact.has_value());
+        assert(still_contested_fact->disputed);
+        const auto fresh_fact_corroboration = contradiction_brain.observe(Event{
+            0, 8, "contradiction-resolution-test", "observation",
+            {{"door-state", std::string("closed")}, {"confidence", 0.9}}});
+        assert(fresh_fact_corroboration.event.sequence != 0);
+        verify_resolved_fact(contradiction_brain);
+
+        const auto new_relation_conflict = contradiction_brain.observe(Event{
+            0, 9, "contradiction-resolution-test", "observation",
+            {{"subject", std::string("door")},
+             {"predicate", std::string("opens_into")},
+             {"object", std::string("room-a")}}});
+        assert(new_relation_conflict.event.sequence != 0);
+        assert(contradiction_brain.world().disputed_relations().size() == 2);
+        const auto fresh_relation_corroboration = contradiction_brain.observe(Event{
+            0, 10, "contradiction-resolution-test", "observation",
+            {{"subject", std::string("door")},
+             {"predicate", std::string("opens_into")},
+             {"object", std::string("room-b")}}});
+        assert(fresh_relation_corroboration.event.sequence != 0);
+        verify_resolved_relation(contradiction_brain);
     }
     {
         Brain contradiction_replay(contradiction_path);
