@@ -415,8 +415,6 @@ void Brain::replay(const Event& event, bool external_observation) {
     // Validate external experience before any subsystem mutates or advances state.
     if (!is_internal_brain_event(event.kind) && !valid_observation_event(event))
         return;
-    state_.cycle = std::max(state_.cycle, event.sequence);
-
     // Validate prediction feedback before any subsystem mutates. Otherwise a
     // duplicate or malformed outcome can alter affect even when prediction
     // resolution itself is rejected below.
@@ -470,10 +468,12 @@ void Brain::replay(const Event& event, bool external_observation) {
         if (!matching_claim) return;
         const std::string feedback_id = std::to_string(sequence) + "|" + *evaluator;
         if (!processed_knowledge_feedback_.insert(feedback_id).second) return;
+        state_.cycle = std::max(state_.cycle, event.sequence);
         knowledge_.score_source(*source, *std::get_if<bool>(&correct_it->second));
         return;
     }
 
+    state_.cycle = std::max(state_.cycle, event.sequence);
     if (event.kind == "action_outcome" &&
         !valid_action_outcome_event(event)) return;
 
