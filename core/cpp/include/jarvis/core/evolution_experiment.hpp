@@ -47,6 +47,9 @@ struct EvolutionExperiment {
     std::string evaluator_executable_fingerprint;
     std::string baseline_artifact_id;
     std::string candidate_artifact_id;
+    // HMAC-SHA-256 over canonical evaluation evidence; the key is supplied by
+    // trusted application configuration and is never persisted with the journal.
+    std::string evidence_authentication;
 
     // Preserve the exact binary double value across the evaluator protocol.
     // std::to_string(double) rounds to six decimals and can evaluate a different
