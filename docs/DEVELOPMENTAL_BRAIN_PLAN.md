@@ -190,3 +190,32 @@ At the time this document was authored, PR #148 was open, draft, unmerged, and r
 PR #148 currently addresses accumulated-evidence conflict handling in the world model and belief dispute synchronization. This work is relevant foundation, but it does not close Priority 1 or establish the complete developmental learning loop.
 
 **This plan remains active until the acceptance gates are met with reproducible evidence.** Update this document when a priority is completed, the active head changes materially, or evidence changes the assessment. Do not silently replace the objective or reorder priorities.
+
+
+## 9. Implementation progress — 2026-10-30
+
+**Current implementation checkpoint:** PR #148 head `80a17978682ab47dd01e168aef682f678f524394`.
+
+A first bounded Priority 1 code change has been committed:
+
+- `KnowledgeMetric.reliability` now represents incoming observation-quality history only.
+- Empirical source calibration has separate `empirical_accuracy` and `calibration_observations` fields.
+- `score_source` updates empirical calibration without modifying observation-quality statistics.
+- Claims retain an aggregated observation-quality value separately from source calibration.
+- `KnowledgeModel::assess` applies calibrated trust to each source's evidence weight only after at least three explicit calibration outcomes; before that it uses a neutral prior.
+- Repeated observations from one source do not add additional independent source weight.
+- Conflicting values remain disputed even if one side has a higher weighted evidence score.
+- The knowledge unit suite was updated for separation, weighting, repetition, and conflict-preservation semantics.
+
+**Important incomplete work — Priority 1 is NOT complete:**
+
+- `score_source` still has no verified production feedback call path.
+- The API accepts a boolean outcome and source string; it does not itself prove evaluator independence, outcome provenance, or that feedback refers to a specific claim.
+- Calibration is currently in-memory model state reconstructed only if some caller replays scoring calls; a journal event lifecycle has not yet been implemented.
+- No fresh-process persistence test for calibration has been run.
+- No claim is made that source calibration currently changes live Brain behaviour through ordinary observations.
+- The new unit test changes have not been run by this builder in this checkpoint; they require the designated tester/CI to execute on the exact head.
+
+**Next mandatory Priority 1 implementation step:** add a validated, provenance-linked journal feedback event that references a specific prior claim event, records the evaluator identity and correctness outcome, rejects self-evaluation and malformed/duplicate feedback, and rebuilds calibration deterministically during replay. Only after this is implemented and independently tested can the source-calibration pathway be considered operational.
+
+The current code is a model-layer foundation, not a completed operational mechanism. Do not describe Priority 1 as closed.
