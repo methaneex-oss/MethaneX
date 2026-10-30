@@ -40,6 +40,61 @@ void calibrate_numeric_prediction(Scalar& value, double estimate, double weight)
 }
 }
 
+bool Brain::record_knowledge_source_feedback(
+    std::uint64_t claim_sequence, const std::string& key, const Scalar& value,
+    const std::string& evaluator, bool correct) {
+    if (claim_sequence == 0 || claim_sequence >
+            static_cast<std::uint64_t>(std::numeric_limits<std::int64_t>::max()) ||
+        key.empty() || evaluator.empty()) return false;
+    std::unique_lock lock(mutex_);
+    const auto history = memory_.all();
+    const auto target = std::find_if(history.begin(), history.end(),
+        [&](const Event& candidate) { return candidate.sequence == claim_sequence; });
+    if (target == history.end() || target->source.empty() || target->source == evaluator)
+        return false;
+
+    bool claim_matches = false;
+    if (target->kind == "learning") {
+        const auto key_it = target->data.find("evidence_key");
+        const auto value_it = target->data.find("evidence_value");
+        const auto* evidence_key = key_it == target->data.end()
+            ? nullptr : std::get_if<std::string>(&key_it->second);
+        claim_matches = evidence_key != nullptr && *evidence_key == key &&
+            value_it != target->data.end() && value_it->second == value;
+    } else {
+        const auto value_it = target->data.find(key);
+        claim_matches = value_it != target->data.end() && value_it->second == value;
+    }
+    if (!claim_matches) return false;
+
+    const auto prior_feedback = memory_.by_kind("knowledge_source_feedback");
+    for (const auto& prior : prior_feedback) {
+        const auto seq_it = prior.data.find("claim_sequence");
+        const auto evaluator_it = prior.data.find("evaluator");
+        const auto* prior_seq = seq_it == prior.data.end()
+            ? nullptr : std::get_if<std::int64_t>(&seq_it->second);
+        const auto* prior_evaluator = evaluator_it == prior.data.end()
+            ? nullptr : std::get_if<std::string>(&evaluator_it->second);
+        if (prior_seq != nullptr && *prior_seq == static_cast<std::int64_t>(claim_sequence) &&
+            prior_evaluator != nullptr && *prior_evaluator == evaluator) return false;
+    }
+
+    Event event{0, 0, evaluator, "knowledge_source_feedback",
+        {{"claim_sequence", static_cast<std::int64_t>(claim_sequence)},
+         {"claim_source", target->source}, {"claim_key", key},
+         {"claim_value", value}, {"evaluator", evaluator}, {"correct", correct}}};
+    event.sequence = memory_.append(event);
+    if (event.sequence == 0) return false;
+    const auto* before = knowledge_.source_metric(target->source);
+    const auto old_count = before == nullptr ? 0 : before->calibration_observations;
+    replay(event);
+    ++state_.events_seen;
+    state_.cycle = event.sequence;
+    sync_self_state();
+    const auto* after = knowledge_.source_metric(target->source);
+    return after != nullptr && after->calibration_observations == old_count + 1;
+}
+
 std::vector<Belief> Brain::beliefs() const { std::shared_lock lock(mutex_); std::vector<Belief> result; result.reserve(beliefs_.size()); for (const auto& [_, belief] : beliefs_) result.push_back(belief); return result; }
 Prediction Brain::predict(std::string key, Scalar value, double confidence) {
     // Non-finite confidence cannot be meaningful evidence and must not enter
