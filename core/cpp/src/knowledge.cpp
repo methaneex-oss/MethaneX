@@ -84,8 +84,13 @@ std::optional<KnowledgeAssessment> KnowledgeModel::assess(const std::string& key
     result.supporting_sources = strongest->sources.size();
     result.observations = strongest->observations;
     if (candidates.size() > 1) {
-        for (const auto& candidate : candidates)
-            result.conflicting_sources += candidate.sources.size();
+        // Conflicting sources are those that support a value other than the
+        // strongest-supported candidate. Sources that support the leading
+        // candidate are not themselves conflicting evidence.
+        for (const auto& candidate : candidates) {
+            if (candidate.value != strongest->value)
+                result.conflicting_sources += candidate.sources.size();
+        }
     }
     if (candidates.size() > 1) {
         result.status = KnowledgeStatus::disputed;
