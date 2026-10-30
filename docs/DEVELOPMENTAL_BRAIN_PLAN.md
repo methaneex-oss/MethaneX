@@ -221,3 +221,12 @@ A first bounded Priority 1 code change has been committed:
 **Next mandatory Priority 1 implementation step:** add a validated, provenance-linked journal feedback event that references a specific prior claim event, records the evaluator identity and correctness outcome, rejects self-evaluation and malformed/duplicate feedback, and rebuilds calibration deterministically during replay. Only after this is implemented and independently tested can the source-calibration pathway be considered operational.
 
 The current code is a model-layer foundation, not a completed operational mechanism. Do not describe Priority 1 as closed.
+
+
+## 10. Repository write-path troubleshooting — 2026-10-31
+
+The GitHub connector write path is operational. A diagnostic UTF-8 blob creation succeeded. The earlier failed multi-object commit attempt was not evidence of a repository permission outage: the workflow incorrectly assumed the normalized `fetch_commit` response exposed the raw Git tree object. It does not; it returns normalized commit metadata and diff fields. The attempted tree creation therefore lacked a verified base-tree SHA.
+
+**Supported safe write procedure:** use `fetch_file` to obtain the current file blob SHA, then use `update_file` with the exact repository, path, complete new content, commit message, blob SHA, and target branch. For multi-file Git-object writes, obtain a valid base-tree SHA from an endpoint that actually returns it; do not infer it from normalized commit metadata. After any write, fetch the updated file and inspect the PR head SHA before proceeding.
+
+No production code change is implied by this troubleshooting note. The source-calibration feedback lifecycle remains an implementation task and must not be reported as complete until production code, replay tests, restart tests, and CI evidence exist.
