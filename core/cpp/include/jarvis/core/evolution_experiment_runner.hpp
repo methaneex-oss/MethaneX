@@ -14,6 +14,11 @@ public:
     // requests and journal records cannot establish trust by supplying a hash.
     // The digest binds executable identity; authorization comes from this local
     // registry, not from a digest supplied by an untrusted request or journal.
+    // Configure a secret from trusted application startup. The key is never
+    // serialized to the journal or passed as evaluator input.
+    static bool set_evidence_authentication_key(const std::string& key) noexcept;
+    static bool authenticate_persisted_evidence(EvolutionExperiment& experiment) noexcept;
+
     static bool register_trusted_evaluator(const std::string& procedure_id,
                                            const std::string& executable,
                                            const std::vector<std::string>& procedure_arguments = {}) noexcept;
