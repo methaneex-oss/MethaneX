@@ -33,7 +33,7 @@ enum class KnowledgeStatus : std::uint8_t {
 
 struct KnowledgeAssessment {
     std::string key;
-    Scalar candidate;
+    std::optional<Scalar> candidate;
     KnowledgeStatus status{KnowledgeStatus::provisional};
     std::size_t supporting_sources{0};
     std::size_t conflicting_sources{0};
