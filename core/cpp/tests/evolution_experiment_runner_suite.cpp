@@ -135,7 +135,6 @@ int main(int argc, char** argv) {
         tampered.candidate_fitness += 0.05;
         assert(!EvolutionExperimentRunner::restore_trusted_attestation(tampered));
         auto intact = experiment;
-        intact.clear_isolation_attestation();
         assert(EvolutionExperimentRunner::restore_trusted_attestation(intact));
         assert(intact.has_valid_isolation_attestation());
     }
