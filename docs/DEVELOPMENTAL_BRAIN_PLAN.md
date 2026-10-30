@@ -1,0 +1,192 @@
+# Developmental Brain Plan and Engineering Handoff
+
+**Status date:** 2026-10-30  
+**Active implementation line:** PR #148 — `fix/learning-contradiction-resolution-after-dlt003`  
+**Observed PR head at documentation time:** `7b9f50e588bb677882a7b8212cd84d41791b8053`  
+**Purpose:** Preserve the developmental objective, current evidence, known gaps, work order, and mandatory rules for builders, testers, and reviewers.
+
+This document is the controlling engineering handoff for the developmental-brain work. Future work must continue from the existing architecture and current branch/PR state. Do not restart the project, replace its architecture with a generic agent/chatbot, or divert into unrelated feature work.
+
+## 1. Non-negotiable objective
+
+**Engineer the mechanisms; let behaviour be acquired through experience.**
+
+We are building an early developmental learning system — a primitive learning brain, not a finished adult intelligence and not a chatbot wrapped around an LLM. The objective is to make existing cognitive mechanisms cooperate so that experience produces durable changes in internal models and later behaviour.
+
+Do not pursue apparent progress by adding isolated modules, hardcoded stimulus-to-response mappings, large fixed knowledge tables, or demonstrations that merely replay pre-programmed answers.
+
+The intended developmental cycle is:
+
+1. Experience acquisition and validation.
+2. Representation and contextualisation.
+3. Memory encoding, retrieval, and consolidation.
+4. Belief formation and evidence-sensitive revision.
+5. Prediction and prediction-error processing.
+6. Internal valuation / affective appraisal and attention.
+7. Association and causal learning.
+8. Decision and action selection.
+9. Outcome observation and consequence attribution.
+10. Learning from outcomes, retaining the change, and adapting future behaviour.
+
+The mechanisms must form a connected loop. A component existing in code is not evidence that the brain has learned.
+
+## 2. Definition of the minimum developmental capability
+
+The first target is narrow, demonstrable general learning — not human-level intelligence or unrestricted AGI.
+
+A developmental capability is not accepted until the system can:
+
+- acquire a relationship from experience in an environment it was not given a hand-authored answer for;
+- retain the acquired information and retrieve it in a fresh process after restart;
+- represent uncertainty and competing evidence rather than blindly overwrite prior beliefs;
+- revise beliefs when sufficiently informative contradictory evidence arrives;
+- transfer a learned relationship to a materially different, previously unseen context when relevant structure is shared;
+- use the learned information to change a later decision or action;
+- observe the consequence, update its internal model, and preserve the behavioural change after restart.
+
+The strongest proof is an end-to-end sequence: learn in context A, restart, encounter unfamiliar context B, transfer the relevant relationship, make a changed decision, observe the result, update, restart again, and demonstrate the retained change. Tests must include controls to rule out hardcoded answers, leakage, memorised exact scenarios, and insertion-order artefacts.
+
+## 3. Current baseline — evidence versus judgement
+
+The following is a provisional engineering assessment, not a claim that every subsystem has been exhaustively audited. Ratings are maturity estimates, not test coverage percentages.
+
+| Mechanism | Provisional maturity / 10 | Main concern |
+|---|---:|---|
+| Experience ingestion and validation | 7 | Coverage and integration across unfamiliar modalities |
+| Internal representation | 5 | Contextual and relational representation depth |
+| Episodic memory | 6 | Retrieval usefulness and developmental linkage |
+| Persistent memory / replay | 6 | End-to-end behavioural continuity proof |
+| Memory retrieval | 5 | Retrieval must influence live reasoning and decisions |
+| Belief formation | 6 | Evidence quality and provenance |
+| Belief revision | 6 | Conflict handling and calibrated resolution |
+| Evidence aggregation | 5 | Dependence/correlation between observations |
+| Source reliability | 3 | Reliability is not yet a coherent learned trust model |
+| Uncertainty management | 5 | Calibration and uncertainty propagation |
+| Prediction | 5 | Contextual predictive use |
+| Prediction-error learning | 5 | Transfer from error to later choices |
+| Association learning | 5 | Generalisation beyond exact co-occurrence |
+| Causal learning | 4 | Robustness, interventions, and transfer |
+| Attention | 5 | Whether selection improves learning efficiency |
+| Affective / internal valuation | 4 | Whether appraisal causally informs learning and action |
+| Threat appraisal | 3 | Calibration and downstream consequences |
+| Decision-making | 3 | Learned knowledge must alter decisions |
+| Planning | 3 | Multi-step consequence-sensitive planning |
+| Action and consequence learning | 4 | Attribution and closed-loop evidence |
+| Self-model | 4 | Accuracy and useful control implications |
+| Strategy learning | 4 | Reliable outcome-based adaptation |
+| Developmental learning | 3 | Cross-mechanism developmental progression |
+| Evolution / adaptation | 3 | Safe, evidence-based improvement rather than proposal generation alone |
+| Generalisation / transfer | 3 | Unseen-context transfer remains a critical proof gap |
+| Cross-mechanism integration | 3 | The complete experience-to-behaviour loop is not yet established |
+
+Earlier bounded developmental evidence (JBP-003, PR #107 at commit `92cce78985f2630f62a6e0beb49ac725623d7d85`) reported 20/20 acquisition and fresh-process recall, 56–57/60 adaptation under changed context, and 60/60 unchanged-context control. This was a bounded demonstration on an earlier isolated test line. It is not proof that the current PR #148 contains equivalent coverage, broad transfer, or an integrated general-learning brain.
+
+## 4. Immediate work order — do not reorder without evidence
+
+Work in this order. A later item must not be used to avoid an unresolved earlier dependency.
+
+### Priority 1 — Make source reliability a real, evidence-grounded mechanism
+
+**Why this is first:** The current knowledge layer stores a source-level reliability metric, but its assessment logic does not use that metric. The public `score_source(source, correct)` method has no observed production call site in the inspected code/search results. The current metric also mixes two conceptually different quantities: the reliability/confidence attached to an incoming observation and the source's empirically demonstrated accuracy.
+
+**Verified code observations at PR #148 head `7b9f50e...`:**
+
+- `core/cpp/include/jarvis/core/knowledge.hpp` defines `KnowledgeEvidence`, `KnowledgeMetric`, `KnowledgeAssessment`, and `KnowledgeModel`.
+- `core/cpp/src/knowledge.cpp` updates `sources_[source].reliability` by averaging incoming `KnowledgeEvidence.reliability`.
+- `KnowledgeModel::score_source` also updates that same average using a boolean correctness outcome.
+- `KnowledgeModel::assess(key)` groups claims by distinct source and value, but selects/assesses using distinct-source counts; it never reads `sources_[source].reliability`.
+- `ClaimEvidence` stores source, key, value, and observation count, but not per-claim evidence quality or calibrated source-trust snapshots.
+- Repository search found `score_source` in its declaration, implementation, and the isolated knowledge unit test; no production call site was found.
+- `core/cpp/tests/knowledge_memory_phase3_suite.cpp` tests metric arithmetic and distinct-source counting, but does not prove learned source reliability affects assessment.
+- The brain replays ordinary observations and explicit learning events into `KnowledgeModel::assimilate`; no source-accuracy feedback loop was established by the inspected paths.
+
+**Required engineering work:**
+
+1. Separate *observation quality/confidence* from *empirical source trust*. They are not interchangeable. Do not keep averaging both into one scalar.
+2. Define what constitutes a valid correctness outcome for a source. It must be grounded in later evidence/outcomes with provenance; do not mark a source correct merely because another source repeats the same claim.
+3. Trace and implement the complete lifecycle: source evidence arrives → claim is retained with provenance and evidence quality → independent/validated outcome becomes available → source calibration updates → assessment can consult calibrated trust → state survives journal replay/restart.
+4. Keep evidence dependence explicit. Repeated claims from one source are not independent corroboration. Correlated sources must not be treated as independent merely because their source strings differ. Do not claim statistical independence unless the data supports it.
+5. Preserve uncertainty and active disputes. A reliability-weighted score must not silently turn a weak plurality into truth. Ties, close evidence, insufficient calibration, stale evidence, and conflicting outcomes must remain unresolved or explicitly qualified.
+6. Ensure low-trust evidence is not discarded automatically: it may still be informative, especially when it is novel or independently corroborated. Trust should affect evidential weight, not erase observations.
+7. Make calibration and assessment deterministic under replay and independent of unordered-map iteration or event insertion artefacts.
+8. Add focused tests for uncalibrated sources, calibration from verified outcomes, correct/incorrect mixed histories, different source trust levels, repeated same-source observations, correlated sources, ties, reversals, malformed feedback, and restart reconstruction.
+9. Trace every caller and persistence pathway before changing APIs. Update documentation with actual semantics and limitations.
+
+**Priority 1 acceptance gate:** Demonstrate that a source's empirically learned reliability changes the *quality/weight/uncertainty* of its evidence in a later assessment; that this effect is based on traceable feedback rather than the incoming confidence field; that repetition/dependence cannot manufacture corroboration; and that the same assessment is reconstructed after restart. The test must also show that conflicting evidence is not automatically erased by a weighted majority.
+
+Do not declare Priority 1 complete because a metric exists, a unit test checks arithmetic, or the assessment merely returns a weighted number.
+
+### Priority 2 — Connect learned knowledge and belief state to decisions
+
+Trace how assessed knowledge, uncertainty, conflict, and memory retrieval reach candidate generation, action selection, planning, and execution. Prove that changing experience changes a later decision for the right reason. Do not insert a hardcoded rule for the test scenario.
+
+### Priority 3 — Strengthen generalisation and transfer
+
+Demonstrate structural transfer across unfamiliar contexts, including negative controls and adversarially similar contexts where transfer should *not* occur. Prevent exact-scenario memorisation and label leakage.
+
+### Priority 4 — Close the developmental feedback loop
+
+Connect decision → action → observed consequence → attribution → prediction/belief/strategy updates → future decision. Prove that the changed behaviour survives restart and is not just a transient score update.
+
+### Priority 5 — Improve evidence-dependence modelling
+
+Distinguish repeated observations, shared-origin sources, genuinely independent corroboration, and contradictory evidence. Avoid treating source-count as a statistical posterior.
+
+## 5. Mandatory builder instructions
+
+- Continue from the current repository and branch state; inspect the actual latest head before editing.
+- Work on the active PR/branch unless an explicit reason requires a separate branch. Do not silently switch the base or stack.
+- Implement the highest unresolved priority. Do not add unrelated features or change direction because a new idea is easier.
+- Before editing, inspect relevant source, callers, tests, journal/replay behaviour, and API contracts.
+- Make the smallest coherent architectural change that closes the identified mechanism gap.
+- Never replace learning with hand-authored mappings, scenario-specific answers, or fixed response tables.
+- Do not remove uncertainty or conflict merely to make tests pass.
+- Do not claim persistence without a fresh-process replay test.
+- Do not claim transfer without unseen-context tests and leakage controls.
+- Do not claim integration because separate unit tests pass.
+- Report exact files, commit SHA, implementation changes, known limitations, and tests actually run. Clearly distinguish tests run by CI/another actor from tests run locally.
+- Do not merge without explicit owner authorization.
+
+## 6. Mandatory tester instructions
+
+Testers must try to falsify the developmental capability, not merely confirm the happy path.
+
+For Priority 1, include at minimum:
+
+- repeated weak observations from one source versus independent corroboration;
+- distinct source identifiers that share one underlying origin;
+- source calibration from both correct and incorrect outcomes;
+- a source that is initially reliable and later degrades, and one that improves;
+- stale calibration versus fresh calibration;
+- high-confidence but historically poor source versus lower-confidence but historically accurate source;
+- two or more competing values, ties, near-ties, and reversals;
+- a source that provides conflicting values over time;
+- malformed, missing, duplicated, or untraceable correctness feedback;
+- restart/replay equivalence, including no double-scoring on replay;
+- downstream assessment/decision impact without a hardcoded scenario response.
+
+Retain exact commit SHA, commands, test output, CI run identifiers, and failures. A green build alone is not proof of learning.
+
+## 7. Mandatory reviewer instructions
+
+Review the mechanism, not the narrative. Independently verify:
+
+- whether source trust and observation quality are separated;
+- whether correctness feedback is genuinely grounded and attributable;
+- whether feedback can be circular or self-confirming;
+- whether source identities and common provenance are modelled honestly;
+- whether confidence aggregation is mathematically and semantically defensible;
+- whether disputes and uncertainty survive ties, reversals, and restart;
+- whether replay is deterministic and idempotent;
+- whether the learned assessment actually reaches decisions;
+- whether tests prove the claimed behaviour rather than implementation details.
+
+Request changes for hardcoded mappings, false independence, ungrounded source scoring, silent conflict deletion, unpersisted calibration, or claims exceeding the evidence.
+
+## 8. Current PR state and verification boundary
+
+At the time this document was authored, PR #148 was open, draft, unmerged, and reported head `7b9f50e588bb677882a7b8212cd84d41791b8053`. GitHub had reported successful runs for Brain ThreadSanitizer, Native Brain Build, Brain CI, and JARVIS Brain Tests on that head. These are CI-reported statuses; they are not a substitute for independent review or the expanded behavioural acceptance tests above.
+
+PR #148 currently addresses accumulated-evidence conflict handling in the world model and belief dispute synchronization. This work is relevant foundation, but it does not close Priority 1 or establish the complete developmental learning loop.
+
+**This plan remains active until the acceptance gates are met with reproducible evidence.** Update this document when a priority is completed, the active head changes materially, or evidence changes the assessment. Do not silently replace the objective or reorder priorities.
