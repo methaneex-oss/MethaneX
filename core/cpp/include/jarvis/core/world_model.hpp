@@ -33,6 +33,9 @@ struct Relation {
     // First observation sequence for this relation value, used to require
     // corroboration after a conflict is introduced.
     std::uint64_t first_sequence{0};
+    // Reliability of the most recent observation, kept separate from the
+    // aggregate mean so weak evidence cannot resolve a conflict by itself.
+    double latest_evidence_confidence{0.5};
 };
 
 class WorldModel {
