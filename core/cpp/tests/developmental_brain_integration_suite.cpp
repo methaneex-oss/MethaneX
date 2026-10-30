@@ -1331,6 +1331,96 @@ int main() {
     std::filesystem::remove(reverse_cross_source_path, ec);
     std::filesystem::remove(reverse_cross_source_path.string() + ".meta", ec);
 
+    // Three-way alternatives: ties must remain contested, and unequal
+    // reliability must accumulate without allowing pre-conflict evidence alone
+    // to settle a newly introduced alternative.
+    const auto multi_value_path =
+        std::filesystem::temp_directory_path() / "jarvis_three_way_fact_conflict.bin";
+    std::filesystem::remove(multi_value_path, ec);
+    std::filesystem::remove(multi_value_path.string() + ".meta", ec);
+    {
+        Brain multi_value(multi_value_path);
+        const auto observe_value = [&](const char* value, double reliability) {
+            return multi_value.observe(Event{0, 0, "multi-value-source", "observation",
+                {{"multi-value", std::string(value)},
+                 {"evidence_reliability", reliability}}});
+        };
+        assert(observe_value("alpha", 0.8).event.sequence != 0);
+        assert(observe_value("beta", 0.8).event.sequence != 0);
+        assert(observe_value("gamma", 0.8).event.sequence != 0);
+        auto contested = multi_value.world().query("multi-value-source", "multi-value");
+        assert(contested.has_value() && contested->disputed);
+        assert(multi_value.world().disputed_facts().size() == 2);
+
+        // A low-reliability repeat cannot settle the three-way tie.
+        assert(observe_value("gamma", 0.2).event.sequence != 0);
+        contested = multi_value.world().query("multi-value-source", "multi-value");
+        assert(contested.has_value() && contested->disputed);
+
+        // Fresh, higher-quality corroboration after the conflict can resolve it.
+        assert(observe_value("gamma", 0.9).event.sequence != 0);
+        const auto resolved = multi_value.world().query(
+            "multi-value-source", "multi-value");
+        assert(resolved.has_value() && !resolved->disputed);
+        assert(resolved->value == Scalar{std::string("gamma")});
+        assert(multi_value.world().disputed_facts().empty());
+    }
+    {
+        Brain multi_value_replay(multi_value_path);
+        const auto resolved = multi_value_replay.world().query(
+            "multi-value-source", "multi-value");
+        assert(resolved.has_value() && !resolved->disputed);
+        assert(resolved->value == Scalar{std::string("gamma")});
+        assert(multi_value_replay.world().disputed_facts().empty());
+    }
+    std::filesystem::remove(multi_value_path, ec);
+    std::filesystem::remove(multi_value_path.string() + ".meta", ec);
+
+    const auto multi_relation_path =
+        std::filesystem::temp_directory_path() / "jarvis_three_way_relation_conflict.bin";
+    std::filesystem::remove(multi_relation_path, ec);
+    std::filesystem::remove(multi_relation_path.string() + ".meta", ec);
+    {
+        Brain multi_relation(multi_relation_path);
+        const auto observe_destination = [&](const char* destination, double reliability) {
+            return multi_relation.observe(Event{0, 0, "relation-source", "observation",
+                {{"subject", std::string("gateway")},
+                 {"predicate", std::string("connects_to")},
+                 {"object", std::string(destination)},
+                 {"evidence_reliability", reliability}}});
+        };
+        assert(observe_destination("node-a", 0.8).event.sequence != 0);
+        assert(observe_destination("node-b", 0.8).event.sequence != 0);
+        assert(observe_destination("node-c", 0.8).event.sequence != 0);
+        auto relations = multi_relation.world().relations_from("gateway");
+        assert(relations.size() == 3);
+        assert(std::all_of(relations.begin(), relations.end(),
+            [](const Relation& relation) { return relation.disputed; }));
+
+        assert(observe_destination("node-c", 0.2).event.sequence != 0);
+        relations = multi_relation.world().relations_from("gateway");
+        assert(relations.size() == 3);
+        assert(std::all_of(relations.begin(), relations.end(),
+            [](const Relation& relation) { return relation.disputed; }));
+
+        assert(observe_destination("node-c", 0.9).event.sequence != 0);
+        relations = multi_relation.world().relations_from("gateway");
+        assert(relations.size() == 1);
+        assert(relations.front().to == "node-c");
+        assert(!relations.front().disputed);
+        assert(multi_relation.world().disputed_relations().empty());
+    }
+    {
+        Brain multi_relation_replay(multi_relation_path);
+        const auto relations = multi_relation_replay.world().relations_from("gateway");
+        assert(relations.size() == 1);
+        assert(relations.front().to == "node-c");
+        assert(!relations.front().disputed);
+        assert(multi_relation_replay.world().disputed_relations().empty());
+    }
+    std::filesystem::remove(multi_relation_path, ec);
+    std::filesystem::remove(multi_relation_path.string() + ".meta", ec);
+
     // Strategy evidence and episodic fallback must remain coordinated without
     // contaminating the restart/replay fixture above. Seed one durable positive
     // strategy, then add a conflicting in-memory episode after Brain has replayed
