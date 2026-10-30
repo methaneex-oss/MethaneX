@@ -30,6 +30,9 @@ struct Relation {
     // Number of observations supporting this exact relation. Appended to keep
     // existing aggregate initializers source-compatible.
     std::uint64_t observations{1};
+    // First observation sequence for this relation value, used to require
+    // corroboration after a conflict is introduced.
+    std::uint64_t first_sequence{0};
 };
 
 class WorldModel {
