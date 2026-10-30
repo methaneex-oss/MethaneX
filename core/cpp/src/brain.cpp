@@ -694,11 +694,18 @@ void Brain::replay(const Event& event, bool external_observation) {
         // evidence to resolve that exact value, clear the transient dispute flag
         // so reasoning does not retain a stale contradiction forever.
         const auto resolved_fact = world_.query(event.source, key);
-        if (resolved_fact.has_value() && !resolved_fact->disputed &&
-            resolved_fact->value == value) {
+        if (resolved_fact.has_value()) {
             const auto belief = beliefs_.find(key);
-            if (belief != beliefs_.end() && belief->second.value == value)
-                belief->second.disputed = false;
+            if (belief != beliefs_.end()) {
+                // The global belief can be updated by more than one source.
+                // Keep it disputed whenever this source still has an active
+                // conflict or its resolved value disagrees with the current
+                // belief; never let a repeated observation clear uncertainty
+                // while the world model still records competing evidence.
+                belief->second.disputed =
+                    resolved_fact->disputed ||
+                    resolved_fact->value != belief->second.value;
+            }
         }
     }
     const auto subject = string_value(event.data, "subject");
