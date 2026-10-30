@@ -1498,6 +1498,49 @@ int main() {
     std::filesystem::remove(precedence_path, ec);
     std::filesystem::remove(precedence_path.string() + ".meta", ec);
 
+    // Knowledge assessment must be driven by factual experience, survive
+    // journal replay, and distinguish repeated observations from independent
+    // corroboration. Corroboration is not treated as proof or safety approval.
+    const auto knowledge_path =
+        std::filesystem::temp_directory_path() / "jarvis_knowledge_assessment.bin";
+    std::filesystem::remove(knowledge_path, ec);
+    std::filesystem::remove(knowledge_path.string() + ".meta", ec);
+    {
+        Brain knowledge_brain(knowledge_path);
+        assert(knowledge_brain.observe(Event{0, 1, "source-A", "observation",
+            {{"surface-risk", std::string("hazardous")}}}).event.sequence != 0);
+        assert(knowledge_brain.observe(Event{0, 2, "source-A", "observation",
+            {{"surface-risk", std::string("hazardous")}}}).event.sequence != 0);
+        auto assessment = knowledge_brain.knowledge_assessment("surface-risk");
+        assert(assessment.has_value());
+        assert(assessment->status == KnowledgeStatus::provisional);
+        assert(assessment->supporting_sources == 1);
+
+        assert(knowledge_brain.observe(Event{0, 3, "source-B", "observation",
+            {{"surface-risk", std::string("hazardous")}}}).event.sequence != 0);
+        assessment = knowledge_brain.knowledge_assessment("surface-risk");
+        assert(assessment.has_value());
+        assert(assessment->status == KnowledgeStatus::corroborated);
+        assert(assessment->supporting_sources == 2);
+
+        assert(knowledge_brain.observe(Event{0, 4, "source-C", "observation",
+            {{"surface-risk", std::string("safe")}}}).event.sequence != 0);
+        assessment = knowledge_brain.knowledge_assessment("surface-risk");
+        assert(assessment.has_value());
+        assert(assessment->status == KnowledgeStatus::disputed);
+        assert(assessment->conflicting_sources == 1);
+    }
+    {
+        Brain knowledge_replay(knowledge_path);
+        const auto assessment = knowledge_replay.knowledge_assessment("surface-risk");
+        assert(assessment.has_value());
+        assert(assessment->status == KnowledgeStatus::disputed);
+        assert(assessment->supporting_sources == 2);
+        assert(assessment->conflicting_sources == 1);
+    }
+    std::filesystem::remove(knowledge_path, ec);
+    std::filesystem::remove(knowledge_path.string() + ".meta", ec);
+
     std::filesystem::remove(path, ec);
     std::filesystem::remove(path.string() + ".meta", ec);
     std::cout << "developmental brain integration suite passed\n";
