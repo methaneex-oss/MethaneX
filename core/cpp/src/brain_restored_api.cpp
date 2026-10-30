@@ -145,7 +145,10 @@ bool Brain::resolve_prediction(std::uint64_t prediction_sequence, const Scalar& 
 bool Brain::record_knowledge_source_feedback(
     std::uint64_t claim_sequence, const std::string& key, const Scalar& value,
     const std::string& evaluator, bool correct) {
-    if (claim_sequence == 0 || key.empty() || evaluator.empty()) return false;
+    if (claim_sequence == 0 ||
+        claim_sequence > static_cast<std::uint64_t>(
+            std::numeric_limits<std::int64_t>::max()) ||
+        key.empty() || evaluator.empty()) return false;
     std::unique_lock lock(mutex_);
     const auto history = memory_.all();
     const auto target = std::find_if(history.begin(), history.end(),
@@ -172,7 +175,7 @@ bool Brain::record_knowledge_source_feedback(
             if (prior_evaluator != nullptr && *prior_evaluator == evaluator) return false;
         }
     }
-    Event feedback{0, now_ns(), evaluator, "knowledge_source_feedback",
+    Event feedback{0, 0, evaluator, "knowledge_source_feedback",
         {{"claim_sequence", static_cast<std::int64_t>(claim_sequence)},
          {"claim_source", target->source}, {"claim_key", key},
          {"claim_value", value}, {"evaluator", evaluator}, {"correct", correct}}};
