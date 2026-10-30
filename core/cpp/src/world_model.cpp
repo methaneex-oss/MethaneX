@@ -25,6 +25,12 @@ void accumulate_evidence(Fact& accumulated, const Fact& incoming) {
         accumulated.updated_sequence, incoming.updated_sequence);
 }
 
+// This aggregate is a simple evidence score, not a calibrated posterior.
+// It assumes each counted observation is an independent sample with
+// comparable calibration: mean confidence times count equals the sum of
+// per-observation confidence weights. Correlated repeats violate this
+// assumption and can overstate support. Do not interpret the score as
+// Bayesian certainty; a dependence-aware model is a future improvement.
 long double evidence_weight(const Fact& fact) {
     return static_cast<long double>(std::clamp(fact.confidence, 0.0, 1.0)) *
            static_cast<long double>(std::max<std::uint64_t>(1, fact.observations));
@@ -49,6 +55,7 @@ void accumulate_evidence(Relation& accumulated, const Relation& incoming) {
         accumulated.updated_sequence, incoming.updated_sequence);
 }
 
+// Relation support shares the same independence and calibration assumptions.
 long double evidence_weight(const Relation& relation) {
     return static_cast<long double>(std::clamp(relation.confidence, 0.0, 1.0)) *
            static_cast<long double>(std::max<std::uint64_t>(1, relation.observations));
