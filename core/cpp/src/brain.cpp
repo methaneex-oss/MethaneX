@@ -896,6 +896,9 @@ void Brain::replay(const Event& event, bool external_observation) {
 }
 Observation Brain::observe(Event event) {
     std::unique_lock lock(mutex_);
+    // Source calibration feedback must enter through the validated adjudication
+    // API below, never through the general external-experience interface.
+    if (event.kind == "knowledge_source_feedback") return Observation{};
     if (!is_internal_brain_event(event.kind) && !valid_observation_event(event))
         return Observation{};
     if (event.kind == "prediction_outcome") {
