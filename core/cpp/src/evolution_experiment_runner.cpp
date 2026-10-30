@@ -184,21 +184,14 @@ bool EvolutionExperimentRunner::is_trusted_evaluator(
 
 bool EvolutionExperimentRunner::restore_trusted_attestation(
     EvolutionExperiment& experiment) noexcept {
-    if (!experiment.candidate_executed || !experiment.isolated ||
-        !safe_field(experiment.id) || !safe_field(experiment.proposal.key) ||
-        !safe_field(experiment.evaluation_procedure_id) ||
-        !is_trusted_evaluator(experiment.evaluation_procedure_id, {},
-                              experiment.evaluator_executable_fingerprint)) return false;
-    const auto expected_baseline = fingerprint(
-        experiment.proposal.key + "\x1f" + EvolutionExperiment::format_parameter_value(experiment.proposal.current) +
-        "\x1f" + experiment.evaluation_procedure_id);
-    const auto expected_candidate = fingerprint(
-        experiment.proposal.key + "\x1f" + EvolutionExperiment::format_parameter_value(experiment.proposal.proposed) +
-        "\x1f" + experiment.evaluation_procedure_id);
-    if (experiment.baseline_artifact_id != expected_baseline ||
-        experiment.candidate_artifact_id != expected_candidate) return false;
-    experiment.attest_isolated_result();
-    return experiment.has_valid_isolation_attestation();
+    // Evaluator registration identifies a trusted executable, but it does not
+    // authenticate historical fitness values copied from a writable journal.
+    // The artifact IDs are unkeyed fingerprints and can be recomputed by anyone
+    // who can edit the journal. Do not reconstruct a private attestation from
+    // those claims. Replay must remain fail-closed until durable measurements
+    // have independently authenticated provenance.
+    (void)experiment;
+    return false;
 }
 
 std::string EvolutionExperimentRunner::executable_fingerprint(
