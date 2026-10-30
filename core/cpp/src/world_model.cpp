@@ -128,8 +128,11 @@ void WorldModel::relate(const Relation& incoming) {
     relation.confidence = std::clamp(relation.confidence, 0.0, 1.0);
     relation.observations = std::max<std::uint64_t>(1, relation.observations);
 
+    const std::string relation_from = relation.from;
+    const std::string relation_type = relation.type;
+    const std::string relation_to = relation.to;
     const auto exact = std::find_if(relations_.begin(), relations_.end(), [&](const Relation& current) {
-        return current.from == relation.from && current.type == relation.type && current.to == relation.to;
+        return current.from == relation_from && current.type == relation_type && current.to == relation_to;
     });
     if (exact != relations_.end()) {
         accumulate_evidence(*exact, relation);
@@ -142,7 +145,7 @@ void WorldModel::relate(const Relation& incoming) {
     // Keep them disputed while support is tied; repeated evidence for one
     // destination can resolve the relation and retire unsupported alternatives.
     const auto same_relation = [&](const Relation& candidate) {
-        return candidate.from == relation.from && candidate.type == relation.type;
+        return candidate.from == relation_from && candidate.type == relation_type;
     };
     Relation* winner = nullptr;
     long double strongest = -1.0L;
