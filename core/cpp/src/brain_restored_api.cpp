@@ -52,6 +52,33 @@ bool Brain::record_knowledge_source_feedback(
         [&](const Event& candidate) { return candidate.sequence == claim_sequence; });
     if (target == history.end() || target->source.empty() || target->source == evaluator)
         return false;
+
+    bool claim_matches = false;
+    if (target->kind == "learning") {
+        const auto key_it = target->data.find("evidence_key");
+        const auto value_it = target->data.find("evidence_value");
+        const auto* evidence_key = key_it == target->data.end()
+            ? nullptr : std::get_if<std::string>(&key_it->second);
+        claim_matches = evidence_key != nullptr && *evidence_key == key &&
+            value_it != target->data.end() && value_it->second == value;
+    } else {
+        const auto value_it = target->data.find(key);
+        claim_matches = value_it != target->data.end() && value_it->second == value;
+    }
+    if (!claim_matches) return false;
+
+    const auto prior_feedback = memory_.by_kind("knowledge_source_feedback");
+    for (const auto& prior : prior_feedback) {
+        const auto seq_it = prior.data.find("claim_sequence");
+        const auto evaluator_it = prior.data.find("evaluator");
+        const auto* prior_seq = seq_it == prior.data.end()
+            ? nullptr : std::get_if<std::int64_t>(&seq_it->second);
+        const auto* prior_evaluator = evaluator_it == prior.data.end()
+            ? nullptr : std::get_if<std::string>(&evaluator_it->second);
+        if (prior_seq != nullptr && *prior_seq == static_cast<std::int64_t>(claim_sequence) &&
+            prior_evaluator != nullptr && *prior_evaluator == evaluator) return false;
+    }
+
     Event event{0, 0, evaluator, "knowledge_source_feedback",
         {{"claim_sequence", static_cast<std::int64_t>(claim_sequence)},
          {"claim_source", target->source}, {"claim_key", key},
