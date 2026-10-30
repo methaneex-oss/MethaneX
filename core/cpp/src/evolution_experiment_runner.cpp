@@ -263,7 +263,8 @@ bool EvolutionExperimentRunner::authenticate_persisted_evidence(
         const auto signature = evidence_mac(experiment, key);
         if (signature.empty()) return false;
         experiment.evidence_authentication = signature;
-        return true;
+        experiment.attest_isolated_result();
+        return experiment.has_valid_isolation_attestation();
     } catch (...) {
         return false;
     }
