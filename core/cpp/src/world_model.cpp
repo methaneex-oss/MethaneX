@@ -4,6 +4,52 @@
 #include <mutex>
 
 namespace jarvis::core {
+namespace {
+
+void accumulate_evidence(Fact& accumulated, const Fact& incoming) {
+    const auto previous_observations = std::max<std::uint64_t>(1, accumulated.observations);
+    const auto incoming_observations = std::max<std::uint64_t>(1, incoming.observations);
+    const long double total = static_cast<long double>(previous_observations) +
+                              static_cast<long double>(incoming_observations);
+    accumulated.confidence = std::clamp(static_cast<double>(
+        (static_cast<long double>(accumulated.confidence) * previous_observations +
+         static_cast<long double>(incoming.confidence) * incoming_observations) / total),
+        0.0, 1.0);
+    accumulated.observations = previous_observations + incoming_observations;
+    if (accumulated.first_sequence == 0 ||
+        (incoming.first_sequence != 0 &&
+         incoming.first_sequence < accumulated.first_sequence)) {
+        accumulated.first_sequence = incoming.first_sequence;
+    }
+    accumulated.updated_sequence = std::max(
+        accumulated.updated_sequence, incoming.updated_sequence);
+}
+
+long double evidence_weight(const Fact& fact) {
+    return static_cast<long double>(std::clamp(fact.confidence, 0.0, 1.0)) *
+           static_cast<long double>(std::max<std::uint64_t>(1, fact.observations));
+}
+
+void accumulate_evidence(Relation& accumulated, const Relation& incoming) {
+    const auto previous_observations = std::max<std::uint64_t>(1, accumulated.observations);
+    const auto incoming_observations = std::max<std::uint64_t>(1, incoming.observations);
+    const long double total = static_cast<long double>(previous_observations) +
+                              static_cast<long double>(incoming_observations);
+    accumulated.confidence = std::clamp(static_cast<double>(
+        (static_cast<long double>(accumulated.confidence) * previous_observations +
+         static_cast<long double>(incoming.confidence) * incoming_observations) / total),
+        0.0, 1.0);
+    accumulated.observations = previous_observations + incoming_observations;
+    accumulated.updated_sequence = std::max(
+        accumulated.updated_sequence, incoming.updated_sequence);
+}
+
+long double evidence_weight(const Relation& relation) {
+    return static_cast<long double>(std::clamp(relation.confidence, 0.0, 1.0)) *
+           static_cast<long double>(std::max<std::uint64_t>(1, relation.observations));
+}
+
+} // namespace
 
 void WorldModel::observe(const Fact& incoming) {
     std::unique_lock lock(mutex_);
@@ -17,44 +63,154 @@ void WorldModel::observe(const Fact& incoming) {
         facts_.push_back(std::move(fact));
         return;
     }
+
+    // Keep independent support for each observed value while a fact is
+    // contested. Repeated evidence for either side accumulates; it must not
+    // leave the first conflict permanently disputed merely because the
+    // currently selected fact had an equal-confidence tie.
     if (it->value == fact.value) {
-        const double n = static_cast<double>(it->observations);
-        it->confidence = std::clamp((it->confidence * n + fact.confidence * fact.observations) /
-                                     (n + static_cast<double>(fact.observations)), 0.0, 1.0);
-        it->observations += fact.observations;
-        it->updated_sequence = std::max(it->updated_sequence, fact.updated_sequence);
+        accumulate_evidence(*it, fact);
+    } else {
+        const auto candidate = std::find_if(
+            disputed_facts_.begin(), disputed_facts_.end(),
+            [&](const Fact& current) {
+                return current.subject == fact.subject &&
+                       current.predicate == fact.predicate &&
+                       current.value == fact.value;
+            });
+        if (candidate != disputed_facts_.end()) {
+            accumulate_evidence(*candidate, fact);
+        } else {
+            fact.disputed = true;
+            if (fact.first_sequence == 0)
+                fact.first_sequence = fact.updated_sequence;
+            disputed_facts_.push_back(std::move(fact));
+        }
+    }
+
+    const auto same_fact = [&](const Fact& candidate) {
+        return candidate.subject == it->subject &&
+               candidate.predicate == it->predicate;
+    };
+    Fact* winner = &*it;
+    long double strongest = evidence_weight(*winner);
+    std::size_t strongest_count = 1;
+    bool has_conflict = false;
+    for (auto& candidate : disputed_facts_) {
+        if (!same_fact(candidate)) continue;
+        has_conflict = true;
+        const long double weight = evidence_weight(candidate);
+        if (weight > strongest) {
+            strongest = weight;
+            winner = &candidate;
+            strongest_count = 1;
+        } else if (weight == strongest) {
+            ++strongest_count;
+        }
+    }
+
+    if (!has_conflict) {
+        it->disputed = false;
+        return;
+    }
+
+    // A single high-confidence observation can raise a contradiction; it
+    // cannot settle one. Require at least two observations for the uniquely
+    // strongest alternative before removing the dispute.
+    if (strongest_count == 1 && winner->observations >= 2) {
+        if (winner != &*it) *it = *winner;
+        it->disputed = false;
+        disputed_facts_.erase(
+            std::remove_if(disputed_facts_.begin(), disputed_facts_.end(), same_fact),
+            disputed_facts_.end());
         return;
     }
 
     it->disputed = true;
-    fact.disputed = true;
-    if (fact.first_sequence == 0) fact.first_sequence = fact.updated_sequence;
-    disputed_facts_.push_back(fact);
-    if (fact.confidence > it->confidence) *it = std::move(fact);
+    for (auto& candidate : disputed_facts_) {
+        if (same_fact(candidate)) candidate.disputed = true;
+    }
 }
 
 void WorldModel::relate(const Relation& incoming) {
     std::unique_lock lock(mutex_);
     Relation relation = incoming;
     relation.confidence = std::clamp(relation.confidence, 0.0, 1.0);
+    relation.observations = std::max<std::uint64_t>(1, relation.observations);
 
+    const std::string relation_from = relation.from;
+    const std::string relation_type = relation.type;
+    const std::string relation_to = relation.to;
     const auto exact = std::find_if(relations_.begin(), relations_.end(), [&](const Relation& current) {
-        return current.from == relation.from && current.type == relation.type && current.to == relation.to;
+        return current.from == relation_from && current.type == relation_type && current.to == relation_to;
     });
     if (exact != relations_.end()) {
-        exact->confidence = std::max(exact->confidence, relation.confidence);
-        exact->updated_sequence = std::max(exact->updated_sequence, relation.updated_sequence);
+        accumulate_evidence(*exact, relation);
+    } else {
+        relation.disputed = true;
+        relations_.push_back(std::move(relation));
+    }
+
+    // Conflicting destinations are competing hypotheses for one relation.
+    // Keep them disputed while support is tied; repeated evidence for one
+    // destination can resolve the relation and retire unsupported alternatives.
+    const auto same_relation = [&](const Relation& candidate) {
+        return candidate.from == relation_from && candidate.type == relation_type;
+    };
+    Relation* winner = nullptr;
+    long double strongest = -1.0L;
+    std::size_t strongest_count = 0;
+    std::size_t relation_count = 0;
+    for (auto& candidate : relations_) {
+        if (!same_relation(candidate)) continue;
+        ++relation_count;
+        const long double weight = evidence_weight(candidate);
+        if (weight > strongest) {
+            strongest = weight;
+            winner = &candidate;
+            strongest_count = 1;
+        } else if (weight == strongest) {
+            ++strongest_count;
+        }
+    }
+
+    if (relation_count == 1) {
+        if (winner != nullptr) winner->disputed = false;
         return;
     }
 
-    const auto conflict = std::find_if(relations_.begin(), relations_.end(), [&](const Relation& current) {
-        return current.from == relation.from && current.type == relation.type && current.to != relation.to;
-    });
-    if (conflict != relations_.end()) {
-        conflict->disputed = true;
-        relation.disputed = true;
+    // As with facts, retain an unresolved relation after a single contrary
+    // observation. Repeated support must establish a unique winner.
+    if (strongest_count == 1 && winner != nullptr && winner->observations >= 2) {
+        const std::string winning_from = winner->from;
+        const std::string winning_type = winner->type;
+        const std::string winning_to = winner->to;
+        for (auto& candidate : relations_) {
+            if (same_relation(candidate))
+                candidate.disputed = candidate.to != winning_to;
+        }
+        relations_.erase(
+            std::remove_if(relations_.begin(), relations_.end(),
+                [&](const Relation& candidate) {
+                    return candidate.from == winning_from &&
+                           candidate.type == winning_type &&
+                           candidate.to != winning_to;
+                }),
+            relations_.end());
+        winner = nullptr;
+        const auto resolved = std::find_if(relations_.begin(), relations_.end(),
+            [&](const Relation& candidate) {
+                return candidate.from == winning_from &&
+                       candidate.type == winning_type &&
+                       candidate.to == winning_to;
+            });
+        if (resolved != relations_.end()) resolved->disputed = false;
+        return;
     }
-    relations_.push_back(std::move(relation));
+
+    for (auto& candidate : relations_) {
+        if (same_relation(candidate)) candidate.disputed = true;
+    }
 }
 
 std::optional<Fact> WorldModel::query(const std::string& subject, const std::string& predicate) const {
