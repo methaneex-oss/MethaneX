@@ -159,7 +159,11 @@ bool EvolutionController::adopt(EvolutionExperiment& experiment) {
 }
 
 bool EvolutionController::validate_adoption_for_brain(const EvolutionExperiment& experiment) const noexcept {
-    if (experiment.id.empty() || !experiment.candidate_executed) return false;
+    // A durable journal record is not proof that its fitness values came from
+    // the trusted evaluator. The runner must have authenticated this exact
+    // evidence (or restored its HMAC) before the controller can authorize it.
+    if (experiment.id.empty() || !experiment.candidate_executed ||
+        !experiment.has_valid_isolation_attestation()) return false;
 
     // Adoption is permitted only when durable history contains an evaluation
     // for this exact experiment and the request still matches that evidence.
@@ -197,11 +201,10 @@ bool EvolutionController::validate_adoption_for_brain(const EvolutionExperiment&
         record->baseline_artifact_id != experiment.baseline_artifact_id ||
         record->candidate_artifact_id != experiment.candidate_artifact_id) return false;
 
-    // On a restart, the caller's value object has no in-memory attestation.
-    // Re-attest a copy only after its fields match the durable evaluated record.
-    EvolutionExperiment verified = experiment;
-    if (record->isolated) verified.attest_isolated_result();
-    if (!EvolutionSafetyGate::approve(verified, policy_)) return false;
+    // Do not recreate a private attestation from journal fields here. That
+    // would turn writable metadata back into trusted evidence and defeat the
+    // runner's authenticated replay boundary.
+    if (!EvolutionSafetyGate::approve(experiment, policy_)) return false;
 
     const auto evaluation = model_.evaluate(experiment.proposal);
     if (!evaluation.eligible) return false;
