@@ -38,6 +38,8 @@ void attest_isolated(EvolutionExperiment& experiment) {
 int main(int argc, char** argv) {
     if (test_support::run_evolution_evaluator_fixture(argc, argv)) return 0;
     evaluator_executable = std::filesystem::absolute(argv[0]).string();
+    if (!EvolutionExperimentRunner::set_evidence_authentication_key(
+            "jarvis-test-evidence-key-2026-10-30-32bytes-minimum")) return 2;
     if (!EvolutionExperimentRunner::register_trusted_evaluator(
             "jarvis.test.fixture.v1", evaluator_executable,
             {"--test-evaluator-from-parameter"})) return 1;
