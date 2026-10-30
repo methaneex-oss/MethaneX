@@ -18,6 +18,9 @@ struct Fact {
     std::uint64_t first_sequence{0};
     std::uint64_t updated_sequence{0};
     bool disputed{false};
+    // Reliability of the latest observation, separate from accumulated support.
+    // Appended to preserve existing aggregate initializers.
+    double latest_evidence_confidence{0.5};
 };
 
 struct Relation {
