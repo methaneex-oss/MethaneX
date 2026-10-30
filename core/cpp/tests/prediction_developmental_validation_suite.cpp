@@ -67,6 +67,19 @@ int main() {
         assert(std::isfinite(learned->recent_error));
         assert(learned->mean_error < 1.0 / 3.0);
 
+        // Negative control: merely generating predictions without observing
+        // their consequences must not create an adaptation metric or change
+        // the untouched key's forecast. This also checks that learning under
+        // stable.sensor does not leak into an unrelated prediction key.
+        for (int i = 0; i < 4; ++i) {
+            const auto unobserved =
+                brain.predict("unobserved.sensor", Scalar{20.0}, 0.8);
+            assert(unobserved.created_sequence != 0);
+            assert(std::abs(numeric_prediction(unobserved) - 20.0) < 1e-12);
+            assert(brain.learning_metric("unobserved.sensor") == nullptr);
+        }
+        assert(brain.learning_metric("stable.sensor")->observations == 9);
+
         // Change the generating process. Repeated surprising outcomes should
         // move the estimate rather than permanently preserving the old regime.
         const auto before_shift = brain.predict("stable.sensor", Scalar{20.0}, 0.8);
@@ -110,6 +123,14 @@ int main() {
         assert(std::abs(first_forecast_error - 10.0) < 1e-12);
         assert(trained_forecast_error < first_forecast_error);
         assert(forecast_after_regime_change > forecast_before_regime_change);
+
+        // The negative control is durable too: an unobserved prediction key
+        // must not acquire learned state merely because its events were stored.
+        assert(restored.learning_metric("unobserved.sensor") == nullptr);
+        const auto unobserved_after_restart =
+            restored.predict("unobserved.sensor", Scalar{20.0}, 0.8);
+        assert(unobserved_after_restart.created_sequence != 0);
+        assert(std::abs(numeric_prediction(unobserved_after_restart) - 20.0) < 1e-12);
     }
 
     remove_journal(path);
