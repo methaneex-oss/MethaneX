@@ -18,7 +18,7 @@ int main() {
     {
         Brain brain(journal);
         const auto observed = brain.observe(Event{0, 0, "sensor-a", "observation",
-            {{"temperature", Scalar{20.0}}, {"reliability", Scalar{0.99}}}});
+            {{"temperature", Scalar{20.0}}, {"humidity", Scalar{50.0}}, {"reliability", Scalar{0.99}}}});
         claim_sequence = observed.event.sequence;
         assert(claim_sequence != 0);
         assert(brain.observe(Event{0, 0, "sensor-b", "observation",
@@ -40,7 +40,7 @@ int main() {
         const auto* initial = brain.knowledge_source("sensor-a");
         assert(initial != nullptr);
         observation_quality = initial->reliability;
-        assert(initial->observations == 1);
+        assert(initial->observations == 2);
         assert(initial->calibration_observations == 0);
 
         assert(!brain.record_knowledge_source_feedback(
@@ -56,6 +56,9 @@ int main() {
         assert(brain.record_knowledge_source_feedback(
             claim_sequence, "temperature", Scalar{20.0},
             "independent-reviewer", true));
+        assert(brain.record_knowledge_source_feedback(
+            claim_sequence, "humidity", Scalar{50.0},
+            "independent-reviewer", true));
         assert(!brain.record_knowledge_source_feedback(
             claim_sequence, "temperature", Scalar{20.0},
             "independent-reviewer", false));
@@ -68,9 +71,9 @@ int main() {
 
         const auto* calibrated = brain.knowledge_source("sensor-a");
         assert(calibrated != nullptr);
-        assert(calibrated->calibration_observations == 3);
-        assert(std::abs(calibrated->empirical_accuracy - (2.0 / 3.0)) < 1e-12);
-        assert(calibrated->observations == 1);
+        assert(calibrated->calibration_observations == 4);
+        assert(std::abs(calibrated->empirical_accuracy - 0.75) < 1e-12);
+        assert(calibrated->observations == 2);
         assert(std::abs(calibrated->reliability - observation_quality) < 1e-12);
         const auto calibrated_assessment = brain.knowledge_assessment("temperature");
         assert(calibrated_assessment.has_value());
@@ -82,9 +85,9 @@ int main() {
         Brain restored(journal);
         const auto* metric = restored.knowledge_source("sensor-a");
         assert(metric != nullptr);
-        assert(metric->calibration_observations == 3);
+        assert(metric->calibration_observations == 4);
         assert(std::abs(metric->empirical_accuracy - (2.0 / 3.0)) < 1e-12);
-        assert(metric->observations == 1);
+        assert(metric->observations == 2);
         assert(std::abs(metric->reliability - observation_quality) < 1e-12);
         const auto restored_assessment = restored.knowledge_assessment("temperature");
         assert(restored_assessment.has_value());
