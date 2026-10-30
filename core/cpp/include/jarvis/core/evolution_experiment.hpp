@@ -101,6 +101,7 @@ struct EvolutionExperiment {
 private:
     void clear_isolation_attestation() noexcept {
         isolation_attested_ = false;
+        evidence_authentication.clear();
         attested_id_.clear();
         attested_key_.clear();
         attested_procedure_id_.clear();
