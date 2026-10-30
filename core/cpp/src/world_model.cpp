@@ -16,6 +16,7 @@ void accumulate_evidence(Fact& accumulated, const Fact& incoming) {
          static_cast<long double>(incoming.confidence) * incoming_observations) / total),
         0.0, 1.0);
     accumulated.observations = previous_observations + incoming_observations;
+    accumulated.latest_evidence_confidence = incoming.latest_evidence_confidence;
     if (accumulated.first_sequence == 0 ||
         (incoming.first_sequence != 0 &&
          incoming.first_sequence < accumulated.first_sequence)) {
@@ -68,6 +69,7 @@ void WorldModel::observe(const Fact& incoming) {
     std::unique_lock lock(mutex_);
     Fact fact = incoming;
     fact.confidence = std::clamp(fact.confidence, 0.0, 1.0);
+    fact.latest_evidence_confidence = fact.confidence;
     fact.observations = std::max<std::uint64_t>(1, fact.observations);
     const auto it = std::find_if(facts_.begin(), facts_.end(), [&](const Fact& current) {
         return current.subject == fact.subject && current.predicate == fact.predicate;
@@ -139,9 +141,19 @@ void WorldModel::observe(const Fact& incoming) {
 
     // A previously strong value cannot dismiss a new contradiction using
     // only its pre-conflict history. The winning alternative must be observed
-    // again after the latest competing value was first introduced.
-    if (strongest_count == 1 && !has_unsequenced_conflict &&
-        latest_conflict_sequence != 0 &&
+    // again after the latest competing value was first introduced, and that
+    // latest observation must be at least as reliable as the strongest
+    // competing alternative's accumulated mean reliability.
+    double strongest_competing_confidence = 0.0;
+    for (const auto& candidate : disputed_facts_) {
+        if (same_fact(candidate) && candidate.value != winner->value) {
+            strongest_competing_confidence = std::max(
+                strongest_competing_confidence, candidate.confidence);
+        }
+    }
+    if (strongest_count == 1 &&
+        winner->latest_evidence_confidence >= strongest_competing_confidence &&
+        !has_unsequenced_conflict && latest_conflict_sequence != 0 &&
         winner->updated_sequence > latest_conflict_sequence) {
         if (winner != &*it) *it = *winner;
         it->disputed = false;
