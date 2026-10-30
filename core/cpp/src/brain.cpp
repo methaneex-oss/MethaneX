@@ -524,6 +524,8 @@ void Brain::replay(const Event& event, bool external_observation) {
                 experiment.baseline_artifact_id = *artifact;
             if (const auto* artifact = string_value(event.data, "candidate_artifact_id"))
                 experiment.candidate_artifact_id = *artifact;
+            if (const auto* authentication = string_value(event.data, "evidence_authentication"))
+                experiment.evidence_authentication = *authentication;
             // Persisted isolation flags are claims, not proof. Re-establish
             // provenance only when the locally registered evaluator still matches.
             if (!EvolutionExperimentRunner::restore_trusted_attestation(experiment))
@@ -573,6 +575,8 @@ void Brain::replay(const Event& event, bool external_observation) {
                     experiment.baseline_artifact_id = *artifact;
                 if (const auto* artifact = string_value(event.data, "candidate_artifact_id"))
                     experiment.candidate_artifact_id = *artifact;
+                if (const auto* authentication = string_value(event.data, "evidence_authentication"))
+                    experiment.evidence_authentication = *authentication;
                 if (!EvolutionExperimentRunner::restore_trusted_attestation(experiment))
                     experiment.isolated = false;
                 const auto adoption = evolution_controller_.adoption_journal().get(*experiment_id);
