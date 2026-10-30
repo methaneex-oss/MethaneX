@@ -58,7 +58,6 @@ public:
  explicit Brain(std::filesystem::path journal_path = "data/brain/continuity.bin");
  Observation observe(Event event); double learn(const Evidence& evidence);
  bool record_knowledge_source_feedback(std::uint64_t claim_sequence, const std::string& key, const Scalar& value, const std::string& evaluator, bool correct);
- bool record_knowledge_source_feedback(std::uint64_t claim_sequence, const std::string& key, const Scalar& value, const std::string& evaluator, bool correct);
  LearningCycle learn_from_prediction(const std::string& key, const Scalar& actual, double fitness);
  std::vector<Belief> beliefs() const; Prediction predict(std::string key, Scalar value, double confidence); Prediction predict_with_context(std::string key, Scalar value, double confidence, double minimum_strength = 0.5, std::size_t minimum_shared_contexts = 2); PredictionFeedbackStatus resolve_prediction_feedback(const std::string& key, const Scalar& actual, std::optional<double> outcome_utility = std::nullopt); PredictionFeedbackStatus resolve_prediction_feedback(std::uint64_t prediction_sequence, const Scalar& actual, std::optional<double> outcome_utility = std::nullopt); bool resolve_prediction(const std::string& key, const Scalar& actual); bool resolve_prediction(std::uint64_t prediction_sequence, const Scalar& actual);
  bool assimilate_goal_outcome(const GoalOutcomeEvidence& evidence);
