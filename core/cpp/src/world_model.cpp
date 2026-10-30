@@ -229,7 +229,7 @@ void WorldModel::relate(const Relation& incoming) {
         }
     }
     if (strongest_count == 1 && winner != nullptr &&
-        winner->latest_evidence_confidence > strongest_competing_confidence &&
+        winner->latest_evidence_confidence >= strongest_competing_confidence &&
         !has_unsequenced_conflict && latest_conflict_sequence != 0 &&
         winner->updated_sequence > latest_conflict_sequence) {
         const std::string winning_from = winner->from;
