@@ -4,6 +4,33 @@
 #include <mutex>
 
 namespace jarvis::core {
+namespace {
+
+void accumulate_evidence(Fact& accumulated, const Fact& incoming) {
+    const auto previous_observations = std::max<std::uint64_t>(1, accumulated.observations);
+    const auto incoming_observations = std::max<std::uint64_t>(1, incoming.observations);
+    const long double total = static_cast<long double>(previous_observations) +
+                              static_cast<long double>(incoming_observations);
+    accumulated.confidence = std::clamp(static_cast<double>(
+        (static_cast<long double>(accumulated.confidence) * previous_observations +
+         static_cast<long double>(incoming.confidence) * incoming_observations) / total),
+        0.0, 1.0);
+    accumulated.observations = previous_observations + incoming_observations;
+    if (accumulated.first_sequence == 0 ||
+        (incoming.first_sequence != 0 &&
+         incoming.first_sequence < accumulated.first_sequence)) {
+        accumulated.first_sequence = incoming.first_sequence;
+    }
+    accumulated.updated_sequence = std::max(
+        accumulated.updated_sequence, incoming.updated_sequence);
+}
+
+long double evidence_weight(const Fact& fact) {
+    return static_cast<long double>(std::clamp(fact.confidence, 0.0, 1.0)) *
+           static_cast<long double>(std::max<std::uint64_t>(1, fact.observations));
+}
+
+} // namespace
 
 void WorldModel::observe(const Fact& incoming) {
     std::unique_lock lock(mutex_);
@@ -17,20 +44,63 @@ void WorldModel::observe(const Fact& incoming) {
         facts_.push_back(std::move(fact));
         return;
     }
+
+    // Keep independent support for each observed value while a fact is
+    // contested. Repeated evidence for either side accumulates; it must not
+    // leave the first conflict permanently disputed merely because the
+    // currently selected fact had an equal-confidence tie.
     if (it->value == fact.value) {
-        const double n = static_cast<double>(it->observations);
-        it->confidence = std::clamp((it->confidence * n + fact.confidence * fact.observations) /
-                                     (n + static_cast<double>(fact.observations)), 0.0, 1.0);
-        it->observations += fact.observations;
-        it->updated_sequence = std::max(it->updated_sequence, fact.updated_sequence);
+        accumulate_evidence(*it, fact);
+    } else {
+        const auto candidate = std::find_if(
+            disputed_facts_.begin(), disputed_facts_.end(),
+            [&](const Fact& current) {
+                return current.subject == fact.subject &&
+                       current.predicate == fact.predicate &&
+                       current.value == fact.value;
+            });
+        if (candidate != disputed_facts_.end()) {
+            accumulate_evidence(*candidate, fact);
+        } else {
+            fact.disputed = true;
+            if (fact.first_sequence == 0)
+                fact.first_sequence = fact.updated_sequence;
+            disputed_facts_.push_back(std::move(fact));
+        }
+    }
+
+    const auto same_fact = [&](const Fact& candidate) {
+        return candidate.subject == it->subject &&
+               candidate.predicate == it->predicate;
+    };
+    Fact* winner = &*it;
+    long double strongest = evidence_weight(*winner);
+    std::size_t strongest_count = 1;
+    for (auto& candidate : disputed_facts_) {
+        if (!same_fact(candidate)) continue;
+        const long double weight = evidence_weight(candidate);
+        if (weight > strongest) {
+            strongest = weight;
+            winner = &candidate;
+            strongest_count = 1;
+        } else if (weight == strongest) {
+            ++strongest_count;
+        }
+    }
+
+    if (strongest_count == 1) {
+        if (winner != &*it) *it = *winner;
+        it->disputed = false;
+        disputed_facts_.erase(
+            std::remove_if(disputed_facts_.begin(), disputed_facts_.end(), same_fact),
+            disputed_facts_.end());
         return;
     }
 
     it->disputed = true;
-    fact.disputed = true;
-    if (fact.first_sequence == 0) fact.first_sequence = fact.updated_sequence;
-    disputed_facts_.push_back(fact);
-    if (fact.confidence > it->confidence) *it = std::move(fact);
+    for (auto& candidate : disputed_facts_) {
+        if (same_fact(candidate)) candidate.disputed = true;
+    }
 }
 
 void WorldModel::relate(const Relation& incoming) {
