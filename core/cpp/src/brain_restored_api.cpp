@@ -163,8 +163,18 @@ bool Brain::record_knowledge_source_feedback(
         matching_claim = evidence_key != nullptr && *evidence_key == key &&
             evidence_value != target->data.end() && evidence_value->second == value;
     } else {
+        const auto external = target->data.find("_external_observation");
+        const bool is_external =
+            external != target->data.end() &&
+            std::get_if<bool>(&external->second) != nullptr &&
+            *std::get_if<bool>(&external->second);
+        const bool metadata = key == "_external_observation" || key == "novelty" ||
+            key == "salience" || key == "urgency" || key == "prediction_error" ||
+            key == "outcome" || key == "confidence" || key == "reliability" ||
+            key == "evidence_reliability" || key == "world_step";
         const auto fact = target->data.find(key);
-        matching_claim = fact != target->data.end() && fact->second == value;
+        matching_claim = is_external && !metadata &&
+            fact != target->data.end() && fact->second == value;
     }
     if (!matching_claim) return false;
     for (const auto& prior : history) {
