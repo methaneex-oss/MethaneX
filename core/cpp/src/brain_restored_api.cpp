@@ -142,6 +142,49 @@ bool Brain::resolve_prediction(std::uint64_t prediction_sequence, const Scalar& 
            PredictionFeedbackStatus::resolved_correctly;
 }
 
+bool Brain::record_knowledge_source_feedback(
+    std::uint64_t claim_sequence, const std::string& key, const Scalar& value,
+    const std::string& evaluator, bool correct) {
+    if (claim_sequence == 0 || key.empty() || evaluator.empty()) return false;
+    std::unique_lock lock(mutex_);
+    const auto history = memory_.all();
+    const auto target = std::find_if(history.begin(), history.end(),
+        [&](const Event& candidate) { return candidate.sequence == claim_sequence; });
+    if (target == history.end() || target->source.empty() ||
+        target->source == evaluator) return false;
+    bool matching_claim = false;
+    if (target->kind == "learning") {
+        const auto* evidence_key = std::get_if<std::string>(
+            target->data.count("evidence_key") ? &target->data.at("evidence_key") : nullptr);
+        const auto evidence_value = target->data.find("evidence_value");
+        matching_claim = evidence_key != nullptr && *evidence_key == key &&
+            evidence_value != target->data.end() && evidence_value->second == value;
+    } else {
+        const auto fact = target->data.find(key);
+        matching_claim = fact != target->data.end() && fact->second == value;
+    }
+    if (!matching_claim) return false;
+    for (const auto& prior : history) {
+        if (prior.kind != "knowledge_source_feedback") continue;
+        if (integer_value(prior.data, "claim_sequence", 0) ==
+                static_cast<std::int64_t>(claim_sequence)) {
+            const auto* prior_evaluator = string_value(prior.data, "evaluator");
+            if (prior_evaluator != nullptr && *prior_evaluator == evaluator) return false;
+        }
+    }
+    Event feedback{0, now_ns(), evaluator, "knowledge_source_feedback",
+        {{"claim_sequence", static_cast<std::int64_t>(claim_sequence)},
+         {"claim_source", target->source}, {"claim_key", key},
+         {"claim_value", value}, {"evaluator", evaluator}, {"correct", correct}}};
+    feedback.sequence = memory_.append(feedback);
+    if (feedback.sequence == 0) return false;
+    replay(feedback);
+    ++state_.events_seen;
+    state_.cycle = feedback.sequence;
+    sync_self_state();
+    return true;
+}
+
 const StrategyParameter* Brain::evolution_parameter(const std::string& key) const noexcept { std::shared_lock lock(mutex_); return evolution_.parameter(key); }
 const KnowledgeMetric* Brain::knowledge_source(const std::string& source) const noexcept { std::shared_lock lock(mutex_); return knowledge_.source_metric(source); }
 const AdaptiveMetric* Brain::learning_metric(const std::string& key) const noexcept { std::shared_lock lock(mutex_); return adaptation_.metric(key); }
