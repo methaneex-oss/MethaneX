@@ -9,28 +9,28 @@ double KnowledgeModel::assimilate(const KnowledgeEvidence& evidence) {
     if (evidence.source.empty() || evidence.key.empty() ||
         !std::isfinite(evidence.reliability)) return 0.0;
     auto& metric = sources_[evidence.source];
-    const double reliability = std::clamp(evidence.reliability, 0.0, 1.0);
+    const double quality = std::clamp(evidence.reliability, 0.0, 1.0);
     if (metric.observations == 0) {
-        metric.reliability = reliability;
+        metric.reliability = quality;
     } else {
-        metric.reliability = std::clamp(
-            (metric.reliability * static_cast<double>(metric.observations) + reliability) /
-            static_cast<double>(metric.observations + 1),
-            0.0, 1.0);
+        metric.reliability = (metric.reliability * static_cast<double>(metric.observations) +
+                              quality) / static_cast<double>(metric.observations + 1);
     }
     ++metric.observations;
 
-    // Preserve provenance. Repeated observations from one source increase its
-    // history but never count as additional independent sources.
+    // One source contributes one claim weight regardless of repetition.
     const auto existing = std::find_if(
         claims_.begin(), claims_.end(), [&](const ClaimEvidence& claim) {
             return claim.source == evidence.source && claim.key == evidence.key &&
                    claim.value == evidence.value;
         });
     if (existing == claims_.end()) {
-        claims_.push_back(ClaimEvidence{evidence.source, evidence.key, evidence.value, 1});
+        claims_.push_back(ClaimEvidence{evidence.source, evidence.key, evidence.value, 1, quality});
     } else {
         ++existing->observations;
+        existing->observation_quality +=
+            (quality - existing->observation_quality) /
+            static_cast<double>(existing->observations);
     }
     return metric.reliability;
 }
@@ -38,10 +38,11 @@ double KnowledgeModel::assimilate(const KnowledgeEvidence& evidence) {
 void KnowledgeModel::score_source(const std::string& source, bool correct) {
     if (source.empty()) return;
     auto& metric = sources_[source];
-    const double observation = correct ? 1.0 : 0.0;
-    metric.reliability = (metric.reliability * static_cast<double>(metric.observations) + observation) /
-                         static_cast<double>(metric.observations + 1);
-    ++metric.observations;
+    const double outcome = correct ? 1.0 : 0.0;
+    metric.empirical_accuracy +=
+        (outcome - metric.empirical_accuracy) /
+        static_cast<double>(metric.calibration_observations + 1);
+    ++metric.calibration_observations;
 }
 
 const KnowledgeMetric* KnowledgeModel::source_metric(const std::string& source) const noexcept {
@@ -54,6 +55,7 @@ std::optional<KnowledgeAssessment> KnowledgeModel::assess(const std::string& key
         Scalar value;
         std::vector<std::string> sources;
         std::size_t observations{0};
+        double evidence_weight{0.0};
     };
     std::vector<CandidateSupport> candidates;
     for (const auto& claim : claims_) {
@@ -63,19 +65,31 @@ std::optional<KnowledgeAssessment> KnowledgeModel::assess(const std::string& key
                 return item.value == claim.value;
             });
         if (candidate == candidates.end()) {
-            candidates.push_back(CandidateSupport{claim.value, {claim.source}, claim.observations});
+            candidates.push_back(CandidateSupport{claim.value, {}, claim.observations, 0.0});
+            candidate = std::prev(candidates.end());
         } else {
-            if (std::find(candidate->sources.begin(), candidate->sources.end(), claim.source) ==
-                candidate->sources.end()) candidate->sources.push_back(claim.source);
             candidate->observations += claim.observations;
+        }
+        if (std::find(candidate->sources.begin(), candidate->sources.end(), claim.source) ==
+            candidate->sources.end()) {
+            candidate->sources.push_back(claim.source);
+            const auto metric = sources_.find(claim.source);
+            // Uncalibrated sources receive a neutral prior, not an invented
+            // accuracy estimate. Calibration affects weight only after three
+            // explicit outcomes; it never deletes low-trust observations.
+            const double trust = metric != sources_.end() &&
+                                 metric->second.calibration_observations >= 3
+                ? metric->second.empirical_accuracy : 0.5;
+            candidate->evidence_weight +=
+                claim.observation_quality * (0.5 + trust);
         }
     }
     if (candidates.empty()) return std::nullopt;
 
-    // Never select a winner from disputed evidence. This avoids insertion-order
-    // dependence when competing candidates have equal or unequal support.
     const auto strongest = std::max_element(
         candidates.begin(), candidates.end(), [](const auto& left, const auto& right) {
+            if (left.evidence_weight != right.evidence_weight)
+                return left.evidence_weight < right.evidence_weight;
             return left.sources.size() < right.sources.size();
         });
     KnowledgeAssessment result{};
@@ -83,18 +97,15 @@ std::optional<KnowledgeAssessment> KnowledgeModel::assess(const std::string& key
     if (candidates.size() == 1) result.candidate = strongest->value;
     result.supporting_sources = strongest->sources.size();
     result.observations = strongest->observations;
+    result.evidence_weight = strongest->evidence_weight;
     if (candidates.size() > 1) {
-        // Conflicting sources are those that support a value other than the
-        // strongest-supported candidate. Sources that support the leading
-        // candidate are not themselves conflicting evidence.
         for (const auto& candidate : candidates) {
             if (candidate.value != strongest->value)
                 result.conflicting_sources += candidate.sources.size();
         }
-    }
-    if (candidates.size() > 1) {
+        // A weighted lead is not sufficient to erase a contradiction.
         result.status = KnowledgeStatus::disputed;
-    } else if (result.supporting_sources >= 2) {
+    } else if (result.supporting_sources >= 2 && result.evidence_weight >= 1.0) {
         result.status = KnowledgeStatus::corroborated;
     } else {
         result.status = KnowledgeStatus::provisional;
