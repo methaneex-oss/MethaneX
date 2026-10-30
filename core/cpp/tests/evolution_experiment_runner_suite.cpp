@@ -41,6 +41,8 @@ EvolutionExperiment make_experiment() {
 int main(int argc, char** argv) {
     if (test_support::run_evolution_evaluator_fixture(argc, argv)) return 0;
     evaluator_executable = std::filesystem::absolute(argv[0]).string();
+    if (!EvolutionExperimentRunner::set_evidence_authentication_key(
+            "jarvis-test-evidence-key-2026-10-30-32bytes-minimum")) return 2;
     if (!EvolutionExperimentRunner::register_trusted_evaluator(
             "jarvis.test.fixture.v1", evaluator_executable,
             {"--test-evaluator-from-parameter"})) return 1;
@@ -128,6 +130,14 @@ int main(int argc, char** argv) {
         assert(experiment.has_valid_isolation_attestation());
         assert(std::abs(experiment.baseline_fitness - experiment.proposal.current) < 1e-12);
         assert(std::abs(experiment.candidate_fitness - experiment.proposal.proposed) < 1e-12);
+        assert(EvolutionExperimentRunner::authenticate_persisted_evidence(experiment));
+        auto tampered = experiment;
+        tampered.candidate_fitness += 0.05;
+        assert(!EvolutionExperimentRunner::restore_trusted_attestation(tampered));
+        auto intact = experiment;
+        intact.clear_isolation_attestation();
+        assert(EvolutionExperimentRunner::restore_trusted_attestation(intact));
+        assert(intact.has_valid_isolation_attestation());
     }
 
     {
