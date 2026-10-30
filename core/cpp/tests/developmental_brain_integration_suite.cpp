@@ -1159,6 +1159,33 @@ int main() {
         assert(fresh_fact_corroboration.event.sequence != 0);
         verify_resolved_fact(contradiction_brain);
 
+        // Repeating the challenger once is not enough when accumulated support
+        // still favors the prior value. The Brain belief must remain disputed
+        // until the leading value is observed again after this new conflict.
+        const auto second_fact_conflict = contradiction_brain.observe(Event{
+            0, 9, "contradiction-resolution-test", "observation",
+            {{"door-state", std::string("open")}, {"confidence", 0.9}}});
+        assert(second_fact_conflict.event.sequence != 0);
+        const auto repeated_challenger = contradiction_brain.observe(Event{
+            0, 10, "contradiction-resolution-test", "observation",
+            {{"door-state", std::string("open")}, {"confidence", 0.9}}});
+        assert(repeated_challenger.event.sequence != 0);
+        const auto still_disputed_fact = contradiction_brain.world().query(
+            "contradiction-resolution-test", "door-state");
+        assert(still_disputed_fact.has_value());
+        assert(still_disputed_fact->disputed);
+        const auto current_beliefs = contradiction_brain.beliefs();
+        const auto current_door_belief = std::find_if(
+            current_beliefs.begin(), current_beliefs.end(),
+            [](const Belief& item) { return item.key == "door-state"; });
+        assert(current_door_belief != current_beliefs.end());
+        assert(current_door_belief->disputed);
+        const auto final_fact_corroboration = contradiction_brain.observe(Event{
+            0, 11, "contradiction-resolution-test", "observation",
+            {{"door-state", std::string("closed")}, {"confidence", 0.9}}});
+        assert(final_fact_corroboration.event.sequence != 0);
+        verify_resolved_fact(contradiction_brain);
+
         const auto new_relation_conflict = contradiction_brain.observe(Event{
             0, 9, "contradiction-resolution-test", "observation",
             {{"subject", std::string("door")},
