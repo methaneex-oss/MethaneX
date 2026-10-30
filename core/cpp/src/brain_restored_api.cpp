@@ -1,4 +1,5 @@
 #include "jarvis/core/brain.hpp"
+#include "jarvis/core/evolution_experiment_runner.hpp"
 
 #include <limits>
 
@@ -283,7 +284,8 @@ bool Brain::rollback_evolution(const std::string& key) {
 }
 bool Brain::record_evolution_evaluation(EvolutionExperiment& experiment) {
     std::unique_lock lock(mutex_);
-    if (!evolution_controller_.validate_evaluation_for_brain(experiment)) return false;
+    if (!evolution_controller_.validate_evaluation_for_brain(experiment) ||
+        !EvolutionExperimentRunner::authenticate_persisted_evidence(experiment)) return false;
     Event event{0, 0, "brain", "evolution_evaluated",
                 {{"experiment_id", experiment.id},
                  {"key", experiment.proposal.key},
@@ -300,7 +302,8 @@ bool Brain::record_evolution_evaluation(EvolutionExperiment& experiment) {
                  {"evaluation_procedure_id", experiment.evaluation_procedure_id},
                  {"evaluator_executable_fingerprint", experiment.evaluator_executable_fingerprint},
                  {"baseline_artifact_id", experiment.baseline_artifact_id},
-                 {"candidate_artifact_id", experiment.candidate_artifact_id}}};
+                 {"candidate_artifact_id", experiment.candidate_artifact_id},
+                 {"evidence_authentication", experiment.evidence_authentication}}};
     event.sequence = memory_.append(event);
     if (event.sequence == 0) return false;
     if (!evolution_controller_.record_evaluation_for_brain(experiment)) return false;
@@ -331,6 +334,7 @@ bool Brain::adopt_evolution_experiment(EvolutionExperiment& experiment) {
                  {"evaluator_executable_fingerprint", experiment.evaluator_executable_fingerprint},
                  {"baseline_artifact_id", experiment.baseline_artifact_id},
                  {"candidate_artifact_id", experiment.candidate_artifact_id},
+                 {"evidence_authentication", experiment.evidence_authentication},
                  {"experiment_id", experiment.id},
                  {"outcome", static_cast<std::int64_t>(experiment.outcome)},
                  {"baseline", experiment.baseline_fitness},

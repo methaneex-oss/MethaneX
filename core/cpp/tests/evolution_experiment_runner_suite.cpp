@@ -41,6 +41,8 @@ EvolutionExperiment make_experiment() {
 int main(int argc, char** argv) {
     if (test_support::run_evolution_evaluator_fixture(argc, argv)) return 0;
     evaluator_executable = std::filesystem::absolute(argv[0]).string();
+    if (!EvolutionExperimentRunner::set_evidence_authentication_key(
+            "jarvis-test-evidence-key-2026-10-30-32bytes-minimum")) return 2;
     if (!EvolutionExperimentRunner::register_trusted_evaluator(
             "jarvis.test.fixture.v1", evaluator_executable,
             {"--test-evaluator-from-parameter"})) return 1;
@@ -128,6 +130,13 @@ int main(int argc, char** argv) {
         assert(experiment.has_valid_isolation_attestation());
         assert(std::abs(experiment.baseline_fitness - experiment.proposal.current) < 1e-12);
         assert(std::abs(experiment.candidate_fitness - experiment.proposal.proposed) < 1e-12);
+        assert(EvolutionExperimentRunner::authenticate_persisted_evidence(experiment));
+        auto tampered = experiment;
+        tampered.candidate_fitness += 0.05;
+        assert(!EvolutionExperimentRunner::restore_trusted_attestation(tampered));
+        auto intact = experiment;
+        assert(EvolutionExperimentRunner::restore_trusted_attestation(intact));
+        assert(intact.has_valid_isolation_attestation());
     }
 
     {
@@ -220,6 +229,32 @@ int main(int argc, char** argv) {
             });
         assert(outcome == ExperimentOutcome::Invalid);
         assert(!experiment.candidate_executed);
+    }
+
+
+    {
+        // A journal editor can copy the registered evaluator identity and
+        // recompute public artifact fingerprints without running the evaluator.
+        // Fabricated fitness values must not recreate the private attestation.
+        auto restored = make_experiment();
+        restored.candidate_executed = true;
+        restored.isolated = true;
+        restored.outcome = ExperimentOutcome::Improved;
+        restored.baseline_fitness = 0.1;
+        restored.candidate_fitness = 0.99;
+        restored.evaluation_procedure_id = "jarvis.test.fixture.v1";
+        restored.evaluator_executable_fingerprint =
+            EvolutionExperimentRunner::executable_fingerprint(evaluator_executable);
+        restored.baseline_artifact_id = EvolutionExperiment::artifact_fingerprint(
+            restored.proposal.key + "\x1f" +
+            EvolutionExperiment::format_parameter_value(restored.proposal.current) + "\x1f" +
+            restored.evaluation_procedure_id);
+        restored.candidate_artifact_id = EvolutionExperiment::artifact_fingerprint(
+            restored.proposal.key + "\x1f" +
+            EvolutionExperiment::format_parameter_value(restored.proposal.proposed) + "\x1f" +
+            restored.evaluation_procedure_id);
+        assert(!EvolutionExperimentRunner::restore_trusted_attestation(restored));
+        assert(!restored.has_valid_isolation_attestation());
     }
 
     return 0;

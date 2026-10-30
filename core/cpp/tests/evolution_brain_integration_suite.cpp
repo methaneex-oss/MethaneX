@@ -38,6 +38,8 @@ void attest_isolated(EvolutionExperiment& experiment) {
 int main(int argc, char** argv) {
     if (test_support::run_evolution_evaluator_fixture(argc, argv)) return 0;
     evaluator_executable = std::filesystem::absolute(argv[0]).string();
+    if (!EvolutionExperimentRunner::set_evidence_authentication_key(
+            "jarvis-test-evidence-key-2026-10-30-32bytes-minimum")) return 2;
     if (!EvolutionExperimentRunner::register_trusted_evaluator(
             "jarvis.test.fixture.v1", evaluator_executable,
             {"--test-evaluator-from-parameter"})) return 1;
@@ -121,6 +123,7 @@ int main(int argc, char** argv) {
         assert(source.register_evolution_parameter("replay.equal", 0.25));
         assert(source.register_evolution_parameter("replay.mismatch", 0.25));
         assert(source.register_evolution_parameter("replay.no-provenance", 0.25));
+        assert(source.register_evolution_parameter("replay.forged-fitness", 0.25));
     }
     {
         Memory journal(256, replay_guard_path);
@@ -177,11 +180,19 @@ int main(int argc, char** argv) {
                      0.35, 0.70, 0.85, 0.01, ExperimentOutcome::Improved, false);
         append_event("evolution_adopt", "replay-no-provenance-exp", "replay.no-provenance",
                      0.35, 0.70, 0.85, 0.01, ExperimentOutcome::Improved, false);
+
+        // This event pair has a registered evaluator fingerprint and correctly
+        // recomputed artifact IDs, but its baseline/candidate fitness values
+        // were never measured. Metadata must not authorize a parameter change.
+        append_event("evolution_evaluated", "replay-forged-fitness-exp", "replay.forged-fitness",
+                     0.35, 0.10, 0.99, 0.01, ExperimentOutcome::Improved, true);
+        append_event("evolution_adopt", "replay-forged-fitness-exp", "replay.forged-fitness",
+                     0.35, 0.10, 0.99, 0.01, ExperimentOutcome::Improved, true);
     }
     {
         Brain replayed(replay_guard_path);
         for (const auto& key : {"replay.missing", "replay.equal", "replay.mismatch",
-                                "replay.no-provenance"}) {
+                                "replay.no-provenance", "replay.forged-fitness"}) {
             const auto* parameter = replayed.evolution_parameter(key);
             assert(parameter != nullptr && parameter->value == parameter->baseline);
         }
@@ -404,12 +415,13 @@ int main(int argc, char** argv) {
             replayed.proposal.key + replay_separator +
             EvolutionExperiment::format_parameter_value(replayed.proposal.proposed) + replay_separator +
             replayed.evaluation_procedure_id);
-        // Restored journal data is not itself a live attestation. Revalidate
-        // the trusted evaluator identity and artifact binding before adoption.
-        assert(EvolutionExperimentRunner::restore_trusted_attestation(replayed));
-        assert(restarted.adopt_evolution_experiment(replayed));
+        // The journal has no independently authenticated measurements, so
+        // a restored object must not regain isolation trust from metadata.
+        assert(!EvolutionExperimentRunner::restore_trusted_attestation(replayed));
+        assert(!restarted.adopt_evolution_experiment(replayed));
         const auto* replayed_parameter = restarted.evolution_parameter("replay.persist");
-        assert(replayed_parameter != nullptr && replayed_parameter->value == 0.4);
+        assert(replayed_parameter != nullptr &&
+               replayed_parameter->value == replayed_parameter->baseline);
 
         const auto persisted_canary = restarted.observe_evolution_canary(
             "canary.persist", "canary-persist-1", {0.90, 0.80});

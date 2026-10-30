@@ -47,6 +47,9 @@ struct EvolutionExperiment {
     std::string evaluator_executable_fingerprint;
     std::string baseline_artifact_id;
     std::string candidate_artifact_id;
+    // HMAC-SHA-256 over canonical evaluation evidence; the key is supplied by
+    // trusted application configuration and is never persisted with the journal.
+    std::string evidence_authentication;
 
     // Preserve the exact binary double value across the evaluator protocol.
     // std::to_string(double) rounds to six decimals and can evaluate a different
@@ -91,18 +94,21 @@ struct EvolutionExperiment {
                evaluator_executable_fingerprint == attested_evaluator_executable_fingerprint_ &&
                baseline_artifact_id == attested_baseline_artifact_id_ &&
                candidate_artifact_id == attested_candidate_artifact_id_ &&
+               evidence_authentication == attested_evidence_authentication_ &&
                candidate_executed && isolated;
     }
 
 private:
     void clear_isolation_attestation() noexcept {
         isolation_attested_ = false;
+        evidence_authentication.clear();
         attested_id_.clear();
         attested_key_.clear();
         attested_procedure_id_.clear();
         attested_evaluator_executable_fingerprint_.clear();
         attested_baseline_artifact_id_.clear();
         attested_candidate_artifact_id_.clear();
+        attested_evidence_authentication_.clear();
         attested_current_ = 0.0;
         attested_proposed_ = 0.0;
         attested_expected_gain_ = 0.0;
@@ -143,6 +149,7 @@ private:
         attested_evaluator_executable_fingerprint_ = evaluator_executable_fingerprint;
         attested_baseline_artifact_id_ = baseline_artifact_id;
         attested_candidate_artifact_id_ = candidate_artifact_id;
+        attested_evidence_authentication_ = evidence_authentication;
     }
 
     bool isolation_attested_{false};
@@ -161,6 +168,7 @@ private:
     std::string attested_evaluator_executable_fingerprint_;
     std::string attested_baseline_artifact_id_;
     std::string attested_candidate_artifact_id_;
+    std::string attested_evidence_authentication_;
 
     friend class EvolutionExperimentRunner;
     friend class EvolutionExperimentCoordinator;
