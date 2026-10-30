@@ -76,7 +76,7 @@ std::optional<KnowledgeAssessment> KnowledgeModel::assess(const std::string& key
         });
     KnowledgeAssessment result{};
     result.key = key;
-    result.candidate = strongest->value;
+    if (candidates.size() == 1) result.candidate = strongest->value;
     result.supporting_sources = strongest->sources.size();
     result.observations = strongest->observations;
     for (const auto& candidate : candidates) {
