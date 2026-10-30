@@ -466,7 +466,8 @@ void Brain::replay(const Event& event, bool external_observation) {
                 fact != target->data.end() && fact->second == value_it->second;
         }
         if (!matching_claim) return;
-        const std::string feedback_id = std::to_string(sequence) + "|" + *evaluator;
+        const std::string feedback_id =
+            std::to_string(sequence) + "|" + *key + "|" + *evaluator;
         if (!processed_knowledge_feedback_.insert(feedback_id).second) return;
         state_.cycle = std::max(state_.cycle, event.sequence);
         knowledge_.score_source(*source, *std::get_if<bool>(&correct_it->second));
