@@ -766,6 +766,11 @@ void Brain::replay(const Event& event, bool external_observation) {
             ++it->second.observations;
             it->second.updated_sequence = event.sequence;
         }
+        // Assess every factual experience, not only explicit learning API
+        // calls. Repeated observations from one source remain one source for
+        // corroboration; disagreement is retained as disputed evidence.
+        if (event.kind != "learning")
+            knowledge_.assimilate(KnowledgeEvidence{event.source, key, value, reliability});
         world_.observe(Fact{event.source, key, value, reliability, 1,
                             event.sequence, event.sequence, false});
         // Global beliefs summarize evidence across sources. A clean update from
