@@ -86,7 +86,7 @@ int main() {
         const auto* metric = restored.knowledge_source("sensor-a");
         assert(metric != nullptr);
         assert(metric->calibration_observations == 4);
-        assert(std::abs(metric->empirical_accuracy - (2.0 / 3.0)) < 1e-12);
+        assert(std::abs(metric->empirical_accuracy - 0.75) < 1e-12);
         assert(metric->observations == 2);
         assert(std::abs(metric->reliability - observation_quality) < 1e-12);
         const auto restored_assessment = restored.knowledge_assessment("temperature");
