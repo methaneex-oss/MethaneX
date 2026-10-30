@@ -21,6 +21,12 @@ int main() {
             {{"temperature", Scalar{20.0}}, {"reliability", Scalar{0.99}}}});
         claim_sequence = observed.event.sequence;
         assert(claim_sequence != 0);
+        assert(brain.observe(Event{0, 0, "sensor-b", "observation",
+            {{"temperature", Scalar{25.0}}}}).event.sequence != 0);
+        const auto baseline_assessment = brain.knowledge_assessment("temperature");
+        assert(baseline_assessment.has_value());
+        const double baseline_weight = baseline_assessment->evidence_weight;
+        assert(baseline_assessment->status == KnowledgeStatus::disputed);
         const auto forged = brain.observe(Event{0, 0, "external-reviewer",
             "knowledge_source_feedback",
             {{"claim_sequence", Scalar{static_cast<std::int64_t>(claim_sequence)}},
@@ -66,6 +72,10 @@ int main() {
         assert(std::abs(calibrated->empirical_accuracy - (2.0 / 3.0)) < 1e-12);
         assert(calibrated->observations == 1);
         assert(std::abs(calibrated->reliability - observation_quality) < 1e-12);
+        const auto calibrated_assessment = brain.knowledge_assessment("temperature");
+        assert(calibrated_assessment.has_value());
+        assert(calibrated_assessment->status == KnowledgeStatus::disputed);
+        assert(calibrated_assessment->evidence_weight > baseline_weight);
     }
 
     {
@@ -76,6 +86,10 @@ int main() {
         assert(std::abs(metric->empirical_accuracy - (2.0 / 3.0)) < 1e-12);
         assert(metric->observations == 1);
         assert(std::abs(metric->reliability - observation_quality) < 1e-12);
+        const auto restored_assessment = restored.knowledge_assessment("temperature");
+        assert(restored_assessment.has_value());
+        assert(restored_assessment->status == KnowledgeStatus::disputed);
+        assert(restored_assessment->evidence_weight > 0.7);
         assert(!restored.record_knowledge_source_feedback(
             claim_sequence, "temperature", Scalar{20.0},
             "independent-reviewer", false));
