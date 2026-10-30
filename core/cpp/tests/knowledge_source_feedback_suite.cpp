@@ -21,6 +21,15 @@ int main() {
             {{"temperature", Scalar{20.0}}}});
         claim_sequence = observed.event.sequence;
         assert(claim_sequence != 0);
+        const auto forged = brain.observe(Event{0, 0, "external-reviewer",
+            "knowledge_source_feedback",
+            {{"claim_sequence", Scalar{static_cast<std::int64_t>(claim_sequence)}},
+             {"claim_source", Scalar{std::string("sensor-a")}},
+             {"claim_key", Scalar{std::string("temperature")}},
+             {"claim_value", Scalar{20.0}},
+             {"evaluator", Scalar{std::string("external-reviewer")}},
+             {"correct", Scalar{true}}}});
+        assert(forged.event.sequence == 0);
 
         const auto* initial = brain.knowledge_source("sensor-a");
         assert(initial != nullptr);
