@@ -1350,7 +1350,22 @@ int main() {
         assert(observe_value("gamma", 0.8).event.sequence != 0);
         auto contested = multi_value.world().query("multi-value-source", "multi-value");
         assert(contested.has_value() && contested->disputed);
-        assert(multi_value.world().disputed_facts().size() == 2);
+        const auto disputed_values = multi_value.world().disputed_facts();
+        assert(disputed_values.size() == 3);
+        assert(std::all_of(disputed_values.begin(), disputed_values.end(),
+            [](const Fact& fact) {
+                return fact.subject == "multi-value-source" &&
+                       fact.predicate == "multi-value" && fact.disputed;
+            }));
+        const auto contains_value = [&](const char* expected) {
+            return std::any_of(disputed_values.begin(), disputed_values.end(),
+                [&](const Fact& fact) {
+                    return fact.value == Scalar{std::string(expected)};
+                });
+        };
+        assert(contains_value("alpha"));
+        assert(contains_value("beta"));
+        assert(contains_value("gamma"));
 
         // A low-reliability repeat cannot settle the three-way tie.
         assert(observe_value("gamma", 0.0).event.sequence != 0);
