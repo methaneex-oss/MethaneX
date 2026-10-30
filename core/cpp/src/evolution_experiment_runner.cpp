@@ -8,6 +8,9 @@
 #include <mutex>
 #include <sstream>
 #include <unordered_map>
+#include <openssl/crypto.h>
+#include <openssl/evp.h>
+#include <openssl/hmac.h>
 #include <string>
 
 namespace jarvis::core {
@@ -35,6 +38,55 @@ struct TrustedEvaluator {
 };
 std::mutex trusted_evaluators_mutex;
 std::unordered_map<std::string, TrustedEvaluator> trusted_evaluators;
+std::mutex evidence_key_mutex;
+std::string evidence_authentication_key;
+
+std::string evidence_payload(const EvolutionExperiment& e) {
+    std::string payload;
+    const auto field = [&payload](const std::string& value) {
+        payload += std::to_string(value.size());
+        payload.push_back(':');
+        payload += value;
+    };
+    field("jarvis-evolution-evidence-v1");
+    field(e.id); field(e.proposal.key);
+    field(EvolutionExperiment::format_parameter_value(e.proposal.current));
+    field(EvolutionExperiment::format_parameter_value(e.proposal.proposed));
+    field(EvolutionExperiment::format_parameter_value(e.proposal.expected_gain));
+    field(EvolutionExperiment::format_parameter_value(e.proposal.confidence));
+    field(EvolutionExperiment::format_parameter_value(e.baseline_fitness));
+    field(EvolutionExperiment::format_parameter_value(e.candidate_fitness));
+    field(EvolutionExperiment::format_parameter_value(e.minimum_improvement));
+    field(EvolutionExperiment::format_parameter_value(e.confidence));
+    field(std::to_string(static_cast<int>(e.outcome)));
+    field(e.candidate_executed ? "1" : "0"); field(e.isolated ? "1" : "0");
+    field(e.evaluation_procedure_id); field(e.evaluator_executable_fingerprint);
+    field(e.baseline_artifact_id); field(e.candidate_artifact_id);
+    return payload;
+}
+
+std::string evidence_mac(const EvolutionExperiment& e, const std::string& key) {
+    unsigned char digest[EVP_MAX_MD_SIZE]{};
+    unsigned int digest_size = 0;
+    const auto payload = evidence_payload(e);
+    if (HMAC(EVP_sha256(), key.data(), static_cast<int>(key.size()),
+             reinterpret_cast<const unsigned char*>(payload.data()), payload.size(),
+             digest, &digest_size) == nullptr || digest_size != 32) return {};
+    static constexpr char hex[] = "0123456789abcdef";
+    std::string result;
+    result.reserve(digest_size * 2);
+    for (unsigned int i = 0; i < digest_size; ++i) {
+        result.push_back(hex[digest[i] >> 4]);
+        result.push_back(hex[digest[i] & 0x0f]);
+    }
+    return result;
+}
+
+bool valid_evidence_mac(const EvolutionExperiment& e, const std::string& key) {
+    const auto expected = evidence_mac(e, key);
+    if (expected.empty() || e.evidence_authentication.size() != expected.size()) return false;
+    return CRYPTO_memcmp(expected.data(), e.evidence_authentication.data(), expected.size()) == 0;
+}
 
 bool parse_measurement(const ProcessIsolationResult& result,
                        const EvolutionExperiment& experiment,
@@ -182,16 +234,50 @@ bool EvolutionExperimentRunner::is_trusted_evaluator(
     }
 }
 
+bool EvolutionExperimentRunner::set_evidence_authentication_key(
+    const std::string& key) noexcept {
+    if (key.size() < 32) return false;
+    try {
+        std::lock_guard<std::mutex> lock(evidence_key_mutex);
+        if (!evidence_authentication_key.empty())
+            return evidence_authentication_key == key;
+        evidence_authentication_key = key;
+        return true;
+    } catch (...) {
+        return false;
+    }
+}
+
+bool EvolutionExperimentRunner::authenticate_persisted_evidence(
+    EvolutionExperiment& experiment) noexcept {
+    if (!experiment.has_valid_isolation_attestation() ||
+        !is_trusted_evaluator(experiment.evaluation_procedure_id, {},
+                              experiment.evaluator_executable_fingerprint)) return false;
+    try {
+        std::lock_guard<std::mutex> lock(evidence_key_mutex);
+        if (evidence_authentication_key.size() < 32) return false;
+        const auto signature = evidence_mac(experiment, evidence_authentication_key);
+        if (signature.empty()) return false;
+        experiment.evidence_authentication = signature;
+        return true;
+    } catch (...) {
+        return false;
+    }
+}
+
 bool EvolutionExperimentRunner::restore_trusted_attestation(
     EvolutionExperiment& experiment) noexcept {
-    // Evaluator registration identifies a trusted executable, but it does not
-    // authenticate historical fitness values copied from a writable journal.
-    // The artifact IDs are unkeyed fingerprints and can be recomputed by anyone
-    // who can edit the journal. Do not reconstruct a private attestation from
-    // those claims. Replay must remain fail-closed until durable measurements
-    // have independently authenticated provenance.
-    (void)experiment;
-    return false;
+    try {
+        std::lock_guard<std::mutex> lock(evidence_key_mutex);
+        if (evidence_authentication_key.size() < 32 ||
+            !valid_evidence_mac(experiment, evidence_authentication_key) ||
+            !is_trusted_evaluator(experiment.evaluation_procedure_id, {},
+                                  experiment.evaluator_executable_fingerprint)) return false;
+        experiment.attest_isolated_result();
+        return experiment.has_valid_isolation_attestation();
+    } catch (...) {
+        return false;
+    }
 }
 
 std::string EvolutionExperimentRunner::executable_fingerprint(
