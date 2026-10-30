@@ -1214,6 +1214,48 @@ int main() {
     std::filesystem::remove(contradiction_path, ec);
     std::filesystem::remove(contradiction_path.string() + ".meta", ec);
 
+    // Observation evidence quality must reach belief/world learning, while
+    // appraisal metadata must not be learned as if it were part of the world.
+    const auto evidence_quality_path =
+        std::filesystem::temp_directory_path() / "jarvis_observation_evidence_quality.bin";
+    std::filesystem::remove(evidence_quality_path, ec);
+    std::filesystem::remove(evidence_quality_path.string() + ".meta", ec);
+    {
+        Brain evidence_quality(evidence_quality_path);
+        const auto observed = evidence_quality.observe(Event{
+            0, 1, "sensor-quality", "observation",
+            {{"reading", 42.0},
+             {"evidence_reliability", 0.2},
+             {"reliability", 0.9},
+             {"confidence", 0.8},
+             {"world_step", std::int64_t{3}}}});
+        assert(observed.event.sequence != 0);
+        const auto fact = evidence_quality.world().query("sensor-quality", "reading");
+        assert(fact.has_value());
+        assert(std::abs(fact->confidence - 0.2) < 1e-12);
+        assert(!evidence_quality.world().query(
+            "sensor-quality", "evidence_reliability").has_value());
+        assert(!evidence_quality.world().query("sensor-quality", "reliability").has_value());
+        assert(!evidence_quality.world().query("sensor-quality", "confidence").has_value());
+        assert(!evidence_quality.world().query("sensor-quality", "world_step").has_value());
+        const auto beliefs = evidence_quality.beliefs();
+        const auto reading = std::find_if(
+            beliefs.begin(), beliefs.end(),
+            [](const Belief& item) { return item.key == "reading"; });
+        assert(reading != beliefs.end());
+        assert(std::abs(reading->confidence - 0.2) < 1e-12);
+    }
+    {
+        Brain evidence_quality_replay(evidence_quality_path);
+        const auto fact = evidence_quality_replay.world().query("sensor-quality", "reading");
+        assert(fact.has_value());
+        assert(std::abs(fact->confidence - 0.2) < 1e-12);
+        assert(!evidence_quality_replay.world().query(
+            "sensor-quality", "evidence_reliability").has_value());
+    }
+    std::filesystem::remove(evidence_quality_path, ec);
+    std::filesystem::remove(evidence_quality_path.string() + ".meta", ec);
+
     // Strategy evidence and episodic fallback must remain coordinated without
     // contaminating the restart/replay fixture above. Seed one durable positive
     // strategy, then add a conflicting in-memory episode after Brain has replayed
