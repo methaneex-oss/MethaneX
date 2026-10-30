@@ -1256,6 +1256,81 @@ int main() {
     std::filesystem::remove(evidence_quality_path, ec);
     std::filesystem::remove(evidence_quality_path.string() + ".meta", ec);
 
+    // Cross-source consistency: a clean observation from one source must not
+    // erase another source's unresolved contradiction. Replay and source-order
+    // permutations must reconstruct the same global dispute state.
+    const auto cross_source_path =
+        std::filesystem::temp_directory_path() / "jarvis_cross_source_conflict.bin";
+    std::filesystem::remove(cross_source_path, ec);
+    std::filesystem::remove(cross_source_path.string() + ".meta", ec);
+    const auto assert_global_dispute = [](const Brain& candidate, bool expected) {
+        const auto beliefs = candidate.beliefs();
+        const auto belief = std::find_if(
+            beliefs.begin(), beliefs.end(),
+            [](const Belief& item) { return item.key == "shared-fact"; });
+        assert(belief != beliefs.end());
+        assert(belief->disputed == expected);
+    };
+    {
+        Brain cross_source(cross_source_path);
+        assert(cross_source.observe(Event{0, 1, "source-a", "observation",
+            {{"shared-fact", std::string("X")}, {"evidence_reliability", 0.8}}}).event.sequence != 0);
+        assert(cross_source.observe(Event{0, 2, "source-a", "observation",
+            {{"shared-fact", std::string("Y")}, {"evidence_reliability", 0.8}}}).event.sequence != 0);
+        const auto source_a_fact = cross_source.world().query("source-a", "shared-fact");
+        assert(source_a_fact.has_value() && source_a_fact->disputed);
+        assert_global_dispute(cross_source, true);
+
+        assert(cross_source.observe(Event{0, 3, "source-b", "observation",
+            {{"shared-fact", std::string("Y")}, {"evidence_reliability", 0.8}}}).event.sequence != 0);
+        // Source B's clean Y must not hide source A's unresolved X/Y conflict.
+        assert_global_dispute(cross_source, true);
+
+        assert(cross_source.observe(Event{0, 4, "source-a", "observation",
+            {{"shared-fact", std::string("Y")}, {"evidence_reliability", 0.8}}}).event.sequence != 0);
+        assert_global_dispute(cross_source, false);
+    }
+    {
+        Brain cross_source_replay(cross_source_path);
+        assert_global_dispute(cross_source_replay, false);
+        const auto a = cross_source_replay.world().query("source-a", "shared-fact");
+        const auto b = cross_source_replay.world().query("source-b", "shared-fact");
+        assert(a.has_value() && !a->disputed && a->value == Scalar{std::string("Y")});
+        assert(b.has_value() && !b->disputed && b->value == Scalar{std::string("Y")});
+    }
+    std::filesystem::remove(cross_source_path, ec);
+    std::filesystem::remove(cross_source_path.string() + ".meta", ec);
+
+    const auto reverse_cross_source_path =
+        std::filesystem::temp_directory_path() / "jarvis_cross_source_conflict_reverse.bin";
+    std::filesystem::remove(reverse_cross_source_path, ec);
+    std::filesystem::remove(reverse_cross_source_path.string() + ".meta", ec);
+    {
+        Brain reverse_cross_source(reverse_cross_source_path);
+        assert(reverse_cross_source.observe(Event{0, 1, "source-b", "observation",
+            {{"shared-fact", std::string("Y")}, {"evidence_reliability", 0.8}}}).event.sequence != 0);
+        assert(reverse_cross_source.observe(Event{0, 2, "source-a", "observation",
+            {{"shared-fact", std::string("X")}, {"evidence_reliability", 0.8}}}).event.sequence != 0);
+        assert(reverse_cross_source.observe(Event{0, 3, "source-a", "observation",
+            {{"shared-fact", std::string("Y")}, {"evidence_reliability", 0.8}}}).event.sequence != 0);
+        assert_global_dispute(reverse_cross_source, true);
+        const auto a = reverse_cross_source.world().query("source-a", "shared-fact");
+        assert(a.has_value() && a->disputed);
+        assert(reverse_cross_source.observe(Event{0, 4, "source-a", "observation",
+            {{"shared-fact", std::string("Y")}, {"evidence_reliability", 0.8}}}).event.sequence != 0);
+        assert_global_dispute(reverse_cross_source, false);
+    }
+    {
+        Brain reverse_cross_source_replay(reverse_cross_source_path);
+        assert_global_dispute(reverse_cross_source_replay, false);
+        const auto a = reverse_cross_source_replay.world().query("source-a", "shared-fact");
+        const auto b = reverse_cross_source_replay.world().query("source-b", "shared-fact");
+        assert(a.has_value() && !a->disputed && a->value == Scalar{std::string("Y")});
+        assert(b.has_value() && !b->disputed && b->value == Scalar{std::string("Y")});
+    }
+    std::filesystem::remove(reverse_cross_source_path, ec);
+    std::filesystem::remove(reverse_cross_source_path.string() + ".meta", ec);
+
     // Strategy evidence and episodic fallback must remain coordinated without
     // contaminating the restart/replay fixture above. Seed one durable positive
     // strategy, then add a conflicting in-memory episode after Brain has replayed
