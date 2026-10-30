@@ -12,8 +12,6 @@ int main() {
     const auto first = knowledge.assimilate(
         KnowledgeEvidence{"sensor-a", "temperature", 20.0, 0.8});
     assert(std::abs(first - 0.8) < 1e-12);
-    auto* unused = nullptr;
-    (void)unused;
     const auto* metric = knowledge.source_metric("sensor-a");
     assert(metric != nullptr);
     assert(metric->observations == 1);
