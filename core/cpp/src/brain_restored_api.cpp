@@ -179,11 +179,15 @@ bool Brain::record_knowledge_source_feedback(
     if (!matching_claim) return false;
     for (const auto& prior : history) {
         if (prior.kind != "knowledge_source_feedback") continue;
-        if (integer_value(prior.data, "claim_sequence", 0) ==
-                static_cast<std::int64_t>(claim_sequence)) {
-            const auto* prior_evaluator = string_value(prior.data, "evaluator");
-            if (prior_evaluator != nullptr && *prior_evaluator == evaluator) return false;
-        }
+        const auto sequence_field = prior.data.find("claim_sequence");
+        const auto* prior_sequence = sequence_field == prior.data.end()
+            ? nullptr : std::get_if<std::int64_t>(&sequence_field->second);
+        const auto evaluator_field = prior.data.find("evaluator");
+        const auto* prior_evaluator = evaluator_field == prior.data.end()
+            ? nullptr : std::get_if<std::string>(&evaluator_field->second);
+        if (prior_sequence != nullptr &&
+            *prior_sequence == static_cast<std::int64_t>(claim_sequence) &&
+            prior_evaluator != nullptr && *prior_evaluator == evaluator) return false;
     }
     Event feedback{0, 0, evaluator, "knowledge_source_feedback",
         {{"claim_sequence", static_cast<std::int64_t>(claim_sequence)},
