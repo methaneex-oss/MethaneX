@@ -42,6 +42,7 @@ int main() {
     auto claim = assessment.assess("surface-risk");
     assert(claim.has_value());
     assert(claim->status == KnowledgeStatus::provisional);
+    assert(claim->candidate.has_value());
     assert(claim->supporting_sources == 1);
     assert(claim->observations == 2);
 
@@ -51,6 +52,7 @@ int main() {
     claim = assessment.assess("surface-risk");
     assert(claim.has_value());
     assert(claim->status == KnowledgeStatus::corroborated);
+    assert(claim->candidate.has_value());
     assert(claim->supporting_sources == 2);
 
     // Any incompatible value remains visible as a dispute even when more
@@ -60,6 +62,7 @@ int main() {
     claim = assessment.assess("surface-risk");
     assert(claim.has_value());
     assert(claim->status == KnowledgeStatus::disputed);
+    assert(!claim->candidate.has_value());
     assert(claim->supporting_sources == 3);
     assert(claim->conflicting_sources == 1);
     assert(!assessment.assess("unknown-claim").has_value());
