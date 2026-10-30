@@ -40,6 +40,11 @@ void accumulate_evidence(Relation& accumulated, const Relation& incoming) {
          static_cast<long double>(incoming.confidence) * incoming_observations) / total),
         0.0, 1.0);
     accumulated.observations = previous_observations + incoming_observations;
+    if (accumulated.first_sequence == 0 ||
+        (incoming.first_sequence != 0 &&
+         incoming.first_sequence < accumulated.first_sequence)) {
+        accumulated.first_sequence = incoming.first_sequence;
+    }
     accumulated.updated_sequence = std::max(
         accumulated.updated_sequence, incoming.updated_sequence);
 }
