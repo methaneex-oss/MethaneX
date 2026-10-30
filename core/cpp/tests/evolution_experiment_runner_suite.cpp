@@ -233,10 +233,20 @@ int main(int argc, char** argv) {
         restored.outcome = ExperimentOutcome::Improved;
         restored.baseline_fitness = 0.1;
         restored.candidate_fitness = 0.99;
-        restored.evaluation_procedure_id = "registered-but-not-measured";
-        restored.evaluator_executable_fingerprint = "forged-fingerprint";
-        restored.baseline_artifact_id = "forged-baseline";
-        restored.candidate_artifact_id = "forged-candidate";
+        restored.evaluation_procedure_id = "jarvis.test.fixture.v1";
+        restored.evaluator_executable_fingerprint =
+            EvolutionExperimentRunner::executable_fingerprint(evaluator_executable);
+        restored.baseline_artifact_id = EvolutionExperiment::artifact_fingerprint(
+            restored.proposal.key + "\\x1f" +
+            EvolutionExperiment::format_parameter_value(restored.proposal.current) + "\\x1f" +
+            restored.evaluation_procedure_id);
+        restored.candidate_artifact_id = EvolutionExperiment::artifact_fingerprint(
+            restored.proposal.key + "\\x1f" +
+            EvolutionExperiment::format_parameter_value(restored.proposal.proposed) + "\\x1f" +
+            restored.evaluation_procedure_id);
+        // All public provenance fields now match the registered evaluator and
+        // expected artifact identities, but the fabricated fitness values were
+        // never measured. Metadata alone must not recreate the private attestation.
         assert(!EvolutionExperimentRunner::restore_trusted_attestation(restored));
         assert(!restored.has_valid_isolation_attestation());
     }
