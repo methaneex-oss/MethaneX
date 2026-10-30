@@ -27,6 +27,9 @@ struct Relation {
     double confidence{0.5};
     std::uint64_t updated_sequence{0};
     bool disputed{false};
+    // Number of observations supporting this exact relation. Appended to keep
+    // existing aggregate initializers source-compatible.
+    std::uint64_t observations{1};
 };
 
 class WorldModel {
