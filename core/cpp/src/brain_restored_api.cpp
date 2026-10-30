@@ -185,9 +185,13 @@ bool Brain::record_knowledge_source_feedback(
         const auto evaluator_field = prior.data.find("evaluator");
         const auto* prior_evaluator = evaluator_field == prior.data.end()
             ? nullptr : std::get_if<std::string>(&evaluator_field->second);
+        const auto key_field = prior.data.find("claim_key");
+        const auto* prior_key = key_field == prior.data.end()
+            ? nullptr : std::get_if<std::string>(&key_field->second);
         if (prior_sequence != nullptr &&
             *prior_sequence == static_cast<std::int64_t>(claim_sequence) &&
-            prior_evaluator != nullptr && *prior_evaluator == evaluator) return false;
+            prior_evaluator != nullptr && *prior_evaluator == evaluator &&
+            prior_key != nullptr && *prior_key == key) return false;
     }
     Event feedback{0, 0, evaluator, "knowledge_source_feedback",
         {{"claim_sequence", static_cast<std::int64_t>(claim_sequence)},
