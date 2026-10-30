@@ -254,9 +254,13 @@ bool EvolutionExperimentRunner::authenticate_persisted_evidence(
         !is_trusted_evaluator(experiment.evaluation_procedure_id, {},
                               experiment.evaluator_executable_fingerprint)) return false;
     try {
-        std::lock_guard<std::mutex> lock(evidence_key_mutex);
-        if (evidence_authentication_key.size() < 32) return false;
-        const auto signature = evidence_mac(experiment, evidence_authentication_key);
+        std::string key;
+        {
+            std::lock_guard<std::mutex> lock(evidence_key_mutex);
+            key = evidence_authentication_key;
+        }
+        if (key.size() < 32) return false;
+        const auto signature = evidence_mac(experiment, key);
         if (signature.empty()) return false;
         experiment.evidence_authentication = signature;
         return true;
@@ -268,9 +272,12 @@ bool EvolutionExperimentRunner::authenticate_persisted_evidence(
 bool EvolutionExperimentRunner::restore_trusted_attestation(
     EvolutionExperiment& experiment) noexcept {
     try {
-        std::lock_guard<std::mutex> lock(evidence_key_mutex);
-        if (evidence_authentication_key.size() < 32 ||
-            !valid_evidence_mac(experiment, evidence_authentication_key) ||
+        std::string key;
+        {
+            std::lock_guard<std::mutex> lock(evidence_key_mutex);
+            key = evidence_authentication_key;
+        }
+        if (key.size() < 32 || !valid_evidence_mac(experiment, key) ||
             !is_trusted_evaluator(experiment.evaluation_procedure_id, {},
                                   experiment.evaluator_executable_fingerprint)) return false;
         experiment.attest_isolated_result();
