@@ -35,5 +35,34 @@ int main() {
     assert(metric->observations == 4);
     assert(metric->reliability >= 0.0 && metric->reliability <= 1.0);
 
+    // Repetition by one source is not independent corroboration.
+    KnowledgeModel assessment;
+    assessment.assimilate(KnowledgeEvidence{"sensor-a", "surface-risk", std::string("hazardous"), 0.9});
+    assessment.assimilate(KnowledgeEvidence{"sensor-a", "surface-risk", std::string("hazardous"), 0.9});
+    auto claim = assessment.assess("surface-risk");
+    assert(claim.has_value());
+    assert(claim->status == KnowledgeStatus::provisional);
+    assert(claim->supporting_sources == 1);
+    assert(claim->observations == 2);
+
+    // A second distinct source corroborates the candidate without converting
+    // corroboration into certainty or a safety/value judgement.
+    assessment.assimilate(KnowledgeEvidence{"sensor-b", "surface-risk", std::string("hazardous"), 0.7});
+    claim = assessment.assess("surface-risk");
+    assert(claim.has_value());
+    assert(claim->status == KnowledgeStatus::corroborated);
+    assert(claim->supporting_sources == 2);
+
+    // Any incompatible value remains visible as a dispute even when more
+    // sources support one side. Majority is not silently equated with truth.
+    assessment.assimilate(KnowledgeEvidence{"sensor-c", "surface-risk", std::string("safe"), 0.8});
+    assessment.assimilate(KnowledgeEvidence{"sensor-d", "surface-risk", std::string("hazardous"), 0.8});
+    claim = assessment.assess("surface-risk");
+    assert(claim.has_value());
+    assert(claim->status == KnowledgeStatus::disputed);
+    assert(claim->supporting_sources == 3);
+    assert(claim->conflicting_sources == 1);
+    assert(!assessment.assess("unknown-claim").has_value());
+
     return 0;
 }
