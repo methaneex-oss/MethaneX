@@ -40,6 +40,34 @@ void calibrate_numeric_prediction(Scalar& value, double estimate, double weight)
 }
 }
 
+bool Brain::record_knowledge_source_feedback(
+    std::uint64_t claim_sequence, const std::string& key, const Scalar& value,
+    const std::string& evaluator, bool correct) {
+    if (claim_sequence == 0 || claim_sequence >
+            static_cast<std::uint64_t>(std::numeric_limits<std::int64_t>::max()) ||
+        key.empty() || evaluator.empty()) return false;
+    std::unique_lock lock(mutex_);
+    const auto history = memory_.all();
+    const auto target = std::find_if(history.begin(), history.end(),
+        [&](const Event& candidate) { return candidate.sequence == claim_sequence; });
+    if (target == history.end() || target->source.empty() || target->source == evaluator)
+        return false;
+    Event event{0, 0, evaluator, "knowledge_source_feedback",
+        {{"claim_sequence", static_cast<std::int64_t>(claim_sequence)},
+         {"claim_source", target->source}, {"claim_key", key},
+         {"claim_value", value}, {"evaluator", evaluator}, {"correct", correct}}};
+    event.sequence = memory_.append(event);
+    if (event.sequence == 0) return false;
+    const auto* before = knowledge_.source_metric(target->source);
+    const auto old_count = before == nullptr ? 0 : before->calibration_observations;
+    replay(event);
+    ++state_.events_seen;
+    state_.cycle = event.sequence;
+    sync_self_state();
+    const auto* after = knowledge_.source_metric(target->source);
+    return after != nullptr && after->calibration_observations == old_count + 1;
+}
+
 std::vector<Belief> Brain::beliefs() const { std::shared_lock lock(mutex_); std::vector<Belief> result; result.reserve(beliefs_.size()); for (const auto& [_, belief] : beliefs_) result.push_back(belief); return result; }
 Prediction Brain::predict(std::string key, Scalar value, double confidence) {
     // Non-finite confidence cannot be meaningful evidence and must not enter
