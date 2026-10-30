@@ -394,9 +394,26 @@ bool Brain::valid_affective_learning_source(const Event& event) const {
     return true;
 }
 
+bool is_internal_brain_event(const std::string& kind) {
+    // Explicit Brain-generated records have their own event-specific
+    // validation. Any other event kind is external experience and must pass
+    // the common appraisal-metadata boundary before replay.
+    return kind == "action_outcome" || kind == "affective_learning" ||
+           kind == "capability_isolate" || kind == "capability_observe" ||
+           kind == "capability_restore" || kind == "evolution_adopt" ||
+           kind == "evolution_canary" || kind == "evolution_evaluated" ||
+           kind == "evolution_fitness" || kind == "evolution_register" ||
+           kind == "evolution_rollback" || kind == "goal_abandon" ||
+           kind == "goal_activate" || kind == "goal_complete" ||
+           kind == "goal_create" || kind == "goal_priority" ||
+           kind == "goal_progress" || kind == "learning" ||
+           kind == "prediction" || kind == "prediction_outcome" ||
+           kind == "resilience_isolate" || kind == "resilience_recover";
+}
+
 void Brain::replay(const Event& event, bool external_observation) {
-    // Validate observations before any subsystem mutates or advances state.
-    if (event.kind == "observation" && !valid_observation_event(event))
+    // Validate external experience before any subsystem mutates or advances state.
+    if (!is_internal_brain_event(event.kind) && !valid_observation_event(event))
         return;
     state_.cycle = std::max(state_.cycle, event.sequence);
 
@@ -751,23 +768,27 @@ void Brain::replay(const Event& event, bool external_observation) {
         }
         world_.observe(Fact{event.source, key, value, reliability, 1,
                             event.sequence, event.sequence, false});
-        // A changed value is initially disputed in the single-current-value
-        // belief map. Once the source-scoped world model has enough post-conflict
-        // evidence to resolve that exact value, clear the transient dispute flag
-        // so reasoning does not retain a stale contradiction forever.
-        const auto resolved_fact = world_.query(event.source, key);
-        if (resolved_fact.has_value()) {
-            const auto belief = beliefs_.find(key);
-            if (belief != beliefs_.end()) {
-                // The global belief can be updated by more than one source.
-                // Keep it disputed whenever this source still has an active
-                // conflict or its resolved value disagrees with the current
-                // belief; never let a repeated observation clear uncertainty
-                // while the world model still records competing evidence.
-                belief->second.disputed =
-                    resolved_fact->disputed ||
-                    resolved_fact->value != belief->second.value;
-            }
+        // Global beliefs summarize evidence across sources. A clean update from
+        // one source must not mask another source conflict, and independently
+        // resolved sources that disagree must remain disputed.
+        const auto belief = beliefs_.find(key);
+        if (belief != beliefs_.end()) {
+            bool disputed = false;
+            std::optional<Scalar> first_value;
+            const auto inspect_source_fact = [&](const Fact& source_fact) {
+                if (source_fact.predicate != key) return;
+                if (source_fact.disputed ||
+                    source_fact.value != belief->second.value) disputed = true;
+                if (!first_value.has_value()) first_value = source_fact.value;
+                else if (*first_value != source_fact.value) disputed = true;
+            };
+            // facts() supplies each selected source value; disputed_facts()
+            // additionally supplies all active alternatives.
+            for (const auto& source_fact : world_.facts())
+                inspect_source_fact(source_fact);
+            for (const auto& source_fact : world_.disputed_facts())
+                inspect_source_fact(source_fact);
+            belief->second.disputed = disputed;
         }
     }
     const auto subject = string_value(event.data, "subject");
@@ -835,7 +856,7 @@ void Brain::replay(const Event& event, bool external_observation) {
 }
 Observation Brain::observe(Event event) {
     std::unique_lock lock(mutex_);
-    if (event.kind == "observation" && !valid_observation_event(event))
+    if (!is_internal_brain_event(event.kind) && !valid_observation_event(event))
         return Observation{};
     if (event.kind == "prediction_outcome") {
         const auto sequence = integer_value(event.data, "prediction_sequence", 0);
