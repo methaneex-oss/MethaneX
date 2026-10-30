@@ -687,14 +687,15 @@ void Brain::replay(const Event& event, bool external_observation) {
             ++it->second.observations;
             it->second.updated_sequence = event.sequence;
         }
-        world_.observe(Fact{event.source, key, value, reliability, 1});
+        world_.observe(Fact{event.source, key, value, reliability, 1,
+                            event.sequence, event.sequence, false});
     }
     const auto subject = string_value(event.data, "subject");
     const auto predicate = string_value(event.data, "predicate");
     const auto object = string_value(event.data, "object");
     if (subject != nullptr && predicate != nullptr && object != nullptr)
         world_.relate(Relation{*subject, *predicate, *object, reliability,
-                               event.sequence, false});
+                               event.sequence, false, 1, event.sequence});
 
     std::vector<Belief> after;
     after.reserve(beliefs_.size());
