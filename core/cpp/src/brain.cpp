@@ -13,6 +13,64 @@ namespace {
 std::uint64_t now_ns() noexcept { return static_cast<std::uint64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count()); }
 const std::string* string_value(const Attributes& data, const std::string& key) { const auto it = data.find(key); return it == data.end() ? nullptr : std::get_if<std::string>(&it->second); }
 double double_value(const Attributes& data, const std::string& key, double fallback = 0.0) { const auto it = data.find(key); if (it == data.end()) return fallback; if (const auto value = std::get_if<double>(&it->second)) return *value; if (const auto value = std::get_if<std::int64_t>(&it->second)) return static_cast<double>(*value); return fallback; }
+
+bool valid_observation_event(const Event& event) {
+    const auto valid_unit = [&](const char* name) {
+        const auto field = event.data.find(name);
+        if (field == event.data.end()) return true;
+        if (const auto* value = std::get_if<double>(&field->second))
+            return std::isfinite(*value) && *value >= 0.0 && *value <= 1.0;
+        if (const auto* value = std::get_if<std::int64_t>(&field->second))
+            return *value == 0 || *value == 1;
+        return false;
+    };
+    const auto valid_signed_unit = [&](const char* name) {
+        const auto field = event.data.find(name);
+        if (field == event.data.end()) return true;
+        if (const auto* value = std::get_if<double>(&field->second))
+            return std::isfinite(*value) && *value >= -1.0 && *value <= 1.0;
+        if (const auto* value = std::get_if<std::int64_t>(&field->second))
+            return *value >= -1 && *value <= 1;
+        return false;
+    };
+    const auto valid_finite_numeric = [&](const char* name) {
+        const auto field = event.data.find(name);
+        if (field == event.data.end()) return true;
+        if (const auto* value = std::get_if<double>(&field->second))
+            return std::isfinite(*value);
+        return std::get_if<std::int64_t>(&field->second) != nullptr;
+    };
+
+    return valid_unit("evidence_reliability") &&
+           valid_unit("reliability") &&
+           valid_unit("confidence") &&
+           valid_unit("salience") &&
+           valid_unit("novelty") &&
+           valid_unit("urgency") &&
+           valid_unit("prediction_error") &&
+           valid_signed_unit("outcome") &&
+           valid_finite_numeric("world_step");
+}
+
+double observation_evidence_reliability(const Event& event) {
+    // Prefer explicit evidence quality. Legacy reliability and perceptual
+    // confidence remain compatible fallbacks; absent metadata uses the
+    // established neutral observation prior.
+    for (const char* key : {"evidence_reliability", "reliability", "confidence"}) {
+        const auto field = event.data.find(key);
+        if (field == event.data.end()) continue;
+        if (const auto* value = std::get_if<double>(&field->second)) {
+            if (std::isfinite(*value))
+                return std::clamp(*value, 0.0, 1.0);
+            return 0.0;
+        }
+        if (const auto* value = std::get_if<std::int64_t>(&field->second))
+            return std::clamp(static_cast<double>(*value), 0.0, 1.0);
+        return 0.0;
+    }
+    return 0.7;
+}
+
 bool numeric_value(const Scalar& value, long double& result) {
     if (const auto* integer = std::get_if<std::int64_t>(&value)) {
         result = static_cast<long double>(*integer);
@@ -342,6 +400,10 @@ void Brain::replay(const Event& event, bool external_observation) {
     // Validate prediction feedback before any subsystem mutates. Otherwise a
     // duplicate or malformed outcome can alter affect even when prediction
     // resolution itself is rejected below.
+    if (event.kind == "observation" && !valid_observation_event(event))
+        return;
+    if (event.kind == "observation" && !valid_observation_event(event))
+        return Observation{};
     if (event.kind == "prediction_outcome") {
         const auto sequence = integer_value(event.data, "prediction_sequence", 0);
         const auto* key = string_value(event.data, "key");
@@ -623,7 +685,7 @@ void Brain::replay(const Event& event, bool external_observation) {
     }
     const double reliability = event.kind == "learning"
         ? std::clamp(double_value(event.data, "reliability", 0.5), 0.0, 1.0)
-        : 0.7;
+        : observation_evidence_reliability(event);
 
     // A learning event carries one evidence item plus appraisal metadata. Read
     // its explicit payload rather than taking the first unordered-map entry;
@@ -656,7 +718,8 @@ void Brain::replay(const Event& event, bool external_observation) {
         for (const auto& [key, value] : event.data) {
             // Appraisal metadata describes an experience; it is not a world fact.
             if (key == "_external_observation" || key == "novelty" || key == "salience" || key == "urgency" ||
-                key == "prediction_error" || key == "outcome" || key == "confidence")
+                key == "prediction_error" || key == "outcome" || key == "confidence" ||
+                key == "reliability" || key == "evidence_reliability" || key == "world_step")
                 continue;
             // The developmental environment adds these fields to describe the
             // episode, not the world state. Keep them in episodic memory for
