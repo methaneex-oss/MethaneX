@@ -453,8 +453,19 @@ void Brain::replay(const Event& event, bool external_observation) {
             matching_claim = evidence_key != nullptr && *evidence_key == *key &&
                 evidence_value != target->data.end() && evidence_value->second == value_it->second;
         } else {
+            const auto external = target->data.find("_external_observation");
+            const bool is_external =
+                external != target->data.end() &&
+                std::get_if<bool>(&external->second) != nullptr &&
+                *std::get_if<bool>(&external->second);
+            const bool metadata = std::find(
+                {"_external_observation", "novelty", "salience", "urgency",
+                 "prediction_error", "outcome", "confidence", "reliability",
+                 "evidence_reliability", "world_step"},
+                *key) != std::initializer_list<const char*>{}.end();
             const auto fact = target->data.find(*key);
-            matching_claim = fact != target->data.end() && fact->second == value_it->second;
+            matching_claim = is_external && !metadata &&
+                fact != target->data.end() && fact->second == value_it->second;
         }
         if (!matching_claim) return;
         const std::string feedback_id = std::to_string(sequence) + "|" + *evaluator;
