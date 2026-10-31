@@ -37,9 +37,9 @@ int main() {
 
     KnowledgeModel assessment;
     assessment.assimilate(KnowledgeEvidence{
-        "sensor-a", "surface-risk", std::string("hazardous"), 0.9});
+        "sensor-a", "surface-risk", std::string("hazardous"), 0.9, "origin-a"});
     assessment.assimilate(KnowledgeEvidence{
-        "sensor-a", "surface-risk", std::string("hazardous"), 0.9});
+        "sensor-a", "surface-risk", std::string("hazardous"), 0.9, "origin-a"});
     auto claim = assessment.assess("surface-risk");
     assert(claim.has_value());
     assert(claim->status == KnowledgeStatus::provisional);
@@ -66,19 +66,68 @@ int main() {
     assert(std::abs(claim->evidence_weight - 1.35) < 1e-12);
 
     assessment.assimilate(KnowledgeEvidence{
-        "sensor-b", "surface-risk", std::string("hazardous"), 0.7});
+        "sensor-b", "surface-risk", std::string("hazardous"), 0.7, "origin-b"});
     claim = assessment.assess("surface-risk");
     assert(claim.has_value());
     assert(claim->status == KnowledgeStatus::corroborated);
     assert(claim->candidate.has_value());
     assert(claim->supporting_sources == 2);
+    assert(claim->supporting_origins == 2);
+
+    // Two source identifiers that share one verified origin are correlated.
+    // They contribute one origin's weight and cannot independently corroborate.
+    KnowledgeModel correlated;
+    correlated.assimilate(KnowledgeEvidence{
+        "sensor-a", "origin-claim", std::string("present"), 0.8, "shared-origin"});
+    correlated.assimilate(KnowledgeEvidence{
+        "sensor-b", "origin-claim", std::string("present"), 0.9, "shared-origin"});
+    auto correlated_assessment = correlated.assess("origin-claim");
+    assert(correlated_assessment.has_value());
+    assert(correlated_assessment->status == KnowledgeStatus::provisional);
+    assert(correlated_assessment->supporting_sources == 2);
+    assert(correlated_assessment->supporting_origins == 1);
+    assert(std::abs(correlated_assessment->evidence_weight - 0.9) < 1e-12);
+    correlated.assimilate(KnowledgeEvidence{
+        "sensor-c", "origin-claim", std::string("present"), 0.7, "independent-origin"});
+    correlated_assessment = correlated.assess("origin-claim");
+    assert(correlated_assessment.has_value());
+    assert(correlated_assessment->status == KnowledgeStatus::corroborated);
+    assert(correlated_assessment->supporting_origins == 2);
+    assert(std::abs(correlated_assessment->evidence_weight - 1.6) < 1e-12);
+
+    // Missing provenance is unknown, not evidence that distinct source strings
+    // represent independent origins.
+    KnowledgeModel unknown_provenance;
+    unknown_provenance.assimilate(KnowledgeEvidence{
+        "sensor-x", "unknown-origin-claim", std::string("present"), 0.8});
+    unknown_provenance.assimilate(KnowledgeEvidence{
+        "sensor-y", "unknown-origin-claim", std::string("present"), 0.9});
+    const auto unknown_assessment = unknown_provenance.assess("unknown-origin-claim");
+    assert(unknown_assessment.has_value());
+    assert(unknown_assessment->status == KnowledgeStatus::provisional);
+    assert(unknown_assessment->supporting_sources == 2);
+    assert(unknown_assessment->supporting_origins == 0);
+    assert(std::abs(unknown_assessment->evidence_weight - 0.9) < 1e-12);
+
+    // Two reporters from one origin disagreeing on a value remain disputed.
+    KnowledgeModel same_origin_conflict;
+    same_origin_conflict.assimilate(KnowledgeEvidence{
+        "sensor-left", "origin-conflict", std::string("left"), 0.8, "same-origin"});
+    same_origin_conflict.assimilate(KnowledgeEvidence{
+        "sensor-right", "origin-conflict", std::string("right"), 0.8, "same-origin"});
+    const auto same_origin_dispute = same_origin_conflict.assess("origin-conflict");
+    assert(same_origin_dispute.has_value());
+    assert(same_origin_dispute->status == KnowledgeStatus::disputed);
+    assert(!same_origin_dispute->candidate.has_value());
+    assert(same_origin_dispute->supporting_origins == 1);
+    assert(same_origin_dispute->conflicting_origins == 1);
 
     // Conflicting evidence remains disputed even when calibrated weighting
     // strongly favours one side.
     assessment.assimilate(KnowledgeEvidence{
-        "sensor-c", "surface-risk", std::string("safe"), 0.8});
+        "sensor-c", "surface-risk", std::string("safe"), 0.8, "origin-c"});
     assessment.assimilate(KnowledgeEvidence{
-        "sensor-d", "surface-risk", std::string("hazardous"), 0.8});
+        "sensor-d", "surface-risk", std::string("hazardous"), 0.8, "origin-d"});
     claim = assessment.assess("surface-risk");
     assert(claim.has_value());
     assert(claim->status == KnowledgeStatus::disputed);
@@ -95,10 +144,10 @@ int main() {
     assert(assessment.source_metric("sensor-a")->observations == metric_before);
 
     KnowledgeModel tied;
-    tied.assimilate(KnowledgeEvidence{"a1", "claim", std::string("left"), 0.8});
-    tied.assimilate(KnowledgeEvidence{"a2", "claim", std::string("left"), 0.8});
-    tied.assimilate(KnowledgeEvidence{"b1", "claim", std::string("right"), 0.8});
-    tied.assimilate(KnowledgeEvidence{"b2", "claim", std::string("right"), 0.8});
+    tied.assimilate(KnowledgeEvidence{"a1", "claim", std::string("left"), 0.8, "origin-a1"});
+    tied.assimilate(KnowledgeEvidence{"a2", "claim", std::string("left"), 0.8, "origin-a2"});
+    tied.assimilate(KnowledgeEvidence{"b1", "claim", std::string("right"), 0.8, "origin-b1"});
+    tied.assimilate(KnowledgeEvidence{"b2", "claim", std::string("right"), 0.8, "origin-b2"});
     const auto tied_assessment = tied.assess("claim");
     assert(tied_assessment.has_value());
     assert(tied_assessment->status == KnowledgeStatus::disputed);
@@ -111,7 +160,7 @@ int main() {
     // but must not erase the observation or silently resolve a contradiction.
     KnowledgeModel degraded_source;
     degraded_source.assimilate(KnowledgeEvidence{
-        "sensor-low-trust", "bridge-condition", std::string("safe"), 0.9});
+        "sensor-low-trust", "bridge-condition", std::string("safe"), 0.9, "origin-low"});
     const auto uncalibrated = degraded_source.assess("bridge-condition");
     assert(uncalibrated.has_value());
     assert(std::abs(uncalibrated->evidence_weight - 0.9) < 1e-12);
@@ -128,13 +177,15 @@ int main() {
     assert(std::abs(calibrated_low_trust->evidence_weight - 0.45) < 1e-12);
 
     degraded_source.assimilate(KnowledgeEvidence{
-        "sensor-independent", "bridge-condition", std::string("unsafe"), 0.8});
+        "sensor-independent", "bridge-condition", std::string("unsafe"), 0.8, "origin-independent"});
     const auto degraded = degraded_source.assess("bridge-condition");
     assert(degraded.has_value());
     assert(degraded->status == KnowledgeStatus::disputed);
     assert(!degraded->candidate.has_value());
     assert(degraded->supporting_sources == 1);
     assert(degraded->conflicting_sources == 1);
+    assert(degraded->supporting_origins == 1);
+    assert(degraded->conflicting_origins == 1);
     // The independent source is now the strongest alternative (0.8), while
     // the previously calibrated source remains present at weight 0.45.
     assert(degraded_source.source_metric("sensor-low-trust")->observations == 1);
