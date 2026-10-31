@@ -294,3 +294,41 @@ On the same exact HEAD:
 - Return PASS or REVISE with file/line evidence. Do not edit or merge.
 
 **Priority 1 remains open.** This checkpoint strengthens one falsifiable property of the knowledge mechanism; it does not complete source reliability, verification, safe knowledge acquisition, or general intelligence. Continue the existing priority order and developmental objective without redesigning the architecture.
+
+
+## 13. Priority 1 source-provenance completion work — 2026-10-31
+
+This entry supersedes the earlier identity-only and source-independence limitations in sections 11–12 where the current implementation below provides a stronger mechanism. It does not erase the remaining ground-truth, storage-integrity, statistical-threshold, or downstream-integration limits.
+
+### Implemented on the active PR #148 branch
+
+- Added a host-supplied `KnowledgeProvenanceVerifier` callback. A source's `provenance_id` is used for independence only when the host verifier accepts the paired `provenance_attestation`. The verifier must be deterministic across restarts and authenticate the source-to-origin assertion.
+- Added `KnowledgeProvenanceRequest` with source, claim key/value, provenance identifier, and attestation. Missing verifier, missing metadata, invalid attestation, or verifier exception yields unknown provenance; it never grants independent-origin status.
+- Distinct source identifiers with the same verified origin contribute at most one origin weight. Evidence with no verified origin is grouped into one unknown-origin bucket and cannot create corroboration. Corroboration now requires at least two distinct host-verified origins.
+- Added explicit `supporting_origins` and `conflicting_origins` to assessments while retaining source counts for auditability.
+- Prevented a source's unknown-provenance copy from being counted again when that same source already has verified provenance for the same claim.
+- Excluded provenance identifiers and attestations from learned world facts and feedback-eligible claim fields. A partial provenance pair is rejected before journal mutation.
+- Changed missing observation-quality metadata from the fixed 0.7 fallback to neutral 0.5. Precedence is explicit `evidence_reliability`, then legacy `reliability`, then `confidence`, then neutral 0.5.
+- Strengthened the feedback test verifier so its test attestation binds claim sequence, key, value, evaluator, and correctness outcome. Added reverse-order conflicting-adjudication replay coverage.
+- Added restart coverage proving that verified provenance reconstructs with the same host verifier and fails closed when the verifier is absent.
+
+### Required exact-head verification
+
+Run these focused suites first, then full CTest and the configured sanitizer workflows:
+
+- `jarvis_knowledge_memory_phase3_suite`
+- `jarvis_knowledge_source_feedback_suite`
+- `jarvis_developmental_brain_integration_suite`
+
+Adversarial checks must include source-order permutations, two source names sharing one origin, distinct verified origins, invalid/missing origin attestations, mixed verified and unknown evidence from one source, restart with and without the verifier, altered feedback payloads, and conflicting adjudications in both journal orders.
+
+### Remaining boundaries
+
+1. **Host trust root:** the core provides the verifier boundary; the embedding application must supply a real cryptographic verifier and protect its trust configuration. The test callback is only a deterministic test fixture, not production cryptography.
+2. **Ground truth:** a valid attestation proves that an authorized evaluator made a claim-specific assertion; it does not prove the assertion objectively true. The host adjudication process must ground correctness in independent evidence.
+3. **Journal integrity:** feedback replay is attestation-checked, but the journal as a whole is not cryptographically authenticated against offline deletion, reordering, or other tampering.
+4. **Calibration sample gate:** the three-outcome activation minimum remains a provisional conservative gate, not a statistically universal sample-size guarantee.
+5. **Downstream behaviour:** whether calibrated knowledge changes planning/action selection remains a separate Priority 2 integration requirement.
+6. **Review status:** builder self-review is not independent review. Keep PR #148 draft and unmerged until exact-head CI and an independent reviewer/tester report are available.
+
+**Priority 1 is not closed by this implementation checkpoint alone.** The source-provenance and neutral-default mechanisms are now implemented candidates; exact-head tests and independent adversarial review decide whether they are accepted.
