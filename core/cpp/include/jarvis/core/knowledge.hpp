@@ -26,8 +26,8 @@ struct KnowledgeMetric {
     // Compatibility field: running mean of incoming observation quality only.
     double reliability{0.5};
     std::uint64_t observations{0};
-    // Empirical source calibration is a separate signal. It is deliberately
-    // unavailable to assessment until enough explicit outcomes have accrued.
+    // Lifetime empirical source calibration is an audit signal. Assessment
+    // uses it only when an explicit freshness policy admits enough recent outcomes.
     double empirical_accuracy{0.5};
     std::uint64_t calibration_observations{0};
 };
