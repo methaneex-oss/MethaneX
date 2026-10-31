@@ -709,13 +709,18 @@ void Brain::replay(const Event& event, bool external_observation) {
             const double evidence_reliability = std::clamp(
                 double_value(event.data, "evidence_reliability", reliability),
                 0.0, 1.0);
+            // An execution failure can inform operational reliability, but
+            // without an observed world consequence it is not evidence about
+            // environmental feature utility. Preserve the context-local
+            // execution trace while excluding it from compositional learning.
             developmental_learning_.observe_strategy(
                 *context, *action,
                 LearningSignal{1.0 - reliability, -1.0,
                     std::clamp(double_value(event.data, "salience", 0.0), 0.0, 1.0),
                     std::clamp(double_value(event.data, "novelty", 0.0), 0.0, 1.0),
                     affective_significance,
-                    evidence_reliability});
+                    evidence_reliability},
+                false);
         } // Unknown consequences do not imply a beneficial outcome. Successful
           // execution updates operational capability reliability above, but
           // action-value learning needs an observed consequence.
