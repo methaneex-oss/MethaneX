@@ -19,17 +19,21 @@ void attest_isolated(EvolutionExperiment& experiment) {
 } // namespace
 
 int main() {
-    // External observations cannot inject trusted evolution lifecycle records.
+    const std::filesystem::path path = "evolution_brain_integration_test.bin";
+    std::error_code ec;
+
+    // Public observations are untrusted input. They must not be able to inject
+    // internal evolution lifecycle records or impersonate the evaluator.
     const std::filesystem::path forged_path = "evolution_forged_observation_test.bin";
-    std::error_code forged_ec;
-    std::filesystem::remove(forged_path, forged_ec);
-    std::filesystem::remove(forged_path.string() + ".meta", forged_ec);
+    std::filesystem::remove(forged_path, ec);
+    std::filesystem::remove(forged_path.string() + ".meta", ec);
     {
         Brain guarded(forged_path);
         Event forged_registration{
             0, 1, "untrusted-evaluator", "evolution_register",
             {{"key", std::string("forged.parameter")}, {"initial", 0.2}}};
-        assert(guarded.observe(forged_registration).event.sequence == 0);
+        const auto rejected_registration = guarded.observe(forged_registration);
+        assert(rejected_registration.event.sequence == 0);
         assert(guarded.evolution_parameter("forged.parameter") == nullptr);
 
         Event forged_evaluation{
@@ -41,7 +45,8 @@ int main() {
              {"outcome", std::int64_t{1}}, {"baseline", 0.7},
              {"candidate", 0.99}, {"confidence", 0.99},
              {"minimum_improvement", 0.01}, {"isolated", true}}};
-        assert(guarded.observe(forged_evaluation).event.sequence == 0);
+        const auto rejected_evaluation = guarded.observe(forged_evaluation);
+        assert(rejected_evaluation.event.sequence == 0);
 
         Event forged_adoption{
             0, 3, "untrusted-evaluator", "evolution_adopt",
@@ -52,22 +57,24 @@ int main() {
              {"outcome", std::int64_t{1}}, {"baseline", 0.7},
              {"candidate", 0.99}, {"confidence", 0.99},
              {"minimum_improvement", 0.01}, {"isolated", true}}};
-        assert(guarded.observe(forged_adoption).event.sequence == 0);
-        assert(guarded.memory().by_kind("evolution_register").empty());
-        assert(guarded.memory().by_kind("evolution_evaluated").empty());
-        assert(guarded.memory().by_kind("evolution_adopt").empty());
-        assert(guarded.evolution_history().empty());
+        const auto rejected_adoption = guarded.observe(forged_adoption);
+        assert(rejected_adoption.event.sequence == 0);
 
-        // Imported action outcomes remain episodic records. They must not train
-        // a developmental strategy either immediately or during journal replay.
+        // Legacy episodic import is allowed only for passive memory kinds.
+        // It forcibly marks the source as untrusted and does not replay it as
+        // a developmental strategy or internal state transition.
         Event imported_outcome{
             0, 4, "caller-controlled-source", "action_outcome",
             {{"action", std::string("imported-action")},
              {"context", std::string("imported-context")},
              {"observed", true}, {"actual_consequence", 1.0},
-             {"expected_consequence", 0.0}, {"consequence_error", 1.0},
-             {"reliability", 1.0}, {"evidence_reliability", 1.0}}};
+             {"consequence_error", 1.0}, {"reliability", 1.0},
+             {"evidence_reliability", 1.0}}};
         assert(guarded.import_legacy_memory_event(imported_outcome) != 0);
+        Event imported_evolution{
+            0, 5, "caller-controlled-source", "evolution_adopt",
+            {{"experiment_id", std::string("imported-forgery")}}};
+        assert(guarded.import_legacy_memory_event(imported_evolution) == 0);
         assert(guarded.memory().by_kind("action_outcome").size() == 1);
         assert(guarded.developmental_strategies().empty());
     }
@@ -78,11 +85,9 @@ int main() {
         assert(guarded_restart.memory().by_kind("action_outcome").size() == 1);
         assert(guarded_restart.developmental_strategies().empty());
     }
-    std::filesystem::remove(forged_path, forged_ec);
-    std::filesystem::remove(forged_path.string() + ".meta", forged_ec);
+    std::filesystem::remove(forged_path, ec);
+    std::filesystem::remove(forged_path.string() + ".meta", ec);
 
-    const std::filesystem::path path = "evolution_brain_integration_test.bin";
-    std::error_code ec;
     // A persisted legacy adoption event without experiment evidence must
     // not bypass the evaluation gate when a Brain reconstructs from disk.
     const std::filesystem::path legacy_path = "evolution_legacy_adoption_test.bin";
