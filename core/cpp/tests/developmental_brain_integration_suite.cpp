@@ -1617,6 +1617,72 @@ int main() {
     std::filesystem::remove(three_source_path, ec);
     std::filesystem::remove(three_source_path.string() + ".meta", ec);
 
+    // Repetition from one source is not independent corroboration. Twenty
+    // weak reassertions cannot erase a stronger competing fact.
+    const auto repeated_fact_path = std::filesystem::temp_directory_path() /
+                                    "jarvis_repeated_weak_fact_evidence.bin";
+    std::filesystem::remove(repeated_fact_path, ec);
+    {
+        Brain repeated_fact(repeated_fact_path);
+        assert(repeated_fact.observe(Event{0, 0, "sensor-repeated", "observation",
+            {{"shared-state", Scalar{std::string("stable")}},
+             {"evidence_reliability", Scalar{0.9}}}}).event.sequence != 0);
+        assert(repeated_fact.observe(Event{0, 0, "sensor-repeated", "observation",
+            {{"shared-state", Scalar{std::string("unstable")}},
+             {"evidence_reliability", Scalar{0.8}}}}).event.sequence != 0);
+        for (int i = 0; i < 20; ++i) {
+            assert(repeated_fact.observe(Event{0, 0, "sensor-repeated", "observation",
+                {{"shared-state", Scalar{std::string("unstable")}},
+                 {"evidence_reliability", Scalar{0.2}}}}).event.sequence != 0);
+        }
+        const auto fact = repeated_fact.world().query("sensor-repeated", "shared-state");
+        assert(fact.has_value());
+        assert(fact->disputed);
+        assert(!repeated_fact.world().disputed_facts().empty());
+    }
+    {
+        Brain repeated_fact_replay(repeated_fact_path);
+        const auto fact = repeated_fact_replay.world().query(
+            "sensor-repeated", "shared-state");
+        assert(fact.has_value());
+        assert(fact->disputed);
+        assert(!repeated_fact_replay.world().disputed_facts().empty());
+    }
+    std::filesystem::remove(repeated_fact_path, ec);
+    std::filesystem::remove(repeated_fact_path.string() + ".meta", ec);
+
+    // Relation alternatives obey the same non-independence rule.
+    const auto repeated_relation_path = std::filesystem::temp_directory_path() /
+                                        "jarvis_repeated_weak_relation_evidence.bin";
+    std::filesystem::remove(repeated_relation_path, ec);
+    {
+        Brain repeated_relation(repeated_relation_path);
+        assert(repeated_relation.observe(Event{0, 0, "relation-sensor", "observation",
+            {{"subject", Scalar{std::string("bridge")}},
+             {"predicate", Scalar{std::string("leads_to")}},
+             {"object", Scalar{std::string("room-a")}},
+             {"evidence_reliability", Scalar{0.9}}}}).event.sequence != 0);
+        assert(repeated_relation.observe(Event{0, 0, "relation-sensor", "observation",
+            {{"subject", Scalar{std::string("bridge")}},
+             {"predicate", Scalar{std::string("leads_to")}},
+             {"object", Scalar{std::string("room-b")}},
+             {"evidence_reliability", Scalar{0.8}}}}).event.sequence != 0);
+        for (int i = 0; i < 20; ++i) {
+            assert(repeated_relation.observe(Event{0, 0, "relation-sensor", "observation",
+                {{"subject", Scalar{std::string("bridge")}},
+                 {"predicate", Scalar{std::string("leads_to")}},
+                 {"object", Scalar{std::string("room-b")}},
+                 {"evidence_reliability", Scalar{0.2}}}}).event.sequence != 0);
+        }
+        assert(repeated_relation.world().disputed_relations().size() == 2);
+    }
+    {
+        Brain repeated_relation_replay(repeated_relation_path);
+        assert(repeated_relation_replay.world().disputed_relations().size() == 2);
+    }
+    std::filesystem::remove(repeated_relation_path, ec);
+    std::filesystem::remove(repeated_relation_path.string() + ".meta", ec);
+
     std::filesystem::remove(path, ec);
     std::filesystem::remove(path.string() + ".meta", ec);
     std::cout << "developmental brain integration suite passed\n";
