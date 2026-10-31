@@ -190,18 +190,15 @@ void WorldModel::relate(const Relation& incoming) {
     }
 
     // Conflicting destinations are competing hypotheses for one relation.
-    // Keep them disputed while support is tied; repeated evidence for one
-    // destination can resolve the relation and retire unsupported alternatives.
+    // A fresh post-conflict observation may revise this source's own claim,
+    // but repetition count never manufactures independent support.
     const auto same_relation = [&](const Relation& candidate) {
         return candidate.from == relation_from && candidate.type == relation_type;
     };
-    Relation* winner = nullptr;
-    long double strongest = -1.0L;
-    std::size_t strongest_count = 0;
-    std::size_t relation_count = 0;
     bool has_unsequenced_conflict = false;
     std::uint64_t latest_conflict_sequence = 0;
-    for (auto& candidate : relations_) {
+    std::size_t relation_count = 0;
+    for (const auto& candidate : relations_) {
         if (!same_relation(candidate)) continue;
         ++relation_count;
         if (candidate.first_sequence == 0) {
@@ -210,41 +207,37 @@ void WorldModel::relate(const Relation& incoming) {
             latest_conflict_sequence = std::max(
                 latest_conflict_sequence, candidate.first_sequence);
         }
-        const long double weight = evidence_weight(candidate);
-        if (weight > strongest) {
-            strongest = weight;
-            winner = &candidate;
-            strongest_count = 1;
-        } else if (weight == strongest) {
-            ++strongest_count;
-        }
     }
 
     if (relation_count == 1) {
-        if (winner != nullptr) winner->disputed = false;
+        const auto only = std::find_if(relations_.begin(), relations_.end(), same_relation);
+        if (only != relations_.end()) only->disputed = false;
         return;
     }
 
-    // Do not let evidence collected before the conflict settle it. The
-    // leading relation must be observed again after the latest alternative,
-    // and that newest observation must itself outweigh every alternative's
-    // aggregate mean reliability. Aggregate support alone can be inflated by
-    // repeated weak observations and must not erase a live conflict.
-    double strongest_competing_confidence = 0.0;
-    if (winner != nullptr) {
-        for (const auto& candidate : relations_) {
-            if (same_relation(candidate) && candidate.to != winner->to)
+    Relation* resolving_candidate = nullptr;
+    std::size_t resolving_candidates = 0;
+    for (auto& candidate : relations_) {
+        if (!same_relation(candidate)) continue;
+        double strongest_competing_confidence = 0.0;
+        for (const auto& competitor : relations_) {
+            if (same_relation(competitor) && competitor.to != candidate.to) {
                 strongest_competing_confidence = std::max(
-                    strongest_competing_confidence, candidate.confidence);
+                    strongest_competing_confidence, competitor.confidence);
+            }
+        }
+        if (candidate.updated_sequence > latest_conflict_sequence &&
+            candidate.latest_evidence_confidence >= strongest_competing_confidence) {
+            resolving_candidate = &candidate;
+            ++resolving_candidates;
         }
     }
-    if (strongest_count == 1 && winner != nullptr &&
-        winner->latest_evidence_confidence >= strongest_competing_confidence &&
-        !has_unsequenced_conflict && latest_conflict_sequence != 0 &&
-        winner->updated_sequence > latest_conflict_sequence) {
-        const std::string winning_from = winner->from;
-        const std::string winning_type = winner->type;
-        const std::string winning_to = winner->to;
+
+    if (resolving_candidates == 1 && resolving_candidate != nullptr &&
+        !has_unsequenced_conflict && latest_conflict_sequence != 0) {
+        const std::string winning_from = resolving_candidate->from;
+        const std::string winning_type = resolving_candidate->type;
+        const std::string winning_to = resolving_candidate->to;
         for (auto& candidate : relations_) {
             if (same_relation(candidate))
                 candidate.disputed = candidate.to != winning_to;
@@ -257,7 +250,6 @@ void WorldModel::relate(const Relation& incoming) {
                            candidate.to != winning_to;
                 }),
             relations_.end());
-        winner = nullptr;
         const auto resolved = std::find_if(relations_.begin(), relations_.end(),
             [&](const Relation& candidate) {
                 return candidate.from == winning_from &&
