@@ -170,6 +170,13 @@ void run_seed(std::uint64_t seed) {
         assert(route_two.matched_features == 3);
         assert(route_one.confidence >= 0.5);
         assert(route_two.confidence >= 0.5);
+        auto cross_source_context = held_out;
+        const auto source_marker = cross_source_context.find("/source/sensor");
+        assert(source_marker != std::string::npos);
+        cross_source_context.replace(source_marker, std::string("/source/sensor").size(),
+                                     "/source/camera");
+        assert(brain.developmental_feature_strategy_estimate(
+            cross_source_context, poor_action).matched_features == 0);
         assert((poor_action == "route-one" ? route_one.value : route_two.value) >
                (poor_action == "route-one" ? route_two.value : route_one.value));
         assert(selected_action(brain, "open", "poor", "rough") == poor_action);
