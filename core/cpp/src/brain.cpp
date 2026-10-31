@@ -491,7 +491,7 @@ void Brain::replay(const Event& event, bool external_observation) {
             correct_it == event.data.end() ||
             std::get_if<bool>(&correct_it->second) == nullptr) return;
         const KnowledgeFeedbackRequest request{
-            sequence, *key, value_it->second, *evaluator,
+            sequence, *source, *key, value_it->second, *evaluator,
             *std::get_if<bool>(&correct_it->second), *attestation};
         bool authorized = false;
         try {
@@ -577,7 +577,7 @@ void Brain::replay(const Event& event, bool external_observation) {
                 candidate_attestation == nullptr || candidate_attestation->empty() ||
                 candidate_correct == nullptr) continue;
             const KnowledgeFeedbackRequest candidate_request{
-                sequence, *candidate_key, candidate_value_it->second,
+                sequence, *candidate_source, *candidate_key, candidate_value_it->second,
                 *candidate_evaluator, *candidate_correct, *candidate_attestation};
             bool candidate_authorized = false;
             try {
