@@ -502,3 +502,75 @@ If a package is blocked, switch to another independent executable package rather
 - Preserve existing branches and PRs. Do not force-push, merge, close, or mark a PR ready without explicit authorization.
 - A later change reopens only the acceptance gates it affects, but must retest those gates.
 - Report implementation, CI, independent testing, independent review, and owner acceptance as separate facts.
+
+
+## 18. Priority-One execution checkpoint — 2026-10-31
+
+**Execution branch:** `integration/priority-one-memory-bool-hardening-20261031`  
+**Current PR:** #165 — `fix(memory): integrate canonical boolean validation into Priority One`  
+**Code-bearing HEAD:** `164eae2fbd78503611116710fb7464ec7477df7e`  
+**Base:** PR #162 HEAD `c6c76cfa2716551490859d6e8699992ebd4b5798`.
+
+### Baseline reconciliation
+
+The open Priority-One implementation line now includes the following stacked changes:
+
+- PR #148: evidence-grounded disputed-knowledge and feedback foundations.
+- PR #156: combined knowledge/action-learning/evolution replay safeguards, including rollback-target binding and feedback attestation binding to the actual claim source.
+- PR #157/#158: Brain-owned internal learning/prediction event injection guards; the integration line includes its integrated guard implementation.
+- PR #159: explicit fail-closed calibration policy and event-sequence freshness.
+- PR #160: proposed trust-boundary contract; documentation only, not the production host implementation.
+- PR #161: globally unique calibration event-sequence semantics; conflicting sequence reuse is invalidated rather than first-writer-wins.
+- PR #162: reject non-finite numeric values at live observation/learning, knowledge assimilation, and replay boundaries.
+- PR #165: carries the serialized-Boolean validation change onto the latest integrated line. PR #163 contained the original focused change but was based on PR #160 and did not include PR #161/#162. PR #165 reapplies that fix on top of PR #162 so the active integration candidate includes all three hardening changes.
+
+### New integration work
+
+The Boolean journal parser previously read serialized bytes directly into a C++ `bool`. The integrated change now writes canonical `uint8_t` values 0/1 and rejects any decoded byte greater than 1 before constructing a Boolean.
+
+The regression corrupts the Boolean byte in a later journal record and verifies:
+- the preceding valid record is retained;
+- the malformed suffix is quarantined;
+- the active journal is truncated to the valid prefix;
+- a new valid event can be appended; and
+- a fresh `Memory` instance reconstructs the valid prefix and subsequent event.
+
+This is malformed-record parser hardening. It is not cryptographic journal integrity and does not detect valid-boundary rollback or whole-file replacement.
+
+### Exact-head CI state
+
+At the time of this checkpoint, GitHub Actions has started the four required workflows on PR #165 HEAD `164eae2fbd78503611116710fb7464ec7477df7e`:
+
+- Native Brain Build — in progress (run #1431).
+- Brain CI — in progress (run #2055).
+- Brain ThreadSanitizer — in progress (run #1186).
+- JARVIS Brain Tests — in progress (run #1204).
+
+Do not inherit PR #162's successful CI result as a pass for PR #165. PR #162 HEAD `c6c76cfa2716551490859d6e8699992ebd4b5798` has all four workflows completed successfully; its CTest-bearing jobs report 74/74. PR #161 HEAD `14f060c66b3877989ac2966f2bcf51086f511c5a` likewise has all four workflows completed successfully and 74/74 CTest in its CTest-bearing jobs. Those results do not cover the later PR #165 changes.
+
+No local C++ build is claimed.
+
+### Independent review status
+
+No submitted independent review is recorded for PRs #148, #156, #157, #158, #159, #160, #161, #162, #163, or #165 at this checkpoint. No independent PASS report is available. Builder inspection and CI are not substitutes for independent adversarial testing or architecture/security review.
+
+### Remaining Priority-One blockers — not closed
+
+1. **Production host trust root and evaluator authentication:** the repository has no identified production embedding host at its root. The Rust crate is a minimal runtime, not the production C++ Brain host or protected key provider. The core verifier callback is only an integration boundary. A real host owner must select/provide authenticated evaluator identity, protected trust configuration, key provisioning/rotation/revocation, and deterministic historical verification.
+2. **Ground-truth adjudication:** the host must define the independent observable basis for correctness, conflicts, stale facts, evaluator qualification, and evidence dependence. A valid signature proves assertion origin, not truth.
+3. **Journal and metadata integrity:** current persistence remains an unframed binary journal plus independently writable metadata. Canonical scalar validation does not provide authenticated records, valid-tail rollback detection, protected monotonic anchoring, cross-process serialization, or durable file/directory synchronization.
+4. **Calibration statistical policy:** the three-outcome activation minimum and event-age horizon are configurable but remain provisional. A defensible target population, dependence/effective-sample treatment, uncertainty policy, and host-selected freshness horizon are not established.
+5. **Independent adversarial tester and reviewer:** no independent report or review submission is recorded for the current exact head.
+
+These are not cosmetic documentation tasks. The first four require explicit host/deployment and statistical policy decisions or their implementations. Do not fabricate those decisions in the core library merely to force a milestone closure.
+
+### Next executable actions
+
+- Await and inspect all four PR #165 exact-head workflow results; diagnose any failures at the job/step level.
+- Inspect the integrated diff and replay/persistence behavior again after CI.
+- Preserve PR #165 draft/unmerged pending independent testing and review.
+- Obtain the owner/host decision needed to implement the protected trust-anchor and adjudication contracts. Until a production host/deployment boundary exists, do not claim production cryptographic trust.
+- Obtain an explicit statistically defensible calibration policy or record the owner-approved operational policy with its limits.
+- Keep Priority Two planning/action-selection integration deferred as required by the priority order.
+
+**Disposition: Priority One remains OPEN and is not eligible for acceptance at this checkpoint.** The implementation line has progressed, but the remaining host trust, ground-truth, storage-integrity, calibration-policy, and independent-review gates are real blockers. Do not merge or mark any stacked PR ready without independent clearance and owner authorization.
