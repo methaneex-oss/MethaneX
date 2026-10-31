@@ -34,7 +34,7 @@ int main() {
     double observation_quality = 0.0;
     {
         Brain brain(journal,
-            {"independent-reviewer", "second-reviewer", "third-reviewer"}, verifier);
+            {"independent-reviewer", "second-reviewer", "third-reviewer", "sensor-a"}, verifier);
         const auto observed = brain.observe(Event{0, 0, "sensor-a", "observation",
             {{"temperature", Scalar{20.0}}, {"humidity", Scalar{50.0}}, {"reliability", Scalar{0.99}}}});
         claim_sequence = observed.event.sequence;
