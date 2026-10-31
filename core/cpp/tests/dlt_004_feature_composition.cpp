@@ -118,6 +118,23 @@ std::string selected_action(Brain& brain, const std::string& bridge,
     return result.context.plan.steps.front().action.name;
 }
 
+bool has_resolved_action_consequence_forecast(const Brain& brain) {
+    const auto predictions = brain.snapshot().predictions;
+    for (const auto& event : brain.memory().by_kind("action_outcome")) {
+        const auto sequence = event.data.find("consequence_prediction_sequence");
+        if (sequence == event.data.end()) continue;
+        const auto* value = std::get_if<std::int64_t>(&sequence->second);
+        if (value == nullptr || *value <= 0) continue;
+        if (std::any_of(predictions.begin(), predictions.end(),
+            [value](const Prediction& prediction) {
+                return prediction.resolved &&
+                       prediction.created_sequence ==
+                           static_cast<std::uint64_t>(*value);
+            })) return true;
+    }
+    return false;
+}
+
 void run_seed(std::uint64_t seed) {
     const auto journal = std::filesystem::temp_directory_path() /
         ("jarvis_dlt_004_" + std::to_string(seed) + ".bin");
@@ -195,12 +212,7 @@ void run_seed(std::uint64_t seed) {
         // feed affective appraisal, prediction calibration, episodic memory,
         // compositional strategy learning, and the next CognitiveCycle decision.
         assert(brain.affective_learning_updates() > 0);
-        const auto live_predictions = brain.snapshot().predictions;
-        assert(std::any_of(live_predictions.begin(), live_predictions.end(),
-            [](const Prediction& prediction) {
-                return prediction.resolved &&
-                       prediction.key.rfind("action_consequence|", 0) == 0;
-            }));
+        assert(has_resolved_action_consequence_forecast(brain));
         const auto recalled_outcomes = brain.memory().recall_ranked(
             {{"action", Scalar{poor_action}}}, 16, "action_outcome", true);
         assert(std::any_of(recalled_outcomes.begin(), recalled_outcomes.end(),
@@ -228,12 +240,7 @@ void run_seed(std::uint64_t seed) {
         // A fresh process must reconstruct every participating learner from
         // journaled experience, not merely preserve the selected action.
         assert(restored.affective_learning_updates() > 0);
-        const auto restored_predictions = restored.snapshot().predictions;
-        assert(std::any_of(restored_predictions.begin(), restored_predictions.end(),
-            [](const Prediction& prediction) {
-                return prediction.resolved &&
-                       prediction.key.rfind("action_consequence|", 0) == 0;
-            }));
+        assert(has_resolved_action_consequence_forecast(restored));
         const auto restored_memories = restored.memory().recall_ranked(
             {{"action", Scalar{poor_action}}}, 16, "action_outcome", true);
         assert(std::any_of(restored_memories.begin(), restored_memories.end(),
