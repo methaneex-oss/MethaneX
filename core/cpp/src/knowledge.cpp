@@ -50,13 +50,18 @@ void KnowledgeModel::score_source(const std::string& source, bool correct) {
 void KnowledgeModel::score_source(
     const std::string& source, bool correct, std::uint64_t sequence) {
     if (source.empty() || sequence == 0) return;
+    auto& outcomes = calibration_outcomes_[source];
+    if (std::any_of(outcomes.begin(), outcomes.end(),
+                    [&](const CalibrationOutcome& item) {
+                        return item.sequence == sequence;
+                    })) return;
     auto& metric = sources_[source];
     const double outcome = correct ? 1.0 : 0.0;
     metric.empirical_accuracy +=
         (outcome - metric.empirical_accuracy) /
         static_cast<double>(metric.calibration_observations + 1);
     ++metric.calibration_observations;
-    calibration_outcomes_[source].push_back(CalibrationOutcome{sequence, correct});
+    outcomes.push_back(CalibrationOutcome{sequence, correct});
 }
 
 const KnowledgeMetric* KnowledgeModel::source_metric(const std::string& source) const noexcept {
