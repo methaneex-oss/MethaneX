@@ -46,7 +46,11 @@ struct KnowledgeAssessment {
     std::size_t supporting_sources{0};
     std::size_t conflicting_sources{0};
     std::size_t observations{0};
+    // Weight from distinct host-verified origins only.
     double evidence_weight{0.0};
+    // Best unverified-origin weight is exposed separately and never contributes
+    // to the corroboration threshold.
+    double unverified_evidence_weight{0.0};
     // Distinct origins accepted by the host provenance verifier.
     std::size_t supporting_origins{0};
     std::size_t conflicting_origins{0};
