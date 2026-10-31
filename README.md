@@ -1,29 +1,33 @@
 # JARVIS
 
-> A continuously evolving, multimodal software intelligence platform.
+> A continuously evolving, multimodal cognitive system.
 
-JARVIS is being engineered as a **software-first cognitive system** rather than a chatbot, a single model wrapper, or a single-language application. The architecture uses the language and runtime best suited to each subsystem.
+JARVIS is being engineered as a persistent, adaptive cognitive system—not a chatbot, a wrapper around an external model, or a collection of disconnected agents. The Brain is the current construction target.
+
+## Governing principle
+
+**ENGINEER THE MECHANISMS; LET BEHAVIOR BE ACQUIRED THROUGH EXPERIENCE.**
 
 ## Engineering principles
 
-- **Cognition over conversation** — perception, memory, world modelling, reasoning, planning, action and reflection are separate capabilities that cooperate.
-- **Continuity over storage** — memory represents experience and state continuity, not merely a database of messages.
-- **Learning over hardcoding** — behaviour should improve from evidence, outcomes and experience instead of depending on large collections of fixed `if/else` rules.
-- **Evolution over stagnation** — capabilities, strategies and internal models are designed to improve as evidence accumulates.
-- **Resilience by design** — faults should be detected, isolated and recovered without assuming that every subsystem is always available.
-- **Model-agnostic intelligence** — external models and knowledge sources may contribute capabilities without becoming JARVIS itself.
-- **Polyglot by engineering necessity** — C++, Rust, Python, TypeScript and other technologies may be used where each provides the strongest implementation characteristics.
-- **Security as a native concern** — defensive monitoring, isolation, integrity and controlled recovery belong in the platform rather than being an afterthought.
+- **Cognition over conversation** — perception, memory, world modelling, reasoning, planning, decision, action and reflection cooperate as one system.
+- **Continuity over storage** — memory preserves experience, context, evidence and state continuity; it is not merely a database of messages.
+- **Learning over hardcoding** — behavior intended to be learned must change through evidence and experience, not scenario-specific fixed mappings.
+- **One cognitive authority** — subsystems and workers may cooperate, but canonical cognitive state has explicit ownership.
+- **Internal cognition** — core reasoning, memory, prediction, decision and learning mechanisms are built and owned within this project; hosted AI APIs and external cognitive engines are not core dependencies.
+- **Evidence before complexity** — mechanisms, languages, frameworks and dependencies require a concrete responsibility and measurable justification.
+- **Resilience by design** — faults should be detected, isolated and recovered without corrupting continuity.
+- **Security as a native concern** — trust boundaries, authorization, integrity and controlled recovery are foundational.
 
 ## Repository layout
 
 ```text
 MethaneX/
-├── core/                 # Native cognitive and systems core
+├── core/                 # Native cognitive foundation
 │   └── cpp/
-├── runtime/              # High-performance runtime components
+├── runtime/              # Bounded infrastructure services
 │   └── rust/
-├── interfaces/           # Integration and external contracts
+├── interfaces/           # Monitoring and authorized interface contracts
 │   └── typescript/
 ├── docs/                 # Architecture and engineering documentation
 └── tests/                # Verification and regression tests
@@ -31,45 +35,26 @@ MethaneX/
 
 ## Brain
 
-The brain is being developed as a layered cognitive substrate including:
+The Brain is being developed as one layered cognitive system. Its responsibilities include perception and representation, memory and continuity, beliefs and evidence, world and self-modelling, attention, prediction, valuation, reasoning, goals, planning, decision, authorized action, outcome evaluation, learning, metacognition, resilience and governed self-improvement.
 
-- persistent continuity memory
-- working context and attention
-- belief and evidence management
-- world modelling and relationships
-- causal reasoning and simulation
-- prediction and outcome learning
-- adaptive decision making
-- planning
-- reflection / metacognition
-- knowledge assimilation
-- threat assessment and defensive posture
-- resilience and recovery
-- capability self-modeling
-- evolution and performance adaptation
-
-These are **components of one cognitive system**, not independent chatbot features.
+These are interacting mechanisms, not independent chatbot features. Their presence in the repository does not prove that they are integrated or behaviorally effective.
 
 ## Language strategy
 
-There is deliberately no requirement that the entire project be written in one language. Native systems work may use C++, safety-critical/high-concurrency components may use Rust, integration layers may use TypeScript, and Python may be introduced where it provides a genuine technical advantage such as scientific/ML tooling. The architecture decides the language; the language does not define the architecture.
+The current proposed Brain allocation uses C++20 for authoritative cognition and orchestration; Python/PyTorch for bounded trainable mechanisms and evaluation; Rust only for justified infrastructure or isolation; TypeScript for monitoring and authorized interface contracts; and CUDA/Triton only when measured acceleration benefits justify them. No language is introduced merely to increase the language count. See the [Brain Layer-to-Language Ownership Map](docs/BRAIN_LAYER_LANGUAGE_OWNERSHIP_MAP.md).
 
-## Development status
+## Brain identity and behavioral target
 
-JARVIS is under active foundational development. The current work is focused on completing and integrating the cognitive substrate before higher-level device, interface and deployment layers are built on top of it.
-
-## Brain language ownership
-
-The Brain-only layer-to-language responsibilities, including the TypeScript monitoring plane, Python/PyTorch learning boundary, and conditional Rust/GPU roles, are defined in the [Brain Layer-to-Language Ownership Map](docs/BRAIN_LAYER_LANGUAGE_OWNERSHIP_MAP.md).
+The [Brain Identity and Behavioral Specification](docs/JARVIS_BRAIN_IDENTITY_AND_BEHAVIORAL_SPEC.md) defines what JARVIS is intended to be, the MCU behavior used as a reference, the target Brain capabilities, and the non-negotiable project rules.
 
 ## Brain engineering governance
 
-The implementation rules for language ownership, cross-language contracts, state integrity, security, persistence, testing, dependencies, performance, and approval gates are defined in [Brain Polyglot Engineering Governance](docs/BRAIN_POLYGLOT_ENGINEERING_GOVERNANCE.md).
+The [Brain Polyglot Engineering Governance](docs/BRAIN_POLYGLOT_ENGINEERING_GOVERNANCE.md) defines language ownership, implementation standards, cross-language contracts, state integrity, security, persistence, testing, dependencies, performance and approval gates.
 
-## Project governance
+## Development status
 
-The command structure, role boundaries, decision authority, architecture change control, independent testing/review requirements, and handoff rules are defined in [JARVIS Project Governance](docs/JARVIS_PROJECT_GOVERNANCE.md). This document is the repository record of the Project Director → Chief Builder → Independent Tester / Independent Reviewer operating model.
+JARVIS is under foundational development. The present work is focused on the Brain. Future embodiments—such as a house, suit, phone, satellite, or other host—are not current implementation targets. The Brain must remain independent of any one such environment.
 
 ## Philosophy
 
-The objective is not to reproduce a fictional implementation line-for-line. The objective is to engineer the closest practical software architecture to the **behavioural idea** of JARVIS: persistent, adaptive, context-aware, capable of reasoning across domains, able to use available tools, resilient to component failure, and capable of improving through experience.
+The objective is to engineer the closest practical software architecture to the behavioral idea of MCU JARVIS: persistent, context-aware, capable of reasoning across domains, able to use authorized capabilities, resilient to faults, and able to improve through experience. Cinematic behavior is a reference for requirements, not proof of a known technical implementation or a claim of human-equivalent intelligence.
