@@ -574,6 +574,24 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
             continue;
         }
 
+        // When the complete context is unseen, use the learned contributions
+        // of its individual observed features before falling back to nearest-
+        // context retrieval. This supports transfer across novel combinations
+        // without treating a shared context prefix as evidence of equivalence.
+        const auto feature_estimate =
+            brain_.developmental_feature_strategy_estimate(
+                developmental_context, action.name);
+        if (feature_estimate.matched_features > 0 &&
+            feature_estimate.confidence >= 0.25) {
+            const double influence = std::clamp(
+                1.25 * feature_estimate.value * feature_estimate.confidence,
+                -1.0, 1.0);
+            action.utility += influence;
+            action.expected_value = std::clamp(
+                action.expected_value + influence, -1.0, 1.0);
+            continue;
+        }
+
         double transferred_evidence = 0.0;
         double transferred_weight = 0.0;
         for (const auto& evidence : related_strategies) {
