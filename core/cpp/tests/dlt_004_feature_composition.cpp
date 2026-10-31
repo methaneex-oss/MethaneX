@@ -12,7 +12,8 @@ namespace {
 constexpr const char* goal_id = "dlt-004-feature-composition-goal";
 
 CognitiveCycleInput make_input(const std::string& bridge,
-                               const std::string& visibility) {
+                               const std::string& visibility,
+                               const std::string& surface) {
     CognitiveCycleInput input;
     input.goal_id = goal_id;
     input.planning_horizon = 1;
@@ -22,6 +23,7 @@ CognitiveCycleInput make_input(const std::string& bridge,
     input.observation = Event{
         0, 1, "sensor", "observation",
         {{"bridge_status", bridge}, {"visibility", visibility},
+         {"surface_condition", surface},
          {"task", std::string("navigation")},
          {"context", std::string("navigation/phase-label-that-must-not-leak")},
          {"world_episode", std::int64_t{17}},
@@ -40,12 +42,14 @@ CognitiveCycleInput make_input(const std::string& bridge,
 }
 
 std::string inferred_context(Brain& brain, const std::string& bridge,
-                             const std::string& visibility) {
-    const auto result = CognitiveCycle(brain).run(make_input(bridge, visibility));
+                             const std::string& visibility,
+                             const std::string& surface) {
+    const auto result = CognitiveCycle(brain).run(
+        make_input(bridge, visibility, surface));
     assert(result.status == CognitiveCycleStatus::completed);
     assert(!result.context.action_assessments.empty());
     const auto& context = result.context.action_assessments.front().developmental_context;
-    assert(context.find("/features/bridge_status/visibility/values/") != std::string::npos);
+    assert(context.find("/features/bridge_status/surface_condition/visibility/values/") != std::string::npos);
     assert(context.find("/values/") != std::string::npos);
     assert(context.find("phase-label-that-must-not-leak") == std::string::npos);
     assert(context.find("world_episode") == std::string::npos);
@@ -86,8 +90,10 @@ void train_pair(Brain& brain, const std::string& context,
 }
 
 std::string selected_action(Brain& brain, const std::string& bridge,
-                            const std::string& visibility) {
-    const auto result = CognitiveCycle(brain).run(make_input(bridge, visibility));
+                            const std::string& visibility,
+                            const std::string& surface) {
+    const auto result = CognitiveCycle(brain).run(
+        make_input(bridge, visibility, surface));
     assert(result.status == CognitiveCycleStatus::completed);
     assert(!result.context.plan.steps.empty());
     return result.context.plan.steps.front().action.name;
@@ -115,31 +121,41 @@ void run_seed(std::uint64_t seed) {
         assert(brain.create_goal(goal));
         assert(brain.activate_goal(goal.id));
 
-        const auto open_clear = inferred_context(brain, "open", "clear");
-        const auto closed_clear = inferred_context(brain, "closed", "clear");
-        const auto closed_poor = inferred_context(brain, "closed", "poor");
+        const auto open_clear_flat =
+            inferred_context(brain, "open", "clear", "flat");
+        const auto open_clear_rough =
+            inferred_context(brain, "open", "clear", "rough");
+        const auto closed_clear_rough =
+            inferred_context(brain, "closed", "clear", "rough");
+        const auto closed_poor_flat =
+            inferred_context(brain, "closed", "poor", "flat");
+        const auto closed_poor_rough =
+            inferred_context(brain, "closed", "poor", "rough");
 
-        // The complete open/poor combination is deliberately withheld.
-        // Repeated evidence across the other combinations teaches that the
-        // visibility feature predicts the better action independently of the
-        // bridge feature.
-        train_pair(brain, open_clear, clear_action, 8);
-        train_pair(brain, closed_clear, clear_action, 8);
-        train_pair(brain, closed_poor, poor_action, 8);
+        // The open/poor/rough combination is deliberately withheld. Every
+        // feature value used in the probe has been observed in multiple
+        // distinct contexts, so repeated samples of one combination cannot
+        // masquerade as independent support.
+        train_pair(brain, open_clear_flat, clear_action, 8);
+        train_pair(brain, open_clear_rough, clear_action, 8);
+        train_pair(brain, closed_clear_rough, clear_action, 8);
+        train_pair(brain, closed_poor_flat, poor_action, 8);
+        train_pair(brain, closed_poor_rough, poor_action, 8);
 
-        const auto held_out = inferred_context(brain, "open", "poor");
+        const auto held_out =
+            inferred_context(brain, "open", "poor", "rough");
         const auto route_one =
             brain.developmental_feature_strategy_estimate(held_out, "route-one");
         const auto route_two =
             brain.developmental_feature_strategy_estimate(held_out, "route-two");
-        assert(route_one.matched_features == 2);
-        assert(route_two.matched_features == 2);
+        assert(route_one.matched_features == 3);
+        assert(route_two.matched_features == 3);
         assert(route_one.confidence >= 0.5);
         assert(route_two.confidence >= 0.5);
         assert((poor_action == "route-one" ? route_one.value : route_two.value) >
                (poor_action == "route-one" ? route_two.value : route_one.value));
-        assert(selected_action(brain, "open", "poor") == poor_action);
-        assert(brain.memory().by_kind("action_outcome").size() == 48);
+        assert(selected_action(brain, "open", "poor", "rough") == poor_action);
+        assert(brain.memory().by_kind("action_outcome").size() == 80);
     }
 
     // Feature weights are reconstructed from the same durable experiences;
@@ -147,13 +163,13 @@ void run_seed(std::uint64_t seed) {
     {
         Brain restored(journal);
         assert(restored.goal(goal_id) != nullptr);
-        assert(selected_action(restored, "open", "poor") == poor_action);
-        const auto held_out = inferred_context(restored, "open", "poor");
+        assert(selected_action(restored, "open", "poor", "rough") == poor_action);
+        const auto held_out = inferred_context(restored, "open", "poor", "rough");
         const auto estimate =
             restored.developmental_feature_strategy_estimate(held_out, poor_action);
         assert(estimate.confidence >= 0.5);
         assert(estimate.value > 0.0);
-        assert(restored.memory().by_kind("action_outcome").size() == 48);
+        assert(restored.memory().by_kind("action_outcome").size() == 80);
     }
 
     std::filesystem::remove(journal, ec);
