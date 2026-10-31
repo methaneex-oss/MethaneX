@@ -10,6 +10,8 @@ namespace jarvis::core {
 double KnowledgeModel::assimilate(const KnowledgeEvidence& evidence) {
     if (evidence.source.empty() || evidence.key.empty() ||
         !std::isfinite(evidence.reliability)) return 0.0;
+    if (const auto* value = std::get_if<double>(&evidence.value);
+        value != nullptr && !std::isfinite(*value)) return 0.0;
     auto& metric = sources_[evidence.source];
     const double quality = std::clamp(evidence.reliability, 0.0, 1.0);
     if (metric.observations == 0) {
