@@ -377,11 +377,16 @@ int main() {
     const auto reverse_journal = std::filesystem::temp_directory_path() /
                                  "jarvis_knowledge_feedback_reverse_order.bin";
     std::filesystem::remove(reverse_journal, error);
+    std::uint64_t reverse_claim_sequence = 0;
     {
         Brain reverse(reverse_journal, {"reviewer"}, verifier);
         const auto claim = reverse.observe(Event{0, 0, "sensor-reverse", "observation",
             {{"pressure", Scalar{10.0}}}});
-        assert(claim.event.sequence != 0);
+        assert(reverse_claim_sequence != 0);
+        reverse_claim_sequence = claim.event.sequence;
+    }
+    {
+        Memory reverse_journal_writer(256, reverse_journal);
         Event first_false{0, 0, "reviewer", "knowledge_source_feedback",
             {{"claim_sequence", Scalar{static_cast<std::int64_t>(claim.event.sequence)}},
              {"claim_source", Scalar{std::string("sensor-reverse")}},
@@ -400,8 +405,8 @@ int main() {
              {"correct", Scalar{true}},
              {"attestation", Scalar{feedback_attestation(
                  claim.event.sequence, "pressure", 10.0, "reviewer", true)}}}};
-        assert(const_cast<Memory&>(reverse.memory()).append(first_false) != 0);
-        assert(const_cast<Memory&>(reverse.memory()).append(second_true) != 0);
+        assert(reverse_journal_writer.append(first_false) != 0);
+        assert(reverse_journal_writer.append(second_true) != 0);
     }
     {
         Brain reverse_restored(reverse_journal, {"reviewer"}, verifier);
