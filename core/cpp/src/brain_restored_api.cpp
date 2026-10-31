@@ -180,7 +180,8 @@ bool Brain::record_knowledge_source_feedback(
         const bool metadata = key == "_external_observation" || key == "novelty" ||
             key == "salience" || key == "urgency" || key == "prediction_error" ||
             key == "outcome" || key == "confidence" || key == "reliability" ||
-            key == "evidence_reliability" || key == "world_step";
+            key == "evidence_reliability" || key == "world_step" ||
+            key == "provenance_id" || key == "provenance_attestation";
         const bool episode_metadata =
             target->source == "developmental_environment" &&
             target->kind == "observation" &&
