@@ -109,6 +109,19 @@ int main() {
     assert(unknown_assessment->supporting_origins == 0);
     assert(std::abs(unknown_assessment->evidence_weight - 0.9) < 1e-12);
 
+    // A source that first reports without provenance and later supplies a
+    // verified origin must not count its own history twice.
+    KnowledgeModel mixed_provenance;
+    mixed_provenance.assimilate(KnowledgeEvidence{
+        "sensor-mixed", "mixed-origin-claim", std::string("present"), 0.9});
+    mixed_provenance.assimilate(KnowledgeEvidence{
+        "sensor-mixed", "mixed-origin-claim", std::string("present"), 0.8, "verified-origin"});
+    const auto mixed_assessment = mixed_provenance.assess("mixed-origin-claim");
+    assert(mixed_assessment.has_value());
+    assert(mixed_assessment->supporting_sources == 1);
+    assert(mixed_assessment->supporting_origins == 1);
+    assert(std::abs(mixed_assessment->evidence_weight - 0.8) < 1e-12);
+
     // Two reporters from one origin disagreeing on a value remain disputed.
     KnowledgeModel same_origin_conflict;
     same_origin_conflict.assimilate(KnowledgeEvidence{
