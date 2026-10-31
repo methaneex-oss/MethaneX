@@ -1569,9 +1569,10 @@ int main() {
     std::filesystem::remove(three_source_path, ec);
     std::filesystem::remove(three_source_path.string() + ".meta", ec);
     const auto observe_value = [](Brain& candidate, const std::string& source,
-                                  const std::string& value) {
+                                  const std::string& value,
+                                  double reliability = 0.9) {
         return candidate.observe(Event{0, 0, source, "observation",
-            {{"shared-state", value}, {"evidence_reliability", 0.9}}});
+            {{"shared-state", value}, {"evidence_reliability", reliability}}});
     };
     const auto assert_three_source_dispute = [](const Brain& candidate, bool expected) {
         const auto beliefs = candidate.beliefs();
@@ -1595,12 +1596,12 @@ int main() {
         assert(unresolved_replay.world().disputed_facts().size() >= 2);
         // Fresh corroboration resolves sensor A's alpha/beta dispute, but
         // sensor C's independent gamma claim still keeps the global belief open.
-        assert(observe_value(unresolved_replay, "sensor-A", "beta").event.sequence != 0);
+        assert(observe_value(unresolved_replay, "sensor-A", "beta", 0.95).event.sequence != 0);
         assert_three_source_dispute(unresolved_replay, true);
         assert(unresolved_replay.world().disputed_facts().empty());
         // A first beta observation from sensor C introduces a new conflict;
         // it must not be mistaken for post-conflict corroboration.
-        assert(observe_value(unresolved_replay, "sensor-C", "beta").event.sequence != 0);
+        assert(observe_value(unresolved_replay, "sensor-C", "beta", 0.95).event.sequence != 0);
         assert_three_source_dispute(unresolved_replay, true);
         assert(!unresolved_replay.world().disputed_facts().empty());
         // A second beta observation is fresh corroboration after gamma/beta
