@@ -262,7 +262,7 @@ int main() {
                            0.9, 0.0, 0, 0, GoalStatus::pending, {}, {}};
         assert(episodic_brain.create_goal(episodic_goal));
         assert(episodic_brain.activate_goal(episodic_goal.id));
-        episodic_brain.memory().append(Event{0, 0, "legacy-journal", "action_outcome",
+        episodic_brain.import_legacy_memory_event(Event{0, 0, "legacy-journal", "action_outcome",
             {{"action", std::string("episodically-good")},
              {"context", std::string("episodic-only-context")},
              {"observed", true},
@@ -271,7 +271,7 @@ int main() {
              {"reliability", 0.1},
              {"evidence_reliability", 1.0},
              {"salience", 1.0}}});
-        episodic_brain.memory().append(Event{0, 0, "legacy-journal", "action_outcome",
+        episodic_brain.import_legacy_memory_event(Event{0, 0, "legacy-journal", "action_outcome",
             {{"action", std::string("episodically-bad")},
              {"context", std::string("episodic-only-context")},
              {"observed", true},
@@ -282,7 +282,7 @@ int main() {
              {"salience", 1.0}}});
         // A recorded but unobserved consequence is not reward evidence and must
         // not make an action look successful merely because a value was stored.
-        episodic_brain.memory().append(Event{0, 0, "legacy-journal", "action_outcome",
+        episodic_brain.import_legacy_memory_event(Event{0, 0, "legacy-journal", "action_outcome",
             {{"action", std::string("episodically-unobserved")},
              {"context", std::string("episodic-only-context")},
              {"observed", false},
@@ -347,11 +347,11 @@ int main() {
         // that share the current sensor key. A nonempty generic result must not
         // suppress candidate-specific retrieval of the older action outcome.
         for (int i = 0; i < 3; ++i) {
-            experienced.memory().append(Event{0, 0, "environment", "observation",
+            experienced.import_legacy_memory_event(Event{0, 0, "environment", "observation",
                 {{"new_sensor_schema", std::string("unrelated-sensor-state")},
                  {"salience", 0.9}}});
         }
-        experienced.memory().append(Event{0, 0, "legacy-journal", "action_outcome",
+        experienced.import_legacy_memory_event(Event{0, 0, "legacy-journal", "action_outcome",
             {{"action", std::string("sensor-adaptation-action")},
              {"context", std::string("featureful-episodic-context")},
              {"observed", true},
@@ -364,14 +364,14 @@ int main() {
         // top-1 action recall would return one of them, then discard it after
         // ranking and miss the older outcome. Kind filtering must happen first.
         for (int i = 0; i < 3; ++i) {
-            experienced.memory().append(Event{0, 0, "executor", "action_attempt",
+            experienced.import_legacy_memory_event(Event{0, 0, "executor", "action_attempt",
                 {{"action", std::string("sensor-adaptation-action")},
                  {"salience", 1.0}}});
         }
         // Legacy outcome records may omit context entirely. They are useful
         // for broad action recall but must never masquerade as exact local
         // evidence when the current context is known.
-        experienced.memory().append(Event{0, 0, "legacy-journal", "action_outcome",
+        experienced.import_legacy_memory_event(Event{0, 0, "legacy-journal", "action_outcome",
             {{"action", std::string("sensor-adaptation-action")},
              {"observed", true},
              {"actual_consequence", -1.0},
@@ -382,7 +382,7 @@ int main() {
         // Recent outcomes for the same action in unrelated contexts must not
         // evict the older outcome that matches this developmental situation.
         for (int i = 0; i < 3; ++i) {
-            experienced.memory().append(Event{0, 0, "legacy-journal", "action_outcome",
+            experienced.import_legacy_memory_event(Event{0, 0, "legacy-journal", "action_outcome",
                 {{"action", std::string("sensor-adaptation-action")},
                  {"context", std::string("unrelated-developmental-context")},
                  {"observed", true},
@@ -473,7 +473,7 @@ int main() {
                   0.9, 0.0, 0, 0, GoalStatus::pending, {}, {}};
         assert(isolated.create_goal(goal));
         assert(isolated.activate_goal(goal.id));
-        isolated.memory().append(Event{0, 0, "legacy-journal", "action_outcome",
+        isolated.import_legacy_memory_event(Event{0, 0, "legacy-journal", "action_outcome",
             {{"action", std::string("contextless-negative-action")},
              {"observed", true},
              {"actual_consequence", -1.0},
@@ -1103,7 +1103,7 @@ int main() {
                              0.9, 0.0, 0, 0, GoalStatus::pending, {}, {}};
         assert(precedence_brain.create_goal(precedence_goal));
         assert(precedence_brain.activate_goal(precedence_goal.id));
-        precedence_brain.memory().append(Event{0, 0, "legacy-journal", "action_outcome",
+        precedence_brain.import_legacy_memory_event(Event{0, 0, "legacy-journal", "action_outcome",
             {{"action", std::string("learned-action")},
              {"context", std::string("developmental-context/variant")},
              {"observed", true},
