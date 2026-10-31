@@ -35,6 +35,37 @@ int main() {
     assert(std::abs(metric->empirical_accuracy - (2.0 / 3.0)) < 1e-12);
     assert(std::abs(metric->reliability - 0.6) < 1e-12);
 
+    // Calibration is experience-dependent: an initially reliable source
+    // degrades after incorrect adjudications and improves again after correct ones.
+    KnowledgeModel changing_source;
+    for (int i = 0; i < 3; ++i) changing_source.score_source("changing", true);
+    assert(std::abs(changing_source.source_metric("changing")->empirical_accuracy - 1.0) < 1e-12);
+    for (int i = 0; i < 3; ++i) changing_source.score_source("changing", false);
+    assert(std::abs(changing_source.source_metric("changing")->empirical_accuracy - 0.5) < 1e-12);
+    for (int i = 0; i < 3; ++i) changing_source.score_source("changing", true);
+    assert(std::abs(changing_source.source_metric("changing")->empirical_accuracy - (2.0 / 3.0)) < 1e-12);
+
+    // Empirical accuracy can outweigh a higher incoming quality score: a
+    // repeatedly incorrect high-quality source must not dominate a lower-
+    // quality source with a consistently correct calibration record.
+    KnowledgeModel calibrated_competition;
+    calibrated_competition.assimilate(KnowledgeEvidence{
+        "high-quality-poor", "bridge-safety", std::string("unsafe"), 0.9, "origin-poor"});
+    for (int i = 0; i < 3; ++i)
+        calibrated_competition.score_source("high-quality-poor", false);
+    calibrated_competition.assimilate(KnowledgeEvidence{
+        "lower-quality-accurate", "bridge-safety", std::string("safe"), 0.4, "origin-accurate"});
+    for (int i = 0; i < 3; ++i)
+        calibrated_competition.score_source("lower-quality-accurate", true);
+    const auto calibrated_competition_assessment =
+        calibrated_competition.assess("bridge-safety");
+    assert(calibrated_competition_assessment.has_value());
+    assert(calibrated_competition_assessment->status == KnowledgeStatus::disputed);
+    assert(!calibrated_competition_assessment->candidate.has_value());
+    assert(calibrated_competition_assessment->supporting_origins == 1);
+    assert(calibrated_competition_assessment->conflicting_origins == 1);
+    assert(std::abs(calibrated_competition_assessment->evidence_weight - 0.6) < 1e-12);
+
     KnowledgeModel assessment;
     assessment.assimilate(KnowledgeEvidence{
         "sensor-a", "surface-risk", std::string("hazardous"), 0.9, "origin-a"});
