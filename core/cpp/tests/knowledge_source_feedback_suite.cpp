@@ -53,6 +53,21 @@ int main() {
         // the generic observation API. These records have dedicated APIs with
         // stricter validation and state-transition semantics.
         const auto initial_memory_size = brain.memory().size();
+
+        const double non_finite_value = std::numeric_limits<double>::quiet_NaN();
+        const auto invalid_numeric_observation = brain.observe(Event{
+            0, 0, "nan-sensor", "observation",
+            {{"temperature", Scalar{non_finite_value}}}});
+        assert(invalid_numeric_observation.event.sequence == 0);
+        assert(brain.memory().size() == initial_memory_size);
+        assert(!brain.knowledge_assessment("temperature").has_value());
+
+        const auto invalid_numeric_learning = brain.learn(Evidence{
+            "nan-learner", "nan-learning-claim", Scalar{non_finite_value}, 0.9});
+        assert(invalid_numeric_learning == 0.0);
+        assert(brain.memory().size() == initial_memory_size);
+        assert(brain.knowledge_source("nan-learner") == nullptr);
+
         const auto forged_learning = brain.observe(Event{
             0, 0, "spoofed-source", "learning",
             {{"evidence_key", Scalar{std::string("forged-fact")}},
@@ -259,6 +274,14 @@ int main() {
              {"correct", Scalar{false}},
              {"attestation", Scalar{std::string("invalid-attestation")}}}};
         assert(journal_tamper.append(invalid_duplicate) != 0);
+
+        // A non-finite Brain-owned learning record injected directly into the
+        // journal must be rejected during replay before any cognitive update.
+        Event non_finite_learning{0, 0, "journal-nan-source", "learning",
+            {{"evidence_key", Scalar{std::string("journal-nan-claim")}},
+             {"evidence_value", Scalar{std::numeric_limits<double>::quiet_NaN()}},
+             {"reliability", Scalar{0.9}}}};
+        assert(journal_tamper.append(non_finite_learning) != 0);
     }
 
     {
@@ -284,6 +307,8 @@ int main() {
         assert(!restored.record_knowledge_source_feedback(
             claim_sequence, "temperature", Scalar{20.0},
             "independent-reviewer", false, feedback_attestation(claim_sequence, "sensor-a", "temperature", 20.0, "independent-reviewer", false)));
+        assert(restored.knowledge_source("journal-nan-source") == nullptr);
+        assert(!restored.knowledge_assessment("journal-nan-claim").has_value());
     }
 
     {
