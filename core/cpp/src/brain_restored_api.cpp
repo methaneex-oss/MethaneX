@@ -152,6 +152,11 @@ bool Brain::record_knowledge_source_feedback(
     std::unique_lock lock(mutex_);
     if (!trusted_knowledge_evaluators_.contains(evaluator) ||
         attestation.empty() || !knowledge_feedback_verifier_) return false;
+    const auto history = memory_.all();
+    const auto target = std::find_if(history.begin(), history.end(),
+        [&](const Event& candidate) { return candidate.sequence == claim_sequence; });
+    if (target == history.end() || target->source.empty() ||
+        target->source == evaluator) return false;
     const KnowledgeFeedbackRequest request{
         claim_sequence, target->source, key, value, evaluator, correct, attestation};
     try {
@@ -159,11 +164,6 @@ bool Brain::record_knowledge_source_feedback(
     } catch (...) {
         return false;
     }
-    const auto history = memory_.all();
-    const auto target = std::find_if(history.begin(), history.end(),
-        [&](const Event& candidate) { return candidate.sequence == claim_sequence; });
-    if (target == history.end() || target->source.empty() ||
-        target->source == evaluator) return false;
     bool matching_claim = false;
     if (target->kind == "learning") {
         const auto* evidence_key = std::get_if<std::string>(
