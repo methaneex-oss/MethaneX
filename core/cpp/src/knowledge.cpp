@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <iterator>
 
 namespace jarvis::core {
 
@@ -137,8 +138,8 @@ std::optional<KnowledgeAssessment> KnowledgeModel::assess(const std::string& key
     if (candidates.empty()) return std::nullopt;
     for (auto& candidate : candidates) {
         candidate.evidence_weight = 0.0;
-        for (const auto& [_, weight] : candidate.origin_weights)
-            candidate.evidence_weight += weight;
+        for (const auto& origin_weight : candidate.origin_weights)
+            candidate.evidence_weight += origin_weight.second;
     }
 
     const auto strongest = std::max_element(
