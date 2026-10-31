@@ -92,6 +92,19 @@ int main() {
             claim_sequence + 100, "temperature", Scalar{20.0},
             "independent-reviewer", true, feedback_attestation(claim_sequence + 100, "temperature", 20.0, "independent-reviewer", true)));
 
+        // An unauthenticated journal record must not poison the API's duplicate
+        // check and deny service to a later valid adjudication.
+        Event preexisting_forgery{0, 0, "independent-reviewer",
+            "knowledge_source_feedback",
+            {{"claim_sequence", Scalar{static_cast<std::int64_t>(claim_sequence)}},
+             {"claim_source", Scalar{std::string("sensor-a")}},
+             {"claim_key", Scalar{std::string("temperature")}},
+             {"claim_value", Scalar{20.0}},
+             {"evaluator", Scalar{std::string("independent-reviewer")}},
+             {"correct", Scalar{false}},
+             {"attestation", Scalar{std::string("forged-attestation")}}}};
+        assert(brain.memory().append(preexisting_forgery) != 0);
+
         assert(brain.record_knowledge_source_feedback(
             claim_sequence, "temperature", Scalar{20.0},
             "independent-reviewer", true, feedback_attestation(claim_sequence, "temperature", 20.0, "independent-reviewer", true)));
