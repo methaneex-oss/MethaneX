@@ -121,7 +121,10 @@ int main() {
              {"claim_value", Scalar{20.0}},
              {"evaluator", Scalar{std::string("independent-reviewer")}},
              {"correct", Scalar{false}},
-             {"attestation", Scalar{std::string("forged-attestation")}}}};
+             {"attestation", Scalar{feedback_attestation(
+                 claim_sequence, "temperature", 20.0, "independent-reviewer", true)}}}};
+        // The signed payload says correct=true while the journal says false:
+        // replay must reject this tampered outcome.
         assert(brain.memory().append(forged_journal_feedback) != 0);
 
         // Even authenticated duplicate adjudications with conflicting outcomes
@@ -299,6 +302,45 @@ int main() {
         assert(assessment->supporting_origins == 0);
     }
     std::filesystem::remove(provenance_journal, error);
+
+    // Conflicting authenticated adjudications are rejected regardless of
+    // journal insertion order. This journal records false first, then true.
+    const auto reverse_journal = std::filesystem::temp_directory_path() /
+                                 "jarvis_knowledge_feedback_reverse_order.bin";
+    std::filesystem::remove(reverse_journal, error);
+    {
+        Brain reverse(reverse_journal, {"reviewer"}, verifier);
+        const auto claim = reverse.observe(Event{0, 0, "sensor-reverse", "observation",
+            {{"pressure", Scalar{10.0}}}});
+        assert(claim.event.sequence != 0);
+        Event first_false{0, 0, "reviewer", "knowledge_source_feedback",
+            {{"claim_sequence", Scalar{static_cast<std::int64_t>(claim.event.sequence)}},
+             {"claim_source", Scalar{std::string("sensor-reverse")}},
+             {"claim_key", Scalar{std::string("pressure")}},
+             {"claim_value", Scalar{10.0}},
+             {"evaluator", Scalar{std::string("reviewer")}},
+             {"correct", Scalar{false}},
+             {"attestation", Scalar{feedback_attestation(
+                 claim.event.sequence, "pressure", 10.0, "reviewer", false)}}}};
+        Event second_true{0, 0, "reviewer", "knowledge_source_feedback",
+            {{"claim_sequence", Scalar{static_cast<std::int64_t>(claim.event.sequence)}},
+             {"claim_source", Scalar{std::string("sensor-reverse")}},
+             {"claim_key", Scalar{std::string("pressure")}},
+             {"claim_value", Scalar{10.0}},
+             {"evaluator", Scalar{std::string("reviewer")}},
+             {"correct", Scalar{true}},
+             {"attestation", Scalar{feedback_attestation(
+                 claim.event.sequence, "pressure", 10.0, "reviewer", true)}}}};
+        assert(reverse.memory().append(first_false) != 0);
+        assert(reverse.memory().append(second_true) != 0);
+    }
+    {
+        Brain reverse_restored(reverse_journal, {"reviewer"}, verifier);
+        const auto* metric = reverse_restored.knowledge_source("sensor-reverse");
+        assert(metric != nullptr);
+        assert(metric->calibration_observations == 0);
+    }
+    std::filesystem::remove(reverse_journal, error);
 
     return 0;
 }
