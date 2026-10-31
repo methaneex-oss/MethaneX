@@ -1,0 +1,358 @@
+#include "jarvis/core/cognitive_cycle.hpp"
+
+#include <algorithm>
+#include <cassert>
+#include <cstdint>
+#include <filesystem>
+#include <string>
+#include <system_error>
+
+using namespace jarvis::core;
+
+namespace {
+constexpr const char* goal_id = "dlt-004-feature-composition-goal";
+
+CognitiveCycleInput make_input(const std::string& bridge,
+                               const std::string& visibility,
+                               const std::string& surface) {
+    CognitiveCycleInput input;
+    input.goal_id = goal_id;
+    input.planning_horizon = 1;
+    input.resource_budget = 10.0;
+    // Deliberately leave developmental_context empty. CognitiveCycle must
+    // infer the feature representation from the observation itself.
+    input.observation = Event{
+        0, 1, "sensor", "observation",
+        {{"bridge_status", bridge}, {"visibility", visibility},
+         {"surface_condition", surface},
+         {"task", std::string("navigation")},
+         {"context", std::string("navigation/phase-label-that-must-not-leak")},
+         {"world_episode", std::int64_t{17}},
+         {"world_terminal", false}}};
+
+    CandidateAction first;
+    first.name = "route-one";
+    first.utility = 0.5;
+    first.expected_value = 0.5;
+    first.confidence = 0.5;
+    first.risk = 0.1;
+    CandidateAction second = first;
+    second.name = "route-two";
+    input.candidate_actions = {first, second};
+    return input;
+}
+
+std::string inferred_context(Brain& brain, const std::string& bridge,
+                             const std::string& visibility,
+                             const std::string& surface) {
+    const auto result = CognitiveCycle(brain).run(
+        make_input(bridge, visibility, surface));
+    assert(result.status == CognitiveCycleStatus::completed);
+    assert(!result.context.action_assessments.empty());
+    const auto& context = result.context.action_assessments.front().developmental_context;
+    assert(context.find("/features/bridge_status/surface_condition/visibility/values/") != std::string::npos);
+    assert(context.find("/values/") != std::string::npos);
+    assert(context.find("phase-label-that-must-not-leak") == std::string::npos);
+    assert(context.find("world_episode") == std::string::npos);
+    return context;
+}
+
+void record_outcome(Brain& brain, const std::string& context,
+                    const std::string& action, double consequence) {
+    ActionAssessment assessment;
+    assessment.action.name = action;
+    assessment.action.expected_consequence = 0.0;
+    assessment.disposition = ActionDisposition::execute;
+    assessment.permitted = true;
+    assessment.confidence = 0.9;
+    assessment.developmental_context = context;
+
+    const auto result = brain.execute_action(
+        assessment,
+        [](const CandidateAction&) { return true; },
+        [](const CandidateAction&) { return true; },
+        {},
+        [consequence](const CandidateAction&) {
+            return std::optional<double>{consequence};
+        });
+    assert(result.authorized && result.executed && result.verified);
+    assert(result.outcome.observed);
+    assert(result.outcome.actual_consequence == consequence);
+}
+
+void record_execution_failure(Brain& brain, const std::string& context,
+                              const std::string& action) {
+    ActionAssessment assessment;
+    assessment.action.name = action;
+    assessment.disposition = ActionDisposition::execute;
+    assessment.permitted = true;
+    assessment.confidence = 0.9;
+    assessment.developmental_context = context;
+    const auto result = brain.execute_action(
+        assessment,
+        [](const CandidateAction&) { return false; },
+        [](const CandidateAction&) { return true; },
+        {},
+        [](const CandidateAction&) { return std::optional<double>{}; });
+    assert(!result.executed);
+    assert(!result.outcome.observed);
+}
+
+void train_pair(Brain& brain, const std::string& context,
+                const std::string& positive_action, int repetitions) {
+    const std::string negative_action =
+        positive_action == "route-one" ? "route-two" : "route-one";
+    for (int i = 0; i < repetitions; ++i) {
+        record_outcome(brain, context, positive_action, 1.0);
+        record_outcome(brain, context, negative_action, -1.0);
+    }
+}
+
+std::string selected_action(Brain& brain, const std::string& bridge,
+                            const std::string& visibility,
+                            const std::string& surface) {
+    const auto result = CognitiveCycle(brain).run(
+        make_input(bridge, visibility, surface));
+    assert(result.status == CognitiveCycleStatus::completed);
+    assert(!result.context.plan.steps.empty());
+    return result.context.plan.steps.front().action.name;
+}
+
+bool has_resolved_action_consequence_forecast(const Brain& brain) {
+    const auto predictions = brain.snapshot().predictions;
+    for (const auto& event : brain.memory().by_kind("action_outcome")) {
+        const auto sequence = event.data.find("consequence_prediction_sequence");
+        if (sequence == event.data.end()) continue;
+        const auto* value = std::get_if<std::int64_t>(&sequence->second);
+        if (value == nullptr || *value <= 0) continue;
+        if (std::any_of(predictions.begin(), predictions.end(),
+            [value](const Prediction& prediction) {
+                return prediction.resolved &&
+                       prediction.created_sequence ==
+                           static_cast<std::uint64_t>(*value);
+            })) return true;
+    }
+    return false;
+}
+
+bool has_action_outcome_for_context(const Brain& brain,
+                                    const std::string& context) {
+    for (const auto& event : brain.memory().by_kind("action_outcome")) {
+        const auto it = event.data.find("context");
+        if (it == event.data.end()) continue;
+        const auto* recorded_context = std::get_if<std::string>(&it->second);
+        if (recorded_context != nullptr && *recorded_context == context)
+            return true;
+    }
+    return false;
+}
+
+void run_seed(std::uint64_t seed) {
+    const auto journal = std::filesystem::temp_directory_path() /
+        ("jarvis_dlt_004_" + std::to_string(seed) + ".bin");
+    std::error_code ec;
+    std::filesystem::remove(journal, ec);
+    std::filesystem::remove(journal.string() + ".meta", ec);
+
+    // The environment varies the successful action label by seed. The brain
+    // receives only bridge and visibility features, never this oracle.
+    const std::string clear_action = seed % 2U == 0U ? "route-two" : "route-one";
+    const std::string poor_action =
+        clear_action == "route-one" ? "route-two" : "route-one";
+
+    {
+        Brain brain(journal);
+        Goal goal;
+        goal.id = goal_id;
+        goal.description = "Choose routes by learning independently useful environmental features";
+        goal.priority = 1.0;
+        assert(brain.create_goal(goal));
+        assert(brain.activate_goal(goal.id));
+
+        const auto open_clear_flat =
+            inferred_context(brain, "open", "clear", "flat");
+        const auto open_clear_rough =
+            inferred_context(brain, "open", "clear", "rough");
+        const auto closed_clear_rough =
+            inferred_context(brain, "closed", "clear", "rough");
+        const auto closed_poor_flat =
+            inferred_context(brain, "closed", "poor", "flat");
+        const auto closed_poor_rough =
+            inferred_context(brain, "closed", "poor", "rough");
+
+        // The open/poor/rough combination is deliberately withheld. Every
+        // feature value used in the probe has been observed in multiple
+        // distinct contexts, so repeated samples of one combination cannot
+        // masquerade as independent support.
+        train_pair(brain, open_clear_flat, clear_action, 8);
+        train_pair(brain, open_clear_rough, clear_action, 8);
+        train_pair(brain, closed_clear_rough, clear_action, 8);
+        train_pair(brain, closed_poor_flat, poor_action, 8);
+        train_pair(brain, closed_poor_rough, poor_action, 8);
+
+        const auto held_out =
+            inferred_context(brain, "open", "poor", "rough");
+        const auto route_one =
+            brain.developmental_feature_strategy_estimate(held_out, "route-one");
+        const auto route_two =
+            brain.developmental_feature_strategy_estimate(held_out, "route-two");
+        assert(route_one.matched_features == 3);
+        assert(route_two.matched_features == 3);
+        assert(route_one.confidence >= 0.5);
+        assert(route_two.confidence >= 0.5);
+        auto cross_source_context = held_out;
+        const auto source_marker = cross_source_context.find("/source/sensor");
+        assert(source_marker != std::string::npos);
+        cross_source_context.replace(source_marker, std::string("/source/sensor").size(),
+                                     "/source/camera");
+        assert(brain.developmental_feature_strategy_estimate(
+            cross_source_context, poor_action).matched_features == 0);
+        auto cross_goal_context = held_out;
+        const auto goal_marker = cross_goal_context.find("/goal/dlt-004-feature-composition-goal");
+        assert(goal_marker != std::string::npos);
+        cross_goal_context.replace(goal_marker,
+            std::string("/goal/dlt-004-feature-composition-goal").size(),
+            "/goal/unrelated-goal");
+        assert(brain.developmental_feature_strategy_estimate(
+            cross_goal_context, poor_action).matched_features == 0);
+        assert((poor_action == "route-one" ? route_one.value : route_two.value) >
+               (poor_action == "route-one" ? route_two.value : route_one.value));
+        assert(!has_action_outcome_for_context(brain, held_out));
+        assert(selected_action(brain, "open", "poor", "rough") == poor_action);
+
+        // New, contradictory consequences in additional contexts must revise
+        // the shared feature values. The open/poor/rough probe remains held out:
+        // no outcome is ever recorded for that exact combination.
+        const auto open_poor_flat =
+            inferred_context(brain, "open", "poor", "flat");
+        const auto closed_poor_flat =
+            inferred_context(brain, "closed", "poor", "flat");
+        const auto closed_poor_rough =
+            inferred_context(brain, "closed", "poor", "rough");
+        train_pair(brain, open_poor_flat, clear_action, 8);
+        train_pair(brain, closed_poor_flat, clear_action, 8);
+        train_pair(brain, closed_poor_rough, clear_action, 8);
+        assert(!has_action_outcome_for_context(brain, held_out));
+        assert(selected_action(brain, "open", "poor", "rough") == clear_action);
+        assert(brain.memory().by_kind("action_outcome").size() == 128);
+
+        // Priority-One integration gate: the same observed consequences must
+        // feed affective appraisal, prediction calibration, episodic memory,
+        // compositional strategy learning, and the next CognitiveCycle decision.
+        assert(brain.affective_learning_updates() > 0);
+        assert(has_resolved_action_consequence_forecast(brain));
+        const auto recalled_outcomes = brain.memory().recall_ranked(
+            {{"action", Scalar{poor_action}}}, 16, "action_outcome", true);
+        assert(std::any_of(recalled_outcomes.begin(), recalled_outcomes.end(),
+            [](const MemoryRecord& record) {
+                const auto observed = record.event.data.find("observed");
+                return observed != record.event.data.end() &&
+                       std::get_if<bool>(&observed->second) != nullptr &&
+                       *std::get_if<bool>(&observed->second);
+            }));
+    }
+
+    // Feature weights are reconstructed from the same durable experiences;
+    // restart must preserve the held-out decision, not just the stored table.
+    {
+        Brain restored(journal);
+        assert(restored.goal(goal_id) != nullptr);
+        assert(selected_action(restored, "open", "poor", "rough") == clear_action);
+        const auto held_out = inferred_context(restored, "open", "poor", "rough");
+        const auto estimate =
+            restored.developmental_feature_strategy_estimate(held_out, clear_action);
+        assert(estimate.confidence >= 0.5);
+        assert(estimate.value > 0.0);
+        assert(restored.memory().by_kind("action_outcome").size() == 128);
+
+        // A fresh process must reconstruct every participating learner from
+        // journaled experience, not merely preserve the selected action.
+        assert(restored.affective_learning_updates() > 0);
+        assert(has_resolved_action_consequence_forecast(restored));
+        const auto restored_memories = restored.memory().recall_ranked(
+            {{"action", Scalar{poor_action}}}, 16, "action_outcome", true);
+        assert(std::any_of(restored_memories.begin(), restored_memories.end(),
+            [](const MemoryRecord& record) {
+                const auto observed = record.event.data.find("observed");
+                return observed != record.event.data.end() &&
+                       std::get_if<bool>(&observed->second) != nullptr &&
+                       *std::get_if<bool>(&observed->second);
+            }));
+    }
+
+    std::filesystem::remove(journal, ec);
+    std::filesystem::remove(journal.string() + ".meta", ec);
+}
+} // namespace
+
+int main() {
+    // An execution failure with no observed world consequence may update the
+    // context-local operational trace, but it must not train feature utility.
+    const auto no_feedback_journal = std::filesystem::temp_directory_path() /
+        "jarvis_dlt_004_no_feedback.bin";
+    std::error_code no_feedback_error;
+    std::filesystem::remove(no_feedback_journal, no_feedback_error);
+    std::filesystem::remove(no_feedback_journal.string() + ".meta", no_feedback_error);
+    const std::string no_feedback_context =
+        "observation/observation/source/sensor/features/bridge_status/visibility/values/open/clear";
+    {
+        Brain no_feedback(no_feedback_journal);
+        record_execution_failure(no_feedback, no_feedback_context, "route-one");
+        assert(no_feedback.developmental_feature_strategy_estimate(
+            no_feedback_context, "route-one").matched_features == 0);
+    }
+    {
+        Brain restored_no_feedback(no_feedback_journal);
+        assert(restored_no_feedback.developmental_feature_strategy_estimate(
+            no_feedback_context, "route-one").matched_features == 0);
+    }
+    std::filesystem::remove(no_feedback_journal, no_feedback_error);
+    std::filesystem::remove(no_feedback_journal.string() + ".meta", no_feedback_error);
+
+    // A single observation must not be treated as sufficient support for
+    // compositional transfer, even when both feature values are present.
+    DevelopmentalLearning sparse;
+    const std::string sparse_context =
+        "observation/observation/source/sensor/features/bridge_status/visibility/values/open/clear";
+    sparse.observe_strategy(
+        sparse_context, "route-one",
+        LearningSignal{1.0, 1.0, 0.0, 0.0, 0.0, 1.0});
+    const auto sparse_estimate =
+        sparse.feature_strategy_estimate(sparse_context, "route-one");
+    assert(sparse_estimate.matched_features == 2);
+    assert(sparse_estimate.confidence < 0.5);
+
+    // Adversarial support check: many repetitions of one exact situation are
+    // still one independent context, not enough evidence for transfer.
+    DevelopmentalLearning repeated_context;
+    for (int i = 0; i < 20; ++i) {
+        repeated_context.observe_strategy(
+            sparse_context, "route-one",
+            LearningSignal{1.0, 1.0, 0.0, 0.0, 0.0, 1.0});
+    }
+    const auto repeated_estimate =
+        repeated_context.feature_strategy_estimate(sparse_context, "route-one");
+    assert(repeated_estimate.matched_features == 2);
+    assert(repeated_estimate.confidence < 0.5);
+
+    // Conflicting outcomes in one context must not manufacture independent
+    // support or a confident positive transfer estimate.
+    DevelopmentalLearning conflicting_context;
+    for (int i = 0; i < 20; ++i) {
+        conflicting_context.observe_strategy(
+            sparse_context, "route-one",
+            LearningSignal{1.0, i % 2 == 0 ? 1.0 : -1.0,
+                           0.0, 0.0, 0.0, 1.0});
+    }
+    const auto conflicting_estimate =
+        conflicting_context.feature_strategy_estimate(sparse_context, "route-one");
+    assert(conflicting_estimate.matched_features == 2);
+    assert(conflicting_estimate.confidence < 0.5);
+
+    run_seed(7);
+    run_seed(8);
+    run_seed(17);
+    run_seed(29);
+    run_seed(43);
+    return 0;
+}

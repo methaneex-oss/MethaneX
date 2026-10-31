@@ -56,6 +56,13 @@ std::string infer_developmental_context(const CognitiveCycleInput& input,
     std::vector<std::pair<std::string, const Scalar*>> features;
     features.reserve(representation.nodes.size());
     for (const auto& node : representation.nodes) {
+        // Task and world bookkeeping identify the experiment/episode; they are
+        // not observations about the current situation. In particular, a
+        // world-supplied context label must not leak the answer into learning
+        // when callers leave developmental_context empty.
+        if (node.label == "task" || node.label == "context" ||
+            node.label == "world_episode" || node.label == "world_step" ||
+            node.label == "world_terminal") continue;
         const auto value = node.attributes.find("value");
         if (value != node.attributes.end())
             features.emplace_back(node.label, &value->second);
@@ -106,6 +113,9 @@ std::string infer_developmental_context(const CognitiveCycleInput& input,
         context += "/goal/" + context_path_segment(goal.id);
         return context;
     }
+    // Keep transfer within the active goal unless a future mechanism
+    // explicitly establishes cross-goal equivalence.
+    context += "/goal/" + context_path_segment(goal.id);
     context += "/features";
     for (const auto& label : labels) context += "/" + label;
     context += "/values";
@@ -568,6 +578,25 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
             // action already tried in this context.
             const double influence = std::clamp(
                 direct_evidence / std::max(1.0, direct_weight), -1.0, 1.0);
+            action.utility += influence;
+            action.expected_value = std::clamp(
+                action.expected_value + influence, -1.0, 1.0);
+            continue;
+        }
+
+        // When the complete context is unseen, use the learned contributions
+        // of its individual observed features before falling back to nearest-
+        // context retrieval. This supports transfer across novel combinations
+        // without treating a shared context prefix as evidence of equivalence.
+        const auto feature_estimate =
+            brain_.developmental_feature_strategy_estimate(
+                developmental_context, action.name);
+        if (feature_estimate.matched_features > 0 &&
+            feature_estimate.matched_features == feature_estimate.feature_count &&
+            feature_estimate.confidence >= 0.5) {
+            const double influence = std::clamp(
+                1.25 * feature_estimate.value * feature_estimate.confidence,
+                -1.0, 1.0);
             action.utility += influence;
             action.expected_value = std::clamp(
                 action.expected_value + influence, -1.0, 1.0);
