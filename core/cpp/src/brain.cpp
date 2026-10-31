@@ -40,8 +40,19 @@ bool valid_observation_event(const Event& event) {
             return std::isfinite(*value);
         return std::get_if<std::int64_t>(&field->second) != nullptr;
     };
+    const auto valid_provenance = [&]() {
+        const auto id = event.data.find("provenance_id");
+        const auto attestation = event.data.find("provenance_attestation");
+        if (id == event.data.end() && attestation == event.data.end()) return true;
+        if (id == event.data.end() || attestation == event.data.end()) return false;
+        const auto* id_value = std::get_if<std::string>(&id->second);
+        const auto* attestation_value = std::get_if<std::string>(&attestation->second);
+        return id_value != nullptr && !id_value->empty() &&
+               attestation_value != nullptr && !attestation_value->empty();
+    };
 
-    return valid_unit("evidence_reliability") &&
+    return valid_provenance() &&
+           valid_unit("evidence_reliability") &&
            valid_unit("reliability") &&
            valid_unit("confidence") &&
            valid_unit("salience") &&
@@ -55,7 +66,8 @@ bool valid_observation_event(const Event& event) {
 double observation_evidence_reliability(const Event& event) {
     // Prefer explicit evidence quality. Legacy reliability and perceptual
     // confidence remain compatible fallbacks; absent metadata uses the
-    // established neutral observation prior.
+    // neutral observation prior. Missing appraisal metadata is unknown, not
+    // evidence of above-average reliability.
     for (const char* key : {"evidence_reliability", "reliability", "confidence"}) {
         const auto field = event.data.find(key);
         if (field == event.data.end()) continue;
@@ -68,7 +80,23 @@ double observation_evidence_reliability(const Event& event) {
             return std::clamp(static_cast<double>(*value), 0.0, 1.0);
         return 0.0;
     }
-    return 0.7;
+    return 0.5;
+}
+
+std::string verified_knowledge_provenance_id(
+    const Event& event, const std::string& key, const Scalar& value,
+    const KnowledgeProvenanceVerifier& verifier) {
+    const auto* provenance_id = string_value(event.data, "provenance_id");
+    const auto* attestation = string_value(event.data, "provenance_attestation");
+    if (provenance_id == nullptr || provenance_id->empty() ||
+        attestation == nullptr || attestation->empty() || !verifier) return {};
+    const KnowledgeProvenanceRequest request{
+        event.source, key, value, *provenance_id, *attestation};
+    try {
+        return verifier(request) ? *provenance_id : std::string{};
+    } catch (...) {
+        return {};
+    }
 }
 
 bool numeric_value(const Scalar& value, long double& result) {
@@ -254,7 +282,16 @@ std::string join_ids(const std::vector<std::string>& ids) { std::ostringstream o
 std::vector<std::string> split_ids(const std::string& value) { std::vector<std::string> result; std::size_t start = 0; while (start <= value.size()) { const auto end = value.find('\x1f', start); const auto token = value.substr(start, end == std::string::npos ? std::string::npos : end - start); if (!token.empty()) result.push_back(token); if (end == std::string::npos) break; start = end + 1; } return result; }
 GoalStatus goal_status_value(std::int64_t value) { switch (value) { case 0: return GoalStatus::pending; case 1: return GoalStatus::active; case 2: return GoalStatus::completed; case 3: return GoalStatus::abandoned; default: return GoalStatus::pending; } }
 }
-Brain::Brain(std::filesystem::path journal_path, std::vector<std::string> trusted_knowledge_evaluators, KnowledgeFeedbackVerifier knowledge_feedback_verifier) : trusted_knowledge_evaluators_(trusted_knowledge_evaluators.begin(), trusted_knowledge_evaluators.end()), knowledge_feedback_verifier_(std::move(knowledge_feedback_verifier)), memory_(256, std::move(journal_path)), evolution_controller_(evolution_, evolution_history_) { const auto history = memory_.all(); for (const auto& event : history) replay(event); state_.events_seen = static_cast<std::uint64_t>(history.size()); if (!history.empty()) state_.cycle = history.back().sequence; sync_self_state(); }
+Brain::Brain(std::filesystem::path journal_path,
+           std::vector<std::string> trusted_knowledge_evaluators,
+           KnowledgeFeedbackVerifier knowledge_feedback_verifier,
+           KnowledgeProvenanceVerifier knowledge_provenance_verifier)
+    : trusted_knowledge_evaluators_(trusted_knowledge_evaluators.begin(),
+                                    trusted_knowledge_evaluators.end()),
+      knowledge_feedback_verifier_(std::move(knowledge_feedback_verifier)),
+      knowledge_provenance_verifier_(std::move(knowledge_provenance_verifier)),
+      memory_(256, std::move(journal_path)),
+      evolution_controller_(evolution_, evolution_history_) { const auto history = memory_.all(); for (const auto& event : history) replay(event); state_.events_seen = static_cast<std::uint64_t>(history.size()); if (!history.empty()) state_.cycle = history.back().sequence; sync_self_state(); }
 void Brain::consolidate_experience(const Event& event, double error) {
     double salience = attention_state_.salience; double novelty = state_.novelty; double confidence = 0.5;
     if (const auto it = event.data.find("salience"); it != event.data.end()) if (const auto* value = std::get_if<double>(&it->second)) salience = *value;
@@ -838,17 +875,24 @@ void Brain::replay(const Event& event, bool external_observation) {
             facts.emplace_back(*evidence_key, evidence_value->second);
             knowledge_.assimilate(
                 KnowledgeEvidence{event.source, *evidence_key,
-                                  evidence_value->second, reliability});
+                    evidence_value->second, reliability,
+                    verified_knowledge_provenance_id(
+                        event, *evidence_key, evidence_value->second,
+                        knowledge_provenance_verifier_)});
         } else {
             // Backward compatibility for journal entries written before the
             // explicit evidence payload was introduced.
             for (const auto& [key, value] : event.data) {
                 if (key == "reliability" || key == "salience" || key == "novelty" ||
                     key == "confidence" || key == "evidence_key" ||
-                    key == "evidence_value" || key == "source_action_sequence")
+                    key == "evidence_value" || key == "source_action_sequence" ||
+                    key == "provenance_id" || key == "provenance_attestation")
                     continue;
                 facts.emplace_back(key, value);
-                knowledge_.assimilate(KnowledgeEvidence{event.source, key, value, reliability});
+                knowledge_.assimilate(KnowledgeEvidence{
+                    event.source, key, value, reliability,
+                    verified_knowledge_provenance_id(
+                        event, key, value, knowledge_provenance_verifier_)});
                 break;
             }
         }
@@ -857,7 +901,8 @@ void Brain::replay(const Event& event, bool external_observation) {
             // Appraisal metadata describes an experience; it is not a world fact.
             if (key == "_external_observation" || key == "novelty" || key == "salience" || key == "urgency" ||
                 key == "prediction_error" || key == "outcome" || key == "confidence" ||
-                key == "reliability" || key == "evidence_reliability" || key == "world_step")
+                key == "reliability" || key == "evidence_reliability" || key == "world_step" ||
+                key == "provenance_id" || key == "provenance_attestation")
                 continue;
             // The developmental environment adds these fields to describe the
             // episode, not the world state. Keep them in episodic memory for
@@ -892,7 +937,10 @@ void Brain::replay(const Event& event, bool external_observation) {
         // calls. Repeated observations from one source remain one source for
         // corroboration; disagreement is retained as disputed evidence.
         if (event.kind != "learning")
-            knowledge_.assimilate(KnowledgeEvidence{event.source, key, value, reliability});
+            knowledge_.assimilate(KnowledgeEvidence{
+                event.source, key, value, reliability,
+                verified_knowledge_provenance_id(
+                    event, key, value, knowledge_provenance_verifier_)});
         world_.observe(Fact{event.source, key, value, reliability, 1,
                             event.sequence, event.sequence, false});
         // Global beliefs summarize evidence across sources. A clean update from
