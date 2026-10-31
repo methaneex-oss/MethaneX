@@ -23,6 +23,21 @@ int main() {
         assert(claim_sequence != 0);
         assert(brain.observe(Event{0, 0, "sensor-b", "observation",
             {{"temperature", Scalar{25.0}}}}).event.sequence != 0);
+
+        // Developmental task/context labels describe the episode rather than
+        // world claims. They must not be eligible for source calibration.
+        const auto episode = brain.observe(Event{0, 0, "developmental_environment",
+            "observation", {{"task", Scalar{std::string("route-delivery")}},
+                            {"context", Scalar{std::string("warehouse")}}}});
+        assert(episode.event.sequence != 0);
+        assert(!brain.record_knowledge_source_feedback(
+            episode.event.sequence, "task", Scalar{std::string("route-delivery")},
+            "independent-reviewer", true));
+        assert(!brain.record_knowledge_source_feedback(
+            episode.event.sequence, "context", Scalar{std::string("warehouse")},
+            "independent-reviewer", true));
+        assert(brain.knowledge_source("developmental_environment") == nullptr);
+
         const auto baseline_assessment = brain.knowledge_assessment("temperature");
         assert(baseline_assessment.has_value());
         const double baseline_weight = baseline_assessment->evidence_weight;

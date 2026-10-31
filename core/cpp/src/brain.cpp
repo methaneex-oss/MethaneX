@@ -463,8 +463,12 @@ void Brain::replay(const Event& event, bool external_observation) {
                 *key == "prediction_error" || *key == "outcome" ||
                 *key == "confidence" || *key == "reliability" ||
                 *key == "evidence_reliability" || *key == "world_step";
+            const bool episode_metadata =
+                target->source == "developmental_environment" &&
+                target->kind == "observation" &&
+                (*key == "task" || *key == "context");
             const auto fact = target->data.find(*key);
-            matching_claim = is_external && !metadata &&
+            matching_claim = is_external && !metadata && !episode_metadata &&
                 fact != target->data.end() && fact->second == value_it->second;
         }
         if (!matching_claim) return;
