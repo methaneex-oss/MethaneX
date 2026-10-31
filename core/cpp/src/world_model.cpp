@@ -64,10 +64,9 @@ void WorldModel::observe(const Fact& incoming) {
         return;
     }
 
-    // Keep independent support for each observed value while a fact is
-    // contested. Repeated evidence for either side accumulates; it must not
-    // leave the first conflict permanently disputed merely because the
-    // currently selected fact had an equal-confidence tie.
+    // Keep each source-local alternative while contested. Repeats update
+    // audit counts and mean quality, but do not create independent support;
+    // only a fresh, strictly stronger post-conflict observation can resolve.
     if (it->value == fact.value) {
         accumulate_evidence(*it, fact);
     } else {
