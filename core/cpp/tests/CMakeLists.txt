@@ -213,6 +213,10 @@ add_executable(jarvis_dlt_003_mapping_generalization dlt_003_mapping_generalizat
 target_link_libraries(jarvis_dlt_003_mapping_generalization PRIVATE jarvis_core)
 target_compile_features(jarvis_dlt_003_mapping_generalization PRIVATE cxx_std_20)
 
+add_executable(jarvis_dlt_004_feature_composition dlt_004_feature_composition.cpp)
+target_link_libraries(jarvis_dlt_004_feature_composition PRIVATE jarvis_core)
+target_compile_features(jarvis_dlt_004_feature_composition PRIVATE cxx_std_20)
+
 # Long-running DLT-001 is invoked explicitly by its dedicated workflow, not CTest.
 add_executable(jarvis_dlt_001_long_run dlt_001_long_run.cpp)
 target_link_libraries(jarvis_dlt_001_long_run PRIVATE jarvis_core)
@@ -294,6 +298,7 @@ if(BUILD_TESTING)
     add_test(NAME jarvis_developmental_world_integration_suite COMMAND jarvis_developmental_world_integration_suite)
     add_test(NAME jarvis_dlt_001_trial COMMAND jarvis_dlt_001_trial)
     add_test(NAME jarvis_dlt_003_mapping_generalization COMMAND jarvis_dlt_003_mapping_generalization)
+    add_test(NAME jarvis_dlt_004_feature_composition COMMAND jarvis_dlt_004_feature_composition)
     # Exercise DLT-002 in CI as two OS processes: train first, then restore and
     # verify the journal in a fresh process. The fixture dependency guarantees
     # ordering and prevents verification against a missing/failed training run.
