@@ -230,3 +230,17 @@ The GitHub connector write path is operational. A diagnostic UTF-8 blob creation
 **Supported safe write procedure:** use `fetch_file` to obtain the current file blob SHA, then use `update_file` with the exact repository, path, complete new content, commit message, blob SHA, and target branch. For multi-file Git-object writes, obtain a valid base-tree SHA from an endpoint that actually returns it; do not infer it from normalized commit metadata. After any write, fetch the updated file and inspect the PR head SHA before proceeding.
 
 No production code change is implied by this troubleshooting note. The source-calibration feedback lifecycle remains an implementation task and must not be reported as complete until production code, replay tests, restart tests, and CI evidence exist.
+
+
+## 11. Trusted evaluator boundary — 2026-10-31
+
+A fail-closed host trust boundary has been added to the source-calibration feedback path:
+
+- `Brain` accepts an optional set of trusted knowledge-evaluator identities at construction.
+- The feedback API rejects evaluator identities not present in that host-supplied set.
+- Journal replay applies the same allowlist check, so feedback from an evaluator not trusted by the current host configuration is not applied.
+- The feedback test now configures three trusted evaluator identities, verifies that an untrusted identity is rejected, and restores calibration with the same trusted configuration.
+
+**Security boundary and limitation:** the allowlist is a host configuration trust anchor, not cryptographic identity authentication. The application integrating `Brain` must ensure that only authenticated, authorized adjudicators can invoke the feedback API and that its trusted-evaluator configuration is protected. An evaluator name in a journal is still metadata; this change does not provide signed feedback, prove independence, or establish ground truth. Journal tamper resistance remains a separate concern.
+
+**Verification status at this entry:** source and test changes are committed on PR #148. CI for the exact resulting head was queued when checked. Do not treat the implementation as accepted until the focused suite and full relevant CI complete, and an independent reviewer verifies the host integration and replay boundary.
