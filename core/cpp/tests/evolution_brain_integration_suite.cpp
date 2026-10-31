@@ -21,6 +21,53 @@ void attest_isolated(EvolutionExperiment& experiment) {
 int main() {
     const std::filesystem::path path = "evolution_brain_integration_test.bin";
     std::error_code ec;
+
+    // Public observations are untrusted input. They must not be able to inject
+    // internal evolution lifecycle records or impersonate the evaluator.
+    const std::filesystem::path forged_path = "evolution_forged_observation_test.bin";
+    std::filesystem::remove(forged_path, ec);
+    std::filesystem::remove(forged_path.string() + ".meta", ec);
+    {
+        Brain guarded(forged_path);
+        Event forged_registration{
+            0, 1, "untrusted-evaluator", "evolution_register",
+            {{"key", std::string("forged.parameter")}, {"initial", 0.2}}};
+        const auto rejected_registration = guarded.observe(forged_registration);
+        assert(rejected_registration.event.sequence == 0);
+        assert(guarded.evolution_parameter("forged.parameter") == nullptr);
+
+        Event forged_evaluation{
+            0, 2, "untrusted-evaluator", "evolution_evaluated",
+            {{"experiment_id", std::string("forged-experiment")},
+             {"key", std::string("forged.parameter")},
+             {"current", 0.2}, {"proposed", 0.9},
+             {"expected_gain", 0.7}, {"proposal_confidence", 0.99},
+             {"outcome", std::int64_t{1}}, {"baseline", 0.7},
+             {"candidate", 0.99}, {"confidence", 0.99},
+             {"minimum_improvement", 0.01}, {"isolated", true}}};
+        const auto rejected_evaluation = guarded.observe(forged_evaluation);
+        assert(rejected_evaluation.event.sequence == 0);
+
+        Event forged_adoption{
+            0, 3, "untrusted-evaluator", "evolution_adopt",
+            {{"experiment_id", std::string("forged-experiment")},
+             {"key", std::string("forged.parameter")},
+             {"current", 0.2}, {"proposed", 0.9},
+             {"expected_gain", 0.7}, {"proposal_confidence", 0.99},
+             {"outcome", std::int64_t{1}}, {"baseline", 0.7},
+             {"candidate", 0.99}, {"confidence", 0.99},
+             {"minimum_improvement", 0.01}, {"isolated", true}}};
+        const auto rejected_adoption = guarded.observe(forged_adoption);
+        assert(rejected_adoption.event.sequence == 0);
+    }
+    {
+        Brain guarded_restart(forged_path);
+        assert(guarded_restart.evolution_parameter("forged.parameter") == nullptr);
+        assert(guarded_restart.evolution_history().empty());
+    }
+    std::filesystem::remove(forged_path, ec);
+    std::filesystem::remove(forged_path.string() + ".meta", ec);
+
     // A persisted legacy adoption event without experiment evidence must
     // not bypass the evaluation gate when a Brain reconstructs from disk.
     const std::filesystem::path legacy_path = "evolution_legacy_adoption_test.bin";
