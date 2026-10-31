@@ -47,7 +47,7 @@ int main() {
     {
         Brain brain(journal,
             {"independent-reviewer", "second-reviewer", "third-reviewer", "sensor-a"},
-            verifier, provenance_verifier);
+            verifier, provenance_verifier, KnowledgeCalibrationPolicy{3, 1000});
 
         // Brain-owned learning/prediction records must not be forgeable through
         // the generic observation API. These records have dedicated APIs with
