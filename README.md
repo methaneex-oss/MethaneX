@@ -58,6 +58,10 @@ There is deliberately no requirement that the entire project be written in one l
 
 JARVIS is under active foundational development. The current work is focused on completing and integrating the cognitive substrate before higher-level device, interface and deployment layers are built on top of it.
 
+## Project governance
+
+The command structure, role boundaries, decision authority, architecture change control, independent testing/review requirements, and handoff rules are defined in [JARVIS Project Governance](docs/JARVIS_PROJECT_GOVERNANCE.md). This document is the repository record of the Project Director → Chief Builder → Independent Tester / Independent Reviewer operating model.
+
 ## Philosophy
 
 The objective is not to reproduce a fictional implementation line-for-line. The objective is to engineer the closest practical software architecture to the **behavioural idea** of JARVIS: persistent, adaptive, context-aware, capable of reasoning across domains, able to use available tools, resilient to component failure, and capable of improving through experience.
