@@ -1601,12 +1601,12 @@ int main() {
         assert(unresolved_replay.world().disputed_facts().empty());
         // A first beta observation from sensor C introduces a new conflict;
         // it must not be mistaken for post-conflict corroboration.
-        assert(observe_value(unresolved_replay, "sensor-C", "beta", 0.95).event.sequence != 0);
+        assert(observe_value(unresolved_replay, "sensor-C", "beta").event.sequence != 0);
         assert_three_source_dispute(unresolved_replay, true);
         assert(!unresolved_replay.world().disputed_facts().empty());
         // A second beta observation is fresh corroboration after gamma/beta
         // became contested, so sensor C can now resolve its own conflict.
-        assert(observe_value(unresolved_replay, "sensor-C", "beta").event.sequence != 0);
+        assert(observe_value(unresolved_replay, "sensor-C", "beta", 0.95).event.sequence != 0);
         assert_three_source_dispute(unresolved_replay, false);
         assert(unresolved_replay.world().disputed_facts().empty());
     }
