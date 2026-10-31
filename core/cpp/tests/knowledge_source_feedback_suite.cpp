@@ -13,10 +13,15 @@ int main() {
     std::error_code error;
     std::filesystem::remove(journal, error);
 
+    const KnowledgeFeedbackVerifier verifier =
+        [](const KnowledgeFeedbackRequest& request) {
+            return request.attestation == "test-attestation:" + request.evaluator;
+        };
     std::uint64_t claim_sequence = 0;
     double observation_quality = 0.0;
     {
-        Brain brain(journal, {"independent-reviewer", "second-reviewer", "third-reviewer"});
+        Brain brain(journal,
+            {"independent-reviewer", "second-reviewer", "third-reviewer"}, verifier);
         const auto observed = brain.observe(Event{0, 0, "sensor-a", "observation",
             {{"temperature", Scalar{20.0}}, {"humidity", Scalar{50.0}}, {"reliability", Scalar{0.99}}}});
         claim_sequence = observed.event.sequence;
@@ -59,32 +64,65 @@ int main() {
         assert(initial->calibration_observations == 0);
 
         assert(!brain.record_knowledge_source_feedback(
-            claim_sequence, "temperature", Scalar{20.0}, "sensor-a", true));
+            claim_sequence, "temperature", Scalar{20.0}, "sensor-a", true,
+            "test-attestation:sensor-a"));
         assert(!brain.record_knowledge_source_feedback(
-            claim_sequence, "temperature", Scalar{20.0}, "untrusted-reviewer", true));
+            claim_sequence, "temperature", Scalar{20.0}, "untrusted-reviewer", true,
+            "test-attestation:untrusted-reviewer"));
         assert(!brain.record_knowledge_source_feedback(
-            claim_sequence, "temperature", Scalar{21.0}, "independent-reviewer", true));
+            claim_sequence, "temperature", Scalar{21.0}, "independent-reviewer", true,
+            "test-attestation:independent-reviewer"));
         assert(!brain.record_knowledge_source_feedback(
-            claim_sequence, "reliability", Scalar{0.99}, "independent-reviewer", true));
+            claim_sequence, "reliability", Scalar{0.99}, "independent-reviewer", true,
+            "test-attestation:independent-reviewer"));
         assert(!brain.record_knowledge_source_feedback(
             claim_sequence + 100, "temperature", Scalar{20.0},
-            "independent-reviewer", true));
+            "independent-reviewer", true, "test-attestation:independent-reviewer"));
 
         assert(brain.record_knowledge_source_feedback(
             claim_sequence, "temperature", Scalar{20.0},
-            "independent-reviewer", true));
+            "independent-reviewer", true, "test-attestation:independent-reviewer"));
         assert(brain.record_knowledge_source_feedback(
             claim_sequence, "humidity", Scalar{50.0},
-            "independent-reviewer", true));
+            "independent-reviewer", true, "test-attestation:independent-reviewer"));
         assert(!brain.record_knowledge_source_feedback(
             claim_sequence, "temperature", Scalar{20.0},
-            "independent-reviewer", false));
+            "independent-reviewer", false, "test-attestation:independent-reviewer"));
         assert(brain.record_knowledge_source_feedback(
             claim_sequence, "temperature", Scalar{20.0},
-            "second-reviewer", false));
+            "second-reviewer", false, "test-attestation:second-reviewer"));
         assert(brain.record_knowledge_source_feedback(
             claim_sequence, "temperature", Scalar{20.0},
-            "third-reviewer", true));
+            "third-reviewer", true, "test-attestation:third-reviewer"));
+        assert(!brain.record_knowledge_source_feedback(
+            claim_sequence, "temperature", Scalar{20.0},
+            "independent-reviewer", false, "forged-attestation"));
+
+        // Bypass both public feedback routes and append directly to Memory.
+        // An unauthenticated forged record must not calibrate on replay.
+        Event forged_journal_feedback{0, 0, "independent-reviewer",
+            "knowledge_source_feedback",
+            {{"claim_sequence", Scalar{static_cast<std::int64_t>(claim_sequence)}},
+             {"claim_source", Scalar{std::string("sensor-a")}},
+             {"claim_key", Scalar{std::string("temperature")}},
+             {"claim_value", Scalar{20.0}},
+             {"evaluator", Scalar{std::string("independent-reviewer")}},
+             {"correct", Scalar{false}},
+             {"attestation", Scalar{std::string("forged-attestation")}}}};
+        assert(brain.memory().append(forged_journal_feedback) != 0);
+
+        // Even authenticated duplicate adjudications with conflicting outcomes
+        // are rejected as a set, rather than making replay order decide trust.
+        Event conflicting_duplicate{0, 0, "independent-reviewer",
+            "knowledge_source_feedback",
+            {{"claim_sequence", Scalar{static_cast<std::int64_t>(claim_sequence)}},
+             {"claim_source", Scalar{std::string("sensor-a")}},
+             {"claim_key", Scalar{std::string("temperature")}},
+             {"claim_value", Scalar{20.0}},
+             {"evaluator", Scalar{std::string("independent-reviewer")}},
+             {"correct", Scalar{false}},
+             {"attestation", Scalar{std::string("test-attestation:independent-reviewer")}}}};
+        assert(brain.memory().append(conflicting_duplicate) != 0);
 
         const auto* calibrated = brain.knowledge_source("sensor-a");
         assert(calibrated != nullptr);
@@ -99,11 +137,12 @@ int main() {
     }
 
     {
-        Brain restored(journal, {"independent-reviewer", "second-reviewer", "third-reviewer"});
+        Brain restored(journal,
+            {"independent-reviewer", "second-reviewer", "third-reviewer"}, verifier);
         const auto* metric = restored.knowledge_source("sensor-a");
         assert(metric != nullptr);
-        assert(metric->calibration_observations == 4);
-        assert(std::abs(metric->empirical_accuracy - 0.75) < 1e-12);
+        assert(metric->calibration_observations == 3);
+        assert(std::abs(metric->empirical_accuracy - (2.0 / 3.0)) < 1e-12);
         assert(metric->observations == 2);
         assert(std::abs(metric->reliability - observation_quality) < 1e-12);
         const auto restored_assessment = restored.knowledge_assessment("temperature");
@@ -112,7 +151,7 @@ int main() {
         assert(restored_assessment->evidence_weight > 0.7);
         assert(!restored.record_knowledge_source_feedback(
             claim_sequence, "temperature", Scalar{20.0},
-            "independent-reviewer", false));
+            "independent-reviewer", false, "test-attestation:independent-reviewer"));
     }
 
     {

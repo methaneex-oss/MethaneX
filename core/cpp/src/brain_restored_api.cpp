@@ -144,13 +144,21 @@ bool Brain::resolve_prediction(std::uint64_t prediction_sequence, const Scalar& 
 
 bool Brain::record_knowledge_source_feedback(
     std::uint64_t claim_sequence, const std::string& key, const Scalar& value,
-    const std::string& evaluator, bool correct) {
+    const std::string& evaluator, bool correct, const std::string& attestation) {
     if (claim_sequence == 0 ||
         claim_sequence > static_cast<std::uint64_t>(
             std::numeric_limits<std::int64_t>::max()) ||
         key.empty() || evaluator.empty()) return false;
     std::unique_lock lock(mutex_);
-    if (!trusted_knowledge_evaluators_.contains(evaluator)) return false;
+    if (!trusted_knowledge_evaluators_.contains(evaluator) ||
+        attestation.empty() || !knowledge_feedback_verifier_) return false;
+    const KnowledgeFeedbackRequest request{
+        claim_sequence, key, value, evaluator, correct, attestation};
+    try {
+        if (!knowledge_feedback_verifier_(request)) return false;
+    } catch (...) {
+        return false;
+    }
     const auto history = memory_.all();
     const auto target = std::find_if(history.begin(), history.end(),
         [&](const Event& candidate) { return candidate.sequence == claim_sequence; });
@@ -201,7 +209,8 @@ bool Brain::record_knowledge_source_feedback(
     Event feedback{0, 0, evaluator, "knowledge_source_feedback",
         {{"claim_sequence", static_cast<std::int64_t>(claim_sequence)},
          {"claim_source", target->source}, {"claim_key", key},
-         {"claim_value", value}, {"evaluator", evaluator}, {"correct", correct}}};
+         {"claim_value", value}, {"evaluator", evaluator}, {"correct", correct},
+         {"attestation", attestation}}};
     feedback.sequence = memory_.append(feedback);
     if (feedback.sequence == 0) return false;
     replay(feedback);
