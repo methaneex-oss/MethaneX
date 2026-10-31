@@ -388,23 +388,23 @@ int main() {
     {
         Memory reverse_journal_writer(256, reverse_journal);
         Event first_false{0, 0, "reviewer", "knowledge_source_feedback",
-            {{"claim_sequence", Scalar{static_cast<std::int64_t>(claim.event.sequence)}},
+            {{"claim_sequence", Scalar{static_cast<std::int64_t>(reverse_claim_sequence)}},
              {"claim_source", Scalar{std::string("sensor-reverse")}},
              {"claim_key", Scalar{std::string("pressure")}},
              {"claim_value", Scalar{10.0}},
              {"evaluator", Scalar{std::string("reviewer")}},
              {"correct", Scalar{false}},
              {"attestation", Scalar{feedback_attestation(
-                 claim.event.sequence, "pressure", 10.0, "reviewer", false)}}}};
+                 reverse_claim_sequence, "pressure", 10.0, "reviewer", false)}}}};
         Event second_true{0, 0, "reviewer", "knowledge_source_feedback",
-            {{"claim_sequence", Scalar{static_cast<std::int64_t>(claim.event.sequence)}},
+            {{"claim_sequence", Scalar{static_cast<std::int64_t>(reverse_claim_sequence)}},
              {"claim_source", Scalar{std::string("sensor-reverse")}},
              {"claim_key", Scalar{std::string("pressure")}},
              {"claim_value", Scalar{10.0}},
              {"evaluator", Scalar{std::string("reviewer")}},
              {"correct", Scalar{true}},
              {"attestation", Scalar{feedback_attestation(
-                 claim.event.sequence, "pressure", 10.0, "reviewer", true)}}}};
+                 reverse_claim_sequence, "pressure", 10.0, "reviewer", true)}}}};
         assert(reverse_journal_writer.append(first_false) != 0);
         assert(reverse_journal_writer.append(second_true) != 0);
     }
