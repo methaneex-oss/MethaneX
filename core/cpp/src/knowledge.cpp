@@ -57,7 +57,15 @@ void KnowledgeModel::score_source(
             sequence, CalibrationSequence{source, correct, false});
         calibration_outcomes_[source].push_back(
             CalibrationOutcome{sequence, correct, false});
-        recompute_calibration_metric(source);
+        // Keep the normal append path O(1). Full recomputation is reserved
+        // for the exceptional case where a previously counted sequence is
+        // later found to be ambiguous.
+        auto& metric = sources_[source];
+        const double outcome = correct ? 1.0 : 0.0;
+        metric.empirical_accuracy +=
+            (outcome - metric.empirical_accuracy) /
+            static_cast<double>(metric.calibration_observations + 1);
+        ++metric.calibration_observations;
         return;
     }
 
