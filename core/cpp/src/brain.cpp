@@ -550,7 +550,11 @@ void Brain::replay(const Event& event, bool external_observation) {
             const auto candidate_correct_it = candidate.data.find("correct");
             const auto* candidate_correct = candidate_correct_it == candidate.data.end()
                 ? nullptr : std::get_if<bool>(&candidate_correct_it->second);
-            if (candidate_sequence == nullptr ||
+            // A feedback record cannot adjudicate a claim that appears
+            // later in the journal, even if an offline reorder preserves a
+            // valid claim-bound attestation.
+            if (candidate.sequence <= sequence ||
+                candidate_sequence == nullptr ||
                 *candidate_sequence != static_cast<std::int64_t>(sequence) ||
                 candidate_key == nullptr || *candidate_key != *key ||
                 candidate_source == nullptr || *candidate_source != *source ||
