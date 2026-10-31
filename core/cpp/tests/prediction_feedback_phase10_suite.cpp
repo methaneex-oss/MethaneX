@@ -635,31 +635,49 @@ int main() {
     assert(brain.learning_metric("nonfinite_guard")->observations == 1);
 
     // Legacy journals encoded every non-exact prediction as error 1.0.
-    // They must remain replayable, while newly generated outcomes carry a
-    // versioned normalized error model.
-    const auto legacy_prediction =
-        brain.predict("legacy_error_model", Scalar{12.0}, 0.8);
-    const auto legacy_feedback = brain.observe(Event{
-        0, 0, "brain", "prediction_outcome",
-        {{"key", std::string{"legacy_error_model"}},
-         {"prediction_sequence", static_cast<std::int64_t>(legacy_prediction.created_sequence)},
-         {"actual", Scalar{30.0}},
-         {"error", 1.0},
-         {"salience", 0.5},
-         {"novelty", 0.0}}});
-    assert(legacy_feedback.event.sequence != 0);
-    bool legacy_prediction_resolved = false;
-    for (const auto& current : brain.snapshot().predictions) {
-        if (current.created_sequence == legacy_prediction.created_sequence) {
-            legacy_prediction_resolved = current.resolved && current.error == 1.0;
-            break;
-        }
+    // Exercise that compatibility path by constructing the historical journal
+    // directly. The public observe API must reject caller-injected internal
+    // prediction_outcome records; it is not a journal migration interface.
+    const auto legacy_path = std::filesystem::temp_directory_path() /
+        "jarvis_legacy_prediction_feedback.bin";
+    std::filesystem::remove(legacy_path, ec);
+    std::filesystem::remove(legacy_path.string() + ".meta", ec);
+    std::uint64_t legacy_prediction_sequence = 0;
+    {
+        Memory legacy_journal(256, legacy_path);
+        legacy_prediction_sequence = legacy_journal.append(Event{
+            0, 0, "brain", "prediction",
+            {{"key", std::string{"legacy_error_model"}},
+             {"value", Scalar{12.0}},
+             {"confidence", 0.8}}});
+        assert(legacy_prediction_sequence != 0);
+        const auto legacy_outcome_sequence = legacy_journal.append(Event{
+            0, 0, "brain", "prediction_outcome",
+            {{"key", std::string{"legacy_error_model"}},
+             {"prediction_sequence", static_cast<std::int64_t>(legacy_prediction_sequence)},
+             {"actual", Scalar{30.0}},
+             {"error", 1.0},
+             {"salience", 0.5},
+             {"novelty", 0.0}}});
+        assert(legacy_outcome_sequence > legacy_prediction_sequence);
     }
-    assert(legacy_prediction_resolved);
-    const auto* legacy_metric = brain.learning_metric("legacy_error_model");
-    assert(legacy_metric != nullptr);
-    assert(legacy_metric->observations == 1);
-    assert(std::abs(legacy_metric->estimate - 30.0) < 1e-12);
+    {
+        Brain restored_legacy(legacy_path);
+        bool legacy_prediction_resolved = false;
+        for (const auto& current : restored_legacy.snapshot().predictions) {
+            if (current.created_sequence == legacy_prediction_sequence) {
+                legacy_prediction_resolved = current.resolved && current.error == 1.0;
+                break;
+            }
+        }
+        assert(legacy_prediction_resolved);
+        const auto* legacy_metric = restored_legacy.learning_metric("legacy_error_model");
+        assert(legacy_metric != nullptr);
+        assert(legacy_metric->observations == 1);
+        assert(std::abs(legacy_metric->estimate - 30.0) < 1e-12);
+    }
+    std::filesystem::remove(legacy_path, ec);
+    std::filesystem::remove(legacy_path.string() + ".meta", ec);
 
     // Stable semantic prediction keys must accumulate learning across separate
     // experiences. The key identifies the variable; each prediction event keeps
