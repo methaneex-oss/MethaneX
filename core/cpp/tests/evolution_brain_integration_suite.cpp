@@ -57,11 +57,26 @@ int main() {
         assert(guarded.memory().by_kind("evolution_evaluated").empty());
         assert(guarded.memory().by_kind("evolution_adopt").empty());
         assert(guarded.evolution_history().empty());
+
+        // Imported action outcomes remain episodic records. They must not train
+        // a developmental strategy either immediately or during journal replay.
+        Event imported_outcome{
+            0, 4, "caller-controlled-source", "action_outcome",
+            {{"action", std::string("imported-action")},
+             {"context", std::string("imported-context")},
+             {"observed", true}, {"actual_consequence", 1.0},
+             {"expected_consequence", 0.0}, {"consequence_error", 1.0},
+             {"reliability", 1.0}, {"evidence_reliability", 1.0}}};
+        assert(guarded.import_legacy_memory_event(imported_outcome) != 0);
+        assert(guarded.memory().by_kind("action_outcome").size() == 1);
+        assert(guarded.developmental_strategies().empty());
     }
     {
         Brain guarded_restart(forged_path);
         assert(guarded_restart.evolution_parameter("forged.parameter") == nullptr);
         assert(guarded_restart.evolution_history().empty());
+        assert(guarded_restart.memory().by_kind("action_outcome").size() == 1);
+        assert(guarded_restart.developmental_strategies().empty());
     }
     std::filesystem::remove(forged_path, forged_ec);
     std::filesystem::remove(forged_path.string() + ".meta", forged_ec);
