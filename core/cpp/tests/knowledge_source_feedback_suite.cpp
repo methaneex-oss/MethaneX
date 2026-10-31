@@ -36,19 +36,39 @@ int main() {
                        request.provenance_id;
         };
     std::uint64_t claim_sequence = 0;
+    std::uint64_t humidity_sequence = 0;
+    std::uint64_t pressure_sequence = 0;
+    std::uint64_t wind_sequence = 0;
+    std::uint64_t voltage_sequence = 0;
     double observation_quality = 0.0;
     {
         Brain brain(journal,
             {"independent-reviewer", "second-reviewer", "third-reviewer", "sensor-a"},
             verifier, provenance_verifier);
         const auto observed = brain.observe(Event{0, 0, "sensor-a", "observation",
-            {{"temperature", Scalar{20.0}}, {"humidity", Scalar{50.0}},
-             {"pressure", Scalar{1013.0}}, {"wind", Scalar{5.0}},
-             {"voltage", Scalar{230.0}}, {"reliability", Scalar{0.99}},
+            {{"temperature", Scalar{20.0}}, {"reliability", Scalar{0.99}},
              {"provenance_id", Scalar{std::string("origin-a")}},
              {"provenance_attestation", Scalar{std::string("source-origin:sensor-a:origin-a")}}}});
         claim_sequence = observed.event.sequence;
         assert(claim_sequence != 0);
+        humidity_sequence = brain.observe(Event{0, 0, "sensor-a", "observation",
+            {{"humidity", Scalar{50.0}}, {"reliability", Scalar{0.99}},
+             {"provenance_id", Scalar{std::string("origin-a")}},
+             {"provenance_attestation", Scalar{std::string("source-origin:sensor-a:origin-a")}}}}).event.sequence;
+        pressure_sequence = brain.observe(Event{0, 0, "sensor-a", "observation",
+            {{"pressure", Scalar{1013.0}}, {"reliability", Scalar{0.99}},
+             {"provenance_id", Scalar{std::string("origin-a")}},
+             {"provenance_attestation", Scalar{std::string("source-origin:sensor-a:origin-a")}}}}).event.sequence;
+        wind_sequence = brain.observe(Event{0, 0, "sensor-a", "observation",
+            {{"wind", Scalar{5.0}}, {"reliability", Scalar{0.99}},
+             {"provenance_id", Scalar{std::string("origin-a")}},
+             {"provenance_attestation", Scalar{std::string("source-origin:sensor-a:origin-a")}}}}).event.sequence;
+        voltage_sequence = brain.observe(Event{0, 0, "sensor-a", "observation",
+            {{"voltage", Scalar{230.0}}, {"reliability", Scalar{0.99}},
+             {"provenance_id", Scalar{std::string("origin-a")}},
+             {"provenance_attestation", Scalar{std::string("source-origin:sensor-a:origin-a")}}}}).event.sequence;
+        assert(humidity_sequence != 0 && pressure_sequence != 0 &&
+               wind_sequence != 0 && voltage_sequence != 0);
         assert(brain.observe(Event{0, 0, "sensor-b", "observation",
             {{"temperature", Scalar{25.0}},
              {"provenance_id", Scalar{std::string("origin-b")}},
@@ -110,8 +130,8 @@ int main() {
             claim_sequence, "temperature", Scalar{20.0},
             "independent-reviewer", true, feedback_attestation(claim_sequence, "temperature", 20.0, "independent-reviewer", true)));
         assert(brain.record_knowledge_source_feedback(
-            claim_sequence, "humidity", Scalar{50.0},
-            "independent-reviewer", true, feedback_attestation(claim_sequence, "humidity", 50.0, "independent-reviewer", true)));
+            humidity_sequence, "humidity", Scalar{50.0},
+            "independent-reviewer", true, feedback_attestation(humidity_sequence, "humidity", 50.0, "independent-reviewer", true)));
         assert(!brain.record_knowledge_source_feedback(
             claim_sequence, "temperature", Scalar{20.0},
             "independent-reviewer", false, feedback_attestation(claim_sequence, "temperature", 20.0, "independent-reviewer", false)));
@@ -124,11 +144,11 @@ int main() {
             claim_sequence, "temperature", Scalar{20.0},
             "third-reviewer", true, feedback_attestation(claim_sequence, "temperature", 20.0, "third-reviewer", true)));
         assert(brain.record_knowledge_source_feedback(
-            claim_sequence, "pressure", Scalar{1013.0},
-            "second-reviewer", false, feedback_attestation(claim_sequence, "pressure", 1013.0, "second-reviewer", false)));
+            pressure_sequence, "pressure", Scalar{1013.0},
+            "second-reviewer", false, feedback_attestation(pressure_sequence, "pressure", 1013.0, "second-reviewer", false)));
         assert(brain.record_knowledge_source_feedback(
-            claim_sequence, "wind", Scalar{5.0},
-            "third-reviewer", true, feedback_attestation(claim_sequence, "wind", 5.0, "third-reviewer", true)));
+            wind_sequence, "wind", Scalar{5.0},
+            "third-reviewer", true, feedback_attestation(wind_sequence, "wind", 5.0, "third-reviewer", true)));
         assert(!brain.record_knowledge_source_feedback(
             claim_sequence, "temperature", Scalar{20.0},
             "independent-reviewer", false, "forged-attestation"));
@@ -177,7 +197,7 @@ int main() {
 
         Event invalid_duplicate{0, 0, "second-reviewer",
             "knowledge_source_feedback",
-            {{"claim_sequence", Scalar{static_cast<std::int64_t>(claim_sequence)}},
+            {{"claim_sequence", Scalar{static_cast<std::int64_t>(voltage_sequence)}},
              {"claim_source", Scalar{std::string("sensor-a")}},
              {"claim_key", Scalar{std::string("voltage")}},
              {"claim_value", Scalar{230.0}},
@@ -194,8 +214,8 @@ int main() {
         // A forged raw record with a copied evaluator name must not poison
         // the legitimate API's duplicate check after restart.
         assert(restored.record_knowledge_source_feedback(
-            claim_sequence, "voltage", Scalar{230.0}, "second-reviewer", true,
-            feedback_attestation(claim_sequence, "voltage", 230.0, "second-reviewer", true)));
+            voltage_sequence, "voltage", Scalar{230.0}, "second-reviewer", true,
+            feedback_attestation(voltage_sequence, "voltage", 230.0, "second-reviewer", true)));
         const auto* metric = restored.knowledge_source("sensor-a");
         assert(metric != nullptr);
         assert(metric->calibration_observations == 4);
