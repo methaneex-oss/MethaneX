@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 namespace jarvis::core {
@@ -114,6 +115,9 @@ private:
         double bias{0.0};
         std::unordered_map<std::string, double> weights;
         std::unordered_map<std::string, std::uint64_t> feature_observations;
+        // Retain at most three distinct full contexts per factor. Repeated
+        // episodes in one context do not masquerade as independent support.
+        std::unordered_map<std::string, std::unordered_set<std::string>> feature_contexts;
         std::uint64_t observations{0};
     };
 
