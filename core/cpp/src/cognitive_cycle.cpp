@@ -113,6 +113,9 @@ std::string infer_developmental_context(const CognitiveCycleInput& input,
         context += "/goal/" + context_path_segment(goal.id);
         return context;
     }
+    // Keep transfer within the active goal unless a future mechanism
+    // explicitly establishes cross-goal equivalence.
+    context += "/goal/" + context_path_segment(goal.id);
     context += "/features";
     for (const auto& label : labels) context += "/" + label;
     context += "/values";
