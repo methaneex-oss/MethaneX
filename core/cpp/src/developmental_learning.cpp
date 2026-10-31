@@ -494,19 +494,27 @@ FeatureStrategyEstimate DevelopmentalLearning::feature_strategy_estimate(
     const auto& model = model_it->second;
     estimate.observations = model.observations;
     double prediction = model.bias;
+    std::uint64_t minimum_feature_observations =
+        std::numeric_limits<std::uint64_t>::max();
     for (const auto& [label, value] : features) {
         const auto key = feature_strategy_key(label, value);
         const auto weight = model.weights.find(key);
-        if (weight == model.weights.end()) continue;
+        const auto observations = model.feature_observations.find(key);
+        if (weight == model.weights.end() ||
+            observations == model.feature_observations.end()) continue;
         prediction += weight->second;
         ++estimate.matched_features;
+        minimum_feature_observations = std::min(
+            minimum_feature_observations, observations->second);
     }
     if (estimate.matched_features == 0) return estimate;
     estimate.value = bounded(prediction);
     const double coverage = static_cast<double>(estimate.matched_features) /
                             static_cast<double>(estimate.feature_count);
+    // Confidence is limited by the least-supported feature in the current
+    // combination, not by unrelated observations of the same action.
     const double support = std::min(
-        1.0, static_cast<double>(estimate.observations) / 6.0);
+        1.0, static_cast<double>(minimum_feature_observations) / 3.0);
     estimate.confidence = std::clamp(coverage * support, 0.0, 1.0);
     return estimate;
 }
