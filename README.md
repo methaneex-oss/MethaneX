@@ -62,6 +62,10 @@ JARVIS is under active foundational development. The current work is focused on 
 
 The Brain-only layer-to-language responsibilities, including the TypeScript monitoring plane, Python/PyTorch learning boundary, and conditional Rust/GPU roles, are defined in the [Brain Layer-to-Language Ownership Map](docs/BRAIN_LAYER_LANGUAGE_OWNERSHIP_MAP.md).
 
+## Brain engineering governance
+
+The implementation rules for language ownership, cross-language contracts, state integrity, security, persistence, testing, dependencies, performance, and approval gates are defined in [Brain Polyglot Engineering Governance](docs/BRAIN_POLYGLOT_ENGINEERING_GOVERNANCE.md).
+
 ## Project governance
 
 The command structure, role boundaries, decision authority, architecture change control, independent testing/review requirements, and handoff rules are defined in [JARVIS Project Governance](docs/JARVIS_PROJECT_GOVERNANCE.md). This document is the repository record of the Project Director → Chief Builder → Independent Tester / Independent Reviewer operating model.
