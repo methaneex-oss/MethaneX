@@ -589,7 +589,7 @@ CognitiveCycleResult CognitiveCycle::run(const CognitiveCycleInput& input) const
             brain_.developmental_feature_strategy_estimate(
                 developmental_context, action.name);
         if (feature_estimate.matched_features > 0 &&
-            feature_estimate.confidence >= 0.25) {
+            feature_estimate.confidence >= 0.5) {
             const double influence = std::clamp(
                 1.25 * feature_estimate.value * feature_estimate.confidence,
                 -1.0, 1.0);
