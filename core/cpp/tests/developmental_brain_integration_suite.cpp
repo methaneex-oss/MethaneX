@@ -1467,14 +1467,16 @@ int main() {
         };
         assert(observe_reversal("alpha", 0.8).event.sequence != 0);
         assert(observe_reversal("beta", 0.9).event.sequence != 0);
-        assert(reversal.world().query("reversal-source", "reversible-state")->disputed);
+        auto contested = reversal.world().query("reversal-source", "reversible-state");
+        assert(contested.has_value() && contested->disputed);
         assert(observe_reversal("beta", 0.95).event.sequence != 0);
         auto resolved = reversal.world().query("reversal-source", "reversible-state");
         assert(resolved.has_value() && !resolved->disputed);
         assert(resolved->value == Scalar{std::string("beta")});
 
         assert(observe_reversal("alpha", 0.9).event.sequence != 0);
-        assert(reversal.world().query("reversal-source", "reversible-state")->disputed);
+        contested = reversal.world().query("reversal-source", "reversible-state");
+        assert(contested.has_value() && contested->disputed);
         assert(observe_reversal("alpha", 0.99).event.sequence != 0);
         resolved = reversal.world().query("reversal-source", "reversible-state");
         assert(resolved.has_value() && !resolved->disputed);
