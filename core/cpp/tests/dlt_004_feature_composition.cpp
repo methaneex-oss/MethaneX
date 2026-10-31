@@ -225,10 +225,9 @@ void run_seed(std::uint64_t seed) {
         // no outcome is ever recorded for that exact combination.
         const auto open_poor_flat =
             inferred_context(brain, "open", "poor", "flat");
-        const auto closed_poor_flat =
-            inferred_context(brain, "closed", "poor", "flat");
-        const auto closed_poor_rough =
-            inferred_context(brain, "closed", "poor", "rough");
+        // Reuse the two previously observed contexts so this phase adds
+        // contradictory outcomes to their evidence rather than redeclaring
+        // equivalent context identifiers in the same scope.
         train_pair(brain, open_poor_flat, clear_action, 8);
         train_pair(brain, closed_poor_flat, clear_action, 8);
         train_pair(brain, closed_poor_rough, clear_action, 8);
