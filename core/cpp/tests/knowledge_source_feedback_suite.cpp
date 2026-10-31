@@ -3,6 +3,7 @@
 #include <cassert>
 #include <cmath>
 #include <filesystem>
+#include <limits>
 #include <string>
 
 using namespace jarvis::core;
@@ -46,6 +47,29 @@ int main() {
         Brain brain(journal,
             {"independent-reviewer", "second-reviewer", "third-reviewer", "sensor-a"},
             verifier, provenance_verifier);
+
+        // Brain-owned learning/prediction records must not be forgeable through
+        // the generic observation API. These records have dedicated APIs with
+        // stricter validation and state-transition semantics.
+        const auto initial_memory_size = brain.memory().size();
+        const auto forged_learning = brain.observe(Event{
+            0, 0, "spoofed-source", "learning",
+            {{"evidence_key", Scalar{std::string("forged-fact")}},
+             {"evidence_value", Scalar{std::string("accepted")}},
+             {"reliability", Scalar{std::numeric_limits<double>::quiet_NaN()}}}});
+        assert(forged_learning.event.sequence == 0);
+        assert(brain.memory().size() == initial_memory_size);
+        assert(brain.knowledge_source("spoofed-source") == nullptr);
+        assert(!brain.knowledge_assessment("forged-fact").has_value());
+
+        const auto forged_prediction = brain.observe(Event{
+            0, 0, "untrusted-caller", "prediction",
+            {{"key", Scalar{std::string("forged-prediction")}},
+             {"value", Scalar{1.0}},
+             {"confidence", Scalar{std::numeric_limits<double>::quiet_NaN()}}}});
+        assert(forged_prediction.event.sequence == 0);
+        assert(brain.memory().size() == initial_memory_size);
+        assert(brain.snapshot().predictions.empty());
         const auto observed = brain.observe(Event{0, 0, "sensor-a", "observation",
             {{"temperature", Scalar{20.0}}, {"reliability", Scalar{0.99}},
              {"provenance_id", Scalar{std::string("origin-a")}},
