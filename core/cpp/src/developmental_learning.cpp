@@ -152,7 +152,7 @@ std::vector<std::pair<std::string, std::string>> context_feature_pairs(
 
 std::string feature_strategy_key(const std::string& label,
                                  const std::string& value) {
-    return label + '\\x1e' + value;
+    return label + '\x1e' + value;
 }
 
 double inferred_value_similarity(const std::string& left, const std::string& right) {
