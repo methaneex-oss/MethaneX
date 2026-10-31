@@ -63,7 +63,7 @@ bool valid_observation_event(const Event& event) {
            valid_finite_numeric("world_step");
 }
 
-double observation_evidence_reliability(const Event& event) {
+double observation_evidence_reliability(const Event& event, double missing_prior = 0.7) {
     // Prefer explicit evidence quality. Legacy reliability and perceptual
     // confidence remain compatible fallbacks; absent metadata uses the
     // neutral observation prior. Missing appraisal metadata is unknown, not
@@ -80,7 +80,7 @@ double observation_evidence_reliability(const Event& event) {
             return std::clamp(static_cast<double>(*value), 0.0, 1.0);
         return 0.0;
     }
-    return 0.5;
+    return missing_prior;
 }
 
 std::string verified_knowledge_provenance_id(
@@ -870,6 +870,11 @@ void Brain::replay(const Event& event, bool external_observation) {
     const double reliability = event.kind == "learning"
         ? std::clamp(double_value(event.data, "reliability", 0.5), 0.0, 1.0)
         : observation_evidence_reliability(event);
+    // Knowledge confidence starts from a neutral prior when an observation
+    // supplies no quality metadata. Preserve the established 0.7 default for
+    // attention, belief updates, and other perceptual mechanisms.
+    const double knowledge_reliability = event.kind == "learning"
+        ? reliability : observation_evidence_reliability(event, 0.5);
 
     // A learning event carries one evidence item plus appraisal metadata. Read
     // its explicit payload rather than taking the first unordered-map entry;
@@ -947,7 +952,7 @@ void Brain::replay(const Event& event, bool external_observation) {
         // corroboration; disagreement is retained as disputed evidence.
         if (event.kind != "learning")
             knowledge_.assimilate(KnowledgeEvidence{
-                event.source, key, value, reliability,
+                event.source, key, value, knowledge_reliability,
                 verified_knowledge_provenance_id(
                     event, key, value, knowledge_provenance_verifier_)});
         world_.observe(Fact{event.source, key, value, reliability, 1,
