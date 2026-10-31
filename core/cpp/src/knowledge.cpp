@@ -64,6 +64,7 @@ std::optional<KnowledgeAssessment> KnowledgeModel::assess(const std::string& key
         std::vector<std::pair<std::string, double>> origin_weights;
         std::size_t observations{0};
         double evidence_weight{0.0};
+        double unverified_evidence_weight{0.0};
     };
     std::vector<CandidateSupport> candidates;
     for (const auto& claim : claims_) {
@@ -73,7 +74,7 @@ std::optional<KnowledgeAssessment> KnowledgeModel::assess(const std::string& key
                 return item.value == claim.value;
             });
         if (candidate == candidates.end()) {
-            candidates.push_back(CandidateSupport{claim.value, {}, {}, {}, {}, 0, 0.0});
+            candidates.push_back(CandidateSupport{claim.value, {}, {}, {}, {}, 0, 0.0, 0.0});
             candidate = std::prev(candidates.end());
         }
         candidate->observations += claim.observations;
@@ -118,13 +119,18 @@ std::optional<KnowledgeAssessment> KnowledgeModel::assess(const std::string& key
         const double source_weight =
             claim.observation_quality * (0.5 + trust);
 
-        // All observations without verified provenance share one unknown-origin
-        // bucket. Distinct source strings alone therefore cannot manufacture
-        // independent corroboration. Multiple reporters of a verified origin
-        // contribute at most that origin's strongest source weight.
-        const std::string origin_key = claim.provenance_id.empty()
-            ? std::string("\x1funknown")
-            : std::string("\x1fknown:") + claim.provenance_id;
+        if (claim.provenance_id.empty()) {
+            // Unknown-origin evidence remains visible but cannot add to the
+            // independent evidence weight used for corroboration.
+            candidate->unverified_evidence_weight = std::max(
+                candidate->unverified_evidence_weight, source_weight);
+            continue;
+        }
+
+        // Multiple reporters of one verified origin contribute at most that
+        // origin's strongest source weight, never one weight per source string.
+        const std::string origin_key =
+            std::string("\x1fknown:") + claim.provenance_id;
         const auto origin = std::find_if(
             candidate->origin_weights.begin(), candidate->origin_weights.end(),
             [&](const auto& item) { return item.first == origin_key; });
@@ -157,6 +163,7 @@ std::optional<KnowledgeAssessment> KnowledgeModel::assess(const std::string& key
     result.supporting_origins = strongest->origins.size();
     result.observations = strongest->observations;
     result.evidence_weight = strongest->evidence_weight;
+    result.unverified_evidence_weight = strongest->unverified_evidence_weight;
     if (candidates.size() > 1) {
         for (const auto& candidate : candidates) {
             if (candidate.value == strongest->value) continue;
