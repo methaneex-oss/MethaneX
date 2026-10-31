@@ -867,19 +867,10 @@ int main() {
     const auto live_affect = brain.affective_state();
     const auto live_attention = brain.attention();
 
+    // Legacy prediction replay and its adaptation reconstruction are tested
+    // independently above using a journal fixture. This Brain instance must
+    // only assert persistence for outcomes actually recorded in its journal.
     Brain restored(path);
-    const auto* restored_legacy_metric = restored.learning_metric("legacy_error_model");
-    assert(restored_legacy_metric != nullptr);
-    assert(restored_legacy_metric->observations == 1);
-    assert(std::abs(restored_legacy_metric->estimate - 30.0) < 1e-12);
-    bool legacy_feedback_replayed = false;
-    for (const auto& current : restored.snapshot().predictions) {
-        if (current.key == "legacy_error_model") {
-            legacy_feedback_replayed = current.resolved && current.error == 1.0;
-            break;
-        }
-    }
-    assert(legacy_feedback_replayed);
     // Both same-key prediction identities and their accumulated calibration must
     // survive restart, not merely the latest key-level resolution.
     std::size_t replayed_pressure_instances = 0;
