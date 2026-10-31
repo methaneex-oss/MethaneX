@@ -8,6 +8,12 @@
 using namespace jarvis::core;
 
 int main() {
+    const double non_finite_value = std::numeric_limits<double>::quiet_NaN();
+    KnowledgeModel invalid_numeric_value;
+    assert(invalid_numeric_value.assimilate(KnowledgeEvidence{
+        "invalid-value-source", "invalid-value-key", non_finite_value, 0.8}) == 0.0);
+    assert(invalid_numeric_value.source_metric("invalid-value-source") == nullptr);
+
     KnowledgeModel knowledge;
     const auto first = knowledge.assimilate(
         KnowledgeEvidence{"sensor-a", "temperature", 20.0, 0.8});
