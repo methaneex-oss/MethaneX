@@ -41,6 +41,7 @@ int main() {
     std::uint64_t wind_sequence = 0;
     std::uint64_t voltage_sequence = 0;
     double observation_quality = 0.0;
+    double baseline_weight = 0.0;
     {
         Brain brain(journal,
             {"independent-reviewer", "second-reviewer", "third-reviewer", "sensor-a"},
@@ -90,7 +91,7 @@ int main() {
 
         const auto baseline_assessment = brain.knowledge_assessment("temperature");
         assert(baseline_assessment.has_value());
-        const double baseline_weight = baseline_assessment->evidence_weight;
+        baseline_weight = baseline_assessment->evidence_weight;
         assert(baseline_assessment->status == KnowledgeStatus::disputed);
         assert(baseline_assessment->supporting_origins == 1);
         assert(baseline_assessment->conflicting_origins == 1);
@@ -297,7 +298,7 @@ int main() {
                     request.key + ":" + request.provenance_id;
         };
     {
-        Brain provenance(provenance_journal, {}, {}, provenance_verifier);
+        Brain provenance(provenance_journal, {}, {}, detailed_provenance_verifier);
         const auto malformed_before = provenance.memory().all().size();
         const auto malformed = provenance.observe(Event{0, 0, "sensor-malformed",
             "observation", {{"device_state", Scalar{std::string("present")}},
@@ -354,7 +355,7 @@ int main() {
         assert(unverified->supporting_origins == 0);
     }
     {
-        Brain provenance_restored(provenance_journal, {}, {}, provenance_verifier);
+        Brain provenance_restored(provenance_journal, {}, {}, detailed_provenance_verifier);
         const auto assessment = provenance_restored.knowledge_assessment("device_state");
         assert(assessment.has_value());
         assert(assessment->status == KnowledgeStatus::corroborated);
@@ -399,8 +400,8 @@ int main() {
              {"correct", Scalar{true}},
              {"attestation", Scalar{feedback_attestation(
                  claim.event.sequence, "pressure", 10.0, "reviewer", true)}}}};
-        assert(reverse.memory().append(first_false) != 0);
-        assert(reverse.memory().append(second_true) != 0);
+        assert(const_cast<Memory&>(reverse.memory()).append(first_false) != 0);
+        assert(const_cast<Memory&>(reverse.memory()).append(second_true) != 0);
     }
     {
         Brain reverse_restored(reverse_journal, {"reviewer"}, verifier);
