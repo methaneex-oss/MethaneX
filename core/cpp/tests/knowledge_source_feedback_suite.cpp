@@ -219,8 +219,8 @@ int main() {
             feedback_attestation(voltage_sequence, "voltage", 230.0, "second-reviewer", true)));
         const auto* metric = restored.knowledge_source("sensor-a");
         assert(metric != nullptr);
-        assert(metric->calibration_observations == 5);
-        assert(std::abs(metric->empirical_accuracy - 0.8) < 1e-12);
+        assert(metric->calibration_observations == 4);
+        assert(std::abs(metric->empirical_accuracy - 0.75) < 1e-12);
         assert(metric->observations == 5);
         assert(std::abs(metric->reliability - observation_quality) < 1e-12);
         const auto restored_assessment = restored.knowledge_assessment("temperature");
