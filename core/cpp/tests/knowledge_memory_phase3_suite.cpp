@@ -51,7 +51,7 @@ int main() {
     // Repetition by the same source does not add independent weight.
     const double repeated_weight = claim->evidence_weight;
     assessment.assimilate(KnowledgeEvidence{
-        "sensor-a", "surface-risk", std::string("hazardous"), 0.9});
+        "sensor-a", "surface-risk", std::string("hazardous"), 0.9, "origin-a"});
     claim = assessment.assess("surface-risk");
     assert(claim.has_value());
     assert(std::abs(claim->evidence_weight - repeated_weight) < 1e-12);
