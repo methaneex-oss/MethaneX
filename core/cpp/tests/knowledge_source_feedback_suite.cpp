@@ -291,7 +291,7 @@ int main() {
     const auto provenance_journal = std::filesystem::temp_directory_path() /
                                     "jarvis_knowledge_provenance.bin";
     std::filesystem::remove(provenance_journal, error);
-    const KnowledgeProvenanceVerifier provenance_verifier =
+    const KnowledgeProvenanceVerifier detailed_provenance_verifier =
         [](const KnowledgeProvenanceRequest& request) {
             return request.value == Scalar{std::string("present")} &&
                 request.attestation == "signed-origin:" + request.source + ":" +
