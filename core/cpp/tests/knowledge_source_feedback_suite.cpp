@@ -382,7 +382,7 @@ int main() {
         Brain reverse(reverse_journal, {"reviewer"}, verifier);
         const auto claim = reverse.observe(Event{0, 0, "sensor-reverse", "observation",
             {{"pressure", Scalar{10.0}}}});
-        assert(reverse_claim_sequence != 0);
+        assert(claim.event.sequence != 0);
         reverse_claim_sequence = claim.event.sequence;
     }
     {
