@@ -234,9 +234,11 @@ int main() {
     {
         Memory restarted(8, invalid_bool_path);
         assert(restarted.size() == 1);
-        assert(restarted.latest()->kind == "after-invalid-bool");
-        const auto flag = restarted.latest()->data.find("flag");
-        assert(flag != restarted.latest()->data.end());
+        const auto latest = restarted.latest();
+        assert(latest.has_value());
+        assert(latest->kind == "after-invalid-bool");
+        const auto flag = latest->data.find("flag");
+        assert(flag != latest->data.end());
         assert(std::get_if<bool>(&flag->second) != nullptr);
         assert(!*std::get_if<bool>(&flag->second));
     }
