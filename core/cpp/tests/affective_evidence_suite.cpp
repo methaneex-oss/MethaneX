@@ -84,12 +84,12 @@ int main() {
     {
         Brain high_brain(high_path);
         Brain low_brain(low_path);
-        assert(high_brain.observe(Event{0, 0, "sensor", "learning", {
-            {"evidence_key", std::string("temperature")},
-            {"evidence_value", Scalar{22.0}}, {"reliability", 0.95}}}).event.sequence != 0);
-        assert(low_brain.observe(Event{0, 0, "sensor", "learning", {
-            {"evidence_key", std::string("temperature")},
-            {"evidence_value", Scalar{22.0}}, {"reliability", 0.15}}}).event.sequence != 0);
+        // Learning records must be created through the validated learning API,
+        // not injected through the generic external-observation interface.
+        high_brain.learn(Evidence{"sensor", "temperature", Scalar{22.0}, 0.95});
+        low_brain.learn(Evidence{"sensor", "temperature", Scalar{22.0}, 0.15});
+        assert(high_brain.memory().by_kind("learning").size() == 1);
+        assert(low_brain.memory().by_kind("learning").size() == 1);
         high_state = high_brain.affective_state();
         low_state = low_brain.affective_state();
         assert(std::abs(high_state.valence) < 1e-9);
