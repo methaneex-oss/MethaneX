@@ -167,5 +167,125 @@ int main() {
     }
 
     std::filesystem::remove(journal, error);
+
+    // Missing observation-quality metadata is neutral, not the old fixed 0.7
+    // boost. Explicit evidence reliability takes precedence over compatibility
+    // reliability, which takes precedence over perceptual confidence.
+    const auto quality_journal = std::filesystem::temp_directory_path() /
+                                 "jarvis_knowledge_observation_quality.bin";
+    std::filesystem::remove(quality_journal, error);
+    {
+        Brain quality(quality_journal);
+        quality.observe(Event{0, 0, "explicit-quality", "observation",
+            {{"explicit_quality_fact", Scalar{true}},
+             {"evidence_reliability", Scalar{0.6}},
+             {"reliability", Scalar{0.99}},
+             {"confidence", Scalar{0.95}}}});
+        quality.observe(Event{0, 0, "legacy-quality", "observation",
+            {{"legacy_quality_fact", Scalar{true}},
+             {"reliability", Scalar{0.4}},
+             {"confidence", Scalar{0.9}}}});
+        quality.observe(Event{0, 0, "confidence-quality", "observation",
+            {{"confidence_quality_fact", Scalar{true}},
+             {"confidence", Scalar{0.3}}}});
+        quality.observe(Event{0, 0, "missing-quality", "observation",
+            {{"missing_quality_fact", Scalar{true}}}});
+        assert(std::abs(quality.knowledge_source("explicit-quality")->reliability - 0.6) < 1e-12);
+        assert(std::abs(quality.knowledge_source("legacy-quality")->reliability - 0.4) < 1e-12);
+        assert(std::abs(quality.knowledge_source("confidence-quality")->reliability - 0.3) < 1e-12);
+        assert(std::abs(quality.knowledge_source("missing-quality")->reliability - 0.5) < 1e-12);
+    }
+    {
+        Brain quality_restored(quality_journal);
+        assert(std::abs(quality_restored.knowledge_source("missing-quality")->reliability - 0.5) < 1e-12);
+    }
+    std::filesystem::remove(quality_journal, error);
+
+    // Distinct source names sharing one host-verified origin count as one
+    // evidence origin. A separate verified origin is required for corroboration.
+    const auto provenance_journal = std::filesystem::temp_directory_path() /
+                                    "jarvis_knowledge_provenance.bin";
+    std::filesystem::remove(provenance_journal, error);
+    const KnowledgeProvenanceVerifier provenance_verifier =
+        [](const KnowledgeProvenanceRequest& request) {
+            return request.value == Scalar{std::string("present")} &&
+                request.attestation == "signed-origin:" + request.source + ":" +
+                    request.key + ":" + request.provenance_id;
+        };
+    {
+        Brain provenance(provenance_journal, {}, {}, provenance_verifier);
+        const auto malformed_before = provenance.memory().all().size();
+        const auto malformed = provenance.observe(Event{0, 0, "sensor-malformed",
+            "observation", {{"device_state", Scalar{std::string("present")}},
+                            {"provenance_attestation", Scalar{std::string("orphaned")}}}});
+        assert(malformed.event.sequence == 0);
+        assert(provenance.memory().all().size() == malformed_before);
+
+        provenance.observe(Event{0, 0, "sensor-a", "observation",
+            {{"device_state", Scalar{std::string("present")}},
+             {"provenance_id", Scalar{std::string("shared-origin")}},
+             {"provenance_attestation", Scalar{std::string(
+                 "signed-origin:sensor-a:device_state:shared-origin")}}}});
+        provenance.observe(Event{0, 0, "sensor-b", "observation",
+            {{"device_state", Scalar{std::string("present")}},
+             {"provenance_id", Scalar{std::string("shared-origin")}},
+             {"provenance_attestation", Scalar{std::string(
+                 "signed-origin:sensor-b:device_state:shared-origin")}}}});
+        auto assessment = provenance.knowledge_assessment("device_state");
+        assert(assessment.has_value());
+        assert(assessment->status == KnowledgeStatus::provisional);
+        assert(assessment->supporting_sources == 2);
+        assert(assessment->supporting_origins == 1);
+        assert(std::abs(assessment->evidence_weight - 0.5) < 1e-12);
+
+        provenance.observe(Event{0, 0, "sensor-c", "observation",
+            {{"device_state", Scalar{std::string("present")}},
+             {"evidence_reliability", Scalar{0.7}},
+             {"provenance_id", Scalar{std::string("independent-origin")}},
+             {"provenance_attestation", Scalar{std::string(
+                 "signed-origin:sensor-c:device_state:independent-origin")}}}});
+        assessment = provenance.knowledge_assessment("device_state");
+        assert(assessment.has_value());
+        assert(assessment->status == KnowledgeStatus::corroborated);
+        assert(assessment->supporting_sources == 3);
+        assert(assessment->supporting_origins == 2);
+        assert(std::abs(assessment->evidence_weight - 1.2) < 1e-12);
+        assert(!provenance.knowledge_assessment("provenance_id").has_value());
+        assert(!provenance.knowledge_assessment("provenance_attestation").has_value());
+
+        // An invalid origin attestation is retained as unknown-origin evidence,
+        // but cannot add an independent origin.
+        provenance.observe(Event{0, 0, "sensor-forged", "observation",
+            {{"unverified_state", Scalar{std::string("present")}},
+             {"provenance_id", Scalar{std::string("invented-origin")}},
+             {"provenance_attestation", Scalar{std::string("forged")}}}});
+        provenance.observe(Event{0, 0, "sensor-forged-two", "observation",
+            {{"unverified_state", Scalar{std::string("present")}},
+             {"provenance_id", Scalar{std::string("another-invented-origin")}},
+             {"provenance_attestation", Scalar{std::string("forged")}}}});
+        const auto unverified = provenance.knowledge_assessment("unverified_state");
+        assert(unverified.has_value());
+        assert(unverified->status == KnowledgeStatus::provisional);
+        assert(unverified->supporting_sources == 2);
+        assert(unverified->supporting_origins == 0);
+    }
+    {
+        Brain provenance_restored(provenance_journal, {}, {}, provenance_verifier);
+        const auto assessment = provenance_restored.knowledge_assessment("device_state");
+        assert(assessment.has_value());
+        assert(assessment->status == KnowledgeStatus::corroborated);
+        assert(assessment->supporting_origins == 2);
+    }
+    {
+        // Without the host verifier, persisted origin labels are not trusted.
+        Brain provenance_untrusted_restore(provenance_journal);
+        const auto assessment = provenance_untrusted_restore.knowledge_assessment("device_state");
+        assert(assessment.has_value());
+        assert(assessment->status == KnowledgeStatus::provisional);
+        assert(assessment->supporting_sources == 3);
+        assert(assessment->supporting_origins == 0);
+    }
+    std::filesystem::remove(provenance_journal, error);
+
     return 0;
 }
