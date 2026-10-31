@@ -142,6 +142,113 @@ bool Brain::resolve_prediction(std::uint64_t prediction_sequence, const Scalar& 
            PredictionFeedbackStatus::resolved_correctly;
 }
 
+bool Brain::record_knowledge_source_feedback(
+    std::uint64_t claim_sequence, const std::string& key, const Scalar& value,
+    const std::string& evaluator, bool correct, const std::string& attestation) {
+    if (claim_sequence == 0 ||
+        claim_sequence > static_cast<std::uint64_t>(
+            std::numeric_limits<std::int64_t>::max()) ||
+        key.empty() || evaluator.empty()) return false;
+    std::unique_lock lock(mutex_);
+    if (!trusted_knowledge_evaluators_.contains(evaluator) ||
+        attestation.empty() || !knowledge_feedback_verifier_) return false;
+    const KnowledgeFeedbackRequest request{
+        claim_sequence, key, value, evaluator, correct, attestation};
+    try {
+        if (!knowledge_feedback_verifier_(request)) return false;
+    } catch (...) {
+        return false;
+    }
+    const auto history = memory_.all();
+    const auto target = std::find_if(history.begin(), history.end(),
+        [&](const Event& candidate) { return candidate.sequence == claim_sequence; });
+    if (target == history.end() || target->source.empty() ||
+        target->source == evaluator) return false;
+    bool matching_claim = false;
+    if (target->kind == "learning") {
+        const auto* evidence_key = std::get_if<std::string>(
+            target->data.count("evidence_key") ? &target->data.at("evidence_key") : nullptr);
+        const auto evidence_value = target->data.find("evidence_value");
+        matching_claim = evidence_key != nullptr && *evidence_key == key &&
+            evidence_value != target->data.end() && evidence_value->second == value;
+    } else {
+        const auto external = target->data.find("_external_observation");
+        const bool is_external =
+            external != target->data.end() &&
+            std::get_if<bool>(&external->second) != nullptr &&
+            *std::get_if<bool>(&external->second);
+        const bool metadata = key == "_external_observation" || key == "novelty" ||
+            key == "salience" || key == "urgency" || key == "prediction_error" ||
+            key == "outcome" || key == "confidence" || key == "reliability" ||
+            key == "evidence_reliability" || key == "world_step" ||
+            key == "provenance_id" || key == "provenance_attestation";
+        const bool episode_metadata =
+            target->source == "developmental_environment" &&
+            target->kind == "observation" &&
+            (key == "task" || key == "context");
+        const auto fact = target->data.find(key);
+        matching_claim = is_external && !metadata && !episode_metadata &&
+            fact != target->data.end() && fact->second == value;
+    }
+    if (!matching_claim) return false;
+    for (const auto& prior : history) {
+        if (prior.kind != "knowledge_source_feedback" ||
+            prior.sequence <= claim_sequence) continue;
+        const auto sequence_field = prior.data.find("claim_sequence");
+        const auto* prior_sequence = sequence_field == prior.data.end()
+            ? nullptr : std::get_if<std::int64_t>(&sequence_field->second);
+        const auto evaluator_field = prior.data.find("evaluator");
+        const auto* prior_evaluator = evaluator_field == prior.data.end()
+            ? nullptr : std::get_if<std::string>(&evaluator_field->second);
+        const auto key_field = prior.data.find("claim_key");
+        const auto* prior_key = key_field == prior.data.end()
+            ? nullptr : std::get_if<std::string>(&key_field->second);
+        const auto source_field = prior.data.find("claim_source");
+        const auto* prior_source = source_field == prior.data.end()
+            ? nullptr : std::get_if<std::string>(&source_field->second);
+        const auto value_field = prior.data.find("claim_value");
+        const auto attestation_field = prior.data.find("attestation");
+        const auto* prior_attestation = attestation_field == prior.data.end()
+            ? nullptr : std::get_if<std::string>(&attestation_field->second);
+        const auto correct_field = prior.data.find("correct");
+        const auto* prior_correct = correct_field == prior.data.end()
+            ? nullptr : std::get_if<bool>(&correct_field->second);
+        if (prior_sequence == nullptr ||
+            *prior_sequence != static_cast<std::int64_t>(claim_sequence) ||
+            prior_evaluator == nullptr || prior_evaluator->empty() ||
+            prior.source != *prior_evaluator || *prior_evaluator == target->source ||
+            prior_key == nullptr || *prior_key != key ||
+            prior_source == nullptr || *prior_source != target->source ||
+            value_field == prior.data.end() || value_field->second != value ||
+            prior_attestation == nullptr || prior_attestation->empty() ||
+            prior_correct == nullptr ||
+            !trusted_knowledge_evaluators_.contains(*prior_evaluator)) continue;
+        const KnowledgeFeedbackRequest prior_request{
+            claim_sequence, key, value, *prior_evaluator, *prior_correct, *prior_attestation};
+        try {
+            // Any authenticated adjudication for this claim blocks a second
+            // score, regardless of evaluator. Invalid raw records cannot deny
+            // service because their attestations are ignored.
+            if (knowledge_feedback_verifier_ &&
+                knowledge_feedback_verifier_(prior_request)) return false;
+        } catch (...) {
+            // A prior record whose attestation cannot be verified is ignored.
+        }
+    }
+    Event feedback{0, 0, evaluator, "knowledge_source_feedback",
+        {{"claim_sequence", static_cast<std::int64_t>(claim_sequence)},
+         {"claim_source", target->source}, {"claim_key", key},
+         {"claim_value", value}, {"evaluator", evaluator}, {"correct", correct},
+         {"attestation", attestation}}};
+    feedback.sequence = memory_.append(feedback);
+    if (feedback.sequence == 0) return false;
+    replay(feedback);
+    ++state_.events_seen;
+    state_.cycle = feedback.sequence;
+    sync_self_state();
+    return true;
+}
+
 const StrategyParameter* Brain::evolution_parameter(const std::string& key) const noexcept { std::shared_lock lock(mutex_); return evolution_.parameter(key); }
 const KnowledgeMetric* Brain::knowledge_source(const std::string& source) const noexcept { std::shared_lock lock(mutex_); return knowledge_.source_metric(source); }
 const AdaptiveMetric* Brain::learning_metric(const std::string& key) const noexcept { std::shared_lock lock(mutex_); return adaptation_.metric(key); }
@@ -149,6 +256,19 @@ double Brain::learning_confidence(const std::string& key) const noexcept { std::
 AffectiveState Brain::affective_state() const { std::shared_lock lock(mutex_); return affective_state_model_.state(); }
 AffectiveAppraisal Brain::affective_appraisal() const { std::shared_lock lock(mutex_); return affective_learning_model_.appraisal(); }
 std::uint64_t Brain::affective_learning_updates() const { std::shared_lock lock(mutex_); return affective_learning_model_.updates(); }
+std::uint64_t Brain::import_legacy_memory_event(Event event) {
+    // Imported history is passive episodic data, never a route for injecting
+    // Brain control-plane events or replaying untrusted state changes.
+    if (event.kind != "observation" && event.kind != "action_outcome" &&
+        event.kind != "action_attempt") return 0;
+    event.source = "legacy_import";
+    std::unique_lock lock(mutex_);
+    event.sequence = memory_.append(event);
+    if (event.sequence == 0) return 0;
+    ++state_.events_seen;
+    state_.cycle = event.sequence;
+    return event.sequence;
+}
 std::vector<LearnedAssociation> Brain::developmental_associations() const { std::shared_lock lock(mutex_); return developmental_learning_.associations(); }
 std::vector<LearnedStrategy> Brain::developmental_strategies() const { std::shared_lock lock(mutex_); return developmental_learning_.strategies(); }
 const LearnedStrategy* Brain::developmental_best_strategy(const std::string& context) const noexcept { std::shared_lock lock(mutex_); return developmental_learning_.best_strategy(context); }
