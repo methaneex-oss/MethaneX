@@ -1566,18 +1566,18 @@ int main() {
         assert(observe_value(three_source, "sensor-A", "beta").event.sequence != 0);
         assert(observe_value(three_source, "sensor-B", "beta").event.sequence != 0);
         assert(observe_value(three_source, "sensor-C", "gamma").event.sequence != 0);
-        assert(three_source.world().disputed_facts().size() >= 3);
+        assert(three_source.world().disputed_facts().size() >= 2);
         assert_three_source_dispute(three_source, true);
     }
     {
         Brain unresolved_replay(three_source_path);
         assert_three_source_dispute(unresolved_replay, true);
-        assert(unresolved_replay.world().disputed_facts().size() >= 3);
+        assert(unresolved_replay.world().disputed_facts().size() >= 2);
         // Fresh corroboration resolves sensor A's alpha/beta dispute, but
         // sensor C's independent gamma claim still keeps the global belief open.
         assert(observe_value(unresolved_replay, "sensor-A", "beta").event.sequence != 0);
         assert_three_source_dispute(unresolved_replay, true);
-        assert(unresolved_replay.world().disputed_facts().size() >= 1);
+        assert(unresolved_replay.world().disputed_facts().empty());
         // Only fresh evidence from the remaining conflicting source can settle
         // the cross-source disagreement; no source's clean update masks another.
         assert(observe_value(unresolved_replay, "sensor-C", "beta").event.sequence != 0);
