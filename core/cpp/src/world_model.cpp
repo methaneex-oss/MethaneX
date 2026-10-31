@@ -26,15 +26,11 @@ void accumulate_evidence(Fact& accumulated, const Fact& incoming) {
         accumulated.updated_sequence, incoming.updated_sequence);
 }
 
-// This aggregate is a simple evidence score, not a calibrated posterior.
-// It assumes each counted observation is an independent sample with
-// comparable calibration: mean confidence times count equals the sum of
-// per-observation confidence weights. Correlated repeats violate this
-// assumption and can overstate support. Do not interpret the score as
-// Bayesian certainty; a dependence-aware model is a future improvement.
+// Repeated observations from one source are not independent samples.
+// Keep their count for auditability and their mean for quality estimation,
+// but never multiply confidence by repetition count when comparing alternatives.
 long double evidence_weight(const Fact& fact) {
-    return static_cast<long double>(std::clamp(fact.confidence, 0.0, 1.0)) *
-           static_cast<long double>(std::max<std::uint64_t>(1, fact.observations));
+    return static_cast<long double>(std::clamp(fact.confidence, 0.0, 1.0));
 }
 
 void accumulate_evidence(Relation& accumulated, const Relation& incoming) {
@@ -57,10 +53,9 @@ void accumulate_evidence(Relation& accumulated, const Relation& incoming) {
         accumulated.updated_sequence, incoming.updated_sequence);
 }
 
-// Relation support shares the same independence and calibration assumptions.
+// Relation repetition is likewise not independent corroboration.
 long double evidence_weight(const Relation& relation) {
-    return static_cast<long double>(std::clamp(relation.confidence, 0.0, 1.0)) *
-           static_cast<long double>(std::max<std::uint64_t>(1, relation.observations));
+    return static_cast<long double>(std::clamp(relation.confidence, 0.0, 1.0));
 }
 
 } // namespace
@@ -109,13 +104,10 @@ void WorldModel::observe(const Fact& incoming) {
         return candidate.subject == it->subject &&
                candidate.predicate == it->predicate;
     };
-    Fact* winner = &*it;
-    long double strongest = evidence_weight(*winner);
-    std::size_t strongest_count = 1;
     bool has_conflict = false;
     bool has_unsequenced_conflict = false;
     std::uint64_t latest_conflict_sequence = 0;
-    for (auto& candidate : disputed_facts_) {
+    for (const auto& candidate : disputed_facts_) {
         if (!same_fact(candidate)) continue;
         has_conflict = true;
         if (candidate.first_sequence == 0) {
@@ -124,14 +116,6 @@ void WorldModel::observe(const Fact& incoming) {
             latest_conflict_sequence = std::max(
                 latest_conflict_sequence, candidate.first_sequence);
         }
-        const long double weight = evidence_weight(candidate);
-        if (weight > strongest) {
-            strongest = weight;
-            winner = &candidate;
-            strongest_count = 1;
-        } else if (weight == strongest) {
-            ++strongest_count;
-        }
     }
 
     if (!has_conflict) {
@@ -139,23 +123,37 @@ void WorldModel::observe(const Fact& incoming) {
         return;
     }
 
-    // A previously strong value cannot dismiss a new contradiction using
-    // only its pre-conflict history. The winning alternative must be observed
-    // again after the latest competing value was first introduced, and that
-    // latest observation must be at least as reliable as the strongest
-    // competing alternative's accumulated mean reliability.
-    double strongest_competing_confidence = 0.0;
-    for (const auto& candidate : disputed_facts_) {
-        if (same_fact(candidate) && candidate.value != winner->value) {
-            strongest_competing_confidence = std::max(
-                strongest_competing_confidence, candidate.confidence);
+    // A source can revise its own earlier claim, but repeated observations
+    // cannot accumulate artificial support. Resolve only when exactly one
+    // alternative has a fresh post-conflict observation whose reliability is
+    // at least as high as every competing alternative's aggregate mean.
+    Fact* resolving_candidate = nullptr;
+    std::size_t resolving_candidates = 0;
+    const auto consider_candidate = [&](Fact& candidate) {
+        double strongest_competing_confidence = 0.0;
+        const auto consider_competitor = [&](const Fact& competitor) {
+            if (same_fact(competitor) && competitor.value != candidate.value) {
+                strongest_competing_confidence = std::max(
+                    strongest_competing_confidence, competitor.confidence);
+            }
+        };
+        consider_competitor(*it);
+        for (const auto& competitor : disputed_facts_)
+            consider_competitor(competitor);
+        if (candidate.updated_sequence > latest_conflict_sequence &&
+            candidate.latest_evidence_confidence >= strongest_competing_confidence) {
+            resolving_candidate = &candidate;
+            ++resolving_candidates;
         }
+    };
+    consider_candidate(*it);
+    for (auto& candidate : disputed_facts_) {
+        if (same_fact(candidate)) consider_candidate(candidate);
     }
-    if (strongest_count == 1 &&
-        winner->latest_evidence_confidence >= strongest_competing_confidence &&
-        !has_unsequenced_conflict && latest_conflict_sequence != 0 &&
-        winner->updated_sequence > latest_conflict_sequence) {
-        if (winner != &*it) *it = *winner;
+
+    if (resolving_candidates == 1 && resolving_candidate != nullptr &&
+        !has_unsequenced_conflict && latest_conflict_sequence != 0) {
+        if (resolving_candidate != &*it) *it = *resolving_candidate;
         it->disputed = false;
         disputed_facts_.erase(
             std::remove_if(disputed_facts_.begin(), disputed_facts_.end(), same_fact),
