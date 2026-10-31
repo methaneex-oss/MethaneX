@@ -89,9 +89,21 @@ private:
     struct CalibrationOutcome {
         std::uint64_t sequence{0};
         bool correct{false};
+        bool conflicted{false};
     };
 
+    struct CalibrationSequence {
+        std::string source;
+        bool correct{false};
+        bool conflicted{false};
+    };
+
+    void recompute_calibration_metric(const std::string& source);
+
     std::unordered_map<std::string, KnowledgeMetric> sources_;
+    // A persisted event sequence is globally unique. Conflicting reuse must
+    // invalidate the sequence rather than allowing first-writer-wins trust.
+    std::unordered_map<std::uint64_t, CalibrationSequence> calibration_sequences_;
     std::unordered_map<std::string, std::vector<CalibrationOutcome>> calibration_outcomes_;
     std::vector<ClaimEvidence> claims_;
     std::uint64_t next_legacy_calibration_sequence_{1};
