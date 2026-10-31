@@ -1371,8 +1371,15 @@ int main() {
         assert(observe_value("gamma", 0.0).event.sequence != 0);
         contested = multi_value.world().query("multi-value-source", "multi-value");
         assert(contested.has_value() && contested->disputed);
+        assert(observe_value("gamma", 0.7).event.sequence != 0);
+        contested = multi_value.world().query("multi-value-source", "multi-value");
+        assert(contested.has_value() && contested->disputed);
+        // Equal reliability is a tie, not a resolution.
+        assert(observe_value("gamma", 0.8).event.sequence != 0);
+        contested = multi_value.world().query("multi-value-source", "multi-value");
+        assert(contested.has_value() && contested->disputed);
 
-        // Fresh, higher-quality corroboration after the conflict can resolve it.
+        // Strictly stronger fresh evidence after the conflict can resolve it.
         assert(observe_value("gamma", 0.9).event.sequence != 0);
         const auto resolved = multi_value.world().query(
             "multi-value-source", "multi-value");
@@ -1417,6 +1424,16 @@ int main() {
         assert(relations.size() == 3);
         assert(std::all_of(relations.begin(), relations.end(),
             [](const Relation& relation) { return relation.disputed; }));
+        assert(observe_destination("node-c", 0.7).event.sequence != 0);
+        relations = multi_relation.world().relations_from("gateway");
+        assert(relations.size() == 3);
+        assert(std::all_of(relations.begin(), relations.end(),
+            [](const Relation& relation) { return relation.disputed; }));
+        assert(observe_destination("node-c", 0.8).event.sequence != 0);
+        relations = multi_relation.world().relations_from("gateway");
+        assert(relations.size() == 3);
+        assert(std::all_of(relations.begin(), relations.end(),
+            [](const Relation& relation) { return relation.disputed; }));
 
         assert(observe_destination("node-c", 0.9).event.sequence != 0);
         relations = multi_relation.world().relations_from("gateway");
@@ -1435,6 +1452,43 @@ int main() {
     }
     std::filesystem::remove(multi_relation_path, ec);
     std::filesystem::remove(multi_relation_path.string() + ".meta", ec);
+
+    // Repeated reversals require a fresh, strictly stronger observation after
+    // each new conflict; a source cannot settle a tie by repeating an equal value.
+    const auto reversal_path =
+        std::filesystem::temp_directory_path() / "jarvis_repeated_conflict_reversal.bin";
+    std::filesystem::remove(reversal_path, ec);
+    {
+        Brain reversal(reversal_path);
+        const auto observe_reversal = [&](const char* value, double reliability) {
+            return reversal.observe(Event{0, 0, "reversal-source", "observation",
+                {{"reversible-state", std::string(value)},
+                 {"evidence_reliability", reliability}}});
+        };
+        assert(observe_reversal("alpha", 0.8).event.sequence != 0);
+        assert(observe_reversal("beta", 0.9).event.sequence != 0);
+        assert(reversal.world().query("reversal-source", "reversible-state")->disputed);
+        assert(observe_reversal("beta", 0.95).event.sequence != 0);
+        auto resolved = reversal.world().query("reversal-source", "reversible-state");
+        assert(resolved.has_value() && !resolved->disputed);
+        assert(resolved->value == Scalar{std::string("beta")});
+
+        assert(observe_reversal("alpha", 0.9).event.sequence != 0);
+        assert(reversal.world().query("reversal-source", "reversible-state")->disputed);
+        assert(observe_reversal("alpha", 0.99).event.sequence != 0);
+        resolved = reversal.world().query("reversal-source", "reversible-state");
+        assert(resolved.has_value() && !resolved->disputed);
+        assert(resolved->value == Scalar{std::string("alpha")});
+    }
+    {
+        Brain reversal_replay(reversal_path);
+        const auto resolved = reversal_replay.world().query(
+            "reversal-source", "reversible-state");
+        assert(resolved.has_value() && !resolved->disputed);
+        assert(resolved->value == Scalar{std::string("alpha")});
+    }
+    std::filesystem::remove(reversal_path, ec);
+    std::filesystem::remove(reversal_path.string() + ".meta", ec);
 
     // Strategy evidence and episodic fallback must remain coordinated without
     // contaminating the restart/replay fixture above. Seed one durable positive
