@@ -138,7 +138,8 @@ int main() {
     assert(unknown_assessment->status == KnowledgeStatus::provisional);
     assert(unknown_assessment->supporting_sources == 2);
     assert(unknown_assessment->supporting_origins == 0);
-    assert(std::abs(unknown_assessment->evidence_weight - 0.9) < 1e-12);
+    assert(std::abs(unknown_assessment->evidence_weight) < 1e-12);
+    assert(std::abs(unknown_assessment->unverified_evidence_weight - 0.9) < 1e-12);
 
     // A source that first reports without provenance and later supplies a
     // verified origin must not count its own history twice.
