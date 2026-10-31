@@ -89,7 +89,9 @@ struct FeatureStrategyEstimate {
 class DevelopmentalLearning {
 public:
     void observe_association(std::string left, std::string right, const LearningSignal& signal);
-    void observe_strategy(std::string context, std::string action, const LearningSignal& signal);
+    void observe_strategy(std::string context, std::string action,
+                          const LearningSignal& signal,
+                          bool update_feature_model = true);
 
     std::vector<LearnedAssociation> associations() const;
     std::vector<LearnedStrategy> strategies() const;
