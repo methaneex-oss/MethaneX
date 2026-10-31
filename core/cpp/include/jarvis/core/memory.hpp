@@ -26,6 +26,7 @@ struct MemoryRecord {
     MemoryTier tier{MemoryTier::Episodic};
     double salience{0.5};
     double confidence{0.5};
+    double consolidation{0.0};
 };
 
 // Memory is continuity. Tier selection, salience and retrieval are learned
@@ -48,6 +49,7 @@ public:
     std::vector<MemoryRecord> recall_ranked(const Attributes& query, std::size_t limit = 8) const;
     std::vector<MemoryRecord> salient(std::size_t limit = 8, MemoryTier tier = MemoryTier::Episodic) const;
     bool promote(std::uint64_t sequence, MemoryTier tier, double salience, double confidence);
+    bool consolidate(std::uint64_t sequence, double salience, double novelty, double error, double confidence);
     bool forget_working(std::size_t keep = 0);
 
     std::size_t size() const noexcept;
