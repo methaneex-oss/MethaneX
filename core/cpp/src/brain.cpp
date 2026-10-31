@@ -337,6 +337,9 @@ bool Brain::valid_affective_learning_source(const Event& event) const {
 }
 
 void Brain::replay(const Event& event, bool external_observation) {
+    // Imported legacy events remain passive episodic records. They may support
+    // recall, but must not be replayed as trusted state transitions or learning.
+    if (event.source == "legacy_import") return;
     // Evolution lifecycle events are written only by Brain's trusted APIs.
     // A journal entry carrying another source must never reconstruct trusted
     // evaluation or adoption state.
