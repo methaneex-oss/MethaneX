@@ -326,7 +326,9 @@ void DevelopmentalLearning::observe_association(std::string left, std::string ri
     ++association.observations;
 }
 
-void DevelopmentalLearning::observe_strategy(std::string context, std::string action, const LearningSignal& signal) {
+void DevelopmentalLearning::observe_strategy(std::string context, std::string action,
+                                                const LearningSignal& signal,
+                                                bool update_feature_model) {
     if (context.empty() || action.empty()) return;
     const double rate = learning_rate(signal);
     if (rate <= 0.0) return;
@@ -356,7 +358,9 @@ void DevelopmentalLearning::observe_strategy(std::string context, std::string ac
     // the complete context string. A small online linear model per action lets
     // later decisions combine previously experienced factors in a novel
     // configuration instead of selecting only the nearest stored context.
-    const auto features = context_feature_pairs(strategy.context);
+    const auto features = update_feature_model
+        ? context_feature_pairs(strategy.context)
+        : std::vector<std::pair<std::string, std::string>>{};
     if (!features.empty()) {
         auto& model = feature_strategy_models_[strategy.action];
         double prediction = model.bias;
