@@ -514,7 +514,7 @@ FeatureStrategyEstimate DevelopmentalLearning::feature_strategy_estimate(
     // Confidence is limited by the least-supported feature in the current
     // combination, not by unrelated observations of the same action.
     const double support = std::min(
-        1.0, static_cast<double>(minimum_feature_observations) / 3.0);
+        1.0, static_cast<double>(minimum_feature_observations) / 4.0);
     estimate.confidence = std::clamp(coverage * support, 0.0, 1.0);
     return estimate;
 }
