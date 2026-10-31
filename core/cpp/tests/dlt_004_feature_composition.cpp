@@ -177,6 +177,14 @@ void run_seed(std::uint64_t seed) {
                                      "/source/camera");
         assert(brain.developmental_feature_strategy_estimate(
             cross_source_context, poor_action).matched_features == 0);
+        auto cross_goal_context = held_out;
+        const auto goal_marker = cross_goal_context.find("/goal/dlt-004-feature-composition-goal");
+        assert(goal_marker != std::string::npos);
+        cross_goal_context.replace(goal_marker,
+            std::string("/goal/dlt-004-feature-composition-goal").size(),
+            "/goal/unrelated-goal");
+        assert(brain.developmental_feature_strategy_estimate(
+            cross_goal_context, poor_action).matched_features == 0);
         assert((poor_action == "route-one" ? route_one.value : route_two.value) >
                (poor_action == "route-one" ? route_two.value : route_one.value));
         assert(selected_action(brain, "open", "poor", "rough") == poor_action);
