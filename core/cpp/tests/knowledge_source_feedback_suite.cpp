@@ -30,17 +30,28 @@ int main() {
                     request.claim_sequence, request.key, *value,
                     request.evaluator, request.correct);
         };
+    const KnowledgeProvenanceVerifier provenance_verifier =
+        [](const KnowledgeProvenanceRequest& request) {
+            return request.attestation == "source-origin:" + request.source + ":" +
+                       request.provenance_id;
+        };
     std::uint64_t claim_sequence = 0;
     double observation_quality = 0.0;
     {
         Brain brain(journal,
-            {"independent-reviewer", "second-reviewer", "third-reviewer", "sensor-a"}, verifier);
+            {"independent-reviewer", "second-reviewer", "third-reviewer", "sensor-a"},
+            verifier, provenance_verifier);
         const auto observed = brain.observe(Event{0, 0, "sensor-a", "observation",
-            {{"temperature", Scalar{20.0}}, {"humidity", Scalar{50.0}}, {"reliability", Scalar{0.99}}}});
+            {{"temperature", Scalar{20.0}}, {"humidity", Scalar{50.0}},
+             {"reliability", Scalar{0.99}},
+             {"provenance_id", Scalar{std::string("origin-a")}},
+             {"provenance_attestation", Scalar{std::string("source-origin:sensor-a:origin-a")}}}});
         claim_sequence = observed.event.sequence;
         assert(claim_sequence != 0);
         assert(brain.observe(Event{0, 0, "sensor-b", "observation",
-            {{"temperature", Scalar{25.0}}}}).event.sequence != 0);
+            {{"temperature", Scalar{25.0}},
+             {"provenance_id", Scalar{std::string("origin-b")}},
+             {"provenance_attestation", Scalar{std::string("source-origin:sensor-b:origin-b")}}}}).event.sequence != 0);
 
         // Developmental task/context labels describe the episode rather than
         // world claims. They must not be eligible for source calibration.
@@ -60,6 +71,8 @@ int main() {
         assert(baseline_assessment.has_value());
         const double baseline_weight = baseline_assessment->evidence_weight;
         assert(baseline_assessment->status == KnowledgeStatus::disputed);
+        assert(baseline_assessment->supporting_origins == 1);
+        assert(baseline_assessment->conflicting_origins == 1);
         const auto forged = brain.observe(Event{0, 0, "external-reviewer",
             "knowledge_source_feedback",
             {{"claim_sequence", Scalar{static_cast<std::int64_t>(claim_sequence)}},
@@ -162,12 +175,14 @@ int main() {
         const auto calibrated_assessment = brain.knowledge_assessment("temperature");
         assert(calibrated_assessment.has_value());
         assert(calibrated_assessment->status == KnowledgeStatus::disputed);
+        assert(calibrated_assessment->supporting_origins == 1);
         assert(calibrated_assessment->evidence_weight > baseline_weight);
     }
 
     {
         Brain restored(journal,
-            {"independent-reviewer", "second-reviewer", "third-reviewer", "sensor-a"}, verifier);
+            {"independent-reviewer", "second-reviewer", "third-reviewer", "sensor-a"},
+            verifier, provenance_verifier);
         const auto* metric = restored.knowledge_source("sensor-a");
         assert(metric != nullptr);
         assert(metric->calibration_observations == 3);
@@ -177,7 +192,8 @@ int main() {
         const auto restored_assessment = restored.knowledge_assessment("temperature");
         assert(restored_assessment.has_value());
         assert(restored_assessment->status == KnowledgeStatus::disputed);
-        assert(restored_assessment->evidence_weight > 0.7);
+        assert(restored_assessment->supporting_origins == 1);
+        assert(restored_assessment->evidence_weight > baseline_weight);
         assert(!restored.record_knowledge_source_feedback(
             claim_sequence, "temperature", Scalar{20.0},
             "independent-reviewer", false, feedback_attestation(claim_sequence, "temperature", 20.0, "independent-reviewer", false)));
@@ -190,6 +206,12 @@ int main() {
         const auto* metric = untrusted_restore.knowledge_source("sensor-a");
         assert(metric != nullptr);
         assert(metric->calibration_observations == 0);
+        const auto untrusted_assessment =
+            untrusted_restore.knowledge_assessment("temperature");
+        assert(untrusted_assessment.has_value());
+        assert(untrusted_assessment->supporting_origins == 0);
+        assert(std::abs(untrusted_assessment->evidence_weight) < 1e-12);
+        assert(untrusted_assessment->unverified_evidence_weight > 0.7);
         assert(!untrusted_restore.record_knowledge_source_feedback(
             claim_sequence, "temperature", Scalar{20.0},
             "independent-reviewer", true));
