@@ -154,7 +154,7 @@ int main() {
 
     {
         Brain restored(journal,
-            {"independent-reviewer", "second-reviewer", "third-reviewer"}, verifier);
+            {"independent-reviewer", "second-reviewer", "third-reviewer", "sensor-a"}, verifier);
         const auto* metric = restored.knowledge_source("sensor-a");
         assert(metric != nullptr);
         assert(metric->calibration_observations == 3);
