@@ -150,6 +150,7 @@ bool Brain::record_knowledge_source_feedback(
             std::numeric_limits<std::int64_t>::max()) ||
         key.empty() || evaluator.empty()) return false;
     std::unique_lock lock(mutex_);
+    if (!trusted_knowledge_evaluators_.contains(evaluator)) return false;
     const auto history = memory_.all();
     const auto target = std::find_if(history.begin(), history.end(),
         [&](const Event& candidate) { return candidate.sequence == claim_sequence; });
