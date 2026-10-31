@@ -16,7 +16,7 @@ int main() {
     std::uint64_t claim_sequence = 0;
     double observation_quality = 0.0;
     {
-        Brain brain(journal);
+        Brain brain(journal, {"independent-reviewer", "second-reviewer", "third-reviewer"});
         const auto observed = brain.observe(Event{0, 0, "sensor-a", "observation",
             {{"temperature", Scalar{20.0}}, {"humidity", Scalar{50.0}}, {"reliability", Scalar{0.99}}}});
         claim_sequence = observed.event.sequence;
@@ -45,6 +45,8 @@ int main() {
 
         assert(!brain.record_knowledge_source_feedback(
             claim_sequence, "temperature", Scalar{20.0}, "sensor-a", true));
+        assert(!brain.record_knowledge_source_feedback(
+            claim_sequence, "temperature", Scalar{20.0}, "untrusted-reviewer", true));
         assert(!brain.record_knowledge_source_feedback(
             claim_sequence, "temperature", Scalar{21.0}, "independent-reviewer", true));
         assert(!brain.record_knowledge_source_feedback(
@@ -82,7 +84,7 @@ int main() {
     }
 
     {
-        Brain restored(journal);
+        Brain restored(journal, {"independent-reviewer", "second-reviewer", "third-reviewer"});
         const auto* metric = restored.knowledge_source("sensor-a");
         assert(metric != nullptr);
         assert(metric->calibration_observations == 4);
