@@ -374,6 +374,9 @@ void DevelopmentalLearning::observe_strategy(std::string context, std::string ac
             auto& weight = model.weights[key];
             weight = bounded(weight + step * error / normalization);
             ++model.feature_observations[key];
+            auto& supporting_contexts = model.feature_contexts[key];
+            if (supporting_contexts.size() < 3)
+                supporting_contexts.insert(strategy.context);
         }
         ++model.observations;
     }
@@ -494,27 +497,27 @@ FeatureStrategyEstimate DevelopmentalLearning::feature_strategy_estimate(
     const auto& model = model_it->second;
     estimate.observations = model.observations;
     double prediction = model.bias;
-    std::uint64_t minimum_feature_observations =
-        std::numeric_limits<std::uint64_t>::max();
+    std::size_t minimum_independent_contexts =
+        std::numeric_limits<std::size_t>::max();
     for (const auto& [label, value] : features) {
         const auto key = feature_strategy_key(label, value);
         const auto weight = model.weights.find(key);
-        const auto observations = model.feature_observations.find(key);
+        const auto contexts = model.feature_contexts.find(key);
         if (weight == model.weights.end() ||
-            observations == model.feature_observations.end()) continue;
+            contexts == model.feature_contexts.end()) continue;
         prediction += weight->second;
         ++estimate.matched_features;
-        minimum_feature_observations = std::min(
-            minimum_feature_observations, observations->second);
+        minimum_independent_contexts = std::min(
+            minimum_independent_contexts, contexts->second.size());
     }
     if (estimate.matched_features == 0) return estimate;
     estimate.value = bounded(prediction);
     const double coverage = static_cast<double>(estimate.matched_features) /
                             static_cast<double>(estimate.feature_count);
-    // Confidence is limited by the least-supported feature in the current
-    // combination, not by unrelated observations of the same action.
+    // Confidence is limited by the least-supported feature across distinct
+    // full contexts. Repeating the same situation cannot inflate support.
     const double support = std::min(
-        1.0, static_cast<double>(minimum_feature_observations) / 4.0);
+        1.0, static_cast<double>(minimum_independent_contexts) / 3.0);
     estimate.confidence = std::clamp(coverage * support, 0.0, 1.0);
     return estimate;
 }
