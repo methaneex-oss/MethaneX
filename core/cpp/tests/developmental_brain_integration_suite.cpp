@@ -1289,7 +1289,7 @@ int main() {
         assert_global_dispute(cross_source, true);
 
         assert(cross_source.observe(Event{0, 4, "source-a", "observation",
-            {{"shared-fact", std::string("Y")}, {"evidence_reliability", 0.8}}}).event.sequence != 0);
+            {{"shared-fact", std::string("Y")}, {"evidence_reliability", 0.9}}}).event.sequence != 0);
         assert_global_dispute(cross_source, false);
     }
     {
@@ -1319,7 +1319,7 @@ int main() {
         const auto a = reverse_cross_source.world().query("source-a", "shared-fact");
         assert(a.has_value() && a->disputed);
         assert(reverse_cross_source.observe(Event{0, 4, "source-a", "observation",
-            {{"shared-fact", std::string("Y")}, {"evidence_reliability", 0.8}}}).event.sequence != 0);
+            {{"shared-fact", std::string("Y")}, {"evidence_reliability", 0.9}}}).event.sequence != 0);
         assert_global_dispute(reverse_cross_source, false);
     }
     {
