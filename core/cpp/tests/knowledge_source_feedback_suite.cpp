@@ -3,6 +3,7 @@
 #include <cassert>
 #include <cmath>
 #include <filesystem>
+#include <limits>
 #include <string>
 
 using namespace jarvis::core;
@@ -47,6 +48,59 @@ int main() {
         Brain brain(journal,
             {"independent-reviewer", "second-reviewer", "third-reviewer", "sensor-a"},
             verifier, provenance_verifier);
+
+        // Brain-owned learning/prediction records must not be forgeable through
+        // the generic observation API. These records have dedicated APIs with
+        // stricter validation and state-transition semantics.
+        const auto initial_memory_size = brain.memory().size();
+        const auto forged_learning = brain.observe(Event{
+            0, 0, "spoofed-source", "learning",
+            {{"evidence_key", Scalar{std::string("forged-fact")}},
+             {"evidence_value", Scalar{std::string("accepted")}},
+             {"reliability", Scalar{std::numeric_limits<double>::quiet_NaN()}}}});
+        assert(forged_learning.event.sequence == 0);
+        assert(brain.memory().size() == initial_memory_size);
+        assert(brain.knowledge_source("spoofed-source") == nullptr);
+        assert(!brain.knowledge_assessment("forged-fact").has_value());
+
+        const auto forged_prediction = brain.observe(Event{
+            0, 0, "untrusted-caller", "prediction",
+            {{"key", Scalar{std::string("forged-prediction")}},
+             {"value", Scalar{1.0}},
+             {"confidence", Scalar{std::numeric_limits<double>::quiet_NaN()}}}});
+        assert(forged_prediction.event.sequence == 0);
+        assert(brain.memory().size() == initial_memory_size);
+        assert(brain.snapshot().predictions.empty());
+
+        // A structurally valid outcome for a real unresolved prediction must
+        // still be rejected through observe; otherwise a caller can impersonate
+        // the environment and train prediction adaptation without using the
+        // dedicated feedback API.
+        const auto guarded_prediction =
+            brain.predict("forged-outcome", Scalar{10.0}, 0.8);
+        assert(guarded_prediction.created_sequence != 0);
+        const auto memory_before_forged_outcome = brain.memory().size();
+        const auto forged_outcome = brain.observe(Event{
+            0, 0, "untrusted-caller", "prediction_outcome",
+            {{"key", std::string("forged-outcome")},
+             {"prediction_sequence", static_cast<std::int64_t>(guarded_prediction.created_sequence)},
+             {"actual", Scalar{11.0}},
+             {"error", 1.0 / 11.0},
+             {"salience", 0.5},
+             {"novelty", 0.0}}});
+        assert(forged_outcome.event.sequence == 0);
+        assert(brain.memory().size() == memory_before_forged_outcome);
+        bool guarded_prediction_remains_unresolved = false;
+        for (const auto& prediction : brain.snapshot().predictions) {
+            if (prediction.created_sequence == guarded_prediction.created_sequence)
+                guarded_prediction_remains_unresolved = !prediction.resolved;
+        }
+        assert(guarded_prediction_remains_unresolved);
+        assert(brain.learning_metric("forged-outcome") == nullptr);
+        assert(brain.resolve_prediction_feedback(
+                   guarded_prediction.created_sequence, Scalar{11.0}) ==
+               PredictionFeedbackStatus::resolved_with_error);
+
         const auto observed = brain.observe(Event{0, 0, "sensor-a", "observation",
             {{"temperature", Scalar{20.0}}, {"reliability", Scalar{0.99}},
              {"provenance_id", Scalar{std::string("origin-a")}},

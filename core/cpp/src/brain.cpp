@@ -1112,19 +1112,17 @@ Observation Brain::observe(Event event) {
     // them through public observation would let callers impersonate the trusted
     // evaluator and bypass the experiment/adoption workflow.
     if (event.kind.rfind("evolution_", 0) == 0) return Observation{};
-    // Source calibration feedback must enter through the validated adjudication
-    // API below, never through the general external-experience interface.
-    if (event.kind == "knowledge_source_feedback") return Observation{};
+    // Brain-owned state-transition records must enter through their
+    // validated APIs. Accepting them as observations bypasses API-specific
+    // validation (for example, Brain::learn rejects non-finite reliability,
+    // while the generic replay path historically treated "learning" as an
+    // internal event and skipped common observation validation).
+    if (event.kind == "knowledge_source_feedback" ||
+        event.kind == "learning" ||
+        event.kind == "prediction" ||
+        event.kind == "prediction_outcome") return Observation{};
     if (!is_internal_brain_event(event.kind) && !valid_observation_event(event))
         return Observation{};
-    if (event.kind == "prediction_outcome") {
-        const auto sequence = integer_value(event.data, "prediction_sequence", 0);
-        const auto* key = string_value(event.data, "key");
-        const Prediction* prediction = sequence != 0
-            ? find_prediction(sequence)
-            : (key == nullptr ? nullptr : find_latest_unresolved_prediction(*key));
-        if (!valid_prediction_outcome_event(event, prediction)) return Observation{};
-    }
     if (event.kind == "action_outcome" &&
         !valid_action_outcome_event(event)) return Observation{};
     if (event.kind == "affective_learning" &&
