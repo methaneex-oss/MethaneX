@@ -183,7 +183,7 @@ int main() {
         assert(source.adopt_evolution_experiment(adopted_b));
     }
     {
-        Memory journal(mismatched_rollback_path);
+        Memory journal(256, mismatched_rollback_path);
         Event mismatched_rollback{
             0, 0, "brain", "evolution_rollback",
             {{"key", std::string("rollback.target.b")},
