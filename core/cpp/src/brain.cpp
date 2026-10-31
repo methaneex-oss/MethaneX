@@ -1112,9 +1112,15 @@ Observation Brain::observe(Event event) {
     // them through public observation would let callers impersonate the trusted
     // evaluator and bypass the experiment/adoption workflow.
     if (event.kind.rfind("evolution_", 0) == 0) return Observation{};
-    // Source calibration feedback must enter through the validated adjudication
-    // API below, never through the general external-experience interface.
-    if (event.kind == "knowledge_source_feedback") return Observation{};
+    // Brain-owned state-transition records must enter through their
+    // validated APIs. Accepting them as observations bypasses API-specific
+    // validation (for example, Brain::learn rejects non-finite reliability,
+    // while the generic replay path historically treated "learning" as an
+    // internal event and skipped common observation validation).
+    if (event.kind == "knowledge_source_feedback" ||
+        event.kind == "learning" ||
+        event.kind == "prediction" ||
+        event.kind == "prediction_outcome") return Observation{};
     if (!is_internal_brain_event(event.kind) && !valid_observation_event(event))
         return Observation{};
     if (event.kind == "prediction_outcome") {
