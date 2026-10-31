@@ -16,6 +16,9 @@ struct KnowledgeEvidence {
     std::string key;
     Scalar value;
     double reliability{0.5};
+    // Host-verified identity of the underlying evidence origin. Empty means
+    // provenance is unknown and must not count as independent corroboration.
+    std::string provenance_id;
 };
 
 struct KnowledgeMetric {
@@ -42,6 +45,8 @@ struct KnowledgeAssessment {
     std::size_t conflicting_sources{0};
     std::size_t observations{0};
     double evidence_weight{0.0};
+    std::size_t supporting_origins{0};
+    std::size_t conflicting_origins{0};
 };
 
 class KnowledgeModel {
@@ -60,6 +65,7 @@ private:
         Scalar value;
         std::size_t observations{0};
         double observation_quality{0.5};
+        std::string provenance_id;
     };
 
     std::unordered_map<std::string, KnowledgeMetric> sources_;
