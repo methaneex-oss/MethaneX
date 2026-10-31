@@ -57,10 +57,9 @@ struct KnowledgeAssessment {
 };
 
 struct KnowledgeCalibrationPolicy {
-    // Calibration is disabled unless the embedding host explicitly configures
-    // a non-zero event-age horizon. This avoids treating lifetime outcomes as
-    // permanently current by default.
-    std::size_t minimum_observations{3};
+    // Both fields must be explicitly configured by the embedding host.
+    // Zero in either field disables calibrated weighting by default.
+    std::size_t minimum_observations{0};
     std::uint64_t maximum_age_events{0};
 };
 
