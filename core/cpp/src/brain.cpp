@@ -14,7 +14,17 @@ std::uint64_t now_ns() noexcept { return static_cast<std::uint64_t>(std::chrono:
 const std::string* string_value(const Attributes& data, const std::string& key) { const auto it = data.find(key); return it == data.end() ? nullptr : std::get_if<std::string>(&it->second); }
 double double_value(const Attributes& data, const std::string& key, double fallback = 0.0) { const auto it = data.find(key); if (it == data.end()) return fallback; if (const auto value = std::get_if<double>(&it->second)) return *value; if (const auto value = std::get_if<std::int64_t>(&it->second)) return static_cast<double>(*value); return fallback; }
 
+bool finite_event_values(const Event& event) {
+    for (const auto& [key, value] : event.data) {
+        (void)key;
+        if (const auto* number = std::get_if<double>(&value);
+            number != nullptr && !std::isfinite(*number)) return false;
+    }
+    return true;
+}
+
 bool valid_observation_event(const Event& event) {
+    if (!finite_event_values(event)) return false;
     const auto valid_unit = [&](const char* name) {
         const auto field = event.data.find(name);
         if (field == event.data.end()) return true;
@@ -456,6 +466,9 @@ void Brain::replay(const Event& event, bool external_observation) {
     // records mutate beliefs, calibration, affect, or developmental strategies
     // when a Brain is reconstructed after restart.
     if (event.source == "legacy_import") return;
+    // Reject non-finite numeric payloads before any internal or external event
+    // can mutate cognitive state during live processing or journal replay.
+    if (!finite_event_values(event)) return;
     // Evolution lifecycle records must be Brain-authored. A forged journal
     // entry from an external source cannot reconstruct trusted evaluation,
     // adoption, rollback, or parameter state.
@@ -1110,6 +1123,7 @@ void Brain::replay(const Event& event, bool external_observation) {
 }
 Observation Brain::observe(Event event) {
     std::unique_lock lock(mutex_);
+    if (!finite_event_values(event)) return Observation{};
     // Internal evolution lifecycle records are control-plane state. Accepting
     // them through public observation would let callers impersonate the trusted
     // evaluator and bypass the experiment/adoption workflow.
@@ -1155,6 +1169,8 @@ double Brain::learn(const Evidence& evidence) {
     std::unique_lock lock(mutex_);
     if (evidence.key.empty() || evidence.source.empty() ||
         !std::isfinite(evidence.reliability)) return 0.0;
+    if (const auto* value = std::get_if<double>(&evidence.value);
+        value != nullptr && !std::isfinite(*value)) return 0.0;
 
     const double reliability = std::clamp(evidence.reliability, 0.0, 1.0);
     const auto history = memory_.recent(256);
