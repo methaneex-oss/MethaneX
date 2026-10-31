@@ -574,3 +574,33 @@ These are not cosmetic documentation tasks. The first four require explicit host
 - Keep Priority Two planning/action-selection integration deferred as required by the priority order.
 
 **Disposition: Priority One remains OPEN and is not eligible for acceptance at this checkpoint.** The implementation line has progressed, but the remaining host trust, ground-truth, storage-integrity, calibration-policy, and independent-review gates are real blockers. Do not merge or mark any stacked PR ready without independent clearance and owner authorization.
+
+
+## 19. Deployment topology decision — 2026-10-31
+
+The project owner has specified the intended operating model:
+
+- **Online mode:** the Brain will run on a server that can be accessed remotely over a network.
+- **Offline mode:** the Brain must also be runnable from a normal terminal without network access, including for training.
+
+This is a dual-mode deployment requirement, not permission to make the online server a mandatory dependency. The offline terminal must be able to execute the same core cognitive mechanisms and retain local experience/training state without reaching an external API or remote service.
+
+### Architectural consequences
+
+1. **One cognitive core, multiple hosts:** keep cognitive state transitions and learning semantics in the shared Brain core. Server and terminal hosts must not develop separate or divergent learning implementations.
+2. **Explicit host adapters:** define narrow host interfaces for process lifecycle, configuration, storage, key/trust services, and optional remote access. Do not let network transport become a hidden dependency of cognition.
+3. **Offline-first operation:** observations, training episodes, memory writes, replay, and local evaluation must work with networking disabled. Network loss must not silently discard experience or alter learning semantics.
+4. **Controlled synchronization:** online/offline synchronization must exchange versioned, authenticated, provenance-preserving event or training packages. Do not blindly concatenate two mutable journals or silently resolve conflicting histories by last-writer-wins. Define identity, origin, sequence namespace, replay rules, duplicate handling, conflict adjudication, and rollback policy before enabling synchronization.
+5. **Trust boundary per installation:** evaluator credentials, provenance verification, encryption/signing keys, and monotonic integrity anchors must be provisioned and verified by the host installation. A remote server must not automatically be trusted as ground truth merely because it is reachable.
+6. **Reproducible training:** record Brain build/version, mechanism/configuration versions, training inputs, source/evaluator provenance, random seeds where applicable, and resulting state/checkpoint identifiers so an offline training run can be audited and compared with a server run.
+7. **No premature platform lock-in:** the owner has not yet specified server OS, terminal OS, hardware-backed key availability, or whether local and server instances share one identity. Keep these as explicit deployment decisions; do not silently assume Linux, Windows, TPM, HSM, or cloud-vendor services.
+
+### Decisions still required before production host implementation
+
+- Server operating system and deployment model (service/container/native process).
+- Offline terminal operating system(s) and whether the same machine may switch between online and offline modes.
+- Whether offline training is performed on the same Brain identity as the server, or on a separately identified training instance whose signed results are later imported.
+- Whether and how experiences/checkpoints are synchronized; synchronization must be an explicit controlled workflow, not an implicit filesystem copy.
+- Available protected key storage on each target (hardware-backed where available, with a documented software fallback threat model where not).
+
+**Interpretation:** implement and test the Brain so that network access is optional for cognition and local training. The server is a deployment/access host, not the source of intelligence; the terminal is a first-class execution/training environment, not a reduced demo mode.
