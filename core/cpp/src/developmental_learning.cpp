@@ -121,6 +121,51 @@ std::vector<std::string> context_path_values(const std::string& context) {
     return values;
 }
 
+std::vector<std::pair<std::string, std::string>> context_feature_pairs(
+    const std::string& context) {
+    const auto features = context.find("/features/");
+    const auto values_marker = context_values_marker(context);
+    if (features == std::string::npos || values_marker == std::string::npos ||
+        values_marker <= features + 10) return {};
+
+    std::vector<std::string> labels;
+    const std::size_t labels_start = features + 10;
+    std::size_t start = labels_start;
+    while (start < values_marker) {
+        const auto separator = context.find('/', start);
+        const auto end = separator == std::string::npos || separator > values_marker
+            ? values_marker : separator;
+        if (end == start) return {};
+        labels.push_back(context.substr(start, end - start));
+        if (end == values_marker) break;
+        start = end + 1;
+    }
+
+    const auto values = context_path_values(context);
+    if (labels.empty() || labels.size() != values.size()) return {};
+    std::vector<std::pair<std::string, std::string>> result;
+    result.reserve(labels.size());
+    for (std::size_t i = 0; i < labels.size(); ++i)
+        result.emplace_back(labels[i], values[i]);
+    return result;
+}
+
+std::string feature_strategy_key(const std::string& label,
+                                 const std::string& value) {
+    return label + '\x1e' + value;
+}
+
+std::string feature_schema_key(const std::string& context) {
+    const auto marker = context_values_marker(context);
+    return marker == std::string::npos ? std::string{} : context.substr(0, marker);
+}
+
+std::string feature_model_key(const std::string& action,
+                              const std::string& context) {
+    const auto schema = feature_schema_key(context);
+    return schema.empty() ? std::string{} : action + '\x1f' + schema;
+}
+
 double inferred_value_similarity(const std::string& left, const std::string& right) {
     if (left == right) return 1.0;
 
@@ -292,7 +337,9 @@ void DevelopmentalLearning::observe_association(std::string left, std::string ri
     ++association.observations;
 }
 
-void DevelopmentalLearning::observe_strategy(std::string context, std::string action, const LearningSignal& signal) {
+void DevelopmentalLearning::observe_strategy(std::string context, std::string action,
+                                                const LearningSignal& signal,
+                                                bool update_feature_model) {
     if (context.empty() || action.empty()) return;
     const double rate = learning_rate(signal);
     if (rate <= 0.0) return;
@@ -317,6 +364,38 @@ void DevelopmentalLearning::observe_strategy(std::string context, std::string ac
         strategy.confidence = std::clamp(strategy.confidence + rate * (1.0 - strategy.confidence), 0.0, 1.0);
     }
     ++strategy.uses;
+
+    // Learn the contribution of each observed feature-value independently of
+    // the complete context string. A small online linear model per action lets
+    // later decisions combine previously experienced factors in a novel
+    // configuration instead of selecting only the nearest stored context.
+    const auto features = update_feature_model
+        ? context_feature_pairs(strategy.context)
+        : std::vector<std::pair<std::string, std::string>>{};
+    const auto model_key = feature_model_key(strategy.action, strategy.context);
+    if (!features.empty() && !model_key.empty()) {
+        auto& model = feature_strategy_models_[model_key];
+        double prediction = model.bias;
+        for (const auto& [label, value] : features) {
+            const auto weight = model.weights.find(feature_strategy_key(label, value));
+            if (weight != model.weights.end()) prediction += weight->second;
+        }
+        prediction = bounded(prediction);
+        const double error = target - prediction;
+        const double step = std::clamp(rate * 0.4, 0.02, 0.25);
+        const double normalization = std::sqrt(static_cast<double>(features.size()));
+        model.bias = bounded(model.bias + step * error * 0.2);
+        for (const auto& [label, value] : features) {
+            const auto key = feature_strategy_key(label, value);
+            auto& weight = model.weights[key];
+            weight = bounded(weight + step * error / normalization);
+            ++model.feature_observations[key];
+            auto& supporting_contexts = model.feature_contexts[key];
+            if (supporting_contexts.size() < 3)
+                supporting_contexts.insert(strategy.context);
+        }
+        ++model.observations;
+    }
 }
 
 std::vector<LearnedAssociation> DevelopmentalLearning::associations() const {
@@ -419,6 +498,46 @@ std::vector<RelatedLearnedStrategy> DevelopmentalLearning::related_strategies(
         return left.strategy.action < right.strategy.action;
     });
     return result;
+}
+
+FeatureStrategyEstimate DevelopmentalLearning::feature_strategy_estimate(
+    const std::string& context, const std::string& action) const {
+    FeatureStrategyEstimate estimate;
+    if (context.empty() || action.empty()) return estimate;
+    const auto features = context_feature_pairs(context);
+    if (features.empty()) return estimate;
+    estimate.feature_count = features.size();
+
+    const auto model_key = feature_model_key(action, context);
+    if (model_key.empty()) return estimate;
+    const auto model_it = feature_strategy_models_.find(model_key);
+    if (model_it == feature_strategy_models_.end()) return estimate;
+    const auto& model = model_it->second;
+    estimate.observations = model.observations;
+    double prediction = model.bias;
+    std::size_t minimum_independent_contexts =
+        std::numeric_limits<std::size_t>::max();
+    for (const auto& [label, value] : features) {
+        const auto key = feature_strategy_key(label, value);
+        const auto weight = model.weights.find(key);
+        const auto contexts = model.feature_contexts.find(key);
+        if (weight == model.weights.end() ||
+            contexts == model.feature_contexts.end()) continue;
+        prediction += weight->second;
+        ++estimate.matched_features;
+        minimum_independent_contexts = std::min(
+            minimum_independent_contexts, contexts->second.size());
+    }
+    if (estimate.matched_features == 0) return estimate;
+    estimate.value = bounded(prediction);
+    const double coverage = static_cast<double>(estimate.matched_features) /
+                            static_cast<double>(estimate.feature_count);
+    // Confidence is limited by the least-supported feature across distinct
+    // full contexts. Repeating the same situation cannot inflate support.
+    const double support = std::min(
+        1.0, static_cast<double>(minimum_independent_contexts) / 3.0);
+    estimate.confidence = std::clamp(coverage * support, 0.0, 1.0);
+    return estimate;
 }
 
 void DevelopmentalLearning::consolidate(double retention_threshold) {
