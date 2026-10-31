@@ -337,6 +337,13 @@ bool Brain::valid_affective_learning_source(const Event& event) const {
 }
 
 void Brain::replay(const Event& event, bool external_observation) {
+    // Imported legacy events remain passive episodic records. They may support
+    // recall, but must not be replayed as trusted state transitions or learning.
+    if (event.source == "legacy_import") return;
+    // Evolution lifecycle events are written only by Brain's trusted APIs.
+    // A journal entry carrying another source must never reconstruct trusted
+    // evaluation or adoption state.
+    if (event.kind.rfind("evolution_", 0) == 0 && event.source != "brain") return;
     state_.cycle = std::max(state_.cycle, event.sequence);
 
     // Validate prediction feedback before any subsystem mutates. Otherwise a
@@ -497,26 +504,48 @@ void Brain::replay(const Event& event, bool external_observation) {
     if (event.kind == "evolution_evaluated") {
         const auto* id = string_value(event.data, "experiment_id");
         const auto* key = string_value(event.data, "key");
-        if (id != nullptr && key != nullptr) {
+        const auto finite_number = [&](const char* name) {
+            const auto it = event.data.find(name);
+            if (it == event.data.end()) return false;
+            if (const auto* value = std::get_if<double>(&it->second))
+                return std::isfinite(*value);
+            return std::get_if<std::int64_t>(&it->second) != nullptr;
+        };
+        const auto outcome_it = event.data.find("outcome");
+        const auto* outcome_value = outcome_it == event.data.end()
+            ? nullptr : std::get_if<std::int64_t>(&outcome_it->second);
+        const auto isolated_it = event.data.find("isolated");
+        const auto* isolated_value = isolated_it == event.data.end()
+            ? nullptr : std::get_if<bool>(&isolated_it->second);
+        const bool complete_evidence =
+            id != nullptr && !id->empty() && key != nullptr && !key->empty() &&
+            finite_number("current") && finite_number("proposed") &&
+            finite_number("expected_gain") && finite_number("proposal_confidence") &&
+            finite_number("baseline") && finite_number("candidate") &&
+            finite_number("minimum_improvement") && finite_number("confidence") &&
+            outcome_value != nullptr &&
+            *outcome_value >= static_cast<std::int64_t>(ExperimentOutcome::Pending) &&
+            *outcome_value <= static_cast<std::int64_t>(ExperimentOutcome::Invalid) &&
+            isolated_value != nullptr;
+        if (complete_evidence) {
             EvolutionExperiment experiment{
                 *id,
                 EvolutionProposal{*key,
                                   double_value(event.data, "current"),
                                   double_value(event.data, "proposed"),
                                   double_value(event.data, "expected_gain"),
-                                  double_value(event.data, "proposal_confidence", double_value(event.data, "confidence"))},
+                                  double_value(event.data, "proposal_confidence")},
                 double_value(event.data, "baseline"),
                 double_value(event.data, "candidate"),
                 double_value(event.data, "minimum_improvement"),
                 double_value(event.data, "confidence"),
-                static_cast<ExperimentOutcome>(integer_value(event.data, "outcome")),
+                static_cast<ExperimentOutcome>(*outcome_value),
                 true};
-            experiment.isolated =
-                event.data.find("isolated") != event.data.end() &&
-                std::get_if<bool>(&event.data.at("isolated")) != nullptr &&
-                *std::get_if<bool>(&event.data.at("isolated"));
-            if (experiment.isolated && experiment.candidate_executed)
-                experiment.attest_isolated_result();
+            experiment.isolated = *isolated_value;
+            // The journal source check above distinguishes Brain-authored
+            // lifecycle events from ordinary observations. The controller
+            // still recomputes the outcome and validates the complete record.
+            if (experiment.isolated) experiment.attest_isolated_result();
             evolution_controller_.replay_evaluation(experiment);
         }
         return;
@@ -534,8 +563,33 @@ void Brain::replay(const Event& event, bool external_observation) {
     }
     if (event.kind == "evolution_adopt") {
         const auto* key = string_value(event.data, "key");
+        const auto* experiment_id = string_value(event.data, "experiment_id");
+        const auto finite_number = [&](const char* name) {
+            const auto it = event.data.find(name);
+            if (it == event.data.end()) return false;
+            if (const auto* value = std::get_if<double>(&it->second))
+                return std::isfinite(*value);
+            return std::get_if<std::int64_t>(&it->second) != nullptr;
+        };
+        const auto outcome_it = event.data.find("outcome");
+        const auto* outcome_value = outcome_it == event.data.end()
+            ? nullptr : std::get_if<std::int64_t>(&outcome_it->second);
+        const auto isolated_it = event.data.find("isolated");
+        const auto* isolated_value = isolated_it == event.data.end()
+            ? nullptr : std::get_if<bool>(&isolated_it->second);
+        const bool complete_adoption_evidence =
+            key != nullptr && !key->empty() &&
+            experiment_id != nullptr && !experiment_id->empty() &&
+            finite_number("current") && finite_number("proposed") &&
+            finite_number("expected_gain") && finite_number("proposal_confidence") &&
+            finite_number("confidence") && finite_number("minimum_improvement") &&
+            finite_number("baseline") && finite_number("candidate") &&
+            outcome_value != nullptr &&
+            *outcome_value >= static_cast<std::int64_t>(ExperimentOutcome::Pending) &&
+            *outcome_value <= static_cast<std::int64_t>(ExperimentOutcome::Invalid) &&
+            isolated_value != nullptr;
+        if (!complete_adoption_evidence) return;
         if (key != nullptr) {
-            const auto* experiment_id = string_value(event.data, "experiment_id");
             const EvolutionProposal proposal{*key, double_value(event.data, "current"),
                                              double_value(event.data, "proposed"),
                                              double_value(event.data, "expected_gain"),
@@ -754,6 +808,10 @@ void Brain::replay(const Event& event, bool external_observation) {
 }
 Observation Brain::observe(Event event) {
     std::unique_lock lock(mutex_);
+    // Evolution lifecycle records are internal control-plane events. Accepting
+    // them through the public observation API lets an external evaluator forge
+    // an evaluation/adoption sequence without executing the trusted workflow.
+    if (event.kind.rfind("evolution_", 0) == 0) return Observation{};
     if (event.kind == "prediction_outcome") {
         const auto sequence = integer_value(event.data, "prediction_sequence", 0);
         const auto* key = string_value(event.data, "key");
