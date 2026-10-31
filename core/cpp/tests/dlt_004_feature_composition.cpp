@@ -134,8 +134,8 @@ void run_seed(std::uint64_t seed) {
             brain.developmental_feature_strategy_estimate(held_out, "route-two");
         assert(route_one.matched_features == 2);
         assert(route_two.matched_features == 2);
-        assert(route_one.confidence >= 0.25);
-        assert(route_two.confidence >= 0.25);
+        assert(route_one.confidence >= 0.5);
+        assert(route_two.confidence >= 0.5);
         assert((poor_action == "route-one" ? route_one.value : route_two.value) >
                (poor_action == "route-one" ? route_two.value : route_one.value));
         assert(selected_action(brain, "open", "poor") == poor_action);
@@ -151,7 +151,7 @@ void run_seed(std::uint64_t seed) {
         const auto held_out = inferred_context(restored, "open", "poor");
         const auto estimate =
             restored.developmental_feature_strategy_estimate(held_out, poor_action);
-        assert(estimate.confidence >= 0.25);
+        assert(estimate.confidence >= 0.5);
         assert(estimate.value > 0.0);
         assert(restored.memory().by_kind("action_outcome").size() == 48);
     }
@@ -162,6 +162,19 @@ void run_seed(std::uint64_t seed) {
 } // namespace
 
 int main() {
+    // A single observation must not be treated as sufficient support for
+    // compositional transfer, even when both feature values are present.
+    DevelopmentalLearning sparse;
+    const std::string sparse_context =
+        "observation/observation/source/sensor/features/bridge_status/visibility/values/open/clear";
+    sparse.observe_strategy(
+        sparse_context, "route-one",
+        LearningSignal{1.0, 1.0, 0.0, 0.0, 0.0, 1.0});
+    const auto sparse_estimate =
+        sparse.feature_strategy_estimate(sparse_context, "route-one");
+    assert(sparse_estimate.matched_features == 2);
+    assert(sparse_estimate.confidence < 0.5);
+
     run_seed(7);
     run_seed(8);
     return 0;
