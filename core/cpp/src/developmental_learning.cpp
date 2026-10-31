@@ -155,6 +155,17 @@ std::string feature_strategy_key(const std::string& label,
     return label + '\x1e' + value;
 }
 
+std::string feature_schema_key(const std::string& context) {
+    const auto marker = context_values_marker(context);
+    return marker == std::string::npos ? std::string{} : context.substr(0, marker);
+}
+
+std::string feature_model_key(const std::string& action,
+                              const std::string& context) {
+    const auto schema = feature_schema_key(context);
+    return schema.empty() ? std::string{} : action + '\x1f' + schema;
+}
+
 double inferred_value_similarity(const std::string& left, const std::string& right) {
     if (left == right) return 1.0;
 
@@ -361,8 +372,9 @@ void DevelopmentalLearning::observe_strategy(std::string context, std::string ac
     const auto features = update_feature_model
         ? context_feature_pairs(strategy.context)
         : std::vector<std::pair<std::string, std::string>>{};
-    if (!features.empty()) {
-        auto& model = feature_strategy_models_[strategy.action];
+    const auto model_key = feature_model_key(strategy.action, strategy.context);
+    if (!features.empty() && !model_key.empty()) {
+        auto& model = feature_strategy_models_[model_key];
         double prediction = model.bias;
         for (const auto& [label, value] : features) {
             const auto weight = model.weights.find(feature_strategy_key(label, value));
@@ -496,7 +508,9 @@ FeatureStrategyEstimate DevelopmentalLearning::feature_strategy_estimate(
     if (features.empty()) return estimate;
     estimate.feature_count = features.size();
 
-    const auto model_it = feature_strategy_models_.find(action);
+    const auto model_key = feature_model_key(action, context);
+    if (model_key.empty()) return estimate;
+    const auto model_it = feature_strategy_models_.find(model_key);
     if (model_it == feature_strategy_models_.end()) return estimate;
     const auto& model = model_it->second;
     estimate.observations = model.observations;
