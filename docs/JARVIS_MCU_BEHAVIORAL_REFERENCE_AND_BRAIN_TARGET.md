@@ -307,13 +307,19 @@ Do not hardcode phrase-to-behavior mappings, scenario answers, stimulus-to-emoti
 
 Implement general mechanisms that can acquire patterns and behavior from experience. Hardcoded invariants, mathematical definitions, protocol rules, permissions, safety limits and test fixtures are legitimate when explicitly justified.
 
-### Rule 2 — No external AI or cognitive API dependency
+### Rule 2 — No external API or outsourced capability dependency in the Brain core
 
-The Brain's intelligence must be engineered and owned inside this project. Do not outsource cognition to hosted LLMs, external agent frameworks, embedding/reranking APIs, remote reasoning services, or paid/third-party AI endpoints. Do not make internet access or a vendor account necessary for core cognition.
+The Brain must not depend on third-party external APIs or hosted services to supply any core cognitive capability. This prohibition includes hosted LLMs, agent services, remote reasoning, embeddings, reranking, retrieval, memory, planning, decision, speech/language intelligence, perception, learning, or other outsourced cognitive functions. No paid vendor endpoint, remote AI provider, cloud brain, or internet connection may be required for the Brain's core operation.
 
-The project already has a polyglot implementation strategy. Use its languages and internally engineered mechanisms to build the required capabilities.
+If the Brain requires a core mechanism, we engineer and own that mechanism inside this project using the approved language architecture. The project has C++, Python/PyTorch, Rust, TypeScript and optional GPU technologies available; do not outsource a missing mechanism because implementation is difficult.
 
-**Terminology matters:** This rule prohibits external services as a source of intelligence. It does not prohibit the Brain's own internal APIs, local IPC, versioned interfaces, operating-system interfaces, or standard hardware/protocol interfaces. Those are necessary engineering boundaries, not outsourced cognition.
+This does **not** mean rewriting compilers, operating systems, hardware drivers, cryptographic primitives, or every generic numerical primitive. Third-party libraries may be considered for non-cognitive infrastructure or established low-level primitives under dependency review. They must not provide outsourced intelligence or become an unexamined cognitive authority. The project owns the cognitive algorithms, state models, learning logic, orchestration and behavioral acceptance.
+
+**Boundary distinction:**
+- The Brain's own internal APIs, local IPC, versioned schemas, and interfaces to its host are permitted and required.
+- Standard hardware and operating-system interfaces are permitted.
+- Future external data, application, device and service adapters belong to the external-integration boundary, are not core cognitive dependencies, and require explicit project-owner authorization.
+- No external service API may be introduced as a shortcut for a capability that belongs inside the Brain.
 
 ### Rule 3 — No second Brain
 
