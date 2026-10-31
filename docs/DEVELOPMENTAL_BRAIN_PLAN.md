@@ -335,3 +335,16 @@ Adversarial checks must include source-order permutations, two source names shar
 6. **Review status:** builder self-review is not independent review. Keep PR #148 draft and unmerged until exact-head CI and an independent reviewer/tester report are available.
 
 **Priority 1 is not closed by this implementation checkpoint alone.** The source-provenance and neutral-default mechanisms are now implemented candidates; exact-head tests and independent adversarial review decide whether they are accepted.
+
+## 14. Feedback replay hardening — 2026-10-31
+
+**Implementation checkpoint:** PR #148, after commit `0050cf77a55c0b3d882a347e9a7770f94ab6bf9e`. This section records a source-audit correction; it is not an acceptance or completion claim.
+
+- The non-const `Brain::memory()` accessor has been removed. Callers can inspect memory but cannot append journal events through a live `Brain` object while bypassing its validation and synchronization path.
+- The feedback test now simulates offline journal modification through a separate `Memory` instance after the original `Brain` has closed, then verifies fresh-process replay. This keeps the adversarial journal-tampering test without leaving a mutable storage escape hatch in the runtime API.
+- Authenticated feedback is deduplicated by claim sequence and key, not by evaluator identity. Multiple trusted evaluator names cannot multiply the calibration count for the same claim.
+- Replay scans all feedback records for the same claim. If any independently authenticated evaluators disagree on correctness, all adjudications for that claim are rejected regardless of journal order. Identical authenticated adjudications are applied once.
+- The live API rejects a second authenticated adjudication for an already-adjudicated claim, regardless of evaluator. Invalid attestations do not reserve the claim or block a later valid submission.
+- The focused feedback test now covers disagreement between different trusted evaluators, forged raw journal records, invalid-record non-poisoning, restart reconstruction, and calibration outcomes attached to distinct observation events rather than several fields from one event.
+
+**Verification boundary:** these changes are committed, but they have not been accepted until all four required CI workflows complete successfully on the exact current HEAD and the source/test changes receive independent review. The host still supplies the actual feedback/provenance verifier; the repository test verifier is only a test fixture. The host must implement authenticated identity, key rotation/revocation, and a deterministic historical-verification policy. This change does not cryptographically protect the journal against offline file replacement, deletion, or reordering.
