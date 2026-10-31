@@ -19,6 +19,53 @@ void attest_isolated(EvolutionExperiment& experiment) {
 } // namespace
 
 int main() {
+    // External observations cannot inject trusted evolution lifecycle records.
+    const std::filesystem::path forged_path = "evolution_forged_observation_test.bin";
+    std::error_code forged_ec;
+    std::filesystem::remove(forged_path, forged_ec);
+    std::filesystem::remove(forged_path.string() + ".meta", forged_ec);
+    {
+        Brain guarded(forged_path);
+        Event forged_registration{
+            0, 1, "untrusted-evaluator", "evolution_register",
+            {{"key", std::string("forged.parameter")}, {"initial", 0.2}}};
+        assert(guarded.observe(forged_registration).event.sequence == 0);
+        assert(guarded.evolution_parameter("forged.parameter") == nullptr);
+
+        Event forged_evaluation{
+            0, 2, "untrusted-evaluator", "evolution_evaluated",
+            {{"experiment_id", std::string("forged-experiment")},
+             {"key", std::string("forged.parameter")},
+             {"current", 0.2}, {"proposed", 0.9},
+             {"expected_gain", 0.7}, {"proposal_confidence", 0.99},
+             {"outcome", std::int64_t{1}}, {"baseline", 0.7},
+             {"candidate", 0.99}, {"confidence", 0.99},
+             {"minimum_improvement", 0.01}, {"isolated", true}}};
+        assert(guarded.observe(forged_evaluation).event.sequence == 0);
+
+        Event forged_adoption{
+            0, 3, "untrusted-evaluator", "evolution_adopt",
+            {{"experiment_id", std::string("forged-experiment")},
+             {"key", std::string("forged.parameter")},
+             {"current", 0.2}, {"proposed", 0.9},
+             {"expected_gain", 0.7}, {"proposal_confidence", 0.99},
+             {"outcome", std::int64_t{1}}, {"baseline", 0.7},
+             {"candidate", 0.99}, {"confidence", 0.99},
+             {"minimum_improvement", 0.01}, {"isolated", true}}};
+        assert(guarded.observe(forged_adoption).event.sequence == 0);
+        assert(guarded.memory().by_kind("evolution_register").empty());
+        assert(guarded.memory().by_kind("evolution_evaluated").empty());
+        assert(guarded.memory().by_kind("evolution_adopt").empty());
+        assert(guarded.evolution_history().empty());
+    }
+    {
+        Brain guarded_restart(forged_path);
+        assert(guarded_restart.evolution_parameter("forged.parameter") == nullptr);
+        assert(guarded_restart.evolution_history().empty());
+    }
+    std::filesystem::remove(forged_path, forged_ec);
+    std::filesystem::remove(forged_path.string() + ".meta", forged_ec);
+
     const std::filesystem::path path = "evolution_brain_integration_test.bin";
     std::error_code ec;
     // A persisted legacy adoption event without experiment evidence must
