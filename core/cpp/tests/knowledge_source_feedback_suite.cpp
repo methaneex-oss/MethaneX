@@ -43,7 +43,8 @@ int main() {
             verifier, provenance_verifier);
         const auto observed = brain.observe(Event{0, 0, "sensor-a", "observation",
             {{"temperature", Scalar{20.0}}, {"humidity", Scalar{50.0}},
-             {"reliability", Scalar{0.99}},
+             {"pressure", Scalar{1013.0}}, {"wind", Scalar{5.0}},
+             {"voltage", Scalar{230.0}}, {"reliability", Scalar{0.99}},
              {"provenance_id", Scalar{std::string("origin-a")}},
              {"provenance_attestation", Scalar{std::string("source-origin:sensor-a:origin-a")}}}});
         claim_sequence = observed.event.sequence;
@@ -86,7 +87,7 @@ int main() {
         const auto* initial = brain.knowledge_source("sensor-a");
         assert(initial != nullptr);
         observation_quality = initial->reliability;
-        assert(initial->observations == 2);
+        assert(initial->observations == 5);
         assert(initial->calibration_observations == 0);
 
         assert(!brain.record_knowledge_source_feedback(
@@ -114,12 +115,20 @@ int main() {
         assert(!brain.record_knowledge_source_feedback(
             claim_sequence, "temperature", Scalar{20.0},
             "independent-reviewer", false, feedback_attestation(claim_sequence, "temperature", 20.0, "independent-reviewer", false)));
-        assert(brain.record_knowledge_source_feedback(
+        // Different trusted evaluators cannot multiply calibration evidence
+        // for one claim or turn disagreement into two independent outcomes.
+        assert(!brain.record_knowledge_source_feedback(
             claim_sequence, "temperature", Scalar{20.0},
             "second-reviewer", false, feedback_attestation(claim_sequence, "temperature", 20.0, "second-reviewer", false)));
-        assert(brain.record_knowledge_source_feedback(
+        assert(!brain.record_knowledge_source_feedback(
             claim_sequence, "temperature", Scalar{20.0},
             "third-reviewer", true, feedback_attestation(claim_sequence, "temperature", 20.0, "third-reviewer", true)));
+        assert(brain.record_knowledge_source_feedback(
+            claim_sequence, "pressure", Scalar{1013.0},
+            "second-reviewer", false, feedback_attestation(claim_sequence, "pressure", 1013.0, "second-reviewer", false)));
+        assert(brain.record_knowledge_source_feedback(
+            claim_sequence, "wind", Scalar{5.0},
+            "third-reviewer", true, feedback_attestation(claim_sequence, "wind", 5.0, "third-reviewer", true)));
         assert(!brain.record_knowledge_source_feedback(
             claim_sequence, "temperature", Scalar{20.0},
             "independent-reviewer", false, "forged-attestation"));
@@ -128,7 +137,7 @@ int main() {
         assert(calibrated != nullptr);
         assert(calibrated->calibration_observations == 4);
         assert(std::abs(calibrated->empirical_accuracy - 0.75) < 1e-12);
-        assert(calibrated->observations == 2);
+        assert(calibrated->observations == 5);
         assert(std::abs(calibrated->reliability - observation_quality) < 1e-12);
         const auto calibrated_assessment = brain.knowledge_assessment("temperature");
         assert(calibrated_assessment.has_value());
@@ -154,24 +163,24 @@ int main() {
                  claim_sequence, "temperature", 20.0, "independent-reviewer", true)}}}};
         assert(journal_tamper.append(forged_journal_feedback) != 0);
 
-        Event conflicting_duplicate{0, 0, "independent-reviewer",
+        Event conflicting_duplicate{0, 0, "second-reviewer",
             "knowledge_source_feedback",
             {{"claim_sequence", Scalar{static_cast<std::int64_t>(claim_sequence)}},
              {"claim_source", Scalar{std::string("sensor-a")}},
              {"claim_key", Scalar{std::string("temperature")}},
              {"claim_value", Scalar{20.0}},
-             {"evaluator", Scalar{std::string("independent-reviewer")}},
+             {"evaluator", Scalar{std::string("second-reviewer")}},
              {"correct", Scalar{false}},
              {"attestation", Scalar{feedback_attestation(
-                 claim_sequence, "temperature", 20.0, "independent-reviewer", false)}}}};
+                 claim_sequence, "temperature", 20.0, "second-reviewer", false)}}}};
         assert(journal_tamper.append(conflicting_duplicate) != 0);
 
         Event invalid_duplicate{0, 0, "second-reviewer",
             "knowledge_source_feedback",
             {{"claim_sequence", Scalar{static_cast<std::int64_t>(claim_sequence)}},
              {"claim_source", Scalar{std::string("sensor-a")}},
-             {"claim_key", Scalar{std::string("humidity")}},
-             {"claim_value", Scalar{50.0}},
+             {"claim_key", Scalar{std::string("voltage")}},
+             {"claim_value", Scalar{230.0}},
              {"evaluator", Scalar{std::string("second-reviewer")}},
              {"correct", Scalar{false}},
              {"attestation", Scalar{std::string("invalid-attestation")}}}};
@@ -185,13 +194,13 @@ int main() {
         // A forged raw record with a copied evaluator name must not poison
         // the legitimate API's duplicate check after restart.
         assert(restored.record_knowledge_source_feedback(
-            claim_sequence, "humidity", Scalar{50.0}, "second-reviewer", true,
-            feedback_attestation(claim_sequence, "humidity", 50.0, "second-reviewer", true)));
+            claim_sequence, "voltage", Scalar{230.0}, "second-reviewer", true,
+            feedback_attestation(claim_sequence, "voltage", 230.0, "second-reviewer", true)));
         const auto* metric = restored.knowledge_source("sensor-a");
         assert(metric != nullptr);
         assert(metric->calibration_observations == 4);
         assert(std::abs(metric->empirical_accuracy - 0.75) < 1e-12);
-        assert(metric->observations == 2);
+        assert(metric->observations == 5);
         assert(std::abs(metric->reliability - observation_quality) < 1e-12);
         const auto restored_assessment = restored.knowledge_assessment("temperature");
         assert(restored_assessment.has_value());
