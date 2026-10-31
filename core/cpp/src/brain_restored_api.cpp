@@ -192,7 +192,8 @@ bool Brain::record_knowledge_source_feedback(
     }
     if (!matching_claim) return false;
     for (const auto& prior : history) {
-        if (prior.kind != "knowledge_source_feedback") continue;
+        if (prior.kind != "knowledge_source_feedback" ||
+            prior.sequence <= claim_sequence) continue;
         const auto sequence_field = prior.data.find("claim_sequence");
         const auto* prior_sequence = sequence_field == prior.data.end()
             ? nullptr : std::get_if<std::int64_t>(&sequence_field->second);
@@ -202,10 +203,36 @@ bool Brain::record_knowledge_source_feedback(
         const auto key_field = prior.data.find("claim_key");
         const auto* prior_key = key_field == prior.data.end()
             ? nullptr : std::get_if<std::string>(&key_field->second);
-        if (prior_sequence != nullptr &&
-            *prior_sequence == static_cast<std::int64_t>(claim_sequence) &&
-            prior_evaluator != nullptr && *prior_evaluator == evaluator &&
-            prior_key != nullptr && *prior_key == key) return false;
+        const auto source_field = prior.data.find("claim_source");
+        const auto* prior_source = source_field == prior.data.end()
+            ? nullptr : std::get_if<std::string>(&source_field->second);
+        const auto value_field = prior.data.find("claim_value");
+        const auto attestation_field = prior.data.find("attestation");
+        const auto* prior_attestation = attestation_field == prior.data.end()
+            ? nullptr : std::get_if<std::string>(&attestation_field->second);
+        const auto correct_field = prior.data.find("correct");
+        const auto* prior_correct = correct_field == prior.data.end()
+            ? nullptr : std::get_if<bool>(&correct_field->second);
+        if (prior_sequence == nullptr ||
+            *prior_sequence != static_cast<std::int64_t>(claim_sequence) ||
+            prior_evaluator == nullptr || *prior_evaluator != evaluator ||
+            prior.source != evaluator || prior_key == nullptr || *prior_key != key ||
+            prior_source == nullptr || *prior_source != target->source ||
+            value_field == prior.data.end() || value_field->second != value ||
+            prior_attestation == nullptr || prior_attestation->empty() ||
+            prior_correct == nullptr ||
+            !trusted_knowledge_evaluators_.contains(evaluator)) continue;
+        const KnowledgeFeedbackRequest prior_request{
+            claim_sequence, key, value, evaluator, *prior_correct, *prior_attestation};
+        try {
+            // Only an already authenticated adjudication blocks a new one.
+            // Forged raw journal entries must not be able to deny service to
+            // a legitimate evaluator by merely copying its public identity.
+            if (knowledge_feedback_verifier_ &&
+                knowledge_feedback_verifier_(prior_request)) return false;
+        } catch (...) {
+            // A prior record whose attestation cannot be verified is ignored.
+        }
     }
     Event feedback{0, 0, evaluator, "knowledge_source_feedback",
         {{"claim_sequence", static_cast<std::int64_t>(claim_sequence)},
