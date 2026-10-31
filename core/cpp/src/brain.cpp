@@ -715,12 +715,12 @@ void Brain::replay(const Event& event, bool external_observation) {
             // execution trace while excluding it from compositional learning.
             developmental_learning_.observe_strategy(
                 *context, *action,
-                    evidence_reliability},
-                false);
+                LearningSignal{1.0 - reliability, -1.0,
                     std::clamp(double_value(event.data, "salience", 0.0), 0.0, 1.0),
                     std::clamp(double_value(event.data, "novelty", 0.0), 0.0, 1.0),
                     affective_significance,
-                    evidence_reliability});
+                    evidence_reliability},
+                false);
         } // Unknown consequences do not imply a beneficial outcome. Successful
           // execution updates operational capability reliability above, but
           // action-value learning needs an observed consequence.
