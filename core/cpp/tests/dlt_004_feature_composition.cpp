@@ -287,7 +287,37 @@ int main() {
     assert(sparse_estimate.matched_features == 2);
     assert(sparse_estimate.confidence < 0.5);
 
+    // Adversarial support check: many repetitions of one exact situation are
+    // still one independent context, not enough evidence for transfer.
+    DevelopmentalLearning repeated_context;
+    for (int i = 0; i < 20; ++i) {
+        repeated_context.observe_strategy(
+            sparse_context, "route-one",
+            LearningSignal{1.0, 1.0, 0.0, 0.0, 0.0, 1.0});
+    }
+    const auto repeated_estimate =
+        repeated_context.feature_strategy_estimate(sparse_context, "route-one");
+    assert(repeated_estimate.matched_features == 2);
+    assert(repeated_estimate.confidence < 0.5);
+
+    // Conflicting outcomes in one context must not manufacture independent
+    // support or a confident positive transfer estimate.
+    DevelopmentalLearning conflicting_context;
+    for (int i = 0; i < 20; ++i) {
+        conflicting_context.observe_strategy(
+            sparse_context, "route-one",
+            LearningSignal{1.0, i % 2 == 0 ? 1.0 : -1.0,
+                           0.0, 0.0, 0.0, 1.0});
+    }
+    const auto conflicting_estimate =
+        conflicting_context.feature_strategy_estimate(sparse_context, "route-one");
+    assert(conflicting_estimate.matched_features == 2);
+    assert(conflicting_estimate.confidence < 0.5);
+
     run_seed(7);
     run_seed(8);
+    run_seed(17);
+    run_seed(29);
+    run_seed(43);
     return 0;
 }
