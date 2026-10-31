@@ -349,3 +349,50 @@ Adversarial checks must include source-order permutations, two source names shar
 - The focused feedback test now covers disagreement between different trusted evaluators, forged raw journal records, invalid-record non-poisoning, restart reconstruction, and calibration outcomes attached to distinct observation events rather than several fields from one event.
 
 **Verification boundary:** these changes are committed, but they have not been accepted until all four required CI workflows complete successfully on the exact current HEAD and the source/test changes receive independent review. The host still supplies the actual feedback/provenance verifier; the repository test verifier is only a test fixture. The host must implement authenticated identity, key rotation/revocation, and a deterministic historical-verification policy. This change does not cryptographically protect the journal against offline file replacement, deletion, or reordering.
+
+
+## 15. Integrated Priority-One audit checkpoint — 2026-10-31
+
+**Integrated validation PR:** #156 — `integration/priority-one-20261031`  
+**Code-bearing checkpoint:** `15d49e5fdeb5723c475922ab78fb92f97c4b3b84`  
+**PR state:** open, draft, unmerged.
+
+### Additional adversarial corrections
+
+A source-level audit of the combined knowledge, action-learning, and evolution-replay tree found two concrete replay/attribution gaps:
+
+1. **Mismatched evolution rollback target.** During replay, an `evolution_rollback` event checked that its experiment was adopted but did not verify that the event's parameter key matched the parameter key stored on that experiment. A malformed/tampered event could therefore roll back a different adopted parameter while marking the referenced experiment rolled back. Replay now rejects the event before mutation unless the keys match. The integration suite creates two adopted parameters, injects a rollback with a mismatched experiment/key pair, restarts, and verifies neither parameter nor the referenced experiment history is changed.
+2. **Feedback attestation omitted claim source.** The host verifier request previously bound claim sequence, key, value, evaluator, and correctness, but not the source whose reliability would be updated. The request now includes the actual source resolved from the referenced claim. The host verifier must bind this field too. A regression attempts to reuse an attestation for one source against a different source and verifies no calibration is applied.
+
+### Exact-head verification
+
+All four required workflows passed on code-bearing HEAD `15d49e5fdeb5723c475922ab78fb92f97c4b3b84`:
+
+- Native Brain Build — PASS.
+- Brain CI — PASS, including native and ASan/UBSan jobs.
+- Brain ThreadSanitizer — PASS.
+- JARVIS Brain Tests — PASS, including brain and sanitizer jobs.
+- Both JARVIS CTest-bearing jobs report 73/73 tests passing.
+
+These are exact-head CI results. No local C++ build is claimed.
+
+### Remaining Priority-One acceptance work
+
+Priority One remains **OPEN**. CI success is necessary but not sufficient. The following gates remain:
+
+- Production cryptographic feedback and provenance verification; authenticated evaluator identity; protected trust configuration; key rotation/revocation; and deterministic historical verification across restart. The test verifier is not production cryptography.
+- Cryptographic journal integrity against offline deletion, replacement, and reordering.
+- Independent ground-truth adjudication. A valid evaluator attestation proves who made an assertion, not that the assertion is objectively true or statistically independent.
+- A justified calibration activation/sample policy. The three-outcome minimum is provisional; stale-versus-fresh calibration behaviour still requires explicit adversarial coverage and a justified policy.
+- Independent adversarial tester and reviewer clearance.
+- The factual source-calibration path still lacks an end-to-end demonstration that calibrated knowledge changes belief/world-model weighting and downstream planning/action selection. The DLT-004 compositional action learner is a separate action-outcome learning path; do not conflate the two.
+
+### Next execution order
+
+1. Obtain independent adversarial tester evidence on the combined PR #156 exact head, including the new rollback-target and feedback-source-binding regressions.
+2. Obtain an independent architecture/security review of the combined replay, provenance, evaluator trust, calibration and evidence-dependence boundaries.
+3. Resolve all findings. Do not weaken assertions or turn known external integration requirements into implied passes.
+4. Close Priority One only when the documented acceptance gate is demonstrated or the owner explicitly accepts a remaining host/storage boundary.
+5. Then proceed to Priority Two: connect calibrated factual knowledge, uncertainty and memory retrieval to decisions, planning and action selection.
+
+**Do not merge PR #156 or mark it ready for review without independent clearance and owner authorization.**
