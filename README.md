@@ -51,6 +51,10 @@ The [Brain Identity and Behavioral Specification](docs/JARVIS_BRAIN_IDENTITY_AND
 
 The [Brain Polyglot Engineering Governance](docs/BRAIN_POLYGLOT_ENGINEERING_GOVERNANCE.md) defines language ownership, implementation standards, cross-language contracts, state integrity, security, persistence, testing, dependencies, performance and approval gates.
 
+## Project governance
+
+The command structure, role boundaries, decision authority, architecture change control, independent testing/review requirements, and handoff rules are defined in [JARVIS Project Governance](docs/JARVIS_PROJECT_GOVERNANCE.md).
+
 ## Development status
 
 JARVIS is under foundational development. The present work is focused on the Brain. Future embodiments—such as a house, suit, phone, satellite, or other host—are not current implementation targets. The Brain must remain independent of any one such environment.
