@@ -114,7 +114,7 @@ void WorldModel::observe(const Fact& incoming) {
     // A source can revise its own earlier claim, but repeated observations
     // cannot accumulate artificial support. Resolve only when exactly one
     // alternative has a fresh post-conflict observation whose reliability is
-    // at least as high as every competing alternative's aggregate mean.
+    // strictly higher than every competing alternative's aggregate mean.
     Fact* resolving_candidate = nullptr;
     std::size_t resolving_candidates = 0;
     const auto consider_candidate = [&](Fact& candidate) {
@@ -129,7 +129,7 @@ void WorldModel::observe(const Fact& incoming) {
         for (const auto& competitor : disputed_facts_)
             consider_competitor(competitor);
         if (candidate.updated_sequence > latest_conflict_sequence &&
-            candidate.latest_evidence_confidence >= strongest_competing_confidence) {
+            candidate.latest_evidence_confidence > strongest_competing_confidence) {
             resolving_candidate = &candidate;
             ++resolving_candidates;
         }
@@ -178,7 +178,7 @@ void WorldModel::relate(const Relation& incoming) {
     }
 
     // Conflicting destinations are competing hypotheses for one relation.
-    // A fresh post-conflict observation may revise this source's own claim,
+    // A fresh, strictly stronger post-conflict observation may revise this source's own claim,
     // but repetition count never manufactures independent support.
     const auto same_relation = [&](const Relation& candidate) {
         return candidate.from == relation_from && candidate.type == relation_type;
@@ -215,7 +215,7 @@ void WorldModel::relate(const Relation& incoming) {
             }
         }
         if (candidate.updated_sequence > latest_conflict_sequence &&
-            candidate.latest_evidence_confidence >= strongest_competing_confidence) {
+            candidate.latest_evidence_confidence > strongest_competing_confidence) {
             resolving_candidate = &candidate;
             ++resolving_candidates;
         }
