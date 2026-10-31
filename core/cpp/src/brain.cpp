@@ -560,8 +560,33 @@ void Brain::replay(const Event& event, bool external_observation) {
     }
     if (event.kind == "evolution_adopt") {
         const auto* key = string_value(event.data, "key");
+        const auto* experiment_id = string_value(event.data, "experiment_id");
+        const auto finite_number = [&](const char* name) {
+            const auto it = event.data.find(name);
+            if (it == event.data.end()) return false;
+            if (const auto* value = std::get_if<double>(&it->second))
+                return std::isfinite(*value);
+            return std::get_if<std::int64_t>(&it->second) != nullptr;
+        };
+        const auto outcome_it = event.data.find("outcome");
+        const auto* outcome_value = outcome_it == event.data.end()
+            ? nullptr : std::get_if<std::int64_t>(&outcome_it->second);
+        const auto isolated_it = event.data.find("isolated");
+        const auto* isolated_value = isolated_it == event.data.end()
+            ? nullptr : std::get_if<bool>(&isolated_it->second);
+        const bool complete_adoption_evidence =
+            key != nullptr && !key->empty() &&
+            experiment_id != nullptr && !experiment_id->empty() &&
+            finite_number("current") && finite_number("proposed") &&
+            finite_number("expected_gain") && finite_number("proposal_confidence") &&
+            finite_number("confidence") && finite_number("minimum_improvement") &&
+            finite_number("baseline") && finite_number("candidate") &&
+            outcome_value != nullptr &&
+            *outcome_value >= static_cast<std::int64_t>(ExperimentOutcome::Pending) &&
+            *outcome_value <= static_cast<std::int64_t>(ExperimentOutcome::Invalid) &&
+            isolated_value != nullptr;
+        if (!complete_adoption_evidence) return;
         if (key != nullptr) {
-            const auto* experiment_id = string_value(event.data, "experiment_id");
             const EvolutionProposal proposal{*key, double_value(event.data, "current"),
                                              double_value(event.data, "proposed"),
                                              double_value(event.data, "expected_gain"),
