@@ -100,6 +100,18 @@ int main() {
             "independent-reviewer", false));
     }
 
+    {
+        // Without the host trust configuration, replay must fail closed rather
+        // than accepting evaluator names persisted in the journal.
+        Brain untrusted_restore(journal);
+        const auto* metric = untrusted_restore.knowledge_source("sensor-a");
+        assert(metric != nullptr);
+        assert(metric->calibration_observations == 0);
+        assert(!untrusted_restore.record_knowledge_source_feedback(
+            claim_sequence, "temperature", Scalar{20.0},
+            "independent-reviewer", true));
+    }
+
     std::filesystem::remove(journal, error);
     return 0;
 }
