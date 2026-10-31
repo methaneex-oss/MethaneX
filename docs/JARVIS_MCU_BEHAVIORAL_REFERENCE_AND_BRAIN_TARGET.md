@@ -1,23 +1,64 @@
 # JARVIS (MCU) Behavioral Reference and Brain Target Specification
 
-**Status:** Research-backed architectural analysis and proposed target specification; not yet approved.  
+**Status:** Research-backed target analysis and proposed foundation specification; not yet approved.  
 **Date:** 2026-10-31  
-**Scope:** The cognitive Brain only. This document does not specify the complete JARVIS product, host operating system, device ecosystem, suit, house, satellite, or deployment infrastructure.  
-**Purpose:** Analyze how Tony Stark's J.A.R.V.I.S. is portrayed as behaving and functioning in the Marvel Cinematic Universe (MCU), separate observable behavior from cinematic assumptions, and translate the most achievable parts into an engineering target for the existing Brain.
+**Ultimate target:** Recreate and improve the complete functional idea of Tony Stark's J.A.R.V.I.S. in our own architecture, methods and engineering terms—not copy fictional code or reproduce scenes mechanically.  
+**Current construction phase:** Build the Brain first. The Brain is the most important foundational part; later JARVIS capabilities, interfaces, embodiment, device/environment integration and operational layers must be built on, around and in coordination with that Brain.  
+**Scope of this document:** Define the overall JARVIS destination so the Brain is not designed in isolation or toward a smaller assistant target, then specify the Brain capabilities and boundaries that must be established first. This is not authorization to implement every future JARVIS layer now.  
+**Purpose:** Analyze how Tony Stark's J.A.R.V.I.S. is portrayed in the Marvel Cinematic Universe (MCU), distinguish observable behavior from cinematic assumptions, derive the whole-system destination, and identify what the Brain must provide as the first and central construction milestone.
 
 > **ENGINEER THE MECHANISMS; LET BEHAVIOR BE ACQUIRED THROUGH EXPERIENCE.**
 
 ## 1. Executive definition: what are we actually building?
 
-The target is not a chatbot with a JARVIS voice, a command parser connected to tools, a collection of hardcoded automations, or a single neural model.
+The ultimate target is **J.A.R.V.I.S. as a complete, coherent intelligence and operational system**, recreated and improved through our own architecture. We are not building a smaller product that happens to resemble a voice assistant. We are not copying fictional source code, film scenes or impossible cinematic effects. We are translating the demonstrated functional qualities of J.A.R.V.I.S. into real mechanisms, contracts, capabilities and measurable behavior.
 
-The target is a **persistent, environment-independent cognitive system**: a software Brain that maintains an evolving internal model of itself and the world; interprets experience; remembers relevant history; forms and revises beliefs; predicts consequences; evaluates needs, goals, risk and uncertainty; reasons and plans; selects authorized capabilities; monitors what happens; learns from outcomes; and changes future behavior when evidence justifies change.
+Construction is deliberately staged. **The Brain comes first and is the central foundation from which the rest of JARVIS will be built.** We are currently engineering the Brain—not the complete house/suit/device ecosystem or every future interface and deployment layer. Later layers must emerge from and integrate with the Brain's real capabilities, state, authority and contracts. They must not become parallel substitutes for cognition or force the Brain into a narrow device-specific design.
 
-It should be able to work with different hosts and environments through explicit interfaces. A house, workshop, computer, phone, vehicle, suit, robot, or future platform is an environment/host that supplies sensors, actuators, compute, storage and permissions. None of those environments is the Brain itself.
+The Brain is a **persistent, developing cognitive system**: it maintains evolving models of itself and the world; interprets experience; remembers; forms and revises beliefs; predicts consequences; evaluates needs, goals, risk and uncertainty; reasons and plans; selects authorized capabilities; monitors outcomes; learns from experience; and changes future behavior when evidence justifies change.
+
+The eventual JARVIS system will extend this foundation with the necessary interaction, perception/actuation adapters, interfaces, host/runtime services, embodiment and environment integrations. Those future parts are not all being implemented now, but the Brain's architecture must anticipate them through clean, versioned and secure boundaries.
+
+A house, workshop, computer, phone, vehicle, suit, robot or future platform is a possible host or environment—not the definition of JARVIS and not a reason to hardwire the Brain to one embodiment.
 
 The MCU reference is useful because J.A.R.V.I.S. is portrayed as much more than a conversational interface. Tony describes an evolution from a natural-language interface into a system that runs the Iron Legion and performs major Stark business responsibilities. Official Disney D23 material describes J.A.R.V.I.S. securing Stark's mansion and Stark Tower, helping run Stark Industries, and supporting the Avengers. These portrayals imply a persistent, context-aware, operational intelligence integrated with complex systems—not merely a voice assistant.
 
 **Important limit:** The films show outcomes, not an implementable specification of J.A.R.V.I.S.'s algorithms, data structures, learning rules, or consciousness. This document infers mechanisms that could plausibly produce the observed behavior. It does not claim the films prove that J.A.R.V.I.S. uses any particular cognitive architecture.
+
+## 1A. Whole-system destination and Brain-first construction
+
+The distinction between the destination and the current build phase is mandatory.
+
+### The destination: complete JARVIS
+
+The long-term system is intended to combine, as required by the eventual use cases:
+- The cognitive Brain: continuity, perception/representation, memory, beliefs, world/self models, attention, reasoning, prediction, goals, planning, decisions, learning, metacognition and controlled evolution.
+- Natural and multimodal interaction: language, voice, visual and other modalities through replaceable perception and expression mechanisms.
+- Interfaces and operator surfaces: monitoring, explanation, configuration, authorized delegation and interaction.
+- Capability and execution systems: tool/application/device adapters, task execution, scheduling, verification and coordination.
+- Embodiment and environment integration: computers, homes, vehicles, robotics, suit-like systems and other future platforms where explicitly designed and authorized.
+- Operational foundations: lifecycle, storage, security, observability, resource management, fault isolation, resilience and recovery.
+
+This is a destination map, not a claim that every category must be a separate process, language, agent or architectural layer. Their boundaries must be justified by responsibilities and failure/security needs.
+
+### The current phase: the Brain
+
+The current priority is to build the Brain's cognitive foundation to the point that it has real, integrated mechanisms and can be trained/evolved through experience. It must be testable and observable without requiring the complete future JARVIS embodiment.
+
+The Brain must not be reduced to a library of disconnected modules. It must have a coherent operating cycle, canonical state ownership, persistent experience, feedback loops and the ability to demonstrate experience-dependent behavioral change.
+
+### How later layers should relate to the Brain
+
+- Later interfaces expose and interact with actual Brain capabilities; they do not invent cognition in the UI.
+- Later perception systems provide validated experience; they do not own the Brain's beliefs or memory.
+- Later actuators and tools execute authorized capability requests; they do not make decisions on behalf of the Brain outside their contracts.
+- Later host and deployment layers provide resources and lifecycle; they do not become a second cognitive authority.
+- Later environment integrations provide observations and action opportunities; they do not define the Brain's identity.
+- Later JARVIS capabilities must integrate through explicit contracts and preserve Brain state authority, provenance, safety and learning lineage.
+
+**Construction order is not a statement of ultimate importance.** The Brain is built first because every higher-level JARVIS capability depends on it. The ultimate target remains the complete JARVIS system.
+
+---
 
 ## 2. Reference boundary: which JARVIS?
 
@@ -164,6 +205,8 @@ The academic analysis of J.A.R.V.I.S. in *Iron Man* describes the system as exte
 This table is a target capability map, not proof that the current repository already implements these behaviors.
 
 ## 5. The Brain, the host, and the environment must remain distinct
+
+This boundary protects the Brain-first construction strategy; it does not shrink the ultimate target to the Brain alone.
 
 This is one of the most important architectural conclusions.
 
@@ -414,9 +457,11 @@ A convincing demonstration should include:
 
 A single successful scripted demonstration is not proof of a working learning Brain.
 
-## 11. Relationship to the current Brain blueprint
+## 11. Relationship to the current Brain blueprint and the whole JARVIS roadmap
 
-This target specification does not replace or reorder the existing Layer 0–19 blueprint. It provides the behavioral purpose against which those layers and their contracts should be assessed.
+This specification defines the eventual JARVIS destination and the Brain-first construction strategy. It does not replace or casually reorder the existing Layer 0–19 Brain blueprint. It provides the behavioral purpose against which those Brain layers and their contracts should be assessed.
+
+The Layer 0–19 blueprint is the current construction map for the Brain, not a claim that it already represents every future JARVIS product, embodiment or deployment layer. Future non-Brain layers will require their own designs when the Brain foundation and evidence justify them. They must integrate with the Brain rather than create a competing center of intelligence.
 
 The current blueprint already names the major areas: cognitive substrate, self-state, perception/representation, world model, memory, attention, knowledge, reasoning, goals/motivation, planning, decision, action/execution, learning, metacognition, evolution, resilience, orchestration, continuous cognition, external integration and validation.
 
@@ -493,4 +538,4 @@ The analysis prioritizes official Marvel/Disney material for character/franchise
 
 ---
 
-**Approval status:** Proposed behavioral reference and Brain target. It is not yet a binding constitution, a claim of current implementation, or authorization to begin new runtime work. It should be independently reviewed and reconciled with the existing Brain blueprint, language map and engineering governance before the full documentation baseline is finalized.
+**Approval status:** Proposed whole-JARVIS destination and Brain-first foundation target. It is not yet a binding constitution, a claim of current implementation, or authorization to implement every future JARVIS layer. It should be independently reviewed and reconciled with the existing Brain blueprint, language map, engineering governance and project command rules before the full documentation baseline is finalized.
