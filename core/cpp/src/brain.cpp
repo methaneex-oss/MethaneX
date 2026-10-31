@@ -893,7 +893,8 @@ void Brain::replay(const Event& event, bool external_observation) {
             if (experiment_id != nullptr && !experiment_id->empty()) {
                 const auto record = evolution_controller_.adoption_journal().get(*experiment_id);
                 if (!record.has_value() || record->state == AdoptionState::RolledBack ||
-                    record->state != AdoptionState::Adopted) return;
+                    record->state != AdoptionState::Adopted ||
+                    record->parameter_key != *key) return;
                 if (!evolution_.rollback(*key)) return;
                 const auto reason = string_value(event.data, "reason");
                 if (!evolution_controller_.replay_rollback(
