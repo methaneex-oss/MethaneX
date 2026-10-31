@@ -79,6 +79,24 @@ void record_outcome(Brain& brain, const std::string& context,
     assert(result.outcome.actual_consequence == consequence);
 }
 
+void record_execution_failure(Brain& brain, const std::string& context,
+                              const std::string& action) {
+    ActionAssessment assessment;
+    assessment.action.name = action;
+    assessment.disposition = ActionDisposition::execute;
+    assessment.permitted = true;
+    assessment.confidence = 0.9;
+    assessment.developmental_context = context;
+    const auto result = brain.execute_action(
+        assessment,
+        [](const CandidateAction&) { return false; },
+        [](const CandidateAction&) { return true; },
+        {},
+        [](const CandidateAction&) { return std::optional<double>{}; });
+    assert(!result.executed);
+    assert(!result.outcome.observed);
+}
+
 void train_pair(Brain& brain, const std::string& context,
                 const std::string& positive_action, int repetitions) {
     const std::string negative_action =
@@ -178,6 +196,29 @@ void run_seed(std::uint64_t seed) {
 } // namespace
 
 int main() {
+    // An execution failure with no observed world consequence may update the
+    // context-local operational trace, but it must not train feature utility.
+    const auto no_feedback_journal = std::filesystem::temp_directory_path() /
+        "jarvis_dlt_004_no_feedback.bin";
+    std::error_code no_feedback_error;
+    std::filesystem::remove(no_feedback_journal, no_feedback_error);
+    std::filesystem::remove(no_feedback_journal.string() + ".meta", no_feedback_error);
+    const std::string no_feedback_context =
+        "observation/observation/source/sensor/features/bridge_status/visibility/values/open/clear";
+    {
+        Brain no_feedback(no_feedback_journal);
+        record_execution_failure(no_feedback, no_feedback_context, "route-one");
+        assert(no_feedback.developmental_feature_strategy_estimate(
+            no_feedback_context, "route-one").matched_features == 0);
+    }
+    {
+        Brain restored_no_feedback(no_feedback_journal);
+        assert(restored_no_feedback.developmental_feature_strategy_estimate(
+            no_feedback_context, "route-one").matched_features == 0);
+    }
+    std::filesystem::remove(no_feedback_journal, no_feedback_error);
+    std::filesystem::remove(no_feedback_journal.string() + ".meta", no_feedback_error);
+
     // A single observation must not be treated as sufficient support for
     // compositional transfer, even when both feature values are present.
     DevelopmentalLearning sparse;
