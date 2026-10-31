@@ -70,6 +70,9 @@ struct KnowledgeProvenanceRequest {
  std::string provenance_id;
  std::string attestation;
 };
+// Must authenticate the source-to-origin assertion and be deterministic
+// across restarts. Missing or invalid attestations never count as independent
+// corroboration; the host owns the trust root and verification policy.
 using KnowledgeProvenanceVerifier = std::function<bool(const KnowledgeProvenanceRequest&)>;
 class Brain {
 public:
