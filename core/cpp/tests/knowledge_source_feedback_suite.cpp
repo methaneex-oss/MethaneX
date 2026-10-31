@@ -8,11 +8,12 @@
 using namespace jarvis::core;
 
 namespace {
-std::string feedback_attestation(std::uint64_t sequence, const std::string& key,
-                                 double value, const std::string& evaluator,
-                                 bool correct) {
-    return "feedback-v1:" + std::to_string(sequence) + ":" + evaluator + ":" +
-           key + ":" + std::to_string(value) + ":" + (correct ? "1" : "0");
+std::string feedback_attestation(std::uint64_t sequence, const std::string& source,
+                                 const std::string& key, double value,
+                                 const std::string& evaluator, bool correct) {
+    return "feedback-v2:" + std::to_string(sequence) + ":" + source + ":" +
+           evaluator + ":" + key + ":" + std::to_string(value) + ":" +
+           (correct ? "1" : "0");
 }
 }
 
@@ -27,7 +28,7 @@ int main() {
             const auto* value = std::get_if<double>(&request.value);
             return value != nullptr &&
                 request.attestation == feedback_attestation(
-                    request.claim_sequence, request.key, *value,
+                    request.claim_sequence, request.claim_source, request.key, *value,
                     request.evaluator, request.correct);
         };
     const KnowledgeProvenanceVerifier provenance_verifier =
@@ -113,43 +114,43 @@ int main() {
 
         assert(!brain.record_knowledge_source_feedback(
             claim_sequence, "temperature", Scalar{20.0}, "sensor-a", true,
-            feedback_attestation(claim_sequence, "temperature", 20.0, "sensor-a", true)));
+            feedback_attestation(claim_sequence, "sensor-a", "temperature", 20.0, "sensor-a", true)));
         assert(!brain.record_knowledge_source_feedback(
             claim_sequence, "temperature", Scalar{20.0}, "untrusted-reviewer", true,
-            feedback_attestation(claim_sequence, "temperature", 20.0, "untrusted-reviewer", true)));
+            feedback_attestation(claim_sequence, "sensor-a", "temperature", 20.0, "untrusted-reviewer", true)));
         assert(!brain.record_knowledge_source_feedback(
             claim_sequence, "temperature", Scalar{21.0}, "independent-reviewer", true,
-            feedback_attestation(claim_sequence, "temperature", 21.0, "independent-reviewer", true)));
+            feedback_attestation(claim_sequence, "sensor-a", "temperature", 21.0, "independent-reviewer", true)));
         assert(!brain.record_knowledge_source_feedback(
             claim_sequence, "reliability", Scalar{0.99}, "independent-reviewer", true,
-            feedback_attestation(claim_sequence, "reliability", 0.99, "independent-reviewer", true)));
+            feedback_attestation(claim_sequence, "sensor-a", "reliability", 0.99, "independent-reviewer", true)));
         assert(!brain.record_knowledge_source_feedback(
             claim_sequence + 100, "temperature", Scalar{20.0},
-            "independent-reviewer", true, feedback_attestation(claim_sequence + 100, "temperature", 20.0, "independent-reviewer", true)));
+            "independent-reviewer", true, feedback_attestation(claim_sequence + 100, "sensor-a", "temperature", 20.0, "independent-reviewer", true)));
 
         assert(brain.record_knowledge_source_feedback(
             claim_sequence, "temperature", Scalar{20.0},
-            "independent-reviewer", true, feedback_attestation(claim_sequence, "temperature", 20.0, "independent-reviewer", true)));
+            "independent-reviewer", true, feedback_attestation(claim_sequence, "sensor-a", "temperature", 20.0, "independent-reviewer", true)));
         assert(brain.record_knowledge_source_feedback(
             humidity_sequence, "humidity", Scalar{50.0},
-            "independent-reviewer", true, feedback_attestation(humidity_sequence, "humidity", 50.0, "independent-reviewer", true)));
+            "independent-reviewer", true, feedback_attestation(humidity_sequence, "sensor-a", "humidity", 50.0, "independent-reviewer", true)));
         assert(!brain.record_knowledge_source_feedback(
             claim_sequence, "temperature", Scalar{20.0},
-            "independent-reviewer", false, feedback_attestation(claim_sequence, "temperature", 20.0, "independent-reviewer", false)));
+            "independent-reviewer", false, feedback_attestation(claim_sequence, "sensor-a", "temperature", 20.0, "independent-reviewer", false)));
         // Different trusted evaluators cannot multiply calibration evidence
         // for one claim or turn disagreement into two independent outcomes.
         assert(!brain.record_knowledge_source_feedback(
             claim_sequence, "temperature", Scalar{20.0},
-            "second-reviewer", false, feedback_attestation(claim_sequence, "temperature", 20.0, "second-reviewer", false)));
+            "second-reviewer", false, feedback_attestation(claim_sequence, "sensor-a", "temperature", 20.0, "second-reviewer", false)));
         assert(!brain.record_knowledge_source_feedback(
             claim_sequence, "temperature", Scalar{20.0},
-            "third-reviewer", true, feedback_attestation(claim_sequence, "temperature", 20.0, "third-reviewer", true)));
+            "third-reviewer", true, feedback_attestation(claim_sequence, "sensor-a", "temperature", 20.0, "third-reviewer", true)));
         assert(brain.record_knowledge_source_feedback(
             pressure_sequence, "pressure", Scalar{1013.0},
-            "second-reviewer", false, feedback_attestation(pressure_sequence, "pressure", 1013.0, "second-reviewer", false)));
+            "second-reviewer", false, feedback_attestation(pressure_sequence, "sensor-a", "pressure", 1013.0, "second-reviewer", false)));
         assert(brain.record_knowledge_source_feedback(
             wind_sequence, "wind", Scalar{5.0},
-            "third-reviewer", true, feedback_attestation(wind_sequence, "wind", 5.0, "third-reviewer", true)));
+            "third-reviewer", true, feedback_attestation(wind_sequence, "sensor-a", "wind", 5.0, "third-reviewer", true)));
         assert(!brain.record_knowledge_source_feedback(
             claim_sequence, "temperature", Scalar{20.0},
             "independent-reviewer", false, "forged-attestation"));
@@ -180,8 +181,7 @@ int main() {
              {"claim_value", Scalar{20.0}},
              {"evaluator", Scalar{std::string("independent-reviewer")}},
              {"correct", Scalar{false}},
-             {"attestation", Scalar{feedback_attestation(
-                 claim_sequence, "temperature", 20.0, "independent-reviewer", true)}}}};
+             {"attestation", Scalar{feedback_attestation(claim_sequence, "sensor-a", "temperature", 20.0, "independent-reviewer", true)}}}};
         assert(journal_tamper.append(forged_journal_feedback) != 0);
 
         Event conflicting_duplicate{0, 0, "second-reviewer",
@@ -192,8 +192,7 @@ int main() {
              {"claim_value", Scalar{20.0}},
              {"evaluator", Scalar{std::string("second-reviewer")}},
              {"correct", Scalar{false}},
-             {"attestation", Scalar{feedback_attestation(
-                 claim_sequence, "temperature", 20.0, "second-reviewer", false)}}}};
+             {"attestation", Scalar{feedback_attestation(claim_sequence, "sensor-a", "temperature", 20.0, "second-reviewer", false)}}}};
         assert(journal_tamper.append(conflicting_duplicate) != 0);
 
         Event invalid_duplicate{0, 0, "second-reviewer",
@@ -216,7 +215,7 @@ int main() {
         // the legitimate API's duplicate check after restart.
         assert(restored.record_knowledge_source_feedback(
             voltage_sequence, "voltage", Scalar{230.0}, "second-reviewer", true,
-            feedback_attestation(voltage_sequence, "voltage", 230.0, "second-reviewer", true)));
+            feedback_attestation(voltage_sequence, "sensor-a", "voltage", 230.0, "second-reviewer", true)));
         const auto* metric = restored.knowledge_source("sensor-a");
         assert(metric != nullptr);
         assert(metric->calibration_observations == 4);
@@ -230,7 +229,7 @@ int main() {
         assert(restored_assessment->evidence_weight > baseline_weight);
         assert(!restored.record_knowledge_source_feedback(
             claim_sequence, "temperature", Scalar{20.0},
-            "independent-reviewer", false, feedback_attestation(claim_sequence, "temperature", 20.0, "independent-reviewer", false)));
+            "independent-reviewer", false, feedback_attestation(claim_sequence, "sensor-a", "temperature", 20.0, "independent-reviewer", false)));
     }
 
     {
@@ -394,8 +393,7 @@ int main() {
              {"claim_value", Scalar{10.0}},
              {"evaluator", Scalar{std::string("reviewer")}},
              {"correct", Scalar{false}},
-             {"attestation", Scalar{feedback_attestation(
-                 reverse_claim_sequence, "pressure", 10.0, "reviewer", false)}}}};
+             {"attestation", Scalar{feedback_attestation(reverse_claim_sequence, "sensor-reverse", "pressure", 10.0, "reviewer", false)}}}};
         Event second_true{0, 0, "reviewer", "knowledge_source_feedback",
             {{"claim_sequence", Scalar{static_cast<std::int64_t>(reverse_claim_sequence)}},
              {"claim_source", Scalar{std::string("sensor-reverse")}},
@@ -403,8 +401,7 @@ int main() {
              {"claim_value", Scalar{10.0}},
              {"evaluator", Scalar{std::string("reviewer")}},
              {"correct", Scalar{true}},
-             {"attestation", Scalar{feedback_attestation(
-                 reverse_claim_sequence, "pressure", 10.0, "reviewer", true)}}}};
+             {"attestation", Scalar{feedback_attestation(reverse_claim_sequence, "sensor-reverse", "pressure", 10.0, "reviewer", true)}}}};
         assert(reverse_journal_writer.append(first_false) != 0);
         assert(reverse_journal_writer.append(second_true) != 0);
     }
@@ -415,6 +412,43 @@ int main() {
         assert(metric->calibration_observations == 0);
     }
     std::filesystem::remove(reverse_journal, error);
+
+    // A valid evaluator attestation must bind the source identity as well
+    // as the claim sequence and value. Re-labeling a journal claim while
+    // retaining its old attestation must not transfer calibration to another
+    // source.
+    const auto source_binding_journal = std::filesystem::temp_directory_path() /
+        "jarvis_knowledge_feedback_source_binding.bin";
+    std::filesystem::remove(source_binding_journal, error);
+    std::uint64_t source_binding_sequence = 0;
+    {
+        Brain source_binding(source_binding_journal, {"reviewer"}, verifier);
+        const auto claim = source_binding.observe(Event{0, 0, "sensor-b", "observation",
+            {{"temperature", Scalar{20.0}}}});
+        assert(claim.event.sequence != 0);
+        source_binding_sequence = claim.event.sequence;
+    }
+    {
+        Memory journal_writer(256, source_binding_journal);
+        Event relabeled_feedback{0, 0, "reviewer", "knowledge_source_feedback",
+            {{"claim_sequence", Scalar{static_cast<std::int64_t>(source_binding_sequence)}},
+             {"claim_source", Scalar{std::string("sensor-b")}},
+             {"claim_key", Scalar{std::string("temperature")}},
+             {"claim_value", Scalar{20.0}},
+             {"evaluator", Scalar{std::string("reviewer")}},
+             {"correct", Scalar{true}},
+             {"attestation", Scalar{feedback_attestation(
+                 source_binding_sequence, "sensor-a", "temperature", 20.0,
+                 "reviewer", true)}}}};
+        assert(journal_writer.append(relabeled_feedback) != 0);
+    }
+    {
+        Brain restored_source_binding(source_binding_journal, {"reviewer"}, verifier);
+        const auto* metric = restored_source_binding.knowledge_source("sensor-b");
+        assert(metric != nullptr);
+        assert(metric->calibration_observations == 0);
+    }
+    std::filesystem::remove(source_binding_journal, error);
 
     return 0;
 }
