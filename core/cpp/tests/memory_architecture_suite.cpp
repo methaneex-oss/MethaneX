@@ -5,6 +5,7 @@
 #include <fstream>
 #include <cstdint>
 #include <string>
+#include <string_view>
 
 using namespace jarvis::core;
 
@@ -183,5 +184,72 @@ int main() {
     std::filesystem::remove(damaged_path, ec);
     std::filesystem::remove(damaged_metadata, ec);
     std::filesystem::remove(quarantine_path, ec);
+
+    // Serialized booleans have only two valid byte encodings. An invalid
+    // representation must be rejected as a malformed record before it is
+    // materialized as a C++ bool or allowed into replayed cognitive state.
+    const auto invalid_bool_path =
+        std::filesystem::temp_directory_path() / "jarvis_memory_invalid_bool.bin";
+    const auto invalid_bool_metadata =
+        std::filesystem::path(invalid_bool_path.string() + ".meta");
+    const auto invalid_bool_quarantine =
+        std::filesystem::path(invalid_bool_path.string() + ".corrupt");
+    std::filesystem::remove(invalid_bool_path, ec);
+    std::filesystem::remove(invalid_bool_metadata, ec);
+    std::filesystem::remove(invalid_bool_quarantine, ec);
+    std::uintmax_t invalid_bool_prefix_size = 0;
+    std::uintmax_t invalid_bool_original_size = 0;
+    {
+        Memory bool_journal(8, invalid_bool_path);
+        assert(bool_journal.append(Event{0, 1, "parser-test", "valid-prefix",
+            {{"flag", false}}}) == 1);
+        invalid_bool_prefix_size = std::filesystem::file_size(invalid_bool_path);
+        assert(bool_journal.append(Event{0, 2, "parser-test", "observation",
+            {{"flag", true}}}) == 2);
+        invalid_bool_original_size = std::filesystem::file_size(invalid_bool_path);
+    }
+    {
+        std::fstream damaged(invalid_bool_path,
+                             std::ios::binary | std::ios::in | std::ios::out);
+        assert(damaged);
+        constexpr std::string_view source = "parser-test";
+        constexpr std::string_view kind = "observation";
+        constexpr std::string_view key = "flag";
+        const auto value_offset = invalid_bool_prefix_size +
+            6 * sizeof(std::uint64_t) + source.size() + kind.size() +
+            key.size() + sizeof(std::uint8_t);
+        damaged.seekp(static_cast<std::streamoff>(value_offset));
+        const std::uint8_t invalid_bool = 2;
+        damaged.write(reinterpret_cast<const char*>(&invalid_bool),
+                      sizeof(invalid_bool));
+        damaged.flush();
+        assert(damaged);
+    }
+    {
+        Memory recovered(8, invalid_bool_path);
+        assert(recovered.size() == 1);
+        assert(recovered.latest()->kind == "valid-prefix");
+        assert(std::filesystem::exists(invalid_bool_quarantine));
+        assert(std::filesystem::file_size(invalid_bool_quarantine) ==
+               invalid_bool_original_size - invalid_bool_prefix_size);
+        assert(std::filesystem::file_size(invalid_bool_path) ==
+               invalid_bool_prefix_size);
+        assert(recovered.append(Event{0, 3, "parser-test", "after-invalid-bool",
+            {{"flag", false}}}) == 2);
+    }
+    {
+        Memory restarted(8, invalid_bool_path);
+        assert(restarted.size() == 2);
+        const auto latest = restarted.latest();
+        assert(latest.has_value());
+        assert(latest->kind == "after-invalid-bool");
+        const auto flag = latest->data.find("flag");
+        assert(flag != latest->data.end());
+        assert(std::get_if<bool>(&flag->second) != nullptr);
+        assert(!*std::get_if<bool>(&flag->second));
+    }
+    std::filesystem::remove(invalid_bool_path, ec);
+    std::filesystem::remove(invalid_bool_metadata, ec);
+    std::filesystem::remove(invalid_bool_quarantine, ec);
     return 0;
 }
