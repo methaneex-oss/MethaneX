@@ -58,6 +58,10 @@ There is deliberately no requirement that the entire project be written in one l
 
 JARVIS is under active foundational development. The current work is focused on completing and integrating the cognitive substrate before higher-level device, interface and deployment layers are built on top of it.
 
+## Brain language ownership
+
+The Brain-only layer-to-language responsibilities, including the TypeScript monitoring plane, Python/PyTorch learning boundary, and conditional Rust/GPU roles, are defined in the [Brain Layer-to-Language Ownership Map](docs/BRAIN_LAYER_LANGUAGE_OWNERSHIP_MAP.md).
+
 ## Project governance
 
 The command structure, role boundaries, decision authority, architecture change control, independent testing/review requirements, and handoff rules are defined in [JARVIS Project Governance](docs/JARVIS_PROJECT_GOVERNANCE.md). This document is the repository record of the Project Director → Chief Builder → Independent Tester / Independent Reviewer operating model.
