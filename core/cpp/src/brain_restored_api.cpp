@@ -256,6 +256,19 @@ double Brain::learning_confidence(const std::string& key) const noexcept { std::
 AffectiveState Brain::affective_state() const { std::shared_lock lock(mutex_); return affective_state_model_.state(); }
 AffectiveAppraisal Brain::affective_appraisal() const { std::shared_lock lock(mutex_); return affective_learning_model_.appraisal(); }
 std::uint64_t Brain::affective_learning_updates() const { std::shared_lock lock(mutex_); return affective_learning_model_.updates(); }
+std::uint64_t Brain::import_legacy_memory_event(Event event) {
+    // Imported history is passive episodic data, never a route for injecting
+    // Brain control-plane events or replaying untrusted state changes.
+    if (event.kind != "observation" && event.kind != "action_outcome" &&
+        event.kind != "action_attempt") return 0;
+    event.source = "legacy_import";
+    std::unique_lock lock(mutex_);
+    event.sequence = memory_.append(event);
+    if (event.sequence == 0) return 0;
+    ++state_.events_seen;
+    state_.cycle = event.sequence;
+    return event.sequence;
+}
 std::vector<LearnedAssociation> Brain::developmental_associations() const { std::shared_lock lock(mutex_); return developmental_learning_.associations(); }
 std::vector<LearnedStrategy> Brain::developmental_strategies() const { std::shared_lock lock(mutex_); return developmental_learning_.strategies(); }
 const LearnedStrategy* Brain::developmental_best_strategy(const std::string& context) const noexcept { std::shared_lock lock(mutex_); return developmental_learning_.best_strategy(context); }
