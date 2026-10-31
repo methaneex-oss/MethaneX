@@ -449,6 +449,12 @@ bool is_internal_brain_event(const std::string& kind) {
 }
 
 void Brain::replay(const Event& event, bool external_observation) {
+    // Legacy imports are retained for episodic recall only. Replaying them as
+    // ordinary observations or action outcomes would let untrusted historical
+    // records mutate beliefs, calibration, affect, or developmental strategies
+    // when a Brain is reconstructed after restart.
+    if (event.source == "legacy_import") return;
+
     // Validate external experience before any subsystem mutates or advances state.
     if (!is_internal_brain_event(event.kind) && !valid_observation_event(event))
         return;
