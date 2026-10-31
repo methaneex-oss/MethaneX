@@ -26,13 +26,6 @@ void accumulate_evidence(Fact& accumulated, const Fact& incoming) {
         accumulated.updated_sequence, incoming.updated_sequence);
 }
 
-// Repeated observations from one source are not independent samples.
-// Keep their count for auditability and their mean for quality estimation,
-// but never multiply confidence by repetition count when comparing alternatives.
-long double evidence_weight(const Fact& fact) {
-    return static_cast<long double>(std::clamp(fact.confidence, 0.0, 1.0));
-}
-
 void accumulate_evidence(Relation& accumulated, const Relation& incoming) {
     const auto previous_observations = std::max<std::uint64_t>(1, accumulated.observations);
     const auto incoming_observations = std::max<std::uint64_t>(1, incoming.observations);
@@ -51,11 +44,6 @@ void accumulate_evidence(Relation& accumulated, const Relation& incoming) {
     }
     accumulated.updated_sequence = std::max(
         accumulated.updated_sequence, incoming.updated_sequence);
-}
-
-// Relation repetition is likewise not independent corroboration.
-long double evidence_weight(const Relation& relation) {
-    return static_cast<long double>(std::clamp(relation.confidence, 0.0, 1.0));
 }
 
 } // namespace
