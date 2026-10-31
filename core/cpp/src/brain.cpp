@@ -13,6 +13,92 @@ namespace {
 std::uint64_t now_ns() noexcept { return static_cast<std::uint64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count()); }
 const std::string* string_value(const Attributes& data, const std::string& key) { const auto it = data.find(key); return it == data.end() ? nullptr : std::get_if<std::string>(&it->second); }
 double double_value(const Attributes& data, const std::string& key, double fallback = 0.0) { const auto it = data.find(key); if (it == data.end()) return fallback; if (const auto value = std::get_if<double>(&it->second)) return *value; if (const auto value = std::get_if<std::int64_t>(&it->second)) return static_cast<double>(*value); return fallback; }
+
+bool valid_observation_event(const Event& event) {
+    const auto valid_unit = [&](const char* name) {
+        const auto field = event.data.find(name);
+        if (field == event.data.end()) return true;
+        if (const auto* value = std::get_if<double>(&field->second))
+            return std::isfinite(*value) && *value >= 0.0 && *value <= 1.0;
+        if (const auto* value = std::get_if<std::int64_t>(&field->second))
+            return *value == 0 || *value == 1;
+        return false;
+    };
+    const auto valid_signed_unit = [&](const char* name) {
+        const auto field = event.data.find(name);
+        if (field == event.data.end()) return true;
+        if (const auto* value = std::get_if<double>(&field->second))
+            return std::isfinite(*value) && *value >= -1.0 && *value <= 1.0;
+        if (const auto* value = std::get_if<std::int64_t>(&field->second))
+            return *value >= -1 && *value <= 1;
+        return false;
+    };
+    const auto valid_finite_numeric = [&](const char* name) {
+        const auto field = event.data.find(name);
+        if (field == event.data.end()) return true;
+        if (const auto* value = std::get_if<double>(&field->second))
+            return std::isfinite(*value);
+        return std::get_if<std::int64_t>(&field->second) != nullptr;
+    };
+    const auto valid_provenance = [&]() {
+        const auto id = event.data.find("provenance_id");
+        const auto attestation = event.data.find("provenance_attestation");
+        if (id == event.data.end() && attestation == event.data.end()) return true;
+        if (id == event.data.end() || attestation == event.data.end()) return false;
+        const auto* id_value = std::get_if<std::string>(&id->second);
+        const auto* attestation_value = std::get_if<std::string>(&attestation->second);
+        return id_value != nullptr && !id_value->empty() &&
+               attestation_value != nullptr && !attestation_value->empty();
+    };
+
+    return valid_provenance() &&
+           valid_unit("evidence_reliability") &&
+           valid_unit("reliability") &&
+           valid_unit("confidence") &&
+           valid_unit("salience") &&
+           valid_unit("novelty") &&
+           valid_unit("urgency") &&
+           valid_unit("prediction_error") &&
+           valid_signed_unit("outcome") &&
+           valid_finite_numeric("world_step");
+}
+
+double observation_evidence_reliability(const Event& event) {
+    // Prefer explicit evidence quality. Legacy reliability and perceptual
+    // confidence remain compatible fallbacks; absent metadata uses the
+    // neutral observation prior. Missing appraisal metadata is unknown, not
+    // evidence of above-average reliability.
+    for (const char* key : {"evidence_reliability", "reliability", "confidence"}) {
+        const auto field = event.data.find(key);
+        if (field == event.data.end()) continue;
+        if (const auto* value = std::get_if<double>(&field->second)) {
+            if (std::isfinite(*value))
+                return std::clamp(*value, 0.0, 1.0);
+            return 0.0;
+        }
+        if (const auto* value = std::get_if<std::int64_t>(&field->second))
+            return std::clamp(static_cast<double>(*value), 0.0, 1.0);
+        return 0.0;
+    }
+    return 0.5;
+}
+
+std::string verified_knowledge_provenance_id(
+    const Event& event, const std::string& key, const Scalar& value,
+    const KnowledgeProvenanceVerifier& verifier) {
+    const auto* provenance_id = string_value(event.data, "provenance_id");
+    const auto* attestation = string_value(event.data, "provenance_attestation");
+    if (provenance_id == nullptr || provenance_id->empty() ||
+        attestation == nullptr || attestation->empty() || !verifier) return {};
+    const KnowledgeProvenanceRequest request{
+        event.source, key, value, *provenance_id, *attestation};
+    try {
+        return verifier(request) ? *provenance_id : std::string{};
+    } catch (...) {
+        return {};
+    }
+}
+
 bool numeric_value(const Scalar& value, long double& result) {
     if (const auto* integer = std::get_if<std::int64_t>(&value)) {
         result = static_cast<long double>(*integer);
@@ -196,7 +282,16 @@ std::string join_ids(const std::vector<std::string>& ids) { std::ostringstream o
 std::vector<std::string> split_ids(const std::string& value) { std::vector<std::string> result; std::size_t start = 0; while (start <= value.size()) { const auto end = value.find('\x1f', start); const auto token = value.substr(start, end == std::string::npos ? std::string::npos : end - start); if (!token.empty()) result.push_back(token); if (end == std::string::npos) break; start = end + 1; } return result; }
 GoalStatus goal_status_value(std::int64_t value) { switch (value) { case 0: return GoalStatus::pending; case 1: return GoalStatus::active; case 2: return GoalStatus::completed; case 3: return GoalStatus::abandoned; default: return GoalStatus::pending; } }
 }
-Brain::Brain(std::filesystem::path journal_path) : memory_(256, std::move(journal_path)), evolution_controller_(evolution_, evolution_history_) { const auto history = memory_.all(); for (const auto& event : history) replay(event); state_.events_seen = static_cast<std::uint64_t>(history.size()); if (!history.empty()) state_.cycle = history.back().sequence; sync_self_state(); }
+Brain::Brain(std::filesystem::path journal_path,
+           std::vector<std::string> trusted_knowledge_evaluators,
+           KnowledgeFeedbackVerifier knowledge_feedback_verifier,
+           KnowledgeProvenanceVerifier knowledge_provenance_verifier)
+    : trusted_knowledge_evaluators_(trusted_knowledge_evaluators.begin(),
+                                    trusted_knowledge_evaluators.end()),
+      knowledge_feedback_verifier_(std::move(knowledge_feedback_verifier)),
+      knowledge_provenance_verifier_(std::move(knowledge_provenance_verifier)),
+      memory_(256, std::move(journal_path)),
+      evolution_controller_(evolution_, evolution_history_) { const auto history = memory_.all(); for (const auto& event : history) replay(event); state_.events_seen = static_cast<std::uint64_t>(history.size()); if (!history.empty()) state_.cycle = history.back().sequence; sync_self_state(); }
 void Brain::consolidate_experience(const Event& event, double error) {
     double salience = attention_state_.salience; double novelty = state_.novelty; double confidence = 0.5;
     if (const auto it = event.data.find("salience"); it != event.data.end()) if (const auto* value = std::get_if<double>(&it->second)) salience = *value;
@@ -336,9 +431,27 @@ bool Brain::valid_affective_learning_source(const Event& event) const {
     return true;
 }
 
-void Brain::replay(const Event& event, bool external_observation) {
-    state_.cycle = std::max(state_.cycle, event.sequence);
+bool is_internal_brain_event(const std::string& kind) {
+    // Explicit Brain-generated records have their own event-specific
+    // validation. Any other event kind is external experience and must pass
+    // the common appraisal-metadata boundary before replay.
+    return kind == "action_outcome" || kind == "affective_learning" ||
+           kind == "capability_isolate" || kind == "capability_observe" ||
+           kind == "capability_restore" || kind == "evolution_adopt" ||
+           kind == "evolution_canary" || kind == "evolution_evaluated" ||
+           kind == "evolution_fitness" || kind == "evolution_register" ||
+           kind == "evolution_rollback" || kind == "goal_abandon" ||
+           kind == "goal_activate" || kind == "goal_complete" ||
+           kind == "goal_create" || kind == "goal_priority" ||
+           kind == "goal_progress" || kind == "knowledge_source_feedback" ||
+           kind == "learning" || kind == "prediction" || kind == "prediction_outcome" ||
+           kind == "resilience_isolate" || kind == "resilience_recover";
+}
 
+void Brain::replay(const Event& event, bool external_observation) {
+    // Validate external experience before any subsystem mutates or advances state.
+    if (!is_internal_brain_event(event.kind) && !valid_observation_event(event))
+        return;
     // Validate prediction feedback before any subsystem mutates. Otherwise a
     // duplicate or malformed outcome can alter affect even when prediction
     // resolution itself is rejected below.
@@ -350,6 +463,131 @@ void Brain::replay(const Event& event, bool external_observation) {
             : (key == nullptr ? nullptr : find_latest_unresolved_prediction(*key));
         if (!valid_prediction_outcome_event(event, prediction)) return;
     }
+    if (event.kind == "knowledge_source_feedback") {
+        const auto sequence = integer_value(event.data, "claim_sequence", 0);
+        const auto* source = string_value(event.data, "claim_source");
+        const auto* key = string_value(event.data, "claim_key");
+        const auto* evaluator = string_value(event.data, "evaluator");
+        const auto* attestation = string_value(event.data, "attestation");
+        const auto value_it = event.data.find("claim_value");
+        const auto correct_it = event.data.find("correct");
+        if (sequence == 0 || sequence >= event.sequence || source == nullptr ||
+            source->empty() || key == nullptr || key->empty() ||
+            evaluator == nullptr || evaluator->empty() || *evaluator != event.source ||
+            *evaluator == *source ||
+            !trusted_knowledge_evaluators_.contains(*evaluator) ||
+            attestation == nullptr || attestation->empty() ||
+            value_it == event.data.end() ||
+            correct_it == event.data.end() ||
+            std::get_if<bool>(&correct_it->second) == nullptr) return;
+        const KnowledgeFeedbackRequest request{
+            sequence, *key, value_it->second, *evaluator,
+            *std::get_if<bool>(&correct_it->second), *attestation};
+        bool authorized = false;
+        try {
+            authorized = knowledge_feedback_verifier_ &&
+                         knowledge_feedback_verifier_(request);
+        } catch (...) {
+            authorized = false;
+        }
+        if (!authorized) return;
+        const auto history = memory_.all();
+        const auto target = std::find_if(history.begin(), history.end(),
+            [&](const Event& candidate) { return candidate.sequence == sequence; });
+        if (target == history.end() || target->sequence >= event.sequence ||
+            target->source != *source) return;
+        bool matching_claim = false;
+        if (target->kind == "learning") {
+            const auto* evidence_key = string_value(target->data, "evidence_key");
+            const auto evidence_value = target->data.find("evidence_value");
+            matching_claim = evidence_key != nullptr && *evidence_key == *key &&
+                evidence_value != target->data.end() && evidence_value->second == value_it->second;
+        } else {
+            const auto external = target->data.find("_external_observation");
+            const bool is_external =
+                external != target->data.end() &&
+                std::get_if<bool>(&external->second) != nullptr &&
+                *std::get_if<bool>(&external->second);
+            const bool metadata = *key == "_external_observation" ||
+                *key == "novelty" || *key == "salience" || *key == "urgency" ||
+                *key == "prediction_error" || *key == "outcome" ||
+                *key == "confidence" || *key == "reliability" ||
+                *key == "evidence_reliability" || *key == "world_step" ||
+                *key == "provenance_id" || *key == "provenance_attestation";
+            const bool episode_metadata =
+                target->source == "developmental_environment" &&
+                target->kind == "observation" &&
+                (*key == "task" || *key == "context");
+            const auto fact = target->data.find(*key);
+            matching_claim = is_external && !metadata && !episode_metadata &&
+                fact != target->data.end() && fact->second == value_it->second;
+        }
+        if (!matching_claim) return;
+        // A journal may contain duplicate adjudications that bypassed the
+        // public API. Identical authenticated duplicates are applied once;
+        // conflicting authenticated outcomes invalidate the entire tuple,
+        // independent of journal insertion order.
+        bool conflicting_adjudication = false;
+        std::uint64_t first_matching_sequence = event.sequence;
+        for (const auto& candidate : history) {
+            if (candidate.kind != "knowledge_source_feedback") continue;
+            const auto candidate_sequence_it = candidate.data.find("claim_sequence");
+            const auto* candidate_sequence = candidate_sequence_it == candidate.data.end()
+                ? nullptr : std::get_if<std::int64_t>(&candidate_sequence_it->second);
+            const auto candidate_key_it = candidate.data.find("claim_key");
+            const auto* candidate_key = candidate_key_it == candidate.data.end()
+                ? nullptr : std::get_if<std::string>(&candidate_key_it->second);
+            const auto candidate_source_it = candidate.data.find("claim_source");
+            const auto* candidate_source = candidate_source_it == candidate.data.end()
+                ? nullptr : std::get_if<std::string>(&candidate_source_it->second);
+            const auto candidate_value_it = candidate.data.find("claim_value");
+            const auto candidate_evaluator_it = candidate.data.find("evaluator");
+            const auto* candidate_evaluator = candidate_evaluator_it == candidate.data.end()
+                ? nullptr : std::get_if<std::string>(&candidate_evaluator_it->second);
+            const auto candidate_attestation_it = candidate.data.find("attestation");
+            const auto* candidate_attestation = candidate_attestation_it == candidate.data.end()
+                ? nullptr : std::get_if<std::string>(&candidate_attestation_it->second);
+            const auto candidate_correct_it = candidate.data.find("correct");
+            const auto* candidate_correct = candidate_correct_it == candidate.data.end()
+                ? nullptr : std::get_if<bool>(&candidate_correct_it->second);
+            if (candidate_sequence == nullptr ||
+                *candidate_sequence != static_cast<std::int64_t>(sequence) ||
+                candidate_key == nullptr || *candidate_key != *key ||
+                candidate_source == nullptr || *candidate_source != *source ||
+                candidate_value_it == candidate.data.end() ||
+                candidate_value_it->second != value_it->second ||
+                candidate_evaluator == nullptr || *candidate_evaluator != *evaluator ||
+                candidate.source != *evaluator ||
+                candidate_attestation == nullptr || candidate_attestation->empty() ||
+                candidate_correct == nullptr) continue;
+            const KnowledgeFeedbackRequest candidate_request{
+                sequence, *candidate_key, candidate_value_it->second,
+                *candidate_evaluator, *candidate_correct, *candidate_attestation};
+            bool candidate_authorized = false;
+            try {
+                candidate_authorized = knowledge_feedback_verifier_ &&
+                    knowledge_feedback_verifier_(candidate_request);
+            } catch (...) {
+                candidate_authorized = false;
+            }
+            if (!candidate_authorized) continue;
+            if (*candidate_correct != *std::get_if<bool>(&correct_it->second)) {
+                conflicting_adjudication = true;
+                break;
+            }
+            first_matching_sequence = std::min(
+                first_matching_sequence, candidate.sequence);
+        }
+        if (conflicting_adjudication || event.sequence != first_matching_sequence) return;
+        const std::string feedback_id =
+            std::to_string(sequence) + "|" + *key + "|" + *evaluator;
+        if (!processed_knowledge_feedback_.insert(feedback_id).second) return;
+        state_.cycle = std::max(state_.cycle, event.sequence);
+        knowledge_.score_source(*source, *std::get_if<bool>(&correct_it->second));
+        return;
+    }
+
+    state_.cycle = std::max(state_.cycle, event.sequence);
     if (event.kind == "action_outcome" &&
         !valid_action_outcome_event(event)) return;
 
@@ -623,7 +861,7 @@ void Brain::replay(const Event& event, bool external_observation) {
     }
     const double reliability = event.kind == "learning"
         ? std::clamp(double_value(event.data, "reliability", 0.5), 0.0, 1.0)
-        : 0.7;
+        : observation_evidence_reliability(event);
 
     // A learning event carries one evidence item plus appraisal metadata. Read
     // its explicit payload rather than taking the first unordered-map entry;
@@ -638,17 +876,24 @@ void Brain::replay(const Event& event, bool external_observation) {
             facts.emplace_back(*evidence_key, evidence_value->second);
             knowledge_.assimilate(
                 KnowledgeEvidence{event.source, *evidence_key,
-                                  evidence_value->second, reliability});
+                    evidence_value->second, reliability,
+                    verified_knowledge_provenance_id(
+                        event, *evidence_key, evidence_value->second,
+                        knowledge_provenance_verifier_)});
         } else {
             // Backward compatibility for journal entries written before the
             // explicit evidence payload was introduced.
             for (const auto& [key, value] : event.data) {
                 if (key == "reliability" || key == "salience" || key == "novelty" ||
                     key == "confidence" || key == "evidence_key" ||
-                    key == "evidence_value" || key == "source_action_sequence")
+                    key == "evidence_value" || key == "source_action_sequence" ||
+                    key == "provenance_id" || key == "provenance_attestation")
                     continue;
                 facts.emplace_back(key, value);
-                knowledge_.assimilate(KnowledgeEvidence{event.source, key, value, reliability});
+                knowledge_.assimilate(KnowledgeEvidence{
+                    event.source, key, value, reliability,
+                    verified_knowledge_provenance_id(
+                        event, key, value, knowledge_provenance_verifier_)});
                 break;
             }
         }
@@ -656,7 +901,9 @@ void Brain::replay(const Event& event, bool external_observation) {
         for (const auto& [key, value] : event.data) {
             // Appraisal metadata describes an experience; it is not a world fact.
             if (key == "_external_observation" || key == "novelty" || key == "salience" || key == "urgency" ||
-                key == "prediction_error" || key == "outcome" || key == "confidence")
+                key == "prediction_error" || key == "outcome" || key == "confidence" ||
+                key == "reliability" || key == "evidence_reliability" || key == "world_step" ||
+                key == "provenance_id" || key == "provenance_attestation")
                 continue;
             // The developmental environment adds these fields to describe the
             // episode, not the world state. Keep them in episodic memory for
@@ -687,14 +934,45 @@ void Brain::replay(const Event& event, bool external_observation) {
             ++it->second.observations;
             it->second.updated_sequence = event.sequence;
         }
-        world_.observe(Fact{event.source, key, value, reliability, 1});
+        // Assess every factual experience, not only explicit learning API
+        // calls. Repeated observations from one source remain one source for
+        // corroboration; disagreement is retained as disputed evidence.
+        if (event.kind != "learning")
+            knowledge_.assimilate(KnowledgeEvidence{
+                event.source, key, value, reliability,
+                verified_knowledge_provenance_id(
+                    event, key, value, knowledge_provenance_verifier_)});
+        world_.observe(Fact{event.source, key, value, reliability, 1,
+                            event.sequence, event.sequence, false});
+        // Global beliefs summarize evidence across sources. A clean update from
+        // one source must not mask another source conflict, and independently
+        // resolved sources that disagree must remain disputed.
+        const auto belief = beliefs_.find(key);
+        if (belief != beliefs_.end()) {
+            bool disputed = false;
+            std::optional<Scalar> first_value;
+            const auto inspect_source_fact = [&](const Fact& source_fact) {
+                if (source_fact.predicate != key) return;
+                if (source_fact.disputed ||
+                    source_fact.value != belief->second.value) disputed = true;
+                if (!first_value.has_value()) first_value = source_fact.value;
+                else if (*first_value != source_fact.value) disputed = true;
+            };
+            // facts() supplies each selected source value; disputed_facts()
+            // additionally supplies all active alternatives.
+            for (const auto& source_fact : world_.facts())
+                inspect_source_fact(source_fact);
+            for (const auto& source_fact : world_.disputed_facts())
+                inspect_source_fact(source_fact);
+            belief->second.disputed = disputed;
+        }
     }
     const auto subject = string_value(event.data, "subject");
     const auto predicate = string_value(event.data, "predicate");
     const auto object = string_value(event.data, "object");
     if (subject != nullptr && predicate != nullptr && object != nullptr)
         world_.relate(Relation{*subject, *predicate, *object, reliability,
-                               event.sequence, false});
+                               event.sequence, false, 1, event.sequence});
 
     std::vector<Belief> after;
     after.reserve(beliefs_.size());
@@ -754,6 +1032,11 @@ void Brain::replay(const Event& event, bool external_observation) {
 }
 Observation Brain::observe(Event event) {
     std::unique_lock lock(mutex_);
+    // Source calibration feedback must enter through the validated adjudication
+    // API below, never through the general external-experience interface.
+    if (event.kind == "knowledge_source_feedback") return Observation{};
+    if (!is_internal_brain_event(event.kind) && !valid_observation_event(event))
+        return Observation{};
     if (event.kind == "prediction_outcome") {
         const auto sequence = integer_value(event.data, "prediction_sequence", 0);
         const auto* key = string_value(event.data, "key");

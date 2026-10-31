@@ -1069,6 +1069,431 @@ int main() {
     std::filesystem::remove(evidence_path, ec);
     std::filesystem::remove(evidence_path.string() + ".meta", ec);
 
+    // Contradictory observations must remain disputed while evidence is
+    // balanced, then become usable again when repeated reliable evidence
+    // supports one value. The same resolution must be reconstructed on replay.
+    const auto contradiction_path =
+        std::filesystem::temp_directory_path() / "jarvis_fact_contradiction_resolution.bin";
+    std::filesystem::remove(contradiction_path, ec);
+    std::filesystem::remove(contradiction_path.string() + ".meta", ec);
+    const auto verify_resolved_fact = [](const Brain& candidate) {
+        const auto fact = candidate.world().query(
+            "contradiction-resolution-test", "door-state");
+        assert(fact.has_value());
+        assert(fact->value == Scalar{std::string("closed")});
+        assert(!fact->disputed);
+        assert(candidate.world().disputed_facts().empty());
+        const auto beliefs = candidate.beliefs();
+        const auto belief = std::find_if(
+            beliefs.begin(), beliefs.end(),
+            [](const Belief& item) { return item.key == "door-state"; });
+        assert(belief != beliefs.end());
+        assert(belief->value == Scalar{std::string("closed")});
+        assert(!belief->disputed);
+    };
+    {
+        Brain contradiction_brain(contradiction_path);
+        const auto open = contradiction_brain.observe(Event{
+            0, 1, "contradiction-resolution-test", "observation",
+            {{"door-state", std::string("open")}, {"confidence", 0.9}}});
+        assert(open.event.sequence != 0);
+        const auto closed = contradiction_brain.observe(Event{
+            0, 2, "contradiction-resolution-test", "observation",
+            {{"door-state", std::string("closed")}, {"confidence", 0.9}}});
+        assert(closed.event.sequence != 0);
+        const auto contested = contradiction_brain.world().query(
+            "contradiction-resolution-test", "door-state");
+        assert(contested.has_value());
+        assert(contested->disputed);
+        assert(!contradiction_brain.world().disputed_facts().empty());
+
+        const auto corroboration = contradiction_brain.observe(Event{
+            0, 3, "contradiction-resolution-test", "observation",
+            {{"door-state", std::string("closed")}, {"confidence", 0.95}}});
+        assert(corroboration.event.sequence != 0);
+        verify_resolved_fact(contradiction_brain);
+
+        const auto verify_resolved_relation = [](const Brain& candidate) {
+            const auto relations = candidate.world().relations_from("door");
+            assert(relations.size() == 1);
+            assert(relations.front().type == "opens_into");
+            assert(relations.front().to == "room-b");
+            assert(!relations.front().disputed);
+            assert(candidate.world().disputed_relations().empty());
+        };
+        const auto room_a = contradiction_brain.observe(Event{
+            0, 4, "contradiction-resolution-test", "observation",
+            {{"subject", std::string("door")},
+             {"predicate", std::string("opens_into")},
+             {"object", std::string("room-a")}}});
+        assert(room_a.event.sequence != 0);
+        const auto room_b = contradiction_brain.observe(Event{
+            0, 5, "contradiction-resolution-test", "observation",
+            {{"subject", std::string("door")},
+             {"predicate", std::string("opens_into")},
+             {"object", std::string("room-b")}}});
+        assert(room_b.event.sequence != 0);
+        assert(contradiction_brain.world().disputed_relations().size() == 2);
+        const auto room_b_corroboration = contradiction_brain.observe(Event{
+            0, 6, "contradiction-resolution-test", "observation",
+            {{"subject", std::string("door")},
+             {"predicate", std::string("opens_into")},
+             {"object", std::string("room-b")},
+             {"confidence", 0.8}}});
+        assert(room_b_corroboration.event.sequence != 0);
+        verify_resolved_relation(contradiction_brain);
+
+        // A strong value learned before a contradiction must not settle the
+        // new conflict by relying only on its old observations. It needs fresh
+        // corroboration after the competing value has appeared.
+        const auto new_fact_conflict = contradiction_brain.observe(Event{
+            0, 7, "contradiction-resolution-test", "observation",
+            {{"door-state", std::string("open")}, {"confidence", 0.9}}});
+        assert(new_fact_conflict.event.sequence != 0);
+        const auto still_contested_fact = contradiction_brain.world().query(
+            "contradiction-resolution-test", "door-state");
+        assert(still_contested_fact.has_value());
+        assert(still_contested_fact->disputed);
+        const auto fresh_fact_corroboration = contradiction_brain.observe(Event{
+            0, 8, "contradiction-resolution-test", "observation",
+            {{"door-state", std::string("closed")}, {"confidence", 0.99}}});
+        assert(fresh_fact_corroboration.event.sequence != 0);
+        verify_resolved_fact(contradiction_brain);
+
+        // Repeating the challenger once is not enough when accumulated support
+        // still favors the prior value. The Brain belief must remain disputed
+        // until the leading value is observed again after this new conflict.
+        const auto second_fact_conflict = contradiction_brain.observe(Event{
+            0, 9, "contradiction-resolution-test", "observation",
+            {{"door-state", std::string("open")}, {"confidence", 0.9}}});
+        assert(second_fact_conflict.event.sequence != 0);
+        const auto repeated_challenger = contradiction_brain.observe(Event{
+            0, 10, "contradiction-resolution-test", "observation",
+            {{"door-state", std::string("open")}, {"confidence", 0.9}}});
+        assert(repeated_challenger.event.sequence != 0);
+        const auto still_disputed_fact = contradiction_brain.world().query(
+            "contradiction-resolution-test", "door-state");
+        assert(still_disputed_fact.has_value());
+        assert(still_disputed_fact->disputed);
+        const auto current_beliefs = contradiction_brain.beliefs();
+        const auto current_door_belief = std::find_if(
+            current_beliefs.begin(), current_beliefs.end(),
+            [](const Belief& item) { return item.key == "door-state"; });
+        assert(current_door_belief != current_beliefs.end());
+        assert(current_door_belief->disputed);
+        const auto final_fact_corroboration = contradiction_brain.observe(Event{
+            0, 11, "contradiction-resolution-test", "observation",
+            {{"door-state", std::string("closed")}, {"confidence", 0.99}}});
+        assert(final_fact_corroboration.event.sequence != 0);
+        verify_resolved_fact(contradiction_brain);
+
+        const auto new_relation_conflict = contradiction_brain.observe(Event{
+            0, 9, "contradiction-resolution-test", "observation",
+            {{"subject", std::string("door")},
+             {"predicate", std::string("opens_into")},
+             {"object", std::string("room-a")}}});
+        assert(new_relation_conflict.event.sequence != 0);
+        assert(contradiction_brain.world().disputed_relations().size() == 2);
+        const auto fresh_relation_corroboration = contradiction_brain.observe(Event{
+            0, 10, "contradiction-resolution-test", "observation",
+            {{"subject", std::string("door")},
+             {"predicate", std::string("opens_into")},
+             {"object", std::string("room-b")},
+             {"confidence", 0.9}}});
+        assert(fresh_relation_corroboration.event.sequence != 0);
+        verify_resolved_relation(contradiction_brain);
+    }
+    {
+        Brain contradiction_replay(contradiction_path);
+        verify_resolved_fact(contradiction_replay);
+        const auto relations = contradiction_replay.world().relations_from("door");
+        assert(relations.size() == 1);
+        assert(relations.front().type == "opens_into");
+        assert(relations.front().to == "room-b");
+        assert(!relations.front().disputed);
+        assert(contradiction_replay.world().disputed_relations().empty());
+    }
+    std::filesystem::remove(contradiction_path, ec);
+    std::filesystem::remove(contradiction_path.string() + ".meta", ec);
+
+    // Observation evidence quality must reach belief/world learning, while
+    // appraisal metadata must not be learned as if it were part of the world.
+    const auto evidence_quality_path =
+        std::filesystem::temp_directory_path() / "jarvis_observation_evidence_quality.bin";
+    std::filesystem::remove(evidence_quality_path, ec);
+    std::filesystem::remove(evidence_quality_path.string() + ".meta", ec);
+    {
+        Brain evidence_quality(evidence_quality_path);
+        const auto observed = evidence_quality.observe(Event{
+            0, 1, "sensor-quality", "observation",
+            {{"reading", 42.0},
+             {"evidence_reliability", 0.2},
+             {"reliability", 0.9},
+             {"confidence", 0.8},
+             {"world_step", std::int64_t{3}}}});
+        assert(observed.event.sequence != 0);
+        const auto fact = evidence_quality.world().query("sensor-quality", "reading");
+        assert(fact.has_value());
+        assert(std::abs(fact->confidence - 0.2) < 1e-12);
+        assert(!evidence_quality.world().query(
+            "sensor-quality", "evidence_reliability").has_value());
+        assert(!evidence_quality.world().query("sensor-quality", "reliability").has_value());
+        assert(!evidence_quality.world().query("sensor-quality", "confidence").has_value());
+        assert(!evidence_quality.world().query("sensor-quality", "world_step").has_value());
+        const auto beliefs = evidence_quality.beliefs();
+        const auto reading = std::find_if(
+            beliefs.begin(), beliefs.end(),
+            [](const Belief& item) { return item.key == "reading"; });
+        assert(reading != beliefs.end());
+        assert(std::abs(reading->confidence - 0.2) < 1e-12);
+    }
+    {
+        Brain evidence_quality_replay(evidence_quality_path);
+        const auto fact = evidence_quality_replay.world().query("sensor-quality", "reading");
+        assert(fact.has_value());
+        assert(std::abs(fact->confidence - 0.2) < 1e-12);
+        assert(!evidence_quality_replay.world().query(
+            "sensor-quality", "evidence_reliability").has_value());
+    }
+    std::filesystem::remove(evidence_quality_path, ec);
+    std::filesystem::remove(evidence_quality_path.string() + ".meta", ec);
+
+    // Cross-source consistency: a clean observation from one source must not
+    // erase another source's unresolved contradiction. Replay and source-order
+    // permutations must reconstruct the same global dispute state.
+    const auto cross_source_path =
+        std::filesystem::temp_directory_path() / "jarvis_cross_source_conflict.bin";
+    std::filesystem::remove(cross_source_path, ec);
+    std::filesystem::remove(cross_source_path.string() + ".meta", ec);
+    const auto assert_global_dispute = [](const Brain& candidate, bool expected) {
+        const auto beliefs = candidate.beliefs();
+        const auto belief = std::find_if(
+            beliefs.begin(), beliefs.end(),
+            [](const Belief& item) { return item.key == "shared-fact"; });
+        assert(belief != beliefs.end());
+        assert(belief->disputed == expected);
+    };
+    {
+        Brain cross_source(cross_source_path);
+        assert(cross_source.observe(Event{0, 1, "source-a", "observation",
+            {{"shared-fact", std::string("X")}, {"evidence_reliability", 0.8}}}).event.sequence != 0);
+        assert(cross_source.observe(Event{0, 2, "source-a", "observation",
+            {{"shared-fact", std::string("Y")}, {"evidence_reliability", 0.8}}}).event.sequence != 0);
+        const auto source_a_fact = cross_source.world().query("source-a", "shared-fact");
+        assert(source_a_fact.has_value() && source_a_fact->disputed);
+        assert_global_dispute(cross_source, true);
+
+        assert(cross_source.observe(Event{0, 3, "source-b", "observation",
+            {{"shared-fact", std::string("Y")}, {"evidence_reliability", 0.8}}}).event.sequence != 0);
+        // Source B's clean Y must not hide source A's unresolved X/Y conflict.
+        assert_global_dispute(cross_source, true);
+
+        assert(cross_source.observe(Event{0, 4, "source-a", "observation",
+            {{"shared-fact", std::string("Y")}, {"evidence_reliability", 0.8}}}).event.sequence != 0);
+        assert_global_dispute(cross_source, false);
+    }
+    {
+        Brain cross_source_replay(cross_source_path);
+        assert_global_dispute(cross_source_replay, false);
+        const auto a = cross_source_replay.world().query("source-a", "shared-fact");
+        const auto b = cross_source_replay.world().query("source-b", "shared-fact");
+        assert(a.has_value() && !a->disputed && a->value == Scalar{std::string("Y")});
+        assert(b.has_value() && !b->disputed && b->value == Scalar{std::string("Y")});
+    }
+    std::filesystem::remove(cross_source_path, ec);
+    std::filesystem::remove(cross_source_path.string() + ".meta", ec);
+
+    const auto reverse_cross_source_path =
+        std::filesystem::temp_directory_path() / "jarvis_cross_source_conflict_reverse.bin";
+    std::filesystem::remove(reverse_cross_source_path, ec);
+    std::filesystem::remove(reverse_cross_source_path.string() + ".meta", ec);
+    {
+        Brain reverse_cross_source(reverse_cross_source_path);
+        assert(reverse_cross_source.observe(Event{0, 1, "source-b", "observation",
+            {{"shared-fact", std::string("Y")}, {"evidence_reliability", 0.8}}}).event.sequence != 0);
+        assert(reverse_cross_source.observe(Event{0, 2, "source-a", "observation",
+            {{"shared-fact", std::string("X")}, {"evidence_reliability", 0.8}}}).event.sequence != 0);
+        assert(reverse_cross_source.observe(Event{0, 3, "source-a", "observation",
+            {{"shared-fact", std::string("Y")}, {"evidence_reliability", 0.8}}}).event.sequence != 0);
+        assert_global_dispute(reverse_cross_source, true);
+        const auto a = reverse_cross_source.world().query("source-a", "shared-fact");
+        assert(a.has_value() && a->disputed);
+        assert(reverse_cross_source.observe(Event{0, 4, "source-a", "observation",
+            {{"shared-fact", std::string("Y")}, {"evidence_reliability", 0.8}}}).event.sequence != 0);
+        assert_global_dispute(reverse_cross_source, false);
+    }
+    {
+        Brain reverse_cross_source_replay(reverse_cross_source_path);
+        assert_global_dispute(reverse_cross_source_replay, false);
+        const auto a = reverse_cross_source_replay.world().query("source-a", "shared-fact");
+        const auto b = reverse_cross_source_replay.world().query("source-b", "shared-fact");
+        assert(a.has_value() && !a->disputed && a->value == Scalar{std::string("Y")});
+        assert(b.has_value() && !b->disputed && b->value == Scalar{std::string("Y")});
+    }
+    std::filesystem::remove(reverse_cross_source_path, ec);
+    std::filesystem::remove(reverse_cross_source_path.string() + ".meta", ec);
+
+    // Three-way alternatives: ties must remain contested, and unequal
+    // reliability must accumulate without allowing pre-conflict evidence alone
+    // to settle a newly introduced alternative.
+    const auto multi_value_path =
+        std::filesystem::temp_directory_path() / "jarvis_three_way_fact_conflict.bin";
+    std::filesystem::remove(multi_value_path, ec);
+    std::filesystem::remove(multi_value_path.string() + ".meta", ec);
+    {
+        Brain multi_value(multi_value_path);
+        const auto observe_value = [&](const char* value, double reliability) {
+            return multi_value.observe(Event{0, 0, "multi-value-source", "observation",
+                {{"multi-value", std::string(value)},
+                 {"evidence_reliability", reliability}}});
+        };
+        assert(observe_value("alpha", 0.8).event.sequence != 0);
+        assert(observe_value("beta", 0.8).event.sequence != 0);
+        assert(observe_value("gamma", 0.8).event.sequence != 0);
+        auto contested = multi_value.world().query("multi-value-source", "multi-value");
+        assert(contested.has_value() && contested->disputed);
+        const auto disputed_values = multi_value.world().disputed_facts();
+        assert(disputed_values.size() == 3);
+        assert(std::all_of(disputed_values.begin(), disputed_values.end(),
+            [](const Fact& fact) {
+                return fact.subject == "multi-value-source" &&
+                       fact.predicate == "multi-value" && fact.disputed;
+            }));
+        const auto contains_value = [&](const char* expected) {
+            return std::any_of(disputed_values.begin(), disputed_values.end(),
+                [&](const Fact& fact) {
+                    return fact.value == Scalar{std::string(expected)};
+                });
+        };
+        assert(contains_value("alpha"));
+        assert(contains_value("beta"));
+        assert(contains_value("gamma"));
+
+        // A low-reliability repeat cannot settle the three-way tie.
+        assert(observe_value("gamma", 0.0).event.sequence != 0);
+        contested = multi_value.world().query("multi-value-source", "multi-value");
+        assert(contested.has_value() && contested->disputed);
+        assert(observe_value("gamma", 0.7).event.sequence != 0);
+        contested = multi_value.world().query("multi-value-source", "multi-value");
+        assert(contested.has_value() && contested->disputed);
+        // Equal reliability is a tie, not a resolution.
+        assert(observe_value("gamma", 0.8).event.sequence != 0);
+        contested = multi_value.world().query("multi-value-source", "multi-value");
+        assert(contested.has_value() && contested->disputed);
+
+        // Strictly stronger fresh evidence after the conflict can resolve it.
+        assert(observe_value("gamma", 0.9).event.sequence != 0);
+        const auto resolved = multi_value.world().query(
+            "multi-value-source", "multi-value");
+        assert(resolved.has_value() && !resolved->disputed);
+        assert(resolved->value == Scalar{std::string("gamma")});
+        assert(multi_value.world().disputed_facts().empty());
+    }
+    {
+        Brain multi_value_replay(multi_value_path);
+        const auto resolved = multi_value_replay.world().query(
+            "multi-value-source", "multi-value");
+        assert(resolved.has_value() && !resolved->disputed);
+        assert(resolved->value == Scalar{std::string("gamma")});
+        assert(multi_value_replay.world().disputed_facts().empty());
+    }
+    std::filesystem::remove(multi_value_path, ec);
+    std::filesystem::remove(multi_value_path.string() + ".meta", ec);
+
+    const auto multi_relation_path =
+        std::filesystem::temp_directory_path() / "jarvis_three_way_relation_conflict.bin";
+    std::filesystem::remove(multi_relation_path, ec);
+    std::filesystem::remove(multi_relation_path.string() + ".meta", ec);
+    {
+        Brain multi_relation(multi_relation_path);
+        const auto observe_destination = [&](const char* destination, double reliability) {
+            return multi_relation.observe(Event{0, 0, "relation-source", "observation",
+                {{"subject", std::string("gateway")},
+                 {"predicate", std::string("connects_to")},
+                 {"object", std::string(destination)},
+                 {"evidence_reliability", reliability}}});
+        };
+        assert(observe_destination("node-a", 0.8).event.sequence != 0);
+        assert(observe_destination("node-b", 0.8).event.sequence != 0);
+        assert(observe_destination("node-c", 0.8).event.sequence != 0);
+        auto relations = multi_relation.world().relations_from("gateway");
+        assert(relations.size() == 3);
+        assert(std::all_of(relations.begin(), relations.end(),
+            [](const Relation& relation) { return relation.disputed; }));
+
+        assert(observe_destination("node-c", 0.2).event.sequence != 0);
+        relations = multi_relation.world().relations_from("gateway");
+        assert(relations.size() == 3);
+        assert(std::all_of(relations.begin(), relations.end(),
+            [](const Relation& relation) { return relation.disputed; }));
+        assert(observe_destination("node-c", 0.7).event.sequence != 0);
+        relations = multi_relation.world().relations_from("gateway");
+        assert(relations.size() == 3);
+        assert(std::all_of(relations.begin(), relations.end(),
+            [](const Relation& relation) { return relation.disputed; }));
+        assert(observe_destination("node-c", 0.8).event.sequence != 0);
+        relations = multi_relation.world().relations_from("gateway");
+        assert(relations.size() == 3);
+        assert(std::all_of(relations.begin(), relations.end(),
+            [](const Relation& relation) { return relation.disputed; }));
+
+        assert(observe_destination("node-c", 0.9).event.sequence != 0);
+        relations = multi_relation.world().relations_from("gateway");
+        assert(relations.size() == 1);
+        assert(relations.front().to == "node-c");
+        assert(!relations.front().disputed);
+        assert(multi_relation.world().disputed_relations().empty());
+    }
+    {
+        Brain multi_relation_replay(multi_relation_path);
+        const auto relations = multi_relation_replay.world().relations_from("gateway");
+        assert(relations.size() == 1);
+        assert(relations.front().to == "node-c");
+        assert(!relations.front().disputed);
+        assert(multi_relation_replay.world().disputed_relations().empty());
+    }
+    std::filesystem::remove(multi_relation_path, ec);
+    std::filesystem::remove(multi_relation_path.string() + ".meta", ec);
+
+    // Repeated reversals require a fresh, strictly stronger observation after
+    // each new conflict; a source cannot settle a tie by repeating an equal value.
+    const auto reversal_path =
+        std::filesystem::temp_directory_path() / "jarvis_repeated_conflict_reversal.bin";
+    std::filesystem::remove(reversal_path, ec);
+    {
+        Brain reversal(reversal_path);
+        const auto observe_reversal = [&](const char* value, double reliability) {
+            return reversal.observe(Event{0, 0, "reversal-source", "observation",
+                {{"reversible-state", std::string(value)},
+                 {"evidence_reliability", reliability}}});
+        };
+        assert(observe_reversal("alpha", 0.8).event.sequence != 0);
+        assert(observe_reversal("beta", 0.9).event.sequence != 0);
+        auto contested = reversal.world().query("reversal-source", "reversible-state");
+        assert(contested.has_value() && contested->disputed);
+        assert(observe_reversal("beta", 0.95).event.sequence != 0);
+        auto resolved = reversal.world().query("reversal-source", "reversible-state");
+        assert(resolved.has_value() && !resolved->disputed);
+        assert(resolved->value == Scalar{std::string("beta")});
+
+        assert(observe_reversal("alpha", 0.9).event.sequence != 0);
+        contested = reversal.world().query("reversal-source", "reversible-state");
+        assert(contested.has_value() && contested->disputed);
+        assert(observe_reversal("alpha", 0.99).event.sequence != 0);
+        resolved = reversal.world().query("reversal-source", "reversible-state");
+        assert(resolved.has_value() && !resolved->disputed);
+        assert(resolved->value == Scalar{std::string("alpha")});
+    }
+    {
+        Brain reversal_replay(reversal_path);
+        const auto resolved = reversal_replay.world().query(
+            "reversal-source", "reversible-state");
+        assert(resolved.has_value() && !resolved->disputed);
+        assert(resolved->value == Scalar{std::string("alpha")});
+    }
+    std::filesystem::remove(reversal_path, ec);
+    std::filesystem::remove(reversal_path.string() + ".meta", ec);
+
     // Strategy evidence and episodic fallback must remain coordinated without
     // contaminating the restart/replay fixture above. Seed one durable positive
     // strategy, then add a conflicting in-memory episode after Brain has replayed
@@ -1130,6 +1555,192 @@ int main() {
     }
     std::filesystem::remove(precedence_path, ec);
     std::filesystem::remove(precedence_path.string() + ".meta", ec);
+
+    // Knowledge assessment must be driven by factual experience, survive
+    // journal replay, and distinguish repeated observations from independent
+    // corroboration. Corroboration is not treated as proof or safety approval.
+    const auto knowledge_path =
+        std::filesystem::temp_directory_path() / "jarvis_knowledge_assessment.bin";
+    std::filesystem::remove(knowledge_path, ec);
+    std::filesystem::remove(knowledge_path.string() + ".meta", ec);
+    const KnowledgeProvenanceVerifier knowledge_origin_verifier =
+        [](const KnowledgeProvenanceRequest& request) {
+            return request.key == "surface-risk" &&
+                request.attestation == "origin:" + request.source + ":" +
+                    request.provenance_id;
+        };
+    {
+        Brain knowledge_brain(knowledge_path, {}, {}, knowledge_origin_verifier);
+        assert(knowledge_brain.observe(Event{0, 1, "source-A", "observation",
+            {{"surface-risk", std::string("hazardous")},
+             {"provenance_id", std::string("origin-A")},
+             {"provenance_attestation", std::string("origin:source-A:origin-A")}}}).event.sequence != 0);
+        assert(knowledge_brain.observe(Event{0, 2, "source-A", "observation",
+            {{"surface-risk", std::string("hazardous")},
+             {"provenance_id", std::string("origin-A")},
+             {"provenance_attestation", std::string("origin:source-A:origin-A")}}}).event.sequence != 0);
+        auto assessment = knowledge_brain.knowledge_assessment("surface-risk");
+        assert(assessment.has_value());
+        assert(assessment->status == KnowledgeStatus::provisional);
+        assert(assessment->supporting_sources == 1);
+        assert(assessment->supporting_origins == 1);
+
+        assert(knowledge_brain.observe(Event{0, 3, "source-B", "observation",
+            {{"surface-risk", std::string("hazardous")},
+             {"provenance_id", std::string("origin-B")},
+             {"provenance_attestation", std::string("origin:source-B:origin-B")}}}).event.sequence != 0);
+        assessment = knowledge_brain.knowledge_assessment("surface-risk");
+        assert(assessment.has_value());
+        assert(assessment->status == KnowledgeStatus::corroborated);
+        assert(assessment->supporting_sources == 2);
+        assert(assessment->supporting_origins == 2);
+
+        assert(knowledge_brain.observe(Event{0, 4, "source-C", "observation",
+            {{"surface-risk", std::string("safe")},
+             {"provenance_id", std::string("origin-C")},
+             {"provenance_attestation", std::string("origin:source-C:origin-C")}}}).event.sequence != 0);
+        assessment = knowledge_brain.knowledge_assessment("surface-risk");
+        assert(assessment.has_value());
+        assert(assessment->status == KnowledgeStatus::disputed);
+        assert(assessment->supporting_origins == 2);
+        assert(assessment->conflicting_sources == 1);
+        assert(assessment->conflicting_origins == 1);
+    }
+    {
+        Brain knowledge_replay(knowledge_path, {}, {}, knowledge_origin_verifier);
+        const auto assessment = knowledge_replay.knowledge_assessment("surface-risk");
+        assert(assessment.has_value());
+        assert(assessment->status == KnowledgeStatus::disputed);
+        assert(assessment->supporting_sources == 2);
+        assert(assessment->supporting_origins == 2);
+        assert(assessment->conflicting_sources == 1);
+        assert(assessment->conflicting_origins == 1);
+    }
+    std::filesystem::remove(knowledge_path, ec);
+    std::filesystem::remove(knowledge_path.string() + ".meta", ec);
+
+    // Three independent sources can sustain three competing values. Resolving
+    // one source-local dispute must not erase a separate source's disagreement,
+    // and an unresolved three-way dispute must survive a fresh process.
+    const auto three_source_path =
+        std::filesystem::temp_directory_path() / "jarvis_three_source_conflict.bin";
+    std::filesystem::remove(three_source_path, ec);
+    std::filesystem::remove(three_source_path.string() + ".meta", ec);
+    const auto observe_value = [](Brain& candidate, const std::string& source,
+                                  const std::string& value,
+                                  double reliability = 0.9) {
+        return candidate.observe(Event{0, 0, source, "observation",
+            {{"shared-state", value}, {"evidence_reliability", reliability}}});
+    };
+    const auto assert_three_source_dispute = [](const Brain& candidate, bool expected) {
+        const auto beliefs = candidate.beliefs();
+        const auto belief = std::find_if(beliefs.begin(), beliefs.end(),
+            [](const Belief& item) { return item.key == "shared-state"; });
+        assert(belief != beliefs.end());
+        assert(belief->disputed == expected);
+    };
+    {
+        Brain three_source(three_source_path);
+        assert(observe_value(three_source, "sensor-A", "alpha").event.sequence != 0);
+        assert(observe_value(three_source, "sensor-A", "beta").event.sequence != 0);
+        assert(observe_value(three_source, "sensor-B", "beta").event.sequence != 0);
+        assert(observe_value(three_source, "sensor-C", "gamma").event.sequence != 0);
+        assert(three_source.world().disputed_facts().size() >= 2);
+        assert_three_source_dispute(three_source, true);
+    }
+    {
+        Brain unresolved_replay(three_source_path);
+        assert_three_source_dispute(unresolved_replay, true);
+        assert(unresolved_replay.world().disputed_facts().size() >= 2);
+        // Fresh corroboration resolves sensor A's alpha/beta dispute, but
+        // sensor C's independent gamma claim still keeps the global belief open.
+        assert(observe_value(unresolved_replay, "sensor-A", "beta", 0.95).event.sequence != 0);
+        assert_three_source_dispute(unresolved_replay, true);
+        assert(unresolved_replay.world().disputed_facts().empty());
+        // A first beta observation from sensor C introduces a new conflict;
+        // it must not be mistaken for post-conflict corroboration.
+        assert(observe_value(unresolved_replay, "sensor-C", "beta").event.sequence != 0);
+        assert_three_source_dispute(unresolved_replay, true);
+        assert(!unresolved_replay.world().disputed_facts().empty());
+        // A second beta observation is fresh corroboration after gamma/beta
+        // became contested, so sensor C can now resolve its own conflict.
+        assert(observe_value(unresolved_replay, "sensor-C", "beta", 0.95).event.sequence != 0);
+        assert_three_source_dispute(unresolved_replay, false);
+        assert(unresolved_replay.world().disputed_facts().empty());
+    }
+    {
+        Brain resolved_replay(three_source_path);
+        assert_three_source_dispute(resolved_replay, false);
+        assert(resolved_replay.world().disputed_facts().empty());
+    }
+    std::filesystem::remove(three_source_path, ec);
+    std::filesystem::remove(three_source_path.string() + ".meta", ec);
+
+    // Repetition from one source is not independent corroboration. Twenty
+    // weak reassertions cannot erase a stronger competing fact.
+    const auto repeated_fact_path = std::filesystem::temp_directory_path() /
+                                    "jarvis_repeated_weak_fact_evidence.bin";
+    std::filesystem::remove(repeated_fact_path, ec);
+    {
+        Brain repeated_fact(repeated_fact_path);
+        assert(repeated_fact.observe(Event{0, 0, "sensor-repeated", "observation",
+            {{"shared-state", Scalar{std::string("stable")}},
+             {"evidence_reliability", Scalar{0.9}}}}).event.sequence != 0);
+        assert(repeated_fact.observe(Event{0, 0, "sensor-repeated", "observation",
+            {{"shared-state", Scalar{std::string("unstable")}},
+             {"evidence_reliability", Scalar{0.8}}}}).event.sequence != 0);
+        for (int i = 0; i < 20; ++i) {
+            assert(repeated_fact.observe(Event{0, 0, "sensor-repeated", "observation",
+                {{"shared-state", Scalar{std::string("unstable")}},
+                 {"evidence_reliability", Scalar{0.2}}}}).event.sequence != 0);
+        }
+        const auto fact = repeated_fact.world().query("sensor-repeated", "shared-state");
+        assert(fact.has_value());
+        assert(fact->disputed);
+        assert(!repeated_fact.world().disputed_facts().empty());
+    }
+    {
+        Brain repeated_fact_replay(repeated_fact_path);
+        const auto fact = repeated_fact_replay.world().query(
+            "sensor-repeated", "shared-state");
+        assert(fact.has_value());
+        assert(fact->disputed);
+        assert(!repeated_fact_replay.world().disputed_facts().empty());
+    }
+    std::filesystem::remove(repeated_fact_path, ec);
+    std::filesystem::remove(repeated_fact_path.string() + ".meta", ec);
+
+    // Relation alternatives obey the same non-independence rule.
+    const auto repeated_relation_path = std::filesystem::temp_directory_path() /
+                                        "jarvis_repeated_weak_relation_evidence.bin";
+    std::filesystem::remove(repeated_relation_path, ec);
+    {
+        Brain repeated_relation(repeated_relation_path);
+        assert(repeated_relation.observe(Event{0, 0, "relation-sensor", "observation",
+            {{"subject", Scalar{std::string("bridge")}},
+             {"predicate", Scalar{std::string("leads_to")}},
+             {"object", Scalar{std::string("room-a")}},
+             {"evidence_reliability", Scalar{0.9}}}}).event.sequence != 0);
+        assert(repeated_relation.observe(Event{0, 0, "relation-sensor", "observation",
+            {{"subject", Scalar{std::string("bridge")}},
+             {"predicate", Scalar{std::string("leads_to")}},
+             {"object", Scalar{std::string("room-b")}},
+             {"evidence_reliability", Scalar{0.8}}}}).event.sequence != 0);
+        for (int i = 0; i < 20; ++i) {
+            assert(repeated_relation.observe(Event{0, 0, "relation-sensor", "observation",
+                {{"subject", Scalar{std::string("bridge")}},
+                 {"predicate", Scalar{std::string("leads_to")}},
+                 {"object", Scalar{std::string("room-b")}},
+                 {"evidence_reliability", Scalar{0.2}}}}).event.sequence != 0);
+        }
+        assert(repeated_relation.world().disputed_relations().size() == 2);
+    }
+    {
+        Brain repeated_relation_replay(repeated_relation_path);
+        assert(repeated_relation_replay.world().disputed_relations().size() == 2);
+    }
+    std::filesystem::remove(repeated_relation_path, ec);
+    std::filesystem::remove(repeated_relation_path.string() + ".meta", ec);
 
     std::filesystem::remove(path, ec);
     std::filesystem::remove(path.string() + ".meta", ec);

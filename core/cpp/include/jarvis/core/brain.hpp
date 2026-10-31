@@ -53,10 +53,39 @@ enum class PredictionFeedbackStatus : std::uint8_t {
 };
 struct BrainState { std::uint64_t cycle{0}; std::uint64_t events_seen{0}; double novelty{0.0}; double attention{0.0}; double threat{0.0}; };
 struct BrainSnapshot { BrainState state{}; SelfState self_state{}; AffectiveState affective_state{}; std::vector<Belief> beliefs; std::vector<Prediction> predictions; std::vector<CausalLink> causal_links; std::vector<Goal> goals; };
+struct KnowledgeFeedbackRequest {
+ std::uint64_t claim_sequence{0};
+ std::string key;
+ Scalar value;
+ std::string evaluator;
+ bool correct{false};
+ std::string attestation;
+};
+using KnowledgeFeedbackVerifier = std::function<bool(const KnowledgeFeedbackRequest&)>;
+
+struct KnowledgeProvenanceRequest {
+ std::string source;
+ std::string key;
+ Scalar value;
+ std::string provenance_id;
+ std::string attestation;
+};
+// Must authenticate the source-to-origin assertion and be deterministic
+// across restarts. Missing or invalid attestations never count as independent
+// corroboration; the host owns the trust root and verification policy.
+using KnowledgeProvenanceVerifier = std::function<bool(const KnowledgeProvenanceRequest&)>;
 class Brain {
 public:
- explicit Brain(std::filesystem::path journal_path = "data/brain/continuity.bin");
+ explicit Brain(std::filesystem::path journal_path = "data/brain/continuity.bin",
+                      std::vector<std::string> trusted_knowledge_evaluators = {},
+                      KnowledgeFeedbackVerifier knowledge_feedback_verifier = {},
+                      KnowledgeProvenanceVerifier knowledge_provenance_verifier = {});
  Observation observe(Event event); double learn(const Evidence& evidence);
+ // Records externally adjudicated correctness feedback for one persisted claim.
+ // Evaluator identity is allowlisted by the host, and the host-supplied verifier must
+ // authenticate the attestation on both live submission and journal replay.
+ // The verifier must be deterministic across restarts and bind all request fields.
+ bool record_knowledge_source_feedback(std::uint64_t claim_sequence, const std::string& key, const Scalar& value, const std::string& evaluator, bool correct, const std::string& attestation = {});
  LearningCycle learn_from_prediction(const std::string& key, const Scalar& actual, double fitness);
  std::vector<Belief> beliefs() const; Prediction predict(std::string key, Scalar value, double confidence); Prediction predict_with_context(std::string key, Scalar value, double confidence, double minimum_strength = 0.5, std::size_t minimum_shared_contexts = 2); PredictionFeedbackStatus resolve_prediction_feedback(const std::string& key, const Scalar& actual, std::optional<double> outcome_utility = std::nullopt); PredictionFeedbackStatus resolve_prediction_feedback(std::uint64_t prediction_sequence, const Scalar& actual, std::optional<double> outcome_utility = std::nullopt); bool resolve_prediction(const std::string& key, const Scalar& actual); bool resolve_prediction(std::uint64_t prediction_sequence, const Scalar& actual);
  bool assimilate_goal_outcome(const GoalOutcomeEvidence& evidence);
@@ -70,14 +99,14 @@ public:
                                       std::function<std::optional<double>(const CandidateAction&)> observe_consequence = {},
                                       ActionAuthorizationContext authorization = {});
  Plan plan(const std::vector<CandidateAction>& actions, std::size_t horizon) const; Plan plan(const std::vector<CandidateAction>& actions, std::size_t horizon, const PlanningContext& context) const; Plan plan_with_affect(const std::vector<CandidateAction>& actions, std::size_t horizon) const; std::vector<ActionAssessment> assess_actions(const std::vector<Decision>& decisions, ActionConstraints constraints = {}) const; std::vector<CapabilityCandidate> evaluate_capabilities(const std::vector<CapabilityDescriptor>& capabilities, CapabilityConstraints constraints = {}) const; CapabilityExecutionResult execute_capability(const CapabilityDescriptor& capability, std::string input, std::vector<std::string> granted_permissions = {}, double maximum_risk = 1.0, CapabilityProvider provider = {});
- Reflection reflect() const; const KnowledgeMetric* knowledge_source(const std::string& source) const noexcept; const AdaptiveMetric* learning_metric(const std::string& key) const noexcept; double learning_confidence(const std::string& key) const noexcept;
+ Reflection reflect() const; const KnowledgeMetric* knowledge_source(const std::string& source) const noexcept; std::optional<KnowledgeAssessment> knowledge_assessment(const std::string& key) const { std::shared_lock lock(mutex_); return knowledge_.assess(key); } const AdaptiveMetric* learning_metric(const std::string& key) const noexcept; double learning_confidence(const std::string& key) const noexcept;
  std::vector<LearnedAssociation> developmental_associations() const; std::vector<LearnedStrategy> developmental_strategies() const; const LearnedStrategy* developmental_best_strategy(const std::string& context) const noexcept; const LearnedStrategy* developmental_best_related_strategy(const std::string& context, double minimum_similarity = 0.5) const; std::vector<RelatedLearnedStrategy> developmental_related_strategies(const std::string& context, double minimum_similarity = 0.5) const; const StrategyParameter* evolution_parameter(const std::string& key) const noexcept; AttentionSignal attention() const; AttentionPolicy attention_policy() const; ThreatAssessment threat() const; Intent intent() const; StrategyContext strategy() const; AffectiveState affective_state() const; AffectiveAppraisal affective_appraisal() const; AffectiveCalibration affective_calibration() const { std::shared_lock lock(mutex_); return affective_learning_model_.calibration(); } std::uint64_t affective_learning_updates() const;
  std::vector<RecoveryPlan> recovery_options() const; bool isolate(const std::string& component); bool recover(const std::string& component, double restored_health); SelfTestReport self_test() const; SelfHealingResult self_heal(const std::string& component, std::function<bool(const std::string&)> repair, std::function<bool(const std::string&)> verify);
  bool register_evolution_parameter(std::string key, double initial); void observe_evolution_fitness(const std::string& key, double fitness); std::vector<EvolutionProposal> evolution_options() const; bool adopt_evolution(const EvolutionProposal& proposal); bool rollback_evolution(const std::string& key); bool record_evolution_evaluation(EvolutionExperiment& experiment); bool adopt_evolution_experiment(EvolutionExperiment& experiment); CanaryDecision observe_evolution_canary(const std::string& parameter_key, const std::string& experiment_id, CanaryObservation observation); std::vector<EvolutionHistoryRecord> evolution_history() const;
  void observe_capability(std::string name, double availability, double performance); bool isolate_capability(const std::string& name); bool restore_capability(const std::string& name, double availability, double performance); bool create_goal(Goal goal); bool activate_goal(const std::string& id); bool update_goal_progress(const std::string& id, double progress); bool complete_goal(const std::string& id); bool abandon_goal(const std::string& id); bool set_goal_priority(const std::string& id, double priority); const Goal* goal(const std::string& id) const noexcept; std::vector<Goal> goals() const; std::vector<Goal> eligible_goals() const;
  const DecisionEngine& decision_engine() const noexcept { return decision_; } const ActionModel& action_model() const noexcept { return action_model_; } const SelfModel& self_model() const noexcept { return self_model_; } const SelfStateModel& self_state_model() const noexcept { return self_state_model_; } const WorldModel& world() const noexcept { return world_; } Memory& memory() noexcept { return memory_; } const Memory& memory() const noexcept { return memory_; } BrainSnapshot snapshot() const; BrainState state() const;
 private: void consolidate_experience(const Event& event, double error = 0.0); void process_affective_experience(const Event& event, bool external_observation = false); static double compute_novelty(const Event& event, const std::vector<Event>& history); void replay(const Event& event, bool external_observation = false); bool valid_affective_learning_source(const Event& event) const; void sync_self_state(); bool append_goal_event(const Event& event); Prediction* find_latest_unresolved_prediction(const std::string& key) noexcept; const Prediction* find_latest_unresolved_prediction(const std::string& key) const noexcept; Prediction* find_prediction(std::uint64_t sequence) noexcept; const Prediction* find_prediction(std::uint64_t sequence) const noexcept;
- mutable std::shared_mutex mutex_; BrainState state_{}; WorldModel world_{}; Memory memory_; std::unordered_map<std::string, Belief> beliefs_; std::unordered_set<std::uint64_t> processed_derived_learning_sources_;
- std::unordered_set<std::uint64_t> processed_affective_learning_sources_; std::vector<Prediction> predictions_; AssociationModel association_{}; CausalModel causal_{}; DecisionEngine decision_{}; ActionModel action_model_{}; AdaptationModel adaptation_{}; LearningLoop learning_loop_{}; AttentionModel attention_model_{}; ThreatModel threat_model_{}; ResilienceModel resilience_{}; EvolutionModel evolution_{}; EvolutionHistory evolution_history_{}; EvolutionController evolution_controller_; Planner planner_{}; ReflectionModel reflection_model_{}; KnowledgeModel knowledge_{}; SelfModel self_model_{}; SelfStateModel self_state_model_{}; SelfTestingModel self_testing_model_{}; GoalModel goals_model_{}; IntentModel intent_model_{}; StrategyModel strategy_model_{}; DevelopmentalLearning developmental_learning_{}; AffectiveStateModel affective_state_model_{}; AffectiveLearningModel affective_learning_model_{}; AttentionSignal attention_state_{}; ThreatAssessment threat_state_{};
+ mutable std::shared_mutex mutex_; std::unordered_set<std::string> trusted_knowledge_evaluators_; KnowledgeFeedbackVerifier knowledge_feedback_verifier_; KnowledgeProvenanceVerifier knowledge_provenance_verifier_; BrainState state_{}; WorldModel world_{}; Memory memory_; std::unordered_map<std::string, Belief> beliefs_; std::unordered_set<std::uint64_t> processed_derived_learning_sources_;
+ std::unordered_set<std::uint64_t> processed_affective_learning_sources_; std::unordered_set<std::string> processed_knowledge_feedback_; std::vector<Prediction> predictions_; AssociationModel association_{}; CausalModel causal_{}; DecisionEngine decision_{}; ActionModel action_model_{}; AdaptationModel adaptation_{}; LearningLoop learning_loop_{}; AttentionModel attention_model_{}; ThreatModel threat_model_{}; ResilienceModel resilience_{}; EvolutionModel evolution_{}; EvolutionHistory evolution_history_{}; EvolutionController evolution_controller_; Planner planner_{}; ReflectionModel reflection_model_{}; KnowledgeModel knowledge_{}; SelfModel self_model_{}; SelfStateModel self_state_model_{}; SelfTestingModel self_testing_model_{}; GoalModel goals_model_{}; IntentModel intent_model_{}; StrategyModel strategy_model_{}; DevelopmentalLearning developmental_learning_{}; AffectiveStateModel affective_state_model_{}; AffectiveLearningModel affective_learning_model_{}; AttentionSignal attention_state_{}; ThreatAssessment threat_state_{};
 };
 } // namespace jarvis::core
