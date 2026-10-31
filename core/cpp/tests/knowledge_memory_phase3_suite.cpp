@@ -131,6 +131,34 @@ int main() {
     assert(std::abs(first_source_metric->empirical_accuracy - 0.5) < 1e-12);
     assert(std::abs(second_source_metric->empirical_accuracy - 0.5) < 1e-12);
 
+    KnowledgeModel cross_source_reverse;
+    cross_source_reverse.assimilate(KnowledgeEvidence{
+        "source-one", "claim-one", std::string("one"), 0.8, "origin-one"});
+    cross_source_reverse.assimilate(KnowledgeEvidence{
+        "source-two", "claim-two", std::string("two"), 0.8, "origin-two"});
+    cross_source_reverse.score_source("source-two", true, 12);
+    cross_source_reverse.score_source("source-one", true, 12);
+    assert(cross_source_reverse.source_metric("source-one")->calibration_observations == 0);
+    assert(cross_source_reverse.source_metric("source-two")->calibration_observations == 0);
+
+    // Invalidating one ambiguous outcome must preserve unrelated valid history
+    // for the same source and recompute its lifetime calibration correctly.
+    KnowledgeModel partial_conflict;
+    partial_conflict.assimilate(KnowledgeEvidence{
+        "partial-source", "partial-claim", std::string("present"), 0.8,
+        "partial-origin"});
+    partial_conflict.score_source("partial-source", true, 20);
+    partial_conflict.score_source("partial-source", false, 21);
+    partial_conflict.score_source("partial-source", false, 20);
+    const auto* partial_metric = partial_conflict.source_metric("partial-source");
+    assert(partial_metric != nullptr);
+    assert(partial_metric->calibration_observations == 1);
+    assert(std::abs(partial_metric->empirical_accuracy - 0.0) < 1e-12);
+    const auto partial_assessment = partial_conflict.assess(
+        "partial-claim", 21, KnowledgeCalibrationPolicy{1, 10});
+    assert(partial_assessment.has_value());
+    assert(std::abs(partial_assessment->evidence_weight - 0.4) < 1e-12);
+
 
     // The freshness boundary is inclusive: an outcome exactly max-age events
     // old is usable; one event older is not.
