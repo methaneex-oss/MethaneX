@@ -21,7 +21,11 @@ CognitiveCycleInput make_input(const std::string& bridge,
     // infer the feature representation from the observation itself.
     input.observation = Event{
         0, 1, "sensor", "observation",
-        {{"bridge_status", bridge}, {"visibility", visibility}}};
+        {{"bridge_status", bridge}, {"visibility", visibility},
+         {"task", std::string("navigation")},
+         {"context", std::string("navigation/phase-label-that-must-not-leak")},
+         {"world_episode", std::int64_t{17}},
+         {"world_terminal", false}}};
 
     CandidateAction first;
     first.name = "route-one";
@@ -41,8 +45,10 @@ std::string inferred_context(Brain& brain, const std::string& bridge,
     assert(result.status == CognitiveCycleStatus::completed);
     assert(!result.context.action_assessments.empty());
     const auto& context = result.context.action_assessments.front().developmental_context;
-    assert(context.find("/features/") != std::string::npos);
+    assert(context.find("/features/bridge_status/visibility/values/") != std::string::npos);
     assert(context.find("/values/") != std::string::npos);
+    assert(context.find("phase-label-that-must-not-leak") == std::string::npos);
+    assert(context.find("world_episode") == std::string::npos);
     return context;
 }
 
