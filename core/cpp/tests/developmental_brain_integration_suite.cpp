@@ -1109,7 +1109,7 @@ int main() {
 
         const auto corroboration = contradiction_brain.observe(Event{
             0, 3, "contradiction-resolution-test", "observation",
-            {{"door-state", std::string("closed")}, {"confidence", 0.9}}});
+            {{"door-state", std::string("closed")}, {"confidence", 0.95}}});
         assert(corroboration.event.sequence != 0);
         verify_resolved_fact(contradiction_brain);
 
@@ -1138,7 +1138,8 @@ int main() {
             0, 6, "contradiction-resolution-test", "observation",
             {{"subject", std::string("door")},
              {"predicate", std::string("opens_into")},
-             {"object", std::string("room-b")}}});
+             {"object", std::string("room-b")},
+             {"confidence", 0.8}}});
         assert(room_b_corroboration.event.sequence != 0);
         verify_resolved_relation(contradiction_brain);
 
@@ -1155,7 +1156,7 @@ int main() {
         assert(still_contested_fact->disputed);
         const auto fresh_fact_corroboration = contradiction_brain.observe(Event{
             0, 8, "contradiction-resolution-test", "observation",
-            {{"door-state", std::string("closed")}, {"confidence", 0.9}}});
+            {{"door-state", std::string("closed")}, {"confidence", 0.99}}});
         assert(fresh_fact_corroboration.event.sequence != 0);
         verify_resolved_fact(contradiction_brain);
 
@@ -1182,7 +1183,7 @@ int main() {
         assert(current_door_belief->disputed);
         const auto final_fact_corroboration = contradiction_brain.observe(Event{
             0, 11, "contradiction-resolution-test", "observation",
-            {{"door-state", std::string("closed")}, {"confidence", 0.9}}});
+            {{"door-state", std::string("closed")}, {"confidence", 0.99}}});
         assert(final_fact_corroboration.event.sequence != 0);
         verify_resolved_fact(contradiction_brain);
 
@@ -1197,7 +1198,8 @@ int main() {
             0, 10, "contradiction-resolution-test", "observation",
             {{"subject", std::string("door")},
              {"predicate", std::string("opens_into")},
-             {"object", std::string("room-b")}}});
+             {"object", std::string("room-b")},
+             {"confidence", 0.9}}});
         assert(fresh_relation_corroboration.event.sequence != 0);
         verify_resolved_relation(contradiction_brain);
     }
