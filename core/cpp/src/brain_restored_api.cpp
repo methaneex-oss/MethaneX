@@ -154,6 +154,20 @@ std::vector<LearnedStrategy> Brain::developmental_strategies() const { std::shar
 const LearnedStrategy* Brain::developmental_best_strategy(const std::string& context) const noexcept { std::shared_lock lock(mutex_); return developmental_learning_.best_strategy(context); }
 const LearnedStrategy* Brain::developmental_best_related_strategy(const std::string& context, double minimum_similarity) const { std::shared_lock lock(mutex_); return developmental_learning_.best_related_strategy(context, minimum_similarity); }
 std::vector<RelatedLearnedStrategy> Brain::developmental_related_strategies(const std::string& context, double minimum_similarity) const { std::shared_lock lock(mutex_); return developmental_learning_.related_strategies(context, minimum_similarity); }
+
+std::uint64_t Brain::import_legacy_memory_event(Event event) {
+    // Imported history is a passive episodic source, never a route for
+    // injecting Brain control-plane events or replaying untrusted state changes.
+    if (event.kind != "observation" && event.kind != "action_outcome" &&
+        event.kind != "action_attempt") return 0;
+    event.source = "legacy_import";
+    std::unique_lock lock(mutex_);
+    event.sequence = memory_.append(event);
+    if (event.sequence == 0) return 0;
+    ++state_.events_seen;
+    state_.cycle = event.sequence;
+    return event.sequence;
+}
 std::vector<std::pair<std::string, Scalar>> Brain::simulate(const std::vector<Belief>& assumptions) const { std::shared_lock lock(mutex_); return causal_.predict(assumptions); }
 SimulationResult Brain::simulate(const std::vector<Belief>& assumptions, std::size_t horizon) const { std::shared_lock lock(mutex_); return causal_.simulate(assumptions, horizon); }
 std::vector<Association> Brain::associations() const { std::shared_lock lock(mutex_); return association_.all(); }
