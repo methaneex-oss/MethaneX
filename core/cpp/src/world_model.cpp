@@ -93,7 +93,7 @@ void WorldModel::observe(const Fact& incoming) {
                candidate.predicate == it->predicate;
     };
     bool has_conflict = false;
-    bool has_unsequenced_conflict = false;
+    bool has_unsequenced_conflict = it->first_sequence == 0;
     std::uint64_t latest_conflict_sequence = 0;
     for (const auto& candidate : disputed_facts_) {
         if (!same_fact(candidate)) continue;
