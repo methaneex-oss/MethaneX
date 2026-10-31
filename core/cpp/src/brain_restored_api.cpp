@@ -153,7 +153,7 @@ bool Brain::record_knowledge_source_feedback(
     if (!trusted_knowledge_evaluators_.contains(evaluator) ||
         attestation.empty() || !knowledge_feedback_verifier_) return false;
     const KnowledgeFeedbackRequest request{
-        claim_sequence, key, value, evaluator, correct, attestation};
+        claim_sequence, target->source, key, value, evaluator, correct, attestation};
     try {
         if (!knowledge_feedback_verifier_(request)) return false;
     } catch (...) {
@@ -224,7 +224,7 @@ bool Brain::record_knowledge_source_feedback(
             prior_correct == nullptr ||
             !trusted_knowledge_evaluators_.contains(*prior_evaluator)) continue;
         const KnowledgeFeedbackRequest prior_request{
-            claim_sequence, key, value, *prior_evaluator, *prior_correct, *prior_attestation};
+            claim_sequence, target->source, key, value, *prior_evaluator, *prior_correct, *prior_attestation};
         try {
             // Any authenticated adjudication for this claim blocks a second
             // score, regardless of evaluator. Invalid raw records cannot deny
