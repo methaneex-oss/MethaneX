@@ -1505,38 +1505,58 @@ int main() {
         std::filesystem::temp_directory_path() / "jarvis_knowledge_assessment.bin";
     std::filesystem::remove(knowledge_path, ec);
     std::filesystem::remove(knowledge_path.string() + ".meta", ec);
+    const KnowledgeProvenanceVerifier knowledge_origin_verifier =
+        [](const KnowledgeProvenanceRequest& request) {
+            return request.key == "surface-risk" &&
+                request.attestation == "origin:" + request.source + ":" +
+                    request.provenance_id;
+        };
     {
-        Brain knowledge_brain(knowledge_path);
+        Brain knowledge_brain(knowledge_path, {}, {}, knowledge_origin_verifier);
         assert(knowledge_brain.observe(Event{0, 1, "source-A", "observation",
-            {{"surface-risk", std::string("hazardous")}}}).event.sequence != 0);
+            {{"surface-risk", std::string("hazardous")},
+             {"provenance_id", std::string("origin-A")},
+             {"provenance_attestation", std::string("origin:source-A:origin-A")}}}).event.sequence != 0);
         assert(knowledge_brain.observe(Event{0, 2, "source-A", "observation",
-            {{"surface-risk", std::string("hazardous")}}}).event.sequence != 0);
+            {{"surface-risk", std::string("hazardous")},
+             {"provenance_id", std::string("origin-A")},
+             {"provenance_attestation", std::string("origin:source-A:origin-A")}}}).event.sequence != 0);
         auto assessment = knowledge_brain.knowledge_assessment("surface-risk");
         assert(assessment.has_value());
         assert(assessment->status == KnowledgeStatus::provisional);
         assert(assessment->supporting_sources == 1);
+        assert(assessment->supporting_origins == 1);
 
         assert(knowledge_brain.observe(Event{0, 3, "source-B", "observation",
-            {{"surface-risk", std::string("hazardous")}}}).event.sequence != 0);
+            {{"surface-risk", std::string("hazardous")},
+             {"provenance_id", std::string("origin-B")},
+             {"provenance_attestation", std::string("origin:source-B:origin-B")}}}).event.sequence != 0);
         assessment = knowledge_brain.knowledge_assessment("surface-risk");
         assert(assessment.has_value());
         assert(assessment->status == KnowledgeStatus::corroborated);
         assert(assessment->supporting_sources == 2);
+        assert(assessment->supporting_origins == 2);
 
         assert(knowledge_brain.observe(Event{0, 4, "source-C", "observation",
-            {{"surface-risk", std::string("safe")}}}).event.sequence != 0);
+            {{"surface-risk", std::string("safe")},
+             {"provenance_id", std::string("origin-C")},
+             {"provenance_attestation", std::string("origin:source-C:origin-C")}}}).event.sequence != 0);
         assessment = knowledge_brain.knowledge_assessment("surface-risk");
         assert(assessment.has_value());
         assert(assessment->status == KnowledgeStatus::disputed);
+        assert(assessment->supporting_origins == 2);
         assert(assessment->conflicting_sources == 1);
+        assert(assessment->conflicting_origins == 1);
     }
     {
-        Brain knowledge_replay(knowledge_path);
+        Brain knowledge_replay(knowledge_path, {}, {}, knowledge_origin_verifier);
         const auto assessment = knowledge_replay.knowledge_assessment("surface-risk");
         assert(assessment.has_value());
         assert(assessment->status == KnowledgeStatus::disputed);
         assert(assessment->supporting_sources == 2);
+        assert(assessment->supporting_origins == 2);
         assert(assessment->conflicting_sources == 1);
+        assert(assessment->conflicting_origins == 1);
     }
     std::filesystem::remove(knowledge_path, ec);
     std::filesystem::remove(knowledge_path.string() + ".meta", ec);
