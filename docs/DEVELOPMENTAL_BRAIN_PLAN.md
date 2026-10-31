@@ -245,3 +245,52 @@ A fail-closed host trust boundary has been added to the source-calibration feedb
 **Security boundary and limitation:** the allowlist is a host configuration trust anchor, not cryptographic identity authentication. The application integrating `Brain` must ensure that only authenticated, authorized adjudicators can invoke the feedback API and that its trusted-evaluator configuration is protected. An evaluator name in a journal is still metadata; this change does not provide signed feedback, prove independence, or establish ground truth. Journal tamper resistance remains a separate concern.
 
 **Verification status at this entry:** source and test changes are committed on PR #148. CI for the exact resulting head was queued when checked. Do not treat the implementation as accepted until the focused suite and full relevant CI complete, and an independent reviewer verifies the host integration and replay boundary.
+
+
+## 12. Priority 1 continuity correction and latest builder checkpoint — 2026-10-31
+
+**Latest builder commit:** `7abdd7ba51da784c33aafa9d4b540e59f17f0a8b`.
+
+The earlier entries in sections 9–11 are historical checkpoints, not descriptions of the current implementation. In particular, section 9's statement that no production feedback path exists was superseded: the current branch contains `Brain::record_knowledge_source_feedback`, a journal event, replay validation, deduplication, host-configured evaluator allowlisting, and a fresh-process restoration test in `knowledge_source_feedback_suite.cpp`.
+
+### Work completed in this checkpoint
+
+- Added a focused regression to `core/cpp/tests/knowledge_memory_phase3_suite.cpp` for a source whose empirical accuracy falls to zero after three negative adjudications.
+- The test checks that its evidence weight falls from 0.9 to 0.45 while its observation remains present.
+- The same test introduces a conflicting independent claim and verifies the assessment remains `disputed`, exposes no selected candidate, and reports both sides. Low trust reduces evidential weight; it does not erase experience or decide truth.
+- The changed test file was fetched again from the repository at the resulting commit and its inserted assertions were verified present.
+
+### Current Priority 1 limitations — explicitly not closed
+
+1. **Evaluator identity:** the allowlist checks a caller-supplied string. It is not caller authentication. The host must enforce the identity boundary; a cryptographically authenticated capability/signature design is not implemented.
+2. **Truth and independence:** an authenticated/allowlisted adjudicator assertion is not objective ground truth. The current feedback path does not independently prove the correctness outcome. Multiple distinct source or evaluator strings are not proof of statistical independence or separate underlying provenance.
+3. **Journal integrity:** replay validates linkage and configured trust but does not cryptographically authenticate feedback records against journal tampering.
+4. **Calibration sample threshold:** the current three-outcome minimum is a conservative activation gate, not a statistically justified universal sample size. It must not be described as proof of accuracy. Calibration evidence may be correlated; current code does not model that dependence.
+5. **Downstream effect:** `KnowledgeModel::assess` returns evidence status and weight, but this checkpoint has not established that assessed knowledge changes candidate generation, planning, or action selection in the live brain.
+6. **Runtime verification:** this builder has not executed the C++ suite locally. The new test is committed but has no exact-HEAD CI result at the time of this checkpoint.
+
+### Tester handoff — read-only
+
+On exact HEAD `7abdd7ba51da784c33aafa9d4b540e59f17f0a8b`:
+
+- Run `jarvis_knowledge_memory_phase3_suite`, `jarvis_knowledge_source_feedback_suite`, and `jarvis_developmental_brain_integration_suite`.
+- Run full CTest and configured ASan/UBSan and ThreadSanitizer workflows.
+- Verify the new degraded-source test and the existing improved-source test.
+- Attack feedback replay with altered outcomes, forged allowlisted evaluator strings, duplicate/conflicting adjudications, missing trust configuration, and restart.
+- Test correlated sources sharing one origin; do not count distinct strings as independent corroboration without provenance.
+- Trace whether assessment status/weight actually influences downstream decisions. Report any absence as a gap, not as a passing capability.
+- Return exact commands, exact SHA, run IDs, logs, and counterexamples. Do not edit.
+
+### Reviewer handoff — read-only, after tester evidence
+
+On the same exact HEAD:
+
+- Verify the source-quality / empirical-accuracy separation and the new low-trust regression.
+- Inspect whether three adjudication outcomes are a justified calibration gate or merely an arbitrary constant.
+- Inspect feedback identity, adjudication provenance, replay integrity, and trust-configuration lifecycle.
+- Explicitly assess the unsupported independence assumption across source identifiers.
+- Trace assessment into decisions and actions; do not equate an API returning a weighted assessment with learned behaviour.
+- Confirm that disputed evidence remains unavailable as a selected candidate and that calibration does not erase the underlying experience.
+- Return PASS or REVISE with file/line evidence. Do not edit or merge.
+
+**Priority 1 remains open.** This checkpoint strengthens one falsifiable property of the knowledge mechanism; it does not complete source reliability, verification, safe knowledge acquisition, or general intelligence. Continue the existing priority order and developmental objective without redesigning the architecture.
