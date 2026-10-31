@@ -156,6 +156,57 @@ int main() {
     std::filesystem::remove(legacy_rollback_path, ec);
     std::filesystem::remove(legacy_rollback_path.string() + ".meta", ec);
 
+    // A rollback record must bind its parameter key to the exact adopted
+    // experiment. A mismatched key must not roll back another experiment or
+    // mark the referenced experiment as rolled back during journal replay.
+    const std::filesystem::path mismatched_rollback_path =
+        "evolution_mismatched_rollback_test.bin";
+    std::filesystem::remove(mismatched_rollback_path, ec);
+    std::filesystem::remove(mismatched_rollback_path.string() + ".meta", ec);
+    {
+        Brain source(mismatched_rollback_path);
+        assert(source.register_evolution_parameter("rollback.target.a", 0.2));
+        assert(source.register_evolution_parameter("rollback.target.b", 0.3));
+        EvolutionExperiment adopted_a{
+            "rollback-target-a",
+            EvolutionProposal{"rollback.target.a", 0.2, 0.35, 0.15, 0.9},
+            0.7, 0.85, 0.01, 0.9, ExperimentOutcome::Improved, true};
+        EvolutionExperiment adopted_b{
+            "rollback-target-b",
+            EvolutionProposal{"rollback.target.b", 0.3, 0.45, 0.15, 0.9},
+            0.7, 0.86, 0.01, 0.9, ExperimentOutcome::Improved, true};
+        attest_isolated(adopted_a);
+        attest_isolated(adopted_b);
+        assert(source.record_evolution_evaluation(adopted_a));
+        assert(source.adopt_evolution_experiment(adopted_a));
+        assert(source.record_evolution_evaluation(adopted_b));
+        assert(source.adopt_evolution_experiment(adopted_b));
+    }
+    {
+        Memory journal(mismatched_rollback_path);
+        Event mismatched_rollback{
+            0, 0, "brain", "evolution_rollback",
+            {{"key", std::string("rollback.target.b")},
+             {"experiment_id", std::string("rollback-target-a")},
+             {"reason", std::string("adversarial_mismatch")}}};
+        assert(journal.append(mismatched_rollback) != 0);
+    }
+    {
+        Brain restored(mismatched_rollback_path);
+        const auto* parameter_a = restored.evolution_parameter("rollback.target.a");
+        const auto* parameter_b = restored.evolution_parameter("rollback.target.b");
+        assert(parameter_a != nullptr && parameter_a->value == 0.35);
+        assert(parameter_b != nullptr && parameter_b->value == 0.45);
+        const auto history = restored.evolution_history();
+        assert(std::none_of(history.begin(), history.end(),
+            [](const EvolutionHistoryRecord& record) {
+                return record.experiment_id == "rollback-target-a" &&
+                       record.action == EvolutionRecordAction::RolledBack;
+            }));
+    }
+    std::filesystem::remove(mismatched_rollback_path, ec);
+    std::filesystem::remove(mismatched_rollback_path.string() + ".meta", ec);
+
     std::filesystem::remove(path, ec);
 
     {
