@@ -1123,14 +1123,6 @@ Observation Brain::observe(Event event) {
         event.kind == "prediction_outcome") return Observation{};
     if (!is_internal_brain_event(event.kind) && !valid_observation_event(event))
         return Observation{};
-    if (event.kind == "prediction_outcome") {
-        const auto sequence = integer_value(event.data, "prediction_sequence", 0);
-        const auto* key = string_value(event.data, "key");
-        const Prediction* prediction = sequence != 0
-            ? find_prediction(sequence)
-            : (key == nullptr ? nullptr : find_latest_unresolved_prediction(*key));
-        if (!valid_prediction_outcome_event(event, prediction)) return Observation{};
-    }
     if (event.kind == "action_outcome" &&
         !valid_action_outcome_event(event)) return Observation{};
     if (event.kind == "affective_learning" &&
