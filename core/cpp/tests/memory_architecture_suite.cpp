@@ -197,11 +197,15 @@ int main() {
     std::filesystem::remove(invalid_bool_path, ec);
     std::filesystem::remove(invalid_bool_metadata, ec);
     std::filesystem::remove(invalid_bool_quarantine, ec);
+    std::uintmax_t invalid_bool_prefix_size = 0;
     std::uintmax_t invalid_bool_original_size = 0;
     {
         Memory bool_journal(8, invalid_bool_path);
-        assert(bool_journal.append(Event{0, 1, "parser-test", "observation",
-            {{"flag", true}}}) == 1);
+        assert(bool_journal.append(Event{0, 1, "parser-test", "valid-prefix",
+            {{"flag", false}}}) == 1);
+        invalid_bool_prefix_size = std::filesystem::file_size(invalid_bool_path);
+        assert(bool_journal.append(Event{0, 2, "parser-test", "observation",
+            {{"flag", true}}}) == 2);
         invalid_bool_original_size = std::filesystem::file_size(invalid_bool_path);
     }
     {
@@ -211,7 +215,7 @@ int main() {
         constexpr std::string_view source = "parser-test";
         constexpr std::string_view kind = "observation";
         constexpr std::string_view key = "flag";
-        const auto value_offset =
+        const auto value_offset = invalid_bool_prefix_size +
             6 * sizeof(std::uint64_t) + source.size() + kind.size() +
             key.size() + sizeof(std::uint8_t);
         damaged.seekp(static_cast<std::streamoff>(value_offset));
@@ -223,17 +227,19 @@ int main() {
     }
     {
         Memory recovered(8, invalid_bool_path);
-        assert(recovered.size() == 0);
+        assert(recovered.size() == 1);
+        assert(recovered.latest()->kind == "valid-prefix");
         assert(std::filesystem::exists(invalid_bool_quarantine));
         assert(std::filesystem::file_size(invalid_bool_quarantine) ==
-               invalid_bool_original_size);
-        assert(std::filesystem::file_size(invalid_bool_path) == 0);
-        assert(recovered.append(Event{0, 2, "parser-test", "after-invalid-bool",
-            {{"flag", false}}}) == 1);
+               invalid_bool_original_size - invalid_bool_prefix_size);
+        assert(std::filesystem::file_size(invalid_bool_path) ==
+               invalid_bool_prefix_size);
+        assert(recovered.append(Event{0, 3, "parser-test", "after-invalid-bool",
+            {{"flag", false}}}) == 2);
     }
     {
         Memory restarted(8, invalid_bool_path);
-        assert(restarted.size() == 1);
+        assert(restarted.size() == 2);
         const auto latest = restarted.latest();
         assert(latest.has_value());
         assert(latest->kind == "after-invalid-bool");
