@@ -396,3 +396,27 @@ Priority One remains **OPEN**. CI success is necessary but not sufficient. The f
 5. Then proceed to Priority Two: connect calibrated factual knowledge, uncertainty and memory retrieval to decisions, planning and action selection.
 
 **Do not merge PR #156 or mark it ready for review without independent clearance and owner authorization.**
+
+
+## 16. Calibration freshness hardening — 2026-10-31
+
+**Implementation checkpoint:** branch `fix/knowledge-calibration-freshness-20261031`, stacked on the exact PR #158 head `4380fcbbdf4887b8332948083d000483d8f8d622`. This is a focused follow-up; it does not alter PR #156, #157, or #158.
+
+### Change
+
+- Added an explicit `KnowledgeCalibrationPolicy` with a configurable minimum number of adjudicated claims and maximum age measured in persisted brain events.
+- Calibration outcomes are retained with their feedback event sequence. During knowledge assessment, only outcomes within the host-configured event-age horizon contribute to source trust.
+- Lifetime calibration totals remain available through `KnowledgeMetric` for audit. They no longer imply that old outcomes remain active forever.
+- A zero freshness horizon disables calibrated weighting. The default policy is therefore fail-closed: unless the embedding host explicitly chooses a horizon, source calibration does not alter evidence weights.
+- The freshness clock is the persisted event sequence, not wall-clock time. This makes expiry deterministic across replay/restart and avoids dependence on machine clock skew. The policy horizon is a host configuration choice, not a hard-coded universal duration.
+- Added a regression that proves three fresh adjudications increase evidence weight, ten later events age those outcomes out, the observation remains present at neutral weight, lifetime metrics remain auditable, and restart reconstructs the same stale result.
+
+### Verification still required
+
+- Run the focused `jarvis_knowledge_source_feedback_suite`, full CTest, ASan/UBSan, and ThreadSanitizer on the exact resulting commit.
+- Independently review policy semantics, sequence overflow/boundary behavior, replay reconstruction, and the effect of event volume on freshness.
+- The event-count horizon is a deterministic freshness mechanism, not a statistically justified universal threshold. The embedding host must select a horizon appropriate to its event rate and use case.
+- This does not implement production cryptographic evaluator/provenance identity, protected key lifecycle, objective ground-truth adjudication, or cryptographic whole-journal integrity.
+- This does not yet prove that factual calibration changes downstream planning/action selection.
+
+**Priority One remains OPEN.** Do not mark this change accepted until exact-head CI and independent tester/reviewer evidence are available.
