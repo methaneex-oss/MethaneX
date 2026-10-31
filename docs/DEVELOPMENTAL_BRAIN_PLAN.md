@@ -338,9 +338,10 @@ Adversarial checks must include source-order permutations, two source names shar
 
 ## 14. Feedback replay hardening — 2026-10-31
 
-**Implementation checkpoint:** PR #148, after commit `0050cf77a55c0b3d882a347e9a7770f94ab6bf9e`. This section records a source-audit correction; it is not an acceptance or completion claim.
+**Implementation checkpoint:** PR #148, current builder head `9331b51b62f5b3772f6f76c3fb8a7c1dd5a12b9d`. This section records a source-audit correction; it is not an acceptance or completion claim.
 
 - The non-const `Brain::memory()` accessor has been removed. Callers can inspect memory but cannot append journal events through a live `Brain` object while bypassing its validation and synchronization path.
+- Added `Brain::import_legacy_memory_event` as the narrow supported import route for passive `observation`, `action_outcome`, and `action_attempt` history. It overwrites the imported source with `legacy_import` and rejects all control-plane event kinds, including feedback and evolution lifecycle events. The integration fixtures now use this route for passive legacy history; raw feedback-journal tampering is performed through a separate `Memory` writer only after the Brain instance is closed.
 - The feedback test now simulates offline journal modification through a separate `Memory` instance after the original `Brain` has closed, then verifies fresh-process replay. This keeps the adversarial journal-tampering test without leaving a mutable storage escape hatch in the runtime API.
 - Authenticated feedback is deduplicated by claim sequence and key, not by evaluator identity. Multiple trusted evaluator names cannot multiply the calibration count for the same claim.
 - Replay scans all feedback records for the same claim. If any independently authenticated evaluators disagree on correctness, all adjudications for that claim are rejected regardless of journal order. Identical authenticated adjudications are applied once.
