@@ -76,6 +76,24 @@ int main() {
     assert(default_assessment.has_value());
     assert(std::abs(default_assessment->evidence_weight - 0.8) < 1e-12);
 
+
+    // One persisted feedback event sequence cannot be counted twice, even if
+    // a caller attempts to submit conflicting results against the same record.
+    KnowledgeModel duplicate_sequence;
+    duplicate_sequence.assimilate(KnowledgeEvidence{
+        "duplicate-source", "duplicate-sequence", std::string("present"), 0.8,
+        "duplicate-origin"});
+    duplicate_sequence.score_source("duplicate-source", true, 7);
+    duplicate_sequence.score_source("duplicate-source", false, 7);
+    const auto* duplicate_metric = duplicate_sequence.source_metric("duplicate-source");
+    assert(duplicate_metric != nullptr);
+    assert(duplicate_metric->calibration_observations == 1);
+    assert(std::abs(duplicate_metric->empirical_accuracy - 1.0) < 1e-12);
+    const auto duplicate_assessment = duplicate_sequence.assess(
+        "duplicate-sequence", 7, KnowledgeCalibrationPolicy{1, 10});
+    assert(duplicate_assessment.has_value());
+    assert(std::abs(duplicate_assessment->evidence_weight - 1.2) < 1e-12);
+
     KnowledgeModel assessment;
     assessment.assimilate(KnowledgeEvidence{
         "sensor-a", "surface-risk", std::string("hazardous"), 0.9, "origin-a"});
