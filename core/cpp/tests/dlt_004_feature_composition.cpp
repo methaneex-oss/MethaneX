@@ -206,7 +206,21 @@ void run_seed(std::uint64_t seed) {
         assert((poor_action == "route-one" ? route_one.value : route_two.value) >
                (poor_action == "route-one" ? route_two.value : route_one.value));
         assert(selected_action(brain, "open", "poor", "rough") == poor_action);
-        assert(brain.memory().by_kind("action_outcome").size() == 80);
+
+        // New, contradictory consequences in additional contexts must revise
+        // the shared feature values. The open/poor/rough probe remains held out:
+        // no outcome is ever recorded for that exact combination.
+        const auto open_poor_flat =
+            inferred_context(brain, "open", "poor", "flat");
+        const auto closed_poor_flat =
+            inferred_context(brain, "closed", "poor", "flat");
+        const auto closed_poor_rough =
+            inferred_context(brain, "closed", "poor", "rough");
+        train_pair(brain, open_poor_flat, clear_action, 8);
+        train_pair(brain, closed_poor_flat, clear_action, 8);
+        train_pair(brain, closed_poor_rough, clear_action, 8);
+        assert(selected_action(brain, "open", "poor", "rough") == clear_action);
+        assert(brain.memory().by_kind("action_outcome").size() == 128);
 
         // Priority-One integration gate: the same observed consequences must
         // feed affective appraisal, prediction calibration, episodic memory,
@@ -229,13 +243,13 @@ void run_seed(std::uint64_t seed) {
     {
         Brain restored(journal);
         assert(restored.goal(goal_id) != nullptr);
-        assert(selected_action(restored, "open", "poor", "rough") == poor_action);
+        assert(selected_action(restored, "open", "poor", "rough") == clear_action);
         const auto held_out = inferred_context(restored, "open", "poor", "rough");
         const auto estimate =
-            restored.developmental_feature_strategy_estimate(held_out, poor_action);
+            restored.developmental_feature_strategy_estimate(held_out, clear_action);
         assert(estimate.confidence >= 0.5);
         assert(estimate.value > 0.0);
-        assert(restored.memory().by_kind("action_outcome").size() == 80);
+        assert(restored.memory().by_kind("action_outcome").size() == 128);
 
         // A fresh process must reconstruct every participating learner from
         // journaled experience, not merely preserve the selected action.
