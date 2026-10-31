@@ -135,6 +135,18 @@ bool has_resolved_action_consequence_forecast(const Brain& brain) {
     return false;
 }
 
+bool has_action_outcome_for_context(const Brain& brain,
+                                    const std::string& context) {
+    for (const auto& event : brain.memory().by_kind("action_outcome")) {
+        const auto it = event.data.find("context");
+        if (it == event.data.end()) continue;
+        const auto* recorded_context = std::get_if<std::string>(&it->second);
+        if (recorded_context != nullptr && *recorded_context == context)
+            return true;
+    }
+    return false;
+}
+
 void run_seed(std::uint64_t seed) {
     const auto journal = std::filesystem::temp_directory_path() /
         ("jarvis_dlt_004_" + std::to_string(seed) + ".bin");
@@ -205,6 +217,7 @@ void run_seed(std::uint64_t seed) {
             cross_goal_context, poor_action).matched_features == 0);
         assert((poor_action == "route-one" ? route_one.value : route_two.value) >
                (poor_action == "route-one" ? route_two.value : route_one.value));
+        assert(!has_action_outcome_for_context(brain, held_out));
         assert(selected_action(brain, "open", "poor", "rough") == poor_action);
 
         // New, contradictory consequences in additional contexts must revise
@@ -219,6 +232,7 @@ void run_seed(std::uint64_t seed) {
         train_pair(brain, open_poor_flat, clear_action, 8);
         train_pair(brain, closed_poor_flat, clear_action, 8);
         train_pair(brain, closed_poor_rough, clear_action, 8);
+        assert(!has_action_outcome_for_context(brain, held_out));
         assert(selected_action(brain, "open", "poor", "rough") == clear_action);
         assert(brain.memory().by_kind("action_outcome").size() == 128);
 
