@@ -59,6 +59,7 @@ std::optional<KnowledgeAssessment> KnowledgeModel::assess(const std::string& key
         Scalar value;
         std::vector<std::string> sources;
         std::vector<std::string> origins;
+        std::vector<std::string> verified_sources;
         std::vector<std::pair<std::string, double>> origin_weights;
         std::size_t observations{0};
         double evidence_weight{0.0};
@@ -71,7 +72,7 @@ std::optional<KnowledgeAssessment> KnowledgeModel::assess(const std::string& key
                 return item.value == claim.value;
             });
         if (candidate == candidates.end()) {
-            candidates.push_back(CandidateSupport{claim.value, {}, {}, {}, 0, 0.0});
+            candidates.push_back(CandidateSupport{claim.value, {}, {}, {}, {}, 0, 0.0});
             candidate = std::prev(candidates.end());
         }
         candidate->observations += claim.observations;
@@ -79,12 +80,32 @@ std::optional<KnowledgeAssessment> KnowledgeModel::assess(const std::string& key
             candidate->sources.end()) {
             candidate->sources.push_back(claim.source);
         }
-
-        if (!claim.provenance_id.empty() &&
-            std::find(candidate->origins.begin(), candidate->origins.end(),
-                      claim.provenance_id) == candidate->origins.end()) {
-            candidate->origins.push_back(claim.provenance_id);
+        if (!claim.provenance_id.empty()) {
+            if (std::find(candidate->origins.begin(), candidate->origins.end(),
+                          claim.provenance_id) == candidate->origins.end()) {
+                candidate->origins.push_back(claim.provenance_id);
+            }
+            if (std::find(candidate->verified_sources.begin(),
+                          candidate->verified_sources.end(), claim.source) ==
+                candidate->verified_sources.end()) {
+                candidate->verified_sources.push_back(claim.source);
+            }
         }
+    }
+
+    for (const auto& claim : claims_) {
+        if (claim.key != key) continue;
+        const auto candidate = std::find_if(
+            candidates.begin(), candidates.end(), [&](const CandidateSupport& item) {
+                return item.value == claim.value;
+            });
+        if (candidate == candidates.end()) continue;
+        // If this source has verified provenance for this claim, an additional
+        // unverified copy from the same source must not create a second weight.
+        if (claim.provenance_id.empty() &&
+            std::find(candidate->verified_sources.begin(),
+                      candidate->verified_sources.end(), claim.source) !=
+                candidate->verified_sources.end()) continue;
 
         const auto metric = sources_.find(claim.source);
         // Uncalibrated sources receive a neutral prior. Calibration affects
@@ -150,5 +171,4 @@ std::optional<KnowledgeAssessment> KnowledgeModel::assess(const std::string& key
     }
     return result;
 }
-
 } // namespace jarvis::core
