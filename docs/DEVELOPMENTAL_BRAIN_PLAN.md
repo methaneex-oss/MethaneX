@@ -420,3 +420,84 @@ Priority One remains **OPEN**. CI success is necessary but not sufficient. The f
 - Downstream planning/action-selection effects are Priority Two in the controlling plan, not part of Priority-One acceptance for this source-reliability mechanism.
 
 **Priority One remains OPEN.** Do not mark this change accepted until exact-head CI and independent tester/reviewer evidence are available.
+
+
+## 17. Priority execution method and scope reconciliation — 2026-10-31
+
+This section establishes the execution method for the remaining developmental work. It supersedes conflicting interpretations in earlier checkpoint prose; earlier entries remain historical records of what was known at their respective commits.
+
+### Priority order remains authoritative
+
+Do not collapse all open work into one undifferentiated blocker list, and do not reorder the developmental priorities for convenience.
+
+1. **Priority 1 — Source reliability as an evidence-grounded mechanism.** Establish traceable claim-specific feedback, verified provenance, evidence-dependence controls, calibrated assessment, deterministic replay, and defensible freshness/uncertainty semantics.
+2. **Priority 2 — Connect learned knowledge and belief state to decisions.** Trace assessed knowledge, uncertainty, conflict, and memory retrieval into candidate generation, planning, action selection, and execution. This is a separate milestone, not an implicit requirement to keep expanding Priority 1.
+3. **Priority 3 — Generalisation and transfer.**
+4. **Priority 4 — Close the developmental feedback loop.**
+5. **Priority 5 — Improve evidence-dependence modelling.**
+
+### Priority 1 acceptance boundary
+
+Priority 1 cannot close merely because the calibration algorithm and feedback journal path exist or because CI is green. It also cannot be held hostage by unrelated Priority 2 feature work.
+
+The following are Priority 1 acceptance requirements because they determine whether source trust and persisted evidence can be relied upon:
+
+- The host must authenticate evaluator identity and provenance, protect trust configuration, and define key provisioning, rotation, revocation, and deterministic historical verification.
+- The host must define an evidence-grounded adjudication process. An authenticated evaluator assertion proves who made an assertion, not that the assertion is objectively true.
+- The journal and every cognition-affecting durable artifact must have an explicit integrity, rollback, crash-consistency, concurrency, migration, and recovery policy. The proposed requirements are in `docs/PRIORITY_ONE_TRUST_BOUNDARY_CONTRACT.md`; that document is a contract, not an implementation.
+- Calibration activation, dependence, uncertainty, and freshness semantics must be justified for the target runtime. Event-count freshness is deterministic but depends on event rate and does not expire during wall-clock idleness.
+- Exact-head automated verification and independent adversarial testing/review must be recorded. Builder CI and builder self-review are not independent acceptance.
+
+**Priority 2 boundary clarification:** end-to-end proof that calibrated knowledge changes planning or action selection belongs to Priority 2 under the priority order above. Earlier checkpoint language that listed this as a remaining Priority-One item must not be used to silently move Priority 2 into Priority 1. Priority 1 still requires proof that calibration changes a later knowledge assessment and that the assessment is persisted/reconstructed correctly.
+
+### Work-package execution method
+
+Each open priority is decomposed into work packages. A package must have an owner-visible requirement, source files/API boundary, dependencies, exact branch and SHA, implementation state, tests, independent review state, and acceptance decision.
+
+Use only these work-package states:
+
+- **Executable:** repository-controlled work can proceed with the current architecture and known contracts.
+- **Decision required:** a real host, policy, or owner decision is missing. Do not fabricate the missing dependency.
+- **Verification:** implementation exists and requires focused/adversarial testing or independent review.
+- **Accepted:** every package-specific gate has evidence and the acceptance authority is recorded.
+- **Blocked:** a named dependency prevents safe progress. Record the dependency and switch to another independent executable package.
+
+A blocked package does not stop unrelated work. Do not begin dependent work until its prerequisite is accepted. Do not mark a priority complete by averaging package statuses.
+
+### Current checkpoint — 2026-10-31
+
+| Work package | Current evidence | State |
+|---|---|---|
+| Source-quality / empirical-trust separation and feedback lifecycle | Implemented through the current stacked integration line; PR #159 adds event-sequence freshness and explicit fail-closed policy | Verification |
+| Calibration freshness and replay | PR #159 exact HEAD `edacf39d91a086480358f6878ecb8461c3cbd7af`; Native Brain Build, Brain CI, Brain ThreadSanitizer, and JARVIS Brain Tests passed. All four CTest-bearing jobs reported 74/74, including `jarvis_knowledge_source_feedback_suite` as test 11/74 | Verification; builder CI only |
+| Duplicate/conflicting calibration sequence semantics | A source audit found that the public model API treated a repeated sequence with a conflicting verdict as first-writer-wins, and allowed one sequence to be reused across source identifiers. A follow-up change invalidates ambiguous sequence reuse and adds order/per-source regressions | Awaiting exact-head CI and review |
+| Production evaluator/provenance trust | Core verifier callbacks exist; no production host trust root or key lifecycle is demonstrated in this repository | Decision required |
+| Ground-truth adjudication and statistical calibration policy | Host adjudication process, effective sample/dependence policy, and justified event horizon are not established | Decision required |
+| Journal integrity and durable commit protocol | Current journal/metadata do not provide authenticated rollback detection or durable anchor semantics; see trust-boundary contract | Decision required |
+| Independent adversarial test and architecture/security review | No independent PASS report is recorded for the current exact head | Verification |
+| Priority 2 decision/action integration | Explicitly deferred until Priority 1 is accepted | Not started in this execution line |
+
+The PR #159 CI result is tied only to its exact SHA. The follow-up sequence-conflict changes on this branch are a new code candidate and inherit none of those CI results until workflows pass on the new exact HEAD.
+
+### Bounded execution cycles
+
+Use focused 40–60 minute work cycles as execution budgets, not completion promises:
+
+1. Reconcile the latest branch/PR/commit state and select the highest-impact executable package.
+2. Inspect implementation, callers, persistence/replay, and existing tests before editing.
+3. Make the smallest coherent change that closes a falsifiable defect.
+4. Add adversarial regressions, including negative controls and insertion-order/restart cases where relevant.
+5. Run focused tests, then integration/full CI as appropriate.
+6. Review the diff for scope drift, untested paths, and regressions.
+7. Record exact SHA, evidence, limitations, blockers, and the next executable package.
+
+If a package is blocked, switch to another independent executable package rather than spending the entire cycle waiting. Never claim elapsed time, tests, builds, commits, pushes, reviewer approval, or acceptance that did not occur.
+
+### Change-control rules
+
+- Keep the existing developmental objective and architecture. Engineer mechanisms; let behaviour be acquired through experience.
+- Do not add hand-authored stimulus-to-response or scenario-specific learning outcomes.
+- Do not add external AI APIs as substitutes for the core mechanisms.
+- Preserve existing branches and PRs. Do not force-push, merge, close, or mark a PR ready without explicit authorization.
+- A later change reopens only the acceptance gates it affects, but must retest those gates.
+- Report implementation, CI, independent testing, independent review, and owner acceptance as separate facts.

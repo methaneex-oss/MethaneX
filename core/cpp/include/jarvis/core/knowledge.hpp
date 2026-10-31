@@ -69,6 +69,8 @@ public:
     // Records an externally established outcome. This API does not itself
     // establish evaluator independence or truth; callers must validate that.
     void score_source(const std::string& source, bool correct);
+    // The sequence is globally unique within the model. Identical repeats are
+    // idempotent; conflicting reuse invalidates the outcome for every source.
     void score_source(const std::string& source, bool correct, std::uint64_t sequence);
     const KnowledgeMetric* source_metric(const std::string& source) const noexcept;
     std::optional<KnowledgeAssessment> assess(const std::string& key) const;
@@ -89,9 +91,21 @@ private:
     struct CalibrationOutcome {
         std::uint64_t sequence{0};
         bool correct{false};
+        bool conflicted{false};
     };
 
+    struct CalibrationSequence {
+        std::string source;
+        bool correct{false};
+        bool conflicted{false};
+    };
+
+    void recompute_calibration_metric(const std::string& source);
+
     std::unordered_map<std::string, KnowledgeMetric> sources_;
+    // A persisted event sequence is globally unique. Conflicting reuse must
+    // invalidate the sequence rather than allowing first-writer-wins trust.
+    std::unordered_map<std::uint64_t, CalibrationSequence> calibration_sequences_;
     std::unordered_map<std::string, std::vector<CalibrationOutcome>> calibration_outcomes_;
     std::vector<ClaimEvidence> claims_;
     std::uint64_t next_legacy_calibration_sequence_{1};

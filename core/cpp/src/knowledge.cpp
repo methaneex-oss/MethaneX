@@ -50,18 +50,64 @@ void KnowledgeModel::score_source(const std::string& source, bool correct) {
 void KnowledgeModel::score_source(
     const std::string& source, bool correct, std::uint64_t sequence) {
     if (source.empty() || sequence == 0) return;
-    auto& outcomes = calibration_outcomes_[source];
-    if (std::any_of(outcomes.begin(), outcomes.end(),
-                    [&](const CalibrationOutcome& item) {
-                        return item.sequence == sequence;
-                    })) return;
+
+    const auto existing = calibration_sequences_.find(sequence);
+    if (existing == calibration_sequences_.end()) {
+        calibration_sequences_.emplace(
+            sequence, CalibrationSequence{source, correct, false});
+        calibration_outcomes_[source].push_back(
+            CalibrationOutcome{sequence, correct, false});
+        // Keep the normal append path O(1). Full recomputation is reserved
+        // for the exceptional case where a previously counted sequence is
+        // later found to be ambiguous.
+        auto& metric = sources_[source];
+        const double outcome = correct ? 1.0 : 0.0;
+        metric.empirical_accuracy +=
+            (outcome - metric.empirical_accuracy) /
+            static_cast<double>(metric.calibration_observations + 1);
+        ++metric.calibration_observations;
+        return;
+    }
+
+    // Repeated identical delivery is idempotent. Reusing one durable event
+    // sequence for another source or a different verdict makes that event
+    // ambiguous; invalidate it rather than retaining whichever arrived first.
+    auto& prior = existing->second;
+    if (prior.conflicted) return;
+    if (prior.source == source && prior.correct == correct) return;
+
+    prior.conflicted = true;
+    const std::string prior_source = prior.source;
+    const auto prior_history = calibration_outcomes_.find(prior_source);
+    if (prior_history != calibration_outcomes_.end()) {
+        for (auto& outcome : prior_history->second) {
+            if (outcome.sequence == sequence) outcome.conflicted = true;
+        }
+    }
+    if (source != prior_source) {
+        calibration_outcomes_[source].push_back(
+            CalibrationOutcome{sequence, correct, true});
+        recompute_calibration_metric(source);
+    }
+    recompute_calibration_metric(prior_source);
+}
+
+void KnowledgeModel::recompute_calibration_metric(const std::string& source) {
     auto& metric = sources_[source];
-    const double outcome = correct ? 1.0 : 0.0;
-    metric.empirical_accuracy +=
-        (outcome - metric.empirical_accuracy) /
-        static_cast<double>(metric.calibration_observations + 1);
-    ++metric.calibration_observations;
-    outcomes.push_back(CalibrationOutcome{sequence, correct});
+    std::size_t count = 0;
+    std::size_t correct = 0;
+    const auto history = calibration_outcomes_.find(source);
+    if (history != calibration_outcomes_.end()) {
+        for (const auto& outcome : history->second) {
+            if (outcome.conflicted) continue;
+            ++count;
+            if (outcome.correct) ++correct;
+        }
+    }
+    metric.calibration_observations = count;
+    metric.empirical_accuracy = count == 0
+        ? 0.5
+        : static_cast<double>(correct) / static_cast<double>(count);
 }
 
 const KnowledgeMetric* KnowledgeModel::source_metric(const std::string& source) const noexcept {
@@ -87,7 +133,7 @@ std::optional<KnowledgeAssessment> KnowledgeModel::assess(
         std::size_t count = 0;
         std::size_t correct = 0;
         for (const auto& outcome : history->second) {
-            if (outcome.sequence > current_sequence ||
+            if (outcome.conflicted || outcome.sequence > current_sequence ||
                 current_sequence - outcome.sequence > policy.maximum_age_events)
                 continue;
             ++count;
