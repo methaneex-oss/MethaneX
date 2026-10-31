@@ -94,6 +94,23 @@ int main() {
     assert(duplicate_assessment.has_value());
     assert(std::abs(duplicate_assessment->evidence_weight - 1.2) < 1e-12);
 
+
+    // The freshness boundary is inclusive: an outcome exactly max-age events
+    // old is usable; one event older is not.
+    KnowledgeModel boundary;
+    boundary.assimilate(KnowledgeEvidence{
+        "boundary-source", "boundary-claim", std::string("present"), 0.8,
+        "boundary-origin"});
+    boundary.score_source("boundary-source", true, 7);
+    const auto at_boundary = boundary.assess(
+        "boundary-claim", 15, KnowledgeCalibrationPolicy{1, 8});
+    assert(at_boundary.has_value());
+    assert(std::abs(at_boundary->evidence_weight - 1.2) < 1e-12);
+    const auto beyond_boundary = boundary.assess(
+        "boundary-claim", 16, KnowledgeCalibrationPolicy{1, 8});
+    assert(beyond_boundary.has_value());
+    assert(std::abs(beyond_boundary->evidence_weight - 0.8) < 1e-12);
+
     KnowledgeModel assessment;
     assessment.assimilate(KnowledgeEvidence{
         "sensor-a", "surface-risk", std::string("hazardous"), 0.9, "origin-a"});
