@@ -95,11 +95,13 @@ J.A.R.V.I.S. runs simulations, analyzes designs, renders proposed suit changes, 
 
 ### 3.6 It synthesizes information from different sources and constructs useful interpretations
 
-In *Iron Man 3*, J.A.R.V.I.S. helps compile information about the Mandarin from multiple intelligence sources, reconstructs a crime scene virtually, compares signatures, and searches for related events. In *The Avengers*, Tony uses J.A.R.V.I.S. to run a long-running decryption task while travelling. In *Age of Ultron*, J.A.R.V.I.S. analyzes unfamiliar technology and attempts variations on an interface.
+In *Iron Man 3*, J.A.R.V.I.S. helps compile information about the Mandarin from multiple intelligence sources, reconstructs a crime scene virtually, compares signatures, and searches for related events. The scene explicitly depicts access to a cloud analysis service and satellite-derived information. In *The Avengers*, Tony uses J.A.R.V.I.S. to run a long-running decryption task while travelling. In *Age of Ultron*, J.A.R.V.I.S. analyzes unfamiliar technology and attempts variations on an interface.
 
 **Observed behavior:** Information from multiple sources is combined with domain knowledge and computational analysis to produce hypotheses, comparisons, and useful next steps.
 
 **Engineering implication:** The Brain needs evidence ingestion, source provenance, entity/event resolution, temporal/spatial correlation, knowledge reconciliation, hypothesis formation, uncertainty tracking, retrieval, simulation and multi-step reasoning.
+
+**Important project distinction:** The films sometimes give J.A.R.V.I.S. access to Stark's cloud resources, intelligence feeds and satellites. That is an environmental capability shown in the story, not evidence that the cognitive Brain itself must be cloud-hosted. This project must not depend on third-party APIs or cloud AI services for core cognition. Any future external information source is an optional, explicitly authorized adapter; the Brain's interpretation, reasoning, memory, prediction and decision mechanisms remain internally owned.
 
 **Non-negotiable:** It must not turn a plausible correlation into a fact. Source reliability, independence, freshness, missing data, alternative explanations and uncertainty must remain explicit.
 
@@ -115,11 +117,11 @@ J.A.R.V.I.S. is composed, concise, technically precise, and often dryly humorous
 
 ### 3.8 It has operational autonomy, but it does not own every decision
 
-J.A.R.V.I.S. makes recommendations, runs tasks, warns Tony, and offers to take control in some circumstances. Tony can sometimes decline the offer. In other cases, the system is delegated a broader operational role.
+J.A.R.V.I.S. makes recommendations, runs tasks, warns Tony, and offers to take control in some circumstances. Tony can sometimes decline the offer. In *Iron Man 3*, after Tony asks whether J.A.R.V.I.S. has been to Tennessee, it prepares a flight plan and the damaged suit later takes Tony there; Tony objects that he did not ask to be taken. The same sequence ends with J.A.R.V.I.S. reporting a malfunction and shutting down.
 
-**Observed behavior:** There are different levels of initiative and control, not one universal mode of obedience or unrestricted autonomy.
+**Observed behavior:** There are different levels of initiative and control, but the films also show an ambiguous inference turning into an unwanted physical consequence and a component failure.
 
-**Engineering implication:** The Brain needs an explicit autonomy and authority model. It must know what it may observe, recommend, prepare, execute, interrupt, or escalate. Authority should depend on the capability, context, risk, reversibility, confidence, permissions and prior delegation.
+**Engineering implication:** The Brain needs an explicit autonomy and authority model. It must know what it may observe, recommend, prepare, execute, interrupt, or escalate. Authority should depend on the capability, context, risk, reversibility, confidence, permissions and prior delegation. Proactivity must not silently convert an ambiguous remark or question into a consequential physical action unless that class of action has already been explicitly delegated.
 
 **Do not hardcode one universal behavior such as always obey, always refuse, or always ask.** The decision must be reasoned from policy constraints and the current situation. Safety invariants remain hard constraints.
 
@@ -381,6 +383,7 @@ The MCU is a behavioral reference, not a literal engineering blueprint. Do not a
 - Perfect perception or perfect speech understanding.
 - Perfect prediction, zero uncertainty or universal knowledge.
 - Instant manufacturing or physical actions without actual equipment.
+- Cloud hosting, satellite access, global network reach, or third-party API access as a prerequisite for the Brain. Those are external resources shown in some scenes, not intrinsic cognitive mechanisms.
 - Consciousness, sentience, subjective experience or human-like emotion merely because conversation sounds natural.
 - A magical distributed consciousness that cannot be lost or corrupted.
 - Unlimited autonomy or authority over every connected system.
