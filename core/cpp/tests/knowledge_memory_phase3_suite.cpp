@@ -77,22 +77,59 @@ int main() {
     assert(std::abs(default_assessment->evidence_weight - 0.8) < 1e-12);
 
 
-    // One persisted feedback event sequence cannot be counted twice, even if
-    // a caller attempts to submit conflicting results against the same record.
+    // Identical delivery of one feedback event is idempotent. A conflicting
+    // verdict for that same durable sequence invalidates the outcome instead
+    // of letting insertion order choose the source's trust score.
     KnowledgeModel duplicate_sequence;
     duplicate_sequence.assimilate(KnowledgeEvidence{
         "duplicate-source", "duplicate-sequence", std::string("present"), 0.8,
         "duplicate-origin"});
     duplicate_sequence.score_source("duplicate-source", true, 7);
-    duplicate_sequence.score_source("duplicate-source", false, 7);
+    duplicate_sequence.score_source("duplicate-source", true, 7);
     const auto* duplicate_metric = duplicate_sequence.source_metric("duplicate-source");
     assert(duplicate_metric != nullptr);
     assert(duplicate_metric->calibration_observations == 1);
     assert(std::abs(duplicate_metric->empirical_accuracy - 1.0) < 1e-12);
+    duplicate_sequence.score_source("duplicate-source", false, 7);
+    assert(duplicate_metric->calibration_observations == 0);
+    assert(std::abs(duplicate_metric->empirical_accuracy - 0.5) < 1e-12);
     const auto duplicate_assessment = duplicate_sequence.assess(
         "duplicate-sequence", 7, KnowledgeCalibrationPolicy{1, 10});
     assert(duplicate_assessment.has_value());
-    assert(std::abs(duplicate_assessment->evidence_weight - 1.2) < 1e-12);
+    assert(std::abs(duplicate_assessment->evidence_weight - 0.8) < 1e-12);
+
+    // Reversing conflicting insertion order produces the same uncalibrated
+    // result. A globally unique journal sequence also cannot calibrate two
+    // different sources.
+    KnowledgeModel reverse_conflict;
+    reverse_conflict.assimilate(KnowledgeEvidence{
+        "reverse-source", "reverse-sequence", std::string("present"), 0.8,
+        "reverse-origin"});
+    reverse_conflict.score_source("reverse-source", false, 9);
+    reverse_conflict.score_source("reverse-source", true, 9);
+    const auto* reverse_metric = reverse_conflict.source_metric("reverse-source");
+    assert(reverse_metric != nullptr);
+    assert(reverse_metric->calibration_observations == 0);
+    assert(std::abs(reverse_metric->empirical_accuracy - 0.5) < 1e-12);
+    const auto reverse_assessment = reverse_conflict.assess(
+        "reverse-sequence", 9, KnowledgeCalibrationPolicy{1, 10});
+    assert(reverse_assessment.has_value());
+    assert(std::abs(reverse_assessment->evidence_weight - 0.8) < 1e-12);
+
+    KnowledgeModel cross_source_conflict;
+    cross_source_conflict.assimilate(KnowledgeEvidence{
+        "source-one", "claim-one", std::string("one"), 0.8, "origin-one"});
+    cross_source_conflict.assimilate(KnowledgeEvidence{
+        "source-two", "claim-two", std::string("two"), 0.8, "origin-two"});
+    cross_source_conflict.score_source("source-one", true, 11);
+    cross_source_conflict.score_source("source-two", true, 11);
+    const auto* first_source_metric = cross_source_conflict.source_metric("source-one");
+    const auto* second_source_metric = cross_source_conflict.source_metric("source-two");
+    assert(first_source_metric != nullptr && second_source_metric != nullptr);
+    assert(first_source_metric->calibration_observations == 0);
+    assert(second_source_metric->calibration_observations == 0);
+    assert(std::abs(first_source_metric->empirical_accuracy - 0.5) < 1e-12);
+    assert(std::abs(second_source_metric->empirical_accuracy - 0.5) < 1e-12);
 
 
     // The freshness boundary is inclusive: an outcome exactly max-age events
