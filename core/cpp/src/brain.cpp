@@ -80,7 +80,7 @@ double observation_evidence_reliability(const Event& event) {
             return std::clamp(static_cast<double>(*value), 0.0, 1.0);
         return 0.0;
     }
-    return 0.5;
+    return 0.7;
 }
 
 std::string verified_knowledge_provenance_id(
