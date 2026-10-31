@@ -113,6 +113,7 @@ int main() {
         EvolutionProposal{"replay.weight", 0.4, 0.5, 0.1, 0.99},
         0.70, 0.70, 0.01, 0.99, ExperimentOutcome::Improved, true};
     attest_isolated(false_improvement);
+    false_improvement.outcome = ExperimentOutcome::Improved;
     assert(!replay_controller.replay_evaluation(false_improvement));
     assert(!replay_controller.adoption_journal().get("exp-false-improvement").has_value());
 
