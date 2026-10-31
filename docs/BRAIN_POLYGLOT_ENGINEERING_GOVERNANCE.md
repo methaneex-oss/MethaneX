@@ -544,12 +544,13 @@ Keep architecture documents synchronized. If code and documentation disagree, re
 
 ## 16. Prohibited engineering patterns
 
-The following are prohibited unless the project owner explicitly approves a documented exception:
+The following are non-negotiable project constraints:
 
 - A second authoritative cognitive state or competing Brain runtime.
 - Hardcoded scenario-to-learned-outcome mappings.
-- A hosted AI API or external LLM as a required core cognitive dependency.
-- A language introduced without a concrete responsibility and evidence.
+- Any external AI API, hosted LLM/inference endpoint, external agent, or cognitive service performing or supplying core Brain reasoning, memory, prediction, planning, decision, or learning.
+- A prebuilt external cognitive engine or agent framework used as a substitute for mechanisms owned by this project.
+- A new programming language outside the proposed C++20, Python/PyTorch, Rust, TypeScript, and optional CUDA/Triton allocation without explicit project-owner approval and independent architecture review.
 - A wholesale rewrite or migration disguised as cleanup.
 - Unbounded background workers, queues, caches, or retry loops.
 - Interfaces that bypass trusted validation or directly mutate canonical state.
@@ -560,6 +561,9 @@ The following are prohibited unless the project owner explicitly approves a docu
 - GPU, network, or optional worker availability required for baseline Brain operation.
 - Duplicate subsystems whose ownership and interaction are not explicitly resolved.
 
+Future external I/O adapters for authorized devices, tools, or data sources are not cognitive engines. They remain outside this Brain-foundation implementation scope and require explicit authorization, bounded contracts, provenance, and trusted validation. They must never become a required external source of cognition.
+
+Low-level general-purpose libraries and infrastructure dependencies are not automatically prohibited, but they require justification and must not silently own a core cognitive responsibility.
 ---
 
 ## 17. Decision records and unresolved choices
