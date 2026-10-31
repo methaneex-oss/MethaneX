@@ -1578,8 +1578,13 @@ int main() {
         assert(observe_value(unresolved_replay, "sensor-A", "beta").event.sequence != 0);
         assert_three_source_dispute(unresolved_replay, true);
         assert(unresolved_replay.world().disputed_facts().empty());
-        // Only fresh evidence from the remaining conflicting source can settle
-        // the cross-source disagreement; no source's clean update masks another.
+        // A first beta observation from sensor C introduces a new conflict;
+        // it must not be mistaken for post-conflict corroboration.
+        assert(observe_value(unresolved_replay, "sensor-C", "beta").event.sequence != 0);
+        assert_three_source_dispute(unresolved_replay, true);
+        assert(!unresolved_replay.world().disputed_facts().empty());
+        // A second beta observation is fresh corroboration after gamma/beta
+        // became contested, so sensor C can now resolve its own conflict.
         assert(observe_value(unresolved_replay, "sensor-C", "beta").event.sequence != 0);
         assert_three_source_dispute(unresolved_replay, false);
         assert(unresolved_replay.world().disputed_facts().empty());
