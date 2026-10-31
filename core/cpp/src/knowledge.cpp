@@ -65,8 +65,9 @@ const KnowledgeMetric* KnowledgeModel::source_metric(const std::string& source) 
 }
 
 std::optional<KnowledgeAssessment> KnowledgeModel::assess(const std::string& key) const {
-    return assess(key, std::numeric_limits<std::uint64_t>::max(),
-                  KnowledgeCalibrationPolicy{3, std::numeric_limits<std::uint64_t>::max()});
+    // The convenience API is deliberately uncalibrated. Callers must provide
+    // an explicit freshness policy before historical outcomes affect evidence.
+    return assess(key, 0, KnowledgeCalibrationPolicy{});
 }
 
 std::optional<KnowledgeAssessment> KnowledgeModel::assess(
