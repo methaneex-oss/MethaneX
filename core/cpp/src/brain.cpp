@@ -556,8 +556,10 @@ void Brain::replay(const Event& event, bool external_observation) {
                 candidate_source == nullptr || *candidate_source != *source ||
                 candidate_value_it == candidate.data.end() ||
                 candidate_value_it->second != value_it->second ||
-                candidate_evaluator == nullptr || *candidate_evaluator != *evaluator ||
-                candidate.source != *evaluator ||
+                candidate_evaluator == nullptr || candidate_evaluator->empty() ||
+                candidate.source != *candidate_evaluator ||
+                *candidate_evaluator == *candidate_source ||
+                !trusted_knowledge_evaluators_.contains(*candidate_evaluator) ||
                 candidate_attestation == nullptr || candidate_attestation->empty() ||
                 candidate_correct == nullptr) continue;
             const KnowledgeFeedbackRequest candidate_request{
@@ -579,8 +581,10 @@ void Brain::replay(const Event& event, bool external_observation) {
                 first_matching_sequence, candidate.sequence);
         }
         if (conflicting_adjudication || event.sequence != first_matching_sequence) return;
+        // One claim contributes at most one calibration outcome, regardless
+        // of how many trusted evaluators independently submit the same verdict.
         const std::string feedback_id =
-            std::to_string(sequence) + "|" + *key + "|" + *evaluator;
+            std::to_string(sequence) + "|" + *key;
         if (!processed_knowledge_feedback_.insert(feedback_id).second) return;
         state_.cycle = std::max(state_.cycle, event.sequence);
         knowledge_.score_source(*source, *std::get_if<bool>(&correct_it->second));
