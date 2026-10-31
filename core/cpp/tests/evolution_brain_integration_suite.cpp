@@ -59,11 +59,31 @@ int main() {
              {"minimum_improvement", 0.01}, {"isolated", true}}};
         const auto rejected_adoption = guarded.observe(forged_adoption);
         assert(rejected_adoption.event.sequence == 0);
+
+        // Legacy episodic import is allowed only for passive memory kinds.
+        // It forcibly marks the source as untrusted and does not replay it as
+        // a developmental strategy or internal state transition.
+        Event imported_outcome{
+            0, 4, "caller-controlled-source", "action_outcome",
+            {{"action", std::string("imported-action")},
+             {"context", std::string("imported-context")},
+             {"observed", true}, {"actual_consequence", 1.0},
+             {"consequence_error", 1.0}, {"reliability", 1.0},
+             {"evidence_reliability", 1.0}}};
+        assert(guarded.import_legacy_memory_event(imported_outcome) != 0);
+        Event imported_evolution{
+            0, 5, "caller-controlled-source", "evolution_adopt",
+            {{"experiment_id", std::string("imported-forgery")}}};
+        assert(guarded.import_legacy_memory_event(imported_evolution) == 0);
+        assert(guarded.memory().by_kind("action_outcome").size() == 1);
+        assert(guarded.developmental_strategies().empty());
     }
     {
         Brain guarded_restart(forged_path);
         assert(guarded_restart.evolution_parameter("forged.parameter") == nullptr);
         assert(guarded_restart.evolution_history().empty());
+        assert(guarded_restart.memory().by_kind("action_outcome").size() == 1);
+        assert(guarded_restart.developmental_strategies().empty());
     }
     std::filesystem::remove(forged_path, ec);
     std::filesystem::remove(forged_path.string() + ".meta", ec);
