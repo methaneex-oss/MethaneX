@@ -106,5 +106,29 @@ int main() {
     assert(tied_assessment->supporting_sources +
            tied_assessment->conflicting_sources == 4);
 
+
+    // Repeated incorrect outcomes must reduce this source's evidential weight,
+    // but must not erase the observation or silently resolve a contradiction.
+    KnowledgeModel degraded_source;
+    degraded_source.assimilate(KnowledgeEvidence{
+        "sensor-low-trust", "bridge-condition", std::string("safe"), 0.9});
+    const auto uncalibrated = degraded_source.assess("bridge-condition");
+    assert(uncalibrated.has_value());
+    assert(std::abs(uncalibrated->evidence_weight - 0.9) < 1e-12);
+    degraded_source.score_source("sensor-low-trust", false);
+    degraded_source.score_source("sensor-low-trust", false);
+    degraded_source.score_source("sensor-low-trust", false);
+    degraded_source.assimilate(KnowledgeEvidence{
+        "sensor-independent", "bridge-condition", std::string("unsafe"), 0.8});
+    const auto degraded = degraded_source.assess("bridge-condition");
+    assert(degraded.has_value());
+    assert(degraded->status == KnowledgeStatus::disputed);
+    assert(!degraded->candidate.has_value());
+    assert(degraded->supporting_sources == 1);
+    assert(degraded->conflicting_sources == 1);
+    assert(std::abs(degraded->evidence_weight - 0.45) < 1e-12);
+    assert(degraded_source.source_metric("sensor-low-trust")->observations == 1);
+    assert(degraded_source.source_metric("sensor-low-trust")->calibration_observations == 3);
+
     return 0;
 }
