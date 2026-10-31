@@ -1,5 +1,6 @@
 #include "jarvis/core/cognitive_cycle.hpp"
 
+#include <algorithm>
 #include <cassert>
 #include <cstdint>
 #include <filesystem>
@@ -189,6 +190,26 @@ void run_seed(std::uint64_t seed) {
                (poor_action == "route-one" ? route_two.value : route_one.value));
         assert(selected_action(brain, "open", "poor", "rough") == poor_action);
         assert(brain.memory().by_kind("action_outcome").size() == 80);
+
+        // Priority-One integration gate: the same observed consequences must
+        // feed affective appraisal, prediction calibration, episodic memory,
+        // compositional strategy learning, and the next CognitiveCycle decision.
+        assert(brain.affective_learning_updates() > 0);
+        const auto live_predictions = brain.snapshot().predictions;
+        assert(std::any_of(live_predictions.begin(), live_predictions.end(),
+            [](const Prediction& prediction) {
+                return prediction.resolved &&
+                       prediction.key.rfind("action_consequence|", 0) == 0;
+            }));
+        const auto recalled_outcomes = brain.memory().recall_ranked(
+            {{"action", Scalar{poor_action}}}, 16, "action_outcome", true);
+        assert(std::any_of(recalled_outcomes.begin(), recalled_outcomes.end(),
+            [](const MemoryRecord& record) {
+                const auto observed = record.event.data.find("observed");
+                return observed != record.event.data.end() &&
+                       std::get_if<bool>(&observed->second) != nullptr &&
+                       *std::get_if<bool>(&observed->second);
+            }));
     }
 
     // Feature weights are reconstructed from the same durable experiences;
@@ -203,6 +224,25 @@ void run_seed(std::uint64_t seed) {
         assert(estimate.confidence >= 0.5);
         assert(estimate.value > 0.0);
         assert(restored.memory().by_kind("action_outcome").size() == 80);
+
+        // A fresh process must reconstruct every participating learner from
+        // journaled experience, not merely preserve the selected action.
+        assert(restored.affective_learning_updates() > 0);
+        const auto restored_predictions = restored.snapshot().predictions;
+        assert(std::any_of(restored_predictions.begin(), restored_predictions.end(),
+            [](const Prediction& prediction) {
+                return prediction.resolved &&
+                       prediction.key.rfind("action_consequence|", 0) == 0;
+            }));
+        const auto restored_memories = restored.memory().recall_ranked(
+            {{"action", Scalar{poor_action}}}, 16, "action_outcome", true);
+        assert(std::any_of(restored_memories.begin(), restored_memories.end(),
+            [](const MemoryRecord& record) {
+                const auto observed = record.event.data.find("observed");
+                return observed != record.event.data.end() &&
+                       std::get_if<bool>(&observed->second) != nullptr &&
+                       *std::get_if<bool>(&observed->second);
+            }));
     }
 
     std::filesystem::remove(journal, ec);
