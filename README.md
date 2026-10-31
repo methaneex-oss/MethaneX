@@ -11,7 +11,7 @@ JARVIS is being engineered as a **software-first cognitive system** rather than 
 - **Learning over hardcoding** — behaviour should improve from evidence, outcomes and experience instead of depending on large collections of fixed `if/else` rules.
 - **Evolution over stagnation** — capabilities, strategies and internal models are designed to improve as evidence accumulates.
 - **Resilience by design** — faults should be detected, isolated and recovered without assuming that every subsystem is always available.
-- **Model-agnostic intelligence** — external models and knowledge sources may contribute capabilities without becoming JARVIS itself.
+- **Internally owned cognition** — core cognitive mechanisms are engineered within this project rather than outsourced to external AI services.
 - **Polyglot by engineering necessity** — C++, Rust, Python, TypeScript and other technologies may be used where each provides the strongest implementation characteristics.
 - **Security as a native concern** — defensive monitoring, isolation, integrity and controlled recovery belong in the platform rather than being an afterthought.
 
@@ -57,6 +57,10 @@ There is deliberately no requirement that the entire project be written in one l
 ## Development status
 
 JARVIS is under active foundational development. The current work is focused on completing and integrating the cognitive substrate before higher-level device, interface and deployment layers are built on top of it.
+
+## Brain behavioral target
+
+The MCU behavioral analysis and proposed capabilities of the Brain are defined in [JARVIS MCU Behavioral Reference and Brain Target](docs/JARVIS_MCU_BEHAVIORAL_REFERENCE_AND_BRAIN_TARGET.md). It distinguishes observed fictional behavior from engineering inference and implementation requirements.
 
 ## Brain language ownership
 
