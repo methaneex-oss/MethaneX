@@ -239,7 +239,8 @@ A fail-closed host trust boundary has been added to the source-calibration feedb
 - `Brain` accepts an optional set of trusted knowledge-evaluator identities at construction.
 - The feedback API rejects evaluator identities not present in that host-supplied set.
 - Journal replay applies the same allowlist check, so feedback from an evaluator not trusted by the current host configuration is not applied.
-- The feedback test now configures three trusted evaluator identities, verifies that an untrusted identity is rejected, and restores calibration with the same trusted configuration.
+- The default constructor has an empty allowlist and therefore fails closed; deployments must explicitly provide trusted evaluator identities before calibration feedback can be recorded or replayed.
+- Tests configure three trusted evaluator identities, reject an untrusted identity, restore calibration with the same trusted configuration, and verify that replay without the trust configuration does not apply calibration.
 
 **Security boundary and limitation:** the allowlist is a host configuration trust anchor, not cryptographic identity authentication. The application integrating `Brain` must ensure that only authenticated, authorized adjudicators can invoke the feedback API and that its trusted-evaluator configuration is protected. An evaluator name in a journal is still metadata; this change does not provide signed feedback, prove independence, or establish ground truth. Journal tamper resistance remains a separate concern.
 
