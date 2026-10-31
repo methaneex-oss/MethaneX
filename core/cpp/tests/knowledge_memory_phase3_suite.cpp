@@ -118,6 +118,15 @@ int main() {
     degraded_source.score_source("sensor-low-trust", false);
     degraded_source.score_source("sensor-low-trust", false);
     degraded_source.score_source("sensor-low-trust", false);
+    // Inspect the calibrated source before introducing a stronger conflicting
+    // source. The assessment's evidence_weight is the strongest candidate's
+    // weight, not the weight of every alternative in a disputed claim.
+    const auto calibrated_low_trust = degraded_source.assess("bridge-condition");
+    assert(calibrated_low_trust.has_value());
+    assert(calibrated_low_trust->status == KnowledgeStatus::provisional);
+    assert(calibrated_low_trust->candidate.has_value());
+    assert(std::abs(calibrated_low_trust->evidence_weight - 0.45) < 1e-12);
+
     degraded_source.assimilate(KnowledgeEvidence{
         "sensor-independent", "bridge-condition", std::string("unsafe"), 0.8});
     const auto degraded = degraded_source.assess("bridge-condition");
@@ -126,7 +135,8 @@ int main() {
     assert(!degraded->candidate.has_value());
     assert(degraded->supporting_sources == 1);
     assert(degraded->conflicting_sources == 1);
-    assert(std::abs(degraded->evidence_weight - 0.45) < 1e-12);
+    // The independent source is now the strongest alternative (0.8), while
+    // the previously calibrated source remains present at weight 0.45.
     assert(degraded_source.source_metric("sensor-low-trust")->observations == 1);
     assert(degraded_source.source_metric("sensor-low-trust")->calibration_observations == 3);
 
