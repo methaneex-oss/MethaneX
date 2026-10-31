@@ -69,6 +69,8 @@ public:
     // Records an externally established outcome. This API does not itself
     // establish evaluator independence or truth; callers must validate that.
     void score_source(const std::string& source, bool correct);
+    // The sequence is globally unique within the model. Identical repeats are
+    // idempotent; conflicting reuse invalidates the outcome for every source.
     void score_source(const std::string& source, bool correct, std::uint64_t sequence);
     const KnowledgeMetric* source_metric(const std::string& source) const noexcept;
     std::optional<KnowledgeAssessment> assess(const std::string& key) const;
