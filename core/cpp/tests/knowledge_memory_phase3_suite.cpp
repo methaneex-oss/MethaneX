@@ -58,13 +58,58 @@ int main() {
     for (int i = 0; i < 3; ++i)
         calibrated_competition.score_source("lower-quality-accurate", true);
     const auto calibrated_competition_assessment =
-        calibrated_competition.assess("bridge-safety");
+        calibrated_competition.assess("bridge-safety", std::numeric_limits<std::uint64_t>::max(), KnowledgeCalibrationPolicy{3, std::numeric_limits<std::uint64_t>::max()});
     assert(calibrated_competition_assessment.has_value());
     assert(calibrated_competition_assessment->status == KnowledgeStatus::disputed);
     assert(!calibrated_competition_assessment->candidate.has_value());
     assert(calibrated_competition_assessment->supporting_origins == 1);
     assert(calibrated_competition_assessment->conflicting_origins == 1);
     assert(std::abs(calibrated_competition_assessment->evidence_weight - 0.6) < 1e-12);
+
+
+    // The default assessment path never silently activates lifetime calibration.
+    KnowledgeModel default_closed;
+    default_closed.assimilate(KnowledgeEvidence{
+        "default-source", "default-policy", std::string("present"), 0.8, "default-origin"});
+    for (int i = 0; i < 3; ++i) default_closed.score_source("default-source", true);
+    const auto default_assessment = default_closed.assess("default-policy");
+    assert(default_assessment.has_value());
+    assert(std::abs(default_assessment->evidence_weight - 0.8) < 1e-12);
+
+
+    // One persisted feedback event sequence cannot be counted twice, even if
+    // a caller attempts to submit conflicting results against the same record.
+    KnowledgeModel duplicate_sequence;
+    duplicate_sequence.assimilate(KnowledgeEvidence{
+        "duplicate-source", "duplicate-sequence", std::string("present"), 0.8,
+        "duplicate-origin"});
+    duplicate_sequence.score_source("duplicate-source", true, 7);
+    duplicate_sequence.score_source("duplicate-source", false, 7);
+    const auto* duplicate_metric = duplicate_sequence.source_metric("duplicate-source");
+    assert(duplicate_metric != nullptr);
+    assert(duplicate_metric->calibration_observations == 1);
+    assert(std::abs(duplicate_metric->empirical_accuracy - 1.0) < 1e-12);
+    const auto duplicate_assessment = duplicate_sequence.assess(
+        "duplicate-sequence", 7, KnowledgeCalibrationPolicy{1, 10});
+    assert(duplicate_assessment.has_value());
+    assert(std::abs(duplicate_assessment->evidence_weight - 1.2) < 1e-12);
+
+
+    // The freshness boundary is inclusive: an outcome exactly max-age events
+    // old is usable; one event older is not.
+    KnowledgeModel boundary;
+    boundary.assimilate(KnowledgeEvidence{
+        "boundary-source", "boundary-claim", std::string("present"), 0.8,
+        "boundary-origin"});
+    boundary.score_source("boundary-source", true, 7);
+    const auto at_boundary = boundary.assess(
+        "boundary-claim", 15, KnowledgeCalibrationPolicy{1, 8});
+    assert(at_boundary.has_value());
+    assert(std::abs(at_boundary->evidence_weight - 1.2) < 1e-12);
+    const auto beyond_boundary = boundary.assess(
+        "boundary-claim", 16, KnowledgeCalibrationPolicy{1, 8});
+    assert(beyond_boundary.has_value());
+    assert(std::abs(beyond_boundary->evidence_weight - 0.8) < 1e-12);
 
     KnowledgeModel assessment;
     assessment.assimilate(KnowledgeEvidence{
@@ -92,7 +137,7 @@ int main() {
     assessment.score_source("sensor-a", true);
     assessment.score_source("sensor-a", true);
     assessment.score_source("sensor-a", true);
-    claim = assessment.assess("surface-risk");
+    claim = assessment.assess("surface-risk", std::numeric_limits<std::uint64_t>::max(), KnowledgeCalibrationPolicy{3, std::numeric_limits<std::uint64_t>::max()});
     assert(claim.has_value());
     assert(std::abs(claim->evidence_weight - 1.35) < 1e-12);
 
@@ -215,7 +260,7 @@ int main() {
     // Inspect the calibrated source before introducing a stronger conflicting
     // source. The assessment's evidence_weight is the strongest candidate's
     // weight, not the weight of every alternative in a disputed claim.
-    const auto calibrated_low_trust = degraded_source.assess("bridge-condition");
+    const auto calibrated_low_trust = degraded_source.assess("bridge-condition", std::numeric_limits<std::uint64_t>::max(), KnowledgeCalibrationPolicy{3, std::numeric_limits<std::uint64_t>::max()});
     assert(calibrated_low_trust.has_value());
     assert(calibrated_low_trust->status == KnowledgeStatus::provisional);
     assert(calibrated_low_trust->candidate.has_value());
@@ -223,7 +268,7 @@ int main() {
 
     degraded_source.assimilate(KnowledgeEvidence{
         "sensor-independent", "bridge-condition", std::string("unsafe"), 0.8, "origin-independent"});
-    const auto degraded = degraded_source.assess("bridge-condition");
+    const auto degraded = degraded_source.assess("bridge-condition", std::numeric_limits<std::uint64_t>::max(), KnowledgeCalibrationPolicy{3, std::numeric_limits<std::uint64_t>::max()});
     assert(degraded.has_value());
     assert(degraded->status == KnowledgeStatus::disputed);
     assert(!degraded->candidate.has_value());

@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cmath>
 #include <iterator>
+#include <limits>
 
 namespace jarvis::core {
 
@@ -41,13 +42,26 @@ double KnowledgeModel::assimilate(const KnowledgeEvidence& evidence) {
 }
 
 void KnowledgeModel::score_source(const std::string& source, bool correct) {
-    if (source.empty()) return;
+    if (next_legacy_calibration_sequence_ ==
+        std::numeric_limits<std::uint64_t>::max()) return;
+    score_source(source, correct, next_legacy_calibration_sequence_++);
+}
+
+void KnowledgeModel::score_source(
+    const std::string& source, bool correct, std::uint64_t sequence) {
+    if (source.empty() || sequence == 0) return;
+    auto& outcomes = calibration_outcomes_[source];
+    if (std::any_of(outcomes.begin(), outcomes.end(),
+                    [&](const CalibrationOutcome& item) {
+                        return item.sequence == sequence;
+                    })) return;
     auto& metric = sources_[source];
     const double outcome = correct ? 1.0 : 0.0;
     metric.empirical_accuracy +=
         (outcome - metric.empirical_accuracy) /
         static_cast<double>(metric.calibration_observations + 1);
     ++metric.calibration_observations;
+    outcomes.push_back(CalibrationOutcome{sequence, correct});
 }
 
 const KnowledgeMetric* KnowledgeModel::source_metric(const std::string& source) const noexcept {
@@ -56,6 +70,32 @@ const KnowledgeMetric* KnowledgeModel::source_metric(const std::string& source) 
 }
 
 std::optional<KnowledgeAssessment> KnowledgeModel::assess(const std::string& key) const {
+    // The convenience API is deliberately uncalibrated. Callers must provide
+    // an explicit freshness policy before historical outcomes affect evidence.
+    return assess(key, 0, KnowledgeCalibrationPolicy{});
+}
+
+std::optional<KnowledgeAssessment> KnowledgeModel::assess(
+    const std::string& key, std::uint64_t current_sequence,
+    const KnowledgeCalibrationPolicy& policy) const {
+    const auto calibrated_accuracy = [&](const std::string& source)
+        -> std::optional<double> {
+        if (policy.maximum_age_events == 0 || policy.minimum_observations == 0 ||
+            current_sequence == 0) return std::nullopt;
+        const auto history = calibration_outcomes_.find(source);
+        if (history == calibration_outcomes_.end()) return std::nullopt;
+        std::size_t count = 0;
+        std::size_t correct = 0;
+        for (const auto& outcome : history->second) {
+            if (outcome.sequence > current_sequence ||
+                current_sequence - outcome.sequence > policy.maximum_age_events)
+                continue;
+            ++count;
+            if (outcome.correct) ++correct;
+        }
+        if (count < policy.minimum_observations) return std::nullopt;
+        return static_cast<double>(correct) / static_cast<double>(count);
+    };
     struct CandidateSupport {
         Scalar value;
         std::vector<std::string> sources;
@@ -109,13 +149,12 @@ std::optional<KnowledgeAssessment> KnowledgeModel::assess(const std::string& key
                       candidate->verified_sources.end(), claim.source) !=
                 candidate->verified_sources.end()) continue;
 
-        const auto metric = sources_.find(claim.source);
-        // Uncalibrated sources receive a neutral prior. Calibration affects
-        // evidence weight only after three explicit outcomes; it never deletes
-        // low-trust observations.
-        const double trust = metric != sources_.end() &&
-                             metric->second.calibration_observations >= 3
-            ? metric->second.empirical_accuracy : 0.5;
+        // Calibration contributes only when the host-configured freshness
+        // horizon contains enough recent, distinct claim outcomes. Lifetime
+        // accuracy remains available for audit but cannot silently stay active.
+        const auto recent_accuracy = calibrated_accuracy(claim.source);
+        const double trust = recent_accuracy.has_value()
+            ? *recent_accuracy : 0.5;
         const double source_weight =
             claim.observation_quality * (0.5 + trust);
 

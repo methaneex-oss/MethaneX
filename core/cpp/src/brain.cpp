@@ -285,11 +285,13 @@ GoalStatus goal_status_value(std::int64_t value) { switch (value) { case 0: retu
 Brain::Brain(std::filesystem::path journal_path,
            std::vector<std::string> trusted_knowledge_evaluators,
            KnowledgeFeedbackVerifier knowledge_feedback_verifier,
-           KnowledgeProvenanceVerifier knowledge_provenance_verifier)
+           KnowledgeProvenanceVerifier knowledge_provenance_verifier,
+           KnowledgeCalibrationPolicy knowledge_calibration_policy)
     : trusted_knowledge_evaluators_(trusted_knowledge_evaluators.begin(),
                                     trusted_knowledge_evaluators.end()),
       knowledge_feedback_verifier_(std::move(knowledge_feedback_verifier)),
       knowledge_provenance_verifier_(std::move(knowledge_provenance_verifier)),
+      knowledge_calibration_policy_(knowledge_calibration_policy),
       memory_(256, std::move(journal_path)),
       evolution_controller_(evolution_, evolution_history_) { const auto history = memory_.all(); for (const auto& event : history) replay(event); state_.events_seen = static_cast<std::uint64_t>(history.size()); if (!history.empty()) state_.cycle = history.back().sequence; sync_self_state(); }
 void Brain::consolidate_experience(const Event& event, double error) {
@@ -601,7 +603,7 @@ void Brain::replay(const Event& event, bool external_observation) {
             std::to_string(sequence) + "|" + *key;
         if (!processed_knowledge_feedback_.insert(feedback_id).second) return;
         state_.cycle = std::max(state_.cycle, event.sequence);
-        knowledge_.score_source(*source, *std::get_if<bool>(&correct_it->second));
+        knowledge_.score_source(*source, *std::get_if<bool>(&correct_it->second), event.sequence);
         return;
     }
 

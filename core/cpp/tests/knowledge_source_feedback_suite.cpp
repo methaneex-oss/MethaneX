@@ -47,7 +47,7 @@ int main() {
     {
         Brain brain(journal,
             {"independent-reviewer", "second-reviewer", "third-reviewer", "sensor-a"},
-            verifier, provenance_verifier);
+            verifier, provenance_verifier, KnowledgeCalibrationPolicy{3, 1000});
 
         // Brain-owned learning/prediction records must not be forgeable through
         // the generic observation API. These records have dedicated APIs with
@@ -264,7 +264,7 @@ int main() {
     {
         Brain restored(journal,
             {"independent-reviewer", "second-reviewer", "third-reviewer", "sensor-a"},
-            verifier, provenance_verifier);
+            verifier, provenance_verifier, KnowledgeCalibrationPolicy{3, 1000});
         // A forged raw record with a copied evaluator name must not poison
         // the legitimate API's duplicate check after restart.
         assert(restored.record_knowledge_source_feedback(
@@ -503,6 +503,117 @@ int main() {
         assert(metric->calibration_observations == 0);
     }
     std::filesystem::remove(source_binding_journal, error);
+
+
+    // Calibration is fresh only within the host-configured event horizon.
+    // This is deterministic across restart and does not depend on wall-clock
+    // skew or a hard-coded duration.
+    const auto freshness_journal = std::filesystem::temp_directory_path() /
+        "jarvis_knowledge_calibration_freshness.bin";
+    std::filesystem::remove(freshness_journal, error);
+    double freshness_baseline = 0.0;
+    {
+        Brain freshness(freshness_journal, {"reviewer"}, verifier,
+                        provenance_verifier, KnowledgeCalibrationPolicy{3, 8});
+        for (int i = 0; i < 3; ++i) {
+            const auto claim = freshness.observe(Event{0, 0, "aging-sensor", "observation",
+                {{"freshness_probe", Scalar{42.0}},
+                 {"reliability", Scalar{0.8}},
+                 {"provenance_id", Scalar{std::string("aging-origin")}},
+                 {"provenance_attestation", Scalar{std::string("source-origin:aging-sensor:aging-origin")}}}});
+            assert(claim.event.sequence != 0);
+            if (i == 0) {
+                const auto baseline = freshness.knowledge_assessment("freshness_probe");
+                assert(baseline.has_value());
+                freshness_baseline = baseline->evidence_weight;
+            }
+            assert(freshness.record_knowledge_source_feedback(
+                claim.event.sequence, "freshness_probe", Scalar{42.0}, "reviewer", true,
+                feedback_attestation(claim.event.sequence, "aging-sensor",
+                                     "freshness_probe", 42.0, "reviewer", true)));
+        }
+        const auto fresh = freshness.knowledge_assessment("freshness_probe");
+        assert(fresh.has_value());
+        assert(fresh->evidence_weight > freshness_baseline);
+
+        // More than eight persisted events without new adjudications age the
+        // calibration out. The underlying observation remains in memory and
+        // retains its neutral evidence contribution.
+        for (int i = 0; i < 10; ++i) {
+            const auto event = freshness.observe(Event{0, 0, "environment", "observation",
+                {{"unrelated_event", Scalar{static_cast<std::int64_t>(i)}}}});
+            assert(event.event.sequence != 0);
+        }
+        const auto stale = freshness.knowledge_assessment("freshness_probe");
+        assert(stale.has_value());
+        assert(std::abs(stale->evidence_weight - freshness_baseline) < 1e-12);
+        const auto* lifetime_metric = freshness.knowledge_source("aging-sensor");
+        assert(lifetime_metric != nullptr);
+        assert(lifetime_metric->calibration_observations == 3);
+        assert(std::abs(lifetime_metric->empirical_accuracy - 1.0) < 1e-12);
+    }
+    {
+        Brain freshness_restored(freshness_journal, {"reviewer"}, verifier,
+                                 provenance_verifier, KnowledgeCalibrationPolicy{3, 8});
+        const auto restored_stale =
+            freshness_restored.knowledge_assessment("freshness_probe");
+        assert(restored_stale.has_value());
+        assert(std::abs(restored_stale->evidence_weight - freshness_baseline) < 1e-12);
+
+        // Fresh, independently adjudicated claims reactivate calibration;
+        // stale lifetime outcomes do not need to be erased to recover.
+        for (int i = 0; i < 3; ++i) {
+            const auto claim = freshness_restored.observe(Event{0, 0, "aging-sensor", "observation",
+                {{"freshness_probe", Scalar{42.0}},
+                 {"reliability", Scalar{0.8}},
+                 {"provenance_id", Scalar{std::string("aging-origin")}},
+                 {"provenance_attestation", Scalar{std::string("source-origin:aging-sensor:aging-origin")}}}});
+            assert(claim.event.sequence != 0);
+            assert(freshness_restored.record_knowledge_source_feedback(
+                claim.event.sequence, "freshness_probe", Scalar{42.0}, "reviewer", true,
+                feedback_attestation(claim.event.sequence, "aging-sensor",
+                                     "freshness_probe", 42.0, "reviewer", true)));
+        }
+        const auto refreshed = freshness_restored.knowledge_assessment("freshness_probe");
+        assert(refreshed.has_value());
+        assert(refreshed->evidence_weight > freshness_baseline);
+    }
+    std::filesystem::remove(freshness_journal, error);
+
+    // A valid verifier alone cannot activate calibration when the host has not
+    // explicitly configured both the minimum sample count and freshness horizon.
+    const auto default_policy_journal = std::filesystem::temp_directory_path() /
+        "jarvis_knowledge_calibration_default_policy.bin";
+    std::filesystem::remove(default_policy_journal, error);
+    {
+        Brain default_policy(default_policy_journal, {"reviewer"}, verifier,
+                             provenance_verifier);
+        double neutral_weight = 0.0;
+        for (int i = 0; i < 3; ++i) {
+            const auto claim = default_policy.observe(Event{0, 0, "default-sensor", "observation",
+                {{"default_probe", Scalar{7.0}},
+                 {"reliability", Scalar{0.8}},
+                 {"provenance_id", Scalar{std::string("default-origin")}},
+                 {"provenance_attestation", Scalar{std::string("source-origin:default-sensor:default-origin")}}}});
+            assert(claim.event.sequence != 0);
+            if (i == 0) {
+                const auto assessment = default_policy.knowledge_assessment("default_probe");
+                assert(assessment.has_value());
+                neutral_weight = assessment->evidence_weight;
+            }
+            assert(default_policy.record_knowledge_source_feedback(
+                claim.event.sequence, "default_probe", Scalar{7.0}, "reviewer", true,
+                feedback_attestation(claim.event.sequence, "default-sensor",
+                                     "default_probe", 7.0, "reviewer", true)));
+        }
+        const auto default_assessment =
+            default_policy.knowledge_assessment("default_probe");
+        assert(default_assessment.has_value());
+        assert(std::abs(default_assessment->evidence_weight - neutral_weight) < 1e-12);
+        const auto* lifetime = default_policy.knowledge_source("default-sensor");
+        assert(lifetime != nullptr && lifetime->calibration_observations == 3);
+    }
+    std::filesystem::remove(default_policy_journal, error);
 
     return 0;
 }
