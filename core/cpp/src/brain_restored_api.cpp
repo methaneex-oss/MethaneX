@@ -215,19 +215,20 @@ bool Brain::record_knowledge_source_feedback(
             ? nullptr : std::get_if<bool>(&correct_field->second);
         if (prior_sequence == nullptr ||
             *prior_sequence != static_cast<std::int64_t>(claim_sequence) ||
-            prior_evaluator == nullptr || *prior_evaluator != evaluator ||
-            prior.source != evaluator || prior_key == nullptr || *prior_key != key ||
+            prior_evaluator == nullptr || prior_evaluator->empty() ||
+            prior.source != *prior_evaluator || *prior_evaluator == target->source ||
+            prior_key == nullptr || *prior_key != key ||
             prior_source == nullptr || *prior_source != target->source ||
             value_field == prior.data.end() || value_field->second != value ||
             prior_attestation == nullptr || prior_attestation->empty() ||
             prior_correct == nullptr ||
-            !trusted_knowledge_evaluators_.contains(evaluator)) continue;
+            !trusted_knowledge_evaluators_.contains(*prior_evaluator)) continue;
         const KnowledgeFeedbackRequest prior_request{
-            claim_sequence, key, value, evaluator, *prior_correct, *prior_attestation};
+            claim_sequence, key, value, *prior_evaluator, *prior_correct, *prior_attestation};
         try {
-            // Only an already authenticated adjudication blocks a new one.
-            // Forged raw journal entries must not be able to deny service to
-            // a legitimate evaluator by merely copying its public identity.
+            // Any authenticated adjudication for this claim blocks a second
+            // score, regardless of evaluator. Invalid raw records cannot deny
+            // service because their attestations are ignored.
             if (knowledge_feedback_verifier_ &&
                 knowledge_feedback_verifier_(prior_request)) return false;
         } catch (...) {
