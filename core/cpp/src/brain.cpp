@@ -254,7 +254,7 @@ std::string join_ids(const std::vector<std::string>& ids) { std::ostringstream o
 std::vector<std::string> split_ids(const std::string& value) { std::vector<std::string> result; std::size_t start = 0; while (start <= value.size()) { const auto end = value.find('\x1f', start); const auto token = value.substr(start, end == std::string::npos ? std::string::npos : end - start); if (!token.empty()) result.push_back(token); if (end == std::string::npos) break; start = end + 1; } return result; }
 GoalStatus goal_status_value(std::int64_t value) { switch (value) { case 0: return GoalStatus::pending; case 1: return GoalStatus::active; case 2: return GoalStatus::completed; case 3: return GoalStatus::abandoned; default: return GoalStatus::pending; } }
 }
-Brain::Brain(std::filesystem::path journal_path) : memory_(256, std::move(journal_path)), evolution_controller_(evolution_, evolution_history_) { const auto history = memory_.all(); for (const auto& event : history) replay(event); state_.events_seen = static_cast<std::uint64_t>(history.size()); if (!history.empty()) state_.cycle = history.back().sequence; sync_self_state(); }
+Brain::Brain(std::filesystem::path journal_path, std::vector<std::string> trusted_knowledge_evaluators) : trusted_knowledge_evaluators_(trusted_knowledge_evaluators.begin(), trusted_knowledge_evaluators.end()), memory_(256, std::move(journal_path)), evolution_controller_(evolution_, evolution_history_) { const auto history = memory_.all(); for (const auto& event : history) replay(event); state_.events_seen = static_cast<std::uint64_t>(history.size()); if (!history.empty()) state_.cycle = history.back().sequence; sync_self_state(); }
 void Brain::consolidate_experience(const Event& event, double error) {
     double salience = attention_state_.salience; double novelty = state_.novelty; double confidence = 0.5;
     if (const auto it = event.data.find("salience"); it != event.data.end()) if (const auto* value = std::get_if<double>(&it->second)) salience = *value;
@@ -436,7 +436,9 @@ void Brain::replay(const Event& event, bool external_observation) {
         if (sequence == 0 || sequence >= event.sequence || source == nullptr ||
             source->empty() || key == nullptr || key->empty() ||
             evaluator == nullptr || evaluator->empty() || *evaluator != event.source ||
-            *evaluator == *source || value_it == event.data.end() ||
+            *evaluator == *source ||
+            !trusted_knowledge_evaluators_.contains(*evaluator) ||
+            value_it == event.data.end() ||
             correct_it == event.data.end() ||
             std::get_if<bool>(&correct_it->second) == nullptr) return;
         const auto history = memory_.all();
