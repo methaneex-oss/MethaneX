@@ -2,9 +2,11 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstddef>
 #include <cstdint>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 namespace jarvis::core {
@@ -76,10 +78,20 @@ struct RelatedLearnedStrategy {
     double similarity{0.0};
 };
 
+struct FeatureStrategyEstimate {
+    double value{0.0};
+    double confidence{0.0};
+    std::uint64_t observations{0};
+    std::size_t matched_features{0};
+    std::size_t feature_count{0};
+};
+
 class DevelopmentalLearning {
 public:
     void observe_association(std::string left, std::string right, const LearningSignal& signal);
-    void observe_strategy(std::string context, std::string action, const LearningSignal& signal);
+    void observe_strategy(std::string context, std::string action,
+                          const LearningSignal& signal,
+                          bool update_feature_model = true);
 
     std::vector<LearnedAssociation> associations() const;
     std::vector<LearnedStrategy> strategies() const;
@@ -89,6 +101,11 @@ public:
                                                  double minimum_similarity = 0.5) const noexcept;
     std::vector<RelatedLearnedStrategy> related_strategies(
         const std::string& context, double minimum_similarity = 0.5) const;
+    // Predict an action's value from independently learned feature contributions.
+    // Unlike context similarity, this can compose feature values in an unseen
+    // combination when those factors have been observed across prior episodes.
+    FeatureStrategyEstimate feature_strategy_estimate(
+        const std::string& context, const std::string& action) const;
 
     void consolidate(double retention_threshold = 0.05);
 
@@ -96,8 +113,19 @@ private:
     static double learning_rate(const LearningSignal& signal) noexcept;
     static double bounded(double value) noexcept;
 
+    struct FeatureStrategyModel {
+        double bias{0.0};
+        std::unordered_map<std::string, double> weights;
+        std::unordered_map<std::string, std::uint64_t> feature_observations;
+        // Retain at most three distinct full contexts per factor. Repeated
+        // episodes in one context do not masquerade as independent support.
+        std::unordered_map<std::string, std::unordered_set<std::string>> feature_contexts;
+        std::uint64_t observations{0};
+    };
+
     std::unordered_map<std::string, LearnedAssociation> associations_;
     std::unordered_map<std::string, LearnedStrategy> strategies_;
+    std::unordered_map<std::string, FeatureStrategyModel> feature_strategy_models_;
 };
 
 } // namespace jarvis::core
