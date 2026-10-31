@@ -41,10 +41,12 @@ struct KnowledgeAssessment {
     std::string key;
     std::optional<Scalar> candidate;
     KnowledgeStatus status{KnowledgeStatus::provisional};
+    // Distinct reporting source identifiers; not assumed independent.
     std::size_t supporting_sources{0};
     std::size_t conflicting_sources{0};
     std::size_t observations{0};
     double evidence_weight{0.0};
+    // Distinct origins accepted by the host provenance verifier.
     std::size_t supporting_origins{0};
     std::size_t conflicting_origins{0};
 };
