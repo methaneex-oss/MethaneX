@@ -55,6 +55,7 @@ struct BrainState { std::uint64_t cycle{0}; std::uint64_t events_seen{0}; double
 struct BrainSnapshot { BrainState state{}; SelfState self_state{}; AffectiveState affective_state{}; std::vector<Belief> beliefs; std::vector<Prediction> predictions; std::vector<CausalLink> causal_links; std::vector<Goal> goals; };
 struct KnowledgeFeedbackRequest {
  std::uint64_t claim_sequence{0};
+ std::string claim_source;
  std::string key;
  Scalar value;
  std::string evaluator;

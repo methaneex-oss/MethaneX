@@ -152,18 +152,18 @@ bool Brain::record_knowledge_source_feedback(
     std::unique_lock lock(mutex_);
     if (!trusted_knowledge_evaluators_.contains(evaluator) ||
         attestation.empty() || !knowledge_feedback_verifier_) return false;
-    const KnowledgeFeedbackRequest request{
-        claim_sequence, key, value, evaluator, correct, attestation};
-    try {
-        if (!knowledge_feedback_verifier_(request)) return false;
-    } catch (...) {
-        return false;
-    }
     const auto history = memory_.all();
     const auto target = std::find_if(history.begin(), history.end(),
         [&](const Event& candidate) { return candidate.sequence == claim_sequence; });
     if (target == history.end() || target->source.empty() ||
         target->source == evaluator) return false;
+    const KnowledgeFeedbackRequest request{
+        claim_sequence, target->source, key, value, evaluator, correct, attestation};
+    try {
+        if (!knowledge_feedback_verifier_(request)) return false;
+    } catch (...) {
+        return false;
+    }
     bool matching_claim = false;
     if (target->kind == "learning") {
         const auto* evidence_key = std::get_if<std::string>(
@@ -224,7 +224,7 @@ bool Brain::record_knowledge_source_feedback(
             prior_correct == nullptr ||
             !trusted_knowledge_evaluators_.contains(*prior_evaluator)) continue;
         const KnowledgeFeedbackRequest prior_request{
-            claim_sequence, key, value, *prior_evaluator, *prior_correct, *prior_attestation};
+            claim_sequence, target->source, key, value, *prior_evaluator, *prior_correct, *prior_attestation};
         try {
             // Any authenticated adjudication for this claim blocks a second
             // score, regardless of evaluator. Invalid raw records cannot deny

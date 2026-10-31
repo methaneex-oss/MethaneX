@@ -81,6 +81,7 @@ int main() {
         "exp-replay",
         EvolutionProposal{"replay.weight", 0.4, 0.5, 0.1, 0.95},
         0.70, 0.84, 0.05, 0.95, ExperimentOutcome::Improved, true};
+    attest_isolated(replay_experiment);
     assert(replay_controller.replay_evaluation(replay_experiment));
     assert(replay_controller.replay_evaluation(replay_experiment));
     assert(replay_history.for_experiment("exp-replay").size() == 1);
@@ -95,6 +96,26 @@ int main() {
     assert(replay_controller.replay_rollback("exp-replay", "replayed"));
     assert(replay_history.for_experiment("exp-replay").size() == 1);
     assert(replay_controller.adoption_journal().get("exp-replay")->state == AdoptionState::RolledBack);
+
+    // A forged adoption with no preceding durable evaluation is rejected.
+    EvolutionExperiment forged{
+        "exp-forged-replay",
+        EvolutionProposal{"replay.weight", 0.4, 0.9, 0.5, 0.99},
+        0.70, 0.95, 0.01, 0.99, ExperimentOutcome::Improved, true};
+    attest_isolated(forged);
+    assert(!replay_controller.replay_adoption(forged));
+    assert(!replay_controller.adoption_journal().get("exp-forged-replay").has_value());
+
+    // Replay recomputes the claimed outcome; a forged Improved label on equal
+    // fitness cannot be staged even if the isolation bit is present.
+    EvolutionExperiment false_improvement{
+        "exp-false-improvement",
+        EvolutionProposal{"replay.weight", 0.4, 0.5, 0.1, 0.99},
+        0.70, 0.70, 0.01, 0.99, ExperimentOutcome::Improved, true};
+    attest_isolated(false_improvement);
+    false_improvement.outcome = ExperimentOutcome::Improved;
+    assert(!replay_controller.replay_evaluation(false_improvement));
+    assert(!replay_controller.adoption_journal().get("exp-false-improvement").has_value());
 
     const auto records = history.for_experiment("exp-canary");
     assert(records.size() >= 2);
