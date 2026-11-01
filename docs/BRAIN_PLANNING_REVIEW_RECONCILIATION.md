@@ -117,6 +117,6 @@ The existence of these branches does not make their contents approved or binding
 
 **Current decision: NOT CLEAR TO PROCEED.**
 
-This reconciliation narrows and corrects the findings; it does not close the P0 work packages. In particular, the general state/event/persistence contract, target-to-mechanism traceability, operational cross-layer cycle, and shared representation/evidence semantics still need formalization. Rust ownership and online/offline synchronization decisions also remain open.
+This reconciliation narrows and corrects the findings; it does not close the P0 work packages. In particular, the general state/event/persistence contract and shared representation/evidence semantics still need formalization. The target-to-mechanism matrix is now drafted, and source inspection confirms a meaningful C++ observation-to-reasoning/planning/action/outcome/learning path; however, the complete operational specification across all layers, exact state ownership/call paths, Rust ownership and online/offline synchronization decisions remain open.
 
 No runtime implementation, language migration, PR merge or Priority-One acceptance is authorized by this document.
