@@ -393,9 +393,9 @@ The last two risks must be managed together. Do not use planning as an excuse to
 
 ## 11. Immediate next work
 
-The next concrete planning deliverable is the **Layer 0–19 target-to-mechanism-to-implementation traceability matrix**, derived from the existing Blueprint, behavioral target, language map, and actual source tree. In parallel, create the decision/conflict register and record the already-resolved provider/source wording and Layer 1/Priority-One sequence so those questions are not reopened without new evidence.
+A working **Layer 0–19 target-to-mechanism-to-implementation traceability matrix** has now been drafted at `docs/BRAIN_LAYER_0_19_TRACEABILITY_MATRIX.md` from the existing Blueprint, behavioral target, language map, inspected C++ build/test tree, Rust runtime and TypeScript interfaces. It maps all 20 layers, candidate source/test locations, proposed language authority, dependencies, cross-layer feedback paths, and independent acceptance evidence. It explicitly does not equate file/test presence with capability completion.
 
-Then formalize the general state/event/persistence contract, shared representation/evidence semantics, and operational cross-layer cycle by extending the appropriate existing documents. Do not create duplicate specifications where a source document can be extended without ambiguity. Select the first learning vertical slice only after the traceability and current mechanism evidence identify the right gap.
+Next, create the architecture decision/conflict register and formalize the general state/event/persistence contract, shared representation/evidence semantics, and operational cross-layer cycle by extending appropriate authoritative documents. The matrix still needs exact call-path and state-owner verification for the mechanisms marked partial or unestablished. Do not create duplicate specifications where an existing source can be extended without ambiguity. Select the first learning vertical slice only after traceability and current mechanism evidence identify the right gap.
 
 Do not start by adding new layers, adding a hosted service, introducing another language, replacing existing mechanisms, or building the complete product interface.
 
