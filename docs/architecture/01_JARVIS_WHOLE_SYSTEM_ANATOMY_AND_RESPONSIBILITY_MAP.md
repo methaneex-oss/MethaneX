@@ -46,7 +46,7 @@ Construction begins with the Brain foundation. The other systems must neverthele
 
 1. **Cognitive responsibility:** interpreting experience, maintaining internal models, learning, reasoning, evaluating, forming goals and decisions. This belongs to the Brain, subject to approved governance constraints.
 2. **Operational responsibility:** acquiring signals, transporting information, executing authorized actions, regulating resources, protecting boundaries, and maintaining infrastructure. These belong to the corresponding non-Brain systems.
-3. **Governance responsibility:** defining permissions, safety constraints, human oversight, auditability, and conditions under which actions or changes are allowed. Governance constrains the system; it must not become a hidden substitute for cognition.
+3. **Governance responsibility:** defining permissions, safety constraints, human oversight, auditability, and conditions under which actions or changes are allowed. These responsibilities require an explicit accountable governance authority, even if implemented as a cross-cutting control plane rather than a biological-style subsystem. Governance constrains the system; it must not become a hidden substitute for cognition.
 
 ### 2.4 Do not infer intelligence from system names
 
@@ -72,8 +72,9 @@ The following domains are proposed as the initial whole-system anatomy. Their ex
 | SYS-08 | Embodiment / Computational and Environmental Substrate | Provide compute, storage, networking, devices, runtime, and physical or digital operating context | Supplies resources and execution environment; is not the source of cognition |
 | SYS-09 | Interaction / Interface and Operator System | Provide human-facing and system-facing interaction channels, controls, and oversight surfaces | Presents information and mediates authorized interaction; does not become the Brain or silently rewrite its state |
 | SYS-10 | Development, Evaluation and Training Environment | Support controlled experiments, evaluation, simulation, diagnostics, and supervised development | Evaluates and proposes changes; cannot silently promote unverified changes into live cognition |
+| SYS-11 | Governance, Safety and Assurance Authority | Own policy, authorization rules, human oversight, risk acceptance, and approval of consequential system changes | Constrains and authorizes system operations; does not own cognitive goals, beliefs, or learned behaviour |
 
-This list is not a claim that all ten domains must become independent deployable services. It is a responsibility map. Some domains may ultimately be grouped or split after their interfaces, timing, trust, and failure characteristics are understood.
+This list is not a claim that all eleven domains must become independent deployable services. It is a responsibility map. Some domains may ultimately be grouped or split after their interfaces, timing, trust, and failure characteristics are understood. SYS-10 is a supporting development environment rather than necessarily a runtime constituent of the JARVIS organism; SYS-11 may be a logical governance authority distributed across policy enforcement points and human oversight rather than one deployable service.
 
 ### 3.1 Cross-cutting functions
 
@@ -85,6 +86,7 @@ Some concerns span several systems and should not automatically be forced into o
 - lifecycle, versioning, compatibility, and configuration;
 - privacy and information handling;
 - safety cases and human approval;
+- policy ownership, authorization decisions, risk acceptance, and change-control governance;
 - fault detection, graceful degradation, and recovery;
 - testing, simulation, and reproducibility.
 
@@ -178,7 +180,7 @@ Biological nervous systems combine central and peripheral pathways and support b
 
 ### 5.1 Candidate functional subdivisions
 
-- **Central coordination pathways:** internal communication among Brain components and the Brain boundary.
+- **System-boundary communication pathways:** transport between the Brain and other JARVIS systems. Internal coordination among Brain mechanisms belongs to the Brain's own cognitive architecture; the Nervous System must not become an owner of internal cognitive orchestration.
 - **Peripheral communication pathways:** communication between the Brain and external JARVIS systems, devices, applications, and services.
 - **Afferent / inbound pathways:** observations, events, feedback, and status flowing toward cognitive processing.
 - **Efferent / outbound pathways:** action requests, control signals, and coordination instructions flowing toward other systems.
@@ -298,7 +300,7 @@ The action system is the operational counterpart to sensing. It includes softwar
 ### 7.2 Inputs
 
 - action requests and plans from the Brain through approved pathways;
-- authorization and policy decisions;
+- authorization and policy decisions from the Governance and Assurance Authority;
 - capability descriptions and current availability;
 - environment and target-state information;
 - cancellation, timeout, and resource constraints.
@@ -444,7 +446,7 @@ The biological immune analogy is useful for layered defence, recognition, respon
 - external input provenance;
 - runtime telemetry and anomalies;
 - Brain and system requests for protected capabilities;
-- policy and operator decisions.
+- policy and operator decisions from the Governance and Assurance Authority.
 
 ### 10.3 Outputs
 
@@ -456,13 +458,15 @@ The biological immune analogy is useful for layered defence, recognition, respon
 
 ### 10.4 Authority boundary
 
-Defence enforces approved security and integrity policy. It does not own the Brain's general world model or decide the meaning of all unfamiliar observations.
+Defence enforces approved security and integrity policy. Policy ownership, risk acceptance, and exceptional authorization belong to the Governance and Assurance Authority (with human approval where required). Defence does not own the Brain's general world model or decide the meaning of all unfamiliar observations.
 
 Security actions must be proportionate, explainable, auditable, and reversible where feasible. High-impact policy changes and exceptional access require explicit governance.
 
 ### 10.5 Open questions
 
 - Is defence a single system or a set of cross-cutting capabilities with one accountable security authority?
+- Which governance decisions are owned by JARVIS policy mechanisms, and which remain with a human operator or external authority?
+- How are policy changes, emergency overrides, and risk acceptance audited and revoked?
 - Which security decisions can be automated, and which require operator approval?
 - How are false positives, compromised credentials, insider threats, and supply-chain risks handled?
 - How is a compromised Brain component isolated without destroying trustworthy continuity evidence?
@@ -545,7 +549,7 @@ This system includes user-facing interfaces, but it is not limited to a chat win
 
 - normalized user input to the appropriate system;
 - user-facing responses and status;
-- approval, rejection, or escalation decisions;
+- approval requests and human decisions, relayed to the Governance and Assurance Authority;
 - operator commands through authorized pathways;
 - interaction and feedback records for the Brain where appropriate.
 
@@ -553,7 +557,7 @@ This system includes user-facing interfaces, but it is not limited to a chat win
 
 The interface presents and mediates. It does not become the cognitive authority.
 
-A user correction may provide evidence or instruction to the Brain, but the interface itself must not silently rewrite beliefs or memory. Operator controls may modify governed configuration and policy through explicit authorization.
+A user correction may provide evidence or instruction to the Brain, but the interface itself must not silently rewrite beliefs or memory. Operator controls may submit configuration or policy changes through the Governance and Assurance Authority; the interface itself does not own policy or grant its own permissions.
 
 ### 12.5 Open questions
 
@@ -569,7 +573,7 @@ A user correction may provide evidence or instruction to the Brain, but the inte
 
 **Primary purpose:** Provide controlled environments for learning experiments, capability evaluation, simulation, testing, and supervised system development.
 
-This domain supports the development of JARVIS; it must not be confused with the live Brain itself.
+This domain supports the development and evaluation of JARVIS; it is an engineering environment around the operational organism, not necessarily a constituent runtime system. It must not be confused with the live Brain itself or with the Brain's own online learning mechanisms.
 
 ### 13.1 Candidate functional subdivisions
 
@@ -599,7 +603,7 @@ This domain supports the development of JARVIS; it must not be confused with the
 
 ### 13.4 Authority boundary
 
-The Development Environment may train, test, compare, and recommend. It must not silently replace the live Brain's mechanisms, memory, or state.
+The Development Environment may train, test, compare, and recommend. It must not silently replace the live Brain's mechanisms, memory, or state. Its experiments and promotion workflow are subject to the Governance and Assurance Authority. Online learning that occurs within the live Brain remains a Brain responsibility and must not be outsourced conceptually to this environment.
 
 Any transfer of learned state or candidate mechanisms into a live system requires explicit compatibility, integrity, safety, and approval controls. The exact relationship between live learning and offline training remains an important Brain and system-level design question.
 
@@ -629,7 +633,7 @@ This section describes major information and control relationships. It is not a 
 ### 14.2 Cognition-to-action path
 
 1. The Brain forms an intention, plan, or action request.
-2. The request passes through governed authorization and communication pathways.
+2. The request passes through the Governance and Assurance Authority's applicable authorization policy and the Nervous System's communication pathways.
 3. The Action System validates capability, parameters, preconditions, and permission.
 4. The action is executed, monitored, and reported.
 5. Outcome verification distinguishes actual effects from command acceptance or execution status.
@@ -666,7 +670,7 @@ This section describes major information and control relationships. It is not a 
 These rules apply across the whole architecture.
 
 1. **One authoritative owner per state domain.** Other systems may cache, derive, or observe state, but the authoritative owner and synchronization contract must be explicit.
-2. **No hidden cognitive authority.** Transport, interface, action, regulatory, security, and infrastructure systems must not quietly become alternative sources of general goals, beliefs, or intentions.
+2. **No hidden cognitive authority.** Transport, interface, action, regulatory, security, governance, and infrastructure systems must not quietly become alternative sources of general goals, beliefs, or intentions. Governance may constrain and authorize operations but does not determine the Brain's cognitive goals or learned conclusions.
 3. **No unverified success claims.** Each system reports what it observed and what it can prove, not what another system hopes occurred.
 4. **Evidence retains provenance.** Transformations must not erase the distinction between raw input, processed observation, interpretation, and verified outcome.
 5. **Bounded autonomy outside the Brain.** Non-Brain systems may perform local deterministic operations under explicit contracts and policies. They may not expand their authority by implication.
@@ -692,6 +696,7 @@ These rules apply across the whole architecture.
 | Infrastructure is mistaken for intelligence | A model provider, database, or runtime becomes incorrectly treated as JARVIS | Keep resources replaceable behind explicit contracts |
 | Interface becomes the Brain | Chat/session logic starts owning memory, beliefs, or decisions | Keep interfaces as interaction and presentation channels |
 | Training environment silently modifies live state | Unvalidated experiments corrupt persistent cognition | Require controlled transfer, validation, approval, and rollback |
+| Governance has no explicit owner | Permissions, safety policy, and change approval become fragmented or self-authorized | Establish an accountable governance authority and identify which decisions require human oversight |
 | Every biological analogy becomes a separate service | Excessive fragmentation adds latency and operational complexity without functional benefit | Require evidence for separate ownership, timing, trust, or failure boundaries |
 
 ---
@@ -709,7 +714,8 @@ This document should not be treated as a final design until the following questi
 
 ### Gate B — Authority and boundaries
 
-- Is Brain cognitive authority clearly distinguished from communication, sensing, execution, regulation, defence, interface, and infrastructure?
+- Is Brain cognitive authority clearly distinguished from communication, sensing, execution, regulation, defence, governance, interface, and infrastructure?
+- Is governance authority explicit without becoming a competing cognitive authority?
 - Are there any responsibilities assigned to more than one authoritative owner?
 - Are there any responsibilities with no accountable owner?
 - Are local autonomous control loops bounded and observable?
@@ -748,7 +754,7 @@ That document should:
 - separate foundational mechanisms, advanced mechanisms, and acquired capabilities;
 - define how persistent experience-dependent change is possible;
 - identify what the Brain explicitly does not own;
-- define the minimum contracts required by future sensory, nervous, action, regulatory, defence, and interface systems;
+- define the minimum contracts required by future sensory, nervous, action, regulatory, defence, governance, and interface systems;
 - record unresolved scientific and engineering questions;
 - avoid layer numbering, language selection, technology allocation, or implementation sequencing until the architecture justifies them.
 
