@@ -7,7 +7,7 @@
 
 1. The Brain is the primary cognitive system; external interfaces are subordinate integrations.
 2. No hardcoded phrase-to-behavior intelligence. Rules may enforce safety, invariants, permissions, and deterministic system contracts; cognition must arise from representations, models, inference, learning, and evaluation.
-3. No permanent dependency on one AI model/provider/source. Models and knowledge sources are replaceable capabilities/resources.
+3. No permanent dependency on a single model implementation or information source. Internally owned models/mechanisms and optional, explicitly authorized information sources may be replaceable. Core cognition and local learning must not require a hosted AI provider, third-party external AI API, remote agent, or internet service.
 4. Polyglot implementation is intentional. Use the best language for each subsystem rather than forcing one language across the Brain.
 5. Every layer has explicit contracts, ownership, failure boundaries, persistence semantics, concurrency semantics, and tests before higher layers depend on it.
 6. Self-improvement is controlled: generate candidates, sandbox, evaluate, compare, adopt, monitor, and rollback.
@@ -359,6 +359,6 @@ A layer is not complete until:
 
 The existing repository should be treated as the **Layer 0 foundation plus early primitives**, with several named subsystems already present but not yet constituting the complete cognitive stack.
 
-The next implementation target is **Layer 1: Self-State and Self-Model**, but only after the contracts and data structures for that layer are reviewed against this blueprint.
+The next net-new layer target remains **Layer 1: Self-State and Self-Model**, after the active Priority-One source-reliability work recorded in `docs/DEVELOPMENTAL_BRAIN_PLAN.md` has been completed against its own acceptance gate. That in-flight corrective work does not reorder the Layer 0–19 blueprint or authorize skipping layer contracts. Once Priority One is accepted, Layer 1 remains the next net-new construction target, subject to review of its contracts and data structures against this blueprint.
 
 No higher layer should be declared complete merely because its source files compile.

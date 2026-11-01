@@ -66,6 +66,18 @@ The MCU behavioral analysis and proposed capabilities of the Brain are defined i
 
 The Brain-only layer-to-language responsibilities, including the TypeScript monitoring plane, Python/PyTorch learning boundary, and conditional Rust/GPU roles, are defined in the [Brain Layer-to-Language Ownership Map](docs/BRAIN_LAYER_LANGUAGE_OWNERSHIP_MAP.md).
 
+## Brain foundation constitution and planning readiness
+
+The proposed [Brain Foundation Constitution and Planning Readiness Register](docs/JARVIS_BRAIN_FOUNDATION_CONSTITUTION_AND_PLANNING_READINESS.md) consolidates foundational rules, identifies planning gaps across Layers 0–19, and defines minimum evidence required before implementation proceeds.
+
+## Independent planning-review reconciliation
+
+The [Brain Planning Review Reconciliation](docs/BRAIN_PLANNING_REVIEW_RECONCILIATION.md) maps the independent readiness findings against existing repository evidence, distinguishes genuine specification gaps from already documented requirements, and records the corrective sequence. It does not grant implementation clearance.
+
+## Brain Layer 0–19 traceability
+
+The working [Brain Layer 0–19 Target-to-Mechanism-to-Implementation Traceability Matrix](docs/BRAIN_LAYER_0_19_TRACEABILITY_MATRIX.md) maps the existing blueprint to candidate mechanisms, inspected source locations, dependencies, feedback paths and independent acceptance evidence. It distinguishes source/test presence from demonstrated capability and does not grant implementation clearance.
+
 ## Brain engineering governance
 
 The implementation rules for language ownership, cross-language contracts, state integrity, security, persistence, testing, dependencies, performance, and approval gates are defined in [Brain Polyglot Engineering Governance](docs/BRAIN_POLYGLOT_ENGINEERING_GOVERNANCE.md).
