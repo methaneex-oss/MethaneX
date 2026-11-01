@@ -16,11 +16,11 @@ This is a living investigation record. It is being maintained so the Reviewer ca
 It is **not**:
 - an approved Brain Foundation architecture;
 - authorization to implement or modify runtime code;
-- a replacement for the two already-approved whole-system architecture documents;
+- a replacement for the two whole-system architecture documents; their repository approval status is currently inconsistent and they are treated as working references pending reconciliation;
 - evidence that any proposed mechanism exists in the repository or has been implemented;
 - a claim that Marvel fiction or neuroscience supplies a complete technical blueprint.
 
-The approved whole-system foundation and responsibility map remain the baseline. This investigation concerns the Brain only, within those already-defined whole-system boundaries.
+The current whole-system foundation and responsibility map are used as working references. Their formal approval status is not established in the repository; this investigation concerns the Brain only and must treat their boundaries as provisional until status is reconciled.
 
 ### 1.1 Governing design principle
 
