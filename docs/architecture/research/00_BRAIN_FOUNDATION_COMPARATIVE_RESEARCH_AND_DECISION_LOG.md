@@ -1574,7 +1574,7 @@ This investigation is ready for independent challenge, not final architecture ap
 - Updated the Marvel/MCU evidence baseline with official Disney material published 13 October 2026 about *VisionQuest*. This is a current-canon update, not evidence of a technical implementation.
 - Added current 2025–2026 research references on cognitive control, planning, metacognition, emotion theories, causal reasoning, continual learning and predictive processing.
 - Preserved all findings as provisional; no Brain architecture, component decomposition, technology allocation or implementation decision is approved by this update.
-- No runtime code, tests, dependencies, approved whole-system architecture documents or PR merge state were changed.
+- No runtime code, tests, dependencies, whole-system architecture documents or PR merge state were changed.
 
 **Reviewer handoff requested:** independently challenge Investigations A–E, with particular attention to cross-investigation consistency, whether the functional distinctions are justified without creating unnecessary subsystems, the MCU canon update, the neuroscience evidence and uncertainty labels, and the Brain/Governance/Action boundary. Identify missing foundational capabilities and adversarial/longitudinal tests before the architecture is consolidated.
 
@@ -1977,7 +1977,7 @@ The Reviewer should assess the integrated A–G model rather than reviewing each
 - Expanded the independent Reviewer handoff on PR #171 to cover A–G as one integrated Brain foundation.
 - The research record remains provisional. It is not the final Brain Foundation architecture, does not settle component boundaries or technology choices, and does not authorize implementation.
 - The six-checkup request is only partially schedulable under the current automation limit: three one-time checkups were created; the remaining three were rejected because the account allows three active scheduled tasks. Their recorded run histories were checked and all three are pending with no run result yet.
-- No runtime code, tests, dependencies, approved whole-system documents or merge state were changed.
+- No runtime code, tests, dependencies, whole-system documents or merge state were changed.
 
 **Remaining work before calling the investigation complete:** independently validate the source-to-claim mapping; investigate any missing cognitive capabilities (especially representation/reasoning integration, self-monitoring and language/contextual communication); challenge the cross-mechanism architecture for over-fragmentation and missing ownership; consolidate the whole-Brain foundation requirements and unresolved Project Director decisions; then verify the final research package and Reviewer handoff. Do not claim that a full 60-minute wall-clock period has elapsed merely because the research record has grown.
 
