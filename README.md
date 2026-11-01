@@ -70,6 +70,10 @@ The Brain-only layer-to-language responsibilities, including the TypeScript moni
 
 The proposed [Brain Foundation Constitution and Planning Readiness Register](docs/JARVIS_BRAIN_FOUNDATION_CONSTITUTION_AND_PLANNING_READINESS.md) consolidates foundational rules, identifies planning gaps across Layers 0–19, and defines minimum evidence required before implementation proceeds.
 
+## Independent planning-review reconciliation
+
+The [Brain Planning Review Reconciliation](docs/BRAIN_PLANNING_REVIEW_RECONCILIATION.md) maps the independent readiness findings against existing repository evidence, distinguishes genuine specification gaps from already documented requirements, and records the corrective sequence. It does not grant implementation clearance.
+
 ## Brain engineering governance
 
 The implementation rules for language ownership, cross-language contracts, state integrity, security, persistence, testing, dependencies, performance, and approval gates are defined in [Brain Polyglot Engineering Governance](docs/BRAIN_POLYGLOT_ENGINEERING_GOVERNANCE.md).
