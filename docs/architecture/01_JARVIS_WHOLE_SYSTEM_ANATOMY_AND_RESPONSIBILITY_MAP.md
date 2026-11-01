@@ -617,11 +617,71 @@ Any transfer of learned state or candidate mechanisms into a live system require
 
 ---
 
-## 14. Cross-system interaction model
+## 14. SYS-11 — Governance, Safety and Assurance Authority
+
+**Primary purpose:** Establish, interpret, version, and enforce the authority framework that determines which operations, changes, and risks are permitted across JARVIS.
+
+Governance is not a biological organ analogy. It is an explicit engineering necessity for a system that can learn, act, access resources, and change over time. It may be implemented as a logical control plane with distributed enforcement points; its placement inside or outside the operational JARVIS boundary remains unresolved.
+
+### 14.1 Candidate functional subdivisions
+
+- **Policy ownership and lifecycle:** define, version, review, supersede, and revoke policies.
+- **Authority and delegation management:** define who or what may authorize actions, access, configuration changes, and capability promotion.
+- **Policy decision:** evaluate requests against applicable permissions, constraints, risk classes, and approval requirements.
+- **Human oversight and consent:** provide explicit approval, rejection, escalation, cancellation, and emergency intervention pathways.
+- **Safety and risk assurance:** maintain safety constraints, risk acceptance records, and required evidence for consequential operations.
+- **Change and capability governance:** control changes to live mechanisms, learned-state transfer, model/provider changes, and deployment promotion.
+- **Audit and accountability:** ensure consequential decisions are attributable, traceable, reviewable, and revocable where possible.
+- **Conflict resolution:** resolve policy precedence, conflicting authorities, and exceptional operating conditions.
+
+### 14.2 Inputs
+
+- action and access requests from JARVIS systems;
+- proposed policy, configuration, and capability changes;
+- security, integrity, and threat assessments;
+- operational context and declared capability limits;
+- evaluation evidence and promotion recommendations;
+- human instructions, approvals, restrictions, and emergency interventions.
+
+### 14.3 Outputs
+
+- traceable allow, deny, constrain, or escalate decisions;
+- required human approval requests and recorded decisions;
+- policy versions, scopes, and revocation notices;
+- risk acceptance or rejection records;
+- change-promotion approvals and rollback requirements;
+- audit evidence and accountability records.
+
+### 14.4 Authority boundary
+
+Governance owns the rules and authorization decisions that constrain system operations. Enforcement may be distributed across the Action, Defence, Nervous, Infrastructure, and Development systems, but those systems must apply the authoritative policy rather than invent or silently broaden it.
+
+Governance must not:
+- determine the Brain's beliefs, interpretations, goals, or learned preferences;
+- replace cognitive reasoning with a fixed scenario-response policy;
+- grant itself authority that has not been delegated by the responsible human or organizational authority;
+- silently modify live Brain state or mechanisms;
+- treat a Brain-generated request as sufficient authorization for a consequential action.
+
+The Brain may reason about rules, propose actions, and request exceptions. It cannot unilaterally redefine the authority framework under which it operates.
+
+### 14.5 Open questions
+
+- Which policies are defined by the user/operator, which are system invariants, and which may be proposed by JARVIS?
+- Which decisions require human approval, and how are urgency and emergency stop handled?
+- Where does ultimate authority reside when JARVIS operates across multiple users, organizations, devices, or jurisdictions?
+- How are conflicting policies, delegated authority, expired permissions, and revocation handled?
+- What evidence is required before learned state, updated mechanisms, or new capabilities are promoted?
+- How is governance kept auditable and resistant to manipulation without making every low-risk operation dependent on a central approval round trip?
+- Which governance functions must remain available during partial system failure or loss of connectivity?
+
+---
+
+## 15. Cross-system interaction model
 
 This section describes major information and control relationships. It is not a fixed execution pipeline; many interactions are asynchronous, concurrent, recurrent, and conditional.
 
-### 14.1 Experience-to-cognition path
+### 15.1 Experience-to-cognition path
 
 1. Sensory systems acquire a signal or observation.
 2. Sensory preprocessing produces a qualified observation with provenance and limitations.
@@ -630,7 +690,7 @@ This section describes major information and control relationships. It is not a 
 5. The Brain may request additional observation, clarification, or action.
 6. Resulting information returns through the relevant pathways and can influence future cognition.
 
-### 14.2 Cognition-to-action path
+### 15.2 Cognition-to-action path
 
 1. The Brain forms an intention, plan, or action request.
 2. The request passes through the Governance and Assurance Authority's applicable authorization policy and the Nervous System's communication pathways.
@@ -639,14 +699,14 @@ This section describes major information and control relationships. It is not a 
 5. Outcome verification distinguishes actual effects from command acceptance or execution status.
 6. Evidence returns to the Brain, where it can update expectations, beliefs, memories, and future decisions.
 
-### 14.3 Regulation path
+### 15.3 Regulation path
 
 1. Autonomic systems observe operational variables and detect deviations or constraints.
 2. Bounded local controllers take permitted corrective action.
 3. Material constraints, degraded capability, or persistent anomalies are communicated to the Brain and relevant systems.
 4. The Brain can adapt its plans to the available operating envelope without supervising every low-level control adjustment.
 
-### 14.4 Defence path
+### 15.4 Defence path
 
 1. Defence mechanisms assess identity, permissions, provenance, integrity, and observable anomalies.
 2. Explicit policy determines whether an operation is allowed, constrained, isolated, or escalated.
@@ -654,7 +714,7 @@ This section describes major information and control relationships. It is not a 
 4. The Brain may receive threat context and consequences for cognitive assessment.
 5. Recovery is verified before a component or capability is trusted again.
 
-### 14.5 Development path
+### 15.5 Development path
 
 1. A limitation or improvement opportunity is observed.
 2. A hypothesis and candidate are formed.
@@ -665,7 +725,7 @@ This section describes major information and control relationships. It is not a 
 
 ---
 
-## 15. Ownership and boundary rules
+## 16. Ownership and boundary rules
 
 These rules apply across the whole architecture.
 
@@ -682,7 +742,7 @@ These rules apply across the whole architecture.
 
 ---
 
-## 16. Architecture risks and failure patterns to prevent
+## 17. Architecture risks and failure patterns to prevent
 
 | Risk | Why it is dangerous | Required architectural response |
 |---|---|---|
@@ -701,7 +761,7 @@ These rules apply across the whole architecture.
 
 ---
 
-## 17. Proposed decomposition and approval gates
+## 18. Proposed decomposition and approval gates
 
 This document should not be treated as a final design until the following questions are answered and the Project Director approves the resulting map.
 
@@ -741,7 +801,7 @@ This document should not be treated as a final design until the following questi
 
 ---
 
-## 18. Recommended next document
+## 19. Recommended next document
 
 After this map is reviewed and approved, the next major document should be:
 
@@ -762,7 +822,7 @@ A separate whole-system document inventory and historical-document disposition r
 
 ---
 
-## 19. References and basis
+## 20. References and basis
 
 These references inform the biological principles used here. They do not prescribe JARVIS's software architecture.
 
