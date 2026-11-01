@@ -2210,3 +2210,19 @@ These requirements do not justify a fully developed theory-of-mind subsystem in 
 
 The report also warns that people can over-ascribe mental capabilities to machines and become overconfident in them. Therefore, JARVIS must not use fluent language, anthropomorphic persona or confident self-report as a substitute for verified competence, observability and calibrated trust. Its apparent understanding must be tested through correct prediction, clarification, task coordination and outcome performance.
 
+
+
+### 21.18 First independent checkup and methodological corrections
+
+**Checkup 1 of 6 completed:** the first automation run independently verified the branch, PR #171, Section 21, the Brain-first scope and the fact that the A–G audit is still incomplete. It independently detected the formal approval-status contradiction between the research log's earlier wording and the current PR/documents. The introductory research-log wording has now been corrected: Documents 00 and 01 are working references, and formal repository approval is not established.
+
+The audit also identified two methodological risks in the earlier research record. They have been corrected:
+- The initial method made Marvel J.A.R.V.I.S. and human cognition mandatory references for every architectural question. This has been replaced with a relevance-based comparative lens. Fictional and biological references generate questions where useful; real-world requirements and engineering evidence remain primary.
+- Earlier A–G and preliminary investigations used “selected direction” language. These have been reclassified as provisional candidate directions/hypotheses, not approved architecture choices.
+
+The B candidate direction has been refined to **logical modularity and owner-managed cognitive responsibilities**, with runtime and deployment distribution explicitly unresolved. The G candidate direction has been refined to **update-class-specific learning validation**: routine reversible memory/context/belief changes may occur online, while material changes to active models, strategies or capabilities require proportionate evaluation, controlled activation, lineage and rollback.
+
+**Checkup scheduling:** Check 1 is complete. Check 2 and Check 3 remain enabled for their one-time runs. Check 4 has been scheduled by reusing the first completed slot. The remaining checks will reuse slots as prior one-time tasks complete; no more than three active tasks will be maintained.
+
+**Current status:** investigation in progress; no final architecture, technology assignment or implementation decision.
+
