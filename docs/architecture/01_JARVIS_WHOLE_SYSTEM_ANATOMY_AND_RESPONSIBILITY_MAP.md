@@ -90,7 +90,20 @@ Some concerns span several systems and should not automatically be forced into o
 - fault detection, graceful degradation, and recovery;
 - testing, simulation, and reproducibility.
 
-Each cross-cutting function must have a clear accountable owner for each contract. “Cross-cutting” must not mean “ownerless.”
+Each cross-cutting function must have a clear accountable owner for each contract. “Cross-cutting” must not mean “ownerless.” The initial accountability allocation below separates policy/accountability ownership from operational implementation. It is a proposed responsibility assignment, not a requirement that each function become a separate service.
+
+| Cross-cutting function | Accountable owner | Operational contributors and boundary |
+|---|---|---|
+| Policy, authority, permission scope, and risk acceptance | SYS-11 Governance and Assurance Authority, acting under authority delegated by the responsible human or organization | SYS-07 enforces security policy; SYS-04 enforces action-time constraints; SYS-09 mediates human decisions |
+| Identity lifecycle and authorization policy | SYS-11 for policy and delegation; the relevant human or organization remains the authority for its identities and grants | SYS-07 operates authentication, credential protection, and security enforcement; SYS-04 validates presented authorization for execution |
+| Data provenance and integrity | The originating system is accountable for source attribution and transformation records; SYS-07 is accountable for integrity and trust assessment | SYS-02 preserves message metadata; SYS-03 records acquisition provenance; SYS-01 owns cognitive interpretation, not source authenticity |
+| Observability and diagnostics | Each system owns the correctness of its own telemetry; SYS-05 owns aggregate operational health monitoring | SYS-09 presents authorized views; SYS-07 protects security logs; SYS-11 defines audit requirements |
+| Privacy and information handling | SYS-11 defines policy and permitted use | SYS-03 and SYS-09 apply acquisition and interaction handling; SYS-07 protects access and integrity; SYS-01 applies governed cognitive retention rules |
+| Safety cases and human approval | SYS-11 owns assurance policy and approval requirements | SYS-09 mediates approval and emergency controls; SYS-04 enforces action preconditions; SYS-07 enforces security restrictions |
+| Component lifecycle and routine operational recovery | The component owner is accountable for component correctness; SYS-05 coordinates permitted runtime lifecycle operations | SYS-08 supplies runtime substrate; SYS-07 may block lifecycle actions during security containment |
+| Security incident containment and trust restoration | SYS-07 owns incident evidence and containment; SYS-11 or the responsible external authority owns exceptional risk acceptance and authorization to restore trust where required | SYS-05 may execute only compatible operational recovery; the affected component owner supplies diagnosis and verification evidence |
+| Testing, simulation, evaluation, and reproducibility | SYS-10 | Each system supplies testable contracts, versions, telemetry, and candidate evidence; SYS-11 governs promotion into live operation |
+| Configuration, versioning, and consequential change | The owner of the changed system owns technical compatibility; SYS-11 owns authorization policy for consequential changes | SYS-10 supplies validation and promotion evidence; SYS-05 applies approved runtime lifecycle changes |
 
 ---
 
@@ -624,7 +637,7 @@ Any transfer of learned state or candidate mechanisms into a live system require
 
 **Primary purpose:** Establish, interpret, version, and enforce the authority framework that determines which operations, changes, and risks are permitted across JARVIS.
 
-Governance is not a biological organ analogy. It is an explicit engineering necessity for a system that can learn, act, access resources, and change over time. It may be implemented as a logical control plane with distributed enforcement points; its placement inside or outside the operational JARVIS boundary remains unresolved.
+Governance is not a biological organ analogy. It is an explicit engineering necessity for a system that can learn, act, access resources, and change over time. The source of ultimate authority remains with the responsible human or organization. SYS-11 represents the delegated policy, authorization, assurance, and audit function that applies that authority to JARVIS. It may be implemented as a logical control plane with distributed enforcement points; some mechanisms may operate within JARVIS while policy ownership or risk acceptance remains external. The architecture must never imply that JARVIS can create its own ultimate authority.
 
 ### 14.1 Candidate functional subdivisions
 
@@ -696,11 +709,12 @@ This section describes major information and control relationships. It is not a 
 ### 15.2 Cognition-to-action path
 
 1. The Brain forms an intention, plan, or action request.
-2. The request passes through the Governance and Assurance Authority's applicable authorization policy and the Nervous System's communication pathways.
-3. The Action System validates capability, parameters, preconditions, and permission.
-4. The action is executed, monitored, and reported.
-5. Outcome verification distinguishes actual effects from command acceptance or execution status.
-6. Evidence returns to the Brain, where it can update expectations, beliefs, memories, and future decisions.
+2. The request is routed through the Nervous System to the Governance and Assurance Authority's applicable policy-decision mechanism.
+3. Governance evaluates the request against delegated policy and returns a traceable authorization, denial, constraint, or escalation result; any required human decision is mediated through SYS-09.
+4. The Nervous System delivers the decision and evidence to the Action System, which verifies authorization validity and scope and checks capability, parameters, target state, and operational preconditions.
+5. The action is executed, monitored, and reported.
+6. Outcome verification distinguishes actual effects from command acceptance or execution status.
+7. Evidence returns to the Brain, where it can update expectations, beliefs, memories, and future decisions.
 
 ### 15.3 Regulation path
 
@@ -711,11 +725,11 @@ This section describes major information and control relationships. It is not a 
 
 ### 15.4 Defence path
 
-1. Defence mechanisms assess identity, permissions, provenance, integrity, and observable anomalies.
-2. Explicit policy determines whether an operation is allowed, constrained, isolated, or escalated.
-3. Relevant systems receive the decision and evidence.
-4. The Brain may receive threat context and consequences for cognitive assessment.
-5. Recovery is verified before a component or capability is trusted again.
+1. SYS-07 assesses identity claims, permissions, provenance, integrity, and observable anomalies against policy and evidence.
+2. SYS-11's applicable policy-decision authority determines whether an operation is allowed, constrained, denied, isolated, or escalated; emergency containment may follow pre-authorized rules.
+3. Relevant systems receive the decision and evidence, and SYS-05 must not undo a security containment state.
+4. The Brain may receive threat context and consequences for cognitive assessment without becoming the security policy authority.
+5. SYS-07 verifies integrity and supplies recovery evidence; SYS-11 or the responsible external authority authorizes restoration of trust where required.
 
 ### 15.5 Development path
 
