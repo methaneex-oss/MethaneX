@@ -24,7 +24,7 @@ This document is proposed. Committing it does not make it binding.
 
 Apply the existing project authority model:
 1. Explicit Project Director decisions and the project command/governance document.
-2. The approved Brain Master Construction Blueprint and approved architecture decisions.
+2. The current Brain Master Construction Blueprint and any explicitly approved architecture decisions. The blueprint's own status line currently says “Architecture/build plan”; its formal Project Director approval status must not be inferred from that label.
 3. Approved Brain layer/language ownership decisions.
 4. Approved Brain engineering governance.
 5. Layer-specific specifications and implementation plans.
@@ -84,7 +84,7 @@ Boundary distinctions:
 - Internet access, hosted AI, vendor services, and external data feeds are not required for core Brain operation.
 - Future JARVIS integrations with external applications, devices, or services are separate adapters. They require explicit Project Director authorization and must not outsource core cognition or bypass Brain authority.
 
-**Conflict requiring reconciliation:** The existing Brain Master Blueprint says there must be no permanent dependency on one AI model/provider/source and that models and knowledge sources are replaceable capabilities/resources. That wording is too broad when read alongside the no-outsourcing rule. The intended interpretation proposed here is that internal mechanisms and locally owned models may be replaceable, and approved information sources may be replaceable inputs; neither statement authorizes a third-party hosted AI provider or external API as a required Brain capability. The Project Director should approve a precise amendment to the blueprint rather than allowing two interpretations to persist.
+**Consistency finding (2026-11-01):** The current `JARVIS_BRAIN_MASTER_BLUEPRINT.md` revision on this planning branch already clarifies that replaceable models/mechanisms are internally owned and that core cognition/local learning must not require a hosted AI provider, third-party external AI API, remote agent, or internet service. Read together, the documents do not establish a substantive conflict. The earlier concern that the blueprint broadly permitted an outsourced provider is therefore stale. Keep the distinction explicit: internally owned mechanisms/models and explicitly authorized information sources may be replaceable inputs; a hosted AI provider or external API must not supply a required Brain capability. No architecture redesign is needed for this point; keep wording aligned across documents.
 
 ### 4.3 One Brain; one authority per canonical state domain
 
@@ -300,13 +300,15 @@ These are not all fully specified at interface or implementation level.
 These remain open and must not be guessed in implementation:
 - TypeScript transport.
 - Python embedded runtime versus separate local worker.
-- Canonical event/persistence technology.
+- Canonical event/persistence technology and the general event/state contract.
 - Cross-language serialization and schema tooling.
 - Final Rust responsibilities after repository caller/dependency analysis.
 - First trainable Python/PyTorch capability, selected from measured limitations.
 - GPU/Triton adoption after profiling.
 - Numerical performance/resource targets after baselines.
 - Supported platform/ABI matrix.
+- The identity model for online/server and offline/terminal instances, including whether they share one Brain identity or produce separately identified training histories.
+- The concrete synchronization protocol, including package format, authentication, sequence namespace, duplicate handling, conflict adjudication, and rollback policy.
 
 ### 6.4 Repository facts requiring investigation
 
@@ -320,15 +322,15 @@ These remain open and must not be guessed in implementation:
 
 ## 7. Planning artifacts still required
 
-These are the minimum next artifacts. Develop them from the existing architecture and repository evidence, not as a parallel redesign.
+The reviewer described five P0 documents as “missing.” That is directionally correct only if “missing” means **no complete, authoritative, cross-layer artifact exists yet**. It is not accurate to say the underlying subjects are undocumented. Several existing documents already cover substantial portions. The work is to reconcile, formalize, and close the gaps without duplicating the architecture.
 
-| Priority | Artifact | Purpose | Completion evidence |
+| Priority | Required artifact/work package | Existing coverage and evidence | Remaining gap / completion evidence |
 |---|---|---|---|
-| P0 | Architecture decision and conflict register | Resolve contradictions and record owner decisions | Each conflict has evidence, options, recommendation, owner decision, and affected docs |
-| P0 | Layer 0–19 traceability matrix | Connect target behaviors to mechanisms, layers, language owners, dependencies, and tests | Every target capability has a traceable owner and acceptance evidence; gaps are explicit |
-| P0 | Cognitive state/event/persistence contract | Define authoritative continuity substrate | Event identity/order, state ownership, replay, crash recovery, schema migration, and corruption behavior are specified and testable |
-| P0 | Cross-layer cognitive cycle specification | Define how existing mechanisms cooperate | Inputs, state transitions, feedback paths, scheduling, failure, and observability are explicit |
-| P0 | Brain-wide data/representation/evidence contract | Prevent incompatible local schemas and hidden uncertainty semantics | Canonical entity/event/evidence/time/confidence semantics and compatibility rules exist |
+| P0 | Architecture decision and conflict register | Decisions and constraints are distributed across this register, the Brain Blueprint, Developmental Brain Plan, Priority-One Trust Boundary Contract, language map, and engineering governance. | No single decision ledger currently records each decision's status, evidence, alternatives, owner, affected documents, and supersession history. Create one authoritative register; distinguish decided, proposed, deferred, rejected, and unresolved items. |
+| P0 | Layer 0–19 target-to-mechanism traceability matrix | The Blueprint defines all 20 layers; the MCU Behavioral Reference defines target capabilities; the Language Ownership Map assigns proposed language responsibilities layer by layer. | No complete crosswalk currently traces each target capability to specific existing mechanisms, layer ownership, dependencies, contracts, implementation locations, and independent acceptance tests. Extend the existing map/blueprint rather than inventing new layers. |
+| P0 | Cognitive state, event, and persistence contract | `ARCHITECTURE.md` states that the event stream is durable history; Blueprint Layer 0 names event sequencing, core state, persistence/journaling and integrity; the Priority-One contract specifies important journal/anchor security semantics; the Developmental Plan records replay/restart requirements. | These are partial and differently scoped. A general contract is still needed for canonical state domains/owners, event identity and causality, time/sequence semantics, state transitions, snapshots versus journal, transaction/durability boundaries, concurrency, replay, migration, recovery, and schema evolution. Priority-One integrity rules remain a specialized trust requirement, not a substitute for the general contract. |
+| P0 | Cross-layer cognitive-cycle specification | `ARCHITECTURE.md` has a high-level cognitive-flow diagram; the Developmental Plan defines a ten-stage developmental loop; the MCU Behavioral Reference has an intended operating cycle; Blueprint Layers 16–17 define orchestration and event-driven continuity. | The flow exists conceptually, but no single operational specification maps triggers/inputs, representations, state transitions, mechanism calls, feedback paths, scheduling, interruption, failure/degraded behavior, observability, and layer dependencies against the actual repository mechanisms. Consolidate and deepen existing descriptions; do not impose a rigid one-size-fits-all loop. |
+| P0 | Brain-wide representation and evidence contract | Blueprint Layer 2 defines entities/events/concepts/attributes/temporal-spatial relations/uncertainty; Layer 6 defines provenance, reliability, freshness, confidence, contradictions and source independence; the Priority-One contract covers evidence adjudication and provenance; existing perception documentation describes canonical perceptual representation types. | No single cross-layer schema/semantic contract currently defines identity resolution, event/entity/concept/relation structures, temporal semantics, evidence lineage, source dependence, uncertainty/confidence meanings, unknown versus false, contradiction, validation, versioning, and compatibility. Reconcile existing types and mechanisms before specifying new ones. |
 | P1 | Memory and belief design specification | Define persistent experience, retrieval, consolidation, and revision | Memory classes, lifecycle, conflict, retention, retrieval, and learning interactions are testable |
 | P1 | Learning and training vertical-slice specification | Select the first real learning capability | Baseline limitation, experience source, update path, artifact lineage, persistence, held-out evaluation, and rollback are defined |
 | P1 | Autonomy, permission, and action contract | Prevent blind obedience and unauthorized actions | Delegation, risk, reversibility, preconditions, execution verification, and audit are specified |
@@ -339,15 +341,15 @@ These are the minimum next artifacts. Develop them from the existing architectur
 | P2 | Runtime packaging/platform matrix | Ensure practical deployment without architecture lock-in | Supported baseline, offline install, startup/recovery, and compatibility matrix |
 | P2 | Whole-JARVIS integration roadmap | Plan later interfaces, sensors, actuators, hosts, and environments | Integration contracts preserve Brain authority and do not expand current implementation scope |
 
-P0 means prerequisite for safe, coherent implementation of dependent mechanisms. P1 means required before the corresponding capability is integrated or accepted. P2 means planned but not allowed to distract from the current Brain foundation.
+P0 means prerequisite for safe, coherent implementation of dependent mechanisms. P1 means required before the corresponding capability is integrated or accepted. P2 means planned but not allowed to distract from the current Brain foundation. These labels classify readiness work, not a requirement to create five separate files. Where an existing authoritative document can be extended cleanly, prefer that over a duplicate document.
 
 ## 8. Recommended order to close planning without creating a documentation project that never ends
 
-1. **Resolve constitutional conflicts first.** Reconcile the blueprint's replaceable provider/source wording with the no-external-API rule. Confirm project authority and document precedence.
-2. **Build the Layer 0–19 traceability matrix.** Start from the existing blueprint and current source, not an idealized redesign. Identify missing, duplicated, disconnected, and unverified mechanisms.
-3. **Specify the continuity substrate.** Settle canonical event/state ownership, persistence, replay, recovery, and schema evolution. These decisions affect nearly every later mechanism.
-4. **Specify shared cognitive data contracts.** Define representation, evidence, provenance, uncertainty, time, identity, and cross-layer update semantics.
-5. **Specify the integrated cognitive cycle.** Show how existing layers interact and how feedback returns to memory, beliefs, prediction, goals, learning, and future decisions.
+1. **Create the decision/conflict register from existing evidence.** Record the provider/source wording as already clarified in the current Blueprint; record the Layer 1/Priority-One sequence as already reconciled; keep genuine open decisions visibly unresolved.
+2. **Build the Layer 0–19 traceability matrix.** Start from the existing Blueprint, MCU Behavioral Reference, Language Ownership Map, and actual source tree. Identify missing, duplicated, disconnected, and unverified mechanisms.
+3. **Specify the continuity substrate.** Reconcile the general state/event/persistence requirements with the narrower Priority-One trust contract. Settle canonical ownership, event identity/order, persistence, replay, recovery, and schema evolution.
+4. **Specify shared cognitive data contracts.** Define representation, evidence, provenance, uncertainty, time, identity, and cross-layer update semantics using existing C++ and perception types as evidence.
+5. **Specify the integrated cognitive cycle.** Consolidate the already documented flows into an operational, event-driven specification showing mechanism interactions and feedback without forcing every task through every layer.
 6. **Select one real learning vertical slice.** Choose it only after measuring an existing limitation. Define baseline, experience, update, persistence, held-out generalization, contradiction, and rollback tests before implementation.
 7. **Close minimum safety and observability contracts.** Establish monitoring, permissions, action verification, threat boundaries, and recovery before exposing consequential capabilities.
 8. **Obtain independent review and independent test-plan challenge.** Resolve material findings and secure Project Director approval.
@@ -391,9 +393,9 @@ The last two risks must be managed together. Do not use planning as an excuse to
 
 ## 11. Immediate next work
 
-The next concrete planning deliverable should be the **Layer 0–19 target-to-mechanism-to-implementation traceability matrix**, based on the actual blueprint and repository. In parallel, record the exact amendment needed for the provider/source wording in the master blueprint and obtain Project Director approval before changing that source document.
+The next concrete planning deliverable is the **Layer 0–19 target-to-mechanism-to-implementation traceability matrix**, derived from the existing Blueprint, behavioral target, language map, and actual source tree. In parallel, create the decision/conflict register and record the already-resolved provider/source wording and Layer 1/Priority-One sequence so those questions are not reopened without new evidence.
 
-After that, specify the continuity/event/persistence contract and the shared cognitive data/evidence contract. Then select the first learning vertical slice from observed repository limitations.
+Then formalize the general state/event/persistence contract, shared representation/evidence semantics, and operational cross-layer cycle by extending the appropriate existing documents. Do not create duplicate specifications where a source document can be extended without ambiguity. Select the first learning vertical slice only after the traceability and current mechanism evidence identify the right gap.
 
 Do not start by adding new layers, adding a hosted service, introducing another language, replacing existing mechanisms, or building the complete product interface.
 
