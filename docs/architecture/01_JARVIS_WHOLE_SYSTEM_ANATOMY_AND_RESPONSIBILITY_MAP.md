@@ -105,6 +105,21 @@ Each cross-cutting function must have a clear accountable owner for each contrac
 | Testing, simulation, evaluation, and reproducibility | SYS-10 | Each system supplies testable contracts, versions, telemetry, and candidate evidence; SYS-11 governs promotion into live operation |
 | Configuration, versioning, and consequential change | The owner of the changed system owns technical compatibility; SYS-11 owns authorization policy for consequential changes | SYS-10 supplies validation and promotion evidence; SYS-05 applies approved runtime lifecycle changes |
 
+
+### 3.2 Operational organism boundary and lifecycle
+
+The map distinguishes the live operational JARVIS system from the people, organizations, resources, and engineering environments with which it interacts. The boundary is logical and may span multiple machines; it is not defined by one computer, process, or network.
+
+| Category | Included responsibilities or entities | Boundary rule |
+|---|---|---|
+| Live operational JARVIS | The live Brain and the operational signalling, sensory, action, autonomic, defence, interaction, and required runtime-support mechanisms | These mechanisms participate in live operation under the approved contracts. SYS-06 remains a proposed modulation responsibility, not an approved mandatory subsystem. |
+| Delegated governance mechanisms | SYS-11 policy-decision, authorization, assurance, and audit mechanisms | Some enforcement and policy-evaluation mechanisms may run within JARVIS; ultimate authority, policy ownership, and risk acceptance remain with the responsible human or organization unless explicitly and lawfully delegated. |
+| Embodiment and infrastructure resources | Compute, storage, operating systems, networks, devices, and physical platforms used by JARVIS | These are operational substrate and dependencies. They may be owned or operated by JARVIS, an operator, or a provider; resource ownership does not confer cognitive authority. |
+| External actors and services | Users, operators, organizations, external applications, model providers, databases, networks, and other services | They are outside the JARVIS cognitive organism. Their outputs are external inputs with provenance, trust, availability, and contractual limits. |
+| Development and evaluation environment | SYS-10 tools, simulators, training harnesses, test infrastructure, experiment stores, release pipelines, and independent evaluation | This is outside live runtime. It may produce candidate changes and evidence but cannot directly mutate live cognitive state or mechanisms; governed promotion is required. |
+
+A runtime component may be hosted on external infrastructure without making its provider part of JARVIS. Conversely, a JARVIS-owned process does not become a cognitive component merely because it runs inside the same deployment. The approved architecture must state which state is live, which is experimental, and what controlled evidence or artifacts may cross that boundary.
+
 ---
 
 ## 4. SYS-01 — Brain / Cognitive System
@@ -365,7 +380,7 @@ Biological homeostasis uses distributed sensors, controllers, effectors, and fee
 - **Scheduling and background operation:** maintenance tasks, housekeeping, and bounded background work.
 - **Thermal and physical operating regulation:** where the chosen embodiment exposes relevant telemetry and controls.
 - **Continuity support:** checkpoint scheduling, state durability coordination, and restart readiness.
-- **Degradation management:** reduce noncritical workloads or isolate failing capabilities while preserving unaffected functions.
+- **Degradation management:** reduce noncritical workloads or isolate capabilities affected by operational faults while preserving unaffected functions. Suspected security compromise and security-driven isolation are owned by SYS-07, not routine autonomic recovery.
 
 ### 8.2 Inputs
 
@@ -452,7 +467,7 @@ The biological immune analogy is useful for layered defence, recognition, respon
 - **Anomaly and threat detection:** identify suspicious or policy-violating behaviour from observable evidence.
 - **Containment and isolation:** restrict compromised or untrusted components and pathways.
 - **Integrity and provenance protection:** preserve trustworthy records of state changes, software versions, and evidence.
-- **Recovery and hardening:** restore known-good operation, verify integrity, and record lessons from failures.
+- **Security recovery and hardening:** after containment, restore a verified known-good security state, establish integrity evidence, and record incident lessons. This is distinct from SYS-05 operational restart/recovery and does not by itself authorize restoration of trust.
 
 ### 10.2 Inputs
 
@@ -670,7 +685,7 @@ Governance is not a biological organ analogy. It is an explicit engineering nece
 
 ### 14.4 Authority boundary
 
-Governance owns the rules and authorization decisions that constrain system operations. Enforcement may be distributed across the Action, Defence, Nervous, Infrastructure, and Development systems, but those systems must apply the authoritative policy rather than invent or silently broaden it.
+Governance owns delegated policy interpretation and authorization decisions that constrain system operations, within authority established by the responsible human or organization. Enforcement may be distributed across the Action, Defence, Nervous, Infrastructure, and Development systems, but those systems must apply the authoritative policy rather than invent or silently broaden it. Where no valid delegation exists, JARVIS cannot manufacture permission or accept risk on behalf of the responsible authority.
 
 Governance must not:
 - determine the Brain's beliefs, interpretations, goals, or learned preferences;
