@@ -28,9 +28,14 @@ The current whole-system foundation and responsibility map are used as working r
 
 The Brain Foundation must provide the cognitive machinery from which future capabilities can develop. It must not hardcode every advanced behaviour, personality response, emotion mapping, preference, or task-specific outcome into the foundation.
 
-### 1.2 Comparative method — mandatory for every question
+### 1.2 Comparative method — relevance-based
 
-Every architectural question investigated in this work must receive two distinct reference solutions:
+Marvel J.A.R.V.I.S. and human cognition are examined where they provide relevant capability, interaction or failure references. They are not forced into every engineering question. Engineering requirements, systems evidence and independent evaluation remain primary. The references generate hypotheses; they are not implementation blueprints.
+
+The evidence roles are distinct:
+- **MCU J.A.R.V.I.S.:** fictional capability and whole-system interaction reference, not a technical specification.
+- **Human cognition and physiology:** empirical evidence about biological functions and constraints, not a one-to-one software component map.
+- **Engineering and AI research:** primary evidence for architecture, representations, reliability, integration, learning, evaluation and operational boundaries.
 
 1. **Marvel J.A.R.V.I.S. reference:** identify the capability demonstrated in the fictional portrayal, the design lesson that can reasonably be extracted, and what cannot be inferred about its internal implementation.
 2. **Human cognition reference:** identify relevant cognitive/neuroscience mechanisms and evidence, distinguishing well-supported findings from hypotheses, incomplete explanations and open scientific questions.
