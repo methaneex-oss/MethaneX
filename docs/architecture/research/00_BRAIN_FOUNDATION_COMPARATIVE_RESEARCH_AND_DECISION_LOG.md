@@ -888,12 +888,12 @@ The next investigation should examine **attention, prioritization and cognitive 
 
 ### 13.1 Problem statement
 
-The Brain will receive more potential inputs, memories, goals, predictions, errors and requests than it can process at full depth simultaneously. Treating all information equally is computationally wasteful and can be unsafe. Treating the loudest, newest or most salient input as automatically important is equally defective.
+The Brain will receive more potential inputs, memories, goals, predictions, errors and requests than it can process at full depth simultaneously. Treating all information equally is computationally wasteful and can be unsafe. Treating the loudest, newest or most salient input as automatically important is equally defective. This investigation concerns cognitive allocation (what to process, how deeply, and when to defer); hardware scheduling, compute quotas, storage capacity and infrastructure resource control remain external responsibilities. The Brain may observe available budgets and request resources, but does not own infrastructure.
 
 Attention is therefore not just a filter that discards information. It is a family of control functions affecting:
 - selection of information for deeper processing;
 - maintenance and protection of current goals;
-- allocation of compute, memory, time and other cognitive resources;
+- allocation of cognitive processing effort, active-context capacity, task attention and deliberation time;
 - switching between tasks and levels of analysis;
 - detection of important unexpected events;
 - suppression or postponement of distractions;
