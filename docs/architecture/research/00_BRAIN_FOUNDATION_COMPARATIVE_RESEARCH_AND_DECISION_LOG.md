@@ -296,7 +296,9 @@ This does not yet determine the final component boundaries, process topology, da
 
 ---
 
-## 6. Next investigation sequence
+## 6. Historical investigation sequence (superseded)
+
+> **Status note (2026-11-01):** The sequence below is retained as historical context only. Its original Investigation C label (Developmental Integrity) was superseded when the expanded A–G programme was developed. The current authoritative A–G mapping is in Sections 17–19; developmental integrity is Investigation G, while Investigation C is Attention and Resource Allocation. Do not use the older sequence below as the current roadmap.
 
 The next investigation should address the most foundational unresolved area first.
 
@@ -371,6 +373,7 @@ The following sources support the current research notes. Marvel sources are use
 - Marvel, [Every Major A.I. in the Marvel Universe](https://www.marvel.com/comics/discover/2500/every-major-a-i-in-the-marvel-universe). Official fictional-universe overview; does not disclose a technical implementation.
 - Marvel, [Iron Man — Tony Stark, In Comics](https://www.marvel.com/characters/iron-man-tony-stark/in-comics). Describes capabilities associated with Iron Man suits, including AI-assisted piloting and communications.
 - U.S. Department of Defense, [Future Human-Machine Team Scenarios — Workshop Report](https://basicresearch.defense.gov/Portals/61/Future%20Directions%20in%20Human%20Machine%20Teaming%20Workshop%20report%20%20%28for%20public%20release%29_1.pdf), 15 January 2020. Includes an analysis of a J.A.R.V.I.S. interaction and broader human-machine teaming scenarios. It is a workshop report, not a canonical Marvel technical specification.
+- The Walt Disney Company, [Marvel Television’s *VisionQuest*: Paul Bettany and James Spader on Vision’s Journey of Self-Discovery](https://thewaltdisneycompany.com/news/marvel-television-visionquest-disney-plus/), 13 October 2026. Official production/performer commentary identifies J.A.R.V.I.S. as one AI persona embedded in Vision’s programming; Emily Hampshire characterizes J.A.R.V.I.S.’s role in this story as security. This is fictional characterization, not a technical architecture or a requirement that JARVIS’s Brain own security enforcement.
 
 ### Human cognition, attention, memory and learning
 - Cowan et al., [The Relation Between Attention and Memory](https://www.annualreviews.org/content/journals/10.1146/annurev-psych-040723-012736), Annual Review of Psychology, 2024.
@@ -1977,3 +1980,88 @@ The Reviewer should assess the integrated A–G model rather than reviewing each
 - No runtime code, tests, dependencies, approved whole-system documents or merge state were changed.
 
 **Remaining work before calling the investigation complete:** independently validate the source-to-claim mapping; investigate any missing cognitive capabilities (especially representation/reasoning integration, self-monitoring and language/contextual communication); challenge the cross-mechanism architecture for over-fragmentation and missing ownership; consolidate the whole-Brain foundation requirements and unresolved Project Director decisions; then verify the final research package and Reviewer handoff. Do not claim that a full 60-minute wall-clock period has elapsed merely because the research record has grown.
+
+
+---
+
+## 21. Investigation update — 2026-11-01 (60-minute investigation commenced)
+
+**Investigation start:** 18:39 Africa/Lagos, 1 November 2026  
+**Target investigation window:** 18:39–19:39 Africa/Lagos  
+**Approval:** Project Director approved the 60-minute structure, full audit and correction/expansion of A–G, and inclusion of architectural alternatives.  
+**Status:** In progress. This update records verified early findings only; it does not claim that the 60-minute window has elapsed or that the investigation is complete.
+
+### 21.1 Scope and implementation boundary
+
+The investigation is about the Brain foundation as the first major JARVIS system to be architected and constructed, while retaining whole-system context and explicit external boundaries.
+
+The following are in scope now:
+- cognitive requirements and responsibilities;
+- mechanisms, representations, state ownership and interaction;
+- natural-language understanding/generation as a cognitive capability and its boundary with sensory and interaction systems;
+- architectural alternatives and their trade-offs;
+- developmental learning requirements and failure/evaluation criteria.
+
+The following are deliberately out of scope:
+- programming-language assignment to components;
+- frameworks, libraries, databases, model providers or runtime selection;
+- class/module/file layouts, APIs and concrete implementation contracts;
+- build systems, deployment topology, implementation sequencing and coding tasks.
+
+A distinction is required between **language as a cognitive capability** and **programming language as an implementation technology**. Language comprehension, semantic interpretation, pragmatics, dialogue context and language generation must be considered in the capability/boundary analysis. Assigning C++, Python, Rust or another implementation language to Brain areas is deferred until the architecture and its contracts are sufficiently established.
+
+### 21.2 Initial repository and record audit
+
+- PR #171 is open, draft and unmerged. Its current head is `5821bbe2f4db1eb755f70173f3ebecaabe538d0d`.
+- The working branch is `docs/jarvis-system-architecture-foundation-20261101`.
+- The existing comparative research log is the authoritative working research record; its fetched blob before this update was `e89b6ef5eb17d77b2c0837ebc47e79ca014b6fbe`.
+- The working record contains Investigations A–G and an integrated synthesis. It explicitly remains provisional and does not authorize implementation.
+- The old Section 6 roadmap was inconsistent with the later A–G expansion. It has now been marked as superseded while preserving its historical content.
+- Documents 00 and 01 currently label themselves **proposed / not approved**; PR #171 is also a draft. This repository status conflicts with the earlier handoff description that treated the documents as approved. No status or content change has been made to either whole-system document. The approval history must be reconciled before they are described as formally approved repository artifacts.
+
+### 21.3 Preliminary architectural alternatives — comparison dimensions
+
+The alternatives must not be treated as a single mutually exclusive list. At least five independent design dimensions exist:
+
+1. **Representation paradigm:** symbolic, subsymbolic/neural, or hybrid.
+2. **Cognitive integration/control:** central decision cycle, shared workspace/broadcast, hierarchical control, or distributed coordination.
+3. **Execution topology:** one process, multiple processes, or distributed services. Logical modularity does not imply process/service distribution.
+4. **Learning regime:** within-episode adaptation, online state learning, staged candidate adaptation, offline training, or combinations.
+5. **Foundation-model role:** absent, specialist capability, one reasoning/policy component, or central controller.
+
+Candidate architectural families to compare:
+- **Centralized symbolic/cognitive-cycle architectures** (e.g. Soar, ACT-R, BDI-inspired designs): explicit state, goals and procedural control can support traceability and deliberate problem solving. Risks include dependence on engineered representations/plans, rigidity when plan generation or broad learning is weak, and a control bottleneck.
+- **Modular hybrid cognitive architectures** (e.g. CLARION, LIDA, Sigma and related approaches): combine specialist functions and potentially explicit/implicit or symbolic/subsymbolic representations. They offer a richer integration vocabulary, but may incur representational translation, arbitration and implementation complexity. Global-workspace ideas should be assessed as functional coordination mechanisms; adopting one does not require a claim about machine consciousness.
+- **Distributed/event-driven cognitive mechanisms:** allow independent activities, asynchronous feedback and fault isolation. They may fit concurrent cognition, but introduce causal-ordering, stale-state, coordination, latency and partial-failure problems. This is an execution/control option, not an automatic consequence of modular cognitive responsibilities.
+- **LLM-centric agent harnesses:** combine a central language-model policy with loops, memory/context, tools, orchestration and verification. They can provide broad language and flexible task handling, but a persistent memory store or orchestration loop does not itself demonstrate internalized learning, reliable grounding or transferable cognitive change.
+- **End-to-end learned/neural architectures:** can learn distributed representations and policies from data, but raise substantial requirements for training evidence, continual-learning stability, interpretability, causal diagnosis and controlled behaviour under distribution shift.
+- **Neuro-symbolic hybrids:** may combine learned perception/representation with structured relational or logical reasoning. They are promising candidates for selected requirements, but the integration problem, grounding, consistency and training stability must be demonstrated rather than assumed.
+
+No candidate has been selected. A hybrid may ultimately be appropriate, but “hybrid” is not a design answer until the exact responsibilities, representations, control relationships and failure semantics are justified.
+
+### 21.4 Early evidence and implications
+
+- Kotseruba and Tsotsos’ broad review catalogues 84 implemented cognitive architectures and over 900 applications, but explicitly warns that feature-presence surveys cannot establish the depth or quality of a capability and that direct architecture comparisons require strong caveats. It also distinguishes an architecture from the particular agents built using it. This means our comparison must evaluate concrete mechanisms and evidence, not labels or feature checklists.
+- Soar’s own documentation describes working, production and preference memory, operator-based problem solving and impasse-driven subgoaling. Its chunking mechanism can learn procedural knowledge from problem-solving experience, but the learned rules operate within a system whose task knowledge and productions are supplied by the Soar program. It is a valuable example of experience-based procedural learning, not proof that a general Brain emerges without substantial engineered knowledge and evaluation.
+- CLARION provides a different hybrid reference: explicit and implicit representations across action-centred, non-action-centred, motivational and metacognitive subsystems. This broadens the alternatives beyond a purely symbolic cycle, while leaving integration and calibration costs to be assessed.
+- BDI architectures clarify beliefs, goals/desires and intentions, but many practical implementations select from developer-provided plan libraries. This makes them useful for explicit commitment and deliberation, but dangerous as a complete Brain foundation if acquired behaviour is replaced by hand-authored situation-to-plan mappings.
+- The 2025 cognitive-control review describes flexible context-sensitive behaviour selection and monitoring/adjustment of ongoing behaviour. This supports treating control as more than a single attention queue or a fixed plan executor.
+- Recent long-horizon-agent research frames long-horizon reliability as a system property spanning persistent state, context, orchestration, verification, recovery and model/agent improvement. It also distinguishes cross-context persistence from cross-task accumulation of reusable skills. This reinforces the need to test trajectories and transfer, not just isolated task success.
+- The official Disney *VisionQuest* article (13 October 2026) adds a current MCU portrayal: J.A.R.V.I.S. appears as one AI persona embedded in Vision’s programming, and the production commentary characterizes his role in that story as security. This must not be generalized into a technical design or override JARVIS’s explicit engineering boundary between cognition and security enforcement.
+
+### 21.5 Initial audit issues to resolve
+
+1. **Over-fragmentation risk:** A–G are functional investigations, not a required seven-component decomposition. Identify the minimum coherent state owners and avoid one subsystem/service per cognitive verb.
+2. **Under-specified representation:** A–G depend on shared representations, but do not yet establish a sufficiently precise account of entities, events, relations, concepts, time, space, context, uncertainty, abstraction and cross-modal grounding.
+3. **Reasoning integration:** E and F identify planning, causal inference and counterfactuals, but the architecture still needs a more explicit account of how reasoning methods cooperate, challenge one another and expose their evidence.
+4. **Self-monitoring:** metacognitive calibration appears across the record, but the minimum self-model, capability model, limitation detection and independent verification mechanisms remain open.
+5. **Language boundary:** language input/output appears partly under sensory and interface domains, while linguistic meaning, pragmatic context, dialogue state and language-mediated reasoning are not yet sufficiently decomposed.
+6. **Learning activation policy:** candidate isolation is appropriate for material changes to active models or strategies, but the design must not force every ordinary memory or belief update through heavyweight candidate promotion. Different learning classes need different risk and validation semantics.
+7. **Architecture/deployment conflation:** “distributed mechanisms” must not be read as a decision for microservices, multiple processes or a networked Brain.
+8. **Evaluation gap:** the research needs a longitudinal test model that distinguishes storage, within-task adaptation, persistent behavioural change, transfer, regression, and recovery after interruption/restart.
+
+### 21.6 Reviewer challenge requested
+
+Independently challenge the alternative-family framing, especially whether the candidate families are comparable at the same architectural level; whether the five dimensions are sufficient; whether a shared workspace or central controller is being assumed; whether distributed execution is being smuggled in by modular language; whether LLM-centric designs are being mistaken for a Brain; whether the Soar/CLARION/BDI summaries overstate their capabilities; and whether the proposed representation, language, self-model and learning questions are truly foundational or should be staged.
+
+**No architecture selection, technology assignment, implementation authorization or final Brain specification is made by this update.**
