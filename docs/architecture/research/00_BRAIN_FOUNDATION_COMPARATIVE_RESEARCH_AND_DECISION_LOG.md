@@ -391,3 +391,289 @@ The following sources support the current research notes. Marvel sources are use
 - Recorded a provisional selection and rationale for each question.
 - Captured cross-cutting risks and the next investigation sequence.
 - Explicitly marked the document as working research, not an approved architecture or implementation authorization.
+
+
+---
+
+## 10. Investigation A — Cognitive Information Lifecycle and Ownership
+
+**Investigation status:** Initial analysis complete; proposed ownership model requires Reviewer challenge.  
+**Date:** 2026-11-01  
+**Decision status:** Provisional engineering direction, not approved architecture.
+
+### 10.1 The actual problem
+
+The Brain will continuously receive experience, form interpretations, construct representations, update beliefs, make predictions, evaluate outcomes, decide and learn. These activities can occur concurrently and can revisit earlier information.
+
+The central design problem is not simply where to store information. It is:
+
+> **How can the Brain preserve what happened, maintain what it currently thinks, and allow that understanding to change without confusing evidence, interpretation, belief, prediction or learned behaviour?**
+
+If these distinctions are weak, several serious defects become likely:
+- an inference is later mistaken for a directly observed fact;
+- a generated or simulated event is remembered as something that actually happened;
+- a source's identity and reliability are lost as information moves between mechanisms;
+- one mechanism silently overwrites another mechanism's authoritative state;
+- a belief changes but dependent predictions and plans continue using stale assumptions;
+- contradictory evidence is erased instead of evaluated;
+- a crash leaves a partially applied cognitive update;
+- repeated copies of the same source are incorrectly treated as independent corroboration.
+
+### 10.2 Marvel J.A.R.V.I.S. reference
+
+The fictional J.A.R.V.I.S. portrayal demonstrates contextual assistance: information is useful because it is interpreted in relation to Tony Stark, his current task, his technology and the surrounding situation. The DoD human-machine teaming workshop's discussion of a J.A.R.V.I.S. interaction illustrates interpretation of an implicit request from contextual cues.
+
+**What this suggests for engineering**
+- Information must retain enough context to be interpreted in the situation in which it is used.
+- A useful assistant needs to connect incoming information with relevant prior information and current goals.
+- Information should be available across coordinated capabilities without every capability independently inventing its meaning.
+- The system should be able to act on contextually interpreted information, not merely retrieve isolated records.
+
+**What Marvel does not answer**
+- Whether the fictional system distinguishes raw observation from inference.
+- How it records provenance, confidence, uncertainty or conflicting sources.
+- How it revises a prior belief without changing the historical record.
+- How it prevents a generated simulation from being mistaken for an actual event.
+- How information ownership, concurrency, transactions or recovery work internally.
+
+**Conclusion from this reference:** adopt contextual integration as a capability requirement, but do not copy an imagined internal architecture. The fiction does not supply a reliable data-lifecycle or ownership model.
+
+### 10.3 Human cognition reference
+
+Human memory and cognition provide several relevant, but non-identical, mechanisms:
+
+1. **Episodic memory** supports memory for particular events with contextual details. The hippocampus is strongly implicated in episodic memory, although the full neural basis of memory is distributed and remains an active research area. A 2024 review discusses hippocampal roles beyond the traditional long-term-memory-only account, including evidence relevant to working memory and perception.  
+   Source: Hawkins and Yonelinas, 2024.
+
+2. **Working memory and attention** support temporary use of information relevant to ongoing cognition. Working memory is not simply a separate permanent store; it interacts with attention, perception and long-term memory. Its exact neural implementation is debated.
+
+3. **Consolidation and transformation** mean retained experience is not necessarily a frozen copy. Research describes multiple representations and changing degrees of detail and generalization across encoding, consolidation and retrieval. The 2025 review on adaptive episodic memory discusses context-specific and gist-like representations that can coexist and influence later behaviour.
+
+4. **Source monitoring** concerns how a person attributes remembered information to a source or mental process—for example, distinguishing what was perceived, heard, inferred, imagined or suggested. Human source monitoring is fallible. This is an important warning: JARVIS must not rely on familiarity or plausibility alone to establish whether something was observed or inferred.
+
+5. **Correction and belief updating** depend partly on remembering the source and correction. A 2024 review reports that correction effectiveness can decline when the source of information is not remembered. This supports preserving source/provenance as part of the information record rather than treating it as disposable metadata.
+
+**What human cognition suggests**
+- Preserve episodic/contextual detail where it has future evidential value.
+- Maintain temporary working context separately from durable retained information.
+- Permit derived abstractions and generalizations without treating them as the original experience.
+- Track source and the distinction between perception, inference and imagination.
+- Allow memory and understanding to update, but do not confuse reconstructive memory with an authoritative historical log.
+
+**What must not be copied**
+- Human memory distortion, forgetting and source confusion are limitations, not design goals.
+- A biological memory trace is not a software record or database row.
+- The hippocampus is not a literal central event database; biological memory involves distributed representations and interacting systems.
+- Current neuroscience does not settle one universal architecture for all forms of memory and cognition.
+
+### 10.4 Comparison and selection
+
+**Selected direction: an engineered provenance-preserving information lifecycle, using human memory distinctions as the stronger structural reference and Marvel-style contextual integration as the operational requirement.**
+
+Why this is stronger:
+- Human cognition provides useful distinctions among episodic experience, active working context, and transformed/generalized memory.
+- Source-monitoring research directly exposes the danger of confusing observed, inferred and imagined information.
+- Marvel adds the requirement that these distinct information types must still be integrated into timely, context-sensitive assistance.
+- Engineering can improve on biological weaknesses by preserving immutable source records, explicit derivation links and auditable revision history.
+
+This is not a 50/50 blend. The human reference is stronger for information-class separation and lifecycle design. The Marvel reference is stronger as a whole-system capability target for contextual use.
+
+### 10.5 Proposed information classes and authoritative ownership
+
+The following is a proposed ownership map. Ownership means the mechanism accountable for the authoritative state and rules of that information class. It does not imply a separate process, service, database or programming-language module.
+
+| Information class | Proposed authoritative owner | Mutability / lifecycle | Key rule |
+|---|---|---|---|
+| Original experience record | Experience Integration / experience-record responsibility | Append-only historical record; corrections are new linked records or annotations | Never rewrite what was originally received |
+| Source and provenance | Experience Integration, with provenance preserved by every downstream consumer | Immutable source facts; quality assessments may be revised as new evidence arrives | Never detach a claim from its source/derivation |
+| Interpretation / hypothesis | Reasoning and interpretation responsibility | Revisable, versioned, may coexist with alternatives | Never relabel an interpretation as an observation |
+| Representation | Representation System | Revisable, versioned, derived from evidence and other representations | Preserve derivation links; invalidation must propagate to dependants |
+| Belief / knowledge claim | Belief and Knowledge Formation | Revisable epistemic state with evidence and revision history | No silent overwrite; preserve supporting and opposing evidence |
+| Working cognitive context | Working Context / cognitive state responsibility (exact owner to resolve) | Ephemeral and continuously changing; reconstructable where necessary | Active availability is not proof of truth or durable memory |
+| Prediction / forecast | Prediction System | Versioned forecast; evaluated against later outcomes | Simulated futures must remain marked as non-events |
+| Valuation / evaluation | Evaluation and Valuation responsibility | Revisable state tied to context, goals, evidence and uncertainty | No universal fixed score or hardcoded stimulus-to-emotion mapping |
+| Decision / intention | Decision responsibility | State transitions with rationale, constraints and status | Decision is not authorization or execution |
+| Action execution outcome | Motor/Action system owns execution record; Brain consumes verified outcome | Historical outcome record, with later corrections linked | Brain must distinguish intended action, attempted action and verified result |
+| Candidate adaptation | Learning and Adaptation | Isolated, versioned, evaluable candidate | Candidate is not active cognitive authority |
+| Activated learned adaptation | The mechanism whose model/strategy is changed owns its active state; Learning coordinates the change | Versioned active state with lineage and recovery path | Learning coordinates; it does not become owner of every mechanism's state |
+| Metacognitive assessment | Metacognitive System | Revisable assessment with evidence and scope | Monitoring does not grant unrestricted control over mechanisms |
+
+**Important ownership caveat:** some rows name functional responsibilities rather than settled components. For example, whether the original experience record is directly owned by Experience Integration or by a dedicated experience-history responsibility remains an architectural boundary decision. Do not create a component merely because the table contains an owner label.
+
+### 10.6 Information lifecycle — not a rigid pipeline
+
+The following lifecycle is conceptual. It is not a fixed execution sequence. Information may enter at different points, branch into competing interpretations, be revisited, or remain unresolved.
+
+1. **Acquire / admit:** a sensory or external source supplies an experience payload. The Brain receives it through an agreed interface; the Brain does not own the sensory device or external acquisition process.
+2. **Preserve the received event:** record the original payload or a faithful, integrity-protected reference to it, plus source identity, event time, arrival/processing time, modality, context and integrity metadata.
+3. **Assess the input:** evaluate completeness, duplication, integrity, source quality and uncertainty. Do not silently discard an unclear event merely because it cannot yet be interpreted.
+4. **Make available to cognition:** publish or expose the admitted experience through controlled contracts. This does not assert that every mechanism must process every event.
+5. **Interpret and represent:** one or more cognitive processes may produce hypotheses, structured representations, relationships or abstractions. Each derived item records its dependencies.
+6. **Evaluate epistemic status:** evidence is assessed; beliefs may be formed, withheld, qualified, supported, contradicted or revised.
+7. **Use in active cognition:** relevant items may enter working context, support predictions, reasoning, evaluation and decisions. Working-context inclusion is not a truth judgement.
+8. **Compare against outcomes:** later experience may confirm, weaken or contradict predictions and beliefs. The original experience remains unchanged; derived states may be revised.
+9. **Consolidate and learn:** selected information may be retained, generalized, used to alter a model or strategy, or left as a candidate pending evaluation. Memory retention is not itself proof of learning.
+10. **Revisit / invalidate:** new evidence or changed assumptions may cause dependent representations, beliefs, predictions or plans to be marked stale and reconsidered.
+
+This model permits loops and branches. For example, a new interpretation can be generated from old experience; a belief conflict can trigger retrieval; a prediction error can initiate learning evaluation; a revised model can produce a new prediction. No single global sequence is imposed.
+
+### 10.7 Worked example — uncertain vehicle observation
+
+Assume a sensory system reports an image of a vehicle approaching a secured entrance.
+
+**Initial experience**
+- The original image payload or its integrity-protected reference is retained.
+- Source device, event timestamp, receipt timestamp, location/context and sensor-quality metadata are attached.
+- The experience record states only what was received. It does not state that the vehicle is hostile.
+
+**Competing interpretations**
+- Interpretation A: the vehicle may be an authorized delivery.
+- Interpretation B: the vehicle may be an unknown visitor.
+- Interpretation C: the image may be too poor to classify reliably.
+
+All three remain interpretations, not historical observations. Their confidence and evidence basis may differ.
+
+**Representation and belief**
+- Representation may identify a vehicle, entrance, time and spatial relation.
+- Belief formation may conclude only that a vehicle is present, while withholding a claim about authorization.
+- If an access-control source later supplies a matching delivery record, that is additional evidence with its own provenance. It is not independent corroboration if it merely repeats the original image's inferred label.
+
+**Prediction and decision**
+- Prediction may forecast possible arrival or access outcomes under each interpretation.
+- Brain may form an intention to request further information or recommend verification.
+- It must not treat its own belief as governance authorization to open the entrance.
+
+**New evidence**
+- A later authorized credential check contradicts the delivery interpretation.
+- The original image and initial interpretations remain in history.
+- The belief is revised; dependent predictions and plans are marked stale and reconsidered.
+- The system records why the earlier interpretation changed.
+
+**What this example tests**
+- Observation/inference separation.
+- Competing hypotheses.
+- Provenance retention.
+- Circular-evidence prevention.
+- Belief revision without historical rewriting.
+- Dependency invalidation.
+- Decision/authorization separation.
+
+### 10.8 State categories and persistence proposal
+
+Do not collapse all information into one storage policy. At minimum, distinguish:
+
+- **Historical evidence:** durable, append-only or immutable-by-contract; corrections represented by linked events/annotations.
+- **Revisable derived state:** versioned and attributable to the evidence and assumptions from which it was produced.
+- **Ephemeral working state:** temporary; may be discarded or reconstructed subject to continuity requirements.
+- **Candidate state:** isolated and not authoritative until accepted through a controlled process.
+- **Operational recovery state:** checkpoints and transaction metadata needed to resume safely; not equivalent to memory or knowledge.
+- **Materialized views/indexes:** rebuildable convenience structures, not authoritative evidence unless explicitly designated otherwise.
+
+An event-history approach may help preserve changes and causal lineage, but this investigation does **not** select event sourcing, a particular database, a single global event store or a universal consistency model. Those are implementation choices to evaluate after contracts and failure semantics are defined.
+
+### 10.9 Dependency and staleness management
+
+Derived cognitive information must declare what it depends on. Dependencies may include:
+- source experience records;
+- interpretations and assumptions;
+- representation versions;
+- belief versions;
+- model/strategy versions;
+- context and time validity;
+- external facts or policy versions where relevant.
+
+When a dependency changes, consumers should not automatically assume every downstream result is invalid. Instead:
+1. identify affected derived items;
+2. mark them as potentially stale;
+3. determine whether the change is relevant to their assumptions;
+4. re-evaluate, recompute, retain with qualification, or invalidate;
+5. preserve the previous result and the reason for the update.
+
+This is preferable to either extreme: no invalidation (stale cognition) or global invalidation after every update (unnecessary recomputation and instability).
+
+### 10.10 Permissions and update authority
+
+Provisional rules:
+- Any mechanism may request or receive information only through defined contracts and access boundaries.
+- A mechanism may propose a derived item, but only its designated owner may commit authoritative state for that information class.
+- Downstream mechanisms may attach feedback or challenge evidence; they do not directly overwrite another mechanism's state.
+- Historical experience cannot be edited by an interpretation, belief or learning process.
+- A candidate adaptation cannot become active merely because it was generated.
+- External action results must be distinguished from Brain intentions and must be verified by the responsible execution/outcome path.
+- Governance and security authority remain outside Brain cognitive ownership as defined in the whole-system architecture.
+
+These are ownership principles, not a complete access-control or transaction protocol.
+
+### 10.11 Failure cases the eventual design must handle
+
+1. Duplicate delivery of the same experience event.
+2. Same event received from two sources with differing quality.
+3. Delayed event arriving after a belief or plan has already been formed.
+4. Source identity unavailable or later found incorrect.
+5. A derived interpretation accidentally written into an observation field.
+6. Conflicting interpretations generated concurrently.
+7. Belief update succeeds but dependent prediction invalidation fails.
+8. Process crash between recording experience and distributing it.
+9. A replay/retry duplicates a learning update.
+10. A simulated event or imagined scenario is persisted as actual experience.
+11. A source correction arrives after the original source has been used in multiple derived claims.
+12. An information item becomes stale because its context or validity period has changed.
+
+For each case, later architecture work must specify detection, containment, recovery, audit evidence and whether the operation is retryable.
+
+### 10.12 Provisional decisions and explicit non-decisions
+
+**Provisional directions selected**
+- Preserve original experience separately from all derived understanding.
+- Treat provenance and derivation as first-class information, not optional metadata.
+- Keep observation, interpretation, representation, belief, prediction, decision and outcome distinct.
+- Permit multiple interpretations and beliefs with different epistemic status.
+- Keep working context distinct from durable memory.
+- Give each authoritative information class a clear owner.
+- Use versioned derived state and dependency-aware selective re-evaluation.
+- Separate candidate adaptations from activated learned state.
+- Preserve event time separately from processing/arrival time.
+
+**Not decided yet**
+- Whether experience history is a dedicated subsystem or a responsibility within Experience Integration.
+- Whether a common envelope plus modality-specific payloads is the correct contract.
+- Exact schemas, identifiers, clocks, ordering guarantees and causal metadata.
+- Whether and where event sourcing is appropriate.
+- Database, graph, vector, object or other storage technologies.
+- Transaction boundaries and consistency guarantees.
+- Exact retention, privacy, deletion and forgetting policies.
+- Exact confidence/calibration representation.
+- Exact rules for stale-state propagation and dependency evaluation.
+- Exact process/service boundaries and programming languages.
+
+### 10.13 Reviewer challenge checklist for this investigation
+
+The Reviewer should specifically test:
+- Are information classes separated for sound reasons, or have we over-fragmented them?
+- Is every proposed authoritative owner actually the right owner?
+- Does Experience Integration own the original record, or should a distinct experience-history responsibility exist?
+- Can original evidence be preserved without requiring every raw modality payload to be stored indefinitely?
+- Does the model preserve provenance through transformation, summarization, abstraction and retrieval?
+- Are we distinguishing event time, processing time and causal order correctly?
+- Can competing interpretations coexist without uncontrolled duplication?
+- Is selective dependency invalidation practical, or does it introduce excessive complexity?
+- Does the proposal accidentally turn the Brain into one centralized data authority?
+- Are candidate adaptations, operational recovery state, memory and current beliefs sufficiently distinct?
+- What information is lost if the original payload is too large, sensitive or transient to retain?
+- Which of these rules are foundational invariants, and which are implementation policy?
+
+### 10.14 Research references added for this investigation
+
+- Hawkins, C. H. and Yonelinas, A. P. (2024), [Evolving perspectives of medial temporal memory function: hippocampal processes in visual and auditory forms of episodic and working memory](https://www.frontiersin.org/journals/cognition/articles/10.3389/fcogn.2024.1497281/full), *Frontiers in Cognition*. Review; some interpretations of hippocampal contribution beyond long-term episodic memory remain debated.
+- Tarder-Stoll, H. et al. (2026 issue; published online 2025), [Adaptive episodic memory: how multiple memory representations drive behavior in humans and nonhumans](https://journals.physiology.org/doi/full/10.1152/physrev.00005.2025), *Physiological Reviews*. Review of multiple episodic representations, consolidation and adaptive retrieval.
+- Kemp, P. L., Goldman, A. C. and Wahlheim, C. N. (2024), [On the role of memory in misinformation corrections: Repeated exposure, correction durability, and source credibility](https://pubmed.ncbi.nlm.nih.gov/38171060/), *Current Opinion in Psychology*. Review highlighting the role of source memory in durable correction.
+- Johnson, M. K. (1997), [Source monitoring and memory distortion](https://pmc.ncbi.nlm.nih.gov/articles/PMC1692093/), *Philosophical Transactions of the Royal Society B*. Foundational review of source attribution and source confusion.
+- U.S. Department of Defense (2020), [Future Human-Machine Team Scenarios — Workshop Report](https://basicresearch.defense.gov/Portals/61/Future%20Directions%20in%20Human%20Machine%20Teaming%20Workshop%20report%20%20%28for%20public%20release%29_1.pdf). Human-machine teaming report containing a contextual J.A.R.V.I.S. example; not a specification of fictional internal architecture.
+
+### 10.15 Investigation A conclusion
+
+The strongest current direction is not a single memory database or one universal information pipeline. It is a **provenance-preserving, owner-managed cognitive information model** in which historical experience, derived understanding, active context, forecasts, decisions, outcomes and adaptations remain distinguishable and traceable.
+
+Human cognition supplies the stronger reference for separating episodic detail, active context, source attribution and transformed memory. Marvel J.A.R.V.I.S. supplies the operational requirement that information be integrated contextually and made useful across coordinated capabilities.
+
+This direction is ready for independent challenge, but it is not yet approved architecture. The next investigation is **Cognitive Coordination and Consistency**, which must determine how these owners safely exchange and revise information under concurrency, delay, feedback and partial failure.
