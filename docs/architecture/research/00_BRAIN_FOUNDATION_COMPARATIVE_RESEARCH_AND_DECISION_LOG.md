@@ -2250,3 +2250,26 @@ The architecture should distinguish:
 
 The Brain may request storage or retrieval and must be able to detect unavailable or stale memory services. Infrastructure provides durable persistence; Security/Governance enforce access and retention rules. Do not reduce memory to a database, and do not let a cognitive memory mechanism silently bypass system-level privacy or retention controls.
 
+
+
+### 22. Investigation session — 2026-11-01, 19:27 Africa/Lagos
+
+**Project Director authorization:** 60-minute investigation approved for 19:27–20:27 WAT. Scope: full audit and extension of Investigations A–G; architectural alternatives included. This is research and decision preparation, not architecture approval or implementation authorization.
+
+**Explicit exclusions:** no programming-language assignment; no framework, database, model-provider, runtime or deployment selection; no class/module/file layout; no implementation changes. Natural-language cognition remains in scope as a cognitive capability, distinct from programming-language selection. The investigation is Brain-first: whole-JARVIS context is used to establish boundaries and dependencies, not to design every other system.
+
+**Verified repository baseline at session start:**
+- Repository: `methaneex-oss/MethaneX`; branch: `docs/jarvis-system-architecture-foundation-20261101`.
+- PR #171: open, draft, unmerged; head `ca7ffb95f95ce487a973578a126be43a2fe14b17`.
+- Document 00 blob: `ff0e57f2f9a266466687dca2c4cbcda6a64cb7d7`.
+- Document 01 blob: `15c9bfc06f5f094d396f8a9dc625c22ac0d1b279`.
+- Research log at start: blob `84ab8c145ecb4498b52e465c975d7e8e8beee4ae`.
+- Documents 00 and 01 are working architectural references; the PR is unmerged and its formal approval/merge status must not be overstated.
+
+**Execution method:** ten stages as approved: (1) target definition; (2) capability demands/scenarios; (3) human cognition; (4) MCU J.A.R.V.I.S.; (5) cognitive architectures and modern AI approaches; (6) Brain foundation engineering; (7) integration boundaries; (8) development and acquired intelligence; (9) adversarial architectural validation; (10) consolidation. Each conclusion must be labelled as evidence-backed, engineering inference, candidate proposal, unresolved question or Director decision. Alternative families must be compared against common requirements and their category differences preserved (architecture vs topology vs mechanism vs learning regime vs model/provider role).
+
+**Checkups rescheduled from the actual session start:** Check 1 at 19:37, Check 2 at 19:47, Check 3 at 19:57 Africa/Lagos. Three existing one-time automation slots were reused and successfully enabled. Attempts to schedule Check 4 simultaneously were rejected because the current plan permits only three active scheduled tasks. Checks 4–6 must be scheduled as slots become available; do not claim six are active. Proposed remaining check times are 20:07, 20:17 and 20:27, subject to slot availability.
+
+**Initial boundary decision:** language assignment is explicitly deferred until cognitive responsibilities, mechanisms, state ownership, interfaces and computational requirements are established. Natural-language comprehension, pragmatic interpretation, reference resolution, grounding and conversation-state management are in scope as cognitive capabilities; choosing implementation languages is not.
+
+**No implementation or technology selection occurred at session start.**
