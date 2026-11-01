@@ -87,9 +87,9 @@ Human cognition distinguishes temporary active information from long-term knowle
 
 **Limitation:** working memory is not simply a software cache, and biological memory is reconstructive and fallible. JARVIS should preserve historical evidence more reliably than human recollection where the system's storage and privacy rules permit.
 
-### Comparison and provisional selection
+### Comparison and provisional candidate direction
 
-**Selected direction: a human-cognition-informed, explicitly engineered information lifecycle, with Marvel-style contextual interpretation as a required capability.**
+**Provisional candidate direction: a human-cognition-informed, explicitly engineered information lifecycle, with Marvel-style contextual interpretation as a required capability.**
 
 The human reference gives the stronger conceptual separation between active context, retained memory and long-term knowledge. Marvel contributes a useful system-level requirement: interpretation must be context-sensitive and useful in the live situation.
 
@@ -129,9 +129,9 @@ Human memory research describes selective consolidation: recent experience is no
 
 **Limitation:** biological consolidation is not equivalent to parallel software training jobs. It does not directly specify locks, transactions, conflict resolution or safe model deployment.
 
-### Comparison and provisional selection
+### Comparison and provisional candidate direction
 
-**Selected direction: selective, staged and versioned adaptation, informed by human consolidation and implemented with explicit software consistency controls.**
+**Provisional candidate direction: selective, staged and versioned adaptation, informed by human consolidation and implemented with explicit software consistency controls.**
 
 Candidate adaptations should be produced without immediately changing authoritative active behaviour. They should be assessed for evidence quality, compatibility, interference, regression, transfer and resource cost. Compatible changes may be integrated; conflicting changes may remain separate, be deferred or be rejected. Activation must be controlled, traceable and recoverable.
 
@@ -159,9 +159,9 @@ Research on cognitive control describes flexible selection of behaviour based on
 
 **Limitation:** human limits are not automatically desirable design targets. Neuroscience does not supply a universal numeric threshold for when an artificial cognitive process should stop.
 
-### Comparison and provisional selection
+### Comparison and provisional candidate direction
 
-**Selected direction: engineered, consequence-sensitive stopping and suspension criteria, informed by human cognitive control and constrained by operational requirements.**
+**Provisional candidate direction: engineered, consequence-sensitive stopping and suspension criteria, informed by human cognitive control and constrained by operational requirements.**
 
 Possible outcomes must include:
 - conclude with an adequately supported result;
@@ -196,9 +196,9 @@ Autobiographical memory integrates past experiences into a life narrative and is
 
 **Limitation:** human identity is socially, culturally and biologically grounded. It should not be reduced to a software identity database or copied literally.
 
-### Comparison and provisional selection
+### Comparison and provisional candidate direction
 
-**Selected direction: a hybrid, with explicit engineered identity lineage and human-inspired autobiographical/developmental continuity.**
+**Provisional candidate direction: a hybrid, with explicit engineered identity lineage and human-inspired autobiographical/developmental continuity.**
 
 Keep distinct:
 1. system identity and instance lineage;
@@ -231,9 +231,9 @@ Human cognition research studies interacting processes such as attention, workin
 
 **Limitation:** human behavioural experiments do not directly translate into software acceptance tests, and observed human performance is not automatically the correct performance target.
 
-### Comparison and provisional selection
+### Comparison and provisional candidate direction
 
-**Selected direction: a layered engineering test strategy combining human-inspired mechanism interaction tests with Marvel-inspired end-to-end operational scenarios.**
+**Provisional candidate direction: a layered engineering test strategy combining human-inspired mechanism interaction tests with Marvel-inspired end-to-end operational scenarios.**
 
 Four provisional test levels:
 1. **Mechanism integrity:** each mechanism respects its contract and handles its own failure modes.
@@ -389,9 +389,9 @@ The following sources support the current research notes. Marvel sources are use
 ## 9. Change log
 
 ### 2026-11-01 — Initial comparative record
-- Established the mandatory two-reference method: Marvel J.A.R.V.I.S. and human cognition for every architectural question.
+- Established a comparative reference lens: Marvel J.A.R.V.I.S. and human cognition are examined where relevant to each capability; engineering evidence and real-world requirements remain primary. This supersedes the initial wording that made both references mandatory for every question.
 - Added provisional comparative analyses for five integration questions: information entering current understanding; concurrent learning; stopping cognition; identity and continuity; and integration testing.
-- Recorded a provisional selection and rationale for each question.
+- Recorded provisional candidate directions and rationales for each question; these are hypotheses for review, not approved architecture decisions.
 - Captured cross-cutting risks and the next investigation sequence.
 - Explicitly marked the document as working research, not an approved architecture or implementation authorization.
 
@@ -471,7 +471,7 @@ Human memory and cognition provide several relevant, but non-identical, mechanis
 
 ### 10.4 Comparison and selection
 
-**Selected direction: an engineered provenance-preserving information lifecycle, using human memory distinctions as the stronger structural reference and Marvel-style contextual integration as the operational requirement.**
+**Provisional candidate direction: an engineered provenance-preserving information lifecycle, using human memory distinctions as the stronger structural reference and Marvel-style contextual integration as the operational requirement.**
 
 Why this is stronger:
 - Human cognition provides useful distinctions among episodic experience, active working context, and transformed/generalized memory.
@@ -626,7 +626,7 @@ For each case, later architecture work must specify detection, containment, reco
 
 ### 10.12 Provisional decisions and explicit non-decisions
 
-**Provisional directions selected**
+**Provisional candidate directions**
 - Preserve original experience separately from all derived understanding.
 - Treat provenance and derivation as first-class information, not optional metadata.
 - Keep observation, interpretation, representation, belief, prediction, decision and outcome distinct.
@@ -776,7 +776,7 @@ These engineering sources are not substitutes for the two required reference len
 
 ### 12.5 Comparison and provisional selection
 
-**Provisional selected direction: distributed, owner-managed cognitive mechanisms coordinated through explicit contracts and causal/version metadata, with selective coordination strength based on the meaning and consequence of each state transition.**
+**Provisional candidate direction: distributed, owner-managed cognitive mechanisms coordinated through explicit contracts and causal/version metadata, with selective coordination strength based on the meaning and consequence of each state transition.**
 
 This is not a proposal for fully decentralized cognition, nor for one central controller that owns all thought. It combines:
 - human-inspired distributed, context-dependent coordination;
@@ -944,7 +944,7 @@ Current cognitive science does not treat attention as one simple faculty with on
 
 ### 13.4 Comparison and provisional selection
 
-**Provisional selected direction: an engineered, multi-factor, context-sensitive allocation and control mechanism, informed by human attentional selection and cognitive control, with Marvel's contextual responsiveness as the operational requirement.**
+**Provisional candidate direction: an engineered, multi-factor, context-sensitive allocation and control mechanism, informed by human attentional selection and cognitive control, with Marvel's contextual responsiveness as the operational requirement.**
 
 The Brain should distinguish at least these related but separate decisions:
 
