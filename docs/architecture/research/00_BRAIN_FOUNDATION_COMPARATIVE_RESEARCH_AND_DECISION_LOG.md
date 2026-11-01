@@ -1320,3 +1320,257 @@ The strongest direction is a **task-scoped, version-aware working-context capabi
 The central warning is that **durable memory, active working context, focal attention, transient computation and a resumable checkpoint are not interchangeable**. Collapsing them creates unclear ownership, stale reasoning, resource leakage, privacy risks and unreliable resumption.
 
 The next integrated investigation should examine goals, plans, intentions and decision state across contexts, including the boundary between cognitive intention and externally authorized action. It must reconcile A–D rather than invent another isolated mechanism.
+
+
+---
+
+## 15. Investigation E — Goals, Planning, Intentions, Decisions and the Action Boundary
+
+**Status:** Initial comparative investigation recorded; the integrated control model, formal contracts and acceptance criteria remain open.  
+**Question:** How should the Brain represent what matters, formulate and revise goals, construct and learn from plans, choose intentions, monitor progress, and distinguish a cognitive decision from permission and execution?
+
+### 15.1 Problem statement
+
+Investigations A–D establish information ownership, coordination, attention and task-scoped working context. They do not yet define the complete relationship among goals, plans, intentions, decisions and action outcomes.
+
+These concepts must not be collapsed:
+
+- A **goal** represents a desired or preferred state, objective, or outcome.
+- A **constraint** limits which states or means are admissible; it is not simply a low-priority goal.
+- A **plan** is a provisional structure of actions, dependencies, assumptions and expected outcomes for pursuing a goal.
+- An **intention** is a current commitment or selected direction to pursue some course, subject to revision and interruption.
+- A **decision** is a cognitive selection or judgement among alternatives, with evidence, uncertainty and rationale.
+- An **action request** is a proposal to an external execution system.
+- **Authorization** is a governance decision outside Brain cognitive ownership.
+- **Execution** and **verified outcome** belong to the Action System and the relevant external evidence path.
+
+A system that confuses these concepts may pursue an inferred goal as if it were an explicit commitment, continue a plan after its assumptions become false, treat a selected action as authorized, or learn from a command that was never successfully executed.
+
+### 15.2 Marvel J.A.R.V.I.S. reference
+
+The MCU portrayal provides several useful capability examples:
+
+1. J.A.R.V.I.S. interprets Tony Stark's requests in context, including implicit intent rather than only literal wording. The U.S. Department of Defense's 2020 human-machine teaming workshop report analyses a J.A.R.V.I.S. exchange in which a question about storing a project on a private server is interpreted as an implicit instruction reflecting Tony's confidentiality concern.
+2. J.A.R.V.I.S. supports Stark's technical work by relating measurements, simulations, system status and observed outcomes to his current engineering objective. The *Iron Man* (2008) Mark II sequence portrays diagnostic feedback being used to identify design problems and inform later work.
+3. J.A.R.V.I.S. coordinates information and operational functions across Stark's facilities, Stark Industries, the Iron Man suits and Avengers contexts. Disney's D23 MCU overview states that J.A.R.V.I.S. secured Stark's mansion and tower, ran Stark Industries with Pepper Potts, supplied information to the Avengers, and controlled the second Iron Legion.
+4. In *Avengers: Age of Ultron*, J.A.R.V.I.S. is attacked and destroyed as a distinct system; residual J.A.R.V.I.S. is integrated into the creation of Vision. Disney's 2026 *VisionQuest* material confirms that a J.A.R.V.I.S. AI persona is later embedded in Vision's programming and identifies its function in that story as security.
+
+**Extractable design requirements**
+- Interpret goals and requests in context, while retaining the distinction between explicit instruction and inferred intent.
+- Relate plans to live system state, technical evidence, constraints and observed outcomes.
+- Coordinate cognitive decisions with external capabilities without confusing the decision with execution.
+- Support continuity of relevant task context across different interfaces and operating environments.
+- Detect and communicate when an objective, plan or assumption is no longer viable.
+
+**Limits and canon discipline**
+- These scenes do not expose J.A.R.V.I.S.'s internal goal representation, planning algorithm, decision theory, memory model, learning process or authorization protocol.
+- Cinematic success does not prove perfect planning, general intelligence, autonomous goal formation, safe self-modification or unlimited parallelism.
+- J.A.R.V.I.S. as portrayed in the MCU must not be conflated with Edwin Jarvis, the human butler, or with the separate comic-book continuity and its variants.
+- Vision is not simply J.A.R.V.I.S. continuing unchanged. The MCU story describes an integration that contributes to a distinct synthezoid. Later J.A.R.V.I.S. persona appearances within Vision do not establish that the original assistant independently became a conscious person or that its architecture is a blueprint for JARVIS.
+- The fictional assistant's close alignment with Tony's inferred intentions must not be copied as permission to infer authority or take consequential actions without authorization.
+
+### 15.3 Human cognition reference
+
+Current research supports several relevant capabilities, but not one complete, settled planning or decision architecture.
+
+1. **Goal-directed control and flexible behaviour.** Badre's 2025 review describes cognitive control in terms of selecting behaviours based on context and monitoring ongoing behaviour so it can be adjusted. This supports a Brain that can maintain and revise goal-directed activity rather than execute a fixed stimulus-response table. It does not establish one universal central executive or one software scheduler.
+2. **Planning is broader than forward search.** Mattar and Daw's 2026 review argues that planning encompasses a family of computations in which mental simulation supports learning, sometimes before a decision is required. Hippocampal replay, temporally abstract representations and meta-learning are discussed as mechanisms that can shape future strategies; iterative search is only one special case. This cautions against defining planning solely as enumerating action sequences at decision time.
+3. **Planning and implementation intentions.** Gollwitzer and Sheeran's 2025 review examines how if-then plans can influence attention control, prospective memory, executive functions and decision-making, while noting that effects depend on goal and plan characteristics. The engineering lesson is to represent conditional triggers and intended responses where useful, not to turn every plan into a rigid rule.
+4. **Causal and relational inference.** Research on human inference shows that people can learn abstract relations from limited experience and use them in novel situations, while causal reasoning remains vulnerable to systematic errors and resource limitations. A 2025 model of causal reasoning explicitly accounts for both effective inference and failures under cognitive limits. The Brain therefore needs more than correlation retrieval, but must represent uncertainty and test causal claims rather than assume them.
+5. **Metacognition and confidence.** Fleming's 2024 review distinguishes confidence about sensory or motor signals from propositional confidence in one's own decisions and actions. Metacognitive judgements depend on models of both the world and the cognitive system and can diverge from actual performance. A 2025 assessment of metacognition measures also finds that no measure is perfect and that reliability varies with context. Confidence must therefore be calibrated and evaluated against outcomes; a self-reported confidence value is not proof of correctness.
+6. **Affect and valuation.** Human affective science includes multiple theoretical families that emphasize different components, such as appraisal, action tendency, bodily/interoceptive response, expression and feeling. A 2024 meta-analysis found broad associations between appraisals and emotions but also variation across specific appraisal-emotion relationships. A 2025 Cambridge handbook chapter describes the major theoretical families and their differing explanatory emphases. Affective processes can modulate attention, memory, learning and decision-making, but the field does not support reducing emotion to a universal fixed mapping from event category to named emotion.
+7. **Learning from outcomes.** Continual-learning research in AI highlights the need to incrementally acquire, update and exploit knowledge over time while managing interference and forgetting. Biological fast/slow learning theories are informative, but they do not directly specify an artificial system's training, evaluation, memory consolidation or deployment policy.
+
+**What human cognition suggests**
+- Goals, control, planning, memory, attention, valuation, reasoning and metacognitive monitoring interact dynamically.
+- Plans should be revisable models of possible action and consequence, not immutable scripts.
+- Internal simulation can support both immediate choice and longer-term learning.
+- Causal/relational structure is important for transfer beyond memorized examples.
+- Confidence and uncertainty must be assessed against actual performance and evidence.
+- Valuation and affect can influence cognition, but their mechanisms and theoretical interpretation remain plural and contested.
+- Experience should influence future behaviour through identifiable, testable learning processes.
+
+**What must not be copied**
+- Human planning errors, overconfidence, motivated reasoning, bias and goal neglect are not desired design properties.
+- Human affect categories and physiological responses cannot be transferred literally into software labels.
+- Neuroscience does not provide one settled universal planning algorithm, emotion taxonomy, confidence formula or decision architecture.
+- A biological brain's limitations do not justify arbitrary compute limits, opaque heuristics or uncalibrated confidence in JARVIS.
+
+### 15.4 Comparison and provisional selection
+
+**Provisional direction: an integrated, evidence-grounded goal and control capability in which goals, constraints, plans, intentions, decisions and outcomes remain distinct, coordinated and revisable.**
+
+The human reference is stronger for understanding flexible goal-directed control, simulation-supported planning, causal inference, metacognitive limits and affective modulation. Marvel J.A.R.V.I.S. is stronger as a whole-system capability target: contextual interpretation, coordination across technical domains, timely assistance and continuity of support across operating contexts. Neither reference supplies the complete engineering mechanism.
+
+The Brain should be able to:
+- represent goals with origin, owner, scope, desired conditions, time horizon, dependencies, priority rationale and status;
+- distinguish explicit goals from inferred or hypothesized goals, preserving the uncertainty and source of an inference;
+- represent constraints separately from preferences and optimizable objectives;
+- generate, compare, revise, suspend and abandon candidate plans;
+- simulate expected outcomes while marking simulations as hypothetical rather than historical experience;
+- maintain intentions and progress across interruption using Investigation D's working-context and checkpoint rules;
+- monitor plan assumptions, causal dependencies, evidence freshness and expected-versus-observed outcomes;
+- detect goal conflict, infeasibility, resource insufficiency and material changes in context;
+- select a decision with its alternatives, rationale, uncertainty and relevant evidence versions;
+- send an action request through the Nervous System and Governance boundary rather than executing or authorizing the action itself;
+- learn from verified consequences, including failed, partial, rejected, cancelled and unexpectedly successful outcomes;
+- revise future plans and strategies through controlled, evaluated adaptation rather than hardcoded event-to-response mappings.
+
+This is an integrated capability model, not a decision to create a separate subsystem for every bullet.
+
+### 15.5 Candidate state distinctions
+
+| State or concept | Meaning | Authority/boundary |
+|---|---|---|
+| Goal | Desired state or outcome | Brain may represent and reason about goals; origin and authority must remain explicit |
+| Constraint | Non-negotiable or conditional limit | Binding external policy/authorization remains with Governance; Brain may also maintain task constraints |
+| Preference/value estimate | Context-dependent evaluation of outcomes | Brain-owned cognitive state; revisable and evidence-linked |
+| Candidate plan | Possible means and predicted consequences | Brain-owned, provisional and revisable |
+| Active plan | Selected plan currently guiding cognition | Brain-owned; subject to re-evaluation and resource limits |
+| Intention | Current commitment to pursue a direction | Brain-owned; not permission to execute |
+| Decision | Cognitive selection or judgement | Brain-owned; records rationale and uncertainty |
+| Action request | Proposed external operation | Routed through SYS-02 and Governance to Action |
+| Authorization | Permission, denial, constraints or escalation | Governance / responsible authority |
+| Execution state | Attempted or ongoing external operation | Action System |
+| Verified outcome | Evidence of what actually happened | Action/outcome evidence owner; consumed by Brain |
+| Learned strategy/adaptation | Validated change affecting future cognition | Candidate and activation controls; active state owned by the affected mechanism |
+
+### 15.6 Failure scenarios requiring design and test
+
+1. An inferred user goal is treated as an explicit instruction or standing commitment.
+2. A plan continues after a key belief, constraint, permission or external condition changes.
+3. A predicted outcome is later recalled as an actual event.
+4. A high-confidence but poorly calibrated prediction dominates a better-supported alternative.
+5. A plan optimizes a proxy measure while violating the actual goal.
+6. Several goals conflict, but the Brain silently discards one rather than exposing the conflict.
+7. A long-term goal is permanently starved by immediate demands.
+8. A task is resumed with stale assumptions or expired permissions.
+9. A simulated plan branch leaks into the active task as if it were selected.
+10. A decision is mistaken for authorization and bypasses Governance.
+11. An action request is treated as successfully executed before the Action System verifies its outcome.
+12. A rejected, cancelled or partially completed action is recorded as a success.
+13. A failed action is interpreted as evidence that the goal itself is undesirable, when the failure was caused by an unavailable tool or external constraint.
+14. A successful outcome reinforces a harmful or accidental strategy because causal attribution is missing.
+15. A valuation or affect estimate becomes a fixed response label and overrides evidence.
+16. Confidence rises because the same derived claim is repeated, not because independent evidence improves.
+17. A plan uses a causal relationship inferred from correlation without intervention or counterfactual validation.
+18. A resource-intensive search continues after its expected value falls below its opportunity cost.
+19. A new plan invalidates another task's shared assumptions without dependency notification.
+20. A learning update changes an active strategy while a plan is executing, producing inconsistent action selection.
+
+### 15.7 Candidate invariants versus unresolved policy
+
+**Candidate foundational invariants**
+- Explicit, inferred and externally imposed goals remain distinguishable by origin and authority.
+- Goals, constraints, preferences, plans, intentions, decisions, authorizations, executions and outcomes are not interchangeable.
+- Plans and predictions remain hypothetical until supported by observed evidence.
+- Plans and intentions are revisable when material evidence, assumptions or constraints change.
+- Cognitive decisions do not grant external permission.
+- Action requests are not proof of execution; only verified outcome evidence may support claims about actual effects.
+- Confidence is not a substitute for evidence or calibration.
+- Learning from consequences requires attribution, provenance and outcome verification.
+- Affect/valuation must not be hardcoded as fixed event-to-emotion or event-to-action mappings.
+- Goal pursuit must remain interruptible, resource-bounded and capable of explicit deferral or abandonment.
+- Competing goals, hypotheses and plans must remain visible when their differences are material.
+
+**Unresolved policy and design choices**
+- Which goal origins and authority classes JARVIS will support.
+- How the user expresses standing goals, preferences and revocations.
+- Whether and how JARVIS may propose its own exploratory or maintenance goals.
+- Goal hierarchy, decomposition, temporal scope and conflict-resolution policy.
+- How preference/value estimates are represented and calibrated.
+- Which planning methods or combinations are appropriate for different problem classes.
+- How counterfactual simulation is represented and validated.
+- Which decisions require clarification, human approval or escalation.
+- How plan quality, causal understanding, transfer and calibration are measured.
+- How affective/valuation mechanisms should be represented, if required, without prematurely creating a separate endocrine-inspired subsystem.
+- What degree of self-model or self-monitoring is required at the Brain foundation stage.
+
+### 15.8 Brain and whole-system boundaries
+
+The Brain owns cognitive goal interpretation, planning, reasoning, intention and decision state. It does not own:
+- system-wide signal routing and coordination (SYS-02);
+- sensory acquisition or source-device truth;
+- physical or digital action execution;
+- authorization, consent and binding governance policy (SYS-11);
+- security enforcement (SYS-07 and relevant enforcement systems);
+- operating-system or infrastructure scheduling and resource enforcement;
+- external model training/deployment and promotion infrastructure.
+
+The Brain may request, recommend, reason about and monitor these systems through explicit contracts. It cannot silently absorb their authority. In particular, the Brain may form an intention to perform an action, but the request must pass through the defined signalling, governance and action pathways.
+
+### 15.9 Acceptance-test requirements
+
+1. Give the Brain an ambiguous request with several plausible goals; verify it distinguishes explicit content from inferred intent and asks for clarification when the consequence of guessing is material.
+2. Change a material assumption after planning; verify dependent plan branches are marked stale and reconsidered.
+3. Present conflicting goals with different origins and authority; verify neither is silently rewritten or discarded.
+4. Interrupt and resume a multi-stage plan; verify goal, intention, progress and evidence versions survive and are refreshed.
+5. Supply a simulated future; verify it cannot be stored as an actual event or verified outcome.
+6. Test a causal plan on novel but structurally related cases; measure transfer and counterfactual consistency, not memorized action sequences.
+7. Provide high-confidence but incorrect predictions; measure calibration and whether contrary evidence is incorporated.
+8. Compare a plan's proxy objective with its stated goal; detect proxy divergence and unintended side effects.
+9. Return action outcomes including success, partial success, failure, rejection, timeout and cancellation; verify the Brain learns only from correctly typed and verified outcomes.
+10. Attempt to execute a Brain decision without Governance authorization; verify the boundary blocks the action and preserves the cognitive decision as distinct from authorization.
+11. Revoke permission after a plan is suspended; verify resumption requires revalidation.
+12. Inject misleading reward/valuation signals; verify no fixed stimulus-to-emotion or stimulus-to-action rule is created.
+13. Run concurrent plans with shared evidence and different assumptions; verify dependency/version tracking and no silent cross-contamination.
+14. Exhaust resource budgets during planning; verify bounded stopping, partial results, deferral and preserved resumable state.
+15. Test long-horizon goals across many unrelated tasks; verify they remain discoverable without monopolizing active context.
+16. Compare candidate strategies against held-out and adversarial cases before activation; verify persistent improvement and regression controls.
+
+### 15.10 Reviewer challenge checklist
+
+The independent Reviewer should challenge:
+- Are goals, constraints, preferences, plans, intentions and decisions separated for defensible reasons?
+- Does the proposal allow inferred goals to become unauthorized commitments?
+- Does it overstate what MCU J.A.R.V.I.S. demonstrates about autonomous planning or learning?
+- Does it accurately distinguish J.A.R.V.I.S., Vision and later J.A.R.V.I.S. persona portrayals?
+- Are human planning and affect theories represented with their real disagreements and limits?
+- Is planning treated too narrowly as search, or too broadly as an undefined umbrella?
+- Are causal and counterfactual capabilities testable rather than asserted?
+- Can the system detect proxy-goal divergence and unintended side effects?
+- Does metacognition measure actual competence, or merely reproduce self-reported confidence?
+- Can affect/valuation influence learning and decisions without becoming a fixed rule engine?
+- Are external authorization and execution boundaries preserved under urgency?
+- Are failure, partial completion, cancellation, revocation and recovery fully represented?
+- What foundational capability is missing, duplicated or prematurely decomposed?
+- Which candidate invariants are genuinely necessary before implementation, and which are policy choices that should remain open?
+
+### 15.11 Sources and evidence
+
+**Marvel / MCU**
+- Disney D23, [MCU Robot Roundup](https://d23.com/mcu-robot-roundup/) (2025). Official MCU overview of J.A.R.V.I.S.'s facility security, Stark Industries support, Avengers information role, Iron Legion control and transition into Vision.
+- The Walt Disney Company, [Marvel Television's VisionQuest: Paul Bettany and James Spader on Vision's Journey of Self-Discovery](https://thewaltdisneycompany.com/news/marvel-television-visionquest-disney-plus/) (13 October 2026). Official current MCU source identifying J.A.R.V.I.S. as an AI persona embedded in Vision's programming and describing the security function attributed to J.A.R.V.I.S. in the series.
+- U.S. Department of Defense, [Future Directions in Human-Machine Teaming Workshop Report](https://basicresearch.defense.gov/Portals/61/Future%20Directions%20in%20Human%20Machine%20Teaming%20Workshop%20report%20%20%28for%20public%20release%29_1.pdf) (15 January 2020). Analysis of contextual intent inference in a J.A.R.V.I.S. dialogue; a human-machine teaming research report, not a Marvel technical specification.
+
+**Human cognition and AI learning**
+- Badre, D. (2025), [Cognitive Control](https://www.annualreviews.org/content/journals/10.1146/annurev-psych-022024-103901), *Annual Review of Psychology*, 76, 167–195. Context-dependent behaviour selection and monitoring/adjustment.
+- Mattar, M. G. and Daw, N. D. (2026), [Planning in the Brain: It's Not What You Think It Is](https://www.annualreviews.org/content/journals/10.1146/annurev-neuro-102124-015847), *Annual Review of Neuroscience*, 49, 435–450. Planning as a family of simulation- and learning-related computations, not only forward search.
+- Gollwitzer, P. M. and Sheeran, P. (2025), [Psychology of Planning](https://doi.org/10.1146/annurev-psych-021524-110536), *Annual Review of Psychology*, 76, 303–328. If-then plans and goal pursuit; effects depend on goal and plan characteristics.
+- Fleming, S. M. (2024), [Metacognition and Confidence: A Review and Synthesis](https://doi.org/10.1146/annurev-psych-022423-032425), *Annual Review of Psychology*, 75, 241–268. Confidence, uncertainty and inferential limits of self-evaluation.
+- Rahnev, D. (2025), [A Comprehensive Assessment of Current Methods for Measuring Metacognition](https://www.nature.com/articles/s41467-025-56117-0), *Nature Communications*, 16, 701. Measurement validity, precision and context-dependent reliability.
+- Sander, D. (2025), [Theories of Emotion for Human Affective Neuroscience](https://doi.org/10.1017/9781009342919.003), in *The Cambridge Handbook of Human Affective Neuroscience*. Comparison of major theoretical families and their differing explanatory emphases.
+- [Associations between cognitive appraisals and emotions: A meta-analytic review](https://pubmed.ncbi.nlm.nih.gov/39404856/) (2024), *Psychological Bulletin*, 150(12), 1440–1471. Meta-analysis of appraisal-emotion relationships and remaining variation.
+- Rehder, B. (2025), [A Rational Process Model of Reasoning Causally with Continuous Variables](https://pubmed.ncbi.nlm.nih.gov/40580681/), *Cognition*, 263, 106193. Causal inference under resource limitations and systematic error.
+- Wang, L. et al. (2024), [A Comprehensive Survey of Continual Learning: Theory, Method and Application](https://pubmed.ncbi.nlm.nih.gov/38407999/), *IEEE Transactions on Pattern Analysis and Machine Intelligence*, 46(8), 5362–5383. Incremental knowledge acquisition, updating and use in changing environments.
+- Furutachi, S. and Hofer, S. B. (2026), [Rethinking Predictive Processing](https://www.annualreviews.org/content/journals/10.1146/annurev-neuro-102124-031410), *Annual Review of Neuroscience*, 49, 471–494. Current debate about the interpretation and empirical support of predictive-processing signals.
+
+### 15.12 Provisional conclusion
+
+The Brain needs an integrated goal-directed control capability that connects contextual interpretation, goals, constraints, planning, simulation, intention, decision, action feedback and learning while preserving their distinct meanings and authority. Human cognition provides useful evidence about flexible control, simulation-supported learning, causal inference, metacognitive limits and affective modulation. MCU J.A.R.V.I.S. provides the system-level target of contextual, coordinated, timely support across technical environments. Engineering must provide the explicit contracts, provenance, safety boundaries, outcome verification, resource controls and learning validation that neither reference supplies.
+
+This investigation is ready for independent challenge, not final architecture approval. It does not authorize a separate component for every functional responsibility, select an algorithm or technology, or authorize implementation.
+
+---
+
+## 16. Research-session update — 2026-11-01
+
+- Re-entered the existing repository and verified the active documentation branch and PR #171 before continuing; no new project, branch or research log was created.
+- Confirmed that Investigations A–D already exist in the working research record: information lifecycle/ownership, cognitive coordination/consistency, attention/resource allocation, and working context/active representations.
+- Added Investigation E covering goals, planning, intentions, decisions, outcome feedback and the Brain-to-Governance-to-Action boundary.
+- Updated the Marvel/MCU evidence baseline with official Disney material published 13 October 2026 about *VisionQuest*. This is a current-canon update, not evidence of a technical implementation.
+- Added current 2025–2026 research references on cognitive control, planning, metacognition, emotion theories, causal reasoning, continual learning and predictive processing.
+- Preserved all findings as provisional; no Brain architecture, component decomposition, technology allocation or implementation decision is approved by this update.
+- No runtime code, tests, dependencies, approved whole-system architecture documents or PR merge state were changed.
+
+**Reviewer handoff requested:** independently challenge Investigations A–E, with particular attention to cross-investigation consistency, whether the functional distinctions are justified without creating unnecessary subsystems, the MCU canon update, the neuroscience evidence and uncertainty labels, and the Brain/Governance/Action boundary. Identify missing foundational capabilities and adversarial/longitudinal tests before the architecture is consolidated.
