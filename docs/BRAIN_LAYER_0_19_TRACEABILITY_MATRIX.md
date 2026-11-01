@@ -63,7 +63,41 @@ The following paths are required by the Brain target. The arrows describe inform
 
 A diagram or source-file call graph alone is insufficient. For each path, the implementation must demonstrate the actual state and information transfer, with provenance and observable consequences.
 
-## 4. Cross-cutting contracts required by all applicable layers
+## 4. Verified C++ integration path at the inspected implementation baseline
+
+A targeted source inspection went beyond filenames and build-manifest presence. The following path is directly visible in the inspected C++ implementation. It is evidence of meaningful existing integration, but it is not evidence that all layers or all real-world behaviors are complete.
+
+### 4.1 Observation-to-reasoning/planning path
+
+1. `CognitiveRuntime::submit` accepts a `CognitiveCycleInput`, optionally evaluates trigger signals, and queues work with a priority in `core/cpp/src/cognitive_runtime.cpp` (approximately lines 83–126).
+2. The runtime worker consumes queued input and calls `CognitiveCycle::run`; it processes feedback work on the same worker path (`cognitive_runtime.cpp`, approximately lines 127–150 and 223).
+3. `CognitiveCycle::run` retrieves prior memories before recording the current observation, including targeted action-outcome retrieval; then calls `Brain::observe` (`core/cpp/src/cognitive_cycle.cpp`, approximately lines 150–190).
+4. `Brain::observe` validates the event, assigns timestamp/novelty metadata, appends it to `Memory`, assigns the durable sequence, updates Brain counters and calls `replay` and experience consolidation (`core/cpp/src/brain.cpp`, approximately lines 1124–1166).
+5. The cycle sends the committed event to `PerceptionPipeline::process`, then collects beliefs, causal links, affective state, attention and disputed world facts (`cognitive_cycle.cpp`, approximately lines 238–289).
+6. The cycle constructs a `ReasoningProblem`, calls `ReasoningEngine::solve`, uses supported conclusions (or observed beliefs when reasoning is invalid/empty) as simulation assumptions, and passes projections through `Brain::predict` (`cognitive_cycle.cpp`, approximately lines 290–325).
+7. Reflection is computed before planning; eligible goals are selected; uncertainty combines attended evidence, disputes, reflection, predictions and perceptual confidence; candidate actions are constrained by capability availability before planning and decision (`cognitive_cycle.cpp`, approximately lines 326–410 and later decision/assessment code).
+8. The selected plan's steps become decision candidates; the cycle invokes the Brain's decision engine and action model and returns assessments with the developmental context preserved (`cognitive_cycle.cpp`, approximately lines 737–767).
+
+### 4.2 Action-to-outcome-to-learning path
+
+1. `CognitiveRuntime::execute_actions` executes only actions present in the selected plan, not every candidate alternative. It invokes the configured adapter only for executable dispositions and records rejected, failed or verified execution status (`cognitive_runtime.cpp`, approximately lines 155–205).
+2. When an action result can produce evidence, the runtime submits feedback through `CognitiveRuntime::submit_feedback`; feedback is validated before queueing (`cognitive_runtime.cpp`, approximately lines 86–125 and 200–205).
+3. The worker later calls `CognitiveCycle::process_outcome`. That path resolves prediction feedback by prediction sequence/key, calls `Brain::learn` for evidence, assimilates goal progress when supplied, then refreshes affective and reflective state (`cognitive_cycle.cpp`, approximately lines 770–800).
+4. `Brain::learn` appends a learning event to durable memory and calls `replay` and consolidation (`brain.cpp`, approximately lines 1168–1199).
+5. In `Brain::replay`, validated prediction outcomes update prediction/attention/affective learning; validated action outcomes update capability performance and developmental strategy learning when observed consequences are available (`brain.cpp`, approximately lines 463–520 and 680–760).
+
+This is a real code-level feedback path across runtime, cognitive cycle, memory, perception, reasoning, prediction, goals, planning, decision, execution and learning. It materially corrects any claim that the repository contains only isolated modules. It does **not** prove broad generalization, fully acquired intelligence, production action integration, complete evidence trust, or every Layer 0–19 requirement.
+
+### 4.3 Important limits exposed by the same inspection
+
+- The runtime uses bounded in-memory input, feedback and result queues. This establishes a local worker/queue path, not a durable distributed event scheduler or online/offline synchronization protocol.
+- `Event` currently contains sequence, timestamp, source, kind and scalar attributes. It does not by itself define globally unique event identity, origin attestation, causal parent, correlation, schema version or cross-host sequence namespace.
+- `Memory` journals events and stores metadata snapshots/updates, but its current `MemoryTier` enum exposes Working, Episodic, Semantic and Procedural. The full intended associative and autobiographical memory taxonomy is not represented as distinct tiers in this header.
+- `KnowledgeEvidence` includes a `provenance_id`, and the knowledge model distinguishes verified from unverified origins. The general event/representation contract must still define how this identity is minted, authenticated, propagated and linked to every downstream claim.
+- The inspected Rust `BrainRuntime` publicly owns its own `CognitiveState` with a beliefs map and working-memory vector. The audit confirms the duplicate state implementation exists; caller/dependency analysis is still required to determine whether it is an active competing runtime or an unused prototype.
+- The inspected TypeScript `BrainTransport` exposes `observe`, `decide` and `capabilities`; the operator session uses an agent bridge transport. This is an interface contract, not proof of a complete read-only monitoring stream, lifecycle protocol, authenticated production transport or synchronized state projection.
+
+## 5. Cross-cutting contracts required by all applicable layers
 
 The matrix cannot be considered implementation-ready until the following contracts are specified and versioned.
 
