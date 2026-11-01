@@ -106,7 +106,7 @@ The existence of these branches does not make their contents approved or binding
 
 1. Keep the overall readiness status **NOT CLEAR TO PROCEED** until the P0 work packages are complete and independently reviewed.
 2. Maintain one architecture decision/conflict register. Record the already-resolved Layer 1/Priority-One sequence and provider/source wording as resolved; record Rust ownership, event/persistence technology, synchronization identity/protocol, and other actual open choices as unresolved.
-3. Build the Layer 0–19 target-to-mechanism traceability matrix from the existing Blueprint, behavioral target, language map and actual source tree.
+3. **Drafted:** `docs/BRAIN_LAYER_0_19_TRACEABILITY_MATRIX.md` now maps all 20 layers to target mechanisms, candidate implementation/test locations, proposed authority, dependencies, feedback paths and independent acceptance evidence. It remains a working artifact; exact call-path and state-owner verification are outstanding.
 4. Formalize the general cognitive state/event/persistence contract, reusing the Priority-One trust contract as a specialized security requirement.
 5. Consolidate the existing cognitive flows into an operational cross-layer cycle specification.
 6. Formalize the shared representation/evidence contract from existing C++ types, perception contracts, knowledge mechanisms and trust rules.
