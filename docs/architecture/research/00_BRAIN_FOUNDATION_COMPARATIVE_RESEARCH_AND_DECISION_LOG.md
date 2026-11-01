@@ -1083,3 +1083,240 @@ The independent Reviewer should challenge:
 The strongest current direction is an **engineered, context-sensitive, multi-factor attention and resource-allocation capability** that separates selection, goal maintenance, compute allocation, interruption, background monitoring, switching and disengagement. Human cognition is the stronger reference for the competing influences and dynamic control problem; Marvel J.A.R.V.I.S. supplies the operational target of contextual, timely assistance across multiple concurrent demands. Neither provides a sufficient software allocation policy, so explicit budgets, hard constraints, fairness, provenance, auditability and safe adaptation must be engineered.
 
 The next investigation should examine **working context, active representations and the interface between attention and memory**. This is necessary to determine what it means for information to be actively available, how active goals survive interruption, what may be displaced, and how working context differs from durable memory and transient processing state. This next question must be compared with Investigation A's information ownership and Investigation B's coordination/version model rather than designing a separate, inconsistent working-memory subsystem.
+
+
+---
+
+## 14. Investigation D — Working Context, Active Representations and the Interface Between Attention and Memory
+
+**Status:** Working comparative research; provisional, not approved architecture or implementation authorization.  
+**Question:** What makes information actively available to cognition, how do goals survive interruption, what may be displaced, and how does working context differ from durable memory and transient processing?
+
+### 14.1 Problem framing
+
+Investigations A–C distinguish information ownership, coordination/consistency and attention/resource allocation. They do not yet explain how a task obtains a coherent, usable set of current information and control state. A Brain can preserve every experience and allocate attention while still failing because the relevant evidence, goal, constraints, task progress and current assumptions are not assembled together. Conversely, keeping everything active creates interference, stale assumptions, resource exhaustion and cross-task contamination.
+
+This investigation concerns the controlled construction, maintenance, isolation, suspension and reactivation of task-relevant cognitive state. It must not create a duplicate memory system, a second attention system or an unbounded universal context store.
+
+### 14.2 Marvel J.A.R.V.I.S. reference
+
+The MCU portrayal supplies operational examples, not an internal architecture:
+
+1. In *Iron Man* (2008), J.A.R.V.I.S. scans Tony's device and relates its measured properties to Tony's stated purpose, identifying a discrepancy between stated intentions and the device's output. This demonstrates contextual interpretation: current task, object, stated goal and measured evidence are used together.
+2. During the Mark II test sequence, J.A.R.V.I.S. imports preferences from the home interface, calibrates a virtual environment, checks control surfaces, responds to weather/air-traffic requests, warns about incomplete calculations and detects a potentially fatal ice buildup. The later diagnostic discussion uses the flight outcome to inform design changes. This portrays relevant context following a task across a change of environment, with observations and outcomes informing subsequent work.
+3. Tony creates a Mark II project file and chooses a private server rather than Stark Industries' central database because he does not know whom to trust. This illustrates project-scoped information custody and separation rather than indiscriminate sharing.
+4. J.A.R.V.I.S. supports both home and suit environments, suggesting that useful context can follow the task across interfaces and embodiments.
+
+**Extractable lessons:** active cognition must combine current observations with relevant goals, preferences and retained knowledge; context must adapt when tasks/environments change; project information may have distinct access boundaries; diagnostic outcomes should remain connected to the task that produced them.
+
+**Limits:** these scenes do not reveal whether J.A.R.V.I.S. uses task frames, databases, caches, snapshots, event sourcing or any particular working-memory model. They do not prove lossless interruption, unlimited concurrency, perfect retrieval or privacy enforcement. The private-server scene is not a complete security specification.
+
+Scene references (screenplay/transcript copies hosted by third parties; useful to locate depicted events, not authoritative architecture documentation):
+- https://assets.scriptslug.com/live/pdf/scripts/iron-man-2008.pdf
+- https://overblack.org/script/iron-man-2008
+- https://www.stockq.org/moviescript/I/iron-man.php
+
+### 14.3 Human cognition reference
+
+Working memory is not a single settled box. Theories differ on component structure, attention's role, the relationship to long-term memory and whether active maintenance relies on persistent activity, temporary accessibility or latent states that can later be reactivated.
+
+Relevant findings:
+- Working memory supports temporary maintenance and use of information for current cognition, including goals, task rules and representations; it is goal-directed, not merely short-term storage.
+- Embedded-processes/state-dependent accounts distinguish activated long-term representations from a narrower focus of attention. The exact capacity estimates and theoretical boundaries remain contested. The engineering lesson is to distinguish accessible background knowledge from currently focal material, not to copy a human item limit.
+- Maintenance and updating compete: task goals and rules must be protected against distraction, but selectively updated when circumstances change. Computational models treat selective gating as a central problem.
+- Egner's 2023 review distinguishes cognitive stability (protecting a task focus) and flexibility (switching when circumstances warrant), proposing partly independent mechanisms and learning shaped by recent demands/context recognition.
+- Interruptions impose resumption costs. Resumption may require preserving/reconstructing the primary goal, switching to the interrupting task, then reactivating relevant information and task rules. The causes of resumption cost remain under investigation.
+- A 2024 study reports evidence that task termination can trigger spontaneous removal of no-longer-relevant visual working-memory content. This supports explicit release after completion.
+- A 2024 *Nature Human Behaviour* perspective reviews evidence that working-memory representations are structured and task-sensitive, not simply passive copies of sensory input.
+- A 2024 review argues that context in memory may be reconstructed in relation to the retrieval question and task demands. This is a theoretical position, not settled consensus, but cautions against assuming one fixed context bundle is always the right retrieval unit.
+
+**Limits:** human memory's forgetting, interference, reconstruction errors and goal neglect are not design goals. Capacity estimates depend on task and theory. Neural accounts of persistent, latent and reactivated states remain debated. Biological boundaries do not dictate software component boundaries.
+
+### 14.4 Comparison and provisional selection
+
+**Provisional direction: an engineered, task-scoped working-context capability with explicit active-state tiers, selective updating, durable suspension records and version-validated reactivation.**
+
+Human cognition is the stronger reference for focal attention, activated/accessibly retained information, goal maintenance and selective updating. Marvel supplies the operational requirement: useful context must follow tasks across projects and environments while preserving information separation. Neither provides software ownership, consistency, privacy or recovery contracts; these must be engineered.
+
+> Working context is not the Brain's memory of everything. It is the currently maintained, task-relevant configuration of information and control state that makes a particular line of cognition coherent.
+
+It should be scoped, selective, structured, version-aware, revisable, suspendable, reconstructable, bounded, isolated by default and auditable. This is a capability/responsibility, not yet a decision to create a standalone subsystem or database.
+
+### 14.5 Information classes that must remain distinct
+
+| Class | Meaning and authority | Relationship to working context |
+|---|---|---|
+| Original experience | Historical source record; immutable as a record, subject to retention/privacy policy | Referenced or selectively summarized, never rewritten |
+| Episodic memory | Retained representation of a particular event/context | Retrieved when relevant; not automatically active |
+| Semantic knowledge | Generalized concepts, facts and relationships | Retrieved/activated as needed |
+| Belief state | Current epistemic commitment and uncertainty, owned by belief/knowledge responsibility | Referenced with version and qualification |
+| Working context | Task-scoped active configuration; mutable, suspendable and recoverable | Object of this investigation |
+| Focus of attention | Focal subset/operation receiving privileged processing | Selects within/over context; does not own all context |
+| Scratch state | Intermediate calculations, partial parses and speculative branches | Ephemeral unless explicitly marked persistable |
+| Prediction/simulation | Possible future and assumptions, not actual experience | May inform context, clearly typed |
+| Goal/constraint | Desired outcome, commitment or boundary | May persist durably while dormant and not focal |
+| Intention/decision | Chosen cognitive direction, distinct from authorization/execution | Referenced with rationale/version |
+| Cache/index | Performance copy, normally rebuildable and non-authoritative | May accelerate assembly; presence is not activation |
+| Checkpoint | Recoverable description of paused task state and dependencies | Starting point for reconstruction, not authoritative belief store |
+
+Persistence, accessibility, activation, focal attention and authority are separate dimensions. A goal can persist without being focal; a memory can be retrievable but inactive; a cache can be warm but stale; scratch computation can be active but not worth preserving.
+
+### 14.6 Candidate context structure and lifecycle
+
+A context may carry or reference: stable task/context ID and lineage; scope/project; lifecycle state; purpose and success conditions; active goals/subgoals/constraints; task phase and progress; relevant entities/events; selected observations with provenance; hypotheses and alternatives; referenced beliefs with versions; predictions labelled as simulations; pending questions and contradictions; decisions/intents; retrieval pointers; dependency/version manifest; deadline/resource state; privacy/access/retention labels; checkpoint integrity and recovery metadata.
+
+Prefer compact representations plus references over copying large source payloads. Summaries are lossy derived views and must retain provenance links and uncertainty; they must not silently become the only surviving evidence.
+
+Candidate lifecycle:
+1. **Assemble:** combine triggering experience, active goals/constraints, relevant memory, current beliefs, task history and applicable system information.
+2. **Validate:** check source access, provenance, relevance, integrity, privacy, freshness and version compatibility. Missing information remains explicitly missing.
+3. **Activate:** attention selects the context or subset for processing; activation does not make every item focal.
+4. **Maintain:** update progress, evidence and decisions through the context's designated owner. Unrelated input does not overwrite it by default.
+5. **Background:** permit selected low-cost monitoring without full activation, under explicit budgets.
+6. **Suspend:** checkpoint goal, progress, unresolved issues, causal history and dependencies sufficient for safe resumption. Omit scratch state unless explicitly needed and safe.
+7. **Resume:** validate dependencies, beliefs, permissions and changed circumstances; refresh or reconstruct before continuing. A checkpoint is not proof that assumptions remain current.
+8. **Complete/cancel/supersede:** release active resources; preserve durable evidence/outcomes under their separate owners and retention rules.
+9. **Archive/expire:** retain, compact or delete non-authoritative context according to policy.
+
+These are candidate states, not necessarily one linear state machine. Contexts may branch, reopen or be reconstructed after failure; transitions and authority need definition.
+
+### 14.7 Goal persistence, task isolation and displacement
+
+Do not confuse **goal persistence** with **continuous activation**.
+
+- Give goals/tasks durable identities, origins, owners, status, constraints, dependencies, success conditions and cancellation/supersession history.
+- Keep only a selected subset active in working context. Dormant goals remain discoverable without consuming focal resources.
+- Reactivate on relevant deadlines, new evidence, dependency changes or explicit requests, not merely because similar words appear.
+- Preserve conflicting goals and expose conflicts to arbitration; do not silently overwrite one.
+- Distinguish inferred goals, user commitments, standing preferences and system constraints. Inferred goals retain uncertainty and do not become binding commitments without appropriate authority.
+- Each task has separate mutable working state by default. Shared information is referenced through authoritative owners or explicit versioned read models.
+- Cross-task transfer is explicit, provenance-preserving and access-checked. A copied summary is not an independent source.
+- Parent/project contexts may coordinate child tasks without absorbing their private mutable state.
+
+When capacity is reached:
+- Protect hard constraints, safety-relevant context and minimum state required for safe resumption.
+- Do not keep everything marked important permanently active.
+- Demote or retrieve non-focal information rather than deleting authoritative records.
+- Prefer explicit completion/cancellation/supersession to age-only expiry.
+- Consider current/near-term relevance, omission consequence, dependency role, freshness, uncertainty, retrieval cost, privacy and reactivation likelihood; do not assume a universal score.
+- Preserve unresolved contradictions and minority hypotheses when material.
+- Summaries must retain source links, uncertainty and exceptions.
+- Record consequential demotion/eviction reasons.
+- Bound dormant contexts and background monitoring; dormant state still consumes resources and carries privacy risk.
+- If reconstruction is incomplete, mark the context degraded/recovery-required rather than pretending it resumed normally.
+
+Do not import a fixed human working-memory item count. Establish engineering budgets through measured compute, latency, storage, task complexity and error trade-offs.
+
+### 14.8 Integration with Investigations A–C
+
+**A — Information lifecycle:** context references authoritative experience, memory and belief records; it is not a second source of truth. Interpretations remain hypotheses with provenance. Upstream changes mark dependent context stale; refresh or qualify it. Context summaries are derived views.
+
+**B — Coordination:** contexts need stable identity, owner, version, causal metadata and idempotent updates. Late results cannot overwrite newer progress. Resume reconciles versions and causality without assuming global total order. Crashes during checkpoint/activation must yield a recoverable state, not a half-active context.
+
+**C — Attention:** attention selects which context or element receives focal processing and resources. Context supplies structured candidates and protected task state; it does not set its own priority. Interrupt policy controls pre-emption; background monitoring is not full activation. Switching cost must be considered.
+
+### 14.9 Privacy and trust
+
+Context may contain sensitive information even when active only temporarily. Access restrictions must follow source information through summaries, caches, checkpoints and retrieval. Separate users/projects/trust domains by default. A private project must not leak through global caches, diagnostics or unrelated task summaries. Checkpoints receive the same protection as their contents. Retention of scratch state, active context, suspension records and durable experience must be governed separately. Retrievability is not permission to use. Governance/security remain authoritative for access policy and enforcement.
+
+### 14.10 Failure scenarios
+
+| Scenario | Required response |
+|---|---|
+| Unrelated input overwrites active reasoning | Selective update; switch only through attention policy |
+| Quiet goal lost when focus changes | Durable goal identity independent of focal attention |
+| Resume from stale checkpoint | Dependency/version validation and refresh |
+| Two tasks share mutable state | Isolation and explicit shared-state contracts |
+| Summary replaces evidence | Derived view with source links and uncertainty |
+| Completed task remains active | Terminal lifecycle transition and resource release |
+| Cancelled task unexpectedly resumes | Cancellation tombstone and reactivation control |
+| Inferred goal becomes commitment | Preserve provenance/uncertainty and authority distinction |
+| Late result overwrites newer progress | Version-aware update/reconciliation |
+| Concurrent updates lose changes | Owner-controlled conflict/merge semantics |
+| Capacity eviction removes critical constraint | Protected state and recoverable checkpoint |
+| Everything remains active | Bounded active/background tiers |
+| Retrieval crosses project boundary | Scope and access validation |
+| Cache serves stale belief | Version/freshness checks; cache non-authoritative |
+| Simulation becomes experience | Typed state and provenance validation |
+| Crash during suspension | Atomic/journaled checkpoint recovery |
+| Crash during resume | Idempotent resume and explicit activation state |
+| Two resumptions race | Single activation owner/lease or equivalent |
+| Old goal conflicts with new constraint | Reconcile before resumption |
+| Permission revoked while suspended | Re-authorize at use time |
+| Sensitive scratch persisted unnecessarily | Persistability classification and minimization |
+| Summary hides contradictory evidence | Preserve alternatives and unresolved conflict |
+| Background monitor lives forever | Budget, relevance review and renewal |
+| Keyword similarity reactivates irrelevant task | Contextual trigger plus arbitration |
+| Reconstruction lacks records | Explicit incompleteness and degraded mode |
+| Context becomes second belief database | Reference authoritative belief owner |
+| Cross-trust summary leaks data | Propagate access labels through derivation |
+| Read sees mixed versions | Snapshot/read consistency or version pinning |
+| Context version current but dependency stale | Transitive dependency freshness validation |
+
+### 14.11 Candidate invariants and unresolved choices
+
+**Candidate invariants**
+- Working context is task-scoped and distinct from durable memory, belief state, focal attention and transient scratch.
+- Persistence does not imply continuous activation.
+- Active context preserves the goal, relevant constraints and enough state for coherent work.
+- Interruption does not silently erase task identity, progress or unresolved issues.
+- Resumption validates dependencies, versions, permissions and changed circumstances.
+- Completed/cancelled/superseded tasks release active resources under explicit rules.
+- Summaries and caches are derived/non-authoritative unless designated otherwise.
+- Cross-task mutable state is isolated by default.
+- Missing, stale or inaccessible information is represented honestly.
+- Context changes preserve provenance and do not rewrite original experience.
+- Privacy restrictions propagate through assembly, copying, checkpointing and retrieval.
+- Lifecycle transitions are observable/auditable.
+- Working context does not authorize external action.
+
+**Unresolved:** component decomposition; active/background storage model; schema/serialization/versioning; checkpoint granularity; persistable scratch classes; context budgets; eviction/summarization policy; context merge/fork rules; goal hierarchy/reactivation; consistency guarantees; retention/deletion; recovery guarantees; language/storage/process topology.
+
+### 14.12 Acceptance-test requirements
+
+1. Interrupt a multi-step task, perform an unrelated urgent task, then resume; verify goal, progress, unresolved issues and provenance, while refreshing changed dependencies.
+2. Change a belief, constraint or permission after suspension; stale checkpoint must not continue unchanged.
+3. Run concurrent tasks with overlapping entities but distinct goals/assumptions; no cross-mutation.
+4. Keep a long-term goal dormant across many tasks; it remains discoverable without consuming focal resources.
+5. Inject irrelevant, misleading and salient inputs; they do not overwrite protected context, while valid urgent interrupts still work.
+6. Complete/cancel a task; active resources release while required historical outcomes remain accessible.
+7. Summarize context containing uncertainty and conflicting sources; do not convert them into settled facts.
+8. Deliver duplicate, delayed and concurrent updates; verify idempotence, conflict visibility and no lost newer state.
+9. Crash at each checkpoint/suspend/resume stage; recover a valid state or explicit recovery-required state, never an unmarked hybrid.
+10. Attempt cross-project reuse; access restrictions survive summary, cache and checkpoint transformations.
+11. Generate large scratch calculations; only explicitly persistable state is checkpointed.
+12. Remove caches and reconstruct from authoritative records; produce equivalent relevant state or an explicit degradation report.
+13. Exceed context budgets; protected constraints survive and demotion/eviction is justified and recoverable.
+14. Reactivate an old goal after a newer conflicting constraint; detect and arbitrate before continuation.
+15. Replaying a checkpoint or retrieving memory does not count as a new experience or learning event.
+16. Run multiple contexts over simulated long periods with changing beliefs/preferences; detect drift and cross-contamination.
+17. Inject untrusted content attempting to alter another task's goal, identity, access scope or constraints; content cannot become authoritative control state merely by appearing in context.
+18. Reconstruct why items were active, backgrounded, evicted or restored, including source/version and policy path.
+
+These require integration, fault-injection, adversarial and longitudinal tests—not only serialization/retrieval unit tests.
+
+### 14.13 Reviewer challenge checklist
+
+Challenge whether working context is functionally distinct from memory, belief, attention and scratch; whether it accidentally becomes a universal context object; whether Marvel examples overclaim internal mechanisms; whether human theories are represented as contested where appropriate; whether goal persistence avoids both loss and permanent activation; whether interruption/resumption contracts are testable; whether task isolation permits legitimate sharing; whether stale dependencies/permissions are detected transitively; whether summaries preserve evidence lineage; whether eviction avoids simplistic recency scoring; whether privacy propagates through derived data; whether crash/concurrency cases are covered; and whether any proposed invariant prematurely dictates implementation.
+
+### 14.14 Sources and evidence
+
+- Baddeley, A. (2012), [Working Memory: Theories, Models, and Controversies](https://www.annualreviews.org/content/journals/10.1146/annurev-psych-120710-100422), *Annual Review of Psychology*, 63, 1–29 — theoretical diversity and competing models.
+- Egner, T. (2023), [Principles of cognitive control over task focus and task switching](https://www.nature.com/articles/s44159-023-00234-4), *Nature Reviews Psychology*, 2, 702–714 — stability, flexibility, task focus and switching.
+- Hazy, T. E., Frank, M. J. and O'Reilly, R. C. (2023), [Computational Neuroscience Models of Working Memory](https://www.cambridge.org/core/books/abs/cambridge-handbook-of-computational-cognitive-sciences/computational-neuroscience-models-of-working-memory/E6AB2DE73E28801FBD5746D067AA6D58) — selective gating and maintenance/updating trade-offs.
+- Tsubomi, H. et al. (2024), [Task Termination Triggers Spontaneous Removal of Information From Visual Working Memory](https://journals.sagepub.com/doi/10.1177/09567976241246709), *Psychological Science* — task completion and release of active information.
+- Bays, P. M. et al. (2024), [Representation and computation in visual working memory](https://www.nature.com/articles/s41562-024-01871-2), *Nature Human Behaviour*, 8, 1016–1034 — structured, task-sensitive working-memory representations.
+- Easton, A. et al. (2024), [Context in memory is reconstructed, not encoded](https://www.sciencedirect.com/science/article/pii/S0149763424004032), *Neuroscience & Biobehavioral Reviews*, 167, 105934 — a theoretical account of retrieval-dependent context.
+- Hirsch, P. et al. (2024), [Task-interruption resumption costs](https://pubmed.ncbi.nlm.nih.gov/37674056/), *Memory & Cognition*, 52, 271–284 — decay/inhibition hypotheses for suspended goals.
+- Rose, N. S. (2020), [The Dynamic-Processing Model of Working Memory](https://journals.sagepub.com/doi/10.1177/0963721420922185) — latent and reactivated working-memory states.
+- [The multicomponent model of working memory fifty years on](https://pmc.ncbi.nlm.nih.gov/articles/PMC11783980/) (2025) — current theoretical diversity and shared functional features.
+- [EEG correlates of cognitive dynamics in task resumption](https://pmc.ncbi.nlm.nih.gov/articles/PMC11851001/) (2025) — interruption, task-state maintenance and resumption.
+- *Iron Man* (2008) screenplay scene references: https://assets.scriptslug.com/live/pdf/scripts/iron-man-2008.pdf ; https://overblack.org/script/iron-man-2008 ; https://www.stockq.org/moviescript/I/iron-man.php — secondary-hosted scene text only, not technical specifications.
+
+### 14.15 Provisional conclusion
+
+The strongest direction is a **task-scoped, version-aware working-context capability** that keeps relevant goals, constraints, representations, evidence references and progress coherently available without making all retained information continuously active. It supports selective activation, backgrounding, suspension, checkpointing, dependency validation, reconstruction and controlled release.
+
+The central warning is that **durable memory, active working context, focal attention, transient computation and a resumable checkpoint are not interchangeable**. Collapsing them creates unclear ownership, stale reasoning, resource leakage, privacy risks and unreliable resumption.
+
+The next integrated investigation should examine goals, plans, intentions and decision state across contexts, including the boundary between cognitive intention and externally authorized action. It must reconcile A–D rather than invent another isolated mechanism.
