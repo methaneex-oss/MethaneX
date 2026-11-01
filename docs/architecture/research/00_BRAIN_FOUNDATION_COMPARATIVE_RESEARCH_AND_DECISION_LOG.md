@@ -2152,3 +2152,24 @@ The record already distinguishes experience retention, memory organization, beli
 7. Which learning classes can update online, which need candidate validation, and how do these policies vary with consequence and reversibility?
 8. Which cognitive capabilities are essential for the first developmental Brain, and which should remain advanced or acquired?
 
+
+
+### 21.13 Human whole-system reference — first-pass findings
+
+The human reference pass must not stop at the brain. Human physiology describes an integrated organism with many interacting local and long-range control systems. This is relevant to whole-JARVIS boundaries, even though the immediate design subject remains the Brain.
+
+- The nervous system has sensory, integration and response functions, with somatic and autonomic control paths. Anatomical and functional divisions do not map one-to-one; the same structures can participate in multiple functions. This is a warning against copying anatomical labels into software component names.
+- The autonomic and enteric systems demonstrate that some regulation can occur locally or without deliberate central control. A whole system therefore need not route every state transition through one central cognitive authority.
+- Nervous and endocrine regulation differ in signal speed, range and duration, and interact. This is a useful reference for multiple timescales and coordination, not a reason to build a literal endocrine software subsystem.
+- Homeostasis combines local and reflex control. The physiology literature distinguishes maintaining variables within viable ranges from allostatic adjustment to changing demands, and describes feedback and anticipatory/feedforward regulation. A software analogy must be translated into explicit operational requirements before use.
+- Immune and nervous functions interact in maintaining and restoring homeostasis. This supports examining cross-system coordination, but biological immunity is not equivalent to cybersecurity, authorization or security enforcement.
+- Cardiovascular, respiratory, metabolic, musculoskeletal, integumentary and other systems provide transport, energy, movement, protection and sensing functions that support the organism. Their existence does not require one software system per human organ system.
+
+**Engineering implication:** whole-JARVIS architecture should identify functional responsibilities, local authorities, feedback paths, timing, resource dependencies, fault containment and system boundaries. The Brain can remain the cognitive authority without becoming the sole controller of every operational or regulatory process. The proposed human-system analogy is a source of questions, not a blueprint.
+
+**Sources checked**
+- Libretti and Puckett, [Physiology, Homeostasis](https://www.ncbi.nlm.nih.gov/books/NBK559138/), StatPearls/NCBI Bookshelf (updated 2023).
+- OpenStax, [Basic Structure and Function of the Nervous System](https://openstax.org/books/anatomy-and-physiology-2e/pages/12-1-basic-structure-and-function-of-the-nervous-system).
+- [The Peripheral Neuroimmune System](https://doi.org/10.1093/jleuko/qiae230), *Journal of Leukocyte Biology* (2024).
+- Tsigos et al., [Stress: Endocrine Physiology and Pathophysiology](https://www.ncbi.nlm.nih.gov/books/NBK278995/), Endotext/NCBI Bookshelf.
+
