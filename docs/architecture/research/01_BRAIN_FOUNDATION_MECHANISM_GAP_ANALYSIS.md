@@ -253,7 +253,7 @@ The independent Reviewer should challenge:
 
 ## References
 
-1. Hakim, S. B., Adil, M., Velasquez, A., & Song, H. H. (2026). *Neuro-symbolic agentic AI: Architectures, integration patterns, applications, open challenges and future research directions*. Computers & Security. https://doi.org/10.1016/j.cose.2026.100902
+1. Hakim, S. B., Adil, M., Velasquez, A., & Song, H. H. (2026). *Neuro-symbolic agentic AI: Architectures, integration patterns, applications, open challenges and future research directions*. Computer Science Review. https://doi.org/10.1016/j.cosrev.2026.100902
 2. *How metacognitive architectures remember their own thoughts: A systematic scoping review* (2026). Artificial Intelligence Review. https://doi.org/10.1007/s10462-026-11669-5
 3. Dulam, S. D., Dancy, C. L., & Gay, J. R. (2026). *New knowledge source pipelines for sociocultural representations in a cognitive architecture*. Frontiers in Psychology, 17. https://doi.org/10.3389/fpsyg.2026.1874556
 4. *Towards visual-symbolic integration in the Soar cognitive architecture* (2025). Cognitive Systems Research, 91, 101353. https://doi.org/10.1016/j.cogsys.2025.101353
