@@ -2065,3 +2065,90 @@ No candidate has been selected. A hybrid may ultimately be appropriate, but “h
 Independently challenge the alternative-family framing, especially whether the candidate families are comparable at the same architectural level; whether the five dimensions are sufficient; whether a shared workspace or central controller is being assumed; whether distributed execution is being smuggled in by modular language; whether LLM-centric designs are being mistaken for a Brain; whether the Soar/CLARION/BDI summaries overstate their capabilities; and whether the proposed representation, language, self-model and learning questions are truly foundational or should be staged.
 
 **No architecture selection, technology assignment, implementation authorization or final Brain specification is made by this update.**
+
+
+### 21.7 Further findings — language, representation and self-monitoring
+
+**Language is a cognitive capability and an interaction boundary, not a programming-language assignment.**
+
+The research must distinguish:
+- signal capture and preprocessing (audio, text, video captions or other external input);
+- speech recognition/transcription or equivalent modality conversion;
+- linguistic interpretation, including syntax, semantics, reference resolution and ambiguity;
+- pragmatic interpretation using speaker, situation, shared context, intention and conversational history;
+- grounding language references in current representations and evidence;
+- language-mediated reasoning and instruction interpretation;
+- response formulation and linguistic generation;
+- external presentation, speech synthesis and interaction protocol.
+
+These are functional questions, not a mandated pipeline or component list. They may overlap and interact recurrently. The 2025 review of speech comprehension emphasizes representations, operations and information flow in a highly parallel and redundant processing regime. A 2026 review of face-to-face conversation treats communication as situated joint action, not isolated text decoding and generation. A 2024 *Nature* perspective argues that language is primarily a communication tool and can be dissociated from non-linguistic thought; this is a significant position, not a settled basis for making all cognition language-dependent. Therefore, the Brain should support language-rich cognition without assuming that every internal representation or reasoning process must be verbal.
+
+**Representation needs a common contract, not necessarily one universal representation.**
+
+The A–G model currently depends on an underspecified representational foundation. A future specification should investigate a common minimum envelope for identity, provenance, time, context, epistemic status, uncertainty, version and dependencies, while allowing typed structures suited to:
+- entities, objects and agents;
+- events, actions and state transitions;
+- attributes, relations and causal dependencies;
+- temporal and spatial structure;
+- concepts, categories, abstractions and exceptions;
+- goals, constraints, plans and intentions;
+- continuous or probabilistic signals as well as discrete/symbolic claims;
+- modality-specific perceptual structures;
+- language-derived meanings and references.
+
+A common envelope must not flatten these into one universal schema. The architecture must test whether a representation can preserve identity and relations across modalities, abstraction levels and time, and whether different reasoning methods can exchange information without losing meaning, uncertainty or provenance.
+
+**Self-monitoring is required; introspective claims are not evidence of self-knowledge.**
+
+The minimum candidate capability is operationally grounded monitoring of:
+- current task and goal progress;
+- evidence sufficiency, uncertainty and unresolved contradiction;
+- known capability limits and out-of-distribution conditions;
+- prediction and decision quality against later outcomes;
+- errors, failed attempts, stale dependencies and resource constraints;
+- whether a requested action was actually authorized, executed and verified.
+
+This is distinct from a rich autobiographical self-concept, subjective consciousness or privileged access to every internal computation. A 2026 scoping review of computational metacognitive architectures included 101 reports across 35 architectures but found quantitative evaluation of the relevant episodic-metacognition focus in only 17% of reviewed architectures. A 2025 review comparing human and LLM metacognition likewise highlights the need to distinguish calibration, control, uncertainty communication and introspection. Generated explanations or chain-of-thought text must not be treated as faithful telemetry unless independently validated against the process and outcomes.
+
+**Candidate decomposition criterion.**
+
+Do not create a separate mechanism, subsystem or service for every named cognitive function. A distinct authoritative responsibility is justified when there is a meaningful difference in one or more of:
+- state ownership and update authority;
+- representation and lifecycle;
+- timing, resource or concurrency requirements;
+- trust, privacy or access boundary;
+- failure containment and recovery;
+- independent evaluation or learning dynamics.
+
+Where none of these differences exists, a function may be an operation within a shared mechanism rather than a separate component. Logical modularity and explicit interfaces may be established without selecting separate processes, services or deployment units.
+
+**Learning updates require differentiated control.**
+
+The record already distinguishes experience retention, memory organization, belief revision, representation learning, predictive-model adaptation, strategy learning, skill acquisition and metacognitive calibration. The next design must map each class to its own update and validation semantics. Routine belief/context/episodic updates must not all be forced through heavyweight candidate-promotion gates. Conversely, material changes to active learned models, strategies or capabilities may require isolation, baseline comparison, regression/transfer evaluation, controlled activation and rollback. The correct threshold depends on the affected state and consequence, not a universal “all learning must be staged” rule.
+
+### 21.8 Additional research sources checked
+
+- Kotseruba, I. and Tsotsos, J. K. (2020), [40 years of cognitive architectures: core cognitive abilities and practical applications](https://link.springer.com/article/10.1007/s10462-018-9646-y), *Artificial Intelligence Review*. Broad architecture landscape; cautions that surveys and feature checklists cannot measure capability depth or support direct ranking.
+- Laird, J. E., Lebiere, C. and Rosenbloom, P. S. (2017), [A Standard Model of the Mind](https://ojs.aaai.org/aimagazine/index.php/aimagazine/article/view/2744/0), *AI Magazine*. Common computational framework as a cumulative reference, not a finished universal architecture.
+- Soar Research Group, [The Soar Architecture](https://soar.eecs.umich.edu/soar_manual/02_TheSoarArchitecture/) and [Procedural Knowledge Learning](https://soar.eecs.umich.edu/soar_manual/04_ProceduralKnowledgeLearning/). Primary documentation for working/production/preference memory, impasses, chunking and procedural learning.
+- Sun, R. (2015), [The CLARION Cognitive Architecture: Toward a Comprehensive Theory of the Mind](https://academic.oup.com/edited-volume/34641/chapter-abstract/295173431), *Oxford Handbook of Cognitive Science*. Hybrid explicit/implicit representations and action, knowledge, motivation and metacognition subsystems.
+- de Silva, L., Meneguzzi, F. and Logan, B. (2020), [BDI Agent Architectures: A Survey](https://ijcai.org/proceedings/2020/684), IJCAI. Belief/desire/intention models, plan libraries, intention scheduling and trade-offs.
+- Dong et al. (2026), [Towards Long-Horizon Agents: A Survey](https://long-horizon-agents.github.io/). Distinguishes intra-context, cross-context and cross-task horizons and emphasizes harness/model co-evolution.
+- Bajoria et al. (2026), [From Language Models to Agentic AI](https://link.springer.com/article/10.1007/s12559-026-10619-1), *Cognitive Computation*. LLM-centric agents, autonomy, tool use, collaboration, governance and evaluation; scoped specifically to LLM-based systems, not a general Brain architecture.
+- Gwilliams et al. (2025), [Computational Architecture of Speech Comprehension in the Human Brain](https://www.annualreviews.org/content/journals/10.1146/annurev-linguistics-031120-111245), *Annual Review of Linguistics*. Speech representations, operations and parallel information flow.
+- Holler and Kuhlen (2026), [Psycholinguistic Perspectives on Face-to-Face Conversation](https://www.nature.com/articles/s44159-026-00538-1), *Nature Reviews Psychology*. Conversation as situated, interactive joint action.
+- Fedorenko, E., Piantadosi, S. T. and Gibson, E. A. F. (2024), [Language Is Primarily a Tool for Communication Rather Than Thought](https://www.nature.com/articles/s41586-024-07522-w), *Nature*. A significant perspective on language/thought dissociation; treat as a debated research position.
+- [How metacognitive architectures remember their own thoughts: a systematic scoping review](https://link.springer.com/article/10.1007/s10462-026-11669-5), *Artificial Intelligence Review* (2026). 101 reports, 35 architectures; reports sparse quantitative evaluation for episodic metacognitive memory.
+- Steyvers, M. and Peters, M. A. K. (2026), [Metacognition and Uncertainty Communication in Humans and Large Language Models](https://journals.sagepub.com/doi/10.1177/09637214251391158), *Current Directions in Psychological Science*. Distinguishes uncertainty estimation, metacognitive training, control and introspection.
+
+### 21.9 Revised unresolved questions
+
+1. What is the minimum common representational contract, and which representations remain modality-, task- or mechanism-specific?
+2. How do symbolic, subsymbolic and hybrid representations exchange evidence and maintain referential identity?
+3. Does the Brain require a shared workspace/broadcast mechanism, a central controller, or a different integration pattern? What evidence would distinguish them?
+4. Which cognitive functions require independent state ownership, and which are operations over shared state?
+5. What is the minimum grounded self-monitoring capability, and how can it be evaluated without trusting generated self-reports?
+6. Which language capabilities are required in the foundation, and how do they interface with sensory acquisition, interaction and non-linguistic reasoning?
+7. Which learning classes can update online, which need candidate validation, and how do these policies vary with consequence and reversibility?
+8. Which cognitive capabilities are essential for the first developmental Brain, and which should remain advanced or acquired?
+
