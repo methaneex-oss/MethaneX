@@ -2192,3 +2192,21 @@ The current MCU evidence should be separated into three classes:
 - The Walt Disney Company, [Marvel Television's VisionQuest](https://thewaltdisneycompany.com/news/marvel-television-visionquest-disney-plus/), 13 October 2026.
 - U.S. Department of Defense, [Future Directions in Human Machine Teaming Workshop](https://basicresearch.defense.gov/Portals/61/Future%20Directions%20in%20Human%20Machine%20Teaming%20Workshop%20report%20%20%28for%20public%20release%29_1.pdf), published 15 January 2020, especially its J.A.R.V.I.S. vignette and human-machine teaming framework.
 
+
+
+### 21.15 Human-machine teaming implications
+
+The 2020 DoD workshop report is useful beyond its J.A.R.V.I.S. vignette. It proposes that effective human-machine teammates maintain models of self, teammate and team, which guide perception, communication and joint action. It highlights common ground, joint attention, perspective taking, trust, predictability and the ability to communicate limitations or task availability.
+
+For JARVIS, this suggests the Brain investigation should include:
+- a context-sensitive model of the human collaborator's current task, stated goals, relevant constraints and demonstrated preferences;
+- explicit uncertainty about inferred intent, rather than treating inferred intent as a command;
+- a representation of shared goals, commitments, plans and common ground;
+- the ability to ask for clarification when the inferred meaning or intended authority is uncertain;
+- a grounded model of JARVIS's own current capabilities, limitations, task progress and verified execution status;
+- communication that makes relevant intentions, uncertainty, constraints and failures legible to the human.
+
+These requirements do not justify a fully developed theory-of-mind subsystem in the first Brain foundation. Basic teammate/context modelling and common-ground maintenance may be foundational for reliable collaboration; richer social cognition and multi-party mental-state reasoning can remain advanced until justified by use cases.
+
+The report also warns that people can over-ascribe mental capabilities to machines and become overconfident in them. Therefore, JARVIS must not use fluent language, anthropomorphic persona or confident self-report as a substitute for verified competence, observability and calibrated trust. Its apparent understanding must be tested through correct prediction, clarification, task coordination and outcome performance.
+
