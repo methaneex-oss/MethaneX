@@ -712,7 +712,7 @@ Each material issue should be recorded with, where applicable:
 - Marvel reference and limits;
 - human-cognition reference and limits;
 - candidate engineering solutions and comparative evaluation;
-- selected direction and why;
+- provisional candidate direction and why;
 - rejected alternatives and their failure modes;
 - invariants versus policy/implementation choices;
 - unresolved facts, assumptions and confidence;
@@ -774,9 +774,9 @@ Microsoft's architecture guidance on event-driven systems specifically warns tha
 
 These engineering sources are not substitutes for the two required reference lenses. They are necessary because Marvel and neuroscience do not specify the software correctness mechanisms needed to implement a reliable cognitive system.
 
-### 12.5 Comparison and provisional selection
+### 12.5 Comparison and provisional candidate direction
 
-**Provisional candidate direction: distributed, owner-managed cognitive mechanisms coordinated through explicit contracts and causal/version metadata, with selective coordination strength based on the meaning and consequence of each state transition.**
+**Provisional candidate direction: logically modular, owner-managed cognitive responsibilities coordinated through explicit contracts and causal/version metadata, with consistency strength selected by state semantics and consequence. Runtime and deployment distribution remain unresolved.**
 
 This is not a proposal for fully decentralized cognition, nor for one central controller that owns all thought. It combines:
 - human-inspired distributed, context-dependent coordination;
@@ -942,7 +942,7 @@ Current cognitive science does not treat attention as one simple faculty with on
 - Neural modulation and arousal cannot be copied literally as software mechanisms.
 - A biological subject's limited awareness is not equivalent to an artificial system's compute budget, concurrency or memory capacity.
 
-### 13.4 Comparison and provisional selection
+### 13.4 Comparison and provisional candidate direction
 
 **Provisional candidate direction: an engineered, multi-factor, context-sensitive allocation and control mechanism, informed by human attentional selection and cognitive control, with Marvel's contextual responsiveness as the operational requirement.**
 
@@ -1135,9 +1135,9 @@ Relevant findings:
 
 **Limits:** human memory's forgetting, interference, reconstruction errors and goal neglect are not design goals. Capacity estimates depend on task and theory. Neural accounts of persistent, latent and reactivated states remain debated. Biological boundaries do not dictate software component boundaries.
 
-### 14.4 Comparison and provisional selection
+### 14.4 Comparison and provisional candidate direction
 
-**Provisional direction: an engineered, task-scoped working-context capability with explicit active-state tiers, selective updating, durable suspension records and version-validated reactivation.**
+**Provisional candidate direction: an engineered task-scoped working-context capability, treated as a controlled active view over authoritative state rather than a duplicate memory store or universal context database; suspension and reactivation validate dependencies and versions.**
 
 Human cognition is the stronger reference for focal attention, activated/accessibly retained information, goal maintenance and selective updating. Marvel supplies the operational requirement: useful context must follow tasks across projects and environments while preserving information separation. Neither provides software ownership, consistency, privacy or recovery contracts; these must be engineered.
 
@@ -1399,9 +1399,9 @@ Current research supports several relevant capabilities, but not one complete, s
 - Neuroscience does not provide one settled universal planning algorithm, emotion taxonomy, confidence formula or decision architecture.
 - A biological brain's limitations do not justify arbitrary compute limits, opaque heuristics or uncalibrated confidence in JARVIS.
 
-### 15.4 Comparison and provisional selection
+### 15.4 Comparison and provisional candidate direction
 
-**Provisional direction: an integrated, evidence-grounded goal and control capability in which goals, constraints, plans, intentions, decisions and outcomes remain distinct, coordinated and revisable.**
+**Provisional candidate direction: an integrated, evidence-grounded goal and control capability in which goals, constraints, plans, intentions, decisions and outcomes remain distinct, coordinated and revisable.**
 
 The human reference is stronger for understanding flexible goal-directed control, simulation-supported planning, causal inference, metacognitive limits and affective modulation. Marvel J.A.R.V.I.S. is stronger as a whole-system capability target: contextual interpretation, coordination across technical domains, timely assistance and continuity of support across operating contexts. Neither reference supplies the complete engineering mechanism.
 
@@ -1634,9 +1634,9 @@ The MCU portrayal provides examples of monitoring, diagnostics, analysis and con
 - Human causal reasoning and confidence are fallible.
 - Neuroscience does not supply one universal probability calculus, belief-update rule or world-model architecture.
 
-### 17.4 Comparison and provisional selection
+### 17.4 Comparison and provisional candidate direction
 
-**Provisional direction: a provenance-grounded predictive and belief-revision capability using explicit, typed epistemic state, with multiple model classes and evaluation methods rather than one universal predictive theory.**
+**Provisional candidate direction: a provenance-grounded predictive and belief-revision capability using explicit, typed epistemic state, with multiple model classes and evaluation methods rather than one universal predictive theory.**
 
 Human cognition provides useful insight into prediction, memory transformation, causal inference and uncertainty, but its theoretical disputes must remain visible. MCU J.A.R.V.I.S. supplies the operational target of contextual monitoring and useful diagnostics. Engineering must supply explicit epistemic types, provenance, calibration, causal validation, versioning and recovery.
 
@@ -1769,9 +1769,9 @@ The later J.A.R.V.I.S. integration into Vision is a narrative transformation of 
 - Human reward, affect and motivation cannot be copied as fixed numeric values without a justified functional model.
 - AI continual-learning benchmarks often simplify the open-world, multimodal and long-horizon conditions expected of JARVIS.
 
-### 18.4 Comparison and provisional selection
+### 18.4 Comparison and provisional candidate direction
 
-**Provisional direction: a multi-timescale, evidence-driven learning and adaptation capability with isolated candidate changes, independent evaluation, controlled activation, persistent lineage and recoverable rollback.**
+**Provisional candidate direction: a multi-timescale, evidence-driven learning capability with update-class-specific validation; routine reversible memory, context and belief updates may occur online, while material changes to active models, strategies or capabilities receive independent evaluation, controlled activation, lineage and rollback.**
 
 Human cognition is the stronger source for the distinction between episode retention and gradual abstraction, and for the interaction of learning with attention, planning and control. MCU J.A.R.V.I.S. supplies the whole-system developmental target, not a learning algorithm. AI continual-learning research supplies concrete technical challenges and evaluation approaches, while engineering must provide governance, versioning, integrity and rollback.
 
