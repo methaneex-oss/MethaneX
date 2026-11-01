@@ -46,7 +46,7 @@ Construction begins with the Brain foundation. The other systems must neverthele
 
 1. **Cognitive responsibility:** interpreting experience, maintaining internal models, learning, reasoning, evaluating, forming goals and decisions. This belongs to the Brain, subject to approved governance constraints.
 2. **Operational responsibility:** acquiring signals, transporting information, executing authorized actions, regulating resources, protecting boundaries, and maintaining infrastructure. These belong to the corresponding non-Brain systems.
-3. **Governance responsibility:** defining permissions, safety constraints, human oversight, auditability, and conditions under which actions or changes are allowed. These responsibilities require an explicit accountable governance authority, even if implemented as a cross-cutting control plane rather than a biological-style subsystem. Governance constrains the system; it must not become a hidden substitute for cognition.
+3. **Governance responsibility:** defining permissions, safety constraints, human oversight, auditability, risk acceptance, and the conditions under which actions or changes are allowed. Governance has an accountable policy authority, but that authority may be exercised by a responsible human or organization, supported by JARVIS's internal policy-decision and enforcement mechanisms. The architecture must distinguish the source of authority from the software that evaluates and enforces delegated policy. Governance constrains operations; it must not become a hidden substitute for cognition.
 
 ### 2.4 Do not infer intelligence from system names
 
@@ -62,7 +62,7 @@ The following domains are proposed as the initial whole-system anatomy. Their ex
 
 | ID | Major system | Primary responsibility | Authority boundary |
 |---|---|---|---|
-| SYS-01 | Brain / Cognitive System | Coherent cognition, internal models, memory, learning, reasoning, evaluation, goals, and decisions | Owns authoritative cognitive state; does not own every sensor, transport, actuator, or infrastructure resource |
+| SYS-01 | Brain / Cognitive System | Coherent cognition, internal models, memory, learning, reasoning, evaluation, goals, and decisions | Owns authoritative cognitive state; may form action proposals and requests but cannot authorize its own consequential actions |
 | SYS-02 | Nervous / Signalling and Coordination System | Reliable information and command pathways between the Brain and other systems | Transports, routes, schedules, and coordinates signals; does not independently own beliefs, intentions, or general goals |
 | SYS-03 | Sensory / Perceptual Acquisition Systems | Acquire and prepare observations from internal and external environments | Detects and prepares evidence; does not decide what the evidence ultimately means to JARVIS |
 | SYS-04 | Motor / Action and Execution Systems | Convert authorized action requests into controlled external effects and report results | Executes within permissions; does not originate general cognitive intent or treat command acceptance as success |
@@ -137,7 +137,7 @@ The Brain may produce:
 - updated memories, beliefs, predictions, and internal models;
 - requests for additional information or clarification;
 - goals, plans, and candidate decisions;
-- action proposals or authorized action requests through the approved control path;
+- action proposals and action requests submitted to the approved authorization path (the Brain does not grant the authorization);
 - requests for resource allocation or operational support;
 - explanations and introspective records grounded in actual cognitive state;
 - learning and evaluation signals.
@@ -180,8 +180,10 @@ Biological nervous systems combine central and peripheral pathways and support b
 
 ### 5.1 Candidate functional subdivisions
 
-- **System-boundary communication pathways:** transport between the Brain and other JARVIS systems. Internal coordination among Brain mechanisms belongs to the Brain's own cognitive architecture; the Nervous System must not become an owner of internal cognitive orchestration.
-- **Peripheral communication pathways:** communication between the Brain and external JARVIS systems, devices, applications, and services.
+- **Intra-Brain coordination:** coordination among cognitive mechanisms and components inside the Brain. This is owned by the Brain architecture, not the Nervous System.
+- **Logical inter-system signalling:** message and event contracts between the Brain and other JARVIS systems. This is the Nervous System's responsibility, independent of the transport technology used.
+- **Physical/runtime transport:** sockets, networks, buses, process communication, APIs, and device links supplied by the relevant infrastructure and adapters. These implement pathways but do not own their logical meaning or cognitive interpretation.
+- **Peripheral communication pathways:** communication between JARVIS systems and external devices, applications, and services, using explicit trust and boundary contracts.
 - **Afferent / inbound pathways:** observations, events, feedback, and status flowing toward cognitive processing.
 - **Efferent / outbound pathways:** action requests, control signals, and coordination instructions flowing toward other systems.
 - **Event and message fabric:** event publication, subscription, routing, correlation, ordering, delivery, and backpressure.
