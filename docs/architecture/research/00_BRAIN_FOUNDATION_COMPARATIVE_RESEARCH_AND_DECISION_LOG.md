@@ -1574,3 +1574,391 @@ This investigation is ready for independent challenge, not final architecture ap
 - No runtime code, tests, dependencies, approved whole-system architecture documents or PR merge state were changed.
 
 **Reviewer handoff requested:** independently challenge Investigations A–E, with particular attention to cross-investigation consistency, whether the functional distinctions are justified without creating unnecessary subsystems, the MCU canon update, the neuroscience evidence and uncertainty labels, and the Brain/Governance/Action boundary. Identify missing foundational capabilities and adversarial/longitudinal tests before the architecture is consolidated.
+
+
+---
+
+## 17. Investigation F — Prediction, Belief Revision and Causal World Models
+
+**Status:** Comparative analysis recorded; representational contracts, calibration methods and operational evaluation remain open.  
+**Question:** How should the Brain form expectations about what may happen, compare them with what actually happens, revise its understanding, and distinguish correlation, causal explanation and counterfactual possibility?
+
+### 17.1 Problem statement
+
+Prediction is a foundational cognitive capability, but prediction, belief and observation are not interchangeable.
+
+- An **observation/experience** records evidence received from a source.
+- A **representation/model** expresses entities, relations, states or mechanisms inferred from evidence.
+- A **belief** is a current epistemic commitment or qualified claim about the world, with supporting and opposing evidence.
+- A **prediction** is a forecast about a future or unobserved state, conditional on assumptions and a model.
+- A **simulation/counterfactual** explores a possible scenario that did not necessarily occur.
+- A **prediction error** is a measured discrepancy between a forecast and a later observation; it is not, by itself, proof that the underlying model is wrong.
+- A **belief/model revision** is a controlled change to current understanding after evidence and alternatives are assessed.
+
+If these are collapsed, JARVIS may remember a forecast as a fact, treat its own generated hypothesis as independent evidence, overreact to noisy observations, or change a model for the wrong reason. Prediction error may arise from sensor noise, incomplete context, stochastic outcomes, execution failure, distribution shift or a genuinely defective model. The Brain must investigate which explanation is supported.
+
+### 17.2 Marvel J.A.R.V.I.S. reference
+
+The MCU portrayal provides examples of monitoring, diagnostics, analysis and contextual technical support. In *Iron Man* (2008), J.A.R.V.I.S. monitors suit status and assists with technical analysis; the Mark II test sequence shows the system reporting conditions and identifying a dangerous ice buildup. The D23 MCU overview describes J.A.R.V.I.S. as supporting Stark's facilities and technology and supplying information to the Avengers.
+
+**Extractable requirement:** the assistant should maintain situation-sensitive expectations about system state, detect material deviations, communicate relevant uncertainty and connect outcomes to the task or system they concern.
+
+**Limits:** the films do not disclose how J.A.R.V.I.S. represents a world model, calculates probabilities, distinguishes model error from sensor error, calibrates confidence, reasons causally or revises beliefs. A cinematic diagnostic warning is not evidence of a specific predictive-processing architecture.
+
+**Canon caution:** the fight-pattern analysis in *Captain America: Civil War* is attributed to F.R.I.D.A.Y. in the official D23 overview, not J.A.R.V.I.S. Do not assign every later Stark-AI capability to J.A.R.V.I.S. merely because the systems are related.
+
+### 17.3 Human cognition reference
+
+1. **Prediction is a useful research lens, not a settled universal theory.** Predictive-processing accounts propose that internal models generate expectations and that discrepancies can contribute to updating. However, a 2024 review of predictive coding and active inference judged existing empirical support for predictive coding to be modest and noted that some findings can be explained by alternative models. Furutachi and Hofer's 2026 *Annual Review of Neuroscience* revisits the evidence and stresses that superficially similar prediction-error signals may reflect different underlying computations. The Brain must not be built on the assumption that all cognition is one prediction-error-minimization loop.
+2. **Memory representations are transformed and task-sensitive.** Recent reviews describe multiple levels of episodic representation, from detailed event-specific information to generalized or gist-like representations. Retrieval can reconstruct an active representation using retrieved event information together with semantic, schematic and current task information. This supports a strict separation between the historical source record and revisable current representation.
+3. **Fast and gradual learning have complementary demands.** Hippocampal research reviews discuss mechanisms relevant to rapid learning of individual episodes and gradual extraction of structure across experience. Complementary-learning-systems theory offers a useful account of the tension between retaining specific episodes and generalizing across them. It is a biological theory, not a requirement to create two literal software memory modules.
+4. **Causal inference goes beyond association.** Human learners can infer abstract relations and use them in novel tasks, but causal reasoning is resource-limited and can be systematically wrong. A model of causal reasoning published in 2025 explicitly addresses both rational inference and limitations in computation. The Brain should distinguish observed association, hypothesized mechanism, intervention evidence and counterfactual prediction.
+5. **Confidence and uncertainty are inferential.** Metacognitive confidence depends on a person's model of the world and of their own cognitive performance; it can diverge from correctness. Confidence must be evaluated against actual outcomes, and a single scalar confidence value cannot replace evidence provenance, alternative hypotheses or calibration analysis.
+
+**Extractable design lessons**
+- Maintain an explicit distinction between observed evidence, current belief, forecast and hypothetical simulation.
+- Represent predictions with scope, time horizon, assumptions, model version, uncertainty and evaluation criteria.
+- Evaluate forecasts against later evidence without rewriting the original forecast or outcome.
+- Diagnose prediction errors before changing beliefs or models.
+- Preserve competing explanations where the evidence does not discriminate among them.
+- Use causal and relational representations where evidence supports them; do not silently upgrade correlation into causation.
+- Support both specific episodic retention and gradual abstraction/generalization.
+- Track model uncertainty and the possibility that the system lacks a relevant representation altogether.
+
+**Limits**
+- Predictive processing is not a complete settled explanation of cognition.
+- Human memory reconstruction and source confusion are vulnerabilities, not desirable implementation properties.
+- Human causal reasoning and confidence are fallible.
+- Neuroscience does not supply one universal probability calculus, belief-update rule or world-model architecture.
+
+### 17.4 Comparison and provisional selection
+
+**Provisional direction: a provenance-grounded predictive and belief-revision capability using explicit, typed epistemic state, with multiple model classes and evaluation methods rather than one universal predictive theory.**
+
+Human cognition provides useful insight into prediction, memory transformation, causal inference and uncertainty, but its theoretical disputes must remain visible. MCU J.A.R.V.I.S. supplies the operational target of contextual monitoring and useful diagnostics. Engineering must supply explicit epistemic types, provenance, calibration, causal validation, versioning and recovery.
+
+The Brain should support:
+- predictions tied to a defined target, time horizon, assumptions and model version;
+- probabilistic or otherwise uncertainty-aware outputs appropriate to the domain;
+- alternative hypotheses and model disagreement;
+- explicit distinction between predicted, simulated, observed and verified states;
+- prediction/outcome matching and calibration over time;
+- error attribution across source quality, context, model, execution and environment;
+- selective belief/model revision with dependency invalidation;
+- causal reasoning that distinguishes association, intervention and counterfactual claims;
+- generalization tests on novel but related cases;
+- explicit representation of unknown, insufficient evidence and out-of-distribution conditions.
+
+No specific predictive-processing, Bayesian, active-inference, causal-graph or neural-network implementation is selected here.
+
+### 17.5 Failure scenarios and required tests
+
+1. A simulated future is stored as an actual event.
+2. A forecast is silently overwritten after the outcome is known, hiding the original error.
+3. The same derived claim is counted repeatedly as independent evidence.
+4. A noisy sensor reading causes a large belief revision without source-quality assessment.
+5. A prediction error caused by failed execution is attributed to the world model.
+6. A distribution shift makes an old model unreliable, but its confidence remains unchanged.
+7. A model explains all observed outcomes after the fact but has no prospective predictive value.
+8. A correlation is treated as a causal mechanism.
+9. A causal model predicts correctly in familiar cases but fails under intervention.
+10. A counterfactual branch leaks into active belief state.
+11. A new abstraction erases important exceptions or minority cases.
+12. A specific episodic memory is overgeneralized into a universal rule.
+13. Retrieval reconstructs context incorrectly and the reconstructed details are treated as original evidence.
+14. Belief revision updates one state but leaves dependent predictions and plans stale.
+15. Two models disagree but the system hides the disagreement behind an averaged confidence score.
+16. Confidence increases through repetition without new independent evidence.
+17. An unobserved or unmodelled state is forced into the nearest known category.
+18. A forecast is scored using a metric that does not match its intended use or consequence.
+19. A system-level outcome is treated as proof of a particular internal cognitive cause.
+20. Repeated error-driven updates create oscillation or unstable belief changes.
+
+### 17.6 Candidate invariants versus unresolved choices
+
+**Candidate foundational invariants**
+- Historical observations, derived representations, beliefs, predictions, simulations and verified outcomes remain distinguishable.
+- Forecasts retain their original assumptions and model/version lineage.
+- A prediction error triggers assessment, not automatic model mutation.
+- Belief/model revisions preserve prior state and rationale.
+- Confidence must be evaluated against performance and cannot substitute for evidence.
+- Correlation, causal inference, intervention and counterfactual claims have distinguishable epistemic status.
+- Unknown, stale, conflicting and out-of-distribution states are representable.
+- Derived changes trigger dependency-aware review rather than silent propagation.
+- A forecast cannot become a remembered event merely because it was vivid, repeated or used in planning.
+
+**Unresolved choices**
+- Which prediction classes are foundational and which are advanced capabilities.
+- How uncertainty is represented across symbolic, numeric, linguistic and learned representations.
+- Whether belief state is one integrated responsibility or several cooperating forms of epistemic state.
+- Which calibration metrics are appropriate for each prediction class.
+- How causal models are learned, tested and revised.
+- How disagreement among models is surfaced and resolved.
+- How model uncertainty, data uncertainty and execution uncertainty are separated.
+- How privacy, retention and deletion apply to forecast history and simulated scenarios.
+
+### 17.7 Reviewer challenge checklist
+
+Challenge whether the proposal overstates predictive-processing neuroscience; whether prediction error is being treated as a single uniform signal; whether forecasts remain immutable for later calibration; whether epistemic types are precise enough to prevent simulation/experience confusion; whether causal claims are independently tested; whether generalization retains exceptions; whether confidence is calibrated rather than self-reported; whether belief revision and dependency invalidation interact correctly with A–D; and whether the proposal requires more architecture than the evidence justifies.
+
+### 17.8 Sources and evidence
+
+- Hodson, R., Mehta, M. and Smith, R. (2024), [The Empirical Status of Predictive Coding and Active Inference](https://pubmed.ncbi.nlm.nih.gov/38030100/), *Neuroscience & Biobehavioral Reviews*, 157, 105473. Review assessing empirical evidence and alternatives.
+- Furutachi, S. and Hofer, S. B. (2026), [Rethinking Predictive Processing](https://www.annualreviews.org/content/journals/10.1146/annurev-neuro-102124-031410), *Annual Review of Neuroscience*, 49, 471–494. Recent reassessment of prediction-error evidence and explanatory scope.
+- Rugg, M. D. and Renoult, L. (2025), [The Cognitive Neuroscience of Memory Representations](https://doi.org/10.1016/j.neubiorev.2025.106417), *Neuroscience & Biobehavioral Reviews*, 179, 106417. Active/latent representations and causal links to past experience.
+- Tarder-Stoll, H. et al. (2026 issue; published online 2025), [Adaptive Episodic Memory: How Multiple Memory Representations Drive Behavior in Humans and Nonhumans](https://doi.org/10.1152/physrev.00005.2025), *Physiological Reviews*, 106(2). Detailed and generalized episodic representations.
+- Liao, Z. and Losonczy, A. (2024), [Learning, Fast and Slow: Single- and Many-Shot Learning in the Hippocampus](https://www.annualreviews.org/content/journals/10.1146/annurev-neuro-102423-100258), *Annual Review of Neuroscience*, 47, 187–209. Hippocampal learning modes and cognitive maps.
+- Singh, D. and Schapiro, A. C. (2026), [Evidence for Complementary Learning Systems Within the Hippocampus](https://pubmed.ncbi.nlm.nih.gov/42421581/), *Philosophical Transactions of the Royal Society B*. Evidence and debate about episode separation and structure learning.
+- Rehder, B. (2025), [A Rational Process Model of Reasoning Causally with Continuous Variables](https://pubmed.ncbi.nlm.nih.gov/40580681/), *Cognition*, 263, 106193. Causal reasoning under computational limits.
+- Fleming, S. M. (2024), [Metacognition and Confidence: A Review and Synthesis](https://doi.org/10.1146/annurev-psych-022423-032425), *Annual Review of Psychology*, 75, 241–268. Confidence and uncertainty.
+- Disney D23, [MCU Robot Roundup](https://d23.com/mcu-robot-roundup/) (2025). Official MCU capability descriptions; distinguishes J.A.R.V.I.S. and F.R.I.D.A.Y.
+- U.S. Department of Defense, [Future Directions in Human-Machine Teaming Workshop Report](https://basicresearch.defense.gov/Portals/61/Future%20Directions%20in%20Human%20Machine%20Teaming%20Workshop%20report%20%20%28for%20public%20release%29_1.pdf) (2020). Contextual J.A.R.V.I.S. dialogue analysis; not an internal technical specification.
+
+### 17.9 Provisional conclusion
+
+Prediction and belief revision should be treated as distinct but interacting cognitive capabilities, grounded in preserved evidence and explicit epistemic status. The Brain should not be architected around predictive processing as a universal law. It should support multiple prediction and inference methods, evaluate them empirically, preserve uncertainty and alternatives, and revise current understanding through traceable, dependency-aware processes.
+
+---
+
+## 18. Investigation G — Learning, Adaptation and Developmental Integrity
+
+**Status:** Comparative synthesis recorded; detailed learning mechanism boundaries and validation policy remain open.  
+**Question:** How can experience cause persistent improvement in the Brain without uncontrolled state mutation, catastrophic forgetting, test-specific hardcoding or a false claim that data storage alone constitutes learning?
+
+### 18.1 Problem statement
+
+Learning is the central developmental requirement. It is not synonymous with storing information, retrieving a record, updating one confidence value, changing a prompt, or fine-tuning a language model. A meaningful learning claim requires an experience-dependent change that persists, affects later behaviour and demonstrates appropriate transfer while controlling for regression and contamination.
+
+The Brain must be capable of development without becoming an uncontrolled self-modifying system. It must be able to retain individual experiences, form abstractions, adjust strategies, discover limitations and improve its own cognitive performance while preserving identity lineage, historical evidence and safety boundaries.
+
+### 18.2 Marvel J.A.R.V.I.S. reference
+
+The MCU portrays J.A.R.V.I.S. as highly capable and integrated with Stark's technology. The stories show contextual interpretation, diagnostics and coordination, but they do not establish a verifiable process by which J.A.R.V.I.S. learns from experience, consolidates knowledge, generalizes to unseen situations, evaluates candidate adaptations or protects active cognition from interference.
+
+The later J.A.R.V.I.S. integration into Vision is a narrative transformation of a fictional AI system, not evidence of an ordinary learning mechanism. The MCU's Ultron storyline demonstrates a serious caution about powerful autonomous systems and intended-purpose drift, but it is a fictional safety narrative rather than empirical evidence about AI development.
+
+**Extractable requirement:** JARVIS should acquire durable capability through experience and remain coherent as its capabilities change.
+
+**Limit:** Marvel does not supply a trustworthy technical blueprint for continual learning, self-modification, safe promotion, rollback or developmental evaluation.
+
+### 18.3 Human cognition reference
+
+1. **Rapid episode learning and gradual abstraction have different demands.** Hippocampal research discusses rapid encoding of specific experiences alongside mechanisms that extract regularities over repeated experiences. Complementary learning systems is a useful explanatory framework for this tension, but it remains a scientific model and should not be copied as a one-to-one software decomposition.
+2. **Memory consolidation is selective and adaptive.** Experience is not indiscriminately converted into a permanent generalized rule. Details and abstractions may coexist, and retrieval/learning can be influenced by current goals and context. This supports separating episodic retention from generalization and behavioural adaptation.
+3. **Cognitive control can change behaviour flexibly.** Badre's 2025 review emphasizes context-sensitive selection of behaviour and monitoring/adjustment. Learning should improve how the Brain selects and regulates behaviour, not merely increase a static database of responses.
+4. **Planning and simulation can train future cognition.** Mattar and Daw's 2026 review discusses offline and prospective simulation as learning processes that can shape representations and strategies, not only as immediate decision search.
+5. **Continual learning is an explicit AI engineering problem.** The 2024 TPAMI survey defines continual learning in terms of incremental acquisition, updating, accumulation and use of knowledge in dynamic environments. The field studies challenges including catastrophic forgetting, stability/plasticity trade-offs, transfer and evaluation. There is no single method that resolves all continual-learning problems.
+6. **Confidence and affect can bias learning.** Metacognitive confidence may be inaccurate, and affective/valuation processes influence what is attended to and learned. Learning therefore requires external performance evidence and checks against self-reinforcing feedback, not only internal reward or confidence.
+
+**Extractable design lessons**
+- Preserve specific experience while also supporting generalization.
+- Treat learning as multiple interacting processes with different timescales and evidence requirements.
+- Separate candidate learning from active authoritative cognitive state.
+- Evaluate transfer, retention, interference, regression and robustness before activation.
+- Learn from verified outcomes and attributable consequences.
+- Preserve the developmental lineage of models, strategies and capabilities.
+- Permit partial learning and explicit uncertainty; not every experience must produce an immediate update.
+- Allow the Brain to discover that a previous strategy or representation was wrong without erasing the historical reason it was adopted.
+
+**Limits**
+- Human consolidation does not prescribe software training pipelines or deployment controls.
+- Biological fast/slow learning theories do not prove that two distinct artificial memory services are required.
+- Human reward, affect and motivation cannot be copied as fixed numeric values without a justified functional model.
+- AI continual-learning benchmarks often simplify the open-world, multimodal and long-horizon conditions expected of JARVIS.
+
+### 18.4 Comparison and provisional selection
+
+**Provisional direction: a multi-timescale, evidence-driven learning and adaptation capability with isolated candidate changes, independent evaluation, controlled activation, persistent lineage and recoverable rollback.**
+
+Human cognition is the stronger source for the distinction between episode retention and gradual abstraction, and for the interaction of learning with attention, planning and control. MCU J.A.R.V.I.S. supplies the whole-system developmental target, not a learning algorithm. AI continual-learning research supplies concrete technical challenges and evaluation approaches, while engineering must provide governance, versioning, integrity and rollback.
+
+A learning cycle should be capable of:
+1. **Detecting a learning opportunity:** prediction mismatch, verified action outcome, repeated experience, explicit correction, new relation, changed environment or observed limitation.
+2. **Preserving the source experience:** maintain original evidence, provenance, context and outcome status.
+3. **Forming a learning hypothesis:** identify what may need to change and why; do not assume every error requires a model update.
+4. **Selecting a learning route:** episodic retention, retrieval/index update, representation refinement, belief revision, parameter adaptation, strategy change, skill acquisition or a combination justified by the problem.
+5. **Creating an isolated candidate:** record the target state, baseline, source evidence, method, assumptions and expected effect.
+6. **Evaluating the candidate:** assess evidence quality, transfer, retention, interference, regression, robustness, calibration, resource cost and safety.
+7. **Resolving conflicts:** merge compatible changes, preserve alternatives, defer uncertain changes or reject unsafe/incompatible candidates.
+8. **Activating under control:** update the affected mechanism's authoritative state through an explicit, traceable transition; Learning coordinates but does not become owner of every cognitive state.
+9. **Monitoring after activation:** compare actual later behaviour with expected improvement and watch for delayed regressions.
+10. **Recovering if necessary:** restore a previous operational version where appropriate without erasing the developmental history or pretending later experiences did not occur.
+
+This cycle is a conceptual capability model, not a mandatory serial pipeline or decision to create one component for each step.
+
+### 18.5 Learning classes that must not be conflated
+
+| Class | What changes | What it does not prove |
+|---|---|---|
+| Experience retention | A particular event becomes retrievable | Generalization or behavioural improvement |
+| Memory organization | Retrieval, indexing or associations change | Correctness of the represented knowledge |
+| Belief revision | Epistemic commitment or uncertainty changes | Improved underlying model or skill |
+| Representation learning | Concepts, relations or abstractions change | Reliable use in future decisions |
+| Predictive-model adaptation | Forecasting behaviour changes | Transfer beyond the evaluated distribution |
+| Strategy learning | Selection of methods or plans changes | Safe performance in all contexts |
+| Skill acquisition | A capability becomes more reliable or efficient | General intelligence or unrestricted autonomy |
+| Metacognitive calibration | Estimates of competence/uncertainty improve | Actual domain competence unless measured |
+| Governance/configuration change | Permitted operating constraints change | Cognitive learning; this is a separate authority domain |
+
+A successful system may require several of these to interact, but they should not be collapsed into one vague "memory update."
+
+### 18.6 Failure scenarios and required tests
+
+1. New experience overwrites an established capability without regression testing.
+2. The Brain stores every event but exhibits no persistent behavioural change.
+3. A learning process memorizes training/test cases and fails on novel related situations.
+4. Fast learning interferes with stable general knowledge.
+5. Gradual abstraction erases important exceptions or context.
+6. A candidate is evaluated against data that leaked from its training experience.
+7. A candidate is activated while based on a stale baseline.
+8. Concurrent candidates change dependent mechanisms incompatibly.
+9. A failed action teaches the wrong lesson because the actual failure cause is misattributed.
+10. A successful outcome reinforces an accidental correlation rather than a causal strategy.
+11. The Brain overfits to a user's recent preference and forgets older standing constraints.
+12. A strategy improves average reward but creates rare catastrophic failures.
+13. Confidence improves while objective performance declines.
+14. Repeated retrieval is mistaken for repeated independent experience.
+15. The same event is replayed after recovery and produces duplicate learning.
+16. A model rollback restores old behaviour but destroys later valid experience or lineage.
+17. A candidate improves one task and causes negative transfer in another.
+18. A training environment modifies live cognitive state before evaluation.
+19. Learning is driven by an adversarial or manipulated reward signal.
+20. A model update changes a decision while the corresponding plan is in progress.
+21. Learning becomes permanently conservative because failures are over-penalized.
+22. Learning becomes recklessly exploratory because short-term success is over-rewarded.
+23. The Brain cannot explain which experiences caused a capability change.
+24. A new capability is reported as learned without a reproducible before/after comparison.
+25. A model-provider change is misrepresented as the Brain learning from experience.
+26. A learning mechanism becomes an opaque hardcoded catalogue of stimulus-to-response mappings.
+
+### 18.7 Candidate invariants versus unresolved choices
+
+**Candidate foundational invariants**
+- Experience retention and behavioural learning are separate claims.
+- Learning candidates cannot silently mutate active authoritative state.
+- Every material adaptation has evidence lineage, baseline, target, version and evaluation record.
+- Activation is controlled, observable and recoverable.
+- The affected mechanism retains ownership of its active state; Learning coordinates adaptation rather than owning all learned knowledge.
+- Learning evaluation includes transfer, regression, interference and robustness, not only training performance.
+- Failed, partial, rejected, cancelled and uncertain outcomes remain distinguishable.
+- Replaying old experience cannot silently count as new independent evidence.
+- Developmental history is preserved across rollback and recovery.
+- Acquired behaviour is not replaced by hardcoded scenario-to-response rules.
+- Learning does not grant permission to bypass Governance, Security or Action boundaries.
+- The system may defer learning when evidence is weak or consequences are high.
+
+**Unresolved choices**
+- Which forms of learning are required in the first Brain foundation and which are later capabilities.
+- Which state changes can be evaluated online versus in a controlled development environment.
+- How to construct representative held-out and adversarial evaluation data.
+- What evidence threshold permits activation for different consequence classes.
+- How to evaluate transfer in open-ended environments.
+- How to detect negative transfer and rare regressions.
+- How to balance stability, plasticity, exploration and consolidation.
+- How learning adapts when the environment changes or evidence is non-stationary.
+- What rollback means for non-parametric memory, beliefs, strategies and relational representations.
+- Which changes require human approval or governance review.
+- How to measure whether learning is improving general cognitive capability rather than only a narrow benchmark.
+
+### 18.8 Reviewer challenge checklist
+
+Challenge whether the proposal distinguishes memory from learning; whether it relies too heavily on complementary-learning-systems analogies; whether candidate isolation and evaluation are feasible; whether transfer and regression tests are adequate; whether learning from action outcomes preserves correct causal attribution; whether active state can be changed atomically or safely; whether rollback preserves valid experience; whether the proposed mechanism can learn beyond hand-authored scenario mappings; and whether the design is genuinely a developmental Brain rather than an LLM wrapper with a memory store.
+
+### 18.9 Sources and evidence
+
+- Liao, Z. and Losonczy, A. (2024), [Learning, Fast and Slow: Single- and Many-Shot Learning in the Hippocampus](https://www.annualreviews.org/content/journals/10.1146/annurev-neuro-102423-100258), *Annual Review of Neuroscience*, 47, 187–209.
+- Singh, D. and Schapiro, A. C. (2026), [Evidence for Complementary Learning Systems Within the Hippocampus](https://pubmed.ncbi.nlm.nih.gov/42421581/), *Philosophical Transactions of the Royal Society B*.
+- Tarder-Stoll, H. et al. (2026 issue; published online 2025), [Adaptive Episodic Memory](https://doi.org/10.1152/physrev.00005.2025), *Physiological Reviews*, 106(2).
+- Wang, L. et al. (2024), [A Comprehensive Survey of Continual Learning: Theory, Method and Application](https://pubmed.ncbi.nlm.nih.gov/38407999/), *IEEE Transactions on Pattern Analysis and Machine Intelligence*, 46(8), 5362–5383.
+- Pham, Q., Liu, C. and Hoi, S. C. H. (2024), [Continual Learning, Fast and Slow](https://pubmed.ncbi.nlm.nih.gov/37831566/), *IEEE Transactions on Pattern Analysis and Machine Intelligence*, 46(1), 134–149.
+- Badre, D. (2025), [Cognitive Control](https://www.annualreviews.org/content/journals/10.1146/annurev-psych-022024-103901), *Annual Review of Psychology*, 76, 167–195.
+- Mattar, M. G. and Daw, N. D. (2026), [Planning in the Brain: It's Not What You Think It Is](https://www.annualreviews.org/content/journals/10.1146/annurev-neuro-102124-015847), *Annual Review of Neuroscience*, 49, 435–450.
+- Furutachi, S. and Hofer, S. B. (2026), [Rethinking Predictive Processing](https://www.annualreviews.org/content/journals/10.1146/annurev-neuro-102124-031410), *Annual Review of Neuroscience*, 49, 471–494.
+- Disney D23, [MCU Robot Roundup](https://d23.com/mcu-robot-roundup/) (2025), for the MCU capability boundary and distinction between J.A.R.V.I.S. and F.R.I.D.A.Y.
+
+### 18.10 Provisional conclusion
+
+The Brain requires genuine developmental machinery: experience must be capable of producing persistent, attributable and transferable changes in future cognition and behaviour. This requires more than memory storage and more than a model update. It requires learning hypotheses, candidate isolation, evaluation, conflict handling, controlled activation, outcome monitoring and recoverable developmental lineage. The proposed direction supports the governing principle — **engineer the mechanisms; let behaviour be acquired through experience** — without assuming that the Brain is complete at foundation stage or that every future capability must be hardcoded now.
+
+This investigation is ready for independent challenge. It does not approve an implementation method, technology stack, component decomposition or autonomous self-modification authority.
+
+---
+
+## 19. Cross-investigation synthesis — A through G
+
+The seven investigations are intended to describe interacting responsibilities within one Brain foundation, not seven independent products or a fixed serial pipeline.
+
+| Investigation | Central cognitive problem | Cross-dependencies |
+|---|---|---|
+| A — Information lifecycle and ownership | What information exists, what it means, where it came from and who owns it | All mechanisms depend on trustworthy, typed and attributable information |
+| B — Coordination and consistency | How cognitive mechanisms interact without losing coherence or corrupting state | All concurrent mechanisms, updates, failures and recovery |
+| C — Attention and resource allocation | What receives processing, how resources are allocated and when work is interrupted | Goals, working context, prediction, learning, metacognition |
+| D — Working context and active representations | What information and task state are actively available and resumable | Attention, memory, goals, reasoning, coordination |
+| E — Goals, planning, intentions and decisions | What the Brain is pursuing, why, by what means and with what commitment | Context, memory, prediction, valuation, reasoning, governance/action boundaries |
+| F — Prediction, belief revision and causal models | What the Brain expects, what it currently believes and how evidence changes understanding | Representation, memory, reasoning, planning, metacognition, learning |
+| G — Learning and developmental integrity | How experience creates persistent improvement without destabilizing cognition | All mechanisms; verified outcomes; controlled candidate/activation lifecycle |
+
+### 19.1 Integrated functional loop
+
+The Brain's activity should be understood as a recurrent, branching and concurrent set of processes, not a mandatory sequence:
+
+1. Experience is admitted with provenance and integrity context.
+2. Current context and relevant retained information are assembled.
+3. Attention allocates processing and selects what requires deeper work.
+4. Representations and hypotheses are formed or retrieved.
+5. Beliefs and predictions are evaluated against available evidence.
+6. Goals, constraints and possible plans are considered.
+7. Reasoning, simulation and valuation help compare alternatives.
+8. The Brain may decide, defer, ask, monitor, learn, or form an action request.
+9. Any external action request passes through the separate signalling, governance and action pathways.
+10. Verified outcomes return as new evidence.
+11. Prediction, belief, memory, strategy and metacognitive state may be reconsidered.
+12. Candidate adaptations may be evaluated and activated under controlled developmental rules.
+
+Not every experience requires every step. Some mechanisms may work in parallel; some may be skipped, suspended or revisited. The loop must not be interpreted as a global synchronous controller.
+
+### 19.2 Foundational versus advanced versus acquired
+
+**Foundational capacities** are the general mechanisms and contracts required to represent information, preserve evidence, coordinate state, allocate resources, maintain context, reason under uncertainty, form and revise goals/plans, evaluate predictions and support controlled learning.
+
+**Advanced mechanisms** are more sophisticated capabilities that can be developed later when the foundation and evidence justify them. Examples may include richer causal/counterfactual reasoning, long-horizon planning, advanced self-modeling, broad skill acquisition, sophisticated affective modulation, multimodal world models and more complex social cognition. Their eventual design must be separately justified.
+
+**Acquired capabilities and behaviours** are knowledge, preferences, associations, strategies, skills, habits and domain-specific competence that should develop through experience and controlled learning rather than being prewritten as a catalogue of responses.
+
+These are capability categories, not a frozen subsystem list or implementation order. A capability may depend on both foundational mechanisms and later acquired development.
+
+### 19.3 Cross-cutting requirements
+
+The following concerns recur across A–G and should be treated as integrated architectural requirements:
+- provenance and source lineage;
+- distinction between evidence, inference, belief, simulation, intention and verified outcome;
+- authoritative ownership and explicit contracts;
+- context-sensitive attention and resource budgets;
+- causal/version dependencies and stale-state handling;
+- controlled interruption, suspension, recovery and resumption;
+- calibrated uncertainty and visible disagreement;
+- learning isolation, transfer, regression detection and rollback;
+- privacy and access restrictions through derived data;
+- separation of cognition, system coordination, authorization, execution, security and infrastructure;
+- auditability of material state changes and decisions;
+- longitudinal evaluation of persistent behavioural change.
+
+### 19.4 Major unresolved architecture questions
+
+The investigations are not yet sufficient to freeze the Brain architecture. Remaining questions include:
+1. What are the smallest coherent cognitive responsibilities that must have independent state ownership, and which are simply operations over shared state?
+2. What common representational contracts are essential without forcing all cognitive content into one universal schema?
+3. How should different kinds of uncertainty, evidence strength, confidence, source reliability and model disagreement be represented?
+4. What mechanisms are required for reasoning, abstraction, causal discovery and counterfactual validation beyond current sections?
+5. How should valuation and affective modulation be integrated without hardcoding emotional categories or creating an unnecessary biological subsystem?
+6. What form of self-monitoring and self-model is foundational, and what belongs to advanced development?
+7. What learning capabilities are necessary at the earliest developmental stage, and which can be acquired or introduced later?
+8. Which cognitive state transitions require atomicity, and which may converge asynchronously?
+9. What is the minimum viable Brain interface to the future sensory, SYS-02, action, autonomic, defence, governance and development systems?
+10. Which project-level choices require explicit Project Director approval before the Brain architecture can be finalized?
+
+### 19.5 Consolidated reviewer challenge
+
+The Reviewer should assess the integrated A–G model rather than reviewing each section in isolation. The central question is whether these capabilities can cooperate to produce persistent, experience-dependent, transferable improvement while maintaining coherent state, epistemic integrity and strict system boundaries. The Reviewer should also identify missing cognition that cannot be adequately represented by A–G, and challenge any apparent completeness claim.
+
+**No final Brain architecture approval or implementation authorization is implied.**
