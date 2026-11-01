@@ -2173,3 +2173,22 @@ The human reference pass must not stop at the brain. Human physiology describes 
 - [The Peripheral Neuroimmune System](https://doi.org/10.1093/jleuko/qiae230), *Journal of Leukocyte Biology* (2024).
 - Tsigos et al., [Stress: Endocrine Physiology and Pathophysiology](https://www.ncbi.nlm.nih.gov/books/NBK278995/), Endotext/NCBI Bookshelf.
 
+
+
+### 21.14 MCU J.A.R.V.I.S. — evidence classification and capability implications
+
+The current MCU evidence should be separated into three classes:
+
+1. **Official MCU reference material:** D23's 2025 MCU Robot Roundup describes J.A.R.V.I.S. as securing Stark's mansion and tower, helping run Stark Industries with Pepper Potts, supplying information to the Avengers, and controlling the second Iron Legion. It also distinguishes J.A.R.V.I.S. from F.R.I.D.A.Y., who replaces him after he is uploaded into Vision.
+2. **Official 2026 production commentary:** The Walt Disney Company *VisionQuest* article (13 October 2026) describes J.A.R.V.I.S. as one of the AI personas embedded in Vision's programming. Emily Hampshire characterizes J.A.R.V.I.S.'s role in that story as security. This is production/performer commentary about the fictional role, not an engineering specification.
+3. **Independent human-machine teaming interpretation:** The U.S. Department of Defense's 2020 workshop report uses a scene from *Iron Man* to illustrate contextual interpretation. Its authors interpret J.A.R.V.I.S.'s reply to Tony's private-server remark as understanding an implicit instruction to keep a project confidential. This is a researcher's interpretation of a fictional interaction, not official canon or evidence of an implemented algorithm.
+
+**Capability reference, not implementation blueprint:** the MCU portrayal suggests a system that integrates information, understands context and implicit intent, provides timely support, coordinates digital and physical systems, supports a human collaborator, and operates across changing tasks. The film material does not establish a technical design for persistent self-learning, epistemic calibration, reliable causal reasoning, safe authorization, or general intelligence. Do not infer these from the character's apparent competence.
+
+**Engineering boundary:** fictional J.A.R.V.I.S. is portrayed with security and operational responsibilities, but the MethaneX architecture must preserve its own authority separation. The Brain may reason about threats, evidence and context and may request security-related operations; security enforcement, permission and containment remain owned by the explicitly designated external system domains. Fictional scope does not override the Project Director's engineering boundaries.
+
+**Sources checked**
+- D23, [MCU Robot Roundup](https://d23.com/mcu-robot-roundup/), 18 July 2025.
+- The Walt Disney Company, [Marvel Television's VisionQuest](https://thewaltdisneycompany.com/news/marvel-television-visionquest-disney-plus/), 13 October 2026.
+- U.S. Department of Defense, [Future Directions in Human Machine Teaming Workshop](https://basicresearch.defense.gov/Portals/61/Future%20Directions%20in%20Human%20Machine%20Teaming%20Workshop%20report%20%20%28for%20public%20release%29_1.pdf), published 15 January 2020, especially its J.A.R.V.I.S. vignette and human-machine teaming framework.
+
