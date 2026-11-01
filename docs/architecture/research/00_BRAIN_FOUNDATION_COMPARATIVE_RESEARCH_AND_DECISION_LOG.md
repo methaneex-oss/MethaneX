@@ -1962,3 +1962,18 @@ The investigations are not yet sufficient to freeze the Brain architecture. Rema
 The Reviewer should assess the integrated A–G model rather than reviewing each section in isolation. The central question is whether these capabilities can cooperate to produce persistent, experience-dependent, transferable improvement while maintaining coherent state, epistemic integrity and strict system boundaries. The Reviewer should also identify missing cognition that cannot be adequately represented by A–G, and challenge any apparent completeness claim.
 
 **No final Brain architecture approval or implementation authorization is implied.**
+
+
+---
+
+## 20. Research-session update — 2026-11-01 (continued)
+
+- Added Investigation F: prediction, belief revision and causal world models. The analysis explicitly treats predictive processing as a contested framework, separates prediction errors from model errors, and requires typed distinctions among observations, beliefs, forecasts, simulations and verified outcomes.
+- Added Investigation G: learning, adaptation and developmental integrity. The analysis distinguishes experience retention from behavioural learning and records candidate isolation, evaluation, transfer, regression, controlled activation and developmental lineage requirements.
+- Added an integrated A–G synthesis describing recurrent interactions, foundational versus advanced versus acquired capabilities, cross-cutting invariants and unresolved architecture questions.
+- Expanded the independent Reviewer handoff on PR #171 to cover A–G as one integrated Brain foundation.
+- The research record remains provisional. It is not the final Brain Foundation architecture, does not settle component boundaries or technology choices, and does not authorize implementation.
+- The six-checkup request is only partially schedulable under the current automation limit: three one-time checkups were created; the remaining three were rejected because the account allows three active scheduled tasks. Their recorded run histories were checked and all three are pending with no run result yet.
+- No runtime code, tests, dependencies, approved whole-system documents or merge state were changed.
+
+**Remaining work before calling the investigation complete:** independently validate the source-to-claim mapping; investigate any missing cognitive capabilities (especially representation/reasoning integration, self-monitoring and language/contextual communication); challenge the cross-mechanism architecture for over-fragmentation and missing ownership; consolidate the whole-Brain foundation requirements and unresolved Project Director decisions; then verify the final research package and Reviewer handoff. Do not claim that a full 60-minute wall-clock period has elapsed merely because the research record has grown.
