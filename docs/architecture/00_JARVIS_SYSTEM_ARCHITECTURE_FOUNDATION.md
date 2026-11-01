@@ -45,6 +45,8 @@ Examples:
 
 Deterministic engineering remains appropriate for mathematical operations, data structures, type and schema validation, protocol rules, security, permissions, resource limits, integrity constraints, and other explicit engineering invariants. Such constraints must not be confused with hardcoded cognitive conclusions.
 
+The Brain cannot begin as an unstructured blank system. It requires an engineered bootstrap: initial representations and data structures, learning/update procedures, initialization conditions, operational constraints, and mechanisms that permit experience to be received and processed. These are legitimate when they establish the capacity and conditions for development. They become prohibited hardcoding when they encode specific beliefs, associations, preferences, emotional reactions, strategies, or desired behavioural conclusions that should instead be acquired and revised through experience. Later specifications must state the purpose and developmental implications of each bootstrap assumption, and provide a way to test that it enables learning rather than predetermining its results.
+
 ### 2.3 Foundations enable development; they do not contain every future capability
 
 The Brain foundation must provide the structural and mechanistic basis on which more advanced cognitive capabilities can be developed.
@@ -59,6 +61,15 @@ For every proposed Brain component, later specifications must distinguish:
 
 The foundation must anticipate future extension through sound boundaries and contracts. Anticipating a future system does not mean implementing that system inside the Brain.
 
+For classification purposes, use these operational tests:
+
+- **Foundational mechanism:** a general structural or computational capacity necessary for a coherent, extensible cognitive system, or for the system to develop further capabilities. Its purpose is to enable classes of future processing, not prescribe a particular learned conclusion.
+- **Advanced mechanism:** a more sophisticated mechanism that depends on, composes, or extends foundational capacities. It may be deliberately engineered later without being part of the minimum foundation.
+- **Acquired capability or behaviour:** a competence, internal model, association, preference, strategy, or behavioural tendency formed or materially improved through experience and learning rather than installed as a predetermined result.
+- **Developmental change within a foundation:** foundational mechanisms may themselves have parameters, structures, or operating characteristics that adapt through experience. Calling a mechanism foundational does not imply that every aspect of its state must remain fixed.
+
+Classification is based on architectural role and dependency, not on whether a capability sounds basic or sophisticated. Later specifications must explain ambiguous cases and identify what is engineered initially versus what is expected to develop.
+
 ### 2.4 Biological inspiration, engineering freedom
 
 Biological anatomy and physiology provide useful questions and patterns: specialization, integration, feedback, parallel pathways, regulation, adaptation, resilience, and coordination.
@@ -72,6 +83,10 @@ Every biological analogy must be translated into an explicit engineering respons
 The Brain owns the authoritative cognitive processes and state assigned to it by the approved architecture. Other systems may sense, transport, transform, store, regulate, or execute information and operations under explicit contracts, but they must not create an ungoverned second Brain.
 
 The exact ownership boundaries and state contracts are not finalized by this document. They must be specified before dependent systems are designed in detail.
+
+Cognitive authority must be distinguished from governance authority. The Brain forms cognitive intent, evaluates options, and makes cognitive decisions. Governance establishes and enforces the rules, permissions, and authorization boundaries under which consequential operations may occur; it is not a second cognitive system and must not independently originate JARVIS's beliefs, goals, or intentions. The Brain cannot authorize itself merely by deciding that an action should occur.
+
+The intended high-level control path is: **cognitive intent and decision → action request → governance authorization → operational validation → execution → outcome verification → feedback to the Brain**. The exact allocation and implementation of these steps remain open, but no step may be silently skipped. Governance policy may be centrally defined while enforcement is distributed across relevant execution boundaries.
 
 ### 2.6 Evidence before architectural certainty
 
@@ -161,6 +176,8 @@ Potential responsibilities include:
 - scheduling and background maintenance;
 - isolation, recovery, and operational stability.
 
+Operational recovery and security containment are different responsibilities even when both involve isolation or restart. For example, restarting a failed process is operational recovery; isolating a process suspected of compromise is security containment; deciding whether the process or its outputs can be trusted again is a security/governance decision. Their interfaces must be explicit so autonomic recovery cannot undo security containment or independently restore trust.
+
 The distinction between autonomic regulation and cognitive control must be specified. Operational regulation must not silently become an alternative source of goals or cognitive decisions.
 
 ### 3.6 Embodiment and infrastructure
@@ -176,6 +193,18 @@ Potential areas include:
 - connections to external applications and services.
 
 Infrastructure provides resources and interfaces. It is not itself the source of JARVIS's intelligence.
+
+### 3.7 Additional system-level and cross-cutting responsibilities
+
+The six domains above are an initial conceptual map, not an exhaustive list of every responsibility. The whole-system architecture must explicitly account for the following responsibilities and decide whether each is a distinct system, a cross-cutting capability, or a responsibility distributed across existing domains. Their inclusion here does not mandate a separate deployable subsystem.
+
+- **Defence and security:** protect assets, identities, data, execution paths, and trust boundaries; detect and respond to compromise; and govern containment and restoration of trust.
+- **Governance, authorization, and safety assurance:** define policy, authority, permissions, operational constraints, auditability, and approval boundaries for consequential actions. Governance is not cognitive goal formation.
+- **Interaction and interfaces:** manage user/operator-facing and system-facing interaction surfaces, including presentation, dialogue transport, control surfaces, and feedback. Interface handling must not become an independent cognitive authority.
+- **Development, training, and evaluation:** provide controlled environments and processes for developing, training, testing, validating, and evaluating mechanisms. These responsibilities may sit outside the live operational JARVIS boundary and must not silently alter live cognitive state.
+- **Global modulation and regulation:** investigate whether system-wide modulation of cognitive operating conditions is a distinct responsibility or belongs within Brain mechanisms and/or autonomic regulation. Do not create an endocrine-inspired subsystem merely to imitate biology or hardcode emotional outputs.
+
+The whole-system responsibility map must define ownership, interfaces, and overlap resolution for these responsibilities. It must also identify additional responsibilities discovered during decomposition.
 
 ## 4. Brain-first construction boundary
 
@@ -248,7 +277,10 @@ Existing documents, plans, branches, and implementations are **reference materia
 Consequently:
 - Existing layer numbers, priorities, phase names, technology allocations, and implementation sequences are not automatically carried forward.
 - Existing mechanisms and source code are not automatically discarded.
+- Existing mechanisms that are technically sound, useful, and compatible with the approved architecture should be preserved and reused where practical.
 - Reusable concepts and verified implementation facts may be retained after examination.
+- Mechanisms that are partly suitable should be adapted where that is technically preferable to replacement.
+- Replacing or discarding an existing mechanism requires a documented technical justification explaining why preservation or adaptation cannot satisfy the approved requirements.
 - Contradictory, premature, duplicated, or misleading documentation must be revised, superseded, or clearly marked as historical.
 - No existing implementation is authorized to dictate the new architecture merely because it already exists.
 - No source-code changes, migrations, deletions, or merges are authorized by this document.
@@ -271,11 +303,18 @@ Use explicit statuses: **proposed**, **approved**, **rejected**, **superseded**,
 
 The Project Director retains final authority over project direction and approval of the architecture.
 
-## 8. Immediate next architectural deliverable
+## 8. Document-specific approval gates and sequencing
 
-The next document should be a dedicated **JARVIS Whole-System Anatomy and Responsibility Map**.
+The whole-system responsibility map is a separate architectural deliverable, identified as **JARVIS Whole-System Anatomy and Responsibility Map** (`docs/architecture/01_JARVIS_WHOLE_SYSTEM_ANATOMY_AND_RESPONSIBILITY_MAP.md`). Its presence in the same pull request or documentation branch does not make it part of this document's approval decision.
 
-It will deepen Section 3 by:
+Approval must be recorded separately for each document:
+1. Approval of this foundation document (00) establishes only its governing direction and principles.
+2. Approval of the whole-system responsibility map (01) establishes only the system decomposition and responsibility boundaries it explicitly covers.
+3. Approval of the Brain foundation architecture is a later, separate decision and must not be inferred from approval of 00 or 01.
+
+No document's approval automatically approves a dependent document, resolves its open questions, or authorizes implementation. Each document must be reviewed against its own scope and acceptance criteria by the independent Reviewer and then explicitly approved by the Project Director.
+
+The responsibility map deepens Section 3 by:
 - defining each major system's purpose and boundary;
 - decomposing its principal subsystems;
 - identifying inputs, outputs, and relationships;
@@ -293,7 +332,9 @@ This document is ready to serve as the starting point for further architectural 
 - biological inspiration without literal biological imitation;
 - foundational mechanisms separated from advanced mechanisms and acquired behaviour;
 - no hardcoding of the intelligence that should develop through experience;
-- clear separation of cognitive authority from sensing, communication, action, regulation, and infrastructure;
+- clear separation of cognitive authority from sensing, communication, action, regulation, infrastructure, and governance authorization;
+- explicit bootstrap structures that enable learning without pre-programming acquired conclusions;
+- preservation and reuse of technically sound existing mechanisms where compatible with the approved architecture;
 - a fresh documentation baseline that treats previous plans as reference material pending review;
 - no implied authorization to implement or merge.
 
