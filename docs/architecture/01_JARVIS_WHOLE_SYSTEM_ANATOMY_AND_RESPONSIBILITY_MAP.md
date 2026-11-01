@@ -96,7 +96,7 @@ Each cross-cutting function must have a clear accountable owner for each contrac
 |---|---|---|
 | Policy, authority, permission scope, and risk acceptance | SYS-11 Governance and Assurance Authority, acting under authority delegated by the responsible human or organization | SYS-07 enforces security policy; SYS-04 enforces action-time constraints; SYS-09 mediates human decisions |
 | Identity lifecycle and authorization policy | SYS-11 for policy and delegation; the relevant human or organization remains the authority for its identities and grants | SYS-07 operates authentication, credential protection, and security enforcement; SYS-04 validates presented authorization for execution |
-| Data provenance and integrity | The originating system is accountable for source attribution and transformation records; SYS-07 is accountable for integrity and trust assessment | SYS-02 preserves message metadata; SYS-03 records acquisition provenance; SYS-01 owns cognitive interpretation, not source authenticity |
+| Data provenance and integrity | The originating system is accountable for source attribution and its own acquisition record; each system that performs a subsequent transformation is accountable for recording that transformation and linking it to its input evidence | SYS-02 preserves provenance metadata across transport; SYS-03 records acquisition and preprocessing provenance; SYS-01 records provenance for cognitive derivations where represented; SYS-07 assesses integrity and trust but does not author other systems' provenance records |
 | Observability and diagnostics | Each system owns the correctness of its own telemetry; SYS-05 owns aggregate operational health monitoring | SYS-09 presents authorized views; SYS-07 protects security logs; SYS-11 defines audit requirements |
 | Privacy and information handling | SYS-11 defines policy and permitted use | SYS-03 and SYS-09 apply acquisition and interaction handling; SYS-07 protects access and integrity; SYS-01 applies governed cognitive retention rules |
 | Safety cases and human approval | SYS-11 owns assurance policy and approval requirements | SYS-09 mediates approval and emergency controls; SYS-04 enforces action preconditions; SYS-07 enforces security restrictions |
@@ -480,7 +480,7 @@ The biological immune analogy is useful for layered defence, recognition, respon
 
 ### 10.3 Outputs
 
-- allow, deny, constrain, or escalate decisions within policy;
+- security enforcement results under SYS-11 policy, such as denial, restriction, containment, or escalation, together with any finding that no security restriction applies; these results are not general action authorization;
 - trust and integrity assessments with supporting evidence;
 - containment and isolation actions;
 - security alerts and audit records;
@@ -488,7 +488,7 @@ The biological immune analogy is useful for layered defence, recognition, respon
 
 ### 10.4 Authority boundary
 
-Defence enforces approved security and integrity policy. Policy ownership, risk acceptance, and exceptional authorization belong to the Governance and Assurance Authority (with human approval where required). Defence does not own the Brain's general world model or decide the meaning of all unfamiliar observations.
+Defence enforces approved security and integrity policy and returns security assessments or enforcement results under SYS-11's authoritative policy. It may deny, restrict, or contain an operation under that policy, including emergency containment under pre-authorized rules; it does not grant general action authorization, independently approve consequential actions, or redefine policy. General action authorization belongs to the Governance and Assurance Authority (with human approval where required). Defence does not own the Brain's general world model or decide the meaning of all unfamiliar observations.
 
 Security actions must be proportionate, explainable, auditable, and reversible where feasible. Operational recovery remains SYS-05 responsibility when no security compromise is suspected. Once compromise is suspected, SYS-07 owns containment and investigation; SYS-05 must respect the containment state. SYS-07 supplies integrity and incident evidence, while SYS-11 or the responsible external authority authorizes restoration of trust where required. High-impact policy changes and exceptional access require explicit governance.
 
@@ -518,7 +518,7 @@ JARVIS may have multiple forms of embodiment: a local computer, remote compute, 
 - **Network substrate:** local and wide-area connectivity, transport, and network interfaces.
 - **Device substrate and device interfaces:** cameras, microphones, speakers, displays, sensors, peripherals, controllers, drivers, and low-level device adapters. SYS-08 owns the physical/computational resource and its low-level interface; SYS-03 owns acquisition and preparation of observations from sensors; SYS-04 owns commanded effects through actuators. Device inventory and hardware state have one explicit substrate owner even when several systems use the device.
 - **Physical platform:** chassis, mobility, manipulators, power supply, and physical interfaces if a robotic embodiment is developed.
-- **External service environment:** supported applications, APIs, model providers, databases, and other replaceable resources.
+- **External dependency interfaces and adapters:** connectors, API clients, protocol adapters, dependency contracts, and resource-health interfaces through which JARVIS accesses supported external applications, APIs, model providers, databases, and other replaceable resources. Those providers and services remain external to JARVIS and are not owned by SYS-08; SYS-08 owns the integration interfaces and local dependency configuration, not the external providers' operation, policies, or internal state.
 
 ### 11.2 Inputs
 
