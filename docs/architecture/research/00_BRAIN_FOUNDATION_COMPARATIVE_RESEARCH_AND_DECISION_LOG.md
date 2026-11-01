@@ -677,3 +677,200 @@ The strongest current direction is not a single memory database or one universal
 Human cognition supplies the stronger reference for separating episodic detail, active context, source attribution and transformed memory. Marvel J.A.R.V.I.S. supplies the operational requirement that information be integrated contextually and made useful across coordinated capabilities.
 
 This direction is ready for independent challenge, but it is not yet approved architecture. The next investigation is **Cognitive Coordination and Consistency**, which must determine how these owners safely exchange and revise information under concurrency, delay, feedback and partial failure.
+
+
+---
+
+## 11. Project Director instruction — exhaustive problem discovery and Reviewer handoff
+
+On 2026-11-01, the Project Director explicitly instructed the Architecture Partner to expose every problem, misunderstanding, ambiguity, risk, missing mechanism, unresolved dependency and potential failure discovered during Brain Foundation work; investigate and solve what can be solved through comparative research into Marvel J.A.R.V.I.S. and human cognition; and raise uncertain matters directly to the Project Director rather than silently guessing. The Director also instructed that **all work and findings must be documented for the independent Reviewer, including analysis that would otherwise remain informal or undocumented**.
+
+### 11.1 Operating obligations
+
+For every investigation and architectural activity:
+
+1. **Discover before deciding.** Actively search for failure modes, edge cases, missing responsibilities, contradictory assumptions, boundary leaks, hidden dependencies, operational constraints and test gaps. Do not limit the investigation to the questions already listed in this document.
+2. **Use both reference lenses.** Examine the relevant Marvel J.A.R.V.I.S. portrayal and human cognitive science separately. State what each genuinely supports and what neither can establish.
+3. **Engineer where the references are insufficient.** Neither fiction nor biology is required to contain the complete answer. Where both are inadequate, develop and justify an engineering solution; explicitly label it as such.
+4. **Resolve what can be resolved.** Provide a reasoned provisional or final recommendation, with trade-offs, failure semantics and evidence requirements. Do not leave a solvable issue as a vague open question.
+5. **Escalate real decisions.** Ask the Project Director when a decision depends on project intent, acceptable risk, authority, identity, privacy, resource limits, desired capability, or a trade-off that cannot responsibly be inferred. Do not ask the Director to decide routine engineering details that can be justified by evidence.
+6. **Record uncertainty honestly.** Mark what is established, inferred, proposed, provisionally selected, rejected, unresolved, or awaiting Director decision. Never present uncertainty as certainty.
+7. **Maintain a complete audit trail.** Record findings, alternatives, rejected approaches, assumptions, corrections, source references, decision rationale, failure scenarios, test implications and changes of mind in this document. If analysis occurs outside the document, transfer its material conclusions and relevant reasoning here before treating the work as complete.
+8. **Keep the Reviewer continuously informed.** Each meaningful research update must identify the new or revised sections and explicitly ask the independent Reviewer to challenge them. The Reviewer must be able to reconstruct not only the conclusion but why it was reached.
+9. **Do not silently expand authority.** This instruction authorizes exhaustive architecture research and documentation only. It does not authorize runtime implementation, changes to approved system boundaries, deletion/migration of existing code, or merging the PR.
+10. **Preserve scope.** Brain Foundation remains the subject. Distinguish Brain-internal coordination from SYS-02 system-wide signalling and coordination, and distinguish cognitive decision from governance authorization and external execution.
+
+### 11.2 Required issue record
+
+Each material issue should be recorded with, where applicable:
+- unique issue/question identifier and affected mechanisms/boundaries;
+- concrete scenario that exposes the problem;
+- consequence if left unresolved;
+- Marvel reference and limits;
+- human-cognition reference and limits;
+- candidate engineering solutions and comparative evaluation;
+- selected direction and why;
+- rejected alternatives and their failure modes;
+- invariants versus policy/implementation choices;
+- unresolved facts, assumptions and confidence;
+- whether Project Director input is required;
+- acceptance/evaluation criteria and adversarial tests;
+- Reviewer challenge questions;
+- source references and date investigated.
+
+A single investigation may identify many issues. Do not force them into one artificial question if their causes or solutions differ.
+
+### 11.3 Director escalation rule
+
+When uncertain, do not conceal uncertainty or make a unilateral project-level decision. Present the exact ambiguity, the viable alternatives, the consequences of each, the recommendation (if evidence supports one), and the specific decision required from the Project Director. If no Director decision is currently needed, say so rather than manufacturing a question.
+
+---
+
+## 12. Investigation B — Cognitive Coordination and Consistency
+
+**Status:** Initial comparative investigation recorded; detailed mechanism contracts and acceptance criteria remain open.  
+**Question:** How can multiple cognitive mechanisms operate concurrently, exchange information and revise their own authoritative state while preserving a coherent, traceable and recoverable overall cognitive state?
+
+### 12.1 Problem statement
+
+The Brain cannot be assumed to operate as one serial pipeline. Perception-derived experience may be interpreted while memory is retrieved, predictions are generated, attention is reallocated, beliefs are revised and learning evaluates prior outcomes. These activities may overlap, interrupt one another, receive delayed information and produce competing results.
+
+The problem is not simply “how to synchronize threads.” It includes:
+- who owns each state and may commit changes;
+- how a consumer knows which versions and assumptions it used;
+- how causality is represented when messages arrive late or out of order;
+- how concurrent but independent updates coexist;
+- how genuinely conflicting updates are detected and resolved;
+- which information requires immediate consistency and which can tolerate temporary divergence;
+- how stale conclusions are detected without recomputing everything;
+- how feedback loops are bounded and instability detected;
+- how interruption, retry, duplication, crash and recovery affect cognitive state;
+- how partial failure is represented without pretending the whole Brain is either fully operational or fully unavailable.
+
+### 12.2 Marvel J.A.R.V.I.S. reference
+
+The Marvel portrayal shows J.A.R.V.I.S. coordinating information and functions across Stark's workshop, home systems, suits and mission contexts. It presents an integrated assistant whose separate capabilities contribute to coherent assistance under changing circumstances. The official Marvel character and Iron Man material describes suit intelligence, situational information and integrated technology capabilities, but remains a fictional capability portrayal.
+
+**Extractable lesson:** coordination must preserve coherent context across concurrent capabilities; a subsystem's local success is not enough if the combined system behaves inconsistently.
+
+**Limits:** Marvel does not provide an inspectable specification for internal scheduling, message delivery, causal ordering, state ownership, conflict resolution, synchronization, transaction boundaries, recovery or consistency guarantees. No particular distributed-systems architecture can be attributed to fictional J.A.R.V.I.S.
+
+### 12.3 Human cognition reference
+
+Research on cognitive control describes coordination emerging from distributed neural activity and hierarchical control networks. A 2024 review of multimodal neuroimaging discusses hierarchical organization and multiplexed control signals across distinct frontoparietal networks. A 2024 network-neuroscience study reports task-specific network configurations associated with working memory and inhibitory control, rather than one identical network configuration for every cognitive demand.
+
+**Extractable lesson:** cognitive coordination is dynamic and context-sensitive; distinct functions can rely on different but interacting network configurations. This cautions against assuming every cognitive operation must pass through one universal central controller or one fixed processing sequence.
+
+**Limits:** neuroscience does not yet provide a complete, settled explanation of global cognitive coordination. Neural networks are not software services, and biological synchrony does not prescribe software locks, queues, event buses, actors, transactions or consensus protocols. Human cognition can also exhibit interference, lapses and inconsistent representations; those are not design goals.
+
+### 12.4 Engineering reference and implications
+
+Distributed-systems engineering makes failure assumptions explicit: messages can be delayed, duplicated, reordered or lost; components can pause, crash and recover; and concurrent operations may not have a single total order. Consistency is not a binary universal property: stronger coordination has costs, while asynchronous/event-driven designs introduce temporary divergence and require explicit handling of delivery, replay and recovery.
+
+Microsoft's architecture guidance on event-driven systems specifically warns that asynchronous consumers can observe eventual rather than immediate consistency; broker-style decoupling can create data inconsistency and replay/recovery complexity, while mediator-style coordination adds control but risks coupling and bottlenecks.
+
+These engineering sources are not substitutes for the two required reference lenses. They are necessary because Marvel and neuroscience do not specify the software correctness mechanisms needed to implement a reliable cognitive system.
+
+### 12.5 Comparison and provisional selection
+
+**Provisional selected direction: distributed, owner-managed cognitive mechanisms coordinated through explicit contracts and causal/version metadata, with selective coordination strength based on the meaning and consequence of each state transition.**
+
+This is not a proposal for fully decentralized cognition, nor for one central controller that owns all thought. It combines:
+- human-inspired distributed, context-dependent coordination;
+- Marvel-inspired requirement for integrated, coherent assistance;
+- explicit software contracts and failure semantics from distributed-systems engineering.
+
+The Brain should not force every mechanism into global synchronization. Instead, it should define where authoritative ownership, causal dependencies, atomic transitions or bounded coordination are necessary. Independent work may proceed concurrently when it does not violate declared dependencies or invariants.
+
+**Why this is stronger:** a universal central controller creates a bottleneck and risks turning the Brain into a monolith; unrestricted asynchronous broadcasting creates stale reads, ambiguous authority and difficult recovery. Owner-managed state with explicit coordination rules offers a more defensible middle path while leaving implementation topology open.
+
+### 12.6 Candidate coordination principles — not yet approved invariants
+
+1. **Single authoritative writer per state domain, not one writer for the whole Brain.** A mechanism may publish proposals or evidence about another domain, but the designated owner commits that domain's authoritative state.
+2. **Explicit contracts.** Every cross-mechanism exchange identifies the meaning, schema/version, source, provenance, relevant context, dependencies and expected response semantics. Contracts must not imply that every consumer processes every event.
+3. **Causal context, not assumed global order.** Preserve event time, processing time, source sequence where available, and causal/dependency links. Do not infer causality solely from wall-clock timestamps.
+4. **Version-aware reads and writes.** A result records the versions of upstream state it consumed. Before committing, the owner or coordinator checks whether relevant dependencies changed; stale results are rejected, recomputed, or retained as qualified historical outputs.
+5. **Scoped consistency.** Specify stronger consistency for state transitions whose correctness requires it; permit eventual convergence for independent derived views or low-risk analyses. The required level must be justified by consequence, not selected globally.
+6. **Idempotent processing.** Re-delivery and retry must not duplicate an experience, belief revision, learning update or other non-repeatable effect.
+7. **Explicit conflict semantics.** Distinguish compatible parallel updates, competing hypotheses, mutually exclusive state transitions and irreconcilable conflicts. Do not resolve every conflict by last-write-wins or arbitrary confidence ranking.
+8. **Bounded feedback.** Track derivation and influence paths so a mechanism cannot treat its own output, or a downstream echo of it, as independent confirmation. Monitor repeated re-triggering and oscillation.
+9. **Partial-failure awareness.** Mechanisms expose health and state validity sufficiently for the Brain to know whether a result is unavailable, stale, degraded, incomplete or authoritative.
+10. **Recoverable transitions.** State changes that span multiple mechanisms require explicit progress, retry, compensation or reconciliation semantics. Do not assume a distributed transaction is automatically available.
+11. **No accidental central authority.** A scheduler or coordinator may allocate work and manage deadlines, but must not silently become the epistemic owner of beliefs, memories, predictions or valuations.
+12. **Bounded re-evaluation.** Dependency invalidation must avoid both stale cognition and unbounded recomputation. Re-evaluation should be prioritized by materiality, consequence, freshness and resource budget; unresolved work remains visibly stale or qualified.
+
+### 12.7 Concrete failure scenarios to design and test
+
+| Scenario | Failure if unmanaged | Required design response to investigate |
+|---|---|---|
+| Memory retrieval completes after a belief was revised | Old memory can overwrite or falsely support newer belief | Version-aware merge; preserve retrieval context and evidence age |
+| Two interpretations are produced concurrently | One is silently lost or treated as fact | Allow competing hypotheses with provenance and explicit epistemic status |
+| A prediction uses belief version 4 while belief advances to version 5 | Forecast may be treated as current despite stale assumptions | Record dependency versions; qualify, reevaluate or invalidate forecast |
+| Same experience is delivered twice after retry | Duplicate learning or inflated evidence | Stable identity/deduplication and idempotent effects |
+| Messages arrive out of causal order | Later state may be applied before prerequisite evidence | Causal dependency checks; defer or reconcile rather than trust arrival order |
+| Mechanism crashes after publishing but before recording completion | Consumers may act on an operation whose source thinks it failed | Durable transition/outbox or equivalent recovery semantics; exact pattern not selected |
+| Coordinator becomes unavailable | Whole Brain may stop despite independent mechanisms being healthy | Define degraded operation and bounded local autonomy |
+| One mechanism returns malformed or adversarial data | Downstream cognitive state may be corrupted | Contract validation, trust boundaries, quarantine and provenance retention |
+| Attention repeatedly reprioritizes the same task | Oscillation/starvation | Hysteresis, cooldown or other evidence-based anti-oscillation control; parameters unresolved |
+| Belief update triggers prediction, which re-triggers belief update indefinitely | Cognitive feedback loop never settles | Causal cycle detection, convergence criteria, iteration/resource bounds and escalation |
+| Two learning candidates activate against different baselines | Active mechanisms become incompatible | Baseline/version compatibility checks and coordinated activation where dependencies require it |
+| Partial outage leaves a mixed set of old and new state | Brain presents internally inconsistent picture | Explicit degraded/transition state and recovery reconciliation |
+| Clock skew makes a late event appear earlier | Incorrect chronology or causal inference | Separate event/processing time and causal metadata; do not rely on wall clock alone |
+| Re-evaluation queue grows faster than it is processed | Important stale state remains unexamined | Priority policy, overload handling, stale-state visibility and capacity limits |
+| A mechanism uses a cached answer after its source is revoked or corrected | Invalid evidence persists in current cognition | Revocation/correction propagation and dependency-aware revalidation |
+
+This is an initial scenario inventory, not an exhaustive proof that all failures have been found. Additional adversarial scenarios must be added as the architecture and contracts become more concrete.
+
+### 12.8 Boundaries: Brain coordination versus SYS-02
+
+Brain-internal coordination governs the exchange, dependency and consistency of cognitive state among Brain mechanisms. SYS-02 remains responsible for system-wide signalling and coordination across the wider JARVIS architecture. The Brain may consume system signals and publish defined cognitive outputs, but this investigation does not assign it ownership of system-wide message routing, device orchestration, motor execution or governance.
+
+A future architecture must define the interface between these responsibilities, including failure reporting and degraded operation, without duplicating ownership.
+
+### 12.9 Open questions requiring further investigation
+
+- Which Brain operations require atomic state transitions across more than one mechanism, and can ownership be redesigned to avoid distributed atomic commits?
+- What is the minimum common message/record envelope, and which fields belong in modality- or mechanism-specific payloads?
+- Which clock/time model is required, and when are logical/causal sequence markers necessary?
+- What consistency guarantees are required for beliefs, active working context, predictions, memory retrieval, candidate learning and activated adaptations?
+- How should conflicting beliefs be represented and resolved without flattening uncertainty?
+- Who detects and manages dependency cycles, oscillation and runaway feedback?
+- What is the right degraded-mode behaviour when memory, reasoning, attention or coordination becomes unavailable?
+- Which coordination functions are intrinsic to Brain and which belong to SYS-02?
+- What recovery guarantees can be achieved without a central coordinator becoming a single point of failure?
+- How can we test convergence, boundedness and consistency over long-running operation rather than only short unit tests?
+
+No database, message broker, actor model, scheduler, programming language, process topology, global event store or synchronization technology is selected by this investigation.
+
+### 12.10 Reviewer challenge checklist
+
+The independent Reviewer is asked to challenge:
+- Does the proposed owner-managed coordination model genuinely avoid both central bottlenecks and uncontrolled decentralization?
+- Are there cognitive functions that need shared state but have no clear owner?
+- Is “single authoritative writer per state domain” sufficient when the state is inherently relational or jointly derived?
+- Are version-aware reads/writes and causal metadata practical at the expected scale?
+- Which transitions truly require atomicity, and which can converge asynchronously?
+- Are competing hypotheses being confused with conflicting authoritative writes?
+- Does the proposal overuse distributed-systems patterns where a simpler in-process mechanism would be safer?
+- Are event time, processing time, sequence and causality clearly distinguished?
+- Could idempotency suppress legitimate repeated experiences or learning events?
+- Are conflict policies specified without arbitrary last-write-wins behaviour?
+- Can partial failure be represented without creating false confidence in the remaining state?
+- How are feedback loops detected, bounded and tested?
+- Does this design accidentally take over SYS-02 responsibilities?
+- What failure scenarios, safety properties or measurable acceptance criteria are missing?
+
+### 12.11 Sources and evidence
+
+- Marvel, [Every Major A.I. in the Marvel Universe](https://www.marvel.com/comics/guides/2500/every-major-a-i-in-the-marvel-universe), official Marvel overview. Useful for fictional identity/context only; it does not disclose implementation.
+- Marvel, [Iron Man (Tony Stark) in Comics](https://www.marvel.com/characters/iron-man-tony-stark/in-comics), official character overview describing suit capabilities and integrated technology; not a J.A.R.V.I.S. architecture specification.
+- Liu et al. (2024), [Multimodal neuroimaging of hierarchical cognitive control](https://pubmed.ncbi.nlm.nih.gov/39488242/), *Biological Psychology*. Review discussing distributed neural coordination and hierarchical/multiplexed control; does not settle a software architecture.
+- [Task-specific topology of brain networks supporting working memory and inhibition](https://onlinelibrary.wiley.com/doi/10.1002/hbm.70024) (2024), *Human Brain Mapping*. Empirical study reporting task-specific network attributes for working memory and inhibitory control.
+- Microsoft Azure Architecture Center, [Event-Driven Architecture Style](https://learn.microsoft.com/en-us/azure/architecture/guide/architecture-styles/event-driven). Engineering reference on asynchronous delivery, eventual consistency, broker/mediator trade-offs and recovery complexity.
+- Microsoft Research, [Consistency in Distributed Systems](https://www.microsoft.com/en-us/research/publication/consistency-distributed-systems/). Research discussion of consistency trade-offs in distributed systems.
+
+### 12.12 Investigation B provisional conclusion
+
+The current strongest direction is **owner-managed cognitive mechanisms with explicit contracts, provenance, causal/version metadata and consequence-sensitive consistency guarantees**. This is a provisional engineering choice, not a final architecture approval. The human reference supports distributed, context-dependent coordination; Marvel supplies the requirement for integrated coherence; software engineering supplies the concrete failure-handling mechanisms neither reference specifies.
+
+The next investigation should examine **attention, prioritization and cognitive resource allocation**, while also continuing to refine the open coordination questions. Attention cannot be treated as a simplistic global on/off switch: it must be examined as an interacting control process that selects, protects, reallocates and releases limited cognitive resources without causing starvation, oscillation or blind spots.
