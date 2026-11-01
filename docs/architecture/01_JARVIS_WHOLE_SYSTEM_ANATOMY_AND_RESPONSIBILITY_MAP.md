@@ -242,7 +242,7 @@ Sensory acquisition is broader than cameras and microphones. It includes digital
 
 - **Visual acquisition:** image, video, screen, and visual-scene capture.
 - **Auditory acquisition:** sound, speech, acoustic events, and audio-stream capture.
-- **Language and communication acquisition:** incoming text, messages, documents, and structured communication.
+- **Modality acquisition:** capture and decoding of text, speech, images, documents, and other incoming signal formats. Sensory owns the modality-level acquisition/preprocessing boundary; it does not own user session semantics or cognitive interpretation.
 - **Physical and environmental sensing:** location, motion, proximity, temperature, pressure, and other available sensor data where embodiment supports them.
 - **Digital environment sensing:** operating-system state, application state, files, processes, network state, and supported digital events.
 - **Internal-state sensing:** Brain runtime status, resource state, component health, execution feedback, and other system telemetry.
@@ -294,7 +294,7 @@ The action system is the operational counterpart to sensing. It includes softwar
 - **Communication execution:** sending messages, issuing requests, and interacting with external services under authorization.
 - **Device control:** operating connected hardware and peripherals.
 - **Physical actuation:** movement, manipulation, or other physical effects if JARVIS later has a robotic embodiment.
-- **Action preparation and validation:** check parameters, preconditions, capability availability, and authorization before execution.
+- **Operational precondition validation:** check parameters, target state, capability availability, and execution safety before execution. Verify that a valid governance authorization applies; do not originate policy or grant authorization.
 - **Execution monitoring:** track accepted, started, progressing, completed, cancelled, failed, or uncertain execution states.
 - **Outcome verification:** gather evidence that the intended effect occurred.
 - **Compensation and rollback:** perform approved recovery or compensating operations where possible.
@@ -317,7 +317,7 @@ The action system is the operational counterpart to sensing. It includes softwar
 
 ### 7.4 Authority boundary
 
-The Brain determines cognitive intent and proposes or requests action. The action system validates whether the requested operation is permitted and operationally possible, then executes within its authorization.
+The Brain determines cognitive intent and proposes or requests action. The Governance and Assurance Authority (or the responsible external authority through its delegated policy mechanism) determines whether the request is authorized. The action system verifies that the authorization is valid and applicable, checks operational preconditions and capability, then executes within that authorization.
 
 The action system must not:
 - invent a new general goal because an operation failed;
@@ -375,7 +375,7 @@ Biological homeostasis uses distributed sensors, controllers, effectors, and fee
 
 Autonomic regulation owns operational stability, not JARVIS's general cognitive purpose.
 
-It may make fast, bounded adjustments such as throttling a saturated queue or restarting a failed noncritical worker if policy permits. It must not silently change the Brain's beliefs, goals, preferences, or long-term strategies.
+It may make fast, bounded adjustments such as throttling a saturated queue or restarting a failed noncritical worker if policy permits. Operational fault recovery includes restarting or replacing a failed component when the failure is not a suspected security compromise and the recovery action is permitted. Security containment—such as isolating a potentially compromised component—is owned by SYS-07 and must not be undone by routine autonomic recovery. Restoration of trust after a compromise requires integrity evidence and the applicable SYS-11 authorization; a successful restart alone never restores trust. Autonomic regulation must not silently change the Brain's beliefs, goals, preferences, or long-term strategies.
 
 The Brain should receive material operational constraints and consequences, but it should not need to approve every low-level housekeeping operation.
 
@@ -431,8 +431,8 @@ The biological immune analogy is useful for layered defence, recognition, respon
 
 ### 10.1 Candidate functional subdivisions
 
-- **Identity and authentication:** establish the identity of users, services, devices, and external providers.
-- **Authorization and policy enforcement:** enforce explicit permissions and capability scopes.
+- **Identity and authentication operations:** establish and verify the identity claims of users, services, devices, and external providers under identity policy owned by SYS-11 and the responsible human/organization.
+- **Authorization enforcement:** enforce explicit permissions and capability scopes issued under SYS-11 policy; SYS-07 does not own the policy or independently grant authority.
 - **Input and content trust assessment:** evaluate origin, integrity, provenance, and known risk indicators.
 - **Runtime and host protection:** protect processes, execution environments, dependencies, and system resources.
 - **Network and integration defence:** control external connectivity, service access, and trust boundaries.
@@ -462,7 +462,7 @@ The biological immune analogy is useful for layered defence, recognition, respon
 
 Defence enforces approved security and integrity policy. Policy ownership, risk acceptance, and exceptional authorization belong to the Governance and Assurance Authority (with human approval where required). Defence does not own the Brain's general world model or decide the meaning of all unfamiliar observations.
 
-Security actions must be proportionate, explainable, auditable, and reversible where feasible. High-impact policy changes and exceptional access require explicit governance.
+Security actions must be proportionate, explainable, auditable, and reversible where feasible. Operational recovery remains SYS-05 responsibility when no security compromise is suspected. Once compromise is suspected, SYS-07 owns containment and investigation; SYS-05 must respect the containment state. SYS-07 supplies integrity and incident evidence, while SYS-11 or the responsible external authority authorizes restoration of trust where required. High-impact policy changes and exceptional access require explicit governance.
 
 ### 10.5 Open questions
 
@@ -488,7 +488,7 @@ JARVIS may have multiple forms of embodiment: a local computer, remote compute, 
 - **Memory and storage substrate:** volatile memory, durable storage, databases, event logs, and backup facilities.
 - **Runtime substrate:** operating systems, containers, process environments, language runtimes, and deployment facilities.
 - **Network substrate:** local and wide-area connectivity, transport, and network interfaces.
-- **Device substrate:** cameras, microphones, speakers, displays, sensors, peripherals, and controllers.
+- **Device substrate and device interfaces:** cameras, microphones, speakers, displays, sensors, peripherals, controllers, drivers, and low-level device adapters. SYS-08 owns the physical/computational resource and its low-level interface; SYS-03 owns acquisition and preparation of observations from sensors; SYS-04 owns commanded effects through actuators. Device inventory and hardware state have one explicit substrate owner even when several systems use the device.
 - **Physical platform:** chassis, mobility, manipulators, power supply, and physical interfaces if a robotic embodiment is developed.
 - **External service environment:** supported applications, APIs, model providers, databases, and other replaceable resources.
 
@@ -531,8 +531,9 @@ This system includes user-facing interfaces, but it is not limited to a chat win
 
 ### 12.1 Candidate functional subdivisions
 
-- **Human input channels:** text, speech, gestures, direct controls, and other supported input.
-- **Human output channels:** speech, text, visual output, notifications, and status presentation.
+- **Interaction channel and session semantics:** identify the human or external interaction context, manage sessions, continuity, consent context, and channel-specific state. This layer consumes modality-acquired input from SYS-03 and does not own raw sensor capture or cognitive interpretation.
+- **Human input channels:** normalized user input and interaction events received from sensory acquisition.
+- **Human output channels:** speech, text, visual output, notifications, and status presentation, delivered through the appropriate motor/output pathway.
 - **Context and session management:** interaction continuity, session state, and channel-specific context.
 - **Operator console and observability surfaces:** system status, cognitive activity summaries, diagnostics, and trace inspection.
 - **Configuration and administration:** approved settings, policy configuration, device setup, and lifecycle controls.
@@ -575,7 +576,7 @@ A user correction may provide evidence or instruction to the Brain, but the inte
 
 **Primary purpose:** Provide controlled environments for learning experiments, capability evaluation, simulation, testing, and supervised system development.
 
-This domain supports the development and evaluation of JARVIS; it is an engineering environment around the operational organism, not necessarily a constituent runtime system. It must not be confused with the live Brain itself or with the Brain's own online learning mechanisms.
+This domain supports the development and evaluation of JARVIS; it is an engineering environment outside the live operational organism, not a runtime organ of JARVIS. Its tools, simulators, training harnesses, benchmark runners, release pipelines, and experiment stores are external development infrastructure. The live Brain may learn online from governed experience through its own mechanisms; SYS-10 may support controlled offline experiments and candidate training, but it must not be conflated with live cognitive learning.
 
 ### 13.1 Candidate functional subdivisions
 
