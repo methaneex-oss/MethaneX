@@ -874,3 +874,212 @@ The independent Reviewer is asked to challenge:
 The current strongest direction is **owner-managed cognitive mechanisms with explicit contracts, provenance, causal/version metadata and consequence-sensitive consistency guarantees**. This is a provisional engineering choice, not a final architecture approval. The human reference supports distributed, context-dependent coordination; Marvel supplies the requirement for integrated coherence; software engineering supplies the concrete failure-handling mechanisms neither reference specifies.
 
 The next investigation should examine **attention, prioritization and cognitive resource allocation**, while also continuing to refine the open coordination questions. Attention cannot be treated as a simplistic global on/off switch: it must be examined as an interacting control process that selects, protects, reallocates and releases limited cognitive resources without causing starvation, oscillation or blind spots.
+
+
+---
+
+## 13. Investigation C — Attention, Prioritization and Cognitive Resource Allocation
+
+**Status:** Comparative investigation and provisional direction recorded; detailed operational policies and measurable thresholds remain unresolved.  
+**Question:** How should the Brain select what to process, keep relevant goals active, allocate limited cognitive resources, respond to unexpected events, and disengage from work that is no longer worth continuing?
+
+### 13.1 Problem statement
+
+The Brain will receive more potential inputs, memories, goals, predictions, errors and requests than it can process at full depth simultaneously. Treating all information equally is computationally wasteful and can be unsafe. Treating the loudest, newest or most salient input as automatically important is equally defective.
+
+Attention is therefore not just a filter that discards information. It is a family of control functions affecting:
+- selection of information for deeper processing;
+- maintenance and protection of current goals;
+- allocation of compute, memory, time and other cognitive resources;
+- switching between tasks and levels of analysis;
+- detection of important unexpected events;
+- suppression or postponement of distractions;
+- maintenance of background monitoring;
+- disengagement, resumption and fair scheduling;
+- learning from the consequences of previous prioritization.
+
+A foundational danger is collapsing these different functions into one scalar priority score or one global attention switch. The architecture must distinguish what deserves awareness, what deserves computation, what deserves working-context capacity, what deserves interruption, and what deserves action. These decisions are related but not identical.
+
+### 13.2 Marvel J.A.R.V.I.S. reference
+
+Across the MCU portrayal, J.A.R.V.I.S. supports Tony Stark in different contexts: monitoring suit and environmental conditions, supplying analysis and information, supporting technical work, coordinating Stark's facilities and technology, and providing information to the Avengers. Official Disney D23 material describes J.A.R.V.I.S. as managing Stark's mansion and tower and serving as an information source for the Avengers; Marvel's official AI overview situates J.A.R.V.I.S. among Stark's digital assistants and other AI.
+
+**Extractable design lessons**
+- Relevance depends on the active context and current task, not merely the raw salience of an input.
+- Attention must be able to shift between ordinary assistance, technical analysis and time-critical operational information.
+- Some information should be monitored in the background and surfaced only when it becomes relevant or urgent.
+- Prioritization must be coordinated with capabilities that actually process information and carry out tasks; a priority declaration alone is not useful.
+
+**Limits**
+- Fiction does not reveal an internal attention mechanism, ranking formula, compute scheduler, working-memory policy, interrupt model, task fairness policy or learning mechanism.
+- Cinematic responsiveness should not be mistaken for proof that all tasks can be processed simultaneously or without resource constraints.
+- J.A.R.V.I.S.'s portrayed ability to monitor many systems is a capability target, not evidence of unlimited attention or a technical architecture.
+- The fiction does not establish how false alarms, adversarial salience, overload, starvation or competing human goals are handled.
+
+### 13.3 Human cognition reference
+
+Current cognitive science does not treat attention as one simple faculty with one universally accepted architecture.
+
+1. **Top-down, bottom-up and selection-history influences.** A 2025 Annual Review describes attentional selection as involving goal-directed control, stimulus-driven capture and selection history. Salient stimuli can capture attention even when they conflict with current goals; proactive control is possible in some circumstances, but capture cannot always be prevented.
+2. **Attention and memory interact.** A 2024 Annual Review surveys interactions across working memory, long-term memory, development and typical brain function. Active representations and memory retrieval influence what is selected, while attention influences what is encoded, maintained and retrieved.
+3. **Cognitive control is adaptive.** Badre's 2025 review describes selecting behaviour based on context and monitoring ongoing behaviour so control can be adjusted. It emphasizes task representations, flexibility, goal maintenance and performance monitoring rather than a fixed stimulus-response table.
+4. **Strategic prioritization is possible but costly and bounded.** A 2025 review of working-memory prioritization finds that prioritizing higher-value items can improve memory for those items, but does not necessarily improve total task performance; benefits depend on task conditions and available executive control.
+5. **Arousal/modulatory systems matter but are not a complete attention solution.** A 2025 review of the locus-coeruleus/norepinephrine system discusses its role in arousal, salience, sensory processing and cognitive flexibility. The mechanisms and theoretical accounts remain an active research area.
+
+**Extractable design lessons**
+- Priority should be influenced by goals, task context, incoming signals, learned history and the consequences of missing an event.
+- Unexpected events must sometimes interrupt goal-directed processing, but salience alone is not sufficient evidence of importance.
+- Attention is coupled to working context, memory, control and learning; it should not be architected as an isolated input filter.
+- The system needs both sustained goal maintenance and flexible shifting.
+- Allocation has opportunity costs: directing resources to one item can reduce resources available elsewhere.
+
+**Limits**
+- Human attention is fallible and vulnerable to capture, fatigue, bias and capacity constraints; these are not design objectives.
+- Neuroscience does not supply a universal formula for computing priority or a single agreed architecture for attention.
+- Neural modulation and arousal cannot be copied literally as software mechanisms.
+- A biological subject's limited awareness is not equivalent to an artificial system's compute budget, concurrency or memory capacity.
+
+### 13.4 Comparison and provisional selection
+
+**Provisional selected direction: an engineered, multi-factor, context-sensitive allocation and control mechanism, informed by human attentional selection and cognitive control, with Marvel's contextual responsiveness as the operational requirement.**
+
+The Brain should distinguish at least these related but separate decisions:
+
+- **Input selection:** which incoming or retained information merits deeper processing?
+- **Goal maintenance:** which active objectives and constraints must remain available?
+- **Resource allocation:** how much compute, working-context capacity and time should be allocated?
+- **Interruption control:** what conditions justify pausing or pre-empting current work?
+- **Task switching:** when should the Brain change the current focus, and what state must be preserved?
+- **Background monitoring:** what should continue to be monitored at low cost while another task is in focus?
+- **Disengagement and resumption:** when should work be stopped, deferred, resumed or abandoned?
+
+No single global priority score should be assumed to answer all seven questions. A common decision framework may compare urgency, relevance, consequence, uncertainty, expected information gain, goal alignment, freshness, resource cost and interruption cost, but the relative weights and hard constraints must be context-dependent and justified. Some conditions should be non-compensatory: for example, a severe safety constraint should not be outweighed merely because another task has a high convenience or productivity score.
+
+**Why this is stronger**
+- Human research gives a better account of competition among goals, salience and learned selection history, plus the relationship between attention, memory and control.
+- Marvel supplies the operational requirement for contextual assistance and monitoring across diverse situations.
+- Engineering must supply explicit resource budgets, interrupt contracts, fairness, deadlines, safety constraints and observability—details neither reference establishes.
+- Separating selection, allocation, interruption and disengagement avoids the false assumption that one ranking function can safely control every aspect of cognition.
+
+### 13.5 Candidate functional responsibilities — not a settled component decomposition
+
+The following are functions that the eventual architecture must support. They are not yet a decision to create one subsystem per row.
+
+| Function | Responsibility | Key risk if omitted |
+|---|---|---|
+| Relevance assessment | Relate information to active context, goals, constraints and current uncertainty | Salience mistaken for relevance |
+| Priority arbitration | Compare competing demands and preserve hard constraints | Inconsistent or arbitrary task ordering |
+| Goal maintenance | Keep active goals, subgoals and constraints available across interruptions | Goal loss or drift |
+| Resource allocation | Allocate bounded processing, memory and time | Overload and unbounded analysis |
+| Interrupt control | Decide whether an event can pre-empt current work | Either dangerous delay or constant interruption |
+| Background monitoring | Maintain selected low-cost watches while focus is elsewhere | Missed changes or excessive resource drain |
+| Switching and resumption | Suspend work with enough state to resume safely | Repeated restart, lost context or stale continuation |
+| Fairness/starvation control | Ensure low-priority work is not postponed indefinitely without justification | Perpetual neglect of important long-term goals |
+| Attention outcome monitoring | Compare predicted value of focus with actual usefulness and missed events | Persistent poor prioritization |
+| Attention learning | Adjust selection policy from experience without reinforcing biased exposure | Self-confirming attention and blind spots |
+
+### 13.6 Concrete failure scenarios
+
+| Scenario | Failure if unmanaged | Required response to investigate |
+|---|---|---|
+| Loud but irrelevant input arrives | It captures processing and displaces a critical task | Distinguish salience from task relevance and consequence |
+| Quiet but high-consequence signal arrives | It is missed because it lacks salience | Background monitoring and consequence-aware escalation |
+| Many urgent tasks arrive simultaneously | Arbitrary ordering or overload | Capacity-aware arbitration, explicit deferral and escalation |
+| High-priority task never completes | It starves all other tasks | Progress monitoring, bounded work slices and reassessment |
+| Low-priority but important long-term goal is repeatedly deferred | Chronic starvation and goal abandonment | Fairness policy, deadlines and periodic re-evaluation |
+| New event repeatedly interrupts current reasoning | No task reaches completion | Interrupt thresholds, hysteresis and protected work intervals |
+| Critical event is delayed by an interrupt threshold | Dangerous response latency | Separate hard safety/latency constraints from ordinary priority ranking |
+| Current task is repeatedly switched away and resumed | Context thrashing and wasted computation | Switching cost, minimum useful work windows and saved state |
+| A resumed task uses obsolete assumptions | Stale plan or conclusion | Dependency/version validation before resumption |
+| Attention over-focuses on a familiar source | Novel evidence or alternative explanations are ignored | Source diversity, uncertainty-triggered exploration and anti-confirmation checks |
+| A past false alarm teaches the system to ignore similar signals | Dangerous underreaction | Context-sensitive calibration and audit of false-negative consequences |
+| A past successful focus policy is reinforced only because other inputs were never examined | Self-reinforcing selection bias | Record unselected/partially observed alternatives where feasible; account for missing-not-at-random evidence |
+| Working context is full | Important information is displaced or silently lost | Explicit capacity policy, eviction/retrieval rules and protected items |
+| Attention and valuation amplify one another | Salience/importance runaway feedback | Independent evidence checks, bounded influence and oscillation monitoring |
+| A background monitor consumes unlimited resources | Hidden resource exhaustion | Explicit monitor budgets, sampling policies and degradation modes |
+| A deadline is near but further analysis could improve quality | Either endless analysis or premature conclusion | Consequence-sensitive stopping and deadline-aware partial results |
+| External actor intentionally floods the Brain with high-salience events | Denial of cognitive resources | Source trust, rate limits, anomaly detection and governance/security escalation |
+| Attention policy is optimized only for short-term task completion | Long-term learning and exploration disappear | Explicit allocation for maintenance, learning and exploration where authorized |
+| One task's urgency is inferred from another task's mistaken belief | Cascading misprioritization | Preserve provenance and uncertainty through priority justification |
+| The scheduler itself fails | Tasks stop or execute without coherent resource limits | Defined degraded mode, local safe behaviour and recovery |
+
+### 13.7 Proposed allocation model
+
+The following is a candidate decision process, not a finalized scoring algorithm.
+
+1. **Collect candidate demands:** incoming experiences, active goals, pending reasoning, prediction errors, monitoring alerts, learning evaluations and external requests.
+2. **Establish admissibility and trust:** validate source, integrity, authorization boundaries and whether the demand is safe to process. Security/governance policy remains outside Brain ownership.
+3. **Assess context and relevance:** identify which goals, beliefs, tasks, constraints and time horizons the demand relates to.
+4. **Identify hard constraints:** deadlines, safety-relevant escalation requirements, resource ceilings and non-negotiable governance restrictions. Hard constraints must not be traded away by a weighted score.
+5. **Estimate value and cost:** urgency, consequence of omission, expected information gain, uncertainty reduction, relevance, freshness, processing cost, interruption cost and opportunity cost.
+6. **Choose a control response:** process now, allocate limited resources, maintain in background, queue, defer, request clarification, interrupt, suspend, resume, or decline.
+7. **Preserve justification:** record why a demand was selected or deferred, the context and evidence versions used, expected value and relevant constraints.
+8. **Monitor outcomes:** measure whether the selected work helped, whether deadlines were met, what was missed, whether interruptions were useful, and whether resource use was justified.
+9. **Adapt cautiously:** candidate policy changes are evaluated against held-out and adversarial scenarios before activation; attention learning must not silently redefine governance constraints or safety priorities.
+
+### 13.8 Invariants versus unresolved policy
+
+**Candidate foundational invariants**
+- Salience is not equivalent to importance.
+- Attention allocation must be context-sensitive and goal-aware.
+- Resource use must be bounded and observable.
+- Active goals and constraints must survive interruption unless explicitly completed, cancelled or superseded.
+- Resumption must validate relevant dependencies and versions.
+- A demand may be deferred without being erased.
+- High-consequence constraints cannot be overridden by an ordinary weighted score.
+- Attention decisions and their evidence must be auditable.
+- Selection policy must account for feedback and selection-induced blind spots.
+- Attention does not authorize external action; decision and governance boundaries remain intact.
+
+**Policy and implementation choices not yet decided**
+- Exact priority features, scales, thresholds and calibration.
+- Whether priority arbitration is one mechanism or coordinated responsibilities.
+- Task classes, deadlines, service guarantees and fairness rules.
+- How much background monitoring is affordable.
+- Which information is protected in working context and which can be evicted.
+- How exploration and learning receive resources relative to immediate tasks.
+- How task state is checkpointed and resumed.
+- Which interruption conditions are hard constraints versus learned policy.
+- How priority policy is evaluated and safely updated.
+
+### 13.9 Brain boundary and interfaces
+
+Attention is a Brain-internal cognitive control responsibility: it allocates cognitive processing and working-context resources. It does not own sensor polling, device-level alert delivery, operating-system scheduling, system-wide signalling, external task execution or governance authorization.
+
+SYS-02 may route signals and coordinate the wider system. Sensory systems acquire observations. Governance/security defines binding authorization and safety restrictions. Brain attention interprets cognitive relevance and allocates its own resources within those external constraints. The interface must avoid two opposite errors: Brain assuming it controls all incoming system traffic, or external signalling deciding what the Brain should believe and think.
+
+### 13.10 Reviewer challenge checklist
+
+The independent Reviewer should challenge:
+- Is attention correctly treated as multiple related control functions rather than one priority score?
+- Are input selection, goal maintenance, resource allocation, interruption and background monitoring sufficiently distinguished?
+- Does the proposed model overstate what neuroscience establishes?
+- Is the Marvel comparison grounded in portrayed capabilities rather than invented internal mechanisms?
+- Can salience, urgency, relevance and consequence be distinguished operationally?
+- Are hard constraints separated from compensatory scoring?
+- How are fairness, starvation and long-term goals handled without undermining genuinely urgent work?
+- How can the system prevent attention-induced confirmation bias and selection bias?
+- What evidence is available about information that was never selected or deeply processed?
+- Are interruption and resumption contracts compatible with Investigation B's causal/version model?
+- What prevents oscillation, thrashing and repeated re-prioritization?
+- How is overload detected and handled?
+- Can resource budgets be enforced without one central controller becoming a bottleneck?
+- Are learning and exploration protected from permanent displacement by immediate tasks?
+- Which proposed invariants are truly foundational and which are premature policy decisions?
+- What adversarial and longitudinal tests are missing?
+
+### 13.11 Sources and evidence
+
+- Marvel/Disney D23, [MCU Robot Roundup](https://d23.com/mcu-robot-roundup/). Official Disney material describing J.A.R.V.I.S.'s portrayed role in Stark's facilities and as an information source for the Avengers; not an internal attention specification.
+- Marvel, [Every Major A.I. in the Marvel Universe](https://www.marvel.com/comics/guides/2500/every-major-a-i-in-the-marvel-universe). Official overview of Marvel AI characters; useful for fictional context, not implementation detail.
+- Badre, D. (2025), [Cognitive Control](https://www.annualreviews.org/content/journals/10.1146/annurev-psych-022024-103901), *Annual Review of Psychology*, 76, 167–195. Review of context-dependent behaviour selection and monitoring/adjustment.
+- Theeuwes, J. (2025), [Attentional Capture and Control](https://www.annualreviews.org/content/journals/10.1146/annurev-psych-011624-025340), *Annual Review of Psychology*, 76, 251–273. Review of top-down, bottom-up and selection-history influences, including limits on control of attentional capture.
+- Cowan, N. et al. (2024), [The Relation Between Attention and Memory](https://www.annualreviews.org/content/journals/10.1146/annurev-psych-040723-012736), *Annual Review of Psychology*, 75, 183–214. Review of attention-memory interactions across working and long-term memory.
+- Allen, R. J., Atkinson, A. L. and Hitch, G. J. (2025 issue; first published online 2024), [Getting value out of working memory through strategic prioritisation](https://journals.sagepub.com/doi/10.1177/17470218241258102), *Quarterly Journal of Experimental Psychology*, 78(2). Review of value-directed prioritization and its limits.
+- Torres, A. S., Robison, M. K. and Brewer, G. A. (2025), [The role of the LC-NE system in attention: From cells, to systems, to sensory-motor control](https://pubmed.ncbi.nlm.nih.gov/40412462/), *Neuroscience & Biobehavioral Reviews*, 175, 106233. Review of neuromodulatory contributions and competing theoretical frameworks.
+
+### 13.12 Investigation C provisional conclusion
+
+The strongest current direction is an **engineered, context-sensitive, multi-factor attention and resource-allocation capability** that separates selection, goal maintenance, compute allocation, interruption, background monitoring, switching and disengagement. Human cognition is the stronger reference for the competing influences and dynamic control problem; Marvel J.A.R.V.I.S. supplies the operational target of contextual, timely assistance across multiple concurrent demands. Neither provides a sufficient software allocation policy, so explicit budgets, hard constraints, fairness, provenance, auditability and safe adaptation must be engineered.
+
+The next investigation should examine **working context, active representations and the interface between attention and memory**. This is necessary to determine what it means for information to be actively available, how active goals survive interruption, what may be displaced, and how working context differs from durable memory and transient processing state. This next question must be compared with Investigation A's information ownership and Investigation B's coordination/version model rather than designing a separate, inconsistent working-memory subsystem.
