@@ -2227,3 +2227,18 @@ The B candidate direction has been refined to **logical modularity and owner-man
 
 **Current status:** investigation in progress; no final architecture, technology assignment or implementation decision.
 
+
+
+### 21.20 Cognitive memory versus persistence infrastructure
+
+A further boundary distinction is required: **memory is a cognitive capability; storage is an infrastructure capability.** The Brain must define what counts as an experience, how it is encoded, indexed, retrieved, interpreted, consolidated, revised and used to change future cognition. It may specify retention, provenance and deletion semantics that the wider system must honour. It does not follow that the Brain owns the database, file system, backup, encryption, storage engine, replication or physical retention implementation.
+
+The architecture should distinguish:
+- cognitive memory semantics and retrieval policy;
+- authoritative historical evidence and derived interpretations;
+- persistence and durability services;
+- access control, privacy and retention enforcement;
+- monitoring and audit of memory operations.
+
+The Brain may request storage or retrieval and must be able to detect unavailable or stale memory services. Infrastructure provides durable persistence; Security/Governance enforce access and retention rules. Do not reduce memory to a database, and do not let a cognitive memory mechanism silently bypass system-level privacy or retention controls.
+
