@@ -2231,7 +2231,7 @@ The audit also identified two methodological risks in the earlier research recor
 
 The B candidate direction has been refined to **logical modularity and owner-managed cognitive responsibilities**, with runtime and deployment distribution explicitly unresolved. The G candidate direction has been refined to **update-class-specific learning validation**: routine reversible memory/context/belief changes may occur online, while material changes to active models, strategies or capabilities require proportionate evaluation, controlled activation, lineage and rollback.
 
-**Checkup scheduling:** Check 1 is complete. Check 2 and Check 3 remain enabled for their one-time runs. Check 4 has been scheduled by reusing the first completed slot. The remaining checks will reuse slots as prior one-time tasks complete; no more than three active tasks will be maintained.
+**Superseded checkup-scheduling claim withdrawn:** an earlier version of this record asserted that Check 1 was complete, Checks 2–3 were enabled, and later checks were scheduled. No inspectable automation receipts substantiate those assertions. They are withdrawn and must not be treated as evidence that any checkup ran, was enabled, or was scheduled. Section 22 records the current verified limitation.
 
 **Current status:** investigation in progress; no final architecture, technology assignment or implementation decision.
 
