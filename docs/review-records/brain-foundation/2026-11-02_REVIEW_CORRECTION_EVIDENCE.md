@@ -128,20 +128,16 @@ This pass addresses the four remaining items in the latest Reviewer report. It d
 - F-02, F-03, F-04 and F-05 were not rewritten; the prior Reviewer had cleared them with the stated limitations.
 - Independent reassessment is still required. This record is not approval.
 
-## Revision manifest
+## Final revision manifest — submission snapshot before manifest-only update
 
-The commit SHA and resulting blob SHAs are to be appended after the final verification pass.
+The final narrow correction pass was fetched from the PR branch at the exact submission snapshot below. This manifest update itself creates one subsequent commit and changes only this correction-evidence file.
 
+- PR head at submission snapshot: `1cc8619474dc9d7e0717d3842e3f99ad9b8d0f01`
+- Document 00 — approved baseline: commit `8490737429b052b65fed3b998e0320d8834f640f`, blob `ff0e57f2f9a266466687dca2c4cbcda6a64cb7d7`; current submission blob: `db0f136b3aaa338fb7d06d7be9e50bb42fc82821`
+- Document 01 — approved baseline: commit `f32d2c9ede71676759b55c87c783253bd23ebbae`, blob `15c9bfc06f5f094d396f8a9dc625c22ac0d1b279`; current submission blob: `2b595af4fefb54c7f8dc81fb997d4d391f2250e0`
+- Comparative Research Log blob: `f84077179f9fa8e151b5faca39940e43a13db2a2`
+- Mechanism Gap Analysis blob: `a90204f28c09dd9c1e2e0e1b24d108a58dc82b46`
+- Correction Evidence Record blob before this manifest update: `1e66d65817fae7bf51cf935037572f2e53cf468f`
 
-## Verified revision manifest
+The Reviewer must fetch the final PR head after this manifest-only commit and verify all five final file blobs again. The manifest is a reproducibility aid, not proof of approval. The current Document 00/01 blobs are explicitly administrative approval-record revisions; only their cited baseline commits/blobs carry the recorded Project Director architectural approvals.
 
-The following exact branch state was fetched after the Builder's final correction to withdraw the unsupported checkup-scheduling assertions and immediately before this manifest-only update:
-
-- PR head at verification: 97609ce53a804f57395c916ff599d76fdd65ba1d
-- Document 00 blob: e6a544e2968d8b8dc4cce88db9c040804a94534c
-- Document 01 blob: 3bb202958f8416dd5efefbb07adc0ee8c4d80541
-- Comparative Research Log blob: 8d58c4e031b6013124ad864a810f871c94e5e897
-- Mechanism Gap Analysis blob: a90204f28c09dd9c1e2e0e1b24d108a58dc82b46
-- Correction evidence record blob before this manifest update: c1539b09401ea79b95a0da4c1077f76ec032b89f
-
-This manifest-only update creates a subsequent commit and changes this file's blob. The Reviewer must independently fetch the final PR head and all five files again, verify their blob SHAs, and review the exact final revisions. This manifest is a reproducibility aid, not proof of approval or a substitute for that check.
