@@ -1,9 +1,11 @@
 # JARVIS — System Architecture Foundation
 
-**Document status:** Approved by the Project Director for the exact revision identified below  
+**Document status:** Project Director-approved architectural baseline; current branch revision carries an administrative approval-record update only  
 **Documentation reset:** 2026-11-01  
 **Scope:** Whole-system anatomy and the governing decision to engineer the Brain first  
 **Implementation status:** This document authorizes no implementation, migration, deletion, or merge.
+**Approved baseline:** commit `8490737429b052b65fed3b998e0320d8834f640f`; blob `ff0e57f2f9a266466687dca2c4cbcda6a64cb7d7`.  
+**Current branch blob:** `e6a544e2968d8b8dc4cce88db9c040804a94534c`. The post-approval difference is limited to approval-status/approval-record documentation; no architectural requirements or system boundaries were changed. The current blob is not represented as having received a separate architectural approval.
 
 > **ENGINEER THE MECHANISMS; LET BEHAVIOR BE ACQUIRED THROUGH EXPERIENCE.**
 
@@ -305,7 +307,7 @@ The Project Director retains final authority over project direction and approval
 
 ## 8. Document-specific approval gates and sequencing
 
-**Approval record:** Project Director approval: https://github.com/methaneex-oss/MethaneX/pull/171#issuecomment-6556047098. This approval applies to this exact Document 00 revision and its governing direction only. It does not approve Document 01, the Brain research package, a Brain architecture, implementation, or PR merge.
+**Approval record:** Project Director approval: https://github.com/methaneex-oss/MethaneX/pull/171#issuecomment-6556047098. The approval identifies the approved baseline as commit `8490737429b052b65fed3b998e0320d8834f640f` / blob `ff0e57f2f9a266466687dca2c4cbcda6a64cb7d7`. The current branch blob is a later administrative status-record revision, not a newly approved architectural baseline. The approval applies to Document 00's governing direction only. It does not approve Document 01, the Brain research package, a Brain architecture, implementation, or PR merge.
 
 The whole-system responsibility map is a separate architectural deliverable, identified as **JARVIS Whole-System Anatomy and Responsibility Map** (`docs/architecture/01_JARVIS_WHOLE_SYSTEM_ANATOMY_AND_RESPONSIBILITY_MAP.md`). Its presence in the same pull request or documentation branch does not make it part of this document's approval decision.
 
