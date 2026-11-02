@@ -20,7 +20,7 @@ It is **not**:
 - evidence that any proposed mechanism exists in the repository or has been implemented;
 - a claim that Marvel fiction or neuroscience supplies a complete technical blueprint.
 
-The current whole-system foundation and responsibility map are used as working references. Their formal approval status is not established in the repository; this investigation concerns the Brain only and must treat their boundaries as provisional until status is reconciled.
+Documents 00 and 01 have separate, explicit Project Director approvals for their reviewed revisions: https://github.com/methaneex-oss/MethaneX/pull/171#issuecomment-6556047098 and https://github.com/methaneex-oss/MethaneX/pull/171#issuecomment-6556276653. Those approvals are limited to each document's stated scope; they do not approve this Brain research package, a Brain architecture, implementation, or PR merge.
 
 ### 1.1 Governing design principle
 
@@ -2022,7 +2022,7 @@ A distinction is required between **language as a cognitive capability** and **p
 - The existing comparative research log is the authoritative working research record; its fetched blob before this update was `e89b6ef5eb17d77b2c0837ebc47e79ca014b6fbe`.
 - The working record contains Investigations A–G and an integrated synthesis. It explicitly remains provisional and does not authorize implementation.
 - The old Section 6 roadmap was inconsistent with the later A–G expansion. It has now been marked as superseded while preserving its historical content.
-- Documents 00 and 01 currently label themselves **proposed / not approved**; PR #171 is also a draft. This repository status conflicts with the earlier handoff description that treated the documents as approved. No status or content change has been made to either whole-system document. The approval history must be reconciled before they are described as formally approved repository artifacts.
+- Documents 00 and 01 have separate Project Director approvals, linked above. PR #171 remains open, draft and unmerged. Document approval is not PR merge approval.
 
 ### 21.3 Preliminary architectural alternatives — comparison dimensions
 
@@ -2223,7 +2223,7 @@ The report also warns that people can over-ascribe mental capabilities to machin
 
 ### 21.18 First independent checkup and methodological corrections
 
-**Checkup 1 of 6 completed:** the first automation run independently verified the branch, PR #171, Section 21, the Brain-first scope and the fact that the A–G audit is still incomplete. It independently detected the formal approval-status contradiction between the research log's earlier wording and the current PR/documents. The introductory research-log wording has now been corrected: Documents 00 and 01 are working references, and formal repository approval is not established.
+**Historical checkup claim withdrawn pending evidence:** this record contains no inspectable automation receipt sufficient to substantiate Checkup 1. Do not count it as completed. Checks 2–6 and their scheduling/execution are likewise unverified unless separate receipts are produced.
 
 The audit also identified two methodological risks in the earlier research record. They have been corrected:
 - The initial method made Marvel J.A.R.V.I.S. and human cognition mandatory references for every architectural question. This has been replaced with a relevance-based comparative lens. Fictional and biological references generate questions where useful; real-world requirements and engineering evidence remain primary.
@@ -2252,9 +2252,11 @@ The Brain may request storage or retrieval and must be able to detect unavailabl
 
 
 
-### 22. Investigation session — 2026-11-01, 19:27 Africa/Lagos
+### 22. Investigation session — 2026-11-01, authorization for 19:40 Africa/Lagos
 
-**Project Director authorization:** 60-minute investigation approved for 19:27–20:27 WAT. Scope: full audit and extension of Investigations A–G; architectural alternatives included. This is research and decision preparation, not architecture approval or implementation authorization.
+**Project Director authorization:** the later 60-minute investigation was authorized to start at 19:40 Africa/Lagos on 1 November 2026. The previously recorded 19:27 start was not the authorized start and is withdrawn. Scope: full audit and extension of Investigations A–G, including architectural alternatives. This is research and decision preparation, not architecture approval or implementation authorization.
+
+**Execution and close-out status:** the available record does not establish a verified actual start receipt, actual end time, six completed checkups, or completion of the authorized investigation. This document therefore does not claim that the session ran from 19:40 to 20:40 or that it completed. The earlier 18:39 session remains a separate historical session under Section 21. Any work attributed to the later authorization must be independently evidenced; otherwise execution/completion remains unverified.
 
 **Explicit exclusions:** no programming-language assignment; no framework, database, model-provider, runtime or deployment selection; no class/module/file layout; no implementation changes. Natural-language cognition remains in scope as a cognitive capability, distinct from programming-language selection. The investigation is Brain-first: whole-JARVIS context is used to establish boundaries and dependencies, not to design every other system.
 
@@ -2264,12 +2266,136 @@ The Brain may request storage or retrieval and must be able to detect unavailabl
 - Document 00 blob: `ff0e57f2f9a266466687dca2c4cbcda6a64cb7d7`.
 - Document 01 blob: `15c9bfc06f5f094d396f8a9dc625c22ac0d1b279`.
 - Research log at start: blob `84ab8c145ecb4498b52e465c975d7e8e8beee4ae`.
-- Documents 00 and 01 are working architectural references; the PR is unmerged and its formal approval/merge status must not be overstated.
+- Documents 00 and 01 have separate Project Director approvals for their reviewed revisions (linked in Section 21.2); PR #171 remains open, draft and unmerged. Neither approval extends to the Brain research package or implementation.
 
 **Execution method:** ten stages as approved: (1) target definition; (2) capability demands/scenarios; (3) human cognition; (4) MCU J.A.R.V.I.S.; (5) cognitive architectures and modern AI approaches; (6) Brain foundation engineering; (7) integration boundaries; (8) development and acquired intelligence; (9) adversarial architectural validation; (10) consolidation. Each conclusion must be labelled as evidence-backed, engineering inference, candidate proposal, unresolved question or Director decision. Alternative families must be compared against common requirements and their category differences preserved (architecture vs topology vs mechanism vs learning regime vs model/provider role).
 
-**Checkups rescheduled from the actual session start:** Check 1 at 19:37, Check 2 at 19:47, Check 3 at 19:57 Africa/Lagos. Three existing one-time automation slots were reused and successfully enabled. Attempts to schedule Check 4 simultaneously were rejected because the current plan permits only three active scheduled tasks. Checks 4–6 must be scheduled as slots become available; do not claim six are active. Proposed remaining check times are 20:07, 20:17 and 20:27, subject to slot availability.
+**Checkup status:** no verifiable automation receipts are included here. Do not claim any checkup ran, that three tasks were enabled, or that checks 4–6 were scheduled.
 
 **Initial boundary decision:** language assignment is explicitly deferred until cognitive responsibilities, mechanisms, state ownership, interfaces and computational requirements are established. Natural-language comprehension, pragmatic interpretation, reference resolution, grounding and conversation-state management are in scope as cognitive capabilities; choosing implementation languages is not.
 
 **No implementation or technology selection occurred at session start.**
+
+
+### 21.21 Comparative assessment of architectural alternatives
+
+This section strengthens the preliminary inventory in Section 21.3. The dimensions are independent: a cognitive-architecture family, representation paradigm, integration pattern, execution topology, learning regime and foundation-model role are not interchangeable choices. A candidate may combine one option from each dimension. No single row constitutes a final architecture selection.
+
+#### Shared Brain requirements
+
+The comparison uses six requirements: (1) coherent cognitive state and identifiable authority for mutable beliefs, representations, memory, goals and learned models; (2) concurrent work without silent overwrites, stale conclusions or an assumption that cognition is serial; (3) persistent experience-dependent learning with lineage, transfer assessment and regression detection; (4) grounding and cross-representation integration that preserve modality-specific meaning, provenance and uncertainty; (5) failure containment and recovery when mechanisms are delayed, unavailable or misleading; and (6) developmental stability under distribution shift, negative transfer, catastrophic interference and overgeneralization.
+
+#### A. Representation paradigms
+
+| Paradigm | Potential fit | Trade-offs and failure modes | Evidence required |
+|---|---|---|---|
+| Symbolic / structured | Explicit entities, relations, rules, provenance and inspectable state support contradiction analysis and traceable reasoning. | Brittle hand-authored ontologies, combinatorial growth, difficulty with noisy perception, pressure to encode desired behaviour manually. | Show concept/relationship acquisition and revision from experience, including uncertain and cross-modal evidence. |
+| Subsymbolic / neural | Learns distributed features from data; supports perception, similarity, generalization and pattern completion. | Opaque state, difficult diagnosis, catastrophic interference, miscalibrated confidence, weak identity/provenance guarantees unless supplemented. | Show persistent learning, calibrated uncertainty, provenance linkage, transfer and regression control under distribution shift. |
+| Hybrid / plural typed representations | Can combine learned perception with structured relations and explicit evidence without forcing one universal format. | Translation can lose semantics; state may be duplicated or divergent; arbitration and synchronization costs may dominate. | Demonstrate bidirectional grounding, consistency under concurrent updates, explicit authority and measurable benefit beyond either side alone. |
+
+No paradigm automatically supplies a coherent Brain. A hybrid is not inherently superior; its integration overhead must be justified by measured capability. A common envelope for identity, provenance, time, context, epistemic status, uncertainty, version and dependencies is an interoperability discipline, not a universal ontology.
+
+#### B. Cognitive-architecture families
+
+| Family | Potential fit | Structural limitations | Fair evaluation |
+|---|---|---|---|
+| Soar / production-system cycle | Explicit state, operator selection, working/long-term knowledge, subgoaling and procedural learning from problem-solving episodes. | Deliberate cycle can bottleneck; substantial task knowledge and productions are engineered; chunking is not open-ended developmental learning. | Concurrent processes, cross-modal grounding, learning beyond supplied task knowledge, conflict resolution and novel-task transfer. |
+| ACT-R / cognitive-process model | Declarative/procedural knowledge, retrieval, activation, timing and cognitive constraints; mature account of selected human-like tasks. | A cognitive theory/model is not a complete general-purpose system; fixed task structures may constrain broad integration. | Persistent acquisition, heterogeneous mechanism interaction, real-world grounding, concurrency and recovery beyond benchmark tasks. |
+| CLARION | Explicit/implicit knowledge across action-centred, non-action-centred, motivational and metacognitive functions. | Translation and coordination complexity; breadth of labels can overstate learning maturity or implementation completeness. | Coherence of explicit/implicit knowledge, concrete learning efficacy and independently measured value of metacognitive monitoring. |
+| LIDA | Workspace-inspired coordination and multiple memory/learning processes offer a selective-access hypothesis. | Broadcast competition, attention bottlenecks and under-specified learning mechanisms; workspace access is not truth or ownership. | Workspace selection under concurrency, source-of-truth discipline, learning efficacy and background cognition during workspace failure. |
+| Sigma | Graphical-model/message-passing approach aims to integrate symbolic/probabilistic and discrete/continuous processing. | Generality does not establish mature coverage; inference cost and scaling may be substantial. | Empirical scalability across grounding, memory, learning, control, partial failure and long-lived state. |
+| BDI | Clarifies beliefs, goals/desires, intentions, commitment and reconsideration when plans fail. | Common implementations rely on supplied plans/rules; BDI alone does not supply rich perception or general representation learning. | Acquisition/revision of plans from experience, intention conflict, grounded evidence and recovery without situation-to-plan tables. |
+| LLM-centric agent harness | Broad language interaction, pretrained knowledge and flexible tool orchestration. | Central policy can become hidden cognitive authority; context and external memory are not internalized learning; fluency can mask ungrounded claims. | Persistent behavioural change after context reset, grounding, independent verification, long-horizon recovery and transfer. |
+| End-to-end learned agent | Can jointly optimize representations and policies from experience. | Data/compute demands, weak interpretability, reward misspecification, catastrophic forgetting and difficult fault isolation. | Longitudinal learning, causal diagnosis, safe adaptation, provenance, transfer and rollback under distribution shift. |
+| Neuro-symbolic systems | May combine learned perception with explicit relations, constraints or inference. | Label covers many designs; integration may be shallow or one-way; no guarantee of coherent state or developmental learning. | Show mutual constraint/improvement, provenance preservation and benefit on integrated tasks over component-only baselines. |
+
+These families are research references, not products ranked by feature count. Surveys catalogue systems and applications but do not provide controlled head-to-head capability rankings. A family name is not proof of an implemented or transferable capability.
+
+#### C. Integration and control patterns
+
+| Pattern | Strengths | Failure conditions / costs | Required probes |
+|---|---|---|---|
+| Central cognitive cycle/controller | Clear coordination point, global scheduling and simple arbitration. | Serial bottleneck, hidden global state, single point of failure, slow asynchronous response. | Inject delayed/conflicting inputs, controller failure, background learning and simultaneous goals; test degradation and authority. |
+| Shared workspace / broadcast | Makes candidate information available across mechanisms; flexible cross-domain coordination. | Competition, salience bias, broadcast storms, bottleneck, unclear ownership and confusion of availability with truth. | Test selection fairness, provenance, simultaneous claims, stale broadcasts and high-consequence unselected evidence. |
+| Hierarchical / supervisory control | Separates broad goal management from local control and bounds escalation. | Parent/child divergence, excessive escalation, supervisory bottleneck, local bypass. | Test conflicting goals, supervisor failure, autonomy limits and interrupted delegation. |
+| Distributed owner-managed coordination | Local authority, typed exchange, parallel activity and potential fault containment. | Stale views, causal-ordering problems, coordination overhead, partial failure and fragmented context. | Test concurrent updates, partitions, delayed/duplicate events and conflicting beliefs without last-write-wins. |
+| Hybrid owner-managed state plus bounded shared context | Retains authority while enabling common active context. | Duplicate state, unclear precedence and additional consistency rules. | Identify authoritative source for every item; test synchronization, expiry, concurrent writes and workspace failure. |
+
+The key question is not centralization versus distribution in the abstract. It is whether concurrent cognition can be coordinated while preserving authority, provenance, timely updates and bounded failure. A workspace may be a coordination view rather than a truth database.
+
+#### D. Execution topology
+
+| Topology | Benefits | Costs / failure modes | Implication |
+|---|---|---|---|
+| One process/runtime | Low communication overhead, simpler debugging and local transactions. | Shared failure domain, resource contention and limited isolation. | Does not imply one cognitive mechanism or serial cognition. |
+| Multiple processes on one machine | Stronger resource/fault isolation and parallel execution without network-scale latency. | IPC, version skew, lifecycle coordination and partial failure. | Requires measured isolation/concurrency needs; not implied by logical modularity. |
+| Distributed services/machines | Independent scaling, placement and infrastructure fault boundaries. | Network partitions, latency, distributed consistency, security surface and operations complexity. | Must not be selected merely because Brain responsibilities are plural. |
+
+Execution topology is orthogonal to cognitive integration. A central controller can span services; owner-managed mechanisms can run in one process. None is selected here.
+
+#### E. Learning regimes
+
+| Regime | Benefits | Risks / limitations | Evidence required |
+|---|---|---|---|
+| Within-episode/context adaptation | Fast response without necessarily changing durable knowledge. | Temporary context mistaken for persistent learning; task leakage and episode overfit. | Test whether effects disappear after context reset and whether temporary adaptation is labelled correctly. |
+| Online persistent updates | Continuous adaptation from new experience. | Drift, poisoning, catastrophic interference, feedback loops and irreproducibility. | Track lineage, pre/post performance, contradictory evidence, negative transfer and reversal. |
+| Staged candidate learning | Isolates material model/strategy changes for evaluation before activation. | Slow adaptation, candidate backlog, selection bias and over-gating ordinary belief/memory updates. | Apply only where impact warrants; compare baselines across contexts and monitor post-activation regressions. |
+| Offline/batch training | Reproducible larger-scale optimization and controlled evaluation. | Training/evaluation mismatch, stale models and unsafe transfer to live operation. | Dataset provenance, held-out and shifted-distribution performance, compatibility and rollback. |
+| Update-specific hybrid regime | Different update classes receive proportionate online, staged or offline treatment. | Misclassification can let high-impact changes bypass validation; policy complexity. | Test classification boundaries and audit resulting behavioural effects. |
+
+No regime alone equals learning. Acceptance requires persistent, experience-dependent improvement in future behaviour with transfer and regression measured. Memory retention, parameter movement or reward accumulation is insufficient by itself.
+
+#### F. Foundation-model role
+
+| Role | Benefits | Risks / failure modes | Required probes |
+|---|---|---|---|
+| No foundation model | Avoids dependence on a general model and may keep decision processes explicit. | High engineering burden and limited language/perception breadth without specialist mechanisms. | Determine which foundational capabilities can be demonstrated without one and what breadth is required. |
+| Specialist capability provider | Bounded perception, language or other specialist capability while Brain state/authority remains elsewhere. | Opaque, stale or inconsistent outputs; hidden dependency. | Test provenance, calibration, replaceability, disagreement and provider unavailability. |
+| Reasoning/interpretation participant | Contributes candidate interpretations alongside other mechanisms. | Fluent output may dominate arbitration; generated rationale mistaken for telemetry or fact. | Require evidence-linked candidates, alternatives, independent checks and bounded authority. |
+| Central cognitive controller | Flexible broad orchestration and language-mediated control. | Single cognitive authority, context-bound memory, prompt-driven pseudo-learning, tool-use hallucination and weak independent verification. | Test persistent change after context reset, grounding, adversarial inputs, recovery and replacement/unavailability. |
+
+A foundation model is neither inherently required nor disqualifying. Its role must respect Brain state ownership and evidence requirements. Its output is a candidate contribution, not proof of truth, learning or authorization.
+
+#### Cross-dimensional combinations
+
+- Symbolic representation + central cycle + one process + online rule updates may be inspectable and simple, but risks becoming a serial rule engine whose hand-authored knowledge dominates; online changes risk untracked drift.
+- Neural representation + end-to-end policy + central model controller + persistent online updates may be flexible but concentrates opacity and authority; memory/context can be mistaken for learning and fault diagnosis becomes difficult.
+- Hybrid representations + owner-managed state + bounded workspace + one-process execution may preserve local authority and shared context without distributed services; it still needs precise precedence, typed translation and concurrency semantics.
+- Hybrid representations + distributed execution + staged material learning may support isolation and controlled evolution but incurs coordination cost, stale state, partial failure and promotion bottlenecks.
+- BDI-style intention management + specialist foundation models + owner-managed memory may clarify commitments and bound model use; it does not itself solve grounding, abstraction or acquired skill learning.
+- Workspace coordination + learned perception + structured relational memory may expose multimodal information to reasoning, but broadcast selection and entity identity still require independent validation.
+
+These are analytical combinations, not recommendations. Concrete scenarios must eliminate combinations that fail shared requirements. No final architecture, runtime, language, model provider, algorithm or data structure is selected here.
+
+#### Failure-scenario assessment
+
+| Scenario | Requirement stressed | Exposed failure if unmitigated | Evidence / safeguard question |
+|---|---|---|---|
+| Two mechanisms revise the same entity belief concurrently | Authority, concurrency | Central bottleneck; distributed last-write-wins; hybrid duplicate state | Can both evidence trails be preserved and incompatible revisions detected without silent overwrite? |
+| Sensory model misidentifies an object across frames | Grounding, uncertainty | Systems trusting detector confidence | Are sensor uncertainty and identity-inference uncertainty separated and revisable? |
+| Language reference has multiple plausible referents | Grounding | Text-centric harness or universal ontology | Can reference resolution remain distinct from world grounding and ambiguity trigger clarification? |
+| Memory/coordination provider unavailable mid-task | Failure containment | Central controller; distributed systems without stale-state semantics | Can unrelated authoritative state survive and the Brain degrade without fabricating continuity? |
+| Online adaptation improves one task but harms another | Developmental stability | Unconstrained online learning/reward optimization | Is negative transfer measured with lineage, rollback and context-specific evaluation? |
+| Simulated outcome stored as historical fact | Epistemic grounding | Weak-provenance systems | Are observed, inferred, predicted and imagined states distinguishable through memory/retrieval? |
+| Supervisor/controller fails | Recovery, concurrency | Single central controller/workspace | Can local mechanisms preserve valid state, suspend unsafe work and resume coherently? |
+| Model produces confident unsupported explanation | Evidence, metacognition | Architectures trusting self-report | Are claims checked against evidence and actual outcomes independently? |
+
+#### Provisional synthesis and open questions
+
+The evidence supports retaining a plural comparison rather than selecting one cognitive-architecture family as a complete Brain blueprint. The decisive questions concern state ownership, integration, grounding, learning validation and failure semantics—not module count or feature labels. This is a research synthesis, not an approved architecture.
+
+Unresolved: foundational representational types; whether a shared workspace is needed; degree of central arbitration; proportionate concurrency guarantees; which learning classes may update online; whether a foundation model is needed and in what role; and what measured requirements justify multiple processes or distributed topology.
+
+
+### 22.1 Correction record — independent-review findings addressed (2026-11-02)
+
+This records corrections in response to the independent Reviewer report. It is not a claim that the package is approved. The separate reviewer-facing evidence record is maintained at docs/review-records/brain-foundation/2026-11-02_REVIEW_CORRECTION_EVIDENCE.md.
+
+- F-01: corrected Section 22 to the authorized 19:40 start; withdrew 19:27 as the authorized start. Actual start/end and completion are unverified where receipts are absent. Section 21's 18:39 session remains distinct. Unsupported checkup completion/scheduling claims were withdrawn.
+- F-02: added Section 21.21, comparing six distinct dimensions, combinations and failure scenarios against shared Brain requirements. No architecture or technology is selected.
+- F-03: added Section 3.9 to the Mechanism Gap Analysis, describing monitoring-to-correction pathways and limits on authority.
+- F-04: expanded Section 3.1 of the Mechanism Gap Analysis to distinguish SYS-03 acquisition/preprocessing from Brain interpretation, identity tracking, cross-modal grounding, conflict handling and uncertainty sources.
+- F-05: corrected Reference 3 author order to Dulam, Gay and Dancy.
+- Approval history: corrected the research log and Document 00/01 status headers to reflect separate, scope-limited Project Director approvals. These do not approve the research package, Brain architecture, implementation or PR merge.
+
+**Post-correction review status:** pending independent Reviewer reassessment of the exact commit. The Reviewer determines whether each correction is sufficient.
