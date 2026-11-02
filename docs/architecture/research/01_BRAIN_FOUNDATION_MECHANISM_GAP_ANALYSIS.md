@@ -55,16 +55,23 @@ These are capability/mechanism families for investigation, not a proposed list o
 
 ### 3.1 Perceptual interpretation and grounding
 
-**Boundary:** SYS-03 remains responsible for external acquisition and preprocessing. The Brain's concern begins with qualified observations and includes interpretation, cross-modal integration, grounding, ambiguity resolution and relating observations to existing representations.
+**Conceptual responsibility boundary:** SYS-03 acquires signals and prepares observations through modality-appropriate preprocessing. Its outputs are evidence-bearing observations or detection proposals, not authoritative interpretations of what the world contains. Preprocessing may include signal cleaning, segmentation, feature extraction, detection proposals or modality conversion; none automatically establishes an entity's identity, an event's meaning, or a belief about the world.
+
+The Brain's perceptual-cognitive responsibility begins when it interprets prepared observations in context. It evaluates candidate entities, events, properties and relations; associates observations across time and modalities; grounds language and other symbols in current evidence and representations; preserves competing hypotheses; and revises beliefs when evidence warrants. This is a conceptual boundary, not a claim that sensory processing is technically simple or that SYS-03 cannot use learned perceptual models.
 
 Questions:
-- How are observations grouped into entities, events, properties, relations and state changes?
+- How are observations grouped into candidate entities, events, properties, relations and state changes while preserving the distinction between a sensor detection and the Brain's grounded interpretation?
+- How is the same entity tracked across successive frames or observations when viewpoint, appearance, location or available features change, and how are identity breaks, occlusion, re-entry and mistaken continuity handled?
+- How are cross-modal identity hypotheses formed (for example, whether a seen object and a heard sound share a source) without treating temporal coincidence as proof?
+- How are event identity and continuity distinguished from repeated similar events, overlapping events or one event observed through different modalities?
 - How are competing interpretations retained instead of prematurely selecting one?
 - How are temporal continuity, object identity and missing/occluded information represented?
-- How does the Brain distinguish sensor uncertainty from uncertainty in its own interpretation?
+- How does the Brain distinguish acquisition uncertainty (signal quality, missing data, modality-specific detection limits) from perceptual-inference uncertainty (ambiguous identity, competing explanations and contextual assumptions)? These uncertainties remain separately attributable and may compound.
+- How are conflicting sensory observations preserved and assessed against source reliability, timing, context, viewpoint and corroboration rather than silently averaged or overwritten?
+- How does linguistic reference recognition (resolving a phrase or pronoun within discourse) differ from grounding that reference to an observed, remembered, hypothetical or currently unknown entity?
 - How are symbols and language grounded in observed or otherwise evidenced entities and events?
 
-Failure modes include false identity continuity, hallucinated attributes, modality conflict, premature closure and treating a sensor's confidence score as truth.
+Failure modes include false identity continuity, hallucinated attributes, modality conflict, premature closure and treating a sensor's confidence score as truth. A detector may propose an object with a score; the Brain must still assess whether it is the same entity seen earlier, whether another modality corroborates it, and whether the real-world interpretation is justified. Sensor confidence is not automatically the Brain's confidence in the inferred claim.
 
 ### 3.2 Association and relational discovery
 
@@ -147,6 +154,14 @@ Language includes comprehension, reference resolution, pragmatics, grounding, di
 The architecture should permit language to interact with non-linguistic representations, memory, reasoning and action planning without requiring every internal state to be serialized as text. It should distinguish the user's literal words, inferred meaning, contextual assumptions and any resulting intention.
 
 Programming-language selection is explicitly out of scope.
+
+### 3.9 Metacognitive monitoring and corrective response
+
+Monitoring is useful only if it can alter cognition in a controlled, evidence-sensitive way. It may identify stalled goal progress, insufficient evidence, unresolved contradiction, prediction/outcome mismatch, out-of-distribution input, a capability limitation, stale dependency, failed reasoning attempt, or uncertainty about whether an action was authorized, executed and verified. These observations do not dictate one fixed response.
+
+Depending on the diagnosed problem and its consequences, corrective responses may include reconsidering an interpretation and reopening alternatives; seeking evidence from another modality or source; retrieving relevant experience and prior outcomes; revising assumptions, predictions, causal explanations or confidence; changing an unsuccessful reasoning approach; recognizing a capability limit, communicating uncertainty or requesting assistance; and suspending a conclusion or consequential action when evidence is insufficient.
+
+The process should preserve evidence and rationale for a correction and later assess whether it improved outcomes. Monitoring is not an unrestricted executive: it cannot rewrite another mechanism's state, bypass ownership, override governance or certify its own diagnosis. It can raise concerns or request reconsideration; the relevant cognitive responsibility retains its defined authority. Generated explanations and self-reported confidence are not independent evidence of monitoring accuracy.
 
 ## 4. Integration is the central unresolved problem
 
@@ -255,7 +270,7 @@ The independent Reviewer should challenge:
 
 1. Hakim, S. B., Adil, M., Velasquez, A., & Song, H. H. (2026). *Neuro-symbolic agentic AI: Architectures, integration patterns, applications, open challenges and future research directions*. Computer Science Review. https://doi.org/10.1016/j.cosrev.2026.100902
 2. *How metacognitive architectures remember their own thoughts: A systematic scoping review* (2026). Artificial Intelligence Review. https://doi.org/10.1007/s10462-026-11669-5
-3. Dulam, S. D., Dancy, C. L., & Gay, J. R. (2026). *New knowledge source pipelines for sociocultural representations in a cognitive architecture*. Frontiers in Psychology, 17. https://doi.org/10.3389/fpsyg.2026.1874556
+3. Dulam, S., Gay, J. R., & Dancy, C. L. (2026). *New knowledge source pipelines for sociocultural representations in a cognitive architecture*. Frontiers in Psychology, 17. https://doi.org/10.3389/fpsyg.2026.1874556
 4. *Towards visual-symbolic integration in the Soar cognitive architecture* (2025). Cognitive Systems Research, 91, 101353. https://doi.org/10.1016/j.cogsys.2025.101353
 5. U.S. Department of Defense (2020). *Future Directions in Human Machine Teaming Workshop*. https://basicresearch.defense.gov/Portals/61/Future%20Directions%20in%20Human%20Machine%20Teaming%20Workshop%20report%20%20%28for%20public%20release%29_1.pdf
 6. Laird, J. E., Lebiere, C., & Rosenbloom, P. S. (2017). *A Standard Model of the Mind*. AI Magazine. https://ojs.aaai.org/aimagazine/index.php/aimagazine/article/view/2744/0
