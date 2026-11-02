@@ -1,6 +1,6 @@
 # JARVIS — System Architecture Foundation
 
-**Document status:** Initial architectural foundation; proposed, not approved  
+**Document status:** Approved by the Project Director for the exact revision identified below  
 **Documentation reset:** 2026-11-01  
 **Scope:** Whole-system anatomy and the governing decision to engineer the Brain first  
 **Implementation status:** This document authorizes no implementation, migration, deletion, or merge.
@@ -304,6 +304,8 @@ Use explicit statuses: **proposed**, **approved**, **rejected**, **superseded**,
 The Project Director retains final authority over project direction and approval of the architecture.
 
 ## 8. Document-specific approval gates and sequencing
+
+**Approval record:** Project Director approval: https://github.com/methaneex-oss/MethaneX/pull/171#issuecomment-6556047098. This approval applies to this exact Document 00 revision and its governing direction only. It does not approve Document 01, the Brain research package, a Brain architecture, implementation, or PR merge.
 
 The whole-system responsibility map is a separate architectural deliverable, identified as **JARVIS Whole-System Anatomy and Responsibility Map** (`docs/architecture/01_JARVIS_WHOLE_SYSTEM_ANATOMY_AND_RESPONSIBILITY_MAP.md`). Its presence in the same pull request or documentation branch does not make it part of this document's approval decision.
 
