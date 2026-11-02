@@ -5,7 +5,7 @@
 **Scope:** Whole-system functional anatomy, ownership boundaries, interactions, and unresolved architecture questions  
 **Implementation status:** Documentation only. This document authorizes no implementation, migration, deletion, or merge.
 **Approved baseline:** commit `f32d2c9ede71676759b55c87c783253bd23ebbae`; blob `15c9bfc06f5f094d396f8a9dc625c22ac0d1b279`.  
-**Current branch blob:** `3bb202958f8416dd5efefbb07adc0ee8c4d80541`. The post-approval difference is limited to approval-status/approval-record documentation; no system responsibilities, boundaries or architectural requirements were changed. The current blob is not represented as having received a separate architectural approval.
+**Pre-correction branch blob:** `3bb202958f8416dd5efefbb07adc0ee8c4d80541`. The post-approval differences are limited to approval-status/approval-record documentation; no system responsibilities, boundaries or architectural requirements were changed. The resulting administrative revision is not represented as having received a separate architectural approval. The final current blob is recorded in the separate correction-evidence manifest.
 
 > **ENGINEER THE MECHANISMS; LET BEHAVIOR BE ACQUIRED THROUGH EXPERIENCE.**
 
