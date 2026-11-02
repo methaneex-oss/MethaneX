@@ -91,6 +91,43 @@ Each approval is treated as document-specific and revision-specific. Neither app
 4. Report each finding as cleared, partially cleared or unresolved with exact file/section/line evidence.
 5. Return the report to the Project Director. The 30-minute capability investigation remains on hold pending independent clearance and Project Director acceptance.
 
+## Final narrow correction pass — following independent re-review (2026-11-02)
+
+This pass addresses the four remaining items in the latest Reviewer report. It does not restart the research, redo cleared findings F-02 through F-05, or authorize architecture/implementation work.
+
+### F-01 — chronology and checkup consistency
+
+**Affected:** Comparative Research Log Sections 20, 21, 21.18 and 22.
+
+**Correction and method:**
+- Section 20's assertion that three checkups were created, the other three rejected by an automation limit, and run histories checked has been explicitly withdrawn. The record now states that no inspectable receipts or task records substantiate creation, rejection, enablement, scheduling or execution; all remain unverified.
+- Section 21 is retitled and rewritten as the earlier 18:39 historical session. Its target window and approval context are explicitly distinguished from the later 19:40 authorization in Section 22. Its actual execution interval and completion remain unverified.
+- Section 21.18 retains the explicit withdrawal of unsupported Checkup 1 completion and Checks 2–6 scheduling/execution claims.
+- Section 22's 19:40 authorization and unverified actual execution status remain unchanged.
+- Section 1's stale statement that Documents 00 and 01 had inconsistent approval status was corrected at the same time.
+
+**Verification target:** Confirm Sections 20–22 contain no claim that a checkup was created, rejected, enabled, scheduled, inspected or completed without receipts; confirm 18:39 and 19:40 are unambiguously separate.
+
+### Additional approval-history finding — exact baseline versus administrative revisions
+
+**Affected:** Comparative Research Log Section 1 and Documents 00 and 01.
+
+**Correction and method:**
+- Document 00 now records its Project Director-approved baseline as commit `8490737429b052b65fed3b998e0320d8834f640f`, blob `ff0e57f2f9a266466687dca2c4cbcda6a64cb7d7`, and identifies current branch blob `479f92f05eda844a47ba2a13445e84550cd46467`.
+- Document 01 now records its Project Director-approved baseline as commit `f32d2c9ede71676759b55c87c783253bd23ebbae`, blob `15c9bfc06f5f094d396f8a9dc625c22ac0d1b279`, and identifies current branch blob `8c98cb075333630976e44450969167cf5cd1782a`.
+- Each document states that the current branch revision adds approval-status/approval-record documentation only, does not change its architectural requirements or boundaries, and is not being represented as a separately approved architectural revision.
+- The original approval links and their scope limitations remain explicit.
+
+**Verification target:** Fetch the exact approved baseline commits and current branch files; inspect the diffs. Confirm the post-approval edits are confined to approval/status documentation and that no new approval is implied for the current blobs.
+
+### Evidence and scope
+
+- The research package remains provisional and unapproved.
+- No architecture, technology, algorithm, implementation sequence or runtime change was made.
+- No runtime tests are applicable to this documentation-only correction pass.
+- F-02, F-03, F-04 and F-05 were not rewritten; the prior Reviewer had cleared them with the stated limitations.
+- Independent reassessment is still required. This record is not approval.
+
 ## Revision manifest
 
 The commit SHA and resulting blob SHAs are to be appended after the final verification pass.
