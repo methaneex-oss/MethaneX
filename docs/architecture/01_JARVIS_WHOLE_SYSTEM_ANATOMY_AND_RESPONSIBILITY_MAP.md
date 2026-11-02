@@ -1,9 +1,11 @@
 # JARVIS — Whole-System Anatomy and Responsibility Map
 
-**Document status:** Approved by the Project Director for the exact revision identified below  
+**Document status:** Project Director-approved architectural baseline; current branch revision carries an administrative approval-record update only  
 **Parent document:** `docs/architecture/00_JARVIS_SYSTEM_ARCHITECTURE_FOUNDATION.md`  
 **Scope:** Whole-system functional anatomy, ownership boundaries, interactions, and unresolved architecture questions  
 **Implementation status:** Documentation only. This document authorizes no implementation, migration, deletion, or merge.
+**Approved baseline:** commit `f32d2c9ede71676759b55c87c783253bd23ebbae`; blob `15c9bfc06f5f094d396f8a9dc625c22ac0d1b279`.  
+**Current branch blob:** `3bb202958f8416dd5efefbb07adc0ee8c4d80541`. The post-approval difference is limited to approval-status/approval-record documentation; no system responsibilities, boundaries or architectural requirements were changed. The current blob is not represented as having received a separate architectural approval.
 
 > **ENGINEER THE MECHANISMS; LET BEHAVIOR BE ACQUIRED THROUGH EXPERIENCE.**
 
@@ -795,7 +797,7 @@ These rules apply across the whole architecture.
 
 ## 18. Proposed decomposition and approval gates
 
-**Approval record:** Project Director approval: https://github.com/methaneex-oss/MethaneX/pull/171#issuecomment-6556276653. This approval applies to this exact Document 01 revision and the responsibility boundaries it explicitly covers only. It does not approve the Brain Foundation research package, a Brain architecture, implementation, or PR merge.
+**Approval record:** Project Director approval: https://github.com/methaneex-oss/MethaneX/pull/171#issuecomment-6556276653. The approval identifies the approved baseline as commit `f32d2c9ede71676759b55c87c783253bd23ebbae` / blob `15c9bfc06f5f094d396f8a9dc625c22ac0d1b279`. The current branch blob is a later administrative status-record revision, not a newly approved architectural baseline. The approval applies only to Document 01's reviewed responsibility boundaries. It does not approve the Brain Foundation research package, a Brain architecture, implementation, or PR merge.
 
 This document should not be treated as a final design until the following questions are answered and the Project Director approves the resulting map.
 
