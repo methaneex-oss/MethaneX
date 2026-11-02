@@ -2391,7 +2391,7 @@ Unresolved: foundational representational types; whether a shared workspace is n
 
 This records corrections in response to the independent Reviewer report. It is not a claim that the package is approved. The separate reviewer-facing evidence record is maintained at docs/review-records/brain-foundation/2026-11-02_REVIEW_CORRECTION_EVIDENCE.md.
 
-- F-01: corrected Section 22 to the authorized 19:40 start; withdrew 19:27 as the authorized start. Actual start/end and completion are unverified where receipts are absent. Section 21's 18:39 session remains distinct. Unsupported checkup completion/scheduling claims were withdrawn.
+- F-01: corrected Section 22 to the authorized 19:40 start; withdrew 19:27 as the authorized start. Actual start/end and completion are unverified where receipts are absent. Section 21 is explicitly labelled as the earlier 18:39 session and distinguished from the later 19:40 authorization. Section 20's unsupported claims that three checkups were created, three rejected, and run histories checked are explicitly withdrawn; Section 21.18 also withdraws unsupported checkup completion/scheduling claims. Checkup existence, scheduling and execution remain unverified.
 - F-02: added Section 21.21, comparing six distinct dimensions, combinations and failure scenarios against shared Brain requirements. No architecture or technology is selected.
 - F-03: added Section 3.9 to the Mechanism Gap Analysis, describing monitoring-to-correction pathways and limits on authority.
 - F-04: expanded Section 3.1 of the Mechanism Gap Analysis to distinguish SYS-03 acquisition/preprocessing from Brain interpretation, identity tracking, cross-modal grounding, conflict handling and uncertainty sources.
