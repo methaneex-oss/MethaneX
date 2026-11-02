@@ -94,3 +94,15 @@ Each approval is treated as document-specific and revision-specific. Neither app
 ## Revision manifest
 
 The commit SHA and resulting blob SHAs are to be appended after the final verification pass.
+
+
+## Verified revision manifest
+
+- PR head after this correction pass: 450d7013a45bdaa8f900f5aa7107dbe9accbda53
+- Document 00 blob: e6a544e2968d8b8dc4cce88db9c040804a94534c
+- Document 01 blob: 3bb202958f8416dd5efefbb07adc0ee8c4d80541
+- Comparative Research Log blob: d773b0ba190b4d10997e9723b9310bbec8e75241
+- Mechanism Gap Analysis blob: a90204f28c09dd9c1e2e0e1b24d108a58dc82b46
+- This correction evidence record blob: bc3b26c083964bc7d970c389b9f5bfecf5db3360
+
+These identifiers were fetched from the named branch after the writes. Reviewer should independently fetch them again at the PR head before relying on this manifest.
