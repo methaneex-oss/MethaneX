@@ -166,6 +166,17 @@ Evidence inspected:
 
 These findings narrow the engineering claim: the code has a real event-backed cycle and several interacting mechanisms, but some interactions are currently shallow or one-way in the inspected path. Capability presence must not be confused with capability integration or demonstrated learning.
 
+**Additional test coverage inspected (source inspection only; not executed):**
+
+- [Memory architecture suite](https://github.com/methaneex-oss/MethaneX/blob/1273ddbcd0087d189e01388ded2d362fb1e058d2/core/cpp/tests/memory_architecture_suite.cpp#L9-L60) checks append/sequence continuity, exact-attribute ranking, explicit tier promotion, working-memory demotion, and restoration of metadata.
+- [Knowledge-memory phase 3 suite](https://github.com/methaneex-oss/MethaneX/blob/1273ddbcd0087d189e01388ded2d362fb1e058d2/core/cpp/tests/knowledge_memory_phase3_suite.cpp#L9-L39) checks source reliability aggregation and feedback scoring.
+- [Attention architecture suite](https://github.com/methaneex-oss/MethaneX/blob/1273ddbcd0087d189e01388ded2d362fb1e058d2/core/cpp/tests/attention_architecture_suite.cpp#L9-L60) checks feature-driven salience, simple reinforcement/suppression and priority ranking.
+- [Reasoning architecture suite](https://github.com/methaneex-oss/MethaneX/blob/1273ddbcd0087d189e01388ded2d362fb1e058d2/core/cpp/tests/reasoning_architecture_suite.cpp#L9-L54) checks consistency, bounded causal-chain inference and contradiction handling.
+- [Learning-loop architecture suite](https://github.com/methaneex-oss/MethaneX/blob/1273ddbcd0087d189e01388ded2d362fb1e058d2/core/cpp/tests/learning_loop_architecture_suite.cpp#L8-L58) checks repeated numeric feedback, adaptation metrics, proposal generation and invalid/NaN input handling.
+- [Prediction-feedback phase 10 suite](https://github.com/methaneex-oss/MethaneX/blob/1273ddbcd0087d189e01388ded2d362fb1e058d2/core/cpp/tests/prediction_feedback_phase10_suite.cpp#L8-L72) checks causal prediction creation, explicit outcome resolution and persistence after reconstruction.
+
+This is broader coverage than a single cognitive-cycle test. It demonstrates multiple implemented foundations and bounded subsystem behaviours. The tests remain mostly deterministic fixtures with explicit inputs and expected values; they do not, by themselves, demonstrate open-ended acquisition, transfer to unfamiliar domains, or longitudinal improvement across a varied environment.
+
 **What this establishes:** a persistent event-backed cognitive substrate and a real integration path across several named capabilities already exist.
 
 **What it does not establish:** open-world perception and grounding, broad semantic or causal learning, generalization to unfamiliar contexts, robust affective/social cognition, reliable metacognitive correction, or persistent improvement across a varied experience stream.
