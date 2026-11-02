@@ -5,7 +5,7 @@
 **Scope:** Whole-system anatomy and the governing decision to engineer the Brain first  
 **Implementation status:** This document authorizes no implementation, migration, deletion, or merge.
 **Approved baseline:** commit `8490737429b052b65fed3b998e0320d8834f640f`; blob `ff0e57f2f9a266466687dca2c4cbcda6a64cb7d7`.  
-**Current branch blob:** `e6a544e2968d8b8dc4cce88db9c040804a94534c`. The post-approval difference is limited to approval-status/approval-record documentation; no architectural requirements or system boundaries were changed. The current blob is not represented as having received a separate architectural approval.
+**Pre-correction branch blob:** `e6a544e2968d8b8dc4cce88db9c040804a94534c`. The post-approval differences are limited to approval-status/approval-record documentation; no architectural requirements or system boundaries were changed. The resulting administrative revision is not represented as having received a separate architectural approval. The final current blob is recorded in the separate correction-evidence manifest.
 
 > **ENGINEER THE MECHANISMS; LET BEHAVIOR BE ACQUIRED THROUGH EXPERIENCE.**
 
