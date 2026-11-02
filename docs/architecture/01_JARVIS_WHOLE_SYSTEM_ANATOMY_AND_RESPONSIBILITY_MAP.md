@@ -1,6 +1,6 @@
 # JARVIS — Whole-System Anatomy and Responsibility Map
 
-**Document status:** Proposed architectural decomposition; not approved  
+**Document status:** Approved by the Project Director for the exact revision identified below  
 **Parent document:** `docs/architecture/00_JARVIS_SYSTEM_ARCHITECTURE_FOUNDATION.md`  
 **Scope:** Whole-system functional anatomy, ownership boundaries, interactions, and unresolved architecture questions  
 **Implementation status:** Documentation only. This document authorizes no implementation, migration, deletion, or merge.
@@ -794,6 +794,8 @@ These rules apply across the whole architecture.
 ---
 
 ## 18. Proposed decomposition and approval gates
+
+**Approval record:** Project Director approval: https://github.com/methaneex-oss/MethaneX/pull/171#issuecomment-6556276653. This approval applies to this exact Document 01 revision and the responsibility boundaries it explicitly covers only. It does not approve the Brain Foundation research package, a Brain architecture, implementation, or PR merge.
 
 This document should not be treated as a final design until the following questions are answered and the Project Director approves the resulting map.
 
