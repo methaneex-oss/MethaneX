@@ -128,16 +128,25 @@ This pass addresses the four remaining items in the latest Reviewer report. It d
 - F-02, F-03, F-04 and F-05 were not rewritten; the prior Reviewer had cleared them with the stated limitations.
 - Independent reassessment is still required. This record is not approval.
 
-## Final revision manifest — submission snapshot before manifest-only update
+## Final revision manifest — verified pre-manifest submission snapshot
 
-The final narrow correction pass was fetched from the PR branch at the exact submission snapshot below. This manifest update itself creates one subsequent commit and changes only this correction-evidence file.
+This manifest records the exact PR state independently fetched and reviewed immediately before this manifest-only correction. It replaces the stale snapshot previously recorded here.
 
-- PR head at submission snapshot: `1cc8619474dc9d7e0717d3842e3f99ad9b8d0f01`
+**Verified pre-manifest submission snapshot**
+- PR head: `99ca68580268d0fc9ba33db5f70eb3dbc576090b`
+- Branch: `docs/jarvis-system-architecture-foundation-20261101`
+- PR: #171 → `main` (open, draft, unmerged)
+
+**Four non-self-referential document blobs fetched from that exact PR head**
 - Document 00 — approved baseline: commit `8490737429b052b65fed3b998e0320d8834f640f`, blob `ff0e57f2f9a266466687dca2c4cbcda6a64cb7d7`; current submission blob: `db0f136b3aaa338fb7d06d7be9e50bb42fc82821`
 - Document 01 — approved baseline: commit `f32d2c9ede71676759b55c87c783253bd23ebbae`, blob `15c9bfc06f5f094d396f8a9dc625c22ac0d1b279`; current submission blob: `2b595af4fefb54c7f8dc81fb997d4d391f2250e0`
 - Comparative Research Log blob: `f84077179f9fa8e151b5faca39940e43a13db2a2`
 - Mechanism Gap Analysis blob: `a90204f28c09dd9c1e2e0e1b24d108a58dc82b46`
-- Correction Evidence Record blob before this manifest update: `1e66d65817fae7bf51cf935037572f2e53cf468f`
 
-The Reviewer must fetch the final PR head after this manifest-only commit and verify all five final file blobs again. The manifest is a reproducibility aid, not proof of approval. The current Document 00/01 blobs are explicitly administrative approval-record revisions; only their cited baseline commits/blobs carry the recorded Project Director architectural approvals.
+**Correction-evidence self-reference and manifest commit**
+- Correction Evidence Record blob at the verified pre-manifest snapshot: `9bb5fc576358b522a4e0c8d7e4c1280dcd2af91c`
+- This manifest-only commit changes this file, so it necessarily creates a new correction-evidence blob and a new PR head. A Git blob cannot contain its own resulting blob SHA, and a commit cannot reliably embed its own resulting commit SHA: changing the file to insert either identifier changes the object being identified. Therefore, the pre-manifest blob above is intentionally identified as the input snapshot, not misrepresented as the final blob.
+- The manifest-only commit's resulting commit SHA and correction-evidence blob SHA are recorded in the Builder's PR handoff comment after GitHub returns them. The Reviewer must independently fetch the branch head and all five files after that commit, verify the four unchanged document blobs above, and compare the fetched correction-evidence blob with the handoff's returned SHA.
+
+The manifest is a reproducibility aid, not proof of approval. The current Document 00/01 blobs are administrative approval-record revisions; only their cited baseline commits/blobs carry the recorded Project Director architectural approvals. This manifest correction changes no architectural content and does not approve the research package.
 
