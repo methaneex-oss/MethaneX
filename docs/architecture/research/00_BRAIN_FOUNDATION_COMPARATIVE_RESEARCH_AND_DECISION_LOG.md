@@ -16,7 +16,7 @@ This is a living investigation record. It is being maintained so the Reviewer ca
 It is **not**:
 - an approved Brain Foundation architecture;
 - authorization to implement or modify runtime code;
-- a replacement for the two whole-system architecture documents; their repository approval status is currently inconsistent and they are treated as working references pending reconciliation;
+- a replacement for the two whole-system architecture documents; Documents 00 and 01 are separately approved by the Project Director for the exact baseline revisions identified in their approval records, while later administrative status-record updates on this branch are not represented as new architectural approvals;
 - evidence that any proposed mechanism exists in the repository or has been implemented;
 - a claim that Marvel fiction or neuroscience supplies a complete technical blueprint.
 
@@ -1981,7 +1981,7 @@ The Reviewer should assess the integrated A–G model rather than reviewing each
 - Added an integrated A–G synthesis describing recurrent interactions, foundational versus advanced versus acquired capabilities, cross-cutting invariants and unresolved architecture questions.
 - Expanded the independent Reviewer handoff on PR #171 to cover A–G as one integrated Brain foundation.
 - The research record remains provisional. It is not the final Brain Foundation architecture, does not settle component boundaries or technology choices, and does not authorize implementation.
-- The six-checkup request is only partially schedulable under the current automation limit: three one-time checkups were created; the remaining three were rejected because the account allows three active scheduled tasks. Their recorded run histories were checked and all three are pending with no run result yet.
+- **Superseded and withdrawn checkup account:** an earlier version of this update asserted that three one-time checkups had been created, that the remaining three were rejected by an automation limit, and that run histories had been checked. No inspectable automation receipts or task records are available in the repository evidence for those claims. Do not treat any checkup as created, rejected, enabled, scheduled, inspected or completed on the basis of this historical statement. Checkup existence, scheduling and execution are unverified.
 - No runtime code, tests, dependencies, whole-system documents or merge state were changed.
 
 **Remaining work before calling the investigation complete:** independently validate the source-to-claim mapping; investigate any missing cognitive capabilities (especially representation/reasoning integration, self-monitoring and language/contextual communication); challenge the cross-mechanism architecture for over-fragmentation and missing ownership; consolidate the whole-Brain foundation requirements and unresolved Project Director decisions; then verify the final research package and Reviewer handoff. Do not claim that a full 60-minute wall-clock period has elapsed merely because the research record has grown.
@@ -1989,12 +1989,12 @@ The Reviewer should assess the integrated A–G model rather than reviewing each
 
 ---
 
-## 21. Investigation update — 2026-11-01 (60-minute investigation commenced)
+## 21. Earlier investigation record — 2026-11-01 (18:39 session; distinct from the later 19:40 authorization)
 
-**Investigation start:** 18:39 Africa/Lagos, 1 November 2026  
-**Target investigation window:** 18:39–19:39 Africa/Lagos  
-**Approval:** Project Director approved the 60-minute structure, full audit and correction/expansion of A–G, and inclusion of architectural alternatives.  
-**Status:** In progress. This update records verified early findings only; it does not claim that the 60-minute window has elapsed or that the investigation is complete.
+**Historical session reference:** 18:39 Africa/Lagos, 1 November 2026  
+**Historical target window:** 18:39–19:39 Africa/Lagos  
+**Approval context:** The Project Director approved a 60-minute investigation structure, full audit and correction/expansion of A–G, and inclusion of architectural alternatives for this earlier session. This is not the later investigation authorized to start at 19:40 and must not be used as evidence that the later session began or ran.  
+**Status:** Historical record of the earlier session's scope and findings. Its actual execution interval and completion are not established by the available evidence. The later 19:40 authorization and its unverified execution status are recorded separately in Section 22.
 
 ### 21.1 Scope and implementation boundary
 
@@ -2396,6 +2396,6 @@ This records corrections in response to the independent Reviewer report. It is n
 - F-03: added Section 3.9 to the Mechanism Gap Analysis, describing monitoring-to-correction pathways and limits on authority.
 - F-04: expanded Section 3.1 of the Mechanism Gap Analysis to distinguish SYS-03 acquisition/preprocessing from Brain interpretation, identity tracking, cross-modal grounding, conflict handling and uncertainty sources.
 - F-05: corrected Reference 3 author order to Dulam, Gay and Dancy.
-- Approval history: corrected the research log and Document 00/01 status headers to reflect separate, scope-limited Project Director approvals. These do not approve the research package, Brain architecture, implementation or PR merge.
+- Approval history: corrected the research log and Document 00/01 status headers to reflect separate, scope-limited Project Director approvals. The approved baseline commit/blob identities are distinguished from later administrative status-record revisions; no new architectural approval is claimed for those later blobs. These approvals do not approve the research package, Brain architecture, implementation or PR merge.
 
 **Post-correction review status:** pending independent Reviewer reassessment of the exact commit. The Reviewer determines whether each correction is sufficient.
