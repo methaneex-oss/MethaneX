@@ -98,13 +98,13 @@ The commit SHA and resulting blob SHAs are to be appended after the final verifi
 
 ## Verified revision manifest
 
-The following document blobs were fetched from the PR branch after the substantive corrections and before this manifest-only update:
+The following exact branch state was fetched after the Builder's final correction to withdraw the unsupported checkup-scheduling assertions and immediately before this manifest-only update:
 
-- PR head at verification: 40e3432f92a745a95bdf6771a19647d9f62a61a2
+- PR head at verification: 97609ce53a804f57395c916ff599d76fdd65ba1d
 - Document 00 blob: e6a544e2968d8b8dc4cce88db9c040804a94534c
 - Document 01 blob: 3bb202958f8416dd5efefbb07adc0ee8c4d80541
-- Comparative Research Log blob: d773b0ba190b4d10997e9723b9310bbec8e75241
+- Comparative Research Log blob: 8d58c4e031b6013124ad864a810f871c94e5e897
 - Mechanism Gap Analysis blob: a90204f28c09dd9c1e2e0e1b24d108a58dc82b46
-- Correction evidence record blob before this manifest update: bc3b26c083964bc7d970c389b9f5bfecf5db3360
+- Correction evidence record blob before this manifest update: c1539b09401ea79b95a0da4c1077f76ec032b89f
 
-This manifest update itself creates a subsequent commit. Reviewer must fetch the final PR head and all blobs again before review; this list is a reproducibility aid, not a substitute for that check.
+This manifest-only update creates a subsequent commit and changes this file's blob. The Reviewer must independently fetch the final PR head and all five files again, verify their blob SHAs, and review the exact final revisions. This manifest is a reproducibility aid, not proof of approval or a substitute for that check.
