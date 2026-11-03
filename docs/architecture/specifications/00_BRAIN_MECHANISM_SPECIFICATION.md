@@ -327,7 +327,7 @@ These are functional distinctions, not a mandate for five isolated stores.
 
 **Purpose:** Provide foundational, context-sensitive appraisal of significance and internal conditions and allow this appraisal to modulate cognition.
 
-**Owns:** Appraisal state, cognitive estimates of relevant internal conditions, appraisal evidence and developmental lineage. These estimates are not authoritative operational or homeostatic state. SYS-05 remains the owner of autonomic/operational regulation state; BM-07 may consume authorized SYS-05 observations and maintain a qualified cognitive estimate with source, freshness and uncertainty. It must not write, redefine or claim authority over SYS-05 state.
+**Owns:** Appraisal state, cognitive estimates of relevant internal conditions, appraisal evidence and developmental lineage. These estimates are not authoritative operational or homeostatic state. SYS-05 remains the owner of autonomic regulation state, while SYS-08 remains the owner of compute, storage, devices and runtime substrate state; BM-07 may consume authorized SYS-05 observations and maintain a qualified cognitive estimate with source, freshness and uncertainty. It must not write, redefine or claim authority over SYS-05 state.
 
 **Required foundational capacity:**
 
@@ -468,7 +468,7 @@ These are capability classes, not selected algorithms or an instruction to imple
 **Required behavior:**
 
 1. Preserve authoritative state ownership; coordination may not silently overwrite another mechanism's state.
-2. Track dependencies between beliefs, predictions, plans, goals, memories and learning candidates.
+2. Track dependencies between beliefs, predictions, plans, goals, memories, reasoning conclusions and learning candidates.
 3. When an upstream state changes, identify dependent state that may now be stale and request proportionate reconsideration.
 4. Support independent work where safe and serialize or reconcile conflicting changes where required.
 5. Detect duplicate, delayed and out-of-order updates.
@@ -500,6 +500,15 @@ These are capability classes, not selected algorithms or an instruction to imple
 - BM-08 goals, questions, plans or decision contexts that establish what is being reasoned about.
 
 **Publishes:** Provisional conclusions, alternative explanations, derived implications, supporting and contradicting premise references, explicit assumptions, scope, uncertainty, counterexamples, unresolved gaps and a traceable inference record. Conclusions are returned to the relevant owner for possible acceptance; publication by BM-12 does not make them beliefs or authorize action.
+
+**Responsibility boundaries:**
+
+- BM-02 constructs interpretations and representation alternatives; it does not own the general derivation/evaluation of conclusions from multiple premises.
+- BM-03 supplies retained experience and retrieval; it does not decide what a memory proves.
+- BM-04 owns accepted beliefs and world-state revision; it evaluates candidate claims but does not own the general inference process.
+- BM-05 owns association/causal hypotheses and predictions, including their generation and outcome resolution; it does not own general reasoning across all evidence types.
+- BM-08 owns goal, intent, planning and decision state; it consumes qualified conclusions but does not subsume general reasoning.
+- BM-10 monitors reasoning quality and requests correction; it does not replace BM-12's inference responsibility.
 
 **Required behavior:**
 
