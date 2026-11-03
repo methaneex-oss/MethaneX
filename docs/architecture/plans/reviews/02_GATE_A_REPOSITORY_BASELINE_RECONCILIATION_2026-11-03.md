@@ -1,0 +1,253 @@
+# Gate A — Repository Baseline Reconciliation
+**Checkpoint:** 1 — PR/branch lineage and immediate-delta reconciliation  
+**Date:** 2026-11-03  
+**Status:** IN PROGRESS — NOT CLOSED  
+**Governing specification:** PR #174, accepted HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`  
+**Planning PR:** #175  
+**Candidate implementation PR:** #156
+
+## 1. Executive disposition
+
+Gate A has established the current PR topology, exact candidate PR delta, major common-ancestor divergence, and several important non-ancestry relationships between component PRs and their integration PRs.
+
+**Gate A is not complete.** The 1,416 commits already present at the candidate integration base have not yet been exhaustively classified commit-by-commit and file-by-file. The present document is a verified checkpoint, not an accepted implementation-baseline decision.
+
+No implementation baseline is selected. PR #156 remains a candidate only.
+
+## 2. Authority and inspection boundaries
+
+This checkpoint is limited to GitHub metadata, commit graph comparisons, changed-file inventories, commit records and static source diffs. No local build, runtime test, benchmark, sanitizer, rebase, cherry-pick, merge, branch rewrite or deployment was performed.
+
+The governing design invariant remains:
+
+**ENGINEER THE MECHANISMS; LET BEHAVIOR BE ACQUIRED THROUGH EXPERIENCE.**
+
+PR #174 is a documentation/specification baseline, not an implementation branch. Existing code is evidence and potential reusable material; it is not automatically the required final architecture.
+
+## 3. Exact current refs
+
+| Role | PR / ref | Exact SHA | State |
+|---|---|---|---|
+| Accepted Brain mechanism specification | PR #174 | `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` | Open, draft, unmerged; Project Director accepted |
+| Candidate PR documentation HEAD | PR #156 | `7fe212bbb0bd61116ea56581435e03b06c69b673` | Open, draft, unmerged |
+| Candidate code-bearing parent | PR #156 | `15d49e5fdeb5723c475922ab78fb92f97c4b3b84` | Parent of documentation HEAD |
+| PR #156 immediate base / PR #155 head | `integration/knowledge-composition-20261031` | `52c367a4b53fdfe9b29776795200555076e8cb49` | Open PR #155, draft, unmerged |
+| Shared ancestor for candidate/spec comparison | — | `af09cf28d35e4a7b75c3c019e9f97893d8e19364` | Merge base |
+| Current main at inspection | `main` | `1273ddbcd0087d189e01388ded2d362fb1e058d2` | Current main ref returned by GitHub |
+
+## 4. Correct interpretation of the 1,429 / 21 divergence
+
+The accepted specification HEAD compared with PR #156 documentation HEAD returns:
+
+- Status: `diverged`
+- Candidate ahead of merge base: **1,429 commits**
+- Accepted specification ahead of merge base: **21 commits**
+- Merge base: `af09cf28d35e4a7b75c3c019e9f97893d8e19364`
+
+Comparing the accepted specification HEAD with the code-bearing parent returns **1,428 ahead / 21 behind**. The one-commit difference is the documentation-only PR #156 HEAD commit `7fe212b`.
+
+**The 1,429 count is inherited branch ancestry, not the number of commits introduced by PR #156.** PR #156 itself is 13 commits ahead of its immediate base `52c367a`. Its exact PR delta is 8 files, 345 additions and 76 deletions. The 12 code-bearing commits touch 7 files (298 additions, 76 deletions); the final documentation commit adds 47 lines to `docs/DEVELOPMENTAL_BRAIN_PLAN.md`.
+
+The immediate PR delta is therefore small relative to the accumulated history. The history risk is in the inherited candidate base and its relationship to the accepted specification line.
+
+### 4.1 Decomposition of the 21 commits missing from candidate ancestry
+
+The shared ancestor `af09cf28` is 9 commits behind current `main`. The accepted PR #174 HEAD is 12 commits ahead of current `main`, with no commits behind it. Therefore the 21 commits by which PR #156 is behind PR #174 decompose as:
+
+- **9 commits on current main after the shared ancestor**, including one Brain API restoration and workflow/test-infrastructure changes.
+- **12 documentation commits from the accepted architecture/specification stack**, represented by five added architecture/specification/review documents in the main-to-PR-174 comparison.
+
+This is not a claim that all 21 commits have equal implementation significance. The nine main commits include both source and workflow/test infrastructure changes; the 12 accepted specification commits are documentation-only.
+
+### 4.2 Why this distinction matters
+
+Do not describe PR #156 as a 1,429-commit change set. Do not interpret the 21-commit behind count as 21 missing runtime features. The comparison is between two histories that diverged at `af09cf28`; the commit graph and file deltas must be inspected separately.
+
+## 5. PR lineage and integration matrix
+
+The following PRs are related to the candidate's knowledge, feature-learning and evolution-replay scope. They are all unmerged at inspection. PR status is not the same as independent acceptance.
+
+| PR | Base → head | PR commit count | Changed files | Status | Contribution / relationship |
+|---|---|---:|---:|---|---|
+| #135 | `c1da222` → `58acf23` | 6 | 2 | Open, unmerged | Causal-learning correction; base of PR #150 |
+| #148 | `94d0297` → `be848d3` | 153 | 13 | Open, draft, unmerged | Knowledge conflict resolution, source calibration/provenance, trusted feedback boundary, passive legacy import and replay protections |
+| #151 | `94d0297` → `8c8889f` | 32 | 8 | Open, not draft, unmerged | Additive feature-based action learning and DLT-004 |
+| #150 | `58acf23` → `ec1ce13` | 12 | 7 | Open, not draft, unmerged | Evolution replay evidence validation and replay/adoption safeguards |
+| #155 | `be848d3` → `52c367a` | 9 | 8 | Open, draft, unmerged | Conflict-resolved integration of PR #151's feature learning on top of PR #148 |
+| #156 | `52c367a` → `7fe212b` | 13 | 8 | Open, draft, unmerged | Integration of evolution replay safeguards and feedback-source binding on top of PR #155 |
+
+All short SHAs above are prefixes of the exact SHAs recorded in Section 3 or the PR metadata. PR #148 and #151 share merge base `94d02976ef4bcf36ad2e7a67f53cfc09d7018494`, but their branches diverge: PR #151 is 32 commits ahead and 153 behind PR #148's head. PR #155 is a nine-commit integration branch based directly on PR #148's head.
+
+### 5.1 Critical ancestry finding: PR #151 is integrated by content, not as a direct ancestor
+
+Comparing PR #151 head `8c8889f` with PR #155 head `52c367a` returns:
+
+- Status: diverged
+- PR #155 side: 162 commits ahead of the common ancestor
+- PR #151 side: 32 commits ahead of the common ancestor
+- Merge base: `94d02976ef4bcf36ad2e7a67f53cfc09d7018494`
+
+PR #155 is nine commits ahead of PR #148 head and its PR description says PR #151's feature was integrated through conflict resolution. The commit graph confirms that PR #151's original 32 commits are **not** direct ancestors of PR #155. The integrated code must be reviewed as the PR #155 result, not assumed equivalent to PR #151 commit-for-commit.
+
+### 5.2 Critical ancestry finding: PR #150 is integrated by content, not as a direct ancestor
+
+Comparing PR #150 head `ec1ce132` with PR #156 code-bearing parent `15d49e5f` returns:
+
+- Status: diverged
+- PR #156 code-bearing parent side: 178 commits ahead of the common ancestor
+- PR #150 side: 12 commits ahead of the common ancestor
+- Merge base: `58acf23c9cc4594284062465ed658daf7f99e9a2`
+
+PR #156's first code commit is based on PR #155 head `52c367a`, not on PR #150 head `ec1ce13`. Thus PR #150's 12 commits are not direct ancestors of PR #156. PR #156 contains separately authored integration/correction commits that implement overlapping replay safeguards. Review the final PR #156 code against PR #150's intended protections; do not claim the source branch was merged unchanged.
+
+### 5.3 Integration topology
+
+```text
+Common candidate ancestor: 94d0297
+  ├── PR #148: knowledge/provenance branch (153 commits) ── be848d3
+  │     └── PR #155: conflict-resolved integration (9 commits) ── 52c367a
+  │           └── PR #156: replay/source-binding integration (12 code commits)
+  │                 └── docs checkpoint (1 commit) ── 7fe212b
+  └── PR #151: feature-learning source branch (32 commits) ── 8c8889f
+        [integrated by content through PR #155; not a direct ancestor]
+
+Separate causal/evolution source line:
+PR #135 head: 58acf23
+  └── PR #150: evolution replay source branch (12 commits) ── ec1ce13
+        [PR #150 head is not a direct ancestor of PR #156]
+
+Accepted architecture/specification line:
+main 1273ddb
+  └── PR #173 accepted architecture branch
+        └── PR #174 accepted specification HEAD 0811a59
+```
+
+The diagram is a simplified relationship map. It does not assert that every feature in a source PR was integrated without modification.
+
+## 6. Exact PR #156 incremental commit inventory
+
+GitHub's PR commit endpoint returned the following ordered sequence:
+
+| # | Commit | Message | Classification |
+|---:|---|---|---|
+| 1 | `1d9ec3a` | integrate authenticated evolution replay validation | Integration |
+| 2 | `ef2befd` | integrate evolution replay evidence validation | Integration |
+| 3 | `f1f9d32` | integrate evolution replay evidence validation | Integration |
+| 4 | `da9d773` | integrate evolution replay evidence validation | Integration |
+| 5 | `1cd81a3` | fix(evolution): bind replay rollback to adopted parameter | Runtime correction |
+| 6 | `f705a26` | test(evolution): reject mismatched replay rollback target | Regression test |
+| 7 | `3a7ddce` | fix(test): use explicit memory capacity for replay fixture | Test-fixture correction |
+| 8 | `bd7d7d3` | fix(knowledge): bind feedback attestations to claim source | Runtime correction |
+| 9 | `5f6ef27` | fix(knowledge): bind feedback attestations to claim source | Runtime correction |
+| 10 | `ecf396d` | fix(knowledge): bind feedback attestations to claim source | Runtime correction |
+| 11 | `f79c8f9` | test(knowledge): reject source relabeling with stale attestation | Regression test |
+| 12 | `15d49e5` | fix(knowledge): resolve claim source before verifying feedback | Runtime correction |
+| 13 | `7fe212b` | docs(plan): record integrated priority-one audit checkpoint | Documentation-only |
+
+The first 12 commits are the code-bearing chain ending at `15d49e5`. The 13th commit changes only `docs/DEVELOPMENTAL_BRAIN_PLAN.md`.
+
+## 7. PR #156 exact changed-file matrix
+
+Comparison of immediate base `52c367a` to code-bearing parent `15d49e5`:
+
+| File | Additions | Deletions | Observed responsibility | Initial disposition |
+|---|---:|---:|---|---|
+| `core/cpp/include/jarvis/core/brain.hpp` | 1 | 0 | Adds claim source to feedback-verifier request contract | Preserve for review; check all callers/verifier integrations |
+| `core/cpp/src/brain.cpp` | 65 | 13 | Restricts external evolution lifecycle replay; validates complete evaluation/adoption evidence; binds rollback to adopted parameter; binds feedback replay to source | Preserve as candidate; verify replay lifecycle and event compatibility |
+| `core/cpp/src/brain_restored_api.cpp` | 7 | 7 | Resolves the actual claim source before invoking feedback verifier and includes source in prior-attestation verification | Preserve as candidate; verify source lookup, locking and replay semantics |
+| `core/cpp/src/evolution_controller.cpp` | 67 | 9 | Recomputes evaluation outcome; checks finite/ranged evidence, durable matching evaluation, safety gate and adoption-journal fields | Preserve as candidate; check idempotency, historical records and rollback interactions |
+| `core/cpp/tests/evolution_brain_integration_suite.cpp` | 75 | 19 | Adds/updates forged lifecycle, rollback-binding and restart regressions | Preserve as evidence; tests are not a substitute for full spec acceptance |
+| `core/cpp/tests/evolution_canary_controller_suite.cpp` | 21 | 0 | Adds forged adoption and false-improvement replay cases; requires isolation attestation in fixture | Preserve as evidence; inspect coverage boundaries |
+| `core/cpp/tests/knowledge_source_feedback_suite.cpp` | 62 | 28 | Binds feedback attestation to source and tests source relabeling across restart | Preserve as evidence; test verifier is not production cryptography |
+| `docs/DEVELOPMENTAL_BRAIN_PLAN.md` | 47 | 0 | Records exact-head audit, corrections, CI and remaining Priority-One gates | Documentation; retain as historical evidence, reconcile with accepted Brain specification |
+
+### 7.1 Source-level change summary
+
+Static diff inspection confirms these changes in the PR #156 delta:
+
+1. Publicly observed external `evolution_*` lifecycle records are rejected during replay unless the source is Brain-authored.
+2. Evaluation replay requires complete finite numeric fields, a valid outcome enum and an explicit isolation field; the controller recomputes the outcome rather than trusting the stored label.
+3. Adoption replay requires a matching durable evaluation record and a fresh safety-gate approval, then checks the staged journal fields against the replayed experiment.
+4. Rollback replay verifies that the experiment's adopted parameter key matches the rollback event's key before mutating the parameter.
+5. Knowledge feedback requests now bind the actual source of the referenced claim. The source is resolved before calling the host verifier, and replay verification includes that source.
+6. Regression coverage includes mismatched rollback targets, false improvement labels, source relabeling with a stale attestation, and restart behavior.
+
+These are substantive integrity/replay improvements. They do not close the documented external requirements for production cryptographic verification, protected trust configuration, key rotation/revocation, objective adjudication or cryptographic journal integrity.
+
+## 8. Current-main drift relative to the candidate's common ancestor
+
+Current `main` is nine commits ahead of `af09cf28`. The nine commits are:
+
+| Commit | Message | Net file-level observation |
+|---|---|---|
+| `4ba84b8` | Restore Brain API definitions after accidental truncation | Adds restored API definitions in `brain_restored_api.cpp` |
+| `043bd1b` | ci(dlt-002): expose overnight trial for manual dispatch | Workflow infrastructure |
+| `6ce51f6` | test(learning): add explicit learning mechanisms probe | Workflow infrastructure |
+| `95afb67` | test(memory): publish JBP MEM-001 manual workflow | Workflow infrastructure |
+| `b23f1e9` | test(learning): add parallel multi-seed adversarial stress trial | Workflow infrastructure |
+| `35ecf7c` | test(brain): add integrated feedback and persistence validation | Workflow/test infrastructure |
+| `a323ce7` | fix(memory-test): test the selected brain revision | Test/workflow correction |
+| `1633105` | feat(evolution): add self-contained artifact digest | Later reverted on main |
+| `1273ddb` | revert: remove misplaced evolution digest header | Reverts the preceding digest change |
+
+The net comparison from `af09cf28` to current `main` reports six changed files: five workflow files and `core/cpp/src/brain_restored_api.cpp`. The digest add/revert pair leaves no net file change in the current-main tree.
+
+### 8.1 Brain API restoration — preliminary equivalence check
+
+The candidate `brain_restored_api.cpp` blob is `00d69ab2eb3811d453a643ef18dc69741109cbc8`; current-main blob is `618deb6976eed951eae02b7f0da741e6d730bb0c`.
+
+A static function-name inventory found that the candidate file contains every Brain API function name present in current main, plus additional candidate APIs including prediction feedback, source feedback, related-strategy retrieval and evolution evaluation recording.
+
+This is evidence that the main-branch API restoration is likely functionally subsumed in the candidate file. It is **not yet a semantic equivalence proof**: the common functions still need signature/body comparison, and callers/build configuration must be reconciled before deciding that the main commit can be excluded.
+
+### 8.2 Workflow/test infrastructure drift
+
+The five workflow files present in current main are not present in the PR #156 changed-file list. They are not automatically required runtime functionality. Their value, triggers, tested source refs and overlap with existing candidate workflows must be assessed independently. Do not copy them blindly and do not silently discard their validation coverage.
+
+## 9. Initial retain/adapt/exclude matrix
+
+| Change group | Current evidence | Preliminary recommendation | Unresolved question |
+|---|---|---|---|
+| PR #148 knowledge conflict/provenance work | Source branch and PR description; integrated by PR #155 | Retain as candidate functionality, not accepted architecture | Which pieces satisfy BM-01/BM-04, and which need changes to meet the accepted epistemic contracts? |
+| PR #151 additive action-feature learner | Source PR, DLT-004 and PR #155 integration | Retain as bounded learning candidate | Does the integrated PR #155 implementation preserve all intended isolation, transfer and restart protections? |
+| PR #150 evolution replay safeguards | Source PR plus separately authored PR #156 integration commits | Retain the PR #156 implementation as candidate; compare each safeguard against PR #150 intent | Are all source-branch protections preserved, and are the integration differences deliberate and complete? |
+| PR #156 rollback parameter binding | Exact source/test diff | Preserve | Does the invariant cover all replay/rollback orderings and historical records? |
+| PR #156 feedback source binding | Exact source/test diff | Preserve | Does the host verifier bind every required claim field and is historical replay policy explicit? |
+| Main Brain API restoration | Candidate includes all main function names; blob differs | Likely subsumed; semantic comparison required | Are common signatures and behavior equivalent, and are any callers/configuration dependencies missing? |
+| Main workflow/test additions | Five net workflow files absent from PR #156 delta | Evaluate individually; do not automatically import | Which workflows remain needed, safe, and compatible with the accepted verification strategy? |
+| Evolution digest add/revert pair | Net no file change on current main | Exclude the reverted feature from current-main baseline unless separate evidence requires it | Verify no dependent artifact remains on candidate line |
+| Accepted PR #173/#174 documentation | 12 commits ahead of main, five docs in comparison | Binding planning/specification baseline | Candidate implementation must be mapped against the accepted responsibilities; docs are not code to cherry-pick |
+
+## 10. Reconciliation risks and unresolved work
+
+Gate A still needs the following before it can be declared complete:
+
+1. **Exhaustive inherited-history inventory:** enumerate and classify the 1,416 commits already present at PR #156's immediate base `52c367a` relative to `af09cf28`. The count is not itself a useful inventory.
+2. **Origin mapping:** map the inherited history to originating PRs, branches and integration checkpoints. Identify overlapping branches and repeated/reworked commits without double-counting them.
+3. **File-level ownership:** for each relevant file, identify which PR/commit first introduced it, later modifications, current candidate blob, current-main blob where applicable, and accepted specification responsibility.
+4. **Integration fidelity:** compare PR #148 and #151 source changes with PR #155's conflict-resolved integration, and PR #150's source changes with PR #156's independently authored integration commits.
+5. **Current-main semantic reconciliation:** compare the restored API definitions and the workflow/test infrastructure against the candidate tree, including their callers and exact refs.
+6. **Unreviewed status:** preserve the fact that PRs #148, #150, #151, #155 and #156 are unmerged. A green CI record or a draft integration PR does not confer independent acceptance.
+7. **Baseline recommendation:** only after the above should the Builder recommend a candidate source baseline, an adaptation set and exclusions for Independent Reviewer challenge.
+
+Gate B remains separate: it must produce the complete 12-mechanism source-to-specification traceability matrix. Gate A must not be represented as having completed Gate B.
+
+## 11. Prohibited actions remain prohibited
+
+This checkpoint does not authorize:
+
+- runtime source modifications;
+- builds, tests, benchmarks or sanitizers;
+- rebase, cherry-pick, merge, branch rewrite or history reconstruction;
+- technology, schema, API, framework or database selection;
+- deployment or autonomous operation.
+
+PR #156 remains a candidate. No implementation base is selected.
+
+## 12. Checkpoint conclusion
+
+**Gate A checkpoint 1: useful structural reconciliation completed; full repository baseline reconciliation remains OPEN.**
+
+The most important correction is that the 1,429/21 figure describes divergent ancestry, not the PR #156 incremental diff. The next reconciliation work must focus on the inherited 1,416-commit base, the missing 21 commits, and the fact that PR #155 and PR #156 integrate source-PR functionality through new commits rather than direct ancestry.
+
+Do not rebase or reconstruct history. Do not begin implementation. Obtain independent review of this reconciliation checkpoint before making any baseline decision.
