@@ -428,7 +428,7 @@ The following is a capability-level allocation, not an implementation schedule.
 | Prediction/outcome comparison | Bounded predictions with assumptions and resolution | Better models, horizons and transfer |
 | Learning/adaptation | Controlled candidate change, evaluation and persistence | Concept, model, strategy and skill development |
 | Reasoning/inference | Evidence-aware foundational inference | Richer causal, analogical and abstract reasoning |
-| Goals/valuation/decision | Process supplied goals and constraints; distinguish them from candidate goals formed internally | Experience-acquired candidate-goal formation, revised priorities/preferences, affective calibration and planning competence |
+| Goals/valuation/affective appraisal/decision | Process supplied goals and constraints; distinguish them from candidate goals formed internally; evaluate significance, risk and relevant internal conditions | Experience-acquired candidate-goal formation, revised priorities/preferences, calibrated affective appraisal and planning competence |
 | Cognitive control/metacognition | Detect uncertainty, inconsistency and limitations; request correction | More effective self-monitoring and strategy selection |
 | Integrated coordination | Explicit ownership, dependencies and bounded shared context | More efficient concurrent coordination under varied load |
 
@@ -500,7 +500,7 @@ The architecture must support end-to-end scenarios such as:
 - a metacognitive check that requests more evidence or suspends a conclusion instead of inventing certainty;
 - a candidate goal formed after an unexpected outcome, with its evidential lineage visible, its feasibility and constraints evaluated, and the goal revised or abandoned when later evidence defeats its basis;
 - an affective appraisal in which the same event has different significance under different goals or internal conditions, changing attention or evaluation without a fixed stimulus-to-emotion or emotion-to-action rule;
-- an SYS-06 modulation signal absent because that responsibility is not deployed, with the Brain continuing within its defined foundational capabilities and not assuming SYS-06 is mandatory;
+- a SYS-06 modulation signal absent because that responsibility is not deployed, with the Brain continuing within its defined foundational capabilities and not assuming SYS-06 is mandatory;
 - a SYS-08 storage/runtime interruption during cognitive persistence, where infrastructure failure is recorded as operational evidence and recovered cognitive state is validated by SYS-01 before reuse;
 - an action request that is denied by governance, with the denial preserved as a constraint/outcome rather than treated as an executed action.
 
