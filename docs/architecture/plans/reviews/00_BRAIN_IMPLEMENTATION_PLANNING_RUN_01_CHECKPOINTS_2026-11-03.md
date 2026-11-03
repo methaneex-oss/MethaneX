@@ -4,7 +4,8 @@
 **Planning package:** `docs/architecture/plans/00_BRAIN_IMPLEMENTATION_PLAN.md`  
 **Governing specification:** PR #174 accepted HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`  
 **Planning branch:** `plan/brain-implementation-roadmap-20261103`  
-**Planning commit:** `256e56b0718ce1fa60b581333e5da638e84924e9`  
+**Plan document commit:** `256e56b0718ce1fa60b581333e5da638e84924e9`  
+**Final planning package HEAD:** `7962fb05de7c1f11846e1fecb0e6774acfd52e9f`  
 **Scope:** Documentation only
 
 ---
