@@ -233,15 +233,23 @@ The active workspace is not long-term memory, the belief store, a goal authority
 
 **Interactions:** beliefs and assumptions support predictions; new evidence may invalidate dependent predictions; resolved outcomes provide learning evidence; reasoning may request memory, perception or further information.
 
-### 4.6 Goals, valuation, planning and decision formation
+### 4.6 Goals, valuation, affective processing, planning and decision formation
 
-**Responsibilities:** represent goals and constraints; evaluate relevance, significance, urgency, risk and competing outcomes; compare alternatives; form plans and decisions; determine whether to act, ask, wait, defer or stop.
+**Responsibilities:** represent goals and constraints; evaluate relevance, significance, urgency, risk, internal conditions and competing outcomes; compare alternatives; form plans and decisions; determine whether to act, ask, wait, defer or stop. This responsibility includes the Brain's minimum affective processing capacity; affect is not omitted from the foundation merely because sophisticated affective dynamics are advanced.
 
-**Must enable initially:** explicit goal and constraint state, decision traceability, uncertainty-aware alternatives and a distinction between deciding and being authorized to execute.
+**Must enable initially — goal processing:** receive, represent, track, evaluate and revise explicit goals, constraints and alternatives. The initial Brain must be able to distinguish a supplied goal from a candidate goal it has formed, and a goal from an intention, plan, decision, or authorized action.
 
-**Must develop through experience:** domain competence, learned priorities, preferences and more sophisticated planning. These must be revisable and evidence-sensitive, not preloaded behavioural mappings.
+**Must develop through experience — goal formation:** develop the capacity to generate candidate goals from interpreted experience, changes in circumstances, discrepancies between expected and observed outcomes, internal conditions, and the consequences of prior goals and actions. These are possible sources of candidate goals, not fixed triggers or prescribed objectives. Candidate goals must be evaluated for evidential basis, relevance, feasibility, uncertainty, risk, conflicts, constraints and expected consequences; they may be revised, deferred, suspended or abandoned as evidence changes. The Brain must preserve why a candidate goal arose and what experience altered its priority. Acquired priorities and preferences are revisable products of development, not preloaded behavioural mappings.
 
-**Valuation boundary:** valuation may influence attention, memory, learning and decision formation. No fixed rule such as negative affect → reject or failure → trauma is permitted as a substitute for acquired appraisal.
+**Must enable initially — affective appraisal:** evaluate the significance of events and information in relation to current goals, risk, uncertainty and relevant internal conditions. This is a minimal capacity for context-sensitive appraisal and modulation, not a requirement to begin with a mature catalogue of emotions, fixed emotional labels, or predetermined reactions.
+
+**Must develop through experience — affective sophistication:** improve the differentiation, calibration and context-sensitivity of affective appraisal, including learned modulation across attention, memory, learning and decision formation. Advanced affective dynamics are developmental depth; the basic affective responsibility is foundational.
+
+**Interactions:** valuation and affective appraisal may alter what receives attention, what is encoded or retrieved, which experiences warrant further evaluation, how alternatives are assessed and how candidate goals are prioritized. These influences must remain evidence-sensitive, bounded and inspectable. Affective appraisal does not itself establish facts, create permission, or dictate an action.
+
+**Boundary with SYS-05 and SYS-06:** the Brain owns cognitive interpretation of significance, goals, valuation and affective appraisal. SYS-05 remains responsible for defined operational/homeostatic regulation and does not silently set cognitive priorities or rewrite goals. SYS-06 is a proposed, unresolved whole-system modulation/global-state-signalling responsibility, not an approved mandatory subsystem. If later justified and separately specified, SYS-06 may provide governed modulation across system operation; it does not own Brain beliefs, goals or emotional meaning and must not encode fixed stimulus-to-emotion or emotion-to-action rules. The existence, placement, scope and contracts of SYS-06 remain open. No endocrine-inspired implementation is selected here.
+
+**Developmental boundary:** no fixed rule such as negative affect → reject, failure → trauma, or success → reward is permitted as a substitute for acquired appraisal. Bootstrap mechanisms may preserve integrity, boundedness and governance invariants; they must not prescribe learned emotional reactions, motivations, priorities or behaviours.
 
 ### 4.7 Learning and developmental adaptation
 
@@ -351,11 +359,17 @@ The Brain must be architected to function in a controlled development environmen
 | SYS-02 Nervous / signalling | Routed observations, events, delivery and failure evidence | Logical messages, requests, priorities and feedback needs | Transport does not interpret evidence or own cognition |
 | SYS-03 Sensory acquisition | Qualified observations, modality metadata and acquisition uncertainty | Requests for additional observations or clarification | Acquisition/preprocessing does not alone establish Brain-level meaning or identity |
 | SYS-04 Motor / action | Execution state and outcome evidence | Action proposals/requests | Brain intent is not authorization or execution |
-| SYS-05 Autonomic regulation | Resource limits, availability and operational health | Resource or scheduling requests | Operational regulation does not create cognitive goals |
+| SYS-05 Autonomic regulation | Resource limits, availability and operational health | Resource or scheduling requests | Operational regulation does not create cognitive goals or substitute for cognitive valuation/affective appraisal |
+| SYS-06 Proposed modulation/global-state signalling | No SYS-06 capability is assumed to exist; if separately authorized later, the Brain may receive governed modulation signals and their provenance/status | The Brain may provide bounded, evidence-grounded modulation requests if a later SYS-06 contract authorizes them | SYS-06 remains proposed and unresolved, not a mandatory subsystem; it does not own Brain beliefs, goals or affective meaning and may not encode predetermined emotional or behavioural outcomes |
 | SYS-07 Defence / security | Trust, threat, integrity and containment information | Requests for security assessment or protected operations | Brain cannot override trust boundaries or restore trust unilaterally |
+| SYS-08 Embodiment / computational and environmental substrate | Compute, storage, networking, device, runtime and operating-context availability, constraints, failures and recovery status | Cognitive persistence/read requests, bounded resource requirements and operational needs through defined contracts | SYS-08 owns/provides the substrate, not cognitive meaning or authoritative cognitive content; substrate failures are operational evidence, not automatically evidence about the external world or a cognitive conclusion |
 | SYS-09 Interaction | User intent, feedback, clarification and operator decisions | Responses, questions, explanations grounded in actual state | Interface presentation is not independent cognition |
 | SYS-10 Development/evaluation | Experiment results and evaluation reports | Testable capability requirements and controlled learning/evaluation requests | Development environment must not silently mutate live cognitive state |
 | SYS-11 Governance/assurance | Policies, permissions, approval decisions and constraints | Action requests and evidence needed for authorization/audit | Governance authorizes and constrains; it does not originate Brain beliefs or goals |
+
+The Brain owns the semantic content, provenance relationships, version meaning and cognitive consistency of its authoritative state. SYS-08 provides the compute, storage, networking, devices and runtime substrate through which that state is processed and persisted; substrate ownership does not transfer cognitive authority to infrastructure. The Brain may request persistence and recovery of cognitive state, but it must be able to distinguish a successful cognitive state transition from an infrastructure acknowledgement that bytes were stored or a process was restarted. SYS-08 reports operational availability, capacity, integrity signals and failures; it does not decide whether a belief, memory or interpretation is true.
+
+Responsibility for recovery is correspondingly divided: SYS-08 restores or reports the availability of the underlying operational substrate; SYS-05 may coordinate permitted component lifecycle operations; SYS-07 assesses integrity and security concerns within its authority; and SYS-01 validates recovered cognitive identity, lineage, consistency and epistemic status before treating recovered state as active cognition. A storage/network/runtime failure must not be reinterpreted as an external-world event, prediction outcome, memory absence or learning signal without independent evidence. Exact persistence, recovery and service contracts remain future specification work; no database, storage technology, runtime topology or infrastructure implementation is selected here.
 
 The exact message contracts, trust semantics, timing, cancellation and failure protocols remain future specification work. This document establishes the responsibility boundaries only.
 
@@ -414,7 +428,7 @@ The following is a capability-level allocation, not an implementation schedule.
 | Prediction/outcome comparison | Bounded predictions with assumptions and resolution | Better models, horizons and transfer |
 | Learning/adaptation | Controlled candidate change, evaluation and persistence | Concept, model, strategy and skill development |
 | Reasoning/inference | Evidence-aware foundational inference | Richer causal, analogical and abstract reasoning |
-| Goals/valuation/decision | Explicit goals, constraints and uncertainty-aware decisions | Acquired priorities, preferences and planning competence |
+| Goals/valuation/decision | Process supplied goals and constraints; distinguish them from candidate goals formed internally | Experience-acquired candidate-goal formation, revised priorities/preferences, affective calibration and planning competence |
 | Cognitive control/metacognition | Detect uncertainty, inconsistency and limitations; request correction | More effective self-monitoring and strategy selection |
 | Integrated coordination | Explicit ownership, dependencies and bounded shared context | More efficient concurrent coordination under varied load |
 
@@ -425,7 +439,7 @@ The foundation should anticipate, but need not initially deliver mature:
 - broad abstraction and transfer;
 - rich causal and counterfactual reasoning;
 - sophisticated imagination and long-horizon simulation;
-- advanced affective modulation;
+- advanced affective dynamics and learned global modulation (while minimum affective appraisal remains foundational);
 - complex social cognition and teammate modelling;
 - mature language-mediated cognition;
 - broad procedural/skill learning;
@@ -449,6 +463,9 @@ The foundation must not block these capabilities, but their presence must be jus
 | Hardcoded behaviour | Bootstrap rules predetermine learned conclusions | Separate enabling invariants from acquired cognitive content |
 | Uncontrolled learning interference | A local improvement damages unrelated capabilities | Candidate evaluation, regression checks and recovery |
 | Metacognitive overreach | Monitoring becomes an unrestricted second authority | Bounded corrective requests and preserved state ownership |
+| Affective omission or reification | Basic significance/internal-condition appraisal is omitted, or affect is reduced to fixed labels and stimulus-response rules | Include minimum contextual affective appraisal; keep its learned sophistication revisable and distinct from SYS-05 operational regulation and unresolved SYS-06 modulation |
+| Goal passivity or hardcoded motivation | Brain can only process externally supplied goals, or bootstrap rules prescribe its objectives | Distinguish supplied and experience-formed candidate goals; preserve evidence, evaluation, revision and governance constraints without preloading desired goals |
+| Substrate/cognition conflation | Infrastructure availability or persistence acknowledgements are mistaken for cognitive truth, memory absence or learning evidence | Separate SYS-08 operational substrate state from SYS-01 authoritative cognitive state and recovery validation |
 | Action authority confusion | Brain intent is mistaken for permission or execution | Separate intent, authorization, validation, execution and verified outcome |
 | False capability claims | Narrow tests are presented as broad intelligence | Capability-specific, longitudinal and transfer-oriented evidence |
 
@@ -466,9 +483,10 @@ The following criteria convert the accepted investigation's evidence matrix into
 6. **Prediction:** a prediction has enough scope, assumptions and resolution conditions to compare it with a later outcome; an unresolved prediction is not treated as a failure or success by default.
 7. **Learning:** a candidate change can be evaluated on varied and novel relevant cases, persist when accepted, and be rejected or recovered when it causes regression.
 8. **Reasoning:** conclusions distinguish evidence from assumptions and remain qualified by scope and uncertainty; fluent output alone is not accepted as reasoning evidence.
-9. **Goals/valuation/decision:** alternatives and constraints can be compared under uncertainty; no fixed stimulus-to-emotion or emotion-to-action mapping substitutes for acquired valuation.
+9. **Goals/valuation/affect/decision:** the Brain can process supplied goals and form traceable candidate goals from experience; candidate goals can be evaluated, revised, suspended or abandoned; minimum affective appraisal can assess significance, risk and internal conditions and influence attention, memory, learning and decisions without fixed emotional or behavioural mappings.
 10. **Metacognition/control:** detected uncertainty or error can lead to an appropriate corrective response, and the system can assess whether that response helped; monitoring cannot bypass governance.
 11. **Integrated coordination:** a change in one responsibility causes relevant dependent state to be reconsidered without corrupting unrelated state; partial failure does not silently invalidate the whole Brain.
+12. **Substrate boundary:** cognitive state remains semantically owned and validated by SYS-01 while SYS-08 supplies operational resources and persistence; substrate failure or acknowledgement is not silently treated as cognitive or external-world evidence.
 
 ### 11.1 Cross-capability acceptance scenarios
 
@@ -480,6 +498,10 @@ The architecture must support end-to-end scenarios such as:
 - a learning candidate that improves one context but regresses an unrelated capability, and is therefore rejected or recovered;
 - a task interruption followed by resumption after a relevant belief or permission has changed;
 - a metacognitive check that requests more evidence or suspends a conclusion instead of inventing certainty;
+- a candidate goal formed after an unexpected outcome, with its evidential lineage visible, its feasibility and constraints evaluated, and the goal revised or abandoned when later evidence defeats its basis;
+- an affective appraisal in which the same event has different significance under different goals or internal conditions, changing attention or evaluation without a fixed stimulus-to-emotion or emotion-to-action rule;
+- an SYS-06 modulation signal absent because that responsibility is not deployed, with the Brain continuing within its defined foundational capabilities and not assuming SYS-06 is mandatory;
+- a SYS-08 storage/runtime interruption during cognitive persistence, where infrastructure failure is recorded as operational evidence and recovered cognitive state is validated by SYS-01 before reuse;
 - an action request that is denied by governance, with the denial preserved as a constraint/outcome rather than treated as an executed action.
 
 These scenarios are architecture acceptance obligations. Their concrete fixtures and implementation tests belong to later verification planning.
@@ -499,6 +521,10 @@ These scenarios are architecture acceptance obligations. Their concrete fixtures
 | BA-07 | Give metacognitive monitoring bounded corrective authority, not unrestricted control | Proposed |
 | BA-08 | Preserve strict separation between cognitive intent, governance authorization, operational validation, execution and outcome verification | Required by approved whole-system boundary; restated here |
 | BA-09 | Keep advanced capabilities extensible but outside the minimum foundational scope unless evidence justifies inclusion | Proposed |
+| BA-10 | Include minimum context-sensitive affective appraisal in the foundational Brain; treat sophisticated affective dynamics as acquired development | Proposed |
+| BA-11 | Treat experience-acquired candidate-goal formation as a developmental capability, distinct from supplied-goal processing and external action authorization | Proposed |
+| BA-12 | Preserve SYS-06 as a proposed, unresolved modulation responsibility rather than an approved mandatory subsystem | Required by PR #171 boundary; restated here |
+| BA-13 | Define SYS-08 as the operational substrate provider while SYS-01 retains semantic authority and validation of cognitive state | Required by PR #171 boundary; restated here |
 
 No final technology, algorithm, database, schema, API, process topology or deployment topology is selected.
 
@@ -515,11 +541,13 @@ The following questions remain open because the current evidence does not justif
 5. How should conflicting beliefs be represented and resolved when sources have different reliability, timing and scope?
 6. What learning classes are safe for online adaptation, and which require controlled offline evaluation or explicit approval?
 7. What is the minimum viable self-model required for effective metacognition without building a second cognitive authority?
-8. How should valuation and affect-related processes be represented without prematurely selecting a biological analogy or fixed emotional categories?
-9. What capability evidence is sufficient to claim transfer, generalization and durable behavioural change?
-10. What is the minimum cognitive contract needed for the Brain to operate before the full sensory, action and embodiment systems exist?
-11. Which existing JARVIS mechanisms can be preserved, adapted or replaced after a source-level compatibility assessment against this architecture?
-12. Which architectural decisions require separate Project Director approval before detailed mechanism specifications begin?
+8. What minimum affective appraisal state and observable evidence are required initially, and which affective dynamics should remain experience-acquired?
+9. Under what conditions, if any, is a distinct SYS-06 modulation responsibility justified, and what authority, scope and interfaces would it have relative to SYS-01, SYS-05 and SYS-08?
+10. What evidence is sufficient to claim that candidate-goal formation is genuinely experience-acquired rather than a hardcoded objective generator?
+11. What capability evidence is sufficient to claim transfer, generalization and durable behavioural change?
+12. What is the minimum cognitive contract needed for the Brain to operate before the full sensory, action and embodiment systems exist, including when SYS-06 is absent?
+13. Which existing JARVIS mechanisms can be preserved, adapted or replaced after a source-level compatibility assessment against this architecture?
+14. Which architectural decisions require separate Project Director approval before detailed mechanism specifications begin?
 
 ---
 
