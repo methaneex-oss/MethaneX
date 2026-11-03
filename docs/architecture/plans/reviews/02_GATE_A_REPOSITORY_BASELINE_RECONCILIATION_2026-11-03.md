@@ -304,9 +304,11 @@ The net comparison from `af09cf28` to current `main` reports six changed files: 
 
 The candidate `brain_restored_api.cpp` blob is `00d69ab2eb3811d453a643ef18dc69741109cbc8`; current-main blob is `618deb6976eed951eae02b7f0da741e6d730bb0c`.
 
-A static function-name inventory found that the candidate file contains every Brain API function name present in current main, plus additional candidate APIs including prediction feedback, source feedback, related-strategy retrieval and evolution evaluation recording.
+A static function-name inventory found all 69 Brain API function names present in current main in the candidate file, plus additional candidate APIs including prediction feedback, source feedback, related-strategy retrieval and evolution evaluation recording.
 
-This is evidence that the main-branch API restoration is likely functionally subsumed in the candidate file. It is **not yet a semantic equivalence proof**: the common functions still need signature/body comparison, and callers/build configuration must be reconciled before deciding that the main commit can be excluded.
+A normalized function-body comparison could align 67 of the 69 definitions: 43 bodies were identical after whitespace normalization and **24 bodies differed**. The two remaining definitions (`beliefs` and `register_evolution_parameter`) were present by name in both files but could not be reliably paired by the simple signature extractor because of the file's compact formatting. The 24 differing definitions include prediction, prediction resolution, goal outcome assimilation, action selection, reflection, goal lifecycle, capability/resilience state, and evolution operations.
+
+Therefore the earlier function-name result is not enough to declare the main restoration functionally subsumed. **The API restoration is an unresolved semantic reconciliation item.** The 24 body differences require targeted review, the two parser-unmatched definitions require manual alignment, and callers/build configuration must be reconciled before deciding whether the main commit is superseded or whether candidate behavior is missing/changed.
 
 ### 8.2 Workflow/test infrastructure drift
 
