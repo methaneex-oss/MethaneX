@@ -69,6 +69,7 @@ The following PRs are related to the candidate's knowledge, feature-learning and
 
 | PR | Base → head | PR commit count | Changed files | Status | Contribution / relationship |
 |---|---|---:|---:|---|---|
+| #97 | `main@4ba84b8` → `c1da222` | 1,244 | 159 | Open, draft, unmerged | Long-lived cognitive/affective development branch; primary inherited candidate history |
 | #135 | `c1da222` → `58acf23` | 6 | 2 | Open, unmerged | Causal-learning correction; base of PR #150 |
 | #148 | `94d0297` → `be848d3` | 153 | 13 | Open, draft, unmerged | Knowledge conflict resolution, source calibration/provenance, trusted feedback boundary, passive legacy import and replay protections |
 | #151 | `94d0297` → `8c8889f` | 32 | 8 | Open, not draft, unmerged | Additive feature-based action learning and DLT-004 |
@@ -77,6 +78,28 @@ The following PRs are related to the candidate's knowledge, feature-learning and
 | #156 | `52c367a` → `7fe212b` | 13 | 8 | Open, draft, unmerged | Integration of evolution replay safeguards and feedback-source binding on top of PR #155 |
 
 All short SHAs above are prefixes of the exact SHAs recorded in Section 3 or the PR metadata. PR #148 and #151 share merge base `94d02976ef4bcf36ad2e7a67f53cfc09d7018494`, but their branches diverge: PR #151 is 32 commits ahead and 153 behind PR #148's head. PR #155 is a nine-commit integration branch based directly on PR #148's head.
+
+
+### 5.0 Primary inherited history: PR #97
+
+PR #97 is the long-lived `feat/jarvis-affective-state` branch at `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`. Current PR metadata reports 1,244 commits, 159 changed files, 18,788 additions and 1,644 deletions. It remains open, draft and unmerged.
+
+The exact graph comparisons establish:
+
+- Shared ancestor `af09cf28` → PR #97 head `c1da222`: 1,244 commits ahead.
+- PR #97 declared base `4ba84b8` → PR #97 head: 1,244 ahead / 1 behind, merge base `af09cf28`. Therefore the PR head does not contain its declared base commit as an ancestor.
+- Current `main@1273ddb` → PR #97 head: 1,244 ahead / 9 behind, same merge base. PR #97 is not based on the current main history despite its PR base field naming main.
+- PR #97 head `c1da222` → PR #156 immediate base `52c367`: 172 commits ahead, zero behind.
+- PR #97 head `c1da222` → PR #156 code-bearing parent `15d49e5`: 184 commits ahead, zero behind.
+- PR #97 head `c1da222` → PR #156 documentation HEAD `7fe212`: 185 commits ahead, zero behind.
+
+This gives an exact arithmetic decomposition of the candidate-side 1,429 commits ahead of the shared ancestor:
+
+**1,244 (PR #97 inherited history) + 172 (post-PR #97 history through PR #155) + 13 (PR #156 commits) = 1,429.**
+
+The accepted specification's 21 commits ahead of the candidate decompose into 9 commits on current main after the shared ancestor and 12 accepted architecture/specification commits after main. This also explains why PR #97 is nine commits behind current main and why the candidate branch's declared PR base does not guarantee it contains the current base history.
+
+**Implication:** the principal inherited-history risk is not an opaque 1,429-commit PR #156 delta. It is a 1,244-commit, 159-file PR #97 development line, followed by 172 commits of later integration/correction work and 13 PR #156 commits. PR #97 itself is unmerged and draft. The later candidate line is a descendant of PR #97, but that does not confer acceptance on the inherited functionality.
 
 ### 5.1 Critical ancestry finding: PR #151 is integrated by content, not as a direct ancestor
 
@@ -103,7 +126,12 @@ PR #156's first code commit is based on PR #155 head `52c367a`, not on PR #150 h
 ### 5.3 Integration topology
 
 ```text
-Common candidate ancestor: 94d0297
+Shared historical ancestor: af09cf28
+  └── PR #97: 1,244-commit cognitive/affective development line ── c1da222
+        └── 172 subsequent commits through PR #155 ── 52c367a
+              └── PR #156: 12 code commits + 1 documentation commit ── 7fe212b
+
+PR #148/#151 subgraph (merge base 94d0297):
   ├── PR #148: knowledge/provenance branch (153 commits) ── be848d3
   │     └── PR #155: conflict-resolved integration (9 commits) ── 52c367a
   │           └── PR #156: replay/source-binding integration (12 code commits)
