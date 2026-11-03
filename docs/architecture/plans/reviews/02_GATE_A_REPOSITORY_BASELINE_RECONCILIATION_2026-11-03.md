@@ -308,7 +308,22 @@ A static function-name inventory found all 69 Brain API function names present i
 
 A normalized function-body comparison could align 67 of the 69 definitions: 43 bodies were identical after whitespace normalization and **24 bodies differed**. The two remaining definitions (`beliefs` and `register_evolution_parameter`) were present by name in both files but could not be reliably paired by the simple signature extractor because of the file's compact formatting. The 24 differing definitions include prediction, prediction resolution, goal outcome assimilation, action selection, reflection, goal lifecycle, capability/resilience state, and evolution operations.
 
-Therefore the earlier function-name result is not enough to declare the main restoration functionally subsumed. **The API restoration is an unresolved semantic reconciliation item.** The 24 body differences require targeted review, the two parser-unmatched definitions require manual alignment, and callers/build configuration must be reconciled before deciding whether the main commit is superseded or whether candidate behavior is missing/changed.
+Representative body differences were inspected directly:
+
+- `predict`: candidate rejects non-finite confidence and numeric values and applies learned adaptation; main only checks an empty key before journaling.
+- `resolve_prediction`: candidate routes both overloads through `resolve_prediction_feedback`; main performs the resolution path directly.
+- `reflect`: candidate includes affective calibration error/learning data in reflection.
+- `assimilate_goal_outcome`: candidate rejects updates to terminal goals before journaling.
+- `create_goal`: candidate rejects duplicate goal IDs.
+- `observe_evolution_fitness`: candidate routes the event through replay rather than directly mutating the evolution model.
+- `adopt_evolution`: candidate deliberately fails closed; adoption must use a completed experiment and controller safety gate. Main still permits the legacy direct proposal-adoption path.
+- `rollback_evolution`: candidate ties rollback to an adopted experiment and records a reason; main directly rolls back by parameter key.
+- `adopt_evolution_experiment`: candidate validates experiment identity, finite/ranged evidence and controller approval before journaling adoption.
+- `observe_evolution_canary`: candidate validates and journals canary observations before applying rollback decisions.
+
+These samples suggest the candidate often contains stricter evidence, replay and lifecycle controls than the restored main version. That is not proof that every difference is correct; it does show that blindly importing the main restoration could reintroduce weaker legacy entry points.
+
+Therefore the earlier function-name result is not enough to declare the main restoration functionally subsumed. **The API restoration remains an unresolved semantic reconciliation item, but it is not an automatic candidate blocker or an automatic cherry-pick.** The 24 body differences require targeted review, the two parser-unmatched definitions require manual alignment, and callers/build configuration must be reconciled before deciding whether the main commit is superseded or whether candidate behavior is missing/changed.
 
 ### 8.2 Workflow/test infrastructure drift
 
