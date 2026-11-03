@@ -132,6 +132,7 @@ The following mechanisms are logical responsibilities, not a required one-class-
 | BM-09 | Learning and developmental adaptation | Form and evaluate evidence-supported changes to cognitive mechanisms and content | Learning candidates, evaluations, accepted changes and lineage |
 | BM-10 | Metacognitive monitoring and control | Detect limits, inconsistency, uncertainty and performance failure; request proportionate correction | Monitoring records and corrective-work lineage |
 | BM-11 | Integrated coordination and continuity control | Coordinate mechanism interactions, dependencies, concurrency, interruption and recovery | Coordination state, dependency status and coherent recovery checkpoints |
+| BM-12 | General reasoning and inference | Derive, evaluate, compare and revise provisional conclusions from evidence-bearing premises and explicit assumptions | Reasoning episodes, argument/conclusion lineage, premise dependencies and unresolved inference records |
 
 ### 3.1 Foundational versus acquired capability
 
@@ -146,7 +147,7 @@ Initial enabling capacity includes:
 - attention and working-context allocation;
 - bounded prediction and outcome comparison;
 - candidate learning and evaluation capacity;
-- foundational inference and reasoning;
+- foundational general reasoning and inference, with explicit premise/assumption handling, conclusion evaluation and traceable inference lineage;
 - supplied-goal processing and minimum candidate-goal evaluation capacity;
 - minimum context-sensitive affective appraisal;
 - cognitive self-monitoring and coordinated state continuity.
@@ -326,7 +327,7 @@ These are functional distinctions, not a mandate for five isolated stores.
 
 **Purpose:** Provide foundational, context-sensitive appraisal of significance and internal conditions and allow this appraisal to modulate cognition.
 
-**Owns:** Appraisal state, relevant internal-condition estimates, appraisal evidence and developmental lineage.
+**Owns:** Appraisal state, cognitive estimates of relevant internal conditions, appraisal evidence and developmental lineage. These estimates are not authoritative operational or homeostatic state. SYS-05 remains the owner of autonomic/operational regulation state; BM-07 may consume authorized SYS-05 observations and maintain a qualified cognitive estimate with source, freshness and uncertainty. It must not write, redefine or claim authority over SYS-05 state.
 
 **Required foundational capacity:**
 
@@ -349,7 +350,7 @@ These are functional distinctions, not a mandate for five isolated stores.
 
 **Publishes:** Contextual appraisal signals and revised appraisal state for other mechanisms.
 
-**Interactions:** BM-06 attention; BM-03 memory encoding and retrieval; BM-09 learning; BM-08 valuation, goal evaluation and decisions; BM-10 metacognitive assessment.
+**Interactions:** BM-06 attention; BM-03 memory encoding and retrieval; BM-09 learning; BM-08 valuation, goal evaluation and decisions; BM-10 metacognitive assessment; BM-12 may consider appraisal as qualified contextual input, never as proof of an external fact or a mandatory conclusion.
 
 **Failure semantics:** Missing or unreliable appraisal must not fabricate emotional certainty. The Brain must continue within its defined foundational capacity if the proposed SYS-06 responsibility is absent.
 
@@ -481,6 +482,45 @@ These are capability classes, not selected algorithms or an instruction to imple
 
 **Failure semantics:** If consistency cannot be established, affected state remains quarantined, provisional or unavailable. The Brain must not claim a successful recovery based only on storage or process availability.
 
+### BM-12 — General reasoning and inference
+
+**Purpose:** Provide the Brain's explicit general process for deriving, evaluating, comparing, qualifying and revising provisional conclusions from evidence-bearing premises, contextual information and explicit assumptions.
+
+**Owns:** Reasoning episodes; premise/assumption sets; inference and argument lineage; provisional conclusions and alternatives; contradiction/counterexample records; unresolved questions; and dependencies identifying which inputs supported each conclusion. BM-12 does **not** own accepted beliefs or world-state claims. BM-04 remains the sole authority for accepting, revising, suspending or withdrawing beliefs. BM-12 also does not own representations, causal models, predictions, goals, plans or decisions.
+
+**Conceptual inputs:**
+
+- BM-01 evidence records and provenance;
+- BM-02 interpretations and representation alternatives;
+- BM-03 retrieved episodic, semantic and procedural memories, with retrieval context and provenance;
+- BM-04 current beliefs, competing claims, scope and revision status;
+- BM-05 association/causal hypotheses and predictions, clearly marked by epistemic status;
+- BM-06 active task/context and processing constraints;
+- BM-07 contextual appraisal signals, treated as qualified influences rather than factual premises;
+- BM-08 goals, questions, plans or decision contexts that establish what is being reasoned about.
+
+**Publishes:** Provisional conclusions, alternative explanations, derived implications, supporting and contradicting premise references, explicit assumptions, scope, uncertainty, counterexamples, unresolved gaps and a traceable inference record. Conclusions are returned to the relevant owner for possible acceptance; publication by BM-12 does not make them beliefs or authorize action.
+
+**Required behavior:**
+
+1. Establish the question or inference objective and the context/scope in which a conclusion is intended to apply.
+2. Distinguish supplied evidence, accepted beliefs, interpretations, retrieved memories, model hypotheses, assumptions and derived conclusions. No input category may be silently promoted to a stronger epistemic status.
+3. Preserve premise identity, provenance, temporal context, retrieval context and relevant limitations. A retrieved memory may materially affect an inference only with its provenance and contextual applicability retained.
+4. Make assumptions explicit, including assumptions introduced to bridge incomplete evidence. Mark conclusions that depend on assumptions and permit their withdrawal when an assumption fails.
+5. Support appropriate forms of inference as developmental capability, including deductive consequence, explanatory/abductive hypothesis formation, inductive generalization and analogy where their evidence requirements are met. The specification does not prescribe a particular logic, algorithm or model, and does not imply equal maturity across inference forms at initialization.
+6. Distinguish logical validity, evidential support, plausibility, confidence and truth. A valid derivation from false or contextually inapplicable premises is not a verified fact.
+7. Preserve competing explanations where evidence underdetermines the answer. Do not force a single conclusion merely to complete a reasoning task.
+8. Detect incompatible premises, contradictions among conclusions, counterexamples and conflicts with newly revised evidence. Record the conflict and affected dependencies rather than silently selecting the last or strongest-looking value.
+9. When premises are missing, stale, contradictory, invalidated or outside their scope, qualify, suspend or withhold the affected conclusion; request retrieval, clarification, new evidence or re-reasoning where useful.
+10. Revisit conclusions when a material premise, assumption, memory interpretation, belief, causal hypothesis or context changes. Preserve prior reasoning versions and identify which dependency caused reconsideration.
+11. Explain conclusions through inspectable premise and inference lineage, not merely a free-form explanation string. The explanation must not claim evidence or operations that were not used.
+12. Permit BM-10 to monitor reasoning quality, omissions, overreach and calibration; permit BM-09 to evaluate improvements to reasoning strategies using later outcomes and counterexamples.
+13. Do not perform prediction resolution (BM-05), belief commitment (BM-04), goal/plan/decision ownership (BM-08), action authorization or execution.
+
+**Interactions:** BM-02 supplies interpretations; BM-03 supplies retrieved evidence; BM-04 supplies beliefs and receives candidate conclusions for epistemic evaluation; BM-05 supplies scoped causal/predictive hypotheses and receives relevant reasoning findings; BM-06 supplies task focus; BM-07 supplies contextual appraisal; BM-08 supplies reasoning objectives and may consume qualified conclusions; BM-09 evaluates developmental changes; BM-10 monitors quality; BM-11 tracks dependencies and invalidation.
+
+**Failure semantics:** Empty premises produce an explicit insufficient-evidence/unresolved result, not a successful substantive inference. Contradictory premises remain visible and prevent unsupported conclusions from being treated as settled. Missing or failed retrieval is not evidence that no relevant memory exists. If premise provenance or scope cannot be established, the conclusion is withheld or explicitly qualified. If an upstream dependency changes, affected conclusions become stale pending review. Failure to reason is represented as a limitation, not replaced by a fabricated answer.
+
 ---
 
 ## 5. Cross-mechanism information contracts
@@ -545,6 +585,22 @@ Only evidence at the appropriate level may resolve a prediction or support a lea
 
 ---
 
+### 5.5 Reasoning and inference contract
+
+Every material reasoning result must preserve, at the conceptual level:
+
+- the question/objective and intended scope;
+- the identity and epistemic status of each premise;
+- source/provenance and temporal/contextual limits for evidence-bearing premises;
+- explicit assumptions and the conclusions that depend on them;
+- the inference relation or reasoning step supporting each conclusion;
+- alternatives, contradictions, counterexamples and unresolved gaps considered;
+- uncertainty and support strength, without conflating them with truth or source reliability;
+- dependency versions/status and conditions that make the conclusion stale;
+- whether the conclusion is provisional, withdrawn, superseded or submitted to BM-04/another owner for evaluation.
+
+A result that cannot provide this lineage may still be a tentative internal signal, but it cannot satisfy the specification's evidence standard for a material conclusion.
+
 ## 6. Core recurrent interaction patterns
 
 These are allowed interaction patterns, not a mandatory global pipeline.
@@ -573,17 +629,19 @@ At no point is raw experience automatically equivalent to a belief.
 
 A prediction may remain unresolved indefinitely or be explicitly invalidated if its conditions no longer apply. It must not be silently marked correct or incorrect.
 
-### 6.3 Memory-supported reasoning
+### 6.3 Memory-supported reasoning and general inference
 
-1. BM-06/08 identify the active context and task.
-2. BM-03 retrieves potentially relevant episodes and semantic/procedural material.
-3. BM-02 interprets retrieved content in the current context.
-4. BM-04 and BM-05 make relevant claims/relations available to reasoning.
-5. Reasoning records which retrieved evidence materially influenced its conclusions.
-6. BM-10 can challenge conclusions that omit relevant evidence or overstate its strength.
-7. Retrieval usefulness can later become evidence for BM-03/BM-09.
+1. BM-06/08 establish the active context, question and reasoning objective.
+2. BM-03 retrieves potentially relevant episodes and semantic/procedural material with provenance and retrieval context.
+3. BM-02 interprets retrieved content in the current context without rewriting the source memory.
+4. BM-04 and BM-05 make current beliefs, competing claims, relations and scoped hypotheses available with their epistemic status.
+5. BM-12 assembles the premise set, identifies missing/contradictory/stale premises, states assumptions and performs the appropriate inference work.
+6. BM-12 records premise-to-conclusion lineage, alternative explanations, uncertainty, counterexamples and which retrieved evidence materially influenced each conclusion.
+7. BM-04 evaluates any candidate claim for belief acceptance or revision; BM-05 evaluates implications for causal/predictive models; BM-08 may consume qualified conclusions in goal/plan/decision formation. None is bypassed by BM-12.
+8. BM-10 can challenge conclusions that omit relevant evidence, ignore contradictions or overstate their scope; BM-11 tracks premise changes and marks dependent conclusions stale.
+9. Retrieval usefulness and reasoning outcomes can later become evidence for BM-03/BM-09.
 
-Retrieving a memory without allowing it to affect inference is not evidence of integrated memory-supported cognition.
+Retrieving a memory without allowing it to affect inference is not evidence of integrated memory-supported cognition. A reasoning conclusion does not become an accepted belief merely because it was derived.
 
 ### 6.4 Candidate-goal formation and evaluation
 
@@ -731,6 +789,17 @@ These scenarios are architecture-to-mechanism obligations. They are not claims t
 25. A partial persistence failure does not cause the Brain to claim a completed state transition.
 26. After interruption and reconstruction, the Brain validates recovered identity, evidence lineage, state consistency and pending work before resuming.
 
+### H. General reasoning and inference
+
+27. Given sufficient premises, BM-12 derives a conclusion and identifies the exact premise and inference lineage; the conclusion remains provisional until the owning mechanism evaluates it.
+28. An empty or materially incomplete premise set produces an explicit unresolved/insufficient-evidence result and cannot be reported as a successful substantive inference.
+29. Contradictory premises are preserved as a conflict; BM-12 does not silently select one value or emit an unqualified conclusion.
+30. A retrieved memory changes a conclusion only when its content is relevant to the current context; the reasoning record identifies the memory, its provenance and the way it affected the inference.
+31. A conclusion depending on an assumption is withdrawn or qualified when later evidence defeats that assumption, while the prior reasoning lineage remains inspectable.
+32. A counterexample or newly revised belief invalidates the affected generalization/conclusion and triggers targeted re-evaluation rather than a blanket rewrite of unrelated knowledge.
+33. Two plausible explanations remain alternatives when evidence does not discriminate between them; the Brain does not manufacture certainty to satisfy a request.
+34. A valid derivation from a stale, false or out-of-scope premise is not accepted as a verified fact; premise status and scope are checked before downstream use.
+
 ---
 
 ## 10. Developmental evidence standard
@@ -789,6 +858,7 @@ These questions are deliberately not answered by inventing algorithms or concret
 13. How are concurrent evidence updates reconciled when they have different event times, reliability and context?
 14. What recovery evidence is sufficient to revalidate derived state after interruption?
 15. Which existing source mechanisms are compatible, incomplete, contradictory or candidates for replacement after a full dependency-level audit?
+16. What reasoning forms and evidence conditions are foundational, and how should premise/assumption lineage, competing explanations, counterexamples and uncertainty be represented without prematurely selecting an inference algorithm?
 
 ---
 
