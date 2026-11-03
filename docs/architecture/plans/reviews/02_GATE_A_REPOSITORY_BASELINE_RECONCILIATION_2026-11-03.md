@@ -611,3 +611,33 @@ The PR #150 changes to `developmental_brain_integration_suite.cpp` replace direc
 - Confirm that PR #150's source-binding and rollback-binding corrections are fully represented in PR #156's integrated diffs and tests.
 - Keep all source PRs unmerged/unaccepted in the status matrix until independent review and Project Director decision.
 
+
+
+## Appendix C — Exact blob matrix for the 172 commits after PR #97
+
+The following table binds every path in the direct `c1da222` → `52c367a` 20-path net diff to the exact tree blob at PR #97 HEAD and at PR #155/PR #156's immediate base. A dash means the path did not exist in the PR #97 tree and was added in the 172-commit segment.
+
+| Path | PR #97 blob | PR #155 base blob |
+|---|---|---|
+| `core/cpp/include/jarvis/core/brain.hpp` | `671186f4c39879a182f9e511394fc564d86f2988` | `94368254672f17045030a9effa86b0a71c2c4704` |
+| `core/cpp/include/jarvis/core/developmental_learning.hpp` | `e3b9bf8af265b67829fd7deb323d88a3a9dd4b75` | `65174400d8c3ce1dea17667ac928767cf3af333a` |
+| `core/cpp/include/jarvis/core/knowledge.hpp` | `3da0d2059331af405bbb0ba98c61308ead99c405` | `ae1adcffeeb090eb102c05156388bce7c030538f` |
+| `core/cpp/include/jarvis/core/world_model.hpp` | `1c14f692374b0ab272f05634b7bdd26e358b4f1f` | `26a77fc5f1f04d7066426faf62d049c513cb0ae8` |
+| `core/cpp/src/brain.cpp` | `dec9e5442b3ca4b81a7879855c6146b2619934cc` | `0f377bf853af866375b35a944862c743c777a4c0` |
+| `core/cpp/src/brain_restored_api.cpp` | `7155d4d9c8eef527836fb79bf901aa32ddbae38b` | `2a49f2aad3a99e74316a068801e3f0f90bf69bad` |
+| `core/cpp/src/causal_model.cpp` | `b7e1e6e6aeb929f09af33b9d17c80a6eed34948c` | `8b884ed11a1a019d0e52bf7f35b0295edcc912b0` |
+| `core/cpp/src/cognitive_cycle.cpp` | `f191dd610d6cbe1621756c35e7c13af2054a7266` | `989f4d154f07b31bcdab175aefbea6edd61eb930` |
+| `core/cpp/src/developmental_learning.cpp` | `dbf5f43271dfa0a3c57236e2faa82eb88d15490d` | `c9a34d562fa1a20641530daba81bfdc1f3621fee` |
+| `core/cpp/src/knowledge.cpp` | `21de8abbcd4426cb4ead70cb089e7d7c4ed0e81a` | `c38e0909c220b450502b46fd4a145e63ab6d21a0` |
+| `core/cpp/src/world_model.cpp` | `5b68e8fe37d99732557237e347ae02234a3de172` | `f98ef4106af2ba6d9565f77a8a811abe6c20f8d3` |
+| `core/cpp/tests/CMakeLists.txt` | `cbfd1fde52fffa6eeac025da2b7ddcb5ab493261` | `0251936730f82a7a8c928fa31dfe1d7effc83d91` |
+| `core/cpp/tests/association_causality_phase5_suite.cpp` | `0d31349857e85a019467e9864bbe6625a6ecdef7` | `9099323d43b5af16d09c9356a239692fab5e136a` |
+| `core/cpp/tests/developmental_brain_integration_suite.cpp` | `760162dd6d1e669162e0bf22223a437491f5e262` | `e6eba3db6df8da9ecfed21974936908a32ea11c5` |
+| `core/cpp/tests/dlt_003_mapping_generalization.cpp` | — | `90c9226a714b020c90fa0dff09790d6997e57a2e` |
+| `core/cpp/tests/dlt_004_feature_composition.cpp` | — | `e486bedc813c1a70dc48b610133a147283e0d7ef` |
+| `core/cpp/tests/evolution_brain_integration_suite.cpp` | `59d7dd68c42eea18d488d8e5e6aa9f7a9a327ded` | `90b6c6246473428a00d38829495f9877cd1fa05f` |
+| `core/cpp/tests/knowledge_memory_phase3_suite.cpp` | `e33b9813edbfaf02a91a3f94988f5c7a54ceed8f` | `108e4c07259df599bb7371a2f4b3b497be97f844` |
+| `core/cpp/tests/knowledge_source_feedback_suite.cpp` | — | `3768c0306f9638be48da2342ce299c582e52b656` |
+| `docs/DEVELOPMENTAL_BRAIN_PLAN.md` | — | `6b447faa668c2c4a559e55fb40dbd301f53e1704` |
+
+This closes the tree-level blob inventory for the 172-commit post-PR #97 segment. It does **not** yet identify the exact commit that last changed each path, attribute every hunk to its originating PR, or determine whether the resulting implementation satisfies BM acceptance scenarios. Those are the remaining commit-to-file and semantic reconciliation tasks.
