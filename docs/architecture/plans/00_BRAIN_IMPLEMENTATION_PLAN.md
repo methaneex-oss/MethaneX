@@ -50,7 +50,7 @@ The recommended approach is a sequence of **integrated vertical capability incre
 The most important early integration risks evidenced by the source audit are:
 
 - memory retrieval is placed in cycle context but is not supplied to the inspected reasoning premises;
-- the reasoning result is stored but is not consumed by the inspected downstream cycle;
+- the reasoning result has one partial downstream consumer (forward simulation/prediction), but memory is omitted from its premises and the full BM-12 premise/assumption/lineage contract is absent;
 - current reasoning is a narrow consistency check and bounded traversal over pre-supplied causal links, not general inference;
 - belief updates can overwrite a current scalar value without preserving a complete competing-claim history;
 - causal links can be strengthened from co-state changes without demonstrated controls for confounding, temporal order or counterexamples;
@@ -350,7 +350,7 @@ It should demonstrate:
 - BM-11 tracks dependent state and interruption/recovery;
 - a later experience can confirm, qualify or defeat the earlier conclusion.
 
-This increment targets the most concrete integration gap in the audited source: memory retrieval currently reaches cycle context but not the inspected reasoning premises, and the reasoning result is not consumed downstream. It also creates a foundation for prediction and learning without prematurely implementing every advanced capability.
+This increment targets the most concrete integration gap in the audited candidate: memory retrieval reaches cycle context but not the reasoning premises. Reasoning conclusions do feed forward simulation/prediction, but the full BM-12 lineage contract and evaluation by the relevant authoritative owners are not demonstrated. It also creates a foundation for prediction and learning without prematurely implementing every advanced capability.
 
 This is a recommendation, not an implementation authorization or an irreversible architecture decision. Phase 0 may show that a different first vertical slice is safer or more useful.
 
@@ -381,5 +381,21 @@ This plan intentionally does not choose:
 - exact implementation tickets or code changes.
 
 Those decisions require current-source evidence, a justified comparison and separate authorization where applicable.
+
+
+## 13. Gate A and Gate B audit update — 2026-11-03
+
+The Project Director authorized the Builder to carry out Gate A and Gate B together as documentation/review work. The resulting records are:
+
+- `reviews/04_GATE_A_BUILDER_TECHNICAL_REREVIEW_2026-11-03.md` — Builder-side technical re-review of the Gate A evidence and disposition.
+- `reviews/05_GATE_B_MECHANISM_TRACEABILITY_AUDIT_2026-11-03.md` — source-to-specification traceability across BM-01 through BM-12 at PR #156's exact code-bearing parent.
+
+**Gate A remains NOT CLEARED.** The technical re-review confirms the no-go disposition. Commit-to-origin/path/hunk attribution for the 1,416 inherited commits remains incomplete; divergent PR #151/#150 integration hunks, 24 Brain API body differences, two unmatched definitions and five workflow files still require closure. PR #156 remains a candidate only. A separate independent reviewer verdict has not been submitted.
+
+**Gate B static traceability is complete for all 12 mechanism owners at candidate code-bearing parent `15d49e5fdeb5723c475922ab78fb92f97c4b3b84`. Mechanism acceptance is NOT PASSED.** The audit records substantial reusable foundations and the exact integration/acceptance gaps. It does not claim all 34 acceptance scenarios pass, and no runtime tests or builds were run.
+
+The candidate's reasoning path is described precisely: valid reasoning conclusions can feed forward simulation and prediction. However, retrieved memories are not supplied as reasoning premises and the complete BM-12 premise, assumption, provenance, alternative, counterexample and dependency-lineage contract is not demonstrated.
+
+This combined audit does not select an implementation baseline or authorize runtime changes, builds, tests, benchmarks, technology choices, merges, rebases, cherry-picks, history rewrites or deployment. Gate A closure and independent review remain required before a baseline decision.
 
 **End of proposed Brain Implementation Plan.**
