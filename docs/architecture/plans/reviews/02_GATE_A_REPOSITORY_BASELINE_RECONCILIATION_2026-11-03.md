@@ -167,6 +167,25 @@ Comparing PR #150 head `ec1ce132` with PR #156 code-bearing parent `15d49e5f` re
 
 PR #156's first code commit is based on PR #155 head `52c367a`, not on PR #150 head `ec1ce13`. Thus PR #150's 12 commits are not direct ancestors of PR #156. PR #156 contains separately authored integration/correction commits that implement overlapping replay safeguards. Review the final PR #156 code against PR #150's intended protections; do not claim the source branch was merged unchanged.
 
+
+### 5.6 PR #155's nine integration commits
+
+The nine PR #155 commits are:
+
+| Commit | Subject | Reconciliation significance |
+|---|---|---|
+| `78c7fca` | integrate compositional learning with knowledge safeguards | Integrates the feature learner against the knowledge/provenance branch |
+| `e322e52` | integrate feature learning into Brain outcome replay | Connects feature learning to Brain outcome processing |
+| `66a183a` | expose compositional feature estimate through Brain API | Adds the public feature-estimate query |
+| `e456881` | integrate compositional feature learning | Integration correction |
+| `09598c8` | integrate compositional feature learning | Integration correction |
+| `989727f` | integrate compositional feature learning | Integration correction |
+| `4264262` | integrate compositional feature learning | Integration correction |
+| `524a3cd` | integrate DLT-004 compositional learning acceptance test | Adds the DLT-004 test to the integrated tree |
+| `52c367a` | fix(integration): preserve execution-only outcome block | Prevents an execution-only outcome from being treated as environmental feature-utility evidence |
+
+The last change is material: PR #155 retains operational reliability information but explicitly excludes an execution failure without an observed world consequence from compositional feature-value learning. This is a boundary that must remain intact in any later integration.
+
 ### 5.3 Integration topology
 
 ```text
@@ -602,6 +621,31 @@ Exact file blobs were compared between the source PR heads and the integrated ca
 The PR #150 changes to `developmental_brain_integration_suite.cpp` replace direct mutable-journal appends with the restricted `import_legacy_memory_event` API. The PR #148 head and PR #155 base already contain the exact integrated blob `e6eba3db...`; therefore this source-branch delta is already subsumed before PR #156.
 
 **Result:** two of seven files are byte-identical; one file's source-branch change is already present in PR #148/PR #155; four files differ and require semantic review. The exact identical files are `evolution_controller.cpp` and `evolution_canary_controller_suite.cpp`. The `developmental_brain_integration_suite.cpp` source change is already present at the PR #148 head and PR #155 base: PR #150 replaces direct mutable-journal appends with `import_legacy_memory_event`, and the integrated PR #148 blob already contains that API migration. PR #156 also changes `knowledge_source_feedback_suite.cpp`, which is not one of PR #150's seven changed files, to test source-bound feedback attestations. Its source-binding corrections are additional PR #156 work, not a PR #150 feature.
+
+
+### B.2 PR #150's two workstreams and their integration paths
+
+PR #150's 12 commits divide into two distinct six-commit workstreams:
+
+**Evolution replay validation (first six commits):**
+- `2786fa2f` — reject externally forged lifecycle observations.
+- `a600f45a` — validate durable evidence during replay.
+- `c8c857e7`, `f1e52819`, `9829878a` — forged replay/adoption/evaluator regression tests.
+- `1710c57a` — reject incomplete replayed adoption events.
+
+This workstream is represented in PR #156 through its independently authored replay-validation commits and later rollback/source-binding corrections. The final `evolution_controller.cpp` and `evolution_canary_controller_suite.cpp` blobs are byte-identical to PR #150. The Brain header/source/restored API and evolution integration suite differ and remain subject to semantic review.
+
+**Restricted legacy-memory import (last six commits):**
+- `0557ee6a` — expose Brain memory as read-only.
+- `09d14f56` — add restricted legacy event import API.
+- `3e1cd18c` — implement passive legacy event import.
+- `ba0083b8` — keep imported legacy events passive during replay.
+- `882b84a6` — update memory tests to use restricted import.
+- `ec1ce132` — verify passive legacy import cannot inject evolution.
+
+This workstream is already present through PR #148/PR #155 rather than requiring PR #156 to add it again. The PR #148 and PR #155 `brain.hpp` expose a const-only Memory accessor and the restricted import API; their Brain replay path retains the legacy-import passive handling. The PR #150 test-only migration in `developmental_brain_integration_suite.cpp` is also subsumed: the PR #148, PR #155 and PR #156 trees share the exact integrated blob `e6eba3db6df8da9ecfed21974936908a32ea11c5`, whereas PR #150's source blob is `b9dc34b63f7ca0b356a5a2589c39fb8b5862d2f6`.
+
+**Result:** PR #150's source branch is not a direct ancestor, but its two workstreams are accounted for through two integration routes: memory-import restrictions via PR #148/PR #155, and evolution replay validation via PR #156. This is a content-level reconciliation, not an ancestry claim.
 
 ### B.3 Required disposition
 
