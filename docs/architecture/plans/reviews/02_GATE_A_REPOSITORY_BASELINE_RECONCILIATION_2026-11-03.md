@@ -101,6 +101,50 @@ The accepted specification's 21 commits ahead of the candidate decompose into 9 
 
 **Implication:** the principal inherited-history risk is not an opaque 1,429-commit PR #156 delta. It is a 1,244-commit, 159-file PR #97 development line, followed by 172 commits of later integration/correction work and 13 PR #156 commits. PR #97 itself is unmerged and draft. The later candidate line is a descendant of PR #97, but that does not confer acceptance on the inherited functionality.
 
+
+### 5.4 Exact 172-commit post-PR #97 decomposition
+
+The 172 commits between PR #97 head `c1da222` and PR #155 head `52c367a` decompose exactly as follows:
+
+| Segment | Commit count | Exact relationship |
+|---|---:|---|
+| Pre-PR #148 preparation | 10 | `c1da222` → `94d0297` |
+| PR #148 knowledge/provenance work | 153 | `94d0297` → `be848d3` |
+| PR #155 conflict-resolved integration | 9 | `be848d3` → `52c367a` |
+| **Total** | **172** | `c1da222` → `52c367a` |
+
+The ten preparation commits are individually identified:
+
+| Commit | Subject | Work group |
+|---|---|---|
+| `c69a15d` | fix(causality): exclude unchanged facts from effect hypotheses | Causal-learning correction |
+| `05e3ff1` | test(causality): ensure unchanged facts are not learned as effects | Causal regression |
+| `c807ffc` | test(causality): include fixed-width integer type | Test portability |
+| `e1b04d7` | fix(causality): learn from pre-transition cause state | Causal-learning correction |
+| `8fa5752` | test(causality): predict outcomes from pre-transition states | Causal regression |
+| `58acf23` | test(causality): predict from pre-transition state | PR #135 head |
+| `d8c7c6c` | test: add multi-seed action mapping learning trial | DLT-003 test |
+| `5e953b8` | test: register multi-seed mapping learning trial | DLT-003 registration |
+| `9ddb4d3` | test: correct trial count and vary mappings by seed | DLT-003 correction |
+| `94d0297` | test: correct restored outcome count | DLT-003 correction / PR #148 base |
+
+This means the candidate-side total can be traced as:
+
+**1,244 (PR #97) + 6 (PR #135 causal correction) + 4 (DLT-003 trial preparation) + 153 (PR #148) + 9 (PR #155 integration) + 13 (PR #156) = 1,429.**
+
+PR #151's 32-commit source branch and PR #150's 12-commit source branch are not additional terms in this ancestry sum. Their functionality is integrated through PR #155 and PR #156 respectively, subject to the blob-level fidelity checks below.
+
+### 5.5 Net file set changed after PR #97
+
+The direct tree comparison `c1da222` → `52c367a` is 172 commits ahead and touches 20 net paths:
+
+- Headers: `brain.hpp`, `developmental_learning.hpp`, `knowledge.hpp`, `world_model.hpp`.
+- Sources: `brain.cpp`, `brain_restored_api.cpp`, `causal_model.cpp`, `cognitive_cycle.cpp`, `developmental_learning.cpp`, `knowledge.cpp`, `world_model.cpp`.
+- Test registration/suites: `core/cpp/tests/CMakeLists.txt`, `association_causality_phase5_suite.cpp`, `developmental_brain_integration_suite.cpp`, `dlt_003_mapping_generalization.cpp`, `dlt_004_feature_composition.cpp`, `evolution_brain_integration_suite.cpp`, `knowledge_memory_phase3_suite.cpp`, `knowledge_source_feedback_suite.cpp`.
+- Documentation: `docs/DEVELOPMENTAL_BRAIN_PLAN.md`.
+
+This 20-path list is the net file delta of the 172-commit segment. It is smaller than the union of every file touched during those commits because multiple commits modify the same files.
+
 ### 5.1 Critical ancestry finding: PR #151 is integrated by content, not as a direct ancestor
 
 Comparing PR #151 head `8c8889f` with PR #155 head `52c367a` returns:
@@ -201,6 +245,23 @@ Static diff inspection confirms these changes in the PR #156 delta:
 6. Regression coverage includes mismatched rollback targets, false improvement labels, source relabeling with a stale attestation, and restart behavior.
 
 These are substantive integrity/replay improvements. They do not close the documented external requirements for production cryptographic verification, protected trust configuration, key rotation/revocation, objective adjudication or cryptographic journal integrity.
+
+
+### 7.2 Exact candidate code-bearing blob identities
+
+The following blob SHAs were fetched at PR #156 code-bearing parent `15d49e5f`:
+
+| File | Blob SHA |
+|---|---|
+| `core/cpp/include/jarvis/core/brain.hpp` | `ca718aa4603bbdd0abc7de26ed296bcf8c6562fe` |
+| `core/cpp/src/brain.cpp` | `93a10a5021a5775a3a239037cbb0b58a1e0c67a9` |
+| `core/cpp/src/brain_restored_api.cpp` | `00d69ab2eb3811d453a643ef18dc69741109cbc8` |
+| `core/cpp/src/evolution_controller.cpp` | `6d08a04db4886e398e2a15c4e6697f6ace26f459` |
+| `core/cpp/tests/evolution_brain_integration_suite.cpp` | `d9dc62b1c6aebdb4ab38f3d64150699d96f393c4` |
+| `core/cpp/tests/evolution_canary_controller_suite.cpp` | `f6fbbaa54771aa1ee3665148ce638d4e9aa390ae` |
+| `core/cpp/tests/knowledge_source_feedback_suite.cpp` | `66a855dfe2aec24cdc173a1cedafbdbefeb811c3` |
+
+These identities bind the static audit to the exact code-bearing parent, not merely the PR's later documentation HEAD.
 
 ## 8. Current-main drift relative to the candidate's common ancestor
 
@@ -506,3 +567,47 @@ The net tree comparison from `af09cf28` to `52c367a` contains **165 paths**: 70 
 | `core/cpp/tests/evolution_brain_integration_suite.cpp` | modified | 316 | 2 |
 
 **Interpretation boundary:** the path inventory identifies the final tree differences at `52c367a`. It does not assign every path to an individual commit, originating PR, accepted BM mechanism or final ownership. Those joins remain required before Gate A can close.
+
+## Appendix B — Source-branch to integration blob fidelity
+
+Exact file blobs were compared between the source PR heads and the integrated candidate heads. Equality means byte-identical content at those refs; inequality means the integration file requires semantic diff review. It does not by itself indicate a defect.
+
+### B.1 PR #151 source → PR #155 integration
+
+| File | PR #151 blob | PR #155 blob | Result |
+|---|---|---|---|
+| `core/cpp/include/jarvis/core/brain.hpp` | `196fed5a91bc5e57ae7d3af3b0576210cd17a8be` | `94368254672f17045030a9effa86b0a71c2c4704` | Different — integration review required |
+| `core/cpp/include/jarvis/core/developmental_learning.hpp` | `65174400d8c3ce1dea17667ac928767cf3af333a` | same | Identical |
+| `core/cpp/src/brain.cpp` | `8232f9a3ca8dcdbda31dad20c14cc798ab85b2ce` | `0f377bf853af866375b35a944862c743c777a4c0` | Different — integration review required |
+| `core/cpp/src/brain_restored_api.cpp` | `3a9295be7bfd240585577f7962e16de4c770b655` | `2a49f2aad3a99e74316a068801e3f0f90bf69bad` | Different — integration review required |
+| `core/cpp/src/cognitive_cycle.cpp` | `989f4d154f07b31bcdab175aefbea6edd61eb930` | same | Identical |
+| `core/cpp/src/developmental_learning.cpp` | `c9a34d562fa1a20641530daba81bfdc1f3621fee` | same | Identical |
+| `core/cpp/tests/CMakeLists.txt` | `0251936730f82a7a8c928fa31dfe1d7effc83d91` | same | Identical |
+| `core/cpp/tests/dlt_004_feature_composition.cpp` | `e486bedc813c1a70dc48b610133a147283e0d7ef` | same | Identical |
+
+**Result:** five of eight files are byte-identical. Three overlapping Brain API/implementation files differ and require a targeted semantic review. The integration branch is not a wholesale copy of PR #151.
+
+### B.2 PR #150 source → PR #156 code-bearing parent
+
+| File | PR #150 blob | PR #156 blob | Result |
+|---|---|---|---|
+| `core/cpp/include/jarvis/core/brain.hpp` | `a195bdd00fe5fe376095c55bb2acf0671abea85c` | `ca718aa4603bbdd0abc7de26ed296bcf8c6562fe` | Different — integration review required |
+| `core/cpp/src/brain.cpp` | `286c55279bc873094ee85c23108e5dbca838be0f` | `93a10a5021a5775a3a239037cbb0b58a1e0c67a9` | Different — integration review required |
+| `core/cpp/src/brain_restored_api.cpp` | `630d6c7f651d4f11cdfa3d8b4779e6b0df519737` | `00d69ab2eb3811d453a643ef18dc69741109cbc8` | Different — integration review required |
+| `core/cpp/src/evolution_controller.cpp` | `6d08a04db4886e398e2a15c4e6697f6ace26f459` | same | Identical |
+| `core/cpp/tests/developmental_brain_integration_suite.cpp` | `b9dc34b63f7ca0b356a5a2589c39fb8b5862d2f6` | `e6eba3db6df8da9ecfed21974936908a32ea11c5` | Source change subsumed by PR #148 |
+| `core/cpp/tests/evolution_brain_integration_suite.cpp` | `d97ea5435baedd7ecad959aa49ec3ce5afff3fc0` | `d9dc62b1c6aebdb4ab38f3d64150699d96f393c4` | Different — integration review required |
+| `core/cpp/tests/evolution_canary_controller_suite.cpp` | `f6fbbaa54771aa1ee3665148ce638d4e9aa390ae` | same | Identical |
+
+The PR #150 changes to `developmental_brain_integration_suite.cpp` replace direct mutable-journal appends with the restricted `import_legacy_memory_event` API. The PR #148 head and PR #155 base already contain the exact integrated blob `e6eba3db...`; therefore this source-branch delta is already subsumed before PR #156.
+
+**Result:** two of seven files are byte-identical; one file's source-branch change is already present in PR #148/PR #155; four files differ and require semantic review. PR #156 also changes `knowledge_source_feedback_suite.cpp`, which is not one of PR #150's seven changed files, to test source-bound feedback attestations.
+
+### B.3 Required disposition
+
+- Do not cherry-pick PR #151 or PR #150 wholesale; the integration branches already contain a mixture of identical, adapted and subsumed changes.
+- Preserve the five exact PR #151 file matches and two exact PR #150 file matches as strong evidence of retained source content, not as proof of full acceptance.
+- Review the three PR #151 conflict files and four PR #150 divergent files semantically against both source-branch intent and the accepted BM contracts.
+- Confirm that PR #150's source-binding and rollback-binding corrections are fully represented in PR #156's integrated diffs and tests.
+- Keep all source PRs unmerged/unaccepted in the status matrix until independent review and Project Director decision.
+
