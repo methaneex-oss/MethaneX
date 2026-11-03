@@ -42,6 +42,10 @@ The accepted architecture and capability investigation are the authority for wha
 | \`core/cpp/src/association_model.cpp\` | \`b378d4237527dfbb4c65f43545f7f0fc7c42669b\` | Association updates |
 | \`core/cpp/src/knowledge.cpp\` | \`25ecf822e6132f576266c1f86a964a227c7fb75f\` | Source reliability metric |
 | \`core/cpp/src/perception_pipeline.cpp\` | \`ab9a745bb68e416d4e32c9d0c26a2d0b2016ab17\` | Provider-based representation acquisition |
+| \`core/cpp/include/jarvis/core/reasoning.hpp\` | \`5c6f82797d4f5052ad5d71a25624de192a2c87d9\` | Reasoning problem/result/engine interfaces |
+| \`core/cpp/src/reasoning.cpp\` | \`feec78b2e8a1f2b0b58733fd509e4e5a750258fc\` | Consistency checking and bounded causal-link inference |
+| \`core/cpp/include/jarvis/core/cognitive_cycle.hpp\` | \`28e7af98327956268a769adf7813125be842c1a2\` | Reasoning and memory cycle-context fields |
+| \`core/cpp/src/cognitive_cycle.cpp\` | \`3df14c552f2048b0394dc362f7ee7a654a93fb32\` | Actual memory retrieval and reasoning invocation path |
 
 The source links are reproducible by opening each path at the exact commit above.
 
@@ -246,6 +250,42 @@ This is a **source-level integration discrepancy**, not a confirmed build failur
 
 **Specification consequence:** Minimum affective appraisal remains a required architectural capability. The current source inventory does not yet establish that its implementation is integrated and usable.
 
+### 2.11 General reasoning and inference
+
+**Observed interfaces:**
+
+- \`reasoning.hpp\` defines \`ReasoningProblem\` with only a vector of belief premises, causal links and a maximum step count.
+- \`ReasoningResult\` carries a kind, validity flag, one confidence value, a free-form explanation and derived belief conclusions.
+- \`ReasoningEngine\` exposes \`solve\`, \`infer\` and \`consistent\`.
+
+**Observed implementation in \`reasoning.cpp\`:**
+
+- \`consistent\` detects only incompatible scalar values associated with the same belief key.
+- \`infer\` copies supplied premises, parses causal-link endpoints encoded as \`key=value\`, and traverses links with positive strength for a bounded number of steps. A link is followed when its cause key/value is already known and its effect key is not already present.
+- Derived belief confidence is based on the clamped link strength; the inspected path does not carry a premise/evidence lineage into the derived belief.
+- The traversal does not evaluate counterexamples, alternative explanations, assumption sets, premise scope, source provenance, temporal applicability or whether a causal link is merely a hypothesis with limited support.
+- If an effect key is already present, the traversal skips it; it does not produce an explicit contradiction/counterexample record for that conflict.
+- \`solve\` treats an empty premise set as \`valid=true\` with zero confidence and an explanatory string stating that no premises were supplied. Inconsistent premises return a contradiction result. Otherwise, the result is classified as deduction when new beliefs were added or consistency when none were added.
+
+**Observed integration in \`CognitiveCycle::run\`:**
+
+1. Ranked memories are retrieved and stored in \`result.context.memories\`.
+2. Current beliefs and causal links are loaded separately.
+3. \`ReasoningProblem\` receives \`result.context.beliefs\`, \`result.context.causal_links\` and the step bound only. Retrieved memories, interpretations, explicit assumptions, task question/context and premise provenance are not passed to the reasoning engine in this path.
+4. The result is stored in \`result.context.reasoning\`.
+5. In the inspected remainder of this cycle, the reasoning result is not used to revise BM-04 belief state, alter prediction premises, evaluate goals or influence plan/decision formation. The cycle continues through prediction, goal selection and planning using their other inputs; it does not gate downstream work on reasoning validity.
+
+**Limitations visible at this boundary:**
+
+- The code establishes a narrow consistency check and bounded traversal over pre-supplied causal links, not general reasoning across diverse evidence types.
+- There is no explicit reasoning ownership contract in the existing cycle beyond the engine call/result field.
+- Premises are not individually identified with provenance, assumptions, scope or dependency versions.
+- Retrieved memories are context output only in this path; they do not materially influence the inspected inference operation.
+- The single result confidence and explanation string do not establish calibrated uncertainty or inspectable premise-to-conclusion lineage.
+- Empty premises being marked valid is not evidence of a substantive inference; consumers must distinguish no-op/insufficient-evidence from a supported conclusion.
+
+**Specification consequence:** The integrated specification now assigns BM-12 explicit ownership of general reasoning/inference and its provisional conclusion/lineage records. BM-04 remains authoritative for belief commitment; BM-02, BM-03, BM-05 and BM-08 retain their separate representation, memory, causal/prediction and planning/decision responsibilities. The source audit does not establish that BM-12 is implemented. Memory-to-reasoning integration and downstream use of reasoning conclusions remain unverified gaps.
+
 ---
 
 ## 3. Cross-mechanism integration findings
@@ -263,6 +303,7 @@ This is a **source-level integration discrepancy**, not a confirmed build failur
 | AUD-09 | Affective processing | API/source integration discrepancy | Reconcile actual ownership and establish foundational appraisal behavior |
 | AUD-10 | Metacognition | Reflection/self-state summaries do not establish corrective cognition | Tie monitoring to actual evidence, dependencies and verified correction |
 | AUD-11 | Recovery | Journal replay exists, but complete validation of every derived mechanism is not demonstrated by this inspection | Specify recovered-state validation and partial-failure semantics |
+| AUD-12 | General reasoning/inference | Existing engine performs narrow belief-key consistency checks and bounded causal-link traversal; memories are retrieved but omitted from premises, and reasoning output is not consumed downstream in the inspected cycle | Assign explicit reasoning ownership, define premise/assumption/provenance/uncertainty/counterexample contracts, and require end-to-end reasoning acceptance scenarios |
 
 ---
 
@@ -280,6 +321,7 @@ This is a **source-level integration discrepancy**, not a confirmed build failur
 - Attention scoring and reinforcement.
 - Goal lifecycle and prerequisite handling.
 - Intent, planning and decision components.
+- Existing \`ReasoningEngine\` interface and bounded causal-link inference prototype; reuse is conditional on meeting the expanded BM-12 evidence, lineage and integration contract.
 - Numeric adaptation and controlled parameter evolution.
 - Reflection and self-state summaries.
 - Cognitive runtime queue and workspace projection.
@@ -290,6 +332,8 @@ These are candidates for compatibility assessment, not approved final mechanisms
 ### Capabilities not established by this static audit
 
 - Memory retrieval materially influencing reasoning in the inspected CognitiveCycle path.
+- General reasoning across evidence types with explicit assumptions, premise provenance, competing explanations, counterexamples and inspectable conclusion lineage.
+- Reasoning conclusions being evaluated by authoritative owners and materially influencing downstream belief, prediction, goal or planning processes.
 - General semantic/conceptual memory retrieval across different wording or modality.
 - Evidence-complete belief revision with competing hypotheses and lineage.
 - Reliable causal discovery beyond co-state association.
