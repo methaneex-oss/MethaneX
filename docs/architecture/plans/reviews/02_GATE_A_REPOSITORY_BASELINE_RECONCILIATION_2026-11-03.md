@@ -585,7 +585,7 @@ Exact file blobs were compared between the source PR heads and the integrated ca
 | `core/cpp/tests/CMakeLists.txt` | `0251936730f82a7a8c928fa31dfe1d7effc83d91` | same | Identical |
 | `core/cpp/tests/dlt_004_feature_composition.cpp` | `e486bedc813c1a70dc48b610133a147283e0d7ef` | same | Identical |
 
-**Result:** five of eight files are byte-identical. Three overlapping Brain API/implementation files differ and require a targeted semantic review. The integration branch is not a wholesale copy of PR #151.
+**Result:** five of eight files are byte-identical. Three overlapping Brain API/implementation files differ and require a targeted semantic review. The integration patches show the intended adaptations: `brain.hpp` exposes `developmental_feature_strategy_estimate`; `brain_restored_api.cpp` implements that accessor; and `brain.cpp` keeps execution-failure evidence for operational reliability but passes `false` to the compositional learner so an unobserved world consequence cannot train feature utility. This preserves the distinction between execution reliability and environmental outcome learning. The integration branch is not a wholesale copy of PR #151.
 
 ### B.2 PR #150 source → PR #156 code-bearing parent
 
@@ -601,7 +601,7 @@ Exact file blobs were compared between the source PR heads and the integrated ca
 
 The PR #150 changes to `developmental_brain_integration_suite.cpp` replace direct mutable-journal appends with the restricted `import_legacy_memory_event` API. The PR #148 head and PR #155 base already contain the exact integrated blob `e6eba3db...`; therefore this source-branch delta is already subsumed before PR #156.
 
-**Result:** two of seven files are byte-identical; one file's source-branch change is already present in PR #148/PR #155; four files differ and require semantic review. PR #156 also changes `knowledge_source_feedback_suite.cpp`, which is not one of PR #150's seven changed files, to test source-bound feedback attestations.
+**Result:** two of seven files are byte-identical; one file's source-branch change is already present in PR #148/PR #155; four files differ and require semantic review. The exact identical files are `evolution_controller.cpp` and `evolution_canary_controller_suite.cpp`. The `developmental_brain_integration_suite.cpp` source change is already present at the PR #148 head and PR #155 base: PR #150 replaces direct mutable-journal appends with `import_legacy_memory_event`, and the integrated PR #148 blob already contains that API migration. PR #156 also changes `knowledge_source_feedback_suite.cpp`, which is not one of PR #150's seven changed files, to test source-bound feedback attestations. Its source-binding corrections are additional PR #156 work, not a PR #150 feature.
 
 ### B.3 Required disposition
 
