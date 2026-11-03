@@ -17,7 +17,7 @@ The human-cognition and MCU J.A.R.V.I.S. comparisons are reference lenses for an
 
 ## 2. Current phase — read this first
 
-**Current phase: Brain Implementation Planning. We are not yet in implementation.**
+**Current phase: Brain Implementation Planning — combined Gate A reconciliation review and Gate B mechanism traceability audit. We are not in implementation.**
 
 Accepted upstream work:
 - **PR #171** — whole-system foundation.
@@ -51,7 +51,7 @@ PR #156 is a **candidate only**, not an accepted implementation baseline. Do not
 The final-disposition review assignment was posted as PR #175 comment:
 https://github.com/methaneex-oss/MethaneX/pull/175#issuecomment-6615019538
 
-At the time of this handoff, the GitHub PR reviews endpoint returned no submitted reviews. No independent reviewer is formally requested in GitHub metadata. Do not claim a review has started or completed. The next action is to obtain an independent review of the Gate A disposition and checkpoint. If no reviewer is available, report that blocker plainly; do not impersonate an independent reviewer or approve your own work.
+Live verification on 2026-11-03 confirms zero submitted reviews on PR #175 and no requested reviewers. The Project Director supplied a reviewer-status report; it accurately states the no-go position but is not a technical independent review verdict. The Builder completed a separately labelled technical re-review in `04_GATE_A_BUILDER_TECHNICAL_REREVIEW_2026-11-03.md`. Do not present that Builder-side review as independent approval.
 
 ### Subsequent reviewer-status report supplied by the user
 
@@ -84,8 +84,9 @@ PR #156 remains useful as an evidence-bearing candidate. It is not approved as t
 1. **Complete independent Gate A review.** Reviewer must challenge the disposition, reproduce critical refs/blob claims, distinguish verified from unverified claims, and state whether any correction is needed.
 2. **Resolve reviewer findings.** Record corrections and their evidence in a separate review/correction document under `docs/architecture/plans/reviews/`, not by silently rewriting the accepted specification or burying findings in the main planning document.
 3. **Return the Gate A decision to the Project Director (the user).** Do not treat reviewer approval as Project Director acceptance.
-4. **Only after explicit user authorization, begin Gate B.** Gate B is the detailed source-to-specification traceability audit for all 12 mechanisms in accepted PR #174. It is not implementation.
-5. **Only after Gate B and a separately accepted implementation plan and explicit authorization** may implementation work begin.
+4. **Gate B static traceability is now complete for BM-01 through BM-12.** Its acceptance gaps are recorded; do not call it passed merely because the matrix is complete.
+5. **Complete Gate A's remaining commit/path/hunk and semantic reconciliation, then obtain independent review of both audit records.** Present the combined evidence and baseline recommendation to the Project Director.
+6. **Only after a baseline decision, accepted implementation plan and separate explicit implementation authorization** may runtime implementation begin.
 
 Do not skip stages to make the project appear to be progressing.
 
@@ -106,7 +107,7 @@ Do not skip stages to make the project appear to be progressing.
 
 1. **Act as the builder when authorized.** Do not speak about “what the Builder should do” as if you are not the builder. State what you will do.
 2. **Inspect the repository before asserting facts.** Use exact branches, commit SHAs, paths, blobs, diffs, and source evidence. Chat memory is context, not repository evidence.
-3. **Respect authorization boundaries.** Current authorization is limited to Gate A repository baseline reconciliation and its independent review. Gate B, runtime changes, builds, tests, technology choices, schema/API decisions, rebase/cherry-pick/merge, branch rewriting, and deployment require separate authorization unless already explicitly granted later.
+3. **Respect authorization boundaries.** The Project Director has authorized Gate A and Gate B to proceed together as static review/traceability and documentation work. Runtime changes, builds, tests, technology choices, schema/API decisions, rebase/cherry-pick/merge, branch rewriting and deployment remain unauthorized.
 4. **Do not claim actions that did not happen.** Distinguish code inspected from code changed, tests run from existing CI evidence, and requested reviews from submitted reviews.
 5. **Document work.** Record findings, corrections, exact evidence, and verification in accessible repository documentation. Keep correction/review records separate from the main planning document where appropriate.
 6. **Fix root causes.** Do not apply speculative patches or create follow-on changes without understanding the failure and its affected contracts.
@@ -134,6 +135,8 @@ These are audit priorities, not a substitute for tracing all 12 mechanisms.
 - Current planning PR: https://github.com/methaneex-oss/MethaneX/pull/175
 - Accepted specification PR: https://github.com/methaneex-oss/MethaneX/pull/174
 - Gate A detailed checkpoint: https://github.com/methaneex-oss/MethaneX/blob/plan/brain-implementation-roadmap-20261103/docs/architecture/plans/reviews/02_GATE_A_REPOSITORY_BASELINE_RECONCILIATION_2026-11-03.md
+- Gate A Builder technical re-review: https://github.com/methaneex-oss/MethaneX/blob/plan/brain-implementation-roadmap-20261103/docs/architecture/plans/reviews/04_GATE_A_BUILDER_TECHNICAL_REREVIEW_2026-11-03.md
+- Gate B 12-mechanism traceability audit: https://github.com/methaneex-oss/MethaneX/blob/plan/brain-implementation-roadmap-20261103/docs/architecture/plans/reviews/05_GATE_B_MECHANISM_TRACEABILITY_AUDIT_2026-11-03.md
 - Gate A final disposition: https://github.com/methaneex-oss/MethaneX/blob/plan/brain-implementation-roadmap-20261103/docs/architecture/plans/reviews/03_GATE_A_FINAL_DISPOSITION_2026-11-03.md
 - Independent review assignment: https://github.com/methaneex-oss/MethaneX/pull/175#issuecomment-6615019538
 
@@ -153,10 +156,10 @@ When continuing this project:
 
 Give the user a short status update in this format:
 
-- **Phase:** Brain Implementation Planning — Gate A independent review.
-- **Last decision:** Gate A not cleared; no implementation baseline selected.
-- **Current blocker:** Independent review not yet submitted (verify live state).
-- **Next action:** Obtain/review the independent Gate A verdict, then report findings and proposed corrections.
-- **Not authorized:** Gate B and implementation until separately authorized.
+- **Phase:** Brain Implementation Planning — Gate A reconciliation + Gate B traceability.
+- **Last decision:** Gate A not cleared; Gate B static traceability complete but capability acceptance not passed.
+- **Current blocker:** Gate A semantic/history reconciliation and independent review remain outstanding.
+- **Next action:** Close remaining Gate A evidence gaps and obtain independent review before baseline selection.
+- **Not authorized:** Runtime implementation, builds/tests, history rewrites, merge or deployment.
 
 If repository state contradicts this document, trust the verified live repository state, explain the discrepancy, and update this handoff through a documented commit. Never silently assume this snapshot is still current.
