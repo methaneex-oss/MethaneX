@@ -312,7 +312,21 @@ Therefore the earlier function-name result is not enough to declare the main res
 
 ### 8.2 Workflow/test infrastructure drift
 
-The five workflow files present in current main are not present in the PR #156 changed-file list. They are not automatically required runtime functionality. Their value, triggers, tested source refs and overlap with existing candidate workflows must be assessed independently. Do not copy them blindly and do not silently discard their validation coverage.
+The five workflow files present in current main are not part of PR #156's immediate eight-file delta, but a direct path/blob check against candidate base `52c367a` shows three distinct cases:
+
+| Current-main workflow | Current-main blob | Candidate-base state | Reconciliation result |
+|---|---|---|---|
+| `.github/workflows/dlt-002-four-hour.yml` | `52d08751d29c1b7c7b60e07834ac1bfdc4eba626` | Same path and same blob | Exact match; no content drift |
+| `.github/workflows/jbp-mem-001.yml` | `9e1efd73a9a91a70c1d9ceda0d6b458f9bdd7f7f` | Same path, blob `82cec28819357a26881584b4ceb951c258ea24ac` | Different; semantic workflow review required |
+| `.github/workflows/jarvis-learning-mechanisms.yml` | `0eac13b1e6a43ea7fa06aaf9e0134f5b6ae27710` | Absent | Missing from candidate base |
+| `.github/workflows/jbp-brain-int-001.yml` | `31523dfa6bb5160397ebefd1f25325484461e271` | Absent | Missing from candidate base |
+| `.github/workflows/jbp-learning-002.yml` | `4e88b4150eed6e5df3e81dd28a35216a299039e9` | Absent | Missing from candidate base |
+
+The `jbp-mem-001.yml` difference is concrete: current main accepts a `source_ref` input, checks out that selected Brain revision, and records both the selected source ref and resolved tested commit in run metadata. The candidate-base version has no `source_ref` input, checks out the workflow's own ref, and omits those two metadata fields. That is a test-target reproducibility/control difference, not a cosmetic edit.
+
+The three absent workflows provide distinct validation paths: a learning-mechanisms probe, an integrated feedback/persistence probe with source-ref selection, and a short-horizon controlled learning stress test. The candidate's existing `jarvis-learning-seed-sweep.yml` is not a path-level substitute for these workflows; equivalence has not been established.
+
+These workflows are test/CI infrastructure, not runtime Brain mechanisms. Their value, triggers, tested source refs and compatibility with candidate CI must be assessed independently. Preserve the exact-match DLT-002 workflow; do not silently discard the JBP-MEM source-selection control; do not copy the three missing workflows blindly.
 
 ## 9. Initial retain/adapt/exclude matrix
 
