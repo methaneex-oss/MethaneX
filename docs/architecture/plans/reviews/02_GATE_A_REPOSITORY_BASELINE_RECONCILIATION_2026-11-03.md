@@ -685,3 +685,46 @@ The following table binds every path in the direct `c1da222` → `52c367a` 20-pa
 | `docs/DEVELOPMENTAL_BRAIN_PLAN.md` | — | `6b447faa668c2c4a559e55fb40dbd301f53e1704` |
 
 This closes the tree-level blob inventory for the 172-commit post-PR #97 segment. It does **not** yet identify the exact commit that last changed each path, attribute every hunk to its originating PR, or determine whether the resulting implementation satisfies BM acceptance scenarios. Those are the remaining commit-to-file and semantic reconciliation tasks.
+
+
+## Appendix D — Exact PR #97 / post-PR #97 file-set reconciliation
+
+Three independent tree comparisons were set-reconciled:
+
+- `af09cf28` → `c1da222`: 159 paths (PR #97 inherited line).
+- `c1da222` → `52c367a`: 20 paths (the 172-commit post-PR #97 segment).
+- `af09cf28` → `52c367a`: 165 paths (the final candidate integration-base tree delta).
+
+The path sets reconcile exactly:
+
+**145 PR #97-only paths + 14 paths modified in both segments + 6 paths first introduced after PR #97 = 165 final paths.**
+
+No path in the PR #97 net diff disappears from the final candidate-base net diff. No path in the post-PR #97 20-path diff disappears from the final candidate-base net diff. The 165-path candidate tree is therefore the exact union of the 159-path PR #97 diff and the 20-path post-PR #97 diff, with 14 overlapping paths.
+
+### D.1 Fourteen paths modified in both segments
+
+- `core/cpp/include/jarvis/core/brain.hpp`
+- `core/cpp/include/jarvis/core/developmental_learning.hpp`
+- `core/cpp/include/jarvis/core/knowledge.hpp`
+- `core/cpp/src/brain.cpp`
+- `core/cpp/src/brain_restored_api.cpp`
+- `core/cpp/src/causal_model.cpp`
+- `core/cpp/src/cognitive_cycle.cpp`
+- `core/cpp/src/developmental_learning.cpp`
+- `core/cpp/src/knowledge.cpp`
+- `core/cpp/tests/CMakeLists.txt`
+- `core/cpp/tests/association_causality_phase5_suite.cpp`
+- `core/cpp/tests/developmental_brain_integration_suite.cpp`
+- `core/cpp/tests/evolution_brain_integration_suite.cpp`
+- `core/cpp/tests/knowledge_memory_phase3_suite.cpp`
+
+### D.2 Six paths first introduced after PR #97
+
+- `core/cpp/include/jarvis/core/world_model.hpp`
+- `core/cpp/src/world_model.cpp`
+- `core/cpp/tests/dlt_003_mapping_generalization.cpp`
+- `core/cpp/tests/dlt_004_feature_composition.cpp`
+- `core/cpp/tests/knowledge_source_feedback_suite.cpp`
+- `docs/DEVELOPMENTAL_BRAIN_PLAN.md`
+
+The remaining 145 paths are present in PR #97's net diff and are not changed again in the 172-commit post-PR #97 segment. This is a path-set statement, not a claim that their behavior is correct or accepted.
