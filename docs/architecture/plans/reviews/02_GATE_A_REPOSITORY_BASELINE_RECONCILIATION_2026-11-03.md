@@ -251,3 +251,230 @@ PR #156 remains a candidate. No implementation base is selected.
 The most important correction is that the 1,429/21 figure describes divergent ancestry, not the PR #156 incremental diff. The next reconciliation work must focus on the inherited 1,416-commit base, the missing 21 commits, and the fact that PR #155 and PR #156 integrate source-PR functionality through new commits rather than direct ancestry.
 
 Do not rebase or reconstruct history. Do not begin implementation. Obtain independent review of this reconciliation checkpoint before making any baseline decision.
+
+
+## Appendix A — Complete net file inventory at candidate integration base
+
+The 1,416 commits from `af09cf28` to PR #156's immediate base `52c367a` were enumerated through 15 paginated compare responses: 14 pages of 100 commits and one page of 16. The enumeration contains **1,416 unique commit SHAs**, spanning 2026-09-25 14:13:51 UTC through 2026-10-31 04:43:06 UTC. This completes the commit-list enumeration, but not per-commit file attribution or originating-PR classification.
+
+The net tree comparison from `af09cf28` to `52c367a` contains **165 paths**: 70 added and 95 modified. This is the net tree delta at the candidate integration base, not a count of files touched at any point in the 1,416 commits.
+
+| Path group | Files |
+|---|---:|
+| `.github/workflows` | 8 |
+| `core/cpp root and other` | 4 |
+| `core/cpp/include` | 36 |
+| `core/cpp/src` | 38 |
+| `core/cpp/tests` | 59 |
+| `docs` | 10 |
+| `engineering` | 10 |
+
+### A.1 Full path/status inventory
+
+**.github/workflows (8)**
+
+- `.github/workflows/brain-ci.yml` — modified
+- `.github/workflows/dlt-001-long-run.yml` — added
+- `.github/workflows/dlt-002-four-hour.yml` — added
+- `.github/workflows/dlt-002-overnight-validation.yml` — added
+- `.github/workflows/jarvis-brain-probe-001.yml` — added
+- `.github/workflows/jarvis-core.yml` — added
+- `.github/workflows/jarvis-learning-seed-sweep.yml` — added
+- `.github/workflows/jbp-mem-001.yml` — added
+
+**core/cpp root and other (4)**
+
+- `core/cpp/CMakeLists.txt` — modified
+- `core/cpp/examples/CMakeLists.txt` — added
+- `core/cpp/examples/developmental_world.cpp` — added
+- `core/cpp/examples/README.md` — added
+
+**core/cpp/include (36)**
+
+- `core/cpp/include/jarvis/core/action_execution.hpp` — modified
+- `core/cpp/include/jarvis/core/action_model.hpp` — modified
+- `core/cpp/include/jarvis/core/adaptation.hpp` — modified
+- `core/cpp/include/jarvis/core/affective_learning.hpp` — added
+- `core/cpp/include/jarvis/core/affective_state.hpp` — added
+- `core/cpp/include/jarvis/core/association_model.hpp` — modified
+- `core/cpp/include/jarvis/core/attention.hpp` — modified
+- `core/cpp/include/jarvis/core/brain.hpp` — modified
+- `core/cpp/include/jarvis/core/causal_link_codec.hpp` — added
+- `core/cpp/include/jarvis/core/causal_model.hpp` — modified
+- `core/cpp/include/jarvis/core/cognition.hpp` — modified
+- `core/cpp/include/jarvis/core/cognitive_cycle.hpp` — modified
+- `core/cpp/include/jarvis/core/cognitive_goal_outcome.hpp` — added
+- `core/cpp/include/jarvis/core/cognitive_runtime.hpp` — modified
+- `core/cpp/include/jarvis/core/cognitive_workspace.hpp` — modified
+- `core/cpp/include/jarvis/core/decision.hpp` — modified
+- `core/cpp/include/jarvis/core/developmental_environment.hpp` — added
+- `core/cpp/include/jarvis/core/developmental_learning.hpp` — added
+- `core/cpp/include/jarvis/core/developmental_world.hpp` — added
+- `core/cpp/include/jarvis/core/evolution_adoption_journal.hpp` — modified
+- `core/cpp/include/jarvis/core/evolution_canary.hpp` — modified
+- `core/cpp/include/jarvis/core/evolution_controller.hpp` — modified
+- `core/cpp/include/jarvis/core/evolution_experiment_coordinator.hpp` — modified
+- `core/cpp/include/jarvis/core/evolution_experiment_runner.hpp` — modified
+- `core/cpp/include/jarvis/core/evolution_experiment.hpp` — modified
+- `core/cpp/include/jarvis/core/evolution_orchestrator.hpp` — modified
+- `core/cpp/include/jarvis/core/evolution.hpp` — modified
+- `core/cpp/include/jarvis/core/experience_memory.hpp` — added
+- `core/cpp/include/jarvis/core/goals.hpp` — modified
+- `core/cpp/include/jarvis/core/intent.hpp` — modified
+- `core/cpp/include/jarvis/core/knowledge.hpp` — modified
+- `core/cpp/include/jarvis/core/memory.hpp` — modified
+- `core/cpp/include/jarvis/core/planning.hpp` — modified
+- `core/cpp/include/jarvis/core/reflection.hpp` — modified
+- `core/cpp/include/jarvis/core/self_model.hpp` — modified
+- `core/cpp/include/jarvis/core/world_model.hpp` — modified
+
+**core/cpp/src (38)**
+
+- `core/cpp/src/action_execution.cpp` — modified
+- `core/cpp/src/adaptation.cpp` — modified
+- `core/cpp/src/affective_learning.cpp` — added
+- `core/cpp/src/affective_state.cpp` — added
+- `core/cpp/src/association_model.cpp` — modified
+- `core/cpp/src/attention.cpp` — modified
+- `core/cpp/src/brain_action_execution.cpp` — added
+- `core/cpp/src/brain_affective_planning.cpp` — added
+- `core/cpp/src/brain_prediction_context.cpp` — added
+- `core/cpp/src/brain_restored_api.cpp` — added
+- `core/cpp/src/brain.cpp` — modified
+- `core/cpp/src/causal_model.cpp` — modified
+- `core/cpp/src/cognitive_cycle.cpp` — modified
+- `core/cpp/src/cognitive_runtime.cpp` — modified
+- `core/cpp/src/decision.cpp` — modified
+- `core/cpp/src/developmental_learning.cpp` — added
+- `core/cpp/src/evolution_adoption_journal.cpp` — modified
+- `core/cpp/src/evolution_adoption.cpp` — modified
+- `core/cpp/src/evolution_canary.cpp` — modified
+- `core/cpp/src/evolution_controller.cpp` — modified
+- `core/cpp/src/evolution_experiment_coordinator.cpp` — modified
+- `core/cpp/src/evolution_experiment_runner.cpp` — modified
+- `core/cpp/src/evolution_history.cpp` — modified
+- `core/cpp/src/evolution_orchestrator.cpp` — modified
+- `core/cpp/src/evolution_safety.cpp` — modified
+- `core/cpp/src/evolution_sandbox.cpp` — modified
+- `core/cpp/src/evolution.cpp` — modified
+- `core/cpp/src/goals.cpp` — modified
+- `core/cpp/src/intent.cpp` — modified
+- `core/cpp/src/knowledge.cpp` — modified
+- `core/cpp/src/memory.cpp` — modified
+- `core/cpp/src/planning.cpp` — modified
+- `core/cpp/src/process_isolation.cpp` — modified
+- `core/cpp/src/reasoning.cpp` — modified
+- `core/cpp/src/reflection.cpp` — modified
+- `core/cpp/src/representation.cpp` — modified
+- `core/cpp/src/self_model.cpp` — modified
+- `core/cpp/src/world_model.cpp` — modified
+
+**core/cpp/tests (59)**
+
+- `core/cpp/tests/action_authorization_suite.cpp` — modified
+- `core/cpp/tests/action_execution_phase7_suite.cpp` — modified
+- `core/cpp/tests/action_model_architecture_suite.cpp` — modified
+- `core/cpp/tests/affective_brain_decision_suite.cpp` — added
+- `core/cpp/tests/affective_decision_learning_suite.cpp` — added
+- `core/cpp/tests/affective_decision_suite.cpp` — added
+- `core/cpp/tests/affective_evidence_suite.cpp` — added
+- `core/cpp/tests/affective_goal_outcome_suite.cpp` — added
+- `core/cpp/tests/affective_learning_suite.cpp` — added
+- `core/cpp/tests/affective_planning_suite.cpp` — added
+- `core/cpp/tests/affective_planning.cmake` — added
+- `core/cpp/tests/affective_state_model_suite.cpp` — added
+- `core/cpp/tests/affective_state_suite.cpp` — added
+- `core/cpp/tests/association_causality_phase5_suite.cpp` — modified
+- `core/cpp/tests/attention_architecture_suite.cpp` — modified
+- `core/cpp/tests/attention_learning_brain_suite.cpp` — added
+- `core/cpp/tests/brain_10_suite.cpp` — modified
+- `core/cpp/tests/brain_action_consequence_integration_suite.cpp` — added
+- `core/cpp/tests/brain_contract.cpp` — modified
+- `core/cpp/tests/brain_deep_suite.cpp` — modified
+- `core/cpp/tests/CMakeLists.txt` — modified
+- `core/cpp/tests/cognitive_cycle_suite.cpp` — modified
+- `core/cpp/tests/cognitive_runtime_goal_feedback_suite.cpp` — added
+- `core/cpp/tests/cognitive_runtime_learning_integration_suite.cpp` — added
+- `core/cpp/tests/cognitive_runtime_suite.cpp` — modified
+- `core/cpp/tests/cognitive_workspace_runtime_suite.cpp` — modified
+- `core/cpp/tests/decision_planning_architecture_suite.cpp` — modified
+- `core/cpp/tests/developmental_brain_integration_suite.cpp` — added
+- `core/cpp/tests/developmental_environment_suite.cpp` — added
+- `core/cpp/tests/developmental_learning_suite.cpp` — added
+- `core/cpp/tests/developmental_learning_tests.cpp` — added
+- `core/cpp/tests/developmental_training_environment_suite.cpp` — added
+- `core/cpp/tests/developmental_world_integration_suite.cpp` — added
+- `core/cpp/tests/developmental_world_suite.cpp` — added
+- `core/cpp/tests/dlt_001_long_run.cpp` — added
+- `core/cpp/tests/dlt_001_trial.cpp` — added
+- `core/cpp/tests/dlt_002_long_run.cpp` — added
+- `core/cpp/tests/dlt_002_persistence.cpp` — added
+- `core/cpp/tests/dlt_003_mapping_generalization.cpp` — added
+- `core/cpp/tests/dlt_004_feature_composition.cpp` — added
+- `core/cpp/tests/evolution_adoption_journal_suite.cpp` — modified
+- `core/cpp/tests/evolution_brain_integration_suite.cpp` — modified
+- `core/cpp/tests/evolution_canary_controller_suite.cpp` — modified
+- `core/cpp/tests/evolution_experiment_coordinator_suite.cpp` — modified
+- `core/cpp/tests/evolution_experiment_runner_suite.cpp` — modified
+- `core/cpp/tests/evolution_opportunity_orchestration_suite.cpp` — modified
+- `core/cpp/tests/experience_memory_test.cpp` — added
+- `core/cpp/tests/goal_directed_cognition_suite.cpp` — added
+- `core/cpp/tests/goal_outcome_model_suite.cpp` — added
+- `core/cpp/tests/goals_architecture_suite.cpp` — modified
+- `core/cpp/tests/knowledge_memory_phase3_suite.cpp` — modified
+- `core/cpp/tests/knowledge_source_feedback_suite.cpp` — added
+- `core/cpp/tests/learning_adaptation_phase8_suite.cpp` — modified
+- `core/cpp/tests/memory_architecture_suite.cpp` — modified
+- `core/cpp/tests/memory_learning_evolution_persistence_suite.cpp` — added
+- `core/cpp/tests/prediction_feedback_phase10_suite.cpp` — modified
+- `core/cpp/tests/process_isolation_suite.cpp` — modified
+- `core/cpp/tests/reasoning_architecture_suite.cpp` — modified
+- `core/cpp/tests/representation_suite.cpp` — modified
+
+**docs (10)**
+
+- `docs/DEVELOPMENTAL_BRAIN_PLAN.md` — added
+- `docs/developmental-training-environment.md` — added
+- `docs/superpowers/plans/2026-09-25-cognitive-action-feedback-loop.md` — added
+- `docs/superpowers/plans/2026-09-26-concept-context-prediction.md` — added
+- `docs/superpowers/plans/2026-09-30-developmental-cognition.md` — added
+- `docs/superpowers/plans/2026-10-01-affective-state.md` — added
+- `docs/superpowers/specs/2026-09-25-cognitive-action-feedback-loop-design.md` — added
+- `docs/superpowers/specs/2026-09-26-concept-context-prediction-design.md` — added
+- `docs/superpowers/specs/2026-09-30-developmental-cognition.md` — added
+- `docs/superpowers/specs/2026-10-01-affective-state.md` — added
+
+**engineering (10)**
+
+- `engineering/cpp/CMakeLists.txt` — modified
+- `engineering/cpp/include/jarvis/engineering/agent.hpp` — modified
+- `engineering/cpp/include/jarvis/engineering/coordinator.hpp` — modified
+- `engineering/cpp/include/jarvis/engineering/message_bus.hpp` — modified
+- `engineering/cpp/include/jarvis/engineering/task_ledger.hpp` — added
+- `engineering/cpp/src/coordinator.cpp` — modified
+- `engineering/cpp/src/message_bus.cpp` — modified
+- `engineering/cpp/src/task_ledger.cpp` — added
+- `engineering/cpp/tests/agent_and_console_suite.cpp` — modified
+- `engineering/cpp/tests/task_ledger_suite.cpp` — added
+
+### A.2 Largest net-delta files
+
+| File | Status | Additions | Deletions |
+|---|---|---:|---:|
+| `core/cpp/tests/developmental_brain_integration_suite.cpp` | added | 1749 | 0 |
+| `core/cpp/src/brain.cpp` | modified | 1136 | 155 |
+| `core/cpp/tests/brain_deep_suite.cpp` | modified | 806 | 153 |
+| `core/cpp/src/cognitive_cycle.cpp` | modified | 727 | 83 |
+| `core/cpp/tests/cognitive_cycle_suite.cpp` | modified | 723 | 33 |
+| `core/cpp/src/developmental_learning.cpp` | added | 563 | 0 |
+| `core/cpp/src/brain_restored_api.cpp` | added | 529 | 0 |
+| `core/cpp/src/memory.cpp` | modified | 149 | 352 |
+| `core/cpp/tests/dlt_002_long_run.cpp` | added | 479 | 0 |
+| `core/cpp/tests/dlt_004_feature_composition.cpp` | added | 357 | 0 |
+| `core/cpp/tests/developmental_training_environment_suite.cpp` | added | 355 | 0 |
+| `core/cpp/include/jarvis/core/brain.hpp` | modified | 65 | 277 |
+| `core/cpp/tests/cognitive_runtime_learning_integration_suite.cpp` | added | 326 | 0 |
+| `core/cpp/tests/dlt_001_trial.cpp` | added | 322 | 0 |
+| `core/cpp/tests/evolution_brain_integration_suite.cpp` | modified | 316 | 2 |
+
+**Interpretation boundary:** the path inventory identifies the final tree differences at `52c367a`. It does not assign every path to an individual commit, originating PR, accepted BM mechanism or final ownership. Those joins remain required before Gate A can close.
