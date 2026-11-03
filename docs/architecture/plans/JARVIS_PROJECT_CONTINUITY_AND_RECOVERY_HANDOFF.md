@@ -1,6 +1,6 @@
 # JARVIS Project Continuity & Recovery Handoff
 
-**Last updated:** 2026-11-03  
+**Last updated:** 2026-11-03 (updated after the user's reviewer-status report)  
 **Purpose:** This is the authoritative restart point for any new ChatGPT conversation, collaborator, or agent continuing this project. Read this document before taking action. Do not rely on chat memory as the source of truth.
 
 ## 1. Project identity and objective
@@ -52,6 +52,20 @@ The final-disposition review assignment was posted as PR #175 comment:
 https://github.com/methaneex-oss/MethaneX/pull/175#issuecomment-6615019538
 
 At the time of this handoff, the GitHub PR reviews endpoint returned no submitted reviews. No independent reviewer is formally requested in GitHub metadata. Do not claim a review has started or completed. The next action is to obtain an independent review of the Gate A disposition and checkpoint. If no reviewer is available, report that blocker plainly; do not impersonate an independent reviewer or approve your own work.
+
+### Subsequent reviewer-status report supplied by the user
+
+The user supplied a report clarifying the current state. It confirms:
+- PR #175 is open.
+- Gate A remains not cleared.
+- PR #156 remains candidate only.
+- No implementation baseline has been selected.
+- Gate B and implementation remain unauthorized.
+- The next action remains an independent technical review of the Gate A reconciliation evidence.
+
+The report's recommendation is deliberately neutral: do not select PR #156 merely because it contains substantial existing work, and do not reject it merely because its history diverges. The decision must follow technical examination of the history, integration differences, and evidence.
+
+**Classification:** This supplied report is a status/recommendation note, not a completed independent technical verdict. It does not clear Gate A, select a baseline, or authorize the next stage. The review is still pending operationally; no submitted review or formal GitHub reviewer request should be claimed unless live repository metadata confirms it.
 
 ## 3. What Gate A found and why it is not cleared
 
