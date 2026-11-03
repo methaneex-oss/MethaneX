@@ -79,6 +79,30 @@ The checkpoint contains a 1,416-commit enumeration and a 165-path net tree inven
 
 PR #156 remains useful as an evidence-bearing candidate. It is not approved as the base to build on.
 
+## 3A. Combined Gate A / Gate B work completed on 2026-11-03
+
+The Project Director explicitly authorized both gates to proceed together as static review, traceability and documentation work. The main objective remains the JARVIS learning cognitive architecture.
+
+- **Gate A Builder technical re-review:** `docs/architecture/plans/reviews/04_GATE_A_BUILDER_TECHNICAL_REREVIEW_2026-11-03.md`.
+  - Confirms the no-go disposition is justified.
+  - PR #156 remains a candidate only.
+  - The 1,416 inherited commits still lack complete commit-to-origin/path/hunk attribution.
+  - Divergent PR #151/#150 integration hunks, 24 Brain API body differences, two unmatched definitions and five workflow files remain unresolved.
+  - This is a Builder-side review, not an independent reviewer verdict.
+
+- **Gate B static traceability audit:** `docs/architecture/plans/reviews/05_GATE_B_MECHANISM_TRACEABILITY_AUDIT_2026-11-03.md`.
+  - Maps BM-01 through BM-12 to candidate source at exact code-bearing parent `15d49e5fdeb5723c475922ab78fb92f97c4b3b84`.
+  - Static traceability is complete for all 12 mechanism owners.
+  - Mechanism acceptance is **NOT PASSED**; the audit does not claim all 34 acceptance scenarios pass.
+  - No build, runtime test, benchmark or sanitizer was run.
+
+- The main implementation plan was upgraded to include these results and correct the BM-12 integration description.
+- Important correction: candidate reasoning conclusions feed forward simulation/prediction. Retrieved memories are still omitted from reasoning premises, and the full BM-12 premise/assumption/provenance/alternative/counterexample/dependency lineage is not demonstrated.
+
+**Combined disposition:** Gate B static traceability complete; capability acceptance not passed. Gate A not cleared; no implementation baseline selected. PR #156 remains a candidate only.
+
+**Still unauthorized:** runtime source changes, builds, tests, benchmarks, technology/schema/API selection, rebase, cherry-pick, merge, history rewrite, deployment and implementation. The combined authorization covered review, traceability and documentation upgrades only.
+
 ## 4. What happens next — in order
 
 1. **Complete independent Gate A review.** Reviewer must challenge the disposition, reproduce critical refs/blob claims, distinguish verified from unverified claims, and state whether any correction is needed.
@@ -138,6 +162,8 @@ These are audit priorities, not a substitute for tracing all 12 mechanisms.
 - Gate A Builder technical re-review: https://github.com/methaneex-oss/MethaneX/blob/plan/brain-implementation-roadmap-20261103/docs/architecture/plans/reviews/04_GATE_A_BUILDER_TECHNICAL_REREVIEW_2026-11-03.md
 - Gate B 12-mechanism traceability audit: https://github.com/methaneex-oss/MethaneX/blob/plan/brain-implementation-roadmap-20261103/docs/architecture/plans/reviews/05_GATE_B_MECHANISM_TRACEABILITY_AUDIT_2026-11-03.md
 - Gate A final disposition: https://github.com/methaneex-oss/MethaneX/blob/plan/brain-implementation-roadmap-20261103/docs/architecture/plans/reviews/03_GATE_A_FINAL_DISPOSITION_2026-11-03.md
+- Gate A Builder technical re-review: https://github.com/methaneex-oss/MethaneX/blob/plan/brain-implementation-roadmap-20261103/docs/architecture/plans/reviews/04_GATE_A_BUILDER_TECHNICAL_REREVIEW_2026-11-03.md
+- Gate B 12-mechanism traceability audit: https://github.com/methaneex-oss/MethaneX/blob/plan/brain-implementation-roadmap-20261103/docs/architecture/plans/reviews/05_GATE_B_MECHANISM_TRACEABILITY_AUDIT_2026-11-03.md
 - Independent review assignment: https://github.com/methaneex-oss/MethaneX/pull/175#issuecomment-6615019538
 
 ## 9. Startup instructions for a new chat
