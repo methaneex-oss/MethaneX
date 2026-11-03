@@ -149,6 +149,26 @@ The Brain forms intent and may issue an action proposal or request. It cannot au
 
 Material learning changes must preserve what evidence caused them, what state was changed, what depended on it, how the change was evaluated, and how an adverse change can be contained or reversed. Learning must be assessed longitudinally and under variation, not only by a single successful fixture.
 
+### 3.9 Comparative reference lenses: MCU J.A.R.V.I.S., human cognition and engineering reality
+
+The architecture is evaluated through three distinct lenses. They answer different questions and must not be collapsed into one source of authority.
+
+**MCU J.A.R.V.I.S. — functional inspiration.** The accepted investigation identifies depicted behaviour relevant to contextual/pragmatic interpretation, situational awareness and grounded assistance, diagnostics and state monitoring, technical analysis and iterative improvement, and human-machine task support. Examples include the Iron Man 3 rescue sequence discussed in *The User Experience of Iron Man*, the workshop diagnostic sequence in the Iron Man shooting script, and the suit/Iron Legion diagnostics and maintenance interfaces discussed by Territory Studio. These depictions inform the *kind of capability and interaction* JARVIS should be able to demonstrate. They do not establish fictional internal memory structures, learning algorithms, neural organization or runtime architecture.
+
+**Human cognition — scientific reference.** Research on attention and memory, cognitive control, memory organization/generalization and continual learning informs questions about limited active capacity, selective processing, retrieval, feedback, interference, transfer and developmental stability. The relevant sources include Cowan et al. (2024), Badre (2025), Sun et al. (2023), and Yang et al. (2026), as recorded in the accepted research baseline. These findings are evidence to reason from, not a requirement to reproduce human neural structures or biological limitations.
+
+**JARVIS engineering reality — implementation evidence.** The inspected engineering baseline establishes what exists and what has actually been demonstrated. It includes memory persistence and retrieval, attention reinforcement, bounded reasoning, prediction feedback and persistent numeric adaptation. It also exposes gaps: retrieved memories were not passed into the inspected reasoning premises; structured attribute-overlap retrieval is not proof of generalized semantic retrieval; prediction and belief records have limited explicit evidence/assumption detail; and the Phase 8 learning test demonstrates bounded persistent numeric parameter evolution, not broad concept acquisition or transfer. These observations constrain claims and identify integration work; they do not force the new architecture to preserve every existing implementation choice.
+
+| Architectural concern | MCU J.A.R.V.I.S. lens | Human cognition lens | Engineering-reality constraint |
+|---|---|---|---|
+| Contextual interpretation and grounding | Depicted contextual, spatial and pragmatic assistance | Perception, attention and memory jointly shape interpretation | Preserve acquisition evidence separately from Brain-level interpretation; do not claim current general grounding |
+| Diagnostics and self-monitoring | Depicted system/suit diagnostics and technical analysis | Cognitive control and error monitoring inform corrective responses | Monitoring must lead to observable correction, not merely confidence labels |
+| Memory and active context | Fictional continuity is a capability aspiration, not evidence of hidden memory internals | Retrieval, working memory and attention interact | Existing retrieval exists, but the inspected reasoning path did not consume retrieved memories as premises |
+| Learning and development | Fictional iterative improvement is an aspiration, not proof of developmental internals | Learning, consolidation, interference and generalization inform evaluation | Existing evidence is bounded numeric adaptation; broader learning requires new evidence |
+| Human-machine action support | Depicted collaboration and task assistance | Goal-directed control and social coordination provide useful questions | Brain intent must remain separate from governance authorization, execution and verified outcome |
+
+These lenses influence requirements and failure scenarios, not a predetermined implementation. When they conflict, the architecture must be justified against the actual engineering objective, evidence quality, system boundaries and developmental principle—not by analogy alone.
+
 ---
 
 ## 4. Foundational cognitive responsibility architecture
