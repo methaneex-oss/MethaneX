@@ -415,4 +415,29 @@ Partial multi-event goal completion and evolution rollback/replay ordering also 
 
 **Gate A remains NOT CLEARED.** Full per-commit origin/path/hunk attribution across the 1,416 inherited commits, particularly the 1,244-commit PR #97 line, remains incomplete. Independent review is still required. No implementation baseline is selected.
 
+
+
+## 15. Risk-based Gate A closure assignment — 2026-11-04
+
+Following the Project Director's authorization, the bounded closure programme is defined in:
+
+`reviews/07_GATE_A_CLOSURE_ASSIGNMENT_2026-11-04.md`.
+
+This assignment refines the remaining historical-provenance requirement. A standalone origin/path/hunk record for every one of the 1,416 inherited commits is not an automatic Gate A prerequisite. The required standard is:
+- path-level accounting for all 165 final-tree paths;
+- deeper commit/hunk attribution for unexplained, overlapping, conflict-resolved, replaced, or high-risk changes;
+- explicit risk and decision-impact classification for every residual provenance gap;
+- no waiver of unexplained high-risk final-tree changes based only on aggregate commit/path counts.
+
+The assignment also separates the remaining work into:
+1. risk-based provenance and final-tree integrity;
+2. declaration/caller/overload/function-pointer API compatibility;
+3. continuity dispositions for all five current-main workflows;
+4. explicit remediation invariants and future regression acceptance criteria for the two confirmed candidate defects;
+5. an independent-review packet pinned to one exact PR head.
+
+The two candidate defects remain **confirmed and unfixed**. D1 is the mismatch between eligible-goal ordering and selected-intent identity in learned-strategy retrieval. D2 is the possibility of journaling NaN goal input before model validation; the consistent future contract rejects all non-finite values before event creation. No runtime changes or tests are authorized by this assignment.
+
+**Gate A remains NOT CLEARED.** The assignment does not select PR #156, waive independent review, or authorize implementation. Gate A clearance still requires evidence for every closure criterion, a genuine independent review, and the Project Director's explicit baseline decision.
+
 **End of proposed Brain Implementation Plan.**
