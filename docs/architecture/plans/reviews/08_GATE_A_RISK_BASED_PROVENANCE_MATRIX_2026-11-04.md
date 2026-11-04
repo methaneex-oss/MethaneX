@@ -234,3 +234,46 @@ The PR #97-only complement includes core Brain interfaces and implementation, me
 - Any discrepancy between this matrix and the live candidate tree must be reconciled before Gate A can be recommended for clearance.
 
 **Disposition:** Path-set accounting reproduced from the recorded evidence. High-risk semantic attribution and independent review remain open. Gate A remains NOT CLEARED.
+
+
+## 6. Targeted blob-level reconciliation of all 14 overlap paths — 2026-11-04
+
+The 14 paths identified in §4.1 were re-fetched at:
+- comparison point `af09cf28d35e4a7b75c3c019e9f97893d8e19364`;
+- candidate code-bearing parent `15d49e5fdeb5723c475922ab78fb92f97c4b3b84`.
+
+The comparison point commit is titled `revert(engineering): remove duplicate agent console implementation`.
+The table records blob identity only. A different blob proves that the final file content differs from that comparison point; it does not, by itself, explain which commit introduced each hunk or establish semantic correctness.
+
+| Overlap path | Comparison-point blob | Candidate blob | Blob-level result |
+|---|---|---|---|
+| `core/cpp/include/jarvis/core/brain.hpp` | `8268ef84e0b361ead536724ba7761904b30ee58f` | `ca718aa4603bbdd0abc7de26ed296bcf8c6562fe` | Different |
+| `core/cpp/include/jarvis/core/developmental_learning.hpp` | Absent (404 at comparison point) | `65174400d8c3ce1dea17667ac928767cf3af333a` | Added after comparison point |
+| `core/cpp/include/jarvis/core/knowledge.hpp` | `50eb1113a4569c3de05489c421d1cabb1437733d` | `ae1adcffeeb090eb102c05156388bce7c030538f` | Different |
+| `core/cpp/src/brain.cpp` | `e9f3758fcc9c0e89b7280ce376db9033d547682d` | `93a10a5021a5775a3a239037cbb0b58a1e0c67a9` | Different |
+| `core/cpp/src/brain_restored_api.cpp` | Absent (404 at comparison point) | `00d69ab2eb3811d453a643ef18dc69741109cbc8` | Added after comparison point |
+| `core/cpp/src/causal_model.cpp` | `f873d0a6e7fa0676bb88bf7a1f66436bc88a3c0d` | `8b884ed11a1a019d0e52bf7f35b0295edcc912b0` | Different |
+| `core/cpp/src/cognitive_cycle.cpp` | `3df14c552f2048b0394dc362f7ee7a654a93fb32` | `989f4d154f07b31bcdab175aefbea6edd61eb930` | Different |
+| `core/cpp/src/developmental_learning.cpp` | Absent (404 at comparison point) | `c9a34d562fa1a20641530daba81bfdc1f3621fee` | Added after comparison point |
+| `core/cpp/src/knowledge.cpp` | `25ecf822e6132f576266c1f86a964a227c7fb75f` | `c38e0909c220b450502b46fd4a145e63ab6d21a0` | Different |
+| `core/cpp/tests/CMakeLists.txt` | `dab0c52ab4dfe15e1e2cbccfa9e6c904abdf54e3` | `0251936730f82a7a8c928fa31dfe1d7effc83d91` | Different |
+| `core/cpp/tests/association_causality_phase5_suite.cpp` | `d520025258805b02c1b3fbb2dbebe32e01562fbf` | `9099323d43b5af16d09c9356a239692fab5e136a` | Different |
+| `core/cpp/tests/developmental_brain_integration_suite.cpp` | Absent (404 at comparison point) | `e6eba3db6df8da9ecfed21974936908a32ea11c5` | Added after comparison point |
+| `core/cpp/tests/evolution_brain_integration_suite.cpp` | `3164cbc19bfb056cdccfdd58f0be047226d41a86` | `d9dc62b1c6aebdb4ab38f3d64150699d96f393c4` | Different |
+| `core/cpp/tests/knowledge_memory_phase3_suite.cpp` | `f796977fd116418b3cf0a5f9c8d33ed7a48f811e` | `108e4c07259df599bb7371a2f4b3b497be97f844` | Different |
+
+### 6.1 What this establishes
+
+- All 14 recorded overlap paths were independently re-fetched at both refs where present.
+- Ten paths exist at both refs and have different blobs.
+- Four paths are absent at the comparison point and present in the candidate tree.
+- The prior path-set accounting is therefore supported by direct blob-level checks for this overlap set.
+
+### 6.2 What it does not establish
+
+- It does not attribute every changed line to a particular PR or commit.
+- It does not establish that all semantic changes in the ten differing files are safe.
+- It does not explain the full introduction history of the four absent files.
+- It does not replace targeted diff/hunk review for high-risk code, especially Brain public APIs, journal/replay, knowledge feedback, developmental learning, and integrated tests.
+
+**Updated disposition:** The 14-path overlap set now has direct comparison-point/candidate blob evidence. Semantic and commit/hunk attribution remain open for all materially changed high-risk files. Gate A remains NOT CLEARED.
