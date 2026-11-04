@@ -1,0 +1,64 @@
+name: JBP-004 Integrated Memory, Learning, Persistence, and Evolution
+
+on:
+  pull_request:
+    branches: ["feat/jarvis-affective-state"]
+    paths:
+      - ".github/workflows/jbp-004-integrated-memory-evolution.yml"
+      - "core/cpp/tests/jbp_004_integrated_memory_evolution_suite.cpp"
+      - "core/cpp/tests/CMakeLists.txt"
+      - "core/cpp/include/jarvis/core/**"
+      - "core/cpp/src/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: jbp-004-integrated-memory-evolution-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  integrated-brain-loop:
+    name: JBP-004 · cross-process cognitive integration
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout exact tested revision
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Configure native cognitive architecture
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p jbp-004-results
+          echo "tested_commit=$(git rev-parse HEAD)" | tee jbp-004-results/metadata.txt
+          echo "started_at_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)" | tee -a jbp-004-results/metadata.txt
+          cmake -S core/cpp -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON 2>&1 | tee jbp-004-results/configure.log
+
+      - name: Build integrated challenge
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmake --build build --parallel 2 --target jarvis_jbp_004_integrated_memory_evolution_suite 2>&1 | tee jbp-004-results/build.log
+
+      - name: Run training and fresh-process verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          ctest --test-dir build -R '^jarvis_jbp_004_integrated_memory_evolution_(train|verify)$' --output-on-failure --timeout 120 2>&1 | tee jbp-004-results/ctest.log
+          echo "completed_at_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)" | tee -a jbp-004-results/metadata.txt
+
+      - name: Preserve raw logs and persisted journal
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: JBP-004-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            jbp-004-results/
+            build/tests/jbp-004-integrated.bin
+            build/tests/jbp-004-integrated.bin.meta
+          if-no-files-found: warn
+          retention-days: 90
