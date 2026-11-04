@@ -54,6 +54,52 @@ int main() {
     const auto learned_negative = intent_model.select({positive, negative}, 0.0, 0.1, 1);
     assert(learned_negative.id == "negative");
 
+    // Brain must reject every non-finite goal input before journaling. Model-level
+    // rejection after append is too late: it leaves an invalid durable event.
+    const auto invalid_goal_journal =
+        std::filesystem::temp_directory_path() / "jarvis_invalid_goal_input_test.bin";
+    std::filesystem::remove(invalid_goal_journal, ec);
+    std::filesystem::remove(invalid_goal_journal.string() + ".meta", ec);
+    const double non_finite_values[] = {
+        std::numeric_limits<double>::quiet_NaN(),
+        std::numeric_limits<double>::infinity(),
+        -std::numeric_limits<double>::infinity(),
+    };
+    {
+        Brain invalid_goal_brain(invalid_goal_journal);
+        const auto events_before = invalid_goal_brain.memory().all().size();
+        for (std::size_t i = 0; i < 3; ++i) {
+            const std::string priority_id = "invalid-priority-" + std::to_string(i);
+            Goal invalid_priority{priority_id, "Reject non-finite priority",
+                                  non_finite_values[i], 0.0, 0, 0,
+                                  GoalStatus::pending, {}, {}};
+            assert(!invalid_goal_brain.create_goal(invalid_priority));
+            assert(invalid_goal_brain.goal(priority_id) == nullptr);
+            assert(invalid_goal_brain.memory().all().size() == events_before);
+
+            const std::string progress_id = "invalid-progress-" + std::to_string(i);
+            Goal invalid_progress{progress_id, "Reject non-finite progress",
+                                  0.5, non_finite_values[i], 0, 0,
+                                  GoalStatus::pending, {}, {}};
+            assert(!invalid_goal_brain.create_goal(invalid_progress));
+            assert(invalid_goal_brain.goal(progress_id) == nullptr);
+            assert(invalid_goal_brain.memory().all().size() == events_before);
+        }
+        assert(invalid_goal_brain.memory().all().empty());
+    }
+    {
+        Brain restored_invalid_goal_brain(invalid_goal_journal);
+        assert(restored_invalid_goal_brain.memory().all().empty());
+        for (std::size_t i = 0; i < 3; ++i) {
+            assert(restored_invalid_goal_brain.goal(
+                "invalid-priority-" + std::to_string(i)) == nullptr);
+            assert(restored_invalid_goal_brain.goal(
+                "invalid-progress-" + std::to_string(i)) == nullptr);
+        }
+    }
+    std::filesystem::remove(invalid_goal_journal, ec);
+    std::filesystem::remove(invalid_goal_journal.string() + ".meta", ec);
+
     const auto journal = std::filesystem::temp_directory_path() / "jarvis_goal_integration_test.bin";
     std::error_code ec;
     std::filesystem::remove(journal, ec);
