@@ -208,12 +208,12 @@ They do not inject failures inside every compensating operation of EvolutionCont
 
 At branch head 4cf017e073da980c9f77d739fde6f92ef1a2fbc1, all four GitHub Actions checks completed successfully:
 
-- Brain CI: https://github.com/methaneex-oss/MethaneX/actions/runs/41807418995
-- Native Brain Build: https://github.com/methaneex-oss/MethaneX/actions/runs/41807419089
-- Brain ThreadSanitizer: https://github.com/methaneex-oss/MethaneX/actions/runs/41807418757
-- JARVIS Brain Tests: https://github.com/methaneex-oss/MethaneX/actions/runs/41807418797
+- Brain CI: https://github.com/methaneex-oss/MethaneX/actions/runs/41808525499
+- Native Brain Build: https://github.com/methaneex-oss/MethaneX/actions/runs/41808525486
+- Brain ThreadSanitizer: https://github.com/methaneex-oss/MethaneX/actions/runs/41808525492
+- JARVIS Brain Tests: https://github.com/methaneex-oss/MethaneX/actions/runs/41808525557
 
-Native and sanitizer CTest runs each report 73/73 tests passed. ThreadSanitizer build/test passed. The goal and evolution failure-injection tests execute within jarvis_goals_architecture_suite and jarvis_evolution_brain_integration_suite.
+Native, ASan/UBSan and ThreadSanitizer CTest runs each report 73/73 tests passed. ThreadSanitizer build/test passed. The goal and evolution failure-injection and crash-window replay tests execute within jarvis_goals_architecture_suite and jarvis_evolution_brain_integration_suite; both suites passed at this exact head.
 
 These are candidate-donor branch results. They do not establish ABI compatibility, integrated Brain capability acceptance, the five long-running workflow contracts, or approval of PR #156 as the baseline.
 
