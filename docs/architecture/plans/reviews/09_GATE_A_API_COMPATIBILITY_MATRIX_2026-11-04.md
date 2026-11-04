@@ -149,3 +149,110 @@ references and binary interfaces.
 evidence for four candidate-only APIs and bounded no-hit evidence for three
 accessors. It narrows, but does not close, the compatibility workstream.
 Gate A remains NOT CLEARED.
+
+
+## 7. Corrected public declaration and full C++ call-site inventory — 2026-11-04
+
+The earlier statement that the candidate had seven candidate-only APIs is superseded. A direct public-header comparison found a broader public surface. This section is authoritative for the declaration-level comparison.
+
+### 7.1 Exact header/build evidence
+
+| Item | Current main | Candidate code-bearing parent |
+|---|---|---|
+| Brain header | core/cpp/include/jarvis/core/brain.hpp, blob 8268ef84e0b361ead536724ba7761904b30ee58f | same path, blob ca718aa4603bbdd0abc7de26ed296bcf8c6562fe |
+| CMake source list | core/cpp/CMakeLists.txt, blob c51816888e1bddb7bc00c59e72529524e27a0717 | same path, blob bc264ce7b4ae489404ca03ea6d9676d0330a6a56 |
+| Brain restored API source | brain_restored_api.cpp exists, blob 618deb6976eed951eae02b7f0da741e6d730bb0c | brain_restored_api.cpp, blob 00d69ab2eb3811d453a643ef18dc69741109cbc8 |
+| CMake registration | Does not compile brain_restored_api.cpp | Compiles brain_restored_api.cpp and the new Brain API/support translation units |
+
+This distinction matters: some functions found in current-main brain_restored_api.cpp are orphan source definitions, not part of the current-main compiled public Brain API. A source-body match in that file must not be described as compiled API compatibility.
+
+### 7.2 Candidate-only public Brain method names
+
+The candidate header declares the following 26 public method names that are absent from the current-main public Brain header:
+
+1. record_knowledge_source_feedback
+2. learn_from_prediction
+3. predict_with_context
+4. resolve_prediction_feedback
+5. assimilate_goal_outcome
+6. contextual_associations
+7. concept_candidates
+8. contextual_concepts
+9. generalized_concepts
+10. choose_with_affect
+11. choose_with_developmental_learning
+12. plan_with_affect
+13. knowledge_assessment
+14. developmental_associations
+15. developmental_strategies
+16. developmental_best_strategy
+17. developmental_best_related_strategy
+18. developmental_related_strategies
+19. developmental_feature_strategy_estimate
+20. attention_policy
+21. affective_state
+22. affective_appraisal
+23. affective_calibration
+24. affective_learning_updates
+25. record_evolution_evaluation
+26. import_legacy_memory_event
+
+Additional overloads/signature changes:
+- resolve_prediction adds a sequence-based overload alongside the existing key-based overload;
+- resolve_prediction_feedback has key-based and sequence-based overloads;
+- choose_with_developmental_learning has two overloads;
+- Brain constructor adds trusted-knowledge evaluator and feedback/provenance verifier parameters (with defaults);
+- execute_action adds an observe_consequence callback before the authorization argument; this changes the positional function type and can break callers that pass authorization as the fifth argument;
+- register_evolution_parameter changes return type from void on current main to bool in the candidate;
+- several methods previously defined inline in the current-main header are out-of-line in the candidate, so source-call compatibility does not establish ABI compatibility.
+
+### 7.3 Candidate-only API call-site inventory
+
+A repository-wide exact-identifier scan of every .cpp and .hpp under core/cpp was executed on candidate-derived branch head b9cde00f63904505b1d56f9101b9895a07d6cb8d. The temporary scan workflow was removed after the run. The successful GitHub Actions log is run 41806123218. The earlier 24-method scan is run 41805564990.
+
+The full file/count output is in those run logs. The following condensed index identifies the principal declaration/definition/test call sites:
+
+| Candidate-only API | Principal definitions and callers found |
+|---|---|
+| record_knowledge_source_feedback | brain_restored_api.cpp; knowledge_source_feedback_suite.cpp |
+| learn_from_prediction | brain.cpp; association_causality_phase5_suite.cpp; evolution_brain_integration_suite.cpp; learning_adaptation_phase8_suite.cpp; memory_learning_evolution_persistence_suite.cpp; prediction_feedback_phase10_suite.cpp |
+| predict_with_context | brain_prediction_context.cpp; association_causality_phase5_suite.cpp; prediction_feedback_phase10_suite.cpp |
+| resolve_prediction_feedback | brain.cpp; brain_action_execution.cpp; brain_restored_api.cpp; cognitive_cycle.cpp; affective_evidence_suite.cpp; cognitive_cycle_suite.cpp; prediction_feedback_phase10_suite.cpp |
+| assimilate_goal_outcome | brain_restored_api.cpp; cognitive_cycle.cpp; cognitive_cycle_suite.cpp; goal_directed_cognition_suite.cpp |
+| contextual_associations | brain_restored_api.cpp; association_causality_phase5_suite.cpp |
+| concept_candidates | association_model.hpp/.cpp; brain_prediction_context.cpp; brain_restored_api.cpp; association_causality_phase5_suite.cpp |
+| contextual_concepts | brain_restored_api.cpp; association_causality_phase5_suite.cpp |
+| generalized_concepts | association_model.hpp/.cpp; brain_prediction_context.cpp; brain_restored_api.cpp; prediction_feedback_phase10_suite.cpp |
+| choose_with_affect | brain_restored_api.cpp; affective_brain_decision_suite.cpp; affective_decision_learning_suite.cpp; affective_evidence_suite.cpp; brain_deep_suite.cpp; developmental_brain_integration_suite.cpp |
+| choose_with_developmental_learning | brain_affective_planning.cpp; developmental_brain_integration_suite.cpp; memory_learning_evolution_persistence_suite.cpp |
+| plan_with_affect | brain_affective_planning.cpp; affective_planning_suite.cpp |
+| knowledge_assessment | developmental_brain_integration_suite.cpp; knowledge_source_feedback_suite.cpp |
+| developmental_associations | brain_restored_api.cpp; cognitive_runtime_suite.cpp; developmental_brain_integration_suite.cpp; prediction_feedback_phase10_suite.cpp |
+| developmental_strategies | brain_restored_api.cpp; cognitive_cycle.cpp; developmental_world.cpp; action_execution_phase7_suite.cpp; brain_action_consequence_integration_suite.cpp; brain_deep_suite.cpp; developmental_brain_integration_suite.cpp; developmental_training_environment_suite.cpp; developmental_world_integration_suite.cpp; DLT-001/002/003 suites; evolution and memory-persistence suites; prediction_feedback_phase10_suite.cpp |
+| developmental_best_strategy | brain_restored_api.cpp; action_execution_phase7_suite.cpp; brain_action_consequence_integration_suite.cpp; brain_deep_suite.cpp; cognitive_runtime_learning_integration_suite.cpp; developmental Brain/training/world suites; DLT-001 trial; prediction_feedback_phase10_suite.cpp |
+| developmental_best_related_strategy | brain_restored_api.cpp; brain_deep_suite.cpp |
+| developmental_related_strategies | brain_restored_api.cpp; cognitive_cycle.cpp; brain_deep_suite.cpp; DLT-002 long-run suite |
+| developmental_feature_strategy_estimate | brain_restored_api.cpp; cognitive_cycle.cpp; DLT-004 suite |
+| attention_policy | brain_restored_api.cpp; affective_decision_learning_suite.cpp; attention_learning_brain_suite.cpp; brain_action_consequence_integration_suite.cpp; brain_deep_suite.cpp; prediction_feedback_phase10_suite.cpp |
+| affective_state | affective_learning.hpp; brain.hpp; cognitive_cycle.hpp; cognitive_workspace.hpp; affective_state.cpp; brain_restored_api.cpp; cognitive_cycle.cpp; cognitive_runtime.cpp; affective decision/planning/evidence suites |
+| affective_appraisal | brain.hpp; cognitive_cycle.hpp; cognitive_workspace.hpp; brain_restored_api.cpp; cognitive_cycle.cpp; cognitive_runtime.cpp; action-execution, affective-decision/evidence and DLT-002 persistence suites |
+| affective_calibration | brain.hpp; affective_decision_learning_suite.cpp; brain_deep_suite.cpp; DLT-002 persistence suite |
+| affective_learning_updates | brain.hpp; brain_restored_api.cpp; action-execution, affective-decision, affective-goal, Brain-action-consequence, Brain-deep, cognitive-runtime-learning, developmental-brain, DLT-002 and DLT-004 suites |
+| record_evolution_evaluation | brain_restored_api.cpp; evolution_brain_integration_suite.cpp; memory_learning_evolution_persistence_suite.cpp |
+| import_legacy_memory_event | brain_restored_api.cpp; developmental_brain_integration_suite.cpp; evolution_brain_integration_suite.cpp |
+
+The scan also covered all 24 previously identified common-name/body-difference identifiers. It confirms repository call sites by exact identifier, but does not discover external downstream consumers that are not in this repository.
+
+### 7.4 Signature-sensitive call sites
+
+- register_evolution_parameter occurs in brain_restored_api.cpp, brain_10_suite.cpp, brain_contract_suite.cpp, evolution_brain_integration_suite.cpp, learning_adaptation_phase8_suite.cpp and memory_learning_evolution_persistence_suite.cpp. Direct call sites that ignore the bool remain source-call compatible; function/member-pointer and ABI compatibility are not proven.
+- execute_action occurs in brain_action_execution.cpp, cognitive_runtime.cpp, action-execution, affective-decision, Brain-action-consequence, Brain-deep, cognitive-cycle, developmental-brain, DLT-002/003/004 and memory-persistence suites. The new observe_consequence positional parameter must be reviewed for any external caller that supplies ActionAuthorizationContext positionally.
+- resolve_prediction(sequence) occurs in cognitive_cycle.hpp, brain.cpp, brain_restored_api.cpp, cognitive_cycle.cpp and the attention-learning, Brain-10, Brain-contract, Brain-deep, developmental-brain and prediction-feedback suites.
+
+### 7.5 API disposition
+
+The static declaration/overload/call-site inventory within core/cpp is now complete at the candidate tree snapshot. The previous seven-API count and the prior source-only 24-body comparison are not sufficient descriptions of the public API delta and are superseded by this section.
+
+Candidate donor compilation/linkage is separately verified by the PR #176 CI runs on the corrected donor branch. This does not prove ABI compatibility with external consumers, function-pointer compatibility, or downstream binaries. A clean full integration build/link and external-consumer recompile remain mandatory before any affected port is accepted.
+
+**Disposition:** static API inventory CLOSED within the repository; external ABI/downstream compatibility remains an explicit later verification gate. Gate A remains NOT CLEARED until the other closure obligations and independent re-check are complete.
