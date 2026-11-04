@@ -255,3 +255,39 @@ Give the user a short status update in this format:
 - **Not authorized:** Runtime implementation, builds/tests, history rewrites, merge or deployment.
 
 If repository state contradicts this document, trust the verified live repository state, explain the discrepancy, and update this handoff through a documented commit. Never silently assume this snapshot is still current.
+
+
+## 10. Final Builder-side Gate A recommendation — 2026-11-04
+
+Read `docs/architecture/plans/reviews/13_GATE_A_FINAL_BASELINE_RECOMMENDATION_2026-11-04.md`
+for the final evidence-based baseline recommendation.
+
+- **Recommended integration starting point:** accepted PR #174 HEAD
+  `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`.
+- **Candidate PR #156:** do not merge/cherry-pick/adopt wholesale. Treat code-bearing
+  parent `15d49e5fdeb5723c475922ab78fb92f97c4b3b84` as a source donor for
+  selective, reviewed ports.
+- **Why:** candidate is substantially divergent, predates the accepted spec,
+  contains confirmed D1/D2 defects, lacks current-main validation workflows,
+  and does not meet all 34 accepted Brain foundation scenarios. It nevertheless
+  contains substantial reusable mechanisms and should not be discarded.
+- **Mandatory carry-forward:** preserve current validation workflow semantics;
+  fix D1/D2 before accepting affected capabilities; prove goal-completion and
+  evolution rollback failure/replay boundaries; map each port to BM-01–BM-12
+  and the relevant acceptance scenarios.
+- **Status:** Builder technical recommendation is complete. Formal Gate A is
+  still NOT CLEARED because no independent PR #175 review has been submitted
+  and no Project Director baseline decision has been recorded.
+- **Authority:** no runtime changes, builds, tests, workflow executions, merge,
+  rebase, cherry-pick, history rewrite or deployment were performed or
+  authorized by this audit. A separate explicit implementation authorization
+  remains required.
+
+### Recovery response update
+
+- **Phase:** Brain Implementation Planning — final Builder-side Gate A recommendation recorded; formal Gate A approval pending.
+- **Last technical recommendation:** accepted PR #174 HEAD as integration base; PR #156 as selective source donor only.
+- **Current governance blocker:** independent review and Project Director baseline decision.
+- **Next action:** review the final recommendation and decide whether to authorize the selective-port implementation plan.
+- **Not authorized:** runtime implementation, builds/tests, workflow runs, merge/rebase/cherry-pick or deployment.
+
