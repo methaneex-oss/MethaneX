@@ -43,6 +43,7 @@ The review is not an implementation authorization and does not ask the reviewer 
 | `13_GATE_A_FINAL_BASELINE_RECOMMENDATION_2026-11-04.md` | Final Builder-side baseline recommendation | Strategy recommendation only; not Gate A clearance |
 | `14_GATE_A_INDEPENDENT_TECHNICAL_REVIEW_2026-11-04.md` | Independent documentary/technical review | NOT CLEARED; not a submitted GitHub review |
 | `15_GATE_A_BUILDER_REVIEWER_RECONCILIATION_2026-11-04.md` | Reconciles Reports 13 and 14 and lists exact remaining closure items | NOT CLEARED; documentation/static closure only |
+| `16_GATE_A_CLOSURE_EVIDENCE_UPDATE_2026-11-04.md` | Corrected tree provenance, public API/call-site inventory, five workflow specifications, D1/D2 correction PR, failure/replay evidence and remaining independent-review boundary | Latest consolidated Builder evidence; Gate A NOT CLEARED |
 | Accepted PR #174 specification | Governing Brain mechanism requirements | Accepted; use exact PR #174 HEAD above |
 
 All artifacts are under `docs/architecture/plans/reviews/` on the PR #175 planning branch.
