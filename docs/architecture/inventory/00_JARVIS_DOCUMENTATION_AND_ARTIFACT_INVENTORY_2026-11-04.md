@@ -350,3 +350,52 @@ The additional PR #96/#97 historical branches, nine dated planning/specification
 Revised estimate for Phase 1 completion: **4–6 focused working hours**. This includes a bounded inventory of relevant documentation, branches and PRs, authority verification, link/dependency checks, and a defensible archive/disposition register. It does not mean exhaustively reviewing all 1,244 commits or auditing all 159 changed files; that would be a separate source-baseline investigation.
 
 The Phase 1 estimate remains provisional until the remaining branch and artifact checks are complete.
+
+
+## 18. Main documentation directory and branch inventory evidence
+
+A direct directory listing was obtained for `docs/` at the inspected main baseline `1273ddbcd0087d189e01388ded2d362fb1e058d2`.
+
+The returned `docs/` entries were exactly:
+
+- `docs/ARCHITECTURE.md`
+- `docs/JARVIS_BRAIN_MASTER_BLUEPRINT.md`
+- `docs/JARVIS_PHASE_2_COMPLETION.md`
+
+No `docs/archive/` directory appeared in that main-branch directory listing. This establishes that the three files above remain in the ordinary docs root at this snapshot; it does not establish that no archive exists elsewhere in the repository or on another branch.
+
+A branch search for `jarvis` returned 33 matching branch names. In addition to the current planning branches, it exposed a family of historical affective planning/implementation branches, including:
+
+- `docs/jarvis-affective-plan`
+- `feat/jarvis-affective-plan`
+- `feat/jarvis-affective-state`
+- `feat/jarvis-affective-state-impl`
+- `feat/jarvis-affective-state-plan` and numbered plan variants through `plan20`, plus `plan-final`
+- `feat/jarvis-affective-state-work`
+- `feat/jarvis-affective-impl`
+- `feat/jarvis-cognitive-action-loop`
+- `feat/jarvis-learning-mechanisms-probe`
+- `feat/jarvis-build-agents-clean`
+
+This branch list is a discovery result, not a complete branch-to-PR disposition. Mapping each relevant historical branch to its PR, unique artifacts, overlap, and preservation status remains open work. Do not delete or rewrite branches as an archive shortcut.
+
+## 19. Chronological correction to PR #174 authority status
+
+The repository discussion confirms that PR #174 was formally accepted by the Project Director in comment [#6604790481](https://github.com/methaneex-oss/MethaneX/pull/174#issuecomment-6604790481) for exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, after F-01 clearance.
+
+A later independent re-review was subsequently supplied by the Project Director in this conversation and identifies F-02 and F-03 as unresolved. That later review is newer evidence and reopens the specification for correction before it can be treated as ready for the next gate. PR #175's wording that PR #174 was accepted reflects the earlier acceptance event; it is now stale for the current decision state, rather than evidence that the later review did not occur.
+
+No submitted GitHub review record for PR #174 was returned by the review-list endpoint at this inspection. The later shared-conversation report is not yet mirrored as a repository review artifact. It should be linked or recorded in the PR discussion only through a separate authorized documentation update, with the exact report and revision identified.
+
+## 20. Expanded historical-review status
+
+GitHub review-submission lists also returned zero submitted reviews for PRs #96, #97, #148, #156 and #164 at the time of inspection. Their open/draft PR status and historical CI claims must therefore remain distinct from independent approval.
+
+The following remain open preservation/reconciliation tasks:
+- map the 33 JARVIS-related branches to their PRs and current relevance;
+- compare the duplicated dated plans/specifications across PR #96 and PR #97;
+- identify which documents were changed or superseded across PR #97, PR #148, PR #156 and PR #170;
+- verify the README and cross-document links for every candidate authoritative document;
+- establish whether each October artifact should remain solely in its historical branch, be represented in a curated archive index, or be formally superseded by a newer document.
+
+No files or branches were moved, deleted, renamed, merged, or rewritten by this inventory update.
