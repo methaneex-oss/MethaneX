@@ -304,9 +304,9 @@ The net comparison from `af09cf28` to current `main` reports six changed files: 
 
 The candidate `brain_restored_api.cpp` blob is `00d69ab2eb3811d453a643ef18dc69741109cbc8`; current-main blob is `618deb6976eed951eae02b7f0da741e6d730bb0c`.
 
-A static function-name inventory found all 69 Brain API function names present in current main in the candidate file, plus additional candidate APIs including prediction feedback, source feedback, related-strategy retrieval and evolution evaluation recording.
+A `Brain::` definition inventory found 69 definition occurrences across 64 unique method names in current main, and 77 occurrences across 71 unique names in the candidate. Every one of the 64 current-main unique names is present in the candidate; the candidate has seven additional unique APIs including prediction feedback, source feedback, related-strategy retrieval and evolution evaluation recording.
 
-A normalized function-body comparison could align 67 of the 69 definitions: 43 bodies were identical after whitespace normalization and **24 bodies differed**. The two remaining definitions (`beliefs` and `register_evolution_parameter`) were present by name in both files but could not be reliably paired by the simple signature extractor because of the file's compact formatting. The 24 differing definitions include prediction, prediction resolution, goal outcome assimilation, action selection, reflection, goal lifecycle, capability/resilience state, and evolution operations.
+The initial normalized signature extractor aligned 67 of the 69 current-main definition occurrences: 43 bodies were identical after whitespace normalization and **24 bodies differed**. It left two definitions (`beliefs` and `register_evolution_parameter`) unmatched because of compact formatting/signature differences. The 2026-11-04 semantic addendum manually resolved them: `beliefs()` is identical; `register_evolution_parameter()` has a candidate `bool` return type versus current-main `void` and its body is one of the differing behaviors. The addendum classifies the 24 common-name body differences, records the seven candidate-only unique APIs, and notes that overload-level caller/ABI compatibility remains unverified.
 
 Representative body differences were inspected directly:
 
