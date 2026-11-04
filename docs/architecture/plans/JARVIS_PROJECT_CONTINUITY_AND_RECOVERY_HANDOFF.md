@@ -186,6 +186,37 @@ These are audit priorities, not a substitute for tracing all 12 mechanisms.
 - Gate B 12-mechanism traceability audit: https://github.com/methaneex-oss/MethaneX/blob/plan/brain-implementation-roadmap-20261103/docs/architecture/plans/reviews/05_GATE_B_MECHANISM_TRACEABILITY_AUDIT_2026-11-03.md
 - Independent review assignment: https://github.com/methaneex-oss/MethaneX/pull/175#issuecomment-6615019538
 
+
+## 3C. Risk-based Gate A closure assignment — 2026-11-04
+
+The Project Director authorized the focused closure assignment. Read:
+
+`docs/architecture/plans/reviews/07_GATE_A_CLOSURE_ASSIGNMENT_2026-11-04.md`.
+
+The assignment replaces an unbounded requirement to write a per-commit hunk record for all 1,416 inherited commits with a risk-based standard:
+- account for all 165 final-tree paths;
+- deepen attribution for unexplained, overlapping, conflict-resolved, replaced, or high-risk paths;
+- explicitly classify residual gaps by risk and baseline-decision impact;
+- do not waive unexplained high-risk changes based on aggregate counts.
+
+Five closure workstreams are now defined: provenance/final-tree integrity; API declaration and caller compatibility; continuity of all five current-main workflows; remediation specifications for the two confirmed candidate defects; and an independent-review packet.
+
+The two defects remain **confirmed, unfixed, and outside current runtime authorization**:
+- learned-strategy retrieval can use an eligible goal different from the selected active intent;
+- NaN goal values can reach the journal before model rejection; future remediation must reject all non-finite inputs before event creation.
+
+### Current Gate A execution rules
+
+- Work only on documentation and static inspection under the current authorization.
+- Create the separate evidence artifacts specified in assignment 07. Do not fill gaps with assumptions.
+- Verify the live PR head before each repository write and before assembling the review packet.
+- Do not request a GitHub reviewer until an actual username/team with repository access is supplied or otherwise verified.
+- Do not claim a formal independent review based on the user's supplied report; it was not a submitted GitHub review.
+- Gate A remains NOT CLEARED until all technical closure criteria, actual independent review, and the Project Director's baseline decision are satisfied.
+- Runtime changes, builds, tests, history operations, baseline selection, and implementation remain unauthorized.
+
+The next builder action is to produce the provenance, API compatibility, workflow continuity, and defect-disposition evidence artifacts from exact repository sources, then assemble the review packet. Avoid repeating already completed inventories or broad historical reconstruction where it cannot change the decision.
+
 ## 9. Startup instructions for a new chat
 
 When continuing this project:
