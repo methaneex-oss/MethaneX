@@ -106,10 +106,11 @@ int main() {
     // the separate completion event cannot be appended. This is an explicitly
     // partial transition: the API reports failure and replay must preserve the
     // pre-completion goal state rather than inventing completion.
+    std::error_code partial_completion_ec;
     const auto partial_completion_journal =
         std::filesystem::temp_directory_path() / "jarvis_partial_goal_completion_test.bin";
-    std::filesystem::remove(partial_completion_journal, ec);
-    std::filesystem::remove(partial_completion_journal.string() + ".meta", ec);
+    std::filesystem::remove(partial_completion_journal, partial_completion_ec);
+    std::filesystem::remove(partial_completion_journal.string() + ".meta", partial_completion_ec);
     const auto max_sequence = std::numeric_limits<std::uint64_t>::max();
     {
         Memory seed(256, partial_completion_journal);
@@ -148,8 +149,8 @@ int main() {
         assert(restored_goal != nullptr && restored_goal->status == GoalStatus::active);
         assert(restored_goal->progress == 0.25);
     }
-    std::filesystem::remove(partial_completion_journal, ec);
-    std::filesystem::remove(partial_completion_journal.string() + ".meta", ec);
+    std::filesystem::remove(partial_completion_journal, partial_completion_ec);
+    std::filesystem::remove(partial_completion_journal.string() + ".meta", partial_completion_ec);
 
     const auto journal = std::filesystem::temp_directory_path() / "jarvis_goal_integration_test.bin";
     std::error_code ec;
