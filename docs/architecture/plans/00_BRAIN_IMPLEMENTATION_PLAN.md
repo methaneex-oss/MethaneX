@@ -398,4 +398,21 @@ The candidate's reasoning path is described precisely: valid reasoning conclusio
 
 This combined audit does not select an implementation baseline or authorize runtime changes, builds, tests, benchmarks, technology choices, merges, rebases, cherry-picks, history rewrites or deployment. Gate A closure and independent review remain required before a baseline decision.
 
+
+## 14. Gate A semantic reconciliation update — 2026-11-04
+
+The targeted semantic reconciliation is recorded separately in:
+
+`reviews/06_GATE_A_SEMANTIC_RECONCILIATION_ADDENDUM_2026-11-04.md`.
+
+The addendum classifies all 24 common Brain API body differences, confirms the earlier parser-unmatched `beliefs()` definition is identical, records the bool-versus-void return-type change for `register_evolution_parameter()`, and identifies seven candidate-only APIs. It reviews the divergent PR #151/#155 and PR #150/#156 integration paths and all five current-main workflow files. All 35 test target names referenced by the current-main learning-mechanisms workflow are present in the candidate CMake registry.
+
+Two candidate correctness risks require attention before a baseline is selected:
+1. `Brain::choose` and `choose_with_affect` key learned-strategy retrieval from `eligible.front().id`, although eligible goals include pending goals and the selected intent may be a different active goal.
+2. `Brain::create_goal` does not reject non-finite priority/progress before journaling; `GoalModel::create` rejects such values afterward.
+
+Partial multi-event goal completion and evolution rollback/replay ordering also require failure-injection evidence. These are recorded as review findings, not silently fixed.
+
+**Gate A remains NOT CLEARED.** Full per-commit origin/path/hunk attribution across the 1,416 inherited commits, particularly the 1,244-commit PR #97 line, remains incomplete. Independent review is still required. No implementation baseline is selected.
+
 **End of proposed Brain Implementation Plan.**
