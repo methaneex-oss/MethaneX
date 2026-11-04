@@ -81,3 +81,71 @@ No ABI/build compatibility claim is made without authorized compile/link evidenc
 - [ ] Record unresolved build/ABI questions for a later authorized verification gate.
 
 **Disposition:** Body-level semantic reconciliation is useful but does not prove caller/API compatibility. Gate A remains NOT CLEARED pending completion of the declaration/caller inventory and independent review.
+
+
+## 6. Targeted declaration and caller inspection — 2026-11-04
+
+The following checks were performed against the exact candidate code-bearing parent
+`15d49e5fdeb5723c475922ab78fb92f97c4b3b84` and current `main`.
+
+### 6.1 Re-fetched declaration and implementation evidence
+
+| Item | Candidate evidence | Current-main evidence | Finding |
+|---|---|---|---|
+| `brain.hpp` | blob `ca718aa4603bbdd0abc7de26ed296bcf8c6562fe` | blob `8268ef84e0b361ead536724ba7761904b30ee58f` | Candidate exposes additional feedback, developmental-strategy, evolution-evaluation, and legacy-import interfaces; the candidate-only list is not merely inferred from implementation symbols. |
+| `brain_restored_api.cpp` | blob `00d69ab2eb3811d453a643ef18dc69741109cbc8` | blob `618deb6976eed951eae02b7f0da741e6d730bb0c` | Candidate definitions were re-fetched and the seven candidate-only API names were confirmed in the implementation. |
+| `register_evolution_parameter` | Header declares `bool`; candidate implementation/test contract uses a result | Header and implementation declare/define `void` | This is a real source-level signature change, not only a body difference. |
+
+### 6.2 Candidate-only API call-site evidence
+
+The following candidate test files were fetched directly from the pinned candidate parent:
+
+| API | Candidate test evidence | Interpretation |
+|---|---|---|
+| `record_knowledge_source_feedback` | `knowledge_source_feedback_suite.cpp`, blob `66a855dfe2aec24cdc173a1cedafbdbefeb811c3`; 18 textual occurrences | The API is exercised by a dedicated test suite, including positive and negative assertions and restored-instance cases. This is static test-source evidence, not a test-pass claim. |
+| `resolve_prediction_feedback` | `prediction_feedback_phase10_suite.cpp`, blob `973350623e52bd9609ebaf1e01082ee52aeb480b`; four occurrences | The sequence-based overload is exercised in the fetched suite. The key-based overload's complete caller inventory remains open. |
+| `import_legacy_memory_event` | `evolution_brain_integration_suite.cpp`, blob `d9dc62b1c6aebdb4ab38f3d64150699d96f393c4`; two occurrences. `developmental_brain_integration_suite.cpp`, blob `e6eba3db6df8da9ecfed21974936908a32ea11c5`; ten occurrences | The import API is used in candidate integration-test source. Its trust boundary and replay behavior still require semantic review; call-site presence alone does not establish safety. |
+| `record_evolution_evaluation` | `evolution_brain_integration_suite.cpp`, blob `d9dc62b1c6aebdb4ab38f3d64150699d96f393c4`; eleven occurrences | The API has candidate integration-test coverage in source, including accepted and rejected evaluation paths. No execution/pass claim is made. |
+| `developmental_best_related_strategy` | No occurrence in the seven targeted candidate test files inspected for this checkpoint | No caller was found in this bounded sample. This is not proof that the API is unreachable or unused across the entire candidate tree. |
+| `developmental_related_strategies` | No occurrence in the seven targeted candidate test files inspected for this checkpoint | Same limitation: repository-wide candidate call-site inventory remains open. |
+| `developmental_feature_strategy_estimate` | No occurrence in the seven targeted candidate test files inspected for this checkpoint | Same limitation: repository-wide candidate call-site inventory remains open. |
+
+The seven targeted test files were: `knowledge_source_feedback_suite.cpp`,
+`prediction_feedback_phase10_suite.cpp`, `evolution_brain_integration_suite.cpp`,
+`developmental_brain_integration_suite.cpp`, `developmental_learning_suite.cpp`,
+`judgment_intent_strategy_phase6_suite.cpp`, and
+`developmental_training_environment_suite.cpp`. The candidate test CMake file
+(blob `0251936730f82a7a8c928fa31dfe1d7effc83d91`) contains 73 C++ source entries.
+Only the named subset was inspected for these API call-site counts.
+
+### 6.3 Return-type compatibility evidence
+
+Current-main code search returned four direct caller locations for
+`register_evolution_parameter`: `brain_contract.cpp`,
+`evolution_brain_integration_suite.cpp`, `brain_10_suite.cpp`, and
+`brain_deep_suite.cpp`. The returned call expressions are statement-form calls
+that ignore the `void` result. The candidate's evolution integration test uses
+boolean assertions against the candidate return value.
+
+This establishes that the inspected current-main direct callers do not consume a
+return value. It does **not** establish complete compatibility: indirect uses,
+function/member pointers, downstream consumers, and ABI-sensitive boundaries
+have not been exhaustively enumerated. A call expression that discards a bool
+can remain source-usable, but the changed function type can still affect typed
+references and binary interfaces.
+
+### 6.4 Remaining API closure work
+
+- The complete candidate-tree caller inventory for the three developmental
+  strategy accessors is still open.
+- The complete declaration/overload/caller inventory for all 24 body-different
+  methods is still open.
+- Function-pointer/member-pointer, callback, template, and type-erased uses have
+  not been exhaustively ruled out.
+- No compilation, linking, ABI inspection, or runtime tests were performed or
+  authorized.
+
+**Updated disposition:** This checkpoint adds direct candidate test-source
+evidence for four candidate-only APIs and bounded no-hit evidence for three
+accessors. It narrows, but does not close, the compatibility workstream.
+Gate A remains NOT CLEARED.
