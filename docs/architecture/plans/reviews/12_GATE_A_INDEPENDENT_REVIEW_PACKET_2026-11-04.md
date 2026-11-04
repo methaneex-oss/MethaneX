@@ -3,7 +3,9 @@
 **Prepared:** 2026-11-04  
 **Review target PR:** #175 — https://github.com/methaneex-oss/MethaneX/pull/175  
 **Review branch:** `plan/brain-implementation-roadmap-20261103`  
-**Latest documentation commit at packet preparation:** `e40f2f221875455ec21125eaad80979f0da45b2f`  
+**Historical packet-preparation commit:** `e40f2f221875455ec21125eaad80979f0da45b2f` (not the current PR head).  
+**Independent review snapshot:** Report 14 inspected PR head `55092a48dc7c0bc2f4deee1a9a994c8db30b7de4`; Report 14 was committed as `c873e31d50808f4adc43daa09a25bff99f1b9443`.  
+**Subsequent reconciliation:** Report 15 records the Builder/Reviewer reconciliation; always read live PR metadata for the current head rather than treating any packet pin as current.
 **Candidate code comparison baseline:** PR #175 source reconciliation pinned at `b4ffa1ea27dadd02cbe8f9246bd96fecc26c450c`; candidate source blob identities are recorded in the semantic addendum and matrices.  
 **Governing specification:** PR #174 accepted HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`  
 **Review state:** Packet assembled; independent reviewer identity/request/submission not established  
@@ -38,6 +40,9 @@ The review is not an implementation authorization and does not ask the reviewer 
 | `10_GATE_A_WORKFLOW_CONTINUITY_MATRIX_2026-11-04.md` | Five current-main workflow dispositions | Static comparison; no workflow execution |
 | `11_GATE_A_CANDIDATE_DEFECT_DISPOSITION_2026-11-04.md` | Two confirmed defects and future acceptance criteria | Confirmed, unfixed, runtime work unauthorized |
 | `05_GATE_B_MECHANISM_TRACEABILITY_AUDIT_2026-11-03.md` | Candidate-to-spec traceability for BM-01 through BM-12 | Static traceability complete; capability acceptance not passed |
+| `13_GATE_A_FINAL_BASELINE_RECOMMENDATION_2026-11-04.md` | Final Builder-side baseline recommendation | Strategy recommendation only; not Gate A clearance |
+| `14_GATE_A_INDEPENDENT_TECHNICAL_REVIEW_2026-11-04.md` | Independent documentary/technical review | NOT CLEARED; not a submitted GitHub review |
+| `15_GATE_A_BUILDER_REVIEWER_RECONCILIATION_2026-11-04.md` | Reconciles Reports 13 and 14 and lists exact remaining closure items | NOT CLEARED; documentation/static closure only |
 | Accepted PR #174 specification | Governing Brain mechanism requirements | Accepted; use exact PR #174 HEAD above |
 
 All artifacts are under `docs/architecture/plans/reviews/` on the PR #175 planning branch.
@@ -86,14 +91,16 @@ All artifacts are under `docs/architecture/plans/reviews/` on the PR #175 planni
 - Do not infer test/build success from CMake registration or workflow definitions.
 - Do not claim an independent GitHub review unless it is actually submitted from the reviewer's account.
 
-## 5. Known limits at packet preparation
+## 5. Known limits and snapshot interpretation
+
+This packet is a historical review guide, not a live manifest of the PR head. Report 14 and Report 15 supersede its earlier evidence index where they provide newer findings. Re-check PR metadata and file blobs before any subsequent review.
 
 - The prior local clone attempt failed DNS resolution; no local history was obtained.
 - The GitHub connector did not expose a complete paginated commit/file-patch history for all 1,416 commits.
 - The 24 API body differences were classified in the addendum, but not every declaration/caller was independently inventoried in that source report.
 - No build, runtime test, benchmark, sanitizer, or workflow execution was performed.
 - The two candidate defects are confirmed and unfixed.
-- The supplied independent technical review was a user-provided report, not a submitted GitHub review.
+- Report 14 is an independent technical review document, but it is not a submitted GitHub review.
 - No reviewer username/team has been supplied or established from repository metadata.
 
 ## 6. Required verdict format
