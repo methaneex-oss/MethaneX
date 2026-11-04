@@ -759,3 +759,21 @@ No path in the PR #97 net diff disappears from the final candidate-base net diff
 - `docs/DEVELOPMENTAL_BRAIN_PLAN.md`
 
 The remaining 145 paths are present in PR #97's net diff and are not changed again in the 172-commit post-PR #97 segment. This is a path-set statement, not a claim that their behavior is correct or accepted.
+
+
+## 8. Exact tree-origin correction — 2026-11-04
+
+The initial 145 / 14 / 6 path-origin partition in this historical report was superseded by the exact three-tree verification in Report 08 §7 and Report 16.
+
+Exact trees compared:
+- PR #97 base: 4ba84b8b5ccf0e41530c46fdb8101551254ba864
+- PR #97 head: c1da222e6c94aeb3f2ad000392c21fe4fc81ab25
+- Candidate code-bearing parent: 15d49e5fdeb5723c475922ab78fb92f97c4b3b84
+
+Corrected 165-path classification:
+- 143 PR #97-only unchanged after PR #97;
+- 16 changed in both PR #97 and post-PR #97;
+- 2 existing paths modified only after PR #97;
+- 4 first added after PR #97.
+
+The two world_model paths were previously called new but are existing paths modified after PR #97. evolution_controller.cpp and evolution_canary_controller_suite.cpp were previously called PR #97-only but were modified only after PR #97. The exact path and blob identities are in Report 08 §7. This addendum supersedes the earlier counts; the original inventory remains preserved as a historical checkpoint.
