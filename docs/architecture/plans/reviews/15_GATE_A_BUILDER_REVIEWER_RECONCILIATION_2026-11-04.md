@@ -105,3 +105,17 @@ This reconciliation is documentation/static review only. It does not select the 
 No runtime source changes, builds, tests, benchmarks, workflow executions, ABI checks, rebase, cherry-pick, merge, branch rewrite or deployment were performed or authorized.
 
 **Final status: NOT CLEARED.** The defensible strategy is agreed; evidence closure is not complete; PR #156 remains a conditional source donor only; implementation remains unauthorized.
+
+
+## 7. Subsequent closure evidence update — Report 16
+
+Report 16 is the latest Builder-side evidence update and supersedes the open-item summaries above where new evidence exists.
+
+- **Provenance:** Report 08 now uses exact three-tree classification: 143 PR #97-only unchanged, 16 overlap, 2 post-PR #97 modified-existing, 4 post-PR #97 added. The previous 145/14/6 classification is corrected. High-risk PR #97-only source/header paths have introduction and latest path-touch attribution in Report 16.
+- **API:** Report 09 now records 26 candidate-only public Brain method names, overloads, constructor/execute_action/register_evolution_parameter signature differences, CMake source membership and complete core/cpp identifier/call-site scans. The prior seven-API inventory was incomplete and is superseded.
+- **Workflows:** Report 10 now specifies the triggers, refs, exact tested commit, runners, timeout, target/suite coverage, trial/seed controls and artifacts for all five workflows.
+- **D1/D2:** implemented on draft PR #176 with regression tests. PR #156 remains unchanged until the correction is reviewed and merged or selectively ported.
+- **Failure ordering:** deterministic failure injection now covers goal completion's second append, canary rollback's second append, manual rollback append failure, and replay after a durable rollback event. Deeper EvolutionController compensation failure injection remains open.
+- **Independent re-check:** still not obtained. Report 14's commit author is the repository owner account; no formal GitHub review was submitted. A distinct reviewer identity is required.
+
+**Updated disposition:** the strategy agreement remains intact. Gate A remains NOT CLEARED because the correction PR is unmerged, one deeper compensation boundary remains unverified, and the independent re-check is outstanding. No implementation authorization is granted.
