@@ -56,10 +56,11 @@ int main() {
 
     // Brain must reject every non-finite goal input before journaling. Model-level
     // rejection after append is too late: it leaves an invalid durable event.
+    std::error_code invalid_goal_ec;
     const auto invalid_goal_journal =
         std::filesystem::temp_directory_path() / "jarvis_invalid_goal_input_test.bin";
-    std::filesystem::remove(invalid_goal_journal, ec);
-    std::filesystem::remove(invalid_goal_journal.string() + ".meta", ec);
+    std::filesystem::remove(invalid_goal_journal, invalid_goal_ec);
+    std::filesystem::remove(invalid_goal_journal.string() + ".meta", invalid_goal_ec);
     const double non_finite_values[] = {
         std::numeric_limits<double>::quiet_NaN(),
         std::numeric_limits<double>::infinity(),
@@ -97,8 +98,8 @@ int main() {
                 "invalid-progress-" + std::to_string(i)) == nullptr);
         }
     }
-    std::filesystem::remove(invalid_goal_journal, ec);
-    std::filesystem::remove(invalid_goal_journal.string() + ".meta", ec);
+    std::filesystem::remove(invalid_goal_journal, invalid_goal_ec);
+    std::filesystem::remove(invalid_goal_journal.string() + ".meta", invalid_goal_ec);
 
     const auto journal = std::filesystem::temp_directory_path() / "jarvis_goal_integration_test.bin";
     std::error_code ec;
