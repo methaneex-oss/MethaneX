@@ -1,4 +1,4 @@
-# Gate A — Builder/Revi​ewer Reconciliation and Remaining Closure Items
+# Gate A — Builder/Reviewer Reconciliation and Remaining Closure Items
 
 **Date:** 2026-11-04  
 **PR:** #175 — `plan/brain-implementation-roadmap-20261103`  
