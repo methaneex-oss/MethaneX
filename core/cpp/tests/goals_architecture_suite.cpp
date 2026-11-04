@@ -101,6 +101,56 @@ int main() {
     std::filesystem::remove(invalid_goal_journal, invalid_goal_ec);
     std::filesystem::remove(invalid_goal_journal.string() + ".meta", invalid_goal_ec);
 
+    // Failure-inject the second append in goal completion by placing the
+    // journal cursor at UINT64_MAX-1. The progress evidence is durable, but
+    // the separate completion event cannot be appended. This is an explicitly
+    // partial transition: the API reports failure and replay must preserve the
+    // pre-completion goal state rather than inventing completion.
+    const auto partial_completion_journal =
+        std::filesystem::temp_directory_path() / "jarvis_partial_goal_completion_test.bin";
+    std::filesystem::remove(partial_completion_journal, ec);
+    std::filesystem::remove(partial_completion_journal.string() + ".meta", ec);
+    const auto max_sequence = std::numeric_limits<std::uint64_t>::max();
+    {
+        Memory seed(256, partial_completion_journal);
+        Event initial_goal{max_sequence - 2, 0, "brain", "goal_create",
+            {{"id", std::string("partial-completion-goal")},
+             {"description", std::string("Goal used to test partial completion persistence")},
+             {"priority", 0.5},
+             {"progress", 0.25},
+             {"status", static_cast<std::int64_t>(GoalStatus::active)},
+             {"deadline_cycle", std::int64_t{0}}}};
+        assert(seed.append(initial_goal) == max_sequence - 2);
+    }
+    {
+        Brain partial_completion(partial_completion_journal);
+        const auto* before = partial_completion.goal("partial-completion-goal");
+        assert(before != nullptr && before->status == GoalStatus::active);
+        assert(before->progress == 0.25);
+        const GoalOutcomeEvidence evidence{
+            "partial-completion-goal", 0.25, 1.0, 0.75, true, 0.9, 77};
+        assert(!partial_completion.assimilate_goal_outcome(evidence));
+        const auto events = partial_completion.memory().all();
+        assert(events.size() == 2);
+        assert(events.back().sequence == max_sequence - 1);
+        assert(events.back().kind == "goal_progress");
+        const auto* after = partial_completion.goal("partial-completion-goal");
+        assert(after != nullptr && after->status == GoalStatus::active);
+        assert(after->progress == 0.25);
+    }
+    {
+        Brain restored_partial_completion(partial_completion_journal);
+        const auto events = restored_partial_completion.memory().all();
+        assert(events.size() == 2);
+        assert(events.back().kind == "goal_progress");
+        const auto* restored_goal =
+            restored_partial_completion.goal("partial-completion-goal");
+        assert(restored_goal != nullptr && restored_goal->status == GoalStatus::active);
+        assert(restored_goal->progress == 0.25);
+    }
+    std::filesystem::remove(partial_completion_journal, ec);
+    std::filesystem::remove(partial_completion_journal.string() + ".meta", ec);
+
     const auto journal = std::filesystem::temp_directory_path() / "jarvis_goal_integration_test.bin";
     std::error_code ec;
     std::filesystem::remove(journal, ec);
