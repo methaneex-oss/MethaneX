@@ -32,8 +32,8 @@ jobs:
           )
           for symbol in "${symbols[@]}"; do
             echo "===== ${symbol} ====="
-            rg -l -w --glob '*.cpp' --glob '*.hpp' "${symbol}" core/cpp | sort | while read -r file; do
-              count="$(rg -c -w "${symbol}" "${file}" || true)"
+            grep -RIlw --include='*.cpp' --include='*.hpp' "${symbol}" core/cpp | sort | while read -r file; do
+              count="$(grep -cw "${symbol}" "${file}" || true)"
               echo "${file}:${count}"
             done
           done
