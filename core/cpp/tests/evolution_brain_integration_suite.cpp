@@ -472,6 +472,56 @@ int main() {
     std::filesystem::remove(canary_append_failure_path, ec);
     std::filesystem::remove(canary_append_failure_path.string() + ".meta", ec);
 
+    // Simulate a crash after the durable rollback event is appended but
+    // before the in-memory evolution controller applies it. Restart replay
+    // must finish the rollback and remain idempotent on a second restart.
+    const std::filesystem::path rollback_crash_window_path =
+        "evolution_rollback_crash_window_replay_test.bin";
+    std::filesystem::remove(rollback_crash_window_path, ec);
+    std::filesystem::remove(rollback_crash_window_path.string() + ".meta", ec);
+    {
+        Brain source(rollback_crash_window_path);
+        assert(source.register_evolution_parameter("rollback.crash-window", 0.3));
+        EvolutionExperiment experiment{
+            "rollback-crash-window-1",
+            EvolutionProposal{"rollback.crash-window", 0.3, 0.4, 0.1, 0.90},
+            0.70, 0.85, 0.01, 0.90, ExperimentOutcome::Improved, true};
+        attest_isolated(experiment);
+        assert(source.record_evolution_evaluation(experiment));
+        assert(source.adopt_evolution_experiment(experiment));
+        const auto* adopted = source.evolution_parameter("rollback.crash-window");
+        assert(adopted != nullptr && adopted->value == 0.4);
+    }
+    {
+        Memory journal(256, rollback_crash_window_path);
+        Event durable_rollback{0, 0, "brain", "evolution_rollback",
+            {{"key", std::string("rollback.crash-window")},
+             {"experiment_id", std::string("rollback-crash-window-1")},
+             {"reason", std::string("manual_rollback")},
+             {"observed_delta", 0.0}}};
+        assert(journal.append(durable_rollback) != 0);
+    }
+    {
+        Brain recovered(rollback_crash_window_path);
+        const auto* parameter = recovered.evolution_parameter("rollback.crash-window");
+        assert(parameter != nullptr && parameter->value == 0.3);
+        const auto history = recovered.evolution_history();
+        assert(std::count_if(history.begin(), history.end(), [](const auto& record) {
+            return record.action == EvolutionRecordAction::RolledBack;
+        }) == 1);
+    }
+    {
+        Brain recovered_again(rollback_crash_window_path);
+        const auto* parameter = recovered_again.evolution_parameter("rollback.crash-window");
+        assert(parameter != nullptr && parameter->value == 0.3);
+        const auto history = recovered_again.evolution_history();
+        assert(std::count_if(history.begin(), history.end(), [](const auto& record) {
+            return record.action == EvolutionRecordAction::RolledBack;
+        }) == 1);
+    }
+    std::filesystem::remove(rollback_crash_window_path, ec);
+    std::filesystem::remove(rollback_crash_window_path.string() + ".meta", ec);
+
     std::filesystem::remove(path, ec);
     std::filesystem::remove(path.string() + ".meta", ec);
     return 0;
