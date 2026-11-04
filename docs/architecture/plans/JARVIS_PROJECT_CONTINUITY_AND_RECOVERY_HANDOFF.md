@@ -217,6 +217,21 @@ The two defects remain **confirmed, unfixed, and outside current runtime authori
 
 The next builder action is to produce the provenance, API compatibility, workflow continuity, and defect-disposition evidence artifacts from exact repository sources, then assemble the review packet. Avoid repeating already completed inventories or broad historical reconstruction where it cannot change the decision.
 
+
+## 3D. Gate A closure evidence package — 2026-11-04
+
+The bounded assignment is in review document 07. Initial separate evidence artifacts are now present:
+
+- 08 — 165-path risk-based provenance matrix. It reconstructs the recorded 145 / 14 / 6 origin classes; it is not full semantic/hunk closure.
+- 09 — API compatibility matrix. It records the 24 body differences, seven candidate-only APIs and signature concern; declaration/overload/caller inventory remains open.
+- 10 — workflow continuity matrix. It records all five workflow dispositions; no workflow was executed.
+- 11 — candidate defect disposition. D1/D2 remain confirmed and unfixed, with future acceptance criteria.
+- 12 — independent review packet. It consolidates evidence, review questions, known limits and required verdict format.
+
+These artifacts are initial evidence, not a Gate A clearance. High-risk per-path semantic attribution and API caller compatibility remain open. The independent review packet is assembled, but no reviewer identity has been supplied and no formal reviewer request or submitted review exists.
+
+Continue static inspection/documentation only. Gate A remains NOT CLEARED; PR #156 remains candidate only. No runtime changes, builds, tests, workflow executions, history operations, or baseline selection are authorized.
+
 ## 9. Startup instructions for a new chat
 
 When continuing this project:
