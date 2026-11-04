@@ -11,7 +11,7 @@
 - Current main: 69 `Brain::` definition occurrences across 64 unique method names.
 - Candidate: 77 definition occurrences across 71 unique method names.
 - All 64 current-main unique method names occur in candidate.
-- Candidate has seven candidate-only unique APIs listed in §3.
+- The seven-item list in §3 was preliminary and is superseded by the full public-header inventory in §7.2 (26 candidate-only public method names).
 - 24 common-name body differences were classified in the semantic addendum and are reproduced below.
 - These counts do not establish overload-level or ABI compatibility.
 
@@ -76,7 +76,7 @@ No ABI/build compatibility claim is made without authorized compile/link evidenc
 - [ ] Reconcile every candidate/current-main declaration pair, including overloads.
 - [ ] Inventory direct and indirect call sites for all 24 changed functions.
 - [ ] Audit all call sites and type references for `register_evolution_parameter()`.
-- [ ] Classify all seven candidate-only APIs by visibility, callers, lifecycle and ownership.
+- [x] Complete the static public declaration/overload/call-site inventory for the candidate public Brain API; external ABI/downstream compatibility remains a later compile/link gate.
 - [ ] Identify removed, renamed or changed signatures beyond the 24 body differences.
 - [ ] Record unresolved build/ABI questions for a later authorized verification gate.
 
