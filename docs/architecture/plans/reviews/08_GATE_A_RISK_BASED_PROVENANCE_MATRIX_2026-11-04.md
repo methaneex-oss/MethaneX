@@ -3,26 +3,28 @@
 **Date:** 2026-11-04  
 **Candidate context:** PR #175 / candidate PR #156 integration under review  
 **Source inventory:** `02_GATE_A_REPOSITORY_BASELINE_RECONCILIATION_2026-11-03.md`, Appendix A and D  
-**Status:** Initial path-level reconciliation; semantic/hunk attribution remains selective and incomplete
+**Status:** Corrected by exact three-tree comparison on 2026-11-04; high-risk semantic attribution is documented in §7; a full 1,416-commit hunk ledger remains intentionally unproduced.
 
 ## 1. Coverage statement
 
 The recorded net tree inventory contains 165 paths. This matrix enumerates each path and assigns it to the previously reconciled origin class:
-- PR #97-only net path: 145
-- Modified in both PR #97 and post-PR #97 segments: 14
-- First introduced after PR #97: 6
+- PR #97-only paths unchanged after PR #97: 143
+- Modified in both PR #97 and post-PR #97 segments: 16
+- Modified after PR #97, but unchanged by PR #97: 2
+- First introduced after PR #97: 4
 
-These are path-set/origin-segment classifications, not proof of per-commit semantic correctness. The 145-path class means present in PR #97's net diff and not changed again in the 172-commit post-PR #97 segment. It does not mean unchanged across every earlier commit or semantically validated.
+These are exact tree-level classifications across PR #97 base, PR #97 head, and candidate code-bearing parent. They establish path/blob provenance, not per-commit semantic correctness. The 143-path class has identical blob identity at PR #97 head and candidate. High-risk paths are additionally traced to their introduction and last relevant source commits in Report 16.
 
 ## 2. Risk-based review rule
 
 Deeper commit/hunk attribution is required for:
-- all 14 overlapping paths;
-- all 6 paths first introduced after PR #97 where they carry candidate-specific functionality;
+- all 16 paths changed in both PR #97 and post-PR #97 segments;
+- both post-PR #97 modifications to existing paths not changed by PR #97;
+- all 4 files first introduced after PR #97;
 - public Brain API, persistence/journal/replay, goal/intent, learning/evolution, action evidence, and workflow/test orchestration paths where semantic changes could affect baseline selection;
 - any path with unexplained replacement, deletion, conflict resolution, or divergent integration.
 
-A path classified PR #97-only is not automatically low-risk. Its subsystem criticality still determines whether it requires deeper review. The inventory does not yet provide a complete per-path semantic review disposition; do not mark this matrix as full semantic closure.
+A path classified PR #97-only is not automatically low-risk. Its subsystem criticality still determines whether it requires deeper review. Report 16 records source-commit attribution for the high-risk Brain/runtime paths and explains why residual unchanged history cannot change the selective-donor baseline recommendation.
 
 ## 3. Complete path inventory
 
@@ -196,7 +198,7 @@ A path classified PR #97-only is not automatically low-risk. Its subsystem criti
 
 ## 4. Required targeted attribution
 
-### 4.1 Overlap paths — all require deeper review
+### 4.1 PR #97 / post-PR #97 overlap paths — all require deeper review
 
 - `core/cpp/include/jarvis/core/brain.hpp`
 - `core/cpp/include/jarvis/core/developmental_learning.hpp`
@@ -212,17 +214,24 @@ A path classified PR #97-only is not automatically low-risk. Its subsystem criti
 - `core/cpp/tests/developmental_brain_integration_suite.cpp`
 - `core/cpp/tests/evolution_brain_integration_suite.cpp`
 - `core/cpp/tests/knowledge_memory_phase3_suite.cpp`
+- `core/cpp/src/evolution_controller.cpp`
+- `core/cpp/tests/evolution_canary_controller_suite.cpp`
+- `core/cpp/include/jarvis/core/world_model.hpp` is not in this overlap set; see §4.4
+- `core/cpp/src/world_model.cpp` is not in this overlap set; see §4.4
 
-### 4.2 Post-PR #97 first-introduced paths — origin segment confirmed; assess semantic risk
+### 4.2 Post-PR #97 first-introduced paths — four new files
 
-- `core/cpp/include/jarvis/core/world_model.hpp`
-- `core/cpp/src/world_model.cpp`
 - `core/cpp/tests/dlt_003_mapping_generalization.cpp`
 - `core/cpp/tests/dlt_004_feature_composition.cpp`
 - `core/cpp/tests/knowledge_source_feedback_suite.cpp`
 - `docs/DEVELOPMENTAL_BRAIN_PLAN.md`
 
-### 4.3 High-risk PR #97-only paths
+### 4.3 Post-PR #97 modifications to existing paths not changed by PR #97
+
+- `core/cpp/include/jarvis/core/world_model.hpp`
+- `core/cpp/src/world_model.cpp`
+
+### 4.4 High-risk PR #97-only paths
 
 The PR #97-only complement includes core Brain interfaces and implementation, memory, representation, reasoning, attention, causal/prediction, goals/intent, decision/action, evolution, persistence/replay, CMake/test registry, and CI. These require prioritization by subsystem and final candidate call-path impact; origin class alone is not a waiver.
 
@@ -236,9 +245,9 @@ The PR #97-only complement includes core Brain interfaces and implementation, me
 **Disposition:** Path-set accounting reproduced from the recorded evidence. High-risk semantic attribution and independent review remain open. Gate A remains NOT CLEARED.
 
 
-## 6. Targeted blob-level reconciliation of all 14 overlap paths — 2026-11-04
+## 6. Historical comparison-point blob reconciliation of the original 14-path subset — 2026-11-04
 
-The 14 paths identified in §4.1 were re-fetched at:
+The original 14-path subset recorded in the first matrix revision was re-fetched at:
 - comparison point `af09cf28d35e4a7b75c3c019e9f97893d8e19364`;
 - candidate code-bearing parent `15d49e5fdeb5723c475922ab78fb92f97c4b3b84`.
 
@@ -264,7 +273,7 @@ The table records blob identity only. A different blob proves that the final fil
 
 ### 6.1 What this establishes
 
-- All 14 recorded overlap paths were independently re-fetched at both refs where present.
+- The original 14-path subset was independently re-fetched at both refs where present.
 - Ten paths exist at both refs and have different blobs.
 - Four paths are absent at the comparison point and present in the candidate tree.
 - The prior path-set accounting is therefore supported by direct blob-level checks for this overlap set.
@@ -276,4 +285,80 @@ The table records blob identity only. A different blob proves that the final fil
 - It does not explain the full introduction history of the four absent files.
 - It does not replace targeted diff/hunk review for high-risk code, especially Brain public APIs, journal/replay, knowledge feedback, developmental learning, and integrated tests.
 
-**Updated disposition:** The 14-path overlap set now has direct comparison-point/candidate blob evidence. Semantic and commit/hunk attribution remain open for all materially changed high-risk files. Gate A remains NOT CLEARED.
+**Updated disposition:** This historical 14-path check is not the authoritative PR #97 origin classification. The exact three-tree comparison in §7 supersedes it. Gate A remains NOT CLEARED.
+
+
+## 7. Exact three-tree provenance reconciliation — 2026-11-04
+
+The origin classes above were rechecked against the Git trees at the exact PR #97 base, PR #97 head, and candidate code-bearing parent:
+
+- PR #97 base: 4ba84b8b5ccf0e41530c46fdb8101551254ba864
+- PR #97 head: c1da222e6c94aeb3f2ad000392c21fe4fc81ab25
+- Candidate code-bearing parent: 15d49e5fdeb5723c475922ab78fb92f97c4b3b84
+
+All three recursive Git trees were fetched without truncation. The comparison yields:
+
+| Tree comparison | Changed paths |
+|---|---:|
+| PR #97 base → PR #97 head | 159 |
+| PR #97 head → candidate parent | 22 |
+| PR #97 base → candidate parent | 165 |
+
+The 165-path final delta is now classified exactly:
+
+| Corrected origin class | Count | Verification rule |
+|---|---:|---|
+| PR #97-only, unchanged after PR #97 | 143 | PR #97 head blob equals candidate blob |
+| Changed in PR #97 and changed again after PR #97 | 16 | Base, PR #97 head and candidate blobs differ |
+| Existing path changed only after PR #97 | 2 | Base blob equals PR #97 head blob; candidate differs |
+| First added after PR #97 | 4 | Absent at PR #97 base and head; present in candidate |
+| **Total** | **165** | Exact path-set reconciliation |
+
+The earlier 145 / 14 / 6 classification was incorrect in four paths:
+- world_model.hpp and world_model.cpp were classified as post-PR #97 new files, but both existed before PR #97 and were modified only after PR #97;
+- evolution_controller.cpp and evolution_canary_controller_suite.cpp were classified as PR #97-only, but both were unchanged by PR #97 and modified after it.
+
+### 7.1 Sixteen true overlap paths — PR #97 blob → candidate blob
+
+| Path | PR #97 head blob | Candidate blob |
+|---|---|---|
+| core/cpp/include/jarvis/core/brain.hpp | 671186f4c39879a182f9e511394fc564d86f2988 | ca718aa4603bbdd0abc7de26ed296bcf8c6562fe |
+| core/cpp/include/jarvis/core/developmental_learning.hpp | e3b9bf8af265b67829fd7deb323d88a3a9dd4b75 | 65174400d8c3ce1dea17667ac928767cf3af333a |
+| core/cpp/include/jarvis/core/knowledge.hpp | 3da0d2059331af405bbb0ba98c61308ead99c405 | ae1adcffeeb090eb102c05156388bce7c030538f |
+| core/cpp/src/brain.cpp | dec9e5442b3ca4b81a7879855c6146b2619934cc | 93a10a5021a5775a3a239037cbb0b58a1e0c67a9 |
+| core/cpp/src/brain_restored_api.cpp | 7155d4d9c8eef527836fb79bf901aa32ddbae38b | 00d69ab2eb3811d453a643ef18dc69741109cbc8 |
+| core/cpp/src/causal_model.cpp | b7e1e6e6aeb929f09af33b9d17c80a6eed34948c | 8b884ed11a1a019d0e52bf7f35b0295edcc912b0 |
+| core/cpp/src/cognitive_cycle.cpp | f191dd610d6cbe1621756c35e7c13af2054a7266 | 989f4d154f07b31bcdab175aefbea6edd61eb930 |
+| core/cpp/src/developmental_learning.cpp | dbf5f43271dfa0a3c57236e2faa82eb88d15490d | c9a34d562fa1a20641530daba81bfdc1f3621fee |
+| core/cpp/src/evolution_controller.cpp | 4e77ec2e5daa09a964132ca486b8c5ee1cebf2f5 | 6d08a04db4886e398e2a15c4e6697f6ace26f459 |
+| core/cpp/src/knowledge.cpp | 21de8abbcd4426cb4ead70cb089e7d7c4ed0e81a | c38e0909c220b450502b46fd4a145e63ab6d21a0 |
+| core/cpp/tests/CMakeLists.txt | cbfd1fde52fffa6eeac025da2b7ddcb5ab493261 | 0251936730f82a7a8c928fa31dfe1d7effc83d91 |
+| core/cpp/tests/association_causality_phase5_suite.cpp | 0d31349857e85a019467e9864bbe6625a6ecdef7 | 9099323d43b5af16d09c9356a239692fab5e136a |
+| core/cpp/tests/developmental_brain_integration_suite.cpp | 760162dd6d1e669162e0bf22223a437491f5e262 | e6eba3db6df8da9ecfed21974936908a32ea11c5 |
+| core/cpp/tests/evolution_brain_integration_suite.cpp | 59d7dd68c42eea18d488d8e5e6aa9f7a9a327ded | d9dc62b1c6aebdb4ab38f3d64150699d96f393c4 |
+| core/cpp/tests/evolution_canary_controller_suite.cpp | 80cac5df347987a9074e1ced43202f8759f797d7 | f6fbbaa54771aa1ee3665148ce638d4e9aa390ae |
+| core/cpp/tests/knowledge_memory_phase3_suite.cpp | e33b9813edbfaf02a91a3f94988f5c7a54ceed8f | 108e4c07259df599bb7371a2f4b3b497be97f844 |
+
+### 7.2 Two existing paths modified only after PR #97
+
+| Path | Base / PR #97 head blob | Candidate blob |
+|---|---|---|
+| core/cpp/include/jarvis/core/world_model.hpp | 1c14f692374b0ab272f05634b7bdd26e358b4f1f | 26a77fc5f1f04d7066426faf62d049c513cb0ae8 |
+| core/cpp/src/world_model.cpp | 5b68e8fe37d99732557237e347ae02234a3de172 | f98ef4106af2ba6d9565f77a8a811abe6c20f8d3 |
+
+### 7.3 Four files first added after PR #97
+
+| Path | Candidate blob |
+|---|---|
+| core/cpp/tests/dlt_003_mapping_generalization.cpp | 90c9226a714b020c90fa0dff09790d6997e57a2e |
+| core/cpp/tests/dlt_004_feature_composition.cpp | e486bedc813c1a70dc48b610133a147283e0d7ef |
+| core/cpp/tests/knowledge_source_feedback_suite.cpp | 66a855dfe2aec24cdc173a1cedafbdbefeb811c3 |
+| docs/DEVELOPMENTAL_BRAIN_PLAN.md | 6b447faa668c2c4a559e55fb40dbd301f53e1704 |
+
+### 7.4 Meaning for the baseline decision
+
+The 143 PR #97-only paths have exact blob equality between PR #97 head and the candidate parent. The high-risk Brain/runtime paths are additionally attributed by introduction and latest relevant path commits in Report 16. The 22 post-PR #97 path changes are explicitly classified above; there are no unexplained path additions/deletions in this 165-path net delta.
+
+The residual 1,416-commit history is not represented as a complete hunk ledger. That is not required to support the baseline recommendation because PR #156 is not being adopted wholesale. Every future selective port must still be reviewed at path/hunk level against BM-01 through BM-12 and the accepted scenarios. No unreviewed PR #97-only path is implicitly approved by this provenance reconciliation.
+
+**Corrected disposition:** path-set and blob provenance is closed for the 165-path baseline comparison using the risk-based method. High-risk semantic attribution is documented in Report 16. Capability acceptance remains separate. Gate A remains NOT CLEARED pending the other workstreams and independent re-check.
