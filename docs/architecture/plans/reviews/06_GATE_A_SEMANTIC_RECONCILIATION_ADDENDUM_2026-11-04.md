@@ -33,6 +33,8 @@ Candidate `core/cpp/src/brain_restored_api.cpp` blob:
 Current-main blob:
 `618deb6976eed951eae02b7f0da741e6d730bb0c`
 
+The exact `Brain::` definition inventory contains 69 definition occurrences across 64 unique method names in current main, and 77 occurrences across 71 unique names in the candidate. Every one of the 64 current-main unique names is present in the candidate; the candidate has seven additional unique names. Overload-level caller/ABI compatibility remains a separate verification requirement.
+
 Candidate `brain.hpp` blob:
 `ca718aa4603bbdd0abc7de26ed296bcf8c6562fe`
 
@@ -91,7 +93,7 @@ These are candidate additions, not missing current-main behavior. They support r
 
 ### 2.4 API restoration disposition
 
-- All 69 current-main function names previously identified are represented in the candidate.
+- All 64 current-main unique method names (69 definition occurrences, including overloads) are represented in the candidate; the candidate contains 71 unique method names (77 definition occurrences), including seven candidate-only names.
 - The 24 differing common bodies have now been individually classified.
 - `beliefs()` is manually confirmed identical.
 - `register_evolution_parameter()` is a deliberate signature difference requiring downstream compatibility verification.
