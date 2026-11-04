@@ -472,6 +472,38 @@ int main() {
     std::filesystem::remove(canary_append_failure_path, ec);
     std::filesystem::remove(canary_append_failure_path.string() + ".meta", ec);
 
+    // Inject a controller-internal history append failure after the model
+    // and adoption journal have entered rollback. The compensation path must
+    // restore both to the adopted state.
+    {
+        EvolutionModel model;
+        EvolutionHistory history;
+        EvolutionController controller(model, history);
+        model.register_parameter("rollback.compensation", 0.3);
+        EvolutionExperiment experiment{
+            "rollback-compensation-1",
+            EvolutionProposal{"rollback.compensation", 0.3, 0.4, 0.1, 0.90},
+            0.70, 0.85, 0.01, 0.90, ExperimentOutcome::Improved, true};
+        attest_isolated(experiment);
+        assert(controller.record_evaluation_for_brain(experiment));
+        assert(controller.adopt_for_brain(experiment));
+        const auto* adopted = model.parameter("rollback.compensation");
+        assert(adopted != nullptr && adopted->value == 0.4);
+        assert(!controller.rollback_for_brain(
+            "rollback.compensation", "rollback-compensation-1",
+            "history_failure_injection", std::numeric_limits<double>::quiet_NaN()));
+        const auto* compensated = model.parameter("rollback.compensation");
+        assert(compensated != nullptr && compensated->value == 0.4);
+        const auto adoption = controller.adoption_journal().get("rollback-compensation-1");
+        assert(adoption.has_value() && adoption->state == AdoptionState::Adopted);
+        assert(controller.adopted_experiment_for_parameter("rollback.compensation") ==
+               std::optional<std::string>("rollback-compensation-1"));
+        const auto history_records = history.for_experiment("rollback-compensation-1");
+        assert(std::none_of(history_records.begin(), history_records.end(), [](const auto& record) {
+            return record.action == EvolutionRecordAction::RolledBack;
+        }));
+    }
+
     // Simulate a crash after the durable rollback event is appended but
     // before the in-memory evolution controller applies it. Restart replay
     // must finish the rollback and remain idempotent on a second restart.
