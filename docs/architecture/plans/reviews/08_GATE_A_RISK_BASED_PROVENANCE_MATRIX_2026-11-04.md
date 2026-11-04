@@ -77,7 +77,7 @@ A path classified PR #97-only is not automatically low-risk. Its subsystem criti
 | `core/cpp/include/jarvis/core/planning.hpp` | modified | PR #97-only net path | Inspect semantic diff where high-risk; per-commit hunk attribution only where origin/overlap/effect is decision-relevant |
 | `core/cpp/include/jarvis/core/reflection.hpp` | modified | PR #97-only net path | Inspect semantic diff where high-risk; per-commit hunk attribution only where origin/overlap/effect is decision-relevant |
 | `core/cpp/include/jarvis/core/self_model.hpp` | modified | PR #97-only net path | Inspect semantic diff where high-risk; per-commit hunk attribution only where origin/overlap/effect is decision-relevant |
-| `core/cpp/include/jarvis/core/world_model.hpp` | modified | post-PR #97 first introduced | Inspect semantic diff where high-risk; per-commit hunk attribution only where origin/overlap/effect is decision-relevant |
+| `core/cpp/include/jarvis/core/world_model.hpp` | modified | Post-PR #97 modified existing path | Inspect semantic diff where high-risk; per-commit hunk attribution only where origin/overlap/effect is decision-relevant |
 | `core/cpp/src/action_execution.cpp` | modified | PR #97-only net path | Inspect semantic diff where high-risk; per-commit hunk attribution only where origin/overlap/effect is decision-relevant |
 | `core/cpp/src/adaptation.cpp` | modified | PR #97-only net path | Inspect semantic diff where high-risk; per-commit hunk attribution only where origin/overlap/effect is decision-relevant |
 | `core/cpp/src/affective_learning.cpp` | added | PR #97-only net path | Inspect semantic diff where high-risk; per-commit hunk attribution only where origin/overlap/effect is decision-relevant |
@@ -97,7 +97,7 @@ A path classified PR #97-only is not automatically low-risk. Its subsystem criti
 | `core/cpp/src/evolution_adoption_journal.cpp` | modified | PR #97-only net path | Inspect semantic diff where high-risk; per-commit hunk attribution only where origin/overlap/effect is decision-relevant |
 | `core/cpp/src/evolution_adoption.cpp` | modified | PR #97-only net path | Inspect semantic diff where high-risk; per-commit hunk attribution only where origin/overlap/effect is decision-relevant |
 | `core/cpp/src/evolution_canary.cpp` | modified | PR #97-only net path | Inspect semantic diff where high-risk; per-commit hunk attribution only where origin/overlap/effect is decision-relevant |
-| `core/cpp/src/evolution_controller.cpp` | modified | PR #97-only net path | Inspect semantic diff where high-risk; per-commit hunk attribution only where origin/overlap/effect is decision-relevant |
+| `core/cpp/src/evolution_controller.cpp` | modified | Post-PR #97 modified existing path | Inspect semantic diff where high-risk; per-commit hunk attribution only where origin/overlap/effect is decision-relevant |
 | `core/cpp/src/evolution_experiment_coordinator.cpp` | modified | PR #97-only net path | Inspect semantic diff where high-risk; per-commit hunk attribution only where origin/overlap/effect is decision-relevant |
 | `core/cpp/src/evolution_experiment_runner.cpp` | modified | PR #97-only net path | Inspect semantic diff where high-risk; per-commit hunk attribution only where origin/overlap/effect is decision-relevant |
 | `core/cpp/src/evolution_history.cpp` | modified | PR #97-only net path | Inspect semantic diff where high-risk; per-commit hunk attribution only where origin/overlap/effect is decision-relevant |
@@ -115,7 +115,7 @@ A path classified PR #97-only is not automatically low-risk. Its subsystem criti
 | `core/cpp/src/reflection.cpp` | modified | PR #97-only net path | Inspect semantic diff where high-risk; per-commit hunk attribution only where origin/overlap/effect is decision-relevant |
 | `core/cpp/src/representation.cpp` | modified | PR #97-only net path | Inspect semantic diff where high-risk; per-commit hunk attribution only where origin/overlap/effect is decision-relevant |
 | `core/cpp/src/self_model.cpp` | modified | PR #97-only net path | Inspect semantic diff where high-risk; per-commit hunk attribution only where origin/overlap/effect is decision-relevant |
-| `core/cpp/src/world_model.cpp` | modified | post-PR #97 first introduced | Inspect semantic diff where high-risk; per-commit hunk attribution only where origin/overlap/effect is decision-relevant |
+| `core/cpp/src/world_model.cpp` | modified | Post-PR #97 modified existing path | Inspect semantic diff where high-risk; per-commit hunk attribution only where origin/overlap/effect is decision-relevant |
 | `core/cpp/tests/action_authorization_suite.cpp` | modified | PR #97-only net path | Inspect semantic diff where high-risk; per-commit hunk attribution only where origin/overlap/effect is decision-relevant |
 | `core/cpp/tests/action_execution_phase7_suite.cpp` | modified | PR #97-only net path | Inspect semantic diff where high-risk; per-commit hunk attribution only where origin/overlap/effect is decision-relevant |
 | `core/cpp/tests/action_model_architecture_suite.cpp` | modified | PR #97-only net path | Inspect semantic diff where high-risk; per-commit hunk attribution only where origin/overlap/effect is decision-relevant |
@@ -158,7 +158,7 @@ A path classified PR #97-only is not automatically low-risk. Its subsystem criti
 | `core/cpp/tests/dlt_004_feature_composition.cpp` | added | post-PR #97 first introduced | Inspect semantic diff where high-risk; per-commit hunk attribution only where origin/overlap/effect is decision-relevant |
 | `core/cpp/tests/evolution_adoption_journal_suite.cpp` | modified | PR #97-only net path | Inspect semantic diff where high-risk; per-commit hunk attribution only where origin/overlap/effect is decision-relevant |
 | `core/cpp/tests/evolution_brain_integration_suite.cpp` | modified | PR #97 + post-PR #97 overlap | Inspect semantic diff where high-risk; per-commit hunk attribution only where origin/overlap/effect is decision-relevant |
-| `core/cpp/tests/evolution_canary_controller_suite.cpp` | modified | PR #97-only net path | Inspect semantic diff where high-risk; per-commit hunk attribution only where origin/overlap/effect is decision-relevant |
+| `core/cpp/tests/evolution_canary_controller_suite.cpp` | modified | Post-PR #97 modified existing path | Inspect semantic diff where high-risk; per-commit hunk attribution only where origin/overlap/effect is decision-relevant |
 | `core/cpp/tests/evolution_experiment_coordinator_suite.cpp` | modified | PR #97-only net path | Inspect semantic diff where high-risk; per-commit hunk attribution only where origin/overlap/effect is decision-relevant |
 | `core/cpp/tests/evolution_experiment_runner_suite.cpp` | modified | PR #97-only net path | Inspect semantic diff where high-risk; per-commit hunk attribution only where origin/overlap/effect is decision-relevant |
 | `core/cpp/tests/evolution_opportunity_orchestration_suite.cpp` | modified | PR #97-only net path | Inspect semantic diff where high-risk; per-commit hunk attribution only where origin/overlap/effect is decision-relevant |
