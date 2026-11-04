@@ -291,3 +291,35 @@ for the final evidence-based baseline recommendation.
 - **Next action:** review the final recommendation and decide whether to authorize the selective-port implementation plan.
 - **Not authorized:** runtime implementation, builds/tests, workflow runs, merge/rebase/cherry-pick or deployment.
 
+
+
+## Latest Gate A closure handoff — 4 November 2026
+
+Consolidated evidence: docs/architecture/plans/reviews/16_GATE_A_CLOSURE_EVIDENCE_UPDATE_2026-11-04.md.
+
+### Current evidence state
+
+- Provenance corrected to 143 PR #97-only unchanged, 16 overlap, 2 post-PR #97 modified-existing, 4 post-PR #97 additions. See Report 08 §7.
+- Static public Brain API inventory completed within core/cpp: 26 candidate-only public method names, overloads/signature changes and complete exact-identifier call-site scan. External ABI/downstream compatibility remains a later compile/link gate. See Report 09 §7.
+- Five current-main workflow preservation/adaptation specifications completed. See Report 10 §5.
+- D1/D2 corrections and regression tests are on draft PR #176. PR #156 remains unchanged until the correction is reviewed and merged or the fixes are selectively ported.
+- Deterministic tests now cover goal completion's second append failure, evolution canary rollback's second append failure, manual rollback append failure, and restart replay after a durable rollback event. Deeper EvolutionController compensation failure injection remains open.
+
+### PR #176 donor correction verification
+
+- PR: https://github.com/methaneex-oss/MethaneX/pull/176
+- Head: 4cf017e073da980c9f77d739fde6f92ef1a2fbc1
+- Draft and unmerged; no cherry-pick/merge into PR #175.
+- Brain CI: https://github.com/methaneex-oss/MethaneX/actions/runs/41808525499 — passed.
+- Native Brain Build: https://github.com/methaneex-oss/MethaneX/actions/runs/41808525486 — passed.
+- Brain ThreadSanitizer: https://github.com/methaneex-oss/MethaneX/actions/runs/41808525492 — passed.
+- JARVIS Brain Tests: https://github.com/methaneex-oss/MethaneX/actions/runs/41808525557 — passed.
+- Native, ASan/UBSan and ThreadSanitizer CTest runs each passed 73/73 tests. The goal and evolution failure/replay tests passed.
+
+### Remaining authority and Gate A boundaries
+
+- Gate A remains NOT CLEARED.
+- Report 14 is a technical review document, not a formal GitHub review submission. A separate independent re-check is still required; no distinct reviewer username has been supplied.
+- The deeper controller-internal compensation failure boundary remains unverified.
+- PR #175 remains documentation-only. Do not merge PR #176, merge PR #175, cherry-pick/rebase, select a baseline or start implementation without explicit Project Director authorization.
+- The recommended strategy remains accepted PR #174 as the integration starting point and PR #156 as a selective source donor only.
