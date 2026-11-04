@@ -144,3 +144,17 @@ No runtime code, build configuration, tests or workflows were modified or execut
 - Semantic/API/workflow addendum: `reviews/06_GATE_A_SEMANTIC_RECONCILIATION_ADDENDUM_2026-11-04.md`
 
 **End of final Builder-side Gate A baseline recommendation.**
+
+
+## 6. Subsequent evidence correction — 2026-11-04
+
+This recommendation remains the same: PR #174 is the integration starting point; PR #156 is a selective donor, not a wholesale baseline.
+
+Later closure evidence is recorded in Report 16 and supersedes earlier supporting counts/status:
+- provenance is now 143 / 16 / 2 / 4 after exact three-tree comparison (Report 08);
+- the candidate public Brain API delta is 26 new method names plus overload/signature changes, not the earlier seven-item summary (Report 09);
+- the five workflow preservation specifications are complete (Report 10);
+- D1/D2 corrections and deterministic journal failure/replay tests are on draft PR #176, unmerged;
+- deeper EvolutionController compensation failure injection and a further independent re-check remain open.
+
+The baseline strategy is not changed by these corrections. Gate A remains NOT CLEARED; the Project Director has not selected a baseline and implementation is not authorized.
