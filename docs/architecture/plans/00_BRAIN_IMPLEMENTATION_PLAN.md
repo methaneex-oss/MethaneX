@@ -477,3 +477,16 @@ The comparison established that accepted PR #174 HEAD is 12 commits ahead of cur
 
 
 **End of proposed Brain Implementation Plan.**
+
+
+## Gate A closure evidence refresh — 4 November 2026
+
+Latest consolidated evidence: docs/architecture/plans/reviews/16_GATE_A_CLOSURE_EVIDENCE_UPDATE_2026-11-04.md.
+
+- Corrected exact tree provenance: 143 PR #97-only unchanged paths, 16 PR #97/post-PR #97 overlaps, 2 post-PR #97 modifications to existing paths, 4 post-PR #97 additions.
+- Static public Brain API inventory completed within core/cpp: 26 candidate-only public method names, overload/signature differences and full identifier/call-site scan. External ABI/downstream compatibility remains a later integration build gate.
+- Preservation/adaptation specification completed for all five current-main validation workflows. Workflow implementation/execution remains later integration work.
+- D1/D2 corrections, regression tests and deterministic goal/evolution journal failure/replay tests are on draft PR #176. PR #156 remains unchanged until correction review/merge or selective port.
+- Residual: deeper EvolutionController compensation failure injection and independent re-check remain open.
+
+**Gate A remains NOT CLEARED.** PR #174 remains the recommended integration starting point; PR #156 remains a selective source donor only. No baseline is selected and implementation is not authorized.
