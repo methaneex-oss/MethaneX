@@ -569,6 +569,102 @@ int main() {
     std::filesystem::remove(generalization_path, ec);
     std::filesystem::remove(generalization_path.string() + ".meta", ec);
 
+    // Learned strategy lookup must follow the intent actually selected by the
+    // intent model, not the first eligible goal (which may be pending and higher priority).
+    const auto goal_context_mismatch_path =
+        std::filesystem::temp_directory_path() / "jarvis_developmental_goal_context_mismatch.bin";
+    std::filesystem::remove(goal_context_mismatch_path, ec);
+    std::filesystem::remove(goal_context_mismatch_path.string() + ".meta", ec);
+    {
+        Brain mismatch(goal_context_mismatch_path);
+        for (int i = 0; i < 5; ++i) {
+            assert(mismatch.observe(Event{0, 0, "environment", "action_outcome",
+                {{"action", std::string("learned-action")},
+                 {"context", std::string("pending-high-priority")},
+                 {"observed", true},
+                 {"expected_consequence", 1.0},
+                 {"actual_consequence", 1.0},
+                 {"consequence_error", 0.0},
+                 {"reliability", 1.0},
+                 {"salience", 0.8},
+                 {"novelty", 0.2}}}).event.sequence != 0);
+        }
+        Goal pending_high{"pending-high-priority", "A high-priority goal not yet committed",
+                          0.99, 0.0, 0, 0, GoalStatus::pending, {}, {}};
+        Goal active_low{"active-low-priority", "The currently committed objective",
+                        0.10, 0.0, 0, 0, GoalStatus::active, {}, {}};
+        assert(mismatch.create_goal(pending_high));
+        assert(mismatch.create_goal(active_low));
+        assert(mismatch.intent().id == active_low.id);
+        const auto* pending_strategy =
+            mismatch.developmental_best_strategy(pending_high.id);
+        assert(pending_strategy != nullptr);
+        assert(pending_strategy->action == "learned-action");
+
+        const auto standard = mismatch.choose(generalization_actions);
+        assert(score_for(standard, "learned-action") <=
+               score_for(standard, "other-action"));
+        const auto affective = mismatch.choose_with_affect(generalization_actions);
+        assert(score_for(affective, "learned-action") <=
+               score_for(affective, "other-action"));
+    }
+    {
+        Brain restored_mismatch(goal_context_mismatch_path);
+        assert(restored_mismatch.intent().id == "active-low-priority");
+        const auto standard = restored_mismatch.choose(generalization_actions);
+        assert(score_for(standard, "learned-action") <=
+               score_for(standard, "other-action"));
+        const auto affective = restored_mismatch.choose_with_affect(generalization_actions);
+        assert(score_for(affective, "learned-action") <=
+               score_for(affective, "other-action"));
+    }
+    std::filesystem::remove(goal_context_mismatch_path, ec);
+    std::filesystem::remove(goal_context_mismatch_path.string() + ".meta", ec);
+
+    // With no active intent, a pending goal must not become an implicit strategy
+    // context; the decision API uses the explicit global fallback instead.
+    const auto no_intent_path =
+        std::filesystem::temp_directory_path() / "jarvis_developmental_no_intent_fallback.bin";
+    std::filesystem::remove(no_intent_path, ec);
+    std::filesystem::remove(no_intent_path.string() + ".meta", ec);
+    {
+        Brain no_intent(no_intent_path);
+        for (int i = 0; i < 5; ++i) {
+            assert(no_intent.observe(Event{0, 0, "environment", "action_outcome",
+                {{"action", std::string("learned-action")},
+                 {"context", std::string("pending-only-context")},
+                 {"observed", true},
+                 {"expected_consequence", 1.0},
+                 {"actual_consequence", 1.0},
+                 {"consequence_error", 0.0},
+                 {"reliability", 1.0},
+                 {"salience", 0.8},
+                 {"novelty", 0.2}}}).event.sequence != 0);
+        }
+        Goal pending_only{"pending-only-context", "A goal not yet activated",
+                           0.99, 0.0, 0, 0, GoalStatus::pending, {}, {}};
+        assert(no_intent.create_goal(pending_only));
+        assert(no_intent.intent().id.empty());
+        const auto standard = no_intent.choose(generalization_actions);
+        assert(score_for(standard, "learned-action") <=
+               score_for(standard, "other-action"));
+        const auto affective = no_intent.choose_with_affect(generalization_actions);
+        assert(score_for(affective, "learned-action") <=
+               score_for(affective, "other-action"));
+    }
+    {
+        Brain restored_no_intent(no_intent_path);
+        assert(restored_no_intent.intent().id.empty());
+        const auto standard = restored_no_intent.choose(generalization_actions);
+        assert(score_for(standard, "learned-action") <=
+               score_for(standard, "other-action"));
+        const auto affective = restored_no_intent.choose_with_affect(generalization_actions);
+        assert(score_for(affective, "learned-action") <=
+               score_for(affective, "other-action"));
+    }
+    std::filesystem::remove(no_intent_path, ec);
+    std::filesystem::remove(no_intent_path.string() + ".meta", ec);
+
     // Strategy learning must recover when later evidence contradicts earlier failures.
     // This exercises the real execution -> outcome journal -> learner -> replay path.
     const auto recovery_path =
