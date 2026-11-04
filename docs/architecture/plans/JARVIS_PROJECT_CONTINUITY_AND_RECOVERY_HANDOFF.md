@@ -103,6 +103,25 @@ The Project Director explicitly authorized both gates to proceed together as sta
 
 **Still unauthorized:** runtime source changes, builds, tests, benchmarks, technology/schema/API selection, rebase, cherry-pick, merge, history rewrite, deployment and implementation. The combined authorization covered review, traceability and documentation upgrades only.
 
+## 3B. Gate A semantic reconciliation update — 2026-11-04
+
+A separate static addendum was completed:
+
+`docs/architecture/plans/reviews/06_GATE_A_SEMANTIC_RECONCILIATION_ADDENDUM_2026-11-04.md`.
+
+It:
+- classifies all 24 common Brain API body differences between candidate and current-main restoration;
+- manually confirms `beliefs()` is identical and records the `register_evolution_parameter()` bool-versus-void signature change;
+- identifies seven candidate-only APIs;
+- reviews PR #151 → #155 and PR #150 → #156 integration fidelity;
+- classifies all five current-main workflow paths and verifies all 35 learning-mechanism workflow test target names exist in candidate CMake;
+- identifies two confirmed candidate risks: learned-strategy context can be keyed to the wrong goal, and non-finite goal values can be journaled before GoalModel rejects them;
+- records unresolved partial-failure/replay ordering questions.
+
+The API restoration is substantially reconciled at source-body level, but caller/build compatibility has not been verified. The candidate risks are recorded for remediation; no runtime changes were made.
+
+**Gate A remains NOT CLEARED.** The full per-commit origin/path/hunk attribution across the 1,416 inherited commits remains incomplete, particularly the 1,244-commit PR #97 history. GitHub tooling available in this session does not expose an exhaustive paginated commit/file-patch inventory, so no false claim of completion is made. Independent review is still absent; no reviewer username/team or CODEOWNERS entry is available to request.
+
 ## 4. What happens next — in order
 
 1. **Complete independent Gate A review.** Reviewer must challenge the disposition, reproduce critical refs/blob claims, distinguish verified from unverified claims, and state whether any correction is needed.
@@ -161,6 +180,7 @@ These are audit priorities, not a substitute for tracing all 12 mechanisms.
 - Gate A detailed checkpoint: https://github.com/methaneex-oss/MethaneX/blob/plan/brain-implementation-roadmap-20261103/docs/architecture/plans/reviews/02_GATE_A_REPOSITORY_BASELINE_RECONCILIATION_2026-11-03.md
 - Gate A Builder technical re-review: https://github.com/methaneex-oss/MethaneX/blob/plan/brain-implementation-roadmap-20261103/docs/architecture/plans/reviews/04_GATE_A_BUILDER_TECHNICAL_REREVIEW_2026-11-03.md
 - Gate B 12-mechanism traceability audit: https://github.com/methaneex-oss/MethaneX/blob/plan/brain-implementation-roadmap-20261103/docs/architecture/plans/reviews/05_GATE_B_MECHANISM_TRACEABILITY_AUDIT_2026-11-03.md
+- Gate A semantic reconciliation addendum: https://github.com/methaneex-oss/MethaneX/blob/plan/brain-implementation-roadmap-20261103/docs/architecture/plans/reviews/06_GATE_A_SEMANTIC_RECONCILIATION_ADDENDUM_2026-11-04.md
 - Gate A final disposition: https://github.com/methaneex-oss/MethaneX/blob/plan/brain-implementation-roadmap-20261103/docs/architecture/plans/reviews/03_GATE_A_FINAL_DISPOSITION_2026-11-03.md
 - Gate A Builder technical re-review: https://github.com/methaneex-oss/MethaneX/blob/plan/brain-implementation-roadmap-20261103/docs/architecture/plans/reviews/04_GATE_A_BUILDER_TECHNICAL_REREVIEW_2026-11-03.md
 - Gate B 12-mechanism traceability audit: https://github.com/methaneex-oss/MethaneX/blob/plan/brain-implementation-roadmap-20261103/docs/architecture/plans/reviews/05_GATE_B_MECHANISM_TRACEABILITY_AUDIT_2026-11-03.md
@@ -184,7 +204,7 @@ Give the user a short status update in this format:
 
 - **Phase:** Brain Implementation Planning — Gate A reconciliation + Gate B traceability.
 - **Last decision:** Gate A not cleared; Gate B static traceability complete but capability acceptance not passed.
-- **Current blocker:** Gate A semantic/history reconciliation and independent review remain outstanding.
+- **Current blocker:** per-commit origin/path/hunk attribution for the 1,416 inherited commits remains incomplete; independent review is not submitted.
 - **Next action:** Close remaining Gate A evidence gaps and obtain independent review before baseline selection.
 - **Not authorized:** Runtime implementation, builds/tests, history rewrites, merge or deployment.
 
