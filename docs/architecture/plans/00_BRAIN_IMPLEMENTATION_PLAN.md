@@ -490,3 +490,10 @@ Latest consolidated evidence: docs/architecture/plans/reviews/16_GATE_A_CLOSURE_
 - Residual: deeper EvolutionController compensation failure injection and independent re-check remain open.
 
 **Gate A remains NOT CLEARED.** PR #174 remains the recommended integration starting point; PR #156 remains a selective source donor only. No baseline is selected and implementation is not authorized.
+
+
+### Donor correction verification — 4 November 2026
+
+Draft PR #176 isolates D1/D2 corrections and journal failure/replay tests from this documentation-only planning branch. At head 4cf017e073da980c9f77d739fde6f92ef1a2fbc1, Brain CI, Native Brain Build, Brain ThreadSanitizer and JARVIS Brain Tests all passed; native, ASan/UBSan and TSAN CTest runs each report 73/73. See Report 16 and PR #176 for run links and scope.
+
+PR #176 remains draft and unmerged. These results validate the corrected donor branch, not the accepted PR #174 integration tree or external ABI. The deeper EvolutionController compensation failure boundary and independent Gate A re-check remain open. No implementation baseline is selected or authorized.
