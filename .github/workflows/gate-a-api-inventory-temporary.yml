@@ -38,4 +38,4 @@ jobs:
             done
           done
           echo "===== CANDIDATE-ONLY DECLARATIONS/OVERLOADS AND CALL LINES ====="
-          grep -Rn -w --include '*.cpp' --include='*.hpp'             'developmental_best_related_strategy|developmental_feature_strategy_estimate|developmental_related_strategies|import_legacy_memory_event|record_evolution_evaluation|record_knowledge_source_feedback|resolve_prediction_feedback|register_evolution_parameter'             core/cpp/include core/cpp/src core/cpp/tests
+          grep -Rn -w -E --include '*.cpp' --include='*.hpp'             'developmental_best_related_strategy|developmental_feature_strategy_estimate|developmental_related_strategies|import_legacy_memory_event|record_evolution_evaluation|record_knowledge_source_feedback|resolve_prediction_feedback|register_evolution_parameter'             core/cpp/include core/cpp/src core/cpp/tests
