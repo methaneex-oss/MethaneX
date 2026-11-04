@@ -4,6 +4,19 @@
 #include <cmath>
 
 namespace jarvis::core {
+namespace {
+
+double comparison_evidence(const TrialComparison& comparison) noexcept {
+    if (!comparison.valid) return 0.0;
+    if (comparison.standard_error == 0.0) {
+        return comparison.mean_difference == 0.0 ? 0.0 : 1.0;
+    }
+    const double z = std::abs(comparison.mean_difference / comparison.standard_error);
+    if (!std::isfinite(z)) return 0.0;
+    return std::clamp(std::erf(z / std::sqrt(2.0)), 0.0, 1.0);
+}
+
+} // namespace
 
 EvolutionTrialBatch EvolutionExperimentCoordinator::run(
     EvolutionExperiment& experiment,
@@ -14,8 +27,8 @@ EvolutionTrialBatch EvolutionExperimentCoordinator::run(
     EvolutionTrialBatch batch;
     if (config.baseline_trials == 0 || config.candidate_trials == 0 ||
         !std::isfinite(config.minimum_improvement) || config.minimum_improvement < 0.0 ||
-        !std::isfinite(config.minimum_confidence) || config.minimum_confidence < 0.0 ||
-        config.minimum_confidence > 1.0) {
+        !std::isfinite(config.minimum_confidence) || config.minimum_confidence < 0.75 ||
+        config.minimum_confidence > 0.99) {
         experiment.outcome = ExperimentOutcome::Invalid;
         return batch;
     }
@@ -53,7 +66,9 @@ EvolutionTrialBatch EvolutionExperimentCoordinator::run(
     experiment.baseline_fitness = batch.baseline.mean;
     experiment.candidate_fitness = batch.candidate.mean;
     experiment.minimum_improvement = config.minimum_improvement;
-    experiment.confidence = std::min(batch.baseline.confidence, batch.candidate.confidence);
+    const auto comparison = EvolutionTrials::compare(batch.baseline, batch.candidate,
+                                                       config.minimum_confidence);
+    experiment.confidence = comparison_evidence(comparison);
     experiment.candidate_executed = true;
     batch.executed = true;
 
