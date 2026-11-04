@@ -455,4 +455,25 @@ These are initial closure artifacts, not proof that every workstream is complete
 
 **Gate A remains NOT CLEARED.** No baseline is selected. No runtime changes, builds, tests, workflow executions, history operations, or implementation were performed.
 
+
+## 17. Final Gate A baseline applicability recommendation — 2026-11-04
+
+The extended Builder-side Gate A review is recorded in
+`reviews/13_GATE_A_FINAL_BASELINE_RECOMMENDATION_2026-11-04.md`.
+
+**Technical recommendation:**
+- Do not adopt PR #156 as a wholesale implementation baseline.
+- Use accepted PR #174 HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` as the integration starting point.
+- Treat PR #156 code-bearing parent `15d49e5fdeb5723c475922ab78fb92f97c4b3b84` as a source donor. Port reusable mechanisms in small, reviewable, specification-mapped work packages.
+- Preserve the five validation workflows present on current main/accepted-spec ancestry.
+- Treat confirmed D1/D2 defects as mandatory correction prerequisites; prove the unresolved goal-completion and evolution rollback failure boundaries with failure-injection/replay evidence.
+- Do not claim capability acceptance from source presence or the historical 73/73 CTest result. The 34 accepted foundational scenarios remain the governing acceptance target.
+
+The comparison established that accepted PR #174 HEAD is 12 commits ahead of current main and adds the accepted architecture/specification documents; candidate PR #156 is 21 commits behind that accepted point. The candidate and current main are substantially divergent. The candidate contains useful cognitive mechanisms, but wholesale adoption would import known defects, miss current validation workflows and require broad reconciliation.
+
+**Builder technical result:** PR #156 is rejected as a wholesale baseline and accepted as a selective source donor; accepted PR #174 HEAD is the recommended integration base.
+
+**Formal Gate A remains NOT CLEARED.** No independent PR #175 review has been submitted, and the Project Director has not approved the baseline. This recommendation is not implementation authorization. No runtime changes, builds, tests or workflow executions were performed.
+
+
 **End of proposed Brain Implementation Plan.**
