@@ -202,6 +202,8 @@ The tests cover:
 
 They do not inject failures inside every compensating operation of EvolutionController rollback, such as a failure while restoring adoption-journal/history state. That deeper controller-internal compensation boundary remains a residual verification item. Do not describe all evolution rollback failure modes as fully proven.
 
+A follow-up direct test intended to inject EvolutionHistory::append failure during rollback compensation was committed to the branch ref as a37add18babf8afc2e9c12ca0449a2ee84ecd60d. However, the live PR #176 metadata and its Actions runs still report head 4cf017e073da980c9f77d739fde6f92ef1a2fbc1, and the PR commit list does not include a37add18. This test is therefore **not part of the verified PR snapshot and is not counted as evidence**. The branch-ref/PR-head synchronization discrepancy must be resolved before relying on it.
+
 **Failure-ordering workstream: PARTIALLY CLOSED.** The principal journal commit and replay boundaries are defined and tested; internal compensation failure injection remains open.
 
 ## 7. CI evidence for the correction branch
