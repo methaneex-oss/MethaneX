@@ -5,6 +5,7 @@
 
 #include <cassert>
 #include <filesystem>
+#include <limits>
 #include <algorithm>
 
 using namespace jarvis::core;
@@ -408,6 +409,68 @@ int main() {
         assert(direct_parameter != nullptr);
         assert(direct_parameter->value == direct_parameter->baseline);
     }
+
+    // Failure-inject the second append in a canary-triggered rollback. The
+    // observation event must be durable before the rollback event is attempted;
+    // if that second append fails, the adopted parameter must remain unchanged
+    // and restart replay must reconstruct the same adopted state.
+    const std::filesystem::path canary_append_failure_path =
+        "evolution_canary_rollback_append_failure_test.bin";
+    std::filesystem::remove(canary_append_failure_path, ec);
+    std::filesystem::remove(canary_append_failure_path.string() + ".meta", ec);
+    const auto max_sequence = std::numeric_limits<std::uint64_t>::max();
+    {
+        Brain source(canary_append_failure_path);
+        assert(source.register_evolution_parameter("canary.append-failure", 0.3));
+        EvolutionExperiment experiment{
+            "canary-append-failure-1",
+            EvolutionProposal{"canary.append-failure", 0.3, 0.4, 0.1, 0.90},
+            0.70, 0.85, 0.01, 0.90, ExperimentOutcome::Improved, true};
+        attest_isolated(experiment);
+        assert(source.record_evolution_evaluation(experiment));
+        assert(source.adopt_evolution_experiment(experiment));
+        assert(!source.observe_evolution_canary(
+            "canary.append-failure", "canary-append-failure-1", {0.90, 0.89}).sufficient_evidence);
+        assert(!source.observe_evolution_canary(
+            "canary.append-failure", "canary-append-failure-1", {0.90, 0.88}).sufficient_evidence);
+    }
+    {
+        Memory journal(256, canary_append_failure_path);
+        Event sequence_padding{max_sequence - 2, 0, "legacy_import", "padding", {}};
+        assert(journal.append(sequence_padding) == max_sequence - 2);
+    }
+    {
+        Brain failure_injected(canary_append_failure_path);
+        const auto* before = failure_injected.evolution_parameter("canary.append-failure");
+        assert(before != nullptr && before->value == 0.4);
+        const auto decision = failure_injected.observe_evolution_canary(
+            "canary.append-failure", "canary-append-failure-1", {0.90, 0.84});
+        assert(decision.sufficient_evidence);
+        assert(!decision.rollback);
+        assert(decision.reason == "rollback_not_persisted");
+        const auto* after = failure_injected.evolution_parameter("canary.append-failure");
+        assert(after != nullptr && after->value == 0.4);
+        assert(!failure_injected.rollback_evolution("canary.append-failure"));
+        const auto events = failure_injected.memory().all();
+        assert(events.back().sequence == max_sequence - 1);
+        assert(events.back().kind == "evolution_canary");
+        assert(std::none_of(events.begin(), events.end(), [](const Event& event) {
+            return event.kind == "evolution_rollback";
+        }));
+    }
+    {
+        Brain restored_after_failure(canary_append_failure_path);
+        const auto* parameter =
+            restored_after_failure.evolution_parameter("canary.append-failure");
+        assert(parameter != nullptr && parameter->value == 0.4);
+        const auto events = restored_after_failure.memory().all();
+        assert(events.back().kind == "evolution_canary");
+        assert(std::none_of(events.begin(), events.end(), [](const Event& event) {
+            return event.kind == "evolution_rollback";
+        }));
+    }
+    std::filesystem::remove(canary_append_failure_path, ec);
+    std::filesystem::remove(canary_append_failure_path.string() + ".meta", ec);
 
     std::filesystem::remove(path, ec);
     std::filesystem::remove(path.string() + ".meta", ec);
