@@ -82,3 +82,17 @@ The reviewer must cite exact refs, paths, blobs and evidence. Do not approve bas
 No runtime source change, build, test, benchmark, sanitizer, technology choice, schema/API selection, rebase, cherry-pick, merge, branch rewrite or deployment is authorized by this report.
 
 **Final statement:** The confusion is resolved at the governance level: PR #156 is a candidate, not the baseline; Gate A has produced a documented no-go disposition; the independent review is the next decision point.
+
+
+## Subsequent evidence update — 2026-11-04
+
+The Builder completed a targeted static semantic reconciliation addendum:
+
+`docs/architecture/plans/reviews/06_GATE_A_SEMANTIC_RECONCILIATION_ADDENDUM_2026-11-04.md`.
+
+The addendum classifies the 24 API body differences, manually resolves the earlier parser mismatch, reviews PR #151/#155 and PR #150/#156 integration fidelity, and classifies all five current-main workflow paths. It identifies two candidate-specific correctness risks (learned-strategy context may use the wrong goal; non-finite goal values may be journaled before GoalModel rejection) and records remaining partial-failure/replay questions.
+
+The full per-commit origin/path/hunk ledger across the 1,416 inherited commits remains incomplete. No independent review has been submitted. Accordingly, the original disposition remains in force:
+
+**NOT CLEARED — NO IMPLEMENTATION BASELINE SELECTED.**
+
