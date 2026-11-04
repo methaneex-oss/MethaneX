@@ -120,3 +120,20 @@ The independent reviewer should return:
 This packet is documentation only. No formal reviewer request has been sent because no actual reviewer identity is available. No GitHub review submission is claimed.
 
 **Gate A remains NOT CLEARED. PR #156 remains a candidate only. No implementation baseline is selected.**
+
+
+## 8. Closure evidence refresh — 2026-11-04
+
+Report 16 is now the latest consolidated evidence update. It supersedes earlier packet summaries where they differ.
+
+- Report 08 corrects the exact three-tree provenance classes to 143 PR #97-only unchanged, 16 PR #97/post-PR #97 overlap, 2 post-PR #97 modifications to existing paths not changed by PR #97, and 4 post-PR #97 additions.
+- Report 09 corrects the public API delta: 26 candidate-only public Brain method names, additional overloads/signature changes, and a full core/cpp identifier/call-site scan. The earlier seven-API count is superseded.
+- Report 10 provides workflow-by-workflow preservation/adaptation specifications for all five current-main workflows.
+- Draft PR #176 contains D1/D2 corrections, regression coverage, and deterministic goal/evolution journal failure/replay tests. It is not merged.
+- The PR #176 CI evidence at its latest verified correction head is recorded in Report 16. Do not treat it as integration-tree or ABI proof.
+- EvolutionController internal compensation failure injection remains a residual verification item.
+- A further independent re-check remains outstanding. Report 14 is a technical document, not a submitted GitHub review; the submitted review list on PR #175 was empty at the last check. A separate reviewer GitHub identity is still required.
+
+The current PR #175 description indexes Reports 13–16 and is the navigation entry point. Always fetch live PR metadata before reviewing; packet commit pins are historical snapshots, not a live head manifest.
+
+**Current disposition remains NOT CLEARED.** The recommended integration strategy is unchanged; the Project Director retains baseline selection and implementation authority.
