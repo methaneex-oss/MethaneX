@@ -275,3 +275,78 @@ No elapsed-time claim is made in this artifact because a continuously running st
 ---
 
 **End of initial inventory.**
+
+
+## 15. Additional historical planning and implementation artifacts — PRs #96, #97 and #164
+
+A broader PR/branch search identified an earlier planning and implementation chain that must also be preserved and reconciled. These are not part of the PR #171–#175 sequence, and their existence means the archive/disposition inventory must cover more than the latest architecture documents.
+
+### 15.1 PR #97 — JARVIS cognitive + affective development
+
+**PR:** [#97 — JARVIS cognitive + affective development](https://github.com/methaneex-oss/MethaneX/pull/97)  
+**Branch:** `feat/jarvis-affective-state`  
+**HEAD:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`  
+**Base:** `main` at `4ba84b8b5ccf0e41530c46fdb8101551254ba864`  
+**Created:** 2026-10-02  
+**PR state:** open, draft, unmerged; mergeability reported false.  
+**Size at inspection:** 1,244 commits, 159 changed files, 18,788 additions and 1,644 deletions.
+
+This is a substantial historical code-bearing branch, not merely an old document branch. It contains cognitive/affective implementation and tests plus the following documentation:
+
+- `docs/developmental-training-environment.md` — 56 lines.
+- `docs/superpowers/plans/2026-09-25-cognitive-action-feedback-loop.md` — 255 lines.
+- `docs/superpowers/plans/2026-09-26-concept-context-prediction.md` — 114 lines.
+- `docs/superpowers/plans/2026-09-30-developmental-cognition.md` — 248 lines.
+- `docs/superpowers/plans/2026-10-01-affective-state.md` — 124 lines.
+- `docs/superpowers/specs/2026-09-25-cognitive-action-feedback-loop-design.md` — 185 lines.
+- `docs/superpowers/specs/2026-09-26-concept-context-prediction-design.md` — 77 lines.
+- `docs/superpowers/specs/2026-09-30-developmental-cognition.md` — 186 lines.
+- `docs/superpowers/specs/2026-10-01-affective-state.md` — 88 lines.
+
+These artifacts describe the cognitive action/feedback loop, concept-context-prediction integration, developmental cognition, affective-state design, and a controlled developmental training environment. They are historically important and must be examined as evidence of prior design intent and implementation rationale.
+
+They must not be treated as current authoritative architecture merely because they are detailed or attached to a large implementation branch. PR #97 is not merged. Its branch and commit history must remain preserved while its code and documents are evaluated against the accepted architecture and the eventual complete JARVIS design.
+
+### 15.2 PR #96 — Integrated cognitive action feedback loop
+
+**PR:** [#96 — Connect JARVIS cognitive action feedback loop](https://github.com/methaneex-oss/MethaneX/pull/96)  
+**Branch:** `feat/jarvis-cognitive-action-loop`  
+**HEAD:** `16abca97caf77ce65d5ac901513eb2790f04c68c`  
+**Created:** 2026-09-25  
+**PR state:** open, draft, unmerged.
+
+PR #96 includes earlier versions of the 2026-09-25/26/30 planning and design documents, alongside code for the cognitive runtime/action/outcome feedback loop. Its documentation overlaps with the later PR #97 artifact set.
+
+Preservation rule: do not create duplicate archive copies until the relationship between the PR #96 and PR #97 versions is compared. Preserve both Git histories and identify which document revisions were carried forward, changed, or superseded.
+
+### 15.3 PR #164 — Polyglot Brain technology audit
+
+**PR:** [#164 — Audit polyglot Brain foundation technology](https://github.com/methaneex-oss/MethaneX/pull/164)  
+**Branch:** `docs/brain-polyglot-foundation-audit-20261031`  
+**HEAD:** `5433b0d0ae6ea7ff9d0991e84c8a6a8a2506c1cb`  
+**Document:** `docs/BRAIN_POLYGLOT_FOUNDATION_TECHNOLOGY_AUDIT.md` (280 lines).  
+**PR state:** open, draft, unmerged.
+
+The document records a repository-grounded technology audit and proposed polyglot direction. It reports a substantial C++20 cognitive core, a minimal Rust runtime, TypeScript interface work, no verified integrated Python/PyTorch learning subsystem in its inspected baseline, and no verified CUDA/Triton integration. It proposes possible future responsibilities, but it does not constitute approved language allocation or implementation authorization.
+
+It must be reconciled with PRs #167 and #168 rather than treated as a separate binding technology decision.
+
+## 16. Updated preservation and archive observations
+
+The historical document inventory now includes at least three distinct classes:
+
+1. **Current-main documentation:** older master blueprint, architecture summary, and phase-completion records remain in `docs/` on main.
+2. **Unmerged planning branches:** PRs #164 and #166–#170 contain proposed technology, governance, language, MCU target, constitution, and traceability documents.
+3. **Unmerged implementation branches:** PRs #96, #97, #148 and #156 contain code-bearing histories and dated planning/specification artifacts, including September/October documents.
+
+The PR #96 and #97 documents are already preserved by their respective Git branches, but they are not thereby placed in a dedicated archive directory. The current-main documents listed in Section 9 remain in the ordinary `docs/` area. No completed archive relocation has been verified.
+
+**Do not archive by copying files indiscriminately.** First compare revisions, identify canonical historical versions, check links/references, and preserve source branch/commit provenance. Some documents may remain in their original PR branches as the primary historical record; others may warrant a curated archive index in the current documentation tree. This is a later disposition decision, not an action taken by this inventory.
+
+## 17. Timing estimate revision
+
+The additional PR #96/#97 historical branches, nine dated planning/specification artifacts, the 1,244-commit PR #97 history, and PR #164 technology audit expand the preservation scope beyond the initial estimate.
+
+Revised estimate for Phase 1 completion: **4–6 focused working hours**. This includes a bounded inventory of relevant documentation, branches and PRs, authority verification, link/dependency checks, and a defensible archive/disposition register. It does not mean exhaustively reviewing all 1,244 commits or auditing all 159 changed files; that would be a separate source-baseline investigation.
+
+The Phase 1 estimate remains provisional until the remaining branch and artifact checks are complete.
