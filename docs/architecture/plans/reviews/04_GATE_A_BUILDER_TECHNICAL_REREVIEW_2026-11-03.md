@@ -103,6 +103,16 @@ It is not a technical review verdict. It does not reproduce the graph counts, in
 4. Record that review and any corrections separately.
 5. Only then present a baseline recommendation for Project Director decision.
 
+## 6A. Subsequent semantic reconciliation
+
+The targeted API, integration and workflow comparison is documented in the separate addendum:
+
+`reviews/06_GATE_A_SEMANTIC_RECONCILIATION_ADDENDUM_2026-11-04.md`.
+
+That addendum classifies all 24 common Brain API body differences, manually resolves the two earlier parser-unmatched definitions, accounts for seven candidate-only APIs, reviews the divergent PR #151/#155 and PR #150/#156 integration paths, and classifies all five current-main workflow files. It also records two confirmed candidate correctness risks and the still-incomplete 1,416-commit origin/path/hunk ledger.
+
+The additional evidence does not clear Gate A. The candidate remains unselected and independent review remains outstanding.
+
 ## 7. Authority and scope
 
 This review is static and documentation-based. It does not authorize or report any runtime source change, build, test, benchmark, sanitizer, rebase, cherry-pick, merge, history rewrite or deployment. Gate B may proceed as a read-only source-to-specification audit against the candidate code-bearing parent, but that audit does not select the implementation baseline.
