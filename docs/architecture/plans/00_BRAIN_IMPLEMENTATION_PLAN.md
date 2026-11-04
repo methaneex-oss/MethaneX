@@ -440,4 +440,19 @@ The two candidate defects remain **confirmed and unfixed**. D1 is the mismatch b
 
 **Gate A remains NOT CLEARED.** The assignment does not select PR #156, waive independent review, or authorize implementation. Gate A clearance still requires evidence for every closure criterion, a genuine independent review, and the Project Director's explicit baseline decision.
 
+
+## 16. Gate A closure evidence package — 2026-11-04
+
+The authorized closure assignment has been recorded in `reviews/07_GATE_A_CLOSURE_ASSIGNMENT_2026-11-04.md`. Initial evidence artifacts have now been created:
+
+- `reviews/08_GATE_A_RISK_BASED_PROVENANCE_MATRIX_2026-11-04.md` — enumerates all 165 recorded net-tree paths and assigns the 145 / 14 / 6 origin classes from the prior reconciliation. This is path-set accounting, not complete per-path semantic or per-commit hunk closure.
+- `reviews/09_GATE_A_API_COMPATIBILITY_MATRIX_2026-11-04.md` — records the 24 body differences, seven candidate-only APIs, and the bool-versus-void signature issue. Declaration/overload/caller inventory remains open.
+- `reviews/10_GATE_A_WORKFLOW_CONTINUITY_MATRIX_2026-11-04.md` — records all five workflow dispositions and the exact limitations of target-name/file-identity evidence. No workflow was executed.
+- `reviews/11_GATE_A_CANDIDATE_DEFECT_DISPOSITION_2026-11-04.md` — records D1/D2 as confirmed and unfixed, with future remediation invariants and regression acceptance criteria.
+- `reviews/12_GATE_A_INDEPENDENT_REVIEW_PACKET_2026-11-04.md` — consolidates the review scope, evidence, questions, limits and verdict format.
+
+These are initial closure artifacts, not proof that every workstream is complete. In particular, the API caller inventory and high-risk per-path semantic attribution still need work. The review packet is assembled but no reviewer identity/request/submission exists.
+
+**Gate A remains NOT CLEARED.** No baseline is selected. No runtime changes, builds, tests, workflow executions, history operations, or implementation were performed.
+
 **End of proposed Brain Implementation Plan.**
