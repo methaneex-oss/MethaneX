@@ -9,7 +9,7 @@
 
 ## 1. Purpose and result
 
-This document reconciles the Builder's final baseline recommendation (Report 13) with the independent technical review (Report 14). It distinguishes agreement, additional reviewer findings, previously known open items, and the exact remaining documentation/static closure work.
+This document preserves the initial reconciliation of Reports 13 and 14. Its original open-item table is historical; the later closure evidence in §7 and Report 16 supersedes those earlier statuses.
 
 **Disposition: GATE A REMAINS NOT CLEARED.**
 
@@ -29,9 +29,9 @@ This is agreement on an integration direction, not baseline selection or impleme
 | D1 learned-strategy context | Confirmed defect, unfixed | Independently confirms | **OPEN — mandatory pre-acceptance fix** |
 | D2 non-finite goal journaling | Confirmed defect, unfixed | Independently confirms | **OPEN — mandatory pre-acceptance fix** |
 | Multi-event goal/evolution ordering | Unresolved risks, not confirmed defects | Agrees they need failure-ordering evidence | **OPEN — define and prove consistency contract** |
-| Provenance | 165-path accounting and 14 overlap blob checks; semantic closure incomplete | Risk-based method acceptable in principle, but completion not demonstrated | **OPEN — high-risk path semantic attribution** |
-| API compatibility | 24 body differences classified; targeted caller evidence; inventory incomplete | Declaration/overload/caller compatibility remains insufficient | **OPEN — complete bounded static inventory; preserve compile/link gate** |
-| Workflow continuity | Five workflows classified; adaptations not proven | Requires explicit workflow-by-workflow preservation/adaptation specification | **OPEN — document equivalence requirements** |
+| Provenance | Initial path accounting incomplete | Reviewer required complete risk-based attribution | **SUPERSEDED — see Report 16; CLOSED for baseline recommendation** |
+| API compatibility | Initial body-difference inventory | Reviewer required declarations/overloads/callers | **SUPERSEDED — see Report 09 §7; static in-repository inventory CLOSED, external ABI later** |
+| Workflow continuity | Five workflows classified | Reviewer required exact preservation/adaptation specification | **SUPERSEDED — see Report 10 §5; specification CLOSED, implementation later** |
 | PR evidence index | Reports 13 and 07–12 added to branch | PR description omits later reports; packet pins an older snapshot | **ADMINISTRATIVE CORRECTION REQUIRED** |
 | Formal review | No formal GitHub review claimed | Report 14 is documentary, not submitted review | **NO FORMAL GITHUB REVIEW** |
 
