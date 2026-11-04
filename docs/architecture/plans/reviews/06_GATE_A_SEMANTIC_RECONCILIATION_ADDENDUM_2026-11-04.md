@@ -189,7 +189,7 @@ The prior checkpoint already establishes:
 
 What remains incomplete is the **per-commit origin → changed path → relevant hunk attribution across the entire inherited 1,416-commit history**, especially the 1,244-commit PR #97 line. The existing path-set and PR-lineage arithmetic do not substitute for that ledger.
 
-The available GitHub connector's commit search returns at most 100 records per call and exposes no pagination cursor for exhaustive retrieval; compare results provide graph/file statistics but not a retrievable complete commit-page sequence. I will not claim exhaustive commit/hunk attribution from incomplete records. Completing that ledger requires a local clone or an API route that exposes all commit pages and per-commit file patches.
+The available GitHub connector's commit search returns at most 100 records per call and exposes no pagination cursor for exhaustive retrieval; compare results provide graph/file statistics but not a retrievable complete commit-page sequence. I will not claim exhaustive commit/hunk attribution from incomplete records. Completing that ledger requires a local clone or an API route that exposes all commit pages and per-commit file patches. A local clone was attempted during this pass, but the execution environment could not resolve github.com; no clone data was retrieved.
 
 ## 8. Independent-review operations
 
