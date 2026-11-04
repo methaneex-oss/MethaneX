@@ -81,6 +81,29 @@ bool CognitiveRuntime::submit(CognitiveCycleInput input, const CognitiveTriggerS
     return enqueue(std::move(input), decision.priority);
 }
 
+bool CognitiveRuntime::submit_feedback(CognitiveFeedback feedback) {
+    const bool has_prediction = !feedback.prediction_key.empty();
+    const bool has_evidence = feedback.evidence.has_value() && !feedback.evidence->key.empty();
+    if (!has_prediction && !has_evidence) {
+        std::lock_guard lock(mutex_);
+        ++metrics_.feedback_rejected;
+        return false;
+    }
+
+    {
+        std::lock_guard lock(mutex_);
+        if (!running_ || stopping_ || config_.feedback_capacity == 0 ||
+            feedback_.size() >= config_.feedback_capacity) {
+            ++metrics_.feedback_rejected;
+            return false;
+        }
+        feedback_.push_back(std::move(feedback));
+        ++metrics_.feedback_accepted;
+    }
+    condition_.notify_one();
+    return true;
+}
+
 bool CognitiveRuntime::enqueue(CognitiveCycleInput input, double priority) {
     {
         std::lock_guard lock(mutex_);
@@ -111,6 +134,11 @@ std::size_t CognitiveRuntime::pending_inputs() const {
     return inputs_.size();
 }
 
+std::size_t CognitiveRuntime::pending_feedback() const {
+    std::lock_guard lock(mutex_);
+    return feedback_.size();
+}
+
 std::size_t CognitiveRuntime::pending_results() const {
     std::lock_guard lock(mutex_);
     return results_.size();
@@ -123,15 +151,52 @@ CognitiveRuntimeMetrics CognitiveRuntime::metrics() const {
 
 CognitiveWorkspace CognitiveRuntime::workspace() const { return workspace_.snapshot(); }
 
+void CognitiveRuntime::process_feedback(CognitiveFeedback feedback) {
+    try {
+        (void)cycle_.process_outcome(
+            feedback.prediction_key.empty()
+                ? std::nullopt
+                : std::optional<std::string>{feedback.prediction_key},
+            feedback.actual,
+            feedback.evidence);
+    } catch (...) {
+        // Feedback is an internal learning path. A malformed or failing outcome
+        // must not terminate the continuous cognitive worker.
+    }
+
+    std::lock_guard lock(mutex_);
+    ++metrics_.feedback_processed;
+}
+
 void CognitiveRuntime::worker_loop() {
     for (;;) {
         WorkItem item;
+        std::optional<CognitiveFeedback> feedback;
+
         {
             std::unique_lock lock(mutex_);
-            condition_.wait(lock, [this] { return stopping_ || !inputs_.empty(); });
-            if (inputs_.empty() && stopping_) break;
-            item = std::move(inputs_.front());
-            inputs_.pop_front();
+            condition_.wait(lock, [this] {
+                return stopping_ || !feedback_.empty() || !inputs_.empty();
+            });
+
+            if (feedback_.empty() && inputs_.empty() && stopping_) {
+                break;
+            }
+
+            // Outcome feedback is consumed before queued cognitive work so that
+            // learning from a completed prediction can influence the next cycle.
+            if (!feedback_.empty()) {
+                feedback = std::move(feedback_.front());
+                feedback_.pop_front();
+            } else {
+                item = std::move(inputs_.front());
+                inputs_.pop_front();
+            }
+        }
+
+        if (feedback.has_value()) {
+            process_feedback(std::move(*feedback));
+            continue;
         }
 
         try {
@@ -179,7 +244,10 @@ void CognitiveRuntime::worker_loop() {
     }
 
     std::lock_guard lock(mutex_);
-    if (!config_.drain_on_stop) inputs_.clear();
+    if (!config_.drain_on_stop) {
+        inputs_.clear();
+        feedback_.clear();
+    }
     running_ = false;
     stopping_ = false;
 }
