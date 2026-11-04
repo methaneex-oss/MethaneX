@@ -127,6 +127,8 @@ For NaN inputs, clamping does not provide a reliable finite-value validation gua
 
 **Disposition: CONFIRMED INPUT/PERSISTENCE INTEGRITY RISK.** Validate finiteness before event creation and append; add NaN and ±infinity regression cases. No runtime fix was made in this review.
 
+**Exact source evidence:** candidate `core/cpp/src/brain_restored_api.cpp` blob `00d69ab2eb3811d453a643ef18dc69741109cbc8`; `core/cpp/src/goals.cpp` blob `afaedcfb0f2f68ff88b3a20e474fce04bb59815c`; `core/cpp/src/intent.cpp` blob `9707d5b6da4ddede4dfc99d52f30e7cdc7eed032`.
+
 ### 3.3 Multi-event and rollback failure ordering
 
 Two further areas need explicit failure-injection/replay proof:
