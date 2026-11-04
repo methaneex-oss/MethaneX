@@ -323,3 +323,8 @@ Consolidated evidence: docs/architecture/plans/reviews/16_GATE_A_CLOSURE_EVIDENC
 - The deeper controller-internal compensation failure boundary remains unverified.
 - PR #175 remains documentation-only. Do not merge PR #176, merge PR #175, cherry-pick/rebase, select a baseline or start implementation without explicit Project Director authorization.
 - The recommended strategy remains accepted PR #174 as the integration starting point and PR #156 as a selective source donor only.
+
+
+### PR #176 branch/PR snapshot discrepancy
+
+A follow-up controller-history compensation test was committed to the branch ref as a37add18babf8afc2e9c12ca0449a2ee84ecd60d. However, the live PR #176 metadata and its Actions runs still report head 4cf017e073da980c9f77d739fde6f92ef1a2fbc1; the PR commit list does not include a37add18. Do not count that follow-up test as part of the verified PR until the branch/PR snapshot is synchronized and CI passes at the updated head. The deeper controller compensation boundary therefore remains open.
