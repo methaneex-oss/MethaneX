@@ -633,7 +633,7 @@ The later donor integration line has substantially stronger CI evidence than the
 - Each run tested the PR head combined with its stated base branch in the recorded synthetic merge commit. It does not prove the donor head is compatible with current main `1273ddbcd0087d189e01388ded2d362fb1e058d2`.
 - The same 73-test suite run in three configurations is not 219 distinct tests.
 - Passing tests do not establish evaluator independence, production provenance trust, generalization beyond the specified test environments, or Gate A acceptance.
-- PR #97's exact head remains without verified CI evidence in this audit. The verified PR #156/PR #176 line is a later, distinct donor/integration revision.
+- At the time this subsection was first written, PR #97's exact head had not yet been verified. That historical statement is superseded by the exact-current-HEAD native and ASan/UBSan runs in §18.3. The PR #156/PR #176 line remains a later, distinct donor/integration revision and additionally supplies ThreadSanitizer evidence.
 
 
 ---
@@ -982,16 +982,17 @@ An initial query through the pull-request-triggered commit-run wrapper returned 
 ### 12.5 Reconciliation of competing Phase 2 reports #179 and #180
 
 Both open/draft PRs modify the same report path, but they have different bases and are not interchangeable:
-- PR #179: branch `docs/jarvis-phase-2-whole-brain-integration-map-20261105`, base PR #178 governance branch at `39fe09dcf13496f5f0005ccf3f00739303e29f88`, current HEAD before this batch `9e00b3ba195975bbc74791af8af297e743bb8f5e`.
+- PR #179: branch `docs/jarvis-phase-2-whole-brain-integration-map-20261105`, base PR #178 governance branch at `39fe09dcf13496f5f0005ccf3f00739303e29f88`. The initial reconciliation snapshot used HEAD `9e00b3ba195975bbc74791af8af297e743bb8f5e`; subsequent report revisions are recorded in PR #179's commit history.
 - PR #180: branch `research/phase-2-brain-integration-map-20261105`, base PR #174 specification branch at `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, HEAD `6ca140300b914ed981a50301bbf1d82a5bfe4d8b`.
 
-The PR #180 report is a 311-line first-batch investigation. It records seven inspected integration areas, six cross-mechanism findings and useful explicit source declarations in six headers not separately named in the PR #179 report's source inventory:
+The PR #180 report is a 311-line first-batch investigation. It records seven inspected integration areas, six cross-mechanism findings and useful explicit source declarations in six mechanism headers not separately named in the PR #179 report's source inventory, plus the `CognitiveCycle` public header identity:
 - `attention.hpp` — `c7e8ab0c5430d5c942fe314d928400f769c0a77c`;
 - `causal_model.hpp` — `f740bdf222b3309b13f0c2f541c97448fc05da3e`;
 - `goals.hpp` — `803fdd34130c71f54912b23fcba2f9eed23dd4f2`;
 - `intent.hpp` — `1749ae0d795da496dd6a9a4dcdbd203ae7ddaf6f`;
 - `learning_loop.hpp` — `287f2fe34cebd60b7a562d68c666572f71431cd6`;
-- `reflection.hpp` — `435e03f8f03f74cb910338ab4ab1264e4eaf085c`.
+- `reflection.hpp` — `435e03f8f03f74cb910338ab4ab1264e4eaf085c`;
+- `cognitive_cycle.hpp` — `28e7af98327956268a769adf7813125be842c1a2`.
 
 Those declarations are now accounted for in the current Phase 2 source map: attention policy and reinforcement, causal transition/simulation, goal lifecycle, intent selection, learning-loop processing and reflection evaluation. The substantive PR #180 integration findings are already represented in the broader PR #179 map (including the memory/reasoning disconnection, reasoning non-consumption, goal-formation gap, causal-inference caveat, sequential-cycle limitation and split persistence paths). PR #179 adds the complete BM-01–BM-12 map, a larger integration-finding register, donor comparison, readiness matrix, appendices and the additional source-tracing evidence above.
 
@@ -1008,7 +1009,7 @@ The six PR #180 findings map to the PR #179 register as follows:
 
 A material correction is also required before PR #180 can be considered a clean duplicate: its BM-02 section labels contextual language/operator-intent grounding as F-02, and its BM-12 section labels downstream reasoning integration as F-03. Those labels do not match the PR #173 correction record. PR #173 F-02 is experience-acquired candidate-goal formation; PR #173 F-03 is the SYS-08 computational-substrate boundary. The downstream reasoning issue is PR #174 source-audit finding AUD-12 / Phase 2 IF-03. PR #179 now corrects these labels and retains contextual language grounding as a separate BM-02 gap. PR #180 must not be merged or treated as an authoritative clean copy without this correction.
 
-**Reconciliation decision for this working phase:** continue PR #179 as the working report because it is materially more complete and is based on the governance branch intended to carry the proposed project rules. Preserve PR #180's six unique header identities and its initial findings as incorporated evidence. Do not merge PR #180, close it, or claim its different base has been reconciled at the Git history level. Its branch ancestry and any unique unincorporated content remain a separate review item before either PR can be accepted or merged. No PR status was changed in this batch.
+**Reconciliation decision for this working phase:** continue PR #179 as the working report because it is materially more complete and is based on the governance branch intended to carry the proposed project rules. Preserve PR #180's seven source identities (six mechanism headers plus `cognitive_cycle.hpp`) and its initial findings as incorporated evidence. Do not merge PR #180, close it, or claim its different base has been reconciled at the Git history level. Its branch ancestry and any unique unincorporated content remain a separate review item before either PR can be accepted or merged. No PR status was changed in this batch.
 
 ### 12.6 Updated interpretation matrix
 
@@ -1025,7 +1026,7 @@ A material correction is also required before PR #180 can be considered a clean 
 
 ### 12.7 Remaining work
 
-1. Exact-head push CI is now retrieved and bound to PR #97 HEAD in §18.3. A long-run DLT-002 artifact exists only at older donor SHA `c6a8...` (§19); no exact-head long-run run is credited.
+1. Exact-head push CI is retrieved and bound to PR #97 HEAD in §18.3. The 330-minute DLT-002 artifact remains at older donor SHA `c6a8...` (§19); the later three-seed, 30 aggregate trial-minute sweep at ancestor SHA `82c49a75...` is documented in §22. Neither is an exact-current-HEAD whole-system long-run run.
 2. Selected donor integration tests and the runtime learning integration suite have been inspected. Complete test-by-test review remains open, especially test-only shortcuts, hidden assumptions, reward/context leakage, observer trust and baseline/control validity.
 3. The CognitiveRuntime → CognitiveCycle → selected action → Brain consequence path is source-traced in §18.1 and exercised by exact-head CI plus the historical DLT harness. Remaining work is to classify other public donor APIs and all application/deployment entrypoints without assuming every deployment uses this path.
 4. The multi-event action-outcome → affective-learning → capability-learning append/replay sequence is source-traced in §18.2. Atomicity is absent at the inspected Memory API boundary; failure-injection, interruption, retry and restart-equivalence tests remain required.
@@ -1814,7 +1815,7 @@ No source changes were made to resolve these findings because Phase 2 remains a 
 ## 22. Additional source-tracing batch — three-seed DLT-002 artifact review and revision-drift reconciliation
 
 **Audit date:** 2026-11-05  
-**Workflow:** JARVIS DLT-002 Multi-Seed Learning Sweep, run #8, ID `40565468650`  
+**Workflow:** [JARVIS DLT-002 Multi-Seed Learning Sweep, run #8](https://github.com/methaneex-oss/MethaneX/actions/runs/40565468650), ID `40565468650`  
 **Run commit:** `82c49a75bd30de2962879f044776f4bf2391970a`  
 **Current donor HEAD:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`  
 **Scope:** Downloaded and independently parsed all three preserved seed artifacts; recomputed episode and phase metrics from the raw CSVs; checked the workflow and DLT executable against the exact run commit; compared the run commit's relevant source files with current PR #97 HEAD. This was artifact/source review, not a rerun.
@@ -1833,9 +1834,9 @@ All three artifacts were downloaded and inspected, including their metadata, sum
 
 | Seed | Artifact ID | SHA-256 | Episodes | Optimal selections | Fixed-policy best | Learner delta |
 |---|---:|---|---:|---:|---:|---:|
-| 20261026 | 12764655498 | `d189293bb8b2d552288caea1e03798436ec335e68a9b0e9a6b6d262be6c9263a` | 586 | 569/586 (97.1%) | 293/586 (50.0%) | +47.1 pp |
-| 20261027 | 12763543000 | `af42bcb1105bc884c6fba94c17097545aa16fe0e3aacbcbf0315fb9d0e6afef0` | 590 | 557/590 (94.4%) | 296/590 (50.2%) | +44.2 pp |
-| 20261028 | 12763204259 | `ae93f0cec02f0896a4e8ec96f8eda2dcb772521b5888916697f30622434b7ef2` | 589 | 556/589 (94.4%) | 295/589 (50.1%) | +44.3 pp |
+| 20261026 | [12764655498](https://github.com/methaneex-oss/MethaneX/actions/runs/40565468650/artifacts/12764655498) | `d189293bb8b2d552288caea1e03798436ec335e68a9b0e9a6b6d262be6c9263a` | 586 | 569/586 (97.1%) | 293/586 (50.0%) | +47.1 pp |
+| 20261027 | [12763543000](https://github.com/methaneex-oss/MethaneX/actions/runs/40565468650/artifacts/12763543000) | `af42bcb1105bc884c6fba94c17097545aa16fe0e3aacbcbf0315fb9d0e6afef0` | 590 | 557/590 (94.4%) | 296/590 (50.2%) | +44.2 pp |
+| 20261028 | [12763204259](https://github.com/methaneex-oss/MethaneX/actions/runs/40565468650/artifacts/12763204259) | `ae93f0cec02f0896a4e8ec96f8eda2dcb772521b5888916697f30622434b7ef2` | 589 | 556/589 (94.4%) | 295/589 (50.1%) | +44.3 pp |
 
 Recomputation from the raw episode CSVs gives **1,682 optimal selections from 1,765 episodes (95.30%)**. The sum of the three per-seed best fixed-action baselines is 884/1,765 (50.08%), giving a descriptive aggregate difference of **+45.22 percentage points**. This is a weighted aggregation of the three runs, not a separate fourth experiment.
 
@@ -1858,7 +1859,7 @@ The final checkpoint in each artifact reports zero unresolved action-consequence
 
 ### 22.3 What the environment did and did not reveal
 
-The exact run-revision executable `core/cpp/tests/dlt_002_long_run.cpp` has blob `cbd80951c2f331fa4893c1805fff45a4035d5d24`. The workflow has blob `f40a859a9b6b4f8138cd14df9fa09ad362f3515c`.
+The exact run-revision [executable](https://github.com/methaneex-oss/MethaneX/blob/82c49a75bd30de2962879f044776f4bf2391970a/core/cpp/tests/dlt_002_long_run.cpp) has blob `cbd80951c2f331fa4893c1805fff45a4035d5d24`. The [workflow](https://github.com/methaneex-oss/MethaneX/blob/82c49a75bd30de2962879f044776f4bf2391970a/.github/workflows/jarvis-learning-seed-sweep.yml) has blob `f40a859a9b6b4f8138cd14df9fa09ad362f3515c`.
 
 Source inspection confirms this is a meaningful but constrained experiment:
 - The environment randomizes the alpha-to-action mapping independently per seed; beta maps to the opposite action.
@@ -1874,7 +1875,7 @@ This supports evidence of rapid, repeatable adaptation in a randomized, noisy, p
 
 ### 22.4 Exact run commit is an ancestor, but not the current integrated donor revision
 
-GitHub's commit comparison reports that current donor HEAD is 18 commits ahead of the run commit and has no commits behind it; `82c49a75...` is the merge base/ancestor in this comparison.
+[GitHub's commit comparison](https://github.com/methaneex-oss/MethaneX/compare/82c49a75bd30de2962879f044776f4bf2391970a...c1da222e6c94aeb3f2ad000392c21fe4fc81ab25) reports that current donor HEAD is 18 commits ahead of the run commit and has no commits behind it; `82c49a75...` is the merge base/ancestor in this comparison.
 
 The source identity comparison is material:
 
@@ -1899,6 +1900,6 @@ The fixed-action baseline is useful as a simple lower bound under randomized map
 
 **Finding P2-I-031 — Three independent 10-minute DLT-002 trials at donor commit `82c49a75...` completed 1,765 episodes with 95.30% aggregate optimal-action selection and 3/3 optimal first decisions in the unseen context.** The result is meaningful repeatability evidence for the narrow synthetic task. It is not a matched learning-ablation result and not an exact-current-HEAD whole-system run because four material Brain/cycle/learning/persistence files changed in the 18 later commits.
 
-**Updated interpretation:** PR #97 has (a) exact-current-HEAD native and ASan/UBSan CI with 71/71 tests in each configuration (§18.3), (b) a three-seed 30-minute aggregate at ancestor revision `82c49a75...` with a fixed-action baseline (§22), and (c) a 330-minute single-seed run at older revision `c6a8a00...` (§19). These are three distinct evidence classes and must not be combined into a claim that the current donor HEAD passed a 330-minute, multi-seed, full-suite, matched-control validation.
+**Updated interpretation:** PR #97 has (a) exact-current-HEAD native and ASan/UBSan CI with 71/71 tests in each configuration (§18.3), (b) a three-seed 30 aggregate trial-minute run at ancestor revision `82c49a75...` with a fixed-action baseline (§22), and (c) a 330-minute single-seed run at older revision `c6a8a00...` (§19). These are three distinct evidence classes and must not be combined into a claim that the current donor HEAD passed a 330-minute, multi-seed, full-suite, matched-control validation.
 
 **Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, and no implementation authorization implied.
