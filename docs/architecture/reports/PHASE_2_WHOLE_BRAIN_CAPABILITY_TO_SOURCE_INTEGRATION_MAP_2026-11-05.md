@@ -1558,6 +1558,28 @@ Run references:
 
 **Finding P2-I-024 — PR #97 exact HEAD has verified native and ASan/UBSan CI with 71/71 registered tests passing in each job.** This replaces the earlier §12.4 statement that exact-head donor CI was unverified. It materially strengthens implementation/test provenance but does not resolve the remaining semantic, failure-model or independent-review obligations.
 
+
+### 18.4 The exact-HEAD runtime integration test checks learning, transfer isolation, reversal and restart behavior
+
+The exact-HEAD CTest suite includes `cognitive_runtime_learning_integration_suite`, blob `656de56b1368e40afb090778a7a5504ab4208056`. Its assertions exercise the runtime call chain rather than invoking only isolated Brain methods:
+
+- The configured consequence observer supplies deterministic action-dependent consequences. The first selected action is executed through `CognitiveRuntime`; the test checks the observed consequence, persisted `action_outcome`, resolved context-keyed prediction, prediction-error metric and affective-learning update.
+- The next cycle reconsiders the same candidate set and selects the alternative after the negative observed consequence.
+- A semantically unrelated context does not blindly inherit the original context's learned action preference.
+- The environment regime is reversed; repeated runtime cycles eventually switch the selected action to the newly beneficial action.
+- After stopping and reconstructing Brain from the same journal, a new CognitiveRuntime selects the action supported by the persisted/replayed experience. This tests a future decision after restart, not only inspection of a restored strategy table.
+- The test also exercises a no-consequence-observation condition: three actions execute and verify successfully while the consequence observer is omitted; the developmental strategy table must remain empty for that context.
+
+Source references:
+- [`cognitive_runtime_learning_integration_suite.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/cognitive_runtime_learning_integration_suite.cpp#L66-L156), blob `656de56b1368e40afb090778a7a5504ab4208056`.
+- [`cognitive_runtime_learning_integration_suite.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/cognitive_runtime_learning_integration_suite.cpp#L158-L270), same blob.
+- [`cognitive_runtime_learning_integration_suite.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/cognitive_runtime_learning_integration_suite.cpp#L275-L317), same blob.
+- [CMake registration](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/CMakeLists.txt#L240-L245), blob `cbfd1fde52fffa6eeac025da2b7ddcb5ab493261`.
+
+**Important precision about the test's “No-feedback control” comment:** this is not a complete no-learning control. Omitting `observe_consequence` prevents environmental consequence evidence and the test correctly checks that no developmental action-value strategy is created. However, `CognitiveRuntime::execute_actions` still calls `evidence_for_action` for a verified, non-rejected execution and submits the action status/reason as operational evidence. The control therefore retains status/reliability feedback and does not assert that all belief, knowledge or affective updates are absent. It is a **no-consequence-observation control**, not a learning-ablation experiment.
+
+**Assessment:** this exact-HEAD test is strong, targeted integration evidence for consequence-sensitive action selection, context isolation, reversal and persistence/restart. Its deterministic callback-based task remains a bounded integration fixture; it does not replace randomized multi-seed controls, broader task transfer or real external observer validation.
+
 ---
 
 ## 19. Additional source-tracing batch — independent inspection of the DLT-002 long-run artifact
@@ -1613,7 +1635,7 @@ The artifact supports the claim that this donor revision performed well over a l
 ### 19.3 The long-run evidence has material experimental limitations
 
 1. **Single seed:** the 330-minute run uses seed `20261026`; one successful seed does not establish robust performance across randomized mappings/noise streams.
-2. **No matched no-learning control in this artifact:** the run does not compare the same Brain with consequence feedback disabled, nor a matched learner with the learning mechanism ablated. The later seed-sweep workflow's fixed-action baseline is not equivalent to a matched Brain control.
+2. **No matched no-learning control in this artifact:** the run does not compare the same Brain with consequence feedback disabled, nor a matched learner with the learning mechanism ablated. The exact-HEAD runtime integration suite does contain a short no-consequence-observer control, but operational action-status evidence is still submitted in that control; it is not a full learning-ablation control (see §18.4). The later seed-sweep workflow's fixed-action baseline is not equivalent to a matched Brain control.
 3. **Narrow task:** two candidate actions, one action per cycle, one-step planning, a synthetic environment and a fixed six-phase protocol do not test multi-step plans, open-ended goals, rich sensor uncertainty, causal intervention breadth or unconstrained action selection.
 4. **Phase counts are unequal:** the trial changes phase by elapsed wall-clock time while each episode takes variable processing time; episode counts per phase are consequently unequal. Aggregate accuracy is not a phase-balanced score.
 5. **Prediction accounting is incomplete in this run revision:** the artifact records 38,400 prediction records and 12,479 prediction-outcome records, with 12,479 resolved predictions. The run's older metrics do not split unresolved action-consequence forecasts from other unresolved predictions. It therefore cannot prove that every action-consequence prediction was resolved.
@@ -1622,5 +1644,76 @@ The artifact supports the claim that this donor revision performed well over a l
 The current donor HEAD's DLT executable adds separate unresolved action-consequence and other-prediction counts and fails a feedback-enabled run when unresolved action-consequence forecasts remain. That is a source-level improvement at `c1da...`; the archived 330-minute artifact predates that version and must not be used to claim that the newer gate passed.
 
 **Finding P2-I-025 — A 330-minute DLT-002 run completed 12,479 episodes with 99.327% environment-evaluated optimal action selection and a 10/10 first-window generalization probe, but the run is from donor commit `c6a8...`, uses one seed and a narrow synthetic one-step task, and lacks a matched no-learning control.** It is useful behavioral evidence, not capability acceptance and not verification of current donor HEAD.
+
+**Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, and no implementation authorization implied.
+
+
+---
+
+## 20. Additional self-review batch — runtime evidence schema collision and feedback backpressure
+
+**Audit date:** 2026-11-05  
+**Donor baseline:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`  
+**Scope:** Independent second-pass review of the donor runtime's action-feedback event contract, replay projection and queue failure behavior. Documentation only; no source or test changes.
+
+### 20.1 A newly generated action-reliability event still uses the legacy unordered-map evidence fallback
+
+The event schema defines `Attributes` as `std::unordered_map<std::string, Scalar>`. The Brain's general learning replay path correctly prefers explicit `evidence_key` and `evidence_value` fields. Its fallback path is explicitly described as backward compatibility for older journal records, but it takes the **first eligible key encountered while iterating the unordered map**.
+
+The donor `Brain::execute_action` currently creates a new `learning` event with:
+- a dynamic key `action_executor.<action-name>` holding numeric reliability;
+- `reliability`;
+- `source_action_sequence`;
+- `affective_relevant=false`.
+
+It does **not** populate `evidence_key` and `evidence_value`. Replay therefore enters the legacy fallback. The fallback excludes reliability, salience, novelty, confidence, evidence_key, evidence_value and source_action_sequence, but does not exclude `affective_relevant`. Depending on unordered-map iteration order, it may assimilate the intended `action_executor.<name>` reliability fact or the `affective_relevant=false` metadata as the fact. The code's own replay comment warns that first-entry unordered-map assimilation can learn appraisal metadata or a different fact; this newly emitted event still takes that path.
+
+This is not a claim that every current build will select the wrong entry on every run. The defect is that the event producer does not satisfy the explicit payload contract and replay semantics are not deterministic by schema across implementations, insertion layouts or persisted/reloaded maps.
+
+Source references:
+- [`event.hpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/include/jarvis/core/event.hpp#L11-L12), blob `a31db633e8181378fcec0a20c5958c0065d430ee`.
+- [`brain_action_execution.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain_action_execution.cpp#L157-L166), blob `3b66bafb438cd28790e6f25611b96c86f1eff05c`.
+- [`brain.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain.cpp#L620-L655), blob `dec9e5442b3ca4b81a7879855c6146b2619934cc`.
+
+**Finding P2-I-026 — The donor emits a new action-reliability learning event without the explicit evidence payload required to avoid the legacy unordered-map replay fallback.** The fallback can assimilate metadata instead of the intended reliability fact. Before acceptance, the event producer must emit explicit typed evidence fields, metadata must never be eligible as a fact, and tests must prove identical replay results across serialization/restart and unordered-map iteration variation.
+
+### 20.2 The runtime submits a second, differently typed value under the same evidence key
+
+There are two action-feedback producers:
+
+1. `Brain::execute_action` appends its internal `learning` event with `action_executor.<name>` mapped to a **double reliability** value and source `action_executor` (subject to the fallback issue in §20.1).
+2. After execution, `CognitiveRuntime::execute_actions` calls `evidence_for_action`, which creates `Evidence` with the same key `action_executor.<name>`, source `action.<name>`, and value `result.reason` — a **string**. `Brain::learn` persists this second event using explicit `evidence_key`/`evidence_value`.
+
+The Brain's belief projection stores one current `Belief` per key. When a later learning event supplies a different value for an existing key, replay replaces the current value and marks the belief disputed. Therefore, when the first event has assimilated the numeric reliability fact, the runtime's later string-valued reason event collides with it under the same key and changes the belief's type/value. The knowledge evidence also carries different sources, but that does not remove the single-key collision in `beliefs_`.
+
+The runtime integration suite verifies consequence prediction, strategy changes, context isolation and restart behavior, but it does not assert the type/value/disputed state of `action_executor.<name>` after these two feedback events. The exact-HEAD 71/71 CI pass therefore does not close this schema defect.
+
+Source references:
+- [`cognitive_runtime.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/cognitive_runtime.cpp#L43-L55), blob `cf00acb6abd52308343f3a0e7016e6173b945603`.
+- [`cognitive_runtime.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/cognitive_runtime.cpp#L205-L212), same blob.
+- [`brain.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain.cpp#L676-L684), blob `dec9e5442b3ca4b81a7879855c6146b2619934cc`.
+- [`brain.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain.cpp#L791-L818), same blob.
+
+**Finding P2-I-027 — The internal action-reliability event and runtime status/reason feedback reuse one evidence key with incompatible value types (numeric reliability versus string reason).** The one-value-per-key belief projection can become disputed and change type. Define separate typed keys/contracts for reliability and execution status/reason, or make the event semantics explicitly multi-valued; then test the post-action belief and replayed state.
+
+### 20.3 The runtime can reject secondary action feedback while the caller discards the result
+
+`submit_feedback` rejects a feedback item when the runtime is stopped/stopping, feedback capacity is zero, or the bounded feedback queue is full. It increments `feedback_rejected` and returns `false`. The action-execution loop invokes it with an explicit `(void)` cast, discarding that result.
+
+Because `execute_actions` runs synchronously on the same worker that drains the feedback queue, feedback queued by earlier planned steps cannot be processed until the current `execute_actions` call returns. A multi-step plan whose non-rejected actions exceed available queue capacity, or concurrent external feedback that fills the queue, can therefore cause secondary status/reason evidence to be rejected while action execution continues. The authoritative action-outcome event and direct observed-consequence learning are already handled inside `Brain::execute_action`; the potential loss concerns the additional runtime evidence record, not automatic loss of the persisted consequence event.
+
+Source references:
+- [`cognitive_runtime.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/cognitive_runtime.cpp#L86-L125), blob `cf00acb6abd52308343f3a0e7016e6173b945603`.
+- [`cognitive_runtime.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/cognitive_runtime.cpp#L155-L223), same blob.
+
+**Finding P2-I-028 — The runtime action loop discards the result of bounded secondary-feedback submission.** Queue saturation can silently omit the additional status/reason evidence from the action result's perspective. Required proof includes a multi-step plan exceeding feedback capacity, concurrent feedback saturation, visible per-action rejection handling and confirmation that the primary action-outcome record remains intact.
+
+### 20.4 Required correction evidence before donor acceptance
+
+1. Give every newly generated learning event an explicit, typed `evidence_key` and `evidence_value`; reserve unordered-map fallback for genuinely legacy journal records and exclude all appraisal/control metadata.
+2. Separate executor reliability from status/reason facts at the evidence-key and schema level.
+3. Test that one action produces the intended distinct facts, with no accidental metadata belief and no cross-type overwrite; verify identical results after restart/replay.
+4. Exercise feedback-queue capacity zero, capacity one, full queue, multi-step plans and concurrent producer saturation. Rejected secondary evidence must be visible and handled according to an explicit loss/retry policy.
+5. Preserve the existing no-consequence-observation invariant: verified execution without observed environmental consequence must not create a developmental utility preference.
 
 **Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, and no implementation authorization implied.
