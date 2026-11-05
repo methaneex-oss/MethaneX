@@ -25,6 +25,28 @@
 | Event journal, reconstruction and learning persistence | `core/cpp/src/memory.cpp` — `ab42bba1d32d6f48d091787491c72294a4a55bb5`; `core/cpp/src/brain.cpp` — `dec9e5442b3ca4b81a7879855c6146b2619934cc` | Memory serializes event data and metadata to a journal; Brain construction/replay rebuilds cognitive state from events. Action, prediction and learning updates are represented as journal events in the inspected path. | Reconstructed Brain state can be used by subsequent cycles, predictions and strategy selection. | `core/cpp/tests/memory_learning_evolution_persistence_suite.cpp` — `98e6598f60912714234f2dfabfbe52fa5eb77044`; `core/cpp/tests/brain_action_consequence_integration_suite.cpp` — `7616082579d53e3579cae8e87895bdb3dadba66f`. | This is event-backed persistence, not a complete authenticated/tamper-evident memory trust system. Verify exact restart assertions and event versions before relying on a specific persistence claim. Keep the journal/replay foundation; do not overstate semantic memory or integrity guarantees. |
 | Evolution evaluation and adoption control | `core/cpp/src/evolution_controller.cpp` — `4e77ec2e5daa09a964132ca486b8c5ee1cebf2f5`; `core/cpp/src/evolution_adoption.cpp` — `836216bb567e2c87d14b6442bd363e9861ac6974` | `EvolutionController::record_evaluation` rejects invalid/incomplete/non-isolated evidence according to policy, recomputes the experiment outcome, stages the adoption journal and records evaluation history. The stateless `EvolutionAdoption::adopt` helper fails closed because it cannot verify durable matching history; adoption must pass through the controller. | The controller coordinates durable evaluation/adoption state, with associated canary and rollback components in the donor tree. | `core/cpp/tests/evolution_brain_integration_suite.cpp` — `59d7dd68c42eea18d488d8e5e6aa9f7a9a327ded`; `core/cpp/tests/memory_learning_evolution_persistence_suite.cpp` — `98e6598f60912714234f2dfabfbe52fa5eb77044`. | The source includes meaningful safety controls, but does not establish unrestricted autonomous self-rewriting. Phase 1 records deeper controller-internal compensation failure injection as open in later donor correction work. Keep safety/evaluation boundaries and retain outstanding failure-injection gates. |
 
+## 3. Test target registration check
+
+The following test source files are present in PR #97 HEAD and are referenced by the exact donor CMake test-registration file:
+
+- CMake file: `core/cpp/tests/CMakeLists.txt`
+- CMake blob at PR #97 HEAD: `cbfd1fde52fffa6eeac025da2b7ddcb5ab493261`
+- Donor commit: `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`
+
+| Test source | CMake target declaration found |
+|---|---|
+| `affective_state_suite.cpp` | Yes — `jarvis_affective_state_suite` |
+| `affective_decision_learning_suite.cpp` | Yes — `jarvis_affective_decision_learning_suite` |
+| `brain_action_consequence_integration_suite.cpp` | Yes — `jarvis_brain_action_consequence_integration_suite` |
+| `developmental_learning_suite.cpp` | Yes — `jarvis_developmental_learning_suite` |
+| `prediction_feedback_phase10_suite.cpp` | Yes — `jarvis_prediction_feedback_phase10_suite` |
+| `evolution_brain_integration_suite.cpp` | Yes — `jarvis_evolution_brain_integration_suite` |
+| `memory_learning_evolution_persistence_suite.cpp` | Yes — `jarvis_memory_learning_evolution_persistence_suite` |
+| `developmental_brain_integration_suite.cpp` | Yes — `jarvis_developmental_brain_integration_suite` |
+| `developmental_training_environment_suite.cpp` | Yes — `jarvis_developmental_training_environment_suite` |
+
+This verifies source-to-CMake target declaration at the donor commit only. It does not prove that the targets compiled or that any test executed successfully at that commit. A specific CI run must still be tied to its exact commit and logs.
+
 ## 3. Cross-path conclusions
 
 1. **Affect has downstream consumers.** The donor's affective state is consumed by intent/planning and by action-outcome evidence weighting. It is not merely an isolated state variable. Its scope remains bounded, and its appraisal equations are engineered priors.
