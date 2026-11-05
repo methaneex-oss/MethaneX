@@ -583,13 +583,13 @@ The donor's action feedback and developmental strategy paths are meaningful and 
 ### 6.2 What was not verified in this phase-start mapping
 
 - No local build or runtime test was run.
-- No test source was executed during this mapping.
+- No test source was executed locally during this mapping; exact donor-HEAD provider CI and a historical long-run artifact were later retrieved and reviewed in §§18–19.
 - No CI run was manually dispatched by this audit; GitHub automatically triggered a PR build after the documentation branch update.
-- No performance, learning, transfer or longitudinal experiment was performed.
+- No new performance, learning, transfer or longitudinal experiment was run by this audit; the historical DLT-002 artifact was retrieved and independently inspected in §19.
 - No independent reviewer has reviewed this Phase 2 map.
 - No full line-by-line audit of every PR #97 changed file or every later donor was performed.
 - No compatibility/ABI/API proof exists for porting donor code into main.
-- No runtime integration behavior is certified by this document.
+- No runtime integration behavior is certified or capability-accepted by this document; the test and artifact evidence in §§18–19 is bounded verification evidence, not a Gate A decision.
 
 ### 6.3 Existing CI evidence must remain exact-commit scoped
 
@@ -859,7 +859,7 @@ Both declare `feat/jarvis-affective-state` as the default `source_ref` and check
 
 **Finding P2-I-009 — Workflow presence on main is not evidence that main was tested for donor capabilities.**
 
-A workflow definition stored on main is not itself execution evidence. Where the workflow's default checkout is the donor branch, its resulting tests (if run with that default) verify the donor ref, not the pinned main baseline. Any claim about a CI result must identify the actual workflow run, input `source_ref`, checked-out SHA, build/test result and artifact. No workflow run was retrieved or executed in this batch.
+A workflow definition stored on main is not itself execution evidence. Where the workflow's default checkout is the donor branch, its resulting tests (if run with that default) verify the donor ref, not the pinned main baseline. Any claim about a CI result must identify the actual workflow run, input `source_ref`, checked-out SHA, build/test result and artifact. No workflow run was retrieved or executed in that batch; this was later superseded for exact PR #97 HEAD by the direct Actions provenance in §18.3. The workflow-default warning remains relevant to runs that checked out the donor branch from main.
 
 ### 11.4 Updated interpretation of the action and affective pathways
 
@@ -964,7 +964,7 @@ These are meaningful source-level behavioral assertions. At the time of this fir
 
 **Finding P2-I-011 — PR #97 contains test specifications for persistent, consequence-sensitive changes in later action selection.** The tests are substantially stronger than the main Phase 7 status-belief test. Exact donor-HEAD CI execution is now confirmed in §18.3. Their assertions still require independent review of test validity and controls, and broader evaluation of confounding, generalization and real external consequence quality before they can support capability acceptance.
 
-### 12.4 CI provenance: PR #179 build verified; PR #97 exact head unverified; later integration CI verified
+### 12.4 CI provenance: PR #179 build verified; PR #97 exact-head CI subsequently verified; later integration CI separately verified
 
 A workflow run associated with PR #179's updated commit was retrieved:
 - Workflow: **Native Brain Build**, run number **1610**, run ID **42064855161**.
@@ -1015,22 +1015,22 @@ A material correction is also required before PR #180 can be considered a clean 
 | Capability | Main at pinned baseline | PR #97 donor at exact HEAD | Evidence status |
 |---|---|---|---|
 | Affective state ownership | Not integrated into main Brain target | Owned by donor Brain and replay path | Donor source-backed; not main capability |
-| Affective appraisal learning | Orphan source artifact only | Event-driven calibration with source-event validation | Donor source-backed; runtime/independent verification pending |
-| Developmental strategy learning | Not present in main Brain owner | Context-keyed strategy state affects action ranking | Donor source-backed; behavioral assertions exist |
+| Affective appraisal learning | Orphan source artifact only | Event-driven calibration with source-event validation | Donor source-backed; exact-head native/sanitizer CI passed; independent semantic review and observer trust remain open |
+| Developmental strategy learning | Not present in main Brain owner | Context-keyed strategy state affects action ranking | Exact-head integration suites passed; long-run behavior evidenced at older donor SHA; independent review and broader controls remain open |
 | Action execution | Public Brain API with status/reason learning | Consequence observer, scoped prediction, structured outcome event | Main narrow path; donor richer path |
 | Outcome attribution | No equivalent structured consequence contract established | Action event and source-linked affective event | Donor stronger; observer trust unresolved |
 | Replay | Main event journal replay | Donor replay reconstructs affective, attention, prediction and strategy effects | Donor stronger; multi-event crash atomicity unresolved |
-| Future action preference | Not demonstrated by main Phase 7 test | Donor tests assert learned preference and related-context transfer | Test source assertions only; no independent run accepted |
-| CI proof | PR #179 combined merge tree configured/built; no tests in that run | No donor PR-triggered run returned by current query | Main PR build only; donor CI unverified |
+| Future action preference | Not demonstrated by main Phase 7 test | Donor tests assert learned preference and related-context transfer | Exact-head runtime integration suite passed in CI; historical DLT transfer evidence at `c6a8...`; independent reviewer acceptance remains open |
+| CI proof | PR #179 combined merge tree configured/built; no tests in that run | Exact donor HEAD `c1da...`: Brain CI native and ASan/UBSan each passed 71/71; Core Verification also succeeded; no exact-head TSan or long-run trial found | Exact-head unit/integration CI verified; separate 330-minute DLT run at `c6a8...` is historical donor evidence, not current HEAD |
 
 ### 12.7 Remaining work
 
-1. Retrieve the exact donor PR #97 workflow runs through the Actions workflow listing/dispatch history where possible, including any manual `workflow_dispatch` runs, and bind run inputs and checked-out SHA to each artifact.
-2. Independently inspect the complete donor integration tests for test-only shortcuts, hidden assumptions, reward leakage, context leakage, baseline/control validity, and whether the action-selection delta is caused by the intended learned state rather than shared global affect.
-3. Trace the donor's external caller graph for `Brain::execute_action`, `choose_with_affect`, `choose_with_developmental_learning` and the CognitiveRuntime path. Separate test harness calls from production/runtime calls.
-4. Trace the full donor event journal failure model across the multi-event action-outcome → affective-learning → capability-learning sequence, including append failures between records and replay idempotence.
-5. Compare donor action authorization, stale assessment and rollback-failure behavior with main and Gate A requirements.
-6. Incorporate the six PR #180 header identities into the final appendix and retain its branch-base difference in the duplicate-artifact register.
+1. Exact-head push CI is now retrieved and bound to PR #97 HEAD in §18.3. A long-run DLT-002 artifact exists only at older donor SHA `c6a8...` (§19); no exact-head long-run run is credited.
+2. Selected donor integration tests and the runtime learning integration suite have been inspected. Complete test-by-test review remains open, especially test-only shortcuts, hidden assumptions, reward/context leakage, observer trust and baseline/control validity.
+3. The CognitiveRuntime → CognitiveCycle → selected action → Brain consequence path is source-traced in §18.1 and exercised by exact-head CI plus the historical DLT harness. Remaining work is to classify other public donor APIs and all application/deployment entrypoints without assuming every deployment uses this path.
+4. The multi-event action-outcome → affective-learning → capability-learning append/replay sequence is source-traced in §18.2. Atomicity is absent at the inspected Memory API boundary; failure-injection, interruption, retry and restart-equivalence tests remain required.
+5. Donor action authorization, stale assessment, rollback-failure and observer-provenance behavior still require a dedicated comparison against main and Gate A requirements.
+6. PR #180's six unique header identities and initial findings are incorporated into the working report. Its distinct base and Git history remain unreconciled; keep PR #180 open until owner-directed duplicate disposition.
 7. Continue unresolved BM-01–BM-12 edges, especially F-02/F-03 exact originating review text, world-model/belief authority, memory-supported reasoning, candidate-goal generation, coordination/invalidation/recovery and cross-language boundaries.
 
 **Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, no implementation authorization implied.
