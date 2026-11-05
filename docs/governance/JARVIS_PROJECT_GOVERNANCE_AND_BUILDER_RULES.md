@@ -151,7 +151,7 @@ If a conflict exists, stop the affected change and resolve it explicitly. Do not
 When artifacts disagree, apply this order, while respecting each artifact's approved scope:
 
 1. Explicit project-owner decisions and approvals.
-2. Accepted whole-system architecture and accepted Brain architecture/specification (PR #171–#174, with the scope qualifications recorded in Phase 1).
+2. Verified approved whole-system architecture and Brain architecture/specification artifacts, within exact approved scopes. PR #174 was formally accepted for exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` in Project Director issue comment #6604790481. A subsequent review report supplied in the conversation identifies F-02 and F-03 as unresolved. Preserve the historical acceptance while treating those later findings as open correction obligations; affected requirements are not implementation-ready until resolved and the required authority/review decision is recorded.
 3. Approved project governance and gate decisions.
 4. Current, verified implementation and its reproducible behavior.
 5. Verified tests, experiments and runtime evidence.
@@ -547,7 +547,7 @@ Until new evidence formally changes them, future work must carry forward these P
 
 1. The project is not to be restarted; substantial implementation and donor work exist.
 2. PR #171 Documents 00 and 01 have scope-limited approvals recorded in the Phase 1 inventory; PR #172 and PR #173 are recorded as accepted planning inputs/baselines, subject to exact revision and approval verification.
-3. PR #174's status is disputed across Phase 1 artifacts: the whole-repository audit describes it as accepted, while the documentation inventory records the latest independent re-review as identifying unresolved F-02 and F-03 and explicitly calls for reconciliation with PR #175's wording. Until that discrepancy is resolved against the exact review report and owner decision, use PR #174 as the current candidate specification for traceability and analysis, but do not describe it as unconditionally accepted or implementation-authoritative. BM-01–BM-12 mapping may proceed as analysis; any implementation dependency on disputed requirements must be gated.
+3. PR #174 was formally accepted by the Project Director for exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` in issue comment #6604790481. A later review report supplied in the conversation identifies F-02 and F-03 as unresolved. This does not retroactively erase the acceptance event. It creates targeted specification-correction obligations; PR #174 remains the accepted planning baseline, but affected requirements must not be treated as implementation-ready until those findings are resolved and the required authority/review decision is recorded. The later report is not currently represented as a submitted GitHub PR review. BM-01–BM-12 mapping may proceed as analysis; implementation depending on unresolved F-02/F-03 requirements remains gated.
 4. Main-branch C++ implementation is a substantial starting point, not a specification-complete Brain.
 5. PR #97 and PR #148–#156 are selective donors, not a wholesale approved baseline.
 6. PR #176 contains D1/D2 corrections and test evidence, but its open/unmerged status and relationship to PR #156 must be checked at the time of future work.
@@ -590,8 +590,8 @@ If a rule is obsolete, mark it superseded and explain why. Preserve the prior ve
 This document is a proposed governance baseline for project-owner review. It does not retroactively certify that all earlier work complied with these rules.
 
 At creation:
-- Phase 1 inventory/reuse/conflict investigation: completed and documented in its own report.
-- Accepted architecture/specification: established through PR #171–#174 within their recorded scopes.
+- Phase 1 technical inventory/reuse/conflict investigation: complete within the declared static scope; historical branch/document preservation follow-up remains open.
+- Architecture/specification authority: PR #171–#174 have recorded approval/acceptance events within their scopes; PR #174's historical acceptance is confirmed, while later F-02/F-03 review findings remain open correction obligations.
 - Phase 1 Gate A: not cleared in the Phase 1 report.
 - Phase 2: integration investigation is the recommended next phase; do not treat this governance document as authorization for runtime implementation.
 - Repository merge status and all PR heads: must be rechecked live before future gate decisions.
