@@ -954,6 +954,19 @@ The PR #180 report is a 311-line first-batch investigation. It records seven ins
 
 Those declarations are now accounted for in the current Phase 2 source map: attention policy and reinforcement, causal transition/simulation, goal lifecycle, intent selection, learning-loop processing and reflection evaluation. The substantive PR #180 integration findings are already represented in the broader PR #179 map (including the memory/reasoning disconnection, reasoning non-consumption, goal-formation gap, causal-inference caveat, sequential-cycle limitation and split persistence paths). PR #179 adds the complete BM-01–BM-12 map, a larger integration-finding register, donor comparison, readiness matrix, appendices and the additional source-tracing evidence above.
 
+The six PR #180 findings map to the PR #179 register as follows:
+
+| PR #180 finding | PR #179 equivalent | Reconciliation note |
+|---|---|---|
+| P2-I-001 — retrieved memory omitted from reasoning premises | IF-02 | Main-baseline source fact; donor memory-to-action valuation is separately mapped in §13.2 |
+| P2-I-002 — reasoning result not consumed downstream | IF-03 | Main-baseline source fact; donor reasoning conclusions feed causal simulation in §13.2 |
+| P2-I-003 — supplied-goal lifecycle is not candidate-goal formation | IF-06 and P2-I-015 | Extended by the exact PR #173 F-02 mapping in §14 |
+| P2-I-004 — causal links may overstate causality | IF-05 | Same main causal-model limitation |
+| P2-I-005 — sequential cycle is not full recurrent/concurrent cognition | IF-08 | Same bounded-coordinator limitation |
+| P2-I-006 — journal and metadata use separate persistence paths | IF-10 and P2-I-014/P2-I-016 | Extended with donor multi-event journal behavior and SYS-08 boundary evidence |
+
+A material correction is also required before PR #180 can be considered a clean duplicate: its BM-02 section labels contextual language/operator-intent grounding as F-02, and its BM-12 section labels downstream reasoning integration as F-03. Those labels do not match the PR #173 correction record. PR #173 F-02 is experience-acquired candidate-goal formation; PR #173 F-03 is the SYS-08 computational-substrate boundary. The downstream reasoning issue is PR #174 source-audit finding AUD-12 / Phase 2 IF-03. PR #179 now corrects these labels and retains contextual language grounding as a separate BM-02 gap. PR #180 must not be merged or treated as an authoritative clean copy without this correction.
+
 **Reconciliation decision for this working phase:** continue PR #179 as the working report because it is materially more complete and is based on the governance branch intended to carry the proposed project rules. Preserve PR #180's six unique header identities and its initial findings as incorporated evidence. Do not merge PR #180, close it, or claim its different base has been reconciled at the Git history level. Its branch ancestry and any unique unincorporated content remain a separate review item before either PR can be accepted or merged. No PR status was changed in this batch.
 
 ### 10.6 Updated interpretation matrix
