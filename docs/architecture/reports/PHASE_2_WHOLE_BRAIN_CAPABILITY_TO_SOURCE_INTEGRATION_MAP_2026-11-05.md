@@ -608,6 +608,34 @@ GitHub automatically ran the **Native Brain Build** workflow after the PR #179 d
 
 This run validates compilation of the PR #179/PR #178 merge tree at the exact synthetic merge SHA above. It does not validate PR #97 donor code, execute any test suite, demonstrate runtime learning, or clear Gate A. The later report-only commits are not represented by this run; no C++ source changed in those documentation updates.
 
+### 6.5 Verified CI for the later integrated donor line — PR #156 and PR #176
+
+The later donor integration line has substantially stronger CI evidence than the exact PR #97 head. These runs are bound to their checked-out synthetic merge commits, not treated as isolated branch builds.
+
+**PR #156 — integration branch**
+- PR head: `7fe212bbb0bd61116ea56581435e03b06c69b673`; base PR #155 head: `52c367a4b53fdfe9b29776795200555076e8cb49`.
+- All workflows checked out synthetic merge commit `fb433acca35004d9d14ed790f2df16c895979b7a`, merging PR #156 into PR #155's base.
+- Native Brain Build run #1403, ID `41174439433`: completed successfully.
+- JARVIS Brain Tests run #1178, ID `41174439423`: native CTest job passed **73/73**; sanitized CTest job passed **73/73**.
+- Brain ThreadSanitizer run #1160, ID `41174439446`: ThreadSanitizer CTest passed **73/73**.
+- The logs specifically show `jarvis_evolution_brain_integration_suite`, `jarvis_developmental_brain_integration_suite`, `jarvis_goals_architecture_suite` and `jarvis_dlt_004_feature_composition` passing.
+
+**PR #176 — D1/D2 correction and failure-boundary tests**
+- PR head: `4cf017e073da980c9f77d739fde6f92ef1a2fbc1`; base PR #156 head: `7fe212bbb0bd61116ea56581435e03b06c69b673`.
+- All workflows checked out synthetic merge commit `bc229522e36c03c4bbab68b56b14fd2cb1a7b1c5`, merging PR #176 into PR #156's base.
+- Native Brain Build run #1587, ID `41808525486`: completed successfully.
+- JARVIS Brain Tests run #1220, ID `41808525557`: native CTest job passed **73/73**; sanitized CTest job passed **73/73**.
+- Brain ThreadSanitizer run #1202, ID `41808525492`: ThreadSanitizer CTest passed **73/73**.
+- The logs specifically show the corrected `jarvis_goals_architecture_suite`, `jarvis_evolution_brain_integration_suite`, `jarvis_developmental_brain_integration_suite` and `jarvis_dlt_004_feature_composition` targets passing. The D1 selected-intent context regression and D2 non-finite goal-input rejection assertions are included in the changed test sources and therefore were compiled and executed by these CTest runs.
+
+**Interpretation limits**
+- These are real successful provider CI executions with build, CTest, sanitizer and ThreadSanitizer steps; they are stronger than test registration or a PR-description claim.
+- Each run tested the PR head combined with its stated base branch in the recorded synthetic merge commit. It does not prove the donor head is compatible with current main `1273ddbcd0087d189e01388ded2d362fb1e058d2`.
+- The same 73-test suite run in three configurations is not 219 distinct tests.
+- Passing tests do not establish evaluator independence, production provenance trust, generalization beyond the specified test environments, or Gate A acceptance.
+- PR #97's exact head remains without verified CI evidence in this audit. The verified PR #156/PR #176 line is a later, distinct donor/integration revision.
+
+
 ---
 
 ## 7. Preliminary implementation-readiness matrix
@@ -936,7 +964,7 @@ These are meaningful source-level behavioral assertions. They are not results of
 
 **Finding P2-I-011 — PR #97 contains test specifications for persistent, consequence-sensitive changes in later action selection.** The tests are substantially stronger than the main Phase 7 status-belief test. Their assertions still require independent execution at an exact commit, review of test validity and controls, and broader evaluation of confounding, generalization and real external consequence quality before they can support capability acceptance.
 
-### 12.4 CI provenance: one PR #179 build is verified; donor CI remains unverified
+### 12.4 CI provenance: PR #179 build verified; PR #97 exact head unverified; later integration CI verified
 
 A workflow run associated with PR #179's updated commit was retrieved:
 - Workflow: **Native Brain Build**, run number **1610**, run ID **42064855161**.
@@ -949,7 +977,7 @@ A workflow run associated with PR #179's updated commit was retrieved:
 
 **What it does not prove:** no test suite passed in that run; no donor branch code was built by this run; no runtime learning trial, persistence trial, sanitizer or independent behavioral evaluation was executed by this run.
 
-A query for pull-request-triggered workflow runs associated with donor HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` returned no runs through the available commit-run wrapper. That wrapper is limited to PR-triggered runs and its first page; this is not evidence that no manually dispatched or otherwise unlisted workflow execution exists. No donor workflow result is accepted as verified here.
+A query for pull-request-triggered workflow runs associated with PR #97 donor HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` returned no runs through the available commit-run wrapper. That wrapper is limited to PR-triggered runs and its first page; this is not evidence that no manually dispatched or otherwise unlisted workflow execution exists. No workflow result for the exact PR #97 head is accepted as verified here. This must be distinguished from the later PR #156/PR #176 integrated donor line, whose exact synthetic-merge CI runs are verified in §6.5.
 
 ### 12.5 Reconciliation of competing Phase 2 reports #179 and #180
 
