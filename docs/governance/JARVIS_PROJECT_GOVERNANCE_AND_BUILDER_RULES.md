@@ -87,19 +87,13 @@ The Phase 1 report is the initial repository-state and reuse/conflict baseline. 
 
 No future work may treat Phase 1 as optional background reading.
 
-### Rule 3.2 — Required Phase 1 relationship statement
+### Rule 3.2 — Proportionate Phase 1 traceability
 
-Every future phase plan and final phase report must contain a section titled **“Phase 1 Continuity and Impact.”** It must state:
+Every future phase plan and final phase report must contain a full section titled **“Phase 1 Continuity and Impact.”** It must identify relevant Phase 1 findings, source paths, commits, mechanisms and decisions; preserved/reused assets; gaps addressed; dependencies; changed or superseded conclusions; carry-forward obligations; and deliberately unchanged scope.
 
-1. Which Phase 1 findings, source paths, commits, mechanisms and decisions are relevant.
-2. Which existing assets are being preserved and reused.
-3. Which Phase 1 gaps, risks or conflicts this work addresses.
-4. Which earlier decisions it depends on.
-5. Whether it changes, supersedes or adds to any Phase 1 conclusion.
-6. What future phases must inherit from this work.
-7. What was deliberately left unchanged and why.
+Every substantial task, design, implementation change, test plan and review must identify its relevant inherited findings and parent phase/task traceability. Small subtasks may inherit traceability from a parent task when they introduce no new architectural, state, safety, persistence, integration or implementation risk. If a subtask reveals new evidence, changes a contract, crosses a system boundary or creates a material risk, it must add its own explicit traceability.
 
-A statement such as “Phase 1 was considered” is insufficient. Traceability must identify concrete findings and artifacts.
+Do not repeat the entire Phase 1 investigation for every small task. Traceability must be concrete and auditable, but proportional to the scope and risk. A statement such as “Phase 1 was considered” remains insufficient.
 
 ### Rule 3.3 — Phase 1 is a baseline, not an untouchable assumption
 
@@ -241,13 +235,15 @@ Do not encode exhaustive lists of situations and prescribed reactions as the Bra
 
 A bounded parser, safety rule or domain-specific adapter may use explicit rules when its limited role is clear. It must not be misrepresented as general understanding.
 
-### Rule 6.3 — Learning must change future behavior persistently
+### Rule 6.3 — Learning must produce persistent, testable change
 
-A learning claim requires evidence of a causal chain:
+Learning may arise through more than one evidence pathway. At minimum, distinguish:
 
-experience or evidence → state/model update → persistence or valid reconstruction → changed prediction, appraisal, strategy or decision → observed consequence → subsequent revision where appropriate.
+**Observational/evidence-based learning:** new observations, verified information, contradiction, discovered relationships or appropriately sourced experience change an internal representation, belief, model, prediction or strategy. Demonstrate that the update is justified by evidence, preserves provenance and uncertainty, persists or reconstructs correctly, and improves or appropriately changes later interpretation or prediction on relevant held-out evidence.
 
-A stored event, incremented counter, changed confidence value or successful learning API call alone does not prove meaningful learning.
+**Action-outcome learning:** an attempted action is followed by an observed and sufficiently verified consequence. Distinguish intention, attempt, execution result and external consequence; assess attribution and uncertainty; then demonstrate a persistent update that changes later prediction, appraisal, strategy or decision and can be revised when subsequent evidence warrants it.
+
+Learning does not require the Brain itself to act first. Nor does merely storing information, incrementing a counter, changing confidence or successfully calling a learning API prove meaningful learning. Evaluation must test the relevant pathway and rule out leakage, unsupported inference and accidental state changes.
 
 ### Rule 6.4 — Separate prediction from outcome and evidence
 
@@ -335,11 +331,11 @@ For every defect:
 3. inspect adjacent call paths and state transitions;
 4. assess regressions and data/persistence consequences;
 5. choose the smallest sound correction;
-6. add a regression test that would fail before the correction;
-7. run the relevant targeted and broader test suites;
+6. add a regression test that would fail before the correction, or an equivalent repeatable verification appropriate to the defect type (for example, a documentation-link/authority consistency check, schema validation, reproducible inventory procedure or independent review);
+7. run the relevant targeted and broader checks applicable to the change;
 8. report any untested boundary.
 
-Do not apply speculative patches or repeatedly change unrelated files to make a build pass.
+Do not demand a software regression test where the defect is documentary or governance-related and a more appropriate repeatable verification exists. Do not apply speculative patches or repeatedly change unrelated files to make a build pass.
 
 ### Rule 8.4 — Protect persistent state and failure semantics
 
