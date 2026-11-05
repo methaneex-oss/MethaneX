@@ -203,10 +203,10 @@ Main currently contains fragments of these paths. It does not yet demonstrate th
 - A conflicting value may overwrite the prior belief even while confidence falls.
 - The inspected belief record does not encode source/evidence lineage, scope, validity interval, revision reason or alternative claims.
 - Source reliability keyed by string and averaged does not establish source identity, independence, freshness or provenance.
-- Disputed flags are not a complete adjudication lifecycle.
+- Disputed flags are not a complete adjudication lifecycle. Main's inspected CognitiveCycle does not consume WorldModel disputed facts/relations; the donor cycle does, but only merges a disputed marker into belief records and raises uncertainty, not a complete alternative-claim reasoning contract.
 - Dependent predictions/plans/conclusions are not shown to be invalidated atomically or marked stale when a belief changes.
 
-**Donor comparison:** PR #148 is the identified donor line for competing alternatives, evidence accumulation, stronger post-conflict evidence and replay-order validation. It remains unmerged; exact PR #148 head and compatibility must be rechecked before port decisions.
+**Donor comparison:** PR #148 is the identified donor line for competing alternatives, evidence accumulation, stronger post-conflict evidence and replay-order validation. PR #97 retains the same WorldModel source but its CognitiveCycle additionally reads disputed facts/relations, marks corresponding beliefs disputed and incorporates world-dispute pressure into planning uncertainty. That is a consumer integration improvement, not full competing-claim adjudication or authoritative world-state reconciliation. PR #148 remains unmerged; exact PR #148 head and compatibility must be rechecked before port decisions.
 
 **Disposition:** **Reuse** current belief/world structures as a base; **adapt** evidence lineage, alternatives, scope, revision and dependency invalidation. Do not use last-write-wins or a generic confidence formula as final epistemic semantics.
 
@@ -1211,5 +1211,74 @@ Observed boundary:
 | PR #174 F-01 | Explicit general reasoning/inference mechanism ownership | Added BM-12 in accepted PR #174 specification | Narrow reasoning prototype only; memory premises and downstream integration remain gaps; AUD-12 / IF-02 / IF-03 |
 
 The full original reviewer prose for PR #173 F-02/F-03 was not present in the PR's changed files, PR conversation comments or review submissions returned by the current repository queries. The separate Builder correction record contains the finding titles, substantive summaries, exact correction map and rationale. The report therefore uses those grounded summaries and does not fabricate a verbatim quote. If verbatim reviewer wording is a mandatory Phase 2 artifact, the original review document or source conversation must be supplied/recovered.
+
+**Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, no implementation authorization implied.
+
+
+---
+
+## 15. Additional source-tracing batch — belief/world-state dual projections and donor dispute consumption
+
+**Audit date:** 2026-11-05  
+**Main baseline:** `1273ddbcd0087d189e01388ded2d362fb1e058d2`  
+**Donor baseline:** PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`
+
+### 15.1 Main replay updates two distinct projections from the same event attributes
+
+Exact main source identities:
+- `core/cpp/include/jarvis/core/brain.hpp` — `8268ef84e0b361ead536724ba7761904b30ee58f`.
+- `core/cpp/src/brain.cpp` — `e9f3758fcc9c0e89b7280ce376db9033d547682d`.
+- `core/cpp/include/jarvis/core/world_model.hpp` — `1c14f692374b0ab272f05634b7bdd26e358b4f1f`.
+- `core/cpp/src/world_model.cpp` — `5b68e8fe37d99732557237e347ae02234a3de172`.
+- `core/cpp/src/cognitive_cycle.cpp` — `3df14c552f2048b0394dc362f7ee7a654a93fb32`.
+
+Main `Brain` owns both `beliefs_` and `world_`. During replay of observation/learning events, each eligible event attribute is processed into:
+- a belief keyed only by the attribute name; and
+- a WorldModel fact keyed by `(event.source, attribute-name)`.
+
+The belief update uses last-value replacement for a conflicting value and reduces confidence using a generic reliability formula. WorldModel instead retains a disputed fact record and can keep the previous fact as current when its confidence is higher. The two representations therefore preserve different conflict semantics and can disagree about which value is current. Both are rebuilt by replaying the same event journal; they are not two independent persistence stores.
+
+Main's `CognitiveCycle::run` reads beliefs and causal links. The inspected main cycle does not read `brain_.world().facts()`, `disputed_facts()` or `disputed_relations()`. A repository-wide search of the pinned main C++ source found the `Brain::world()` accessor used in `world_self_model_phase4_suite.cpp`, not as a consumer in the main runtime/cycle. Thus the WorldModel is maintained and externally inspectable, but its disputed-state information is not an operative input to the inspected main reasoning/planning cycle.
+
+### 15.2 PR #97 adds a bounded consumer for disputed world evidence
+
+The donor retains the same WorldModel implementation blob `5b68e8fe37d99732557237e347ae02234a3de172`, but changes the CognitiveCycle integration:
+- Donor `core/cpp/src/cognitive_cycle.cpp` — `f191dd610d6cbe1621756c35e7c13af2054a7266`.
+- Donor `core/cpp/src/brain.cpp` — `dec9e5442b3ca4b81a7879855c6146b2619934cc`.
+
+The donor cycle retrieves `disputed_facts()` and `disputed_relations()`, marks a belief disputed when a matching WorldModel fact is disputed, and includes disputed-belief/world-dispute pressure in its uncertainty used for planning. This is a concrete improvement over main's non-consuming cycle path. It still does not pass alternative fact values, their source histories and conflict lineage into the reasoning premise contract; it carries dispute as a boolean/aggregate uncertainty signal.
+
+### 15.3 WorldState is a separate compiled utility, not the Brain's authoritative world-state owner
+
+Exact main source identities:
+- `core/cpp/include/jarvis/core/world_state.hpp` — `5e91ec301d8254380731e0fdf14d16b6a3d5face`.
+- `core/cpp/src/world_state.cpp` — `84658ee6e1a4485e1fe0f24ebb40eb3e281670f0`.
+- `core/cpp/tests/world_state_suite.cpp` — `bc6539059a8cc856572f3b01358085f27b1673a9`.
+- `core/cpp/tests/world_self_model_phase4_suite.cpp` — `f375f6e36c16fbb038d2ce3ba5c4cd18adf1860c`.
+- `core/cpp/CMakeLists.txt` — `c51816888e1bddb7bc00c59e72529524e27a0717`.
+- `core/cpp/tests/CMakeLists.txt` — `dab0c52ab4dfe15e1e2cbccfa9e6c904abdf54e3`.
+
+`WorldState` wraps a `WorldModel` with an in-memory event summary/history and per-update snapshots. Its `apply(Event)` converts each event attribute into a fact with default confidence 0.5, records sequence/timestamp/source/kind, and checkpoints the current facts/relations. It offers historical lookup by sequence and clear operations. The source does not provide a persistence or replay constructor for `WorldState`; its history and snapshots are ordinary in-memory vectors.
+
+`world_state.cpp` is included in `jarvis_core`, and `jarvis_world_state_suite` is registered in CTest. The inspected C++ source callsites show its direct use in the standalone world-state test, not as a member of `Brain` or a CognitiveRuntime dependency. By contrast, `Brain` owns `WorldModel` directly. The existence and compilation of this separate timeline/snapshot utility must not be mistaken for an integrated Brain world-state history or recovery mechanism.
+
+### 15.4 Test evidence and interpretation
+
+- `world_self_model_phase4_suite` tests that standalone WorldModel conflict handling retains disputed facts/relations and that Brain replay makes a fact queryable through `brain.world()`. It does not assert that disputed facts alter a main CognitiveCycle decision.
+- `world_state_suite` tests standalone event application, snapshot sequence/timestamp, fact/relation access, in-memory history, historical lookup and clearing. It does not test Brain integration or persistence across restart.
+- These test sources are registered, but no test execution is claimed in this Phase 2 batch.
+
+**Finding P2-I-017 — Main maintains belief and world projections with different conflict semantics, but the inspected main cycle does not consume WorldModel dispute state.** PR #97 adds a bounded dispute-to-uncertainty consumer; it does not establish complete multi-hypothesis adjudication or reasoning over alternative world claims.
+
+**Finding P2-I-018 — The separate WorldState history/snapshot utility is compiled and tested in isolation but is not connected to Brain/CognitiveRuntime in the inspected source graph.** Its in-memory snapshots are not evidence of persistent, restart-recoverable world-state history.
+
+### 15.5 Remaining BM-04/BM-11 questions
+
+1. Establish the canonical owner and semantic contract between the belief map, WorldModel facts/relations and any WorldState timeline.
+2. Define how source identity, claim scope, temporal validity, confidence and independent corroboration affect conflict resolution.
+3. Determine whether donor dispute flags are sufficient for any accepted scenario or whether premise-level alternatives and contradiction lineage are required.
+4. Trace invalidation from belief/world revision to dependent predictions, strategies, plans and reasoning conclusions.
+5. Define whether WorldState is retained as a utility, integrated into the Brain under one owner, or deferred; do not create a second authoritative world-state store.
+6. Add tests that demonstrate disputed evidence changing downstream reasoning/decisions, and that restart/replay reconstructs the same conflict history.
 
 **Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, no implementation authorization implied.
