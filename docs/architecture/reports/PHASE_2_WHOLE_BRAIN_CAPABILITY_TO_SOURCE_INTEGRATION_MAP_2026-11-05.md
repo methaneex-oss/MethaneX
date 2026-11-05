@@ -1920,7 +1920,7 @@ Exact implementation identities:
 - `core/cpp/src/cognitive_cycle.cpp` — `f191dd610d6cbe1621756c35e7c13af2054a7266`.
 - `core/cpp/src/cognitive_runtime.cpp` — `cf00acb6abd52308343f3a0e7016e6173b945603`.
 
-A search across all 37 changed donor production `.cpp` files found the helper method definitions, but no production-source callsites for `Brain::choose_with_affect` or `Brain::choose_with_developmental_learning`. The 54 changed C++ test sources do call these methods directly, including:
+A search across all 64 `.cpp` files under the donor branch's `core/cpp/src/` directory (37 changed by PR #97 and 27 unchanged) found the helper method definitions, but no production-source callsites for `Brain::choose_with_affect` or `Brain::choose_with_developmental_learning`. The 54 changed C++ test sources do call these methods directly, including:
 - `affective_brain_decision_suite.cpp` — blob `9ff9c0480fa34fa4f5600e514af419b2bbc79765`;
 - `affective_decision_learning_suite.cpp` — blob `920ddcbc8a422783bb8724093afd952cc885e6b6`;
 - `affective_evidence_suite.cpp` — blob `c8a401cab1a29d57506f990043a1f82536fd9029`;
@@ -1950,7 +1950,7 @@ The donor `developmental_brain_integration_suite` explicitly tests both layers: 
 
 ### 23.3 The helper and cycle implementations are not semantically identical
 
-The helper methods in `brain_affective_planning.cpp` use `apply_developmental_evidence` on a copy of the candidate actions, then build a one-step plan from the unmodified action list and pass affective fields into the decision engine.
+The two `choose_with_developmental_learning` overloads in `brain_affective_planning.cpp` use `apply_developmental_evidence` on a copy of the candidate actions, then build a one-step plan from the unmodified action list and pass affective fields into the decision engine. The separate `choose_with_affect` implementation in `brain_restored_api.cpp` applies a best exact/related strategy with a fixed 0.25 influence scale and builds its plan from developmentally weighted candidates.
 
 The CognitiveCycle path uses a different evidence-aggregation procedure:
 - exact-context evidence is weighted by strategy confidence;
@@ -1981,7 +1981,7 @@ These are materially different scoring/dataflow paths. A result from a helper te
 
 ### 23.5 Self-review
 
-The callsite search covered all 37 changed donor production `.cpp` files and all 54 changed donor C++ test sources listed by PR #97. The conclusion is deliberately limited to that inspected source set. The normal runtime path was separately traced through `CognitiveRuntime::worker_loop`, `CognitiveCycle::run` and `Brain::execute_action`; it was not inferred from method names or test labels.
+The callsite search covered all 64 donor `core/cpp/src/*.cpp` files (37 PR #97 changes and 27 unchanged source files) and all 54 changed donor C++ test sources listed by PR #97. The conclusion is deliberately limited to that inspected source set. The normal runtime path was separately traced through `CognitiveRuntime::worker_loop`, `CognitiveCycle::run` and `Brain::execute_action`; it was not inferred from method names or test labels.
 
 No source/test/build changes were made. This finding does not erase the integrated cycle behavior or downgrade the existing exact-HEAD CI evidence; it narrows which tests exercise which public decision path.
 
