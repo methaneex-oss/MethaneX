@@ -771,7 +771,7 @@ The correct direction is selective integration around one cognitive authority, w
 
 This batch extends the first map. It does not close Phase 2.
 
-### 9.1 Main contains a bounded Brain-level action execution and feedback path
+### 11.1 Main contains a bounded Brain-level action execution and feedback path
 
 The first map correctly records that `CognitiveCycle::run` ends with action assessment and does not itself invoke external execution. The whole-Brain map must also account for a separate public Brain API:
 
@@ -790,7 +790,7 @@ This is real mainline infrastructure and must not be described as donor-only. It
 
 **Integration boundary:** `CognitiveCycle::run` still does not call `Brain::execute_action`; the cycle produces assessments, while execution is available through a separate Brain API. Therefore the action path exists in the repository but is not established as a single automatic end-to-end path from the inspected CognitiveCycle.
 
-### 9.2 An affective/developmental source file exists on main but is not part of the main Brain target
+### 11.2 An affective/developmental source file exists on main but is not part of the main Brain target
 
 A source artifact at `core/cpp/src/brain_restored_api.cpp`, blob `618deb6976eed951eae02b7f0da741e6d730bb0c`, contains definitions for affective and developmental accessors and a `choose_with_affect` method. It references `affective_state_model_`, `affective_learning_model_`, and `developmental_learning_`.
 
@@ -807,7 +807,7 @@ It is an uncompiled/orphan source artifact relative to the inspected main CMake 
 
 No manual compilation of this orphan file was attempted. The conclusion is based on the target source list and declaration/member mismatch, not on a claimed build failure.
 
-### 9.3 Learning workflow files in main explicitly default to the donor branch
+### 11.3 Learning workflow files in main explicitly default to the donor branch
 
 The following workflow files exist on main:
 
@@ -820,7 +820,7 @@ Both declare `feat/jarvis-affective-state` as the default `source_ref` and check
 
 A workflow definition stored on main is not itself execution evidence. Where the workflow's default checkout is the donor branch, its resulting tests (if run with that default) verify the donor ref, not the pinned main baseline. Any claim about a CI result must identify the actual workflow run, input `source_ref`, checked-out SHA, build/test result and artifact. No workflow run was retrieved or executed in this batch.
 
-### 9.4 Updated interpretation of the action and affective pathways
+### 11.4 Updated interpretation of the action and affective pathways
 
 | Pathway | Pinned main evidence | Current classification |
 |---|---|---|
@@ -831,7 +831,7 @@ A workflow definition stored on main is not itself execution evidence. Where the
 | Affective model accessors in orphan source | `brain_restored_api.cpp` only | Not part of main target; not current-main capability |
 | Affective/developmental donor tests | Workflows default to `feat/jarvis-affective-state` | Donor verification path; not main verification |
 
-### 9.5 Follow-up required
+### 11.5 Follow-up required
 
 1. Trace the full donor affective/developmental model sources, their event update triggers, state ownership, persistence/replay and actual downstream consumers at the exact PR #97 revision.
 2. Determine whether donor action-consequence mechanisms add genuinely new evidence semantics beyond main's status/reason feedback, rather than assuming they do.
@@ -852,11 +852,11 @@ A workflow definition stored on main is not itself execution evidence. Where the
 **Donor baseline:** PR #97 branch `feat/jarvis-affective-state`, exact HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`  
 **Scope:** Read-only comparison of donor Brain ownership, event/replay integration, action-consequence feedback, selected integration tests, CMake registration, workflow evidence, and the competing Phase 2 report.
 
-This batch closes several follow-ups from §9. It does not authorize donor integration or implementation.
+This batch advances several investigations identified in §8, especially P2-03 and P2-05. It does not authorize donor integration or implementation.
 
-### 10.1 PR #97 contains a genuinely integrated affective/developmental Brain path on its donor revision
+### 12.1 PR #97 contains a genuinely integrated affective/developmental Brain path on its donor revision
 
-The orphan-artifact finding in §9.2 needs a precise two-revision interpretation:
+The orphan-artifact finding in §11.2 needs a precise two-revision interpretation:
 
 - On pinned **main**, `brain_restored_api.cpp` is not listed in the `jarvis_core` source target, and the main `Brain` declaration does not own the affective/developmental models. It remains incorrect to credit these models to main.
 - At PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`, the donor `brain.hpp` includes `developmental_learning.hpp`, `affective_state.hpp` and `affective_learning.hpp`; its `BrainSnapshot` carries affective state; the private Brain members include `DevelopmentalLearning`, `AffectiveStateModel` and `AffectiveLearningModel`. The donor CMake target explicitly compiles `brain_restored_api.cpp`, `brain_action_execution.cpp`, `brain_prediction_context.cpp`, `brain_affective_planning.cpp`, `affective_state.cpp`, `affective_learning.cpp` and `developmental_learning.cpp`.
@@ -875,7 +875,7 @@ Exact donor identities:
 
 **Finding P2-I-010 — PR #97's affective/developmental code is a compiled donor-side Brain integration, not merely a collection of disconnected files.** This is a material donor capability and a stronger state than the main orphan artifact. It remains donor-only because PR #97 is open, draft and unmerged. Its presence does not establish compatibility with the accepted PR #174 specification, current main APIs, later corrections, or Gate A.
 
-### 10.2 Donor event/replay path joins prediction, affect, attention, developmental association and action strategy
+### 12.2 Donor event/replay path joins prediction, affect, attention, developmental association and action strategy
 
 The donor `Brain::replay` path in `core/cpp/src/brain.cpp` does more than restore independent model objects:
 
@@ -903,7 +903,7 @@ This distinction matters: executor verification, operational reliability, conseq
 - Replay validation and source-sequence checks improve integrity, but do not by themselves establish tamper resistance, adversarial provenance, atomic multi-event transactions, or recovery under every partial-append failure.
 - The event-driven path is not proof that every external observation or every action is routed through this Brain API in a deployed runtime.
 
-### 10.3 Donor integration tests demonstrate behavioral feedback, not just state storage
+### 12.3 Donor integration tests demonstrate behavioral feedback, not just state storage
 
 Selected donor test identities:
 - `core/cpp/tests/brain_action_consequence_integration_suite.cpp` — `7616082579d53e3579cae8e87895bdb3dadba66f`.
@@ -923,7 +923,7 @@ These are meaningful source-level behavioral assertions. They are not results of
 
 **Finding P2-I-011 — PR #97 contains test specifications for persistent, consequence-sensitive changes in later action selection.** The tests are substantially stronger than the main Phase 7 status-belief test. Their assertions still require independent execution at an exact commit, review of test validity and controls, and broader evaluation of confounding, generalization and real external consequence quality before they can support capability acceptance.
 
-### 10.4 CI provenance: one PR #179 build is verified; donor CI remains unverified
+### 12.4 CI provenance: one PR #179 build is verified; donor CI remains unverified
 
 A workflow run associated with PR #179's updated commit was retrieved:
 - Workflow: **Native Brain Build**, run number **1610**, run ID **42064855161**.
@@ -938,7 +938,7 @@ A workflow run associated with PR #179's updated commit was retrieved:
 
 A query for pull-request-triggered workflow runs associated with donor HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` returned no runs through the available commit-run wrapper. That wrapper is limited to PR-triggered runs and its first page; this is not evidence that no manually dispatched or otherwise unlisted workflow execution exists. No donor workflow result is accepted as verified here.
 
-### 10.5 Reconciliation of competing Phase 2 reports #179 and #180
+### 12.5 Reconciliation of competing Phase 2 reports #179 and #180
 
 Both open/draft PRs modify the same report path, but they have different bases and are not interchangeable:
 - PR #179: branch `docs/jarvis-phase-2-whole-brain-integration-map-20261105`, base PR #178 governance branch at `39fe09dcf13496f5f0005ccf3f00739303e29f88`, current HEAD before this batch `9e00b3ba195975bbc74791af8af297e743bb8f5e`.
@@ -969,7 +969,7 @@ A material correction is also required before PR #180 can be considered a clean 
 
 **Reconciliation decision for this working phase:** continue PR #179 as the working report because it is materially more complete and is based on the governance branch intended to carry the proposed project rules. Preserve PR #180's six unique header identities and its initial findings as incorporated evidence. Do not merge PR #180, close it, or claim its different base has been reconciled at the Git history level. Its branch ancestry and any unique unincorporated content remain a separate review item before either PR can be accepted or merged. No PR status was changed in this batch.
 
-### 10.6 Updated interpretation matrix
+### 12.6 Updated interpretation matrix
 
 | Capability | Main at pinned baseline | PR #97 donor at exact HEAD | Evidence status |
 |---|---|---|---|
@@ -982,7 +982,7 @@ A material correction is also required before PR #180 can be considered a clean 
 | Future action preference | Not demonstrated by main Phase 7 test | Donor tests assert learned preference and related-context transfer | Test source assertions only; no independent run accepted |
 | CI proof | PR #179 combined merge tree configured/built; no tests in that run | No donor PR-triggered run returned by current query | Main PR build only; donor CI unverified |
 
-### 10.7 Remaining work
+### 12.7 Remaining work
 
 1. Retrieve the exact donor PR #97 workflow runs through the Actions workflow listing/dispatch history where possible, including any manual `workflow_dispatch` runs, and bind run inputs and checked-out SHA to each artifact.
 2. Independently inspect the complete donor integration tests for test-only shortcuts, hidden assumptions, reward leakage, context leakage, baseline/control validity, and whether the action-selection delta is caused by the intended learned state rather than shared global affect.
