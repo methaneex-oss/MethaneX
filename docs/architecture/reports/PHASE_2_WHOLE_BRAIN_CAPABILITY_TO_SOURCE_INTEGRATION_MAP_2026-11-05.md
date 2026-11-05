@@ -1034,7 +1034,7 @@ A material correction is also required before PR #180 can be considered a clean 
 | Outcome attribution | No equivalent structured consequence contract established | Action event and source-linked affective event | Donor stronger; observer trust unresolved |
 | Replay | Main event journal replay | Donor replay reconstructs affective, attention, prediction and strategy effects | Donor stronger; multi-event crash atomicity unresolved |
 | Future action preference | Not demonstrated by main Phase 7 test | Donor tests assert learned preference and related-context transfer | Exact-head runtime integration suite passed in CI; historical DLT transfer evidence at `c6a8...`; independent reviewer acceptance remains open |
-| CI proof | PR #179 combined merge tree configured/built; no tests in that run | Exact donor HEAD `c1da...`: Brain CI native and ASan/UBSan each passed 71/71; Core Verification also succeeded; no exact-head TSan or long-run trial found | Exact-head unit/integration CI verified; separate 330-minute DLT run at `c6a8...` is historical donor evidence, not current HEAD |
+| CI proof | PR #179 combined merge tree configured/built; no tests in that run | Exact donor HEAD `c1da...`: native Release and Debug ASan/UBSan each had 71/71 CTest processes exit successfully; only Debug retained assertion checks; Core Verification also succeeded | Exact-head assertion-enabled Debug ASan/UBSan integration CI verified; Release result is process-smoke only; separate 330-minute DLT run at `c6a8...` is historical donor evidence, not current HEAD |
 
 ### 12.7 Remaining work
 
@@ -1574,7 +1574,7 @@ Run references:
 
 **What this does not prove:** no ThreadSanitizer run at this exact donor HEAD was found; no broad external-world deployment, long-duration test at this exact SHA, independent reviewer acceptance, adversarial observer validation, or multi-event append-failure recovery was established by these two CI runs. CI pass is test evidence, not Gate A approval.
 
-**Finding P2-I-024 — PR #97 exact HEAD has verified native and ASan/UBSan CI with 71/71 registered tests passing in each job.** This replaces the earlier §12.4 statement that exact-head donor CI was unverified. It materially strengthens implementation/test provenance but does not resolve the remaining semantic, failure-model or independent-review obligations.
+**Finding P2-I-024 — PR #97 exact HEAD has verified native Release and Debug ASan/UBSan CI, with 71/71 CTest processes exiting successfully in each job.** Only the Debug sanitizer job retains the suites' assertion checks; the Release job is compilation/optimized-configuration and process-smoke evidence because `NDEBUG` elides `assert` expressions. This replaces the earlier §12.4 statement that exact-head donor CI was unverified. The Debug result materially strengthens implementation/test provenance but does not resolve the remaining semantic, failure-model or independent-review obligations.
 
 
 ### 18.4 The exact-HEAD runtime integration test checks learning, transfer isolation, reversal and restart behavior
@@ -1912,7 +1912,7 @@ The fixed-action baseline is useful as a simple lower bound under randomized map
 
 **Finding P2-I-031 — Three independent 10-minute DLT-002 trials at donor commit `82c49a75...` completed 1,765 episodes with 95.30% aggregate optimal-action selection and 3/3 optimal first decisions in the unseen context.** The result is meaningful repeatability evidence for the narrow synthetic task. It is not a matched learning-ablation result and not an exact-current-HEAD whole-system run because four material Brain/cycle/learning/persistence files changed in the 18 later commits.
 
-**Updated interpretation:** PR #97 has (a) exact-current-HEAD native and ASan/UBSan CI with 71/71 tests in each configuration (§18.3), (b) a three-seed 30 aggregate trial-minute run at ancestor revision `82c49a75...` with a fixed-action baseline (§22), and (c) a 330-minute single-seed run at older revision `c6a8a00...` (§19). These are three distinct evidence classes and must not be combined into a claim that the current donor HEAD passed a 330-minute, multi-seed, full-suite, matched-control validation.
+**Updated interpretation:** PR #97 has (a) exact-current-HEAD Debug ASan/UBSan CI with assertion-enabled 71/71 tests, alongside a native Release job whose 71/71 CTest process successes do not evaluate `assert` expressions (§18.3 and §26), (b) a three-seed 30 aggregate trial-minute run at ancestor revision `82c49a75...` with a fixed-action baseline (§22), and (c) a 330-minute single-seed run at older revision `c6a8a00...` (§19). These are three distinct evidence classes and must not be combined into a claim that the current donor HEAD passed a 330-minute, multi-seed, full-suite, matched-control validation.
 
 **Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, and no implementation authorization implied.
 
