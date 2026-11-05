@@ -1722,3 +1722,77 @@ Source references:
 5. Preserve the existing no-consequence-observation invariant: verified execution without observed environmental consequence must not create a developmental utility preference.
 
 **Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, and no implementation authorization implied.
+
+---
+
+## 21. Additional self-review batch — action execution ambiguity and cognitive-persistence acknowledgement
+
+**Audit date:** 2026-11-05  
+**Main baseline:** `1273ddbcd0087d189e01388ded2d362fb1e058d2`  
+**Donor baseline:** PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`  
+**Scope:** Independent second-pass inspection of the shared ActionExecutor contract, donor Brain action-outcome persistence, runtime reporting and registered action tests. Documentation only; no runtime source, tests, build configuration or dependencies changed.
+
+### 21.1 Execution verification and cognitive persistence are separate success conditions, but the result type reports only the former
+
+Exact donor source identities:
+- `core/cpp/src/brain_action_execution.cpp` — `3b66bafb438cd28790e6f25611b96c86f1eff05c`.
+- `core/cpp/include/jarvis/core/action_execution.hpp` — `04c73d02bdd4e1154be142dfeb024fc07ad432f8`.
+- `core/cpp/src/memory.cpp` — `ab42bba1d32d6f48d091787491c72294a4a55bb5`.
+- `core/cpp/src/cognitive_runtime.cpp` — `cf00acb6abd52308343f3a0e7016e6173b945603`.
+
+The donor `Brain::execute_action` obtains an `ActionExecutionResult` from `ActionExecutor::run`. It then appends the authoritative `action_outcome` event. The local `outcome_persisted` flag becomes true only when `Memory::append` returns a nonzero sequence. Replay, consequence-linked affective learning, capability-learning append and subsequent prediction resolution are gated by that persistence result.
+
+`Memory::append` returns zero when its `persist(event)` operation fails. The inspected persistence implementation can fail while creating the parent directory, opening the journal, writing/flushing the record or restoring the original file size after a failed write.
+
+However, `outcome_persisted` is local to `Brain::execute_action`; it is not copied into `ActionExecutionResult`, and the result type has no separate journal/learning-persistence status. The method returns the executor result even when the authoritative action-outcome append failed. If the action was physically executed and verified and the consequence observer returned a value, the caller can therefore receive a result that still says `verified`, `executed` and `outcome.observed`, while the Brain did not persist or replay that outcome. The pre-execution consequence prediction is left unresolved because resolution is conditional on `outcome_persisted`.
+
+The donor runtime increments its action-success metric based on `execution.status == verified`; it does not receive the local persistence flag. Its later secondary status/reason feedback is a separate event and cannot reconstruct the missing observed consequence. Thus operational execution success and durable cognitive acquisition are currently indistinguishable in the returned result/metric surface.
+
+**Finding P2-I-029 — The donor action API can report verified execution without reporting failure to persist the authoritative cognitive outcome.** The source does not establish that a verified action's observed consequence was durably acquired. This is a persistence-acknowledgement and caller-observability gap, not proof that a write failure occurred in the cited CI runs.
+
+Required proof/correction before donor acceptance:
+1. Expose executor status and cognitive-record persistence status as separate result fields; do not overload `verified` to imply learning persistence.
+2. Surface partial persistence explicitly when the action outcome is committed but a derived affective/capability event is not.
+3. Define caller behavior when execution succeeded but the authoritative outcome record did not persist; avoid blind re-execution of a possibly completed external action.
+4. Add deterministic append-failure injection at the authoritative action-outcome append and each derived-event append; verify returned status, unresolved prediction state, restart/replay state and retry/idempotency behavior.
+5. Ensure runtime metrics and published cycle results expose the distinction.
+
+### 21.2 The shared executor contract cannot represent ambiguous partial side effects from a failed or throwing callback
+
+The ActionExecutor implementation exists on both inspected baselines:
+- Main `core/cpp/src/action_execution.cpp` — blob `c2f8653eb755fa2790a88e49bc8b0b9c3077e439`.
+- Donor `core/cpp/src/action_execution.cpp` — blob `af5bed6cec9ed1309b24ed3d50241fb4c0d33bff`.
+
+Both versions accept an execution callback returning only `bool`. If the callback throws, or returns `false`, the executor immediately returns `failed` before setting `result.executed=true`. In the donor version this also bypasses the later consequence-observer block, which runs only when `result.executed` is true. The rollback callback is reached only after a successful callback has set `executed=true` and verification subsequently fails. The donor's rollback result is represented by a boolean; no independent rollback-verification callback exists in this request/result contract.
+
+This behavior is safe only if the adapter contract guarantees that a false return or exception means **no external side effect occurred**. The inspected request/header does not state that guarantee, and the result type has no representation for “execution may have partially taken effect.” A real adapter can encounter a timeout, transport disconnect or exception after the external system accepted part or all of a command. The current API cannot distinguish that ambiguous state from a clean no-effect failure, cannot request/verify compensation on that path, and cannot ask the consequence observer to determine what actually happened.
+
+This is an interface/failure-semantics gap; the source does not prove that any deployed adapter currently violates a no-side-effect-on-false convention.
+
+Test coverage inspected:
+- `core/cpp/tests/action_execution_phase7_suite.cpp` — blob `db11ac95d26a97b01dfeb67cfb85194dc284ffb8`: tests a false-return callback with no side effect and a successful rollback after verification failure. It does not test callback exception after partial effect, rollback false/throw, or rollback verification.
+- `core/cpp/tests/cognitive_runtime_suite.cpp` — blob `361cba84a6fc6e07e31d14b5fa618c3f0a7848fa`: tests a false-return callback and worker continuity; the callback simply returns false and does not model an external partial effect.
+- `core/cpp/tests/brain_action_consequence_integration_suite.cpp` — blob `7616082579d53e3579cae8e87895bdb3dadba66f`: tests consequence observation after execution succeeds but verification fails. This is useful evidence that verification failure and environmental consequence are distinct; it does not cover executor ambiguity before `executed=true`.
+
+**Finding P2-I-030 — The shared ActionExecutor API has no explicit partial-effect/unknown-execution state, and its false/exception path bypasses compensation and consequence observation.** This is a contract ambiguity affecting both main and donor executor primitives. It is not evidence that an external side effect occurred in any tested scenario.
+
+Required proof/correction:
+1. Specify whether a false/throwing adapter result is guaranteed to mean “no side effect”; if that guarantee cannot be enforced, replace the binary result with a structured execution disposition that can represent not-started, completed, failed-before-effect and effect-unknown/partial.
+2. Define when rollback is permitted/required and how rollback completion is independently verified.
+3. Preserve the ability to observe and reconcile external consequences when execution status is ambiguous, without inventing a neutral or absent outcome.
+4. Add tests for false-before-effect, false-after-partial-effect, throw-before-effect, throw-after-partial-effect, rollback false, rollback exception, rollback verification failure and process restart after each boundary.
+5. Keep authorization rejection distinct from execution failure and from uncertain external completion.
+
+### 21.3 Self-review of findings P2-I-026 through P2-I-030
+
+The second-pass review checked the findings against the exact donor/main source blobs and the selected registered tests:
+
+- **P2-I-026:** confirmed. The new donor reliability event lacks the explicit evidence payload, and the legacy unordered-map fallback does not exclude `affective_relevant`.
+- **P2-I-027:** confirmed with its stated condition. The internal reliability fact and runtime status/reason event use the same key with different Scalar alternatives; the Brain belief projection is keyed by that string.
+- **P2-I-028:** confirmed. Action execution submits secondary feedback synchronously from the worker that later drains the same queue; queue rejection is counted but the per-action submit result is discarded.
+- **P2-I-029:** confirmed. The persistence-success flag is local and absent from the returned result/metrics, while the append return value gates replay and prediction resolution.
+- **P2-I-030:** confirmed as a contract gap, not an observed production incident. The callback contract does not document a no-side-effect guarantee for false/exception results; the tests only exercise clean false-return and verification-failure rollback paths.
+
+No source changes were made to resolve these findings because Phase 2 remains a documentation/investigation stage and implementation is not authorized. The findings are not Gate A clearance or a donor rejection decision; they are concrete requirements for the later independent review and any separately authorized correction work.
+
+**Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, and no implementation authorization implied.
