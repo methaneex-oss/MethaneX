@@ -982,7 +982,7 @@ A later build was also retrieved for the then-current PR #179 report commit:
 - The job completed CMake configure and full native C++ build successfully. It did **not** run CTest; the workflow steps contain configure and build only.
 - The log repeats the existing `evolution_rollback.cpp` missing-field-initializer warnings for `EvolutionHistoryRecord::reason` and `parent_experiment_id`, and the Actions Node.js 20 deprecation warning for `actions/checkout@v4`.
 
-This later run supersedes the older PR #179 build commit listed above for the working report's then-current HEAD. It still proves build success only, not test execution or donor acceptance.
+This later run supersedes the older PR #179 build commit listed above for the working report's then-current HEAD. It still proves build success only, not test execution or donor acceptance. The subsequent PR #179 commits through this report revision modify only this Markdown report, so they do not alter the C++ build inputs tested by run #1634.
 
 
 **What it does not prove:** no test suite passed in that run; no donor branch code was built by this run; no runtime learning trial, persistence trial, sanitizer or independent behavioral evaluation was executed by this run.
