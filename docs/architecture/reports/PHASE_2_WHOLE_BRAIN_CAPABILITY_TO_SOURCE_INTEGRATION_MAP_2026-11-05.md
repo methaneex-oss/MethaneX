@@ -2289,3 +2289,53 @@ This finding is distinct from a claim of data corruption: the inspected append p
 The donor tree includes `CognitiveRuntime`, `Brain::execute_action`, a TypeScript Brain interface and several simulation/test harnesses. The present batch verifies the native runtime class and its action-adapter call path. It does not yet establish that every intended external application entry point constructs and drives this runtime, that TypeScript calls the same path, or that production integrations consistently provide independent consequence observation. Those remain open integration questions, not presumed defects.
 
 **Phase 2 remains IN PROGRESS. Gate A remains NOT CLEARED. PR #97 remains an unmerged donor.**
+
+
+---
+
+## 10.10 DLT-002 protocol audit — what its runtime evidence can and cannot establish
+
+A second source-level pass examined the measurement path, not just the successful workflow summaries.
+
+### Protocol strengths
+
+At the earlier DLT-002 trial revision (`82c49a75bd30de2962879f044776f4bf2391970a`), the harness:
+- Randomizes which route is optimal for each latent condition per seed, inside the environment rather than exposing that mapping to the Brain.
+- Uses 20% contradictory/noisy outcomes.
+- Preserves a visible context while changing the latent condition/action relationship, including a reversal phase.
+- Includes a held-out context transfer probe and a later second reversal.
+- Checks that a completed cognitive cycle selected exactly one planned action and that the returned consequence was actually observed.
+- Requires the action-consequence prediction to have been issued by Brain and records its calibrated value, rather than substituting the planner's raw action prior.
+- Separates evaluation-only latent labels and expected action from the observation and consequence feedback given to Brain.
+- Records per-episode choices, consequences, prediction counts and per-context strategy values, plus periodic checkpoints.
+
+This is a meaningful controlled test of context-conditioned action learning, reversal, noisy feedback, prediction feedback and transfer. It is stronger than a static unit fixture that feeds the correct answer directly to the learner.
+
+### Limitations of the protocol and its evidence
+
+1. **Environment is controlled and small.** Two route actions and a finite set of named contexts do not establish open-world action learning, complex perception, or broad transfer.
+2. **The task context is supplied.** The Brain receives the world context as part of the input. The trial does not test whether JARVIS can infer the relevant context from raw sensory evidence.
+3. **The hidden labels are evaluation-only, but the harness computes success.** The metric is valid for this environment, yet it is not an independent external benchmark and must be interpreted within the protocol.
+4. **Episode count is not learning quality.** The workflow's 586–590 completed episodes and successful exit establish run completion, not by themselves high decision accuracy, successful reversal, or positive transfer.
+5. **The trial run predates final donor HEAD by 18 commits.** It cannot close the final-revision runtime evidence gap.
+6. **No cross-seed statistical analysis is included in the workflow summary alone.** Three seeds are useful replication, but the raw per-episode artifacts and predeclared acceptance thresholds must be analyzed before claiming reliable effect size or variance.
+7. **The persistence fixture uses prescribed context/action/consequence pairs.** It tests durable acquisition and restoration, not autonomous discovery of the environment's latent mapping.
+
+### Three-reference interpretation
+
+- **MCU JARVIS functional reference:** the protocol contributes evidence toward contextual adaptation, prediction from experience and changing action preference after consequences. It does not approach broad environmental awareness or complex multi-domain planning.
+- **Human cognition reference:** context-dependent learning, noisy reinforcement, reversal and transfer are relevant cognitive phenomena. The simulation is an engineering abstraction, not a model of neural circuitry, emotion, or human developmental learning.
+- **Our JARVIS engineering reality:** the harness supplies a reproducible environment, hidden evaluation labels, actual observed consequences and a real Brain/runtime path. Its claims should be bounded to those measured properties.
+
+**Acceptance implication:** DLT-002 is credible evidence of a designed learning mechanism being exercised in a controlled environment. It is not sufficient by itself to clear Gate A. The next runtime evidence should rerun the same protocol at the final candidate commit, retain raw artifacts, analyze phase-specific accuracy and reversal latency, quantify held-out transfer against a no-transfer/control baseline, and report seed-level distributions rather than only completion counts.
+
+### Updated Phase 2 position
+
+The donor now has:
+- Exact-HEAD 71/71 native CTest and 71/71 ASan/UBSan CTest evidence.
+- Earlier three-seed, ten-minute DLT-002 runtime evidence.
+- Source-level tests for action consequence, developmental strategy, affective appraisal and persistence across reconstruction.
+- A concrete remaining durability limitation for multi-event action learning.
+- An unresolved production integration/caller-graph question beyond the native C++ runtime.
+
+The next investigation should prioritize (a) independent analysis of the retained DLT-002 artifacts and acceptance metrics, (b) failure-injection verification of multi-event recovery, and (c) identifying the actual application boundary that supplies observations, actions and consequence observations to the Brain. No donor merge or Gate A approval is implied.
