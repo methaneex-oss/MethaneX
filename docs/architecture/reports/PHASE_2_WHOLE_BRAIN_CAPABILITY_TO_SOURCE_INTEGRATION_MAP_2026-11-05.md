@@ -2253,7 +2253,7 @@ Relevant exact donor blobs:
 - `cognitive_runtime.cpp`: `cf00acb6abd52308343f3a0e7016e6173b945603`.
 - `brain_action_execution.cpp`: `3b66bafb438cd28790e6f25611b96c86f1eff05c`.
 - `action_execution.cpp`: `af5bed6cec9ed1309b24ed3d50241fb4c0d33bff`.
-- `memory.cpp`: `c7a2f... ` (full file retrieved during this batch; blob identity should be re-fetched before any line-specific follow-up).
+- `memory.cpp`: `ab42bba1d32d6f48d091787491c72294a4a55bb5`.
 
 ### Verified execution ordering
 
