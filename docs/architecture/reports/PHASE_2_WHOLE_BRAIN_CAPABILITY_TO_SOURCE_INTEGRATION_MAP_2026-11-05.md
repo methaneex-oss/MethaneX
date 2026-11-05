@@ -48,7 +48,7 @@ The following Phase 1 conclusions are carried forward:
 2. Main at `1273ddbcd0087d189e01388ded2d362fb1e058d2` is the pinned engineering baseline for this map, not a claim that main is the complete Brain.
 3. PR #97 at `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` is a donor source, not an approved implementation baseline. It is open, draft, unmerged and contains 159 changed files.
 4. Later PR #148–#156 work is also donor material and must be evaluated at exact revisions before reuse.
-5. PR #174 was formally accepted as a planning baseline at the exact head recorded above. The later F-02 (contextual language/operator-intent grounding) and F-03 (downstream reasoning integration) findings remain open correction obligations. Historical acceptance is not erased, but affected requirements are not implementation-ready until the findings and required authority/review decision are resolved.
+5. PR #174 was formally accepted as a planning baseline at the exact head recorded above. The PR #173 architecture review correction record identifies F-02 as experience-acquired candidate-goal formation and F-03 as the SYS-08 computational-substrate boundary; its corrected architecture and correction record are mapped in §14. The downstream reasoning-consumption gap is a separate PR #174 source-audit finding (AUD-12 / this report's IF-03), not F-03. The exact original reviewer prose and the independent-clearance record for PR #173 must not be inferred from the Builder correction record alone.
 6. PR #178 governance remains proposed, open, draft and unmerged. Its rules are used here as project working constraints, not represented as binding accepted governance.
 7. Gate A remains NOT CLEARED. The outstanding controller-internal compensation failure injection and genuine independent re-review must not be silently treated as closed.
 8. The main branch's event journal and replay, structured memory, perception/representation, world/causal models, attention, goals, planning, action assessment, prediction feedback, evolution and metacognition are valuable foundations. They are not collectively proof of a specification-complete Brain.
@@ -624,9 +624,9 @@ The map is deliberately not closed. The following work is needed before Phase 2 
 
 ### P2-01 — Resolve F-02/F-03 against their originating review artifact
 
-Retrieve the exact review artifact and quote its full findings, affected requirements and acceptance conditions. The current Phase 1 correction record identifies the topics but does not reproduce the full original finding text. Do not paraphrase from memory or silently narrow the findings.
+The PR #173 correction record and corrected architecture are now identified. F-02 is experience-acquired candidate-goal formation; F-03 is the SYS-08 computational-substrate boundary. The correction record gives the finding summaries, exact corrected sections and acceptance obligations, but not the full verbatim reviewer prose. Retrieve that original review artifact if verbatim wording is required, and reconcile the independent-clearance/Project Director decision without inferring it from PR #174's separate acceptance.
 
-**Exit evidence:** exact finding text, affected BM sections, proposed correction, source/test impact, independent review status and Project Director decision.
+**Exit evidence:** exact correction-record and architecture revisions; affected BM/SYS responsibilities; source/test impact; explicit status of each correction; independent review status and Project Director decision.
 
 ### P2-02 — Complete the 12-mechanism dependency and state-transition graph
 
@@ -1117,5 +1117,85 @@ The working report was re-read and checked against the exact source revisions us
 - The only verified CI result remains the PR #179/PR #178 merge-tree native build, with no CTest step. It is not represented as donor CI or test evidence.
 - Journal append protection is described per individual record; no multi-event transaction or fsync guarantee is claimed.
 - No runtime source, test, build configuration, dependency or donor file was changed. This batch updates the Phase 2 investigation report only.
+
+**Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, no implementation authorization implied.
+
+
+---
+
+## 14. Additional source-tracing batch — correction of F-02/F-03 provenance and goal/substrate capability mapping
+
+**Audit date:** 2026-11-05  
+**Architecture correction baseline:** PR #173 head `97191111bc2573c14d391c0af9628db7b11f194b`  
+**Accepted specification baseline:** PR #174 head `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`
+
+### 14.1 Correction to the Phase 2 finding labels
+
+A self-review of §1.2 found that the previous report version incorrectly described F-02 as “contextual language/operator-intent grounding” and F-03 as “downstream reasoning integration.” Those labels do not match the repository's PR #173 correction record.
+
+The exact PR #173 artifacts inspected are:
+- Corrected architecture: `docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md`, blob `364aa3b5fabdab527c169ab170dd72e23c502438`.
+- Separate correction record: `docs/architecture/reviews/02_BRAIN_FOUNDATION_ARCHITECTURE_REVIEW_CORRECTIONS_2026-11-03.md`, blob `fa6a5baaa4226dc7b845f4da6e07c5635ccc6ad8`.
+- PR #173 remains open/draft at `97191111bc2573c14d391c0af9628db7b11f194b`; its PR body records the original independent-review verdict as NOT APPROVED — REVISION REQUIRED, followed by the Builder's correction submission.
+- The available GitHub review-list query returned no submitted review nodes for PR #173. The correction record itself says independent re-review pending.
+- PR #174's Project Director acceptance comment `6604790481` accepts the specification at `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` and explicitly clears PR #174 finding F-01. It does not itself state that PR #173 F-02/F-03 received an independent re-review verdict.
+
+The PR #173 correction record defines:
+- **F-02 — Experience-acquired goal formation.** The architecture must distinguish supplied-goal processing from the developmental capacity to generate candidate goals from interpreted experience, changed circumstances, discrepancies, internal conditions and prior goal/action consequences. Candidate formation must be evidence-grounded, evaluated, revisable and traceable; the listed sources are not fixed triggers or prescribed objectives.
+- **F-03 — SYS-08 embodiment and computational-substrate boundary.** SYS-08 provides compute, storage, networking, device and runtime substrate; SYS-01 retains semantic ownership and validation of cognitive state. Infrastructure acknowledgement/failure must not be treated automatically as cognitive truth, memory absence, external-world evidence or learning. Recovery responsibilities and operational contracts must remain distinct.
+
+The correction record says the Builder addressed both findings in the architecture proposal and supplies exact section references. The available PR metadata does not establish a later independent re-review submission for PR #173. Therefore this report does not invent an independent clearance verdict. The Project Director's project history/decision record remains authoritative for whether those corrections were formally accepted.
+
+**Separate reasoning issue:** PR #174's F-01 was the missing explicit owner for general reasoning/inference; it was addressed by adding BM-12. The later source-audit finding AUD-12 and this report's IF-03 concern the existing reasoning engine's narrow behavior and lack of downstream use on pinned main. They are not PR #173 F-03.
+
+### 14.2 F-02 source mapping — goal progress learning exists; candidate-goal formation is not demonstrated
+
+Exact main source identities:
+- `core/cpp/include/jarvis/core/brain.hpp` — `8268ef84e0b361ead536724ba7761904b30ee58f`.
+- `core/cpp/src/goals.cpp` — `778a829de8314e83b095af2f2c2a6b83baa769f4`.
+
+Exact PR #97 donor identities:
+- `core/cpp/include/jarvis/core/brain.hpp` — `671186f4c39879a182f9e511394fc564d86f2988`.
+- `core/cpp/src/brain_restored_api.cpp` — `7155d4d9c8eef527836fb79bf901aa32ddbae38b`.
+- `core/cpp/include/jarvis/core/goals.hpp` — `66f8cd436a18a0bca8039205f682fc929c32b6a5`.
+- `core/cpp/src/goals.cpp` — `afaedcfb0f2f68ff88b3a20e474fce04bb59815c`.
+- `core/cpp/include/jarvis/core/cognitive_goal_outcome.hpp` — `c986480d82b9951177031f3387169819c3856234`.
+- `core/cpp/tests/goal_directed_cognition_suite.cpp` — `7fe6cf6c4dd2dc2a54bb9f48fcdd3c3d91d7c282`.
+- `core/cpp/tests/cognitive_runtime_goal_feedback_suite.cpp` — `15a6bdffe37ae7df6c625ea9737fda4c0bf08a7f`.
+
+Observed implementation:
+- Both main and donor expose goal creation through a caller-supplied `Goal` object; the inspected API accepts an already formed goal rather than deriving a candidate from an experience.
+- Donor `GoalModel::create` validates and stores the supplied goal. `update_progress` updates an existing goal's progress, outcome momentum and priority from the observed progress delta.
+- Donor `GoalOutcomeEvidence` and `GoalProgressModel` track progress and positive/negative/completed outcomes for an identified goal. Donor `Brain::assimilate_goal_outcome` assimilates outcome evidence into an existing goal's progress.
+- Donor replay restores goal creation and progress lifecycle events. Runtime goal-feedback tests check progress, regression rejection and completion for an already-created goal.
+- The inspected goal-directed test starts with two explicit goal objects and tests intent selection, action planning and progress/outcome assimilation. It does not test candidate-goal generation.
+- No candidate-goal proposal/generation API or experience-to-new-goal formation path was found in the inspected main Brain/CognitiveCycle path or the inspected PR #97 goal/Brain/runtime paths.
+
+**Finding P2-I-015 — F-02 remains a capability gap in the inspected main and PR #97 donor paths.** The donor has stronger goal-outcome assimilation and experience-sensitive progress/priority updates, but that is not the same capability as forming a new candidate goal from experience. Do not count goal progress learning, intent selection or supplied-goal evaluation as satisfying experience-acquired candidate-goal formation. This is a bounded source finding, not a proof that no candidate-goal concept exists anywhere outside the inspected paths.
+
+### 14.3 F-03 source mapping — cognitive state persists through direct filesystem code; SYS-08 contract is not explicit at this boundary
+
+Exact pinned main source identities:
+- `core/cpp/include/jarvis/core/memory.hpp` — `f3662038237246efa51155f940d77564f144d6d9`.
+- `core/cpp/src/memory.cpp` — `ba72a897306d4761246d0deab2fbab37c49d372f`.
+
+Observed boundary:
+- The inspected `Memory` constructor accepts a `std::filesystem::path` for the journal.
+- The implementation directly creates directories, opens journal and metadata files, appends records, flushes streams, reads files and repairs a corrupt journal suffix using filesystem operations.
+- The inspected `Memory` interface does not expose an explicit SYS-08 substrate provider/adapter contract for operational availability, bounded resource requests, storage acknowledgement, integrity/failure status or substrate recovery.
+- The event journal and metadata file are separate persistence artifacts; their lifecycle and recovery are implemented inside this C++ Memory component.
+- The donor uses the same general direct-filesystem Memory boundary; the richer donor Brain replay path does not itself establish a separate SYS-08 contract.
+
+**Finding P2-I-016 — The inspected C++ persistence boundary does not make the SYS-08 substrate contract explicit.** The architecture-level separation between SYS-01 cognitive meaning and SYS-08 operational substrate is documented, but this source path directly owns filesystem interaction. The required SYS-08 interface, failure reporting, persistence acknowledgement semantics and recovery handoff are not established by the inspected Memory API. This is a source-boundary gap, not a claim that no SYS-08 implementation exists anywhere in the wider repository.
+
+### 14.4 Updated correction and acceptance ledger
+
+| Finding | Correct meaning | Architecture correction | Source/capability status in this map |
+|---|---|---|---|
+| PR #173 F-02 | Experience-acquired candidate-goal formation | Builder correction record maps the requirement into PR #173 architecture sections 4.6, 9, 11, 11.1, 12 and 13 | Not demonstrated in inspected main or PR #97 donor paths; P2-I-015 |
+| PR #173 F-03 | SYS-08 computational-substrate boundary | Builder correction record maps the requirement into PR #173 architecture sections 7, 11, 11.1 and 12 | Architecture-level boundary exists; explicit C++ Memory-to-SYS-08 contract not demonstrated; P2-I-016 |
+| PR #174 F-01 | Explicit general reasoning/inference mechanism ownership | Added BM-12 in accepted PR #174 specification | Narrow reasoning prototype only; memory premises and downstream integration remain gaps; AUD-12 / IF-02 / IF-03 |
+
+The full original reviewer prose for PR #173 F-02/F-03 was not present in the PR's changed files, PR conversation comments or review submissions returned by the current repository queries. The separate Builder correction record contains the finding titles, substantive summaries, exact correction map and rationale. The report therefore uses those grounded summaries and does not fabricate a verbatim quote. If verbatim reviewer wording is a mandatory Phase 2 artifact, the original review document or source conversation must be supplied/recovered.
 
 **Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, no implementation authorization implied.
