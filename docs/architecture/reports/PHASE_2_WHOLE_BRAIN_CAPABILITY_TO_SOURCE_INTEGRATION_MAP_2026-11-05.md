@@ -1808,3 +1808,97 @@ The second-pass review checked the findings against the exact donor/main source 
 No source changes were made to resolve these findings because Phase 2 remains a documentation/investigation stage and implementation is not authorized. The findings are not Gate A clearance or a donor rejection decision; they are concrete requirements for the later independent review and any separately authorized correction work.
 
 **Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, and no implementation authorization implied.
+
+---
+
+## 22. Additional source-tracing batch — three-seed DLT-002 artifact review and revision-drift reconciliation
+
+**Audit date:** 2026-11-05  
+**Workflow:** JARVIS DLT-002 Multi-Seed Learning Sweep, run #8, ID `40565468650`  
+**Run commit:** `82c49a75bd30de2962879f044776f4bf2391970a`  
+**Current donor HEAD:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`  
+**Scope:** Downloaded and independently parsed all three preserved seed artifacts; recomputed episode and phase metrics from the raw CSVs; checked the workflow and DLT executable against the exact run commit; compared the run commit's relevant source files with current PR #97 HEAD. This was artifact/source review, not a rerun.
+
+### 22.1 Run identity and preserved artifacts
+
+The GitHub run record establishes:
+- Workflow: `JARVIS DLT-002 Multi-Seed Learning Sweep`.
+- Run number: 8; run ID: `40565468650`.
+- Event: `push`; branch: `feat/jarvis-affective-state`.
+- Exact run commit: `82c49a75bd30de2962879f044776f4bf2391970a`.
+- Run conclusion: success; all three matrix jobs completed successfully.
+- Each matrix job used a 10-minute trial and one of the three configured seeds: `20261026`, `20261027`, `20261028`.
+
+All three artifacts were downloaded and inspected, including their metadata, summaries, episode CSVs, checkpoint CSVs, trial logs and preserved Brain journals:
+
+| Seed | Artifact ID | SHA-256 | Episodes | Optimal selections | Fixed-policy best | Learner delta |
+|---|---:|---|---:|---:|---:|---:|
+| 20261026 | 12764655498 | `d189293bb8b2d552288caea1e03798436ec335e68a9b0e9a6b6d262be6c9263a` | 586 | 569/586 (97.1%) | 293/586 (50.0%) | +47.1 pp |
+| 20261027 | 12763543000 | `af42bcb1105bc884c6fba94c17097545aa16fe0e3aacbcbf0315fb9d0e6afef0` | 590 | 557/590 (94.4%) | 296/590 (50.2%) | +44.2 pp |
+| 20261028 | 12763204259 | `ae93f0cec02f0896a4e8ec96f8eda2dcb772521b5888916697f30622434b7ef2` | 589 | 556/589 (94.4%) | 295/589 (50.1%) | +44.3 pp |
+
+Recomputation from the raw episode CSVs gives **1,682 optimal selections from 1,765 episodes (95.30%)**. The sum of the three per-seed best fixed-action baselines is 884/1,765 (50.08%), giving a descriptive aggregate difference of **+45.22 percentage points**. This is a weighted aggregation of the three runs, not a separate fourth experiment.
+
+### 22.2 Phase-level results and transfer probe
+
+Recomputed from the raw episode CSVs:
+
+| Phase | Optimal selections | Episodes | Accuracy |
+|---|---:|---:|---:|
+| clear-baseline | 280 | 300 | 93.33% |
+| flooded | 286 | 297 | 96.30% |
+| tunnel | 279 | 295 | 94.58% |
+| clear-reversal | 276 | 294 | 93.88% |
+| generalization-probe | 289 | 291 | 99.31% |
+| flooded-reversal | 272 | 288 | 94.44% |
+
+Each seed's **first decision** in the unseen `navigation/canyon` context was optimal before any canyon outcome feedback: 3/3 across the three independent seeds. The first ten decisions in that context were 29/30 optimal, but those ten include feedback from earlier decisions; they are not ten feedback-free transfer observations.
+
+The final checkpoint in each artifact reports zero unresolved action-consequence forecasts. It also reports 1,429–1,439 unresolved *other* predictions. The executable deliberately distinguishes these categories; the result must not be summarized as “all predictions resolved.”
+
+### 22.3 What the environment did and did not reveal
+
+The exact run-revision executable `core/cpp/tests/dlt_002_long_run.cpp` has blob `cbd80951c2f331fa4893c1805fff45a4035d5d24`. The workflow has blob `f40a859a9b6b4f8138cd14df9fa09ad362f3515c`.
+
+Source inspection confirms this is a meaningful but constrained experiment:
+- The environment randomizes the alpha-to-action mapping independently per seed; beta maps to the opposite action.
+- The latent `route_condition` is removed by the observation filter before the Brain receives the observation.
+- The Brain is still explicitly given context labels such as `navigation/clear`, `navigation/flooded`, `navigation/tunnel` and `navigation/canyon`.
+- Outcomes have 20% noise.
+- The six phases include context changes, reversals and an unseen canyon transfer probe.
+- The harness evaluates two candidate actions, requires exactly one selected/executed action per episode, and configures planning horizon 1.
+- The expected action and latent condition are evaluation labels used to score behavior; they are not supplied as Brain observations.
+- The comparison policy is the better of two fixed actions over the full scored run. The workflow explicitly says this is **not** a matched Brain with learning disabled.
+
+This supports evidence of rapid, repeatable adaptation in a randomized, noisy, partially observed, context-labelled two-action task. It does not isolate the causal contribution of the developmental-learning mechanism from every other Brain subsystem, establish a matched learning-ablation effect, or demonstrate broad open-ended goal formation and general intelligence.
+
+### 22.4 Exact run commit is an ancestor, but not the current integrated donor revision
+
+GitHub's commit comparison reports that current donor HEAD is 18 commits ahead of the run commit and has no commits behind it; `82c49a75...` is the merge base/ancestor in this comparison.
+
+The source identity comparison is material:
+
+| File | Run-commit blob | Current PR #97 HEAD blob | Same? |
+|---|---|---|---|
+| `cognitive_runtime.cpp` | `cf00acb6abd52308343f3a0e7016e6173b945603` | same | Yes |
+| `cognitive_cycle.cpp` | `2bff7eebe0905afbf2556833de189fee2da15b42` | `f191dd610d6cbe1621756c35e7c13af2054a7266` | No |
+| `brain_action_execution.cpp` | `3b66bafb438cd28790e6f25611b96c86f1eff05c` | same | Yes |
+| `brain.cpp` | `bbc3469e6463c40a8957fdb43590bf3a55b36379` | `dec9e5442b3ca4b81a7879855c6146b2619934cc` | No |
+| `developmental_learning.cpp` | `bfe2db73a2722c421e6616d1caa20606f4f86098` | `dbf5f43271dfa0a3c57236e2faa82eb88d15490d` | No |
+| `memory.cpp` | `bb2aee0eae27a667d64d7c32c2e2a8b613d35f16` | `ab42bba1d32d6f48d091787491c72294a4a55bb5` | No |
+| `dlt_002_long_run.cpp` | `cbd80951c2f331fa4893c1805fff45a4035d5d24` | same | Yes |
+| `jarvis-learning-seed-sweep.yml` | `f40a859a9b6b4f8138cd14df9fa09ad362f3515c` | same | Yes |
+
+The experiment harness and workflow are byte-identical to current donor HEAD, and two central runtime/action files are also identical. However, the cycle, Brain replay, developmental-learning and Memory implementations changed in the 18 later commits. Therefore these three seed trials are **not exact-current-HEAD integrated Brain runs**. They are stronger multi-seed evidence than the single-seed historical 330-minute artifact in §19, but their whole-system revision must remain pinned to `82c49a75...`.
+
+### 22.5 Verification and experimental limits
+
+The seed-sweep workflow configures CMake and builds only `jarvis_dlt_002_long_run`; it does not run the full CTest suite, sanitizers, ThreadSanitizer or a separate-process persistence train/verify test before each trial. The artifact preserves a journal and metadata, but the long-running executable itself is a single-process trial. The separate exact-current-HEAD 71/71 native and ASan/UBSan CI evidence remains §18.3 and must not be attributed to this run.
+
+The fixed-action baseline is useful as a simple lower bound under randomized mappings and reversals, but it is not a matched learner with developmental feedback disabled. The experiment also does not establish observer independence: the environment callback both supplies the consequence and determines the evaluation labels. The first unseen-context decision is genuinely pre-feedback for that context, while subsequent decisions receive canyon feedback and should not all be described as zero-shot transfer.
+
+**Finding P2-I-031 — Three independent 10-minute DLT-002 trials at donor commit `82c49a75...` completed 1,765 episodes with 95.30% aggregate optimal-action selection and 3/3 optimal first decisions in the unseen context.** The result is meaningful repeatability evidence for the narrow synthetic task. It is not a matched learning-ablation result and not an exact-current-HEAD whole-system run because four material Brain/cycle/learning/persistence files changed in the 18 later commits.
+
+**Updated interpretation:** PR #97 has (a) exact-current-HEAD native and ASan/UBSan CI with 71/71 tests in each configuration (§18.3), (b) a three-seed 30-minute aggregate at ancestor revision `82c49a75...` with a fixed-action baseline (§22), and (c) a 330-minute single-seed run at older revision `c6a8a00...` (§19). These are three distinct evidence classes and must not be combined into a claim that the current donor HEAD passed a 330-minute, multi-seed, full-suite, matched-control validation.
+
+**Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, and no implementation authorization implied.
