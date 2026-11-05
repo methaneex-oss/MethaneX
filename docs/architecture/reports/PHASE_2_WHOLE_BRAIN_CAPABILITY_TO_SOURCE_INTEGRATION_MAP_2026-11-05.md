@@ -1282,3 +1282,104 @@ Exact main source identities:
 6. Add tests that demonstrate disputed evidence changing downstream reasoning/decisions, and that restart/replay reconstructs the same conflict history.
 
 **Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, no implementation authorization implied.
+
+
+---
+
+## 16. Additional source-tracing batch — Rust state ownership, TypeScript contracts, and cross-language integration reality
+
+**Audit date:** 2026-11-05  
+**Main baseline:** `1273ddbcd0087d189e01388ded2d362fb1e058d2`  
+**Scope:** Trace the repository's Rust runtime prototype and TypeScript integration contracts against the authoritative C++ Brain types and build target. This is a source/configuration audit; no cross-language builds or runtime calls were executed.
+
+### 16.1 Rust is a separate minimal cognitive-state prototype, not a connected C++ runtime service
+
+Exact Rust source identities:
+- `runtime/rust/Cargo.toml` — `c8e5a4d1cd1faef5c79a816fbef04d5022575f0a`.
+- `runtime/rust/src/lib.rs` — `ba949e43b7e06ce081b078035dfe7e48625d521c`.
+- `runtime/rust/src/cognition.rs` — `e46bb5b19528b58bf518f75f5edf704221cf5c9f`.
+- `runtime/rust/src/error.rs` — `5019356b7382960766de039e3e16a1f1c4e43150`.
+
+The crate is named `jarvis-runtime`, edition 2021, exposes a Rust library and declares no external dependencies. Its `BrainRuntime` owns a public `CognitiveState`; `observe` validates nonempty key/value and finite strength, then updates that state.
+
+The Rust `CognitiveState` owns:
+- a `HashMap<String, Belief>` keyed by string;
+- a `Vec<String>` working-memory buffer;
+- a cycle counter.
+
+Its `Belief` stores only string key/value, scalar strength and evidence count. Repeated equal values update a running mean; a conflicting value replaces the current value only when incoming strength is greater; otherwise existing strength is multiplied by 0.95. The working-memory vector stores only observed values and removes its oldest item after 64 entries.
+
+This is a small standalone state-update prototype. The inspected crate does not expose an event-journal interface, source/provenance record, C++ bridge, RPC endpoint, serialization contract, prediction/causal/goal/action lifecycle, or persistence/replay path. `CognitiveState::observe` is also publicly callable independently of `BrainRuntime::observe`, so the finite-strength validation in the wrapper is not an invariant enforced by the state type itself.
+
+### 16.2 C++ remains the only inspected integrated Brain state owner
+
+Exact C++ source identities:
+- `core/cpp/include/jarvis/core/brain.hpp` — `8268ef84e0b361ead536724ba7761904b30ee58f`.
+- `core/cpp/include/jarvis/core/cognition.hpp` — `e9aec6461351db42c77ff8414a175ce4c5eea33e`.
+- `core/cpp/include/jarvis/core/event.hpp` — `a31db633e8181378fcec0a20c5958c0065d430ee`.
+- `core/cpp/CMakeLists.txt` — `c51816888e1bddb7bc00c59e72529524e27a0717`.
+
+The C++ Brain owns the event-backed `Memory`, belief map, prediction map, WorldModel, goals, attention, causal/association models and the rest of the integrated C++ mechanisms described in this map. Its `Belief` uses the shared `Scalar` variant (monostate, bool, int64, double, string), confidence, observation count and updated event sequence. This is a materially different state contract from Rust's string-only belief and in-memory value list.
+
+The inspected `jarvis_core` CMake project declares `LANGUAGES CXX` and compiles the C++ Brain/runtime sources into a static C++ library. It does not declare a Rust language, invoke Cargo, link the Rust crate, or expose a C ABI/FFI bridge. Repository code search found the Rust `BrainRuntime`/ `CognitiveState` symbols only in the Rust crate. No caller from the C++ Brain or C++ CognitiveRuntime was identified.
+
+**Finding P2-I-019 — The Rust crate is an isolated prototype with its own duplicate belief/working-memory state, not a connected subsystem of the authoritative C++ Brain.** It must not be counted as an integrated runtime, persistence service or safety/concurrency boundary. If retained, its future role must be defined as either a subordinate service with an explicit state-free contract or a separate experimental implementation; it must not become a second authority for beliefs, goals or identity.
+
+### 16.3 TypeScript provides draft contracts and operator/agent wrappers, but no concrete Brain transport implementation was found
+
+Exact TypeScript source identities:
+- `interfaces/typescript/src/brain.ts` — `291916d45af0c67180542f8d775dba8b8ec1976f`.
+- `interfaces/typescript/src/agent_bridge.ts` — `cd86f7d5f44e2d30c0401bb4bf02e05328d1c038`.
+- `interfaces/typescript/src/operator_session.ts` — `2a699a78bc5beb31ed07cd913e0a527bb64d6bcf`.
+
+The TypeScript `brain.ts` declares `Observation`, `DecisionContext`, `Capability` and an abstract `BrainTransport` interface with asynchronous `observe`, `decide` and `capabilities` methods. The interface describes a possible integration seam; the inspected file supplies no implementation.
+
+The `agent_bridge.ts` file declares typed request/message/session structures and an abstract `AgentBridgeTransport` with `send`, `receive` and `connected`. `operator_session.ts` wraps that transport with operator identity and convenience functions for send/receive/connectivity. Its source comment explicitly preserves authorization inside the engineering/runtime boundary; the operator wrapper itself does not grant execution authority.
+
+Repository symbol searches found the declarations but no concrete class implementing `BrainTransport` or `AgentBridgeTransport`. The operator functions are wrappers over an injected transport, not a transport implementation. No direct call from these TypeScript files into the C++ Brain, Rust crate or a defined RPC endpoint was identified.
+
+### 16.4 The declared TypeScript shapes do not yet form a lossless C++ wire contract
+
+The source-level comparison exposes several material schema mismatches:
+
+| Concept | TypeScript declaration | C++ declaration | Integration consequence |
+|---|---|---|---|
+| Observation | source, kind, scalar record, timestampNs | Event has sequence, timestamp_ns, source, kind, Attributes; Observation wraps Event plus novelty | Event sequence and novelty are absent from the TypeScript Observation shape; timestamp and scalar encoding need a specified mapping |
+| Scalar values | string, number, boolean, null | monostate, bool, int64, double, string | JavaScript number does not preserve every int64 exactly; null/absence/monostate semantics are not mapped |
+| Decision context | goal string plus observation array | numeric goal priority/progress, plan value/risk, resource budget, uncertainty, threat and deadline pressure | The same type name represents materially different data and semantics |
+| Decision result | `string | null` | vector of scored Decision objects with CandidateAction and typed DecisionOutcome | Candidate alternatives, scores and disposition semantics are lost by the declared return shape |
+| Capability | id, version, string input/output lists | id, name, description, schemas, permissions, cost, risk, reliability, availability and reversibility | Authorization and operational capability metadata have no corresponding TypeScript fields |
+
+The TypeScript files also leave transport serialization, protocol versioning, authentication, replay/idempotency, correlation failure handling, deadlines, cancellation, error mapping and schema evolution unspecified. The use of `bigint` for message sequence/timestamp fields requires an explicit wire representation; the interface does not define one.
+
+The expected `interfaces/typescript/package.json` and `interfaces/typescript/tsconfig.json` paths were not present, and repository code search returned no `package.json` or `tsconfig` result. No TypeScript build/test command or concrete transport implementation was identified in the inspected repository configuration. This is not a claim that the source cannot be compiled manually; it means the checked-in contract does not currently provide a reproducible package/build/verification boundary.
+
+**Finding P2-I-020 — TypeScript contains useful but incomplete integration contracts; it does not yet connect to the C++ Brain and its same-named types are not semantically equivalent.** The contracts must not be treated as a working cross-language API until wire encoding, schema compatibility, concrete transport, authority, error semantics and contract tests are established.
+
+### 16.5 Polyglot architecture disposition
+
+The repository's architecture document states that C++ is intended for native computation/memory, Rust for concurrency- and safety-sensitive services, TypeScript for integration contracts and Python where its ecosystem is appropriate. That is an architectural direction, not evidence that the corresponding cross-language boundaries already exist.
+
+The inspected source state is:
+- **C++:** integrated Brain implementation and current cognitive-state authority.
+- **Rust:** independent minimal prototype with duplicate belief/working-memory state and no observed bridge to C++.
+- **TypeScript:** interface declarations and operator/agent wrappers, with no concrete Brain transport found.
+- **Python:** no Python Brain bridge or runtime path was established by this targeted source/configuration search; no Python subsystem is credited in this map.
+- **Engineering-agent coordination:** the TypeScript agent bridge is a coordination message contract; it is not itself the Brain's cognitive state or action authority.
+
+The PR #97 changed-file inventory contains no Rust or TypeScript source changes. The donor integration examined in §§10–13 remains a C++ donor path; it does not solve the polyglot boundary.
+
+### 16.6 Updated findings and required proof
+
+**P2-I-019** and **P2-I-020** refine IF-12. They do not imply that all polyglot implementation is undesirable. They establish that the current checked-in Rust and TypeScript assets are not yet interoperable cognitive/runtime subsystems.
+
+Before any cross-language integration is authorized:
+1. Declare one authoritative cognitive-state owner and explicitly forbid duplicate belief/goal/identity authority in subordinate services.
+2. Specify versioned, lossless event, scalar, decision, capability and error schemas, including integer precision, timestamp units, nullability and sequence semantics.
+3. Select a transport and define authentication, authorization, correlation, idempotency, retry, ordering, timeout, cancellation, backpressure and restart behavior.
+4. Define whether Rust receives immutable work requests and returns typed results, rather than maintaining a second mutable Brain state.
+5. Provide concrete TypeScript transport implementations and a reproducible package/build/test configuration.
+6. Add cross-language contract tests against the C++ types and tests proving rejected/duplicate/stale messages cannot mutate cognitive state or bypass action authorization.
+7. Demonstrate end-to-end persistence/replay and failure behavior across process boundaries before claiming integrated operation.
+
+**Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, no cross-language integration authorized.
