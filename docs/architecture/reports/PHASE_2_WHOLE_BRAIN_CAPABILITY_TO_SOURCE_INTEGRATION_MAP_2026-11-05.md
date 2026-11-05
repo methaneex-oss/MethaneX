@@ -841,3 +841,142 @@ A workflow definition stored on main is not itself execution evidence. Where the
 6. Reconcile the orphan `brain_restored_api.cpp` provenance with its originating branch/commit and determine whether it is stale, intentionally excluded, or a preservation artifact. Do not add it to the target as part of Phase 2.
 
 **Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected and no implementation authorization implied.
+
+
+---
+
+## 10. Additional source-tracing batch — PR #97 donor integration, learning tests, CI provenance, and duplicate-report reconciliation
+
+**Audit date:** 2026-11-05  
+**Main baseline:** `1273ddbcd0087d189e01388ded2d362fb1e058d2`  
+**Donor baseline:** PR #97 branch `feat/jarvis-affective-state`, exact HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`  
+**Scope:** Read-only comparison of donor Brain ownership, event/replay integration, action-consequence feedback, selected integration tests, CMake registration, workflow evidence, and the competing Phase 2 report.
+
+This batch closes several follow-ups from §9. It does not authorize donor integration or implementation.
+
+### 10.1 PR #97 contains a genuinely integrated affective/developmental Brain path on its donor revision
+
+The orphan-artifact finding in §9.2 needs a precise two-revision interpretation:
+
+- On pinned **main**, `brain_restored_api.cpp` is not listed in the `jarvis_core` source target, and the main `Brain` declaration does not own the affective/developmental models. It remains incorrect to credit these models to main.
+- At PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`, the donor `brain.hpp` includes `developmental_learning.hpp`, `affective_state.hpp` and `affective_learning.hpp`; its `BrainSnapshot` carries affective state; the private Brain members include `DevelopmentalLearning`, `AffectiveStateModel` and `AffectiveLearningModel`. The donor CMake target explicitly compiles `brain_restored_api.cpp`, `brain_action_execution.cpp`, `brain_prediction_context.cpp`, `brain_affective_planning.cpp`, `affective_state.cpp`, `affective_learning.cpp` and `developmental_learning.cpp`.
+
+Exact donor identities:
+- `core/cpp/include/jarvis/core/brain.hpp` — `671186f4c39879a182f9e511394fc564d86f2988`.
+- `core/cpp/src/brain.cpp` — `dec9e5442b3ca4b81a7879855c6146b2619934cc`.
+- `core/cpp/src/brain_action_execution.cpp` — `3b66bafb438cd28790e6f25611b96c86f1eff05c`.
+- `core/cpp/src/brain_affective_planning.cpp` — `2a9406257c23f3a66a64071842be7d6448799406`.
+- `core/cpp/src/brain_prediction_context.cpp` — `b3ceff150f3fe8223dc3f76f4c298ac264d72dae`.
+- `core/cpp/src/affective_state.cpp` — `563a61cd8f6440f78a084f76a799b2c84bdd6813`.
+- `core/cpp/src/affective_learning.cpp` — `dd1735a10871512691d4b518d1ce45246c80f708`.
+- `core/cpp/src/developmental_learning.cpp` — `dbf5f43271dfa0a3c57236e2faa82eb88d15490d`.
+- `core/cpp/CMakeLists.txt` — `bc264ce7b4ae489404ca03ea6d9676d0330a6a56`.
+- `core/cpp/tests/CMakeLists.txt` — `cbfd1fde52fffa6eeac025da2b7ddcb5ab493261`.
+
+**Finding P2-I-010 — PR #97's affective/developmental code is a compiled donor-side Brain integration, not merely a collection of disconnected files.** This is a material donor capability and a stronger state than the main orphan artifact. It remains donor-only because PR #97 is open, draft and unmerged. Its presence does not establish compatibility with the accepted PR #174 specification, current main APIs, later corrections, or Gate A.
+
+### 10.2 Donor event/replay path joins prediction, affect, attention, developmental association and action strategy
+
+The donor `Brain::replay` path in `core/cpp/src/brain.cpp` does more than restore independent model objects:
+
+1. It validates prediction-outcome, action-outcome and affective-learning records before the affective processing stage mutates state.
+2. It routes accepted events through `process_affective_experience`.
+3. Prediction outcomes resolve the identified prediction, update numeric adaptation where applicable, apply association feedback, update developmental associations, and reinforce or suppress attention using prediction error.
+4. Action outcomes update capability performance and action-status belief, then feed observed consequence and context into developmental strategy learning. Execution reliability and consequence evidence are represented separately.
+5. Affective-learning events are checked against their referenced source action-outcome event. The donor verifies the source sequence, observed flag and matching expected/actual/error values before accepting the calibration update.
+6. Brain construction replays the memory journal, reconstructing the integrated models from persisted events.
+
+The donor's `Brain::execute_action` adds a richer path than the main status/reason wrapper:
+- It checks authorization and, when an observer is supplied, creates a context-keyed expected-consequence prediction before execution.
+- It records action identity, context, status, authorization/execution/verification/rollback flags, whether a consequence was observed, expected and actual consequence, consequence error, operational reliability, evidence reliability, salience, novelty and affective state metrics.
+- It appends the authoritative action-outcome event, replays it and consolidates experience.
+- For an observed consequence it appends a separately attributed affective-learning event.
+- For a non-rejected attempt it appends a separate learning event for capability reliability.
+- After releasing the Brain lock, it resolves the consequence prediction only when the consequence was actually observed. Missing observations leave the prediction unresolved.
+
+This distinction matters: executor verification, operational reliability, consequence observation, consequence utility and affective calibration are not collapsed into one success/failure scalar. The donor's design is materially richer than main's narrow status/reason evidence path.
+
+**Important limits and review questions remain:**
+- The consequence observer is an injected callback. The source contract does not prove that an external observer is independent, trustworthy, correctly scoped, or measuring the intended world-state consequence.
+- The donor derives a default strategy context from the first eligible goal or the literal fallback `global` when no explicit developmental context is present. This is a context fallback, not proof of general context understanding.
+- The affective state equations and appraisal weights are engineered update rules. Their existence does not establish that the system's valuation is semantically grounded or that the learned appraisal is calibrated against independent utility.
+- Replay validation and source-sequence checks improve integrity, but do not by themselves establish tamper resistance, adversarial provenance, atomic multi-event transactions, or recovery under every partial-append failure.
+- The event-driven path is not proof that every external observation or every action is routed through this Brain API in a deployed runtime.
+
+### 10.3 Donor integration tests demonstrate behavioral feedback, not just state storage
+
+Selected donor test identities:
+- `core/cpp/tests/brain_action_consequence_integration_suite.cpp` — `7616082579d53e3579cae8e87895bdb3dadba66f`.
+- `core/cpp/tests/developmental_brain_integration_suite.cpp` — `760162dd6d1e669162e0bf22223a437491f5e262`.
+- `core/cpp/tests/affective_brain_decision_suite.cpp` — `9ff9c0480fa34fa4f5600e514af419b2bbc79765`.
+
+The inspected assertions establish that the donor test suite is designed to check more than model presence:
+- A predicted action consequence is compared with an observed consequence; the prediction is resolved and a learning metric receives observations.
+- Harmful observed consequences change attention's prediction-error weighting and affective learning updates.
+- An executed action without an observed consequence does not create fabricated reward evidence; affective valence remains unchanged, uncertainty increases, and the strategy-use count does not increase.
+- A failed verification can coexist with an observed external consequence; operational reliability and consequence learning are kept separate.
+- After constructing a new Brain from the same journal, affective state, attention state/policy, developmental strategy, prediction calibration and action preference are checked for restoration.
+- Developmental tests check that a learned action's score increases relative to a competing action, that the learned strategy is preferred in a related context, and that a subsequent CognitiveCycle decision reflects the learned preference.
+- Episodic outcome tests explicitly distinguish positive, negative and unobserved outcomes and check that relevant prior experience can influence action ranking.
+
+These are meaningful source-level behavioral assertions. They are not results of a test run performed in this Phase 2 batch. CMake declares and registers the action-consequence, developmental-brain and affective-brain suites, but registration alone is not execution evidence.
+
+**Finding P2-I-011 — PR #97 contains test specifications for persistent, consequence-sensitive changes in later action selection.** The tests are substantially stronger than the main Phase 7 status-belief test. Their assertions still require independent execution at an exact commit, review of test validity and controls, and broader evaluation of confounding, generalization and real external consequence quality before they can support capability acceptance.
+
+### 10.4 CI provenance: one PR #179 build is verified; donor CI remains unverified
+
+A workflow run associated with PR #179's updated commit was retrieved:
+- Workflow: **Native Brain Build**, run number **1610**, run ID **42064855161**.
+- Job `cpp`: completed successfully.
+- Job log checkout line identifies synthetic PR merge commit `337d30b6906ae19711359e65412e1d89801064ca`, described as merging PR #179 commit `9e00b3ba195975bbc74791af8af297e743bb8f5e` into PR #178 base `39fe09dcf13496f5f0005ccf3f00739303e29f88`.
+- CMake configure and full native C++ build completed successfully for that merge tree.
+- The workflow job's recorded steps contain configure and build, but no CTest/test step. No artifacts were attached.
+
+**What this proves:** the combined PR #179/PR #178 merge tree compiled successfully in that workflow run.
+
+**What it does not prove:** no test suite passed in that run; no donor branch code was built by this run; no runtime learning trial, persistence trial, sanitizer or independent behavioral evaluation was executed by this run.
+
+A query for pull-request-triggered workflow runs associated with donor HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` returned no runs through the available commit-run wrapper. That wrapper is limited to PR-triggered runs and its first page; this is not evidence that no manually dispatched or otherwise unlisted workflow execution exists. No donor workflow result is accepted as verified here.
+
+### 10.5 Reconciliation of competing Phase 2 reports #179 and #180
+
+Both open/draft PRs modify the same report path, but they have different bases and are not interchangeable:
+- PR #179: branch `docs/jarvis-phase-2-whole-brain-integration-map-20261105`, base PR #178 governance branch at `39fe09dcf13496f5f0005ccf3f00739303e29f88`, current HEAD before this batch `9e00b3ba195975bbc74791af8af297e743bb8f5e`.
+- PR #180: branch `research/phase-2-brain-integration-map-20261105`, base PR #174 specification branch at `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, HEAD `6ca140300b914ed981a50301bbf1d82a5bfe4d8b`.
+
+The PR #180 report is a 311-line first-batch investigation. It records seven inspected integration areas, six cross-mechanism findings and useful explicit source declarations in six headers not separately named in the PR #179 report's source inventory:
+- `attention.hpp` — `c7e8ab0c5430d5c942fe314d928400f769c0a77c`;
+- `causal_model.hpp` — `f740bdf222b3309b13f0c2f541c97448fc05da3e`;
+- `goals.hpp` — `803fdd34130c71f54912b23fcba2f9eed23dd4f2`;
+- `intent.hpp` — `1749ae0d795da496dd6a9a4dcdbd203ae7ddaf6f`;
+- `learning_loop.hpp` — `287f2fe34cebd60b7a562d68c666572f71431cd6`;
+- `reflection.hpp` — `435e03f8f03f74cb910338ab4ab1264e4eaf085c`.
+
+Those declarations are now accounted for in the current Phase 2 source map: attention policy and reinforcement, causal transition/simulation, goal lifecycle, intent selection, learning-loop processing and reflection evaluation. The substantive PR #180 integration findings are already represented in the broader PR #179 map (including the memory/reasoning disconnection, reasoning non-consumption, goal-formation gap, causal-inference caveat, sequential-cycle limitation and split persistence paths). PR #179 adds the complete BM-01–BM-12 map, a larger integration-finding register, donor comparison, readiness matrix, appendices and the additional source-tracing evidence above.
+
+**Reconciliation decision for this working phase:** continue PR #179 as the working report because it is materially more complete and is based on the governance branch intended to carry the proposed project rules. Preserve PR #180's six unique header identities and its initial findings as incorporated evidence. Do not merge PR #180, close it, or claim its different base has been reconciled at the Git history level. Its branch ancestry and any unique unincorporated content remain a separate review item before either PR can be accepted or merged. No PR status was changed in this batch.
+
+### 10.6 Updated interpretation matrix
+
+| Capability | Main at pinned baseline | PR #97 donor at exact HEAD | Evidence status |
+|---|---|---|---|
+| Affective state ownership | Not integrated into main Brain target | Owned by donor Brain and replay path | Donor source-backed; not main capability |
+| Affective appraisal learning | Orphan source artifact only | Event-driven calibration with source-event validation | Donor source-backed; runtime/independent verification pending |
+| Developmental strategy learning | Not present in main Brain owner | Context-keyed strategy state affects action ranking | Donor source-backed; behavioral assertions exist |
+| Action execution | Public Brain API with status/reason learning | Consequence observer, scoped prediction, structured outcome event | Main narrow path; donor richer path |
+| Outcome attribution | No equivalent structured consequence contract established | Action event and source-linked affective event | Donor stronger; observer trust unresolved |
+| Replay | Main event journal replay | Donor replay reconstructs affective, attention, prediction and strategy effects | Donor stronger; multi-event crash atomicity unresolved |
+| Future action preference | Not demonstrated by main Phase 7 test | Donor tests assert learned preference and related-context transfer | Test source assertions only; no independent run accepted |
+| CI proof | PR #179 combined merge tree configured/built; no tests in that run | No donor PR-triggered run returned by current query | Main PR build only; donor CI unverified |
+
+### 10.7 Remaining work
+
+1. Retrieve the exact donor PR #97 workflow runs through the Actions workflow listing/dispatch history where possible, including any manual `workflow_dispatch` runs, and bind run inputs and checked-out SHA to each artifact.
+2. Independently inspect the complete donor integration tests for test-only shortcuts, hidden assumptions, reward leakage, context leakage, baseline/control validity, and whether the action-selection delta is caused by the intended learned state rather than shared global affect.
+3. Trace the donor's external caller graph for `Brain::execute_action`, `choose_with_affect`, `choose_with_developmental_learning` and the CognitiveRuntime path. Separate test harness calls from production/runtime calls.
+4. Trace the full donor event journal failure model across the multi-event action-outcome → affective-learning → capability-learning sequence, including append failures between records and replay idempotence.
+5. Compare donor action authorization, stale assessment and rollback-failure behavior with main and Gate A requirements.
+6. Incorporate the six PR #180 header identities into the final appendix and retain its branch-base difference in the duplicate-artifact register.
+7. Continue unresolved BM-01–BM-12 edges, especially F-02/F-03 exact originating review text, world-model/belief authority, memory-supported reasoning, candidate-goal generation, coordination/invalidation/recovery and cross-language boundaries.
+
+**Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, no implementation authorization implied.
