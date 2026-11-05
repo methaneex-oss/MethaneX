@@ -1495,6 +1495,8 @@ Source references at the exact donor HEAD:
 
 - [`cognitive_runtime.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/cognitive_runtime.cpp#L155-L223), blob `cf00acb6abd52308343f3a0e7016e6173b945603`.
 - [`cognitive_cycle.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/cognitive_cycle.cpp#L140-L158), blob `f191dd610d6cbe1621756c35e7c13af2054a7266`.
+- [`cognitive_cycle.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/cognitive_cycle.cpp#L430-L535), same blob — context-specific consequence calibration and learned strategy/episodic evidence are applied before planning.
+- [`cognitive_cycle.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/cognitive_cycle.cpp#L620-L731), same blob — episodic outcome weighting, affective planning context, plan and action assessment.
 - [`cognitive_cycle.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/cognitive_cycle.cpp#L706-L731), same blob.
 - [`brain_action_execution.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain_action_execution.cpp#L8-L60), blob `3b66bafb438cd28790e6f25611b96c86f1eff05c`.
 - [`brain_action_execution.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain_action_execution.cpp#L112-L183), same blob.
@@ -1525,7 +1527,10 @@ The underlying Memory journal appends and flushes each event separately. Its rec
 Source references:
 - [`brain_action_execution.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain_action_execution.cpp#L112-L183), blob `3b66bafb438cd28790e6f25611b96c86f1eff05c`.
 - [`brain.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain.cpp#L199-L199), blob `dec9e5442b3ca4b81a7879855c6146b2619934cc`.
-- [`brain.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain.cpp#L292-L358), same blob.
+- [`brain.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain.cpp#L245-L268), same blob — action-outcome affect processing and affective-learning source-sequence deduplication.
+- [`brain.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain.cpp#L292-L358), same blob — source validation and replay rejection of malformed derived records.
+- [`brain.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain.cpp#L431-L460), same blob — action outcome updates operational capability state and observed-consequence developmental strategy.
+- [`brain.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain.cpp#L619-L622), same blob — derived-learning source-sequence deduplication.
 - [`memory.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/memory.cpp#L33-L60), blob `ab42bba1d32d6f48d091787491c72294a4a55bb5`.
 - [`memory.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/memory.cpp#L135-L135), same blob.
 
