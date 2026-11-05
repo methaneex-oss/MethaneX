@@ -1383,3 +1383,48 @@ Before any cross-language integration is authorized:
 7. Demonstrate end-to-end persistence/replay and failure behavior across process boundaries before claiming integrated operation.
 
 **Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, no cross-language integration authorized.
+
+
+---
+
+## 17. Additional source-tracing batch — PR #97 ancestry and current-main divergence
+
+**Audit date:** 2026-11-05  
+**Current main:** `1273ddbcd0087d189e01388ded2d362fb1e058d2`  
+**PR #97 recorded base:** `4ba84b8b5ccf0e41530c46fdb8101551254ba864`  
+**PR #97 head:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`
+
+### 17.1 Exact PR metadata and commit-graph results
+
+Current PR #97 metadata reports **1,244 commits**, **159 changed files**, **18,788 additions** and **1,644 deletions**. It remains open, draft and unmerged.
+
+GitHub commit comparisons returned:
+- Recorded base `4ba84b8b5ccf0e41530c46fdb8101551254ba864` to donor head `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`: diverged; common ancestor `af09cf28d35e4a7b75c3c019e9f97893d8e19364`; 1,244 ahead and 1 behind.
+- Recorded base to current main `1273ddbcd0087d189e01388ded2d362fb1e058d2`: main is 8 commits ahead, with the recorded base as merge base.
+- Current main to donor head: diverged; same common ancestor `af09cf28d35e4a7b75c3c019e9f97893d8e19364`; 1,244 ahead and 9 behind.
+
+The donor is therefore a large divergent implementation line, not a small patch based on the current main snapshot. The current main contains nine commits after the common ancestor that are absent from the donor head.
+
+### 17.2 Reconcile counts by scope
+
+These numbers are from different comparisons:
+- **159 changed files**: current PR #97 diff against its recorded PR base.
+- **165 paths**: Phase 1 main-to-candidate tree-delta inventory, including later integration changes. Its partition is 143 PR #97-only unchanged paths, 16 paths changed in both PR #97 and the later integration segment, 2 existing paths modified only after PR #97, and 4 files first introduced after PR #97.
+- **1,244 commits**: current GitHub PR #97 commit count.
+- **1,416-commit hunk ledger**: a separate historical/provenance enumeration artifact in Phase 1, not the PR #97 commit count.
+
+Phase 1 source for the 165-path partition and the distinct hunk-ledger scope:
+- `docs/architecture/reports/PHASE_1_WHOLE_REPOSITORY_INVESTIGATION_AND_REUSE_AUDIT_2026-11-04.md` — blob `925eb079b6c26578b64ee69caadb97b90143afb6`, §7 and §9.
+
+### 17.3 Review consequence
+
+This ancestry reinforces the existing donor disposition:
+1. Treat PR #97 as a high-value donor, not the current main implementation baseline.
+2. Compare every candidate donor path against the accepted PR #174 architecture, current main and later donor corrections at exact blob identities.
+3. Revalidate API, event, persistence, workflow, test and failure semantics at the actual candidate revision.
+4. Do not merge PR #97 wholesale or infer that its 1,244 commits represent 1,244 independently accepted cognitive capabilities.
+5. Keep Gate A semantic provenance, ABI/downstream compatibility, rollback and independent-review obligations open until independently evidenced.
+
+**Finding P2-I-021 — PR #97 is a 1,244-commit divergent donor line, with 9 commits of current-main history absent from its head.** Its 159-file PR diff and the separate 165-path main-to-candidate inventory are different evidence scopes. This rules out treating PR #97 as a current-main-compatible drop-in baseline.
+
+**Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, no implementation authorization implied.
