@@ -975,6 +975,16 @@ A workflow run associated with PR #179's updated commit was retrieved:
 
 **What this proves:** the combined PR #179/PR #178 merge tree compiled successfully in that workflow run.
 
+A later build was also retrieved for the then-current PR #179 report commit:
+- [Native Brain Build run #1634](https://github.com/methaneex-oss/MethaneX/actions/runs/42080973918), run ID `42080973918`, completed successfully on 2026-11-05.
+- Exact PR head checked out: `8b114f4d8b911f8280235b64ee2cd59e2eef5fe8`.
+- Exact synthetic merge checkout: `044be4ae1312f1abfd41e631bca9383919f7b3c8`, merging that PR #179 head into PR #178 base `39fe09dcf13496f5f0005ccf3f00739303e29f88`.
+- The job completed CMake configure and full native C++ build successfully. It did **not** run CTest; the workflow steps contain configure and build only.
+- The log repeats the existing `evolution_rollback.cpp` missing-field-initializer warnings for `EvolutionHistoryRecord::reason` and `parent_experiment_id`, and the Actions Node.js 20 deprecation warning for `actions/checkout@v4`.
+
+This later run supersedes the older PR #179 build commit listed above for the working report's then-current HEAD. It still proves build success only, not test execution or donor acceptance.
+
+
 **What it does not prove:** no test suite passed in that run; no donor branch code was built by this run; no runtime learning trial, persistence trial, sanitizer or independent behavioral evaluation was executed by this run.
 
 An initial query through the pull-request-triggered commit-run wrapper returned no run for donor HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`. That was an incomplete search: the wrapper did not expose the branch-push runs. A subsequent direct Actions run-list query found and verified the exact-HEAD push CI runs. The corrected provenance and results are recorded in §18.3; the earlier statement that exact-head CI was unverified is superseded. This must be distinguished from the later PR #156/PR #176 integrated donor line, whose exact synthetic-merge CI runs are verified in §6.5.
@@ -1007,7 +1017,9 @@ The six PR #180 findings map to the PR #179 register as follows:
 | P2-I-005 — sequential cycle is not full recurrent/concurrent cognition | IF-08 | Same bounded-coordinator limitation |
 | P2-I-006 — journal and metadata use separate persistence paths | IF-10 and P2-I-014/P2-I-016 | Extended with donor multi-event journal behavior and SYS-08 boundary evidence |
 
-A second exact-identity reconciliation extracted all 20 distinct 40-character blob SHAs from the PR #180 report and checked them against the current PR #179 report; all 20 are present, with no source-identity hash left unaccounted for. This hash check does not mean the reports are textually identical or that every sentence was copied; it verifies that the source identities cited by the first-batch report are represented in the working report.\n\nA material correction is also required before PR #180 can be considered a clean duplicate: its BM-02 section labels contextual language/operator-intent grounding as F-02, and its BM-12 section labels downstream reasoning integration as F-03. Those labels do not match the PR #173 correction record. PR #173 F-02 is experience-acquired candidate-goal formation; PR #173 F-03 is the SYS-08 computational-substrate boundary. The downstream reasoning issue is PR #174 source-audit finding AUD-12 / Phase 2 IF-03. PR #179 now corrects these labels and retains contextual language grounding as a separate BM-02 gap. PR #180 must not be merged or treated as an authoritative clean copy without this correction.
+A second exact-identity reconciliation extracted all 20 distinct 40-character blob SHAs from the PR #180 report and checked them against the current PR #179 report; all 20 are present, with no source-identity hash left unaccounted for. This hash check does not mean the reports are textually identical or that every sentence was copied; it verifies that the source identities cited by the first-batch report are represented in the working report.
+
+A material correction is also required before PR #180 can be considered a clean duplicate: its BM-02 section labels contextual language/operator-intent grounding as F-02, and its BM-12 section labels downstream reasoning integration as F-03. Those labels do not match the PR #173 correction record. PR #173 F-02 is experience-acquired candidate-goal formation; PR #173 F-03 is the SYS-08 computational-substrate boundary. The downstream reasoning issue is PR #174 source-audit finding AUD-12 / Phase 2 IF-03. PR #179 now corrects these labels and retains contextual language grounding as a separate BM-02 gap. PR #180 must not be merged or treated as an authoritative clean copy without this correction.
 
 **Reconciliation decision for this working phase:** continue PR #179 as the working report because it is materially more complete and is based on the governance branch intended to carry the proposed project rules. Preserve PR #180's seven source identities (six mechanism headers plus `cognitive_cycle.hpp`) and its initial findings as incorporated evidence. Do not merge PR #180, close it, or claim its different base has been reconciled at the Git history level. Its branch ancestry and any unique unincorporated content remain a separate review item before either PR can be accepted or merged. No PR status was changed in this batch.
 
