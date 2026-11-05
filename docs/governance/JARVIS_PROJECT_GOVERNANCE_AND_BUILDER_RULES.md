@@ -4,7 +4,7 @@
 **Created:** 2026-11-05  
 **Repository:** `methaneex-oss/MethaneX`  
 **Companion baseline:** [Phase 1 — Whole-Repository Investigation, Reuse and Conflict Audit](../architecture/reports/PHASE_1_WHOLE_REPOSITORY_INVESTIGATION_AND_REUSE_AUDIT_2026-11-04.md)  
-**Architecture authorities:** PR #171–#174, subject to the exact scope and acceptance recorded in the Phase 1 report  
+**Architecture references:** PR #171–#174, subject to the exact scope, review outcome and authority reconciliation recorded in both Phase 1 artifacts  
 **Important:** This document establishes working rules. It does not itself clear Gate A, authorize runtime implementation, merge a PR, or change the accepted architecture.
 
 ---
@@ -550,8 +550,8 @@ Do not omit a section silently. Mark it not applicable with a reason.
 Until new evidence formally changes them, future work must carry forward these Phase 1 conclusions:
 
 1. The project is not to be restarted; substantial implementation and donor work exist.
-2. Accepted PR #171–#174 architecture/specification is the planning authority within the recorded approval scopes.
-3. PR #174 BM-01–BM-12 is the Brain integration mapping baseline.
+2. PR #171 Documents 00 and 01 have scope-limited approvals recorded in the Phase 1 inventory; PR #172 and PR #173 are recorded as accepted planning inputs/baselines, subject to exact revision and approval verification.
+3. PR #174's status is disputed across Phase 1 artifacts: the whole-repository audit describes it as accepted, while the documentation inventory records the latest independent re-review as identifying unresolved F-02 and F-03 and explicitly calls for reconciliation with PR #175's wording. Until that discrepancy is resolved against the exact review report and owner decision, use PR #174 as the current candidate specification for traceability and analysis, but do not describe it as unconditionally accepted or implementation-authoritative. BM-01–BM-12 mapping may proceed as analysis; any implementation dependency on disputed requirements must be gated.
 4. Main-branch C++ implementation is a substantial starting point, not a specification-complete Brain.
 5. PR #97 and PR #148–#156 are selective donors, not a wholesale approved baseline.
 6. PR #176 contains D1/D2 corrections and test evidence, but its open/unmerged status and relationship to PR #156 must be checked at the time of future work.
