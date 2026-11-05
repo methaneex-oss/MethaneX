@@ -763,7 +763,7 @@ The correct direction is selective integration around one cognitive authority, w
 
 ---
 
-## 9. Additional source-tracing batch — action execution, affective artifact boundary, and test provenance
+## 11. Additional source-tracing batch — action execution, affective artifact boundary, and test provenance
 
 **Audit date:** 2026-11-05  
 **Engineering source baseline remains:** `main` at `1273ddbcd0087d189e01388ded2d362fb1e058d2`  
@@ -845,7 +845,7 @@ A workflow definition stored on main is not itself execution evidence. Where the
 
 ---
 
-## 10. Additional source-tracing batch — PR #97 donor integration, learning tests, CI provenance, and duplicate-report reconciliation
+## 12. Additional source-tracing batch — PR #97 donor integration, learning tests, CI provenance, and duplicate-report reconciliation
 
 **Audit date:** 2026-11-05  
 **Main baseline:** `1273ddbcd0087d189e01388ded2d362fb1e058d2`  
@@ -978,5 +978,144 @@ Those declarations are now accounted for in the current Phase 2 source map: atte
 5. Compare donor action authorization, stale assessment and rollback-failure behavior with main and Gate A requirements.
 6. Incorporate the six PR #180 header identities into the final appendix and retain its branch-base difference in the duplicate-artifact register.
 7. Continue unresolved BM-01–BM-12 edges, especially F-02/F-03 exact originating review text, world-model/belief authority, memory-supported reasoning, candidate-goal generation, coordination/invalidation/recovery and cross-language boundaries.
+
+**Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, no implementation authorization implied.
+
+
+---
+
+## 13. Additional source-tracing batch — donor runtime closure, mainline comparison, and journal failure boundaries
+
+**Audit date:** 2026-11-05  
+**Main baseline:** `1273ddbcd0087d189e01388ded2d362fb1e058d2`  
+**Donor baseline:** PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` (reverified against open PR #97; base is `main` at `4ba84b8b5ccf0e41530c46fdb8101551254ba864`)  
+**Scope:** Trace the donor CognitiveRuntime → CognitiveCycle → selected-plan execution → Brain outcome processing → persistent learning → later decision path; compare the same boundary on pinned main; inspect the event journal's append/recovery semantics.
+
+### 13.1 Donor runtime closes the action-learning loop at the coordinator boundary
+
+The prior §12.7 follow-up asking whether the donor's runtime routes cycle output to action execution is now resolved at source level.
+
+Exact donor source identities:
+- `core/cpp/src/cognitive_runtime.cpp` — `cf00acb6abd52308343f3a0e7016e6173b945603`.
+- `core/cpp/src/cognitive_cycle.cpp` — `f191dd610d6cbe1621756c35e7c13af2054a7266`.
+- `core/cpp/src/brain_action_execution.cpp` — `3b66bafb438cd28790e6f25611b96c86f1eff05c`.
+- `core/cpp/src/brain_affective_planning.cpp` — `2a9406257c23f3a66a64071842be7d6448799406`.
+- `core/cpp/src/brain.cpp` — `dec9e5442b3ca4b81a7879855c6146b2619934cc`.
+- `core/cpp/tests/cognitive_runtime_learning_integration_suite.cpp` — `656de56b1368e40afb090778a7a5504ab4208056`.
+- `core/cpp/tests/cognitive_runtime_suite.cpp` — `361cba84a6fc6e07e31d14b5fa618c3f0a7848fa`.
+- `core/cpp/src/memory.cpp` — `ab42bba1d32d6f48d091787491c72294a4a55bb5`.
+
+The donor call chain is explicit:
+
+1. `CognitiveRuntime::worker_loop` dequeues a `CognitiveCycleInput`, runs `cycle_.run(item.input)`, and, only when the result is completed, calls `execute_actions(result)` before publishing it.
+2. `CognitiveRuntime::execute_actions` walks `result.context.plan.steps` in plan order. It matches each planned action to one corresponding assessment and marks that assessment consumed. It does not execute every candidate assessment as a batch.
+3. A non-executable disposition is recorded as rejected. An executable action requires the configured adapter; when present, runtime calls `brain_.execute_action` with execute, verify, rollback, consequence-observer and authorization callbacks.
+4. The execution result is appended to the cycle result; runtime metrics are updated. A narrow executor-reliability `Evidence` is queued as `CognitiveFeedback` for the runtime feedback processor.
+5. `Brain::execute_action` creates a context-keyed consequence prediction before execution when authorization and a consequence observer are available. It executes through `ActionExecutor`, then appends and replays an authoritative `action_outcome` event.
+6. When a consequence was observed, it appends a source-linked `affective_learning` event. For a non-rejected attempt it separately appends a capability `learning` event. After releasing the Brain lock, it resolves the consequence prediction using the observed actual consequence.
+7. Replay routes action outcome through capability performance, developmental strategy, attention and affective-state processing; source-linked affective learning updates appraisal parameters; prediction feedback updates adaptation/association/developmental association/attention paths.
+8. The next runtime cycle recalls prior action outcomes and developmental strategies. Those records alter expected consequence, utility and expected value before planning and decision. The loop therefore contains a source-visible path from observed action consequence to a later action-selection input.
+
+**Finding P2-I-012 — PR #97 contains a connected runtime action/consequence/learning/decision loop, not merely callable isolated models.** This is a donor-side integration finding. It does not establish that the loop is in main, that all inputs are real-world trustworthy, or that its behavior has passed independent capability acceptance.
+
+### 13.2 Donor memory is decision-operative, but not a premise source for the reasoning engine
+
+The donor cycle retrieves prior experience before recording the current observation. It supplements generic observation recall with candidate-action-specific `action_outcome` recall, then adds perceptual and exact developmental-context recall.
+
+The retrieved outcome records are used in two explicit decision pathways:
+- Exact-context observed consequences calibrate each candidate's `expected_consequence` using evidence reliability and a weak prior.
+- Direct-context learned strategies, related-context strategies, or (when no strategy exists) observed episodic outcomes alter action utility and expected value. Exploration pressure is applied where local evidence is absent.
+
+The cycle then passes these adjusted candidates to the planner, decision engine and action assessment boundary. This is stronger than memory being present only in a result object: retrieved episodic evidence is used in action ranking.
+
+There is still a distinct limitation. The donor `ReasoningProblem` is constructed from current beliefs and causal links; retrieved memories are not directly included as reasoning premises. However, when reasoning is valid and has conclusions, those conclusions are used as assumptions for causal simulation, whose projections are persisted as predictions and then contribute to uncertainty/planning. Therefore:
+- **Memory → action valuation/planning:** connected in donor.
+- **Memory → explicit reasoning premises:** not established in the inspected donor path.
+- **Reasoning conclusions → causal simulation/prediction:** connected in donor.
+- **Reasoning conclusions → mainline simulation:** not connected in the pinned main path, which simulates directly from current beliefs.
+
+This refines, rather than erases, IF-02 and IF-03: the earlier findings describe the pinned main baseline; donor-side connections must be represented separately and must not be attributed to main.
+
+### 13.3 Mainline runtime does not currently close the same execution loop
+
+The pinned main files were independently fetched at `1273ddbcd0087d189e01388ded2d362fb1e058d2`:
+- `core/cpp/src/cognitive_runtime.cpp` — `1a1383cedc42e357dc9efce117328b8d55e30bca`.
+- `core/cpp/src/cognitive_cycle.cpp` — `3df14c552f2048b0394dc362f7ee7a654a93fb32`.
+- `core/cpp/include/jarvis/core/brain.hpp` — `8268ef84e0b361ead536724ba7761904b30ee58f`.
+- `core/cpp/src/brain.cpp` — `e9f3758fcc9c0e89b7280ce376db9033d547682d`.
+
+Main's `CognitiveCycle::run` performs observation, memory retrieval, belief/causal reasoning, prediction, goal selection, planning, decision and action assessment. It returns assessments; it does not execute them. Main's `CognitiveRuntime::worker_loop` runs the cycle, creates/publishes a workspace and result, and updates processed metrics. The pinned main runtime source contains no `execute_actions` method and no call to `brain_.execute_action`.
+
+Main does expose an inline `Brain::execute_action` method in `brain.hpp`. That wrapper calls `ActionExecutor::run` and converts the returned reason/status into one `Evidence` record with a fixed reliability mapping. The inspected main method is not invoked by the main CognitiveRuntime path and does not accept the donor's consequence-observer callback or create the donor's structured outcome-event sequence.
+
+**Finding P2-I-013 — Main has an action-execution API, but its inspected cognitive runtime does not connect cycle assessments to that API.** The main path therefore must not be described as a closed action/consequence learning loop. P2-I-007 in §11 remains accurate only as a narrow standalone Brain API; this section supplies the missing integration qualification.
+
+Main's reasoning boundary is also confirmed at the pinned source: `ReasoningProblem` receives beliefs and causal links; causal simulation uses the current belief set directly. Retrieved memories are included in the cycle result but are not used as reasoning premises or as candidate-action outcome evidence in this main cycle. This supports the main-baseline scope of IF-02/IF-03.
+
+### 13.4 Donor runtime integration tests assert behavioral change across cycles and restart
+
+The donor `cognitive_runtime_learning_integration_suite` provides a particularly important test specification:
+
+- It configures an injected action executor, verifier and consequence observer.
+- In the initial synthetic environment regime, `calibrate` produces `-0.8`; after one runtime cycle, the test checks the authoritative action outcome, resolved consequence prediction, prediction-error metric, affective-learning update, persisted context-specific event and negative developmental strategy.
+- The next cycle receives the same candidate set and is expected to plan `wait`, demonstrating that the previous consequence changed later action selection.
+- A separate context test checks that the learned preference does not blindly transfer to an unrelated context.
+- The environment callback is then switched to a reversed deterministic regime. Repeated cycles must eventually select `calibrate`, showing that the strategy can be revised by subsequent contrary evidence.
+- After stopping and reconstructing Brain from the journal, a new CognitiveRuntime must choose and execute `calibrate` under the restored regime.
+- A no-observer control verifies that successful and verified execution without an observed consequence does not create a developmental strategy preference.
+
+The companion `cognitive_runtime_suite` checks that runtime executes only selected plan steps, records results, does not invoke the executor when authorization rejects the action, and continues operating after an execution failure.
+
+These are strong integration-test assertions for the donor loop. Their limits must remain explicit:
+- The observer is a deterministic test callback, not an independent physical-world sensor or trusted evaluator.
+- The environment regime switch is controlled by the test, not learned from an uncontrolled environment.
+- The test demonstrates bounded adaptation and context isolation for the selected scenarios, not general causal attribution, statistical robustness, safety under arbitrary actions, or broad generalization.
+- The tests were inspected but not executed in this Phase 2 batch. Their CMake registration is not execution evidence.
+
+### 13.5 Multi-event action learning is not a single atomic journal transaction
+
+The donor action handler appends multiple separate records:
+1. authoritative `action_outcome`;
+2. conditional `affective_learning` when the consequence was observed;
+3. conditional capability `learning` for non-rejected attempts;
+4. a separate prediction-outcome record when the consequence prediction is resolved.
+
+The donor `Memory::append` persists each event individually. `Memory::persist` opens the journal in append mode, writes one event, flushes the stream, and if that individual write fails attempts to resize the journal back to its pre-append size. This protects an individual append from some partial-write failures, but it is not a transaction spanning the entire action-learning sequence. Earlier successful events are not rolled back when a later append fails. In particular, the action outcome may be committed while the affective-learning event or capability-learning event is absent; the function does not expose a complete-chain commit status to the runtime caller.
+
+The replay path validates the affective-learning source against the referenced action-outcome sequence and checks matching expected/actual/error values. It also tracks processed affective-learning source sequences to avoid applying the same source-linked appraisal update twice during replay. This is a useful local integrity/idempotence control, not a transaction protocol for all related events.
+
+The inspected persistence code uses stream `flush()`; no explicit file or directory `fsync` is visible in the inspected append path. The journal format also lacks a frame marker/checksum; startup scans valid records, quarantines an unreadable suffix and truncates to the last valid record boundary. Metadata is persisted separately through a `.meta` file and temporary-file rename. These mechanisms should not be conflated with power-loss durability, tamper resistance or cross-file atomicity.
+
+**Finding P2-I-014 — Donor event replay provides ordered reconstruction and source-linked validation, but action learning is a multi-record, partially committable sequence.** Failure-injection tests must establish what state is reconstructed when each append boundary fails and whether callers can distinguish execution success from learning-record persistence failure.
+
+### 13.6 Updated investigation ledger
+
+Resolved or narrowed in this batch:
+- The donor external runtime caller path for `Brain::execute_action` is source-traced through `CognitiveRuntime::execute_actions`.
+- Donor memory's action-outcome influence on candidate action valuation is source-traced.
+- Donor reasoning conclusions' use in causal simulation is source-traced.
+- Main's absence of runtime action execution is confirmed at the pinned main baseline.
+- The donor's multi-record append and local affective-source validation boundary is source-traced.
+
+Still open:
+1. Exact F-02/F-03 originating review text and acceptance obligation reconciliation.
+2. Donor test execution at exact PR #97 HEAD, with full CI run/input/checkout SHA evidence; the current connector cannot list arbitrary/manual workflow-dispatch runs, so absence of a returned PR-triggered run is not proof no other run exists.
+3. Independent review of test controls and test validity, plus failure injection at every append boundary.
+4. Trustworthiness and calibration of external consequence observers, including evidence provenance and objective ground truth.
+5. Donor authorization freshness, stale assessment handling, rollback failure semantics and caller-visible persistence failure semantics.
+6. Full world-model/belief authority, candidate-goal formation, coordination/invalidation/recovery, cross-language boundaries and any remaining BM-01–BM-12 edges.
+7. PR #180's ancestry/base reconciliation and any unique content not yet represented in PR #179.
+
+### 13.7 Self-review and consistency checks performed before handoff
+
+The working report was re-read and checked against the exact source revisions used in this batch. The following corrections/controls were applied:
+- Section headings were renumbered sequentially after the two appended source-tracing batches; the prior duplicate section numbers 9 and 10 are corrected to 11 and 12.
+- Main and donor source identities were fetched separately and pinned explicitly. Donor runtime evidence is not attributed to main.
+- The earlier main action-execution statement is qualified: the standalone Brain API exists, but the pinned main CognitiveRuntime does not call it.
+- IF-02/IF-03 are explicitly scoped to main and contrasted with the narrower donor integrations; the donor still does not pass retrieved memories as direct reasoning premises.
+- Donor integration tests are described as source assertions, not as executed test results.
+- The only verified CI result remains the PR #179/PR #178 merge-tree native build, with no CTest step. It is not represented as donor CI or test evidence.
+- Journal append protection is described per individual record; no multi-event transaction or fsync guarantee is claimed.
+- No runtime source, test, build configuration, dependency or donor file was changed. This batch updates the Phase 2 investigation report only.
 
 **Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, no implementation authorization implied.
