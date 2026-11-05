@@ -1559,8 +1559,8 @@ A direct Actions run-list query for the exact donor commit identified two push-t
 | JARVIS Core Verification | `40788714735` | `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` | Success | `cpp-core`: configure, build, test |
 
 For Brain CI run `40788714686`:
-- The `native-brain` job completed successfully and its CTest log reports **71/71 tests passed**.
-- The `sanitizer` job completed successfully and its CTest log also reports **71/71 tests passed** under AddressSanitizer and UndefinedBehaviorSanitizer.
+- The `native-brain` job completed successfully and its CTest log reports **71/71 test processes passed** in a Release configuration. Important qualification: C++ `assert` checks are disabled by the standard Release `NDEBUG` configuration unless explicitly re-enabled; the workflow/CMake files do not add `-UNDEBUG`. Many suites use `assert(...)` for both checks and setup calls, so this job's green CTest result is not evidence that those assertion expressions were evaluated.
+- The `sanitizer` job completed successfully and its CTest log reports **71/71 tests passed** under AddressSanitizer and UndefinedBehaviorSanitizer in Debug configuration. The Debug configuration keeps the suites' `assert` expressions active, so this is the stronger assertion-bearing test result.
 - The executed test list includes `jarvis_developmental_brain_integration_suite`, `jarvis_affective_brain_decision_suite`, `jarvis_brain_action_consequence_integration_suite`, `jarvis_cognitive_runtime_learning_integration_suite`, the memory/evolution persistence suite and the other registered C++ suites.
 - No workflow artifacts were attached to this CI run.
 
@@ -2096,8 +2096,8 @@ This checklist records the second-pass validation performed before handing this 
 - [x] EvolutionHistory and EvolutionAdoptionJournal are correctly classified as in-memory projections reconstructed from Brain Memory events, not separate durable stores.
 - [x] The three-seed DLT-002 aggregate is recomputed from raw episode CSVs and pinned to ancestor commit `82c49a75...`; the source-file identity differences against current donor HEAD are recorded.
 - [x] The older 330-minute DLT artifact, the three-seed ancestor run and the exact-current-HEAD CI runs are presented as separate evidence classes, not blended into a single validation claim.
-- [x] The exact PR #97 HEAD native and ASan/UBSan runs are verified from provider job logs: 71/71 in each CTest job. The separate Core Verification run is also identified.
-- [x] The latest verified PR #179 branch build is identified as run #1634 on the then-current report commit's synthetic merge tree; its absence of a CTest step is stated. Subsequent PR #179 changes through this report revision are Markdown-only.
+- [x] The exact PR #97 HEAD native Release and Debug ASan/UBSan runs are verified from provider job logs: 71/71 test processes in each; the Release run's `assert` expressions are disabled, while the Debug sanitizer run retains them. The separate Core Verification run is also identified.
+- [x] The latest verified PR #179 branch build is run #1639 on synthetic merge commit `11546a265346826fc0c90e0e766ed8a403eb37f8`, combining report commit `99f48d52d1ea816d6f9a2138d976578bc5e33222` with governance base `39fe09dcf13496f5f0005ccf3f00739303e29f88`; it configured and built but had no CTest step.
 - [x] The 64-file donor C++ production source callsite search and 54 changed C++ test-source search are scoped accurately; no claim is made about external consumers outside the repository.
 
 ### 25.3 Claim-strength and wording checks
@@ -2126,5 +2126,50 @@ The report is intentionally **not** marked complete. Before Phase 2 can pass its
 8. Keep Gate A NOT CLEARED until its own required provenance, compatibility, rollback, independent test and independent review conditions are satisfied.
 
 **Self-review result:** no internal contradiction or unsupported completion claim was identified in this pass. The report remains a substantial but incomplete Phase 2 investigation. Its findings are ready for independent challenge; they are not approval to implement, merge donor code or select an implementation baseline.
+
+**Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, and no implementation authorization implied.
+
+
+## 26. Additional verification audit — Release-mode assertion elision and current report-branch CI
+
+**Audit date:** 2026-11-05  
+**Donor baseline:** PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`  
+**Report baseline before this update:** PR #179 branch blob `76170fa2a604d28366f05a18293ae448b41b64d8`  
+**Scope:** Rechecked the exact donor Brain CI workflow, both job logs, CMake test configuration, and the assertion-heavy runtime/action integration suites. Also rechecked the latest workflow run attached to PR #179's current head. No runtime or test source was modified.
+
+### 26.1 Native Release CTest reports success while compiling out the suites' assertions
+
+The donor workflow `.github/workflows/brain-ci.yml` configures its native job with:
+
+```sh
+cmake -S core/cpp -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON
+```
+
+The test suites use the C/C++ `assert` macro. Under the normal CMake Release configuration for GCC/Clang, `NDEBUG` is defined; when `NDEBUG` is defined, `assert(expression)` expands to a no-op and **does not evaluate the expression**. The donor CMake test registration does not add a test-target option to undefine `NDEBUG`. Therefore, in the native Release job, assertions are not merely unchecked: any setup or state-changing calls placed inside `assert(...)` are also omitted from execution.
+
+This is directly relevant to the selected integration suites. For example, `cognitive_runtime_learning_integration_suite.cpp` wraps goal creation/activation, runtime start/submission, result-presence checks and many behavioral invariants in `assert(...)`. In the Release configuration, those expressions are not evaluated. The executable still runs non-assert statements and CTest still observes process exit status, but a successful exit cannot be interpreted as those assertion-defined learning invariants having been checked. The same pattern appears in `brain_action_consequence_integration_suite.cpp` and `affective_brain_decision_suite.cpp`.
+
+The exact donor CI logs independently confirm the two configurations and results:
+- Native job `123168281291`, run `40788714686`: checked out exact donor HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`, configured Release, and reported 71/71 CTest processes passed.
+- Sanitizer job `123168281548`, same run: checked out the same exact SHA, configured Debug with AddressSanitizer and UndefinedBehaviorSanitizer, and reported 71/71 tests passed. Debug retains `assert` expressions, so this is the assertion-bearing CI evidence for those suites.
+
+The Release build remains useful compilation/optimized-configuration and process-smoke evidence. The Debug ASan/UBSan job is the meaningful assertion-enabled test result. Neither job covers ThreadSanitizer or the separately identified event-append/partial-effect failure injections.
+
+### 26.2 Current PR #179 CI is a build-only check on its latest verified head
+
+The current PR #179 head at the time of this audit is `99f48d52d1ea816d6f9a2138d976578bc5e33222`. Its latest returned workflow run is Native Brain Build run `1639`, ID `42081553060`. The job checked out synthetic merge commit `11546a265346826fc0c90e0e766ed8a403eb37f8`, which merges that report head into PR #178 base `39fe09dcf13496f5f0005ccf3f00739303e29f88`. Its steps were configure and build; there was no CTest step. This verifies the current documentation-branch merge tree compiles, not that tests ran or that donor runtime behavior was tested.
+
+### 26.3 Finding and required CI correction
+
+**Finding P2-I-034 — PR #97's native Release CTest job disables assertion-based test logic; its 71/71 result is not equivalent to 71/71 assertion-bearing test passes.** The separate exact-HEAD Debug ASan/UBSan job does retain assertions and passed 71/71, so the donor does have substantial exact-HEAD assertion-enabled test evidence. The distinction must remain explicit in any review or acceptance decision.
+
+Required CI/test-quality correction before donor acceptance:
+1. Ensure test targets compile with assertions enabled in every configuration (for example, a portable test-target-specific undefinition of `NDEBUG`), or replace assertion-only checks with a test framework whose checks remain active in Release.
+2. Move setup and state-changing operations out of assertion expressions; assertions should verify outcomes, not perform required test setup.
+3. Add a CI guard that proves test assertion checks are active in Release, rather than relying on the build type label alone.
+4. Preserve Debug ASan/UBSan coverage and add a separate ThreadSanitizer/concurrency run where appropriate.
+5. Keep the PR #179 build-only run distinct from donor test evidence.
+
+**Self-review:** the conclusion is supported by the workflow's explicit Release/Debug configuration, the absence of a test-target `NDEBUG` override in CMake registration, the assertion-heavy test sources, and the provider logs for both exact-HEAD jobs. This does not invalidate the Debug sanitizer results or imply a failure in the observed CI runs. It narrows the native Release job's evidentiary value.
 
 **Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, and no implementation authorization implied.
