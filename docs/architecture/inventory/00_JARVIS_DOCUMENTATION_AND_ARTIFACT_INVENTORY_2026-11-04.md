@@ -381,11 +381,13 @@ This branch list is a discovery result, not a complete branch-to-PR disposition.
 
 ## 19. Chronological correction to PR #174 authority status
 
-The repository discussion confirms that PR #174 was formally accepted by the Project Director in comment [#6604790481](https://github.com/methaneex-oss/MethaneX/pull/174#issuecomment-6604790481) for exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, after F-01 clearance.
+The repository discussion confirms that PR #174 was formally accepted by the Project Director in comment [#6604790481](https://github.com/methaneex-oss/MethaneX/pull/174#issuecomment-6604790481), dated 2026-11-03 13:14:28 UTC, for exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, after F-01 clearance. The comment explicitly limits acceptance to the planning baseline, states the BM-07/SYS-05/SYS-08 clarification is non-blocking, and grants no implementation authorization.
 
-A later independent re-review was subsequently supplied by the Project Director in this conversation and identifies F-02 and F-03 as unresolved. That later review is newer evidence and reopens the specification for correction before it can be treated as ready for the next gate. PR #175's wording that PR #174 was accepted reflects the earlier acceptance event; it is now stale for the current decision state, rather than evidence that the later review did not occur.
+A subsequent review report supplied in the conversation identifies F-02 and F-03 as unresolved. This is later evidence requiring targeted specification correction; it does not erase the historical acceptance event. PR #175's “accepted” wording accurately records that earlier event but does not capture the later F-02/F-03 obligations, so its current-readiness wording must be treated as incomplete.
 
-No submitted GitHub review record for PR #174 was returned by the review-list endpoint at this inspection. The later shared-conversation report is not yet mirrored as a repository review artifact. It should be linked or recorded in the PR discussion only through a separate authorized documentation update, with the exact report and revision identified.
+The GitHub PR #174 review-list endpoint returned an empty array at this inspection. The formal Project Director acceptance is visible in the issue discussion; the later F-02/F-03 review report is not represented as a submitted GitHub PR review. Do not describe that later report as a GitHub review submission unless such a record is subsequently created and verified.
+
+**Current disposition:** PR #174 remains the formally accepted planning baseline at the exact accepted revision, with F-02/F-03 correction obligations open. Use it for traceability and analysis; do not treat affected requirements as implementation-ready until the later findings are resolved and the required authority/review decision is recorded. No implementation authorization is implied.
 
 ## 20. Expanded historical-review status
 
@@ -399,3 +401,19 @@ The following remain open preservation/reconciliation tasks:
 - establish whether each October artifact should remain solely in its historical branch, be represented in a curated archive index, or be formally superseded by a newer document.
 
 No files or branches were moved, deleted, renamed, merged, or rewritten by this inventory update.
+
+
+## 21. Phase 1 technical completion versus preservation follow-up
+
+The Phase 1 technical repository inventory and reuse/conflict investigation is complete within the scope defined by its report: the full tracked tree at the pinned baseline, critical cognitive source paths, build/test registration, donor line, polyglot boundaries, architecture and Gate A evidence were examined.
+
+The following preservation tasks remain open and must not be represented as complete:
+- map all 33 JARVIS-related branches to PRs, unique artifacts and current relevance;
+- compare duplicated dated plans/specifications across PR #96/#97 and related donor history;
+- reconcile historical document revisions across PR #97, PR #148, PR #156 and PR #170;
+- verify README and cross-document links for candidate authoritative documents;
+- decide which historical artifacts remain in source branches, receive a curated archive index, or are formally superseded.
+
+These tasks form a bounded documentation/preservation follow-up. They do not invalidate the completed technical inventory or require restarting Phase 1's technical investigation.
+
+A reproducible exact-baseline file list is now published at [PHASE_1_TRACKED_FILE_INVENTORY_2026-11-05.md](PHASE_1_TRACKED_FILE_INVENTORY_2026-11-05.md). Selected donor implementation paths are traced in [PHASE_1_PR97_DONOR_CAPABILITY_TRACEABILITY_2026-11-05.md](PHASE_1_PR97_DONOR_CAPABILITY_TRACEABILITY_2026-11-05.md). The complete correction disposition is in [PHASE_1_REVIEW_CORRECTIONS_AND_SCOPE_RECONCILIATION_2026-11-05.md](../reports/PHASE_1_REVIEW_CORRECTIONS_AND_SCOPE_RECONCILIATION_2026-11-05.md).
