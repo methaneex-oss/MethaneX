@@ -150,11 +150,11 @@ Main currently contains fragments of these paths. It does not yet demonstrate th
 - The strongest-confidence provider selection does not preserve multiple plausible interpretations or resolve disagreement.
 - Attribute normalization is not semantic grounding, entity identity, contextual language understanding or operator-intent understanding.
 - Confidence is not source reliability or belief confidence.
-- The Phase 2 map carries forward F-02: contextual language/operator-intent grounding is an open specification correction obligation. The precise finding text must be resolved against its originating review artifact before implementation relies on it.
+- Contextual language/operator-intent grounding remains a separate BM-02 requirement gap. It is not PR #173 F-02, which concerns experience-acquired candidate-goal formation.
 
 **Donor comparison:** PR #97's developmental context extraction uses observation kind/source and representation features/values; its fixed tokenization and context hierarchy are engineered inductive biases. It does not by itself establish general contextual language/operator-intent grounding.
 
-**Disposition:** **Reuse** provider capability and representation boundaries; **adapt** ambiguity, grounding, source/context and alternative-interpretation semantics. Keep F-02 open for implementation readiness.
+**Disposition:** **Reuse** provider capability and representation boundaries; **adapt** ambiguity, grounding, source/context and alternative-interpretation semantics. Keep contextual grounding open as a distinct BM-02 gap.
 
 **Required integration proof:** Ambiguous input yields competing interpretations; contextual evidence and memory change their relative support; operator intent is grounded from context rather than a fixed phrase/source lookup; raw evidence remains unchanged.
 
@@ -313,13 +313,13 @@ Main currently contains fragments of these paths. It does not yet demonstrate th
 - Main accepts already-created goals; it does not demonstrate candidate-goal formation from experience.
 - Priority is supplied/updated; no learned priority formation is demonstrated.
 - Default first-eligible selection is a deterministic fallback, not autonomous goal evaluation.
-- Contextual language/operator-intent grounding remains affected by F-02 and must be resolved before implementation relies on this pathway.
+- PR #173 F-02 concerns experience-acquired candidate-goal formation, not contextual language/operator-intent grounding. The latter remains a separate BM-02 gap.
 - Decision/plan outputs need explicit dependency freshness and re-evaluation when beliefs/predictions/goals change.
 - Action assessment is not execution authorization or verified consequence.
 
-**Donor comparison:** PR #97 adds affect-aware planning and developmental context strategy adjustment. This can inform downstream modulation but does not by itself solve candidate-goal formation or F-02 grounding. The PR #97 action execution path is a separate donor capability described under BM-09/BM-11 interactions.
+**Donor comparison:** PR #97 adds affect-aware planning and developmental context strategy adjustment. This can inform downstream modulation but does not by itself solve experience-acquired candidate-goal formation (PR #173 F-02). Contextual language/operator-intent grounding remains a separate BM-02 gap. The PR #97 action execution path is a separate donor capability described under BM-09/BM-11 interactions.
 
-**Disposition:** **Reuse** goal lifecycle, planner, decision and action-assessment foundations; **adapt** candidate-goal origin/evaluation, contextual grounding, dependency freshness and interaction with appraisal/reasoning. Preserve external authorization boundary.
+**Disposition:** **Reuse** goal lifecycle, planner, decision and action-assessment foundations; **adapt** candidate-goal origin/evaluation (PR #173 F-02), contextual grounding, dependency freshness and interaction with appraisal/reasoning. Preserve external authorization boundary.
 
 **Required integration proof:** Supplied goals remain distinguished from internally formed candidates; novel experience can produce an evidence-backed candidate without fixed triggers; defeated premises cause revision/abandonment; governance denial prevents execution while preserving intent and denial separately.
 
@@ -427,11 +427,11 @@ Main currently contains fragments of these paths. It does not yet demonstrate th
 - Contradiction handling is scalar consistency checking, not a preserved alternative/argument lifecycle.
 - Derived beliefs lack the required premise-to-conclusion lineage.
 - No downstream consumer in the inspected cycle gives reasoning outputs operational effect.
-- F-03 is specifically an open downstream reasoning integration correction obligation; BM-12-dependent implementation remains blocked until the finding and required decision are resolved.
+- Downstream reasoning consumption is PR #174 source-audit finding AUD-12 / Phase 2 IF-03. It is separate from PR #173 F-03, which concerns the SYS-08 substrate boundary.
 
 **Donor comparison:** PR #97 changes selected cognitive/affective pathways but is not established as a complete BM-12 general reasoning donor. The Phase 1 donor matrix does not identify a donor that closes memory-supported general inference and downstream consumption.
 
-**Disposition:** **Retain** the narrow ReasoningEngine as a prototype if useful; **do not count BM-12 as implemented**. Resolve F-03 and deepen F-02-related grounding boundaries before implementation. Do not add another reasoning engine that becomes a competing state authority.
+**Disposition:** **Retain** the narrow ReasoningEngine as a prototype if useful; **do not count BM-12 as implemented**. Resolve IF-03/AUD-12 and deepen the separate BM-02 contextual-grounding gap before implementation. Track PR #173 F-02 (candidate goals) and F-03 (SYS-08) under their own responsibilities. Do not add another reasoning engine that becomes a competing state authority.
 
 **Required integration proof:** All accepted PR #174 scenarios 27–34; retrieved relevant memory changes inference with provenance; irrelevant memory does not; contradictions and alternatives remain explicit; defeated assumptions invalidate dependent conclusions; conclusions are evaluated by their owning mechanisms; downstream planning/decision uses only qualified, fresh conclusions.
 
@@ -455,7 +455,7 @@ The current cycle retrieves memory, but the ReasoningProblem receives only belie
 
 **Impact:** BM-03, BM-06, BM-11 and BM-12.  
 **Consequence:** Memory availability is being mistaken for memory-supported cognition if only the workspace/context is inspected.  
-**Disposition:** Explicitly close F-03 and verify end-to-end effect, not merely pass a memory vector to an API.
+**Disposition:** Close the memory-to-reasoning integration gap by verifying end-to-end effect, not merely passing a memory vector to an API. This is IF-02, not PR #173 F-03.
 
 ### IF-03 — Reasoning output is not an operative input to downstream cognition
 
@@ -604,7 +604,7 @@ This table is an investigation classification, not an authorization decision.
 | Mechanism | Main status | Donor status | Highest-impact unresolved requirement | Preliminary disposition |
 |---|---|---|---|---|
 | BM-01 Experience/provenance | Partial | PR #97 event/action outcome records | Typed provenance, event/receipt time, epistemic and derivation lineage | Reuse journal; adapt contract |
-| BM-02 Representation | Partial | PR #97 context features | Multiple interpretations and contextual language/operator-intent grounding (F-02) | Reuse provider boundary; adapt grounding |
+| BM-02 Representation | Partial | PR #97 context features | Multiple interpretations and contextual language/operator-intent grounding (separate BM-02 gap) | Reuse provider boundary; adapt grounding |
 | BM-03 Memory | Partial | PR #97 persistence/replay | Semantic/contextual retrieval materially used downstream | Reuse continuity; adapt retrieval |
 | BM-04 Belief/world state | Partial | PR #148 evidence alternatives | Competing claims, revision lineage, dependent invalidation | Reuse structures; adapt epistemics |
 | BM-05 Association/causality/prediction | Partial | PR #97 contextual prediction | Causal evidence, scoped resolution and attribution | Reuse narrow simulation; adapt |
@@ -614,7 +614,7 @@ This table is an investigation classification, not an authorization decision.
 | BM-09 Learning/development | Narrow numeric adaptation/evolution | PR #97 strategy/action/prediction feedback; PR #151 bounded transfer | Cross-mechanism candidate lifecycle, held-out behavior, recovery | Reuse safety/evolution; adapt learning |
 | BM-10 Metacognition | Aggregate reflection/self-health | No identified complete donor closure | Evidence-aware detection → correction → evaluation loop | Reuse monitoring signals; adapt |
 | BM-11 Coordination/continuity | Partial single-pass cycle/runtime/workspace | PR #97 action feedback adds a loop | Recurrent dependencies, stale-state control, interruption and coherent recovery | Reuse coordinator scaffold; adapt |
-| BM-12 General reasoning | Narrow bounded causal-link inference | No identified donor closure | Memory-supported inference and downstream use (F-03) | Retain prototype; do not count implemented |
+| BM-12 General reasoning | Narrow bounded causal-link inference | No identified donor closure | Memory-supported inference and downstream use (IF-02/IF-03; PR #174 AUD-12) | Retain prototype; do not count implemented |
 
 ---
 
@@ -675,7 +675,7 @@ Phase 2 is complete only when all of the following are satisfied:
 1. BM-01 through BM-12 each have exact specification references, current-main source/function/blob evidence, donor source/function/blob evidence where relevant, and explicit missing/partial/conflict classifications.
 2. Every material cross-mechanism producer/consumer edge is mapped, including the recurrent and delayed paths.
 3. Every authoritative state owner is identified, and no competing Brain authority is left ambiguous.
-4. Memory-to-reasoning and reasoning-to-downstream integration are traced end to end, with F-03 resolved or explicitly blocked by authority.
+4. Memory-to-reasoning and reasoning-to-downstream integration are traced end to end, with IF-02/IF-03 resolved or explicitly blocked by authority. PR #173 F-03 remains a separate SYS-08 substrate-boundary obligation.
 5. F-02 and F-03 are reproduced from their exact originating review artifact and have documented dispositions.
 6. Persistence, replay, stale dependencies, concurrency, interruption, partial completion and recovery are mapped with test evidence or explicit non-verification.
 7. Donor paths are compared to main and accepted requirements at exact commits; no wholesale merge is used as a substitute for integration analysis.
@@ -1182,7 +1182,8 @@ Exact pinned main source identities:
 Observed boundary:
 - The inspected `Memory` constructor accepts a `std::filesystem::path` for the journal.
 - The implementation directly creates directories, opens journal and metadata files, appends records, flushes streams, reads files and repairs a corrupt journal suffix using filesystem operations.
-- The inspected `Memory` interface does not expose an explicit SYS-08 substrate provider/adapter contract for operational availability, bounded resource requests, storage acknowledgement, integrity/failure status or substrate recovery.
+- The inspected `Memory` interface does not expose an explicit SYS-08 substrate provider/adapter contract for operational availability, bounded resource requests, storage acknowledgement, integrity/failure status or substrate recovery. Main identities: `memory.hpp` `f3662038237246efa51155f940d77564f144d6d9`; `memory.cpp` `ba72a897306d4761246d0deab2fbab37c49d372f`.
+- Donor identities: `memory.hpp` `5401d5bd236cca8d3a93f2815164a7734cf6990f`; `memory.cpp` `ab42bba1d32d6f48d091787491c72294a4a55bb5`.
 - The event journal and metadata file are separate persistence artifacts; their lifecycle and recovery are implemented inside this C++ Memory component.
 - The donor uses the same general direct-filesystem Memory boundary; the richer donor Brain replay path does not itself establish a separate SYS-08 contract.
 
