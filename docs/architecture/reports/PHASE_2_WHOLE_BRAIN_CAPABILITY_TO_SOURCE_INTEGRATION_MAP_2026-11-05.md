@@ -2173,3 +2173,119 @@ Required CI/test-quality correction before donor acceptance:
 **Self-review:** the conclusion is supported by the workflow's explicit Release/Debug configuration, the absence of a test-target `NDEBUG` override in CMake registration, the assertion-heavy test sources, and the provider logs for both exact-HEAD jobs. This does not invalidate the Debug sanitizer results or imply a failure in the observed CI runs. It narrows the native Release job's evidentiary value.
 
 **Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, and no implementation authorization implied.
+
+
+---
+
+## 10.8 CI and trial-evidence correction — donor workflows were present and must be counted
+
+This section corrects the overly narrow CI statement in §10.4. The earlier query used a PR-triggered commit-run wrapper and did not enumerate push/workflow-dispatch runs. A direct Actions-run listing for `feat/jarvis-affective-state` exposes successful donor-branch runs. The previous statement that donor CI remained unverified is therefore superseded.
+
+### Exact donor HEAD CI
+
+**Brain CI run #1595 — run ID `40788714686`**
+- Event: `push`.
+- Branch: `feat/jarvis-affective-state`.
+- Exact checked-out HEAD: `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+- Run conclusion: success.
+- Jobs: `native-brain` success; `sanitizer` success.
+- Native job completed configure, build and CTest. The log reports **100% tests passed out of 71**, total CTest time 2.61 seconds.
+- Sanitizer job completed configure, build and CTest with **100% tests passed out of 71**, total CTest time 13.00 seconds.
+- Sanitizer configuration explicitly enabled AddressSanitizer and UndefinedBehaviorSanitizer.
+- No artifacts were attached to this Brain CI run.
+
+The exact HEAD is also PR #97's head, and the run metadata links it to PR #97. This is direct CI evidence for compilation and execution of the 71 registered CTest tests at the donor HEAD. It is not a substitute for inspecting the tests' validity, and it does not establish real-world deployment, untested behavior, long-duration robustness, or complete cognitive capability.
+
+**JARVIS Core Verification run #1227 — run ID `40788714735`**
+- Event: `push`, branch `feat/jarvis-affective-state`.
+- Exact HEAD: `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+- Conclusion: success; job `cpp-core` success.
+- This is additional CI evidence, but the specific test scope must be taken from its own job steps/log rather than inferred from the run name.
+
+### DLT-002 multi-seed trial evidence — valid, but at an earlier donor revision
+
+**JARVIS DLT-002 Multi-Seed Learning Sweep run #8 — run ID `40565468650`**
+- Event: `push`, branch `feat/jarvis-affective-state`, PR #97 association.
+- Exact HEAD: `82c49a75bd30de2962879f044776f4bf2391970a`.
+- Conclusion: success.
+- Three independent jobs completed successfully for seeds `20261026`, `20261027`, and `20261028`.
+- Each job built the native C++ DLT-002 executable and ran a changing-environment trial for 10 minutes.
+- Recorded completed episode counts: 586, 590 and 589 respectively.
+- Each job summarized behavioral/prediction evidence and uploaded a raw-evidence artifact. Artifact IDs: `12764655498`, `12763543000`, and `12763204259`.
+
+The trial commit is an ancestor of donor HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`, with 18 commits between it and HEAD. Therefore:
+- This is real multi-seed runtime evidence for an earlier donor revision.
+- It is not direct runtime evidence for the final donor HEAD.
+- The later exact-HEAD 71-test CI includes the registered DLT-002 persistence train/verify tests, but does not rerun the 10-minute three-seed DLT-002 trial.
+- Do not merge the earlier trial evidence and later CI evidence into a claim that the final donor HEAD passed the same long-duration experiment.
+
+### DLT-002 protocol source inspection
+
+The long-run harness `core/cpp/tests/dlt_002_long_run.cpp` constructs a partially observed, noisy environment:
+- The latent-state/action mapping is randomized per seed inside the environment; it is explicitly documented as evaluation-only and not supplied to the Brain.
+- Outcomes include 20% noise that contradicts the latent action/condition relationship.
+- The protocol includes context-local learning, reversal of the original clear-context mapping, an unseen-context transfer probe, and a second reversal in a different context while visible cues remain unchanged.
+- The Brain receives observations, context and available candidate actions; the harness checks that exactly one planned action is executed and that a real observed consequence is returned.
+- It requires an issued action-consequence prediction and records prediction error/decision metrics separately from evaluation-only latent labels.
+- The trial is a controlled simulation with a seeded world, not an unconstrained physical environment. Its results support performance in that protocol only.
+
+The separate persistence fixture `core/cpp/tests/dlt_002_persistence.cpp` performs deterministic training using explicitly supplied action/consequence experiences, then verifies context-specific learned strategy signs, action selection, affective calibration, prediction resolution and replay after process restart. This is valuable persistence verification, but it is a controlled fixture with prescribed experience labels; it must not be described as the same evidence as the randomized long-run environment.
+
+### Updated CI evidence classification
+
+| Evidence | Exact revision | Result | What it supports | What it does not support |
+|---|---|---|---|---|
+| Brain CI native CTest | `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` | 71/71 pass | Build and registered test execution | Untested runtime behavior or capability completion |
+| Brain CI ASan/UBSan CTest | `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` | 71/71 pass | Executed test paths did not trigger reported ASan/UBSan failures | Thread-race verification, all undefined behavior, production runtime |
+| DLT-002 multi-seed sweep | `82c49a75bd30de2962879f044776f4bf2391970a` | 3/3 seeds completed | Ten-minute controlled changing-environment trials with raw artifacts | Same long-run result at final donor HEAD |
+| DLT-002 train/verify CTest | `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` | Included in 71/71 CTest | Registered persistence train/verify fixture executed | Full long-run learning performance |
+
+**Finding P2-I-012 — CI evidence coverage was under-reported in the previous batch.** Status: corrected; this is a review-record accuracy correction, not a source defect. The donor has exact-HEAD native and ASan/UBSan CI evidence, plus earlier multi-seed DLT-002 evidence. The evidence is stronger than previously recorded, but it still does not clear Gate A.
+
+---
+
+## 10.9 Runtime and persistence failure-path trace
+
+The exact donor runtime path is now source-traced across:
+`CognitiveRuntime::worker_loop` → `CognitiveCycle::run` → `CognitiveRuntime::execute_actions` → `Brain::execute_action` → `ActionExecutor::run` → durable `action_outcome` append/replay → separately appended `affective_learning` and `learning` events → prediction feedback resolution → later runtime feedback processing.
+
+Relevant exact donor blobs:
+- `cognitive_runtime.cpp`: `cf00acb6abd52308343f3a0e7016e6173b945603`.
+- `brain_action_execution.cpp`: `3b66bafb438cd28790e6f25611b96c86f1eff05c`.
+- `action_execution.cpp`: `af5bed6cec9ed1309b24ed3d50241fb4c0d33bff`.
+- `memory.cpp`: `c7a2f... ` (full file retrieved during this batch; blob identity should be re-fetched before any line-specific follow-up).
+
+### Verified execution ordering
+
+1. The runtime worker prioritizes queued feedback over queued new cognitive inputs.
+2. A completed cycle executes only actions present in the selected plan, in plan order; unselected candidate assessments are not executed.
+3. Before external execution, Brain checks authorization and creates a context-keyed consequence prediction only if authorization succeeds and a consequence observer is configured.
+4. The executor obtains execution/verification/rollback status and independently invokes the consequence observer when the action crossed the execution boundary. A failed verification/rollback status does not automatically erase an observed external consequence.
+5. Brain appends the authoritative action outcome. Only after that append succeeds does it replay the action outcome and attempt separate affective-learning and capability-learning appends.
+6. Prediction feedback is resolved only after releasing the Brain lock, and only if the action outcome persisted, the consequence was observed, and a prediction sequence exists.
+7. The runtime later publishes the cycle result. The generic evidence feedback created from an action result is queued and processed by the same worker on a subsequent worker iteration.
+
+### Failure-path limitation requiring explicit acceptance criteria
+
+The action outcome, affective-learning event and capability-learning event are separate journal appends. A successful action-outcome append followed by a failed secondary append leaves a durable partial learning sequence. The current implementation checks each append result and avoids replaying a failed secondary event, but it does not make the three-event sequence atomic and does not expose a complete per-stage persistence outcome in `ActionExecutionResult`.
+
+This is not evidence that the normal path is broken. It is a crash/I/O-failure recovery limitation. The authoritative action outcome remains durable, while one or both derived learning records may be absent. The current tests demonstrate normal replay and restart behavior, not every possible append-failure interleaving.
+
+**Finding P2-I-013 — Multi-record action learning is not transactionally atomic.**
+- Severity: Medium (provisional; consequence depends on the required durability contract).
+- Confidence: High for the separate-append behavior; Medium for operational impact absent an injected I/O-failure reproduction.
+- Status: CONFIRMED as a limitation / UNRESOLVED as an acceptance blocker.
+- Affected donor revision: `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+- Affected code: `core/cpp/src/brain_action_execution.cpp`, action-outcome append followed by optional affective-learning and capability-learning appends; `core/cpp/src/memory.cpp`, `Memory::append` persists one event at a time.
+- Root cause: the logical learning transaction is represented by multiple independently durable events with no transaction envelope, completion marker, or deterministic repair/reconciliation step.
+- Consequence: after a secondary append failure or process termination between appends, replay reconstructs the persisted subset, not necessarily the full intended update set. The action record may exist while affective calibration or capability-reliability learning does not.
+- Required Builder decision: define whether partial derived learning is an acceptable recoverable state. If not, introduce a durable transaction/completion protocol or replay-time derivation with idempotent source-event identity. Do not simply retry secondary appends without duplicate protection.
+- Verification: inject failures at each append boundary; restart from the resulting journal; prove the action outcome is retained exactly once, each derived learning update is either completed exactly once or explicitly marked pending/recoverable, and predictions are not double-resolved.
+
+This finding is distinct from a claim of data corruption: the inspected append path attempts to roll back a failed individual event write to the original file size. The gap is atomicity across multiple successful/failed appends and the recovery contract for partially completed logical learning.
+
+### Remaining runtime caller-graph work
+
+The donor tree includes `CognitiveRuntime`, `Brain::execute_action`, a TypeScript Brain interface and several simulation/test harnesses. The present batch verifies the native runtime class and its action-adapter call path. It does not yet establish that every intended external application entry point constructs and drives this runtime, that TypeScript calls the same path, or that production integrations consistently provide independent consequence observation. Those remain open integration questions, not presumed defects.
+
+**Phase 2 remains IN PROGRESS. Gate A remains NOT CLEARED. PR #97 remains an unmerged donor.**
