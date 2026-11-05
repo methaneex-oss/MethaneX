@@ -610,7 +610,7 @@ This table is an investigation classification, not an authorization decision.
 | BM-05 Association/causality/prediction | Partial | PR #97 contextual prediction | Causal evidence, scoped resolution and attribution | Reuse narrow simulation; adapt |
 | BM-06 Attention/context | Partial | PR #97 attention learning/affect consumers | Active-context ownership, multiple contexts, interruption/resumption | Reuse scaffold; adapt |
 | BM-07 Affective appraisal | Not demonstrated as integrated main capability | PR #97 substantial donor | State owner integration, context-sensitive evidence and no fixed mapping | Selective donor evaluation |
-| BM-08 Goals/intent/planning/decision | Partial | PR #97 affective/developmental planning | Experience-acquired candidate goals and F-02 grounding | Reuse lifecycle/planner; adapt |
+| BM-08 Goals/intent/planning/decision | Partial | PR #97 affective/developmental planning | Experience-acquired candidate goals (PR #173 F-02); no candidate-generation path demonstrated | Reuse lifecycle/planner; adapt |
 | BM-09 Learning/development | Narrow numeric adaptation/evolution | PR #97 strategy/action/prediction feedback; PR #151 bounded transfer | Cross-mechanism candidate lifecycle, held-out behavior, recovery | Reuse safety/evolution; adapt learning |
 | BM-10 Metacognition | Aggregate reflection/self-health | No identified complete donor closure | Evidence-aware detection → correction → evaluation loop | Reuse monitoring signals; adapt |
 | BM-11 Coordination/continuity | Partial single-pass cycle/runtime/workspace | PR #97 action feedback adds a loop | Recurrent dependencies, stale-state control, interruption and coherent recovery | Reuse coordinator scaffold; adapt |
@@ -676,7 +676,7 @@ Phase 2 is complete only when all of the following are satisfied:
 2. Every material cross-mechanism producer/consumer edge is mapped, including the recurrent and delayed paths.
 3. Every authoritative state owner is identified, and no competing Brain authority is left ambiguous.
 4. Memory-to-reasoning and reasoning-to-downstream integration are traced end to end, with IF-02/IF-03 resolved or explicitly blocked by authority. PR #173 F-03 remains a separate SYS-08 substrate-boundary obligation.
-5. F-02 and F-03 are reproduced from their exact originating review artifact and have documented dispositions.
+5. PR #173 F-02/F-03 are mapped to their exact correction record and architecture sections; the original reviewer prose is recovered or its unavailability is explicitly recorded, and the Project Director/independent-clearance status is reconciled.
 6. Persistence, replay, stale dependencies, concurrency, interruption, partial completion and recovery are mapped with test evidence or explicit non-verification.
 7. Donor paths are compared to main and accepted requirements at exact commits; no wholesale merge is used as a substitute for integration analysis.
 8. Hardcoded assumptions are classified as legitimate integrity/safety controls, provisional inductive biases or prohibited predetermined cognitive conclusions.
