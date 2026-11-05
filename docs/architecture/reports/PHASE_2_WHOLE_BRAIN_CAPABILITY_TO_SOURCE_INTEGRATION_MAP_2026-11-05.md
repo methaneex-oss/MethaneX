@@ -584,7 +584,7 @@ The donor's action feedback and developmental strategy paths are meaningful and 
 
 - No local build or runtime test was run.
 - No test source was executed during this mapping.
-- No new CI run was initiated.
+- No CI run was manually dispatched by this audit; GitHub automatically triggered a PR build after the documentation branch update.
 - No performance, learning, transfer or longitudinal experiment was performed.
 - No independent reviewer has reviewed this Phase 2 map.
 - No full line-by-line audit of every PR #97 changed file or every later donor was performed.
@@ -594,6 +594,19 @@ The donor's action feedback and developmental strategy paths are meaningful and 
 ### 6.3 Existing CI evidence must remain exact-commit scoped
 
 Phase 1 recorded earlier CI results for selected PR #151, PR #176 and other donor revisions. They remain evidence only for the exact commits and workflows recorded in Phase 1. They must not be transferred to the current main commit, PR #97 head, PR #156 or this documentation branch.
+
+### 6.4 Automatic build for the Phase 2 report branch
+
+GitHub automatically ran the **Native Brain Build** workflow after the PR #179 documentation update:
+- Run number **1620**, run ID `42073461253`.
+- PR #179 head at run time: `33ea25dc28af096a3fc48669834417bbe74bea80`.
+- PR #178 base: `39fe09dcf13496f5f0005ccf3f00739303e29f88`.
+- Checked-out synthetic merge commit: `dec6629f8a5935696201cf25db6d203f5cfb8e7f`, merging that PR #179 head into the PR #178 base.
+- The `cpp` job completed successfully. CMake Release configuration and `cmake --build build --parallel` both completed successfully; the build reached 100% and linked the registered C++ test executables.
+- The workflow job has no CTest/test-execution step, and no artifacts were attached. This is build evidence, not a test pass.
+- The log contains existing compiler warnings in `core/cpp/src/evolution_rollback.cpp` for missing initializers of `EvolutionHistoryRecord::reason` and `parent_experiment_id`. PR #179 changes only the Phase 2 report, so these warnings are not introduced by its documentation changes.
+
+This run validates compilation of the PR #179/PR #178 merge tree at the exact synthetic merge SHA above. It does not validate PR #97 donor code, execute any test suite, demonstrate runtime learning, or clear Gate A. The later report-only commits are not represented by this run; no C++ source changed in those documentation updates.
 
 ---
 
