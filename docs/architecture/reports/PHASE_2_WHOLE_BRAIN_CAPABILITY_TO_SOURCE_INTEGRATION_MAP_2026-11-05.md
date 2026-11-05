@@ -1763,7 +1763,7 @@ The ActionExecutor implementation exists on both inspected baselines:
 - Main `core/cpp/src/action_execution.cpp` — blob `c2f8653eb755fa2790a88e49bc8b0b9c3077e439`.
 - Donor `core/cpp/src/action_execution.cpp` — blob `af5bed6cec9ed1309b24ed3d50241fb4c0d33bff`.
 
-Both versions accept an execution callback returning only `bool`. If the callback throws, or returns `false`, the executor immediately returns `failed` before setting `result.executed=true`. In the donor version this also bypasses the later consequence-observer block, which runs only when `result.executed` is true. The rollback callback is reached only after a successful callback has set `executed=true` and verification subsequently fails. The donor's rollback result is represented by a boolean; no independent rollback-verification callback exists in this request/result contract.
+Both versions accept an execution callback returning only `bool`. If the callback throws, or returns `false`, the executor immediately returns `failed` before setting `result.executed=true`. In the donor version this also bypasses the later consequence-observer block, which runs only when `result.executed` is true. The rollback callback is reached only after a successful callback has set `executed=true` and the later verification stage fails or is unavailable. The donor's rollback result is represented by a boolean; no independent rollback-verification callback exists in this request/result contract.
 
 This behavior is safe only if the adapter contract guarantees that a false return or exception means **no external side effect occurred**. The inspected request/header does not state that guarantee, and the result type has no representation for “execution may have partially taken effect.” A real adapter can encounter a timeout, transport disconnect or exception after the external system accepted part or all of a command. The current API cannot distinguish that ambiguous state from a clean no-effect failure, cannot request/verify compensation on that path, and cannot ask the consequence observer to determine what actually happened.
 
@@ -1782,6 +1782,18 @@ Required proof/correction:
 3. Preserve the ability to observe and reconcile external consequences when execution status is ambiguous, without inventing a neutral or absent outcome.
 4. Add tests for false-before-effect, false-after-partial-effect, throw-before-effect, throw-after-partial-effect, rollback false, rollback exception, rollback verification failure and process restart after each boundary.
 5. Keep authorization rejection distinct from execution failure and from uncertain external completion.
+
+**Line-level source anchors for independent review:**
+- [Donor Brain outcome-persistence flag and authoritative append](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain_action_execution.cpp#L60-L120), blob `3b66bafb438cd28790e6f25611b96c86f1eff05c`.
+- [Donor prediction resolution gated by outcome persistence and result return](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain_action_execution.cpp#L175-L188), same blob.
+- [ActionExecutionResult fields](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/include/jarvis/core/action_execution.hpp#L35-L58), blob `04c73d02bdd4e1154be142dfeb024fc07ad432f8`.
+- [Memory append failure return and journal persistence](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/memory.cpp#L34-L35) and [persist failure path](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/memory.cpp#L135-L136), blob `ab42bba1d32d6f48d091787491c72294a4a55bb5`.
+- [Runtime action-success metric and discarded secondary feedback result](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/cognitive_runtime.cpp#L200-L212), blob `cf00acb6abd52308343f3a0e7016e6173b945603`.
+- [Donor executor false/exception and rollback/observer branches](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/action_execution.cpp#L20-L95), blob `af5bed6cec9ed1309b24ed3d50241fb4c0d33bff`.
+- [Main executor false/exception and rollback branches](https://github.com/methaneex-oss/MethaneX/blob/1273ddbcd0087d189e01388ded2d362fb1e058d2/core/cpp/src/action_execution.cpp#L18-L78), blob `c2f8653eb755fa2790a88e49bc8b0b9c3077e439`.
+- [Clean false-return and verification-failure rollback tests](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/action_execution_phase7_suite.cpp#L46-L80), blob `db11ac95d26a97b01dfeb67cfb85194dc284ffb8`.
+- [Runtime false-return test](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/cognitive_runtime_suite.cpp#L200-L220), blob `361cba84a6fc6e07e31d14b5fa618c3f0a7848fa`.
+- [Observed consequence despite verification failure](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/brain_action_consequence_integration_suite.cpp#L197-L228), blob `7616082579d53e3579cae8e87895bdb3dadba66f`.
 
 ### 21.3 Self-review of findings P2-I-026 through P2-I-030
 
