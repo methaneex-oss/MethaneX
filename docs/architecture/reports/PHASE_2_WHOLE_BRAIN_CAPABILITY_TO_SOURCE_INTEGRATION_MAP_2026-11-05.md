@@ -760,3 +760,84 @@ The correct direction is selective integration around one cognitive authority, w
 - PR #97 detailed seven-path matrix: `docs/architecture/inventory/PHASE_1_PR97_DONOR_CAPABILITY_TRACEABILITY_2026-11-05.md`
 
 **End of Phase 2 first integration map.**
+
+---
+
+## 9. Additional source-tracing batch — action execution, affective artifact boundary, and test provenance
+
+**Audit date:** 2026-11-05  
+**Engineering source baseline remains:** `main` at `1273ddbcd0087d189e01388ded2d362fb1e058d2`  
+**Scope:** Read-only source/CMake/workflow tracing. No runtime code or tests changed; no build or test execution is claimed.
+
+This batch extends the first map. It does not close Phase 2.
+
+### 9.1 Main contains a bounded Brain-level action execution and feedback path
+
+The first map correctly records that `CognitiveCycle::run` ends with action assessment and does not itself invoke external execution. The whole-Brain map must also account for a separate public Brain API:
+
+- `core/cpp/include/jarvis/core/brain.hpp`, blob `8268ef84e0b361ead536724ba7761904b30ee58f`, lines 157–170.
+- `core/cpp/src/action_execution.cpp`, blob `c2f8653eb755fa2790a88e49bc8b0b9c3077e439`.
+- `core/cpp/include/jarvis/core/action_execution.hpp`, blob `38ff7033e7621db8f05cc1edc4bf59cb899ccdd3`.
+- `core/cpp/tests/action_execution_phase7_suite.cpp`, blob `b4a0060596c91c67080ac0a2db324f720d760fbe`.
+
+The Brain wrapper calls `ActionExecutor::run`, then records an `Evidence` item under `action.<action-name>` with the execution result's reason. The wrapper assigns reliability 1.0 to verified execution, 0.25 to rolled-back execution, and 0.5 to other returned statuses.
+
+The executor performs authorization, invokes the supplied execution callback, invokes a verification callback, and attempts rollback after failed verification when a rollback callback is supplied. The registered Phase 7 test checks verified, failed, rejected and rolled-back cases, then checks that the Brain wrapper records `action.protect = "verified"` as a belief.
+
+**Finding P2-I-007 — Main has a limited action-execution-to-learning feedback path.**
+
+This is real mainline infrastructure and must not be described as donor-only. Its demonstrated feedback is nevertheless narrow: a status/reason string and a fixed status-to-reliability mapping are assimilated as evidence. The inspected API does not itself capture a structured external world-state delta, causal attribution, independent consequence provenance, or a general learned action policy. The test establishes a narrow action-status belief, not durable improvement in future action selection.
+
+**Integration boundary:** `CognitiveCycle::run` still does not call `Brain::execute_action`; the cycle produces assessments, while execution is available through a separate Brain API. Therefore the action path exists in the repository but is not established as a single automatic end-to-end path from the inspected CognitiveCycle.
+
+### 9.2 An affective/developmental source file exists on main but is not part of the main Brain target
+
+A source artifact at `core/cpp/src/brain_restored_api.cpp`, blob `618deb6976eed951eae02b7f0da741e6d730bb0c`, contains definitions for affective and developmental accessors and a `choose_with_affect` method. It references `affective_state_model_`, `affective_learning_model_`, and `developmental_learning_`.
+
+However:
+
+- The pinned main `core/cpp/include/jarvis/core/brain.hpp`, blob `8268ef84e0b361ead536724ba7761904b30ee58f`, does not declare those affective/developmental accessors or those model members.
+- The pinned main `core/cpp/CMakeLists.txt`, blob `c51816888e1bddb7bc00c59e72529524e27a0717f`, explicitly lists the `jarvis_core` sources and includes `src/brain.cpp`, but not `src/brain_restored_api.cpp`.
+- The main Brain header's private model list contains the current models but no affective-state, affective-learning, or developmental-learning model members.
+- The file is therefore not evidence that those methods or models are compiled into, or available through, the main Brain target.
+
+**Finding P2-I-008 — Do not count `brain_restored_api.cpp` as an integrated mainline affective/developmental capability.**
+
+It is an uncompiled/orphan source artifact relative to the inspected main CMake target and current Brain declaration. Its presence may be useful provenance for future donor/source investigation, but it is not current-main runtime capability. This reinforces the existing conclusion that the richer affective/developmental implementation must be audited at its exact donor revision and cannot be credited to main merely because a source file is present.
+
+No manual compilation of this orphan file was attempted. The conclusion is based on the target source list and declaration/member mismatch, not on a claimed build failure.
+
+### 9.3 Learning workflow files in main explicitly default to the donor branch
+
+The following workflow files exist on main:
+
+- `.github/workflows/jarvis-learning-mechanisms.yml`, blob `0eac13b1e6a43ea7fa06aaf9e0134f5b6ae27710`.
+- `.github/workflows/jbp-brain-int-001.yml`, blob `31523dfa6bb5160397ebefd1f25325484461e271`.
+
+Both declare `feat/jarvis-affective-state` as the default `source_ref` and check out that selected ref. The learning workflow invokes affective/developmental test targets; the integration workflow builds and runs developmental/action-consequence test targets.
+
+**Finding P2-I-009 — Workflow presence on main is not evidence that main was tested for donor capabilities.**
+
+A workflow definition stored on main is not itself execution evidence. Where the workflow's default checkout is the donor branch, its resulting tests (if run with that default) verify the donor ref, not the pinned main baseline. Any claim about a CI result must identify the actual workflow run, input `source_ref`, checked-out SHA, build/test result and artifact. No workflow run was retrieved or executed in this batch.
+
+### 9.4 Updated interpretation of the action and affective pathways
+
+| Pathway | Pinned main evidence | Current classification |
+|---|---|---|
+| Cognitive-cycle action assessment | `CognitiveCycle::run` calls `ActionModel::assess` | Main source present; no execution in this cycle |
+| Brain-level action execution | `Brain::execute_action` delegates to `ActionExecutor` | Main source present |
+| Execution outcome feedback | Status/reason recorded through `Brain::learn` | Main source present; narrow feedback semantics |
+| Durable action-learning effect | Phase 7 test observes an action-status belief | Limited test evidence; future action-selection improvement not demonstrated |
+| Affective model accessors in orphan source | `brain_restored_api.cpp` only | Not part of main target; not current-main capability |
+| Affective/developmental donor tests | Workflows default to `feat/jarvis-affective-state` | Donor verification path; not main verification |
+
+### 9.5 Follow-up required
+
+1. Trace the full donor affective/developmental model sources, their event update triggers, state ownership, persistence/replay and actual downstream consumers at the exact PR #97 revision.
+2. Determine whether donor action-consequence mechanisms add genuinely new evidence semantics beyond main's status/reason feedback, rather than assuming they do.
+3. Trace all callers of `Brain::execute_action` and establish whether an application/runtime path connects it to cycle outputs.
+4. Inspect the action authorization and execution tests for bypass, rollback failure, repeated execution, stale assessment and consequence-attribution boundaries.
+5. Retrieve actual workflow runs and bind each result to its checked-out SHA before using it as test evidence.
+6. Reconcile the orphan `brain_restored_api.cpp` provenance with its originating branch/commit and determine whether it is stale, intentionally excluded, or a preservation artifact. Do not add it to the target as part of Phase 2.
+
+**Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected and no implementation authorization implied.
