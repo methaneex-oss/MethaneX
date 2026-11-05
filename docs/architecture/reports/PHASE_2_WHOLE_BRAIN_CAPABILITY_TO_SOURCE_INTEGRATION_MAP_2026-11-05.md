@@ -1903,3 +1903,86 @@ The fixed-action baseline is useful as a simple lower bound under randomized map
 **Updated interpretation:** PR #97 has (a) exact-current-HEAD native and ASan/UBSan CI with 71/71 tests in each configuration (§18.3), (b) a three-seed 30 aggregate trial-minute run at ancestor revision `82c49a75...` with a fixed-action baseline (§22), and (c) a 330-minute single-seed run at older revision `c6a8a00...` (§19). These are three distinct evidence classes and must not be combined into a claim that the current donor HEAD passed a 330-minute, multi-seed, full-suite, matched-control validation.
 
 **Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, and no implementation authorization implied.
+
+---
+
+## 23. Additional source-tracing batch — direct decision helpers versus the CognitiveRuntime production path
+
+**Audit date:** 2026-11-05  
+**Donor baseline:** PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`  
+**Scope:** Searched all 37 changed `core/cpp/src/*.cpp` donor production source files for calls to `choose_with_affect` and `choose_with_developmental_learning`; separately searched the 54 changed C++ test sources; then compared the helper implementations with the actual CognitiveCycle/CognitiveRuntime path. This is source/call-graph review only.
+
+### 23.1 The public helper decision methods are not called by the inspected production source set
+
+Exact implementation identities:
+- `core/cpp/src/brain_restored_api.cpp` — `7155d4d9c8eef527836fb79bf901aa32ddbae38b`; defines `Brain::choose` and `Brain::choose_with_affect`.
+- `core/cpp/src/brain_affective_planning.cpp` — `2a9406257c23f3a66a64071842be7d6448799406`; defines the two `Brain::choose_with_developmental_learning` overloads.
+- `core/cpp/src/cognitive_cycle.cpp` — `f191dd610d6cbe1621756c35e7c13af2054a7266`.
+- `core/cpp/src/cognitive_runtime.cpp` — `cf00acb6abd52308343f3a0e7016e6173b945603`.
+
+A search across all 37 changed donor production `.cpp` files found the helper method definitions, but no production-source callsites for `Brain::choose_with_affect` or `Brain::choose_with_developmental_learning`. The 54 changed C++ test sources do call these methods directly, including:
+- `affective_brain_decision_suite.cpp` — blob `9ff9c0480fa34fa4f5600e514af419b2bbc79765`;
+- `affective_decision_learning_suite.cpp` — blob `920ddcbc8a422783bb8724093afd952cc885e6b6`;
+- `affective_evidence_suite.cpp` — blob `c8a401cab1a29d57506f990043a1f82536fd9029`;
+- `developmental_brain_integration_suite.cpp` — blob `760162dd6d1e669162e0bf22223a437491f5e262`;
+- `brain_deep_suite.cpp` — blob `1314123ea3b524b24fd6693fc6fb4873b6c550d5`;
+- `memory_learning_evolution_persistence_suite.cpp` — blob `98e6598f60912714234f2dfabfbe52fa5eb77044`.
+
+This does not make the public APIs invalid or prove that external consumers never call them. It establishes that they are not the call path used by the donor's checked-in CognitiveRuntime implementation.
+
+### 23.2 CognitiveRuntime uses a separate integrated CognitiveCycle decision path
+
+The production path is:
+1. `CognitiveRuntime::worker_loop` calls `cycle_.run(item.input)`.
+2. After a completed cycle, `execute_actions` executes only the selected plan steps through `brain_.execute_action`.
+3. `CognitiveCycle::run` directly reads stored and related developmental strategies, constructs learned candidate actions, and applies direct-evidence, related-context transfer, episodic fallback and exploration-pressure adjustments before planning.
+4. It separately reads affective state and appraisal, derives affective uncertainty/tension/valence/arousal/stability, and places them into the planning and decision contexts.
+5. The resulting decisions are action-assessed; their developmental context is preserved for the later action-outcome event.
+
+This is a real integrated path, not merely a test helper:
+- The cycle reads `brain_.developmental_strategies()` and `brain_.developmental_related_strategies()`.
+- It applies direct-context strategy evidence and related-context transfer to candidate utility/expected value.
+- If no strategy evidence exists, it can use observed episodic `action_outcome` memories, requiring a real observed consequence.
+- It computes exploration pressure from attention, affective state, reflection, prediction and perception uncertainty.
+- It then injects affective appraisal values into the `PlanningContext` and `DecisionContext`.
+
+The donor `developmental_brain_integration_suite` explicitly tests both layers: it first checks the direct `choose_with_developmental_learning` helper, then creates a related goal and asserts that the normal `CognitiveCycle` decision path ranks the learned action above its competitor. Thus the helper-only assertions and the actual cycle integration assertions must be counted separately.
+
+### 23.3 The helper and cycle implementations are not semantically identical
+
+The helper methods in `brain_affective_planning.cpp` use `apply_developmental_evidence` on a copy of the candidate actions, then build a one-step plan from the unmodified action list and pass affective fields into the decision engine.
+
+The CognitiveCycle path uses a different evidence-aggregation procedure:
+- exact-context evidence is weighted by strategy confidence;
+- related-context transfer is weighted by similarity and strategy confidence;
+- episodic outcomes are a fallback only when direct/related strategy evidence is absent;
+- an exploration incentive is added based on uncertainty and absence of local evidence;
+- the plan is built from the already adjusted candidate actions.
+
+These are materially different scoring/dataflow paths. A result from a helper test cannot be assumed to equal the result from the runtime path. The cycle path has its own integration test coverage, but the two implementations create a maintenance and behavioral-consistency obligation.
+
+**Finding P2-I-032 — The donor exposes affective/developmental decision helpers that are exercised directly by tests but are not called by the inspected production source path; CognitiveRuntime instead uses a separate CognitiveCycle implementation with different evidence aggregation and scoring.** The runtime has genuine affective/developmental integration, but helper-method test results must not be presented as if they were direct runtime-path results. The two decision paths require explicit ownership, semantic equivalence or intentional separation, and paired regression coverage.
+
+### 23.4 Required proof before donor acceptance
+
+1. Declare which decision path is the canonical production contract and whether the helper methods are supported public APIs, test utilities or alternate modes.
+2. If both paths remain supported, define the intended semantic differences and prevent silent divergence in evidence weighting, transfer, exploration, affective modulation and planning.
+3. Add paired tests that apply identical Brain state, candidate actions, goal/context and evidence to both paths and assert either equivalence or the documented difference.
+4. Retain explicit CognitiveCycle/CognitiveRuntime tests for learned action ranking, context transfer, observed-consequence dependence and restart/replay; helper-only tests are insufficient.
+5. Include the chosen path and its exact source/test/CI provenance in any later implementation-baseline review.
+
+**Line-level source anchors:**
+- [Helper affective/developmental decision implementations](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain_affective_planning.cpp#L93-L185), blob `2a9406257c23f3a66a64071842be7d6448799406`.
+- [Brain choose/choose_with_affect helper](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain_restored_api.cpp#L217-L218), blob `7155d4d9c8eef527836fb79bf901aa32ddbae38b`.
+- [CognitiveCycle developmental evidence and transfer path](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/cognitive_cycle.cpp#L535-L681), blob `f191dd610d6cbe1621756c35e7c13af2054a7266`.
+- [CognitiveCycle affective decision context](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/cognitive_cycle.cpp#L683-L735), same blob.
+- [CognitiveRuntime invokes the cycle and selected-action execution](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/cognitive_runtime.cpp#L155-L223), blob `cf00acb6abd52308343f3a0e7016e6173b945603`.
+- [Test of direct helper and normal CognitiveCycle integration](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/developmental_brain_integration_suite.cpp#L50-L175), blob `760162dd6d1e669162e0bf22223a437491f5e262`.
+
+### 23.5 Self-review
+
+The callsite search covered all 37 changed donor production `.cpp` files and all 54 changed donor C++ test sources listed by PR #97. The conclusion is deliberately limited to that inspected source set. The normal runtime path was separately traced through `CognitiveRuntime::worker_loop`, `CognitiveCycle::run` and `Brain::execute_action`; it was not inferred from method names or test labels.
+
+No source/test/build changes were made. This finding does not erase the integrated cycle behavior or downgrade the existing exact-HEAD CI evidence; it narrows which tests exercise which public decision path.
+
+**Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, and no implementation authorization implied.
