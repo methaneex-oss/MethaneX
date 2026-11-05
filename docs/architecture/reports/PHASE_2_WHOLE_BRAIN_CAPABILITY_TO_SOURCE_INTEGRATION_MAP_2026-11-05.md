@@ -2070,3 +2070,61 @@ Required proof before donor acceptance:
 - [Brain-level adoption/restart/canary tests](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/evolution_brain_integration_suite.cpp#L1-L298), blob `59d7dd68c42eea18d488d8e5e6aa9f7a9a327ded`.
 
 **Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, and no implementation authorization implied.
+
+---
+
+## 25. Independent self-review checklist — current Phase 2 working report
+
+This checklist records the second-pass validation performed before handing this report to an independent reviewer. It is a report-quality check, not a substitute for the independent review itself.
+
+### 25.1 Scope and provenance checks
+
+- [x] Main source claims remain pinned to main commit `1273ddbcd0087d189e01388ded2d362fb1e058d2`; donor claims remain explicitly pinned to PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+- [x] Accepted specification references remain pinned to PR #174 HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`.
+- [x] PR #97 donor code is not described as integrated into main.
+- [x] PR #179 remains the working report branch, based on PR #178's governance branch; PR #180 remains a separate open/draft branch based on PR #174's specification branch.
+- [x] All 20 distinct blob SHAs found in the PR #180 first-batch report are present in the PR #179 working report. Seven source identities specifically called out in the reconciliation section (six mechanism headers plus `cognitive_cycle.hpp`) are recorded.
+- [x] The PR #180 branch-base difference and unresolved Git-history disposition are explicit. No merge/close action was performed.
+- [x] The PR #173 original reviewer wording is not fabricated. The unavailable wording and the available correction record/review-submission status are explicitly distinguished.
+
+### 25.2 Coverage and evidence checks
+
+- [x] BM-01 through BM-12 have an explicit source-to-capability map and an evidence-backed status; the map does not infer capability from names or test filenames.
+- [x] Cross-mechanism findings P2-I-001 through P2-I-033 are present with no missing numeric IDs.
+- [x] Donor action feedback, runtime decision path, memory/replay, goal progress, affective/developmental learning and evolution state ownership are distinguished from the main baseline.
+- [x] The action outcome → affective-learning → capability-learning append sequence is described as separate event writes, not an atomic transaction.
+- [x] EvolutionHistory and EvolutionAdoptionJournal are correctly classified as in-memory projections reconstructed from Brain Memory events, not separate durable stores.
+- [x] The three-seed DLT-002 aggregate is recomputed from raw episode CSVs and pinned to ancestor commit `82c49a75...`; the source-file identity differences against current donor HEAD are recorded.
+- [x] The older 330-minute DLT artifact, the three-seed ancestor run and the exact-current-HEAD CI runs are presented as separate evidence classes, not blended into a single validation claim.
+- [x] The exact PR #97 HEAD native and ASan/UBSan runs are verified from provider job logs: 71/71 in each CTest job. The separate Core Verification run is also identified.
+- [x] The latest verified PR #179 branch build is identified as run #1634 on the then-current report commit's synthetic merge tree; its absence of a CTest step is stated. Subsequent PR #179 changes through this report revision are Markdown-only.
+- [x] The 64-file donor C++ production source callsite search and 54 changed C++ test-source search are scoped accurately; no claim is made about external consumers outside the repository.
+
+### 25.3 Claim-strength and wording checks
+
+- [x] Source-level findings are not presented as runtime-confirmed defects unless CI/artifact evidence actually establishes runtime behavior.
+- [x] “No source found in the inspected path” is not converted into a repository-wide absence claim.
+- [x] A public helper method's direct unit/integration test is not conflated with the canonical CognitiveRuntime path.
+- [x] The DLT fixed-action baseline is not described as a matched Brain learning ablation.
+- [x] The no-consequence-observation runtime control is not described as a no-learning control.
+- [x] First-decision transfer in the unseen context is distinguished from later decisions that receive feedback.
+- [x] Verified action execution is not equated with successful cognitive-outcome persistence.
+- [x] Failed/throwing executor callbacks are described as an ambiguous partial-effect contract unless a no-side-effect guarantee is documented.
+- [x] Evolution compensation and rollback failure paths are recorded as unverified failure boundaries, not asserted production incidents.
+- [x] Existing C++ compiler and GitHub Actions deprecation warnings are not attributed to the Phase 2 documentation changes.
+
+### 25.4 Remaining exit blockers
+
+The report is intentionally **not** marked complete. Before Phase 2 can pass its exit criteria, the following still require closure:
+1. Finish the remaining BM-01/BM-02 acquisition, perception and representation provenance trace and map all relevant production entrypoints, including any non-C++ callers not covered by the donor C++ source search.
+2. Complete the test-by-test validity review of the selected donor suites, including observer independence, hidden assumptions, reward/context leakage, matched controls and generalization limits.
+3. Complete authorization freshness, stale assessment, executor rollback/partial-effect and caller-visible persistence-failure analysis against the accepted Gate A requirements.
+4. Complete deterministic failure injection for every relevant Memory append boundary, multi-event action feedback, evolution event ordering, compensation and restart/retry equivalence.
+5. Reconcile all remaining BM-11 coordination, invalidation, concurrency, interruption and recovery edges across language/runtime boundaries.
+6. Recover the original PR #173 F-02/F-03 reviewer document if verbatim wording is mandatory; the report records the current retrieval limit rather than inventing it.
+7. Obtain independent review of the completed source map and an explicit Project Director decision on any remaining PR #179/#180 duplicate disposition.
+8. Keep Gate A NOT CLEARED until its own required provenance, compatibility, rollback, independent test and independent review conditions are satisfied.
+
+**Self-review result:** no internal contradiction or unsupported completion claim was identified in this pass. The report remains a substantial but incomplete Phase 2 investigation. Its findings are ready for independent challenge; they are not approval to implement, merge donor code or select an implementation baseline.
+
+**Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, and no implementation authorization implied.
