@@ -1986,3 +1986,75 @@ The callsite search covered all 64 donor `core/cpp/src/*.cpp` files (37 PR #97 c
 No source/test/build changes were made. This finding does not erase the integrated cycle behavior or downgrade the existing exact-HEAD CI evidence; it narrows which tests exercise which public decision path.
 
 **Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, and no implementation authorization implied.
+
+---
+
+## 24. Additional source-tracing batch — evolution history projections, event ordering and compensation windows
+
+**Audit date:** 2026-11-05  
+**Donor baseline:** PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`  
+**Scope:** Traced the donor evolution evaluation/adoption/canary/rollback lifecycle across Brain wrappers, EvolutionController, EvolutionHistory, EvolutionAdoptionJournal, Memory events, replay and registered tests. No implementation or test changes were made.
+
+### 24.1 EvolutionHistory and EvolutionAdoptionJournal are in-memory projections, not independent durable stores
+
+Exact source identities:
+- `core/cpp/src/evolution_history.cpp` — `e394042ba7fc6db85e4663722f735918aa1ce7fb`.
+- `core/cpp/src/evolution_adoption_journal.cpp` — `d8df30a2902d3dac734fb1a571cbbecdd881b76f`.
+- `core/cpp/src/evolution_controller.cpp` — `4e77ec2e5daa09a964132ca486b8c5ee1cebf2f5`.
+- `core/cpp/src/brain_restored_api.cpp` — `7155d4d9c8eef527836fb79bf901aa32ddbae38b`.
+- `core/cpp/src/brain.cpp` — `dec9e5442b3ca4b81a7879855c6146b2619934cc`.
+
+`EvolutionHistory::append` validates record fields, de-duplicates by experiment/key/action, assigns an in-memory sequence and appends to a vector. It performs no filesystem or journal write. `EvolutionAdoptionJournal` similarly owns an in-memory map of staged/pending/adopted/rolled-back records and state-transition methods; it has no independent serialization or storage path.
+
+The durable source of truth in the Brain-mediated path is the Memory event journal. Brain replay reconstructs the controller projections:
+- `evolution_evaluated` invokes `EvolutionController::replay_evaluation`, rebuilding the staged adoption record and evaluated history projection.
+- `evolution_adopt` validates/reconstructs the experiment, applies the proposal if not already adopted/rolled back, then calls `replay_adoption` and appends the adopted history projection.
+- `evolution_canary` replays the canary observation into controller-local state.
+- `evolution_rollback` applies the rollback and updates the adoption journal/history projection when the experiment identity and current state match.
+
+The controller's comments and validation describe evaluation history as durable. The actual implementation checks the in-memory `EvolutionHistory` projection, which is expected to have been reconstructed from the durable Brain journal. The distinction matters: the projection is not a second durable log and cannot independently recover if its owning Brain journal is missing or incomplete.
+
+### 24.2 The Brain lifecycle uses different persistence/mutation ordering at each stage
+
+| Operation | Ordering observed in Brain wrapper | Failure/recovery implication |
+|---|---|---|
+| Record evaluation | Validate → append `evolution_evaluated` to Memory → update controller journal/history projections | If projection update returns false after Memory append, caller receives false although the durable event remains; replay can reconstruct the projection. |
+| Adopt experiment | Validate → controller mutates model and marks adoption journal Adopted → append `evolution_adopt` to Memory → update history projection | If Memory append fails, Brain calls compensation to restore model/journal. The compensation return value is currently discarded by the caller. |
+| Observe canary | Preview → append `evolution_canary` → update canary state → if rollback required, append `evolution_rollback` → perform controller rollback | If controller rollback fails after the rollback event append, the call returns a failure reason while the durable rollback event remains for a later replay attempt. |
+| Manual rollback | Append `evolution_rollback` → perform controller/model rollback → update Brain state | If controller rollback fails after event append, the call returns false but the durable event remains; replay may later apply it if its experiment/state checks pass. |
+
+The adoption compensation method checks that the controller journal is Adopted, restores the model's previous value, then moves the journal back to Pending. The Brain wrapper calls it when the `evolution_adopt` Memory append returns zero, but does not check or surface the compensation return value. This is a real observability gap if compensation ever fails; source review does not establish that the compensation failed in any run.
+
+The canary/manual rollback paths use event-first ordering. Their intended recovery model appears to be “durable rollback request, then apply projection/model transition”; a returned failure does not necessarily mean that no rollback event was durably recorded. That caller contract is not expressed as a distinct persisted/pending/failed status.
+
+### 24.3 Existing tests prove normal replay and in-memory state transitions, not persistence-failure atomicity
+
+Inspected tests:
+- `core/cpp/tests/evolution_adoption_journal_suite.cpp` — blob `fc8ae17bb837831fef7bf69873ec0e5243e2bc22`: exercises pending/adopted/rolled-back transitions, idempotent operations, restore-pending/restore-adopted compensation helpers and normal controller rollback. It does not inject a failed Memory append or force a compensation helper to fail.
+- `core/cpp/tests/evolution_canary_controller_suite.cpp` — blob `80cac5df347987a9074e1ced43202f8759f797d7`: exercises canary decisions, adoption, rollback and replay idempotence in memory.
+- `core/cpp/tests/evolution_brain_integration_suite.cpp` — blob `59d7dd68c42eea18d488d8e5e6aa9f7a9a327ded`: exercises Brain-level evaluation/adoption/manual rollback/canary rollback and reconstruction from the Memory journal, including rejection of unversioned legacy adoption/rollback events.
+
+The tests establish useful normal-path and restart/replay behavior. They do not demonstrate crash/failure atomicity at each boundary between Memory append, EvolutionModel mutation, AdoptionJournal transition and EvolutionHistory projection update. In particular, the journal unit tests call compensation methods successfully; that is not the same as injecting a failed compensation into the Brain lifecycle.
+
+### 24.4 Finding and required evidence
+
+**Finding P2-I-033 — EvolutionHistory and EvolutionAdoptionJournal are volatile projections reconstructed from Brain Memory events; the Brain lifecycle has mixed event-first and mutation-first ordering, and the adoption compensation result is discarded.** This is not evidence that replay is broken or that compensation has failed. It means the real transaction/recovery boundary is the Brain Memory event plus the model/controller projections, not the two in-memory helper stores considered as independent durable logs.
+
+Required proof before donor acceptance:
+1. Document Memory events as the authoritative durable lifecycle records and explicitly classify EvolutionHistory/AdoptionJournal as rebuildable projections.
+2. Give callers a structured result distinguishing event persisted, model/controller transition applied, compensation completed and replay-required/pending states.
+3. Do not discard the result of `compensate_adoption_for_brain`; expose or durably record compensation failure.
+4. Add deterministic fault injection at each Memory append boundary and at each projection transition; verify live state, returned status, durable event sequence and restart reconstruction.
+5. Test retry/idempotency when an event is persisted but the in-memory transition reports failure, including same-process retry and process restart.
+6. Verify that canary rollback and manual rollback return values accurately describe whether the rollback event was persisted and whether the model actually reached baseline.
+
+**Line-level source anchors:**
+- [EvolutionHistory is an in-memory vector with validation/deduplication](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/evolution_history.cpp#L7-L24), blob `e394042ba7fc6db85e4663722f735918aa1ce7fb`.
+- [EvolutionAdoptionJournal state transitions](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/evolution_adoption_journal.cpp#L5-L115), blob `d8df30a2902d3dac734fb1a571cbbecdd881b76f`.
+- [Controller adoption compensation and rollback boundaries](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/evolution_controller.cpp#L113-L264), blob `4e77ec2e5daa09a964132ca486b8c5ee1cebf2f5`.
+- [Brain evaluation/adoption/canary/rollback event ordering](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain_restored_api.cpp#L256-L380), blob `7155d4d9c8eef527836fb79bf901aa32ddbae38b`.
+- [Brain replay reconstructs evolution projections from durable events](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain.cpp#L497-L610), blob `dec9e5442b3ca4b81a7879855c6146b2619934cc`.
+- [Journal transition/compensation tests](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/evolution_adoption_journal_suite.cpp#L1-L108), blob `fc8ae17bb837831fef7bf69873ec0e5243e2bc22`.
+- [Brain-level adoption/restart/canary tests](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/evolution_brain_integration_suite.cpp#L1-L298), blob `59d7dd68c42eea18d488d8e5e6aa9f7a9a327ded`.
+
+**Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, and no implementation authorization implied.
