@@ -655,18 +655,18 @@ The correct next step is Phase 2 capability-to-source integration mapping agains
 ### Main repository snapshot and core source
 
 - Main tree: https://github.com/methaneex-oss/MethaneX/tree/1273ddbcd0087d189e01388ded2d362fb1e058d2
-- Main README: https://github.com/methaneex-oss/MethaneX/blob/main/README.md
-- Core CMake source list: https://github.com/methaneex-oss/MethaneX/blob/main/core/cpp/CMakeLists.txt
-- Core CTest registration: https://github.com/methaneex-oss/MethaneX/blob/main/core/cpp/tests/CMakeLists.txt
-- Cognitive cycle: https://github.com/methaneex-oss/MethaneX/blob/main/core/cpp/src/cognitive_cycle.cpp
-- Memory: https://github.com/methaneex-oss/MethaneX/blob/main/core/cpp/src/memory.cpp
-- World model: https://github.com/methaneex-oss/MethaneX/blob/main/core/cpp/src/world_model.cpp
-- Knowledge: https://github.com/methaneex-oss/MethaneX/blob/main/core/cpp/src/knowledge.cpp
-- Reasoning: https://github.com/methaneex-oss/MethaneX/blob/main/core/cpp/src/reasoning.cpp
-- Decision: https://github.com/methaneex-oss/MethaneX/blob/main/core/cpp/src/decision.cpp
-- Threat: https://github.com/methaneex-oss/MethaneX/blob/main/core/cpp/src/threat.cpp
-- Action authorization: https://github.com/methaneex-oss/MethaneX/blob/main/core/cpp/src/action_authorization.cpp
-- Action execution: https://github.com/methaneex-oss/MethaneX/blob/main/core/cpp/src/action_execution.cpp
+- Main README: https://github.com/methaneex-oss/MethaneX/blob/1273ddbcd0087d189e01388ded2d362fb1e058d2/README.md
+- Core CMake source list: https://github.com/methaneex-oss/MethaneX/blob/1273ddbcd0087d189e01388ded2d362fb1e058d2/core/cpp/CMakeLists.txt
+- Core CTest registration: https://github.com/methaneex-oss/MethaneX/blob/1273ddbcd0087d189e01388ded2d362fb1e058d2/core/cpp/tests/CMakeLists.txt
+- Cognitive cycle: https://github.com/methaneex-oss/MethaneX/blob/1273ddbcd0087d189e01388ded2d362fb1e058d2/core/cpp/src/cognitive_cycle.cpp
+- Memory: https://github.com/methaneex-oss/MethaneX/blob/1273ddbcd0087d189e01388ded2d362fb1e058d2/core/cpp/src/memory.cpp
+- World model: https://github.com/methaneex-oss/MethaneX/blob/1273ddbcd0087d189e01388ded2d362fb1e058d2/core/cpp/src/world_model.cpp
+- Knowledge: https://github.com/methaneex-oss/MethaneX/blob/1273ddbcd0087d189e01388ded2d362fb1e058d2/core/cpp/src/knowledge.cpp
+- Reasoning: https://github.com/methaneex-oss/MethaneX/blob/1273ddbcd0087d189e01388ded2d362fb1e058d2/core/cpp/src/reasoning.cpp
+- Decision: https://github.com/methaneex-oss/MethaneX/blob/1273ddbcd0087d189e01388ded2d362fb1e058d2/core/cpp/src/decision.cpp
+- Threat: https://github.com/methaneex-oss/MethaneX/blob/1273ddbcd0087d189e01388ded2d362fb1e058d2/core/cpp/src/threat.cpp
+- Action authorization: https://github.com/methaneex-oss/MethaneX/blob/1273ddbcd0087d189e01388ded2d362fb1e058d2/core/cpp/src/action_authorization.cpp
+- Action execution: https://github.com/methaneex-oss/MethaneX/blob/1273ddbcd0087d189e01388ded2d362fb1e058d2/core/cpp/src/action_execution.cpp
 
 ### Candidate learning and integration evidence
 
@@ -701,8 +701,20 @@ The correct next step is Phase 2 capability-to-source integration mapping agains
 ### Preservation inventory
 
 - Existing documentation/artifact inventory branch: https://github.com/methaneex-oss/MethaneX/tree/docs/jarvis-phase-1-preservation-inventory-20261104
-- Legacy master blueprint: https://github.com/methaneex-oss/MethaneX/blob/main/docs/JARVIS_BRAIN_MASTER_BLUEPRINT.md
-- Legacy Phase 2 completion note: https://github.com/methaneex-oss/MethaneX/blob/main/docs/JARVIS_PHASE_2_COMPLETION.md
+- Legacy master blueprint: https://github.com/methaneex-oss/MethaneX/blob/1273ddbcd0087d189e01388ded2d362fb1e058d2/docs/JARVIS_BRAIN_MASTER_BLUEPRINT.md
+- Legacy Phase 2 completion note: https://github.com/methaneex-oss/MethaneX/blob/1273ddbcd0087d189e01388ded2d362fb1e058d2/docs/JARVIS_PHASE_2_COMPLETION.md
 - Priority-One trust-boundary contract: https://github.com/methaneex-oss/MethaneX/blob/docs/priority-one-trust-boundary-contract-20261031/docs/PRIORITY_ONE_TRUST_BOUNDARY_CONTRACT.md
 
-**End of Phase 1 report.**
+## 16. Post-publication review corrections and reproducibility records
+
+The following dated addenda refine the evidence package without changing the original audited source baseline or reopening the completed technical inventory:
+
+- [Phase 1 tracked-file inventory](../inventory/PHASE_1_TRACKED_FILE_INVENTORY_2026-11-05.md) — all 200 tracked blob paths, sizes and blob SHAs at the exact audited tree, with reproduction procedure.
+- [PR #97 donor capability traceability](../inventory/PHASE_1_PR97_DONOR_CAPABILITY_TRACEABILITY_2026-11-05.md) — selected high-impact donor paths traced to exact source/test blobs, dataflow, consumers, persistence and limitations.
+- [Phase 1 review corrections and scope reconciliation](PHASE_1_REVIEW_CORRECTIONS_AND_SCOPE_RECONCILIATION_2026-11-05.md) — reconciles PR #174's formal acceptance chronology with subsequent F-02/F-03 findings, records F2–F5 dispositions, and captures governance refinements G1–G3.
+
+**Source-link correction:** all source links in this report that previously used mutable `blob/main/` references are pinned to the audited main commit `1273ddbcd0087d189e01388ded2d362fb1e058d2`.
+
+**Completion boundary:** the technical repository inventory and reuse/conflict assessment is complete within the static-investigation scope in Sections 1–2. Historical branch-to-PR mapping, duplicated-document reconciliation, README/cross-link verification and archive curation remain open preservation work; they are not claimed complete and do not require restarting the technical investigation.
+
+**End of Phase 1 report (with dated review addenda).**
