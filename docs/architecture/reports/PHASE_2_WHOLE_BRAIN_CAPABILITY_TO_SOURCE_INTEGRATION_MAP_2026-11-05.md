@@ -960,9 +960,9 @@ The inspected assertions establish that the donor test suite is designed to chec
 - Developmental tests check that a learned action's score increases relative to a competing action, that the learned strategy is preferred in a related context, and that a subsequent CognitiveCycle decision reflects the learned preference.
 - Episodic outcome tests explicitly distinguish positive, negative and unobserved outcomes and check that relevant prior experience can influence action ranking.
 
-These are meaningful source-level behavioral assertions. They are not results of a test run performed in this Phase 2 batch. CMake declares and registers the action-consequence, developmental-brain and affective-brain suites, but registration alone is not execution evidence.
+These are meaningful source-level behavioral assertions. At the time of this first inspection, no exact-HEAD test result had yet been retrieved. The exact donor-HEAD CI execution was subsequently located and is documented in §18.3. CMake registration alone was not treated as execution evidence.
 
-**Finding P2-I-011 — PR #97 contains test specifications for persistent, consequence-sensitive changes in later action selection.** The tests are substantially stronger than the main Phase 7 status-belief test. Their assertions still require independent execution at an exact commit, review of test validity and controls, and broader evaluation of confounding, generalization and real external consequence quality before they can support capability acceptance.
+**Finding P2-I-011 — PR #97 contains test specifications for persistent, consequence-sensitive changes in later action selection.** The tests are substantially stronger than the main Phase 7 status-belief test. Exact donor-HEAD CI execution is now confirmed in §18.3. Their assertions still require independent review of test validity and controls, and broader evaluation of confounding, generalization and real external consequence quality before they can support capability acceptance.
 
 ### 12.4 CI provenance: PR #179 build verified; PR #97 exact head unverified; later integration CI verified
 
@@ -977,7 +977,7 @@ A workflow run associated with PR #179's updated commit was retrieved:
 
 **What it does not prove:** no test suite passed in that run; no donor branch code was built by this run; no runtime learning trial, persistence trial, sanitizer or independent behavioral evaluation was executed by this run.
 
-A query for pull-request-triggered workflow runs associated with PR #97 donor HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` returned no runs through the available commit-run wrapper. That wrapper is limited to PR-triggered runs and its first page; this is not evidence that no manually dispatched or otherwise unlisted workflow execution exists. No workflow result for the exact PR #97 head is accepted as verified here. This must be distinguished from the later PR #156/PR #176 integrated donor line, whose exact synthetic-merge CI runs are verified in §6.5.
+An initial query through the pull-request-triggered commit-run wrapper returned no run for donor HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`. That was an incomplete search: the wrapper did not expose the branch-push runs. A subsequent direct Actions run-list query found and verified the exact-HEAD push CI runs. The corrected provenance and results are recorded in §18.3; the earlier statement that exact-head CI was unverified is superseded. This must be distinguished from the later PR #156/PR #176 integrated donor line, whose exact synthetic-merge CI runs are verified in §6.5.
 
 ### 12.5 Reconciliation of competing Phase 2 reports #179 and #180
 
@@ -1469,3 +1469,158 @@ This ancestry reinforces the existing donor disposition:
 **Finding P2-I-021 — PR #97 is a 1,244-commit divergent donor line, with 9 commits of current-main history absent from its head.** Its 159-file PR diff and the separate 165-path main-to-candidate inventory are different evidence scopes. This rules out treating PR #97 as a current-main-compatible drop-in baseline.
 
 **Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, no implementation authorization implied.
+
+
+---
+
+## 18. Additional source-tracing batch — donor runtime call graph and exact-HEAD CI verification
+
+**Audit date:** 2026-11-05  
+**Main baseline:** `1273ddbcd0087d189e01388ded2d362fb1e058d2`  
+**Donor baseline:** PR #97 `feat/jarvis-affective-state` at `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`  
+**Scope:** Read-only source, CMake, Actions metadata and job-log audit. No runtime/test/build files changed.
+
+### 18.1 The donor has a concrete runtime caller chain from cycle to external action and consequence feedback
+
+The previous map correctly distinguished `CognitiveCycle::run` from action execution, but the donor runtime closes that boundary. The actual call chain is:
+
+1. `CognitiveRuntime::worker_loop` runs `cycle_.run(item.input)`.
+2. When the cycle completes, the worker invokes `execute_actions(result)`.
+3. `execute_actions` walks the selected plan steps, matches each planned action to its assessment, and does not execute every candidate alternative.
+4. For an executable assessment with an available adapter, it calls `brain_.execute_action(...)`.
+5. The action adapter supplies execution, verification, optional rollback and consequence-observation callbacks. The consequence observer's returned value is passed into the Brain action-execution boundary.
+6. `Brain::execute_action` creates the context-keyed consequence prediction before execution when authorized and an observer exists; then persists/replays the action outcome and any derived learning events. It resolves the consequence prediction only after the Brain lock is released and only when the authoritative action outcome persisted and the consequence was observed.
+
+Source references at the exact donor HEAD:
+
+- [`cognitive_runtime.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/cognitive_runtime.cpp#L155-L223), blob `cf00acb6abd52308343f3a0e7016e6173b945603`.
+- [`cognitive_cycle.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/cognitive_cycle.cpp#L140-L158), blob `f191dd610d6cbe1621756c35e7c13af2054a7266`.
+- [`cognitive_cycle.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/cognitive_cycle.cpp#L706-L731), same blob.
+- [`brain_action_execution.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain_action_execution.cpp#L8-L60), blob `3b66bafb438cd28790e6f25611b96c86f1eff05c`.
+- [`brain_action_execution.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain_action_execution.cpp#L112-L183), same blob.
+
+The cognitive cycle also applies affective state through its planning context and uses context-specific developmental strategy/episodic evidence in its action scoring path. The separate public `choose_with_affect` and `choose_with_developmental_learning` methods are not the methods called by `CognitiveRuntime` in the inspected path; the runtime's cycle applies the relevant mechanisms directly. They should not be described as the runtime's entry point.
+
+**Finding P2-I-022 — The donor contains a source-connected CognitiveRuntime → CognitiveCycle → selected-plan execution → Brain action-outcome → consequence-learning path.** This corrects any reading that donor action execution is only a standalone Brain API with no runtime caller. The path is source-proven and is exercised by the DLT executable described in §19. It does not prove every deployed sensor/action provider routes through this runtime, nor does it establish trustworthiness of arbitrary injected callbacks.
+
+### 18.2 The action path is deliberately multi-event, but the journal does not provide an atomic learning transaction
+
+The donor action-execution implementation appends separate events in this order:
+
+1. The authoritative `action_outcome` event.
+2. When a consequence was observed, a source-linked `affective_learning` event.
+3. For every non-rejected attempt, a separate `learning` event carrying action-executor reliability evidence.
+
+Each append is a separate call to `Memory::append`. The code checks each returned sequence, but it does not wrap the three records in a journal transaction or make the later append contingent on all prior derived events succeeding. If the affective-learning append fails, the capability-learning append is still attempted. A process interruption between appends can leave a valid prefix of the intended event group.
+
+Replay has useful integrity controls:
+- Brain construction replays the journal in sequence.
+- Affective-learning records must reference a valid observed action-outcome sequence and must match its expected, actual and error values.
+- Processed affective-learning source sequences and derived-learning source sequences are tracked to suppress duplicate application.
+
+Those controls make individual records replayable and validate the source relationship; they do not make the group atomic. A failure after the action-outcome append but before the affective-learning append can preserve the action outcome and its direct affect/developmental processing while omitting the separate affective calibration update. A failure before the authoritative action-outcome append leaves the already-created prediction unresolved because the post-lock prediction-resolution path requires `outcome_persisted`.
+
+The underlying Memory journal appends and flushes each event separately. Its recovery code quarantines an unreadable suffix before truncating the active journal, but the legacy format has no frame marker/checksum for safe resynchronization. No multi-event transaction, write-ahead intent/commit marker, or explicit filesystem `fsync` call was identified in the inspected implementation.
+
+Source references:
+- [`brain_action_execution.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain_action_execution.cpp#L112-L183), blob `3b66bafb438cd28790e6f25611b96c86f1eff05c`.
+- [`brain.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain.cpp#L199-L199), blob `dec9e5442b3ca4b81a7879855c6146b2619934cc`.
+- [`brain.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain.cpp#L292-L358), same blob.
+- [`memory.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/memory.cpp#L33-L60), blob `ab42bba1d32d6f48d091787491c72294a4a55bb5`.
+- [`memory.cpp`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/memory.cpp#L135-L135), same blob.
+
+**Finding P2-I-023 — Action outcome, affective calibration and capability-learning persistence are individually journaled, not committed as one atomic experience transaction.** This is a concrete recovery/failure boundary that must be covered by failure-injection tests before the donor path can be accepted as crash-consistent. Required tests include append failure at each event boundary, process termination between appends, restart/replay equivalence, retry/idempotency behavior and explicit reporting of partial learning persistence. No such multi-event failure-injection evidence was found in the inspected selected suites.
+
+### 18.3 Exact PR #97 HEAD CI was found and verified; earlier §12.4 wording is superseded
+
+A direct Actions run-list query for the exact donor commit identified two push-triggered workflows on **2026-10-28**:
+
+| Workflow | Run ID | Exact checked-out HEAD | Result | Jobs and executed steps |
+|---|---:|---|---|---|
+| Brain CI | `40788714686` | `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` | Success | `native-brain`: configure, build, CTest; `sanitizer`: ASan/UBSan configure, build, CTest |
+| JARVIS Core Verification | `40788714735` | `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` | Success | `cpp-core`: configure, build, test |
+
+For Brain CI run `40788714686`:
+- The `native-brain` job completed successfully and its CTest log reports **71/71 tests passed**.
+- The `sanitizer` job completed successfully and its CTest log also reports **71/71 tests passed** under AddressSanitizer and UndefinedBehaviorSanitizer.
+- The executed test list includes `jarvis_developmental_brain_integration_suite`, `jarvis_affective_brain_decision_suite`, `jarvis_brain_action_consequence_integration_suite`, `jarvis_cognitive_runtime_learning_integration_suite`, the memory/evolution persistence suite and the other registered C++ suites.
+- No workflow artifacts were attached to this CI run.
+
+Run references:
+- [Brain CI run 40788714686](https://github.com/methaneex-oss/MethaneX/actions/runs/40788714686).
+- [JARVIS Core Verification run 40788714735](https://github.com/methaneex-oss/MethaneX/actions/runs/40788714735).
+- [Donor Brain CI workflow](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/.github/workflows/brain-ci.yml), blob `74182cd073ef4b1eec77f78800f96c337545007e`.
+- [Donor CMake test registration](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/CMakeLists.txt), blob `cbfd1fde52fffa6eeac025da2b7ddcb5ab493261`.
+
+**What this proves:** the exact PR #97 donor HEAD compiled and all 71 registered C++ tests passed in the native CI job and again under ASan/UBSan. The selected integration tests were executed, not merely declared in CMake.
+
+**What this does not prove:** no ThreadSanitizer run at this exact donor HEAD was found; no broad external-world deployment, long-duration test at this exact SHA, independent reviewer acceptance, adversarial observer validation, or multi-event append-failure recovery was established by these two CI runs. CI pass is test evidence, not Gate A approval.
+
+**Finding P2-I-024 — PR #97 exact HEAD has verified native and ASan/UBSan CI with 71/71 registered tests passing in each job.** This replaces the earlier §12.4 statement that exact-head donor CI was unverified. It materially strengthens implementation/test provenance but does not resolve the remaining semantic, failure-model or independent-review obligations.
+
+---
+
+## 19. Additional source-tracing batch — independent inspection of the DLT-002 long-run artifact
+
+**Audit date:** 2026-11-05  
+**Run:** DLT-002 workflow run `40243557728`  
+**Run commit:** `c6a8a00db848035c2f93564fa35f837c0fdb477f`  
+**Artifact:** `DLT-002-40243557728-1`, artifact ID `12627858274`, SHA-256 `85c230eca64206269376efdd31a1d14667a84e1dadbcb23029c6d4e55b9becd5`  
+**Scope:** Retrieved and inspected the archived workflow artifact, including run metadata, acceptance log, episode CSV, checkpoint CSV, trial log and preserved Brain journal. This was an artifact review, not a rerun.
+
+### 19.1 The run completed, but it is not a test run of the current PR #97 HEAD
+
+The workflow metadata and artifact establish:
+- Branch: `feat/jarvis-affective-state`.
+- Exact tested commit: `c6a8a00db848035c2f93564fa35f837c0fdb477f`, not current donor HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+- Configured duration: 19,800 seconds (330 minutes), 60-second checkpoints, seed `20261026`.
+- Workflow job completed successfully. The long-run executable reported `final_status=COMPLETED` with **12,479 episodes**.
+- Before the long run, the workflow ran only the two DLT-002 cross-process persistence tests (2/2 passed) and a 60-second smoke trial checking that all six phases appeared. It did **not** run the full 71-test CTest suite in this workflow.
+- The archived `dlt_002_long_run.cpp` blob at that run commit is `4f322c6360d899871331b719bf29f6812dd715df`; the corresponding file at current donor HEAD is `cbd80951c2f331fa4893c1805fff45a4035d5d24`. The artifact CSV schema also differs from current HEAD's expanded output schema. Therefore the long-run result must be cited as historical donor evidence at `c6a8...`, not as a run of `c1da...`.
+
+Evidence:
+- [DLT-002 run 40243557728](https://github.com/methaneex-oss/MethaneX/actions/runs/40243557728).
+- [DLT-002 workflow at current donor HEAD](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/.github/workflows/dlt-002-four-hour.yml), blob `52d08751d29c1b7c7b60e07834ac1bfdc4eba626`.
+- [DLT-002 executable at run commit](https://github.com/methaneex-oss/MethaneX/blob/c6a8a00db848035c2f93564fa35f837c0fdb477f/core/cpp/tests/dlt_002_long_run.cpp), blob `4f322c6360d899871331b719bf29f6812dd715df`.
+- [DLT-002 executable at current donor HEAD](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/dlt_002_long_run.cpp), blob `cbd80951c2f331fa4893c1805fff45a4035d5d24`.
+
+### 19.2 Archived episode evidence shows strong performance in a narrow synthetic contextual task
+
+The artifact's 12,479 episode records produce these environment-evaluated optimal-action selection results:
+
+| Phase | Optimal selections | Episodes | Accuracy |
+|---|---:|---:|---:|
+| clear-baseline | 2,957 | 2,964 | 99.764% |
+| flooded | 2,431 | 2,436 | 99.795% |
+| tunnel | 2,079 | 2,108 | 98.624% |
+| clear-reversal | 1,884 | 1,889 | 99.735% |
+| generalization-probe | 1,615 | 1,633 | 98.898% |
+| flooded-reversal | 1,429 | 1,449 | 98.620% |
+| **Total** | **12,395** | **12,479** | **99.327%** |
+
+The recorded first ten decisions in the held-out `navigation/canyon` generalization phase were all optimal (10/10). Before the first action in that phase, the trial recorded a related strategy source from `navigation/flooded`, action `route-one`, similarity `0.5`. The run also recorded 9,931 positive and 2,548 negative consequences.
+
+The trial design is meaningful but bounded:
+- It is a two-action, one-step contextual choice task. Each cycle uses planning horizon 1 and the executable expects exactly one selected/executed action.
+- The environment randomizes the hidden alpha-to-action mapping per seed, with beta mapped to the opposite action; it withholds the latent `route_condition` field from the Brain's observation.
+- Outcomes contain 20% noise.
+- The same context is reversed in later phases, and the held-out canyon context tests transfer from prior context-specific experience.
+- The environment supplies an explicit context label (for example, `navigation/flooded` or `navigation/canyon`) to the Brain. The hidden latent condition/action mapping is withheld, but the task is not context-free or fully unstructured.
+- The recorded expected action and latent condition are evaluation labels used by the harness to score selections; they are not passed as Brain observations.
+
+The artifact supports the claim that this donor revision performed well over a long, noisy, partially observed synthetic contextual-learning challenge, including context reversal and a first-window transfer probe. It does not establish general intelligence, broad world-model competence, open-ended developmental learning, or performance in an external physical environment.
+
+### 19.3 The long-run evidence has material experimental limitations
+
+1. **Single seed:** the 330-minute run uses seed `20261026`; one successful seed does not establish robust performance across randomized mappings/noise streams.
+2. **No matched no-learning control in this artifact:** the run does not compare the same Brain with consequence feedback disabled, nor a matched learner with the learning mechanism ablated. The later seed-sweep workflow's fixed-action baseline is not equivalent to a matched Brain control.
+3. **Narrow task:** two candidate actions, one action per cycle, one-step planning, a synthetic environment and a fixed six-phase protocol do not test multi-step plans, open-ended goals, rich sensor uncertainty, causal intervention breadth or unconstrained action selection.
+4. **Phase counts are unequal:** the trial changes phase by elapsed wall-clock time while each episode takes variable processing time; episode counts per phase are consequently unequal. Aggregate accuracy is not a phase-balanced score.
+5. **Prediction accounting is incomplete in this run revision:** the artifact records 38,400 prediction records and 12,479 prediction-outcome records, with 12,479 resolved predictions. The run's older metrics do not split unresolved action-consequence forecasts from other unresolved predictions. It therefore cannot prove that every action-consequence prediction was resolved.
+6. **No full-suite gate in the long-run workflow:** only the two persistence tests and the six-phase smoke test were run before the 330-minute executable. The exact current donor HEAD's 71-test native and ASan/UBSan CI is separate evidence in §18.3, not part of this DLT workflow.
+
+The current donor HEAD's DLT executable adds separate unresolved action-consequence and other-prediction counts and fails a feedback-enabled run when unresolved action-consequence forecasts remain. That is a source-level improvement at `c1da...`; the archived 330-minute artifact predates that version and must not be used to claim that the newer gate passed.
+
+**Finding P2-I-025 — A 330-minute DLT-002 run completed 12,479 episodes with 99.327% environment-evaluated optimal action selection and a 10/10 first-window generalization probe, but the run is from donor commit `c6a8...`, uses one seed and a narrow synthetic one-step task, and lacks a matched no-learning control.** It is useful behavioral evidence, not capability acceptance and not verification of current donor HEAD.
+
+**Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, and no implementation authorization implied.
