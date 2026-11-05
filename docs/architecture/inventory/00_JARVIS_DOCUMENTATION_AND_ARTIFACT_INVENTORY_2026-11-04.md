@@ -343,13 +343,13 @@ The PR #96 and #97 documents are already preserved by their respective Git branc
 
 **Do not archive by copying files indiscriminately.** First compare revisions, identify canonical historical versions, check links/references, and preserve source branch/commit provenance. Some documents may remain in their original PR branches as the primary historical record; others may warrant a curated archive index in the current documentation tree. This is a later disposition decision, not an action taken by this inventory.
 
-## 17. Timing estimate revision
+## 17. Historical preservation follow-up estimate
 
 The additional PR #96/#97 historical branches, nine dated planning/specification artifacts, the 1,244-commit PR #97 history, and PR #164 technology audit expand the preservation scope beyond the initial estimate.
 
-Revised estimate for Phase 1 completion: **4–6 focused working hours**. This includes a bounded inventory of relevant documentation, branches and PRs, authority verification, link/dependency checks, and a defensible archive/disposition register. It does not mean exhaustively reviewing all 1,244 commits or auditing all 159 changed files; that would be a separate source-baseline investigation.
+Revised estimate for the **historical documentation and branch-preservation follow-up**: **4–6 focused working hours**. This includes a bounded inventory of relevant documentation, branches and PRs, authority verification, link/dependency checks, and a defensible archive/disposition register. It does not mean exhaustively reviewing all 1,244 commits or auditing all 159 changed files; that would be a separate source-baseline investigation.
 
-The Phase 1 estimate remains provisional until the remaining branch and artifact checks are complete.
+This estimate is not a statement that the completed Phase 1 technical repository inventory/reuse investigation is unfinished. It applies only to the remaining historical branch and artifact preservation tasks, which remain provisional until those bounded checks are complete.
 
 
 ## 18. Main documentation directory and branch inventory evidence
