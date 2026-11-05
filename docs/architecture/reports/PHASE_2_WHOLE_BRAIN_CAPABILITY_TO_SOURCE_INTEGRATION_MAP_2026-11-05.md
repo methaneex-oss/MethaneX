@@ -1,0 +1,762 @@
+# Phase 2 — Whole-Brain Capability-to-Source Integration Map
+
+**Date:** 2026-11-05  
+**Repository:** `methaneex-oss/MethaneX`  
+**Phase 2 branch:** `docs/jarvis-phase-2-whole-brain-integration-map-20261105`  
+**Documentation parent:** PR #178 head `39fe09dcf13496f5f0005ccf3f00739303e29f88`  
+**Accepted specification reference:** PR #174 exact accepted head `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`  
+**Specification blob:** `docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md` — `3b6a53c8a295fa0d9fc29bbb6c7688b61d1dcdb1`  
+**Engineering source baseline:** `main` at `1273ddbcd0087d189e01388ded2d362fb1e058d2`  
+**Source-audit package:** PR #174, exact accepted head above; source-audit blob `4479874476715fd59a4c3ba6c908f06c43a1c6c2`  
+**Donor reference:** PR #97 exact inspected head `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`; open/draft/unmerged  
+**Status:** Phase 2 source-to-capability mapping in progress. This report is the first source-backed integration map, not Phase 2 completion or an implementation baseline.
+
+---
+
+## 1. Purpose and decision boundary
+
+Phase 2 maps the twelve logical Brain mechanisms in accepted PR #174 to the actual repository: current main implementation, selected donor implementation, authoritative state ownership, inputs/outputs, downstream consumers, persistence/replay, test evidence, and known limitations.
+
+The unit of analysis is the **integrated Brain**, not twelve independent modules. A mechanism is not considered integrated merely because a class, header, source file, test source, or workspace field exists. The relevant question is whether its state and outputs participate in the required recurrent cognitive processes and whether changes remain coherent across persistence, interruption, recovery and later behavior.
+
+This is documentation/source investigation only.
+
+- No runtime code, tests, build configuration, dependencies or interfaces were changed.
+- No build, runtime test, benchmark or sanitizer was run.
+- No donor PR was merged.
+- No implementation baseline was selected.
+- No implementation authorization is inferred from Phase 1 completion, PR #174 acceptance or this mapping.
+- Gate A remains **NOT CLEARED** in the last recorded evidence and must be rechecked before any later gate decision.
+
+### 1.1 Evidence labels used here
+
+| Label | Meaning |
+|---|---|
+| **Main source present** | The pinned main tree contains a relevant implementation. This does not establish full specification compliance. |
+| **Partial** | Some required behavior exists, but important semantics, consumers or lifecycle stages are absent or incomplete. |
+| **Donor-only** | A relevant path exists in a separate, unmerged donor revision. It is not current-main capability. |
+| **Integration gap** | Source exists but the required information does not reach, or is not consumed by, the next mechanism. |
+| **Not demonstrated** | The inspected source does not establish the capability. This is not proof that no related code exists elsewhere. |
+| **Blocked for implementation** | An open specification finding, uncleared gate, or missing authorization prevents implementation reliance. |
+| **Reuse / adapt / defer** | Preliminary source disposition, not an approved implementation decision. |
+
+### 1.2 Phase 1 continuity and impact
+
+The following Phase 1 conclusions are carried forward:
+
+1. The project is substantial and must not be restarted.
+2. Main at `1273ddbcd0087d189e01388ded2d362fb1e058d2` is the pinned engineering baseline for this map, not a claim that main is the complete Brain.
+3. PR #97 at `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` is a donor source, not an approved implementation baseline. It is open, draft, unmerged and contains 159 changed files.
+4. Later PR #148–#156 work is also donor material and must be evaluated at exact revisions before reuse.
+5. PR #174 was formally accepted as a planning baseline at the exact head recorded above. The later F-02 (contextual language/operator-intent grounding) and F-03 (downstream reasoning integration) findings remain open correction obligations. Historical acceptance is not erased, but affected requirements are not implementation-ready until the findings and required authority/review decision are resolved.
+6. PR #178 governance remains proposed, open, draft and unmerged. Its rules are used here as project working constraints, not represented as binding accepted governance.
+7. Gate A remains NOT CLEARED. The outstanding controller-internal compensation failure injection and genuine independent re-review must not be silently treated as closed.
+8. The main branch's event journal and replay, structured memory, perception/representation, world/causal models, attention, goals, planning, action assessment, prediction feedback, evolution and metacognition are valuable foundations. They are not collectively proof of a specification-complete Brain.
+9. The Rust prototype must not become a competing cognitive-state authority. TypeScript interfaces and engineering-agent orchestration must not be counted as a second functioning Brain.
+10. Historical branch/document preservation work remains open separately; it does not justify restarting the technical inventory.
+
+---
+
+## 2. Whole-Brain architecture and state ownership
+
+PR #174 defines BM-01 through BM-12 as logical responsibilities within one coherent cognitive system. It explicitly rejects a one-class-per-mechanism mandate and requires a single coherent cognitive authority.
+
+The current main C++ `Brain` is the strongest candidate for the central state-owning runtime in the inspected tree. It owns or coordinates memory, beliefs, predictions, causal and association models, attention, goals, intent, strategy, planning, decision, capability and evolution-related components. This is evidence of a central C++ authority, not proof that all mechanisms have complete or unambiguous state ownership.
+
+The `CognitiveCycle` and `CognitiveRuntime` sit above this state owner:
+- `CognitiveCycle::run` assembles an observation context, retrieves memories, reads beliefs/causal links, invokes reasoning, creates predictions, selects a goal, plans, decides, assesses actions and reflects.
+- `CognitiveRuntime` queues work, executes cycles and projects cycle results into a `CognitiveWorkspace`.
+- `CognitiveWorkspaceStore` provides mutex-protected snapshot/replace/clear semantics.
+
+A workspace snapshot is not an independent authority. It is a projection of cycle results. The map must preserve that distinction.
+
+### 2.1 Preliminary ownership map
+
+| Authority / component | State or responsibility observed on main | Boundary that must remain explicit |
+|---|---|---|
+| `Brain` | Central event-backed cognitive state and access to major cognitive models | Must remain the single coherent Brain authority; do not create parallel Brain state in Rust, TypeScript or orchestration |
+| `Memory` | Durable event continuity journal, memory metadata, tier/salience/confidence and ranked recall | Retained experience is not automatically an accepted belief or semantic knowledge |
+| `Brain::beliefs_` / `WorldModel` | Current key/value beliefs; facts and relations with disputed markers | Belief acceptance/revision and competing-claim lineage are incomplete |
+| `CausalModel` / prediction map | Associations/causal links, simulation and keyed prediction lifecycle | Causal hypothesis, prediction, observed outcome and accepted causal knowledge must remain distinct |
+| `AttentionModel` / `BrainState` | Attention signal and compact state metrics | Active context, interruption/resumption and multi-context ownership are not demonstrated by a scalar signal |
+| `GoalModel` / intent / planner / decision | Goal lifecycle, intent selection, plan construction and action ranking | Candidate-goal formation and evidence lineage are missing on main; decision is not authorization |
+| `LearningLoop` / adaptation / evolution | Numeric prediction adaptation and proposal/adoption path | Not a general cross-mechanism developmental process |
+| `ReflectionModel` / `SelfModel` / `SelfStateModel` | Aggregate uncertainty, prediction accuracy, coherence and capability-health state | Reflection is not a full evidence-aware corrective control loop |
+| `ReasoningEngine` | Bounded inference over beliefs and causal links | BM-12 state/lineage and downstream consumer contract are not satisfied |
+| `CognitiveRuntime` / `CognitiveWorkspace` | Work queue, cycle execution and projected context | Scheduling/workspace must not silently become a second owner of beliefs/goals/memory |
+| Action/governance boundary | Main cycle produces action assessments; execution/authorization is outside this cycle | Brain intent/decision must not imply permission or verified external consequence |
+
+### 2.2 Cross-mechanism loop required by the specification
+
+The relevant recurrent interactions are:
+
+1. **Evidence and interpretation:** BM-01 preserves experience and provenance; BM-02 interprets; BM-03 supplies memory; BM-04 evaluates claims; BM-10 detects omissions/conflicts; BM-11 marks dependent state stale.
+2. **Prediction and delayed outcome:** BM-03/BM-04 provide context and premises; BM-05 predicts; later BM-01 evidence resolves only when attribution and resolution conditions are met; BM-09 evaluates changes; BM-11 maintains dependency freshness.
+3. **Memory-supported reasoning:** BM-03 retrieves candidate evidence; BM-02 interprets it in context; BM-04/BM-05 provide qualified claims/hypotheses; BM-12 reasons with explicit premises and assumptions; the relevant owner evaluates conclusions; BM-10 challenges overreach; BM-11 invalidates conclusions when dependencies change.
+4. **Candidate-goal formation:** experience, representation, memory, beliefs, prediction and appraisal inform BM-08 candidate goals; BM-08 evaluates and revises them; governance remains external to Brain authority.
+5. **Learning and development:** evidence is attributed to a mechanism; BM-09 forms/evaluates a candidate; activation is controlled; persistence and lineage are recorded; later behavior is evaluated in acquisition and relevant novel contexts.
+6. **Coordination and recovery:** BM-11 tracks dependencies, concurrency, interruption, partial completion and recovery. It does not become a competing reasoning or belief authority.
+
+Main currently contains fragments of these paths. It does not yet demonstrate the complete loop as specified.
+
+---
+
+## 3. BM-01 through BM-12 source-to-capability map
+
+### BM-01 — Experience intake and provenance
+
+**Specification responsibility:** Preserve what was received, where it came from, temporal/contextual conditions, integrity and derivation lineage before interpretation or learning changes it.
+
+**Main source evidence**
+- `core/cpp/include/jarvis/core/event.hpp` — blob `a31db633e8181378fcec0a20c5958c0065d430ee`
+- `core/cpp/src/brain.cpp` — blob `e9f3758fcc9c0e89b7280ce376db9033d547682d`
+- `core/cpp/src/memory.cpp` — blob `ba72a897306d4761246d0deab2fbab37c49d372f`
+
+**Observed path:** `Brain::observe(Event)` timestamps an event when its timestamp is zero, appends it to Memory, receives a sequence, increments event/cycle counters, replays the event into cognitive state and synchronizes self-state. The event carries sequence, timestamp, source, kind and scalar attributes.
+
+**Consumers:** BM-02 representation/perception; BM-03 Memory; BM-04 belief/world state; BM-05 causal/prediction paths; BM-06 attention; BM-09 learning feedback.
+
+**Persistence/recovery:** Event records are journaled and replayed. Memory loading recovers a valid prefix and truncates bytes beyond the valid end. The journal is useful continuity infrastructure, but the inspected envelope does not enforce first-class separate receipt/event times, modality, scope, epistemic status, provenance chain, reliability dimensions or derivation lineage.
+
+**Gaps**
+- Source identity is a string; provenance independence and source authentication are not established.
+- Event time versus acquisition/receipt time is not represented as separate typed semantics in the event envelope.
+- Raw acquisition, interpreted representation, internal model output and external observation are not strongly distinguished by the core event contract.
+- A journal append is not semantic acceptance, nor tamper-evident/rollback-resistant trust.
+- Malformed, delayed, reordered, duplicate and partial evidence semantics are not established across all consumers.
+
+**Donor comparison:** PR #97 has event/action/prediction outcome persistence paths, but the Phase 1 donor matrix does not establish that its event envelope fully satisfies the accepted evidence contract. Do not infer that richer action feedback solves general provenance.
+
+**Disposition:** **Reuse** event sequencing and journal/replay as infrastructure; **adapt** evidence semantics and provenance contracts. Preserve the trust-boundary requirements from the existing PR #160 work as a required input.
+
+**Required integration proof:** One experience must retain immutable acquisition lineage through interpretation, memory retrieval, belief revision, reasoning, prediction and learning; restart/replay must preserve those distinctions.
+
+### BM-02 — Representation and interpretation
+
+**Specification responsibility:** Produce one or more interpretations from experience while retaining ambiguity, alternatives, confidence meaning and evidence lineage.
+
+**Main source evidence**
+- `core/cpp/include/jarvis/core/representation.hpp` and `core/cpp/src/representation.cpp` — implementation blob `0e53bfaa0c1114cb7390d9f7ce577c87d6bc6169`
+- `core/cpp/src/perception_pipeline.cpp` — blob `ab9a745bb68e416d4e32c9d0c26a2d0b2016ab17`
+- `core/cpp/include/jarvis/core/perception_pipeline.hpp`
+- `core/cpp/src/cognitive_cycle.cpp` — blob `3df14c552f2048b0394dc362f7ee7a654a93fb32`
+
+**Observed path:** The representation engine normalizes event attributes into semantic nodes/relations and assigns modality using a finite source/kind string mapping. The perception pipeline supports registered providers, support checks, validation, exception isolation and strongest-confidence selection, then falls back to normalized event representation.
+
+**Consumers:** World/knowledge models and cognitive context; the current cycle's observed code path is not a demonstrated general semantic interpretation pipeline feeding every downstream mechanism.
+
+**Gaps**
+- Exact source/kind strings (voice/speech, vision/camera, audio/microphone, sensor/system, text/command/message) act as modality fallback conventions. They are adapters, not acquired understanding.
+- The strongest-confidence provider selection does not preserve multiple plausible interpretations or resolve disagreement.
+- Attribute normalization is not semantic grounding, entity identity, contextual language understanding or operator-intent understanding.
+- Confidence is not source reliability or belief confidence.
+- The Phase 2 map carries forward F-02: contextual language/operator-intent grounding is an open specification correction obligation. The precise finding text must be resolved against its originating review artifact before implementation relies on it.
+
+**Donor comparison:** PR #97's developmental context extraction uses observation kind/source and representation features/values; its fixed tokenization and context hierarchy are engineered inductive biases. It does not by itself establish general contextual language/operator-intent grounding.
+
+**Disposition:** **Reuse** provider capability and representation boundaries; **adapt** ambiguity, grounding, source/context and alternative-interpretation semantics. Keep F-02 open for implementation readiness.
+
+**Required integration proof:** Ambiguous input yields competing interpretations; contextual evidence and memory change their relative support; operator intent is grounded from context rather than a fixed phrase/source lookup; raw evidence remains unchanged.
+
+### BM-03 — Continuity and memory
+
+**Specification responsibility:** Retain experience, retrieve by relevance, support episodic/semantic/procedural/associative functions, track use, consolidate and forget without losing required lineage.
+
+**Main source evidence**
+- `core/cpp/include/jarvis/core/memory.hpp` — blob `f3662038237246efa51155f940d77564f144d6d9`
+- `core/cpp/src/memory.cpp` — blob `ba72a897306d4761246d0deab2fbab37c49d372f`
+- `core/cpp/src/cognitive_cycle.cpp` — blob `3df14c552f2048b0394dc362f7ee7a654a93fb32`
+
+**Observed path:** Memory stores event continuity and metadata with Working/Episodic/Semantic/Procedural tier labels, salience and confidence. It supports append, load, recent/history access, ranked recall, promotion and working-memory eviction. Ranked recall uses exact matches, attribute overlap, relative record position, salience and confidence. `CognitiveCycle::run` retrieves ranked memories using observation attributes.
+
+**Consumers:** Current cycle context receives memories. The inspected reasoning invocation does not consume them. Other uses in the source must be distinguished from the specific BM-12 integration requirement; mere workspace/context availability is not downstream use.
+
+**Gaps**
+- Current recall is structured attribute-overlap retrieval, not general semantic/conceptual retrieval across different wording, modalities or abstraction levels.
+- Tier labels do not prove distinct semantic/procedural memory functions.
+- Retrieval usefulness/irrelevance is not tracked as a complete evaluated lifecycle.
+- Consolidation lineage and evidence behind promotion are incomplete.
+- Memory can be stored without being used by reasoning or decision.
+- Missing retrieval is not evidence that an experience never occurred; this semantic distinction needs to be preserved at all consumers.
+
+**Donor comparison:** PR #97 includes event journal/reconstruction and learning persistence paths. Those are useful continuity donors, not proof of semantic retrieval or memory-supported inference. The donor matrix explicitly states event-based persistence is not synonymous with trusted memory.
+
+**Disposition:** **Reuse** journal, replay and metadata foundation; **adapt** retrieval and consolidation semantics; **defer** claims of semantic/procedural generality until demonstrated.
+
+**Required integration proof:** A relevant memory changes a later inference/decision; an irrelevant memory does not; the effect and provenance are inspectable; working-context eviction does not erase durable history; replay preserves retrieval and lineage.
+
+### BM-04 — Belief and world-state management
+
+**Specification responsibility:** Maintain evidence-qualified, scoped, revisable claims with support, contradiction, versioning and dependent-state invalidation.
+
+**Main source evidence**
+- `core/cpp/src/brain.cpp` — blob `e9f3758fcc9c0e89b7280ce376db9033d547682d`
+- `core/cpp/src/world_model.cpp` — blob `5b68e8fe37d99732557237e347ae02234a3de172`
+- `core/cpp/src/knowledge.cpp` — blob `25ecf822e6132f576266c1f86a964a227c7fb75f`
+
+**Observed path:** Main replay updates a map of beliefs keyed by attribute name. Matching values increase confidence; differing values replace the current scalar and reduce confidence. WorldModel stores facts/relations and marks conflicts disputed, retaining a disputed fact list; a higher-confidence incoming fact can replace the current fact. KnowledgeModel maintains a running average reliability keyed by source string.
+
+**Consumers:** BM-05 causal/prediction, BM-08 planning/decision, BM-10 reflection/monitoring and BM-12 reasoning receive beliefs in some form. The inspected model does not preserve enough lineage for the accepted cross-mechanism contract.
+
+**Gaps**
+- One current scalar per key is not a competing-claim model.
+- A conflicting value may overwrite the prior belief even while confidence falls.
+- The inspected belief record does not encode source/evidence lineage, scope, validity interval, revision reason or alternative claims.
+- Source reliability keyed by string and averaged does not establish source identity, independence, freshness or provenance.
+- Disputed flags are not a complete adjudication lifecycle.
+- Dependent predictions/plans/conclusions are not shown to be invalidated atomically or marked stale when a belief changes.
+
+**Donor comparison:** PR #148 is the identified donor line for competing alternatives, evidence accumulation, stronger post-conflict evidence and replay-order validation. It remains unmerged; exact PR #148 head and compatibility must be rechecked before port decisions.
+
+**Disposition:** **Reuse** current belief/world structures as a base; **adapt** evidence lineage, alternatives, scope, revision and dependency invalidation. Do not use last-write-wins or a generic confidence formula as final epistemic semantics.
+
+**Required integration proof:** Contradictory evidence preserves both claims; support/contradiction changes qualified belief status; downstream predictions/plans/reasoning are marked stale; restart preserves the complete revision history.
+
+### BM-05 — Association, causal modelling and prediction
+
+**Specification responsibility:** Discover candidate relationships, distinguish association from causality, create scoped predictions and resolve them against attributable outcomes.
+
+**Main source evidence**
+- `core/cpp/src/association_model.cpp` — blob `b378d4237527dfbb4c65f43545f7f0fc7c42669b`
+- `core/cpp/src/causal_model.cpp` — blob `f873d0a6e7fa0676bb88bf7a1f66436bc88a3c0d`
+- `core/cpp/src/brain.cpp` — blob `e9f3758fcc9c0e89b7280ce376db9033d547682d`
+- `core/cpp/src/cognitive_cycle.cpp` — blob `3df14c552f2048b0394dc362f7ee7a654a93fb32`
+
+**Observed path:** Association/CausalModel observe before/after belief snapshots. CausalModel forms links when changed beliefs co-occur with other current values; simulation traverses sufficiently strong links with confidence attenuated by depth. Brain persists predictions as events and resolves by key. Numeric outcomes use bounded absolute error; non-numeric values use equality. CognitiveCycle simulates current beliefs and creates cycle-scoped prediction keys.
+
+**Consumers:** Planning receives predicted value/risk context; prediction resolution feeds adaptation; BM-09 is expected to evaluate learning; BM-04 should receive relevant outcome evidence.
+
+**Gaps**
+- Co-state change is not sufficient causal evidence; confounding, temporal precedence, interventions, alternative causes and counterexamples are not demonstrated.
+- Association and causal strength require separate epistemic semantics.
+- Prediction records on main have limited scope/assumption/horizon/resolution semantics.
+- Generic absolute difference/equality is not domain-appropriate for all predictions.
+- Caller-supplied scalar outcome does not by itself establish independent external verification or attribution.
+- A resolved prediction and numeric adaptation do not prove improved held-out predictive performance.
+
+**Donor comparison:** PR #97 adds contextual prediction and prediction feedback. Its pathway uses contextual concepts/candidates and numeric adaptation, but the donor matrix explicitly limits the claim and requires held-out metrics. PR #151's controlled compositional transfer is separate evidence and must not be conflated with PR #97.
+
+**Disposition:** **Reuse** keyed prediction persistence and simulation as a narrow starting point; **adapt** causal evidence, prediction scope, resolution and attribution. Preserve the distinction between prediction feedback and broad learning.
+
+**Required integration proof:** Two similar predictions resolve independently; delayed/out-of-order outcomes resolve only the matching prediction; action cancellation/provider failure cannot count as verified external consequence; counterexamples weaken the relevant causal hypothesis; held-out metrics establish whether prediction improved.
+
+### BM-06 — Attention and active context
+
+**Specification responsibility:** Allocate limited processing capacity among experiences, memories, predictions, goals and internal conditions; manage active contexts, interruption and resumption.
+
+**Main source evidence**
+- `core/cpp/src/attention.cpp` — blob `58f734dbe9772675d687752026231297f289e770`
+- `core/cpp/include/jarvis/core/cognitive_workspace.hpp` — blob `b015d44e332ea2511d29e607495714d0b982d44e`
+- `core/cpp/src/cognitive_workspace.cpp` — blob `fbd2321d9cd1c98217389beced292654e33a906e`
+- `core/cpp/src/cognitive_runtime.cpp` — blob `1a1383cedc42e357dc9efce117328b8d55e30bca`
+
+**Observed path:** Attention scoring combines novelty, uncertainty (derived from strongest belief confidence) and optional urgency. The default policy initializes equal weights; reinforce/suppress adjusts these weights. CognitiveWorkspace holds a projection of observation, memories, beliefs, causal links, predictions, reasoning, goals, plan, decisions, action assessments, intent, strategy and reflection. Runtime queues and prioritizes cycle inputs, runs work and replaces workspace snapshots.
+
+**Consumers:** Attention affects state and may feed strategy/planning context; runtime uses trigger priority for scheduling. Workspace exposes a cycle result to callers.
+
+**Gaps**
+- Attention scoring does not directly include goal relevance, affective appraisal, consequence, resource contention or full task context.
+- Equal initial weights are a bootstrap policy, not acquired attention.
+- A single event salience score is not the full active-context ownership/lifecycle.
+- Workspace is a snapshot/projection; it does not establish multiple context isolation, dependency freshness, interruption/resumption guarantees or authoritative state.
+- Scheduling priority in CognitiveRuntime must not be conflated with cognitive attention.
+
+**Donor comparison:** PR #97 includes attention learning and affective consumers, but its learned weighting/context assumptions must be inspected with the same scrutiny as main. It does not automatically close multi-context and lifecycle requirements.
+
+**Disposition:** **Reuse** AttentionModel and workspace/runtime scaffolding; **adapt** contextual relevance, ownership, concurrency, interruption/resumption and starvation detection. Keep runtime scheduling and cognitive attention as distinct concepts.
+
+**Required integration proof:** Competing contexts are prioritized; context can be suspended/resumed with evidence, goals, permissions and freshness intact; attention can be redirected by new evidence without erasing durable state; starvation and oscillation are observable.
+
+### BM-07 — Affective appraisal and valuation
+
+**Specification responsibility:** Context-sensitive appraisal of significance and internal conditions; modulate attention, memory, learning, goal evaluation and decision without fixed stimulus-to-emotion or emotion-to-action mappings.
+
+**Main source evidence**
+- Phase 1 source audit identifies affect-related and developmental API definitions in `core/cpp/src/brain_restored_api.cpp` — blob `618deb6976eed951eae02b7f0da741e6d730bb0c`.
+- Main `brain.hpp` inspected at blob `8268ef84e0b361ead536724ba7761904b30ee58f` does not show corresponding affective members in its inspected private member inventory.
+- `core/cpp/src/brain.cpp` self-state synchronization is aggregate and derives workload/uncertainty/health from counters, threat, attention, novelty and capability health.
+
+**Observed path:** The main baseline does have threat, attention and self-state signals, and an affect-related restored API source file. The Phase 1 audit identified a source-level integration discrepancy: API definitions refer to affective/developmental members not present in the inspected Brain declaration. This is not a confirmed build failure; compilation-unit membership and declaration integration were not verified by build.
+
+**Consumers:** Main threat/attention influence planning and decisions. A complete contextual appraisal state with evidence lineage and downstream consumers is not established on main.
+
+**Gaps**
+- Main does not establish a coherent, compiled, authoritative affective-state owner.
+- Aggregate self-state is not affective appraisal.
+- Context-dependent significance, appraisal evidence, revision and multi-dimensional state are not demonstrated.
+- Affective influence on memory, learning, goals and decisions is not established as a coherent integrated path on main.
+- SYS-05 autonomic regulation and SYS-08 runtime substrate ownership must remain external; BM-07 owns only cognitive estimates/appraisal.
+
+**Donor comparison:** PR #97 contains continuous affective state, appraisal adaptation, affect-aware planning/decision and action-outcome evidence weighting. The Phase 1 donor matrix records actual consumers and persistence, but also classifies appraisal equations and context encoding as engineered priors. PR #97 is a donor, not a merged main capability. Its fixed equations, feature assumptions, evidence attribution and failure/replay behavior require full compatibility review.
+
+**Disposition:** **Do not count BM-07 as implemented on main.** **Evaluate PR #97 selectively** as the strongest identified donor path; preserve SYS-05/SYS-08 boundaries and reject fixed stimulus/emotion/action mappings as a general cognitive policy.
+
+**Required integration proof:** Same event, different goals/history/internal conditions, yields contextually different appraisals; appraisal modulates but does not command cognition; evidence can revise appraisal; restart preserves state/lineage; no competing authority with SYS-05/SYS-08.
+
+### BM-08 — Goals, intent, planning and decision
+
+**Specification responsibility:** Process supplied goals and form experience-informed candidate goals; evaluate feasibility, conflicts, consequences, resources and constraints; produce plans/decisions without authorizing execution.
+
+**Main source evidence**
+- `core/cpp/src/goals.cpp` — blob `778a829de8314e83b095af2f2c2a6b83baa769f4`
+- `core/cpp/src/intent.cpp` — blob `4283a4255284c51257df6bad12734782f2a6cde9`
+- `core/cpp/src/strategy.cpp` — blob `5406a341cd4b3f42e16166f6122a0cb580aee298`
+- `core/cpp/src/planning.cpp` — blob `aab022b7cbc06f380413395757d590b56a1f3a20`
+- `core/cpp/src/decision.cpp` — blob `6a49e0f1f80c3c6b0955ddf98182fc6611c0e84c`
+- `core/cpp/src/cognitive_cycle.cpp` — blob `3df14c552f2048b0394dc362f7ee7a654a93fb32`
+
+**Observed path:** GoalModel creates/activates/updates/completes/abandons goals and checks prerequisites/deadlines. CognitiveCycle uses an explicit supplied goal ID if present; otherwise it selects the first eligible goal. IntentModel scores existing eligible goals using priority, remaining progress and deadline. StrategyModel translates intent/attention/threat/uncertainty/resource budget into PlanningContext. Planner ranks actions and builds a plan; DecisionEngine ranks candidate actions; ActionModel assesses them against constraints. The cycle explicitly does not authorize or execute actions.
+
+**Consumers:** BM-06 attention/active context should consume goal context; BM-05 predictions inform planning; BM-07 appraisal is missing as a coherent main consumer; external governance and execution layers remain separate.
+
+**Gaps**
+- Main accepts already-created goals; it does not demonstrate candidate-goal formation from experience.
+- Priority is supplied/updated; no learned priority formation is demonstrated.
+- Default first-eligible selection is a deterministic fallback, not autonomous goal evaluation.
+- Contextual language/operator-intent grounding remains affected by F-02 and must be resolved before implementation relies on this pathway.
+- Decision/plan outputs need explicit dependency freshness and re-evaluation when beliefs/predictions/goals change.
+- Action assessment is not execution authorization or verified consequence.
+
+**Donor comparison:** PR #97 adds affect-aware planning and developmental context strategy adjustment. This can inform downstream modulation but does not by itself solve candidate-goal formation or F-02 grounding. The PR #97 action execution path is a separate donor capability described under BM-09/BM-11 interactions.
+
+**Disposition:** **Reuse** goal lifecycle, planner, decision and action-assessment foundations; **adapt** candidate-goal origin/evaluation, contextual grounding, dependency freshness and interaction with appraisal/reasoning. Preserve external authorization boundary.
+
+**Required integration proof:** Supplied goals remain distinguished from internally formed candidates; novel experience can produce an evidence-backed candidate without fixed triggers; defeated premises cause revision/abandonment; governance denial prevents execution while preserving intent and denial separately.
+
+### BM-09 — Learning and developmental adaptation
+
+**Specification responsibility:** Attribute evidence, form/evaluate candidate changes, activate under controls, persist lineage, monitor effects and recover regressions across cognitive capabilities.
+
+**Main source evidence**
+- `core/cpp/src/learning_loop.cpp` — blob `bc9a6aaca38d060667bcdf82f2b1a1f72c5936ba`
+- `core/cpp/src/adaptation.cpp` — blob `7e07a491a5b13379a5719882a834ecc2452a54ef`
+- `core/cpp/src/brain.cpp` — blob `e9f3758fcc9c0e89b7280ce376db9033d547682d`
+- `core/cpp/src/evolution_controller.cpp` and associated evolution modules are present in main; Phase 1 inventory identifies candidate generation/evaluation/adoption/canary/rollback infrastructure.
+
+**Observed path:** Main LearningLoop validates finite feedback, updates numeric adaptation, observes fitness, proposes evolution changes and adopts a matching proposal only if confidence is at least 0.75 and expected gain is positive. AdaptationModel updates per-key numeric estimates and mean absolute error with a running average over values clamped to [0,1]. Brain records events and replays prediction outcomes into adaptation state.
+
+**Consumers:** Adapted estimates and evolution parameters can affect later numeric predictions and selected model parameters. The inspected main path does not demonstrate cross-mechanism learning that revises semantic memory, representations, belief structures, causal hypotheses, goals, reasoning or procedural skills.
+
+**Gaps**
+- Narrow numeric prediction adaptation is not the accepted multi-class developmental process.
+- Attribution (what exactly the outcome supports) and independent consequence verification are incomplete at this boundary.
+- Candidate evaluation across counterexamples, interference, transfer and regression is not established for all cognitive state classes.
+- Persistence of every candidate/evaluation/activation and downstream dependency invalidation must be checked per mechanism.
+- A numeric metric improving does not prove behavior improved on held-out contexts.
+- Gate A's controller-internal compensation failure injection remains open in Phase 1 evidence.
+
+**Donor comparison:** PR #97 adds developmental strategy learning/contextual transfer and stronger action-outcome/prediction feedback. It provides a real donor path where learned contextual evidence changes later planning/decision scores, but uses engineered context features, tokenization, negator sets, numeric magnitude bands, similarity and thresholds. The donor matrix warns that synthetic distributions do not prove arbitrary open-world transfer. PR #151 separately demonstrates bounded synthetic compositional transfer with held-out feature combinations, not broad intelligence.
+
+**Disposition:** **Reuse** evolution safety/evaluation infrastructure and narrow adaptation where justified; **adapt** learning into a cross-mechanism lifecycle. Preserve donor paths as selective candidates. Do not claim generalized learning from parameter updates or synthetic transfer alone.
+
+**Required integration proof:** Evidence attribution; candidate changes; counterexample/regression rejection; persistence/restart; measurable later behavioral effect; held-out relevant transfer; unrelated-context protection; rollback and recovery under partial failure.
+
+### BM-10 — Metacognitive monitoring and control
+
+**Specification responsibility:** Monitor uncertainty, contradiction, calibration, stale dependencies, missing evidence, overload and capability degradation; request and evaluate bounded correction.
+
+**Main source evidence**
+- `core/cpp/src/reflection.cpp` — blob `06f34e20f35aad535a2c606b3669b2127ef7a480`
+- `core/cpp/src/self_model.cpp` — blob `3c6a375eadd6894a635d2e18023a7079cba97c86`
+- `core/cpp/src/brain.cpp` — blob `e9f3758fcc9c0e89b7280ce376db9033d547682d`
+
+**Observed path:** ReflectionModel computes average belief uncertainty, resolved-prediction accuracy and a composite coherence score; it emits generic observations when uncertainty dominates or prediction performance is low. SelfModel tracks capability availability/performance, supports isolate/restore and computes aggregate health. Brain syncs a self-state snapshot from event count, threat, attention, novelty, capability health and active goals.
+
+**Consumers:** CognitiveCycle stores reflection in its result/workspace; self-state uncertainty influences planning/decision context.
+
+**Gaps**
+- Reflection is an aggregate report, not an evidence-lineage-aware monitor of actual reasoning steps and assumptions.
+- Generic text observations do not themselves trigger targeted retrieval, re-reasoning, belief revision, plan invalidation or corrective evaluation.
+- The inspected path does not establish a closed loop from limitation detection → bounded correction → measured correction effect.
+- Stale premise/dependency detection is not demonstrated.
+- Self-state aggregate values must not be mistaken for authoritative SYS-05 physiological/autonomic state or SYS-08 substrate state.
+
+**Donor comparison:** PR #97 has affective appraisal and action feedback that may provide richer signals, but those are not a replacement for metacognitive monitoring and correction ownership.
+
+**Disposition:** **Reuse** reflection/self-model health signals; **adapt** toward explicit monitoring records, evidence dependencies, corrective requests and evaluation. Do not let BM-10 become an unrestricted writer of other mechanisms' state.
+
+**Required integration proof:** A known overreach/contradiction is detected with evidence; targeted corrective work occurs; affected conclusion/plan is revised; the system measures whether the correction helped; the prior state and correction lineage remain inspectable.
+
+### BM-11 — Integrated coordination and continuity control
+
+**Specification responsibility:** Coordinate mechanism interactions, dependencies, concurrency, interruption and recovery while maintaining one coherent cognitive state.
+
+**Main source evidence**
+- `core/cpp/include/jarvis/core/cognitive_cycle.hpp`
+- `core/cpp/src/cognitive_cycle.cpp` — blob `3df14c552f2048b0394dc362f7ee7a654a93fb32`
+- `core/cpp/src/cognitive_runtime.cpp` — blob `1a1383cedc42e357dc9efce117328b8d55e30bca`
+- `core/cpp/include/jarvis/core/cognitive_workspace.hpp` — blob `b015d44e332ea2511d29e607495714d0b982d44e`
+- `core/cpp/src/cognitive_workspace.cpp` — blob `fbd2321d9cd1c98217389beced292654e33a906e`
+- `core/cpp/src/brain.cpp` — blob `e9f3758fcc9c0e89b7280ce376db9033d547682d`
+
+**Observed path:** CognitiveCycle runs a bounded sequence from observation through recall, beliefs/causal links, reasoning, predictions, goal selection, planning, decision, action assessment and reflection. CognitiveRuntime provides a prioritized queue, worker thread, result queue, metrics and workspace projection. Workspace snapshots are mutex-protected.
+
+**Gaps**
+- The current cycle is mostly a fixed sequence, while PR #174 requires selective, recurrent, delayed and interruptible processing. A single pass is not a complete coordination model.
+- The cycle retrieves memories but fails to pass them to reasoning.
+- Reasoning results are stored in context but not consumed to qualify beliefs, revise predictions, evaluate goals or influence planning/decision.
+- Workspace replace/snapshot does not by itself provide dependency versioning, stale-state detection, multi-context isolation, durable checkpoints or partial-operation recovery.
+- Queue priority is scheduling policy, not the full BM-06 cognitive attention process.
+- Cross-mechanism transactions and concurrent changes to authoritative state are not demonstrated by a mutex-protected workspace alone.
+- The current cycle does not own a complete action → verified consequence → learning loop; it stops at action assessment. PR #97 contains a separate Brain-owned action execution/consequence donor path.
+
+**Donor comparison:** PR #97 adds Brain-owned action execution, consequence observation and feedback. The donor matrix records that execution and verification are separated and that observed consequence feeds the event/prediction path. It also records unresolved rollback/partial-side-effect semantics. PR #176 contains D1/D2 corrections, but its merge relationship and controller failure-injection status must be checked before adoption.
+
+**Disposition:** **Reuse** central Brain authority, CognitiveCycle, runtime queue and workspace projection as scaffolding; **adapt** into explicit dependency-aware recurrent coordination and coherent recovery. Selectively evaluate the donor action loop; do not merge it wholesale.
+
+**Required integration proof:** A belief change invalidates dependent predictions/plans/conclusions; interruption/resumption retains constraints and lineage; partial persistence failure does not claim completion; concurrent updates reconcile; action execution and verified consequence remain distinct and feed learning only with valid evidence.
+
+### BM-12 — General reasoning and inference
+
+**Specification responsibility:** Derive, compare, evaluate and revise provisional conclusions from evidence-bearing premises and explicit assumptions while preserving complete inference lineage. BM-04 owns belief commitment; BM-05 owns causal/prediction lifecycle; BM-08 owns goal/plan/decision; BM-12 is not a second Brain authority.
+
+**Main source evidence**
+- `core/cpp/include/jarvis/core/reasoning.hpp` — blob `5c6f82797d4f5052ad5d71a25624de192a2c87d9`
+- `core/cpp/src/reasoning.cpp` — blob `feec78b2e8a1f2b0b58733fd509e4e5a750258fc`
+- `core/cpp/src/cognitive_cycle.cpp` — blob `3df14c552f2048b0394dc362f7ee7a654a93fb32`
+
+**Observed path:** ReasoningProblem accepts belief premises, causal links and a maximum step count. ReasoningResult contains kind, valid flag, one confidence, free-form explanation and derived beliefs. ReasoningEngine checks scalar consistency and performs bounded traversal over causal links encoded as key/value strings. Empty premises can return `valid=true` with zero confidence and a no-premises explanation.
+
+**Critical integration finding:** CognitiveCycle retrieves ranked memories into `result.context.memories`, then builds ReasoningProblem from `result.context.beliefs` and `result.context.causal_links` only. Memories are not passed to the reasoning engine. The result is stored in cycle context but is not used in the inspected remainder to revise beliefs, change prediction premises, evaluate goals or influence planning/decision. Downstream work is not gated on reasoning validity.
+
+**Gaps**
+- No explicit premise identity/provenance/scope/temporal status, assumptions, alternatives, counterexamples or conclusion dependencies in the interface.
+- No evidence that a retrieved memory can materially change an inference.
+- No general deduction/explanation/induction/analogy breadth demonstrated by bounded causal-link traversal.
+- Empty premise set's `valid=true` is not a substantive supported inference.
+- Contradiction handling is scalar consistency checking, not a preserved alternative/argument lifecycle.
+- Derived beliefs lack the required premise-to-conclusion lineage.
+- No downstream consumer in the inspected cycle gives reasoning outputs operational effect.
+- F-03 is specifically an open downstream reasoning integration correction obligation; BM-12-dependent implementation remains blocked until the finding and required decision are resolved.
+
+**Donor comparison:** PR #97 changes selected cognitive/affective pathways but is not established as a complete BM-12 general reasoning donor. The Phase 1 donor matrix does not identify a donor that closes memory-supported general inference and downstream consumption.
+
+**Disposition:** **Retain** the narrow ReasoningEngine as a prototype if useful; **do not count BM-12 as implemented**. Resolve F-03 and deepen F-02-related grounding boundaries before implementation. Do not add another reasoning engine that becomes a competing state authority.
+
+**Required integration proof:** All accepted PR #174 scenarios 27–34; retrieved relevant memory changes inference with provenance; irrelevant memory does not; contradictions and alternatives remain explicit; defeated assumptions invalidate dependent conclusions; conclusions are evaluated by their owning mechanisms; downstream planning/decision uses only qualified, fresh conclusions.
+
+---
+
+## 4. Cross-mechanism integration findings
+
+The following are system-level findings, not isolated module defects.
+
+### IF-01 — Evidence lineage is thinner than the specification contract
+
+The core event envelope and belief records do not consistently preserve source, scope, epistemic status, uncertainty dimensions, temporal applicability and derivation lineage. Memory replay provides continuity, but the provenance semantics needed by reasoning, belief revision, prediction resolution and learning are not yet uniform.
+
+**Impact:** BM-01, BM-02, BM-03, BM-04, BM-05, BM-09, BM-10 and BM-12.  
+**Consequence:** A later mechanism may receive a scalar value without enough information to judge what it means, where it applies, or whether it is independent/verified.  
+**Disposition:** Resolve the shared evidence contract before selecting concrete schemas or porting donor paths.
+
+### IF-02 — Memory is retrieved but not integrated into reasoning
+
+The current cycle retrieves memory, but the ReasoningProblem receives only beliefs and causal links.
+
+**Impact:** BM-03, BM-06, BM-11 and BM-12.  
+**Consequence:** Memory availability is being mistaken for memory-supported cognition if only the workspace/context is inspected.  
+**Disposition:** Explicitly close F-03 and verify end-to-end effect, not merely pass a memory vector to an API.
+
+### IF-03 — Reasoning output is not an operative input to downstream cognition
+
+The current cycle stores reasoning output but does not consume it in belief revision, prediction premise formation, goal evaluation, planning or decision.
+
+**Impact:** BM-04, BM-05, BM-08, BM-10, BM-11 and BM-12.  
+**Consequence:** Reasoning is a side calculation rather than an integrated inference capability.  
+**Disposition:** Resolve downstream ownership and freshness contracts before implementation.
+
+### IF-04 — Belief revision is not yet evidence-sensitive enough
+
+Main's key-to-scalar map and generic same/different update can overwrite prior claims. WorldModel's disputed flags are useful but do not establish full competing-hypothesis adjudication.
+
+**Impact:** BM-01, BM-02, BM-03, BM-04, BM-05, BM-09, BM-10 and BM-12.  
+**Disposition:** Compare PR #148's evidence accumulation and competing alternatives at an exact revision; do not transplant without event/replay compatibility analysis.
+
+### IF-05 — Main's causal learner confuses co-state change with causal evidence
+
+CausalModel observes before/after belief snapshots and forms links from changed values and other current values. The inspected code does not establish confounder control, intervention semantics or counterexample management.
+
+**Impact:** BM-04, BM-05, BM-09 and BM-12.  
+**Disposition:** Preserve candidate associations as hypotheses; require causal evidence criteria and held-out intervention/counterexample evaluation.
+
+### IF-06 — Candidate-goal formation is absent from the inspected main path
+
+Main processes goals that already exist and selects one. It does not form an experience-acquired candidate goal with evidence lineage.
+
+**Impact:** BM-02, BM-03, BM-04, BM-05, BM-07, BM-08, BM-09 and BM-12.  
+**Disposition:** Separate supplied goals, internally proposed candidate goals, subgoals and external governance constraints. No fixed event-to-goal trigger.
+
+### IF-07 — Affective state is donor-backed, not integrated main capability
+
+Main has threat/attention/self-state signals and an affect-related restored source file, but Phase 1 identified a declaration/member integration discrepancy. PR #97 has richer affective state and downstream planning/decision consumers, but is unmerged and contains engineered appraisal priors.
+
+**Impact:** BM-06, BM-07, BM-08, BM-09, BM-10 and BM-11.  
+**Disposition:** Inspect donor state ownership, update/decay, persistence/replay, context dependence, consumers and fixed assumptions before selecting any part.
+
+### IF-08 — The current cycle is a single-pass coordinator, not the full recurrent control system
+
+CognitiveCycle provides a valuable integration skeleton but currently executes a mostly linear bounded pass and does not re-open earlier mechanisms when premises, beliefs or context change.
+
+**Impact:** BM-01 through BM-12, especially BM-06, BM-10 and BM-11.  
+**Disposition:** Map recurrent dependency transitions, invalidation, interruption, asynchronous completion and recovery. Do not assume a more elaborate class graph solves this.
+
+### IF-09 — Action/consequence loop differs between main and donor
+
+Main CognitiveCycle ends at action assessment and explicitly leaves authorization/execution outside. PR #97 adds a Brain-owned action execution/consequence path with authorization, verification, optional rollback and observed consequence. The donor distinguishes execution result from verified consequence, but partial-side-effect/rollback failure semantics remain a review concern.
+
+**Impact:** BM-01, BM-05, BM-08, BM-09, BM-10 and BM-11.  
+**Disposition:** Preserve the security/governance boundary. Evaluate the donor path selectively after exact PR #176 corrections, controller failure-injection evidence and compatibility are rechecked.
+
+### IF-10 — Persistence is stronger than transient state but weaker than complete cognitive continuity
+
+Event replay reconstructs many state changes. It does not automatically prove that derived state, dependencies, memory retrieval history, candidate learning, multi-context work, and partial transactions all recover coherently.
+
+**Impact:** BM-01, BM-03, BM-04, BM-05, BM-08, BM-09, BM-10 and BM-11.  
+**Disposition:** Require lifecycle-specific replay, stale-state and partial-failure evidence; preserve history rather than relying on snapshot presence.
+
+### IF-11 — Hardcoded assumptions need classification, not blanket removal
+
+Observed engineered priors include:
+- modality fallback from exact source/kind strings;
+- attribute-overlap memory retrieval;
+- generic belief confidence updates;
+- causal-link formation from co-state changes and fixed link thresholds;
+- attention's initial equal novelty/uncertainty/urgency weights;
+- first-eligible goal fallback and priority/deadline intent scoring;
+- numeric adaptation clamped to [0,1], running-average updates and fixed adoption confidence/expected-gain gates;
+- reflection's aggregate formula;
+- PR #97 developmental context tokenization, hierarchy, negator set, numeric magnitude bands, similarity and thresholds;
+- PR #97 affective appraisal equations and feature assumptions.
+
+These are not all equally problematic. Type validation, finite-value checks, authorization, permission boundaries, process isolation, bounded resource use, provenance integrity, state ownership and fail-closed adoption are legitimate engineering/safety constraints. Fixed cognitive conclusions disguised as universal learned behavior are not.
+
+**Disposition:** For each prior, record purpose, evidence basis, scope, whether it is an integrity constraint or a provisional inductive bias, how it can be revised, and the evaluation needed to justify retention.
+
+### IF-12 — Cross-language and subsystem boundaries remain unresolved
+
+C++ is the substantive current Brain. Rust has a small cognition/runtime prototype and must not own competing beliefs/goals/identity. TypeScript contains interfaces but no integrated package/build in the audited tree. Engineering-agent C++ is a separate agent/task coordination subsystem.
+
+**Disposition:** Keep one authoritative cognitive-state owner and establish explicit contracts only after whole-system dataflow and ownership are settled. Do not add language/process topology during this mapping phase.
+
+---
+
+## 5. Donor comparison and preservation decisions
+
+| Donor line | Relevant contribution | Current status | Phase 2 disposition |
+|---|---|---|---|
+| PR #97, head `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` | Affective state/appraisal, action execution and consequence feedback, developmental strategy learning, contextual prediction, event persistence/replay, evolution adoption | Open, draft, unmerged; 159 changed files | Selective source candidate only; no wholesale merge |
+| PR #148 | Competing belief alternatives, evidence accumulation, source/provenance improvements and replay-order validation (per Phase 1 audit) | Donor; exact live head must be rechecked before any port | Inspect against BM-04/01/09 and main event semantics |
+| PR #151 | Bounded synthetic compositional transfer with withheld feature combination, multiple seeds, persistence/restart and source/goal isolation | Donor test evidence; not general intelligence proof | Reuse evaluation design where applicable; record additive learner/fixed-schema limits |
+| PR #156 | Integrated donor candidate | Not merged/approved baseline in Phase 1 evidence | Recheck exact head, ancestry and corrections; selective comparison only |
+| PR #176 | D1/D2 donor corrections and failure-replay tests | Open/unmerged in Phase 1 evidence; live status must be rechecked | Required input to action/evolution safety review; residual controller failure injection remains open |
+
+### 5.1 PR #97 evidence boundary
+
+The Phase 1 PR #97 traceability matrix covers seven high-impact paths:
+- continuous affective-state update/decay;
+- affective appraisal adaptation and downstream planning consumption;
+- Brain-owned action execution and observed-consequence feedback;
+- developmental strategy learning and contextual transfer;
+- contextual prediction and prediction feedback;
+- event-journal persistence/reconstruction;
+- evolution evaluation/adoption control.
+
+It records exact source/test blob identities and CMake target declarations for nine test sources. Those declarations prove only that CMake references the test source at the donor commit. They do not prove compilation or execution at the exact PR #97 head. The matrix is bounded, not a line-by-line audit of all 159 changed paths.
+
+The donor's action feedback and developmental strategy paths are meaningful and should not be discarded. They are also not a reason to ignore fixed context features, goal-context bugs, partial rollback semantics or evidence attribution.
+
+---
+
+## 6. Test, build and verification evidence
+
+### 6.1 What this mapping verified
+
+- PR #174 is open/draft/unmerged at the exact accepted head stated above.
+- PR #178 is open/draft/unmerged at head `39fe09dcf13496f5f0005ccf3f00739303e29f88`.
+- PR #97 is open/draft/unmerged at exact inspected head `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+- The accepted PR #174 specification and its source-audit package were fetched at the exact accepted revision.
+- The main source files listed in this report were fetched at the exact Phase 1 audited main commit, and blob SHAs are recorded where available.
+- The full `CognitiveCycle::run` path was inspected; memory retrieval, reasoning invocation, prediction creation, goal selection, planning, decision, action assessment and reflection are visible in that function.
+- The current main test CMake file was fetched at the audited main commit. Phase 1 records 45 registered targets and three unregistered test source files.
+- The PR #97 changed-file list was retrieved and confirms 159 changed paths. The Phase 1 donor matrix remains the bounded source-level trace for seven pathways.
+
+### 6.2 What was not verified in this phase-start mapping
+
+- No local build or runtime test was run.
+- No test source was executed during this mapping.
+- No new CI run was initiated.
+- No performance, learning, transfer or longitudinal experiment was performed.
+- No independent reviewer has reviewed this Phase 2 map.
+- No full line-by-line audit of every PR #97 changed file or every later donor was performed.
+- No compatibility/ABI/API proof exists for porting donor code into main.
+- No runtime integration behavior is certified by this document.
+
+### 6.3 Existing CI evidence must remain exact-commit scoped
+
+Phase 1 recorded earlier CI results for selected PR #151, PR #176 and other donor revisions. They remain evidence only for the exact commits and workflows recorded in Phase 1. They must not be transferred to the current main commit, PR #97 head, PR #156 or this documentation branch.
+
+---
+
+## 7. Preliminary implementation-readiness matrix
+
+This table is an investigation classification, not an authorization decision.
+
+| Mechanism | Main status | Donor status | Highest-impact unresolved requirement | Preliminary disposition |
+|---|---|---|---|---|
+| BM-01 Experience/provenance | Partial | PR #97 event/action outcome records | Typed provenance, event/receipt time, epistemic and derivation lineage | Reuse journal; adapt contract |
+| BM-02 Representation | Partial | PR #97 context features | Multiple interpretations and contextual language/operator-intent grounding (F-02) | Reuse provider boundary; adapt grounding |
+| BM-03 Memory | Partial | PR #97 persistence/replay | Semantic/contextual retrieval materially used downstream | Reuse continuity; adapt retrieval |
+| BM-04 Belief/world state | Partial | PR #148 evidence alternatives | Competing claims, revision lineage, dependent invalidation | Reuse structures; adapt epistemics |
+| BM-05 Association/causality/prediction | Partial | PR #97 contextual prediction | Causal evidence, scoped resolution and attribution | Reuse narrow simulation; adapt |
+| BM-06 Attention/context | Partial | PR #97 attention learning/affect consumers | Active-context ownership, multiple contexts, interruption/resumption | Reuse scaffold; adapt |
+| BM-07 Affective appraisal | Not demonstrated as integrated main capability | PR #97 substantial donor | State owner integration, context-sensitive evidence and no fixed mapping | Selective donor evaluation |
+| BM-08 Goals/intent/planning/decision | Partial | PR #97 affective/developmental planning | Experience-acquired candidate goals and F-02 grounding | Reuse lifecycle/planner; adapt |
+| BM-09 Learning/development | Narrow numeric adaptation/evolution | PR #97 strategy/action/prediction feedback; PR #151 bounded transfer | Cross-mechanism candidate lifecycle, held-out behavior, recovery | Reuse safety/evolution; adapt learning |
+| BM-10 Metacognition | Aggregate reflection/self-health | No identified complete donor closure | Evidence-aware detection → correction → evaluation loop | Reuse monitoring signals; adapt |
+| BM-11 Coordination/continuity | Partial single-pass cycle/runtime/workspace | PR #97 action feedback adds a loop | Recurrent dependencies, stale-state control, interruption and coherent recovery | Reuse coordinator scaffold; adapt |
+| BM-12 General reasoning | Narrow bounded causal-link inference | No identified donor closure | Memory-supported inference and downstream use (F-03) | Retain prototype; do not count implemented |
+
+---
+
+## 8. Required next Phase 2 investigations
+
+The map is deliberately not closed. The following work is needed before Phase 2 can be declared complete.
+
+### P2-01 — Resolve F-02/F-03 against their originating review artifact
+
+Retrieve the exact review artifact and quote its full findings, affected requirements and acceptance conditions. The current Phase 1 correction record identifies the topics but does not reproduce the full original finding text. Do not paraphrase from memory or silently narrow the findings.
+
+**Exit evidence:** exact finding text, affected BM sections, proposed correction, source/test impact, independent review status and Project Director decision.
+
+### P2-02 — Complete the 12-mechanism dependency and state-transition graph
+
+Map every material producer/consumer edge, authoritative state owner, event transition, dependency version, stale-state behavior, concurrency boundary and recovery checkpoint. Include recurrent cycles and interruption paths. Identify where current main's single-pass cycle is merely a projection.
+
+**Exit evidence:** traceable graph and edge ledger grounded in exact source paths/functions/commits, plus unresolved edges.
+
+### P2-03 — Expand donor mapping beyond the seven PR #97 pathways
+
+Inspect the remaining high-impact changed files in PR #97 and the later PR #148–#156 line. Reconcile branch ancestry and exact heads. Do not repeat Phase 1; deepen its bounded matrix with BM requirement, main counterpart, donor function, dataflow, tests, failure semantics and hardcoding classification.
+
+**Exit evidence:** donor-by-requirement matrix, exact blob SHAs, compatibility conflicts, evidence quality and selective port dispositions.
+
+### P2-04 — Cross-mechanism learning evidence map
+
+For every learning class in BM-09, identify:
+- source evidence and attribution;
+- candidate state and owner;
+- evaluation and counterexample path;
+- activation and rollback;
+- persistence/replay;
+- later behavioral consumer;
+- held-out/generalization evidence;
+- fixed assumptions and limitations.
+
+**Exit evidence:** an evidence graph distinguishing observational learning from action-outcome learning, and separating numeric adaptation from structural/cognitive development.
+
+### P2-05 — Failure/recovery and continuity integration map
+
+Trace append failure, replay truncation, metadata mismatch, partial belief/goal changes, prediction resolution, candidate adoption, action rollback, interruption, concurrent updates and stale dependent state. Tie each claim to an actual test source and exact CI run, or mark it unverified.
+
+**Exit evidence:** failure matrix with reproducible verification references and open failure-injection gaps.
+
+### P2-06 — Cross-language and whole-system boundary reconciliation
+
+Map C++ Brain ownership against Rust prototypes, TypeScript interfaces and engineering-agent subsystem. Identify any duplicate cognitive state, data contract mismatch or unbuilt interface. Do not select process topology or introduce dependencies.
+
+**Exit evidence:** single-authority boundary diagram and exact interface/source evidence.
+
+---
+
+## 9. Phase 2 acceptance criteria
+
+Phase 2 is complete only when all of the following are satisfied:
+
+1. BM-01 through BM-12 each have exact specification references, current-main source/function/blob evidence, donor source/function/blob evidence where relevant, and explicit missing/partial/conflict classifications.
+2. Every material cross-mechanism producer/consumer edge is mapped, including the recurrent and delayed paths.
+3. Every authoritative state owner is identified, and no competing Brain authority is left ambiguous.
+4. Memory-to-reasoning and reasoning-to-downstream integration are traced end to end, with F-03 resolved or explicitly blocked by authority.
+5. F-02 and F-03 are reproduced from their exact originating review artifact and have documented dispositions.
+6. Persistence, replay, stale dependencies, concurrency, interruption, partial completion and recovery are mapped with test evidence or explicit non-verification.
+7. Donor paths are compared to main and accepted requirements at exact commits; no wholesale merge is used as a substitute for integration analysis.
+8. Hardcoded assumptions are classified as legitimate integrity/safety controls, provisional inductive biases or prohibited predetermined cognitive conclusions.
+9. Learning claims distinguish storage, numeric adaptation, evidence-based structural change, action-outcome learning, later behavioral effect and held-out transfer.
+10. Human cognitive function and MCU J.A.R.V.I.S. functional reference comparisons are included for substantial mechanism/integration decisions, without literal biological imitation or surface-behavior claims.
+11. Historical Phase 1 preservation tasks remain visible and are not silently treated as completed.
+12. A phase report records completed, partial, blocked, deferred and unverified work; independent review and required owner approval are recorded.
+
+### Phase 2 exit boundary
+
+Completion of this mapping phase will **not** clear Gate A, select an implementation baseline, approve donor ports, or authorize runtime implementation. Those decisions require their own explicit evidence and approval.
+
+---
+
+## 10. Current conclusion
+
+The repository contains substantial reusable mechanisms and at least one meaningful donor line with affective state, action/consequence feedback, developmental strategy learning and contextual prediction. The main C++ Brain already has an event-backed state owner, memory, beliefs, world/causal models, attention, goals, planning, decision, prediction adaptation, evolution controls, reflection and a coordinating cycle.
+
+However, the current main path is not a complete implementation of BM-01 through BM-12. Its most consequential integration failures are not simply missing classes:
+
+- acquired evidence does not consistently retain the full provenance and epistemic lineage required downstream;
+- memory is retrieved but is not passed into the reasoning premises;
+- reasoning output is not consumed by downstream belief, prediction, goal, planning or decision processes;
+- belief and causal updates rely on narrow generic rules;
+- candidate goals are not formed from experience in the inspected main path;
+- integrated affective appraisal is not established on main;
+- learning is narrower than the specification's cross-mechanism developmental lifecycle;
+- the current coordinator is a bounded single-pass cycle rather than the full recurrent, dependency-aware and recoverable Brain;
+- the main action-assessment cycle does not own the full verified action-consequence path present in the PR #97 donor.
+
+The correct direction is selective integration around one cognitive authority, with explicit evidence, dependency, persistence and learning contracts. Adding more isolated modules or merging the largest donor would not resolve these system-level gaps.
+
+**Phase 2 remains in progress. No runtime implementation is authorized by this report.**
+
+---
+
+## Appendix A — Exact inspected source identities
+
+### Accepted specification and source audit
+- PR #174 HEAD: `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`
+- Specification: `3b6a53c8a295fa0d9fc29bbb6c7688b61d1dcdb1`
+- Existing mechanism source audit: `4479874476715fd59a4c3ba6c908f06c43a1c6c2`
+- BM-12 review correction record: `518522e5f222ee9fa7efe771c458adc08bd09a19`
+
+### Main source baseline
+- Main commit: `1273ddbcd0087d189e01388ded2d362fb1e058d2`
+- `event.hpp`: `a31db633e8181378fcec0a20c5958c0065d430ee`
+- `brain.hpp`: `8268ef84e0b361ead536724ba7761904b30ee58f`
+- `brain.cpp`: `e9f3758fcc9c0e89b7280ce376db9033d547682d`
+- `memory.hpp`: `f3662038237246efa51155f940d77564f144d6d9`
+- `memory.cpp`: `ba72a897306d4761246d0deab2fbab37c49d372f`
+- `cognitive_cycle.cpp`: `3df14c552f2048b0394dc362f7ee7a654a93fb32`
+- `cognitive_workspace.hpp`: `b015d44e332ea2511d29e607495714d0b982d44e`
+- `cognitive_workspace.cpp`: `fbd2321d9cd1c98217389beced292654e33a906e`
+- `cognitive_runtime.cpp`: `1a1383cedc42e357dc9efce117328b8d55e30bca`
+- `representation.cpp`: `0e53bfaa0c1114cb7390d9f7ce577c87d6bc6169`
+- `perception_pipeline.cpp`: `ab9a745bb68e416d4e32c9d0c26a2d0b2016ab17`
+- `world_model.cpp`: `5b68e8fe37d99732557237e347ae02234a3de172`
+- `knowledge.cpp`: `25ecf822e6132f576266c1f86a964a227c7fb75f`
+- `causal_model.cpp`: `f873d0a6e7fa0676bb88bf7a1f66436bc88a3c0d`
+- `association_model.cpp`: `b378d4237527dfbb4c65f43545f7f0fc7c42669b`
+- `attention.cpp`: `58f734dbe9772675d687752026231297f289e770`
+- `goals.cpp`: `778a829de8314e83b095af2f2c2a6b83baa769f4`
+- `intent.cpp`: `4283a4255284c51257df6bad12734782f2a6cde9`
+- `strategy.cpp`: `5406a341cd4b3f42e16166f6122a0cb580aee298`
+- `planning.cpp`: `aab022b7cbc06f380413395757d590b56a1f3a20`
+- `decision.cpp`: `6a49e0f1f80c3c6b0955ddf98182fc6611c0e84c`
+- `action_model.cpp`: `1da9e70b4d0716ae6ee7ff2110b28424f094d6df`
+- `learning_loop.cpp`: `bc9a6aaca38d060667bcdf82f2b1a1f72c5936ba`
+- `adaptation.cpp`: `7e07a491a5b13379a5719882a834ecc2452a54ef`
+- `reasoning.hpp`: `5c6f82797d4f5052ad5d71a25624de192a2c87d9`
+- `reasoning.cpp`: `feec78b2e8a1f2b0b58733fd509e4e5a750258fc`
+- `reflection.cpp`: `06f34e20f35aad535a2c606b3669b2127ef7a480`
+- `self_model.cpp`: `3c6a375eadd6894a635d2e18023a7079cba97c86`
+- Core test CMake: `dab0c52ab4dfe15e1e2cbccfa9e6c904abdf54e3`
+
+### Donor identities
+- PR #97 HEAD: `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`
+- PR #97 changed paths: 159
+- PR #97 test CMake blob from Phase 1 matrix: `cbfd1fde52fffa6eeac025da2b7ddcb5ab493261`
+- PR #97 detailed seven-path matrix: `docs/architecture/inventory/PHASE_1_PR97_DONOR_CAPABILITY_TRACEABILITY_2026-11-05.md`
+
+**End of Phase 2 first integration map.**
