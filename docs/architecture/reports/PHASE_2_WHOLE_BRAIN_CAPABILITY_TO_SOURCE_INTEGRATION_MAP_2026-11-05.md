@@ -1028,7 +1028,7 @@ The six PR #180 findings map to the PR #179 register as follows:
 
 A second exact-identity reconciliation extracted all 20 distinct 40-character blob SHAs from the PR #180 report and checked them against the current PR #179 report; all 20 are present, with no source-identity hash left unaccounted for. This hash check does not mean the reports are textually identical or that every sentence was copied; it verifies that the source identities cited by the first-batch report are represented in the working report.
 
-A material correction is also required before PR #180 can be considered a clean duplicate: its BM-02 section labels contextual language/operator-intent grounding as F-02, and its BM-12 section labels downstream reasoning integration as F-03. Those labels do not match the PR #173 correction record. PR #173 F-02 is experience-acquired candidate-goal formation; PR #173 F-03 is the SYS-08 computational-substrate boundary. The downstream reasoning issue is PR #174 source-audit finding AUD-12 / Phase 2 IF-03. PR #179 now corrects these labels and retains contextual language grounding as a separate BM-02 gap. PR #180 must not be merged or treated as an authoritative clean copy without this correction.
+A previous draft of this reconciliation incorrectly attributed PR #174 follow-on labels to PR #180. A fresh fetch of the complete 311-line PR #180 report at exact HEAD `6ca140300b914ed981a50301bbf1d82a5bfe4d8b` (blob `ebbbdb264091c11ec3724e0f73b7fbe56d69f0d6`) confirms that the report contains neither `F-02` nor `F-03`. Its BM-02 entry is a provisional representation/interpretation assessment; its BM-12 entry describes the narrow reasoning engine and the memory/downstream gaps. The six P2-I-001–P2-I-006 findings and their mapping table above remain the correct PR #180 provenance. The separate PR #174 follow-on F-02/F-03 obligations are recorded in the provenance recovery record and must not be attributed to PR #180. PR #180 remains a first-pass precursor for the already-recorded canonical-report disposition; this correction changes only the factual attribution.
 
 **Reconciliation decision for this working phase:** continue PR #179 as the working report because it is materially more complete and is based on the governance branch intended to carry the proposed project rules. Preserve PR #180's seven source identities (six mechanism headers plus `cognitive_cycle.hpp`) and its initial findings as incorporated evidence. Do not merge PR #180, close it, or claim its different base has been reconciled at the Git history level. Its branch ancestry and any unique unincorporated content remain a separate review item before either PR can be accepted or merged. No PR status was changed in this batch.
 
@@ -4042,3 +4042,84 @@ The new provenance and runtime-contract artifacts also require independent revie
 The closeout artifacts improve traceability and test-contract precision. They do not clear technical findings, authorize runtime changes, select PR #97 as a baseline, or satisfy the Phase 2 exit gate.
 
 **Phase 2 remains IN PROGRESS; exit criteria NOT MET. Gate A NOT CLEARED. Gate B capability acceptance NOT PASSED. No donor approved; no implementation baseline selected; no runtime implementation authorized.**
+
+
+---
+
+## 61. Advisory source-challenge reconciliation — reasoning API and report provenance (2026-11-06)
+
+### 61.1 Review provenance and authority
+
+A further review artifact exists in PR #189:
+- Review branch: `review/phase-2-whole-brain-map-independent-review-20261106`.
+- Review HEAD: `46796725fd656628f7b6e47a57929b87f79a6d8d`.
+- Review report blob: `870481186434027414ba35a90cf8833810b1e527`.
+- Verdict: **REVISE**.
+- Author identity: `methaneex-oss`, the same repository identity that authored PR #179.
+
+The report is useful source-challenge evidence. Because the reviewer and author identities are the same, it is **not** a genuinely independent formal review and cannot satisfy criterion 12 or Rule 11.8. The four observations are reconciled below on their technical merits, without promoting the review's process status.
+
+### 61.2 R-01 — Mainline journal failure handling
+
+The advisory review identifies that mainline Memory has the same class of unchecked append rollback and startup tail-repair errors as the donor, with differences in donor quarantine behavior. This is already independently represented in §47.2, which extends P2-I-014 to main and donor separately and records the required journal-health/fault-injection contract.
+
+**Disposition:** Already reconciled in §47.2. Keep open pending failure injection, restart/replay proof and authorized implementation. Do not duplicate it as a new finding or claim it reproduced.
+
+### 61.3 R-02 — PR #180 attribution error corrected
+
+The prior §12.5 sentence claiming that PR #180 labels its BM-02/BM-12 content as F-02/F-03 was factually incorrect. The exact PR #180 report was re-fetched at its pinned HEAD and checked in full:
+- PR #180 HEAD: `6ca140300b914ed981a50301bbf1d82a5bfe4d8b`.
+- Report blob: `ebbbdb264091c11ec3724e0f73b7fbe56d69f0d6`.
+- Length: 311 lines.
+- Neither literal `F-02` nor `F-03` occurs in the report.
+
+The erroneous sentence in §12.5 has been replaced. The corrected attribution is: PR #180 contains six first-pass P2-I-001–P2-I-006 findings; the PR #174 follow-on F-02/F-03 labels belong to the separate partial provenance record. The four finding namespaces remain distinct.
+
+**Disposition:** Documentary correction applied in this commit. This is not an independent review acceptance of the corrected report.
+
+### 61.4 R-03 — Public ReasoningEngine::infer can overwrite contradictory premises
+
+**Pinned main source:**
+- `core/cpp/include/jarvis/core/reasoning.hpp`, blob `5c6f82797d4f5052ad5d71a25624de192a2c87d9`.
+- `core/cpp/src/reasoning.cpp`, blob `feec78b2e8a1f2b0b58733fd509e4e5a750258fc`.
+- `core/cpp/tests/reasoning_architecture_suite.cpp`, blob `a7119afd091e045d6294aa1b15c20de349ed6a1c`.
+- `core/cpp/tests/CMakeLists.txt`, blob `dab0c52ab4dfe15e1e2cbccfa9e6c904abdf54e3`.
+
+**Verified source behavior:**
+1. `ReasoningEngine::infer` is public in the header.
+2. It initializes its local premise map with `known[belief.key] = belief.value`. If two premises share a key with incompatible values, the later vector element overwrites the earlier value. The public method does not call `consistent` or return a contradiction status.
+3. `ReasoningEngine::solve` does call `consistent` before invoking `infer`, so the normal `solve` path rejects conflicting premises. The gap is specifically the separately public `infer` entry point.
+4. The registered reasoning suite calls `infer` with a single premise and tests contradictory premises only through `solve`. It does not test direct contradictory `infer` calls in both input orders.
+
+**Risk boundary:** This is an order-dependent public API behavior, not evidence that the current `CognitiveCycle::run` invokes `infer` directly with contradictory premises. The main cycle uses `solve`. The report must not claim a reproduced production incident.
+
+**Required correction/evidence:** Either enforce contradiction detection in public `infer` or make it a private helper with an enforced precondition. Add direct tests with conflicting duplicate keys in both orders; require identical explicit contradiction/insufficient-evidence behavior and no unsupported inferred conclusion. Preserve the distinction between empty premises, inconsistent premises and valid derivation.
+
+**Disposition:** OPEN; no code or tests changed. This finding adds an API-boundary correction to the existing BM-12/IF-03 reasoning limitations.
+
+### 61.5 R-04 — Reasoning confidence is not semantically qualified
+
+The public `ReasoningResult` exposes a single `double confidence` without a documented semantic definition or a distinction between evidence confidence, premise consistency, inference support and confidence in the result classification.
+
+At the pinned main source:
+- `ReasoningEngine::solve` returns `confidence = 1.0` for a contradiction result.
+- It also returns `confidence = 1.0` when non-empty premises are internally consistent but no new conclusion is derivable.
+- For deductions, confidence is calculated from the minimum confidence among newly inferred conclusions.
+- The test suite asserts deduction confidence and contradiction confidence, but does not assert or define the confidence semantics for the consistency-only result.
+
+A value of 1.0 therefore cannot safely be read as “the supplied beliefs are certainly true.” In the contradiction branch it can only plausibly express certainty that the consistency check detected a contradiction; in the stable branch it appears to express the consistency classification. Those meanings are not encoded in the API.
+
+**Required correction/evidence:** Define the confidence domain and interpretation for each ReasoningKind, or replace the single field with separately typed/qualified status and evidence measures. Tests must show that a consistency-only result does not imply high confidence in the truth of its premises, and that downstream consumers cannot treat a structural consistency status as evidential support.
+
+**Disposition:** OPEN; no code or tests changed. This reinforces the need to qualify reasoning output before any downstream belief, prediction, goal or action consumer treats it as evidence.
+
+### 61.6 Consolidated status
+
+| Review item | Disposition | Remaining work |
+|---|---|---|
+| R-01 mainline Memory failure semantics | Already recorded in §47.2 | Fault injection, journal-health/recovery behavior and restart/replay proof |
+| R-02 PR #180 misattribution | Corrected in §12.5 | Independent verification of the corrected provenance |
+| R-03 public `infer` conflict handling | Open | API contract, order-independent contradiction tests and authorized correction |
+| R-04 confidence semantics | Open | Qualified confidence/status contract, tests and downstream-consumer audit |
+
+The PR #189 artifact and this reconciliation do not satisfy the independent-review requirement. Phase 2 remains IN PROGRESS; exit criteria remain NOT MET. Gate A remains NOT CLEARED; Gate B capability acceptance remains NOT PASSED. No implementation baseline, donor approval or runtime implementation authorization is created.
