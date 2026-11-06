@@ -240,8 +240,8 @@ The investigation has found substantial reusable engineering and a credible dono
 - [Main perception pipeline implementation](https://github.com/methaneex-oss/MethaneX/blob/1273ddbcd0087d189e01388ded2d362fb1e058d2/core/cpp/src/perception_pipeline.cpp).
 - [Main perception pipeline test registration](https://github.com/methaneex-oss/MethaneX/blob/1273ddbcd0087d189e01388ded2d362fb1e058d2/core/cpp/tests/CMakeLists.txt#L16-L18) and [CTest registration](https://github.com/methaneex-oss/MethaneX/blob/1273ddbcd0087d189e01388ded2d362fb1e058d2/core/cpp/tests/CMakeLists.txt#L144).
 - [PR #97 donor CognitiveCycle perception/reasoning path](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/cognitive_cycle.cpp#L236-L302).
-- [PR #97 donor runtime feedback submission and shutdown](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f3f3a0e7016e6173b945603/core/cpp/src/cognitive_runtime.cpp#L76-L123).
-- [PR #97 donor runtime worker scheduling](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f3f3a0e7016e6173b945603/core/cpp/src/cognitive_runtime.cpp#L223).
+- [PR #97 donor runtime feedback submission and shutdown](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/cognitive_runtime.cpp#L76-L123).
+- [PR #97 donor runtime worker scheduling](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/cognitive_runtime.cpp#L223).
 - [PR #97 Brain CI](https://github.com/methaneex-oss/MethaneX/actions/runs/40788714686).
 - [PR #97 Core Verification](https://github.com/methaneex-oss/MethaneX/actions/runs/40788714735).
 
