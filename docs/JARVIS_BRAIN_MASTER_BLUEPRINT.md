@@ -1,5 +1,8 @@
 # JARVIS Brain — Master Construction Blueprint
 
+> **Historical / superseded planning artifact — 2026-11-06.** Preserve this document as evidence of the earlier dependency-ordered Layer 0–19 construction plan; do not treat it as the current governing Brain architecture or as an implementation sequence. The later accepted architecture/specification establishes recurrent, branching and concurrent cognitive interactions, explicit mechanism/state ownership and cross-mechanism contracts. Use the accepted [Brain Mechanism Specification](architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md) as the mechanism requirements reference and the current [Phase 2 Whole-Brain Capability-to-Source Integration Map](architecture/reports/PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md) for the source-backed integration investigation. This notice does not delete or rewrite the historical blueprint's original content, and it does not authorize implementation or select a baseline.
+
+
 **Status:** Architecture/build plan
 **Purpose:** Define the dependency-ordered construction of the complete JARVIS Brain before deeper implementation continues.
 
