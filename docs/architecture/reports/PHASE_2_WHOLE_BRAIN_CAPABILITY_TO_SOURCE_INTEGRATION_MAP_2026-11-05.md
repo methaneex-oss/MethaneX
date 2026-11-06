@@ -3389,3 +3389,35 @@ The donor P2-I-014 discussion must therefore not be represented as donor-only. M
 **Remaining Phase 2 obligations:** R3-02 Memory metadata recovery and R3-04 empty-premise reasoning remain open technical defects requiring separately authorized implementation and tests. R3-01's legacy-document scope interpretation still requires explicit confirmation; the existing clarification is not a final historical taxonomy decision. Repository-wide authority/conflict search and independent verification remain outstanding. Phase 2 remains IN PROGRESS; Gate A remains NOT CLEARED in the current report record; Gate B remains unassessed. No implementation baseline or production implementation authorization is established.
 
 **Verification boundary:** This decision records report authority and PR disposition only. It does not claim that R3-02/R3-04 have been fixed, that tests have been run, or that the current report has passed independent re-review.
+
+
+---
+
+## 49. Project Director Phase 2 completion directive — scope and clearance boundary (2026-11-06)
+
+The Project Director instructed the Main Builder to finish Phase 2 and ensure that all applicable obligations are cleared.
+
+### 49.1 Legacy Phase 2 document scope
+
+The Project Director's response was: “Ok finish phase tow and make sure everything is cleared,” following the Builder's direct question whether `docs/JARVIS_PHASE_2_COMPLETION.md` describes an earlier, narrower Perception & Representation work package rather than the current whole-Brain Phase 2.
+
+**Working interpretation:** The response authorizes the Builder to proceed on the narrower-work-package interpretation for purposes of Phase 2 reconciliation. The legacy document's own `Phase` field names “Perception & Representation”; it must therefore not be used as evidence that the current BM-01–BM-12 whole-Brain Phase 2 is complete.
+
+**Authority precision:** Because the response did not restate the scope distinction explicitly, this interpretation is recorded as the working disposition, not as a fabricated verbatim Project Director decision. The legacy completion claim remains preserved as historical source text. The current whole-Brain report remains the working authority for the present Phase 2 investigation. A separate explicit owner decision may still be required if governance acceptance demands a durable decision record outside this conversation.
+
+### 49.2 Completion is not equivalent to gate clearance
+
+The instruction to finish Phase 2 does not itself clear Gate A, Gate B, authorize runtime changes, select an implementation baseline, approve donor code, or waive independent review. These are separate controls and require their own evidence and authority.
+
+At this report revision:
+- Phase 2 remains **IN PROGRESS**.
+- Gate A remains **NOT CLEARED** in the latest verified governance/Phase 1 record.
+- Gate B remains **UNASSESSED**; no authoritative clearance record was found in the bounded search performed for this update.
+- No implementation baseline is selected.
+- No runtime implementation authorization is recorded.
+- The Main Builder cannot satisfy the independent-review requirement by reviewing its own changes.
+
+### 49.3 Required closure discipline
+
+The Builder must close each Phase 2 obligation with one of the following evidence-backed dispositions: completed and verified; accepted with explicit owner authority; deferred with owner, rationale and carry-forward; or blocked with exact dependency. “Everything cleared” must not be used as a status claim while any mandatory gate, acceptance review, test, owner decision or traceability obligation remains open.
+
