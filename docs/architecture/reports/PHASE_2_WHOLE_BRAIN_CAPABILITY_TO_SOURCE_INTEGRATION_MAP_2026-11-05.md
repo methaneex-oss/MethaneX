@@ -3274,3 +3274,97 @@ This does not establish that event history is lost. It establishes that learned 
 | R3-04 | Empty-premise source/spec mismatch and deterministic acceptance test recorded | Result-contract decision, implementation authorization, tests and execution remain open |
 
 No production code, tests, CMake files, workflows, donor files or runtime state were changed. No build, CTest run, benchmark, sanitizer or failure-injection experiment was executed. Phase 2 remains IN PROGRESS. Gate A remains NOT CLEARED. Gate B remains unassessed. No implementation baseline is selected. PR #97 remains an unmerged donor. No merge, donor approval, production fix or implementation authorization is implied.
+
+
+---
+
+## 47. Follow-up review response — mainline persistence findings R1 and R2
+
+**Review source:** PR #188, `docs/architecture/reviews/PHASE_2_INDEPENDENT_REVIEW_FOLLOWUP_2026-11-06.md`, review HEAD `36b843f6959628a689d81bc1e12e523e17227073`.  
+**Reviewed target in that report:** PR #179 at `6f2c2cf05196e69a48f5deefcc3f4609e258c19a`.  
+**Current report branch before this response:** PR #179 at `ab1deaf5c18e27f04a3303870c8b5d494b99f6e7`.  
+**Scope:** Documentation/source reconciliation only. No production source, tests, build configuration, donor code, gate state, baseline selection or implementation authorization is changed or implied.
+
+### 47.1 R1 — Goal lifecycle mutates live state before journal acknowledgement
+
+**Disposition:** AGREE. **Source confidence:** High. **Runtime impact:** Conditional on append failure; not reproduced in this response. **Status:** Mainline finding recorded; implementation and failure-injection verification remain open.
+
+**Affected baseline and source identities:**
+- Main: `1273ddbcd0087d189e01388ded2d362fb1e058d2`.
+- `core/cpp/src/brain.cpp`, blob `e9f3758fcc9c0e89b7280ce376db9033d547682d`.
+- `core/cpp/src/goals.cpp`, blob `778a829de8314e83b095af2f2c2a6b83baa769f4`.
+- `core/cpp/src/memory.cpp`, blob `ba72a897306d4761246d0deab2fbab37c49d372f`.
+
+**Verified transition ordering:** On the audited main source, `Brain::activate_goal`, `update_goal_progress`, `complete_goal`, `abandon_goal` and `set_goal_priority` first call the corresponding mutating `GoalModel` operation, then append the event to Memory. The GoalModel methods directly mutate the stored Goal. If `Memory::append` returns zero, the Brain wrapper returns failure but does not restore the previous GoalModel state. The live process can therefore observe a goal transition that has no committed journal event; a reconstructed Brain cannot replay that missing transition.
+
+This finding is distinct from donor P2-I-036, which concerns the donor's two-event goal-progress/completion protocol. R1 concerns the mainline single-event wrapper ordering.
+
+**Adjacent mutator audit:** The same ordering pattern is not confined to goal methods. The inspected main `brain.cpp` also shows:
+- `isolate_capability` mutates SelfModel before appending `capability_isolate`;
+- `restore_capability` mutates SelfModel before appending `capability_restore`;
+- `isolate` mutates Resilience state before appending `resilience_isolate`;
+- `rollback_evolution` mutates Evolution state before appending `evolution_rollback`;
+- `observe_evolution_canary` obtains a controller decision that may already roll back an experiment, then attempts to append the rollback event.
+
+By contrast, the inspected `create_goal`, `observe_capability`, `register_evolution_parameter` and `observe_evolution_fitness` append before applying their corresponding state mutation. `recover`, `adopt_evolution` and `adopt_evolution_experiment` attempt compensating state changes when append fails. These differences are recorded as source-level ordering categories, not as a claim that every path has been exhaustively tested or that every compensation is correct. The complete Brain mutator surface still requires a systematic inventory and failure-path verification.
+
+**Required correction contract (not implemented here):**
+1. Establish one explicit mutation/commit protocol for persistent Brain state.
+2. For each transition, validate and prepare the state change before durable append; after append, application must be guaranteed not to fail under the held Brain lock, or use a verified compensation/transaction protocol.
+3. A failed append must leave live state, journal sequence/content, counters and reconstructed state mutually consistent.
+4. Do not fix only the five goal wrappers while leaving equivalent mutation-before-append paths in capability, resilience, evolution or canary transitions.
+5. Preserve idempotent retry semantics and define what callers observe when commit or compensation cannot be confirmed.
+
+**Required acceptance evidence:**
+- A complete source inventory of Brain mutators, categorized as persist-before-apply, mutate-before-persist with compensation, mutate-before-persist without compensation, or non-persistent/derived.
+- Deterministic append-failure injection for goal activation, progress, completion, abandonment and priority; successful controls for each.
+- Equivalent failure tests for every sibling mutator found to use the same ordering pattern, including canary rollback.
+- Assertions across method result, live state, Memory sequence/content, Brain counters, restart/replay and retry.
+- Exact-head build and registered CTest execution, followed by independent review.
+
+### 47.2 R2 — Mainline journal rollback and startup tail-repair errors are unchecked
+
+**Disposition:** AGREE. **Source confidence:** High. **Data-loss/recovery sequence:** Conditional on filesystem failure; not reproduced in this response. **Status:** P2-I-014 scope extended to main; recovery contract and tests remain open.
+
+**Affected baseline and source identity:**
+- Main: `1273ddbcd0087d189e01388ded2d362fb1e058d2`.
+- `core/cpp/src/memory.cpp`, blob `ba72a897306d4761246d0deab2fbab37c49d372f`.
+
+**Verified mainline behavior:**
+1. `Memory::persist` records the original journal size, writes and flushes an event, and checks the stream result. On write/flush failure it calls `std::filesystem::resize_file` to roll back to the original size, but does not inspect or surface the rollback error.
+2. `Memory::load` scans to the last valid event boundary. If the file is longer than that boundary, it calls `resize_file` to truncate the malformed suffix, but does not inspect or surface the truncation error and does not quarantine the suffix before attempting repair.
+3. `Memory::append` has no explicit poisoned/journal-recovery-required state. A failed persist returns zero, but the Memory instance is not marked unusable if rollback itself failed.
+4. The inspected main loader reconstructs the valid prefix and then attempts repair. If repair fails, the object has no caller-visible indication that the journal may still contain an unreadable tail.
+
+The donor P2-I-014 discussion must therefore not be represented as donor-only. Main has the unchecked append rollback and unchecked startup truncation path. The donor's startup path includes a quarantine-copy step before truncation; main's inspected path does not. The donor truncation result also requires verification rather than assuming quarantine alone guarantees successful repair.
+
+**Conditional consequence:** If rollback or startup truncation fails, the journal may remain malformed. Without a poisoned/recovery-required state, a later append may be acknowledged behind that malformed region; a subsequent restart may stop at the earlier valid prefix and fail to recover later acknowledged records. This is a source-derived failure sequence, not an observed incident.
+
+**Required correction contract (not implemented here):**
+1. Define journal health states, including at least healthy, append/repair uncertain, recovery required and recovered.
+2. If rollback or tail repair cannot be verified, Memory must reject further appends until a recovery procedure establishes a valid append point.
+3. Surface rollback, quarantine and truncation failures to the owning Brain/caller through structured status; do not silently continue with uncertain journal integrity.
+4. Preserve/quarantine malformed bytes before destructive repair where required by the recovery policy.
+5. Specify the durability guarantee precisely. Stream flush is not equivalent to stable-storage durability after power loss or kernel crash.
+6. Keep main and donor behavior separately mapped; do not silently port donor quarantine code or treat donor behavior as an approved baseline.
+
+**Required acceptance evidence:**
+- P2-I-014 affected-revision matrix updated to include main and distinguish main/donor startup-repair behavior.
+- Deterministic injection for partial event write, append rollback failure, startup truncation failure, and donor quarantine-copy failure.
+- After each injected failure, attempt another append, reconstruct/restart, and verify that every acknowledged event is recovered exactly once and no unacknowledged event is presented as committed.
+- Verify that uncertain journal health blocks subsequent appends until recovery succeeds.
+- Exact-head build/CTest execution and independent review.
+
+### 47.3 Consolidated disposition and authority boundary
+
+| Review item | Documentation response | Remaining status |
+|---|---|---|
+| R1 — main goal mutation-before-append | Confirmed and recorded; adjacent mutator ordering categories added | Open; implementation authorization, complete mutator audit, deterministic failure tests and independent verification required |
+| R2 — main journal rollback/tail repair | Confirmed and recorded; P2-I-014 scope extended from donor-only to main plus donor | Open; journal-health/recovery contract, fault injection, restart/replay proof and independent verification required |
+| R3-01 through R3-04 | Responses remain in §46 | R3-01 Project Director scope confirmation; R3-02/R3-04 technical implementation and tests; R3-03 Project Director PR disposition |
+
+**Review-process limitation:** PR #188 publishes the technical findings and states that the connected GitHub identity is also the author of PR #179. It explicitly records that a formal `REQUEST_CHANGES` review could not be submitted from that identity. This documentation response treats R1/R2 as findings requiring reconciliation, but neither PR #188 nor this Builder response satisfies the repository's genuinely separate reviewer-identity requirement. A separate reviewer must verify the corrected report and submit the required formal review.
+
+**Verification boundary:** Source files were re-fetched at main and their blob identities match those cited above. No local build, CTest, sanitizer, runtime experiment, filesystem fault injection or end-to-end test was run for this response. No runtime behavior is claimed as reproduced.
+
+**Current status:** Phase 2 remains IN PROGRESS. Gate A remains NOT CLEARED in the current report record. Gate B remains unassessed in this report. No implementation baseline is selected. PR #97 remains an unmerged donor. No production implementation, donor port, merge or gate clearance is authorized.
