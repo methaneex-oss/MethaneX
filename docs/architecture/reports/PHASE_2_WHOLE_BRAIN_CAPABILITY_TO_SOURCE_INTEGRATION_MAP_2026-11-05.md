@@ -3497,3 +3497,44 @@ The comparison artifact commit `609d38ede50bbdd98a93dfed112781eacabee9fd` has a 
 | Phase 2 exit | NOT MET |
 
 **Scope:** This update adds source-backed analysis and records a new draft architecture deliverable. It changes no runtime source, test, CMake configuration, workflow, donor code, implementation baseline or gate state. It does not claim Phase 2 completion.
+
+
+---
+
+## 51. Bounded legacy-authority scan and preservation update (2026-11-06)
+
+### 51.1 Exact tracked-main documentation scan
+
+The Phase 1 tracked-file inventory identifies the complete 200-file main tree at `1273ddbcd0087d189e01388ded2d362fb1e058d2`. Within that exact tree, the Markdown/documentation artifacts are:
+- `README.md`;
+- `docs/ARCHITECTURE.md`;
+- `docs/JARVIS_BRAIN_MASTER_BLUEPRINT.md`;
+- `docs/JARVIS_PHASE_2_COMPLETION.md`;
+- `core/cpp/tests/phase4_notes.md`.
+
+Each was fetched at the pinned main baseline and checked for Phase 2 / completion / Perception & Representation claims. The only whole-Brain Phase 2 completion statement found in that bounded tracked-main documentation set is in `docs/JARVIS_PHASE_2_COMPLETION.md`. Its own phase field is “Perception & Representation.” The master blueprint describes an earlier fixed Layer 0–19 construction plan, not a second whole-Brain Phase 2 completion claim. The README and short architecture summary contain no competing Phase 2 completion declaration; the test note is explicitly a Phase 4 test-history note.
+
+**Search boundary:** This is a complete scan of the Markdown/documentation paths in the exact 200-file audited main tree, not a claim that every historical branch, open PR, external artifact or untracked file across the repository has been exhaustively searched. The all-branches authority scan remains a separate follow-up.
+
+### 51.2 Preservation and supersession notices
+
+On the PR #179 working branch:
+- `README.md` links to the current whole-Brain Phase 2 map and labels it IN PROGRESS, not complete or implementation-authorizing. Current blob: `4952c7d2c407706fb69e3cdb3731f21c96b14611`.
+- `docs/JARVIS_PHASE_2_COMPLETION.md` preserves its original content and adds a top-level scope clarification separating the narrower Perception & Representation work package from current BM-01–BM-12 whole-Brain Phase 2. Current blob: `faa5cace14d13179d717438be61f533ac5b8ef97`.
+- `docs/JARVIS_BRAIN_MASTER_BLUEPRINT.md` now has a top-level historical/superseded notice linking to the accepted Brain Mechanism Specification and current Phase 2 map, while preserving the original blueprint content. Change commit: `cb7b082a153f10156345484525a5054bf44e6988`; new blob: `7ee8b5a399cda312d2c0be15d8244e9260d3b828`.
+
+These are documentation preservation changes only. No historical document or branch was deleted or moved.
+
+### 51.3 Updated R3-01 disposition
+
+**Bounded main-tree conflict scan:** completed for the pinned tracked documentation set; only the legacy Phase 2 completion file contains the conflicting whole-Brain completion phrase.  
+**Legacy scope:** the working interpretation is that this is a narrower Perception & Representation work package. The scope clarification is present on PR #179 and the original statements remain intact.  
+**Still open:** the Project Director's conversational “Ok finish phase tow” is treated as authorization to proceed with this working interpretation, but it does not restate the exact historical scope in a durable decision record. If formal authority requires an explicit written scope decision, that remains outstanding. An all-branches/all-artifacts scan and independent verification also remain outstanding.
+
+### 51.4 Exact-head build evidence
+
+The latest report commit before this section, `e06a22faa535b38d4f98566968509688873e245f`, completed Native Brain Build run `42272147335`, job `128079137294`, with Configure and Build successful. No CTest step was present. This validates build compatibility of the documentation branch's synthetic PR workflow context only; it does not execute the registered test suites or resolve runtime findings.
+
+### 51.5 Status
+
+The main-tree documentation authority scan and three preservation/link updates are complete within the bounded scope above. R3-01 is **partially resolved**, not fully cleared. Phase 2 remains IN PROGRESS; Gate A remains NOT CLEARED; Gate B remains UNASSESSED. Independent review, owner acceptance and the outstanding technical test/implementation obligations remain separate requirements.
