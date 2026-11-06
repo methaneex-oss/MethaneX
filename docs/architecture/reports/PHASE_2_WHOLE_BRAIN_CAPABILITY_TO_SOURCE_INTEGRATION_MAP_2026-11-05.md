@@ -2460,7 +2460,7 @@ Until that evidence exists, classify the C++ runtime as an integrated native sub
 
 ## 32. Journal append failure semantics — second persistence finding
 
-A deeper inspection of the journal writer found a separate failure-path gap from P2-I-013. This finding concerns a single event append's rollback and the meaning of "durable", rather than the multi-event learning transaction.
+A deeper inspection of the journal writer found a separate failure-path gap from P2-I-013. This finding concerns single-event append rollback, startup repair of a malformed journal tail, and the meaning of "durable", rather than the multi-event learning transaction.
 
 ### Direct source evidence
 
@@ -2480,7 +2480,7 @@ There are two related conditional failure paths. First, if an append partially w
 
 Separately, even a successful append currently establishes stream-flush completion, not a documented power-loss durability guarantee. Any use of "durable" in the report or product contract must specify whether it means process-restart persistence under normal OS operation or stable-storage persistence after abrupt machine failure.
 
-### Finding P2-I-014 — Journal rollback failure is unchecked and stable-storage durability is unspecified
+### Finding P2-I-014 — Journal append rollback and startup tail-repair failures are unchecked; stable-storage durability is unspecified
 
 - Severity: Medium (provisional; may be higher if the product contract promises crash/power-loss durability).
 - Confidence: High for the unchecked rollback result and absence of fsync-like calls in the inspected writer; Medium for the operational loss scenario until fault-injection reproduction.
