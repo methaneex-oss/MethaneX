@@ -198,3 +198,14 @@ This review does **not**:
 - claim that either newly identified failure path has been reproduced by execution.
 
 No production source, tests, build configuration, workflows or shared runtime state were modified by this review. The only intended repository change is this review document.
+
+
+## 8. Reviewer identity and formal GitHub submission limitation
+
+This review was performed in the Reviewer role assigned for this task and was kept separate from the Main Builder's implementation work. However, the connected GitHub identity is the same repository account that authored PR #179. GitHub rejected a formal `REQUEST_CHANGES` review on PR #179 with HTTP 422: “Review Can not request changes on your own pull request.”
+
+Accordingly:
+- This document and PR #188 publish the technical review findings and evidence.
+- A top-level comment linking this review was added to PR #179.
+- No formal GitHub review state was submitted on PR #179.
+- Under the repository's independent-review separation rule, this artifact must not be treated as a substitute for a review submitted by a genuinely separate GitHub reviewer identity. A separate reviewer must verify this report and submit the formal review decision before the independence requirement is considered satisfied.
