@@ -58,7 +58,7 @@ There is deliberately no requirement that the entire project be written in one l
 
 JARVIS is under active foundational development. The current work is focused on completing and integrating the cognitive substrate before higher-level device, interface and deployment layers are built on top of it.
 
-The current whole-Brain Phase 2 status and evidence map is maintained in the [Phase 2 — Whole-Brain Capability-to-Source Integration Map](docs/architecture/reports/PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md). It remains an in-progress investigation, not a completion or implementation authorization.
+The current BM-01–BM-12 source-integration investigation is maintained in the [Phase 2 — Whole-Brain Capability-to-Source Integration Map](docs/architecture/reports/PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md). It is a useful partial map, not proof that the complete future Brain has been architecturally defined. The corrected planning scope is in [Whole-Brain Planning Scope and Builder Correction](docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md).
 
 ## Philosophy
 
