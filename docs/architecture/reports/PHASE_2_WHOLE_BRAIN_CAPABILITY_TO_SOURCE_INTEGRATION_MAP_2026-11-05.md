@@ -3421,3 +3421,79 @@ At this report revision:
 
 The Builder must close each Phase 2 obligation with one of the following evidence-backed dispositions: completed and verified; accepted with explicit owner authority; deferred with owner, rationale and carry-forward; or blocked with exact dependency. “Everything cleared” must not be used as a status claim while any mandatory gate, acceptance review, test, owner decision or traceability obligation remains open.
 
+
+
+---
+
+## 50. Follow-up source audit and missing reference deliverable (2026-11-06)
+
+### 50.1 Human-cognition and MCU J.A.R.V.I.S. comparison
+
+The required comparison artifact has now been drafted in:
+
+- `docs/architecture/reports/PHASE_2_HUMAN_AND_MCU_REFERENCE_COMPARISON_2026-11-06.md`
+- PR #191, draft and unmerged, head `609d38ede50bbdd98a93dfed112781eacabee9fd`.
+
+It covers BM-01 through BM-12 and distinguishes empirical human-cognition references, fictional MCU inspiration and concrete software mechanisms. Each mechanism has a functional overlap, difference, inference limit and test direction. The scientific discussion explicitly qualifies contested predictive-processing claims and domain-generality claims about metacognition.
+
+**Disposition:** Deliverable drafted; independent challenge and Project Director acceptance remain open. PR #191 is not merged and must not be treated as an accepted authority.
+
+### 50.2 R3-02 — Memory metadata recovery: refined source-level findings
+
+**Exact audited main baseline:** `1273ddbcd0087d189e01388ded2d362fb1e058d2`.  
+**Source:** `core/cpp/src/memory.cpp`, blob `ba72a897306d4761246d0deab2fbab37c49d372f`; `core/cpp/include/jarvis/core/memory.hpp`, blob `f3662038237246efa51155f940d77564f144d6d9`.
+
+The bounded re-read confirms:
+
+1. Metadata header handling returns silently when the file cannot be opened, magic is invalid, the count header is truncated or the count exceeds `kMaxMetadataRecords`. The caller receives no distinction between first-run absence, corruption, truncation, incompatibility or I/O failure.
+2. Records are decoded and applied one at a time directly to live `metadata_` entries. A later malformed/truncated record returns after earlier records have already changed tier/salience/confidence and incremented `learned_tiers_`. This is a partial-restore path.
+3. A metadata record whose sequence is not present in the journal is silently skipped. Duplicate sequence records are not rejected; each accepted duplicate can increment the learned-tier aggregate again. Trailing bytes after the declared record count are not checked in the inspected function.
+4. The format exposes a magic value and count but no separately decoded schema/version field in this implementation. A magic change may be treated as a generic invalid header rather than a caller-visible incompatible-version result.
+5. The existing `jarvis_memory_architecture_suite` tests a successful promotion/snapshot/restart path and restored tier/salience/confidence. It does not exercise malformed metadata, partial-record failure, duplicate/unknown sequence, invalid enum/value, trailing bytes or no-partial-mutation guarantees. The target is registered in `core/cpp/tests/CMakeLists.txt`.
+6. The journal and metadata snapshot are separate persistence artifacts. Reconstructing events from the journal does not recreate learned tier/salience/confidence metadata. Any fallback to journal-derived defaults must therefore be explicit and observable as degraded metadata recovery.
+
+**Required correction design:** Decode into a temporary validated snapshot; validate header, count, every record, sequence uniqueness/membership, enum range, finite/ranged values and exact file termination; only then atomically apply the complete snapshot and rebuild aggregate indexes from the validated records. On failure, leave journal-derived metadata unchanged and publish a structured recovery status plus diagnostics. Define first-run/absent separately from corrupt, truncated, unsupported-version and I/O-failed. Do not increment learned-tier aggregates from duplicate or partially applied records.
+
+**Acceptance matrix still required:** valid snapshot; absent metadata; invalid magic; truncated header; excessive count; truncation at every record boundary; invalid tier; non-finite and out-of-range values; unknown sequence; duplicate sequence; trailing bytes; valid first record followed by invalid second record; interrupted snapshot replacement; restart after each recovery status; and assertions that no partial metadata or double-counted tier state leaks into retrieval.
+
+**Status:** Source-level omission and failure path confirmed; no corruption experiment or production correction has been executed. R3-02 remains open.
+
+### 50.3 R3-04 — Empty-premise reasoning: exact test gap
+
+**Exact audited main baseline:** `1273ddbcd0087d189e01388ded2d362fb1e058d2`.  
+**Source:** `core/cpp/src/reasoning.cpp`, blob `feec78b2e8a1f2b0b58733fd509e4e5a750258fc`; `core/cpp/include/jarvis/core/reasoning.hpp`, blob `5c6f82797d4f5052ad5d71a25624de192a2c87d9`.
+
+The empty-premise branch returns `ReasoningKind::consistency`, `valid=true`, zero confidence and no conclusions. The current `jarvis_reasoning_architecture_suite` exercises consistent premises, contradiction, ordinary consistency, bounded inference and deduction. It does **not** include an empty-premise assertion. Its CMake target and CTest registration exist, but registration is not execution evidence.
+
+The inspected `CognitiveCycle::run` retrieves ranked memories into `result.context.memories`, then constructs reasoning premises only from `result.context.beliefs`; retrieved memories are not supplied to the reasoning problem. The reasoning result is stored in cycle context, but the inspected function does not consume it to qualify downstream beliefs, predictions, goal selection, planning or decisions. These are separate integration gaps: changing the empty-input result alone will not connect memory-supported reasoning to downstream cognition.
+
+**Required correction design:** Add an explicit unresolved/insufficient-evidence status or kind, with a stable machine-readable reason and no conclusions. Define the semantics of `valid` unambiguously (structural validity versus evidential support); do not allow callers to treat an empty-evidence result as a supported inference. Downstream consumers must gate on the explicit status. Preserve regression behavior for supported premises and contradictory premises.
+
+**Acceptance matrix still required:** empty premises with empty and non-empty causal links; one supported premise; contradictory premises; malformed/unsupported premises; stable reason code; no success signal; downstream consumer rejection; exact-head build and registered CTest execution.
+
+**Status:** Source/specification mismatch and test gap confirmed; no correction or test execution has been performed. R3-04 remains open.
+
+### 50.4 CI evidence for the report update
+
+The report update commit `f6267456560a08054d69f7960d2951452b14017c` has a completed successful GitHub Actions `Native Brain Build` run: run `42271797166`, job `128077942862`. Its steps are Configure and Build; it contains no CTest step. This is build evidence for the exact report commit's synthetic PR workflow context, not evidence that any test suite ran or that runtime defects were corrected.
+
+The comparison artifact commit `609d38ede50bbdd98a93dfed112781eacabee9fd` has a separate `Native Brain Build` run `42272045285` in progress at the time of this record. Its final result must be checked before claiming the comparison branch passed CI.
+
+### 50.5 Updated obligation status
+
+| Obligation | Current disposition |
+|---|---|
+| BM-01–BM-12 source map | Substantially mapped; end-to-end acquisition/host and several recurrent edges remain incomplete |
+| Human/MCU comparison | Drafted in PR #191; independent review and Project Director acceptance outstanding |
+| R3-01 legacy scope | Working interpretation recorded in §49; durable explicit owner scope decision and repository-wide authority search still required |
+| R3-02 metadata recovery | Source failure path refined; correction design and corruption/recovery tests open |
+| R3-03 duplicate report authority | PR #179 selected as canonical working report; PR #180 closed as superseded, not merged |
+| R3-04 empty-premise reasoning | Source/spec mismatch and missing test confirmed; result contract, implementation and tests open |
+| R1/R2 mainline persistence | Source findings recorded in §47; complete mutator audit, failure injection and recovery proof open |
+| P2-I-037/P2-I-038 and action/recovery findings | Open; require host boundary, typed provider failures, authorization lifecycle and failure-path tests |
+| Independent review | Still requires a genuinely separate GitHub reviewer identity and formal review submission |
+| Gate A | NOT CLEARED |
+| Gate B | UNASSESSED |
+| Phase 2 exit | NOT MET |
+
+**Scope:** This update adds source-backed analysis and records a new draft architecture deliverable. It changes no runtime source, test, CMake configuration, workflow, donor code, implementation baseline or gate state. It does not claim Phase 2 completion.
