@@ -2401,7 +2401,7 @@ The three artifacts record:
 - Zero unresolved action-consequence forecasts in every seed.
 - 1,429–1,439 unresolved non-action-consequence predictions in those same snapshots.
 
-The final trial log reports a larger count of resolved action-consequence predictions accumulated over the full run (586–590), because its memory/event accounting and the final retained prediction snapshot are not the same denominator. Do not combine these counters as if they were interchangeable. The zero unresolved action-consequence count is useful evidence that action-consequence forecasts were resolved in the recorded run; it does not establish that every other prediction class is resolved.
+The summary script reads the final row of checkpoints.csv, whose last periodic checkpoint is at approximately 578 seconds. The trial.log completion record is written after the run finishes at approximately 600 seconds and reports a later prediction snapshot (586–590 resolved predictions and 2,215–2,239 prediction records). These values differ because the checkpoint precedes the final run interval, not because the two outputs use different metrics: both use the same prediction_metrics snapshot calculation. Cite the checkpoint and completion values with their timestamps and do not present them as contradictory counts. The zero unresolved action-consequence count is useful evidence that action-consequence forecasts were resolved in both snapshots; it does not establish that every other prediction class is resolved.
 
 ### Experimental design gap
 
