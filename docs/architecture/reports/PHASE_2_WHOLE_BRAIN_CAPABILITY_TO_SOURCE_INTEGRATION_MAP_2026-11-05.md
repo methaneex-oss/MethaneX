@@ -2090,7 +2090,7 @@ This checklist records the second-pass validation performed before handing this 
 ### 25.2 Coverage and evidence checks
 
 - [x] BM-01 through BM-12 have an explicit source-to-capability map and an evidence-backed status; the map does not infer capability from names or test filenames.
-- [x] Cross-mechanism findings P2-I-001 through P2-I-033 are present with no missing numeric IDs.
+- [x] The original cross-mechanism finding sequence P2-I-001 through P2-I-033 is present with no missing numeric IDs; subsequent withdrawals and additions are reconciled in §35.
 - [x] Donor action feedback, runtime decision path, memory/replay, goal progress, affective/developmental learning and evolution state ownership are distinguished from the main baseline.
 - [x] The action outcome → affective-learning → capability-learning append sequence is described as separate event writes, not an atomic transaction.
 - [x] EvolutionHistory and EvolutionAdoptionJournal are correctly classified as in-memory projections reconstructed from Brain Memory events, not separate durable stores.
@@ -2538,7 +2538,7 @@ This batch improves the accuracy and navigability of the report; it does not com
 
 ---
 
-## 34. Runtime feedback persistence acknowledgement — follow-up to P2-I-023 and P2-I-029
+## 34. Finding P2-I-035 — Runtime feedback persistence acknowledgement is not reflected in completion metrics
 
 **Audit date:** 2026-11-06  
 **Affected donor revision:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`  
@@ -2568,7 +2568,15 @@ These are source-derived failure-path outcomes, not reproduced incidents. The in
 
 ### Finding disposition and required correction
 
-This evidence **extends P2-I-029** (persistence acknowledgement is not surfaced through the result/metrics boundary) and **P2-I-023** (a logical learning update can be split across independent journal appends). It does not warrant a new numeric finding because the underlying acceptance concerns are already represented by those findings.
+**Finding P2-I-035 — Runtime feedback completion metrics can report evidence as processed even when its learning event was not persisted.**
+
+- **Severity:** Medium (provisional; impact depends on whether `feedback_processed` is consumed as an operational or acceptance signal).
+- **Confidence:** High for the control-flow and missing-status evidence; Medium for the failure outcome until append failure is deterministically injected.
+- **Status:** Confirmed code-level acknowledgement gap; conditional append-failure scenarios not reproduced.
+- **Affected revision:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+- **Affected code:** `CognitiveRuntime::process_feedback`, `CognitiveCycle::process_outcome`, `Brain::learn`, and the `Memory::append` boundary.
+- **Root cause:** `CognitiveFeedbackResult` exposes no unambiguous evidence-persistence status. `Brain::learn` returns a scalar reliability value that can be zero both after append failure and after a valid zero-reliability update. `CognitiveRuntime::process_feedback` checks prediction resolution and goal assimilation but does not inspect the evidence-learning result before incrementing `feedback_processed`.
+- **Impact:** a queue item can be counted as successfully processed even though its evidence-learning event was not appended/replayed. With prediction-plus-evidence feedback, the prediction outcome may persist while the separate evidence event fails, leaving a partial result that the current metric reports as fully processed.
 
 Required Builder/Tester evidence:
 
@@ -2577,6 +2585,8 @@ Required Builder/Tester evidence:
 3. Define whether prediction resolution and evidence learning form one logical feedback transaction. If partial completion is permitted, persist a recoverable pending marker or equivalent reconciliation identity; retries must be idempotent.
 4. Inject `Memory::append` failure for (a) evidence-only feedback and (b) combined prediction-plus-evidence feedback. Assert the returned per-component status, `feedback_processed`/`feedback_failed` counters, live Brain state, journal contents, restart/replay state and retry behavior.
 5. Include a successful zero-reliability evidence case so the test proves that a numeric return of zero is not mistaken for append failure.
+
+**Relationship to existing findings:** P2-I-029 concerns the action-execution result/metrics boundary after `Brain::execute_action`; P2-I-035 concerns the later queued-feedback processing boundary and `feedback_processed` accounting. They share the general persistence-acknowledgement principle but are distinct caller/result paths. P2-I-023 remains related because prediction resolution and evidence learning can be separate persisted events; P2-I-035 specifically addresses the runtime's false-success accounting when evidence assimilation is not acknowledged.
 
 ### Test-coverage judgement
 
@@ -2600,10 +2610,10 @@ The full report contained reused numeric labels in later appended batches. These
 - **P2-I-013** remains the mainline finding that the inspected main CognitiveRuntime does not connect cycle assessments to the standalone Brain action-execution API.
 - **P2-I-014** now identifies the lower-level journal append rollback and startup tail-repair failure/durability issue in §32.
 - **P2-I-023** is the canonical multi-event action-learning atomicity finding. The earlier source-trace statement in §13.5 and the detailed failure-path treatment in §28 are explicitly cross-referenced to this same finding rather than creating competing IDs.
-- **P2-I-029** remains the action-execution/persistence-acknowledgement finding. The evidence-only and prediction-plus-evidence feedback path in §34 extends its caller-visible acknowledgement concern and P2-I-023's partial-commit concern.
+- **P2-I-029** remains the action-execution/persistence-acknowledgement finding. **P2-I-035** separately covers the evidence-only and prediction-plus-evidence feedback path's caller-visible acknowledgement and completion-metric gap; it cross-references P2-I-023's partial-commit concern.
 - **P2-I-034** is withdrawn. It is retained only as an audit trail for the incorrect Release-assertion conclusion; it is not an active finding or Gate A blocker.
 
-The active finding set is P2-I-001 through P2-I-033. Repeated references to an existing finding are expansions or cross-references, not additional findings. The report does not claim that the withdrawn P2-I-034 is active.
+The active finding set is P2-I-001 through P2-I-033 plus P2-I-035. P2-I-034 is withdrawn and intentionally not reused. Repeated references to an existing finding are expansions or cross-references, not additional findings.
 
 ### 35.2 Runtime-feedback follow-up verification
 
@@ -2614,12 +2624,12 @@ The §34 source trace was independently checked against the donor blobs for `cog
 - `Brain::learn` returns numeric zero both when the Memory append fails and when a valid zero-reliability update is learned; the scalar return is not a persistence status.
 - The current successful runtime tests do not inject failure at the evidence-learning append. The report labels the failure sequences as conditional source-derived outcomes, not reproduced incidents.
 
-The follow-up is correctly treated as an extension of existing acceptance findings, not as a new numeric finding.
+P2-I-035 is a distinct finding because it concerns the queued-feedback processing boundary and its completion metric, rather than the action-execution result boundary in P2-I-029. It cross-references P2-I-023 because the prediction outcome and evidence-learning event can partially persist.
 
 ### 35.3 Report structure and source boundaries
 
 - Sections are numbered consecutively through §35, with no duplicate section numbers.
-- Active finding IDs are reconciled as stated above; the CI correction and the §34 follow-up are not double-counted as separate numbered findings.
+- Active finding IDs are reconciled as stated above; the CI correction remains an unnumbered report-history correction, while §34 contains distinct finding P2-I-035 and explicit cross-references to P2-I-023/P2-I-029.
 - Donor evidence remains pinned to PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
 - The donor branch remains unchanged by this review. The report and its corrections are confined to the Phase 2 review branch and PR #179.
 - No production source, test, workflow or build configuration was edited by this review batch.
