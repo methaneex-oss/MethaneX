@@ -176,6 +176,7 @@ Main currently contains fragments of these paths. It does not yet demonstrate th
 **Consumers:** Current cycle context receives memories. The inspected reasoning invocation does not consume them. Other uses in the source must be distinguished from the specific BM-12 integration requirement; mere workspace/context availability is not downstream use.
 
 **Gaps**
+- `Memory::load_metadata` has a separate, source-confirmed recovery weakness: metadata file open/header/count/decode failures return without a caller-visible status. Records are applied incrementally, so a malformed later record can leave earlier metadata applied while later records retain journal-derived defaults. This is not closed by event-journal replay and is not covered by the existing successful-restart test; see R3-02 in §46.
 - Current recall is structured attribute-overlap retrieval, not general semantic/conceptual retrieval across different wording, modalities or abstraction levels.
 - Tier labels do not prove distinct semantic/procedural memory functions.
 - Retrieval usefulness/irrelevance is not tracked as a complete evaluated lifecycle.
@@ -427,6 +428,7 @@ Main currently contains fragments of these paths. It does not yet demonstrate th
 **Critical integration finding:** CognitiveCycle retrieves ranked memories into `result.context.memories`, then builds ReasoningProblem from `result.context.beliefs` and `result.context.causal_links` only. Memories are not passed to the reasoning engine. The result is stored in cycle context but is not used in the inspected remainder to revise beliefs, change prediction premises, evaluate goals or influence planning/decision. Downstream work is not gated on reasoning validity.
 
 **Gaps**
+- `ReasoningEngine::solve` currently returns `valid=true`, `kind=consistency`, and `confidence=0.0` when `problem.premises` is empty. This is a source-confirmed contract mismatch: the accepted BM-12 specification requires an explicit insufficient-evidence/unresolved result, not a successful substantive-inference signal. The exact acceptance invariant is tracked as R3-04 in §46.
 - No explicit premise identity/provenance/scope/temporal status, assumptions, alternatives, counterexamples or conclusion dependencies in the interface.
 - No evidence that a retrieved memory can materially change an inference.
 - No general deduction/explanation/induction/analogy breadth demonstrated by bounded causal-link traversal.
@@ -3054,6 +3056,10 @@ The next evidence owner is the Builder/Project Director: identify the executable
 | Donor BM-11 fairness/shutdown/result recovery (IR-03) | Main Builder defines contract; Independent Tester verifies donor behavior | Sustained-load fairness, in-flight-action shutdown, result saturation, restart/retry/idempotency test evidence |
 | PR #173 / PR #174 finding provenance (IR-02) | Main Builder recovers records; Project Director accepts bounded source limitation if unrecoverable | Separate status ledger; original PR #174 follow-on review artifact recovered or its absence explicitly accepted |
 | Human/MCU comparison artifact (IR-04) | Main Builder / architecture evidence owner; Independent Reviewer challenges | `PHASE_2_HUMAN_AND_MCU_REFERENCE_COMPARISON_2026-11-06.md`; Project Director accepts or approves deferral |
+| R3-01 legacy phase-scope conflict | Main Builder documents scope; Project Director confirms interpretation; Independent Reviewer verifies | Scope notice in legacy completion document, current-authority link and repository conflict register |
+| R3-02 Memory metadata recovery | Main Builder defines/implements only after authorization; Independent Tester verifies | Corrupt/truncated/missing metadata recovery contract, deterministic tests and caller-visible status |
+| R3-03 competing PR #179/#180 report authority | Project Director decides; Main Builder records decision | One selected working authority, explicit disposition of the other PR, no silent duplicate same-path deliverables |
+| R3-04 empty-premise reasoning result | Main Builder defines/implements only after authorization; Independent Tester verifies | Specification-conformant unresolved result and deterministic empty-premise acceptance test |
 
 ### 44.4 Acceptance rule
 
@@ -3184,3 +3190,87 @@ The existing §9.10 comparison criterion is retained but now names a bounded del
 **Current status:** Phase 2 remains IN PROGRESS. Gate A remains NOT CLEARED. Gate B is not assessed or cleared here. No implementation baseline is selected. PR #97 remains an unmerged donor. No production implementation, donor port, merge, deployment or gate clearance is authorized. The PR #174 follow-on F-02/F-03 source artifact and the human/MCU comparison deliverable remain outstanding. The IR-03 runtime scenarios remain unexecuted.
 
 **Next action:** Submit this exact updated PR #179 head for independent re-review against IR-01 through IR-04. The reviewer should independently reproduce the main/donor perception call graph; verify the four-row finding provenance ledger and missing-source limitation; inspect donor scheduler/shutdown/result queue code and assess the acceptance matrix; and verify that the human/MCU comparison deliverable has a named owner and explicit Project Director disposition. The reviewer should retain the REVISE verdict unless the documented corrections and outstanding authority/evidence conditions are independently satisfied.
+
+
+---
+
+## 46. Third independent review response — R3-01 through R3-04
+
+**Review source:** PR #190, review commit `a1df22531765b7022f6bfbcfd9f3f5251cf5adf5`.  
+**Reviewed target:** PR #179 at `6f2c2cf05196e69a48f5deefcc3f4609e258c19a`.  
+**Scope of this response:** Documentation, repository authority clarification and source-level defect recording. No production implementation, test code, donor port, gate decision, merge or baseline selection is authorized by this response.
+
+### 46.1 R3-01 — Legacy Phase 2 completion document conflicts with whole-Brain status
+
+**Disposition:** AGREE that the repository presents a material scope/status ambiguity. **Confidence:** High that the documents appear contradictory; medium on the intended historical meaning of the legacy document. **Status:** Documentation clarification applied; Project Director confirmation remains required.
+
+**Evidence:** At the audited main baseline `1273ddbcd0087d189e01388ded2d362fb1e058d2`, `docs/JARVIS_PHASE_2_COMPLETION.md` (blob `7e001e63703bf07efe95c321c1f6c4272ae626f7`) names its phase as “Perception & Representation” and lists provider contracts, provider isolation, representation types, evidence/provenance, fallback normalization and CMake integration. It then says “Phase 2 is structurally complete and ready for system validation before Phase 3” and identifies the World Model as the next phase. The current whole-Brain report maps BM-01–BM-12 and explicitly remains IN PROGRESS.
+
+**Interpretation boundary:** The legacy document's own `## Phase` field narrows its listed completed work to Perception & Representation. That is consistent with a completed work package or earlier phase taxonomy, but the document does not explicitly state that it is a historical sub-phase or that its “Phase 2” numbering is independent of the current whole-Brain Phase 2. The Builder must not silently rewrite the original decision as though that ambiguity had already been formally resolved.
+
+**Correction applied:** The legacy document now carries a dated scope clarification immediately below its title. It preserves the original completion record, identifies the listed scope as Perception & Representation, states that it does not establish completion of the current whole-Brain BM-01–BM-12 Phase 2, and links to this current working integration map. The README development-status section now links to the current whole-Brain report. This is a clarification, not deletion or silent rewriting of the legacy record.
+
+**Remaining authority decision:** The Project Director must confirm whether the legacy document is (a) a historical Perception & Representation work-package completion record under an earlier numbering scheme, or (b) an obsolete/incorrect whole-Brain Phase 2 completion claim. If (a), retain it as a scope-limited historical artifact. If (b), approve a superseded notice and authority-map entry. Until confirmed, the whole-Brain report remains the working Phase 2 status map and no completion claim is accepted from the legacy document.
+
+**Acceptance evidence:** Exact updated legacy/README/report blobs; repository-wide search for other unqualified whole-Brain Phase 2 completion claims; Project Director's written scope disposition; independent verification of the cross-links and status wording. The current response has not performed an exhaustive repository-wide document search, so it does not claim that no other conflicting document exists.
+
+### 46.2 R3-02 — Memory metadata recovery can silently produce partial restoration
+
+**Disposition:** AGREE. **Confidence:** High for the inspected source semantics. **Status:** Source-confirmed mainline defect recorded; production fix and failure-injection tests remain unauthorized and open.
+
+**Exact source:** Main baseline `1273ddbcd0087d189e01388ded2d362fb1e058d2`; `core/cpp/src/memory.cpp`, blob `ba72a897306d4761246d0deab2fbab37c49d372f`, `Memory::load_metadata` lines 160–189.
+
+**Observed behavior:**
+
+1. Failure to open the metadata file returns without a recovery result.
+2. Invalid magic, missing/truncated header, or record count above `kMaxMetadataRecords` returns without a recovery result.
+3. The loader applies each successfully decoded record directly to `metadata_` and increments `learned_tiers_` while iterating.
+4. If a later record fails `read_metadata_record`, the function returns after earlier records have already been applied. There is no temporary all-or-nothing snapshot, rollback, quarantine marker, corrupt/degraded status or caller-visible error in this function.
+5. Event-journal reconstruction and metadata restoration are distinct. A valid journal does not recreate the lost tier/salience/confidence snapshot. Records not restored retain the metadata defaults established during journal loading; previously applied records can remain partially restored.
+
+This does not establish that event history is lost. It establishes that learned metadata can be missing or partially restored without an explicit recovery status, and that retrieval/tier behavior may therefore differ after restart. The existing successful restart/promotion coverage does not test malformed or truncated metadata. No corruption experiment was executed in this response.
+
+**Required implementation contract (not implemented here):** Metadata restoration must have an explicit outcome such as restored, absent/first-run, corrupt, truncated, incompatible-version or I/O-failed. Decode/validate the complete snapshot before mutating live metadata, or otherwise guarantee rollback to a defined safe state. If recovery falls back to journal-derived defaults, expose degraded status and preserve enough evidence to diagnose/rebuild the metadata; do not silently present a partial snapshot as a complete restore. The exact recovery policy (fail construction, quarantine and rebuild, or continue degraded) requires an explicit design decision and must not be guessed in this documentation patch.
+
+**Required deterministic tests:** valid metadata restore; absent metadata on first run; bad magic; truncated header; excessive count; truncation at every record boundary; invalid enum/value fields; unknown event sequence; valid first record followed by invalid second record; duplicate records; interrupted write; and restart after recovery. Assert no partial live-state mutation on failed validation, accurate recovery status, stable journal history, deterministic fallback metadata and no double-counting of `learned_tiers_`.
+
+**Acceptance evidence:** Exact source-level contract; test coverage for the corruption matrix; failure-injection execution on the exact candidate SHA; restart/replay evidence proving retrieval/tier behavior is either restored or explicitly degraded; independent review. R3-02 remains open until these are completed under separate implementation authorization.
+
+### 46.3 R3-03 — PR #179 and PR #180 compete for the same report path
+
+**Disposition:** AGREE. **Confidence:** High. **Status:** Conflict documented; Project Director disposition required; no PR was closed, retargeted or merged.
+
+**Verified repository state:** PR #179 is open/draft/unmerged at `6f2c2cf05196e69a48f5deefcc3f4609e258c19a`, based on `docs/jarvis-project-governance-rules-20261105`. PR #180 is open/draft/unmerged at `6ca140300b914ed981a50301bbf1d82a5bfe4d8b`, based on `spec/brain-mechanism-specification-20261103`. Both add `docs/architecture/reports/PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md`. The branches have different bases and are not a simple linear succession. PR #179 is materially expanded and includes later review-response material; PR #180 remains an earlier investigation with its own base/provenance.
+
+**Correction applied:** This report now records the two PRs as competing proposals for one canonical destination, rather than independent complementary deliverables. It identifies PR #179 as the current expanded working candidate for review, not as an already accepted or merged authority. PR #180 remains preserved and unmerged.
+
+**Project Director decision required:** Select the canonical report branch/PR and explicitly disposition the other: close as superseded after preserving its provenance, retarget/reconcile it if its base contributes required material, or retain it only as a clearly labelled historical investigation outside the canonical destination. Do not merge both same-path files or assume that larger content alone grants authority. The Builder has not made this governance decision.
+
+**Acceptance evidence:** Written Project Director decision; exact selected head/base; explicit disposition of the other PR; no two active PRs proposing conflicting contents for the same canonical path; independent verification that the chosen report links to the accepted specification and current governance authority.
+
+### 46.4 R3-04 — Empty-premise reasoning reports a successful valid result
+
+**Disposition:** AGREE. **Confidence:** High. **Status:** Mainline source/specification mismatch recorded; implementation and test remain unauthorized and open.
+
+**Exact source:** Main baseline `1273ddbcd0087d189e01388ded2d362fb1e058d2`; `core/cpp/src/reasoning.cpp`, blob `feec78b2e8a1f2b0b58733fd509e4e5a750258fc`, `ReasoningEngine::solve` lines 84–89.
+
+**Observed behavior:** When `problem.premises.empty()`, the implementation returns `ReasoningKind::consistency`, `valid=true`, `confidence=0.0`, and explanation “No premises were supplied.” The explanatory text and zero confidence signal absence of evidence, but `valid=true` remains a potentially misleading success predicate for callers. The inspected CognitiveCycle does not gate downstream processing on reasoning validity, which is a separate integration gap and is not repaired by this finding.
+
+**Specification requirement:** The accepted BM-12 contract requires an explicit insufficient-evidence/unresolved result when no premises are supplied, rather than a successful substantive inference. The source behavior therefore violates the result contract even though confidence is zero. The specification's exact file path/line anchors must be preserved from the accepted PR #174 specification artifact when the implementation test is authored; the independent review cites the empty-premise rule at specification lines 801–810.
+
+**Required acceptance test:** Construct a `ReasoningProblem` with no premises and arbitrary/empty causal links. Assert that the result is explicitly classified as insufficient-evidence/unresolved (or the exact accepted equivalent), contains no conclusions, does not carry a success/validity signal that callers can interpret as a supported inference, and exposes a stable machine-readable reason. Add companion cases with one supported premise and with contradictory premises to ensure the empty-input correction does not collapse ordinary consistency or contradiction behavior. Test downstream callers so an unresolved result cannot be consumed as a qualified conclusion.
+
+**Required contract decision:** Prefer a distinct result status/kind for unresolved/insufficient evidence. If the existing `valid` field is retained, document whether it means structurally well-formed or evidentially supported; do not overload it ambiguously. The empty-premise path must never be represented as a successful substantive inference. No implementation choice is made in this report.
+
+**Acceptance evidence:** Specification-to-enum/result mapping; deterministic empty-premise test and neighboring regression tests; exact-head build/CTest execution; downstream caller behavior; independent review. R3-04 remains open until verified.
+
+### 46.5 Consolidated status and approval boundary
+
+| Finding | Documentation response | Remaining status |
+|---|---|---|
+| R3-01 | Legacy scope clarification and README/report cross-links added | Project Director must confirm historical scope/supersession; repository-wide conflict search and independent verification remain |
+| R3-02 | Main Memory partial-restore behavior and acceptance contract recorded | Production recovery contract, implementation authorization, corruption tests and runtime evidence remain open |
+| R3-03 | Same-path PR conflict and decision options recorded | Project Director must select canonical authority and disposition the other PR |
+| R3-04 | Empty-premise source/spec mismatch and deterministic acceptance test recorded | Result-contract decision, implementation authorization, tests and execution remain open |
+
+No production code, tests, CMake files, workflows, donor files or runtime state were changed. No build, CTest run, benchmark, sanitizer or failure-injection experiment was executed. Phase 2 remains IN PROGRESS. Gate A remains NOT CLEARED. Gate B remains unassessed. No implementation baseline is selected. PR #97 remains an unmerged donor. No merge, donor approval, production fix or implementation authorization is implied.
