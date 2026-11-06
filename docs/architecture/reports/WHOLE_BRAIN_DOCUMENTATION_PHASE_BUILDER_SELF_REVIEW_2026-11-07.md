@@ -23,7 +23,7 @@ The following files were fetched again from the change branch after writing. Eac
 3. `docs/architecture/reports/PHASE_1_REVIEW_CORRECTIONS_AND_SCOPE_RECONCILIATION_2026-11-05.md` — clarification of the bounded Phase 1 conclusion.
 4. `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md` — preservation and authority clarification.
 5. `docs/architecture/reports/PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md` — scope banner and section 66 addendum.
-6. `docs/architecture/reports/PHASE_2_HUMAN_AND_MCU_REFERENCE_COMPARISON_2026-11-06.md` — explicit limitation that its comparison covers BM-01–BM-12 only.
+6. `docs/architecture/reports/PHASE_2_HUMAN_AND_MCU_REFERENCE_COMPARISON_2026-11-06.md` — a copy of the comparison document with a scope addendum. **Known issue:** PR #191 already adds this same path on a separate branch. PR #192 therefore contains a duplicate same-path addition. This must be resolved by the independent reviewer / Project Director before either PR is accepted; do not merge both versions blindly.
 7. `docs/JARVIS_BRAIN_MASTER_BLUEPRINT.md` — Layer 0–19 sequence marked as historical planning input, not an approved development order.
 8. `docs/JARVIS_PHASE_2_COMPLETION.md` — legacy Perception & Representation phase note disambiguated from current whole-Brain Phase 2.
 9. `README.md` — current whole-Brain planning status and controlling correction linked.
@@ -80,14 +80,15 @@ The independent reviewer should specifically verify:
 1. Whether the correction accurately represents the actual authority/status of PR #171–#191 and the historically accepted PR #174 revision.
 2. Whether the Phase 1 report's declared completion scope and all historical recommendations are characterized without overstating or weakening their original conclusions.
 3. Whether the Phase 2 addendum preserves all original technical findings and does not accidentally imply that all Phase 2 exit criteria are superseded or closed.
-4. Whether all relative/absolute document links resolve from their actual locations and whether the PR branch ancestry includes the intended source documents.
-5. Whether the implementation plan and continuity handoff on the separate PR #175-derived branch require any additional cross-links or a different dependency/base arrangement.
-6. Whether the Builder error record is complete, factual and sufficiently explicit without attributing errors to other project participants.
-7. Whether any existing project governance rule requires a different report location, reviewer identity, submission format or formal review procedure.
+4. Resolve the duplicate same-path addition of the human/MCU comparison in PR #191 and PR #192; determine whether to remove the copy from PR #192 or retarget/rebase through the proper dependency. Do not merge both versions as-is.
+5. Whether all relative/absolute document links resolve from their actual locations and whether the PR branch ancestry includes the intended source documents.
+6. Whether the implementation plan and continuity handoff on the separate PR #175-derived branch require any additional cross-links or a different dependency/base arrangement.
+7. Whether the Builder error record is complete, factual and sufficiently explicit without attributing errors to other project participants.
+8. Whether any existing project governance rule requires a different report location, reviewer identity, submission format or formal review procedure.
 
 ## 6. Disposition
 
-**Builder self-review result: READY FOR INDEPENDENT REVIEW, subject to the limitations above.**
+**Builder self-review result: NOT READY FOR ACCEPTANCE; READY ONLY FOR INDEPENDENT REVIEW OF THE DOCUMENTATION AND THE KNOWN PR-STACKING ISSUE.** The duplicate same-path addition is an explicit unresolved defect in the submitted PR set.
 
 This is not an independent reviewer verdict, not a formal governance acceptance and not a gate decision. The next required action is an independent review by the designated reviewer, followed by the Project Director's decision.
 
