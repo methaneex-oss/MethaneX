@@ -2907,3 +2907,45 @@ This is not a claim that every action needs a short time-to-live or that a stati
 - Donor source remains pinned to PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
 - This update changes only the Phase 2 report branch and PR #179. It does not modify donor production code, tests, workflows or build configuration.
 - Phase 2 remains IN PROGRESS. Gate A remains NOT CLEARED. PR #97 remains an unmerged donor; no implementation baseline is selected and no implementation authorization is implied.
+
+
+---
+
+## 42. Host-boundary audit for P2-I-038 — no in-repository authorization refresh owner identified
+
+**Audit date:** 2026-11-06  
+**Scope:** Follow the runtime authorization value beyond the cognitive C++ library into the checked-in TypeScript operator bridge and the separate engineering-agent subsystem. This is a repository-wide source-tree inspection at donor HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`, not an audit of external deployment infrastructure.
+
+### 42.1 Findings from the cross-language boundary
+
+- The TypeScript `BrainTransport` contract exposes `observe`, `decide` and `capabilities`; it does not expose action execution, authorization grants, grant refresh, revocation, policy version or expiry.
+- `OperatorSession` explicitly documents that communication does not grant execution authority and that authorization remains inside the engineering/runtime boundary. Its implementation only wraps message transport (`send`, `receive`, `connected`). It does not issue, cache, refresh or revoke permissions.
+- `AgentBridgeSession` is a message transport contract with participant/run/workspace identifiers. It has no authorization-policy lifecycle fields or callback.
+- The C++ `engineering::EngineeringAuthorizer` is a separate agent/task-coordination interface. `EngineeringCoordinator::dispatch` and `dispatch_tracked` invoke its `authorize` method before dispatch, but this interface is not the `ActionAuthorizationContext` used by `CognitiveRuntime`/`Brain::execute_action`.
+- The engineering test instantiates `AllowAllAuthorizer`, whose implementation unconditionally returns true. That is test wiring for the engineering-agent coordinator; it is not evidence that the cognitive runtime authorizes all actions, nor evidence of a production policy provider.
+- The repository tree contains no checked-in adapter joining `OperatorSession`/`AgentBridgeTransport` to `CognitiveRuntime` authorization refresh, and no identified policy issuer implementation that can establish the runtime's grant lifecycle.
+
+### 42.2 Revised interpretation of P2-I-038
+
+The prior finding remains correctly scoped as a missing lifecycle contract in the inspected cognitive-runtime path. This cross-boundary inspection removes one possible but unsupported assumption: the checked-in TypeScript operator bridge is not the missing grant-refresh mechanism, and the engineering-agent authorizer is not interchangeable with the Brain action authorizer.
+
+Do not conclude that no external host policy exists. The repository does not contain the deployment host or an identified external authorization service implementation. Therefore the operational question remains unresolved outside the inspected tree. P2-I-038 should remain **Medium / High source-level confidence / UNRESOLVED at system boundary**, rather than being promoted to a confirmed exploitable security vulnerability.
+
+### 42.3 Required evidence to resolve the boundary
+
+1. Identify the actual executable/application host that constructs `CognitiveRuntimeConfig` and supplies `ActionAuthorizationContext`.
+2. If that host is outside this repository, obtain its source/contract and identify the policy issuer, grant lifetime, revocation delivery, runtime replacement/cancellation semantics and fail-closed behavior.
+3. Prove whether a policy change can occur while the runtime remains alive and whether already assessed/queued actions are invalidated before executor invocation.
+4. If the host intentionally creates immutable per-session grants, define the session boundary and prove that revocation terminates the session and prevents all subsequent side effects. A process restart must not silently resume stale queued work.
+5. Add an end-to-end test at the actual host/runtime boundary. Unit tests of `ActionAuthorizer` with a copied vector cannot establish external policy freshness.
+
+### 42.4 Exact source anchors
+
+- [`BrainTransport` observation/decision interface](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/interfaces/typescript/src/brain.ts), blob `291916d45af0c67180542f8d775dba8b8ec1976f`.
+- [`OperatorSession` governance-boundary contract and transport-only implementation](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/interfaces/typescript/src/operator_session.ts), blob `2a699a78bc5beb31ed07cd913e0a527bb64d6bcf`.
+- [`AgentBridgeSession` transport contract](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/interfaces/typescript/src/agent_bridge.ts), blob `cd86f7d5f44e2d30c0401bb4bf02e05328d1c038`.
+- [`EngineeringAuthorizer` and `AllowAllAuthorizer`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/engineering/cpp/include/jarvis/engineering/execution.hpp), blob `2bf187c48bee71bda48ecac6f7135cba3cc7495b`.
+- [`EngineeringCoordinator` authorization call sites](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/engineering/cpp/src/coordinator.cpp), blob `e175dd61aaa3d8302aba6381401305db9f034062`.
+- [`AllowAllAuthorizer` test wiring](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/engineering/cpp/tests/agent_and_console_suite.cpp), blob `7ac8c21e6df0d157d4d95fe87fabae962734139a`.
+
+**Disposition:** P2-I-038 remains open. The TypeScript operator bridge and engineering-agent authorizer do not close the Brain runtime grant-lifecycle gap. No production authorization bypass is established. Phase 2 remains IN PROGRESS; Gate A remains NOT CLEARED.
