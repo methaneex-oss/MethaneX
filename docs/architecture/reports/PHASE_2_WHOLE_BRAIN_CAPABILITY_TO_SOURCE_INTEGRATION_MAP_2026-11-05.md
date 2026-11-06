@@ -2949,3 +2949,32 @@ Do not conclude that no external host policy exists. The repository does not con
 - [`AllowAllAuthorizer` test wiring](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/engineering/cpp/tests/agent_and_console_suite.cpp), blob `7ac8c21e6df0d157d4d95fe87fabae962734139a`.
 
 **Disposition:** P2-I-038 remains open. The TypeScript operator bridge and engineering-agent authorizer do not close the Brain runtime grant-lifecycle gap. No production authorization bypass is established. Phase 2 remains IN PROGRESS; Gate A remains NOT CLEARED.
+
+
+---
+
+## 43. Self-review — authorization host-boundary trace and report consistency
+
+**Audit date:** 2026-11-06  
+**Scope:** Validate §42 against the exact donor blobs, ensure authorization domains are not conflated, and reconcile the report/PR boundary.
+
+### 43.1 Independent checks
+
+- Re-fetched the exact `BrainTransport`, `OperatorSession`, `AgentBridgeSession`, `EngineeringAuthorizer`, `EngineeringCoordinator` and engineering test files at donor HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`; the blob identities recorded in §42 match.
+- Confirmed `OperatorSession` sends and receives messages only. Its comment expressly leaves execution authority inside the engineering/runtime boundary; no grant issuer or refresh path is implemented there.
+- Confirmed `EngineeringCoordinator` calls its injected `EngineeringAuthorizer`, while the engineering test uses `AllowAllAuthorizer`. This is a separate agent-task dispatch path and is not the `ActionAuthorizationContext` consumed by the Brain action path.
+- The donor repository tree contains 260 tracked files at the audited commit. No matching application-host, runtime-host, authorization-provider or authorization-service source path was identified by the targeted tree-name inspection. This is a bounded repository search, not proof that external deployment infrastructure does not exist.
+- The report correctly avoids calling this an exploitable bypass. The missing host lifecycle evidence keeps the operational risk unresolved and the finding open.
+
+### 43.2 Index and status reconciliation
+
+- Active findings remain P2-I-001 through P2-I-033, plus P2-I-035 through P2-I-038. P2-I-034 remains withdrawn.
+- P2-I-038 remains a distinct Brain action-authorization grant lifecycle finding; §42 adds boundary evidence and does not create a duplicate finding.
+- Report sections are consecutively numbered through §43.
+- Donor PR #97 remains open/draft and unmerged. Review PR #179 remains open on the Phase 2 report branch. No donor source, tests, workflow or build files were changed.
+
+### 43.3 Handoff
+
+The next evidence owner is the Builder/Project Director: identify the executable host and authoritative policy lifecycle, or explicitly establish that the runtime's grant context is immutable for a bounded session and show how revocation terminates that session and invalidates pending work. The Independent Tester should then exercise revocation/expiry at the real host-to-executor boundary. Until that evidence exists, P2-I-038 and Gate A remain open.
+
+**Phase 2 status:** IN PROGRESS. **Gate A:** NOT CLEARED. No implementation baseline selected; no donor approved; no implementation authorization implied.
