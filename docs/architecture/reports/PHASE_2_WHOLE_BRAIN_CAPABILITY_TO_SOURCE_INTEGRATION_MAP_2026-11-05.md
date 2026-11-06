@@ -3368,3 +3368,24 @@ The donor P2-I-014 discussion must therefore not be represented as donor-only. M
 **Verification boundary:** Source files were re-fetched at main and their blob identities match those cited above. No local build, CTest, sanitizer, runtime experiment, filesystem fault injection or end-to-end test was run for this response. No runtime behavior is claimed as reproduced.
 
 **Current status:** Phase 2 remains IN PROGRESS. Gate A remains NOT CLEARED in the current report record. Gate B remains unassessed in this report. No implementation baseline is selected. PR #97 remains an unmerged donor. No production implementation, donor port, merge or gate clearance is authorized.
+
+
+---
+
+## 48. Project Director disposition — canonical Phase 2 report (2026-11-06)
+
+**Decision authority:** Project Director decision communicated on 2026-11-06 in the project conversation.  
+**Decision:** PR #179 is selected as the canonical *working* Phase 2 Whole-Brain Capability-to-Source Integration Map. PR #180 is designated a historical first-pass precursor and is superseded for the canonical report path. This is a report-authority decision only; it does not accept or merge PR #179, approve PR #178's proposed governance baseline, clear any gate, select an implementation baseline, approve PR #97, or authorize production implementation.
+
+**Verified selection snapshot:**
+
+- PR #179 was open, draft and unmerged at HEAD `553fb2a179ed34bd637127b1cce7a7885301441a`, branch `docs/jarvis-phase-2-whole-brain-integration-map-20261105`, with base `docs/jarvis-project-governance-rules-20261105`.
+- PR #180 was open, draft and unmerged at HEAD `6ca140300b914ed981a50301bbf1d82a5bfe4d8b`, branch `research/phase-2-brain-integration-map-20261105`, with base `spec/brain-mechanism-specification-20261103`.
+- Both PRs add the same canonical report path. Their histories are divergent and their bases differ; they are not a safe pair of reports to merge independently.
+- PR #180's initial BM-01–BM-12 mapping and its concrete first-pass observations are retained in the expanded PR #179 report. In particular, the memory-to-reasoning premise gap, lack of a downstream reasoning consumer in the inspected cycle, narrow reasoning scope, absence of demonstrated experience-acquired goal formation, and causal-confounding limitations remain represented. PR #179 adds the subsequent source tracing, review responses, evidence qualifications, donor/main distinctions and closure criteria. No distinct PR #180 finding identified in the inspected 310-line initial report was found to be lost from the expanded report.
+
+**Disposition:** Preserve PR #180 and its commit history as historical provenance. Do not merge it. Close PR #180 as superseded by PR #179, with an explanatory closure comment linking this decision and the canonical PR. Keep PR #179 open and draft pending the remaining Phase 2 work and independent review. Do not merge PR #179 merely because it is now the selected working authority.
+
+**Remaining Phase 2 obligations:** R3-02 Memory metadata recovery and R3-04 empty-premise reasoning remain open technical defects requiring separately authorized implementation and tests. R3-01's legacy-document scope interpretation still requires explicit confirmation; the existing clarification is not a final historical taxonomy decision. Repository-wide authority/conflict search and independent verification remain outstanding. Phase 2 remains IN PROGRESS; Gate A remains NOT CLEARED in the current report record; Gate B remains unassessed. No implementation baseline or production implementation authorization is established.
+
+**Verification boundary:** This decision records report authority and PR disposition only. It does not claim that R3-02/R3-04 have been fixed, that tests have been run, or that the current report has passed independent re-review.
