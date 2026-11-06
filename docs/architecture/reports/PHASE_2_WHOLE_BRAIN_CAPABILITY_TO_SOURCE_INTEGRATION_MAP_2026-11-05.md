@@ -2169,7 +2169,7 @@ No donor production source, test source, workflow, or CMake file was modified. T
 **Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, and no implementation authorization implied.
 
 
-## 27 CI and trial-evidence correction — donor workflows were present and must be counted
+## 27. CI and trial-evidence correction — donor workflows were present and must be counted
 
 This section corrects the overly narrow CI statement in §10.4. The earlier query used a PR-triggered commit-run wrapper and did not enumerate push/workflow-dispatch runs. A direct Actions-run listing for `feat/jarvis-affective-state` exposes successful donor-branch runs. The previous statement that donor CI remained unverified is therefore superseded.
 
@@ -2236,7 +2236,7 @@ The separate persistence fixture `core/cpp/tests/dlt_002_persistence.cpp` perfor
 
 ---
 
-## 28 Runtime and persistence failure-path trace
+## 28. Runtime and persistence failure-path trace
 
 The exact donor runtime path is now source-traced across:
 `CognitiveRuntime::worker_loop` → `CognitiveCycle::run` → `CognitiveRuntime::execute_actions` → `Brain::execute_action` → `ActionExecutor::run` → `action_outcome` journal append/replay → separately appended `affective_learning` and `learning` events → prediction feedback resolution → later runtime feedback processing.
@@ -2285,7 +2285,7 @@ The donor tree includes `CognitiveRuntime`, `Brain::execute_action`, a TypeScrip
 
 ---
 
-## 29 DLT-002 protocol audit — what its runtime evidence can and cannot establish
+## 29. DLT-002 protocol audit — what its runtime evidence can and cannot establish
 
 A second source-level pass examined the measurement path, not just the successful workflow summaries.
 
@@ -2335,7 +2335,7 @@ The next investigation should prioritize (a) independent analysis of the retaine
 
 ---
 
-## 30 DLT-002 raw artifact analysis — three-seed behavioral results
+## 30. DLT-002 raw artifact analysis — three-seed behavioral results
 
 The three retained ZIP artifacts from workflow run #8 (40565468650) were downloaded and the raw episodes.csv, trial.log, checkpoints.csv, and summary files were inspected. This moves the evidence assessment beyond workflow completion and summary counts.
 
@@ -2403,7 +2403,7 @@ The executable supports enabled and no-feedback modes, but the three-seed workfl
 
 ---
 
-## 31 Application-boundary and polyglot integration map
+## 31. Application-boundary and polyglot integration map
 
 A bounded whole-tree inspection was performed against donor HEAD c1da222e6c94aeb3f2ad000392c21fe4fc81ab25. The result is important because the presence of language-specific directories or interfaces is not evidence that they are connected to the native cognitive runtime.
 
@@ -2458,7 +2458,7 @@ Until that evidence exists, classify the C++ runtime as an integrated native sub
 
 ---
 
-## 32 Journal append failure semantics — second persistence finding
+## 32. Journal append failure semantics — second persistence finding
 
 A deeper inspection of the journal writer found a separate failure-path gap from P2-I-013. This finding concerns a single event append's rollback and the meaning of "durable", rather than the multi-event learning transaction.
 
