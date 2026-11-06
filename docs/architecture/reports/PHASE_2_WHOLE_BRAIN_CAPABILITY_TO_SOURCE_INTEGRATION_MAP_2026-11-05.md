@@ -2462,3 +2462,47 @@ Until that evidence exists, classify the C++ runtime as an integrated native sub
 5. Preserve the distinction between mechanism existence, controlled runtime integration, cross-language integration and deployed operation in all Gate A decisions.
 
 **Phase 2 remains IN PROGRESS. Gate A remains NOT CLEARED. PR #97 remains an unmerged donor.**
+
+
+---
+
+## 10.13 Journal append failure semantics — second persistence finding
+
+A deeper inspection of the journal writer found a separate failure-path gap from P2-I-013. This finding concerns a single event append's rollback and the meaning of "durable", rather than the multi-event learning transaction.
+
+### Direct source evidence
+
+At donor HEAD c1da222e6c94aeb3f2ad000392c21fe4fc81ab25:
+
+- core/cpp/src/memory.cpp, Memory::persist, serializes an event through std::ofstream opened with binary|app, calls write_event, calls flush, checks the stream state, and closes the stream.
+- If the write/flush reports failure, it calls std::filesystem::resize_file(journal_path_, original_size, rollback_error) and returns false.
+- The rollback_error is not checked or surfaced. There is no second verification that the file size returned to original_size.
+- The writer does not call fsync/fdatasync or an equivalent platform-specific stable-storage primitive. C++ stream flush is not a guarantee that bytes have reached stable storage across sudden power loss or kernel crash.
+- Memory::load scans sequentially until it encounters an invalid/truncated event, then quarantines the unreadable suffix and truncates the active journal to the last valid record boundary. It cannot safely resynchronize beyond an invalid record because the journal has no frame marker/checksum.
+
+### Failure sequence and impact
+
+If an append fails after writing a partial record and the subsequent resize_file rollback also fails (for example, a filesystem/storage error or permission/space failure), Memory::append returns 0 but the partial suffix may remain in the active journal. The same Memory instance can then accept a later append: persist opens with app and writes after the leftover suffix. That later append can report success and update in-memory state, even though on restart the loader stops at the earlier malformed suffix and quarantines the later valid record along with it.
+
+This is a conditional failure-path risk; the source proves that rollback failure is not checked, but no injected filesystem failure has yet reproduced the sequence. It is not evidence that ordinary appends are currently losing data.
+
+Separately, even a successful append currently establishes stream-flush completion, not a documented power-loss durability guarantee. Any use of "durable" in the report or product contract must specify whether it means process-restart persistence under normal OS operation or stable-storage persistence after abrupt machine failure.
+
+### Finding P2-I-014 — Journal rollback failure is unchecked and stable-storage durability is unspecified
+
+- Severity: Medium (provisional; may be higher if the product contract promises crash/power-loss durability).
+- Confidence: High for the unchecked rollback result and absence of fsync-like calls in the inspected writer; Medium for the operational loss scenario until fault-injection reproduction.
+- Status: Confirmed code-level failure-path weakness; acceptance impact unresolved.
+- Affected revision: c1da222e6c94aeb3f2ad000392c21fe4fc81ab25.
+- Affected code: core/cpp/src/memory.cpp, Memory::persist and Memory::load.
+- Root cause: append rollback is best-effort but its result is discarded; append can continue after an unrepaired partial tail; the journal's durability contract is not explicit.
+- Required Builder decision: define the supported failure model (process crash, OS crash, power loss, disk-full, I/O error). If rollback cannot be verified, put the Memory instance into a failed/poisoned state and reject subsequent appends until recovery, or use a journal format/recovery protocol that can safely identify and repair the tail before continuing. Specify whether successful append promises process-restart persistence or stable-storage durability.
+- Verification: use a fault-injectable filesystem/journal backend to fail writes and rollback truncation independently; assert that no later append is acknowledged behind an invalid suffix; restart and verify every acknowledged event is recovered exactly once. Add crash/power-loss tests only for durability guarantees the project explicitly elects to provide.
+
+### Relationship to P2-I-013 and current test coverage
+
+P2-I-013 remains the multi-record logical learning atomicity issue: action_outcome, affective_learning and learning are separate appends. P2-I-014 is the lower-level single-record journal rollback/durability issue. Fixing one does not fix the other.
+
+The inspected memory_learning_evolution_persistence_suite and dlt_002_persistence test normal successful append/reconstruction and learned-state restoration. They do not inject write failure, flush failure, rollback truncation failure, or abrupt power loss. Their successful restart assertions must not be described as evidence for those untested failure modes.
+
+**Updated persistence assessment:** normal-path event append/replay and learning reconstruction have meaningful integration coverage. Multi-event transaction recovery and low-level journal failure handling remain unverified. The word "durable" should be qualified to match the actual guarantees implemented and tested.
