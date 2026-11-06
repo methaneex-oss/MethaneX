@@ -2702,7 +2702,7 @@ The inspected `cognitive_runtime_goal_feedback_suite` covers successful 0.4 prog
 
 ---
 
-## 37. Final independent review of goal-completion partial-commit finding and report state
+## 37. Goal-completion finding verification and report-state audit
 
 **Audit date:** 2026-11-06  
 **Scope:** Independent source verification of §36, final finding-index consistency, report-branch state and donor isolation.
@@ -2743,3 +2743,84 @@ The conditional failure sequence is source-supported but not experimentally repr
 The additional goal-completion audit strengthens the failure/recovery map but does not close the relevant acceptance criteria. The report is ready for independent review of its evidence and severity judgments; deterministic failure injection, remaining BM-01/BM-02 provenance work, test-validity review, runtime integration boundaries and Project Director decisions remain outstanding.
 
 **Final handoff status:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. PR #97 remains an unmerged donor. No implementation baseline is selected, no donor is approved, and no implementation authorization is implied.
+
+
+---
+
+## 38. Finding P2-I-037 — Specialized perception-provider failures are not observable and provider isolation is incomplete
+
+**Audit date:** 2026-11-06  
+**Affected donor revision:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`  
+**Severity:** Medium (provisional; the impact depends on whether downstream callers treat a fallback representation as complete interpretation).  
+**Confidence:** High for the silent `perceive` failure/fallback path and missing failure telemetry; High for the C++ `noexcept` contract consequence; Medium for operational impact in a production provider deployment.  
+**Status:** Confirmed observability/contract gap; no production provider outage is asserted.
+
+### Source trace
+
+1. `PerceptionPipeline::process` iterates registered providers. For each provider it invokes `supports(input)`, then `perceive(input, context)` if supported.
+2. Exceptions from `perceive` are caught and discarded. Invalid provider representations are also silently skipped. If no provider returns a valid representation, the pipeline normalizes the raw event and returns that fallback.
+3. The method's return type is only `PerceptualRepresentation`. It carries no provider selection/failure status, degraded-mode marker, failed-provider identity or structured diagnostic.
+4. `CognitiveRuntimeMetrics` has no perception-provider failure/degradation counter. The cycle consumes the returned representation as its context representation; it cannot distinguish a provider-derived interpretation from fallback normalization by inspecting an explicit pipeline outcome.
+5. `PerceptionProvider::supports` is declared `noexcept`. The `try/catch` around that call in `PerceptionPipeline::process` therefore does not make throwing implementations recoverable: an exception escaping a `noexcept` override terminates the process before the catch can handle it. The interface currently requires providers to be non-throwing in `supports`, but the implementation comment's broad provider-isolation language does not state or test this distinction.
+6. The existing `ThrowingProvider` test throws from `perceive`, then asserts only that fallback output is valid. It does not assert that provider failure is recorded, surfaced to the cycle/runtime, or reflected in capability health. It cannot test a throwing `supports` implementation without violating the declared `noexcept` contract.
+
+### Specification comparison
+
+Accepted PR #174 BM-01 requires intake failures and missing evidence not to be converted into fabricated observations, and requires external experience to remain distinguishable from internal outputs. BM-02 requires interpretation to preserve uncertainty and alternatives. Its scenario 3 explicitly requires a provider failure to be recorded as a capability failure, not as evidence that the external event did not occur. The donor pipeline preserves the raw event and can provide a normalized fallback, which is useful degradation behavior; it does not expose the provider failure as a first-class result.
+
+### Impact and boundary
+
+- A provider can fail while the cycle still receives a valid fallback representation. That may be an acceptable degraded-mode continuation, but the caller has no typed evidence that specialized perception failed.
+- A downstream consumer can therefore treat the fallback as an ordinary successful representation unless it independently knows the configured provider set and reconstructs failure state.
+- Silent provider failure prevents operational capability-health monitoring and weakens later evaluation of whether a learning or decision change followed specialized interpretation or fallback normalization.
+- The `supports noexcept` issue is narrower: it is a contract-design constraint, not a claim that the current test provider throws from `supports`.
+- The report does not claim raw experience is lost, that fallback normalization is inherently wrong, or that a real deployment currently uses a throwing provider.
+
+### Required Builder/Tester evidence
+
+1. Define a structured perception result that distinguishes provider-selected representation, fallback normalization, invalid provider output, provider exception and no supporting provider. Preserve the raw acquired event and its immutable sequence/source lineage in every case.
+2. Record provider identity, failure category and relevant diagnostic/correlation identity in an operational capability-health path. Do not encode provider failure as an observation about the external world.
+3. Decide whether `supports` must be a total non-throwing predicate. If so, document and test that contract and remove the misleading catch or expose a safe non-throwing adapter. If provider failure must be isolated there too, remove `noexcept` and catch at the pipeline boundary.
+4. Test: successful provider; no provider supports; provider `perceive` throws; provider returns invalid representation; first provider fails while a later provider succeeds; all providers fail and fallback is returned; and provider health recovers after a later successful call.
+5. Assert both the returned representation and the failure/degradation telemetry, plus preservation of the original event sequence/source and no false external-world consequence.
+6. Add an integration test proving that the runtime/workspace exposes degraded perception status without promoting the fallback into a claim of successful specialized interpretation.
+
+### Source anchors
+
+- [`PerceptionPipeline::process`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/perception_pipeline.cpp#L13-L50), blob `ab9a745bb68e416d4e32c9d0c26a2d0b2016ab17`.
+- [`PerceptionProvider::supports` and provider contract](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/include/jarvis/core/perception_pipeline.hpp#L25-L31), blob `1e5fed009a2453211dac1a4187ff47c5cc65da39`.
+- [`CognitiveRuntimeMetrics`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/include/jarvis/core/cognitive_runtime.hpp#L42-L59), blob `e5a3c853add8b5fcb9b8c04c9b25f20179b5b629`.
+- [`ThrowingProvider` fallback test](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/perception_pipeline_suite.cpp#L39-L44) and [asserted fallback behavior](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/perception_pipeline_suite.cpp#L72-L78), blob `2312d9f86763a05d7eef9e341d7b1d60bfe845e9`.
+- [Accepted BM-02 provider-failure scenario](https://github.com/methaneex-oss/MethaneX/blob/0811a59e46bf934e32e794f90e4e7d18d4e2bd97/docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md#L752-L760), blob `3b6a53c8a295fa0d9fc29bbb6c7688b61d1dcdb1`.
+
+**Finding disposition:** P2-I-037 is a distinct BM-02/BM-11 observability and failure-contract finding. It does not duplicate the general representation/grounding gap or the external consequence observer provenance findings. It remains open pending structured failure reporting and tests.
+
+
+---
+
+## 39. Final self-review — provider failure finding, exit blockers and repository boundary
+
+**Audit date:** 2026-11-06  
+**Scope:** Independent consistency pass after adding P2-I-037.
+
+### 39.1 Finding and source consistency
+
+- P2-I-037 is present as a new finding and does not reuse P2-I-034, which remains withdrawn.
+- The `perceive` exception path, fallback behavior and absence of an explicit provider-failure result are grounded in the exact donor blobs cited above.
+- The `supports noexcept` consequence is described as a contract limitation; no claim is made that a conforming implementation can throw and be caught.
+- The existing test's scope is described accurately: it exercises a throwing `perceive`, validates fallback output and does not assert a capability-failure record.
+- The accepted specification's provider-failure scenario is cited separately from implementation evidence.
+- The finding does not assert raw-event loss or a production incident.
+
+### 39.2 Report structure and finding index
+
+- Active findings are P2-I-001 through P2-I-033, plus P2-I-035, P2-I-036 and P2-I-037.
+- P2-I-034 remains withdrawn and is not reused.
+- Sections are numbered consecutively through §39; repeated references to existing findings remain cross-references.
+- The BM-02 map and §25.4 exit blockers now point to P2-I-037 and require provider-failure observability in the remaining acquisition/perception trace.
+
+### 39.3 Final repository boundary
+
+- Donor source remains pinned to PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+- This update is confined to the Phase 2 report branch and PR #179. No donor production source, test, workflow or build configuration was changed.
+- Phase 2 remains IN PROGRESS. Gate A remains NOT CLEARED. PR #97 remains an unmerged donor; no implementation baseline is selected and no implementation authorization is implied.
