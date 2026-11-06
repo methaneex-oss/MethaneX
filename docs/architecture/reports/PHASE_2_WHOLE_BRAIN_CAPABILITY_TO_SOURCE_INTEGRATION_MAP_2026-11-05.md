@@ -3119,7 +3119,7 @@ The report's §14 correctly identifies the meanings of PR #173 F-02/F-03, but di
 
 **Provenance verification:** The PR #173 correction record `docs/architecture/reviews/02_BRAIN_FOUNDATION_ARCHITECTURE_REVIEW_CORRECTIONS_2026-11-03.md` at PR #173 corrected head `97191111bc2573c14d391c0af9628db7b11f194b` explicitly defines PR #173 F-02 as experience-acquired goal formation and PR #173 F-03 as the SYS-08 substrate boundary. The Phase 1 reconciliation record at PR #178 head `39fe09dcf13496f5f0005ccf3f00739303e29f88` states that a subsequent review report supplied in the conversation identified PR #174 follow-on F-02 as contextual language/operator-intent grounding and F-03 as downstream reasoning integration. It also records that the later report was not mirrored as a GitHub review submission. The PR #174 discussion history confirms historical acceptance of exact specification HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` and later F-01 correction activity; the inspected PR #174 comments/review submissions do not contain the original F-02/F-03 review report.
 
-**Limitation:** The original PR #174 follow-on reviewer document was not located in the checked-in correction records or PR #174 discussion/review objects inspected for this response; no exhaustive repository-wide document search was run. Its exact title, full text and reviewer line-level rationale cannot be independently recovered from these sources. The report preserves the source-backed summaries and explicitly records the missing artifact; it does not invent a verbatim finding. The Project Director must either supply/recover that original review artifact or explicitly accept its unavailability as a bounded provenance limitation. The historical PR #174 acceptance is not erased, and it does not clear these later follow-on obligations. No one finding closes another.
+**Limitation:** The original PR #174 follow-on reviewer document was not located in the checked-in correction records or PR #174 discussion/review objects inspected for this response; no exhaustive repository-wide document search was run. A prior-conversation retrieval subsequently recovered the two finding titles, severities and substantive summaries: F-02, “Contextual language and operator-intent grounding” (High), requires grounding in context, available knowledge, speaker intent and uncertainty rather than isolated words; F-03, “Downstream reasoning integration” (Medium), requires reasoning conclusions, uncertainty and alternatives to influence downstream cognitive processing. The retrieved record explicitly says the shared reviewer URL did not load and that the wording was summarized from conversation context rather than extracted from the original artifact. It is corroborating conversation provenance, not the original review, not verbatim reviewer text, and not independently verifiable line-level rationale. The Project Director must either supply/recover the original review artifact or explicitly accept its unavailability as a bounded provenance limitation. The historical PR #174 acceptance is not erased, and it does not clear these later follow-on obligations. No one finding closes another.
 
 ### 45.4 IR-03 — Donor runtime fairness, shutdown feedback and result loss
 
@@ -3184,3 +3184,73 @@ The existing §9.10 comparison criterion is retained but now names a bounded del
 **Current status:** Phase 2 remains IN PROGRESS. Gate A remains NOT CLEARED. Gate B is not assessed or cleared here. No implementation baseline is selected. PR #97 remains an unmerged donor. No production implementation, donor port, merge, deployment or gate clearance is authorized. The PR #174 follow-on F-02/F-03 source artifact and the human/MCU comparison deliverable remain outstanding. The IR-03 runtime scenarios remain unexecuted.
 
 **Next action:** Submit this exact updated PR #179 head for independent re-review against IR-01 through IR-04. The reviewer should independently reproduce the main/donor perception call graph; verify the four-row finding provenance ledger and missing-source limitation; inspect donor scheduler/shutdown/result queue code and assess the acceptance matrix; and verify that the human/MCU comparison deliverable has a named owner and explicit Project Director disposition. The reviewer should retain the REVISE verdict unless the documented corrections and outstanding authority/evidence conditions are independently satisfied.
+
+
+---
+
+## 46. Builder follow-through after second independent review — IR-02, IR-03 and IR-04
+
+**Date:** 2026-11-06  
+**Parent independent review:** PR #184, exact review commit 8ba6dfcb17f2aab409f58cbd8bc57898edd60405.  
+**Working branch:** docs/phase-2-ir02-ir04-ir03-followthrough-20261106  
+**Scope:** Documentation, provenance reconciliation, comparative analysis, and runtime test-contract preparation only.
+
+### 46.1 IR-02 — conversation summary recovered; original artifact and authority decision remain outstanding
+
+A prior-conversation retrieval was performed specifically to recover the PR #174 follow-on F-02/F-03 review information. It returned these contemporaneous summaries:
+
+- **PR #174 follow-on F-02 — “Contextual language and operator-intent grounding” (High):** language/intent interpretation must be grounded in context, available knowledge, speaker intent and uncertainty, not isolated words.
+- **PR #174 follow-on F-03 — “Downstream reasoning integration” (Medium):** reasoning conclusions, uncertainty and alternatives must meaningfully influence downstream cognitive processing.
+
+The retrieved record also states that the original shared reviewer URL did not load and that the wording was based on recorded conversation context rather than fresh extraction of the original report. Accordingly:
+- titles, severities and substantive summaries are now corroborated by a prior-conversation record;
+- the original reviewer document, exact complete wording and line-level rationale remain unavailable;
+- the conversation summary is not the original review and must not be presented as a verbatim quotation;
+- PR #173 F-02 (experience-acquired candidate-goal formation) and PR #173 F-03 (SYS-08 computational-substrate boundary) remain separate findings.
+
+**Project Director disposition:** NOT RECORDED. The Builder cannot approve the bounded provenance limitation on the Project Director's behalf. The original review artifact must still be supplied/recovered, or the Project Director must explicitly accept its unavailability as a bounded provenance limitation. Either route preserves all four separate obligations and does not close the BM-02/BM-08/SYS-08/BM-12 technical work.
+
+### 46.2 IR-04 — comparison artifact prepared
+
+The required artifact now exists:
+
+docs/architecture/reports/PHASE_2_HUMAN_AND_MCU_REFERENCE_COMPARISON_2026-11-06.md
+
+It covers BM-01 through BM-12; separates scientific human-cognition references, fictional MCU motifs and repository evidence; records current-main versus donor boundaries; states limits; and includes Phase 1 Continuity and Impact.
+
+**Status:** Builder-prepared. Independent review and Project Director acceptance or explicit bounded deferral remain pending. The artifact is not accepted as complete merely because it exists.
+
+### 46.3 IR-03 — correlation and idempotency contract made explicit
+
+The required contract now exists:
+
+docs/architecture/reports/PHASE_2_DONOR_RUNTIME_FAIRNESS_AND_RECOVERY_TEST_CONTRACT_2026-11-06.md
+
+It defines:
+- stable logical-request correlation identity, per-attempt identity, and per-side-effect action/idempotency identity;
+- idempotency scope that distinguishes separate identical requests from retries of one logical side effect;
+- retention through retry/recovery/reconciliation windows, including tombstone/expiry requirements;
+- caller-visible effect-unknown, feedback-pending/rejected, result-dropped and completed-but-undelivered states;
+- deterministic fairness, in-flight shutdown, result saturation, crash/restart, duplicate delivery and unknown-effect reconciliation scenarios RT-01 through RT-08;
+- exact evidence required to claim tests were executed.
+
+**Status:** Documentation/test preparation only. No runtime code or test source was modified. No build, CTest, runtime test, failure injection or donor execution was performed. IR-03 runtime verification remains OPEN; donor reliance remains prohibited until separately authorized implementation and independent test evidence exist.
+
+### 46.4 Verification and authority boundary
+
+The three deliverables were prepared on a branch based on the exact PR #179 reviewed HEAD. Only documentation files are changed. No production source, test source, CMake configuration, workflow, dependency, donor branch or runtime state is changed.
+
+Builder self-check is not an independent review. The next Independent Reviewer must inspect the exact submitted commit, challenge the provenance treatment, review all twelve comparison entries and scientific source fit, and assess whether the runtime contract is testable without treating it as executed evidence.
+
+**Current status remains:**
+- Phase 2: IN PROGRESS; not accepted complete.
+- IR-02: PARTIAL; Project Director provenance disposition pending.
+- IR-03: documentation contract prepared; runtime verification OPEN.
+- IR-04: artifact prepared; independent review and Project Director acceptance/deferral pending.
+- Gate A: NOT CLEARED.
+- Gate B: not assessed or cleared.
+- Implementation baseline: none selected.
+- PR #97: unapproved, unmerged donor.
+- Runtime implementation and donor port: not authorized.
+
+**No gate clearance, donor approval, implementation authorization or phase completion is implied by this follow-through.**
