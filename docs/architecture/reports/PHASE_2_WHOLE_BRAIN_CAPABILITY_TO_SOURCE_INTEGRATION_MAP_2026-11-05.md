@@ -3901,7 +3901,7 @@ If the deployed host is intentionally outside this repository, its contract and 
 
 A bounded GitHub record check recovered the following:
 
-- PR #173's 2026-11-03 Builder resubmission issue comment (comment `659...`, author `methaneex-oss`) identifies the Independent Review as having reviewed original commit `bd2f6f2d38e874aea015e2cc5de3c1a8d2b0f688` and records the correction map for F-01, F-02 and F-03 at architecture head `97191111bc2573c14d391c0af9628db7b11f194b`. It is a Builder-authored correction/handoff, not the review artifact itself.
+- PR #173's 2026-11-03 Builder resubmission issue comment (comment `6598465160`, author `methaneex-oss`) identifies the Independent Review as having reviewed original commit `bd2f6f2d38e874aea015e2cc5de3c1a8d2b0f688` and records the correction map for F-01, F-02 and F-03 at architecture head `97191111bc2573c14d391c0af9628db7b11f194b`. It is a Builder-authored correction/handoff, not the review artifact itself.
 - PR #174's 2026-11-03 resubmission comment records F-01 correction at exact head `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, including the BM-12 reasoning additions and the separate Builder correction record.
 - PR #174's Project Director decision comment (2026-11-03 13:14 UTC) explicitly states that the Project Director accepted exact head `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` following the Independent Reviewer's approval, and explicitly clears F-01. It does not separately state that F-02 and F-03 were re-reviewed/cleared.
 - PR #174's 2026-11-04 revision comment records updated specification, source-audit and correction-record blobs, but is again Builder-authored.
