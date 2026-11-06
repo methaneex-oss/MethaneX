@@ -3617,7 +3617,9 @@ This section supersedes any earlier shorthand in this report that described Gate
 
 This section records a fresh live check after §§50–53. It updates status only; it does not change approval, gate, implementation or baseline authority.
 
-### 54.1 Current documentation PR chain
+### 54.1 Documentation PR chain at the time of the live check
+
+The #179 head shown below is the head observed immediately before the report-reconciliation commit that added §54; the report update itself advances that branch.
 
 | PR | Live state | Exact head | Authority consequence |
 |---|---|---|---|
@@ -3648,3 +3650,53 @@ Both are **build-only** evidence. Neither result establishes that CTest ran, tha
 6. Phase 2 remains **IN PROGRESS; exit criteria NOT MET**. No implementation baseline is selected, no donor is approved, and no runtime implementation is authorized.
 
 **Builder disposition:** Documentation/build work has advanced, but the remaining closure items include decisions and formal review that only the Project Director or a genuinely separate reviewer can provide. They are not tasks the Main Builder may self-certify. Continue with bounded source/evidence work that does not require those approvals; stop at authority boundaries rather than inventing clearance.
+
+
+---
+
+## 55. Direct source re-check — perception-to-cognition integration boundary (2026-11-06)
+
+### 55.1 Pinned source evidence
+
+The following files were re-fetched from the exact Phase 1 main baseline `1273ddbcd0087d189e01388ded2d362fb1e058d2`:
+
+| Source | Blob | Relevant contract |
+|---|---|---|
+| `core/cpp/include/jarvis/core/perception_pipeline.hpp` | `1e5fed009a2453211dac1a4187ff47c5cc65da39` | Declares `PerceptionInput`, `PerceptionContext`, `PerceptionProvider` and `PerceptionPipeline::process` |
+| `core/cpp/src/perception_pipeline.cpp` | `ab9a745bb68e416d4e32c9d0c26a2d0b2016ab17` | Selects the strongest valid provider result; isolates provider exceptions; falls back to representation normalization |
+| `core/cpp/include/jarvis/core/cognitive_cycle.hpp` | `28e7af98327956268a769adf7813125be842c1a2` | `CognitiveCycleInput` carries an `Event observation`; it has no `PerceptionPipeline` or `PerceptualRepresentation` input |
+| `core/cpp/src/cognitive_cycle.cpp` | `3df14c552f2048b0394dc362f7ee7a654a93fb32` | `CognitiveCycle::run` calls `brain_.observe(input.observation)` directly |
+| `core/cpp/include/jarvis/core/cognitive_runtime.hpp` | `d02b2607cebcb7c31963e2fe336970707a481e00` | Runtime owns `Brain`, `CognitiveCycle`, trigger and workspace; no perception pipeline member |
+| `core/cpp/src/cognitive_runtime.cpp` | `1a1383cedc42e357dc9efce117328b8d55e30bca` | Worker dequeues `CognitiveCycleInput` and calls `cycle_.run(item.input)` directly |
+| `core/cpp/tests/CMakeLists.txt` | `dab0c52ab4dfe15e1e2cbccfa9e6c904abdf54e3` | Registers perception-pipeline, cognitive-cycle and cognitive-runtime suites as separate test targets |
+
+### 55.2 Dataflow conclusion
+
+The implemented perception subsystem and the main cognitive coordinator are both present, but the inspected mainline contracts do not connect them:
+
+`PerceptionInput → PerceptionPipeline::process → PerceptualRepresentation`
+
+is a separate path from:
+
+`CognitiveCycleInput::observation (Event) → Brain::observe → memory/beliefs/reasoning/planning/decision`.
+
+The runtime's worker forwards the event-bearing cycle input directly; it does not invoke the perception pipeline or convert a perceptual representation into the cycle's observation. The test build file separately registers the perception and cycle/runtime suites. Separate unit-suite registration is not an end-to-end integration test.
+
+This confirms a concrete missing producer/consumer edge, not merely an inference from class names. It strengthens the existing IR-01 / BM-01 integration finding and the partial status of exit criterion 2. It does **not** establish that no other executable or external host performs perception elsewhere; this conclusion is bounded to the pinned C++ mainline path inspected here.
+
+### 55.3 Required closure evidence
+
+Before criterion 2 can be marked complete, a later authorized integration/review task must:
+
+1. Define the ownership and lifecycle of perception providers and the pipeline relative to the single Brain authority.
+2. Define the representation-to-observation/event contract, including provenance, timestamp, source, uncertainty/confidence, validation and failure semantics.
+3. Trace the representation through memory, belief formation, reasoning, prediction and downstream decisions; do not merely call the pipeline and discard its output.
+4. Add an integration test that submits raw perception input through the real runtime boundary and asserts that the resulting representation influences the expected Brain-owned state and later behavior.
+5. Test provider failure, unsupported input, invalid representation, fallback normalization and recovery without silently converting provider failure into apparently successful perception.
+6. Run the exact-head relevant CTest targets and record results; registration/build success alone is insufficient.
+
+This is an architecture/dataflow correction requirement, not authorization to implement it now. Gate A remains NOT CLEARED; no implementation baseline is selected and no runtime change is authorized.
+
+### 55.4 Status
+
+**Source re-check complete. Integration defect remains open.** Exit criterion 2 remains PARTIAL. The new evidence does not change the Phase 2 exit decision in §52 or the live authority boundary in §54.
