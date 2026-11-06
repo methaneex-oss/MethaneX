@@ -2610,7 +2610,8 @@ The full report contained reused numeric labels in later appended batches. These
 - **P2-I-014** now identifies the lower-level journal append rollback and startup tail-repair failure/durability issue in §32.
 - **P2-I-023** is the canonical multi-event action-learning atomicity finding. The earlier source-trace statement in §13.5 and the detailed failure-path treatment in §28 are explicitly cross-referenced to this same finding rather than creating competing IDs.
 - **P2-I-029** remains the action-execution/persistence-acknowledgement finding. **P2-I-035** separately covers the evidence-only and prediction-plus-evidence feedback path's caller-visible acknowledgement and completion-metric gap; it cross-references P2-I-023's partial-commit concern.
-- **P2-I-034** is withdrawn. It is retained only as an audit trail for the incorrect Release-assertion conclusion; it is not an active finding or Gate A blocker.\n- **P2-I-036** covers the distinct two-event goal-completion path: a persisted `goal_progress(progress=1.0)` event is not sufficient for goal-state replay without the separate `goal_complete` event.
+- **P2-I-034** is withdrawn. It is retained only as an audit trail for the incorrect Release-assertion conclusion; it is not an active finding or Gate A blocker.
+- **P2-I-036** covers the distinct two-event goal-completion path: a persisted `goal_progress(progress=1.0)` event is not sufficient for goal-state replay without the separate `goal_complete` event.
 
 The active finding set is P2-I-001 through P2-I-033 plus P2-I-035 and P2-I-036. P2-I-034 is withdrawn and intentionally not reused. Repeated references to an existing finding are expansions or cross-references, not additional findings.
 
@@ -2627,7 +2628,7 @@ P2-I-035 is a distinct finding because it concerns the queued-feedback processin
 
 ### 35.3 Report structure and source boundaries
 
-- Sections are numbered consecutively through §35, with no duplicate section numbers.
+- Sections are numbered consecutively through §36, with no duplicate section numbers.
 - Active finding IDs are reconciled as stated above; the CI correction remains an unnumbered report-history correction, while §34 contains distinct finding P2-I-035 and §36 contains distinct finding P2-I-036, with explicit cross-references to P2-I-023/P2-I-029 where applicable.
 - Donor evidence remains pinned to PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
 - The donor branch remains unchanged by this review. The report and its corrections are confined to the Phase 2 review branch and PR #179.
