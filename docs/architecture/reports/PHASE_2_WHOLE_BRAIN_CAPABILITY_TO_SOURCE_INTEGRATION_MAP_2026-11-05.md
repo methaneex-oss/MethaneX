@@ -731,7 +731,7 @@ Phase 2 is complete only when all of the following are satisfied:
 7. Donor paths are compared to main and accepted requirements at exact commits; no wholesale merge is used as a substitute for integration analysis.
 8. Hardcoded assumptions are classified as legitimate integrity/safety controls, provisional inductive biases or prohibited predetermined cognitive conclusions.
 9. Learning claims distinguish storage, numeric adaptation, evidence-based structural change, action-outcome learning, later behavioral effect and held-out transfer.
-10. A bounded human-cognition and MCU J.A.R.V.I.S. comparison register is delivered for substantial mechanism/integration decisions, or the Project Director explicitly approves deferral. The required artifact is `docs/architecture/reports/PHASE_2_HUMAN_AND_MCU_REFERENCE_COMPARISON_2026-11-06.md` (not yet created). The Main Builder owns its preparation; the Independent Reviewer challenges its evidence and limits; the Project Director accepts the deliverable or records an explicit deferral. Human cognition must be grounded in appropriate scientific sources with uncertainty/controversy stated; MCU J.A.R.V.I.S. is fictional functional inspiration only, not scientific evidence. The comparison must not prescribe literal biological imitation or surface-behavior claims.
+10. A bounded human-cognition and MCU J.A.R.V.I.S. comparison register is delivered for substantial mechanism/integration decisions, or the Project Director explicitly approves deferral. The required artifact is `docs/architecture/reports/PHASE_2_HUMAN_AND_MCU_REFERENCE_COMPARISON_2026-11-06.md`; it is drafted in PR #191, with independent review and Project Director acceptance still pending. The Main Builder owns its preparation; the Independent Reviewer challenges its evidence and limits; the Project Director accepts the deliverable or records an explicit deferral. Human cognition must be grounded in appropriate scientific sources with uncertainty/controversy stated; MCU J.A.R.V.I.S. is fictional functional inspiration only, not scientific evidence. The comparison must not prescribe literal biological imitation or surface-behavior claims.
 11. Historical Phase 1 preservation tasks remain visible and are not silently treated as completed.
 12. A phase report records completed, partial, blocked, deferred and unverified work; independent review and required owner approval are recorded.
 
@@ -3477,7 +3477,7 @@ The inspected `CognitiveCycle::run` retrieves ranked memories into `result.conte
 
 The report update commit `f6267456560a08054d69f7960d2951452b14017c` has a completed successful GitHub Actions `Native Brain Build` run: run `42271797166`, job `128077942862`. Its steps are Configure and Build; it contains no CTest step. This is build evidence for the exact report commit's synthetic PR workflow context, not evidence that any test suite ran or that runtime defects were corrected.
 
-The comparison artifact commit `609d38ede50bbdd98a93dfed112781eacabee9fd` has a separate `Native Brain Build` run `42272045285` in progress at the time of this record. Its final result must be checked before claiming the comparison branch passed CI.
+The comparison artifact commit `609d38ede50bbdd98a93dfed112781eacabee9fd` completed separate `Native Brain Build` run `42272045285` successfully. This is configure/build evidence only; no CTest step is represented by this run.
 
 ### 50.5 Updated obligation status
 
@@ -3576,7 +3576,7 @@ This section evaluates the twelve exit criteria in §9 against the current repos
 
 This is not a declaration that all Brain capabilities must be implemented before the mapping phase can close. It is a declaration that each remaining obligation must have a verified result or an explicit, authorized blocked/deferred disposition, with owner and carry-forward recorded. Until then, claiming Phase 2 complete would contradict the repository's own acceptance criteria.
 
-**Current status:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. Gate B UNASSESSED. No implementation baseline selected. No donor approved. No production implementation authorized.
+**Status at the time of this ledger:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. Gate B capability acceptance NOT PASSED. No implementation baseline selected. No donor approved. No production implementation authorized.
 
 
 ---
@@ -3609,3 +3609,42 @@ PR #176 remains open/draft/unmerged at `4cf017e073da980c9f77d739fde6f92ef1a2fbc1
 - Runtime implementation authorization: **not granted**.
 
 This section supersedes any earlier shorthand in this report that described Gate B only as “unassessed.” It does not alter either gate or waive any requirement.
+
+
+---
+
+## 54. Live PR, review and CI reconciliation (2026-11-06)
+
+This section records a fresh live check after §§50–53. It updates status only; it does not change approval, gate, implementation or baseline authority.
+
+### 54.1 Current documentation PR chain
+
+| PR | Live state | Exact head | Authority consequence |
+|---|---|---|---|
+| #178 governance rules | OPEN, DRAFT, unmerged | `39fe09dcf13496f5f0005ccf3f00739303e29f88` | Proposed governance baseline; not accepted authority |
+| #179 whole-Brain integration map | OPEN, DRAFT, unmerged | `85f4cba12517eecbb82a4ff2f8dd4f7d5581e3f9` | Canonical working Phase 2 map; still based on proposed #178 |
+| #191 human/MCU comparison | OPEN, DRAFT, unmerged | `609d38ede50bbdd98a93dfed112781eacabee9fd` | Required comparison draft; based on earlier #179 commit `f6267456560a08054d69f7960d2951452b14017c` |
+
+PR #188 and PR #190 remain open review-report PRs, not submitted formal reviews of #179. Their authorship is the same repository identity as the reviewed work. Their reports remain useful advisory evidence but cannot satisfy the independent-review requirement.
+
+### 54.2 Formal review record check
+
+A fresh read of submitted review records returned **zero review submissions** for PRs #178, #179, #188, #190 and #191. In particular, PR #179 and #191 have no formal independent review recorded at their current heads. This is a hard external dependency: the Main Builder cannot create an independent review of its own work or represent an advisory report as one.
+
+### 54.3 CI reconciliation
+
+- PR #179 head `85f4cba12517eecbb82a4ff2f8dd4f7d5581e3f9`: Native Brain Build run `42273356466` completed successfully.
+- PR #191 head `609d38ede50bbdd98a93dfed112781eacabee9fd`: Native Brain Build run `42272045285` completed successfully.
+
+Both are **build-only** evidence. Neither result establishes that CTest ran, that the comparison was independently accepted, or that any runtime finding was corrected. The PR #191 artifact exists at the exact required path in §9; it remains a draft pending review and owner acceptance.
+
+### 54.4 Authority and exit consequences
+
+1. PR #178 remains a proposed governance parent. PR #179 depends on it. The Project Director must explicitly accept that exact governance revision or authorize a different authority/base path. The Main Builder must not merge, rebase or silently promote either branch.
+2. The human/MCU comparison deliverable is drafted, so criterion 10's *preparation* portion is complete. Criterion 10 is not accepted until independent review and Project Director acceptance are recorded.
+3. Criterion 12 remains blocked by the absent independent review and owner approval.
+4. Criteria 2, 3, 5, 6 and 11 remain partial as described in §52. Their remaining evidence and owner decisions have not been manufactured by this update.
+5. Gate A remains **NOT CLEARED**. Gate B capability acceptance remains **NOT PASSED**. Neither gate is a Phase 2 exit substitute.
+6. Phase 2 remains **IN PROGRESS; exit criteria NOT MET**. No implementation baseline is selected, no donor is approved, and no runtime implementation is authorized.
+
+**Builder disposition:** Documentation/build work has advanced, but the remaining closure items include decisions and formal review that only the Project Director or a genuinely separate reviewer can provide. They are not tasks the Main Builder may self-certify. Continue with bounded source/evidence work that does not require those approvals; stop at authority boundaries rather than inventing clearance.
