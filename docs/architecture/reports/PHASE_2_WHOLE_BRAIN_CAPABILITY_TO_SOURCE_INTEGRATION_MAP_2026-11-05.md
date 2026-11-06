@@ -2130,54 +2130,46 @@ The report is intentionally **not** marked complete. Before Phase 2 can pass its
 **Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, and no implementation authorization implied.
 
 
-## 26. Additional verification audit — Release-mode assertion elision and current report-branch CI
+## 26. Additional verification audit — correction of the Release-assertion finding
 
-**Audit date:** 2026-11-05  
+**Audit date:** 2026-11-06  
 **Donor baseline:** PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`  
-**Report baseline before this update:** PR #179 branch blob `76170fa2a604d28366f05a18293ae448b41b64d8`  
-**Scope:** Rechecked the exact donor Brain CI workflow, both job logs, CMake test configuration, and the assertion-heavy runtime/action integration suites. Also rechecked the latest workflow run attached to PR #179's current head. No runtime or test source was modified.
+**Scope:** Re-opened the complete donor test CMake configuration after the prior audit raised P2-I-034. The previous audit inspected test registration but missed the assertion-enabling block at the end of the same file. This correction supersedes the previous §26.1 conclusion.
 
-### 26.1 Native Release CTest reports success while compiling out the suites' assertions
+### 26.1 P2-I-034 is withdrawn — Release test targets explicitly undefine NDEBUG
 
-The donor workflow `.github/workflows/brain-ci.yml` configures its native job with:
+The prior audit stated that Release-mode test executables compiled out their `assert(...)` expressions because no test-target override undefines `NDEBUG`. That statement was incorrect.
 
-```sh
-cmake -S core/cpp -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON
-```
+The complete file `core/cpp/tests/CMakeLists.txt` at donor HEAD has blob `cbfd1fde52fffa6eeac025da2b7ddcb5ab493261`. Its final block, lines 303–315, explicitly states that the executable suites use `assert()` and that assertions must remain enabled in Release. It obtains the directory's `BUILDSYSTEM_TARGETS`, iterates the executable targets, and applies:
 
-The test suites use the C/C++ `assert` macro. Under the normal CMake Release configuration for GCC/Clang, `NDEBUG` is defined; when `NDEBUG` is defined, `assert(expression)` expands to a no-op and **does not evaluate the expression**. The donor CMake test registration does not add a test-target option to undefine `NDEBUG`. Therefore, in the native Release job, assertions are not merely unchecked: any setup or state-changing calls placed inside `assert(...)` are also omitted from execution.
+- GNU/Clang: `-UNDEBUG`
+- MSVC: `/UNDEBUG`
 
-This is directly relevant to the selected integration suites. For example, `cognitive_runtime_learning_integration_suite.cpp` wraps goal creation/activation, runtime start/submission, result-presence checks and many behavioral invariants in `assert(...)`. In the Release configuration, those expressions are not evaluated. The executable still runs non-assert statements and CTest still observes process exit status, but a successful exit cannot be interpreted as those assertion-defined learning invariants having been checked. The same pattern appears in `brain_action_consequence_integration_suite.cpp` and `affective_brain_decision_suite.cpp`.
+This target-specific undefinition is applied after the Release configuration's normal `NDEBUG` definition in the generated compile command ordering. Therefore the checked-in CMake configuration is designed to keep assertion expressions active for the test executables in Release as well as Debug.
 
-The exact donor CI logs independently confirm the two configurations and results:
-- Native job `123168281291`, run `40788714686`: checked out exact donor HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`, configured Release, and reported 71/71 CTest processes passed.
-- Sanitizer job `123168281548`, same run: checked out the same exact SHA, configured Debug with AddressSanitizer and UndefinedBehaviorSanitizer, and reported 71/71 tests passed. Debug retains `assert` expressions, so this is the assertion-bearing CI evidence for those suites.
+The workflow's native job configures `CMAKE_BUILD_TYPE=Release`, and its exact-HEAD run reported 71/71 CTest processes passing. In light of the test-target override, that result must not be discounted on the basis of assertion elision. The separate Debug ASan/UBSan job also passed 71/71 and remains valid assertion-bearing sanitizer evidence.
 
-The Release build remains useful compilation/optimized-configuration and process-smoke evidence. The Debug ASan/UBSan job is the meaningful assertion-enabled test result. Neither job covers ThreadSanitizer or the separately identified event-append/partial-effect failure injections.
+**Disposition:** P2-I-034 is **withdrawn**. It is not an active donor finding and must not be used as a Gate A blocker. The earlier conclusion resulted from an incomplete inspection of `core/cpp/tests/CMakeLists.txt`; the complete-file recheck corrected it. No source defect is established by that earlier claim.
 
-### 26.2 Current PR #179 CI is a build-only check on its latest verified head
+A residual test-design consideration remains: required setup and state-changing calls inside `assert(...)` are fragile if those test sources are compiled outside this CMake target configuration or under a different build system. That portability concern is not evidence that the repository's current CMake Release job elides those expressions, and it is not promoted to a separate finding in this audit.
 
-The current PR #179 head at the time of this audit is `99f48d52d1ea816d6f9a2138d976578bc5e33222`. Its latest returned workflow run is Native Brain Build run `1639`, ID `42081553060`. The job checked out synthetic merge commit `11546a265346826fc0c90e0e766ed8a403eb37f8`, which merges that report head into PR #178 base `39fe09dcf13496f5f0005ccf3f00739303e29f88`. Its steps were configure and build; there was no CTest step. This verifies the current documentation-branch merge tree compiles, not that tests ran or that donor runtime behavior was tested.
+### 26.2 Current interpretation of the CI evidence
 
-### 26.3 Finding and required CI correction
+- Exact donor HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`: native Release CTest 71/71 and Debug ASan/UBSan CTest 71/71, both successful.
+- The Release test-target CMake override preserves assertions; the native result is valid registered-test execution evidence, subject to the normal limits of the test suite's coverage and validity.
+- The Debug sanitizer result adds AddressSanitizer and UndefinedBehaviorSanitizer coverage. It does not provide ThreadSanitizer coverage or replace deterministic persistence/action failure injection.
+- A previously inspected PR #179 workflow run was build-only and did not run CTest. That historical report-branch build result is not donor runtime/test evidence and should not be conflated with the donor's exact-HEAD CI.
 
-**Finding P2-I-034 — PR #97's native Release CTest job disables assertion-based test logic; its 71/71 result is not equivalent to 71/71 assertion-bearing test passes.** The separate exact-HEAD Debug ASan/UBSan job does retain assertions and passed 71/71, so the donor does have substantial exact-HEAD assertion-enabled test evidence. The distinction must remain explicit in any review or acceptance decision.
+### 26.3 Self-review and correction record
 
-Required CI/test-quality correction before donor acceptance:
-1. Ensure test targets compile with assertions enabled in every configuration (for example, a portable test-target-specific undefinition of `NDEBUG`), or replace assertion-only checks with a test framework whose checks remain active in Release.
-2. Move setup and state-changing operations out of assertion expressions; assertions should verify outcomes, not perform required test setup.
-3. Add a CI guard that proves test assertion checks are active in Release, rather than relying on the build type label alone.
-4. Preserve Debug ASan/UBSan coverage and add a separate ThreadSanitizer/concurrency run where appropriate.
-5. Keep the PR #179 build-only run distinct from donor test evidence.
+The correction was checked against the complete test CMake file, not a partial line range. The relevant blob SHA is recorded above. The test-target loop applies to executable targets in the test subdirectory, where the suite executables are declared. The prior report statement that no override existed is therefore explicitly superseded.
 
-**Self-review:** the conclusion is supported by the workflow's explicit Release/Debug configuration, the absence of a test-target `NDEBUG` override in CMake registration, the assertion-heavy test sources, and the provider logs for both exact-HEAD jobs. This does not invalidate the Debug sanitizer results or imply a failure in the observed CI runs. It narrows the native Release job's evidentiary value.
+No donor production source, test source, workflow, or CMake file was modified. This was a review-record correction only. The other findings P2-I-001 through P2-I-033 are not changed by withdrawing P2-I-034; they remain subject to their own evidence and acceptance status.
 
 **Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, and no implementation authorization implied.
 
 
----
-
-## 10.8 CI and trial-evidence correction — donor workflows were present and must be counted
+## 27 CI and trial-evidence correction — donor workflows were present and must be counted
 
 This section corrects the overly narrow CI statement in §10.4. The earlier query used a PR-triggered commit-run wrapper and did not enumerate push/workflow-dispatch runs. A direct Actions-run listing for `feat/jarvis-affective-state` exposes successful donor-branch runs. The previous statement that donor CI remained unverified is therefore superseded.
 
@@ -2244,7 +2236,7 @@ The separate persistence fixture `core/cpp/tests/dlt_002_persistence.cpp` perfor
 
 ---
 
-## 10.9 Runtime and persistence failure-path trace
+## 28 Runtime and persistence failure-path trace
 
 The exact donor runtime path is now source-traced across:
 `CognitiveRuntime::worker_loop` → `CognitiveCycle::run` → `CognitiveRuntime::execute_actions` → `Brain::execute_action` → `ActionExecutor::run` → `action_outcome` journal append/replay → separately appended `affective_learning` and `learning` events → prediction feedback resolution → later runtime feedback processing.
@@ -2293,7 +2285,7 @@ The donor tree includes `CognitiveRuntime`, `Brain::execute_action`, a TypeScrip
 
 ---
 
-## 10.10 DLT-002 protocol audit — what its runtime evidence can and cannot establish
+## 29 DLT-002 protocol audit — what its runtime evidence can and cannot establish
 
 A second source-level pass examined the measurement path, not just the successful workflow summaries.
 
@@ -2343,7 +2335,7 @@ The next investigation should prioritize (a) independent analysis of the retaine
 
 ---
 
-## 10.11 DLT-002 raw artifact analysis — three-seed behavioral results
+## 30 DLT-002 raw artifact analysis — three-seed behavioral results
 
 The three retained ZIP artifacts from workflow run #8 (40565468650) were downloaded and the raw episodes.csv, trial.log, checkpoints.csv, and summary files were inspected. This moves the evidence assessment beyond workflow completion and summary counts.
 
@@ -2411,7 +2403,7 @@ The executable supports enabled and no-feedback modes, but the three-seed workfl
 
 ---
 
-## 10.12 Application-boundary and polyglot integration map
+## 31 Application-boundary and polyglot integration map
 
 A bounded whole-tree inspection was performed against donor HEAD c1da222e6c94aeb3f2ad000392c21fe4fc81ab25. The result is important because the presence of language-specific directories or interfaces is not evidence that they are connected to the native cognitive runtime.
 
@@ -2466,7 +2458,7 @@ Until that evidence exists, classify the C++ runtime as an integrated native sub
 
 ---
 
-## 10.13 Journal append failure semantics — second persistence finding
+## 32 Journal append failure semantics — second persistence finding
 
 A deeper inspection of the journal writer found a separate failure-path gap from P2-I-013. This finding concerns a single event append's rollback and the meaning of "durable", rather than the multi-event learning transaction.
 
@@ -2506,3 +2498,39 @@ P2-I-013 remains the multi-record logical learning atomicity issue: action_outco
 The inspected memory_learning_evolution_persistence_suite and dlt_002_persistence test normal successful append/reconstruction and learned-state restoration. They do not inject write failure, flush failure, rollback truncation failure, or abrupt power loss. Their successful restart assertions must not be described as evidence for those untested failure modes.
 
 **Updated persistence assessment:** normal-path event append/replay and learning reconstruction have meaningful integration coverage. Multi-event transaction recovery and low-level journal failure handling remain unverified. The word "durable" should be qualified to match the actual guarantees implemented and tested.
+
+
+## 33. Final self-review and reviewer handoff audit
+
+**Audit date:** 2026-11-06  
+**Review scope:** Report consistency, source provenance, finding status, section structure, and separation of review artifacts from the donor branch.
+
+### 33.1 Material correction made before handoff
+
+- Re-opened the complete donor `core/cpp/tests/CMakeLists.txt` after noticing that the prior Release-assertion analysis had inspected only the test registrations.
+- Verified the final CMake block applies `-UNDEBUG` for GNU/Clang and `/UNDEBUG` for MSVC to executable test targets.
+- Replaced the incorrect active finding P2-I-034 with an explicit withdrawal and correction record in §26.
+- The report must not state that the donor's Release CTest job elides assertions. That earlier conclusion is withdrawn.
+- The correction does not change the separate exact-HEAD Debug ASan/UBSan evidence or any of P2-I-001 through P2-I-033.
+
+### 33.2 Structure and finding-index checks
+
+- The appended investigation batches are now numbered consecutively as §§27–32 rather than reusing §§10.8–10.13 after §26.
+- P2-I-034 is recorded only as a withdrawn finding; it is not part of the active finding set.
+- The active finding sequence remains P2-I-001 through P2-I-033. The withdrawal is retained for auditability rather than silently deleting the prior reviewer error.
+- The report continues to distinguish confirmed source defects, unverified failure-path risks, unresolved integration scope, and experimental limitations.
+- Historical CI and DLT-002 results remain scoped to their exact commit SHAs; earlier-revision experiments are not presented as current-HEAD runtime proof.
+
+### 33.3 Source and branch boundary
+
+- Donor source baseline remains PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+- The CMake evidence used for the correction is donor blob `cbfd1fde52fffa6eeac025da2b7ddcb5ab493261`.
+- The report is maintained on `docs/jarvis-phase-2-whole-brain-integration-map-20261105` and PR #179; no donor branch source or tests were changed.
+- The review remains independent and review-only. No implementation, merge, donor approval, or baseline selection is implied.
+
+### 33.4 Remaining work and decision boundary
+
+This batch improves the accuracy and navigability of the report; it does not complete Phase 2. The remaining blockers in §25.4 still apply, including acquisition/provenance tracing, test-validity review, authorization and action-failure boundaries, deterministic failure injection, runtime coordination/recovery, and independent review.
+
+**Final self-review result:** the prior Release-assertion finding was materially wrong and has been explicitly withdrawn. The report's active finding index, section numbering, and donor/report branch boundary have been reconciled in this update. Phase 2 remains IN PROGRESS; Gate A remains NOT CLEARED. No implementation baseline is selected and no donor is approved.
+
