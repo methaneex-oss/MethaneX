@@ -2534,3 +2534,52 @@ This batch improves the accuracy and navigability of the report; it does not com
 
 **Final self-review result:** the prior Release-assertion finding was materially wrong and has been explicitly withdrawn. The report's active finding index, section numbering, and donor/report branch boundary have been reconciled in this update. Phase 2 remains IN PROGRESS; Gate A remains NOT CLEARED. No implementation baseline is selected and no donor is approved.
 
+
+
+---
+
+## 34. Runtime feedback persistence acknowledgement — follow-up to P2-I-013 and P2-I-029
+
+**Audit date:** 2026-11-06  
+**Affected donor revision:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`  
+**Scope:** Trace queued `CognitiveFeedback` through prediction resolution, evidence learning, journal append and runtime completion metrics. This is a follow-up to the existing persistence/atomicity findings, not a new finding ID.
+
+### Direct source trace
+
+1. `CognitiveRuntime::process_feedback` calls `CognitiveCycle::process_outcome` and decides whether the item failed using only two conditions: a requested prediction was not resolved, or a requested goal update was not assimilated. If neither condition is requested, neither can fail the item.
+2. `CognitiveCycle::process_outcome` resolves a requested prediction first. It then calls `learn_from_outcome(evidence)` when evidence is present and stores the returned numeric reliability in `CognitiveFeedbackResult::learned_reliability`. It exposes no separate evidence-persistence status.
+3. `Brain::learn` appends a `learning` event. If `Memory::append` returns sequence zero, it returns numeric zero before replaying the event or updating the knowledge projection. On success, it can also return numeric zero when the assimilated source reliability is zero. Therefore the numeric return value is not an unambiguous persistence acknowledgement.
+4. `CognitiveRuntime::process_feedback` does not inspect `learned_reliability` and has no evidence-assimilated/persisted flag to inspect. A non-throwing evidence append failure can therefore still increment `feedback_processed`.
+
+This produces two concrete conditional cases:
+
+- **Evidence-only feedback:** if the `learning` event append fails, neither prediction nor goal failure condition is requested; the runtime increments `feedback_processed` even though the evidence event was not replayed into Brain state.
+- **Prediction plus evidence feedback:** prediction resolution is attempted and can persist before the separate evidence append. If prediction resolution succeeds but the later `learning` append fails, the runtime still increments `feedback_processed`; the journal contains the resolved prediction outcome but not the associated evidence-learning event.
+
+These are source-derived failure-path outcomes, not reproduced incidents. The inspected tests do not inject a failure specifically at the `Brain::learn` evidence append.
+
+### Source anchors
+
+- [`CognitiveRuntime::process_feedback`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/cognitive_runtime.cpp#L127-L154), blob `cf00acb6abd52308343f3a0e7016e6173b945603`.
+- [`CognitiveCycle::process_outcome`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/cognitive_cycle.cpp#L750-L773), blob `f191dd610d6cbe1621756c35e7c13af2054a7266`.
+- [`Brain::learn`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain.cpp#L791-L820), blob `dec9e5442b3ca4b81a7879855c6146b2619934cc`.
+- [Runtime feedback integration test](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/cognitive_runtime_suite.cpp#L223-L260), blob `361cba84a6fc6e07e31d14b5fa618c3f0a7848fa`.
+- [Goal-feedback runtime test](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/cognitive_runtime_goal_feedback_suite.cpp#L1-L90), blob `15a6bdffe37ae7df6c625ea9737fda4c0bf08a7f`.
+
+### Finding disposition and required correction
+
+This evidence **extends P2-I-029** (persistence acknowledgement is not surfaced through the result/metrics boundary) and **P2-I-013** (a logical learning update can be split across independent journal appends). It does not warrant a new numeric finding because the underlying acceptance concerns are already represented by those findings.
+
+Required Builder/Tester evidence:
+
+1. Give evidence assimilation an explicit structured result that distinguishes validation rejection, journal append failure, persisted-and-replayed evidence, and a valid zero-reliability update. Do not infer persistence from a floating-point reliability value.
+2. Make runtime feedback accounting reflect partial outcomes. A prediction may be resolved while associated evidence learning fails; expose that as partial/failed rather than a fully processed feedback item.
+3. Define whether prediction resolution and evidence learning form one logical feedback transaction. If partial completion is permitted, persist a recoverable pending marker or equivalent reconciliation identity; retries must be idempotent.
+4. Inject `Memory::append` failure for (a) evidence-only feedback and (b) combined prediction-plus-evidence feedback. Assert the returned per-component status, `feedback_processed`/`feedback_failed` counters, live Brain state, journal contents, restart/replay state and retry behavior.
+5. Include a successful zero-reliability evidence case so the test proves that a numeric return of zero is not mistaken for append failure.
+
+### Test-coverage judgement
+
+The inspected `cognitive_runtime_suite` exercises successful prediction-plus-evidence feedback, sequence-bound prediction resolution and invalid-payload rejection. The inspected goal-feedback suite exercises successful progress assimilation and a regressive goal update counted as failed. These tests do not establish correct metrics or recovery when the evidence-learning append itself fails.
+
+**Updated review judgement:** runtime feedback queue acceptance is not equivalent to successful evidence assimilation; successful prediction resolution is not proof that associated evidence learning persisted. The existing P2-I-013/P2-I-029 findings remain open, and this additional call path must be included in their failure-injection matrix. Phase 2 remains IN PROGRESS. Gate A remains NOT CLEARED. PR #97 remains an unmerged donor.
