@@ -3537,7 +3537,7 @@ The latest report commit before this section, `e06a22faa535b38d4f985669685096888
 
 ### 51.5 Status
 
-The main-tree documentation authority scan and three preservation/link updates are complete within the bounded scope above. R3-01 is **partially resolved**, not fully cleared. Phase 2 remains IN PROGRESS; Gate A remains NOT CLEARED; Gate B remains UNASSESSED. Independent review, owner acceptance and the outstanding technical test/implementation obligations remain separate requirements.
+The main-tree documentation authority scan and three preservation/link updates are complete within the bounded scope above. R3-01 is **partially resolved**, not fully cleared. Phase 2 remains IN PROGRESS; Gate A remains NOT CLEARED; Gate B capability acceptance has NOT PASSED. This corrects the shorthand in this historical section in accordance with §53. Independent review, owner acceptance and the outstanding technical test/implementation obligations remain separate requirements.
 
 
 ---
