@@ -3816,3 +3816,38 @@ No runtime code or tests were changed by this audit. Gate A remains NOT CLEARED;
 ## 58. Exact-head CI update after §§56–57
 
 The report update containing §§56–57 must be evaluated at its exact commit. The preceding successful run `42297709974` applies only to commit `b36760801b798b958a6563126ea3bac6f8e78abe`; it must not be attributed to this later report revision. This section is a provenance guard and does not claim a new build or CTest result.
+
+
+---
+
+## 59. World-model provenance and snapshot consistency gap (2026-11-06)
+
+### 59.1 Direct source trace
+
+At the pinned main baseline `1273ddbcd0087d189e01388ded2d362fb1e058d2`:
+
+- `Fact` declares `first_sequence` and `updated_sequence` in `core/cpp/include/jarvis/core/world_model.hpp` (blob `1c14f692374b0ab272f05634b7bdd26e358b4f1f`, line 12 onward).
+- Brain observation replay updates the belief's `updated_sequence` to `event.sequence`, but constructs the corresponding WorldModel fact as `Fact{event.source, key, value, reliability, 1}` in `core/cpp/src/brain.cpp` (blob `e9f3758fcc9c0e89b7280ce376db9033d547682d`, line 82). The aggregate initialization leaves both Fact sequence fields at their zero defaults.
+- The standalone WorldState event path similarly calls `model_.observe(Fact{event.source, key, value, 0.5, 1})` in `core/cpp/src/world_state.cpp` (blob `84658ee6e1a4485e1fe0f24ebb40eb3e281670f0`, line 21), while separately recording the event sequence in its history/checkpoint.
+- `BrainSnapshot` does not include WorldModel facts or relations; `Brain::snapshot()` copies state, self-state, beliefs, predictions, causal links and goals only (`brain.hpp` blob `8268ef84e0b361ead536724ba7761904b30ee58f`, line 55 onward; `brain.cpp` blob above, line 215).
+- The existing WorldModel/Brain test verifies a query result and restart of selected self-state fields, but does not assert that WorldModel Fact sequence metadata matches the journal event sequence (`world_self_model_phase4_suite.cpp`, blob `f375f6e36c16fbb038d2ce3ba5c4cd18adf1860c`).
+
+### 59.2 Impact and limits
+
+The Brain journal and belief records carry event sequence identity, but the WorldModel Fact projection currently drops that identity at construction. Consumers querying a Fact cannot rely on its declared first/updated sequence fields to establish freshness or trace the fact back to a journal event. This is a provenance defect in the projection, not proof that the underlying journal has lost the event.
+
+The incomplete BrainSnapshot projection compounds the observability problem: a caller cannot obtain Brain-owned world facts/relations as part of the same declared snapshot object. The public `world()` reference provides a separate query surface, but the inspected API does not define an atomic cross-model snapshot contract. Do not claim a concurrency race or stale read has been reproduced; the finding is a source-level absence of an explicit consistency contract plus missing sequence propagation.
+
+### 59.3 Required closure evidence
+
+1. Define the intended semantics of Fact `first_sequence` and `updated_sequence` for new, repeated and conflicting observations.
+2. Populate those fields from the authoritative journal event sequence on Brain replay and from the supplied event sequence in WorldState, without fabricating values for caller-created facts that lack provenance.
+3. Add tests for first observation, repeated same-value observation, conflicting observation, restart/replay and sequence monotonicity.
+4. Define whether BrainSnapshot is intentionally partial or must include a coherent WorldModel projection; if coherent, specify lock/order semantics and test it under concurrent observation/snapshot reads.
+5. Ensure WorldState remains explicitly standalone unless an authorized architecture decision gives it a distinct projection role and ownership contract.
+
+No production change is authorized by this audit.
+
+### 59.4 Status
+
+**New source-level finding recorded.** This adds a concrete provenance/observability gap to exit criteria 2, 3 and 6. Criterion 3 remains PARTIAL; criterion 6 remains PARTIAL. The issue is uncorrected and untested. Gate A remains NOT CLEARED; Phase 2 exit criteria remain NOT MET.
