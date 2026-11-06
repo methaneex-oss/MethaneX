@@ -2542,7 +2542,7 @@ This batch improves the accuracy and navigability of the report; it does not com
 
 **Audit date:** 2026-11-06  
 **Affected donor revision:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`  
-**Scope:** Trace queued `CognitiveFeedback` through prediction resolution, evidence learning, journal append and runtime completion metrics. This is a follow-up to the existing persistence/atomicity findings, not a new finding ID.
+**Scope:** Trace queued `CognitiveFeedback` through prediction resolution, evidence learning, journal append and runtime completion metrics. This follow-up isolates a distinct caller-visible status gap at the queued-feedback boundary; it cross-references, but does not duplicate, the existing action-persistence and multi-event atomicity findings.
 
 ### Direct source trace
 
@@ -2566,9 +2566,7 @@ These are source-derived failure-path outcomes, not reproduced incidents. The in
 - [Runtime feedback integration test](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/cognitive_runtime_suite.cpp#L223-L260), blob `361cba84a6fc6e07e31d14b5fa618c3f0a7848fa`.
 - [Goal-feedback runtime test](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/cognitive_runtime_goal_feedback_suite.cpp#L1-L90), blob `15a6bdffe37ae7df6c625ea9737fda4c0bf08a7f`.
 
-### Finding disposition and required correction
-
-**Finding P2-I-035 — Runtime feedback completion metrics can report evidence as processed even when its learning event was not persisted.**
+### P2-I-035 — Finding details and required correction
 
 - **Severity:** Medium (provisional; impact depends on whether `feedback_processed` is consumed as an operational or acceptance signal).
 - **Confidence:** High for the control-flow and missing-status evidence; Medium for the failure outcome until append failure is deterministically injected.
