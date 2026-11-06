@@ -1153,7 +1153,7 @@ The replay path validates the affective-learning source against the referenced a
 
 The inspected persistence code uses stream `flush()`; no explicit file or directory `fsync` is visible in the inspected append path. The journal format also lacks a frame marker/checksum; startup scans valid records, quarantines an unreadable suffix and truncates to the last valid record boundary. Metadata is persisted separately through a `.meta` file and temporary-file rename. These mechanisms should not be conflated with power-loss durability, tamper resistance or cross-file atomicity.
 
-**Finding P2-I-014 — Donor event replay provides ordered reconstruction and source-linked validation, but action learning is a multi-record, partially committable sequence.** Failure-injection tests must establish what state is reconstructed when each append boundary fails and whether callers can distinguish execution success from learning-record persistence failure.
+**P2-I-023 (expanded in §§18.2 and 28) — Donor event replay provides ordered reconstruction and source-linked validation, but action learning is a multi-record, partially committable sequence.** Failure-injection tests must establish what state is reconstructed when each append boundary fails and whether callers can distinguish execution success from learning-record persistence failure.
 
 ### 13.6 Updated investigation ledger
 
@@ -2232,7 +2232,7 @@ The separate persistence fixture `core/cpp/tests/dlt_002_persistence.cpp` perfor
 | DLT-002 multi-seed sweep | `82c49a75bd30de2962879f044776f4bf2391970a` | 3/3 seeds completed | Ten-minute controlled changing-environment trials with raw artifacts | Same long-run result at final donor HEAD |
 | DLT-002 train/verify CTest | `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` | Included in 71/71 CTest | Registered persistence train/verify fixture executed | Full long-run learning performance |
 
-**Finding P2-I-012 — CI evidence coverage was under-reported in the previous batch.** Status: corrected; this is a review-record accuracy correction, not a source defect. The donor has exact-HEAD native and ASan/UBSan CI evidence, plus earlier multi-seed DLT-002 evidence. The evidence is stronger than previously recorded, but it still does not clear Gate A.
+**CI evidence correction — coverage was under-reported in the previous batch.** Status: corrected; this is a review-record accuracy correction, not a source defect. The donor has exact-HEAD native and ASan/UBSan CI evidence, plus earlier multi-seed DLT-002 evidence. The evidence is stronger than previously recorded, but it still does not clear Gate A.
 
 ---
 
@@ -2263,7 +2263,7 @@ The action outcome, affective-learning event and capability-learning event are s
 
 This is not evidence that the normal path is broken. It is a crash/I/O-failure recovery limitation. When the action-outcome append reports success, its event has been written and stream-flushed; the implementation does not establish stable-storage durability against power loss. One or both derived learning records may be absent after a later append failure. The current tests demonstrate normal replay and restart behavior, not every possible append-failure interleaving.
 
-**Finding P2-I-013 — Multi-record action learning is not transactionally atomic.**
+**Expanded detail for P2-I-023 — Multi-record action learning is not transactionally atomic.**
 - Severity: Medium (provisional; consequence depends on the required durability contract).
 - Confidence: High for the separate-append behavior; Medium for operational impact absent an injected I/O-failure reproduction.
 - Status: CONFIRMED as a limitation / UNRESOLVED as an acceptance blocker.
@@ -2449,7 +2449,7 @@ Until that evidence exists, classify the C++ runtime as an integrated native sub
 
 1. Run paired enabled/no-feedback and transfer-ablation DLT-002 experiments with the same seeds and schedules.
 2. Rerun the long-run behavioral protocol on the exact final candidate SHA and publish per-phase, early-reversal and transfer metrics.
-3. Execute failure injection for P2-I-013 and define the journal's partial-transaction recovery contract.
+3. Execute failure injection for P2-I-023 and define the multi-event learning transaction's partial-commit recovery contract.
 4. Require the actual application entry-point/transport map and one end-to-end test across the intended language boundaries.
 5. Preserve the distinction between mechanism existence, controlled runtime integration, cross-language integration and deployed operation in all Gate A decisions.
 
@@ -2460,7 +2460,7 @@ Until that evidence exists, classify the C++ runtime as an integrated native sub
 
 ## 32. Journal append failure semantics — second persistence finding
 
-A deeper inspection of the journal writer found a separate failure-path gap from P2-I-013. This finding concerns single-event append rollback, startup repair of a malformed journal tail, and the meaning of "durable", rather than the multi-event learning transaction.
+A deeper inspection of the journal writer found a separate failure-path gap from P2-I-023. This finding concerns single-event append rollback, startup repair of a malformed journal tail, and the meaning of "durable", rather than the multi-event learning transaction.
 
 ### Direct source evidence
 
@@ -2493,14 +2493,14 @@ Separately, even a successful append currently establishes stream-flush completi
 
 ### Relationship to P2-I-013 and current test coverage
 
-P2-I-013 remains the multi-record logical learning atomicity issue: action_outcome, affective_learning and learning are separate appends. P2-I-014 is the lower-level single-record journal rollback/durability issue. Fixing one does not fix the other.
+P2-I-023 remains the multi-record logical learning atomicity issue: action_outcome, affective_learning and learning are separate appends. P2-I-014 is the lower-level single-record journal rollback/durability issue. Fixing one does not fix the other.
 
 The inspected memory_architecture_suite includes a positive-path corrupt-tail test: it corrupts a later record, verifies that the suffix is quarantined, verifies the active journal is repaired, appends a new event, and verifies restart recovery. This validates successful repair only. The memory_learning_evolution_persistence_suite and dlt_002_persistence likewise test normal successful append/reconstruction and learned-state restoration. None of these tests injects event-write failure, append rollback truncation failure, quarantine-copy failure, load-time truncation failure, flush failure, or abrupt power loss. Their successful recovery assertions must not be described as evidence for those untested failure modes.
 
 **Updated persistence assessment:** normal-path event append/replay and learning reconstruction have meaningful integration coverage. Multi-event transaction recovery and low-level journal failure handling remain unverified. The word "durable" should be qualified to match the actual guarantees implemented and tested.
 
 
-## 33. Final self-review and reviewer handoff audit
+## 33. Self-review and correction audit before feedback follow-up
 
 **Audit date:** 2026-11-06  
 **Review scope:** Report consistency, source provenance, finding status, section structure, and separation of review artifacts from the donor branch.
@@ -2515,7 +2515,7 @@ The inspected memory_architecture_suite includes a positive-path corrupt-tail te
 
 ### 33.2 Structure and finding-index checks
 
-- The appended investigation batches are now numbered consecutively as §§27–32 rather than reusing §§10.8–10.13 after §26.
+- The appended investigation batches are numbered consecutively as §§27–32; the subsequent feedback-persistence follow-up is isolated in §34.
 - P2-I-034 is recorded only as a withdrawn finding; it is not part of the active finding set.
 - The active finding sequence remains P2-I-001 through P2-I-033. The withdrawal is retained for auditability rather than silently deleting the prior reviewer error.
 - The report continues to distinguish confirmed source defects, unverified failure-path risks, unresolved integration scope, and experimental limitations.
@@ -2532,13 +2532,13 @@ The inspected memory_architecture_suite includes a positive-path corrupt-tail te
 
 This batch improves the accuracy and navigability of the report; it does not complete Phase 2. The remaining blockers in §25.4 still apply, including acquisition/provenance tracing, test-validity review, authorization and action-failure boundaries, deterministic failure injection, runtime coordination/recovery, and independent review.
 
-**Final self-review result:** the prior Release-assertion finding was materially wrong and has been explicitly withdrawn. The report's active finding index, section numbering, and donor/report branch boundary have been reconciled in this update. Phase 2 remains IN PROGRESS; Gate A remains NOT CLEARED. No implementation baseline is selected and no donor is approved.
+**Self-review result at this stage:** the prior Release-assertion finding was materially wrong and has been explicitly withdrawn. The report's active finding index, section numbering, and donor/report branch boundary have been reconciled in this update. Phase 2 remains IN PROGRESS; Gate A remains NOT CLEARED. No implementation baseline is selected and no donor is approved.
 
 
 
 ---
 
-## 34. Runtime feedback persistence acknowledgement — follow-up to P2-I-013 and P2-I-029
+## 34. Runtime feedback persistence acknowledgement — follow-up to P2-I-023 and P2-I-029
 
 **Audit date:** 2026-11-06  
 **Affected donor revision:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`  
@@ -2568,7 +2568,7 @@ These are source-derived failure-path outcomes, not reproduced incidents. The in
 
 ### Finding disposition and required correction
 
-This evidence **extends P2-I-029** (persistence acknowledgement is not surfaced through the result/metrics boundary) and **P2-I-013** (a logical learning update can be split across independent journal appends). It does not warrant a new numeric finding because the underlying acceptance concerns are already represented by those findings.
+This evidence **extends P2-I-029** (persistence acknowledgement is not surfaced through the result/metrics boundary) and **P2-I-023** (a logical learning update can be split across independent journal appends). It does not warrant a new numeric finding because the underlying acceptance concerns are already represented by those findings.
 
 Required Builder/Tester evidence:
 
@@ -2582,4 +2582,51 @@ Required Builder/Tester evidence:
 
 The inspected `cognitive_runtime_suite` exercises successful prediction-plus-evidence feedback, sequence-bound prediction resolution and invalid-payload rejection. The inspected goal-feedback suite exercises successful progress assimilation and a regressive goal update counted as failed. These tests do not establish correct metrics or recovery when the evidence-learning append itself fails.
 
-**Updated review judgement:** runtime feedback queue acceptance is not equivalent to successful evidence assimilation; successful prediction resolution is not proof that associated evidence learning persisted. The existing P2-I-013/P2-I-029 findings remain open, and this additional call path must be included in their failure-injection matrix. Phase 2 remains IN PROGRESS. Gate A remains NOT CLEARED. PR #97 remains an unmerged donor.
+**Updated review judgement:** runtime feedback queue acceptance is not equivalent to successful evidence assimilation; successful prediction resolution is not proof that associated evidence learning persisted. The existing P2-I-023/P2-I-029 findings remain open, and this additional call path must be included in their failure-injection matrix. Phase 2 remains IN PROGRESS. Gate A remains NOT CLEARED. PR #97 remains an unmerged donor.
+
+
+---
+
+## 35. Final finding-index, provenance and handoff verification
+
+**Audit date:** 2026-11-06  
+**Scope:** Independent consistency pass after the runtime-feedback persistence follow-up in §34.
+
+### 35.1 Finding identity reconciliation
+
+The full report contained reused numeric labels in later appended batches. These have been reconciled so a reviewer can identify one issue unambiguously:
+
+- **P2-I-012** remains the donor runtime action/consequence/learning/decision integration finding. The later CI evidence correction in §27 is a report-history correction, not a second finding, and no longer carries a finding ID.
+- **P2-I-013** remains the mainline finding that the inspected main CognitiveRuntime does not connect cycle assessments to the standalone Brain action-execution API.
+- **P2-I-014** now identifies the lower-level journal append rollback and startup tail-repair failure/durability issue in §32.
+- **P2-I-023** is the canonical multi-event action-learning atomicity finding. The earlier source-trace statement in §13.5 and the detailed failure-path treatment in §28 are explicitly cross-referenced to this same finding rather than creating competing IDs.
+- **P2-I-029** remains the action-execution/persistence-acknowledgement finding. The evidence-only and prediction-plus-evidence feedback path in §34 extends its caller-visible acknowledgement concern and P2-I-023's partial-commit concern.
+- **P2-I-034** is withdrawn. It is retained only as an audit trail for the incorrect Release-assertion conclusion; it is not an active finding or Gate A blocker.
+
+The active finding set is P2-I-001 through P2-I-033. Repeated references to an existing finding are expansions or cross-references, not additional findings. The report does not claim that the withdrawn P2-I-034 is active.
+
+### 35.2 Runtime-feedback follow-up verification
+
+The §34 source trace was independently checked against the donor blobs for `cognitive_runtime.cpp`, `cognitive_cycle.cpp`, and `brain.cpp`:
+
+- `process_feedback` marks feedback failed only for an unresolved requested prediction, an unassimilated requested goal update, or an exception. It does not inspect whether optional evidence learning persisted.
+- `process_outcome` resolves a requested prediction before invoking `learn_from_outcome` for evidence, so the two effects can persist independently.
+- `Brain::learn` returns numeric zero both when the Memory append fails and when a valid zero-reliability update is learned; the scalar return is not a persistence status.
+- The current successful runtime tests do not inject failure at the evidence-learning append. The report labels the failure sequences as conditional source-derived outcomes, not reproduced incidents.
+
+The follow-up is correctly treated as an extension of existing acceptance findings, not as a new numeric finding.
+
+### 35.3 Report structure and source boundaries
+
+- Sections are numbered consecutively through §35, with no duplicate section numbers.
+- Active finding IDs are reconciled as stated above; the CI correction and the §34 follow-up are not double-counted as separate numbered findings.
+- Donor evidence remains pinned to PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+- The donor branch remains unchanged by this review. The report and its corrections are confined to the Phase 2 review branch and PR #179.
+- No production source, test, workflow or build configuration was edited by this review batch.
+
+### 35.4 Decision boundary
+
+This report is materially more complete and internally navigable, but Phase 2 is not complete. The unresolved requirements in §25.4 remain open, including acquisition/provenance tracing, selected-suite validity and controls, authorization freshness, partial-effect/rollback behavior, deterministic journal and feedback failure injection, cross-runtime integration, and independent review.
+
+**Final handoff status:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. PR #97 remains an unmerged donor. No implementation baseline is selected, no donor is approved, and no implementation authorization is implied.
+
