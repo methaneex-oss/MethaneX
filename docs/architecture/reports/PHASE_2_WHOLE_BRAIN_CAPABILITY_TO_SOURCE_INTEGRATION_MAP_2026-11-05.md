@@ -3891,3 +3891,35 @@ If the deployed host is intentionally outside this repository, its contract and 
 ### 59.4 Status
 
 **Bounded call-site search complete; external host remains unidentified.** Criteria 2, 3, 5 and 6 retain their existing PARTIAL/BLOCKED dispositions. No implementation authority or phase-exit status changes.
+
+
+---
+
+## 60. PR #173 / #174 F-02 and F-03 review-provenance reconciliation (2026-11-06)
+
+### 60.1 Evidence recovered
+
+A bounded GitHub record check recovered the following:
+
+- PR #173's 2026-11-03 Builder resubmission issue comment (comment `659...`, author `methaneex-oss`) identifies the Independent Review as having reviewed original commit `bd2f6f2d38e874aea015e2cc5de3c1a8d2b0f688` and records the correction map for F-01, F-02 and F-03 at architecture head `97191111bc2573c14d391c0af9628db7b11f194b`. It is a Builder-authored correction/handoff, not the review artifact itself.
+- PR #174's 2026-11-03 resubmission comment records F-01 correction at exact head `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, including the BM-12 reasoning additions and the separate Builder correction record.
+- PR #174's Project Director decision comment (2026-11-03 13:14 UTC) explicitly states that the Project Director accepted exact head `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` following the Independent Reviewer's approval, and explicitly clears F-01. It does not separately state that F-02 and F-03 were re-reviewed/cleared.
+- PR #174's 2026-11-04 revision comment records updated specification, source-audit and correction-record blobs, but is again Builder-authored.
+- The live PR #173 and #174 formal review collections each return zero reviews; PR #174 review comments return an empty list. Its four issue comments are all authored by `methaneex-oss`. Thus those records do not contain the underlying reviewer artifact.
+
+### 60.2 Reconciled interpretation
+
+The original PR #173 F-02/F-03 correction mapping is recoverable and must not be described as wholly missing. The later PR #174 Project Director acceptance and F-01 clearance are also recoverable. However, the exact follow-on independent-review artifact specifically assessing F-02/F-03 at the revised PR #174 head was not recovered from the checked PR review/comment records or the checked repository artifacts.
+
+Do not infer that the reviewer failed to assess F-02/F-03, and do not infer that the Project Director's acceptance explicitly cleared them. The defensible state is: original corrections mapped; PR #174 accepted as a planning baseline; F-01 explicitly cleared; later F-02/F-03 re-review evidence not independently recoverable in the bounded checked records; separate owner disposition still required for Phase 2's provenance criterion.
+
+### 60.3 Required closure
+
+1. Recover and attach the exact independent review artifact for PR #174's F-02/F-03 follow-on assessment, if it exists; otherwise the Project Director must explicitly accept the bounded provenance limitation.
+2. Record whether the PR #173 F-02/F-03 corrections were accepted as sufficient by the reviewer/Project Director, with exact scope and commit.
+3. Keep SYS-08 substrate responsibility separate from goal-formation F-02; do not merge similarly numbered findings across review packages.
+4. Retain the existing accepted PR #174 baseline and its stated limits; this reconciliation does not revoke that acceptance.
+
+### 60.4 Status
+
+**Criterion 5 remains PARTIAL.** The original F-02/F-03 correction map and PR #174 acceptance are now better evidenced, but the specific follow-on review artifact / explicit owner disposition remains unresolved. No gate or implementation authority changes.
