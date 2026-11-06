@@ -3538,3 +3538,42 @@ The latest report commit before this section, `e06a22faa535b38d4f985669685096888
 ### 51.5 Status
 
 The main-tree documentation authority scan and three preservation/link updates are complete within the bounded scope above. R3-01 is **partially resolved**, not fully cleared. Phase 2 remains IN PROGRESS; Gate A remains NOT CLEARED; Gate B remains UNASSESSED. Independent review, owner acceptance and the outstanding technical test/implementation obligations remain separate requirements.
+
+
+---
+
+## 52. Phase 2 exit-criteria ledger — explicit closure state (2026-11-06)
+
+This section evaluates the twelve exit criteria in §9 against the current repository evidence. “Mapped” does not mean “implemented”; “registered” does not mean “executed”; and “blocked” does not mean “cleared.”
+
+| # | Exit criterion | Current disposition | Evidence / remaining closure condition |
+|---:|---|---|---|
+| 1 | BM-01–BM-12 mapped to exact specification, main and relevant donor evidence | **SUBSTANTIALLY COMPLETE** | Mechanism sections and exact source identities exist. Final independent verification of every anchor remains required. |
+| 2 | Material producer/consumer edges, including recurrent and delayed paths | **PARTIAL** | Main and donor call paths, memory/reasoning, action feedback and persistence paths are mapped. The complete recurrent dependency/invalidation graph and external host edges are not fully established. |
+| 3 | Authoritative state owners identified; no competing Brain authority ambiguous | **PARTIAL** | C++ main is the inspected Brain authority; Rust is an isolated prototype and TypeScript is a contract layer. WorldModel/Brain projections and the external host's authority boundary still require final owner confirmation. |
+| 4 | Memory-to-reasoning and reasoning-to-downstream integration traced and resolved or explicitly blocked; PR #173 F-03 kept separate | **MAPPED / BLOCKED** | IF-02/IF-03 are source-traced. Main cycle retrieves memories but does not pass them to reasoning; reasoning output is not consumed downstream. Closing requires separately authorized integration work or explicit owner-approved carry-forward. SYS-08 remains a separate substrate-boundary obligation. |
+| 5 | PR #173 F-02/F-03 mapped to exact corrections; original review recovered or unavailability recorded; authority reconciled | **PARTIAL** | F-02 candidate-goal formation and F-03 SYS-08 are distinguished. The later PR #174 follow-on F-02/F-03 review artifact remains unavailable in checked repository records; bounded provenance limitation is recorded, but owner acceptance of that limitation and formal independent clearance remain open. |
+| 6 | Persistence, replay, stale dependencies, concurrency, interruption, partial completion and recovery mapped with tests or explicit non-verification | **PARTIAL** | Multiple source-derived failure paths and test gaps are recorded, including R1/R2, R3-02, P2-I-023/029/030/035/036/037/038. Several required fault-injection and host-boundary tests have not been executed. |
+| 7 | Donor paths compared against main and accepted requirements at exact commits | **SUBSTANTIALLY COMPLETE** | PR #97 and later donor lines are separately identified and compared; no donor is approved. Independent verification remains required. |
+| 8 | Hardcoded assumptions classified | **SUBSTANTIALLY COMPLETE** | Infrastructure invariants, provisional policies, situation-specific mappings and test-environment ground truth are distinguished. Independent challenge remains required. |
+| 9 | Learning evidence separated into storage, numeric adaptation, structural change, action-outcome learning, later behavioral effect and held-out transfer | **SUBSTANTIALLY COMPLETE** | DLT evidence and limitations are documented; matched-control and broader transfer claims remain explicitly limited. Further test-validity review is open. |
+| 10 | Human-cognition and MCU J.A.R.V.I.S. comparison delivered or explicitly deferred | **DRAFT DELIVERED** | PR #191 contains BM-01–BM-12 comparisons, scientific references, functional overlap/differences, inference limits and test directions. Independent review and Project Director acceptance are outstanding. |
+| 11 | Historical Phase 1 preservation tasks remain visible | **PARTIALLY ADDRESSED** | Main-tree README/legacy completion/blueprint notices are updated on PR #179. Historical branches and the full archive/cross-link maintenance remain preserved as open follow-up; no history was deleted. |
+| 12 | Completed/partial/blocked/deferred/unverified status recorded; independent review and owner approval recorded | **PARTIAL / BLOCKED** | This ledger and prior status sections distinguish the states. A separate reviewer identity, formal review submission, Project Director acceptance of the exact report revision, and disposition of the proposed governance parent remain outstanding. |
+
+### 52.1 Mandatory authority and evidence blockers
+
+1. **Independent reviewer:** PR #179 and PR #191 currently have no submitted review records. A separate GitHub reviewer identity must review the exact final report/comparison revisions and submit the required formal review. The author cannot satisfy this requirement.
+2. **Governance parent:** PR #179 is based on PR #178 at exact head `39fe09dcf13496f5f0005ccf3f00739303e29f88`. PR #178 remains open, draft and unmerged; its governance rules are proposed, not accepted. The Project Director must either accept that exact governance revision or authorize a different PR #179 base/authority path. Do not silently promote the governance proposal.
+3. **Implementation authority:** Gate A is NOT CLEARED and Gate B is UNASSESSED. No implementation baseline or runtime scope is selected. R1/R2/R3-02/R3-04 and other source findings cannot be marked fixed without the required gate, baseline, scope and explicit implementation authorization.
+4. **External host boundary:** the repository-only audit has not identified the deployed executable, grant issuer or actual external action host. The Project Director must identify the real host or approve a bounded deferral with owner and acceptance boundary.
+5. **Missing review provenance:** the original PR #174 follow-on F-02/F-03 review artifact has not been recovered in the bounded checked repository evidence. The Project Director must supply it or explicitly accept the recorded provenance limitation.
+6. **Legacy taxonomy:** the working interpretation and scope clarification are recorded in §§49 and 51. A durable explicit owner decision remains required if the project's approval process requires a separately worded historical-scope record.
+
+### 52.2 Phase 2 exit decision
+
+**Phase 2 exit criteria are NOT YET MET.** The report and comparison have materially advanced the documentation work, but criteria 2, 3, 5, 6, 11 and 12 remain partial, and several mapped defects require authorized implementation or owner-approved carry-forward.
+
+This is not a declaration that all Brain capabilities must be implemented before the mapping phase can close. It is a declaration that each remaining obligation must have a verified result or an explicit, authorized blocked/deferred disposition, with owner and carry-forward recorded. Until then, claiming Phase 2 complete would contradict the repository's own acceptance criteria.
+
+**Current status:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. Gate B UNASSESSED. No implementation baseline selected. No donor approved. No production implementation authorized.
