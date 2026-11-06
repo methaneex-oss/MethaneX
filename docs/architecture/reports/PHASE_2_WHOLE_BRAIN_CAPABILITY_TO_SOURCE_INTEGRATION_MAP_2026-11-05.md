@@ -2616,7 +2616,7 @@ The active finding set is P2-I-001 through P2-I-033 plus P2-I-035. P2-I-034 is w
 
 ### 35.2 Runtime-feedback follow-up verification
 
-The §34 source trace was independently checked against the donor blobs for `cognitive_runtime.cpp`, `cognitive_cycle.cpp`, and `brain.cpp`:
+The §34 source trace was independently checked against the donor blobs for `cognitive_runtime.cpp`, `cognitive_cycle.cpp`, `cognitive_cycle.hpp`, `brain.cpp`, and `memory.cpp`:
 
 - `process_feedback` marks feedback failed only for an unresolved requested prediction, an unassimilated requested goal update, or an exception. It does not inspect whether optional evidence learning persisted.
 - `process_outcome` resolves a requested prediction before invoking `learn_from_outcome` for evidence, so the two effects can persist independently.
