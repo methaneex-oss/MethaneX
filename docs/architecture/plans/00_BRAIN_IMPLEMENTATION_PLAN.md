@@ -1,5 +1,7 @@
 # Brain Implementation Plan — Planning Baseline
 
+> **Deferred as the active plan — 2026-11-07:** This is a proposed implementation roadmap derived from the earlier BM-01–BM-12 specification and repository audit. Its proposed increments, dependency ordering and first implementation target are not authorized as the current development sequence. Whole-Brain capability definition, mechanism architecture and completeness/reconciliation must come first. Preserve this plan as a downstream proposal; do not execute or refine its implementation sequence until the whole-Brain planning baseline is independently reviewed and accepted. See the [Whole-Brain Planning Scope and Builder Correction](https://github.com/methaneex-oss/MethaneX/blob/docs/whole-brain-planning-scope-correction-20261107/docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md).
+
 **Document status:** Proposed implementation plan; submitted for independent review and Project Director decision  
 **Planning run:** Run 01 — 2026-11-03  
 **Planning authority:** Project Director authorization received 2026-11-03  
@@ -497,3 +499,33 @@ Latest consolidated evidence: docs/architecture/plans/reviews/16_GATE_A_CLOSURE_
 Draft PR #176 isolates D1/D2 corrections and journal failure/replay tests from this documentation-only planning branch. At head 4cf017e073da980c9f77d739fde6f92ef1a2fbc1, Brain CI, Native Brain Build, Brain ThreadSanitizer and JARVIS Brain Tests all passed; native, ASan/UBSan and TSAN CTest runs each report 73/73. See Report 16 and PR #176 for run links and scope.
 
 PR #176 remains draft and unmerged. These results validate the corrected donor branch, not the accepted PR #174 integration tree or external ABI. The deeper EvolutionController compensation failure boundary and independent Gate A re-check remain open. No implementation baseline is selected or authorized.
+
+---
+
+## 18. Whole-Brain planning scope hold — 2026-11-07
+
+The Project Director clarified that the entire future Brain must be architecturally planned before deciding where development begins or which repository source should be used.
+
+This roadmap was prepared from the earlier accepted BM-01–BM-12 specification and Phase 1 source investigation. It is a proposed downstream implementation plan, not the whole-Brain capability architecture. The existence of a dependency graph and six proposed implementation phases does not establish that all future Brain capabilities, mechanisms, emergent interactions or developmental requirements have been identified.
+
+Accordingly, the following are **held and non-operative** until whole-Brain planning is completed and accepted:
+- the implementation phases in §5;
+- the proposed work-package structure in §6;
+- the recommended first implementation increment in §10;
+- any source-baseline or reuse implication inferred from the proposed order.
+
+Do not delete this plan or its prior reasoning. Preserve it as a candidate input for Stage D development planning. Reassess every proposed increment against the accepted whole-Brain architecture before retaining, changing or rejecting it.
+
+The corrected sequence is:
+1. whole-Brain capability definition using human cognition, MCU J.A.R.V.I.S. and the developing-Brain analogy;
+2. whole-Brain mechanism architecture and interaction model;
+3. completeness challenge and reconciliation with existing architecture/specification;
+4. independent review and Project Director acceptance;
+5. development order and first increment planning;
+6. repository reuse/adaptation assessment for that increment;
+7. implementation planning and separate explicit authorization.
+
+The prior Builder (ChatGPT, GPT-6) acknowledges that it allowed the existing twelve-mechanism decomposition to become the effective planning boundary, conflated mechanism-to-source mapping with complete capability definition, and advanced toward development sequencing before proving whole-Brain completeness. The full error record and next-Builder instructions are in the linked correction document.
+
+**Current disposition:** implementation roadmap deferred; no implementation baseline selected by this correction; no runtime implementation, build, test, merge or gate clearance authorized.
+
