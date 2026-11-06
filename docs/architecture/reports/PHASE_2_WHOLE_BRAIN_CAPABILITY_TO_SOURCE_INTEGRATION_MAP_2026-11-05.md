@@ -4123,3 +4123,50 @@ A value of 1.0 therefore cannot safely be read as “the supplied beliefs are ce
 | R-04 confidence semantics | Open | Qualified confidence/status contract, tests and downstream-consumer audit |
 
 The PR #189 artifact and this reconciliation do not satisfy the independent-review requirement. Phase 2 remains IN PROGRESS; exit criteria remain NOT MET. Gate A remains NOT CLEARED; Gate B capability acceptance remains NOT PASSED. No implementation baseline, donor approval or runtime implementation authorization is created.
+
+
+---
+
+## 65. Exact main-cycle reasoning dataflow and consumer audit (2026-11-06)
+
+### 65.1 Pinned source and line-level trace
+
+Re-fetched from the Phase 1 main baseline `1273ddbcd0087d189e01388ded2d362fb1e058d2`:
+
+| File | Blob | Exact source lines |
+|---|---|---|
+| `core/cpp/src/cognitive_cycle.cpp` | `3df14c552f2048b0394dc362f7ee7a654a93fb32` | 36 retrieves ranked memories; 37 copies beliefs; 38 copies causal links; 40–44 constructs and solves reasoning problem |
+| `core/cpp/src/reasoning.cpp` | `feec78b2e8a1f2b0b58733fd509e4e5a750258fc` | 50 declares public `infer`; 57 populates the premise map; 82–98 implements `solve` and calls `infer` after empty/consistency checks |
+| `core/cpp/tests/reasoning_architecture_suite.cpp` | `a7119afd091e045d6294aa1b15c20de349ed6a1c` | 23 and 49 exercise `infer` with one premise; contradictory premises are tested through `solve`, not direct public `infer` |
+
+### 65.2 Verified main-cycle behavior
+
+The source sequence is:
+
+1. `CognitiveCycle::run` recalls ranked Memory records into `result.context.memories` (line 36).
+2. It obtains current Brain beliefs and causal links (lines 37–38).
+3. It constructs `ReasoningProblem` with `problem.premises = result.context.beliefs` (line 41), not the recalled Memory records.
+4. It calls `ReasoningEngine::solve` (line 44).
+5. Later planning, decision and action-assessment code does not read `result.context.reasoning`. The reasoning result is retained in cycle context and copied to the runtime workspace, but is not an input to those downstream operations in this function.
+
+This establishes two separate integration gaps in the inspected mainline cycle: recalled episodic Memory is not supplied as reasoning premises, and the resulting reasoning classification/conclusions do not qualify downstream planning, decisions or action assessments. It does not prove no other consumer exists outside the inspected path.
+
+### 65.3 Implications and required acceptance
+
+This is not fixed by making the reasoning API internally correct. There are two distinct contracts:
+
+- **Evidence composition:** define how retrieved memories may support, contradict or contextualize beliefs, including source/provenance, recency, reliability, conflict resolution and whether a memory is admissible as a premise.
+- **Reasoning consumption:** define which result kinds and confidence/evidence statuses may influence belief updates, predictions, goal selection, planning, decisions and action assessment. Empty, contradictory, unresolved or consistency-only results must not be treated as affirmative evidence.
+
+Required tests must exercise the actual `CognitiveCycle` path, not only the isolated ReasoningEngine:
+- a retrieved relevant memory changes the reasoning input in a traceable, policy-governed way;
+- a retrieved but irrelevant/low-reliability memory does not become an unsupported premise;
+- conflicting memory and belief evidence yields an explicit unresolved/contradiction state;
+- unsupported or consistency-only reasoning cannot silently raise prediction, goal or action confidence;
+- the resulting downstream difference is persistent and attributable to experience, with matched controls where behavioral-learning claims are made.
+
+No hardcoded memory-to-belief or reasoning-kind-to-action mapping is proposed. The integration contract must preserve uncertainty and allow the mechanisms to learn from evidence.
+
+### 65.4 Status
+
+**Line-level source audit complete; criterion 4 remains MAPPED / BLOCKED.** The missing Memory-to-reasoning input and reasoning-to-downstream consumer edges are now stated with exact mainline line anchors. Corrections and integration tests remain unauthorized pending Gate A, baseline/scope selection and Project Director approval. Phase 2 exit remains NOT MET.
