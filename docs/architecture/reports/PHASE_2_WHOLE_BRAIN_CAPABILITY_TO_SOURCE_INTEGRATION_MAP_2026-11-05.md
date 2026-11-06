@@ -3851,3 +3851,43 @@ No production change is authorized by this audit.
 ### 59.4 Status
 
 **New source-level finding recorded.** This adds a concrete provenance/observability gap to exit criteria 2, 3 and 6. Criterion 3 remains PARTIAL; criterion 6 remains PARTIAL. The issue is uncorrected and untested. Gate A remains NOT CLEARED; Phase 2 exit criteria remain NOT MET.
+
+
+---
+
+## 59. Bounded production-host call-site search (2026-11-06)
+
+### 59.1 Search result
+
+A bounded GitHub code-index search was run against the repository default branch, which resolves to the Phase 1 main baseline `1273ddbcd0087d189e01388ded2d362fb1e058d2`:
+
+| Search term | Returned source call sites |
+|---|---|
+| `CognitiveRuntime(` | Runtime declaration and constructor implementation; runtime construction in cognitive runtime, trigger and workspace tests |
+| `CognitiveRuntimeConfig` | Runtime declaration/implementation and test setup |
+| `Brain brain(` | Brain declaration/implementation and multiple test constructions |
+| `execute_action(` | Brain API declaration/definition and `action_execution_phase7_suite` test invocation |
+| `CognitiveCycleInput` | Cycle/runtime declarations, implementations and test construction |
+
+No production application executable or non-test host construction/call site was returned by these searches. The result is consistent with the earlier source trace: the inspected repository exposes a C++ cognitive library and test harnesses, but does not identify the deployed host that owns external input acquisition, grant issuance, action adapters and consequence observation.
+
+### 59.2 Evidence limitation
+
+GitHub code search is an index-based bounded search, not a complete filesystem or deployment inventory. The absence of a returned production call site is **not proof** that no host exists: the host may be in an unindexed path, another repository, a private deployment, generated code, or an external application. This section therefore records a precise repository-discovery limitation rather than an exhaustive absence claim.
+
+### 59.3 Required owner input
+
+To close the external-host portions of criteria 2, 3, 5 and 6, the Project Director or deployment owner must identify:
+
+1. The deployed executable/repository and exact revision that constructs the Brain/runtime.
+2. The owner of raw observation acquisition, normalization and provenance.
+3. The authoritative permission/grant issuer and policy-change/revocation channel.
+4. The action adapter/executor that performs external side effects.
+5. The source of independent consequence evidence and the reconciliation/retry/idempotency contract.
+6. Whether host state is authoritative, a projection of Brain state, or merely an adapter/workspace.
+
+If the deployed host is intentionally outside this repository, its contract and exact version must be attached or linked as review evidence. A repository-only source map cannot certify uninspected deployment behavior.
+
+### 59.4 Status
+
+**Bounded call-site search complete; external host remains unidentified.** Criteria 2, 3, 5 and 6 retain their existing PARTIAL/BLOCKED dispositions. No implementation authority or phase-exit status changes.
