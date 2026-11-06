@@ -3700,3 +3700,52 @@ This is an architecture/dataflow correction requirement, not authorization to im
 ### 55.4 Status
 
 **Source re-check complete. Integration defect remains open.** Exit criterion 2 remains PARTIAL. The new evidence does not change the Phase 2 exit decision in §52 or the live authority boundary in §54.
+
+
+---
+
+## 56. State-authority audit — Brain, WorldModel, WorldState and Rust prototype (2026-11-06)
+
+### 56.1 Pinned evidence
+
+The audit used the same Phase 1 main baseline `1273ddbcd0087d189e01388ded2d362fb1e058d2`.
+
+| Source | Blob | Finding |
+|---|---|---|
+| `core/cpp/include/jarvis/core/brain.hpp` | `8268ef84e0b361ead536724ba7761904b30ee58f` | `Brain` owns `WorldModel world_`, `Memory memory_`, beliefs, predictions, causal/association models, goals and other cognitive models. Public `world()` returns a const reference. |
+| `core/cpp/src/brain.cpp` | `e9f3758fcc9c0e89b7280ce376db9033d547682d` | Constructor replays journal events into Brain-owned state; observation replay updates both beliefs and Brain-owned WorldModel. |
+| `core/cpp/include/jarvis/core/world_model.hpp` | `1c14f692374b0ab272f05634b7bdd26e358b4f1f` | WorldModel is a separately constructible model with its own facts/relations and internal mutex. |
+| `core/cpp/include/jarvis/core/world_state.hpp` | `5e91ec301d8254380731e0fdf14d16b6a3d5face` | WorldState separately owns another WorldModel, event history and snapshots. |
+| `core/cpp/src/world_state.cpp` | `84658ee6e1a4485e1fe0f24ebb40eb3e281670f0` | WorldState::apply updates its private model and in-memory snapshots; this path is not journal-backed in the inspected implementation. |
+| `core/cpp/tests/world_state_suite.cpp` | `bc6539059a8cc856572f3b01358085f27b1673a9` | Tests standalone WorldState behavior, including local history/checkpoints and clear; does not establish Brain/WorldState integration. |
+| `core/cpp/tests/world_self_model_phase4_suite.cpp` | `f375f6e36c16fbb038d2ce3ba5c4cd18adf1860c` | Exercises a standalone WorldModel and separately checks Brain-owned `brain.world()` updates and Brain restart behavior. |
+| `core/cpp/include/jarvis/core/cognitive_runtime.hpp` | `d02b2607cebcb7c31963e2fe336970707a481e00` | CognitiveRuntime receives a Brain reference and owns a CognitiveCycle; it does not own a WorldState. |
+| `core/cpp/CMakeLists.txt` | `c51816888e1bddb7bc00c59e72529524e27a0717` | Compiles `world_model.cpp` and `world_state.cpp`; the separately present `brain_restored_api.cpp` is not in the listed `jarvis_core` source set. |
+| `runtime/rust/src/lib.rs` | `ba949e43b7e06ce081b078035dfe7e48625d521c` | Rust exposes a separate `BrainRuntime` containing a `CognitiveState`, with a simple observe method. |
+| `runtime/rust/src/cognition.rs` | `e46bb5b19528b58bf518f75f5edf704221cf5c9f` | Rust CognitiveState holds an in-memory belief map and bounded working-memory vector; no durable journal or C++ Brain synchronization is present in the inspected files. |
+
+### 56.2 Authority conclusion
+
+The evidence supports the following bounded classification:
+
+1. **C++ Brain is the authoritative integrated state owner in the inspected mainline runtime.** It owns the journal-backed Memory and WorldModel and is passed by reference into CognitiveRuntime/CognitiveCycle.
+2. **WorldState is a separate standalone state abstraction, not demonstrated as a second live Brain authority.** It owns its own WorldModel/history/snapshots and is compiled and unit-tested, but the inspected Brain and CognitiveRuntime do not own or invoke it. Its existence creates a potential competing projection if later integrated without an explicit ownership contract; it is not evidence that a second live Brain currently exists.
+3. **Rust BrainRuntime is a prototype, not a synchronized authority.** Its in-memory CognitiveState is independently mutable and has no demonstrated journal, C++ bridge or shared-state protocol in the inspected files. Treat it as isolated prototype evidence, not a production runtime.
+4. **BrainSnapshot is not a complete snapshot of all Brain-owned state.** Its declared projection includes BrainState, SelfState, beliefs, predictions, causal links and goals, but omits the Brain-owned WorldModel facts/relations, Memory journal state, associations and several other model states. The public `world()` accessor exposes a separate read path, but this is not equivalent to a coherent whole-Brain snapshot.
+5. **Source/build boundary:** `brain_restored_api.cpp` exists in the tree but is absent from the inspected `jarvis_core` CMake source list. Its contents must not be treated as compiled mainline behavior without a separate build/target proof. The present audit does not infer runtime capability from that orphan file.
+
+### 56.3 Remaining ownership and consistency questions
+
+Criterion 3 cannot yet be marked complete. The source audit narrows the issue but does not settle:
+
+- whether WorldState is intended to remain a standalone utility, become a Brain-owned projection, or be retired from the integrated architecture (Project Director/architecture owner decision);
+- whether BrainSnapshot is intended as a partial diagnostic view or a whole-Brain consistency boundary;
+- how WorldModel facts/relations, journal sequence and snapshot timestamps are expected to remain consistent under concurrent observation and snapshot reads;
+- whether Rust is formally retained as a non-authoritative prototype and what prevents future deployment from creating a second writer;
+- whether the external host owns only input/action orchestration or also maintains authoritative cognitive state.
+
+Required closure evidence is an explicit state-authority diagram and owner decision, plus tests proving one write authority, projection consistency, restart/replay equivalence, and safe read/snapshot semantics. No production changes are authorized by this audit.
+
+### 56.4 Status
+
+**Source ownership classification advanced; criterion 3 remains PARTIAL.** The inspected evidence identifies C++ Brain as the current integrated authority, while WorldState and Rust remain separate, non-integrated state holders. Project Director/architecture-owner disposition and external-host confirmation remain open. Gate A remains NOT CLEARED; Phase 2 exit criteria remain NOT MET.
