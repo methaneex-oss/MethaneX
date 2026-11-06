@@ -2628,7 +2628,7 @@ P2-I-035 is a distinct finding because it concerns the queued-feedback processin
 
 ### 35.3 Report structure and source boundaries
 
-- Sections are numbered consecutively through §36, with no duplicate section numbers.
+- Sections are numbered consecutively through §37, with no duplicate section numbers.
 - Active finding IDs are reconciled as stated above; the CI correction remains an unnumbered report-history correction, while §34 contains distinct finding P2-I-035 and §36 contains distinct finding P2-I-036, with explicit cross-references to P2-I-023/P2-I-029 where applicable.
 - Donor evidence remains pinned to PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
 - The donor branch remains unchanged by this review. The report and its corrections are confined to the Phase 2 review branch and PR #179.
