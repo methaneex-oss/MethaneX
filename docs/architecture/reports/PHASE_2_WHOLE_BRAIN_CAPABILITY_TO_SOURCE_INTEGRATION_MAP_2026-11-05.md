@@ -90,7 +90,7 @@ A workspace snapshot is not an independent authority. It is a projection of cycl
 
 The relevant recurrent interactions are:
 
-1. **Evidence and interpretation:** BM-01 preserves experience and provenance; BM-02 interprets; BM-03 supplies memory; BM-04 evaluates claims; BM-10 detects omissions/conflicts; BM-11 marks dependent state stale.
+1. **Evidence and interpretation:** BM-01 preserves acquired experience and provenance; BM-02 is responsible for interpretation; BM-03 supplies memory; BM-04 evaluates claims; BM-10 detects omissions/conflicts; BM-11 marks dependent state stale. On pinned main, the raw event reaches `Brain::observe`, but the standalone `PerceptionPipeline` is not called by the production `CognitiveCycle`; therefore the BM-01→BM-02 production edge is not established on main. PR #97 has a donor-only pipeline-to-cycle edge. Do not draw the donor edge as a current-main capability.
 2. **Prediction and delayed outcome:** BM-03/BM-04 provide context and premises; BM-05 predicts; later BM-01 evidence resolves only when attribution and resolution conditions are met; BM-09 evaluates changes; BM-11 maintains dependency freshness.
 3. **Memory-supported reasoning:** BM-03 retrieves candidate evidence; BM-02 interprets it in context; BM-04/BM-05 provide qualified claims/hypotheses; BM-12 reasons with explicit premises and assumptions; the relevant owner evaluates conclusions; BM-10 challenges overreach; BM-11 invalidates conclusions when dependencies change.
 4. **Candidate-goal formation:** experience, representation, memory, beliefs, prediction and appraisal inform BM-08 candidate goals; BM-08 evaluates and revises them; governance remains external to Brain authority.
@@ -141,9 +141,11 @@ Main currently contains fragments of these paths. It does not yet demonstrate th
 - `core/cpp/include/jarvis/core/perception_pipeline.hpp`
 - `core/cpp/src/cognitive_cycle.cpp` — blob `3df14c552f2048b0394dc362f7ee7a654a93fb32`
 
-**Observed path:** The representation engine normalizes event attributes into semantic nodes/relations and assigns modality using a finite source/kind string mapping. The perception pipeline supports registered providers, support checks, validation, exception isolation and strongest-confidence selection, then falls back to normalized event representation.
+**Observed path:** The representation engine normalizes event attributes into semantic nodes/relations and assigns modality using a finite source/kind string mapping. The perception pipeline supports registered providers, support checks, validation, exception isolation and strongest-confidence selection, then falls back to normalized event representation. These are real main-branch implementation units, but their existence must be separated from production integration. At main `1273ddbcd0087d189e01388ded2d362fb1e058d2`, `core/cpp/CMakeLists.txt` compiles `src/perception_pipeline.cpp`, and `core/cpp/tests/CMakeLists.txt` registers `jarvis_perception_pipeline_suite` and its CTest entry. However, `cognitive_cycle.hpp` does not include or own `PerceptionPipeline`, and `CognitiveCycle::run` calls `brain_.observe(input.observation)` then retrieves memory from raw observation attributes; it does not call `PerceptionPipeline::process` or `RepresentationEngine::normalize`. The bounded main-branch search found no production caller. Therefore main has a compiled/tested perception utility, not a perception pipeline integrated into its production CognitiveCycle. A unit test of the utility does not prove the production observation path invokes it.
 
-**Consumers:** World/knowledge models and cognitive context; the current cycle's observed code path is not a demonstrated general semantic interpretation pipeline feeding every downstream mechanism.
+**Main/donor boundary:** PR #97 at donor HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` has a different call graph: its `CognitiveRuntime` constructor registers configured providers with `cycle_.perception_pipeline()`, and its donor `CognitiveCycle::run` invokes the pipeline and uses the returned representation. This is donor-only capability and remains subject to P2-I-037's provider-failure observability/contract limitation. Do not copy or credit this path to main.
+
+**Consumers:** On main, no production consumer of `PerceptionPipeline` was found in the audited `CognitiveCycle`; the cycle context has no representation field in its header. The standalone pipeline output therefore does not currently feed main memory retrieval, context formation or reasoning. In PR #97 donor, the representation is carried into donor cycle context and participates in downstream retrieval/context processing, but this remains a separate unmerged revision.
 
 **Gaps**
 - Exact source/kind strings (voice/speech, vision/camera, audio/microphone, sensor/system, text/command/message) act as modality fallback conventions. They are adapters, not acquired understanding.
@@ -152,7 +154,7 @@ Main currently contains fragments of these paths. It does not yet demonstrate th
 - Confidence is not source reliability or belief confidence.
 - Contextual language/operator-intent grounding remains a separate BM-02 requirement gap. It is not PR #173 F-02, which concerns experience-acquired candidate-goal formation.
 
-**Donor comparison:** PR #97's developmental context extraction uses observation kind/source and representation features/values; its fixed tokenization and context hierarchy are engineered inductive biases. It does not by itself establish general contextual language/operator-intent grounding.
+**Donor comparison:** PR #97's `CognitiveRuntime` registers configured perception providers and its donor `CognitiveCycle::run` calls the configured pipeline; its developmental context extraction uses observation kind/source and representation features/values. Its fixed tokenization and context hierarchy are engineered inductive biases. This donor integration does not establish current-main integration or general contextual language/operator-intent grounding.
 
 **Additional provider-failure boundary (donor HEAD):** `PerceptionPipeline::process` catches exceptions from `PerceptionProvider::perceive`, silently continues to other providers and falls back to deterministic raw-event normalization when none succeeds. It returns only a `PerceptualRepresentation`; no provider-failure result, capability-health event or runtime metric is exposed. The `PerceptionProvider::supports` interface is declared `noexcept`, so the catch surrounding `supports` cannot isolate a provider that actually throws there: violating the contract invokes termination rather than reaching the catch. The existing throwing-provider test covers a `perceive` exception and confirms fallback output, but it does not assert a recorded capability failure or test the `supports` contract. See P2-I-037 in §38.
 
@@ -400,9 +402,12 @@ Main currently contains fragments of these paths. It does not yet demonstrate th
 - Workspace replace/snapshot does not by itself provide dependency versioning, stale-state detection, multi-context isolation, durable checkpoints or partial-operation recovery.
 - Queue priority is scheduling policy, not the full BM-06 cognitive attention process.
 - Cross-mechanism transactions and concurrent changes to authoritative state are not demonstrated by a mutex-protected workspace alone.
+- On donor PR #97, feedback work is selected whenever the feedback queue is non-empty; there is no visible feedback-burst quota or aging rule in `worker_loop`. Under sustained feedback arrivals that keep the queue non-empty, queued input work can be delayed without a source-level service bound.
+- `stop()` sets `stopping_`; `submit_feedback()` rejects while stopping, while `execute_actions()` discards the boolean return from its secondary feedback submission. With shutdown beginning during an in-flight action, the action may complete and its follow-on feedback may be rejected without an action-level acknowledgement. `drain_on_stop` drains already queued work; it does not make new submissions during shutdown admissible.
+- When the donor result queue reaches `result_capacity`, `publish_result()` removes the oldest result and increments `dropped_results`. The counter makes aggregate loss observable, but the source does not establish per-result acknowledgement/reconciliation or safe retry semantics for a caller that did not receive a result.
 - The current cycle does not own a complete action → verified consequence → learning loop; it stops at action assessment. PR #97 contains a separate Brain-owned action execution/consequence donor path.
 
-**Donor comparison:** PR #97 adds Brain-owned action execution, consequence observation and feedback. The donor matrix records that execution and verification are separated and that observed consequence feeds the event/prediction path. It also records unresolved rollback/partial-side-effect semantics. PR #176 contains D1/D2 corrections, but its merge relationship and controller failure-injection status must be checked before adoption.
+**Donor comparison:** PR #97 adds Brain-owned action execution, consequence observation and feedback. The donor matrix records that execution and verification are separated and that observed consequence feeds the event/prediction path. It also records unresolved rollback/partial-side-effect semantics. PR #176 contains D1/D2 corrections, but its merge relationship and controller failure-injection status must be checked before adoption. The feedback-first scheduling, shutdown rejection and result-overflow behavior above are source-confirmed control-flow properties; starvation, lost caller reconciliation and duplicate retry are conditional risks, not reproduced production incidents. See IR-03 in §45 for the required test matrix and measurable acceptance conditions.
 
 **Disposition:** **Reuse** central Brain authority, CognitiveCycle, runtime queue and workspace projection as scaffolding; **adapt** into explicit dependency-aware recurrent coordination and coherent recovery. Selectively evaluate the donor action loop; do not merge it wholesale.
 
@@ -724,7 +729,7 @@ Phase 2 is complete only when all of the following are satisfied:
 7. Donor paths are compared to main and accepted requirements at exact commits; no wholesale merge is used as a substitute for integration analysis.
 8. Hardcoded assumptions are classified as legitimate integrity/safety controls, provisional inductive biases or prohibited predetermined cognitive conclusions.
 9. Learning claims distinguish storage, numeric adaptation, evidence-based structural change, action-outcome learning, later behavioral effect and held-out transfer.
-10. Human cognitive function and MCU J.A.R.V.I.S. functional reference comparisons are included for substantial mechanism/integration decisions, without literal biological imitation or surface-behavior claims.
+10. A bounded human-cognition and MCU J.A.R.V.I.S. comparison register is delivered for substantial mechanism/integration decisions, or the Project Director explicitly approves deferral. The required artifact is `docs/architecture/reports/PHASE_2_HUMAN_AND_MCU_REFERENCE_COMPARISON_2026-11-06.md` (not yet created). The Main Builder owns its preparation; the Independent Reviewer challenges its evidence and limits; the Project Director accepts the deliverable or records an explicit deferral. Human cognition must be grounded in appropriate scientific sources with uncertainty/controversy stated; MCU J.A.R.V.I.S. is fictional functional inspiration only, not scientific evidence. The comparison must not prescribe literal biological imitation or surface-behavior claims.
 11. Historical Phase 1 preservation tasks remain visible and are not silently treated as completed.
 12. A phase report records completed, partial, blocked, deferred and unverified work; independent review and required owner approval are recorded.
 
@@ -1265,8 +1270,10 @@ Observed boundary:
 | PR #173 F-02 | Experience-acquired candidate-goal formation | Builder correction record maps the requirement into PR #173 architecture sections 4.6, 9, 11, 11.1, 12 and 13 | Not demonstrated in inspected main or PR #97 donor paths; P2-I-015 |
 | PR #173 F-03 | SYS-08 computational-substrate boundary | Builder correction record maps the requirement into PR #173 architecture sections 7, 11, 11.1 and 12 | Architecture-level boundary exists; explicit C++ Memory-to-SYS-08 contract not demonstrated; P2-I-016 |
 | PR #174 F-01 | Explicit general reasoning/inference mechanism ownership | Added BM-12 in accepted PR #174 specification | Narrow reasoning prototype only; memory premises and downstream integration remain gaps; AUD-12 / IF-02 / IF-03 |
+| PR #174 follow-on F-02 | Contextual language/operator-intent grounding | Later review obligation summarized in Phase 1 reconciliation record; original review artifact is not present in the checked-in repository or PR #174 discussion/review submissions inspected for this response | OPEN specification-review obligation; map to BM-02. Do not merge with PR #173 F-02. |
+| PR #174 follow-on F-03 | Downstream reasoning integration | Later review obligation summarized in Phase 1 reconciliation record; original review artifact is not present in the checked-in repository or PR #174 discussion/review submissions inspected for this response | OPEN specification-review obligation; map to BM-12 / IF-03 and the applicable reasoning source-audit finding. Do not merge with PR #173 F-03.
 
-The full original reviewer prose for PR #173 F-02/F-03 was not present in the PR's changed files, PR conversation comments or review submissions returned by the current repository queries. The separate Builder correction record contains the finding titles, substantive summaries, exact correction map and rationale. The report therefore uses those grounded summaries and does not fabricate a verbatim quote. If verbatim reviewer wording is a mandatory Phase 2 artifact, the original review document or source conversation must be supplied/recovered.
+The full original reviewer prose for PR #173 F-02/F-03 was not present in the PR's changed files, PR conversation comments or review submissions returned by the repository queries. The separate Builder correction record contains their finding titles, substantive summaries, exact correction map and rationale. The PR #174 follow-on F-02/F-03 source is different: `PHASE_1_REVIEW_CORRECTIONS_AND_SCOPE_RECONCILIATION_2026-11-05.md` states that a subsequent review report supplied in the conversation identified contextual language/operator-intent grounding and downstream reasoning integration; it also records that this later report was not mirrored as a submitted GitHub review. The PR #174 issue discussion confirms historical acceptance of exact head `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` and later F-01 correction activity, but does not contain that F-02/F-03 review report. Accordingly, the original PR #174 follow-on review artifact is **not available in the checked repository evidence inspected here**. This report preserves its two grounded summaries and open status without fabricating verbatim reviewer text. The missing original artifact must be recovered or its unavailability explicitly accepted by the Project Director before those obligations can be considered fully reconciled.
 
 **Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, no implementation authorization implied.
 
@@ -3043,9 +3050,137 @@ The next evidence owner is the Builder/Project Director: identify the executable
 | Persistence and multi-event recovery (P2-I-023/035/036) | Tester, with Builder-provided harness | Deterministic append-failure matrix and replay/retry evidence |
 | Learning-test causal validity and controls | Independent Tester | Matched controls, held-out trials, per-seed metrics and artifact review |
 | Phase 2 report and Gate A decision | Independent Reviewer / Project Director | Independent report review and separate explicit gate decision |
+| Main perception production integration (IR-01) | Main Builder; Independent Tester verifies after separate implementation authorization | Main CognitiveCycle caller/dataflow and production-path provider/fallback tests; no donor code port implied |
+| Donor BM-11 fairness/shutdown/result recovery (IR-03) | Main Builder defines contract; Independent Tester verifies donor behavior | Sustained-load fairness, in-flight-action shutdown, result saturation, restart/retry/idempotency test evidence |
+| PR #173 / PR #174 finding provenance (IR-02) | Main Builder recovers records; Project Director accepts bounded source limitation if unrecoverable | Separate status ledger; original PR #174 follow-on review artifact recovered or its absence explicitly accepted |
+| Human/MCU comparison artifact (IR-04) | Main Builder / architecture evidence owner; Independent Reviewer challenges | `PHASE_2_HUMAN_AND_MCU_REFERENCE_COMPARISON_2026-11-06.md`; Project Director accepts or approves deferral |
 
 ### 44.4 Acceptance rule
 
 Phase 2 may be called complete only when its defined source-map, cross-boundary, test-validity and independent-review deliverables are actually closed, with unavailable evidence explicitly resolved or accepted by the Project Director as a bounded limitation. Gate A remains a separate decision and cannot be cleared by completion of this report.
 
 **Current decision:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. PR #97 remains draft/unmerged and is not an approved implementation baseline. P2-I-035 through P2-I-038 remain active findings; P2-I-034 remains withdrawn. No implementation authorization is implied.
+
+
+---
+
+## 45. Independent review response — IR-01 through IR-04
+
+**Response date:** 2026-11-06  
+**Review source:** PR #183, review commit `30eaefe3bee02e2038f66fb18c907673026ebe76`  
+**Primary report revision being corrected:** PR #179 prior HEAD `e6a824e820dd91a19a1f54c5460079eec02a7306`  
+**Scope:** Documentation correction and source verification only. No production implementation, donor port, gate decision or baseline selection is authorized.
+
+### 45.1 Repository snapshot and ancestry verification
+
+The following state was re-fetched before this correction:
+
+| Reference | Verified state at response start |
+|---|---|
+| `main` | `1273ddbcd0087d189e01388ded2d362fb1e058d2` |
+| PR #179 | Open/draft/unmerged; branch `docs/jarvis-phase-2-whole-brain-integration-map-20261105`; HEAD `e6a824e820dd91a19a1f54c5460079eec02a7306`; base `docs/jarvis-project-governance-rules-20261105` at `39fe09dcf13496f5f0005ccf3f00739303e29f88` |
+| PR #180 | Open/draft/unmerged; branch `research/phase-2-brain-integration-map-20261105`; HEAD `6ca140300b914ed981a50301bbf1d82a5bfe4d8b`; base `spec/brain-mechanism-specification-20261103` at `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` |
+| PR #183 | Open, non-draft, unmerged; branch `review/phase-2-independent-review-20261106`; HEAD `30eaefe3bee02e2038f66fb18c907673026ebe76`; base `main` at `1273ddbcd0087d189e01388ded2d362fb1e058d2` |
+| PR #97 donor | Exact inspected donor HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`; remains a separate unmerged donor reference |
+
+The PR #179 and #180 branches are not successive revisions of one branch. Their comparison has common merge base `1273ddbcd0087d189e01388ded2d362fb1e058d2`; comparing #180 HEAD to #179 HEAD reports divergence (78 commits ahead and 13 behind in that direction). Each PR adds the same report path against a different base. PR #179 remains the broader working report; PR #180's branch/history is preserved and no merge or closure is performed by this correction. Project Director disposition remains required.
+
+The complete 3,052-line PR #179 report and complete PR #183 review were fetched at their exact starting heads. The review's four findings are addressed below. The report's prior evidence, historical sections and findings register are retained; this response does not rewrite the reviewer's document.
+
+### 45.2 IR-01 — Main perception pipeline is not connected to main CognitiveCycle
+
+**Disposition:** AGREE. **Confidence:** High. **Status:** Confirmed main-branch integration gap; correction is documentary, implementation remains open.
+
+**Reviewer observation:** Main compiles and tests `PerceptionPipeline`, but the production main `CognitiveCycle` does not call it. PR #97 donor has a different integration state.
+
+**Independent source verification:**
+
+- Main is pinned to `1273ddbcd0087d189e01388ded2d362fb1e058d2`. Main `core/cpp/include/jarvis/core/cognitive_cycle.hpp` does not include `perception_pipeline.hpp`, own a pipeline or expose provider registration.
+- Main `core/cpp/src/cognitive_cycle.cpp` (`CognitiveCycle::run`) calls `brain_.observe(input.observation)`, retrieves memories using `input.observation.data`, reads beliefs/causal links and constructs reasoning premises. It does not call `PerceptionPipeline::process` or `RepresentationEngine::normalize`.
+- Main `core/cpp/CMakeLists.txt` compiles `src/perception_pipeline.cpp`; `core/cpp/tests/CMakeLists.txt` registers `jarvis_perception_pipeline_suite` and its CTest entry. This proves compilation/test registration of the utility, not production call-path integration. The bounded main-branch search found no production caller.
+- Donor PR #97 at `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` has a `CognitiveRuntime` constructor that registers configured providers with `cycle_.perception_pipeline()`, and donor `CognitiveCycle::run` invokes the pipeline. That is donor-only and remains subject to P2-I-037.
+
+**Correction made:** §2.2 now marks the main BM-01→BM-02 production edge as unestablished and distinguishes the donor edge. §3 BM-02 now states the exact main call-path absence, compilation/test registration, absence of a production consumer, and donor-only integration. §3 BM-11 and this section preserve the separate runtime donor boundary.
+
+**Remaining work / acceptance criteria:** Main integration remains unimplemented and unauthorized. Before it can be accepted in a later authorized implementation phase, evidence must include (a) an actual production caller from the main CognitiveCycle/runtime path, (b) a trace showing raw acquired event identity/provenance retained while the representation is produced, (c) a production-path test that injects a provider and demonstrates its representation reaches the intended downstream consumers rather than only testing the utility, (d) fallback/provider-failure behavior that preserves raw experience and exposes degraded status under P2-I-037, and (e) exact-head build and registered integration-test execution. A compiled source file or standalone unit test alone cannot close this gap.
+
+### 45.3 IR-02 — PR #173 and PR #174 F-02/F-03 provenance must remain separate
+
+**Disposition:** AGREE. **Confidence:** High. **Status:** Four separate obligations retained; two original source records remain unavailable in the checked repository evidence.
+
+The report's §14 correctly identifies the meanings of PR #173 F-02/F-03, but did not separately preserve the later PR #174 follow-on review pair. The reconciliation table in §14.4 now contains all four distinct namespaces:
+
+| Stable namespace for this report | Original finding meaning | Current source-backed status | Map / closure condition |
+|---|---|---|---|
+| PR #173 F-02 | Experience-acquired candidate-goal formation | OPEN; P2-I-015 says this is not demonstrated in inspected main or PR #97 donor paths | BM-08 / P2-I-015; close only with experience-to-candidate-goal formation and inspectable evidence lineage, or explicit authority-approved limitation |
+| PR #173 F-03 | SYS-08 computational-substrate boundary | OPEN; P2-I-016 says the inspected C++ Memory boundary does not expose the required explicit SYS-08 contract | SYS-08 / P2-I-016; close with explicit substrate ownership/failure/acknowledgement/recovery contract and independent review |
+| PR #174 follow-on F-02 | Contextual language/operator-intent grounding | OPEN specification-review obligation; BM-02's technical gap remains | BM-02; close with a corrected requirement and evidence that contextual grounding is not a fixed phrase/source lookup |
+| PR #174 follow-on F-03 | Downstream reasoning integration | OPEN specification-review obligation; IF-03/AUD-12 source gap remains | BM-12 / IF-03; close with memory-supported premises and qualified reasoning outputs demonstrably affecting appropriate downstream computation |
+
+**Provenance verification:** The PR #173 correction record `docs/architecture/reviews/02_BRAIN_FOUNDATION_ARCHITECTURE_REVIEW_CORRECTIONS_2026-11-03.md` at PR #173 corrected head `97191111bc2573c14d391c0af9628db7b11f194b` explicitly defines PR #173 F-02 as experience-acquired goal formation and PR #173 F-03 as the SYS-08 substrate boundary. The Phase 1 reconciliation record at PR #178 head `39fe09dcf13496f5f0005ccf3f00739303e29f88` states that a subsequent review report supplied in the conversation identified PR #174 follow-on F-02 as contextual language/operator-intent grounding and F-03 as downstream reasoning integration. It also records that the later report was not mirrored as a GitHub review submission. The PR #174 discussion history confirms historical acceptance of exact specification HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` and later F-01 correction activity; the inspected PR #174 comments/review submissions do not contain the original F-02/F-03 review report.
+
+**Limitation:** The original PR #174 follow-on reviewer document is not present in the checked-in repository paths or PR #174 discussion/review objects inspected for this response. Its exact title, full text and reviewer line-level rationale cannot be independently recovered from these sources. The report preserves the source-backed summaries and explicitly records the missing artifact; it does not invent a verbatim finding. The Project Director must either supply/recover that original review artifact or explicitly accept its unavailability as a bounded provenance limitation. The historical PR #174 acceptance is not erased, and it does not clear these later follow-on obligations. No one finding closes another.
+
+### 45.4 IR-03 — Donor runtime fairness, shutdown feedback and result loss
+
+**Disposition:** AGREE with the source-visible control-flow observations. **Confidence:** High for source semantics; operational consequences are conditional. **Status:** Control-flow properties confirmed; no production incident or reproduced failure claimed.
+
+**Exact donor source inspected:** `core/cpp/src/cognitive_runtime.cpp` blob `cf00acb6abd52308343f3a0e7016e6173b945603`; corresponding header `core/cpp/include/jarvis/core/cognitive_runtime.hpp`; donor test `core/cpp/tests/cognitive_runtime_suite.cpp`. All are pinned to PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+
+**Verified control-flow properties:**
+
+1. `worker_loop` chooses a feedback item whenever `feedback_` is non-empty and chooses input work only when feedback is empty. No feedback quota, aging rule or cross-queue fairness bound is visible in this loop. If producers maintain a non-empty feedback queue, queued inputs have no source-level bounded service guarantee. This is a conditional starvation risk, not a reproduced starvation incident.
+2. `stop()` sets `stopping_ = true`. `submit_feedback()` rejects when `stopping_` is true (and increments `feedback_rejected`). `execute_actions()` submits secondary action evidence using `(void)submit_feedback(...)`, discarding the boolean result. Thus if shutdown begins during action execution, the action can finish while its follow-on feedback submission is rejected without an action-result field indicating that rejection. This is a source-derived race window, not a reproduced live failure.
+3. `publish_result()` drops the oldest result when the bounded result queue is full and increments `dropped_results`. Aggregate loss is counted, but the inspected source does not establish per-result acknowledgement, caller reconciliation or a retry-safe idempotency protocol.
+4. With `drain_on_stop`, the worker drains items already queued before stopping; that does not allow new feedback submissions after `stopping_` becomes true. This distinction is now explicit in BM-11.
+
+**Existing-test boundary:** The donor `cognitive_runtime_suite.cpp` exercises normal action feedback, feedback processing/rejection for malformed or stale data, stop/start behavior and persistence/reconstruction. It does not establish sustained feedback-vs-input fairness, shutdown initiated while the executor callback is in flight, result queue saturation/loss reconciliation, or restart/retry idempotency across an unknown external side effect. No donor tests were executed by this documentation correction.
+
+**Required test matrix and measurable acceptance:**
+
+| Scenario | Required setup | Acceptance condition |
+|---|---|---|
+| Sustained feedback load / input fairness | Keep feedback producers active while one or more valid inputs remain queued | A documented finite feedback burst/quota or aging rule guarantees an eligible input is selected after no more than the configured maximum consecutive feedback dispatches; test asserts dispatch-count bound, not a machine-dependent wall-clock guess |
+| Shutdown during action execution | Block an executor callback on a test barrier; initiate `stop()`; release the action and observe its secondary feedback submission | The completed action's feedback is either durably accepted before shutdown, or the action result/caller receives an explicit rejected/pending-recovery disposition with a stable correlation ID; no silent ignored false return |
+| Result queue saturation | Configure a small result capacity, stop polling, and publish more completed results than capacity | Every dropped result is identifiable by sequence/correlation ID; metrics and caller API expose loss; caller can distinguish completed-but-unobserved from never-executed work |
+| Restart/retry/idempotency | Crash/reconstruct after action side effect but before feedback/result acknowledgement; retry the same logical request | Stable idempotency key or durable execution ledger prevents duplicate external side effects; unknown effect remains unknown until independently reconciled; replay does not fabricate success/failure |
+| Recovery accounting | Restart after queued feedback rejection and after result overflow | Persisted/replayed state reconciles accepted, rejected, processed, failed and unknown work without double-counting learning or goal progress |
+
+**Correction made:** BM-11 now records the feedback-first scheduler, shutdown rejection window, ignored secondary submission result and drop-oldest result policy as donor-specific control-flow semantics. It explicitly separates these from confirmed incidents and cross-references this test matrix. Existing P2-I-023/P2-I-029/P2-I-030/P2-I-035/P2-I-036 remain separate; this response does not collapse them into a single queue finding.
+
+**Remaining limitation:** No scheduler change, runtime instrumentation, test or failure injection was performed. These remain donor BM-11 verification obligations; they do not establish that main has the donor runtime or that an incident has occurred.
+
+### 45.5 IR-04 — Human and MCU comparison criterion has an owner and bounded artifact
+
+**Disposition:** AGREE. **Confidence:** High. **Status:** Deliverable and ownership are now defined; the artifact itself remains outstanding.
+
+The existing §9.10 comparison criterion is retained but now names a bounded deliverable:
+
+- **Artifact:** `docs/architecture/reports/PHASE_2_HUMAN_AND_MCU_REFERENCE_COMPARISON_2026-11-06.md` (required; not yet created).
+- **Primary owner:** Main Builder / architecture evidence owner.
+- **Independent challenge:** Independent Reviewer verifies source quality, distinction between evidence and analogy, and whether comparisons materially affect decisions.
+- **Authority:** Project Director accepts the deliverable or explicitly approves a bounded deferral.
+- **Scope:** Compare substantial BM-01–BM-12 mechanism/integration decisions against (a) relevant human cognitive functions with appropriate scientific references, uncertainty and contested findings stated, and (b) MCU J.A.R.V.I.S. as fictional functional inspiration only. For each comparison, record the function being compared, what is established vs hypothesized, what the fiction contributes as a design analogy, what the actual repository implements, and the resulting engineering implication/limit.
+- **Exclusions:** No literal biological imitation, anthropomorphic equivalence, MCU behavior treated as scientific evidence, or claim that resemblance establishes capability.
+
+**Correction made:** §9.10 now assigns this artifact and its owners; §44.3 ownership table now lists the accountable evidence owners and outputs. The comparison requirement is not silently waived. Phase 2 remains open until the artifact is reviewed or the Project Director explicitly approves deferral.
+
+### 45.6 Self-review, verification and approval boundary
+
+**Documentation corrections applied in this revision:**
+
+- §2.2 — main vs donor BM-01→BM-02 interaction edge.
+- §3 BM-02 — production call-path absence on main; standalone compilation/test registration; donor-only integration.
+- §3 BM-11 — donor scheduling, shutdown feedback rejection and bounded result-queue loss semantics.
+- §9.10 — bounded human/MCU comparison artifact, owner, reviewer and Project Director authority.
+- §14.4 — separate reconciliation rows for PR #173 F-02/F-03 and PR #174 follow-on F-02/F-03; missing original PR #174 review artifact explicitly recorded.
+- §44.3 — explicit owner/output rows for the four review-response workstreams.
+- §45 — finding-by-finding response, exact source revisions, limitations and measurable acceptance criteria.
+
+**Verification performed:** Repository metadata, exact PR heads/bases, main ref, source blobs, report/review files, PR #173 correction record, Phase 1 reconciliation record, PR #174 discussion history, and PR #179/#180 commit ancestry were re-fetched. The donor runtime test source was inspected for existing scenario coverage. No local shell command, build, CTest run, benchmark, sanitizer, runtime experiment or failure injection was executed as part of this documentation-only response. No test result is claimed.
+
+**Files changed by this response:** This Phase 2 report only. The PR #183 independent review, PR #180 report/branch, production source, tests, CMake files, workflows and donor branch are unchanged.
+
+**Current status:** Phase 2 remains IN PROGRESS. Gate A remains NOT CLEARED. Gate B is not assessed or cleared here. No implementation baseline is selected. PR #97 remains an unmerged donor. No production implementation, donor port, merge, deployment or gate clearance is authorized. The PR #174 follow-on F-02/F-03 source artifact and the human/MCU comparison deliverable remain outstanding. The IR-03 runtime scenarios remain unexecuted.
+
+**Next action:** Submit this exact updated PR #179 head for independent re-review against IR-01 through IR-04. The reviewer should independently reproduce the main/donor perception call graph; verify the four-row finding provenance ledger and missing-source limitation; inspect donor scheduler/shutdown/result queue code and assess the acceptance matrix; and verify that the human/MCU comparison deliverable has a named owner and explicit Project Director disposition. The reviewer should retain the REVISE verdict unless the documented corrections and outstanding authority/evidence conditions are independently satisfied.
