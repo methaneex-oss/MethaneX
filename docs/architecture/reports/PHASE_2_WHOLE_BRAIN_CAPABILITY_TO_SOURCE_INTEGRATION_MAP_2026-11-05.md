@@ -1015,7 +1015,7 @@ The six PR #180 findings map to the PR #179 register as follows:
 | P2-I-003 — supplied-goal lifecycle is not candidate-goal formation | IF-06 and P2-I-015 | Extended by the exact PR #173 F-02 mapping in §14 |
 | P2-I-004 — causal links may overstate causality | IF-05 | Same main causal-model limitation |
 | P2-I-005 — sequential cycle is not full recurrent/concurrent cognition | IF-08 | Same bounded-coordinator limitation |
-| P2-I-006 — journal and metadata use separate persistence paths | IF-10 and P2-I-014/P2-I-016 | Extended with donor multi-event journal behavior and SYS-08 boundary evidence |
+| P2-I-006 — journal and metadata use separate persistence paths | IF-10 and P2-I-023/P2-I-016 | Extended with donor multi-event journal behavior and SYS-08 boundary evidence |
 
 A second exact-identity reconciliation extracted all 20 distinct 40-character blob SHAs from the PR #180 report and checked them against the current PR #179 report; all 20 are present, with no source-identity hash left unaccounted for. This hash check does not mean the reports are textually identical or that every sentence was copied; it verifies that the source identities cited by the first-batch report are represented in the working report.
 
@@ -2263,7 +2263,7 @@ The action outcome, affective-learning event and capability-learning event are s
 
 This is not evidence that the normal path is broken. It is a crash/I/O-failure recovery limitation. When the action-outcome append reports success, its event has been written and stream-flushed; the implementation does not establish stable-storage durability against power loss. One or both derived learning records may be absent after a later append failure. The current tests demonstrate normal replay and restart behavior, not every possible append-failure interleaving.
 
-**Expanded detail for P2-I-023 — Multi-record action learning is not transactionally atomic.**
+**Expanded detail — multi-record action learning atomicity (P2-I-023).**
 - Severity: Medium (provisional; consequence depends on the required durability contract).
 - Confidence: High for the separate-append behavior; Medium for operational impact absent an injected I/O-failure reproduction.
 - Status: CONFIRMED as a limitation / UNRESOLVED as an acceptance blocker.
@@ -2491,7 +2491,7 @@ Separately, even a successful append currently establishes stream-flush completi
 - Required Builder decision: define the supported failure model (process crash, OS crash, power loss, disk-full, I/O error). If rollback cannot be verified, put the Memory instance into a failed/poisoned state and reject subsequent appends until recovery, or use a journal format/recovery protocol that can safely identify and repair the tail before continuing. Specify whether successful append promises process-restart persistence or stable-storage durability.
 - Verification: use a fault-injectable filesystem/journal backend to fail event writes, append rollback truncation, quarantine copying, and load-time truncation independently. Assert that Memory does not accept later appends while an invalid tail remains unrepaired; restart and verify every acknowledged event is recovered exactly once. Retain the existing successful-quarantine/recovery test, and add failure assertions for both ignored truncation results. Add crash/power-loss tests only for durability guarantees the project explicitly elects to provide.
 
-### Relationship to P2-I-013 and current test coverage
+### Relationship to P2-I-023 and current test coverage
 
 P2-I-023 remains the multi-record logical learning atomicity issue: action_outcome, affective_learning and learning are separate appends. P2-I-014 is the lower-level single-record journal rollback/durability issue. Fixing one does not fix the other.
 
@@ -2610,9 +2610,9 @@ The full report contained reused numeric labels in later appended batches. These
 - **P2-I-014** now identifies the lower-level journal append rollback and startup tail-repair failure/durability issue in §32.
 - **P2-I-023** is the canonical multi-event action-learning atomicity finding. The earlier source-trace statement in §13.5 and the detailed failure-path treatment in §28 are explicitly cross-referenced to this same finding rather than creating competing IDs.
 - **P2-I-029** remains the action-execution/persistence-acknowledgement finding. **P2-I-035** separately covers the evidence-only and prediction-plus-evidence feedback path's caller-visible acknowledgement and completion-metric gap; it cross-references P2-I-023's partial-commit concern.
-- **P2-I-034** is withdrawn. It is retained only as an audit trail for the incorrect Release-assertion conclusion; it is not an active finding or Gate A blocker.
+- **P2-I-034** is withdrawn. It is retained only as an audit trail for the incorrect Release-assertion conclusion; it is not an active finding or Gate A blocker.\n- **P2-I-036** covers the distinct two-event goal-completion path: a persisted `goal_progress(progress=1.0)` event is not sufficient for goal-state replay without the separate `goal_complete` event.
 
-The active finding set is P2-I-001 through P2-I-033 plus P2-I-035. P2-I-034 is withdrawn and intentionally not reused. Repeated references to an existing finding are expansions or cross-references, not additional findings.
+The active finding set is P2-I-001 through P2-I-033 plus P2-I-035 and P2-I-036. P2-I-034 is withdrawn and intentionally not reused. Repeated references to an existing finding are expansions or cross-references, not additional findings.
 
 ### 35.2 Runtime-feedback follow-up verification
 
@@ -2628,14 +2628,69 @@ P2-I-035 is a distinct finding because it concerns the queued-feedback processin
 ### 35.3 Report structure and source boundaries
 
 - Sections are numbered consecutively through §35, with no duplicate section numbers.
-- Active finding IDs are reconciled as stated above; the CI correction remains an unnumbered report-history correction, while §34 contains distinct finding P2-I-035 and explicit cross-references to P2-I-023/P2-I-029.
+- Active finding IDs are reconciled as stated above; the CI correction remains an unnumbered report-history correction, while §34 contains distinct finding P2-I-035 and §36 contains distinct finding P2-I-036, with explicit cross-references to P2-I-023/P2-I-029 where applicable.
 - Donor evidence remains pinned to PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
 - The donor branch remains unchanged by this review. The report and its corrections are confined to the Phase 2 review branch and PR #179.
 - No production source, test, workflow or build configuration was edited by this review batch.
 
 ### 35.4 Decision boundary
 
-This report is materially more complete and internally navigable, but Phase 2 is not complete. The unresolved requirements in §25.4 remain open, including acquisition/provenance tracing, selected-suite validity and controls, authorization freshness, partial-effect/rollback behavior, deterministic journal and feedback failure injection, cross-runtime integration, and independent review.
+This report is materially more complete and internally navigable, but Phase 2 is not complete. The unresolved requirements in §25.4 remain open, including acquisition/provenance tracing, selected-suite validity and controls, authorization freshness, partial-effect/rollback behavior, deterministic journal, goal-completion and feedback failure injection, cross-runtime integration, and independent review.
 
 **Final handoff status:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. PR #97 remains an unmerged donor. No implementation baseline is selected, no donor is approved, and no implementation authorization is implied.
 
+
+
+---
+
+## 36. Goal-completion feedback has a two-event partial-commit boundary
+
+**Audit date:** 2026-11-06  
+**Affected donor revision:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`  
+**Finding P2-I-036 — A failed goal-completion append can leave a persisted 100% progress event that replay deliberately does not apply to goal state.**
+
+### Direct source trace
+
+- `Brain::assimilate_goal_outcome` normalizes the supplied evidence and sets `completed` when `progress_after >= 1.0`. It first appends a `goal_progress` event. If that append succeeds, it immediately replays the event and advances the Brain event/cycle counters. Only then does it append a separate `goal_complete` event. If the second append returns zero, the method returns `false` without rolling back the first event.
+- `Brain::replay` processes affective experience before dispatching the event-specific goal projection. For `goal_progress`, it calls `goals_model_.update_progress` only when the recorded progress is strictly less than 1.0. For `goal_complete`, it calls `goals_model_.complete`.
+- `GoalModel::update_progress` itself marks a goal completed at progress 1.0, but the replay guard deliberately prevents the `goal_progress` event from applying that transition. The separate `goal_complete` event is therefore required to reconstruct completion.
+- The persisted `goal_progress(progress=1.0)` event still passes through `process_affective_experience`, which updates affective state and appraisal before the replay branch skips the goal-model update.
+
+### Conditional failure sequence and impact
+
+If the first append succeeds and the second `goal_complete` append fails:
+
+1. The journal contains a `goal_progress` event with progress 1.0.
+2. Affective processing has consumed that event.
+3. The goal model has not been advanced to progress 1.0 or completed, because replay intentionally skips the goal-model update for progress values equal to 1.0.
+4. `assimilate_goal_outcome` returns `false`; the runtime correctly increments `feedback_failed` for the requested goal update.
+5. On restart, the persisted progress event is replayed with the same guard and still does not complete the goal. Without a persisted `goal_complete` event, the goal remains at its prior progress/status.
+
+This is a source-derived failure path, not a reproduced incident. It is distinct from P2-I-023's action-outcome/affective/capability multi-event sequence and P2-I-035's queued-evidence completion-metric gap: this path concerns the goal lifecycle and the replay semantics that make the second event necessary.
+
+### Source anchors
+
+- [`Brain::assimilate_goal_outcome`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain_restored_api.cpp#L172-L215), blob `7155d4d9c8eef527836fb79bf901aa32ddbae38b`.
+- [`Brain::replay`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain.cpp#L339-L370), blob `dec9e5442b3ca4b81a7879855c6146b2619934cc`.
+- [Goal progress affective processing](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain.cpp#L287-L289), same blob.
+- [`GoalModel::update_progress`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/goals.cpp#L37-L59), blob `afaedcfb0f2f68ff88b3a20e474fce04bb59815c`.
+- [Goal-feedback success/restart test](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/cognitive_runtime_goal_feedback_suite.cpp#L45-L78), blob `15a6bdffe37ae7df6c625ea9737fda4c0bf08a7f`.
+
+### Severity, confidence and status
+
+- **Severity:** Medium (provisional; the impact is a persistent goal-state/replay inconsistency under a second-append failure).
+- **Confidence:** High for the source ordering and replay guard; Medium for operational impact until deterministic append-failure injection reproduces the sequence.
+- **Status:** Confirmed code-level partial-commit hazard; failure-path acceptance remains unresolved.
+- **Affected code:** `core/cpp/src/brain_restored_api.cpp`, `core/cpp/src/brain.cpp`, and `core/cpp/src/goals.cpp`.
+
+### Required Builder/Tester evidence
+
+1. Decide whether a 100% `goal_progress` event is independently authoritative for goal completion. If it is, replay must apply it consistently; if it is not, the two-event completion protocol needs an explicit transaction/completion marker or recoverable pending state.
+2. Inject failure specifically at the second append (`goal_complete`) after a successful `goal_progress(progress=1.0)` append.
+3. Assert the live goal state, returned assimilation status, affective state, journal event sequence and reconstructed goal state after restart.
+4. Retry the same logical goal outcome and prove completion is eventually reconstructed without duplicate or unintended affective-learning updates.
+5. Preserve tests for ordinary sub-1.0 progress, successful completion, terminal-goal rejection and restart equivalence.
+
+The inspected `cognitive_runtime_goal_feedback_suite` covers successful 0.4 progress, successful 1.0 completion, rejection of a regressive update after completion, and successful restart reconstruction. It does not inject failure between the two completion appends.
+
+**Updated review judgement:** goal feedback is not a single atomic state transition at the 100% boundary. A successful `goal_progress` append is not sufficient to reconstruct completion under the current replay rules. P2-I-036 remains open. Phase 2 remains IN PROGRESS. Gate A remains NOT CLEARED. PR #97 remains an unmerged donor.
