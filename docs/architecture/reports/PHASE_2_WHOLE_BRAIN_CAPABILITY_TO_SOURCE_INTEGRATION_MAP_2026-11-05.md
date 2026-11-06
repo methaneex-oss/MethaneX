@@ -2119,7 +2119,7 @@ The report is intentionally **not** marked complete. Before Phase 2 can pass its
 1. Finish the remaining BM-01/BM-02 acquisition, perception and representation provenance trace and map all relevant production entrypoints, including any non-C++ callers not covered by the donor C++ source search.
 2. Complete the test-by-test validity review of the selected donor suites, including observer independence, hidden assumptions, reward/context leakage, matched controls and generalization limits.
 3. Complete authorization freshness, stale assessment, executor rollback/partial-effect and caller-visible persistence-failure analysis against the accepted Gate A requirements.
-4. Complete deterministic failure injection for every relevant Memory append boundary, multi-event action feedback, evolution event ordering, compensation and restart/retry equivalence.
+4. Complete deterministic failure injection for every relevant Memory append boundary, multi-event action feedback, queued-feedback evidence assimilation and completion-metric accounting, evolution event ordering, compensation and restart/retry equivalence.
 5. Reconcile all remaining BM-11 coordination, invalidation, concurrency, interruption and recovery edges across language/runtime boundaries.
 6. Recover the original PR #173 F-02/F-03 reviewer document if verbatim wording is mandatory; the report records the current retrieval limit rather than inventing it.
 7. Obtain independent review of the completed source map and an explicit Project Director decision on any remaining PR #179/#180 duplicate disposition.
