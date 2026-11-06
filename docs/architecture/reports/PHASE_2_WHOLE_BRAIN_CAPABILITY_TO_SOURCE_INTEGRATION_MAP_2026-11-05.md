@@ -1034,7 +1034,7 @@ A material correction is also required before PR #180 can be considered a clean 
 | Outcome attribution | No equivalent structured consequence contract established | Action event and source-linked affective event | Donor stronger; observer trust unresolved |
 | Replay | Main event journal replay | Donor replay reconstructs affective, attention, prediction and strategy effects | Donor stronger; multi-event crash atomicity unresolved |
 | Future action preference | Not demonstrated by main Phase 7 test | Donor tests assert learned preference and related-context transfer | Exact-head runtime integration suite passed in CI; historical DLT transfer evidence at `c6a8...`; independent reviewer acceptance remains open |
-| CI proof | PR #179 combined merge tree configured/built; no tests in that run | Exact donor HEAD `c1da...`: native Release and Debug ASan/UBSan each had 71/71 CTest processes exit successfully; only Debug retained assertion checks; Core Verification also succeeded | Exact-head assertion-enabled Debug ASan/UBSan integration CI verified; Release result is process-smoke only; separate 330-minute DLT run at `c6a8...` is historical donor evidence, not current HEAD |
+| CI proof | PR #179 combined merge tree configured/built; no tests in that run | Exact donor HEAD `c1da...`: native Release and Debug ASan/UBSan each had 71/71 CTest processes exit successfully; the test CMake explicitly undefines `NDEBUG` for executable test targets in Release, so assertions remain active in both jobs; Core Verification also succeeded | Exact-head assertion-enabled native and Debug ASan/UBSan integration CI verified; separate 330-minute DLT run at `c6a8...` is historical donor evidence, not current HEAD |
 
 ### 12.7 Remaining work
 
@@ -1559,8 +1559,8 @@ A direct Actions run-list query for the exact donor commit identified two push-t
 | JARVIS Core Verification | `40788714735` | `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` | Success | `cpp-core`: configure, build, test |
 
 For Brain CI run `40788714686`:
-- The `native-brain` job completed successfully and its CTest log reports **71/71 test processes passed** in a Release configuration. Important qualification: C++ `assert` checks are disabled by the standard Release `NDEBUG` configuration unless explicitly re-enabled; the workflow/CMake files do not add `-UNDEBUG`. Many suites use `assert(...)` for both checks and setup calls, so this job's green CTest result is not evidence that those assertion expressions were evaluated.
-- The `sanitizer` job completed successfully and its CTest log reports **71/71 tests passed** under AddressSanitizer and UndefinedBehaviorSanitizer in Debug configuration. The Debug configuration keeps the suites' `assert` expressions active, so this is the stronger assertion-bearing test result.
+- The `native-brain` job completed successfully and its CTest log reports **71/71 test processes passed** in a Release configuration. The complete `core/cpp/tests/CMakeLists.txt` explicitly applies `-UNDEBUG` to GNU/Clang executable test targets and `/UNDEBUG` to MSVC executable test targets, so the Release test executables retain their `assert(...)` checks. The native result is assertion-bearing test evidence, not merely process-smoke evidence.
+- The `sanitizer` job completed successfully and its CTest log reports **71/71 tests passed** under AddressSanitizer and UndefinedBehaviorSanitizer in Debug configuration. Debug naturally retains the suites' `assert` expressions; this job adds ASan/UBSan instrumentation to the assertion-bearing test run.
 - The executed test list includes `jarvis_developmental_brain_integration_suite`, `jarvis_affective_brain_decision_suite`, `jarvis_brain_action_consequence_integration_suite`, `jarvis_cognitive_runtime_learning_integration_suite`, the memory/evolution persistence suite and the other registered C++ suites.
 - No workflow artifacts were attached to this CI run.
 
@@ -1574,7 +1574,7 @@ Run references:
 
 **What this does not prove:** no ThreadSanitizer run at this exact donor HEAD was found; no broad external-world deployment, long-duration test at this exact SHA, independent reviewer acceptance, adversarial observer validation, or multi-event append-failure recovery was established by these two CI runs. CI pass is test evidence, not Gate A approval.
 
-**Finding P2-I-024 — PR #97 exact HEAD has verified native Release and Debug ASan/UBSan CI, with 71/71 CTest processes exiting successfully in each job.** Only the Debug sanitizer job retains the suites' assertion checks; the Release job is compilation/optimized-configuration and process-smoke evidence because `NDEBUG` elides `assert` expressions. This replaces the earlier §12.4 statement that exact-head donor CI was unverified. The Debug result materially strengthens implementation/test provenance but does not resolve the remaining semantic, failure-model or independent-review obligations.
+**Finding P2-I-024 — PR #97 exact HEAD has verified assertion-bearing native Release and Debug ASan/UBSan CI, with 71/71 CTest processes exiting successfully in each job.** The test CMake explicitly undefines `NDEBUG` for executable test targets in Release, so the native job's assertions remain active; the Debug sanitizer job also retains assertions and adds AddressSanitizer/UndefinedBehaviorSanitizer coverage. This replaces the earlier §12.4 statement that exact-head donor CI was unverified. The CI evidence materially strengthens implementation/test provenance but does not resolve the remaining semantic, failure-model or independent-review obligations.
 
 
 ### 18.4 The exact-HEAD runtime integration test checks learning, transfer isolation, reversal and restart behavior
@@ -2096,7 +2096,7 @@ This checklist records the second-pass validation performed before handing this 
 - [x] EvolutionHistory and EvolutionAdoptionJournal are correctly classified as in-memory projections reconstructed from Brain Memory events, not separate durable stores.
 - [x] The three-seed DLT-002 aggregate is recomputed from raw episode CSVs and pinned to ancestor commit `82c49a75...`; the source-file identity differences against current donor HEAD are recorded.
 - [x] The older 330-minute DLT artifact, the three-seed ancestor run and the exact-current-HEAD CI runs are presented as separate evidence classes, not blended into a single validation claim.
-- [x] The exact PR #97 HEAD native Release and Debug ASan/UBSan runs are verified from provider job logs: 71/71 test processes in each; the Release run's `assert` expressions are disabled, while the Debug sanitizer run retains them. The separate Core Verification run is also identified.
+- [x] The exact PR #97 HEAD native Release and Debug ASan/UBSan runs are verified from provider job logs: 71/71 test processes in each; the complete test CMake explicitly undefines `NDEBUG` for executable targets, so assertions remain active in Release and Debug. The separate Core Verification run is also identified.
 - [x] The latest verified PR #179 branch build is run #1639 on synthetic merge commit `11546a265346826fc0c90e0e766ed8a403eb37f8`, combining report commit `99f48d52d1ea816d6f9a2138d976578bc5e33222` with governance base `39fe09dcf13496f5f0005ccf3f00739303e29f88`; it configured and built but had no CTest step.
 - [x] The 64-file donor C++ production source callsite search and 54 changed C++ test-source search are scoped accurately; no claim is made about external consumers outside the repository.
 
