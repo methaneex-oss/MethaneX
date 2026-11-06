@@ -1,6 +1,8 @@
 # JARVIS Project Continuity & Recovery Handoff
 
-**Last updated:** 2026-11-03 (updated after the user's reviewer-status report)  
+> **Current scope correction — 2026-11-07 (read before all historical status below):** The older phase/status and next-action instructions in this handoff were written for Brain Implementation Planning and Gate A/Gate B work. They are historical snapshots and are superseded for the immediate next task by the [Whole-Brain Planning Scope and Builder Correction](https://github.com/methaneex-oss/MethaneX/blob/docs/whole-brain-planning-scope-correction-20261107/docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md). The current next task is whole-Brain capability definition, not implementation planning, source selection or runtime work. Preserve the earlier evidence and gate history; do not silently treat the old "current phase" wording as current.
+
+**Last updated:** 2026-11-07  
 **Purpose:** This is the authoritative restart point for any new ChatGPT conversation, collaborator, or agent continuing this project. Read this document before taking action. Do not rely on chat memory as the source of truth.
 
 ## 1. Project identity and objective
@@ -17,7 +19,7 @@ The human-cognition and MCU J.A.R.V.I.S. comparisons are reference lenses for an
 
 ## 2. Current phase — read this first
 
-**Current phase: Brain Implementation Planning — combined Gate A reconciliation review and Gate B mechanism traceability audit. We are not in implementation.**
+**Current phase: Whole-Brain architectural planning — Stage A capability and responsibility definition. Development planning and implementation are deferred.**
 
 Accepted upstream work:
 - **PR #171** — whole-system foundation.
@@ -328,3 +330,36 @@ Consolidated evidence: docs/architecture/plans/reviews/16_GATE_A_CLOSURE_EVIDENC
 ### PR #176 branch/PR snapshot discrepancy
 
 A follow-up controller-history compensation test was committed to the branch ref as a37add18babf8afc2e9c12ca0449a2ee84ecd60d. However, the live PR #176 metadata and its Actions runs still report head 4cf017e073da980c9f77d739fde6f92ef1a2fbc1; the PR commit list does not include a37add18. Do not count that follow-up test as part of the verified PR until the branch/PR snapshot is synchronized and CI passes at the updated head. The deeper controller compensation boundary therefore remains open.
+
+---
+
+## 11. Current whole-Brain planning direction — 2026-11-07
+
+**Current immediate stage:** Whole-Brain architectural planning — Stage A, capability and responsibility definition.
+
+The Project Director has clarified the required order: plan the entire future Brain first; only after the whole-Brain capability architecture, mechanism architecture and completeness/reconciliation are accepted may the project decide where development should begin and what existing source to use.
+
+The three required reference lenses are:
+1. **Human brain and cognition:** investigate functions, interactions, development, limitations and scientific uncertainty; do not copy biological anatomy literally.
+2. **MCU J.A.R.V.I.S.:** derive functional aspirations from the fictional assistant; do not invent its internals or treat fiction as scientific evidence.
+3. **Developing-Brain analogy:** engineer enabling mechanisms and the capacity to develop; let knowledge, skills, strategies and increasingly capable behavior be acquired through experience rather than preloading a finished personality or behavioral repertoire.
+
+BM-01–BM-12 remain valuable existing specification work, but they are not assumed to exhaust the future Brain. The Phase 2 source map is a partial mechanism-to-source integration investigation, not proof of whole-Brain completeness. Phase 1's technical repository audit remains useful and complete only within its declared static investigation scope; it did not define the complete Brain.
+
+### Immediate instructions
+
+- Read the linked correction document in full.
+- Preserve Phase 1/Phase 2 reports, exact evidence and accepted-history records.
+- Read PR #171–#174 as existing architecture and research inputs; challenge completeness rather than blindly replacing them.
+- Do not choose mechanisms, add arbitrary mechanism counts, select development order, choose source reuse, or select algorithms/languages/providers/databases/APIs at Stage A.
+- Produce a whole-Brain capability definition with explicit coverage, gaps, unknowns and reference rationale.
+- Derive the mechanism architecture and interaction model only after the capability analysis is sufficiently complete.
+- Obtain independent review and Project Director acceptance before moving into development planning.
+- No implementation, baseline selection, merge/rebase/cherry-pick, builds, tests, or runtime changes are authorized by this documentation correction.
+
+### Prior Builder error acknowledgement
+
+ChatGPT (GPT-6), the Builder responsible for the earlier planning responses, made a scope error by treating BM-01–BM-12 as the effective boundary for whole-Brain planning, confusing source integration mapping with complete capability definition, and recommending movement toward development planning before whole-Brain completeness had been established. This error is recorded explicitly in the linked correction document. The previous work is not discarded; its authority and completeness claims are corrected.
+
+**Handoff rule:** If any older section in this document conflicts with this §11 or the linked 2026-11-07 correction, follow the newer scope correction while preserving the older section as historical evidence.
+
