@@ -2122,11 +2122,12 @@ The report is intentionally **not** marked complete. Before Phase 2 can pass its
 2. Add provider-failure semantics to that trace: a failed specialized provider must be observable as a capability failure while preserving the raw acquired experience and any valid fallback representation. Reconcile the `supports noexcept` contract with the intended provider-isolation guarantee.
 3. Complete the test-by-test validity review of the selected donor suites, including observer independence, hidden assumptions, reward/context leakage, matched controls and generalization limits.
 4. Complete authorization freshness, stale assessment, executor rollback/partial-effect and caller-visible persistence-failure analysis against the accepted Gate A requirements.
-5. Complete deterministic failure injection for every relevant Memory append boundary, multi-event action feedback, queued-feedback evidence assimilation and completion-metric accounting, the two-event `goal_progress`/`goal_complete` boundary, evolution event ordering, compensation and restart/retry equivalence.
-6. Reconcile all remaining BM-11 coordination, invalidation, concurrency, interruption and recovery edges across language/runtime boundaries.
-7. Recover the original PR #173 F-02/F-03 reviewer document if verbatim wording is mandatory; the report records the current retrieval limit rather than inventing it.
-8. Obtain independent review of the completed source map and an explicit Project Director decision on any remaining PR #179/#180 duplicate disposition.
-9. Keep Gate A NOT CLEARED until its own required provenance, compatibility, rollback, independent test and independent review conditions are satisfied.
+5. Establish the authorization-context lifecycle: where grants originate, how revocation/expiry/policy changes reach a running runtime, and what freshness/version check must occur immediately before an external side effect.
+6. Complete deterministic failure injection for every relevant Memory append boundary, multi-event action feedback, queued-feedback evidence assimilation and completion-metric accounting, the two-event `goal_progress`/`goal_complete` boundary, evolution event ordering, compensation and restart/retry equivalence.
+7. Reconcile all remaining BM-11 coordination, invalidation, concurrency, interruption and recovery edges across language/runtime boundaries.
+8. Recover the original PR #173 F-02/F-03 reviewer document if verbatim wording is mandatory; the report records the current retrieval limit rather than inventing it.
+9. Obtain independent review of the completed source map and an explicit Project Director decision on any remaining PR #179/#180 duplicate disposition.
+10. Keep Gate A NOT CLEARED until its own required provenance, compatibility, rollback, independent test and independent review conditions are satisfied.
 
 **Self-review result:** no internal contradiction or unsupported completion claim was identified in this pass. The report remains a substantial but incomplete Phase 2 investigation. Its findings are ready for independent challenge; they are not approval to implement, merge donor code or select an implementation baseline.
 
@@ -2823,4 +2824,86 @@ Accepted PR #174 BM-01 requires intake failures and missing evidence not to be c
 
 - Donor source remains pinned to PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
 - This update is confined to the Phase 2 report branch and PR #179. No donor production source, test, workflow or build configuration was changed.
+- Phase 2 remains IN PROGRESS. Gate A remains NOT CLEARED. PR #97 remains an unmerged donor; no implementation baseline is selected and no implementation authorization is implied.
+
+
+---
+
+## 40. Finding P2-I-038 — Runtime action authorization has no explicit grant freshness or revocation path
+
+**Audit date:** 2026-11-06  
+**Affected donor revision:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`  
+**Severity:** Medium (provisional; actual risk depends on how the host supplies and updates governance permissions).  
+**Confidence:** High that the inspected runtime contract carries a static authorization-context value and exposes no in-place refresh/revocation API; Medium that this creates stale authorization in a deployment because host lifecycle behavior is not established by the inspected repository.  
+**Status:** Freshness/revocation capability not demonstrated; no unauthorized real-world action is asserted.
+
+### Source trace
+
+1. `ActionAuthorizationContext` contains only `granted_permissions`, `maximum_risk` and `require_reversible`. It has no issuer, policy version, grant identity, issue/expiry time, revocation epoch or freshness token.
+2. `CognitiveRuntimeConfig` owns a `CognitiveActionAdapter`, whose `authorization` member is an `ActionAuthorizationContext` value. The `CognitiveRuntime` constructor moves the configuration into private `config_`; the public runtime API exposes no authorization-context update, policy-change notification or revocation operation.
+3. `CognitiveRuntime::execute_actions` passes the stored `config_.action_adapter.authorization` into `Brain::execute_action` for each selected action.
+4. `Brain::execute_action` performs an authorization check before creating an action-consequence prediction, then passes the same request context to `ActionExecutor::run`, which checks it again immediately before invoking the execution callback. The two checks are useful ordering but do not refresh the underlying grants; both consume the same copied context.
+5. `ActionAuthorizer::authorize` validates assessment disposition, risk threshold, reversibility and membership of each required permission in the supplied vector. It does not consult an external authority or compare a policy version/freshness value.
+6. The authorization test covers a missing permission, a matching permission, a risk denial and prevention of a denied execution callback. It does not cover permission revocation, expiry, policy-version change, stale queued work or host policy refresh.
+
+### Specification and boundary comparison
+
+Accepted PR #174 preserves governance as an external constraint rather than a Brain-created goal or permission. BM-06 also requires enough state to suspend and resume work without losing permissions or freshness information; BM-11 requires interruption, cancellation, resumption and recovery without fabricating completion. The inspected donor provides a clear separation between cognitive assessment and a supplied authorization context, but it does not define the lifecycle or freshness of that external context.
+
+This is not a claim that every action needs a short time-to-live or that a static permission set is inherently unsafe in a single-process test harness. It is a claim that the repository does not establish how a running runtime learns that a previously granted permission has been revoked, expired or superseded. Rechecking the same in-memory value twice is not a revocation check.
+
+### Impact and limits
+
+- A host that changes its external policy while leaving the runtime alive has no demonstrated API in this contract to push the new policy into the existing runtime.
+- A previously queued or assessed action could therefore be authorized against an old grant set if the host does not stop/recreate the runtime or provide an out-of-band enforcement layer.
+- The repository does not establish whether production callers recreate the runtime on policy change, enforce authorization inside the external action adapter, or use an independent security boundary. Those possibilities must be verified before calling this an exploitable authorization bypass.
+- Risk threshold and reversibility checks are local data checks; they do not establish user/operator consent, resource ownership, tenant scope, credential freshness or external governance approval.
+
+### Required Builder/Tester evidence
+
+1. Document the authoritative grant issuer and policy owner, and specify whether the runtime receives immutable per-session grants or must observe live policy changes.
+2. If grants are immutable for a session, define the session boundary and prove policy changes terminate/cancel affected queued work before any subsequent side effect.
+3. If grants can change in place, add a versioned authorization provider or explicit refresh/revocation contract. Bind an assessment/request to the policy version under which it was formed and revalidate against the current version immediately before execution.
+4. Define stale-policy behavior: deny by default, preserve the cognitive intent/assessment as non-executed, record the denial separately, and do not count it as execution failure or external consequence.
+5. Test revocation after assessment but before execution, revocation while an action waits in the input queue, expiry at the execution boundary, policy-version mismatch, refresh failure, and cancellation during runtime shutdown.
+6. Demonstrate that a denial prevents the executor callback from running and remains distinguishable from a rejected cognitive assessment, an execution failure and a verified negative external consequence.
+7. Verify the actual host/application boundary; if an independent authorization service enforces freshness, identify its source, contract, tests and failure behavior rather than assuming the in-process vector is the complete security boundary.
+
+### Source anchors
+
+- [`ActionAuthorizationContext`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/include/jarvis/core/action_authorization.hpp#L9-L19), blob `047f3f8d74c8558255750fbe14d29f7ae9153360`.
+- [`CognitiveActionAdapter` and `CognitiveRuntimeConfig`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/include/jarvis/core/cognitive_runtime.hpp#L17-L40), blob `e5a3c853add8b5fcb9b8c04c9b25f20179b5b629`.
+- [`CognitiveRuntime::execute_actions`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/cognitive_runtime.cpp#L112-L175), blob `cf00acb6abd52308343f3a0e7016e6173b945603`.
+- [`Brain::execute_action`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain_action_execution.cpp#L8-L50), blob `3b66bafb438cd28790e6f25611b96c86f1eff05c`.
+- [`ActionAuthorizer::authorize`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/action_authorization.cpp#L14-L45), blob `669bc86c8111ae9755bcd40715352b4fc71350d0`.
+- [`Action authorization tests`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/action_authorization_suite.cpp#L1-L48), blob `66127a2b574d5c44571332733edb800fb558bcaf`.
+- [Accepted BM-06 permission/freshness preservation](https://github.com/methaneex-oss/MethaneX/blob/0811a59e46bf934e32e794f90e4e7d18d4e2bd97/docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md#L307-L324), blob `3b6a53c8a295fa0d9fc29bbb6c7688b61d1dcdb1`.
+
+**Finding disposition:** P2-I-038 is a distinct governance-context lifecycle gap. It is not the same as P2-I-030's partial external side-effect contract or P2-I-029's persistence acknowledgement. Keep it provisional until the real host policy lifecycle is inspected.
+
+
+---
+
+## 41. Final self-review — authorization lifecycle finding and repository boundary
+
+**Audit date:** 2026-11-06  
+**Scope:** Independent consistency pass after P2-I-038.
+
+### 41.1 Evidence and claim-strength checks
+
+- The finding is limited to the inspected C++ runtime/action path and does not assert that no external policy service exists outside the repository.
+- The context is copied into runtime configuration and reused for each action; the report does not confuse the repeated local authorization check with a fresh external policy lookup.
+- The required tests cover revocation/expiry at the execution boundary and queued work, while the finding explicitly allows a documented immutable-session design if cancellation/session semantics are proven.
+- P2-I-038 is separate from P2-I-030 (partial external effects), P2-I-029 (action-outcome persistence acknowledgement) and P2-I-037 (perception-provider failure observability).
+
+### 41.2 Finding and section index
+
+- Active findings are P2-I-001 through P2-I-033, plus P2-I-035, P2-I-036, P2-I-037 and P2-I-038.
+- P2-I-034 remains withdrawn and is not reused.
+- Sections are numbered consecutively through §41; the BM-02/provider and authorization lifecycle additions are cross-referenced from the remaining exit blockers.
+
+### 41.3 Final repository boundary
+
+- Donor source remains pinned to PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+- This update changes only the Phase 2 report branch and PR #179. It does not modify donor production code, tests, workflows or build configuration.
 - Phase 2 remains IN PROGRESS. Gate A remains NOT CLEARED. PR #97 remains an unmerged donor; no implementation baseline is selected and no implementation authorization is implied.
