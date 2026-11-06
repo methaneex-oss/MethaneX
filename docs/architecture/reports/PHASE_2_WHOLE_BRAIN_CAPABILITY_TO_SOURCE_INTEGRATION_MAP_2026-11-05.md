@@ -1759,7 +1759,7 @@ The donor `Brain::execute_action` obtains an `ActionExecutionResult` from `Actio
 
 However, `outcome_persisted` is local to `Brain::execute_action`; it is not copied into `ActionExecutionResult`, and the result type has no separate journal/learning-persistence status. The method returns the executor result even when the authoritative action-outcome append failed. If the action was physically executed and verified and the consequence observer returned a value, the caller can therefore receive a result that still says `verified`, `executed` and `outcome.observed`, while the Brain did not persist or replay that outcome. The pre-execution consequence prediction is left unresolved because resolution is conditional on `outcome_persisted`.
 
-The donor runtime increments its action-success metric based on `execution.status == verified`; it does not receive the local persistence flag. Its later secondary status/reason feedback is a separate event and cannot reconstruct the missing observed consequence. Thus operational execution success and durable cognitive acquisition are currently indistinguishable in the returned result/metric surface.
+The donor runtime increments its action-success metric based on `execution.status == verified`; it does not receive the local persistence flag. Its later secondary status/reason feedback is a separate event and cannot reconstruct the missing observed consequence. Thus operational execution success and journal acquisition are currently indistinguishable in the returned result/metric surface.
 
 **Finding P2-I-029 — The donor action API can report verified execution without reporting failure to persist the authoritative cognitive outcome.** The source does not establish that a verified action's observed consequence was durably acquired. This is a persistence-acknowledgement and caller-observability gap, not proof that a write failure occurred in the cited CI runs.
 
@@ -2247,7 +2247,7 @@ The separate persistence fixture `core/cpp/tests/dlt_002_persistence.cpp` perfor
 ## 10.9 Runtime and persistence failure-path trace
 
 The exact donor runtime path is now source-traced across:
-`CognitiveRuntime::worker_loop` → `CognitiveCycle::run` → `CognitiveRuntime::execute_actions` → `Brain::execute_action` → `ActionExecutor::run` → durable `action_outcome` append/replay → separately appended `affective_learning` and `learning` events → prediction feedback resolution → later runtime feedback processing.
+`CognitiveRuntime::worker_loop` → `CognitiveCycle::run` → `CognitiveRuntime::execute_actions` → `Brain::execute_action` → `ActionExecutor::run` → `action_outcome` journal append/replay → separately appended `affective_learning` and `learning` events → prediction feedback resolution → later runtime feedback processing.
 
 Relevant exact donor blobs:
 - `cognitive_runtime.cpp`: `cf00acb6abd52308343f3a0e7016e6173b945603`.
@@ -2267,9 +2267,9 @@ Relevant exact donor blobs:
 
 ### Failure-path limitation requiring explicit acceptance criteria
 
-The action outcome, affective-learning event and capability-learning event are separate journal appends. A successful action-outcome append followed by a failed secondary append leaves a durable partial learning sequence. The current implementation checks each append result and avoids replaying a failed secondary event, but it does not make the three-event sequence atomic and does not expose a complete per-stage persistence outcome in `ActionExecutionResult`.
+The action outcome, affective-learning event and capability-learning event are separate journal appends. A successful action-outcome append followed by a failed secondary append leaves a partial sequence in the journal (subject to the lower-level flush/rollback limitations described in P2-I-014). The current implementation checks each append result and avoids replaying a failed secondary event, but it does not make the three-event sequence atomic and does not expose a complete per-stage persistence outcome in `ActionExecutionResult`.
 
-This is not evidence that the normal path is broken. It is a crash/I/O-failure recovery limitation. The authoritative action outcome remains durable, while one or both derived learning records may be absent. The current tests demonstrate normal replay and restart behavior, not every possible append-failure interleaving.
+This is not evidence that the normal path is broken. It is a crash/I/O-failure recovery limitation. When the action-outcome append reports success, its event has been written and stream-flushed; the implementation does not establish stable-storage durability against power loss. One or both derived learning records may be absent after a later append failure. The current tests demonstrate normal replay and restart behavior, not every possible append-failure interleaving.
 
 **Finding P2-I-013 — Multi-record action learning is not transactionally atomic.**
 - Severity: Medium (provisional; consequence depends on the required durability contract).
@@ -2277,7 +2277,7 @@ This is not evidence that the normal path is broken. It is a crash/I/O-failure r
 - Status: CONFIRMED as a limitation / UNRESOLVED as an acceptance blocker.
 - Affected donor revision: `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
 - Affected code: `core/cpp/src/brain_action_execution.cpp`, action-outcome append followed by optional affective-learning and capability-learning appends; `core/cpp/src/memory.cpp`, `Memory::append` persists one event at a time.
-- Root cause: the logical learning transaction is represented by multiple independently durable events with no transaction envelope, completion marker, or deterministic repair/reconciliation step.
+- Root cause: the logical learning transaction is represented by multiple independently appended events with no transaction envelope, completion marker, or deterministic repair/reconciliation step.
 - Consequence: after a secondary append failure or process termination between appends, replay reconstructs the persisted subset, not necessarily the full intended update set. The action record may exist while affective calibration or capability-reliability learning does not.
 - Required Builder decision: define whether partial derived learning is an acceptable recoverable state. If not, introduce a durable transaction/completion protocol or replay-time derivation with idempotent source-event identity. Do not simply retry secondary appends without duplicate protection.
 - Verification: inject failures at each append boundary; restart from the resulting journal; prove the action outcome is retained exactly once, each derived learning update is either completed exactly once or explicitly marked pending/recoverable, and predictions are not double-resolved.
