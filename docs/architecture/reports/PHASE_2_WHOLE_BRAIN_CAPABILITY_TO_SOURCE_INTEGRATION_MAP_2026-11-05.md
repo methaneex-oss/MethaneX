@@ -3577,3 +3577,35 @@ This section evaluates the twelve exit criteria in §9 against the current repos
 This is not a declaration that all Brain capabilities must be implemented before the mapping phase can close. It is a declaration that each remaining obligation must have a verified result or an explicit, authorized blocked/deferred disposition, with owner and carry-forward recorded. Until then, claiming Phase 2 complete would contradict the repository's own acceptance criteria.
 
 **Current status:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. Gate B UNASSESSED. No implementation baseline selected. No donor approved. No production implementation authorized.
+
+
+---
+
+## 53. Gate A / Gate B live-status reconciliation (2026-11-06)
+
+A fresh read of PR #175's live body at head `874c732973b6ab303d65a503f5a215b0af8e1153` and its Gate A Report 16 at blob `6a8276deff9c4560daee7a665193f3e8ea16ce7c` refines the shorthand status in earlier sections.
+
+### Gate A
+
+**NOT CLEARED.** Report 16 identifies:
+- the provenance, static in-repository API and workflow-specification workstreams as closed within their bounded scopes;
+- D1/D2 fixes and principal journal failure/replay tests as present on PR #176, not merged into PR #156;
+- deeper EvolutionController internal compensation failure injection as still open;
+- independent re-check as open because no separate reviewer identity or submitted formal review exists.
+
+PR #176 remains open/draft/unmerged at `4cf017e073da980c9f77d739fde6f92ef1a2fbc1`. Its passing 73/73 native, ASan/UBSan and ThreadSanitizer CTest results apply to that donor correction head only. They do not close the residual controller-compensation boundary or independent-review requirement.
+
+### Gate B
+
+**Capability acceptance has NOT PASSED.** PR #175's live body states that static BM-01–BM-12 traceability is documented, but capability acceptance has not passed. This is more precise than the earlier “unassessed” shorthand: traceability exists, but the required capability acceptance result is explicitly negative/not passed. No Gate B clearance is recorded.
+
+### Corrected current status
+
+- Gate A: **NOT CLEARED**.
+- Gate B capability acceptance: **NOT PASSED**; no formal clearance.
+- Phase 2: **IN PROGRESS; exit criteria not met**.
+- Implementation baseline: **not selected**.
+- Donor approval: **none**.
+- Runtime implementation authorization: **not granted**.
+
+This section supersedes any earlier shorthand in this report that described Gate B only as “unassessed.” It does not alter either gate or waive any requirement.
