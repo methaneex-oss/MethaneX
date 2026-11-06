@@ -2118,16 +2118,16 @@ This checklist records the second-pass validation performed before handing this 
 ### 25.4 Remaining exit blockers
 
 The report is intentionally **not** marked complete. Before Phase 2 can pass its exit criteria, the following still require closure:
-1. Finish the remaining BM-01/BM-02 acquisition, perception and representation provenance trace and map all relevant production entrypoints, including any non-C++ callers not covered by the donor C++ source search.
-2. Add provider-failure semantics to that trace: a failed specialized provider must be observable as a capability failure while preserving the raw acquired experience and any valid fallback representation. Reconcile the `supports noexcept` contract with the intended provider-isolation guarantee.
-3. Complete the test-by-test validity review of the selected donor suites, including observer independence, hidden assumptions, reward/context leakage, matched controls and generalization limits.
-4. Complete authorization freshness, stale assessment, executor rollback/partial-effect and caller-visible persistence-failure analysis against the accepted Gate A requirements.
-5. Establish the authorization-context lifecycle: where grants originate, how revocation/expiry/policy changes reach a running runtime, and what freshness/version check must occur immediately before an external side effect.
-6. Complete deterministic failure injection for every relevant Memory append boundary, multi-event action feedback, queued-feedback evidence assimilation and completion-metric accounting, the two-event `goal_progress`/`goal_complete` boundary, evolution event ordering, compensation and restart/retry equivalence.
-7. Reconcile all remaining BM-11 coordination, invalidation, concurrency, interruption and recovery edges across language/runtime boundaries.
-8. Recover the original PR #173 F-02/F-03 reviewer document if verbatim wording is mandatory; the report records the current retrieval limit rather than inventing it.
-9. Obtain independent review of the completed source map and an explicit Project Director decision on any remaining PR #179/#180 duplicate disposition.
-10. Keep Gate A NOT CLEARED until its own required provenance, compatibility, rollback, independent test and independent review conditions are satisfied.
+1. Close the remaining BM-01/BM-02 production-entrypoint and provenance trace. P2-I-037 now establishes the donor C++ provider-failure behavior, but does not map every non-C++ or deployed acquisition caller or establish end-to-end provenance.
+2. Resolve P2-I-037: expose specialized-provider failure/degraded-mode status as a first-class capability result while preserving the raw acquired experience and valid fallback; settle the `supports noexcept` contract and test provider recovery and failure observability.
+3. Complete the test-by-test validity review of the selected donor suites, including observer independence, hidden assumptions, reward/context leakage, matched controls and generalization limits. Existing test registration and CI pass evidence do not replace this review.
+4. Close the action execution/governance chain: P2-I-030's partial/unknown external-effect contract, P2-I-029's action-result persistence acknowledgement, P2-I-035's queued-feedback evidence/completion accounting, and P2-I-038's authorization-context lifecycle must be assessed together without conflating their distinct failure boundaries.
+5. Resolve P2-I-038 at the actual host boundary: identify the executable host and grant issuer; prove either immutable bounded-session grants with cancellation/restart invalidation or a live refresh/revocation/version contract; verify fail-closed behavior immediately before external side effects. The repository-only audit did not identify the external host.
+6. Complete deterministic failure injection and recovery verification for Memory append boundaries, multi-event action feedback (P2-I-023), queued-feedback evidence assimilation and completion-metric accounting (P2-I-035), the two-event `goal_progress`/`goal_complete` boundary (P2-I-036), evolution event ordering, compensation, and restart/retry equivalence. Source-derived failure paths are not runtime-reproduced until these tests execute.
+7. Reconcile all remaining BM-11 coordination, invalidation, concurrency, interruption and recovery edges across language/runtime boundaries, including the distinction between cognitive intent, authorization denial, execution failure, unknown external effect and verified consequence.
+8. Recover the original PR #173 F-02/F-03 reviewer document if verbatim wording is mandatory; the report records the current retrieval limit rather than inventing it. Preserve the corrected distinction: F-02 is experience-acquired candidate-goal formation; F-03 is SYS-08 computational-substrate boundary.
+9. Obtain independent review of the completed source map and an explicit Project Director decision on any remaining PR #179/#180 duplicate disposition. Do not treat a draft report PR as accepted governance.
+10. Keep Gate A NOT CLEARED until its own required provenance, compatibility, rollback, independent test and independent review conditions are satisfied. Phase 2 report completion and Gate A clearance are separate decisions.
 
 **Self-review result:** no internal contradiction or unsupported completion claim was identified in this pass. The report remains a substantial but incomplete Phase 2 investigation. Its findings are ready for independent challenge; they are not approval to implement, merge donor code or select an implementation baseline.
 
@@ -2978,3 +2978,74 @@ Do not conclude that no external host policy exists. The repository does not con
 The next evidence owner is the Builder/Project Director: identify the executable host and authoritative policy lifecycle, or explicitly establish that the runtime's grant context is immutable for a bounded session and show how revocation terminates that session and invalidates pending work. The Independent Tester should then exercise revocation/expiry at the real host-to-executor boundary. Until that evidence exists, P2-I-038 and Gate A remain open.
 
 **Phase 2 status:** IN PROGRESS. **Gate A:** NOT CLEARED. No implementation baseline selected; no donor approved; no implementation authorization implied.
+
+
+---
+
+## 44. Consolidated Phase 2 closure plan after findings P2-I-037 and P2-I-038
+
+**Audit date:** 2026-11-06  
+**Purpose:** Replace the earlier broad exit-blocker wording with a dependency-aware closure sequence. This section is a review handoff, not an implementation authorization or claim that Phase 2 is complete.
+
+### 44.1 What this investigation has now established
+
+1. The BM-01–BM-12 capability map exists and is source-anchored against the accepted PR #174 specification, the audited main baseline and the PR #97 donor revision.
+2. The report has identified concrete cross-mechanism defects and limitations beyond missing modules, including disconnected memory/reasoning use, narrow goal formation, partial persistence/feedback boundaries, action execution ambiguity, specialized perception failure observability and the unresolved host authorization lifecycle.
+3. PR #97 contains a substantial integrated donor implementation and meaningful exact-HEAD CI evidence, but remains a draft, unmerged donor. Its existence and test results do not establish compatibility with current main or satisfy Gate A.
+4. The report distinguishes source-derived failure paths from reproduced runtime incidents. P2-I-035, P2-I-036 and P2-I-038 remain open; P2-I-037 remains open pending structured failure reporting and tests.
+5. The TypeScript operator bridge and engineering-agent authorization path were traced and are not the missing Brain action-grant refresh owner. The external application/deployment host remains unidentified in this repository.
+6. No production source, test, workflow or CMake file was changed by this review batch. No runtime experiment or new test execution is claimed by §§40–44.
+
+### 44.2 Dependency-aware order of work
+
+**Priority 1 — establish the real system boundary**
+
+- Identify the actual executable that constructs the Brain/runtime, supplies external observations, invokes actions and reports consequences.
+- Trace every supported language/API entrypoint from external input to typed experience/provenance and from selected action to executor/observer.
+- Establish the authoritative governance owner and the lifetime of its grants.
+- This is a prerequisite to claiming whole-system provenance or authorization correctness. The current C++ library audit alone cannot establish deployed behavior.
+
+**Priority 2 — close acquisition/perception truthfulness (BM-01/BM-02)**
+
+- Resolve P2-I-037 with typed provider outcomes, observable failure/degraded-mode state and preserved raw-event lineage.
+- Decide and test the `supports noexcept` contract; do not claim exception isolation where C++ termination semantics prevent it.
+- Trace contextual language/operator-intent grounding separately from candidate-goal formation.
+- Demonstrate that provider failure is not converted into a false statement about the external event.
+
+**Priority 3 — close execution, evidence and recovery semantics (BM-09/BM-11)**
+
+- Resolve the host authorization lifecycle (P2-I-038) before treating the action path as safe for live operation.
+- Define and test the executor's partial/unknown side-effect result (P2-I-030), persistence acknowledgement (P2-I-029), action-feedback partial commits (P2-I-023), queued-feedback completion accounting (P2-I-035), and goal-completion two-event recovery (P2-I-036).
+- Inject failures at each durable append and external-effect boundary; verify replay, retries, idempotency, compensation and caller-visible status.
+- Keep cognitive assessment, policy denial, execution failure, unknown effect and verified external consequence as distinct states.
+
+**Priority 4 — verify learning claims and test validity**
+
+- Review each learning test's causal path: experience/evidence → update → durable state → changed future computation.
+- Require matched learning-disabled controls where a claim attributes improvement to learning or transfer.
+- Separate unit/helper tests, production runtime-path tests, persistence/restart tests and end-to-end host integration tests.
+- Report per-seed and held-out results, uncertainty and limitations; do not infer broad intelligence from a narrow synthetic task.
+
+**Priority 5 — independent decision and governance**
+
+- Have the Independent Tester reproduce the open failure paths and verify runtime behavior at the real host boundary.
+- Have an independent reviewer challenge the source map, severity, evidence quality and acceptance criteria.
+- Have the Project Director decide the PR #179/#180 documentation disposition and explicitly authorize any next implementation scope.
+- Only then decide whether a donor baseline is suitable. Do not merge PR #97 by implication.
+
+### 44.3 Explicit ownership handoff
+
+| Work item | Primary evidence owner | Required output |
+|---|---|---|
+| Host/runtime/application boundary and grant issuer | Main Builder / Project Director | Exact entrypoint, construction path, policy owner and lifecycle contract |
+| Provider failure/degraded-mode contract (P2-I-037) | Main Builder; Tester verifies | Typed result, raw-event lineage, failure telemetry, recovery tests |
+| Authorization freshness/revocation (P2-I-038) | Builder identifies host; Tester exercises | Revocation/expiry test at executor boundary or proven immutable-session cancellation |
+| Persistence and multi-event recovery (P2-I-023/035/036) | Tester, with Builder-provided harness | Deterministic append-failure matrix and replay/retry evidence |
+| Learning-test causal validity and controls | Independent Tester | Matched controls, held-out trials, per-seed metrics and artifact review |
+| Phase 2 report and Gate A decision | Independent Reviewer / Project Director | Independent report review and separate explicit gate decision |
+
+### 44.4 Acceptance rule
+
+Phase 2 may be called complete only when its defined source-map, cross-boundary, test-validity and independent-review deliverables are actually closed, with unavailable evidence explicitly resolved or accepted by the Project Director as a bounded limitation. Gate A remains a separate decision and cannot be cleared by completion of this report.
+
+**Current decision:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. PR #97 remains draft/unmerged and is not an approved implementation baseline. P2-I-035 through P2-I-038 remain active findings; P2-I-034 remains withdrawn. No implementation authorization is implied.
