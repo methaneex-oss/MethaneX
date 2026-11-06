@@ -3552,7 +3552,7 @@ This section evaluates the twelve exit criteria in §9 against the current repos
 | 2 | Material producer/consumer edges, including recurrent and delayed paths | **PARTIAL** | Main and donor call paths, memory/reasoning, action feedback and persistence paths are mapped. The complete recurrent dependency/invalidation graph and external host edges are not fully established. |
 | 3 | Authoritative state owners identified; no competing Brain authority ambiguous | **PARTIAL** | C++ main is the inspected Brain authority; Rust is an isolated prototype and TypeScript is a contract layer. WorldModel/Brain projections and the external host's authority boundary still require final owner confirmation. |
 | 4 | Memory-to-reasoning and reasoning-to-downstream integration traced and resolved or explicitly blocked; PR #173 F-03 kept separate | **MAPPED / BLOCKED** | IF-02/IF-03 are source-traced. Main cycle retrieves memories but does not pass them to reasoning; reasoning output is not consumed downstream. Closing requires separately authorized integration work or explicit owner-approved carry-forward. SYS-08 remains a separate substrate-boundary obligation. |
-| 5 | PR #173 F-02/F-03 mapped to exact corrections; original review recovered or unavailability recorded; authority reconciled | **PARTIAL** | F-02 candidate-goal formation and F-03 SYS-08 are distinguished. The later PR #174 follow-on F-02/F-03 review artifact remains unavailable in checked repository records; bounded provenance limitation is recorded, but owner acceptance of that limitation and formal independent clearance remain open. |
+| 5 | PR #173 F-02/F-03 mapped to exact corrections; original review recovered or unavailability recorded; authority reconciled | **PARTIAL — provenance summary recovered** | The separate provenance recovery record captures the prior-conversation title, REVISE verdict, F-02/F-03 labels, severity summaries and approximate affected-location pointers. The original reviewer report, complete rationale and verbatim text remain unavailable; Project Director disposition and independent verification remain open. The four finding namespaces remain distinct. |
 | 6 | Persistence, replay, stale dependencies, concurrency, interruption, partial completion and recovery mapped with tests or explicit non-verification | **PARTIAL** | Multiple source-derived failure paths and test gaps are recorded, including R1/R2, R3-02, P2-I-023/029/030/035/036/037/038. Several required fault-injection and host-boundary tests have not been executed. |
 | 7 | Donor paths compared against main and accepted requirements at exact commits | **SUBSTANTIALLY COMPLETE** | PR #97 and later donor lines are separately identified and compared; no donor is approved. Independent verification remains required. |
 | 8 | Hardcoded assumptions classified | **SUBSTANTIALLY COMPLETE** | Infrastructure invariants, provisional policies, situation-specific mappings and test-environment ground truth are distinguished. Independent challenge remains required. |
@@ -3567,7 +3567,7 @@ This section evaluates the twelve exit criteria in §9 against the current repos
 2. **Governance parent:** PR #179 is based on PR #178 at exact head `39fe09dcf13496f5f0005ccf3f00739303e29f88`. PR #178 remains open, draft and unmerged; its governance rules are proposed, not accepted. The Project Director must either accept that exact governance revision or authorize a different PR #179 base/authority path. Do not silently promote the governance proposal.
 3. **Implementation authority:** Gate A is NOT CLEARED and Gate B capability acceptance has NOT PASSED. No implementation baseline or runtime scope is selected. R1/R2/R3-02/R3-04 and other source findings cannot be marked fixed without the required gate, baseline, scope and explicit implementation authorization.
 4. **External host boundary:** the repository-only audit has not identified the deployed executable, grant issuer or actual external action host. The Project Director must identify the real host or approve a bounded deferral with owner and acceptance boundary.
-5. **Missing review provenance:** the original PR #174 follow-on F-02/F-03 review artifact has not been recovered in the bounded checked repository evidence. The Project Director must supply it or explicitly accept the recorded provenance limitation.
+5. **Missing review provenance:** the original PR #174 follow-on F-02/F-03 report has not been recovered in full. Partial title/verdict/finding/location metadata is preserved in `docs/architecture/reports/PR_174_FOLLOW_ON_REVIEW_PROVENANCE_RECOVERY_2026-11-06.md`; the Project Director must supply the original artifact or explicitly accept bounded unavailability. The technical obligations remain open either way.
 6. **Legacy taxonomy:** the working interpretation and scope clarification are recorded in §§49 and 51. A durable explicit owner decision remains required if the project's approval process requires a separately worded historical-scope record.
 
 ### 52.2 Phase 2 exit decision
@@ -3959,3 +3959,86 @@ This addendum supersedes only the affected evidence descriptions in §52; it doe
 The source and documentation audit is more complete than the §52 snapshot, but **Phase 2 exit criteria remain NOT MET**. This is not a request to implement all BM capabilities during Phase 2. It is a requirement to close each mapping/evidence criterion with verified evidence or an explicit authorized blocked/deferred disposition, and to obtain the required independent review and Project Director acceptance.
 
 **Main Builder disposition:** continue bounded source tracing and report corrections; do not merge, rebase, promote proposed governance, self-certify independent review, select a baseline, or change runtime mechanisms. Phase 2 cannot be honestly declared complete until the external review and owner decisions are recorded.
+
+
+---
+
+## 60. Closeout artifact reconciliation — provenance and donor runtime contract (2026-11-06)
+
+### 60.1 Stale closeout branches reconciled without merging report copies
+
+A fresh PR inventory found three additional closeout branches that were not represented in the prior handoff:
+
+| PR | Branch | Reviewed base | Disposition in this update |
+|---|---|---|---|
+| #185 | `docs/phase-2-closeout-preparation-20261106` | #179 at `6f2c2cf05196e69a48f5deefcc3f4609e258c19a` | Source of the fuller donor-runtime acceptance contract and comparison draft |
+| #186 | `docs/phase-2-closeout-evidence-20261106` | #179 at `6f2c2cf05196e69a48f5deefcc3f4609e258c19a` | Source of the bounded PR #174 provenance recovery record and builder handoff |
+| #187 | `docs/phase-2-ir02-ir04-ir03-followthrough-20261106` | #179 at `6f2c2cf05196e69a48f5deefcc3f4609e258c19a` | Source of the later reciprocal-fairness and recovery-test clarification |
+
+All three PRs were open and unmerged at inspection. Their report copies are based on an older #179 head and must not replace the current canonical report. The useful unique artifacts have been reconciled below; this does not merge, accept or independently approve those PRs.
+
+### 60.2 PR #174 follow-on review provenance — partial recovery now recorded
+
+The recovery artifact is now present on this canonical working branch:
+
+`docs/architecture/reports/PR_174_FOLLOW_ON_REVIEW_PROVENANCE_RECOVERY_2026-11-06.md`
+
+Source: PR #186 branch, exact source blob `41ae1599ce824471635439b2a991acc79c449407`. Canonical-branch creation commit: `1bac502932fea49b698ed7af9c4c79c8a6d0a7e8`.
+
+Recovered from prior conversation context:
+- Original review title: **Independent Principal Technical Re-Review — PR #174**.
+- Verdict: **REVISE — NOT APPROVED**.
+- Follow-on F-02: “Missing explicit contextual language and operator-intent grounding.”
+- Follow-on F-03: “Downstream reasoning integration is not sufficiently enforceable.”
+- Approximate affected locations and separate finding namespaces are listed in the recovery record.
+
+Not recovered:
+- the original reviewer document itself;
+- exact complete wording, full rationale and line-level annotations;
+- independently verifiable reviewer identity/provenance beyond the prior-conversation record.
+
+The user-supplied shared-chat URL could not be fetched in the earlier recovery attempt. The record is a transparent partial recovery index, not a verbatim original report. It improves the status from “no recovered finding metadata” to **PARTIALLY RECOVERED**; it does not close either finding or satisfy independent review.
+
+**Project Director decision remains required:** supply the original full report or explicitly accept bounded unavailability as a provenance limitation. The four separate obligations (PR #173 F-02/F-03 and PR #174 follow-on F-02/F-03) remain separate and open.
+
+### 60.3 Donor runtime reliability contract consolidated
+
+The following contract is now present on this canonical working branch:
+
+`docs/architecture/reports/PHASE_2_DONOR_RUNTIME_RELIABILITY_ACCEPTANCE_CONTRACT_2026-11-06.md`
+
+Source: PR #185 branch, source blob `377952cc08d2e16e89e420290180628c24827232`. Canonical-branch creation commit: `74b5545111cc1220fe332b02f8c772b23bbd0bbf`.
+
+The contract specifies:
+- distinct `work_id`, `correlation_id`, `action_id`, `idempotency_key`, `attempt_id`, `result_id` and `feedback_id`;
+- stable identity propagation and durable idempotency scope/retention across retries and restart;
+- explicit effect-confirmed, effect-rejected, effect-unknown and recovery-required states;
+- finite feedback-to-input fairness bounds, with reciprocal feedback service under sustained eligible input;
+- admission-close and in-flight shutdown disposition;
+- individually identifiable result loss and caller-visible observation state;
+- restart/retry reconciliation without blind repeat of an uncertain external effect;
+- eleven deterministic acceptance scenarios and exact evidence requirements.
+
+The reciprocal feedback service requirement is carried forward from PR #187's later contract clarification. It prevents a fairness correction from merely reversing starvation onto the feedback queue. The contract does not choose a numeric bound or scheduler algorithm.
+
+The contract remains documentation/test preparation. It does not authorize donor or main implementation, does not claim RT-* tests were executed, and does not approve PR #97.
+
+### 60.4 Comparison and independent review status
+
+The BM-01–BM-12 human/MCU comparison remains available as the deliverable on PR #191. It is still draft, unmerged, unreviewed by a separate reviewer and not Project Director accepted. The existence of another comparison draft on a closeout branch does not change that acceptance status.
+
+The new provenance and runtime-contract artifacts also require independent review. No submitted review record is created by this reconciliation.
+
+### 60.5 Updated criterion dispositions
+
+- **Criterion 5:** PARTIAL — provenance metadata recovered; original artifact and Project Director disposition remain outstanding.
+- **Criterion 6:** PARTIAL — a detailed donor reliability acceptance contract is now linked; implementation and RT-* execution remain unauthorized/unperformed, and mainline persistence/action findings remain open.
+- **Criterion 10:** DRAFT DELIVERED — comparison exists; independent review and Project Director acceptance/deferral remain outstanding.
+- **Criterion 12:** PARTIAL / BLOCKED — formal independent review, governance-parent decision and owner approval remain outstanding.
+- **Criterion 11:** the branch inventory is now enumerated (138 branch names returned across the complete paginated search), but historical branch content/authority review and full archive cross-link maintenance are not complete. Do not mark this criterion complete.
+
+### 60.6 Status and boundary
+
+The closeout artifacts improve traceability and test-contract precision. They do not clear technical findings, authorize runtime changes, select PR #97 as a baseline, or satisfy the Phase 2 exit gate.
+
+**Phase 2 remains IN PROGRESS; exit criteria NOT MET. Gate A NOT CLEARED. Gate B capability acceptance NOT PASSED. No donor approved; no implementation baseline selected; no runtime implementation authorized.**
