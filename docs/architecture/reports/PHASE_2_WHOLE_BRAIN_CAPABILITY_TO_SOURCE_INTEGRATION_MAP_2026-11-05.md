@@ -3923,3 +3923,39 @@ Do not infer that the reviewer failed to assess F-02/F-03, and do not infer that
 ### 60.4 Status
 
 **Criterion 5 remains PARTIAL.** The original F-02/F-03 correction map and PR #174 acceptance are now better evidenced, but the specific follow-on review artifact / explicit owner disposition remains unresolved. No gate or implementation authority changes.
+
+
+---
+
+## 61. Exit-ledger delta after §§55–60 (2026-11-06)
+
+This addendum supersedes only the affected evidence descriptions in §52; it does not silently change any criterion to complete.
+
+| Criterion | Updated disposition | Latest evidence and remaining requirement |
+|---:|---|---|
+| 1 | SUBSTANTIALLY COMPLETE | BM-01–BM-12 mapping remains substantially complete; exact source anchors and comparison exist. Independent reviewer must still challenge the complete map and anchor accuracy. |
+| 2 | PARTIAL | §55 confirms the missing PerceptionPipeline → CognitiveCycle runtime edge at the pinned C++ main baseline. §57 adds authorization/uncertain-effect path evidence; §59 adds WorldModel fact-provenance and snapshot-consistency gaps. Full recurrent, delayed, invalidation and external-host edges remain incomplete. |
+| 3 | PARTIAL | §56 identifies C++ Brain as the integrated mainline state owner; WorldState is standalone and Rust BrainRuntime is an isolated in-memory prototype, not a demonstrated second live authority. §59 identifies missing Fact sequence propagation and an incomplete BrainSnapshot projection. External host authority and owner disposition remain open. |
+| 4 | MAPPED / BLOCKED | Memory-to-reasoning and reasoning-to-downstream gaps remain source-traced and require authorized integration or explicit owner-approved carry-forward. |
+| 5 | PARTIAL | §60 recovers the original PR #173 F-02/F-03 correction map and PR #174 acceptance/F-01 clearance. The specific follow-on F-02/F-03 review artifact at the revised PR #174 head remains unrecovered from checked review/comment/repository records; Project Director disposition is still required. |
+| 6 | PARTIAL | Existing persistence, partial-commit, replay, authorization and uncertain-effect findings remain open. §59 adds missing WorldModel fact sequence provenance and the absence of a defined coherent BrainSnapshot contract. Required failure injection and exact-head CTest evidence are incomplete. |
+| 7 | SUBSTANTIALLY COMPLETE | Donor comparisons remain documented and no donor is approved. Independent verification remains required. |
+| 8 | SUBSTANTIALLY COMPLETE | Hardcoded assumption taxonomy remains documented; independent challenge remains required. |
+| 9 | SUBSTANTIALLY COMPLETE | Learning evidence tiers and limits remain documented; independent test-validity review remains required. |
+| 10 | DRAFT DELIVERED | PR #191 contains the human/MCU comparison; independent review and Project Director acceptance remain outstanding. |
+| 11 | PARTIALLY ADDRESSED | Main-tree notices are present on the working branch. Full archive/cross-link and historical branch preservation verification remains open. |
+| 12 | PARTIAL / BLOCKED | No formal review submissions exist for current PR #179 or #191. A separate reviewer must review exact final heads; Project Director must accept the report and resolve the PR #178 governance-parent decision and remaining owner dispositions. |
+
+### 61.1 Current non-negotiable blockers
+
+1. PR #178 remains open/draft/unmerged; PR #179 remains stacked on its proposed governance branch. Exact governance authority/base disposition is not recorded.
+2. PR #179 and PR #191 have no formal independent review submissions. Builder-authored review reports and correction records do not satisfy that requirement.
+3. The Project Director has not accepted the exact current PR #179 report head or PR #191 comparison head.
+4. External host/action authority is not identified by the bounded repository audit; this requires owner-supplied evidence or explicit owner-approved deferral.
+5. No production implementation baseline/scope has been selected. Gate A is NOT CLEARED and Gate B capability acceptance has NOT PASSED. Runtime corrections remain unauthorized.
+
+### 61.2 Completion decision
+
+The source and documentation audit is more complete than the §52 snapshot, but **Phase 2 exit criteria remain NOT MET**. This is not a request to implement all BM capabilities during Phase 2. It is a requirement to close each mapping/evidence criterion with verified evidence or an explicit authorized blocked/deferred disposition, and to obtain the required independent review and Project Director acceptance.
+
+**Main Builder disposition:** continue bounded source tracing and report corrections; do not merge, rebase, promote proposed governance, self-certify independent review, select a baseline, or change runtime mechanisms. Phase 2 cannot be honestly declared complete until the external review and owner decisions are recorded.
