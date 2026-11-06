@@ -91,3 +91,16 @@ The governance document remains a proposed baseline until explicit Project Direc
 - Phase 2 remains the recommended next investigation: source-backed, whole-system integration mapping, carrying forward every open item above.
 
 **Conclusion:** These are bounded corrections to the Phase 1 evidence and governance package. They do not restart Phase 1, discard its conclusions or authorize implementation.
+
+## 9. Whole-Brain planning scope correction — 2026-11-07
+
+The previous F5 distinction remains correct only for the bounded technical repository investigation. It must not be interpreted as completion of whole-Brain architectural planning.
+
+Phase 1 investigated repository assets, source behavior, donors, tests, documentation and reuse/conflict risks. It did not define every capability required by the future Brain, establish that BM-01–BM-12 are exhaustive, or settle the complete mechanism architecture. The audit remains useful and should not be restarted; its findings must instead be carried into a separate whole-Brain capability and architecture exercise.
+
+The corrected order is whole-Brain capability definition, mechanism architecture and interaction model, completeness/reconciliation, then development planning and repository reuse decisions. This corrects the planning scope; it does not retroactively alter the original audited baseline or the historical F1–F5 dispositions.
+
+The authoring Builder (ChatGPT, GPT-6) records its own prior errors in the linked correction: allowing the twelve mechanisms to become the effective completeness boundary; conflating source mapping with capability definition; relying on the "whole Brain" report title rather than challenging its actual scope; and advancing toward development planning too early.
+
+See [Whole-Brain Planning Scope and Builder Correction](WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md). No runtime implementation, baseline selection or gate clearance is authorized.
+
