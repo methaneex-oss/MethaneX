@@ -2339,3 +2339,126 @@ The donor now has:
 - An unresolved production integration/caller-graph question beyond the native C++ runtime.
 
 The next investigation should prioritize (a) independent analysis of the retained DLT-002 artifacts and acceptance metrics, (b) failure-injection verification of multi-event recovery, and (c) identifying the actual application boundary that supplies observations, actions and consequence observations to the Brain. No donor merge or Gate A approval is implied.
+
+
+---
+
+## 10.11 DLT-002 raw artifact analysis — three-seed behavioral results
+
+The three retained ZIP artifacts from workflow run #8 (40565468650) were downloaded and the raw episodes.csv, trial.log, checkpoints.csv, and summary files were inspected. This moves the evidence assessment beyond workflow completion and summary counts.
+
+**Revision boundary:** all three artifacts identify donor commit 82c49a75bd30de2962879f044776f4bf2391970a, which is an ancestor of the current donor HEAD c1da222e6c94aeb3f2ad000392c21fe4fc81ab25 with 18 intervening commits. These are valid results for the earlier revision only.
+
+### Aggregate observed results
+
+Across the three seeds:
+
+| Phase | Optimal selections | Decisions | Accuracy |
+|---|---:|---:|---:|
+| Clear baseline | 280 | 300 | 93.3% |
+| Flooded | 286 | 297 | 96.3% |
+| Tunnel | 279 | 295 | 94.6% |
+| Clear reversal | 276 | 294 | 93.9% |
+| Held-out canyon probe | 289 | 291 | 99.3% |
+| Flooded reversal | 272 | 288 | 94.4% |
+| **Total** | **1,682** | **1,765** | **95.3%** |
+
+Individual learning-enabled trial summaries report:
+- Seed 20261026: 569/586 optimal (97.1%).
+- Seed 20261027: 557/590 optimal (94.4%).
+- Seed 20261028: 556/589 optimal (94.4%).
+
+These aggregate values are descriptive results from the retained artifacts, not a statistical claim of generalization beyond this task.
+
+### Reversal behavior
+
+The raw episode records show that the policy did not simply maintain a fixed action throughout the trial:
+
+- In the clear-context reversal, the first ten decisions were 5/10, 6/10 and 7/10 optimal across the three seeds; the final ten were 10/10 in all three.
+- In the later flooded-context reversal, the first ten were 4/10, 7/10 and 4/10 optimal; the final ten were 9/10, 10/10 and 10/10.
+- The trial logs show context-local strategy values changing sign as the hidden action/consequence relationship reverses, followed by the policy's decision accuracy recovering.
+
+This supports behavioral adaptation after contradictory experience in this bounded task. It also exposes a measurable adaptation cost: early post-reversal choices are substantially worse than the late-phase choices. The current summary's final phase accuracy hides that transient cost; future acceptance reports should retain and publish first-window accuracy and recovery curves.
+
+### Held-out transfer behavior
+
+All three seeds:
+- Retrieved a related strategy before the first action in the unseen navigation/canyon context.
+- Reported a source-context similarity of 0.5.
+- Selected the evaluation-optimal action on the first canyon decision, before any canyon outcome feedback.
+- Achieved 29/30 optimal decisions across the first ten canyon decisions (the first decision precedes canyon feedback; subsequent decisions may use newly received feedback).
+- Achieved 289/291 optimal decisions over the full probe phase.
+
+The source context varied by seed (clear or flooded), and the selected source action matched the hidden evaluation-optimal action in the probe. This is stronger than merely observing high final probe accuracy: the first choice occurred before the new context could teach the Brain its own action mapping.
+
+**However, this is not yet a causal estimate of transfer benefit.** The sweep did not run a matched no-transfer policy or an ablation that disables related-strategy retrieval. The first-choice success is evidence consistent with transfer under the harness's similarity mechanism, not proof that transfer improves performance relative to a no-transfer counterfactual. The fixed-policy controls in the summary are always-route-one and always-route-two; they are not matched learning-disabled Brain controls.
+
+### Prediction accounting
+
+The three artifacts record:
+- 1,995–2,008 prediction records per seed in the final summary.
+- 566–569 resolved predictions in the summary's retained prediction snapshot.
+- Zero unresolved action-consequence forecasts in every seed.
+- 1,429–1,439 unresolved non-action-consequence predictions in those same snapshots.
+
+The final trial log reports a larger count of resolved action-consequence predictions accumulated over the full run (586–590), because its memory/event accounting and the final retained prediction snapshot are not the same denominator. Do not combine these counters as if they were interchangeable. The zero unresolved action-consequence count is useful evidence that action-consequence forecasts were resolved in the recorded run; it does not establish that every other prediction class is resolved.
+
+### Experimental design gap
+
+The executable supports enabled and no-feedback modes, but the three-seed workflow invokes the executable without the final mode argument, so it uses the default enabled mode for every seed. It does not schedule a paired no-feedback run. The fixed-action baselines therefore do not isolate the causal contribution of learning from other Brain/runtime effects.
+
+**Updated evidence judgement:** DLT-002 run #8 provides substantial, reproducible evidence of learning-enabled policy adaptation, repeated reversal and first-choice performance in a held-out context at commit 82c49a.... It does not establish a matched causal learning effect, and it is not current-HEAD runtime evidence. The next experiment should pair identical seeds and environment schedules in enabled and no-feedback modes, predefine primary metrics, include a transfer-disabled ablation, and rerun at the final candidate commit.
+
+---
+
+## 10.12 Application-boundary and polyglot integration map
+
+A bounded whole-tree inspection was performed against donor HEAD c1da222e6c94aeb3f2ad000392c21fe4fc81ab25. The result is important because the presence of language-specific directories or interfaces is not evidence that they are connected to the native cognitive runtime.
+
+### Native C++ cognitive substrate
+
+- core/cpp/CMakeLists.txt builds jarvis_core as a static C++20 library and includes the cognitive runtime, cycle, perception pipeline, memory, action execution, developmental learning, affective learning and related mechanisms.
+- CognitiveRuntime is a concrete worker-thread runtime with bounded input, result and feedback queues; perception providers; an action adapter; and a shared cognitive workspace.
+- The verified in-tree construction/use sites found in the inspected executable C++ code are simulation examples and test/trial harnesses, including core/cpp/examples/developmental_world.cpp, core/cpp/tests/developmental_world_integration_suite.cpp, core/cpp/tests/cognitive_runtime_suite.cpp, core/cpp/tests/cognitive_runtime_learning_integration_suite.cpp and core/cpp/tests/dlt_002_long_run.cpp.
+- Those harnesses provide the external environment boundary explicitly: observations are submitted, candidate actions are supplied, the adapter executes a selected action, and observe_consequence returns the world result to Brain.
+
+### TypeScript interface boundary
+
+The inspected TypeScript files contain contracts and session forwarding:
+- interfaces/typescript/src/brain.ts defines BrainTransport with observe, decide and capabilities methods.
+- interfaces/typescript/src/agent_bridge.ts defines message/request/transport/session interfaces.
+- interfaces/typescript/src/operator_session.ts forwards operator requests to an injected transport and receives messages from that transport.
+
+These files do not implement a concrete transport connecting TypeScript to the C++ CognitiveRuntime, nor do they show an observation/action/consequence adapter into the native runtime. operatorSend forwards a request; it does not itself execute a cognitive cycle or grant action authority. The source explicitly keeps execution authorization inside the runtime boundary.
+
+### Rust runtime boundary
+
+The inspected runtime/rust/src/lib.rs and runtime/rust/src/cognition.rs implement a separate minimal BrainRuntime/CognitiveState with a map of beliefs, evidence counts and a bounded working-memory vector. Its observe method updates that local state. The inspected Rust module does not call or bind to the C++ Brain/runtime and does not implement the full C++ cognitive cycle, action adapter, prediction-feedback loop or durable journal integration.
+
+### Documentation alignment
+
+The repository README describes JARVIS as foundational development focused on completing and integrating the cognitive substrate before higher-level device, interface and deployment layers. The architecture document describes intended polyglot boundaries and explicit contracts. The observed code is consistent with a native C++ substrate plus preliminary TypeScript/Rust boundary work; the source inspected does not yet demonstrate a single integrated, deployed, polyglot application.
+
+### Integration status and required proof
+
+This is an **unresolved integration-scope item, not a confirmed implementation defect**. The current donor evidence supports a runnable C++ cognitive substrate in controlled harnesses. It does not support claims that the TypeScript operator layer, Rust runtime and C++ cognitive runtime are already one connected production system.
+
+Before describing the whole brain as application-integrated, the Builder should provide an explicit executable entry-point map with:
+1. The real application process or service that owns the Brain and starts/stops CognitiveRuntime.
+2. The concrete TypeScript-to-native transport implementation and serialization/version contract, if TypeScript is intended to drive the native Brain.
+3. The role of the Rust runtime: production component, isolated prototype, or superseded experiment; if production, its synchronization and ownership boundary with C++.
+4. The source of real observations and the provenance/independence of consequence observations.
+5. Authorization, cancellation, timeout, retry, backpressure and shutdown semantics at the application boundary.
+6. An end-to-end integration test that launches the actual entry point and proves one externally sourced experience changes a later decision through the same persistent Brain instance, followed by restart/replay verification where required.
+
+Until that evidence exists, classify the C++ runtime as an integrated native substrate exercised through controlled harnesses, and classify the cross-language/application boundary as not yet demonstrated. Do not count the existence of interfaces/typescript or runtime/rust as integration evidence.
+
+### Updated Phase 2 priorities
+
+1. Run paired enabled/no-feedback and transfer-ablation DLT-002 experiments with the same seeds and schedules.
+2. Rerun the long-run behavioral protocol on the exact final candidate SHA and publish per-phase, early-reversal and transfer metrics.
+3. Execute failure injection for P2-I-013 and define the journal's partial-transaction recovery contract.
+4. Require the actual application entry-point/transport map and one end-to-end test across the intended language boundaries.
+5. Preserve the distinction between mechanism existence, controlled runtime integration, cross-language integration and deployed operation in all Gate A decisions.
+
+**Phase 2 remains IN PROGRESS. Gate A remains NOT CLEARED. PR #97 remains an unmerged donor.**
