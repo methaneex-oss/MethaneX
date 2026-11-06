@@ -417,3 +417,16 @@ The following preservation tasks remain open and must not be represented as comp
 These tasks form a bounded documentation/preservation follow-up. They do not invalidate the completed technical inventory or require restarting Phase 1's technical investigation.
 
 A reproducible exact-baseline file list is now published at [PHASE_1_TRACKED_FILE_INVENTORY_2026-11-05.md](PHASE_1_TRACKED_FILE_INVENTORY_2026-11-05.md). Selected donor implementation paths are traced in [PHASE_1_PR97_DONOR_CAPABILITY_TRACEABILITY_2026-11-05.md](PHASE_1_PR97_DONOR_CAPABILITY_TRACEABILITY_2026-11-05.md). The complete correction disposition is in [PHASE_1_REVIEW_CORRECTIONS_AND_SCOPE_RECONCILIATION_2026-11-05.md](../reports/PHASE_1_REVIEW_CORRECTIONS_AND_SCOPE_RECONCILIATION_2026-11-05.md).
+
+---
+
+## 22. Whole-Brain planning scope correction — 2026-11-07
+
+This inventory is a preservation and authority-discovery artifact. It does not prove that the complete future Brain has been architecturally defined.
+
+The PR #171 whole-system foundation, PR #172 capability investigation, PR #173 Brain Foundation Architecture, PR #174 BM-01–BM-12 specification, Phase 1 repository audit and Phase 2 source map are substantial prior inputs. Their exact approval scopes must be respected, but none should be treated as a substitute for the newly clarified whole-Brain capability definition and completeness assessment.
+
+The next Builder must preserve these artifacts and analyze them as evidence. The Builder must not assume that twelve mechanisms exhaust the Brain, and must not select implementation order or repository reuse until whole-Brain architecture and its completeness review are accepted.
+
+See [Whole-Brain Planning Scope and Builder Correction](../reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md) for the corrected sequence, reference lenses, authority boundaries and explicit Builder error record.
+
