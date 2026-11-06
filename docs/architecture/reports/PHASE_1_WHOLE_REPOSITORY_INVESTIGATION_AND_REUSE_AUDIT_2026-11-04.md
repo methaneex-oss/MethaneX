@@ -1,5 +1,7 @@
 # Phase 1 — Whole-Repository Investigation, Reuse and Conflict Audit
 
+> **Whole-Brain scope correction — 2026-11-07:** This report is a repository inventory and static reuse/conflict investigation at the exact baseline recorded below. It is not the complete definition or completeness proof of the future Brain. Preserve its source findings; do not treat BM-01–BM-12 coverage or reuse classifications as a final whole-Brain architecture or development decision. The corrected planning sequence and Builder error record are in [Whole-Brain Planning Scope and Builder Correction](WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md).
+
 **Date:** 2026-11-04  
 **Repository:** methaneex-oss/MethaneX  
 **Audited main baseline:** 1273ddbcd0087d189e01388ded2d362fb1e058d2  
