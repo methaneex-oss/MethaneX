@@ -3184,3 +3184,103 @@ The existing §9.10 comparison criterion is retained but now names a bounded del
 **Current status:** Phase 2 remains IN PROGRESS. Gate A remains NOT CLEARED. Gate B is not assessed or cleared here. No implementation baseline is selected. PR #97 remains an unmerged donor. No production implementation, donor port, merge, deployment or gate clearance is authorized. The PR #174 follow-on F-02/F-03 source artifact and the human/MCU comparison deliverable remain outstanding. The IR-03 runtime scenarios remain unexecuted.
 
 **Next action:** Submit this exact updated PR #179 head for independent re-review against IR-01 through IR-04. The reviewer should independently reproduce the main/donor perception call graph; verify the four-row finding provenance ledger and missing-source limitation; inspect donor scheduler/shutdown/result queue code and assess the acceptance matrix; and verify that the human/MCU comparison deliverable has a named owner and explicit Project Director disposition. The reviewer should retain the REVISE verdict unless the documented corrections and outstanding authority/evidence conditions are independently satisfied.
+
+
+---
+
+## 46. Closeout preparation addendum — provenance recovery, runtime contract and comparison deliverable
+
+**Prepared:** 2026-11-06  
+**Base report reviewed:** PR #179 head `6f2c2cf05196e69a48f5deefcc3f4609e258c19a`  
+**Preparation branch:** `docs/phase-2-closeout-preparation-20261106`  
+**Scope:** Documentation only. This addendum supersedes earlier "not yet created" status statements where the new artifact is now present, but does not claim independent acceptance or Project Director approval.
+
+### 46.1 IR-02 — Follow-on PR #174 review provenance recovery attempt
+
+The repository and PR records previously inspected remain unable to provide the original full follow-on review artifact:
+
+- PR #174 review submissions endpoint returned an empty array.
+- PR #174 issue discussion inspected does not contain the follow-on F-02/F-03 review text.
+- PR #178's Phase 1 reconciliation says the later findings were supplied in a subsequent review report in the conversation and were not mirrored as a submitted GitHub review.
+- Repository code/document search for the distinctive phrases "contextual language operator intent grounding" and "downstream reasoning integration" returned no matching document.
+
+A search of the prior conversation context recovered only a secondary summary of the earlier independent re-review:
+- Date recorded in conversation context: **2026-11-04**.
+- Overall result: **REVISE — NOT APPROVED**.
+- Follow-on F-02: contextual language/operator-intent grounding; recorded severity **High**.
+- Follow-on F-03: downstream reasoning integration; recorded severity **Medium**.
+- The prior response explicitly said the linked review report did not load and that exact title, document path, verbatim wording and complete reviewer rationale were not recovered.
+
+This is useful corroboration of the two finding labels, summary meanings, severity and outcome. It is **not** the original review artifact, not a verbatim copy, and not adequate to reconstruct line-level rationale or prove that no further qualifications existed. No exact title, source path, reviewer identity or original text is asserted.
+
+The four obligations remain separate:
+1. PR #173 F-02 — experience-acquired candidate-goal formation.
+2. PR #173 F-03 — SYS-08 computational-substrate boundary.
+3. PR #174 follow-on F-02 — contextual language/operator-intent grounding.
+4. PR #174 follow-on F-03 — downstream reasoning integration.
+
+**Project Director decision required:** either (a) supply/recover the original PR #174 follow-on review artifact and attach its exact title/path/content/provenance, or (b) explicitly accept the artifact's bounded unavailability while preserving the two PR #174 follow-on obligations as open until their technical correction/acceptance evidence is independently reviewed. This Builder cannot make that Project Director decision on the Director's behalf. No substantive finding is closed by accepting missing provenance.
+
+### 46.2 IR-03 — Detailed donor runtime reliability contract
+
+A separate implementation-neutral acceptance contract has been created:
+
+`docs/architecture/reports/PHASE_2_DONOR_RUNTIME_RELIABILITY_ACCEPTANCE_CONTRACT_2026-11-06.md`
+
+It defines:
+- distinct `work_id`, `correlation_id`, `action_id`, `idempotency_key`, `attempt_id`, `result_id` and `feedback_id` semantics;
+- end-to-end identity propagation from admission through cycle, action, feedback, result, persistence/replay and caller observation;
+- stable idempotency identity across retry/restart, distinct attempt identity, scope and retention requirements;
+- explicit action/effect states including confirmed, rejected, unknown and recovery-required;
+- a finite feedback service bound and deterministic dispatch-count fairness assertion;
+- shutdown admission-close and in-flight action/secondary-feedback disposition;
+- individually identifiable result loss rather than aggregate-only overflow accounting;
+- crash-after-side-effect-before-ack recovery and no-blind-retry semantics;
+- eleven deterministic test cases covering fairness, shutdown, saturation, restart, idempotency, accounting and replay.
+
+The contract expressly rejects an unqualified exactly-once claim. Where the external executor cannot deduplicate or authoritatively query an effect, an ambiguous action must remain unknown and require reconciliation rather than blind replay.
+
+**Verification boundary:** no production or donor source, tests, CMake or workflow were modified. No runtime tests were implemented or executed. The contract is a proposed acceptance artifact pending independent review and Project Director authorization. The original IR-03 source-confirmed behaviors remain source observations at donor PR #97 HEAD; operational incidents remain unproven.
+
+### 46.3 IR-04 — Human/MCU comparison deliverable created
+
+The bounded comparison artifact now exists at:
+
+`docs/architecture/reports/PHASE_2_HUMAN_AND_MCU_REFERENCE_COMPARISON_2026-11-06.md`
+
+It contains:
+- a function-level register for BM-01 through BM-12;
+- human cognitive-function comparisons grounded in peer-reviewed review literature;
+- a separate qualitative MCU J.A.R.V.I.S. functional-inspiration column;
+- pinned-main implementation status and engineering implications;
+- explicit warnings against biological equivalence, anthropomorphism and treating fictional portrayal as scientific evidence;
+- a bounded source list and explicit review/approval status.
+
+**Ownership:** Main Builder / architecture evidence owner prepared the artifact. The Independent Reviewer must challenge source quality, the evidence/analogy boundary and engineering implications. The Project Director must accept the artifact or explicitly approve a bounded deferral with rationale and a later completion point.
+
+**Status:** artifact created; independent review not yet performed; Project Director acceptance/deferral not recorded. Therefore the deliverable is not complete for Phase 2 exit purposes.
+
+### 46.4 Phase 2 closeout state after this addendum
+
+| Item | Updated status |
+|---|---|
+| IR-01 | Documentary correction independently passed in PR #184; main production integration remains absent |
+| IR-02 | Four obligations separately preserved; original artifact not recovered; Project Director disposition pending |
+| IR-03 | Source analysis passed in PR #184; detailed contract now drafted; implementation/tests not authorized or executed |
+| IR-04 | Bounded comparison artifact created; independent review and Project Director decision pending |
+| Phase 2 | IN PROGRESS — not accepted as complete |
+| Gate A | NOT CLEARED |
+| Gate B | Not assessed or cleared |
+| Donor PR #97 | Not approved |
+| Implementation baseline | Not selected |
+| Runtime implementation | Not authorized |
+
+### 46.5 Required next actions
+
+1. Project Director records the IR-02 provenance decision described in §46.1.
+2. Independent Reviewer reviews the comparison artifact and runtime reliability contract as new deliverables.
+3. Project Director accepts the comparison artifact or approves a bounded deferral.
+4. Only after the applicable Phase 2 and gate decisions may a separately authorized implementation/test stage implement and execute the RT-* runtime acceptance matrix.
+5. A subsequent independent Phase 2 review verifies the decisions, artifacts and any resulting report changes.
+
+This addendum is documentation preparation, not a Phase 2 approval, gate decision, donor approval or implementation authorization.
