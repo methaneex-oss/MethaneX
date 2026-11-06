@@ -154,6 +154,8 @@ Main currently contains fragments of these paths. It does not yet demonstrate th
 
 **Donor comparison:** PR #97's developmental context extraction uses observation kind/source and representation features/values; its fixed tokenization and context hierarchy are engineered inductive biases. It does not by itself establish general contextual language/operator-intent grounding.
 
+**Additional provider-failure boundary (donor HEAD):** `PerceptionPipeline::process` catches exceptions from `PerceptionProvider::perceive`, silently continues to other providers and falls back to deterministic raw-event normalization when none succeeds. It returns only a `PerceptualRepresentation`; no provider-failure result, capability-health event or runtime metric is exposed. The `PerceptionProvider::supports` interface is declared `noexcept`, so the catch surrounding `supports` cannot isolate a provider that actually throws there: violating the contract invokes termination rather than reaching the catch. The existing throwing-provider test covers a `perceive` exception and confirms fallback output, but it does not assert a recorded capability failure or test the `supports` contract. See P2-I-037 in §38.
+
 **Disposition:** **Reuse** provider capability and representation boundaries; **adapt** ambiguity, grounding, source/context and alternative-interpretation semantics. Keep contextual grounding open as a distinct BM-02 gap.
 
 **Required integration proof:** Ambiguous input yields competing interpretations; contextual evidence and memory change their relative support; operator intent is grounded from context rather than a fixed phrase/source lookup; raw evidence remains unchanged.
@@ -2117,13 +2119,14 @@ This checklist records the second-pass validation performed before handing this 
 
 The report is intentionally **not** marked complete. Before Phase 2 can pass its exit criteria, the following still require closure:
 1. Finish the remaining BM-01/BM-02 acquisition, perception and representation provenance trace and map all relevant production entrypoints, including any non-C++ callers not covered by the donor C++ source search.
-2. Complete the test-by-test validity review of the selected donor suites, including observer independence, hidden assumptions, reward/context leakage, matched controls and generalization limits.
-3. Complete authorization freshness, stale assessment, executor rollback/partial-effect and caller-visible persistence-failure analysis against the accepted Gate A requirements.
-4. Complete deterministic failure injection for every relevant Memory append boundary, multi-event action feedback, queued-feedback evidence assimilation and completion-metric accounting, the two-event `goal_progress`/`goal_complete` boundary, evolution event ordering, compensation and restart/retry equivalence.
-5. Reconcile all remaining BM-11 coordination, invalidation, concurrency, interruption and recovery edges across language/runtime boundaries.
-6. Recover the original PR #173 F-02/F-03 reviewer document if verbatim wording is mandatory; the report records the current retrieval limit rather than inventing it.
-7. Obtain independent review of the completed source map and an explicit Project Director decision on any remaining PR #179/#180 duplicate disposition.
-8. Keep Gate A NOT CLEARED until its own required provenance, compatibility, rollback, independent test and independent review conditions are satisfied.
+2. Add provider-failure semantics to that trace: a failed specialized provider must be observable as a capability failure while preserving the raw acquired experience and any valid fallback representation. Reconcile the `supports noexcept` contract with the intended provider-isolation guarantee.
+3. Complete the test-by-test validity review of the selected donor suites, including observer independence, hidden assumptions, reward/context leakage, matched controls and generalization limits.
+4. Complete authorization freshness, stale assessment, executor rollback/partial-effect and caller-visible persistence-failure analysis against the accepted Gate A requirements.
+5. Complete deterministic failure injection for every relevant Memory append boundary, multi-event action feedback, queued-feedback evidence assimilation and completion-metric accounting, the two-event `goal_progress`/`goal_complete` boundary, evolution event ordering, compensation and restart/retry equivalence.
+6. Reconcile all remaining BM-11 coordination, invalidation, concurrency, interruption and recovery edges across language/runtime boundaries.
+7. Recover the original PR #173 F-02/F-03 reviewer document if verbatim wording is mandatory; the report records the current retrieval limit rather than inventing it.
+8. Obtain independent review of the completed source map and an explicit Project Director decision on any remaining PR #179/#180 duplicate disposition.
+9. Keep Gate A NOT CLEARED until its own required provenance, compatibility, rollback, independent test and independent review conditions are satisfied.
 
 **Self-review result:** no internal contradiction or unsupported completion claim was identified in this pass. The report remains a substantial but incomplete Phase 2 investigation. Its findings are ready for independent challenge; they are not approval to implement, merge donor code or select an implementation baseline.
 
