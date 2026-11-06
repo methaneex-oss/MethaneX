@@ -2119,7 +2119,7 @@ The report is intentionally **not** marked complete. Before Phase 2 can pass its
 1. Finish the remaining BM-01/BM-02 acquisition, perception and representation provenance trace and map all relevant production entrypoints, including any non-C++ callers not covered by the donor C++ source search.
 2. Complete the test-by-test validity review of the selected donor suites, including observer independence, hidden assumptions, reward/context leakage, matched controls and generalization limits.
 3. Complete authorization freshness, stale assessment, executor rollback/partial-effect and caller-visible persistence-failure analysis against the accepted Gate A requirements.
-4. Complete deterministic failure injection for every relevant Memory append boundary, multi-event action feedback, queued-feedback evidence assimilation and completion-metric accounting, evolution event ordering, compensation and restart/retry equivalence.
+4. Complete deterministic failure injection for every relevant Memory append boundary, multi-event action feedback, queued-feedback evidence assimilation and completion-metric accounting, the two-event `goal_progress`/`goal_complete` boundary, evolution event ordering, compensation and restart/retry equivalence.
 5. Reconcile all remaining BM-11 coordination, invalidation, concurrency, interruption and recovery edges across language/runtime boundaries.
 6. Recover the original PR #173 F-02/F-03 reviewer document if verbatim wording is mandatory; the report records the current retrieval limit rather than inventing it.
 7. Obtain independent review of the completed source map and an explicit Project Director decision on any remaining PR #179/#180 duplicate disposition.
@@ -2596,7 +2596,7 @@ The inspected `cognitive_runtime_suite` exercises successful prediction-plus-evi
 
 ---
 
-## 35. Final finding-index, provenance and handoff verification
+## 35. Finding-index and provenance reconciliation before goal-completion audit
 
 **Audit date:** 2026-11-06  
 **Scope:** Independent consistency pass after the runtime-feedback persistence follow-up in §34.
@@ -2638,7 +2638,7 @@ P2-I-035 is a distinct finding because it concerns the queued-feedback processin
 
 This report is materially more complete and internally navigable, but Phase 2 is not complete. The unresolved requirements in §25.4 remain open, including acquisition/provenance tracing, selected-suite validity and controls, authorization freshness, partial-effect/rollback behavior, deterministic journal, goal-completion and feedback failure injection, cross-runtime integration, and independent review.
 
-**Final handoff status:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. PR #97 remains an unmerged donor. No implementation baseline is selected, no donor is approved, and no implementation authorization is implied.
+**Status at this audit point:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. PR #97 remains an unmerged donor. No implementation baseline is selected, no donor is approved, and no implementation authorization is implied.
 
 
 
@@ -2695,3 +2695,48 @@ This is a source-derived failure path, not a reproduced incident. It is distinct
 The inspected `cognitive_runtime_goal_feedback_suite` covers successful 0.4 progress, successful 1.0 completion, rejection of a regressive update after completion, and successful restart reconstruction. It does not inject failure between the two completion appends.
 
 **Updated review judgement:** goal feedback is not a single atomic state transition at the 100% boundary. A successful `goal_progress` append is not sufficient to reconstruct completion under the current replay rules. P2-I-036 remains open. Phase 2 remains IN PROGRESS. Gate A remains NOT CLEARED. PR #97 remains an unmerged donor.
+
+
+---
+
+## 37. Final independent review of goal-completion partial-commit finding and report state
+
+**Audit date:** 2026-11-06  
+**Scope:** Independent source verification of §36, final finding-index consistency, report-branch state and donor isolation.
+
+### 37.1 P2-I-036 source verification
+
+The goal-completion finding was checked against the exact donor source blobs:
+
+- `Brain::assimilate_goal_outcome` appends and replays `goal_progress` before it attempts the separate `goal_complete` append. A failure of the second append returns `false` without undoing the first event.
+- `Brain::replay` invokes `process_affective_experience` before its event-specific dispatch. The `goal_progress` branch updates the goal projection only when `progress < 1.0`; the `goal_complete` branch performs the completion transition.
+- `GoalModel::update_progress` can set status to completed at progress 1.0, but the replay guard deliberately prevents the `goal_progress(progress=1.0)` event from invoking that method.
+- Therefore a successful first append followed by a failed second append leaves a persisted 100% progress event that affects affective state but does not reconstruct goal completion. The same replay behavior persists after restart until a `goal_complete` event is successfully recorded.
+- The cited goal-feedback test covers successful progress, successful completion, terminal-goal rejection and successful restart. It does not inject failure between the two completion appends.
+
+The conditional failure sequence is source-supported but not experimentally reproduced. P2-I-036 remains a valid, distinct medium-severity provisional finding. Its required second-append failure injection and retry/replay assertions remain open.
+
+### 37.2 Finding-index and section reconciliation
+
+- Active findings are P2-I-001 through P2-I-033, plus P2-I-035 and P2-I-036.
+- P2-I-034 remains withdrawn and is not reused.
+- P2-I-012 is the donor runtime-loop integration finding; the later CI correction is unnumbered.
+- P2-I-013 is the mainline runtime/action-execution integration gap.
+- P2-I-014 is the low-level journal rollback/startup-tail-repair finding.
+- P2-I-023 is the multi-event action-learning atomicity finding.
+- P2-I-035 is the queued-feedback evidence-persistence/completion-metric finding.
+- P2-I-036 is the two-event goal-completion/replay finding.
+- Sections are numbered consecutively through §37 with no duplicate section numbers. Repeated mentions of a finding are cross-references or expanded treatment, not additional IDs.
+
+### 37.3 Repository and PR boundary
+
+- Donor PR #97 remains open/draft at exact HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`, targeting `main`.
+- The review report remains on `docs/jarvis-phase-2-whole-brain-integration-map-20261105`, PR #179 targeting `docs/jarvis-project-governance-rules-20261105`.
+- The donor branch compares identical to its recorded HEAD; this review changed only the review report, not donor production code, tests, workflows or CMake configuration.
+- The report remains a review artifact. Its findings and required tests are not implementation authorization.
+
+### 37.4 Final decision
+
+The additional goal-completion audit strengthens the failure/recovery map but does not close the relevant acceptance criteria. The report is ready for independent review of its evidence and severity judgments; deterministic failure injection, remaining BM-01/BM-02 provenance work, test-validity review, runtime integration boundaries and Project Director decisions remain outstanding.
+
+**Final handoff status:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. PR #97 remains an unmerged donor. No implementation baseline is selected, no donor is approved, and no implementation authorization is implied.
