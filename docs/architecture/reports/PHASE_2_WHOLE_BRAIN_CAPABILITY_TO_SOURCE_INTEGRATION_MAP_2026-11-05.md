@@ -3184,3 +3184,65 @@ The existing §9.10 comparison criterion is retained but now names a bounded del
 **Current status:** Phase 2 remains IN PROGRESS. Gate A remains NOT CLEARED. Gate B is not assessed or cleared here. No implementation baseline is selected. PR #97 remains an unmerged donor. No production implementation, donor port, merge, deployment or gate clearance is authorized. The PR #174 follow-on F-02/F-03 source artifact and the human/MCU comparison deliverable remain outstanding. The IR-03 runtime scenarios remain unexecuted.
 
 **Next action:** Submit this exact updated PR #179 head for independent re-review against IR-01 through IR-04. The reviewer should independently reproduce the main/donor perception call graph; verify the four-row finding provenance ledger and missing-source limitation; inspect donor scheduler/shutdown/result queue code and assess the acceptance matrix; and verify that the human/MCU comparison deliverable has a named owner and explicit Project Director disposition. The reviewer should retain the REVISE verdict unless the documented corrections and outstanding authority/evidence conditions are independently satisfied.
+
+
+---
+
+## 46. Closeout evidence prepared — 2026-11-06
+
+**Builder response to second independent review PR #184.** This section records new documentation artifacts on branch `docs/phase-2-closeout-evidence-20261106`, parented directly on the reviewed PR #179 HEAD `6f2c2cf05196e69a48f5deefcc3f4609e258c19a`. These are documentation/recovery artifacts only.
+
+### 46.1 IR-02 — bounded provenance recovery
+
+A prior-conversation retrieval recovered the original follow-on review title **“Independent Principal Technical Re-Review — PR #174”**, verdict **REVISE — NOT APPROVED**, and finding names:
+
+- F-02 — “Missing explicit contextual language and operator-intent grounding.”
+- F-03 — “Downstream reasoning integration is not sufficiently enforceable.”
+
+Recovered affected-location pointers:
+- F-02: accepted specification BM-02 approximately lines 196–218; BM-08 approximately lines 357–389; specification §§5/6/9; PR #172 §5; PR #171 SYS-09.
+- F-03: accepted specification §6.3 approximately lines 641–653; §9.H scenarios 27–34; §10; source audit §2.11/AUD-12.
+
+The shared-chat URL supplied in the earlier conversation could not be fetched during this recovery. The exact full report wording and complete reviewer rationale remain unavailable. The new provenance record is explicitly a recovery index, not a verbatim reproduction:
+
+`docs/architecture/reports/PR_174_FOLLOW_ON_REVIEW_PROVENANCE_RECOVERY_2026-11-06.md`
+
+**Disposition:** Improved from “no review identity/details recovered” to **partial recovery**. Still requires Project Director choice: supply an accessible original artifact, or explicitly accept its bounded unavailability. All four finding namespaces and their technical obligations remain distinct and open.
+
+### 46.2 IR-04 — human/MCU comparison artifact created
+
+The previously missing deliverable now exists:
+
+`docs/architecture/reports/PHASE_2_HUMAN_AND_MCU_REFERENCE_COMPARISON_2026-11-06.md`
+
+It covers BM-01–BM-12, separates empirical human-cognition references from engineering hypotheses and fictional MCU analogy, maps the comparison to pinned repository evidence, states engineering implications and exclusions, and includes a bounded literature reference list.
+
+**Status:** Created, not independently reviewed or Project Director accepted. It does not claim biological equivalence, fictional capability as scientific evidence, or implementation completion.
+
+### 46.3 IR-03 — runtime contract made explicit
+
+The donor runtime contract now exists:
+
+`docs/architecture/reports/PHASE_2_DONOR_RUNTIME_RELIABILITY_CONTRACT_2026-11-06.md`
+
+It defines distinct `operation_id`, `action_id`, `attempt_id`, `feedback_id` and `result_id` identities; end-to-end propagation; idempotency key scope and durable retention; unknown external-effect reconciliation; a configurable finite feedback burst bound; in-flight shutdown feedback obligations; per-result loss identification; and RT-01 through RT-08 deterministic verification scenarios.
+
+**Status:** Contract clarified, not implemented. No runtime code or tests were changed. No RT-01 through RT-08 tests were executed. The contract explicitly rejects an exactly-once external-effect claim unless the external target provides deduplication, transactionality or independent reconciliation.
+
+### 46.4 Builder handoff and verification boundary
+
+`docs/architecture/reviews/PHASE_2_CLOSEOUT_BUILDER_HANDOFF_2026-11-06.md` records the artifact inventory, non-claims, independent-review checklist and Project Director decisions.
+
+Builder self-check is not an independent review. The next reviewer must inspect the new artifacts and this updated report at the exact submitted HEAD. The human/MCU comparison remains pending acceptance; provenance remains pending Project Director disposition; runtime verification remains pending implementation/test authorization and actual execution.
+
+### 46.5 Revised Phase 2 exit conditions
+
+| ID | Current state | Remaining evidence / authority |
+|---|---|---|
+| C-01 — PR #174 follow-on review provenance | **PARTIALLY RECOVERED** | Project Director must supply the original full artifact or explicitly accept bounded unavailability; retain all four obligations |
+| C-02 — Human/MCU comparison | **ARTIFACT CREATED** | Independent review and Project Director acceptance, or explicit bounded deferral |
+| C-03 — Donor runtime contract and tests | **CONTRACT SPECIFIED; TESTS NOT RUN** | Independent contract review; separately authorized implementation/test work; execute RT-01–RT-08 at exact donor/runtime commit before donor reliance |
+| C-04 — Subsequent independent review | **PENDING** | Independent reviewer must assess this exact report and artifacts; Builder self-review does not satisfy it |
+| C-05 — Gate separation | **UNCHANGED** | Gate A and Gate B each require separate evidence and explicit authority decisions |
+
+**Current decision remains:** Phase 2 IN PROGRESS, not accepted complete. Gate A NOT CLEARED. Gate B not assessed/not cleared. PR #97 donor remains unapproved/unmerged. No implementation baseline, merge, production implementation or deployment is authorized by these documentation artifacts.
