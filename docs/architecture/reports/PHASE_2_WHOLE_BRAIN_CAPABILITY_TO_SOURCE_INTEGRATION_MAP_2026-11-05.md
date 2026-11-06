@@ -3565,7 +3565,7 @@ This section evaluates the twelve exit criteria in §9 against the current repos
 
 1. **Independent reviewer:** PR #179 and PR #191 currently have no submitted review records. A separate GitHub reviewer identity must review the exact final report/comparison revisions and submit the required formal review. The author cannot satisfy this requirement.
 2. **Governance parent:** PR #179 is based on PR #178 at exact head `39fe09dcf13496f5f0005ccf3f00739303e29f88`. PR #178 remains open, draft and unmerged; its governance rules are proposed, not accepted. The Project Director must either accept that exact governance revision or authorize a different PR #179 base/authority path. Do not silently promote the governance proposal.
-3. **Implementation authority:** Gate A is NOT CLEARED and Gate B is UNASSESSED. No implementation baseline or runtime scope is selected. R1/R2/R3-02/R3-04 and other source findings cannot be marked fixed without the required gate, baseline, scope and explicit implementation authorization.
+3. **Implementation authority:** Gate A is NOT CLEARED and Gate B capability acceptance has NOT PASSED. No implementation baseline or runtime scope is selected. R1/R2/R3-02/R3-04 and other source findings cannot be marked fixed without the required gate, baseline, scope and explicit implementation authorization.
 4. **External host boundary:** the repository-only audit has not identified the deployed executable, grant issuer or actual external action host. The Project Director must identify the real host or approve a bounded deferral with owner and acceptance boundary.
 5. **Missing review provenance:** the original PR #174 follow-on F-02/F-03 review artifact has not been recovered in the bounded checked repository evidence. The Project Director must supply it or explicitly accept the recorded provenance limitation.
 6. **Legacy taxonomy:** the working interpretation and scope clarification are recorded in §§49 and 51. A durable explicit owner decision remains required if the project's approval process requires a separately worded historical-scope record.
@@ -3749,3 +3749,70 @@ Required closure evidence is an explicit state-authority diagram and owner decis
 ### 56.4 Status
 
 **Source ownership classification advanced; criterion 3 remains PARTIAL.** The inspected evidence identifies C++ Brain as the current integrated authority, while WorldState and Rust remain separate, non-integrated state holders. Project Director/architecture-owner disposition and external-host confirmation remain open. Gate A remains NOT CLEARED; Phase 2 exit criteria remain NOT MET.
+
+
+---
+
+## 57. Mainline authorization and uncertain-effect source re-check (2026-11-06)
+
+### 57.1 Scope and pinned evidence
+
+This is a bounded re-check of the accepted Phase 1 main C++ baseline `1273ddbcd0087d189e01388ded2d362fb1e058d2`, not a claim about an unidentified deployed host.
+
+| Source | Blob | Relevant contract |
+|---|---|---|
+| `core/cpp/include/jarvis/core/action_authorization.hpp` | `047f3f8d74c8558255750fbe14d29f7ae9153360` | Authorization context is a permission vector, maximum-risk scalar and reversible-action flag |
+| `core/cpp/src/action_authorization.cpp` | `669bc86c8111ae9755bcd40715352b4fc71350d0` | Authorizer checks assessment, risk, reversibility and string membership; no issuer/version/expiry/revocation lookup |
+| `core/cpp/include/jarvis/core/action_execution.hpp` | `38ff7033e7621db8f05cc1edc4bf59cb899ccdd3` | Executor callback returns bool; result has rejected/prepared/executed/verified/failed/cancelled/rolled_back, but no unknown/partial-effect state |
+| `core/cpp/src/action_execution.cpp` | `c2f8653eb755fa2790a88e49bc8b0b9c3077e439` | False or throwing execution callback returns failed immediately, before verification or rollback; successful callback sets executed=true |
+| `core/cpp/include/jarvis/core/brain.hpp` | `8268ef84e0b361ead536724ba7761904b30ee58f` | `Brain::execute_action` accepts authorization context as a caller-supplied value with a default empty context, then calls the executor |
+| `core/cpp/include/jarvis/core/capability_execution.hpp` | `d2835c4e77b4b672422eaf4ef024d23a7d2eafc9` | Capability request independently carries raw granted-permission strings and a maximum-risk scalar |
+| `core/cpp/src/capability_execution.cpp` | `5fef6077caf96c77eef6bda2eedd57540759d4e7` | Capability boundary checks string membership/risk and invokes a registered provider; no grant freshness or revocation lookup is present in this contract |
+| `core/cpp/tests/action_authorization_suite.cpp` | `cf0cd95ec6fd83da756c305c54439a018cad796b` | Tests missing/matching permission, risk denial and denied callback prevention |
+| `core/cpp/tests/action_execution_phase7_suite.cpp` | `b4a0060596c91c67080ac0a2db324f720d760fbe` | Tests clean false return, verification failure with successful rollback, and verified action feedback |
+
+### 57.2 P2-I-038 — mainline confirmation and limits
+
+The mainline implementation independently confirms the authorization lifecycle gap already identified in the donor audit:
+
+1. The mainline `ActionAuthorizationContext` has no grant issuer, subject/resource scope, grant identity, policy version, issue/expiry time, revocation epoch or freshness token.
+2. `ActionAuthorizer::authorize` makes its decision from the supplied in-memory values. The code does not consult an external authority or current policy version.
+3. `Brain::execute_action` accepts that context directly from its caller. The inspected Brain API does not establish who issued it, how it is refreshed, or how queued work is invalidated after revocation.
+4. The capability execution path has a parallel raw permission-vector contract. It is a distinct boundary and must not be assumed to inherit action authorization lifecycle guarantees.
+5. The registered authorization tests prove local permission/risk checks, not grant issuance, identity binding, expiry, revocation, freshness, or queued-action invalidation.
+
+**Finding refinement:** P2-I-038 is confirmed as a mainline API/lifecycle contract gap, not merely a donor-only concern. Deployment exploitability remains unestablished because the external application host may enforce an additional policy boundary or recreate/cancel runtimes when grants change. No unauthorized real-world action is asserted.
+
+### 57.3 P2-I-030 — false/exception execution is not equivalent to no side effect
+
+The mainline executor also confirms the existing uncertain-effect finding:
+
+- The execution callback's `bool` contract does not encode whether an external side effect occurred before a false return or exception.
+- When the callback returns false, `ActionExecutor::run` sets `failed` and returns without invoking verification or rollback.
+- When it throws, the executor likewise returns `failed` immediately.
+- `result.executed` is set only after a true callback return. Consequently, `executed == false` is not proof that the external system was untouched.
+- The current false-return test exercises a clean failure callback; it does not simulate a side effect followed by false/throw.
+
+This is a contract and evidence gap. It is not a reproduced external side effect. Required closure remains the P2-I-030 matrix already recorded in §21.2: false/throw before and after side effect, rollback false/throw, rollback verification failure, restart/reconciliation, and a structured unknown/partial outcome that cannot be mistaken for a clean rejection.
+
+### 57.4 Closure requirements
+
+1. Identify the actual host, grant issuer, policy owner and external action adapter; establish whether policy is immutable per session or revocable in place.
+2. Define a versioned/identified grant contract, or prove a session-stop/cancellation protocol that invalidates queued work before side effects.
+3. Revalidate authorization immediately before execution against the authoritative current policy; fail closed on stale or unavailable policy.
+4. Distinguish cognitive assessment, authorization rejection, not-started execution, completed execution, failed-before-effect, effect-unknown/partial, verified consequence and verified compensation.
+5. Replace or formally constrain boolean execution callbacks so false/exception has an enforceable no-side-effect meaning; otherwise return structured effect disposition.
+6. Add fault-injection and host-boundary tests, including revocation after assessment and while queued, grant expiry, policy-version mismatch, false/throw after partial external effect, and failed compensation.
+7. Preserve the original intent and evidence trail when execution is uncertain; do not convert an unknown external outcome into a successful or neutral learning label.
+
+No runtime code or tests were changed by this audit. Gate A remains NOT CLEARED; no baseline/scope authorization was added.
+
+### 57.5 Status
+
+**Source re-check complete; P2-I-038 and P2-I-030 remain OPEN.** This strengthens criteria 2, 3 and 6 evidence but does not close them. The real host boundary remains an owner-supplied dependency. Phase 2 exit remains NOT MET.
+
+---
+
+## 58. Exact-head CI update after §§56–57
+
+The report update containing §§56–57 must be evaluated at its exact commit. The preceding successful run `42297709974` applies only to commit `b36760801b798b958a6563126ea3bac6f8e78abe`; it must not be attributed to this later report revision. This section is a provenance guard and does not claim a new build or CTest result.
