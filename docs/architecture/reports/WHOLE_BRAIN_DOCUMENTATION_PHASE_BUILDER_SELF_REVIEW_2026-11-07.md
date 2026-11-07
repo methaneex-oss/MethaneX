@@ -44,7 +44,7 @@ Those two files are intentionally separate because they originate from the PR #1
 
 **PASS (author self-check).** The controlling correction states the sequence as whole-Brain capability definition → mechanism architecture and interactions → completeness/reconciliation → development planning → repository assessment for selected increments → implementation planning and explicit authorization.
 
-**PASS (author self-check).** It makes clear that the current next task is Stage A capability definition, not mechanism selection, source selection, or implementation.
+**SUPERSEDED / CORRECTED.** The original version incorrectly named Stage A as the immediate next task. The live documentation-foundation audit corrected this sequence: the Initial Documentation Foundation Completion Gate is now the immediate task; Stage A remains held until that gate is independently reviewed and accepted.
 
 ### 3.2 Three reference lenses
 
@@ -112,6 +112,6 @@ The audit establishes:
 - the independent PR #192/#193 lineages;
 - the current documentation-foundation hold and DF-01 through DF-13 exit criteria.
 
-The index was revised to make the documentation gate the immediate task, add the proposed governance document to the reading path, pin cross-branch links, and prohibit Stage A until the gate is independently reviewed and accepted. The detailed inventory and continuity handoff still require synchronization and verification.
+The index and detailed inventory were updated to make the documentation gate the immediate task, include the proposed governance document, and record the current dependency/authority qualifications. The continuity handoff and deferred implementation plan were updated on the separate PR #193 branch. Cross-link validation and the fresh-reader continuity test remain outstanding.
 
 **Remaining disposition:** NOT READY FOR ACCEPTANCE. Continue the documentation correction pass. No Stage A planning, implementation, merge, rebase, gate clearance, or source-baseline selection is authorized by this self-review.
