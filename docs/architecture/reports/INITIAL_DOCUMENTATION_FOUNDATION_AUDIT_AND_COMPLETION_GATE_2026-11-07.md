@@ -496,3 +496,34 @@ The Builder correction pass has:
 The foundation remains **NOT READY FOR ACCEPTANCE**. Remaining work includes the complete link audit, unresolved authority/provenance reconciliation, PR #191 stale-base disposition, PR #174 status-header reconciliation, historical preservation follow-up, fresh-reader continuity test, final review package, genuinely independent review, and the designated authority's exact-revision decision.
 
 No Stage A capability planning has begun. No implementation, source selection, baseline selection, merge, rebase, gate clearance, or runtime change is authorized by this audit. This is the Builder's report, not an independent review or acceptance decision.
+
+
+## 12. Documentation usability and navigation correction — 2026-11-07
+
+### 12.1 Change objective
+
+The documentation foundation is being organized for multiple reader roles, not only the next Builder. A new human-facing portal at `docs/README.md` is proposed on PR #192. The repository root README directs readers to it. The Planning Documentation Index remains the canonical planning-artifact catalog and authority/status map.
+
+### 12.2 Role routes added
+
+The portal defines reading routes and responsibility boundaries for:
+- new readers, stakeholders and occasional contributors;
+- Builders and implementation engineers;
+- independent reviewers;
+- testers and verification engineers;
+- researchers and architects;
+- documentation maintainers.
+
+It also defines a repository documentation map, authority/status vocabulary, evidence and link conventions, a minimum document header, and a documentation contribution workflow.
+
+### 12.3 Quality boundary
+
+This is a Builder-authored navigation correction. It does not establish that every historical document has been reconciled, every repository link has been exhaustively validated, or the fresh-reader test has been independently completed. It does not satisfy independent review or exact-revision acceptance. The portal and updated index remain proposals pending review.
+
+### 12.4 Cross-lineage boundary
+
+The portal is added to the PR #192 / PR #179-derived line. The continuity handoff and deferred implementation plan remain on the separate PR #193 / PR #175-derived line. The portal links to PR #193 for live handoff context rather than silently copying or merging that lineage.
+
+### 12.5 Current disposition
+
+The navigation structure is improved, but the Initial Documentation Foundation Completion Gate remains **NOT CLEARED**. DF-09 fresh-reader verification, DF-11 independent review and DF-12 exact-revision authority decision remain unmet. Other provenance, preservation, revision synchronization and cross-link obligations remain open until verified and recorded.

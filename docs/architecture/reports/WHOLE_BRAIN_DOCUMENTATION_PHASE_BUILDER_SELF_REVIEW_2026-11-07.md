@@ -182,3 +182,30 @@ Remaining defects/limitations:
 - no independent review or required authority decision has been submitted.
 
 **Disposition remains NOT READY FOR ACCEPTANCE.** No Stage A planning, implementation, merge, rebase, gate clearance or source-baseline selection is authorized by this self-review.
+
+
+## 9. Role-based documentation portal correction — 2026-11-07
+
+### 9.1 Files changed in this correction
+
+- `docs/README.md` — new human-facing documentation portal with role-based reading routes, canonical navigation map, status vocabulary, evidence/link standards, contribution workflow and minimum document-header requirements.
+- `README.md` — directs readers to the portal rather than sending every audience directly into the planning index.
+- `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md` — links the portal and defines Builder, reviewer, tester, researcher, documentation-maintainer and general-reader responsibilities.
+- `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md` — records the portal's purpose and its non-authoritative status.
+- `docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md` — records the navigation correction and remaining gate limitations.
+
+### 9.2 Self-review checks
+
+- The root README now points to a human-facing portal.
+- The portal points to the planning index as the canonical planning-artifact catalog.
+- Role-specific routes distinguish the reading needs and authority boundaries of Builders, reviewers, testers, researchers and general readers.
+- Testers are explicitly instructed to distinguish test definitions, registered targets, executed runs, results and accepted capability.
+- Reviewers are explicitly instructed to inspect exact revisions and formal review records, not rely on PR descriptions or Builder summaries.
+- The portal does not promote proposed governance to binding authority or authorize Stage A/implementation.
+- PR #192 and PR #193 remain separate lineages; the portal does not copy the handoff or roadmap into PR #192.
+
+### 9.3 Limitations
+
+This is a Builder self-review, not independent review. The portal is a proposed documentation layer. The change does not complete the historical preservation work, resolve PR #173 acceptance provenance, recover the original PR #174 follow-on review, or decide PR #191's historical-base disposition. A genuine fresh-reader test must still be performed by someone who did not author this package and should be recorded separately. Exhaustive link validation and exact-revision authority acceptance remain outstanding.
+
+**Disposition:** improved navigation and contributor onboarding; foundation gate remains **NOT READY FOR ACCEPTANCE**.

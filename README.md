@@ -31,7 +31,7 @@ MethaneX/
 
 ## Documentation and planning navigation
 
-The [JARVIS Planning Documentation Index](docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md) is the entry point for the current planning work. It defines the reading order, document classes, authority distinctions, and links to the whole-Brain planning correction, prior architecture, research, and repository investigations. Read it before treating any individual planning report as authoritative.
+Start at the [JARVIS Documentation Portal](docs/README.md). It provides role-specific reading routes for new readers, Builders, independent reviewers, testers, researchers and documentation maintainers. The [Planning Documentation Index](docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md) remains the canonical planning-artifact catalog and authority/status map. Read the portal and index before treating an individual planning report as authoritative.
 
 ## Brain
 

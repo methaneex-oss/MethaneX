@@ -7,7 +7,7 @@
 **Planning hold:** Stage A — whole-Brain capability and responsibility definition — has **not** started. It remains held until the initial documentation foundation is independently reviewed and accepted.  
 **Governing principle:** **ENGINEER THE MECHANISMS; LET BEHAVIOR BE ACQUIRED THROUGH EXPERIENCE.**
 
-> **Start here.** Do not infer authority from a filename, directory, branch, PR state, document length, or the word “approved” appearing in an older handoff. Exact-scope acceptance, independent review, GitHub merge state, gate clearance, and implementation authorization are separate facts.
+> **Human-facing entry point:** Start with the [JARVIS Documentation Portal](../README.md) for role-specific routes for Builders, reviewers, testers, researchers and general readers. This index remains the canonical planning-artifact catalog. Do not infer authority from a filename, directory, branch, PR state, document length, or the word “approved” appearing in an older handoff. Exact-scope acceptance, independent review, GitHub merge state, gate clearance, and implementation authorization are separate facts.
 
 ## 1. Current objective and immediate next work
 
@@ -150,3 +150,33 @@ The next Builder must:
 **Do not begin Stage A until the Initial Documentation Foundation Completion Gate is independently reviewed and accepted.** Stage A remains the first whole-Brain planning stage after that gate, not the current task.
 
 **No implementation, source selection, baseline selection, merge, rebase, gate clearance, or runtime change is authorized by this index.**
+
+
+## 9. Role-based reading and contribution routes
+
+The [JARVIS Documentation Portal](../README.md) is the human-facing landing page. It defines the shortest safe reading route for new readers, Builders, independent reviewers, testers, researchers and documentation maintainers. Use that page when onboarding someone who does not already know the repository's history.
+
+The following responsibilities remain distinct:
+
+- **Builder:** preserves project intent, works only within the current authorized scope, maintains canonical artifacts, and records evidence and limitations. The Builder does not independently approve their own work or make an authority decision.
+- **Independent reviewer:** examines the exact submitted revision, challenges evidence and scope, records findings, and submits a formal review. A review report or comment alone is not automatically a formal review submission.
+- **Tester / verification engineer:** distinguishes requirements, test definitions, registered targets, executed runs, observed results and accepted capability. A test result applies only to the exact commit and environment tested.
+- **Researcher / architect:** separates evidence, interpretation, hypothesis, engineering constraints and decisions; records uncertainty and competing explanations.
+- **Documentation maintainer:** keeps one canonical path per artifact, synchronizes index and inventory, validates links and preserves historical provenance.
+- **General reader / stakeholder:** uses the portal and index to understand the project, current phase, decision status and allowed next actions without reading every historical artifact.
+
+### 9.1 Contribution workflow
+
+For each substantive documentation change: locate existing material; classify the artifact; state purpose, scope and non-goals; pin evidence; edit the canonical path; synchronize index and inventory; validate links and terminology; perform and record Builder self-review; obtain genuinely independent review; then obtain the required exact-revision authority decision.
+
+Never silently replace a prior decision, duplicate an authoritative artifact, infer acceptance from a PR state, or treat a Builder self-review as independent review.
+
+### 9.2 Minimum navigation and evidence standard
+
+Every substantive artifact must be discoverable from this index or a clearly identified parent document. It must state its status, purpose, scope, date, responsible author/role, exact evidence baseline where relevant, prerequisites, limitations, and review/decision references. Cross-branch links must be immutable revision-pinned links; PR links are used for live discussion and review state.
+
+For tests, record exact commit, environment, command, test selection, outcome, artifacts and limitations. Source presence, CMake registration, test definitions and historical CI results must not be presented as proof of current integrated capability.
+
+### 9.3 Current route boundary
+
+The documentation portal is proposed on PR #192. The continuity handoff and deferred implementation plan remain on separate PR #193 lineage. The portal does not combine those histories, clear DF-01–DF-13, accept any proposal, authorize Stage A, or authorize implementation.

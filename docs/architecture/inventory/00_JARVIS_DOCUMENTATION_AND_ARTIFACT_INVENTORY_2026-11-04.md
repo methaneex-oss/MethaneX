@@ -485,3 +485,16 @@ The PR #193 continuity handoff's unsupported claim that the user had identified 
 The current-phase corrections are present in the current package revisions: the Initial Documentation Foundation Completion Gate is the current task; Stage A remains not started and held; implementation remains unauthorized. The PR #178 governance document remains a proposed, unaccepted governance input, not a binding project-wide authority.
 
 **Remaining documentation work:** validate all cross-branch links, reconcile exact authority/provenance where unresolved (especially PR #173), complete the historical preservation follow-up, refresh the index/inventory/self-review together, conduct a fresh-reader continuity test, and obtain independent review plus the required exact-revision authority decision. No Stage A planning is included in this addendum.
+
+
+## 25. Reader navigation and documentation maintenance — 2026-11-07
+
+A human-facing portal is proposed at `docs/README.md` on PR #192. It provides role-specific routes for general readers, Builders, independent reviewers, testers, researchers and documentation maintainers. The root README points to that portal; the Planning Documentation Index remains the canonical catalog of planning artifacts, authority/status distinctions and dependencies.
+
+The portal adds navigation and contribution guidance; it does not create new architecture, governance or implementation authority. Its content explicitly distinguishes:
+- authored, submitted, independently reviewed, accepted within exact scope, merged, gate-cleared and implementation-authorized;
+- test definitions, registered targets, executed runs, observed results and accepted capability;
+- the Builder's self-review from a genuinely independent review;
+- the PR #179-derived PR #192 documentation line from the separate PR #175-derived PR #193 handoff/roadmap line.
+
+The inventory remains a preservation record, not an approval register. Any subsequent change to artifact location, status, revision, authority or dependency must update this inventory and the Planning Documentation Index in the same reviewed change.
