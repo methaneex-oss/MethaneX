@@ -527,3 +527,16 @@ The portal is added to the PR #192 / PR #179-derived line. The continuity handof
 ### 12.5 Current disposition
 
 The navigation structure is improved, but the Initial Documentation Foundation Completion Gate remains **NOT CLEARED**. DF-09 fresh-reader verification, DF-11 independent review and DF-12 exact-revision authority decision remain unmet. Other provenance, preservation, revision synchronization and cross-link obligations remain open until verified and recorded.
+
+
+## 13. Reusable contributor, reviewer and tester templates — 2026-11-07
+
+The proposed documentation portal now links to a small template library under `docs/templates/`:
+- planning/technical document template;
+- independent review report template;
+- test/verification evidence report template;
+- template guide describing use and limits.
+
+The templates standardize metadata, scope, evidence provenance, exact revision identifiers, findings, test reproducibility, limitations and authority boundaries. They are not project governance and do not replace formal review submissions, independent review, Project Director decisions or test execution.
+
+This improves contributor consistency but does not close the foundation gate. The fresh-reader test, independent review, exact-revision authority decision, historical preservation follow-up and unresolved provenance/status items remain open.

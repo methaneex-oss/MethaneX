@@ -180,3 +180,10 @@ For tests, record exact commit, environment, command, test selection, outcome, a
 ### 9.3 Current route boundary
 
 The documentation portal is proposed on PR #192. The continuity handoff and deferred implementation plan remain on separate PR #193 lineage. The portal does not combine those histories, clear DF-01–DF-13, accept any proposal, authorize Stage A, or authorize implementation.
+
+
+## 10. Reusable documentation templates
+
+The [Documentation Templates Guide](../templates/README.md) provides consistent starting structures for planning/technical documents, independent review reports and test-evidence reports. Templates are aids only; they do not create authority, substitute for formal GitHub review, or prove that tests were executed.
+
+When adding a substantive planning artifact, use the appropriate template where helpful, then update this index and the detailed inventory in the same reviewed change.

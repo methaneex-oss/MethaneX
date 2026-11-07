@@ -209,3 +209,19 @@ Remaining defects/limitations:
 This is a Builder self-review, not independent review. The portal is a proposed documentation layer. The change does not complete the historical preservation work, resolve PR #173 acceptance provenance, recover the original PR #174 follow-on review, or decide PR #191's historical-base disposition. A genuine fresh-reader test must still be performed by someone who did not author this package and should be recorded separately. Exhaustive link validation and exact-revision authority acceptance remain outstanding.
 
 **Disposition:** improved navigation and contributor onboarding; foundation gate remains **NOT READY FOR ACCEPTANCE**.
+
+
+## 10. Reusable templates added — 2026-11-07
+
+### 10.1 Added artifacts
+
+- `docs/templates/README.md` — template guide and usage rules.
+- `docs/templates/PLANNING_DOCUMENT_TEMPLATE.md` — planning/technical document structure.
+- `docs/templates/INDEPENDENT_REVIEW_REPORT_TEMPLATE.md` — exact-revision independent review structure and formal-review distinction.
+- `docs/templates/TEST_EVIDENCE_REPORT_TEMPLATE.md` — reproducible verification evidence structure.
+
+### 10.2 Self-review
+
+The templates require exact revision identifiers, purpose/scope/non-goals, evidence provenance, limitations, explicit findings or test outcomes, and separate authority/approval records. The test template distinguishes definitions, registration, execution and capability acceptance. The review template makes reviewer independence and formal submission explicit.
+
+The templates are linked from the portal and planning index. They are aids, not binding governance or approval. The inventory and audit record their purpose. The documentation foundation remains **NOT READY FOR ACCEPTANCE** pending independent review, fresh-reader testing, remaining provenance/preservation work and exact-revision authority decision.

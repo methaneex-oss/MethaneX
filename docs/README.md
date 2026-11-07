@@ -80,7 +80,11 @@ A test report must identify the exact commit, environment, command, test selecti
 5. Preserve historical artifacts; use explicit supersession or correction records rather than silent deletion or duplicate competing copies.
 6. Run the documentation link and consistency checks described below.
 
-## 2. Canonical navigation map
+## 2. Reusable contribution templates
+
+Use the [Documentation Templates Guide](templates/README.md) for consistent planning-document, independent-review and test-evidence report structures. Templates are aids, not approval or governance authority.
+
+## 3. Canonical navigation map
 
 | Need | Canonical starting point | What it controls |
 |---|---|---|
@@ -93,7 +97,7 @@ A test report must identify the exact commit, environment, command, test selecti
 | Understand authority proposals | [Governance rules — PR #178](https://github.com/methaneex-oss/MethaneX/pull/178) | Proposed rules only; unaccepted at this snapshot |
 | Inspect source integration | [Phase 1 report](architecture/reports/PHASE_1_WHOLE_REPOSITORY_INVESTIGATION_AND_REUSE_AUDIT_2026-11-04.md) and [Phase 2 map](architecture/reports/PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md) | Bounded repository and source evidence |
 
-## 3. Repository documentation map
+## 4. Repository documentation map
 
 The following describes the observed documentation areas. A directory's existence does not imply that every document in it is current or authoritative.
 
@@ -108,7 +112,7 @@ The following describes the observed documentation areas. A directory's existenc
 - **docs/governance/** — governance proposals and decision-control material; verify acceptance status before treating any rule as binding.
 - **core/**, **runtime/**, **interfaces/** and **tests/** — implementation and verification areas. Use the source maps and build/test registration evidence to locate the relevant code; do not infer coverage from directory names.
 
-## 4. Status and authority vocabulary
+## 5. Status and authority vocabulary
 
 Use these terms precisely:
 
@@ -126,7 +130,7 @@ Use these terms precisely:
 
 Never collapse authored, submitted, reviewed, accepted, merged, gate-cleared and implementation-authorized into one status.
 
-## 5. Evidence and linking conventions
+## 6. Evidence and linking conventions
 
 Every material technical or governance claim should be traceable to evidence.
 
@@ -141,7 +145,7 @@ Use:
 
 Do not use a mutable branch link as proof of what was reviewed. Do not use a PR description as a substitute for an explicit decision record.
 
-## 6. Documentation contribution workflow
+## 7. Documentation contribution workflow
 
 For every proposed documentation change:
 
@@ -158,7 +162,7 @@ For every proposed documentation change:
 
 A correction must preserve the original decision and explain whether it clarifies, narrows, supersedes or reopens it. Never silently rewrite history.
 
-## 7. Minimum document header
+## 8. Minimum document header
 
 New substantive planning artifacts should begin with a compact metadata block containing:
 
@@ -176,7 +180,7 @@ New substantive planning artifacts should begin with a compact metadata block co
 
 Do not write “approved” without naming the exact revision, scope and decision record.
 
-## 8. Current branch and authority boundary
+## 9. Current branch and authority boundary
 
 This portal is being introduced on PR #192's PR #179-derived line. The continuity handoff and deferred implementation plan are on PR #193's separate PR #175-derived line. They are not silently combined by this portal.
 
@@ -190,7 +194,7 @@ At this snapshot:
 
 The current task is to complete the Initial Documentation Foundation Completion Gate. Stage A remains held. This portal does not accept any proposal, clear any gate, select a source baseline, authorize implementation, or replace the required independent review and authority decision.
 
-## 9. How to improve this portal
+## 10. How to improve this portal
 
 If a reader cannot determine where to start, which revision is relevant, what is authoritative, or what action is currently allowed, improve this portal and the canonical index rather than adding another unlinked overview document.
 

@@ -498,3 +498,14 @@ The portal adds navigation and contribution guidance; it does not create new arc
 - the PR #179-derived PR #192 documentation line from the separate PR #175-derived PR #193 handoff/roadmap line.
 
 The inventory remains a preservation record, not an approval register. Any subsequent change to artifact location, status, revision, authority or dependency must update this inventory and the Planning Documentation Index in the same reviewed change.
+
+
+## 26. Reusable documentation templates — 2026-11-07
+
+A proposed template set is added under `docs/templates/`:
+- `README.md` — template directory guide and usage boundaries;
+- `PLANNING_DOCUMENT_TEMPLATE.md` — metadata, scope, evidence, analysis, proposed decisions, risks, verification and authority limitations;
+- `INDEPENDENT_REVIEW_REPORT_TEMPLATE.md` — exact-revision review, independence disclosure, evidence, findings, closure criteria and formal-review distinction;
+- `TEST_EVIDENCE_REPORT_TEMPLATE.md` — reproducible test context, exact commands, outcomes, failure analysis, coverage limits and provenance.
+
+The templates support consistent contributions from Builders, reviewers and testers. They are not accepted governance rules and do not replace the formal review or authority process. New substantive artifacts should be added to this inventory and the Planning Documentation Index in the same reviewed change.
