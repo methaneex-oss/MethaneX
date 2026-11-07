@@ -136,7 +136,7 @@ The API restoration is substantially reconciled at source-body level, but caller
 
 1. **Complete independent Gate A review.** Reviewer must challenge the disposition, reproduce critical refs/blob claims, distinguish verified from unverified claims, and state whether any correction is needed.
 2. **Resolve reviewer findings.** Record corrections and their evidence in a separate review/correction document under `docs/architecture/plans/reviews/`, not by silently rewriting the accepted specification or burying findings in the main planning document.
-3. **Return the Gate A decision to the Project Director (the user).** Do not treat reviewer approval as Project Director acceptance.
+3. **Return the Gate A decision to the designated Project Director.** Do not treat reviewer approval as Project Director acceptance.
 4. **Gate B static traceability is now complete for BM-01 through BM-12.** Its acceptance gaps are recorded; do not call it passed merely because the matrix is complete.
 5. **Complete Gate A's remaining commit/path/hunk and semantic reconciliation, then obtain independent review of both audit records.** Present the combined evidence and baseline recommendation to the Project Director.
 6. **Only after a baseline decision, accepted implementation plan and separate explicit implementation authorization** may runtime implementation begin.
@@ -167,7 +167,7 @@ Do not skip stages to make the project appear to be progressing.
 7. **Keep communication concise and orienting.** The user has explicitly said lengthy explanations cause confusion. Start with current phase, what changed, what is blocked, and the next action. Expand only when needed.
 8. **Avoid unnecessary long-running tool work.** Prefer bounded repository operations. If a local checkout/manual step is materially faster or safer, explain that rather than wasting time.
 9. **Never silently change project direction.** No restart, generic redesign, chatbot conversion, premature implementation, or hardcoded behavior shortcuts.
-10. **The user's approval is distinct from reviewer approval.** A reviewer assesses evidence; the user decides project direction and grants stage authorization.
+10. **Project Director acceptance is distinct from independent reviewer approval.** A reviewer assesses evidence; the designated Project Director decides project direction and grants stage authorization.
 
 ## 7. Important interpretation of the 12 mechanisms
 
@@ -345,7 +345,7 @@ A follow-up controller-history compensation test was committed to the branch ref
 
 **Previously proposed next planning stage:** Whole-Brain architectural planning — Stage A, capability and responsibility definition. This is no longer the immediate task; the documentation foundation gate in §12 must be completed first.
 
-The Project Director has clarified the required order: plan the entire future Brain first; only after the whole-Brain capability architecture, mechanism architecture and completeness/reconciliation are accepted may the project decide where development should begin and what existing source to use.
+The user's instruction clarifies the required order: plan the entire future Brain first; only after the whole-Brain capability architecture, mechanism architecture and completeness/reconciliation are accepted may the project decide where development should begin and what existing source to use.
 
 The three required reference lenses are:
 1. **Human brain and cognition:** investigate functions, interactions, development, limitations and scientific uncertainty; do not copy biological anatomy literally.
