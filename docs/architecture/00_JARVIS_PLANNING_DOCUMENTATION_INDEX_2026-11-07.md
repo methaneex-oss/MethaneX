@@ -92,6 +92,8 @@ No reviewer was requested on these PRs at the time of the check. These are point
 
 **Duplicate-path rule:** the comparison report belongs in the PR #191 stack. PR #192 must not add a second copy of that same path. The PR #192 scope correction may link to PR #191 and describe its bounded scope, but must not create a competing version.
 
+**Observed PR #191 / PR #192 base relationship:** PR #191 records base SHA `f6267456560a08054d69f7960d2951452b14017c`; PR #192 records base SHA `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`. A commit comparison confirms the PR #192 base is 22 commits ahead of the PR #191 base, with zero commits behind. Thus PR #191 was opened against an earlier snapshot of the same PR #179 branch. This is not evidence that PR #191's comparison commit is included in PR #192; the changed-file lists show that the comparison path is only in PR #191. No retarget or rebase has been performed. The independent reviewer / Project Director must decide whether the older PR #191 base is acceptable or whether a dependency adjustment is required.
+
 **Do not merge the PRs merely to make the tree look tidy.** First verify their base/head ancestry, changed-file sets, dependency order, and independent review findings. Do not retarget, rebase, merge, or close a PR without the required authorization.
 
 ## 6. Authority and status vocabulary
