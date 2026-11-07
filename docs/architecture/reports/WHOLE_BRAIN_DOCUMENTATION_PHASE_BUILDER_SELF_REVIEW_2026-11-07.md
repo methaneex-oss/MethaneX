@@ -269,3 +269,18 @@ The portal and audit previously carried a PR #192/PR #193 snapshot of `273c2c0ac
 This check did not validate fragment anchors, every external URL, every cross-branch link throughout all historical documents, semantic correctness of each destination, or authority status of every linked artifact. It is a bounded navigation check, not the full DF-06 completion evidence.
 
 The work remains Builder-authored. No independent fresh-reader test has been performed; no independent review has been submitted for the resulting exact revision; no authority decision has been recorded. The foundation gate remains **NOT READY FOR ACCEPTANCE**.
+
+
+## 12. Expanded whole-documentation relative-link validation — 2026-11-07
+
+A second, broader link-path check was completed against the PR #192 tree at parent `1901d5f39d788d7ad928cc1045065d7b32f120c1`.
+
+- **24** Markdown files under the repository root and `docs/` were checked.
+- **63** repository-relative Markdown link targets were resolved against the recursive tree.
+- **0** missing repository-relative target paths were found.
+
+The checked set includes the root README, role-based portal, legacy architecture pages, planning index, inventories, Phase 1/Phase 2 reports, provenance recovery record, governance proposal, this self-review and all four reusable templates.
+
+This validates repository-relative target paths only. It does not validate fragment anchors, external URLs, semantic destination correctness, every cross-branch link in historical reports, or authority status of linked material. DF-06 remains subject to independent review and broader cross-reference verification.
+
+The check used PR #192 parent `1901d5f39d788d7ad928cc1045065d7b32f120c1`; PR #193 live HEAD was `976aa33f89cc02225296f59246f47982300f5b39`. The commit resulting from this update must be fetched before review. The result is Builder-generated evidence, not an independent review or fresh-reader test.

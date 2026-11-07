@@ -534,3 +534,14 @@ The portal's prior snapshot in Section 9 named PR #192 `273c2c0ac1d9d6a2291d3393
 The exact PR #192 HEAD resulting from this update must be re-fetched after the commit is created; do not predict its SHA. This section records the pre-update parent and PR #193 live head to avoid a self-referential commit claim.
 
 This correction does not alter PR bases, integrate PR #192 and PR #193, or change any acceptance, review, gate or implementation status.
+
+
+## 29. Expanded repository-relative link-path check — 2026-11-07
+
+A repository-relative Markdown link-path check was completed across all 24 Markdown documents under the repository root and `docs/` in the PR #192 tree at parent `1901d5f39d788d7ad928cc1045065d7b32f120c1`. The check covered the root README, the documentation portal, legacy architecture pages, the planning index, inventories, Phase 1/Phase 2 reports, the provenance record, the governance proposal, the Builder self-review, and all documentation templates.
+
+**Result:** 63 repository-relative Markdown link targets checked; zero missing repository paths.
+
+This is path-existence validation only. It does not validate fragment anchors, semantic correctness, external URL availability, or authority/status claims in linked documents. Those remain separate review obligations.
+
+The PR #192 parent used for this check is `1901d5f39d788d7ad928cc1045065d7b32f120c1`; PR #193 live HEAD at the time of the check was `976aa33f89cc02225296f59246f47982300f5b39`. The commit containing this addendum advances PR #192 and must be fetched before a later exact-revision review. No PR integration, base change, merge, or authority decision is implied.

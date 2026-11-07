@@ -584,3 +584,24 @@ This is a bounded spot check, not exhaustive external-link or anchor validation.
 ### 14.4 Current disposition
 
 The portal, role-specific routes and template library improve discoverability and consistency. The documentation foundation remains **NOT CLEARED**. DF-09 fresh-reader testing, DF-11 independent review and DF-12 exact-revision authority decision remain unmet; historical preservation and unresolved provenance/status items remain open. No Stage A planning or implementation is authorized.
+
+
+## 15. Expanded repository-relative documentation link check — 2026-11-07
+
+### 15.1 Scope and method
+
+A bounded repository-relative Markdown link-path check was run across all 24 Markdown files under the repository root and `docs/` in the PR #192 tree at parent `1901d5f39d788d7ad928cc1045065d7b32f120c1`. The check resolved relative paths against the recursive tree at that exact commit.
+
+### 15.2 Result
+
+- Markdown documents checked: **24**.
+- Repository-relative Markdown link targets checked: **63**.
+- Missing repository-relative target paths: **0**.
+
+The check included the root README, portal, legacy architecture overview, planning index, detailed inventory, Phase 1 and Phase 2 reports, provenance recovery record, governance proposal, Builder self-review and all four documentation-template files.
+
+### 15.3 Limits
+
+This check verifies target-path existence only. It does not verify fragment/heading anchors, external URL availability, semantic correctness of every destination, current authority status of every linked artifact, or every cross-branch link embedded in historical source reports. Those remain open review items. DF-06 should not be marked fully complete based on this bounded check alone.
+
+The check was performed against PR #192 parent `1901d5f39d788d7ad928cc1045065d7b32f120c1`; PR #193 live HEAD was `976aa33f89cc02225296f59246f47982300f5b39`. This addendum itself advances PR #192, so its resulting head must be re-fetched before independent review. No independent review, gate clearance, acceptance or implementation authorization is claimed.
