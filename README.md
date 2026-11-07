@@ -60,7 +60,7 @@ There is deliberately no requirement that the entire project be written in one l
 
 ## Development status
 
-JARVIS is under active foundational development. The current work is focused on completing and integrating the cognitive substrate before higher-level device, interface and deployment layers are built on top of it.
+JARVIS is an existing software project with implemented runtime foundations and substantial open architecture/planning work. The immediate repository task is to complete the initial documentation foundation before beginning whole-Brain Stage A. Existing source is preserved as engineering evidence; this status does not claim that the whole-Brain architecture or integrated Brain capability is complete.
 
 The current BM-01–BM-12 source-integration investigation is maintained in the [Phase 2 — Whole-Brain Capability-to-Source Integration Map](docs/architecture/reports/PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md). It is a useful partial map, not proof that the complete future Brain has been architecturally defined. The corrected planning scope is in [Whole-Brain Planning Scope and Builder Correction](docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md).
 
