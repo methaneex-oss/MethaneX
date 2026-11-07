@@ -2,7 +2,7 @@
 
 **Date:** 2026-11-07  
 **Author and self-reviewer:** ChatGPT (GPT-6), the same Builder that authored the documentation changes  
-**Role authorization:** Project Director granted Builder authority solely for this documentation correction.  
+**Role authorization:** The user delegated bounded Builder authority for this documentation phase. This does not establish the user's identity as Project Director or authorize the Builder to make Project Director decisions.  
 **Review classification:** Builder self-review / pre-submission quality check. **This is not an independent review and must not be counted as one.**  
 **Change branch:** `docs/whole-brain-planning-scope-correction-20261107`  
 **Target/base for proposed PR:** `docs/jarvis-phase-2-whole-brain-integration-map-20261105` (PR #179 head at the recorded inspection).  
@@ -27,6 +27,7 @@ The following files were fetched again from the change branch after writing. Eac
 7. `docs/JARVIS_BRAIN_MASTER_BLUEPRINT.md` — Layer 0–19 sequence marked as historical planning input, not an approved development order.
 8. `docs/JARVIS_PHASE_2_COMPLETION.md` — legacy Perception & Representation phase note disambiguated from current whole-Brain Phase 2.
 9. `README.md` — points readers to the central planning index, clarifies the current documentation-foundation task, and avoids implying that whole-Brain architecture or integrated capability is complete.\n10. `docs/ARCHITECTURE.md` — marked as a legacy, non-controlling overview and linked to the canonical index.\n11. `docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md` — records the live repository audit, authority/provenance issues, PR topology, and measurable DF-01–DF-13 exit criteria.
+12. `docs/architecture/reports/WHOLE_BRAIN_DOCUMENTATION_PHASE_BUILDER_SELF_REVIEW_2026-11-07.md` — this Builder-authored self-review; not an independent review.
 
 A separate documentation-only branch, `docs/whole-brain-planning-roadmap-hold-20261107`, contains the deferred implementation roadmap and continuity handoff corrections:
 - `docs/architecture/plans/00_BRAIN_IMPLEMENTATION_PLAN.md`
@@ -115,3 +116,69 @@ The audit establishes:
 The index and detailed inventory were updated to make the documentation gate the immediate task, include the proposed governance document, and record the current dependency/authority qualifications. The continuity handoff and deferred implementation plan were updated on the separate PR #193 branch. Cross-link validation and the fresh-reader continuity test remain outstanding.
 
 **Remaining disposition:** NOT READY FOR ACCEPTANCE. Continue the documentation correction pass. No Stage A planning, implementation, merge, rebase, gate clearance, or source-baseline selection is authorized by this self-review.
+
+
+## 8. Documentation-foundation corrective-pass self-review — 2026-11-07
+
+This section records the subsequent correction pass. It is still authored by the same Builder and is not an independent review.
+
+### 8.1 Authority and role attribution
+
+**Corrected.** The PR #193 continuity handoff no longer asserts that the user identified themselves as Project Director. The PR #193 description and PR #192 scope-correction report attribute the current sequence instruction to the user without assigning a formal Project Director role. This self-review's role-authorization statement has also been corrected to describe only bounded user-delegated Builder authority.
+
+Historical references to a designated Project Director remain only as role references where they describe prior recorded decisions. They do not establish the identity of the current user.
+
+### 8.2 Current repository snapshot and review state
+
+At the last live refresh before this self-review update:
+- `main` remained at `1273ddbcd0087d189e01388ded2d362fb1e058d2`.
+- PR #192 was open/draft/unmerged at `f766a496c8c6e15c7ce7f67cf15b32ce1b3346b3`.
+- PR #193 was open/draft/unmerged at `a968bc6afebdcaf9a97e45fec4b307d995826784`.
+- Both PR review-submission lists were empty; both PR discussion timelines returned no comments/review submissions.
+- The PR #192 recursive tree contained 241 paths and the PR #193 recursive tree 255 paths; both were non-truncated.
+- No `AGENTS.md`, `CONTRIBUTING.md`, or `CODE_OF_CONDUCT.md` was found in the inspected main, PR #192 or PR #193 trees.
+- The 600-line governance document exists in PR #192 only and remains explicitly proposed/unaccepted.
+
+These are point-in-time facts and must be re-fetched before a later decision.
+
+### 8.3 Current changed-file inventory
+
+The PR #192 changed-file endpoint returns these 12 paths. Their blobs were fetched from PR #192 HEAD `f766a496c8c6e15c7ce7f67cf15b32ce1b3346b3`:
+
+| Path | Blob SHA |
+|---|---|
+| `README.md` | `fb268ed5ba61eb88a39338baf3fe420379609234` |
+| `docs/ARCHITECTURE.md` | `59f898a135b5aa1240a1b4f1e3bca84771bc5dba` |
+| `docs/JARVIS_BRAIN_MASTER_BLUEPRINT.md` | `0e49d313bf3929aa30140cb7149ebab038918378` |
+| `docs/JARVIS_PHASE_2_COMPLETION.md` | `e0e57a44216fc36c52d469a79abfc8df058515a3` |
+| `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md` | `c789a33180a2ffa30ace7bb8248cd9a00a16622b` |
+| `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md` | `21ac0234cd212d1eb2e911714a6f584f16f697fe` |
+| `docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md` | `f32a2b88cd4d485c787239e6daa2aa27fe6c92e8` |
+| `docs/architecture/reports/PHASE_1_REVIEW_CORRECTIONS_AND_SCOPE_RECONCILIATION_2026-11-05.md` | `a459cdfd02d850d455ca526e6823e68525776ba3` |
+| `docs/architecture/reports/PHASE_1_WHOLE_REPOSITORY_INVESTIGATION_AND_REUSE_AUDIT_2026-11-04.md` | `f725eda1e23d6558d90f6f7c87302019ef3a0dfc` |
+| `docs/architecture/reports/PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md` | `7cf312f6cc6fd880473a0b6ccc86cf53bf3b3533` |
+| `docs/architecture/reports/WHOLE_BRAIN_DOCUMENTATION_PHASE_BUILDER_SELF_REVIEW_2026-11-07.md` | This report; its resulting blob is recorded by the PR #192 branch after this update |
+| `docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md` | `0187a0ac71bd0c95e94beb3bf006da9cc7c3605f` |
+
+The separate PR #193 changed-file set contains:
+- `docs/architecture/plans/00_BRAIN_IMPLEMENTATION_PLAN.md` — blob `34d8af54a02817b27ac37afb8e80eab6dfac5514`;
+- `docs/architecture/plans/JARVIS_PROJECT_CONTINUITY_AND_RECOVERY_HANDOFF.md` — updated in the PR #193 lineage after the authority-attribution and cross-link corrections; fetch its exact current blob from the live PR head before review.
+
+### 8.4 Corrections made and remaining defects
+
+Corrections made:
+- current phase and Stage A hold are aligned across README, index, scope correction, continuity handoff and implementation-plan hold;
+- unsupported user/Project Director identity attribution was removed;
+- the audit and inventory were refreshed with the current PR #192/#193 heads and review state;
+- the index and handoff links were updated to immutable commit references;
+- the governance proposal remains explicitly proposed and unaccepted.
+
+Remaining defects/limitations:
+- the PR #192 and PR #193 branches remain separate; no integration decision is made;
+- the audit still has open authority/provenance, stale-base, preservation, and PR #174 status findings;
+- every remaining commit-pinned link still requires exact resolution verification;
+- the detailed inventory and self-review require a final synchronized refresh after all remaining corrections;
+- no fresh-reader test has yet been executed and recorded;
+- no independent review or required authority decision has been submitted.
+
+**Disposition remains NOT READY FOR ACCEPTANCE.** No Stage A planning, implementation, merge, rebase, gate clearance or source-baseline selection is authorized by this self-review.
