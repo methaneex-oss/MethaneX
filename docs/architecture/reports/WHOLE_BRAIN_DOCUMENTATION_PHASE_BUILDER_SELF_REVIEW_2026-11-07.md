@@ -6,7 +6,7 @@
 **Review classification:** Builder self-review / pre-submission quality check. **This is not an independent review and must not be counted as one.**  
 **Change branch:** `docs/whole-brain-planning-scope-correction-20261107`  
 **Target/base for proposed PR:** `docs/jarvis-phase-2-whole-brain-integration-map-20261105` (PR #179 head at the recorded inspection).  
-**Scope:** Documentation only.
+**Scope:** Documentation only, including a centralized planning index, entry-point links, and duplicate-path removal.
 
 ---
 
@@ -23,10 +23,10 @@ The following files were fetched again from the change branch after writing. Eac
 3. `docs/architecture/reports/PHASE_1_REVIEW_CORRECTIONS_AND_SCOPE_RECONCILIATION_2026-11-05.md` — clarification of the bounded Phase 1 conclusion.
 4. `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md` — preservation and authority clarification.
 5. `docs/architecture/reports/PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md` — scope banner and section 66 addendum.
-6. `docs/architecture/reports/PHASE_2_HUMAN_AND_MCU_REFERENCE_COMPARISON_2026-11-06.md` — a copy of the comparison document with a scope addendum. **Known issue:** PR #191 already adds this same path on a separate branch. PR #192 therefore contains a duplicate same-path addition. This must be resolved by the independent reviewer / Project Director before either PR is accepted; do not merge both versions blindly.
+6. `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md` — central navigation, reading order, document classes, authority map, and PR dependency guidance. The duplicate comparison copy has been removed from this branch; PR #191 remains the sole proposed addition of that path.
 7. `docs/JARVIS_BRAIN_MASTER_BLUEPRINT.md` — Layer 0–19 sequence marked as historical planning input, not an approved development order.
 8. `docs/JARVIS_PHASE_2_COMPLETION.md` — legacy Perception & Representation phase note disambiguated from current whole-Brain Phase 2.
-9. `README.md` — current whole-Brain planning status and controlling correction linked.
+9. `README.md` — points readers to the central planning index and clarifies that the Brain capability bullets are not an exhaustive accepted architecture.
 
 A separate documentation-only branch, `docs/whole-brain-planning-roadmap-hold-20261107`, contains the deferred implementation roadmap and continuity handoff corrections:
 - `docs/architecture/plans/00_BRAIN_IMPLEMENTATION_PLAN.md`
@@ -35,6 +35,10 @@ A separate documentation-only branch, `docs/whole-brain-planning-roadmap-hold-20
 Those two files are intentionally separate because they originate from the PR #175 roadmap branch, not the PR #179 integration-map branch. They must be submitted as a dependent/separate documentation change rather than silently mixed into a branch with a different base.
 
 ## 3. Self-review results
+
+### 2.1 Organization and navigation
+
+**PASS (author self-check).** A single planning index now provides a start-here route, ordered reading sequence, document classifications, authority vocabulary, PR-stack boundaries, and rules for future document changes. README and continuity handoff both point to that index. This is a proposed navigation structure pending independent review, not a claim that every repository document has been fully reconciled.
 
 ### 3.1 Scope and sequence
 
@@ -69,6 +73,7 @@ This self-review is limited and is not an independent technical review.
 - No build, test, CTest, benchmark, sanitizer, runtime, integration or failure-injection command was run. The changes are documentation-only.
 - No production source, test source, build configuration, workflow, dependency, donor runtime code or runtime state was intentionally changed in the scope-correction branch.
 - The content was checked for presence and basic branch-level existence after writes. This report does not claim a full line-by-line independent review of every pre-existing report or all repository links.
+- The index's relative links and cross-branch links still require independent link validation from the intended PR merge context.
 - The separate PR #175-derived roadmap/handoff branch was verified to contain the two updated files, but it has not yet been merged or combined with this branch.
 - PR base/head ancestry, conflicts and final changed-file inventory must be checked by the independent reviewer before acceptance.
 - The correction itself remains a proposal until independent review and Project Director acceptance.
@@ -80,7 +85,7 @@ The independent reviewer should specifically verify:
 1. Whether the correction accurately represents the actual authority/status of PR #171–#191 and the historically accepted PR #174 revision.
 2. Whether the Phase 1 report's declared completion scope and all historical recommendations are characterized without overstating or weakening their original conclusions.
 3. Whether the Phase 2 addendum preserves all original technical findings and does not accidentally imply that all Phase 2 exit criteria are superseded or closed.
-4. Resolve the duplicate same-path addition of the human/MCU comparison in PR #191 and PR #192; determine whether to remove the copy from PR #192 or retarget/rebase through the proper dependency. Do not merge both versions as-is.
+4. Verify that PR #192 no longer contains the comparison report path also added by PR #191, and that the index links to PR #191's sole proposed copy. Do not merge parallel copies.
 5. Whether all relative/absolute document links resolve from their actual locations and whether the PR branch ancestry includes the intended source documents.
 6. Whether the implementation plan and continuity handoff on the separate PR #175-derived branch require any additional cross-links or a different dependency/base arrangement.
 7. Whether the Builder error record is complete, factual and sufficiently explicit without attributing errors to other project participants.
@@ -88,7 +93,7 @@ The independent reviewer should specifically verify:
 
 ## 6. Disposition
 
-**Builder self-review result: NOT READY FOR ACCEPTANCE; READY ONLY FOR INDEPENDENT REVIEW OF THE DOCUMENTATION AND THE KNOWN PR-STACKING ISSUE.** The duplicate same-path addition is an explicit unresolved defect in the submitted PR set.
+**Builder self-review result: NOT READY FOR ACCEPTANCE; READY ONLY FOR INDEPENDENT REVIEW OF THE DOCUMENTATION ORGANIZATION AND PR-STACKING ARRANGEMENT.** The previously identified duplicate same-path addition has been removed from the PR #192 branch and must be verified against the live changed-file lists. Remaining acceptance blockers include independent review, link/ancestry validation, and authority reconciliation.
 
 This is not an independent reviewer verdict, not a formal governance acceptance and not a gate decision. The next required action is an independent review by the designated reviewer, followed by the Project Director's decision.
 
