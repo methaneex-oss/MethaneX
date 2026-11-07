@@ -109,6 +109,7 @@ The following describes the observed documentation areas. A directory's existenc
 - **docs/architecture/inventory/** — artifact and source inventories.
 - **docs/architecture/plans/** — planning proposals and continuity handoffs; check status before execution.
 - **docs/architecture/plans/reviews/** — detailed review, reconciliation and gate evidence associated with planning work.
+- **docs/templates/** — reusable starting structures for planning documents, independent reviews and test-evidence reports; templates are aids, not approval authority.
 - **docs/governance/** — governance proposals and decision-control material; verify acceptance status before treating any rule as binding.
 - **core/**, **runtime/**, **interfaces/** and **tests/** — implementation and verification areas. Use the source maps and build/test registration evidence to locate the relevant code; do not infer coverage from directory names.
 
