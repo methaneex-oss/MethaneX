@@ -410,8 +410,8 @@ This refresh records the repository state after the corrective commits and self-
 ### 11.1 Exact current revisions and branch relationships
 
 - `main`: `1273ddbcd0087d189e01388ded2d362fb1e058d2`.
-- PR #192 head: `edd1b90161dca9a735ba308b32898e94a64f3991`, open/draft/unmerged; base PR #179 head `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.
-- PR #193 head: `a968bc6afebdcaf9a97e45fec4b307d995826784`, open/draft/unmerged; base PR #175 head `874c732973b6ab303d65a503f5a215b0af8e1153`.
+- PR #192 head immediately before this audit refresh: `56bf64e807c46c87f620955f687e88d4f688e2a9`, open/draft/unmerged; base PR #179 head `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.
+- PR #193 head: `0898354a715253af3d09429317877d8cf857e8b3`, open/draft/unmerged; base PR #175 head `874c732973b6ab303d65a503f5a215b0af8e1153`.
 - PR #191 base: `f6267456560a08054d69f7960d2951452b14017c`; PR #191 head: `609d38ede50bbdd98a93dfed112781eacabee9fd`.
 - A fresh compare of PR #191's base to PR #179's current head again returned 22 commits ahead, 0 behind. No retarget/rebase action was performed.
 - PR #192 and PR #193 remain without formal review submissions or PR discussion comments at the latest check.
@@ -419,7 +419,7 @@ This refresh records the repository state after the corrective commits and self-
 ### 11.2 Exact cross-branch link checks performed
 
 The following immutable commit/path references were fetched successfully and returned the expected files:
-- PR #193 continuity handoff at `a968bc6afebdcaf9a97e45fec4b307d995826784`;
+- PR #193 continuity handoff at `0898354a715253af3d09429317877d8cf857e8b3`;
 - PR #178 governance proposal at `39fe09dcf13496f5f0005ccf3f00739303e29f88`;
 - PR #171 system architecture foundation and responsibility map at `b05434758ad4fe72815503f89bd5d2990ccb658b`;
 - PR #172 capability investigation at `d7d676b79dbf3269f7fd3ebdb4363a6df19f255d`;
@@ -446,3 +446,16 @@ The corrections have improved navigation, authority wording, current-phase consi
 
 **Stage A remains held.** This audit update is a Builder-authored verification record, not an independent review or Project Director decision.
 
+
+
+### 11.5 Synchronized document revisions at this refresh
+
+The exact document revisions fetched from their respective branch heads were:
+- PR #192 canonical index: commit `f92cf0241e9656a85a0f48069ab93ddcded80536`, blob `6596639d92db22ed9c63668adca67fd6cd269db2`.
+- PR #192 detailed inventory: commit `56bf64e807c46c87f620955f687e88d4f688e2a9`, blob `681c40b205c7d9511b5a21bd19d07e8d1ed8ba05`.
+- PR #192 Builder self-review: commit `edd1b90161dca9a735ba308b32898e94a64f3991`, blob `a4ca144cb67679c18e514841175481a1fc9c87e1`.
+- PR #192 scope correction: commit `06f9358143b6b76eb667d31a95bb21e8b1d1f85a`, blob `0187a0ac71bd0c95e94beb3bf006da9cc7c3605f`.
+- PR #193 continuity handoff: commit `0898354a715253af3d09429317877d8cf857e8b3`, blob `28ce25ba65ba7b2f3e476117095d26ef327b504b`.
+- PR #193 implementation plan: blob `34d8af54a02817b27ac37afb8e80eab6dfac5514` at the inspected PR #193 lineage.
+
+The audit and inventory are updated as point-in-time records. This audit refresh is itself the next commit after the recorded PR #192 pre-refresh head; the live PR head remains the authoritative way to identify the resulting branch tip. No claim is made that the separate PR #192 and PR #193 branches have been integrated.
