@@ -472,8 +472,8 @@ This addendum refreshes the documentation-package branch heads after the first c
 
 | Artifact / branch | Current verified revision | Status |
 |---|---|---|
-| PR #192 — whole-Brain scope correction, index, audit and inventory | `f92cf0241e9656a85a0f48069ab93ddcded80536` | Open, draft, unmerged; no formal review submission |
-| PR #193 — roadmap hold and continuity handoff | `0898354a715253af3d09429317877d8cf857e8b3` | Open, draft, unmerged; no formal review submission |
+| PR #192 — whole-Brain scope correction, index, audit and inventory | `86cb082b54d541ffcd374100acee81b2f2068182` | Open, draft, unmerged; no formal review submission |
+| PR #193 — roadmap hold and continuity handoff | `15fe766dca5fd9225d7576e5466df6a7fecb9d94` | Open, draft, unmerged; no formal review submission |
 | PR #192 base / PR #179 head | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | Separate #179-derived lineage |
 | PR #193 base / PR #175 head | `874c732973b6ab303d65a503f5a215b0af8e1153` | Separate #175-derived lineage |
 | `main` | `1273ddbcd0087d189e01388ded2d362fb1e058d2` | Contains only the three legacy top-level documentation files under `docs/`; the proposed planning package remains on unmerged branches |
