@@ -248,3 +248,24 @@ A repository-relative Markdown link check was run across the root README, portal
 The package remains Builder-authored and unaccepted. No independent fresh-reader has completed DF-09. No independent review has been submitted for the exact updated revision. The PR #173 primary acceptance record and PR #174 follow-on provenance remain unresolved; historical preservation and PR #191 disposition remain open. No Stage A planning or implementation is authorized.
 
 **Disposition:** improved navigation and consistency; Initial Documentation Foundation Completion Gate remains NOT CLEARED.
+
+
+## 11. Live navigation validation and snapshot correction — 2026-11-07
+
+### 11.1 Snapshot correction
+
+The portal and audit previously carried a PR #192/PR #193 snapshot of `273c2c0ac1d9d6a2291d339387ea6e88dae037d7` and `03502c5719b320b9e323cb1d040ae38737fc7b81`. A live fetch immediately before this correction returned PR #192 parent HEAD `f831faef6d031776e0cee116d1986c3160faffb5` and PR #193 live HEAD `976aa33f89cc02225296f59246f47982300f5b39`. The prior pair is retained as historical text but is not the current snapshot. The commit resulting from this update must be re-fetched; its SHA is not predicted here.
+
+### 11.2 Link verification performed
+
+- Checked repository-relative Markdown links across 11 files: root README, portal, legacy architecture overview, planning index, inventory, foundation audit, this self-review and all four documentation-template files.
+- Resolved 48 repository-relative links against the PR #192 parent tree.
+- Result: zero missing relative link targets.
+- Fetched five explicit commit-pinned cross-branch artifacts named in the portal; all five paths existed at their specified commit revisions.
+- Checked PR links to #193 and #178; both resolved to open, unmerged PRs at the time of the check.
+
+### 11.3 Limitations
+
+This check did not validate fragment anchors, every external URL, every cross-branch link throughout all historical documents, semantic correctness of each destination, or authority status of every linked artifact. It is a bounded navigation check, not the full DF-06 completion evidence.
+
+The work remains Builder-authored. No independent fresh-reader test has been performed; no independent review has been submitted for the resulting exact revision; no authority decision has been recorded. The foundation gate remains **NOT READY FOR ACCEPTANCE**.

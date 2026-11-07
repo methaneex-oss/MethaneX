@@ -553,3 +553,34 @@ Latest verified PR snapshot for this refresh:
 The portal and navigation files remain proposals pending independent review and the required exact-revision authority decision. A relative-link check was run over the root README, portal, planning index, inventory, audit, self-review and legacy architecture page: 44 repository-relative links resolved against the PR #192 tree, with no missing targets. This check did not verify every external URL, every commit-pinned cross-branch link, or every anchor target.
 
 The initial audit finding in §1 that Stage A instructions were present is explicitly historical and superseded by the later correction. Stage A remains held.
+
+
+## 14. Live branch-head correction and expanded navigation-link verification — 2026-11-07
+
+### 14.1 Corrected branch snapshot
+
+The previous portal snapshot in §13 listed PR #192 HEAD `273c2c0ac1d9d6a2291d339387ea6e88dae037d7` and PR #193 HEAD `03502c5719b320b9e323cb1d040ae38737fc7b81`. A subsequent live ref and PR metadata fetch did not return those values. They are retained as historical report content but are superseded for current navigation by this pre-correction refresh:
+
+- PR #192 parent HEAD before this update: `f831faef6d031776e0cee116d1986c3160faffb5`.
+- PR #193 live HEAD: `976aa33f89cc02225296f59246f47982300f5b39`, open/draft/unmerged, base PR #175 head `874c732973b6ab303d65a503f5a215b0af8e1153`.
+- PR #192 is open/draft/unmerged and this correction advances its head. The resulting head must be fetched after commit creation rather than predicted.
+
+The exact branch heads must be re-fetched before independent review and authority decisions.
+
+### 14.2 Repository-relative link validation
+
+A bounded link check was run against the PR #192 tree at parent `f831faef6d031776e0cee116d1986c3160faffb5`. It inspected these eleven files: root README, `docs/README.md`, legacy `docs/ARCHITECTURE.md`, planning index, detailed inventory, foundation audit, Builder self-review, template guide, planning-document template, independent-review template and test-evidence template.
+
+**Result:** 48 repository-relative Markdown links were resolved against the recursive tree; zero missing relative targets were found.
+
+This check did not verify fragment/heading anchors, external website availability, every cross-branch URL outside the portal's explicit pinned links, semantic correctness of every destination, or whether each linked document's content remains authoritative. Those checks remain open.
+
+### 14.3 Immutable cross-branch and PR-link spot checks
+
+The portal's explicit commit-pinned links to the system architecture foundation, whole-system responsibility map, foundational capability investigation, Brain Foundation Architecture and Brain Mechanism Specification were fetched at their stated commit/path pairs; all five resolved to existing files. The portal's PR links to #193 and #178 resolved to open, unmerged PRs at the time of the check.
+
+This is a bounded spot check, not exhaustive external-link or anchor validation.
+
+### 14.4 Current disposition
+
+The portal, role-specific routes and template library improve discoverability and consistency. The documentation foundation remains **NOT CLEARED**. DF-09 fresh-reader testing, DF-11 independent review and DF-12 exact-revision authority decision remain unmet; historical preservation and unresolved provenance/status items remain open. No Stage A planning or implementation is authorized.

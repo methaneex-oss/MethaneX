@@ -516,3 +516,21 @@ The templates support consistent contributions from Builders, reviewers and test
 Section 5's historical handoff claim has been qualified. Later documents report that PR #173's exact Brain Foundation Architecture revision was accepted as a planning baseline, but the primary exact-revision Project Director decision record was not recovered from the available PR #173 discussion during the current audit. The inventory must therefore distinguish the recorded claim from independently verified provenance. Until the primary record is recovered or the designated authority explicitly dispositions the gap, the acceptance provenance remains unresolved.
 
 This qualification does not erase the historical claim, invalidate the technical content, or authorize implementation. It prevents the inventory from presenting an unverified authority claim as settled fact.
+
+
+## 28. Live branch-head correction after navigation validation — 2026-11-07
+
+The older branch-head tables in Sections 23–24 are retained as historical snapshots. A live re-fetch on 2026-11-07 established the following pre-correction state:
+
+| Item | Verified revision / state |
+|---|---|
+| PR #192 parent HEAD before this inventory update | `f831faef6d031776e0cee116d1986c3160faffb5` |
+| PR #193 live HEAD | `976aa33f89cc02225296f59246f47982300f5b39` |
+| PR #192 | Open, draft, unmerged; this corrective commit advances its head |
+| PR #193 | Open, draft, unmerged; based on PR #175 head `874c732973b6ab303d65a503f5a215b0af8e1153` |
+
+The portal's prior snapshot in Section 9 named PR #192 `273c2c0ac1d9d6a2291d339387ea6e88dae037d7` and PR #193 `03502c5719b320b9e323cb1d040ae38737fc7b81`. Those values did not match the live refs fetched immediately before this correction and must not be used as current branch heads. The live refs above supersede those snapshot values for present navigation.
+
+The exact PR #192 HEAD resulting from this update must be re-fetched after the commit is created; do not predict its SHA. This section records the pre-update parent and PR #193 live head to avoid a self-referential commit claim.
+
+This correction does not alter PR bases, integrate PR #192 and PR #193, or change any acceptance, review, gate or implementation status.

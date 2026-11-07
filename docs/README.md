@@ -186,10 +186,10 @@ Do not write “approved” without naming the exact revision, scope and decisio
 
 This portal is being introduced on PR #192's PR #179-derived line. The continuity handoff and deferred implementation plan are on PR #193's separate PR #175-derived line. They are not silently combined by this portal.
 
-At the portal's latest verified repository refresh on 2026-11-07:
-- PR #192 HEAD: `273c2c0ac1d9d6a2291d339387ea6e88dae037d7`.
-- PR #193 HEAD: `03502c5719b320b9e323cb1d040ae38737fc7b81`.
-- Both are open, draft and unmerged. Fetch live PR metadata again before relying on these snapshot values.
+At the pre-correction repository refresh on 2026-11-07:
+- PR #192 parent HEAD: `f831faef6d031776e0cee116d1986c3160faffb5` (this portal correction advances that branch).
+- PR #193 live HEAD: `976aa33f89cc02225296f59246f47982300f5b39`.
+- PR #192 and PR #193 are open, draft and unmerged at this refresh. Re-fetch live PR metadata before relying on snapshot values.
 - PR #191 is a separate comparison proposal based on an earlier PR #179 snapshot.
 - PR #178 governance remains proposed and unaccepted.
 - PR #173 acceptance provenance remains unresolved in the available PR discussion.
