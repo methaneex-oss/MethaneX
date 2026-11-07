@@ -380,7 +380,7 @@ ChatGPT (GPT-6), the Builder responsible for the earlier planning responses, mad
 
 The latest user instruction is to make the initial documentation foundation clear before whole-Brain planning begins. Documentation will continue to evolve during Stage A and later engineering; this gate establishes a reliable, traceable, internally consistent, recoverable initial baseline.
 
-The current audit and measurable exit criteria are recorded in the [Initial Documentation Foundation Audit](https://github.com/methaneex-oss/MethaneX/blob/57dfe33f8dd6a0d0be4d86538420d1d976391730/docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md).
+The current audit and measurable exit criteria are recorded in the [Initial Documentation Foundation Audit](https://github.com/methaneex-oss/MethaneX/blob/4051d0cf7cb2f389a301b06911a70bacb58d530d/docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md).
 
 ### Required work before Stage A
 
