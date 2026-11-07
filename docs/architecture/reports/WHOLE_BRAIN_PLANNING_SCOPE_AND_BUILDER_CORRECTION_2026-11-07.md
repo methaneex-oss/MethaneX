@@ -2,7 +2,7 @@
 
 **Status:** Documentation correction proposal; awaiting independent review and Project Director acceptance  
 **Repository:** `methaneex-oss/MethaneX`  
-**Prepared by:** ChatGPT (GPT-6), acting as the JARVIS Builder under the Project Director's explicitly limited authorization granted 2026-11-07  
+**Prepared by:** ChatGPT (GPT-6), acting as the JARVIS Builder under user-delegated bounded documentation-work authority granted 2026-11-07  
 **Authorization boundary:** Correct existing planning/continuity documentation only. No runtime implementation, tests, builds, baseline selection, donor adoption, merge, rebase, deployment or gate clearance is authorized.  
 **Governing principle:** **ENGINEER THE MECHANISMS; LET BEHAVIOR BE ACQUIRED THROUGH EXPERIENCE.**
 
@@ -10,7 +10,7 @@
 
 ## 1. Why this correction exists
 
-The Project Director clarified that the project must plan the **entire future Brain before deciding where development should begin or what existing code should be used**.
+The user's instruction is that the project must plan the **entire future Brain before deciding where development should begin or what existing code should be used**.
 
 The correct sequence is:
 
