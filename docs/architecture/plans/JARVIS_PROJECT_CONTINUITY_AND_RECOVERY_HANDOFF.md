@@ -4,9 +4,9 @@
 > **Hold:** Do not begin Stage A until the documentation foundation has met its exit criteria, received genuinely independent review, and received the required exact-revision authority decision.  
 > **Authority caution:** This handoff records repository decisions only where exact records exist. It does not infer the requesting user's formal project role or attribute a new approval to them.
 
-> **Start here — documentation navigation:** Read the [JARVIS Planning Documentation Index](https://github.com/methaneex-oss/MethaneX/blob/docs/whole-brain-planning-scope-correction-20261107/docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md) first. It supplies the reading order, authority classifications, and document dependency map.
+> **Start here — documentation navigation:** Read the [JARVIS Planning Documentation Index](https://github.com/methaneex-oss/MethaneX/blob/f55e1f9f07e88052492a6f22ac49303d7678f8c6/docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md) first. It supplies the reading order, authority classifications, and document dependency map.
 >
-> **Current scope correction — 2026-11-07 (read before all historical status below):** The older phase/status and next-action instructions in this handoff were written for Brain Implementation Planning and Gate A/Gate B work. They are historical snapshots and are superseded for the immediate next task by the [Whole-Brain Planning Scope and Builder Correction](https://github.com/methaneex-oss/MethaneX/blob/docs/whole-brain-planning-scope-correction-20261107/docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md). The current next task is whole-Brain capability definition, not implementation planning, source selection or runtime work. Preserve the earlier evidence and gate history; do not silently treat the old "current phase" wording as current.
+> **Current scope correction — 2026-11-07 (read before all historical status below):** The older phase/status and next-action instructions in this handoff were written for Brain Implementation Planning and Gate A/Gate B work. They are historical snapshots and are superseded for the immediate next task by the [Whole-Brain Planning Scope and Builder Correction](https://github.com/methaneex-oss/MethaneX/blob/771118f604f04dfbf78e461d5d57d436039ac44d/docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md). The current next task is whole-Brain capability definition, not implementation planning, source selection or runtime work. Preserve the earlier evidence and gate history; do not silently treat the old "current phase" wording as current.
 
 **Last updated:** 2026-11-07  
 **Purpose:** This is the authoritative restart point for any new ChatGPT conversation, collaborator, or agent continuing this project. Read this document before taking action. Do not rely on chat memory as the source of truth.
@@ -49,7 +49,7 @@ The disposition document is:
 `docs/architecture/plans/reviews/03_GATE_A_FINAL_DISPOSITION_2026-11-03.md`
 
 Direct link:
-https://github.com/methaneex-oss/MethaneX/blob/plan/brain-implementation-roadmap-20261103/docs/architecture/plans/reviews/03_GATE_A_FINAL_DISPOSITION_2026-11-03.md
+https://github.com/methaneex-oss/MethaneX/blob/874c732973b6ab303d65a503f5a215b0af8e1153/docs/architecture/plans/reviews/03_GATE_A_FINAL_DISPOSITION_2026-11-03.md
 
 Detailed reconciliation checkpoint:
 `docs/architecture/plans/reviews/02_GATE_A_REPOSITORY_BASELINE_RECONCILIATION_2026-11-03.md`
@@ -185,13 +185,13 @@ These are audit priorities, not a substitute for tracing all 12 mechanisms.
 - Repository: https://github.com/methaneex-oss/MethaneX
 - Current planning PR: https://github.com/methaneex-oss/MethaneX/pull/175
 - Accepted specification PR: https://github.com/methaneex-oss/MethaneX/pull/174
-- Gate A detailed checkpoint: https://github.com/methaneex-oss/MethaneX/blob/plan/brain-implementation-roadmap-20261103/docs/architecture/plans/reviews/02_GATE_A_REPOSITORY_BASELINE_RECONCILIATION_2026-11-03.md
-- Gate A Builder technical re-review: https://github.com/methaneex-oss/MethaneX/blob/plan/brain-implementation-roadmap-20261103/docs/architecture/plans/reviews/04_GATE_A_BUILDER_TECHNICAL_REREVIEW_2026-11-03.md
-- Gate B 12-mechanism traceability audit: https://github.com/methaneex-oss/MethaneX/blob/plan/brain-implementation-roadmap-20261103/docs/architecture/plans/reviews/05_GATE_B_MECHANISM_TRACEABILITY_AUDIT_2026-11-03.md
-- Gate A semantic reconciliation addendum: https://github.com/methaneex-oss/MethaneX/blob/plan/brain-implementation-roadmap-20261103/docs/architecture/plans/reviews/06_GATE_A_SEMANTIC_RECONCILIATION_ADDENDUM_2026-11-04.md
-- Gate A final disposition: https://github.com/methaneex-oss/MethaneX/blob/plan/brain-implementation-roadmap-20261103/docs/architecture/plans/reviews/03_GATE_A_FINAL_DISPOSITION_2026-11-03.md
-- Gate A Builder technical re-review: https://github.com/methaneex-oss/MethaneX/blob/plan/brain-implementation-roadmap-20261103/docs/architecture/plans/reviews/04_GATE_A_BUILDER_TECHNICAL_REREVIEW_2026-11-03.md
-- Gate B 12-mechanism traceability audit: https://github.com/methaneex-oss/MethaneX/blob/plan/brain-implementation-roadmap-20261103/docs/architecture/plans/reviews/05_GATE_B_MECHANISM_TRACEABILITY_AUDIT_2026-11-03.md
+- Gate A detailed checkpoint: https://github.com/methaneex-oss/MethaneX/blob/874c732973b6ab303d65a503f5a215b0af8e1153/docs/architecture/plans/reviews/02_GATE_A_REPOSITORY_BASELINE_RECONCILIATION_2026-11-03.md
+- Gate A Builder technical re-review: https://github.com/methaneex-oss/MethaneX/blob/874c732973b6ab303d65a503f5a215b0af8e1153/docs/architecture/plans/reviews/04_GATE_A_BUILDER_TECHNICAL_REREVIEW_2026-11-03.md
+- Gate B 12-mechanism traceability audit: https://github.com/methaneex-oss/MethaneX/blob/874c732973b6ab303d65a503f5a215b0af8e1153/docs/architecture/plans/reviews/05_GATE_B_MECHANISM_TRACEABILITY_AUDIT_2026-11-03.md
+- Gate A semantic reconciliation addendum: https://github.com/methaneex-oss/MethaneX/blob/874c732973b6ab303d65a503f5a215b0af8e1153/docs/architecture/plans/reviews/06_GATE_A_SEMANTIC_RECONCILIATION_ADDENDUM_2026-11-04.md
+- Gate A final disposition: https://github.com/methaneex-oss/MethaneX/blob/874c732973b6ab303d65a503f5a215b0af8e1153/docs/architecture/plans/reviews/03_GATE_A_FINAL_DISPOSITION_2026-11-03.md
+- Gate A Builder technical re-review: https://github.com/methaneex-oss/MethaneX/blob/874c732973b6ab303d65a503f5a215b0af8e1153/docs/architecture/plans/reviews/04_GATE_A_BUILDER_TECHNICAL_REREVIEW_2026-11-03.md
+- Gate B 12-mechanism traceability audit: https://github.com/methaneex-oss/MethaneX/blob/874c732973b6ab303d65a503f5a215b0af8e1153/docs/architecture/plans/reviews/05_GATE_B_MECHANISM_TRACEABILITY_AUDIT_2026-11-03.md
 - Independent review assignment: https://github.com/methaneex-oss/MethaneX/pull/175#issuecomment-6615019538
 
 
