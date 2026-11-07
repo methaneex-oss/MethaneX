@@ -26,7 +26,7 @@ The following files were fetched again from the change branch after writing. Eac
 6. `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md` — central navigation, reading order, document classes, authority map, and PR dependency guidance. The duplicate comparison copy has been removed from this branch; PR #191 remains the sole proposed addition of that path.
 7. `docs/JARVIS_BRAIN_MASTER_BLUEPRINT.md` — Layer 0–19 sequence marked as historical planning input, not an approved development order.
 8. `docs/JARVIS_PHASE_2_COMPLETION.md` — legacy Perception & Representation phase note disambiguated from current whole-Brain Phase 2.
-9. `README.md` — points readers to the central planning index and clarifies that the Brain capability bullets are not an exhaustive accepted architecture.
+9. `README.md` — points readers to the central planning index, clarifies the current documentation-foundation task, and avoids implying that whole-Brain architecture or integrated capability is complete.\n10. `docs/ARCHITECTURE.md` — marked as a legacy, non-controlling overview and linked to the canonical index.\n11. `docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md` — records the live repository audit, authority/provenance issues, PR topology, and measurable DF-01–DF-13 exit criteria.
 
 A separate documentation-only branch, `docs/whole-brain-planning-roadmap-hold-20261107`, contains the deferred implementation roadmap and continuity handoff corrections:
 - `docs/architecture/plans/00_BRAIN_IMPLEMENTATION_PLAN.md`
