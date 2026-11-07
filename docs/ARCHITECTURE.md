@@ -1,6 +1,6 @@
 # JARVIS Cognitive Architecture
 
-> **Documentation status:** Legacy cognitive-architecture overview retained for historical context. This file is not the controlling whole-Brain architecture or current planning index. For current scope, authority, document status, and reading order, use the [JARVIS Planning Documentation Index](https://github.com/methaneex-oss/MethaneX/blob/0eda63af7b245550b3658be9d4312e5ed625182f/docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md).  
+> **Documentation status:** Legacy cognitive-architecture overview retained for historical context. This file is not the controlling whole-Brain architecture or current planning index. For the human-facing documentation entry point and role-specific reading routes, start at the [JARVIS Documentation Portal](README.md). For the canonical planning-artifact catalog, authority status, and reading order, use the [JARVIS Planning Documentation Index](architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md).  
 > **Scope boundary:** The flow below is a high-level conceptual summary, not an exhaustive capability inventory, accepted mechanism architecture, or implementation sequence.
 
 ## Purpose
