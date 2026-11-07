@@ -82,7 +82,7 @@ A document can have more than one descriptive role, but it must have one clearly
 
 - [JARVIS Brain Master Blueprint](../JARVIS_BRAIN_MASTER_BLUEPRINT.md): historical Layer 0–19 proposal, not an approved current development order.
 - [Legacy Phase 2 Completion Note](../JARVIS_PHASE_2_COMPLETION.md): describes a bounded Perception & Representation work package, not completion of the current whole-Brain Phase 2 investigation. Preserve the scope clarification in the PR #179 line.
-- [Brain Implementation Plan](https://github.com/methaneex-oss/MethaneX/blob/5c5928144edddf1409de97acbad77a9f3ac76ce9/docs/architecture/plans/00_BRAIN_IMPLEMENTATION_PLAN.md): deferred proposal in PR #193; not operative until whole-Brain planning is completed and accepted.
+- [Brain Implementation Plan](https://github.com/methaneex-oss/MethaneX/blob/bce28e7ddabdbad91a15dc518ede54d5ed7cb02c/docs/architecture/plans/00_BRAIN_IMPLEMENTATION_PLAN.md): deferred proposal in PR #193; not operative until whole-Brain planning is completed and accepted.
 
 ## 5. Current documentation change set and dependency boundaries
 
