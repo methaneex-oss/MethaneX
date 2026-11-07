@@ -103,9 +103,11 @@ Preserve the existing maps and findings. Reclassify their authority accurately:
 
 ### 4.3 Existing twelve-mechanism specification
 
-PR #174's BM-01–BM-12 specification is important accepted planning work at its exact historically accepted revision. Do not discard it, silently rewrite its accepted history, or assume that twelve is the final number of Brain mechanisms.
+PR #174's BM-01–BM-12 specification is important existing planning work at the exact historically cited revision. Do not discard it, silently rewrite its history, or assume that twelve is the final number of Brain mechanisms.
 
-Treat BM-01–BM-12 as an existing mechanism decomposition to be assessed against the whole-Brain architecture. The later architecture reconciliation must determine whether each mechanism remains correctly bounded, needs clarification, needs to be divided or combined, or leaves responsibilities uncovered. Any change to accepted architecture/specification authority must follow the required independent review and Project Director decision.
+**Authority qualification:** Earlier handoff material described this exact revision as accepted. However, the Phase 1 inventory records a subsequent independent re-review identifying F-02 (contextual language/operator-intent grounding) and F-03 (downstream reasoning integration) as unresolved, while PR #175's description calls PR #174 accepted. Those records conflict. Until the exact reviewer report, current PR discussion, and Project Director decision are reconciled, do not represent PR #174 as unconditionally accepted or final. The documentation index flags this conflict for the next Builder and independent reviewer.
+
+Treat BM-01–BM-12 as an existing mechanism decomposition to be assessed against the whole-Brain architecture. The later architecture reconciliation must determine whether each mechanism remains correctly bounded, needs clarification, needs to be divided or combined, or leaves responsibilities uncovered. Any change to specification authority must follow the required independent review and Project Director decision.
 
 ### 4.4 Earlier blueprint and implementation roadmap
 
