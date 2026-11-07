@@ -220,19 +220,39 @@ Relevant inspected heads:
 
 The Phase 2 report's latest inspected exit ledger still records unresolved/partial items and does not establish Phase 2 completion. Gate A was recorded NOT CLEARED; Gate B was not passed/accepted. This correction does not change those gate decisions.
 
-## 9. Required first actions for the next Builder
+## 9. Required first actions for the next Builder — documentation foundation first
 
-1. Read this correction in full before using older phase or implementation documents.
-2. Read the Phase 1 report, its review-correction addendum, the preservation inventory and the Phase 2 integration map. Treat each according to the corrected scope in this document.
-3. Read the PR #171 whole-system architecture/research and PR #173 Brain Foundation Architecture as existing inputs; do not silently assume they are complete or rewrite their accepted history.
-4. Read the PR #174 mechanism specification and assess BM-01–BM-12 against the whole-Brain capability analysis rather than treating the count as fixed.
-5. Recover and assess the full prior human-cognition and MCU J.A.R.V.I.S. research so new work extends it instead of repeating it.
-6. Produce Stage A first. Do not select mechanisms, development priorities or source reuse until the evidence supports those later stages.
-7. Present the capability coverage, gaps and uncertainties for independent challenge and Project Director direction before advancing to Stage B/C decisions.
-8. Keep PR #175's implementation roadmap deferred as a proposal until whole-Brain architecture and development-planning stages are accepted.
+1. Read the [Initial Documentation Foundation Audit and Completion Gate](INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md) in full.
+2. Reconcile the exact authority and provenance of the existing whole-system, capability, Brain architecture, and mechanism-specification inputs. Do not infer acceptance from later documents when the exact decision record is missing.
+3. Keep the proposed governance rules explicitly proposed unless an exact acceptance record is found.
+4. Reconcile the canonical index, detailed inventory, README, continuity handoff, and implementation-plan hold. They must agree on the current phase.
+5. Validate cross-branch links against exact commits; document the PR #191 stale base and the separate PR #192/#193 lineages.
+6. Preserve the Phase 1 and Phase 2 evidence and all historical artifacts. Do not restart completed technical work or delete/move historical files.
+7. Perform the fresh-reader continuity test, then complete the Builder self-review.
+8. Obtain a genuinely independent review and the required authority decision on the exact revised documentation baseline.
 
-**Current next task: Stage A — define the complete intended Brain capability space.**  
-**Not the next task: selecting the first mechanism to implement, selecting a repository baseline, or beginning runtime work.**
+**Do not begin Stage A until the Initial Documentation Foundation Completion Gate is independently reviewed and accepted.** Stage A remains the first whole-Brain planning stage after that gate; it is not the current task.
+
+## 10. Initial Documentation Foundation Completion Gate — 2026-11-07
+
+The user has clarified that the initial documentation foundation must be made clear before whole-Brain planning begins. Documentation will continue to evolve during planning and engineering; this gate establishes the initial reliable baseline rather than claiming that documentation can ever become permanently complete.
+
+The gate covers:
+
+- one canonical navigation index and one synchronized detailed inventory;
+- exact document/commit/blob provenance and authority classification;
+- explicit PR base/head/dependency relationships;
+- durable commit-pinned cross-branch links;
+- consistent current-phase and authorization language across README, index, correction report, continuity handoff, and deferred implementation plan;
+- visible unresolved findings, historical preservation obligations, and unaccepted governance proposals;
+- a reproducible fresh-reader continuity test;
+- Builder self-review, genuinely independent review, and the required authority decision.
+
+The current audit records blockers F-01 through F-11 and measurable exit criteria DF-01 through DF-13. Those findings are not considered closed merely because this addendum exists. Closure requires the evidence and review specified in the audit.
+
+**Current phase:** Initial Documentation Foundation Completion Gate.  
+**Stage A:** Not started; held pending acceptance of this gate.  
+**Implementation:** Not authorized.
 
 ---
 
