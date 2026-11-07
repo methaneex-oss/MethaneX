@@ -334,3 +334,68 @@ Continue the Initial Documentation Foundation Completion Gate by correcting the 
 ---
 
 **End of audit.**
+
+
+---
+
+## 10. Verification refresh after the initial corrective pass — 2026-11-07
+
+This addendum supersedes only the point-in-time PR #192/#193 head and correction-status observations below. It does not erase the original audit findings or claim that the documentation gate is complete.
+
+### 10.1 Refreshed repository and branch state
+
+Live GitHub state was re-fetched after the authority-attribution and current-phase corrections:
+
+| Item | Verified state |
+|---|---|
+| `main` | HEAD `1273ddbcd0087d189e01388ded2d362fb1e058d2`; default branch; not protected |
+| PR #192 | Open, draft, unmerged; head `06f9358143b6b76eb667d31a95bb21e8b1d1f85a`; base branch `docs/jarvis-phase-2-whole-brain-integration-map-20261105` at `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` |
+| PR #193 | Open, draft, unmerged; head `8882bd21b0ed78b1bc640cfd2206728d39261db3`; base branch `plan/brain-implementation-roadmap-20261103` at `874c732973b6ab303d65a503f5a215b0af8e1153` |
+| PR #192 formal reviews | Zero review submissions at this refresh |
+| PR #193 formal reviews | Zero review submissions at this refresh |
+| PR #192 discussion timeline | No comments/review submissions returned at this refresh |
+| PR #193 discussion timeline | No comments/review submissions returned at this refresh |
+
+The recursive trees for PR #192 HEAD and PR #193 HEAD returned 241 and 255 paths respectively, both with `truncated=false`. The recursive `main` tree returned 223 paths, `truncated=false`. No `AGENTS.md`, `CONTRIBUTING.md`, or `CODE_OF_CONDUCT.md` file was found in these three inspected trees. The governance proposal exists in the PR #192 tree at `docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md`; it remains proposed/unaccepted and is not a binding project-wide authority. PR #193's separate tree does not contain that governance file.
+
+The two documentation PRs remain separate lineages. No merge, retarget, rebase, cherry-pick, or branch rewrite was performed.
+
+### 10.2 Authority-attribution correction
+
+The prior PR #193 continuity handoff contained the unsupported sentence that the user had explicitly identified themselves as Project Director. That identity claim was not established by the available direct instruction. The handoff now records only the verified fact that the user delegated bounded Builder authority for this documentation phase, and explicitly prohibits inferring a Project Director role from that delegation, account identity, or repository permissions.
+
+The PR #193 description and the PR #192 scope-correction report were also changed to attribute the relevant sequence instruction to the user without assigning the Project Director role. Historical references to a designated Project Director remain role references where they describe prior project decisions; they must not be used to infer that the requesting user occupies that role.
+
+### 10.3 Current-phase correction status
+
+The current-phase and Stage A hold have now been corrected in the PR #192 README/index/scope-correction package and in the PR #193 continuity handoff and implementation-plan hold. The refreshed documents state that the Initial Documentation Foundation Completion Gate is the current task, Stage A has not started, and implementation remains unauthorized.
+
+Accordingly, original findings F-01 and F-07 are **addressed in the current PR heads**, subject to final link validation, synchronized inventory, fresh-reader testing, independent review, and the required authority decision. F-05 (governance proposal absent from the index reading path) and F-09 (legacy architecture overview lacking an authority label) are also addressed in the current PR #192 content. These are Builder-verified corrections, not independent review findings.
+
+### 10.4 Remaining findings and exit-criterion status
+
+| Finding / criterion | Refresh status | Remaining evidence or action |
+|---|---|---|
+| F-02 — separate PR lineages | Open | Preserve the #179-derived and #175-derived stacks; obtain an authorized integration disposition |
+| F-03 — durable cross-branch links | Open | Validate every exact commit-pinned link; update stale pins and document the unavoidable staged-revision references |
+| F-04 — PR #173 acceptance provenance | Open | Locate an exact decision record or retain the unverified/proposed classification |
+| F-06 — PR #191 stale base | Open | Independent reviewer/authority disposition; do not retarget or rebase by Builder action |
+| F-08 — legacy Phase 2 status consistency | Partially addressed | Confirm the correction is consistent across all relevant source branches and historical documents |
+| F-11 — independent review and acceptance | Open | No formal review submissions or PR discussion review/acceptance records exist for #192/#193 at this refresh |
+| F-12 — PR #174 specification header contradiction | Open | Preserve the exact-revision acceptance event and reconcile the stale draft header through a separately reviewed status correction or explicit exception |
+| DF-01 — canonical entry point | Builder work present; not independently verified | Verify README-to-index path and fresh-reader navigation |
+| DF-02 — synchronized inventory | In progress | Refresh PR #192/#193 exact heads, artifact blobs, and dependencies in the inventory |
+| DF-03 — authority traceability | In progress | PR #173 unresolved; retain exact-scope qualifications for all other decisions |
+| DF-04 — governance status | Addressed in current index | Keep PR #178 governance proposal explicitly proposed/unaccepted |
+| DF-05 — branch dependencies | Partially evidenced | Preserve exact current base/head ancestry and obtain authorized integration decision |
+| DF-06 — durable links | Open | Complete link-by-link resolution checks against immutable commits |
+| DF-07 — status consistency | Builder corrections present | Run a cross-document contradiction scan and fresh-reader test |
+| DF-08 — historical preservation | Open | The bounded Phase 1 historical-branch/document preservation follow-up remains incomplete |
+| DF-09 — continuity reproducibility | Not yet tested | Conduct and record a fresh-reader test without relying on chat memory |
+| DF-10 — Builder self-review | In progress | Update self-review with exact final changed paths, blob SHAs, checks, limitations, and remaining findings |
+| DF-11 — independent review | Not met | Obtain a genuinely separate review against exact final revisions |
+| DF-12 — authority decision | Not met | Obtain the designated authority's explicit decision against exact artifacts/revisions; do not infer the person's identity |
+| DF-13 — planning hold | Maintained | No Stage A work has begun |
+
+**Current disposition:** The initial corrective pass has removed several known contradictions, but the Initial Documentation Foundation is **not complete**. Cross-link verification, inventory synchronization, fresh-reader testing, final Builder self-review, independent review, and the required exact-revision authority decision remain outstanding. Stage A remains held.
+
