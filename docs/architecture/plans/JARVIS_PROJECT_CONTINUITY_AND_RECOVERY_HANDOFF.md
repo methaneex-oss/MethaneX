@@ -1,5 +1,9 @@
 # JARVIS Project Continuity & Recovery Handoff
 
+> **Current handoff — 2026-11-07:** The active task is the **Initial Documentation Foundation Completion Gate**, not Stage A. Read the [Planning Documentation Index](https://github.com/methaneex-oss/MethaneX/blob/82c7214a17bb8e71298817f23b9f389c6f3de509/docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md) and [Initial Documentation Foundation Audit](https://github.com/methaneex-oss/MethaneX/blob/61b03be4cee54d62da7e4359171618ad20788cff/docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md) first. This current-status banner and the later §12 control the immediate next task; older phase sections remain historical evidence and must not override them.  
+> **Hold:** Do not begin Stage A until the documentation foundation has met its exit criteria, received genuinely independent review, and received the required exact-revision authority decision.  
+> **Authority caution:** This handoff records repository decisions only where exact records exist. It does not infer the requesting user's formal project role or attribute a new approval to them.
+
 > **Start here — documentation navigation:** Read the [JARVIS Planning Documentation Index](https://github.com/methaneex-oss/MethaneX/blob/docs/whole-brain-planning-scope-correction-20261107/docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md) first. It supplies the reading order, authority classifications, and document dependency map.
 >
 > **Current scope correction — 2026-11-07 (read before all historical status below):** The older phase/status and next-action instructions in this handoff were written for Brain Implementation Planning and Gate A/Gate B work. They are historical snapshots and are superseded for the immediate next task by the [Whole-Brain Planning Scope and Builder Correction](https://github.com/methaneex-oss/MethaneX/blob/docs/whole-brain-planning-scope-correction-20261107/docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md). The current next task is whole-Brain capability definition, not implementation planning, source selection or runtime work. Preserve the earlier evidence and gate history; do not silently treat the old "current phase" wording as current.
@@ -335,9 +339,9 @@ A follow-up controller-history compensation test was committed to the branch ref
 
 ---
 
-## 11. Current whole-Brain planning direction — 2026-11-07
+## 11. Previously established whole-Brain planning direction — 2026-11-07 (Stage A held)
 
-**Current immediate stage:** Whole-Brain architectural planning — Stage A, capability and responsibility definition.
+**Previously proposed next planning stage:** Whole-Brain architectural planning — Stage A, capability and responsibility definition. This is no longer the immediate task; the documentation foundation gate in §12 must be completed first.
 
 The Project Director has clarified the required order: plan the entire future Brain first; only after the whole-Brain capability architecture, mechanism architecture and completeness/reconciliation are accepted may the project decide where development should begin and what existing source to use.
 
@@ -350,18 +354,45 @@ BM-01–BM-12 remain valuable existing specification work, but they are not assu
 
 ### Immediate instructions
 
-- Read the linked correction document in full.
-- Preserve Phase 1/Phase 2 reports, exact evidence and accepted-history records.
+These are the instructions for Stage A **after** the Initial Documentation Foundation Completion Gate is accepted; they are not the current task.
+
+- Preserve Phase 1/Phase 2 reports, exact evidence and recorded historical decisions.
 - Read PR #171–#174 as existing architecture and research inputs; challenge completeness rather than blindly replacing them.
 - Do not choose mechanisms, add arbitrary mechanism counts, select development order, choose source reuse, or select algorithms/languages/providers/databases/APIs at Stage A.
 - Produce a whole-Brain capability definition with explicit coverage, gaps, unknowns and reference rationale.
 - Derive the mechanism architecture and interaction model only after the capability analysis is sufficiently complete.
-- Obtain independent review and Project Director acceptance before moving into development planning.
-- No implementation, baseline selection, merge/rebase/cherry-pick, builds, tests, or runtime changes are authorized by this documentation correction.
+- Obtain the required independent review and exact-revision authority decision before moving into development planning.
+- No implementation, baseline selection, merge/rebase/cherry-pick, builds, tests, or runtime changes are authorized by the documentation correction.
 
 ### Prior Builder error acknowledgement
 
 ChatGPT (GPT-6), the Builder responsible for the earlier planning responses, made a scope error by treating BM-01–BM-12 as the effective boundary for whole-Brain planning, confusing source integration mapping with complete capability definition, and recommending movement toward development planning before whole-Brain completeness had been established. This error is recorded explicitly in the linked correction document. The previous work is not discarded; its authority and completeness claims are corrected.
 
 **Handoff rule:** If any older section in this document conflicts with this §11 or the linked 2026-11-07 correction, follow the newer scope correction while preserving the older section as historical evidence.
+
+## 12. Current phase — Initial Documentation Foundation Completion Gate
+
+**Current phase:** Initial Documentation Foundation Completion Gate.  
+**Stage A status:** Not started; held.  
+**Implementation status:** Not authorized.
+
+The latest user instruction is to make the initial documentation foundation clear before whole-Brain planning begins. Documentation will continue to evolve during Stage A and later engineering; this gate establishes a reliable, traceable, internally consistent, recoverable initial baseline.
+
+The current audit and measurable exit criteria are recorded in the [Initial Documentation Foundation Audit](https://github.com/methaneex-oss/MethaneX/blob/61b03be4cee54d62da7e4359171618ad20788cff/docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md).
+
+### Required work before Stage A
+
+1. Reconcile exact authority/provenance for PR #171–#175, #178, #179, #191, #192, and #193; keep unresolved claims qualified.
+2. Maintain one canonical index and one synchronized detailed inventory.
+3. Pin cross-branch links to immutable commits and verify all referenced paths.
+4. Reconcile the independent PR #192 and PR #193 lineages without unauthorized retargeting, rebasing, cherry-picking, or merging.
+5. Correct all current-phase and authorization statements across README, index, inventory, correction, handoff, and deferred plan.
+6. Preserve all historical evidence and keep the open Phase 1 preservation follow-up visible.
+7. Complete a fresh-reader continuity test and Builder self-review.
+8. Obtain a genuinely independent review and the required authority decision on exact revisions.
+
+The gate is not complete merely because the audit or index exists. The DF-01 through DF-13 criteria must be evidenced. A Builder self-review is not an independent review. No acceptance is inferred from a PR merge, silence, or a prior decision on a different artifact.
+
+**Immediate next task:** continue the documentation-foundation correction and verification work.  
+**Not the immediate task:** Stage A capability definition, Stage B mechanism architecture, Stage C completeness reconciliation, development sequencing, source selection, or implementation.
 
