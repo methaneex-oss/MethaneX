@@ -399,3 +399,50 @@ Accordingly, original findings F-01 and F-07 are **addressed in the current PR h
 
 **Current disposition:** The initial corrective pass has removed several known contradictions, but the Initial Documentation Foundation is **not complete**. Cross-link verification, inventory synchronization, fresh-reader testing, final Builder self-review, independent review, and the required exact-revision authority decision remain outstanding. Stage A remains held.
 
+
+
+---
+
+## 11. Final Builder verification refresh — 2026-11-07
+
+This refresh records the repository state after the corrective commits and self-review update. It supersedes the earlier PR #192/#193 head values in §10 for current-state purposes; the earlier values remain historical snapshots.
+
+### 11.1 Exact current revisions and branch relationships
+
+- `main`: `1273ddbcd0087d189e01388ded2d362fb1e058d2`.
+- PR #192 head: `edd1b90161dca9a735ba308b32898e94a64f3991`, open/draft/unmerged; base PR #179 head `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.
+- PR #193 head: `a968bc6afebdcaf9a97e45fec4b307d995826784`, open/draft/unmerged; base PR #175 head `874c732973b6ab303d65a503f5a215b0af8e1153`.
+- PR #191 base: `f6267456560a08054d69f7960d2951452b14017c`; PR #191 head: `609d38ede50bbdd98a93dfed112781eacabee9fd`.
+- A fresh compare of PR #191's base to PR #179's current head again returned 22 commits ahead, 0 behind. No retarget/rebase action was performed.
+- PR #192 and PR #193 remain without formal review submissions or PR discussion comments at the latest check.
+
+### 11.2 Exact cross-branch link checks performed
+
+The following immutable commit/path references were fetched successfully and returned the expected files:
+- PR #193 continuity handoff at `a968bc6afebdcaf9a97e45fec4b307d995826784`;
+- PR #178 governance proposal at `39fe09dcf13496f5f0005ccf3f00739303e29f88`;
+- PR #171 system architecture foundation and responsibility map at `b05434758ad4fe72815503f89bd5d2990ccb658b`;
+- PR #172 capability investigation at `d7d676b79dbf3269f7fd3ebdb4363a6df19f255d`;
+- PR #173 Brain Foundation Architecture at `97191111bc2573c14d391c0af9628db7b11f194b`;
+- PR #174 mechanism specification at `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`;
+- PR #191 human/MCU comparison at `609d38ede50bbdd98a93dfed112781eacabee9fd`.
+
+The continuity handoff and the deferred implementation plan were fetched from the PR #193 lineage. Relative links to Phase 1/Phase 2 documents were checked against the PR #192 branch tree. This is a bounded link check, not yet a complete audit of every link in every historical artifact.
+
+### 11.3 Fresh authority-attribution check
+
+The PR #192 scope correction, PR #193 handoff, PR #193 description and Builder self-review now describe bounded user-delegated documentation authority without asserting that the user is the Project Director. Historical references to Project Director decisions are retained only as role-based historical statements where the source record is being described. They do not identify the current user as that role.
+
+### 11.4 Builder disposition
+
+The corrections have improved navigation, authority wording, current-phase consistency, and snapshot accuracy. The foundation is still **NOT READY FOR ACCEPTANCE** because:
+- full link-by-link validation remains incomplete;
+- exact PR #173 acceptance provenance remains unresolved;
+- PR #191's stale base has no authorized disposition;
+- PR #174's specification header still conflicts with its exact-revision acceptance record;
+- the historical branch/document preservation follow-up remains open;
+- the fresh-reader continuity test has not yet been completed and recorded;
+- the independent review and required exact-revision authority decision have not occurred.
+
+**Stage A remains held.** This audit update is a Builder-authored verification record, not an independent review or Project Director decision.
+
