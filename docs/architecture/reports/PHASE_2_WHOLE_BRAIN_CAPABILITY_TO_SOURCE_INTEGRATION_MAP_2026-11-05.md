@@ -1,5 +1,7 @@
 # Phase 2 — Whole-Brain Capability-to-Source Integration Map
 
+> **Whole-Brain scope correction — 2026-11-07:** This report is a substantial but bounded source-integration investigation organized around the existing BM-01–BM-12 specification. It does not establish that those twelve mechanisms exhaust the future Brain's capabilities. Preserve the source/dataflow findings, but do not treat the BM-01–BM-12 acceptance ledger as proof of whole-Brain architectural completeness or as a development sequence. The corrected planning scope and prior Builder error record are in [Whole-Brain Planning Scope and Builder Correction](WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md).
+
 **Date:** 2026-11-05  
 **Repository:** `methaneex-oss/MethaneX`  
 **Phase 2 branch:** `docs/jarvis-phase-2-whole-brain-integration-map-20261105`  
@@ -4170,3 +4172,47 @@ No hardcoded memory-to-belief or reasoning-kind-to-action mapping is proposed. T
 ### 65.4 Status
 
 **Line-level source audit complete; criterion 4 remains MAPPED / BLOCKED.** The missing Memory-to-reasoning input and reasoning-to-downstream consumer edges are now stated with exact mainline line anchors. Corrections and integration tests remain unauthorized pending Gate A, baseline/scope selection and Project Director approval. Phase 2 exit remains NOT MET.
+
+---
+
+## 66. Whole-Brain planning scope correction — 2026-11-07
+
+### 66.1 Scope distinction
+
+The Phase 2 map was authored to map the twelve logical mechanisms in PR #174 to repository source, donor evidence, state ownership, producer/consumer paths, persistence/replay, tests and limitations. It contains meaningful integrated-system analysis, but its capability universe and exit ledger are substantially organized around BM-01–BM-12.
+
+The Project Director has clarified that the project must first plan the **entire future Brain**, before deciding where development should begin or which repository components should be used. Therefore, this report is not a complete whole-Brain capability architecture and cannot close that architectural planning requirement by itself.
+
+### 66.2 What remains valid
+
+- Preserve all exact source references, dataflow traces, defects, integration gaps, donor comparisons and test-evidence qualifications in this report.
+- Preserve the distinction between mainline, donor-only, partial, unverified and implemented behavior.
+- Preserve the existing finding that mechanisms must interact as one coherent Brain rather than as twelve isolated modules.
+- Preserve all unresolved technical findings and gate restrictions unless a later exact-evidence decision closes them.
+
+### 66.3 What is not established
+
+This report does not establish that:
+- BM-01–BM-12 are an exhaustive list of every mechanism/responsibility required by the future Brain;
+- all human cognitive functions relevant to the target have been covered;
+- all functional aspirations drawn from MCU J.A.R.V.I.S. have been translated into Brain/system responsibilities;
+- the developing-Brain analogy has been fully applied to foundational capacity versus experience-acquired competence;
+- all emergent capabilities, recurrent interactions, developmental paths or Brain-to-surrounding-system boundaries have been identified;
+- a development sequence, first implementation increment or repository reuse decision is authorized.
+
+### 66.4 Corrected order of work
+
+1. Define the whole-Brain capability space using human cognition, MCU J.A.R.V.I.S. and the developing-Brain analogy as distinct reference lenses.
+2. Derive and define the mechanisms, state ownership, contracts, dependencies and recurrent interactions required to support those capabilities.
+3. Challenge completeness and reconcile the resulting architecture with BM-01–BM-12 and the accepted upstream architecture/specifications.
+4. Obtain independent review and Project Director acceptance of the whole-Brain planning baseline.
+5. Only then determine development order and the first development increment.
+6. Only then assess repository code and donor material for reuse/adaptation/replacement against the selected increment.
+7. Obtain separate implementation authorization before runtime changes.
+
+The detailed definitions, exit evidence and constraints are maintained in [Whole-Brain Planning Scope and Builder Correction](WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md).
+
+### 66.5 Status correction
+
+The existing BM-01–BM-12 mapping remains a useful partial source-integration investigation. It must not be represented as a completed whole-Brain planning exercise. Existing Phase 2 ledger items remain open/partial/blocked as recorded; this addendum does not close them, clear Gate A, pass Gate B, select a baseline or authorize implementation.
+

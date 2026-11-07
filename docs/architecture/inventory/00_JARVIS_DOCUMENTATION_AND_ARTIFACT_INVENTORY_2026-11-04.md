@@ -111,7 +111,7 @@ It is a bounded capability investigation, not a complete neuroscience review or 
 **Blob:** `364aa3b5fabdab527c169ab170dd72e23c502438`  
 **Length:** 594 lines.  
 **PR state:** open, draft, unmerged.  
-**Project status:** accepted by the Project Director as a Brain architecture planning baseline, according to the recorded project handoff.
+**Historical status claim:** later project handoff material reports that this exact revision was accepted as a Brain architecture planning baseline. The current documentation audit did not recover the primary exact-revision Project Director decision record from PR #173's discussion. Treat the acceptance provenance as unresolved pending recovery or an explicit authority disposition; do not promote this historical handoff claim to independently verified acceptance.
 
 The proposal includes one cognitive authority, recurrent/branching/concurrent cognition, authoritative state ownership with shared context, plural representations, epistemic distinctions, experience-dependent development, intent/authorization separation, and capability-level acceptance criteria.
 
@@ -417,3 +417,102 @@ The following preservation tasks remain open and must not be represented as comp
 These tasks form a bounded documentation/preservation follow-up. They do not invalidate the completed technical inventory or require restarting Phase 1's technical investigation.
 
 A reproducible exact-baseline file list is now published at [PHASE_1_TRACKED_FILE_INVENTORY_2026-11-05.md](PHASE_1_TRACKED_FILE_INVENTORY_2026-11-05.md). Selected donor implementation paths are traced in [PHASE_1_PR97_DONOR_CAPABILITY_TRACEABILITY_2026-11-05.md](PHASE_1_PR97_DONOR_CAPABILITY_TRACEABILITY_2026-11-05.md). The complete correction disposition is in [PHASE_1_REVIEW_CORRECTIONS_AND_SCOPE_RECONCILIATION_2026-11-05.md](../reports/PHASE_1_REVIEW_CORRECTIONS_AND_SCOPE_RECONCILIATION_2026-11-05.md).
+
+---
+
+## 22. Whole-Brain planning scope correction — 2026-11-07
+
+This inventory is a preservation and authority-discovery artifact. It does not prove that the complete future Brain has been architecturally defined.
+
+The PR #171 whole-system foundation, PR #172 capability investigation, PR #173 Brain Foundation Architecture, PR #174 BM-01–BM-12 specification, Phase 1 repository audit and Phase 2 source map are substantial prior inputs. Their exact approval scopes must be respected, but none should be treated as a substitute for the newly clarified whole-Brain capability definition and completeness assessment.
+
+The next Builder must preserve these artifacts and analyze them as evidence. The Builder must not assume that twelve mechanisms exhaust the Brain, and must not select implementation order or repository reuse until whole-Brain architecture and its completeness review are accepted.
+
+See [Whole-Brain Planning Scope and Builder Correction](../reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md) for the corrected sequence, reference lenses, authority boundaries and explicit Builder error record.
+
+
+
+## 23. Initial Documentation Foundation package — 2026-11-07
+
+The following documents form the proposed initial documentation-foundation correction package. They are not accepted merely because they are present on PR #192.
+
+| Artifact | Location | Current classification | Purpose / boundary |
+|---|---|---|---|
+| Planning Documentation Index | `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md`, PR #192 | Proposed; awaiting independent review and authority decision | Canonical navigation and authority/status map |
+| Whole-Brain Planning Scope and Builder Correction | `docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md`, PR #192 | Proposed correction | Corrects whole-Brain scope and planning sequence; now places the documentation foundation gate before Stage A |
+| Initial Documentation Foundation Audit | `docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md`, PR #192 | Builder audit; not independently reviewed or accepted | Records live repository snapshot, branch topology, authority/provenance findings, blockers, and DF-01–DF-13 exit criteria |
+| Documentation Phase Builder Self-Review | `docs/architecture/reports/WHOLE_BRAIN_DOCUMENTATION_PHASE_BUILDER_SELF_REVIEW_2026-11-07.md`, PR #192 | Builder self-review only | Records limitations and confirms the package is not ready for acceptance |
+| Project Continuity and Recovery Handoff | `docs/architecture/plans/JARVIS_PROJECT_CONTINUITY_AND_RECOVERY_HANDOFF.md`, PR #193 | Proposed; updated to align with PR #192 documentation gate | Carries historical evidence and the current operational handoff; independent review and cross-link verification remain pending |
+| Brain Implementation Plan | `docs/architecture/plans/00_BRAIN_IMPLEMENTATION_PLAN.md`, PR #193 | Deferred/non-operative proposal | Preserved as a candidate input for later development planning; no phase or first increment is operative |
+
+### 23.1 Live dependency and authority qualifications
+
+- PR #192 is based on PR #179 head `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.
+- PR #193 is based on PR #175 head `874c732973b6ab303d65a503f5a215b0af8e1153`.
+- These are separate lineages. Neither branch alone represents the complete integrated documentation state.
+- PR #191 is based on an earlier PR #179 snapshot 22 commits behind the current line; its comparison report remains a single-path artifact in PR #191.
+- PR #178's governance rules remain proposed and unaccepted. They are not to be silently promoted to project-wide authority.
+- PR #173's acceptance claim requires exact decision-record reconciliation; the current PR #173 discussion did not expose an explicit acceptance decision.
+- PR #192 and PR #193 remain open/draft/unmerged and have no submitted formal review records at the audited snapshot.
+
+### 23.2 Current phase and preservation boundary
+
+The current task is the **Initial Documentation Foundation Completion Gate**. Stage A is held until the gate's measurable exit criteria are met, independently reviewed, and accepted.
+
+The historical preservation follow-up recorded in Sections 20–21 remains open. This addendum does not claim that all historical branches, duplicated documents, or archive decisions have been reconciled. It also does not restart the completed Phase 1 technical source investigation.
+
+No historical file or branch was deleted, moved, renamed, merged, or rewritten by this addendum.
+
+
+---
+
+## 24. Live documentation-foundation refresh — 2026-11-07
+
+This addendum refreshes the documentation-package branch heads after the first corrective pass. It does not replace the historical snapshots in Sections 19–23.
+
+| Artifact / branch | Current verified revision | Status |
+|---|---|---|
+| PR #192 — whole-Brain scope correction, index, audit and inventory | `86cb082b54d541ffcd374100acee81b2f2068182` | Open, draft, unmerged; no formal review submission |
+| PR #193 — roadmap hold and continuity handoff | `15fe766dca5fd9225d7576e5466df6a7fecb9d94` | Open, draft, unmerged; no formal review submission |
+| PR #192 base / PR #179 head | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | Separate #179-derived lineage |
+| PR #193 base / PR #175 head | `874c732973b6ab303d65a503f5a215b0af8e1153` | Separate #175-derived lineage |
+| `main` | `1273ddbcd0087d189e01388ded2d362fb1e058d2` | Contains only the three legacy top-level documentation files under `docs/`; the proposed planning package remains on unmerged branches |
+
+The refreshed PR #192 and PR #193 formal review lists are empty, and their discussion timelines returned no comments/review submissions at this refresh. Neither PR has been merged, retargeted, rebased, or cherry-picked.
+
+The PR #193 continuity handoff's unsupported claim that the user had identified themselves as Project Director has been removed. The handoff now records bounded user-delegated Builder authority and explicitly prohibits inferring a Project Director role from that delegation or from GitHub identity/permissions. The PR #193 description and PR #192 scope-correction report now attribute the relevant planning sequence to the user's instruction without assigning the user a formal Project Director role.
+
+The current-phase corrections are present in the current package revisions: the Initial Documentation Foundation Completion Gate is the current task; Stage A remains not started and held; implementation remains unauthorized. The PR #178 governance document remains a proposed, unaccepted governance input, not a binding project-wide authority.
+
+**Remaining documentation work:** validate all cross-branch links, reconcile exact authority/provenance where unresolved (especially PR #173), complete the historical preservation follow-up, refresh the index/inventory/self-review together, conduct a fresh-reader continuity test, and obtain independent review plus the required exact-revision authority decision. No Stage A planning is included in this addendum.
+
+
+## 25. Reader navigation and documentation maintenance — 2026-11-07
+
+A human-facing portal is proposed at `docs/README.md` on PR #192. It provides role-specific routes for general readers, Builders, independent reviewers, testers, researchers and documentation maintainers. The root README points to that portal; the Planning Documentation Index remains the canonical catalog of planning artifacts, authority/status distinctions and dependencies.
+
+The portal adds navigation and contribution guidance; it does not create new architecture, governance or implementation authority. Its content explicitly distinguishes:
+- authored, submitted, independently reviewed, accepted within exact scope, merged, gate-cleared and implementation-authorized;
+- test definitions, registered targets, executed runs, observed results and accepted capability;
+- the Builder's self-review from a genuinely independent review;
+- the PR #179-derived PR #192 documentation line from the separate PR #175-derived PR #193 handoff/roadmap line.
+
+The inventory remains a preservation record, not an approval register. Any subsequent change to artifact location, status, revision, authority or dependency must update this inventory and the Planning Documentation Index in the same reviewed change.
+
+
+## 26. Reusable documentation templates — 2026-11-07
+
+A proposed template set is added under `docs/templates/`:
+- `README.md` — template directory guide and usage boundaries;
+- `PLANNING_DOCUMENT_TEMPLATE.md` — metadata, scope, evidence, analysis, proposed decisions, risks, verification and authority limitations;
+- `INDEPENDENT_REVIEW_REPORT_TEMPLATE.md` — exact-revision review, independence disclosure, evidence, findings, closure criteria and formal-review distinction;
+- `TEST_EVIDENCE_REPORT_TEMPLATE.md` — reproducible test context, exact commands, outcomes, failure analysis, coverage limits and provenance.
+
+The templates support consistent contributions from Builders, reviewers and testers. They are not accepted governance rules and do not replace the formal review or authority process. New substantive artifacts should be added to this inventory and the Planning Documentation Index in the same reviewed change.
+
+
+## 27. Authority-status qualification for PR #173 — 2026-11-07
+
+Section 5's historical handoff claim has been qualified. Later documents report that PR #173's exact Brain Foundation Architecture revision was accepted as a planning baseline, but the primary exact-revision Project Director decision record was not recovered from the available PR #173 discussion during the current audit. The inventory must therefore distinguish the recorded claim from independently verified provenance. Until the primary record is recovered or the designated authority explicitly dispositions the gap, the acceptance provenance remains unresolved.
+
+This qualification does not erase the historical claim, invalidate the technical content, or authorize implementation. It prevents the inventory from presenting an unverified authority claim as settled fact.

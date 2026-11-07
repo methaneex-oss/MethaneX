@@ -1,5 +1,8 @@
 # JARVIS Cognitive Architecture
 
+> **Documentation status:** Legacy cognitive-architecture overview retained for historical context. This file is not the controlling whole-Brain architecture or current planning index. For the human-facing documentation entry point and role-specific reading routes, start at the [JARVIS Documentation Portal](README.md). For the canonical planning-artifact catalog, authority status, and reading order, use the [JARVIS Planning Documentation Index](architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md).  
+> **Scope boundary:** The flow below is a high-level conceptual summary, not an exhaustive capability inventory, accepted mechanism architecture, or implementation sequence.
+
 ## Purpose
 
 The brain is a persistent cognitive substrate. It receives observations, maintains an evolving internal representation, forms and revises beliefs, predicts outcomes, evaluates alternatives, learns from results, and adapts its own strategies.
