@@ -1,12 +1,12 @@
 # JARVIS Project Continuity & Recovery Handoff
 
-> **Current handoff — 2026-11-07:** The active task is the **Initial Documentation Foundation Completion Gate**, not Stage A. Read the [Planning Documentation Index](https://github.com/methaneex-oss/MethaneX/blob/e7f4ee172e04dcb7da7428f3fd1e5dcaefeb281a/docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md) and [Initial Documentation Foundation Audit](https://github.com/methaneex-oss/MethaneX/blob/61b03be4cee54d62da7e4359171618ad20788cff/docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md) first. This current-status banner and the later §12 control the immediate next task; older phase sections remain historical evidence and must not override them.  
+> **Current handoff — 2026-11-07:** The active task is the **Initial Documentation Foundation Completion Gate**, not Stage A. Read the [Planning Documentation Index](https://github.com/methaneex-oss/MethaneX/blob/d845f3b027be78f131e5818ca7a4853888985e91/docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md) and [Initial Documentation Foundation Audit](https://github.com/methaneex-oss/MethaneX/blob/61b03be4cee54d62da7e4359171618ad20788cff/docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md) first. This current-status banner and the later §12 control the immediate next task; older phase sections remain historical evidence and must not override them.  
 > **Hold:** Do not begin Stage A until the documentation foundation has met its exit criteria, received genuinely independent review, and received the required exact-revision authority decision.  
 > **Authority caution:** This handoff records repository decisions only where exact records exist. It does not infer the requesting user's formal project role or attribute a new approval to them.
 
 > **Start here — documentation navigation:** Read the [JARVIS Planning Documentation Index](https://github.com/methaneex-oss/MethaneX/blob/f55e1f9f07e88052492a6f22ac49303d7678f8c6/docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md) first. It supplies the reading order, authority classifications, and document dependency map.
 >
-> **Current scope correction — 2026-11-07 (read before all historical status below):** The older phase/status and next-action instructions in this handoff were written for Brain Implementation Planning and Gate A/Gate B work. They are historical snapshots and are superseded for the immediate next task by the [Whole-Brain Planning Scope and Builder Correction](https://github.com/methaneex-oss/MethaneX/blob/771118f604f04dfbf78e461d5d57d436039ac44d/docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md). The current next task is whole-Brain capability definition, not implementation planning, source selection or runtime work. Preserve the earlier evidence and gate history; do not silently treat the old "current phase" wording as current.
+> **Current scope correction — 2026-11-07 (read before all historical status below):** The older phase/status and next-action instructions in this handoff were written for Brain Implementation Planning and Gate A/Gate B work. They are historical snapshots and are superseded for the immediate next task by the [Whole-Brain Planning Scope and Builder Correction](https://github.com/methaneex-oss/MethaneX/blob/771118f604f04dfbf78e461d5d57d436039ac44d/docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md). The current next task is the Initial Documentation Foundation Completion Gate. Stage A whole-Brain capability definition follows only after that gate is independently reviewed and accepted. Preserve the earlier evidence and gate history; do not silently treat the old "current phase" wording as current.
 
 **Last updated:** 2026-11-07  
 **Purpose:** This is the authoritative restart point for any new ChatGPT conversation, collaborator, or agent continuing this project. Read this document before taking action. Do not rely on chat memory as the source of truth.
@@ -23,23 +23,25 @@ Do not reduce the project to a chatbot, thin LLM wrapper, fixed rule engine, har
 
 The human-cognition and MCU J.A.R.V.I.S. comparisons are reference lenses for analysis, not permission to invent fictional internals or copy fictional capabilities as if they were engineering specifications.
 
-## 2. Current phase — read this first
+## 2. Historical phase snapshot — superseded by §12
 
-**Current phase: Whole-Brain architectural planning — Stage A capability and responsibility definition. Development planning and implementation are deferred.**
+**Historical phase at the time of this snapshot:** Whole-Brain architectural planning — Stage A capability and responsibility definition. This is not the current immediate task.
 
-Accepted upstream work:
-- **PR #171** — whole-system foundation.
-- **PR #172** — foundational Brain capability investigation.
-- **PR #173** — integrated Brain foundation architecture.
-- **PR #174** — integrated Brain mechanism specification. This is the governing mechanism specification; accepted HEAD: `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`.
+**Current phase:** Initial Documentation Foundation Completion Gate (§12). Stage A has not started and remains held.
 
-Current planning work:
-- **PR #175** — Brain implementation roadmap / planning.
+Prior planning inputs and authority status (see the canonical index and audit for exact records):
+- **PR #171** — Documents 00 and 01 have separate exact-scope approval records; the PR and research package are not blanket-approved.
+- **PR #172** — bounded foundational Brain capability investigation accepted as a planning input at exact HEAD `d7d676b79dbf3269f7fd3ebdb4363a6df19f255d`.
+- **PR #173** — Brain Foundation Architecture proposal; the exact acceptance decision is not established in its own PR discussion and remains an authority-reconciliation item.
+- **PR #174** — Brain Mechanism Specification accepted at exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`; follow-on F-02/F-03 obligations and provenance limits remain open.
+
+Deferred planning proposal:
+- **PR #175** — Brain implementation roadmap; held and non-operative pending whole-Brain planning and the prior documentation-foundation gate.
 - Branch: `plan/brain-implementation-roadmap-20261103`.
-- Latest known HEAD: `5088c0644658f573bd18cf579ba426bb51dfb506`.
+- Live HEAD at the 2026-11-07 audit: `874c732973b6ab303d65a503f5a215b0af8e1153`.
 - PR: https://github.com/methaneex-oss/MethaneX/pull/175
 
-### Exact subphase: Gate A — repository baseline reconciliation
+### Historical subphase snapshot: Gate A — repository baseline reconciliation
 
 Gate A's final disposition has been documented as:
 
