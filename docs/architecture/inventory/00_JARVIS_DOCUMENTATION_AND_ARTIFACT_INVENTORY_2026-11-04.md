@@ -430,3 +430,35 @@ The next Builder must preserve these artifacts and analyze them as evidence. The
 
 See [Whole-Brain Planning Scope and Builder Correction](../reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md) for the corrected sequence, reference lenses, authority boundaries and explicit Builder error record.
 
+
+
+## 23. Initial Documentation Foundation package — 2026-11-07
+
+The following documents form the proposed initial documentation-foundation correction package. They are not accepted merely because they are present on PR #192.
+
+| Artifact | Location | Current classification | Purpose / boundary |
+|---|---|---|---|
+| Planning Documentation Index | `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md`, PR #192 | Proposed; awaiting independent review and authority decision | Canonical navigation and authority/status map |
+| Whole-Brain Planning Scope and Builder Correction | `docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md`, PR #192 | Proposed correction | Corrects whole-Brain scope and planning sequence; now places the documentation foundation gate before Stage A |
+| Initial Documentation Foundation Audit | `docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md`, PR #192 | Builder audit; not independently reviewed or accepted | Records live repository snapshot, branch topology, authority/provenance findings, blockers, and DF-01–DF-13 exit criteria |
+| Documentation Phase Builder Self-Review | `docs/architecture/reports/WHOLE_BRAIN_DOCUMENTATION_PHASE_BUILDER_SELF_REVIEW_2026-11-07.md`, PR #192 | Builder self-review only | Records limitations and confirms the package is not ready for acceptance |
+| Project Continuity and Recovery Handoff | `docs/architecture/plans/JARVIS_PROJECT_CONTINUITY_AND_RECOVERY_HANDOFF.md`, PR #193 | Proposed; requires synchronization with PR #192 index/audit | Carries historical evidence and the current operational handoff; its current task must be documentation foundation, not Stage A |
+| Brain Implementation Plan | `docs/architecture/plans/00_BRAIN_IMPLEMENTATION_PLAN.md`, PR #193 | Deferred/non-operative proposal | Preserved as a candidate input for later development planning; no phase or first increment is operative |
+
+### 23.1 Live dependency and authority qualifications
+
+- PR #192 is based on PR #179 head `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.
+- PR #193 is based on PR #175 head `874c732973b6ab303d65a503f5a215b0af8e1153`.
+- These are separate lineages. Neither branch alone represents the complete integrated documentation state.
+- PR #191 is based on an earlier PR #179 snapshot 22 commits behind the current line; its comparison report remains a single-path artifact in PR #191.
+- PR #178's governance rules remain proposed and unaccepted. They are not to be silently promoted to project-wide authority.
+- PR #173's acceptance claim requires exact decision-record reconciliation; the current PR #173 discussion did not expose an explicit acceptance decision.
+- PR #192 and PR #193 remain open/draft/unmerged and have no submitted formal review records at the audited snapshot.
+
+### 23.2 Current phase and preservation boundary
+
+The current task is the **Initial Documentation Foundation Completion Gate**. Stage A is held until the gate's measurable exit criteria are met, independently reviewed, and accepted.
+
+The historical preservation follow-up recorded in Sections 20–21 remains open. This addendum does not claim that all historical branches, duplicated documents, or archive decisions have been reconciled. It also does not restart the completed Phase 1 technical source investigation.
+
+No historical file or branch was deleted, moved, renamed, merged, or rewritten by this addendum.
