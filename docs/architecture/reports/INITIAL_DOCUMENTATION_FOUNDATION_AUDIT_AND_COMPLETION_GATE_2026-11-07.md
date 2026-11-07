@@ -114,7 +114,7 @@ The PR discussion contains an explicit acceptance record, comment `#6604790481`,
 
 A later follow-on review is recorded as F-02 (contextual language/operator-intent grounding) and F-03 (downstream reasoning integration). The original report was not recoverable from the supplied shared-chat URL. The checked-in provenance-recovery record explicitly says recovery is partial and that the original wording/rationale was not reproduced. It leaves a decision about the provenance limitation outstanding and retains the technical obligations as open.
 
-**Classification:** Historical acceptance of the exact specification baseline is recorded; later follow-on findings and their provenance/disposition remain open. Do not erase the acceptance event, and do not treat it as proof that the current specification is free of unresolved corrections or ready for implementation.
+**Header/status discrepancy:** The specification file's current header still says `Draft for independent review`, while PR #174 discussion comment #6604790481 records acceptance of the exact same HEAD. This is an internal document-status contradiction. The acceptance event must not be erased, and the header must not silently override the exact decision record. Resolve this with a separately reviewed status correction or an explicit documented exception; do not alter the accepted specification's substantive content under this documentation audit.\n\n**Classification:** Historical acceptance of the exact specification baseline is recorded; later follow-on findings and their provenance/disposition remain open. Do not treat acceptance as proof that the current specification is free of unresolved corrections or ready for implementation.
 
 ### 3.5 Implementation roadmap — PR #175 and PR #193
 
@@ -238,6 +238,12 @@ The detailed inventory is substantial and preserves important history, but it pr
 The formal review-submission lists for PRs #178, #179, #191, #192, and #193 returned no review objects. PR #192/#193 also have no PR discussion review/acceptance records in the retrieved timelines. A Builder self-review cannot satisfy this requirement.
 
 **Required correction:** Submit the exact revised package for a genuinely independent review after the Builder correction pass. Keep the package proposed until the responsible authority records a decision on exact revisions. This report does not perform or claim that review.
+
+### F-12 — PR #174 specification header contradicts its exact-revision acceptance record
+
+The current PR #174 specification header says `Draft for independent review`. The PR discussion records acceptance of exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` in comment #6604790481.
+
+**Required correction:** Preserve the accepted baseline and its later F-02/F-03 obligations. Reconcile the header through a separately reviewed, non-substantive status correction or an explicit documented exception. Do not silently rewrite the accepted specification or infer that the header cancels the recorded acceptance.
 
 ## 5. Documentation-foundation work sequence
 
