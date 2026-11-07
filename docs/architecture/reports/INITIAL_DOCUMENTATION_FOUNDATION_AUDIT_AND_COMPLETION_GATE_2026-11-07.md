@@ -459,3 +459,40 @@ The exact document revisions fetched from their respective branch heads were:
 - PR #193 implementation plan: blob `34d8af54a02817b27ac37afb8e80eab6dfac5514` at the inspected PR #193 lineage.
 
 The audit and inventory are updated as point-in-time records. This audit refresh is itself the next commit after the recorded PR #192 pre-refresh head; the live PR head remains the authoritative way to identify the resulting branch tip. No claim is made that the separate PR #192 and PR #193 branches have been integrated.
+
+
+---
+
+## 12. Final branch-head and navigation snapshot — 2026-11-07
+
+This is the final Builder snapshot for the present corrective batch. The PR #192 head below is the exact parent immediately before this audit update; this audit update is committed next on that branch.
+
+| Artifact | Exact revision at this snapshot | Verified state |
+|---|---|---|
+| `main` | `1273ddbcd0087d189e01388ded2d362fb1e058d2` | Default branch |
+| PR #192 | `6e2caf3f1b3799b5bad467ceea213a762dd9f0d8` | Open, draft, unmerged; base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` |
+| PR #193 | `15fe766dca5fd9225d7576e5466df6a7fecb9d94` | Open, draft, unmerged; base `874c732973b6ab303d65a503f5a215b0af8e1153` |
+| Canonical index | `86cb082b54d541ffcd374100acee81b2f2068182` | Fetched successfully; links to the current PR #193 handoff |
+| Detailed inventory | `6e2caf3f1b3799b5bad467ceea213a762dd9f0d8` | Fetched successfully; current PR #192/#193 lineage snapshot |
+| Builder self-review | `edd1b90161dca9a735ba308b32898e94a64f3991` | Fetched successfully; explicitly NOT READY FOR ACCEPTANCE |
+| Scope correction | `06f9358143b6b76eb667d31a95bb21e8b1d1f85a` | Fetched successfully; authority wording corrected |
+| Continuity handoff | `15fe766dca5fd9225d7576e5466df6a7fecb9d94` | Fetched successfully; bounded Builder authority and current phase stated |
+| Deferred implementation plan | PR #193 lineage, same branch snapshot | Fetched; remains deferred/non-operative |
+
+At this snapshot, PR #192 and PR #193 each still have zero formal review submissions and zero discussion comments/review submissions. Neither has been merged, retargeted, rebased, cherry-picked, or closed.
+
+The canonical index points to the current continuity handoff at PR #193 commit `15fe766dca5fd9225d7576e5466df6a7fecb9d94`. To avoid a cyclic commit dependency, the handoff's own index link points to the immediately preceding index revision `f92cf0241e9656a85a0f48069ab93ddcded80536`; that revision contains the same project objective, current-phase hold, authority distinctions, and reading order. The index is the latest navigation entry point.
+
+### Final disposition
+
+The Builder correction pass has:
+- corrected unsupported attribution of the user's identity as Project Director;
+- aligned the current phase and Stage A hold across the proposed documentation package;
+- refreshed the audit and inventory with exact branch/dependency snapshots;
+- checked the listed immutable cross-branch references and relevant relative-path targets;
+- kept the proposed governance rules unaccepted and non-controlling;
+- preserved the independent review and authority-decision requirements.
+
+The foundation remains **NOT READY FOR ACCEPTANCE**. Remaining work includes the complete link audit, unresolved authority/provenance reconciliation, PR #191 stale-base disposition, PR #174 status-header reconciliation, historical preservation follow-up, fresh-reader continuity test, final review package, genuinely independent review, and the designated authority's exact-revision decision.
+
+No Stage A capability planning has begun. No implementation, source selection, baseline selection, merge, rebase, gate clearance, or runtime change is authorized by this audit. This is the Builder's report, not an independent review or acceptance decision.
