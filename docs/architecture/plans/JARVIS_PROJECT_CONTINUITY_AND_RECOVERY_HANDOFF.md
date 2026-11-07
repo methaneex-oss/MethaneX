@@ -1,12 +1,12 @@
 # JARVIS Project Continuity & Recovery Handoff
 
-> **Current handoff — 2026-11-07:** The active task is the **Initial Documentation Foundation Completion Gate**, not Stage A. Read the [Planning Documentation Index](https://github.com/methaneex-oss/MethaneX/blob/f92cf0241e9656a85a0f48069ab93ddcded80536/docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md) and [Initial Documentation Foundation Audit](https://github.com/methaneex-oss/MethaneX/blob/57dfe33f8dd6a0d0be4d86538420d1d976391730/docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md) first. This current-status banner and the later §12 control the immediate next task; older phase sections remain historical evidence and must not override them.  
+> **Current handoff — 2026-11-07:** The active task is the **Initial Documentation Foundation Completion Gate**, not Stage A. Start with the [JARVIS Documentation Portal](https://github.com/methaneex-oss/MethaneX/blob/85c7c427c0caea84dab4f945549918f04dc2dc1b/docs/README.md), which provides role-specific routes for Builders, independent reviewers, testers, researchers, documentation maintainers and general readers. Then use the [Planning Documentation Index](https://github.com/methaneex-oss/MethaneX/blob/85c7c427c0caea84dab4f945549918f04dc2dc1b/docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md) and [Initial Documentation Foundation Audit](https://github.com/methaneex-oss/MethaneX/blob/85c7c427c0caea84dab4f945549918f04dc2dc1b/docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md). This current-status banner and the later §12 control the immediate next task; older phase sections remain historical evidence and must not override them.  
 > **Hold:** Do not begin Stage A until the documentation foundation has met its exit criteria, received genuinely independent review, and received the required exact-revision authority decision.  
 > **Authority boundary:** The user has delegated bounded Builder authority for this documentation phase. Do not infer that the user holds the Project Director role from this delegation, GitHub account identity, repository permissions, or any other indirect signal. Do not claim Project Director approval or acceptance unless an explicit, attributable decision record establishes it for the exact artifact and revision. Builder authority does not include independent review or Project Director decision-making.
 
-> **Start here — documentation navigation:** Read the [JARVIS Planning Documentation Index](https://github.com/methaneex-oss/MethaneX/blob/f92cf0241e9656a85a0f48069ab93ddcded80536/docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md) first. It supplies the reading order, authority classifications, and document dependency map.
+> **Start here — documentation navigation:** The [JARVIS Documentation Portal](https://github.com/methaneex-oss/MethaneX/blob/85c7c427c0caea84dab4f945549918f04dc2dc1b/docs/README.md) is the human-facing entry point and gives each role a reading route. The [Planning Documentation Index](https://github.com/methaneex-oss/MethaneX/blob/85c7c427c0caea84dab4f945549918f04dc2dc1b/docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md) remains the canonical planning-artifact catalog and authority/dependency map.
 >
-> **Current scope correction — 2026-11-07 (read before all historical status below):** The older phase/status and next-action instructions in this handoff were written for Brain Implementation Planning and Gate A/Gate B work. They are historical snapshots and are superseded for the immediate next task by the [Whole-Brain Planning Scope and Builder Correction](https://github.com/methaneex-oss/MethaneX/blob/06f9358143b6b76eb667d31a95bb21e8b1d1f85a/docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md). The current next task is the Initial Documentation Foundation Completion Gate. Stage A whole-Brain capability definition follows only after that gate is independently reviewed and accepted. Preserve the earlier evidence and gate history; do not silently treat the old "current phase" wording as current.
+> **Current scope correction — 2026-11-07 (read before all historical status below):** The older phase/status and next-action instructions in this handoff were written for Brain Implementation Planning and Gate A/Gate B work. They are historical snapshots and are superseded for the immediate next task by the [Whole-Brain Planning Scope and Builder Correction](https://github.com/methaneex-oss/MethaneX/blob/85c7c427c0caea84dab4f945549918f04dc2dc1b/docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md). The current next task is the Initial Documentation Foundation Completion Gate. Stage A whole-Brain capability definition follows only after that gate is independently reviewed and accepted. Preserve the earlier evidence and gate history; do not silently treat the old "current phase" wording as current.
 
 **Last updated:** 2026-11-07  
 **Purpose:** This is the authoritative restart point for any new ChatGPT conversation, collaborator, or agent continuing this project. Read this document before taking action. Do not rely on chat memory as the source of truth.
@@ -398,3 +398,20 @@ The gate is not complete merely because the audit or index exists. The DF-01 thr
 **Immediate next task:** continue the documentation-foundation correction and verification work.  
 **Not the immediate task:** Stage A capability definition, Stage B mechanism architecture, Stage C completeness reconciliation, development sequencing, source selection, or implementation.
 
+
+
+## 13. Reader onboarding and role boundaries — 2026-11-07
+
+The human-facing documentation entry point is the [JARVIS Documentation Portal](https://github.com/methaneex-oss/MethaneX/blob/85c7c427c0caea84dab4f945549918f04dc2dc1b/docs/README.md). It provides separate reading routes for:
+- new readers and stakeholders;
+- Builders and implementation engineers;
+- independent reviewers;
+- testers and verification engineers;
+- researchers and architects;
+- documentation maintainers.
+
+Use the portal for onboarding and navigation. Use the Planning Documentation Index for the canonical planning-artifact catalog and exact authority/status distinctions. Use this handoff for operational continuity and recovery. Use the implementation plan only as a deferred historical proposal; it is not the current task list or an authorization to execute its proposed increments.
+
+A new Builder must first identify the current task, exact branch and revision, authority boundary and open gate. A reviewer must inspect the exact submitted revision and submit a formal review. A tester must distinguish test definitions, registered targets, executed runs, observed outcomes and accepted capability. No role may infer acceptance or authorization from a document's presence or a PR's state.
+
+The portal is on the separate PR #192 / PR #179-derived line. This handoff remains on PR #193 / PR #175-derived line. The cross-lineage link is pinned to the portal revision; do not merge, rebase, retarget or copy files between these branches merely to simplify navigation.
