@@ -462,3 +462,26 @@ The current task is the **Initial Documentation Foundation Completion Gate**. St
 The historical preservation follow-up recorded in Sections 20–21 remains open. This addendum does not claim that all historical branches, duplicated documents, or archive decisions have been reconciled. It also does not restart the completed Phase 1 technical source investigation.
 
 No historical file or branch was deleted, moved, renamed, merged, or rewritten by this addendum.
+
+
+---
+
+## 24. Live documentation-foundation refresh — 2026-11-07
+
+This addendum refreshes the documentation-package branch heads after the first corrective pass. It does not replace the historical snapshots in Sections 19–23.
+
+| Artifact / branch | Current verified revision | Status |
+|---|---|---|
+| PR #192 — whole-Brain scope correction, index, audit and inventory | `06f9358143b6b76eb667d31a95bb21e8b1d1f85a` | Open, draft, unmerged; no formal review submission |
+| PR #193 — roadmap hold and continuity handoff | `8882bd21b0ed78b1bc640cfd2206728d39261db3` | Open, draft, unmerged; no formal review submission |
+| PR #192 base / PR #179 head | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | Separate #179-derived lineage |
+| PR #193 base / PR #175 head | `874c732973b6ab303d65a503f5a215b0af8e1153` | Separate #175-derived lineage |
+| `main` | `1273ddbcd0087d189e01388ded2d362fb1e058d2` | Contains only the three legacy top-level documentation files under `docs/`; the proposed planning package remains on unmerged branches |
+
+The refreshed PR #192 and PR #193 formal review lists are empty, and their discussion timelines returned no comments/review submissions at this refresh. Neither PR has been merged, retargeted, rebased, or cherry-picked.
+
+The PR #193 continuity handoff's unsupported claim that the user had identified themselves as Project Director has been removed. The handoff now records bounded user-delegated Builder authority and explicitly prohibits inferring a Project Director role from that delegation or from GitHub identity/permissions. The PR #193 description and PR #192 scope-correction report now attribute the relevant planning sequence to the user's instruction without assigning the user a formal Project Director role.
+
+The current-phase corrections are present in the current package revisions: the Initial Documentation Foundation Completion Gate is the current task; Stage A remains not started and held; implementation remains unauthorized. The PR #178 governance document remains a proposed, unaccepted governance input, not a binding project-wide authority.
+
+**Remaining documentation work:** validate all cross-branch links, reconcile exact authority/provenance where unresolved (especially PR #173), complete the historical preservation follow-up, refresh the index/inventory/self-review together, conduct a fresh-reader continuity test, and obtain independent review plus the required exact-revision authority decision. No Stage A planning is included in this addendum.
