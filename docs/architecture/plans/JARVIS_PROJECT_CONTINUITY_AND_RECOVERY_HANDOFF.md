@@ -1,5 +1,7 @@
 # JARVIS Project Continuity & Recovery Handoff
 
+> **Start here — documentation navigation:** Read the [JARVIS Planning Documentation Index](https://github.com/methaneex-oss/MethaneX/blob/docs/whole-brain-planning-scope-correction-20261107/docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md) first. It supplies the reading order, authority classifications, and document dependency map.
+>
 > **Current scope correction — 2026-11-07 (read before all historical status below):** The older phase/status and next-action instructions in this handoff were written for Brain Implementation Planning and Gate A/Gate B work. They are historical snapshots and are superseded for the immediate next task by the [Whole-Brain Planning Scope and Builder Correction](https://github.com/methaneex-oss/MethaneX/blob/docs/whole-brain-planning-scope-correction-20261107/docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md). The current next task is whole-Brain capability definition, not implementation planning, source selection or runtime work. Preserve the earlier evidence and gate history; do not silently treat the old "current phase" wording as current.
 
 **Last updated:** 2026-11-07  
