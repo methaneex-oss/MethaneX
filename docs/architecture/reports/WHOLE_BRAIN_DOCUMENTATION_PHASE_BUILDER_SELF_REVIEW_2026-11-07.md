@@ -225,3 +225,26 @@ This is a Builder self-review, not independent review. The portal is a proposed 
 The templates require exact revision identifiers, purpose/scope/non-goals, evidence provenance, limitations, explicit findings or test outcomes, and separate authority/approval records. The test template distinguishes definitions, registration, execution and capability acceptance. The review template makes reviewer independence and formal submission explicit.
 
 The templates are linked from the portal and planning index. They are aids, not binding governance or approval. The inventory and audit record their purpose. The documentation foundation remains **NOT READY FOR ACCEPTANCE** pending independent review, fresh-reader testing, remaining provenance/preservation work and exact-revision authority decision.
+
+
+## 10. Navigation package follow-up and consistency refresh — 2026-11-07
+
+### 10.1 Additional navigation changes
+
+- Added a role-based human-facing portal at `docs/README.md`.
+- Routed the repository root README and legacy `docs/ARCHITECTURE.md` through the portal.
+- Linked the portal to the planning index, artifact inventory, foundation audit, role-specific source documents and reusable templates.
+- Added explicit routes for new readers, Builders, independent reviewers, testers, researchers and documentation maintainers.
+- Clarified that test definitions, registered targets, executed tests, observed results and accepted capabilities are distinct.
+- Qualified the historical PR #173 acceptance claim in the inventory so it is not mistaken for recovered primary decision evidence.
+- Corrected the audit's opening Stage A finding to identify it as a historical observation superseded by later corrective commits.
+
+### 10.2 Link validation
+
+A repository-relative Markdown link check was run across the root README, portal, legacy architecture page, planning index, inventory, foundation audit and this self-review against the PR #192 tree at `273c2c0ac1d9d6a2291d339387ea6e88dae037d7`. Forty-four repository-relative links resolved, with no missing targets. This check did not establish the availability of external URLs, every immutable cross-branch URL, or every fragment anchor.
+
+### 10.3 Current limitations
+
+The package remains Builder-authored and unaccepted. No independent fresh-reader has completed DF-09. No independent review has been submitted for the exact updated revision. The PR #173 primary acceptance record and PR #174 follow-on provenance remain unresolved; historical preservation and PR #191 disposition remain open. No Stage A planning or implementation is authorized.
+
+**Disposition:** improved navigation and consistency; Initial Documentation Foundation Completion Gate remains NOT CLEARED.

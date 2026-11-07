@@ -111,7 +111,7 @@ It is a bounded capability investigation, not a complete neuroscience review or 
 **Blob:** `364aa3b5fabdab527c169ab170dd72e23c502438`  
 **Length:** 594 lines.  
 **PR state:** open, draft, unmerged.  
-**Project status:** accepted by the Project Director as a Brain architecture planning baseline, according to the recorded project handoff.
+**Historical status claim:** later project handoff material reports that this exact revision was accepted as a Brain architecture planning baseline. The current documentation audit did not recover the primary exact-revision Project Director decision record from PR #173's discussion. Treat the acceptance provenance as unresolved pending recovery or an explicit authority disposition; do not promote this historical handoff claim to independently verified acceptance.
 
 The proposal includes one cognitive authority, recurrent/branching/concurrent cognition, authoritative state ownership with shared context, plural representations, epistemic distinctions, experience-dependent development, intent/authorization separation, and capability-level acceptance criteria.
 
@@ -509,3 +509,10 @@ A proposed template set is added under `docs/templates/`:
 - `TEST_EVIDENCE_REPORT_TEMPLATE.md` — reproducible test context, exact commands, outcomes, failure analysis, coverage limits and provenance.
 
 The templates support consistent contributions from Builders, reviewers and testers. They are not accepted governance rules and do not replace the formal review or authority process. New substantive artifacts should be added to this inventory and the Planning Documentation Index in the same reviewed change.
+
+
+## 27. Authority-status qualification for PR #173 — 2026-11-07
+
+Section 5's historical handoff claim has been qualified. Later documents report that PR #173's exact Brain Foundation Architecture revision was accepted as a planning baseline, but the primary exact-revision Project Director decision record was not recovered from the available PR #173 discussion during the current audit. The inventory must therefore distinguish the recorded claim from independently verified provenance. Until the primary record is recovered or the designated authority explicitly dispositions the gap, the acceptance provenance remains unresolved.
+
+This qualification does not erase the historical claim, invalidate the technical content, or authorize implementation. It prevents the inventory from presenting an unverified authority claim as settled fact.

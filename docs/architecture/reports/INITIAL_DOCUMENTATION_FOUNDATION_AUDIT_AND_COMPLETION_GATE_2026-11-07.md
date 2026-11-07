@@ -19,7 +19,7 @@ The repository contains substantial and valuable architecture, research, specifi
 
 The live audit identified material blockers:
 
-1. The current index and continuity handoff still direct the next Builder to begin Stage A immediately. The latest user instruction requires the initial documentation foundation to be completed first.
+1. **Historical finding, corrected in subsequent commits:** the initial audit snapshot found Stage A instructions in the index/handoff. Later corrective commits moved the immediate task to the Initial Documentation Foundation Completion Gate and explicitly held Stage A. The later correction supersedes this initial observation; it is retained here to preserve the audit trail.
 2. The canonical index is proposed and unreviewed. The governance rules document it relies on is also proposed and unaccepted; it cannot silently be treated as an already accepted project-wide authority.
 3. PR #173's acceptance is claimed by later documents, but no explicit acceptance decision was found in PR #173's own discussion during this audit.
 4. PR #191 is based on a PR #179 commit that is 22 commits behind PR #179's current base/head lineage. It remains unreviewed.
@@ -540,3 +540,16 @@ The proposed documentation portal now links to a small template library under `d
 The templates standardize metadata, scope, evidence provenance, exact revision identifiers, findings, test reproducibility, limitations and authority boundaries. They are not project governance and do not replace formal review submissions, independent review, Project Director decisions or test execution.
 
 This improves contributor consistency but does not close the foundation gate. The fresh-reader test, independent review, exact-revision authority decision, historical preservation follow-up and unresolved provenance/status items remain open.
+
+
+## 13. Navigation package snapshot refresh — 2026-11-07
+
+The role-based portal and associated navigation corrections were committed to the PR #192 line. The portal links to the reusable template guide, and the legacy `docs/ARCHITECTURE.md` page now routes readers through the portal and current planning index.
+
+Latest verified PR snapshot for this refresh:
+- PR #192 HEAD: `273c2c0ac1d9d6a2291d339387ea6e88dae037d7`.
+- PR #193 HEAD: `03502c5719b320b9e323cb1d040ae38737fc7b81`.
+
+The portal and navigation files remain proposals pending independent review and the required exact-revision authority decision. A relative-link check was run over the root README, portal, planning index, inventory, audit, self-review and legacy architecture page: 44 repository-relative links resolved against the PR #192 tree, with no missing targets. This check did not verify every external URL, every commit-pinned cross-branch link, or every anchor target.
+
+The initial audit finding in §1 that Stage A instructions were present is explicitly historical and superseded by the later correction. Stage A remains held.

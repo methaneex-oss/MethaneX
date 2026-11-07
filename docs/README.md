@@ -18,6 +18,7 @@ This page is the human-facing entry point to the JARVIS documentation system. It
 2. Read the [Whole-Brain Planning Scope and Builder Correction](architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md) to understand what the project is and is not trying to build.
 3. Read the [Planning Documentation Index](architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md) for the reading order, document classifications, authority status and PR dependencies.
 4. Use the [Documentation and Artifact Inventory](architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md) when you need to locate historical work or understand why an artifact is retained.
+5. Use the [Documentation Templates Guide](templates/README.md) when creating a planning document, independent review report or test-evidence report.
 
 You do not need to read every historical report to understand the current task. Follow the relevant role route below.
 
@@ -185,9 +186,10 @@ Do not write “approved” without naming the exact revision, scope and decisio
 
 This portal is being introduced on PR #192's PR #179-derived line. The continuity handoff and deferred implementation plan are on PR #193's separate PR #175-derived line. They are not silently combined by this portal.
 
-At this snapshot:
-- PR #192 HEAD: 121298a8c33f918aa36eca3713b5fbb5b455fb3f.
-- PR #193 HEAD: 15fe766dca5fd9225d7576e5466df6a7fecb9d94.
+At the portal's latest verified repository refresh on 2026-11-07:
+- PR #192 HEAD: `273c2c0ac1d9d6a2291d339387ea6e88dae037d7`.
+- PR #193 HEAD: `03502c5719b320b9e323cb1d040ae38737fc7b81`.
+- Both are open, draft and unmerged. Fetch live PR metadata again before relying on these snapshot values.
 - PR #191 is a separate comparison proposal based on an earlier PR #179 snapshot.
 - PR #178 governance remains proposed and unaccepted.
 - PR #173 acceptance provenance remains unresolved in the available PR discussion.
