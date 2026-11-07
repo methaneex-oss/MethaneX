@@ -29,9 +29,13 @@ MethaneX/
 └── tests/                # Verification and regression tests
 ```
 
+## Documentation and planning navigation
+
+The [JARVIS Planning Documentation Index](docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md) is the entry point for the current planning work. It defines the reading order, document classes, authority distinctions, and links to the whole-Brain planning correction, prior architecture, research, and repository investigations. Read it before treating any individual planning report as authoritative.
+
 ## Brain
 
-The brain is being developed as a layered cognitive substrate including:
+The Brain's complete future capability architecture is still being planned. The following items are broad project concepts, not an exhaustive or accepted capability inventory, final mechanism decomposition, or implementation sequence:
 
 - persistent continuity memory
 - working context and attention
