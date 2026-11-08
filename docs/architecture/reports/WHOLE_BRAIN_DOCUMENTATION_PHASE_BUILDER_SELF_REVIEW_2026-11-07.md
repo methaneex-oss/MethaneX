@@ -696,3 +696,28 @@ A new recovery record for PR #174 follow-on review has recovered the separate F-
 ### 22.5 Self-review disposition
 
 Builder-controlled corrections are recorded, but they do not satisfy the missing reader, independent-review or authority evidence. The package is **NOT READY FOR ACCEPTANCE**. Stage A remains held; implementation remains unauthorized. No runtime source, tests, build configuration, workflows, dependencies, runtime state, or donor code were changed. No PR was merged, rebased, retargeted, cherry-picked or integrated.
+
+
+## 23. Final cross-lineage and status-pin self-review — 2026-11-08
+
+### 23.1 Exact snapshot before this self-review update
+
+- PR #192: open/draft/unmerged; HEAD 142e97337be9388fe7f728cd187beee2bcd69e76; base 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c; 23 changed files.
+- PR #193: open/draft/unmerged; HEAD d2ccbbb26595f28fb7488db4dbe778e7ddd58c7a; base 874c732973b6ab303d65a503f5a215b0af8e1153; 2 changed files.
+- PR #174: open/draft/unmerged; current administrative status-clarification HEAD 922912283d173e24df891ba23d0e2dfc17e0f4b4; the Project Director's accepted planning-baseline event remains tied to exact prior HEAD 0811a59e46bf934e32e794f90e4e7d18d4e2bd97.
+
+### 23.2 Cross-lineage consistency checks
+
+- PR #193's implementation plan no longer describes PR #173's exact architecture revision as accepted; it identifies the proposal and explicitly marks primary acceptance provenance unresolved.
+- PR #193's continuity handoff distinguishes the exact accepted PR #174 planning baseline from the later F-02/F-03 follow-on findings.
+- PR #193's handoff and plan pin to immutable PR #192 documentation snapshot `db5968bfbddf77590cd9303539abda00dd961ab7`. PR #192's index pins to the final PR #193 handoff/plan at HEAD d2ccbbb26595f28fb7488db4dbe778e7ddd58c7a. The cross-links intentionally use immutable snapshots to avoid a cyclic commit dependency.
+- PR #192's index and preservation register point to PR #174's latest administrative status-clarification HEAD 922912283d173e24df891ba23d0e2dfc17e0f4b4 and its specification blob `ac1621c43d60b2a556438371287c07ab2b20c8aa`. The accepted PR #174 planning baseline remains the earlier exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`; the administrative revision is not represented as a new approval.
+- The PR #174 provenance recovery record preserves F-02/F-03 as open and does not represent its recovered summary as the original report.
+
+### 23.3 Remaining work and self-review conclusion
+
+The cross-lineage status corrections and immutable pins are Builder-controlled documentation improvements. They do not resolve PR #173's missing primary acceptance record, PR #191's authorized integration disposition, exhaustive fragment/external-link validation, or the broader historical archive decisions.
+
+DF-09 remains NOT MET until an actual uninvolved human completes the 17-question protocol. DF-11 remains NOT MET until a genuinely separate reviewer submits a formal review against the exact final revision. DF-12 remains NOT MET until the Project Director records the exact-revision decision. The final changed-path/blob inventory must still be refreshed after this self-review and reviewer-handoff update.
+
+**Disposition: NOT READY FOR ACCEPTANCE.** Stage A remains held; implementation remains unauthorized. This is a Builder self-review only.
