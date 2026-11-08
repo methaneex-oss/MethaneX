@@ -656,3 +656,43 @@ The previous §21.2 correctly stated that PR #191's base is an ancestor of PR #1
 A new recovery record for PR #174 follow-on review has recovered the separate F-02/F-03 finding identities and principal themes, but not the original report verbatim. Follow-on F-02 concerns contextual language/operator-intent grounding (recovered HIGH / CONFIRMED); follow-on F-03 concerns enforceable downstream reasoning integration (recovered MEDIUM / CONFIRMED as a specification weakness). These are distinct from PR #173's F-02/F-03. Both remain open; the recovered summary does not close either finding or replace independent re-review. The Project Director must also disposition the missing-original-report limitation.
 
 **Self-review correction:** The prior §21 remains a Builder self-review, not an independent review. No acceptance or gate clearance is inferred.
+
+
+## 22. Final Builder self-review — authority, preservation and handoff corrections — 2026-11-08
+
+### 22.1 Exact snapshot before this self-review update
+
+- PR #192: open/draft/unmerged; HEAD 140608b544e30bcd73625cf609b5d84de133b01d; base 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c; 23 changed files.
+- PR #193: open/draft/unmerged; HEAD 3fc4c12add3656578da949689955aafd3b2b83af; base 874c732973b6ab303d65a503f5a215b0af8e1153; 2 changed files.
+- PR #174: open/draft/unmerged; current status-clarification HEAD 922912283d173e24df891ba23d0e2dfc17e0f4b4; accepted planning-baseline decision remains tied to prior exact HEAD 0811a59e46bf934e32e794f90e4e7d18d4e2bd97.
+- PR #192 review submissions / inline threads / conversation comments: 0 / 0 / 0 at the latest recorded query.
+
+### 22.2 Builder-controlled corrections completed
+
+1. Added a supplemental historical preservation register mapping 68 documentation paths across PR #171–#193 to immutable PR heads and fetched blob SHAs. This complements, rather than duplicates, the earlier branch discovery and selected duplicate/revision comparison report covering PR #96/#97/#148/#156/#170.
+2. Linked the supplemental register from the Planning Documentation Index and Documentation Portal.
+3. Enriched the PR #174 follow-on review provenance record with recovered F-02/F-03 severity, requirement themes and original overall verdict. The recovery remains explicitly partial; the original report and exact annotations remain unavailable.
+4. Corrected the PR #174 specification metadata and PR description so the accepted PR #174 planning baseline is distinct from the unresolved PR #173 parent-acceptance claim. The substantive specification was not changed. The new administrative revision is not yet independently reviewed or separately accepted.
+5. Corrected the PR #193 implementation-plan wording so PR #173 is described as a proposal with unresolved acceptance provenance. The PR #193 continuity handoff separately records the exact PR #174 acceptance and open F-02/F-03 obligations.
+6. Corrected the PR #191 dependency description: base-to-PR #179 is 22 ahead / 0 behind, but PR #179 HEAD versus PR #191 HEAD is diverged, with PR #191 one unique commit ahead and 22 behind. No rebase, retarget or cherry-pick was performed.
+7. Updated the audit with exact evidence and remaining gate blockers.
+
+### 22.3 Verification boundaries
+
+- The preservation register's 68 paths were individually returned by PR changed-file endpoints and fetched at their stated exact PR heads. This proves retrievability at those revisions, not universal archival completeness or authority.
+- The prior relative-link check recorded 63 resolved target paths and zero missing paths at its exact parent. It also identified 143 external URL occurrences not exhaustively checked; heading fragments and all historical cross-branch links remain incomplete. DF-06 remains PARTIAL.
+- The preservation report closes selected branch/document comparisons only. Broader non-JARVIS-named PR lineage, two unmatched branch refs, Developmental Brain Plan revision reconciliation and archive/supersession decisions remain open. DF-08 remains PARTIAL.
+- The PR #173 exact-revision Project Director acceptance decision was not recovered. No acceptance is inferred from downstream documents.
+- The PR #174 exact planning-baseline decision remains evidenced by comment 6604790481; the later F-02/F-03 obligations remain open. The original report is still only partially recovered.
+- PR #191 integration remains an authority decision; no branch-history operation was performed.
+
+### 22.4 Non-Builder requirements
+
+- DF-09 remains NOT MET until an actual uninvolved human completes the 17-question protocol without coaching and the raw evidence is recorded.
+- DF-11 remains NOT MET until a genuinely separate reviewer submits a formal review against the exact final revision. The GPT-6 reports are not counted.
+- DF-12 remains NOT MET until the Project Director makes an explicit exact-revision decision.
+- DF-03 and DF-05 also require the Project Director's disposition where primary authority evidence or branch integration is missing.
+
+### 22.5 Self-review disposition
+
+Builder-controlled corrections are recorded, but they do not satisfy the missing reader, independent-review or authority evidence. The package is **NOT READY FOR ACCEPTANCE**. Stage A remains held; implementation remains unauthorized. No runtime source, tests, build configuration, workflows, dependencies, runtime state, or donor code were changed. No PR was merged, rebased, retargeted, cherry-picked or integrated.
