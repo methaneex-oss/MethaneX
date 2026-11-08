@@ -314,3 +314,42 @@ PR #193's implementation plan and continuity handoff were updated to pin their l
 The exact PR #192 HEAD will change if further audit, self-review or inventory corrections are committed. The reviewer must fetch the live metadata, changed-path list and every changed file at the actual review target, and must check the inventory's parent-snapshot/self-reference convention.
 
 **Gate status remains NOT CLEARED.** DF-09 requires an actual uninvolved human reader; DF-11 requires a genuinely separate reviewer; DF-12 requires the designated authority's exact-revision decision. PR #173 provenance, PR #174's stale draft header and F-02/F-03 follow-on obligations, PR #191 dependency disposition, comprehensive anchor/external-link validation and broader historical preservation remain open or partial. Stage A remains held. No implementation, merge, rebase, retarget, cherry-pick, or branch deletion is authorized by this handoff.
+
+
+---
+
+## 15. Superseding reviewer handoff — authority/dependency remediation — 2026-11-08
+
+### 15.1 Exact target at handoff preparation
+
+| Item | Verified state |
+|---|---|
+| PR #192 | Open, draft, unmerged; HEAD `89a24754150497824e972c94b6fdf621246750f8`; base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; `23` changed files before this handoff commit |
+| PR #193 | Open, draft, unmerged; HEAD `3fc4c12add3656578da949689955aafd3b2b83af`; base `874c732973b6ab303d65a503f5a215b0af8e1153`; 2 changed files |
+| PR #192 formal reviews / inline review threads / issue comments | 0 / 0 / 0 returned by the latest queries |
+| PR #192 / PR #193 | Separate PR #179-derived and PR #175-derived lineages |
+
+The inventory update will create the next PR #192 commit. Reviewers must fetch live metadata and the full changed-path list again after that write; the parent snapshot recorded in the inventory is not the final HEAD.
+
+### 15.2 Authority corrections already made
+
+- PR #173's exact-revision Project Director acceptance remains **unestablished**: the retrieved PR #173 discussion contains Builder handoff/resubmission comments, not a primary acceptance decision. Do not infer acceptance from PR #174 or later documents.
+- PR #174 exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` was accepted as a planning baseline by Project Director comment `6604790481`. Its stale “Draft for independent review” header was corrected in PR #174 documentation-only commit `89cc526d735a645a848e84d5a67dde810819f96f`. The PR description was corrected to stop claiming PR #173 acceptance as established. F-02/F-03 follow-on obligations remain open.
+- The PR #174 follow-on report remains a partial provenance recovery. The original reviewer artifact was not recovered verbatim. Its findings remain open, and the Project Director's disposition of the provenance limitation is still required.
+- PR #178 governance remains proposed/unaccepted.
+
+### 15.3 PR #191 graph — exact comparison
+
+PR #191 base `f6267456560a08054d69f7960d2951452b14017c`, PR #179 HEAD `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, and PR #191 HEAD `609d38ede50bbdd98a93dfed112781eacabee9fd` were compared directly. PR #179 HEAD to PR #191 HEAD is **diverged: 1 ahead / 22 behind**, merge base `f6267456560a08054d69f7960d2951452b14017c`. PR #191 contributes one unique document commit on its historical base. Retargeting alone will not reconcile it. The Project Director must choose whether to review it as a historical-base artifact or authorize a new dependent revision that replays its single document commit onto current PR #179. No rebase, cherry-pick, retarget or branch rewrite is performed.
+
+### 15.4 Reviewer mandate
+
+Review the actual post-inventory PR #192 HEAD, not any historical SHA in earlier sections. Re-fetch all changed paths and blobs. Verify the refreshed inventory's parent-snapshot and self-reference semantics. Review the PR #174 status correction and its separation of accepted planning baseline from open follow-on findings. Challenge the PR #173 provenance classification, PR #191 graph, historical preservation register, link-validation coverage, portal/index/README consistency and DF-01–DF-13 evidence.
+
+A qualifying DF-11 review must be authored by a genuinely separate reviewer identity meeting the project's independence rule. A report produced by the Builder's GPT-6 identity, including prior reports, is not qualifying. The fresh-reader test is separate: DF-09 requires an actual uninvolved human to complete the 17-question protocol without coaching and preserve raw answers, navigation observations, assistance/time conditions and corrections.
+
+The reviewer must state exact PR #192 HEAD/base, changed-file count, reviewer identity and independence basis, methods, findings, limitations and explicit clearance recommendation. Submit a formal GitHub review and commit the full report to the repository. If reviewer independence is not satisfied, explicitly leave DF-11 NOT MET.
+
+### 15.5 Remaining authority gates
+
+DF-09, DF-11 and DF-12 remain NOT MET. PR #173 provenance, PR #174 follow-on F-02/F-03 and its provenance limitation, PR #191 dependency disposition, DF-06 broader link validation, DF-07 cross-lineage consistency and DF-08 full historical preservation remain open/partial. Stage A remains held. This handoff does not clear the gate, make a Project Director decision, authorize implementation or authorize PR integration.
