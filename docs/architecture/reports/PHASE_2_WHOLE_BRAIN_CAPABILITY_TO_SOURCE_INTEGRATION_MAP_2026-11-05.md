@@ -3890,7 +3890,7 @@ To close the external-host portions of criteria 2, 3, 5 and 6, the Project Direc
 
 If the deployed host is intentionally outside this repository, its contract and exact version must be attached or linked as review evidence. A repository-only source map cannot certify uninspected deployment behavior.
 
-### 61.4 Status
+### 60.4 Status
 
 **Bounded call-site search complete; external host remains unidentified.** Criteria 2, 3, 5 and 6 retain their existing PARTIAL/BLOCKED dispositions. No implementation authority or phase-exit status changes.
 
@@ -3922,7 +3922,7 @@ Do not infer that the reviewer failed to assess F-02/F-03, and do not infer that
 3. Keep SYS-08 substrate responsibility separate from goal-formation F-02; do not merge similarly numbered findings across review packages.
 4. Retain the existing accepted PR #174 baseline and its stated limits; this reconciliation does not revoke that acceptance.
 
-### 60.4 Status
+### 61.4 Status
 
 **Criterion 5 remains PARTIAL.** The original F-02/F-03 correction map and PR #174 acceptance are now better evidenced, but the specific follow-on review artifact / explicit owner disposition remains unresolved. No gate or implementation authority changes.
 
