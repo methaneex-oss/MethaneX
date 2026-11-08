@@ -1,6 +1,6 @@
 # JARVIS Brain — Integrated Mechanism Specification
 
-**Document status:** Draft for independent review  
+**Document status:** Accepted as the Brain Mechanism Specification planning baseline at PR #174 HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` by Project Director decision comment [#6604790481](https://github.com/methaneex-oss/MethaneX/pull/174#issuecomment-6604790481). This acceptance is planning-baseline acceptance only, not implementation authorization. The separately recorded follow-on F-02/F-03 obligations remain open and must be resolved before relying on the affected areas for implementation.  
 **Stage:** Detailed Brain Mechanism Specification  
 **Authority:** Project Director authorization received 2026-11-03 after acceptance of PR #173  
 **Accepted architecture baseline:** PR #173, commit \`97191111bc2573c14d391c0af9628db7b11f194b\`  
