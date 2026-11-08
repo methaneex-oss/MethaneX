@@ -915,3 +915,81 @@ GitHub's commit comparison from PR #191's base to PR #179's current head reports
 DF-09, DF-11 and DF-12 cannot honestly be closed by the Builder. DF-03 also cannot be closed by inventing a missing historical decision. DF-05/DF-07 require a deliberate authority decision where integration order is concerned. DF-06 and DF-08 require further evidence, not a status-label change.
 
 **Disposition: NOT CLEARED.** Stage A remains held; implementation remains unauthorized. This addendum corrects the dependency description and records live evidence; it does not claim that all outstanding criteria have been satisfied.
+
+
+## 24. Preservation, navigation and live-state correction — 2026-11-08
+
+This addendum records the Builder's latest bounded evidence work. It supersedes earlier live-state values only where it supplies a newer exact snapshot. Earlier snapshots remain historical evidence.
+
+### 24.1 Current PR and review state at parent snapshot
+
+Immediately before this audit update:
+
+| Item | Verified state |
+|---|---|
+| PR #192 | Open, draft, unmerged; HEAD `e017f9976177e1d7ed77b250d9cbacbf7367f8b9`; base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; 21 changed paths |
+| PR #193 | Open, draft, unmerged; HEAD `714142a24ed1ba286291bba8ccfc8a81f2f9115a`; base `874c732973b6ab303d65a503f5a215b0af8e1153`; 2 changed paths |
+| PR #192 formal reviews / inline review threads / conversation comments | 0 / 0 / 0 returned at this refresh |
+| PR #192 / PR #193 relationship | Separate PR #179-derived and PR #175-derived lineages; no integration, merge, rebase or retarget performed |
+
+### 24.2 Historical-preservation work completed in this pass
+
+The new [Historical Preservation and Cross-Revision Comparison Report](DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md) records:
+
+- 37 current branch refs returned by the repository-scoped `jarvis` branch search, grouped into 11 distinct commit tips;
+- 27 branch refs at the same PR #96 commit tip, demonstrating that these are aliases rather than 27 distinct content revisions;
+- principal branch-to-PR mappings and two refs for which no matching PR head was found in the 63-result repository-scoped JARVIS PR search;
+- all 12 shared Markdown files between PR #96 and PR #97 as byte-identical;
+- all 15 shared Markdown files between PR #97 and PR #156 as byte-identical;
+- 15 shared Markdown files between PR #148 and PR #156, of which 15 are identical except for the distinct Developmental Brain Plan revision (16 shared total);
+- 15 shared Markdown paths between PR #97 and PR #170, with 13 identical and two distinct (`README.md` and `docs/JARVIS_BRAIN_MASTER_BLUEPRINT.md`).
+
+This closes those selected duplicate/revision comparisons. It does not close the broader historical-preservation follow-up: all JARVIS-related PRs with non-JARVIS branch names have not yet been exhaustively mapped; the two unmatched branch refs still need owner/provenance confirmation; the two Developmental Brain Plan revisions need an authority-aware content disposition; and no archive/supersession relocation proposal has been accepted. No branch or file was moved, deleted or rewritten.
+
+### 24.3 Link validation actually performed
+
+At exact PR #192 parent HEAD `e017f9976177e1d7ed77b250d9cbacbf7367f8b9`:
+
+- the recursive repository tree contained 250 paths and was not truncated;
+- all 21 PR #192 changed files were fetched at that exact revision;
+- 63 relative Markdown link occurrences across those files were resolved against the tree;
+- **zero relative target paths were missing**;
+- 143 external URL occurrences were identified but not exhaustively fetched or semantically validated;
+- heading-fragment correctness and every historical/cross-branch link have not been exhaustively validated.
+
+Therefore DF-06 is improved but remains **PARTIAL**, not PASS. The path-existence result must not be described as full link validation.
+
+### 24.4 Cross-lineage navigation correction
+
+PR #193's implementation plan and continuity handoff now pin their PR #192 documentation references to commit `f481c710eb8a9e779a207fac52f82f0589d3b1b2`. The PR #193 handoff was updated again at commit `714142a24ed1ba286291bba8ccfc8a81f2f9115a`. The PR #192 index now points to that exact handoff revision. The handoff's link back to PR #192 intentionally targets the earlier `f481c710...` snapshot to avoid a cyclic commit dependency. Both PRs remain separate and must be re-fetched before any review.
+
+### 24.5 Authority and dependency findings remain explicit
+
+- **PR #173:** The complete PR #173 discussion query returned Builder handoff/resubmission comments, not a direct Project Director acceptance decision for exact architecture HEAD `97191111bc2573c14d391c0af9628db7b11f194b`. The architecture document itself still labels the proposal as proposed for independent review and Project Director decision. Treat its acceptance as **not established** unless the primary decision is recovered or the Project Director explicitly dispositions the missing provenance. Do not infer acceptance from PR #174's later acceptance.
+- **PR #174:** Comment `6604790481` records Project Director acceptance of exact specification HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` as the Brain Mechanism Specification planning baseline. The file header still says “Draft for independent review,” and follow-on F-02/F-03 remain open. This Builder pass does not edit the accepted specification or make the required status decision.
+- **PR #178:** remains proposed/unaccepted; no governance authority is inferred.
+- **PR #191:** comparison of base `f6267456560a08054d69f7960d2951452b14017c` to PR #179 HEAD `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` remains 22 commits ahead, 0 behind. No retarget/rebase is performed; an explicit authority disposition remains required.
+- **DF-09:** no genuinely uninvolved reader has completed the 17-question protocol; NOT MET.
+- **DF-11:** the available reviewer reports disclose the same GPT-6 identity as the Builder; no qualifying separate review exists; NOT MET.
+- **DF-12:** no exact-revision Project Director acceptance/rejection/conditional decision is recorded for the final package; NOT MET.
+- **DF-13:** Stage A remains not started and held; PASS for the hold only.
+
+### 24.6 Updated disposition
+
+| Criterion | Current Builder assessment |
+|---|---|
+| DF-01 — canonical entry point | Present; not independently verified |
+| DF-02 — synchronized inventory | Awaiting final snapshot refresh after this audit/self-review pass |
+| DF-03 — authority traceability | Improved: PR #173 explicitly unestablished; PR #174 exact-scope acceptance preserved; remaining authority decision required |
+| DF-04 — governance status honesty | PASS within current index: PR #178 remains proposed/unaccepted |
+| DF-05 — branch dependencies | Partial: exact lineages recorded; PR #191 disposition and PR #192/#193 integration order remain unauthorized |
+| DF-06 — durable links | PARTIAL: 63 relative target paths resolve; fragments, 143 external URL occurrences and exhaustive historical cross-branch links remain unchecked |
+| DF-07 — status consistency | Improved by current portal/index/PR #193 handoff and plan updates; independent contradiction review still required |
+| DF-08 — historical preservation | PARTIAL: selected branch and document comparisons completed; broader PR lineage and archive/supersession decisions remain open |
+| DF-09 — continuity reproducibility | NOT MET: genuine fresh-reader session absent |
+| DF-10 — Builder self-review | Awaiting final update against this pass |
+| DF-11 — qualifying independent review | NOT MET |
+| DF-12 — exact-revision authority decision | NOT MET |
+| DF-13 — planning hold | PASS: Stage A remains held |
+
+**Disposition: NOT CLEARED.** The Builder has closed specific evidence gaps and refreshed navigation, but the documentation foundation is not ready for acceptance. Stage A remains held. No runtime source, tests, build configuration, dependencies, workflows or runtime state were changed. No merge, rebase, retarget, cherry-pick, branch deletion, archive move, baseline selection or implementation action was performed.
