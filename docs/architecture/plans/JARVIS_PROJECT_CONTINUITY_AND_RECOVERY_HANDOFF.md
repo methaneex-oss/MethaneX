@@ -417,7 +417,7 @@ A new Builder must first identify the current task, exact branch and revision, a
 The portal is on the separate PR #192 / PR #179-derived line. This handoff remains on PR #193 / PR #175-derived line. The cross-lineage link is pinned to the portal revision; do not merge, rebase, retarget or copy files between these branches merely to simplify navigation.
 
 
-## 13. Follow-on review provenance and authority correction — 2026-11-08
+## 14. Follow-on review provenance and authority correction — 2026-11-08
 
 The PR #174 follow-on review record has been enriched from recovered prior-conversation evidence. Read the [PR #174 Follow-on Review Provenance Recovery](https://github.com/methaneex-oss/MethaneX/blob/db5968bfbddf77590cd9303539abda00dd961ab7/docs/architecture/reports/PR_174_FOLLOW_ON_REVIEW_PROVENANCE_RECOVERY_2026-11-06.md) in the PR #192 documentation line for the qualified recovery record. Also consult the [Historical Documentation Preservation Register](https://github.com/methaneex-oss/MethaneX/blob/db5968bfbddf77590cd9303539abda00dd961ab7/docs/architecture/inventory/HISTORICAL_DOCUMENTATION_PRESERVATION_REGISTER_2026-11-08.md) and [Historical Preservation and Cross-Revision Comparison Report](https://github.com/methaneex-oss/MethaneX/blob/db5968bfbddf77590cd9303539abda00dd961ab7/docs/architecture/reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md).
 
