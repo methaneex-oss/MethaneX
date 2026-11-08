@@ -463,3 +463,26 @@ The follow-up review does not close the documentation gate. DF-09 remains NOT ME
 DF-06 remains PARTIAL: existing validation covers a bounded earlier set of repository-relative Markdown paths and selected immutable links, not exhaustive fragment resolution, external reachability, semantic correctness or all historical cross-branch references. DF-07 remains PARTIAL because PR #192 and PR #193 are separate lineages and the legacy Phase 2 status must remain consistently qualified. DF-08 remains PARTIAL because a complete historical source-to-destination/history preservation map is still absent. PR #173 provenance remains unresolved; PR #174 header/follow-on obligations remain open; PR #191 dependency disposition remains unauthorized.
 
 **Disposition: NOT READY FOR ACCEPTANCE.** Stage A remains held. No source code, tests, build configuration, dependencies, workflows or runtime state were changed. No PR was merged, rebased, retargeted, cherry-picked or integrated. No implementation, baseline selection, gate clearance or authority decision is claimed.
+
+
+## 18. Repository review-record report and latest exact-revision refresh — 2026-11-08
+
+### 18.1 Report retrieved and assessed
+
+
+The review-record branch `docs/reviewer-records-foundation-20261108` contains the report `docs/review-records/documentation-foundation/2026-11-08_DOCUMENTATION_FOUNDATION_REVIEW_REPORT.md` (blob `5724c956e3fe9d801d86fdb7ce7122e61ab6ed2e`) and its navigation index. This is a separate review-record branch, not a changed file in PR #192 and not a formal GitHub review submission. The report explicitly discloses that its author and Builder share the ChatGPT (GPT-6) model identity; it therefore does not satisfy DF-11. Its disposition is CLEARANCE NOT RECOMMENDED.
+
+The report's inspected PR #192 snapshot was HEAD `cd61ace37206ed4621f84dbe0e3ca2a22c86947e` with 17 changed files; PR #193 was HEAD `976aa33f89cc02225296f59246f47982300f5b39` with 2 changed files. Its inventory/self-review freshness finding is valid for that inspected snapshot, but the report does not cover subsequent PR #192 commits. A later technical re-review at `5f204e3ea72d991ccc5d5695d824dc356fee0700` (19 changed files) also disclosed the same GPT-6 identity and is not qualifying independent review.
+
+At the current refresh, live PR #192 is HEAD `0ddf6daa8fb3491f8dfed6f4c704bbceaa3f6701`, base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, open/draft/unmerged, with 20 changed files. PR #193 remains HEAD `976aa33f89cc02225296f59246f47982300f5b39`, base `874c732973b6ab303d65a503f5a215b0af8e1153`, open/draft/unmerged, with 2 changed files. The current inventory blob at PR #192 HEAD is `b7b57b58e957cd3f4929b40b9f7b2f9028b77b67`; its Section 30 records all 20 PR #192 changed paths at parent HEAD `c1f4a0df600314ef04b2b09b103c7eaca625c9d2`, including the pre-update inventory blob. The live PR head advanced to `0ddf6daa...` after that inventory update.
+
+The new report's principal conclusions remain substantively applicable: DF-09 NOT MET; DF-11 NOT MET; DF-12 NOT MET; DF-03, DF-05–DF-08 remain partial/open. DF-01, DF-04 and DF-13 are supported within the report's bounded scope. The report does not clear the documentation foundation. Stage A remains held and implementation remains unauthorized.
+
+
+### 18.2 Builder disposition
+
+The report's FND-06 observation that the inventory and self-review were stale is grounded for its inspected `cd61ace...` / 17-file snapshot. Subsequent Builder corrections refreshed the inventory first against parent `c1f4a0d...` with all 20 paths and exact blobs; the current resulting inventory blob is `b7b57b58e957cd3f4929b40b9f7b2f9028b77b67` at live PR #192 HEAD `0ddf6daa...`. This refresh corrects the inventory register for the later 20-file snapshot, but does not make the report itself a review of that later revision.
+
+The report is retained as supporting technical assessment. It is not relabeled as independent, is not counted toward DF-11, and is not treated as a formal GitHub review. No report finding is closed solely by this Builder statement; exact-revision evidence and the appropriate authority remain required.
+
+**Current disposition: NOT READY FOR ACCEPTANCE.** DF-09, DF-11 and DF-12 remain NOT MET. PR #173 provenance and PR #174 status/follow-on obligations remain open; PR #191 dependency disposition remains unauthorized; DF-06, DF-07 and DF-08 remain partial. Stage A remains held. No source, tests, workflows, build configuration, dependencies or runtime files were changed.
