@@ -437,3 +437,43 @@ The reviewer must inspect the supplemental 68-path historical preservation regis
 PR #192 and PR #193 remain separate lineages. The immutable cross-link arrangement is intentional: PR #193 pins to a PR #192 snapshot; PR #192's index pins to PR #193's exact handoff/plan. No integration is implied. PR #191 requires a Project Director disposition; no rebase, retarget or cherry-pick is authorized by this handoff.
 
 **Gate remains NOT CLEARED.** DF-09 requires an actual uninvolved human reader; DF-11 requires a genuinely separate reviewer; DF-12 requires the Project Director's exact-revision decision. Stage A remains held and implementation remains unauthorized.
+
+
+## 18. Builder remediation synchronization — 2026-11-08
+
+### 18.1 Snapshot before this handoff update
+
+- PR #192: open, draft, unmerged; HEAD `6344cb49d4330f033897a6a202e883d798128ff6`; base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; 24 changed paths.
+- PR #193 remains a separate open/draft/unmerged PR #175-derived lineage. Fetch its live metadata and exact two changed paths before assessing cross-lineage status.
+- PR #174's accepted planning-baseline event remains tied to exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`; the later administrative clarification is not a new approval.
+- PR #173 acceptance provenance remains unverified/proposed. The full PR #173 discussion query did not reveal a primary Project Director acceptance comment for exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b`.
+
+### 18.2 New corrections for this review
+
+- The documentation portal navigation table was repaired; its three historical-navigation rows are now separate valid Markdown table rows.
+- The portal's stale mutable snapshot list was replaced with a live-state rule and current authority distinctions.
+- The outstanding-work register was added to the planning index and updated with the strongest recorded DF-06 and DF-08 evidence, explicit exclusions and authority boundaries.
+- The Builder self-review was extended with exact pre-update snapshot, work completed, remaining technical work and unfulfilled human/authority criteria.
+- The inventory already contains the 68-path historical register reference and the bounded 76-relative-link check at its exact parent snapshot. This is not a full final-HEAD anchor/semantic validation.
+
+### 18.3 Required reviewer actions
+
+1. Fetch live PR #192 metadata and all changed paths after the final inventory commit; do not rely on any snapshot SHA in this handoff as the final target.
+2. Fetch every changed file at that exact HEAD and compare the inventory's path/blob register.
+3. Review the portal and index navigation, including the repaired table and outstanding-work register link.
+4. Re-evaluate DF-06 precisely: relative target existence is boundedly evidenced; heading fragments, line-range anchors, semantic relevance and exhaustive historical/cross-branch links remain open unless independently verified at final HEAD.
+5. Re-evaluate DF-08 precisely: the 68-path register plus selected older PR comparisons are bounded evidence; broader non-JARVIS PR lineage and unresolved historical provenance/archive dispositions remain open.
+6. Verify PR #174's accepted exact planning baseline and administrative status clarification are not conflated; independently challenge the still-open F-02/F-03 obligations and the missing-original-report limitation.
+7. Verify PR #173 remains unverified/proposed unless primary acceptance evidence or a Project Director disposition is produced.
+8. Reproduce PR #191's divergent graph and do not treat retargeting as a valid integration fix.
+9. Treat PR #192 and PR #193 as separate lineages unless the Project Director explicitly orders otherwise.
+10. Do not count this Builder self-review or the earlier GPT-6 reviewer report as qualifying independent review.
+
+### 18.4 Requirements that remain external to the Builder
+
+- DF-09: an uninvolved human must complete the 17-question fresh-reader protocol without coaching; preserve raw answers and session conditions.
+- DF-11: a genuinely separate qualifying reviewer must submit a formal review against the exact final PR #192 revision.
+- DF-12: the Project Director must decide the exact reviewed revisions and scope after the evidence is complete.
+- PR #173 provenance and PR #191 / PR #192 / PR #193 dependency decisions require primary evidence or explicit Project Director disposition.
+
+**Builder recommendation: NOT CLEARED.** Stage A remains held. No merge, rebase, retarget, cherry-pick, archive move, branch deletion or implementation is authorized by this handoff.
