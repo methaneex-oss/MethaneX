@@ -1198,3 +1198,14 @@ PR #192 and PR #193 remain separate. No merge, rebase, retarget, cherry-pick, br
 - PR #193's implementation roadmap remains deferred/non-operative; it is not the whole-Brain architecture and does not authorize implementation.
 
 **Final Builder disposition: NOT CLEARED.** DF-09, DF-11 and DF-12 are not Builder-completable. DF-03 and DF-05 require primary evidence or Project Director disposition. DF-06 and DF-08 remain partial. Stage A remains held; implementation remains unauthorized.
+
+
+## 30. Exact inventory refresh and current gate boundary — 2026-11-08
+
+The Builder refreshed the detailed inventory at commit `3e8e2a520ccec3878afd5412070a1b1592a6d449`. It records all 24 PR #192 changed paths fetched at immutable parent `0008655719c49527e9b6a6b8dd033f080d44ad8e`, including the inventory's own pre-update blob. The resulting inventory blob is `7f73ada36a6d18a8e8e6871a849726899c83d315`. PR #192 remained open/draft/unmerged with 24 changed paths and base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` immediately after that write.
+
+This refresh closes the prior 23-versus-24 changed-path inventory staleness for the stated parent snapshot. It does not establish full current-head link correctness or broader historical preservation. DF-06 remains PARTIAL; DF-08 remains PARTIAL. DF-09 remains NOT MET until an uninvolved human completes the 17-question protocol. DF-11 remains NOT MET until a qualifying separate reviewer submits a formal review against the final exact revision. DF-12 remains NOT MET until the Project Director records the exact-revision decision.
+
+PR #173 remains UNVERIFIED / PROPOSED absent primary acceptance evidence or a Project Director disposition. PR #174's accepted planning baseline remains the exact earlier revision recorded by comment `6604790481`; follow-on F-02/F-03 remain OPEN. PR #191's divergent dependency and PR #192/#193 lineage order remain authority decisions. No rebase, retarget, cherry-pick, merge, Stage A start or implementation is performed or authorized by this addendum.
+
+**Disposition: NOT CLEARED. Stage A remains HELD.**
