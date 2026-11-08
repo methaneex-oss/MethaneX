@@ -549,22 +549,22 @@ The PR #192 parent used for this check is `1901d5f39d788d7ad928cc1045065d7b32f12
 
 ## 30. Exact documentation-package revision and blob register — 2026-11-08
 
-This register refreshes the documentation package against the live PR metadata fetched for the Builder response. The values below are exact pre-update branch heads and blob SHAs fetched from those commits. They supersede earlier branch-head snapshots for this review pass only; earlier snapshots remain as historical audit evidence.
+This is an immutable evidence snapshot of the live PR metadata and changed-file sets fetched at PR #192 HEAD `b34aed2f7f9b18400a852d145b200c1f4951a34b`, immediately before this inventory correction. It records the exact parent revision that was inspected; it does not claim that this file can contain its own resulting commit SHA or remain the live PR HEAD after a documentation write. Subsequent commits must be treated as later revisions and re-fetched before review.
 
 ### 30.1 Pull-request state and dependency register
 
 | Item | Exact revision / state |
 |---|---|
-| PR #192 | HEAD `cd61ace37206ed4621f84dbe0e3ca2a22c86947e`; base branch `docs/jarvis-phase-2-whole-brain-integration-map-20261105`; base SHA `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; open, draft, unmerged; 17 changed files |
+| PR #192 | HEAD `b34aed2f7f9b18400a852d145b200c1f4951a34b`; base branch `docs/jarvis-phase-2-whole-brain-integration-map-20261105`; base SHA `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; open, draft, unmerged; 19 changed files |
 | PR #193 | HEAD `976aa33f89cc02225296f59246f47982300f5b39`; base branch `plan/brain-implementation-roadmap-20261103`; base SHA `874c732973b6ab303d65a503f5a215b0af8e1153`; open, draft, unmerged; 2 changed files |
-| PR #192 formal reviews / threads / conversation comments | 0 / 0 / 0 returned |
-| PR #193 formal reviews / threads / conversation comments | 0 / 0 / 0 returned |
+| PR #192 formal reviews / threads / conversation comments | 0 / 0 / 0 returned at the live review-state query |
+| PR #193 formal reviews / threads / conversation comments | 0 / 0 / 0 returned at the live review-state query |
 | PR #192 and PR #193 relationship | Separate #179-derived and #175-derived lineages; no integration or ancestry change performed |
-| `main` | `1273ddbcd0087d189e01388ded2d362fb1e058d2` as recorded in the live PR metadata context; no main-branch write performed |
+| `main` | `1273ddbcd0087d189e01388ded2d362fb1e058d2` as recorded in the inventory baseline context; no main-branch write performed |
 
 ### 30.2 PR #192 changed-file blob register
 
-Every changed path returned by the live PR #192 changed-file endpoint was fetched at exact HEAD `cd61ace37206ed4621f84dbe0e3ca2a22c86947e`.
+All 19 changed paths returned by the live PR #192 changed-file endpoint were fetched at exact HEAD `b34aed2f7f9b18400a852d145b200c1f4951a34b`.
 
 | Repository path | Blob SHA |
 |---|---|
@@ -574,12 +574,14 @@ Every changed path returned by the live PR #192 changed-file endpoint was fetche
 | `docs/JARVIS_PHASE_2_COMPLETION.md` | `e0e57a44216fc36c52d469a79abfc8df058515a3` |
 | `docs/README.md` | `00d6a5996b1f76aeefc7fcda5e07a95de4c77288` |
 | `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md` | `1318ea9af7455a19fae1e67f669e176518b2696b` |
-| `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md` | `b91d03ecb738be0fefa83a0902c80cb8da056211` |
-| `docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md` | `1ed4c34f1444112f4a184dbe0e3ca2a22c86947e` |
+| `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md` | `526576b417aa33682e3e34e94c817f90ae6f8d29` |
+| `docs/architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_2026-11-08.md` | `ecd11354a858eb6e46cbd85b816836a2f88973c9` |
+| `docs/architecture/reports/INDEPENDENT_REVIEWER_HANDOFF_2026-11-08.md` | `fa74ed6b51e860b1a16dc12d1437d27d67867772` |
+| `docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md` | `6fee1e9a73cfa733ddb506383edb96e190fbf67f` |
 | `docs/architecture/reports/PHASE_1_REVIEW_CORRECTIONS_AND_SCOPE_RECONCILIATION_2026-11-05.md` | `a459cdfd02d850d455ca526e6823e68525776ba3` |
 | `docs/architecture/reports/PHASE_1_WHOLE_REPOSITORY_INVESTIGATION_AND_REUSE_AUDIT_2026-11-04.md` | `f725eda1e23d6558d90f6f7c87302019ef3a0dfc` |
 | `docs/architecture/reports/PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md` | `7cf312f6cc6fd880473a0b6ccc86cf53bf3b3533` |
-| `docs/architecture/reports/WHOLE_BRAIN_DOCUMENTATION_PHASE_BUILDER_SELF_REVIEW_2026-11-07.md` | `370456c7f0699e54bf7fe8979abe8eb0de551996` |
+| `docs/architecture/reports/WHOLE_BRAIN_DOCUMENTATION_PHASE_BUILDER_SELF_REVIEW_2026-11-07.md` | `7c2757c73086c78ecaa397edb33a17eede612d0d` |
 | `docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md` | `0187a0ac71bd0c95e94beb3bf006da9cc7c3605f` |
 | `docs/templates/INDEPENDENT_REVIEW_REPORT_TEMPLATE.md` | `f3176cf1a1f45735a3ad62fa4a865806edc24e08` |
 | `docs/templates/PLANNING_DOCUMENT_TEMPLATE.md` | `b9f71a923b0d717a3b29655574c89c10e0801115` |
@@ -595,20 +597,19 @@ Both changed paths returned by the live PR #193 changed-file endpoint were fetch
 | `docs/architecture/plans/00_BRAIN_IMPLEMENTATION_PLAN.md` | `d065e833d2211753985784d9de6e562e0f72bc2b` |
 | `docs/architecture/plans/JARVIS_PROJECT_CONTINUITY_AND_RECOVERY_HANDOFF.md` | `9eae4ffc1e4cc1f4673abecb880aa37558935026` |
 
-### 30.4 Builder correction and status boundary
+### 30.4 Reviewer findings and Builder disposition
 
-The independent reviewer identified two direct Builder corrections: stale revision/blob synchronization (DF-F01) and duplicate top-level numbering in the foundation audit (DF-F02). Both findings are accepted. The audit has been updated to renumber its later chronological sections and record the finding-by-finding disposition. This inventory and the Builder self-review are being updated to this same exact parent snapshot.
+The repository-based review report is committed at `docs/architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_2026-11-08.md`, blob `ecd11354a858eb6e46cbd85b816836a2f88973c9`. It identifies:
+- **DF-F01 — OPEN / REOPENED** at its inspected live HEAD: the prior register recorded an older PR #192 head, 17 files, and stale blob SHAs. This section replaces that obsolete snapshot with the exact 19-file parent snapshot above.
+- **DF-F02 — CORRECTED, limited scope:** the audit's top-level sections are sequential 1–18. This does not establish that every historical internal cross-reference is correct.
+- **DF-09 — NOT MET:** no genuine uninvolved fresh-reader session has been evidenced.
+- **DF-11 — NOT MET:** the report's author identifies as ChatGPT (GPT-6), the same model identity recorded as Builder. The report is useful technical scrutiny but does not meet the project's separate-reviewer independence requirement.
+- **DF-12 — NOT MET:** no exact-revision Project Director decision is recorded.
 
-The following remain unresolved and are not converted to passes by this update:
-- PR #173 exact-revision acceptance provenance;
-- PR #174's contradictory draft header and the open F-02/F-03 follow-on obligations;
-- PR #191 stale-base disposition;
-- full fragment-anchor, external-URL, and historical cross-branch link verification;
-- historical preservation follow-up;
-- DF-09 genuine fresh-reader test;
-- DF-11 qualifying independent review against the final resulting revision;
-- DF-12 exact-revision authority decision.
+Other unresolved items remain: PR #173 acceptance provenance; PR #174's accepted-revision header contradiction and follow-on F-02/F-03 obligations; PR #178 governance proposal status; PR #191 stale-base disposition; bounded DF-06 link validation; DF-07 cross-lineage status consistency; and DF-08 historical preservation.
 
 No fresh-reader result is fabricated. No acceptance decision is inferred. No PR was merged, rebased, retargeted, cherry-picked, or integrated. No source/runtime file was changed. Stage A remains held and implementation remains unauthorized.
 
-The update commits for the audit, inventory and self-review are sequential. Their final branch HEAD and final blob SHAs must be fetched after the last write; the pre-update SHAs above are evidence for the exact inspected snapshot, not claims about the resulting commit.
+### 30.5 Snapshot limitations
+
+This register is deliberately a snapshot at PR #192 HEAD `b34aed2f7f9b18400a852d145b200c1f4951a34b`, not a self-referential claim about the commit that updates this inventory. The resulting inventory write creates a later PR revision. Any subsequent reviewer must fetch the live PR metadata and changed-file list again, then verify the resulting inventory blob independently. Earlier snapshots are retained as historical evidence and must not be mistaken for the latest state.
