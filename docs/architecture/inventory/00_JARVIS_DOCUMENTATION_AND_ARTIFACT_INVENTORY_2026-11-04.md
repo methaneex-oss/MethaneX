@@ -545,3 +545,70 @@ A repository-relative Markdown link-path check was completed across all 24 Markd
 This is path-existence validation only. It does not validate fragment anchors, semantic correctness, external URL availability, or authority/status claims in linked documents. Those remain separate review obligations.
 
 The PR #192 parent used for this check is `1901d5f39d788d7ad928cc1045065d7b32f120c1`; PR #193 live HEAD at the time of the check was `976aa33f89cc02225296f59246f47982300f5b39`. The commit containing this addendum advances PR #192 and must be fetched before a later exact-revision review. No PR integration, base change, merge, or authority decision is implied.
+
+
+## 30. Exact documentation-package revision and blob register — 2026-11-08
+
+This register refreshes the documentation package against the live PR metadata fetched for the Builder response. The values below are exact pre-update branch heads and blob SHAs fetched from those commits. They supersede earlier branch-head snapshots for this review pass only; earlier snapshots remain as historical audit evidence.
+
+### 30.1 Pull-request state and dependency register
+
+| Item | Exact revision / state |
+|---|---|
+| PR #192 | HEAD `cd61ace37206ed4621f84dbe0e3ca2a22c86947e`; base branch `docs/jarvis-phase-2-whole-brain-integration-map-20261105`; base SHA `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; open, draft, unmerged; 17 changed files |
+| PR #193 | HEAD `976aa33f89cc02225296f59246f47982300f5b39`; base branch `plan/brain-implementation-roadmap-20261103`; base SHA `874c732973b6ab303d65a503f5a215b0af8e1153`; open, draft, unmerged; 2 changed files |
+| PR #192 formal reviews / threads / conversation comments | 0 / 0 / 0 returned |
+| PR #193 formal reviews / threads / conversation comments | 0 / 0 / 0 returned |
+| PR #192 and PR #193 relationship | Separate #179-derived and #175-derived lineages; no integration or ancestry change performed |
+| `main` | `1273ddbcd0087d189e01388ded2d362fb1e058d2` as recorded in the live PR metadata context; no main-branch write performed |
+
+### 30.2 PR #192 changed-file blob register
+
+Every changed path returned by the live PR #192 changed-file endpoint was fetched at exact HEAD `cd61ace37206ed4621f84dbe0e3ca2a22c86947e`.
+
+| Repository path | Blob SHA |
+|---|---|
+| `README.md` | `780651b804b491781fdcac8e248eaca9243797a4` |
+| `docs/ARCHITECTURE.md` | `3c6692b52059e43947d1fd2e7e84debb2362023f` |
+| `docs/JARVIS_BRAIN_MASTER_BLUEPRINT.md` | `0e49d313bf3929aa30140cb7149ebab038918378` |
+| `docs/JARVIS_PHASE_2_COMPLETION.md` | `e0e57a44216fc36c52d469a79abfc8df058515a3` |
+| `docs/README.md` | `00d6a5996b1f76aeefc7fcda5e07a95de4c77288` |
+| `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md` | `1318ea9af7455a19fae1e67f669e176518b2696b` |
+| `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md` | `b91d03ecb738be0fefa83a0902c80cb8da056211` |
+| `docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md` | `1ed4c34f1444112f4a184dbe0e3ca2a22c86947e` |
+| `docs/architecture/reports/PHASE_1_REVIEW_CORRECTIONS_AND_SCOPE_RECONCILIATION_2026-11-05.md` | `a459cdfd02d850d455ca526e6823e68525776ba3` |
+| `docs/architecture/reports/PHASE_1_WHOLE_REPOSITORY_INVESTIGATION_AND_REUSE_AUDIT_2026-11-04.md` | `f725eda1e23d6558d90f6f7c87302019ef3a0dfc` |
+| `docs/architecture/reports/PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md` | `7cf312f6cc6fd880473a0b6ccc86cf53bf3b3533` |
+| `docs/architecture/reports/WHOLE_BRAIN_DOCUMENTATION_PHASE_BUILDER_SELF_REVIEW_2026-11-07.md` | `370456c7f0699e54bf7fe8979abe8eb0de551996` |
+| `docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md` | `0187a0ac71bd0c95e94beb3bf006da9cc7c3605f` |
+| `docs/templates/INDEPENDENT_REVIEW_REPORT_TEMPLATE.md` | `f3176cf1a1f45735a3ad62fa4a865806edc24e08` |
+| `docs/templates/PLANNING_DOCUMENT_TEMPLATE.md` | `b9f71a923b0d717a3b29655574c89c10e0801115` |
+| `docs/templates/README.md` | `7209fd0fcda239349af602490d26b8c708b743da` |
+| `docs/templates/TEST_EVIDENCE_REPORT_TEMPLATE.md` | `9c6bbae48a22beb7c4e95858282d7d8d7b2159c2` |
+
+### 30.3 PR #193 changed-file blob register
+
+Both changed paths returned by the live PR #193 changed-file endpoint were fetched at exact HEAD `976aa33f89cc02225296f59246f47982300f5b39`.
+
+| Repository path | Blob SHA |
+|---|---|
+| `docs/architecture/plans/00_BRAIN_IMPLEMENTATION_PLAN.md` | `d065e833d2211753985784d9de6e562e0f72bc2b` |
+| `docs/architecture/plans/JARVIS_PROJECT_CONTINUITY_AND_RECOVERY_HANDOFF.md` | `9eae4ffc1e4cc1f4673abecb880aa37558935026` |
+
+### 30.4 Builder correction and status boundary
+
+The independent reviewer identified two direct Builder corrections: stale revision/blob synchronization (DF-F01) and duplicate top-level numbering in the foundation audit (DF-F02). Both findings are accepted. The audit has been updated to renumber its later chronological sections and record the finding-by-finding disposition. This inventory and the Builder self-review are being updated to this same exact parent snapshot.
+
+The following remain unresolved and are not converted to passes by this update:
+- PR #173 exact-revision acceptance provenance;
+- PR #174's contradictory draft header and the open F-02/F-03 follow-on obligations;
+- PR #191 stale-base disposition;
+- full fragment-anchor, external-URL, and historical cross-branch link verification;
+- historical preservation follow-up;
+- DF-09 genuine fresh-reader test;
+- DF-11 qualifying independent review against the final resulting revision;
+- DF-12 exact-revision authority decision.
+
+No fresh-reader result is fabricated. No acceptance decision is inferred. No PR was merged, rebased, retargeted, cherry-picked, or integrated. No source/runtime file was changed. Stage A remains held and implementation remains unauthorized.
+
+The update commits for the audit, inventory and self-review are sequential. Their final branch HEAD and final blob SHAs must be fetched after the last write; the pre-update SHAs above are evidence for the exact inspected snapshot, not claims about the resulting commit.
