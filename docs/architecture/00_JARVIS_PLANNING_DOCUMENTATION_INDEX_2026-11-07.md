@@ -206,3 +206,19 @@ This closes the specific comparisons stated in that report only. It does not clo
 ### Current review discipline
 
 The live PR #192 and PR #193 heads, changed-path lists and file blobs must be re-fetched before any review. Their lineages remain separate. The inventory is the exact changed-path/blob register; this index is the navigation and authority map. Neither document grants approval, merges lineages, clears the documentation gate, starts Stage A or authorizes implementation.
+
+
+## 12. Supplemental historical preservation register — 2026-11-08
+
+The [Historical Documentation Preservation Register](inventory/HISTORICAL_DOCUMENTATION_PRESERVATION_REGISTER_2026-11-08.md) complements the earlier [Historical Preservation and Cross-Revision Comparison Report](reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md).
+
+- The earlier report records branch discovery and selected duplicate/revision comparisons across the PR #96/#97/#148/#156/#170 lineage.
+- The supplemental register maps the changed documentation artifacts in PRs #171, #172, #173, #174, #175, #178, #179, #191, #192 and #193 to immutable PR heads and fetched blob SHAs.
+- The register records authority distinctions and explicitly preserves unresolved status rather than promoting proposals to accepted decisions.
+- Its PR #192 and PR #193 entries are historical snapshots at their stated heads; fetch live metadata and changed-file lists before any later review.
+
+### PR #191 graph clarification
+
+The base of PR #191 (f6267456560a08054d69f7960d2951452b14017c) is an ancestor of PR #179 HEAD (61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c): the base-to-#179 comparison reports 22 commits ahead and 0 behind. However, comparing PR #179 HEAD to PR #191 HEAD (609d38ede50bbdd98a93dfed112781eacabee9fd) reports **diverged**, with PR #191 one unique commit ahead and 22 commits behind the PR #179 line. Retargeting alone does not reconcile this graph. Any rebase, cherry-pick, or other integration path requires an explicit authority decision; none is performed here.
+
+The register materially improves DF-08 evidence for the enumerated PR artifact sets. It does not complete the broader repository-wide preservation requirement or authorize branch/file movement, deletion, merge, rebase, retarget, cherry-pick, Stage A, or implementation.
