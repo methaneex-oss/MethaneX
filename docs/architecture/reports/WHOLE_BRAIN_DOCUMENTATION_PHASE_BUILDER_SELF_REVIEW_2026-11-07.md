@@ -732,3 +732,38 @@ The latest Builder-controlled state has: (1) a supplemental 68-path historical p
 The remaining work is not Builder-completable: DF-09 requires the actual uninvolved human session; DF-11 requires a genuinely separate formal reviewer; DF-12 requires the Project Director's exact-revision decision. PR #173 provenance and PR #191 dependency disposition require authority or primary evidence. DF-06 and DF-08 remain partial. The final 23-path inventory must be refreshed after this self-review and the reviewer handoff, at the exact immutable parent immediately before the inventory write.
 
 **Disposition: NOT READY FOR ACCEPTANCE.** Stage A remains held; implementation remains unauthorized. This is a Builder self-review only.
+
+
+## 23. Final Builder-controlled remediation review — 2026-11-08
+
+### 23.1 Exact snapshot before this self-review update
+
+- PR #192: open, draft, unmerged; HEAD `d07cf190691885ddb25da6861f0e4b0b3331edaf`; base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; changed paths: 24.
+- PR #193 remains a separate open/draft/unmerged lineage; its exact live metadata must be fetched by the reviewer.
+- PR #174's accepted planning-baseline decision remains tied to exact earlier HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`; the later administrative status clarification is not a new acceptance.
+- PR #192 formal review submissions, inline review threads and conversation comments must be re-queried at review time; no historical zero-count snapshot is treated as permanent.
+
+### 23.2 Corrections completed in the current remediation pass
+
+1. Repaired the documentation portal's malformed navigation-table rows, added the outstanding-work register to the navigation map, and removed stale mutable snapshot values from its current-authority explanation.
+2. Added the outstanding-work and authority register to the canonical planning index.
+3. Updated the outstanding-work register with the strongest available exact-snapshot link-validation and preservation evidence, and separated Builder-controlled work from human/Project Director obligations.
+4. Re-fetched all 24 changed PR #192 paths at the working branch during this pass; every fetch returned file content and a blob SHA.
+5. Reconfirmed that PR #173's discussion contains Builder handoff/resubmission comments but no primary Project Director acceptance decision for exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b`.
+6. Reconfirmed PR #191's graph: its base is 22 commits behind current PR #179 HEAD in ancestry terms, while its own head diverges from PR #179 by one unique commit ahead and 22 behind. Retargeting alone is not sufficient.
+7. Preserved the explicit separation between PR #192 and PR #193; no branch-history operation or integration was performed.
+
+### 23.3 Verification limits and remaining Builder work
+
+- **DF-06 remains PARTIAL.** The strongest recorded path check is 76 relative-link occurrences across 23 changed files at exact parent `fb30fd7ac5cc80c86b84edd4e6d7497253b72775`, checked against a complete, non-truncated 252-path tree with zero missing relative targets. It is not the current final 24-file snapshot. Heading fragments, line-range anchors, semantic relevance and exhaustive historical cross-branch validation remain open.
+- **DF-08 remains PARTIAL.** The 68-path preservation register and selected PR #96/#97/#148/#156/#170 comparisons are real bounded evidence, not proof of repository-wide archive completeness. Broader non-JARVIS-named PR lineage, unmatched branch provenance and remaining historical revision dispositions still require research.
+- **PR #174 F-02/F-03 remain OPEN.** The recovered review summary is partial and secondary; the original full report/annotations are unavailable. No speculative substantive correction was made without the source finding details.
+- **PR #173 acceptance remains UNVERIFIED / PROPOSED** unless a primary decision or explicit Project Director disposition is supplied.
+- **PR #191 and PR #192/#193 lineage decisions remain with the Project Director.** No rebase, cherry-pick, retarget or merge was performed.
+- **DF-09 remains NOT MET:** no uninvolved human has completed the 17-question protocol.
+- **DF-11 remains NOT MET:** no qualifying separate reviewer has submitted a formal review.
+- **DF-12 remains NOT MET:** no Project Director exact-revision decision exists.
+
+### 23.4 Self-review conclusion
+
+The Builder-controlled corrections above are complete for this pass, but the documentation-foundation package is **NOT READY FOR ACCEPTANCE**. The gate remains **NOT CLEARED**. Stage A remains held; implementation remains unauthorized. This is a Builder self-review, not an independent review or Project Director decision.
