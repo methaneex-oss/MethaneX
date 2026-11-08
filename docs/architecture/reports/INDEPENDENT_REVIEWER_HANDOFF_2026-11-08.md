@@ -557,3 +557,17 @@ The final inventory synchronization is the last Builder-controlled write. The re
 **Builder recommendation:** READY TO SUBMIT FOR INDEPENDENT REVIEW — NOT CLEARED FOR ACCEPTANCE. DF-06 and DF-08 remain partial; DF-09 requires an uninvolved human; DF-11 requires a genuinely separate reviewer identity and formal review; DF-12 requires the Project Director's exact-revision decision. PR #173 provenance, PR #174 follow-on F-02/F-03, PR #191 disposition and PR #192/#193 ordering remain unresolved as described in the controlling report.
 
 Stage A remains HELD. No implementation or branch-history operation is authorized.
+
+
+## 22. Builder response to technical re-review — 2026-11-08
+
+The technical re-review report is committed in this PR. Its reviewer identity is ChatGPT (GPT-6), the same identity as the Builder; it is useful technical scrutiny but does not satisfy DF-11. Do not represent the existing COMMENT review or report as qualifying independent review.
+
+The Builder has corrected the three specific numbering defects identified in the report:
+- Planning index section order: commit `afcd6f434a4a2c1b6da2c19bb11a33bbc508a177`.
+- Inventory duplicate §37 / subsequent section numbering: commit `9d1c4d1009e771900dd17568471a0a8dfa3fdbb8`.
+- Phase 2 swapped §60.4 / §61.4 status headings: commit `1d0c5d265d736d57a915690699ee46e0f81b1105`.
+
+The Builder reconciliation report now records a 26-path exact parent snapshot at `1d0c5d265d736d57a915690699ee46e0f81b1105`. A final inventory refresh is being written after all preceding document updates. The reviewer must always fetch the live PR #192 HEAD, complete changed-file list and every changed blob before a new review; older snapshots in this handoff are historical evidence only.
+
+Still open: full DF-06 link validation; broader DF-08 historical preservation; DF-09 uninvolved fresh-reader evidence; DF-11 qualifying independent review; DF-12 Project Director exact-revision decision. PR #173 provenance, PR #174 follow-on F-02/F-03, PR #191 disposition, and PR #192/#193 integration order remain unresolved as already qualified. Stage A remains held; implementation and integration remain unauthorized.
