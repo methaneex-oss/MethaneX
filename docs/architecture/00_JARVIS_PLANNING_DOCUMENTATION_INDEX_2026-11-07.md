@@ -187,3 +187,11 @@ The documentation portal is proposed on PR #192. The continuity handoff and defe
 The [Documentation Templates Guide](../templates/README.md) provides consistent starting structures for planning/technical documents, independent review reports and test-evidence reports. Templates are aids only; they do not create authority, substitute for formal GitHub review, or prove that tests were executed.
 
 When adding a substantive planning artifact, use the appropriate template where helpful, then update this index and the detailed inventory in the same reviewed change.
+
+## 11. Reviewer records and review evidence
+
+The [JARVIS Review Records index](../review-records/README.md) is the canonical navigation point for reviewer-authored reports and evidence. Records are grouped by subject under `docs/review-records/`; the root index defines filing, independence-disclosure, evidence, finding-lifecycle and historical-preservation rules.
+
+The documentation-foundation assessment of PRs #192 and #193 is recorded at [2026-11-08 Documentation Foundation Review Report](../review-records/documentation-foundation/2026-11-08_DOCUMENTATION_FOUNDATION_REVIEW_REPORT.md). It recommends no clearance and records DF-01–DF-13 dispositions. **Important limitation:** the report shares the GPT-6 model identity recorded as Builder in the Builder self-review. It is a technical assessment for traceability, not a qualifying independent review and does not satisfy DF-11.
+
+A stored review report, a PR conversation comment, a formal GitHub review submission, an exact-scope acceptance decision, gate clearance and implementation authorization are distinct records/states. Use the report's own independence and authority disclosures; do not infer status from its presence in this directory.
