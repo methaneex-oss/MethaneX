@@ -228,3 +228,44 @@ The report inspected PR #192 HEAD `cd61ace37206ed4621f84dbe0e3ca2a22c86947e` (17
 The current PR #192 live HEAD is `0ddf6daa8fb3491f8dfed6f4c704bbceaa3f6701`, base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, open/draft/unmerged, 20 changed files. PR #193 remains at HEAD `976aa33f89cc02225296f59246f47982300f5b39`, base `874c732973b6ab303d65a503f5a215b0af8e1153`, open/draft/unmerged, 2 changed files. Inventory Section 30 has been refreshed against parent `c1f4a0df600314ef04b2b09b103c7eaca625c9d2`, with all 20 paths and exact fetched blob SHAs; the resulting inventory blob is `b7b57b58e957cd3f4929b40b9f7b2f9028b77b67` at current HEAD `0ddf6daa...`.
 
 The report's final disposition is accepted as the correct gate recommendation, but its independence limitation is decisive: DF-11 remains NOT MET. DF-09 remains NOT MET; DF-12 remains NOT MET. Stage A remains held and implementation unauthorized. This handoff requests review only and does not make any authority decision.
+
+
+## 12. Final Builder correction-pass handoff — 2026-11-08
+
+### 12.1 Current exact review target at handoff update
+
+After the audit and Builder self-review addenda were committed, PR #192 was re-fetched. At the time this handoff update was prepared:
+
+| Item | Verified value |
+|---|---|
+| Repository | `methaneex-oss/MethaneX` |
+| PR #192 | Open, draft, unmerged |
+| PR #192 branch | `docs/whole-brain-planning-scope-correction-20261107` |
+| PR #192 HEAD | `8b55d87f16fff836d1436f966fd5468a2a6f5344` |
+| PR #192 base | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` |
+| PR #192 changed paths | 20 |
+| PR #193 | Open, draft, unmerged; separate lineage |
+| PR #193 HEAD / base | `976aa33f89cc02225296f59246f47982300f5b39` / `874c732973b6ab303d65a503f5a215b0af8e1153` |
+| PR #193 changed paths | 2 |
+
+The audit's current-state addendum is §22, blob `50ded0c25eaad4fff02b094c3b9ea05fe4dde720`. The Builder self-review addendum is §18, blob `6f9222456ca1577ec34ca348799e4fc97fee862e`. The inventory's final exact changed-path register is being refreshed as the last documentation write in this pass; its immutable parent snapshot and inventory self-reference exception must be explicit.
+
+Re-fetch live metadata before review. The HEAD above is the target at this handoff update, not a promise that no later authorized documentation commit will occur.
+
+### 12.2 Required reviewer outcome and non-qualifying prior reports
+
+The two existing reports in this PR disclose the same ChatGPT (GPT-6) model identity as the Builder. They must remain classified as useful technical scrutiny, not as DF-11 qualifying independent review. The live PR #192 queries at the preceding refresh returned zero formal review submissions, zero inline threads and zero conversation comments.
+
+A new reviewer must state their identity, independence basis, prior involvement and limitations; inspect the live exact PR revision, all changed paths and the inventory register; and issue a clear gate recommendation. If the reviewer does not meet the project's independence requirement, they must say so and DF-11 remains NOT MET.
+
+### 12.3 Remaining gate blockers — do not conceal or simulate
+
+1. **DF-09:** The fixed 17-question protocol is prepared but has not been completed by a genuinely uninvolved reader. Do not simulate, coach or fabricate a session.
+2. **DF-11:** A qualifying reviewer separate from the Builder's GPT-6 identity is still required.
+3. **DF-12:** The Project Director must record an explicit decision against the exact reviewed artifact revisions. The reviewer and Builder cannot make this decision.
+4. **DF-03 / PR #173:** Recover the primary exact-revision Project Director decision for architecture HEAD `97191111bc2573c14d391c0af9628db7b11f194b`, or retain its status as unresolved pending the Director's explicit disposition.
+5. **PR #174:** Preserve the exact accepted planning-baseline decision while separately resolving the stale draft header and open F-02/F-03 obligations through an authorized process. Do not alter accepted substantive content in this review pass.
+6. **PR #191:** Obtain an explicit disposition of the 22-commit stale-base relationship. Do not rebase or retarget without authority.
+7. **DF-06 / DF-07 / DF-08:** Complete the broader link/fragment/external-reference checks, cross-lineage status reconciliation and historical preservation mapping; current evidence remains partial.
+
+**Builder recommendation:** clearance is not recommended until these evidence and authority requirements are satisfied. Stage A remains held. This handoff requests review only; it does not satisfy DF-09/DF-11/DF-12, clear the gate, authorize Stage A, authorize implementation, or authorize merge/rebase/retarget/integration.
