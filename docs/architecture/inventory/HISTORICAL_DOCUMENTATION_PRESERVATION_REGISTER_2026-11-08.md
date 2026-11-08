@@ -304,9 +304,9 @@ Each path below was fetched at the exact PR head and its returned blob SHA match
 
 PR #180 is closed but unmerged; its single map artifact remains preserved as a historical revision. PRs #160, #164, #166–#170 and #181–#190 are open at this snapshot; the PR listing identifies their authors as `methaneex-oss`. In particular, the PRs titled as independent Phase 2 reviews (#183, #184, #188, #189, #190) were authored by that same repository account and have no formal GitHub review submissions. Their titles and report contents do not establish an independent reviewer identity or satisfy DF-11.
 
-### 5.3 Corrected current PR #192 snapshot — 26 paths
+### 5.3 Exact PR #192 parent snapshot immediately before this register expansion — 26 paths
 
-At exact PR #192 HEAD `8b6c257bc40748e3d96a0fdf2272b774f54d7a17`, base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, state open/draft/unmerged, all 26 changed paths were fetched. Each fetched blob matched the GitHub PR-files API. The complete recursive tree contained 255 entries / 227 blobs and was not truncated.
+At exact PR #192 parent HEAD `8b6c257bc40748e3d96a0fdf2272b774f54d7a17`, immediately before this register expansion commit `9a8c12eb238dd5cd1b223497583dcd39bc492aea`, base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, state open/draft/unmerged, all 26 changed paths were fetched. Each fetched blob matched the GitHub PR-files API. The complete recursive tree contained 255 entries / 227 blobs and was not truncated. This is a historical parent snapshot; later control-document commits are covered by the final Builder closure report and inventory.
 
 | Repository path | Blob SHA |
 |---|---|
@@ -337,7 +337,7 @@ At exact PR #192 HEAD `8b6c257bc40748e3d96a0fdf2272b774f54d7a17`, base `61311fe5
 | `docs/templates/README.md` | `7209fd0fcda239349af602490d26b8c708b743da` |
 | `docs/templates/TEST_EVIDENCE_REPORT_TEMPLATE.md` | `9c6bbae48a22beb7c4e95858282d7d8d7b2159c2` |
 
-This current snapshot supersedes the earlier PR #192 live-state rows in §1/§2/§4, which remain historical. It also corrects the earlier 68-path total: six PR #192 artifacts omitted from that earlier table are now present above, and the broader 18-PR set in §5.2 adds 34 more paths. Together with the 68 previously registered paths, the expanded documentation lineage contains 108 paths across 28 PRs.
+This exact parent snapshot supersedes the earlier PR #192 live-state rows in §1/§2/§4, which remain historical. The final live HEAD is recorded by the Builder closure report and the final inventory parent-snapshot manifest. It also corrects the earlier 68-path total: six PR #192 artifacts omitted from that earlier table are now present above, and the broader 18-PR set in §5.2 adds 34 more paths. Together with the 68 previously registered paths, the expanded documentation lineage contains 108 paths across 28 PRs.
 
 ### 5.4 Corrected current PR #193 snapshot — 2 paths
 
