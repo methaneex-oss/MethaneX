@@ -241,3 +241,39 @@ This is a parent snapshot. Updating this report and the inventory advances PR #1
 - DF-12: no exact-revision Project Director decision is claimed.
 
 **Disposition remains NOT CLEARED FOR ACCEPTANCE. Stage A remains HELD. Implementation remains unauthorized.**
+
+
+## 11. Builder closure evidence reconciliation — 2026-11-08
+
+This addendum supersedes earlier live-state and open-work statements only for the exact parent snapshot recorded here. PR #192 parent HEAD: 4709b95f8324d4b1e749f10563e2fc5d648d085a; base: 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c; state: open/draft/unmerged; changed paths: 26. The final inventory and final closure report are still to be committed after the remaining control-document updates.
+
+### 11.1 Builder-controlled findings closed in this pass
+
+1. **DF-06 — links and anchors:** all 84 repository-relative Markdown targets in the 26-file package resolve against a complete, non-truncated tree (255 entries / 227 blobs). The Phase 2 source map's 89 immutable GitHub blob links cover 45 exact commit/path pairs; all 45 fetched blobs match the recorded source identities. All 76 line-anchor ranges are within the exact fetched file lengths after correcting the goal-feedback suite link from #L1-L90 to #L1-L84; 13 source links have no line anchor. The 189 external URL occurrences were classified and checked against GitHub PR, blob/tree, Actions, artifact-list and compare metadata. One historical ChatGPT share pointer remains access-limited and is disclosed as unverified, not asserted broken.
+2. **DF-07 — status consistency:** PR #173 is consistently UNVERIFIED/PROPOSED; PR #174 acceptance is consistently limited to its exact planning baseline; PR #174 F-02/F-03 remain open; PR #178 remains proposed/unaccepted; PR #191 remains a divergent historical-base PR; PR #192 and #193 remain separate lineages; Stage A remains held. The old PR #173 “accepted” label in the Phase 1 evidence index is now explicitly superseded and its branch-based source links are pinned to immutable commits.
+3. **DF-08 — historical preservation:** paginated discovery covered 245 branches and 184 PRs. The historical register now maps 108 documentation paths across 28 documentation PRs and records 37 documentation-family branch refs with exact tips. The two formerly unmatched refs are mapped by ancestry; the 27-ref PR #96 alias family is one content tip, not 27 revisions. No branch or file was deleted, moved or archived.
+4. **PR #173 / #174 provenance:** PR #173's primary discussion/review endpoints contain two Builder-authored comments, zero formal reviews and zero inline review comments; no direct Project Director acceptance decision was recovered. PR #174's acceptance comment 6604790481 is exact and limited to planning-baseline acceptance. Its current header reflects that scope. The original F-02/F-03 review report and inline annotations remain unavailable; those obligations remain open and no speculative fix is claimed.
+5. **Premature reviewer request:** the earlier request has been explicitly withdrawn/suspended in its repository file and PR conversation. No new reviewer request has been issued and no qualifying reviewer is assigned.
+6. **Self-review numbering:** duplicate/out-of-order top-level section numbers in the Builder self-review were corrected to a sequential continuation. The final exact-head self-review remains to be appended after the final inventory snapshot.
+
+### 11.2 Current gate matrix
+
+| Criterion | Builder disposition | External requirement / limit |
+|---|---|---|
+| DF-01 | Portal/index/role routes present | Uninvolved fresh-reader confirmation |
+| DF-02 | Final inventory snapshot is the last Builder synchronization step | Independent post-write exact-revision verification |
+| DF-03 | PR #173 acceptance remains unverified; PR #174 accepted planning baseline only | Project Director disposition of PR #173 provenance |
+| DF-04 | PR #178 remains proposed/unaccepted | Project Director acceptance if desired |
+| DF-05 | PR #191 graph and separate PR #192/#193 lineages documented | Project Director dependency/order decision |
+| DF-06 | Builder path/anchor/external-reference validation complete within recorded scope; one access-limited historical pointer disclosed | Independent semantic challenge remains possible |
+| DF-07 | Builder-controlled status reconciliation complete | Independent reviewer confirmation |
+| DF-08 | 108-path/28-PR preservation register and paginated discovery complete | Project Director archive/supersession decisions |
+| DF-09 | Fixed 17-question protocol prepared; not executed | Actual uninvolved human session and raw evidence |
+| DF-10 | Builder self-review corrections and numbering complete | Final exact-HEAD inventory/self-review synchronization |
+| DF-11 | No qualifying separate reviewer identified or assigned | Separate reviewer identity and formal GitHub review |
+| DF-12 | No decision inferred | Project Director exact-revision decision |
+| DF-13 | Stage A remains NOT STARTED and HELD | No implementation authorization |
+
+### 11.3 Final Builder disposition
+
+The avoidable Builder-controlled link, anchor, external-reference, branch-discovery, documentation-path mapping, status-label and numbering defects identified in the current evidence have been corrected or bounded with explicit evidence. The remaining Builder work is the final exact-HEAD inventory, the final self-review/closure report synchronization, and post-write verification. The package is **NOT CLEARED FOR ACCEPTANCE**; no independent review is active or requested, and Stage A remains held. The human reader, qualifying independent reviewer and Project Director decision remain distinct external gates and are not represented as complete.
