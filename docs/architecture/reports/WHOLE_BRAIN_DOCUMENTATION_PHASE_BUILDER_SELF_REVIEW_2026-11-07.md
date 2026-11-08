@@ -486,3 +486,28 @@ The report's FND-06 observation that the inventory and self-review were stale is
 The report is retained as supporting technical assessment. It is not relabeled as independent, is not counted toward DF-11, and is not treated as a formal GitHub review. No report finding is closed solely by this Builder statement; exact-revision evidence and the appropriate authority remain required.
 
 **Current disposition: NOT READY FOR ACCEPTANCE.** DF-09, DF-11 and DF-12 remain NOT MET. PR #173 provenance and PR #174 status/follow-on obligations remain open; PR #191 dependency disposition remains unauthorized; DF-06, DF-07 and DF-08 remain partial. Stage A remains held. No source, tests, workflows, build configuration, dependencies or runtime files were changed.
+
+
+## 18. Final Builder-controlled correction pass — 2026-11-08
+
+### 18.1 Live-state refresh and evidence
+
+After the audit refresh was committed, PR #192 was fetched again. At this point it was open, draft and unmerged at HEAD `0b351379474f9d23913e7ed3fb02e785723c3812`, based on `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, with 20 changed paths. The refreshed audit is `docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md`, blob `50ded0c25eaad4fff02b094c3b9ea05fe4dde720`.
+
+The Builder rechecked PR #192 formal reviews, inline review threads and conversation comments: 0 / 0 / 0 returned. PR #193 remains a separate open/draft/unmerged lineage at HEAD `976aa33f89cc02225296f59246f47982300f5b39`, base `874c732973b6ab303d65a503f5a215b0af8e1153`, with two changed paths.
+
+### 18.2 Corrections and limitations
+
+- The audit now has a dated live-state addendum (§22) that distinguishes current facts from historical snapshots.
+- The fresh-reader protocol remains exactly 17 questions, but no uninvolved participant or session evidence exists. DF-09 remains NOT MET.
+- The available reviewer reports disclose the same GPT-6 model identity as the Builder. They are retained as technical scrutiny, not qualifying independent review. DF-11 remains NOT MET.
+- No exact-revision Project Director decision has been made or inferred. DF-12 remains NOT MET.
+- PR #173 acceptance provenance remains unresolved; PR #174's accepted-revision header contradiction and follow-on F-02/F-03 obligations remain open; PR #178 remains proposed/unaccepted; PR #191's stale-base disposition remains unauthorized.
+- DF-06, DF-07 and DF-08 remain partial. The earlier path/link checks were bounded, not exhaustive; cross-lineage consistency and historical preservation are not fully evidenced.
+- The self-review's changed-file list above is a historical description of the original scope-correction pass, not a live inventory of every later report/addendum. The detailed inventory's final register is the source for the exact PR changed-path/blob snapshot and explicitly records its parent commit and self-reference limitation.
+
+### 18.3 Final disposition
+
+Builder-controlled documentation corrections and evidence refreshes are recorded. This does not satisfy the missing human/independent-review/authority evidence.
+
+**Disposition: NOT READY FOR ACCEPTANCE.** DF-09, DF-11 and DF-12 remain NOT MET; DF-03 and DF-05–DF-08 remain partial or unresolved as stated in audit §22. The Initial Documentation Foundation Completion Gate remains NOT CLEARED. Stage A remains held. No source code, tests, build configuration, workflows, dependencies, runtime state, accepted architecture or accepted specification content was changed. No PR was merged, rebased, retargeted, cherry-picked or integrated.
