@@ -26,7 +26,9 @@ The following files were fetched again from the change branch after writing. Eac
 6. `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md` — central navigation, reading order, document classes, authority map, and PR dependency guidance. The duplicate comparison copy has been removed from this branch; PR #191 remains the sole proposed addition of that path.
 7. `docs/JARVIS_BRAIN_MASTER_BLUEPRINT.md` — Layer 0–19 sequence marked as historical planning input, not an approved development order.
 8. `docs/JARVIS_PHASE_2_COMPLETION.md` — legacy Perception & Representation phase note disambiguated from current whole-Brain Phase 2.
-9. `README.md` — points readers to the central planning index, clarifies the current documentation-foundation task, and avoids implying that whole-Brain architecture or integrated capability is complete.\n10. `docs/ARCHITECTURE.md` — marked as a legacy, non-controlling overview and linked to the canonical index.\n11. `docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md` — records the live repository audit, authority/provenance issues, PR topology, and measurable DF-01–DF-13 exit criteria.
+9. `README.md` — points readers to the central planning index, clarifies the current documentation-foundation task, and avoids implying that whole-Brain architecture or integrated capability is complete.
+10. `docs/ARCHITECTURE.md` — marked as a legacy, non-controlling overview and linked to the canonical index.
+11. `docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md` — records the live repository audit, authority/provenance issues, PR topology, and measurable DF-01–DF-13 exit criteria.
 12. `docs/architecture/reports/WHOLE_BRAIN_DOCUMENTATION_PHASE_BUILDER_SELF_REVIEW_2026-11-07.md` — this Builder-authored self-review; not an independent review.
 
 A separate documentation-only branch, `docs/whole-brain-planning-roadmap-hold-20261107`, contains the deferred implementation roadmap and continuity handoff corrections:
@@ -348,3 +350,27 @@ After the audit and inventory writes, both were fetched again from the live PR #
 The GitHub write response for this final self-review update supplies its resulting commit and content blob SHA. The live PR #192 metadata must be fetched once more after this write; that returned HEAD, together with the audit and inventory blob SHAs above and the resulting self-review blob SHA, is the exact review target. Earlier pre-correction file SHAs in the inventory remain explicitly historical evidence and must not be mistaken for the resulting blobs.
 
 This is a post-write verification record, not a claim that the independent reviewer or Project Director has accepted the package.
+
+
+## 14. Repository review report and Builder response — 2026-11-08
+
+### 14.1 Review report received
+
+The repository report `docs/architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_2026-11-08.md` was retrieved directly from PR #192. Its blob at the report's recorded revision is `ecd11354a858eb6e46cbd85b816836a2f88973c9`. The reviewer inspected PR #192 HEAD `0308fb84481d004a4101a07b81c56d78a2fef49e` (18 changed files), not the older `e4f4eed...` target supplied in the initial handoff.
+
+### 14.2 Finding disposition
+
+- **DF-F01 — accepted and correction applied.** The reviewer correctly found that the inventory still described the older `cd61ace...` snapshot and omitted the reviewer handoff. The Builder refreshed inventory Section 30 against live PR #192 HEAD `b34aed2f7f9b18400a852d145b200c1f4951a34b`, recording all 19 changed paths and their verified blob SHAs, plus the unchanged PR #193 two-file register. The inventory correction commit is `329e03ebaf0a48c793b8f0d599926f98df5da18b`. The register explicitly identifies its parent snapshot and does not falsely claim to contain its own resulting commit SHA.
+- **DF-F02 — corrected, limited scope.** The audit's top-level headings are sequential 1–18. This does not prove every historical internal cross-reference or every document's semantic consistency.
+- **Handoff target — correction applied.** The handoff now labels `e4f4eed...` as the originally supplied historical target and records the actual inspected `0308fb8...` revision, the report commit, and the subsequent inventory correction commit. Live metadata must still be fetched for any further review.
+- **DF-09 — NOT MET.** No genuine uninvolved fresh-reader session or raw evidence has been produced.
+- **DF-11 — NOT MET.** The report author explicitly identifies as ChatGPT (GPT-6), the same model identity named as Builder. This report cannot be counted as the separate independent review required by the project.
+- **DF-12 — NOT MET.** No exact-revision Project Director decision is made or inferred here.
+
+### 14.3 Remaining findings not closed by this Builder pass
+
+PR #173 acceptance provenance; PR #174's accepted-revision header contradiction and follow-on F-02/F-03 obligations; PR #178 proposed/unaccepted governance status; PR #191 stale-base disposition; DF-06 fragment/external/historical-link validation; DF-07 cross-lineage status consistency; and DF-08 historical preservation remain open or partial. The Builder does not have authority to invent missing decisions, claim reader evidence, alter accepted architecture, or silently integrate PR #192 and PR #193.
+
+### 14.4 Current disposition
+
+**NOT READY FOR ACCEPTANCE.** The reviewer report is useful and its direct inventory finding has been corrected, but the report does not satisfy DF-11. DF-09 and DF-12 remain unmet, and other provenance/preservation/link/dependency findings remain open. Stage A remains held. Implementation remains unauthorized. No source, test, build, workflow, dependency, or runtime files were changed.
