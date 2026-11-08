@@ -721,3 +721,14 @@ The cross-lineage status corrections and immutable pins are Builder-controlled d
 DF-09 remains NOT MET until an actual uninvolved human completes the 17-question protocol. DF-11 remains NOT MET until a genuinely separate reviewer submits a formal review against the exact final revision. DF-12 remains NOT MET until the Project Director records the exact-revision decision. The final changed-path/blob inventory must still be refreshed after this self-review and reviewer-handoff update.
 
 **Disposition: NOT READY FOR ACCEPTANCE.** Stage A remains held; implementation remains unauthorized. This is a Builder self-review only.
+
+
+## 24. Final pre-inventory self-review synchronization — 2026-11-08
+
+Immediately before this self-review update, PR #192 was open/draft/unmerged at HEAD 1de6504210d980a2b2ef6720422ccbb6ff59647d, base 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c, with 23 changed files. PR #193 was open/draft/unmerged at HEAD d2ccbbb26595f28fb7488db4dbe778e7ddd58c7a, base 874c732973b6ab303d65a503f5a215b0af8e1153, with 2 changed files. PR #174's current administrative status-clarification HEAD was 922912283d173e24df891ba23d0e2dfc17e0f4b4; the accepted planning-baseline decision remains tied to exact earlier HEAD 0811a59e46bf934e32e794f90e4e7d18d4e2bd97.
+
+The latest Builder-controlled state has: (1) a supplemental 68-path historical preservation register; (2) index and portal routes to that register; (3) a qualified recovery of PR #174 F-02/F-03 finding severity, themes and verdict; (4) PR #174 status metadata that distinguishes its accepted baseline from unresolved PR #173 parent provenance; (5) PR #193 plan/handoff wording consistent with PR #173's unresolved status; (6) immutable cross-lineage pins that avoid a cyclic commit dependency; and (7) an exact PR #191 graph description that distinguishes the ancestor base comparison from the divergent head comparison.
+
+The remaining work is not Builder-completable: DF-09 requires the actual uninvolved human session; DF-11 requires a genuinely separate formal reviewer; DF-12 requires the Project Director's exact-revision decision. PR #173 provenance and PR #191 dependency disposition require authority or primary evidence. DF-06 and DF-08 remain partial. The final 23-path inventory must be refreshed after this self-review and the reviewer handoff, at the exact immutable parent immediately before the inventory write.
+
+**Disposition: NOT READY FOR ACCEPTANCE.** Stage A remains held; implementation remains unauthorized. This is a Builder self-review only.
