@@ -792,3 +792,43 @@ The report's DF-01, DF-04 and DF-13 PASS assessments are bounded to the report's
 ### 21.3 Current gate disposition
 
 **The documentation foundation remains NOT CLEARED.** Stage A remains held and implementation remains unauthorized. The review-record branch does not alter PR #192 or PR #193, and the report is not part of PR #192's changed-file set. No merge, rebase, retarget, cherry-pick, integration or source/runtime change is authorized or performed by this addendum.
+
+
+## 22. Live documentation-foundation status refresh — 2026-11-08
+
+This addendum supersedes the older live-state snapshots above for the PR metadata and review-state facts recorded here. Earlier snapshots remain historical evidence and are not rewritten.
+
+### 22.1 Exact PR state checked before this addendum
+
+| Item | Verified state |
+|---|---|
+| PR #192 | Open, draft, unmerged; branch `docs/whole-brain-planning-scope-correction-20261107` |
+| PR #192 HEAD | `8cd3f41629c3761bf867c3966b4b609d3be186c9` |
+| PR #192 base | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` |
+| PR #192 changed paths | 20 |
+| PR #192 formal reviews / inline review threads / conversation comments returned | 0 / 0 / 0 |
+| PR #193 | Open, draft, unmerged; separate `docs/whole-brain-planning-roadmap-hold-20261107` lineage |
+| PR #193 HEAD / base | `976aa33f89cc02225296f59246f47982300f5b39` / `874c732973b6ab303d65a503f5a215b0af8e1153` |
+| PR #193 changed paths | 2 |
+
+The two PRs remain separate lineages. No merge, rebase, retarget, cherry-pick, or integration is performed or implied.
+
+### 22.2 Review and reader evidence
+
+The repository contains the initial reviewer report and the later Builder follow-up report. Both disclose that the reviewer identity is ChatGPT (GPT-6), the same model identity as the Builder. They provide useful technical scrutiny but do not qualify as the separate independent review required by DF-11. The current PR #192 review-submission, inline-thread and conversation-comment queries returned zero.
+
+The 17-question fresh-reader protocol is documented in §19. It has not been executed by a genuinely uninvolved participant. No participant, answers, session, or result is claimed. DF-09 remains NOT MET.
+
+### 22.3 Remaining authority, dependency and preservation findings
+
+- **DF-03 / PR #173:** the primary exact-revision Project Director acceptance record for architecture HEAD `97191111bc2573c14d391c0af9628db7b11f194b` has not been recovered from PR #173's discussion. Later corroboration is not a substitute for the primary decision. Preserve the status as unresolved pending evidence or an explicit Project Director disposition.
+- **PR #174:** Project Director comment `6604790481` accepts exact specification HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` as a planning baseline, not implementation authorization. The accepted-revision document header still says “Draft for independent review”; follow-on F-02/F-03 obligations remain open. Do not alter accepted substantive content without authority.
+- **PR #178:** governance remains proposed and unaccepted.
+- **PR #191:** its base `f6267456560a08054d69f7960d2951452b14017c` remains 22 commits behind the PR #179 line at `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`. This is not permission to rebase or retarget.
+- **DF-06 / DF-07 / DF-08:** exhaustive fragment/external/historical-link validation, cross-lineage status consistency, and historical source-to-destination preservation remain partial. The bounded prior checks must not be represented as exhaustive.
+
+### 22.4 Gate disposition
+
+DF-09, DF-11 and DF-12 remain NOT MET. DF-03 and DF-05–DF-08 remain partial or unresolved as described above. The Builder-controlled inventory snapshot and self-review records are being refreshed separately against this live PR state; the inventory's next section will identify its exact immutable parent snapshot and self-reference boundary.
+
+**The Initial Documentation Foundation Completion Gate remains NOT CLEARED. Stage A remains held. Implementation, baseline selection, merge, rebase, retarget, cherry-pick, and architecture/specification changes outside this documentation correction are not authorized.**
