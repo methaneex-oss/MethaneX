@@ -610,3 +610,38 @@ At the start of this self-review update, PR #192 was open/draft/unmerged at HEAD
 The work in this pass is documentation-only and is traceable to the exact repository commits and blob evidence. The checks above support the bounded claims made; they do not establish complete link validation, complete historical preservation, independent review, fresh-reader success or acceptance.
 
 **Disposition: NOT READY FOR ACCEPTANCE; DOCUMENTATION FOUNDATION NOT CLEARED.** DF-09, DF-11 and DF-12 remain NOT MET. DF-03 and DF-05–DF-08 remain partial or unresolved as stated. Stage A remains held. This is a Builder self-review only, not an independent review or Project Director decision.
+
+
+---
+
+## 22. Builder self-review — authority and dependency remediation — 2026-11-08
+
+### 22.1 Exact state at start of this self-review update
+
+PR #192 was open/draft/unmerged at HEAD `ec122fba76ae7feda2b66a310a81efcf04e4beeb`, base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, with `23` changed files. PR #193 remains a separate open/draft/unmerged lineage at HEAD `31f8cafcb0547e70f47e03b503d3125e4573de4b`, base `874c732973b6ab303d65a503f5a215b0af8e1153`.
+
+### 22.2 Corrections completed and checked
+
+1. **PR #174 status header:** corrected in a documentation-only commit. The document now records the exact planning-baseline acceptance at PR #174 HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, links to Project Director comment `6604790481`, and distinguishes planning-baseline acceptance from implementation authorization. Current PR #174 HEAD is `89cc526d735a645a848e84d5a67dde810819f96f`; the updated specification blob is `e91482ea350873f60f7cf0a68d4e89c0e5ff8c9e`.
+2. **PR #174 description:** corrected to stop asserting PR #173 acceptance as established fact. It records that PR #173's primary exact-revision acceptance evidence was not recovered.
+3. **PR #192 planning index:** updated to point to the corrected PR #174 specification revision and accurately preserve the open F-02/F-03 obligations.
+4. **PR #192 audit:** Section 25 now records the PR #173/174 authority distinction and the corrected PR #191 graph.
+5. **PR #191 dependency:** direct comparison of PR #179 HEAD `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` to PR #191 HEAD `609d38ede50bbdd98a93dfed112781eacabee9fd` returns diverged: 1 ahead / 22 behind, merge base `f6267456560a08054d69f7960d2951452b14017c`. Retargeting alone is insufficient; no history rewrite was performed.
+
+### 22.3 Remaining work — not represented as complete
+
+- PR #173 acceptance remains unestablished. A primary decision must be recovered or the Project Director must explicitly disposition the missing provenance.
+- PR #174 follow-on F-02/F-03 remain open technical obligations. The original review report is not recoverable verbatim; the recovery record is partial. The Project Director's choice to accept or reject that provenance limitation remains outstanding.
+- PR #191's historical-base integration/review disposition remains a Project Director decision.
+- DF-06 remains partial: external URL reachability/semantics, heading fragments and full historical cross-branch link validation remain incomplete.
+- DF-08 remains partial: broader non-JARVIS-named PR lineage, two unmatched branch refs, the distinct Developmental Brain Plan revisions and archive/supersession disposition remain open.
+- DF-09 remains NOT MET: no actual uninvolved reader has completed the 17-question protocol.
+- DF-11 remains NOT MET: no qualifying reviewer separate from the Builder's GPT-6 identity has submitted a formal review.
+- DF-12 remains NOT MET: no Project Director decision has been made against the exact final documentation-foundation revision.
+- DF-02 remains pending the final inventory refresh after this self-review and handoff update.
+
+### 22.4 Self-review disposition
+
+The PR #174 status contradiction and PR #191 graph description have been corrected. This does not close the documentation-foundation gate. The Builder cannot supply the required human reader, independent reviewer identity or Project Director decision and must not simulate them.
+
+**Disposition: NOT READY FOR ACCEPTANCE.** DF-09, DF-11 and DF-12 remain NOT MET; DF-03 and DF-05–DF-08 remain partial/unresolved as stated in the audit. Stage A remains held. No runtime source, tests, build configuration, dependencies or workflows were changed. No merge, rebase, retarget, cherry-pick, branch deletion, archive move or implementation action was performed.
