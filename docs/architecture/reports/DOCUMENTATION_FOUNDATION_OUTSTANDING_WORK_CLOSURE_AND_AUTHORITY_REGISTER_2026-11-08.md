@@ -116,3 +116,53 @@ The inventory refresh commit `3e8e2a520ccec3878afd5412070a1b1592a6d449` records 
 **Still open:** DF-06 remains partial because the strongest prior relative-path check is for an earlier parent and does not establish current-fragment, line-anchor, external reachability or semantic validation. DF-08 remains partial because the 68-path register and selected historical comparisons do not prove complete archive/provenance reconciliation. PR #173 remains unverified/proposed; PR #174 F-02/F-03 remain open because the original review artifact is unavailable verbatim and exact corrections cannot safely be inferred; PR #191 and PR #192/#193 dependency/order remain authority decisions. DF-09, DF-11 and DF-12 remain external human/reviewer/Project Director requirements.
 
 No human session, qualifying review, authority decision, branch-history operation, merge, Stage A start or implementation is claimed.
+
+## 8. Final exact-head Builder verification — 2026-11-08
+
+The Builder re-fetched PR #192 and PR #193 metadata and reran bounded repository checks. This addendum supersedes earlier live-state snapshots only for the exact facts below.
+
+### 8.1 Live PR state
+
+| Item | Exact state at verification |
+|---|---|
+| PR #192 | Open, draft, unmerged; HEAD \`e658b30f7eacdde9510fb81128b85644339017ef\`; base \`61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c\`; 24 changed paths |
+| PR #193 | Open, draft, unmerged; HEAD \`d2ccbbb26595f28fb7488db4dbe778e7ddd58c7a\`; base \`874c732973b6ab303d65a503f5a215b0af8e1153\`; 2 changed paths |
+| PR #173 | Open, draft, unmerged; HEAD \`97191111bc2573c14d391c0af9628db7b11f194b\` |
+| PR #174 | Open, draft, unmerged; current administrative HEAD \`922912283d173e24df891ba23d0e2dfc17e0f4b4\`; accepted planning-baseline event remains tied to earlier HEAD \`0811a59e46bf934e32e794f90e4e7d18d4e2bd97\` |
+| PR #179 | Open, draft, unmerged; HEAD \`61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c\` |
+| PR #191 | Open, draft, unmerged; HEAD \`609d38ede50bbdd98a93dfed112781eacabee9fd\`; base \`f6267456560a08054d69f7960d2951452b14017c\` |
+
+At the same check, PR #192 returned zero formal review submissions, zero inline review threads and zero conversation comments. These are point-in-time counts, not permanent state.
+
+### 8.2 Current-head relative-link check
+
+At PR #192 HEAD \`e658b30f7eacdde9510fb81128b85644339017ef\`, the Builder:
+- fetched all 24 changed paths and their blob identities;
+- fetched the recursive Git tree; GitHub reported \`truncated=false\`, with 225 blob paths;
+- checked 80 relative Markdown link occurrences from the 24 changed files against that complete tree;
+- found zero missing relative target paths;
+- counted 143 external URL occurrences.
+
+This closes the relative-target existence check for the stated exact HEAD. It does **not** validate external URL reachability, heading-fragment correctness, line-range anchors, semantic relevance, or every historical cross-branch link. DF-06 therefore remains PARTIAL, not PASS.
+
+### 8.3 Branch/PR discovery and previously unmatched refs
+
+A fresh repository-scoped branch search for \`jarvis\` returned 37 branch refs. A fresh repository-scoped PR search for \`JARVIS\` returned 63 PR results. The 37 refs group into 11 distinct commit tips; 27 refs are aliases at the same exact tip \`16abca97caf77ce65d5ac901513eb2790f04c68c\`.
+
+The two refs previously described as unmatched now have ancestry evidence:
+- \`feat/jarvis-build-agents-clean\` points to \`04a441676c1d41833f64bc0f20f5320af6f10855\`. Its commit changes the evolution-orchestration header, controller/orchestrator sources and the corresponding test suite. A direct commit comparison shows PR #179 HEAD \`61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c\` is 170 commits ahead and 0 behind this branch tip. The tip is therefore an ancestor of the PR #179 line; it is not an unexplained independent content island.
+- \`docs/jarvis-phase-1-preservation-inventory-20261104\` points to \`ebbda074957e0f9fb0d0f04dd9b03fe58b270a0a\`. Its commit adds the Phase 1 whole-repository investigation report. A direct comparison shows PR #178 HEAD \`39fe09dcf13496f5f0005ccf3f00739303e29f88\` is 11 commits ahead and 0 behind this tip. The tip is therefore an ancestor of the PR #178 line.
+
+These checks resolve the prior two unmatched-ref ancestry questions. They do not authorize branch deletion, renaming, consolidation or archive relocation. Broader non-JARVIS-named PR/branch discovery and full archive/supersession disposition remain open; DF-08 remains PARTIAL.
+
+### 8.4 Remaining evidence and authority requirements
+
+- PR #173 remains UNVERIFIED / PROPOSED because no primary exact-revision Project Director acceptance record was recovered. Do not infer acceptance from PR #174.
+- PR #174 F-02 and F-03 remain OPEN. The original complete follow-on review and inline annotations remain unavailable verbatim; the recovery report is secondary evidence. Do not invent technical corrections from incomplete findings.
+- PR #191 remains 1 unique commit ahead and 22 behind the current PR #179 line; retargeting alone does not reconcile it. Its disposition remains with the Project Director.
+- PR #192 and PR #193 remain separate lineages; their review/integration order remains an authority decision.
+- DF-09 remains NOT MET until a genuinely uninvolved human completes the 17-question protocol without coaching and the raw results/session conditions are recorded.
+- DF-11 remains NOT MET until a genuinely separate qualifying reviewer submits a formal review against the actual final PR #192 revision.
+- DF-12 remains NOT MET until the Project Director records the exact-revision decision.
+
+**Builder disposition: NOT CLEARED.** Stage A remains HELD. No merge, rebase, retarget, cherry-pick, branch deletion, archive relocation, implementation or authority decision is performed or implied.
