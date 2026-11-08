@@ -1345,3 +1345,82 @@ At the exact parent commit `d2397d1dcca8bf062a9b4269f0d35dd188e07ddf`, PR #192 w
 ### 39.2 Current limits
 
 This exact path/blob register corrects the stale inventory snapshot. It does not claim exhaustive current-head link/fragment/semantic validation, complete repository-wide historical preservation, a completed fresh-reader session, a qualifying independent review, or Project Director acceptance. DF-06 and DF-08 remain partial; DF-09, DF-11 and DF-12 remain unmet. Stage A remains held.
+
+
+---
+
+## 40. Final exact PR #192 / PR #193 snapshot — 2026-11-08
+
+This is the synchronized post-remediation snapshot. It supersedes prior live-state manifests in earlier inventory sections only for the exact parent commits and path/blob identities recorded here. Earlier sections remain historical audit records.
+
+### 40.1 PR #192 exact parent snapshot
+
+| Field | Verified value |
+|---|---|
+| PR | [#192](https://github.com/methaneex-oss/MethaneX/pull/192) |
+| Head branch | `docs/whole-brain-planning-scope-correction-20261107` |
+| Exact parent HEAD | `98101fa6cc2a2908cfefd2428b77174a25a49fa8` |
+| Base SHA | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` |
+| State | Open, draft, unmerged |
+| Changed paths | 26 |
+| Review submissions | One COMMENT by the same ChatGPT (GPT-6) identity as Builder; not qualifying independent review |
+| Requested reviewers | No individual or team reviewer returned |
+
+All 26 changed paths were fetched at the exact parent HEAD above. The inventory's own row records its pre-update blob `b0fdd722bbd2e84d071bd85876b24b620e92ae2a`, because this commit necessarily creates a new inventory blob.
+
+| # | Repository path | Blob SHA at parent HEAD |
+|---:|---|---|
+| 1 | `README.md` | `780651b804b491781fdcac8e248eaca9243797a4` |
+| 2 | `docs/ARCHITECTURE.md` | `3c6692b52059e43947d1fd2e7e84debb2362023f` |
+| 3 | `docs/JARVIS_BRAIN_MASTER_BLUEPRINT.md` | `0e49d313bf3929aa30140cb7149ebab038918378` |
+| 4 | `docs/JARVIS_PHASE_2_COMPLETION.md` | `e0e57a44216fc36c52d469a79abfc8df058515a3` |
+| 5 | `docs/README.md` | `da0d9c834e8a5b2e67519ee5e0a2927bcec96374` |
+| 6 | `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md` | `df75bf2dd76ea30532ebfc179d972763945ffaab` |
+| 7 | `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md` | `b0fdd722bbd2e84d071bd85876b24b620e92ae2a` (pre-update self-reference) |
+| 8 | `docs/architecture/inventory/HISTORICAL_DOCUMENTATION_PRESERVATION_REGISTER_2026-11-08.md` | `96539183fab3a2b630a8e9154f183b0bfada9016` |
+| 9 | `docs/architecture/reports/BUILDER_FINAL_DOCUMENTATION_FOUNDATION_RECONCILIATION_2026-11-08.md` | `f4687a09bac754f7d7cc8d59543ac2f6e08c28df` |
+| 10 | `docs/architecture/reports/BUILDER_TO_INDEPENDENT_REVIEWER_REQUEST_2026-11-08.md` | `51b9a853fe86c458cf9ed95d00e0f9b0adc33953` |
+| 11 | `docs/architecture/reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md` | `bcc3fe48a37f7f625246f85c2e27fd493250c6b2` |
+| 12 | `docs/architecture/reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md` | `7c9568478c65453d4258325efe53480f610f0eca` |
+| 13 | `docs/architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_2026-11-08.md` | `0a2c20cf62a5573d6ba4afcebc9c3dbfbfafab73` |
+| 14 | `docs/architecture/reports/INDEPENDENT_REVIEWER_HANDOFF_2026-11-08.md` | `60d096d174a5e03312886ad1ea5d6c01750e7f41` |
+| 15 | `docs/architecture/reports/INDEPENDENT_RE_REVIEW_BUILDER_FOLLOW_UP_2026-11-08.md` | `2d63ed93344a7081dcedb44247536c416322c793` |
+| 16 | `docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md` | `955a6c953cdf539a6f478a2d472a327666845e4c` |
+| 17 | `docs/architecture/reports/PHASE_1_REVIEW_CORRECTIONS_AND_SCOPE_RECONCILIATION_2026-11-05.md` | `a459cdfd02d850d455ca526e6823e68525776ba3` |
+| 18 | `docs/architecture/reports/PHASE_1_WHOLE_REPOSITORY_INVESTIGATION_AND_REUSE_AUDIT_2026-11-04.md` | `f725eda1e23d6558d90f6f7c87302019ef3a0dfc` |
+| 19 | `docs/architecture/reports/PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md` | `b1c203121879aa50ecad30e71e2e1800456bcd9c` |
+| 20 | `docs/architecture/reports/PR_174_FOLLOW_ON_REVIEW_PROVENANCE_RECOVERY_2026-11-06.md` | `d01fa6170b87254619d469d276ba57e813c08ff3` |
+| 21 | `docs/architecture/reports/WHOLE_BRAIN_DOCUMENTATION_PHASE_BUILDER_SELF_REVIEW_2026-11-07.md` | `db10fd69d25cf09fce6df2caabe164fc9314ad00` |
+| 22 | `docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md` | `0187a0ac71bd0c95e94beb3bf006da9cc7c3605f` |
+| 23 | `docs/templates/INDEPENDENT_REVIEW_REPORT_TEMPLATE.md` | `f3176cf1a1f45735a3ad62fa4a865806edc24e08` |
+| 24 | `docs/templates/PLANNING_DOCUMENT_TEMPLATE.md` | `b9f71a923b0d717a3b29655574c89c10e0801115` |
+| 25 | `docs/templates/README.md` | `7209fd0fcda239349af602490d26b8c708b743da` |
+| 26 | `docs/templates/TEST_EVIDENCE_REPORT_TEMPLATE.md` | `9c6bbae48a22beb7c4e95858282d7d8d7b2159c2` |
+
+### 40.2 PR #193 separate-lineage snapshot
+
+PR #193 was independently re-fetched after the PR #192 remediation writes:
+
+| Field | Verified value |
+|---|---|
+| PR | [#193](https://github.com/methaneex-oss/MethaneX/pull/193) |
+| Head branch | `docs/whole-brain-planning-roadmap-hold-20261107` |
+| Exact HEAD | `65220543416da9b368f24e226aefe24bcdbc7870` |
+| Base SHA | `874c732973b6ab303d65a503f5a215b0af8e1153` |
+| State | Open, draft, unmerged |
+| Changed paths | 2 |
+
+Both PR #193 changed files were fetched at that exact HEAD:
+
+| Repository path | Blob SHA |
+|---|---|
+| `docs/architecture/plans/00_BRAIN_IMPLEMENTATION_PLAN.md` | `3a07b45f85dd540c3b39c2150723cf983bb218c6` |
+| `docs/architecture/plans/JARVIS_PROJECT_CONTINUITY_AND_RECOVERY_HANDOFF.md` | `77bb207efb26e71345138901a8027dfe3525edf1` |
+
+PR #192 and PR #193 remain separate lineages. This inventory does not imply integration, rebase, retarget, cherry-pick, merge or an integration-order decision.
+
+### 40.3 Post-write verification requirement and limits
+
+This section is a parent-snapshot manifest. The inventory update itself advances PR #192 and changes its own blob. The Builder must re-fetch live PR #192 metadata, the complete changed-path list and all 26 changed-file blobs after this commit, then record the resulting HEAD and resulting inventory blob in a subsequent verification note if any further file changes occur.
+
+This snapshot corrects the 25-path stale manifest identified by the technical re-review. It does not close DF-06 or DF-08, does not prove fresh-reader completion, does not create a qualifying independent review, and does not constitute Project Director acceptance. DF-09, DF-11 and DF-12 remain unmet. Stage A remains held; implementation remains unauthorized.
