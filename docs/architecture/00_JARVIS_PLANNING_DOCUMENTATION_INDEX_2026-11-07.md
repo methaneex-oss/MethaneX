@@ -251,3 +251,40 @@ Use the [Outstanding Work Closure and Authority Register](reports/DOCUMENTATION_
 The two branch refs previously described in §11 as unmatched have since been resolved by exact ancestry comparisons recorded in the preservation report §9 and outstanding-work register §8.3. `feat/jarvis-build-agents-clean` is an ancestor of PR #179 HEAD `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` (170 commits); `docs/jarvis-phase-1-preservation-inventory-20261104` is an ancestor of PR #178 HEAD `39fe09dcf13496f5f0005ccf3f00739303e29f88` (11 commits). The old §11 unmatched wording is superseded by this correction. Neither ref is deleted or consolidated.
 
 The latest PR #193 snapshot used by this index is HEAD `65220543416da9b368f24e226aefe24bcdbc7870` (open, draft, unmerged; base `874c732973b6ab303d65a503f5a215b0af8e1153`; two changed paths). The continuity handoff blob is `77bb207efb26e71345138901a8027dfe3525edf1`; the deferred implementation plan blob is `3a07b45f85dd540c3b39c2150723cf983bb218c6`. This replaces the older `d2ccbbb...` snapshot in §13 as the latest PR #193 snapshot. PR #193 remains separate from PR #192; no integration is implied.
+
+
+## 16. Builder closure evidence snapshot — 2026-11-08
+
+This addendum supersedes earlier PR #192 live-state statements in this index only for the exact parent snapshot named here. Earlier snapshots remain historical.
+
+- **PR #192:** open/draft/unmerged; HEAD `8998bf73bd0b2bd1db3144ea000fd3d1550a8a87`; base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; 26 changed paths. The Builder is still completing the final inventory/self-review synchronization. No independent review is currently requested or assigned; the earlier premature request is withdrawn/suspended in the repository request record and PR conversation.
+- **PR #193:** open/draft/unmerged; HEAD `65220543416da9b368f24e226aefe24bcdbc7870`; base `874c732973b6ab303d65a503f5a215b0af8e1153`; two changed paths. Its implementation plan remains deferred/non-operative and its lineage remains separate from PR #192.
+- **PR #191:** open/draft/unmerged; HEAD `609d38ede50bbdd98a93dfed112781eacabee9fd`; base `f6267456560a08054d69f7960d2951452b14017c`. Relative to PR #179 HEAD `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, the lineages diverge: PR #191 is one commit ahead and 22 behind. No retarget/rebase/cherry-pick is authorized.
+
+### 16.1 Provenance and authority
+
+- PR #173 remains UNVERIFIED/PROPOSED for exact-revision acceptance; its current discussion has two Builder-authored comments, zero formal reviews and zero inline review comments.
+- PR #174's Project Director decision comment `6604790481` accepts exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` as the Brain Mechanism Specification planning baseline only. Current PR #174 HEAD is `922912283d173e24df891ba23d0e2dfc17e0f4b4`; its header correctly states the accepted planning-baseline scope, while follow-on F-02/F-03 remain open. The original full F-02/F-03 review and inline annotations were not recoverable from the PR review endpoints.
+- PR #178 governance remains proposed/unaccepted.
+
+### 16.2 Builder verification and remaining external gates
+
+The expanded preservation register maps 108 documentation paths across 28 PRs, based on the completed paginated branch/PR discovery. The bounded link-validation report records 84 repository-relative paths with zero missing targets, 89 historical source links across 45 exact commit/path pairs, 76 valid line-anchor ranges, and 189 external URL occurrences. One historical ChatGPT share pointer remains access-limited and is explicitly marked unverified; the other GitHub PR, blob/tree, Actions-run, artifact-list and compare references were checked against repository metadata. See the Preservation and Link Validation Report §11.
+
+| Gate | Current Builder disposition | External requirement / limit |
+|---|---|---|
+| DF-01 | Portal, index and role routes present | Uninvolved fresh-reader confirmation still required |
+| DF-02 | Current inventory refresh is the final Builder synchronization step | Independent post-write verification against the exact resulting HEAD |
+| DF-03 | PR #173 provenance remains unverified; PR #174 planning-baseline acceptance is exact and scoped | Project Director disposition of the PR #173 historical acceptance claim |
+| DF-04 | Status is accurately recorded | PR #178 remains proposed/unaccepted |
+| DF-05 | PR #191 and PR #192/#193 lineages are explicitly separate | Project Director disposition of PR #191 and PR #192/#193 order |
+| DF-06 | Bounded current-package path, anchor and external-reference validation complete; one access-limited historical pointer disclosed | Independent semantic review may challenge scope or relevance |
+| DF-07 | Builder-controlled status contradictions reconciled in current addenda | Independent reviewer confirmation remains required |
+| DF-08 | Bounded branch/PR discovery and 108-path documentation register complete | Project Director controls archive/supersession and disputed authority decisions |
+| DF-09 | Fixed 17-question protocol exists | Actual uninvolved human session and raw evidence not yet performed |
+| DF-10 | Builder self-review numbering and technical findings corrected | Final exact-HEAD inventory/self-review synchronization still pending |
+| DF-11 | No qualifying separate reviewer is identified or assigned | A genuinely separate reviewer and formal GitHub review are required |
+| DF-12 | No decision inferred | Project Director exact-revision decision required after review |
+| DF-13 | Stage A remains NOT STARTED and HELD | No implementation authorization |
+
+**Disposition:** Builder-controlled link and bounded historical-discovery work is materially complete; final inventory/self-review synchronization remains in progress. This index does not declare the documentation-foundation gate cleared, does not request a reviewer, and does not authorize Stage A or implementation.
