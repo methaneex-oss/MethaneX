@@ -201,3 +201,50 @@ At PR #192 HEAD `07b4405195f109306f5c47110f8ca0fdef96cc13`, all 26 changed files
 DF-09 still requires an actual uninvolved human to complete the 17-question fresh-reader protocol. DF-11 still requires a genuinely separate reviewer identity and formal review against the final exact HEAD. DF-12 still requires the Project Director's exact-revision decision after review. These requirements are not Builder-controlled and are not represented as complete.
 
 **Current Builder disposition: technical remediation in progress; not cleared. Stage A remains held.**
+
+
+## 10. Expanded Builder closure evidence and current gate boundary — 2026-11-08
+
+This addendum supersedes the earlier live snapshots in §§8–9 only for the exact parent snapshot named here. The parent PR #192 revision is `5216bd4566504c6b8f177b730a152990a45c2c1e`, base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, open/draft/unmerged, with 26 changed paths. The final inventory/self-review synchronization is still pending; no independent review is active or assigned.
+
+### 10.1 DF-06 — link and anchor verification
+
+The bounded current-package scan at exact PR #192 HEAD `8b6c257bc40748e3d96a0fdf2272b774f54d7a17` fetched all 26 changed paths and compared their blob SHAs with the PR-files API. The complete tree contained 255 entries / 227 blobs and was not truncated. The scan found 84 repository-relative Markdown links, zero missing target paths, and no local heading fragments.
+
+The Phase 2 source map contains 89 immutable GitHub blob links across 45 commit/path pairs. All 45 paths were fetched at their exact commits; all fetched blob SHAs matched the recorded source blob identities. Seventy-six line-anchor ranges were checked against exact file lengths; all are valid after correcting the goal-feedback test link from `#L1-L90` to `#L1-L84`. Thirteen source links have no line anchor.
+
+The 26 changed documents contain 189 raw external URL occurrences. All referenced PRs exist in the complete 184-PR listing; five Actions runs were retrievable and successful; three artifact IDs were present and unexpired in their run's artifact listing; the pinned source/plan/architecture paths and compare reference were checked. One ChatGPT share URL remains access-limited and is explicitly disclosed as unverified, not falsely reported as broken. Subsequent documentation updates added no new link targets. The detailed scope and evidence are in Preservation and Link Validation Report §11.
+
+**Builder disposition:** DF-06 validation is complete within the stated current-package and enumerated historical-source scope, with one access-limited historical pointer disclosed. This is not a claim that a reviewer cannot challenge semantic relevance.
+
+### 10.2 DF-08 — expanded historical preservation
+
+The paginated repository listings returned 245 branch refs (203 distinct tips) and 184 PRs. The 37 documentation-family branch refs have 37 distinct tips. The JARVIS-name branch search returned 37 refs/11 tips; its 27-ref alias family is one PR #96 tip. The two formerly unmatched refs are mapped by exact ancestry to PR #179 and PR #178.
+
+The expanded historical register now maps 108 documentation paths across 28 documentation PRs (#160, #164, #166–#175 and #178–#193). The 34 newly added paths across 18 previously omitted PRs were fetched at exact PR heads and matched to GitHub PR-files blob SHAs. The previous 68-path register count was incomplete because it omitted six PR #192 artifacts and the 34-path earlier/later PR lineage extension; the corrected total is 108.
+
+**Builder disposition:** the bounded branch/PR discovery and documentation-path/blob mapping are complete. No historical branch or file was deleted or moved. Archive/supersession policy and disputed authority decisions remain Project Director matters.
+
+### 10.3 Current DF-01–DF-13 disposition
+
+| Criterion | Builder disposition | Remaining external gate / authority |
+|---|---|---|
+| DF-01 | Portal, index, role routes and templates are present | Actual uninvolved fresh-reader confirmation |
+| DF-02 | Inventory refresh remains the final Builder synchronization step | Independent post-write verification of exact parent/head/blob relationship |
+| DF-03 | PR #173 acceptance provenance remains UNVERIFIED/PROPOSED; PR #174 planning-baseline acceptance is exact and scoped; F-02/F-03 remain open | Project Director disposition of the PR #173 provenance claim and missing-original-review limitation |
+| DF-04 | PR #178 remains proposed/unaccepted; no status promotion | Project Director acceptance if desired |
+| DF-05 | PR #191 graph and PR #192/#193 separation are accurately recorded | Project Director disposition of PR #191 and PR #192/#193 order |
+| DF-06 | Bounded current-package path, source-anchor and external-reference checks complete; one access-limited URL disclosed | Independent semantic challenge remains possible |
+| DF-07 | Builder-controlled status contradictions reconciled in current addenda | Independent reviewer confirmation |
+| DF-08 | 108-path / 28-PR preservation map and paginated branch/PR discovery complete | Project Director archive/supersession and authority decisions |
+| DF-09 | Fixed 17-question protocol is executable and count is consistent | Uninvolved human must complete it; no session is claimed |
+| DF-10 | Builder self-review numbering and known technical corrections are updated | Final exact-HEAD inventory/self-review synchronization |
+| DF-11 | No qualifying reviewer identity is known or assigned; prior premature request is suspended | Genuinely separate reviewer and formal review after Builder closure and Director authorization |
+| DF-12 | No exact-revision decision is inferred | Project Director decision after review |
+| DF-13 | Stage A remains NOT STARTED and HELD | No implementation authorization |
+
+### 10.4 Reviewer-request state and Builder disposition
+
+The earlier PR #192 reviewer request was premature. Its repository request file is now explicitly WITHDRAWN/SUSPENDED, and the PR conversation records that no reviewer should act on it. The Builder has not issued another request and has not identified or assigned a qualifying reviewer. Several repository reports explicitly disclose GPT-6 as the same model identity as Builder; another review-labelled report lacks identity/independence disclosure. None satisfies DF-11.
+
+**Current Builder disposition:** link/anchor validation and bounded historical discovery are closed within the recorded scope. The remaining Builder-controlled closeout is the final synchronized inventory, self-review, and one exact-HEAD closure report. The documentation-foundation gate is **NOT CLEARED** until the human reader, qualifying independent reviewer and Project Director decision are supplied. Stage A remains held; implementation remains unauthorized.
