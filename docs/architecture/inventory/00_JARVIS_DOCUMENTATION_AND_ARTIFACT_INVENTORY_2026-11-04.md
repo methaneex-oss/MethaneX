@@ -612,11 +612,11 @@ The repository review report at `docs/architecture/reports/INDEPENDENT_DOCUMENTA
 
 No fresh-reader result is fabricated. No acceptance decision is inferred. No PR was merged, rebased, retargeted, cherry-picked or integrated. No source/runtime file was changed. Stage A remains held and implementation remains unauthorized.
 
-### 30. Exact documentation-package revision and blob register — 2026-11-08 (refreshed)
+## 30A. Documentation-package revision and blob register — refreshed snapshot
 
 This immutable snapshot was fetched from live GitHub metadata and the complete PR #192 changed-file endpoint at parent HEAD `326da3927cd3cd6b34144b3cfad56fe53e137a15`, immediately before this inventory update. The PR changed-file endpoint returned 20 paths, and every path was fetched at that exact branch ref. This inventory update creates the next commit; its own listed blob is therefore the pre-update blob. The resulting inventory blob and final PR HEAD must be verified after the write.
 
-### 30.1 Pull-request state and dependency register
+### 30A.1 Pull-request state and dependency register
 
 | Item | Exact revision / state |
 |---|---|
@@ -627,7 +627,7 @@ This immutable snapshot was fetched from live GitHub metadata and the complete P
 | PR #191 dependency | PR #191 base `f6267456560a08054d69f7960d2951452b14017c`; PR #179 HEAD `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; compare reports 22 commits ahead, 0 behind |
 | `main` | `1273ddbcd0087d189e01388ded2d362fb1e058d2` as recorded in the inventory baseline context; no main-branch write performed |
 
-### 30.2 PR #192 changed-file blob register
+### 30A.2 PR #192 changed-file blob register
 
 All 20 paths returned by the paginated PR #192 changed-file endpoint were fetched at exact parent HEAD `326da3927cd3cd6b34144b3cfad56fe53e137a15`.
 
@@ -654,7 +654,7 @@ All 20 paths returned by the paginated PR #192 changed-file endpoint were fetche
 | 19 | `docs/templates/README.md` | `7209fd0fcda239349af602490d26b8c708b743da` |
 | 20 | `docs/templates/TEST_EVIDENCE_REPORT_TEMPLATE.md` | `9c6bbae48a22beb7c4e95858282d7d8d7b2159c2` |
 
-### 30.3 PR #193 changed-file blob register
+### 30A.3 PR #193 changed-file blob register
 
 Both changed paths returned by the PR #193 changed-file endpoint were fetched at exact HEAD `976aa33f89cc02225296f59246f47982300f5b39`.
 
@@ -663,7 +663,7 @@ Both changed paths returned by the PR #193 changed-file endpoint were fetched at
 | `docs/architecture/plans/00_BRAIN_IMPLEMENTATION_PLAN.md` | `d065e833d2211753985784d9de6e562e0f72bc2b` |
 | `docs/architecture/plans/JARVIS_PROJECT_CONTINUITY_AND_RECOVERY_HANDOFF.md` | `9eae4ffc1e4cc1f4673abecb880aa37558935026` |
 
-### 30.4 Reviewer findings and Builder disposition
+### 30A.4 Reviewer findings and Builder disposition
 
 The original report `INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_2026-11-08.md` (blob `ecd11354a858eb6e46cbd85b816836a2f88973c9`) and the follow-up report `INDEPENDENT_RE_REVIEW_BUILDER_FOLLOW_UP_2026-11-08.md` (blob `2d63ed93344a7081dcedb44247536c416322c793`) were retrieved directly.
 
@@ -679,11 +679,11 @@ The original report `INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_2026-11-08.md` 
 
 No fresh-reader result is fabricated. No acceptance decision is inferred. No PR was merged, rebased, retargeted, cherry-picked or integrated. No source/runtime file was changed. Stage A remains held and implementation remains unauthorized.
 
-### 30. Exact documentation-package revision and blob register — 2026-11-08 (corrected live refresh)
+## 30B. Documentation-package revision and blob register — corrected live snapshot
 
 This immutable snapshot was fetched from live GitHub metadata and the complete PR #192 changed-file endpoint at parent HEAD `c1f4a0df600314ef04b2b09b103c7eaca625c9d2`, immediately before this inventory update. The endpoint returned 20 paths; all 20 are listed below. Each path was fetched at the parent revision. This update creates the next commit; its own listed blob is therefore the pre-update blob. The resulting inventory blob and final PR HEAD must be verified after the write.
 
-### 30.1 Pull-request state and dependency register
+### 30B.1 Pull-request state and dependency register
 
 | Item | Exact revision / state |
 |---|---|
@@ -694,7 +694,7 @@ This immutable snapshot was fetched from live GitHub metadata and the complete P
 | PR #191 dependency | PR #191 base `f6267456560a08054d69f7960d2951452b14017c`; PR #179 HEAD `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; compare reports 22 commits ahead, 0 behind |
 | `main` | `1273ddbcd0087d189e01388ded2d362fb1e058d2` as recorded in the inventory baseline context; no main-branch write performed |
 
-### 30.2 PR #192 changed-file blob register
+### 30B.2 PR #192 changed-file blob register
 
 All 20 paths returned by the paginated PR #192 changed-file endpoint were fetched at exact parent HEAD `c1f4a0df600314ef04b2b09b103c7eaca625c9d2`.
 
@@ -721,7 +721,7 @@ All 20 paths returned by the paginated PR #192 changed-file endpoint were fetche
 | 19 | `docs/templates/README.md` | `7209fd0fcda239349af602490d26b8c708b743da` |
 | 20 | `docs/templates/TEST_EVIDENCE_REPORT_TEMPLATE.md` | `9c6bbae48a22beb7c4e95858282d7d8d7b2159c2` |
 
-### 30.3 PR #193 changed-file blob register
+### 30B.3 PR #193 changed-file blob register
 
 Both changed paths returned by the PR #193 changed-file endpoint were fetched at exact HEAD `976aa33f89cc02225296f59246f47982300f5b39`.
 
@@ -730,7 +730,7 @@ Both changed paths returned by the PR #193 changed-file endpoint were fetched at
 | `docs/architecture/plans/00_BRAIN_IMPLEMENTATION_PLAN.md` | `d065e833d2211753985784d9de6e562e0f72bc2b` |
 | `docs/architecture/plans/JARVIS_PROJECT_CONTINUITY_AND_RECOVERY_HANDOFF.md` | `9eae4ffc1e4cc1f4673abecb880aa37558935026` |
 
-### 30.4 Reviewer findings and Builder disposition
+### 30B.4 Reviewer findings and Builder disposition
 
 The original report `INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_2026-11-08.md` (blob `ecd11354a858eb6e46cbd85b816836a2f88973c9`) and follow-up report `INDEPENDENT_RE_REVIEW_BUILDER_FOLLOW_UP_2026-11-08.md` (blob `2d63ed93344a7081dcedb44247536c416322c793`) were retrieved directly.
 
@@ -746,7 +746,7 @@ The original report `INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_2026-11-08.md` 
 
 No fresh-reader result is fabricated. No acceptance decision is inferred. No PR was merged, rebased, retargeted, cherry-picked or integrated. No source/runtime file was changed. Stage A remains held and implementation remains unauthorized.
 
-### 30.5 Snapshot and self-reference limitations
+### 30B.5 Snapshot and self-reference limitations
 
 This register is a snapshot at PR #192 parent HEAD `c1f4a0df600314ef04b2b09b103c7eaca625c9d2`, immediately before this inventory update. The listed inventory blob is its pre-update blob `c975a20b5dda44b316e58082572287e751b02319`. The resulting inventory write creates a later PR head and a new inventory blob; that returned blob and live head must be checked after the write. Future reviewers must fetch live metadata and changed-file paths rather than assume this snapshot remains current.
 
