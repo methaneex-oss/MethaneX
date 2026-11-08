@@ -50,7 +50,7 @@ The reviewer's job is to challenge claims and verify evidence, not merely confir
 6. Submit a formal review through the repository's review process. A report stored in the repository or a comment is not automatically a formal GitHub review.
 7. State findings, severity, evidence, required correction and whether the reviewed revision is cleared. Do not make the Project Director's decision or claim implementation authorization.
 
-Relevant provenance material: [PR #174 follow-on review provenance recovery](architecture/reports/PR_174_FOLLOW_ON_REVIEW_PROVENANCE_RECOVERY_2026-11-06.md). It is explicitly a partial recovery record, not the original review.
+Relevant provenance material: [PR #174 follow-on review provenance recovery](architecture/reports/PR_174_FOLLOW_ON_REVIEW_PROVENANCE_RECOVERY_2026-11-06.md). It is explicitly a partial recovery record, not the original review. Use the [JARVIS Review Records index](review-records/README.md) to locate reviewer-authored reports and evidence by subject. A stored report is not automatically a formal GitHub review or an acceptance decision.
 
 ### Tester / verification engineer
 
@@ -94,7 +94,7 @@ Use the [Documentation Templates Guide](templates/README.md) for consistent plan
 | Understand current phase and boundaries | [Scope correction](architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md) | Whole-Brain scope and current planning sequence |
 | Recover project context | [Continuity handoff — PR #193](https://github.com/methaneex-oss/MethaneX/pull/193) | Historical context and operational restart instructions |
 | Locate historical documents | [Artifact inventory](architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md) | Provenance, preservation and artifact location |
-| Verify current gate | [Foundation audit](architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md) | DF-01–DF-13 evidence and blockers |
+| Verify current gate | [Foundation audit](architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md) | DF-01–DF-13 evidence and blockers |\n| Find reviewer reports and evidence | [JARVIS Review Records](review-records/README.md) | Canonical navigation for reviewer-authored reports, evidence and review-process records |
 | Understand authority proposals | [Governance rules — PR #178](https://github.com/methaneex-oss/MethaneX/pull/178) | Proposed rules only; unaccepted at this snapshot |
 | Inspect source integration | [Phase 1 report](architecture/reports/PHASE_1_WHOLE_REPOSITORY_INVESTIGATION_AND_REUSE_AUDIT_2026-11-04.md) and [Phase 2 map](architecture/reports/PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md) | Bounded repository and source evidence |
 
