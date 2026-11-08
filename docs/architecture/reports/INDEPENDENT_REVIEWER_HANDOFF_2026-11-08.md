@@ -418,3 +418,22 @@ Re-fetch live PR metadata, changed paths and file blobs before review. The HEAD 
 DF-06 remains PARTIAL (63 relative target paths were previously checked; 143 external URL occurrences, fragments and exhaustive historical cross-branch links remain open). DF-08 remains PARTIAL (selected branch/document lineage is mapped; broader non-JARVIS PR lineage, unmatched branch refs, Developmental Brain Plan revision disposition and archive/supersession decisions remain open). DF-09 remains NOT MET until a genuinely uninvolved human completes the 17-question protocol. DF-11 remains NOT MET until a separate qualifying reviewer submits a formal review. DF-12 remains NOT MET until the Project Director records an exact-revision decision.
 
 **Current recommendation remains NOT CLEARED.** Do not begin Stage A. Do not merge, rebase, retarget, cherry-pick, delete branches, relocate archives or begin implementation. The reviewer must not claim independence if the identity/role requirements are not met, and must not convert a technical report into Project Director acceptance.
+
+
+## 17. Final pre-inventory reviewer target refresh — 2026-11-08
+
+Immediately before this handoff update, the live metadata returned:
+
+| Item | Exact value |
+|---|---|
+| PR #192 | Open, draft, unmerged; HEAD 8168b9e45e9cbcaf0938dfe27f82426cfa8d19fe; base 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c; 23 changed files |
+| PR #193 | Open, draft, unmerged; HEAD d2ccbbb26595f28fb7488db4dbe778e7ddd58c7a; base 874c732973b6ab303d65a503f5a215b0af8e1153; 2 changed files |
+| PR #174 | Open, draft, unmerged; current administrative status-clarification HEAD 922912283d173e24df891ba23d0e2dfc17e0f4b4; accepted planning-baseline decision tied to earlier exact HEAD 0811a59e46bf934e32e794f90e4e7d18d4e2bd97 |
+
+This is the pre-handoff-update snapshot; the handoff commit advances PR #192. The final inventory is the next and last Builder-controlled documentation write. It must enumerate every changed path and fetched blob at the exact parent after this handoff update, and must state the inventory's own pre-update blob. The reviewer must fetch live PR metadata again after the inventory commit and verify all changed paths at the resulting HEAD.
+
+The reviewer must inspect the supplemental 68-path historical preservation register, the earlier branch/document comparison report, the updated PR #174 F-02/F-03 provenance recovery, the PR #174 administrative status revision, the PR #193 plan/handoff status corrections and immutable cross-lineage pins. The 68-path register is bounded evidence, not complete archive preservation. The original PR #174 follow-on report remains unavailable verbatim; F-02 and F-03 remain open.
+
+PR #192 and PR #193 remain separate lineages. The immutable cross-link arrangement is intentional: PR #193 pins to a PR #192 snapshot; PR #192's index pins to PR #193's exact handoff/plan. No integration is implied. PR #191 requires a Project Director disposition; no rebase, retarget or cherry-pick is authorized by this handoff.
+
+**Gate remains NOT CLEARED.** DF-09 requires an actual uninvolved human reader; DF-11 requires a genuinely separate reviewer; DF-12 requires the Project Director's exact-revision decision. Stage A remains held and implementation remains unauthorized.
