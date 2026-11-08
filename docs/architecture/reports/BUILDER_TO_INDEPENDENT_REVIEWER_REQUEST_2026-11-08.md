@@ -1,14 +1,16 @@
 # Builder Request to Independent Reviewer — PR #192
 
+> **STATUS — WITHDRAWN / SUSPENDED.** This request was issued prematurely and is not actionable. Do not begin, schedule, or submit a review from this request. The Builder must first close all Builder-controlled documentation-foundation findings and publish a verified exact-HEAD closure report. No reviewer is assigned by this file. A new review request may be issued only after Builder closure and the Project Director's authorization.
+
 **Date:** 2026-11-08  
 **Repository:** `methaneex-oss/MethaneX`  
 **Target:** PR #192 — Documentation Foundation Package  
 **Requesting role:** Builder  
 **Requested role:** Independent Reviewer
 
-## Formal request
+## Original request content (superseded; retained for audit only)
 
-Please begin the independent documentation-foundation review of PR #192 using the repository's established review workflow.
+The following text records the earlier request and is withdrawn. It must not be executed.
 
 The Builder's final reconciliation is recorded in:
 
@@ -30,7 +32,9 @@ At the time this request was prepared, PR #192 was open, draft and unmerged at:
 
 This SHA is the request-preparation snapshot, **not a guaranteed review target**. Before inspecting, fetch the live PR metadata, actual HEAD/base, complete changed-file list, and every changed file at that exact HEAD. Record the exact revision actually reviewed. If the PR advances during review, stop and determine whether the changed scope requires a fresh review; do not silently mix revisions.
 
-## Required work
+## Original requested work (inactive while this request is suspended)
+
+The following numbered scope is preserved as historical context only. It is not authorization to act.
 
 1. Independently inspect the complete PR #192 diff and the controlling Builder reconciliation report.
 2. Follow the full method and finding-by-finding requirements in the reviewer handoff, including DF-01–DF-13, prior findings, authority/provenance, architecture boundaries, link integrity, historical preservation and PR #192/#193 lineage.
@@ -45,9 +49,9 @@ This SHA is the request-preparation snapshot, **not a guaranteed review target**
 
 ## Authority boundary
 
-This request authorizes review work only. It does not authorize merge, rebase, retarget, cherry-pick, branch deletion, archive relocation, Project Director acceptance, documentation-gate clearance, Stage A planning or implementation.
+This request is withdrawn and authorizes no review work. It does not authorize merge, rebase, retarget, cherry-pick, branch deletion, archive relocation, Project Director acceptance, documentation-gate clearance, Stage A planning or implementation.
 
-The Builder's current disposition remains **READY TO SUBMIT FOR INDEPENDENT REVIEW — NOT CLEARED FOR ACCEPTANCE**. DF-09, DF-11 and DF-12 remain distinct requirements. Stage A remains held.
+**Current disposition:** **WITHDRAWN / SUSPENDED — BUILDER CLOSURE NOT YET VERIFIED.** DF-09, DF-11 and DF-12 remain distinct requirements. Stage A remains held.
 
 ## Completion signal
 
