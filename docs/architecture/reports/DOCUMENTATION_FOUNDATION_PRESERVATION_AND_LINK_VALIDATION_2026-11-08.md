@@ -129,7 +129,7 @@ PR #97-only Markdown paths:
 | PR #170 master blueprint | Preserve as a distinct revision; do not silently substitute it for main, PR #97 or the corrected PR #192 legacy-status banner. |
 | PR #191 comparison | Preserve as draft bounded BM-01–BM-12 evidence; its stale-base relationship requires an authorized disposition before integration. |
 | 27 branch aliases at PR #96 HEAD | Record as multiple refs to one exact tip, not 27 independent content histories. Do not delete or consolidate refs without authorization. |
-| Two unmatched branch refs | Retain pending provenance confirmation; no automatic deletion or archive action. |
+| Two formerly unmatched branch refs | Ancestry is now resolved: `feat/jarvis-build-agents-clean` is an ancestor of PR #179; `docs/jarvis-phase-1-preservation-inventory-20261104` is an ancestor of PR #178. Retain the refs; no deletion or consolidation is authorized. |
 | PR #178 governance proposal | Preserve as proposed/unaccepted; it is not a binding project-wide governance baseline. |
 | Legacy `docs/JARVIS_BRAIN_MASTER_BLUEPRINT.md` and `docs/JARVIS_PHASE_2_COMPLETION.md` | Preserve their history and current authority labels. Do not move or delete during this gate. Their historical/proposed status must remain distinct from accepted architecture/specification decisions. |
 
@@ -206,3 +206,10 @@ A fresh repository-scoped \`jarvis\` branch search returned 37 refs, grouped int
 The first tip also compares as an ancestor of PR #96's exact tip. The 27 branch refs at \`16abca97caf77ce65d5ac901513eb2790f04c68c\` remain aliases to one commit, not 27 independent content revisions.
 
 **Updated preservation disposition:** the two previously unmatched refs are no longer unresolved ancestry cases. They remain existing refs and are retained. No branch deletion or consolidation is authorized. Broader non-JARVIS-named PR/branch lineage, archive/supersession decisions and remaining historical revision classification are still open; this report does not claim repository-wide preservation completeness.
+
+
+## 10. Builder correction — branch ancestry disposition — 2026-11-08
+
+Section 5 and the earlier §6 list predate the expanded ancestry checks in §9 of this report. The two formerly unmatched refs are now mapped by exact ancestry: `feat/jarvis-build-agents-clean` tip `04a441676c1d41833f64bc0f20f5320af6f10855` is an ancestor of PR #179 HEAD `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` (170 commits); `docs/jarvis-phase-1-preservation-inventory-20261104` tip `ebbda074957e0f9fb0d0f04dd9b03fe58b270a0a` is an ancestor of PR #178 HEAD `39fe09dcf13496f5f0005ccf3f00739303e29f88` (11 commits). The prior unmatched-ref item is closed. The 27 branch aliases at tip `16abca97caf77ce65d5ac901513eb2790f04c68c` remain aliases to one commit. No refs are deleted or consolidated.
+
+This closes only those ancestry questions. Broader non-JARVIS-named lineage, remaining historical revision comparisons and archive/supersession disposition remain open. DF-08 remains PARTIAL.
