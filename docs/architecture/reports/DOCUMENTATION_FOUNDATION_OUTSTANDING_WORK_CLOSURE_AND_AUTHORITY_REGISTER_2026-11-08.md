@@ -166,3 +166,38 @@ These checks resolve the prior two unmatched-ref ancestry questions. They do not
 - DF-12 remains NOT MET until the Project Director records the exact-revision decision.
 
 **Builder disposition: NOT CLEARED.** Stage A remains HELD. No merge, rebase, retarget, cherry-pick, branch deletion, archive relocation, implementation or authority decision is performed or implied.
+
+
+## 9. Builder correction — current exact-head validation and resolved FND-09/FND-10 — 2026-11-08
+
+This addendum supersedes stale status statements in earlier sections only where explicitly stated.
+
+### 9.1 Live snapshots
+
+- PR #192: open, draft, unmerged; HEAD `07b4405195f109306f5c47110f8ca0fdef96cc13`; base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; 26 changed paths.
+- PR #193: open, draft, unmerged; HEAD `65220543416da9b368f24e226aefe24bcdbc7870`; base `874c732973b6ab303d65a503f5a215b0af8e1153`; two changed paths. Its current continuity handoff and deferred plan blobs are `77bb207efb26e71345138901a8027dfe3525edf1` and `3a07b45f85dd540c3b39c2150723cf983bb218c6` respectively.
+
+### 9.2 FND-09 — branch ancestry status contradiction corrected
+
+The two previously unmatched branch refs are resolved by exact ancestry evidence: `04a441676c1d41833f64bc0f20f5320af6f10855` is an ancestor of PR #179 HEAD by 170 commits; `ebbda074957e0f9fb0d0f04dd9b03fe58b270a0a` is an ancestor of PR #178 HEAD by 11 commits. The preservation report §9 and this register §8.3 contain the exact evidence. The planning index now reflects the resolved status and retains the remaining broader DF-08 work. **FND-09 CLOSED as a cross-document status contradiction.**
+
+### 9.3 FND-10 — PR #193 latest-snapshot contradiction corrected
+
+The planning index now identifies PR #193 HEAD `65220543416da9b368f24e226aefe24bcdbc7870` as the latest snapshot and records both current file blobs. The earlier `d2ccbbb...` entry is historical and no longer represented as current. **FND-10 CLOSED as a stale-snapshot contradiction.**
+
+### 9.4 Current-head relative-link check
+
+At PR #192 HEAD `07b4405195f109306f5c47110f8ca0fdef96cc13`, all 26 changed files were fetched. A complete, non-truncated recursive tree contained 227 blob paths. A Markdown scan found 81 relative link occurrences; all 81 target paths exist, with zero missing relative targets. The scan found 147 external URL occurrences. This result establishes relative-path existence only. Heading fragments, line anchors, external reachability and semantic relevance are still being validated; DF-06 is not marked PASS by this addendum.
+
+### 9.5 Remaining Builder-controlled work
+
+- Finish full heading-fragment and line-anchor validation, including all immutable GitHub blob references in the changed documents.
+- Check external URL reachability and semantic destination relevance; report transient or access-limited endpoints distinctly from confirmed failures.
+- Complete broader non-JARVIS-named PR/branch lineage discovery and compare remaining material historical planning/specification revisions.
+- Reconcile all current control documents and inventory against one final immutable PR #192 snapshot after the last content change.
+
+### 9.6 External evidence and authority requirements
+
+DF-09 still requires an actual uninvolved human to complete the 17-question fresh-reader protocol. DF-11 still requires a genuinely separate reviewer identity and formal review against the final exact HEAD. DF-12 still requires the Project Director's exact-revision decision after review. These requirements are not Builder-controlled and are not represented as complete.
+
+**Current Builder disposition: technical remediation in progress; not cleared. Stage A remains held.**
