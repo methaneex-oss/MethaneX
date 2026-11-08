@@ -1,12 +1,12 @@
-# Brain Implementation Plan — Planning Baseline
+# Brain Implementation Plan — Deferred Proposal
 
 > **Documentation entry point:** Use the [JARVIS Documentation Portal](https://github.com/methaneex-oss/MethaneX/blob/db5968bfbddf77590cd9303539abda00dd961ab7/docs/README.md) for role-based navigation and the [Planning Documentation Index](https://github.com/methaneex-oss/MethaneX/blob/db5968bfbddf77590cd9303539abda00dd961ab7/docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md) for canonical planning-artifact status and dependencies. This file is a deferred proposal, not the current Builder handoff.
 >
 > **Deferred as the active plan — 2026-11-07:** This is a proposed implementation roadmap derived from the earlier BM-01–BM-12 specification and repository audit. Its proposed increments, dependency ordering and first implementation target are not authorized as the current development sequence. Whole-Brain capability definition, mechanism architecture and completeness/reconciliation must come first. Preserve this plan as a downstream proposal; do not execute or refine its implementation sequence until the whole-Brain planning baseline is independently reviewed and accepted. See the [Whole-Brain Planning Scope and Builder Correction](https://github.com/methaneex-oss/MethaneX/blob/db5968bfbddf77590cd9303539abda00dd961ab7/docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md).
 
-**Document status:** Proposed implementation plan; submitted for independent review and Project Director decision  
+**Document status:** Deferred, non-operative implementation proposal. The earlier submission-for-review wording is a historical status and is superseded by the 2026-11-07 whole-Brain planning hold and the 2026-11-08 documentation-foundation gate. This document is not currently awaiting a decision to activate its proposed implementation sequence.  
 **Planning run:** Run 01 — 2026-11-03  
-**Planning authority:** Project Director authorization received 2026-11-03  
+**Planning authority:** Authorization to prepare this planning proposal recorded as received 2026-11-03; this does not authorize implementation or make the proposal operative.  
 **Governing specification:** PR #174, accepted HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`  
 **Parent architecture:** PR #173, exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b`; primary Project Director acceptance provenance remains unresolved  
 **Engineering evidence baseline used by the existing audit:** `main` at `1273ddbcd0087d189e01388ded2d362fb1e058d2`  
