@@ -1123,3 +1123,21 @@ The PR #192 index and preservation register now reference PR #174's latest admin
 The final inventory refresh must now use the exact live PR #192 parent after the audit, self-review and reviewer-handoff updates. It must enumerate all changed paths and blobs at that parent, retain PR #193's exact separate snapshot, and identify the inventory's own pre-update blob. After that final inventory write, re-fetch the live PR head and all changed paths; do not predict or hardcode the resulting commit SHA.
 
 **Disposition remains NOT CLEARED.** DF-09 still requires the actual uninvolved human reader; DF-11 still requires a genuinely separate reviewer; DF-12 still requires the Project Director's exact-revision decision. PR #173 provenance, PR #191 dependency disposition, broader link validation and historical preservation remain open or partial. Stage A remains held; implementation remains unauthorized.
+
+
+## 28. Pre-inventory final snapshot refresh — 2026-11-08
+
+Immediately before this addendum, the live metadata and review-state queries returned:
+
+| Item | Exact state |
+|---|---|
+| PR #192 | Open, draft, unmerged; HEAD 6e0e3bcbd1f91b304a799ed1a65c06665c428a1b; base 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c; 23 changed files |
+| PR #193 | Open, draft, unmerged; HEAD d2ccbbb26595f28fb7488db4dbe778e7ddd58c7a; base 874c732973b6ab303d65a503f5a215b0af8e1153; 2 changed files |
+| PR #174 | Open, draft, unmerged; current administrative status-clarification HEAD 922912283d173e24df891ba23d0e2dfc17e0f4b4; accepted planning-baseline event remains tied to exact earlier HEAD 0811a59e46bf934e32e794f90e4e7d18d4e2bd97 |
+| PR #192 formal reviews / inline threads / conversation comments | 0 / 0 / 0 returned |
+
+The exact PR #192 changed-path endpoint returned 23 paths. The final inventory must be written only after the audit, Builder self-review and reviewer handoff have been synchronized. Its parent snapshot must be the live PR #192 HEAD immediately before the inventory write, and all 23 paths must be fetched at that exact parent. The inventory row must record its own pre-update blob; after the write, re-fetch the resulting PR HEAD and all changed paths to confirm the inventory commit did not invalidate the other 22 blob identities.
+
+PR #193 remains a separate PR #175-derived lineage. Its handoff and plan point to immutable PR #192 snapshot `db5968bfbddf77590cd9303539abda00dd961ab7`; PR #192's index points to PR #193's exact handoff/plan at `d2ccbbb26595f28fb7488db4dbe778e7ddd58c7a`. This snapshot arrangement is intentional and must not be mistaken for branch integration.
+
+**Disposition remains NOT CLEARED.** DF-09, DF-11 and DF-12 remain external reader/reviewer/authority requirements. PR #173 acceptance provenance, PR #191 dependency disposition, exhaustive fragment/external-link validation and broader historical preservation remain open or partial. Stage A remains held; implementation remains unauthorized.
