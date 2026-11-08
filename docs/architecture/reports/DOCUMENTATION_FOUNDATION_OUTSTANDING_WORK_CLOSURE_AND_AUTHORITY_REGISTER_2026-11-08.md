@@ -62,3 +62,46 @@ Do not perform PR #191 rebase/cherry-pick/retarget, PR #192/#193 integration, br
 The Builder can close technical validation, historical discovery, synchronization and self-review. The Builder cannot supply the uninvolved reader, substitute its own GPT-6 identity for an independent reviewer, or make the Project Director's acceptance decision. These are not paperwork gaps to be simulated; they are distinct evidence and authority requirements.
 
 No runtime source, tests, build configuration, dependency, workflow or runtime state is changed by this report.
+
+
+## 6. Builder verification update — 2026-11-08
+
+This update supersedes the earlier DF-06 summary in §3 only to the extent stated below. It does not convert partial checks into a full pass.
+
+### 6.1 Relative-link evidence
+
+The repository inventory records a later bounded check at exact parent HEAD `fb30fd7ac5cc80c86b84edd4e6d7497253b72775`: 76 relative Markdown link occurrences across all 23 changed files resolved against a complete, non-truncated 252-path repository tree, with zero missing relative targets. It also records 143 external URL occurrences (120 unique), all on GitHub. The referenced blob paths, linked PR records, five Actions run records and comparison endpoint were retrieved successfully.
+
+This is stronger than the earlier 63-link check. It still does **not** establish heading-fragment correctness, line-range anchor validity, semantic relevance, or exhaustive reachability of every historical cross-branch reference. The 24th changed file (this register) was added after that bounded snapshot. Therefore DF-06 remains PARTIAL until a new exact-final-revision validation covers it and the remaining fragment/semantic checks.
+
+### 6.2 Builder-controlled work already completed
+
+- The PR #174 specification header and PR description were corrected to preserve the exact accepted planning-baseline event while not asserting unverified PR #173 acceptance.
+- The PR #174 F-02/F-03 recovery record was expanded with the recovered severity, themes and overall verdict. The original report remains unavailable verbatim; the findings remain open.
+- PR #191's graph was corrected: one unique commit ahead and 22 behind current PR #179; retargeting alone cannot reconcile it.
+- The 68-path preservation register and selected historical cross-revision comparisons were added.
+- The PR #148 / PR #156 Developmental Brain Plan comparison was resolved as an exact 352-line prefix plus a 47-line append-only addition in PR #156.
+- The fresh-reader protocol count was normalized to 17 questions.
+- The portal's navigation table and current-authority wording have been corrected; the planning index now points to this outstanding-work register.
+
+These are repository/documentation corrections only. They do not clear the human review, fresh-reader, authority or historical completeness requirements.
+
+### 6.3 Remaining Builder-controlled work
+
+1. Complete a bounded repository-wide PR/branch lineage discovery beyond JARVIS-named branches, recording search criteria, pagination limits and unresolved results.
+2. Resolve the two unmatched branch refs' provenance through commit/PR ancestry evidence; do not delete or consolidate them.
+3. Compare the remaining material historical planning/specification revisions not already covered by the selected PR comparisons.
+4. Complete heading-fragment and semantic link validation for the final PR #192 snapshot; verify all current changed-file relative targets after the last documentation write.
+5. Refresh the final inventory, audit, self-review and reviewer handoff against one immutable snapshot, then re-fetch the live PR state and all changed paths.
+
+### 6.4 Requirements outside Builder authority
+
+- **PR #173:** no attributable Project Director acceptance record for exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b` was recovered. The correct non-invented status is UNVERIFIED / PROPOSED unless primary evidence or an explicit Director disposition is supplied.
+- **PR #174 F-02/F-03:** both remain open technical obligations. The original full report and inline annotations are unavailable; the recovered summary is secondary evidence. A traceable specification correction and independent re-review are required.
+- **PR #191:** the Project Director must choose historical-base review or authorize a dependent revision that replays its unique document commit onto current PR #179. No rebase, retarget or cherry-pick is performed here.
+- **PR #192 / #193:** these remain separate lineages. Their review/integration order is an authority decision; no stacking or integration is inferred.
+- **DF-09:** requires an actual uninvolved human to complete the 17-question protocol without coaching.
+- **DF-11:** requires a qualifying reviewer separate from the Builder's GPT-6 identity and a formal review against the exact final revision.
+- **DF-12:** requires the Project Director's exact-revision acceptance/rejection/conditional decision after the required evidence exists.
+
+**Current disposition remains NOT CLEARED.** Stage A remains HELD and implementation remains unauthorized.
