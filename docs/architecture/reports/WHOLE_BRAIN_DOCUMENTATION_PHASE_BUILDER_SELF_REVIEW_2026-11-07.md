@@ -405,3 +405,18 @@ The inventory's Section 30 is an immutable snapshot of PR #192 parent HEAD `0576
 - **DF-06 / DF-07 / DF-08:** broader fragment/external/historical-link validation, cross-lineage status consistency and historical preservation remain partial/open.
 
 **Disposition: NOT READY FOR ACCEPTANCE.** Stage A remains held. Implementation remains unauthorized. No source, tests, build configuration, workflows, dependencies, or runtime files were changed.
+
+
+## 16. Fresh-reader protocol preparation — 2026-11-08
+
+The foundation audit now contains Section 19, a fixed fresh-reader continuity test protocol with exactly 17 numbered questions. It replaces the earlier ambiguous 16-versus-17 reference with a new explicit question set; it does not claim to recover or validate the earlier unrecorded set.
+
+- Audit path: `docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md`
+- Audit blob after protocol addition: `92f1766633bddb73be5af91a95652dd83b7252ef`
+- Audit update commit: `b2835aa634df324351127604fd72c0b724c530c4`
+- Protocol requires a genuinely uninvolved participant, only the root README and Documentation Portal as initial materials, no coaching, verbatim answers, supporting paths/sections, exact revisions and a full session record.
+- **DF-09 remains NOT MET.** No eligible participant or session has been supplied or conducted. The protocol is preparation, not test evidence.
+- **DF-11 remains NOT MET.** The received review report discloses that its author shares the Builder's ChatGPT/GPT-6 identity. A genuinely separate reviewer must inspect the corrected exact revision.
+- **DF-12 remains NOT MET.** Project Director acceptance/rejection/conditional acceptance of an exact revision remains the Director's decision.
+
+The audit update is documentation-only. It does not start Stage A, select a baseline, authorize implementation, or change any accepted architecture/specification. No source, tests, build configuration, workflows, dependencies or runtime files were changed.
