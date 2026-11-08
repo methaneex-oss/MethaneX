@@ -355,3 +355,12 @@ The repository contains several review-labelled branches and reports. The review
 The original PR #174 formal review list and inline review-comment endpoint both returned zero records; PR #173 likewise returned zero formal reviews and zero inline review comments. PR #173's two conversation comments are Builder-authored handoff/resubmission comments, not a direct Project Director acceptance decision. PR #174's conversation contains the Project Director decision comment `6604790481`, accepting exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` as the Brain Mechanism Specification planning baseline only. F-02/F-03 remain open; no missing review content is invented.
 
 No branch was deleted or moved, no historical file was relocated, and no PR was merged, rebased, retargeted or cherry-picked. The register closes the Builder's bounded current branch/PR discovery and path/blob mapping work. Any archive relocation, disputed historical acceptance disposition, PR #191 integration choice, and PR #192/#193 order remain Project Director decisions.
+
+
+### 5.6 Final Builder closeout parent snapshot — 2026-11-08
+
+At the start of the final Builder closeout pass, PR #192 was open/draft/unmerged at parent HEAD `5fb1e15c38c4fb4e3a117f960c7d491217fdc2d8`, base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, with 26 changed paths. This is a parent snapshot, not a claim that the PR remains at this SHA after the closeout commits.
+
+The current package's 26 paths and exact parent blob identities are recorded in the detailed inventory's final §41 manifest. The final closeout pass re-fetched the 26 changed files at this parent revision, confirmed the changed-path set, and verified that the 22 unique repository-relative Markdown target paths used by the package exist at this exact revision. The current PR #192 and PR #193 lineages remain separate. PR #193 remains open/draft/unmerged at HEAD `65220543416da9b368f24e226aefe24bcdbc7870`, base `874c732973b6ab303d65a503f5a215b0af8e1153`, with two changed paths.
+
+The 108-path / 28-documentation-PR register remains a bounded preservation map, not a claim that every historical file in the repository has been archived or that any artifact is accepted. Branch/file relocation, deletion, consolidation, disputed authority and archive/supersession policy remain outside Builder authority. No such operation was performed.
