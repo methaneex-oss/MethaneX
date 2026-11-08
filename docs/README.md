@@ -193,7 +193,7 @@ At the pre-correction repository refresh on 2026-11-07:
 - PR #191 is a separate comparison proposal based on an earlier PR #179 snapshot.
 - PR #178 governance remains proposed and unaccepted.
 - PR #173 acceptance provenance remains unresolved in the available PR discussion.
-- PR #174's exact-revision acceptance is recorded, but its draft header and follow-on review obligations remain to be reconciled.
+- PR #174's exact-revision planning-baseline acceptance is recorded. Its stale draft header has received a non-substantive administrative correction on the PR branch; that new revision is not itself independently reviewed or separately accepted. The F-02/F-03 follow-on obligations remain open.
 
 The current task is to complete the Initial Documentation Foundation Completion Gate. Stage A remains held. This portal does not accept any proposal, clear any gate, select a source baseline, authorize implementation, or replace the required independent review and authority decision.
 
