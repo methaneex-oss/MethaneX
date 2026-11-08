@@ -767,3 +767,37 @@ The remaining work is not Builder-completable: DF-09 requires the actual uninvol
 ### 23.4 Self-review conclusion
 
 The Builder-controlled corrections above are complete for this pass, but the documentation-foundation package is **NOT READY FOR ACCEPTANCE**. The gate remains **NOT CLEARED**. Stage A remains held; implementation remains unauthorized. This is a Builder self-review, not an independent review or Project Director decision.
+
+
+---
+
+## 24. Final pre-inventory Builder self-review — 2026-11-08
+
+### 24.1 Exact snapshot reviewed by Builder
+
+Immediately before this self-review update, PR #192 was open/draft/unmerged at HEAD `3e8e2a520ccec3878afd5412070a1b1592a6d449`, base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, with 24 changed paths. The 24-path inventory at that parent was fetched and refreshed; its resulting blob was `7f73ada36a6d18a8e8e6871a849726899c83d315`. The current self-review commit and final inventory write will advance the branch; the reviewer must fetch the actual post-inventory HEAD.
+
+### 24.2 Builder-controlled corrections verified
+
+- The portal's navigation table and role routes are present; current status language distinguishes proposals, accepted exact-scope decisions, historical material and deferred plans.
+- The planning index routes readers to the audit, preservation evidence, historical register, outstanding-work register and PR #174 provenance recovery.
+- PR #174's specification header distinguishes the exact accepted planning baseline from the later administrative clarification; follow-on F-02/F-03 remain open.
+- PR #173 is consistently treated as UNVERIFIED / PROPOSED absent primary acceptance evidence.
+- PR #191's graph is accurately described as diverged; retargeting alone is not a valid reconciliation.
+- The 68-path historical register and selected PR #96/#97/#148/#156/#170 comparisons are preserved as bounded evidence.
+- The inventory now records all 24 PR #192 changed paths and exact blobs at the stated immutable parent, with its own pre-update blob explicitly identified.
+- PR #192 and PR #193 remain separate lineages; no branch-history operation or integration was performed.
+
+### 24.3 Remaining findings and limitations
+
+- DF-06 remains PARTIAL: the prior 76-relative-link check is from an earlier 23-file parent; the current 24-path parent has a refreshed blob register, not exhaustive heading-fragment, line-anchor, external-reachability, semantic or historical cross-branch validation.
+- DF-08 remains PARTIAL: broader non-JARVIS PR/branch lineage, two unmatched branch refs and archive/supersession decisions are not fully resolved.
+- PR #174 F-02/F-03 remain OPEN. The original review report and inline annotations remain unavailable verbatim; no speculative correction is asserted.
+- PR #173 provenance, PR #191 integration disposition and PR #192/#193 order require primary evidence or Project Director decision.
+- DF-09 remains NOT MET until an uninvolved human completes the 17-question protocol without coaching.
+- DF-11 remains NOT MET until a qualifying separate reviewer submits a formal review against the actual final revision.
+- DF-12 remains NOT MET until the Project Director decides against the exact reviewed revision.
+
+### 24.4 Self-review disposition
+
+The Builder-controlled inventory synchronization is corrected for the stated parent. This self-review is not an independent review and does not clear the documentation-foundation gate. **NOT READY FOR ACCEPTANCE; NOT CLEARED.** Stage A remains held; implementation remains unauthorized.
