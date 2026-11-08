@@ -557,3 +557,56 @@ No simulation, self-review, generated answer set or Builder statement can substi
 This is a Builder self-review only. It is not independent review and does not accept the documentation foundation. DF-09, DF-11 and DF-12 remain NOT MET; DF-03 and DF-05–DF-08 remain partial/unresolved as detailed in audit §24. The final inventory and exact PR HEAD must be refreshed after all writes in this pass.
 
 **Builder recommendation: NOT READY FOR ACCEPTANCE.** Stage A remains held. No source/runtime changes, implementation, merge, rebase, retarget, cherry-pick or integration is authorized.
+
+
+## 21. Final Builder self-review — preservation and navigation correction pass — 2026-11-08
+
+### 21.1 Exact scope and repository state
+
+This self-review update covers documentation-only work on PR #192 and PR #193:
+
+- Added `DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md`, containing the 37-branch discovery, exact-tip grouping, principal branch-to-PR mappings, and selected PR #96/#97/#148/#156/#170 Markdown blob comparisons.
+- Updated the Planning Documentation Index to include the preservation report and point to the latest PR #193 continuity-handoff revision.
+- Updated the Documentation Portal with a new reader route and navigation-map entry for the preservation report.
+- Updated PR #193's implementation plan and continuity handoff to pin their PR #192 documentation links to an immutable commit; updated the PR #193 handoff with the preservation evidence and current review target.
+- Updated the foundation audit with the current branch, preservation, link-validation and authority evidence.
+
+At the start of this self-review update, PR #192 was open/draft/unmerged at HEAD `bbd033b5b966b6b85f0c61161641e568604548db`, base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, with 21 changed paths. PR #193 was open/draft/unmerged at HEAD `714142a24ed1ba286291bba8ccfc8a81f2f9115a`, base `874c732973b6ab303d65a503f5a215b0af8e1153`, with two changed paths. The PR #192 review-submission, inline-thread and conversation-comment queries returned 0 / 0 / 0.
+
+### 21.2 Verification performed
+
+- Retrieved the complete recursive PR #192 tree at parent HEAD `e017f9976177e1d7ed77b250d9cbacbf7367f8b9`; GitHub reported 250 paths and `truncated=false`.
+- Fetched all 21 changed PR #192 files at that exact parent.
+- Checked 63 relative Markdown link occurrences across those 21 files against the complete tree; zero target paths were missing.
+- Identified 143 external URL occurrences. They were not exhaustively fetched or semantically checked. Heading fragments and all historical/cross-branch links were not exhaustively validated.
+- Reproduced exact tree comparisons for PR #96, #97, #148, #156 and #170. The preservation report records the shared paths, identical blob counts, distinct revisions and exact refs.
+- Re-fetched PR #173 and #174 discussion evidence. PR #173's retrieved discussion contains Builder comments but no direct Project Director acceptance record for its exact architecture HEAD. PR #174 comment `6604790481` records acceptance of exact specification HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`; its stale draft header and F-02/F-03 follow-on obligations remain unresolved.
+- Rechecked PR #191's base-to-PR #179 comparison: 22 commits ahead, 0 behind. No rebase or retarget was performed.
+
+### 21.3 Findings and remaining work
+
+**Builder-controlled work completed in this pass:**
+
+1. Branch discovery and exact-tip grouping for all 37 refs returned by the `jarvis` branch search.
+2. Selected duplicate-document and divergent-revision comparisons across PR #96/#97/#148/#156/#170.
+3. Portal and index navigation to the preservation evidence.
+4. PR #193 plan/handoff links refreshed to exact immutable PR #192 commit references; index points to the new PR #193 handoff.
+5. Current relative target-path check completed for 63 occurrences with zero missing paths.
+
+**Still open; not claimed as completed:**
+
+- DF-03: PR #173 acceptance remains unestablished unless the primary exact-revision decision is recovered or the Project Director explicitly dispositions the provenance gap.
+- PR #174: stale “Draft for independent review” header and F-02/F-03 follow-on obligations need an authorized, separately reviewed status correction or explicit exception. The accepted specification's substantive content was not changed.
+- PR #191: 22-commit stale-base relationship still needs an explicit Project Director disposition; no rebase/retarget is authorized.
+- DF-05/DF-07: PR #192 and PR #193 remain separate lineages; integration order is not decided.
+- DF-06: 143 external URL occurrences, heading fragments and exhaustive historical/cross-branch links remain unchecked.
+- DF-08: selected comparisons are complete, but the broader non-JARVIS-named PR lineage map, the two unmatched branch refs, full Developmental Brain Plan disposition and archive/supersession proposal remain open.
+- DF-09: the 17-question protocol has not been completed by a genuinely uninvolved reader.
+- DF-11: no qualifying reviewer separate from the Builder's GPT-6 identity has submitted a formal review.
+- DF-12: no exact-revision Project Director decision has been recorded.
+
+### 21.4 Self-review disposition
+
+The work in this pass is documentation-only and is traceable to the exact repository commits and blob evidence. The checks above support the bounded claims made; they do not establish complete link validation, complete historical preservation, independent review, fresh-reader success or acceptance.
+
+**Disposition: NOT READY FOR ACCEPTANCE; DOCUMENTATION FOUNDATION NOT CLEARED.** DF-09, DF-11 and DF-12 remain NOT MET. DF-03 and DF-05–DF-08 remain partial or unresolved as stated. Stage A remains held. This is a Builder self-review only, not an independent review or Project Director decision.
