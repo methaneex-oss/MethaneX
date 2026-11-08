@@ -1209,3 +1209,47 @@ This refresh closes the prior 23-versus-24 changed-path inventory staleness for 
 PR #173 remains UNVERIFIED / PROPOSED absent primary acceptance evidence or a Project Director disposition. PR #174's accepted planning baseline remains the exact earlier revision recorded by comment `6604790481`; follow-on F-02/F-03 remain OPEN. PR #191's divergent dependency and PR #192/#193 lineage order remain authority decisions. No rebase, retarget, cherry-pick, merge, Stage A start or implementation is performed or authorized by this addendum.
 
 **Disposition: NOT CLEARED. Stage A remains HELD.**
+
+## 31. Final exact-head Builder verification — 2026-11-08
+
+The following live-state and bounded-check results supersede earlier snapshots only for the stated exact revision.
+
+### 31.1 Current PR state
+
+- PR #192: open/draft/unmerged, HEAD \`e658b30f7eacdde9510fb81128b85644339017ef\`, base \`61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c\`, 24 changed paths.
+- PR #193: open/draft/unmerged, HEAD \`d2ccbbb26595f28fb7488db4dbe778e7ddd58c7a\`, base \`874c732973b6ab303d65a503f5a215b0af8e1153\`, 2 changed paths.
+- PR #192 formal reviews, inline review threads and conversation comments: 0 / 0 / 0 at the time queried.
+
+### 31.2 DF-06 — current changed-file relative-path validation
+
+At exact PR #192 HEAD \`e658b30f7eacdde9510fb81128b85644339017ef\`, all 24 changed paths were fetched. The recursive repository tree was complete (\`truncated=false\`; 225 blob paths). A bounded Markdown-link scan found 80 relative link occurrences and zero missing target paths. It counted 143 external URL occurrences.
+
+This is a current exact-head relative-path existence check. It does not prove external reachability, heading-fragment resolution, line-anchor validity, semantic relevance or exhaustive historical cross-branch link correctness. DF-06 remains PARTIAL.
+
+### 31.3 DF-08 — branch ancestry correction
+
+The fresh \`jarvis\` branch search returned 37 refs; the \`JARVIS\` PR search returned 63 PR results. The two prior unmatched refs were mapped by direct ancestry:
+- \`feat/jarvis-build-agents-clean\` tip \`04a441676c1d41833f64bc0f20f5320af6f10855\` is an ancestor of PR #179 HEAD, with PR #179 170 commits ahead and 0 behind.
+- \`docs/jarvis-phase-1-preservation-inventory-20261104\` tip \`ebbda074957e0f9fb0d0f04dd9b03fe58b270a0a\` is an ancestor of PR #178 HEAD, with PR #178 11 commits ahead and 0 behind.
+
+This resolves the two prior unmatched-ref ancestry questions. It does not complete broader non-JARVIS-named lineage discovery or archive/supersession decisions. DF-08 remains PARTIAL.
+
+### 31.4 Gate matrix — current disposition
+
+| Criterion | Current disposition |
+|---|---|
+| DF-01 | Present; external fresh-reader confirmation pending |
+| DF-02 | Parent-snapshot inventory refresh to follow this Builder pass; final post-write reviewer verification required |
+| DF-03 | Partial; PR #173 primary acceptance provenance unresolved |
+| DF-04 | Pass within scope; PR #178 governance remains proposed/unaccepted |
+| DF-05 | Partial; PR #191 and PR #192/#193 dependency/order require Director disposition |
+| DF-06 | Partial; 80 current relative links, zero missing targets; fragments/external reachability/semantics remain |
+| DF-07 | Partial; separate PR #192/#193 lineages documented; independent and Director confirmation remain |
+| DF-08 | Partial; two unmatched refs mapped by ancestry; broader lineage and archive/supersession remain |
+| DF-09 | NOT MET; actual uninvolved human session required |
+| DF-10 | Builder self-review updated in this pass; not independent clearance |
+| DF-11 | NOT MET; separate qualifying reviewer required |
+| DF-12 | NOT MET; Project Director exact-revision decision required |
+| DF-13 | PASS for hold only; Stage A remains not started and held |
+
+**Builder disposition: NOT CLEARED.** No human test, qualifying independent review, Director acceptance, branch-history operation, merge, Stage A start or implementation is claimed.
