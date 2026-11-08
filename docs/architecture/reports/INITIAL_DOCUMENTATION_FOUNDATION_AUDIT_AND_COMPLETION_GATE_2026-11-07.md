@@ -661,3 +661,65 @@ No source code, tests, build configuration, workflows, dependencies, runtime sta
 ### 18.6 Current Builder disposition
 
 The two concrete documentation defects DF-F01 and DF-F02 are accepted and corrected in this update batch, subject to post-write verification of the resulting exact commit and blob SHAs. The documentation foundation is **NOT READY FOR ACCEPTANCE** while DF-09, DF-11 and DF-12 remain unmet and provenance, preservation, dependency, and broader link-verification obligations remain open. Stage A remains held.
+
+
+## 19. Fresh-reader continuity test protocol — prepared, not executed
+
+**Status:** Protocol prepared; DF-09 remains **NOT MET** until a genuinely uninvolved participant completes the session and the raw evidence is recorded.  
+**Purpose:** Test whether a first-time reader can recover the project's current objective, scope, document navigation, authority distinctions, exact PR state, unresolved obligations and immediate next action without relying on chat history or Builder explanation.
+
+### 19.1 Participant eligibility and test conditions
+
+The participant must not have authored, reviewed, maintained or previously worked on this documentation package. Prefer a person with no prior JARVIS project involvement. Record their role and prior involvement; do not collect unnecessary personal or sensitive information.
+
+The participant receives only:
+1. the repository root `README.md` at the exact tested PR #192 revision; and
+2. `docs/README.md` (the Documentation Portal) at that same revision.
+
+The participant may follow links reachable from those two entry points, including the Planning Documentation Index and the separate PR #193 artifacts. Do not provide this audit, the review report, Builder handoff, chat history, answer key, or private explanation in advance.
+
+The facilitator must not coach, hint, paraphrase a question to lead the participant, or correct an answer during the session. The participant may answer “not found” or “not sure”; those are valid observations, not failures to be hidden. Ask for the document path and section supporting each answer. Record exact answers before any discussion or correction.
+
+### 19.2 Fixed question set — 17 questions
+
+1. What is JARVIS intended to become, and what is the scope of the existing project?
+2. What is the governing engineering principle for how the Brain should acquire capabilities?
+3. What does “Brain-first” mean in the project, and why does it not mean the Brain is the entire JARVIS product?
+4. What is the current project task or documentation phase?
+5. Has Stage A started? What must happen before it may start?
+6. Where should a new reader begin, and what is the difference between the Documentation Portal and the Planning Documentation Index?
+7. What do the document status and authority labels mean? Why are filenames, branch names, PR titles and draft/merged state insufficient to establish acceptance?
+8. Which foundational architecture or specification artifacts are accepted within a stated scope, and where can their exact-revision authority evidence be checked?
+9. What is the recorded status of PR #173's Brain Foundation Architecture, and what acceptance-provenance issue remains?
+10. What is the exact accepted-revision status of PR #174, and what header contradiction and follow-on obligations remain?
+11. What is the status of PR #178's governance proposal? May a Builder treat it as binding?
+12. What are the current states and purposes of PR #192 and PR #193, and why must their separate lineages not be treated as already integrated?
+13. What is the dependency/base issue involving PR #191, and what must not be done automatically to resolve it?
+14. At the tested revision, what are PR #192's exact HEAD, base SHA and changed-file count, and where is the full changed-file/blob register?
+15. Which documentation-foundation requirements remain open or partial, especially link validation, historical preservation, fresh-reader evidence, independent review and authority acceptance?
+16. Which decisions belong to the Project Director, which work belongs to the Builder and Independent Reviewer, and why can the Brain/project Builder not self-authorize consequential work?
+17. Based only on the repository material, what is the immediate next action, who owns it, and what evidence would demonstrate completion?
+
+### 19.3 Required session record
+
+The resulting test-evidence record must include:
+- participant identifier or role (a non-sensitive pseudonym is acceptable), eligibility and prior-involvement statement;
+- facilitator identity/role;
+- date, start/end time and timezone;
+- exact PR #192 HEAD and base SHA, plus exact PR #193 HEAD/base SHA used for the session;
+- exact entry-point files and revisions provided;
+- all 17 questions and the participant's verbatim answers;
+- supporting document paths/sections cited by the participant, or “not found”;
+- unanswered questions, incorrect inferences, contradictions, navigation failures and points of confusion;
+- outside assistance, hints, interruptions or deviations from the protocol;
+- findings, severity, proposed documentation corrections and retest decision.
+
+Do not replace verbatim answers with a polished summary. Distinguish what the participant found in the documents from what they inferred or guessed. Do not publish unnecessary personal information.
+
+### 19.4 Evaluation and retest rule
+
+Evaluate whether the participant can reconstruct the current task, scope, authority, PR dependencies, unresolved findings and immediate next action from the permitted materials. A correct guess without documentary support is not sufficient evidence of reader continuity. Missing or contradictory documentation must be recorded as a finding, not explained away by the facilitator.
+
+If a correction changes entry-point navigation, authority/status interpretation, PR dependency understanding or the next-action route, repeat the affected test against the corrected exact revision. Preserve both records.
+
+**Execution status:** Not performed. No participant, session, answer or result is claimed by this audit. This protocol resolves the earlier 16-versus-17 count ambiguity by defining one fixed set of exactly 17 questions; it does not retroactively validate or reproduce the earlier unrecorded question set. DF-09 remains **NOT MET** until the test evidence exists.
