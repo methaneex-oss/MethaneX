@@ -290,3 +290,27 @@ The Project Director alone decides DF-12 for the exact package revisions. The Bu
 Inspect the actual PR #192 diff and every changed path at the re-fetched HEAD; verify the inventory's exact parent-snapshot/blob register; inspect PR #193 only as a separate dependency lineage; verify the audit, self-review and handoff agree on current statuses; independently challenge all findings and authority claims; and commit the review report to `docs/architecture/reports/` on the PR #192 branch. State reviewer identity, independence basis, exact inspected HEAD/base, changed-file count, methods, findings, limitations and explicit clearance recommendation. If independence criteria are not met, say so and leave DF-11 NOT MET.
 
 **Current Builder recommendation remains NOT CLEARED.** This handoff requests review only. It does not claim DF-09/DF-11/DF-12 completion, Project Director acceptance, Stage A authorization or implementation authorization.
+
+
+## 14. Historical-preservation evidence and current review target — 2026-11-08
+
+The Builder added [DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md](DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md). It records the 37 current branch refs returned by the `jarvis` branch search, groups them by exact tip SHA, maps the principal documentation branches to their PRs, and compares Markdown blobs across PR #96/#97 and PR #97/#148/#156/#170.
+
+The report closes selected historical comparisons but explicitly leaves broader PR lineage reconciliation, the two unmatched branch refs, the PR #148/#156 Developmental Brain Plan difference, and archive/supersession decisions open. It does not authorize deleting or moving anything. The reviewer must reproduce its branch and blob comparisons rather than treating the Builder report as independent validation.
+
+### 14.1 Cross-lineage navigation refresh
+
+PR #193's implementation plan and continuity handoff were updated to pin their links to the PR #192 documentation snapshot at commit `f481c710eb8a9e779a207fac52f82f0589d3b1b2`. PR #193's current handoff is now commit `31f8cafcb0547e70f47e03b503d3125e4573de4b`. The PR #192 index now points to that handoff revision. The handoff intentionally points to the earlier PR #192 snapshot to avoid a cyclic commit dependency; re-fetch both branches before review.
+
+### 14.2 Exact review target at this handoff update
+
+| Item | Live state |
+|---|---|
+| PR #192 | Open, draft, unmerged; HEAD `ec4d6f7f49260b9357834f6387469b76093d08ea`; base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; 21 changed paths |
+| PR #193 | Open, draft, unmerged; HEAD `31f8cafcb0547e70f47e03b503d3125e4573de4b`; base `874c732973b6ab303d65a503f5a215b0af8e1153`; 2 changed paths |
+| PR #192 formal reviews / inline threads / conversation comments | 0 / 0 / 0 returned at this refresh |
+| PR #191 dependency | Base `f6267456560a08054d69f7960d2951452b14017c`; PR #179 HEAD `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; compare remains 22 commits ahead, 0 behind |
+
+The exact PR #192 HEAD will change if further audit, self-review or inventory corrections are committed. The reviewer must fetch the live metadata, changed-path list and every changed file at the actual review target, and must check the inventory's parent-snapshot/self-reference convention.
+
+**Gate status remains NOT CLEARED.** DF-09 requires an actual uninvolved human reader; DF-11 requires a genuinely separate reviewer; DF-12 requires the designated authority's exact-revision decision. PR #173 provenance, PR #174's stale draft header and F-02/F-03 follow-on obligations, PR #191 dependency disposition, comprehensive anchor/external-link validation and broader historical preservation remain open or partial. Stage A remains held. No implementation, merge, rebase, retarget, cherry-pick, or branch deletion is authorized by this handoff.
