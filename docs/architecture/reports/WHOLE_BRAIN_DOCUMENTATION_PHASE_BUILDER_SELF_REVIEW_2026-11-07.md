@@ -229,9 +229,9 @@ The templates require exact revision identifiers, purpose/scope/non-goals, evide
 The templates are linked from the portal and planning index. They are aids, not binding governance or approval. The inventory and audit record their purpose. The documentation foundation remains **NOT READY FOR ACCEPTANCE** pending independent review, fresh-reader testing, remaining provenance/preservation work and exact-revision authority decision.
 
 
-## 10. Navigation package follow-up and consistency refresh — 2026-11-07
+## 10A. Navigation package follow-up and consistency refresh — 2026-11-07
 
-### 10.1 Additional navigation changes
+### 10A.1 Additional navigation changes
 
 - Added a role-based human-facing portal at `docs/README.md`.
 - Routed the repository root README and legacy `docs/ARCHITECTURE.md` through the portal.
@@ -241,11 +241,11 @@ The templates are linked from the portal and planning index. They are aids, not 
 - Qualified the historical PR #173 acceptance claim in the inventory so it is not mistaken for recovered primary decision evidence.
 - Corrected the audit's opening Stage A finding to identify it as a historical observation superseded by later corrective commits.
 
-### 10.2 Link validation
+### 10A.2 Link validation
 
 A repository-relative Markdown link check was run across the root README, portal, legacy architecture page, planning index, inventory, foundation audit and this self-review against the PR #192 tree at `273c2c0ac1d9d6a2291d339387ea6e88dae037d7`. Forty-four repository-relative links resolved, with no missing targets. This check did not establish the availability of external URLs, every immutable cross-branch URL, or every fragment anchor.
 
-### 10.3 Current limitations
+### 10A.3 Current limitations
 
 The package remains Builder-authored and unaccepted. No independent fresh-reader has completed DF-09. No independent review has been submitted for the exact updated revision. The PR #173 primary acceptance record and PR #174 follow-on provenance remain unresolved; historical preservation and PR #191 disposition remain open. No Stage A planning or implementation is authorized.
 
@@ -559,9 +559,9 @@ This is a Builder self-review only. It is not independent review and does not ac
 **Builder recommendation: NOT READY FOR ACCEPTANCE.** Stage A remains held. No source/runtime changes, implementation, merge, rebase, retarget, cherry-pick or integration is authorized.
 
 
-## 21. Final Builder self-review — preservation and navigation correction pass — 2026-11-08
+## 21A. Final Builder self-review — preservation and navigation correction pass — 2026-11-08
 
-### 21.1 Exact scope and repository state
+### 21A.1 Exact scope and repository state
 
 This self-review update covers documentation-only work on PR #192 and PR #193:
 
@@ -573,7 +573,7 @@ This self-review update covers documentation-only work on PR #192 and PR #193:
 
 At the start of this self-review update, PR #192 was open/draft/unmerged at HEAD `bbd033b5b966b6b85f0c61161641e568604548db`, base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, with 21 changed paths. PR #193 was open/draft/unmerged at HEAD `714142a24ed1ba286291bba8ccfc8a81f2f9115a`, base `874c732973b6ab303d65a503f5a215b0af8e1153`, with two changed paths. The PR #192 review-submission, inline-thread and conversation-comment queries returned 0 / 0 / 0.
 
-### 21.2 Verification performed
+### 21A.2 Verification performed
 
 - Retrieved the complete recursive PR #192 tree at parent HEAD `e017f9976177e1d7ed77b250d9cbacbf7367f8b9`; GitHub reported 250 paths and `truncated=false`.
 - Fetched all 21 changed PR #192 files at that exact parent.
@@ -583,7 +583,7 @@ At the start of this self-review update, PR #192 was open/draft/unmerged at HEAD
 - Re-fetched PR #173 and #174 discussion evidence. PR #173's retrieved discussion contains Builder comments but no direct Project Director acceptance record for its exact architecture HEAD. PR #174 comment `6604790481` records acceptance of exact specification HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`; its stale draft header and F-02/F-03 follow-on obligations remain unresolved.
 - Rechecked PR #191's base-to-PR #179 comparison: 22 commits ahead, 0 behind. No rebase or retarget was performed.
 
-### 21.3 Findings and remaining work
+### 21A.3 Findings and remaining work
 
 **Builder-controlled work completed in this pass:**
 
@@ -605,7 +605,7 @@ At the start of this self-review update, PR #192 was open/draft/unmerged at HEAD
 - DF-11: no qualifying reviewer separate from the Builder's GPT-6 identity has submitted a formal review.
 - DF-12: no exact-revision Project Director decision has been recorded.
 
-### 21.4 Self-review disposition
+### 21A.4 Self-review disposition
 
 The work in this pass is documentation-only and is traceable to the exact repository commits and blob evidence. The checks above support the bounded claims made; they do not establish complete link validation, complete historical preservation, independent review, fresh-reader success or acceptance.
 
@@ -649,7 +649,7 @@ The PR #174 status contradiction and PR #191 graph description have been correct
 
 ---
 
-## 22. PR #191 graph and PR #174 follow-on recovery correction — 2026-11-08
+## 22A. PR #191 graph and PR #174 follow-on recovery correction — 2026-11-08
 
 The previous §21.2 correctly stated that PR #191's base is an ancestor of PR #179's head, but that fact alone does not describe the relationship between the PR heads. The direct comparison from PR #179 HEAD `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` to PR #191 HEAD `609d38ede50bbdd98a93dfed112781eacabee9fd` reports **diverged: PR #191 is 1 commit ahead and 22 commits behind**, with merge base `f6267456560a08054d69f7960d2951452b14017c`. Retargeting alone does not reconcile this. The authority must decide whether to review PR #191 as a historical-base artifact or authorize a dependent revision that replays its unique document commit.
 
@@ -658,16 +658,16 @@ A new recovery record for PR #174 follow-on review has recovered the separate F-
 **Self-review correction:** The prior §21 remains a Builder self-review, not an independent review. No acceptance or gate clearance is inferred.
 
 
-## 22. Final Builder self-review — authority, preservation and handoff corrections — 2026-11-08
+## 22B. Final Builder self-review — authority, preservation and handoff corrections — 2026-11-08
 
-### 22.1 Exact snapshot before this self-review update
+### 22B.1 Exact snapshot before this self-review update
 
 - PR #192: open/draft/unmerged; HEAD 140608b544e30bcd73625cf609b5d84de133b01d; base 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c; 23 changed files.
 - PR #193: open/draft/unmerged; HEAD 3fc4c12add3656578da949689955aafd3b2b83af; base 874c732973b6ab303d65a503f5a215b0af8e1153; 2 changed files.
 - PR #174: open/draft/unmerged; current status-clarification HEAD 922912283d173e24df891ba23d0e2dfc17e0f4b4; accepted planning-baseline decision remains tied to prior exact HEAD 0811a59e46bf934e32e794f90e4e7d18d4e2bd97.
 - PR #192 review submissions / inline threads / conversation comments: 0 / 0 / 0 at the latest recorded query.
 
-### 22.2 Builder-controlled corrections completed
+### 22B.2 Builder-controlled corrections completed
 
 1. Added a supplemental historical preservation register mapping 68 documentation paths across PR #171–#193 to immutable PR heads and fetched blob SHAs. This complements, rather than duplicates, the earlier branch discovery and selected duplicate/revision comparison report covering PR #96/#97/#148/#156/#170.
 2. Linked the supplemental register from the Planning Documentation Index and Documentation Portal.
@@ -677,7 +677,7 @@ A new recovery record for PR #174 follow-on review has recovered the separate F-
 6. Corrected the PR #191 dependency description: base-to-PR #179 is 22 ahead / 0 behind, but PR #179 HEAD versus PR #191 HEAD is diverged, with PR #191 one unique commit ahead and 22 behind. No rebase, retarget or cherry-pick was performed.
 7. Updated the audit with exact evidence and remaining gate blockers.
 
-### 22.3 Verification boundaries
+### 22B.3 Verification boundaries
 
 - The preservation register's 68 paths were individually returned by PR changed-file endpoints and fetched at their stated exact PR heads. This proves retrievability at those revisions, not universal archival completeness or authority.
 - The prior relative-link check recorded 63 resolved target paths and zero missing paths at its exact parent. It also identified 143 external URL occurrences not exhaustively checked; heading fragments and all historical cross-branch links remain incomplete. DF-06 remains PARTIAL.
@@ -686,14 +686,14 @@ A new recovery record for PR #174 follow-on review has recovered the separate F-
 - The PR #174 exact planning-baseline decision remains evidenced by comment 6604790481; the later F-02/F-03 obligations remain open. The original report is still only partially recovered.
 - PR #191 integration remains an authority decision; no branch-history operation was performed.
 
-### 22.4 Non-Builder requirements
+### 22B.4 Non-Builder requirements
 
 - DF-09 remains NOT MET until an actual uninvolved human completes the 17-question protocol without coaching and the raw evidence is recorded.
 - DF-11 remains NOT MET until a genuinely separate reviewer submits a formal review against the exact final revision. The GPT-6 reports are not counted.
 - DF-12 remains NOT MET until the Project Director makes an explicit exact-revision decision.
 - DF-03 and DF-05 also require the Project Director's disposition where primary authority evidence or branch integration is missing.
 
-### 22.5 Self-review disposition
+### 22B.5 Self-review disposition
 
 Builder-controlled corrections are recorded, but they do not satisfy the missing reader, independent-review or authority evidence. The package is **NOT READY FOR ACCEPTANCE**. Stage A remains held; implementation remains unauthorized. No runtime source, tests, build configuration, workflows, dependencies, runtime state, or donor code were changed. No PR was merged, rebased, retargeted, cherry-picked or integrated.
 
