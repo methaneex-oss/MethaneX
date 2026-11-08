@@ -192,3 +192,17 @@ The added §15 records:
 The workflow results above are recorded as statements in the PR #156 document; this content comparison did not independently rerun or revalidate those workflows.
 
 **Disposition:** The PR #156 revision is an append-only extension of the PR #148 revision, not a conflicting rewrite. The content relationship is now resolved. PR #148 and PR #156 remain separate open, draft, unmerged lineages; neither document is promoted to an accepted canonical plan by this comparison. Preserve PR #148 as the earlier exact version and PR #156 as the later extended version. Any authority/canonical-selection decision remains with the Project Director.
+
+
+## 9. Expanded branch ancestry verification — 2026-11-08
+
+A fresh repository-scoped \`jarvis\` branch search returned 37 refs, grouped into 11 exact commit tips. A fresh repository-scoped PR search for \`JARVIS\` returned 63 results. The two refs previously left without a matching PR head were checked by exact commit and ancestry comparison:
+
+| Branch | Exact tip | Commit content | Ancestry evidence | Result |
+|---|---|---|---|---|
+| \`feat/jarvis-build-agents-clean\` | \`04a441676c1d41833f64bc0f20f5320af6f10855\` | Evolution orchestration header, controller/orchestrator source and orchestration test | PR #179 HEAD \`61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c\` is 170 commits ahead and 0 behind | Tip is an ancestor of PR #179; prior unmatched classification resolved |
+| \`docs/jarvis-phase-1-preservation-inventory-20261104\` | \`ebbda074957e0f9fb0d0f04dd9b03fe58b270a0a\` | Phase 1 whole-repository investigation report | PR #178 HEAD \`39fe09dcf13496f5f0005ccf3f00739303e29f88\` is 11 commits ahead and 0 behind | Tip is an ancestor of PR #178; prior unmatched classification resolved |
+
+The first tip also compares as an ancestor of PR #96's exact tip. The 27 branch refs at \`16abca97caf77ce65d5ac901513eb2790f04c68c\` remain aliases to one commit, not 27 independent content revisions.
+
+**Updated preservation disposition:** the two previously unmatched refs are no longer unresolved ancestry cases. They remain existing refs and are retained. No branch deletion or consolidation is authorized. Broader non-JARVIS-named PR/branch lineage, archive/supersession decisions and remaining historical revision classification are still open; this report does not claim repository-wide preservation completeness.
