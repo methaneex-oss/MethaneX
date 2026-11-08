@@ -202,3 +202,8 @@ The current task is to complete the Initial Documentation Foundation Completion 
 If a reader cannot determine where to start, which revision is relevant, what is authoritative, or what action is currently allowed, improve this portal and the canonical index rather than adding another unlinked overview document.
 
 **End of documentation portal.**
+
+
+## Supplemental historical preservation register
+
+For exact artifact paths and blob identities across the principal JARVIS planning PR lineages, use the [Historical Documentation Preservation Register](architecture/inventory/HISTORICAL_DOCUMENTATION_PRESERVATION_REGISTER_2026-11-08.md). It complements the [Historical Preservation and Cross-Revision Comparison Report](architecture/reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md): the latter covers earlier branch discovery and selected cross-revision comparisons; the register maps the later PR #171–#193 documentation artifacts. Neither document converts a proposal into an accepted decision or authorizes branch integration.
