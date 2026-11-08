@@ -645,3 +645,14 @@ PR #192 was open/draft/unmerged at HEAD `ec122fba76ae7feda2b66a310a81efcf04e4bee
 The PR #174 status contradiction and PR #191 graph description have been corrected. This does not close the documentation-foundation gate. The Builder cannot supply the required human reader, independent reviewer identity or Project Director decision and must not simulate them.
 
 **Disposition: NOT READY FOR ACCEPTANCE.** DF-09, DF-11 and DF-12 remain NOT MET; DF-03 and DF-05–DF-08 remain partial/unresolved as stated in the audit. Stage A remains held. No runtime source, tests, build configuration, dependencies or workflows were changed. No merge, rebase, retarget, cherry-pick, branch deletion, archive move or implementation action was performed.
+
+
+---
+
+## 22. PR #191 graph and PR #174 follow-on recovery correction — 2026-11-08
+
+The previous §21.2 correctly stated that PR #191's base is an ancestor of PR #179's head, but that fact alone does not describe the relationship between the PR heads. The direct comparison from PR #179 HEAD `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` to PR #191 HEAD `609d38ede50bbdd98a93dfed112781eacabee9fd` reports **diverged: PR #191 is 1 commit ahead and 22 commits behind**, with merge base `f6267456560a08054d69f7960d2951452b14017c`. Retargeting alone does not reconcile this. The authority must decide whether to review PR #191 as a historical-base artifact or authorize a dependent revision that replays its unique document commit.
+
+A new recovery record for PR #174 follow-on review has recovered the separate F-02/F-03 finding identities and principal themes, but not the original report verbatim. Follow-on F-02 concerns contextual language/operator-intent grounding (recovered HIGH / CONFIRMED); follow-on F-03 concerns enforceable downstream reasoning integration (recovered MEDIUM / CONFIRMED as a specification weakness). These are distinct from PR #173's F-02/F-03. Both remain open; the recovered summary does not close either finding or replace independent re-review. The Project Director must also disposition the missing-original-report limitation.
+
+**Self-review correction:** The prior §21 remains a Builder self-review, not an independent review. No acceptance or gate clearance is inferred.
