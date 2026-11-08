@@ -97,13 +97,13 @@ Live repository state checked on **2026-11-07**:
 | [#175](https://github.com/methaneex-oss/MethaneX/pull/175) | Proposed Brain implementation roadmap | Open, draft, unmerged | Stacked on #174; now held |
 | [#178](https://github.com/methaneex-oss/MethaneX/pull/178) | Governance rules and Phase 1 inventory/preservation | Open, draft, unmerged | Based on `main`; governance remains proposed |
 | [#179](https://github.com/methaneex-oss/MethaneX/pull/179) | Phase 2 BM-to-source integration map | Open, draft, unmerged | Stacked on #178 |
-| [#191](https://github.com/methaneex-oss/MethaneX/pull/191) | Human/MCU comparison | Open, draft, unmerged | Based on an earlier #179 snapshot, 22 commits behind its current line |
+| [#191](https://github.com/methaneex-oss/MethaneX/pull/191) | Human/MCU comparison | Open, draft, unmerged | Based on ancestor commit `f6267456560a08054d69f7960d2951452b14017c`; current #179 head is 22 commits ahead, 0 behind |
 | [#192](https://github.com/methaneex-oss/MethaneX/pull/192) | Scope correction, documentation index, and foundation audit | Open, draft, unmerged | Stacked on current #179 head |
 | [#193](https://github.com/methaneex-oss/MethaneX/pull/193) | Roadmap hold and continuity handoff | Open, draft, unmerged | Separate stack based on #175 |
 
 The index and handoff are proposals, not accepted decisions. No PR is to be merged, retargeted, rebased, or closed merely to make the documentation tree look tidy. Preserve the exact base/head relationship and obtain the required authority decision before changing the stack.
 
-**PR #191 / PR #192 relationship:** PR #191's base is 22 commits behind PR #179's current line. The comparison report is only in PR #191's changed-file set; PR #192 must not add a duplicate copy. The reviewer/authority must decide whether PR #191 should be reviewed against its historical base or updated through an explicitly approved dependency change.
+**PR #191 / PR #192 relationship:** PR #191's base (`f6267456560a08054d69f7960d2951452b14017c`) is an ancestor of PR #179's current head (`61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`); the compare reports 22 commits ahead and 0 behind from the #191 base to the #179 head. The comparison report is only in PR #191's changed-file set; PR #192 must not add a duplicate copy. The reviewer/authority must decide whether PR #191 should be reviewed against its historical base or updated through an explicitly approved dependency change.
 
 **PR #192 / PR #193 relationship:** these are separate lineages (#179-derived and #175-derived). Neither branch alone is the complete integrated documentation state. Their cross-links must be pinned to immutable commits, and the final integration order must preserve the corrected legacy Phase 2 scope banner.
 
@@ -142,7 +142,7 @@ The next Builder must:
 2. Reconcile the PR #173 acceptance evidence and keep the status qualified until the exact decision is found.
 3. Keep PR #178 governance proposed unless an exact acceptance record is available.
 4. Verify that the current-phase instruction remains consistent across the continuity handoff and implementation-plan hold.
-5. Pin and validate every cross-branch link and reconcile PR #191's stale base.
+5. Pin and validate every cross-branch link and record PR #191's historical-base dependency accurately; do not rebase or retarget without authority.
 6. Update the detailed inventory and this index together.
 7. Perform the fresh-reader continuity test and Builder self-review.
 8. Submit the exact revision for independent review and the required authority decision.
@@ -187,3 +187,22 @@ The documentation portal is proposed on PR #192. The continuity handoff and defe
 The [Documentation Templates Guide](../templates/README.md) provides consistent starting structures for planning/technical documents, independent review reports and test-evidence reports. Templates are aids only; they do not create authority, substitute for formal GitHub review, or prove that tests were executed.
 
 When adding a substantive planning artifact, use the appropriate template where helpful, then update this index and the detailed inventory in the same reviewed change.
+
+
+---
+
+## 11. Dependency and preservation evidence correction — 2026-11-08
+
+### PR #191 ancestry clarification
+
+PR #191 is based on commit `f6267456560a08054d69f7960d2951452b14017c`. PR #179 currently points to `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`. GitHub comparison reports 22 commits ahead and 0 behind from the PR #191 base to the PR #179 head. The #191 base is therefore an ancestor of the current #179 head. Describe this as a historical-base lag/dependency requiring review disposition, not as demonstrated divergence or a merge conflict. No rebase or retarget is authorized.
+
+### Historical preservation report
+
+[Documentation Foundation — Historical Preservation and Cross-Revision Comparison](reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md) records a bounded branch and document comparison: 37 JARVIS-named branch refs, 11 distinct tip SHAs, grouped aliases, principal PR mappings, and selected exact-blob comparisons across PR #96, #97, #148, #156 and #170.
+
+This closes the specific comparisons stated in that report only. It does not close the full DF-08 preservation requirement: two branch refs remain unmatched to a PR head in the inspected search, broader non-JARVIS-named PR lineage remains incomplete, two Developmental Brain Plan revisions remain unreconciled, and archive/supersession decisions remain open. No branch or file may be deleted, moved or consolidated on the basis of this report alone.
+
+### Current review discipline
+
+The live PR #192 and PR #193 heads, changed-path lists and file blobs must be re-fetched before any review. Their lineages remain separate. The inventory is the exact changed-path/blob register; this index is the navigation and authority map. Neither document grants approval, merges lineages, clears the documentation gate, starts Stage A or authorizes implementation.
