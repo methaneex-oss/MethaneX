@@ -390,3 +390,31 @@ Earlier target SHAs in §§2, 10–14 are historical snapshots. Fetch live metad
 Inspect the complete PR #192 diff at the newly fetched HEAD; verify every changed file and the final inventory snapshot; review the portal, index, audit, self-review, handoff, preservation register and PR #174 provenance recovery; independently challenge the architectural/system boundaries and every status/authority claim; and submit a finding-by-finding report with exact evidence and a clear clearance recommendation.
 
 **Current Builder recommendation: NOT CLEARED.** Stage A remains held. This handoff does not satisfy DF-09/DF-11/DF-12, make the Project Director decision, authorize merge/rebase/retarget/cherry-pick/integration, or authorize implementation.
+
+
+## 16. Final review synchronization and exact external dependencies — 2026-11-08
+
+### 16.1 Snapshot immediately before this handoff update
+
+| Item | Exact value |
+|---|---|
+| PR #192 | Open, draft, unmerged; HEAD 4c649fe250626a61498e5e3b6d88a849d9cab8de; base 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c; 23 changed files |
+| PR #193 | Open, draft, unmerged; HEAD d2ccbbb26595f28fb7488db4dbe778e7ddd58c7a; base 874c732973b6ab303d65a503f5a215b0af8e1153; 2 changed files |
+| PR #174 | Open, draft, unmerged; current administrative status-clarification HEAD 922912283d173e24df891ba23d0e2dfc17e0f4b4; accepted planning-baseline decision tied to prior HEAD 0811a59e46bf934e32e794f90e4e7d18d4e2bd97 |
+
+Re-fetch live PR metadata, changed paths and file blobs before review. The HEAD above is the pre-handoff-update snapshot; the handoff commit itself advances PR #192.
+
+### 16.2 Review the final status and provenance corrections
+
+- Verify PR #173 is consistently classified as an architecture proposal with unresolved primary exact-revision acceptance provenance. No downstream claim substitutes for the missing primary decision.
+- Verify PR #174's accepted planning baseline remains exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, while its current branch revision 922912283d173e24df891ba23d0e2dfc17e0f4b4 is a separate administrative status clarification and not a new approval.
+- Verify the PR #174 follow-on provenance record distinguishes the original missing review artifact from the recovered secondary summary: F-02 HIGH / CONFIRMED, F-03 MEDIUM / CONFIRMED, overall recovered verdict REVISE — NOT APPROVED FOR THE NEXT GATE. Both obligations remain open.
+- Verify PR #193's implementation plan and continuity handoff qualify PR #173 acceptance consistently and preserve PR #174's accepted baseline and follow-on obligations.
+- Verify PR #191's base-to-PR #179 comparison (22 ahead / 0 behind) and direct PR #179-to-PR #191-head comparison (diverged; one ahead / 22 behind). No history rewrite is authorized by this handoff.
+- Verify the 68-path historical preservation register against its stated immutable PR heads and confirm it is scoped as partial, not complete archive preservation.
+
+### 16.3 Remaining requirements
+
+DF-06 remains PARTIAL (63 relative target paths were previously checked; 143 external URL occurrences, fragments and exhaustive historical cross-branch links remain open). DF-08 remains PARTIAL (selected branch/document lineage is mapped; broader non-JARVIS PR lineage, unmatched branch refs, Developmental Brain Plan revision disposition and archive/supersession decisions remain open). DF-09 remains NOT MET until a genuinely uninvolved human completes the 17-question protocol. DF-11 remains NOT MET until a separate qualifying reviewer submits a formal review. DF-12 remains NOT MET until the Project Director records an exact-revision decision.
+
+**Current recommendation remains NOT CLEARED.** Do not begin Stage A. Do not merge, rebase, retarget, cherry-pick, delete branches, relocate archives or begin implementation. The reviewer must not claim independence if the identity/role requirements are not met, and must not convert a technical report into Project Director acceptance.
