@@ -196,3 +196,24 @@ The current Builder disposition is **NOT READY FOR ACCEPTANCE** until the unmet 
 ---
 
 **End of Builder-to-Reviewer handoff.**
+
+
+## 10. Subsequent re-review report and current correction-pass boundary — 2026-11-08
+
+A repository follow-up report was committed at:
+
+- Path: `docs/architecture/reports/INDEPENDENT_RE_REVIEW_BUILDER_FOLLOW_UP_2026-11-08.md`
+- Blob at the live PR #192 snapshot fetched for this correction pass: `2d63ed93344a7081dcedb44247536c416322c793`
+- Reported inspected PR #192 HEAD: `5f204e3ea72d991ccc5d5695d824dc356fee0700`
+- Reported PR #192 base: `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`
+- Reported changed-file count at that inspection: 19.
+
+The follow-up report verifies the inventory snapshot correction and the 17-question protocol correction at its inspected revision, but its own independence disclosure states that Builder and reviewer share the GPT-6 model identity. It therefore does not satisfy DF-11. Its disposition is NOT CLEARED.
+
+At the start of the present Builder correction pass, live PR #192 metadata was re-fetched as HEAD `662e43380c50f8e501e1741b0bb7eb689e154ff5`, base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, open/draft/unmerged, with 20 changed files. The new follow-up report is the one additional file relative to its reviewed revision. The current inventory, audit and self-review require a synchronized refresh against the resulting correction-pass revision.
+
+PR #193 remains a separate open/draft/unmerged lineage at HEAD `976aa33f89cc02225296f59246f47982300f5b39`, base `874c732973b6ab303d65a503f5a215b0af8e1153`, with two changed files. No integration, rebase, retarget or merge is performed.
+
+The reviewer must fetch live PR metadata and the full changed-file list after this correction pass. Do not use `662e433...` as the final review target: this handoff and the synchronized evidence documents are being updated, and the inventory refresh will create a subsequent commit. Record the actual resulting HEAD and exact blob SHAs after all writes.
+
+**Current authority boundary:** This handoff requests review only. It does not establish qualifying independence, fresh-reader completion, Project Director acceptance, gate clearance, Stage A authorization or implementation authorization.
