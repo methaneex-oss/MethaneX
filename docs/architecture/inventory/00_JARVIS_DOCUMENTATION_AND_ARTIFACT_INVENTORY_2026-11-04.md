@@ -1297,3 +1297,51 @@ This section records the exact PR #192 parent revision `0008655719c49527e9b6a6b8
 ### 37.2 Self-reference and post-write verification
 
 The inventory's own row records its pre-update blob `46d404ab7873d2b919edb2b5ba9152847ca06c2b`. This commit creates a new inventory blob and advances PR #192. After the write, the Builder/reviewer must fetch live PR metadata and all 24 changed paths again; this table is a parent-snapshot register, not a prediction of the resulting HEAD. No gate clearance, Stage A start or implementation authorization is claimed.
+
+
+---
+
+## 38. Final Builder reconciliation snapshot — parent `d2397d1dcca8bf062a9b4269f0d35dd188e07ddf`
+
+**Purpose:** Supersede prior PR #192 changed-path snapshots in this inventory. This is a parent-snapshot register: the inventory blob listed below is the pre-update blob, and this update is the final Builder-controlled write in the reconciliation pass.
+
+At the exact parent commit `d2397d1dcca8bf062a9b4269f0d35dd188e07ddf`, PR #192 was open, draft and unmerged; base SHA was `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; the PR changed-file endpoint returned 25 paths. The recursive Git tree was complete (`truncated=false)), with 226 blob paths. Every changed path below was present in that tree and mapped to the listed blob SHA.
+
+| # | Repository path | Blob SHA at parent HEAD |
+|---:|---|---|
+| 1 | `README.md` | `780651b804b491781fdcac8e248eaca9243797a4` |
+| 2 | `docs/ARCHITECTURE.md` | `3c6692b52059e43947d1fd2e7e84debb2362023f` |
+| 3 | `docs/JARVIS_BRAIN_MASTER_BLUEPRINT.md` | `0e49d313bf3929aa30140cb7149ebab038918378` |
+| 4 | `docs/JARVIS_PHASE_2_COMPLETION.md` | `e0e57a44216fc36c52d469a79abfc8df058515a3` |
+| 5 | `docs/README.md` | `da0d9c834e8a5b2e67519ee5e0a2927bcec96374` |
+| 6 | `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md` | `e5ed35c0188c1524dd9b15f5cdef2953e4c40a7f` |
+| 7 | `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md` | `7f73ada36a6d18a8e8e6871a849726899c83d315` (pre-update inventory blob) |
+| 8 | `docs/architecture/inventory/HISTORICAL_DOCUMENTATION_PRESERVATION_REGISTER_2026-11-08.md` | `96539183fab3a2b630a8e9154f183b0bfada9016` |
+| 9 | `docs/architecture/reports/BUILDER_FINAL_DOCUMENTATION_FOUNDATION_RECONCILIATION_2026-11-08.md` | `656e4dca522c43452f31c125f5e84684c2bd87c1` |
+| 10 | `docs/architecture/reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md` | `bcc3fe48a37f7f625246f85c2e27fd493250c6b2` |
+| 11 | `docs/architecture/reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md` | `7c9568478c65453d4258325efe53480f610f0eca` |
+| 12 | `docs/architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_2026-11-08.md` | `ecd11354a858eb6e46cbd85b816836a2f88973c9` |
+| 13 | `docs/architecture/reports/INDEPENDENT_REVIEWER_HANDOFF_2026-11-08.md` | `b50d6d8ceaec77d0cee5fc6bb14d19a04032c7ac` |
+| 14 | `docs/architecture/reports/INDEPENDENT_RE_REVIEW_BUILDER_FOLLOW_UP_2026-11-08.md` | `2d63ed93344a7081dcedb44247536c416322c793` |
+| 15 | `docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md` | `955a6c953cdf539a6f478a2d472a327666845e4c` |
+| 16 | `docs/architecture/reports/PHASE_1_REVIEW_CORRECTIONS_AND_SCOPE_RECONCILIATION_2026-11-05.md` | `a459cdfd02d850d455ca526e6823e68525776ba3` |
+| 17 | `docs/architecture/reports/PHASE_1_WHOLE_REPOSITORY_INVESTIGATION_AND_REUSE_AUDIT_2026-11-04.md` | `f725eda1e23d6558d90f6f7c87302019ef3a0dfc` |
+| 18 | `docs/architecture/reports/PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md` | `7cf312f6cc6fd880473a0b6ccc86cf53bf3b3533` |
+| 19 | `docs/architecture/reports/PR_174_FOLLOW_ON_REVIEW_PROVENANCE_RECOVERY_2026-11-06.md` | `d01fa6170b87254619d469d276ba57e813c08ff3` |
+| 20 | `docs/architecture/reports/WHOLE_BRAIN_DOCUMENTATION_PHASE_BUILDER_SELF_REVIEW_2026-11-07.md` | `a212b7ffd4831d7ec83125cb04e9b243a0cddd38` |
+| 21 | `docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md` | `0187a0ac71bd0c95e94beb3bf006da9cc7c3605f` |
+| 22 | `docs/templates/INDEPENDENT_REVIEW_REPORT_TEMPLATE.md` | `f3176cf1a1f45735a3ad62fa4a865806edc24e08` |
+| 23 | `docs/templates/PLANNING_DOCUMENT_TEMPLATE.md` | `b9f71a923b0d717a3b29655574c89c10e0801115` |
+| 24 | `docs/templates/README.md` | `7209fd0fcda239349af602490d26b8c708b743da` |
+| 25 | `docs/templates/TEST_EVIDENCE_REPORT_TEMPLATE.md` | `9c6bbae48a22beb7c4e95858282d7d8d7b2159c2` |
+
+### 38.1 Controlling reconciliation report and handoff
+
+- Builder reconciliation: `docs/architecture/reports/BUILDER_FINAL_DOCUMENTATION_FOUNDATION_RECONCILIATION_2026-11-08.md`, blob at this parent `656e4dca522c43452f31c125f5e84684c2bd87c1`.
+- Updated reviewer handoff: `docs/architecture/reports/INDEPENDENT_REVIEWER_HANDOFF_2026-11-08.md`, blob at this parent `b50d6d8ceaec77d0cee5fc6bb14d19a04032c7ac`.
+- Exact PR #192 parent snapshot for this table: `d2397d1dcca8bf062a9b4269f0d35dd188e07ddf`.
+- The inventory update creates a new commit and advances the PR. The reviewer must fetch the actual post-inventory HEAD and complete changed-file list before reviewing. Do not assume the parent SHA above is the final review target.
+
+### 38.2 Current limits
+
+This exact path/blob register corrects the stale inventory snapshot. It does not claim exhaustive current-head link/fragment/semantic validation, complete repository-wide historical preservation, a completed fresh-reader session, a qualifying independent review, or Project Director acceptance. DF-06 and DF-08 remain partial; DF-09, DF-11 and DF-12 remain unmet. Stage A remains held.
