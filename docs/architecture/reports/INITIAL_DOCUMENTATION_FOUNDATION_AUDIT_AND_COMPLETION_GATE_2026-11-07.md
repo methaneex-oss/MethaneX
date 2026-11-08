@@ -1141,3 +1141,60 @@ The exact PR #192 changed-path endpoint returned 23 paths. The final inventory m
 PR #193 remains a separate PR #175-derived lineage. Its handoff and plan point to immutable PR #192 snapshot `db5968bfbddf77590cd9303539abda00dd961ab7`; PR #192's index points to PR #193's exact handoff/plan at `d2ccbbb26595f28fb7488db4dbe778e7ddd58c7a`. This snapshot arrangement is intentional and must not be mistaken for branch integration.
 
 **Disposition remains NOT CLEARED.** DF-09, DF-11 and DF-12 remain external reader/reviewer/authority requirements. PR #173 acceptance provenance, PR #191 dependency disposition, exhaustive fragment/external-link validation and broader historical preservation remain open or partial. Stage A remains held; implementation remains unauthorized.
+
+
+## 29. Final Builder remediation and gate-state refresh — 2026-11-08
+
+This addendum supersedes earlier live-state snapshots only for the exact facts below. Earlier sections remain historical audit evidence.
+
+### 29.1 Exact PR state before this audit update
+
+| Item | Verified state |
+|---|---|
+| PR #192 | Open, draft, unmerged; HEAD `3f5677458ca3598d1e6be52d4b8547395ab02a94`; base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; 24 changed paths |
+| PR #193 | Open, draft, unmerged; HEAD `d2ccbbb26595f28fb7488db4dbe778e7ddd58c7a`; base `874c732973b6ab303d65a503f5a215b0af8e1153`; separate PR #175-derived lineage |
+| PR #173 | Open, draft, unmerged; HEAD `97191111bc2573c14d391c0af9628db7b11f194b` |
+| PR #174 | Open, draft, unmerged; administrative status-clarification HEAD `922912283d173e24df891ba23d0e2dfc17e0f4b4`; accepted planning-baseline event remains tied to earlier exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` |
+| PR #191 | Open, draft, unmerged; HEAD `609d38ede50bbdd98a93dfed112781eacabee9fd`; base `f6267456560a08054d69f7960d2951452b14017c` |
+| PR #192 formal reviews / inline threads / conversation comments | 0 / 0 / 0 returned by the current queries |
+
+PR #192 and PR #193 remain separate. No merge, rebase, retarget, cherry-pick, branch deletion or archive relocation was performed.
+
+### 29.2 Builder-controlled corrections completed in this pass
+
+- Repaired the documentation portal's malformed navigation table and removed stale mutable snapshot values from its current-authority explanation.
+- Added the outstanding-work closure/authority register to the planning index and portal navigation.
+- Updated the outstanding-work register with the strongest recorded link and preservation evidence, exact exclusions, and authority boundaries.
+- Extended the Builder self-review and independent-reviewer handoff with the latest remediation findings and explicit remaining requirements.
+- Re-fetched all 24 changed PR #192 paths at the working branch; all 24 fetches returned content and blob identities.
+- Reconfirmed the PR #173 primary discussion contains no attributable Project Director acceptance decision for its exact current HEAD.
+- Reconfirmed PR #191's graph: the base is an ancestor of PR #179 HEAD by 22 commits, while PR #191 HEAD diverges from PR #179 HEAD by one unique commit ahead and 22 behind.
+
+### 29.3 Gate matrix
+
+| Criterion | Current disposition | Remaining evidence/action |
+|---|---|---|
+| DF-01 | Present; external confirmation pending | Fresh reader/reviewer confirms entry route and comprehension |
+| DF-02 | Pending final inventory refresh | Inventory all 24 changed paths/blobs at the exact parent; re-fetch after inventory commit |
+| DF-03 | Partial / unresolved | PR #173 exact-revision acceptance primary evidence absent; retain UNVERIFIED / PROPOSED unless Project Director dispositions otherwise |
+| DF-04 | Pass within scope | PR #178 remains proposed/unaccepted |
+| DF-05 | Partial / authority-dependent | Project Director disposition for PR #191 and PR #192/#193 lineage order |
+| DF-06 | Partial | 76 relative-link occurrences across 23 changed files passed at exact parent `fb30fd7ac5cc80c86b84edd4e6d7497253b72775`, zero missing targets against complete 252-path tree; final 24-file revision, fragments, line anchors, semantic relevance and exhaustive historical/cross-branch links remain unverified |
+| DF-07 | Partial | Separate PR #192/#193 lineage is documented; independent confirmation and Director's order decision remain |
+| DF-08 | Partial, materially advanced | 68-path register and selected older-PR comparisons exist; broader non-JARVIS PR lineage, unmatched refs, remaining revision classification and archive/supersession disposition remain open |
+| DF-09 | NOT MET | Actual uninvolved human must complete the 17-question protocol without coaching |
+| DF-10 | Builder self-review updated; final snapshot refresh pending | Tie the self-review and inventory to the final immutable PR #192 revision |
+| DF-11 | NOT MET | Qualifying separate reviewer must submit formal review against the final exact revision |
+| DF-12 | NOT MET | Project Director exact-revision decision after required evidence |
+| DF-13 | PASS for hold only | Stage A remains NOT STARTED and HELD |
+
+### 29.4 Historical and authority distinctions
+
+- PR #173 remains UNVERIFIED / PROPOSED for authority purposes. The later PR #174 acceptance does not substitute for a primary PR #173 decision.
+- PR #174's exact accepted planning-baseline event remains valid for its bounded scope. The later administrative status clarification is not a new substantive acceptance.
+- PR #174 follow-on F-02/F-03 remain OPEN. The recovered summary is secondary and partial; the original full report and annotations remain unavailable. No speculative technical correction was made from incomplete source material.
+- PR #191 is not made current by retargeting alone. Its disposition requires an explicit Project Director decision.
+- PR #178 governance remains proposed/unaccepted.
+- PR #193's implementation roadmap remains deferred/non-operative; it is not the whole-Brain architecture and does not authorize implementation.
+
+**Final Builder disposition: NOT CLEARED.** DF-09, DF-11 and DF-12 are not Builder-completable. DF-03 and DF-05 require primary evidence or Project Director disposition. DF-06 and DF-08 remain partial. Stage A remains held; implementation remains unauthorized.
