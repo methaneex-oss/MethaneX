@@ -428,3 +428,43 @@ The PR #174 follow-on review record has been enriched from recovered prior-conve
 - PR #173's exact-revision acceptance provenance remains unresolved. The downstream plan's older wording has been qualified; do not state PR #173 is accepted unless its primary decision record is recovered or the Project Director records an explicit disposition.
 
 These corrections preserve the accepted PR #174 baseline and the later review obligations as separate events. They do not authorize implementation, Gate A/Gate B closure, technology selection, or integration.
+
+## 15. Documentation-line maintenance and review-status snapshot — 2026-11-08
+
+### PR #193 — deferred planning line
+
+At the snapshot immediately before this handoff update:
+
+- PR: [#193](https://github.com/methaneex-oss/MethaneX/pull/193)
+- State: open, draft, unmerged.
+- Head branch: `docs/whole-brain-planning-roadmap-hold-20261107`
+- Head: `c653367a0bd63ec4f0fa9ab009b242eca2b32585`
+- Base branch: `plan/brain-implementation-roadmap-20261103`
+- Base: `874c732973b6ab303d65a503f5a215b0af8e1153`
+- Changed files: 2.
+
+The deferred implementation plan's title and metadata were corrected in commit `c653367a0bd63ec4f0fa9ab009b242eca2b32585`. It is explicitly a deferred, non-operative proposal; the 2026-11-03 planning authorization is not implementation authorization. No implementation sequence or source baseline is activated by that correction.
+
+The handoff and deferred-plan documents contain 12 distinct immutable GitHub blob links. At this snapshot, each target path was retrieved successfully at the exact SHA encoded in its link. This verifies target-path existence only; it does not claim exhaustive Markdown fragment, rendered-page, external-link or semantic validation.
+
+### PR #192 — documentation-foundation review line
+
+At the same 2026-11-08 check:
+
+- PR: [#192](https://github.com/methaneex-oss/MethaneX/pull/192)
+- State: open, draft, unmerged.
+- Head: `bcb8a4f2a90f75628bf16d7ecf219d18bc861ce2`
+- Base: `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`
+- Changed files: 26.
+- A technical review report was committed at `docs/architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_2026-11-08.md`, commit `bcb8a4f2a90f75628bf16d7ecf219d18bc861ce2`.
+- A formal GitHub COMMENT review was submitted against the earlier exact PR HEAD `4b290ddf271564c01bbb46e98933a93cf1e54448`, not the later report-bearing HEAD.
+- The report discloses that the reviewer is ChatGPT (GPT-6), the same model identity as the Builder. Therefore this technical scrutiny is not a qualifying independent review and **DF-11 remains NOT MET**.
+- The reported remaining blockers include the live inventory/reconciliation snapshot mismatch, numbering defects, partial DF-06/DF-08, DF-09 fresh-reader evidence, DF-11 independence and DF-12 exact-revision Project Director decision.
+
+Do not describe the same-identity technical review as independent clearance. The reviewer report and formal review are evidence to be assessed, not acceptance. If a genuinely separate reviewer later reviews the current PR HEAD, record that exact HEAD and identity separately.
+
+### Continuing authority boundary
+
+- Stage A remains held.
+- PR #192 and PR #193 remain separate lineages.
+- No merge, rebase, retarget, cherry-pick, baseline selection, implementation, gate clearance or Project Director acceptance is authorized or implied by these maintenance updates.
