@@ -498,13 +498,13 @@ The foundation remains **NOT READY FOR ACCEPTANCE**. Remaining work includes the
 No Stage A capability planning has begun. No implementation, source selection, baseline selection, merge, rebase, gate clearance, or runtime change is authorized by this audit. This is the Builder's report, not an independent review or acceptance decision.
 
 
-## 12. Documentation usability and navigation correction — 2026-11-07
+## 13. Documentation usability and navigation correction — 2026-11-07
 
-### 12.1 Change objective
+### 13.1 Change objective
 
 The documentation foundation is being organized for multiple reader roles, not only the next Builder. A new human-facing portal at `docs/README.md` is proposed on PR #192. The repository root README directs readers to it. The Planning Documentation Index remains the canonical planning-artifact catalog and authority/status map.
 
-### 12.2 Role routes added
+### 13.2 Role routes added
 
 The portal defines reading routes and responsibility boundaries for:
 - new readers, stakeholders and occasional contributors;
@@ -516,20 +516,20 @@ The portal defines reading routes and responsibility boundaries for:
 
 It also defines a repository documentation map, authority/status vocabulary, evidence and link conventions, a minimum document header, and a documentation contribution workflow.
 
-### 12.3 Quality boundary
+### 13.3 Quality boundary
 
 This is a Builder-authored navigation correction. It does not establish that every historical document has been reconciled, every repository link has been exhaustively validated, or the fresh-reader test has been independently completed. It does not satisfy independent review or exact-revision acceptance. The portal and updated index remain proposals pending review.
 
-### 12.4 Cross-lineage boundary
+### 13.4 Cross-lineage boundary
 
 The portal is added to the PR #192 / PR #179-derived line. The continuity handoff and deferred implementation plan remain on the separate PR #193 / PR #175-derived line. The portal links to PR #193 for live handoff context rather than silently copying or merging that lineage.
 
-### 12.5 Current disposition
+### 13.5 Current disposition
 
 The navigation structure is improved, but the Initial Documentation Foundation Completion Gate remains **NOT CLEARED**. DF-09 fresh-reader verification, DF-11 independent review and DF-12 exact-revision authority decision remain unmet. Other provenance, preservation, revision synchronization and cross-link obligations remain open until verified and recorded.
 
 
-## 13. Reusable contributor, reviewer and tester templates — 2026-11-07
+## 14. Reusable contributor, reviewer and tester templates — 2026-11-07
 
 The proposed documentation portal now links to a small template library under `docs/templates/`:
 - planning/technical document template;
@@ -542,7 +542,7 @@ The templates standardize metadata, scope, evidence provenance, exact revision i
 This improves contributor consistency but does not close the foundation gate. The fresh-reader test, independent review, exact-revision authority decision, historical preservation follow-up and unresolved provenance/status items remain open.
 
 
-## 13. Navigation package snapshot refresh — 2026-11-07
+## 15. Navigation package snapshot refresh — 2026-11-07
 
 The role-based portal and associated navigation corrections were committed to the PR #192 line. The portal links to the reusable template guide, and the legacy `docs/ARCHITECTURE.md` page now routes readers through the portal and current planning index.
 
@@ -555,9 +555,9 @@ The portal and navigation files remain proposals pending independent review and 
 The initial audit finding in §1 that Stage A instructions were present is explicitly historical and superseded by the later correction. Stage A remains held.
 
 
-## 14. Live branch-head correction and expanded navigation-link verification — 2026-11-07
+## 16. Live branch-head correction and expanded navigation-link verification — 2026-11-07
 
-### 14.1 Corrected branch snapshot
+### 16.1 Corrected branch snapshot
 
 The previous portal snapshot in §13 listed PR #192 HEAD `273c2c0ac1d9d6a2291d339387ea6e88dae037d7` and PR #193 HEAD `03502c5719b320b9e323cb1d040ae38737fc7b81`. A subsequent live ref and PR metadata fetch did not return those values. They are retained as historical report content but are superseded for current navigation by this pre-correction refresh:
 
@@ -567,7 +567,7 @@ The previous portal snapshot in §13 listed PR #192 HEAD `273c2c0ac1d9d6a2291d33
 
 The exact branch heads must be re-fetched before independent review and authority decisions.
 
-### 14.2 Repository-relative link validation
+### 16.2 Repository-relative link validation
 
 A bounded link check was run against the PR #192 tree at parent `f831faef6d031776e0cee116d1986c3160faffb5`. It inspected these eleven files: root README, `docs/README.md`, legacy `docs/ARCHITECTURE.md`, planning index, detailed inventory, foundation audit, Builder self-review, template guide, planning-document template, independent-review template and test-evidence template.
 
@@ -575,24 +575,24 @@ A bounded link check was run against the PR #192 tree at parent `f831faef6d03177
 
 This check did not verify fragment/heading anchors, external website availability, every cross-branch URL outside the portal's explicit pinned links, semantic correctness of every destination, or whether each linked document's content remains authoritative. Those checks remain open.
 
-### 14.3 Immutable cross-branch and PR-link spot checks
+### 16.3 Immutable cross-branch and PR-link spot checks
 
 The portal's explicit commit-pinned links to the system architecture foundation, whole-system responsibility map, foundational capability investigation, Brain Foundation Architecture and Brain Mechanism Specification were fetched at their stated commit/path pairs; all five resolved to existing files. The portal's PR links to #193 and #178 resolved to open, unmerged PRs at the time of the check.
 
 This is a bounded spot check, not exhaustive external-link or anchor validation.
 
-### 14.4 Current disposition
+### 16.4 Current disposition
 
 The portal, role-specific routes and template library improve discoverability and consistency. The documentation foundation remains **NOT CLEARED**. DF-09 fresh-reader testing, DF-11 independent review and DF-12 exact-revision authority decision remain unmet; historical preservation and unresolved provenance/status items remain open. No Stage A planning or implementation is authorized.
 
 
-## 15. Expanded repository-relative documentation link check — 2026-11-07
+## 17. Expanded repository-relative documentation link check — 2026-11-07
 
-### 15.1 Scope and method
+### 17.1 Scope and method
 
 A bounded repository-relative Markdown link-path check was run across all 24 Markdown files under the repository root and `docs/` in the PR #192 tree at parent `1901d5f39d788d7ad928cc1045065d7b32f120c1`. The check resolved relative paths against the recursive tree at that exact commit.
 
-### 15.2 Result
+### 17.2 Result
 
 - Markdown documents checked: **24**.
 - Repository-relative Markdown link targets checked: **63**.
@@ -600,8 +600,64 @@ A bounded repository-relative Markdown link-path check was run across all 24 Mar
 
 The check included the root README, portal, legacy architecture overview, planning index, detailed inventory, Phase 1 and Phase 2 reports, provenance recovery record, governance proposal, Builder self-review and all four documentation-template files.
 
-### 15.3 Limits
+### 17.3 Limits
 
 This check verifies target-path existence only. It does not verify fragment/heading anchors, external URL availability, semantic correctness of every destination, current authority status of every linked artifact, or every cross-branch link embedded in historical source reports. Those remain open review items. DF-06 should not be marked fully complete based on this bounded check alone.
 
 The check was performed against PR #192 parent `1901d5f39d788d7ad928cc1045065d7b32f120c1`; PR #193 live HEAD was `976aa33f89cc02225296f59246f47982300f5b39`. This addendum itself advances PR #192, so its resulting head must be re-fetched before independent review. No independent review, gate clearance, acceptance or implementation authorization is claimed.
+
+
+## 18. Independent reviewer findings response and exact revision refresh — 2026-11-08
+
+### 18.1 Live repository snapshot
+
+The live GitHub metadata was re-fetched before this update. These are the exact revisions inspected for this Builder response:
+
+| Item | Exact value | Verified state |
+|---|---|---|
+| `main` | `1273ddbcd0087d189e01388ded2d362fb1e058d2` | Default branch HEAD reported by the current PR metadata context; not changed by this work |
+| PR #192 | `cd61ace37206ed4621f84dbe0e3ca2a22c86947e` | Open, draft, unmerged; base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; 17 changed files |
+| PR #193 | `976aa33f89cc02225296f59246f47982300f5b39` | Open, draft, unmerged; base `874c732973b6ab303d65a503f5a215b0af8e1153`; 2 changed files |
+| PR #192 formal reviews | 0 | No submitted review objects returned |
+| PR #192 inline review threads | 0 | No review threads returned |
+| PR #192 conversation comments | 0 | No comments returned |
+| PR #193 formal reviews | 0 | No submitted review objects returned |
+| PR #193 inline review threads | 0 | No review threads returned |
+| PR #193 conversation comments | 0 | No comments returned |
+
+The PRs remain separate #179-derived and #175-derived lineages. No base, head, merge, rebase, cherry-pick, or integration operation was performed. The detailed inventory records the exact blob SHA for every changed file in both PRs at these inspected heads.
+
+### 18.2 DF-F01 — inventory and self-review revision synchronization
+
+**Accepted.** The prior inventory and Builder self-review did not identify all 17 PR #192 changed-file blobs and both PR #193 changed-file blobs against the final pre-response heads. The inventory and this self-review are being updated with exact head/base references, changed-file lists, blob SHAs, review-state evidence, and limitations. The resulting commit SHA must be fetched after these sequential updates; no resulting SHA is predicted.
+
+### 18.3 DF-F02 — duplicate section numbering
+
+**Accepted.** This audit previously used duplicate top-level section numbers 12 and 13. The later chronological sections have been renumbered sequentially as Sections 13–17, preserving the earlier Section 12 and the original chronology. No findings or historical observations have been deleted. The final revision will be re-fetched to confirm headings and content.
+
+### 18.4 Finding-by-finding Builder disposition
+
+| Reviewer finding / gate | Builder disposition | Current status |
+|---|---|---|
+| DF-F01 — inventory not synchronized | Accepted; exact PR #192/#193 heads, bases and changed-file blob register added to inventory and self-review | Corrective update in this commit batch; resulting heads/blobs require post-write refresh |
+| DF-F02 — duplicate top-level numbering | Accepted; later audit sections renumbered sequentially without deleting chronology | Corrective update in this commit batch; verify final headings after write |
+| PR #173 acceptance provenance | Accepted as unresolved; no acceptance event will be fabricated or inferred from later documents | Open; requires primary decision recovery or explicit authority disposition |
+| PR #174 draft-header contradiction | Accepted as a real status inconsistency; no edit to the accepted specification is made in this scope | Open; requires separately reviewed non-substantive status correction or explicit exception; F-02/F-03 follow-on obligations remain |
+| PR #178 governance proposal | Retained as proposed/unaccepted | Open status accurately qualified |
+| PR #191 stale base | Retained as a separate historical-base dependency; no rebase or retarget | Open; requires authorized disposition |
+| DF-06 link completeness | Existing path checks retained with their exact limits; no claim that anchors, all external URLs or all historical cross-branch links are verified | Partial/open |
+| DF-07 current-phase consistency | PR #192 and PR #193 metadata and descriptions confirm separate lineages; the legacy Phase 2 correction is on the PR #179/#192 line and is not silently copied to PR #193 | Partial pending integration decision; no claim of integrated consistency |
+| DF-08 historical preservation | Historical preservation follow-up remains explicitly open; no historical file or branch was deleted, moved or rewritten in this response | Partial/open |
+| DF-09 fresh-reader continuity | Not performed by Builder; no simulated or coached reader result will be claimed | NOT MET |
+| DF-10 Builder self-review | Exact parent revisions and blob register are being recorded; final resulting revision still requires post-write refresh | In progress |
+| DF-11 independent review | Builder does not count the supplied reviewer report or this response as the qualifying independent review; the reviewer must qualify and submit against the exact final revision | NOT MET pending qualifying exact-revision review |
+| DF-12 authority decision | No acceptance or gate decision is inferred; the designated authority must decide after review | NOT MET |
+| DF-13 planning hold | Stage A and implementation remain unauthorized and have not been started | PASS / hold preserved |
+
+### 18.5 Work deliberately not performed
+
+No source code, tests, build configuration, workflows, dependencies, runtime state, or donor code were changed. No fresh-reader test was fabricated. No Project Director acceptance was fabricated. No PR #173 or PR #174 architecture/specification content was altered. No PR #191 base change, PR #192/#193 integration, merge, rebase, cherry-pick, or implementation work was performed.
+
+### 18.6 Current Builder disposition
+
+The two concrete documentation defects DF-F01 and DF-F02 are accepted and corrected in this update batch, subject to post-write verification of the resulting exact commit and blob SHAs. The documentation foundation is **NOT READY FOR ACCEPTANCE** while DF-09, DF-11 and DF-12 remain unmet and provenance, preservation, dependency, and broader link-verification obligations remain open. Stage A remains held.
