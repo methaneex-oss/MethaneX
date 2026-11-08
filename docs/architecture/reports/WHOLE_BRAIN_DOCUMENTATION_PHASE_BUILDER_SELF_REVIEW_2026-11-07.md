@@ -420,3 +420,46 @@ The foundation audit now contains Section 19, a fixed fresh-reader continuity te
 - **DF-12 remains NOT MET.** Project Director acceptance/rejection/conditional acceptance of an exact revision remains the Director's decision.
 
 The audit update is documentation-only. It does not start Stage A, select a baseline, authorize implementation, or change any accepted architecture/specification. No source, tests, build configuration, workflows, dependencies or runtime files were changed.
+
+
+## 17. Follow-up re-review and current exact-revision refresh — 2026-11-08
+
+### 17.1 Follow-up review received
+
+The repository contains `docs/architecture/reports/INDEPENDENT_RE_REVIEW_BUILDER_FOLLOW_UP_2026-11-08.md`, blob `2d63ed93344a7081dcedb44247536c416322c793` at the live PR #192 snapshot fetched for this pass. It reports inspection of PR #192 HEAD `5f204e3ea72d991ccc5d5695d824dc356fee0700`, base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, and 19 changed files.
+
+The follow-up verifies the then-current inventory snapshot correction, sequential audit section numbering, and the internally consistent 17-question protocol. It explicitly leaves DF-09 NOT MET, DF-11 NOT MET, DF-12 NOT MET, and the documentation-foundation gate NOT CLEARED.
+
+**Independence qualification:** Although the report labels its role Independent Reviewer, it explicitly states that the reviewer and Builder share the GPT-6 model identity. That disclosed limitation means the report is additional technical scrutiny, not the qualifying separate independent review required by DF-11. It is not a formal GitHub review submission; live review-submission and inline-thread queries returned zero for PR #192 at the current snapshot.
+
+### 17.2 Current repository refresh at start of this correction pass
+
+Live GitHub metadata and paginated changed-file lists were re-fetched:
+
+| Item | Verified state |
+|---|---|
+| PR #192 | Open, draft, unmerged; branch `docs/whole-brain-planning-scope-correction-20261107` |
+| PR #192 HEAD at start of pass | `662e43380c50f8e501e1741b0bb7eb689e154ff5` |
+| PR #192 base | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` |
+| PR #192 changed paths | 20 |
+| PR #192 formal reviews / inline threads / conversation comments returned | 0 / 0 / 0 |
+| PR #193 | Open, draft, unmerged; separate branch and lineage |
+| PR #193 HEAD / base | `976aa33f89cc02225296f59246f47982300f5b39` / `874c732973b6ab303d65a503f5a215b0af8e1153` |
+| PR #193 changed paths | 2 |
+
+The current PR #192 changed-file list includes the original independent-review report, this handoff, the Builder self-review, the foundation audit, the inventory, and the follow-up re-review report. Inventory Section 30 still described the earlier 19-file snapshot at `f615e11...`; it is stale against the live 20-file state and is being refreshed as the final documentation write in this pass.
+
+### 17.3 Primary provenance checks
+
+- **PR #173:** The complete PR #173 issue-comment query returned Builder handoff/resubmission comments `6598264380` and `6598465160`; neither is a Project Director acceptance decision. The exact architecture revision `97191111bc2573c14d391c0af9628db7b11f194b` still labels itself “Proposed architecture for independent review and Project Director decision.” No primary exact-revision acceptance record was recovered. Status remains unresolved; do not infer acceptance.
+- **PR #174:** Comment `6604790481` explicitly accepts exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` as the Brain Mechanism Specification planning baseline, without implementation authorization. The accepted-revision document header still says “Draft for independent review.” A later PR #174 comment `6628850155` records further documentation corrections to the specification/source-audit deliverables, but does not itself constitute a new Project Director decision or close the separately recorded F-02/F-03 follow-on obligations. Do not alter accepted substantive architecture without authority.
+- **PR #178:** Remains proposed/unaccepted; no authority promotion is made.
+- **PR #191:** Live PR #191 is open/draft/unmerged, based at `f6267456560a08054d69f7960d2951452b14017c`. Comparing that base to PR #179 HEAD `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` returns 22 commits ahead, 0 behind. This is a dependency fact, not permission to rebase or retarget.
+
+### 17.4 Current disposition and limitations
+
+The follow-up review does not close the documentation gate. DF-09 remains NOT MET because no genuinely uninvolved reader has completed the protocol. DF-11 remains NOT MET because the available reviewer shares the Builder's GPT-6 identity. DF-12 remains NOT MET because no exact-revision Project Director decision has been recorded.
+
+DF-06 remains PARTIAL: existing validation covers a bounded earlier set of repository-relative Markdown paths and selected immutable links, not exhaustive fragment resolution, external reachability, semantic correctness or all historical cross-branch references. DF-07 remains PARTIAL because PR #192 and PR #193 are separate lineages and the legacy Phase 2 status must remain consistently qualified. DF-08 remains PARTIAL because a complete historical source-to-destination/history preservation map is still absent. PR #173 provenance remains unresolved; PR #174 header/follow-on obligations remain open; PR #191 dependency disposition remains unauthorized.
+
+**Disposition: NOT READY FOR ACCEPTANCE.** Stage A remains held. No source code, tests, build configuration, dependencies, workflows or runtime state were changed. No PR was merged, rebased, retargeted, cherry-picked or integrated. No implementation, baseline selection, gate clearance or authority decision is claimed.
