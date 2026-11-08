@@ -415,3 +415,16 @@ Use the portal for onboarding and navigation. Use the Planning Documentation Ind
 A new Builder must first identify the current task, exact branch and revision, authority boundary and open gate. A reviewer must inspect the exact submitted revision and submit a formal review. A tester must distinguish test definitions, registered targets, executed runs, observed outcomes and accepted capability. No role may infer acceptance or authorization from a document's presence or a PR's state.
 
 The portal is on the separate PR #192 / PR #179-derived line. This handoff remains on PR #193 / PR #175-derived line. The cross-lineage link is pinned to the portal revision; do not merge, rebase, retarget or copy files between these branches merely to simplify navigation.
+
+
+## 13. Follow-on review provenance and authority correction — 2026-11-08
+
+The PR #174 follow-on review record has been enriched from recovered prior-conversation evidence. Read `docs/architecture/reports/PR_174_FOLLOW_ON_REVIEW_PROVENANCE_RECOVERY_2026-11-06.md` in the PR #192 documentation line for the full qualified recovery record.
+
+- **F-02 — contextual language and operator-intent grounding:** recovered severity HIGH / CONFIRMED. The recovered requirement themes include contextual intent, reference grounding, speech-act/source attribution, uncertainty, clarification, trusted-versus-untrusted content, and continuity.
+- **F-03 — enforceable downstream reasoning integration:** recovered severity MEDIUM / CONFIRMED as a specification weakness. The recovered requirement themes include material influence on authoritative downstream computation, invalidation/rejection handling, and traceable end-to-end acceptance.
+- The recovered overall verdict was **REVISE — NOT APPROVED FOR THE NEXT GATE**. The original full report, complete rationale, and exact inline annotations remain unavailable; the recovery record is explicitly secondary and partial.
+- Project Director comment `6604790481` accepts PR #174 exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` as a planning baseline. That earlier acceptance does not clear the later F-02/F-03 findings, approve implementation, or substitute for independent re-review of any correction.
+- PR #173's exact-revision acceptance provenance remains unresolved. The downstream plan's older wording has been qualified; do not state PR #173 is accepted unless its primary decision record is recovered or the Project Director records an explicit disposition.
+
+These corrections preserve the accepted PR #174 baseline and the later review obligations as separate events. They do not authorize implementation, Gate A/Gate B closure, technology selection, or integration.
