@@ -917,11 +917,11 @@ DF-09, DF-11 and DF-12 cannot honestly be closed by the Builder. DF-03 also cann
 **Disposition: NOT CLEARED.** Stage A remains held; implementation remains unauthorized. This addendum corrects the dependency description and records live evidence; it does not claim that all outstanding criteria have been satisfied.
 
 
-## 24. Preservation, navigation and live-state correction — 2026-11-08
+## 24A. Preservation, navigation and live-state correction — 2026-11-08
 
 This addendum records the Builder's latest bounded evidence work. It supersedes earlier live-state values only where it supplies a newer exact snapshot. Earlier snapshots remain historical evidence.
 
-### 24.1 Current PR and review state at parent snapshot
+### 24A.1 Current PR and review state at parent snapshot
 
 Immediately before this audit update:
 
@@ -932,7 +932,7 @@ Immediately before this audit update:
 | PR #192 formal reviews / inline review threads / conversation comments | 0 / 0 / 0 returned at this refresh |
 | PR #192 / PR #193 relationship | Separate PR #179-derived and PR #175-derived lineages; no integration, merge, rebase or retarget performed |
 
-### 24.2 Historical-preservation work completed in this pass
+### 24A.2 Historical-preservation work completed in this pass
 
 The new [Historical Preservation and Cross-Revision Comparison Report](DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md) records:
 
@@ -946,7 +946,7 @@ The new [Historical Preservation and Cross-Revision Comparison Report](DOCUMENTA
 
 This closes those selected duplicate/revision comparisons. It does not close the broader historical-preservation follow-up: all JARVIS-related PRs with non-JARVIS branch names have not yet been exhaustively mapped; the two unmatched branch refs still need owner/provenance confirmation; the two Developmental Brain Plan revisions need an authority-aware content disposition; and no archive/supersession relocation proposal has been accepted. No branch or file was moved, deleted or rewritten.
 
-### 24.3 Link validation actually performed
+### 24A.3 Link validation actually performed
 
 At exact PR #192 parent HEAD `e017f9976177e1d7ed77b250d9cbacbf7367f8b9`:
 
@@ -959,11 +959,11 @@ At exact PR #192 parent HEAD `e017f9976177e1d7ed77b250d9cbacbf7367f8b9`:
 
 Therefore DF-06 is improved but remains **PARTIAL**, not PASS. The path-existence result must not be described as full link validation.
 
-### 24.4 Cross-lineage navigation correction
+### 24A.4 Cross-lineage navigation correction
 
 PR #193's implementation plan and continuity handoff now pin their PR #192 documentation references to commit `f481c710eb8a9e779a207fac52f82f0589d3b1b2`. The PR #193 handoff was updated again at commit `714142a24ed1ba286291bba8ccfc8a81f2f9115a`. The PR #192 index now points to that exact handoff revision. The handoff's link back to PR #192 intentionally targets the earlier `f481c710...` snapshot to avoid a cyclic commit dependency. Both PRs remain separate and must be re-fetched before any review.
 
-### 24.5 Authority and dependency findings remain explicit
+### 24A.5 Authority and dependency findings remain explicit
 
 - **PR #173:** The complete PR #173 discussion query returned Builder handoff/resubmission comments, not a direct Project Director acceptance decision for exact architecture HEAD `97191111bc2573c14d391c0af9628db7b11f194b`. The architecture document itself still labels the proposal as proposed for independent review and Project Director decision. Treat its acceptance as **not established** unless the primary decision is recovered or the Project Director explicitly dispositions the missing provenance. Do not infer acceptance from PR #174's later acceptance.
 - **PR #174:** Comment `6604790481` records Project Director acceptance of exact specification HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` as the Brain Mechanism Specification planning baseline. The file header still says “Draft for independent review,” and follow-on F-02/F-03 remain open. This Builder pass does not edit the accepted specification or make the required status decision.
@@ -974,7 +974,7 @@ PR #193's implementation plan and continuity handoff now pin their PR #192 docum
 - **DF-12:** no exact-revision Project Director acceptance/rejection/conditional decision is recorded for the final package; NOT MET.
 - **DF-13:** Stage A remains not started and held; PASS for the hold only.
 
-### 24.6 Updated disposition
+### 24A.6 Updated disposition
 
 | Criterion | Current Builder assessment |
 |---|---|
