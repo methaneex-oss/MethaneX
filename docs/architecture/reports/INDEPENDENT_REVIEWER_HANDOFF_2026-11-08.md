@@ -269,3 +269,24 @@ A new reviewer must state their identity, independence basis, prior involvement 
 7. **DF-06 / DF-07 / DF-08:** Complete the broader link/fragment/external-reference checks, cross-lineage status reconciliation and historical preservation mapping; current evidence remains partial.
 
 **Builder recommendation:** clearance is not recommended until these evidence and authority requirements are satisfied. Stage A remains held. This handoff requests review only; it does not satisfy DF-09/DF-11/DF-12, clear the gate, authorize Stage A, authorize implementation, or authorize merge/rebase/retarget/integration.
+
+
+## 13. Fresh handoff target after correction-pass synchronization — 2026-11-08
+
+### 13.1 Superseding live target
+
+The earlier exact targets in §§2, 10, 11 and 12 are historical snapshots. Immediately before this correction pass, PR #192 was open/draft/unmerged at HEAD `267f10fce5e186424d6c33462083aa7c78a39772`, base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, with 20 changed paths. PR #193 remained open/draft/unmerged at HEAD `976aa33f89cc02225296f59246f47982300f5b39`, base `874c732973b6ab303d65a503f5a215b0af8e1153`, with 2 changed paths. Both PRs remain separate lineages.
+
+The Builder is synchronizing the audit, self-review and inventory before requesting another review. The inventory will identify the exact immutable parent snapshot and every changed-file blob. The final live PR HEAD will be fetched again after the inventory commit. **Do not review the historical HEADs in earlier sections as if they were current. Re-fetch PR #192 metadata and all changed paths at the actual review target.**
+
+### 13.2 Required independent review and non-negotiable limits
+
+The existing reviewer report is substantive but explicitly shares the Builder's GPT-6 model identity and therefore does not satisfy DF-11. A qualifying review must be performed by a genuinely separate reviewer meeting the project's independence rule; another report from this same model identity cannot close DF-11. The fresh-reader requirement is also separate: DF-09 requires an actual uninvolved human participant following the fixed 17-question protocol, with raw session evidence. No session may be simulated or fabricated.
+
+The Project Director alone decides DF-12 for the exact package revisions. The Builder and reviewer cannot self-accept the foundation. PR #173 provenance, PR #174 header/follow-on obligations, PR #191 dependency disposition, broader link validation and historical preservation remain unresolved/partial. No PR integration, merge, rebase or retarget is authorized by this handoff.
+
+### 13.3 Review deliverable
+
+Inspect the actual PR #192 diff and every changed path at the re-fetched HEAD; verify the inventory's exact parent-snapshot/blob register; inspect PR #193 only as a separate dependency lineage; verify the audit, self-review and handoff agree on current statuses; independently challenge all findings and authority claims; and commit the review report to `docs/architecture/reports/` on the PR #192 branch. State reviewer identity, independence basis, exact inspected HEAD/base, changed-file count, methods, findings, limitations and explicit clearance recommendation. If independence criteria are not met, say so and leave DF-11 NOT MET.
+
+**Current Builder recommendation remains NOT CLEARED.** This handoff requests review only. It does not claim DF-09/DF-11/DF-12 completion, Project Director acceptance, Stage A authorization or implementation authorization.
