@@ -1168,3 +1168,21 @@ PR #191 base is `f6267456560a08054d69f7960d2951452b14017c`; PR #179 HEAD is `613
 ### 35.6 Snapshot and self-reference
 
 This section records parent HEAD `fb30fd7ac5cc80c86b84edd4e6d7497253b72775`. The inventory row intentionally records its pre-update blob `2b01925fcdb92423f76ca1b2a2e9c9b5309d3307`. The inventory update creates a new PR commit and new inventory blob. The resulting live PR HEAD, inventory blob and all 23 changed paths must be re-fetched after the write. Any later PR commit makes this snapshot historical. Reviewers must always fetch live metadata and changed paths before review.
+
+
+---
+
+## 36. Outstanding-work and authority register — 2026-11-08
+
+The [Documentation Foundation Outstanding Work Closure and Authority Register](../reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md) is a Builder-maintained disposition register. It distinguishes completed repository corrections from unresolved technical work and requirements that must be supplied by a genuinely uninvolved reader, a qualifying independent reviewer or the Project Director.
+
+Exact file identities at this inventory update:
+
+| Artifact | Path | Blob SHA |
+|---|---|---|
+| Outstanding-work and authority register | `docs/architecture/reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md` | `8a905e2d390340184d82af77c9da53869d1136f5` |
+| Planning documentation index | `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md` | `5ced63a783f18812fdf87bb2e332fa000b3c5d3d` |
+
+The index update was committed as `db3c0eb9dfaf8208e1bee20e90bf3eba8703bfe9`. This inventory update is being made against PR #192 parent HEAD `db3c0eb9dfaf8208e1bee20e90bf3eba8703bfe9`; the inventory's own row is necessarily its pre-update blob `58ed6eed623fd6e0fd19cdf777a9cfe6b29a6d5a`. The resulting PR head and inventory blob must be fetched after the write. This is a scoped register addition, not a claim that the entire changed-file inventory has been refreshed.
+
+**Gate remains NOT CLEARED.** DF-09 (actual uninvolved reader), DF-11 (qualifying independent review) and DF-12 (Project Director exact-revision decision) remain unmet. PR #173 authority provenance, PR #174 follow-on F-02/F-03, PR #191 dependency disposition, full link validation and broader historical preservation remain open as stated in the linked register. Stage A remains HELD; no implementation is authorized.
