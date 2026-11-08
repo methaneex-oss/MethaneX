@@ -8,7 +8,7 @@
 **Planning run:** Run 01 — 2026-11-03  
 **Planning authority:** Project Director authorization received 2026-11-03  
 **Governing specification:** PR #174, accepted HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`  
-**Parent architecture:** PR #173, accepted HEAD `97191111bc2573c14d391c0af9628db7b11f194b`  
+**Parent architecture:** PR #173, exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b`; primary Project Director acceptance provenance remains unresolved  
 **Engineering evidence baseline used by the existing audit:** `main` at `1273ddbcd0087d189e01388ded2d362fb1e058d2`  
 **Scope:** Documentation and planning only  
 **Governing principle:** **ENGINEER THE MECHANISMS; LET BEHAVIOR BE ACQUIRED THROUGH EXPERIENCE.**
@@ -19,7 +19,7 @@
 
 This plan translates the accepted Brain Mechanism Specification into a proposed, evidence-driven implementation programme. It is intended to establish implementation order, dependency management, bounded work packages, integration obligations, verification evidence and stage gates.
 
-This is an existing JARVIS project. This plan does not restart the project, replace the accepted architecture, or treat the current source tree as either wholly reusable or wholly disposable.
+This is an existing JARVIS project. This plan does not restart the project, replace the proposed architecture, or treat the current source tree as either wholly reusable or wholly disposable.
 
 ### 1.1 Authority boundary
 
@@ -37,7 +37,7 @@ A later Project Director decision must explicitly authorize implementation. Runt
 
 1. Accepted whole-system boundary and system ownership baseline in PR #171.
 2. Accepted foundational capability investigation in PR #172.
-3. Accepted Brain Foundation Architecture in PR #173.
+3. Brain Foundation Architecture proposal in PR #173 (exact-revision acceptance provenance unresolved).
 4. Accepted 12-mechanism specification in PR #174, including 34 acceptance scenarios and BM-12 reasoning ownership.
 5. Existing source audit at main commit `1273ddbcd0087d189e01388ded2d362fb1e058d2`.
 
@@ -473,7 +473,7 @@ The extended Builder-side Gate A review is recorded in
 - Treat confirmed D1/D2 defects as mandatory correction prerequisites; prove the unresolved goal-completion and evolution rollback failure boundaries with failure-injection/replay evidence.
 - Do not claim capability acceptance from source presence or the historical 73/73 CTest result. The 34 accepted foundational scenarios remain the governing acceptance target.
 
-The comparison established that accepted PR #174 HEAD is 12 commits ahead of current main and adds the accepted architecture/specification documents; candidate PR #156 is 21 commits behind that accepted point. The candidate and current main are substantially divergent. The candidate contains useful cognitive mechanisms, but wholesale adoption would import known defects, miss current validation workflows and require broad reconciliation.
+The comparison established that PR #174 HEAD is 12 commits ahead of current main and adds the PR #173 architecture proposal plus the accepted PR #174 specification documents; candidate PR #156 is 21 commits behind that accepted point. The candidate and current main are substantially divergent. The candidate contains useful cognitive mechanisms, but wholesale adoption would import known defects, miss current validation workflows and require broad reconciliation.
 
 **Builder technical result:** PR #156 is rejected as a wholesale baseline and accepted as a selective source donor; accepted PR #174 HEAD is the recommended integration base.
 
