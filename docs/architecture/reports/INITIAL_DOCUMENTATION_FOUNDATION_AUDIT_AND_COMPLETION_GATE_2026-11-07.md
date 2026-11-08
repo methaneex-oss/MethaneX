@@ -860,3 +860,58 @@ PR #173 primary exact-revision acceptance provenance remains unresolved. PR #174
 ### 23.2 Gate and scope
 
 **The Initial Documentation Foundation Completion Gate remains NOT CLEARED.** Stage A remains NOT STARTED and HELD. This correction pass is limited to documentation evidence synchronization and handoff quality. It does not authorize implementation, source/test/build/workflow changes, architecture/specification changes, merge, rebase, retarget, cherry-pick or integration. No fresh-reader session, independent reviewer identity, acceptance decision or test result is fabricated.
+
+
+---
+
+## 24. Builder remediation and live evidence reconciliation — 2026-11-08
+
+This section supersedes prior live-state snapshots only where it states a newer exact fact. Earlier snapshots remain historical records.
+
+### 24.1 Live PR state and review evidence
+
+A fresh GitHub metadata query immediately before this addendum returned:
+
+| Item | Verified state |
+|---|---|
+| PR #192 | Open, draft, unmerged; HEAD `e8cd17277ab5c08d1f6dd6f267120f356ce28666`; base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; 20 changed files |
+| PR #193 | Open, draft, unmerged; HEAD `976aa33f89cc02225296f59246f47982300f5b39`; base `874c732973b6ab303d65a503f5a215b0af8e1153`; 2 changed files |
+| PR #192 formal reviews / inline review threads / conversation comments | 0 / 0 / 0 returned |
+| PR #193 formal reviews / inline review threads / conversation comments | 0 / 0 / 0 returned |
+
+PR #192 and PR #193 remain separate lineages. No integration, merge, rebase, retarget, cherry-pick or branch rewrite is performed or implied.
+
+### 24.2 Corrected PR #191 dependency description
+
+PR #191 is open/draft/unmerged at HEAD `609d38ede50bbdd98a93dfed112781eacabee9fd`, based on `f6267456560a08054d69f7960d2951452b14017c`. PR #179 is open/draft/unmerged at HEAD `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.
+
+GitHub's commit comparison from PR #191's base to PR #179's current head reports **22 commits ahead and 0 behind**. Therefore the PR #191 base is an ancestor of the current PR #179 head; this is a historical-base lag, not a divergent-history conflict. The report must not imply that a merge conflict or branch divergence has been demonstrated. Whether to review PR #191 against its historical base or authorize a dependent revision remains an authority/reviewer disposition. No rebase or retarget is authorized here.
+
+### 24.3 Primary authority evidence — exact findings
+
+- **PR #173:** The complete issue-comment query returned only Builder handoff/resubmission comments `6598264380` and `6598465160`. Neither is a Project Director acceptance decision. The architecture proposal at exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b` still presents itself as proposed for review/decision. Its acceptance remains unresolved; no later document's assertion substitutes for a primary decision record.
+- **PR #174:** Project Director comment `6604790481` explicitly accepts exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` as the Brain Mechanism Specification planning baseline, not implementation authorization. The header at that accepted revision still says “Draft for independent review.” Later comment `6628850155` records additional specification/source-audit corrections but is not a new Project Director decision and does not prove closure of the separately tracked F-02/F-03 follow-on obligations. Preserve the accepted revision and record the status contradiction; do not silently rewrite its substantive content.
+- **PR #178:** Governance remains proposed/unaccepted.
+- **PR #191:** The comparison remains a proposed, unreviewed artifact on its historical base; no integration disposition is inferred.
+
+### 24.4 Corrected gate matrix and honest limits
+
+| Criterion | Current disposition | What remains |
+|---|---|---|
+| DF-01 | Supported within current PR #192 scope | Final independent confirmation |
+| DF-02 | Partial | Refresh exact changed-path/blob inventory after this correction pass |
+| DF-03 | Partial | PR #173 exact acceptance evidence or explicit Director disposition; PR #174 status/follow-on reconciliation |
+| DF-04 | Supported within current scope | Governance must remain explicitly proposed |
+| DF-05 | Partial | Preserve exact PR ancestry and obtain authorized integration/dependency disposition |
+| DF-06 | Partial | Full local-path, fragment, immutable cross-branch and external-link validation remains unproven |
+| DF-07 | Partial | Verify status agreement across both independent PR lineages and all current entry points |
+| DF-08 | Partial | Complete historical source-to-destination/branch preservation mapping remains outstanding |
+| DF-09 | NOT MET | Actual 17-question test by a genuinely uninvolved human |
+| DF-10 | Partial | Final self-review and exact snapshot after all Builder corrections |
+| DF-11 | NOT MET | Formal review by a genuinely separate reviewer; same-GPT-6 reports do not qualify |
+| DF-12 | NOT MET | Exact-revision decision by the designated Project Director |
+| DF-13 | PASS | Stage A remains not started and held |
+
+DF-09, DF-11 and DF-12 cannot honestly be closed by the Builder. DF-03 also cannot be closed by inventing a missing historical decision. DF-05/DF-07 require a deliberate authority decision where integration order is concerned. DF-06 and DF-08 require further evidence, not a status-label change.
+
+**Disposition: NOT CLEARED.** Stage A remains held; implementation remains unauthorized. This addendum corrects the dependency description and records live evidence; it does not claim that all outstanding criteria have been satisfied.
