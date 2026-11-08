@@ -1039,3 +1039,50 @@ Both changed paths were fetched at exact PR #193 HEAD `3fc4c12add3656578da949689
 ### 33.5 Snapshot and self-reference boundary
 
 This section records parent PR #192 HEAD `0a3963012c7b9c8647c02f1bd4e3cbe496f471ac`. The inventory row intentionally records its pre-update blob `870315cc136edc91e5b82d9760b47c31ebc606ca`. This inventory update creates the next PR commit and a new inventory blob. The resulting PR #192 HEAD, inventory blob, changed-path count and registered file blobs must be re-fetched after the write. Any later commit makes this snapshot historical. Reviewers must always fetch live PR metadata and changed paths before review.
+
+
+---
+
+## 34. Post-correction exact revision refresh — 2026-11-08
+
+This section supersedes §33 for the PR #192 parent snapshot. After §33 was written, the Planning Documentation Index and foundation audit received further corrections. The live PR #192 changed-file endpoint still returned the same 23 paths. The updated index and audit blobs were fetched at parent HEAD `7eade1395de5fd205c8f537ab46978a4e276b582`; all other PR #192 changed-path blobs remain as registered in §33.
+
+### 34.1 Exact parent and current related revisions
+
+| Item | Exact state |
+|---|---|
+| PR #192 parent HEAD | `7eade1395de5fd205c8f537ab46978a4e276b582` |
+| PR #192 base | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` |
+| PR #192 changed paths | 23 |
+| PR #193 HEAD / base | `3fc4c12add3656578da949689955aafd3b2b83af` / `874c732973b6ab303d65a503f5a215b0af8e1153` |
+| PR #193 changed paths | 2 |
+| PR #174 current HEAD at this refresh | `8b781d07874eec6895cefa0422c8c8a33e1ec2e2` |
+| PR #174 current specification blob | `edeaf2cb109fba251f91f44b0b0bc4775e580cc4` |
+
+### 34.2 Updated PR #192 blobs
+
+Only the following two registered paths changed after the §33 parent snapshot:
+
+| Repository path | Updated blob SHA at parent HEAD |
+|---|---|
+| `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md` | `0b5d6143a715f4c71b1ffa7cd14189016c4c9e15` |
+| `docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md` | `5d4be0db6ca8320eddb9df1636f9faf3f0e1a00e` |
+
+All remaining 21 PR #192 paths retain the exact blobs listed in §33.2 at this parent snapshot. The inventory itself retains its pre-update blob `29aea598d6658414b919379b1cafff79ad3e7d78`; this update creates its next blob and PR commit.
+
+### 34.3 Authority and status corrections
+
+The updated audit §26 now records:
+- PR #174's follow-on F-02/F-03 recovery details and their still-open status;
+- the correct PR #191 head graph: PR #191 is one commit ahead and 22 behind PR #179, with merge base `f6267456560a08054d69f7960d2951452b14017c`;
+- 63 relative target paths resolved at the earlier bounded validation snapshot, while fragments, 143 external URL occurrences and exhaustive historical cross-branch links remain unverified;
+- the historical preservation report and supplemental register materially advance DF-08 without completing it;
+- DF-09, DF-11 and DF-12 remain NOT MET.
+
+The PR #174 specification at current HEAD `8b781d07874eec6895cefa0422c8c8a33e1ec2e2` now has an explicit status header preserving acceptance of exact baseline `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, while stating that follow-on F-02/F-03 remain open and PR #173's prerequisite acceptance remains unverified. This is a documentation-status correction; it does not change the accepted substantive specification or authorize implementation.
+
+**Gate status remains NOT CLEARED.** Stage A remains NOT STARTED and HELD. Implementation remains unauthorized.
+
+### 34.4 Snapshot and self-reference
+
+This section records PR #192 parent HEAD `7eade1395de5fd205c8f537ab46978a4e276b582`. The inventory row intentionally records pre-update blob `29aea598d6658414b919379b1cafff79ad3e7d78`. After this write, fetch the resulting live PR #192 HEAD, inventory blob and changed-file list. Any subsequent commit makes this register historical; reviewers must use live metadata.
