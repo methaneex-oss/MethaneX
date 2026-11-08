@@ -93,7 +93,10 @@ Use the [Documentation Templates Guide](templates/README.md) for consistent plan
 | Find the right document | [Planning Documentation Index](architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md) | Reading order, artifact classification, authority and dependency map |
 | Understand current phase and boundaries | [Scope correction](architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md) | Whole-Brain scope and current planning sequence |
 | Recover project context | [Continuity handoff — PR #193](https://github.com/methaneex-oss/MethaneX/pull/193) | Historical context and operational restart instructions |
-| Locate historical documents | [Artifact inventory](architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md) | Provenance, preservation and artifact location |\n| Compare historical revisions | [Preservation comparison report](architecture/reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md) | Branch-tip grouping and exact duplicate/divergent Markdown blob comparisons |\n| Locate PR-lineage artifacts | [Historical preservation register](architecture/inventory/HISTORICAL_DOCUMENTATION_PRESERVATION_REGISTER_2026-11-08.md) | Exact paths and blob SHAs across the principal planning PRs |
+| Locate historical documents | [Artifact inventory](architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md) | Provenance, preservation and artifact location |
+| Compare historical revisions | [Preservation comparison report](architecture/reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md) | Branch-tip grouping and exact duplicate/divergent Markdown blob comparisons |
+| Locate PR-lineage artifacts | [Historical preservation register](architecture/inventory/HISTORICAL_DOCUMENTATION_PRESERVATION_REGISTER_2026-11-08.md) | Exact paths and blob SHAs across the principal planning PRs |
+| Understand remaining blockers | [Outstanding-work and authority register](architecture/reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md) | Completed corrections, remaining Builder work and human/authority requirements |
 | Verify current gate | [Foundation audit](architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md) | DF-01–DF-13 evidence and blockers |
 | Understand authority proposals | [Governance rules — PR #178](https://github.com/methaneex-oss/MethaneX/pull/178) | Proposed rules only; unaccepted at this snapshot |
 | Inspect source integration | [Phase 1 report](architecture/reports/PHASE_1_WHOLE_REPOSITORY_INVESTIGATION_AND_REUSE_AUDIT_2026-11-04.md) and [Phase 2 map](architecture/reports/PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md) | Bounded repository and source evidence |
@@ -186,14 +189,15 @@ Do not write “approved” without naming the exact revision, scope and decisio
 
 This portal is being introduced on PR #192's PR #179-derived line. The continuity handoff and deferred implementation plan are on PR #193's separate PR #175-derived line. They are not silently combined by this portal.
 
-At the pre-correction repository refresh on 2026-11-07:
-- PR #192 parent HEAD: `f831faef6d031776e0cee116d1986c3160faffb5` (this portal correction advances that branch).
-- PR #193 live HEAD: `976aa33f89cc02225296f59246f47982300f5b39`.
-- PR #192 and PR #193 are open, draft and unmerged at this refresh. Re-fetch live PR metadata before relying on snapshot values.
-- PR #191 is a separate comparison proposal based on an earlier PR #179 snapshot.
+At the latest verified repository refresh for this documentation update:
+- PR #192 and PR #193 remain open, draft and unmerged on separate lineages.
+- PR #192 is the documentation-foundation correction/review line; PR #193 is the separate deferred-plan and continuity line.
+- PR #191 remains a historical-base comparison proposal whose head diverges from current PR #179; retargeting alone is insufficient.
 - PR #178 governance remains proposed and unaccepted.
-- PR #173 acceptance provenance remains unresolved in the available PR discussion.
-- PR #174's exact-revision planning-baseline acceptance is recorded. Its stale draft header has received a non-substantive administrative correction on the PR branch; that new revision is not itself independently reviewed or separately accepted. The F-02/F-03 follow-on obligations remain open.
+- PR #173 acceptance provenance remains unverified; do not infer acceptance from downstream documents.
+- PR #174's exact-revision planning-baseline acceptance remains tied to HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`. A later administrative clarification does not constitute a new acceptance. Follow-on F-02/F-03 remain open.
+
+Fetch live PR metadata and changed-file revisions before relying on exact commit values; this portal deliberately avoids presenting a mutable snapshot as current truth.
 
 The current task is to complete the Initial Documentation Foundation Completion Gate. Stage A remains held. This portal does not accept any proposal, clear any gate, select a source baseline, authorize implementation, or replace the required independent review and authority decision.
 
