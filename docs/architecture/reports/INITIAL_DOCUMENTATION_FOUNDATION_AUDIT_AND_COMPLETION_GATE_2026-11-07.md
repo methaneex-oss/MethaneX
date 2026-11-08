@@ -1104,3 +1104,22 @@ The earlier link-validation pass recorded 63 repository-relative target paths re
 | DF-13 | PASS for hold only | Stage A remains not started and held |
 
 **Disposition: NOT CLEARED.** Builder-controlled documentation corrections have advanced the provenance, status, navigation and preservation records. DF-09, DF-11 and DF-12 cannot be completed by the Builder; PR #173 provenance and PR #191 integration also require authority. DF-06 and DF-08 remain evidence-limited. Stage A remains NOT STARTED and HELD. Implementation remains unauthorized.
+
+
+## 27. Final cross-lineage pin and administrative-status refresh — 2026-11-08
+
+This section records the state immediately before this audit update and supersedes earlier live-state claims where the facts below are newer. Prior snapshots remain historical.
+
+| Item | Exact state |
+|---|---|
+| PR #192 | Open, draft, unmerged; HEAD 896a9e14ed022df9b5b1376e60714e0ac6a763b0; base 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c; 23 changed files |
+| PR #193 | Open, draft, unmerged; HEAD d2ccbbb26595f28fb7488db4dbe778e7ddd58c7a; base 874c732973b6ab303d65a503f5a215b0af8e1153; 2 changed files |
+| PR #174 | Open, draft, unmerged; administrative/status-clarification HEAD 922912283d173e24df891ba23d0e2dfc17e0f4b4; accepted planning-baseline decision remains tied to prior exact HEAD 0811a59e46bf934e32e794f90e4e7d18d4e2bd97 |
+
+The PR #192 Planning Documentation Index now pins PR #193's current handoff and plan to exact PR #193 HEAD d2ccbbb26595f28fb7488db4dbe778e7ddd58c7a. The PR #193 handoff and plan pin back to PR #192 documentation snapshot `db5968bfbddf77590cd9303539abda00dd961ab7`, which contains the updated portal, index, audit, preservation evidence and PR #174 follow-on recovery record. This is an intentional immutable-snapshot arrangement that avoids a cyclic commit dependency; the pinned PR #192 snapshot is not claimed to be the latest PR #192 HEAD.
+
+The PR #192 index and preservation register now reference PR #174's latest administrative status-clarification HEAD 922912283d173e24df891ba23d0e2dfc17e0f4b4 and specification blob `ac1621c43d60b2a556438371287c07ab2b20c8aa`. The original accepted planning baseline remains exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`; the later branch revision is a non-substantive metadata clarification and has not itself been independently reviewed or separately accepted. The parent PR #173 acceptance remains unverified.
+
+The final inventory refresh must now use the exact live PR #192 parent after the audit, self-review and reviewer-handoff updates. It must enumerate all changed paths and blobs at that parent, retain PR #193's exact separate snapshot, and identify the inventory's own pre-update blob. After that final inventory write, re-fetch the live PR head and all changed paths; do not predict or hardcode the resulting commit SHA.
+
+**Disposition remains NOT CLEARED.** DF-09 still requires the actual uninvolved human reader; DF-11 still requires a genuinely separate reviewer; DF-12 still requires the Project Director's exact-revision decision. PR #173 provenance, PR #191 dependency disposition, broader link validation and historical preservation remain open or partial. Stage A remains held; implementation remains unauthorized.
