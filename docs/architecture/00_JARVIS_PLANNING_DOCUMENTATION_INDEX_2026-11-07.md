@@ -227,6 +227,10 @@ The register materially improves DF-08 evidence for the enumerated PR artifact s
 
 ---
 
+## 14. Documentation-foundation outstanding work and authority register
+
+Use the [Outstanding Work Closure and Authority Register](reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md) as the concise control record for the initial documentation-foundation gate. It separates corrections already completed from unresolved technical evidence and from requirements that must be supplied by an uninvolved reader, a qualifying independent reviewer or the Project Director. It does not itself clear the gate.
+
 ## 13. PR #174 follow-on review provenance and obligations — 2026-11-08
 
 [PR #174 Follow-on Review — Provenance Recovery Record](reports/PR_174_FOLLOW_ON_REVIEW_PROVENANCE_RECOVERY_2026-11-06.md) records a partial recovery of the later F-02/F-03 review. The original report and its complete rationale/inline annotations remain unavailable verbatim.
