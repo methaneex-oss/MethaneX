@@ -522,3 +522,38 @@ The inventory register is being rebuilt against the exact PR #192 parent snapsho
 The prior self-review used duplicate top-level section number 18 for its final correction-pass section. That heading is corrected to §19 in this revision; this addendum is §20. No content or finding is silently removed. The changed-file list in §2 is the original scope description, not a complete list of subsequent audit/review/addendum changes; the exact changed-file inventory is the authority for a particular immutable PR snapshot.
 
 **Disposition remains NOT READY FOR ACCEPTANCE.** DF-09 remains NOT MET (no genuine fresh-reader session); DF-11 remains NOT MET (available reviewer reports share the Builder's GPT-6 identity); DF-12 remains NOT MET (no exact-revision Project Director decision). PR #173 provenance, PR #174 header/follow-on obligations, PR #178 proposed status, PR #191 dependency disposition, and DF-06/DF-07/DF-08 remain open or partial as recorded in audit §23. Stage A remains held; implementation remains unauthorized. This is a Builder self-review, not independent review.
+
+
+---
+
+## 21. Builder remediation review — 2026-11-08
+
+### 21.1 Live snapshot recheck
+
+At the start of this remediation pass, PR #192 was open/draft/unmerged at HEAD `e8cd17277ab5c08d1f6dd6f267120f356ce28666`, base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, with 20 changed files. PR #193 was open/draft/unmerged at HEAD `976aa33f89cc02225296f59246f47982300f5b39`, base `874c732973b6ab303d65a503f5a215b0af8e1153`, with 2 changed files. Both PRs have zero returned formal reviews, inline review threads and conversation comments in the live queries used for this pass.
+
+### 21.2 Corrections made to the Builder's understanding
+
+- PR #191's base is 22 commits behind PR #179's current head but is an ancestor (comparison: 22 ahead, 0 behind from #191 base to #179 head). This is a historical-base dependency, not proven divergence or a merge conflict.
+- PR #173 has no primary Project Director acceptance comment in the retrieved complete PR discussion. Its status remains unresolved.
+- PR #174 has a primary exact-revision acceptance comment for HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`; the accepted file's “Draft for independent review” header and follow-on F-02/F-03 obligations must remain visible rather than being silently overwritten.
+- PR #178 remains proposed/unaccepted.
+- PR #192 and #193 remain distinct PR lineages; no integration order has been authorized.
+
+### 21.3 Final Builder-controlled versus external blockers
+
+Builder-controlled work includes accurate status language, revision synchronization, bounded link checking, inventory completeness, historical-document mapping, and a reproducible fresh-reader protocol. The exact current audit and reviewer handoff record the outstanding evidence and authority limits.
+
+The following are not Builder-completable:
+1. DF-09 — an actual uninvolved human must complete the 17-question fresh-reader protocol without coaching.
+2. DF-11 — a genuinely separate reviewer must inspect the final exact revision and submit a formal review. Reports produced under the Builder's GPT-6 identity do not qualify.
+3. DF-12 — the designated Project Director must decide against the exact final revisions.
+4. PR #173 acceptance provenance — a primary decision record must be found or the authority must explicitly dispose of the unresolved claim.
+
+No simulation, self-review, generated answer set or Builder statement can substitute for these events.
+
+### 21.4 Self-review disposition
+
+This is a Builder self-review only. It is not independent review and does not accept the documentation foundation. DF-09, DF-11 and DF-12 remain NOT MET; DF-03 and DF-05–DF-08 remain partial/unresolved as detailed in audit §24. The final inventory and exact PR HEAD must be refreshed after all writes in this pass.
+
+**Builder recommendation: NOT READY FOR ACCEPTANCE.** Stage A remains held. No source/runtime changes, implementation, merge, rebase, retarget, cherry-pick or integration is authorized.
