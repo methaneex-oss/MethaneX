@@ -355,9 +355,9 @@ The reviewer must state exact PR #192 HEAD/base, changed-file count, reviewer id
 DF-09, DF-11 and DF-12 remain NOT MET. PR #173 provenance, PR #174 follow-on F-02/F-03 and its provenance limitation, PR #191 dependency disposition, DF-06 broader link validation, DF-07 cross-lineage consistency and DF-08 full historical preservation remain open/partial. Stage A remains held. This handoff does not clear the gate, make a Project Director decision, authorize implementation or authorize PR integration.
 
 
-## 15. Superseding reviewer handoff — final remediation snapshot — 2026-11-08
+## 15A. Superseding reviewer handoff — final remediation snapshot — 2026-11-08
 
-### 15.1 Exact target before this handoff update
+### 15A.1 Exact target before this handoff update
 
 | Item | Exact value |
 |---|---|
@@ -368,7 +368,7 @@ DF-09, DF-11 and DF-12 remain NOT MET. PR #173 provenance, PR #174 follow-on F-0
 
 Earlier target SHAs in §§2, 10–14 are historical snapshots. Fetch live metadata and the complete changed-path list again before review. Do not treat any earlier HEAD as current merely because it appears in this handoff.
 
-### 15.2 New evidence the reviewer must inspect
+### 15A.2 New evidence the reviewer must inspect
 
 1. [Historical Documentation Preservation Register](../inventory/HISTORICAL_DOCUMENTATION_PRESERVATION_REGISTER_2026-11-08.md): verify the 68 listed PR artifact paths and their exact head/blob identities. It supplements the earlier [Historical Preservation and Cross-Revision Comparison Report](DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md); neither report claims complete repository-wide preservation.
 2. [PR #174 Follow-on Review Provenance Recovery](PR_174_FOLLOW_ON_REVIEW_PROVENANCE_RECOVERY_2026-11-06.md): reassess the recovered F-02 (HIGH / CONFIRMED) and F-03 (MEDIUM / CONFIRMED) requirement themes. The original full report remains unavailable; the recovery record must remain explicitly partial. Neither finding is marked closed.
@@ -376,7 +376,7 @@ Earlier target SHAs in §§2, 10–14 are historical snapshots. Fetch live metad
 4. PR #193 implementation plan and handoff: verify that PR #173 is consistently described as an architecture proposal with unresolved primary acceptance provenance, while PR #174's accepted planning-baseline event and follow-on F-02/F-03 obligations remain distinct.
 5. PR #191 graph: independently reproduce both comparisons — PR #191 base to PR #179 HEAD (22 ahead / 0 behind), and PR #179 HEAD to PR #191 HEAD (diverged; PR #191 one unique commit ahead and 22 behind). No branch-history operation is authorized by this handoff.
 
-### 15.3 Remaining gate requirements
+### 15A.3 Remaining gate requirements
 
 - **DF-06 — PARTIAL:** 63 relative target paths were recorded as resolved at an earlier exact parent; 143 external URL occurrences, heading fragments and exhaustive historical cross-branch references remain unchecked.
 - **DF-08 — PARTIAL:** the 68-path register and selected branch comparisons materially advance preservation, but broader non-JARVIS-named PR lineage, two unmatched branch refs, Developmental Brain Plan revision disposition and archive/supersession decisions remain open.
@@ -385,7 +385,7 @@ Earlier target SHAs in §§2, 10–14 are historical snapshots. Fetch live metad
 - **DF-12 — NOT MET:** the Project Director must make the exact-revision decision after review.
 - **DF-03 / DF-05:** PR #173 primary acceptance provenance and PR #191 / PR #192 / PR #193 dependency dispositions require explicit authority or primary evidence.
 
-### 15.4 Required deliverable and boundary
+### 15A.4 Required deliverable and boundary
 
 Inspect the complete PR #192 diff at the newly fetched HEAD; verify every changed file and the final inventory snapshot; review the portal, index, audit, self-review, handoff, preservation register and PR #174 provenance recovery; independently challenge the architectural/system boundaries and every status/authority claim; and submit a finding-by-finding report with exact evidence and a clear clearance recommendation.
 
