@@ -1048,3 +1048,59 @@ The comparison from PR #191 base to PR #179 HEAD is 22 ahead / 0 behind. That co
 **Disposition remains NOT CLEARED.** The PR #174 status-header and PR-description corrections are complete, and the PR #191 graph description is now corrected. They do not complete the fresh-reader test, qualifying independent review, exact-revision Project Director decision, or the remaining historical/link/dependency evidence.
 
 Stage A remains NOT STARTED and HELD. No implementation, baseline selection, merge, rebase, retarget, cherry-pick, branch deletion, archive relocation, or PR integration is authorized by this audit. No reader session, independent reviewer identity, or authority decision is fabricated.
+
+
+## 26. Final Builder remediation evidence and exact unresolved authority items — 2026-11-08
+
+This addendum supersedes earlier live-state snapshots only where it records newer exact facts. Prior snapshots remain historical.
+
+### 26.1 Live repository state immediately before this audit update
+
+| Item | Verified state |
+|---|---|
+| PR #192 | Open, draft, unmerged; HEAD 2be976dcb24a8fbd9571adbecc0c470f861d629b; base 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c; 23 changed files |
+| PR #193 | Open, draft, unmerged; HEAD 3fc4c12add3656578da949689955aafd3b2b83af; base 874c732973b6ab303d65a503f5a215b0af8e1153; 2 changed files |
+| PR #174 | Open, draft, unmerged; current administrative/status-clarification HEAD 8b781d07874eec6895cefa0422c8c8a33e1ec2e2; parent PR #173 HEAD 97191111bc2573c14d391c0af9628db7b11f194b |
+| PR #192 formal reviews / inline threads / conversation comments | 0 / 0 / 0 returned by the latest GitHub queries |
+
+PR #192 and PR #193 remain separate lineages. No integration, merge, rebase, retarget, cherry-pick, branch deletion or archive relocation was performed.
+
+### 26.2 PR #173 and PR #174 — corrected authority record
+
+- **PR #173:** Primary PR discussion evidence still contains Builder handoff/resubmission comments, not a direct Project Director acceptance decision for exact HEAD 97191111bc2573c14d391c0af9628db7b11f194b. The architecture proposal remains unverified/proposed for authority purposes. Later downstream statements are not substituted for the missing primary decision.
+- **PR #174 accepted baseline:** Project Director comment 6604790481 accepts exact HEAD 0811a59e46bf934e32e794f90e4e7d18d4e2bd97 as the Brain Mechanism Specification planning baseline only. It does not establish PR #173 acceptance or authorize implementation.
+- **PR #174 administrative correction:** The current specification branch now has a separate status-only clarification at HEAD 8b781d07874eec6895cefa0422c8c8a33e1ec2e2. Its header preserves the accepted 0811a59... baseline while identifying PR #173 as a parent proposal whose acceptance provenance remains unresolved. The PR description was also corrected to distinguish the accepted PR #174 planning baseline from the unverified PR #173 parent claim. The substantive mechanism specification was not changed by this metadata correction. The new administrative revision has not itself been independently reviewed or separately accepted.
+- **F-02 / F-03 follow-on review:** The provenance recovery record now contains a recovered summary: F-02 (contextual language/operator-intent grounding) was HIGH / CONFIRMED; F-03 (enforceable downstream reasoning integration) was MEDIUM / CONFIRMED as a specification weakness; the recovered overall verdict was REVISE — NOT APPROVED FOR THE NEXT GATE. The recovered themes include contextual intent, reference grounding, speech-act/source attribution, uncertainty, clarification, trusted/untrusted content and continuity for F-02; material downstream influence, invalidation/rejection handling and traceable end-to-end acceptance for F-03. The original full report and exact inline annotations remain unavailable. Both obligations remain OPEN; no correction or acceptance is inferred.
+- **PR #193 plan/handoff:** The downstream implementation plan now qualifies PR #173 acceptance as unresolved. The continuity handoff separately records PR #174's accepted planning-baseline event and the still-open F-02/F-03 obligations.
+
+### 26.3 PR #191 graph — exact relationship, not merely base lag
+
+PR #191 base is f6267456560a08054d69f7960d2951452b14017c; PR #179 HEAD is 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c; PR #191 HEAD is 609d38ede50bbdd98a93dfed112781eacabee9fd.
+
+The comparison from PR #191 base to PR #179 HEAD reports 22 commits ahead and 0 behind: the base is an ancestor of current PR #179. The direct comparison from PR #179 HEAD to PR #191 HEAD reports DIVERGED, with PR #191 one unique commit ahead and 22 commits behind. Retargeting alone would not reconcile this. An explicit authority decision is required: retain PR #191 for review against its historical base, or authorize a dependent revision that replays the one-document commit onto the current PR #179 line. No rebase, cherry-pick or retarget is performed.
+
+### 26.4 Historical preservation and link-validation progress
+
+The new Historical Documentation Preservation Register maps 68 changed documentation paths across PRs #171, #172, #173, #174, #175, #178, #179, #191, #192 and #193 to exact PR heads and fetched blob SHAs. All 68 listed paths were successfully fetched at the stated immutable revisions. It complements the earlier branch-discovery and selected cross-revision comparison report for PR #96/#97/#148/#156/#170. This materially advances DF-08 for the enumerated PR artifacts, but does not close the broader historical archive obligation: unmatched branch refs, broader non-JARVIS-named PR lineage, the two Developmental Brain Plan revisions, and archive/supersession decisions remain open.
+
+The earlier link-validation pass recorded 63 repository-relative target paths resolving with no missing targets at its exact PR #192 parent. It also identified 143 external URL occurrences that were not exhaustively fetched or semantically checked. Heading fragments and all historical cross-branch links were not exhaustively validated. DF-06 therefore remains PARTIAL. The supplemental preservation register is linked from the Planning Documentation Index and Documentation Portal.
+
+### 26.5 Current gate matrix
+
+| Criterion | Disposition | Remaining work |
+|---|---|---|
+| DF-01 | Present; independent confirmation pending | Fresh-reader/reviewer confirmation of entry route |
+| DF-02 | Partial until final inventory snapshot | Refresh all 23 changed paths/blobs at the exact parent and verify resulting head/blob |
+| DF-03 | Partial | PR #173 primary decision evidence or explicit Project Director disposition; keep unverified otherwise |
+| DF-04 | Pass within documented scope | Keep PR #178 governance proposed/unaccepted |
+| DF-05 | Partial | Project Director decision on PR #191 graph and PR #192/#193 integration order |
+| DF-06 | Partial | Heading fragments, external URL reachability/semantics and exhaustive historical cross-branch links |
+| DF-07 | Partial | Independent confirmation of separate-lineage status consistency |
+| DF-08 | Partial, materially advanced | Broader archive, unmatched branch and revision-disposition work |
+| DF-09 | NOT MET | Actual 17-question session with a genuinely uninvolved human; preserve raw answers and observations |
+| DF-10 | Partial pending final snapshot | Final Builder self-review against the exact submitted revision |
+| DF-11 | NOT MET | Formal review by a genuinely separate reviewer identity, against the exact final revision |
+| DF-12 | NOT MET | Project Director decision against exact reviewed revisions |
+| DF-13 | PASS for hold only | Stage A remains not started and held |
+
+**Disposition: NOT CLEARED.** Builder-controlled documentation corrections have advanced the provenance, status, navigation and preservation records. DF-09, DF-11 and DF-12 cannot be completed by the Builder; PR #173 provenance and PR #191 integration also require authority. DF-06 and DF-08 remain evidence-limited. Stage A remains NOT STARTED and HELD. Implementation remains unauthorized.
