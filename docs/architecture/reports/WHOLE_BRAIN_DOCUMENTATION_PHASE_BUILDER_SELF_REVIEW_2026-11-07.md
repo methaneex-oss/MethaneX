@@ -801,3 +801,34 @@ Immediately before this self-review update, PR #192 was open/draft/unmerged at H
 ### 24.4 Self-review disposition
 
 The Builder-controlled inventory synchronization is corrected for the stated parent. This self-review is not an independent review and does not clear the documentation-foundation gate. **NOT READY FOR ACCEPTANCE; NOT CLEARED.** Stage A remains held; implementation remains unauthorized.
+
+## 25. Final exact-head Builder self-review — 2026-11-08
+
+### 25.1 Live revision and checks
+
+At the start of this final Builder verification, PR #192 was open/draft/unmerged at HEAD \`e658b30f7eacdde9510fb81128b85644339017ef\`, base \`61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c\), with 24 changed paths. PR #193 was separately open/draft/unmerged at HEAD \`d2ccbbb26595f28fb7488db4dbe778e7ddd58c7a\`, base \`874c732973b6ab303d65a503f5a215b0af8e1153\`.
+
+The Builder fetched all 24 PR #192 changed paths at the exact HEAD. The recursive tree was complete (225 blob paths; \`truncated=false\`). The Markdown scan found 80 relative link occurrences with zero missing target paths and 143 external URL occurrences. External reachability, fragment correctness, line anchors and semantic relevance were not established.
+
+### 25.2 Historical branch correction
+
+The \`jarvis\` branch search returned 37 refs and the \`JARVIS\` PR search returned 63 results. The two previously unmatched refs now have exact ancestry evidence:
+- \`feat/jarvis-build-agents-clean\` tip \`04a441676c1d41833f64bc0f20f5320af6f10855\` is an ancestor of PR #179 HEAD, 170 commits behind that descendant.
+- \`docs/jarvis-phase-1-preservation-inventory-20261104\` tip \`ebbda074957e0f9fb0d0f04dd9b03fe58b270a0a\` is an ancestor of PR #178 HEAD, 11 commits behind that descendant.
+
+This corrects the prior unmatched-ref classification. No branch was deleted or rewritten.
+
+### 25.3 Remaining work and authority limits
+
+- DF-06 remains PARTIAL: current relative target paths are verified, but fragments, external reachability, line anchors, semantic correctness and exhaustive historical cross-branch links are not.
+- DF-08 remains PARTIAL: two prior unmatched refs are mapped by ancestry; broader non-JARVIS PR/branch lineage, remaining historical revision classification and archive/supersession decisions remain open.
+- PR #173 remains UNVERIFIED / PROPOSED without primary acceptance evidence or Project Director disposition.
+- PR #174 F-02/F-03 remain OPEN; the original full follow-on review and annotations remain unavailable verbatim. No speculative technical fix is claimed.
+- PR #191's dependency and PR #192/#193 order remain Project Director decisions.
+- DF-09 remains NOT MET pending an uninvolved human's 17-question session.
+- DF-11 remains NOT MET pending a genuinely separate qualifying review.
+- DF-12 remains NOT MET pending the Project Director's exact-revision decision.
+
+### 25.4 Self-review disposition
+
+The current-head relative-path check and the two branch-ancestry corrections are Builder-controlled evidence. They do not close all DF-06/DF-08 requirements and cannot satisfy DF-09, DF-11 or DF-12. **NOT READY FOR ACCEPTANCE; NOT CLEARED.** Stage A remains held; implementation remains unauthorized.
