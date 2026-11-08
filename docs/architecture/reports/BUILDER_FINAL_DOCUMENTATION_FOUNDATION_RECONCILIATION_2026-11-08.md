@@ -165,3 +165,79 @@ The reviewer must re-fetch the live PR because committing this report will advan
 No gate clearance, Stage A start, implementation authorization, merge or branch-history operation is claimed.
 
 **End of report.**
+
+
+## 10. Builder response to technical re-review findings — 2026-11-08
+
+This addendum responds to the same-identity GPT-6 technical re-review recorded in `INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_2026-11-08.md`. It is a Builder correction record, not a qualifying independent review or Project Director decision.
+
+### 10.1 Numbering corrections completed
+
+The following defects were corrected on the PR #192 branch:
+
+- Planning index: moved the PR #174 follow-on provenance section before the documentation-foundation outstanding-work section, restoring sequential order (§13 then §14). Commit: `afcd6f434a4a2c1b6da2c19bb11a33bbc508a177`; resulting blob: `df75bf2dd76ea30532ebfc179d972763945ffaab`.
+- Detailed inventory: renamed the second duplicate §37 to §38 and renumbered the subsequent final Builder reconciliation section to §39, including its subsection identifiers. Commit: `9d1c4d1009e771900dd17568471a0a8dfa3fdbb8`; resulting blob: `b0fdd722bbd2e84d071bd85876b24b620e92ae2a`.
+- Phase 2 integration map: corrected the swapped §60.4 and §61.4 status headings so each belongs to its containing section. Commit: `1d0c5d265d736d57a915690699ee46e0f81b1105`; resulting blob: `b1c203121879aa50ecad30e71e2e1800456bcd9c`.
+
+These are heading/structure corrections only. No technical finding, acceptance status, or authority decision was changed.
+
+### 10.2 Exact PR #192 snapshot after the numbering corrections
+
+Immediately after the three correction commits above, live PR metadata and the complete paginated changed-filename list were re-fetched. The exact parent snapshot for this addendum is:
+
+| Field | Verified value |
+|---|---|
+| PR #192 HEAD | `1d0c5d265d736d57a915690699ee46e0f81b1105` |
+| Base SHA | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` |
+| Branch | `docs/whole-brain-planning-scope-correction-20261107` |
+| State | Open, draft, unmerged |
+| Changed paths | 26 |
+| PR author | `methaneex-oss` |
+| Recorded review submissions at the preceding query | One COMMENT by the same ChatGPT (GPT-6) identity as Builder; not qualifying under DF-11 |
+| Requested individual/team reviewers | None returned |
+
+All 26 changed paths were fetched at exact HEAD `1d0c5d265d736d57a915690699ee46e0f81b1105`. Their returned blob identities are:
+
+| # | Repository path | Blob SHA |
+|---:|---|---|
+| 1 | `README.md` | `780651b804b491781fdcac8e248eaca9243797a4` |
+| 2 | `docs/ARCHITECTURE.md` | `3c6692b52059e43947d1fd2e7e84debb2362023f` |
+| 3 | `docs/JARVIS_BRAIN_MASTER_BLUEPRINT.md` | `0e49d313bf3929aa30140cb7149ebab038918378` |
+| 4 | `docs/JARVIS_PHASE_2_COMPLETION.md` | `e0e57a44216fc36c52d469a79abfc8df058515a3` |
+| 5 | `docs/README.md` | `da0d9c834e8a5b2e67519ee5e0a2927bcec96374` |
+| 6 | `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md` | `df75bf2dd76ea30532ebfc179d972763945ffaab` |
+| 7 | `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md` | `b0fdd722bbd2e84d071bd85876b24b620e92ae2a` |
+| 8 | `docs/architecture/inventory/HISTORICAL_DOCUMENTATION_PRESERVATION_REGISTER_2026-11-08.md` | `96539183fab3a2b630a8e9154f183b0bfada9016` |
+| 9 | `docs/architecture/reports/BUILDER_FINAL_DOCUMENTATION_FOUNDATION_RECONCILIATION_2026-11-08.md` | `656e4dca522c43452f31c125f5e84684c2bd87c1` |
+| 10 | `docs/architecture/reports/BUILDER_TO_INDEPENDENT_REVIEWER_REQUEST_2026-11-08.md` | `51b9a853fe86c458cf9ed95d00e0f9b0adc33953` |
+| 11 | `docs/architecture/reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md` | `bcc3fe48a37f7f625246f85c2e27fd493250c6b2` |
+| 12 | `docs/architecture/reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md` | `7c9568478c65453d4258325efe53480f610f0eca` |
+| 13 | `docs/architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_2026-11-08.md` | `0a2c20cf62a5573d6ba4afcebc9c3dbfbfafab73` |
+| 14 | `docs/architecture/reports/INDEPENDENT_REVIEWER_HANDOFF_2026-11-08.md` | `b50d6d8ceaec77d0cee5fc6bb14d19a04032c7ac` |
+| 15 | `docs/architecture/reports/INDEPENDENT_RE_REVIEW_BUILDER_FOLLOW_UP_2026-11-08.md` | `2d63ed93344a7081dcedb44247536c416322c793` |
+| 16 | `docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md` | `955a6c953cdf539a6f478a2d472a327666845e4c` |
+| 17 | `docs/architecture/reports/PHASE_1_REVIEW_CORRECTIONS_AND_SCOPE_RECONCILIATION_2026-11-05.md` | `a459cdfd02d850d455ca526e6823e68525776ba3` |
+| 18 | `docs/architecture/reports/PHASE_1_WHOLE_REPOSITORY_INVESTIGATION_AND_REUSE_AUDIT_2026-11-04.md` | `f725eda1e23d6558d90f6f7c87302019ef3a0dfc` |
+| 19 | `docs/architecture/reports/PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md` | `b1c203121879aa50ecad30e71e2e1800456bcd9c` |
+| 20 | `docs/architecture/reports/PR_174_FOLLOW_ON_REVIEW_PROVENANCE_RECOVERY_2026-11-06.md` | `d01fa6170b87254619d469d276ba57e813c08ff3` |
+| 21 | `docs/architecture/reports/WHOLE_BRAIN_DOCUMENTATION_PHASE_BUILDER_SELF_REVIEW_2026-11-07.md` | `a212b7ffd4831d7ec83125cb04e9b243a0cddd38` |
+| 22 | `docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md` | `0187a0ac71bd0c95e94beb3bf006da9cc7c3605f` |
+| 23 | `docs/templates/INDEPENDENT_REVIEW_REPORT_TEMPLATE.md` | `f3176cf1a1f45735a3ad62fa4a865806edc24e08` |
+| 24 | `docs/templates/PLANNING_DOCUMENT_TEMPLATE.md` | `b9f71a923b0d717a3b29655574c89c10e0801115` |
+| 25 | `docs/templates/README.md` | `7209fd0fcda239349af602490d26b8c708b743da` |
+| 26 | `docs/templates/TEST_EVIDENCE_REPORT_TEMPLATE.md` | `9c6bbae48a22beb7c4e95858282d7d8d7b2159c2` |
+
+This is a parent snapshot. Updating this report and the inventory advances PR #192; the final post-write HEAD and inventory self-blob must be fetched and recorded separately. The prior 24-path Builder manifest and earlier reviewer snapshots remain historical records, not live-state assertions.
+
+### 10.3 Remaining disposition
+
+- FND-01: the 26-path manifest above is now recorded in this report; final inventory synchronization and post-write verification remain to be completed.
+- FND-02: the three identified numbering defects are corrected; cross-reference and heading-order verification remains part of final validation.
+- FND-03: current exact-snapshot synchronization remains in progress.
+- FND-04 / DF-06: full current-head link, fragment, anchor, external-reachability and semantic validation remains incomplete.
+- FND-05 / DF-08: historical preservation remains bounded; broader lineage and provenance reconciliation remains open.
+- DF-09: no uninvolved human fresh-reader session is claimed.
+- DF-11: no qualifying separate reviewer has been identified or assigned; the same-identity technical review does not qualify.
+- DF-12: no exact-revision Project Director decision is claimed.
+
+**Disposition remains NOT CLEARED FOR ACCEPTANCE. Stage A remains HELD. Implementation remains unauthorized.**
