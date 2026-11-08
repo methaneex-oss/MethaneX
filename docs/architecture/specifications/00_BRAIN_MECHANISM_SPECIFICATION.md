@@ -2,8 +2,8 @@
 
 **Document status:** Accepted as the Brain Mechanism Specification planning baseline at PR #174 HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` by Project Director decision comment [#6604790481](https://github.com/methaneex-oss/MethaneX/pull/174#issuecomment-6604790481). This acceptance is planning-baseline acceptance only, not implementation authorization. The separately recorded follow-on F-02/F-03 obligations remain open and must be resolved before relying on the affected areas for implementation.  
 **Stage:** Detailed Brain Mechanism Specification  
-**Authority:** Project Director authorization received 2026-11-03 after acceptance of PR #173  
-**Accepted architecture baseline:** PR #173, commit \`97191111bc2573c14d391c0af9628db7b11f194b\`  
+**Authority:** Project Director authorization for this specification stage was recorded as received 2026-11-03. The claimed prerequisite acceptance of PR #173 is not established by the primary PR #173 discussion evidence currently available; see the PR #174 authority clarification.  
+**Parent architecture reference:** PR #173, commit \`97191111bc2573c14d391c0af9628db7b11f194b\`   (proposal; exact-revision Project Director acceptance provenance unresolved).
 **Foundational capability baseline:** PR #172, commit \`d7d676b79dbf3269f7fd3ebdb4363a6df19f255d\`  
 **Whole-system boundary baseline:** PR #171, reviewed package commit \`b05434758ad4fe72815503f89bd5d2990ccb658b\`  
 **Engineering source baseline:** \`main\`, commit \`1273ddbcd0087d189e01388ded2d362fb1e058d2\`  
