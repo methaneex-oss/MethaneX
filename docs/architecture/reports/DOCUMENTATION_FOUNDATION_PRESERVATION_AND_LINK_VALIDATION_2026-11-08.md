@@ -170,3 +170,25 @@ This distinction matters. PR #191 is a clean one-commit addition on its historic
 
 **Recommendation for decision:** keep PR #191 as a historical-base review target if the immediate purpose is to review the comparison artifact in isolation; if the purpose is to integrate it into the current PR #179 line, authorize a new revision that replays its single unique document commit onto the current PR #179 head, then independently review that new exact revision. This is a recommendation, not an executed operation or acceptance decision.
 
+
+
+## 8. Developmental Brain Plan — exact PR #148 / PR #156 content comparison
+
+The two distinct `docs/DEVELOPMENTAL_BRAIN_PLAN.md` blobs identified in §4.2 were fetched directly:
+
+| Source | Exact commit | Blob | Lines |
+|---|---|---|---:|
+| PR #148 | `be848d35d575dc0a6d48052ad1ac5265039c879e` | `6b447faa668c2c4a559e55fb40dbd301f53e1704` | 352 |
+| PR #156 | `7fe212bbb0bd61116ea56581435e03b06c69b673` | `1db14e73ecc4ff4fded2791df17f34d20958c329` | 399 |
+
+**Exact content relationship:** all 352 lines of the PR #148 file are an exact, line-for-line prefix of the PR #156 file. PR #156 adds 47 lines at the end as a new §15, “Integrated Priority-One audit checkpoint — 2026-10-31.” No earlier line was modified or removed.
+
+The added §15 records:
+- two additional adversarial corrections (mismatched evolution rollback target and feedback attestation source binding);
+- a claim that four exact-head workflows passed on code-bearing commit `15d49e5fdeb5723c475922ab78fb92f97c4b3b84`, including two CTest-bearing jobs reporting 73/73 tests;
+- explicit remaining Priority-One acceptance work, including production cryptographic verification, journal integrity, independent ground-truth adjudication, calibration policy and independent tester/reviewer clearance;
+- a warning that factual source calibration still lacks an end-to-end demonstration of changing belief/world-model weighting and downstream planning/action selection.
+
+The workflow results above are recorded as statements in the PR #156 document; this content comparison did not independently rerun or revalidate those workflows.
+
+**Disposition:** The PR #156 revision is an append-only extension of the PR #148 revision, not a conflicting rewrite. The content relationship is now resolved. PR #148 and PR #156 remain separate open, draft, unmerged lineages; neither document is promoted to an accepted canonical plan by this comparison. Preserve PR #148 as the earlier exact version and PR #156 as the later extended version. Any authority/canonical-selection decision remains with the Project Director.
