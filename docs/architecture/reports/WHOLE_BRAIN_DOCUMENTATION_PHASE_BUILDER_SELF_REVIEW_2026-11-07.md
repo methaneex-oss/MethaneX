@@ -284,3 +284,54 @@ The checked set includes the root README, role-based portal, legacy architecture
 This validates repository-relative target paths only. It does not validate fragment anchors, external URLs, semantic destination correctness, every cross-branch link in historical reports, or authority status of linked material. DF-06 remains subject to independent review and broader cross-reference verification.
 
 The check used PR #192 parent `1901d5f39d788d7ad928cc1045065d7b32f120c1`; PR #193 live HEAD was `976aa33f89cc02225296f59246f47982300f5b39`. The commit resulting from this update must be fetched before review. The result is Builder-generated evidence, not an independent review or fresh-reader test.
+
+
+## 13. Reviewer finding response and exact-revision self-review refresh — 2026-11-08
+
+### 13.1 Exact pre-correction repository state
+
+The live PR metadata and changed-file endpoints were re-fetched before the correction batch.
+
+| Item | Exact value |
+|---|---|
+| PR #192 inspected HEAD | `cd61ace37206ed4621f84dbe0e3ca2a22c86947e` |
+| PR #192 base SHA | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` |
+| PR #192 state | Open, draft, unmerged; 17 changed files |
+| PR #193 inspected HEAD | `976aa33f89cc02225296f59246f47982300f5b39` |
+| PR #193 base SHA | `874c732973b6ab303d65a503f5a215b0af8e1153` |
+| PR #193 state | Open, draft, unmerged; 2 changed files |
+| PR #192 formal reviews / threads / comments | 0 / 0 / 0 returned |
+| PR #193 formal reviews / threads / comments | 0 / 0 / 0 returned |
+
+The exact changed-file paths and blob SHAs for all 17 PR #192 files and both PR #193 files are recorded in Section 30 of the detailed inventory. This self-review does not duplicate the full table; the inventory is the canonical detailed register. The two PRs remain separate lineages and no integration, base change, merge, rebase or cherry-pick was performed.
+
+### 13.2 Builder findings disposition
+
+- **DF-F01 — accepted.** The inventory was stale relative to the final PR heads and lacked a complete changed-file blob register. Section 30 of the inventory now records exact PR #192/#193 heads, bases, all changed paths and their fetched blob SHAs, plus review-state evidence.
+- **DF-F02 — accepted.** The foundation audit contained duplicate top-level section numbers. Its later chronological sections have been renumbered sequentially; the original findings and chronology were retained.
+- **PR #173 provenance — unresolved.** No acceptance record is invented. The primary exact-revision decision must be recovered or explicitly dispositioned by the designated authority.
+- **PR #174 status contradiction — unresolved.** The accepted specification was not substantively edited. Its draft header requires a separately reviewed status correction or explicit exception; F-02/F-03 follow-on obligations remain open.
+- **PR #178 governance — remains proposed/unaccepted.**
+- **PR #191 stale base — remains unresolved.** No rebase or retarget was performed.
+- **DF-06 — partial/open.** Existing repository-relative path checks do not establish fragment anchors, external URL availability, semantic destination correctness, or every historical cross-branch link.
+- **DF-07 — partial.** PR #192 and PR #193 remain separate; no claim is made that their content has been integrated. The corrected legacy Phase 2 scope note is in the PR #192 lineage and PR #193's historical snapshot remains distinct pending an authorized integration decision.
+- **DF-08 — partial/open.** Historical preservation follow-up remains open. No historical artifact was deleted or moved.
+- **DF-09 — NOT MET.** No genuine fresh-reader test was performed. Builder cannot substitute a simulated reader or coach a participant.
+- **DF-11 — NOT MET.** This self-review is not independent review. A qualifying reviewer must submit a review against the exact resulting revision and disclose their independence/role basis.
+- **DF-12 — NOT MET.** No exact-revision authority acceptance is recorded or implied.
+- **DF-13 — PASS / hold preserved.** Stage A and implementation remain unauthorized and have not begun.
+
+### 13.3 Correction commits created
+
+The following sequential commits were created on the authorized PR #192 branch:
+- `356672b732b1498f1a420d11c71e79f48cca9203` — audit section renumbering and reviewer finding response.
+- `55a8a57c8539c0af26874cb93fecc14547fcca65` — inventory exact-revision and changed-file blob register.
+- This self-review update follows those commits; its resulting commit and final branch head must be fetched after the write.
+
+These commits are documentation-only. No PR #193 files, source code, tests, workflows, build configuration, dependencies or runtime state were changed.
+
+### 13.4 Verification limitations and final disposition
+
+This is still a Builder self-review, not an independent review, fresh-reader test, Project Director decision or gate-clearance record. It records the reviewer findings and corrective work, but cannot close DF-09, DF-11 or DF-12. The exact final branch head, final blob SHAs, and renumbered audit headings must be fetched after this commit and added as a post-write verification record before asking the reviewer to re-review.
+
+**Disposition: NOT READY FOR ACCEPTANCE.** Stage A remains held. No implementation, baseline selection, merge, rebase, retarget, gate clearance or authority decision is claimed.
