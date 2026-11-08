@@ -549,13 +549,13 @@ The PR #192 parent used for this check is `1901d5f39d788d7ad928cc1045065d7b32f12
 
 ## 30. Exact documentation-package revision and blob register — 2026-11-08
 
-This is an immutable evidence snapshot fetched from live GitHub metadata and the complete changed-file lists at PR #192 HEAD `c1c134268ed6f2a3d833ddec52420605c3400347`, immediately before this inventory correction. It records the exact parent revision inspected. This update creates a later commit; the inventory's own listed blob is therefore its pre-update blob. The resulting inventory blob and final PR HEAD are verified after the write and recorded in the Builder's chat report. Do not mistake this parent snapshot for the resulting commit.
+This is an immutable evidence snapshot fetched from live GitHub metadata and the complete changed-file lists at PR #192 HEAD `f615e11bf54fb3776d3e6ece4f74179f61c848f8`, immediately before this inventory correction. It records the exact parent revision inspected. This update creates a later commit; the inventory's own listed blob is therefore its pre-update blob. The resulting inventory blob and final PR HEAD are verified after the write. Do not mistake this parent snapshot for the resulting commit.
 
 ### 30.1 Pull-request state and dependency register
 
 | Item | Exact revision / state |
 |---|---|
-| PR #192 | HEAD `c1c134268ed6f2a3d833ddec52420605c3400347`; base branch `docs/jarvis-phase-2-whole-brain-integration-map-20261105`; base SHA `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; open, draft, unmerged; 19 changed files |
+| PR #192 | HEAD `f615e11bf54fb3776d3e6ece4f74179f61c848f8`; base branch `docs/jarvis-phase-2-whole-brain-integration-map-20261105`; base SHA `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; open, draft, unmerged; 19 changed files |
 | PR #193 | HEAD `976aa33f89cc02225296f59246f47982300f5b39`; base branch `plan/brain-implementation-roadmap-20261103`; base SHA `874c732973b6ab303d65a503f5a215b0af8e1153`; open, draft, unmerged; 2 changed files |
 | PR #192 formal reviews / inline threads / conversation comments | 0 / 0 / 0 returned in live GitHub queries |
 | PR #193 formal reviews / inline threads / conversation comments | 0 / 0 / 0 returned in live GitHub queries |
@@ -564,7 +564,7 @@ This is an immutable evidence snapshot fetched from live GitHub metadata and the
 
 ### 30.2 PR #192 changed-file blob register
 
-All 19 paths returned by the paginated PR #192 changed-file endpoint were fetched at exact HEAD `c1c134268ed6f2a3d833ddec52420605c3400347`.
+All 19 paths returned by the paginated PR #192 changed-file endpoint were fetched at exact HEAD `f615e11bf54fb3776d3e6ece4f74179f61c848f8`.
 
 | # | Repository path | Blob SHA |
 |---:|---|---|
@@ -574,14 +574,14 @@ All 19 paths returned by the paginated PR #192 changed-file endpoint were fetche
 | 4 | `docs/JARVIS_PHASE_2_COMPLETION.md` | `e0e57a44216fc36c52d469a79abfc8df058515a3` |
 | 5 | `docs/README.md` | `00d6a5996b1f76aeefc7fcda5e07a95de4c77288` |
 | 6 | `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md` | `b963c9cea549feca0353b2d48e7eb307930f2dcf` |
-| 7 | `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md` | `9b47bd747236961e19aa5411e5db53dfb3ed5752` (pre-update blob) |
+| 7 | `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md` | `e0d22e36187b29935b442e7c15bdd011bcf4fe59` (pre-update blob) |
 | 8 | `docs/architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_2026-11-08.md` | `ecd11354a858eb6e46cbd85b816836a2f88973c9` |
 | 9 | `docs/architecture/reports/INDEPENDENT_REVIEWER_HANDOFF_2026-11-08.md` | `578afa8f4f9a323161773c4215872d9f34ff2281` |
-| 10 | `docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md` | `6fee1e9a73cfa733ddb506383edb96e190fbf67f` |
+| 10 | `docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md` | `92f1766633bddb73be5af91a95652dd83b7252ef` |
 | 11 | `docs/architecture/reports/PHASE_1_REVIEW_CORRECTIONS_AND_SCOPE_RECONCILIATION_2026-11-05.md` | `a459cdfd02d850d455ca526e6823e68525776ba3` |
 | 12 | `docs/architecture/reports/PHASE_1_WHOLE_REPOSITORY_INVESTIGATION_AND_REUSE_AUDIT_2026-11-04.md` | `f725eda1e23d6558d90f6f7c87302019ef3a0dfc` |
 | 13 | `docs/architecture/reports/PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md` | `7cf312f6cc6fd880473a0b6ccc86cf53bf3b3533` |
-| 14 | `docs/architecture/reports/WHOLE_BRAIN_DOCUMENTATION_PHASE_BUILDER_SELF_REVIEW_2026-11-07.md` | `ac511979ebac34991955226f9cf080722074f44e` |
+| 14 | `docs/architecture/reports/WHOLE_BRAIN_DOCUMENTATION_PHASE_BUILDER_SELF_REVIEW_2026-11-07.md` | `8afd335747e69b0d61c02579c60dfbd1625c9b3c` |
 | 15 | `docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md` | `0187a0ac71bd0c95e94beb3bf006da9cc7c3605f` |
 | 16 | `docs/templates/INDEPENDENT_REVIEW_REPORT_TEMPLATE.md` | `f3176cf1a1f45735a3ad62fa4a865806edc24e08` |
 | 17 | `docs/templates/PLANNING_DOCUMENT_TEMPLATE.md` | `b9f71a923b0d717a3b29655574c89c10e0801115` |
@@ -601,10 +601,10 @@ Both changed paths returned by the PR #193 changed-file endpoint were fetched at
 
 The repository review report at `docs/architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_2026-11-08.md`, blob `ecd11354a858eb6e46cbd85b816836a2f88973c9`, was retrieved directly. The Builder's response is:
 
-- **DF-F01 — correction applied.** This Section 30 replaces the stale register with the exact 19-path PR #192 snapshot at `c1c1342...`, including all fetched blob SHAs, the report, the updated index and the updated self-review. PR #193's exact two-file register remains separate.
-- **DF-F02 — corrected, limited scope.** The audit's top-level headings are sequential 1–18. This is not a complete semantic or historical cross-reference audit.
+- **DF-F01 — correction applied.** This Section 30 replaces the stale register with the exact 19-path PR #192 snapshot at `f615e11...`, including all fetched blob SHAs, the review report, updated index, updated audit protocol and updated self-review. PR #193's two-file register remains separate.
+- **DF-F02 — corrected, limited scope.** The audit's top-level headings are sequential 1–19. This is not a complete semantic or historical cross-reference audit.
 - **PR #193 link freshness — corrected.** Three index links were updated from older commit `03502c5719b320b9e323cb1d040ae38737fc7b81` to verified PR #193 HEAD `976aa33f89cc02225296f59246f47982300f5b39`; both destination files were fetched at that revision.
-- **DF-09 — NOT MET.** No genuine uninvolved fresh-reader session or raw evidence exists.
+- **DF-09 — NOT MET.** A fixed 17-question test protocol is now recorded in audit Section 19. No genuinely uninvolved participant or session evidence exists.
 - **DF-11 — NOT MET.** The received report identifies its author as ChatGPT (GPT-6), the same model identity recorded as Builder. It does not satisfy the project's separate-reviewer requirement.
 - **DF-12 — NOT MET.** No exact-revision Project Director decision is recorded or inferred.
 - **Other open findings:** PR #173 acceptance provenance; PR #174 accepted-revision header contradiction and follow-on F-02/F-03; PR #178 governance remains proposed/unaccepted; PR #191 stale-base disposition; broader DF-06 link validation; DF-07 cross-lineage status consistency; and DF-08 historical preservation.
@@ -613,4 +613,4 @@ No fresh-reader result is fabricated. No acceptance decision is inferred. No PR 
 
 ### 30.5 Snapshot and self-reference limitations
 
-This register is a snapshot at PR #192 HEAD `c1c134268ed6f2a3d833ddec52420605c3400347`, immediately before this inventory update. The listed inventory blob is its pre-update blob `9b47bd747236961e19aa5411e5db53dfb3ed5752`. The resulting inventory write creates a later PR head and a new inventory blob; that returned blob and live head must be checked after the write. Future reviewers must fetch live metadata and changed-file paths rather than assume this snapshot remains current.
+This register is a snapshot at PR #192 HEAD `f615e11bf54fb3776d3e6ece4f74179f61c848f8`, immediately before this inventory update. The listed inventory blob is its pre-update blob `e0d22e36187b29935b442e7c15bdd011bcf4fe59`. The resulting inventory write creates a later PR head and a new inventory blob; that returned blob and live head must be checked after the write. Future reviewers must fetch live metadata and changed-file paths rather than assume this snapshot remains current.
