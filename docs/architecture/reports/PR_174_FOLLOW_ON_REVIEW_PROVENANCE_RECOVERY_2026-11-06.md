@@ -76,3 +76,36 @@ Silence, a Builder-authored recovery summary, or historical acceptance of the ea
 **Current status:** Awaiting Project Director disposition. This record does not self-approve the provenance limitation and does not close F-02 or F-03.
 
 **End of recovery record.**
+
+
+## 5. Additional recovered finding detail — 2026-11-08
+
+A further retrieval of prior conversation context recovered a more detailed outcome summary from the 2026-11-04 review session. This is still a secondary recovery, not the original reviewer report, and it does not restore the missing verbatim rationale or inline annotations.
+
+### F-02 — contextual language and operator-intent grounding
+
+- **Recovered severity/status:** HIGH / CONFIRMED.
+- **Recovered requirement themes:** contextual intent; reference grounding; speech-act and source attribution; uncertainty handling; clarification when context is insufficient; separation of trusted and untrusted content; and continuity across the interaction.
+- **Recovered disposition:** the specification was not approved for the next gate on this finding. No independent clearance evidence has been recovered.
+
+### F-03 — enforceable downstream reasoning integration
+
+- **Recovered severity/status:** MEDIUM / CONFIRMED as a specification weakness.
+- **Recovered requirement themes:** accepted reasoning must materially influence authoritative downstream computation; invalidation and rejection must be handled explicitly; and the end-to-end effect must be traceable through an acceptance scenario.
+- **Recovered disposition:** the specification was not approved for the next gate on this finding. No later correction or acceptance evidence has been recovered.
+
+### 5.1 Recovered overall outcome
+
+The recovered review-session summary states the verdict as **REVISE — NOT APPROVED FOR THE NEXT GATE**. It records that no runtime tests, builds, or repository publication were performed as part of that review and that corrections plus independent reconsideration were required.
+
+This summary strengthens the recovered identity, severity and obligation themes of F-02/F-03. It does not establish the full original reasoning, exact line-level findings, or whether a later reviewer cleared either finding. The original report remains unavailable in the repository and the linked shared-chat artifact has not been recovered verbatim.
+
+### 5.2 Required handling
+
+1. Retain the original accepted PR #174 planning-baseline decision as a separate historical event.
+2. Retain F-02 and F-03 as open follow-on obligations; acceptance of the earlier baseline did not clear them.
+3. Do not claim that the recovered summary is the original review report.
+4. Before treating either finding as closed, require a traceable correction or explicit disposition, independent re-review against the exact corrected revision, and the required Project Director decision.
+5. Keep the technical requirements separate from any decision to accept the provenance limitation caused by the missing original report.
+
+**Updated recovery status:** Improved but still partial. The finding identities, severity, principal requirement themes and original overall verdict are now recoverable. The full original report, complete rationale, precise inline annotations and any later independent clearance remain unverified.
