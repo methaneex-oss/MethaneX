@@ -13,7 +13,7 @@
 
 ## 1. Purpose and specification authority
 
-This document translates the accepted Brain Foundation Architecture into mechanism-level responsibilities, conceptual contracts, state lifecycles, interaction rules, failure semantics and observable acceptance obligations.
+This document translates the intended parent Brain Foundation Architecture proposal into mechanism-level responsibilities, conceptual contracts, state lifecycles, interaction rules, failure semantics and observable acceptance obligations. PR #173's exact-revision Project Director acceptance remains unverified; this specification's own planning-baseline acceptance is separately recorded above.
 
 It is a specification, not an implementation plan. It must guide later implementation without selecting the implementation prematurely.
 
@@ -889,4 +889,4 @@ This document does not select:
 4. Project Director accepts, rejects or returns the specification baseline.
 5. Implementation and runtime verification remain separate authorization gates.
 
-**End of specification draft.**
+**End of specification.**
