@@ -1253,3 +1253,48 @@ This resolves the two prior unmatched-ref ancestry questions. It does not comple
 | DF-13 | PASS for hold only; Stage A remains not started and held |
 
 **Builder disposition: NOT CLEARED.** No human test, qualifying independent review, Director acceptance, branch-history operation, merge, Stage A start or implementation is claimed.
+
+
+## 32. Expanded exact-evidence gate refresh — 2026-11-08
+
+This addendum supersedes the earlier live-state claims in §§26–31 for the exact parent snapshot recorded here. PR #192 parent HEAD 749d7358e2c16d155995101d9dd873fcfa212a3a; base 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c; open/draft/unmerged; 26 changed paths. The final inventory and Builder closure report are the only remaining Builder synchronization writes.
+
+### 32.1 DF-06 — link, anchor and external destination evidence
+
+The bounded 26-file PR #192 package was checked against a complete recursive tree (255 entries / 227 blobs; truncated=false). The Markdown scan found 84 repository-relative link occurrences, zero missing target paths and no local heading fragments. The Phase 2 integration map contains 89 immutable GitHub blob links across 45 exact commit/path pairs. All 45 paths were fetched at their exact commits and all fetched blob SHAs matched the recorded source identities. Seventy-six line-anchor ranges were checked against exact file lengths; all are in range after the verified correction of the goal-feedback test anchor from L1–L90 to L1–L84. Thirteen source links have no line anchor.
+
+The 26-file package contains 189 raw external URL occurrences. GitHub PR references were checked against the complete 184-PR listing; five Actions runs were retrievable and successful; three artifact IDs were present and unexpired in their run's artifact listing; pinned blob/tree targets and the compare reference were checked. One ChatGPT shared-conversation pointer remains access-limited and unverified, not confirmed broken. The mutable branch URLs in the Phase 1 evidence index were replaced with immutable commit pins. Later control-document updates added no new link targets.
+
+**DF-06 Builder disposition:** complete within the documented current-package and enumerated historical-source scope, with one access-limited historical pointer disclosed. Independent semantic relevance review remains available to challenge the evidence.
+
+### 32.2 DF-07 / DF-08 — status and historical preservation
+
+Paginated GitHub discovery covered 245 branch refs (203 distinct tips) and 184 PRs. The 37 documentation-family branch refs have 37 distinct tips. The JARVIS-name search returned 37 refs and 11 distinct tips; 27 refs are aliases at the PR #96 tip. The two previously unmatched refs are mapped by exact ancestry to PR #179 and PR #178.
+
+The expanded historical register maps 108 documentation paths across 28 documentation PRs (#160, #164, #166–#175 and #178–#193). The 34 additional paths across 18 previously omitted PRs were fetched at exact PR heads and matched the PR-files API blob identities. The prior 68-path count was incomplete; it omitted six PR #192 artifacts and the 34-path earlier/later PR extension. No branch or historical file was deleted, moved or archived.
+
+PR #173 remains UNVERIFIED/PROPOSED: its current discussion has two Builder-authored comments, zero formal reviews and zero inline review comments. PR #174 acceptance is limited to the exact planning-baseline HEAD 0811a59e46bf934e32e794f90e4e7d18d4e2bd97; the current PR #174 specification header accurately records that scope. The original F-02/F-03 review report and inline annotations were not recoverable; both follow-on obligations remain open. PR #178 remains proposed/unaccepted. PR #191 remains one commit ahead / 22 behind PR #179. PR #192 and #193 remain separate lineages; PR #193's plan remains deferred/non-operative.
+
+### 32.3 Final DF-01–DF-13 gate matrix
+
+| Criterion | Builder disposition | External requirement / limit |
+|---|---|---|
+| DF-01 | Portal, index, role routes and templates present | Uninvolved fresh-reader confirmation |
+| DF-02 | Final inventory synchronization remains the last Builder write | Independent post-write verification of exact resulting HEAD and blobs |
+| DF-03 | PR #173 acceptance unverified; PR #174 planning-baseline acceptance exact and scoped | Project Director disposition of PR #173 provenance and missing-original-review limitation |
+| DF-04 | PR #178 accurately remains proposed/unaccepted | Project Director acceptance if desired |
+| DF-05 | PR #191 divergence and PR #192/#193 separation recorded | Project Director integration/dependency decision |
+| DF-06 | Bounded path/anchor/external checks complete; one access-limited historical pointer disclosed | Independent semantic challenge remains possible |
+| DF-07 | Builder-controlled status contradictions corrected in current addenda | Independent reviewer confirmation |
+| DF-08 | 108-path/28-PR register and paginated branch/PR discovery complete | Project Director archive/supersession decisions |
+| DF-09 | 17-question protocol count corrected and protocol prepared | Actual uninvolved human session and raw evidence; not performed |
+| DF-10 | Builder self-review updated and section numbering corrected | Final inventory snapshot synchronization |
+| DF-11 | No qualifying separate reviewer identity known or assigned; premature request withdrawn/suspended | Genuinely separate reviewer and formal review after Director authorization |
+| DF-12 | No decision inferred | Project Director exact-revision decision after review |
+| DF-13 | Stage A remains NOT STARTED and HELD | No implementation authorization |
+
+### 32.4 Disposition and review boundary
+
+The Builder has closed the bounded link/anchor, external-reference, historical-lineage, status-label and numbering work. The final inventory synchronization and exact-head closure report remain to be completed. The previous review request is withdrawn/suspended; no reviewer is assigned and no new request is active. No human fresh-reader session, qualifying independent review, Project Director acceptance, merge, branch-history operation, Stage A start or implementation is claimed.
+
+**Builder disposition:** BUILDER-CONTROLLED TECHNICAL WORK COMPLETE PENDING FINAL INVENTORY AND CLOSURE REPORT. The documentation-foundation gate remains **NOT CLEARED** until the human reader, qualifying independent reviewer and Project Director decision are supplied. Stage A remains HELD.
