@@ -1248,3 +1248,52 @@ Fetch PR #193 live metadata again before review; the values above are an immutab
 - DF-09 (actual uninvolved reader), DF-11 (qualifying separate reviewer) and DF-12 (Project Director exact-revision decision) remain NOT MET.
 
 **Gate remains NOT CLEARED. Stage A remains HELD. Implementation remains unauthorized.**
+
+
+---
+
+## 37. Final exact 24-path snapshot refresh — 2026-11-08
+
+This section records the exact PR #192 parent revision `0008655719c49527e9b6a6b8dd033f080d44ad8e` after the audit, index, preservation report, outstanding-work register, self-review and reviewer-handoff updates. The live PR #192 changed-file endpoint returned 24 paths. Every path below was fetched by immutable parent commit `0008655719c49527e9b6a6b8dd033f080d44ad8e`; the recorded blob SHA is the returned content identity. This refresh supersedes earlier §35–§36 live-path snapshots for the PR #192 state at this parent. Historical sections remain intact as audit evidence.
+
+| # | Repository path | Blob SHA at parent HEAD |
+|---:|---|---|
+| 1 | `README.md` | `780651b804b491781fdcac8e248eaca9243797a4` |
+| 2 | `docs/ARCHITECTURE.md` | `3c6692b52059e43947d1fd2e7e84debb2362023f` |
+| 3 | `docs/JARVIS_BRAIN_MASTER_BLUEPRINT.md` | `0e49d313bf3929aa30140cb7149ebab038918378` |
+| 4 | `docs/JARVIS_PHASE_2_COMPLETION.md` | `e0e57a44216fc36c52d469a79abfc8df058515a3` |
+| 5 | `docs/README.md` | `da0d9c834e8a5b2e67519ee5e0a2927bcec96374` |
+| 6 | `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md` | `e5ed35c0188c1524dd9b15f5cdef2953e4c40a7f` |
+| 7 | `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md` | `46d404ab7873d2b919edb2b5ba9152847ca06c2b (pre-update inventory blob)` |
+| 8 | `docs/architecture/inventory/HISTORICAL_DOCUMENTATION_PRESERVATION_REGISTER_2026-11-08.md` | `96539183fab3a2b630a8e9154f183b0bfada9016` |
+| 9 | `docs/architecture/reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md` | `c0b19e4434d12e0d4f0f4e1d0fa68b8282d8ac9f` |
+| 10 | `docs/architecture/reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md` | `a295668eb35083dfd64d59c9a2afd3a596f74ddd` |
+| 11 | `docs/architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_2026-11-08.md` | `ecd11354a858eb6e46cbd85b816836a2f88973c9` |
+| 12 | `docs/architecture/reports/INDEPENDENT_REVIEWER_HANDOFF_2026-11-08.md` | `cb315a6c9a52aad6fe245608720679a08c1eac4d` |
+| 13 | `docs/architecture/reports/INDEPENDENT_RE_REVIEW_BUILDER_FOLLOW_UP_2026-11-08.md` | `2d63ed93344a7081dcedb44247536c416322c793` |
+| 14 | `docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md` | `387cbd4bf1581940852374b11901975979c280e7` |
+| 15 | `docs/architecture/reports/PHASE_1_REVIEW_CORRECTIONS_AND_SCOPE_RECONCILIATION_2026-11-05.md` | `a459cdfd02d850d455ca526e6823e68525776ba3` |
+| 16 | `docs/architecture/reports/PHASE_1_WHOLE_REPOSITORY_INVESTIGATION_AND_REUSE_AUDIT_2026-11-04.md` | `f725eda1e23d6558d90f6f7c87302019ef3a0dfc` |
+| 17 | `docs/architecture/reports/PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md` | `7cf312f6cc6fd880473a0b6ccc86cf53bf3b3533` |
+| 18 | `docs/architecture/reports/PR_174_FOLLOW_ON_REVIEW_PROVENANCE_RECOVERY_2026-11-06.md` | `d01fa6170b87254619d469d276ba57e813c08ff3` |
+| 19 | `docs/architecture/reports/WHOLE_BRAIN_DOCUMENTATION_PHASE_BUILDER_SELF_REVIEW_2026-11-07.md` | `cfd7fd9dd295ddd64314573b8f67e328fafcbe09` |
+| 20 | `docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md` | `0187a0ac71bd0c95e94beb3bf006da9cc7c3605f` |
+| 21 | `docs/templates/INDEPENDENT_REVIEW_REPORT_TEMPLATE.md` | `f3176cf1a1f45735a3ad62fa4a865806edc24e08` |
+| 22 | `docs/templates/PLANNING_DOCUMENT_TEMPLATE.md` | `b9f71a923b0d717a3b29655574c89c10e0801115` |
+| 23 | `docs/templates/README.md` | `7209fd0fcda239349af602490d26b8c708b743da` |
+| 24 | `docs/templates/TEST_EVIDENCE_REPORT_TEMPLATE.md` | `9c6bbae48a22beb7c4e95858282d7d8d7b2159c2` |
+
+### 37.1 Separate lineage and gate facts
+
+- PR #192 parent HEAD: `0008655719c49527e9b6a6b8dd033f080d44ad8e`; base: `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; open/draft/unmerged at the pre-write metadata query.
+- PR #193 remains a separate PR #175-derived lineage; its then-current handoff/plan snapshot remains HEAD `d2ccbbb26595f28fb7488db4dbe778e7ddd58c7a`. No PR #192/#193 integration is implied.
+- PR #191 remains diverged from PR #179: its one unique document commit is based on the historical merge base and is 22 commits behind current PR #179. Retargeting alone is insufficient; no history operation was performed.
+- PR #173 remains UNVERIFIED / PROPOSED because no primary exact-revision Project Director acceptance record was recovered.
+- PR #174's accepted planning-baseline decision remains tied to exact earlier HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`; later administrative clarification is not a new approval. Follow-on F-02/F-03 remain open.
+- The 68-path preservation register and selected earlier cross-revision comparisons are bounded evidence. DF-08 remains partial pending broader lineage/provenance and archive/supersession reconciliation.
+- DF-06 remains partial: the earlier 76-relative-link check was against parent `fb30fd7ac5cc80c86b84edd4e6d7497253b72775`, not this 24-path parent. This update refreshes path/blob identity only; it does not claim current-head fragment, line-anchor, external-reachability or semantic-link validation.
+- DF-09 remains NOT MET pending an actual uninvolved human's 17-question session. DF-11 remains NOT MET pending a qualifying separate formal review. DF-12 remains NOT MET pending the Project Director's exact-revision decision.
+
+### 37.2 Self-reference and post-write verification
+
+The inventory's own row records its pre-update blob `46d404ab7873d2b919edb2b5ba9152847ca06c2b`. This commit creates a new inventory blob and advances PR #192. After the write, the Builder/reviewer must fetch live PR metadata and all 24 changed paths again; this table is a parent-snapshot register, not a prediction of the resulting HEAD. No gate clearance, Stage A start or implementation authorization is claimed.
