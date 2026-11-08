@@ -171,3 +171,30 @@ Exact head at preservation check: `976aa33f89cc02225296f59246f47982300f5b39`
 6. **No gate or authority changes:** this register is a Builder-produced preservation record. It does not accept PRs, resolve missing Project Director decisions, clear review findings, approve governance, close Gate A/Gate B, or authorize Stage A or implementation.
 
 **Current disposition:** DF-08 is materially advanced for the enumerated planning lineage: the PR artifact paths are mapped to immutable heads and blobs. It remains **PARTIAL** until an independent reviewer confirms the map is sufficient and the remaining repository-wide historical-status questions are resolved.
+
+## 4. Live-state and PR #191 divergence correction — 2026-11-08
+
+This addendum supersedes the PR #192 / PR #193 current-head values in §1 and §2 only for the later snapshot recorded here. The original artifact/blob register remains an immutable historical snapshot.
+
+At the time of this addendum:
+
+| Item | Live state |
+|---|---|
+| PR #192 | Open, draft, unmerged; HEAD `d8a92f9cf09d792311764077dc28c24034054ae2`; base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; 22 changed paths |
+| PR #193 | Open, draft, unmerged; HEAD `714142a24ed1ba286291bba8ccfc8a81f2f9115a`; base `874c732973b6ab303d65a503f5a215b0af8e1153`; 2 changed paths |
+| PR #192 formal reviews / inline threads / conversation comments | 0 / 0 / 0 returned at this refresh |
+
+### 4.1 PR #191 graph clarification
+
+The exact comparisons are:
+
+- PR #191 base `f6267456560a08054d69f7960d2951452b14017c` → PR #191 head `609d38ede50bbdd98a93dfed112781eacabee9fd`: 1 ahead, 0 behind; one unique document commit.
+- PR #179 head `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` → PR #191 head `609d38ede50bbdd98a93dfed112781eacabee9fd`: diverged; 1 ahead, 22 behind; merge base `f6267456560a08054d69f7960d2951452b14017c`.
+
+Therefore PR #191 is a one-commit document addition on its historical base, not a current descendant of PR #179. Retargeting alone would not reconcile the histories. The Project Director must choose between reviewing it as a historical-base artifact or authorizing a new dependent revision that replays its single document commit onto the current PR #179 head. No such operation has been performed.
+
+### 4.2 Authority and scope reminder
+
+The PR #173 primary acceptance record remains unrecovered; do not infer acceptance. PR #174's exact specification-baseline acceptance remains recorded, but its draft header and F-02/F-03 follow-on obligations remain distinct. PR #178 governance remains proposed/unaccepted. This register is evidence only; it does not make any Project Director decision or clear a gate.
+
+**Current disposition:** The PR #171–#193 artifact map remains a bounded preservation register. Its original path/blob table is tied to the immutable heads named in those sections; the live state above is a later status snapshot. The broader 37-branch and PR #96/#97/#148/#156/#170 comparisons are documented separately in the [Historical Preservation and Cross-Revision Comparison Report](../reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md).
