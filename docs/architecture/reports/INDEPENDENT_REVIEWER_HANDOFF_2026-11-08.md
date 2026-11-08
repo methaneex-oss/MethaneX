@@ -477,3 +477,22 @@ PR #192 and PR #193 remain separate lineages. The immutable cross-link arrangeme
 - PR #173 provenance and PR #191 / PR #192 / PR #193 dependency decisions require primary evidence or explicit Project Director disposition.
 
 **Builder recommendation: NOT CLEARED.** Stage A remains held. No merge, rebase, retarget, cherry-pick, archive move, branch deletion or implementation is authorized by this handoff.
+
+
+## 19. Post-inventory reviewer handoff — 2026-11-08
+
+### 19.1 Inventory snapshot
+
+The latest Builder inventory commit before this handoff update is `3e8e2a520ccec3878afd5412070a1b1592a6d449`. It records all 24 PR #192 changed paths at parent `0008655719c49527e9b6a6b8dd033f080d44ad8e`; resulting inventory blob `7f73ada36a6d18a8e8e6871a849726899c83d315`. The inventory's own row intentionally records its pre-update blob `46d404ab7873d2b919edb2b5ba9152847ca06c2b`.
+
+### 19.2 Required review target and limitations
+
+The handoff update itself advances PR #192. Therefore the reviewer MUST fetch the live PR #192 metadata, complete changed-path list, and every changed file by the actual resulting HEAD after this handoff and subsequent self-review/inventory synchronization. Do not treat `3e8e2a520ccec3878afd5412070a1b1592a6d449` as the final review target.
+
+The 24-path inventory refresh resolves the prior changed-file-count mismatch for its exact parent. It does not close DF-06: heading fragments, line anchors, semantic relevance, current external reachability and exhaustive historical/cross-branch links remain to be validated. DF-08 remains partial: the 68-path preservation register and selected older-PR comparisons are bounded, not an exhaustive archive/provenance disposition.
+
+PR #173 remains UNVERIFIED / PROPOSED. PR #174's exact planning-baseline acceptance remains tied to earlier HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`; F-02/F-03 remain OPEN and the original full review artifact remains unavailable verbatim. PR #191's divergent dependency and PR #192/#193 order require Project Director disposition; no history operation is authorized by this handoff.
+
+DF-09 requires an actual uninvolved human to complete the 17-question protocol. DF-11 requires a genuinely separate reviewer identity and a formal GitHub review against the final exact revision. DF-12 requires the Project Director's exact-revision decision. Do not simulate any of these requirements.
+
+**Builder recommendation: NOT CLEARED. Stage A remains HELD; implementation remains unauthorized.**
