@@ -195,7 +195,7 @@ When adding a substantive planning artifact, use the appropriate template where 
 
 ### PR #191 ancestry clarification
 
-PR #191 is based on commit `f6267456560a08054d69f7960d2951452b14017c`. PR #179 currently points to `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`. GitHub comparison reports 22 commits ahead and 0 behind from the PR #191 base to the PR #179 head. The #191 base is therefore an ancestor of the current #179 head. Describe this as a historical-base lag/dependency requiring review disposition, not as demonstrated divergence or a merge conflict. No rebase or retarget is authorized.
+PR #191 is based on commit `f6267456560a08054d69f7960d2951452b14017c`. PR #179 currently points to `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`. GitHub comparison reports 22 commits ahead and 0 behind from the PR #191 base to the PR #179 head. The #191 base is therefore an ancestor of the current #179 head. However, comparing PR #179 HEAD to PR #191 HEAD (`609d38ede50bbdd98a93dfed112781eacabee9fd`) reports **diverged: 1 commit ahead and 22 commits behind**, with merge base `f6267456560a08054d69f7960d2951452b14017c`. Retargeting alone does not reconcile the branch histories. The authority must choose review-as-historical or authorize a dependent revision that replays the unique document commit; no rebase, cherry-pick or retarget is authorized.
 
 ### Historical preservation report
 
@@ -222,3 +222,15 @@ The [Historical Documentation Preservation Register](inventory/HISTORICAL_DOCUME
 The base of PR #191 (f6267456560a08054d69f7960d2951452b14017c) is an ancestor of PR #179 HEAD (61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c): the base-to-#179 comparison reports 22 commits ahead and 0 behind. However, comparing PR #179 HEAD to PR #191 HEAD (609d38ede50bbdd98a93dfed112781eacabee9fd) reports **diverged**, with PR #191 one unique commit ahead and 22 commits behind the PR #179 line. Retargeting alone does not reconcile this graph. Any rebase, cherry-pick, or other integration path requires an explicit authority decision; none is performed here.
 
 The register materially improves DF-08 evidence for the enumerated PR artifact sets. It does not complete the broader repository-wide preservation requirement or authorize branch/file movement, deletion, merge, rebase, retarget, cherry-pick, Stage A, or implementation.
+
+
+---
+
+## 13. PR #174 follow-on review provenance and obligations — 2026-11-08
+
+[PR #174 Follow-on Review — Provenance Recovery Record](reports/PR_174_FOLLOW_ON_REVIEW_PROVENANCE_RECOVERY_2026-11-06.md) records a partial recovery of the later F-02/F-03 review. The original report and its complete rationale/inline annotations remain unavailable verbatim.
+
+- **Follow-on F-02:** contextual language and operator-intent grounding, including context, reference grounding, speech-act/source attribution, uncertainty, clarification, trusted/untrusted content separation and continuity. Recovered severity: HIGH / CONFIRMED.
+- **Follow-on F-03:** enforceable downstream reasoning integration, including material downstream use of accepted reasoning, invalidation/rejection handling and traceable end-to-end scenarios. Recovered severity: MEDIUM / CONFIRMED as a specification weakness.
+
+Keep these findings distinct from PR #173's separate F-02 (experience-acquired candidate-goal formation) and F-03 (SYS-08 computational-substrate boundary). The recovery report is secondary evidence, not the original review. Both follow-on obligations remain open pending traceable correction, independent re-review and the required authority decision. The Project Director must separately disposition the missing-original-report limitation.
