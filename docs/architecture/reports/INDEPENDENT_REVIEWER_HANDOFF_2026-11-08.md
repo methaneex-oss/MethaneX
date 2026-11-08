@@ -353,3 +353,40 @@ The reviewer must state exact PR #192 HEAD/base, changed-file count, reviewer id
 ### 15.5 Remaining authority gates
 
 DF-09, DF-11 and DF-12 remain NOT MET. PR #173 provenance, PR #174 follow-on F-02/F-03 and its provenance limitation, PR #191 dependency disposition, DF-06 broader link validation, DF-07 cross-lineage consistency and DF-08 full historical preservation remain open/partial. Stage A remains held. This handoff does not clear the gate, make a Project Director decision, authorize implementation or authorize PR integration.
+
+
+## 15. Superseding reviewer handoff — final remediation snapshot — 2026-11-08
+
+### 15.1 Exact target before this handoff update
+
+| Item | Exact value |
+|---|---|
+| PR #192 | Open, draft, unmerged; HEAD 80164296aee322d2730d2ba118167f002847f763; base 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c; 23 changed files |
+| PR #193 | Open, draft, unmerged; HEAD 3fc4c12add3656578da949689955aafd3b2b83af; base 874c732973b6ab303d65a503f5a215b0af8e1153; 2 changed files |
+| PR #174 | Open, draft, unmerged; current administrative status-clarification HEAD 922912283d173e24df891ba23d0e2dfc17e0f4b4; accepted planning-baseline event remains tied to exact HEAD 0811a59e46bf934e32e794f90e4e7d18d4e2bd97 |
+| PR #192 formal reviews / inline threads / conversation comments | 0 / 0 / 0 returned at the latest query |
+
+Earlier target SHAs in §§2, 10–14 are historical snapshots. Fetch live metadata and the complete changed-path list again before review. Do not treat any earlier HEAD as current merely because it appears in this handoff.
+
+### 15.2 New evidence the reviewer must inspect
+
+1. [Historical Documentation Preservation Register](../inventory/HISTORICAL_DOCUMENTATION_PRESERVATION_REGISTER_2026-11-08.md): verify the 68 listed PR artifact paths and their exact head/blob identities. It supplements the earlier [Historical Preservation and Cross-Revision Comparison Report](DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md); neither report claims complete repository-wide preservation.
+2. [PR #174 Follow-on Review Provenance Recovery](PR_174_FOLLOW_ON_REVIEW_PROVENANCE_RECOVERY_2026-11-06.md): reassess the recovered F-02 (HIGH / CONFIRMED) and F-03 (MEDIUM / CONFIRMED) requirement themes. The original full report remains unavailable; the recovery record must remain explicitly partial. Neither finding is marked closed.
+3. PR #174 current status clarification: verify that the file header distinguishes the previously accepted exact planning baseline `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` from the later administrative revision and that PR #173's parent-acceptance provenance is not asserted as established.
+4. PR #193 implementation plan and handoff: verify that PR #173 is consistently described as an architecture proposal with unresolved primary acceptance provenance, while PR #174's accepted planning-baseline event and follow-on F-02/F-03 obligations remain distinct.
+5. PR #191 graph: independently reproduce both comparisons — PR #191 base to PR #179 HEAD (22 ahead / 0 behind), and PR #179 HEAD to PR #191 HEAD (diverged; PR #191 one unique commit ahead and 22 behind). No branch-history operation is authorized by this handoff.
+
+### 15.3 Remaining gate requirements
+
+- **DF-06 — PARTIAL:** 63 relative target paths were recorded as resolved at an earlier exact parent; 143 external URL occurrences, heading fragments and exhaustive historical cross-branch references remain unchecked.
+- **DF-08 — PARTIAL:** the 68-path register and selected branch comparisons materially advance preservation, but broader non-JARVIS-named PR lineage, two unmatched branch refs, Developmental Brain Plan revision disposition and archive/supersession decisions remain open.
+- **DF-09 — NOT MET:** the actual 17-question test by a genuinely uninvolved human has not been evidenced. Do not simulate or coach.
+- **DF-11 — NOT MET:** the existing reviewer reports share the Builder's GPT-6 identity. A genuinely separate reviewer must submit a formal review against the actual final PR #192 revision.
+- **DF-12 — NOT MET:** the Project Director must make the exact-revision decision after review.
+- **DF-03 / DF-05:** PR #173 primary acceptance provenance and PR #191 / PR #192 / PR #193 dependency dispositions require explicit authority or primary evidence.
+
+### 15.4 Required deliverable and boundary
+
+Inspect the complete PR #192 diff at the newly fetched HEAD; verify every changed file and the final inventory snapshot; review the portal, index, audit, self-review, handoff, preservation register and PR #174 provenance recovery; independently challenge the architectural/system boundaries and every status/authority claim; and submit a finding-by-finding report with exact evidence and a clear clearance recommendation.
+
+**Current Builder recommendation: NOT CLEARED.** Stage A remains held. This handoff does not satisfy DF-09/DF-11/DF-12, make the Project Director decision, authorize merge/rebase/retarget/cherry-pick/integration, or authorize implementation.
