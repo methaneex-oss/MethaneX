@@ -841,3 +841,34 @@ The Builder responded to the technical re-review findings in `BUILDER_FINAL_DOCU
 The Builder reconciliation now records the exact 26-path PR #192 parent snapshot at `1d0c5d265d736d57a915690699ee46e0f81b1105`, including fetched blob SHAs. The inventory refresh is being performed after the final documentation writes; its resulting live HEAD and self-blob must be verified separately. Older snapshot statements in this self-review remain historical and must not be mistaken for current PR metadata.
 
 The same-identity GPT-6 technical review remains non-qualifying for DF-11. No uninvolved fresh-reader session or Project Director exact-revision decision is claimed. DF-06 and DF-08 remain partial; DF-09, DF-11 and DF-12 remain unmet. Stage A remains held; implementation remains unauthorized.
+
+
+## 29. Final Builder self-review — link, lineage and status closure — 2026-11-08
+
+**Exact parent snapshot reviewed:** PR #192 HEAD 1a26a795b2566355fe137b1ed0a467b55f842405; base 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c; open/draft/unmerged; 26 changed paths. This self-review is Builder-authored and is not independent review. The inventory synchronization commit is the final Builder write after the closure report; the inventory will record this self-review blob and the exact parent snapshot.
+
+### 29.1 Structural and navigation integrity
+
+- The top-level numbering defects in this self-review have been corrected: the prior duplicate/out-of-order headings now continue sequentially through §28. The current section is §29.
+- The documentation portal, planning index, role routes and reusable templates are present. The fresh-reader protocol has a consistent count of 17 questions and an executable instruction set; no human session is claimed.
+- All 84 repository-relative Markdown targets in the 26-file package were checked against the complete 255-entry / 227-blob tree: zero missing paths and no local heading fragments.
+
+### 29.2 Source and external-reference integrity
+
+- The Phase 2 source map contains 89 immutable GitHub blob links across 45 exact commit/path pairs. All 45 source files were fetched at their pinned commits and their blob SHAs matched the recorded identities.
+- Seventy-six line-anchor ranges were checked against exact file lengths; all are in range after correcting the goal-feedback test link to L1–L84. Thirteen source links have no line anchor.
+- The 189 external URL occurrences were classified. GitHub PR references exist in the complete 184-PR listing; five Actions runs were retrievable and successful; three referenced artifact IDs were present and unexpired; pinned blob/tree targets and the compare reference were checked. One ChatGPT share pointer remains access-limited and explicitly unverified.
+- The Phase 1 evidence index now uses immutable commit pins rather than mutable branch names for the PR #175 review files, Phase 1 inventory tree and Priority-One contract. Its historical PR #173 “accepted” label is corrected to UNVERIFIED/PROPOSED.
+
+### 29.3 Historical and authority integrity
+
+- The historical register maps 108 documentation paths across 28 PRs. The paginated repository discovery covered 245 branches and 184 PRs; 37 documentation-family branch refs have exact distinct tips. The 27-ref PR #96 alias group is one commit tip, and both formerly unmatched refs are mapped by ancestry.
+- PR #173 acceptance remains UNVERIFIED/PROPOSED; PR #174 acceptance is limited to exact planning-baseline HEAD 0811a59e46bf934e32e794f90e4e7d18d4e2bd97. PR #174 F-02/F-03 remain open because the original review report and inline annotations are unavailable; no speculative fix is claimed.
+- PR #178 remains proposed/unaccepted. PR #191 remains one commit ahead / 22 behind PR #179. PR #192 and #193 remain separate; PR #193's implementation plan remains deferred/non-operative.
+- The earlier PR #192 reviewer request is withdrawn/suspended. No qualifying separate reviewer is known or assigned. GPT-6-authored reports and same-account review-labelled PRs do not satisfy DF-11; a report without identity/independence disclosure also does not qualify.
+
+### 29.4 Final self-review disposition
+
+The Builder-controlled link/anchor checks, bounded historical discovery, path/blob mapping, status-label correction, immutable-link correction and numbering repairs are complete within the documented scope. No Builder-controlled technical defect remains open in those areas. The final inventory synchronization is the sole remaining Builder write and must be verified against the exact resulting PR head. The documentation-foundation gate is not cleared: DF-09 requires an uninvolved human, DF-11 requires a genuinely separate reviewer after Director authorization, and DF-12 requires the Project Director's exact-revision decision. PR #173 provenance, PR #174 F-02/F-03, PR #191 disposition, archive/supersession and PR #192/#193 order remain accurately recorded as external project/authority matters, not silently marked closed.
+
+**Builder self-review result:** BUILDER-CONTROLLED TECHNICAL WORK COMPLETE PENDING FINAL INVENTORY COMMIT. NOT CLEARED FOR ACCEPTANCE. Stage A remains HELD; implementation remains unauthorized.
