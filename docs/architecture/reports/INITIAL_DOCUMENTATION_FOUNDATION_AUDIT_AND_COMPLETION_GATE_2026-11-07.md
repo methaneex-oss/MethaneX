@@ -832,3 +832,31 @@ The 17-question fresh-reader protocol is documented in §19. It has not been exe
 DF-09, DF-11 and DF-12 remain NOT MET. DF-03 and DF-05–DF-08 remain partial or unresolved as described above. The Builder-controlled inventory snapshot and self-review records are being refreshed separately against this live PR state; the inventory's next section will identify its exact immutable parent snapshot and self-reference boundary.
 
 **The Initial Documentation Foundation Completion Gate remains NOT CLEARED. Stage A remains held. Implementation, baseline selection, merge, rebase, retarget, cherry-pick, and architecture/specification changes outside this documentation correction are not authorized.**
+
+
+## 23. Live-state correction after reviewer report — 2026-11-08
+
+This addendum corrects the prior §22 snapshot. It records the live PR state fetched immediately before this correction pass; it does not claim that the state remains current after the documentation commits that follow.
+
+| Item | Verified value |
+|---|---|
+| PR #192 | Open, draft, unmerged |
+| PR #192 branch | `docs/whole-brain-planning-scope-correction-20261107` |
+| PR #192 HEAD before this correction pass | `267f10fce5e186424d6c33462083aa7c78a39772` |
+| PR #192 base | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` |
+| PR #192 changed-file count | 20 |
+| PR #193 | Open, draft, unmerged; separate PR #175-derived lineage |
+| PR #193 HEAD / base | `976aa33f89cc02225296f59246f47982300f5b39` / `874c732973b6ab303d65a503f5a215b0af8e1153` |
+| PR #193 changed-file count | 2 |
+
+The inventory's previous §30 snapshot was already stale relative to PR #192 HEAD `267f10f...`. The final inventory refresh will therefore use a new immutable parent snapshot, include all 20 paths returned by the PR endpoint, fetch every PR #192 path at that exact parent, and separately retain the two PR #193 paths at its exact HEAD. The inventory row will identify its own pre-update blob and explicitly state the self-reference boundary. It will not claim that the parent snapshot is the resulting final HEAD.
+
+### 23.1 Review, reader and authority limits
+
+The retrieved reviewer report recommends clearance not be granted. Its author discloses the same GPT-6 model identity as the Builder; it is technical scrutiny, not a qualifying independent review. The follow-up report has the same limitation. DF-11 remains NOT MET. The 17-question protocol exists but no genuine uninvolved participant/session evidence exists; DF-09 remains NOT MET. No Project Director decision against the exact final package revision is recorded here; DF-12 remains NOT MET.
+
+PR #173 primary exact-revision acceptance provenance remains unresolved. PR #174's exact acceptance event, draft-header contradiction and follow-on F-02/F-03 obligations remain distinct and open as previously recorded. PR #178 remains proposed/unaccepted. PR #191's historical-base disposition remains a matter for explicit authority. DF-06, DF-07 and DF-08 remain partial; this pass does not claim exhaustive fragment/external-link validation or completed historical preservation mapping.
+
+### 23.2 Gate and scope
+
+**The Initial Documentation Foundation Completion Gate remains NOT CLEARED.** Stage A remains NOT STARTED and HELD. This correction pass is limited to documentation evidence synchronization and handoff quality. It does not authorize implementation, source/test/build/workflow changes, architecture/specification changes, merge, rebase, retarget, cherry-pick or integration. No fresh-reader session, independent reviewer identity, acceptance decision or test result is fabricated.
