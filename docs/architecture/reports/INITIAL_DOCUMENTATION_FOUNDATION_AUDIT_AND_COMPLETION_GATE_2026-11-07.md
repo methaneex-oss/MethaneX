@@ -723,3 +723,45 @@ Evaluate whether the participant can reconstruct the current task, scope, author
 If a correction changes entry-point navigation, authority/status interpretation, PR dependency understanding or the next-action route, repeat the affected test against the corrected exact revision. Preserve both records.
 
 **Execution status:** Not performed. No participant, session, answer or result is claimed by this audit. This protocol resolves the earlier 16-versus-17 count ambiguity by defining one fixed set of exactly 17 questions; it does not retroactively validate or reproduce the earlier unrecorded question set. DF-09 remains **NOT MET** until the test evidence exists.
+
+
+## 20. Live re-review refresh and primary provenance checks — 2026-11-08
+
+### 20.1 Exact live PR state at start of Builder correction pass
+
+Live GitHub metadata, complete changed-file lists, formal review submissions, inline review threads and PR conversation comments were re-fetched.
+
+| Item | Verified value |
+|---|---|
+| PR #192 HEAD | `662e43380c50f8e501e1741b0bb7eb689e154ff5` |
+| PR #192 base SHA | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` |
+| PR #192 state | Open, draft, unmerged |
+| PR #192 changed-file count | 20 |
+| PR #192 formal reviews / inline review threads / conversation comments returned | 0 / 0 / 0 |
+| PR #193 HEAD | `976aa33f89cc02225296f59246f47982300f5b39` |
+| PR #193 base SHA | `874c732973b6ab303d65a503f5a215b0af8e1153` |
+| PR #193 state / changed files | Open, draft, unmerged / 2 |
+| PR #192 and PR #193 | Separate lineages; no merge, rebase, retarget, cherry-pick or integration performed |
+
+The repository follow-up report `INDEPENDENT_RE_REVIEW_BUILDER_FOLLOW_UP_2026-11-08.md` reports review of PR #192 HEAD `5f204e3ea72d991ccc5d5695d824dc356fee0700` (19 changed files), not the live HEAD above. It verifies the prior inventory correction, audit numbering and 17-question protocol at that earlier revision, but concludes NOT CLEARED.
+
+### 20.2 Inventory synchronization finding
+
+At live HEAD `662e43380c50f8e501e1741b0bb7eb689e154ff5`, the changed-file endpoint returns 20 paths. Inventory Section 30 still described the prior 19-path snapshot at `f615e11bf54fb3776d3e6ece4f74179f61c848f8`; it is therefore stale at the current live revision. The inventory is being rebuilt from the complete current path list and exact file blobs. The resulting inventory write will be the final documentation write in this correction pass and will explicitly record its parent-snapshot/self-reference boundary.
+
+### 20.3 Primary authority and dependency checks
+
+- **PR #173:** The full issue-comment query returned only Builder handoff/resubmission comments `6598264380` and `6598465160`. Neither records Project Director acceptance. The architecture document at exact revision `97191111bc2573c14d391c0af9628db7b11f194b` still says “Proposed architecture for independent review and Project Director decision.” Acceptance provenance remains unresolved; no later PR's statement is substituted for the missing primary record.
+- **PR #174:** Project Director comment `6604790481` explicitly accepts exact revision `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` as the Brain Mechanism Specification planning baseline, not implementation authorization. The accepted-revision specification header still says “Draft for independent review.” Later comment `6628850155` records further documentation corrections, but does not itself provide a new Project Director decision or establish closure of follow-on F-02/F-03. Preserve the accepted substantive specification and record the contradiction/obligations.
+- **PR #178:** Governance remains proposed/unaccepted; no binding status is inferred.
+- **PR #191:** Live PR #191 base is `f6267456560a08054d69f7960d2951452b14017c`; PR #179 HEAD is `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`. GitHub compare returns 22 commits ahead, 0 behind from the PR #191 base to PR #179 HEAD. This does not authorize a rebase or retarget.
+
+### 20.4 DF-01–DF-13 and final disposition
+
+The prior re-review's gate matrix remains the latest technical disposition at its inspected revision. Its core unmet requirements remain unmet at this live refresh: DF-09 fresh-reader execution NOT MET; DF-11 qualifying independent review NOT MET; DF-12 exact-revision Project Director decision NOT MET. DF-06 link validation, DF-07 cross-lineage consistency and DF-08 historical preservation remain PARTIAL. DF-03 remains PARTIAL due PR #173 provenance; PR #174's accepted-revision header and follow-on obligations require traceable reconciliation. PR #191's dependency disposition remains a decision requiring authority, not a Builder branch operation.
+
+The follow-up reviewer and Builder share the GPT-6 model identity. The report is useful technical scrutiny but cannot satisfy DF-11. No formal GitHub review submission was returned for PR #192.
+
+No genuine fresh-reader session has been performed; the 17-question protocol remains prepared only. No Project Director decision is inferred. **The documentation foundation remains NOT CLEARED; Stage A remains held.** No implementation is authorized.
+
+This audit addendum records the live pre-correction snapshot. The inventory's final Section 30 refresh will record the parent snapshot after this audit and the other evidence-document updates. A reviewer must fetch the resulting live PR metadata and blobs again rather than assume this snapshot remains current.
