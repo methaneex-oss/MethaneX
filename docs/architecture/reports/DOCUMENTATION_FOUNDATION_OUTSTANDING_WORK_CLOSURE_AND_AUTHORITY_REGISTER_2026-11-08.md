@@ -105,3 +105,14 @@ These are repository/documentation corrections only. They do not clear the human
 - **DF-12:** requires the Project Director's exact-revision acceptance/rejection/conditional decision after the required evidence exists.
 
 **Current disposition remains NOT CLEARED.** Stage A remains HELD and implementation remains unauthorized.
+
+
+## 7. Exact-snapshot remediation update — 2026-11-08
+
+The inventory refresh commit `3e8e2a520ccec3878afd5412070a1b1592a6d449` records all 24 PR #192 changed paths and their fetched blob identities at parent `0008655719c49527e9b6a6b8dd033f080d44ad8e`. The inventory's resulting blob is `7f73ada36a6d18a8e8e6871a849726899c83d315`. PR #192 remained open/draft/unmerged, base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, with 24 changed paths after that commit.
+
+**Builder-controlled snapshot correction:** DF-02's 24-path parent-snapshot register is now refreshed. This closes the stale 23-path inventory issue for that parent snapshot, subject to reviewer confirmation of the parent/self-reference convention and a final post-write fetch. It does not make the inventory perpetually current; any subsequent commit requires another refresh.
+
+**Still open:** DF-06 remains partial because the strongest prior relative-path check is for an earlier parent and does not establish current-fragment, line-anchor, external reachability or semantic validation. DF-08 remains partial because the 68-path register and selected historical comparisons do not prove complete archive/provenance reconciliation. PR #173 remains unverified/proposed; PR #174 F-02/F-03 remain open because the original review artifact is unavailable verbatim and exact corrections cannot safely be inferred; PR #191 and PR #192/#193 dependency/order remain authority decisions. DF-09, DF-11 and DF-12 remain external human/reviewer/Project Director requirements.
+
+No human session, qualifying review, authority decision, branch-history operation, merge, Stage A start or implementation is claimed.
