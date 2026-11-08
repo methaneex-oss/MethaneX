@@ -227,10 +227,6 @@ The register materially improves DF-08 evidence for the enumerated PR artifact s
 
 ---
 
-## 14. Documentation-foundation outstanding work and authority register
-
-Use the [Outstanding Work Closure and Authority Register](reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md) as the concise control record for the initial documentation-foundation gate. It separates corrections already completed from unresolved technical evidence and from requirements that must be supplied by an uninvolved reader, a qualifying independent reviewer or the Project Director. It does not itself clear the gate.
-
 ## 13. PR #174 follow-on review provenance and obligations — 2026-11-08
 
 [PR #174 Follow-on Review — Provenance Recovery Record](reports/PR_174_FOLLOW_ON_REVIEW_PROVENANCE_RECOVERY_2026-11-06.md) records a partial recovery of the later F-02/F-03 review. The original report and its complete rationale/inline annotations remain unavailable verbatim.
@@ -244,3 +240,7 @@ Keep these findings distinct from PR #173's separate F-02 (experience-acquired c
 ### PR #193 latest handoff snapshot — 2026-11-08
 
 The current PR #193 branch was re-fetched at HEAD `d2ccbbb26595f28fb7488db4dbe778e7ddd58c7a`. Its continuity handoff blob is `cc426df109b795a97fd06aef2ee8d4ecd613a780`; its deferred implementation plan blob is `d001ba9a3e2b8ffbc0fd2f5cba9e573f5af93c74`. The index links above point to those exact files. PR #193 remains open, draft and unmerged, on its separate PR #175-derived lineage. The handoff and plan themselves intentionally point back to the immutable PR #192 documentation snapshot `db5968bfbddf77590cd9303539abda00dd961ab7` to avoid a cyclic commit dependency. That snapshot includes the portal, index, audit, preservation evidence and PR #174 follow-on recovery record; it predates only the index's link to this final PR #193 handoff revision and the subsequent inventory refresh.
+
+## 14. Documentation-foundation outstanding work and authority register
+
+Use the [Outstanding Work Closure and Authority Register](reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md) as the concise control record for the initial documentation-foundation gate. It separates corrections already completed from unresolved technical evidence and from requirements that must be supplied by an uninvolved reader, a qualifying independent reviewer or the Project Director. It does not itself clear the gate.
