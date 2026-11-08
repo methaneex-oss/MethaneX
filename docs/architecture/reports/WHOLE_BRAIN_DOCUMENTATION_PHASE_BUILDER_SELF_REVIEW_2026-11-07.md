@@ -374,3 +374,34 @@ PR #173 acceptance provenance; PR #174's accepted-revision header contradiction 
 ### 14.4 Current disposition
 
 **NOT READY FOR ACCEPTANCE.** The reviewer report is useful and its direct inventory finding has been corrected, but the report does not satisfy DF-11. DF-09 and DF-12 remain unmet, and other provenance/preservation/link/dependency findings remain open. Stage A remains held. Implementation remains unauthorized. No source, test, build, workflow, dependency, or runtime files were changed.
+
+
+## 15. Reviewer follow-up corrections and revision synchronization — 2026-11-08
+
+### 15.1 Corrections completed in this pass
+
+- **DF-F01 — inventory revision synchronization:** refreshed Section 30 against live PR #192 HEAD `05768e646d1f51af91acbc3ab16495c6edf1c0a0`. The register contains all 19 paths returned by the PR changed-file endpoint, exact fetched blob SHAs, the current PR #193 two-file register, PR states, and review-state observations. The inventory write commit is `940653d179d6963650e1023bb4380500bc276260`; resulting inventory blob SHA is `9b47bd747236961e19aa5411e5db53dfb3ed5752`.
+- **DF-06 — PR #193 index destinations:** the Planning Documentation Index contained three immutable links to PR #193's older commit `03502c5719b320b9e323cb1d040ae38737fc7b81`, while PR #193's current verified HEAD is `976aa33f89cc02225296f59246f47982300f5b39`. The three links now point to that current HEAD. Index correction commit: `05768e646d1f51af91acbc3ab16495c6edf1c0a0`; resulting index blob: `b963c9cea549feca0353b2d48e7eb307930f2dcf`.
+- **DF-F02 — top-level numbering:** the audit was re-fetched and its top-level sections remain sequential 1–18. This remains a bounded structural check, not a complete semantic/cross-reference audit.
+- **Self-review formatting:** the changed-file list was re-inspected; no literal escaped newline sequences were found in the current self-review text.
+
+### 15.2 Exact snapshot and limits
+
+The inventory's Section 30 is an immutable snapshot of PR #192 parent HEAD `05768e646d1f51af91acbc3ab16495c6edf1c0a0`. At that parent:
+- PR #192 was open, draft and unmerged, with 19 changed paths.
+- PR #193 was open, draft and unmerged at HEAD `976aa33f89cc02225296f59246f47982300f5b39`, with 2 changed paths.
+- The index, inventory, review report, reviewer handoff, audit, and self-review blobs were fetched at the exact PR #192 parent.
+- The inventory's own listed blob is its pre-update blob `860058c71249c51e060bfd1580bcd31ac901e3a5`; its resulting blob is recorded above. This avoids a false self-referential claim.
+
+### 15.3 Outstanding requirements — unchanged
+
+- **DF-09 — NOT MET:** no genuinely uninvolved reader and no uncoached session record exists.
+- **DF-11 — NOT MET:** the received report identifies the same GPT-6 model identity as Builder and therefore cannot satisfy the separate-reviewer requirement. A genuinely separate reviewer must inspect the corrected exact revision and submit an attributable review.
+- **DF-12 — NOT MET:** the Project Director must decide on the exact reviewed revision; no decision is inferred.
+- **PR #173:** direct exact-revision acceptance provenance remains unrecovered.
+- **PR #174:** the acceptance event, draft-header contradiction and follow-on F-02/F-03 obligations remain distinct and unresolved; substantive accepted architecture was not edited.
+- **PR #178:** governance remains proposed/unaccepted.
+- **PR #191:** stale-base disposition remains unresolved. The live comparison still reports 22 commits ahead from its base to current PR #179 HEAD, 0 behind; no rebase or retarget was performed.
+- **DF-06 / DF-07 / DF-08:** broader fragment/external/historical-link validation, cross-lineage status consistency and historical preservation remain partial/open.
+
+**Disposition: NOT READY FOR ACCEPTANCE.** Stage A remains held. Implementation remains unauthorized. No source, tests, build configuration, workflows, dependencies, or runtime files were changed.
