@@ -889,7 +889,7 @@ This section records parent HEAD `d8a92f9cf09d792311764077dc28c24034054ae2`. The
 
 ---
 
-## 33. Exact documentation-package revision and blob register — 2026-11-08
+## 33. Superseded documentation-package revision and blob register — 2026-11-08
 
 This section supersedes §32 for the PR #192 changed-path snapshot. The complete paginated PR #192 changed-file endpoint returned 23 paths. Every path below was fetched at immutable parent HEAD `0a3963012c7b9c8647c02f1bd4e3cbe496f471ac`. This inventory's row records its pre-update blob. The inventory update creates a new commit and blob, so the parent snapshot is not the resulting PR HEAD.
 
@@ -964,6 +964,131 @@ This register records parent PR #192 HEAD `0a3963012c7b9c8647c02f1bd4e3cbe496f47
 
 ---
 
+## 33A. Corrected documentation-package revision and blob register — 2026-11-08 (remediation snapshot)
+
+This section supersedes earlier PR #192 changed-path registers for the exact parent snapshot below. The complete paginated PR #192 changed-file endpoint returned 23 paths. Every path was fetched at exact parent HEAD `0a3963012c7b9c8647c02f1bd4e3cbe496f471ac`. The inventory row records its pre-update blob. This update creates the next commit; the resulting inventory blob and final live PR HEAD must be verified afterward.
+
+### 33A.1 Parent snapshot and PR state
+
+| Item | Exact state at parent snapshot |
+|---|---|
+| PR #192 | Open, draft, unmerged |
+| PR #192 branch | `docs/whole-brain-planning-scope-correction-20261107` |
+| PR #192 parent HEAD | `0a3963012c7b9c8647c02f1bd4e3cbe496f471ac` |
+| PR #192 base | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` |
+| PR #192 changed paths | 23 |
+| PR #193 | Open, draft, unmerged; separate PR #175-derived lineage |
+| PR #193 HEAD / base | `3fc4c12add3656578da949689955aafd3b2b83af` / `874c732973b6ab303d65a503f5a215b0af8e1153` |
+| PR #193 changed paths | 2 |
+| PR #192 / PR #193 relationship | Separate PR #179-derived and PR #175-derived lineages; no integration, merge, rebase or retarget performed |
+
+### 33A.2 PR #192 changed-path and blob register
+
+All 23 changed paths returned by the PR #192 endpoint were fetched at exact parent HEAD `0a3963012c7b9c8647c02f1bd4e3cbe496f471ac`.
+
+| # | Repository path | Blob SHA at parent HEAD |
+|---:|---|---|
+| 1 | `README.md` | `780651b804b491781fdcac8e248eaca9243797a4` |
+| 2 | `docs/ARCHITECTURE.md` | `3c6692b52059e43947d1fd2e7e84debb2362023f` |
+| 3 | `docs/JARVIS_BRAIN_MASTER_BLUEPRINT.md` | `0e49d313bf3929aa30140cb7149ebab038918378` |
+| 4 | `docs/JARVIS_PHASE_2_COMPLETION.md` | `e0e57a44216fc36c52d469a79abfc8df058515a3` |
+| 5 | `docs/README.md` | `eb8011d298d73e1437e6a38e4c36f89d977592ad` |
+| 6 | `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md` | `d217152d2d7f24a5dfe85911bed2649456878696` |
+| 7 | `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md` | `870315cc136edc91e5b82d9760b47c31ebc606ca` (pre-update inventory blob) |
+| 8 | `docs/architecture/inventory/HISTORICAL_DOCUMENTATION_PRESERVATION_REGISTER_2026-11-08.md` | `238160a8bf7510d3648ee5d9fb4518c88f90e49e` |
+| 9 | `docs/architecture/reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md` | `81ae9ceab355b63997f47aee24a9e5e01ecfe724` |
+| 10 | `docs/architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_2026-11-08.md` | `ecd11354a858eb6e46cbd85b816836a2f88973c9` |
+| 11 | `docs/architecture/reports/INDEPENDENT_REVIEWER_HANDOFF_2026-11-08.md` | `1d14b760bf942c0e0fd2227860585b105585616f` |
+| 12 | `docs/architecture/reports/INDEPENDENT_RE_REVIEW_BUILDER_FOLLOW_UP_2026-11-08.md` | `2d63ed93344a7081dcedb44247536c416322c793` |
+| 13 | `docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md` | `d65023b16987deb779e6eeee3344e00c9a653dec` |
+| 14 | `docs/architecture/reports/PHASE_1_REVIEW_CORRECTIONS_AND_SCOPE_RECONCILIATION_2026-11-05.md` | `a459cdfd02d850d455ca526e6823e68525776ba3` |
+| 15 | `docs/architecture/reports/PHASE_1_WHOLE_REPOSITORY_INVESTIGATION_AND_REUSE_AUDIT_2026-11-04.md` | `f725eda1e23d6558d90f6f7c87302019ef3a0dfc` |
+| 16 | `docs/architecture/reports/PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md` | `7cf312f6cc6fd880473a0b6ccc86cf53bf3b3533` |
+| 17 | `docs/architecture/reports/PR_174_FOLLOW_ON_REVIEW_PROVENANCE_RECOVERY_2026-11-06.md` | `f85c0e48dba9fc693d8debeb5dbbb21d023e40c6` |
+| 18 | `docs/architecture/reports/WHOLE_BRAIN_DOCUMENTATION_PHASE_BUILDER_SELF_REVIEW_2026-11-07.md` | `3cd2c1d7d6eacdf3b47047fee3144044e32877b2` |
+| 19 | `docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md` | `0187a0ac71bd0c95e94beb3bf006da9cc7c3605f` |
+| 20 | `docs/templates/INDEPENDENT_REVIEW_REPORT_TEMPLATE.md` | `f3176cf1a1f45735a3ad62fa4a865806edc24e08` |
+| 21 | `docs/templates/PLANNING_DOCUMENT_TEMPLATE.md` | `b9f71a923b0d717a3b29655574c89c10e0801115` |
+| 22 | `docs/templates/README.md` | `7209fd0fcda239349af602490d26b8c708b743da` |
+| 23 | `docs/templates/TEST_EVIDENCE_REPORT_TEMPLATE.md` | `9c6bbae48a22beb7c4e95858282d7d8d7b2159c2` |
+
+### 33A.3 PR #193 separate-lineage blob register
+
+Both changed paths were fetched at exact PR #193 HEAD `3fc4c12add3656578da949689955aafd3b2b83af`.
+
+| Repository path | Blob SHA |
+|---|---|
+| `docs/architecture/plans/00_BRAIN_IMPLEMENTATION_PLAN.md` | `86d35317d9e41297fc47a4fbc5850b43c456a8bf` |
+| `docs/architecture/plans/JARVIS_PROJECT_CONTINUITY_AND_RECOVERY_HANDOFF.md` | `a2f2e20655a7315fb5539f956c3fd2ddd3558dd4` |
+
+### 33A.4 Corrected authority, dependency and gate disposition
+
+- **PR #173:** its exact-revision Project Director acceptance remains unestablished in the primary PR discussion evidence. The architecture remains proposed/unverified; no later PR's statement is substituted.
+- **PR #174:** exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` was accepted as a planning baseline by Project Director comment `6604790481`. The stale draft header was corrected in later documentation-only PR #174 HEAD `89cc526d735a645a848e84d5a67dde810819f96f`. Follow-on F-02/F-03 remain open, and the original report was not recovered verbatim.
+- **PR #178:** governance remains proposed/unaccepted.
+- **PR #191:** direct comparison of PR #179 HEAD `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` to PR #191 HEAD `609d38ede50bbdd98a93dfed112781eacabee9fd` is diverged: 1 ahead / 22 behind, merge base `f6267456560a08054d69f7960d2951452b14017c`. Retargeting alone is insufficient. The Project Director must choose historical-base review or authorize a dependent revision; no history rewrite has occurred.
+- **DF-06:** remains partial. Prior 63-relative-link path validation is bounded to its exact earlier revision. External URL occurrences, heading fragments and exhaustive historical cross-branch links remain unverified.
+- **DF-07 / DF-08:** remain partial. PR #192/#193 are separate lineages; the broader historical PR/branch map, unmatched branch provenance, distinct Developmental Brain Plan revisions and archive/supersession disposition remain open.
+- **DF-09:** NOT MET; no genuine uninvolved reader has completed the 17-question protocol.
+- **DF-11:** NOT MET; the available reviewer reports share the Builder's GPT-6 identity and do not qualify.
+- **DF-12:** NOT MET; no exact-revision Project Director decision has been recorded.
+- **DF-13:** PASS for the hold only; Stage A remains not started and held.
+
+**Gate status: NOT CLEARED.** The PR #174 status-header and PR-description corrections are complete. They do not complete the human reader, separate reviewer, remaining provenance/dependency/link/preservation evidence, or Project Director decision requirements.
+
+### 33A.5 Snapshot and self-reference boundary
+
+This section records parent PR #192 HEAD `0a3963012c7b9c8647c02f1bd4e3cbe496f471ac`. The inventory row intentionally records its pre-update blob `870315cc136edc91e5b82d9760b47c31ebc606ca`. This inventory update creates the next PR commit and a new inventory blob. The resulting PR #192 HEAD, inventory blob, changed-path count and registered file blobs must be re-fetched after the write. Any later commit makes this snapshot historical. Reviewers must always fetch live PR metadata and changed paths before review.
+
+
+---
+
+## 34. Post-correction exact revision refresh — 2026-11-08
+
+This section supersedes §33A for the PR #192 parent snapshot. Sections §33 and §33A remain historical snapshots. After §33 was written, the Planning Documentation Index and foundation audit received further corrections. The live PR #192 changed-file endpoint still returned the same 23 paths. The updated index and audit blobs were fetched at parent HEAD `7eade1395de5fd205c8f537ab46978a4e276b582`; all other PR #192 changed-path blobs remain as registered in §33.
+
+### 34.1 Exact parent and current related revisions
+
+| Item | Exact state |
+|---|---|
+| PR #192 parent HEAD | `7eade1395de5fd205c8f537ab46978a4e276b582` |
+| PR #192 base | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` |
+| PR #192 changed paths | 23 |
+| PR #193 HEAD / base | `3fc4c12add3656578da949689955aafd3b2b83af` / `874c732973b6ab303d65a503f5a215b0af8e1153` |
+| PR #193 changed paths | 2 |
+| PR #174 current HEAD at this refresh | `922912283d173e24df891ba23d0e2dfc17e0f4b4` |
+| PR #174 current specification blob | `ac1621c43d60b2a556438371287c07ab2b20c8aa` |
+
+### 34.2 Updated PR #192 blobs
+
+Only the following two registered paths changed after the §33 parent snapshot:
+
+| Repository path | Updated blob SHA at parent HEAD |
+|---|---|
+| `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md` | `0b5d6143a715f4c71b1ffa7cd14189016c4c9e15` |
+| `docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md` | `5d4be0db6ca8320eddb9df1636f9faf3f0e1a00e` |
+
+All remaining 21 PR #192 paths retain the exact blobs listed in §33A.2 at this parent snapshot. The inventory itself retains its pre-update blob `29aea598d6658414b919379b1cafff79ad3e7d78`; this update creates its next blob and PR commit.
+
+### 34.3 Authority and status corrections
+
+The updated audit §26 now records:
+- PR #174's follow-on F-02/F-03 recovery details and their still-open status;
+- the correct PR #191 head graph: PR #191 is one commit ahead and 22 behind PR #179, with merge base `f6267456560a08054d69f7960d2951452b14017c`;
+- 63 relative target paths resolved at the earlier bounded validation snapshot, while fragments, 143 external URL occurrences and exhaustive historical cross-branch links remain unverified;
+- the historical preservation report and supplemental register materially advance DF-08 without completing it;
+- DF-09, DF-11 and DF-12 remain NOT MET.
+
+The PR #174 specification at current HEAD `922912283d173e24df891ba23d0e2dfc17e0f4b4` preserves acceptance of exact planning baseline `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, explicitly labels PR #173 as an unverified parent proposal, and removes the stale draft footer. Its blob is `ac1621c43d60b2a556438371287c07ab2b20c8aa`. These are status/provenance wording corrections only; they do not change the accepted substantive specification or authorize implementation.
+
+**Gate status remains NOT CLEARED.** Stage A remains NOT STARTED and HELD. Implementation remains unauthorized.
+
+### 34.4 Snapshot and self-reference
+
+This section records PR #192 parent HEAD `7eade1395de5fd205c8f537ab46978a4e276b582`. The inventory row intentionally records pre-update blob `29aea598d6658414b919379b1cafff79ad3e7d78`. After this write, fetch the resulting live PR #192 HEAD, inventory blob and changed-file list. Any subsequent commit makes this register historical; reviewers must use live metadata.
+
+
+> **Superseded snapshot:** This initial §33 register predates the corrected PR #191 head comparison and the later PR #193 navigation refresh. Its PR #191 status wording is superseded. Retain it as historical evidence only; use §§33A and 34 for later snapshots.
 ## 33. Exact documentation-package revision and blob register — 2026-11-08 (remediation snapshot)
 
 This section supersedes earlier PR #192 changed-path registers for the exact parent snapshot below. The complete paginated PR #192 changed-file endpoint returned 23 paths. Every path was fetched at exact parent HEAD `0a3963012c7b9c8647c02f1bd4e3cbe496f471ac`. The inventory row records its pre-update blob. This update creates the next commit; the resulting inventory blob and final live PR HEAD must be verified afterward.
@@ -1056,8 +1181,8 @@ This section supersedes §33 for the PR #192 parent snapshot. After §33 was wri
 | PR #192 changed paths | 23 |
 | PR #193 HEAD / base | `3fc4c12add3656578da949689955aafd3b2b83af` / `874c732973b6ab303d65a503f5a215b0af8e1153` |
 | PR #193 changed paths | 2 |
-| PR #174 current HEAD at this refresh | `8b781d07874eec6895cefa0422c8c8a33e1ec2e2` |
-| PR #174 current specification blob | `edeaf2cb109fba251f91f44b0b0bc4775e580cc4` |
+| PR #174 current HEAD at this refresh | `922912283d173e24df891ba23d0e2dfc17e0f4b4` |
+| PR #174 current specification blob | `ac1621c43d60b2a556438371287c07ab2b20c8aa` |
 
 ### 34.2 Updated PR #192 blobs
 
@@ -1079,7 +1204,7 @@ The updated audit §26 now records:
 - the historical preservation report and supplemental register materially advance DF-08 without completing it;
 - DF-09, DF-11 and DF-12 remain NOT MET.
 
-The PR #174 specification at current HEAD `8b781d07874eec6895cefa0422c8c8a33e1ec2e2` now has an explicit status header preserving acceptance of exact baseline `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, while stating that follow-on F-02/F-03 remain open and PR #173's prerequisite acceptance remains unverified. This is a documentation-status correction; it does not change the accepted substantive specification or authorize implementation.
+The PR #174 specification at current HEAD `922912283d173e24df891ba23d0e2dfc17e0f4b4` now has an explicit status header preserving acceptance of exact baseline `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, while stating that follow-on F-02/F-03 remain open and PR #173's prerequisite acceptance remains unverified. This is a documentation-status correction; it does not change the accepted substantive specification or authorize implementation.
 
 **Gate status remains NOT CLEARED.** Stage A remains NOT STARTED and HELD. Implementation remains unauthorized.
 
