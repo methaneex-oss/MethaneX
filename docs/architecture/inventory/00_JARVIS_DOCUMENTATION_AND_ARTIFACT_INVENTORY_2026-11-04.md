@@ -1186,3 +1186,65 @@ Exact file identities at this inventory update:
 The index update was committed as `db3c0eb9dfaf8208e1bee20e90bf3eba8703bfe9`. This inventory update is being made against PR #192 parent HEAD `db3c0eb9dfaf8208e1bee20e90bf3eba8703bfe9`; the inventory's own row is necessarily its pre-update blob `58ed6eed623fd6e0fd19cdf777a9cfe6b29a6d5a`. The resulting PR head and inventory blob must be fetched after the write. This is a scoped register addition, not a claim that the entire changed-file inventory has been refreshed.
 
 **Gate remains NOT CLEARED.** DF-09 (actual uninvolved reader), DF-11 (qualifying independent review) and DF-12 (Project Director exact-revision decision) remain unmet. PR #173 authority provenance, PR #174 follow-on F-02/F-03, PR #191 dependency disposition, full link validation and broader historical preservation remain open as stated in the linked register. Stage A remains HELD; no implementation is authorized.
+
+
+---
+
+## 37. Final Builder remediation snapshot — PR #192 — 2026-11-08
+
+This section supersedes prior PR #192 changed-file snapshots for the exact parent and blob identities recorded below. It is the final Builder-controlled inventory refresh before external review.
+
+**PR #192 parent HEAD:** `0438f6be66faaee36713716efb3ec723117e5eb3`  
+**PR #192 base:** `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`  
+**Changed paths:** 24  
+**Snapshot rule:** every blob below was fetched from the PR #192 branch at the exact parent HEAD above. The inventory's own row records its pre-update blob because the inventory commit necessarily changes that blob.
+
+| # | Repository path | Blob SHA at parent HEAD |
+|---:|---|---|
+| 1 | `README.md` | `780651b804b491781fdcac8e248eaca9243797a4` |
+| 2 | `docs/ARCHITECTURE.md` | `3c6692b52059e43947d1fd2e7e84debb2362023f` |
+| 3 | `docs/JARVIS_BRAIN_MASTER_BLUEPRINT.md` | `0e49d313bf3929aa30140cb7149ebab038918378` |
+| 4 | `docs/JARVIS_PHASE_2_COMPLETION.md` | `e0e57a44216fc36c52d469a79abfc8df058515a3` |
+| 5 | `docs/README.md` | `da0d9c834e8a5b2e67519ee5e0a2927bcec96374` |
+| 6 | `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md` | `e5ed35c0188c1524dd9b15f5cdef2953e4c40a7f` |
+| 7 | `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md` | `e82f3c6cf69dec49ce799fce3ec718a6ca76aab2` (pre-update self-reference) |
+| 8 | `docs/architecture/inventory/HISTORICAL_DOCUMENTATION_PRESERVATION_REGISTER_2026-11-08.md` | `96539183fab3a2b630a8e9154f183b0bfada9016` |
+| 9 | `docs/architecture/reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md` | `c0b19e4434d12e0d4f0f4e1d0fa68b8282d8ac9f` |
+| 10 | `docs/architecture/reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md` | `a295668eb35083dfd64d59c9a2afd3a596f74ddd` |
+| 11 | `docs/architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_2026-11-08.md` | `ecd11354a858eb6e46cbd85b816836a2f88973c9` |
+| 12 | `docs/architecture/reports/INDEPENDENT_REVIEWER_HANDOFF_2026-11-08.md` | `cb315a6c9a52aad6fe245608720679a08c1eac4d` |
+| 13 | `docs/architecture/reports/INDEPENDENT_RE_REVIEW_BUILDER_FOLLOW_UP_2026-11-08.md` | `2d63ed93344a7081dcedb44247536c416322c793` |
+| 14 | `docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md` | `387cbd4bf1581940852374b11901975979c280e7` |
+| 15 | `docs/architecture/reports/PHASE_1_REVIEW_CORRECTIONS_AND_SCOPE_RECONCILIATION_2026-11-05.md` | `a459cdfd02d850d455ca526e6823e68525776ba3` |
+| 16 | `docs/architecture/reports/PHASE_1_WHOLE_REPOSITORY_INVESTIGATION_AND_REUSE_AUDIT_2026-11-04.md` | `f725eda1e23d6558d90f6f7c87302019ef3a0dfc` |
+| 17 | `docs/architecture/reports/PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md` | `7cf312f6cc6fd880473a0b6ccc86cf53bf3b3533` |
+| 18 | `docs/architecture/reports/PR_174_FOLLOW_ON_REVIEW_PROVENANCE_RECOVERY_2026-11-06.md` | `d01fa6170b87254619d469d276ba57e813c08ff3` |
+| 19 | `docs/architecture/reports/WHOLE_BRAIN_DOCUMENTATION_PHASE_BUILDER_SELF_REVIEW_2026-11-07.md` | `cfd7fd9dd295ddd64314573b8f67e328fafcbe09` |
+| 20 | `docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md` | `0187a0ac71bd0c95e94beb3bf006da9cc7c3605f` |
+| 21 | `docs/templates/INDEPENDENT_REVIEW_REPORT_TEMPLATE.md` | `f3176cf1a1f45735a3ad62fa4a865806edc24e08` |
+| 22 | `docs/templates/PLANNING_DOCUMENT_TEMPLATE.md` | `b9f71a923b0d717a3b29655574c89c10e0801115` |
+| 23 | `docs/templates/README.md` | `7209fd0fcda239349af602490d26b8c708b743da` |
+| 24 | `docs/templates/TEST_EVIDENCE_REPORT_TEMPLATE.md` | `9c6bbae48a22beb7c4e95858282d7d8d7b2159c2` |
+
+### 37.1 Separate PR #193 snapshot
+
+PR #193 remains a separate open/draft/unmerged lineage, not integrated into PR #192. Its last independently fetched exact head remains `d2ccbbb26595f28fb7488db4dbe778e7ddd58c7a`, base `874c732973b6ab303d65a503f5a215b0af8e1153`, with two paths:
+
+| Repository path | Blob SHA |
+|---|---|
+| `docs/architecture/plans/00_BRAIN_IMPLEMENTATION_PLAN.md` | `d001ba9a3e2b8ffbc0fd2f5cba9e573f5af93c74` |
+| `docs/architecture/plans/JARVIS_PROJECT_CONTINUITY_AND_RECOVERY_HANDOFF.md` | `cc426df109b795a97fd06aef2ee8d4ecd613a780` |
+
+Fetch PR #193 live metadata again before review; the values above are an immutable snapshot, not a live-state assertion.
+
+### 37.2 Gate and evidence boundary
+
+- DF-02 inventory coverage is refreshed for all 24 PR #192 changed paths at the exact parent above; the resulting inventory commit must be followed by a live-head and changed-path re-fetch.
+- DF-06 remains PARTIAL. The recorded 76-relative-link/23-file check belongs to earlier exact parent `fb30fd7ac5cc80c86b84edd4e6d7497253b72775`. The current 24-file snapshot has not been fully revalidated for heading fragments, line anchors, external reachability, semantic relevance or exhaustive historical cross-branch links.
+- DF-08 remains PARTIAL. The 68-path register and selected earlier PR comparisons are bounded evidence, not a complete repository archive or a Project Director supersession decision.
+- PR #173 acceptance provenance remains UNVERIFIED / PROPOSED.
+- PR #174 follow-on F-02/F-03 remain OPEN; the original review artifact is unavailable verbatim.
+- PR #191 integration/review disposition and PR #192/#193 order remain Project Director decisions.
+- DF-09 (actual uninvolved reader), DF-11 (qualifying separate reviewer) and DF-12 (Project Director exact-revision decision) remain NOT MET.
+
+**Gate remains NOT CLEARED. Stage A remains HELD. Implementation remains unauthorized.**
