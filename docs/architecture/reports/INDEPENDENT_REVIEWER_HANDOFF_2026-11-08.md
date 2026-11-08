@@ -496,3 +496,42 @@ PR #173 remains UNVERIFIED / PROPOSED. PR #174's exact planning-baseline accepta
 DF-09 requires an actual uninvolved human to complete the 17-question protocol. DF-11 requires a genuinely separate reviewer identity and a formal GitHub review against the final exact revision. DF-12 requires the Project Director's exact-revision decision. Do not simulate any of these requirements.
 
 **Builder recommendation: NOT CLEARED. Stage A remains HELD; implementation remains unauthorized.**
+
+## 20. Final Builder remediation handoff — exact revision refresh — 2026-11-08
+
+### 20.1 Current live target before inventory commit
+
+| Item | Exact value |
+|---|---|
+| PR #192 | Open, draft, unmerged |
+| PR #192 branch | \`docs/whole-brain-planning-scope-correction-20261107\` |
+| PR #192 HEAD before final inventory write | \`e658b30f7eacdde9510fb81128b85644339017ef\` |
+| PR #192 base | \`61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c\` |
+| PR #192 changed paths | 24 |
+| PR #193 | Open, draft, unmerged; HEAD \`d2ccbbb26595f28fb7488db4dbe778e7ddd58c7a\`; base \`874c732973b6ab303d65a503f5a215b0af8e1153\`; 2 changed paths |
+| PR #192 formal reviews / inline threads / conversation comments | 0 / 0 / 0 at the latest query |
+
+The Builder will make the inventory refresh the final Builder-controlled write in this pass. That inventory commit will advance PR #192 beyond the pre-inventory HEAD above. The reviewer MUST fetch the actual live HEAD and all changed paths after that commit. The reviewer must not report \`e658b30...\` as the final review target if the inventory commit has advanced the branch.
+
+### 20.2 New Builder evidence to verify
+
+1. Current exact-head link check: 24 changed paths fetched; complete recursive tree (225 blob paths, \`truncated=false\`); 80 relative Markdown link occurrences; zero missing target paths; 143 external URL occurrences. External reachability, fragment/anchor correctness, line anchors and semantic relevance remain unverified.
+2. Branch ancestry: 37 refs from the repository-scoped \`jarvis\` branch search and 63 PR results from the repository-scoped \`JARVIS\` PR search. The two prior unmatched refs are resolved by ancestry: \`04a441676c1d41833f64bc0f20f5320af6f10855\` is an ancestor of PR #179 HEAD by 170 commits; \`ebbda074957e0f9fb0d0f04dd9b03fe58b270a0a\` is an ancestor of PR #178 HEAD by 11 commits.
+3. PR state and authority: PR #173 remains UNVERIFIED / PROPOSED; PR #174's accepted planning baseline remains the exact earlier HEAD \`0811a59e46bf934e32e794f90e4e7d18d4e2bd97\`; PR #174 F-02/F-03 remain open and the original full report remains unavailable verbatim; PR #191 remains one unique commit ahead and 22 behind PR #179; PR #192 and PR #193 remain separate lineages.
+
+### 20.3 Reviewer requirements
+
+- Re-fetch the live PR #192 metadata, full changed-path list and every changed file at the actual post-inventory HEAD.
+- Verify the final inventory's 24 path/blob entries against its stated parent snapshot and its own pre-update blob convention.
+- Re-run the relative-link check if any subsequent commit changes a Markdown file; independently assess fragment, line-anchor, external reachability and semantic correctness within a stated coverage boundary.
+- Reassess DF-03, DF-05, DF-06, DF-07 and DF-08 against the updated records; do not treat the Builder's ancestry checks as a complete archive or authority decision.
+- Verify the exact current PR #173/#174/#179/#191/#192/#193 metadata and preserve their separate lineages.
+- Obtain a genuinely uninvolved human for the 17-question DF-09 protocol. Preserve raw answers, time/assistance conditions and observed navigation failures; do not coach or simulate.
+- DF-11 requires a reviewer identity genuinely separate from the Builder's GPT-6 identity and a formal GitHub review. Prior GPT-6 reports do not satisfy it.
+- DF-12 requires the Project Director's exact-revision decision after the evidence is complete.
+
+### 20.4 Required disposition
+
+The Builder has improved the exact-head link-path evidence and resolved two branch ancestry questions. DF-06 and DF-08 remain partial; DF-09, DF-11 and DF-12 remain unmet; PR #173 provenance, PR #174 F-02/F-03, PR #191 dependency and PR #192/#193 ordering remain open.
+
+**Builder recommendation: NOT CLEARED. Stage A remains HELD.** No merge, rebase, retarget, cherry-pick, branch deletion, archive relocation, Stage A start or implementation is authorized by this handoff.
