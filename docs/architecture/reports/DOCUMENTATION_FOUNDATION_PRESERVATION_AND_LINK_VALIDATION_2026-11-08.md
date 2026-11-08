@@ -213,3 +213,48 @@ The first tip also compares as an ancestor of PR #96's exact tip. The 27 branch 
 Section 5 and the earlier §6 list predate the expanded ancestry checks in §9 of this report. The two formerly unmatched refs are now mapped by exact ancestry: `feat/jarvis-build-agents-clean` tip `04a441676c1d41833f64bc0f20f5320af6f10855` is an ancestor of PR #179 HEAD `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` (170 commits); `docs/jarvis-phase-1-preservation-inventory-20261104` tip `ebbda074957e0f9fb0d0f04dd9b03fe58b270a0a` is an ancestor of PR #178 HEAD `39fe09dcf13496f5f0005ccf3f00739303e29f88` (11 commits). The prior unmatched-ref item is closed. The 27 branch aliases at tip `16abca97caf77ce65d5ac901513eb2790f04c68c` remain aliases to one commit. No refs are deleted or consolidated.
 
 This closes only those ancestry questions. Broader non-JARVIS-named lineage, remaining historical revision comparisons and archive/supersession disposition remain open. DF-08 remains PARTIAL.
+
+
+## 11. Expanded repository lineage and link-integrity verification — 2026-11-08
+
+This addendum records the broader bounded discovery and validation work completed after §10. Earlier snapshots remain historical; the exact parent revision for this addendum is PR #192 HEAD `93eb06e2e244518a3b86df1f3add4aba038f461c`, base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, open/draft/unmerged, with 26 changed paths.
+
+### 11.1 Repository-wide discovery scope
+
+- Paginated branch listing: 245 branch refs across three pages; 203 distinct tip SHAs.
+- Documentation-family branch prefixes (`docs/`, `architecture/`, `research/`, `plan/`, `review/`, `spec/`): 37 refs and 37 distinct tips.
+- JARVIS-name branch search: 37 refs and 11 distinct tips; 27 refs are aliases at the PR #96 tip `16abca97caf77ce65d5ac901513eb2790f04c68c`. The two formerly unmatched refs are now mapped by ancestry: `feat/jarvis-build-agents-clean` is an ancestor of PR #179, and `docs/jarvis-phase-1-preservation-inventory-20261104` is an ancestor of PR #178.
+- Paginated PR listing: 184 PRs across two pages.
+- Documentation PR lineage: 28 PRs (#160, #164, #166–#175, #178–#193) with 108 changed documentation paths. PR #176 was source/test-only and excluded from this documentation-path total.
+- The 34 additional paths across PRs #160, #164, #166–#170 and #180–#190 were fetched at exact PR heads; each returned blob SHA matched the PR-files API. The expanded 108-path register is in `docs/architecture/inventory/HISTORICAL_DOCUMENTATION_PRESERVATION_REGISTER_2026-11-08.md` §5.
+
+### 11.2 Current PR #192 relative-link validation
+
+At PR #192 HEAD `8b6c257bc40748e3d96a0fdf2272b774f54d7a17`, all 26 changed paths were fetched and their returned blob SHAs matched the PR-files API. The recursive tree contained 255 entries / 227 blobs and was not truncated. The Markdown scan found 84 repository-relative link occurrences across the 26 changed documents; all 84 target paths exist. No missing repository-relative target or local Markdown fragment was found.
+
+This check establishes path existence. It is not, by itself, proof of semantic suitability or external reachability.
+
+### 11.3 Historical source links and line anchors
+
+The Phase 2 capability-to-source map contains 89 immutable GitHub blob links across 45 unique commit/path pairs and five pinned commits. All 45 exact commit/path pairs were fetched. Every fetched blob SHA matched the SHA recorded alongside its source link. Of the 89 links, 76 carry line anchors and 13 do not. All 76 anchored ranges were within the exact fetched file lengths after one verified correction:
+
+- `core/cpp/tests/cognitive_runtime_goal_feedback_suite.cpp` at commit `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` contains 84 lines, not 90. The map link was corrected from `#L1-L90` to `#L1-L84`.
+
+The Phase 1 repository-investigation evidence index was also corrected to use immutable commit SHAs instead of mutable branch names for the three PR #175 Gate A report links, the Phase 1 inventory tree link, and the Priority-One trust-boundary contract. All target paths were fetched at those exact immutable revisions. The historical PR #173 evidence label was corrected to state that its acceptance provenance remains UNVERIFIED/PROPOSED; PR #174 is explicitly scoped to planning-baseline acceptance only.
+
+### 11.4 External URL verification
+
+The 26 changed documents contain 189 raw external URL occurrences. All GitHub PR references resolve to PRs present in the complete 184-PR listing. The five linked Actions runs were retrievable and completed successfully. The three artifact IDs referenced from run `40565468650` were present in that run's artifact listing and were not expired. The pinned GitHub blob/tree targets and the comparison link were checked against exact commits and API metadata; the comparison from `82c49a75bd30de2962879f044776f4bf2391970a` to `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` reports 18 commits ahead and 0 behind.
+
+One non-GitHub URL is a ChatGPT shared-conversation pointer in the PR #174 recovery record. It could not be fetched by the available external retrieval endpoint (disabled access). It is retained as a historical pointer and is classified **ACCESS-LIMITED / NOT INDEPENDENTLY VERIFIED**, not as a confirmed broken URL. No other non-GitHub external destination was found in the 26-file scan.
+
+### 11.5 Authority and preservation boundaries
+
+- PR #173 remains UNVERIFIED/PROPOSED for acceptance provenance: its discussion contains two Builder-authored comments, with zero formal reviews and zero inline review comments. PR #174's later decision does not replace a primary PR #173 decision.
+- PR #174's accepted planning-baseline event is present at comment `6604790481`; current specification HEAD `922912283d173e24df891ba23d0e2dfc17e0f4b4` correctly scopes that acceptance and keeps F-02/F-03 open. The original F-02/F-03 review report and inline annotations were not recoverable from the PR review endpoints.
+- PR #191 remains diverged from PR #179: 1 unique commit ahead / 22 behind; no ancestry operation is authorized.
+- PR #178 governance remains proposed/unaccepted. PR #193 remains a separate deferred/non-operative roadmap lineage.
+- Review-labelled reports from the same repository account do not establish a separate reviewer identity. The same GPT-6 identity is explicitly disclosed in several reports; another report lacks an identity/independence disclosure. None qualifies for DF-11.
+- No branch was deleted, no artifact moved or archived, and no PR was merged, rebased, retargeted or cherry-picked. Archive/supersession and disputed authority decisions remain with the Project Director.
+
+**Updated Builder evidence disposition:** The bounded link, anchor, external-reference and documentation-lineage discovery work is now complete for the current PR #192 package and the enumerated historical PR set. The one access-limited ChatGPT pointer remains disclosed. This does not satisfy DF-09 fresh-reader execution, DF-11 qualifying independent review, or DF-12 Project Director acceptance. Stage A remains held and implementation remains unauthorized.
