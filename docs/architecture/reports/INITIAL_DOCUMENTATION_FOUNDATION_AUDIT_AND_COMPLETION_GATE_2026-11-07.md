@@ -993,3 +993,58 @@ PR #193's implementation plan and continuity handoff now pin their PR #192 docum
 | DF-13 — planning hold | PASS: Stage A remains held |
 
 **Disposition: NOT CLEARED.** The Builder has closed specific evidence gaps and refreshed navigation, but the documentation foundation is not ready for acceptance. Stage A remains held. No runtime source, tests, build configuration, dependencies, workflows or runtime state were changed. No merge, rebase, retarget, cherry-pick, branch deletion, archive move, baseline selection or implementation action was performed.
+
+
+---
+
+## 25. Remediation status and superseding authority/dependency correction — 2026-11-08
+
+This section supersedes earlier live-state statements only where it records newer exact evidence. Earlier snapshots remain historical.
+
+### 25.1 Live PR snapshot before this audit update
+
+| Item | Verified value |
+|---|---|
+| PR #192 | Open, draft, unmerged; HEAD `5a6fe80e1f4647f3ee550dd2fa30569ac99fe489`; base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; 23 changed files |
+| PR #193 | Open, draft, unmerged; HEAD `31f8cafcb0547e70f47e03b503d3125e4573de4b`; base `874c732973b6ab303d65a503f5a215b0af8e1153`; 2 changed files |
+| PR #192 formal reviews / inline review threads / issue comments | 0 / 0 / 0 returned by the latest queries |
+| PR #192 / PR #193 | Separate PR #179-derived and PR #175-derived lineages; no integration performed |
+
+The inventory must be refreshed against the exact parent snapshot after this audit, self-review and handoff synchronization. The resulting inventory update must record its own pre-update blob and state that the final PR head is one commit later.
+
+### 25.2 PR #173 and PR #174 authority reconciliation
+
+- **PR #173:** The retrieved primary PR #173 discussion contains Builder handoff/resubmission comments, not an attributable Project Director acceptance decision for exact architecture HEAD `97191111bc2573c14d391c0af9628db7b11f194b`. The architecture document still labels itself proposed for independent review and Project Director decision. Acceptance is **not established**. Do not infer acceptance from downstream documents.
+- **PR #174:** Project Director comment `6604790481` accepts exact PR #174 HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` as a planning baseline only. On 2026-11-08, the specification's stale “Draft for independent review” header was corrected in a documentation-only commit; PR #174 now points to HEAD `89cc526d735a645a848e84d5a67dde810819f96f`, with the updated specification blob `e91482ea350873f60f7cf0a68d4e89c0e5ff8c9e`. The PR description was also corrected so it no longer states PR #173 acceptance as an established fact. These metadata corrections do not change the accepted substantive specification or authorize implementation.
+- **PR #174 follow-on F-02/F-03:** The original review artifact remains unavailable verbatim. The recovery record is explicitly partial; the recovered findings remain open technical obligations. The Project Director disposition of the provenance limitation is also still required. No follow-on finding is marked closed.
+- **PR #178:** Governance remains proposed and unaccepted.
+
+### 25.3 PR #191 graph — corrected disposition
+
+PR #191 base is `f6267456560a08054d69f7960d2951452b14017c`; PR #179 HEAD is `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; PR #191 HEAD is `609d38ede50bbdd98a93dfed112781eacabee9fd`.
+
+The comparison from PR #191 base to PR #179 HEAD is 22 ahead / 0 behind. That comparison alone does not describe the PR #191 head's relationship to current PR #179. The direct comparison from PR #179 HEAD to PR #191 HEAD returns **diverged: PR #191 is 1 commit ahead and 22 commits behind**, with merge base `f6267456560a08054d69f7960d2951452b14017c`. PR #191 contains one unique document commit on its historical base. Retargeting alone would not reconcile the histories. The Project Director must decide whether to review it as a historical-base artifact or authorize a new dependent revision that replays its single document commit onto the current PR #179 head. No rebase, cherry-pick or retarget has been performed.
+
+### 25.4 Remaining acceptance evidence
+
+| Criterion | Current disposition | Remaining requirement |
+|---|---|---|
+| DF-01 | Present; independent confirmation pending | Qualifying reviewer/fresh-reader confirmation |
+| DF-02 | Partial pending final inventory refresh | Exact current parent-snapshot/blob register and post-write verification |
+| DF-03 | Improved; PR #173 acceptance unestablished; PR #174 exact planning-baseline acceptance preserved | Project Director disposition of the missing PR #173 provenance; preserve unverified status unless a primary record is found |
+| DF-04 | PASS within current documented scope | PR #178 remains proposed/unaccepted |
+| DF-05 | PARTIAL | Project Director disposition of PR #191's divergent historical-base relationship and PR #192/#193 integration order |
+| DF-06 | PARTIAL | Full current-HEAD relative/fragment validation, external URL reachability/semantic checks, and historical cross-branch validation |
+| DF-07 | PARTIAL | Independent confirmation of status consistency across the separate PR lineages |
+| DF-08 | PARTIAL | Broader non-JARVIS-named PR lineage, unmatched branch provenance, Developmental Brain Plan revision disposition, and archive/supersession proposal |
+| DF-09 | NOT MET | Actual uninvolved human completes the 17-question protocol without coaching; preserve raw answers and observations |
+| DF-10 | PARTIAL until final inventory/review synchronization | Final Builder self-review against the exact submitted revision |
+| DF-11 | NOT MET | A genuinely separate reviewer identity submits a formal review against the exact final revision |
+| DF-12 | NOT MET | Project Director makes an explicit decision against exact final PR #192/related revisions |
+| DF-13 | PASS for hold only | Stage A remains not started and held |
+
+### 25.5 Gate and authority boundary
+
+**Disposition remains NOT CLEARED.** The PR #174 status-header and PR-description corrections are complete, and the PR #191 graph description is now corrected. They do not complete the fresh-reader test, qualifying independent review, exact-revision Project Director decision, or the remaining historical/link/dependency evidence.
+
+Stage A remains NOT STARTED and HELD. No implementation, baseline selection, merge, rebase, retarget, cherry-pick, branch deletion, archive relocation, or PR integration is authorized by this audit. No reader session, independent reviewer identity, or authority decision is fabricated.
