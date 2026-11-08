@@ -109,3 +109,24 @@ This summary strengthens the recovered identity, severity and obligation themes 
 5. Keep the technical requirements separate from any decision to accept the provenance limitation caused by the missing original report.
 
 **Updated recovery status:** Improved but still partial. The finding identities, severity, principal requirement themes and original overall verdict are now recoverable. The full original report, complete rationale, precise inline annotations and any later independent clearance remain unverified.
+
+
+## 6. Primary GitHub retrieval recheck — 2026-11-08
+
+The Builder rechecked the relevant primary GitHub endpoints rather than relying only on the earlier secondary recovery summary.
+
+| Item | Retrieved result |
+|---|---|
+| PR #173 | Open/draft/unmerged; HEAD `97191111bc2573c14d391c0af9628db7b11f194b`; base `1273ddbcd0087d189e01388ded2d362fb1e058d2` |
+| PR #173 conversation comments | Two comments, IDs `6598264380` and `6598465160`; both authored by `methaneex-oss` and are Builder handoff/resubmission comments |
+| PR #173 formal reviews / inline review comments | 0 / 0 |
+| PR #174 | Open/draft/unmerged; HEAD `922912283d173e24df891ba23d0e2dfc17e0f4b4`; base `97191111bc2573c14d391c0af9628db7b11f194b` |
+| PR #174 conversation decision | Comment `6604790481` records acceptance of exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` as the planning baseline only |
+| PR #174 formal reviews / inline review comments | 0 / 0 |
+| Current PR #174 specification blob | `ac1621c43d60b2a556438371287c07ab2b20c8aa` at HEAD `922912283d173e24df891ba23d0e2dfc17e0f4b4`; its header now accurately says accepted planning baseline only and explicitly retains F-02/F-03 as open |
+
+The current specification header contradiction identified in the earlier review at exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` has been corrected in the later PR #174 administrative revision `922912283d173e24df891ba23d0e2dfc17e0f4b4`. The substantive accepted baseline remains the earlier exact HEAD; the later metadata revision does not constitute a new substantive acceptance.
+
+The original F-02/F-03 review report and inline annotations were not recovered: both the PR #174 formal-review endpoint and inline-comment endpoint returned zero records. The repository conversation contains Builder submissions and the planning-baseline decision, not the missing reviewer rationale. The secondary recovery in §§1–5A remains explicitly partial. F-02 and F-03 remain open technical obligations; no speculative correction is made from incomplete source material.
+
+**Updated disposition:** The stale-header contradiction is corrected at current PR #174 HEAD. The bounded primary-source retrieval is complete for the available PR discussion/review endpoints. The original F-02/F-03 review details remain unavailable and the obligations remain open; this is a documented external evidence limitation, not a claim of closure.
