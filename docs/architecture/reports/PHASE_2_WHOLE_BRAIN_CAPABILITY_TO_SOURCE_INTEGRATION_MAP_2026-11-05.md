@@ -2580,7 +2580,7 @@ These are source-derived failure-path outcomes, not reproduced incidents. The in
 - [`CognitiveFeedbackResult` exposes only a numeric `learned_reliability`, not an evidence-persistence status](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/include/jarvis/core/cognitive_cycle.hpp#L70-L76), blob `eed8bc75f59557c255e796343d77498d90b31ea5`.
 - [`Brain::learn`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain.cpp#L791-L820), blob `dec9e5442b3ca4b81a7879855c6146b2619934cc`.
 - [Runtime feedback integration test](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/cognitive_runtime_suite.cpp#L223-L260), blob `361cba84a6fc6e07e31d14b5fa618c3f0a7848fa`.
-- [Goal-feedback runtime test](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/cognitive_runtime_goal_feedback_suite.cpp#L1-L90), blob `15a6bdffe37ae7df6c625ea9737fda4c0bf08a7f`.
+- [Goal-feedback runtime test](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/cognitive_runtime_goal_feedback_suite.cpp#L1-L84), blob `15a6bdffe37ae7df6c625ea9737fda4c0bf08a7f`.
 
 ### P2-I-035 — Finding details and required correction
 
