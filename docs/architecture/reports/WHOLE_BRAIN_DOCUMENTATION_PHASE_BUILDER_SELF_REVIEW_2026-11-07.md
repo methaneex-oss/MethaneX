@@ -335,3 +335,16 @@ These commits are documentation-only. No PR #193 files, source code, tests, work
 This is still a Builder self-review, not an independent review, fresh-reader test, Project Director decision or gate-clearance record. It records the reviewer findings and corrective work, but cannot close DF-09, DF-11 or DF-12. The exact final branch head, final blob SHAs, and renumbered audit headings must be fetched after this commit and added as a post-write verification record before asking the reviewer to re-review.
 
 **Disposition: NOT READY FOR ACCEPTANCE.** Stage A remains held. No implementation, baseline selection, merge, rebase, retarget, gate clearance or authority decision is claimed.
+
+
+### 13.5 Post-write evidence immediately before final self-review commit
+
+After the audit and inventory writes, both were fetched again from the live PR #192 branch:
+- Audit blob SHA: `6fee1e9a73cfa733ddb506383edb96e190fbf67f`.
+- Inventory blob SHA: `526576b417aa33682e3e34e94c817f90ae6f8d29`.
+- Self-review parent blob SHA before this final self-review write: `3517d3aa20c848685a524f55127380398b87aa2e`.
+- PR #192 parent HEAD before this final self-review write: `55a8a57c8539c0af26874cb93fecc14547fcca65`.
+
+The GitHub write response for this final self-review update supplies its resulting commit and content blob SHA. The live PR #192 metadata must be fetched once more after this write; that returned HEAD, together with the audit and inventory blob SHAs above and the resulting self-review blob SHA, is the exact review target. Earlier pre-correction file SHAs in the inventory remain explicitly historical evidence and must not be mistaken for the resulting blobs.
+
+This is a post-write verification record, not a claim that the independent reviewer or Project Director has accepted the package.
