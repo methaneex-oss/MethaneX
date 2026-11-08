@@ -110,7 +110,7 @@ The three central report blobs verified here are:
 
 ### 3.1 DF-F01 — stale inventory / revision synchronization
 
-<severity>High</severity>  
+**Severity: High**  
 **Disposition: NOT RESOLVED — REOPENED AT LIVE HEAD.**
 
 The inventory at blob `526576b...`, Section 30, still records:
@@ -135,7 +135,7 @@ The table is explicitly a pre-update snapshot, but it is titled as the exact doc
 
 ### 3.2 DF-F02 — duplicate audit numbering
 
-<severity>Low</severity>  
+**Severity: Low**  
 **Disposition: CORRECTED FOR TOP-LEVEL NUMBERING; PASS WITH LIMITED SCOPE.**
 
 The audit at blob `6fee1e9...` has top-level sections numbered sequentially 1 through 18, with no duplicate top-level section number. The later addenda are now numbered 10–18. The original chronology and historical observations remain present, including the explicit note that the earlier Stage A instruction was superseded by the documentation-foundation hold.
@@ -180,7 +180,7 @@ This was a documentation and governance review. I did not modify Builder-owned f
 
 ### 6.1 PR #173 — Brain Foundation Architecture acceptance provenance
 
-<severity>Medium</severity>  
+**Severity: Medium**  
 **Disposition: UNRESOLVED; DO NOT LABEL AS DIRECTLY VERIFIED ACCEPTANCE.**
 
 PR #173 is open, draft and unmerged at HEAD `97191111bc2573c14d391c0af9628db7b11f194b`. Its retrieved discussion contains two Builder-authored comments: the original handoff and the F-01/F-02/F-03 resubmission. Neither is a Project Director acceptance decision.
@@ -196,7 +196,7 @@ This is meaningful contemporaneous corroboration, not nothing. However, the audi
 
 ### 6.2 PR #174 — accepted specification header and follow-on review obligations
 
-<severity>Medium</severity>  
+**Severity: Medium**  
 **Disposition: ACCEPTANCE EVENT VERIFIED; STATUS CONTRADICTION AND FOLLOW-ON OBLIGATIONS OPEN.**
 
 The exact specification revision `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` is recorded as accepted by Project Director comment `6604790481` on PR #174. That comment states that PR #174 is accepted as the approved Brain Mechanism Specification planning baseline, clears the then-applicable F-01, and expressly does not authorize implementation or subsequent stages.
@@ -213,14 +213,14 @@ The Builder must not treat the accepted specification as free of these later obl
 
 ### 6.3 PR #178 — proposed governance
 
-<severity>Low</severity>  
+**Severity: Low**  
 **Disposition: STATUS CORRECTLY QUALIFIED; PROPOSAL REMAINS UNACCEPTED.**
 
 PR #178 remains open, draft and unmerged. Its discussion query returned no comments. The index and portal correctly classify the governance document as proposed/unaccepted. This is the correct status. The project must not rely on PR #178 as binding governance until an exact-revision authority decision exists.
 
 ### 6.4 PR #191 — historical-base disposition
 
-<severity>Medium</severity>  
+**Severity: Medium**  
 **Disposition: UNRESOLVED.**
 
 The current PR #179 head is `61311fe5...`; PR #191's base is `f6267456...`. The comparison confirms 22 commits exist after the base on the current PR #179 line. The index appropriately calls this out and says an authorized reviewer/authority must decide whether to review the historical snapshot or arrange a dependent revision.
