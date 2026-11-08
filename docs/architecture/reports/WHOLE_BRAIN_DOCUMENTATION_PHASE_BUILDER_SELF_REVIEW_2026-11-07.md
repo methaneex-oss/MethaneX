@@ -832,3 +832,12 @@ This corrects the prior unmatched-ref classification. No branch was deleted or r
 ### 25.4 Self-review disposition
 
 The current-head relative-path check and the two branch-ancestry corrections are Builder-controlled evidence. They do not close all DF-06/DF-08 requirements and cannot satisfy DF-09, DF-11 or DF-12. **NOT READY FOR ACCEPTANCE; NOT CLEARED.** Stage A remains held; implementation remains unauthorized.
+
+
+## 11. Technical re-review correction follow-up — 2026-11-08
+
+The Builder responded to the technical re-review findings in `BUILDER_FINAL_DOCUMENTATION_FOUNDATION_RECONCILIATION_2026-11-08.md` §10. The index numbering, inventory numbering and Phase 2 §60.4/§61.4 identifiers were corrected in commits `afcd6f434a4a2c1b6da2c19bb11a33bbc508a177`, `9d1c4d1009e771900dd17568471a0a8dfa3fdbb8` and `1d0c5d265d736d57a915690699ee46e0f81b1105` respectively.
+
+The Builder reconciliation now records the exact 26-path PR #192 parent snapshot at `1d0c5d265d736d57a915690699ee46e0f81b1105`, including fetched blob SHAs. The inventory refresh is being performed after the final documentation writes; its resulting live HEAD and self-blob must be verified separately. Older snapshot statements in this self-review remain historical and must not be mistaken for current PR metadata.
+
+The same-identity GPT-6 technical review remains non-qualifying for DF-11. No uninvolved fresh-reader session or Project Director exact-revision decision is claimed. DF-06 and DF-08 remain partial; DF-09, DF-11 and DF-12 remain unmet. Stage A remains held; implementation remains unauthorized.
