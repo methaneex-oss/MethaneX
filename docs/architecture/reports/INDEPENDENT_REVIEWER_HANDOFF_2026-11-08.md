@@ -28,10 +28,10 @@ The live PR metadata was fetched after the Builder's final documentation write.
 | Repository | `methaneex-oss/MethaneX` |
 | PR #192 | [https://github.com/methaneex-oss/MethaneX/pull/192](https://github.com/methaneex-oss/MethaneX/pull/192) |
 | PR #192 branch | `docs/whole-brain-planning-scope-correction-20261107` |
-| PR #192 HEAD | `e4f4eed4590c43bebd600d56199abe433b1e381a` |
+| PR #192 HEAD originally supplied to reviewer | `e4f4eed4590c43bebd600d56199abe433b1e381a` (historical target; not the revision ultimately inspected) |
 | PR #192 base SHA | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` |
 | PR #192 state at verification | Open, draft, unmerged |
-| PR #192 changed files | 17 |
+| PR #192 changed files at original handoff snapshot | 17 |
 | PR #193 | [https://github.com/methaneex-oss/MethaneX/pull/193](https://github.com/methaneex-oss/MethaneX/pull/193) |
 | PR #193 HEAD | `976aa33f89cc02225296f59246f47982300f5b39` |
 | PR #193 base SHA | `874c732973b6ab303d65a503f5a215b0af8e1153` |
@@ -39,6 +39,15 @@ The live PR metadata was fetched after the Builder's final documentation write.
 | PR #193 changed files | 2 |
 
 The PRs remain separate lineages. No merge, rebase, retarget, cherry-pick, or integration was performed by the Builder. Re-fetch live metadata before reviewing; if either PR has advanced, record both the supplied target and the actual inspected target, and explain any scope difference. Do not silently substitute a different revision.
+
+### 2.1 Actual reviewer inspection and subsequent Builder correction
+
+The reviewer re-fetched live metadata rather than relying on the stale target above. The report records the actual inspected PR #192 HEAD as `0308fb84481d004a4101a07b81c56d78a2fef49e`, base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, and 18 changed files. The review report was subsequently committed to this branch and is present at `docs/architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_2026-11-08.md`.
+
+After retrieving that report, the Builder refreshed the inventory against the next live PR snapshot, HEAD `b34aed2f7f9b18400a852d145b200c1f4951a34b`, including 19 changed paths and the review-report blob. That inventory correction was committed as `329e03ebaf0a48c793b8f0d599926f98df5da18b`. The live PR must be fetched again for any later review; this handoff is now a historical record of the review sequence, not a claim that `329e03e...` remains the live HEAD after subsequent updates.
+
+The reviewer identified an independence limitation: the report author identifies as ChatGPT (GPT-6), the same model identity named as Builder. The report is substantive technical scrutiny but does not satisfy the project's qualifying independent-review requirement (DF-11). A genuinely separate reviewer is still required.
+
 
 At the post-write check, PR #192 had no formal review submissions, no inline review threads, and no PR conversation comments returned by the connected GitHub queries. Recheck this state rather than assuming it remains current.
 
