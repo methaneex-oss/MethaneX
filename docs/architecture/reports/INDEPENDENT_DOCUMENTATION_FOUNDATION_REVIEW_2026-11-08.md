@@ -402,3 +402,206 @@ This report:
 ---
 
 **End of review report.**
+
+
+---
+
+## 13. Current Builder review request — technical re-review of live PR #192 — 2026-11-08
+
+### 13.1 Reviewer identity and qualification
+
+**Reviewer identity:** ChatGPT (GPT-6), acting as a repository-based technical reviewer in this conversation.  
+**Builder identity:** ChatGPT (GPT-6), as explicitly identified in the Builder self-review and correction artifacts.  
+**Independence qualification:** **NOT QUALIFIED as an independent reviewer under DF-11.** The Builder and reviewer share the same model identity. This re-review is useful technical scrutiny and a durable review record, but it must not be counted as the qualifying independent review. No human identity or separate reviewer account is being impersonated.
+
+The PR author shown by GitHub is `methaneex-oss`. The connected review identity has previously encountered GitHub's author/reviewer restriction on this repository. Any formal review event attempted from this connection must be interpreted in light of that same-author limitation; it cannot create independence.
+
+### 13.2 Exact live revision inspected
+
+The Builder request was found at `docs/architecture/reports/BUILDER_TO_INDEPENDENT_REVIEWER_REQUEST_2026-11-08.md`, blob `51b9a853fe86c458cf9ed95d00e0f9b0adc33953`, on PR #192. The request's preparation SHA is explicitly historical and instructs the reviewer to fetch live state.
+
+The live metadata and complete changed-file endpoint were fetched for this review:
+
+| Field | Verified value |
+|---|---|
+| Repository | `methaneex-oss/MethaneX` |
+| PR | [#192](https://github.com/methaneex-oss/MethaneX/pull/192) |
+| Head branch | `docs/whole-brain-planning-scope-correction-20261107` |
+| Exact reviewed HEAD | `4b290ddf271564c01bbb46e98933a93cf1e54448` |
+| Base branch | `docs/jarvis-phase-2-whole-brain-integration-map-20261105` |
+| Exact base SHA | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` |
+| PR state | Open, draft, unmerged |
+| Changed files | 26 |
+| PR author | `methaneex-oss` |
+| Formal reviews returned | 0 at the review-state query |
+| Inline review threads returned | 0 at the review-state query |
+| PR conversation comments | 1; the Builder's formal review request |
+
+PR #193 was re-fetched at HEAD `d2ccbbb26595f28fb7488db4dbe778e7ddd58c7a`, base `874c732973b6ab303d65a503f5a215b0af8e1153`, open/draft/unmerged, 2 changed files. It remains a separate PR #175-derived lineage.
+
+PR #174 was re-fetched at administrative/status-clarification HEAD `922912283d173e24df891ba23d0e2dfc17e0f4b4`, based on PR #173 HEAD `97191111bc2573c14d391c0af9628db7b11f194b`. The accepted planning-baseline decision remains tied to the earlier exact PR #174 HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`; the later administrative revision is not a new substantive acceptance.
+
+PR #191 remains open/draft/unmerged at HEAD `609d38ede50bbdd98a93dfed112781eacabee9fd`, base `f6267456560a08054d69f7960d2951452b14017c`. The recorded graph remains divergent from PR #179: one unique commit ahead and 22 behind. No branch-history operation was performed.
+
+### 13.3 Changed-file manifest at the exact reviewed HEAD
+
+The GitHub changed-file endpoint returned 26 paths. All 26 paths were fetched at exact HEAD `4b290ddf271564c01bbb46e98933a93cf1e54448`. The resulting blob identities are:
+
+| # | Path | Blob SHA |
+|---:|---|---|
+| 1 | `README.md` | `780651b804b491781fdcac8e248eaca9243797a4` |
+| 2 | `docs/ARCHITECTURE.md` | `3c6692b52059e43947d1fd2e7e84debb2362023f` |
+| 3 | `docs/JARVIS_BRAIN_MASTER_BLUEPRINT.md` | `0e49d313bf3929aa30140cb7149ebab038918378` |
+| 4 | `docs/JARVIS_PHASE_2_COMPLETION.md` | `e0e57a44216fc36c52d469a79abfc8df058515a3` |
+| 5 | `docs/README.md` | `da0d9c834e8a5b2e67519ee5e0a2927bcec96374` |
+| 6 | `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md` | `e5ed35c0188c1524dd9b15f5cdef2953e4c40a7f` |
+| 7 | `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md` | `6b418b4816c39faeaf55ec37a7f0cd3ad69e1085` |
+| 8 | `docs/architecture/inventory/HISTORICAL_DOCUMENTATION_PRESERVATION_REGISTER_2026-11-08.md` | `96539183fab3a2b630a8e9154f183b0bfada9016` |
+| 9 | `docs/architecture/reports/BUILDER_FINAL_DOCUMENTATION_FOUNDATION_RECONCILIATION_2026-11-08.md` | `656e4dca522c43452f31c125f5e84684c2bd87c1` |
+| 10 | `docs/architecture/reports/BUILDER_TO_INDEPENDENT_REVIEWER_REQUEST_2026-11-08.md` | `51b9a853fe86c458cf9ed95d00e0f9b0adc33953` |
+| 11 | `docs/architecture/reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md` | `bcc3fe48a37f7f625246f85c2e27fd493250c6b2` |
+| 12 | `docs/architecture/reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md` | `7c9568478c65453d4258325efe53480f610f0eca` |
+| 13 | `docs/architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_2026-11-08.md` | `ecd11354a858eb6e46cbd85b816836a2f88973c9` |
+| 14 | `docs/architecture/reports/INDEPENDENT_REVIEWER_HANDOFF_2026-11-08.md` | `b50d6d8ceaec77d0cee5fc6bb14d19a04032c7ac` |
+| 15 | `docs/architecture/reports/INDEPENDENT_RE_REVIEW_BUILDER_FOLLOW_UP_2026-11-08.md` | `2d63ed93344a7081dcedb44247536c416322c793` |
+| 16 | `docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md` | `955a6c953cdf539a6f478a2d472a327666845e4c` |
+| 17 | `docs/architecture/reports/PHASE_1_REVIEW_CORRECTIONS_AND_SCOPE_RECONCILIATION_2026-11-05.md` | `a459cdfd02d850d455ca526e6823e68525776ba3` |
+| 18 | `docs/architecture/reports/PHASE_1_WHOLE_REPOSITORY_INVESTIGATION_AND_REUSE_AUDIT_2026-11-04.md` | `f725eda1e23d6558d90f6f7c87302019ef3a0dfc` |
+| 19 | `docs/architecture/reports/PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md` | `7cf312f6cc6fd880473a0b6ccc86cf53bf3b3533` |
+| 20 | `docs/architecture/reports/PR_174_FOLLOW_ON_REVIEW_PROVENANCE_RECOVERY_2026-11-06.md` | `d01fa6170b87254619d469d276ba57e813c08ff3` |
+| 21 | `docs/architecture/reports/WHOLE_BRAIN_DOCUMENTATION_PHASE_BUILDER_SELF_REVIEW_2026-11-07.md` | `a212b7ffd4831d7ec83125cb04e9b243a0cddd38` |
+| 22 | `docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md` | `0187a0ac71bd0c95e94beb3bf006da9cc7c3605f` |
+| 23 | `docs/templates/INDEPENDENT_REVIEW_REPORT_TEMPLATE.md` | `f3176cf1a1f45735a3ad62fa4a865806edc24e08` |
+| 24 | `docs/templates/PLANNING_DOCUMENT_TEMPLATE.md` | `b9f71a923b0d717a3b29655574c89c10e0801115` |
+| 25 | `docs/templates/README.md` | `7209fd0fcda239349af602490d26b8c708b743da` |
+| 26 | `docs/templates/TEST_EVIDENCE_REPORT_TEMPLATE.md` | `9c6bbae48a22beb7c4e95858282d7d8d7b2159c2` |
+
+### 13.4 New findings from the current review
+
+#### FND-01 — Inventory and controlling reconciliation are stale against the requested live HEAD
+
+**Severity: HIGH — revision-integrity defect.**
+
+The controlling Builder reconciliation report still states PR #192 HEAD `b319dd214d3f91dfbaafbb2e2042c16301dd015c` and 24 changed files (its §2, lines 19–37). It is not the live revision requested by the Builder's own review request.
+
+The current inventory's §38 records a parent snapshot at `d2397d1dcca8bf062a9b4269f0d35dd188e07ddf` and a 25-path manifest (inventory lines 1304–1342). A direct compare from that parent to current HEAD `4b290ddf271564c01bbb46e98933a93cf1e54448` reports exactly two commits and two changed paths: the inventory itself and the newly added Builder review request. The live changed-file endpoint returns 26 paths. The new request file (blob `51b9a853fe86c458cf9ed95d00e0f9b0adc33953`) is therefore not included in the 25-path parent snapshot, and the reconciliation report remains at 24.
+
+The inventory's parent-snapshot/self-blob convention is legitimate; the problem is not the self-reference rule. The problem is that a later request commit advanced the branch and introduced another changed path after the inventory snapshot. The Builder must refresh the inventory against the exact parent immediately preceding that refresh, include all 26 changed paths/blobs, record the inventory's own pre-update blob, then re-fetch the post-write live HEAD and full changed-file set. The reconciliation report and handoff must be synchronized to the same snapshot or explicitly label their historical scopes.
+
+#### FND-02 — Numbering errors remain in the planning index, inventory and Phase 2 report
+
+**Severity: MEDIUM — documentation-integrity defect.**
+
+The audit's earlier duplicate top-level numbering correction is present, but numbering consistency is not yet sound across the package:
+
+- The planning index places `## 14. Documentation-foundation outstanding work and authority register` at line 230 before `## 13. PR #174 follow-on review provenance and obligations` at line 234. The sequence is out of order.
+- The inventory uses `## 37` twice: line 1193, “Final Builder remediation snapshot”, and line 1255, “Final exact 24-path snapshot refresh”. The second section needs a unique identifier and all internal references must follow it.
+- The Phase 2 integration report places `### 61.4 Status` at line 3893 under §60, and `### 60.4 Status` at line 3925 under §61. These subsection identifiers are swapped.
+
+The Builder should correct the headings and audit any cross-references. Do not treat the earlier audit renumbering correction as proof that the entire documentation package has consistent numbering.
+
+#### FND-03 — Cross-document snapshot and authority status still requires synchronization
+
+**Severity: MEDIUM.**
+
+The portal correctly instructs readers to fetch live PR metadata rather than trust mutable SHA lists. However, the controlling reconciliation and inventory contain older exact-state claims, while the new request identifies a newer review task. The request itself correctly warns that its preparation SHA is not the review target; the actual current HEAD was fetched for this review.
+
+PR #192 and PR #193 remain separate lineages. PR #193's handoff/plan are pinned to an immutable PR #192 snapshot by design; this is not evidence of integration. PR #191's divergent history remains an authority decision. PR #173 remains UNVERIFIED / PROPOSED. PR #174's accepted planning baseline remains the earlier exact revision, and F-02/F-03 remain open. PR #178 governance remains proposed/unaccepted.
+
+#### FND-04 — Current link validation remains incomplete
+
+**Severity: MEDIUM.**
+
+The Builder's strongest recorded relative-path check was run at an earlier PR #192 HEAD, not at `4b290ddf271564c01bbb46e98933a93cf1e54448`. The current PR contains a later inventory revision and a new request file. No reproducible exact-current-HEAD report was found that validates relative targets, fragments, line anchors, cross-branch pins, external URL reachability and semantic relevance across the declared scope.
+
+DF-06 remains PARTIAL. Do not treat the earlier “zero missing relative targets” result as a complete current link-integrity pass.
+
+#### FND-05 — Historical preservation is materially improved but bounded
+
+**Severity: MEDIUM / OPEN.**
+
+The 68-path register records immutable artifacts across the selected PR #171–#193 lineages and correctly discloses that this is not complete repository-wide archive reconciliation. The supplemental branch search/ancestry report resolves the two previously unmatched branch refs, but broader non-JARVIS-named lineage discovery, remaining historical revision comparisons and archive/supersession dispositions remain open.
+
+The PR #192 row in the historical register is pinned to an earlier PR #192 snapshot (`e8cd17277ab5c08d1f6dd6f267120f356ce28666`), not the current 26-file review target. That is acceptable as an immutable historical snapshot if clearly labeled; it is not evidence that the current package is fully preserved in that register.
+
+DF-08 remains PARTIAL.
+
+#### FND-06 — Fresh-reader evidence is still absent
+
+**Severity: HIGH — acceptance gate blocker.**
+
+The protocol is now defined as 17 questions, but neither the Builder nor this reviewer has evidence of an uninvolved human completing it without coaching. The reviewer's own ability to navigate the documentation cannot substitute for DF-09.
+
+DF-09 remains NOT MET.
+
+#### FND-07 — Qualifying independent review is not established
+
+**Severity: HIGH — acceptance gate blocker.**
+
+This reviewer and the Builder share GPT-6 model identity. The existing report and follow-up already disclose this. This technical re-review cannot satisfy DF-11, regardless of whether a GitHub COMMENT review object can be submitted by the connected repository identity.
+
+DF-11 remains NOT MET. A separate qualifying reviewer must review the exact final revision.
+
+#### FND-08 — Project Director decision remains outstanding
+
+**Severity: HIGH — authority gate blocker.**
+
+No exact-revision Project Director decision accepting the documentation foundation was found. The reviewer cannot make that decision.
+
+DF-12 remains NOT MET.
+
+### 13.5 DF-01–DF-13 evidence matrix
+
+| Criterion | Current review disposition | Evidence / remaining requirement |
+|---|---|---|
+| DF-01 — canonical navigation and continuity | PARTIAL | Portal, index and role routes exist. Genuine first-reader confirmation is absent. |
+| DF-02 — inventory and artifact integrity | PARTIAL / REOPENED | 25-path parent snapshot at `d2397d1...`; live PR has 26 changed paths at `4b290dd...`. New Builder request path is not in the parent manifest. |
+| DF-03 — authority and provenance | PARTIAL | PR #173 exact-revision acceptance remains unverified; PR #174 acceptance is tied to its earlier exact planning-baseline revision. |
+| DF-04 — governance status honesty | PASS within scope | PR #178 remains proposed/unaccepted; no claim of binding governance was found in the reviewed navigation/status records. |
+| DF-05 — branch/PR dependencies | PARTIAL | PR #191 remains divergent; PR #192/#193 remain separate lineages. Project Director disposition required. |
+| DF-06 — link integrity | PARTIAL | Earlier relative-path checks are bounded to older snapshots; current fragments, anchors, external reachability and semantic correctness remain unverified. |
+| DF-07 — cross-document status consistency | PARTIAL | Key authority distinctions are stated, but current inventory/reconciliation snapshots are stale and numbering defects remain. |
+| DF-08 — historical preservation | PARTIAL | 68-path register and selected ancestry checks are useful but explicitly non-exhaustive. |
+| DF-09 — fresh-reader test | NOT MET | No uninvolved human session or raw 17-question results. |
+| DF-10 — Builder self-review | PARTIAL | Detailed self-review exists and discloses limits, but it is not independent and package-level numbering/snapshot defects remain. |
+| DF-11 — qualifying independent review | NOT MET | Same GPT-6 model identity as Builder; separate reviewer required. |
+| DF-12 — Project Director decision | NOT MET | Exact-revision Project Director decision required. |
+| DF-13 — Stage A hold | PASS for hold only | Stage A remains explicitly held; no implementation authorization is implied. |
+
+### 13.6 Architecture, scope and reader-continuity assessment
+
+The package preserves the governing principle **ENGINEER THE MECHANISMS; LET BEHAVIOR BE ACQUIRED THROUGH EXPERIENCE** and correctly distinguishes the human-cognition, fictional MCU J.A.R.V.I.S. and developing-Brain reference lenses. It now states more clearly that Phase 1 is a bounded repository investigation and Phase 2 is a bounded BM-01–BM-12 source-integration map, not a complete future-Brain capability definition.
+
+The documentation portal provides useful role-based routes for new readers, Builders, independent reviewers, testers, researchers/architects and maintainers. The index provides a canonical planning-artifact catalog; the inventory records lineage; templates distinguish proposal/research/evidence from authority. These are meaningful improvements.
+
+The reviewed changes remain documentation-only. They do not demonstrate runtime integration, persistent learning, memory-to-reasoning flow, acquired behavioral change, or implementation readiness. The architecture boundary distinctions remain directionally consistent with the prior review: cognitive intent and authoritative cognitive state belong to the Brain; governance owns authorization; operational systems validate/execute authorized requests; verified outcomes return to cognition. No new evidence in this documentation package proves those runtime contracts are implemented.
+
+The documentation is not yet ready for gate acceptance because its live snapshot is stale, package numbering errors remain, and the three external requirements DF-09, DF-11 and DF-12 are unmet.
+
+### 13.7 Scope, method and limitations
+
+Reviewed the live PR metadata, complete 26-path changed-file listing, exact blob identities for all 26 files at `4b290dd...`, PR #192 compare from inventory parent `d2397d1...`, current PR #174/#191/#193 metadata, formal review/thread state, the Builder request, controlling reconciliation, inventory, portal, index, preservation register, outstanding-work register, audit, Phase 1/Phase 2 reports, PR #174 provenance recovery, Builder self-review, scope correction, templates, prior review and prior follow-up.
+
+A complete current-HEAD exhaustive Markdown-link audit (relative target resolution plus fragments, line anchors, external reachability and semantic correctness) was not executed. No uninvolved human reader was available in this review context. No source-code, build, test, runtime or implementation verification was performed. No authority decision was inferred.
+
+### 13.8 Final recommendation
+
+**CLEARANCE NOT RECOMMENDED. Keep the documentation-foundation gate open. Stage A remains HELD.**
+
+The Builder has materially improved the package and correctly disclosed the major external blockers. However, the final request commit advanced PR #192 beyond the inventory snapshot, leaving the current 26-path revision incompletely represented by the inventory and the older 24-path reconciliation. The index, inventory and Phase 2 report also contain specific numbering defects. DF-06 and DF-08 remain partial; DF-09, DF-11 and DF-12 remain unmet.
+
+Required next work:
+
+1. Refresh the inventory for all 26 current changed paths at a precise parent snapshot, then re-fetch the resulting live HEAD and all paths.
+2. Synchronize the Builder reconciliation and handoff to the actual current revision, clearly marking prior snapshots as historical.
+3. Correct the index, inventory and Phase 2 numbering defects and verify internal references.
+4. Run a reproducible exact-current-HEAD link audit with stated coverage and limitations.
+5. Complete the 17-question fresh-reader session with an uninvolved human.
+6. Obtain a qualifying independent reviewer identity and formal review.
+7. Submit the exact reviewed revision and evidence to the Project Director for DF-12.
+
+This review does not accept or reject the documentation foundation on behalf of the Project Director, clear Gate A/Gate B or Phase 2, authorize Stage A or implementation, select a baseline, or authorize merge/rebase/retarget/cherry-pick/integration.
+
+**Final status: NOT CLEARED. Stage A remains held. Implementation remains unauthorized.**
+
+---
