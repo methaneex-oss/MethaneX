@@ -1252,7 +1252,7 @@ Fetch PR #193 live metadata again before review; the values above are an immutab
 
 ---
 
-## 37. Final exact 24-path snapshot refresh — 2026-11-08
+## 38. Final exact 24-path snapshot refresh — 2026-11-08
 
 This section records the exact PR #192 parent revision `0008655719c49527e9b6a6b8dd033f080d44ad8e` after the audit, index, preservation report, outstanding-work register, self-review and reviewer-handoff updates. The live PR #192 changed-file endpoint returned 24 paths. Every path below was fetched by immutable parent commit `0008655719c49527e9b6a6b8dd033f080d44ad8e`; the recorded blob SHA is the returned content identity. This refresh supersedes earlier §35–§36 live-path snapshots for the PR #192 state at this parent. Historical sections remain intact as audit evidence.
 
@@ -1283,7 +1283,7 @@ This section records the exact PR #192 parent revision `0008655719c49527e9b6a6b8
 | 23 | `docs/templates/README.md` | `7209fd0fcda239349af602490d26b8c708b743da` |
 | 24 | `docs/templates/TEST_EVIDENCE_REPORT_TEMPLATE.md` | `9c6bbae48a22beb7c4e95858282d7d8d7b2159c2` |
 
-### 37.1 Separate lineage and gate facts
+### 38.1 Separate lineage and gate facts
 
 - PR #192 parent HEAD: `0008655719c49527e9b6a6b8dd033f080d44ad8e`; base: `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; open/draft/unmerged at the pre-write metadata query.
 - PR #193 remains a separate PR #175-derived lineage; its then-current handoff/plan snapshot remains HEAD `d2ccbbb26595f28fb7488db4dbe778e7ddd58c7a`. No PR #192/#193 integration is implied.
@@ -1294,14 +1294,14 @@ This section records the exact PR #192 parent revision `0008655719c49527e9b6a6b8
 - DF-06 remains partial: the earlier 76-relative-link check was against parent `fb30fd7ac5cc80c86b84edd4e6d7497253b72775`, not this 24-path parent. This update refreshes path/blob identity only; it does not claim current-head fragment, line-anchor, external-reachability or semantic-link validation.
 - DF-09 remains NOT MET pending an actual uninvolved human's 17-question session. DF-11 remains NOT MET pending a qualifying separate formal review. DF-12 remains NOT MET pending the Project Director's exact-revision decision.
 
-### 37.2 Self-reference and post-write verification
+### 38.2 Self-reference and post-write verification
 
 The inventory's own row records its pre-update blob `46d404ab7873d2b919edb2b5ba9152847ca06c2b`. This commit creates a new inventory blob and advances PR #192. After the write, the Builder/reviewer must fetch live PR metadata and all 24 changed paths again; this table is a parent-snapshot register, not a prediction of the resulting HEAD. No gate clearance, Stage A start or implementation authorization is claimed.
 
 
 ---
 
-## 38. Final Builder reconciliation snapshot — parent `d2397d1dcca8bf062a9b4269f0d35dd188e07ddf`
+## 39. Final Builder reconciliation snapshot — parent `d2397d1dcca8bf062a9b4269f0d35dd188e07ddf`
 
 **Purpose:** Supersede prior PR #192 changed-path snapshots in this inventory. This is a parent-snapshot register: the inventory blob listed below is the pre-update blob, and this update is the final Builder-controlled write in the reconciliation pass.
 
@@ -1335,13 +1335,13 @@ At the exact parent commit `d2397d1dcca8bf062a9b4269f0d35dd188e07ddf`, PR #192 w
 | 24 | `docs/templates/README.md` | `7209fd0fcda239349af602490d26b8c708b743da` |
 | 25 | `docs/templates/TEST_EVIDENCE_REPORT_TEMPLATE.md` | `9c6bbae48a22beb7c4e95858282d7d8d7b2159c2` |
 
-### 38.1 Controlling reconciliation report and handoff
+### 39.1 Controlling reconciliation report and handoff
 
 - Builder reconciliation: `docs/architecture/reports/BUILDER_FINAL_DOCUMENTATION_FOUNDATION_RECONCILIATION_2026-11-08.md`, blob at this parent `656e4dca522c43452f31c125f5e84684c2bd87c1`.
 - Updated reviewer handoff: `docs/architecture/reports/INDEPENDENT_REVIEWER_HANDOFF_2026-11-08.md`, blob at this parent `b50d6d8ceaec77d0cee5fc6bb14d19a04032c7ac`.
 - Exact PR #192 parent snapshot for this table: `d2397d1dcca8bf062a9b4269f0d35dd188e07ddf`.
 - The inventory update creates a new commit and advances the PR. The reviewer must fetch the actual post-inventory HEAD and complete changed-file list before reviewing. Do not assume the parent SHA above is the final review target.
 
-### 38.2 Current limits
+### 39.2 Current limits
 
 This exact path/blob register corrects the stale inventory snapshot. It does not claim exhaustive current-head link/fragment/semantic validation, complete repository-wide historical preservation, a completed fresh-reader session, a qualifying independent review, or Project Director acceptance. DF-06 and DF-08 remain partial; DF-09, DF-11 and DF-12 remain unmet. Stage A remains held.
