@@ -535,3 +535,25 @@ The Builder will make the inventory refresh the final Builder-controlled write i
 The Builder has improved the exact-head link-path evidence and resolved two branch ancestry questions. DF-06 and DF-08 remain partial; DF-09, DF-11 and DF-12 remain unmet; PR #173 provenance, PR #174 F-02/F-03, PR #191 dependency and PR #192/#193 ordering remain open.
 
 **Builder recommendation: NOT CLEARED. Stage A remains HELD.** No merge, rebase, retarget, cherry-pick, branch deletion, archive relocation, Stage A start or implementation is authorized by this handoff.
+
+
+---
+
+## 21. Authoritative final Builder reconciliation — supersedes all earlier live-target snapshots
+
+**New controlling Builder report:** [Builder Final Documentation-Foundation Reconciliation and Review-Readiness Report](BUILDER_FINAL_DOCUMENTATION_FOUNDATION_RECONCILIATION_2026-11-08.md).
+
+The report was added after the earlier §20 snapshot. It records the verified PR #192 state at exact HEAD `b319dd214d3f91dfbaafbb2e2042c16301dd015c`, the exact 24 changed paths and their blob SHAs, the complete recursive-tree result, the stale-snapshot correction, the authority/provenance register, the DF-01–DF-13 disposition and the remaining reviewer requirements.
+
+**Supersession rule:** Every earlier statement in this handoff that calls a different PR #192 SHA the “current”, “final”, “latest” or “review” target is historical. This includes the former `e658b30...` snapshot and all earlier targets in §§1–20. Do not review an old SHA merely because it appears in an earlier section. The controlling evidence baseline is the report above; the actual review target is the live PR #192 HEAD fetched by the reviewer after the final inventory synchronization commit.
+
+The final inventory synchronization is the last Builder-controlled write. The reviewer must:
+1. Fetch live PR #192 metadata and confirm the resulting HEAD, base, state and complete changed-file list.
+2. Fetch every changed path at that exact HEAD.
+3. Verify the inventory's final parent-snapshot table and self-reference convention against the actual parent commit.
+4. Treat the reconciliation report as the controlling Builder summary, while independently checking its claims against repository evidence.
+5. Submit a formal GitHub review anchored to the exact live HEAD and commit the detailed review report to the repository.
+
+**Builder recommendation:** READY TO SUBMIT FOR INDEPENDENT REVIEW — NOT CLEARED FOR ACCEPTANCE. DF-06 and DF-08 remain partial; DF-09 requires an uninvolved human; DF-11 requires a genuinely separate reviewer identity and formal review; DF-12 requires the Project Director's exact-revision decision. PR #173 provenance, PR #174 follow-on F-02/F-03, PR #191 disposition and PR #192/#193 ordering remain unresolved as described in the controlling report.
+
+Stage A remains HELD. No implementation or branch-history operation is authorized.
