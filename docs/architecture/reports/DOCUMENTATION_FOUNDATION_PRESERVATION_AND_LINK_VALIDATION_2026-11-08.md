@@ -157,3 +157,16 @@ PR #97-only Markdown paths:
 **Conclusion:** The historical-preservation follow-up is materially advanced but not complete. The technical repository inventory remains complete within its original bounded scope. This report does not clear DF-08, accept any architecture proposal, select a baseline, authorize Stage A, or authorize implementation.
 
 **End of report.**
+
+
+## 7. PR #191 dependency graph — exact divergence check
+
+The PR #191 dependency was rechecked using both relevant comparisons:
+
+- PR #191 base `f6267456560a08054d69f7960d2951452b14017c` to PR #191 head `609d38ede50bbdd98a93dfed112781eacabee9fd`: **1 commit ahead, 0 behind**. The unique change is the addition of `docs/architecture/reports/PHASE_2_HUMAN_AND_MCU_REFERENCE_COMPARISON_2026-11-06.md`.
+- PR #179 head `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` to PR #191 head `609d38ede50bbdd98a93dfed112781eacabee9fd`: **diverged**; PR #191 is 1 commit ahead and 22 commits behind, with merge base `f6267456560a08054d69f7960d2951452b14017c`.
+
+This distinction matters. PR #191 is a clean one-commit addition on its historical base, but it is not a descendant of the current PR #179 head. Simply retargeting the PR would not incorporate the 22 intervening commits. A current-line revision would require an explicit history-preserving rebase/cherry-pick or a new dependent branch. The Builder does not choose or execute that operation without the Project Director's explicit disposition.
+
+**Recommendation for decision:** keep PR #191 as a historical-base review target if the immediate purpose is to review the comparison artifact in isolation; if the purpose is to integrate it into the current PR #179 line, authorize a new revision that replays its single unique document commit onto the current PR #179 head, then independently review that new exact revision. This is a recommendation, not an executed operation or acceptance decision.
+
