@@ -613,3 +613,17 @@ At the start of this update PR #192 was open/draft/unmerged at HEAD `57b32304900
 The final inventory write remains pending. It must record the exact 26-path parent snapshot and the inventory's pre-update blob identity. The Builder must then verify live PR metadata, the complete changed-path set and every changed-file blob at the resulting HEAD. No review should begin from this handoff until the Project Director explicitly authorizes a new review request after receiving the verified Builder closure report.
 
 External requirements remain distinct: DF-09 requires an uninvolved human's 17-question session; DF-11 requires a genuinely separate reviewer and formal GitHub review; DF-12 requires the Project Director's exact-revision decision. Stage A remains held; implementation remains unauthorized.
+
+---
+
+## 25. Final Builder closeout revision synchronization — 2026-11-09
+
+**This remains a Builder handoff-status record, not a review request.** The earlier premature request remains withdrawn/suspended. No reviewer is assigned, and the Project Director has not authorized a new review request.
+
+At closeout start PR #192 was open/draft/unmerged at HEAD `5031fb9348dd10664023df5338125acf4b8ef676`, base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, with 26 changed paths. All 26 changed paths were fetched at that exact revision. The previous inventory parent `98101fa6cc2a2908cfefd2428b77174a25a49fa8` is historical; it must not be treated as the final closeout manifest.
+
+The current Phase 2 source-map blob is `9dd776920d0a479a9d7275acc821e12c266623d9`. Preservation report §12 reconciles its two corrected line anchors against the prior map blob and records that the normalized map content and all source-link/blob identities remain unchanged. The current Builder closure evidence and its limits are in the outstanding-work register §12, reconciliation §13 and preservation report §§11–12.
+
+The final inventory write and post-write verification are still required before the Builder can report completion. After those steps, this handoff can be submitted for the Project Director's review authorization. It must not be treated as authorization itself.
+
+External gates remain distinct: DF-09 requires an uninvolved human's 17-question session; DF-11 requires a genuinely separate reviewer identity and formal GitHub review; DF-12 requires the Project Director's exact-revision decision. PR #173 provenance remains unverified; PR #174 F-02/F-03 remain open; PR #191 and PR #192/#193 order remain authority matters. Stage A remains held; implementation remains unauthorized.
