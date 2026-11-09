@@ -266,3 +266,29 @@ This parser does not establish renderer-specific anchors, absolute-URL fragments
 The Grok-declared formal review examined `9e0c342dcfbbe1d7a51a6b3a2b7574c9cdf480dc`. GitHub comparison to PR #192 HEAD `006f46298ad2203860abe42f234a5dfa68b14158` reports 35 commits ahead, 0 behind, with six documentation paths changed since that review. It is not an exact-current-head review. PR #192 remains open, non-draft and unmerged with 29 changed paths.
 
 No Markdown link destination was introduced by this addendum. The subsequent inventory-only manifest update records blob identities and does not add a Markdown link destination.
+
+
+---
+
+## 16. Final PR-state and post-write verification snapshot — 2026-11-10
+
+This section records the live PR state after the documentation corrections described above and before this final report append. The PR #192 parent examined here is `9f9e68566ed43c2208dcf89b3086e9a14dd47d92`.
+
+| PR | Base | HEAD at this snapshot | State | Changed paths |
+|---|---|---|---|---:|
+| #173 | `1273ddbcd0087d189e01388ded2d362fb1e058d2` | `97191111bc2573c14d391c0af9628db7b11f194b` | Open, draft, unmerged | 2 |
+| #174 | `97191111bc2573c14d391c0af9628db7b11f194b` | `be46b3858102c31022128522c4b3506aad4dff8a` | Open, draft, unmerged | 3 |
+| #191 | `f6267456560a08054d69f7960d2951452b14017c` | `609d38ede50bbdd98a93dfed112781eacabee9fd` | Open, draft, unmerged | 1 |
+| #192 | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | `9f9e68566ed43c2208dcf89b3086e9a14dd47d92` | Open, non-draft, unmerged | 29 |
+| #193 | `874c732973b6ab303d65a503f5a215b0af8e1153` | `ee508c09be9d848c7baa9533bb6f88f9cc27f94a` | Open, draft, unmerged | 2 |
+
+The final PR #192 changed-file endpoint still returns exactly 29 unique paths. Every path is `README.md` or under `docs/`; no runtime source, tests, dependencies, build configuration, workflows or runtime-state paths are present. The other four PR changed-file lists are also documentation-only.
+
+The final verified control-document blobs at this parent are:
+
+- Planning index: `52198b925a3f44826995980004cfd3964800c137`.
+- Outstanding-work/authority register: `ec74dc42b5637237818de62f1ba0f2fb52d5cd49`.
+- Execution/readiness report before this append: `ccf305b571eb025d2b702ee5d2498bbf1f446074`.
+- Artifact inventory before its next self-referential manifest append: `a75871cbe85fd773b8b5eaa8af56f7e637c09f50`.
+
+The latest inventory parent manifest is §49 at `62637b3bb491533a85961a3a504c2aaa28dccbda`; this final report append requires a subsequent inventory parent snapshot so that the report's resulting blob is recorded. The exact-head review status and all gate dispositions remain unchanged: DF-06/DF-08 PARTIAL, DF-09 OPEN, DF-11 UNRESOLVED, DF-12 outstanding, DF-13 NOT STARTED / HELD. No PR was merged or closed, no branch history was rewritten, and no implementation was started.
