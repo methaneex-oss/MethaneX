@@ -333,7 +333,7 @@ This section supersedes conflicting earlier status statements in this index and 
 - **PR #192 / #193:** remain separate lineages; integration order requires Project Director decision.
 - **DF-06 / DF-08:** bounded path/anchor/external-reference and historical-discovery work is documented; exhaustive semantic/historical validation and archive/supersession disposition are not claimed complete.
 - **DF-09:** no uninvolved human has completed the 17-question test; OPEN.
-- **DF-11:** Grok-declared formal COMMENTED review exists against PR #192 commit `9e0c342dcfbbe1d7a51a6b3a2b7574c9cdf480dc`. It was submitted through the same GitHub account as the Builder, and current HEAD `c166e7d955293f1108f71b123d0a92f5941bdabd` was not the exact reviewed revision. Reviewer qualification and exact-head re-review requirements require Project Director disposition.
+- **DF-11:** Grok-declared formal COMMENTED review exists against PR #192 commit `9e0c342dcfbbe1d7a51a6b3a2b7574c9cdf480dc`. It was submitted through the same GitHub account as the Builder, and PR #192 HEAD at the time of the Grok report was `c166e7d955293f1108f71b123d0a92f5941bdabd`; subsequent reconciliation commits advanced the branch, so live PR metadata controls the current head. Reviewer qualification and exact-head re-review requirements require Project Director disposition.
 - **DF-12:** final exact-revision documentation-foundation decision remains outstanding.
 - **DF-13:** Stage A remains NOT STARTED and HELD; implementation remains unauthorized.
 
