@@ -266,3 +266,54 @@ At PR #193 HEAD `ee508c09be9d848c7baa9533bb6f88f9cc27f94a`, the two changed file
 Accordingly, the prior statement that both current PR #193 files still contain PR #173 UNVERIFIED/PROPOSED wording was stale. Other uses of “unverified” in the files refer to unrelated technical evidence or derived state, not PR #173's acceptance status.
 
 This is a factual documentation correction only. PR #193 remains on its existing PR #175-derived branch; no cross-lineage integration or history operation was performed. The Project Director's PR #192/#193 order decision remains outstanding.
+
+---
+
+## 10. Current-run recheck and stale-snapshot correction — 2026-11-09
+
+**Reviewed pre-update PR #192 HEAD:** 400be7f87a5db5c978819aaa85f84853422384d2 (open, non-draft, unmerged; base 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c; 28 changed paths). This addendum supersedes the earlier live-state values in §§4, 5, 9 and the earlier PR #193 wording where newer exact evidence is recorded below. Those earlier statements remain historical snapshots.
+
+### 10.1 Current PR and document references
+
+| Item | Verified current reference | Result |
+|---|---|---|
+| PR #192 | 400be7f87a5db5c978819aaa85f84853422384d2 | Open, non-draft, unmerged; 28 changed paths |
+| Planning index | Blob 1e896ae07ceda0bc200ef26bb9cf123a62521200 at the preceding index commit 0796ff8c3ef7057a19c4565fa2d158a6f0bd97ce | Updated active PR #193 links and corrected stale PR #193 status wording; added current-run DF-09/DF-11 supersession note |
+| Authority register | Blob 989c991267a6a3e61dd55b2ffb3ec95774778702 at preceding commit 400be7f87a5db5c978819aaa85f84853422384d2 | Added current-run PR, F-02/F-03, DF-06/08/09/11/12 evidence and decisions |
+| PR #174 | HEAD be46b3858102c31022128522c4b3506aad4dff8a; spec blob b366564b3f68e674ae5f5f9fc5a6c90d8b4f454d | Open/draft/unmerged; accepted baseline remains 0811a59e46bf934e32e794f90e4e7d18d4e2bd97 |
+| PR #191 | HEAD 609d38ede50bbdd98a93dfed112781eacabee9fd; report blob eac3cb443b5c6a2b9c0d9ad9f5fd552b79d8a0e2 | One unique added report path; no reviews/comments/inline threads |
+| PR #193 | HEAD ee508c09be9d848c7baa9533bb6f88f9cc27f94a; plan/handoff blobs 7df34fed59c1c8577ddcd23c02f772f366d46d39 / 0392ff59c6ae48d3c78e571c905550dfc77a5965 | Both current files correctly state PR #173 acceptance; previous statement in §§4/9 that they still contain UNVERIFIED/PROPOSED wording is superseded |
+| PR #179 Phase 2 map | Blob e7c85d74a1051a40a10b0318da739c6b1b0c2ad7 at HEAD 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c | Exact map revision to use for any future PR #191 replay review |
+
+PR #193 remains on the PR #175-derived lineage; PR #192 remains on the PR #179-derived lineage. The PR #193 plan and handoff link back to PR #192 commit db5968bfbddf77590cd9303539abda00dd961ab7. That pinned snapshot was fetched successfully for docs/README.md, the planning index and the whole-Brain scope correction. These are valid immutable historical links, not links to the current PR #192 head. PR #192 and PR #193 have no changed-path overlap. The recommended sequencing remains PR #192 foundation first, then a separately authorized refresh/reconciliation and review of PR #193's two files. No integration operation is authorized.
+
+### 10.2 PR #174 original-review recovery status
+
+The current PR #174 discussion contains four issue comments. The formal review list returned zero submissions and the inline review-thread endpoint returned zero threads. The comments record Builder handoffs, the exact planning-baseline acceptance, and a Builder correction submission; they do not contain the later F-02/F-03 report. Bounded commit-message searches for F-02, F-03 and “follow-on review” returned no matches. The checked-in recovery record remains secondary and partial; the original report, complete rationale and exact inline annotations are not available from the retrieved sources.
+
+Current affected specification locations, at blob b366564b3f68e674ae5f5f9fc5a6c90d8b4f454d:
+- F-02: BM-02 lines 196–218 and BM-08 lines 357–389.
+- F-03: §6.3 lines 641–653; scenarios 27–34 at lines 803–810; §10 at lines 814–835.
+
+The themes recovered from secondary context remain contextual intent/reference grounding and enforceable downstream use of qualified reasoning. No speculative correction was made. Project Director disposition is still required on whether to accept the missing original artifact as a bounded provenance limitation and authorize corrections/re-review, or require further recovery first. F-02 and F-03 remain open.
+
+### 10.3 PR #191 and replay implications
+
+PR #191's unique contribution is one 220-line report added at blob eac3cb443b5c6a2b9c0d9ad9f5fd552b79d8a0e2. It is absent from PR #179 HEAD 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c. The PR #191 base is an ancestor of PR #179, but the PR #191 head diverges by one unique commit versus 22 commits on the PR #179 line. No PR #191 comments, formal reviews or inline threads exist. A replay would add the single absent path without overwriting an existing target file; the residual risk is semantic freshness because the report describes its source map as the current PR #179 branch without pinning the exact map revision. Any authorized replay should be checked against the exact Phase 2 map blob above and independently reviewed. The Project Director must choose historical-base review or authorize a dependent replay.
+
+### 10.4 DF-06 / DF-08 validation status
+
+At pre-update PR #192 HEAD 400be7f87a5db5c978819aaa85f84853422384d2, the complete changed-file endpoint returned 28 paths. All 28 were fetched successfully. The recursive tree contained 257 entries and was not truncated. A bounded inline-Markdown relative-target scan found no missing repository-relative targets. The same parser found no fragment-bearing inline Markdown links in the scanned files; raw HTML links, reference-style link definitions, semantic relevance and exhaustive historical links were not established by this check.
+
+The earlier preservation report's bounded evidence remains: 89 immutable source links across 45 exact commit/path pairs; 76 line-anchor ranges checked; 189 external URL occurrences classified/checked within its then-current scope; one historical ChatGPT shared-conversation pointer remains access-limited/unverified. Those checks were not rerun exhaustively against this newer head. DF-06 remains PARTIAL.
+
+DF-08 remains PARTIAL. The existing bounded discovery records 245 branches, 184 PRs and 108 documentation paths across 28 PRs. Broader historical mapping and archive/supersession decisions remain unresolved. No archive or destructive action was taken.
+
+### 10.5 DF-09 / DF-11 / DF-12 and final gate
+
+- **DF-09:** no uninvolved human session exists. The exact 17-question list was not recoverable from the repository or accessible Library files in this run. The reviewer handoff contains a 16-versus-17 count inconsistency. Therefore the test package is not fully portable/volunteer-ready until the authoritative list is restored and the count reconciled. No volunteer was contacted and no LLM was substituted.
+- **DF-11:** a formal Grok-declared COMMENTED review exists, submitted at 2026-11-09 10:59:55 UTC against PR #192 HEAD 9e0c342dcfbbe1d7a51a6b3a2b7574c9cdf480dc. It declares a distinct model identity from Builder GPT-6 but was submitted through the same methaneex-oss GitHub account. Current PR #192 HEAD is 400be7f87a5db5c978819aaa85f84853422384d2; no exact-head review exists. Reviewer qualification and exact-head re-review remain Project Director decisions. No separate authenticated reviewer identity was available in this run.
+- **DF-12:** exact-revision Project Director acceptance remains outstanding.
+- **DF-13:** Stage A remains NOT STARTED and HELD; implementation remains unauthorized.
+
+**Final disposition: DOCUMENTATION FOUNDATION NOT CLEARED.** The Project Director decisions remain PR #174 provenance route, PR #191 disposition, PR #192/#193 order, DF-11 qualification/exact-head review, and DF-12 exact-revision acceptance. DF-09 still requires a real uninvolved human. No PR was merged, rebased, retargeted, cherry-picked or closed. No runtime source, tests, dependencies, build/workflow files or runtime state changed. No Stage A or implementation work was started.
