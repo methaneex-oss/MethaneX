@@ -32,7 +32,7 @@ The human-cognition and MCU J.A.R.V.I.S. comparisons are reference lenses for an
 Prior planning inputs and authority status (see the canonical index and audit for exact records):
 - **PR #171** — Documents 00 and 01 have separate exact-scope approval records; the PR and research package are not blanket-approved.
 - **PR #172** — bounded foundational Brain capability investigation accepted as a planning input at exact HEAD `d7d676b79dbf3269f7fd3ebdb4363a6df19f255d`.
-- **PR #173** — Brain Foundation Architecture proposal; the exact acceptance decision is not established in its own PR discussion and remains an authority-reconciliation item.
+- **PR #173** — Brain Foundation Architecture accepted as the planning baseline at exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b` by the Project Director on 2026-11-03; the recovered decision is transcribed in PR #173 comment #6752144835. This does not authorize implementation.
 - **PR #174** — Brain Mechanism Specification accepted at exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`; follow-on F-02/F-03 obligations and provenance limits remain open.
 
 Deferred planning proposal:
@@ -425,7 +425,7 @@ The PR #174 follow-on review record has been enriched from recovered prior-conve
 - **F-03 — enforceable downstream reasoning integration:** recovered severity MEDIUM / CONFIRMED as a specification weakness. The recovered requirement themes include material influence on authoritative downstream computation, invalidation/rejection handling, and traceable end-to-end acceptance.
 - The recovered overall verdict was **REVISE — NOT APPROVED FOR THE NEXT GATE**. The original full report, complete rationale, and exact inline annotations remain unavailable; the recovery record is explicitly secondary and partial.
 - Project Director comment `6604790481` accepts PR #174 exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` as a planning baseline. That earlier acceptance does not clear the later F-02/F-03 findings, approve implementation, or substitute for independent re-review of any correction.
-- PR #173's exact-revision acceptance provenance remains unresolved. The downstream plan's older wording has been qualified; do not state PR #173 is accepted unless its primary decision record is recovered or the Project Director records an explicit disposition.
+- PR #173's exact-revision planning-baseline acceptance has been recovered from prior conversation history and transcribed in PR #173 comment #6752144835. The accepted scope is limited to the planning baseline and does not authorize implementation.
 
 These corrections preserve the accepted PR #174 baseline and the later review obligations as separate events. They do not authorize implementation, Gate A/Gate B closure, technology selection, or integration.
 
