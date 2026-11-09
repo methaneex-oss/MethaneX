@@ -40,8 +40,8 @@ The current sequence is:
 | 6 | [Whole-System Architecture Foundation](https://github.com/methaneex-oss/MethaneX/blob/b05434758ad4fe72815503f89bd5d2990ccb658b/docs/architecture/00_JARVIS_SYSTEM_ARCHITECTURE_FOUNDATION.md) | Approved-within-scope whole-system principles and Brain-first boundary. | Exact-scope approval recorded for baseline commit `8490737429b052b65fed3b998e0320d8834f640f`; current branch carries administrative approval-record updates. |
 | 7 | [Whole-System Anatomy and Responsibility Map](https://github.com/methaneex-oss/MethaneX/blob/b05434758ad4fe72815503f89bd5d2990ccb658b/docs/architecture/01_JARVIS_WHOLE_SYSTEM_ANATOMY_AND_RESPONSIBILITY_MAP.md) | System-domain responsibilities and boundaries around the Brain. | Exact-scope approval recorded for baseline commit `f32d2c9ede71676759b55c87c783253bd23ebbae`; current branch carries administrative approval-record updates. |
 | 8 | [Foundational Brain Capability Investigation](https://github.com/methaneex-oss/MethaneX/blob/d7d676b79dbf3269f7fd3ebdb4363a6df19f255d/docs/architecture/research/02_BRAIN_FOUNDATIONAL_CAPABILITY_INVESTIGATION_2026-11-03.md) | Prior capability research across human cognition, MCU J.A.R.V.I.S., and engineering reality. | Accepted planning input at exact HEAD `d7d676b79dbf3269f7fd3ebdb4363a6df19f255d`; not whole-Brain completeness proof. |
-| 9 | [Brain Foundation Architecture](https://github.com/methaneex-oss/MethaneX/blob/97191111bc2573c14d391c0af9628db7b11f194b/docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md) | Existing Brain-level architecture proposal and its recurrent/integrated cognition concepts. | **Authority reconciliation required:** later documents call it accepted, but no explicit acceptance decision was found in PR #173's own discussion during the current audit. |
-| 10 | [Brain Mechanism Specification](https://github.com/methaneex-oss/MethaneX/blob/922912283d173e24df891ba23d0e2dfc17e0f4b4/docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md) | Existing BM-01–BM-12 mechanism decomposition, contracts, interactions, and scenarios. | The Project Director accepted exact PR #174 baseline HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` as a planning baseline by decision comment #6604790481. The current branch adds a non-substantive status clarification at HEAD `922912283d173e24df891ba23d0e2dfc17e0f4b4`; this administrative revision has not itself been independently reviewed or separately accepted. PR #173 parent acceptance provenance remains unresolved. F-02/F-03 follow-on obligations remain open; no implementation authorization is implied. |
+| 9 | [Brain Foundation Architecture](https://github.com/methaneex-oss/MethaneX/blob/97191111bc2573c14d391c0af9628db7b11f194b/docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md) | Existing Brain-level architecture baseline and its recurrent/integrated cognition concepts. | **Accepted planning baseline:** the Project Director's 2026-11-03 decision at exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b` was recovered from prior conversation history and transcribed in PR #173 comment #6752144835. Implementation remains unauthorized. |
+| 10 | [Brain Mechanism Specification](https://github.com/methaneex-oss/MethaneX/blob/922912283d173e24df891ba23d0e2dfc17e0f4b4/docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md) | Existing BM-01–BM-12 mechanism decomposition, contracts, interactions, and scenarios. | The Project Director accepted exact PR #174 baseline HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` as a planning baseline by decision comment #6604790481. The current branch adds a non-substantive status clarification at HEAD `922912283d173e24df891ba23d0e2dfc17e0f4b4`; this administrative revision has not itself been independently reviewed or separately accepted. PR #173's exact planning-baseline acceptance is recovered and recorded in PR #173 comment #6752144835. F-02/F-03 follow-on obligations remain open; no implementation authorization is implied. |
 | 11 | [Phase 1 Whole-Repository Investigation](reports/PHASE_1_WHOLE_REPOSITORY_INVESTIGATION_AND_REUSE_AUDIT_2026-11-04.md) and [Phase 1 Review Corrections](reports/PHASE_1_REVIEW_CORRECTIONS_AND_SCOPE_RECONCILIATION_2026-11-05.md) | Existing repository/source investigation, pinned baseline, preservation, and reuse/conflict evidence. | Technical investigation complete within its declared static scope; historical preservation follow-up remains open. |
 | 12 | [Phase 2 Whole-Brain Capability-to-Source Integration Map](reports/PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md) | Existing BM-01–BM-12 source, ownership, dataflow, persistence/replay, and test mapping. | In-progress bounded integration investigation; not whole-Brain completeness proof or accepted Phase 2 exit. |
 | 13 | [Phase 2 Human and MCU Reference Comparison](https://github.com/methaneex-oss/MethaneX/blob/609d38ede50bbdd98a93dfed112781eacabee9fd/docs/architecture/reports/PHASE_2_HUMAN_AND_MCU_REFERENCE_COMPARISON_2026-11-06.md) | Comparison of the existing BM-01–BM-12 set against human-cognition and fictional MCU reference lenses. | Draft artifact in PR #191; unreviewed, unaccepted, and based on an earlier PR #179 snapshot. |
@@ -70,7 +70,7 @@ A document can have more than one descriptive role, but it must have one clearly
 
 - PR #171 contains the whole-system foundation, responsibility map, and comparative research. The exact-scope approvals for Documents 00 and 01 must not be generalized to every file in the PR.
 - PR #172 contains an accepted bounded foundational capability investigation.
-- PR #173 contains the Brain Foundation Architecture proposal. Its acceptance status requires exact decision-record reconciliation.
+- PR #173 contains the Brain Foundation Architecture planning baseline, accepted by the Project Director at exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b`; see PR #173 comment #6752144835.
 - PR #174 contains the BM-01–BM-12 mechanism specification. Preserve it; do not assume the twelve mechanisms exhaust the future Brain. Its exact-revision planning-baseline acceptance is recorded; the stale draft header has been corrected administratively, and F-02/F-03 follow-on obligations remain open.
 
 ### Repository investigations
@@ -140,7 +140,7 @@ A Builder self-review is not an independent review. An open or draft PR is not a
 The next Builder must:
 
 1. Read the [Initial Documentation Foundation Audit](reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md) in full.
-2. Reconcile the PR #173 acceptance evidence and keep the status qualified until the exact decision is found.
+2. Read the recovered PR #173 decision record in PR comment #6752144835; preserve its exact scope and do not infer implementation authorization.
 3. Keep PR #178 governance proposed unless an exact acceptance record is available.
 4. Verify that the current-phase instruction remains consistent across the continuity handoff and implementation-plan hold.
 5. Pin and validate every cross-branch link and record PR #191's historical-base dependency accurately; do not rebase or retarget without authority.
@@ -263,7 +263,7 @@ This addendum supersedes earlier PR #192 live-state statements in this index onl
 
 ### 16.1 Provenance and authority
 
-- PR #173 remains UNVERIFIED/PROPOSED for exact-revision acceptance; its current discussion has two Builder-authored comments, zero formal reviews and zero inline review comments.
+- PR #173 exact-head planning-baseline acceptance is recovered from the 2026-11-03 Project Director conversation and transcribed in PR comment #6752144835; the original decision was not in the earlier PR discussion.
 - PR #174's Project Director decision comment `6604790481` accepts exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` as the Brain Mechanism Specification planning baseline only. Current PR #174 HEAD is `922912283d173e24df891ba23d0e2dfc17e0f4b4`; its header correctly states the accepted planning-baseline scope, while follow-on F-02/F-03 remain open. The original full F-02/F-03 review and inline annotations were not recoverable from the PR review endpoints.
 - PR #178 governance remains proposed/unaccepted.
 
@@ -275,7 +275,7 @@ The expanded preservation register maps 108 documentation paths across 28 PRs, b
 |---|---|---|
 | DF-01 | Portal, index and role routes present | Uninvolved fresh-reader confirmation still required |
 | DF-02 | Current inventory refresh is the final Builder synchronization step | Independent post-write verification against the exact resulting HEAD |
-| DF-03 | PR #173 provenance remains unverified; PR #174 planning-baseline acceptance is exact and scoped | Project Director disposition of the PR #173 historical acceptance claim |
+| DF-03 | PR #173 planning-baseline acceptance recovered and recorded; PR #174 planning-baseline acceptance remains exact and scoped | Keep the historical decision transcription and scope traceable; no new PR #173 acceptance decision is needed |
 | DF-04 | Status is accurately recorded | PR #178 remains proposed/unaccepted |
 | DF-05 | PR #191 and PR #192/#193 lineages are explicitly separate | Project Director disposition of PR #191 and PR #192/#193 order |
 | DF-06 | Bounded current-package path, anchor and external-reference validation complete; one access-limited historical pointer disclosed | Independent semantic review may challenge scope or relevance |
@@ -319,3 +319,22 @@ The final inventory and exact-head Builder self-review synchronization remain pe
 ## 19. Builder closeout snapshot — 2026-11-09
 
 The final Builder closeout synchronization is recorded in the [Outstanding Work Closure and Authority Register](reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md) §13 and [Builder Final Reconciliation](reports/BUILDER_FINAL_DOCUMENTATION_FOUNDATION_RECONCILIATION_2026-11-08.md) §14. The exact parent snapshot for this synchronized update is PR #192 HEAD `cdd2732bddb002f48263b098567c34f8b8b9ae1c`; the 26-path parent blob manifest is in the detailed inventory §42. The PR #192 branch remains separate from PR #193. This update does not clear DF-09 fresh-reader execution, DF-11 qualifying independent review, or DF-12 Project Director acceptance; Stage A remains held and implementation remains unauthorized.
+
+
+---
+
+## 20. Post-review and recovered-decision reconciliation — 2026-11-09
+
+This section supersedes conflicting earlier status statements in this index and links the current evidence packet: [Project Director Decision Provenance and Documentation-Gate Reconciliation](reports/PROJECT_DIRECTOR_DECISION_PROVENANCE_AND_GATE_RECONCILIATION_2026-11-09.md).
+
+- **PR #173:** accepted as the Brain Foundation Architecture planning baseline at exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b` by the user's 2026-11-03 08:18:21 UTC decision. The recovered decision is transcribed in PR #173 comment #6752144835. The authorization was for the Detailed Brain Mechanism Specification stage only.
+- **PR #174:** exact accepted planning baseline remains `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`; current branch HEAD is `922912283d173e24df891ba23d0e2dfc17e0f4b4`. Follow-on F-02/F-03 remain OPEN; the original full report and inline annotations remain unavailable.
+- **PR #191:** its base is an ancestor of PR #179 HEAD, but its head diverges by one unique report commit and 22 intervening PR #179 commits. No integration operation is authorized.
+- **PR #192 / #193:** remain separate lineages; integration order requires Project Director decision.
+- **DF-06 / DF-08:** bounded path/anchor/external-reference and historical-discovery work is documented; exhaustive semantic/historical validation and archive/supersession disposition are not claimed complete.
+- **DF-09:** no uninvolved human has completed the 17-question test; OPEN.
+- **DF-11:** Grok-declared formal COMMENTED review exists against PR #192 commit `9e0c342dcfbbe1d7a51a6b3a2b7574c9cdf480dc`. It was submitted through the same GitHub account as the Builder, and current HEAD `c166e7d955293f1108f71b123d0a92f5941bdabd` was not the exact reviewed revision. Reviewer qualification and exact-head re-review requirements require Project Director disposition.
+- **DF-12:** final exact-revision documentation-foundation decision remains outstanding.
+- **DF-13:** Stage A remains NOT STARTED and HELD; implementation remains unauthorized.
+
+See the linked reconciliation report for exact refs, comparison results, decision boundaries and non-actions.
