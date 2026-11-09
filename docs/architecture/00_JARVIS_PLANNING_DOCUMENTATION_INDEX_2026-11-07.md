@@ -288,3 +288,14 @@ The expanded preservation register maps 108 documentation paths across 28 PRs, b
 | DF-13 | Stage A remains NOT STARTED and HELD | No implementation authorization |
 
 **Disposition:** Builder-controlled link and bounded historical-discovery work is materially complete; final inventory/self-review synchronization remains in progress. This index does not declare the documentation-foundation gate cleared, does not request a reviewer, and does not authorize Stage A or implementation.
+
+
+---
+
+## 17. Final Builder closeout synchronization — 2026-11-09
+
+At the start of this closeout synchronization, PR #192 was open/draft/unmerged at HEAD `73c908aded4fe5546fdd0fdeb86691c2b9b8d586`, base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, with 26 changed paths. The final Builder verification is recorded in the Outstanding Work Closure and Authority Register §11 and the Builder reconciliation §12. The final inventory is the last planned Builder write and records its exact parent snapshot; its self-reference uses the pre-update inventory blob.
+
+The Builder has completed the bounded validation recorded in Preservation and Link Validation Report §11: 84 current-package relative targets, 89 historical source links across 45 exact commit/path pairs, 76 valid line-anchor ranges, and 189 external URL occurrences checked within the disclosed scope. One historical ChatGPT share pointer remains access-limited/unverified. Historical discovery records 245 branches, 184 PRs, and 108 documentation paths across 28 documentation PRs. These are bounded, reproducible findings, not a claim that every historical repository artifact has been exhaustively archived.
+
+DF-09 remains pending an actual uninvolved human session; DF-11 remains pending a genuinely separate reviewer and formal review; DF-12 remains the Project Director's exact-revision decision. No reviewer is assigned, the earlier request remains suspended, Stage A remains held, and implementation remains unauthorized. This index does not clear the gate.
