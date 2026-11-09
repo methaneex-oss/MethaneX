@@ -9,6 +9,8 @@
 
 > **Human-facing entry point:** Start with the [JARVIS Documentation Portal](../README.md) for role-specific routes for Builders, reviewers, testers, researchers and general readers. This index remains the canonical planning-artifact catalog. Do not infer authority from a filename, directory, branch, PR state, document length, or the word “approved” appearing in an older handoff. Exact-scope acceptance, independent review, GitHub merge state, gate clearance, and implementation authorization are separate facts.
 
+> **Current exact-head control report (2026-11-10):** [Initial Documentation Foundation Execution and Readiness Report](reports/INITIAL_DOCUMENTATION_FOUNDATION_EXECUTION_AND_READINESS_2026-11-10.md). It supersedes earlier live-head snapshots where stated; it does not clear the gate.
+
 ## 1. Current objective and immediate next work
 
 The immediate task is to establish a coherent, traceable, recoverable initial documentation foundation before beginning whole-Brain planning.
@@ -20,7 +22,7 @@ The current sequence is:
 3. Reconcile cross-PR branch dependencies and pin cross-branch links to immutable commits.
 4. Correct contradictory current-phase instructions in the scope correction, continuity handoff, and implementation-plan hold.
 5. Verify the preservation status of historical work without restarting completed technical investigations or deleting/moving artifacts.
-6. Perform a fresh-reader continuity test and Builder self-review.
+6. Perform the Project Director-authorized blind AI fresh-reader assessment using a genuinely different model (not a human session), preserve its raw evidence and navigation trail, and complete Builder self-review.
 7. Obtain a genuinely independent review and the required authority decision on exact revisions.
 8. Only after this documentation gate is accepted, begin Stage A.
 
@@ -104,6 +106,8 @@ Live repository state checked on **2026-11-07**:
 
 The index and handoff are proposals, not accepted decisions. No PR is to be merged, retargeted, rebased, or closed merely to make the documentation tree look tidy. Preserve the exact base/head relationship and obtain the required authority decision before changing the stack.
 
+**Snapshot qualification:** The table above is a historical 2026-11-07 snapshot. PR #173's acceptance provenance was recovered on 2026-11-09: exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b` was accepted as the Brain Foundation Architecture planning baseline, with the decision transcription in PR #173 comment #6752144835. The older “acceptance record unresolved” entry is not the current status; see §20 and the 2026-11-10 execution report.
+
 **PR #191 / PR #192 relationship:** PR #191's base (`f6267456560a08054d69f7960d2951452b14017c`) is an ancestor of PR #179's current head (`61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`); the compare reports 22 commits ahead and 0 behind from the #191 base to the #179 head. The comparison report is only in PR #191's changed-file set; PR #192 must not add a duplicate copy. The reviewer/authority must decide whether PR #191 should be reviewed against its historical base or updated through an explicitly approved dependency change.
 
 **PR #192 / PR #193 relationship:** these are separate lineages (#179-derived and #175-derived). Neither branch alone is the complete integrated documentation state. Their cross-links must be pinned to immutable commits, and the final integration order must preserve the corrected legacy Phase 2 scope banner.
@@ -145,7 +149,7 @@ The next Builder must:
 4. Verify that the current-phase instruction remains consistent across the continuity handoff and implementation-plan hold.
 5. Pin and validate every cross-branch link and record PR #191's historical-base dependency accurately; do not rebase or retarget without authority.
 6. Update the detailed inventory and this index together.
-7. Perform the fresh-reader continuity test and Builder self-review.
+7. Perform the Project Director-authorized blind AI fresh-reader assessment using a genuinely different model (not a human session), preserve its raw evidence and navigation trail, and complete Builder self-review.
 8. Submit the exact revision for independent review and the required authority decision.
 
 **Do not begin Stage A until the Initial Documentation Foundation Completion Gate is independently reviewed and accepted.** Stage A remains the first whole-Brain planning stage after that gate, not the current task.
@@ -380,10 +384,23 @@ The user has explicitly accepted a different AI's demonstrated repository compre
 Current live PR #192 HEAD is `ac7f860dc257e181a12612bf3e3cb811ce26bd58` (open, non-draft, unmerged; 28 changed paths). The formal Grok-declared COMMENTED review examined older HEAD `9e0c342dcfbbe1d7a51a6b3a2b7574c9cdf480dc`, declared a distinct model identity from Builder GPT-6, but was submitted through the same GitHub account. Its verdict was NOT CLEAR TO PROCEED. Reviewer qualification and exact-current-head review remain unresolved. DF-06 and DF-08 remain bounded/partial; DF-11 remains unresolved; DF-12 remains a Project Director decision. Stage A remains NOT STARTED and HELD; implementation remains unauthorized.
 
 
-## 21. Project Director decision — fresh-reader evidence substitution — 2026-11-09
+## 24. Project Director decision — fresh-reader evidence substitution — 2026-11-09
 
 The Project Director has explicitly replaced the uninvolved-human fresh-reader requirement with a blind fresh-reader assessment by a genuinely different AI model. The AI must receive only the repository entry point and documentation package, with no prior project summaries or Builder briefing; it must independently explain project purpose, current state, architecture/planning boundaries, navigation, unresolved work, authority gates and next safe actions, citing exact paths/sections and labeling explicit facts, inference and unknowns. Preserve its actual model identity, exact repository revision, prompt, raw answers, navigation trail and ambiguities. This is an AI test, not a human test.
 
 This substitution is authorized, but no fresh-reader AI result is yet available. The current execution environment exposes no separately callable model-inference tool; self-review by this assistant or relabeling its own analysis would not satisfy the requirement. DF-09 therefore remains OPEN pending an actual distinct-model run. The earlier Grok review is not this fresh-reader test and is tied to an older PR #192 revision. This section supersedes earlier statements that a human session is mandatory; it does not claim the revised test has passed.
 
 Live PR #192 HEAD at this update: 4cdfbda5f428ab8c9f78db8e0bc7a7f42e0bfcd0. PR #174 remains at be46b3858102c31022128522c4b3506aad4dff8a; PR #191 at 609d38ede50bbdd98a93dfed112781eacabee9fd; PR #193 at ee508c09be9d848c7baa9533bb6f88f9cc27f94a. All remain open and unmerged; #174/#191/#193 are draft, #192 is non-draft. Stage A remains held and implementation unauthorized.
+
+
+## 25. Exact-head execution and readiness update — 2026-11-10
+
+The [Initial Documentation Foundation Execution and Readiness Report](reports/INITIAL_DOCUMENTATION_FOUNDATION_EXECUTION_AND_READINESS_2026-11-10.md) is the current consolidated evidence packet. It records the exact PR #173–#193 revisions examined, the recovered PR #173 acceptance, PR #174 F-02/F-03 provenance limits, PR #191 ancestry, PR #192/#193 lineages, current DF-06/DF-08 bounded results, the user-authorized AI fresh-reader substitution, DF-11 reviewer/account attribution, and the DF-12/DF-13 boundary.
+
+At the report's pre-write snapshot, PR #192 was open/non-draft/unmerged at HEAD `bb53158da4c629451184ff61d936f0a463603d59` with 29 changed paths. The report itself does not pass DF-09: no distinct AI model was invoked. DF-06 and DF-08 remain PARTIAL; DF-11 remains unresolved; DF-12 remains outstanding; Stage A remains NOT STARTED / HELD.
+
+The user-approved reader-comprehension requirement is a blind assessment by a genuinely different AI model, not a human session. The assessment must not be simulated or replaced by the prior Grok reviewer report. PR #193 remains a separate #175-derived lineage and its current handoff has not yet been updated to the revised AI test wording. No PR integration order is inferred.
+
+The PR #174 and PR #192 descriptions still contain historical PR #173 acceptance-provenance wording that conflicts with the recovered decision. Those PR metadata descriptions were not edited in this branch-only documentation pass. The accepted PR #173 artifact itself was not changed.
+
+No PR was merged or closed; no branch was rebased, retargeted or cherry-picked; no Stage A or implementation work was started.
