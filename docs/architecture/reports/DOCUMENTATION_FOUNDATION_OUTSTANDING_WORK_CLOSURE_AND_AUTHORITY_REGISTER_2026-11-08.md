@@ -409,3 +409,66 @@ This addendum corrects the PR #193 disposition sentence in §15. The current PR 
 The prior §15 statement that both current files still contain PR #173 UNVERIFIED/PROPOSED wording is therefore stale and incorrect. The word “unverified” appears in these documents in other contexts (for example, unverified derived state or unresolved technical evidence); those occurrences are not a claim that PR #173 acceptance is unverified.
 
 This correction is a documentation-status clarification only. PR #193 remains open, draft and unmerged on its existing PR #175-derived lineage. No retarget, rebase, cherry-pick, merge or cross-lineage integration is performed or implied. The Project Director's PR #192/#193 integration-order decision remains outstanding.
+
+---
+
+## 17. Current-run technical reconciliation — 2026-11-09
+
+This addendum supersedes earlier live-state statements where the evidence below is newer. Historical audit snapshots remain preserved as snapshots, not rewritten.
+
+### 17.1 Exact live revisions and path relationships
+
+| PR | Base | Current HEAD | State / changed paths |
+|---|---|---|---|
+| #192 | 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c | 0796ff8c3ef7057a19c4565fa2d158a6f0bd97ce | Open, non-draft, unmerged; 28 changed paths |
+| #193 | 874c732973b6ab303d65a503f5a215b0af8e1153 | ee508c09be9d848c7baa9533bb6f88f9cc27f94a | Open, draft, unmerged; 2 changed paths |
+| #174 | 97191111bc2573c14d391c0af9628db7b11f194b | be46b3858102c31022128522c4b3506aad4dff8a | Open, draft, unmerged; 3 changed paths |
+| #191 | f6267456560a08054d69f7960d2951452b14017c | 609d38ede50bbdd98a93dfed112781eacabee9fd | Open, draft, unmerged; 1 changed path |
+
+PR #192's 28 changed paths were fetched at pre-update HEAD 98a01381f11e08dd1f682e662bf714a5ad434945. The recursive tree at that revision contained 257 entries and was not truncated. A bounded inline-Markdown relative-target scan over all 28 changed documents found no missing repository-relative targets. The inventory's §44 and §45 remain immutable parent snapshots at a6d2f22f13aa5f8a1c8f683e2b955b2b1b6ec885 and 9d965ef496323f692c3035eca71dd3317c37d813 respectively; neither is the live HEAD. Do not cite either as a current-head manifest.
+
+PR #193 changes only the implementation plan and continuity/recovery handoff. Neither path overlaps the 28 PR #192 changed paths. Both current PR #193 files correctly identify PR #173's recovered accepted planning-baseline status and cite PR #173 comment #6752144835. Their links back to PR #192 intentionally pin commit db5968bfbddf77590cd9303539abda00dd961ab7, an older immutable documentation snapshot. The links are not the current PR #192 revision. The safe dependency recommendation remains: complete PR #192 foundation review/decision first, then refresh/reconcile PR #193's two pinned references and review its current content. This is not an integration authorization.
+
+### 17.2 PR #174 follow-on evidence recheck
+
+At current PR #174 HEAD be46b3858102c31022128522c4b3506aad4dff8a, the specification blob is b366564b3f68e674ae5f5f9fc5a6c90d8b4f454d. The current specification's relevant locations are:
+
+- F-02 recovered locations: BM-02 lines 196–218 and BM-08 lines 357–389.
+- F-03 recovered locations: §6.3 lines 641–653; scenarios 27–34 at lines 803–810; developmental evidence standard §10 at lines 814–835.
+
+The current PR #174 discussion has four issue comments, all Builder-authored except the Project Director's accepted-baseline decision comment #6604790481. The formal review list returns zero submissions and the inline review-thread endpoint returns zero threads. Bounded commit-message searches for F-02, F-03 and “follow-on review” returned no matches. The checked-in recovery record (blob f5d1dd62801642b47e35df986c3b5ab8a7e01a26) explicitly says the original report, full rationale and inline annotations were not recovered; it preserves only secondary recovered identities, severity, themes and approximate locations. No speculative specification correction was made.
+
+**PR #174 disposition remains blocked for Project Director decision:** accept the missing original report as a bounded provenance limitation and authorize corrections/re-review from the recovered themes, or require further recovery first. F-02 and F-03 remain open either way.
+
+### 17.3 PR #191 unique contribution and replay risk
+
+PR #191 has one unique commit and one added file only: docs/architecture/reports/PHASE_2_HUMAN_AND_MCU_REFERENCE_COMPARISON_2026-11-06.md (220 lines; blob eac3cb443b5c6a2b9c0d9ad9f5fd552b79d8a0e2). The file is absent from PR #179 HEAD 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c. Its stated requirements baseline is accepted PR #174 HEAD 0811a59e46bf934e32e794f90e4e7d18d4e2bd97 / spec blob 3b6a53c8a295fa0d9fc29bbb6c7688b61d1dcdb1. Its source-map baseline is described as the current PR #179 branch without pinning an exact map commit. The Phase 2 map at PR #179 HEAD has blob e7c85d74a1051a40a10b0318da739c6b1b0c2ad7.
+
+PR #191 has zero issue comments, zero formal review submissions and zero inline review threads. A replay onto PR #179 would add one new report path; the compare shows no existing-file patch conflict because the path is absent at the target. The remaining risk is semantic freshness: the report should be checked against the exact PR #179 map and source references at the time of any authorized replay. No replay or history operation was performed. The Project Director must choose historical-base review or authorize a new dependent revision.
+
+### 17.4 DF-06 / DF-08 bounded checks
+
+| Check | Result | Scope / limitation |
+|---|---|---|
+| PR #192 changed-file retrieval | PASS | All 28 changed paths fetched at exact pre-update HEAD 98a01381f11e08dd1f682e662bf714a5ad434945. |
+| Recursive tree retrieval | PASS | 257 entries; not truncated. |
+| Inline-Markdown relative path targets | PASS | No missing repository-relative target in the bounded scan across those 28 files. This does not cover all reference-style links, raw HTML links or semantic suitability. |
+| Inline-Markdown local fragments | PASS / NOT APPLICABLE | The parser found no local fragment-bearing inline Markdown links in the 28-file scan; this is not a general HTML/anchor audit. |
+| External reachability at current HEAD | NOT RUN | Prior preservation report's bounded 189-URL check was at an earlier snapshot; one ChatGPT shared-conversation pointer remains access-limited/unverified. |
+| Exhaustive semantic/historical link validation | NOT RUN | Not established by the current bounded path scan. |
+| DF-08 archive/supersession disposition | BLOCKED | Existing bounded discovery records 245 branches, 184 PRs and 108 documentation paths across 28 PRs; broader historical mapping and archive/supersession decisions remain open. |
+
+DF-06 and DF-08 remain PARTIAL. Do not inflate the bounded scan into exhaustive validation or full preservation completion.
+
+### 17.5 DF-09 / DF-11 / DF-12
+
+- **DF-09 — NOT MET:** no uninvolved human has completed the protocol. The exact 17-question list was not recoverable from repository or accessible Library files during this run. The reviewer handoff contains a 16-versus-17 count inconsistency. The test package is therefore not fully portable/volunteer-ready until the authoritative question list is restored and the count reconciled. No volunteer was contacted; no LLM was substituted.
+- **DF-11 — NOT CLEARED:** the Grok-declared formal COMMENTED review exists, submitted 2026-11-09 10:59:55 UTC against PR #192 HEAD 9e0c342dcfbbe1d7a51a6b3a2b7574c9cdf480dc. It declares a model identity distinct from Builder GPT-6, but GitHub attributes it to the same methaneex-oss account used for Builder activity. Current PR #192 HEAD is 0796ff8c3ef7057a19c4565fa2d158a6f0bd97ce; no review against this exact head exists. The Project Director must decide reviewer qualification and whether exact-head re-review is required. No separate authenticated reviewer identity was available in this run.
+- **DF-12 — NOT MET:** exact-revision Project Director acceptance remains outstanding.
+- **DF-13 — HOLD PASS:** Stage A remains NOT STARTED and HELD; implementation remains unauthorized.
+
+### 17.6 Decision boundary
+
+The Project Director decisions remain: (1) PR #174 missing-original-report provenance route; (2) PR #191 historical-base review versus authorized dependent replay; (3) PR #192/#193 sequencing; (4) DF-11 Grok qualification and exact-head review requirement; and (5) DF-12 exact-revision acceptance. DF-09 remains an actual human requirement, not a decision the Builder can satisfy. No merge, rebase, retarget, cherry-pick, branch deletion, Stage A start or implementation occurred.
+
+**Current disposition: DOCUMENTATION FOUNDATION NOT CLEARED. Stage A HELD. Implementation unauthorized.**
