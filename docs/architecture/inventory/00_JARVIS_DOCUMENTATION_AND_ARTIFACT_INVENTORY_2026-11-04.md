@@ -1532,3 +1532,22 @@ This addendum supersedes the pending post-write verification statements in §41.
 This table is the exact parent manifest for the synchronized closeout commit. The inventory's own row is necessarily its pre-update blob at the parent. The closeout commit updates this inventory together with the index, outstanding-work register, audit, Builder reconciliation and Builder self-review. After the commit, the Builder must verify the resulting PR head, complete changed-path list and all 26 resulting blob identities. A mismatch or branch movement invalidates this snapshot and requires reconciliation.
 
 DF-09 remains a genuine uninvolved-human evidence requirement; DF-11 requires a separate reviewer identity and formal review; DF-12 is the Project Director's exact-revision decision. This Builder closeout does not claim or manufacture those external acts. Stage A remains held and implementation remains unauthorized.
+
+
+---
+
+## 43. Recovered Project Director decision and current documentation-gate status — 2026-11-09
+
+This dated addendum supersedes earlier inventory statements that PR #173's acceptance remained unverified. Those earlier statements accurately described the absence of a Project Director decision in PR #173's own discussion, but did not account for the prior conversation decision recovered on 2026-11-09.
+
+The Project Director explicitly accepted PR #173 as the Brain Foundation Architecture planning baseline at exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b` on 2026-11-03 at 08:18:21 UTC and authorized the Detailed Brain Mechanism Specification stage only. The decision was recovered from prior conversation history and transcribed in PR #173 comment #6752144835. It did not authorize implementation, runtime tests, technology or algorithm selection, merge, deployment or a later stage.
+
+PR #174 remains accepted as a planning baseline only at exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, by decision comment #6604790481. The current branch HEAD `922912283d173e24df891ba23d0e2dfc17e0f4b4` is three commits later and contains a status/authority clarification; follow-on F-02/F-03 remain open because the original full reviewer report and inline annotations are unavailable. The Project Director must decide whether to accept that missing artifact as a bounded provenance limitation and authorize corrections based on the recovered themes.
+
+A formal Grok-declared COMMENTED review was submitted on PR #192 against commit `9e0c342dcfbbe1d7a51a6b3a2b7574c9cdf480dc`; current PR #192 HEAD is `c166e7d955293f1108f71b123d0a92f5941bdabd`. The review body declares a distinct model identity from GPT-6, but GitHub attributes it to the same repository-owner account used for Builder activity. Its qualification as a genuinely separate reviewer and the exact-current-HEAD requirement remain for Project Director disposition.
+
+PR #191 remains a one-commit contribution on an earlier PR #179 base: its base is an ancestor of PR #179 HEAD by 22 commits, while its head diverges from PR #179 HEAD by one unique report commit and 22 commits behind. PR #192 and PR #193 remain separate #179-derived and #175-derived lineages. No rebase, retarget, cherry-pick or merge is authorized.
+
+DF-06 and DF-08 have bounded validation/discovery evidence recorded, but exhaustive semantic/historical link validation and broader archive/supersession disposition are not claimed complete. DF-09 still requires an actual uninvolved human's 17-question session. DF-12 still requires the Project Director's exact-revision acceptance decision. Stage A remains HELD; implementation remains unauthorized.
+
+See [Project Director Decision Provenance and Documentation-Gate Reconciliation](../reports/PROJECT_DIRECTOR_DECISION_PROVENANCE_AND_GATE_RECONCILIATION_2026-11-09.md) for the exact refs, evidence and decisions still required.
