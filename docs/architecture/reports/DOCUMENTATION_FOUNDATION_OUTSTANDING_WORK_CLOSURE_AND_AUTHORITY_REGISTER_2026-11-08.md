@@ -418,12 +418,14 @@ This addendum supersedes earlier live-state statements where the evidence below 
 
 ### 17.1 Exact live revisions and path relationships
 
-| PR | Base | Current HEAD | State / changed paths |
+| PR | Base | HEAD observed at this addendum's pre-update snapshot | State / changed paths |
 |---|---|---|---|
 | #192 | 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c | 0796ff8c3ef7057a19c4565fa2d158a6f0bd97ce | Open, non-draft, unmerged; 28 changed paths |
 | #193 | 874c732973b6ab303d65a503f5a215b0af8e1153 | ee508c09be9d848c7baa9533bb6f88f9cc27f94a | Open, draft, unmerged; 2 changed paths |
 | #174 | 97191111bc2573c14d391c0af9628db7b11f194b | be46b3858102c31022128522c4b3506aad4dff8a | Open, draft, unmerged; 3 changed paths |
 | #191 | f6267456560a08054d69f7960d2951452b14017c | 609d38ede50bbdd98a93dfed112781eacabee9fd | Open, draft, unmerged; 1 changed path |
+
+The PR #192 SHA in the table above is the head observed before this register addendum was committed; it is not the live head after the write. The control-document and inventory commits that followed are recorded in the reconciliation report. Fetch live PR metadata before treating any snapshot row as current.
 
 PR #192's 28 changed paths were fetched at pre-update HEAD 98a01381f11e08dd1f682e662bf714a5ad434945. The recursive tree at that revision contained 257 entries and was not truncated. A bounded inline-Markdown relative-target scan over all 28 changed documents found no missing repository-relative targets. The inventory's §44 and §45 remain immutable parent snapshots at a6d2f22f13aa5f8a1c8f683e2b955b2b1b6ec885 and 9d965ef496323f692c3035eca71dd3317c37d813 respectively; neither is the live HEAD. Do not cite either as a current-head manifest.
 
