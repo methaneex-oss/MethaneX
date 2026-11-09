@@ -195,3 +195,58 @@ The repository investigation and bounded documentation corrections are complete 
 No PR was merged, rebased, retargeted, cherry-picked or closed. No runtime source, tests, build configuration, dependencies, workflows or runtime state were changed. No implementation baseline, donor, algorithm, provider, technology or sequence was selected.
 
 **Disposition remains NOT CLEARED. Stage A remains HELD. Implementation remains unauthorized.**
+
+
+---
+
+## 10. Corrected live-state addendum — 2026-11-09
+
+This addendum supersedes stale current-head values in §§2–5 and §9. The following are exact live GitHub results re-fetched after those earlier snapshots.
+
+### PR #174
+
+- Current PR HEAD: `be46b3858102c31022128522c4b3506aad4dff8a`.
+- Current specification blob: `b366564b3f68e674ae5f5f9fc5a6c90d8b4f454d`.
+- State: open, draft, unmerged.
+- Accepted planning-baseline HEAD remains `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, by Project Director comment #6604790481.
+- Current document header correctly states that the accepted baseline is the earlier exact revision and that follow-on F-02/F-03 remain open.
+- Current formal-review and inline-thread endpoints return zero records. The recovery record is partial: original review title, overall verdict, finding identities, severity and themes were recovered, but the original full report, complete rationale and exact inline annotations remain unavailable.
+
+The two findings are independently documented:
+- **PR #174 follow-on F-02:** HIGH / CONFIRMED — contextual language and operator-intent grounding, including contextual intent, reference grounding, speech-act/source attribution, uncertainty, clarification, trusted/untrusted content separation and interaction continuity.
+- **PR #174 follow-on F-03:** MEDIUM / CONFIRMED as a specification weakness — accepted reasoning must materially influence authoritative downstream computation; rejection/invalidation must be explicit; end-to-end effects must be traceable.
+
+The recovered requirement themes are sufficient to identify the obligations, but not to reconstruct the reviewer's exact rationale or line-by-line correction request. No correction was guessed or applied. The Project Director must decide whether to accept the missing original artifact as a bounded provenance limitation and authorize corrections/re-review from the recovered themes, or require further recovery first.
+
+### PR #191
+
+- Base: `f6267456560a08054d69f7960d2951452b14017c`.
+- Head: `609d38ede50bbdd98a93dfed112781eacabee9fd`.
+- One changed file: `docs/architecture/reports/PHASE_2_HUMAN_AND_MCU_REFERENCE_COMPARISON_2026-11-06.md`, blob `eac3cb443b5c6a2b9c0d9ad9f5fd552b79d8a0e2`.
+- The file is absent at PR #179 HEAD `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; it is a unique artifact, not an existing duplicate.
+- Comparing PR #191 HEAD to PR #179 HEAD returns DIVERGED: one unique PR #191 commit and 22 commits on the #179 line. PR #191's base remains an ancestor of #179.
+
+The artifact can be read and reviewed as a historical-base document without rewriting history. If the intended requirement is that it live on the current #179 line, a dependent revision must be explicitly authorized. The choice remains with the Project Director.
+
+### PR #193
+
+- State: open, draft, unmerged.
+- Base: `874c732973b6ab303d65a503f5a215b0af8e1153`.
+- Current HEAD: `ee508c09be9d848c7baa9533bb6f88f9cc27f94a`.
+- Compare against its own base: 31 commits ahead, 0 behind.
+- Current implementation-plan blob: `7df34fed59c1c8577ddcd23c02f772f366d46d39`.
+- Current continuity-handoff blob: `0392ff59c6ae48d3c78e571c905550dfc77a5965`.
+
+Both documents still contain historical PR #173 UNVERIFIED/PROPOSED wording in parts of their history/current text. The recovered PR #173 acceptance supersedes that status. Updating those files should occur as part of an authorized cross-lineage reconciliation, not by silently editing PR #193 or changing its base.
+
+### PR #192 and gate
+
+PR #192 remains open, non-draft and unmerged on base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`. Its latest exact HEAD and 28-path artifact manifest are recorded in the inventory's subsequent §45 snapshot.
+
+The following decisions remain reserved to the Project Director:
+1. Accept the missing original PR #174 F-02/F-03 report as a bounded provenance limitation and authorize correction/re-review from the recovered themes, or require further recovery first.
+2. Choose historical-base review or authorize a dependent PR #191 revision.
+3. Set PR #192/#193 integration order.
+4. Decide whether Grok's declared distinct model identity suffices for DF-11 despite shared GitHub account attribution, and whether exact-current-HEAD re-review is required.
+
+DF-09 still requires an uninvolved human to complete the 17-question test. DF-12 still requires the final exact-revision acceptance decision. Stage A remains HELD; implementation remains unauthorized.
