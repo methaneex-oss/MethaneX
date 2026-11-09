@@ -401,6 +401,6 @@ At the report's pre-write snapshot, PR #192 was open/non-draft/unmerged at HEAD 
 
 The user-approved reader-comprehension requirement is a blind assessment by a genuinely different AI model, not a human session. The assessment must not be simulated or replaced by the prior Grok reviewer report. PR #193 remains a separate #175-derived lineage and its current handoff has not yet been updated to the revised AI test wording. No PR integration order is inferred.
 
-The PR #174 and PR #192 descriptions still contain historical PR #173 acceptance-provenance wording that conflicts with the recovered decision. Those PR metadata descriptions were not edited in this branch-only documentation pass. The accepted PR #173 artifact itself was not changed.
+PR #174's current description still contains stale wording that calls PR #173 acceptance unverified; it was not edited in this branch-only documentation pass. PR #192's 2026-11-07 description addendum preserves the then-current discrepancy as a dated historical snapshot, not a current status claim. The accepted PR #173 artifact itself was not changed.
 
 No PR was merged or closed; no branch was rebased, retargeted or cherry-picked; no Stage A or implementation work was started.
