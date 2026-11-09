@@ -279,3 +279,28 @@ At the start of this synchronization PR #192 was open/draft/unmerged at HEAD `2c
 ### 11.4 Builder disposition
 
 **Builder-controlled technical work: COMPLETE WITHIN THE BOUNDED SCOPE ABOVE, pending final inventory write and post-write verification.** The package is not gate-cleared and is not yet ready for acceptance because DF-09, DF-11 and DF-12 are external requirements. Stage A remains HELD; implementation remains unauthorized. No review request is active or issued.
+
+## 12. Final Builder closeout — current branch-head reconciliation — 2026-11-09
+
+This addendum supersedes §11.1's starting-snapshot statement and the pending-inventory wording only where stated here. It does not change the external human or Project Director gates.
+
+### 12.1 Current revision reconciliation
+
+At closeout start PR #192 was open/draft/unmerged at HEAD `5031fb9348dd10664023df5338125acf4b8ef676`, base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, with 26 changed paths. All 26 changed paths were fetched at that exact HEAD; their current blob identities are being captured in the final inventory parent-snapshot manifest. The prior inventory §40 is historical: its parent was `98101fa6cc2a2908cfefd2428b77174a25a49fa8` and must not be represented as the current manifest.
+
+The Phase 2 map's current blob at closeout start is `9dd776920d0a479a9d7275acc821e12c266623d9`. Preservation report §12 compares it with the previously recorded map blob and reconciles the two line-anchor-only corrections. The 89 source links, 45 exact commit/path pairs, source blob annotations and 76 valid anchor ranges are unchanged in substance; the two corrected ranges are independently within the exact pinned files' line counts.
+
+### 12.2 Builder-controlled work and remaining verification
+
+The bounded DF-06 and DF-08 evidence remains as recorded in Preservation and Link Validation Report §§11–12 and Historical Documentation Preservation Register §5.6. The 26-file exact-HEAD fetch confirms the complete current changed-path set at the closeout-start revision. The remaining Builder operation is not another broad re-investigation: it is the final synchronized inventory/self-review/control-document snapshot, followed by a post-write fetch of PR metadata, all changed paths and all 26 resulting blobs. Any branch movement during that sequence invalidates the snapshot and requires a refresh.
+
+### 12.3 External requirements and authority
+
+- **DF-09:** NOT MET until an uninvolved human completes the 17-question protocol without coaching and the raw answers/session conditions are preserved.
+- **DF-11:** NOT MET until a genuinely separate reviewer identity submits a formal GitHub review against the final exact PR revision. No reviewer is assigned; the earlier request remains withdrawn/suspended.
+- **DF-12:** NOT MET until the Project Director records the exact-revision decision after the qualifying review.
+- PR #173 acceptance provenance remains UNVERIFIED/PROPOSED. PR #174 F-02/F-03 remain OPEN because the original full review/inline annotations were not recovered. PR #191 disposition and PR #192/#193 order remain Project Director matters.
+
+### 12.4 Builder disposition
+
+**Builder-controlled technical validation and bounded historical discovery are complete within the explicitly recorded scope. Final exact-HEAD inventory/self-review synchronization and post-write verification remain in progress until their resulting commit and live PR state are verified.** This is not gate clearance. Stage A remains HELD; implementation remains unauthorized. No independent review is requested or implied.
