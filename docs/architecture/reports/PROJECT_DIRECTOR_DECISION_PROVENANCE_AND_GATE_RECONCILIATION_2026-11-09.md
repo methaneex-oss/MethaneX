@@ -250,3 +250,19 @@ The following decisions remain reserved to the Project Director:
 4. Decide whether Grok's declared distinct model identity suffices for DF-11 despite shared GitHub account attribution, and whether exact-current-HEAD re-review is required.
 
 DF-09 still requires an uninvolved human to complete the 17-question test. DF-12 still requires the final exact-revision acceptance decision. Stage A remains HELD; implementation remains unauthorized.
+
+
+---
+
+## 11. PR #193 current-file authority wording recheck — 2026-11-09
+
+The PR #193 current-file status statement in §§4 and 10 is superseded by this exact-current-file recheck.
+
+At PR #193 HEAD `ee508c09be9d848c7baa9533bb6f88f9cc27f94a`, the two changed files were fetched directly:
+
+- `docs/architecture/plans/00_BRAIN_IMPLEMENTATION_PLAN.md`, blob `7df34fed59c1c8577ddcd23c02f772f366d46d39`: its current authority header and planning-baseline references identify PR #173 exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b` as accepted and cite decision comment #6752144835.
+- `docs/architecture/plans/JARVIS_PROJECT_CONTINUITY_AND_RECOVERY_HANDOFF.md`, blob `0392ff59c6ae48d3c78e571c905550dfc77a5965`: its current handoff and recovery sections identify the recovered PR #173 acceptance, its limited planning-baseline scope and the same decision comment.
+
+Accordingly, the prior statement that both current PR #193 files still contain PR #173 UNVERIFIED/PROPOSED wording was stale. Other uses of “unverified” in the files refer to unrelated technical evidence or derived state, not PR #173's acceptance status.
+
+This is a factual documentation correction only. PR #193 remains on its existing PR #175-derived branch; no cross-lineage integration or history operation was performed. The Project Director's PR #192/#193 order decision remains outstanding.
