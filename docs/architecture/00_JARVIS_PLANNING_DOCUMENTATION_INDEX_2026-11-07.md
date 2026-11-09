@@ -338,3 +338,19 @@ This section supersedes conflicting earlier status statements in this index and 
 - **DF-13:** Stage A remains NOT STARTED and HELD; implementation remains unauthorized.
 
 See the linked reconciliation report for exact refs, comparison results, decision boundaries and non-actions.
+
+
+---
+
+## 21. Live PR-state recheck — 2026-11-09
+
+This section supersedes earlier live-state snapshots in §§16–20 where their PR heads have since advanced. Exact current metadata and changed-file/blob evidence were re-fetched from GitHub.
+
+- **PR #174:** open, draft, unmerged. Current HEAD `be46b3858102c31022128522c4b3506aad4dff8a`; current specification blob `b366564b3f68e674ae5f5f9fc5a6c90d8b4f454d`. The accepted planning baseline remains exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, by decision comment #6604790481. The current document header correctly preserves that limited acceptance and keeps follow-on F-02/F-03 open. Formal review and inline-review-thread endpoints return zero records. The separate provenance-recovery report is partial: original title, verdict, finding identities, severity and themes were recovered from prior conversation context, but the original report, complete rationale and exact inline annotations remain unavailable. F-02/F-03 remain open; see §13 and the recovery artifact.
+- **PR #191:** open, draft, unmerged; base `f6267456560a08054d69f7960d2951452b14017c`; head `609d38ede50bbdd98a93dfed112781eacabee9fd`. Its one changed file is `docs/architecture/reports/PHASE_2_HUMAN_AND_MCU_REFERENCE_COMPARISON_2026-11-06.md`, blob `eac3cb443b5c6a2b9c0d9ad9f5fd552b79d8a0e2`. That file is absent at PR #179 HEAD `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; it is not a duplicate already present in PR #179. Graph comparison confirms the PR #191 head diverges from PR #179 head by one unique #191 commit and 22 commits on the #179 line. The #191 base itself is an ancestor of #179. Historical-base review versus a dependent replay remains an authority decision.
+- **PR #193:** open, draft, unmerged; base `874c732973b6ab303d65a503f5a215b0af8e1153`; current HEAD `ee508c09be9d848c7baa9533bb6f88f9cc27f94a`. It is 31 commits ahead and 0 behind its own base. Its two changed files are the deferred implementation plan (blob `7df34fed59c1c8577ddcd23c02f772f366d46d39`) and continuity/recovery handoff (blob `0392ff59c6ae48d3c78e571c905550dfc77a5965`). Both still contain older PR #173 UNVERIFIED/PROPOSED wording in historical sections; that is superseded by the recovered decision, but cross-lineage edits should be made only under an authorized integration order.
+- **PR #192:** remains open, non-draft, unmerged; current HEAD is the exact parent revision for this update. Its changed-path manifest is refreshed separately in the inventory after these synchronized control-document writes.
+
+### Decision boundary
+
+No PR ancestry was rewritten, no branch retargeted, and no cross-lineage files changed. The live facts above do not decide PR #191's disposition, PR #192/#193 integration order, acceptance of the missing original PR #174 review as a provenance limitation, DF-11 reviewer qualification, DF-09 human-test completion, or DF-12 final acceptance. Stage A remains HELD; implementation remains unauthorized.
