@@ -258,3 +258,17 @@ One non-GitHub URL is a ChatGPT shared-conversation pointer in the PR #174 recov
 - No branch was deleted, no artifact moved or archived, and no PR was merged, rebased, retargeted or cherry-picked. Archive/supersession and disputed authority decisions remain with the Project Director.
 
 **Updated Builder evidence disposition:** The bounded link, anchor, external-reference and documentation-lineage discovery work is now complete for the current PR #192 package and the enumerated historical PR set. The one access-limited ChatGPT pointer remains disclosed. This does not satisfy DF-09 fresh-reader execution, DF-11 qualifying independent review, or DF-12 Project Director acceptance. Stage A remains held and implementation remains unauthorized.
+
+
+## 12. Phase 2 map revision delta — 2026-11-09
+
+A final exact-HEAD fetch found that the Phase 2 integration map's blob had advanced since §11. The prior blob recorded in the earlier inventory was `b1c203121879aa50ecad30e71e2e1800456bcd9c`; the current blob at PR #192 closeout-start HEAD `5031fb9348dd10664023df5338125acf4b8ef676` is `9dd776920d0a479a9d7275acc821e12c266623d9`.
+
+The two map contents were compared directly after normalizing the two line-anchor corrections below; the normalized contents are identical. The 89 immutable source-link occurrences and 45 unique commit/path pairs are unchanged, as are their source blob identity annotations. The only differences are:
+
+- `core/cpp/src/action_execution.cpp` at commit `1273ddbcd0087d189e01388ded2d362fb1e058d2`: anchor corrected from `#L18-L78` to `#L18-L77`. The exact pinned file was previously fetched as 100 lines; the revised range is within the file.
+- `core/cpp/tests/cognitive_runtime_goal_feedback_suite.cpp` at commit `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`: anchor corrected from `#L1-L90` to `#L1-L84`. The exact pinned file was previously fetched as 84 lines; the revised range matches its full length.
+
+Because the normalized map contents are identical, the previously recorded verification of all 45 pinned source blobs and the other 74 anchor ranges carries forward unchanged; the two revised ranges above are valid against their exact pinned file lengths. The current map therefore retains 89 links, 45 unique commit/path pairs, 76 anchored ranges and 13 links without anchors. This is a bounded source-map validation, not a claim that every prose statement in the map has been independently re-audited.
+
+**Disposition:** the Phase 2 map revision delta is reconciled. The historical source-link evidence in §11 applies to the current map blob after these two explicit anchor corrections. The separate access-limited ChatGPT shared-conversation pointer remains unverified as previously disclosed.
