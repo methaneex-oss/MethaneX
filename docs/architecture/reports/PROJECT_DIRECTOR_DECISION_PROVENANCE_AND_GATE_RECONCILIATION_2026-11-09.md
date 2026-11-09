@@ -76,7 +76,7 @@ Live refs:
 | #192 | PR #179 head `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | `c166e7d955293f1108f71b123d0a92f5941bdabd` | Open, non-draft, unmerged |
 | #193 | PR #175 head `874c732973b6ab303d65a503f5a215b0af8e1153` | `65220543416da9b368f24e226aefe24bcdbc7870` | Open, draft, unmerged |
 
-PR #192 contains the documentation portal, planning index, inventory, foundation audit and related documentation closeout. PR #193 changes two paths: the implementation plan and project continuity/recovery handoff. Its branch is derived from PR #175, not PR #179, and it explicitly links readers to the PR #192 documentation index.
+PR #192 contains the documentation portal, planning index, inventory, foundation audit and related documentation closeout. PR #193 changes two paths: the implementation plan and project continuity/recovery handoff. Its branch is derived from PR #175, not PR #179, and it explicitly links readers to the PR #192 documentation index. Both PR #193 files still carry the older PR #173 UNVERIFIED/PROPOSED wording. That wording is now superseded by the recovered decision in PR #173 comment #6752144835; correcting the two files should be part of the authorized cross-lineage reconciliation so their pinned links and the PR #192 index do not drift independently.
 
 **Decision required:** authorize an integration order. A reasonable candidate is to integrate/reconcile the PR #192 documentation foundation first, then replay/reconcile the two PR #193 handoff/plan documents against that resulting state. This is only a recommendation; no integration order is inferred or executed.
 
@@ -92,7 +92,7 @@ A formal GitHub review submission exists on PR #192:
 - **Current PR #192 HEAD:** `c166e7d955293f1108f71b123d0a92f5941bdabd`.
 - **Determination:** NOT CLEAR TO PROCEED.
 
-The formal review was submitted through the same GitHub account (`methaneex-oss)) used for the repository's Builder activity. The review body declares a distinct Grok model identity, but GitHub does not attribute it to a separately authenticated reviewer account. The review also targets the parent revision `9e0c342...`, not the current HEAD `c166e7d...`, which adds the report artifact.
+The formal review was submitted through the same GitHub account (`methaneex-oss`) used for the repository's Builder activity. The review body declares a distinct Grok model identity, but GitHub does not attribute it to a separately authenticated reviewer account. The review also targets the parent revision `9e0c342...`, not the current HEAD `c166e7d...`, which adds the report artifact.
 
 **Decision required:** determine whether the declared distinct model identity is sufficient for the project's “genuinely separate reviewer” requirement despite the shared GitHub account, and whether a short exact-current-HEAD re-review is required. Do not claim DF-11 fully satisfied until this is decided and the exact-revision requirement is met.
 
