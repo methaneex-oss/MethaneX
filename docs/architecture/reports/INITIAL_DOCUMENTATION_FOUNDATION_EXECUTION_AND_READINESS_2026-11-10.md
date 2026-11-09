@@ -249,3 +249,20 @@ No PR was merged or closed. No branch was rebased, retargeted, cherry-picked, fo
 7. Keep Stage A held until the documentation-foundation gate is explicitly accepted and a separate Stage A authorization is recorded.
 
 **Final disposition: NOT CLEARED.** The repository investigation and bounded validation advanced; the fresh-reader AI test, DF-11 disposition, DF-12 decision, F-02/F-03 provenance route, PR #191 disposition and PR #192/#193 order remain open. Stage A is held and implementation is unauthorized.
+
+
+---
+
+## 15. Final post-write validation refresh — 2026-11-10
+
+At PR #192 HEAD `006f46298ad2203860abe42f234a5dfa68b14158` (base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, open/non-draft/unmerged), the recursive tree contained 258 entries and was not truncated. All 29 changed paths were fetched. A bounded parser with fenced code blocks removed found 246 inline Markdown links, 92 repository-relative targets, zero missing repository-relative targets, zero fragment-bearing local inline links, zero reference-style link definitions, zero raw HTML href attributes and zero raw HTML id/name attributes. It counted 196 raw HTTP(S) URL occurrences; current reachability and semantic relevance were not tested.
+
+This parser does not establish renderer-specific anchors, absolute-URL fragments, line-range anchors, external URL reachability, semantic relevance or exhaustive historical cross-branch validity. The earlier 89 immutable source-link / 45 commit-path pair / 76 line-anchor checks and 189 external-URL checks remain historical checks at their previously recorded 26-file snapshot.
+
+**Updated DF-06 disposition: PARTIAL.** All repository-relative targets in this bounded 29-path scan resolve; external, semantic, rendered-anchor and historical exclusions remain open.
+
+### 15.1 Reviewer-head distance
+
+The Grok-declared formal review examined `9e0c342dcfbbe1d7a51a6b3a2b7574c9cdf480dc`. GitHub comparison to PR #192 HEAD `006f46298ad2203860abe42f234a5dfa68b14158` reports 35 commits ahead, 0 behind, with six documentation paths changed since that review. It is not an exact-current-head review. PR #192 remains open, non-draft and unmerged with 29 changed paths.
+
+No Markdown link destination was introduced by this addendum. The subsequent inventory-only manifest update records blob identities and does not add a Markdown link destination.
