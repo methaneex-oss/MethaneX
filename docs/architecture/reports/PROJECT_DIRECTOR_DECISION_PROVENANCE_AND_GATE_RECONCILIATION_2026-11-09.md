@@ -359,3 +359,33 @@ This is an explicit change to the reader-comprehension evidence criterion; it mu
 - DF-13 remains **NOT STARTED / HELD**. Runtime implementation remains unauthorized.
 
 No PR was merged or closed; no branch was rebased, retargeted or cherry-picked; no cross-lineage integration was performed; no runtime source, tests, dependencies, build/workflow files or runtime state were changed. The PR #192/#193 integration order, PR #191 disposition, PR #174 missing-original-report route, reviewer qualification and final DF-12 acceptance remain Project Director decisions.
+
+
+---
+
+## 10. Project Director decision — AI fresh-reader substitution and live-state correction — 2026-11-09
+
+The Project Director explicitly instructed that the uninvolved-human fresh-reader requirement be skipped. The accepted substitute is a fresh-reader assessment by a genuinely different AI model, supplied only the repository's actual entry point and documentation package, with no prior project conversation, memory, Builder handoff or reviewer summary. It must independently navigate the documents, explain the project's purpose/current phase/architecture boundaries/authority gates/open work/next safe actions, cite exact paths and sections, and distinguish explicit statements from inference and unavailable information. Its prompt, declared model identity, exact repository revision, raw answers, navigation trail, ambiguities and unanswered questions must be preserved. This is AI comprehension evidence, not a human session.
+
+The Project Director's substitution decision is recorded; the assessment itself has not been performed or passed. The tools available in this execution expose repository operations and task orchestration but no callable inference endpoint or separately selectable model identity. The current assistant cannot truthfully impersonate another model or label its own reading as independent. A distinct model must actually be invoked before DF-09 can be marked satisfied under the revised criterion. The prior Grok review is not a substitute: it was a reviewer assessment, not a blind fresh-reader test, and examined an earlier PR #192 revision.
+
+### Live PR state recheck
+
+At the time of this addendum, GitHub reports:
+- PR #174 open, draft, unmerged; base 97191111bc2573c14d391c0af9628db7b11f194b; head be46b3858102c31022128522c4b3506aad4dff8a.
+- PR #191 open, draft, unmerged; base f6267456560a08054d69f7960d2951452b14017c; head 609d38ede50bbdd98a93dfed112781eacabee9fd; one changed file: docs/architecture/reports/PHASE_2_HUMAN_AND_MCU_REFERENCE_COMPARISON_2026-11-06.md.
+- PR #192 open, non-draft, unmerged; base 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c; head 4cdfbda5f428ab8c9f78db8e0bc7a7f42e0bfcd0.
+- PR #193 open, draft, unmerged; base 874c732973b6ab303d65a503f5a215b0af8e1153; head ee508c09be9d848c7baa9533bb6f88f9cc27f94a; its two changed paths are the implementation plan and continuity/recovery handoff.
+
+PR #174 review-submission and inline-thread queries returned empty arrays in this check. Its issue-comment timeline contains Builder handoff/resubmission comments and the Project Director acceptance comment #6604790481. The current specification at PR #174 head be46b3858102c31022128522c4b3506aad4dff8a correctly records acceptance of the exact planning baseline 0811a59e46bf934e32e794f90e4e7d18d4e2bd97 and the recovered PR #173 parent acceptance. The earlier accepted revision and current PR head must not be conflated.
+
+The previously cited recovery-report path docs/architecture/reports/PR_174_FOLLOW_ON_REVIEW_PROVENANCE_RECOVERY_2026-11-06.md returned 404 at both the current PR #174 head and default branch during this execution. The original full F-02/F-03 reviewer report and inline annotations therefore remain unrecovered from those locations; the existing reconciliation report's recovered themes remain secondary evidence only.
+
+### Status and limits
+
+- User-approved AI substitution: DECIDED.
+- Fresh distinct-model execution: NOT PERFORMED — no separate model invocation is exposed in this execution environment.
+- DF-09 under revised criterion: OPEN pending actual blind AI assessment.
+- DF-11 remains a separate reviewer-qualification/exact-head issue; the fresh-reader substitution does not waive it.
+- PR #174 F-02/F-03, PR #191 disposition, PR #192/#193 integration order, DF-11 qualification, and DF-12 final exact-revision acceptance remain unresolved authority/evidence items.
+- No merge, close, rebase, retarget, cherry-pick, implementation, or Stage A release was performed.
