@@ -393,3 +393,19 @@ This addendum supersedes stale live-head values in earlier register sections.
 The PR #191 comparison report is confirmed absent from PR #179 HEAD, so it is not a duplicate contribution. PR #191's base is an ancestor of PR #179 HEAD, but PR #191's own head diverges: one unique report commit versus 22 intervening #179-line commits. PR #193's comparison is made against its own base, not against PR #192; the latter is a different lineage and a comparison between those unrelated tips is not a meaningful merge-readiness test.
 
 No cross-lineage changes or history operations were performed. PR #174 F-02/F-03 provenance disposition, PR #191 disposition, PR #192/#193 integration order, DF-11 qualification, DF-09 human test, and DF-12 exact-revision acceptance remain outside Builder authority. Stage A remains held.
+
+
+---
+
+## 16. PR #193 current-file status correction — 2026-11-09
+
+This addendum corrects the PR #193 disposition sentence in §15. The current PR #193 HEAD is `ee508c09be9d848c7baa9533bb6f88f9cc27f94a`. The exact current changed files were fetched and checked:
+
+| Path | Current blob | Verified PR #173 authority wording |
+|---|---|---|
+| `docs/architecture/plans/00_BRAIN_IMPLEMENTATION_PLAN.md` | `7df34fed59c1c8577ddcd23c02f772f366d46d39` | Identifies PR #173 as the accepted planning baseline at exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b`, and cites decision comment #6752144835. |
+| `docs/architecture/plans/JARVIS_PROJECT_CONTINUITY_AND_RECOVERY_HANDOFF.md` | `0392ff59c6ae48d3c78e571c905550dfc77a5965` | Identifies the recovered PR #173 acceptance and its limited planning-baseline scope, and cites decision comment #6752144835. |
+
+The prior §15 statement that both current files still contain PR #173 UNVERIFIED/PROPOSED wording is therefore stale and incorrect. The word “unverified” appears in these documents in other contexts (for example, unverified derived state or unresolved technical evidence); those occurrences are not a claim that PR #173 acceptance is unverified.
+
+This correction is a documentation-status clarification only. PR #193 remains open, draft and unmerged on its existing PR #175-derived lineage. No retarget, rebase, cherry-pick, merge or cross-lineage integration is performed or implied. The Project Director's PR #192/#193 integration-order decision remains outstanding.
