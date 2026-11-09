@@ -8,7 +8,7 @@
 **Planning run:** Run 01 — 2026-11-03  
 **Planning authority:** Authorization to prepare this planning proposal recorded as received 2026-11-03; this does not authorize implementation or make the proposal operative.  
 **Governing specification:** PR #174, accepted HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`  
-**Parent architecture:** PR #173, exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b`; primary Project Director acceptance provenance remains unresolved  
+**Parent architecture:** PR #173, accepted planning-baseline HEAD `97191111bc2573c14d391c0af9628db7b11f194b`; Project Director decision 2026-11-03, transcribed in PR #173 comment #6752144835  
 **Engineering evidence baseline used by the existing audit:** `main` at `1273ddbcd0087d189e01388ded2d362fb1e058d2`  
 **Scope:** Documentation and planning only  
 **Governing principle:** **ENGINEER THE MECHANISMS; LET BEHAVIOR BE ACQUIRED THROUGH EXPERIENCE.**
@@ -37,7 +37,7 @@ A later Project Director decision must explicitly authorize implementation. Runt
 
 1. Accepted whole-system boundary and system ownership baseline in PR #171.
 2. Accepted foundational capability investigation in PR #172.
-3. Brain Foundation Architecture proposal in PR #173 (exact-revision acceptance provenance unresolved).
+3. Accepted Brain Foundation Architecture planning baseline in PR #173 at exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b` (Project Director decision recorded in PR #173 comment #6752144835).
 4. Accepted 12-mechanism specification in PR #174, including 34 acceptance scenarios and BM-12 reasoning ownership.
 5. Existing source audit at main commit `1273ddbcd0087d189e01388ded2d362fb1e058d2`.
 
