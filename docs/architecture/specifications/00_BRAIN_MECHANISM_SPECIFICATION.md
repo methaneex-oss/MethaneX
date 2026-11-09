@@ -2,7 +2,7 @@
 
 **Document status:** Accepted as the Brain Mechanism Specification planning baseline at PR #174 HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` by Project Director decision comment [#6604790481](https://github.com/methaneex-oss/MethaneX/pull/174#issuecomment-6604790481). This acceptance is planning-baseline acceptance only, not implementation authorization. The separately recorded follow-on F-02/F-03 obligations remain open and must be resolved before relying on the affected areas for implementation.  
 **Stage:** Detailed Brain Mechanism Specification  
-**Authority:** Project Director authorization for this specification stage was recorded as received 2026-11-03. The claimed prerequisite acceptance of PR #173 is not established by the primary PR #173 discussion evidence currently available; see the PR #174 authority clarification.  
+**Authority:** Project Director authorization for this specification stage was recorded as received 2026-11-03. The Project Director's exact-revision acceptance of PR #173 as the Brain Foundation Architecture planning baseline was recovered from the 2026-11-03 decision and transcribed in PR #173 comment #6752144835.  
 **Parent architecture reference:** PR #173, commit \`97191111bc2573c14d391c0af9628db7b11f194b\`   (proposal; exact-revision Project Director acceptance provenance unresolved).
 **Foundational capability baseline:** PR #172, commit \`d7d676b79dbf3269f7fd3ebdb4363a6df19f255d\`  
 **Whole-system boundary baseline:** PR #171, reviewed package commit \`b05434758ad4fe72815503f89bd5d2990ccb658b\`  
@@ -13,7 +13,7 @@
 
 ## 1. Purpose and specification authority
 
-This document translates the intended parent Brain Foundation Architecture proposal into mechanism-level responsibilities, conceptual contracts, state lifecycles, interaction rules, failure semantics and observable acceptance obligations. PR #173's exact-revision Project Director acceptance remains unverified; this specification's own planning-baseline acceptance is separately recorded above.
+This document translates the accepted parent Brain Foundation Architecture planning baseline into mechanism-level responsibilities, conceptual contracts, state lifecycles, interaction rules, failure semantics and observable acceptance obligations. PR #173's exact-revision Project Director acceptance was recovered from prior conversation history and transcribed in PR #173 comment #6752144835. This specification's own planning-baseline acceptance is separately recorded above.
 
 It is a specification, not an implementation plan. It must guide later implementation without selecting the implementation prematurely.
 
