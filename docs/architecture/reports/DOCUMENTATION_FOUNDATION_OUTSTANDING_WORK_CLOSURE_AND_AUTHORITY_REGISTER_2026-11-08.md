@@ -331,3 +331,47 @@ This synchronized commit refreshes the inventory, index, audit, Builder reconcil
 | DF-13 | Stage A remains held | Project Director authorization after documentation gate acceptance |
 
 **Builder disposition:** all currently identified Builder-controlled documentation, bounded preservation, link/anchor, authority-label, status and numbering work is complete within the recorded scope, subject only to successful post-write verification of this synchronized commit. This is not gate clearance. DF-09, DF-11 and DF-12 remain real external requirements; they are not Builder defects and must not be fabricated. No reviewer request is issued by this update.
+
+
+---
+
+## 14. Post-review and recovered-decision reconciliation — 2026-11-09
+
+This addendum supersedes conflicting earlier status summaries in this register. The full evidence and decision boundaries are in [Project Director Decision Provenance and Documentation-Gate Reconciliation](PROJECT_DIRECTOR_DECISION_PROVENANCE_AND_GATE_RECONCILIATION_2026-11-09.md).
+
+### 14.1 Recovered authority evidence
+
+The Project Director explicitly accepted PR #173 as the Brain Foundation Architecture planning baseline at exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b` on 2026-11-03 at 08:18:21 UTC and authorized the Detailed Brain Mechanism Specification stage only. This was recovered from prior conversation history and transcribed in PR #173 comment #6752144835. The prior classification of PR #173 as unverified/proposed is superseded. No implementation, runtime tests, technology/algorithm selection, merge or deployment was authorized.
+
+PR #174 remains accepted only as the planning baseline at exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, by comment #6604790481. Its current HEAD is `922912283d173e24df891ba23d0e2dfc17e0f4b4`. Follow-on F-02/F-03 remain open; the original full follow-on review and inline annotations remain unavailable. No speculative correction was made.
+
+### 14.2 Corrected external-review status
+
+A formal COMMENTED review by a reviewer declaring the model identity Grok (xAI), distinct from Builder GPT-6, was submitted on PR #192 at 2026-11-09 10:59:55 UTC. It examined `9e0c342dcfbbe1d7a51a6b3a2b7574c9cdf480dc`, while current PR #192 HEAD is `c166e7d955293f1108f71b123d0a92f5941bdabd`. GitHub attributes the submission to the same `methaneex-oss` account used for Builder activity. The reviewer qualification and exact-current-HEAD requirement therefore remain for Project Director disposition; the formal submission must not be described as absent, nor DF-11 as unconditionally satisfied.
+
+### 14.3 Current gate status
+
+| Gate / issue | Current evidence | Remaining boundary |
+|---|---|---|
+| DF-03 / PR #173 | Exact planning-baseline acceptance recovered and recorded in PR comment #6752144835 | Preserve the historical decision and exact scope; no new acceptance decision required |
+| PR #174 follow-on F-02/F-03 | Recovered requirement themes and severity exist; original full review/inline annotations unavailable | Project Director decision on accepting the bounded provenance limitation and authorizing corrections/re-review |
+| PR #191 | One unique comparison-report commit; 22 intervening PR #179 commits; branch head diverged | Project Director chooses historical-base review or authorizes a dependent revision |
+| PR #192 / #193 | Separate #179-derived and #175-derived lineages | Project Director chooses integration order |
+| DF-06 | Bounded current-package path, anchor and external-reference validation documented | No claim of exhaustive semantic or all-historical-link validation |
+| DF-08 | Bounded 245-branch / 184-PR discovery and 108-path / 28-PR register documented | Broader historical mapping and archive/supersession disposition remain incomplete |
+| DF-09 | 17-question protocol exists | Actual uninvolved human session and raw evidence required |
+| DF-11 | Grok-declared formal COMMENTED review submitted against prior PR #192 HEAD | Project Director decides reviewer qualification; exact-current-HEAD review may be required |
+| DF-12 | No final documentation-foundation acceptance | Project Director exact-revision decision after outstanding requirements |
+| DF-13 | Stage A remains held | No Stage A or implementation until proper gate acceptance and separate authorization |
+
+### 14.4 Decision boundary
+
+The Project Director must decide:
+1. Whether to accept the missing original PR #174 F-02/F-03 report as a bounded provenance limitation and authorize corrections based on the recovered themes, or require further recovery first.
+2. Whether PR #191 is reviewed on its historical base or replayed onto the current PR #179 line through a newly authorized dependent revision.
+3. The integration order for PR #192 and PR #193. Recommended sequence: reconcile/integrate the PR #192 foundation first, then replay/reconcile PR #193's two handoff/plan files.
+4. Whether Grok's declared distinct model identity is sufficient for DF-11 despite the shared GitHub account, and whether exact-current-HEAD re-review is required.
+
+DF-09 remains open until a real uninvolved human completes the protocol. DF-12 remains the final exact-revision decision. No merge, rebase, retarget, cherry-pick, branch deletion, Stage A start or implementation was performed.
+
+**Current disposition: NOT CLEARED. Stage A remains HELD; implementation remains unauthorized.**
