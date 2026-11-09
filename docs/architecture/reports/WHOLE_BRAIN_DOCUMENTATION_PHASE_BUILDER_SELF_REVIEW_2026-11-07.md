@@ -931,3 +931,16 @@ Immediately before this self-review write, PR #192 was open/draft/unmerged at pa
 The Builder-controlled link/anchor validation, bounded historical discovery, status reconciliation, known numbering corrections and closeout-document synchronization are complete within the explicitly documented scope. The inventory post-write verification is the remaining mechanical verification step. The resulting inventory commit SHA becomes the exact final Builder snapshot for post-write validation.
 
 **Builder self-review: BUILDER-CONTROLLED TECHNICAL WORK COMPLETE WITHIN THE BOUNDED SCOPE, PENDING INVENTORY POST-WRITE VERIFICATION. NOT CLEARED FOR ACCEPTANCE.** Stage A remains HELD; implementation remains unauthorized. No independent review is requested or implied.
+
+
+---
+
+## 32. Final exact-head Builder self-review — 2026-11-09
+
+This is a Builder self-review, not an independent review. It is tied to the synchronized parent snapshot `cdd2732bddb002f48263b098567c34f8b8b9ae1c` on PR #192 (base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`). The exact 26-path parent blob manifest is recorded in inventory §42. The parent tree is complete and non-truncated (255 entries). The inventory's previous post-write check is reconciled: 25 other paths matched the parent manifest, while the inventory blob itself was `64ed1102ff8ec376f78ba7d42c17c1989fbe4013` after its prior write.
+
+The review confirms the following bounded Builder work: portal/index/role navigation and templates exist; current authority labels preserve proposed, accepted, historical and deferred status; the Phase 2 map's 89 immutable source links across 45 exact commit/path pairs, 45 source blob identities and 76 line-anchor ranges are recorded as validated; the 26-file package has 84 relative link targets with no missing paths; 189 external URL occurrences were classified and checked against available GitHub metadata, with one historical ChatGPT pointer access-limited; historical discovery covers 245 branch refs, 184 PRs and 108 documentation paths across 28 documentation PRs; known numbering and cross-document status defects were corrected. These are bounded checks, not universal archival or semantic certification.
+
+External requirements remain: DF-09 needs an uninvolved human's uncoached 17-question session; DF-11 needs a genuinely separate reviewer identity and formal GitHub review; DF-12 needs the Project Director's exact-revision decision. PR #173 acceptance provenance remains unverified; PR #174 follow-on F-02/F-03 remain open due missing original review details; PR #191 disposition and PR #192/#193 order remain Director matters. No reviewer is assigned or requested. Stage A remains held and implementation remains unauthorized.
+
+**Self-review disposition:** Builder-controlled work is complete within the documented bounded scope, contingent on successful post-write verification of this synchronized commit. No independent clearance or gate acceptance is claimed.

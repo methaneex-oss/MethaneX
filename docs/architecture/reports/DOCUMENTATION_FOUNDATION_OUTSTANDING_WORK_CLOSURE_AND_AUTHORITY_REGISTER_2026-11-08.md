@@ -304,3 +304,30 @@ The bounded DF-06 and DF-08 evidence remains as recorded in Preservation and Lin
 ### 12.4 Builder disposition
 
 **Builder-controlled technical validation and bounded historical discovery are complete within the explicitly recorded scope. Final exact-HEAD inventory/self-review synchronization and post-write verification remain in progress until their resulting commit and live PR state are verified.** This is not gate clearance. Stage A remains HELD; implementation remains unauthorized. No independent review is requested or implied.
+
+
+---
+
+## 13. Post-inventory exact-head verification and Builder disposition — 2026-11-09
+
+At the start of this synchronized closeout, PR #192 was open, non-draft and unmerged at exact HEAD `cdd2732bddb002f48263b098567c34f8b8b9ae1c`, base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`. The 26 changed paths and their parent blob identities are recorded in the detailed inventory §42. The recursive tree was complete and non-truncated (255 entries). The inventory's prior post-write verification was therefore completed: its previous self-reference was the pre-update blob, while the current inventory blob at this parent was `64ed1102ff8ec376f78ba7d42c17c1989fbe4013`; all other 25 changed-path blob identities matched the inventory's recorded values.
+
+This synchronized commit refreshes the inventory, index, audit, Builder reconciliation and Builder self-review against the same parent. Its resulting commit must be checked against all 26 paths and blobs before the Builder declares its own work complete.
+
+| Gate | Builder status at this closeout | Remaining non-Builder act |
+|---|---|---|
+| DF-01 | Portal, index, role routes and templates exist; navigation evidence documented | Fresh-reader evidence is still required for usability confirmation |
+| DF-02 | Parent snapshot and exact path/blob manifest recorded in inventory §42 | Post-write blob verification of this commit |
+| DF-03 | PR #173 remains UNVERIFIED/PROPOSED; PR #174 acceptance is scoped to exact planning-baseline revision | Project Director disposition of provenance and missing-original-review limitation |
+| DF-04 | PR #178 correctly remains proposed/unaccepted | Project Director decision if consolidation is desired |
+| DF-05 | PR #191 divergence and PR #192/#193 separate lineages are documented | Project Director integration/order decision |
+| DF-06 | Bounded current-package relative paths, source links, anchors and external references are validated; one access-limited historical pointer is disclosed | Independent semantic challenge may still identify defects |
+| DF-07 | Known Builder-controlled status and numbering contradictions are reconciled | Independent confirmation |
+| DF-08 | Bounded branch/PR discovery and 108-path/28-PR preservation register completed within stated scope | Project Director archive/supersession decisions; no destructive action implied |
+| DF-09 | Protocol is consistently 17 questions; no test result claimed | Uninvolved human must execute it and preserve raw evidence |
+| DF-10 | Exact-head self-review synchronized in this commit | Post-write verification |
+| DF-11 | No qualifying independent reviewer is assigned; same-identity review is non-qualifying | Project Director authorizes a genuinely separate reviewer and formal review |
+| DF-12 | No decision inferred | Project Director exact-revision decision after review |
+| DF-13 | Stage A remains held | Project Director authorization after documentation gate acceptance |
+
+**Builder disposition:** all currently identified Builder-controlled documentation, bounded preservation, link/anchor, authority-label, status and numbering work is complete within the recorded scope, subject only to successful post-write verification of this synchronized commit. This is not gate clearance. DF-09, DF-11 and DF-12 remain real external requirements; they are not Builder defects and must not be fabricated. No reviewer request is issued by this update.
