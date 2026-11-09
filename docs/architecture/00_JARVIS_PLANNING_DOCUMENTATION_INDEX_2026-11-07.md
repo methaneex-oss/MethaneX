@@ -299,3 +299,16 @@ At the start of this closeout synchronization, PR #192 was open/draft/unmerged a
 The Builder has completed the bounded validation recorded in Preservation and Link Validation Report §11: 84 current-package relative targets, 89 historical source links across 45 exact commit/path pairs, 76 valid line-anchor ranges, and 189 external URL occurrences checked within the disclosed scope. One historical ChatGPT share pointer remains access-limited/unverified. Historical discovery records 245 branches, 184 PRs, and 108 documentation paths across 28 documentation PRs. These are bounded, reproducible findings, not a claim that every historical repository artifact has been exhaustively archived.
 
 DF-09 remains pending an actual uninvolved human session; DF-11 remains pending a genuinely separate reviewer and formal review; DF-12 remains the Project Director's exact-revision decision. No reviewer is assigned, the earlier request remains suspended, Stage A remains held, and implementation remains unauthorized. This index does not clear the gate.
+
+## 18. Final closeout revision reconciliation — 2026-11-09
+
+At closeout start PR #192 was open/draft/unmerged at HEAD `5031fb9348dd10664023df5338125acf4b8ef676`, base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, with 26 changed paths. All 26 paths were fetched at that exact revision. The previous inventory §40 parent `98101fa6cc2a2908cfefd2428b77174a25a49fa8` is historical and is not the current final manifest.
+
+The current Phase 2 integration-map blob is `9dd776920d0a479a9d7275acc821e12c266623d9`. Preservation report §12 records the exact two line-anchor corrections relative to its prior blob and confirms that the normalized source-map content, 89 source-link occurrences, 45 exact commit/path pairs and 76 anchored ranges remain accounted for. The 108-path/28-PR historical preservation register and its bounded discovery limits remain as stated in §16.
+
+The current closeout control records are:
+- [Outstanding Work Closure and Authority Register](reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md) §12.
+- [Builder Final Reconciliation](reports/BUILDER_FINAL_DOCUMENTATION_FOUNDATION_RECONCILIATION_2026-11-08.md) §13.
+- [Preservation and Link Validation](reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md) §§11–12.
+
+The final inventory and exact-head Builder self-review synchronization remain pending until the inventory commit and post-write verification are complete. DF-09 still requires an uninvolved human's 17-question session; DF-11 requires a genuinely separate reviewer and formal review after Project Director authorization; DF-12 requires the Project Director's exact-revision decision. No reviewer is assigned or requested. Stage A remains HELD; implementation remains unauthorized. This index does not clear the gate.
