@@ -8,7 +8,7 @@
 
 ## 1. Purpose
 
-This report separates (a) work already completed in repository revisions, (b) technical work that remains within Builder authority, and (c) requirements that cannot truthfully be completed by the Builder. It prevents completed corrections from being repeated and prevents missing human evidence or authority decisions from being represented as completed.
+This report separates (a) work already completed in repository revisions, (b) technical work that remains within Builder authority, and (c) requirements that cannot truthfully be completed by the Builder. It prevents completed corrections from being repeated and prevents missing distinct-model AI evidence or authority decisions from being represented as completed.
 
 This report does not accept any PR, clear the documentation-foundation gate, authorize Stage A, authorize implementation, or change historical decisions.
 
@@ -16,7 +16,7 @@ This report does not accept any PR, clear the documentation-foundation gate, aut
 
 The following are already documented in the current PR #192 audit/history and must not be described as outstanding Builder edits:
 
-1. **PR #174 status-header discrepancy:** the specification now identifies the exact accepted planning-baseline revision `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, preserves the Project Director's acceptance comment `6604790481`, and states that the newer administrative clarification is not a new substantive acceptance or implementation authorization. The PR description was corrected to stop asserting unverified PR #173 acceptance.
+1. **PR #174 status-header discrepancy:** the current specification header identifies the exact accepted planning-baseline revision `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, preserves the Project Director's acceptance comment `6604790481`, and states that the later administrative clarification is not a new substantive acceptance or implementation authorization. The PR #174 description itself still contains stale wording that calls PR #173 acceptance unverified; it was not edited in this PR #192 branch-only documentation pass.
 2. **PR #174 follow-on F-02/F-03 provenance:** the recovery record now contains a bounded recovered summary. The original full review and inline annotations remain unavailable; both findings remain OPEN and are not treated as cleared.
 3. **PR #191 graph:** the exact relationship is documented as DIVERGED: PR #191 has one unique commit and is 22 commits behind PR #179 HEAD. Retargeting alone is not a solution. No rebase, cherry-pick or retarget has been performed.
 4. **Historical preservation:** the Historical Documentation Preservation Register records 68 paths across principal PR lineages, each mapped to a source revision and blob. The selected PR #96/#97/#148/#156/#170 comparisons are also recorded.
@@ -27,16 +27,16 @@ The following are already documented in the current PR #192 audit/history and mu
 
 | Item | Current evidence-based disposition | What closes it | Authority |
 |---|---|---|---|
-| PR #173 acceptance provenance | No attributable Project Director acceptance decision for exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b` was recovered from its complete discussion query. Keep it UNVERIFIED / PROPOSED. | Recover a primary decision record, or the Project Director explicitly decides that the architecture remains unaccepted/unverified. | Project Director |
+| PR #173 acceptance provenance | RESOLVED: the Project Director accepted exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b` as the Brain Foundation Architecture planning baseline on 2026-11-03 at 08:18:21 UTC; recovered decision transcription is PR #173 comment `#6752144835`. | Preserve the exact accepted revision and limited scope: Detailed Brain Mechanism Specification only. Any later stage requires separate authorization. | Recovered Project Director decision; no new decision required for this baseline |
 | PR #174 F-02 | Recovered finding: contextual language/operator-intent grounding; OPEN. Original full report unavailable. | Correct the affected specification requirements in a traceable follow-up, then obtain independent review and an exact-scope decision. | Builder may draft; independent reviewer and Project Director decide clearance |
 | PR #174 F-03 | Recovered finding: enforceable downstream reasoning integration; OPEN. Original full report unavailable. | Correct the affected specification requirements in a traceable follow-up, then obtain independent review and an exact-scope decision. | Builder may draft; independent reviewer and Project Director decide clearance |
 | PR #191 integration disposition | PR #191 is a one-commit historical-base proposal diverged from current PR #179 by 22 commits. | Project Director chooses historical-base review only, or authorizes a new dependent revision replaying the unique document commit onto current PR #179. Retargeting alone is insufficient. | Project Director |
 | PR #192 / PR #193 lineage order | Separate PR #179-derived and PR #175-derived lineages. | Explicitly decide intended review/integration order; do not silently stack, rebase, merge or retarget. | Project Director |
-| DF-06 link validation | Earlier check covered 63 relative links on a prior exact parent revision, with 0 missing paths; 143 external URL occurrences were not exhaustively checked. Fragment and cross-branch validation was incomplete. | Re-run against the exact final PR #192 HEAD: relative paths, heading fragments, commit-pinned/cross-branch links, external URL reachability and semantic relevance. Report exclusions and failures. | Builder |
-| DF-08 historical preservation | Materially advanced, not complete. The 68-path register covers named principal PRs; broader non-JARVIS-named lineage, unmatched branch provenance and archive/supersession decisions remain open. | Complete bounded discovery with explicit search limits; classify unmatched refs; compare remaining material historical revisions; propose dispositions without moving/deleting anything. | Builder researches; Project Director authorizes destructive or canonical changes |
-| DF-09 fresh-reader test | NOT MET. Protocol exists; no uninvolved reader session exists. | A person uninvolved in authoring and not coached completes the exact 17-question protocol. Preserve unedited answers, time, assistance, navigation failures and observations. | Independent human participant; Builder records results |
+| DF-06 link validation | PARTIAL. At PR #192 pre-write HEAD `8f3a45c91d0671548fe4b0cf3d9cd684bb75b6d0`, all 28 changed paths were fetched; the recursive tree had 257 non-truncated entries; a deterministic inline-Markdown scan found 242 link occurrences, including 90 repository-relative targets, with 0 missing targets and no local fragment-bearing inline links. | Preserve the exact bounded scope. The scan does not establish reference-style/raw-HTML correctness, semantic relevance, current external reachability, all line anchors or exhaustive historical cross-branch validity. Re-run on the final post-write PR #192 head before any exact-head review. | Builder; current scan remains bounded |
+| DF-08 historical preservation | PARTIAL. Bounded discovery records 37 JARVIS-named branch refs / 11 distinct tips, 184 PRs, and 108 documentation paths across 28 documentation PRs; the separate principal-lineage register maps 68 paths. Selected duplicate/revision comparisons and two formerly unmatched ancestry cases are resolved. | Continue bounded non-JARVIS-named lineage mapping, remaining dated-document comparisons and per-artifact archive/supersession analysis. Do not move, delete or consolidate artifacts without authority. | Builder researches; Project Director authorizes destructive or canonical changes |
+| DF-09 fresh-reader assessment | OPEN — the Project Director explicitly replaced the human session with a blind assessment by a genuinely different AI model. The user-approved substitution is recorded; no distinct-model output has been obtained. | Invoke an actual model distinct from Builder GPT-6 and prior Grok reviewer; supply only the repository entry point/documentation package; preserve model identity/revision, prompt, raw answers, navigation trail, ambiguities and unanswered questions. Do not simulate or reuse a prior review. | Builder must obtain actual distinct-model output; Project Director authorized the evidence-type substitution |
 | DF-10 Builder self-review | Must be tied to the final immutable PR #192 snapshot after all Builder changes. | Final self-review names exact HEAD, changed-file set, blobs, checks performed, exclusions and unresolved findings. | Builder |
-| DF-11 qualifying independent review | NOT MET. Existing reviewer and Builder share GPT-6 identity; existing report is useful but not qualifying. | A genuinely separate reviewer identity conducts and submits a formal review against the exact final revision. A repository report alone is not a formal GitHub review. | Independent reviewer |
+| DF-11 qualifying independent review | UNRESOLVED. A Grok (xAI) formal `COMMENTED` review declares a model identity distinct from Builder GPT-6, but GitHub attributes it to the same `methaneex-oss` account used for Builder activity. It reviewed older PR #192 HEAD `9e0c342dcfbbe1d7a51a6b3a2b7574c9cdf480dc`, not the current head. | Project Director decides whether the distinct model identity qualifies despite same-account attribution and whether a formal review against the final exact PR #192 HEAD is required. Do not treat the same-identity GPT-6 review as independent. | Project Director decides qualification; independent reviewer supplies any required exact-head review |
 | DF-12 Project Director decision | NOT MET. | Project Director records accept / reject / conditional acceptance against exact reviewed PR #192 and related revisions, with scope and conditions. | Project Director |
 | DF-13 Stage A hold | PASS for the hold only. | Keep Stage A held until all required evidence and the Project Director's decision are complete. | Project Director |
 
@@ -50,7 +50,7 @@ The remaining Builder-controlled work should be completed in this order:
 4. Reconcile the index, portal, inventory and gate audit against one immutable PR #192 snapshot.
 5. Produce the final Builder self-review against that exact snapshot.
 6. Hand the immutable snapshot to a qualifying separate reviewer.
-7. Run the uninvolved fresh-reader protocol.
+7. Execute the Project Director-authorized blind AI fresh-reader assessment using a genuinely different model; preserve raw output and navigation evidence. Do not describe it as a human session.
 8. Submit the evidence package to the Project Director for the exact-revision decision.
 
 Do not perform PR #191 rebase/cherry-pick/retarget, PR #192/#193 integration, branch deletion, archive relocation, merge, or implementation without a separate explicit Project Director decision.
@@ -59,7 +59,7 @@ Do not perform PR #191 rebase/cherry-pick/retarget, PR #192/#193 integration, br
 
 **The documentation-foundation gate remains NOT CLEARED. Stage A remains HELD.**
 
-The Builder can close technical validation, historical discovery, synchronization and self-review. The Builder cannot supply the uninvolved reader, substitute its own GPT-6 identity for an independent reviewer, or make the Project Director's acceptance decision. These are not paperwork gaps to be simulated; they are distinct evidence and authority requirements.
+The Builder can close bounded technical validation, historical discovery, synchronization and self-review. The Builder cannot fabricate distinct-model AI output, substitute its own GPT-6 identity for a separate reviewer, or make the Project Director's acceptance decision. These are distinct evidence and authority requirements.
 
 No runtime source, tests, build configuration, dependency, workflow or runtime state is changed by this report.
 
@@ -476,7 +476,7 @@ The Project Director decisions remain: (1) PR #174 missing-original-report prove
 **Current disposition: DOCUMENTATION FOUNDATION NOT CLEARED. Stage A HELD. Implementation unauthorized.**
 
 
-## 17. Project Director revision to DF-09 and live-state update — 2026-11-09
+## 18. Project Director revision to DF-09 and live-state update — 2026-11-09
 
 The Project Director explicitly supersedes the human-only DF-09 fresh-reader requirement for this project. The required reader-comprehension evidence is now a fresh assessment by a genuinely different AI model, without prior project conversation or summaries, using only the repository entry point and documentation package. The model must explain project purpose, navigation, current status, planning/architecture boundaries, unresolved work, authority gates and next safe actions; cite exact paths; separate explicit statements from inference/unavailable information; and preserve its model identity, prompt, exact revision, raw answers, navigation path and ambiguities. It must be described as an AI fresh-reader assessment, not a human session. The Project Director has stated that a different AI's demonstrated understanding is sufficient for this criterion.
 
@@ -487,7 +487,7 @@ Live PR metadata rechecked in this run: #173 HEAD `97191111bc2573c14d391c0af9628
 DF-06 and DF-08 remain partial within their disclosed bounded scopes. DF-11 remains unresolved: Grok declared a distinct model identity but the formal COMMENTED review used the same GitHub account as Builder and examined older PR #192 HEAD `9e0c342dcfbbe1d7a51a6b3a2b7574c9cdf480dc`, not current HEAD. DF-12 remains the Project Director's exact-revision acceptance decision. DF-13 remains NOT STARTED / HELD; implementation is unauthorized. PR #174 F-02/F-03 provenance disposition, PR #191 disposition and PR #192/#193 integration order remain unresolved Project Director decisions.
 
 
-## 15. Project Director decision — AI fresh-reader substitution — 2026-11-09
+## 19. Project Director decision — AI fresh-reader substitution — 2026-11-09
 
 The Project Director explicitly authorized replacing the uninvolved-human fresh-reader session with a blind fresh-reader assessment by a genuinely different AI model. The test must start from the repository entry point and documentation package only, with no prior conversation, memory, Builder summary or reviewer briefing. It must independently explain purpose, current phase, architecture/planning boundaries, navigation, unresolved work, authority gates and next safe actions; cite exact paths/sections; distinguish explicit evidence, inference and unavailable information; and preserve actual model identity, exact revision, prompt, raw answers, navigation trail, ambiguities and unanswered questions. This is AI evidence, not human evidence.
 
@@ -496,3 +496,40 @@ The decision to use AI is accepted; the test has not yet been executed. No disti
 The PR #174 follow-on provenance recovery document path previously referenced by the reconciliation was not found at the current PR #174 head or default branch (404). PR #174 issue-comment evidence confirms the accepted planning-baseline decision at comment #6604790481; review-list and inline-thread queries returned no entries in this check. The full original F-02/F-03 report/annotations remain unavailable.
 
 Current live refs rechecked: PR #174 head be46b3858102c31022128522c4b3506aad4dff8a; PR #191 head 609d38ede50bbdd98a93dfed112781eacabee9fd; PR #192 head 4cdfbda5f428ab8c9f78db8e0bc7a7f42e0bfcd0; PR #193 head ee508c09be9d848c7baa9533bb6f88f9cc27f94a. No PR was merged or closed and no integration or implementation operation was performed.
+
+
+---
+
+## 20. Exact-head execution and authority reconciliation — 2026-11-10
+
+This addendum supersedes earlier active-status statements where the current evidence below differs. Earlier dated snapshots remain historical audit records.
+
+### 20.1 Current PR state at the report/index update boundary
+
+- PR #173: open/draft/unmerged; current HEAD remains the accepted planning-baseline SHA `97191111bc2573c14d391c0af9628db7b11f194b`; 2 documentation paths.
+- PR #174: open/draft/unmerged; current HEAD `be46b3858102c31022128522c4b3506aad4dff8a`; accepted baseline remains `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`; 3 documentation paths.
+- PR #191: open/draft/unmerged; current HEAD `609d38ede50bbdd98a93dfed112781eacabee9fd`; 1 comparison-report path.
+- PR #192: open/non-draft/unmerged; HEAD at this addendum's pre-update snapshot `9752414966c0c695fa6836b91cd73a65fce15a23`; base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; 29 documentation/README/template paths.
+- PR #193: open/draft/unmerged; current HEAD `ee508c09be9d848c7baa9533bb6f88f9cc27f94a`; 2 planning-document paths.
+
+No PR was merged or closed. No history or integration operation was performed.
+
+### 20.2 PR #173 acceptance and stale metadata
+
+The Project Director's exact-head acceptance is resolved as stated in §3. The repository transcription is PR #173 comment `#6752144835`; the accepted architecture blob is `364aa3b5fabdab527c169ab170dd72e23c502438`. The PR #173 artifact header and PR descriptions retain historical proposal wording, but the decision event establishes the accepted planning-baseline status. The PR #174 description and PR #192 description still contain stale “unverified/provenance discrepancy” wording; they were not edited because the permitted writes in this pass were restricted to the existing PR #192 documentation branch. This metadata inconsistency must remain visible rather than be silently treated as corrected.
+
+### 20.3 PR #174 recovery artifact location and disposition
+
+The partial recovery record is present in the PR #192 documentation tree at `docs/architecture/reports/PR_174_FOLLOW_ON_REVIEW_PROVENANCE_RECOVERY_2026-11-06.md`, blob `f5d1dd62801642b47e35df986c3b5ab8a7e01a26`. Its absence from PR #174's current tree and the default branch does not mean it is absent from PR #192. The original full report and inline annotations remain unavailable. F-02 and F-03 remain open, and the Project Director's provenance-route decision remains outstanding.
+
+### 20.4 AI fresh-reader substitution
+
+The human session has been explicitly replaced by a blind assessment from a genuinely different AI model. No distinct model was invoked. Hugging Face Space discovery returned `INVALID_ARGUMENT: Tool space_search not found`; Hugging Face documentation search returned `INVALID_ARGUMENT: Tool hf_doc_search not found`. The authenticated Hugging Face connection exposed a Jobs scope, but no direct inference endpoint was callable through the available tools; no remote compute job was launched because no compute-credit budget/authorization was supplied. DF-09 remains OPEN. The prior Grok review is not a fresh-reader test.
+
+### 20.5 DF-11, DF-12 and DF-13
+
+The Grok-declared formal review is a `COMMENTED` submission against PR #192 HEAD `9e0c342dcfbbe1d7a51a6b3a2b7574c9cdf480dc`, review ID `PRR_kwDOUDDigc8AAAABWzEnBA`, submitted 2026-11-09 10:59:55 UTC. It declares a model identity distinct from Builder GPT-6, but GitHub attributes it to the same `methaneex-oss` account. Current PR #192 is 31 commits ahead of that reviewed HEAD; five documentation paths changed in the interval. Reviewer qualification and exact-head re-review remain Project Director decisions. DF-12 remains outstanding. Stage A remains NOT STARTED / HELD; implementation remains unauthorized.
+
+### 20.6 Remaining Builder checks and authority boundary
+
+A final post-write DF-06 scan and 29-path inventory snapshot must be completed after the remaining index/register/inventory updates. DF-06 and DF-08 must remain PARTIAL unless their disclosed exclusions are actually closed. The Project Director decisions remain PR #174 provenance route, PR #191 disposition, PR #192/#193 sequencing, DF-11 reviewer qualification/exact-head review, and DF-12 exact-revision acceptance. No merge, close, rebase, retarget, cherry-pick, archive move, Stage A start or implementation is authorized.
