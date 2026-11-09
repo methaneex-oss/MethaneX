@@ -516,7 +516,7 @@ No PR was merged or closed. No history or integration operation was performed.
 
 ### 20.2 PR #173 acceptance and stale metadata
 
-The Project Director's exact-head acceptance is resolved as stated in §3. The repository transcription is PR #173 comment `#6752144835`; the accepted architecture blob is `364aa3b5fabdab527c169ab170dd72e23c502438`. The PR #173 artifact header and PR descriptions retain historical proposal wording, but the decision event establishes the accepted planning-baseline status. The PR #174 description and PR #192 description still contain stale “unverified/provenance discrepancy” wording; they were not edited because the permitted writes in this pass were restricted to the existing PR #192 documentation branch. This metadata inconsistency must remain visible rather than be silently treated as corrected.
+The Project Director's exact-head acceptance is resolved as stated in §3. The repository transcription is PR #173 comment `#6752144835`; the accepted architecture blob is `364aa3b5fabdab527c169ab170dd72e23c502438`. The PR #173 artifact header and PR descriptions retain historical proposal wording, but the decision event establishes the accepted planning-baseline status. PR #174's current description still contains stale “unverified” wording; it was not edited because the permitted writes in this pass were restricted to the existing PR #192 documentation branch. PR #192's 2026-11-07 description addendum preserves the then-current discrepancy as a dated historical snapshot, not a current status claim. This metadata inconsistency must remain visible rather than be silently treated as corrected.
 
 ### 20.3 PR #174 recovery artifact location and disposition
 
