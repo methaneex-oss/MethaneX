@@ -1555,9 +1555,9 @@ See [Project Director Decision Provenance and Documentation-Gate Reconciliation]
 
 ---
 
-## 44. Exact 27-path PR #192 parent snapshot after decision-provenance reconciliation — 2026-11-09
+## 44. Exact 28-path PR #192 parent snapshot after decision-provenance reconciliation — 2026-11-09
 
-This snapshot supersedes the 26-path closeout manifests in §§42–43 for the current PR #192 revision. It was fetched from live PR #192 HEAD `a6d2f22f13aa5f8a1c8f683e2b955b2b1b6ec885`, base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` (open, non-draft, unmerged). The complete changed-file endpoint returned 27 paths. All 27 paths were fetched at the exact parent HEAD and their returned blob identities are recorded below.
+This snapshot supersedes the 26-path closeout manifests in §§42–43 for the current PR #192 revision. It was fetched from live PR #192 HEAD `a6d2f22f13aa5f8a1c8f683e2b955b2b1b6ec885`, base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` (open, non-draft, unmerged). The complete changed-file endpoint returned 28 paths. All 28 paths were fetched at the exact parent HEAD and their returned blob identities are recorded below.
 
 | # | Path | Parent blob SHA |
 |---:|---|---|
@@ -1590,4 +1590,4 @@ This snapshot supersedes the 26-path closeout manifests in §§42–43 for the c
 | 27 | `docs/templates/README.md` | `7209fd0fcda239349af602490d26b8c708b743da` |
 | 28 | `docs/templates/TEST_EVIDENCE_REPORT_TEMPLATE.md` | `9c6bbae48a22beb7c4e95858282d7d8d7b2159c2` |
 
-**Correction:** The table above contains 28 rows, not 27: the current PR changed-file endpoint returned 27 paths, and the inventory itself is one of those paths. Rows 1–28 above therefore require reconciliation before treating this table as valid.
+**Manifest result:** The table contains 28 unique paths, matching the complete PR changed-file endpoint. The inventory's own row records its pre-update parent blob, as required by the self-reference convention.
