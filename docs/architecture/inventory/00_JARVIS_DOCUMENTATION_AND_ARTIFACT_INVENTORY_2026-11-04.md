@@ -1424,3 +1424,71 @@ PR #192 and PR #193 remain separate lineages. This inventory does not imply inte
 This section is a parent-snapshot manifest. The inventory update itself advances PR #192 and changes its own blob. The Builder must re-fetch live PR #192 metadata, the complete changed-path list and all 26 changed-file blobs after this commit, then record the resulting HEAD and resulting inventory blob in a subsequent verification note if any further file changes occur.
 
 This snapshot corrects the 25-path stale manifest identified by the technical re-review. It does not close DF-06 or DF-08, does not prove fresh-reader completion, does not create a qualifying independent review, and does not constitute Project Director acceptance. DF-09, DF-11 and DF-12 remain unmet. Stage A remains held; implementation remains unauthorized.
+
+
+## 41. Final exact PR #192 closeout parent snapshot — 2026-11-09
+
+This is the final Builder parent-snapshot manifest for the documentation-foundation closeout. It supersedes prior live-state manifests only for the exact parent revision and blob identities below; earlier sections remain historical records.
+
+### 41.1 Live PR state at the exact parent
+
+| Field | Verified value |
+|---|---|
+| PR | [#192](https://github.com/methaneex-oss/MethaneX/pull/192) |
+| Head branch | `docs/whole-brain-planning-scope-correction-20261107` |
+| Exact parent HEAD immediately before inventory write | `b74a64a35f99aab7b55f1e6f3994a70706344021` |
+| Base SHA | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` |
+| State | Open, draft, unmerged |
+| Changed paths | 26 |
+| Review status | No qualifying independent review; earlier premature request remains withdrawn/suspended; no reviewer assigned |
+| Inventory blob before this write | `1ce4914b2a84acb1b6bfbd8f9ca035cb1784ad66` |
+
+All 26 changed paths were fetched at the exact parent HEAD above. The complete path list from the live PR-files endpoint matches the 26 entries below. Each blob SHA is the result returned by the exact-ref file fetch.
+
+### 41.2 PR #192 changed-path and blob register
+
+| # | Repository path | Blob SHA at exact parent HEAD |
+|---:|---|---|
+| 1 | `README.md` | `780651b804b491781fdcac8e248eaca9243797a4` |
+| 2 | `docs/ARCHITECTURE.md` | `3c6692b52059e43947d1fd2e7e84debb2362023f` |
+| 3 | `docs/JARVIS_BRAIN_MASTER_BLUEPRINT.md` | `0e49d313bf3929aa30140cb7149ebab038918378` |
+| 4 | `docs/JARVIS_PHASE_2_COMPLETION.md` | `e0e57a44216fc36c52d469a79abfc8df058515a3` |
+| 5 | `docs/README.md` | `da0d9c834e8a5b2e67519ee5e0a2927bcec96374` |
+| 6 | `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md` | `485f6bdd355efe6e8203902d203b047f3ddd2a34` |
+| 7 | `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md` | `1ce4914b2a84acb1b6bfbd8f9ca035cb1784ad66` (pre-update self-reference) |
+| 8 | `docs/architecture/inventory/HISTORICAL_DOCUMENTATION_PRESERVATION_REGISTER_2026-11-08.md` | `95cd280295c86c6d33278aa667de1d72048026ea` |
+| 9 | `docs/architecture/reports/BUILDER_FINAL_DOCUMENTATION_FOUNDATION_RECONCILIATION_2026-11-08.md` | `6c708b96887a410ebe5d5d74e16f74f03d0f07ad` |
+| 10 | `docs/architecture/reports/BUILDER_TO_INDEPENDENT_REVIEWER_REQUEST_2026-11-08.md` | `c458f689ccbcd1e1d54242e38648ca151d70c250` |
+| 11 | `docs/architecture/reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md` | `5e12bd21ec3685c4c869affa487e07c5b9ac2f69` |
+| 12 | `docs/architecture/reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md` | `69d7ce71f23c102925ef368f7762931de09bbe59` |
+| 13 | `docs/architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_2026-11-08.md` | `c43d82ba18ff89de226d2268cf72e724b222a5bd` |
+| 14 | `docs/architecture/reports/INDEPENDENT_REVIEWER_HANDOFF_2026-11-08.md` | `35294bf2fbdd9eb149f8fac53cc218b99f02b34d` |
+| 15 | `docs/architecture/reports/INDEPENDENT_RE_REVIEW_BUILDER_FOLLOW_UP_2026-11-08.md` | `2d63ed93344a7081dcedb44247536c416322c793` |
+| 16 | `docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md` | `6e1686c7c5c099705550e8d5505649c172f598d0` |
+| 17 | `docs/architecture/reports/PHASE_1_REVIEW_CORRECTIONS_AND_SCOPE_RECONCILIATION_2026-11-05.md` | `a459cdfd02d850d455ca526e6823e68525776ba3` |
+| 18 | `docs/architecture/reports/PHASE_1_WHOLE_REPOSITORY_INVESTIGATION_AND_REUSE_AUDIT_2026-11-04.md` | `7dc1a246486abfb13169c89365289fcc8134a6ea` |
+| 19 | `docs/architecture/reports/PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md` | `9dd776920d0a479a9d7275acc821e12c266623d9` |
+| 20 | `docs/architecture/reports/PR_174_FOLLOW_ON_REVIEW_PROVENANCE_RECOVERY_2026-11-06.md` | `f5d1dd62801642b47e35df986c3b5ab8a7e01a26` |
+| 21 | `docs/architecture/reports/WHOLE_BRAIN_DOCUMENTATION_PHASE_BUILDER_SELF_REVIEW_2026-11-07.md` | `67ad1db200709becfd3f6c0eed40c15f63db8627` |
+| 22 | `docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md` | `0187a0ac71bd0c95e94beb3bf006da9cc7c3605f` |
+| 23 | `docs/templates/INDEPENDENT_REVIEW_REPORT_TEMPLATE.md` | `f3176cf1a1f45735a3ad62fa4a865806edc24e08` |
+| 24 | `docs/templates/PLANNING_DOCUMENT_TEMPLATE.md` | `b9f71a923b0d717a3b29655574c89c10e0801115` |
+| 25 | `docs/templates/README.md` | `7209fd0fcda239349af602490d26b8c708b743da` |
+| 26 | `docs/templates/TEST_EVIDENCE_REPORT_TEMPLATE.md` | `9c6bbae48a22beb7c4e95858282d7d8d7b2159c2` |
+
+### 41.3 Separate PR #193 lineage recheck
+
+PR #193 was re-fetched independently at HEAD `65220543416da9b368f24e226aefe24bcdbc7870`, base `874c732973b6ab303d65a503f5a215b0af8e1153`, open/draft/unmerged, with two changed paths. Both exact-ref fetches matched the previously recorded blobs:
+
+| Repository path | Blob SHA |
+|---|---|
+| `docs/architecture/plans/00_BRAIN_IMPLEMENTATION_PLAN.md` | `3a07b45f85dd540c3b39c2150723cf983bb218c6` |
+| `docs/architecture/plans/JARVIS_PROJECT_CONTINUITY_AND_RECOVERY_HANDOFF.md` | `77bb207efb26e71345138901a8027dfe3525edf1` |
+
+PR #192 and PR #193 remain separate lineages. This snapshot makes no integration, dependency-order, rebase, retarget, cherry-pick or merge decision.
+
+### 41.4 Post-write verification and gate boundary
+
+This section records the exact parent before the inventory write; its own row necessarily records the pre-update inventory blob. The inventory write advances PR #192. The Builder must now re-fetch live PR metadata, the complete changed-path list and all 26 changed-file blobs at the resulting HEAD, then verify that the inventory's resulting blob SHA matches the post-write fetch. Any branch movement or mismatch invalidates this manifest and requires reconciliation.
+
+This inventory does not constitute independent review, fresh-reader execution or Project Director acceptance. DF-09, DF-11 and DF-12 remain external gates. Stage A remains HELD; implementation remains unauthorized.
