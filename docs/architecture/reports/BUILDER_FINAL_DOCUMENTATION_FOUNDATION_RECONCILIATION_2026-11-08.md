@@ -302,3 +302,22 @@ The outstanding-work register §11 and planning index §17 have been synchronize
 DF-09 remains pending an uninvolved human's 17-question session. DF-11 remains pending a genuinely separate reviewer identity and formal GitHub review; the earlier request is suspended and no reviewer is assigned. DF-12 remains the Project Director's exact-revision decision. PR #173 acceptance provenance remains unverified; PR #174 F-02/F-03 remain open due unavailable original review details; PR #191 and PR #192/#193 ordering remain authority matters.
 
 **Builder disposition: BUILDER-CONTROLLED TECHNICAL WORK COMPLETE WITHIN THE BOUNDED SCOPE, PENDING FINAL INVENTORY WRITE AND POST-WRITE VERIFICATION. NOT CLEARED FOR ACCEPTANCE.** Stage A remains HELD; implementation remains unauthorized. No independent review is requested or implied.
+
+## 13. Final closeout revision reconciliation — 2026-11-09
+
+### 13.1 Live state at closeout start
+
+PR #192 was open/draft/unmerged at HEAD `5031fb9348dd10664023df5338125acf4b8ef676`, base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, with 26 changed paths. This supersedes the earlier §12.1 preparation snapshot only for the closeout-start state. The Builder fetched all 26 changed paths at that exact HEAD and recorded their blob identities for the final inventory synchronization. The previous inventory §40 parent `98101fa6cc2a2908cfefd2428b77174a25a49fa8` is stale for this final closeout and is preserved as historical evidence only.
+
+### 13.2 Final technical evidence reconciliation
+
+- DF-06 current-package and historical-source validation remains bounded to the 26-file package and enumerated historical source set. Preservation report §12 additionally reconciles the current Phase 2 map blob `9dd776920d0a479a9d7275acc821e12c266623d9` against the earlier recorded blob: the normalized contents are identical except for two corrected line anchors, both within the exact pinned source-file lengths. The 89 links, 45 commit/path pairs, 45 source blob identities and 76 anchor ranges remain accounted for. One ChatGPT shared-conversation URL remains access-limited/unverified.
+- DF-07 status consistency remains as recorded in the outstanding-work register §12: PR #173 UNVERIFIED/PROPOSED; PR #174 acceptance limited to the exact planning-baseline revision, with F-02/F-03 OPEN; PR #178 proposed/unaccepted; PR #191 diverged; PR #192/#193 separate; Stage A held.
+- DF-08 bounded discovery remains 245 branch refs, 184 PRs and 108 documentation paths across 28 documentation PRs, with the two formerly unmatched refs mapped by ancestry. This is not a claim of exhaustive archival of every repository artifact.
+- DF-09 protocol is consistently 17 questions; no human execution is claimed.
+
+### 13.3 Final synchronization and disposition
+
+The final inventory must record the exact parent immediately before its write, all 26 changed paths and their blob identities at that parent, and the inventory's pre-update self-blob. The self-review must be synchronized to the same parent and explicitly identify itself as Builder-authored, not independent. After the inventory commit, the Builder must re-fetch PR #192 metadata, all changed paths and all resulting changed-file blobs; the resulting inventory blob and live HEAD must be recorded. If the branch moves during verification, refresh rather than report a stale snapshot.
+
+DF-09, DF-11 and DF-12 remain external requirements. No qualifying reviewer is assigned or requested, and the Project Director's authorization for a new review request has not been given. **Builder disposition: final exact-HEAD inventory/self-review synchronization and post-write verification remain in progress; NOT CLEARED FOR ACCEPTANCE.** Stage A remains HELD; implementation remains unauthorized.
