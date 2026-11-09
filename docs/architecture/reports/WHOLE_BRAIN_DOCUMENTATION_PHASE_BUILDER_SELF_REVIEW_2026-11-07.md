@@ -902,3 +902,32 @@ At the start of this self-review update, PR #192 was open/draft/unmerged at HEAD
 The identified Builder-controlled link/anchor checks, bounded historical discovery, documentation-path/blob mapping, status reconciliation and numbering corrections are complete within the documented scope. The detailed inventory is the final Builder write; it must record the exact parent snapshot and self-blob convention. After that commit, the Builder must re-fetch PR #192 metadata, all changed paths and all 26 blobs at the resulting HEAD and verify the inventory's post-write blob identity.
 
 **Self-review result: BUILDER-CONTROLLED TECHNICAL WORK COMPLETE WITHIN THE BOUNDED SCOPE, PENDING FINAL INVENTORY WRITE AND POST-WRITE VERIFICATION. NOT CLEARED FOR ACCEPTANCE.** Stage A remains HELD; implementation remains unauthorized.
+
+## 31. Final exact pre-inventory Builder self-review — 2026-11-09
+
+### 31.1 Exact closeout scope
+
+Immediately before this self-review write, PR #192 was open/draft/unmerged at parent HEAD `9c7863e0566a4a1603c9df694c9288de888323be`, base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, with 26 changed paths. This section is Builder-authored self-review, not independent review. The closeout-start revision was `5031fb9348dd10664023df5338125acf4b8ef676`; all 26 changed paths were fetched there and their blob identities are recorded in the final inventory §41 at the exact pre-inventory parent.
+
+### 31.2 Builder-controlled work reviewed
+
+- **DF-01:** portal, planning index, role-based routes and reusable templates are present. The actual uninvolved fresh-reader session remains outstanding.
+- **DF-02:** the final inventory §41 records the exact 26-path parent snapshot and pre-update inventory blob. Its post-write self-blob and resulting PR head must be verified after the inventory commit.
+- **DF-03–DF-05 / DF-07:** the current control records preserve PR #173 as UNVERIFIED/PROPOSED; PR #174 acceptance is limited to exact planning-baseline HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` with follow-on F-02/F-03 OPEN; PR #178 remains proposed/unaccepted; PR #191 remains diverged; PR #192 and #193 remain separate lineages. No acceptance or dependency decision is inferred.
+- **DF-06:** Preservation and Link Validation Report §§11–12 records the bounded 26-file package checks, 89 immutable source links across 45 exact commit/path pairs, 45 matching source blob identities, 76 line-anchor ranges, and 189 external URL occurrences classified against available GitHub metadata. The current Phase 2 map blob is `9dd776920d0a479a9d7275acc821e12c266623d9`; §12 compares it with the prior blob and reconciles the two line-anchor corrections. One ChatGPT shared-conversation pointer remains access-limited and unverified. These checks are bounded to the enumerated package and sources; they are not a claim of universal repository link validation.
+- **DF-07:** status contradictions and stale PR #193/branch ancestry records are reconciled in the current control documents.
+- **DF-08:** Historical Documentation Preservation Register §5.6 and Preservation Report §11 record bounded discovery of 245 branches, 184 PRs and 108 documentation paths across 28 documentation PRs. This does not claim exhaustive archival of every repository artifact or decide archive/supersession policy.
+- **Numbering and snapshot integrity:** the known numbering corrections are recorded in reconciliation §10 and the technical follow-up report. The stale inventory §40 parent is retained as historical; §41 is the current closeout parent manifest.
+
+### 31.3 External gates and limitations
+
+- **DF-09 — NOT MET:** an uninvolved human must complete the 17-question protocol without coaching and preserve raw answers and session conditions. No such session is claimed.
+- **DF-11 — NOT MET:** a genuinely separate reviewer identity must conduct and submit a formal GitHub review against the final exact revision. The same GPT-6 identity's prior report/review is not independent. No reviewer is assigned; the prior request remains withdrawn/suspended. A new request requires Project Director authorization.
+- **DF-12 — NOT MET:** the Project Director must decide against the exact revision after qualifying review.
+- PR #173 primary acceptance provenance remains unverified. PR #174 F-02/F-03 remain open because the original complete follow-on report and inline annotations were not recovered. PR #191 disposition, PR #192/#193 order and archive/supersession decisions remain Project Director matters.
+
+### 31.4 Self-review disposition
+
+The Builder-controlled link/anchor validation, bounded historical discovery, status reconciliation, known numbering corrections and closeout-document synchronization are complete within the explicitly documented scope. The inventory post-write verification is the remaining mechanical verification step. The resulting inventory commit SHA becomes the exact final Builder snapshot for post-write validation.
+
+**Builder self-review: BUILDER-CONTROLLED TECHNICAL WORK COMPLETE WITHIN THE BOUNDED SCOPE, PENDING INVENTORY POST-WRITE VERIFICATION. NOT CLEARED FOR ACCEPTANCE.** Stage A remains HELD; implementation remains unauthorized. No independent review is requested or implied.
