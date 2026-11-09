@@ -317,3 +317,45 @@ DF-08 remains PARTIAL. The existing bounded discovery records 245 branches, 184 
 - **DF-13:** Stage A remains NOT STARTED and HELD; implementation remains unauthorized.
 
 **Final disposition: DOCUMENTATION FOUNDATION NOT CLEARED.** The Project Director decisions remain PR #174 provenance route, PR #191 disposition, PR #192/#193 order, DF-11 qualification/exact-head review, and DF-12 exact-revision acceptance. DF-09 still requires a real uninvolved human. No PR was merged, rebased, retargeted, cherry-picked or closed. No runtime source, tests, dependencies, build/workflow files or runtime state changed. No Stage A or implementation work was started.
+
+
+## 11. Live-state reconciliation and revised fresh-reader criterion — 2026-11-09
+
+This addendum records the repository state re-fetched during the immediate continuation run. It supersedes earlier live-head snapshots in this report where the values differ.
+
+### 11.1 Live PR revisions verified
+
+| PR | Base | Current HEAD | State | Verification |
+|---|---|---|---|---|
+| #173 | main at `1273ddbcd0087d189e01388ded2d362fb1e058d2` | `97191111bc2573c14d391c0af9628db7b11f194b` | Open, draft, unmerged | `get_pr_info`; recovered Project Director decision transcribed in comment [#6752144835](https://github.com/methaneex-oss/MethaneX/pull/173#issuecomment-6752144835) |
+| #174 | PR #173 accepted head `97191111bc2573c14d391c0af9628db7b11f194b` | `be46b3858102c31022128522c4b3506aad4dff8a` | Open, draft, unmerged | Live metadata; current specification blob `b366564b3f68e674ae5f5f9fc5a6c90d8b4f454d` |
+| #191 | `f6267456560a08054d69f7960d2951452b14017c` | `609d38ede50bbdd98a93dfed112781eacabee9fd` | Open, draft, unmerged | One changed file: human/MCU comparison report, blob `eac3cb443b5c6a2b9c0d9ad9f5fd552b79d8a0e2` |
+| #192 | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | `ac7f860dc257e181a12612bf3e3cb811ce26bd58` | Open, non-draft, unmerged | Live metadata; 28 changed paths returned by paginated changed-file listing |
+| #193 | `874c732973b6ab303d65a503f5a215b0af8e1153` | `ee508c09be9d848c7baa9533bb6f88f9cc27f94a` | Open, draft, unmerged | Two changed files: implementation plan blob `7df34fed59c1c8577ddcd23c02f772f366d46d39`; continuity handoff blob `0392ff59c6ae48d3c78e571c905550dfc77a5965` |
+
+PR #174's live review-submission and inline-thread endpoints returned zero records. Its discussion contains four issue comments, including the exact accepted-baseline decision #6604790481, but not the original follow-on F-02/F-03 review. The recovery artifact remains secondary/partial. The current specification's F-02-relevant locations include BM-02 (lines 196–218) and BM-08 (lines 357–389); F-03-relevant locations include §6.3 (lines 641–653), scenarios 27–34 (around lines 803–810), and §10. These are verified locations, not recovered original inline annotations.
+
+PR #191 still contributes one unique 220-line report absent from PR #179 HEAD. Its base is an ancestor of PR #179, while its head diverges by one unique PR #191 commit versus 22 intervening PR #179 commits. No disposition is inferred.
+
+PR #193's current plan and handoff both state the recovered PR #173 acceptance and cite comment #6752144835. They remain on the PR #175-derived lineage. PR #192 and #193 have separate bases; no integration order is inferred.
+
+### 11.2 DF-11 current status
+
+The formal Grok-declared review remains a GitHub `COMMENTED` submission against PR #192 HEAD `9e0c342dcfbbe1d7a51a6b3a2b7574c9cdf480dc`, submitted 2026-11-09 10:59:55 UTC. The review states **NOT CLEAR TO PROCEED**. It declares Grok (xAI) as a model identity distinct from Builder GPT-6, but GitHub attributes the submission to the same `methaneex-oss` account used for Builder activity. PR #192 has since advanced to `ac7f860dc257e181a12612bf3e3cb811ce26bd58`; the formal review is not against this current exact HEAD. The reviewer qualification and exact-head re-review requirements remain unresolved; DF-11 is not unconditionally satisfied.
+
+### 11.3 Project Director's revised DF-09 criterion
+
+The Project Director has now explicitly instructed that the uninvolved-human fresh-reader session be skipped. The accepted substitute is a genuinely different AI model, given only the actual repository entry point and documentation package, with no prior project summary or conversation context. It must independently explain the project, document navigation, current state, architecture/planning boundaries, unresolved work, authority gates and next safe actions, citing exact repository paths and distinguishing explicit statements, inference and unavailable information. Its model identity, prompt, exact repository revision, raw answers, navigation path, ambiguities and unanswered questions must be preserved.
+
+This is an explicit change to the reader-comprehension evidence criterion; it must be labelled an **AI fresh-reader assessment**, not a human session. The user has stated that a different AI's demonstrated ability to understand the repository is sufficient for this criterion. The assessment has **not yet been performed** in this run: no separate-model inference endpoint was available through the connected tools exercised, and an attempted Hugging Face Space discovery call returned a tool-not-found error. Do not simulate a second model, reuse Builder GPT-6 as an independent reader, or claim a pass without actual distinct-model output. If a separate model cannot be invoked, record that technical limitation for the Project Director rather than fabricating evidence.
+
+### 11.4 Gate disposition and non-actions
+
+- DF-06 remains **PARTIAL**: bounded relative-path/link checks and earlier pinned-source/anchor/external-reference checks are documented, but the available evidence does not establish exhaustive semantic, raw-HTML, reference-style or all-historical-link validation.
+- DF-08 remains **PARTIAL**: bounded discovery and preservation mapping are substantial, but broader historical reconciliation and archive/supersession decisions remain incomplete.
+- DF-09 is **REVISED / AI ASSESSMENT PENDING** under the Project Director's explicit instruction above.
+- DF-11 remains **UNRESOLVED** as to reviewer qualification and exact-current-head review.
+- DF-12 remains **AWAITING PROJECT DIRECTOR EXACT-REVISION DECISION**.
+- DF-13 remains **NOT STARTED / HELD**. Runtime implementation remains unauthorized.
+
+No PR was merged or closed; no branch was rebased, retargeted or cherry-picked; no cross-lineage integration was performed; no runtime source, tests, dependencies, build/workflow files or runtime state were changed. The PR #192/#193 integration order, PR #191 disposition, PR #174 missing-original-report route, reviewer qualification and final DF-12 acceptance remain Project Director decisions.
