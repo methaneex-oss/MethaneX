@@ -375,3 +375,21 @@ The Project Director must decide:
 DF-09 remains open until a real uninvolved human completes the protocol. DF-12 remains the final exact-revision decision. No merge, rebase, retarget, cherry-pick, branch deletion, Stage A start or implementation was performed.
 
 **Current disposition: NOT CLEARED. Stage A remains HELD; implementation remains unauthorized.**
+
+
+---
+
+## 15. Live PR-state recheck — 2026-11-09
+
+This addendum supersedes stale live-head values in earlier register sections.
+
+| Item | Live evidence | Current disposition |
+|---|---|---|
+| PR #174 | Open/draft/unmerged; HEAD `be46b3858102c31022128522c4b3506aad4dff8a`; specification blob `b366564b3f68e674ae5f5f9fc5a6c90d8b4f454d`. Accepted planning baseline remains `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`. Review and inline-thread endpoints return zero records. | Follow-on F-02/F-03 remain open; original full report and exact inline rationale remain unavailable. |
+| PR #191 | Open/draft/unmerged; base `f6267456560a08054d69f7960d2951452b14017c`; head `609d38ede50bbdd98a93dfed112781eacabee9fd`; one changed report file, blob `eac3cb443b5c6a2b9c0d9ad9f5fd552b79d8a0e2`. The report file is absent at current PR #179 HEAD `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`. | It is a unique contribution; historical-base review versus dependent replay remains a Project Director decision. |
+| PR #193 | Open/draft/unmerged; base `874c732973b6ab303d65a503f5a215b0af8e1153`; head `ee508c09be9d848c7baa9533bb6f88f9cc27f94a`; 31 commits ahead / 0 behind its own base. Current plan/handoff blobs: `7df34fed59c1c8577ddcd23c02f772f366d46d39` / `0392ff59c6ae48d3c78e571c905550dfc77a5965`. | Both files still contain historical PR #173 UNVERIFIED/PROPOSED wording; correction belongs in the authorized cross-lineage reconciliation, not an unapproved branch mutation. |
+| PR #192 | Open, non-draft, unmerged; exact current HEAD and 28-path snapshot are recorded in inventory §45 after this addendum. | No merge or integration decision inferred. |
+
+The PR #191 comparison report is confirmed absent from PR #179 HEAD, so it is not a duplicate contribution. PR #191's base is an ancestor of PR #179 HEAD, but PR #191's own head diverges: one unique report commit versus 22 intervening #179-line commits. PR #193's comparison is made against its own base, not against PR #192; the latter is a different lineage and a comparison between those unrelated tips is not a meaningful merge-readiness test.
+
+No cross-lineage changes or history operations were performed. PR #174 F-02/F-03 provenance disposition, PR #191 disposition, PR #192/#193 integration order, DF-11 qualification, DF-09 human test, and DF-12 exact-revision acceptance remain outside Builder authority. Stage A remains held.
