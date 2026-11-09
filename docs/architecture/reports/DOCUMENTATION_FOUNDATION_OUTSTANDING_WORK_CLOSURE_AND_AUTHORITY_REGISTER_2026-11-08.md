@@ -474,3 +474,14 @@ DF-06 and DF-08 remain PARTIAL. Do not inflate the bounded scan into exhaustive 
 The Project Director decisions remain: (1) PR #174 missing-original-report provenance route; (2) PR #191 historical-base review versus authorized dependent replay; (3) PR #192/#193 sequencing; (4) DF-11 Grok qualification and exact-head review requirement; and (5) DF-12 exact-revision acceptance. DF-09 remains an actual human requirement, not a decision the Builder can satisfy. No merge, rebase, retarget, cherry-pick, branch deletion, Stage A start or implementation occurred.
 
 **Current disposition: DOCUMENTATION FOUNDATION NOT CLEARED. Stage A HELD. Implementation unauthorized.**
+
+
+## 17. Project Director revision to DF-09 and live-state update — 2026-11-09
+
+The Project Director explicitly supersedes the human-only DF-09 fresh-reader requirement for this project. The required reader-comprehension evidence is now a fresh assessment by a genuinely different AI model, without prior project conversation or summaries, using only the repository entry point and documentation package. The model must explain project purpose, navigation, current status, planning/architecture boundaries, unresolved work, authority gates and next safe actions; cite exact paths; separate explicit statements from inference/unavailable information; and preserve its model identity, prompt, exact revision, raw answers, navigation path and ambiguities. It must be described as an AI fresh-reader assessment, not a human session. The Project Director has stated that a different AI's demonstrated understanding is sufficient for this criterion.
+
+**Execution status:** PENDING. No distinct-model output was obtained in this run; do not simulate a model, reuse Builder GPT-6, or claim the test passed. The limitation and attempted discovery failure are recorded in the consolidated provenance report §11. This is not a reason to block other technical reconciliation work.
+
+Live PR metadata rechecked in this run: #173 HEAD `97191111bc2573c14d391c0af9628db7b11f194b`; #174 HEAD `be46b3858102c31022128522c4b3506aad4dff8a`; #191 head `609d38ede50bbdd98a93dfed112781eacabee9fd`; #192 HEAD `ac7f860dc257e181a12612bf3e3cb811ce26bd58` (28 changed paths); #193 HEAD `ee508c09be9d848c7baa9533bb6f88f9cc27f94a`. All five PRs remain open and unmerged; #173, #174, #191 and #193 are drafts, while #192 is non-draft.
+
+DF-06 and DF-08 remain partial within their disclosed bounded scopes. DF-11 remains unresolved: Grok declared a distinct model identity but the formal COMMENTED review used the same GitHub account as Builder and examined older PR #192 HEAD `9e0c342dcfbbe1d7a51a6b3a2b7574c9cdf480dc`, not current HEAD. DF-12 remains the Project Director's exact-revision acceptance decision. DF-13 remains NOT STARTED / HELD; implementation is unauthorized. PR #174 F-02/F-03 provenance disposition, PR #191 disposition and PR #192/#193 integration order remain unresolved Project Director decisions.
