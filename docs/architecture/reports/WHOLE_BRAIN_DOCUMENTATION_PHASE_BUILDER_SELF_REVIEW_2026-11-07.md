@@ -872,3 +872,33 @@ The same-identity GPT-6 technical review remains non-qualifying for DF-11. No un
 The Builder-controlled link/anchor checks, bounded historical discovery, path/blob mapping, status-label correction, immutable-link correction and numbering repairs are complete within the documented scope. No Builder-controlled technical defect remains open in those areas. The final inventory synchronization is the sole remaining Builder write and must be verified against the exact resulting PR head. The documentation-foundation gate is not cleared: DF-09 requires an uninvolved human, DF-11 requires a genuinely separate reviewer after Director authorization, and DF-12 requires the Project Director's exact-revision decision. PR #173 provenance, PR #174 F-02/F-03, PR #191 disposition, archive/supersession and PR #192/#193 order remain accurately recorded as external project/authority matters, not silently marked closed.
 
 **Builder self-review result:** BUILDER-CONTROLLED TECHNICAL WORK COMPLETE PENDING FINAL INVENTORY COMMIT. NOT CLEARED FOR ACCEPTANCE. Stage A remains HELD; implementation remains unauthorized.
+
+
+---
+
+## 30. Final Builder self-review — exact pre-inventory snapshot — 2026-11-09
+
+### 30.1 Exact revision and scope
+
+At the start of this self-review update, PR #192 was open/draft/unmerged at HEAD `5c33c39b32f4ccb8f598998c7ce0f0355dbede40`, base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, with 26 changed paths. This is a Builder self-review, not an independent review. The PR remains documentation-only; no runtime/source implementation or build/test configuration was changed.
+
+### 30.2 Builder-controlled work verified in the controlling evidence
+
+- **Navigation and document structure:** portal, planning index, role-based routes and reusable templates are present. The earlier section-numbering defects identified by the technical re-review have been corrected.
+- **DF-06 bounded link validation:** Preservation and Link Validation Report §11 records 84 relative Markdown targets with no missing paths, 45 exact historical commit/path pairs with matching blob identities, 76 valid line-anchor ranges, and 189 external URL occurrences classified/checked against available GitHub metadata. One historical ChatGPT share pointer remains access-limited and unverified.
+- **DF-07 status consistency:** the planning index, outstanding-work register and preservation report distinguish PR #173 UNVERIFIED/PROPOSED; PR #174's exact accepted planning-baseline revision from its open F-02/F-03 findings; PR #178 proposed/unaccepted; PR #191's divergent graph; separate PR #192/#193 lineages; and Stage A's held status.
+- **DF-08 bounded preservation:** the historical register maps 108 documentation paths across 28 documentation PRs; discovery covered 245 branches and 184 PRs. The two formerly unmatched refs are mapped by exact ancestry. The evidence is bounded to the stated discovery and document families; it is not a claim that every repository artifact has been archived.
+- **Cross-document synchronization:** the planning index §17, outstanding-work register §11 and Builder reconciliation §12 now record the same Builder-closure disposition and external-gate boundaries.
+
+### 30.3 Remaining requirements
+
+- **DF-09:** NOT MET until an uninvolved human completes the 17-question protocol without coaching and the raw session evidence is preserved.
+- **DF-11:** NOT MET until a genuinely separate reviewer identity conducts and submits a formal review against the final exact PR revision. The prior same-identity GPT-6 review is non-qualifying; no reviewer is assigned and the earlier request remains suspended.
+- **DF-12:** NOT MET until the Project Director records an exact-revision decision after qualifying review.
+- PR #173 primary acceptance provenance remains unverified; PR #174 F-02/F-03 remain open because the original review/inline annotations were not recovered; PR #191 disposition and PR #192/#193 integration order remain Director matters.
+
+### 30.4 Final Builder disposition
+
+The identified Builder-controlled link/anchor checks, bounded historical discovery, documentation-path/blob mapping, status reconciliation and numbering corrections are complete within the documented scope. The detailed inventory is the final Builder write; it must record the exact parent snapshot and self-blob convention. After that commit, the Builder must re-fetch PR #192 metadata, all changed paths and all 26 blobs at the resulting HEAD and verify the inventory's post-write blob identity.
+
+**Self-review result: BUILDER-CONTROLLED TECHNICAL WORK COMPLETE WITHIN THE BOUNDED SCOPE, PENDING FINAL INVENTORY WRITE AND POST-WRITE VERIFICATION. NOT CLEARED FOR ACCEPTANCE.** Stage A remains HELD; implementation remains unauthorized.
