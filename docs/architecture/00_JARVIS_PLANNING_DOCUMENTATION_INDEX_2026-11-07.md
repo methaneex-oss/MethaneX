@@ -367,3 +367,14 @@ This addendum controls the current-run facts below. Earlier dated snapshots rema
 - The documentation foundation remains NOT CLEARED. DF-09 remains open; DF-11 qualification and exact-head review remain unresolved; DF-12 requires the Project Director's exact-revision decision. Stage A remains NOT STARTED and HELD; implementation remains unauthorized.
 
 The current-run evidence packet is maintained in the Project Director Decision Provenance and Documentation-Gate Reconciliation and the updated authority register.
+
+
+---
+
+## 23. Revised fresh-reader evidence criterion and live reconciliation — 2026-11-09
+
+This addendum records the Project Director's explicit change to DF-09 evidence: an uninvolved human session is no longer required for the reader-comprehension criterion. The replacement is a fresh assessment by a genuinely different AI model, given only the repository entry point and documentation package without prior project summaries or conversation context. The AI must independently explain the project's purpose, navigation, current status, architecture/planning boundaries, unresolved work, authority gates and next safe actions, citing exact paths and distinguishing explicit content, inference and unavailable information. Preserve model identity, exact revision, prompt, raw answers and navigation/ambiguity evidence. This must be labelled an AI assessment, never a human session.
+
+The user has explicitly accepted a different AI's demonstrated repository comprehension as sufficient for this criterion. The AI assessment is **PENDING**, not passed: the immediate run did not obtain a usable separate-model inference endpoint. No result is fabricated. The current evidence and limitations are recorded in [Project Director Decision Provenance and Documentation-Gate Reconciliation](reports/PROJECT_DIRECTOR_DECISION_PROVENANCE_AND_GATE_RECONCILIATION_2026-11-09.md) §11.
+
+Current live PR #192 HEAD is `ac7f860dc257e181a12612bf3e3cb811ce26bd58` (open, non-draft, unmerged; 28 changed paths). The formal Grok-declared COMMENTED review examined older HEAD `9e0c342dcfbbe1d7a51a6b3a2b7574c9cdf480dc`, declared a distinct model identity from Builder GPT-6, but was submitted through the same GitHub account. Its verdict was NOT CLEAR TO PROCEED. Reviewer qualification and exact-current-head review remain unresolved. DF-06 and DF-08 remain bounded/partial; DF-11 remains unresolved; DF-12 remains a Project Director decision. Stage A remains NOT STARTED and HELD; implementation remains unauthorized.
