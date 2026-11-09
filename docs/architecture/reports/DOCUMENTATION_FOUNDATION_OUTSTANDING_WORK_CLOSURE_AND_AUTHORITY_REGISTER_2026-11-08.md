@@ -248,3 +248,34 @@ The expanded historical register now maps 108 documentation paths across 28 docu
 The earlier PR #192 reviewer request was premature. Its repository request file is now explicitly WITHDRAWN/SUSPENDED, and the PR conversation records that no reviewer should act on it. The Builder has not issued another request and has not identified or assigned a qualifying reviewer. Several repository reports explicitly disclose GPT-6 as the same model identity as Builder; another review-labelled report lacks identity/independence disclosure. None satisfies DF-11.
 
 **Current Builder disposition:** link/anchor validation and bounded historical discovery are closed within the recorded scope. The remaining Builder-controlled closeout is the final synchronized inventory, self-review, and one exact-HEAD closure report. The documentation-foundation gate is **NOT CLEARED** until the human reader, qualifying independent reviewer and Project Director decision are supplied. Stage A remains held; implementation remains unauthorized.
+
+
+---
+
+## 11. Final Builder closeout synchronization — 2026-11-09
+
+This addendum supersedes the earlier statement in §10 that the Builder still had to complete DF-06 and DF-08 validation. It does not supersede the external-human or Project Director requirements.
+
+### 11.1 Exact starting snapshot
+
+At the start of this synchronization PR #192 was open/draft/unmerged at HEAD `2c564c3b20e724899ff228564bf55cbc877d3442`, base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, with 26 changed paths. The final inventory update is still pending and will record the parent immediately before that write.
+
+### 11.2 Builder-controlled closure evidence
+
+- **DF-06:** the 26-file package validation is recorded in Preservation and Link Validation Report §11: 84 relative Markdown targets with no missing repository paths; 89 immutable source links across 45 exact commit/path pairs; all 45 pinned blobs matched; 76 line-anchor ranges are within exact fetched file lengths; 189 external URL occurrences were classified and checked against available GitHub PR, blob/tree, Actions, artifact and comparison metadata. One ChatGPT shared-conversation pointer remains access-limited and explicitly unverified. The result is bounded to the enumerated package and sources.
+- **DF-07:** the status corrections are reconciled in the current control documents: PR #173 UNVERIFIED/PROPOSED; PR #174 acceptance limited to exact planning-baseline HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`; follow-on F-02/F-03 OPEN; PR #178 proposed/unaccepted; PR #191 diverged; PR #192/#193 separate; Stage A held.
+- **DF-08:** bounded repository discovery and preservation mapping are recorded in the historical register: 245 branches, 184 PRs, 108 documentation paths across 28 documentation PRs, with exact source revisions/blob identities for the enumerated paths. This is not a claim of exhaustive archival of every repository artifact. Archive/supersession policy and destructive actions remain Director-controlled.
+- **DF-09:** protocol is corrected and consistently defined as 17 questions; no actual fresh-reader session is claimed.
+- **DF-10:** the final self-review is being synchronized to the exact pre-inventory parent; the final inventory is the last Builder write.
+- Numbering defects identified in the technical re-review have been corrected and are recorded in reconciliation §10 and the technical follow-up record.
+
+### 11.3 Remaining external gates and authority
+
+- **DF-09:** an uninvolved human must complete the 17-question protocol without coaching and preserve raw answers/session conditions.
+- **DF-11:** a genuinely separate reviewer must be identified and submit a formal GitHub review after the Project Director authorizes review. No reviewer is currently assigned; the earlier request remains withdrawn/suspended.
+- **DF-12:** the Project Director must decide against the exact revision after qualifying review.
+- PR #173 primary acceptance provenance remains unverified; PR #174 F-02/F-03 remain open because the original full review/inline annotations were not recoverable; PR #191 disposition and PR #192/#193 integration order remain Director matters.
+
+### 11.4 Builder disposition
+
+**Builder-controlled technical work: COMPLETE WITHIN THE BOUNDED SCOPE ABOVE, pending final inventory write and post-write verification.** The package is not gate-cleared and is not yet ready for acceptance because DF-09, DF-11 and DF-12 are external requirements. Stage A remains HELD; implementation remains unauthorized. No review request is active or issued.
