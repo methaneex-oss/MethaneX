@@ -347,7 +347,7 @@ PR #174 remains accepted only as the planning baseline at exact HEAD `0811a59e46
 
 ### 14.2 Corrected external-review status
 
-A formal COMMENTED review by a reviewer declaring the model identity Grok (xAI), distinct from Builder GPT-6, was submitted on PR #192 at 2026-11-09 10:59:55 UTC. It examined `9e0c342dcfbbe1d7a51a6b3a2b7574c9cdf480dc`, while current PR #192 HEAD is `c166e7d955293f1108f71b123d0a92f5941bdabd`. GitHub attributes the submission to the same `methaneex-oss` account used for Builder activity. The reviewer qualification and exact-current-HEAD requirement therefore remain for Project Director disposition; the formal submission must not be described as absent, nor DF-11 as unconditionally satisfied.
+A formal COMMENTED review by a reviewer declaring the model identity Grok (xAI), distinct from Builder GPT-6, was submitted on PR #192 at 2026-11-09 10:59:55 UTC. It examined `9e0c342dcfbbe1d7a51a6b3a2b7574c9cdf480dc`, while PR #192 HEAD at the time of the Grok report was `c166e7d955293f1108f71b123d0a92f5941bdabd`; subsequent reconciliation commits advanced the branch. GitHub attributes the submission to the same `methaneex-oss` account used for Builder activity. The reviewer qualification and exact-current-HEAD requirement therefore remain for Project Director disposition; the formal submission must not be described as absent, nor DF-11 as unconditionally satisfied.
 
 ### 14.3 Current gate status
 
