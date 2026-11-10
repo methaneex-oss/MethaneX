@@ -1356,3 +1356,12 @@ This addendum records the Builder's response to two distinct-model evidence arti
 - DF-13: Stage A HELD; implementation NOT AUTHORIZED.
 
 No merge, branch-history rewrite, archive operation, Stage A start or runtime implementation was performed.
+
+
+## 2026-11-10 current evidence addendum — second blind reader run
+
+The second authorized blind AI fresh-reader run completed as workflow [#42879721340](https://github.com/methaneex-oss/MethaneX/actions/runs/42879721340), assessing PR #192 packet revision `4a670636baf787ad4b1774bd306544c135868a04`. Artifact ID `13793841106`; API-reported provider/model `Nvidia` / `nvidia/nemotron-3.5-super-vl:free`; finish reason `stop`; result **PARTIALLY CLEAR (22/32)**. The run's execution succeeded; the reader-comprehension criterion did not pass. DF-09 therefore remains OPEN pending a later CLEAR result.
+
+The result's primary evidence/authority findings are reconciled in the [Execution and Readiness Report](INITIAL_DOCUMENTATION_FOUNDATION_EXECUTION_AND_READINESS_2026-11-10.md) and [Project Director Decision Evidence Extracts](PROJECT_DIRECTOR_DECISION_EVIDENCE_EXTRACTS_2026-11-10.md). The PR #173 acceptance record is a later transcription from conversation history; PR #174 acceptance is in direct GitHub comment #6604790481. The PR #174 accepted baseline and its current status-header clarification are distinct revisions. PR #191's base-to-#179 and head-to-#179 comparisons describe different graph relationships, not mutually exclusive facts. DF-11 and DF-12 remain unresolved/outstanding respectively.
+
+This addendum does not clear the documentation gate, authorize Stage A, authorize runtime implementation, or decide PR integration. Stage A remains NOT STARTED / HELD; implementation remains NOT AUTHORIZED.
