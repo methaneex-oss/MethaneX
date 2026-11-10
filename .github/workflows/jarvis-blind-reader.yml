@@ -50,15 +50,9 @@ jobs:
             ("b05434758ad4fe72815503f89bd5d2990ccb658b","docs/architecture/01_JARVIS_WHOLE_SYSTEM_ANATOMY_AND_RESPONSIBILITY_MAP.md","Whole-system responsibility map"),
             ("TARGET","docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md","Whole-Brain scope correction"),
             ("TARGET","docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md","Documentation-foundation audit and gate criteria"),
-            ("TARGET","docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md","Documentation inventory"),
-            ("d7d676b79dbf3269f7fd3ebdb4363a6df19f255d","docs/architecture/research/02_BRAIN_FOUNDATIONAL_CAPABILITY_INVESTIGATION_2026-11-03.md","Foundational Brain capability investigation"),
-            ("TARGET","docs/architecture/reports/PHASE_1_WHOLE_REPOSITORY_INVESTIGATION_AND_REUSE_AUDIT_2026-11-04.md","Phase 1 repository investigation"),
-            ("TARGET","docs/architecture/reports/PHASE_1_REVIEW_CORRECTIONS_AND_SCOPE_RECONCILIATION_2026-11-05.md","Phase 1 corrections"),
-            ("TARGET","docs/architecture/reports/PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md","Phase 2 integration map"),
             ("609d38ede50bbdd98a93dfed112781eacabee9fd","docs/architecture/reports/PHASE_2_HUMAN_AND_MCU_REFERENCE_COMPARISON_2026-11-06.md","Human and MCU comparison"),
             ("97191111bc2573c14d391c0af9628db7b11f194b","docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md","Accepted Brain Foundation Architecture baseline"),
             ("0811a59e46bf934e32e794f90e4e7d18d4e2bd97","docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md","Accepted Brain Mechanism Specification baseline"),
-            ("39fe09dcf13496f5f0005ccf3f00739303e29f88","docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md","Proposed governance document"),
           ]
 
           def git(*args, check=True):
@@ -81,8 +75,8 @@ jobs:
               body = item.stdout
               raw = body.encode("utf-8")
               total += len(raw)
-              if total > 180000:
-                  raise SystemExit("Packet exceeds 180,000 bytes; refusing to truncate.")
+              if total > 500000:
+                  raise SystemExit("Packet exceeds 500,000 bytes; refusing to truncate.")
               digest = hashlib.sha256(raw).hexdigest()
               manifest.append({"source_commit":source,"path":path,"role":role,"bytes":len(raw),"sha256":digest})
               chunks.append(f"\n\n===== DOCUMENT {path} | COMMIT {source} | SHA256 {digest} =====\n{body}\n===== END DOCUMENT =====")
