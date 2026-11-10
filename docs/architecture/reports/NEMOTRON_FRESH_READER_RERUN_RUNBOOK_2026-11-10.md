@@ -13,6 +13,7 @@ The reusable workflow on `main` has been parameterized to accept an exact `targe
 - `3b43ac1c5f6c7a9c070505a5d621e8e96645aa9e` — correct dispatch input YAML.
 - `2fb25e968dd102bc20e5e41ef93726232ff88321` — fix the missing `os` import in the packet-assembly step.
 - `f1ec646b2a4e0b9d3207c37883139c4708a1f7b2` — enforce exact Nemotron provider/model identity, require `finish_reason=stop` (missing values fail), reject refusal/tool-call responses, and record the validated assessment label in run metadata.
+- `d7bb3b8f267a86b7f156a70716db6c143fdbbaa8` — pass the validated assessment label into the API-request step's environment.
 
 The workflow:
 - checks out the exact supplied commit SHA;
