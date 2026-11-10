@@ -123,8 +123,11 @@ jobs:
                   {"role": "user", "content": user}
               ],
               "temperature": 0.2,
-              "max_tokens": 12000,
-              "reasoning": {"effort": "low", "exclude": True},
+              "max_tokens": 10000,
+              # This model's free endpoint exhausted the entire output budget
+              # on reasoning even at effort=low. Disable reasoning explicitly
+              # so the assessment receives the completion budget.
+              "reasoning": {"enabled": False},
               "stream": False
           }
           request = urllib.request.Request(
