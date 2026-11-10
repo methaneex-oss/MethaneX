@@ -627,3 +627,34 @@ The current Phase 2 source-map blob is `9dd776920d0a479a9d7275acc821e12c266623d9
 The final inventory write and post-write verification are still required before the Builder can report completion. After those steps, this handoff can be submitted for the Project Director's review authorization. It must not be treated as authorization itself.
 
 External gates remain distinct: DF-09 requires an uninvolved human's 17-question session; DF-11 requires a genuinely separate reviewer identity and formal GitHub review; DF-12 requires the Project Director's exact-revision decision. PR #173 provenance remains unverified; PR #174 F-02/F-03 remain open; PR #191 and PR #192/#193 order remain authority matters. Stage A remains held; implementation remains unauthorized.
+
+
+---
+
+## 26. Superseding review and fresh-reader evidence update — 2026-11-10
+
+This addendum supersedes earlier statements in this handoff that DF-09 requires a human reader session or that no separate-model reviewer exists. Those statements were accurate for their dated snapshots but are no longer the current evidence state.
+
+### 26.1 Independent review evidence now available
+
+Grok (xAI), a model identity distinct from Builder GPT-6, produced the report [Independent Documentation Foundation Review — PR #192](INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_GROK_2026-11-09.md). It examined exact PR #192 HEAD `9e0c342dcfbbe1d7a51a6b3a2b7574c9cdf480dc` and recommended **NOT CLEAR TO PROCEED**. A formal GitHub COMMENTED review was submitted against that exact revision on 2026-11-09. GitHub attributes the submission to the same `methaneex-oss` account used for Builder activity; the report itself declares a distinct xAI/Grok model identity and no prior involvement. Preserve both facts. Do not misstate the report as same-model GPT-6 work, but do not hide the account-attribution limitation either.
+
+The report is now stale relative to live PR #192 HEAD `ff95f2807a88388805e8e413616fc9776f244e44`. Its exact-revision findings remain useful evidence, but a review of the current exact HEAD is still required before relying on it as the final review of the current package. The Project Director retains the DF-11 qualification decision.
+
+### 26.2 Fresh-reader evidence now available
+
+The Project Director-authorized substitute for a human session is a blind assessment by a genuinely different AI model. NVIDIA Nemotron via OpenRouter completed workflow run [#42834248124](https://github.com/methaneex-oss/MethaneX/actions/runs/42834248124) against packet revision `3ea2970c7b43bdfb87b3d1459690eacd83516745`. The result was **PARTIALLY CLEAR** (31/32 scorecard). The exact prompt, packet manifest, run metadata and report are preserved in `NEMOTRON_BLIND_FRESH_READER_ASSESSMENT_2026-11-10.md` and `fresh-reader-evidence/`.
+
+This satisfies execution of the AI assessment route, not its comprehension acceptance criterion. DF-09 remains OPEN until the documented ambiguities are corrected and a repeat blind assessment against the corrected exact revision returns CLEAR. Do not ask for or report a human session; the Project Director explicitly substituted the different-AI route.
+
+### 26.3 Findings to apply to documentation
+
+- Consolidate the current state at the top of the planning index; keep dated addenda as historical evidence, not competing current summaries.
+- State PR #173 acceptance accurately but qualify that its repository evidence is a later transcription of a prior conversation, not the original contemporaneous decision artifact. Do not revert to UNVERIFIED merely because the original artifact is not in the PR discussion.
+- Distinguish PR #174's exact accepted baseline from its later header clarification and open F-02/F-03 follow-on obligations.
+- Keep PR #191's historical-base disposition and PR #192/#193 integration order as reserved Project Director decisions.
+- Refresh the inventory and Builder self-review against the final exact PR #192 HEAD after all documentation writes.
+- Preserve Grok's positive findings: the mechanisms/acquired-behavior principle, Brain-versus-whole-system boundary, staged planning boundary, authority vocabulary, and Stage A hold are correctly represented. Do not redesign or rewrite those sections without new evidence.
+- Follow Grok's DF-06 recommendation by recording the exact scope of final changed-file path/fragment validation. External reachability, semantic relevance and renderer-specific behavior must remain explicitly PARTIAL unless actually tested.
+
+**Current state:** PR #192 remains open/non-draft/unmerged at `ff95f2807a88388805e8e413616fc9776f244e44`; PR #193 remains a separate open/draft lineage at `ee508c09be9d848c7baa9533bb6f88f9cc27f94a`. DF-09 remains OPEN pending repeat CLEAR assessment; DF-11 qualification/current-head review remains open; DF-12 exact-revision Project Director acceptance remains outstanding. Stage A remains HELD; implementation remains NOT AUTHORIZED. No merge, rebase, retarget, cherry-pick or runtime change is authorized.
