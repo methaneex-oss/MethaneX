@@ -41,7 +41,7 @@ The following facts were checked against GitHub after the assessment:
 
 ### PR #173 — acceptance is verified
 
-PR #173 exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b` was accepted as the Brain Foundation Architecture planning baseline. The decision provenance is transcribed in PR #173's own discussion comment [#6752144835](https://github.com/methaneex-oss/MethaneX/pull/173#issuecomment-6752144835). This is an existing 2026-11-03 Project Director decision, not a new decision. The earlier classification as unverified is superseded.
+PR #173 exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b` was accepted as the Brain Foundation Architecture planning baseline. The decision provenance is transcribed in PR #173's own discussion comment [#6752144835](https://github.com/methaneex-oss/MethaneX/pull/173#issuecomment-6752144835). This is an existing 2026-11-03 Project Director decision, not a new decision. The earlier classification as unverified is superseded. The accepted artifact's own header still uses historical `Proposed architecture` wording; the decision comment controls the acceptance status. This stale header is disclosed in the current index rather than concealed.
 
 ### PR #174 — accepted baseline, separate open follow-on obligations
 
