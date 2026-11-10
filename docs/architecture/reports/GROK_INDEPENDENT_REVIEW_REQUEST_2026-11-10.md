@@ -62,6 +62,12 @@ Inspect the entire PR #192 documentation diff and follow relevant linked evidenc
 
 Do not assume prior reports are correct. Verify their claims against the actual repository and GitHub records. The prior Grok review examined PR #192 HEAD `9e0c342dcfbbe1d7a51a6b3a2b7574c9cdf480dc`; it is historical evidence and does not automatically cover the current HEAD.
 
+## 3A. Latest fresh-reader evidence to verify
+
+The second Nemotron assessment is now available: workflow [#42879721340](https://github.com/methaneex-oss/MethaneX/actions/runs/42879721340), exact packet revision `4a670636baf787ad4b1774bd306544c135868a04`, artifact ID `13793841106`, result **PARTIALLY CLEAR (22/32)**. It identified remaining authority/revision verifiability problems. The Builder has since added a repository-fetched decision-evidence extract, included both the accepted PR #174 baseline and its current status-header correction in the blind packet, strengthened the current-status/historical-snapshot rule, added a glossary, clarified the portal's provisional status, and updated the packet rubric.
+
+These are Builder claims, not findings you should accept without inspection. Fetch the current PR #192 HEAD when your review begins. Verify each change directly and determine whether the next fresh-reader packet is sufficiently neutral and complete. The latest run #42879721340 is historical evidence for its stated packet SHA; it does not review the subsequent corrections.
+
 ## 4. Required independent review questions
 
 ### A. Newcomer comprehension and navigation
