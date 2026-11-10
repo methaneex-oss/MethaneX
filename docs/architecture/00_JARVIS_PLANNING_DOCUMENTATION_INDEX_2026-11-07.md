@@ -17,7 +17,7 @@
 **Gate:** **NOT CLEARED.**  
 **Stage A:** NOT STARTED / HELD.  
 **Runtime implementation:** NOT AUTHORIZED.  
-**Working PR:** #192, open, non-draft, unmerged; base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; live HEAD `9dccbf6990161a287b775c8f9a481a7f7068a28d` (this index refresh itself advances the branch; consult PR #192 for the resulting live HEAD).
+**Working PR:** #192, open, non-draft, unmerged; base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; live HEAD `c026b5b69828d83249505ce28226fa1c668520f6` at this snapshot; later commits on this branch supersede this SHA. Always fetch PR #192 for the live HEAD before acting.
 
 ### Accepted planning baselines (exact scope only)
 
@@ -32,7 +32,7 @@
 | #174 | `be46b3858102c31022128522c4b3506aad4dff8a` | PR #173 HEAD | Open / draft / unmerged | Accepted exact planning baseline plus open F-02/F-03 follow-ons |
 | #179 | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | `39fe09dcf13496f5f0005ccf3f00739303e29f88` | Open / draft / unmerged | BM-01–BM-12 source-integration map; partial, not whole-Brain completeness |
 | #191 | `609d38ede50bbdd98a93dfed112781eacabee9fd` | `f6267456560a08054d69f7960d2951452b14017c` | Open / draft / unmerged | One unique human/MCU comparison report; historical base; one unique commit ahead and 22 commits behind/diverged from #179 line |
-| #192 | `ff95f2807a88388805e8e413616fc9776f244e44` | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | Open / non-draft / unmerged | Documentation-foundation reconciliation and evidence |
+| #192 | `c026b5b69828d83249505ce28226fa1c668520f6` | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | Open / non-draft / unmerged | Documentation-foundation reconciliation and evidence; live HEAD advances with subsequent commits |
 | #193 | `ee508c09be9d848c7baa9533bb6f88f9cc27f94a` | `874c732973b6ab303d65a503f5a215b0af8e1153` | Open / draft / unmerged | Separate #175-derived deferred plan/handoff lineage |
 
 PR #191's disposition (historical-base review or authorized dependent replay) and PR #192/#193 integration order remain Project Director decisions. No rebase, retarget, cherry-pick, merge, or branch deletion is authorized or performed.
@@ -59,6 +59,23 @@ The historical sections below remain dated evidence snapshots. This summary cont
 - [Prior Grok review](reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_GROK_2026-11-09.md) — historical NOT CLEAR report against an older PR #192 HEAD.
 
 ---
+
+## Reader glossary — identifiers used in this documentation set
+
+- **BM-01–BM-12:** the twelve logical Brain Mechanism responsibilities defined in the accepted PR #174 specification. They are an existing decomposition, not a claim that the future whole Brain has exactly twelve mechanisms.
+- **SYS-01–SYS-11:** system-level responsibilities/boundaries used by the architecture and mechanism specification to describe the surrounding JARVIS system and its relationship to the Brain. Consult the exact system architecture and specification for each identifier's full definition; the numeric range is not a completeness claim.
+- **DF-01–DF-13:** the thirteen exit criteria in the Initial Documentation Foundation audit. They track documentation integrity, evidence, review, acceptance and preservation—not Brain capabilities.
+- **F-01, F-02, F-03:** finding identifiers from reviews of the Brain architecture/specification. Their status is revision- and finding-specific; do not infer closure from a later document mentioning them. F-02/F-03 remain open follow-on obligations in the current records.
+- **Gate A / Gate B:** named project governance/authorization gates used in historical planning records. They are not interchangeable with the current Initial Documentation Foundation Completion Gate. Their operative definitions and acceptance authority must be read from the exact governance artifact and decision record; proposed governance text is not binding merely because it defines a gate.
+- **Accepted within exact scope:** a decision accepting a named artifact at one exact revision for a stated purpose. It does not accept later revisions by implication or authorize unrelated stages, implementation, merge or deployment.
+
+### Provenance evidence for accepted baselines
+
+The exact PR #173 and PR #174 decision records, their different provenance quality, accepted revisions, later header clarification and authorization limits are consolidated in [Project Director Decision Evidence Extracts](reports/PROJECT_DIRECTOR_DECISION_EVIDENCE_EXTRACTS_2026-11-10.md). In particular, PR #173's record is a later transcription from conversation history; PR #174's acceptance is recorded in the GitHub decision comment itself. These are not equivalent provenance classes.
+
+### Historical snapshot rule
+
+Sections and addenda below that contain dated PR HEADs, workflow statuses or "current" labels are point-in-time evidence. They do not override this controlling status block. For live branch/PR state, fetch GitHub metadata. For accepted baseline status, use the exact decision evidence and accepted SHA. Never combine a historical PR head from one date with a live base/head from another date as if they were one snapshot.
 
 ## 1. Current objective and immediate next work
 
