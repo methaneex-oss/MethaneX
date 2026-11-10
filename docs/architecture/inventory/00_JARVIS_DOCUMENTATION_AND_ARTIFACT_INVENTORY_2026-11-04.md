@@ -2006,3 +2006,52 @@ This manifest supersedes §52 after the final DF-06 post-write link/path scan an
 **Manifest verification:** the recursive tree contains 258 entries, is not truncated, and all 29 expected paths are present. The execution/readiness report blob is 2cad4c927cf812630e373b05c25b19d72630f10c; the authority-register blob is 0cf7fae1ffc4ddd28180cd372b77524525f94fc0. The inventory row records its pre-append parent blob 50a6f168c64bc3b56466108fec5f99e9c982a334; its resulting blob is expected to differ. The other 28 blob identities are exact at this parent.
 
 The final bounded DF-06 scan at this parent reports 247 inline Markdown links, 93 repository-relative targets, zero missing targets, zero local fragments and 154 external Markdown destinations. DF-06 remains PARTIAL because external reachability, semantic relevance, renderer-specific anchors and exhaustive historical cross-branch validation remain open. DF-08 remains PARTIAL; DF-09 OPEN; DF-11 UNRESOLVED; DF-12 OUTSTANDING; DF-13 NOT STARTED / HELD. No governance or implementation operation was performed.
+
+
+---
+
+## 54. Nemotron fresh-reader evidence — exact 33-path PR #192 parent manifest — 2026-11-10
+
+This parent snapshot was fetched immediately before the inventory update. PR #192 was open, non-draft and unmerged at HEAD `69c86191f6d11a70ed765facb5722dfc3d6a76f5`, based on `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`. The PR-files endpoint returned 33 changed paths. The recursive tree at tree SHA `1a8ef6d09b143896110dca49524d01153c9a8793` contained 263 entries and was not truncated. All 33 PR paths existed in that tree and every tree blob SHA matched the PR-files endpoint; zero missing paths and zero mismatches.
+
+| # | Path | Parent blob SHA |
+|---:|---|---|
+| 1 | README.md | 780651b804b491781fdcac8e248eaca9243797a4 |
+| 2 | docs/ARCHITECTURE.md | 3c6692b52059e43947d1fd2e7e84debb2362023f |
+| 3 | docs/JARVIS_BRAIN_MASTER_BLUEPRINT.md | 0e49d313bf3929aa30140cb7149ebab038918378 |
+| 4 | docs/JARVIS_PHASE_2_COMPLETION.md | e0e57a44216fc36c52d469a79abfc8df058515a3 |
+| 5 | docs/README.md | da0d9c834e8a5b2e67519ee5e0a2927bcec96374 |
+| 6 | docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md | 9131ec3b246ae438cff8d5429a54c14f6d43066c |
+| 7 | docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md | dd27805c4f394ec3a02360d9d9a08237a7867eaa |
+| 8 | docs/architecture/inventory/HISTORICAL_DOCUMENTATION_PRESERVATION_REGISTER_2026-11-08.md | 95cd280295c86c6d33278aa667de1d72048026ea |
+| 9 | docs/architecture/reports/BUILDER_FINAL_DOCUMENTATION_FOUNDATION_RECONCILIATION_2026-11-08.md | 9acf6716c426e010f1189b43eb8c0f1750810828 |
+| 10 | docs/architecture/reports/BUILDER_TO_INDEPENDENT_REVIEWER_REQUEST_2026-11-08.md | c458f689ccbcd1e1d54242e38648ca151d70c250 |
+| 11 | docs/architecture/reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md | 43d21c22fa0815076eb423d82b0ec8e25bffde43 |
+| 12 | docs/architecture/reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md | 69d7ce71f23c102925ef368f7762931de09bbe59 |
+| 13 | docs/architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_2026-11-08.md | c43d82ba18ff89de226d2268cf72e724b222a5bd |
+| 14 | docs/architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_GROK_2026-11-09.md | 1938203fe3a0e3cb4e7a7df7d5fa8e3298fa8635 |
+| 15 | docs/architecture/reports/INDEPENDENT_REVIEWER_HANDOFF_2026-11-08.md | 35294bf2fbdd9eb149f8fac53cc218b99f02b34d |
+| 16 | docs/architecture/reports/INDEPENDENT_RE_REVIEW_BUILDER_FOLLOW_UP_2026-11-08.md | 2d63ed93344a7081dcedb44247536c416322c793 |
+| 17 | docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md | 9533e3b3c4ce5f538f9f3c251cccc76edb571129 |
+| 18 | docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_EXECUTION_AND_READINESS_2026-11-10.md | 07ed10aa046999f21e46b42f0565bfcdc5205ff6 |
+| 19 | docs/architecture/reports/NEMOTRON_BLIND_FRESH_READER_ASSESSMENT_2026-11-10.md | f08f7948434ea53cc78306b4f094aca4c471c2b2 |
+| 20 | docs/architecture/reports/PHASE_1_REVIEW_CORRECTIONS_AND_SCOPE_RECONCILIATION_2026-11-05.md | a459cdfd02d850d455ca526e6823e68525776ba3 |
+| 21 | docs/architecture/reports/PHASE_1_WHOLE_REPOSITORY_INVESTIGATION_AND_REUSE_AUDIT_2026-11-04.md | 7dc1a246486abfb13169c89365289fcc8134a6ea |
+| 22 | docs/architecture/reports/PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md | 9dd776920d0a479a9d7275acc821e12c266623d9 |
+| 23 | docs/architecture/reports/PROJECT_DIRECTOR_DECISION_PROVENANCE_AND_GATE_RECONCILIATION_2026-11-09.md | 3542b3af3d5c25098b102a926e6078d30631c684 |
+| 24 | docs/architecture/reports/PR_174_FOLLOW_ON_REVIEW_PROVENANCE_RECOVERY_2026-11-06.md | f5d1dd62801642b47e35df986c3b5ab8a7e01a26 |
+| 25 | docs/architecture/reports/WHOLE_BRAIN_DOCUMENTATION_PHASE_BUILDER_SELF_REVIEW_2026-11-07.md | 0243adf72739313282cede7c49ce2ff522a02752 |
+| 26 | docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md | a35e535f7940376cab3627471f70024c5d0ff5cc |
+| 27 | docs/architecture/reports/fresh-reader-evidence/NEMOTRON_ASSESSMENT_PROMPT_2026-11-10.md | 03475a43c1440ca9affd38dfe046b8ef1e9b91d0 |
+| 28 | docs/architecture/reports/fresh-reader-evidence/NEMOTRON_PACKET_MANIFEST_2026-11-10.json | 5910299b3ea4f686fe30220867b1273bf52e8dba |
+| 29 | docs/architecture/reports/fresh-reader-evidence/NEMOTRON_RUN_METADATA_2026-11-10.json | 7d1d287ee571c673b23184c2d523a35b90845fa3 |
+| 30 | docs/templates/INDEPENDENT_REVIEW_REPORT_TEMPLATE.md | f3176cf1a1f45735a3ad62fa4a865806edc24e08 |
+| 31 | docs/templates/PLANNING_DOCUMENT_TEMPLATE.md | b9f71a923b0d717a3b29655574c89c10e0801115 |
+| 32 | docs/templates/README.md | 7209fd0fcda239349af602490d26b8c708b743da |
+| 33 | docs/templates/TEST_EVIDENCE_REPORT_TEMPLATE.md | 9c6bbae48a22beb7c4e95858282d7d8d7b2159c2 |
+
+**Inventory self-reference convention:** row 7 records the inventory blob at the parent revision before this section was appended. The resulting inventory blob is expected to differ. The other 32 paths match the exact parent snapshot.
+
+**Evidence added in this PR:** the Nemotron assessment report, prompt, packet manifest and run metadata are now represented in the 33-path manifest. The complete raw response and assembled packet remain in GitHub Actions artifact `13772199059` (run #42834248124) until its expiry; the manifest pins the nine input documents and their SHA-256 values for reconstruction.
+
+**Gate interpretation:** this manifest verifies the exact changed-file snapshot only. It does not pass DF-09: the blind AI assessment returned PARTIALLY CLEAR. DF-06/DF-08 remain PARTIAL; DF-11 remains unresolved; DF-12 remains outstanding; Stage A remains HELD; implementation remains unauthorized.
