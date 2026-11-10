@@ -441,3 +441,23 @@ DF-13 remains NOT STARTED / HELD. The hold is preserved; it is not a release.
 - No PR was merged or closed. No branch was rebased, retargeted, cherry-picked or replayed. No archive move or deletion occurred. No Stage A start or implementation occurred.
 
 **Final disposition: NOT CLEARED.** Builder-controlled bounded reconciliation and current-revision documentation checks are recorded. DF-06/DF-08 remain PARTIAL; DF-09 is OPEN because the account credit balance cannot be verified and no model was invoked; DF-11 remains UNRESOLVED; DF-12 remains outstanding; DF-13 remains NOT STARTED / HELD.
+
+
+---
+
+## 18. Post-write verification — 2026-11-10
+
+This section records the final verification after the extended-run report, authority-register addendum and inventory parent manifest were written to the existing PR #192 branch.
+
+At the start of this post-write verification, PR #192 was open, non-draft and unmerged at HEAD af9a7cd22a1cacaed91e93467f1edf89b8403480, base 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c, with 29 changed paths. The other relevant PRs remained unchanged: #173 open/draft/unmerged at 97191111bc2573c14d391c0af9628db7b11f194b; #174 open/draft/unmerged at be46b3858102c31022128522c4b3506aad4dff8a; #191 open/draft/unmerged at 609d38ede50bbdd98a93dfed112781eacabee9fd; and #193 open/draft/unmerged at ee508c09be9d848c7baa9533bb6f88f9cc27f94a.
+
+The recursive tree at this PR #192 HEAD contains 258 entries, is not truncated, and contains all 29 PR changed paths. The post-write fetch verified:
+- This execution/readiness report: blob c6efc08cc46f0283f565b128fed2db51f0896b76.
+- Outstanding-work/authority register: blob a31355a7654d71b4951a10056c5f61b83453d8ab.
+- Documentation inventory: blob 93959e9391a54ed2d847d2670794fdd68f15b477.
+
+Inventory §51 is the exact 29-path parent manifest at parent HEAD ed53aca4485cec08c99398c9ada6f29c8f199e92. It records the report and register blobs at that parent and the inventory's expected pre-append self-reference. The next inventory addendum records the successor parent after this report append.
+
+No runtime source, tests, dependencies, build configuration, workflows, runtime state or architecture decisions changed. No PR was merged or closed; no branch was rebased, retargeted, cherry-picked or replayed; no archive move or deletion occurred; Stage A was not started and implementation remains unauthorized.
+
+The final disposition remains NOT CLEARED: DF-06/DF-08 PARTIAL; DF-09 OPEN because the Hugging Face account credit balance is not observable and no model was invoked; DF-11 UNRESOLVED; DF-12 outstanding; DF-13 NOT STARTED / HELD.
