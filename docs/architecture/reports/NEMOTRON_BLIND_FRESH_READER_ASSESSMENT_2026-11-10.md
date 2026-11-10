@@ -94,3 +94,57 @@ No PR merge, branch rebase/retarget/cherry-pick, Stage A start, runtime change, 
 The full raw packet and response remain available in the linked GitHub Actions artifact until its stated expiry. The immutable source revisions and manifest permit reconstruction of the packet after artifact expiry.
 
 **Final disposition:** AI fresh-reader assessment executed; result PARTIALLY CLEAR; DF-09 not passed. Documentation-foundation gate NOT CLEARED. Stage A HELD. Implementation NOT AUTHORIZED.
+
+
+---
+
+# Second blind assessment — 2026-11-10 — latest result
+
+**Result:** **PARTIALLY CLEAR (22/32)**  
+**Exact packet revision:** `4a670636baf787ad4b1774bd306544c135868a04`  
+**Workflow:** [GitHub Actions run #42879721340](https://github.com/methaneex-oss/MethaneX/actions/runs/42879721340)  
+**Artifact:** `documentation-foundation-nemotron-reader-42879721340-1`, ID `13793841106`  
+**Model/provider attribution:** API reported `Nvidia` / `nvidia/nemotron-3.5-super-vl:free`; this is not cryptographic proof of backend execution.
+
+The run completed successfully. Exact checkout and packet assembly passed; the model response was non-empty, `finish_reason=stop`, 23,764 characters, 6,508 completion tokens, 79,275 prompt tokens, reported cost 0, no refusal, no tool calls and no reasoning output. The complete prompt, packet, manifest, response and metadata are preserved in the linked artifact.
+
+## Scorecard
+
+| Category | Score |
+|---|---:|
+| Project identity and boundaries | 4/4 |
+| Governing principle | 4/4 |
+| Brain-first rationale and system boundary | 4/4 |
+| Reference lenses | 4/4 |
+| Document classification and authority | 2/4 |
+| Current phase and authorization | 3/4 |
+| Role-based navigation | 3/4 |
+| Internal consistency and verifiability | 1/4 |
+| **Total** | **22/32** |
+
+## Material findings and live-repository reconciliation
+
+The reader understood the central project identity and principle but could not reliably verify exact authority and revision status from the supplied packet. It reported confusion around the PR #173 decision provenance, PR #174 accepted baseline versus stale historical header, PR #191 ancestry, Grok reviewer qualification, and current/historical status statements.
+
+The Builder then fetched the primary GitHub decision comments and live PR metadata:
+
+- PR #173 accepted baseline: `97191111bc2573c14d391c0af9628db7b11f194b`. Comment #6752144835 is a later repository-side transcription of a prior conversation, not the contemporaneous original decision artifact.
+- PR #174 accepted baseline: `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, supported by direct GitHub decision comment #6604790481. Current PR #174 HEAD `be46b3858102c31022128522c4b3506aad4dff8a` contains a one-line status-header correction and does not replace the accepted baseline. F-02/F-03 remain open; original full follow-on review annotations remain unavailable.
+- PR #191 base `f6267456560a08054d69f7960d2951452b14017c` is an ancestor of PR #179 HEAD `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; PR #191 head `609d38ede50bbdd98a93dfed112781eacabee9fd` is one unique commit ahead and 22 behind #179. These describe different graph comparisons, not a contradiction.
+- Grok's distinct-model identity is documented, but GitHub review submission is attributed to the same repository-owner account as Builder activity and the review is against an older PR #192 HEAD. DF-11 remains unresolved pending qualification and exact-current-HEAD review.
+- The result is a blind packet assessment only; the model did not follow links or inspect live GitHub records. DF-09 execution is complete, but acceptance is not passed.
+
+## Builder response
+
+The following corrections were committed after this assessment and are intended to be retested in the next packet:
+
+1. A packet-visible [Project Director Decision Evidence Extracts](PROJECT_DIRECTOR_DECISION_EVIDENCE_EXTRACTS_2026-11-10.md) document distinguishes PR #173's later transcription from PR #174's direct decision comment and records exact accepted/current revisions and scope.
+2. The workflow packet now includes that evidence extract and both the accepted PR #174 specification revision and the current status-header-corrected revision.
+3. The planning index now states that dated addenda are historical snapshots and adds a glossary for BM, SYS, DF, F and gate identifiers. Its PR #192 live head is a dynamic PR link to avoid a self-staling SHA.
+4. The portal is explicitly provisional navigation, not an authority source.
+5. The workflow rubric tests historical-snapshot interpretation, direct-versus-transcribed provenance, accepted-versus-current revision distinctions, PR #191 ancestry and identifier comprehension.
+6. The execution/readiness report, audit, outstanding-work register, inventory, Builder self-review and Grok assignment have been updated with the second result and its limitations.
+
+These changes are Builder claims and have not yet been independently reviewed or retested by Nemotron. The next run must assess the resulting exact PR #192 HEAD. A CLEAR result is required for DF-09 acceptance; a successful workflow alone is insufficient.
+
+**Disposition:** second AI fresh-reader assessment executed; result PARTIALLY CLEAR; DF-09 acceptance remains OPEN. DF-11 unresolved; DF-12 outstanding. Documentation-foundation gate NOT CLEARED. Stage A NOT STARTED / HELD. Runtime implementation NOT AUTHORIZED.
