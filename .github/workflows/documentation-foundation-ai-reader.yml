@@ -11,7 +11,7 @@ on:
         description: "Short run label for evidence artifacts"
         required: false
         default: "post-review-corrections"
-        type: string:
+        type: string
 
 permissions:
   contents: read
