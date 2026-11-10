@@ -461,3 +461,25 @@ Inventory §51 is the exact 29-path parent manifest at parent HEAD ed53aca4485ce
 No runtime source, tests, dependencies, build configuration, workflows, runtime state or architecture decisions changed. No PR was merged or closed; no branch was rebased, retargeted, cherry-picked or replayed; no archive move or deletion occurred; Stage A was not started and implementation remains unauthorized.
 
 The final disposition remains NOT CLEARED: DF-06/DF-08 PARTIAL; DF-09 OPEN because the Hugging Face account credit balance is not observable and no model was invoked; DF-11 UNRESOLVED; DF-12 outstanding; DF-13 NOT STARTED / HELD.
+
+
+---
+
+## 19. Final post-documentation-write link/path recheck — 2026-11-10
+
+A final bounded scan was rerun after the report, authority-register and inventory addenda were written, because the authority register added one new relative Markdown link to the execution/readiness report.
+
+Exact scan revision: PR #192 HEAD 44049de604ccf133da455cede11867bb16a62e0e. The recursive tree contains 258 entries, is not truncated, and the current PR changed-file endpoint still returns 29 unique documentation-only paths. All 29 changed files were fetched and parsed after fenced code blocks were removed.
+
+Final counts:
+- 247 inline Markdown links.
+- 93 repository-relative targets.
+- 0 missing repository-relative targets against the exact recursive tree.
+- 0 fragment-bearing local inline links.
+- 154 external HTTP(S) Markdown destinations.
+- 198 raw HTTP(S) occurrences in the unfiltered source scan; the earlier fenced-code-filtered snapshot counted 196. The post-write additions introduced one relative Markdown link and no new raw HTTP(S) destination.
+- The earlier exact-revision scan found zero reference-style definitions and zero raw HTML href/id/name attributes; the post-write additions introduced no reference definitions or raw HTML attributes.
+
+The newly added authority-register relative link resolves to the execution/readiness report in the same reports directory. The final local-path result is therefore 93/93 resolved, with no missing target. External URL reachability, semantic relevance, renderer-specific heading/line anchors, absolute-URL fragments and exhaustive historical cross-branch validation remain outside this bounded test.
+
+**Final DF-06 disposition remains PARTIAL.** Internal path/link resolution passes for the 29-file PR #192 package at the exact revision above; the untested external, semantic, renderer-specific and historical scopes prevent a complete-gate claim.
