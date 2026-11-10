@@ -15,8 +15,6 @@ jobs:
     name: Nemotron blind fresh-reader assessment
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    env:
-      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
     steps:
       - name: Check out the exact documentation revision
         uses: actions/checkout@v6
