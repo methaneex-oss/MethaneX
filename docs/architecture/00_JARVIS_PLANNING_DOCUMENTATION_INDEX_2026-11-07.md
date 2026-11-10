@@ -17,7 +17,7 @@
 **Gate:** **NOT CLEARED.**  
 **Stage A:** NOT STARTED / HELD.  
 **Runtime implementation:** NOT AUTHORIZED.  
-**Working PR:** #192, open, non-draft, unmerged; base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; live HEAD `04eefdb150e81857cea26db81edb2f4dbe6359b9` at this snapshot; later commits on this branch supersede this SHA. Always fetch PR #192 for the live HEAD before acting.
+**Working PR:** #192, open, non-draft, unmerged; base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; live HEAD: use the live [PR #192 page](https://github.com/methaneex-oss/MethaneX/pull/192). Because this index is itself committed to PR #192, embedding the resulting commit SHA here would make the index stale with its own update; the PR page is the authoritative live pointer.
 
 ### Accepted planning baselines (exact scope only)
 
@@ -32,7 +32,7 @@
 | #174 | `be46b3858102c31022128522c4b3506aad4dff8a` | PR #173 HEAD | Open / draft / unmerged | Accepted exact planning baseline plus open F-02/F-03 follow-ons |
 | #179 | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | `39fe09dcf13496f5f0005ccf3f00739303e29f88` | Open / draft / unmerged | BM-01–BM-12 source-integration map; partial, not whole-Brain completeness |
 | #191 | `609d38ede50bbdd98a93dfed112781eacabee9fd` | `f6267456560a08054d69f7960d2951452b14017c` | Open / draft / unmerged | One unique human/MCU comparison report; historical base; one unique commit ahead and 22 commits behind/diverged from #179 line |
-| #192 | `04eefdb150e81857cea26db81edb2f4dbe6359b9` | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | Open / non-draft / unmerged | Documentation-foundation reconciliation and evidence; live HEAD advances with subsequent commits |
+| #192 | Live HEAD: [PR #192](https://github.com/methaneex-oss/MethaneX/pull/192) | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | Open / non-draft / unmerged | Documentation-foundation reconciliation and evidence; fetch live metadata before acting |
 | #193 | `ee508c09be9d848c7baa9533bb6f88f9cc27f94a` | `874c732973b6ab303d65a503f5a215b0af8e1153` | Open / draft / unmerged | Separate #175-derived deferred plan/handoff lineage |
 
 PR #191's disposition (historical-base review or authorized dependent replay) and PR #192/#193 integration order remain Project Director decisions. No rebase, retarget, cherry-pick, merge, or branch deletion is authorized or performed.
