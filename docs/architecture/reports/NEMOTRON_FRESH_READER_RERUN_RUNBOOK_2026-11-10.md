@@ -11,6 +11,8 @@ The reusable workflow on `main` has been parameterized to accept an exact `targe
 
 - `12ced8bf445309fcad0422194febcc7002e9621f` — parameterize exact target revision.
 - `3b43ac1c5f6c7a9c070505a5d621e8e96645aa9e` — correct dispatch input YAML.
+- `2fb25e968dd102bc20e5e41ef93726232ff88321` — fix the missing `os` import in the packet-assembly step.
+- `f1ec646b2a4e0b9d3207c37883139c4708a1f7b2` — enforce exact Nemotron provider/model identity, require `finish_reason=stop` (missing values fail), reject refusal/tool-call responses, and record the validated assessment label in run metadata.
 
 The workflow:
 - checks out the exact supplied commit SHA;
@@ -42,11 +44,12 @@ Open the new workflow run and verify:
 - The workflow run was created by `workflow_dispatch`.
 - The checkout/verification step reports the exact target SHA.
 - The packet assembly step succeeds and produces a manifest.
-- The Nemotron API step completes with non-empty text and `finish_reason=stop` (not `length`).
-- Provider/model metadata identifies the response as `Nvidia` / `nvidia/nemotron-3.5-super-vl:free`.
+- The Nemotron API step completes with non-empty text and exactly `finish_reason=stop`; missing, null, truncated or other finish reasons fail the job.
+- The workflow itself enforces exact provider `Nvidia` and model `nvidia/nemotron-3.5-super-vl:free`; missing or different identity fails the job after preserving the response and sanitized metadata.
+- The supplied assessment label is validated and recorded in `run_metadata.json`; it does not alter the blind reader packet.
 - The evidence artifact is uploaded.
 
-A green workflow alone is not sufficient if the model response is empty, truncated, refused, or the wrong model/provider was returned. If the API fails, inspect the bounded diagnostic artifact; do not paste credentials into logs.
+A green workflow alone is not sufficient if the model response is empty, truncated, refused, or the wrong model/provider was returned. The workflow now fails closed for provider/model mismatch and for every completion reason other than the exact value `stop` (including a missing value); these are enforced checks, not merely operator inspection instructions. If the API fails, inspect the bounded diagnostic artifact; do not paste credentials into logs.
 
 ## 4. Retrieve and preserve the result
 
