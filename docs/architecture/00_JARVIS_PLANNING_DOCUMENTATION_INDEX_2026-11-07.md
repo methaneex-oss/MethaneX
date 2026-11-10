@@ -11,13 +11,13 @@
 
 > **Current exact-head control report (2026-11-10):** [Initial Documentation Foundation Execution and Readiness Report](reports/INITIAL_DOCUMENTATION_FOUNDATION_EXECUTION_AND_READINESS_2026-11-10.md). It supersedes earlier live-head snapshots where stated; it does not clear the gate.
 
-## Current status summary — 2026-11-10 (controlling snapshot; live metadata fetched 14:48 UTC)
+## Current status summary — 2026-11-10 (controlling snapshot; live metadata fetched immediately before this index refresh)
 
 **Current phase:** Initial Documentation Foundation Completion Gate.  
 **Gate:** **NOT CLEARED.**  
 **Stage A:** NOT STARTED / HELD.  
 **Runtime implementation:** NOT AUTHORIZED.  
-**Working PR:** #192, open, non-draft, unmerged; base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; live HEAD `ff95f2807a88388805e8e413616fc9776f244e44`.
+**Working PR:** #192, open, non-draft, unmerged; base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; live HEAD `9dccbf6990161a287b775c8f9a481a7f7068a28d` (this index refresh itself advances the branch; consult PR #192 for the resulting live HEAD).
 
 ### Accepted planning baselines (exact scope only)
 
