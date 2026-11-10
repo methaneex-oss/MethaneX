@@ -977,3 +977,30 @@ The Project Director-authorized blind AI assessment was executed in GitHub Actio
 - **PR #192/#193:** integration order remains a reserved Project Director decision.
 
 **Self-review disposition:** The Nemotron run is real and its evidence is preserved. Its PARTIALLY CLEAR outcome means the documentation foundation is not cleared. Stage A remains HELD; implementation remains NOT AUTHORIZED. No independent review, merge, history rewrite, or gate acceptance is claimed.
+
+
+---
+
+## 34. Builder self-review — review-driven documentation corrections — 2026-11-10
+
+This section records Builder actions after reading the Grok independent review and Nemotron blind AI fresh-reader assessment. It is not a replacement independent review.
+
+**Evidence:**
+- Grok (xAI) examined PR #192 HEAD `9e0c342dcfbbe1d7a51a6b3a2b7574c9cdf480dc` and recommended NOT CLEAR TO PROCEED. Its model identity is distinct from Builder GPT-6; the formal GitHub COMMENTED review is attributed to the same repository-owner account and is not against current PR #192 HEAD `ff95f2807a88388805e8e413616fc9776f244e44`.
+- Nemotron via OpenRouter examined packet revision `3ea2970c7b43bdfb87b3d1459690eacd83516745` and returned PARTIALLY CLEAR. This is the authorized AI fresh-reader route, not a human session.
+
+**Corrections made:**
+1. Replaced the planning index's stale current-state summary with current PR metadata and separate authority/review/gate status.
+2. Corrected the portal's PR #173 acceptance description, preserving the distinction between the accepted scope and the later repository-side provenance transcription.
+3. Updated the independent-reviewer handoff to supersede obsolete human-only DF-09 instructions and record both distinct-model evidence artifacts.
+4. Added a finding-by-finding disposition and preserved all unresolved authority boundaries.
+
+**Remaining:**
+- Complete bounded current-HEAD relative-path and fragment validation; refresh the inventory after all writes.
+- Repeat Nemotron on the corrected exact package; DF-09 remains open until CLEAR.
+- Obtain Grok review of the corrected exact current HEAD; do not claim the older review covers it.
+- Keep DF-11 qualification and DF-12 acceptance within Project Director authority.
+- DF-06/DF-08 remain PARTIAL; PR #191 and #192/#193 disposition remains reserved.
+- Stage A remains HELD; implementation remains NOT AUTHORIZED.
+
+**Self-review result:** Documentation clarity has improved, but the foundation is not cleared. No runtime source, tests, build configuration, dependencies or runtime state were changed.
