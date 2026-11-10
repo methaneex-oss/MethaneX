@@ -585,3 +585,30 @@ All 29 changed files were fetched and parsed with fenced code blocks removed. Th
 **DF-06 remains PARTIAL:** 93/93 internal targets resolve for this bounded package, but external reachability, semantic relevance, renderer-specific anchors and exhaustive historical cross-branch validation remain untested.
 
 The latest report records the same result in §19. The exact 29-path parent manifest is to be refreshed in the inventory after this register update. DF-08 remains PARTIAL; DF-09 OPEN; DF-11 UNRESOLVED; DF-12 OUTSTANDING; DF-13 NOT STARTED / HELD. No PR merge/close, history rewrite, archive move, Stage A start or runtime implementation occurred.
+
+
+---
+
+## 23. Nemotron blind fresh-reader result and updated closure status — 2026-11-10
+
+The Project Director-authorized distinct-model AI fresh-reader assessment has now been executed. GitHub Actions run [#42834248124](https://github.com/methaneex-oss/MethaneX/actions/runs/42834248124) completed successfully against documentation packet revision `3ea2970c7b43bdfb87b3d1459690eacd83516745`. The reported model was `nvidia/nemotron-3.5-super-vl:free` (provider field `Nvidia`). It returned 23,440 characters with finish reason `stop` and no reasoning tokens. Full execution metadata, packet hashes and the artifact reference are in [the Nemotron assessment report](NEMOTRON_BLIND_FRESH_READER_ASSESSMENT_2026-11-10.md) and `reports/fresh-reader-evidence/`.
+
+**DF-09:** assessment execution performed; outcome **PARTIALLY CLEAR**; acceptance criterion remains OPEN pending documentation corrections and a repeat blind assessment with a CLEAR result. This is the user-authorized AI substitution, not a human session, formal independent review or gate decision.
+
+### Reconciled facts
+
+1. **PR #173:** accepted planning baseline at exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b`; repository-side provenance transcription is PR #173 comment #6752144835. Prior UNVERIFIED/PROPOSED wording is superseded.
+2. **PR #174:** accepted planning baseline at exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, by comment #6604790481. Current HEAD `be46b3858102c31022128522c4b3506aad4dff8a` records the limited acceptance in its specification header. Follow-on F-02/F-03 remain OPEN; original full review and inline annotations remain unavailable. The PR description's stale PR #173 wording has been corrected.
+3. **PR #191:** remains open/draft/unmerged at head `609d38ede50bbdd98a93dfed112781eacabee9fd`, base `f6267456560a08054d69f7960d2951452b14017c`; its head diverges from PR #179 HEAD `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` by one unique report commit and 22 intervening #179 commits. Historical-base review versus dependent replay remains a Project Director decision.
+4. **PR #192/#193:** remain separate lineages. PR #193 is open/draft/unmerged at `ee508c09be9d848c7baa9533bb6f88f9cc27f94a`, based on PR #175 HEAD `874c732973b6ab303d65a503f5a215b0af8e1153`. Integration order remains a Project Director decision.
+
+### Closure classification
+
+- DF-06: PARTIAL.
+- DF-08: PARTIAL.
+- DF-09: OPEN; assessment performed, PARTIALLY CLEAR, correction and repeat required.
+- DF-11: UNRESOLVED; Grok's distinct model identity is declared, but GitHub attributes the formal COMMENTED review to the same repository-owner account as Builder and the review is against an older PR #192 HEAD. Qualification and exact-head re-review require Project Director disposition.
+- DF-12: OUTSTANDING; no exact-revision Project Director acceptance of the documentation foundation.
+- DF-13: Stage A NOT STARTED / HELD; implementation NOT AUTHORIZED.
+
+No PR was merged, closed, rebased, retargeted or cherry-picked. No implementation, Stage A work or runtime change occurred.
