@@ -1,3 +1,34 @@
+
+
+---
+
+# Controlling current-state and fresh-reader result — 2026-11-10 23:06 UTC
+
+> **Precedence:** This block is the latest controlling status for this index. It supersedes every older dated status/addendum below, including any older PR #192 HEAD, DF-09 human-session requirement, AI assessment run number, and "no distinct model available" statement. Older sections remain historical evidence only; do not combine them into a synthetic current state.
+
+## Current authoritative status
+
+- PR #192 is OPEN, non-draft, unmerged, and currently at exact HEAD `53039921202409ce40abb45981024fdbdfa7dc2f`; base is `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`. The live PR page is the sole current pointer: https://github.com/methaneex-oss/MethaneX/pull/192. Do not treat any older SHA embedded in dated sections or PR description history as current.
+- **Latest blind fresh-reader run:** [#42909224258](https://github.com/methaneex-oss/MethaneX/actions/runs/42909224258), artifact `13804984673`, digest `sha256:59cb332c02b99fa5a7c63ec13ba26e11754ed81479fe8ac467914b49ae458cd3`, exact assessed documentation revision `53039921202409ce40abb45981024fdbdfa7dc2f`.
+- API-reported provider/model: `Nvidia` / `nvidia/nemotron-3.5-super-vl:free`; finish reason `stop`; 26,981 response characters; 94,174 prompt tokens; 6,929 completion tokens; no refusal, no tool calls, no reasoning output. The artifact's `assessment_label` is `post-review-corrections`, not the requested `post-review-corrections-v2`; this is a workflow-input bookkeeping discrepancy, not evidence of a different model or target revision.
+- **Result: PARTIALLY CLEAR (31/32).** Scores: project identity 4/4; governing principle 4/4; Brain-first boundary 4/4; reference lenses 4/4; document authority/classification 3/4; current phase/authorization 4/4; unauthorized actions 4/4; role navigation 4/4. Execution succeeded; comprehension acceptance did not pass.
+- **DF-09:** the Project Director-approved AI fresh-reader substitution is controlling. The older 17-question uninvolved-human-session requirements are historical and superseded. A distinct AI model did run; the latest result is PARTIALLY CLEAR, so DF-09 remains OPEN pending a later CLEAR result and evidence reconciliation.
+- **Gate:** documentation foundation NOT CLEARED. Stage A NOT STARTED / HELD. Runtime implementation, PR integration, merge, rebase, retargeting, cherry-picking, and gate clearance remain NOT AUTHORIZED.
+
+## Exact remaining reader corrections
+
+1. The index has numerous old PR #192 HEAD values in §§16–25. They must remain visibly historical; the live PR page above is the only current reference. Do not attempt to update every historical snapshot to today's SHA.
+2. Older sections still mention the 17-question human test and "no separate model" before the approved AI substitution. This controlling block supersedes them; a future structural cleanup may add explicit historical labels to those passages, but must not erase their audit history.
+3. PR #173 acceptance is recorded in comment #6752144835 as a later transcription of a prior conversation, not the contemporaneous original artifact. Preserve this provenance limitation; do not silently upgrade its evidence class.
+4. PR #174 accepted baseline `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` is distinct from current status-header-corrected HEAD `be46b3858102c31022128522c4b3506aad4dff8a`. F-02/F-03 and missing full follow-on annotations remain open.
+5. The blind packet is deliberately bounded. It does not contain every linked source audit, templates guide, PR #193 handoff, inventory detail, or external GitHub record. These must be marked as external/linked evidence, not implied to have been inspected by Nemotron. The reader did correctly identify this limitation; the 3/4 authority score reflects residual discoverability/verifiability, not a failure to understand project identity.
+6. PR #191 disposition, PR #192/#193 integration order, DF-11 reviewer qualification/exact-head review, and DF-12 Project Director exact-revision decision remain reserved/outstanding.
+
+## Label and evidence integrity note
+
+The run was dispatched with `post-review-corrections`, despite the operator's intended `post-review-corrections-v2` label. The target SHA, provider/model, completion reason, artifact and digest are verified independently from the label. Correct the workflow default to `post-review-corrections-v2` for future runs and always record the actual dispatch input; never infer it from a requested label.
+
+
 # JARVIS Planning Documentation Index — 2026-11-07
 
 **Status:** Proposed navigation and document-governance index; awaiting independent review and the required authority decision.  
