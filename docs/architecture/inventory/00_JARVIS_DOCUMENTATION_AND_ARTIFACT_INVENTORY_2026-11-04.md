@@ -2112,3 +2112,11 @@ The PR-files endpoint and recursive tree were reconciled at the exact parent HEA
 **Post-write verification required:** fetch the resulting live PR #192 HEAD, re-read all 33 changed paths, compare every tree blob with the PR-files endpoint, and verify the inventory's resulting blob differs only by the expected self-update. This section is a parent snapshot, not a claim that the inventory write has already been independently verified.
 
 **Gate disposition:** documentation is improved but NOT CLEARED. DF-06/DF-08 remain PARTIAL; DF-09 remains OPEN pending a repeat CLEAR AI fresh-reader assessment; DF-11 exact-current-head review/qualification remains open; DF-12 remains OUTSTANDING; Stage A remains HELD; implementation NOT AUTHORIZED.
+
+
+## 2026-11-10 inventory addendum — decision evidence and second reader assessment
+
+- Added `docs/architecture/reports/PROJECT_DIRECTOR_DECISION_EVIDENCE_EXTRACTS_2026-11-10.md`: repository-fetched exact decision comment references and accepted-revision/provenance distinctions for PR #173 and PR #174. This is an evidence index/transcription, not a new decision.
+- Added the second blind assessment evidence: workflow run [#42879721340](https://github.com/methaneex-oss/MethaneX/actions/runs/42879721340), exact packet revision `4a670636baf787ad4b1774bd306544c135868a04`, artifact ID `13793841106`, result PARTIALLY CLEAR (22/32). Raw prompt, packet, manifest, assessment and metadata are retained in the GitHub Actions artifact; the artifact is not a new source architecture document.
+- The blind packet is being strengthened to include the decision evidence and both accepted/current PR #174 specification revisions. The current packet remains bounded and does not include every historical report, source audit, review annotation or external discussion.
+- PR #192 remains documentation-only; no runtime source, tests, build configuration, dependencies or runtime state are authorized or changed by this addendum.
