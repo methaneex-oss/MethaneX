@@ -566,3 +566,32 @@ The next Builder-controlled steps are final exact-head relative-path/fragment ch
 The exact-current-HEAD Grok review must be requested/performed after the Builder correction pass; the prior report is valuable but stale as a review of the current revision. DF-11 qualification remains a Project Director decision. DF-12 remains outstanding.
 
 **Current disposition:** documentation improved, but not cleared. Stage A NOT STARTED / HELD. Runtime implementation NOT AUTHORIZED. No PR merge, branch-history rewrite, or runtime change occurred.
+
+
+## 22. Second blind AI fresh-reader assessment — 2026-11-10 (controlling result)
+
+The second user-authorized blind assessment was executed by GitHub Actions run [#42879721340](https://github.com/methaneex-oss/MethaneX/actions/runs/42879721340) against exact PR #192 documentation revision `4a670636baf787ad4b1774bd306544c135868a04`. The workflow implementation on `main` was `d7bb3b8f267a86b7f156a70716db6c143fdbbaa8` (with strict provider/model and completion validation).
+
+- Run conclusion: `success`; exact checkout and packet assembly succeeded; API request returned text; artifact upload succeeded.
+- Artifact: `documentation-foundation-nemotron-reader-42879721340-1`, ID `13793841106`.
+- API-reported provider/model: `Nvidia` / `nvidia/nemotron-3.5-super-vl:free` (API metadata, not cryptographic proof of backend execution).
+- Response ID: `gen-1794336809-iYrTzeTwgcFLwrvEv1RD`; `finish_reason=stop`; 23,764 characters; 6,508 completion tokens; 79,275 prompt tokens; reported cost 0; no refusal, tool calls or reasoning output.
+- Assessment label: `post-review-corrections`.
+- Result: **PARTIALLY CLEAR — 22/32**, not a pass.
+
+The result improved neither enough nor uniformly: the model understood the project identity, governing principle, Brain/system boundary and reference lenses, but found material confusion in document authority, exact revisions, current status and verifiability. The eight-category score was: identity 4/4; principle 4/4; Brain/system boundary 4/4; reference lenses 4/4; document authority 2/4; current phase/authorization 3/4; navigation 3/4; internal consistency/verifiability 1/4.
+
+### Findings reconciled against live repository evidence
+
+1. **PR #173:** the exact accepted baseline is `97191111bc2573c14d391c0af9628db7b11f194b`. The decision is recorded in issue comment #6752144835, created 2026-11-09. The comment explicitly describes itself as a transcription of the 2026-11-03 conversation, not the contemporaneous original decision. This limitation must remain visible; it is not a missing fact that the Builder can silently repair.
+2. **PR #174:** exact accepted baseline `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` is supported by the direct GitHub decision comment #6604790481, created 2026-11-03. Current PR #174 HEAD `be46b3858102c31022128522c4b3506aad4dff8a` contains a one-line header clarification. The accepted baseline's old draft header is historical; the current head clarifies it without replacing the accepted baseline. F-02/F-03 remain open and the original follow-on review/inline annotations remain unrecovered.
+3. **PR #191:** base `f6267456560a08054d69f7960d2951452b14017c` is an ancestor of PR #179 HEAD `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; comparing PR #191 HEAD `609d38ede50bbdd98a93dfed112781eacabee9fd` with #179 HEAD shows one unique #191 commit ahead and 22 commits behind. These are two different comparisons, not contradictory statements. Disposition remains reserved for the Project Director.
+4. **Grok:** the prior review report declares a distinct model identity, but GitHub attributes its formal COMMENTED review to the same repository-owner account used for Builder activity and it reviewed an older PR #192 HEAD. It is not represented as independently qualifying exact-current-HEAD review. DF-11 remains unresolved.
+5. **DF-09:** this second assessment completed, but its result is PARTIALLY CLEAR. Execution is complete; comprehension acceptance remains open. The model was limited to the supplied packet and did not follow links or inspect live GitHub records.
+6. **PR #192/#193:** their separate lineages remain unchanged; integration order is not inferred. DF-12 exact-revision Project Director acceptance remains outstanding.
+
+### Builder corrections triggered by this result
+
+The Builder is consolidating the exact PR #173/#174 decision records and provenance quality in a packet-visible evidence extract; including both the accepted PR #174 baseline and its current header-corrected revision in the blind packet; explicitly demoting dated index addenda to historical snapshots under a controlling current-status block; adding an in-packet glossary; clarifying that the portal is provisional navigation rather than an authority source; and updating the runbook and workflow packet to include the decision evidence and current specification clarification.
+
+The result does not authorize Stage A, implementation, merge, PR integration or gate clearance. DF-09 remains OPEN pending a later CLEAR assessment; DF-11 remains unresolved; DF-12 remains outstanding. Stage A remains NOT STARTED / HELD; runtime implementation remains NOT AUTHORIZED.
