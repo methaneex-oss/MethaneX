@@ -89,9 +89,12 @@ jobs:
           test -n "${OPENROUTER_API_KEY:-}" || { echo "::error::Repository secret OPENROUTER_API_KEY is not configured."; exit 1; }
           python3 - <<'PY'
           from pathlib import Path
-          import json, os, urllib.request, urllib.error, datetime
+          import json, os, re, urllib.request, urllib.error, datetime
 
           out = Path("documentation-foundation-reader-evidence")
+          assessment_label = os.environ["ASSESSMENT_LABEL"].strip()
+          if not re.fullmatch(r"[A-Za-z0-9._-]{1,64}", assessment_label):
+              raise SystemExit("assessment_label must be 1-64 characters using only letters, digits, dot, underscore or hyphen.")
           packet = (out / "reader_packet.md").read_text()
           system = """You are an independent first-time documentation reader. You have no prior conversation context and must assess only the supplied repository documents. Do not assume that a claim is true merely because a document says so; distinguish what the documents establish, imply, contradict, or leave unknown. Do not use external sources. Do not reveal private chain-of-thought or hidden reasoning; provide concise conclusions with document-path and heading evidence. Do not rewrite the documents or design a new architecture."""
           user = """Perform a blind fresh-reader assessment of this JARVIS repository documentation packet.
@@ -178,6 +181,9 @@ jobs:
           usage = raw.get("usage") or {}
           completion_details = usage.get("completion_tokens_details") or {}
           metadata = {
+              "assessment_label": assessment_label,
+              "expected_provider": "Nvidia",
+              "expected_model": "nvidia/nemotron-3.5-super-vl:free",
               "provider": raw.get("provider"),
               "model": raw.get("model"),
               "id": raw.get("id"),
@@ -212,10 +218,20 @@ jobs:
           (out / "nemotron_assessment.md").write_text(content)
           metadata["response_content_saved"] = True
           (out / "run_metadata.json").write_text(json.dumps(metadata, indent=2))
-          if metadata["finish_reason"] == "length":
-              raise SystemExit("Nemotron response was truncated (finish_reason=length); assessment saved but incomplete.")
-          if metadata["finish_reason"] not in ("stop", None):
-              raise SystemExit(f"Unexpected finish_reason={metadata['finish_reason']}; assessment saved for inspection.")
+          if metadata["provider"] != "Nvidia" or metadata["model"] != "nvidia/nemotron-3.5-super-vl:free":
+              raise SystemExit(
+                  "Unexpected model identity; expected provider Nvidia and model "
+                  "nvidia/nemotron-3.5-super-vl:free, got "
+                  f"provider={metadata['provider']!r}, model={metadata['model']!r}. "
+                  "Response and sanitized metadata were preserved."
+              )
+          if metadata["finish_reason"] != "stop":
+              raise SystemExit(
+                  f"Assessment completion is invalid: expected finish_reason='stop', "
+                  f"got {metadata['finish_reason']!r}. Response and metadata were preserved."
+              )
+          if metadata["refusal_present"] or metadata["tool_calls_present"]:
+              raise SystemExit("Assessment response contains a refusal or tool calls; preserved for inspection.")
           if len(content.strip()) < 1500:
               raise SystemExit("Nemotron response is too short to count as a substantive fresh-reader assessment; response preserved.")
           print("Nemotron textual assessment received and saved. Sanitized metadata recorded; reasoning and API key excluded.")
