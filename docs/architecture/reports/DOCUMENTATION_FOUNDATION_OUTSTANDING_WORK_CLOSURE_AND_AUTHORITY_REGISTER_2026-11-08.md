@@ -540,3 +540,35 @@ The final post-write DF-06 scan is complete at PR #192 HEAD `006f46298ad2203860a
 The execution/readiness report was refreshed at commit `2b6ed765ae2f043167bb727b25f2bc05d549fa64`, blob `1d512d114a1eb11e6ff830560dc945d8e52ee2a3`. Its §15 records the final bounded 29-path scan at parent HEAD `006f46298ad2203860abe42f234a5dfa68b14158`. The scan found no missing repository-relative targets but does not establish current external URL reachability or semantic/renderer-specific correctness.
 
 At this register update, PR #192 is open, non-draft and unmerged on base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; the current head is the report-refresh commit `2b6ed765ae2f043167bb727b25f2bc05d549fa64`, with 29 changed paths. The inventory must receive a new exact parent manifest after this register update. No gate status changes: DF-06/DF-08 PARTIAL, DF-09 OPEN, DF-11 UNRESOLVED, DF-12 outstanding, DF-13 NOT STARTED / HELD.
+
+
+---
+
+## 21. Extended live-state and compute-gate reconciliation — 2026-11-10
+
+This addendum supersedes §20.4's statement that no compute-credit budget/authorization had been supplied. The Project Director has since explicitly authorized one bounded CPU-only Hugging Face Jobs run for the blind AI fresh-reader assessment, with a maximum 45-minute job timeout. The user-approved substitution of a different AI for a human reader remains in force. No further consent for the AI substitution or the bounded CPU job is required.
+
+The current execution/readiness report is [the 2026-11-10 extended reconciliation addendum](INITIAL_DOCUMENTATION_FOUNDATION_EXECUTION_AND_READINESS_2026-11-10.md), appended at PR #192 commit 68e5d9adea60c11ed4d4c1ece8292854d1488887. It records live PR metadata, exact current source revisions, PR #174 F-02/F-03 recovery limits, PR #191 ancestry, PR #192/#193 lineage, current bounded DF-06 checks, DF-08 historical coverage, reviewer identity/exact-head status and the compute gate.
+
+### 21.1 Hugging Face account and job access
+
+The connected account is @Hg-face12, a regular non-Pro user with no visible organization memberships and the Jobs OAuth scope. The read-only hf_jobs ps operation is callable and returned zero running jobs. The connector's model_search and hf_doc_search actions returned “Tool not found”; public Hugging Face API/model-card and official documentation pages were used as alternate read-only routes.
+
+A public, ungated, Apache-2.0 candidate is HuggingFaceTB/SmolLM2-1.7B-Instruct at exact model revision 31b70e2e869a7173562077fd711b654946d38674. The model API reports LlamaForCausalLM / llama and 1,711,376,384 BF16 parameters. The model card documents CPU inference. No inference prompt was sent and no model response exists.
+
+Official Jobs pricing requires a positive credit balance and lists CPU Basic at $0.01/hour, billed per minute while Starting or Running. A 45-minute hard timeout gives an estimated hardware charge of approximately $0.01 at the conservative rounded per-minute rate, with no exposed ports and no GPU. The account identity response does not expose the current credit balance; the connected tools provide no billing-balance read operation, and the billing-page read route redirected to login. The available account allowance therefore cannot be verified.
+
+**Current disposition:** no job was launched and no compute charge was incurred. The blocker is not missing permission to use AI or missing authorization for a bounded CPU job; it is the unobservable positive Jobs credit balance/available allowance. DF-09 remains OPEN until the account allowance can be verified and the actual blind assessment is run. Do not report a simulated result or treat model discovery as a completed fresh-reader test.
+
+### 21.2 Current gate and authority disposition
+
+- DF-06: PARTIAL. Current PR #192 HEAD 4fbcbb55fbf44e4d74504365d99588f10ca3dc49: 29 files, 246 inline Markdown links, 92 repository-relative targets, zero missing targets, zero local fragments; external/semantic/renderer-specific/exhaustive historical checks remain open.
+- DF-08: PARTIAL. The bounded historical discovery and selected comparisons are documented; archive/supersession and broader historical coverage remain open.
+- DF-09: OPEN. Different-AI substitution authorized; candidate model/revision identified; no model invoked because available account credit could not be verified.
+- DF-11: UNRESOLVED. The Grok-declared review is COMMENTED, uses the same GitHub account as Builder and is 44 commits behind the current PR #192 head. Reviewer qualification and exact-head review remain undecided.
+- DF-12: OUTSTANDING. Exact-revision Project Director acceptance of the completed documentation foundation has not been recorded.
+- DF-13: Stage A NOT STARTED / HELD.
+
+The PR #173 planning-baseline acceptance, PR #174 accepted planning baseline, AI fresh-reader substitution and bounded CPU-job authorization are explicit Project Director decisions. The PR #174 provenance route, F-02/F-03 correction authorization, PR #191 disposition, PR #192/#193 sequencing, DF-11 reviewer qualification, DF-12 acceptance and Stage A release remain reserved decisions.
+
+No runtime implementation, architecture/algorithm selection, merge, close, rebase, retarget, cherry-pick, replay or archive operation was performed.
