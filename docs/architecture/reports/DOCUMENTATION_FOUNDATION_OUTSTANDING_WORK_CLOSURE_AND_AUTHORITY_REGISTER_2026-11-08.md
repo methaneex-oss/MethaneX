@@ -612,3 +612,31 @@ The Project Director-authorized distinct-model AI fresh-reader assessment has no
 - DF-13: Stage A NOT STARTED / HELD; implementation NOT AUTHORIZED.
 
 No PR was merged, closed, rebased, retargeted or cherry-picked. No implementation, Stage A work or runtime change occurred.
+
+
+---
+
+## 24. Review-driven documentation correction and gate status — 2026-11-10
+
+The Grok independent review and Nemotron blind AI fresh-reader assessment have both been incorporated as evidence. Their findings are not interchangeable:
+
+- Grok (xAI) reviewed exact PR #192 HEAD `9e0c342dcfbbe1d7a51a6b3a2b7574c9cdf480dc`, declared a distinct model identity from Builder GPT-6, and recommended **NOT CLEAR TO PROCEED**. Its formal GitHub review is COMMENTED; GitHub attributes the submission to the same repository-owner account used for Builder activity. It is an independent-model review report, but not a review of the current PR #192 HEAD `ff95f2807a88388805e8e413616fc9776f244e44`. Preserve both facts and obtain an exact-current-head review before final reliance.
+- Nemotron completed the Project Director-authorized blind AI fresh-reader assessment against packet revision `3ea2970c7b43bdfb87b3d1459690eacd83516745` in workflow run [#42834248124](https://github.com/methaneex-oss/MethaneX/actions/runs/42834248124). Outcome: **PARTIALLY CLEAR**. Execution is complete; DF-09 comprehension acceptance is not.
+
+### 24.1 Findings disposition
+
+1. **Current-state fragmentation:** corrected in the controlling planning-index summary and portal. Dated addenda remain historical, not competing live summaries.
+2. **PR #173 acceptance:** current docs now preserve the accepted exact planning-baseline scope while disclosing that the repository-side comment is a later transcription of the prior conversation, not the original contemporaneous decision artifact. This addresses the stale status classification without overstating provenance.
+3. **PR #174 status:** current docs distinguish the accepted baseline revision, later header-only clarification, and still-open F-02/F-03 follow-ons. The original full follow-on review/inline annotations remain unavailable; no speculative technical correction was made.
+4. **PR #191 and PR #192/#193:** branch disposition and integration order remain reserved Project Director decisions; no history rewrite or implicit merge was performed.
+5. **DF-06:** final changed-file path and fragment validation plus inventory synchronization remain to be completed. External reachability, semantic relevance, renderer-specific anchors and exhaustive historical validation remain partial unless separately tested.
+6. **DF-08:** remains PARTIAL; the review does not authorize archive, deletion, or supersession actions.
+7. **DF-11:** distinct Grok model identity and a formal COMMENTED review are evidenced, but exact-current-head coverage is absent and the same-account attribution remains a qualification caveat. Project Director disposition remains necessary.
+8. **DF-12:** no exact-revision Project Director acceptance exists.
+9. **DF-13:** Stage A remains NOT STARTED / HELD; implementation remains NOT AUTHORIZED.
+
+### 24.2 Builder action
+
+The planning index, portal and reviewer handoff have been corrected to reflect current evidence. The remaining Builder-controlled work is exact-head link/fragment validation, final inventory synchronization and a repeat Nemotron assessment against the corrected revision. The current review report must not be relabelled as covering `ff95f2807a88388805e8e413616fc9776f244e44`.
+
+**Disposition:** NOT CLEARED. DF-09 OPEN pending repeat CLEAR result; DF-06/DF-08 PARTIAL; DF-11 qualification/current-head review unresolved; DF-12 OUTSTANDING; DF-13 HELD. No implementation or PR integration authorized.
