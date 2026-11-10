@@ -140,7 +140,10 @@ jobs:
           (out / "assessment_prompt.md").write_text(system + "\n\n" + user.split("DOCUMENTATION PACKET:")[0])
           try:
               with urllib.request.urlopen(request, timeout=300) as response:
-                  raw = json.loads(response.read().decode())
+                  response_status = response.status
+                  response_request_id = response.headers.get("x-request-id") or response.headers.get("x-openrouter-request-id")
+                  response_bytes = response.read()
+                  raw = json.loads(response_bytes.decode())
           except urllib.error.HTTPError as exc:
               detail = exc.read().decode(errors="replace")[:4000]
               (out / "api_error.txt").write_text(f"HTTP {exc.code}\n{detail}")
@@ -149,33 +152,107 @@ jobs:
               (out / "api_error.txt").write_text(type(exc).__name__ + ": " + str(exc))
               raise SystemExit("OpenRouter request failed; diagnostic saved as artifact.")
 
-          choices = raw.get("choices") or []
-          message = choices[0].get("message", {}) if choices else {}
-          content = message.get("content")
-          if isinstance(content, list):
-              content = "\n".join(part.get("text", "") for part in content if isinstance(part, dict))
+          def safe_text(value):
+              return value[:1000] if isinstance(value, str) else None
+
+          choices = raw.get("choices") if isinstance(raw, dict) else None
+          choices = choices if isinstance(choices, list) else []
+          first = choices[0] if choices and isinstance(choices[0], dict) else {}
+          message = first.get("message") if isinstance(first.get("message"), dict) else {}
+          raw_content = message.get("content")
+          content = None
+          content_blocks = []
+          if isinstance(raw_content, str):
+              content = raw_content
+          elif isinstance(raw_content, list):
+              pieces = []
+              for part in raw_content:
+                  if not isinstance(part, dict):
+                      continue
+                  content_blocks.append({
+                      "type": part.get("type"),
+                      "has_text": isinstance(part.get("text"), str),
+                      "has_content": isinstance(part.get("content"), str)
+                  })
+                  text_value = part.get("text")
+                  if not isinstance(text_value, str):
+                      text_value = part.get("content")
+                  if isinstance(text_value, str):
+                      pieces.append(text_value)
+              content = "\\n".join(pieces)
           if not isinstance(content, str) or not content.strip():
-              (out / "api_error.txt").write_text("OpenRouter returned no textual message content.")
-              raise SystemExit("OpenRouter returned no textual message content.")
-          (out / "nemotron_assessment.md").write_text(content)
-          usage = raw.get("usage") or {}
+              alternative = message.get("output_text")
+              if isinstance(alternative, str) and alternative.strip():
+                  content = alternative
+          if not isinstance(content, str) or not content.strip():
+              legacy_text = first.get("text")
+              if isinstance(legacy_text, str) and legacy_text.strip():
+                  content = legacy_text
+
+          usage = raw.get("usage") if isinstance(raw, dict) else {}
+          usage = usage if isinstance(usage, dict) else {}
+          error_obj = raw.get("error") if isinstance(raw, dict) else None
+          if not isinstance(error_obj, dict):
+              error_obj = {}
           metadata = {
-              "provider": raw.get("provider"),
-              "model": raw.get("model"),
-              "id": raw.get("id"),
-              "created": raw.get("created"),
-              "finish_reason": choices[0].get("finish_reason") if choices else None,
+              "http_status": response_status,
+              "request_id": response_request_id,
+              "provider": raw.get("provider") if isinstance(raw, dict) else None,
+              "model": raw.get("model") if isinstance(raw, dict) else None,
+              "id": raw.get("id") if isinstance(raw, dict) else None,
+              "created": raw.get("created") if isinstance(raw, dict) else None,
+              "top_level_keys": sorted(raw.keys()) if isinstance(raw, dict) else [],
+              "choice_count": len(choices),
+              "choice_keys": sorted(first.keys()) if first else [],
+              "message_keys": sorted(message.keys()) if message else [],
+              "content_type": type(raw_content).__name__ if raw_content is not None else "missing",
+              "content_characters": len(content) if isinstance(content, str) else 0,
+              "content_block_shapes": content_blocks,
+              "reasoning_present": bool(message.get("reasoning") or message.get("reasoning_content")),
+              "refusal_present": bool(message.get("refusal")),
+              "error_type": error_obj.get("type"),
+              "error_code": error_obj.get("code"),
+              "error_message": safe_text(error_obj.get("message")),
+              "finish_reason": first.get("finish_reason"),
               "usage": {k: usage.get(k) for k in ("prompt_tokens", "completion_tokens", "total_tokens", "cost") if k in usage},
-              "response_content_saved": True,
+              "response_content_saved": bool(isinstance(content, str) and content.strip()),
               "reasoning_fields_saved": False,
               "completed_at_utc": datetime.datetime.now(datetime.timezone.utc).isoformat()
           }
           (out / "run_metadata.json").write_text(json.dumps(metadata, indent=2))
+
+          if not isinstance(content, str) or not content.strip():
+              diagnostics = {
+                  "error": "OpenRouter returned no usable textual assistant content.",
+                  "response_metadata": metadata,
+                  "note": "Response body, prompt, API key, and reasoning content are intentionally not recorded."
+              }
+              (out / "api_error.txt").write_text(json.dumps(diagnostics, indent=2))
+              raise SystemExit("OpenRouter response contained no usable text; safe response-shape diagnostics were saved.")
+
+          (out / "nemotron_assessment.md").write_text(content)
+          required_sections = ["A.", "B.", "C.", "D.", "E.", "F.", "G.", "H."]
+          missing_sections = [section for section in required_sections if section not in content]
           if metadata["finish_reason"] == "length":
-              raise SystemExit("Nemotron response was truncated (finish_reason=length); evidence preserved but assessment is incomplete.")
+              raise SystemExit("Nemotron response was truncated (finish_reason=length); assessment and metadata were preserved.")
           if metadata["finish_reason"] not in ("stop", None):
-              raise SystemExit(f"Unexpected finish_reason={metadata['finish_reason']}; evidence preserved for inspection.")
-          print("Nemotron response received. Evidence saved; API key and reasoning fields were not recorded.")
+              raise SystemExit(f"Unexpected finish_reason={metadata['finish_reason']}; assessment and metadata were preserved.")
+          if len(content.strip()) < 1200 or missing_sections:
+              metadata["assessment_validation"] = {
+                  "passed": False,
+                  "character_count": len(content.strip()),
+                  "missing_sections": missing_sections,
+                  "minimum_characters": 1200
+              }
+              (out / "run_metadata.json").write_text(json.dumps(metadata, indent=2))
+              raise SystemExit("Nemotron returned text, but the assessment failed completeness checks; evidence was preserved.")
+          metadata["assessment_validation"] = {
+              "passed": True,
+              "character_count": len(content.strip()),
+              "required_sections": required_sections
+          }
+          (out / "run_metadata.json").write_text(json.dumps(metadata, indent=2))
+          print("Nemotron response received and passed structural completeness checks. API key and reasoning fields were not recorded.")
           PY
 
       - name: Upload assessment evidence
