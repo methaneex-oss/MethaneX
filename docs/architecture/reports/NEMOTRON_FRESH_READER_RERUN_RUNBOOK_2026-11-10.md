@@ -14,11 +14,13 @@ The reusable workflow on `main` has been parameterized to accept an exact `targe
 - `2fb25e968dd102bc20e5e41ef93726232ff88321` — fix the missing `os` import in the packet-assembly step.
 - `f1ec646b2a4e0b9d3207c37883139c4708a1f7b2` — enforce exact Nemotron provider/model identity, require `finish_reason=stop` (missing values fail), reject refusal/tool-call responses, and record the validated assessment label in run metadata.
 - `d7bb3b8f267a86b7f156a70716db6c143fdbbaa8` — pass the validated assessment label into the API-request step's environment.
+- `8c530e8588c77f475af788ba97396bea8e6b712e` — include the exact PR #173/#174 decision-evidence extract and both accepted/current PR #174 specification revisions in the blind packet.
+- `003c040187a6cd5a4307f08b36686d31f98f6bfc` — strengthen the reader rubric to test historical-snapshot handling, provenance classes, accepted/current revision distinctions, PR #191 graph interpretation and identifier glossary usability.
 
 The workflow:
 - checks out the exact supplied commit SHA;
 - verifies that the checked-out HEAD equals the supplied SHA;
-- builds a blind packet from the current repository entry points and the accepted historical architecture/specification baselines;
+- builds a blind packet from the current repository entry points, the decision-evidence extract, and both the accepted and current status-clarified PR #174 specification revisions;
 - excludes Builder audit/self-review/remediation and prior reviewer reports from the reader packet;
 - invokes the NVIDIA Nemotron model through OpenRouter using the configured repository secret;
 - disables reasoning output to preserve the completion budget;
@@ -84,3 +86,12 @@ After the assessment:
 5. Only after both evidence streams are reconciled is the exact-revision package submitted for Project Director decision.
 
 **Authority boundary:** This workflow assesses documentation comprehension only. It cannot authorize Stage A, runtime implementation, PR integration, merge, rebase, retargeting, cherry-picking or final documentation-foundation acceptance. Stage A remains HELD; runtime implementation remains NOT AUTHORIZED.
+
+
+## 7. Second-run outcome and corrective packet changes — 2026-11-10
+
+The second run, [#42879721340](https://github.com/methaneex-oss/MethaneX/actions/runs/42879721340), assessed exact PR #192 revision `4a670636baf787ad4b1774bd306544c135868a04` and returned **PARTIALLY CLEAR (22/32)**. Artifact ID: `13793841106`. The execution passed strict provider/model identity and `finish_reason=stop` validation, but DF-09 comprehension acceptance did not pass.
+
+The next packet version adds the repository-fetched PR #173/#174 decision evidence extract, both the accepted PR #174 baseline and current status-corrected revision, a controlling-current-status/historical-snapshot explanation, and an identifier glossary. The rubric now explicitly tests provenance classes, historical snapshot interpretation, PR #191 ancestry comparisons, and the provisional portal's non-authority status.
+
+The Builder must finish the documentation corrections, verify the exact PR #192 HEAD and packet contents, and only then launch one new run. A CLEAR result is required; a green workflow or high numeric score alone is not enough.
