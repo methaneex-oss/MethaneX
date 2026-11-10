@@ -148,3 +148,45 @@ The following corrections were committed after this assessment and are intended 
 These changes are Builder claims and have not yet been independently reviewed or retested by Nemotron. The next run must assess the resulting exact PR #192 HEAD. A CLEAR result is required for DF-09 acceptance; a successful workflow alone is insufficient.
 
 **Disposition:** second AI fresh-reader assessment executed; result PARTIALLY CLEAR; DF-09 acceptance remains OPEN. DF-11 unresolved; DF-12 outstanding. Documentation-foundation gate NOT CLEARED. Stage A NOT STARTED / HELD. Runtime implementation NOT AUTHORIZED.
+
+
+---
+
+# Third blind assessment — 2026-11-10 — latest result
+
+**Workflow:** [#42909224258](https://github.com/methaneex-oss/MethaneX/actions/runs/42909224258)  
+**Assessed documentation revision:** `53039921202409ce40abb45981024fdbdfa7dc2f`  
+**Artifact ID:** `13804984673`  
+**SHA-256:** `59cb332c02b99fa5a7c63ec13ba26e11754ed81479fe8ac467914b49ae458cd3`  
+**Provider/model:** API-reported `Nvidia` / `nvidia/nemotron-3.5-super-vl:free`  
+**Completion:** `finish_reason=stop`; 26,981 characters; 94,174 prompt tokens; 6,929 completion tokens; no refusal, tool calls or reasoning output.
+
+## Verdict and scorecard
+
+**PARTIALLY CLEAR (31/32)** — workflow execution passed, but reader-comprehension acceptance did not.
+
+| Category | Score |
+|---|---:|
+| Project identity and scope | 4/4 |
+| Governing principle | 4/4 |
+| Brain-first rationale and boundary | 4/4 |
+| Human cognition / MCU / engineering reality | 4/4 |
+| Document authority and classification | 3/4 |
+| Current phase and authorization | 4/4 |
+| Unauthorized actions | 4/4 |
+| Role-based navigation | 4/4 |
+| **Total** | **31/32** |
+
+## Remaining finding
+
+The model understood the intended project, governing principle, Brain-first rationale, current phase, prohibited actions and role-based navigation. The remaining point concerns document authority/verifiability: the packet refers to additional linked materials and GitHub records that it does not itself include. The reader correctly noted that it cannot inspect those linked sources from a bounded packet. Examples identified include the source audit, templates guide, DF-09 question list, PR #193 handoff and some inventory details. This is a bounded-packet limitation, not evidence that the model failed to understand JARVIS.
+
+The reader also warned that many historical PR #192 HEADs and older dated status statements could be combined into a false current picture. The latest controlling status block in the index now explicitly supersedes older addenda; older values are historical snapshots and must not be rewritten as current values.
+
+The reader's assessment of DF-09 is an AI reader test, not formal independent review or Project Director acceptance. The older human-session requirement was explicitly superseded by the Project Director-approved distinct-AI route. This run did invoke the configured NVIDIA Nemotron model; therefore any older statement claiming no separate model ran is stale.
+
+## Label discrepancy
+
+The artifact records `assessment_label=post-review-corrections`, not the requested `post-review-corrections-v2`. The exact target SHA, model/provider, successful completion, response and artifact digest are verified. The label mismatch is a workflow-input bookkeeping issue and does not invalidate the response, but the workflow default must be corrected for the next dispatch.
+
+**Disposition:** DF-09 remains OPEN pending CLEAR. Documentation foundation NOT CLEARED. Stage A NOT STARTED / HELD. Runtime implementation NOT AUTHORIZED.
