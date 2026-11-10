@@ -378,7 +378,7 @@ All 29 PR #192 changed files were fetched at exact HEAD 4fbcbb55fbf44e4d74504365
 - 0 raw HTML href attributes, id attributes or name attributes.
 - 154 external HTTP(S) Markdown link destinations. A separate raw-string scan found 198 HTTP(S) occurrences including fenced code; the earlier fenced-code-filtered report counted 196. This parser-scope difference does not alter the 246/92/0 link-target result.
 
-The 92 repository-relative targets all resolve in the current tree. The scan does not establish external URL reachability, semantic relevance, renderer-specific heading behavior, absolute-URL fragment validity, every line-range anchor, or exhaustive historical cross-branch validity. The 89 immutable source-link / 45 commit-path pair / 76 line-anchor and 189 external-reference checks in earlier reports are historical checks over their stated prior snapshots, not a universal external validation.
+The 92 repository-relative targets all resolve in the current tree. The scan does not establish external URL reachability, semantic relevance, renderer-specific heading behavior, absolute-URL fragment validity, every line-range anchor, or exhaustive historical cross-branch validity. The 89 immutable source-link / 45 commit-path pair / 76 line-anchor checks in earlier reports are historical checks over their stated prior snapshots, not a universal external validation.
 
 **DF-06 remains PARTIAL.** The bounded internal target/path check passes for the stated scope; external, semantic, renderer-specific and exhaustive historical validation remain incomplete.
 
