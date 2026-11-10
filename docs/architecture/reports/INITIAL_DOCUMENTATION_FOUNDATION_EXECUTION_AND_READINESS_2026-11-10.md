@@ -483,3 +483,42 @@ Final counts:
 The newly added authority-register relative link resolves to the execution/readiness report in the same reports directory. The final local-path result is therefore 93/93 resolved, with no missing target. External URL reachability, semantic relevance, renderer-specific heading/line anchors, absolute-URL fragments and exhaustive historical cross-branch validation remain outside this bounded test.
 
 **Final DF-06 disposition remains PARTIAL.** Internal path/link resolution passes for the 29-file PR #192 package at the exact revision above; the untested external, semantic, renderer-specific and historical scopes prevent a complete-gate claim.
+
+
+---
+
+## 20. Blind AI fresh-reader execution and live-state reconciliation — 2026-11-10
+
+### 20.1 Exact execution evidence
+
+The Project Director-authorized blind AI fresh-reader assessment was executed successfully by GitHub Actions run [#42834248124](https://github.com/methaneex-oss/MethaneX/actions/runs/42834248124), using workflow implementation commit `dfdc63df98d717409ddf67285d181a7fa4830ddb`. The exact documentation packet revision was `3ea2970c7b43bdfb87b3d1459690eacd83516745`.
+
+OpenRouter response metadata reported provider `Nvidia`, model `nvidia/nemotron-3.5-super-vl:free`, response ID `gen-1794320850-PXFxrWdBUKmeVOzLq0fJ`, finish reason `stop`, 23,440 characters, 6,091 completion tokens, 76,155 prompt tokens, zero reasoning tokens, no refusal and no tool calls. Provider/model attribution is API-reported, not cryptographic proof of backend execution.
+
+The uploaded artifact is `documentation-foundation-nemotron-reader-42834248124-1`, ID `13772199059`, SHA-256 `d140228bbdb4fa07827c32a9a1da4f2d5e1e06a6446eb869f76479b6c6bd35e5`. It contains the exact prompt, raw assessment, assembled reader packet, packet manifest and run metadata. The packet manifest pins nine documents and hashes. The packet excluded Builder audits, self-reviews, remediation registers and prior reviewer reports; the model was instructed to use only the packet and not external sources.
+
+### 20.2 Result and DF-09 disposition
+
+Nemotron returned **PARTIALLY CLEAR**, with an eight-category scorecard of 31/32. It correctly understood the project's identity, governing principle, Brain-first but not Brain-only scope, reference lenses, current phase, Stage A hold, implementation boundary and role-based navigation.
+
+It also identified real reader-facing defects: (1) the index's dated addenda leave current status fragmented; (2) the scope correction §4.3 still describes PR #174 acceptance as conflicting; (3) the packet does not let a newcomer reconcile the accepted specification revision with its draft-status signal and decision provenance; (4) DF-09 appears pending because the packet predates this assessment; and (5) PR #191's disposition remains unresolved.
+
+**DF-09 execution is complete; DF-09 acceptance is not passed.** The assessment is the authorized AI substitute, not a human session. Its PARTIALLY CLEAR result requires the corrections and a repeat blind assessment against the corrected exact revision. It is not a formal independent review, a gate decision, or Project Director acceptance.
+
+Detailed analysis and source hashes: [Nemotron Blind Fresh-Reader Assessment](NEMOTRON_BLIND_FRESH_READER_ASSESSMENT_2026-11-10.md). Exact prompt, packet manifest and run metadata are preserved under `reports/fresh-reader-evidence/`; the full raw response and packet remain in the GitHub Actions artifact until its stated expiry.
+
+### 20.3 Repository facts independently reconciled after the blind run
+
+- **PR #173:** accepted as the Brain Foundation Architecture planning baseline at exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b`; decision provenance is recorded in PR #173 comment #6752144835. The prior unverified classification is superseded.
+- **PR #174:** accepted planning-baseline HEAD remains `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, by comment #6604790481. Current HEAD is `be46b3858102c31022128522c4b3506aad4dff8a`; F-02/F-03 remain open and original full review annotations remain unavailable. Its current specification header correctly records the exact acceptance scope. The stale PR #174 description wording about PR #173 acceptance has been corrected.
+- **PR #191:** open/draft/unmerged, head `609d38ede50bbdd98a93dfed112781eacabee9fd`, base `f6267456560a08054d69f7960d2951452b14017c`; one unique report commit, divergent from PR #179 HEAD `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` by one unique report commit and 22 intervening #179 commits. Disposition remains a Project Director decision.
+- **PR #192:** at the pre-synchronization snapshot, open/non-draft/unmerged, HEAD `c5577a117393df1a0be9ae17e9155c01e70ea292`, base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.
+- **PR #193:** open/draft/unmerged, HEAD `ee508c09be9d848c7baa9533bb6f88f9cc27f94a`, base `874c732973b6ab303d65a503f5a215b0af8e1153`. Its lineage remains separate from PR #192.
+
+### 20.4 Required next actions and reserved decisions
+
+Builder-controlled corrections now underway: consolidate the current status at the top of the index; correct the scope-correction authority wording; synchronize the audit, readiness report, outstanding-work register, self-review and inventory; then repeat the blind assessment. The result must be CLEAR before DF-09 can be passed.
+
+Reserved decisions remain: PR #174 missing-original-review provenance route and any F-02/F-03 correction authorization; PR #191 historical-base review versus dependent replay; PR #192/#193 integration order; DF-11 Grok qualification and exact-head review; DF-12 exact-revision Project Director acceptance.
+
+DF-06 and DF-08 remain PARTIAL. DF-11 remains UNRESOLVED. DF-12 remains OUTSTANDING. Stage A remains NOT STARTED / HELD; implementation remains NOT AUTHORIZED. No merge, branch-history rewrite, Stage A start or runtime change occurred.
