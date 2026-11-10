@@ -595,3 +595,16 @@ The result improved neither enough nor uniformly: the model understood the proje
 The Builder is consolidating the exact PR #173/#174 decision records and provenance quality in a packet-visible evidence extract; including both the accepted PR #174 baseline and its current header-corrected revision in the blind packet; explicitly demoting dated index addenda to historical snapshots under a controlling current-status block; adding an in-packet glossary; clarifying that the portal is provisional navigation rather than an authority source; and updating the runbook and workflow packet to include the decision evidence and current specification clarification.
 
 The result does not authorize Stage A, implementation, merge, PR integration or gate clearance. DF-09 remains OPEN pending a later CLEAR assessment; DF-11 remains unresolved; DF-12 remains outstanding. Stage A remains NOT STARTED / HELD; runtime implementation remains NOT AUTHORIZED.
+
+
+## Third blind fresh-reader assessment — 2026-11-10
+
+- Workflow: [#42909224258](https://github.com/methaneex-oss/MethaneX/actions/runs/42909224258)
+- Exact assessed PR #192 revision: `53039921202409ce40abb45981024fdbdfa7dc2f`; PR base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.
+- Artifact: `documentation-foundation-nemotron-reader-42909224258-1`, ID `13804984673`; SHA-256 `59cb332c02b99fa5a7c63ec13ba26e11754ed81479fe8ac467914b49ae458cd3`.
+- API-reported provider/model `Nvidia` / `nvidia/nemotron-3.5-super-vl:free`; finish reason `stop`; 26,981 response characters; 94,174 prompt tokens; 6,929 completion tokens; no refusal, tool calls or reasoning output.
+- Workflow job and all five substantive steps completed successfully. Reader verdict **PARTIALLY CLEAR (31/32)**. Scorecard: identity 4/4; principle 4/4; Brain/system boundary 4/4; reference lenses 4/4; document authority 3/4; current phase 4/4; unauthorized actions 4/4; role navigation 4/4.
+- The response correctly understood the project, governing principle, Brain/system boundary, current phase and holds. Remaining weakness: a bounded packet cannot independently verify all linked external artifacts, and the index's many dated snapshots/historical statements still create a risk of combining stale values. It specifically identified absent linked materials (source audit, templates guide, DF-09 protocol list, PR #193 handoff, inventory details) and residual authority/provenance limitations.
+- The run metadata records assessment label `post-review-corrections`, not the intended `post-review-corrections-v2`. Target SHA, model/provider, response and artifact digest are independently verified; treat this as an input-label bookkeeping defect only.
+
+**Disposition:** DF-09 execution complete; comprehension acceptance remains OPEN because the result is PARTIALLY CLEAR. Do not call this a pass. Older statements in this report about a missing distinct-model run or a mandatory uninvolved-human session are historical and superseded by the Project Director-authorized AI substitution and this actual run. Stage A remains HELD; runtime implementation and PR integration remain NOT AUTHORIZED.
