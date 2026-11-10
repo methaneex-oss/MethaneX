@@ -213,3 +213,15 @@ If a reader cannot determine where to start, which revision is relevant, what is
 ## Supplemental historical preservation register
 
 For exact artifact paths and blob identities across the principal JARVIS planning PR lineages, use the [Historical Documentation Preservation Register](architecture/inventory/HISTORICAL_DOCUMENTATION_PRESERVATION_REGISTER_2026-11-08.md). It complements the [Historical Preservation and Cross-Revision Comparison Report](architecture/reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md): the latter covers earlier branch discovery and selected cross-revision comparisons; the register maps the later PR #171–#193 documentation artifacts. Neither document converts a proposal into an accepted decision or authorizes branch integration.
+
+
+## Active documentation-foundation review resources — 2026-11-10
+
+The current review cycle uses the following repository-resident instructions and evidence. These files are the communication channel between Builder, Nemotron and Grok; the Project Director does not need to copy or relay reports.
+
+- [Nemotron blind fresh-reader rerun runbook](architecture/reports/NEMOTRON_FRESH_READER_RERUN_RUNBOOK_2026-11-10.md) — how to launch one exact-revision assessment and verify/preserve its result.
+- [Grok independent reviewer assignment](architecture/reports/GROK_INDEPENDENT_REVIEW_REQUEST_2026-11-10.md) — full review scope, exact-revision protocol, verdict criteria and repository-based communication requirements.
+- [Previous Nemotron assessment](architecture/reports/NEMOTRON_BLIND_FRESH_READER_ASSESSMENT_2026-11-10.md) — historical PARTIALLY CLEAR result and the findings that the repeat assessment must retest.
+- [Previous Grok independent review](architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_GROK_2026-11-09.md) — historical NOT CLEAR TO PROCEED report; it does not cover the current PR #192 HEAD.
+
+**Current authority boundary:** A Nemotron CLEAR result and Grok CLEAR recommendation are evidence inputs only. The Project Director retains final documentation-foundation acceptance. Stage A remains HELD; runtime implementation and PR integration remain NOT AUTHORIZED.
