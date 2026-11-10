@@ -572,3 +572,16 @@ Official Jobs pricing requires a positive credit balance and lists CPU Basic at 
 The PR #173 planning-baseline acceptance, PR #174 accepted planning baseline, AI fresh-reader substitution and bounded CPU-job authorization are explicit Project Director decisions. The PR #174 provenance route, F-02/F-03 correction authorization, PR #191 disposition, PR #192/#193 sequencing, DF-11 reviewer qualification, DF-12 acceptance and Stage A release remain reserved decisions.
 
 No runtime implementation, architecture/algorithm selection, merge, close, rebase, retarget, cherry-pick, replay or archive operation was performed.
+
+
+---
+
+## 22. Final post-write DF-06 scan and gate snapshot — 2026-11-10
+
+This addendum supersedes earlier active DF-06 counts in §§20–21 for the final post-write PR #192 package. The exact scan revision was PR #192 HEAD d3e6d13276efd011526ee73c0075d3966b85dc6d. The recursive tree contained 258 entries, was not truncated, and the changed-file endpoint returned 29 documentation-only paths.
+
+All 29 changed files were fetched and parsed with fenced code blocks removed. The final count is 247 inline Markdown links, 93 repository-relative targets, zero missing targets, zero fragment-bearing local inline links, and 154 external HTTP(S) Markdown destinations. An unfiltered raw-string scan counted 198 HTTP(S) occurrences; the earlier fenced-code-filtered snapshot counted 196. The only newly introduced Markdown destination since the previous scan is the relative link from this register to the execution/readiness report, and it resolves within docs/architecture/reports. No new raw HTTP URL, reference definition or raw HTML anchor attribute was introduced by the post-write addenda.
+
+**DF-06 remains PARTIAL:** 93/93 internal targets resolve for this bounded package, but external reachability, semantic relevance, renderer-specific anchors and exhaustive historical cross-branch validation remain untested.
+
+The latest report records the same result in §19. The exact 29-path parent manifest is to be refreshed in the inventory after this register update. DF-08 remains PARTIAL; DF-09 OPEN; DF-11 UNRESOLVED; DF-12 OUTSTANDING; DF-13 NOT STARTED / HELD. No PR merge/close, history rewrite, archive move, Stage A start or runtime implementation occurred.
