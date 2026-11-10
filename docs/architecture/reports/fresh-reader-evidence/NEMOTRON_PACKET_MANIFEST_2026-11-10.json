@@ -1,0 +1,15 @@
+{
+  "target_documentation_revision": "3ea2970c7b43bdfb87b3d1459690eacd83516745",
+  "documents": [
+    {"path":"README.md","source_commit":"3ea2970c7b43bdfb87b3d1459690eacd83516745","sha256":"3db3662c9321b1a98289c75d0242f42c988bbec08f4745426645fb1e6b83f567","characters":4970},
+    {"path":"docs/README.md","source_commit":"3ea2970c7b43bdfb87b3d1459690eacd83516745","sha256":"5105278040fcae7756cfa29bdef53050bf1f13bf9858dee1e6090420e510abc0","characters":19481},
+    {"path":"docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md","source_commit":"3ea2970c7b43bdfb87b3d1459690eacd83516745","sha256":"3627472b115b2b657f9631b95c5bd48485f16dcef9db83598f59c2407443379a","characters":54654},
+    {"path":"docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md","source_commit":"3ea2970c7b43bdfb87b3d1459690eacd83516745","sha256":"f509f4126d7db63479da803e9bb3e8930d8ee60091a0880f846371095a9f8058","characters":22237},
+    {"path":"docs/architecture/00_JARVIS_SYSTEM_ARCHITECTURE_FOUNDATION.md","source_commit":"b05434758ad4fe72815503f89bd5d2990ccb658b","sha256":"9eb2c8060b30144f2c4418393838527e5510b09bd27651c24b84cc7570bdb1c5","characters":25552},
+    {"path":"docs/architecture/01_JARVIS_WHOLE_SYSTEM_ANATOMY_AND_RESPONSIBILITY_MAP.md","source_commit":"b05434758ad4fe72815503f89bd5d2990ccb658b","sha256":"38d4048198308f9f920d23f144fd1425808c7b23b4b0c17f4469592cf587e909","characters":68256},
+    {"path":"docs/architecture/research/02_BRAIN_FOUNDATIONAL_CAPABILITY_INVESTIGATION_2026-11-03.md","source_commit":"d7d676b79dbf3269f7fd3ebdb4363a6df19f255d","sha256":"b314fbd6a2a649283f4dc2687deeb46b9001b0f286eaf4bfb55a32a7ab2b066a","characters":48931},
+    {"path":"docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md","source_commit":"97191111bc2573c14d391c0af9628db7b11f194b","sha256":"6b424aae039b7389ca16b830e0b8c1fa80e207ce09af4a2aea1476557ceaa5b4","characters":58142},
+    {"path":"docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md","source_commit":"0811a59e46bf934e32e794f90e4e7d18d4e2bd97","sha256":"7404aa2f9c3fadc55666bd14f1f10fc4f9b95195a00f0cc227940e94758dd827","characters":62071}
+  ],
+  "note": "Blind packet excludes Builder audit, self-review, remediation register, and prior reviewer reports."
+}
