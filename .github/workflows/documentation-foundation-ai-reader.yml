@@ -123,7 +123,8 @@ jobs:
                   {"role": "user", "content": user}
               ],
               "temperature": 0.2,
-              "max_tokens": 8000,
+              "max_tokens": 12000,
+              "reasoning": {"effort": "low", "exclude": True},
               "stream": False
           }
           request = urllib.request.Request(
@@ -150,32 +151,58 @@ jobs:
               raise SystemExit("OpenRouter request failed; diagnostic saved as artifact.")
 
           choices = raw.get("choices") or []
-          message = choices[0].get("message", {}) if choices else {}
+          choice = choices[0] if choices else {}
+          message = choice.get("message") or {}
           content = message.get("content")
           if isinstance(content, list):
-              content = "\n".join(part.get("text", "") for part in content if isinstance(part, dict))
-          if not isinstance(content, str) or not content.strip():
-              (out / "api_error.txt").write_text("OpenRouter returned no textual message content.")
-              raise SystemExit("OpenRouter returned no textual message content.")
-          (out / "nemotron_assessment.md").write_text(content)
+              content = "\\n".join(
+                  part.get("text", "") for part in content
+                  if isinstance(part, dict) and isinstance(part.get("text"), str)
+              )
           usage = raw.get("usage") or {}
+          completion_details = usage.get("completion_tokens_details") or {}
           metadata = {
               "provider": raw.get("provider"),
               "model": raw.get("model"),
               "id": raw.get("id"),
               "created": raw.get("created"),
-              "finish_reason": choices[0].get("finish_reason") if choices else None,
+              "finish_reason": choice.get("finish_reason"),
+              "native_finish_reason": choice.get("native_finish_reason"),
+              "response_top_level_keys": sorted(raw.keys()),
+              "message_keys": sorted(message.keys()),
+              "content_type": type(message.get("content")).__name__,
+              "content_characters": len(content) if isinstance(content, str) else 0,
+              "refusal_present": bool(message.get("refusal")),
+              "tool_calls_present": bool(message.get("tool_calls")),
+              "reasoning_present": bool(message.get("reasoning") or message.get("reasoning_details")),
               "usage": {k: usage.get(k) for k in ("prompt_tokens", "completion_tokens", "total_tokens", "cost") if k in usage},
-              "response_content_saved": True,
+              "reasoning_tokens": completion_details.get("reasoning_tokens"),
+              "response_content_saved": False,
               "reasoning_fields_saved": False,
               "completed_at_utc": datetime.datetime.now(datetime.timezone.utc).isoformat()
           }
           (out / "run_metadata.json").write_text(json.dumps(metadata, indent=2))
+          if not isinstance(content, str) or not content.strip():
+              error = {
+                  "message": "OpenRouter returned no textual message content.",
+                  "finish_reason": metadata["finish_reason"],
+                  "reasoning_tokens": metadata["reasoning_tokens"],
+                  "completion_tokens": usage.get("completion_tokens"),
+                  "message_keys": metadata["message_keys"],
+                  "hint": "Check whether reasoning consumed the output-token budget, whether the provider returned a refusal/error, or whether the endpoint returned an empty completion."
+              }
+              (out / "api_error.json").write_text(json.dumps(error, indent=2))
+              raise SystemExit("No textual answer returned; sanitized response diagnostics saved.")
+          (out / "nemotron_assessment.md").write_text(content)
+          metadata["response_content_saved"] = True
+          (out / "run_metadata.json").write_text(json.dumps(metadata, indent=2))
           if metadata["finish_reason"] == "length":
-              raise SystemExit("Nemotron response was truncated (finish_reason=length); evidence preserved but assessment is incomplete.")
+              raise SystemExit("Nemotron response was truncated (finish_reason=length); assessment saved but incomplete.")
           if metadata["finish_reason"] not in ("stop", None):
-              raise SystemExit(f"Unexpected finish_reason={metadata['finish_reason']}; evidence preserved for inspection.")
-          print("Nemotron response received. Evidence saved; API key and reasoning fields were not recorded.")
+              raise SystemExit(f"Unexpected finish_reason={metadata['finish_reason']}; assessment saved for inspection.")
+          if len(content.strip()) < 1500:
+              raise SystemExit("Nemotron response is too short to count as a substantive fresh-reader assessment; response preserved.")
+          print("Nemotron textual assessment received and saved. Sanitized metadata recorded; reasoning and API key excluded.")
           PY
 
       - name: Upload assessment evidence
