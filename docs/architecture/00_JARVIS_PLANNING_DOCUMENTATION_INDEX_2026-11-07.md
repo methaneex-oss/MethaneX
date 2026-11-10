@@ -75,7 +75,21 @@ The historical sections below remain dated evidence snapshots. This summary cont
 ## Reader glossary — identifiers used in this documentation set
 
 - **BM-01–BM-12:** the twelve logical Brain Mechanism responsibilities defined in the accepted PR #174 specification. They are an existing decomposition, not a claim that the future whole Brain has exactly twelve mechanisms.
-- **SYS-01–SYS-11:** system-level responsibilities/boundaries used by the architecture and mechanism specification to describe the surrounding JARVIS system and its relationship to the Brain. Consult the exact system architecture and specification for each identifier's full definition; the numeric range is not a completeness claim.
+- **SYS-01–SYS-11:** the eleven logical system responsibilities in the Whole-System Anatomy and Responsibility Map. They are a responsibility map, not a requirement for eleven independent deployable services.
+  | ID | Responsibility |
+  |---|---|
+  | SYS-01 | Brain / Cognitive System |
+  | SYS-02 | Nervous / Signalling and Coordination System |
+  | SYS-03 | Sensory / Perceptual Acquisition Systems |
+  | SYS-04 | Motor / Action and Execution Systems |
+  | SYS-05 | Autonomic / Homeostatic Regulation Systems |
+  | SYS-06 | Endocrine-inspired Modulation and Global State Signalling |
+  | SYS-07 | Immune / Security, Trust and Recovery Defence |
+  | SYS-08 | Embodiment / Computational and Environmental Substrate |
+  | SYS-09 | Interaction / Interface and Operator System |
+  | SYS-10 | Development, Evaluation and Training Environment |
+  | SYS-11 | Governance, Safety and Assurance Authority |
+  Full responsibility and authority boundaries are defined in `docs/architecture/01_JARVIS_WHOLE_SYSTEM_ANATOMY_AND_RESPONSIBILITY_MAP.md` at the accepted planning revision.
 - **DF-01–DF-13:** the thirteen exit criteria in the Initial Documentation Foundation audit. They track documentation integrity, evidence, review, acceptance and preservation—not Brain capabilities.
 - **F-01, F-02, F-03:** finding identifiers from reviews of the Brain architecture/specification. Their status is revision- and finding-specific; do not infer closure from a later document mentioning them. F-02/F-03 remain open follow-on obligations in the current records.
 - **Gate A / Gate B:** named project governance/authorization gates used in historical planning records. They are not interchangeable with the current Initial Documentation Foundation Completion Gate. Their operative definitions and acceptance authority must be read from the exact governance artifact and decision record; proposed governance text is not binding merely because it defines a gate.
