@@ -527,3 +527,11 @@ The user-approved reader-comprehension requirement is a blind assessment by a ge
 PR #174's current description still contains stale wording that calls PR #173 acceptance unverified; it was not edited in this branch-only documentation pass. PR #192's 2026-11-07 description addendum preserves the then-current discrepancy as a dated historical snapshot, not a current status claim. The accepted PR #173 artifact itself was not changed.
 
 No PR was merged or closed; no branch was rebased, retargeted or cherry-picked; no Stage A or implementation work was started.
+
+## Bounded blind-packet coverage and external evidence — controlling clarification
+
+The Nemotron packet is a deliberately bounded comprehension test, not a full repository mirror. It includes the current root README, documentation portal, planning index, whole-Brain scope correction, PR #173/#174 decision-evidence extract, accepted system architecture foundations, whole-system responsibility map, accepted research investigation, accepted Brain Foundation Architecture, and both accepted/current PR #174 mechanism-specification revisions. Each included file is pinned to an exact commit in the packet manifest.
+
+The following linked materials are **not included in the blind packet** and must not be described as read or independently verified by the model: the complete source audit, all reusable templates and template guide, the full PR #193 handoff/implementation-plan branch, the complete inventory, historical PR review discussions/inline annotations, and live GitHub PR/issue metadata beyond what is transcribed into the decision-evidence extract. Their links are navigation to external evidence. The reader may correctly report that it cannot inspect them from the packet alone; this limitation is not a reason to infer their contents or authority.
+
+For the documentation gate, a newcomer must be able to distinguish (a) what the packet directly establishes, (b) what a linked external artifact may establish only after opening it, and (c) what remains unresolved. The index and authority register remain the source of current status; the packet itself is not the authority source.
