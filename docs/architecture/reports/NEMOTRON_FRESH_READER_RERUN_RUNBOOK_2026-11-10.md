@@ -95,3 +95,14 @@ The second run, [#42879721340](https://github.com/methaneex-oss/MethaneX/actions
 The next packet version adds the repository-fetched PR #173/#174 decision evidence extract, both the accepted PR #174 baseline and current status-corrected revision, a controlling-current-status/historical-snapshot explanation, and an identifier glossary. The rubric now explicitly tests provenance classes, historical snapshot interpretation, PR #191 ancestry comparisons, and the provisional portal's non-authority status.
 
 The Builder must finish the documentation corrections, verify the exact PR #192 HEAD and packet contents, and only then launch one new run. A CLEAR result is required; a green workflow or high numeric score alone is not enough.
+
+
+## 8. Third-run result — 2026-11-10
+
+Run [#42909224258](https://github.com/methaneex-oss/MethaneX/actions/runs/42909224258) assessed exact PR #192 revision `53039921202409ce40abb45981024fdbdfa7dc2f`. Artifact ID `13804984673`; digest `sha256:59cb332c02b99fa5a7c63ec13ba26e11754ed81479fe8ac467914b49ae458cd3`. Provider/model `Nvidia` / `nvidia/nemotron-3.5-super-vl:free`; `finish_reason=stop`; response 26,981 characters; result **PARTIALLY CLEAR (31/32)**.
+
+The reader correctly understood identity, principle, Brain/system boundary, reference lenses, phase/authorization, prohibited actions and role navigation. The only lost point was document authority/verifiability: the bounded packet links to some source materials and external GitHub records it does not include. It also flagged the historical-snapshot burden. Do not treat a 31/32 as CLEAR.
+
+The artifact records `post-review-corrections`, not the intended `post-review-corrections-v2`. Record actual labels from metadata, and change the workflow default before a future dispatch. The target SHA/model/completion/artifact are valid despite the label discrepancy.
+
+Older human-only DF-09 language and claims that no distinct model had run are historical; the Project Director-approved AI substitution has been exercised. DF-09 remains OPEN because the latest result is PARTIALLY CLEAR. Stage A remains HELD; implementation remains NOT AUTHORIZED.
