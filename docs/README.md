@@ -1,12 +1,12 @@
 # JARVIS Documentation Portal
 
-**Status:** Proposed documentation-navigation layer in PR #192; not yet independently reviewed or accepted.  
+**Status:** Provisional navigation aid carried in PR #192; not a governance instrument, approval record, or authority source. It remains subject to independent review and exact-revision acceptance.  
 **Repository:** methaneex-oss/MethaneX  
 **Snapshot:** 2026-11-07  
 **Current task:** Initial Documentation Foundation Completion Gate  
 **Stage A:** Not started; held pending completion, independent review and exact-revision acceptance of the documentation foundation.
 
-This page is the human-facing entry point to the JARVIS documentation system. It is designed for people arriving with different responsibilities. It does not replace the planning index, architecture decisions, governance records, technical specifications, test evidence, or pull-request review history.
+This page is a provisional human-facing navigation entry point to the JARVIS documentation system. It is designed for people arriving with different responsibilities. Its role routes are practical navigation, not evidence that this page or every linked artifact has been accepted. It does not replace the planning index, architecture decisions, governance records, technical specifications, test evidence, or pull-request review history.
 
 > **Navigation rule:** Start with this portal, follow the route for your role, then use the Planning Documentation Index as the canonical catalog of planning artifacts and their status. Never infer authority from a filename, folder, PR title, draft/merged state, or an old handoff.
 
@@ -80,6 +80,12 @@ A test report must identify the exact commit, environment, command, test selecti
 4. Add exact revision links for cross-branch references and live PR links for review state.
 5. Preserve historical artifacts; use explicit supersession or correction records rather than silent deletion or duplicate competing copies.
 6. Run the documentation link and consistency checks described below.
+
+## 1A. Current evidence and status quick-check
+
+For exact accepted-baseline decisions, use the [Project Director Decision Evidence Extracts](architecture/reports/PROJECT_DIRECTOR_DECISION_EVIDENCE_EXTRACTS_2026-11-10.md). It distinguishes the PR #173 conversation-history transcription from the PR #174 decision comment fetched directly from GitHub, and states the exact accepted revisions and authorization limits.
+
+For current live PR heads and the documentation-gate state, use the controlling current-status block at the top of the [Planning Documentation Index](architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md). Dated addenda later in that index are historical snapshots unless explicitly identified as current. The latest Nemotron blind-reader result is evidence of comprehension only; it is not independent review or acceptance.
 
 ## 2. Reusable contribution templates
 
