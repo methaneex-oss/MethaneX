@@ -10,7 +10,7 @@ on:
       assessment_label:
         description: "Short run label for evidence artifacts"
         required: false
-        default: "post-review-corrections"
+        default: "post-review-corrections-v3"
         type: string
 
 permissions:
@@ -123,6 +123,8 @@ jobs:
           - Are PR #191 ancestry statements actually contradictory, or do they describe different comparisons?
           - Are BM, SYS, DF, F, and gate identifiers explained sufficiently for a newcomer?
           - Are links and cross-revision references understandable from the packet?
+          - Does the packet explicitly identify which linked documents and GitHub records are intentionally external/not included, and avoid implying they were inspected?
+          - Can the reader distinguish the packet's bounded evidence from materials that require opening a live link or separate repository revision?
           - Do any documents conflict, rely on unexplained jargon, assume missing context, or make authority claims that are not substantiated by the packet?
           - What would a new reader likely misunderstand or be unable to verify?
 
