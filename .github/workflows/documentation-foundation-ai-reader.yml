@@ -84,6 +84,7 @@ jobs:
         shell: bash
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          ASSESSMENT_LABEL: ${{ inputs.assessment_label }}
         run: |
           set -euo pipefail
           test -n "${OPENROUTER_API_KEY:-}" || { echo "::error::Repository secret OPENROUTER_API_KEY is not configured."; exit 1; }
