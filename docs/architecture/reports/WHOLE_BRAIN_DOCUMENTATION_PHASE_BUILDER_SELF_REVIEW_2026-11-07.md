@@ -961,7 +961,7 @@ The Project Director-authorized blind AI assessment was executed in GitHub Actio
 ### 33.2 Corrections made / in progress
 
 - PR #173's exact accepted planning-baseline decision was verified in comment #6752144835; prior unverified wording is superseded.
-- PR #174's exact accepted baseline is #0811a59... by comment #6604790481; F-02/F-03 remain open. Its stale PR description statement about PR #173 was corrected.
+- PR #174's exact accepted baseline is `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` by comment #6604790481; F-02/F-03 remain open. Its stale PR description statement about PR #173 was corrected.
 - The scope-correction §4.3 wording was updated to distinguish accepted baseline status from the open follow-on findings.
 - The planning index now has a consolidated current-status summary; historical addenda remain preserved as snapshots.
 - The readiness report, audit, and outstanding-work register now record the actual AI result and its limitations.
