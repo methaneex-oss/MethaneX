@@ -11,6 +11,45 @@
 
 > **Current exact-head control report (2026-11-10):** [Initial Documentation Foundation Execution and Readiness Report](reports/INITIAL_DOCUMENTATION_FOUNDATION_EXECUTION_AND_READINESS_2026-11-10.md). It supersedes earlier live-head snapshots where stated; it does not clear the gate.
 
+## Current status summary — 2026-11-10 (controlling snapshot)
+
+**Current phase:** Initial Documentation Foundation Completion Gate.  
+**Gate:** **NOT CLEARED.**  
+**Stage A:** NOT STARTED / HELD.  
+**Runtime implementation:** NOT AUTHORIZED.  
+**Current working PR:** #192, open, non-draft, unmerged; base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; live HEAD at this snapshot `c5577a117393df1a0be9ae17e9155c01e70ea292`. This snapshot precedes the current-status synchronization commits; fetch live metadata for any later review.
+
+### Accepted planning baselines (exact scope only)
+
+- **PR #173 — Brain Foundation Architecture:** accepted at exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b`. Existing decision provenance is recorded in PR #173 comment [#6752144835](https://github.com/methaneex-oss/MethaneX/pull/173#issuecomment-6752144835). It authorizes the Detailed Brain Mechanism Specification stage only; no implementation.
+- **PR #174 — Brain Mechanism Specification:** accepted at exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, by decision comment [#6604790481](https://github.com/methaneex-oss/MethaneX/pull/174#issuecomment-6604790481). Current PR HEAD is `be46b3858102c31022128522c4b3506aad4dff8a`; its current specification header records the limited accepted-baseline status. Follow-on F-02/F-03 remain OPEN. The original full follow-on review and inline annotations remain unavailable; the recovery record is partial. This is not a complete/final specification and does not authorize implementation.
+
+### Live PR and dependency snapshot
+
+| PR | Live HEAD | Base | State | Current meaning |
+|---|---|---|---|---|
+| #173 | `97191111bc2573c14d391c0af9628db7b11f194b` | `main` | Open / draft / unmerged | Accepted Brain Foundation Architecture planning baseline at exact HEAD |
+| #174 | `be46b3858102c31022128522c4b3506aad4dff8a` | PR #173 HEAD | Open / draft / unmerged | Accepted exact planning baseline plus open F-02/F-03 follow-ons |
+| #179 | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | PR #178 HEAD | Open / draft / unmerged | BM-01–BM-12 source integration map; partial, not whole-Brain completeness |
+| #191 | `609d38ede50bbdd98a93dfed112781eacabee9fd` | `f6267456560a08054d69f7960d2951452b14017c` | Open / draft / unmerged | One unique human/MCU comparison report; base is ancestor of #179 HEAD, head diverges by one unique commit and 22 intervening #179 commits |
+| #192 | `c5577a117393df1a0be9ae17e9155c01e70ea292` | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | Open / non-draft / unmerged | Documentation-foundation reconciliation and evidence |
+| #193 | `ee508c09be9d848c7baa9533bb6f88f9cc27f94a` | `874c732973b6ab303d65a503f5a215b0af8e1153` | Open / draft / unmerged | Separate #175-derived deferred plan/handoff lineage |
+
+PR #191's disposition (historical-base review or authorized dependent replay) and PR #192/#193 integration order remain Project Director decisions. No rebase, retarget, cherry-pick, merge, or branch deletion is authorized or performed.
+
+### Documentation-gate criteria
+
+- **DF-06:** PARTIAL — bounded local path/anchor and selected external-reference checks; exhaustive external reachability, semantic relevance, renderer-specific anchors, and historical cross-branch validation are not claimed.
+- **DF-08:** PARTIAL — bounded branch/PR/document discovery and preservation register; exhaustive archive/supersession work remains open.
+- **DF-09:** A blind assessment by a genuinely different AI model was executed against documentation revision `3ea2970c7b43bdfb87b3d1459690eacd83516745`. Nemotron returned **PARTIALLY CLEAR**. Execution is complete, but the comprehension criterion is **not passed**; correct the identified reader-facing contradictions and repeat the blind assessment. Evidence: [Nemotron assessment report](reports/NEMOTRON_BLIND_FRESH_READER_ASSESSMENT_2026-11-10.md), [workflow run #42834248124](https://github.com/methaneex-oss/MethaneX/actions/runs/42834248124).
+- **DF-11:** UNRESOLVED — Grok declared a distinct model identity, but GitHub attributes the formal COMMENTED review to the same repository-owner account as Builder and it reviewed an older PR #192 HEAD. Qualification and exact-head re-review remain Project Director decisions.
+- **DF-12:** OUTSTANDING — exact-revision Project Director acceptance of the documentation foundation has not been recorded.
+- **DF-13:** Stage A remains NOT STARTED / HELD; implementation remains unauthorized.
+
+The index, portal, and governance proposal remain proposed/unaccepted unless separately accepted by an exact decision. Historical sections below are dated evidence snapshots; this summary controls the current status and supersedes conflicting active-status wording in those earlier snapshots. The current status does not clear the documentation gate or authorize Stage A, implementation, or PR integration.
+
+---
+
 ## 1. Current objective and immediate next work
 
 The immediate task is to establish a coherent, traceable, recoverable initial documentation foundation before beginning whole-Brain planning.
