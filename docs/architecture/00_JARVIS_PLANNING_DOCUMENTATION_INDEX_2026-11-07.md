@@ -17,7 +17,7 @@
 **Gate:** **NOT CLEARED.**  
 **Stage A:** NOT STARTED / HELD.  
 **Runtime implementation:** NOT AUTHORIZED.  
-**Working PR:** #192, open, non-draft, unmerged; base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; live HEAD `c026b5b69828d83249505ce28226fa1c668520f6` at this snapshot; later commits on this branch supersede this SHA. Always fetch PR #192 for the live HEAD before acting.
+**Working PR:** #192, open, non-draft, unmerged; base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; live HEAD `04eefdb150e81857cea26db81edb2f4dbe6359b9` at this snapshot; later commits on this branch supersede this SHA. Always fetch PR #192 for the live HEAD before acting.
 
 ### Accepted planning baselines (exact scope only)
 
@@ -32,7 +32,7 @@
 | #174 | `be46b3858102c31022128522c4b3506aad4dff8a` | PR #173 HEAD | Open / draft / unmerged | Accepted exact planning baseline plus open F-02/F-03 follow-ons |
 | #179 | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | `39fe09dcf13496f5f0005ccf3f00739303e29f88` | Open / draft / unmerged | BM-01–BM-12 source-integration map; partial, not whole-Brain completeness |
 | #191 | `609d38ede50bbdd98a93dfed112781eacabee9fd` | `f6267456560a08054d69f7960d2951452b14017c` | Open / draft / unmerged | One unique human/MCU comparison report; historical base; one unique commit ahead and 22 commits behind/diverged from #179 line |
-| #192 | `c026b5b69828d83249505ce28226fa1c668520f6` | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | Open / non-draft / unmerged | Documentation-foundation reconciliation and evidence; live HEAD advances with subsequent commits |
+| #192 | `04eefdb150e81857cea26db81edb2f4dbe6359b9` | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | Open / non-draft / unmerged | Documentation-foundation reconciliation and evidence; live HEAD advances with subsequent commits |
 | #193 | `ee508c09be9d848c7baa9533bb6f88f9cc27f94a` | `874c732973b6ab303d65a503f5a215b0af8e1153` | Open / draft / unmerged | Separate #175-derived deferred plan/handoff lineage |
 
 PR #191's disposition (historical-base review or authorized dependent replay) and PR #192/#193 integration order remain Project Director decisions. No rebase, retarget, cherry-pick, merge, or branch deletion is authorized or performed.
@@ -40,12 +40,24 @@ PR #191's disposition (historical-base review or authorized dependent replay) an
 ### Review and fresh-reader evidence
 
 - **Grok independent review:** distinct model identity (Grok / xAI) from Builder GPT-6; report [INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_GROK_2026-11-09.md](reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_GROK_2026-11-09.md), formal GitHub COMMENTED review submitted 2026-11-09 against PR #192 HEAD `9e0c342dcfbbe1d7a51a6b3a2b7574c9cdf480dc`. The report recommends **NOT CLEAR TO PROCEED**. GitHub attributes the review submission to the same repository-owner account used for Builder activity; therefore the report establishes distinct model-level scrutiny, while account-level reviewer separation and an exact-current-HEAD re-review remain unresolved. Its PR #173 finding predates the later repository-side provenance transcription; that transcription is not the original contemporaneous decision artifact.
-- **Nemotron blind AI fresh-reader assessment:** executed in [workflow run #42834248124](https://github.com/methaneex-oss/MethaneX/actions/runs/42834248124) against packet revision `3ea2970c7b43bdfb87b3d1459690eacd83516745`; result **PARTIALLY CLEAR** (31/32 scorecard). This is a blind AI assessment, not a human session or formal independent review. It identified fragmented current-state snapshots, PR #174 status/provenance presentation, and PR #191 disposition as reader traps. Its result is not a pass.
+- **Nemotron blind AI fresh-reader assessment:** latest run [#42879721340](https://github.com/methaneex-oss/MethaneX/actions/runs/42879721340), exact packet revision `4a670636baf787ad4b1774bd306544c135868a04`, result **PARTIALLY CLEAR (22/32)**, artifact ID `13793841106`. The earlier run #42834248124 (31/32) is historical and superseded as the latest assessment. The latest run is AI fresh-reader evidence, not a human session, formal independent review, or gate acceptance. DF-09 execution is complete; comprehension acceptance remains OPEN until a later CLEAR result.
 - **DF-09:** AI substitution is the Project Director-approved reader-evidence route. The first assessment is complete but **DF-09 acceptance remains OPEN** because the result was PARTIALLY CLEAR. Correct the documentation and repeat the blind assessment against the corrected exact revision; require CLEAR.
 - **DF-11:** Grok's distinct model identity and formal COMMENTED review are recorded; same-account submission provenance and exact-current-HEAD review still require disposition. Do not count GPT-6 same-identity reviews.
 - **DF-12:** OUTSTANDING — exact-revision Project Director acceptance of the documentation foundation has not been recorded.
 - **DF-06 / DF-08:** PARTIAL — preserve the bounded scope of completed link and historical-preservation checks; do not claim exhaustive external, semantic, renderer-specific, or archival validation.
 - **DF-13:** Stage A remains NOT STARTED / HELD; implementation remains unauthorized.
+
+### Latest reader-result correction pass — 2026-11-10
+
+The second Nemotron assessment found **PARTIALLY CLEAR (22/32)** on packet revision `4a670636baf787ad4b1774bd306544c135868a04`. Builder corrections now include:
+- repository-fetched decision evidence for PR #173 and #174, with their different provenance classes;
+- separate inclusion of PR #174's accepted baseline and current status-header correction;
+- an explicit controlling-current-status versus historical-snapshot rule;
+- a glossary for BM, SYS, DF, F and gate identifiers;
+- a clear statement that the documentation portal is provisional navigation, not authority;
+- a strengthened blind-reader rubric for provenance, revision, ancestry and status comprehension.
+
+The second result does not pass DF-09. The next assessment must target the final exact PR #192 HEAD after all these changes. The raw second-run packet and assessment are preserved in artifact `13793841106`.
 
 The historical sections below remain dated evidence snapshots. This summary controls the current status and supersedes conflicting active-status wording in earlier snapshots. It does not clear the documentation gate or authorize Stage A, implementation, or PR integration.
 
