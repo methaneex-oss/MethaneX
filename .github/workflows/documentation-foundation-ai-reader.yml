@@ -1,0 +1,188 @@
+name: Documentation Foundation — Blind AI Fresh-Reader Assessment
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: documentation-foundation-ai-reader
+  cancel-in-progress: false
+
+jobs:
+  blind-reader-assessment:
+    name: Nemotron blind fresh-reader assessment
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+    steps:
+      - name: Check out the exact documentation revision
+        uses: actions/checkout@v6
+        with:
+          ref: 3ea2970c7b43bdfb87b3d1459690eacd83516745
+          fetch-depth: 1
+
+      - name: Verify revision and assemble blind reader packet
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "3ea2970c7b43bdfb87b3d1459690eacd83516745"
+          mkdir -p documentation-foundation-reader-evidence
+          git fetch --no-tags --depth=1 origin b05434758ad4fe72815503f89bd5d2990ccb658b
+          git fetch --no-tags --depth=1 origin d7d676b79dbf3269f7fd3ebdb4363a6df19f255d
+          git fetch --no-tags --depth=1 origin 97191111bc2573c14d391c0af9628db7b11f194b
+          git fetch --no-tags --depth=1 origin 0811a59e46bf934e32e794f90e4e7d18d4e2bd97
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib, json, subprocess
+
+          root = Path(".")
+          docs = [
+              ("README.md", "3ea2970c7b43bdfb87b3d1459690eacd83516745", "README.md"),
+              ("docs/README.md", "3ea2970c7b43bdfb87b3d1459690eacd83516745", "docs/README.md"),
+              ("docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md", "3ea2970c7b43bdfb87b3d1459690eacd83516745", "docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md"),
+              ("docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md", "3ea2970c7b43bdfb87b3d1459690eacd83516745", "docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md"),
+              ("docs/architecture/00_JARVIS_SYSTEM_ARCHITECTURE_FOUNDATION.md", "b05434758ad4fe72815503f89bd5d2990ccb658b", "docs/architecture/00_JARVIS_SYSTEM_ARCHITECTURE_FOUNDATION.md"),
+              ("docs/architecture/01_JARVIS_WHOLE_SYSTEM_ANATOMY_AND_RESPONSIBILITY_MAP.md", "b05434758ad4fe72815503f89bd5d2990ccb658b", "docs/architecture/01_JARVIS_WHOLE_SYSTEM_ANATOMY_AND_RESPONSIBILITY_MAP.md"),
+              ("docs/architecture/research/02_BRAIN_FOUNDATIONAL_CAPABILITY_INVESTIGATION_2026-11-03.md", "d7d676b79dbf3269f7fd3ebdb4363a6df19f255d", "docs/architecture/research/02_BRAIN_FOUNDATIONAL_CAPABILITY_INVESTIGATION_2026-11-03.md"),
+              ("docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md", "97191111bc2573c14d391c0af9628db7b11f194b", "docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md"),
+              ("docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md", "0811a59e46bf934e32e794f90e4e7d18d4e2bd97", "docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md"),
+          ]
+          chunks, manifest = [], []
+          for label, commit, path in docs:
+              content = subprocess.check_output(["git", "show", f"{commit}:{path}"], text=True)
+              chunks.append(f"\n\n===== DOCUMENT: {label}\nSOURCE COMMIT: {commit}\n=====\n\n{content}")
+              manifest.append({
+                  "path": label, "source_commit": commit,
+                  "sha256": hashlib.sha256(content.encode()).hexdigest(),
+                  "characters": len(content)
+              })
+          packet = "".join(chunks)
+          out = Path("documentation-foundation-reader-evidence")
+          (out / "reader_packet.md").write_text(packet)
+          (out / "packet_manifest.json").write_text(json.dumps({
+              "target_documentation_revision": "3ea2970c7b43bdfb87b3d1459690eacd83516745",
+              "documents": manifest,
+              "note": "Blind packet excludes Builder audit, self-review, remediation register, and prior reviewer reports."
+          }, indent=2))
+          PY
+
+      - name: Request independent fresh-reader assessment from Nemotron
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${OPENROUTER_API_KEY:-}" || { echo "::error::Repository secret OPENROUTER_API_KEY is not configured."; exit 1; }
+          python3 - <<'PY'
+          from pathlib import Path
+          import json, os, urllib.request, urllib.error, datetime
+
+          out = Path("documentation-foundation-reader-evidence")
+          packet = (out / "reader_packet.md").read_text()
+          system = """You are an independent first-time documentation reader. You have no prior conversation context and must assess only the supplied repository documents. Do not assume that a claim is true merely because a document says so; distinguish what the documents establish, imply, contradict, or leave unknown. Do not use external sources. Do not reveal private chain-of-thought or hidden reasoning; provide concise conclusions with document-path and heading evidence. Do not rewrite the documents or design a new architecture."""
+          user = """Perform a blind fresh-reader assessment of this JARVIS repository documentation packet.
+
+          Imagine you have just arrived at the repository with no prior project context. Assess whether a technically capable newcomer can independently discover and correctly explain:
+          1. What JARVIS is intended to be, and what it is not.
+          2. The governing engineering principle and its practical implications.
+          3. Why the Brain is a first construction target but not the whole intended product.
+          4. The relationship between human-cognition research, fictional MCU inspiration, and engineering reality.
+          5. Which documents are navigational, research inputs, accepted planning baselines, proposals, or historical context — and what evidence supports those distinctions.
+          6. The current project phase, immediate objective, next permitted work, and explicit holds.
+          7. What actions are not authorized (including implementation, PR integration, and gate clearance).
+          8. Where a newcomer should go next for each role: general reader, Builder, reviewer, tester, researcher.
+
+          Also test practical usability:
+          - Can you identify a clear entry point and ordered reading path?
+          - Are important concepts explained before being relied upon?
+          - Are status/authority distinctions consistent across documents?
+          - Are links and cross-revision references understandable from the packet?
+          - Do any documents conflict, rely on unexplained jargon, assume missing context, or make authority claims that are not substantiated by the packet?
+          - What would a new reader likely misunderstand or be unable to verify?
+
+          Output exactly these sections:
+          A. Overall result: CLEAR / PARTIALLY CLEAR / NOT CLEAR, with a short rationale.
+          B. What I understand (numbered, evidence-backed).
+          C. What I cannot establish or understand (numbered; say why).
+          D. Contradictions, ambiguities, and likely reader traps (severity HIGH/MEDIUM/LOW).
+          E. Navigation test (entry point, reading sequence, role routes).
+          F. Eight-category scorecard (0–4 each, with one evidence citation per score).
+          G. Minimum documentation corrections needed before an uninformed newcomer can reliably understand the project.
+          H. Confidence and limitations.
+
+          Evidence format: cite exact document path and section heading; cite source commit when relevant. Never invent content or claim you opened links not included in the packet. This is a reader test, not a formal independent-review decision and not Project Director acceptance.
+
+          DOCUMENTATION PACKET:
+          """ + packet
+
+          body = {
+              "model": "nvidia/nemotron-3.5-super-vl:free",
+              "messages": [
+                  {"role": "system", "content": system},
+                  {"role": "user", "content": user}
+              ],
+              "temperature": 0.2,
+              "max_tokens": 10000,
+              "stream": False
+          }
+          request = urllib.request.Request(
+              "https://openrouter.ai/api/v1/chat/completions",
+              data=json.dumps(body).encode(),
+              headers={
+                  "Authorization": "Bearer " + os.environ["OPENROUTER_API_KEY"],
+                  "Content-Type": "application/json",
+                  "HTTP-Referer": "https://github.com/methaneex-oss/MethaneX",
+                  "X-Title": "MethaneX Documentation Foundation Fresh Reader"
+              },
+              method="POST"
+          )
+          (out / "assessment_prompt.md").write_text(system + "\n\n" + user.split("DOCUMENTATION PACKET:")[0])
+          try:
+              with urllib.request.urlopen(request, timeout=300) as response:
+                  raw = json.loads(response.read().decode())
+          except urllib.error.HTTPError as exc:
+              detail = exc.read().decode(errors="replace")[:4000]
+              (out / "api_error.txt").write_text(f"HTTP {exc.code}\n{detail}")
+              raise SystemExit(f"OpenRouter request failed with HTTP {exc.code}; details saved as artifact.")
+          except Exception as exc:
+              (out / "api_error.txt").write_text(type(exc).__name__ + ": " + str(exc))
+              raise SystemExit("OpenRouter request failed; diagnostic saved as artifact.")
+
+          choices = raw.get("choices") or []
+          message = choices[0].get("message", {}) if choices else {}
+          content = message.get("content")
+          if isinstance(content, list):
+              content = "\n".join(part.get("text", "") for part in content if isinstance(part, dict))
+          if not isinstance(content, str) or not content.strip():
+              (out / "api_error.txt").write_text("OpenRouter returned no textual message content.")
+              raise SystemExit("OpenRouter returned no textual message content.")
+          (out / "nemotron_assessment.md").write_text(content)
+          usage = raw.get("usage") or {}
+          metadata = {
+              "provider": raw.get("provider"),
+              "model": raw.get("model"),
+              "id": raw.get("id"),
+              "created": raw.get("created"),
+              "finish_reason": choices[0].get("finish_reason") if choices else None,
+              "usage": {k: usage.get(k) for k in ("prompt_tokens", "completion_tokens", "total_tokens", "cost") if k in usage},
+              "response_content_saved": True,
+              "reasoning_fields_saved": False,
+              "completed_at_utc": datetime.datetime.now(datetime.timezone.utc).isoformat()
+          }
+          (out / "run_metadata.json").write_text(json.dumps(metadata, indent=2))
+          if metadata["finish_reason"] == "length":
+              raise SystemExit("Nemotron response was truncated (finish_reason=length); evidence preserved but assessment is incomplete.")
+          if metadata["finish_reason"] not in ("stop", None):
+              raise SystemExit(f"Unexpected finish_reason={metadata['finish_reason']}; evidence preserved for inspection.")
+          print("Nemotron response received. Evidence saved; API key and reasoning fields were not recorded.")
+          PY
+
+      - name: Upload assessment evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: documentation-foundation-nemotron-reader-${{ github.run_id }}-${{ github.run_attempt }}
+          path: documentation-foundation-reader-evidence/
+          if-no-files-found: warn
+          retention-days: 90
