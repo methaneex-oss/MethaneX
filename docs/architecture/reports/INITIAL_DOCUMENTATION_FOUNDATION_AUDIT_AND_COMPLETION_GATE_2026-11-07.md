@@ -1309,3 +1309,19 @@ The Builder closeout synchronization is based on PR #192 parent HEAD `cdd2732bdd
 The bounded evidence remains: 84 relative Markdown targets with no missing repository paths; 89 immutable source links across 45 exact commit/path pairs with matching source blob identities; 76 in-range line-anchor ranges; 189 external URL occurrences checked against available GitHub metadata; one access-limited ChatGPT shared-conversation pointer; and historical discovery of 245 branch refs, 184 PRs and 108 documentation paths across 28 documentation PRs. DF-09, DF-11 and DF-12 remain external human/reviewer/Director requirements. No Stage A planning or implementation is authorized by this record.
 
 This addendum is a pre-commit synchronization record. It does not assert the resulting commit SHA or post-write verification; those must be established from live GitHub evidence after the commit is created.
+
+
+---
+
+## 34. Current fresh-reader and authority reconciliation — 2026-11-10
+
+This addendum supersedes older active-status statements in this historical audit where later evidence is now available. Earlier sections remain as dated audit evidence and must not be read as the latest state.
+
+- **PR #173:** Project Director acceptance is verified for exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b`; provenance transcription is in PR #173 comment #6752144835. Older statements that PR #173 remains UNVERIFIED/PROPOSED are superseded.
+- **PR #174:** accepted planning-baseline revision is exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, decision comment #6604790481. Current PR HEAD is `be46b3858102c31022128522c4b3506aad4dff8a`; follow-on F-02/F-03 remain open and original full review annotations remain unavailable. The PR #174 description's stale PR #173 wording was corrected on 2026-11-10.
+- **DF-09:** blind AI fresh-reader assessment executed by the user-authorized different-model route. Run [#42834248124](https://github.com/methaneex-oss/MethaneX/actions/runs/42834248124), exact packet revision `3ea2970c7b43bdfb87b3d1459690eacd83516745`, reported model `nvidia/nemotron-3.5-super-vl:free`, outcome **PARTIALLY CLEAR**. Execution is complete; acceptance is not. Correct reader-facing inconsistencies and repeat the assessment until CLEAR. This is AI evidence, not a human session or formal independent review.
+- **Reader findings being corrected:** fragmented dated index snapshots; stale PR #174 acceptance-conflict wording in the scope correction; incomplete presentation of exact acceptance provenance and follow-on F-02/F-03 scope; and unresolved PR #191 disposition.
+- **PR #191:** open/draft/unmerged at head `609d38ede50bbdd98a93dfed112781eacabee9fd`, base `f6267456560a08054d69f7960d2951452b14017c`; one unique report commit and 22 intervening PR #179 commits. Historical-base review versus dependent replay remains a Director decision.
+- **PR #192/#193:** separate lineages; integration order remains a Director decision. PR #193 remains open/draft/unmerged at head `ee508c09be9d848c7baa9533bb6f88f9cc27f94a`, based on `874c732973b6ab303d65a503f5a215b0af8e1153`.
+
+**Current disposition:** DF-06/DF-08 PARTIAL; DF-09 OPEN pending correction and repeat CLEAR result; DF-11 UNRESOLVED; DF-12 OUTSTANDING; DF-13 NOT STARTED / HELD. The documentation foundation is NOT CLEARED. No merge, rebase, retarget, cherry-pick, Stage A start or implementation is authorized.
