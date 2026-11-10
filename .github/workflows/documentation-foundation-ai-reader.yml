@@ -47,7 +47,7 @@ jobs:
           git fetch --no-tags --depth=1 origin 0811a59e46bf934e32e794f90e4e7d18d4e2bd97
           python3 - <<'PY'
           from pathlib import Path
-          import hashlib, json, subprocess
+          import hashlib, json, os, subprocess
 
           root = Path(".")
           docs = [
