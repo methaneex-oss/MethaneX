@@ -944,3 +944,36 @@ The review confirms the following bounded Builder work: portal/index/role naviga
 External requirements remain: DF-09 needs an uninvolved human's uncoached 17-question session; DF-11 needs a genuinely separate reviewer identity and formal GitHub review; DF-12 needs the Project Director's exact-revision decision. PR #173 acceptance provenance remains unverified; PR #174 follow-on F-02/F-03 remain open due missing original review details; PR #191 disposition and PR #192/#193 order remain Director matters. No reviewer is assigned or requested. Stage A remains held and implementation remains unauthorized.
 
 **Self-review disposition:** Builder-controlled work is complete within the documented bounded scope, contingent on successful post-write verification of this synchronized commit. No independent clearance or gate acceptance is claimed.
+
+
+---
+
+## 33. Builder self-review — Nemotron fresh-reader result and reconciliation — 2026-11-10
+
+This is a Builder self-review and repository reconciliation, not an independent review or gate decision.
+
+### 33.1 Fresh-reader execution
+
+The Project Director-authorized blind AI assessment was executed in GitHub Actions run [#42834248124](https://github.com/methaneex-oss/MethaneX/actions/runs/42834248124) against documentation revision `3ea2970c7b43bdfb87b3d1459690eacd83516745`. OpenRouter reported `nvidia/nemotron-3.5-super-vl:free`; the assessment contained 23,440 characters and ended with `finish_reason=stop`. Exact prompt, packet manifest, run metadata and the detailed evidence report are preserved in the reports directory; the raw packet and response remain in the workflow artifact.
+
+**Result: PARTIALLY CLEAR (31/32 scorecard).** The model correctly understood the core project, governing principle, Brain-first scope, reference lenses, current phase, Stage A hold, implementation boundary and role routes. It identified reader-facing confusion around current-state snapshots, PR #174 authority wording, the accepted-specification status signal, and PR #191 disposition.
+
+### 33.2 Corrections made / in progress
+
+- PR #173's exact accepted planning-baseline decision was verified in comment #6752144835; prior unverified wording is superseded.
+- PR #174's exact accepted baseline is #0811a59... by comment #6604790481; F-02/F-03 remain open. Its stale PR description statement about PR #173 was corrected.
+- The scope-correction §4.3 wording was updated to distinguish accepted baseline status from the open follow-on findings.
+- The planning index now has a consolidated current-status summary; historical addenda remain preserved as snapshots.
+- The readiness report, audit, and outstanding-work register now record the actual AI result and its limitations.
+
+### 33.3 Remaining requirements
+
+- **DF-09:** assessment execution complete, result PARTIALLY CLEAR; not passed. Correct remaining reader confusion and repeat the blind assessment. A CLEAR result is required.
+- **DF-06 / DF-08:** remain PARTIAL within their bounded validation scopes.
+- **DF-11:** remains unresolved; the Grok-declared reviewer identity is distinct at model level, but the formal review is attributed to the same GitHub account as Builder and covers an older PR #192 revision. Project Director disposition required.
+- **DF-12:** exact-revision Project Director acceptance remains outstanding.
+- **PR #174:** follow-on F-02/F-03 remain open; missing original report/provenance route is a reserved Project Director decision.
+- **PR #191:** historical-base review versus dependent replay remains a reserved Project Director decision.
+- **PR #192/#193:** integration order remains a reserved Project Director decision.
+
+**Self-review disposition:** The Nemotron run is real and its evidence is preserved. Its PARTIALLY CLEAR outcome means the documentation foundation is not cleared. Stage A remains HELD; implementation remains NOT AUTHORIZED. No independent review, merge, history rewrite, or gate acceptance is claimed.
