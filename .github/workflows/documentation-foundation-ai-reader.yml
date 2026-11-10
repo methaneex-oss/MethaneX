@@ -2,6 +2,16 @@ name: Documentation Foundation — Blind AI Fresh-Reader Assessment
 
 on:
   workflow_dispatch:
+    inputs:
+      target_revision:
+        description: "Exact PR #192 documentation HEAD to assess"
+        required: true
+        type: string
+      assessment_label:
+        description: "Short run label for evidence artifacts"
+        required: false
+        default: "post-review-corrections"
+        type: string:
 
 permissions:
   contents: read
@@ -19,14 +29,17 @@ jobs:
       - name: Check out the exact documentation revision
         uses: actions/checkout@v6
         with:
-          ref: 3ea2970c7b43bdfb87b3d1459690eacd83516745
+          ref: ${{ inputs.target_revision }}
           fetch-depth: 1
 
       - name: Verify revision and assemble blind reader packet
+        env:
+          TARGET_DOCS_SHA: ${{ inputs.target_revision }}
+          ASSESSMENT_LABEL: ${{ inputs.assessment_label }}
         shell: bash
         run: |
           set -euo pipefail
-          test "$(git rev-parse HEAD)" = "3ea2970c7b43bdfb87b3d1459690eacd83516745"
+          test "$(git rev-parse HEAD)" = "${{ inputs.target_revision }}"
           mkdir -p documentation-foundation-reader-evidence
           git fetch --no-tags --depth=1 origin b05434758ad4fe72815503f89bd5d2990ccb658b
           git fetch --no-tags --depth=1 origin d7d676b79dbf3269f7fd3ebdb4363a6df19f255d
@@ -38,10 +51,10 @@ jobs:
 
           root = Path(".")
           docs = [
-              ("README.md", "3ea2970c7b43bdfb87b3d1459690eacd83516745", "README.md"),
-              ("docs/README.md", "3ea2970c7b43bdfb87b3d1459690eacd83516745", "docs/README.md"),
-              ("docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md", "3ea2970c7b43bdfb87b3d1459690eacd83516745", "docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md"),
-              ("docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md", "3ea2970c7b43bdfb87b3d1459690eacd83516745", "docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md"),
+              ("README.md", os.environ["TARGET_DOCS_SHA"], "README.md"),
+              ("docs/README.md", os.environ["TARGET_DOCS_SHA"], "docs/README.md"),
+              ("docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md", os.environ["TARGET_DOCS_SHA"], "docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md"),
+              ("docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md", os.environ["TARGET_DOCS_SHA"], "docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md"),
               ("docs/architecture/00_JARVIS_SYSTEM_ARCHITECTURE_FOUNDATION.md", "b05434758ad4fe72815503f89bd5d2990ccb658b", "docs/architecture/00_JARVIS_SYSTEM_ARCHITECTURE_FOUNDATION.md"),
               ("docs/architecture/01_JARVIS_WHOLE_SYSTEM_ANATOMY_AND_RESPONSIBILITY_MAP.md", "b05434758ad4fe72815503f89bd5d2990ccb658b", "docs/architecture/01_JARVIS_WHOLE_SYSTEM_ANATOMY_AND_RESPONSIBILITY_MAP.md"),
               ("docs/architecture/research/02_BRAIN_FOUNDATIONAL_CAPABILITY_INVESTIGATION_2026-11-03.md", "d7d676b79dbf3269f7fd3ebdb4363a6df19f255d", "docs/architecture/research/02_BRAIN_FOUNDATIONAL_CAPABILITY_INVESTIGATION_2026-11-03.md"),
@@ -61,7 +74,7 @@ jobs:
           out = Path("documentation-foundation-reader-evidence")
           (out / "reader_packet.md").write_text(packet)
           (out / "packet_manifest.json").write_text(json.dumps({
-              "target_documentation_revision": "3ea2970c7b43bdfb87b3d1459690eacd83516745",
+              "target_documentation_revision": os.environ["TARGET_DOCS_SHA"],
               "documents": manifest,
               "note": "Blind packet excludes Builder audit, self-review, remediation register, and prior reviewer reports."
           }, indent=2))
