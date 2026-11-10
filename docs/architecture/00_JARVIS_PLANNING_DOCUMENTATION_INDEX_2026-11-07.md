@@ -50,6 +50,14 @@ PR #191's disposition (historical-base review or authorized dependent replay) an
 The historical sections below remain dated evidence snapshots. This summary controls the current status and supersedes conflicting active-status wording in earlier snapshots. It does not clear the documentation gate or authorize Stage A, implementation, or PR integration.
 
 
+
+### Active review execution resources
+
+- [Nemotron blind fresh-reader rerun runbook](reports/NEMOTRON_FRESH_READER_RERUN_RUNBOOK_2026-11-10.md) — exact-SHA workflow launch, verification and evidence handling.
+- [Grok independent reviewer assignment](reports/GROK_INDEPENDENT_REVIEW_REQUEST_2026-11-10.md) — complete independent-review request and repository-based Builder/reviewer communication protocol.
+- [Prior Nemotron result](reports/NEMOTRON_BLIND_FRESH_READER_ASSESSMENT_2026-11-10.md) — PARTIALLY CLEAR baseline; the repeat must retest its findings.
+- [Prior Grok review](reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_GROK_2026-11-09.md) — historical NOT CLEAR report against an older PR #192 HEAD.
+
 ---
 
 ## 1. Current objective and immediate next work
