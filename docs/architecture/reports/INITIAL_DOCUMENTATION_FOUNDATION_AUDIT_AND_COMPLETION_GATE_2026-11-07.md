@@ -1325,3 +1325,34 @@ This addendum supersedes older active-status statements in this historical audit
 - **PR #192/#193:** separate lineages; integration order remains a Director decision. PR #193 remains open/draft/unmerged at head `ee508c09be9d848c7baa9533bb6f88f9cc27f94a`, based on `874c732973b6ab303d65a503f5a215b0af8e1153`.
 
 **Current disposition:** DF-06/DF-08 PARTIAL; DF-09 OPEN pending correction and repeat CLEAR result; DF-11 UNRESOLVED; DF-12 OUTSTANDING; DF-13 NOT STARTED / HELD. The documentation foundation is NOT CLEARED. No merge, rebase, retarget, cherry-pick, Stage A start or implementation is authorized.
+
+
+---
+
+## 35. Independent-review and fresh-reader correction pass — 2026-11-10
+
+This addendum records the Builder's response to two distinct-model evidence artifacts. It does not supersede their original reports or claim that either report reviewed the current final HEAD.
+
+### 35.1 Evidence boundary
+
+- Grok (xAI) report: exact reviewed PR #192 HEAD `9e0c342dcfbbe1d7a51a6b3a2b7574c9cdf480dc`; determination **NOT CLEAR TO PROCEED**. Formal GitHub review state COMMENTED. Distinct model identity is declared in the report; GitHub submission is attributed to the same repository-owner account used by Builder activity. Current PR #192 HEAD is now `ff95f2807a88388805e8e413616fc9776f244e44`, so exact-head review remains outstanding.
+- Nemotron AI fresh-reader: exact packet revision `3ea2970c7b43bdfb87b3d1459690eacd83516745`; result **PARTIALLY CLEAR**. The Project Director-authorized different-AI route replaces the earlier human-only reader requirement. Execution is complete; comprehension acceptance is not.
+
+### 35.2 Findings acted on
+
+- The index's controlling current-status summary has been replaced with a current PR snapshot and explicit distinctions among exact-scope acceptance, review recommendation, reader-test outcome and gate authority.
+- The documentation portal no longer says PR #173 acceptance is simply unverified. It records the accepted exact planning-baseline scope and discloses the provenance as a later transcription of the prior conversation.
+- The independent-reviewer handoff now records the Grok and Nemotron evidence and supersedes old human-only DF-09 instructions.
+- PR #174 is described as an accepted exact baseline with later header clarification and open F-02/F-03 obligations; no unsupported completion claim is made.
+- PR #191 disposition and PR #192/#193 integration order remain reserved decisions.
+
+### 35.3 Findings still open
+
+- DF-06: exact-current-head changed-file path/fragment validation and final inventory refresh remain; external reachability, semantic relevance and renderer-specific behavior remain PARTIAL.
+- DF-08: historical preservation completeness remains PARTIAL.
+- DF-09: repeat blind Nemotron assessment against the corrected exact revision required; only a CLEAR result passes.
+- DF-11: Grok review is against an older HEAD; exact-current-head review and Project Director qualification remain required.
+- DF-12: exact-revision Project Director decision outstanding.
+- DF-13: Stage A HELD; implementation NOT AUTHORIZED.
+
+No merge, branch-history rewrite, archive operation, Stage A start or runtime implementation was performed.
