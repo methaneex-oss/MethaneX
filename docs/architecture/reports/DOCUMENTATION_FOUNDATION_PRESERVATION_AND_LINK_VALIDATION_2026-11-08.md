@@ -272,3 +272,28 @@ The two map contents were compared directly after normalizing the two line-ancho
 Because the normalized map contents are identical, the previously recorded verification of all 45 pinned source blobs and the other 74 anchor ranges carries forward unchanged; the two revised ranges above are valid against their exact pinned file lengths. The current map therefore retains 89 links, 45 unique commit/path pairs, 76 anchored ranges and 13 links without anchors. This is a bounded source-map validation, not a claim that every prose statement in the map has been independently re-audited.
 
 **Disposition:** the Phase 2 map revision delta is reconciled. The historical source-link evidence in §11 applies to the current map blob after these two explicit anchor corrections. The separate access-limited ChatGPT shared-conversation pointer remains unverified as previously disclosed.
+
+
+---
+
+## 13. Exact-current-HEAD changed-file link validation after reviewer corrections — 2026-11-10
+
+**Validated PR #192 HEAD:** `b246ffbac96b770b0a16efd14c29f8f6a8ec3c28`  
+**Base:** `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`  
+**PR state:** open, non-draft, unmerged.  
+**Changed files:** 33.  
+**Repository tree:** 263 entries, recursive response not truncated.
+
+The complete 33-path PR-files list was reconciled against the recursive Git tree at the exact HEAD. All 33 paths existed and all 33 PR-file blob SHAs matched the corresponding tree blob SHAs. There were zero missing changed paths and zero blob mismatches.
+
+A bounded scan of inline Markdown links in all 33 changed files found:
+- 98 repository-relative inline Markdown link occurrences;
+- zero missing repository-relative targets in the exact tree;
+- zero inline Markdown heading-fragment or line-anchor links in the scanned changed files;
+- 111 external HTTP(S) inline Markdown link occurrences identified but not fetched or reachability-tested.
+
+**Scope limitations:** This scan does not establish correctness of reference-style Markdown links, raw HTML `href` attributes, semantic relevance of destinations, renderer-specific anchor behavior, all historical links outside the 33 changed files, or external destination reachability. Therefore DF-06 remains **PARTIAL**. Do not describe this as exhaustive link validation.
+
+The scan is a direct response to the Grok review's recommendation to refresh link/path validation at the exact reviewed revision and to synchronize the inventory after the final write. The inventory must now record this 33-path parent snapshot. Any subsequent document write invalidates this snapshot and requires a new parent manifest.
+
+**Gate disposition:** DF-06 PARTIAL; DF-08 PARTIAL; DF-09 OPEN pending repeat CLEAR Nemotron assessment; DF-11 current-head review/qualification unresolved; DF-12 outstanding; Stage A HELD; implementation NOT AUTHORIZED.
