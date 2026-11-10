@@ -640,3 +640,16 @@ The Grok independent review and Nemotron blind AI fresh-reader assessment have b
 The planning index, portal and reviewer handoff have been corrected to reflect current evidence. The remaining Builder-controlled work is exact-head link/fragment validation, final inventory synchronization and a repeat Nemotron assessment against the corrected revision. The current review report must not be relabelled as covering `ff95f2807a88388805e8e413616fc9776f244e44`.
 
 **Disposition:** NOT CLEARED. DF-09 OPEN pending repeat CLEAR result; DF-06/DF-08 PARTIAL; DF-11 qualification/current-head review unresolved; DF-12 OUTSTANDING; DF-13 HELD. No implementation or PR integration authorized.
+
+
+## 2026-11-10 update — second Nemotron result and current Builder corrections
+
+- **DF-09 execution:** completed again in workflow run [#42879721340](https://github.com/methaneex-oss/MethaneX/actions/runs/42879721340), exact packet revision `4a670636baf787ad4b1774bd306544c135868a04`, artifact ID `13793841106`, API-reported NVIDIA Nemotron model, `finish_reason=stop`. Result **PARTIALLY CLEAR (22/32)**. Execution is complete; acceptance remains OPEN. Do not describe this as a pass.
+- **PR #173 provenance:** acceptance at exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b` is recorded in comment #6752144835, but that comment is a later transcription of a prior conversation, not the contemporaneous original artifact.
+- **PR #174 provenance:** acceptance at exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` is in direct decision comment #6604790481. Current PR #174 HEAD `be46b3858102c31022128522c4b3506aad4dff8a` corrects the header without replacing the accepted baseline. F-02/F-03 remain open.
+- **PR #191 graph:** base `f6267456560a08054d69f7960d2951452b14017c` is an ancestor of #179 HEAD `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; PR #191 head `609d38ede50bbdd98a93dfed112781eacabee9fd` is one unique commit ahead and 22 behind #179. No disposition or history operation is inferred.
+- **DF-11:** Grok's distinct-model declaration is documented, but same-account GitHub attribution and stale reviewed HEAD mean qualification/exact-head review remain unresolved.
+- **DF-12:** exact-revision Project Director acceptance remains outstanding.
+- **Builder action:** decision extracts, current PR #174 clarification, historical-snapshot labeling, glossary and packet scope are being corrected. No authority decision is made by this update.
+
+Stage A remains NOT STARTED / HELD. Runtime implementation, PR integration and gate clearance remain NOT AUTHORIZED.
