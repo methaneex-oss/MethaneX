@@ -292,3 +292,152 @@ The final verified control-document blobs at this parent are:
 - Artifact inventory before its next self-referential manifest append: `a75871cbe85fd773b8b5eaa8af56f7e637c09f50`.
 
 The latest inventory parent manifest is §49 at `62637b3bb491533a85961a3a504c2aaa28dccbda`; this final report append requires a subsequent inventory parent snapshot so that the report's resulting blob is recorded. The exact-head review status and all gate dispositions remain unchanged: DF-06/DF-08 PARTIAL, DF-09 OPEN, DF-11 UNRESOLVED, DF-12 outstanding, DF-13 NOT STARTED / HELD. No PR was merged or closed, no branch history was rewritten, and no implementation was started.
+
+
+---
+
+## 17. Extended reconciliation run 2 — 2026-11-10 01:25 Africa/Lagos
+
+**Starting PR #192 HEAD:** 4fbcbb55fbf44e4d74504365d99588f10ca3dc49  
+**Base:** 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c  
+**Disposition:** NOT CLEARED. Stage A remains NOT STARTED / HELD. Runtime implementation remains NOT AUTHORIZED.
+
+This addendum supersedes earlier active-status snapshots in this report where the live evidence below differs. Earlier dated snapshots remain historical records.
+
+### 17.1 Live PR state and repository integrity
+
+The live PR metadata, complete changed-path lists, review submissions, inline review threads and discussion timelines were re-fetched for PRs #173, #174, #191, #192 and #193.
+
+| PR | Base SHA | HEAD SHA | Live state | Draft | Changed paths | Reviews / threads / discussion comments |
+|---|---|---|---|---|---:|---:|
+| #173 | 1273ddbcd0087d189e01388ded2d362fb1e058d2 | 97191111bc2573c14d391c0af9628db7b11f194b | Open, unmerged | Yes | 2 | 0 / 0 / 3 |
+| #174 | 97191111bc2573c14d391c0af9628db7b11f194b | be46b3858102c31022128522c4b3506aad4dff8a | Open, unmerged | Yes | 3 | 0 / 0 / 4 |
+| #191 | f6267456560a08054d69f7960d2951452b14017c | 609d38ede50bbdd98a93dfed112781eacabee9fd | Open, unmerged | Yes | 1 | 0 / 0 / 0 |
+| #192 | 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c | 4fbcbb55fbf44e4d74504365d99588f10ca3dc49 | Open, unmerged | No | 29 | 2 / 0 / 13 |
+| #193 | 874c732973b6ab303d65a503f5a215b0af8e1153 | ee508c09be9d848c7baa9533bb6f88f9cc27f94a | Open, unmerged | Yes | 2 | 0 / 0 / 0 |
+
+The PR #192 recursive Git tree at its exact HEAD contains 258 entries and is not truncated. All 29 changed paths are present in the tree; every path is README, documentation, or documentation-template content. The 29 current blob SHAs were read from that exact tree. Twenty-eight non-inventory blobs match inventory §50's parent manifest at b05a30fd904f826ae92c926717f173ba9131e5ba; the inventory itself has the expected new blob 171833e727840f0f92b283f54ca52c49a92796d9. The full current path/blob manifest is recorded in the subsequent inventory addendum. No runtime source, test source, dependency, build configuration, workflow or runtime-state path appears in any of the five live PR changed-file sets.
+
+Current control-document blobs at the starting HEAD:
+- Planning index: 52198b925a3f44826995980004cfd3964800c137.
+- Outstanding-work/authority register: ec74dc42b5637237818de62f1ba0f2fb52d5cd49.
+- Documentation inventory: 171833e727840f0f92b283f54ca52c49a92796d9.
+- Execution/readiness report before this addendum: da5aa634de5e5aa7e60340c1efdb7305e2fc5ee6.
+- Historical preservation register: 95cd280295c86c6d33278aa667de1d72048026ea.
+- Historical preservation/link-validation report: 69d7ce71f23c102925ef368f7762931de09bbe59.
+- PR #174 follow-on provenance recovery: f5d1dd62801642b47e35df986c3b5ab8a7e01a26.
+- PR #191 human/MCU comparison: eac3cb443b5c6a2b9c0d9ad9f5fd552b79d8a0e2.
+- Grok-declared review report: 1938203fe3a0e3cb4e7a7df7d5fa8e3298fa8635.
+
+### 17.2 PR #173 — recovered acceptance
+
+The Project Director's decision to accept the Brain Foundation Architecture as the planning baseline at exact HEAD 97191111bc2573c14d391c0af9628db7b11f194b remains the governing decision. It is transcribed in PR #173 comment #6752144835 and is corroborated by the accepted artifact/blob and the Project Director's subsequent references. The authorized next work was Detailed Brain Mechanism Specification only. It did not authorize runtime implementation, runtime tests, technology/algorithm selection, merge, deployment or Stage A.
+
+The repository comment is a transcription of the earlier Project Director decision, not a formal GitHub review submission. PR #173 remains open/draft/unmerged with no formal review or inline thread. The decision itself is not being reopened by this reconciliation.
+
+### 17.3 PR #174 — accepted baseline versus open follow-on findings
+
+PR #174 remains open/draft/unmerged at HEAD be46b3858102c31022128522c4b3506aad4dff8a. Its current integrated specification blob is b366564b3f68e674ae5f5f9fc5a6c90d8b4f454d. The specification correctly identifies the accepted planning baseline as exact HEAD 0811a59e46bf934e32e794f90e4e7d18d4e2bd97 through Project Director comment #6604790481, while explicitly retaining F-02/F-03 as open. The BM-12 reasoning owner and BM-07/SYS-05/SYS-08 authority clarification are present in the current specification.
+
+The original full follow-on reviewer report and inline annotations remain unrecovered. The recovery artifact on PR #192 is explicitly partial, not verbatim:
+- F-02: contextual language and operator-intent grounding. Recovered themes include reference grounding, speech-act/source attribution, uncertainty, clarification when context is insufficient, trusted/untrusted-content separation and interaction continuity.
+- F-03: enforceable downstream reasoning integration. Recovered themes require accepted reasoning to materially affect authoritative downstream computation, with explicit rejection/invalidation and traceable end-to-end acceptance evidence.
+
+Provisional verification criteria, derived from those recovered themes and not represented as the original reviewer's verbatim criteria:
+- F-02: test varied references, pronouns, context shifts, speech acts, source identities, trust levels and ambiguous/incomplete utterances; verify grounded interpretation, source attribution, uncertainty preservation, clarification when needed, and continuity without fixed phrase-to-intent mappings.
+- F-03: use a traceable scenario in which retrieved evidence affects a reasoning premise, a qualified conclusion is consumed by the appropriate downstream owner, invalid/stale/rejected conclusions are not applied, and the resulting downstream effect is observable and attributable.
+
+PR #174's formal-review and inline-thread endpoints currently return zero entries. Its four discussion comments are Builder submissions and the accepted-baseline decision, not the missing follow-on review. A bounded code search for the original review title and a commit-message search for the follow-on review returned zero results. The recovery record also documents that the supplied shared-chat pointer could not be fetched. This is not proof that no copy exists in every external export or historical branch.
+
+A live inconsistency remains in PR #174's description: it still labels PR #173's acceptance unverified/proposed, despite the recovered Project Director decision at exact HEAD 97191111bc2573c14d391c0af9628db7b11f194b. The current PR #174 specification and the current PR #192 index/register/report carry the accepted status. PR #174 metadata was not edited because writes were restricted to the existing PR #192 documentation branch. No F-02/F-03 correction was implemented or authorized.
+
+### 17.4 PR #191 — ancestry and disposition recommendation
+
+PR #191 has exactly one unique commit over its recorded base f6267456560a08054d69f7960d2951452b14017c. Its sole changed path is docs/architecture/reports/PHASE_2_HUMAN_AND_MCU_REFERENCE_COMPARISON_2026-11-06.md, blob eac3cb443b5c6a2b9c0d9ad9f5fd552b79d8a0e2. The report is 219 lines and explicitly remains draft evidence, not independently reviewed or Project Director accepted.
+
+The current PR #179 HEAD is 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c. The commit comparison confirms that #179 is 22 commits ahead of the #191 base, while #191 is one unique report commit ahead of that base and diverged from #179 by one unique commit / 22 commits behind. Fetching the report path at #179 HEAD returned 404, confirming it is not already present there.
+
+Recommendation for Project Director consideration: keep #191 separate pending a disposition. If the report is to be reviewed as a historical-base artifact, review that exact revision as such. If it is to join the current #179 line, authorize a new dependent document replay/port of the single unique report commit, then verify the resulting blob and obtain review at the new exact head. Retargeting alone would not bring the missing 22 commits. No retarget, rebase, cherry-pick, replay, close or merge was performed.
+
+### 17.5 PR #192 / #193 — separate lineages and sequencing risk
+
+PR #192 is based exactly on PR #179 HEAD 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c. PR #193 is based exactly on PR #175 HEAD 874c732973b6ab303d65a503f5a215b0af8e1153. PR #192 has 29 changed paths; PR #193 has two: the deferred implementation plan and continuity/recovery handoff. Their changed-path sets do not overlap. Their branch heads are graph-diverged from common ancestor main 1273ddbcd0087d189e01388ded2d362fb1e058d2; the two PRs are not a simple stack.
+
+PR #193's three tested pinned PR #192 links (portal, planning index and scope correction) resolve at its pinned commit db5968bfbddf77590cd9303539abda00dd961ab7. Those links resolve to a historical PR #192 snapshot, not the current PR #192 HEAD. The PR #193 handoff still carries its 2026-11-08 current-status banner and predates the Project Director's AI fresh-reader substitution. The current PR #192 index explicitly records that this separate handoff has not yet been updated.
+
+Sequencing proposal only: if the Project Director chooses to review/accept #192 first, then authorize a separate PR #193 refresh of pinned links and AI fresh-reader wording, followed by an exact-head review of #193. Do not merge, retarget, rebase, cherry-pick or replay either line without the Project Director's explicit decision.
+
+### 17.6 DF-06 — exact-current bounded link/path/anchor checks
+
+All 29 PR #192 changed files were fetched at exact HEAD 4fbcbb55fbf44e4d74504365d99588f10ca3dc49 and parsed after removing fenced code blocks. The deterministic scan found:
+- 246 inline Markdown links.
+- 92 repository-relative targets.
+- 0 missing repository-relative targets against the 258-entry, non-truncated recursive tree.
+- 0 fragment-bearing local inline links.
+- 0 reference-style link definitions.
+- 0 raw HTML href attributes, id attributes or name attributes.
+- 154 external HTTP(S) Markdown link destinations. A separate raw-string scan found 198 HTTP(S) occurrences including fenced code; the earlier fenced-code-filtered report counted 196. This parser-scope difference does not alter the 246/92/0 link-target result.
+
+The 92 repository-relative targets all resolve in the current tree. The scan does not establish external URL reachability, semantic relevance, renderer-specific heading behavior, absolute-URL fragment validity, every line-range anchor, or exhaustive historical cross-branch validity. The 89 immutable source-link / 45 commit-path pair / 76 line-anchor and 189 external-reference checks in earlier reports are historical checks over their stated prior snapshots, not a universal external validation.
+
+**DF-06 remains PARTIAL.** The bounded internal target/path check passes for the stated scope; external, semantic, renderer-specific and exhaustive historical validation remain incomplete.
+
+### 17.7 DF-08 — historical coverage and exclusions
+
+The existing bounded preservation evidence covers 37 JARVIS-named branch refs representing 11 distinct tips, 184 PRs in the repository-scoped discovery snapshot, 108 documentation paths across 28 documentation PRs, and a separate 68-path principal-lineage register for PRs #171–#193. Selected duplicate/revision comparisons cover PR #96/#97, #97/#156, #148/#156 and #97/#170. The reports identify byte-identical shared paths, append-only versus differing revisions, and aliases that share a commit tip.
+
+This is not a complete archive/supersession decision for every repository document, every non-JARVIS-named branch, every external artifact or every historical PR. The branch and PR search scopes are bounded; no document was moved, deleted or declared canonical solely because it was byte-identical. Archive relocation, deletion, disputed authority and final supersession decisions remain outside Builder authority.
+
+**DF-08 remains PARTIAL.**
+
+### 17.8 DF-09 — distinct-model discovery passed; execution blocked at account-credit gate
+
+The Project Director has explicitly authorized the blind AI fresh-reader substitution and one bounded CPU job. No second authorization for AI instead of a human was requested.
+
+The authenticated Hugging Face identity is @Hg-face12, a regular non-Pro user with no visible organization memberships and the Jobs OAuth scope. The read-only hf_jobs ps operation succeeded and reported no running jobs. The available connector's model_search and hf_doc_search actions returned “Tool not found” despite appearing in the tool catalogue. The official Hugging Face model API and public model card were used as alternate read-only sources.
+
+A suitable candidate was identified:
+- Model: HuggingFaceTB/SmolLM2-1.7B-Instruct.
+- Exact model repository revision: 31b70e2e869a7173562077fd711b654946d38674.
+- Public, ungated, text-generation model; Apache-2.0 license.
+- API configuration: LlamaForCausalLM / llama; 1,711,376,384 BF16 parameters.
+- The model card documents CPU loading/inference with Transformers and a CPU chat route. The model is not currently deployed by an Inference Provider, so this route would require the authorized CPU job.
+
+The official Jobs pricing documentation states that a positive credit balance is required, Jobs are billed per minute while Starting or Running, and CPU Basic is 2 vCPU / 16 GB RAM / 50 GB storage at $0.01/hour. With a hard 45-minute timeout and no exposed ports, a conservative hardware-cost reserve is approximately $0.01. The account identity endpoint does not expose the current credit balance; the connected tools provide no billing-balance read action, and the billing-page read path redirected to login. Therefore it is not possible to verify that the account's available allowance covers the bounded job.
+
+**No job was launched. No compute charge was incurred. No model prompt was transmitted. No model output, tokenizer/runtime version, job ID, resource metric or navigation trace exists.** The planned fresh-reader assessment has not been simulated and has not passed.
+
+The missing condition is not consent to use AI or consent to a bounded CPU job; both were explicitly given. The missing condition is verifiable positive Jobs credit balance / available allowance for the approximately $0.01 maximum reserve. DF-09 remains OPEN. Once the balance can be verified, the single CPU job can be run under the existing authorization and 45-minute cap; do not use GPU, paid endpoints, persistent services or scheduled jobs.
+
+### 17.9 DF-11 — reviewer qualification and exact-head review
+
+PR #192 currently has two formal review submissions, both COMMENTED and both attributed by GitHub to methaneex-oss:
+- GPT-6 technical re-review against 4b290ddf271564c01bbb46e98933a93cf1e54448, review ID PRR_kwDOUDDigc8AAAABWtvEiw, submitted 2026-11-08 19:26:12 UTC. The reviewer explicitly disclosed the same GPT-6 model identity as Builder.
+- Grok-declared review against 9e0c342dcfbbe1d7a51a6b3a2b7574c9cdf480dc, review ID PRR_kwDOUDDigc8AAAABWzEnBA, submitted 2026-11-09 10:59:55 UTC. The report declares a model identity distinct from Builder GPT-6; GitHub still attributes the submission to the same methaneex-oss account. Its verdict is NOT CLEAR TO PROCEED.
+
+The current PR #192 HEAD is 44 commits ahead of the Grok-reviewed SHA, with six documentation paths changed since that review. It is 86 commits ahead of the GPT-6 technical-review SHA. The inline review-thread endpoint returns zero threads. Neither COMMENTED submission is an APPROVED review, and neither is an exact-current-head review.
+
+Whether a distinct AI model identity submitted through the same GitHub account satisfies the Project Director's reviewer-independence criterion remains a Project Director decision. A qualifying independent exact-head review is not established. **DF-11 remains UNRESOLVED.**
+
+### 17.10 DF-12 / DF-13 and decision ledger
+
+DF-12 remains outstanding. The exact evidence package for Project Director final acceptance must include the final PR #192 HEAD/base and all 29 path/blob identities; bounded DF-06 results and exclusions; DF-08 coverage and exclusions; actual DF-09 raw blind model evidence (or an explicit decision to accept the limitation); DF-11 reviewer qualification/exact-head evidence or explicit disposition; PR #174 F-02/F-03 provenance disposition; PR #191 disposition; and the PR #192/#193 sequencing decision. The Project Director's accept/reject/conditional decision must identify the exact revision and scope. Acceptance of the documentation foundation would not itself authorize Stage A or implementation.
+
+DF-13 remains NOT STARTED / HELD. The hold is preserved; it is not a release.
+
+**Explicit Project Director decisions already recorded:** PR #173 acceptance at exact HEAD 97191111bc2573c14d391c0af9628db7b11f194b; PR #174 planning-baseline acceptance at exact HEAD 0811a59e46bf934e32e794f90e4e7d18d4e2bd97; replacement of the human fresh-reader with a blind distinct-AI test; authorization for one bounded CPU job.
+
+**Decisions still reserved:** whether the missing original PR #174 follow-on report is a mandatory prerequisite or bounded provenance limitation; authorization of F-02/F-03 corrections; PR #191 disposition; PR #192/#193 sequencing; whether Grok's distinct model identity with same GitHub account qualifies for DF-11; DF-12 exact-revision acceptance; and any Stage A release/implementation authorization.
+
+### 17.11 Run verification and prohibited operations
+
+- PR-state check: all five PRs remain open and unmerged.
+- Changed-path scope check: all five PRs are documentation/README/template-only.
+- PR #191 ancestry check: one unique commit, 22 commits behind current #179 line.
+- PR #192/#193 lineage check: distinct bases, disjoint changed paths, no integration.
+- Link/path/anchor check: 29 files, 246 Markdown links, 92 local targets, zero missing, zero local fragments.
+- Current tree check: 258 entries, not truncated; 29/29 changed paths found.
+- No runtime source, tests, dependencies, build configuration, workflows, runtime state or architecture decisions changed.
+- No PR was merged or closed. No branch was rebased, retargeted, cherry-picked or replayed. No archive move or deletion occurred. No Stage A start or implementation occurred.
+
+**Final disposition: NOT CLEARED.** Builder-controlled bounded reconciliation and current-revision documentation checks are recorded. DF-06/DF-08 remain PARTIAL; DF-09 is OPEN because the account credit balance cannot be verified and no model was invoked; DF-11 remains UNRESOLVED; DF-12 remains outstanding; DF-13 remains NOT STARTED / HELD.
