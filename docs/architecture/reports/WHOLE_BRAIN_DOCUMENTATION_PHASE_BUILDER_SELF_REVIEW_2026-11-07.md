@@ -1004,3 +1004,19 @@ This section records Builder actions after reading the Grok independent review a
 - Stage A remains HELD; implementation remains NOT AUTHORIZED.
 
 **Self-review result:** Documentation clarity has improved, but the foundation is not cleared. No runtime source, tests, build configuration, dependencies or runtime state were changed.
+
+
+## 2026-11-10 Builder self-review — second blind reader correction pass
+
+This remains a Builder-authored self-review, not independent review or Project Director acceptance.
+
+The second Nemotron blind assessment (workflow #42879721340; exact packet revision `4a670636baf787ad4b1774bd306544c135868a04`; artifact 13793841106) returned **PARTIALLY CLEAR (22/32)**. It confirmed comprehension of the project identity, governing principle, Brain/system boundary and three reference lenses, but found that authority and revision status were still too difficult to verify from the packet alone. The Builder does not relabel this as a pass.
+
+Corrective actions initiated:
+- Added a packet-visible evidence extract for the exact PR #173 and #174 decision comments, distinguishing the PR #173 later conversation transcription from the PR #174 direct GitHub decision record.
+- Clarified the accepted PR #174 baseline versus its current one-line status-header correction; preserved F-02/F-03 as open.
+- Strengthened the index's controlling current-status and historical-snapshot rule and added an identifier glossary.
+- Clarified the documentation portal is provisional navigation, not authority.
+- Expanded the blind packet to include the decision extract and both accepted/current PR #174 specification revisions.
+
+Remaining limits are not Builder-fixable by wording alone: the original PR #173 contemporaneous decision artifact and original PR #174 follow-on review annotations remain unrecovered; PR #191 disposition, PR #192/#193 integration order, Grok qualification/exact-head review, and exact-revision Project Director acceptance remain reserved decisions. DF-09 remains open until a later blind assessment is CLEAR. Stage A remains held; implementation is not authorized.
