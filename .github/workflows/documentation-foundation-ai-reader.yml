@@ -179,7 +179,7 @@ jobs:
                       text_value = part.get("content")
                   if isinstance(text_value, str):
                       pieces.append(text_value)
-              content = "\\n".join(pieces)
+              content = "\n".join(pieces)
           if not isinstance(content, str) or not content.strip():
               alternative = message.get("output_text")
               if isinstance(alternative, str) and alternative.strip():
