@@ -1,0 +1,157 @@
+
+name: JARVIS Blind Fresh-Reader Assessment
+on:
+  workflow_dispatch:
+    inputs:
+      target_sha:
+        description: "Exact MethaneX commit SHA to assess"
+        required: true
+        type: string
+        default: "3ea2970c7b43bdfb87b3d1459690eacd83516745"
+permissions:
+  contents: read
+concurrency:
+  group: jarvis-blind-reader-${{ github.workflow }}-${{ inputs.target_sha }}
+  cancel-in-progress: false
+jobs:
+  blind-reader:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Check out exact target revision
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.target_sha }}
+          fetch-depth: 0
+      - name: Run one blind assessment
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          TARGET_SHA: ${{ inputs.target_sha }}
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, os, re, subprocess, time
+          from datetime import datetime, timezone
+          from pathlib import Path
+          from urllib.request import Request, urlopen
+          from urllib.error import HTTPError
+
+          target = os.environ["TARGET_SHA"].strip()
+          key = os.environ.get("OPENROUTER_API_KEY", "")
+          if not re.fullmatch(r"[0-9a-fA-F]{40}", target):
+              raise SystemExit("TARGET_SHA must be a full 40-character SHA.")
+          if not key:
+              raise SystemExit("Repository secret OPENROUTER_API_KEY is missing.")
+
+          docs = [
+            ("TARGET","README.md","Repository entry point"),
+            ("TARGET","docs/README.md","Human-facing documentation portal"),
+            ("TARGET","docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md","Canonical planning index"),
+            ("TARGET","docs/architecture/00_JARVIS_SYSTEM_ARCHITECTURE_FOUNDATION.md","Whole-system architecture foundation"),
+            ("TARGET","docs/architecture/01_JARVIS_WHOLE_SYSTEM_ANATOMY_AND_RESPONSIBILITY_MAP.md","Whole-system responsibility map"),
+            ("TARGET","docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md","Whole-Brain scope correction"),
+            ("TARGET","docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md","Documentation-foundation audit and gate criteria"),
+            ("TARGET","docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md","Documentation inventory"),
+            ("TARGET","docs/architecture/research/02_BRAIN_FOUNDATIONAL_CAPABILITY_INVESTIGATION_2026-11-03.md","Foundational Brain capability investigation"),
+            ("TARGET","docs/architecture/reports/PHASE_1_WHOLE_REPOSITORY_INVESTIGATION_AND_REUSE_AUDIT_2026-11-04.md","Phase 1 repository investigation"),
+            ("TARGET","docs/architecture/reports/PHASE_1_REVIEW_CORRECTIONS_AND_SCOPE_RECONCILIATION_2026-11-05.md","Phase 1 corrections"),
+            ("TARGET","docs/architecture/reports/PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md","Phase 2 integration map"),
+            ("TARGET","docs/architecture/reports/PHASE_2_HUMAN_AND_MCU_REFERENCE_COMPARISON_2026-11-06.md","Human and MCU comparison"),
+            ("97191111bc2573c14d391c0af9628db7b11f194b","docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md","Accepted Brain Foundation Architecture baseline"),
+            ("0811a59e46bf934e32e794f90e4e7d18d4e2bd97","docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md","Accepted Brain Mechanism Specification baseline"),
+            ("39fe09dcf13496f5f0005ccf3f00739303e29f88","docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md","Proposed governance document"),
+          ]
+
+          def git(*args, check=True):
+              return subprocess.run(["git", *args], check=check, capture_output=True, text=True, timeout=90)
+
+          if git("rev-parse", f"{target}^{{commit}}").stdout.strip().lower() != target.lower():
+              raise SystemExit("Checked-out commit does not match TARGET_SHA.")
+
+          manifest, chunks, total = [], [], 0
+          for ref, path, role in docs:
+              source = target if ref == "TARGET" else ref
+              exists = git("cat-file", "-e", f"{source}:{path}", check=False)
+              if exists.returncode:
+                  fetched = git("fetch", "--no-tags", "origin", source, check=False)
+                  if fetched.returncode:
+                      raise SystemExit(f"Could not fetch pinned source {source} for {path}.")
+              item = git("show", f"{source}:{path}", check=False)
+              if item.returncode:
+                  raise SystemExit(f"Missing required document at {source}:{path}")
+              body = item.stdout
+              raw = body.encode("utf-8")
+              total += len(raw)
+              if total > 180000:
+                  raise SystemExit("Packet exceeds 180,000 bytes; refusing to truncate.")
+              digest = hashlib.sha256(raw).hexdigest()
+              manifest.append({"source_commit":source,"path":path,"role":role,"bytes":len(raw),"sha256":digest})
+              chunks.append(f"\n\n===== DOCUMENT {path} | COMMIT {source} | SHA256 {digest} =====\n{body}\n===== END DOCUMENT =====")
+
+          system = """You are an independent first-time reader of a software project repository.
+          You have no prior chat, memory, private handoff, author explanation, or expected answer.
+          Use only supplied documents. Do not assume authority from filenames or titles. Distinguish
+          accepted decisions, proposals, evidence, historical records, and unresolved matters.
+          Do not invent facts or reveal private reasoning. Cite exact supplied paths and section
+          headings for material claims. Return: 1) project identity and governing principle;
+          2) current phase and authorized/prohibited work; 3) architecture/planning boundaries
+          and next authorized deliverable; 4) navigation routes for contributors, Builders,
+          reviewers, testers and researchers; 5) gate/status table; 6) PR, provenance, preservation
+          and reviewer-qualification issues; 7) safe next actions and prohibited actions;
+          8) evidence vs inference vs unknown; 9) contradictions, stale references and missing
+          evidence; 10) overall comprehension verdict PASS/PARTIAL/FAIL with reasons.
+          State uncertainty. Do not make Project Director decisions or authorize implementation."""
+
+          user = f"""Perform a blind fresh-reader assessment of the repository documentation.
+          Start with entry points and follow their reading order. Target commit: {target}.
+          The packet includes exact source revisions and SHA-256 hashes. Test whether a new reader
+          can identify the current task, planning/implementation boundary, accepted versus proposed
+          decisions, unresolved matters, and next authorized work. Every material conclusion must
+          cite a supplied path and heading. If a linked artifact is absent, say so. An open,
+          mergeable, or non-draft PR is not automatically accepted.
+
+          DOCUMENT PACKET:
+          {''.join(chunks)}"""
+
+          out = Path("assessment-output")
+          out.mkdir(exist_ok=True)
+          (out/"input_manifest.json").write_text(json.dumps({"target_sha":target,"packet_bytes":total,"documents":manifest},indent=2),encoding="utf-8")
+          (out/"prompt.txt").write_text(user,encoding="utf-8")
+          payload = {"model":"nvidia/nemotron-3.5-super-vl:free","messages":[{"role":"system","content":system},{"role":"user","content":user}],"temperature":0.1,"max_tokens":5000}
+          request = Request("https://openrouter.ai/api/v1/chat/completions",data=json.dumps(payload).encode(),headers={"Authorization":"Bearer "+key,"Content-Type":"application/json","HTTP-Referer":"https://github.com/methaneex-oss/MethaneX","X-Title":"MethaneX blind fresh-reader assessment"},method="POST")
+          started = datetime.now(timezone.utc)
+          clock = time.monotonic()
+          try:
+              with urlopen(request,timeout=240) as response:
+                  result = json.loads(response.read().decode())
+                  http_status = response.status
+          except HTTPError as exc:
+              (out/"provider_error.txt").write_text(f"HTTP {exc.code}\n"+exc.read().decode(errors="replace")[:12000],encoding="utf-8")
+              raise SystemExit(f"OpenRouter HTTP {exc.code}; provider error saved as artifact.")
+          choice = (result.get("choices") or [{}])[0]
+          message = choice.get("message") or {}
+          answer = message.get("content")
+          if not isinstance(answer,str) or not answer.strip():
+              raise SystemExit("OpenRouter returned no textual answer.")
+          safe_message = {k:v for k,v in message.items() if k not in ("reasoning","reasoning_details")}
+          safe_choice = {k:v for k,v in choice.items() if k!="message"}
+          safe_choice["message"] = safe_message
+          safe_result = {k:v for k,v in result.items() if k not in ("reasoning","reasoning_details")}
+          safe_result["choices"] = [safe_choice] + (result.get("choices") or [])[1:]
+          (out/"assistant_answer.md").write_text(answer,encoding="utf-8")
+          (out/"provider_response_sanitized.json").write_text(json.dumps(safe_result,indent=2),encoding="utf-8")
+          metadata = {"provider":"OpenRouter","requested_model":"nvidia/nemotron-3.5-super-vl:free","returned_model":result.get("model"),"response_id":result.get("id"),"http_status":http_status,"target_sha":target,"started_at_utc":started.isoformat(),"completed_at_utc":datetime.now(timezone.utc).isoformat(),"elapsed_seconds":round(time.monotonic()-clock,3),"finish_reason":choice.get("finish_reason"),"usage":result.get("usage"),"document_count":len(manifest),"packet_bytes":total,"reasoning_fields_excluded":True}
+          (out/"run_metadata.json").write_text(json.dumps(metadata,indent=2),encoding="utf-8")
+          if choice.get("finish_reason") == "length":
+              raise SystemExit("Output truncated (finish_reason=length); not a pass.")
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a",encoding="utf-8") as summary:
+              summary.write(f"## Blind reader response captured\n\n- Target: {target}\n- Model: {result.get('model')}\n- Finish reason: {choice.get('finish_reason')}\n- Documents: {len(manifest)} ({total} bytes)\n- Result: response captured; evidence reconciliation remains required.\n")
+          print("Assessment captured. API key was not written to disk or logs.")
+          PY
+      - name: Upload assessment evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jarvis-blind-reader-${{ inputs.target_sha }}
+          path: assessment-output/
+          if-no-files-found: warn
+          retention-days: 30
