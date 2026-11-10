@@ -192,12 +192,14 @@ This portal is being introduced on PR #192's PR #179-derived line. The continuit
 At the latest verified repository refresh for this documentation update:
 - PR #192 and PR #193 remain open, draft and unmerged on separate lineages.
 - PR #192 is the documentation-foundation correction/review line; PR #193 is the separate deferred-plan and continuity line.
-- PR #191 remains a historical-base comparison proposal whose head diverges from current PR #179; retargeting alone is insufficient.
+- PR #191 remains a historical-base comparison proposal whose head diverges from current PR #179; retargeting alone is insufficient. Its disposition (historical-base review or authorized dependent replay) remains a Project Director decision.
 - PR #178 governance remains proposed and unaccepted.
-- PR #173 acceptance provenance remains unverified; do not infer acceptance from downstream documents.
-- PR #174's exact-revision planning-baseline acceptance remains tied to HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`. A later administrative clarification does not constitute a new acceptance. Follow-on F-02/F-03 remain open.
+- PR #173 was accepted as the Brain Foundation Architecture planning baseline at exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b`, with the prior decision preserved as a later repository-side transcription in [PR #173 comment #6752144835](https://github.com/methaneex-oss/MethaneX/pull/173#issuecomment-6752144835). The source is prior conversation history, not the original contemporaneous decision artifact; the document's historical Proposed header remains visible. Scope: proceed to Detailed Brain Mechanism Specification only.
+- PR #174's exact-revision planning-baseline acceptance remains tied to HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, by decision comment #6604790481. Current PR HEAD `be46b3858102c31022128522c4b3506aad4dff8a` contains a later documentation-only header correction. Follow-on F-02/F-03 remain open; the original full follow-on review artifact remains unavailable.
+- Grok's distinct-model independent review examined PR #192 HEAD `9e0c342dcfbbe1d7a51a6b3a2b7574c9cdf480dc` and recommended **NOT CLEAR TO PROCEED**. The formal GitHub review is COMMENTED and was submitted through the same repository-owner account used for Builder activity; exact-current-HEAD re-review and reviewer-process qualification remain open.
+- Nemotron's blind AI fresh-reader assessment examined packet revision `3ea2970c7b43bdfb87b3d1459690eacd83516745` and returned **PARTIALLY CLEAR**. Correct the identified reader-facing issues and repeat the assessment before DF-09 can pass. This was an AI assessment, not a human session.
 
-Fetch live PR metadata and changed-file revisions before relying on exact commit values; this portal deliberately avoids presenting a mutable snapshot as current truth.
+Fetch live PR metadata and changed-file revisions before relying on exact commit values; this portal deliberately avoids presenting a mutable snapshot as current truth. Stage A remains HELD; runtime implementation is NOT AUTHORIZED.
 
 The current task is to complete the Initial Documentation Foundation Completion Gate. Stage A remains held. This portal does not accept any proposal, clear any gate, select a source baseline, authorize implementation, or replace the required independent review and authority decision.
 
