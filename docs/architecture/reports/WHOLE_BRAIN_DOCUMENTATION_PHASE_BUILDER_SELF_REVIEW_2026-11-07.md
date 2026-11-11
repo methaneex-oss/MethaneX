@@ -1451,3 +1451,41 @@ Current disposition: DF-06 NOT MET; DF-08 RESOLVED only against its bounded crit
 PR #195 advanced after the prior inventory snapshot. Its current observed HEAD is `fdd2640d89e76a9c396487fe3df7b4542eb3f382`; the documentation-reader workflow blob is `26c9fd6deb07dfed312d58f0ce82ccb3fa01f268` and the audit blob is `7f7f2c0c6626a7642c65e81d8f3c63d08fc573c0`. The latest workflow revision also removes raw provider HTTP error bodies and raw generic exception messages from persisted artifacts, retaining only bounded allowlisted diagnostic fields. Static inspection confirms this behavior alongside the previously fixed target-SHA environment, exact-SHA validation, response-shape handling and structural completeness checks. The workflow has not been executed, and no Blind Fresh Tester result is claimed. PR #194 remains a stale, separate alternative; neither PR is merged or closed.
 
 This PR #192 self-review refresh is the final Builder self-review write for the updated snapshot. The inventory must again be the final PR #192 file write.
+
+
+## 13. Final Builder self-review synchronization — 2026-11-11
+
+### 13.1 Exact parent and scope
+
+This is the final Builder self-review update before the final inventory write.
+
+- Repository: `methaneex-oss/MethaneX`.
+- PR #192 branch: `docs/whole-brain-planning-scope-correction-20261107`.
+- Exact parent immediately before this self-review write: `0530fc9da57a08fa378e2ce5068ecdd967e5b2f9`.
+- PR #192 remains open, non-draft and unmerged with 38 changed paths.
+- PR #192's API base SHA remains `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; the live base branch ref and PR #179 head are `d30237b81c3695f2a7cb980144b221bbd42ce548`. This discrepancy is preserved; no branch-history or integration action is authorized.
+- The canonical index, preservation report, outstanding-work register and live closeout report have been refreshed in this pass. Their exact blobs and resulting commits are in the Git history at this parent.
+
+### 13.2 Builder work verified in this pass
+
+1. All 38 PR #192 changed files were fetched at the prior exact PR #192 HEAD `c060ad15e8e5bf86d9b359b88e696cc1fe995a54`; the recursive tree was complete (268 entries, not truncated).
+2. The bounded link sweep at that revision extracted 316 Markdown/autolink occurrences: 116 relative targets, zero missing; 200 GitHub HTTP(S) occurrences. The 18 Actions run destinations rechecked were all completed/success; 13 PR metadata destinations resolved; two Project Director comments were fetched; three DLT-002 artifacts remained present/unexpired.
+3. The Phase 2 map remained blob `9dd776920d0a479a9d7275acc821e12c266623d9`; its 89 immutable source links resolve to 45 commit/path pairs. The prior exact-blob checks and 76 line-range checks remain tied to those immutable source revisions. The current PR #192 copy includes the corrected main-executor and goal-feedback ranges `#L18-L77` and `#L1-L84`.
+4. The current canonical index now distinguishes the live PR heads, the PR #192 base-reference discrepancy, PR #194's stale workflow alternative, PR #195's consolidated unexecuted proposal and PR #196's additive governance amendment.
+5. Governance PR #196 contains Builder Rules 11.9–11.16 in the existing governance document. It is open and unmerged; no claim is made that the rules have been merged into the base branch.
+
+### 13.3 Remaining limits and gate state
+
+- **DF-06: NOT MET.** The bounded relative-path and GitHub metadata checks are not a full semantic-relevance review. Rendered GitHub line-anchor behavior could not be tested because the available connector returns source text rather than rendered UI and the browser retrieval returned a cache miss. The historical ChatGPT pointer remains access-limited. Applicable historical/cross-branch link semantics are not fully closed.
+- **DF-08: RESOLVED** only against its exact bounded preservation criterion.
+- **DF-09: OPEN / NOT MET.** The 31/32 PARTIALLY CLEAR result remains tied to older assessed revision `887b349f9826de7726707209f640ae0cafd78ace`. No current-head Blind Fresh Tester run is claimed; the available GitHub connection exposes no workflow-dispatch action.
+- **DF-10: final inventory write and post-write exact-tree/blob verification remain.**
+- **DF-11: WAIVED. DF-12: NOT ACCEPTED.**
+- PR #173 blind architecture assessment and BFA-C01–BFA-C14 dispositions; PR #174 independent re-review and Project Director disposition; PR #191 disposition; and PR #192/#193 integration order remain reserved external work.
+- Stage A NOT STARTED / HELD; implementation planning HELD; runtime implementation NOT AUTHORIZED.
+
+### 13.4 Final-write protocol
+
+The detailed inventory is the final planned PR #192 file write. It must record all 38 changed paths and their blob identities at this exact parent, including its own pre-update blob. After that commit, fetch the live PR #192 metadata, complete changed-path list, recursive tree and all 38 resulting file blobs. Verify that the inventory commit changed only the inventory file and that the other 37 blob identities match the recorded parent. If the branch moves during verification, refresh the snapshot and do not report stale evidence. Record post-write verification in the PR conversation; make no further PR #192 file edits.
+
+This self-review is Builder-authored. It is not an Independent Reviewer report, fresh-reader assessment, gate acceptance or Project Director decision.
