@@ -1075,11 +1075,11 @@ The final index refresh will record this exact parent and become the final docum
 
 ### 33.1 Exact live PR state before final index refresh
 
-- **PR #192:** open, non-draft, unmerged; branch `docs/whole-brain-planning-scope-correction-20261107`; HEAD `87e368d790b6271b641070e1a3f9bb0fdd0c32b3`; base `docs/jarvis-phase-2-whole-brain-integration-map-20261105`; 37 changed paths. All 37 changed paths are documentation, README or template paths; no runtime source, test source, dependency, build configuration, workflow or runtime-state path is present.
+- **PR #192:** open, non-draft, unmerged; branch `docs/whole-brain-planning-scope-correction-20261107`; HEAD `1b022a19be58e07eeac8323b3e95cd6ea237481d`; base `docs/jarvis-phase-2-whole-brain-integration-map-20261105`; 37 changed paths. All 37 changed paths are documentation, README or template paths; no runtime source, test source, dependency, build configuration, workflow or runtime-state path is present.
 - **PR #173:** open, draft, unmerged; corrected proposal HEAD `756724b95e093ac48fcd95c5587117c0a4d8f3c0`; blind independent re-review remains outstanding.
 - **PR #174:** open, draft, unmerged; corrected specification proposal HEAD `4b134048680fb5902f8c2a5a067b0c369169dbfe`; Builder responses to reconstructed F-02/F-03 are submitted; independent re-review and Project Director disposition remain outstanding.
 - **PR #191:** open, draft, unmerged; HEAD `609d38ede50bbdd98a93dfed112781eacabee9fd`; read-only content/dependency review complete; Project Director disposition remains pending.
-- **PR #193:** open, draft, unmerged; current HEAD `0d19b136df8021a3fc3faaf0d53072d9a9ff651b`; base branch `plan/brain-implementation-roadmap-20261103`; separate #175-derived lineage. Its two documents now carry the corrected gate status, PR #173 supersession, and PR #174 follow-on review limitations.
+- **PR #193:** open, draft, unmerged; current HEAD `e8c64d3a51c131a1fdd46a4308beabe8ae6c7d11`; base branch `plan/brain-implementation-roadmap-20261103`; separate #175-derived lineage. Its two documents now carry the corrected gate status, PR #173 supersession, and PR #174 follow-on review limitations.
 
 ### 33.2 Controlling gate status
 
