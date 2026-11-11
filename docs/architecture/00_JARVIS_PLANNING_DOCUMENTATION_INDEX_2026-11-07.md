@@ -1,30 +1,51 @@
-# Controlling current-state and fresh-reader result — 2026-11-11 06:15 UTC
+# Controlling Project Director decision and current gate status — 2026-11-11
 
-> **Precedence:** This block is the latest controlling status for this index. It supersedes every older dated status/addendum below, including older PR #192 HEADs, DF-09 human-session requirements, previous AI assessment runs, and statements that no distinct model was available. Older sections remain historical evidence only; do not combine them into a synthetic current state.
+> **Precedence:** This is the latest controlling authority record for the Documentation Foundation. It supersedes earlier active-status and reserved-decision statements below where they conflict. Older dated sections remain historical evidence and must not be rewritten as if they had anticipated these decisions.
 
-## Current authoritative status
+## Project Director decisions — recorded 2026-11-11
 
-- PR #192 is OPEN, non-draft and unmerged. Its live HEAD is available only from the [live PR #192 page](https://github.com/methaneex-oss/MethaneX/pull/192). The exact documentation revision assessed in the latest run was `887b349f9826de7726707209f640ae0cafd78ace`; the PR page remains the authoritative pointer for any later HEAD.
-- **Latest blind fresh-reader run:** [#42970930733](https://github.com/methaneex-oss/MethaneX/actions/runs/42970930733), artifact `13832623613`, digest `sha256:394153a7ea2ab8467b367464cd02dacd72fac3e585e8c76d3e8395b987e159d8`, exact assessed documentation revision `887b349f9826de7726707209f640ae0cafd78ace`.
-- Workflow run source: `main` at `264d0202945fd73edd52ddeecf58d3623979ef3d`; this is the workflow-code revision, **not** the assessed PR documentation revision. The packet manifest independently records target revision `887b349...`.
-- API-reported provider/model: `Nvidia` / `nvidia/nemotron-3.5-super-vl:free`; finish reason `stop`; 26,748 response characters; 95,773 prompt tokens; 7,101 completion tokens; no refusal, no tool calls, no reasoning output. Assessment label: `post-review-corrections-v3` (correct).
-- **Result: PARTIALLY CLEAR (31/32).** Scores: project identity 4/4; governing principle 4/4; Brain-first boundary 4/4; reference lenses 4/4; document authority/classification 3/4; current phase/authorization 4/4; unauthorized actions 4/4; role navigation 4/4. Workflow execution and artifact integrity passed; comprehension acceptance did not pass the written CLEAR threshold.
-- **DF-09:** the Project Director-approved AI fresh-reader substitution is controlling. The older 17-question uninvolved-human-session requirement is historical and superseded; its unrecovered question list is not a remaining deliverable. A distinct model actually ran against the exact target revision. DF-09 remains OPEN pending the Project Director's decision on whether the residual 31/32 authority/provenance limitation is acceptable under the approved substitution.
-- **Gate:** documentation foundation NOT CLEARED. Stage A NOT STARTED / HELD. Runtime implementation, PR integration, merge, rebase, retargeting, cherry-picking, and gate clearance remain NOT AUTHORIZED.
+The Project Director submitted the following explicit decisions in ChatGPT on 2026-11-11. This entry records those decisions; it does not claim that any acceptance condition has thereby been satisfied.
 
-## Final Builder reconciliation of the latest reader result
+| Item | Project Director decision | Controlling disposition |
+|---|---|---|
+| DF-09 — Nemotron 31/32 | **B — Require a full CLEAR result** | The latest 31/32 PARTIALLY CLEAR result does not satisfy the written CLEAR threshold. DF-09 remains NOT MET / OPEN. |
+| DF-11 — Grok reviewer qualification | **C — Explicitly waive the independent-review requirement** | DF-11 is WAIVED by Project Director decision. The historical Grok report remains evidence with its exact reviewed revision and same-account attribution disclosed; it is not upgraded into an exact-current-HEAD review. |
+| PR #191 disposition | **C — Review contents further before deciding** | PR #191 remains open, draft and unmerged. No close, merge, rebase, retarget, cherry-pick or replay is authorized. |
+| PR #192 / #193 integration order | **C — Keep all PRs unmerged until all outstanding documentation decisions are resolved** | Both remain open and unmerged. No stacking, retargeting, rebase, cherry-pick or integration is authorized. |
+| DF-12 — Final foundation acceptance | **B — Keep the foundation open until every outstanding issue is cleared** | Documentation Foundation is NOT ACCEPTED / NOT CLEARED. No conditional acceptance is implied. |
+| DF-06 / DF-08 | **B — Require full resolution before foundation acceptance** | Both remain closure blockers. Their previous PARTIAL classifications are not waived or carried into Stage A. |
 
-1. The only lost score point is document authority/classification (3/4). Nemotron correctly recognized that PR #173's acceptance record is a later transcription, not the original contemporaneous decision artifact. That provenance limitation cannot be repaired by rewriting documentation; the record must remain qualified for the Project Director's decision.
-2. The packet explicitly identifies the bounded evidence set and the linked materials it does not contain. The reader correctly states that it cannot inspect those external materials from the packet alone. This is a deliberate evidence boundary, not a claim that those materials were inspected. Adding every linked file to the packet would change the bounded test rather than fix a false statement.
-3. The old 17-question human-session protocol and pre-substitution statements are retained as historical audit evidence. The controlling DF-09 rule is the approved blind assessment by a distinct AI model. Do not resurrect the superseded human-session requirement or fabricate the missing old question list.
-4. PR #191's base-to-#179 ancestry and #191-head-to-#179-head divergence are different graph comparisons, not contradictory claims. This distinction is already stated in the index; retain it.
-5. The packet's entry point, current status, authority vocabulary, provenance extract, accepted/current PR #174 distinction, and external-evidence boundary were included in the assessed revision. The result does not justify another identical Nemotron run.
-6. Remaining decisions are reserved for the Project Director: DF-09 disposition on the 31/32 result; DF-11 reviewer qualification and exact-current-head independent review; DF-12 exact-revision acceptance; PR #191 disposition; and PR #192/#193 integration order. No Builder action may make these decisions by implication.
+### Exact evidence snapshot associated with this decision
 
-## Label and evidence integrity
+- Working PR: [PR #192](https://github.com/methaneex-oss/MethaneX/pull/192), branch `docs/whole-brain-planning-scope-correction-20261107`, HEAD at the time of this decision record update: `e687f3295f6f858f713694d941e97fbd94ac6154`.
+- PR #192 is open, non-draft and unmerged; its 37 changed paths are documentation/README paths only.
+- PR #191 is open, draft and unmerged; its head is `609d38ede50bbdd98a93dfed112781eacabee9fd`, base `f6267456560a08054d69f7960d2951452b14017c`. The documented graph relationship to PR #179 is one unique commit ahead and 22 commits behind; this does not decide its disposition.
+- PR #193 is open, draft and unmerged; its head is `ee508c09be9d848c7baa9533bb6f88f9cc27f94a`, base `874c732973b6ab303d65a503f5a215b0af8e1153`. Its lineage remains separate from PR #192.
+- The latest blind fresh-reader run [#42970930733](https://github.com/methaneex-oss/MethaneX/actions/runs/42970930733) assessed documentation revision `887b349f9826de7726707209f640ae0cafd78ace`, not the current PR #192 HEAD above. Its result remains **PARTIALLY CLEAR (31/32)**. Do not describe it as an assessment of `e687f329...`.
+- The `cpp` CI run [#42976840057](https://github.com/methaneex-oss/MethaneX/actions/runs/42976840057) completed successfully on `e687f329...`. This is a CI result only; it does not satisfy the documentation gate.
 
-The artifact records `post-review-corrections-v3`, matching the requested label. Its ZIP SHA-256 matches GitHub's artifact digest. Preserve the raw artifact unchanged. The assessment is AI reader evidence only; it is not formal independent review, Project Director acceptance, gate clearance, or implementation authorization.
+### Required closure work
 
+1. **DF-09:** Investigate whether primary contemporaneous evidence for the PR #173 Project Director decision can be recovered. Preserve the existing provenance limitation; do not fabricate or rewrite it as primary evidence. After any legitimate evidence and documentation corrections, assemble a bounded packet and repeat the blind fresh-reader assessment against the exact resulting PR #192 revision. DF-09 passes only on a recorded **CLEAR** result under the governing rubric.
+2. **DF-06:** Complete the remaining checks required by its governing criterion, including external destination reachability, semantic relevance, renderer-specific heading/line anchors and the required historical/cross-branch link scope. Existing 93/93 internal-target existence evidence is bounded and does not establish these other properties.
+3. **DF-08:** Complete the outstanding historical-preservation, discovery, provenance and archive/supersession reconciliation required by its criterion. Existing registers and selected ancestry comparisons are not proof of exhaustive closure.
+4. **PR #191:** Perform a read-only content and dependency review, then present the historical-base versus dependent-replay options for a later Project Director decision. Do not perform either operation.
+5. **PR #192 / #193:** Maintain the hold and prepare an evidence-based dependency/integration analysis only. No PR integration until all outstanding documentation decisions and gate conditions are resolved.
+6. **DF-12:** Return a final exact-revision acceptance package to the Project Director only after DF-06, DF-08 and DF-09 are cleared and all other applicable gate requirements are evidenced.
+
+### Current authorization boundary
+
+- **Documentation Foundation:** NOT ACCEPTED / NOT CLEARED.
+- **DF-09:** OPEN / NOT MET — requires CLEAR.
+- **DF-11:** WAIVED by explicit Project Director decision; historical evidence limitations remain disclosed.
+- **DF-06 / DF-08:** PARTIAL / NOT MET — full resolution required before acceptance.
+- **PR #191:** review pending; no disposition or history operation authorized.
+- **PR #192 / #193:** open and unmerged; integration held.
+- **DF-12:** NOT ACCEPTED; final decision deferred until all required conditions are cleared.
+- **Stage A — whole-Brain capability and responsibility definition:** NOT STARTED / HELD.
+- **Runtime implementation:** NOT AUTHORIZED.
+
+This authorization permits only the documentation-only recording of these decisions and the resulting status in PR #192. It does not authorize runtime changes, implementation planning execution, PR merge/closure/integration, branch-history operations, architecture or algorithm selection, or Stage A commencement.
 
 # JARVIS Planning Documentation Index — 2026-11-07
 
