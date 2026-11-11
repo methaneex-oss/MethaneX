@@ -66,8 +66,8 @@ The bounded default-branch code search returned no other matching reviewer-brand
 
 | Path | Change |
 |---|---|
-| `.github/workflows/documentation-foundation-ai-reader.yml` | Job/step labels and assessment artifact naming now use **Blind Fresh Tester** |
-| `.github/workflows/brain-foundation-blind-architecture-review.yml` | Job/step labels, assessment persona, and output filename now use **Blind Fresh Tester** |
+| `.github/workflows/documentation-foundation-ai-reader.yml` | Workflow/job/step labels and assessment artifact naming now use **Blind Fresh Tester** terminology |
+| `.github/workflows/brain-foundation-blind-architecture-review.yml` | Workflow title no longer implies a formal Independent Reviewer role; job/step labels, assessment persona, and output filename use **Blind Fresh Tester** |
 | `interfaces/typescript/src/operator_session.ts` | Generic product-specific interface comment changed to “assistant-facing” |
 | PR #192 description | Two provider-branded role phrases replaced with **Independent Reviewer** role wording; historical limitation preserved |
 | This audit | Records the naming standard, findings, scope, changes, and historical-provenance boundary |
