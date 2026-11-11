@@ -633,3 +633,42 @@ No implementation, runtime modification, runtime tests, technology selection, me
 ### Latest PR #173 integrated revision — 2026-11-11
 
 PR #173's latest integrated architecture revision is `4b960062b7b3d41fa18c60909c628e8264459927`. The main architecture addendum now extends through §§16–30 and includes explicit language/symbolic cognition, social/agent modelling, existing-mechanism compatibility and Project Director reserved-decision boundaries. The completion matrix is synchronized to that revision. This remains Builder-completed work, not independent clearance or final Project Director acceptance.
+
+
+---
+
+## Controlling final pre-assessment status — 2026-11-11
+
+This section is the current controlling snapshot and supersedes older active-status statements above where they conflict. Historical snapshots remain preserved.
+
+### Current exact repository state
+
+- **PR #192:** open, non-draft, unmerged; branch `docs/whole-brain-planning-scope-correction-20261107`; pre-index-refresh HEAD `759d90eff190eb9a1c4860a616804ff26356b898`; base `docs/jarvis-phase-2-whole-brain-integration-map-20261105`; 37 changed paths. The 37 changed paths are documentation, README or template paths only; no runtime source, tests, dependencies, build configuration, workflow or runtime-state files are changed.
+- **PR #173:** open, draft, unmerged; corrected proposal HEAD `756724b95e093ac48fcd95c5587117c0a4d8f3c0`. The historical accepted planning-baseline event at `97191111bc2573c14d391c0af9628db7b11f194b` remains valid for its original scope, but its sufficiency as complete/final architecture was superseded on 2026-11-11. The prior blind assessment on `4b960062b7b3d41fa18c60909c628e8264459927` was NOT CLEAR and is historical; it does not assess the corrected HEAD. New blind independent re-review and explicit Project Director disposition of BFA-C01–BFA-C14 remain outstanding.
+- **PR #174:** open, draft, unmerged; corrected specification proposal HEAD `4b134048680fb5902f8c2a5a067b0c369169dbfe`. The accepted planning-baseline event remains tied to exact earlier HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`. Builder responses to reconstructed F-02/F-03 are recorded in `specifications/reviews/01_BRAIN_MECHANISM_SPECIFICATION_F02_F03_CORRECTIONS_2026-11-11.md`, with scenarios 35–46. The original follow-on report, exact reviewed SHA and complete original acceptance criteria remain unavailable; independent re-review and Project Director disposition remain outstanding.
+- **PR #191:** open, draft, unmerged; HEAD `609d38ede50bbdd98a93dfed112781eacabee9fd`. Read-only content/dependency review is complete. Builder recommendation is to retain the report as a separate bounded reference artifact; Project Director disposition remains pending.
+- **PR #193:** open, draft, unmerged; HEAD `e8c64d3a51c131a1fdd46a4308beabe8ae6c7d11`; base branch `plan/brain-implementation-roadmap-20261103`, whose live PR #175 head is `c30fe20cfdf3f499416972042be06acdd70f752d`. PR #193 remains a separate deferred/non-operative plan and handoff lineage; no integration order is inferred.
+
+### Controlling documentation-foundation gate status
+
+- **DF-06: NOT MET.** Exact-path and selected immutable-source checks are useful but do not yet satisfy the Project Director's full-resolution requirement. Remaining work includes complete semantic-relevance review of the in-scope link set, reachability checks for all applicable external destinations, renderer-specific verification of anchors, and reconciliation of all applicable historical/cross-branch links. A path existing in a Git tree or an anchor falling within a file's line count is not proof that the rendered destination works or is semantically correct. The one ChatGPT shared-conversation pointer remains access-limited and must stay explicitly qualified. Do not claim DF-06 is closed.
+- **DF-08: RESOLVED** against its exact stated exit criterion and bounded foundational-document scope. Preservation report §16 maps each criterion element to evidence: no destructive deletion/movement/overwrite, visible non-destructive supersession, discoverable foundational lineage through the recorded census and 108-path/28-PR register, explicit handling of duplicate refs and ambiguous ancestry, and visibility of unresolved/unaccepted historical items. Broader repository-wide semantic archive curation is explicitly outside the DF-08 criterion and remains deferred. No repository-wide completeness claim is made.
+- **DF-09: OPEN / NOT MET.** The latest qualifying blind fresh-reader result remains PARTIALLY CLEAR (31/32) on older packet revision `887b349f9826de7726707209f640ae0cafd78ace`, run [#42970930733](https://github.com/methaneex-oss/MethaneX/actions/runs/42970930733). It does not assess the final current PR #192 HEAD. A new blind assessment by a genuinely different AI model must receive only the repository entry point and packet, with no Builder briefing or prior summaries, and must return CLEAR against the final exact PR #192 revision. The workflow exists on `main`; the available GitHub connection exposes no workflow-dispatch operation, and this execution exposes no separately callable model-inference endpoint. No new run or result is claimed.
+- **DF-11: WAIVED** by explicit Project Director decision. No independent approval is inferred from the historical same-account Grok COMMENTED review.
+- **DF-12: NOT ACCEPTED.** Exact-revision Project Director acceptance remains pending until all applicable evidence gates are met and reserved decisions are dispositioned.
+
+### Remaining architecture and authority gates
+
+1. Blind independent re-review of corrected PR #173 HEAD `756724b95e093ac48fcd95c5587117c0a4d8f3c0`, followed by correction/recheck if needed.
+2. Independent re-review of PR #174 corrected specification HEAD `4b134048680fb5902f8c2a5a067b0c369169dbfe`; original F-02/F-03 report provenance remains a disclosed limitation, not a resolved criterion.
+3. Project Director disposition of BFA-C01–BFA-C14 and exact-revision acceptance of the final Brain Foundation Architecture.
+4. Project Director disposition of PR #191's bounded reference report.
+5. Project Director decision on PR #192/#193 integration order. Both remain open and unmerged.
+6. Complete DF-06 validation to the full-resolution criteria above.
+7. Run DF-09 blind fresh-reader assessment on the final exact PR #192 HEAD and obtain CLEAR.
+8. Only after the preceding gates are complete, present the exact evidence package for DF-12 Project Director acceptance.
+
+### Phase boundary
+
+Initial planning is **NOT COMPLETE**. Stage A whole-Brain capability/responsibility planning remains NOT STARTED / HELD. Runtime implementation, implementation-plan execution, source-baseline selection, runtime tests/builds, technology selection, PR integration, branch-history operations and deployment remain **NOT AUTHORIZED**. A successful C++ build workflow is build evidence only and does not satisfy DF-06, DF-09, architecture review, independent review or Project Director acceptance.
+
