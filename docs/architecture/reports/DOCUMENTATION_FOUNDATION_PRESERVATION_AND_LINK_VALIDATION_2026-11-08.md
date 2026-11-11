@@ -431,3 +431,56 @@ A bounded static sweep was performed against all 38 paths in the PR #192 changed
 **Correction made:** the sweep found one cross-branch relative link in `docs/README.md` to the PR #173 inherited-mechanism audit. That target does not exist on the PR #192 tree because it belongs to the separate PR #173 branch. The link is now pinned to the exact PR #173 HEAD `756724b95e093ac48fcd95c5587117c0a4d8f3c0`; the target was fetched successfully and its blob is `037dc71df9e508c0cc08e96a42b41aa7ba5bc041`. This removes the only missing repository-relative target found by the sweep.
 
 **Limits:** this extraction is not a complete Markdown parser and does not claim to enumerate reference-style links, every raw URL form, or all link semantics. The 199 external URLs were inventoried, not individually re-fetched in this sweep. Existing exact-revision checks remain as recorded in §§10–15, including the 45 unique Phase 2 source files and 76 cited line ranges, and the enumerated GitHub PR/Actions/artifact destinations. Renderer-specific behavior for GitHub line anchors and rendered fragments has not been established by this static pass. Therefore this section does **not** close DF-06; DF-06 remains **NOT MET** until the remaining full-resolution criteria are evidenced.
+
+
+## 19. Exact-current PR #192 Builder link revalidation — 2026-11-11
+
+### 19.1 Exact revision and changed-file coverage
+
+The live PR #192 head was re-fetched as `c060ad15e8e5bf86d9b359b88e696cc1fe995a54`, open/non-draft/unmerged, with 38 changed paths. All 38 paths were fetched at that exact revision. The recursive tree contains 268 entries and reports `truncated=false`.
+
+A bounded scan of inline Markdown links, image links, reference definitions and HTTP(S) autolinks in those 38 files found:
+
+| Item | Result |
+|---|---:|
+| Changed files fetched at exact HEAD | 38 / 38 |
+| Recursive tree entries | 268 (complete) |
+| Extracted link occurrences | 316 |
+| Repository-relative targets | 116 |
+| Missing repository-relative targets | 0 |
+| GitHub HTTP(S) link occurrences | 200 |
+| Local relative heading-fragment links found | 0 |
+
+All 116 relative targets resolve against the exact `c060ad1` tree. This count differs from §18's earlier 117 relative / 199 external split because the cross-branch PR #173 source reference is now an explicit immutable GitHub blob URL rather than a relative path. The total extracted occurrence count remains 316.
+
+The historical ChatGPT shared-conversation pointer is retained as literal text in the PR #174 provenance-recovery record, outside the Markdown-link extraction above. It remains ACCESS-LIMITED / NOT INDEPENDENTLY VERIFIED and is not represented as a clickable navigation dependency.
+
+### 19.2 External GitHub destination checks
+
+The following previously enumerated destination classes were rechecked against the current repository state:
+
+- 18 linked GitHub Actions run IDs: all resolved and returned `status=completed`, `conclusion=success`.
+- PR metadata links for #96, #97, #164, #171, #172, #173, #174, #175, #178, #179, #191, #192 and #193: all resolved.
+- Project Director provenance comments #6752144835 and #6604790481: both fetched successfully; their contents continue to support the exact-scope distinctions recorded in the index.
+- DLT-002 artifact IDs #12764655498, #12763543000 and #12763204259 on run #40565468650: all remain present and unexpired.
+- The Phase 2 map remains blob `9dd776920d0a479a9d7275acc821e12c266623d9`; its 89 immutable source links map to 45 exact commit/path pairs. The previously recorded exact-blob checks and 76 in-range line-anchor checks remain applicable to those immutable source revisions.
+- The PR #192 copy contains the two corrected source line ranges from PR #179's latest correction: `action_execution.cpp#L18-L77` and `cognitive_runtime_goal_feedback_suite.cpp#L1-L84`.
+
+These checks establish destination metadata/path availability for the enumerated GitHub resources. They do not by themselves establish that every destination is semantically relevant to the sentence or requirement that cites it.
+
+### 19.3 Semantic and renderer-specific limits
+
+The current pass does not claim a complete link-by-link semantic audit of every source citation. The source-map descriptions and adjacent analysis provide a traceable rationale, but a full DF-06 semantic-relevance determination requires examining each cited source passage against the specific claim it is intended to support, not merely confirming its blob identity and line range.
+
+The available GitHub connector returns source-file text for blob URLs; it does not expose GitHub's rendered Markdown/file viewer. A browser retrieval attempt for a representative line-anchor URL returned a cache miss. Therefore GitHub's rendered fragment/line-anchor behavior has not been verified in the rendered UI. Static line-range validity is not a substitute for that check.
+
+### 19.4 Current DF-06 disposition
+
+**DF-06 remains NOT MET.** The current exact-head relative-path check is complete with zero missing targets; the enumerated GitHub destinations and source identities have bounded verification evidence; the two stale source anchors are corrected in the current PR #192 map copy. Remaining full-resolution work is:
+
+1. Complete the semantic relevance review of every applicable link in the in-scope documentation package.
+2. Verify rendered GitHub fragment/line-anchor behavior through an actual rendered UI or an explicitly accepted renderer test.
+3. Resolve the access-limited historical ChatGPT pointer's status with primary-source access, or obtain an explicit Project Director determination that its disclosed non-clickable historical-pointer treatment satisfies the criterion.
+4. Reconcile any remaining applicable historical/cross-branch links not covered by the enumerated immutable source set.
+
+No full DF-06 closure is claimed. This addendum is Builder technical evidence only; it is not an independent review or Project Director gate decision.
