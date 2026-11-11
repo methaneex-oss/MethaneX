@@ -813,3 +813,36 @@ This is the latest controlling status entry in this index. Older live-state tabl
 **Phase boundary:** Initial planning is NOT COMPLETE. Stage A remains NOT STARTED / HELD. Implementation planning remains HELD. Runtime implementation, source-baseline selection, runtime tests/builds, technology selection, PR integration, rebase/retarget and deployment remain NOT AUTHORIZED.
 
 This entry is a Builder status reconciliation only. It does not pass a gate, replace a review, authorize integration or make a Project Director decision.
+
+
+## Final Builder-owned closeout addendum — 2026-11-11
+
+This addendum supersedes the earlier status statements in this index that described DF-10 inventory synchronization as pending. The exact final PR #192 revision is the one recorded in inventory §70 and the corresponding post-write PR conversation verification; earlier head snapshots in this index remain historical.
+
+### Current Builder disposition
+
+- **DF-06 — NOT MET.** The final semantic-link audit is recorded in preservation report §20. All 116 repository-relative targets resolve; the 89 Phase 2 source citations across 45 exact commit/path pairs were checked against their adjacent claims; 20 Phase 1 source references and nine immutable cross-branch document pins were checked; external GitHub evidence destinations were revalidated. The remaining technical blocker is rendered GitHub line/fragment-anchor behavior, which the available source/API connector cannot verify and direct browser retrieval could not fetch. The historical ChatGPT shared-conversation pointer remains explicitly access-limited and is not used as a clickable navigation dependency.
+- **DF-08 — RESOLVED** only against its exact bounded preservation criterion.
+- **DF-09 — OPEN / NOT MET.** The 31/32 PARTIALLY CLEAR result is tied to an older packet revision. A CLEAR Blind Fresh Tester result against the final exact PR #192 HEAD is still required.
+- **DF-10 — BUILDER COMPLETE** for the exact final PR #192 HEAD after inventory §70 and its post-write verification. This is not Independent Reviewer or Project Director acceptance.
+- **DF-11 — WAIVED** by the Project Director.
+- **DF-12 — NOT ACCEPTED.** Exact-revision Project Director acceptance remains outstanding.
+
+### Related Builder proposals
+
+- **PR #195:** HEAD 9d0255041c1d3c41c1b6a9f9e373f2bf673184cd. Consolidated terminology and blind-assessment workflow proposal; statically inspected only, not YAML-runtime-validated or executed. Open/draft/unmerged. PR #194 remains the stale alternative.
+- **PR #196:** HEAD 9a744927c5ebcfea2c720ded42ec7425edc499c0. Additive governance amendment containing Builder Rules 11.9–11.16. Open/non-draft/unmerged; the rules are not yet integrated into the base governance branch.
+
+### Reserved review and authority work
+
+- PR #173: blind fresh architecture assessment and Project Director decisions BFA-C01–BFA-C14.
+- PR #174: Independent Reviewer re-review and Project Director disposition; the original follow-on review artifact remains partially unrecovered.
+- PR #191: Project Director disposition.
+- PR #192/#193: Project Director integration order.
+- DF-12: Project Director exact-revision acceptance.
+
+The PR #192 base-reference discrepancy remains disclosed: the PR API records base SHA 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c, while the live PR #179/base-branch tip is d30237b81c3695f2a7cb980144b221bbd42ce548. No rebase, retarget, merge, cherry-pick or history rewrite was performed.
+
+### Phase boundary
+
+Initial planning is **NOT COMPLETE** while DF-06, DF-09 and DF-12 remain open. Stage A is **NOT STARTED / HELD**. Implementation planning is **HELD**. Runtime implementation, source-baseline selection and PR integration remain **NOT AUTHORIZED**.
