@@ -2569,3 +2569,21 @@ Related exact revisions:
 Current gate state: DF-06/DF-08 resolved within defined scopes; DF-09 open/not met (31/32 on older packet, no exact-current-head run); DF-11 waived; DF-12 not accepted. PR #173 blind re-review, PR #174 F-02/F-03 independent re-review, BFA-C01–C14 Project Director dispositions, PR #191 disposition and final DF-12 acceptance remain outstanding. Stage A is held; runtime implementation is not authorized.
 
 No additional relative-link targets were introduced by this final cross-reference update; new PR #174 correction artifacts are recorded by exact commit/blob in the index and inventory and exist at their pinned revision. This inventory append changes its own blob; re-fetch the live inventory blob and PR #192 HEAD after the final index write.
+
+
+
+## 65. Final pre-assessment live revision cross-reference — 2026-11-11
+
+Exact current related PR revisions immediately before the final planning-index refresh:
+
+| PR | Exact HEAD | Base / lineage | State and scope |
+|---|---|---|---|
+| #173 | `756724b95e093ac48fcd95c5587117c0a4d8f3c0` | `main` | Open/draft/unmerged; corrected Brain Foundation Architecture proposal; blind independent re-review and Project Director disposition pending |
+| #174 | `4b134048680fb5902f8c2a5a067b0c369169dbfe` | PR #173 corrected proposal branch | Open/draft/unmerged; corrected BM-01–BM-12 specification proposal; F-02/F-03 Builder responses; independent re-review and Project Director disposition pending |
+| #191 | `609d38ede50bbdd98a93dfed112781eacabee9fd` | PR #179-derived base | Open/draft/unmerged; bounded human/MCU reference report; Project Director disposition pending |
+| #192 | `87e368d790b6271b641070e1a3f9bb0fdd0c32b3` | PR #179-derived base | Open/non-draft/unmerged; 37 documentation/README/template paths; final blind fresh-reader target will be the resulting index-refresh commit |
+| #193 | `0d19b136df8021a3fc3faaf0d53072d9a9ff651b` | `plan/brain-implementation-roadmap-20261103` | Open/draft/unmerged; deferred non-operative plan and continuity handoff; separate lineage |
+
+PR #193's current plan and handoff blobs are `3131c32fc10abb86fc93d7d9721cce7f0db48e0b` and `23d7ebf2a287b8d1c4cd049dce2f96181fdd0ae6`, respectively. Both now identify DF-06 as NOT MET, DF-08 as RESOLVED against its exact criterion, DF-09 as pending CLEAR, DF-11 as WAIVED, and DF-12 as NOT ACCEPTED. They also distinguish the historical PR #173 planning-baseline event from its superseded completeness status and identify the corrected PR #174 F-02/F-03 proposal as pending review.
+
+The final PR #192 index commit must be fetched after this inventory write. No PR integration, branch-history operation, Stage A start or runtime implementation is authorized.
