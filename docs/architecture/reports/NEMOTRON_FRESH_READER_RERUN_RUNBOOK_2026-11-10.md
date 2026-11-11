@@ -81,9 +81,9 @@ The repeat assessment is AI fresh-reader evidence. It is not a human session, fo
 After the assessment:
 1. The Builder records the exact run evidence and raw output in the PR #192 documentation branch.
 2. Any material new reader finding is corrected or explicitly left open with a reason.
-3. Grok performs the independent review of the then-current exact PR #192 HEAD using [GROK_INDEPENDENT_REVIEW_REQUEST_2026-11-10.md](GROK_INDEPENDENT_REVIEW_REQUEST_2026-11-10.md).
-4. The Builder responds to Grok's findings directly in repository/PR records. The user is not a message relay.
-5. Only after both evidence streams are reconciled is the exact-revision package submitted for Project Director decision.
+3. **DF-11 was explicitly waived by the Project Director on 2026-11-11.** Do not treat a new independent documentation review as a required gate or launch one on the assumption that it is required. Preserve prior reviewer reports as historical evidence with their exact revision and provenance qualifications.
+4. Complete the Builder's exact-revision self-review and reconcile any new fresh-reader findings directly in repository records. The user is not a message relay.
+5. Submit the exact-revision package for Project Director decision only after DF-09 returns CLEAR and every other applicable criterion is evidenced.
 
 **Authority boundary:** This workflow assesses documentation comprehension only. It cannot authorize Stage A, runtime implementation, PR integration, merge, rebase, retargeting, cherry-picking or final documentation-foundation acceptance. Stage A remains HELD; runtime implementation remains NOT AUTHORIZED.
 
@@ -112,6 +112,15 @@ Older human-only DF-09 language and claims that no distinct model had run are hi
 
 Run [#42970930733](https://github.com/methaneex-oss/MethaneX/actions/runs/42970930733) assessed exact PR #192 documentation revision `887b349f9826de7726707209f640ae0cafd78ace`. Workflow-code revision on `main` was `264d0202945fd73edd52ddeecf58d3623979ef3d`; do not confuse it with the packet's target SHA. Artifact ID `13832623613`; digest `sha256:394153a7ea2ab8467b367464cd02dacd72fac3e585e8c76d3e8395b987e159d8`. The downloaded ZIP hash matches the GitHub artifact digest. Provider/model `Nvidia` / `nvidia/nemotron-3.5-super-vl:free`; response ID `gen-1794377626-nsXcHSnGSDE0byiVgJ43`; `finish_reason=stop`; label `post-review-corrections-v3`; result **PARTIALLY CLEAR (31/32)**.
 
-The only lost point is document authority/provenance. The reader correctly recognized that PR #173's acceptance evidence is a later transcription, not the original contemporaneous decision artifact. This limitation cannot be fixed by rewriting the record; the Project Director must decide whether the available provenance is acceptable. The packet also correctly discloses external linked materials that are not included or inspected. The old 17-question human protocol is superseded by the approved distinct-AI assessment and is not a current deliverable.
+The only lost point is document authority/provenance. The reader correctly recognized that PR #173's acceptance evidence is a later transcription, not the original contemporaneous decision artifact. This limitation cannot be fixed by rewriting the record; any further authority determination belongs to the Project Director. The packet also correctly discloses external linked materials that are not included or inspected. The old 17-question human protocol is superseded by the approved distinct-AI assessment and is not a current deliverable.
 
-**Disposition:** DF-09 execution complete; DF-09 acceptance remains OPEN for Project Director decision. No identical repeat is recommended. DF-11 qualification/exact-head review, DF-12 exact-revision decision, PR #191 disposition and PR #192/#193 integration order remain reserved. Stage A HELD; implementation and PR integration NOT AUTHORIZED.
+**Disposition:** DF-09 execution is complete for the historical packet, but acceptance remains OPEN / NOT MET because the result was PARTIALLY CLEAR. No identical repeat is recommended without new evidence or a materially corrected packet. DF-11 is WAIVED; no independent documentation review is claimed or required. DF-12 exact-revision decision and PR #191 disposition remain reserved. PR #192/#193 integration remains held. Stage A HELD; implementation and PR integration NOT AUTHORIZED.
+
+
+## 10. Controlling status correction — 2026-11-11
+
+The current run target must be the live PR #192 HEAD fetched after all intended documentation writes. The previous assessment at `887b349f9826de7726707209f640ae0cafd78ace` remains PARTIALLY CLEAR (31/32) and is not a result for a later branch head. The exact PR #192 branch head changes whenever this package is updated; do not reuse a historical target SHA.
+
+The remaining DF-09 reader-verifiability issue concerns the absence of an independently addressable immutable export/message identifier for the recovered 2026-11-03 primary conversation record. The evidence extract must preserve that limitation rather than invent a URL or relabel the later GitHub comment as the original. A repeat run is useful only against a materially updated packet or additional primary-source evidence; repeated assessment of the same packet is not a substitute for the missing provenance decision.
+
+DF-11 is WAIVED. The prior independent-review reports remain historical evidence; no new documentation independent review is required by DF-11. PR #191 disposition remains a separate Project Director decision. DF-12 remains NOT ACCEPTED until the exact final package is submitted and explicitly decided.
