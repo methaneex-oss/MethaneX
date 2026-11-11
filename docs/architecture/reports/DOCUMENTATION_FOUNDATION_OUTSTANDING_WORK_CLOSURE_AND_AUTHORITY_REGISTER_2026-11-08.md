@@ -1155,3 +1155,35 @@ The original report, complete rationale, inline annotations and exact originally
 
 The Builder created `docs/architecture/reports/INITIAL_PLANNING_GATE_CLOSEOUT_STATUS_2026-11-11.md` to consolidate the exact live snapshot, gate status, completed corrections, blockers and required sequence. This report is not an independent review or acceptance decision. The final index and self-review must be refreshed after all other intended PR #192 documentation writes; the resulting exact PR #192 HEAD is the only eligible DF-09 target.
 
+
+
+## 34. Explicit supersession of earlier bounded DF-06 closure wording — 2026-11-11
+
+The Project Director's controlling decision is **B — require full resolution of DF-06 before Documentation Foundation acceptance**. The current gate disposition is therefore **DF-06 NOT MET**.
+
+This section removes ambiguity in the historical record. Earlier Builder statements in §§28.1, 29.3, 30.5, 31 and 33, and the bounded Builder disposition formerly stated in preservation report §15.5, described DF-06 as resolved within a narrower enumerated package/source-link scope. Those were bounded technical assessments made before, or without fully applying, the Project Director's later full-resolution requirement. They are retained as historical evidence of checks performed, but **must not be read as current DF-06 clearance**. Preservation report §15.5 has been qualified accordingly.
+
+### 34.1 Evidence that remains valid
+
+The following checks remain valid within their stated scope:
+
+- All 38 PR #192 changed paths exist in the exact final tree; the final 38-path parent-blob manifest matches the exact parent tree.
+- The previously audited repository-relative targets and enumerated immutable source paths resolve at their recorded revisions.
+- The 45 unique Phase 2 source files and 76 cited line ranges were checked against exact source-file line counts; the identified stale ranges were corrected.
+- The enumerated GitHub PR and Actions destinations and three linked DLT-002 artifacts were fetched and checked as recorded.
+- The historical ChatGPT shared-conversation pointer remains access-limited and is not presented as a verified clickable dependency.
+
+These checks do not prove the remaining full-resolution requirements.
+
+### 34.2 Requirements still not established
+
+DF-06 remains **NOT MET** until evidence establishes:
+
+1. Semantic relevance for all applicable links, not merely destination existence.
+2. Reachability of every applicable external destination, with access-limited or unavailable destinations explicitly classified.
+3. Renderer-specific fragment/anchor behavior where applicable, rather than inferring rendered behavior from path existence or line-count checks.
+4. All applicable historical and cross-branch link behavior for the documentation package, including exact revision and destination semantics.
+
+No Builder claim of full DF-06 completion is made. This is not an external-review, Blind Fresh Tester or Project Director decision item; it remains a Builder technical gate until the above evidence is complete. DF-08 remains resolved only against its separately defined bounded exit criterion.
+
+All other authority boundaries remain unchanged: DF-09 requires CLEAR against the frozen final PR #192 HEAD; DF-11 is waived; DF-12 is not accepted; PR #191 disposition and PR #192/#193 integration remain reserved; Stage A and implementation planning remain held; runtime implementation is not authorized.
