@@ -155,3 +155,29 @@ The available GitHub connection exposes no workflow-dispatch operation. No new w
 ## 9. Post-snapshot correction control
 
 The live PR #192 HEAD was re-fetched as `8e51052eed0984958fa39716fbda5cf17247c7b3` immediately before this correction. The previous §2/§3 snapshot values are historical; this entry records the pre-write state only. Because updating this report advances the PR branch, the resulting commit SHA and complete changed-path/blob set must be fetched after the final Builder self-review write and recorded in the final post-write verification. No exact-final-HEAD claim is made by this pre-write note.
+
+## 10. Builder follow-up — 2026-11-11
+
+### 10.1 PR #192 link sweep and correction
+
+At pre-sweep PR #192 tree `8c5e688e3f83c582cde7ab0190d9d748edc3e967`, the Builder fetched all 38 changed paths and inspected the complete recursive tree (268 entries, not truncated). A bounded extractor found 316 inline Markdown links/HTTP(S) autolinks: 199 external destinations and 117 repository-relative targets. All 117 relative targets now resolve within the exact tree or to an explicitly pinned immutable cross-branch target. One cross-branch relative link in `docs/README.md` was corrected to PR #173 exact HEAD `756724b95e093ac48fcd95c5587117c0a4d8f3c0`; its target blob is `037dc71df9e508c0cc08e96a42b41aa7ba5bc041`.
+
+The full bounded method, counts and limitations are recorded in preservation report §18. This sweep does not claim exhaustive reference-style/raw-URL extraction, semantic validation of every external link, or rendered-anchor verification. **DF-06 remains NOT MET.**
+
+### 10.2 PR #195 workflow correction
+
+A separate static review found that the response step referenced `TARGET_DOCS_SHA` without exporting it in that step's environment. The variable is now passed to both packet-assembly and response/metadata steps. The workflow correction is commit `5a813f8febd0a0b0e5e0365439d5182e79833c15`, workflow blob `3cbe2e54fb9500f78b2842801e8371641ee24ddc`; the audit update is commit `ef4ddbd3df2cc2b2bc8f6a1ea80dbe7982391328`, audit blob `9884397de3e6e34ddb7c66b370280acc89d39c3b`. Static inspection confirms the required variable is available where referenced. No Actions run or Blind Fresh Tester result is claimed.
+
+PR #194 remains open and unmerged but is a stale alternative pinned to historical documentation revision `3ea2970c7b43bdfb87b3d1459690eacd83516745`. The Builder recorded on PR #194 that PR #195 is the current consolidated proposal. No PR was merged or closed.
+
+### 10.3 Builder disposition after this pass
+
+- DF-06: **NOT MET**; static relative-link sweep completed and one broken cross-branch link corrected; semantic completeness, all external reachability and rendered-anchor behavior remain unestablished.
+- DF-08: **RESOLVED** only against its exact bounded preservation criterion.
+- DF-10: final self-review and inventory synchronization are being refreshed after this pass; no completion claim until the final inventory commit and verification.
+- DF-09: **OPEN / NOT MET**, pending a CLEAR Blind Fresh Tester result against the final frozen PR #192 HEAD.
+- DF-11: **WAIVED**. DF-12: **NOT ACCEPTED**.
+- PR #173/#174 review and decision gates, PR #191 disposition, and PR #192/#193 integration remain reserved.
+- Stage A and implementation planning remain HELD; runtime implementation remains NOT AUTHORIZED.
+
+This update is Builder evidence only. It is not a review, test result, gate acceptance, Project Director decision or implementation authorization.
