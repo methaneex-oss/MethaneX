@@ -1,32 +1,29 @@
+# Controlling current-state and fresh-reader result — 2026-11-11 06:15 UTC
 
-
----
-
-# Controlling current-state and fresh-reader result — 2026-11-10 23:06 UTC
-
-> **Precedence:** This block is the latest controlling status for this index. It supersedes every older dated status/addendum below, including any older PR #192 HEAD, DF-09 human-session requirement, AI assessment run number, and "no distinct model available" statement. Older sections remain historical evidence only; do not combine them into a synthetic current state.
+> **Precedence:** This block is the latest controlling status for this index. It supersedes every older dated status/addendum below, including older PR #192 HEADs, DF-09 human-session requirements, previous AI assessment runs, and statements that no distinct model was available. Older sections remain historical evidence only; do not combine them into a synthetic current state.
 
 ## Current authoritative status
 
-- PR #192 is OPEN, non-draft and unmerged. Its live HEAD is available only from the live PR page: https://github.com/methaneex-oss/MethaneX/pull/192 (the branch advanced after the assessment while this correction set was committed). Base remains `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`. Do not treat the assessment target SHA or any older SHA embedded in dated sections/PR description history as today's HEAD.
-- **Latest blind fresh-reader run:** [#42909224258](https://github.com/methaneex-oss/MethaneX/actions/runs/42909224258), artifact `13804984673`, digest `sha256:59cb332c02b99fa5a7c63ec13ba26e11754ed81479fe8ac467914b49ae458cd3`, exact assessed documentation revision `53039921202409ce40abb45981024fdbdfa7dc2f`.
-- API-reported provider/model: `Nvidia` / `nvidia/nemotron-3.5-super-vl:free`; finish reason `stop`; 26,981 response characters; 94,174 prompt tokens; 6,929 completion tokens; no refusal, no tool calls, no reasoning output. The artifact's `assessment_label` is `post-review-corrections`, not the requested `post-review-corrections-v2`; this is a workflow-input bookkeeping discrepancy, not evidence of a different model or target revision.
-- **Result: PARTIALLY CLEAR (31/32).** Scores: project identity 4/4; governing principle 4/4; Brain-first boundary 4/4; reference lenses 4/4; document authority/classification 3/4; current phase/authorization 4/4; unauthorized actions 4/4; role navigation 4/4. Execution succeeded; comprehension acceptance did not pass.
-- **DF-09:** the Project Director-approved AI fresh-reader substitution is controlling. The older 17-question uninvolved-human-session requirements are historical and superseded. A distinct AI model did run; the latest result is PARTIALLY CLEAR, so DF-09 remains OPEN pending a later CLEAR result and evidence reconciliation.
+- PR #192 is OPEN, non-draft and unmerged. Its live HEAD is available only from the [live PR #192 page](https://github.com/methaneex-oss/MethaneX/pull/192). The exact documentation revision assessed in the latest run was `887b349f9826de7726707209f640ae0cafd78ace`; the PR page remains the authoritative pointer for any later HEAD.
+- **Latest blind fresh-reader run:** [#42970930733](https://github.com/methaneex-oss/MethaneX/actions/runs/42970930733), artifact `13832623613`, digest `sha256:394153a7ea2ab8467b367464cd02dacd72fac3e585e8c76d3e8395b987e159d8`, exact assessed documentation revision `887b349f9826de7726707209f640ae0cafd78ace`.
+- Workflow run source: `main` at `264d0202945fd73edd52ddeecf58d3623979ef3d`; this is the workflow-code revision, **not** the assessed PR documentation revision. The packet manifest independently records target revision `887b349...`.
+- API-reported provider/model: `Nvidia` / `nvidia/nemotron-3.5-super-vl:free`; finish reason `stop`; 26,748 response characters; 95,773 prompt tokens; 7,101 completion tokens; no refusal, no tool calls, no reasoning output. Assessment label: `post-review-corrections-v3` (correct).
+- **Result: PARTIALLY CLEAR (31/32).** Scores: project identity 4/4; governing principle 4/4; Brain-first boundary 4/4; reference lenses 4/4; document authority/classification 3/4; current phase/authorization 4/4; unauthorized actions 4/4; role navigation 4/4. Workflow execution and artifact integrity passed; comprehension acceptance did not pass the written CLEAR threshold.
+- **DF-09:** the Project Director-approved AI fresh-reader substitution is controlling. The older 17-question uninvolved-human-session requirement is historical and superseded; its unrecovered question list is not a remaining deliverable. A distinct model actually ran against the exact target revision. DF-09 remains OPEN pending the Project Director's decision on whether the residual 31/32 authority/provenance limitation is acceptable under the approved substitution.
 - **Gate:** documentation foundation NOT CLEARED. Stage A NOT STARTED / HELD. Runtime implementation, PR integration, merge, rebase, retargeting, cherry-picking, and gate clearance remain NOT AUTHORIZED.
 
-## Exact remaining reader corrections
+## Final Builder reconciliation of the latest reader result
 
-1. The index has numerous old PR #192 HEAD values in §§16–25. They must remain visibly historical; the live PR page above is the only current reference. Do not attempt to update every historical snapshot to today's SHA.
-2. Older sections still mention the 17-question human test and "no separate model" before the approved AI substitution. This controlling block supersedes them; a future structural cleanup may add explicit historical labels to those passages, but must not erase their audit history.
-3. PR #173 acceptance is recorded in comment #6752144835 as a later transcription of a prior conversation, not the contemporaneous original artifact. Preserve this provenance limitation; do not silently upgrade its evidence class.
-4. PR #174 accepted baseline `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` is distinct from current status-header-corrected HEAD `be46b3858102c31022128522c4b3506aad4dff8a`. F-02/F-03 and missing full follow-on annotations remain open.
-5. The blind packet is deliberately bounded. It does not contain every linked source audit, templates guide, PR #193 handoff, inventory detail, or external GitHub record. These must be marked as external/linked evidence, not implied to have been inspected by Nemotron. The reader did correctly identify this limitation; the 3/4 authority score reflects residual discoverability/verifiability, not a failure to understand project identity.
-6. PR #191 disposition, PR #192/#193 integration order, DF-11 reviewer qualification/exact-head review, and DF-12 Project Director exact-revision decision remain reserved/outstanding.
+1. The only lost score point is document authority/classification (3/4). Nemotron correctly recognized that PR #173's acceptance record is a later transcription, not the original contemporaneous decision artifact. That provenance limitation cannot be repaired by rewriting documentation; the record must remain qualified for the Project Director's decision.
+2. The packet explicitly identifies the bounded evidence set and the linked materials it does not contain. The reader correctly states that it cannot inspect those external materials from the packet alone. This is a deliberate evidence boundary, not a claim that those materials were inspected. Adding every linked file to the packet would change the bounded test rather than fix a false statement.
+3. The old 17-question human-session protocol and pre-substitution statements are retained as historical audit evidence. The controlling DF-09 rule is the approved blind assessment by a distinct AI model. Do not resurrect the superseded human-session requirement or fabricate the missing old question list.
+4. PR #191's base-to-#179 ancestry and #191-head-to-#179-head divergence are different graph comparisons, not contradictory claims. This distinction is already stated in the index; retain it.
+5. The packet's entry point, current status, authority vocabulary, provenance extract, accepted/current PR #174 distinction, and external-evidence boundary were included in the assessed revision. The result does not justify another identical Nemotron run.
+6. Remaining decisions are reserved for the Project Director: DF-09 disposition on the 31/32 result; DF-11 reviewer qualification and exact-current-head independent review; DF-12 exact-revision acceptance; PR #191 disposition; and PR #192/#193 integration order. No Builder action may make these decisions by implication.
 
-## Label and evidence integrity note
+## Label and evidence integrity
 
-The run was dispatched with `post-review-corrections`, despite the operator's intended `post-review-corrections-v2` label. The target SHA, provider/model, completion reason, artifact and digest are verified independently from the label. Correct the workflow default to `post-review-corrections-v2` for future runs and always record the actual dispatch input; never infer it from a requested label.
+The artifact records `post-review-corrections-v3`, matching the requested label. Its ZIP SHA-256 matches GitHub's artifact digest. Preserve the raw artifact unchanged. The assessment is AI reader evidence only; it is not formal independent review, Project Director acceptance, gate clearance, or implementation authorization.
 
 
 # JARVIS Planning Documentation Index — 2026-11-07
