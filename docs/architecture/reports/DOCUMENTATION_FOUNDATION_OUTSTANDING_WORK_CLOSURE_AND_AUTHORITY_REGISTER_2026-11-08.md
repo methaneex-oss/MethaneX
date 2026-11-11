@@ -1187,3 +1187,47 @@ DF-06 remains **NOT MET** until evidence establishes:
 No Builder claim of full DF-06 completion is made. This is not an external-review, Blind Fresh Tester or Project Director decision item; it remains a Builder technical gate until the above evidence is complete. DF-08 remains resolved only against its separately defined bounded exit criterion.
 
 All other authority boundaries remain unchanged: DF-09 requires CLEAR against the frozen final PR #192 HEAD; DF-11 is waived; DF-12 is not accepted; PR #191 disposition and PR #192/#193 integration remain reserved; Stage A and implementation planning remain held; runtime implementation is not authorized.
+
+
+## 35. Exact-current Builder reconciliation — 2026-11-11
+
+### 35.1 Live repository and PR state
+
+At the start of this reconciliation, PR #192 was re-fetched as open/non-draft/unmerged at HEAD `c060ad15e8e5bf86d9b359b88e696cc1fe995a54`, with 38 changed paths. Its base ref is `docs/jarvis-phase-2-whole-brain-integration-map-20261105`; the PR API reports base SHA `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, while the live Git ref and PR #179 head for that branch name are `d30237b81c3695f2a7cb980144b221bbd42ce548`. This one-commit base-reference discrepancy is disclosed; no retarget, rebase, merge or history rewrite is performed.
+
+Other live PR heads were re-fetched:
+- #173 `756724b95e093ac48fcd95c5587117c0a4d8f3c0`;
+- #174 `b78e24b6fa122d1141b1f225bc6d29e1e7c77631`;
+- #175 `c30fe20cfdf3f499416972042be06acdd70f752d`;
+- #179 `d30237b81c3695f2a7cb980144b221bbd42ce548`;
+- #191 `609d38ede50bbdd98a93dfed112781eacabee9fd`;
+- #193 `4705716e0845d7b5621ab7e339d36c9f42853b1a`;
+- #194 `9b457e35c601719d9b213fb843dd5876976b35b9`;
+- #195 `9d0255041c1d3c41c1b6a9f9e373f2bf673184cd`;
+- #196 `9a744927c5ebcfea2c720ded42ec7425edc499c0`.
+
+PR #194 remains the stale historical-revision workflow alternative. PR #195 is the consolidated open draft and has not been workflow-executed. PR #196 contains the requested additive governance amendment (Builder Rules 11.9–11.16) in one governance file; it is open and unmerged. None of these PR states authorizes integration.
+
+### 35.2 DF-06 exact-head work
+
+The preservation/link-validation report §19 records the current exact-head sweep: all 38 changed files fetched; complete 268-entry tree; 316 extracted Markdown/autolink occurrences; 116 repository-relative targets with zero missing; 200 GitHub HTTP(S) occurrences; no local relative heading fragments. It also records rechecks of 18 Actions runs, 13 PR metadata destinations, two Project Director decision comments and three DLT-002 artifacts. The Phase 2 source map remains at the exact blob recorded in §19, with 89 immutable links across 45 commit/path pairs and previously checked line ranges. The current map copy contains the two corrected anchor ranges.
+
+**DF-06 remains NOT MET.** Full semantic relevance of every link and rendered GitHub anchor behavior are not yet established; the historical ChatGPT pointer remains access-limited; and full applicable historical/cross-branch link semantics remain open. Do not promote the bounded checks to full closure.
+
+### 35.3 Current gate and authority disposition
+
+- DF-06: **NOT MET**; remaining evidence limits and exact tasks are in preservation report §19.4.
+- DF-08: **RESOLVED** only against its exact bounded preservation criterion in §16.
+- DF-09: **OPEN / NOT MET**; 31/32 PARTIALLY CLEAR remains the latest qualifying result on older revision `887b349f9826de7726707209f640ae0cafd78ace`. No new blind run is claimed. The available GitHub connection exposes no workflow-dispatch operation. The exact-current-revision assessment remains external fresh-tester work.
+- DF-10: Builder self-review, final inventory snapshot and post-write verification must be synchronized to the exact final PR #192 HEAD.
+- DF-11: **WAIVED** by explicit Project Director decision.
+- DF-12: **NOT ACCEPTED**; exact-revision Project Director decision remains reserved.
+- PR #173: blind fresh architecture assessment and BFA-C01–BFA-C14 Project Director dispositions remain outstanding.
+- PR #174: independent re-review and Project Director disposition remain outstanding; original review-source limitation remains disclosed.
+- PR #191: Project Director disposition remains reserved.
+- PR #192/#193: integration order remains reserved; no integration operation is performed.
+- Stage A: NOT STARTED / HELD. Implementation planning: HELD. Runtime implementation: NOT AUTHORIZED.
+
+### 35.4 Builder boundary
+
+This reconciliation records only observed Builder-side work and exact live repository facts. It does not represent an Independent Reviewer report, Blind Fresh Tester result, Project Director decision, gate clearance, PR merge or runtime implementation authorization.
