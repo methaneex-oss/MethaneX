@@ -1068,3 +1068,34 @@ This controlling disposition supersedes earlier statements in §§30.5 and 31 th
 Initial planning is **NOT COMPLETE**. Stage A remains NOT STARTED / HELD. Runtime implementation remains NOT AUTHORIZED. The C++ CI success on PR #173/PR #192 is build evidence only and is not a blind architecture review, DF-09 fresh-reader result, or Project Director acceptance.
 
 The final index refresh will record this exact parent and become the final documentation commit before manual review dispatch. Its resulting PR #192 HEAD must be fetched and used as the sole current DF-09 target.
+
+
+
+## 33. Post-correction live-state reconciliation — 2026-11-11
+
+### 33.1 Exact live PR state before final index refresh
+
+- **PR #192:** open, non-draft, unmerged; branch `docs/whole-brain-planning-scope-correction-20261107`; HEAD `87e368d790b6271b641070e1a3f9bb0fdd0c32b3`; base `docs/jarvis-phase-2-whole-brain-integration-map-20261105`; 37 changed paths. All 37 changed paths are documentation, README or template paths; no runtime source, test source, dependency, build configuration, workflow or runtime-state path is present.
+- **PR #173:** open, draft, unmerged; corrected proposal HEAD `756724b95e093ac48fcd95c5587117c0a4d8f3c0`; blind independent re-review remains outstanding.
+- **PR #174:** open, draft, unmerged; corrected specification proposal HEAD `4b134048680fb5902f8c2a5a067b0c369169dbfe`; Builder responses to reconstructed F-02/F-03 are submitted; independent re-review and Project Director disposition remain outstanding.
+- **PR #191:** open, draft, unmerged; HEAD `609d38ede50bbdd98a93dfed112781eacabee9fd`; read-only content/dependency review complete; Project Director disposition remains pending.
+- **PR #193:** open, draft, unmerged; current HEAD `0d19b136df8021a3fc3faaf0d53072d9a9ff651b`; base branch `plan/brain-implementation-roadmap-20261103`; separate #175-derived lineage. Its two documents now carry the corrected gate status, PR #173 supersession, and PR #174 follow-on review limitations.
+
+### 33.2 Controlling gate status
+
+- **DF-06: NOT MET.** Current checks establish path existence for the enumerated package and selected immutable sources, but do not establish the full semantic relevance of every link, all external destination reachability, renderer-specific anchor behavior, and all applicable historical/cross-branch link behavior required by the Project Director's full-resolution decision.
+- **DF-08: RESOLVED** against the exact stated exit criterion and bounded foundational-document scope. Preservation report §16 maps each criterion element to evidence. Broader repository-wide semantic archive curation is explicitly outside the criterion and remains deferred.
+- **DF-09: OPEN / NOT MET.** The historical 31/32 PARTIALLY CLEAR result is not a result for current PR #192. A new blind assessment by a genuinely different AI model is required against the final exact PR #192 revision. The GitHub connection exposes no workflow-dispatch action, and this execution exposes no separately callable model-inference endpoint; no assessment is fabricated.
+- **DF-11: WAIVED** by explicit Project Director decision. No independent approval is inferred.
+- **DF-12: NOT ACCEPTED.** Exact-revision Project Director acceptance remains pending until every applicable gate is evidenced and all reserved decisions are dispositioned.
+
+### 33.3 Architecture and specification gates
+
+- **PR #173:** the historical planning-baseline acceptance at `97191111bc2573c14d391c0af9628db7b11f194b` was superseded as sufficient/final architecture. Corrected proposal HEAD `756724b95e093ac48fcd95c5587117c0a4d8f3c0` includes Builder responses and a bounded PR #97 donor-source audit; blind independent re-review and explicit Project Director disposition of BFA-C01–BFA-C14 remain outstanding.
+- **PR #174:** historical accepted planning baseline `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` remains distinct from corrected proposal HEAD `4b134048680fb5902f8c2a5a067b0c369169dbfe`. F-02/F-03 responses are Builder-level and reconstructed from prior context because the original reviewer report and exact reviewed SHA could not be recovered. Independent re-review and Project Director disposition remain outstanding.
+- **PR #191:** Builder recommendation is retain as a separate bounded reference artifact; Project Director disposition remains pending.
+- **PR #192/#193:** integration hold remains in force. No merge, rebase, retarget, cherry-pick, replay or branch-history operation.
+
+### 33.4 Phase boundary
+
+Initial planning is **NOT COMPLETE**. Stage A remains NOT STARTED / HELD. Runtime implementation remains NOT AUTHORIZED. Successful Native Brain Build CI runs are build evidence only; they do not satisfy DF-09, the PR #173 blind architecture review, PR #174 independent re-review, or Project Director acceptance.
