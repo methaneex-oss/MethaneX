@@ -1,6 +1,6 @@
 # JARVIS Brain — Integrated Mechanism Specification
 
-**Document status:** Accepted as the Brain Mechanism Specification planning baseline at PR #174 HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` by Project Director decision comment [#6604790481](https://github.com/methaneex-oss/MethaneX/pull/174#issuecomment-6604790481). This acceptance is planning-baseline acceptance only, not implementation authorization. The separately recorded follow-on F-02/F-03 obligations remain open and must be resolved before relying on the affected areas for implementation.  
+**Historical baseline status:** Accepted as the Brain Mechanism Specification planning baseline at PR #174 HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` by Project Director decision comment [#6604790481](https://github.com/methaneex-oss/MethaneX/pull/174#issuecomment-6604790481). This acceptance is limited to that exact baseline and is not implementation authorization. The current correction revision contains Builder responses to the follow-on F-02/F-03 findings; independent re-review and Project Director disposition remain outstanding. The historical parent architecture baseline was superseded on 2026-11-11 as sufficient/final architecture; this specification must be reconciled against the current PR #173 architecture before implementation reliance.  
 **Stage:** Detailed Brain Mechanism Specification  
 **Authority:** Project Director authorization for this specification stage was recorded as received 2026-11-03. The Project Director's exact-revision acceptance of PR #173 as the Brain Foundation Architecture planning baseline was recovered from the 2026-11-03 decision and transcribed in PR #173 comment #6752144835.  
 **Parent architecture reference:** PR #173, accepted planning-baseline HEAD `97191111bc2573c14d391c0af9628db7b11f194b` (Project Director decision 2026-11-03; provenance transcription in PR #173 comment #6752144835).
@@ -13,7 +13,7 @@
 
 ## 1. Purpose and specification authority
 
-This document translates the accepted parent Brain Foundation Architecture planning baseline into mechanism-level responsibilities, conceptual contracts, state lifecycles, interaction rules, failure semantics and observable acceptance obligations. PR #173's exact-revision Project Director acceptance was recovered from prior conversation history and transcribed in PR #173 comment #6752144835. This specification's own planning-baseline acceptance is separately recorded above.
+This document translates the historical PR #173 planning-baseline revision into mechanism-level responsibilities, conceptual contracts, state lifecycles, interaction rules, failure semantics and observable acceptance obligations. The prior Project Director decision for PR #173 HEAD `97191111bc2573c14d391c0af9628db7b11f194b` is transcribed in comment #6752144835, but the Project Director superseded that revision's sufficiency as the complete/final architecture on 2026-11-11. PR #174's separate acceptance at exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` remains a planning-baseline decision only. This corrected specification revision requires independent re-review and explicit disposition; it is not implementation authorization.
 
 It is a specification, not an implementation plan. It must guide later implementation without selecting the implementation prematurely.
 
