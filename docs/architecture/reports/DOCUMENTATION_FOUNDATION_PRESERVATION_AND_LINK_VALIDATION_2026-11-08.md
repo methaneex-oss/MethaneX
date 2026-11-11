@@ -297,3 +297,55 @@ A bounded scan of inline Markdown links in all 33 changed files found:
 The scan is a direct response to the Grok review's recommendation to refresh link/path validation at the exact reviewed revision and to synchronize the inventory after the final write. The inventory must now record this 33-path parent snapshot. Any subsequent document write invalidates this snapshot and requires a new parent manifest.
 
 **Gate disposition:** DF-06 PARTIAL; DF-08 PARTIAL; DF-09 OPEN pending repeat CLEAR Nemotron assessment; DF-11 current-head review/qualification unresolved; DF-12 outstanding; Stage A HELD; implementation NOT AUTHORIZED.
+
+
+## 14. Historical retention and supersession disposition — 2026-11-11
+
+### 14.1 Controlling retention rule
+
+The Project Director's standing instruction is that historical material must be preserved and must not be deleted or silently superseded merely to clean the documentation tree. The disposition for the initial foundation is therefore **retain in place**:
+
+- No historical file is deleted, moved, renamed, overwritten, or relocated to an archive by this work.
+- No branch is deleted, renamed, force-updated, or consolidated.
+- No PR is merged, closed, rebased, retargeted, cherry-picked or replayed as an archive operation.
+- “Superseded” is an interpretive/status label only. It means “not the current controlling document for this specific question”; it never means that the original artifact is removed, its historical content rewritten, or its exact source identity discarded.
+- Where authority or revision status is disputed, the artifact remains **UNRESOLVED / PRESERVED**, not silently demoted.
+- Identical copies are recorded by shared blob identity; distinct blob revisions remain separate records. No duplicate-copy deletion is authorized.
+
+### 14.2 Completed discovery scope and retained evidence
+
+The repository-wide discovery already recorded in §11.1 is the bounded census used for this disposition: 245 branch refs across three pages / 203 distinct tips; 37 documentation-family refs; 37 JARVIS-name refs / 11 distinct tips; 184 PRs across two pages; and 28 documentation PRs with 108 changed documentation paths. The two JARVIS-name refs initially unmatched to a PR head were mapped by ancestry: `feat/jarvis-build-agents-clean` is an ancestor of PR #179 and `docs/jarvis-phase-1-preservation-inventory-20261104` is an ancestor of PR #178. The 27 branch aliases at the PR #96 tip are aliases, not 27 distinct content versions.
+
+The older lineage comparisons remain part of the preservation evidence:
+- PR #96/#97: 12 shared Markdown paths are byte-identical; PR #97 contributes three additional Markdown paths.
+- PR #97/#156: 15 shared Markdown paths are byte-identical; PR #156 adds the separate `docs/DEVELOPMENTAL_BRAIN_PLAN.md` artifact.
+- PR #148/#156: 15 of 16 shared Markdown paths are identical; the Developmental Brain Plan is a distinct revision and both versions are retained.
+- PR #97/#170: 13 of 15 shared Markdown paths are identical; README and the master blueprint differ, and PR #170 contributes nine additional Markdown documents.
+
+The 108-path / 28-PR register and exact source blob identities remain the canonical preservation locator. This report does not claim that all repository content outside the enumerated documentation-family and PR discovery scope has been semantically reviewed.
+
+### 14.3 Per-lineage status and retention rationale
+
+| Lineage | Retained artifact class | Current interpretation | Retention rationale |
+|---|---|---|---|
+| #160, #164 | Trust-boundary and technology-audit inputs | Historical research/contract inputs; not a current technology decision | Preserve design rationale and security constraints without activating old technology choices |
+| #166–#168 | Governance and language-ownership proposals | Historical proposals; not binding governance or current technology selection | Preserve alternatives and rejected/unaccepted governance history |
+| #169 | MCU behavioral reference | Fictional functional inspiration only | Preserve as a product-vision lens, not empirical or implementation evidence |
+| #170 | Layer 0–19 blueprint, traceability, planning reconciliation and foundation constitution | Historical/superseded planning inputs; not current whole-Brain architecture or implementation order | Preserve original content and exact revisions so later planning can compare rather than erase prior reasoning |
+| #171 | Whole-system foundation and research | Documents 00/01 have separate exact-scope approval records; research is not blanket-approved | Preserve scope-specific decisions and the wider research context separately |
+| #172 | Foundational capability investigation and corrections | Accepted planning input at exact recorded revision; not a whole-Brain completeness proof | Preserve the accepted input and its correction history |
+| #173 | Brain Foundation Architecture and review correction | Accepted planning baseline at exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b`; authorization limited to the detailed mechanism specification stage | Preserve the exact accepted revision, primary conversation evidence extract and later GitHub transcription as distinct evidence classes |
+| #174 | Brain Mechanism Specification, source audit and corrections | Accepted specification baseline at exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`; F-02/F-03 remain open | Preserve accepted baseline and follow-on obligations without rewriting the accepted content |
+| #175 | Implementation plan and Gate A/Gate B evidence | Deferred proposal; Gate A not cleared; no implementation baseline selected | Preserve the plan and no-go evidence; do not execute its proposed sequence before whole-Brain planning |
+| #178 | Phase 1 inventory and governance proposal | Inventory/preservation evidence retained; governance proposal remains unaccepted | Preserve both the evidence and the proposal's unaccepted status |
+| #179 | BM-01–BM-12 source integration map and closure evidence | Bounded source-mapping work; not whole-Brain completeness or acceptance | Preserve exact mapping and its scope limits |
+| #180–#190 | Historical map revisions, reliability contracts and review reports | Retain each exact PR revision; closed PR #180 remains preserved; reviewer identity and acceptance are determined by evidence, not titles | Preserve divergent analyses and reviewer provenance, including same-account limitations |
+| #191 | Human-cognition / MCU reference comparison | Draft, not accepted; read-only content review completed; disposition still pending | Retain because it is useful bounded reference evidence and no disposition decision has been made |
+| #192 | Documentation foundation correction and current navigation package | Current open, non-draft PR; not merged or accepted | Preserve the current working foundation package on its own lineage |
+| #193 | Deferred implementation plan and continuity handoff | Open draft, separate #175-derived lineage; implementation plan remains non-operative | Preserve its separate history and current hold; do not integrate it into #192 yet |
+
+### 14.4 DF-08 disposition
+
+**Builder evidence status: RESOLVED within the defined historical-discovery scope.** The required preservation controls are now explicit and actionable: the bounded repository census and 108-path/28-PR register are retained; selected cross-revision comparisons are recorded; ambiguous provenance remains qualified; all historical material is retained in place; and supersession is non-destructive and visible-only. No archive relocation or deletion is required to satisfy the user's preservation constraint, and none is performed.
+
+This is not a claim that every historical document has been independently accepted, nor that every line of every old report has been semantically re-reviewed. It is not DF-12 foundation acceptance. The remaining DF-06 external-link/semantic/anchor closure and DF-09 CLEAR reader result remain separate gates. PR #191 disposition and PR #192/#193 integration remain unchanged and unauthorized.
