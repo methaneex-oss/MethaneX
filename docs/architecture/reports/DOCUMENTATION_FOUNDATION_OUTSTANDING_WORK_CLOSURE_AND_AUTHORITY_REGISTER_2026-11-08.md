@@ -737,3 +737,31 @@ The content review finds no basis to discard the report. The graph remains stale
 - Stage A: NOT STARTED / HELD. Runtime implementation: NOT AUTHORIZED.
 
 This section records evidence recovery and a read-only content review. It does not authorize any PR or branch-history operation, Stage A commencement, source selection or runtime implementation.
+
+
+## 27. DF-08 retention disposition and DF-06 link-access correction — 2026-11-11
+
+### 27.1 DF-08 — historical preservation
+
+The Project Director's standing instruction is to preserve historical material and not delete or silently supersede it merely to clean the documentation tree. The preservation report §14 now records the non-destructive disposition: retain all identified artifacts and branch refs in place; do not delete, move, rename, overwrite, archive-relocate or consolidate them; use visible interpretive status labels only; preserve exact source revisions/blob identities; and keep disputed items marked UNRESOLVED / PRESERVED.
+
+The bounded discovery evidence is recorded as 245 branch refs / 203 distinct tips, 184 PRs, 28 documentation PRs and 108 changed documentation paths, plus the selected PR #96/#97/#148/#156/#170 duplicate/revision comparisons. The two JARVIS-name branch refs initially unmatched to PR heads were mapped by ancestry. The 27 refs at the PR #96 tip are aliases, not independent content revisions. Distinct Developmental Brain Plan revisions remain separate. PR #180 remains closed/unmerged but its historical artifact is preserved. PR #191 remains open/draft/unmerged after read-only content review; no disposition or ancestry operation is performed. PR #192 and #193 remain separate and unmerged.
+
+**DF-08 Builder evidence disposition: RESOLVED within the defined discovery scope.** No archive move or deletion is necessary to satisfy the preservation rule; none is authorized or performed. This does not imply that all historical proposals are accepted or that every document outside the enumerated discovery scope has been semantically re-reviewed.
+
+### 27.2 DF-06 — access-limited external pointer
+
+The only non-GitHub external pointer previously identified in the changed-document scan is the historical ChatGPT shared-conversation URL in the PR #174 follow-on provenance-recovery report. The external fetch endpoint returned a cache/access failure; this does not establish that the user-supplied URL is broken. To prevent it being presented as a verified navigational dependency, the exact URL is now retained verbatim as inline code with an explicit access-limited label, not as a clickable link. The local recovery report remains the navigational target and clearly states that the original full review/annotations are not recovered.
+
+This is an explicit, non-destructive status correction: the historical pointer is preserved; no historical evidence is removed; the inaccessible external destination is no longer treated as a verified operational link. The exact-current-HEAD full link/path/anchor/semantic scan must still be recorded before DF-06 can be marked closed.
+
+### 27.3 Current gate status
+
+- DF-08: Builder evidence resolved within the bounded repository-discovery scope; final gate acceptance remains part of DF-12.
+- DF-06: link access classification corrected; exact-current-HEAD comprehensive validation still required.
+- DF-09: original PR #173 conversation message recovered and included in the blind packet evidence extract; a new CLEAR assessment is still required. The previous 31/32 result remains PARTIALLY CLEAR and is not retroactively changed.
+- DF-11: WAIVED by Project Director decision; no independent review is claimed.
+- DF-12: NOT ACCEPTED until all outstanding issues are cleared and the Project Director makes the exact-revision decision.
+- PR #191 disposition: content review complete; decision still pending.
+- PR #192/#193: open and unmerged; integration held.
+- Stage A: NOT STARTED / HELD. Runtime implementation: NOT AUTHORIZED.
