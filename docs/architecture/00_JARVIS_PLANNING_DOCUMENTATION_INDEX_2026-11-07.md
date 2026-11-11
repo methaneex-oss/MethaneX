@@ -2,9 +2,9 @@
 
 > This block supersedes earlier active-status snapshots below where they conflict. Dated historical records remain preserved as historical evidence.
 
-- **PR #192:** open, non-draft, unmerged; branch `docs/whole-brain-planning-scope-correction-20261107`; pre-inventory snapshot HEAD `5df25fd376bb84fa90680339504fc1a5f8363b22`; base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; 38 changed paths. This index correction and the final inventory synchronization will advance the branch; the resulting HEAD and all changed-file blobs must be fetched and recorded after the inventory write.
+- **PR #192:** open, non-draft, unmerged; branch `docs/whole-brain-planning-scope-correction-20261107`; exact verified HEAD `3cb09befa2b28b3ea0dc2242bc1176bc6a721abd`; base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; 38 changed paths. All 38 changed paths were fetched successfully at this exact HEAD after the final inventory write.
 - **PR #173:** open, draft, unmerged; corrected architecture proposal HEAD `756724b95e093ac48fcd95c5587117c0a4d8f3c0`. Blind Fresh Tester assessment of this exact revision and Project Director disposition of BFA-C01–BFA-C14 remain outstanding.
-- **PR #174:** open, draft, unmerged; current corrected proposal HEAD `b78e24b6fa122d1141b1f225bc6d29e1e7c77631`; accepted historical planning baseline remains `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`. F-02/F-03 Builder responses exist, but the original full review artifact and exact reviewed SHA remain unavailable; Independent Reviewer re-review and Project Director disposition remain outstanding.
+- **PR #174:** open, draft, unmerged; exact current HEAD `b78e24b6fa122d1141b1f225bc6d29e1e7c77631`; accepted historical planning baseline remains `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`. F-02/F-03 Builder responses exist, but the original full review artifact and exact originally reviewed SHA remain unavailable; Independent Reviewer re-review and Project Director disposition remain outstanding.
 - **PR #191:** open, draft, unmerged; HEAD `609d38ede50bbdd98a93dfed112781eacabee9fd`, historical base `f6267456560a08054d69f7960d2951452b14017c`. It remains a bounded human/MCU reference artifact; content/dependency review is complete, but Project Director disposition is pending. No retarget/rebase/replay is authorized.
 - **PR #193:** open, draft, unmerged; HEAD `4705716e0845d7b5621ab7e339d36c9f42853b1a`, separate PR #175-derived lineage. Integration with PR #192 remains held.
 - **PR #194:** open, draft, unmerged; workflow response-diagnostics correction branch HEAD `9b457e35c601719d9b213fb843dd5876976b35b9`. It remains separate and unintegrated.
@@ -12,7 +12,7 @@
 - **DF-06:** **NOT MET.** Existing validation remains bounded. Complete semantic relevance, all applicable external destination reachability, renderer-specific anchor behavior and applicable historical/cross-branch link validation are not established. Do not repeat earlier bounded-scope RESOLVED wording as current gate status.
 - **DF-08:** **RESOLVED** against its exact bounded preservation criterion. This does not claim repository-wide semantic archive completeness.
 - **DF-09:** **OPEN / NOT MET.** Latest qualifying result is PARTIALLY CLEAR (31/32), run `42970930733`, on older packet revision `887b349f9826de7726707209f640ae0cafd78ace`. A CLEAR Blind Fresh Tester result against the frozen final PR #192 revision is required. No new run is claimed; the available GitHub connection exposes no workflow-dispatch action.
-- **DF-10:** Builder self-review has been refreshed and the prior stale PR-head reference corrected. The final inventory must now be synchronized to the pre-inventory snapshot above, then post-write verification must fetch all 38 changed paths at the resulting exact HEAD.
+- **DF-10:** Builder self-review and inventory are finalized. The post-write verification fetched all 38 changed paths at exact PR #192 HEAD `3cb09befa2b28b3ea0dc2242bc1176bc6a721abd` (38/38).
 - **DF-11:** **WAIVED** by explicit Project Director decision. No new DF-11 review is required or commissioned.
 - **DF-12:** **NOT ACCEPTED.** Exact-revision Project Director acceptance remains pending after all applicable evidence and reserved decisions are resolved.
 - **PR #192 / #193 integration:** held by explicit Project Director decision. No merge, rebase, retarget, cherry-pick or branch-history operation is authorized.
@@ -51,7 +51,7 @@ The Project Director submitted the following explicit decisions in ChatGPT on 20
 ### Required closure work
 
 1. **DF-09:** The primary 2026-11-03 conversation exchange is now recovered and recorded in the decision-evidence extract, with its lack of a separately addressable immutable export/share URL disclosed. Assemble the final bounded packet and run the blind fresh-reader assessment against the exact final PR #192 HEAD. DF-09 passes only on a recorded **CLEAR** result; the prior 31/32 remains PARTIALLY CLEAR.
-2. **DF-06:** Builder validation is complete within the documented scope; see outstanding-work register §28.1. No unresolved clickable destination, missing relative target or invalid source line range remains in that scope.
+2. **DF-06:** NOT MET. The previous bounded validation does not satisfy the Project Director's full-resolution requirement. Remaining work is semantic relevance, applicable external destination reachability, renderer-specific fragment behavior, and applicable historical/cross-branch link validation. Do not describe DF-06 as resolved.
 3. **DF-08:** Builder preservation and non-destructive retention disposition are complete within the defined discovery scope; see outstanding-work register §28.2. Unresolved/disputed artifacts remain explicitly marked preserved, not silently promoted or discarded.
 4. **PR #191:** Content/dependency review is complete. Present the historical-base versus dependent-replay options for the Project Director's disposition; do not perform either operation.
 5. **PR #192 / #193:** Maintain the hold and prepare an evidence-based dependency/integration analysis only. No PR integration until all outstanding documentation decisions and gate conditions are resolved.
@@ -62,7 +62,7 @@ The Project Director submitted the following explicit decisions in ChatGPT on 20
 - **Documentation Foundation:** NOT ACCEPTED / NOT CLEARED.
 - **DF-09:** OPEN / NOT MET — requires CLEAR.
 - **DF-11:** WAIVED by explicit Project Director decision; historical evidence limitations remain disclosed.
-- **DF-06 / DF-08:** RESOLVED within the documented package/discovery scopes in register §28; not waived or carried as partials.
+- **DF-06:** NOT MET; the full-resolution checks listed above remain outstanding. **DF-08:** RESOLVED only against its exact bounded preservation criterion in register §28. Neither status is waived.
 - **PR #191:** content review complete; disposition pending; no history operation authorized.
 - **PR #192 / #193:** open and unmerged; integration held.
 - **DF-12:** NOT ACCEPTED; final decision deferred until all required conditions are cleared.
