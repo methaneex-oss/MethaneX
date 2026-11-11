@@ -173,3 +173,17 @@ This is a Builder reconciliation recommendation, not a merge, close, review, or 
 ### 9.3 Verification boundary
 
 Static source assertions were re-run against the final workflow blob for full-SHA validation, environment-only shell comparison, response-shape fallbacks, bounded sanitized HTTP diagnostics, omission of raw exception messages, provider/model identity checks, refusal/tool-call checks, finish-reason validation, A–H/1,500-character completeness checks, and unconditional artifact upload. This does not validate GitHub Actions YAML parsing or execute the workflow. No Blind Fresh Tester inference or assessment is claimed.
+
+
+### 9.4 Follow-up correction — bound successful-response metadata and HTTP error reads
+
+A further Builder pass found that successful-response metadata still copied several provider-controlled fields without type and length bounds. This included provider/model identifiers, response IDs, timestamps, finish-reason values, content-block type labels, reasoning-token counts, and usage values. The HTTP-error branch also read the entire provider error body into memory even though it did not persist the body.
+
+**Correction:** commit `0f74fe99ac953044bc4c285d832205b2da85426d` adds allowlist helpers that:
+- retain only bounded strings for provider/model/request/response identifiers and finish-reason labels;
+- retain only finite numeric values for timestamps, token counts, and usage fields;
+- constrain content-block type labels to short strings;
+- cap the HTTP error-body read at 65,536 bytes before parsing the allowlisted error fields;
+- continue to exclude raw response bodies and raw exception messages from evidence artifacts.
+
+**Static verification against workflow blob** `1166ce7c66e939f4d6106dba2bbd9756fa96c03a` confirmed the bounded metadata helpers, numeric allowlists, capped HTTP error-body read, absence of raw exception-message persistence, and continued full-SHA/environment-only handling. This remains source inspection only. YAML parsing, GitHub Actions execution, provider behavior, and artifact inspection have not been performed; no workflow runtime pass is claimed.
