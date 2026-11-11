@@ -128,3 +128,33 @@ The corrections are deliberately mechanism-level. They do not choose a language 
 **Project Director status:** no new acceptance decision is implied. The earlier acceptance of PR #174 at exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` remains a planning-baseline decision only. This correction revision must be separately reviewed and explicitly dispositioned before any implementation reliance.
 
 No runtime code, tests, dependencies, build configuration, merge, rebase, retarget, deployment or implementation authorization is included.
+
+
+## 6. Reconciliation against the recovered secondary finding record — 2026-11-11
+
+The repository's `PR_174_FOLLOW_ON_REVIEW_PROVENANCE_RECOVERY_2026-11-06.md` preserves more detailed secondary recovery than was reflected in the initial correction summary. It records the finding titles, severity and requirement themes, while explicitly stating that the original reviewer report, complete rationale and inline annotations remain unavailable.
+
+The recovered requirement themes are now mapped as follows:
+
+| Recovered F-02 theme | Corrected specification response |
+|---|---|
+| Contextual intent | BM-02 §4.2 and scenarios 35–38 |
+| Reference grounding | BM-02 discourse/reference interpretation and scenarios 35–37 |
+| Speech-act and source attribution | BM-02 now explicitly distinguishes communicative-function hypotheses and attributes utterances/embedded claims to source/speaker where evidence permits |
+| Uncertainty and clarification | BM-02 preserves alternatives and requires clarification when ambiguity is material |
+| Trusted/untrusted content | BM-02 preserves quoted/reported source boundaries and does not elevate untrusted imperatives to operator instructions |
+| Continuity across interaction | BM-02 now preserves active referents, unresolved interpretations, corrections and context across turns/interruptions, with temporal/provenance limits |
+| Authority separation | BM-02 keeps inferred intent separate from authorization |
+
+| Recovered F-03 theme | Corrected specification response |
+|---|---|
+| Material influence on authoritative downstream computation | BM-12 requires accepted reasoning results to retain an explicit dependency in the consuming owner's authoritative computation/state transition and to record the resulting owner-state/decision version |
+| Explicit invalidation | BM-12 and BM-11 dependency tracking require affected downstream versions to be reconsidered when premises/assumptions change |
+| Explicit rejection | BM-12 requires a recorded consumer disposition and rationale; silent discard is prohibited |
+| End-to-end traceability | Scenarios 47–48 require exact reasoning artifact/version and resulting downstream state/decision version, plus invalidation/recomputation evidence |
+
+The additional scenarios 47–48 supplement the existing 35–46 set. They are specification acceptance obligations, not evidence that runtime behavior has been implemented or tested.
+
+**Builder reconciliation:** the earlier correction pass covered much of the recovered substance but did not explicitly name speech-act/source attribution, discourse continuity, or a traceable downstream state-version effect for accepted reasoning. Those omissions are now corrected in the current specification proposal.
+
+**Status remains:** Builder correction submitted; Independent Reviewer re-review and Project Director disposition are outstanding. The original report and exact original reviewed SHA remain unavailable. This report is not a verbatim reconstruction and does not claim independent clearance or implementation authorization.
