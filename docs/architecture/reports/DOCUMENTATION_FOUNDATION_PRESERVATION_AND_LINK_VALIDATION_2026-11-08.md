@@ -349,3 +349,67 @@ The 108-path / 28-PR register and exact source blob identities remain the canoni
 **Builder evidence status: RESOLVED within the defined historical-discovery scope.** The required preservation controls are now explicit and actionable: the bounded repository census and 108-path/28-PR register are retained; selected cross-revision comparisons are recorded; ambiguous provenance remains qualified; all historical material is retained in place; and supersession is non-destructive and visible-only. No archive relocation or deletion is required to satisfy the user's preservation constraint, and none is performed.
 
 This is not a claim that every historical document has been independently accepted, nor that every line of every old report has been semantically re-reviewed. It is not DF-12 foundation acceptance. The remaining DF-06 external-link/semantic/anchor closure and DF-09 CLEAR reader result remain separate gates. PR #191 disposition and PR #192/#193 integration remain unchanged and unauthorized.
+
+
+## 15. Exact-current PR #192 link and destination revalidation — 2026-11-11
+
+### 15.1 Exact snapshot and changed-file delta
+
+The live PR #192 HEAD at the start of this revalidation was `9a669d2545862d76b3935dfc9555cac278765169` (open, non-draft, unmerged). A GitHub commit comparison from the previously audited parent `c0778822b201197be2ddc34057ec7259afbab1f7` to that HEAD reports 11 commits ahead, 0 behind, and exactly three changed files:
+
+| File | Exact current blob SHA | Lines |
+|---|---|---:|
+| `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md` | `44ce84e18a9252f2fee73ea3c665303b53cf8765` | 633 |
+| `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md` | `c294e770f7cf0e3d289ee70a21a58787a4010691` | 2357 |
+| `docs/architecture/reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md` | `27bafb7d7d6aec1a7386628ec179b7ffb5b5f885` | 878 |
+
+The other 34 files in PR #192's 37-file package are unchanged from the previously audited parent. The earlier §28.1 audit fetched all 37 files and resolved all discovered repository-relative targets. The current recheck therefore repeated the full validation on the three changed files and retained the exact unchanged-file comparison as the basis for the other 34.
+
+### 15.2 Repository-relative paths and Markdown forms
+
+The three changed files contain 45 repository-relative inline Markdown link occurrences and 29 unique repository-relative target paths. Every unique target was fetched successfully from the exact current PR #192 branch. No missing target was found.
+
+The three changed files were also checked for reference-style Markdown link definitions, raw HTML `href` attributes and autolink URL forms. None were present. This avoids treating the inline-link scan as if it had covered syntax that the documents do not use.
+
+### 15.3 Cross-branch source pointers and line anchors
+
+The current index's immutable cross-branch links were fetched at their exact commit/path pairs, including the PR #171, #172, historical accepted PR #173, current status-clarified PR #174, PR #191, PR #175 and governance/source-audit references. All 13 explicit pinned paths checked in the current index/inventory set resolve.
+
+The Phase 2 source-integration map remains at blob `9dd776920d0a479a9d7275acc821e12c266623d9`, unchanged from the prior exact-parent audit. Its 89 immutable source references resolve to 45 unique commit/path pairs; all 45 source files were fetched, and all 76 cited line-anchor ranges were checked against exact source-file line counts. The two stale ranges previously found were already corrected in the map and in PR #179. The Phase 1 source-audit report's 18 additional immutable file references were also fetched successfully. This verifies path existence and line-bound validity; it does not claim that GitHub's rendered anchor UI was manually inspected for every anchor.
+
+### 15.4 GitHub PR, Actions and artifact destinations
+
+Every distinct GitHub PR destination discovered in the package was fetched successfully: PRs #96, #97, #99, #148, #150, #151, #155, #156, #171, #172, #173, #174, #175, #176, #178, #179, #191, #192 and #193. Their live open/closed/merged states were recorded separately from historical claims.
+
+Every distinct GitHub Actions run destination discovered in the package was fetched successfully and returned completed jobs. The checked run IDs were: `40243557728`, `40419118694`, `40565468650`, `40788714686`, `40788714735`, `41808525486`, `41808525492`, `41808525499`, `41808525557`, `42080973918`, `42834248124`, `42879721340`, `42909224258`, `42970930733`, `42976840057`, `43016629593`, `43018312917` and `43019119856`. The three linked DLT-002 artifacts on run `40565468650` (IDs `12764655498`, `12763543000` and `12763204259`) were confirmed present and unexpired. The historical ChatGPT shared-conversation pointer remains literal inline text with an explicit access-limited qualification; it is not a clickable navigation dependency and is not represented as reachable.
+
+### 15.5 DF-06 criterion disposition
+
+DF-06 requires durable cross-document links: exact commit-pinned paths for document/source references, with PR links retained for discussion context. The checks above cover the current PR #192 package, all changed-file relative targets, the unchanged-file comparison, the enumerated pinned source files, the source-map references/line ranges, and the GitHub PR/Actions destinations. The only inaccessible external historical pointer is explicitly non-clickable and access-qualified.
+
+**Builder disposition: DF-06 RESOLVED within the Initial Documentation Foundation package and its enumerated immutable source/link scope.** This is not an unqualified claim that every URL ever mentioned anywhere in every historical repository file has been revalidated. It closes the gate's declared documentation-package scope without silently deleting or rewriting historical evidence.
+
+## 16. DF-08 criterion-to-evidence reconciliation — 2026-11-11
+
+The governing DF-08 exit criterion is: **“Historical work is preserved — No historical evidence is deleted or silently superseded; open preservation follow-up is visible.”** It does not require every historical artifact to be semantically re-reviewed, every source branch to be merged, or a destructive archive relocation. The initial gate explicitly defers full historical branch-to-PR/archive curation beyond the bounded foundational-document map (§7).
+
+| Criterion element | Evidence | Result |
+|---|---|---|
+| No historical file or branch is deleted, moved, renamed, overwritten or archive-relocated by this work | Retain-in-place policy in §14.1; PR/branch operations explicitly prohibited; no destructive operation performed | Satisfied |
+| Supersession is visible and non-destructive | §14.1 defines superseded as an interpretive label only; original artifact and exact revision remain preserved | Satisfied |
+| Current foundational lineage is discoverable | Paginated census of 245 branch refs / 203 distinct tips and 184 PRs; 28 documentation PRs and 108 changed documentation paths; exact PR heads/blobs in the inventory | Satisfied within declared foundational scope |
+| Ambiguous ancestry and duplicate content are not silently collapsed | Two unmatched refs mapped by ancestry; 27 aliases identified as one tip; selected #96/#97/#148/#156/#170 comparisons; distinct Developmental Brain Plan revisions retained | Satisfied within enumerated comparisons |
+| Unresolved or unaccepted historical items remain visible | PR #191, #192/#193, governance proposal, PR #173 sufficiency supersession and other open dispositions remain labelled proposed/open/unresolved; no artifact is promoted by retention | Satisfied |
+| Broader repository-wide semantic archive curation | Explicitly deferred by the initial gate §7; outside DF-08's stated exit criterion | Deferred, not a DF-08 defect |
+
+**Builder disposition: DF-08 RESOLVED against the exact stated exit criterion and bounded foundational-document scope.** The census is not inflated into a claim that every repository document has been semantically audited. Open preservation questions outside this gate remain visible and are not silently marked complete.
+
+## 17. Current PR #191 dependency recheck — 2026-11-11
+
+PR #191 remains open, draft and unmerged at `609d38ede50bbdd98a93dfed112781eacabee9fd`. Its sole changed file remains the 219-line human/MCU reference comparison. A fresh comparison against the current PR #179 head `d30237b81c3695f2a7cb980144b221bbd42ce548` returns **diverged: 1 commit ahead, 23 commits behind**, with merge base `f6267456560a08054d69f7960d2951452b14017c`. The one unique commit adds only the comparison document.
+
+The read-only content review remains valid: the report is a bounded BM-01–BM-12 reference comparison, not whole-Brain completeness evidence. Its nine human-cognition citations were checked against publisher/PubMed/official sources. The Marvel AI guide is a general Marvel fictional-AI reference, not a direct source for the MCU film portrayal; the report must not overstate that citation. No content defect requiring deletion was identified.
+
+**Builder recommendation for Project Director:** retain PR #191 as a separate, clearly bounded reference artifact; do not retarget it alone or rebase/cherry-pick it without an explicit integration decision. Its current base is stale, but its unique document can be linked and reviewed at its immutable head. This recommendation is not a PR disposition or integration authorization. The Project Director's decision remains pending.
+
+**Scope boundary:** DF-06 and DF-08 Builder closure evidence does not close DF-09, waive/reinstate DF-11, decide PR #191, accept DF-12, or authorize PR integration or Stage A.
