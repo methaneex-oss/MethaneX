@@ -177,7 +177,7 @@ jobs:
                   raw = json.loads(response.read().decode())
           except urllib.error.HTTPError as exc:
               detail = exc.read().decode(errors="replace")[:4000]
-              (out / "api_error.txt").write_text(f"HTTP {exc.code}\\n{detail}")
+              (out / "api_error.txt").write_text(f"HTTP {exc.code}\n{detail}")
               raise SystemExit(f"OpenRouter request failed with HTTP {exc.code}; details saved as artifact.")
           except Exception as exc:
               (out / "api_error.txt").write_text(type(exc).__name__ + ": " + str(exc))
@@ -207,7 +207,7 @@ jobs:
                       text_value = part.get("content")
                   if isinstance(text_value, str):
                       pieces.append(text_value)
-              content = "\\n".join(pieces)
+              content = "\n".join(pieces)
           if not isinstance(content, str) or not content.strip():
               alternative = message.get("output_text")
               if isinstance(alternative, str) and alternative.strip():
