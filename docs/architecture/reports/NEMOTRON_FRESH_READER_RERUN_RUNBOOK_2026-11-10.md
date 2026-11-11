@@ -1,5 +1,7 @@
 # Nemotron Blind Fresh-Reader Rerun — Operator Runbook — 2026-11-10
 
+> **Execution hold — 2026-11-11:** Do not dispatch the workflow from the current `main` branch yet. Its Bash step interpolates the manual `target_revision` input directly into a shell command. PR #195 contains the corrected candidate, but it is still open/draft/unmerged and has not been executed. Review PR #195 and integrate the approved correction first; then re-fetch `main` and verify the corrected workflow before launching exactly one assessment. Do not use the older main workflow merely because it is green or because previous runs succeeded.
+
 **Purpose:** Run one new blind fresh-reader assessment against the final corrected PR #192 documentation revision.  
 **Model:** `nvidia/nemotron-3.5-super-vl:free` via OpenRouter.  
 **Workflow:** [Documentation Foundation — Blind AI Fresh-Reader Assessment](https://github.com/methaneex-oss/MethaneX/actions/workflows/documentation-foundation-ai-reader.yml)  
@@ -7,7 +9,7 @@
 
 ## 1. Workflow readiness
 
-The reusable workflow on `main` has been parameterized to accept an exact `target_revision` input rather than assessing a hard-coded historical SHA. Workflow update commits:
+The workflow on `main` accepts an exact `target_revision` input, but the current main-branch implementation still interpolates that input directly inside a Bash command. Do not dispatch the current main version. PR #195 contains the corrected candidate at exact HEAD `9d0255041c1d3c41c1b6a9f9e373f2bf673184cd` (workflow blob `f4373401f07d8550f39eb9bb8b252eac31f03783`): it validates the 40-character SHA through an environment variable and uses that variable inside shell commands. The candidate is statically inspected only; it has not been YAML-runtime-validated or executed. PR #195 must be reviewed and integrated before the one new blind run. After integration, re-fetch the live `main` workflow and verify that it contains the approved correction before dispatching. Historical workflow update commits:
 
 - `12ced8bf445309fcad0422194febcc7002e9621f` — parameterize exact target revision.
 - `3b43ac1c5f6c7a9c070505a5d621e8e96645aa9e` — correct dispatch input YAML.
@@ -32,8 +34,8 @@ The workflow timeout is 20 minutes. It does not create paid compute, GPU infrast
 ## 2. How to launch
 
 1. Open the workflow link above.
-2. Select **Run workflow**.
-3. Set branch/ref to `main` (the workflow definition is on `main`).
+2. Do **not** select Run workflow until PR #195 has been reviewed and integrated.
+3. After integration, re-fetch the live workflow on `main` and verify the SHA-validation/environment-variable correction is present; only then select **Run workflow** and set branch/ref to `main**.
 4. In **target_revision**, paste the exact current HEAD SHA shown at the top of PR #192. Do not use a branch name.
 5. Keep assessment label as `post-review-corrections`.
 6. Start the workflow once. Do not launch duplicate runs while one is queued or running.
@@ -74,7 +76,7 @@ The assessment must be scored against the supplied packet, not for fluency. Requ
 - **PARTIALLY CLEAR** if one or more material misunderstandings or unresolved reader traps remain.
 - **NOT CLEAR** if the reader cannot reliably establish the project's identity, current phase, authority boundary or safe next steps.
 
-The repeat assessment is AI fresh-reader evidence. It is not a human session, formal independent review, Project Director decision, or gate acceptance. A CLEAR result may close the reader-comprehension criterion only after the Builder records the exact evidence and reconciles it with Grok's independent review.
+The repeat assessment is AI fresh-reader evidence. It is not a human session, formal independent review, Project Director decision, or gate acceptance. A CLEAR result may close the reader-comprehension criterion only after the Builder records the exact evidence and reconciles all material fresh-reader findings with the final documentation package. It does not replace the separate reviewer pass requested by the Project Director.
 
 ## 6. What happens next
 
