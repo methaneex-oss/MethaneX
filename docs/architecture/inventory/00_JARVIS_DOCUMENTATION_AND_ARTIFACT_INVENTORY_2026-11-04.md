@@ -2943,3 +2943,79 @@ After this inventory commit, perform post-write verification and record the evid
 The 38 changed paths are documentation, README, reports, inventory, evidence and template paths. No runtime source, test source, dependency, build configuration, runtime workflow or runtime-state path is included. This is not evidence of runtime behavior or implementation readiness.
 
 This is the final planned PR #192 file write for this Builder closeout pass. After the commit, perform exact post-write verification and record it in the PR conversation only; do not make another PR #192 file write in this pass. If the branch moves during verification, refresh the snapshot and do not report stale evidence.
+
+
+## 70. Final Builder closeout inventory and new final-write boundary — 2026-11-11
+
+### 70.1 Exact parent snapshot
+
+- Repository: methaneex-oss/MethaneX.
+- PR: #192; branch docs/whole-brain-planning-scope-correction-20261107.
+- Exact parent immediately before this final inventory write: 183a723dc192569123cb14ccb4577e36f6e61458.
+- Parent recursive tree SHA: 218cece1c535aed61b9dd83519864121d86a675e.
+- Recursive tree entries: 268; truncated=false.
+- PR changed paths: 38; every changed path is present in the parent tree.
+- This table records every changed-path blob identity at the exact parent. The inventory row is its pre-update blob and is expected to change in this final inventory commit.
+
+### 70.2 Complete 38-path parent-blob manifest
+
+| Path | Parent blob SHA |
+|---|---|
+| README.md | 780651b804b491781fdcac8e248eaca9243797a4 |
+| docs/ARCHITECTURE.md | 3c6692b52059e43947d1fd2e7e84debb2362023f |
+| docs/JARVIS_BRAIN_MASTER_BLUEPRINT.md | 0e49d313bf3929aa30140cb7149ebab038918378 |
+| docs/JARVIS_PHASE_2_COMPLETION.md | e0e57a44216fc36c52d469a79abfc8df058515a3 |
+| docs/README.md | 7076ca40e48c8cfe2ab6066a8461fc890124e16b |
+| docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md | 8fbe03c8eb4f299ba9a75ddb084b07647c3903f9 |
+| docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md | 51ecafb7f019f48a2e40567a3929c868cd1f7a4e |
+| docs/architecture/inventory/HISTORICAL_DOCUMENTATION_PRESERVATION_REGISTER_2026-11-08.md | 95cd280295c86c6d33278aa667de1d72048026ea |
+| docs/architecture/reports/BUILDER_FINAL_DOCUMENTATION_FOUNDATION_RECONCILIATION_2026-11-08.md | c962de2465f1728752e46456f69e722caf277de7 |
+| docs/architecture/reports/BUILDER_TO_INDEPENDENT_REVIEWER_REQUEST_2026-11-08.md | c458f689ccbcd1e1d54242e38648ca151d70c250 |
+| docs/architecture/reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md | 8ac2a6872588cee8c2921ecc0dbbc38ad0c32516 |
+| docs/architecture/reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md | 6680803fc9a3de843d64bca21252841ce3260c1e |
+| docs/architecture/reports/GROK_INDEPENDENT_REVIEW_REQUEST_2026-11-10.md | c99b49c4870422cfcfe306de74c56fe5d19a92bb |
+| docs/architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_2026-11-08.md | c43d82ba18ff89de226d2268cf72e724b222a5bd |
+| docs/architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_GROK_2026-11-09.md | 1938203fe3a0e3cb4e7a7df7d5fa8e3298fa8635 |
+| docs/architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_GROK_2026-11-10.md | 4ad40a2cf9ca57df75f5b5d0134c99b164b8bf75 |
+| docs/architecture/reports/INDEPENDENT_REVIEWER_HANDOFF_2026-11-08.md | 45f73dbde0d169785bb563e48b0e8dfe18decc42 |
+| docs/architecture/reports/INDEPENDENT_RE_REVIEW_BUILDER_FOLLOW_UP_2026-11-08.md | 2d63ed93344a7081dcedb44247536c416322c793 |
+| docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md | 4143159f3c3cb1f99fd7edb9cdbe2ad5c3592d3d |
+| docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_EXECUTION_AND_READINESS_2026-11-10.md | 04d8f92dbef6ee70eb990e62c83d0c3e2eb4fc84 |
+| docs/architecture/reports/INITIAL_PLANNING_GATE_CLOSEOUT_STATUS_2026-11-11.md | 9509e89350ab89517b572eaf71efee54eed7de14 |
+| docs/architecture/reports/NEMOTRON_BLIND_FRESH_READER_ASSESSMENT_2026-11-10.md | 34d960245c8d44fc5dca3f5c168718c0bff0ae7d |
+| docs/architecture/reports/NEMOTRON_FRESH_READER_RERUN_RUNBOOK_2026-11-10.md | 7599c8ec78b15cd1e1804131842c33734e5b0112 |
+| docs/architecture/reports/PHASE_1_REVIEW_CORRECTIONS_AND_SCOPE_RECONCILIATION_2026-11-05.md | a459cdfd02d850d455ca526e6823e68525776ba3 |
+| docs/architecture/reports/PHASE_1_WHOLE_REPOSITORY_INVESTIGATION_AND_REUSE_AUDIT_2026-11-04.md | 7dc1a246486abfb13169c89365289fcc8134a6ea |
+| docs/architecture/reports/PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md | 9dd776920d0a479a9d7275acc821e12c266623d9 |
+| docs/architecture/reports/PROJECT_DIRECTOR_DECISION_EVIDENCE_EXTRACTS_2026-11-10.md | 1c0b6a580b0420fd6d68140a15383364b468acd4 |
+| docs/architecture/reports/PROJECT_DIRECTOR_DECISION_PROVENANCE_AND_GATE_RECONCILIATION_2026-11-09.md | 3542b3af3d5c25098b102a926e6078d30631c684 |
+| docs/architecture/reports/PR_174_FOLLOW_ON_REVIEW_PROVENANCE_RECOVERY_2026-11-06.md | 86111e43b6a1dd36c6c49458d6da3306acdadfa3 |
+| docs/architecture/reports/WHOLE_BRAIN_DOCUMENTATION_PHASE_BUILDER_SELF_REVIEW_2026-11-07.md | ac4965d9e4d93b746bb04061b897adcd98ee6bae |
+| docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md | afc0155b79beda7a04508cab825a5a5f9d0a1173 |
+| docs/architecture/reports/fresh-reader-evidence/NEMOTRON_ASSESSMENT_PROMPT_2026-11-10.md | 03475a43c1440ca9affd38dfe046b8ef1e9b91d0 |
+| docs/architecture/reports/fresh-reader-evidence/NEMOTRON_PACKET_MANIFEST_2026-11-10.json | 5910299b3ea4f686fe30220867b1273bf52e8dba |
+| docs/architecture/reports/fresh-reader-evidence/NEMOTRON_RUN_METADATA_2026-11-10.json | 7d1d287ee571c673b23184c2d523a35b90845fa3 |
+| docs/templates/INDEPENDENT_REVIEW_REPORT_TEMPLATE.md | f3176cf1a1f45735a3ad62fa4a865806edc24e08 |
+| docs/templates/PLANNING_DOCUMENT_TEMPLATE.md | b9f71a923b0d717a3b29655574c89c10e0801115 |
+| docs/templates/README.md | 7209fd0fcda239349af602490d26b8c708b743da |
+| docs/templates/TEST_EVIDENCE_REPORT_TEMPLATE.md | 9c6bbae48a22beb7c4e95858282d7d8d7b2159c2 |
+
+### 70.3 Final Builder and authority status
+
+- **DF-06: NOT MET.** Semantic relevance, relative-path integrity, external GitHub destination revalidation and the enumerated historical/cross-branch comparisons are recorded in preservation report §20. The remaining technical check is rendered GitHub line/fragment-anchor behavior, which the available connector/browser surface could not verify. The historical ChatGPT shared-conversation pointer remains explicitly access-limited and is not a clickable navigation dependency.
+- **DF-08: RESOLVED** only against its exact bounded preservation criterion.
+- **DF-09: OPEN / NOT MET** pending a CLEAR Blind Fresh Tester result against this final exact PR #192 HEAD.
+- **DF-10: BUILDER COMPLETE** after this final inventory write and the exact post-write verification recorded in the PR conversation.
+- **DF-11: WAIVED** by Project Director decision.
+- **DF-12: NOT ACCEPTED** pending the Project Director's exact-revision decision.
+- **PR #195:** exact HEAD 9d0255041c1d3c41c1b6a9f9e373f2bf673184cd; statically inspected workflow proposal, open/draft/unmerged; no workflow execution or YAML runtime validation claimed.
+- **PR #196:** exact HEAD 9a744927c5ebcfea2c720ded42ec7425edc499c0; additive Builder Rules 11.9–11.16, open/non-draft/unmerged; not integrated into the base governance branch.
+- PR #194 remains the stale alternative. PR #173/#174 review and decision obligations, PR #191 disposition and PR #192/#193 integration order remain reserved.
+
+### 70.4 Scope and final-write boundary
+
+This PR #192 closeout changes documentation, README, inventory, reports, evidence and templates only. It does not change runtime source, tests, dependencies, build configuration, runtime workflows or runtime state. No runtime build/test/benchmark, workflow dispatch, merge, rebase, retarget, cherry-pick or history rewrite was performed.
+
+The PR API base SHA remains 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c while the live PR #179/base-branch tip is d30237b81c3695f2a7cb980144b221bbd42ce548. This discrepancy is preserved; no base operation is authorized.
+
+**Final-write boundary:** this §70 inventory is the final planned PR #192 file write. After its commit, perform exact post-write verification of live PR metadata, all 38 changed paths, the recursive tree, the inventory blob and the 37 non-inventory blobs. Record that verification in the PR conversation only. Make no further PR #192 file edits.
