@@ -2475,3 +2475,44 @@ Compared with §58 parent 4fe2c35be650848defa06be3458edf4437635e0c, the branch i
 - Stage A: HELD. Runtime implementation: NOT AUTHORIZED.
 
 **Self-reference rule:** this section records the inventory blob at parent HEAD 9fee3da6010dfc91ca37133ce663315813946848. Its resulting blob must change after commit. Re-fetch the live PR #192 HEAD and inventory blob after this commit. That post-write HEAD is the only valid target for the next DF-09 assessment.
+
+
+
+## 62. Final PR #173 source-audit and PR #192 pre-assessment manifest — 2026-11-11
+
+**Exact PR #192 parent HEAD:** 7967f8e2cf15313d93c29fc2ecf921f7caa7b391. **State:** open, non-draft, unmerged. **Base:** PR #179-derived documentation branch. **Changed paths:** 37; all README/documentation files; no runtime source, tests, build configuration, dependencies or workflow files changed.
+
+Compared with §58 parent 4fe2c35be650848defa06be3458edf4437635e0c, the branch has seven changed paths; the other 30 paths are unchanged and retain the exact blob identities in §58.
+
+| Path | Parent blob SHA | Purpose/status |
+|---|---|---|
+| docs/README.md | b8ed78360051e2f8dfe75872ab1f0a2c40968420 | Portal links current proposed architecture and bounded source audit; historical acceptance separately identified |
+| docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md | 8f6392f1b760747924311eb5aa8ad499f5e74ffa | Current gate status, exact PR #173 revision and DF-06/DF-08 evidence |
+| docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md | 848a084ce989e632111d0fc96929782727127dd3 | This inventory at parent; post-write blob changes on commit |
+| docs/architecture/reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md | f6923f154e59626a969b425c030ba4f4a768ad19 | Latest authority register and bounded source-audit findings |
+| docs/architecture/reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md | 6d1b6a4c3ab25ba966982b1ab606eb362ba01d62 | DF-06 link evidence and DF-08 criterion-to-evidence reconciliation |
+| docs/architecture/reports/NEMOTRON_FRESH_READER_RERUN_RUNBOOK_2026-11-10.md | 7599c8ec78b15cd1e1804131842c33734e5b0112 | DF-09 exact-current-head runbook; DF-11 waiver reflected |
+| docs/architecture/reports/WHOLE_BRAIN_DOCUMENTATION_PHASE_BUILDER_SELF_REVIEW_2026-11-07.md | 826b89a5029de887ced4cdfa54da6360cb072bde | Current Builder self-review, exact parent and source-audit revision |
+
+### 62.1 Current PR #173 exact artifact manifest
+
+| Artifact | Exact PR #173 HEAD / blob | Status |
+|---|---|---|
+| Branch HEAD | 756724b95e093ac48fcd95c5587117c0a4d8f3c0 | Open, draft, unmerged; corrected proposal, not accepted |
+| docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md | d5a7676e81d2c95b5ba18f45a237d3e0a7635696 | §§31–34; social/agent ownership, inherited rule dispositions, accountability and source-audit results |
+| docs/architecture/03_BRAIN_FOUNDATION_ARCHITECTURE_COMPLETION_AND_DECISION_MATRIX_2026-11-11.md | ca647a5a5c2c415bae7b8f4582ecbbc451906680 | CF-01–CF-27 traceability, review-finding dispositions, BFA-C01–C14 reserved register and source audit manifest |
+| docs/architecture/reports/INHERITED_MECHANISM_SOURCE_COMPATIBILITY_AUDIT_2026-11-11.md | 037dc71df9e508c0cc08e96a42b41aa7ba5bc041 | Bounded source audit of PR #97 donor HEAD c1da222e6c94aeb3f2ad000392c21fe4fc81ab25 |
+
+### 62.2 Gate and assessment status
+
+- DF-01–DF-08: Builder evidence recorded as resolved within the stated criteria and bounded package scope.
+- DF-09: OPEN / NOT MET. Latest assessment PARTIALLY CLEAR (31/32), run 42970930733, exact packet revision 887b349f9826de7726707209f640ae0cafd78ace. It does not assess this parent. A CLEAR result on the final post-write PR #192 HEAD remains required.
+- DF-10: self-review blob 826b89a5029de887ced4cdfa54da6360cb072bde covers the exact parent above; this inventory's post-write blob and resulting PR #192 HEAD must be re-fetched.
+- DF-11: WAIVED by Project Director.
+- DF-12: NOT ACCEPTED; exact-revision Project Director decision required.
+- PR #173: bounded source audit completed; compatibility not accepted as-is; blind independent re-review and BFA-C01–BFA-C14 Project Director disposition remain pending.
+- PR #191: read-only content/dependency review complete; disposition pending Project Director.
+- PR #192/#193: open, unmerged, separate lineages; no integration operation.
+- Stage A: HELD. Runtime implementation: NOT AUTHORIZED.
+
+**Self-reference rule:** this section records the inventory blob at parent HEAD 7967f8e2cf15313d93c29fc2ecf921f7caa7b391. Its resulting blob changes on commit. Re-fetch the live PR #192 HEAD and inventory blob after this write; the resulting exact HEAD is the only valid DF-09 assessment target.
