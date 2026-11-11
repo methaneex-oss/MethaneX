@@ -6,7 +6,7 @@ import type {
 } from "./agent_bridge";
 
 /**
- * Supervised human/ChatGPT-facing session over the existing agent transport.
+ * Supervised human/assistant-facing session over the existing agent transport.
  * Communication never grants execution authority; authorization remains inside
  * the engineering/runtime boundary.
  */
