@@ -2516,3 +2516,25 @@ Compared with §58 parent 4fe2c35be650848defa06be3458edf4437635e0c, the branch h
 - Stage A: HELD. Runtime implementation: NOT AUTHORIZED.
 
 **Self-reference rule:** this section records the inventory blob at parent HEAD 7967f8e2cf15313d93c29fc2ecf921f7caa7b391. Its resulting blob changes on commit. Re-fetch the live PR #192 HEAD and inventory blob after this write; the resulting exact HEAD is the only valid DF-09 assessment target.
+
+
+## 63. Final pre-index-refresh branch reconciliation — 2026-11-11
+
+At the start of this final reconciliation, PR #192 HEAD was b867982a6db5028fd4d879532ceee3051af59eb0 (open, non-draft, unmerged; base docs/jarvis-phase-2-whole-brain-integration-map-20261105). The current inventory blob at that parent was 15e1e2ec16e7559f878ddc5fe4592afd7c6fb726.
+
+The prior §62 manifest correctly records its own parent snapshot, not the current final state. This section supersedes its pre-assessment parent references. PR #192 still has 37 documentation-only changed paths. The latest seven-path delta remains: portal README, planning index, inventory, authority register, preservation report, fresh-reader runbook and Builder self-review. The remaining 30 files are unchanged from the §58 baseline manifest.
+
+Current cross-references at the start of this reconciliation:
+- PR #173 exact corrected proposal HEAD: 756724b95e093ac48fcd95c5587117c0a4d8f3c0 (open/draft/unmerged).
+- PR #173 architecture blob: d5a7676e81d2c95b5ba18f45a237d3e0a7635696.
+- PR #173 decision matrix blob: ca647a5a5c2c415bae7b8f4582ecbbc451906680.
+- PR #173 bounded source audit blob: 037dc71df9e508c0cc08e96a42b41aa7ba5bc041.
+- PR #97 donor source audited: c1da222e6c94aeb3f2ad000392c21fe4fc81ab25.
+- PR #192 portal blob: b8ed78360051e2f8dfe75872ab1f0a2c40968420.
+- PR #192 planning index blob before final index refresh: 8f6392f1b760747924311eb5aa8ad499f5e74ffa.
+- PR #192 authority register blob: f6923f154e59626a969b425c030ba4f4a768ad19.
+- PR #192 Builder self-review blob: 826b89a5029de887ced4cdfa54da6360cb072bde.
+
+Gate status remains DF-01–DF-08 resolved within their stated criteria and bounded scope; DF-09 OPEN/NOT MET; DF-10 refreshed through this reconciliation; DF-11 WAIVED; DF-12 NOT ACCEPTED. PR #191 disposition and BFA-C01–BFA-C14 remain reserved for Project Director decisions. PR #173 blind independent re-review remains outstanding. PR #192/#193 remain unmerged. Stage A remains HELD and runtime implementation remains NOT AUTHORIZED.
+
+This section records the parent snapshot before the final index refresh. The final exact PR #192 HEAD is the commit produced by the subsequent index update and must be re-fetched for DF-09.
