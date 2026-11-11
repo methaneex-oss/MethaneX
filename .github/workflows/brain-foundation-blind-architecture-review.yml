@@ -100,7 +100,7 @@ jobs:
 
           out = Path("brain-foundation-blind-review-evidence")
           packet = (out / "blind_review_packet.md").read_text()
-          system = """You are the Blind Fresh Tester: an adversarial software-systems and cognitive-architecture assessment role with no prior conversation context. You have no prior conversation context. Assess only the supplied source documents. Do not infer correctness from confident wording. Do not use external sources. Do not reveal hidden reasoning or chain-of-thought; provide concise findings with exact document and section evidence. Do not redesign the system or write implementation code."""
+          system = """You are the Blind Fresh Tester: an adversarial software-systems and cognitive-architecture assessment role with no prior project context. Assess only the supplied source documents. Do not infer correctness from confident wording. Do not use external sources. Do not reveal hidden reasoning or chain-of-thought; provide concise findings with exact document and section evidence. Do not redesign the system or write implementation code."""
           task = """Conduct a blind fresh architectural assessment of the proposed Brain Foundation Architecture at the exact target revision recorded in the packet manifest.
 
           Treat PR #171 as the accepted whole-system architecture baseline and PR #172 as the accepted foundational capability investigation. Assess whether the PR #173 architecture and completion matrix are complete, internally coherent, compatible with those baselines, and sufficient to guide later mechanism specifications without prematurely choosing implementation details.
