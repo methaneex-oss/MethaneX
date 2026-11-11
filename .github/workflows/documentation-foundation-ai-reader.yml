@@ -1,4 +1,4 @@
-name: Documentation Foundation — Blind AI Fresh-Reader Assessment
+name: Documentation Foundation — Blind Fresh-Reader Assessment
 
 on:
   workflow_dispatch:
