@@ -3,7 +3,7 @@
 **Document status:** Proposed implementation plan; submitted for independent review and Project Director decision  
 **Planning run:** Run 01 — 2026-11-03  
 **Planning authority:** Project Director authorization received 2026-11-03  
-**Historical accepted specification baseline:** PR #174 HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`; corrected proposal HEAD `4b134048680fb5902f8c2a5a067b0c369169dbfe` contains Builder responses to F-02/F-03 but awaits independent re-review and Project Director disposition.  
+**Governing specification:** PR #174, accepted HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`  
 **Parent architecture:** PR #173, accepted HEAD `97191111bc2573c14d391c0af9628db7b11f194b`  
 **Engineering evidence baseline used by the existing audit:** `main` at `1273ddbcd0087d189e01388ded2d362fb1e058d2`  
 **Scope:** Documentation and planning only  
@@ -34,7 +34,7 @@ A later Project Director decision must explicitly authorize implementation. Runt
 1. Accepted whole-system boundary and system ownership baseline in PR #171.
 2. Accepted foundational capability investigation in PR #172.
 3. Accepted Brain Foundation Architecture in PR #173.
-4. Historical accepted PR #174 specification baseline at `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`; corrected proposal `4b134048680fb5902f8c2a5a067b0c369169dbfe` adds F-02/F-03 responses and scenarios 35–46, but is not independently cleared or accepted.
+4. Accepted 12-mechanism specification in PR #174, including 34 acceptance scenarios and BM-12 reasoning ownership.
 5. Existing source audit at main commit `1273ddbcd0087d189e01388ded2d362fb1e058d2`.
 
 The source audit is static inspection, not proof of runtime behavior. Its observations must be revalidated against the exact implementation target before coding begins.
