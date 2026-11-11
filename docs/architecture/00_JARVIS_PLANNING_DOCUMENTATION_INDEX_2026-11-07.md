@@ -569,3 +569,41 @@ The Nemotron packet is a deliberately bounded comprehension test, not a full rep
 The following linked materials are **not included in the blind packet** and must not be described as read or independently verified by the model: the complete source audit, all reusable templates and template guide, the full PR #193 handoff/implementation-plan branch, the complete inventory, historical PR review discussions/inline annotations, and live GitHub PR/issue metadata beyond what is transcribed into the decision-evidence extract. Their links are navigation to external evidence. The reader may correctly report that it cannot inspect them from the packet alone; this limitation is not a reason to infer their contents or authority.
 
 For the documentation gate, a newcomer must be able to distinguish (a) what the packet directly establishes, (b) what a linked external artifact may establish only after opening it, and (c) what remains unresolved. The index and authority register remain the source of current status; the packet itself is not the authority source.
+
+
+---
+
+## Controlling update — initial-stage execution recheck — 2026-11-11
+
+This update supersedes conflicting older snapshots above only for the facts recorded here. Historical entries remain preserved.
+
+### Project Director decisions (controlling)
+
+- **DF-09:** CLEAR is required; 31/32 PARTIALLY CLEAR is insufficient.
+- **DF-11:** the independent-review requirement is explicitly waived by the Project Director. Historical Grok review provenance and stale reviewed revision remain disclosed; no independent approval is inferred.
+- **PR #191:** further read-only content/dependency review before any disposition.
+- **PR #192/#193:** keep all PRs unmerged until outstanding documentation decisions are resolved.
+- **DF-12:** foundation remains unaccepted until every outstanding issue is cleared.
+- **DF-06/DF-08:** full resolution is required before foundation acceptance.
+
+### New primary-provenance evidence relevant to DF-09
+
+The [Project Director Decision Evidence Extracts](reports/PROJECT_DIRECTOR_DECISION_EVIDENCE_EXTRACTS_2026-11-10.md) now contains a 2026-11-11 recovery of the contemporaneous 2026-11-03 PR #173 decision event from the originating ChatGPT conversation: the original question, the Project Director's “Yes I do / Proceed” response, timestamp, and immediate confirmation are recorded. This materially improves the evidence packet beyond the later GitHub transcription. The recovered conversation record has no separately available immutable message URL/export ID/message ID, so that access limitation remains disclosed. Do not claim the later GitHub comment itself is the primary artifact.
+
+The previous 31/32 result assessed revision `887b349f9826de7726707209f640ae0cafd78ace` and its packet. It remains a valid historical result for that exact packet; it is not retroactively converted to CLEAR. A new blind assessment against the exact current documentation revision, with the recovered primary-source extract included, is still required. The workflow exists on `main`, but the available GitHub connection in this execution exposes no workflow-dispatch action; no run is claimed or fabricated.
+
+### Current repository snapshot
+
+- PR #192: open, non-draft, unmerged; branch `docs/whole-brain-planning-scope-correction-20261107`; HEAD `ae4db888e83a05b149758c7de00395df8c9907c7`; base `docs/jarvis-phase-2-whole-brain-integration-map-20261105`; 37 changed paths.
+- PR #191: open, draft, unmerged; head `609d38ede50bbdd98a93dfed112781eacabee9fd`; base `f6267456560a08054d69f7960d2951452b14017c`; one changed document; its review/disposition remains pending.
+- PR #193: open, draft, unmerged; head `c67318387d9c2129484203e4f1a1002c4af96ef0`; base `874c732973b6ab303d65a503f5a215b0af8e1153`; two changed documents; separate lineage.
+- Native Brain Build run [#43019119856](https://github.com/methaneex-oss/MethaneX/actions/runs/43019119856) completed successfully on PR #192 HEAD `ae4db888e83a05b149758c7de00395df8c9907c7`; its `cpp` job's Configure and Build steps both succeeded. This is build evidence only, not documentation-gate evidence.
+
+### DF-06 / DF-08 exact disposition
+
+- **DF-06 remains NOT MET.** Existing bounded checks establish path presence, selected pinned-source blob identities, selected anchor ranges and bounded external-reference metadata checks. They do not establish complete semantic relevance, all external destination reachability, renderer-specific anchor behavior, and all applicable historical/cross-branch link behavior under the Project Director's full-resolution requirement.
+- **DF-08 has a bounded closure case, not yet a blanket assertion.** Preservation report §14 defines a non-destructive retain-in-place policy, records the 245-branch/203-tip and 184-PR census, maps 108 documentation paths across 28 PRs, documents selected cross-revision comparisons, and explicitly qualifies its scope. It labels DF-08 resolved within that defined discovery scope. Because the Project Director requires full resolution, the final closure packet must demonstrate that the governing DF-08 criterion is fully satisfied by this bounded scope or identify and close any remaining discovery gap; do not expand the claim beyond the recorded census.
+
+### Gate and authorization status
+
+Documentation Foundation **NOT ACCEPTED / NOT CLEARED**. DF-09 OPEN pending a new CLEAR assessment; DF-06 NOT MET; DF-08 closure requires explicit criterion-to-evidence reconciliation; DF-11 WAIVED; DF-12 NOT ACCEPTED. Stage A remains HELD pending foundation closure. Runtime implementation, PR integration and branch-history operations remain unauthorized.
