@@ -875,3 +875,69 @@ No implementation, runtime modification, runtime test execution, technology sele
 ### 27.4 Latest exact PR #173 revision — 2026-11-11
 
 The latest integrated PR #173 head is `4b960062b7b3d41fa18c60909c628e8264459927`. The architecture addendum now extends through §§16–30, including language/symbolic cognition, social/agent modelling, existing-mechanism compatibility assessment and Project Director reserved-decision authority. The completion matrix was synchronized to this exact revision. Independent review and final Project Director acceptance remain pending.
+
+
+## 29. Final Builder revalidation of DF-06/DF-08 and current architecture correction — 2026-11-11
+
+This addendum records new evidence after §28. It supersedes older live-head snapshots only where exact newer revisions are stated. Historical entries remain intact.
+
+### 29.1 Current exact PR state at start of this addendum
+
+| PR | State | Exact HEAD | Base / dependency |
+|---|---|---|---|
+| #173 | Open, draft, unmerged | `627c809bea7a7c18a9d5f350b632c67c8e5a34ac` | `main` |
+| #191 | Open, draft, unmerged | `609d38ede50bbdd98a93dfed112781eacabee9fd` | PR #179 lineage |
+| #192 | Open, non-draft, unmerged | `e56b7d9ee4a7ac7a53a37b920b8f5bcb1496b64f` | PR #179 lineage |
+| #193 | Open, draft, unmerged | `c67318387d9c2129484203e4f1a1002c4af96ef0` | PR #175 lineage |
+
+No PR was merged, closed, retargeted, rebased, cherry-picked or replayed.
+
+### 29.2 PR #173 architecture correction pass
+
+The exact PR #173 branch now contains these corrected artifacts:
+
+- `docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md` — blob `d51912a8c71688f85d2864ff69607b3558bd9d1f`, with new §§31–33.
+- `docs/architecture/03_BRAIN_FOUNDATION_ARCHITECTURE_COMPLETION_AND_DECISION_MATRIX_2026-11-11.md` — blob `211b6346d4a970ccab796bf0402bd9935f555e66`, with a corrected manifest, all CF-01–CF-27 traceability, accountable deferred-specification register and explicit reserved-decision register.
+- Latest PR #173 HEAD at this record: `627c809bea7a7c18a9d5f350b632c67c8e5a34ac`.
+
+The five Blind Fresh Tester findings have Builder-side architectural responses. Source-level compatibility of inherited reliability values, confidence thresholds, first-eligible-goal selection and belief-overwrite paths remains **UNASSESSED**; §32 explicitly prohibits silent adoption and defines the required audit. The 14 BFA-C decisions remain reserved for Project Director disposition. No independent re-review or final architecture acceptance is claimed.
+
+### 29.3 DF-06 — closure against the stated criterion
+
+The governing DF-06 criterion requires durable cross-document links: exact commit-pinned paths for document/source references, with PR links retained for discussion context.
+
+At PR #192 parent HEAD `9a669d2545862d76b3935dfc9555cac278765169`, the three files changed since the prior exact-parent validation were fetched and checked: index blob `44ce84e18a9252f2fee73ea3c665303b53cf8765`, inventory blob `c294e770f7cf0e3d289ee70a21a58787a4010691`, and this register blob `27bafb7d7d6aec1a7386628ec179b7ffb5b5f885`. Their 45 repository-relative Markdown link occurrences resolve to 24 unique targets; every target was fetched. The other 34 files in the 37-file package were unchanged from the earlier audited parent, where all 37 files and their repository-relative targets had been fetched.
+
+All 19 distinct linked PR destinations were fetched. All 18 distinct linked Actions run destinations were fetched and returned completed jobs. The three linked DLT-002 artifacts were present and unexpired. The current index's 13 pinned file destinations and the Phase 1 report's 18 pinned file destinations resolved. The Phase 2 source map remains at its previously validated exact blob; its 89 immutable source references resolve to 45 unique source files and its 76 line ranges remain within the exact source-file line counts. No reference-style link definitions, raw HTML hrefs or autolink forms were present in the three revalidated files. The historical ChatGPT shared-conversation pointer remains explicitly access-limited, non-clickable text rather than a claimed reachable dependency.
+
+**DF-06 Builder disposition: RESOLVED within the stated Initial Documentation Foundation package and enumerated immutable-source scope.** The scope and renderer-specific limitation are explicitly documented in preservation report §15. This does not claim a universal audit of every historical URL anywhere in the repository.
+
+### 29.4 DF-08 — criterion-to-evidence closure
+
+The exact DF-08 exit criterion is: “No historical evidence is deleted or silently superseded; open preservation follow-up is visible.” The gate's §7 explicitly defers full historical branch-to-PR/archive curation beyond the bounded foundational-document map.
+
+The preservation report §16 now maps each clause to evidence: retain-in-place/no destructive operations; visible-only supersession labels; 245 branch refs / 203 distinct tips and 184 PRs; 28 documentation PRs / 108 changed paths; ancestry mapping for two unmatched refs; identification of 27 aliases at one tip; selected #96/#97/#148/#156/#170 comparisons; preservation of distinct Developmental Brain Plan revisions; and visible unresolved/proposed statuses for unaccepted items. Broader semantic review outside the bounded map remains explicitly deferred and is not misrepresented as complete.
+
+**DF-08 Builder disposition: RESOLVED against the exact DF-08 exit criterion and bounded foundational-document scope.** No historical material was deleted, moved, renamed, overwritten or silently replaced.
+
+### 29.5 PR #191 read-only dependency review — final comparison
+
+PR #191's exact head `609d38ede50bbdd98a93dfed112781eacabee9fd` compared with the live PR #179 head `d30237b81c3695f2a7cb980144b221bbd42ce548` is diverged: PR #191 is 1 commit ahead and 23 behind, with merge base `f6267456560a08054d69f7960d2951452b14017c`. Its unique commit adds only the 219-line human/MCU reference comparison.
+
+The read-only content review finds the document useful as a bounded BM-01–BM-12 reference, not whole-Brain completeness evidence. The nine human-cognition citations were checked against publisher/PubMed/official sources. The Marvel AI guide is a general Marvel fictional-AI reference, not a direct source for the MCU film portrayal; that qualification must remain. No content basis to discard the report was found.
+
+**Builder recommendation, not disposition:** retain PR #191 as a separate reference artifact at its immutable head; do not retarget alone or rewrite its history. The Project Director's disposition remains pending.
+
+### 29.6 Remaining gate and authority state
+
+- DF-01 through DF-08: Builder evidence is now recorded as resolved within the stated initial-foundation criteria and bounded package scope. DF-09 remains separate.
+- DF-09: OPEN / NOT MET. The last assessment remains PARTIALLY CLEAR (31/32) on exact revision `887b349f9826de7726707209f640ae0cafd78ace`; no new CLEAR result exists for current PR #192. The recovered primary-source extract was already in that packet; its missing immutable conversation export/message identifier remains the sole reader-verifiability issue. The current GitHub connection exposes no workflow-dispatch action, so no run is claimed. The runbook requires one new exact-current-HEAD assessment only after all intended PR #192 writes are complete.
+- DF-10: Builder self-review must be refreshed after the final PR #192 writes with exact file/blob manifest and checks.
+- DF-11: WAIVED by the Project Director; no independent documentation review is claimed or required under this criterion.
+- DF-12: NOT ACCEPTED. Exact-revision Project Director decision remains required.
+- PR #191: content/dependency review complete; disposition pending Project Director.
+- PR #192/#193: remain unmerged and separate; no integration order is enacted.
+- PR #173: corrections committed; blind independent re-review and Project Director disposition of BFA-C01–BFA-C14 remain outstanding.
+- Stage A: HELD. Runtime implementation: NOT AUTHORIZED.
+
+This addendum records Builder evidence and recommendations only. It does not create a CLEAR reader result, substitute for a reserved Project Director decision, merge PRs, start Stage A or authorize implementation.
