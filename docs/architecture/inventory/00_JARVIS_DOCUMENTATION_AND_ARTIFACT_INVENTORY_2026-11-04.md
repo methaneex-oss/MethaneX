@@ -2120,3 +2120,62 @@ The PR-files endpoint and recursive tree were reconciled at the exact parent HEA
 - Added the second blind assessment evidence: workflow run [#42879721340](https://github.com/methaneex-oss/MethaneX/actions/runs/42879721340), exact packet revision `4a670636baf787ad4b1774bd306544c135868a04`, artifact ID `13793841106`, result PARTIALLY CLEAR (22/32). Raw prompt, packet, manifest, assessment and metadata are retained in the GitHub Actions artifact; the artifact is not a new source architecture document.
 - The blind packet is being strengthened to include the decision evidence and both accepted/current PR #174 specification revisions. The current packet remains bounded and does not include every historical report, source audit, review annotation or external discussion.
 - PR #192 remains documentation-only; no runtime source, tests, build configuration, dependencies or runtime state are authorized or changed by this addendum.
+
+
+---
+
+## 56. Final exact 37-path PR #192 parent manifest and reader-evidence closure — 2026-11-11
+
+**Parent PR #192 HEAD:** `00bc2b2094f7befa40e43ea6909ea181909ede1c`  
+**Base:** `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`  
+**PR state at snapshot:** open, non-draft, unmerged.  
+**Changed paths:** 37, reconciled from the GitHub PR-files endpoint and fetched individually at the exact parent HEAD.  
+**Scope:** all 37 changed paths are `README.md` or under `docs/`; no runtime source, test, build, dependency, or workflow path is part of this PR diff.
+
+| # | Path | Parent blob SHA |
+|---:|---|---|
+| 1 | `README.md` | `780651b804b491781fdcac8e248eaca9243797a4` |
+| 2 | `docs/ARCHITECTURE.md` | `3c6692b52059e43947d1fd2e7e84debb2362023f` |
+| 3 | `docs/JARVIS_BRAIN_MASTER_BLUEPRINT.md` | `0e49d313bf3929aa30140cb7149ebab038918378` |
+| 4 | `docs/JARVIS_PHASE_2_COMPLETION.md` | `e0e57a44216fc36c52d469a79abfc8df058515a3` |
+| 5 | `docs/README.md` | `1f034841abf236e6bc17a21e0f79be0e4a7861ea` |
+| 6 | `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md` | `2ffbfd87f2bd13217bc2368c6b41cc06ab8d0196` |
+| 7 | `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md` | `10788765e197bd376400f091ea071f56a45cd267` |
+| 8 | `docs/architecture/inventory/HISTORICAL_DOCUMENTATION_PRESERVATION_REGISTER_2026-11-08.md` | `95cd280295c86c6d33278aa667de1d72048026ea` |
+| 9 | `docs/architecture/reports/BUILDER_FINAL_DOCUMENTATION_FOUNDATION_RECONCILIATION_2026-11-08.md` | `c962de2465f1728752e46456f69e722caf277de7` |
+| 10 | `docs/architecture/reports/BUILDER_TO_INDEPENDENT_REVIEWER_REQUEST_2026-11-08.md` | `c458f689ccbcd1e1d54242e38648ca151d70c250` |
+| 11 | `docs/architecture/reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md` | `b59ae82464de9b0dc8f5f35c21d736f840f1a749` |
+| 12 | `docs/architecture/reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md` | `f0fb353b5013eafd88188d472eb52a2fe32e7e02` |
+| 13 | `docs/architecture/reports/GROK_INDEPENDENT_REVIEW_REQUEST_2026-11-10.md` | `c99b49c4870422cfcfe306de74c56fe5d19a92bb` |
+| 14 | `docs/architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_2026-11-08.md` | `c43d82ba18ff89de226d2268cf72e724b222a5bd` |
+| 15 | `docs/architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_GROK_2026-11-09.md` | `1938203fe3a0e3cb4e7a7df7d5fa8e3298fa8635` |
+| 16 | `docs/architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_GROK_2026-11-10.md` | `4ad40a2cf9ca57df75f5b5d0134c99b164b8bf75` |
+| 17 | `docs/architecture/reports/INDEPENDENT_REVIEWER_HANDOFF_2026-11-08.md` | `45f73dbde0d169785bb563e48b0e8dfe18decc42` |
+| 18 | `docs/architecture/reports/INDEPENDENT_RE_REVIEW_BUILDER_FOLLOW_UP_2026-11-08.md` | `2d63ed93344a7081dcedb44247536c416322c793` |
+| 19 | `docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md` | `4143159f3c3cb1f99fd7edb9cdbe2ad5c3592d3d` |
+| 20 | `docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_EXECUTION_AND_READINESS_2026-11-10.md` | `04d8f92dbef6ee70eb990e62c83d0c3e2eb4fc84` |
+| 21 | `docs/architecture/reports/NEMOTRON_BLIND_FRESH_READER_ASSESSMENT_2026-11-10.md` | `34d960245c8d44fc5dca3f5c168718c0bff0ae7d` |
+| 22 | `docs/architecture/reports/NEMOTRON_FRESH_READER_RERUN_RUNBOOK_2026-11-10.md` | `c8ddfae4a1b0dba4a96d989ef5c05284a7ad19fd` |
+| 23 | `docs/architecture/reports/PHASE_1_REVIEW_CORRECTIONS_AND_SCOPE_RECONCILIATION_2026-11-05.md` | `a459cdfd02d850d455ca526e6823e68525776ba3` |
+| 24 | `docs/architecture/reports/PHASE_1_WHOLE_REPOSITORY_INVESTIGATION_AND_REUSE_AUDIT_2026-11-04.md` | `7dc1a246486abfb13169c89365289fcc8134a6ea` |
+| 25 | `docs/architecture/reports/PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md` | `9dd776920d0a479a9d7275acc821e12c266623d9` |
+| 26 | `docs/architecture/reports/PROJECT_DIRECTOR_DECISION_EVIDENCE_EXTRACTS_2026-11-10.md` | `cfc9e2bfc2b401242df82d90b667bad8b7a1f327` |
+| 27 | `docs/architecture/reports/PROJECT_DIRECTOR_DECISION_PROVENANCE_AND_GATE_RECONCILIATION_2026-11-09.md` | `3542b3af3d5c25098b102a926e6078d30631c684` |
+| 28 | `docs/architecture/reports/PR_174_FOLLOW_ON_REVIEW_PROVENANCE_RECOVERY_2026-11-06.md` | `f5d1dd62801642b47e35df986c3b5ab8a7e01a26` |
+| 29 | `docs/architecture/reports/WHOLE_BRAIN_DOCUMENTATION_PHASE_BUILDER_SELF_REVIEW_2026-11-07.md` | `744431a5b1be415225f87108495b6e203c01175d` |
+| 30 | `docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md` | `afc0155b79beda7a04508cab825a5a5f9d0a1173` |
+| 31 | `docs/architecture/reports/fresh-reader-evidence/NEMOTRON_ASSESSMENT_PROMPT_2026-11-10.md` | `03475a43c1440ca9affd38dfe046b8ef1e9b91d0` |
+| 32 | `docs/architecture/reports/fresh-reader-evidence/NEMOTRON_PACKET_MANIFEST_2026-11-10.json` | `5910299b3ea4f686fe30220867b1273bf52e8dba` |
+| 33 | `docs/architecture/reports/fresh-reader-evidence/NEMOTRON_RUN_METADATA_2026-11-10.json` | `7d1d287ee571c673b23184c2d523a35b90845fa3` |
+| 34 | `docs/templates/INDEPENDENT_REVIEW_REPORT_TEMPLATE.md` | `f3176cf1a1f45735a3ad62fa4a865806edc24e08` |
+| 35 | `docs/templates/PLANNING_DOCUMENT_TEMPLATE.md` | `b9f71a923b0d717a3b29655574c89c10e0801115` |
+| 36 | `docs/templates/README.md` | `7209fd0fcda239349af602490d26b8c708b743da` |
+| 37 | `docs/templates/TEST_EVIDENCE_REPORT_TEMPLATE.md` | `9c6bbae48a22beb7c4e95858282d7d8d7b2159c2` |
+
+**Self-reference convention:** row 7 records the inventory blob at the parent revision before this section was appended. Its resulting blob is expected to differ. All other 36 paths must retain the listed blob identities at the parent snapshot.
+
+**Fresh-reader evidence:** run [#42970930733](https://github.com/methaneex-oss/MethaneX/actions/runs/42970930733), exact packet revision `887b349f9826de7726707209f640ae0cafd78ace`, artifact `13832623613`, digest `sha256:394153a7ea2ab8467b367464cd02dacd72fac3e585e8c76d3e8395b987e159d8`, result PARTIALLY CLEAR (31/32). The raw packet, prompt, metadata and assessment are preserved in that workflow artifact. DF-09 execution is complete; acceptance is reserved for the Project Director because the written CLEAR threshold was not reached and the remaining point concerns the disclosed PR #173 provenance limitation.
+
+**Post-write verification:** fetch the resulting PR #192 HEAD and compare the live PR-files endpoint with the recursive tree. All 36 non-inventory paths should match this parent manifest; the inventory itself should differ only because this section was appended. Record any mismatch rather than silently correcting the historical parent manifest.
+
+**Gate disposition:** documentation foundation remains NOT CLEARED pending the Project Director's exact-revision decision and the unresolved independent-review qualification. Stage A remains HELD; implementation and PR integration remain NOT AUTHORIZED.
