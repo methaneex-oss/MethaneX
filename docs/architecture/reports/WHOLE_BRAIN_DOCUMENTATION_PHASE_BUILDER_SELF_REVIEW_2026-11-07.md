@@ -1420,3 +1420,18 @@ Current controlling Builder status:
 - Stage A and implementation planning remain HELD; runtime implementation remains NOT AUTHORIZED.
 
 No review, workflow dispatch, test run, merge, rebase, retarget, cherry-pick or implementation is claimed or performed.
+
+
+---
+
+## 11. Final canonical-index pointer correction — 2026-11-11
+
+The canonical index's opening status block has been made self-reference-safe. It no longer embeds a PR #192 HEAD or a final-inventory commit SHA that becomes stale when the index/inventory itself is updated. It directs readers to the live PR page for the current HEAD and to inventory §65 for the exact parent commit, 38-path manifest and final tree verification.
+
+- Index commit: `1b3a02aca06d065db585a8806cba8d82fb79d4f1`.
+- Index blob: `3999234cdfe3bb590d5755e84a3a49e25df67273`.
+- **Exact PR #192 parent before this self-review update:** `1b3a02aca06d065db585a8806cba8d82fb79d4f1`.
+
+This is the final self-review update. The detailed inventory is the final PR #192 file write. After that commit, verify the exact final tree and manifest, then make no further PR #192 file edits.
+
+DF-06 remains NOT MET as documented in register §34.2. DF-08 remains resolved only against its bounded criterion. DF-09 remains open pending a CLEAR Blind Fresh Tester result. DF-11 remains waived; DF-12 remains not accepted. Stage A and implementation planning remain held; runtime implementation remains unauthorized.
