@@ -166,7 +166,7 @@ The full bounded method, counts and limitations are recorded in preservation rep
 
 ### 10.2 PR #195 workflow correction
 
-A separate static review found that the response step referenced `TARGET_DOCS_SHA` without exporting it in that step's environment. The variable is now passed to both packet-assembly and response/metadata steps. The workflow correction is commit `5a813f8febd0a0b0e5e0365439d5182e79833c15`, workflow blob `3cbe2e54fb9500f78b2842801e8371641ee24ddc`; the audit update is commit `ef4ddbd3df2cc2b2bc8f6a1ea80dbe7982391328`, audit blob `9884397de3e6e34ddb7c66b370280acc89d39c3b`. Static inspection confirms the required variable is available where referenced. No Actions run or Blind Fresh Tester result is claimed.
+A separate static review found that the response step referenced `TARGET_DOCS_SHA` without exporting it in that step's environment. The variable is now passed to both packet-assembly and response/metadata steps. The workflow correction is commit `5a813f8febd0a0b0e5e0365439d5182e79833c15`, workflow blob `3cbe2e54fb9500f78b2842801e8371641ee24ddc`; the audit update is commit `fdd2640d89e76a9c396487fe3df7b4542eb3f382`, audit blob `9884397de3e6e34ddb7c66b370280acc89d39c3b`. Static inspection confirms the required variable is available where referenced. No Actions run or Blind Fresh Tester result is claimed.
 
 PR #194 remains open and unmerged but is a stale alternative pinned to historical documentation revision `3ea2970c7b43bdfb87b3d1459690eacd83516745`. The Builder recorded on PR #194 that PR #195 is the current consolidated proposal. No PR was merged or closed.
 
