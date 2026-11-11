@@ -116,7 +116,7 @@ This addendum supersedes the stale PR-head values in §§2–5 above. The live P
 | #175 Brain Implementation Roadmap | `c30fe20cfdf3f499416972042be06acdd70f752d` | Open, draft, unmerged | Historical proposal; non-operative |
 | #179 Phase 2 integration map | `d30237b81c3695f2a7cb980144b221bbd42ce548` | Open, draft, unmerged | Bounded source-integration evidence, not whole-Brain completeness acceptance |
 | #191 Human/MCU comparison | `609d38ede50bbdd98a93dfed112781eacabee9fd` | Open, draft, unmerged | Bounded BM-01–BM-12 reference; content review complete; disposition reserved |
-| #192 Documentation Foundation | `4aedf541afa8cbbc0555f37a39cc8b8c429191d9` | Open, non-draft, unmerged | 38 changed paths; exact final package still requires corrected self-review synchronization and DF-09 assessment |
+| #192 Documentation Foundation | `8e51052eed0984958fa39716fbda5cf17247c7b3` (live pre-update snapshot) | Open, non-draft, unmerged | 38 changed paths at this fetch; this report/self-review update will advance the branch, so the resulting HEAD must be re-fetched and recorded separately |
 | #193 Deferred roadmap hold | `4705716e0845d7b5621ab7e339d36c9f42853b1a` | Open, draft, unmerged | Separate PR #175-derived lineage; integration held |
 | #195 AI role terminology audit | `2c9dffc21032dec9bdc5af827259d8bdb3c97746` | Open, draft, unmerged | Terminology-only proposal; not a planning gate or review result |
 
@@ -124,7 +124,7 @@ This addendum supersedes the stale PR-head values in §§2–5 above. The live P
 
 - **DF-06 — NOT MET.** The bounded link checks do not satisfy the Project Director's full-resolution requirement for complete semantic relevance, all applicable external destination reachability, renderer-specific anchor behavior and applicable historical/cross-branch link validation. The inaccessible shared-conversation pointer remains access-limited and unverified.
 - **DF-08 — RESOLVED** against the exact bounded preservation criterion documented in preservation report §16. This does not claim repository-wide semantic archive completeness.
-- **DF-09 — OPEN / NOT MET.** Run #42970930733 returned PARTIALLY CLEAR (31/32) against older revision `887b349f9826de7726707209f640ae0cafd78ace`. It is not evidence for current PR #192 HEAD `4aedf541afa8cbbc0555f37a39cc8b8c429191d9`. A fresh result of CLEAR against the final exact PR #192 revision is mandatory.
+- **DF-09 — OPEN / NOT MET.** Run #42970930733 returned PARTIALLY CLEAR (31/32) against older revision `887b349f9826de7726707209f640ae0cafd78ace`. It does not assess the later PR #192 closeout revision. A fresh result of CLEAR against the frozen final PR #192 revision is mandatory; do not reuse the 31/32 result as evidence for a later HEAD.
 - **DF-10 — BUILDER SELF-REVIEW REFRESH REQUIRED.** This correction and the synchronized index/self-review must be checked against the final post-write PR #192 state. Builder self-review is not independent clearance.
 - **DF-11 — WAIVED** by explicit Project Director decision. Do not commission or claim a new DF-11 review.
 - **DF-12 — NOT ACCEPTED.** Exact-revision Project Director acceptance remains deferred until all applicable evidence gates and reserved decisions are resolved.
@@ -150,3 +150,8 @@ Still not executable by the Builder in this environment:
 The available GitHub connection exposes no workflow-dispatch operation. No new workflow run, reviewer submission, acceptance, or gate clearance is claimed.
 
 **Controlling status after this correction:** Initial planning remains NOT COMPLETE. Implementation planning remains HELD. Runtime implementation remains NOT AUTHORIZED.
+
+
+## 9. Post-snapshot correction control
+
+The live PR #192 HEAD was re-fetched as `8e51052eed0984958fa39716fbda5cf17247c7b3` immediately before this correction. The previous §2/§3 snapshot values are historical; this entry records the pre-write state only. Because updating this report advances the PR branch, the resulting commit SHA and complete changed-path/blob set must be fetched after the final Builder self-review write and recorded in the final post-write verification. No exact-final-HEAD claim is made by this pre-write note.
