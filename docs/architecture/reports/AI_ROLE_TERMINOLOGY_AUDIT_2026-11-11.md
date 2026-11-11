@@ -29,7 +29,8 @@ The audit used GitHub repository code search on `methaneex-oss/MethaneX` and fet
 - `.github/workflows/documentation-foundation-ai-reader.yml`;
 - `.github/workflows/brain-foundation-blind-architecture-review.yml`;
 - `interfaces/typescript/src/operator_session.ts`;
-- selected documentation on the existing PR #192 branch `docs/whole-brain-planning-scope-correction-20261107`: the planning index, outstanding-work register, initial documentation-foundation audit, fresh-reader assessment report, and whole-Brain planning scope correction.
+- selected documentation on the existing PR #192 branch `docs/whole-brain-planning-scope-correction-20261107`: the planning index, outstanding-work register, initial documentation-foundation audit, fresh-reader assessment report, and whole-Brain planning scope correction;
+- the PR #192 description, which contained two provider-branded phrases in places where the project role should be named.
 
 This was a bounded terminology audit, not a claim that every historical branch, PR description, issue, artifact, or repository object was exhaustively searched.
 
@@ -53,9 +54,13 @@ The selected PR #192 planning and evidence documents contain numerous historical
 
 **Disposition:** not bulk-rewritten in this pass. Historical evidence must not be silently altered in a way that falsifies attribution, obscures the limits of an earlier assessment, or changes the meaning of a prior Project Director decision. The new role standard governs current and future project-facing labels. Where a historical model/provider identifier is necessary to reproduce or qualify an event, it belongs in provenance metadata, not as the participant's project role.
 
-### 3.4 No current default-branch reviewer-brand role string was returned by the bounded code search
+### 3.4 PR metadata used a provider name as a reviewer-role shorthand
 
-The default-branch search returned no matching code result for the reviewer-brand term being audited. The selected PR #192 documents did contain historical reviewer attribution. This audit does not claim that the historical review itself was re-performed, qualified, or upgraded by a terminology change.
+The PR #192 description used a provider-branded name in two phrases describing the status and limitations of an earlier review attempt. That wording made the provider appear to be the project role. The underlying historical limitation remains relevant, but the project-facing role is **Independent Reviewer**.
+
+**Disposition:** updated the two phrases in the PR #192 description to use **Independent Reviewer assessment** and neutral wording for the historical attempt's limitations. This does not claim that the earlier attempt was re-performed, qualified, or upgraded. Historical reports and evidence artifacts retain technical attribution where needed to preserve provenance.
+
+The bounded default-branch code search returned no other matching reviewer-brand code result. This is not an exhaustive search of every historical branch, PR, issue, or artifact.
 
 ## 4. Changes made on this branch
 
@@ -64,6 +69,7 @@ The default-branch search returned no matching code result for the reviewer-bran
 | `.github/workflows/documentation-foundation-ai-reader.yml` | Job/step labels and assessment artifact naming now use **Blind Fresh Tester** |
 | `.github/workflows/brain-foundation-blind-architecture-review.yml` | Job/step labels, assessment persona, and output filename now use **Blind Fresh Tester** |
 | `interfaces/typescript/src/operator_session.ts` | Generic product-specific interface comment changed to “assistant-facing” |
+| PR #192 description | Two provider-branded role phrases replaced with **Independent Reviewer** role wording; historical limitation preserved |
 | This audit | Records the naming standard, findings, scope, changes, and historical-provenance boundary |
 
 ## 5. Model and provider provenance is intentionally retained
@@ -80,7 +86,7 @@ This audit did not:
 - alter the distinction between a Blind Fresh Tester assessment and a formal Independent Reviewer assessment;
 - claim that a blind assessment is an independent review or Project Director acceptance;
 - change API providers, model endpoints, credentials, or secrets;
-- alter historical reviewer findings, decision records, or evidence artifacts;
+- alter historical reviewer findings, decision records, or evidence artifacts; technical provenance remains where it is necessary to explain past evidence;
 - modify PR #173, PR #192, or PR #193 source branches;
 - merge a pull request, clear a gate, start implementation, or authorize runtime work.
 
@@ -93,5 +99,6 @@ Before this branch is integrated, verify the diff and workflow syntax, then conf
 3. Technical provider/model routing and provenance checks remain intact.
 4. The generic operator-session comment no longer implies a product-specific integration.
 5. No runtime behavior or authorization boundary changed.
+6. The PR #192 description uses **Independent Reviewer** as the role name without rewriting historical evidence attribution.
 
 A successful terminology edit is not evidence that either assessment workflow has executed successfully. No workflow run is claimed by this audit.
