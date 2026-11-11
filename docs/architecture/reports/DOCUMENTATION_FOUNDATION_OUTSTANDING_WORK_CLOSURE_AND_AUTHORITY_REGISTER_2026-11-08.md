@@ -981,3 +981,16 @@ At the start of this addendum, PR #192 parent HEAD was 0d4831432fbb157a880016c0d
 - BFA-C01–BFA-C14: reserved for explicit Project Director disposition; no recommendation is treated as acceptance.
 - Stage A: HELD. Runtime implementation: NOT AUTHORIZED.
 
+
+
+## 31. Final pre-index-refresh reconciliation — 2026-11-11
+
+PR #192 exact branch parent at the start of this reconciliation: b867982a6db5028fd4d879532ceee3051af59eb0. It remains open, non-draft and unmerged, based on docs/jarvis-phase-2-whole-brain-integration-map-20261105. The 37 changed paths are documentation-only; no runtime source, tests, dependencies, build configuration or workflow changes were made in this correction pass.
+
+PR #173 corrected proposal exact HEAD: 756724b95e093ac48fcd95c5587117c0a4d8f3c0. Its bounded donor-source audit is complete for the four identified inherited patterns, with compatibility NOT ACCEPTED AS-IS. The audit is limited to PR #97 donor HEAD c1da222e6c94aeb3f2ad000392c21fe4fc81ab25; broader cross-branch lineage and remediation specifications remain open. A new blind independent review of the exact corrected PR #173 HEAD has not been run and remains required.
+
+DF-06 and DF-08: RESOLVED within the stated Initial Documentation Foundation criteria and bounded package scope, supported by preservation report §§15–16. DF-09: OPEN / NOT MET; the prior PARTIALLY CLEAR (31/32) result on packet 887b349f9826de7726707209f640ae0cafd78ace does not assess the current PR #192 head. The 2026-11-03 primary conversation record still lacks an independently addressable original export/message identifier; a later transcription must not be misrepresented as the original. The GitHub connection exposes no workflow-dispatch operation, so no new blind run is claimed. DF-10: refreshed by the current inventory and self-review. DF-11: WAIVED. DF-12: NOT ACCEPTED.
+
+PR #191 content/dependency review is complete; Builder recommendation remains retain separately, with Project Director disposition pending. BFA-C01–BFA-C14 remain reserved for explicit Project Director disposition. PR #173 blind re-review remains outstanding. PR #192/#193 remain unmerged. Stage A remains HELD; runtime implementation remains NOT AUTHORIZED.
+
+The subsequent final index refresh will be the last documentation commit in this pass. Its resulting commit SHA is the exact PR #192 target for DF-09.
