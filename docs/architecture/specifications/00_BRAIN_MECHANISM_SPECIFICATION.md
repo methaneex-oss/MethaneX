@@ -216,7 +216,9 @@ Each mechanism below is specified by responsibility, conceptual inputs and outpu
 11. Preserve materially different readings and their assumptions when context does not discriminate among them; request clarification when ambiguity changes the likely outcome or consequence.
 12. Incorporate corrections as new evidence and revise the interpretation without rewriting the original utterance.
 13. Treat quoted, reported, hypothetical or otherwise untrusted imperative text as content to interpret, not automatically as an instruction from the current operator.
-14. Keep inferred intent distinct from authority: interpretation does not authorize action.
+14. Represent speech-act/communicative-function hypotheses separately from literal content and inferred desired outcome; attribute utterances and embedded claims to their actual source/speaker where evidence permits, preserving quoted/reported source boundaries.
+15. Preserve discourse continuity across turns and interruptions: retain provenance and temporal scope of active referents, unresolved interpretations, corrections and relevant context, while allowing stale or contradicted context to be revised.
+16. Keep inferred intent distinct from authority: interpretation does not authorize action.
 
 **Publishes:** Candidate representations, including literal/semantic readings, reference/discourse hypotheses and pragmatic/operator-intent hypotheses where applicable, with evidence links, alternatives, uncertainty and explicit epistemic status.
 
@@ -534,6 +536,8 @@ These are capability classes, not selected algorithms or an instruction to imple
 13. Do not perform prediction resolution (BM-05), belief commitment (BM-04), goal/plan/decision ownership (BM-08), action authorization or execution.
 14. Route each material conclusion or unresolved result to the relevant owner(s) with its uncertainty, alternatives, assumptions, scope, provenance and dependency lineage intact; record the consumer's explicit disposition (accepted for use, qualified, rejected, deferred or returned for evidence).
 15. Treat delivery, logging, persistence or acknowledgement alone as insufficient evidence of downstream integration. The receiving owner must evaluate the result within its own responsibility and preserve its epistemic limits.
+16. When a consumer accepts a reasoning result for use, the resulting authoritative computation or state transition must retain an explicit dependency on the reasoning artifact/version and record the resulting owner-state version or decision effect.
+17. If a result is rejected, invalidated or superseded, its disposition and rationale plus affected dependencies must remain traceable; no silent discard or stale downstream use is permitted.
 
 **Interactions:** BM-02 supplies interpretations; BM-03 supplies retrieved evidence; BM-04 supplies beliefs and receives candidate conclusions for epistemic evaluation; BM-05 supplies scoped causal/predictive hypotheses and receives relevant reasoning findings; BM-06 supplies task focus; BM-07 supplies contextual appraisal; BM-08 supplies reasoning objectives and may consume qualified conclusions; BM-09 evaluates developmental changes; BM-10 monitors quality; BM-11 tracks dependencies and invalidation.
 
