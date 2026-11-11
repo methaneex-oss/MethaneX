@@ -44,9 +44,9 @@ jobs:
           mkdir -p documentation-foundation-reader-evidence
           git fetch --no-tags --depth=1 origin b05434758ad4fe72815503f89bd5d2990ccb658b
           git fetch --no-tags --depth=1 origin d7d676b79dbf3269f7fd3ebdb4363a6df19f255d
-          git fetch --no-tags --depth=1 origin 97191111bc2573c14d391c0af9628db7b11f194b
+          git fetch --no-tags --depth=1 origin 756724b95e093ac48fcd95c5587117c0a4d8f3c0
           git fetch --no-tags --depth=1 origin 0811a59e46bf934e32e794f90e4e7d18d4e2bd97
-          git fetch --no-tags --depth=1 origin be46b3858102c31022128522c4b3506aad4dff8a
+          git fetch --no-tags --depth=1 origin b78e24b6fa122d1141b1f225bc6d29e1e7c77631
           python3 - <<'PY'
           from pathlib import Path
           import hashlib, json, os, subprocess
@@ -61,9 +61,9 @@ jobs:
               ("docs/architecture/00_JARVIS_SYSTEM_ARCHITECTURE_FOUNDATION.md", "b05434758ad4fe72815503f89bd5d2990ccb658b", "docs/architecture/00_JARVIS_SYSTEM_ARCHITECTURE_FOUNDATION.md"),
               ("docs/architecture/01_JARVIS_WHOLE_SYSTEM_ANATOMY_AND_RESPONSIBILITY_MAP.md", "b05434758ad4fe72815503f89bd5d2990ccb658b", "docs/architecture/01_JARVIS_WHOLE_SYSTEM_ANATOMY_AND_RESPONSIBILITY_MAP.md"),
               ("docs/architecture/research/02_BRAIN_FOUNDATIONAL_CAPABILITY_INVESTIGATION_2026-11-03.md", "d7d676b79dbf3269f7fd3ebdb4363a6df19f255d", "docs/architecture/research/02_BRAIN_FOUNDATIONAL_CAPABILITY_INVESTIGATION_2026-11-03.md"),
-              ("docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md", "97191111bc2573c14d391c0af9628db7b11f194b", "docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md"),
+              ("docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md [current proposed architecture; not accepted]", "756724b95e093ac48fcd95c5587117c0a4d8f3c0", "docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md"),
               ("docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md [accepted baseline]", "0811a59e46bf934e32e794f90e4e7d18d4e2bd97", "docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md"),
-              ("docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md [current status clarification]", "be46b3858102c31022128522c4b3506aad4dff8a", "docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md"),
+              ("docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md [current corrected proposal]", "b78e24b6fa122d1141b1f225bc6d29e1e7c77631", "docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md"),
           ]
           chunks, manifest = [], []
           for label, commit, path in docs:
