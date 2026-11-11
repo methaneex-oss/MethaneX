@@ -187,3 +187,12 @@ A further Builder pass found that successful-response metadata still copied seve
 - continue to exclude raw response bodies and raw exception messages from evidence artifacts.
 
 **Static verification against workflow blob** `1166ce7c66e939f4d6106dba2bbd9756fa96c03a` confirmed the bounded metadata helpers, numeric allowlists, capped HTTP error-body read, absence of raw exception-message persistence, and continued full-SHA/environment-only handling. This remains source inspection only. YAML parsing, GitHub Actions execution, provider behavior, and artifact inspection have not been performed; no workflow runtime pass is claimed.
+
+
+### 9.5 Additional resource-bound correction
+
+The same pass tightened two edge cases in the metadata hardening:
+- Successful provider response bodies are now read with an 8 MiB maximum; oversized responses fail closed instead of being fully buffered and parsed.
+- Numeric metadata accepts only finite values within a conservative magnitude bound. Integer values are handled without converting arbitrary-size integers to floating point, avoiding overflow during sanitization.
+
+The final workflow correction is commit `0dfceaaf29c3a93cbc8f52f8ba7bce44ee44adb3`, workflow blob `f4373401f07d8550f39eb9bb8b252eac31f03783`. Static checks establish the presence of these bounds only; they do not replace YAML validation or execution tests.
