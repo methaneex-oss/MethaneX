@@ -984,4 +984,51 @@ The Project Director does not need to approve routine algorithm selection, concr
 
 Every reserved decision must be recorded with its exact proposal/revision, rationale, consequences, dependencies and acceptance/rejection/revision status. A Builder must not treat silence, document presence, reviewer recommendation or implementation convenience as approval.
 
-**End of document.**
+
+
+## 31. Social and agent-model ownership contract
+
+The minimum social/agent model is not an unowned cross-cutting data bucket. Its authority is divided by the meaning of each claim:
+
+- **Experience interpretation, representation and grounding (§4.2):** owns candidate agent/entity identity hypotheses, observed attributes, identity-resolution alternatives and links between observations that may refer to the same agent. It cannot assert an unobserved mental state as fact.
+- **Memory, belief and knowledge stewardship (§4.3):** owns retained interaction episodes and the qualified claims derived from them, including claims attributed to an agent. It preserves the distinction between what an agent said, what was independently observed, and what the Brain currently believes.
+- **Prediction and reasoning (§4.5):** owns predictions and inference artifacts about likely future actions, knowledge, commitments or intentions. These remain scoped hypotheses with explicit evidence, assumptions and uncertainty.
+- **Goals, valuation and planning (§4.6):** may consume those hypotheses when evaluating coordination or alternatives, but does not own another agent's identity or private mental state.
+- **Governance/security (SYS-07 and the wider system):** owns access, privacy, authorization and disclosure policy. Cognitive inference cannot grant itself access to private information or override those controls.
+
+The minimum agent representation must preserve, where available, source-linked identity hypotheses, observed interactions, attributed statements/actions, context, externally established roles/permissions, temporal validity, contradictions, and evidence-qualified estimates. Each claim must identify whether it is directly observed, reported by the agent, reported by another source, inferred, predicted or unknown. Confidence in one claim must not be copied to unrelated claims about the same agent.
+
+**Failure semantics:** identity ambiguity remains multiple hypotheses; conflicting statements remain attributed and inspectable; unavailable interaction history remains missing evidence rather than proof of absence; stale commitments are revalidated; and a failed social inference cannot rewrite the underlying episode. The model must support correction and withdrawal without erasing the historical record.
+
+**Accountability:** the later Social/Agent Representation Specification is owned by the Architecture & Engineering Builder. It must be reviewed against this authority split, privacy/security constraints and the accepted whole-system baseline before implementation. The Project Director retains approval over any change to cognitive authority, privacy/governance boundaries or foundational scope. The Independent Reviewer may challenge the specification but does not own or approve the architecture. This assigns delivery responsibility without pre-approving advanced theory-of-mind or social-motivation capabilities.
+
+## 32. Explicit disposition of inherited mechanism rules
+
+The following rules have appeared in historical implementation or planning discussions and must not silently become foundational Brain policy. Their treatment here is an architecture-level disposition; it is not a claim that every occurrence has been located in the current source tree or that source compatibility has been completed.
+
+| Inherited rule or pattern | Foundational disposition | Required later source-level evidence and owner |
+|---|---|---|
+| Fixed/historical source-reliability value | **Do not adopt as universal truth.** A reliability estimate may be retained only as a scoped, evidence-qualified prior or measurement with source, task/domain, time window, calibration evidence and uncertainty. It must be revisable and must not replace evaluation of the current observation. | Architecture & Engineering Builder must locate every implementation/use site, identify its semantics and consumers, test calibration and drift, and recommend preserve/adapt/replace. Independent Reviewer challenges the evidence. |
+| Fixed confidence threshold | **Do not treat as a truth boundary or universal cognitive constant.** A threshold may exist for an explicitly defined operational decision (for example, abstention or escalation) only when its measured objective, error costs, calibration domain, version and owner are explicit. It cannot silently convert a hypothesis into fact or authorize an action. | Architecture & Engineering Builder must identify each threshold, its decision consequence, calibration dataset/conditions, false-positive/false-negative trade-off, and sensitivity. Any safety/governance threshold remains under its designated authority. |
+| First-eligible-goal selection | **Rejected as the general goal-selection architecture.** Eligibility is a filter, not a ranking or justification. The Brain must compare the relevant candidate set against evidence, constraints, feasibility, risk, dependencies, expected consequences and uncertainty. A bounded fallback may select a safe operational default only under an explicit external policy and must be labelled as such, not represented as cognitive preference or learned goal. | Architecture & Engineering Builder must locate the selection path, show whether candidates are skipped or evaluated, and test order permutation, conflicting goals, stale evidence and budget exhaustion. Project Director disposition is required if a fallback changes foundational goal authority. |
+| Belief overwrite / last-write-wins | **Prohibited as semantic belief revision.** New evidence may qualify, supersede, narrow, suspend or withdraw a belief only through an owner-governed transition that preserves the prior version, evidence, scope, rationale and affected dependencies. Concurrent or contradictory claims remain inspectable until resolved. | Architecture & Engineering Builder must locate all overwrite/update paths and demonstrate contradiction preservation, version lineage, dependency invalidation and recovery. |
+
+These dispositions distinguish deterministic engineering constraints from learned cognitive conclusions. A numeric threshold is not automatically hardcoding: its meaning, calibration, scope and consequence determine whether it is a legitimate operational guard or an unjustified cognitive shortcut. Conversely, labelling a fixed value a parameter does not make it learned or evidence-sensitive.
+
+**Compatibility status:** UNASSESSED at source level. The architecture defines the required evaluation and prohibited semantics; it does not declare the legacy mechanisms preserved, adapted or replaced. No runtime code is changed or authorized by this section.
+
+## 33. Accountability and completion evidence
+
+Every deferred architecture obligation must have one accountable specification owner, a defined deliverable, a predecessor decision, a verification obligation and an approval boundary. “Later” without those fields is not an acceptable disposition.
+
+| Obligation | Accountable delivery owner | Required output | Approval / challenge boundary |
+|---|---|---|---|
+| Social/agent representation | Architecture & Engineering Builder | Social/Agent Representation Specification with claim classes, ownership, provenance, temporal validity, contradiction and privacy contracts | Project Director approves scope/authority changes; Independent Reviewer challenges evidence and completeness |
+| Legacy reliability/threshold/goal-selection/overwrite audit | Architecture & Engineering Builder | Source-level inventory, exact revisions, call paths, tests, semantic classification and preserve/adapt/replace recommendations | Project Director decides reserved foundational changes; Independent Reviewer challenges audit completeness |
+| CF-26 compatibility dispositions | Architecture & Engineering Builder | Per-mechanism compatibility records against §§16–32 and the approved system boundary | Project Director decides high-impact scope/authority changes; no code change implied |
+| CF-27 decision governance | Project Director (decision authority); Architecture & Engineering Builder (register maintenance) | Exact-revision decision ledger with proposal, alternatives, rationale, impact, status and downstream constraints | Project Director is the sole acceptance authority for reserved decisions; Independent Reviewer may challenge traceability |
+| Architecture traceability and revision integrity | Architecture & Engineering Builder | Complete CF/Q/BFA-to-section traceability and exact commit/blob manifest | Independent Reviewer rechecks exact revision; Project Director accepts/rejects/revises |
+
+A reviewer finding is not closed by a narrative assertion. Closure requires the changed architectural text, exact changed revision, a trace to the finding, and independent recheck. Where the finding depends on source-level facts, the source audit must be attached or the item remains explicitly unassessed.
+
+**End of architecture completion addendum.**
