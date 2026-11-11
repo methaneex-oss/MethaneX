@@ -2782,7 +2782,7 @@ All 38 changed paths were fetched at exact parent `357906ef9a82afd842b0f93570cbb
 - DF-11: WAIVED by explicit Project Director decision.
 - DF-12: NOT ACCEPTED; exact-revision Project Director acceptance remains reserved.
 - PR #173: corrected proposal HEAD `756724b95e093ac48fcd95c5587117c0a4d8f3c0`; Blind Fresh Tester assessment and BFA-C01–BFA-C14 Project Director dispositions remain outstanding.
-- PR #174: corrected proposal HEAD `f6662c149be4395f4c207f62a42920e787f063c4`; Independent Reviewer re-review and Project Director disposition remain outstanding; original source report/provenance limitation remains disclosed.
+- PR #174: current PR HEAD `b78e24b6fa122d1141b1f225bc6d29e1e7c77631`; its only commit after corrected proposal HEAD `f6662c149be4395f4c207f62a42920e787f063c4` updates the review assignment to avoid a stale self-referential SHA. Specification blob remains `fbe017d96f9d0716be6080c96eea6b67c7da62fa`; Independent Reviewer re-review and Project Director disposition remain outstanding; original source report/provenance limitation remains disclosed.
 - PR #191: bounded reference artifact HEAD `609d38ede50bbdd98a93dfed112781eacabee9fd`; Project Director disposition remains pending.
 - PR #194: open/draft/unmerged stale alternative at `9b457e35c601719d9b213fb843dd5876976b35b9`; do not integrate alongside PR #195.
 - PR #195: consolidated workflow/terminology proposal HEAD `fdd2640d89e76a9c396487fe3df7b4542eb3f382`; documentation-reader workflow blob `26c9fd6deb07dfed312d58f0ce82ccb3fa01f268`. Static source assertions pass for the bounded checks recorded in its audit; YAML parsing and workflow execution are not claimed.
