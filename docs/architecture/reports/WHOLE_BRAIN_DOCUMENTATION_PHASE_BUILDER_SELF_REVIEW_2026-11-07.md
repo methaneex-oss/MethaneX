@@ -1353,3 +1353,44 @@ This self-review is tied to the exact PR #192 parent `a79e290405eba38b3421ad1eae
 - Stage A and implementation planning remain HELD; runtime implementation remains NOT AUTHORIZED.
 
 This correction does not convert any open gate into a pass and does not authorize review, testing, integration or implementation.
+
+
+---
+
+## 9. Final DF-06 disposition reconciliation — 2026-11-11
+
+This section supersedes the earlier DF-06 bounded-closure wording and the prior inventory-freeze sequence in §8. A final cross-document read found that older Builder dispositions in the outstanding-work register (§§28–31 and §33) and preservation report §15.5 still described DF-06 as resolved within a bounded scope, while the later Project Director decision required full resolution and the controlling index correctly stated DF-06 NOT MET. The historical records have now been explicitly qualified rather than silently rewritten.
+
+### 9.1 Corrective commits
+
+- Preservation report clarification: commit `5c08a637928b92fe75cb4e7964174ac019cfe92b`, blob `c69384198a335fb3c0393d3636073c42d0c68b99`. Its §15.5 now labels the earlier bounded DF-06 closure as a historical Builder disposition superseded by the Project Director's full-resolution requirement.
+- Outstanding-work register clarification: commit `d6d8357ee1bf611478b768b2b39610c73589922f`, blob `097ae65971533efa0b3230f7c735a91c294d234d`. New §34 explicitly identifies the older bounded statements as historical, preserves the evidence that remains valid, and lists the four full-resolution requirements still open.
+- Canonical index controlling status remains DF-06 NOT MET, DF-08 RESOLVED only against its exact bounded criterion, DF-09 OPEN / NOT MET, DF-10 Builder synchronization pending final inventory, DF-11 WAIVED, and DF-12 NOT ACCEPTED.
+
+### 9.2 Exact remaining Builder work
+
+DF-06 remains a Builder technical gate, not a review or Project Director decision. Existing evidence establishes the enumerated package paths, selected relative targets, immutable source-file identities, 76 line-range bounds, and selected GitHub PR/Actions/artifact destinations. It does not establish all applicable link semantic relevance, every external destination's reachability, renderer-specific fragment behavior where applicable, or all applicable historical/cross-branch link behavior.
+
+The access-limited ChatGPT shared-conversation pointer remains explicitly classified and non-clickable. It is not to be called a verified reachable destination or a broken required navigation link.
+
+**The Builder cannot honestly mark DF-06 complete on the evidence available.** No claim of full closure is made. The remaining requirements are listed in register §34.2. DF-08 remains separately resolved against its exact criterion.
+
+### 9.3 Current finalization sequence
+
+- Exact PR #192 parent before this self-review update: `d6d8357ee1bf611478b768b2b39610c73589922f`.
+- This self-review is the final Builder self-review update for the current pass.
+- The inventory must be the final PR #192 file write and must capture all 38 changed-path blob identities at the exact resulting parent tree.
+- After the inventory commit, verify the final recursive tree, all 38 path entries, the complete parent-blob manifest and that no other file changed in the final inventory commit. No further PR #192 file edits are planned after that verification.
+
+### 9.4 Final Builder disposition
+
+- **DF-06: NOT MET** — remaining Builder work as enumerated in register §34.2.
+- **DF-08: RESOLVED** only against its exact bounded preservation criterion.
+- **DF-10: pending final inventory and post-write verification.**
+- **DF-09: OPEN / NOT MET** pending CLEAR Blind Fresh Tester assessment against exact frozen final PR #192 HEAD.
+- **DF-11: WAIVED.**
+- **DF-12: NOT ACCEPTED.**
+- PR #173 / #174 reviews and reserved dispositions, PR #191 disposition, and PR #192/#193 integration order remain outside Builder authority.
+- Stage A and implementation planning remain HELD; runtime implementation remains NOT AUTHORIZED.
+
+This is a Builder self-review, not independent clearance, a test result, or a Project Director decision.
