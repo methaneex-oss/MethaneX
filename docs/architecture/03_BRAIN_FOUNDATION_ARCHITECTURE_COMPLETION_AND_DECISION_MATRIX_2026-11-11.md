@@ -456,35 +456,89 @@ The Brain Foundation Architecture is complete only when:
 **Current completion status:** The matrix and recommended architecture-level closures are established in this artifact. The architecture itself is not yet declared complete, independently cleared or accepted until steps 1–9 are evidenced.
 
 
-## 19. Integration status update — 2026-11-11
+## 19. Corrected integration and exact revision manifest — 2026-11-11
 
-The Builder has now integrated the matrix's conceptual closure material into the main architecture document as **Architecture completion addendum §§16–30** in `docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md`.
+The completion material is integrated into the main architecture document. The earlier manifest entries in this section's predecessor were inconsistent: one entry named an intermediate PR head while a later note incorrectly named an integration commit as the PR head. Those values are retained in Git history, not repeated as current state.
 
-The integration covers responsibility contracts, epistemic classes and state transitions, cross-responsibility exchange semantics, atomic owner-state commits with asynchronous propagation, foundational reasoning and simulation, goal and affective architecture, learning lifecycle and classes, metacognition, system/security/degraded-operation boundaries, developmental progression, verification obligations, dispositions for the 14 prior open questions, architecture-to-specification boundaries, language/symbolic cognition, social/agent modelling, existing-mechanism compatibility and Project Director reserved-decision authority.
+### Current exact manifest
 
-### Exact revision manifest
+- PR #173 branch: `architecture/brain-foundation-planning-20261103`.
+- Current architecture file: `docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md`.
+- Architecture blob SHA after this correction: `d51912a8c71688f85d2864ff69607b3558bd9d1f`.
+- Architecture correction commit: `1f6584a2308c4b80735ec2863bb2bc97a888f5e1`.
+- Current PR #173 HEAD must be re-fetched after the matrix update; the commit above is the latest known branch commit at the time this section was authored.
+- Exact parent baselines remain PR #171 reviewed package HEAD `b05434758ad4fe72815503f89bd5d2990ccb658b` and PR #172 accepted HEAD `d7d676b79dbf3269f7fd3ebdb4363a6df19f255d`.
 
-- Starting PR #173 head: `97191111bc2573c14d391c0af9628db7b11f194b`
-- Matrix commit: `59bc9766711e133c812ef7b89d18fa4c21ec9aa7`
-- Main architecture integration commit: `80b6d2fc909024e7197cbbcfe652da0197a4bf48`
-- Current PR #173 head at this update: `361d821343c4a68bcfbbdc86f528c84554262424`
-- Compare from starting head: 2 commits ahead, 0 behind; 2 changed files (one architecture modification and one new matrix).
+### Corrections made against the Blind Fresh Tester findings
 
-### Remaining gates — not represented as complete
+| Finding | Architectural correction | Remaining evidence requirement |
+|---|---|---|
+| Social/agent modelling contract and ownership insufficiently explicit | §31 assigns semantic ownership by claim type across representation/grounding, memory/belief, prediction/reasoning, goals/planning and governance/security; defines minimum record semantics and failure handling | Independent reviewer must challenge ownership completeness and privacy/security boundary against PR #171 and PR #172 |
+| Accountable owners/constraints for CF-26/CF-27 unclear | §33 names accountable delivery owner, deliverable and approval/challenge boundary for compatibility audit, decision governance and traceability | Project Director must make reserved decisions; reviewer must verify no authority was delegated incorrectly |
+| Revision manifest stale/conflicting | This section replaces the inconsistent prior current-state claims with a single exact manifest and labels prior values historical | Re-fetch exact PR head and both file blobs at review time |
+| CF-01–CF-27 traceability absent | §20 maps all 27 domains to architecture sections and matrix obligations | Reviewer must verify each mapping reaches substantive text, not only a heading |
+| Inherited reliability/threshold/goal-selection/belief-overwrite rules not dispositioned | §32 defines explicit architectural disposition and marks source compatibility UNASSESSED | Source-level inventory and tests remain required before preserve/adapt/replace decisions; no legacy mechanism is silently adopted |
 
-1. Independent reviewer must inspect the exact current PR head, including the original proposal, F-01/F-02/F-03 correction record and completion addendum, against PR #171 and PR #172.
-2. Independent review must challenge contradictions, omissions, unsupported assumptions, developmental integrity, whole-system boundaries and all 14 question dispositions.
-3. Builder must correct findings and obtain independent recheck against the corrected exact revision.
-4. Project Director must explicitly accept/reject/revise the 14 proposed BFA-C decisions and accept the exact reviewed architecture revision.
+## 20. Complete CF-01–CF-27 architecture traceability
 
-**Status:** Conceptual architecture integration performed; independent clearance pending; final Project Director acceptance pending. No implementation, merge or deployment is authorized.
+The following table is the required traceability map. Section references identify the substantive architecture contract; the matrix's §3 identifies the domain-level gap/closure obligation. A reference to a later specification is not a claim that its implementation already exists.
 
+| ID | Domain | Main architecture contract | Supporting matrix/architecture sections |
+|---|---|---|---|
+| CF-01 | Cognitive identity and continuity | §4.1 | §§16–18, 23–24 |
+| CF-02 | Experience acquisition boundary | §§4.2, 7 | §§16–18, 23 |
+| CF-03 | Representation and grounding | §4.2 | §§17, 19, 28 |
+| CF-04 | Memory and episodic retention | §4.3 | §§8, 17, 21 |
+| CF-05 | Belief and knowledge stewardship | §4.3 | §§17, 19, 21, 32 |
+| CF-06 | Attention and working context | §4.4 | §§5–6, 18 |
+| CF-07 | Prediction and outcome resolution | §4.5 | §§17, 19, 21 |
+| CF-08 | Reasoning and inference | §4.5 | §§19, 24 |
+| CF-09 | Simulation and imagination | §4.5 | §§17, 19, 23–24 |
+| CF-10 | Learning and adaptation | §4.7 | §§8, 21, 24, 32 |
+| CF-11 | Goals and motivation | §4.6 | §§20, 25 |
+| CF-12 | Affective appraisal | §4.6 | §§20, 25 |
+| CF-13 | Planning and decision | §4.6 | §§17, 20, 23 |
+| CF-14 | Metacognition and self-model | §4.8 | §§22, 24 |
+| CF-15 | Coordination and concurrency | §§3.2, 6 | §§16, 18, 23 |
+| CF-16 | Language and symbolic cognition | §28.1 | §§17, 19, 24 |
+| CF-17 | Social and agent modelling | §31 | §§7, 17, 23, 30 |
+| CF-18 | Action intention and feedback | §§3.7, 7 | §§17, 19, 23 |
+| CF-19 | Internal condition and homeostasis | §§4.6, 7 | §§20, 23 |
+| CF-20 | SYS-06 modulation boundary | §§7, 20 | §§23, 25, 30 |
+| CF-21 | SYS-08 substrate and SYS-01 state authority | §§7, 16 | §§18, 23 |
+| CF-22 | Security, privacy and governance | §§3.7, 7 | §§23, 30–31 |
+| CF-23 | Developmental stages | §§3.6, 8–9 | §§21, 24 |
+| CF-24 | Failure and degraded operation | §§6.4, 10 | §§23–24 |
+| CF-25 | Verification and evidence | §§11, 24 | §§12, 17 |
+| CF-26 | Existing mechanism disposition | §§29, 32 | §33; source-level audit remains unassessed |
+| CF-27 | Architecture decision governance | §§30, 33 | §§15, 17; Project Director decisions remain reserved |
 
-### Additional integration — §§28–30
+## 21. Accountable deferred-specification register
 
-A subsequent closure pass added explicit architecture-level boundaries for language/symbolic cognition, minimum evidence-grounded social/agent modelling, advanced social-cognition deferrals, the preserve/adapt/replace assessment required for existing mechanisms, and decisions reserved to the Project Director. These additions address CF-16, CF-17, CF-26 and CF-27 more directly.
+| Deferred work | Accountable delivery owner | Minimum deliverable | Gate |
+|---|---|---|---|
+| Social/Agent Representation Specification | Architecture & Engineering Builder | Claim taxonomy, ownership map, provenance/temporal semantics, contradiction and privacy/security contracts, verification scenarios | Independent challenge; Project Director approval for scope/authority changes |
+| Legacy rule/mechanism source audit | Architecture & Engineering Builder | Exact source revision, occurrence inventory, call paths, consumers, tests, semantic classification, calibration and preserve/adapt/replace recommendation | Independent challenge; Project Director disposition for reserved changes |
+| CF-26 compatibility assessment | Architecture & Engineering Builder | Per-mechanism evidence against architecture ownership, epistemic, developmental, integration, failure and verification obligations | Project Director decision where reserved authority is affected |
+| CF-27 decision ledger | Project Director owns decisions; Architecture & Engineering Builder maintains record | Exact proposal/revision, alternatives, rationale, consequences, dependencies and accept/reject/revise status | Project Director acceptance; Independent Reviewer may challenge traceability |
+| CF-01–CF-27 traceability maintenance | Architecture & Engineering Builder | Section-level map synchronized to every architecture revision | Independent exact-revision recheck |
 
-- Latest architecture integration commit: `80b6d2fc909024e7197cbbcfe652da0197a4bf48`.
-- Latest PR #173 head after this pass: `80b6d2fc909024e7197cbbcfe652da0197a4bf48` (subject to final live recheck).
+“Deferred” is not ownerless. A later specification cannot begin implementation merely because an owner and deliverable are named; it still requires its own authorization and predecessor decisions.
 
-Independent review remains pending. The matrix and main architecture are not finally accepted.
+## 22. Project Director reserved decision register — no implied acceptance
+
+The 14 BFA-C decisions remain reserved for explicit Project Director disposition. The Builder's recommended positions are proposals only. No response, reviewer verdict, successful workflow, merge status or implementation convenience is acceptance.
+
+| Decision range | Required Director action |
+|---|---|
+| BFA-C01–BFA-C04 | Accept, reject or revise cognitive authority, ownership, epistemic lifecycle and recurrent coordination |
+| BFA-C05–BFA-C06 | Accept, reject or revise foundational reasoning and distributed learning obligations |
+| BFA-C07–BFA-C09 | Accept, reject or revise acquired goal formation, affective appraisal and metacognitive authority |
+| BFA-C10–BFA-C12 | Accept, reject or revise action/governance boundary, SYS-06 optionality and SYS-01/SYS-08 responsibility split |
+| BFA-C13–BFA-C14 | Accept, reject or revise atomic owner commits/asynchronous propagation and capability evidence standard |
+
+## 23. Current completion status — Builder correction pass
+
+**Builder correction status:** The five Blind Fresh Tester findings now have explicit architecture-level responses in §§31–33 and this matrix's §§19–22. This is not independent clearance. The inherited source-rule audit remains unassessed at source level. The 14 BFA-C decisions remain reserved to the Project Director. The exact corrected revision must be independently re-reviewed and any new findings corrected before Director acceptance.
+
+**No-shortcut status:** no merge, implementation, runtime source change, runtime test, technology selection, deployment, PR #191 disposition, PR #192/#193 integration or branch-history operation is authorized by this document.
