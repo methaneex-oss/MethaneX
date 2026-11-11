@@ -1058,10 +1058,10 @@ Exact current artifact references:
 ### 32.2 DF-06 / DF-08 / DF-11 controlling disposition
 
 - **DF-06: NOT MET.** Bounded checks establish path presence, selected pinned-source blob identities, selected anchor ranges and bounded external-reference metadata checks. They do not establish complete semantic relevance, all external destination reachability, renderer-specific anchor behavior, and all applicable historical/cross-branch link behavior under the Project Director's full-resolution requirement.
-- **DF-08: bounded closure case only; full closure not yet accepted.** Preservation report §14 defines a non-destructive retain-in-place policy and records a bounded 245-branch/203-tip and 184-PR census, mapping 108 documentation paths across 28 PRs. The final closure packet must demonstrate that this scope fully satisfies the governing DF-08 criterion or identify and close any remaining discovery gap. Do not turn a bounded closure claim into repository-wide completeness.
+- **DF-08: RESOLVED against the exact stated exit criterion and bounded foundational-document scope.** Preservation report §16 explicitly maps every criterion element to evidence: no destructive deletion/movement/overwrite, visible non-destructive supersession, discoverable foundational lineage through the recorded census and 108-path/28-PR register, explicit handling of duplicate refs and ambiguous ancestry, and visibility of unresolved/unaccepted historical items. Broader repository-wide semantic archive curation is explicitly outside the DF-08 exit criterion and remains deferred. This is not a claim of repository-wide semantic completeness.
 - **DF-11: WAIVED** by explicit Project Director decision. No independent approval is inferred.
 
-This controlling disposition supersedes earlier statements in §§30.5 and 31 that described DF-06/DF-08 as resolved within scope. Those earlier bounded results remain historical evidence, not current gate closure.
+This controlling disposition supersedes earlier statements in §§30.5 and 31 that described DF-06/DF-08 as resolved together. DF-08 is now resolved by the explicit criterion-to-evidence reconciliation in preservation report §16; DF-06 remains open.
 
 ### 32.3 Phase boundary
 
