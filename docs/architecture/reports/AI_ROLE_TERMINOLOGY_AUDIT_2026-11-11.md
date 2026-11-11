@@ -102,3 +102,39 @@ Before this branch is integrated, verify the diff and workflow syntax, then conf
 6. The PR #192 description uses **Independent Reviewer** as the role name without rewriting historical evidence attribution.
 
 A successful terminology edit is not evidence that either assessment workflow has executed successfully. No workflow run is claimed by this audit.
+
+
+---
+
+## 8. Post-audit workflow security and diagnostics correction — 2026-11-11
+
+A subsequent Builder review of the exact PR #195 workflow revision found two defects that the original bounded terminology audit had not covered:
+
+1. The manually supplied `target_revision` input was interpolated directly into a Bash `run:` script. This created an avoidable script-injection surface.
+2. The response parser did not handle all observed response shapes. It only extracted list content blocks with a `text` member, did not fall back to `message.output_text` or legacy choice text, and joined list blocks with a literal escaped separator rather than actual newlines. It could therefore reject a usable assessment or produce malformed formatting.
+
+### 8.1 Corrections applied
+
+The workflow now:
+
+- validates `TARGET_DOCS_SHA` as a full 40-character lowercase hexadecimal SHA;
+- compares the checked-out commit to the environment variable rather than interpolating the input into shell source;
+- captures HTTP status and request ID before parsing the response;
+- safely extracts string content, text/content blocks, `message.output_text`, and legacy choice text;
+- records sanitized response-shape, provider/model, finish-reason, refusal/tool-call, reasoning-presence and usage metadata before deciding whether the assessment is usable;
+- saves textual assessment output before completeness and model-identity checks, so an incomplete response remains inspectable;
+- requires the expected provider/model, `finish_reason=stop`, no refusal/tool calls, all sections A–H, and at least 1,500 characters;
+- excludes the raw response body, API key and reasoning content from evidence artifacts.
+
+### 8.2 Exact revisions and bounded verification
+
+- PR #195 head before the workflow correction: `c2727eaf09222d8cb4884f84ffd2bd0641621d53`.
+- Workflow blob before correction: `2217f6629bf65a43460ba645693d31b6ee6bd6fb`.
+- Workflow correction commits: `b1ab02e305cbe04952fa109859f92869ab9ae4a9` and `c2727eaf09222d8cb4884f84ffd2bd0641621d53`.
+- Resulting workflow blob: `885f9fa7accf825ac1360f5115a81e66d668ad74`.
+
+Static source checks against the resulting blob confirmed the SHA validation, environment-only shell comparison, all response-shape fallbacks, actual newline joining, metadata capture, and saving the response before completeness validation. This is static inspection only: the workflow has **not** been dispatched or executed. No successful Blind Fresh Tester assessment is claimed.
+
+### 8.3 Remaining verification
+
+Before PR #195 integration, verify workflow syntax and run the workflow against a deliberately controlled test revision, including empty content, list content blocks, `output_text`, legacy text, truncated output, wrong provider/model, refusal/tool calls and a valid A–H response. Confirm the artifact contains only the intended sanitized evidence. PR #195 remains a terminology/workflow proposal, open and unmerged; this correction does not merge PR #194, authorize workflow execution, clear DF-09, or change any Project Director decision.
