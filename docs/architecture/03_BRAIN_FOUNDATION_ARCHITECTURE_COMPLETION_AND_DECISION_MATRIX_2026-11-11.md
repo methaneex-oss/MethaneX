@@ -460,7 +460,7 @@ The Brain Foundation Architecture is complete only when:
 
 The completion material is integrated into the main architecture document. The earlier manifest entries in this section's predecessor were inconsistent: one entry named an intermediate PR head while a later note incorrectly named an integration commit as the PR head. Those values are retained in Git history, not repeated as current state.
 
-### Current exact manifest
+### Historical manifest before bounded source audit — superseded by §25
 
 - PR #173 branch: `architecture/brain-foundation-planning-20261103`.
 - Current architecture file: `docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md`.
@@ -559,3 +559,40 @@ The exact source evidence and line-level findings are recorded in [Inherited Mec
 
 **BFA-C01–BFA-C14 status:** all 14 remain reserved for explicit Project Director disposition. This audit does not convert Builder recommendations into accepted decisions.
 
+
+
+
+## 25. Final Builder source-audit manifest and remaining independent gate — 2026-11-11
+
+### 25.1 Exact parent snapshot before this matrix update
+
+- PR #173 branch: architecture/brain-foundation-planning-20261103.
+- PR #173 parent HEAD before this matrix update: 0f8ca586316b96e3c5738acdf6f26630746ce39d.
+- Architecture file blob: d5a7676e81d2c95b5ba18f45a237d3e0a7635696.
+- Matrix file blob before this update: f905df8f9c31fa8f3fc5a1c9247d94263a92e71e.
+- Bounded source audit report blob: 037dc71df9e508c0cc08e96a42b41aa7ba5bc041.
+- Audited donor source: PR #97 HEAD c1da222e6c94aeb3f2ad000392c21fe4fc81ab25.
+- Baseline PR #171 HEAD: b05434758ad4fe72815503f89bd5d2990ccb658b.
+- Accepted PR #172 HEAD: d7d676b79dbf3269f7fd3ebdb4363a6df19f255d.
+
+The matrix update itself advances the PR #173 branch. The resulting matrix blob and PR #173 HEAD must be re-fetched; the parent SHA above is not the post-write target.
+
+### 25.2 Source compatibility disposition
+
+The bounded donor audit is complete for the four named inherited patterns. Its conclusions are:
+
+1. Source reliability is an average of caller-supplied reliability metadata in the production assimilation path, not a calibrated source-trust estimate; the correctness-scoring method was not found called in the inspected production files.
+2. No single global confidence cutoff was found. Action-score, uncertainty/risk, similarity, retention and minimum-strength thresholds are distinct parameters with different semantics.
+3. First-eligible selection is both a fallback and a context-coupling shortcut; strategy context can be bound to eligible.front() rather than the selected intent.
+4. The authoritative belief map overwrites an existing value before setting a disputed flag; action-status beliefs are unconditionally replaced. WorldModel conflict retention is partial, not a complete versioned claim ledger.
+
+CF-26 is therefore **PARTIALLY ASSESSED**, not closed: the identified donor patterns have source evidence and dispositions, but cross-branch lineage, complete mechanism-by-mechanism compatibility and remediation specifications remain open. The audit does not authorize runtime changes.
+
+### 25.3 Remaining acceptance gates
+
+- The five prior Blind Fresh Tester findings have Builder-side responses in §§31–34 and this matrix's §§19–24. A new blind independent review of the exact post-update PR #173 HEAD remains required. The previous NOT CLEAR result on 4b960062b7b3d41fa18c60909c628e8264459927 is historical and cannot be upgraded retroactively.
+- BFA-C01–BFA-C14 remain reserved for explicit Project Director disposition; the matrix's recommendations are not approvals.
+- CF-26 broader source compatibility and remediation remain open as described above.
+- No PR merge, runtime source modification, runtime test, technology selection, deployment or Stage A start is authorized.
+
+**Builder status:** architecture corrections and bounded source audit are complete for this pass; independent re-review and Project Director decisions are not complete. Architecture acceptance remains NOT CLEARED.
