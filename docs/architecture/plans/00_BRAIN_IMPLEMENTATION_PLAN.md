@@ -1,3 +1,15 @@
+> **CONTROLLING AUTHORITY / DEFERRED STATUS — 2026-11-11**
+>
+> This document is a historical implementation-planning proposal retained for traceability. It is **NON-OPERATIVE and NOT CLEARED FOR IMPLEMENTATION PLANNING EXECUTION** while initial planning remains incomplete.
+>
+> The parent architecture and mechanism specification references below are historical accepted planning baselines only. The Project Director superseded PR #173 HEAD `97191111bc2573c14d391c0af9628db7b11f194b` as sufficient/final architecture on 2026-11-11. Current corrected proposals are PR #173 HEAD `756724b95e093ac48fcd95c5587117c0a4d8f3c0` and PR #174 HEAD `4b134048680fb5902f8c2a5a067b0c369169dbfe`; neither has completed independent re-review and Project Director disposition.
+>
+> Documentation Foundation remains NOT ACCEPTED: DF-06 is NOT MET; DF-09 is OPEN / NOT MET (latest qualifying result PARTIALLY CLEAR, 31/32, on an older revision); DF-11 is WAIVED; DF-12 is NOT ACCEPTED. DF-08 is RESOLVED against its exact bounded exit criterion. PR #191 disposition and PR #192/#193 integration order remain reserved.
+>
+> This plan may be read as a prior proposal and audited for stale assumptions, but it must not be advanced, treated as current, used to select a source baseline or technology, converted into implementation tickets, or used to authorize runtime changes. Stage A remains HELD; runtime implementation is NOT AUTHORIZED. The Project Director must explicitly reopen implementation planning after initial-planning acceptance.
+
+---
+
 > **Controlling status refresh — 2026-11-11:** This plan remains a deferred, non-operative implementation proposal. Documentation Foundation status: **DF-06 NOT MET; DF-08 RESOLVED against its exact stated exit criterion and bounded foundational-document scope; DF-09 OPEN pending a CLEAR blind fresh-reader result against the final exact PR #192 revision; DF-11 WAIVED; DF-12 NOT ACCEPTED.** PR #173's historical planning-baseline acceptance is superseded as sufficient/final architecture; corrected proposal HEAD `756724b95e093ac48fcd95c5587117c0a4d8f3c0` awaits blind independent re-review and Project Director disposition. PR #174's historical accepted specification baseline remains distinct from corrected proposal HEAD `4b134048680fb5902f8c2a5a067b0c369169dbfe`, whose F-02/F-03 responses await independent re-review and Project Director disposition; the original review report remains unavailable. PR #191 content/dependency review is complete, but Project Director disposition remains pending. PR #192/#193 remain open and unmerged; integration is held. Stage A has not started. **No implementation, source-baseline selection, runtime tests/builds, or deployment is authorized.** Consult the live [PR #192 planning index](https://github.com/methaneex-oss/MethaneX/pull/192) for the controlling status. This dated block supersedes older status statements below where they conflict; all older planning content is retained as historical evidence.
 
 # Brain Implementation Plan — Deferred Proposal
