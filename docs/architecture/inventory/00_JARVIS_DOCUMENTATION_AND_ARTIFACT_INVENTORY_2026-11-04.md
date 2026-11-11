@@ -2581,8 +2581,8 @@ Exact current related PR revisions immediately before the final planning-index r
 | #173 | `756724b95e093ac48fcd95c5587117c0a4d8f3c0` | `main` | Open/draft/unmerged; corrected Brain Foundation Architecture proposal; blind independent re-review and Project Director disposition pending |
 | #174 | `4b134048680fb5902f8c2a5a067b0c369169dbfe` | PR #173 corrected proposal branch | Open/draft/unmerged; corrected BM-01–BM-12 specification proposal; F-02/F-03 Builder responses; independent re-review and Project Director disposition pending |
 | #191 | `609d38ede50bbdd98a93dfed112781eacabee9fd` | PR #179-derived base | Open/draft/unmerged; bounded human/MCU reference report; Project Director disposition pending |
-| #192 | `87e368d790b6271b641070e1a3f9bb0fdd0c32b3` | PR #179-derived base | Open/non-draft/unmerged; 37 documentation/README/template paths; final blind fresh-reader target will be the resulting index-refresh commit |
-| #193 | `0d19b136df8021a3fc3faaf0d53072d9a9ff651b` | `plan/brain-implementation-roadmap-20261103` | Open/draft/unmerged; deferred non-operative plan and continuity handoff; separate lineage |
+| #192 | `1b022a19be58e07eeac8323b3e95cd6ea237481d` | PR #179-derived base | Open/non-draft/unmerged; 37 documentation/README/template paths; final blind fresh-reader target will be the resulting index-refresh commit |
+| #193 | `e8c64d3a51c131a1fdd46a4308beabe8ae6c7d11` | `plan/brain-implementation-roadmap-20261103` | Open/draft/unmerged; deferred non-operative plan and continuity handoff; separate lineage |
 
 PR #193's current plan and handoff blobs are `3131c32fc10abb86fc93d7d9721cce7f0db48e0b` and `23d7ebf2a287b8d1c4cd049dce2f96181fdd0ae6`, respectively. Both now identify DF-06 as NOT MET, DF-08 as RESOLVED against its exact criterion, DF-09 as pending CLEAR, DF-11 as WAIVED, and DF-12 as NOT ACCEPTED. They also distinguish the historical PR #173 planning-baseline event from its superseded completeness status and identify the corrected PR #174 F-02/F-03 proposal as pending review.
 
