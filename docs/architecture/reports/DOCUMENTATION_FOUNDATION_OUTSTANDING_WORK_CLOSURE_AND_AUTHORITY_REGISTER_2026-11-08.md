@@ -811,3 +811,30 @@ The read-only review found the 219-line human/MCU comparison useful and technica
 - Stage A: NOT STARTED / HELD. Runtime implementation: NOT AUTHORIZED.
 
 This section records bounded validation and preservation evidence only. It does not authorize PR integration, rebase, retarget, cherry-pick, replay, merge, closure, Stage A commencement, source selection or runtime implementation.
+
+---
+
+## 26. Initial-stage execution recheck and primary-source recovery — 2026-11-11
+
+The Project Director's six decisions remain controlling as recorded in §25. This addendum records subsequent evidence without changing those decisions.
+
+### 26.1 PR #173 primary decision recovery
+
+The Project Director Decision Evidence Extracts now records the contemporaneous 2026-11-03 conversation event: exact preceding question, original “Yes I do / Proceed” response at 08:18:21 UTC, reviewer context and immediate confirmation. This is materially stronger than the later repository transcription. The recovered conversation record still lacks a separately accessible immutable message URL, export ID or message ID. Preserve that access limitation. Do not call the later GitHub comment the original primary artifact.
+
+The prior Nemotron result 31/32 assessed exact revision `887b349f9826de7726707209f640ae0cafd78ace`; it remains PARTIALLY CLEAR for that packet. A new blind assessment against the exact current revision and the packet containing the recovered primary-source extract is necessary to test whether the authority/classification category reaches CLEAR. No new run has been started or claimed; the available GitHub connection exposes no workflow-dispatch operation.
+
+### 26.2 Current PR and build evidence
+
+At this recheck PR #192 is open/non-draft/unmerged at HEAD `ae4db888e83a05b149758c7de00395df8c9907c7`, base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, with 37 changed paths. PR #191 remains open/draft/unmerged at `609d38ede50bbdd98a93dfed112781eacabee9fd`; PR #193 remains open/draft/unmerged at `c67318387d9c2129484203e4f1a1002c4af96ef0`. Their lineages remain separate; no history operation is authorized.
+
+Native Brain Build run [#43019119856](https://github.com/methaneex-oss/MethaneX/actions/runs/43019119856) completed successfully on PR #192 HEAD `ae4db888e83a05b149758c7de00395df8c9907c7`; the `cpp` job's Configure and Build steps succeeded. This does not clear any documentation-foundation criterion.
+
+### 26.3 DF-06 / DF-08 under the Project Director's full-resolution requirement
+
+- **DF-06 remains NOT MET.** Existing evidence covers bounded path existence, selected pinned source identities, selected anchor ranges and bounded external-reference metadata checks. It does not yet prove complete semantic relevance, external destination reachability, renderer-specific anchor behavior and all applicable historical/cross-branch link behavior.
+- **DF-08:** Preservation report §14 records a 245-branch / 203-tip and 184-PR census, 108 documentation paths across 28 documentation PRs, selected cross-revision comparisons and a non-destructive retain-in-place rule. It labels DF-08 resolved within that defined discovery scope, while explicitly excluding semantic review of all repository content outside the enumerated set. The Project Director's requirement is full resolution; the closure package must map every DF-08 requirement to this evidence and show that the defined scope is sufficient, or identify and close remaining gaps. Do not inflate a bounded census into an unqualified repository-wide completeness claim.
+
+### 26.4 Current disposition
+
+Documentation Foundation remains **NOT ACCEPTED / NOT CLEARED**. DF-09 OPEN pending a new CLEAR assessment; DF-06 NOT MET; DF-08 requires criterion-to-evidence closure reconciliation; DF-11 WAIVED; DF-12 NOT ACCEPTED. Stage A remains HELD. Runtime implementation, PR integration, PR closure and branch-history operations remain unauthorized.
