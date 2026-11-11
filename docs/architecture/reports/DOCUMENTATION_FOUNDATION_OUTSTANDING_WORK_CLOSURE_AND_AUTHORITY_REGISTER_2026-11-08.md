@@ -941,3 +941,43 @@ The read-only content review finds the document useful as a bounded BM-01–BM-1
 - Stage A: HELD. Runtime implementation: NOT AUTHORIZED.
 
 This addendum records Builder evidence and recommendations only. It does not create a CLEAR reader result, substitute for a reserved Project Director decision, merge PRs, start Stage A or authorize implementation.
+
+
+
+## 30. Updated Brain architecture source-audit and documentation cross-reference status — 2026-11-11
+
+### 30.1 Latest exact PR #173 revision
+
+The PR #173 branch has advanced beyond the correction snapshot in §29.2. Its current exact HEAD is 756724b95e093ac48fcd95c5587117c0a4d8f3c0 (open, draft, unmerged). Current artifacts:
+
+| Artifact | Blob SHA | Status |
+|---|---|---|
+| docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md | d5a7676e81d2c95b5ba18f45a237d3e0a7635696 | §§31–34; social/agent ownership, inherited-rule dispositions, accountability and bounded source-audit result |
+| docs/architecture/03_BRAIN_FOUNDATION_ARCHITECTURE_COMPLETION_AND_DECISION_MATRIX_2026-11-11.md | ca647a5a5c2c415bae7b8f4582ecbbc451906680 | CF-01–CF-27 traceability, five finding dispositions, BFA-C01–C14 register, exact source audit manifest |
+| docs/architecture/reports/INHERITED_MECHANISM_SOURCE_COMPATIBILITY_AUDIT_2026-11-11.md | 037dc71df9e508c0cc08e96a42b41aa7ba5bc041 | Bounded source audit of exact PR #97 donor HEAD c1da222e6c94aeb3f2ad000392c21fe4fc81ab25 |
+
+### 30.2 Source audit result — CF-26 partial assessment
+
+The source audit is no longer unassessed for the four inherited patterns named by the blind reviewer. It establishes that the donor's source reliability metric averages incoming reliability metadata; correctness-based source scoring has no call site in the inspected production cognitive files; no single global confidence cutoff was found, although several distinct fixed operational defaults exist; first-eligible-goal fallback and first-eligible context coupling occur in multiple paths; and authoritative belief/action-status state uses latest-value replacement with only partial conflict preservation.
+
+**CF-26: PARTIALLY ASSESSED, NOT ACCEPTED AS-IS.** The bounded PR #97 donor evidence and explicit preserve/adapt/replace dispositions are complete. Broader cross-branch lineage, mechanism-specific remediation specifications and tests remain outstanding. The source audit is read-only; no runtime source changed.
+
+### 30.3 Blind independent re-review requirement
+
+The previous NOT CLEAR assessment on PR #173 HEAD 4b960062b7b3d41fa18c60909c628e8264459927 is historical. The current corrected target is 756724b95e093ac48fcd95c5587117c0a4d8f3c0. The workflow on main is .github/workflows/brain-foundation-blind-architecture-review.yml and requires the exact 40-character target_revision input. The available GitHub connection exposes no workflow-dispatch action; no new review run is claimed. A blind re-review of the exact current target remains a required external evidence step.
+
+### 30.4 PR #192 documentation cross-reference update
+
+At the start of this addendum, PR #192 parent HEAD was 0d4831432fbb157a880016c0dee8cee1b7b11601. The portal docs/README.md was updated to link to the exact current PR #173 proposal and to the new source compatibility audit. Its blob is b8ed78360051e2f8dfe75872ab1f0a2c40968420. The PR #192 index, inventory and self-review must be refreshed to the new PR #173 exact head before the final DF-09 packet is built.
+
+### 30.5 Controlling gate state
+
+- DF-06 and DF-08: RESOLVED within the stated Initial Documentation Foundation criteria and bounded package scope, with evidence in preservation report §§15–16.
+- DF-09: OPEN / NOT MET. Last result remains PARTIALLY CLEAR (31/32) on exact packet revision 887b349f9826de7726707209f640ae0cafd78ace; not a result for current PR #192.
+- DF-10: must be refreshed after PR #192 cross-reference updates and exact final blob/HEAD re-fetch.
+- DF-11: WAIVED by the Project Director.
+- DF-12: NOT ACCEPTED; Project Director exact-revision decision remains required.
+- PR #191: read-only review complete; Builder recommendation is retain as a separate reference artifact; Project Director disposition remains pending.
+- BFA-C01–BFA-C14: reserved for explicit Project Director disposition; no recommendation is treated as acceptance.
+- Stage A: HELD. Runtime implementation: NOT AUTHORIZED.
+
