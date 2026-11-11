@@ -1,0 +1,219 @@
+name: Brain Foundation — Blind Independent Architecture Review
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_revision:
+        description: "Exact PR #173 commit SHA to review (40-character SHA)"
+        required: true
+        type: string
+      assessment_label:
+        description: "Evidence artifact label"
+        required: false
+        default: "brain-foundation-blind-review-v1"
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: brain-foundation-blind-review-${{ inputs.target_revision }}
+  cancel-in-progress: false
+
+jobs:
+  blind-architecture-review:
+    name: Nemotron blind architecture review
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Check out exact target revision
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.target_revision }}
+          fetch-depth: 1
+
+      - name: Verify revision and assemble blind review packet
+        env:
+          TARGET_SHA: ${{ inputs.target_revision }}
+          ASSESSMENT_LABEL: ${{ inputs.assessment_label }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$TARGET_SHA" =~ ^[0-9a-f]{40}$ ]] || { echo "::error::target_revision must be a full 40-character commit SHA."; exit 1; }
+          test "$(git rev-parse HEAD)" = "$TARGET_SHA"
+          [[ "$ASSESSMENT_LABEL" =~ ^[A-Za-z0-9._-]{1,64}$ ]] || { echo "::error::Invalid assessment_label."; exit 1; }
+
+          # Pin and fetch the accepted architecture baselines. Do not use moving branch names.
+          git fetch --no-tags --depth=1 origin b05434758ad4fe72815503f89bd5d2990ccb658b
+          git fetch --no-tags --depth=1 origin d7d676b79dbf3269f7fd3ebdb4363a6df19f255d
+
+          mkdir -p brain-foundation-blind-review-evidence
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib, json, os, subprocess
+
+          target = os.environ["TARGET_SHA"]
+          docs = [
+              ("PR173 architecture", target, "docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md"),
+              ("PR173 completion and decision matrix", target, "docs/architecture/03_BRAIN_FOUNDATION_ARCHITECTURE_COMPLETION_AND_DECISION_MATRIX_2026-11-11.md"),
+              ("PR171 whole-system architecture foundation", "b05434758ad4fe72815503f89bd5d2990ccb658b", "docs/architecture/00_JARVIS_SYSTEM_ARCHITECTURE_FOUNDATION.md"),
+              ("PR171 whole-system anatomy and responsibility map", "b05434758ad4fe72815503f89bd5d2990ccb658b", "docs/architecture/01_JARVIS_WHOLE_SYSTEM_ANATOMY_AND_RESPONSIBILITY_MAP.md"),
+              ("Accepted PR172 foundational capability investigation", "d7d676b79dbf3269f7fd3ebdb4363a6df19f255d", "docs/architecture/research/02_BRAIN_FOUNDATIONAL_CAPABILITY_INVESTIGATION_2026-11-03.md"),
+          ]
+          out = Path("brain-foundation-blind-review-evidence")
+          chunks, manifest = [], []
+          for label, commit, path in docs:
+              content = subprocess.check_output(["git", "show", f"{commit}:{path}"], text=True)
+              chunks.append(f"\n\n===== {label}\nPATH: {path}\nSOURCE COMMIT: {commit}\n=====\n\n{content}")
+              manifest.append({"label": label, "path": path, "source_commit": commit,
+                               "sha256": hashlib.sha256(content.encode()).hexdigest(),
+                               "characters": len(content)})
+          packet = "".join(chunks)
+          (out / "blind_review_packet.md").write_text(packet)
+          (out / "packet_manifest.json").write_text(json.dumps({
+              "target_revision": target,
+              "baseline_pr171": "b05434758ad4fe72815503f89bd5d2990ccb658b",
+              "accepted_pr172": "d7d676b79dbf3269f7fd3ebdb4363a6df19f255d",
+              "documents": manifest,
+              "exclusions": [
+                  "PR description and comments",
+                  "Builder correction/review-response record",
+                  "prior reviewer reports and verdicts",
+                  "conversation history and Project Director commentary"
+              ],
+              "purpose": "Blind assessment of the architecture and matrix against the accepted baselines; no prior reviewer findings are disclosed."
+          }, indent=2))
+          PY
+
+      - name: Run independent Nemotron architecture assessment
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          ASSESSMENT_LABEL: ${{ inputs.assessment_label }}
+          TARGET_SHA: ${{ inputs.target_revision }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${OPENROUTER_API_KEY:-}" || { echo "::error::Repository secret OPENROUTER_API_KEY is not configured."; exit 1; }
+          python3 - <<'PY'
+          from pathlib import Path
+          import json, os, re, urllib.request, urllib.error, datetime
+
+          out = Path("brain-foundation-blind-review-evidence")
+          packet = (out / "blind_review_packet.md").read_text()
+          system = """You are an independent, adversarial software-systems and cognitive-architecture reviewer. You have no prior conversation context. Assess only the supplied source documents. Do not infer correctness from confident wording. Do not use external sources. Do not reveal hidden reasoning or chain-of-thought; provide concise findings with exact document and section evidence. Do not redesign the system or write implementation code."""
+          task = """Conduct a blind independent architectural review of the proposed Brain Foundation Architecture at the exact target revision recorded in the packet manifest.
+
+          Treat PR #171 as the accepted whole-system architecture baseline and PR #172 as the accepted foundational capability investigation. Assess whether the PR #173 architecture and completion matrix are complete, internally coherent, compatible with those baselines, and sufficient to guide later mechanism specifications without prematurely choosing implementation details.
+
+          Apply the governing principle: ENGINEER THE MECHANISMS; LET BEHAVIOR BE ACQUIRED THROUGH EXPERIENCE. Challenge any hidden hardcoding of learned beliefs, goals, motivation, preferences, affective reactions, strategies or behaviour. Do not mistake naming a responsibility for specifying its authority, state, lifecycle, interactions, failure semantics or verification obligations.
+
+          Independently examine at minimum:
+          1. Coverage of every foundational cognitive responsibility and whether any responsibility is missing, duplicated, ownerless or ambiguously owned.
+          2. Authoritative state ownership, proposal-versus-commit boundaries, state consistency, provenance, epistemic status, uncertainty, temporal/contextual scope and revision history.
+          3. Cross-responsibility contracts, dependency direction, circularity, coordination, concurrency, atomicity, ordering, stale updates, contradiction, delayed evidence and partial failure.
+          4. Experience representation, memory, belief revision, prediction, prediction error, valuation, affect, attention/appraisal, consolidation, association, strategy learning, decision, action consequences and persistent behavioural change.
+          5. Whether learning is genuinely experience-dependent, distributed where appropriate, evaluated, persistent, transferable, reversible/correctable and protected against regression or spurious updates.
+          6. Whether goals, motivation and affect can emerge through mechanisms without hardcoded stimulus-to-response mappings or fixed desired outcomes.
+          7. Reasoning, simulation, metacognition, self-model, social/agent modelling, language/symbolic cognition and development: what is foundational, what is deferred, and whether the boundary is defensible.
+          8. Governance, safety, action authorization, external execution, embodiment and pre-embodiment boundaries.
+          9. Degraded operation, recovery, security/trust boundaries and observability/evidence requirements.
+          10. Every CF-01 through CF-27 obligation and each of the 14 proposed decision dispositions in the completion matrix. Identify omissions and unsupported closure claims.
+          11. Compatibility with PR #171 system responsibilities and PR #172 research conclusions; identify any contradiction, unjustified narrowing or untraceable architectural claim.
+          12. Whether implementation-level matters are properly deferred with explicit architectural obligations, rationale and later ownership—or whether deferral hides a foundational gap.
+
+          Be adversarial but fair. Separate a true architecture blocker from a detail properly deferred to mechanism specifications. Do not require arbitrary technical choices where architecture-level contracts are sufficient. Do not treat a passing CI build as evidence of conceptual correctness.
+
+          Required output:
+          A. Exact target revision reviewed (copy from manifest).
+          B. Overall verdict: CLEAR / PARTIALLY CLEAR / NOT CLEAR, with concise rationale.
+          C. Critical blockers (if any), each with ID, severity, exact path + heading (and line numbers where determinable), violated/unsatisfied requirement, concrete correction, and objective recheck criterion.
+          D. Major and minor findings in the same evidence-based format.
+          E. CF-01–CF-27 coverage table: CLEAR / PARTIAL / MISSING for each, with a brief evidence pointer.
+          F. The 14 proposed decision dispositions: identify which are sound, unsound, incomplete or require explicit Project Director choice; do not assume recommendations are approved.
+          G. Cross-baseline compatibility findings for PR #171 and PR #172.
+          H. Hardcoding/developmental-integrity audit: identify any mechanism that prescribes learned behaviour rather than enabling acquisition through experience.
+          I. Deferred-specification register: acceptable deferrals versus hidden foundational omissions, with later specification ownership where the documents identify it.
+          J. Final recheck plan: exact corrections and evidence required before a second independent review.
+          K. Confidence, scope limits and any packet evidence that was unavailable.
+
+          Verdict standard:
+          - CLEAR only if no critical or major architectural blocker remains and all foundational obligations are adequately specified at architecture level.
+          - PARTIALLY CLEAR if the architecture is substantially sound but material gaps remain.
+          - NOT CLEAR if foundational ownership, interaction, learning integrity, authority or verification is materially incomplete or contradictory.
+
+          Cite exact supplied document paths and headings for every material finding. Never invent a section, line number, source or fact. If line numbers are unavailable, cite the exact heading and say so. This is an independent assessment, not Project Director acceptance or authorization to implement.
+
+          BLIND REVIEW PACKET:
+          """ + packet
+          prompt_path = out / "assessment_prompt.md"
+          prompt_path.write_text(system + "\n\n" + task.split("BLIND REVIEW PACKET:")[0])
+
+          body = {
+              "model": "nvidia/nemotron-3.5-super-vl:free",
+              "messages": [{"role": "system", "content": system}, {"role": "user", "content": task}],
+              "temperature": 0.1,
+              "max_tokens": 12000,
+              "reasoning": {"enabled": False},
+              "stream": False
+          }
+          request = urllib.request.Request(
+              "https://openrouter.ai/api/v1/chat/completions",
+              data=json.dumps(body).encode(),
+              headers={"Authorization": "Bearer " + os.environ["OPENROUTER_API_KEY"],
+                       "Content-Type": "application/json",
+                       "HTTP-Referer": "https://github.com/methaneex-oss/MethaneX",
+                       "X-Title": "MethaneX Blind Brain Foundation Architecture Review"},
+              method="POST")
+          try:
+              with urllib.request.urlopen(request, timeout=600) as response:
+                  raw = json.loads(response.read().decode())
+          except urllib.error.HTTPError as exc:
+              detail = exc.read().decode(errors="replace")[:4000]
+              (out / "api_error.txt").write_text(f"HTTP {exc.code}\n{detail}")
+              raise SystemExit(f"OpenRouter request failed with HTTP {exc.code}; diagnostic saved.")
+          except Exception as exc:
+              (out / "api_error.txt").write_text(type(exc).__name__ + ": " + str(exc))
+              raise SystemExit("OpenRouter request failed; diagnostic saved.")
+
+          choices = raw.get("choices") or []
+          choice = choices[0] if choices else {}
+          message = choice.get("message") or {}
+          content = message.get("content")
+          if isinstance(content, list):
+              content = "\n".join(part.get("text", "") for part in content
+                                   if isinstance(part, dict) and isinstance(part.get("text"), str))
+          if not isinstance(content, str) or not content.strip():
+              (out / "api_error.txt").write_text(json.dumps({
+                  "error": "Model returned no textual assessment",
+                  "provider": raw.get("provider"), "model": raw.get("model"),
+                  "finish_reason": choice.get("finish_reason"),
+                  "usage": raw.get("usage")
+              }, indent=2))
+              raise SystemExit("Model returned no textual assessment; diagnostic saved.")
+
+          (out / "independent_assessment.md").write_text(content)
+          usage = raw.get("usage") or {}
+          metadata = {
+              "assessment_label": os.environ["ASSESSMENT_LABEL"],
+              "target_revision": os.environ["TARGET_SHA"],
+              "expected_model": "nvidia/nemotron-3.5-super-vl:free",
+              "provider": raw.get("provider"), "model": raw.get("model"),
+              "response_id": raw.get("id"), "finish_reason": choice.get("finish_reason"),
+              "native_finish_reason": choice.get("native_finish_reason"),
+              "usage": {k: usage.get(k) for k in ("prompt_tokens", "completion_tokens", "total_tokens", "cost") if k in usage},
+              "assessment_characters": len(content),
+              "completed_at_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+              "review_is_advisory_not_project_director_acceptance": True
+          }
+          (out / "run_metadata.json").write_text(json.dumps(metadata, indent=2))
+          print("Assessment generated. See independent_assessment.md and run_metadata.json in the uploaded artifact.")
+          PY
+
+      - name: Upload blind review evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: brain-foundation-blind-review-${{ inputs.assessment_label }}
+          path: brain-foundation-blind-review-evidence/
+          if-no-files-found: warn
+          retention-days: 30
