@@ -2587,3 +2587,49 @@ Exact current related PR revisions immediately before the final planning-index r
 PR #193's current plan and handoff blobs are `3131c32fc10abb86fc93d7d9721cce7f0db48e0b` and `23d7ebf2a287b8d1c4cd049dce2f96181fdd0ae6`, respectively. Both now identify DF-06 as NOT MET, DF-08 as RESOLVED against its exact criterion, DF-09 as pending CLEAR, DF-11 as WAIVED, and DF-12 as NOT ACCEPTED. They also distinguish the historical PR #173 planning-baseline event from its superseded completeness status and identify the corrected PR #174 F-02/F-03 proposal as pending review.
 
 The final PR #192 index commit must be fetched after this inventory write. No PR integration, branch-history operation, Stage A start or runtime implementation is authorized.
+
+
+## 64. Final initial-planning closeout artifacts and exact live state — 2026-11-11
+
+### 64.1 PR #192 closeout snapshot before this inventory update
+
+- PR #192 branch: `docs/whole-brain-planning-scope-correction-20261107`.
+- Exact parent HEAD before this inventory update: `90837dc47d75291b61895888d6ce44f6bea4fa84`.
+- Base: `docs/jarvis-phase-2-whole-brain-integration-map-20261105` at `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.
+- Open, non-draft, unmerged; 38 changed paths.
+- Current inventory blob before this update: `1a27a3db681f0fde177420ac51987ce29fe2309a`.
+- Current outstanding-work register blob: `a5a0855c906874f7eb119403973c8cd0e9323a3e`.
+- Current Builder self-review blob: `6955c1d085c51a1954d6756a89f450e3a2b78321`.
+- New initial-planning closeout report blob: `f21020ce0242b5c811804282f54e8d28fce7f86c`.
+
+The complete 38-path manifest and exact parent blob SHAs are in self-review §23.2. This inventory update advances PR #192; the final index update will be the last planned PR #192 write, and the resulting live HEAD must be fetched afterward.
+
+### 64.2 Current architecture/specification and deferred-plan references
+
+| Artifact | Exact current revision | Status |
+|---|---|---|
+| PR #173 Brain Foundation Architecture | HEAD `756724b95e093ac48fcd95c5587117c0a4d8f3c0` | Corrected proposal; blind independent re-review and Project Director BFA-C01–BFA-C14 decisions remain |
+| PR #174 Brain Mechanism Specification | HEAD `f6662c149be4395f4c207f62a42920e787f063c4`; spec blob `fbe017d96f9d0716be6080c96eea6b67c7da62fa` | Corrected proposal; F-02/F-03 correction report blob `3f133ab32a0f5fc70c525c312ebdc8e0060d67fe`; independent re-review request blob `4e3e4482158f9905cecd3b5d9bab2946a603681b`; review and Director disposition outstanding |
+| PR #175 implementation roadmap | HEAD `c30fe20cfdf3f499416972042be06acdd70f752d` | Draft, non-operative proposal; no baseline or implementation authorization |
+| PR #193 deferred plan/handoff | HEAD `4705716e0845d7b5621ab7e339d36c9f42853b1a` | Draft, non-operative; current status block states initial planning NOT COMPLETE |
+| PR #191 human/MCU reference report | HEAD `609d38ede50bbdd98a93dfed112781eacabee9fd` | Bounded reference; content/dependency review complete; Project Director disposition pending |
+
+### 64.3 Gate status and final closeout report
+
+The exact live gate status is consolidated in [Initial Planning Gate — Live Closeout Status — 2026-11-11](../reports/INITIAL_PLANNING_GATE_CLOSEOUT_STATUS_2026-11-11.md), blob `f21020ce0242b5c811804282f54e8d28fce7f86c`.
+
+- DF-06 NOT MET; complete semantic, external, renderer-specific and historical/cross-branch link validation remains open.
+- DF-08 RESOLVED against its exact bounded exit criterion; no repository-wide semantic completeness claim.
+- DF-09 OPEN / NOT MET; the 31/32 PARTIALLY CLEAR result on older revision `887b349f9826de7726707209f640ae0cafd78ace` does not assess final current PR #192 HEAD.
+- DF-11 WAIVED by Project Director.
+- DF-12 NOT ACCEPTED.
+- PR #173 blind independent re-review and BFA-C01–BFA-C14 dispositions remain outstanding.
+- PR #174 independent re-review and Project Director disposition remain outstanding.
+- PR #191 disposition and PR #192/#193 integration order remain reserved.
+- Stage A NOT STARTED / HELD; implementation planning HELD; runtime implementation NOT AUTHORIZED.
+
+### 64.4 Evidence and self-reference boundary
+
+Self-review §23.2 records all 38 exact changed paths and their blob SHAs at the closeout parent snapshot. The inventory, index and self-review themselves are updated sequentially; their resulting blobs cannot be fully enumerated by a document that is itself still being updated. The final index refresh will record the exact parent snapshot and final cross-document artifact identities; after that commit, fetch the live PR #192 HEAD and use only that exact revision for DF-09.
+
+No PR is merged, rebased, retargeted or cherry-picked. No runtime source, test, dependency, build configuration or runtime workflow is modified in this closeout.
