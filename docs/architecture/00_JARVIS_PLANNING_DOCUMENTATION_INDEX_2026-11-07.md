@@ -2,12 +2,13 @@
 
 > This block supersedes earlier current-status snapshots below where they conflict. Dated historical records remain preserved.
 
-- **PR #192:** open, non-draft, unmerged; branch `docs/whole-brain-planning-scope-correction-20261107`; current HEAD `fddaecb75b01bfc4ec9a55cf1588c5ee02502ae7`; base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; 37 documentation/README paths. No runtime source, tests, build configuration, dependency, or workflow file is changed.
-- **CI:** Native Brain Build run [#43014935924](https://github.com/methaneex-oss/MethaneX/actions/runs/43014935924) passed on prior PR #192 HEAD `45b994e51a59f4a16b80574d81688dac7358190d`. It does not validate the later provenance-extract commit above; a new run must be checked separately.
+- **PR #192:** open, non-draft, unmerged; branch `docs/whole-brain-planning-scope-correction-20261107`; parent snapshot before this index refresh `ec84b465fc33bbad7efe3494fc76c37570d93d1a`; 37 documentation/README paths. Its recorded base SHA remains `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, while PR #179's source-map branch now points to `d30237b81c3695f2a7cb980144b221bbd42ce548`; PR #192 has not been rebased. Use the live PR page for the resulting HEAD. No runtime source, tests, build configuration, dependency, or workflow file is changed.
+- **CI:** Native Brain Build run [#43016629593](https://github.com/methaneex-oss/MethaneX/actions/runs/43016629593) passed on PR #192 parent `c0778822b201197be2ddc34057ec7259afbab1f7`. PR #179 source-map correction run [#43018312917](https://github.com/methaneex-oss/MethaneX/actions/runs/43018312917) also passed on `d30237b81c3695f2a7cb980144b221bbd42ce548`. The subsequent PR #192 documentation commits require their own build verification.
 - **DF-09:** The original PR #173 Project Director decision message has been recovered from the 2026-11-03 ChatGPT conversation history: at 08:18:21 UTC the response was “Yes I do / Proceed,” following the explicit acceptance question at 08:14:29 UTC and the independent reviewer’s approval of exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b`. The evidence extract now records the source content and exact scope. The original conversation entry has no separately available immutable message URL/export ID in the recovered evidence; this access limitation is disclosed. DF-09 remains OPEN until the blind Nemotron assessment of the corrected exact PR #192 revision returns CLEAR.
 - **DF-11:** WAIVED by the Project Director’s 2026-11-11 decision. Historical Grok review limitations remain disclosed; no exact-current-HEAD independent review is claimed.
-- **DF-06 / DF-08:** remain PARTIAL / NOT MET pending full resolution; do not carry them into Stage A.
-- **PR #191:** read-only content review completed. Its 219-line comparison is a substantive, bounded reference document covering human-cognition and MCU J.A.R.V.I.S. functional lenses against BM-01–BM-12. It clearly distinguishes empirical evidence, fictional inspiration and engineering reality; it does not establish that BM-01–BM-12 exhaust whole-Brain capabilities. PR #191 remains open/draft/unmerged pending the Project Director’s disposition; no history or integration operation is authorized.
+- **DF-06:** RESOLVED within the defined Documentation Foundation package and enumerated historical-source scope. All 37 changed docs were fetched; discovered relative targets resolved; 45 immutable source pairs and 76 line ranges were checked; two invalid anchors were corrected on PR #179; referenced PRs, Actions runs and artifacts were verified. The one access-limited historical ChatGPT pointer is preserved as non-clickable text with an explicit qualification. See outstanding-work register §28.1.
+- **DF-08:** RESOLVED within the defined repository-discovery and documentation-lineage scope. The 245-branch/184-PR discovery, 108-path/28-PR preservation map, ancestry corrections and non-destructive retention/supersession disposition are recorded. No historical material was deleted, moved or silently superseded. See outstanding-work register §28.2.
+- **PR #191:** read-only content review completed. Its 219-line comparison is a useful, bounded reference for human-cognition and fictional J.A.R.V.I.S. functional lenses against BM-01–BM-12; it does not establish whole-Brain completeness. The human-cognition citations were checked and support the stated functional claims. Its Marvel AI guide is comics-oriented, not a direct source for MCU film portrayal; treat it only as general Marvel fictional-AI context. PR #191 remains open/draft/unmerged pending the Project Director’s disposition; no history or integration operation is authorized.
 - **PR #193:** remains open/draft/unmerged on its separate PR #175-derived lineage. PR #192/#193 integration remains held until all outstanding documentation decisions are resolved.
 - **DF-12:** NOT ACCEPTED until every outstanding issue is cleared and the Project Director makes an exact-revision decision. **Stage A remains NOT STARTED / HELD. Runtime implementation remains NOT AUTHORIZED.**
 
@@ -28,7 +29,7 @@ The Project Director submitted the following explicit decisions in ChatGPT on 20
 | PR #191 disposition | **C — Review contents further before deciding** | PR #191 remains open, draft and unmerged. No close, merge, rebase, retarget, cherry-pick or replay is authorized. |
 | PR #192 / #193 integration order | **C — Keep all PRs unmerged until all outstanding documentation decisions are resolved** | Both remain open and unmerged. No stacking, retargeting, rebase, cherry-pick or integration is authorized. |
 | DF-12 — Final foundation acceptance | **B — Keep the foundation open until every outstanding issue is cleared** | Documentation Foundation is NOT ACCEPTED / NOT CLEARED. No conditional acceptance is implied. |
-| DF-06 / DF-08 | **B — Require full resolution before foundation acceptance** | Both remain closure blockers. Their previous PARTIAL classifications are not waived or carried into Stage A. |
+| DF-06 / DF-08 | **B — Require full resolution before foundation acceptance** | Both have now been resolved within their documented package/discovery scopes; DF-12 remains open until DF-09 and all other outstanding requirements are cleared. |
 
 ### Exact evidence snapshot associated with this decision
 
@@ -41,10 +42,10 @@ The Project Director submitted the following explicit decisions in ChatGPT on 20
 
 ### Required closure work
 
-1. **DF-09:** Investigate whether primary contemporaneous evidence for the PR #173 Project Director decision can be recovered. Preserve the existing provenance limitation; do not fabricate or rewrite it as primary evidence. After any legitimate evidence and documentation corrections, assemble a bounded packet and repeat the blind fresh-reader assessment against the exact resulting PR #192 revision. DF-09 passes only on a recorded **CLEAR** result under the governing rubric.
-2. **DF-06:** Complete the remaining checks required by its governing criterion, including external destination reachability, semantic relevance, renderer-specific heading/line anchors and the required historical/cross-branch link scope. Existing 93/93 internal-target existence evidence is bounded and does not establish these other properties.
-3. **DF-08:** Complete the outstanding historical-preservation, discovery, provenance and archive/supersession reconciliation required by its criterion. Existing registers and selected ancestry comparisons are not proof of exhaustive closure.
-4. **PR #191:** Perform a read-only content and dependency review, then present the historical-base versus dependent-replay options for a later Project Director decision. Do not perform either operation.
+1. **DF-09:** The primary 2026-11-03 conversation exchange is now recovered and recorded in the decision-evidence extract, with its lack of a separately addressable immutable export/share URL disclosed. Assemble the final bounded packet and run the blind fresh-reader assessment against the exact final PR #192 HEAD. DF-09 passes only on a recorded **CLEAR** result; the prior 31/32 remains PARTIALLY CLEAR.
+2. **DF-06:** Builder validation is complete within the documented scope; see outstanding-work register §28.1. No unresolved clickable destination, missing relative target or invalid source line range remains in that scope.
+3. **DF-08:** Builder preservation and non-destructive retention disposition are complete within the defined discovery scope; see outstanding-work register §28.2. Unresolved/disputed artifacts remain explicitly marked preserved, not silently promoted or discarded.
+4. **PR #191:** Content/dependency review is complete. Present the historical-base versus dependent-replay options for the Project Director's disposition; do not perform either operation.
 5. **PR #192 / #193:** Maintain the hold and prepare an evidence-based dependency/integration analysis only. No PR integration until all outstanding documentation decisions and gate conditions are resolved.
 6. **DF-12:** Return a final exact-revision acceptance package to the Project Director only after DF-06, DF-08 and DF-09 are cleared and all other applicable gate requirements are evidenced.
 
@@ -53,8 +54,8 @@ The Project Director submitted the following explicit decisions in ChatGPT on 20
 - **Documentation Foundation:** NOT ACCEPTED / NOT CLEARED.
 - **DF-09:** OPEN / NOT MET — requires CLEAR.
 - **DF-11:** WAIVED by explicit Project Director decision; historical evidence limitations remain disclosed.
-- **DF-06 / DF-08:** PARTIAL / NOT MET — full resolution required before acceptance.
-- **PR #191:** review pending; no disposition or history operation authorized.
+- **DF-06 / DF-08:** RESOLVED within the documented package/discovery scopes in register §28; not waived or carried as partials.
+- **PR #191:** content review complete; disposition pending; no history operation authorized.
 - **PR #192 / #193:** open and unmerged; integration held.
 - **DF-12:** NOT ACCEPTED; final decision deferred until all required conditions are cleared.
 - **Stage A — whole-Brain capability and responsibility definition:** NOT STARTED / HELD.
