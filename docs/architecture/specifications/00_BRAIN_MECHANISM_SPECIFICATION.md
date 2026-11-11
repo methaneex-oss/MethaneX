@@ -837,6 +837,8 @@ These scenarios are architecture-to-mechanism obligations. They are not claims t
 44. A changed premise or assumption causes BM-11 to mark dependent conclusions and downstream derived state stale and trigger targeted reconsideration.
 45. A downstream owner may qualify or reject a reasoning result; its disposition and rationale remain inspectable and the reasoning episode is preserved.
 46. A result that is only logged or delivered without relevant downstream evaluation/disposition fails the integration acceptance test.
+47. An accepted reasoning result is used by a relevant owner to produce a materially different qualified belief, prediction/model state or goal/plan evaluation; the downstream record identifies the exact reasoning artifact/version and the resulting owner-state/decision version. If no material downstream computation can be demonstrated, the integration claim fails.
+48. A previously accepted reasoning result is invalidated by a changed premise or contradicted evidence; BM-11 identifies affected downstream versions, and each owner records whether it recomputes, qualifies, withdraws or retains its state with rationale. Silent persistence of invalid dependent conclusions fails.
 
 ---
 
