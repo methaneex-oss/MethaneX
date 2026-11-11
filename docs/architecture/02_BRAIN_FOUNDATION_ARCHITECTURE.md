@@ -928,4 +928,60 @@ The Brain Foundation Architecture is complete only when:
 
 A Builder self-assessment, correction log, open PR, green documentation workflow or document length is not proof of completion. Until all gates are evidenced, this remains a proposed architecture. No merge, implementation, runtime test, technology selection or deployment is authorized by this addendum.
 
+
+## 28. Language, symbolic and social/agent cognition boundaries
+
+### 28.1 Language and symbolic cognition
+
+Language is one representational and interaction modality within the Brain, not the Brain's entirety or sole reasoning substrate. Language inputs may arrive as user reports, documents, dialogue, tool outputs or other authorized sources; their source, context, temporal scope and reliability remain attached. Language interpretation produces candidate meanings and referents, which must be grounded against available context, observations and memory where possible.
+
+The Brain must distinguish quoted/reported claims, instructions, questions, hypothetical content, generated text and verified facts. A language model's fluent output, a generated explanation or a paraphrase does not independently establish truth, memory, reasoning provenance or action execution. Language can express a belief, goal, plan or proposal, but does not replace the authoritative state owner for that class.
+
+The foundation must support language-mediated cognition while remaining capable of processing structured, non-linguistic and future multimodal representations. Mature language generation, dialogue strategy and linguistic skill remain capabilities that may improve through experience and later mechanism specifications.
+
+### 28.2 Social and agent modelling
+
+The foundational Brain may need to represent other agents to interpret interaction, coordinate tasks and reason about reported information. The minimum architecture supports evidence-grounded agent records containing observed identity hypotheses, interaction history, attributed statements/actions, context, known role/authority where externally established, and evidence-qualified estimates of capability, availability, commitments or likely knowledge.
+
+Claims about another agent's beliefs, intentions, emotions, reliability or future behaviour remain hypotheses with provenance and uncertainty, not directly observed facts. The Brain must distinguish an agent's statement from an independently verified external fact, and distinguish a role or permission granted by system governance from an inferred social status. Conflicting identity hypotheses and inconsistent statements remain inspectable.
+
+Advanced theory-of-mind modelling, rich social motivation, relationship dynamics, persuasion, negotiation and teammate modelling are advanced capabilities. The foundation must not preload a fixed persona, loyalty model, emotional attitude or social preference. Any acquired social model must be evidence-sensitive, revisable and subject to privacy, security and governance constraints.
+
+## 29. Existing mechanism compatibility and disposition process
+
+The architecture neither requires preserving every existing mechanism nor authorizes wholesale replacement. Existing JARVIS code, tests, data and prior subsystem designs are engineering evidence and candidate reusable material.
+
+Before any existing mechanism is selected for preservation, adaptation or replacement, a later source-level compatibility assessment must record:
+- exact source revision and files/tests inspected;
+- the mechanism's demonstrated capability, distinguishing test evidence from intended behaviour;
+- its authoritative state ownership and any competing or implicit ownership;
+- epistemic/provenance and temporal semantics;
+- integration dependencies and whether relevant information actually reaches its consumers;
+- persistence, recovery, concurrency and failure behaviour;
+- learning/developmental implications, including hardcoded conclusions or fixed mappings;
+- compatibility with governance and SYS responsibility boundaries;
+- verification gaps, regression risks and migration implications;
+- a reasoned disposition: preserve, adapt, replace, defer or retire.
+
+No disposition may be based only on file names, subsystem labels, line count, a green build or the fact that code already exists. A mechanism may be preserved only when its actual behaviour and authority contract are compatible or can be made compatible through an explicitly scoped adaptation. The assessment itself is later planning/specification work and does not authorize code changes.
+
+## 30. Project Director decision authority and reserved approvals
+
+The Project Director retains authority over decisions that alter the project's cognitive purpose, foundational scope, developmental principle, cognitive authority, system governance boundary, or mandatory subsystem status.
+
+The following require explicit Project Director disposition before a later specification may rely on them as approved:
+- the integrated cognitive authority and responsibility ownership model;
+- the epistemic classes and foundational state lifecycle;
+- the minimum foundational reasoning and learning obligations;
+- the distinction between bootstrap enabling mechanisms and experience-acquired beliefs, goals, preferences, affective reactions and strategies;
+- the foundational status and scope of affective appraisal and experience-acquired goal formation;
+- any proposal to make SYS-06 mandatory or transfer authority among SYS-01, SYS-05, SYS-06 and SYS-08;
+- any change to security, privacy, governance or action-authorization boundaries;
+- any high-impact learning authority that could alter identity continuity, core epistemic integrity, safety-relevant behaviour or broad cognitive policy;
+- any deviation from the governing principle or the approved whole-system architecture.
+
+The Project Director does not need to approve routine algorithm selection, concrete data structures, API details, implementation decomposition or ordinary mechanism-level engineering choices once their parent architecture decisions are approved and the later specification remains within scope.
+
+Every reserved decision must be recorded with its exact proposal/revision, rationale, consequences, dependencies and acceptance/rejection/revision status. A Builder must not treat silence, document presence, reviewer recommendation or implementation convenience as approval.
+
 **End of document.**
