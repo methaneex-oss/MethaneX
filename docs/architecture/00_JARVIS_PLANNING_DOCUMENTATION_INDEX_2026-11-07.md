@@ -1,3 +1,18 @@
+# Current status refresh — 2026-11-11 (post-provenance recovery)
+
+> This block supersedes earlier current-status snapshots below where they conflict. Dated historical records remain preserved.
+
+- **PR #192:** open, non-draft, unmerged; branch `docs/whole-brain-planning-scope-correction-20261107`; current HEAD `fddaecb75b01bfc4ec9a55cf1588c5ee02502ae7`; base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; 37 documentation/README paths. No runtime source, tests, build configuration, dependency, or workflow file is changed.
+- **CI:** Native Brain Build run [#43014935924](https://github.com/methaneex-oss/MethaneX/actions/runs/43014935924) passed on prior PR #192 HEAD `45b994e51a59f4a16b80574d81688dac7358190d`. It does not validate the later provenance-extract commit above; a new run must be checked separately.
+- **DF-09:** The original PR #173 Project Director decision message has been recovered from the 2026-11-03 ChatGPT conversation history: at 08:18:21 UTC the response was “Yes I do / Proceed,” following the explicit acceptance question at 08:14:29 UTC and the independent reviewer’s approval of exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b`. The evidence extract now records the source content and exact scope. The original conversation entry has no separately available immutable message URL/export ID in the recovered evidence; this access limitation is disclosed. DF-09 remains OPEN until the blind Nemotron assessment of the corrected exact PR #192 revision returns CLEAR.
+- **DF-11:** WAIVED by the Project Director’s 2026-11-11 decision. Historical Grok review limitations remain disclosed; no exact-current-HEAD independent review is claimed.
+- **DF-06 / DF-08:** remain PARTIAL / NOT MET pending full resolution; do not carry them into Stage A.
+- **PR #191:** read-only content review completed. Its 219-line comparison is a substantive, bounded reference document covering human-cognition and MCU J.A.R.V.I.S. functional lenses against BM-01–BM-12. It clearly distinguishes empirical evidence, fictional inspiration and engineering reality; it does not establish that BM-01–BM-12 exhaust whole-Brain capabilities. PR #191 remains open/draft/unmerged pending the Project Director’s disposition; no history or integration operation is authorized.
+- **PR #193:** remains open/draft/unmerged on its separate PR #175-derived lineage. PR #192/#193 integration remains held until all outstanding documentation decisions are resolved.
+- **DF-12:** NOT ACCEPTED until every outstanding issue is cleared and the Project Director makes an exact-revision decision. **Stage A remains NOT STARTED / HELD. Runtime implementation remains NOT AUTHORIZED.**
+
+---
+
 # Controlling Project Director decision and current gate status — 2026-11-11
 
 > **Precedence:** This is the latest controlling authority record for the Documentation Foundation. It supersedes earlier active-status and reserved-decision statements below where they conflict. Older dated sections remain historical evidence and must not be rewritten as if they had anticipated these decisions.
