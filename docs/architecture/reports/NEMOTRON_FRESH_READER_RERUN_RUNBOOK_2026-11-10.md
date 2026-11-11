@@ -35,7 +35,7 @@ The workflow timeout is 20 minutes. It does not create paid compute, GPU infrast
 
 1. Open the workflow link above.
 2. Do **not** select Run workflow until PR #195 has been reviewed and integrated.
-3. After integration, re-fetch the live workflow on `main` and verify the SHA-validation/environment-variable correction is present; only then select **Run workflow** and set branch/ref to `main**.
+3. After integration, re-fetch the live workflow on `main` and verify the SHA-validation/environment-variable correction is present; only then select **Run workflow** and set branch/ref to `main`.
 4. In **target_revision**, paste the exact current HEAD SHA shown at the top of PR #192. Do not use a branch name.
 5. Keep assessment label as `post-review-corrections`.
 6. Start the workflow once. Do not launch duplicate runs while one is queued or running.
