@@ -367,7 +367,7 @@ The other 34 files in PR #192's 37-file package are unchanged from the previousl
 
 ### 15.2 Repository-relative paths and Markdown forms
 
-The three changed files contain 45 repository-relative inline Markdown link occurrences and 29 unique repository-relative target paths. Every unique target was fetched successfully from the exact current PR #192 branch. No missing target was found.
+The three changed files contain 45 repository-relative inline Markdown link occurrences and 24 unique repository-relative target paths. Every unique target was fetched successfully from the exact current PR #192 branch. No missing target was found.
 
 The three changed files were also checked for reference-style Markdown link definitions, raw HTML `href` attributes and autolink URL forms. None were present. This avoids treating the inline-link scan as if it had covered syntax that the documents do not use.
 
