@@ -190,3 +190,55 @@ The reader's assessment of DF-09 is an AI reader test, not formal independent re
 The artifact records `assessment_label=post-review-corrections`, not the requested `post-review-corrections-v2`. The exact target SHA, model/provider, successful completion, response and artifact digest are verified. The label mismatch is a workflow-input bookkeeping issue and does not invalidate the response, but the workflow default must be corrected for the next dispatch.
 
 **Disposition:** DF-09 remains OPEN pending CLEAR. Documentation foundation NOT CLEARED. Stage A NOT STARTED / HELD. Runtime implementation NOT AUTHORIZED.
+
+
+---
+
+# Fourth blind assessment — 2026-11-11 — latest result
+
+**Workflow:** [#42970930733](https://github.com/methaneex-oss/MethaneX/actions/runs/42970930733)  
+**Assessed documentation revision:** `887b349f9826de7726707209f640ae0cafd78ace`  
+**Workflow-code revision on main:** `264d0202945fd73edd52ddeecf58d3623979ef3d`  
+**Artifact ID:** `13832623613`  
+**SHA-256:** `394153a7ea2ab8467b367464cd02dacd72fac3e585e8c76d3e8395b987e159d8`  
+**Provider/model:** API-reported `Nvidia` / `nvidia/nemotron-3.5-super-vl:free`  
+**Response ID:** `gen-1794377626-nsXcHSnGSDE0byiVgJ43`  
+**Completion:** `finish_reason=stop`; 26,748 characters; 95,773 prompt tokens; 7,101 completion tokens; no refusal, tool calls or reasoning output.  
+**Assessment label:** `post-review-corrections-v3` (correct).
+
+## Verdict and scorecard
+
+**PARTIALLY CLEAR (31/32)** — execution and artifact verification passed, but the defined comprehension acceptance threshold did not.
+
+| Category | Score |
+|---|---:|
+| Project identity and scope | 4/4 |
+| Governing principle | 4/4 |
+| Brain-first rationale and boundary | 4/4 |
+| Human cognition / MCU / engineering reality | 4/4 |
+| Document authority and classification | 3/4 |
+| Current phase and authorization | 4/4 |
+| Unauthorized actions | 4/4 |
+| Role-based navigation | 4/4 |
+| **Total** | **31/32** |
+
+## Remaining finding
+
+The only lost point concerns document authority/provenance. The reader correctly recognized that PR #173's acceptance record is a later repository-side transcription of a prior Project Director decision, not the original contemporaneous decision artifact. This is an evidence-quality limitation, not a wording defect that the Builder can repair. The provenance must remain explicit and the Project Director must decide whether the available record is sufficient for the intended documentation-foundation acceptance.
+
+The reader also correctly stated that the bounded packet does not contain every linked source audit, template, PR #193 handoff, inventory detail or live GitHub record. The index and packet explicitly identify those exclusions. The model did not inspect those external records; their absence is a disclosed scope boundary, not an assertion that they were checked. Expanding the packet to include every linked artifact would materially change the bounded reader test and is not automatically required.
+
+The model's suggestion to include the old DF-09 17-question human protocol is not adopted. The Project Director explicitly superseded that requirement with a blind fresh-reader assessment by a distinct AI model. The historical question list was not recoverable and is not a current acceptance deliverable. PR #191's two ancestry statements describe different comparisons and are not contradictory.
+
+## Builder disposition
+
+- DF-09 execution: **COMPLETE**.
+- DF-09 acceptance: **OPEN — Project Director decision required**. The result is 31/32, not CLEAR under the written rubric.
+- DF-11: reviewer qualification and exact-current-HEAD independent review remain unresolved.
+- DF-12: exact-revision Project Director decision remains outstanding.
+- PR #191 disposition and PR #192/#193 integration order remain Project Director decisions.
+- Documentation foundation: **NOT CLEARED** pending the reserved decisions.
+- Stage A: **NOT STARTED / HELD**.
+- Runtime implementation and PR integration: **NOT AUTHORIZED**.
+
+No further identical Nemotron run is recommended. The remaining uncertainty is provenance/authority and reserved decision-making, not a missing prompt-label correction or a failure to invoke the distinct model.
