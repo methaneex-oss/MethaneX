@@ -146,3 +146,30 @@ A second static pass found that the assessment-request step reads `TARGET_DOCS_S
 **Correction:** exported `TARGET_DOCS_SHA: ${{ inputs.target_revision }}` in the assessment-request step as well. The workflow now passes the exact requested documentation revision to both packet assembly and response metadata. The updated workflow blob is `3cbe2e54fb9500f78b2842801e8371641ee24ddc` in commit `5a813f8febd0a0b0e5e0365439d5182e79833c15`.
 
 **Verification boundary:** static source inspection confirms every `TARGET_DOCS_SHA` reference has the required step-level environment variable. The workflow has not been executed; this is not runtime verification or a Blind Fresh Tester result.
+
+
+## 9. Final Builder correction — sanitized HTTP failure evidence and PR #194/#195 reconciliation — 2026-11-11
+
+A further exact-source review found that the HTTP-error branch still persisted up to 4,000 characters of the provider response body in `api_error.txt`. That contradicted the stated evidence-minimization boundary: provider error bodies are untrusted and may echo request data. The generic exception path also persisted `str(exc)`, which was not necessary to diagnose the failure and could expose request details.
+
+### 9.1 Correction applied to the consolidated PR #195 workflow
+
+The workflow now reads the HTTP error body only in memory and persists only allowlisted, type-checked, length-bounded metadata: HTTP status, bounded request ID, error type/code, provider and model. It records explicit false flags for raw-response, API-key and reasoning persistence. Generic exceptions persist only the exception class, not the exception message. The raw response body and raw exception message are not written to the evidence artifact.
+
+Exact workflow correction commits:
+- `59cc1fcadb1b8669b1bc7703f07cf443469348d6` — initial removal of raw HTTP/generic exception text persistence.
+- `cf8dc19cff9997fddd730bec1086c4c3989456b3` — bounds all persisted diagnostic string fields.
+
+Final workflow blob after these writes: `26c9fd6deb07dfed312d58f0ce82ccb3fa01f268`.
+
+### 9.2 PR #194 versus PR #195
+
+Both open draft PRs modify `.github/workflows/documentation-foundation-ai-reader.yml` on separate branches. PR #194 adds response-shape diagnostics and completeness handling but does not include PR #195's full target-SHA shell-injection correction, model/refusal/tool-call validation, Blind Fresh Tester terminology alignment, or the final bounded error-evidence handling.
+
+PR #195 contains the consolidated response extraction paths (string content, text/content blocks, `message.output_text`, and legacy choice text), safe target-SHA handling, role terminology, and the sanitized diagnostic correction above. Its implementation is the preferred consolidated candidate for further static verification. PR #194 should not be merged or cherry-picked alongside PR #195; its useful response-shape behavior is already represented in the PR #195 workflow, while raw provider error-message persistence is intentionally not carried forward.
+
+This is a Builder reconciliation recommendation, not a merge, close, review, or Project Director disposition. Both PRs remain open/draft/unmerged until the authorized disposition is made.
+
+### 9.3 Verification boundary
+
+Static source assertions were re-run against the final workflow blob for full-SHA validation, environment-only shell comparison, response-shape fallbacks, bounded sanitized HTTP diagnostics, omission of raw exception messages, provider/model identity checks, refusal/tool-call checks, finish-reason validation, A–H/1,500-character completeness checks, and unconditional artifact upload. This does not validate GitHub Actions YAML parsing or execute the workflow. No Blind Fresh Tester inference or assessment is claimed.
