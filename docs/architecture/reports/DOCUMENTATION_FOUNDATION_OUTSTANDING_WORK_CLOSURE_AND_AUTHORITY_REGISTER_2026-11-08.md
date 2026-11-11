@@ -1055,11 +1055,13 @@ Exact current artifact references:
 5. **PR #192/#193:** integration hold remains in force under the Project Director's decision. No merge, rebase, retarget, cherry-pick or replay.
 6. **DF-12:** NOT ACCEPTED until all applicable conditions are evidenced and the Project Director makes an exact-revision decision.
 
-### 32.2 Resolved documentation gates
+### 32.2 DF-06 / DF-08 / DF-11 controlling disposition
 
-- **DF-06:** RESOLVED within the documented package and enumerated immutable-source/link scope; evidence in preservation report §15.
-- **DF-08:** RESOLVED against the exact no-deletion/no-silent-supersession criterion and bounded discovery scope; evidence in preservation report §16.
-- **DF-11:** WAIVED by explicit Project Director decision.
+- **DF-06: NOT MET.** Bounded checks establish path presence, selected pinned-source blob identities, selected anchor ranges and bounded external-reference metadata checks. They do not establish complete semantic relevance, all external destination reachability, renderer-specific anchor behavior, and all applicable historical/cross-branch link behavior under the Project Director's full-resolution requirement.
+- **DF-08: bounded closure case only; full closure not yet accepted.** Preservation report §14 defines a non-destructive retain-in-place policy and records a bounded 245-branch/203-tip and 184-PR census, mapping 108 documentation paths across 28 PRs. The final closure packet must demonstrate that this scope fully satisfies the governing DF-08 criterion or identify and close any remaining discovery gap. Do not turn a bounded closure claim into repository-wide completeness.
+- **DF-11: WAIVED** by explicit Project Director decision. No independent approval is inferred.
+
+This controlling disposition supersedes earlier statements in §§30.5 and 31 that described DF-06/DF-08 as resolved within scope. Those earlier bounded results remain historical evidence, not current gate closure.
 
 ### 32.3 Phase boundary
 
