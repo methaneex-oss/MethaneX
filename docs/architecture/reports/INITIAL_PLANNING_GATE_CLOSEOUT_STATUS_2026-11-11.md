@@ -99,3 +99,54 @@ The original review report, complete rationale, inline annotations and exact ori
 8. Only after acceptance, reopen whole-Brain Stage A / implementation-planning decisions under explicit authorization.
 
 **Final status:** Initial planning is NOT COMPLETE. Implementation planning remains HELD. Runtime implementation is NOT AUTHORIZED.
+
+
+---
+
+## 8. Builder live-state correction — 2026-11-11
+
+This addendum supersedes the stale PR-head values in §§2–5 above. The live PR metadata was re-fetched after the earlier closeout snapshot. The previous values are retained as historical snapshot evidence, not current state.
+
+### 8.1 Re-fetched exact PR state
+
+| PR | Current exact HEAD | Current state | Controlling interpretation |
+|---|---|---|---|
+| #173 Brain Foundation Architecture | `756724b95e093ac48fcd95c5587117c0a4d8f3c0` | Open, draft, unmerged | Corrected proposal; blind fresh assessment of this exact revision and Project Director disposition of BFA-C01–BFA-C14 remain outstanding |
+| #174 Brain Mechanism Specification | `b78e24b6fa122d1141b1f225bc6d29e1e7c77631` | Open, draft, unmerged | Current specification blob verified as `fbe017d96f9d0716be6080c96eea6b67c7da62fa`; independent re-review and Project Director disposition remain outstanding |
+| #175 Brain Implementation Roadmap | `c30fe20cfdf3f499416972042be06acdd70f752d` | Open, draft, unmerged | Historical proposal; non-operative |
+| #179 Phase 2 integration map | `d30237b81c3695f2a7cb980144b221bbd42ce548` | Open, draft, unmerged | Bounded source-integration evidence, not whole-Brain completeness acceptance |
+| #191 Human/MCU comparison | `609d38ede50bbdd98a93dfed112781eacabee9fd` | Open, draft, unmerged | Bounded BM-01–BM-12 reference; content review complete; disposition reserved |
+| #192 Documentation Foundation | `4aedf541afa8cbbc0555f37a39cc8b8c429191d9` | Open, non-draft, unmerged | 38 changed paths; exact final package still requires corrected self-review synchronization and DF-09 assessment |
+| #193 Deferred roadmap hold | `4705716e0845d7b5621ab7e339d36c9f42853b1a` | Open, draft, unmerged | Separate PR #175-derived lineage; integration held |
+| #195 AI role terminology audit | `2c9dffc21032dec9bdc5af827259d8bdb3c97746` | Open, draft, unmerged | Terminology-only proposal; not a planning gate or review result |
+
+### 8.2 Corrected controlling gate status
+
+- **DF-06 — NOT MET.** The bounded link checks do not satisfy the Project Director's full-resolution requirement for complete semantic relevance, all applicable external destination reachability, renderer-specific anchor behavior and applicable historical/cross-branch link validation. The inaccessible shared-conversation pointer remains access-limited and unverified.
+- **DF-08 — RESOLVED** against the exact bounded preservation criterion documented in preservation report §16. This does not claim repository-wide semantic archive completeness.
+- **DF-09 — OPEN / NOT MET.** Run #42970930733 returned PARTIALLY CLEAR (31/32) against older revision `887b349f9826de7726707209f640ae0cafd78ace`. It is not evidence for current PR #192 HEAD `4aedf541afa8cbbc0555f37a39cc8b8c429191d9`. A fresh result of CLEAR against the final exact PR #192 revision is mandatory.
+- **DF-10 — BUILDER SELF-REVIEW REFRESH REQUIRED.** This correction and the synchronized index/self-review must be checked against the final post-write PR #192 state. Builder self-review is not independent clearance.
+- **DF-11 — WAIVED** by explicit Project Director decision. Do not commission or claim a new DF-11 review.
+- **DF-12 — NOT ACCEPTED.** Exact-revision Project Director acceptance remains deferred until all applicable evidence gates and reserved decisions are resolved.
+- **DF-13 — MAINTAINED.** Stage A has not started. Implementation planning remains held. Runtime implementation remains not authorized.
+
+### 8.3 Architecture/specification review targets
+
+- PR #173 blind fresh architecture assessment target: `756724b95e093ac48fcd95c5587117c0a4d8f3c0`. The previous NOT CLEAR result on `4b960062b7b3d41fa18c60909c628e8264459927` is historical and must not be reused.
+- PR #174 independent re-review target: `b78e24b6fa122d1141b1f225bc6d29e1e7c77631`; specification blob `fbe017d96f9d0716be6080c96eea6b67c7da62fa`. The posted assignment document is present at blob `c0185e1b1507cbe63e056dc21240dd1a09cb8ccc`. The original F-02/F-03 report and exact original reviewed SHA remain unavailable; the secondary recovery remains explicitly qualified.
+- PR #195 role terminology proposal: `2c9dffc21032dec9bdc5af827259d8bdb3c97746`. Its patch changes workflow-facing assessment labels to **Blind Fresh Tester**, retains provider/model metadata for reproducibility, and does not convert the blind assessment into a formal **Independent Reviewer** clearance. It remains unmerged and has not been workflow-executed.
+
+### 8.4 Builder-owned closeout work and external gates
+
+The Builder has re-fetched live PR metadata and verified the current PR #173 architecture/matrix/source-audit blobs, PR #174 specification and re-review-request blobs, and PR #195 workflow/terminology diff. The stale exact-head references in this report are now explicitly superseded by §8.1.
+
+Still not executable by the Builder in this environment:
+1. Dispatch the DF-09 workflow against the final frozen PR #192 HEAD and preserve the raw assessment artifact and metadata.
+2. Dispatch the PR #173 blind fresh architecture assessment against its exact current HEAD and correct/recheck any findings.
+3. Obtain a genuinely separate Independent Reviewer report against exact PR #174 HEAD.
+4. Obtain the Project Director's BFA-C01–BFA-C14 dispositions, PR #191 disposition, and PR #192/#193 integration decision.
+5. Perform renderer-specific anchor verification where the accepted DF-06 criterion requires rendered UI evidence.
+
+The available GitHub connection exposes no workflow-dispatch operation. No new workflow run, reviewer submission, acceptance, or gate clearance is claimed.
+
+**Controlling status after this correction:** Initial planning remains NOT COMPLETE. Implementation planning remains HELD. Runtime implementation remains NOT AUTHORIZED.
