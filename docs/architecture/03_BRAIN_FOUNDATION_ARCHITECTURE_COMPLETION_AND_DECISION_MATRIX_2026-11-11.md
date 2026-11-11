@@ -58,7 +58,7 @@ A topic is not complete merely because it is named, listed as a future capabilit
 | CF-23 | Developmental stages | Partial | Define bootstrap, early learning, capability growth and mature/advanced scope without age-based assumptions | Stages describe capability evidence, not hardcoded personality or a fixed timetable |
 | CF-24 | Failure and degraded operation | Partial | Define responsibility-local failure, uncertainty escalation, recovery and safe suspension | Partial failure is visible and contained; it does not silently corrupt unrelated cognition |
 | CF-25 | Verification and evidence | Partial | Map every capability to positive, negative, transfer, persistence and regression evidence | No capability claim without repeatable evidence and explicit limits |
-| CF-26 | Existing mechanism disposition | Open | Require later source-level compatibility review against approved architecture | Existing code is candidate evidence/material, not an architectural constraint or automatic discard |
+| CF-26 | Existing mechanism disposition | PARTIALLY ASSESSED | Bounded source compatibility audit completed for PR #97 donor HEAD c1da222e6c94aeb3f2ad000392c21fe4fc81ab25; broader mechanism inventory, remediation specifications and Director dispositions remain open | Existing code is candidate evidence/material, not an architectural constraint or automatic discard |
 | CF-27 | Architecture decision governance | Open | Separate settled foundational decisions from implementation decisions and reserved Project Director approvals | No hidden decisions migrate into implementation specifications |
 
 ## 4. Integrated responsibility and authority model
@@ -225,7 +225,7 @@ These are recommended architecture-level dispositions to remove avoidable ambigu
 | Q10. Experience-acquired goals | Candidate goals may arise from discrepancies, opportunities, needs, outcomes, observed constraints or learned models; origin and evidence are retained; goals are evaluated for feasibility, conflict, risk and consequences; no trigger directly mandates a goal | Makes internally proposed goals possible without a hardcoded objective generator |
 | Q11. Transfer/generalization evidence | Require original-context improvement, relevant variation, held-out related context, counterexamples, unrelated-capability regression checks and persistence/reconstruction checks; claims are bounded to tested scope | Prevents fixture memorization from being called general learning |
 | Q12. Minimum Brain contract before full embodiment | Brain can operate on supplied observations, records, goals and verified outcomes; missing modalities remain unavailable/unknown; it can reason, learn and request evidence within those limits; no simulated embodiment is treated as real | Allows staged integration without false sensor/action claims |
-| Q13. Preserve/adapt/replace existing mechanisms | No blanket retain or discard decision. Perform later source-level compatibility assessment per mechanism against ownership, evidence, developmental, integration and verification criteria; record keep/adapt/replace with tests/evidence | Existing implementation is evidence and candidate material, not architecture authority |
+| Q13. Preserve/adapt/replace existing mechanisms | No blanket retain or discard decision. A bounded audit of the four inherited patterns is complete for PR #97 donor HEAD c1da222e6c94aeb3f2ad000392c21fe4fc81ab25; later specifications must extend the inventory where required, define remediation, and test each disposition against ownership, evidence, developmental, integration and verification criteria | Existing implementation is evidence and candidate material, not architecture authority |
 | Q14. Decisions requiring Project Director approval | PD approval required for changes to cognitive authority, foundational scope, safety/governance boundary, mandatory subsystem status, bootstrap-acquired boundary, high-impact learning authority, and any deviation from governing principle; routine mechanism details remain delegated to approved specs | Keeps strategic authority explicit without routing every engineering choice to PD |
 
 ## 9. Goal, valuation and affective architecture closure
@@ -477,7 +477,7 @@ The completion material is integrated into the main architecture document. The e
 | Accountable owners/constraints for CF-26/CF-27 unclear | §33 names accountable delivery owner, deliverable and approval/challenge boundary for compatibility audit, decision governance and traceability | Project Director must make reserved decisions; reviewer must verify no authority was delegated incorrectly |
 | Revision manifest stale/conflicting | This section replaces the inconsistent prior current-state claims with a single exact manifest and labels prior values historical | Re-fetch exact PR head and both file blobs at review time |
 | CF-01–CF-27 traceability absent | §20 maps all 27 domains to architecture sections and matrix obligations | Reviewer must verify each mapping reaches substantive text, not only a heading |
-| Inherited reliability/threshold/goal-selection/belief-overwrite rules not dispositioned | §32 defines explicit architectural disposition and marks source compatibility UNASSESSED | Source-level inventory and tests remain required before preserve/adapt/replace decisions; no legacy mechanism is silently adopted |
+| Inherited reliability/threshold/goal-selection/belief-overwrite rules not dispositioned | §§32–34 and the source compatibility audit report define explicit dispositions; the bounded PR #97 donor audit is complete and finds incompatibilities requiring adaptation/replacement | Broader repository/source-lineage inventory, remediation specifications and tests remain required; no donor mechanism is silently adopted |
 
 ## 20. Complete CF-01–CF-27 architecture traceability
 
@@ -510,7 +510,7 @@ The following table is the required traceability map. Section references identif
 | CF-23 | Developmental stages | §§3.6, 8–9 | §§21, 24 |
 | CF-24 | Failure and degraded operation | §§6.4, 10 | §§23–24 |
 | CF-25 | Verification and evidence | §§11, 24 | §§12, 17 |
-| CF-26 | Existing mechanism disposition | §§29, 32 | §33; source-level audit remains unassessed |
+| CF-26 | Existing mechanism disposition | §§29, 32, 34 | §33 and the bounded source audit report; compatibility remains unaccepted as-is |
 | CF-27 | Architecture decision governance | §§30, 33 | §§15, 17; Project Director decisions remain reserved |
 
 ## 21. Accountable deferred-specification register
@@ -518,8 +518,8 @@ The following table is the required traceability map. Section references identif
 | Deferred work | Accountable delivery owner | Minimum deliverable | Gate |
 |---|---|---|---|
 | Social/Agent Representation Specification | Architecture & Engineering Builder | Claim taxonomy, ownership map, provenance/temporal semantics, contradiction and privacy/security contracts, verification scenarios | Independent challenge; Project Director approval for scope/authority changes |
-| Legacy rule/mechanism source audit | Architecture & Engineering Builder | Exact source revision, occurrence inventory, call paths, consumers, tests, semantic classification, calibration and preserve/adapt/replace recommendation | Independent challenge; Project Director disposition for reserved changes |
-| CF-26 compatibility assessment | Architecture & Engineering Builder | Per-mechanism evidence against architecture ownership, epistemic, developmental, integration, failure and verification obligations | Project Director decision where reserved authority is affected |
+| Legacy rule/mechanism source audit and remediation specification | Architecture & Engineering Builder | Bounded PR #97 donor audit completed for reliability, numeric thresholds, goal selection/context and belief overwrite; extend to additional source baselines only where the inventory shows a real gap, then define remediation and objective tests | Independent challenge; Project Director disposition for reserved changes |
+| CF-26 compatibility assessment | Architecture & Engineering Builder | Bounded donor audit completed; per-mechanism remediation specifications and evidence against ownership, epistemic, developmental, integration, failure and verification obligations remain | Project Director decision where reserved authority is affected |
 | CF-27 decision ledger | Project Director owns decisions; Architecture & Engineering Builder maintains record | Exact proposal/revision, alternatives, rationale, consequences, dependencies and accept/reject/revise status | Project Director acceptance; Independent Reviewer may challenge traceability |
 | CF-01–CF-27 traceability maintenance | Architecture & Engineering Builder | Section-level map synchronized to every architecture revision | Independent exact-revision recheck |
 
@@ -539,6 +539,23 @@ The 14 BFA-C decisions remain reserved for explicit Project Director disposition
 
 ## 23. Current completion status — Builder correction pass
 
-**Builder correction status:** The five Blind Fresh Tester findings now have explicit architecture-level responses in §§31–33 and this matrix's §§19–22. This is not independent clearance. The inherited source-rule audit remains unassessed at source level. The 14 BFA-C decisions remain reserved to the Project Director. The exact corrected revision must be independently re-reviewed and any new findings corrected before Director acceptance.
+**Builder correction status:** The five Blind Fresh Tester findings now have explicit architecture-level responses in §§31–34 and this matrix's §§19–24. A bounded source audit of the PR #97 donor revision is complete; compatibility is NOT accepted as-is and remediation/specification work remains. This is not independent clearance. The 14 BFA-C decisions remain reserved to the Project Director. The exact corrected revision must be independently re-reviewed and any new findings corrected before Director acceptance.
 
 **No-shortcut status:** no merge, implementation, runtime source change, runtime test, technology selection, deployment, PR #191 disposition, PR #192/#193 integration or branch-history operation is authorized by this document.
+
+
+## 24. Bounded inherited-mechanism source audit — 2026-11-11
+
+The exact source evidence and line-level findings are recorded in [Inherited Mechanism Source Compatibility Audit — 2026-11-11](reports/INHERITED_MECHANISM_SOURCE_COMPATIBILITY_AUDIT_2026-11-11.md). The audit uses PR #97 donor HEAD c1da222e6c94aeb3f2ad000392c21fe4fc81ab25 and exact source blob identities.
+
+| Finding | Source result | Architecture disposition |
+|---|---|---|
+| Source reliability | KnowledgeModel averages incoming reliability metadata; correctness-based score_source has no call site in the 14 inspected production cognitive files and appears in a unit test. Defaults include 0.5 and replay fallback 0.7. | Adapt; not calibrated source trust. |
+| Confidence/threshold concern | No single global confidence cutoff found. Action-score, uncertainty/risk, similarity, retention and minimum-strength thresholds are distinct configurable/default parameters. | Provisional engineering parameters only, each with objective-specific evaluation and ownership. |
+| Goal selection | CognitiveCycle falls back to eligible.front(); planning and decision paths also bind strategy context to eligible.front() independently of selected intent. | Replace as general selector; correct context binding; any safe fallback must be explicit external policy. |
+| Belief overwrite | Brain belief map replaces the existing value before marking dispute; action-status belief is unconditionally replaced. WorldModel preserves some conflicting incoming facts but not a complete versioned claim history. | Replace with versioned, provenance-bearing claim revision and full alternative preservation. |
+
+**CF-26 status:** PARTIALLY ASSESSED. The named inherited patterns are now source-assessed for the PR #97 donor revision. The complete cross-branch/source-lineage inventory, per-mechanism remediation specifications and implementation tests remain later work. No code is changed or authorized.
+
+**BFA-C01–BFA-C14 status:** all 14 remain reserved for explicit Project Director disposition. This audit does not convert Builder recommendations into accepted decisions.
+
