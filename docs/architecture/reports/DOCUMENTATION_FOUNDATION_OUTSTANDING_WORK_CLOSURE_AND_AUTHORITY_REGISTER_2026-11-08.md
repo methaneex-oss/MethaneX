@@ -701,3 +701,39 @@ The `cpp` CI run #42976840057 completed successfully on the pre-update PR #192 H
 **Documentation Foundation: NOT ACCEPTED / NOT CLEARED.** DF-09 OPEN / NOT MET; DF-11 WAIVED; DF-06 and DF-08 PARTIAL / NOT MET; PR #191 disposition pending read-only review; PR #192/#193 integration held; DF-12 NOT ACCEPTED. Stage A remains NOT STARTED / HELD. Runtime implementation remains NOT AUTHORIZED.
 
 This update records the Project Director's authority decisions only. It does not perform or authorize PR integration, branch-history changes, PR closure, Stage A commencement, implementation, architecture selection or runtime changes.
+
+
+## 26. Evidence recovery and read-only PR #191 content review — 2026-11-11
+
+### 26.1 PR #173 primary decision source recovery
+
+The original Project Director response has been recovered from the contemporaneous 2026-11-03 ChatGPT conversation history. At 08:14:29 UTC, the Builder asked whether the Project Director formally accepted PR #173 as the Brain Foundation Architecture baseline and authorized the Detailed Brain Mechanism Specification stage, explicitly excluding implementation, runtime tests, technology selection and merge. The Independent Reviewer had approved exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b` at 08:14:26 UTC. At 08:18:21 UTC, the Project Director replied exactly: “Yes I do / Proceed.” At 08:18:24 UTC, the assistant immediately recorded acceptance at that exact HEAD and authorization of the specification stage only.
+
+The original conversation entry is the primary decision event. The repository evidence extract is a later transcription of the recovered primary source, while PR #173 comment #6752144835 remains a separate later repository-side transcription. No immutable conversation-message URL, export ID or message identifier was available in the recovered context. This is a stronger provenance basis than the previous GitHub-comment-only evidence, but the source remains account-contextual rather than independently openable from GitHub. The exact wording, timestamp, preceding question, review context and limited scope are now included in the fresh-reader packet's decision-evidence document.
+
+**DF-09 consequence:** The prior 31/32 assessment is not retroactively changed. A new blind assessment must target the exact post-recovery PR #192 HEAD and return CLEAR. No CLEAR result is claimed here.
+
+### 26.2 PR #191 read-only content review
+
+Live metadata re-fetched 2026-11-11:
+- PR #191 remains open, draft and unmerged.
+- Head: `609d38ede50bbdd98a93dfed112781eacabee9fd`.
+- Base: `f6267456560a08054d69f7960d2951452b14017c`.
+- One changed file: `docs/architecture/reports/PHASE_2_HUMAN_AND_MCU_REFERENCE_COMPARISON_2026-11-06.md`.
+- No formal PR review submissions are present.
+
+The 219-line report has been read in full. It distinguishes (1) empirical human-cognition references, (2) fictional MCU J.A.R.V.I.S. functional inspiration, and (3) concrete software mechanisms. It explicitly warns against literal biological imitation, fictional-internals invention, and human-equivalence claims. Its BM-01–BM-12 comparison includes functional overlap, differences, prohibited inferences and required tests. It is useful bounded reference evidence for later whole-Brain capability planning, but it is scoped to BM-01–BM-12 and cannot establish whole-Brain completeness. It is a draft, not independently reviewed or Project Director accepted.
+
+The content review finds no basis to discard the report. The graph remains stale/diverged: the PR #191 head is one unique document commit ahead of the current PR #179 head while 22 commits behind it. This is not fixed by changing the base label alone. **No disposition is made** because the Project Director selected further review before deciding. PR #191 remains open/draft/unmerged; no replay, rebase, retarget, cherry-pick, merge or close is performed.
+
+### 26.3 Current authority and remaining closure work
+
+- DF-09: primary conversational decision content recovered; exact-current-revision blind assessment still required; status OPEN / NOT MET until CLEAR.
+- DF-11: WAIVED by explicit Project Director decision on 2026-11-11. Do not claim an independent review occurred.
+- DF-06: prior bounded evidence includes internal target existence, immutable source/blob checks, anchor-range checks and external URL metadata checks. Full exact-current-head link/anchor/semantic/reachability reconciliation remains required; no pass is claimed.
+- DF-08: historical discovery evidence includes 245 branch refs, 184 PRs, and 108 documentation paths across 28 documentation PRs, with selected revision/blob comparisons. The register preserves found artifacts and no destructive archive operation has occurred. The remaining work is explicit current-vs-historical/superseded classification and closure of unresolved lineage/provenance exceptions; no exhaustive all-repository archive claim is made.
+- DF-12: NOT ACCEPTED until all outstanding issues are cleared and the Project Director makes an exact-revision decision.
+- PR #192/#193: remain open and unmerged; integration held.
+- Stage A: NOT STARTED / HELD. Runtime implementation: NOT AUTHORIZED.
+
+This section records evidence recovery and a read-only content review. It does not authorize any PR or branch-history operation, Stage A commencement, source selection or runtime implementation.
