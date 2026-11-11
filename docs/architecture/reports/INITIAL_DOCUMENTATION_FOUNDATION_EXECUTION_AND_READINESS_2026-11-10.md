@@ -608,3 +608,23 @@ The result does not authorize Stage A, implementation, merge, PR integration or 
 - The run metadata records assessment label `post-review-corrections`, not the intended `post-review-corrections-v2`. Target SHA, model/provider, response and artifact digest are independently verified; treat this as an input-label bookkeeping defect only.
 
 **Disposition:** DF-09 execution complete; comprehension acceptance remains OPEN because the result is PARTIALLY CLEAR. Do not call this a pass. Older statements in this report about a missing distinct-model run or a mandatory uninvolved-human session are historical and superseded by the Project Director-authorized AI substitution and this actual run. Stage A remains HELD; runtime implementation and PR integration remain NOT AUTHORIZED.
+
+
+## Fourth blind fresh-reader assessment — 2026-11-11
+
+- Workflow: [#42970930733](https://github.com/methaneex-oss/MethaneX/actions/runs/42970930733), event `workflow_dispatch`, conclusion `success`.
+- Workflow-code revision on `main`: `264d0202945fd73edd52ddeecf58d3623979ef3d`. This is distinct from the assessed documentation revision.
+- Exact assessed PR #192 documentation revision from `packet_manifest.json`: `887b349f9826de7726707209f640ae0cafd78ace`; PR base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.
+- Artifact: `documentation-foundation-nemotron-reader-42970930733-1`, ID `13832623613`; SHA-256 `394153a7ea2ab8467b367464cd02dacd72fac3e585e8c76d3e8395b987e159d8`. The downloaded ZIP digest matches GitHub's artifact digest.
+- API-reported provider/model: `Nvidia` / `nvidia/nemotron-3.5-super-vl:free`; response ID `gen-1794377626-nsXcHSnGSDE0byiVgJ43`; `finish_reason=stop`; 26,748 response characters; 95,773 prompt tokens; 7,101 completion tokens; no refusal, tool calls or reasoning output; reported cost 0.
+- Assessment label: `post-review-corrections-v3`, matching the requested label.
+- Workflow job and all substantive steps completed successfully, including exact revision checkout, packet assembly, Nemotron request and artifact upload.
+- Reader verdict: **PARTIALLY CLEAR (31/32)**. Scorecard: identity 4/4; principle 4/4; Brain/system boundary 4/4; reference lenses 4/4; document authority/classification 3/4; current phase/authorization 4/4; unauthorized actions 4/4; role navigation 4/4.
+
+### Builder reconciliation and disposition
+
+The single lost point concerns document authority/provenance. Nemotron correctly distinguished PR #173's repository-side transcription from a contemporaneous primary decision artifact. That historical provenance cannot be improved by changing the wording; it must remain qualified for the Project Director. The reader also correctly noted that external linked records were not included in the bounded packet. The packet manifest and index explicitly disclose this boundary; the model did not claim to inspect those sources. The absence of external files is intentional and is not evidence that their contents or authority were verified.
+
+The assessment's suggestion to include the old 17-question DF-09 list is not adopted: the Project Director-approved distinct-AI substitution superseded the human-session criterion. The unrecovered historical list is not a current deliverable. The index's ancestry clarification distinguishes two different Git comparisons for PR #191; no branch rewrite is authorized.
+
+**DF-09 execution is complete; acceptance remains OPEN.** The written CLEAR threshold was not reached. The remaining question—whether the 31/32 result and its explicitly bounded provenance limitation are acceptable—is reserved for the Project Director. DF-11 reviewer qualification/exact-current-head review, DF-12 exact-revision decision, PR #191 disposition and PR #192/#193 integration order also remain reserved. Stage A remains HELD; implementation and PR integration remain unauthorized. No additional identical Nemotron run is recommended.
