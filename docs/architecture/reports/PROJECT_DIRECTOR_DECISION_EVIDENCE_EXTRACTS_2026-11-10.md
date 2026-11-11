@@ -50,3 +50,24 @@ F-02 and F-03 are recorded as open follow-on obligations in the current document
 3. A later documentation-only header correction does not silently change the accepted technical baseline.
 4. PR open/draft/unmerged state is a GitHub lifecycle fact, not a contradiction of an exact-scope acceptance decision.
 5. Neither accepted planning baseline authorizes implementation or overrides the current whole-Brain planning hold and documentation-foundation gate.
+
+
+## PR #173 — primary contemporaneous conversation record recovered — 2026-11-11
+
+The original Project Director decision message has now been recovered from the contemporaneous ChatGPT conversation history, rather than inferred solely from the later GitHub transcription.
+
+- **Original decision timestamp:** 2026-11-03 08:18:21 UTC.
+- **Exact preceding decision question (2026-11-03 08:14:29 UTC):** “Do you formally accept PR #173 as the Brain Foundation Architecture baseline and authorize the Detailed Brain Mechanism Specification stage? This would still not authorize implementation, runtime tests, technology selection, or merging PR #173.”
+- **Review context:** the Independent Reviewer had marked PR #173 **APPROVED — architecture planning baseline** at exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b` at 08:14:26 UTC and recommended acceptance plus authorization of the specification stage.
+- **Original Project Director response:**
+
+  > Yes I do
+  > Proceed
+
+- **Immediate contemporaneous confirmation (2026-11-03 08:18:24 UTC):** the assistant recorded “Project Director decision recorded: ACCEPTED,” confirmed the same exact HEAD, and stated that only the Detailed Brain Mechanism Specification stage was authorized. Implementation, runtime tests, technology/algorithm selection, merging and deployment remained unauthorized.
+
+### Provenance classification and limits
+
+The original user message in the 2026-11-03 ChatGPT conversation is the **primary decision event**. This section is a verbatim/near-verbatim evidence extract of that recovered conversation record, not the decision event itself. The later PR #173 issue comment #6752144835 remains a repository-side transcription and is not relabelled as the primary artifact. The recovered conversation entry has no separately available immutable message URL, export ID or message identifier in the evidence returned to this Builder; therefore a reader without access to the originating conversation cannot independently open the primary source from GitHub alone. The evidence packet must disclose both the recovered primary-source content and this remaining access limitation.
+
+**Scope remains narrow:** PR #173 was accepted as the Brain Foundation Architecture planning baseline at exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b`, and the next Detailed Brain Mechanism Specification stage was authorized. No implementation, runtime tests, technology selection, merge, deployment or later stage was authorized by that decision.
