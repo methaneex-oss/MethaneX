@@ -854,7 +854,7 @@ The Project Director has explicitly superseded the earlier acceptance of PR #173
 
 ### 27.2 Work performed against PR #173
 
-On 2026-11-11, the Builder added the 27-domain completion/decision matrix and integrated conceptual architecture addendum §§16–27 into the main Brain Foundation Architecture document. Exact PR #173 branch revision at the time of this record: `382e3f91e9aa1fdb269d2b72af1f8f9138ec8029`.
+On 2026-11-11, the Builder added the 27-domain completion/decision matrix and integrated conceptual architecture addendum §§16–30 into the main Brain Foundation Architecture document. Exact PR #173 branch revision at the time of this record: `4b960062b7b3d41fa18c60909c628e8264459927`.
 
 Artifacts:
 - `docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md` — original proposal plus addendum §§16–27.
@@ -870,3 +870,8 @@ This is Builder-completed architecture work, not independent clearance. The 14 q
 4. Explicit Project Director disposition of BFA-C01–BFA-C14 and acceptance of the exact reviewed architecture revision.
 
 No implementation, runtime modification, runtime test execution, technology selection, merge, deployment, Stage A start or change to other PR dispositions is authorized by this superseding decision.
+
+
+### 27.4 Latest exact PR #173 revision — 2026-11-11
+
+The latest integrated PR #173 head is `4b960062b7b3d41fa18c60909c628e8264459927`. The architecture addendum now extends through §§16–30, including language/symbolic cognition, social/agent modelling, existing-mechanism compatibility assessment and Project Director reserved-decision authority. The completion matrix was synchronized to this exact revision. Independent review and final Project Director acceptance remain pending.
