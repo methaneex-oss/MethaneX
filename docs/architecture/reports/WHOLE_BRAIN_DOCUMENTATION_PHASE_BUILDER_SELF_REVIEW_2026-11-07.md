@@ -1318,3 +1318,38 @@ The PR #195 workflow remains unexecuted. This correction does not constitute a s
 - Stage A / implementation planning: HELD; runtime implementation: NOT AUTHORIZED.
 
 **Exact pre-inventory PR #192 parent at this self-review update:** `3f5e01fa34c23fc0d2a18eb2e0377d2b89bf8fe0`. The inventory is now the sole remaining Builder-controlled synchronization write. After it is committed, re-fetch all 38 changed files at the resulting exact HEAD and record the result in a PR conversation comment; do not make further PR #192 file edits after that verification.
+
+
+---
+
+## 8. Final consistency correction after the previous inventory freeze — 2026-11-11
+
+A post-verification read of the canonical Planning Documentation Index found that its opening current-status block correctly said **DF-06 NOT MET**, but a later subsection within that same controlling block still said DF-06 was resolved within the documented scope. That statement contradicted the Project Director's explicit decision requiring full resolution before foundation acceptance. The index also retained a pre-inventory PR #192 snapshot and a stale instruction that DF-10 inventory synchronization was still pending.
+
+The Builder reopened the documentation-only closeout to correct those inconsistencies rather than leave a known contradiction in the canonical entry point.
+
+### 8.1 Exact correction evidence
+
+- Pre-correction PR #192 HEAD: `3cb09befa2b28b3ea0dc2242bc1176bc6a721abd`.
+- Index correction commit: `a79e290405eba38b3421ad1eae78c4202a28918`.
+- Corrected index blob: `01ee72b50bd45e03eb8293dd34ed512c183abef1`.
+- The corrected controlling block now records PR #192's exact verified pre-correction HEAD, PR #174's live HEAD, DF-06 as NOT MET, DF-10 as completed after 38/38 post-write retrieval, and DF-08 as resolved only against its bounded criterion.
+- PR #195's Blind Fresh Tester workflow was updated in separate commit `507263f470987cf5f91fa07e052e85e6b92bf652`, workflow blob `a66d6cff17dae02c483f99c431db881593863ed8`. Its packet now fetches the current proposed PR #173 architecture revision `756724b95e093ac48fcd95c5587117c0a4d8f3c0` and current PR #174 specification revision `b78e24b6fa122d1141b1f225bc6d29e1e7c77631`, rather than stale revisions. This is static workflow preparation only; no workflow run or assessment is claimed.
+- PR #194 remains a separate, open, draft, unmerged workflow-diagnostics proposal. PR #195 contains the response-shape/diagnostics handling together with the later exact-SHA input validation and role terminology changes. No branch merge, cherry-pick, retarget or integration was performed.
+
+### 8.2 Remaining Builder synchronization
+
+This self-review is tied to the exact PR #192 parent `a79e290405eba38b3421ad1eae78c4202a28918`. The detailed inventory must now be refreshed against the resulting self-review commit and made the final PR #192 file write. The final inventory must capture the complete 38-path parent blob manifest at that exact parent. After the inventory commit, verify the resulting tree and all changed-path identities; do not make further PR #192 file edits after that verification.
+
+### 8.3 Corrected Builder disposition
+
+- **DF-06 remains NOT MET.** Full semantic relevance, applicable external destination reachability, renderer-specific fragment behavior and applicable historical/cross-branch validation have not been established.
+- **DF-08 remains RESOLVED** only against its exact bounded preservation criterion.
+- **DF-09 remains OPEN / NOT MET** pending a CLEAR Blind Fresh Tester result against the frozen final PR #192 revision.
+- **DF-10 remains Builder-owned and is not complete until the final inventory and post-write verification described above are recorded.**
+- **DF-11 remains WAIVED** by the Project Director.
+- **DF-12 remains NOT ACCEPTED** pending the Project Director's exact-revision decision.
+- PR #173 / #174 reviews and reserved dispositions, PR #191 disposition, and PR #192/#193 integration order remain outside Builder authority.
+- Stage A and implementation planning remain HELD; runtime implementation remains NOT AUTHORIZED.
+
+This correction does not convert any open gate into a pass and does not authorize review, testing, integration or implementation.
