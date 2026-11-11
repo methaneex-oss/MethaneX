@@ -387,7 +387,7 @@ Every distinct GitHub Actions run destination discovered in the package was fetc
 
 DF-06 requires durable cross-document links: exact commit-pinned paths for document/source references, with PR links retained for discussion context. The checks above cover the current PR #192 package, all changed-file relative targets, the unchanged-file comparison, the enumerated pinned source files, the source-map references/line ranges, and the GitHub PR/Actions destinations. The only inaccessible external historical pointer is explicitly non-clickable and access-qualified.
 
-**Builder disposition: DF-06 RESOLVED within the Initial Documentation Foundation package and its enumerated immutable source/link scope.** This is not an unqualified claim that every URL ever mentioned anywhere in every historical repository file has been revalidated. It closes the gate's declared documentation-package scope without silently deleting or rewriting historical evidence.
+**Historical Builder disposition (2026-11-11; superseded):** At the time of this bounded audit, the Builder assessed DF-06 as resolved within the Initial Documentation Foundation package and its enumerated immutable source/link scope. This was a bounded technical disposition, not proof of complete semantic relevance, all applicable external destination reachability, renderer-specific behavior, or every applicable historical/cross-branch link. The Project Director subsequently selected the full-resolution requirement (decision B), and the controlling register §32.2 records **DF-06 NOT MET**. This historical bounded result must not be presented as current gate clearance. The evidence above remains valid for the checks it actually performed.
 
 ## 16. DF-08 criterion-to-evidence reconciliation — 2026-11-11
 
