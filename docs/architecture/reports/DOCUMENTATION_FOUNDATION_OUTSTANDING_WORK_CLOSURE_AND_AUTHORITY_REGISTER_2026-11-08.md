@@ -994,3 +994,40 @@ DF-06 and DF-08: RESOLVED within the stated Initial Documentation Foundation cri
 PR #191 content/dependency review is complete; Builder recommendation remains retain separately, with Project Director disposition pending. BFA-C01–BFA-C14 remain reserved for explicit Project Director disposition. PR #173 blind re-review remains outstanding. PR #192/#193 remain unmerged. Stage A remains HELD; runtime implementation remains NOT AUTHORIZED.
 
 The subsequent final index refresh will be the last documentation commit in this pass. Its resulting commit SHA is the exact PR #192 target for DF-09.
+
+
+## 31. PR #174 follow-on finding correction and provenance reconciliation — 2026-11-11
+
+### 31.1 Exact current revision
+
+- PR #174: open, draft, unmerged.
+- Historical Project Director-accepted specification baseline: `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`.
+- Corrected PR #174 branch HEAD: `4b134048680fb5902f8c2a5a067b0c369169dbfe`.
+- Current specification blob: `31ea81078403006929eb6514e4d39c5bf6456c70`.
+- Follow-on correction report blob: `2a5f5028fe013607e688f927cd58f9f26dd7aba7`.
+
+### 31.2 Findings and Builder response
+
+Prior conversation context records the PR #174 follow-on findings as:
+
+- **F-02 — contextual language/operator-intent grounding (High):** require general, context-sensitive language and operator-intent interpretation, not hardcoded phrase-to-intent mappings.
+- **F-03 — downstream reasoning integration (Medium):** define how reasoning conclusions, uncertainty and alternatives influence downstream cognitive processing through explicit contracts and acceptance scenarios.
+
+The Builder updated BM-02 to distinguish acquired utterance, literal/semantic interpretation, reference/discourse interpretation and pragmatic/operator-intent hypotheses; preserve context, provenance, alternatives and uncertainty; handle correction; and keep inferred intent separate from authorization. Scenarios 35–40 were added.
+
+The Builder updated BM-12 to require owner-routed conclusions with preserved uncertainty, alternatives, assumptions, provenance, scope and dependencies, plus explicit consumer disposition. Scenarios 41–46 test downstream evaluation, alternatives, invalidation and failure when a result is only logged/delivered.
+
+### 31.3 Provenance limitation and acceptance status
+
+The original follow-on report was previously supplied as a ChatGPT shared-conversation URL: `https://chatgpt.com/s/t_6aeb2a73b6dc81918355a8da5bfb6a84`. Retrieval failed in this pass. The exact report body, reviewed SHA, verbatim finding text and full original acceptance criteria remain unavailable. The correction report explicitly labels the finding summaries as reconstructed from prior conversation context, not verbatim source material.
+
+**Status:** Builder-level corrections submitted; F-02/F-03 are NOT independently cleared. The exact corrected PR #174 revision requires independent re-review and Project Director disposition. The accepted baseline at `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` remains a historical planning-baseline acceptance only; it does not automatically accept the correction revision or establish implementation readiness.
+
+### 31.4 Relationship to PR #173
+
+Do not conflate PR #174 F-02/F-03 with the similarly numbered PR #173 architecture findings. PR #173 has its own correction record, exact current revision `756724b95e093ac48fcd95c5587117c0a4d8f3c0`, and separate blind architecture re-review requirement. PR #174's corrected specification is not a substitute for PR #173 architecture acceptance.
+
+### 31.5 Authorization
+
+No runtime code, tests, dependencies, build configuration, workflow, merge, rebase, retarget, deployment or implementation authorization is included in this correction. PR #174 remains open/draft pending independent review and explicit Project Director disposition.
+
