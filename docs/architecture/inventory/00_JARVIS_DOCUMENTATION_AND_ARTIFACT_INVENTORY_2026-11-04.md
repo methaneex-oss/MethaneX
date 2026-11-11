@@ -2443,3 +2443,35 @@ The other 30 unchanged paths are the rows in §58 not listed above. No runtime s
 - Stage A: HELD. Runtime implementation: NOT AUTHORIZED.
 
 **Self-reference rule:** this section records the inventory blob at parent HEAD d142d0cdc01a295ba98449d8fee2b83eb8ff2ff4. Its resulting blob must change when this section is committed. Re-fetch the resulting PR #192 HEAD and inventory blob before the fresh-reader assessment; do not use this parent SHA as the post-write target.
+
+
+
+## 61. Final pre-assessment parent manifest — 2026-11-11
+
+**Exact PR #192 parent HEAD:** 9fee3da6010dfc91ca37133ce663315813946848. **State:** open, non-draft, unmerged. **Base:** docs/jarvis-phase-2-whole-brain-integration-map-20261105. **Changed paths:** 37; all README/documentation paths; no runtime source, tests, build configuration, dependencies or workflow files changed.
+
+Compared with §58 parent 4fe2c35be650848defa06be3458edf4437635e0c, the branch is 14 commits ahead, 0 behind, and seven paths differ. The other 30 paths are unchanged from §58 and retain those exact blob identities.
+
+| Path | Parent blob SHA | Status |
+|---|---|---|
+| docs/README.md | 49c83eae37d09f371b9339e712f5c6db1a5f9db7 | Portal; historical PR #173 acceptance and current proposal clearly distinguished |
+| docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md | 909aeab5454418a86f752c604232d99c5164543a | Canonical index; current gate status and exact architecture/dependency snapshot |
+| docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md | 848a084ce989e632111d0fc96929782727127dd3 | This inventory at parent; resulting blob changes on commit |
+| docs/architecture/reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md | aac384f933e1349b4c87b1e636be0e86d1349d5d | DF-06/DF-08 closure, current architecture corrections, PR #191 recommendation and reserved decisions |
+| docs/architecture/reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md | 6d1b6a4c3ab25ba966982b1ab606eb362ba01d62 | Exact package link validation and DF-08 criterion-to-evidence reconciliation |
+| docs/architecture/reports/NEMOTRON_FRESH_READER_RERUN_RUNBOOK_2026-11-10.md | 7599c8ec78b15cd1e1804131842c33734e5b0112 | Exact-current-head DF-09 rerun procedure; DF-11 waiver reflected |
+| docs/architecture/reports/WHOLE_BRAIN_DOCUMENTATION_PHASE_BUILDER_SELF_REVIEW_2026-11-07.md | a5bfa9db15709be4797e11dc609b9ddcfbd0cbd5 | Final Builder self-review at parent d142d0cdc01a295ba98449d8fee2b83eb8ff2ff4 |
+
+### 61.1 Final gate disposition before blind reader run
+
+- DF-01–DF-08: Builder evidence recorded as resolved within the exact stated initial-foundation criteria and bounded package scope.
+- DF-09: OPEN / NOT MET. Last assessment PARTIALLY CLEAR (31/32), run 42970930733, exact packet revision 887b349f9826de7726707209f640ae0cafd78ace. It does not assess this parent. A CLEAR result on the final post-write PR #192 HEAD remains required.
+- DF-10: self-review and exact path/blob register recorded; this inventory's post-write blob and resulting PR HEAD must be fetched before any fresh-reader run.
+- DF-11: WAIVED by Project Director.
+- DF-12: NOT ACCEPTED; exact-revision Project Director decision remains required.
+- PR #173: Builder corrections committed at HEAD 627c809bea7a7c18a9d5f350b632c67c8e5a34ac; independent re-review and BFA-C01–BFA-C14 Project Director disposition pending.
+- PR #191: read-only content/dependency review complete; disposition pending Project Director.
+- PR #192/#193: open, unmerged and separate; no integration operation performed.
+- Stage A: HELD. Runtime implementation: NOT AUTHORIZED.
+
+**Self-reference rule:** this section records the inventory blob at parent HEAD 9fee3da6010dfc91ca37133ce663315813946848. Its resulting blob must change after commit. Re-fetch the live PR #192 HEAD and inventory blob after this commit. That post-write HEAD is the only valid target for the next DF-09 assessment.
