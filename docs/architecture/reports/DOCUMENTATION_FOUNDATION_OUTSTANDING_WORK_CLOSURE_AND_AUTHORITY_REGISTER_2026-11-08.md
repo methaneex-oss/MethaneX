@@ -1099,3 +1099,59 @@ The final index refresh will record this exact parent and become the final docum
 ### 33.4 Phase boundary
 
 Initial planning is **NOT COMPLETE**. Stage A remains NOT STARTED / HELD. Runtime implementation remains NOT AUTHORIZED. Successful Native Brain Build CI runs are build evidence only; they do not satisfy DF-09, the PR #173 blind architecture review, PR #174 independent re-review, or Project Director acceptance.
+
+
+## 34. Live initial-planning closeout reconciliation — 2026-11-11
+
+### 34.1 Exact live PR snapshot
+
+The live snapshot was fetched from GitHub during this pass. It is not immutable; re-fetch before any future operation.
+
+| PR | Exact HEAD | Base | State | Disposition |
+|---|---|---|---|---|
+| #173 | `756724b95e093ac48fcd95c5587117c0a4d8f3c0` | `main` / `1273ddbcd0087d189e01388ded2d362fb1e058d2` | Open/draft | Corrected architecture proposal; blind re-review and Project Director BFA-C01–C14 decisions outstanding |
+| #174 | `f6662c149be4395f4c207f62a42920e787f063c4` | historical architecture baseline `97191111bc2573c14d391c0af9628db7b11f194b` | Open/draft | F-02/F-03 corrections and independent review request submitted; independent re-review/Director disposition outstanding |
+| #175 | `c30fe20cfdf3f499416972042be06acdd70f752d` | accepted historical specification baseline `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` | Open/draft | Implementation roadmap proposal; non-operative until initial planning accepted and separately authorized |
+| #179 | `d30237b81c3695f2a7cb980144b221bbd42ce548` | governance proposal `39fe09dcf13496f5f0005ccf3f00739303e29f88` | Open/draft | Phase 2 source-integration evidence, not whole-Brain completeness acceptance |
+| #191 | `609d38ede50bbdd98a93dfed112781eacabee9fd` | `f6267456560a08054d69f7960d2951452b14017c` | Open/draft | Bounded reference report; content/dependency review complete; Project Director disposition pending |
+| #192 | `b1dcd6e1da91e9a556f8bbb20dfc14e1fbcc90d3` | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | Open/non-draft | 37 changed paths at this snapshot; final index/self-review refresh and DF-09 current-head assessment remain |
+| #193 | `4705716e0845d7b5621ab7e339d36c9f42853b1a` | PR #175 base `874c732973b6ab303d65a503f5a215b0af8e1153` | Open/draft | Implementation plan/handoff explicitly marked non-operative against current initial-planning gate |
+| #195 | `2c9dffc21032dec9bdc5af827259d8bdb3c97746` | `main` / `8edc7cdfc886537d319d81cea04cdc9f3476044e` | Open/draft | Separate role terminology proposal; not a gate clearance |
+
+PR #191's base is an ancestor of PR #179 HEAD: compare result is 23 commits ahead and zero behind for #179 relative to the #191 base. No rebase, retarget or replay is implied.
+
+### 34.2 PR #174 follow-on correction status
+
+The secondary recovery record `PR_174_FOLLOW_ON_REVIEW_PROVENANCE_RECOVERY_2026-11-06.md` confirms:
+- F-02: “Missing explicit contextual language and operator-intent grounding” — High / Confirmed; themes include contextual intent, reference grounding, speech-act/source attribution, uncertainty, clarification, trusted/untrusted content and interaction continuity.
+- F-03: “Downstream reasoning integration is not sufficiently enforceable” — Medium / Confirmed specification weakness; accepted reasoning must materially affect authoritative downstream computation, rejection/invalidation must be explicit, and end-to-end effects must be traceable.
+
+The corrected PR #174 specification now includes speech-act/source attribution and discourse continuity in BM-02; explicit downstream reasoning artifact/version to consumer-state/decision-version traceability and rejection/invalidation requirements in BM-12; and scenarios 47–48 for material downstream effect and invalidation/recomputation. Scenarios 35–48 collectively cover the recovered themes.
+
+Exact current artifacts:
+- PR #174 HEAD: `f6662c149be4395f4c207f62a42920e787f063c4`.
+- Specification blob: `fbe017d96f9d0716be6080c96eea6b67c7da62fa`.
+- Correction report blob: `3f133ab32a0f5fc70c525c312ebdc8e0060d67fe`.
+- Independent re-review request blob: `4e3e4482158f9905cecd3b5d9bab2946a603681b`.
+
+The original report, complete rationale, inline annotations and exact originally reviewed SHA remain unavailable. The secondary record is not a verbatim original. Independent re-review is requested but not yet submitted; Project Director disposition remains outstanding.
+
+### 34.3 Current gate and authority disposition
+
+- **DF-06: NOT MET.** Bounded checks are not equivalent to full link-by-link semantic relevance, external destination reachability, renderer-specific fragment behavior and historical/cross-branch validation. The shared-conversation pointer remains access-limited and unverified.
+- **DF-08: RESOLVED** against the exact bounded exit criterion by preservation report §16. No repository-wide semantic completeness claim is made.
+- **DF-09: OPEN / NOT MET.** The 31/32 PARTIALLY CLEAR result on `887b349f9826de7726707209f640ae0cafd78ace` (run #42970930733) is historical and does not assess current PR #192 HEAD. A CLEAR result is required against the final exact PR #192 revision.
+- **DF-11: WAIVED** by Project Director decision. No qualifying independent review is claimed from same-account historical comments.
+- **DF-12: NOT ACCEPTED.** Project Director exact-revision acceptance remains outstanding.
+- **PR #173:** corrected architecture proposal requires blind re-review of exact current HEAD and explicit disposition of BFA-C01–BFA-C14.
+- **PR #174:** corrected specification proposal requires independent re-review and Project Director disposition.
+- **PR #191:** bounded reference artifact; Project Director disposition pending.
+- **PR #192/#193:** separate lineages; integration order remains reserved.
+- **Stage A:** NOT STARTED / HELD.
+- **Implementation planning:** HELD.
+- **Runtime implementation:** NOT AUTHORIZED.
+
+### 34.4 Builder completion record
+
+The Builder created `docs/architecture/reports/INITIAL_PLANNING_GATE_CLOSEOUT_STATUS_2026-11-11.md` to consolidate the exact live snapshot, gate status, completed corrections, blockers and required sequence. This report is not an independent review or acceptance decision. The final index and self-review must be refreshed after all other intended PR #192 documentation writes; the resulting exact PR #192 HEAD is the only eligible DF-09 target.
+
