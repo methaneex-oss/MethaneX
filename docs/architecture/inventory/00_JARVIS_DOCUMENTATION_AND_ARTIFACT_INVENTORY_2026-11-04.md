@@ -2409,3 +2409,37 @@ The current architecture branch HEAD is 627c809bea7a7c18a9d5f350b632c67c8e5a34ac
 - Stage A: HELD. Runtime implementation: NOT AUTHORIZED.
 
 **Snapshot rule:** this section's PR #192 parent SHA is f5e4ac9ab1f0c4c273b8cd3f64dcb9c741bb1f54. The inventory file's blob changes when this section is committed. The resulting PR #192 HEAD and resulting inventory blob must be re-fetched; this parent value must not be relabelled as the post-write HEAD.
+
+
+
+## 60. Final Builder self-review and exact seven-path delta — 2026-11-11
+
+**Parent PR #192 HEAD:** d142d0cdc01a295ba98449d8fee2b83eb8ff2ff4 (open, non-draft, unmerged). **Base:** docs/jarvis-phase-2-whole-brain-integration-map-20261105 at the previously recorded PR #179 lineage. **Changed paths:** 37; all README/documentation paths.
+
+A compare from the §58 parent 4fe2c35be650848defa06be3458edf4437635e0c to this parent returns 13 commits ahead, 0 behind, and exactly seven changed paths. The other 30 of the 37 paths retain the exact blob identities recorded in §58.
+
+| Path | Parent blob SHA | Purpose/status |
+|---|---|---|
+| docs/README.md | 49c83eae37d09f371b9339e712f5c6db1a5f9db7 | Portal distinguishes historical PR #173 acceptance from current corrected proposal |
+| docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md | ced9a73051952accd2f5aab0afec7e4451706d64 | Current gate/index status; exact PR #173 and PR #191 updates |
+| docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md | 78e3f07aa4b26f9313468fa40ae2349147b24730 | This inventory's parent blob before this append; self-reference changes on commit |
+| docs/architecture/reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md | aac384f933e1349b4c87b1e636be0e86d1349d5d | DF-06/DF-08 closure, architecture correction and reserved decisions |
+| docs/architecture/reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md | 6d1b6a4c3ab25ba966982b1ab606eb362ba01d62 | Link revalidation, DF-08 criterion map and PR #191 review |
+| docs/architecture/reports/NEMOTRON_FRESH_READER_RERUN_RUNBOOK_2026-11-10.md | 7599c8ec78b15cd1e1804131842c33734e5b0112 | DF-09 rerun instructions and DF-11 waiver status |
+| docs/architecture/reports/WHOLE_BRAIN_DOCUMENTATION_PHASE_BUILDER_SELF_REVIEW_2026-11-07.md | a5bfa9db15709be4797e11dc609b9ddcfbd0cbd5 | Final Builder self-review for this exact parent snapshot |
+
+The other 30 unchanged paths are the rows in §58 not listed above. No runtime source, tests, build configuration, dependencies or workflows are changed by PR #192.
+
+### 60.1 Current gate snapshot
+
+- DF-01–DF-08: Builder evidence recorded as resolved within the stated criteria and bounded package scope; DF-06/DF-08 evidence is in preservation report §§15–16.
+- DF-09: OPEN / NOT MET; last result PARTIALLY CLEAR (31/32) on exact packet revision 887b349f9826de7726707209f640ae0cafd78ace; no CLEAR result on this parent.
+- DF-10: self-review blob a5bfa9db15709be4797e11dc609b9ddcfbd0cbd5 covers this exact parent; inventory post-write blob and resulting PR HEAD must be re-fetched.
+- DF-11: WAIVED by Project Director.
+- DF-12: NOT ACCEPTED; exact-revision Project Director decision required.
+- PR #173: corrected Builder proposal at HEAD 627c809bea7a7c18a9d5f350b632c67c8e5a34ac; blind independent re-review and BFA-C01–BFA-C14 Project Director disposition pending.
+- PR #191: open/draft/unmerged; read-only content/dependency review complete; disposition pending.
+- PR #192/#193: separate and unmerged; integration held.
+- Stage A: HELD. Runtime implementation: NOT AUTHORIZED.
+
+**Self-reference rule:** this section records the inventory blob at parent HEAD d142d0cdc01a295ba98449d8fee2b83eb8ff2ff4. Its resulting blob must change when this section is committed. Re-fetch the resulting PR #192 HEAD and inventory blob before the fresh-reader assessment; do not use this parent SHA as the post-write target.
