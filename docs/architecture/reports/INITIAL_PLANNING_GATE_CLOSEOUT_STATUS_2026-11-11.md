@@ -181,3 +181,44 @@ PR #194 remains open and unmerged but is a stale alternative pinned to historica
 - Stage A and implementation planning remain HELD; runtime implementation remains NOT AUTHORIZED.
 
 This update is Builder evidence only. It is not a review, test result, gate acceptance, Project Director decision or implementation authorization.
+
+
+---
+
+## 9. Final Builder reconciliation — 2026-11-11
+
+### 9.1 Exact repository state and scope
+
+PR #192 was re-fetched as open/non-draft/unmerged with 38 changed paths. The exact parent before the latest canonical-index update was `62dc0ca2576a08aeaa9ef27f98136e02292e80a7`; the index update is commit `07fed575e949e03fda79471c3f544ce0541d51c2`. The final inventory write must record the exact parent immediately before that write and all 38 changed-path blob identities.
+
+The PR base-ref discrepancy remains explicit: PR #192's API base SHA is `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, while the live Git ref and PR #179 head for the named base branch are `d30237b81c3695f2a7cb980144b221bbd42ce548`. No base update, merge, rebase, retarget or history rewrite is performed.
+
+### 9.2 Builder work completed or reconciled
+
+- Re-fetched all 38 PR #192 changed paths at exact HEAD `c060ad15e8e5bf86d9b359b88e696cc1fe995a54`; the complete recursive tree had 268 entries and was not truncated.
+- Re-ran the bounded link extraction at that revision: 316 Markdown/autolink occurrences, 116 repository-relative targets, zero missing relative targets, and 200 GitHub HTTP(S) occurrences. Rechecked 18 Actions run destinations (all completed/success), 13 PR metadata destinations, two Project Director decision comments and three DLT-002 artifacts (present/unexpired). The immutable Phase 2 source map remains blob `9dd776920d0a479a9d7275acc821e12c266623d9`; its 89 source links map to 45 commit/path pairs and prior exact-blob/76-line-range checks remain applicable. The current PR #192 copy includes the corrected `#L18-L77` and `#L1-L84` ranges.
+- Updated the canonical index with a new controlling live-status reconciliation and preserved historical snapshots as dated evidence.
+- Updated the preservation report with the exact-head validation method, results and remaining DF-06 limits.
+- Updated the outstanding-work/authority register with current PR heads, gate dispositions and reserved decision boundaries.
+- Added governance PR #196 with the requested additive Builder Rules 11.9–11.16. It changes only `docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md`; it is open and unmerged.
+- Reconciled PR #194/#195: #194 remains the stale fixed-revision alternative; #195 is the consolidated workflow/terminology proposal. Neither has been executed or merged.
+
+### 9.3 Controlling gate disposition
+
+| Gate | Current disposition |
+|---|---|
+| DF-06 | **NOT MET** — semantic relevance of every applicable link and rendered GitHub anchor behavior remain unestablished; historical ChatGPT pointer remains access-limited; historical/cross-branch semantic reconciliation remains incomplete |
+| DF-08 | **RESOLVED** against the exact bounded preservation criterion only |
+| DF-09 | **OPEN / NOT MET** — latest qualifying result remains 31/32 PARTIALLY CLEAR on older revision `887b349f9826de7726707209f640ae0cafd78ace`; no current-head run is claimed |
+| DF-10 | Final self-review, exact-parent 38-path inventory and post-write verification remain |
+| DF-11 | **WAIVED** by Project Director decision |
+| DF-12 | **NOT ACCEPTED**; exact-revision Project Director decision remains reserved |
+| DF-13 | Stage A NOT STARTED / HELD; implementation planning HELD; runtime implementation NOT AUTHORIZED |
+
+The available GitHub connection exposes no workflow-dispatch action. No fresh-reader run, blind PR #173 assessment, independent PR #174 review or other reserved assessment is claimed. Project Director decisions remain reserved for BFA-C01–BFA-C14, PR #191 disposition, PR #192/#193 integration order and DF-12 acceptance.
+
+### 9.4 Final Builder boundary
+
+The remaining Builder-owned closeout step is to synchronize the self-review and final 38-path inventory to the exact current parent, perform post-write verification against the resulting live PR #192 HEAD, and record the result in the PR conversation without further file writes. DF-06 remains an open Builder technical gate to the extent that semantic and rendered-destination verification can be performed with available capabilities; the inaccessible historical pointer and unavailable renderer UI are explicitly disclosed blockers.
+
+**Initial planning remains NOT COMPLETE. Documentation Foundation remains NOT ACCEPTED / NOT CLEARED.** Stage A remains NOT STARTED / HELD. Implementation planning remains HELD. Runtime implementation and PR integration remain NOT AUTHORIZED.
