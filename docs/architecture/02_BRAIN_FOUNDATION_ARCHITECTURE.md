@@ -1004,7 +1004,7 @@ The minimum agent representation must preserve, where available, source-linked i
 
 ## 32. Explicit disposition of inherited mechanism rules
 
-The following rules have appeared in historical implementation or planning discussions and must not silently become foundational Brain policy. Their treatment here is an architecture-level disposition; it is not a claim that every occurrence has been located in the current source tree or that source compatibility has been completed.
+The following rules have appeared in historical implementation or planning discussions and must not silently become foundational Brain policy. A bounded source-level compatibility audit has now been completed against the exact PR #97 donor revision c1da222e6c94aeb3f2ad000392c21fe4fc81ab25. The findings are recorded in docs/architecture/reports/INHERITED_MECHANISM_SOURCE_COMPATIBILITY_AUDIT_2026-11-11.md. The audit does not claim every repository branch or historical source revision was searched.
 
 | Inherited rule or pattern | Foundational disposition | Required later source-level evidence and owner |
 |---|---|---|
@@ -1015,7 +1015,7 @@ The following rules have appeared in historical implementation or planning discu
 
 These dispositions distinguish deterministic engineering constraints from learned cognitive conclusions. A numeric threshold is not automatically hardcoding: its meaning, calibration, scope and consequence determine whether it is a legitimate operational guard or an unjustified cognitive shortcut. Conversely, labelling a fixed value a parameter does not make it learned or evidence-sensitive.
 
-**Compatibility status:** UNASSESSED at source level. The architecture defines the required evaluation and prohibited semantics; it does not declare the legacy mechanisms preserved, adapted or replaced. No runtime code is changed or authorized by this section.
+**Compatibility status:** BOUNDED SOURCE AUDIT COMPLETE; COMPATIBILITY NOT ACCEPTED AS-IS. The PR #97 donor source uses incoming reliability metadata averaged as a source metric, fixed operational defaults with distinct meanings, a first-eligible goal fallback plus first-eligible context coupling, and latest-value mutation in the authoritative belief map. The belief update path is incompatible with this section's revision contract; goal/context selection requires correction or a narrowly authorized operational fallback; reliability values require independent calibration/provenance; numeric thresholds require objective-specific evaluation. The audit is bounded to PR #97 donor HEAD c1da222e6c94aeb3f2ad000392c21fe4fc81ab25 and its exact source blobs. See the linked source compatibility report for path/blob/line evidence. No runtime code is changed or authorized by this section.
 
 ## 33. Accountability and completion evidence
 
@@ -1024,11 +1024,24 @@ Every deferred architecture obligation must have one accountable specification o
 | Obligation | Accountable delivery owner | Required output | Approval / challenge boundary |
 |---|---|---|---|
 | Social/agent representation | Architecture & Engineering Builder | Social/Agent Representation Specification with claim classes, ownership, provenance, temporal validity, contradiction and privacy contracts | Project Director approves scope/authority changes; Independent Reviewer challenges evidence and completeness |
-| Legacy reliability/threshold/goal-selection/overwrite audit | Architecture & Engineering Builder | Source-level inventory, exact revisions, call paths, tests, semantic classification and preserve/adapt/replace recommendations | Project Director decides reserved foundational changes; Independent Reviewer challenges audit completeness |
+| Legacy reliability/threshold/goal-selection/overwrite audit and remediation specification | Architecture & Engineering Builder | Bounded PR #97 donor source audit is recorded; next deliverable is a compatibility/remediation specification with versioned-belief, selected-goal context, calibrated evidence and threshold tests | Project Director decides reserved foundational changes; Independent Reviewer challenges audit completeness |
 | CF-26 compatibility dispositions | Architecture & Engineering Builder | Per-mechanism compatibility records against §§16–32 and the approved system boundary | Project Director decides high-impact scope/authority changes; no code change implied |
 | CF-27 decision governance | Project Director (decision authority); Architecture & Engineering Builder (register maintenance) | Exact-revision decision ledger with proposal, alternatives, rationale, impact, status and downstream constraints | Project Director is the sole acceptance authority for reserved decisions; Independent Reviewer may challenge traceability |
 | Architecture traceability and revision integrity | Architecture & Engineering Builder | Complete CF/Q/BFA-to-section traceability and exact commit/blob manifest | Independent Reviewer rechecks exact revision; Project Director accepts/rejects/revises |
 
 A reviewer finding is not closed by a narrative assertion. Closure requires the changed architectural text, exact changed revision, a trace to the finding, and independent recheck. Where the finding depends on source-level facts, the source audit must be attached or the item remains explicitly unassessed.
+
+
+
+## 34. Bounded source compatibility result and downstream constraints
+
+The exact PR #97 donor source audit is recorded in [Inherited Mechanism Source Compatibility Audit — 2026-11-11](reports/INHERITED_MECHANISM_SOURCE_COMPATIBILITY_AUDIT_2026-11-11.md). Its result is not a blanket endorsement of existing code.
+
+- **Source reliability:** current production assimilation averages caller-supplied reliability metadata; the correctness-scoring method was found in the inspected source set only as a direct unit-test call, not as a production feedback path. Treat reliability as provisional evidence metadata, not calibrated source truth.
+- **Thresholds:** no single universal confidence cutoff was found in the bounded inspection. Action-score, uncertainty/risk, similarity, retention and minimum-strength defaults have distinct purposes. Their provisional use requires separate objectives, calibration/evaluation, ownership and versioning.
+- **Goal selection:** the first eligible item is used as a fallback and also as a strategy context in other paths even when intent is selected independently. This is a real context-coupling defect, not merely a cosmetic ordering choice.
+- **Belief revision:** the authoritative belief value is overwritten before a disputed flag is set; action-status beliefs are also replaced. The WorldModel preserves some incoming conflicting facts, but it does not provide a complete versioned claim ledger or preserve every replaced active value. This is incompatible with the foundational revision contract.
+
+The next specification must define remediation and objective verification; it must not silently preserve these donor semantics. This section closes the source-evidence identification task for the bounded donor revision only. It does not authorize runtime changes, decide final architecture acceptance or substitute for blind independent re-review.
 
 **End of architecture completion addendum.**
