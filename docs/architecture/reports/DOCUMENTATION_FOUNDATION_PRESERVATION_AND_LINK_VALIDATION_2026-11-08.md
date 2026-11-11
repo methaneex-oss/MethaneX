@@ -484,3 +484,53 @@ The available GitHub connector returns source-file text for blob URLs; it does n
 4. Reconcile any remaining applicable historical/cross-branch links not covered by the enumerated immutable source set.
 
 No full DF-06 closure is claimed. This addendum is Builder technical evidence only; it is not an independent review or Project Director gate decision.
+
+
+## 20. Final Builder semantic-link audit and rendered-anchor boundary — 2026-11-11
+
+### 20.1 Exact target and complete occurrence inventory
+
+This supplement reconciles the final inventory-only snapshot recorded in §19 and the PR conversation audit supplement. The target was PR #192 at exact HEAD 51f9056404a7a885213665b864f2205ea4f464c7, with 38 changed paths and a complete 268-entry recursive tree.
+
+The full changed-file scan covered all 38 paths at that exact logical snapshot: the 37 non-inventory files at the inventory parent and the inventory at its resulting final blob. The extracted set contains 316 Markdown/autolink occurrences:
+- 116 repository-relative targets; all 116 exist in the final tree.
+- 200 external HTTP(S) occurrences.
+- Zero local relative heading-fragment links.
+
+### 20.2 Semantic relevance review
+
+The Builder reviewed the links against the destination content and the adjacent claim/navigation purpose, not merely against destination existence.
+
+- **Phase 2 source map:** 89 immutable source citations resolve to 45 exact commit/path pairs. The cited passages were checked against the adjacent claims about mechanism boundaries, runtime call paths, memory/reasoning, prediction and outcome processing, developmental learning, persistence/replay, action execution, authorization, tests and workflows. No material citation-to-claim mismatch was identified.
+- **Phase 1 source audit:** 20 exact source references were checked against the named subsystem, build/test registration or review artifact. Their destinations match the described evidence role.
+- **Planning index:** nine immutable cross-branch document pins were fetched and checked against the stated subject and authority/provenance qualification.
+- **Repository navigation:** the README, documentation portal, planning index, inventory and role-based reading routes were checked for label-to-destination consistency. All repository-relative destinations resolve in the exact tree.
+- **External evidence references:** the PR, Actions, comment and artifact links were checked against the evidence role stated next to each reference. The full exact-snapshot destination revalidation recorded 16 unique GitHub Actions run IDs (all completed/success), 20 unique PR metadata destinations, two Project Director provenance comments and three DLT-002 artifacts (present and unexpired).
+
+The 200 external occurrences are not 200 distinct destinations; repeated references are expected. The counts above distinguish occurrence counts from unique destination classes.
+
+### 20.3 Historical and cross-branch reconciliation
+
+The following comparisons were rechecked and are retained as evidence only; none authorizes a branch operation:
+
+- PR #191 and PR #179 share ancestor f6267456560a08054d69f7960d2951452b14017c. PR #191 is one commit ahead and 23 behind current PR #179 HEAD d30237b81c3695f2a7cb980144b221bbd42ce548.
+- PR #192's recorded base SHA 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c is one commit behind current PR #179 branch HEAD d30237b81c3695f2a7cb980144b221bbd42ce548. The discrepancy is disclosed and preserved.
+- PR #193's recorded base SHA is 874c732973b6ab303d65a503f5a215b0af8e1153. PR #193 HEAD 4705716e0845d7b5621ab7e339d36c9f42853b1a is 39 commits ahead of that base; current PR #175 HEAD c30fe20cfdf3f499416972042be06acdd70f752d is three commits ahead of the same base. The heads diverge.
+
+No merge, rebase, retarget, cherry-pick, replay or history rewrite was performed.
+
+### 20.4 Remaining renderer and provenance limits
+
+Static source checks establish that the cited line ranges fall within the exact immutable source blobs and that their line positions were checked. They do **not** establish that GitHub's rendered file viewer resolves every line/fragment anchor correctly.
+
+Two available retrieval routes were attempted:
+1. The connected GitHub fetch returns normalized source-file content and removes the fragment from its canonical URL; it does not expose the rendered GitHub file viewer or confirm browser scroll-to-line behavior.
+2. Direct browser retrieval of the exact GitHub blob URLs returned a cache miss. No rendered browser session is available in this Builder environment.
+
+The historical ChatGPT shared-conversation pointer in the PR #174 provenance recovery record was also attempted and remains ACCESS-LIMITED / NOT INDEPENDENTLY VERIFIED. It is retained as literal provenance text, not a clickable Markdown navigation dependency.
+
+### 20.5 DF-06 disposition
+
+**DF-06 remains NOT MET.** Builder-side semantic relevance, repository-relative path integrity, GitHub destination revalidation and the enumerated historical/cross-branch comparisons are complete for the exact scope above. The remaining technical blocker is rendered GitHub line/fragment-anchor behavior, which cannot be verified through the available source/API retrieval surface. The historical ChatGPT pointer remains separately and explicitly classified as access-limited.
+
+Do not convert static line-range validity into a claim of rendered-anchor success. If the independent reviewer has a rendered GitHub browser surface, include this exact check in the single review pass. No further Builder claim of DF-06 clearance is made.
