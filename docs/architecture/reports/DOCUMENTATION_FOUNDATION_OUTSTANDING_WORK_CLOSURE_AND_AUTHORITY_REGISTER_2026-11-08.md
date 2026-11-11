@@ -838,3 +838,35 @@ Native Brain Build run [#43019119856](https://github.com/methaneex-oss/MethaneX/
 ### 26.4 Current disposition
 
 Documentation Foundation remains **NOT ACCEPTED / NOT CLEARED**. DF-09 OPEN pending a new CLEAR assessment; DF-06 NOT MET; DF-08 requires criterion-to-evidence closure reconciliation; DF-11 WAIVED; DF-12 NOT ACCEPTED. Stage A remains HELD. Runtime implementation, PR integration, PR closure and branch-history operations remain unauthorized.
+
+
+## 27. Superseding Project Director disposition on PR #173 — 2026-11-11
+
+The Project Director has explicitly superseded the earlier acceptance of PR #173 as sufficient. This is a change in the Project Director's current assessment of the completeness of the Brain Foundation Architecture; it does not erase the historical acceptance event or rescind the prior acceptance of PR #172 / authorization to conduct Brain Foundation Architecture planning.
+
+### 27.1 Controlling decision
+
+- PR #173 remains open and draft and is retained as the starting proposal and source material.
+- PR #173 is **not accepted as the complete/final Brain Foundation Architecture**.
+- The required standard is a full foundational architecture: no critical foundational responsibility, interaction, state/authority boundary, developmental mechanism or verification obligation may remain undefined.
+- Implementation-level algorithms, schemas, APIs, protocols, technologies and runtime/deployment topology may be deferred only after their architectural obligations, rationale and later specification ownership are explicit.
+- The earlier PR #173 acceptance must be read as a historical decision that is superseded on sufficiency/finality, not as current final-architecture approval.
+
+### 27.2 Work performed against PR #173
+
+On 2026-11-11, the Builder added the 27-domain completion/decision matrix and integrated conceptual architecture addendum §§16–27 into the main Brain Foundation Architecture document. Exact PR #173 branch revision at the time of this record: `382e3f91e9aa1fdb269d2b72af1f8f9138ec8029`.
+
+Artifacts:
+- `docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md` — original proposal plus addendum §§16–27.
+- `docs/architecture/03_BRAIN_FOUNDATION_ARCHITECTURE_COMPLETION_AND_DECISION_MATRIX_2026-11-11.md` — 27-domain matrix, responsibility/authority model, epistemic lifecycle, recommended dispositions for 14 open questions, developmental/learning/affect/goal/failure/verification requirements.
+
+This is Builder-completed architecture work, not independent clearance. The 14 question dispositions and BFA-C01–BFA-C14 remain recommendations for explicit Project Director disposition. PR #173 remains open/draft and unmerged.
+
+### 27.3 Remaining gates and authorization
+
+1. Blind independent adversarial review of exact PR #173 current head against PR #171 and accepted PR #172.
+2. Reassessment of prior findings F-01, F-02 and F-03, plus CF-01–CF-27 and the 14 prior open architecture questions.
+3. Builder correction of any findings and independent recheck against the corrected exact revision.
+4. Explicit Project Director disposition of BFA-C01–BFA-C14 and acceptance of the exact reviewed architecture revision.
+
+No implementation, runtime modification, runtime test execution, technology selection, merge, deployment, Stage A start or change to other PR dispositions is authorized by this superseding decision.
