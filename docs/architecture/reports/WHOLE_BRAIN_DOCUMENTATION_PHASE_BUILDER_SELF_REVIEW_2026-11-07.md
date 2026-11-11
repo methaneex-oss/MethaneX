@@ -1071,3 +1071,45 @@ PR #191 remains open/draft/unmerged at 609d38ede50bbdd98a93dfed112781eacabee9fd.
 **Builder result:** DF-01–DF-08 evidence is recorded as resolved within the defined gate criteria and scope; DF-09 remains OPEN / NOT MET; DF-10 self-review is current for the stated parent snapshot; DF-11 is WAIVED; DF-12 remains NOT ACCEPTED; DF-13 hold is maintained. PR #173 correction work is complete at Builder level but not independently cleared or accepted. PR #191 disposition remains reserved. PR #192/#193 remain unmerged and separate.
 
 The next safe step is not implementation planning. It is to obtain the required CLEAR DF-09 assessment against the final exact PR #192 HEAD, then present the exact package for Project Director disposition. No implementation, merge, rebase, retarget, cherry-pick, branch rewrite or deployment is authorized.
+
+
+
+## 21. PR #173 source-audit revision and final documentation cross-reference review — 2026-11-11
+
+### 21.1 Exact parent snapshot
+
+PR #192 parent HEAD for this review is 90de230e36aa881001c7ae28b1bd590402ebd8be (open, non-draft, unmerged). PR #192 remains a 37-path documentation-only package; the seven paths modified from the §58 inventory parent are the portal, index, inventory, authority register, preservation report, fresh-reader runbook and this self-review. The other 30 paths remain unchanged from the exact §58 inventory manifest.
+
+| Artifact | Exact blob SHA at this parent | Review |
+|---|---|---|
+| docs/README.md | b8ed78360051e2f8dfe75872ab1f0a2c40968420 | Current proposed architecture link points to PR #173 HEAD 756724b95e093ac48fcd95c5587117c0a4d8f3c0; historical acceptance remains separate |
+| docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md | 8f6392f1b760747924311eb5aa8ad499f5e74ffa | Current gate summary synchronized to source audit and PR #173 revision |
+| docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md | 848a084ce989e632111d0fc96929782727127dd3 | Inventory before its final parent/branch refresh; self-reference will be updated last |
+| docs/architecture/reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md | f6923f154e59626a969b425c030ba4f4a768ad19 | Latest PR #173 source audit, DF-06/DF-08 closure, PR #191 recommendation and authority holds |
+| docs/architecture/reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md | 6d1b6a4c3ab25ba966982b1ab606eb362ba01d62 | Exact link/preservation evidence remains current; no source change to the linked map |
+| docs/architecture/reports/NEMOTRON_FRESH_READER_RERUN_RUNBOOK_2026-11-10.md | 7599c8ec78b15cd1e1804131842c33734e5b0112 | DF-09 exact-current-head procedure; DF-11 waiver correctly reflected |
+
+### 21.2 Exact current PR #173 source-audit artifacts
+
+PR #173 is open/draft/unmerged at HEAD 756724b95e093ac48fcd95c5587117c0a4d8f3c0.
+
+- Architecture blob: d5a7676e81d2c95b5ba18f45a237d3e0a7635696.
+- Completion matrix blob: ca647a5a5c2c415bae7b8f4582ecbbc451906680.
+- Inherited mechanism source audit blob: 037dc71df9e508c0cc08e96a42b41aa7ba5bc041.
+- Source audit baseline: PR #97 donor HEAD c1da222e6c94aeb3f2ad000392c21fe4fc81ab25.
+
+The source audit establishes the following bounded facts: reliability metrics average caller-supplied metadata and correctness scoring was not found wired into the inspected production files; no single global confidence threshold was found, but distinct operational defaults exist; goal fallback and strategy-context selection use eligible.front() in multiple paths; and the authoritative belief map overwrites prior values before setting a dispute flag, with only partial alternative preservation in WorldModel. The architecture now records the corresponding adapt/replace constraints. No runtime code was modified.
+
+### 21.3 Current completion/gate self-review
+
+- DF-01–DF-08: Builder evidence recorded as resolved within the stated criteria and bounded package scope; DF-06 and DF-08 evidence is in preservation report §§15–16.
+- DF-09: OPEN / NOT MET. The latest result remains PARTIALLY CLEAR (31/32) on packet revision 887b349f9826de7726707209f640ae0cafd78ace; it does not assess this parent or the final branch. A CLEAR result on the final exact PR #192 HEAD remains required. No new run is claimed.
+- DF-10: this self-review records the exact parent and all current cross-reference changes; the final inventory append and resulting PR #192 HEAD must be fetched after this commit.
+- DF-11: WAIVED by the Project Director; no independent documentation review is required or claimed.
+- DF-12: NOT ACCEPTED; exact-revision Project Director decision remains required.
+- PR #191: content/dependency review complete; diverged 1 ahead / 23 behind PR #179; Builder recommendation is retain separately without retarget/rebase; disposition pending.
+- PR #173: Builder corrections and bounded source audit complete; blind independent re-review and BFA-C01–BFA-C14 Project Director disposition remain outstanding.
+- PR #192/#193: remain open and unmerged; no integration operation.
+- Stage A: HELD. Runtime implementation: NOT AUTHORIZED.
+
+**Builder conclusion:** documentation evidence closure through DF-08 is complete within the stated criteria; the current source audit is bounded and does not accept donor compatibility as-is. Initial planning is not complete because DF-09 is not CLEAR and Project Director acceptance/dispositions remain outstanding.
