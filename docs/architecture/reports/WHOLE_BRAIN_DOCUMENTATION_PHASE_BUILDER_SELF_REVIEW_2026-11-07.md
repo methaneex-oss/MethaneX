@@ -1489,3 +1489,44 @@ This is the final Builder self-review update before the final inventory write.
 The detailed inventory is the final planned PR #192 file write. It must record all 38 changed paths and their blob identities at this exact parent, including its own pre-update blob. After that commit, fetch the live PR #192 metadata, complete changed-path list, recursive tree and all 38 resulting file blobs. Verify that the inventory commit changed only the inventory file and that the other 37 blob identities match the recorded parent. If the branch moves during verification, refresh the snapshot and do not report stale evidence. Record post-write verification in the PR conversation; make no further PR #192 file edits.
 
 This self-review is Builder-authored. It is not an Independent Reviewer report, fresh-reader assessment, gate acceptance or Project Director decision.
+
+
+## 14. Final Builder-owned closeout pass — 2026-11-11
+
+### 14.1 Scope and supersession of the prior freeze
+
+The prior §13.4 no-further-write boundary applied to the preceding inventory pass. A subsequent explicit Project Director instruction required the Builder to finish all Builder-owned work before the next reviewer/tester pass. This follow-up therefore re-opened only the documentation closeout records; it did not reopen runtime implementation, external review, testing authority or PR integration.
+
+The new final-write boundary is inventory §70. It records the exact parent tree and all 38 changed-path blob identities after the closeout synchronization. After §70 is committed and post-write verification is recorded in the PR conversation, no further PR #192 file writes are planned.
+
+### 14.2 DF-06 Builder audit result
+
+The final exact-snapshot semantic audit is recorded in preservation report §20 and PR #192 conversation comment 6808281387.
+
+- All 38 changed paths were included in the final snapshot scan; the exact tree contains 268 entries and is not truncated.
+- The scan contains 316 Markdown/autolink occurrences: 116 repository-relative targets (zero missing) and 200 external HTTP(S) occurrences.
+- The Phase 2 integration map's 89 immutable source citations were checked across 45 exact commit/path pairs against their adjacent claims. No material citation-to-claim mismatch was identified.
+- Twenty Phase 1 source references and nine immutable cross-branch document pins were checked against their described evidence role and authority/provenance qualification.
+- External evidence revalidation resolved 16 unique Actions run IDs (all completed/success), 20 unique PR metadata destinations, two Project Director provenance comments and three present/unexpired DLT-002 artifacts.
+- PR #191/#179, PR #192's base-reference discrepancy and PR #193/#175 were reconciled against exact revisions. No history operation was performed.
+
+**DF-06 remains NOT MET.** The remaining Builder technical limitation is rendered GitHub line/fragment-anchor behavior. The GitHub connector normalizes blob URLs to source text and strips fragments; direct browser retrieval returned a cache miss. Static line-range checks do not prove rendered-anchor behavior. The historical ChatGPT shared-conversation pointer remains explicitly ACCESS-LIMITED / NOT INDEPENDENTLY VERIFIED and is retained as literal provenance text rather than a navigation dependency.
+
+### 14.3 Other Builder-owned outputs
+
+- **PR #192 / DF-10:** The final inventory snapshot and exact post-write verification are recorded in inventory §70 and the final PR conversation comment. DF-10 is Builder-complete only for that exact final HEAD; this is not acceptance by another role.
+- **PR #195:** Exact HEAD 9d0255041c1d3c41c1b6a9f9e373f2bf673184cd. The current workflow blob was re-fetched and statically inspected. The manual target revision is not interpolated directly into a shell script; a full SHA is validated through an environment variable and the checked-out revision is verified. Response-size bounds, provider/model/finish-reason checks, content-block parsing, fallback text extraction and bounded error diagnostics were inspected. No YAML runtime validation, workflow dispatch or workflow execution is claimed. PR #195 remains open/draft/unmerged; PR #194 remains the stale alternative.
+- **PR #196:** Exact HEAD 9a744927c5ebcfea2c720ded42ec7425edc499c0. The existing governance rules document contains additive Builder Rules 11.9–11.16. PR #196 is open/non-draft/unmerged; the amendment is proposed on its PR branch and is not integrated into the base governance branch.
+
+### 14.4 Final authority and phase boundary
+
+- DF-06: **NOT MET** because rendered GitHub anchor behavior remains unverified; the historical ChatGPT pointer remains access-limited.
+- DF-08: **RESOLVED** only against its exact bounded preservation criterion.
+- DF-09: **OPEN / NOT MET** pending a CLEAR Blind Fresh Tester result against the final exact PR #192 HEAD.
+- DF-10: **BUILDER COMPLETE** after the §70 final inventory write and exact post-write verification.
+- DF-11: **WAIVED** by the Project Director.
+- DF-12: **NOT ACCEPTED**; exact-revision Project Director acceptance remains reserved.
+- PR #173 blind architecture assessment and BFA-C01–BFA-C14 decisions; PR #174 independent re-review and disposition; PR #191 disposition; and PR #192/#193 integration order remain external work.
+- Stage A: **NOT STARTED / HELD**. Implementation planning: **HELD**. Runtime implementation and PR integration: **NOT AUTHORIZED**.
+
+This self-review remains Builder-authored evidence. It is not an Independent Reviewer report, Blind Fresh Tester result, gate clearance, Project Director decision or implementation authorization.
