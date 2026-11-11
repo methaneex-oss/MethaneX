@@ -1124,3 +1124,20 @@ The PR #173 source-audit correction is exact at HEAD 756724b95e093ac48fcd95c5587
 The current package has refreshed cross-references in the portal, authority register, inventory and self-review. The planning index is the final remaining status document to refresh after this commit. DF-06 and DF-08 remain resolved within stated scope. DF-09 remains open because the previous 31/32 assessment does not assess the current exact branch HEAD and the missing primary-source export/message identifier has not been recovered. DF-11 remains waived. DF-12 remains not accepted. PR #191 disposition and BFA-C01–BFA-C14 remain reserved for Project Director decisions. PR #173 independent blind re-review remains outstanding. No PR merge, Stage A start or runtime implementation is authorized.
 
 This self-review is a Builder-side package consistency check, not the DF-09 blind fresh-reader result or a Project Director acceptance decision.
+
+
+## 22. PR #174 follow-on correction and authority reconciliation — 2026-11-11
+
+The PR #174 follow-on findings were recovered from prior conversation context as F-02 (contextual language/operator-intent grounding, High) and F-03 (downstream reasoning integration, Medium). The original reviewer report was supplied as a shared-conversation URL but could not be retrieved; its exact reviewed SHA, verbatim text and complete acceptance criteria remain unavailable.
+
+The Builder has submitted specification-level responses on PR #174:
+- corrected exact head: `4b134048680fb5902f8c2a5a067b0c369169dbfe`;
+- specification blob: `31ea81078403006929eb6514e4d39c5bf6456c70`;
+- correction report blob: `2a5f5028fe013607e688f927cd58f9f26dd7aba7`;
+- F-02: BM-02 contextual language/reference/pragmatic intent grounding, evidence/provenance, alternatives, correction and authority separation; scenarios 35–40;
+- F-03: BM-12 owner-routed qualified conclusions and explicit downstream consumer dispositions; scenarios 41–46.
+
+The response is explicitly a Builder reconstruction from prior recorded context, not a verbatim report transcription. **Independent re-review and Project Director disposition remain outstanding.** The earlier accepted PR #174 baseline `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` remains limited to that exact planning-baseline scope. The corrected revision is not automatically accepted.
+
+The PR #174 correction does not clear or replace PR #173's separate architecture findings/re-review gate. No implementation, runtime test or PR integration is authorized.
+
