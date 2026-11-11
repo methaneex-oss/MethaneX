@@ -672,3 +672,54 @@ This section is the current controlling snapshot and supersedes older active-sta
 
 Initial planning is **NOT COMPLETE**. Stage A whole-Brain capability/responsibility planning remains NOT STARTED / HELD. Runtime implementation, implementation-plan execution, source-baseline selection, runtime tests/builds, technology selection, PR integration, branch-history operations and deployment remain **NOT AUTHORIZED**. A successful C++ build workflow is build evidence only and does not satisfy DF-06, DF-09, architecture review, independent review or Project Director acceptance.
 
+
+
+---
+
+## Final controlling initial-planning closeout snapshot — 2026-11-11
+
+This section is the latest controlling status in this index and supersedes older active-status snapshots where they conflict. Older dated snapshots remain preserved as historical evidence.
+
+### Exact parent snapshot and finalization boundary
+
+- PR #192 branch: `docs/whole-brain-planning-scope-correction-20261107`.
+- Exact parent HEAD before this final index update: `5029a8fbb05def1f84d7a5c7d7aebee913eda0b4`.
+- Base branch: `docs/jarvis-phase-2-whole-brain-integration-map-20261105` at `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.
+- PR #192 is open, non-draft and unmerged; 38 changed paths before this final index write.
+- The current live closeout report is [Initial Planning Gate — Live Closeout Status — 2026-11-11](reports/INITIAL_PLANNING_GATE_CLOSEOUT_STATUS_2026-11-11.md).
+- The exact 38-path parent manifest is in the Builder self-review §23.2; the latest inventory snapshot is §64.
+- This index update is intended to be the final PR #192 branch write in this closeout pass. Fetch the resulting live PR #192 HEAD after the commit; that exact resulting SHA, not the parent above or any historical SHA, is the only eligible target for DF-09.
+
+### Current upstream planning artifacts
+
+| Artifact | Current exact revision | Controlling status |
+|---|---|---|
+| PR #173 Brain Foundation Architecture | HEAD `756724b95e093ac48fcd95c5587117c0a4d8f3c0` | Corrected proposal; blind independent re-review and Project Director disposition of BFA-C01–BFA-C14 remain outstanding. Historical acceptance at `97191111bc2573c14d391c0af9628db7b11f194b` was superseded as sufficient/final architecture. |
+| PR #174 Brain Mechanism Specification | HEAD `f6662c149be4395f4c207f62a42920e787f063c4`; spec blob `fbe017d96f9d0716be6080c96eea6b67c7da62fa` | Corrected proposal; F-02/F-03 responses and independent re-review request submitted. Original report and exact original reviewed SHA remain unavailable; independent re-review and Project Director disposition outstanding. |
+| PR #175 implementation roadmap | HEAD `c30fe20cfdf3f499416972042be06acdd70f752d` | Draft proposal, non-operative until initial planning is accepted and implementation planning is separately authorized. |
+| PR #179 Phase 2 integration map | HEAD `d30237b81c3695f2a7cb980144b221bbd42ce548` | Source-integration/reference evidence; not whole-Brain completeness acceptance. |
+| PR #191 human/MCU comparison | HEAD `609d38ede50bbdd98a93dfed112781eacabee9fd` | Bounded reference artifact; content/dependency review complete; Project Director disposition pending. Its base is an ancestor of PR #179 HEAD (23 commits behind, zero ahead); no rebase/retarget is authorized. |
+| PR #193 deferred plan/handoff | HEAD `4705716e0845d7b5621ab7e339d36c9f42853b1a` | Draft, non-operative; current status block correctly states initial planning NOT COMPLETE and implementation planning HELD. |
+| PR #195 terminology audit | HEAD `2c9dffc21032dec9bdc5af827259d8bdb3c97746` | Separate open draft; no gate effect. |
+
+### Controlling Documentation Foundation gate status
+
+- **DF-06: NOT MET.** The bounded checks do not yet establish full semantic relevance of every applicable link, all external destination reachability, renderer-specific fragment/anchor behavior, and complete historical/cross-branch link behavior required by the Project Director's full-resolution standard. The one ChatGPT shared-conversation pointer remains access-limited and unverified. Do not claim closure.
+- **DF-08: RESOLVED** against its exact bounded exit criterion. Preservation report §16 maps each criterion element to evidence: no destructive deletion/movement/overwrite, visible non-destructive supersession, discoverable foundational lineage within the declared census/register, explicit handling of duplicate refs/ambiguous ancestry, and visibility of unresolved items. Broader repository-wide semantic curation remains deferred; no repository-wide completeness claim is made.
+- **DF-09: OPEN / NOT MET.** Latest qualifying result remains PARTIALLY CLEAR (31/32), run [#42970930733](https://github.com/methaneex-oss/MethaneX/actions/runs/42970930733), on older assessed revision `887b349f9826de7726707209f640ae0cafd78ace`. It does not assess the final current PR #192 HEAD. A CLEAR result is required on the exact final revision.
+- **DF-11: WAIVED** by explicit Project Director decision. No new independent documentation review is required under this criterion; historical reports remain qualified by their exact identity and target revision.
+- **DF-12: NOT ACCEPTED.** Project Director exact-revision acceptance remains outstanding after all applicable evidence and reserved decisions are presented.
+- **DF-13: HOLD MAINTAINED.** Stage A has not started; implementation planning remains held; runtime implementation is not authorized.
+
+### Architecture/specification review gates
+
+1. **PR #173:** run the existing Blind Fresh Tester workflow against exact current HEAD `756724b95e093ac48fcd95c5587117c0a4d8f3c0`. The earlier NOT CLEAR result on `4b960062b7b3d41fa18c60909c628e8264459927` is historical and cannot be upgraded retroactively. Correct and recheck any new findings, then obtain Project Director disposition of BFA-C01–BFA-C14.
+2. **PR #174:** independent re-review request is `specifications/reviews/02_INDEPENDENT_RE_REVIEW_REQUEST_PR174_2026-11-11.md` on exact current HEAD `f6662c149be4395f4c207f62a42920e787f063c4`. No independent review is yet submitted. The original F-02/F-03 report and exact original reviewed SHA remain unavailable; the secondary recovery is not the original artifact.
+3. **PR #191:** Project Director disposition remains pending; Builder recommendation is to retain it as a separate bounded reference artifact and not retarget it alone.
+4. **PR #192/#193:** independent branch lineages remain separate. Integration order is reserved for the Project Director. No merge, rebase, retarget, cherry-pick, replay or history rewrite is authorized.
+
+### Final phase boundary
+
+**Initial planning is NOT COMPLETE.** Documentation Foundation is NOT ACCEPTED. Stage A is NOT STARTED / HELD. Implementation planning is HELD. Runtime implementation, source-baseline selection, technology selection, runtime tests/builds, PR integration and deployment remain NOT AUTHORIZED.
+
+The Builder-side closeout report, exact parent manifest, PR #174 corrections and re-review request are now recorded. The remaining work is not merely more prose: it requires full DF-06 evidence, exact-current-revision blind assessment(s), an independent PR #174 review, and explicit Project Director decisions. Do not declare completion until those conditions are evidenced.
