@@ -454,3 +454,27 @@ The Brain Foundation Architecture is complete only when:
 9. Present only the exact reviewed revision and unresolved decision list to the Project Director for final acceptance.
 
 **Current completion status:** The matrix and recommended architecture-level closures are established in this artifact. The architecture itself is not yet declared complete, independently cleared or accepted until steps 1–9 are evidenced.
+
+
+## 19. Integration status update — 2026-11-11
+
+The Builder has now integrated the matrix's conceptual closure material into the main architecture document as **Architecture completion addendum §§16–27** in `docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md`.
+
+The integration covers responsibility contracts, epistemic classes and state transitions, cross-responsibility exchange semantics, atomic owner-state commits with asynchronous propagation, foundational reasoning and simulation, goal and affective architecture, learning lifecycle and classes, metacognition, system/security/degraded-operation boundaries, developmental progression, verification obligations, dispositions for the 14 prior open questions, architecture-to-specification boundaries and the completion gate.
+
+### Exact revision manifest
+
+- Starting PR #173 head: `97191111bc2573c14d391c0af9628db7b11f194b`
+- Matrix commit: `59bc9766711e133c812ef7b89d18fa4c21ec9aa7`
+- Main architecture integration commit: `361d821343c4a68bcfbbdc86f528c84554262424`
+- Current PR #173 head at this update: `361d821343c4a68bcfbbdc86f528c84554262424`
+- Compare from starting head: 2 commits ahead, 0 behind; 2 changed files (one architecture modification and one new matrix).
+
+### Remaining gates — not represented as complete
+
+1. Independent reviewer must inspect the exact current PR head, including the original proposal, F-01/F-02/F-03 correction record and completion addendum, against PR #171 and PR #172.
+2. Independent review must challenge contradictions, omissions, unsupported assumptions, developmental integrity, whole-system boundaries and all 14 question dispositions.
+3. Builder must correct findings and obtain independent recheck against the corrected exact revision.
+4. Project Director must explicitly accept/reject/revise the 14 proposed BFA-C decisions and accept the exact reviewed architecture revision.
+
+**Status:** Conceptual architecture integration performed; independent clearance pending; final Project Director acceptance pending. No implementation, merge or deployment is authorized.
