@@ -4,13 +4,13 @@
 
 - **Repository:** `methaneex-oss/MethaneX`
 - **Pull request:** [#174](https://github.com/methaneex-oss/MethaneX/pull/174)
-- **Exact target HEAD:** `41f5f86cd210dedab0e30751ab4c853305c87be8`
-- **Specification blob:** `fbe017d96f9d0716be6080c96eea6b67c7da62fa`
+- **Exact target PR HEAD:** use the latest SHA recorded in the current PR #174 review-assignment comment; re-fetch PR metadata immediately before review.
+- **Specification blob to verify at that HEAD:** `fbe017d96f9d0716be6080c96eea6b67c7da62fa`
 - **Accepted historical planning baseline:** `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`
 - **Parent architecture proposal currently under separate review:** PR #173 HEAD `756724b95e093ac48fcd95c5587117c0a4d8f3c0`
 - **Review requested:** independent technical re-review of the complete current PR #174 specification, with particular attention to the recovered F-02/F-03 obligations.
 
-The reviewer must be a genuinely separate model/person from the Architecture & Engineering Builder, disclose identity and any prior involvement, inspect the exact target revision, and produce a report tied to the exact SHA. A Builder self-review, Project Director decision, same-model review, or report against an earlier SHA does not satisfy this request.
+The reviewer must be a genuinely separate model/person from the Architecture & Engineering Builder, disclose identity and any prior involvement, inspect the exact current PR #174 HEAD recorded in the latest review-assignment comment and verify that it contains the specification blob above, and produce a report tied to the exact SHA. A Builder self-review, Project Director decision, same-model review, or report against an earlier SHA does not satisfy this request.
 
 ## 2. Review packet and anti-coaching boundary
 
