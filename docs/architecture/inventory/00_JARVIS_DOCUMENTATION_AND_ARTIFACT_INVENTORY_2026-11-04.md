@@ -2661,7 +2661,7 @@ The following exact blob SHAs are the parent-snapshot identities at `e3f5cfcb314
 | 4 | `docs/JARVIS_PHASE_2_COMPLETION.md` | `e0e57a44216fc36c52d469a79abfc8df058515a3` |
 | 5 | `docs/README.md` | `7076ca40e48c8cfe2ab6066a8461fc890124e16b` |
 | 6 | `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md` | `3999234cdfe3bb590d5755e84a3a49e25df67273` |
-| 7 | `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md` | `1c1d8ac522171ee67577dcc0cca4246408f52888` |
+| 7 | `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md` | `af8f1a86b26f15fecf765babda8b28c229f6e0f5` |
 | 8 | `docs/architecture/inventory/HISTORICAL_DOCUMENTATION_PRESERVATION_REGISTER_2026-11-08.md` | `95cd280295c86c6d33278aa667de1d72048026ea` |
 | 9 | `docs/architecture/reports/BUILDER_FINAL_DOCUMENTATION_FOUNDATION_RECONCILIATION_2026-11-08.md` | `c962de2465f1728752e46456f69e722caf277de7` |
 | 10 | `docs/architecture/reports/BUILDER_TO_INDEPENDENT_REVIEWER_REQUEST_2026-11-08.md` | `c458f689ccbcd1e1d54242e38648ca151d70c250` |
@@ -2699,13 +2699,13 @@ The following exact blob SHAs are the parent-snapshot identities at `e3f5cfcb314
 - DF-06: NOT MET; full semantic relevance, external destination reachability, renderer-specific anchor behavior and historical/cross-branch link validation remain unestablished.
 - DF-08: RESOLVED against the exact bounded preservation criterion only.
 - DF-09: OPEN / NOT MET; 31/32 PARTIALLY CLEAR on older revision `887b349f9826de7726707209f640ae0cafd78ace` is insufficient. A CLEAR Blind Fresh Tester result against the frozen final PR #192 revision is required.
-- DF-10: Builder self-review refreshed at parent `b4f64bd881d406bdd1b917d31c08f6e44c25b7c3`; this inventory is the final Builder write and post-write tree/blob verification remains mandatory.
+- DF-10: Builder self-review refreshed at parent `fc9c0061b3ffd57dc6cced5a2b799d3700b3fa69`; this inventory is the final Builder write and post-write tree/blob verification remains mandatory.
 - DF-11: WAIVED by Project Director decision.
 - DF-12: NOT ACCEPTED; exact-revision Project Director decision remains pending.
 - PR #173 blind architecture assessment and BFA-C01–BFA-C14 decisions remain outstanding.
 - PR #174 Independent Reviewer re-review and Project Director disposition remain outstanding.
 - PR #191 disposition and PR #192/#193 integration order remain reserved.
-- PR #194 remains an open, unmerged stale alternative pinned to historical documentation revision `3ea2970c7b43bdfb87b3d1459690eacd83516745`. PR #195 is the current consolidated, open, unmerged workflow proposal at HEAD `ef4ddbd3df2cc2b2bc8f6a1ea80dbe7982391328`; its response-shape/diagnostics handling, exact-SHA input validation, current architecture/specification packet references and follow-up target-SHA environment correction are recorded. Neither PR has been merged or workflow-executed.
+- PR #194 remains an open, unmerged stale alternative pinned to historical documentation revision `3ea2970c7b43bdfb87b3d1459690eacd83516745`. PR #195 is the current consolidated, open, unmerged workflow proposal at HEAD `fdd2640d89e76a9c396487fe3df7b4542eb3f382`; its response-shape handling, exact-SHA input validation, current architecture/specification packet references, target-SHA environment correction and sanitized provider-error diagnostics are recorded. Neither PR has been merged or workflow-executed.
 - Stage A NOT STARTED / HELD; implementation planning HELD; runtime implementation NOT AUTHORIZED.
 
 ### 65.4 Change-scope assertion
