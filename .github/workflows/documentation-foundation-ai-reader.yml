@@ -95,7 +95,7 @@ jobs:
           test -n "${OPENROUTER_API_KEY:-}" || { echo "::error::Repository secret OPENROUTER_API_KEY is not configured."; exit 1; }
           python3 - <<'PY'
           from pathlib import Path
-          import json, os, re, urllib.request, urllib.error, datetime
+          import json, os, re, math, urllib.request, urllib.error, datetime
 
           out = Path("documentation-foundation-reader-evidence")
           assessment_label = os.environ["ASSESSMENT_LABEL"].strip()
@@ -182,7 +182,7 @@ jobs:
               request_id = exc.headers.get("x-request-id") or exc.headers.get("x-openrouter-request-id")
               request_id = request_id[:200] if isinstance(request_id, str) else None
               try:
-                  error_payload = json.loads(exc.read().decode(errors="replace"))
+                  error_payload = json.loads(exc.read(65536).decode(errors="replace"))
               except Exception:
                   error_payload = {}
               error_obj = error_payload.get("error") if isinstance(error_payload, dict) else None
@@ -212,6 +212,14 @@ jobs:
               }, indent=2))
               raise SystemExit("OpenRouter request failed; sanitized diagnostics saved.")
 
+          def safe_text(value, limit=200):
+              return value[:limit] if isinstance(value, str) else None
+
+          def safe_number(value):
+              if isinstance(value, bool) or not isinstance(value, (int, float)):
+                  return None
+              return value if math.isfinite(value) else None
+
           choices = raw.get("choices") if isinstance(raw, dict) else None
           choices = choices if isinstance(choices, list) else []
           choice = choices[0] if choices and isinstance(choices[0], dict) else {}
@@ -227,7 +235,7 @@ jobs:
                   if not isinstance(part, dict):
                       continue
                   content_blocks.append({
-                      "type": part.get("type"),
+                      "type": safe_text(part.get("type"), 64),
                       "has_text": isinstance(part.get("text"), str),
                       "has_content": isinstance(part.get("content"), str)
                   })
@@ -254,13 +262,13 @@ jobs:
               "assessment_label": assessment_label,
               "target_documentation_revision": os.environ["TARGET_DOCS_SHA"],
               "http_status": response_status,
-              "request_id": response_request_id,
+              "request_id": safe_text(response_request_id),
               "expected_provider": "Nvidia",
               "expected_model": "nvidia/nemotron-3.5-super-vl:free",
-              "provider": raw.get("provider") if isinstance(raw, dict) else None,
-              "model": raw.get("model") if isinstance(raw, dict) else None,
-              "id": raw.get("id") if isinstance(raw, dict) else None,
-              "created": raw.get("created") if isinstance(raw, dict) else None,
+              "provider": safe_text(raw.get("provider")) if isinstance(raw, dict) else None,
+              "model": safe_text(raw.get("model")) if isinstance(raw, dict) else None,
+              "id": safe_text(raw.get("id")) if isinstance(raw, dict) else None,
+              "created": safe_number(raw.get("created")) if isinstance(raw, dict) else None,
               "response_top_level_keys": sorted(raw.keys()) if isinstance(raw, dict) else [],
               "choice_count": len(choices),
               "choice_keys": sorted(choice.keys()) if choice else [],
@@ -268,13 +276,13 @@ jobs:
               "content_type": type(raw_content).__name__ if raw_content is not None else "missing",
               "content_characters": len(content) if isinstance(content, str) else 0,
               "content_block_shapes": content_blocks,
-              "finish_reason": choice.get("finish_reason"),
-              "native_finish_reason": choice.get("native_finish_reason"),
+              "finish_reason": safe_text(choice.get("finish_reason"), 64),
+              "native_finish_reason": safe_text(choice.get("native_finish_reason"), 128),
               "refusal_present": bool(message.get("refusal")),
               "tool_calls_present": bool(message.get("tool_calls")),
               "reasoning_present": bool(message.get("reasoning") or message.get("reasoning_details") or message.get("reasoning_content")),
-              "reasoning_tokens": completion_details.get("reasoning_tokens"),
-              "usage": {k: usage.get(k) for k in ("prompt_tokens", "completion_tokens", "total_tokens", "cost") if k in usage},
+              "reasoning_tokens": safe_number(completion_details.get("reasoning_tokens")),
+              "usage": {k: safe_number(usage.get(k)) for k in ("prompt_tokens", "completion_tokens", "total_tokens", "cost") if k in usage},
               "response_content_saved": bool(isinstance(content, str) and content.strip()),
               "reasoning_fields_saved": False,
               "completed_at_utc": datetime.datetime.now(datetime.timezone.utc).isoformat()
