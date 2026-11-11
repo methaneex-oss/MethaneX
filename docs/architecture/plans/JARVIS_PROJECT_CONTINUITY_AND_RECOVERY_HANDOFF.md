@@ -1,3 +1,19 @@
+# Controlling project status refresh — 2026-11-11
+
+> **Current task:** Complete the Initial Documentation Foundation Completion Gate. Stage A whole-Brain capability definition has not started and remains held until the foundation is cleared and accepted.
+>
+> **Current DF status:** DF-06 and DF-08 remain PARTIAL / NOT MET; DF-09 requires a full CLEAR result from the blind AI fresh-reader assessment against the corrected exact PR #192 revision; DF-11 is WAIVED by explicit Project Director decision; DF-12 is NOT ACCEPTED until all outstanding issues are cleared and the Project Director makes an exact-revision decision. DF-13 is being respected: Stage A remains held.
+>
+> **PR #173:** The original 2026-11-03 Project Director response “Yes I do / Proceed” at 08:18:21 UTC has been recovered from the original conversation history, following the explicit acceptance question at 08:14:29 UTC and review approval of exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b`. The authorized scope was the Detailed Brain Mechanism Specification stage only. The repository evidence extract records that the primary source has no separately available immutable message URL/export ID.
+>
+> **PR #191:** Read-only content review is complete. The comparison is a useful bounded human-cognition/MCU functional reference for BM-01–BM-12, not a whole-Brain completeness proof. Disposition remains pending; no PR/branch-history operation is authorized.
+>
+> **PR #192 / #193:** Separate lineages; both remain open and unmerged. Integration is held until all documentation-foundation decisions are resolved. Do not merge, rebase, retarget, cherry-pick, replay, close or deploy.
+>
+> **Implementation boundary:** This handoff and the deferred implementation plan are documentation/planning artifacts only. No runtime implementation, source-baseline selection, runtime test/build, algorithm/provider/database/API selection, or deployment is authorized by the current task.
+
+---
+
 # JARVIS Project Continuity & Recovery Handoff
 
 > **Current handoff — 2026-11-08:** The active task is the **Initial Documentation Foundation Completion Gate**, not Stage A. Start with the [JARVIS Documentation Portal](https://github.com/methaneex-oss/MethaneX/blob/db5968bfbddf77590cd9303539abda00dd961ab7/docs/README.md), which provides role-specific routes for Builders, independent reviewers, testers, researchers, documentation maintainers and general readers. Then use the [Planning Documentation Index](https://github.com/methaneex-oss/MethaneX/blob/db5968bfbddf77590cd9303539abda00dd961ab7/docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md) and [Initial Documentation Foundation Audit](https://github.com/methaneex-oss/MethaneX/blob/db5968bfbddf77590cd9303539abda00dd961ab7/docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md). This current-status banner and the later §12 control the immediate next task; older phase sections remain historical evidence and must not override them.  
