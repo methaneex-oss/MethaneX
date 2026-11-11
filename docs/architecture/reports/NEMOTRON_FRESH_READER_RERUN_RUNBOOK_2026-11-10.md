@@ -106,3 +106,12 @@ The reader correctly understood identity, principle, Brain/system boundary, refe
 The artifact records `post-review-corrections`, not the intended `post-review-corrections-v2`. Record actual labels from metadata, and change the workflow default before a future dispatch. The target SHA/model/completion/artifact are valid despite the label discrepancy.
 
 Older human-only DF-09 language and claims that no distinct model had run are historical; the Project Director-approved AI substitution has been exercised. DF-09 remains OPEN because the latest result is PARTIALLY CLEAR. Stage A remains HELD; implementation remains NOT AUTHORIZED.
+
+
+## 9. Fourth-run outcome and final Builder reconciliation — 2026-11-11
+
+Run [#42970930733](https://github.com/methaneex-oss/MethaneX/actions/runs/42970930733) assessed exact PR #192 documentation revision `887b349f9826de7726707209f640ae0cafd78ace`. Workflow-code revision on `main` was `264d0202945fd73edd52ddeecf58d3623979ef3d`; do not confuse it with the packet's target SHA. Artifact ID `13832623613`; digest `sha256:394153a7ea2ab8467b367464cd02dacd72fac3e585e8c76d3e8395b987e159d8`. The downloaded ZIP hash matches the GitHub artifact digest. Provider/model `Nvidia` / `nvidia/nemotron-3.5-super-vl:free`; response ID `gen-1794377626-nsXcHSnGSDE0byiVgJ43`; `finish_reason=stop`; label `post-review-corrections-v3`; result **PARTIALLY CLEAR (31/32)**.
+
+The only lost point is document authority/provenance. The reader correctly recognized that PR #173's acceptance evidence is a later transcription, not the original contemporaneous decision artifact. This limitation cannot be fixed by rewriting the record; the Project Director must decide whether the available provenance is acceptable. The packet also correctly discloses external linked materials that are not included or inspected. The old 17-question human protocol is superseded by the approved distinct-AI assessment and is not a current deliverable.
+
+**Disposition:** DF-09 execution complete; DF-09 acceptance remains OPEN for Project Director decision. No identical repeat is recommended. DF-11 qualification/exact-head review, DF-12 exact-revision decision, PR #191 disposition and PR #192/#193 integration order remain reserved. Stage A HELD; implementation and PR integration NOT AUTHORIZED.
