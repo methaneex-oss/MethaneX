@@ -458,15 +458,15 @@ The Brain Foundation Architecture is complete only when:
 
 ## 19. Integration status update — 2026-11-11
 
-The Builder has now integrated the matrix's conceptual closure material into the main architecture document as **Architecture completion addendum §§16–27** in `docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md`.
+The Builder has now integrated the matrix's conceptual closure material into the main architecture document as **Architecture completion addendum §§16–30** in `docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md`.
 
-The integration covers responsibility contracts, epistemic classes and state transitions, cross-responsibility exchange semantics, atomic owner-state commits with asynchronous propagation, foundational reasoning and simulation, goal and affective architecture, learning lifecycle and classes, metacognition, system/security/degraded-operation boundaries, developmental progression, verification obligations, dispositions for the 14 prior open questions, architecture-to-specification boundaries and the completion gate.
+The integration covers responsibility contracts, epistemic classes and state transitions, cross-responsibility exchange semantics, atomic owner-state commits with asynchronous propagation, foundational reasoning and simulation, goal and affective architecture, learning lifecycle and classes, metacognition, system/security/degraded-operation boundaries, developmental progression, verification obligations, dispositions for the 14 prior open questions, architecture-to-specification boundaries, language/symbolic cognition, social/agent modelling, existing-mechanism compatibility and Project Director reserved-decision authority.
 
 ### Exact revision manifest
 
 - Starting PR #173 head: `97191111bc2573c14d391c0af9628db7b11f194b`
 - Matrix commit: `59bc9766711e133c812ef7b89d18fa4c21ec9aa7`
-- Main architecture integration commit: `361d821343c4a68bcfbbdc86f528c84554262424`
+- Main architecture integration commit: `80b6d2fc909024e7197cbbcfe652da0197a4bf48`
 - Current PR #173 head at this update: `361d821343c4a68bcfbbdc86f528c84554262424`
 - Compare from starting head: 2 commits ahead, 0 behind; 2 changed files (one architecture modification and one new matrix).
 
@@ -478,3 +478,13 @@ The integration covers responsibility contracts, epistemic classes and state tra
 4. Project Director must explicitly accept/reject/revise the 14 proposed BFA-C decisions and accept the exact reviewed architecture revision.
 
 **Status:** Conceptual architecture integration performed; independent clearance pending; final Project Director acceptance pending. No implementation, merge or deployment is authorized.
+
+
+### Additional integration — §§28–30
+
+A subsequent closure pass added explicit architecture-level boundaries for language/symbolic cognition, minimum evidence-grounded social/agent modelling, advanced social-cognition deferrals, the preserve/adapt/replace assessment required for existing mechanisms, and decisions reserved to the Project Director. These additions address CF-16, CF-17, CF-26 and CF-27 more directly.
+
+- Latest architecture integration commit: `80b6d2fc909024e7197cbbcfe652da0197a4bf48`.
+- Latest PR #173 head after this pass: `80b6d2fc909024e7197cbbcfe652da0197a4bf48` (subject to final live recheck).
+
+Independent review remains pending. The matrix and main architecture are not finally accepted.
