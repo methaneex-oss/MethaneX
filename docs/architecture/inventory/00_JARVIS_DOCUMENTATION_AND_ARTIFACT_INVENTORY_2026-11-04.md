@@ -2538,3 +2538,20 @@ Current cross-references at the start of this reconciliation:
 Gate status remains DF-01–DF-08 resolved within their stated criteria and bounded scope; DF-09 OPEN/NOT MET; DF-10 refreshed through this reconciliation; DF-11 WAIVED; DF-12 NOT ACCEPTED. PR #191 disposition and BFA-C01–BFA-C14 remain reserved for Project Director decisions. PR #173 blind independent re-review remains outstanding. PR #192/#193 remain unmerged. Stage A remains HELD and runtime implementation remains NOT AUTHORIZED.
 
 This section records the parent snapshot before the final index refresh. The final exact PR #192 HEAD is the commit produced by the subsequent index update and must be re-fetched for DF-09.
+
+
+## 63. PR #174 follow-on corrections and final pre-assessment cross-reference — 2026-11-11
+
+PR #174 is open, draft and unmerged. Its previously accepted planning-baseline revision remains `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`; the current corrected branch head is `4b134048680fb5902f8c2a5a067b0c369169dbfe`.
+
+| Artifact | Exact blob SHA | Description |
+|---|---|---|
+| `docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md` | `31ea81078403006929eb6514e4d39c5bf6456c70` | Current specification; contextual language/operator-intent and downstream reasoning integration strengthened; scenarios 35–46; historical PR #173 baseline authority clarified |
+| `docs/architecture/specifications/reviews/01_BRAIN_MECHANISM_SPECIFICATION_F02_F03_CORRECTIONS_2026-11-11.md` | `2a5f5028fe013607e688f927cd58f9f26dd7aba7` | Builder correction report for reconstructed F-02/F-03 follow-on findings |
+
+The recorded finding summaries are F-02 (contextual language/operator-intent grounding, High) and F-03 (downstream reasoning integration, Medium). The original reviewer report was supplied as a ChatGPT shared-conversation URL but could not be retrieved. Its exact reviewed SHA, verbatim wording and full acceptance criteria remain unavailable. The report and PR #174 body explicitly distinguish reconstructed summaries from the original source.
+
+**Status:** Builder corrections submitted; independent re-review and Project Director disposition remain outstanding. The correction revision is not automatically accepted. Do not conflate PR #174 F-02/F-03 with the similarly numbered PR #173 architecture findings.
+
+The PR #192 index, authority register and Builder self-review have been updated to cross-reference this exact PR #174 revision. The final PR #192 HEAD must be fetched after this inventory write; only that exact resulting HEAD is eligible as the DF-09 assessment target.
+
