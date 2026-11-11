@@ -664,3 +664,40 @@ The fourth blind fresh-reader run [#42970930733](https://github.com/methaneex-os
 The Project Director-approved AI fresh-reader substitution supersedes the old 17-question human-session criterion. DF-09 execution is complete; DF-09 acceptance is now reserved for the Project Director's decision on the 31/32 result and its provenance limitation. No identical repeat is recommended. The old human question list is not a current deliverable.
 
 **Remaining Builder/authority boundary:** DF-11 reviewer qualification and exact-current-HEAD review; DF-12 exact-revision Project Director decision; PR #191 disposition; and PR #192/#193 integration order remain outstanding/reserved. DF-06 and DF-08 remain bounded/partial as previously qualified. Stage A remains NOT STARTED / HELD. Runtime implementation, PR integration and gate clearance remain NOT AUTHORIZED. The Builder does not make the Project Director's acceptance decision.
+
+
+---
+
+## 25. Project Director decisions and resulting gate disposition — 2026-11-11
+
+The Project Director submitted six explicit decisions on 2026-11-11. These decisions are controlling and supersede earlier statements in this register that the same matters remain undecided.
+
+| Item | Decision | Result |
+|---|---|---|
+| DF-09 | Require a full CLEAR result; reject 31/32 as insufficient | OPEN / NOT MET. The latest Nemotron assessment remains PARTIALLY CLEAR (31/32). |
+| DF-11 | Explicitly waive the independent-review requirement | WAIVED by Project Director. The Grok report remains historical evidence with same-account attribution and stale reviewed revision disclosed; no claim of exact-current-HEAD review is made. |
+| PR #191 | Review contents further before deciding | OPEN / DRAFT / UNMERGED. Read-only review only; no disposition or history operation authorized. |
+| PR #192 / #193 | Keep all PRs unmerged until all outstanding documentation decisions are resolved | OPEN / UNMERGED. Integration is held; lineages remain separate. |
+| DF-12 | Keep foundation open until every outstanding issue is cleared | NOT ACCEPTED / NOT CLEARED. |
+| DF-06 / DF-08 | Require full resolution before foundation acceptance | Both remain closure blockers; neither may be carried forward as a waiver. |
+
+### 25.1 Exact revision and evidence qualifications
+
+The decision-recording update began from PR #192 HEAD `e687f3295f6f858f713694d941e97fbd94ac6154`. The latest Nemotron run #42970930733 assessed `887b349f9826de7726707209f640ae0cafd78ace`, not that later HEAD. Its 31/32 result therefore remains evidence about the assessed packet revision only; it must not be represented as a fresh-reader assessment of the post-decision documentation.
+
+The `cpp` CI run #42976840057 completed successfully on the pre-update PR #192 HEAD `e687f329...`. This does not establish a CI result for the new documentation commits and does not satisfy DF-06, DF-08 or DF-09.
+
+### 25.2 Required work
+
+- **DF-09:** investigate recoverability of contemporaneous primary evidence for the PR #173 decision. Never manufacture primary provenance by rewriting a later transcription. If legitimate evidence or packet corrections are made, rerun the blind reader against the exact final revision and require CLEAR.
+- **DF-06:** complete all checks required by the governing criterion, not merely internal path existence. This includes the remaining external reachability, semantic relevance, renderer-specific anchor and historical/cross-branch scopes.
+- **DF-08:** complete the outstanding historical discovery, provenance, archive and supersession reconciliation required by the criterion. Existing bounded registers do not establish exhaustive closure.
+- **PR #191:** conduct read-only content/dependency analysis and present options for a later Project Director decision. Do not rebase, retarget, cherry-pick, replay, merge or close.
+- **PR #192 / #193:** keep both unmerged and prepare only an evidence-based dependency analysis. No integration until all outstanding documentation decisions and gate requirements are resolved.
+- **DF-12:** request final exact-revision acceptance only after DF-06, DF-08, DF-09 and all other applicable requirements are evidenced as cleared.
+
+### 25.3 Current status and non-actions
+
+**Documentation Foundation: NOT ACCEPTED / NOT CLEARED.** DF-09 OPEN / NOT MET; DF-11 WAIVED; DF-06 and DF-08 PARTIAL / NOT MET; PR #191 disposition pending read-only review; PR #192/#193 integration held; DF-12 NOT ACCEPTED. Stage A remains NOT STARTED / HELD. Runtime implementation remains NOT AUTHORIZED.
+
+This update records the Project Director's authority decisions only. It does not perform or authorize PR integration, branch-history changes, PR closure, Stage A commencement, implementation, architecture selection or runtime changes.
