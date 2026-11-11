@@ -197,7 +197,7 @@ Each mechanism below is specified by responsibility, conceptual inputs and outpu
 
 **Purpose:** Convert acquired experience into one or more useful internal interpretations while preserving uncertainty and alternatives.
 
-**Inputs:** BM-01 experience, relevant context, retrieved memory, active beliefs, task/goal context, and available perception capabilities.
+**Inputs:** BM-01 experience (including original utterance/content and acquisition context), relevant conversation history, speaker/source role, shared referents, retrieved memory, active beliefs, active context, task/goal context, and available perception capabilities.
 
 **Owns:** Derived representations, candidate interpretations, entity/event hypotheses, relations and transformation lineage.
 
@@ -210,10 +210,17 @@ Each mechanism below is specified by responsibility, conceptual inputs and outpu
 5. Permit later evidence to revise, split, merge or withdraw an interpretation without rewriting the original acquisition record.
 6. Distinguish representation confidence from source reliability and from belief confidence.
 7. Avoid treating normalized attributes or matching words as proof of semantic identity.
+8. Distinguish the original utterance/content from literal/semantic interpretation, reference/discourse interpretation and pragmatic/operator-intent hypotheses.
+9. Ground interpretation in relevant conversation history, speaker/source role, shared referents, active task and context; preserve temporal and source provenance.
+10. Treat inferred operator intent as a provisional interpretation supported by evidence, not as a fact derived from a fixed phrase-to-intent mapping.
+11. Preserve materially different readings and their assumptions when context does not discriminate among them; request clarification when ambiguity changes the likely outcome or consequence.
+12. Incorporate corrections as new evidence and revise the interpretation without rewriting the original utterance.
+13. Treat quoted, reported, hypothetical or otherwise untrusted imperative text as content to interpret, not automatically as an instruction from the current operator.
+14. Keep inferred intent distinct from authority: interpretation does not authorize action.
 
-**Publishes:** Candidate representations with evidence links and explicit epistemic status.
+**Publishes:** Candidate representations, including literal/semantic readings, reference/discourse hypotheses and pragmatic/operator-intent hypotheses where applicable, with evidence links, alternatives, uncertainty and explicit epistemic status.
 
-**Interactions:** BM-03 supplies context; BM-04 compares interpretations with current claims; BM-05 may discover relations; BM-06 allocates processing; BM-09 may improve representational competence through evaluated experience.
+**Interactions:** BM-03 supplies context; BM-04 compares interpretations with current claims; BM-05 may discover relations; BM-06 supplies active context and allocates further processing; BM-08 supplies goal/request context and evaluates qualified intent hypotheses; BM-09 may improve representational competence through evaluated experience; BM-12 reasons over interpretations and contextual evidence without committing beliefs or authorizing actions.
 
 **Failure semantics:** Unsupported interpretation remains a hypothesis or unresolved input. Provider failure, absent modality support and low confidence must be visible, not silently replaced with a claim of successful perception.
 
@@ -525,6 +532,8 @@ These are capability classes, not selected algorithms or an instruction to imple
 11. Explain conclusions through inspectable premise and inference lineage, not merely a free-form explanation string. The explanation must not claim evidence or operations that were not used.
 12. Permit BM-10 to monitor reasoning quality, omissions, overreach and calibration; permit BM-09 to evaluate improvements to reasoning strategies using later outcomes and counterexamples.
 13. Do not perform prediction resolution (BM-05), belief commitment (BM-04), goal/plan/decision ownership (BM-08), action authorization or execution.
+14. Route each material conclusion or unresolved result to the relevant owner(s) with its uncertainty, alternatives, assumptions, scope, provenance and dependency lineage intact; record the consumer's explicit disposition (accepted for use, qualified, rejected, deferred or returned for evidence).
+15. Treat delivery, logging, persistence or acknowledgement alone as insufficient evidence of downstream integration. The receiving owner must evaluate the result within its own responsibility and preserve its epistemic limits.
 
 **Interactions:** BM-02 supplies interpretations; BM-03 supplies retrieved evidence; BM-04 supplies beliefs and receives candidate conclusions for epistemic evaluation; BM-05 supplies scoped causal/predictive hypotheses and receives relevant reasoning findings; BM-06 supplies task focus; BM-07 supplies contextual appraisal; BM-08 supplies reasoning objectives and may consume qualified conclusions; BM-09 evaluates developmental changes; BM-10 monitors quality; BM-11 tracks dependencies and invalidation.
 
@@ -811,6 +820,26 @@ These scenarios are architecture-to-mechanism obligations. They are not claims t
 
 ---
 
+### I. Contextual language and operator-intent grounding
+
+35. The same ambiguous utterance in two different conversation/task contexts yields context-supported interpretations rather than a fixed phrase-to-intent mapping.
+36. An utterance with two materially different possible intended outcomes preserves both readings and requests clarification before consequential commitment.
+37. An indirect or incomplete request uses relevant prior turns and shared referents while keeping literal content distinct from inferred intent.
+38. An operator correction revises the interpretation, preserves the original utterance and re-evaluates dependent state.
+39. Quoted or reported imperative text is not silently treated as an instruction from the current operator.
+40. Correctly inferred operator intent does not bypass authorization or execution governance.
+
+### J. Downstream reasoning integration
+
+41. A provisional conclusion with explicit uncertainty is evaluated by BM-04 as a candidate claim; it is not silently committed as certain.
+42. Two plausible explanations materially affect BM-08 planning; both remain represented or discriminating evidence is requested rather than consuming only the first result.
+43. An explanatory conclusion routed to BM-05 remains a causal hypothesis until appropriate evidence and prediction/outcome evaluation support stronger status.
+44. A changed premise or assumption causes BM-11 to mark dependent conclusions and downstream derived state stale and trigger targeted reconsideration.
+45. A downstream owner may qualify or reject a reasoning result; its disposition and rationale remain inspectable and the reasoning episode is preserved.
+46. A result that is only logged or delivered without relevant downstream evaluation/disposition fails the integration acceptance test.
+
+---
+
 ## 10. Developmental evidence standard
 
 A capability is not demonstrated by the existence of a class, method, data structure, test name or successful single fixture.
@@ -890,3 +919,16 @@ This document does not select:
 5. Implementation and runtime verification remain separate authorization gates.
 
 **End of specification.**
+
+
+## 14. Follow-on review correction status — F-02 and F-03
+
+The Builder's 2026-11-11 response to the recorded follow-on findings is in [PR #174 Follow-on Review Corrections — F-02 and F-03](reviews/01_BRAIN_MECHANISM_SPECIFICATION_F02_F03_CORRECTIONS_2026-11-11.md).
+
+- **F-02 — contextual language/operator-intent grounding:** BM-02 now explicitly distinguishes acquired utterance, literal/semantic interpretation, reference/discourse interpretation and pragmatic/operator-intent hypotheses. It requires context, source role, history, alternatives, uncertainty, correction handling and authority separation. Scenarios 35–40 define minimum verification.
+- **F-03 — downstream reasoning integration:** BM-12 now requires owner-routed conclusions with preserved uncertainty, alternatives, assumptions, provenance, scope and dependencies, plus explicit consumer disposition. Delivery/logging alone is not integration. Scenarios 41–46 test actual downstream evaluation and invalidation.
+
+**Provenance qualification:** the original follow-on review report was supplied as a shared-conversation URL but could not be retrieved during this correction pass. The exact reviewed SHA, verbatim finding text and complete original acceptance criteria remain unavailable. The correction report therefore distinguishes recorded finding summaries from verbatim source material and does not claim full original-criteria closure.
+
+**Builder status:** specification-level corrections submitted. **Independent re-review and Project Director disposition remain outstanding.** PR #174's previously accepted planning baseline at exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` is not silently replaced by this corrected revision. No implementation is authorized.
+
