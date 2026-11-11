@@ -244,7 +244,7 @@ jobs:
           if metadata["refusal_present"] or metadata["tool_calls_present"]:
               raise SystemExit("Assessment response contains a refusal or tool calls; preserved for inspection.")
           if len(content.strip()) < 1500:
-              raise SystemExit("Nemotron response is too short to count as a substantive fresh-reader assessment; response preserved.")
+              raise SystemExit("Blind Fresh Tester response is too short to count as a substantive fresh-reader assessment; response preserved.")
           print("Blind Fresh Tester assessment received and saved. Sanitized metadata recorded; reasoning and API key excluded.")
           PY
 
