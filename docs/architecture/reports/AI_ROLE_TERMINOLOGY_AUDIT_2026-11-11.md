@@ -138,3 +138,11 @@ Static source checks against the resulting blob confirmed the SHA validation, en
 ### 8.3 Remaining verification
 
 Before PR #195 integration, verify workflow syntax and run the workflow against a deliberately controlled test revision, including empty content, list content blocks, `output_text`, legacy text, truncated output, wrong provider/model, refusal/tool calls and a valid A–H response. Confirm the artifact contains only the intended sanitized evidence. PR #195 remains a terminology/workflow proposal, open and unmerged; this correction does not merge PR #194, authorize workflow execution, clear DF-09, or change any Project Director decision.
+
+### 8.2 Follow-up correction — target revision metadata environment
+
+A second static pass found that the assessment-request step reads `TARGET_DOCS_SHA` when writing `run_metadata.json`, but the variable was only exported in the preceding packet-assembly step. GitHub Actions step environments are isolated, so the assessment step would otherwise fail with a missing environment variable after receiving the provider response.
+
+**Correction:** exported `TARGET_DOCS_SHA: ${{ inputs.target_revision }}` in the assessment-request step as well. The workflow now passes the exact requested documentation revision to both packet assembly and response metadata. The updated workflow blob is `3cbe2e54fb9500f78b2842801e8371641ee24ddc` in commit `5a813f8febd0a0b0e5e0365439d5182e79833c15`.
+
+**Verification boundary:** static source inspection confirms every `TARGET_DOCS_SHA` reference has the required step-level environment variable. The workflow has not been executed; this is not runtime verification or a Blind Fresh Tester result.
