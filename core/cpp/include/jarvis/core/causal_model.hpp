@@ -25,6 +25,7 @@ struct SimulationResult {
 class CausalModel {
 public:
     void observe_transition(const std::vector<Belief>& before, const std::vector<Belief>& after);
+    void observe_outcome(const std::vector<Belief>& before, const std::vector<Belief>& after);
     std::vector<CausalLink> links() const;
     std::vector<std::pair<std::string, Scalar>> predict(const std::vector<Belief>& assumptions) const;
     SimulationResult simulate(const std::vector<Belief>& assumptions, std::size_t horizon = 2) const;

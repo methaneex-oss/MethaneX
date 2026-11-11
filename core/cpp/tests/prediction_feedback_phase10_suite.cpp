@@ -12,6 +12,100 @@ int main() {
     std::filesystem::remove(path.string() + ".meta", ec);
 
     Brain brain(path);
+
+    // Build an experience-derived concept from repeated co-change, then ensure
+    // its provenance survives journal replay and can still receive outcome feedback.
+    brain.observe(Event{0, 1, "sensor", "observation", {{"alpha", false}, {"beta", false}, {"context_one", false}, {"context_two", false}}});
+    brain.observe(Event{0, 2, "sensor", "observation", {{"alpha", true}, {"beta", true}, {"context_one", true}, {"context_two", true}}});
+    brain.observe(Event{0, 3, "sensor", "observation", {{"alpha", false}, {"beta", false}, {"context_one", false}, {"context_two", false}}});
+    brain.observe(Event{0, 4, "sensor", "observation", {{"alpha", true}, {"beta", true}, {"context_one", true}, {"context_two", true}}});
+    const auto contextual_prediction = brain.predict_with_context("alpha", 1.0, 0.2, 0.5, 2);
+    assert(!contextual_prediction.context.concept_members.empty());
+    assert(contextual_prediction.context.evidence_strength > 0.0);
+    const double learned_context_confidence = contextual_prediction.confidence;
+    assert(learned_context_confidence > 0.2);
+
+    brain.observe(Event{0, 5, "sensor", "observation",
+                         {{"alpha", false}, {"beta", false},
+                          {"context_one", false}, {"context_two", false},
+                          {"gamma", false}}});
+    brain.observe(Event{0, 6, "sensor", "observation",
+                         {{"alpha", false}, {"beta", false},
+                          {"context_one", true}, {"context_two", true},
+                          {"gamma", true}}});
+    const auto generalized = brain.generalized_concepts("gamma", 0.5, 2, 0.5);
+    bool matched_learned_pattern = false;
+    for (const auto& match : generalized) {
+        if (match.concept_members == contextual_prediction.context.concept_members &&
+            match.matched_contexts.size() >= 2 &&
+            match.similarity >= 0.5 &&
+            match.evidence_strength > 0.0) {
+            matched_learned_pattern = true;
+            break;
+        }
+    }
+    assert(matched_learned_pattern);
+    assert(brain.resolve_prediction("alpha", 1.0));
+
+    Brain restored_context(path);
+    bool provenance_restored = false;
+    for (const auto& current : restored_context.snapshot().predictions) {
+        if (current.key == "alpha" && current.created_sequence == contextual_prediction.created_sequence) {
+            provenance_restored = current.context.concept_members == contextual_prediction.context.concept_members &&
+                                  current.context.evidence_strength == contextual_prediction.context.evidence_strength &&
+                                  current.resolved && current.error == 0.0;
+            break;
+        }
+    }
+    assert(provenance_restored);
+
+    // Stable semantic prediction keys must accumulate learning across separate
+    // experiences. The key identifies the variable; each prediction event keeps
+    // its own journal sequence, while adaptation remains keyed by the variable.
+    const auto first_prediction = brain.predict("temperature", Scalar{30.0}, 0.8);
+    assert(first_prediction.key == "temperature");
+    assert(!brain.resolve_prediction("temperature", Scalar{32.0}));
+    const auto* metric_after_first = brain.learning_metric("temperature");
+    assert(metric_after_first != nullptr);
+    assert(metric_after_first->observations == 1);
+
+    const auto second_prediction = brain.predict("temperature", Scalar{31.0}, 0.8);
+    assert(second_prediction.key == "temperature");
+    assert(second_prediction.created_sequence != first_prediction.created_sequence);
+    assert(!second_prediction.resolved);
+    assert(brain.resolve_prediction("temperature", Scalar{31.0}));
+    const auto* metric_after_second = brain.learning_metric("temperature");
+    assert(metric_after_second != nullptr);
+    assert(metric_after_second->observations == 2);
+
+    // Two unresolved predictions for the same semantic key must coexist. Their
+    // journal identities are distinct and neither prediction may overwrite the other.
+    const auto concurrent_first = brain.predict("pressure", Scalar{100.0}, 0.8);
+    const auto concurrent_second = brain.predict("pressure", Scalar{110.0}, 0.8);
+    assert(concurrent_first.created_sequence != 0);
+    assert(concurrent_second.created_sequence != 0);
+    assert(concurrent_first.created_sequence != concurrent_second.created_sequence);
+    std::size_t pressure_instances = 0;
+    for (const auto& current : brain.snapshot().predictions) {
+        if (current.key == "pressure" &&
+            (current.created_sequence == concurrent_first.created_sequence ||
+             current.created_sequence == concurrent_second.created_sequence)) {
+            ++pressure_instances;
+        }
+    }
+    assert(pressure_instances == 2);
+    assert(!brain.resolve_prediction("pressure", Scalar{111.0}));
+    std::size_t unresolved_pressure_instances = 0;
+    for (const auto& current : brain.snapshot().predictions) {
+        if (current.key == "pressure" &&
+            (current.created_sequence == concurrent_first.created_sequence ||
+             current.created_sequence == concurrent_second.created_sequence) &&
+            !current.resolved) {
+            ++unresolved_pressure_instances;
+        }
+    }
+    assert(unresolved_pressure_instances == 1);
+
     Goal goal;
     goal.id = "stabilize";
     goal.description = "Stabilize the observed system";
