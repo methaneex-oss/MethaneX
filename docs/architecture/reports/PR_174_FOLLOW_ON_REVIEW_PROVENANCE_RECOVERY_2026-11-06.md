@@ -4,7 +4,7 @@
 **Original review title recovered from prior conversation context:** **Independent Principal Technical Re-Review — PR #174**  
 **Original review outcome recovered:** **REVISE — NOT APPROVED**  
 **Affected specification baseline:** `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`  
-**Original shared-chat reference supplied in the conversation:** https://chatgpt.com/s/t_6aeb2a73b6dc81918355a8da5bfb6a84  
+**Legacy access-limited shared-chat pointer supplied in the conversation (retained verbatim as text; not a verified navigation link):** `https://chatgpt.com/s/t_6aeb2a73b6dc81918355a8da5bfb6a84`  
 **Recovery status:** Partial. The linked conversation could not be fetched. This record is not the original reviewer report and does not claim verbatim recovery.
 
 ## 1. Recovered finding identities
