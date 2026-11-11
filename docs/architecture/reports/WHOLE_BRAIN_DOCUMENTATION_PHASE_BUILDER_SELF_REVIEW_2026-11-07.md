@@ -1020,3 +1020,54 @@ Corrective actions initiated:
 - Expanded the blind packet to include the decision extract and both accepted/current PR #174 specification revisions.
 
 Remaining limits are not Builder-fixable by wording alone: the original PR #173 contemporaneous decision artifact and original PR #174 follow-on review annotations remain unrecovered; PR #191 disposition, PR #192/#193 integration order, Grok qualification/exact-head review, and exact-revision Project Director acceptance remain reserved decisions. DF-09 remains open until a later blind assessment is CLEAR. Stage A remains held; implementation is not authorized.
+
+
+
+## 20. Final exact-revision Builder self-review — 2026-11-11
+
+### 20.1 Exact snapshot and changed-path scope
+
+The live PR #192 parent HEAD for this self-review is 4032e92a8939f4ebf93915acf871b8a97b8e6cdb (open, non-draft, unmerged; base remains PR #179's earlier branch snapshot). Comparing it with the prior inventory parent 4fe2c35be650848defa06be3458edf4437635e0c returns 12 commits ahead, 0 behind, and six modified documentation paths. The other 31 of the 37 changed paths are unchanged from the prior exact inventory register.
+
+| Changed path | Exact parent blob SHA | Review result |
+|---|---|---|
+| docs/README.md | 49c83eae37d09f371b9339e712f5c6db1a5f9db7 | Portal now distinguishes the historical PR #173 acceptance from the current corrected proposal and states the last 31/32 reader result accurately |
+| docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md | ced9a73051952accd2f5aab0afec7e4451706d64 | Current gate status and PR #173/#191 exact revisions recorded; DF-06/DF-08 closure evidence linked; DF-09 and DF-12 remain open |
+| docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md | 78e3f07aa4b26f9313468fa40ae2349147b24730 | PR #171–#193 dependency snapshot and PR #173 corrected architecture blobs recorded; parent snapshot limitation explicit |
+| docs/architecture/reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md | aac384f933e1349b4c87b1e636be0e86d1349d5d | DF-06/DF-08 criterion closures, exact PR #173 correction and PR #191 dependency recommendation recorded |
+| docs/architecture/reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md | 6d1b6a4c3ab25ba966982b1ab606eb362ba01d62 | Current package link checks, DF-08 criterion matrix and PR #191 ancestry/content review recorded |
+| docs/architecture/reports/NEMOTRON_FRESH_READER_RERUN_RUNBOOK_2026-11-10.md | 7599c8ec78b15cd1e1804131842c33734e5b0112 | DF-11 waiver and exact-current-head DF-09 rerun rules clarified |
+
+No runtime source, tests, build configuration, dependencies or workflow files are changed by PR #192.
+
+### 20.2 Gate criterion self-review
+
+- **DF-01:** README points to the canonical documentation portal and the index remains the planning-status source. Current portal link to the PR #173 proposal uses exact corrected HEAD 627c809bea7a7c18a9d5f350b632c67c8e5a34ac; historical accepted baseline remains separately identified.
+- **DF-02:** the detailed inventory contains the 37-path package register and a new current six-path delta; the other 31 paths inherit exact blob identities from the preceding manifest. The inventory must be re-fetched after its next append because its own blob is self-referential.
+- **DF-03:** accepted/recovered decisions and their source classes are distinguished; the PR #173 historical acceptance does not imply current complete/final architecture acceptance.
+- **DF-04:** PR #178 governance remains proposed/unaccepted.
+- **DF-05:** PR #191, #192 and #193 bases/lineages remain separate and explicit; no integration operation was performed.
+- **DF-06:** resolved within the stated package scope. The three-file delta since the prior exact audit was fetched; 45 relative-link occurrences resolve to 24 unique paths. The other 34 files are unchanged from the previously audited parent. All enumerated PR/Actions/source destinations and source-map line ranges were verified as recorded in preservation report §15. The historical shared-chat pointer remains non-clickable and access-qualified.
+- **DF-07:** the portal, index, inventory, authority register, preservation report and runbook now state the same gate holds: DF-09 open, DF-11 waived, DF-12 not accepted, Stage A held, runtime implementation unauthorized.
+- **DF-08:** resolved against the exact criterion and bounded foundational-document scope. No historical evidence was deleted or silently superseded; the 245-branch/184-PR census, 108-path/28-PR lineage map, alias/ancestry corrections and retain-in-place policy are preserved. Broader semantic archive curation remains explicitly deferred.
+- **DF-09:** NOT MET. The latest result is PARTIALLY CLEAR (31/32) on packet revision 887b349f9826de7726707209f640ae0cafd78ace. It does not assess the current PR #192 HEAD. No new workflow run is claimed because this GitHub connection exposes no workflow-dispatch action. A CLEAR result on the final exact branch HEAD remains required.
+- **DF-10:** this self-review is refreshed at the exact parent above; the final inventory blob/branch head must be re-fetched after all final writes.
+- **DF-11:** WAIVED by explicit Project Director decision. No independent documentation review is claimed or required.
+- **DF-12:** NOT ACCEPTED. Project Director exact-revision decision remains required after DF-09 and other applicable conditions are cleared.
+- **DF-13:** Stage A remains held; no Stage A work, implementation, runtime tests, technology selection or deployment has begun.
+
+### 20.3 PR #173 architecture correction review
+
+PR #173 exact HEAD is 627c809bea7a7c18a9d5f350b632c67c8e5a34ac. Architecture blob d51912a8c71688f85d2864ff69607b3558bd9d1f and matrix blob 211b6346d4a970ccab796bf0402bd9935f555e66 contain explicit responses to the five Blind Fresh Tester findings: social/agent claim ownership and failure semantics; accountable owners/deliverables for CF-26/CF-27; a corrected revision manifest; complete CF-01–CF-27 section traceability; and explicit dispositions for inherited reliability values, confidence thresholds, first-eligible-goal selection and belief overwrite.
+
+These are Builder-side corrections. The inherited rules remain unassessed against source call paths; no preserve/adapt/replace decision is claimed. The architecture still requires blind independent re-review and Project Director disposition of BFA-C01–BFA-C14. No merge or implementation is authorized.
+
+### 20.4 PR #191 dependency review
+
+PR #191 remains open/draft/unmerged at 609d38ede50bbdd98a93dfed112781eacabee9fd. Against PR #179 head d30237b81c3695f2a7cb980144b221bbd42ce548 it is diverged: one unique commit ahead, 23 behind, merge base f6267456560a08054d69f7960d2951452b14017c. Its one unique commit adds the 219-line human/MCU comparison. The content is useful and appropriately bounded; the Marvel guide is not a direct MCU film source. Builder recommendation is to retain it as a separate reference artifact without retarget/rebase; the Project Director disposition remains pending.
+
+### 20.5 Final disposition
+
+**Builder result:** DF-01–DF-08 evidence is recorded as resolved within the defined gate criteria and scope; DF-09 remains OPEN / NOT MET; DF-10 self-review is current for the stated parent snapshot; DF-11 is WAIVED; DF-12 remains NOT ACCEPTED; DF-13 hold is maintained. PR #173 correction work is complete at Builder level but not independently cleared or accepted. PR #191 disposition remains reserved. PR #192/#193 remain unmerged and separate.
+
+The next safe step is not implementation planning. It is to obtain the required CLEAR DF-09 assessment against the final exact PR #192 HEAD, then present the exact package for Project Director disposition. No implementation, merge, rebase, retarget, cherry-pick, branch rewrite or deployment is authorized.
