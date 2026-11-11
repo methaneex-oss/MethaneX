@@ -180,19 +180,24 @@ jobs:
               # Never persist the provider's raw error body: it is untrusted and may
               # contain echoed request data. Keep only allowlisted diagnostic fields.
               request_id = exc.headers.get("x-request-id") or exc.headers.get("x-openrouter-request-id")
+              request_id = request_id[:200] if isinstance(request_id, str) else None
               try:
                   error_payload = json.loads(exc.read().decode(errors="replace"))
               except Exception:
                   error_payload = {}
               error_obj = error_payload.get("error") if isinstance(error_payload, dict) else None
               error_obj = error_obj if isinstance(error_obj, dict) else {}
+              error_type = error_obj.get("type")
+              error_code = error_obj.get("code")
+              provider = error_payload.get("provider") if isinstance(error_payload, dict) else None
+              model = error_payload.get("model") if isinstance(error_payload, dict) else None
               (out / "api_error.json").write_text(json.dumps({
                   "http_status": exc.code,
                   "request_id": request_id,
-                  "error_type": error_obj.get("type") if isinstance(error_obj.get("type"), str) else None,
-                  "error_code": error_obj.get("code") if isinstance(error_obj.get("code"), (str, int)) else None,
-                  "provider": error_payload.get("provider") if isinstance(error_payload, dict) else None,
-                  "model": error_payload.get("model") if isinstance(error_payload, dict) else None,
+                  "error_type": error_type[:128] if isinstance(error_type, str) else None,
+                  "error_code": error_code[:128] if isinstance(error_code, str) else error_code if isinstance(error_code, int) else None,
+                  "provider": provider[:128] if isinstance(provider, str) else None,
+                  "model": model[:200] if isinstance(model, str) else None,
                   "raw_response_saved": False,
                   "api_key_saved": False,
                   "reasoning_saved": False
