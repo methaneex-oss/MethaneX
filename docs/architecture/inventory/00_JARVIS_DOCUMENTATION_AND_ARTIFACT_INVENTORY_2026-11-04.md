@@ -2354,3 +2354,58 @@ This parent snapshot includes the recovered PR #173 contemporaneous decision evi
 **Gate status:** DF-09 OPEN pending a new CLEAR assessment; DF-06 NOT MET; DF-08 requires explicit criterion-to-evidence closure reconciliation; DF-11 WAIVED; DF-12 NOT ACCEPTED. Stage A HELD; implementation NOT AUTHORIZED. PR #191 disposition and PR #192/#193 integration remain held.
 
 After this inventory update, re-fetch the PR-files endpoint and verify every non-inventory blob against this parent manifest. Do not claim the new live HEAD is this parent snapshot.
+
+## 59. Exact current documentation package and Brain architecture correction snapshot — 2026-11-11
+
+This addendum supersedes §58 only for the live revisions and four changed blob identities listed below. The prior 37-path table remains the baseline for the 33 unchanged paths.
+
+### 59.1 Exact PR and dependency state at parent snapshot
+
+| PR | State | Exact HEAD | Base / dependency | Scope |
+|---|---|---|---|---|
+| #171 | Open, draft, unmerged |  b05434758ad4fe72815503f89bd5d2990ccb658b | main | Whole-system foundation and responsibility map |
+| #172 | Open, draft, unmerged | d7d676b79dbf3269f7fd3ebdb4363a6df19f255d | main | Accepted foundational capability investigation |
+| #173 | Open, draft, unmerged | 627c809bea7a7c18a9d5f350b632c67c8e5a34ac | main | Brain Foundation Architecture; Builder correction pass §§31–33 and CF traceability |
+| #174 | Open, draft, unmerged | be46b3858102c31022128522c4b3506aad4dff8a | PR #173 branch | Accepted mechanism-specification baseline plus administrative status clarification |
+| #175 | Open, draft, unmerged | 874c732973b6ab303d65a503f5a215b0af8e1153 | PR #174 branch | Deferred implementation roadmap; non-operative |
+| #178 | Open, draft, unmerged | 39fe09dcf13496f5f0005ccf3f00739303e29f88 | main | Proposed governance and inventory lineage; governance remains unaccepted |
+| #179 | Open, draft, unmerged | d30237b81c3695f2a7cb980144b221bbd42ce548 | PR #178 branch | BM-01–BM-12 source integration map; not whole-Brain acceptance |
+| #191 | Open, draft, unmerged | 609d38ede50bbdd98a93dfed112781eacabee9fd | Historical PR #179 base | Bounded human/MCU comparison; disposition pending |
+| #192 | Open, non-draft, unmerged | f5e4ac9ab1f0c4c273b8cd3f64dcb9c741bb1f54 | PR #179 branch | Initial documentation foundation correction package |
+| #193 | Open, draft, unmerged | c67318387d9c2129484203e4f1a1002c4af96ef0 | PR #175 branch | Deferred implementation-plan hold; separate lineage |
+
+### 59.2 PR #192 exact 37-path register delta
+
+A compare of §58 parent 4fe2c35be650848defa06be3458edf4437635e0c to current PR #192 parent f5e4ac9ab1f0c4c273b8cd3f64dcb9c741bb1f54 returns 8 commits ahead, 0 behind, and exactly four modified paths. The other 33 of the 37 paths are unchanged from §58 and retain their exact blob identities recorded there.
+
+| Path | Current parent blob SHA | Status / dependency |
+|---|---|---|
+| docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md | 44ce84e18a9252f2fee73ea3c665303b53cf8765 | Canonical proposed index; depends on exact PR #171–#193 snapshots; current gate status is Builder evidence pending DF-09/DF-12 |
+| docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md | c294e770f7cf0e3d289ee70a21a58787a4010691 | This inventory; self-reference is the parent blob before this addendum |
+| docs/architecture/reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md | aac384f933e1349b4c87b1e636be0e86d1349d5d | Controlling Builder evidence/authority register; Director decisions remain reserved |
+| docs/architecture/reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md | 6d1b6a4c3ab25ba966982b1ab606eb362ba01d62 | DF-06/DF-08 validation and preservation evidence; bounded declared scope |
+
+The 33 unchanged rows are exactly the other paths in §58. No source code, tests, build configuration, dependencies or workflow files are changed by PR #192.
+
+### 59.3 PR #173 exact corrected artifact register
+
+| Path | Exact PR #173 parent blob SHA | Status |
+|---|---|---|
+| docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md | d51912a8c71688f85d2864ff69607b3558bd9d1f | Proposed architecture, Builder corrections §§31–33; independent re-review and Director acceptance pending |
+| docs/architecture/03_BRAIN_FOUNDATION_ARCHITECTURE_COMPLETION_AND_DECISION_MATRIX_2026-11-11.md | 211b6346d4a970ccab796bf0402bd9935f555e66 | CF-01–CF-27 traceability, review-finding dispositions, accountability and reserved decisions |
+| docs/architecture/reviews/02_BRAIN_FOUNDATION_ARCHITECTURE_REVIEW_CORRECTIONS_2026-11-03.md | fa6a5baaa4226dc7b845f4da6e07c5635ccc6ad8 | Historical F-01/F-02/F-03 correction record; retained unchanged |
+
+The current architecture branch HEAD is 627c809bea7a7c18a9d5f350b632c67c8e5a34ac. It remains open/draft/unmerged and is not accepted as complete/final. The source-level inherited-rule compatibility audit remains unassessed; BFA-C01–BFA-C14 remain reserved for Project Director disposition; blind independent re-review is required.
+
+### 59.4 Gate and preservation status
+
+- DF-01–DF-08: Builder evidence is recorded as resolved against the stated initial-foundation criteria and bounded package scope in preservation report §§15–16 and authority register §29. This is not DF-12 acceptance.
+- DF-09: OPEN / NOT MET; last exact assessment remains PARTIALLY CLEAR (31/32) on 887b349f9826de7726707209f640ae0cafd78ace; no CLEAR assessment exists for the current PR #192 revision.
+- DF-10: this inventory is the current artifact map; final self-review still must be refreshed after the last package edits.
+- DF-11: WAIVED by Project Director; no independent documentation review is claimed.
+- DF-12: NOT ACCEPTED; exact-revision Project Director decision remains required.
+- PR #191: read-only content/dependency review complete; disposition pending.
+- PR #192/#193: separate, open, unmerged lineages; no integration operation performed.
+- Stage A: HELD. Runtime implementation: NOT AUTHORIZED.
+
+**Snapshot rule:** this section's PR #192 parent SHA is f5e4ac9ab1f0c4c273b8cd3f64dcb9c741bb1f54. The inventory file's blob changes when this section is committed. The resulting PR #192 HEAD and resulting inventory blob must be re-fetched; this parent value must not be relabelled as the post-write HEAD.
