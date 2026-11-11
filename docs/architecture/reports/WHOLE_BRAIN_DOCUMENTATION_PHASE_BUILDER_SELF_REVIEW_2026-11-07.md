@@ -1289,3 +1289,32 @@ This is a Builder self-review, not an Independent Reviewer assessment. No workfl
 ### 6.4 Mandatory post-write verification
 
 After this self-review commit, re-fetch PR #192 metadata, its complete changed-file list, and every changed-file blob at the resulting HEAD. Record the resulting exact HEAD and verify that the changed-path set is complete. If the branch advances during verification, repeat against the new live HEAD. Do not call Builder closeout complete until that post-write check passes.
+
+
+---
+
+## 7. Canonical status reconciliation and supporting workflow review — 2026-11-11
+
+### 7.1 Canonical index conflict corrected
+
+The canonical planning index previously contradicted the live closeout report: its top status block described DF-06 as RESOLVED within a bounded scope, while the controlling closeout report and Project Director's full-resolution requirement correctly kept DF-06 NOT MET. The index also carried stale PR #174, PR #192 path-count and Builder inventory/self-review blob references.
+
+The index was corrected in commit `3f5e01fa34c23fc0d2a18eb2e0377d2b89bf8fe0`. Its new controlling block now states DF-06 NOT MET, DF-08 RESOLVED only within its bounded criterion, DF-09 OPEN / NOT MET, DF-11 WAIVED, DF-12 NOT ACCEPTED, and Stage A / implementation holds. It records the live PR #173/#174/#191/#193/#194/#195 states and explicitly warns that PR #194 and #195 both touch the Blind Fresh Tester workflow and must be reconciled before integration.
+
+### 7.2 PR #195 workflow defects found and corrected
+
+A separate read-only review of PR #195 found that its workflow directly interpolated the manually supplied `target_revision` into a Bash script and had incomplete response-shape extraction. Both issues were corrected on PR #195: the target SHA is validated and read through an environment variable; the response parser now handles string content, text/content blocks, `output_text`, and legacy choice text; safe response metadata is recorded before failure checks; and assessment text is saved before structural validation. The audit report on PR #195 records the exact patch revisions and static checks.
+
+The PR #195 workflow remains unexecuted. This correction does not constitute a successful Blind Fresh Tester run, Independent Reviewer assessment, or gate clearance. PR #194 remains a separate unmerged workflow-diagnostics branch; do not merge both workflow branches blindly.
+
+### 7.3 Current gate status and final inventory step
+
+- DF-06: NOT MET; full semantic, external reachability, renderer-specific and historical/cross-branch validation remains unestablished.
+- DF-08: RESOLVED only against the exact bounded preservation criterion.
+- DF-09: OPEN / NOT MET; 31/32 PARTIALLY CLEAR on an older packet revision is insufficient.
+- DF-10: this self-review has been refreshed, but the detailed inventory must be the final Builder write and must capture all 38 changed paths and blob identities at the exact pre-inventory PR #192 parent.
+- DF-11: WAIVED.
+- DF-12: NOT ACCEPTED.
+- Stage A / implementation planning: HELD; runtime implementation: NOT AUTHORIZED.
+
+**Exact pre-inventory PR #192 parent at this self-review update:** `3f5e01fa34c23fc0d2a18eb2e0377d2b89bf8fe0`. The inventory is now the sole remaining Builder-controlled synchronization write. After it is committed, re-fetch all 38 changed files at the resulting exact HEAD and record the result in a PR conversation comment; do not make further PR #192 file edits after that verification.
