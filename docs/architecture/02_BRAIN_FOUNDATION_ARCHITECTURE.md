@@ -590,4 +590,342 @@ The central architectural commitment proposed here is that JARVIS's Brain should
 
 The proposal is intentionally specific about cognitive responsibilities, authority, integration and developmental integrity, while remaining open about algorithms, concrete schemas, technologies and runtime construction. Those details must follow—not dictate—the approved architecture.
 
+
+---
+
+# Architecture completion addendum — 2026-11-11
+
+**Status:** Expanded proposed architecture for Project Director review and independent reassessment. This addendum supersedes no approved whole-system boundary. It expands the conceptual architecture and resolves the earlier open questions with recommended dispositions. It does not itself constitute final Project Director acceptance.
+
+## 16. Responsibility contracts and authority invariants
+
+The responsibility groupings in §4 are conceptual ownership domains. They may later be combined or distributed, but the following invariants are mandatory:
+
+1. Every authoritative cognitive state item has one semantic owner.
+2. Other responsibilities may read, reference, challenge or propose changes to that item; they do not silently overwrite it.
+3. A proposal is not an accepted state transition. Acceptance is recorded by the owning responsibility under its defined criteria.
+4. Cross-responsibility updates carry source identity, version, provenance, epistemic class, temporal scope, uncertainty and dependency information.
+5. A consumer must be able to distinguish current, provisional, stale, superseded, withdrawn and unavailable information.
+6. Coordination can order work, detect conflicts and request reconsideration; it cannot invent semantic conclusions or become a competing owner.
+7. System governance, security and action authorization remain outside the Brain's cognitive authority.
+8. SYS-08 supplies operational substrate and persistence capabilities; SYS-01 remains responsible for semantic cognitive-state ownership and validation of reconstructed state.
+9. SYS-03 supplies acquired/preprocessed observations and associated acquisition evidence; the Brain owns cognitive interpretation, not the original observation.
+10. SYS-05 operational/homeostatic regulation may provide relevant internal-condition evidence but does not own cognitive goals, affective meaning or belief.
+11. SYS-06 remains proposed and unresolved. Foundational Brain capabilities must not depend on its existence.
+12. No bootstrap invariant may prescribe learned beliefs, preferences, emotional reactions, strategies, motivations or desired behaviours.
+
+### 16.1 Responsibility contract matrix
+
+| Responsibility | Owns | Receives | Produces | Not authorized to |
+|---|---|---|---|---|
+| Continuity/state stewardship | Identity, lifecycle, state lineage and recovery validation | Versioned state, persistence/recovery evidence | Validated continuity state, recovery gaps | Invent missing history or equate storage acknowledgement with cognitive truth |
+| Interpretation/grounding | Candidate referents, events, relations and interpretations | Qualified observations, active context, memory, beliefs | Hypotheses, grounded representations, ambiguity | Rewrite observations or collapse unresolved identity hypotheses |
+| Memory/knowledge | Episodes, retained lineage, memory organization and summaries | Observations, interpretations, outcomes, accepted learning | Retrievals, summaries, associations and candidate knowledge | Promote simulation or generated summary to observed fact |
+| Belief stewardship | Qualified claims and revision history | Evidence, memory, inference, prediction outcomes | Belief proposals, qualifications, contradiction and withdrawal | Erase contradictory evidence or claim unsupported certainty |
+| Attention/workspace | Active selection and task-scoped context | Goals, uncertainty, relevance, resource state, dependencies | Activation, prioritization, suspension and resumption | Become long-term truth store or overwrite source state |
+| Prediction/modeling | Predictions, assumptions, scope and resolution | Beliefs, representations, context and outcomes | Predictions, comparisons, unresolved status | Count unmatched/unverified outcomes as prediction error |
+| Reasoning/inference | Inference artifacts and derivation lineage | Evidence, memory, beliefs, models and context | Conclusions, alternatives, explanations and evidence requests | Present assumptions as observations |
+| Goals/valuation/affect | Candidate goals, appraisal and valuation lineage | Experience, goals, constraints, internal conditions, outcomes | Candidate goals, appraisals, priorities and alternatives | Hardcode desired motivation or fixed emotion-to-action mappings |
+| Planning/decision | Plans, decision records and commitment state | Goals, constraints, beliefs, predictions and valuation | Plans, decisions, defer/ask/stop and action proposals | Authorize or claim execution |
+| Learning/adaptation | Learning candidates, accepted adaptations and developmental lineage | Evidence, outcomes, prediction comparisons and evaluations | Candidate changes, consolidation and regression alerts | Treat every error as an update instruction |
+| Metacognition | Monitoring state, capability estimates and corrective-work history | Signals from all responsibilities | Bounded reconsideration, evidence requests and suspension | Become an unrestricted second cognitive authority |
+| Coordination | Work scheduling, dependencies, conflict and interruption records | Work requests and version metadata | Dispatch, arbitration, cancellation and stale-work notices | Own other responsibilities' semantic state |
+
+## 17. Epistemic classes and state-transition contract
+
+The conceptual minimum information classes are:
+
+- **Observation:** acquired evidence with source and acquisition context.
+- **Interpretation/hypothesis:** candidate meaning assigned to evidence.
+- **Episode:** retained experience with source lineage.
+- **Memory summary:** derived compression linked to its source episodes.
+- **Belief:** a currently accepted, qualified claim within stated scope.
+- **Prediction:** an expectation awaiting a suitably matched outcome.
+- **Simulation:** internally generated hypothetical content.
+- **Goal:** a represented desired condition with recorded origin.
+- **Plan:** a candidate organized course toward a goal.
+- **Intention/decision:** a selected or committed cognitive direction.
+- **Action proposal/request:** a request submitted to the authorized action path.
+- **Execution evidence:** evidence of what the authorized executor did or did not perform.
+- **Verified outcome:** evidence of the resulting state, separate from execution acknowledgement.
+- **Learning candidate/adaptation:** proposed or accepted change to cognitive state or capability.
+- **Metacognitive assessment:** evidence-qualified estimate or finding about cognitive process/capability.
+
+No class is silently promoted into another. Every transition retains derivation, owner, time, context, uncertainty and status.
+
+### 17.1 State lifecycle
+
+| Transition | Required condition | Required record |
+|---|---|---|
+| Observation → interpretation | Evidence is available for cognitive processing | Source, acquisition uncertainty, transformation and competing hypotheses |
+| Observation/interpretation → episode | Retention is justified by the memory policy and available resources | Original evidence reference, context and retention status |
+| Episode → summary/knowledge | A derivation or consolidation operation is performed | Source episodes, transformation lineage and known loss/uncertainty |
+| Evidence → belief proposal | Evidence supports a scoped claim or change | Claim, scope, support, contradiction, assumptions and uncertainty |
+| Belief proposal → active belief | Owner accepts under its criteria | Version, rationale, effective scope and dependent items |
+| Belief → revised/withdrawn | New evidence or discovered defect justifies change | Prior version, new evidence, reason and affected dependencies |
+| Belief/model → prediction | A prediction is explicitly formed | Expected state, scope, assumptions, horizon and resolution condition |
+| Prediction → resolved | Suitable outcome evidence is matched | Matching rationale, outcome evidence and comparison |
+| Prediction → unresolved/expired | Outcome cannot be matched or resolution condition lapses | Reason; never default success/failure |
+| Simulation → belief | Independent evidence corroborates the claim | Corroborating evidence and explicit evaluation; simulation alone is insufficient |
+| Experience → candidate goal | Evidence/context suggests a potentially desirable state | Origin, motivating experience, feasibility assumptions and constraints |
+| Goal → active/suspended/abandoned | Contextual evaluation changes status | Rationale, dependencies and consequences for plans |
+| Plan → decision/intention | Alternatives and constraints have been evaluated | Chosen alternative, rejected alternatives, assumptions and uncertainty |
+| Decision → action proposal | Action is within the Brain's proposal capability | Requested operation, intended outcome and relevant evidence |
+| Proposal → authorized execution | External governance and operational validation permit it | Authorization and validation evidence owned outside the Brain |
+| Execution → verified outcome | Independent outcome evidence is available | Executor evidence, outcome evidence and their separate provenance |
+| Experience → learning candidate | A possible capability/state improvement is identified | Target, evidence, scope, dependencies and risk |
+| Candidate → accepted adaptation | Eligibility and evaluation requirements are satisfied | Evaluation evidence, approval path, activated version and recovery path |
+
+### 17.2 Contradiction, uncertainty and time
+
+Contradictory claims remain separately inspectable. Resolution considers source quality, temporal validity, context, evidence independence, scope and counterevidence. If the evidence does not justify resolution, the Brain preserves conflict or abstains.
+
+Signal quality, source reliability, ambiguity, missing context, model uncertainty and disagreement are not one interchangeable scalar. Confidence attaches to a proposition and scope. Unknown, unavailable, unresolved, false and not-yet-observed remain distinct statuses. Event time and receipt time remain distinct wherever delayed or reordered evidence can affect interpretation.
+
+## 18. Integration and coordination semantics
+
+The Brain is recurrent, branching and concurrent. It is not a mandatory serial pipeline. The following interaction cycle describes possible causal relations, not a fixed execution order:
+
+1. SYS-03 makes qualified acquired observations available.
+2. Interpretation/grounding forms candidate representations without altering source observations.
+3. Memory may retain the experience and retrieve related episodes or knowledge.
+4. Belief stewardship evaluates evidence and proposes qualification, revision or contradiction.
+5. Attention activates task-relevant evidence, context, goals and unresolved issues.
+6. Reasoning requests further retrieval, interpretation, prediction, simulation or external evidence as needed.
+7. Prediction/modeling forms expectations and tracks their resolution.
+8. Goal/valuation/affective appraisal evaluates significance in context and may influence attention, encoding, retrieval, learning eligibility and alternative evaluation.
+9. Planning compares feasible alternatives against goals, constraints, beliefs, risks and expected consequences.
+10. Decision formation selects, defers, asks, suspends or proposes an action.
+11. External governance and the authorized action path independently authorize, validate, execute or deny the proposal.
+12. Execution evidence and verified outcomes return as separate evidence classes.
+13. Prediction comparison and learning determine whether any state change is justified.
+14. Metacognition monitors process quality and may request bounded correction.
+15. Coordination manages dependencies, interruption, cancellation, stale work and resumption throughout.
+
+Any responsibility may be skipped, repeated, interrupted, run concurrently or reopened. No experience is required to produce a durable learning update.
+
+### 18.1 Cross-responsibility exchange contract
+
+Every conceptual exchange must carry or reference:
+- producer and semantic owner;
+- item identity and version;
+- epistemic class and status;
+- source and derivation lineage;
+- temporal and contextual scope;
+- uncertainty and known limitations;
+- dependency and invalidation conditions;
+- whether it is information, a proposal, a request or an accepted authoritative transition.
+
+A consumer must not treat a provisional proposal as accepted owner state. A delayed exchange must be checked against current versions. Duplicate delivery must not create duplicate semantic effects. Exact message formats, transport, idempotency mechanisms and concurrency implementation are later specifications; these semantics are foundational and cannot be deferred.
+
+### 18.2 Atomicity and asynchronous coordination
+
+Recommended architectural disposition for the earlier atomic-versus-asynchronous question:
+
+- An individual authoritative owner-state transition must be committed coherently with its version and lineage.
+- Cross-owner propagation may be asynchronous, provided it is versioned and exposes pending, stale, failed and reconciled states.
+- A dependent decision must not silently rely on a known-stale prerequisite.
+- Local owner failure must not imply global cognitive-state corruption.
+- Global synchronous locking is not required and must not be assumed.
+
+This provides coherent ownership without imposing a single global transaction or serial cognitive controller. Concrete consistency and transaction mechanisms remain later specifications.
+
+## 19. Reasoning, prediction and simulation foundation
+
+The foundational reasoning capability must support:
+
+- evidence-based deduction within stated assumptions;
+- induction with explicit qualification and scope limits;
+- abduction and hypothesis generation where multiple explanations remain possible;
+- constraint reasoning over goals, permissions, resources and feasibility;
+- comparative evaluation of alternatives, evidence and expected consequences;
+- requests for missing evidence, clarification or further observation;
+- abstention or suspension when evidence is insufficient.
+
+The architecture must support later causal, analogical, counterfactual and long-horizon reasoning without requiring all of them to be mature at bootstrap.
+
+Prediction is not merely a confidence value. A prediction has an expected proposition/state, context, assumptions, horizon or resolution condition, and an eventual status. Outcomes must be matched on the relevant proposition and temporal scope. Delayed, partial or ambiguous outcomes remain unresolved or partially resolved rather than being forced into binary success/failure.
+
+Simulation is a hypothetical workspace. Simulated events, entities and outcomes remain marked as hypothetical and cannot be written into episodic history as observed events. A simulation can inform a decision or candidate belief, but only independently acquired evidence can corroborate an external-world claim.
+
+Reasoning artifacts preserve the evidence and assumptions that materially influenced the conclusion. A natural-language explanation generated after a conclusion is not, by itself, proof that the stated process caused the conclusion.
+
+## 20. Goal, valuation and affective foundation
+
+### 20.1 Goal origin and lifecycle
+
+The Brain distinguishes:
+- **supplied goals** from authorized external sources;
+- **derived goals** logically/operationally entailed by a supplied goal and its constraints;
+- **candidate self-formed goals** proposed from interpreted experience, learned models, discrepancies, opportunities or relevant internal conditions;
+- **active, suspended, completed, superseded and abandoned goals** as lifecycle states.
+
+A candidate self-formed goal is not automatically valid, feasible, safe or authorized. Its origin and motivating evidence remain traceable. It is evaluated for relevance, feasibility, uncertainty, risk, conflicts, constraints, dependencies and expected consequences. It can be revised, deferred, suspended or abandoned when evidence changes.
+
+No fixed stimulus or event directly mandates a particular goal. No bootstrap objective generator may encode the desired priorities or behavioural conclusions the Brain is meant to acquire.
+
+### 20.2 Goal competition and persistence
+
+Goals may conflict, lose relevance, become infeasible or be superseded. The architecture preserves their origin, constraints, motivating evidence, priority rationale, dependencies, affected commitments and reasons for revision. Priority is contextual and revisable; no universal fixed ranking is assumed.
+
+### 20.3 Minimum affective appraisal
+
+Affective appraisal is a foundational cognitive responsibility. At minimum it evaluates the contextual significance of information in relation to current goals, uncertainty, risk and relevant internal conditions. Appraisal may influence attention, memory encoding/retrieval, learning eligibility, goal priority and decision comparison.
+
+The initial foundation need not contain a mature catalogue of named human emotions. It must permit differentiated, context-sensitive, revisable and uncertain appraisal, including mixed or ambivalent significance. Appraisal does not establish external facts, create permissions or dictate action.
+
+SYS-05 may provide operational/homeostatic evidence but does not own cognitive meaning or goals. SYS-06 remains proposed and unresolved; the Brain must function within its foundational capability without SYS-06. Any later SYS-06 proposal must demonstrate distinct value and define authority, interfaces, failure behaviour and governance without taking ownership of Brain beliefs, goals or affective meaning.
+
+## 21. Learning and developmental adaptation architecture
+
+Learning is a distributed change process across memory, representation, beliefs, predictions, reasoning, attention, goals, valuation, affect, skills and self-model. It is not a single terminal stage or a single parameter updater.
+
+### 21.1 Learning lifecycle
+
+1. **Experience registration:** retain source, context, temporal data and epistemic status.
+2. **Opportunity detection:** identify a possible discrepancy, regularity, outcome or limitation without assuming an update is warranted.
+3. **Candidate formation:** specify target state, scope, evidence, assumptions and dependencies.
+4. **Eligibility/risk assessment:** consider evidence quality, reversibility, impact, interference, safety and authority.
+5. **Evaluation:** test the candidate against baseline behaviour, relevant variation, counterexamples and unaffected capabilities.
+6. **Activation decision:** accept, reject, defer or request more evidence; high-impact changes follow their required governance path.
+7. **Consolidation/persistence:** preserve accepted change and lineage.
+8. **Post-change monitoring:** assess durability, transfer and regression.
+9. **Correction/recovery:** qualify, reverse, isolate or supersede adverse changes while preserving history.
+
+### 21.2 Learning classes
+
+The architecture distinguishes episodic retention/retrieval, semantic/relational knowledge, belief calibration/revision, predictive/model learning, reasoning-strategy learning, attention/relevance learning, goal/valuation learning, affective appraisal calibration, procedural/skill learning and self-model/metacognitive learning. They may share infrastructure but are not assumed to share one undifferentiated update rule.
+
+### 21.3 Risk-sensitive eligibility
+
+Low-impact, reversible and bounded candidates may be eligible for controlled adaptation when evidence is adequate and monitoring is available. Changes to cognitive identity, foundational epistemic integrity, broad world models, goal/valuation policy, safety-relevant capabilities or wide-ranging behaviour require stronger evaluation, isolation/recovery provisions and any governance approval required by system policy.
+
+Prediction error, reward, success, failure or adverse affect alone is not sufficient evidence for a particular belief, emotional reaction, goal or strategy update.
+
+### 21.4 Transfer, regression and developmental lineage
+
+A material learning claim must identify what changed, evidence and assumptions, baseline and post-change behaviour, original-context result, relevant variation, held-out related contexts, counterexamples, unrelated-capability regression, persistence/reconstruction and limitations. The claim must be no broader than its evidence.
+
+## 22. Metacognition and self-model
+
+The minimum self-model contains evidence-qualified estimates of:
+- current capability and known capability boundaries;
+- uncertainty and unresolved issues;
+- available/consumed cognitive resources and active commitments;
+- known failure patterns and dependencies;
+- recent correction attempts and observed effectiveness;
+- calibration error between estimated and observed performance.
+
+These estimates are revisable and carry provenance. They are not infallible self-knowledge.
+
+Metacognitive monitoring may request reconsideration, retrieval, further evidence, assumption revision, a different reasoning approach, clarification, suspension or assistance. It must evaluate whether the correction helped. It may not erase evidence, directly overwrite another responsibility's authoritative state, bypass governance or become an unrestricted second Brain.
+
+## 23. System boundaries, security and degraded operation
+
+### 23.1 Whole-system boundaries
+
+- **SYS-01:** semantic ownership and validation of cognitive state, including recovery validation.
+- **SYS-03:** signal acquisition and preprocessing; acquisition output is evidence/proposal, not automatically a Brain belief.
+- **SYS-05:** defined operational/homeostatic regulation; its signals may inform cognition but do not silently determine cognitive goals or affective meaning.
+- **SYS-06:** proposed/unresolved optional modulation responsibility; no foundational Brain dependency.
+- **SYS-07:** security/integrity authority within its approved system scope; Brain intent cannot bypass it.
+- **SYS-08:** operational substrate including compute, storage, networking, devices and runtime; infrastructure acknowledgements are not semantic cognitive truth.
+- **Governance/action path:** independently authorizes and validates action proposals, executes permitted operations and returns execution/outcome evidence.
+
+### 23.2 Security and information access
+
+The Brain operates only on information made available under the wider system's access, privacy and security controls. Cognitive relevance does not create access permission. Provenance and access constraints must remain attached to information as it is retrieved, summarized, transformed or used. Retention and deletion obligations are governed by system policy and cannot be overridden by a cognitive learning objective.
+
+### 23.3 Degraded operation
+
+| Condition | Required response |
+|---|---|
+| Memory unavailable/corrupt | Mark gap, preserve lineage and recover only from validated evidence; do not invent missing history |
+| Conflicting observations | Retain alternatives, seek discriminating evidence or abstain |
+| Stale belief dependency | Mark affected plans/predictions stale and reconsider before reliance |
+| Prediction outcome unavailable | Remain unresolved or expire under an explicit rule |
+| Learning regression | Contain, reject, reverse or supersede with lineage |
+| Workspace pressure | Suspend/deprioritize with recoverable references; do not discard authoritative state |
+| Coordination unavailable | Continue independent safe work or suspend dependent work visibly |
+| SYS-08 outage | Record operational failure; SYS-01 validates reconstructed cognitive state before reuse |
+| SYS-06 absent | Continue within foundational capability and known limits |
+| Governance denial | Preserve denial as a governance result; do not treat request as executed |
+| Metacognitive miscalibration | Retain estimate lineage and recalibrate against observed performance |
+
+## 24. Developmental progression and verification obligations
+
+### 24.1 Capability progression
+
+| Level | Required evidence | Not implied |
+|---|---|---|
+| Foundation-ready | Identity, evidence discipline, memory, qualified beliefs, bounded context, basic prediction/inference, supplied-goal processing, minimum appraisal, controlled learning candidates and governance boundaries | Mature autonomy, broad knowledge or sophisticated emotion |
+| Integrated learner | Memory materially informs reasoning; belief revision invalidates dependencies; predictions resolve against outcomes; evidence-supported learning persists | General transfer from one successful fixture |
+| Adaptive learner | Changes improve varied relevant cases while protecting unrelated capabilities; goal, attention and strategy changes are traceable | Fixed motivation or guaranteed improvement |
+| Advanced cognitive development | Stronger abstraction, causal/analogical/counterfactual reasoning, robust grounding, complex skill/social modelling and calibrated metacognition | Human equivalence or unbounded self-direction |
+
+Progression is evidence-based, not calendar-based, personality-based or measured by code volume.
+
+### 24.2 Verification record required for each capability
+
+Each capability specification and later verification suite must identify owner, preconditions, input evidence, expected observable behaviour, prohibited behaviour, provenance requirements, persistence/reconstruction, variation/transfer scope, counterexamples, regression surface, known limitations and claim scope.
+
+Required verification classes include responsibility ownership, cross-responsibility interaction, lifecycle transitions, contradiction handling, failure injection, longitudinal learning, transfer, regression, governance boundaries and developmental integrity.
+
+A narrow fixture does not establish broad intelligence, generalized grounding, autonomous motivation or human-like affect. Capability claims must be bounded to tested environments, evidence, variation and time horizons.
+
+## 25. Disposition of the 14 previously open architecture questions
+
+The following recommended dispositions close the conceptual questions from §13 while leaving implementation mechanisms to later specifications:
+
+| Question | Recommended architecture disposition |
+|---|---|
+| Atomic vs asynchronous transitions | Atomic coherent commits within each authoritative owner; asynchronous cross-owner propagation with version, dependency, pending/stale and reconciliation status |
+| Workspace semantics | Bounded task-scoped activation of references and derived working items; source owners remain authoritative |
+| Epistemic distinctions | Adopt the 15 conceptual classes in §17 as minimum taxonomy; allow typed extensions |
+| Essential reasoning forms | Foundational deduction, qualified induction, abduction/hypothesis generation, constraint reasoning and comparison; advanced causal/analogical/counterfactual depth is staged |
+| Conflicting beliefs | Preserve scoped competing claims and evidence; evaluate source, time, context and independence; abstain when unresolved |
+| Safe online learning | Permit only bounded reversible candidates under explicit eligibility/monitoring; stronger evaluation and governance for high-impact changes |
+| Minimum self-model | Evidence-qualified capability, uncertainty, resource, commitment, failure-pattern and correction-effectiveness estimates |
+| Minimum affective appraisal | Contextual appraisal of significance, goal relevance, urgency, risk, uncertainty and internal condition; no fixed emotional or behavioural mapping |
+| SYS-06 | Remains optional/unresolved; Brain functions without it; later proposal must establish distinct value and explicit boundaries |
+| Experience-acquired goals | Candidate goals may arise from discrepancies, opportunities, outcomes, constraints and internal conditions; origin and evidence preserved; no fixed trigger-to-goal rule |
+| Transfer/generalization evidence | Original context, relevant variation, held-out related context, counterexamples, unrelated regression and persistence/reconstruction |
+| Minimum pre-embodiment contract | Operate on supplied observations, records, goals and verified outcomes; unavailable modalities remain unknown; no simulated embodiment treated as real |
+| Existing mechanisms | No blanket retain/discard; later source-level compatibility assessment against approved architecture |
+| Project Director approvals | Required for cognitive authority, foundational scope, governance/safety boundaries, mandatory subsystem status, bootstrap/acquired boundary and high-impact learning authority; routine mechanism details delegated to approved specifications |
+
+These are recommendations for Project Director disposition. They do not become approved decisions solely by appearing in this document.
+
+## 26. Architecture-to-specification boundary
+
+Later mechanism specifications may select algorithms, data structures, concrete schemas, APIs, protocols, programming languages, frameworks, databases, model providers, process/runtime topology and deployment topology. They must not redefine without explicit architecture change:
+- semantic ownership and authority;
+- epistemic classes and transition meanings;
+- provenance and lineage obligations;
+- the developmental distinction between enabling mechanisms and acquired behaviour;
+- the Brain/governance/action boundary;
+- SYS-01/SYS-03/SYS-05/SYS-06/SYS-07/SYS-08 responsibility boundaries;
+- learning evaluation, transfer, regression and recovery obligations;
+- the requirement that foundational Brain capabilities work without unresolved optional SYS-06.
+
+Each later specification must identify its parent architectural decisions, responsibilities affected, inputs/outputs, failure semantics, verification obligations and any proposed deviation requiring Project Director approval.
+
+## 27. Completion and acceptance gate
+
+The Brain Foundation Architecture is complete only when:
+
+1. Every foundational responsibility has purpose, authority, inputs, outputs, interactions, developmental status, failure semantics and verification obligations.
+2. Every epistemic class and lifecycle transition is coherent across observation, interpretation, memory, belief, prediction, simulation, goals, plans, decisions, actions, outcomes and learning.
+3. Cross-responsibility contracts preserve owner, version, provenance, status, uncertainty and dependencies.
+4. Goal formation, motivation and affect are foundationally addressed without preloading desired learned behaviour.
+5. Learning covers memory, knowledge, beliefs, prediction, reasoning, attention, goals, affect, skills and metacognition—not merely numeric parameter adjustment.
+6. SYS-01, SYS-03, SYS-05, SYS-06, SYS-07 and SYS-08 boundaries are consistent with the approved whole-system architecture.
+7. Failure, degraded operation, persistence and reconstruction are explicitly addressed.
+8. Every foundational decision is accepted by the Project Director, rejected with rationale or explicitly assigned to a later specification with its architectural constraints already defined.
+9. Independent review of the exact completed revision returns CLEAR with no unresolved critical finding.
+10. Builder corrections are independently rechecked against the exact changed revision.
+11. The Project Director explicitly accepts that exact revision.
+
+A Builder self-assessment, correction log, open PR, green documentation workflow or document length is not proof of completion. Until all gates are evidenced, this remains a proposed architecture. No merge, implementation, runtime test, technology selection or deployment is authorized by this addendum.
+
 **End of document.**
