@@ -37,7 +37,7 @@ This was a bounded terminology audit, not a claim that every historical branch, 
 
 ### 3.1 Generic interface comment used a product name
 
-At the audit baseline, `interfaces/typescript/src/operator_session.ts` described a generic supervised operator session as “ChatGPT-facing”. The interface itself is not a product-specific ChatGPT integration. The product reference was therefore unnecessary and made the abstraction appear coupled to a consumer product.
+At the audit baseline, `interfaces/typescript/src/operator_session.ts` described a generic supervised operator session using a consumer-product-specific label. The interface itself is not product-specific. The product reference was therefore unnecessary and made the abstraction appear coupled to a consumer product.
 
 **Disposition:** corrected to “assistant-facing”. No interface behavior, type, runtime boundary, or authorization semantics changed.
 
@@ -53,9 +53,9 @@ The selected PR #192 planning and evidence documents contain numerous historical
 
 **Disposition:** not bulk-rewritten in this pass. Historical evidence must not be silently altered in a way that falsifies attribution, obscures the limits of an earlier assessment, or changes the meaning of a prior Project Director decision. The new role standard governs current and future project-facing labels. Where a historical model/provider identifier is necessary to reproduce or qualify an event, it belongs in provenance metadata, not as the participant's project role.
 
-### 3.4 No current default-branch Grok role string was returned by the bounded code search
+### 3.4 No current default-branch reviewer-brand role string was returned by the bounded code search
 
-The default-branch search returned no matching code result for the requested reviewer-brand term. The selected PR #192 documents did contain historical reviewer attribution. This audit does not claim that the historical review itself was re-performed, qualified, or upgraded by a terminology change.
+The default-branch search returned no matching code result for the reviewer-brand term being audited. The selected PR #192 documents did contain historical reviewer attribution. This audit does not claim that the historical review itself was re-performed, qualified, or upgraded by a terminology change.
 
 ## 4. Changes made on this branch
 
@@ -63,7 +63,7 @@ The default-branch search returned no matching code result for the requested rev
 |---|---|
 | `.github/workflows/documentation-foundation-ai-reader.yml` | Job/step labels and assessment artifact naming now use **Blind Fresh Tester** |
 | `.github/workflows/brain-foundation-blind-architecture-review.yml` | Job/step labels, assessment persona, and output filename now use **Blind Fresh Tester** |
-| `interfaces/typescript/src/operator_session.ts` | Generic “ChatGPT-facing” comment changed to “assistant-facing” |
+| `interfaces/typescript/src/operator_session.ts` | Generic product-specific interface comment changed to “assistant-facing” |
 | This audit | Records the naming standard, findings, scope, changes, and historical-provenance boundary |
 
 ## 5. Model and provider provenance is intentionally retained
