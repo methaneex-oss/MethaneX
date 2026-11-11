@@ -2643,7 +2643,7 @@ No PR is merged, rebased, retargeted or cherry-picked. No runtime source, test, 
 
 - Repository: `methaneex-oss/MethaneX`.
 - PR: #192; branch `docs/whole-brain-planning-scope-correction-20261107`.
-- Exact parent HEAD immediately before this final inventory write: `256e1bbd276e9af9acddaf1273f085cd021ce5d6`.
+- Exact parent HEAD immediately before this final inventory write: `2bf56073182660ffe453412269b742fbb1bcf8d9`.
 - Base: `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.
 - State at parent: open, non-draft, unmerged.
 - Complete live PR-files endpoint: 38 changed paths.
@@ -2651,7 +2651,7 @@ No PR is merged, rebased, retargeted or cherry-picked. No runtime source, test, 
 
 ### 65.2 Complete 38-path parent blob manifest
 
-The following exact blob SHAs are the parent-snapshot identities at `256e1bbd276e9af9acddaf1273f085cd021ce5d6`. The inventory's own entry is its pre-update blob; the inventory blob necessarily changes in this final write.
+The following exact blob SHAs are the parent-snapshot identities at `2bf56073182660ffe453412269b742fbb1bcf8d9`. The inventory's own entry is its pre-update blob; the inventory blob necessarily changes in this final write.
 
 | # | Path | Parent blob SHA |
 |---:|---|---|
@@ -2661,12 +2661,12 @@ The following exact blob SHAs are the parent-snapshot identities at `256e1bbd276
 | 4 | `docs/JARVIS_PHASE_2_COMPLETION.md` | `e0e57a44216fc36c52d469a79abfc8df058515a3` |
 | 5 | `docs/README.md` | `b8ed78360051e2f8dfe75872ab1f0a2c40968420` |
 | 6 | `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md` | `01ee72b50bd45e03eb8293dd34ed512c183abef1` |
-| 7 | `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md` | `634dd1770d82bff87e8742057a1efa50825816a3` |
+| 7 | `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md` | `0dc5a5bf15acdbaff2f9885abc56bc2ec8f97761` |
 | 8 | `docs/architecture/inventory/HISTORICAL_DOCUMENTATION_PRESERVATION_REGISTER_2026-11-08.md` | `95cd280295c86c6d33278aa667de1d72048026ea` |
 | 9 | `docs/architecture/reports/BUILDER_FINAL_DOCUMENTATION_FOUNDATION_RECONCILIATION_2026-11-08.md` | `c962de2465f1728752e46456f69e722caf277de7` |
 | 10 | `docs/architecture/reports/BUILDER_TO_INDEPENDENT_REVIEWER_REQUEST_2026-11-08.md` | `c458f689ccbcd1e1d54242e38648ca151d70c250` |
-| 11 | `docs/architecture/reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md` | `a5a0855c906874f7eb119403973c8cd0e9323a3e` |
-| 12 | `docs/architecture/reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md` | `6d1b6a4c3ab25ba966982b1ab606eb362ba01d62` |
+| 11 | `docs/architecture/reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md` | `097ae65971533efa0b3230f7c735a91c294d234d` |
+| 12 | `docs/architecture/reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md` | `c69384198a335fb3c0393d3636073c42d0c68b99` |
 | 13 | `docs/architecture/reports/GROK_INDEPENDENT_REVIEW_REQUEST_2026-11-10.md` | `c99b49c4870422cfcfe306de74c56fe5d19a92bb` |
 | 14 | `docs/architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_2026-11-08.md` | `c43d82ba18ff89de226d2268cf72e724b222a5bd` |
 | 15 | `docs/architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_GROK_2026-11-09.md` | `1938203fe3a0e3cb4e7a7df7d5fa8e3298fa8635` |
@@ -2684,7 +2684,7 @@ The following exact blob SHAs are the parent-snapshot identities at `256e1bbd276
 | 27 | `docs/architecture/reports/PROJECT_DIRECTOR_DECISION_EVIDENCE_EXTRACTS_2026-11-10.md` | `1c0b6a580b0420fd6d68140a15383364b468acd4` |
 | 28 | `docs/architecture/reports/PROJECT_DIRECTOR_DECISION_PROVENANCE_AND_GATE_RECONCILIATION_2026-11-09.md` | `3542b3af3d5c25098b102a926e6078d30631c684` |
 | 29 | `docs/architecture/reports/PR_174_FOLLOW_ON_REVIEW_PROVENANCE_RECOVERY_2026-11-06.md` | `86111e43b6a1dd36c6c49458d6da3306acdadfa3` |
-| 30 | `docs/architecture/reports/WHOLE_BRAIN_DOCUMENTATION_PHASE_BUILDER_SELF_REVIEW_2026-11-07.md` | `b6e7309a9d9c2ebf94ae4fa4327ee3d19d896854` |
+| 30 | `docs/architecture/reports/WHOLE_BRAIN_DOCUMENTATION_PHASE_BUILDER_SELF_REVIEW_2026-11-07.md` | `ffed765c0fb6a81d6f09b86abfde13fcfe13e786` |
 | 31 | `docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md` | `afc0155b79beda7a04508cab825a5a5f9d0a1173` |
 | 32 | `docs/architecture/reports/fresh-reader-evidence/NEMOTRON_ASSESSMENT_PROMPT_2026-11-10.md` | `03475a43c1440ca9affd38dfe046b8ef1e9b91d0` |
 | 33 | `docs/architecture/reports/fresh-reader-evidence/NEMOTRON_PACKET_MANIFEST_2026-11-10.json` | `5910299b3ea4f686fe30220867b1273bf52e8dba` |
@@ -2699,7 +2699,7 @@ The following exact blob SHAs are the parent-snapshot identities at `256e1bbd276
 - DF-06: NOT MET; full semantic relevance, external destination reachability, renderer-specific anchor behavior and historical/cross-branch link validation remain unestablished.
 - DF-08: RESOLVED against the exact bounded preservation criterion only.
 - DF-09: OPEN / NOT MET; 31/32 PARTIALLY CLEAR on older revision `887b349f9826de7726707209f640ae0cafd78ace` is insufficient. A CLEAR Blind Fresh Tester result against the frozen final PR #192 revision is required.
-- DF-10: Builder self-review refreshed at parent `256e1bbd276e9af9acddaf1273f085cd021ce5d6`; this inventory is the final Builder write and post-write tree/blob verification remains mandatory.
+- DF-10: Builder self-review refreshed at parent `2bf56073182660ffe453412269b742fbb1bcf8d9`; this inventory is the final Builder write and post-write tree/blob verification remains mandatory.
 - DF-11: WAIVED by Project Director decision.
 - DF-12: NOT ACCEPTED; exact-revision Project Director decision remains pending.
 - PR #173 blind architecture assessment and BFA-C01–BFA-C14 decisions remain outstanding.
