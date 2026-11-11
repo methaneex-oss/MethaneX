@@ -88,6 +88,7 @@ jobs:
         shell: bash
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          TARGET_DOCS_SHA: ${{ inputs.target_revision }}
           ASSESSMENT_LABEL: ${{ inputs.assessment_label }}
         run: |
           set -euo pipefail
