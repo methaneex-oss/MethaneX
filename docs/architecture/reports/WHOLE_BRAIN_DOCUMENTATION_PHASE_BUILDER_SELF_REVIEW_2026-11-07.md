@@ -1258,3 +1258,34 @@ The Builder has reconciled the current documentation records to the live reposit
 - Runtime implementation NOT AUTHORIZED.
 
 **Self-review conclusion:** the Builder-controlled documentation corrections and exact parent manifest are recorded. This self-review is not independent clearance, does not satisfy DF-06/DF-09, and does not authorize implementation or PR integration.
+
+
+---
+
+## 6. Final closeout self-review refresh — 2026-11-11
+
+**Exact pre-self-review revision fetched:** `35c3c070461b3df25f94a6285a9d2f1e063d6e37`  
+**Live PR state at fetch:** open, non-draft, unmerged; base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.  
+**Working branch:** `docs/whole-brain-planning-scope-correction-20261107`.
+
+### 6.1 Stale-state correction
+
+The prior closeout report contained an obsolete PR #192 HEAD reference. The live branch was re-fetched before this update. The closeout report was corrected in commit `35c3c070461b3df25f94a6285a9d2f1e063d6e37`; its note explicitly treats `35c3c070461b3df25f94a6285a9d2f1e063d6e37` as a pre-write snapshot and does not claim it is the post-write HEAD.
+
+### 6.2 Current gate disposition rechecked
+
+- DF-06 remains NOT MET. Existing checks are bounded and do not establish the Project Director's full-resolution requirements for semantic relevance, all applicable external destinations, renderer-specific fragments, and historical/cross-branch links.
+- DF-08 remains RESOLVED only against its exact bounded preservation criterion.
+- DF-09 remains OPEN / NOT MET. The latest qualifying assessment is 31/32 PARTIALLY CLEAR on an older revision; it is not evidence for this or a later PR #192 HEAD.
+- DF-10 is this Builder-authored refresh and remains subject to post-write exact-head verification.
+- DF-11 remains WAIVED by the Project Director; no new review is commissioned or claimed.
+- DF-12 remains NOT ACCEPTED pending the Project Director's exact-revision decision.
+- Stage A remains NOT STARTED / HELD. Implementation planning remains HELD. Runtime implementation remains NOT AUTHORIZED.
+
+### 6.3 Scope and evidence limits
+
+This is a Builder self-review, not an Independent Reviewer assessment. No workflow was dispatched, no new Blind Fresh Tester result was obtained, and no external reviewer or Project Director decision is represented as complete. The GitHub connection used for this pass exposes no workflow-dispatch action. No runtime source, tests, build configuration, dependencies, or runtime state were changed by this closeout correction.
+
+### 6.4 Mandatory post-write verification
+
+After this self-review commit, re-fetch PR #192 metadata, its complete changed-file list, and every changed-file blob at the resulting HEAD. Record the resulting exact HEAD and verify that the changed-path set is complete. If the branch advances during verification, repeat against the new live HEAD. Do not call Builder closeout complete until that post-write check passes.
