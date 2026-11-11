@@ -1161,3 +1161,19 @@ Documentation Foundation gates:
 The GitHub integration has no workflow-dispatch operation. The exact PR #192 target must be fetched after the final index write and manually dispatched through the Documentation Foundation blind fresh-reader workflow. The PR #173 and PR #174 blind/review evidence must also be obtained separately. C++ CI success is not a substitute for any review.
 
 **Conclusion:** initial planning is not complete. Stage A remains HELD; runtime implementation remains NOT AUTHORIZED. This is the last Builder documentation pass before the required external review/decision evidence, not a claim of gate completion.
+
+
+
+## 24. Final pre-assessment state reconciliation — 2026-11-11
+
+The Builder has reconciled the current documentation records to the live repository state:
+
+- **PR #173** corrected proposal HEAD `756724b95e093ac48fcd95c5587117c0a4d8f3c0`; blind independent architecture re-review and explicit Project Director disposition of BFA-C01–BFA-C14 remain outstanding. Its earlier accepted planning-baseline event is historical and no longer establishes complete/final architecture sufficiency.
+- **PR #174** corrected specification proposal HEAD `4b134048680fb5902f8c2a5a067b0c369169dbfe`; Builder-level responses to reconstructed F-02/F-03 and scenarios 35–46 are submitted. The original review report, exact reviewed SHA and full criteria remain unavailable; independent re-review and Project Director disposition remain outstanding.
+- **PR #191** read-only content/dependency review is complete; Builder recommends retaining it as a separate bounded reference artifact. Project Director disposition remains pending.
+- **PR #192** pre-index-refresh HEAD `87e368d790b6271b641070e1a3f9bb0fdd0c32b3`, open/non-draft/unmerged, 37 documentation/README/template paths only.
+- **PR #193** updated plan/handoff HEAD `0d19b136df8021a3fc3faaf0d53072d9a9ff651b`, open/draft/unmerged, separate #175-derived lineage. The two files now reflect current authority/gate status.
+
+**Gate status:** DF-06 NOT MET; DF-08 RESOLVED against the exact criterion and bounded foundational scope by preservation report §16; DF-09 OPEN pending a CLEAR blind fresh-reader result on final exact PR #192 HEAD; DF-11 WAIVED; DF-12 NOT ACCEPTED.
+
+**Phase boundary:** Initial planning remains NOT COMPLETE. Stage A is HELD; runtime implementation is NOT AUTHORIZED. No PR merge, branch rebase, retarget, cherry-pick, replay or integration operation is authorized.
