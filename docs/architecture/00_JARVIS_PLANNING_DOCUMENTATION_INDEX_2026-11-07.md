@@ -728,3 +728,53 @@ This section is the latest controlling status in this index and supersedes older
 **Initial planning is NOT COMPLETE.** Documentation Foundation is NOT ACCEPTED. Stage A is NOT STARTED / HELD. Implementation planning is HELD. Runtime implementation, source-baseline selection, technology selection, runtime tests/builds, PR integration and deployment remain NOT AUTHORIZED.
 
 The Builder-side closeout report, exact parent manifest, PR #174 corrections and re-review request are now recorded. The remaining work is not merely more prose: it requires full DF-06 evidence, exact-current-revision blind assessment(s), an independent PR #174 review, and explicit Project Director decisions. Do not declare completion until those conditions are evidenced.
+
+
+---
+
+## Live Builder reconciliation — exact repository state rechecked 2026-11-11
+
+This is the newest live-state entry in this index. It supersedes older active snapshots where they conflict; historical records remain intact.
+
+### Exact live PR state
+
+| PR | Current head / state | Current interpretation |
+|---|---|---|
+| #173 | `756724b95e093ac48fcd95c5587117c0a4d8f3c0`, open/draft/unmerged | Corrected Brain Foundation Architecture proposal; blind fresh architecture assessment and Project Director dispositions BFA-C01–BFA-C14 remain outstanding |
+| #174 | `b78e24b6fa122d1141b1f225bc6d29e1e7c77631`, open/draft/unmerged | Corrected specification proposal; blob `fbe017d96f9d0716be6080c96eea6b67c7da62fa`; Independent Reviewer re-review and Project Director disposition remain outstanding; original F-02/F-03 report provenance remains qualified |
+| #175 | `c30fe20cfdf3f499416972042be06acdd70f752d`, open/draft/unmerged | Implementation roadmap proposal; non-operative until initial planning acceptance and separate implementation-planning authorization |
+| #179 | `d30237b81c3695f2a7cb980144b221bbd42ce548`, open/draft/unmerged | Phase 2 source-integration map; target branch tip for the PR #192 base branch |
+| #191 | `609d38ede50bbdd98a93dfed112781eacabee9fd`, open/draft/unmerged | Bounded human/MCU reference artifact; Project Director disposition remains reserved |
+| #192 | `c060ad15e8e5bf86d9b359b88e696cc1fe995a54`, open/non-draft/unmerged | Documentation Foundation branch; 38 changed paths; exact-current-head Builder reconciliation is recorded below |
+| #193 | `4705716e0845d7b5621ab7e339d36c9f42853b1a`, open/draft/unmerged | Separate deferred-plan/handoff lineage; integration order reserved |
+| #194 | `9b457e35c601719d9b213fb843dd5876976b35b9`, open/draft/unmerged | Stale Blind Fresh Tester workflow alternative pinned to historical documentation revision `3ea2970c7b43bdfb87b3d1459690eacd83516745`; do not integrate alongside #195 |
+| #195 | `9d0255041c1d3c41c1b6a9f9e373f2bf673184cd`, open/draft/unmerged | Consolidated terminology/workflow proposal; workflow has exact-SHA input validation and response-shape/diagnostic corrections; not workflow-executed |
+| #196 | `9a744927c5ebcfea2c720ded42ec7425edc499c0`, open/non-draft/unmerged | Governance amendment adding Builder Rules 11.9–11.16; one governance file only; no runtime authorization or gate change |
+
+**PR #192 base-reference discrepancy:** the PR API reports base ref `docs/jarvis-phase-2-whole-brain-integration-map-20261105` at `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`, while the live Git ref and PR #179 head for that same branch name are `d30237b81c3695f2a7cb980144b221bbd42ce548`. The latter contains the two source-anchor corrections described below. This discrepancy is recorded, not silently normalized. No merge, retarget, rebase or branch-history operation is authorized.
+
+### DF-06 — exact-current-head Builder checks
+
+At PR #192 HEAD `c060ad15e8e5bf86d9b359b88e696cc1fe995a54`:
+
+- All 38 changed paths were fetched at that exact revision; their blob identities were recorded for the final inventory refresh.
+- The recursive Git tree contains 268 entries and is not truncated.
+- A bounded inline-Markdown/autolink scan found 316 occurrences: 116 repository-relative targets and 200 GitHub HTTP(S) destinations. All 116 repository-relative targets resolve against the exact tree; no missing target was found. No local relative heading-fragment links were found by this scan.
+- The current Phase 2 map blob is `9dd776920d0a479a9d7275acc821e12c266623d9`. Its 89 immutable source links still map to 45 exact commit/path pairs. The earlier exact-blob and 76 line-range checks remain valid for those immutable source revisions. The two line ranges corrected by PR #179's latest commit are present in the PR #192 copy: main executor `#L18-L77` and goal-feedback test `#L1-L84`.
+- Rechecked 18 linked GitHub Actions run destinations; all returned completed/success. Rechecked PR metadata for #96, #97, #164, #171–#175, #178, #179, #191–#193; all destinations resolved. Re-fetched decision comments #6752144835 and #6604790481. The three DLT-002 artifact IDs referenced by the map remain present and unexpired.
+- The historical ChatGPT shared-conversation pointer in the PR #174 provenance-recovery report remains plain text and access-limited; it is not treated as a verified navigation dependency.
+
+**DF-06 remains NOT MET.** These checks do not establish semantic relevance of every link, successful rendered GitHub fragment/line-anchor behavior, or every applicable historical/cross-branch link's semantics. GitHub file retrieval returns source text rather than the rendered browser UI, and the available browser retrieval did not provide a renderable cached page for the tested line-anchor URL. The access-limited shared-conversation pointer cannot be independently opened in this environment. Do not report DF-06 as complete.
+
+### Controlling gates and reserved work
+
+- DF-06: **NOT MET**; remaining Builder evidence limits are stated above.
+- DF-08: **RESOLVED** against its exact bounded preservation criterion; no repository-wide semantic-archive completeness claim.
+- DF-09: **OPEN / NOT MET**; latest qualifying result remains PARTIALLY CLEAR (31/32) on older assessed revision `887b349f9826de7726707209f640ae0cafd78ace`. The exact-current-revision Blind Fresh Tester run is not performed here; the available GitHub connection exposes no workflow-dispatch action. No result is inferred.
+- DF-10: Builder self-review and final inventory must be synchronized to the exact final PR #192 revision and verified after the last write.
+- DF-11: **WAIVED** by Project Director decision.
+- DF-12: **NOT ACCEPTED**; exact-revision Project Director decision remains reserved.
+- PR #173 blind assessment and BFA-C01–BFA-C14 dispositions; PR #174 independent re-review/disposition; PR #191 disposition; and PR #192/#193 integration order remain external review/authority work.
+- Stage A remains NOT STARTED / HELD. Implementation planning remains HELD. Runtime implementation, source-baseline selection, PR integration, rebase/retarget and deployment remain NOT AUTHORIZED.
+
+This entry records Builder verification only. It is not a Blind Fresh Tester result, Independent Reviewer report, gate acceptance or Project Director decision.
