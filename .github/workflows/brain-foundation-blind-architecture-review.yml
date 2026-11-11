@@ -22,7 +22,7 @@ concurrency:
 
 jobs:
   blind-architecture-review:
-    name: Nemotron blind architecture review
+    name: Blind Fresh Tester — blind architecture assessment
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
@@ -85,7 +85,7 @@ jobs:
           }, indent=2))
           PY
 
-      - name: Run independent Nemotron architecture assessment
+      - name: Run blind architecture assessment with Blind Fresh Tester
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           ASSESSMENT_LABEL: ${{ inputs.assessment_label }}
@@ -100,8 +100,8 @@ jobs:
 
           out = Path("brain-foundation-blind-review-evidence")
           packet = (out / "blind_review_packet.md").read_text()
-          system = """You are an independent, adversarial software-systems and cognitive-architecture reviewer. You have no prior conversation context. Assess only the supplied source documents. Do not infer correctness from confident wording. Do not use external sources. Do not reveal hidden reasoning or chain-of-thought; provide concise findings with exact document and section evidence. Do not redesign the system or write implementation code."""
-          task = """Conduct a blind independent architectural review of the proposed Brain Foundation Architecture at the exact target revision recorded in the packet manifest.
+          system = """You are the Blind Fresh Tester: an adversarial software-systems and cognitive-architecture assessment role with no prior conversation context. You have no prior conversation context. Assess only the supplied source documents. Do not infer correctness from confident wording. Do not use external sources. Do not reveal hidden reasoning or chain-of-thought; provide concise findings with exact document and section evidence. Do not redesign the system or write implementation code."""
+          task = """Conduct a blind fresh architectural assessment of the proposed Brain Foundation Architecture at the exact target revision recorded in the packet manifest.
 
           Treat PR #171 as the accepted whole-system architecture baseline and PR #172 as the accepted foundational capability investigation. Assess whether the PR #173 architecture and completion matrix are complete, internally coherent, compatible with those baselines, and sufficient to guide later mechanism specifications without prematurely choosing implementation details.
 
@@ -141,7 +141,7 @@ jobs:
           - PARTIALLY CLEAR if the architecture is substantially sound but material gaps remain.
           - NOT CLEAR if foundational ownership, interaction, learning integrity, authority or verification is materially incomplete or contradictory.
 
-          Cite exact supplied document paths and headings for every material finding. Never invent a section, line number, source or fact. If line numbers are unavailable, cite the exact heading and say so. This is an independent assessment, not Project Director acceptance or authorization to implement.
+          Cite exact supplied document paths and headings for every material finding. Never invent a section, line number, source or fact. If line numbers are unavailable, cite the exact heading and say so. This is a blind fresh assessment, not Project Director acceptance or authorization to implement.
 
           BLIND REVIEW PACKET:
           """ + packet
@@ -191,7 +191,7 @@ jobs:
               }, indent=2))
               raise SystemExit("Model returned no textual assessment; diagnostic saved.")
 
-          (out / "independent_assessment.md").write_text(content)
+          (out / "blind_fresh_tester_assessment.md").write_text(content)
           usage = raw.get("usage") or {}
           metadata = {
               "assessment_label": os.environ["ASSESSMENT_LABEL"],
@@ -206,7 +206,7 @@ jobs:
               "review_is_advisory_not_project_director_acceptance": True
           }
           (out / "run_metadata.json").write_text(json.dumps(metadata, indent=2))
-          print("Assessment generated. See independent_assessment.md and run_metadata.json in the uploaded artifact.")
+          print("Assessment generated. See blind_fresh_tester_assessment.md and run_metadata.json in the uploaded artifact.")
           PY
 
       - name: Upload blind review evidence
