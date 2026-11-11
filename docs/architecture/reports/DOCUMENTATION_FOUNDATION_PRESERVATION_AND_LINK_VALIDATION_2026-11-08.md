@@ -413,3 +413,21 @@ The read-only content review remains valid: the report is a bounded BM-01–BM-1
 **Builder recommendation for Project Director:** retain PR #191 as a separate, clearly bounded reference artifact; do not retarget it alone or rebase/cherry-pick it without an explicit integration decision. Its current base is stale, but its unique document can be linked and reviewed at its immutable head. This recommendation is not a PR disposition or integration authorization. The Project Director's decision remains pending.
 
 **Scope boundary:** DF-06 and DF-08 Builder closure evidence does not close DF-09, waive/reinstate DF-11, decide PR #191, accept DF-12, or authorize PR integration or Stage A.
+
+## 18. PR #192 full changed-path inline-link sweep — 2026-11-11
+
+A bounded static sweep was performed against all 38 paths in the PR #192 changed-file list at the pre-sweep tree revision `8c5e688e3f83c582cde7ab0190d9d748edc3e967`. All 38 files were fetched from that exact revision. The sweep extracted Markdown inline links and HTTP(S) autolinks from those files and resolved repository-relative paths against the exact recursive Git tree (268 entries; not truncated).
+
+| Check | Result |
+|---|---:|
+| Changed paths fetched | 38 / 38 |
+| Recursive tree entries | 268 (complete, not truncated) |
+| Inline Markdown links and HTTP(S) autolinks extracted | 316 |
+| External HTTP(S) destinations | 199 |
+| Repository-relative targets | 117 |
+| Repository-relative targets present in the tree after correction | 117 / 117 |
+| Standalone same-file fragment links | 0 |
+
+**Correction made:** the sweep found one cross-branch relative link in `docs/README.md` to the PR #173 inherited-mechanism audit. That target does not exist on the PR #192 tree because it belongs to the separate PR #173 branch. The link is now pinned to the exact PR #173 HEAD `756724b95e093ac48fcd95c5587117c0a4d8f3c0`; the target was fetched successfully and its blob is `037dc71df9e508c0cc08e96a42b41aa7ba5bc041`. This removes the only missing repository-relative target found by the sweep.
+
+**Limits:** this extraction is not a complete Markdown parser and does not claim to enumerate reference-style links, every raw URL form, or all link semantics. The 199 external URLs were inventoried, not individually re-fetched in this sweep. Existing exact-revision checks remain as recorded in §§10–15, including the 45 unique Phase 2 source files and 76 cited line ranges, and the enumerated GitHub PR/Actions/artifact destinations. Renderer-specific behavior for GitHub line anchors and rendered fragments has not been established by this static pass. Therefore this section does **not** close DF-06; DF-06 remains **NOT MET** until the remaining full-resolution criteria are evidenced.
