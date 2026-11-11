@@ -607,3 +607,21 @@ The previous 31/32 result assessed revision `887b349f9826de7726707209f640ae0cafd
 ### Gate and authorization status
 
 Documentation Foundation **NOT ACCEPTED / NOT CLEARED**. DF-09 OPEN pending a new CLEAR assessment; DF-06 NOT MET; DF-08 closure requires explicit criterion-to-evidence reconciliation; DF-11 WAIVED; DF-12 NOT ACCEPTED. Stage A remains HELD pending foundation closure. Runtime implementation, PR integration and branch-history operations remain unauthorized.
+
+
+---
+
+## Controlling update — PR #173 Brain Foundation Architecture sufficiency superseded (2026-11-11)
+
+The Project Director has superseded the earlier acceptance of PR #173 as sufficient. The historical acceptance event is preserved, but it is no longer current approval of the complete/final Brain Foundation Architecture. The prior acceptance of PR #172 and authorization to conduct Brain Foundation Architecture planning are not rescinded.
+
+**Current status:** PR #173 remains open, draft and unmerged. It is retained as the starting proposal, but is **not accepted as complete/final**. The required standard is a full foundational architecture with no critical responsibility, interaction, authority/state boundary, developmental mechanism or verification obligation left undefined. Implementation-level detail may be deferred only with explicit architectural obligations, rationale and later specification ownership.
+
+Builder work added and integrated:
+- Main architecture addendum §§16–27 in `docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md`.
+- 27-domain completion/decision matrix in `docs/architecture/03_BRAIN_FOUNDATION_ARCHITECTURE_COMPLETION_AND_DECISION_MATRIX_2026-11-11.md`.
+- Superseding decision and remaining gates in the outstanding-work closure and authority register §27.
+
+Exact PR #173 head recorded on 2026-11-11: `382e3f91e9aa1fdb269d2b72af1f8f9138ec8029`. Builder integration is not independent clearance. The 14 question dispositions and BFA-C01–BFA-C14 remain recommendations for Project Director disposition. The next required gate is blind independent adversarial review of the exact current PR #173 revision against PR #171 and accepted PR #172, followed by corrections/recheck and explicit Project Director acceptance.
+
+No implementation, runtime modification, runtime tests, technology selection, merge, deployment, Stage A start or change to other PR dispositions is authorized by this update. PR #173 remains open/draft/unmerged.
