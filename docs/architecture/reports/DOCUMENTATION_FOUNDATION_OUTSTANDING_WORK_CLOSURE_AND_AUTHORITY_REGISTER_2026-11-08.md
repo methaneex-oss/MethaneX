@@ -765,3 +765,49 @@ This is an explicit, non-destructive status correction: the historical pointer i
 - PR #191 disposition: content review complete; decision still pending.
 - PR #192/#193: open and unmerged; integration held.
 - Stage A: NOT STARTED / HELD. Runtime implementation: NOT AUTHORIZED.
+
+
+## 28. Exact-head DF-06 link validation and DF-08 preservation closure — 2026-11-11
+
+### 28.1 DF-06 — exact PR #192 package and historical source-link validation
+
+Validation was performed against PR #192 parent HEAD `c0778822b201197be2ddc34057ec7259afbab1f7` (open, non-draft, unmerged; 37 changed documentation/README paths). All 37 changed files were fetched. Every unique repository-relative target discovered in the inline Markdown links was fetched successfully at this revision. No missing relative target was found.
+
+The Phase 2 source-integration map was reviewed at its exact PR #179 source revision. Its 89 immutable GitHub blob references resolve to 45 unique commit/path pairs; all 45 source files were fetched. The 76 line-anchor ranges were checked against the exact source-file lengths. Two stale ranges were found and corrected in the PR #179 map:
+
+- Main `core/cpp/src/action_execution.cpp` at commit `1273ddbcd0087d189e01388ded2d362fb1e058d2`: `#L18-L78` corrected to `#L18-L77` (source file has 77 lines).
+- Donor `core/cpp/tests/cognitive_runtime_goal_feedback_suite.cpp` at commit `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`: `#L1-L90` corrected to `#L1-L84` (source file has 84 lines).
+
+Both corrections are in PR #179 head `d30237b81c3695f2a7cb980144b221bbd42ce548`. The PR #179 Native Brain Build run `43018312917` completed successfully. The 76 ranges are now within the corresponding source-file line bounds. The 45 source files and surrounding claim text were checked for citation relevance; the references point to the described runtime, memory, action-execution, perception, authorization, goal, learning, evolution and test evidence. This validates citation relevance only; it does not establish that the referenced mechanisms are complete or integrated as a whole Brain.
+
+All referenced PR destinations in the current package were fetched (#96, #97, #164, #171, #172, #173, #174, #175, #178, #179, #191, #192 and #193). Referenced Actions runs were fetched and their jobs completed successfully, including the historical DLT-002 and source-validation runs. The three linked DLT-002 artifacts (`12764655498`, `12763543000`, `12763204259`) are present and unexpired. The PR #173 and #174 decision-comment links resolve to their recorded comments.
+
+The historical ChatGPT shared-conversation pointer in the PR #174 follow-on recovery report remains access-limited. It is preserved as literal inline text with an explicit access-limited qualification rather than presented as a verified clickable dependency. It is not treated as a broken required navigation link.
+
+**DF-06 Builder disposition: RESOLVED within the defined Documentation Foundation package and enumerated historical-source scope.** No unresolved clickable link, missing relative target or invalid source line range remains in that scope. This is not a claim that every historical URL in every repository file has been exhaustively revalidated.
+
+### 28.2 DF-08 — preservation and supersession disposition
+
+The paginated discovery and preservation evidence now covers 245 repository branch refs (203 distinct tips), 184 PRs, and 108 documentation paths across 28 documentation PRs. The two formerly unmatched branch refs have exact ancestry mappings. The 27 branch aliases at the PR #96 tip are treated as aliases, not independent content revisions. Selected duplicate/revision comparisons remain recorded for PR #96/#97/#148/#156/#170 and the Developmental Brain Plan revisions.
+
+The retention disposition is non-destructive: all identified branch refs and historical artifacts remain in place; exact source revisions/blob identities are preserved; current, historical, accepted-within-scope, proposed, superseded and unresolved states are visibly distinguished; disputed items remain `UNRESOLVED / PRESERVED`. No branch or file was deleted, moved, renamed, overwritten, archive-relocated or consolidated. No disputed historical proposal is promoted to accepted status by this disposition.
+
+**DF-08 Builder disposition: RESOLVED within the defined repository-discovery and documentation-lineage scope.** The criterion is preservation without silent deletion/supersession and visible disclosure of unresolved items; it does not require destructive archive relocation. The bounded scope and exclusions remain explicit.
+
+### 28.3 PR #191 content-review qualification
+
+The read-only review found the 219-line human/MCU comparison useful and technically cautious. Its nine human-cognition citations were checked against publisher, PubMed or official sources and support the stated functional claims. The Marvel reference resolves to an official Marvel AI guide focused on Marvel/comics continuity, not a direct source for the MCU film portrayal. Treat it only as a general Marvel fictional-AI reference; the report's MCU film portrayal remains illustrative and should not be represented as empirically or directly sourced by that comics guide. This qualification does not invalidate the comparison's core BM-01–BM-12 content. PR #191 remains open/draft/unmerged pending the Project Director's disposition.
+
+### 28.4 Current gate and lineage status
+
+- DF-06: RESOLVED within the defined package/source-link scope above.
+- DF-08: RESOLVED within the defined discovery/retention scope above.
+- DF-09: OPEN / NOT MET. The primary 2026-11-03 conversation exchange for PR #173 is recovered and included in the evidence extract, but the new blind Nemotron assessment must target the final post-correction PR #192 HEAD and return CLEAR. The prior 31/32 remains PARTIALLY CLEAR and is not retroactively changed.
+- DF-11: WAIVED by Project Director decision; no independent review is claimed.
+- PR #191: read-only content review complete; disposition still requires the Project Director.
+- PR #179: map-anchor correction commit `d30237b81c3695f2a7cb980144b221bbd42ce548`; its CI passed. PR #192 has not been rebased onto that new base tip; no history operation was performed.
+- PR #192/#193: remain open and unmerged; integration held.
+- DF-12: NOT ACCEPTED until all remaining issues are cleared and the Project Director makes the exact-revision decision.
+- Stage A: NOT STARTED / HELD. Runtime implementation: NOT AUTHORIZED.
+
+This section records bounded validation and preservation evidence only. It does not authorize PR integration, rebase, retarget, cherry-pick, replay, merge, closure, Stage A commencement, source selection or runtime implementation.
