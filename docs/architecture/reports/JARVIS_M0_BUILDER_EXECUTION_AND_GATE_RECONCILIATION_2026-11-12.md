@@ -318,3 +318,85 @@ The workflow files already exist on the repository default branch, and GitHub's 
 - Stage A remains HELD; runtime implementation remains NOT AUTHORIZED.
 
 This section records Builder correction and verification only. It is not an Independent Reviewer verdict, Tester result, workflow execution, gate clearance or Project Director acceptance.
+
+
+
+## 13. JARVIS-M0 Builder continuation — current-target handoff reconciliation — 2026-11-12
+
+### 13.1 Governance revalidation record
+
+- **Run identifier:** `JARVIS-M0-BLD-2026-11-12-04`.
+- **Project/work item:** MethaneX / JARVIS-M0 / Builder continuation.
+- **Governing source:** `docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md`.
+- **Exact governance blob freshly fetched:** `f5827c552f36f4647339b3f8dfb38956d146c570`, from `docs/jarvis-phase-2-whole-brain-integration-map-20261105`.
+- **Fresh-read confirmation:** Yes. The full current source was fetched and read during this run, including permanent principles, Rules 1–16, Sections 17–22, amendments, acceptance record and post-merge reconciliation. Sections 17–22 and Rules 11.9–11.16 were specifically re-examined for role accountability, sequence, scope, completion evidence and per-run revalidation.
+- **Role:** Builder.
+- **Applicable requirements:** Rules 2.1–2.7; 3.1–3.6; 4.1–4.3; 5.1–5.6; 6.1–6.6; 7.1–7.3; 8.1–8.6; 9.1–9.6; 10.1–10.5; 11.1–11.16; Sections 17–22.
+- **Authorized scope:** Continue the Director-approved JARVIS-M0 gate-closure work; revalidate exact current target revisions and correct stale review handoffs so independent actors are not sent to obsolete commits.
+- **Exclusions:** No merge/integration, branch-history operation, Stage A, implementation-planning execution, source-baseline selection, runtime implementation, training or deployment.
+- **Architecture/gates checked:** Phase 1 continuity; PR #171/#172 accepted baselines; PR #173 current architecture proposal; PR #174 current corrected specification and historical accepted baseline; PR #192 current documentation target; PR #195 assessment workflow candidate; PR #191 Director Option A; DF-06/08/09/10/11/12; existing PR #192/#193 integration hold.
+- **Conflicts found:** The existing PR #173 and PR #174 review handoff comments referenced stale target SHAs. Corrected by adding explicit superseding handoff comments; the older comments remain as historical records.
+
+### 13.2 Exact repository snapshot at run start
+
+- **PR #192:** open, non-draft, unmerged; exact HEAD `6141de967b862a4c90384052d4c16c66eb7f8b13`; 39 changed paths; recorded base SHA `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.
+- **PR #173:** open/draft/unmerged; exact HEAD `7e9481677197cf82df31bbe08984fa5d58644d98`.
+- **PR #174:** open/draft/unmerged; exact HEAD `9502989ffae91c00ba0a8568ab5296925fa9f27b`; specification blob `a1798ee8a1d48284bd0dc6686ce255eacab8a2b7`.
+- **PR #195:** open/draft/unmerged; exact HEAD `26bdfc49316489675d947f5c0a60faa887309d8d`; corrected documentation-reader workflow blob `5b58d8250860f10df64947858bae7b729cb8a501`.
+- **PR #191:** remains open/draft/unmerged at `609d38ede50bbdd98a93dfed112781eacabee9fd`; Director Option A is recorded in comments #6836333027 and #6836335152. No branch operation.
+
+### 13.3 Root cause and correction — stale review handoff targets
+
+Existing review assignment comments were not current:
+
+- PR #173 comment #6803566867 referenced target `756724b95e093ac48fcd95c5587117c0a4d8f3c0`, not the current PR #173 HEAD.
+- PR #174 comment #6803481563 referenced target `f6662c149be4395f4c207f62a42920e787f063c4`, not the current PR #174 HEAD.
+
+The assignments themselves were otherwise useful, so the Builder preserved their history and posted superseding exact-target comments rather than rewriting the old audit trail.
+
+**PR #173 superseding handoff**
+- Comment: `6837198028`.
+- Exact target: `7e9481677197cf82df31bbe08984fa5d58644d98`.
+- Workflow: `.github/workflows/brain-foundation-blind-architecture-review.yml`.
+- Workflow ref: `main`.
+- Target input: exact current PR #173 SHA above.
+- Label: `jarvis-m0-bfa-7e948167-20261112`.
+- Accepted comparison baselines: PR #171 `b05434758ad4fe72815503f89bd5d2990ccb658b`; accepted PR #172 `d7d676b79dbf3269f7fd3ebdb4363a6df19f255d`.
+- The comment expressly requires a single launch, exact artifact identity, and independent assessment; it does not claim dispatch or result.
+
+**PR #174 superseding independent-review handoff**
+- Comment: `6837198710`.
+- Exact target: `9502989ffae91c00ba0a8568ab5296925fa9f27b`.
+- Current specification blob: `a1798ee8a1d48284bd0dc6686ce255eacab8a2b7`.
+- Historically accepted baseline: `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`.
+- Current related PR #173 proposal: `7e9481677197cf82df31bbe08984fa5d58644d98`.
+- The comment explicitly preserves the missing-original-review provenance limitation and requires the reviewer to assess it honestly.
+
+**PR #195 workflow candidate review request**
+- Existing exact-head request: comment `6836686985`, target `26bdfc49316489675d947f5c0a60faa887309d8d`.
+- It requests review of both workflow files, YAML/workflow validity, exact source pins, injection resistance, provider/model checks, failure handling, secret/evidence minimization, authority separation and branch-based manual dispatch.
+- No Independent Reviewer verdict is present in this Builder run. PR #195 remains open/draft/unmerged.
+
+### 13.4 Workflow launch preparation and execution boundary
+
+The corrected documentation-reader workflow was re-fetched at blob `5b58d8250860f10df64947858bae7b729cb8a501`. Its manual inputs include `target_revision` and `assessment_label`; it validates the target as a full 40-character lowercase commit SHA and checks the checked-out revision. The workflow file is present in the PR #195 candidate branch.
+
+The GitHub Actions read surface available to this Builder does not expose workflow dispatch. No dispatch request, run ID, provider call, artifact or assessment result was produced. Do not interpret the absence of a run in this report as a test pass.
+
+**DF-09 dispatch values must be frozen only after the final M0 Builder documentation/inventory commit.** At that point, re-fetch PR #192 and use its exact live HEAD as `target_revision`; set `assessment_label` to `jarvis-m0-df09-<first-8-of-final-head>-20261112`. Use the corrected PR #195 branch `docs/ai-role-terminology-audit-20261111` as the workflow ref. Launch once only after the independent review of PR #195 has an acceptable verdict and its exact workflow revision is verified. Required outcome remains **CLEAR**.
+
+The PR #173 blind architecture assessment is similarly prepared against exact target `7e9481677197cf82df31bbe08984fa5d58644d98` and label `jarvis-m0-bfa-7e948167-20261112`, but must not be launched until the PR #195 workflow candidate has acceptable independent review. The independent assessment must not be replaced by Builder analysis.
+
+### 13.5 Builder self-review and verification boundary
+
+- Freshly fetched and read the complete accepted governance document at the exact blob above.
+- Re-fetched live PR #192/#173/#174/#195 metadata and exact heads.
+- Re-fetched PR #195's corrected documentation-reader workflow and confirmed blob identity.
+- Re-fetched PR #173/#174 review assignment comments and identified stale target SHAs.
+- Posted superseding exact-target handoffs to PR #173 and PR #174; the historical assignments were not edited.
+- Re-fetched PR #173/#174 comment collections to confirm the new handoff comments were present.
+- Confirmed PR #195's independent workflow-review request already exists at comment #6836686985.
+- No workflow YAML parser, actionlint, Actions run, provider invocation, assessment artifact or blind-review result is claimed.
+- No branch merge, close, rebase, retarget, cherry-pick, replay, source-baseline selection, Stage A, implementation planning execution or runtime implementation was performed.
+
+**Builder verdict for this run:** bounded handoff correction and exact-target reconciliation completed. JARVIS-M0 remains OPEN / BLOCKED pending the independent PR #195 workflow review, workflow execution and DF-09 CLEAR result, DF-06 resolution, PR #173 blind assessment and BFA Director decisions, PR #174 independent re-review and F-02/F-03 Director disposition, DF-12, and applicable final independent review/testing-or-authorized-N/A and Director acceptance. This report is not a Reviewer verdict, Tester verdict, gate clearance or Director acceptance.
