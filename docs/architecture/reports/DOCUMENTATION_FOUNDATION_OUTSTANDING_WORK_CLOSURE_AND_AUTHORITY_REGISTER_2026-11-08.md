@@ -1566,3 +1566,13 @@ This entry records Builder correction and verification only. It is not an Indepe
 - **Authority:** No merge, branch-history operation, workflow dispatch, Stage A, implementation-planning execution, source-baseline selection, runtime implementation, training or deployment authorized or performed.
 
 This Builder record is not an Independent Reviewer verdict, Tester result, gate clearance or Project Director acceptance.
+
+
+
+## 43. Builder self-review correction — BFA workflow ref — 2026-11-12
+
+- **Run:** `JARVIS-M0-BLD-2026-11-12-04`; governance freshly read at accepted blob `f5827c552f36f4647339b3f8dfb38956d146c570`.
+- **Finding:** Builder's superseding PR #173 handoff comment #6837198028 incorrectly instructed the operator to select `main`. This could select an older workflow rather than the reviewed PR #195 candidate.
+- **Correction:** PR #173 comment #6837226392 now instructs selecting branch `docs/ai-role-terminology-audit-20261111`, exact PR #195 HEAD `26bdfc49316489675d947f5c0a60faa887309d8d`.
+- **BFA target:** PR #173 `7e9481677197cf82df31bbe08984fa5d58644d98`; label `jarvis-m0-bfa-7e948167-20261112`.
+- **Disposition:** corrected before dispatch; no workflow run claimed. PR #195 independent review remains a prerequisite. No gate or implementation authority changed.
