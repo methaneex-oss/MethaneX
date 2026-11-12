@@ -1530,3 +1530,53 @@ The final exact-snapshot semantic audit is recorded in preservation report §20 
 - Stage A: **NOT STARTED / HELD**. Implementation planning: **HELD**. Runtime implementation and PR integration: **NOT AUTHORIZED**.
 
 This self-review remains Builder-authored evidence. It is not an Independent Reviewer report, Blind Fresh Tester result, gate clearance, Project Director decision or implementation authorization.
+
+
+---
+
+## 15. Builder review and correction pass — 2026-11-12
+
+### 15.1 Exact scope and revision
+
+- Repository: \`methaneex-oss/MethaneX\`.
+- PR #192 branch: \`docs/whole-brain-planning-scope-correction-20261107\`.
+- PR #192 pre-write HEAD for this self-review update: \`755855901a5d3b4d4366b62e7252c5bd7be5207b\`.
+- PR #192 remains open, non-draft and unmerged, with 38 changed paths.
+- The report update advances PR #192. The final exact HEAD and inventory manifest must be re-fetched after all intended Builder writes.
+- Related live targets at the start of this update: PR #173 \`7e9481677197cf82df31bbe08984fa5d58644d98\`; PR #174 \`8e66ad5f693dc23354a5386661eda99328313e5f\`; PR #191 \`609d38ede50bbdd98a93dfed112781eacabee9fd\`; PR #193 \`9d8aec43e749ffe1eaa5a75b53e153954ac5bd55\`; PR #195 \`1e18536a3bc769fadd4bf2b53639c5490cc0d052\`; PR #196 \`9a744927c5ebcfea2c720ded42ec7425edc499c0\`.
+
+### 15.2 Findings from the Builder's fresh review
+
+The following are actual defects found during the current pass, not hypothetical future checks:
+
+1. **PR #173 completion matrix under-classified CF-17.** It marked social/agent modelling wholly deferred even though the architecture already defined a minimum foundational agent representation and responsibility-ownership contract. Corrected the row to PARTIAL and explicitly separated foundational claim/ownership semantics from advanced social cognition.
+2. **PR #174 F-03 status summary was incomplete.** The main specification described scenarios 41–46 as the downstream integration test set, while the correction report and actual specification also contained scenarios 47–48. Corrected the summary to state that 47–48 extend the contract with material downstream state/decision-version effects and owner-specific reconsideration after invalidation.
+3. **PR #193 current gate summary contradicted the controlling index.** Its continuity handoff said DF-06 and DF-08 were both partial/not met. Corrected it to DF-06 NOT MET and DF-08 RESOLVED only against its bounded criterion, with DF-09 open, DF-11 waived and DF-12 not accepted.
+4. **PR #195 architecture-assessment workflow had weaker response safety than the documentation-reader workflow.** Corrected raw provider-error persistence, generic exception-message persistence, missing response-size limits, narrow response extraction and insufficient model/completion/content validation. Added bounded diagnostics, response-shape handling and required A–K structure checks.
+5. **PR #195 audit and PR #192 runbook contained stale workflow revision pointers.** Updated the runbook to identify the workflow-hardening commit/blob and clarified that audit-only commits may move the PR head without changing the workflow blob.
+6. **PR #192 planning index contained stale inventory section and PR-head references.** Corrected the controlling index pointers and added a current Builder review reconciliation; the exact final inventory section is to be refreshed after this review batch.
+
+### 15.3 Checks performed so far
+
+- All four PR #173 changed documents were fetched at the exact PR #173 head. Architecture/matrix/source-audit headings, closure claims, decision boundaries, CF traceability and bounded donor-source compatibility statements were inspected.
+- All five PR #174 changed documents were fetched at the exact PR #174 head. BM-02 contextual grounding, BM-12 reasoning ownership, scenarios 35–48, correction provenance and the independent re-review request were inspected.
+- Both PR #193 documents were fetched at the exact PR #193 head; the contradictory current DF status line was corrected.
+- Both PR #195 workflow files, the terminology audit and the TypeScript interface comment were fetched at the exact PR #195 head. Static source checks verified target-SHA validation, environment-variable handling, bounded provider reads, sanitized diagnostics, multiple response extraction paths, expected provider/model validation, refusal/tool-call/completion checks and assessment-section validation.
+- PR #196 governance Rules 11.9–11.16 and their amendment record were inspected. The amendment remains additive, open and unmerged.
+- Bounded Markdown scans of the inspected PR #192 documents found no missing repository-relative targets and no placeholder markers. These scans are not a complete Markdown parser and do not prove rendered GitHub anchor behavior or semantic correctness of every external destination.
+
+### 15.4 Verification not yet performed
+
+- Full content-level inspection of every PR #192 changed path and cross-document consistency reconciliation is still in progress.
+- The complete 38-path manifest must be rechecked against the exact parent tree and resulting final tree after the remaining Builder updates.
+- YAML parsing/runtime validation, workflow execution and provider response-shape tests have not been run. Static source assertions are not substitutes.
+- Rendered GitHub line/fragment-anchor verification remains unavailable through the current source/API retrieval surface.
+- No fresh-reader assessment has been run against the current final PR #192 head; the previous 31/32 result remains tied to older revision \`887b349f9826de7726707209f640ae0cafd78ace\`.
+
+### 15.5 Current Builder disposition
+
+Builder review has found and corrected real defects, but **this is not the final Builder closeout**. Continue reviewing the remaining PR #192 documents, complete the exact-revision structural tests, synchronize the inventory, and re-fetch all 38 changed paths at the resulting final HEAD before handing the package to any external role.
+
+DF-06 remains NOT MET; DF-08 remains RESOLVED only within its bounded criterion; DF-09 remains OPEN / NOT MET; DF-10 remains in Builder verification; DF-11 is WAIVED; DF-12 is NOT ACCEPTED. Stage A remains NOT STARTED / HELD. Implementation planning remains HELD. Runtime implementation and PR integration remain NOT AUTHORIZED.
+
+This is a Builder self-review. It does not constitute an independent review, Blind Fresh Tester result or Project Director acceptance.
