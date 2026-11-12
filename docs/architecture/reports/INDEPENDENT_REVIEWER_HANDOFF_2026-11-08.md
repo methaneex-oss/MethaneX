@@ -658,3 +658,15 @@ This satisfies execution of the AI assessment route, not its comprehension accep
 - Follow Grok's DF-06 recommendation by recording the exact scope of final changed-file path/fragment validation. External reachability, semantic relevance and renderer-specific behavior must remain explicitly PARTIAL unless actually tested.
 
 **Current state:** PR #192 remains open/non-draft/unmerged at `ff95f2807a88388805e8e413616fc9776f244e44`; PR #193 remains a separate open/draft lineage at `ee508c09be9d848c7baa9533bb6f88f9cc27f94a`. DF-09 remains OPEN pending repeat CLEAR assessment; DF-11 qualification/current-head review remains open; DF-12 exact-revision Project Director acceptance remains outstanding. Stage A remains HELD; implementation remains NOT AUTHORIZED. No merge, rebase, retarget, cherry-pick or runtime change is authorized.
+
+## 27. Reviewer-role correction and current assignment boundary — 2026-11-12
+
+The current project direction is role-based. Use **Independent Reviewer** as the reviewer role and **Blind Fresh Tester** as the fresh-reader/assessment role. Do not use Grok as the assigned reviewer for this cycle.
+
+- The Grok-specific assignment in `GROK_INDEPENDENT_REVIEW_REQUEST_2026-11-10.md` is now explicitly marked **SUPERSEDED / INACTIVE**. Do not execute or reactivate it.
+- The Grok review reports and their formal GitHub review events remain preserved as historical evidence. They are not the current assignment and do not replace a fresh review of the final exact PR #192 HEAD.
+- The Blind Fresh Tester role remains separate from the Independent Reviewer role. The prior Nemotron result is historical and tied to its recorded packet SHA; it is not a current-head result.
+- No new Independent Reviewer has been assigned or has reviewed the final current PR #192 revision. A future assignment must identify the actual reviewer/model, disclose prior involvement and account limitations, inspect the exact live HEAD and submit evidence tied to that SHA.
+- The Builder must finish Builder-owned review, corrections, testing and final inventory synchronization before issuing a new reviewer handoff. The user is not a message relay between roles.
+
+This section supersedes any earlier wording in this handoff or linked portal that presents Grok as the active designated reviewer. It does not waive DF-11, satisfy DF-09, clear DF-12, authorize workflow dispatch, or authorize PR integration or implementation.
