@@ -1344,3 +1344,56 @@ This section supersedes §38 for live PR metadata and current Builder status. Ea
 - Stage A: NOT STARTED / HELD. Implementation planning: HELD. Runtime implementation, source-baseline selection, PR integration, merge and deployment: NOT AUTHORIZED.
 
 This is a Builder evidence record only. It is not an Independent Reviewer verdict, Blind Fresh Tester result, Project Director acceptance or implementation authorization.
+
+
+## 40. Final Builder reconciliation and remaining authority boundaries — 2026-11-12
+
+This section supersedes §39 where the current evidence below is newer. Earlier sections remain historical records and must not be silently rewritten.
+
+### 40.1 Current exact revisions and branch relationships
+
+- PR #173 HEAD `7e9481677197cf82df31bbe08984fa5d58644d98`, architecture blob `d5a7676e81d2c95b5ba18f45a237d3e0a7635696`, completion matrix blob `47ab5b2fcd7ec5d1ca9050910b150b92a13cbf63`; open/draft/unmerged. CF-17 remains Partial. No GitHub review submission exists.
+- PR #174 HEAD `9502989ffae91c00ba0a8568ab5296925fa9f27b`, specification blob `a1798ee8a1d48284bd0dc6686ce255eacab8a2b7`, correction report blob `3f133ab32a0a5fc70c525c312ebdc8e0060d67fe`, review request blob `9473fe7d38ca2bee9e0c66901693ca0c62db0cc4`; open/draft/unmerged. No GitHub review submission exists. F-02/F-03 corrections remain proposals pending independent re-review and Director disposition.
+- PR #174 versus PR #173 is diverged from merge base `97191111bc2573c14d391c0af9628db7b11f194b`: 24 commits ahead and 12 behind. No branch-history operation was performed or authorized.
+- PR #191 HEAD `609d38ede50bbdd98a93dfed112781eacabee9fd`; open/draft/unmerged. It is one commit ahead and 23 behind PR #179 HEAD `d30237b81c3695f2a7cb980144b221bbd42ce548`; its unique commit adds the bounded human/MCU comparison. Director disposition remains pending.
+- PR #192 current HEAD before this register update: `70983459341ab34b7727fb2d07aa90e0bad6eb38`; open/non-draft/unmerged; 38 documentation-only changed paths. Its recorded base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` is one commit behind PR #179's current branch HEAD. No rebase/retarget/merge was performed.
+- PR #193 HEAD `fa2bd50d6fb0bb77dc3cbaab684f51d606e94bb5`; open/draft/unmerged. It is 48 commits ahead and 3 behind current PR #175 HEAD `c30fe20cfdf3f499416972042be06acdd70f752d`. It remains a non-operative plan; no branch-history operation was performed.
+- PR #195 HEAD `6f43b94fca4b00a0196f7775e5a41316142ea5e9`; reader workflow blob `7d202c8c3e8ea29a7b40ec70baafbc75d07a34e2`; architecture workflow blob `96dc2971503af022e4d247d4be07d257aec5d7db`. Open/draft/unmerged; static assertions and a 31-assertion synthetic logic harness are recorded, but no YAML parse, Actions execution, provider call or artifact inspection occurred.
+- PR #196 HEAD `bd778bd235062e8bfdf0ae1a05232c9489c1eda3`; governance file blob `f9979cf92a7297a5d38467223a41560188accb54`. Open/non-draft/unmerged; one governance file changed with 292 additions and no deletions. Sections 17–21 add the Director/team operating standard. No review submission exists.
+- PR #194 remains the older reader-workflow alternative and must not be integrated alongside PR #195.
+
+### 40.2 Builder verification completed for the bounded documentation package
+
+- The complete PR #192 changed-path list contains 38 documentation/inventory/report/template files. All 38 were fetched at the exact PR #192 HEAD and are present in the complete 268-entry recursive tree (`truncated=false`).
+- The established exact-snapshot Markdown/autolink scan records 316 occurrences: 116 repository-relative targets and 200 external HTTP(S) occurrences. All 116 relative targets resolve. The inventory-only PR #192 update from its §73 parent did not add, remove or alter any Markdown link destinations; the prior/current inventory blobs contain the same 20 Markdown link destinations.
+- Preservation report §20 records the bounded semantic relevance review: 89 Phase 2 source citations across 45 exact commit/path pairs; 20 Phase 1 source references; nine immutable cross-branch document pins; and enumerated GitHub Actions, PR, Project Director comment and DLT-002 artifact checks. These are Builder checks, not independent acceptance.
+- The current 38-path structural scan found no reference-style link definitions, raw HTML anchor attributes or local fragment links. The complete recursive tree contains 268 entries.
+- Both historical fresh-reader JSON evidence files parse successfully. They describe the 2026-11-10 assessment and are not a new current-head assessment.
+- PR #195's current workflow source was inspected. Its pinned PR #174 source commit `16a82663d6a421575234b5f8f4ea0c5ad4f735cf` contains the same specification blob `a1798ee8...` as current PR #174 HEAD `9502989...`; the review-request-only head advance did not change the specification content.
+- PR #174 scenarios 35–48 were re-fetched; scenarios 47–48 require a material downstream state/decision-version effect and owner-specific reconsideration after invalidation. The original full follow-on review and exact originally reviewed SHA remain unavailable; the correction record is explicitly secondary and not a verbatim reconstruction.
+- PR #173's current architecture and completion matrix were re-fetched. CF-17 remains Partial; no independent review is submitted.
+
+### 40.3 Remaining DF-06 limitation — do not overstate closure
+
+**DF-06 remains NOT MET.** Builder-side semantic relevance, enumerated external destination checks, repository-relative path integrity and recorded historical/cross-branch checks are complete for the documented scope. Two matters remain:
+
+1. GitHub-rendered line/fragment-anchor behavior cannot be verified in the available Builder environment. The GitHub connector returns normalized source content rather than the rendered file viewer; a direct rendered GitHub page request returned a disabled-fetch error. Static line-range checks are not rendered-anchor verification.
+2. The historical ChatGPT shared-conversation pointer remains ACCESS-LIMITED / NOT INDEPENDENTLY VERIFIED and is retained as non-clickable provenance text. Closing this item requires primary-source access or an explicit Project Director determination that the disclosed treatment satisfies the criterion.
+
+Do not repeat the older §39 statement that external destination verification is wholly incomplete; §20 and §40.2 record the completed bounded checks. Do not convert those checks into full DF-06 clearance.
+
+### 40.4 Final gates and role ownership
+
+- DF-06: **NOT MET** for the precise reasons in §40.3.
+- DF-08: **RESOLVED** only within its exact bounded preservation criterion.
+- DF-09: **OPEN / NOT MET**. The 31/32 PARTIALLY CLEAR result is historical and tied to an older packet revision. The corrected PR #195 workflow remains unmerged and unexecuted. The available GitHub connection does not expose a workflow-dispatch action.
+- DF-10: **Builder-owned work is complete only after the final inventory parent manifest and exact post-write 38-path verification are recorded.** This register update advances PR #192; the final inventory must be written after all other intended Builder documentation updates.
+- DF-11: **WAIVED** by explicit Project Director decision.
+- DF-12: **NOT ACCEPTED**; exact-revision Project Director disposition remains reserved.
+- Independent Reviewer: current PR #173/#174 reviews and the final PR #192 handoff review remain outstanding. Builder self-review does not substitute.
+- Blind Fresh Tester: current PR #192 assessment remains outstanding. A blocked/unavailable dispatch is not a pass.
+- Project Director: PR #191 disposition, BFA-C01–BFA-C14 decisions, DF-12 and the access-limited DF-06 pointer determination remain reserved.
+
+Stage A: **NOT STARTED / HELD**. Implementation planning: **HELD**. Runtime implementation, source-baseline selection, PR integration, merge, rebase, retarget, cherry-pick, deployment and gate waiver remain **NOT AUTHORIZED**.
+
+This is Builder evidence only. It is not an Independent Reviewer verdict, Blind Fresh Tester result, gate clearance or Project Director acceptance.
