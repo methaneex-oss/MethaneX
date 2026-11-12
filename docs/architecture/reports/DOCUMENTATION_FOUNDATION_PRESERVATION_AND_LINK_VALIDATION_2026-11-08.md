@@ -557,3 +557,43 @@ Do not convert static line-range validity into a claim of rendered-anchor succes
 This is a source-level path/structure check, not rendered GitHub navigation validation. It does not prove external URL reachability, semantic relevance of every destination, GitHub-generated heading/line-anchor behavior, or every historical/cross-branch link's current authority. DF-06 remains **NOT MET**. The historical shared-conversation pointer remains access-limited and is not represented as a verified navigation target.
 
 The report update advances PR #192 after the recorded snapshot. The final 38-path parent/blob manifest and resulting tree must be recorded after all remaining intended PR #192 writes.
+
+
+## 22. Final Builder-side link and preservation reconciliation — 2026-11-12
+
+### 22.1 Exact snapshot boundary
+
+This section supersedes §21's older PR #192 HEAD reference. PR #192's live HEAD before this report update was `cd7d3127b5b26b96ac7a3ab4c7543972d19153fd`; it remains open, non-draft and unmerged. The package has 38 changed paths and a complete 268-entry recursive tree (`truncated=false`). The current inventory-only update recorded in inventory §73 added no Markdown link destinations: the previous and current inventory blobs contain the same 20 Markdown link destinations. The index and authority-register updates in this Builder pass add no Markdown link destinations.
+
+### 22.2 Reconciled source-level link results
+
+The exact-snapshot Markdown/autolink extraction remains 316 occurrences:
+- **116 repository-relative targets:** all 116 resolve in the complete PR #192 tree.
+- **200 external HTTP(S) occurrences:** repeated references are expected and are not 200 distinct destinations.
+- **Zero local relative heading-fragment links** in the scanned 38-file package.
+- **Zero reference-style link definitions** and **zero raw HTML `href`/`id`/`name` anchor attributes** detected.
+
+The current 38-path fetch and structural checks confirm the package remains documentation/inventory/report/template-only. Both historical fresh-reader JSON files parse successfully. Their contents remain historical 2026-11-10 evidence, not a current-head assessment.
+
+### 22.3 Semantic relevance and destination verification
+
+The bounded semantic audit in §20 remains applicable because the cited Phase 1/Phase 2 source documents and link destinations were not changed by this Builder continuation:
+- 89 Phase 2 source citations map to 45 exact immutable commit/path pairs; the cited source passages were checked against their adjacent mechanism/integration claims.
+- 20 Phase 1 source references were checked against the named subsystem, build/test registration or review artifact.
+- Nine immutable cross-branch document pins were fetched and checked against their stated subject and authority/provenance qualification.
+- The enumerated GitHub destination checks cover 16 unique Actions run IDs (all completed/success), 20 unique PR metadata destinations, two Project Director provenance comments, and three DLT-002 artifacts present and unexpired.
+- The 200 external occurrences include repeated references; counts distinguish occurrences from unique destination classes.
+
+These are bounded Builder checks. They do not constitute independent review or prove that GitHub's rendered viewer resolves every fragment/line anchor.
+
+### 22.4 Rendered-anchor and historical-pointer limitations
+
+The Builder attempted to verify a representative immutable GitHub source-line link through the rendered page surface. The connected GitHub fetch exposes normalized source text, not the rendered file viewer; the rendered-page request returned a disabled-fetch error. No browser session capable of verifying GitHub's actual scroll-to-line/fragment behavior is available in this Builder environment.
+
+The historical ChatGPT shared-conversation pointer remains ACCESS-LIMITED / NOT INDEPENDENTLY VERIFIED. It is retained as literal, non-clickable provenance text rather than represented as a verified navigation destination.
+
+### 22.5 DF-06 disposition
+
+**DF-06 remains NOT MET.** The Builder-side semantic review, enumerated external destination checks, relative-path existence, structural checks and documented historical/cross-branch comparisons are complete for the declared package. The rendered GitHub line/fragment-anchor check remains technically unavailable through the present tools. The access-limited historical pointer requires primary-source access or an explicit Project Director determination that the disclosed non-clickable treatment satisfies the criterion.
+
+No full DF-06 clearance is claimed. Static line-range validity must not be represented as rendered-anchor success. This report is Builder evidence only, not an Independent Reviewer verdict or Project Director gate decision.
