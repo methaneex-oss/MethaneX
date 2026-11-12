@@ -196,3 +196,34 @@ The same pass tightened two edge cases in the metadata hardening:
 - Numeric metadata accepts only finite values within a conservative magnitude bound. Integer values are handled without converting arbitrary-size integers to floating point, avoiding overflow during sanitization.
 
 The final workflow correction is commit `0dfceaaf29c3a93cbc8f52f8ba7bce44ee44adb3`, workflow blob `f4373401f07d8550f39eb9bb8b252eac31f03783`. Static checks establish the presence of these bounds only; they do not replace YAML validation or execution tests.
+
+
+## 10. Blind architecture workflow hardening — 2026-11-12
+
+A Builder review of the second workflow in this PR found that the earlier terminology-only edit had not carried over the response-safety and evidence-validation protections added to the documentation-reader workflow. The architecture-assessment workflow still persisted raw provider HTTP error text and generic exception messages, had no response-size bound, handled only a narrow subset of response shapes, and did not reject wrong-model, refused, incomplete or structurally truncated assessments.
+
+### 10.1 Correction
+
+The architecture workflow now:
+
+- bounds successful provider response reads to 8 MiB and HTTP-error reads to 64 KiB;
+- persists only allowlisted, bounded diagnostic fields for HTTP failures and only the exception class for generic failures;
+- never persists raw provider error bodies, raw exception messages, API keys or reasoning fields;
+- extracts textual assessment output from string content, text/content blocks, message.output_text and legacy choice text;
+- bounds provider/model/request/response identifiers, finish-reason labels, content-block labels and numeric usage metadata;
+- saves any returned textual assessment and sanitized run metadata before validation, so an incomplete or misattributed response remains inspectable;
+- requires the expected provider/model, finish_reason=stop, no refusal, no tool calls, all required A–K sections and at least 2,000 characters before treating the assessment step as successful.
+
+### 10.2 Exact revision and static checks
+
+- PR #195 head before this correction: 9d0255041c1d3c41c1b6a9f9e373f2bf673184cd.
+- Architecture workflow blob before correction: eb87ba8e17a6dee6b992be50a3a95463621559fb.
+- Correction commits: d190dc8a90e9643fd7494139b699475638691ba3 and 87087800ba8a24b07066656691fdc0ef16eae6f5.
+- Final architecture workflow blob: 8f7f94c87c905c033ac4385ca1a977f30b41478c.
+- The final live PR #195 head was re-fetched as 87087800ba8a24b07066656691fdc0ef16eae6f5; the workflow was re-fetched at that exact head.
+
+Static source assertions against the exact final workflow confirmed full-SHA and label validation, environment-only target handling, response and diagnostic read bounds, all four response extraction paths, bounded metadata, expected provider/model checks, finish/refusal/tool-call validation, A–K section checks, and saving output before validation.
+
+### 10.3 Verification boundary
+
+This is static source verification only. GitHub Actions YAML parsing, workflow execution, provider response-shape tests, artifact inspection and a Blind Fresh Tester assessment have not been performed. The workflow remains unexecuted; no architecture-review verdict, gate clearance or Project Director acceptance is claimed.
