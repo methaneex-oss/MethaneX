@@ -7,7 +7,7 @@
 - **Exact target PR HEAD:** use the latest SHA recorded in the current PR #174 review-assignment comment; re-fetch PR metadata immediately before review.
 - **Specification blob to verify at that HEAD:** `fbe017d96f9d0716be6080c96eea6b67c7da62fa`
 - **Accepted historical planning baseline:** `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`
-- **Parent architecture proposal currently under separate review:** PR #173 HEAD `756724b95e093ac48fcd95c5587117c0a4d8f3c0`
+- **Parent architecture proposal currently under separate review:** PR #173 HEAD `7e9481677197cf82df31bbe08984fa5d58644d98`
 - **Review requested:** independent technical re-review of the complete current PR #174 specification, with particular attention to the recovered F-02/F-03 obligations.
 
 The reviewer must be a genuinely separate model/person from the Architecture & Engineering Builder, disclose identity and any prior involvement, inspect the exact current PR #174 HEAD recorded in the latest review-assignment comment and verify that it contains the specification blob above, and produce a report tied to the exact SHA. A Builder self-review, Project Director decision, same-model review, or report against an earlier SHA does not satisfy this request.
@@ -18,7 +18,7 @@ Inspect the following repository artifacts directly at their exact revisions:
 
 1. Current specification at the exact target HEAD above.
 2. Historical accepted specification baseline at `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, to identify what was changed and whether accepted content was improperly altered.
-3. PR #173 historical accepted planning baseline at `97191111bc2573c14d391c0af9628db7b11f194b` and current corrected architecture proposal at `756724b95e093ac48fcd95c5587117c0a4d8f3c0`, while keeping their authority scopes distinct.
+3. PR #173 historical accepted planning baseline at `97191111bc2573c14d391c0af9628db7b11f194b` and current corrected architecture proposal at `7e9481677197cf82df31bbe08984fa5d58644d98`, while keeping their authority scopes distinct.
 4. Secondary recovery record `docs/architecture/reports/PR_174_FOLLOW_ON_REVIEW_PROVENANCE_RECOVERY_2026-11-06.md` at PR #192's current branch snapshot. It contains recovered finding identities/severity/themes but is explicitly not the original report.
 
 Do **not** rely on the Builder's correction report, PR description, comments, chat history, or prior review conclusions as proof that a finding is fixed. Verify each material claim from the specification itself. The original F-02/F-03 report and exact originally reviewed SHA remain unavailable; assess whether the recovered secondary themes are sufficiently precise for a bounded technical re-review, and state what cannot be established.
