@@ -58,6 +58,8 @@ There is deliberately no requirement that the entire project be written in one l
 
 JARVIS is under active foundational development. The current work is focused on completing and integrating the cognitive substrate before higher-level device, interface and deployment layers are built on top of it.
 
+The current whole-Brain Phase 2 status and evidence map is maintained in the [Phase 2 — Whole-Brain Capability-to-Source Integration Map](docs/architecture/reports/PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md). It remains an in-progress investigation, not a completion or implementation authorization.
+
 ## Philosophy
 
 The objective is not to reproduce a fictional implementation line-for-line. The objective is to engineer the closest practical software architecture to the **behavioural idea** of JARVIS: persistent, adaptive, context-aware, capable of reasoning across domains, able to use available tools, resilient to component failure, and capable of improving through experience.
