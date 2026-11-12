@@ -400,3 +400,20 @@ The PR #173 blind architecture assessment is similarly prepared against exact ta
 - No branch merge, close, rebase, retarget, cherry-pick, replay, source-baseline selection, Stage A, implementation planning execution or runtime implementation was performed.
 
 **Builder verdict for this run:** bounded handoff correction and exact-target reconciliation completed. JARVIS-M0 remains OPEN / BLOCKED pending the independent PR #195 workflow review, workflow execution and DF-09 CLEAR result, DF-06 resolution, PR #173 blind assessment and BFA Director decisions, PR #174 independent re-review and F-02/F-03 Director disposition, DF-12, and applicable final independent review/testing-or-authorized-N/A and Director acceptance. This report is not a Reviewer verdict, Tester verdict, gate clearance or Director acceptance.
+
+
+
+## 14. Builder self-review correction — BFA workflow dispatch ref — 2026-11-12
+
+During Builder self-review of §13, I identified one incorrect workflow-ref instruction in the superseding PR #173 handoff comment #6837198028: it said to select `main`. The PR #195 candidate is the revision under independent review; selecting `main` could execute an older workflow file rather than the candidate revision. This is a Builder-authored instruction defect and is corrected explicitly.
+
+- **Corrected handoff comment:** PR #173 comment #6837226392.
+- **Correct workflow ref:** `docs/ai-role-terminology-audit-20261111` (the exact PR #195 head branch).
+- **PR #195 exact HEAD:** `26bdfc49316489675d947f5c0a60faa887309d8d`.
+- **Workflow path:** `.github/workflows/brain-foundation-blind-architecture-review.yml`.
+- **Target revision:** `7e9481677197cf82df31bbe08984fa5d58644d98`.
+- **Assessment label:** `jarvis-m0-bfa-7e948167-20261112`.
+
+The corrected branch instruction supersedes only the workflow-ref field in comment #6837198028. All other target, baseline, review and authority details remain unchanged. PR #195 still requires acceptable independent technical review before dispatch. No workflow run or assessment result is claimed.
+
+**Builder self-review outcome:** the incorrect ref was caught before dispatch and corrected in a new auditable comment. No code, workflow, source baseline or project authority changed. This correction does not clear DF-09, DF-06, DF-12 or authorize Stage A/runtime work.
