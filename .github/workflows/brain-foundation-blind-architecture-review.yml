@@ -96,7 +96,7 @@ jobs:
           test -n "${OPENROUTER_API_KEY:-}" || { echo "::error::Repository secret OPENROUTER_API_KEY is not configured."; exit 1; }
           python3 - <<'PY'
           from pathlib import Path
-          import json, os, re, urllib.request, urllib.error, datetime
+          import json, os, re, math, urllib.request, urllib.error, datetime
 
           out = Path("brain-foundation-blind-review-evidence")
           packet = (out / "blind_review_packet.md").read_text()
