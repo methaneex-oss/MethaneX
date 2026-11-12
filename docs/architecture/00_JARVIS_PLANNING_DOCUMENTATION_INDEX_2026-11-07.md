@@ -3,6 +3,22 @@
 > Controlling live-status snapshot for this Builder run. Historical snapshots below remain preserved. Builder evidence only; not independent review, testing, gate clearance or Director acceptance.
 
 - **Governance revalidation:** freshly read during run `JARVIS-M0-BLD-2026-11-12-04`; exact accepted governance blob `f5827c552f36f4647339b3f8dfb38956d146c570`. Sections 17–22 and Rules 11.9–11.16 re-examined.
+- **M0 execution record:** [Builder continuation and current-target handoff reconciliation](reports/JARVIS_M0_BUILDER_EXECUTION_AND_GATE_RECONCILIATION_2026-11-12.md), §§13–14.
+- **PR #192:** open/non-draft/unmerged. Run-start HEAD `6141de967b862a4c90384052d4c16c66eb7f8b13`; final Builder inventory commit before this correction `232cb82975a15b3ca17329cb302ebbc120cbac1c`. Re-fetch live PR metadata after this correction/inventory cycle for the final target.
+- **PR #173:** open/draft/unmerged at `7e9481677197cf82df31bbe08984fa5d58644d98`. Superseding blind-assessment handoff comment #6837198028; dispatch-ref correction comment #6837226392 instructs use PR #195 branch `docs/ai-role-terminology-audit-20261111`, not `main`.
+- **PR #174:** open/draft/unmerged at `9502989ffae91c00ba0a8568ab5296925fa9f27b`; spec blob `a1798ee8a1d48284bd0dc6686ce255eacab8a2b7`. Superseding independent-review handoff comment #6837198710.
+- **PR #195:** open/draft/unmerged at `26bdfc49316489675d947f5c0a60faa887309d8d`; corrected workflow blob `5b58d8250860f10df64947858bae7b729cb8a501`. Independent-review request comment #6836686985; no independent verdict or workflow run claimed.
+- **PR #191:** Director Option A — retain separately — remains recorded at original HEAD. No branch operation.
+- **DF-06:** NOT MET. **DF-08:** RESOLVED within exact bounded criterion. **DF-09:** OPEN / NOT MET. **DF-11:** WAIVED. **DF-12:** NOT ACCEPTED.
+- **Stage A:** NOT STARTED / HELD. Implementation planning: HELD. Runtime implementation, source-baseline selection, PR integration, merge and deployment: NOT AUTHORIZED.
+
+---
+
+# Current status refresh — 2026-11-12 (JARVIS-M0 Builder continuation 04)
+
+> Controlling live-status snapshot for this Builder run. Historical snapshots below remain preserved. Builder evidence only; not independent review, testing, gate clearance or Director acceptance.
+
+- **Governance revalidation:** freshly read during run `JARVIS-M0-BLD-2026-11-12-04`; exact accepted governance blob `f5827c552f36f4647339b3f8dfb38956d146c570`. Sections 17–22 and Rules 11.9–11.16 re-examined.
 - **M0 execution record:** [Builder continuation and current-target handoff reconciliation](reports/JARVIS_M0_BUILDER_EXECUTION_AND_GATE_RECONCILIATION_2026-11-12.md), §13.
 - **PR #192:** open/non-draft/unmerged. At start of run, exact HEAD `6141de967b862a4c90384052d4c16c66eb7f8b13`; 39 changed paths. Subsequent M0 documentation updates may advance it; always re-fetch live PR metadata before dispatch or handoff. Recorded base SHA remains `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; integration remains held.
 - **PR #173:** open/draft/unmerged at `7e9481677197cf82df31bbe08984fa5d58644d98`. Superseding blind-assessment handoff posted at comment `6837198028`; old stale-target assignment retained historically.
