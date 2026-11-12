@@ -887,3 +887,41 @@ PR #192 still reports base SHA \`61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c\`, whi
 - Stage A: NOT STARTED / HELD. Implementation planning: HELD. Runtime implementation, source-baseline selection and PR integration: NOT AUTHORIZED.
 
 This Builder entry is not an Independent Reviewer verdict, Blind Fresh Tester result, Project Director acceptance or implementation authorization.
+
+## 17. Builder review continuation — live revision reconciliation — 2026-11-12
+
+This entry supersedes the live-PR snapshot in §16 where commit identifiers or current Builder status differ. Earlier entries remain historical evidence. The exact PR #192 HEAD is intentionally not embedded here because this file update advances that branch; use the live PR page for its current HEAD.
+
+### 17.1 Live PR revisions re-fetched before this index update
+
+| PR | Exact HEAD | State | Current Builder status |
+|---|---|---|---|
+| #173 Brain Foundation Architecture | `7e9481677197cf82df31bbe08984fa5d58644d98` | Open, draft, unmerged | CF-17 is correctly classified Partial; independent blind architecture assessment and BFA-C01–BFA-C14 Project Director dispositions remain outstanding |
+| #174 Brain Mechanism Specification | `88efbc8fa5729e63d854a21c0d48eeff2fc5c6c3` | Open, draft, unmerged | F-02/F-03 responses and scenarios 35–48 are present; review request now identifies current specification blob `a1798ee8a1d48284bd0dc6686ce255eacab8a2b7`; independent re-review and Project Director disposition remain outstanding |
+| #175 Brain implementation roadmap | `c30fe20cfdf3f499416972042be06acdd70f752d` | Open, draft, unmerged | Non-operative proposal; no source baseline or implementation authorization |
+| #191 Human/MCU comparison | `609d38ede50bbdd98a93dfed112781eacabee9fd` | Open, draft, unmerged | Bounded reference artifact; Project Director disposition remains pending |
+| #192 Documentation Foundation | Live PR page is the current HEAD pointer | Open, non-draft, unmerged | Builder content review and correction closeout continue; exact inventory verification is being refreshed after corrections |
+| #193 Deferred implementation-plan hold | `948cb19c0bad39705835a8885b4f58df2f42d5a2` | Open, draft, unmerged | Stale PR #173 current-proposal references corrected in both plan and continuity handoff; no rebase/retarget or implementation authorization |
+| #194 Older reader workflow alternative | `9b457e35c601719d9b213fb843dd5876976b35b9` | Open, draft, unmerged | Superseded alternative; do not integrate alongside consolidated PR #195 workflow |
+| #195 Role terminology and workflow corrections | `2bdef58a3f13976936fe22d6dd48e99d995835da` | Open, draft, unmerged | Consolidated workflow corrections; documentation-reader blob `e6d493080d5aa93c695c33d05eab02c1ecf7b1e3`, architecture-assessment blob `8f7f94c87c905c033ac4385ca1a977f30b41478c`; static review only, no YAML parse or execution |
+| #196 Builder operating controls | `9a744927c5ebcfea2c720ded42ec7425edc499c0` | Open, non-draft, unmerged | Additive Builder Rules 11.9–11.16; not integrated into the governing branch |
+
+### 17.2 Corrections and verification performed in this Builder continuation
+
+- **PR #173:** re-fetched the exact live architecture and matrix. CF-17 remains Partial, with the minimum agent representation/ownership contract retained in the architecture and advanced social cognition deferred. No architecture acceptance is inferred.
+- **PR #174:** re-fetched the exact live specification and confirmed scenarios 35–48, including material downstream state/decision-version effects and owner-specific invalidation/reconsideration. Corrected the independent re-review request's stale specification blob and stale instruction to rely on an older assignment comment.
+- **PR #193:** replaced four stale current-proposal references to PR #173 HEAD `756724b95e093ac48fcd95c5587117c0a4d8f3c0` with live HEAD `7e9481677197cf82df31bbe08984fa5d58644d98` in the implementation-plan and continuity-handoff documents. The two resulting file blobs are `a812dcc135594a475d5f003410b01a97f619711a` and `dfa3b4df4c8973ca5af9517f939557e78c3295a0`.
+- **PR #195:** reconciled the terminology audit with the later documentation-reader workflow refresh at commit `aac0a58fad2638a71dfa8e58b02437258bae148c`; the audit update is commit `2bdef58a3f13976936fe22d6dd48e99d995835da`. The two workflow files remain unexecuted.
+- **PR #192 inventory:** the prior §71 parent manifest was independently checked against parent commit `f8184bb3cd16692b738c121118c6f12fe84a543b` and tree `fed93b4ac0916ce8c0daffbf9f5a5639e2fa3552`. All 38 manifest rows matched; all 38 changed paths existed in the parent and current trees; the current tree contained 268 entries and was not truncated. A new exact manifest is required after this index update and the remaining PR #192 corrections.
+
+### 17.3 Current gate and authority status
+
+- DF-06: **NOT MET**; rendered GitHub line/fragment-anchor behavior remains unverified.
+- DF-08: **RESOLVED** only against its exact bounded preservation criterion.
+- DF-09: **OPEN / NOT MET**; the 31/32 PARTIALLY CLEAR result is from an older documentation revision and is not a result for the current PR #192 HEAD.
+- DF-10: **Builder closeout in progress**; the current 38-path content review and final exact inventory refresh must finish before handoff.
+- DF-11: **WAIVED** by Project Director decision.
+- DF-12: **NOT ACCEPTED**; exact-revision Project Director disposition remains reserved.
+- Stage A: NOT STARTED / HELD. Implementation planning: HELD. Runtime implementation, source-baseline selection, PR integration, merge and deployment: NOT AUTHORIZED.
+
+This is a Builder status record only. It is not an Independent Reviewer verdict, Blind Fresh Tester result, Project Director acceptance or implementation authorization.
