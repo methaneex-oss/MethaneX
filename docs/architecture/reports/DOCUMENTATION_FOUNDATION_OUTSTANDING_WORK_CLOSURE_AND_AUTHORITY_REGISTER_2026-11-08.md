@@ -1419,7 +1419,7 @@ This section records the Builder's first execution pass under the Project Direct
 | #174 | `9502989ffae91c00ba0a8568ab5296925fa9f27b` | Open/draft/unmerged; spec blob `a1798ee8a1d48284bd0dc6686ce255eacab8a2b7`; no current independent review submission; F-02/F-03 disposition pending |
 | #175 | `c30fe20cfdf3f499416972042be06acdd70f752d` | Open/draft/unmerged; implementation roadmap remains non-operative |
 | #179 | `ea64607ef94f142a6142a013e119a7225bc95c1c` | Open/draft/unmerged; current Phase 2 branch head |
-| #191 | `609d38ede50bbdd98a93dfed112781eacabee9fd` | Open/draft/unmerged; bounded comparison; Director disposition pending |
+| #191 | `609d38ede50bbdd98a93dfed112781eacabee9fd` | Open/draft/unmerged; Director selected Option A — retain separately; no branch operation |
 | #192 | Live PR page is exact HEAD pointer | Open/non-draft/unmerged; 39 changed paths after M0 report/status additions |
 | #193 | `fa2bd50d6fb0bb77dc3cbaab684f51d606e94bb5` | Open/draft/unmerged; non-operative, separate lineage |
 | #195 | `6f43b94fca4b00a0196f7775e5a41316142ea5e9` | Open/draft/unmerged; workflow candidate, no YAML parse or Actions execution |
@@ -1441,7 +1441,7 @@ This section records the Builder's first execution pass under the Project Direct
 - **DF-11 — WAIVED** by explicit Director decision; no new documentation independent review is commissioned.
 - **DF-12 — NOT ACCEPTED.** Exact-revision Director acceptance remains reserved.
 
-### 41.5 PR #191 disposition options prepared
+### 41.5 PR #191 disposition options prepared — historical snapshot superseded by §42
 
 The current PR #191 content remains a useful bounded human/MCU reference, but its branch is now 1 ahead / 36 behind current PR #179. The prior 1-ahead/23-behind statement is stale.
 
@@ -1449,7 +1449,7 @@ The current PR #191 content remains a useful bounded human/MCU reference, but it
 2. **Authorize dependent replay:** separately authorize replay of the single comparison-report commit onto current PR #179, followed by source refresh, conflict inspection, Builder self-review and independent review.
 3. **Close without merging:** preserve the branch and commit as an archival artifact; only do this after explicit Director direction.
 
-No option has been executed. The Director retains the disposition.
+At the time §41 was written, no option had been selected. The Director subsequently selected Option A; see §42. No branch operation was authorized or executed.
 
 ### 41.6 PR #192 / #193 and workflow lineage
 
@@ -1465,3 +1465,46 @@ Builder re-fetched current PR metadata, exact target revisions, branch tips, anc
 This report/status update advances the PR #192 tree and reopens inventory closure. The refreshed final manifest is recorded separately after the last planned M0 Builder write. This Builder record is not independent review, a Blind Fresh Tester result, a Tester verdict, gate clearance or Director acceptance.
 
 **Current result:** JARVIS-M0 remains OPEN / BLOCKED on DF-06 evidence/authority, DF-09 current-head CLEAR assessment, PR #173 blind assessment and BFA decisions, PR #174 independent re-review and Director disposition, PR #191 Director disposition, and DF-12. Stage A remains HELD; runtime implementation remains NOT AUTHORIZED.
+
+
+## 42. PR #191 Director disposition — Option A recorded — 2026-11-12
+
+### 42.1 Governance revalidation record
+
+- **Project/work item/run:** MethaneX / JARVIS-M0 / Builder continuation after Director decision; run `JARVIS-M0-BLD-2026-11-12-02`.
+- **Governing source:** `docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md`, freshly fetched and read at blob `f5827c552f36f4647339b3f8dfb38956d146c570` from the current governing documentation branch.
+- **Fresh-read confirmation:** Yes, during this run; Rules 1–16 and Sections 17–22 were revisited.
+- **Role / applicable controls:** Builder; Rules 11.9–11.16 and Sections 17–22, particularly scope control, run-specific revalidation, evidence-backed status, and independent role separation.
+- **Authorized scope:** Continue only the Director-approved JARVIS-M0 gate-closure milestone; record the explicit PR #191 disposition and reconcile its current status in M0 documentation.
+- **Exclusions:** No Stage A, runtime implementation, implementation-planning execution, source-baseline selection, architecture/algorithm selection, PR integration, merge, close, rebase, retarget, cherry-pick, replay, deployment or gate waiver.
+- **Architecture/gates checked:** Current M0 report and index, PR #173/#174/#179/#191/#192/#193/#195 states, DF-06/08/09/10/11/12, and existing PR #192/#193 integration hold.
+- **Conflict found and disposition:** The previous §41 and M0 index/report described PR #191's Director disposition as pending. This became stale after the Director selected Option A. The new §42 is controlling; §41 is retained as a dated historical snapshot and explicitly superseded where it conflicts.
+- **Participant / artifact revision:** Builder #2; this record applies to the PR #192 documentation updates initiated from parent HEAD `45291514b34e98eb5c8b53b6e0464de704da06ce`; final exact revision is recorded after inventory closure.
+
+### 42.2 Director decision and verification
+
+- **Decision:** Option A — retain PR #191 as a separate historical/bounded human-cognition / MCU J.A.R.V.I.S. reference.
+- **Director comment:** PR #191 comment `6836333027`.
+- **Cross-reference:** PR #192 comment `6836335152`.
+- **PR #191 exact HEAD:** `609d38ede50bbdd98a93dfed112781eacabee9fd`.
+- **Verified state:** open, draft, unmerged; exact HEAD unchanged after decision recording.
+- **Forbidden operations not performed:** replay, cherry-pick, rebase, retarget, merge, close or branch deletion.
+- **Effect:** resolves only the Director's choice among the three PR #191 disposition options. It does not independently review or accept the report, clear a gate, alter PR #192/#193 hold, or authorize any implementation stage.
+
+### 42.3 Remaining gate and authority state
+
+- DF-06: **NOT MET** — rendered GitHub anchor behavior and the access-limited historical primary-source pointer remain unresolved.
+- DF-08: **RESOLVED** only within the exact bounded preservation criterion.
+- DF-09: **OPEN / NOT MET** — no exact-current-head CLEAR Blind Fresh Tester result; workflow integration and authorized dispatch route remain unavailable.
+- DF-10: **REOPENED** by the current decision/status documentation writes; close only after the refreshed exact changed-path manifest and post-write verification.
+- DF-11: **WAIVED** by explicit Project Director decision.
+- DF-12: **NOT ACCEPTED**.
+- PR #173: blind architecture assessment and BFA-C01–BFA-C14 Director decisions remain outstanding.
+- PR #174: independent re-review and Director disposition of F-02/F-03 remain outstanding.
+- PR #191: disposition choice resolved as Option A; independent review/acceptance remains a separate status and is not inferred.
+- PR #192/#193: remain open and unmerged under the existing integration hold.
+- PR #195: workflow candidate only; no YAML parse, Actions execution, provider invocation or assessment result is claimed.
+- Stage A: **NOT STARTED / HELD**. Runtime implementation: **NOT AUTHORIZED**.
+
+This is Builder documentation and repository-state evidence only. It is not an Independent Reviewer verdict, Tester result, gate clearance or Project Director acceptance of JARVIS-M0.
+
