@@ -298,3 +298,14 @@ GitHub's manual-dispatch constraint also means the workflow file must exist on t
 **Current verification status:** static source inspection and the previously recorded synthetic logic harness remain the available evidence. YAML parsing, execution of the embedded workflow scripts inside GitHub Actions, provider invocation, artifact inspection and a Blind Fresh Tester assessment remain unverified. No runtime pass, reviewer verdict beyond the separately recorded PR #195 review, gate clearance or Director acceptance is claimed.
 
 **Next safe execution route:** obtain an authorized execution environment that can run the exact PR #195 workflow revision without integrating it into the default branch, or obtain a separate explicit Director decision authorizing a narrowly scoped, reversible default-branch test arrangement. Until then, report runtime verification as BLOCKED; do not convert synthetic tests or static inspection into an Actions runtime pass.
+
+## 14. Governance revalidation record — this Builder run
+
+- **Project/work item:** MethaneX / PR #195 bounded assessment-workflow metadata reconciliation and execution-feasibility check.
+- **Role:** Builder.
+- **Governing source freshly read:** `docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md`, blob `9c17d2870047cc1d58afea745cd7160d15e216c3`.
+- **Applicable requirements:** Rules 2.1–2.7 (continuity and evidence), 4.1–4.3 (authority), 8 (implementation controls), 17–22 (role accountability, handoff, scope, evidence and run-specific revalidation).
+- **Authorized scope:** keep PR #195 open/draft/base `main`; reconcile assessment packet revision metadata; attempt bounded workflow verification without merge, deployment, architecture change, gate clearance or runtime implementation.
+- **Scope exclusions preserved:** no merge, no base/status change, no workflow trigger expansion, no default-branch integration, no credential/secret changes, no PR #173/#174 source changes, no gate disposition and no Director acceptance claim.
+- **Current authoritative inputs checked:** PR #195, PR #173 and PR #174 live metadata; exact reader workflow blob; exact PR #174 specification contents at both historical and live pin commits.
+- **Unresolved obligation:** actual GitHub Actions dispatch/runtime verification remains blocked by the absence of a dispatch action in the connected GitHub tools and the default-branch availability constraint for `workflow_dispatch`. Escalate rather than bypassing the boundary.
