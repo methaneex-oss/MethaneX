@@ -276,3 +276,25 @@ The documentation-reader workflow additionally changed its A–H completeness ch
 ### 12.4 Verification boundary
 
 The synthetic harness exercises copied response-extraction and validation logic; it is not execution of the workflow's embedded Python script. Exact-source static assertions are not a YAML parser, GitHub Actions execution, provider invocation, artifact inspection or Blind Fresh Tester result. No workflow was dispatched. Both workflows remain open-PR proposals, and no workflow run is authorized by this audit.
+
+## 13. Live PR #174 pin reconciliation and execution boundary — 2026-11-12
+
+A follow-up check compared the PR #174 source commit recorded in Section 11 with the source commit currently pinned by the documentation-reader workflow and the live PR #174 head.
+
+- Section 11's historical source commit: `16a82663d6a421575234b5f8f4ea0c5ad4f735cf`.
+- Current documentation-reader workflow pin: `9502989ffae91c00ba0a8568ab5296925fa9f27b`.
+- Live PR #174 head at this reconciliation: `9502989ffae91c00ba0a8568ab5296925fa9f27b`.
+- Fetched specification blob at both commits: `a1798ee8a1d48284bd0dc6686ce255eacab8a2b7`.
+- Both fetched file contents are byte-for-byte identical (71,091 characters).
+
+**Disposition:** this is a commit-identity/history discrepancy, not a specification-content discrepancy. The current workflow pin is correct for the authorized live-head assessment input. Section 11 is retained as a historical snapshot; this addendum supplies the later reconciliation without rewriting history. PR #173's current workflow pin `7e9481677197cf82df31bbe08984fa5d58644d98` also matches its live PR head at this check.
+
+### Controlled execution feasibility
+
+The live documentation-reader workflow at blob `5b58d8250860f10df64947858bae7b729cb8a501` declares only `workflow_dispatch`. The available GitHub connection exposes repository/workflow reads and workflow-run inspection, but no workflow-dispatch action. The attempted read-only run-history check did not find either assessment workflow in the latest 100 repository runs; this is not evidence of execution or success.
+
+GitHub's manual-dispatch constraint also means the workflow file must exist on the repository's default branch before a `workflow_dispatch` event can be run. PR #195 remains unmerged, and the authorization expressly preserves it as a draft. No merge, temporary default-branch integration, trigger expansion, or other repository-state workaround is authorized by this bounded task.
+
+**Current verification status:** static source inspection and the previously recorded synthetic logic harness remain the available evidence. YAML parsing, execution of the embedded workflow scripts inside GitHub Actions, provider invocation, artifact inspection and a Blind Fresh Tester assessment remain unverified. No runtime pass, reviewer verdict beyond the separately recorded PR #195 review, gate clearance or Director acceptance is claimed.
+
+**Next safe execution route:** obtain an authorized execution environment that can run the exact PR #195 workflow revision without integrating it into the default branch, or obtain a separate explicit Director decision authorizing a narrowly scoped, reversible default-branch test arrangement. Until then, report runtime verification as BLOCKED; do not convert synthetic tests or static inspection into an Actions runtime pass.
