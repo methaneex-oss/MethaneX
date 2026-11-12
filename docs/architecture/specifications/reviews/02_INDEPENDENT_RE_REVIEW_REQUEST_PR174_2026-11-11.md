@@ -4,13 +4,13 @@
 
 - **Repository:** `methaneex-oss/MethaneX`
 - **Pull request:** [#174](https://github.com/methaneex-oss/MethaneX/pull/174)
-- **Exact target PR HEAD:** use the latest SHA recorded in the current PR #174 review-assignment comment; re-fetch PR metadata immediately before review.
-- **Specification blob to verify at that HEAD:** `fbe017d96f9d0716be6080c96eea6b67c7da62fa`
+- **Exact target PR HEAD:** re-fetch live PR #174 metadata immediately before review and record the exact 40-character HEAD in the review report; do not rely on an older assignment comment.
+- **Current specification blob:** `a1798ee8a1d48284bd0dc6686ce255eacab8a2b7` (verify this blob is present at the live target HEAD before review).
 - **Accepted historical planning baseline:** `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`
 - **Parent architecture proposal currently under separate review:** PR #173 HEAD `7e9481677197cf82df31bbe08984fa5d58644d98`
 - **Review requested:** independent technical re-review of the complete current PR #174 specification, with particular attention to the recovered F-02/F-03 obligations.
 
-The reviewer must be a genuinely separate model/person from the Architecture & Engineering Builder, disclose identity and any prior involvement, inspect the exact current PR #174 HEAD recorded in the latest review-assignment comment and verify that it contains the specification blob above, and produce a report tied to the exact SHA. A Builder self-review, Project Director decision, same-model review, or report against an earlier SHA does not satisfy this request.
+The reviewer must be a genuinely separate model/person from the Architecture & Engineering Builder, disclose identity and any prior involvement, inspect the exact current PR #174 HEAD recorded in the latest review-assignment comment and verify that it contains the current specification blob above, and produce a report tied to the exact SHA. A Builder self-review, Project Director decision, same-model review, or report against an earlier SHA does not satisfy this request.
 
 ## 2. Review packet and anti-coaching boundary
 
