@@ -1,6 +1,6 @@
 # JARVIS Project Governance and Builder Rules
 
-**Status:** Proposed project-wide governance baseline, published for explicit owner review  
+**Status:** Accepted project-wide governance standard by Project Director; repository merge pending  
 **Created:** 2026-11-05  
 **Repository:** `methaneex-oss/MethaneX`  
 **Companion baseline:** [Phase 1 — Whole-Repository Investigation, Reuse and Conflict Audit](../architecture/reports/PHASE_1_WHOLE_REPOSITORY_INVESTIGATION_AND_REUSE_AUDIT_2026-11-04.md)  
@@ -668,7 +668,7 @@ If a rule is obsolete, mark it superseded and explain why. Preserve the prior ve
 
 **Historical snapshot notice:** This section records the status at the document's creation. Current operating requirements are defined in Sections 17–22 and the dated amendment records; do not treat this creation-time snapshot as a replacement for those current requirements.
 
-This document is a proposed governance baseline for project-owner review. It does not retroactively certify that all earlier work complied with these rules.
+At the time of this section's creation, this document was a proposed governance baseline awaiting project-owner review. That historical status was superseded by the Project Director acceptance recorded in the dated acceptance record below. It does not retroactively certify that all earlier work complied with these rules.
 
 At creation:
 - Phase 1 technical inventory/reuse/conflict investigation: complete within the declared static scope; historical branch/document preservation follow-up remains open.
@@ -967,7 +967,7 @@ The run-by-run revalidation and role-accountability requirements are a cross-pro
 - **Cross-project application:** The run-by-run operating requirement applies across projects undertaken by this team, subject to each project's own stricter governance and authority hierarchy. This JARVIS repository amendment does not itself modify other project repositories.
 - **Compatibility and authority:** Additive to existing Rules 1–21. It does not clear gates, authorize runtime implementation, approve a merge, or alter accepted architecture.
 - **Approval authority:** Project Director instruction dated 2026-11-12.
-- **Effective operating instruction:** Apply immediately in this collaboration. Repository governance remains proposed until the normal review and acceptance process is completed.
+- **Effective operating instruction at amendment time:** Apply immediately in this collaboration. At that time, repository governance remained proposed pending the normal review and acceptance process; the later Project Director acceptance is recorded separately below.
 - **Version:** Governance amendment 2026-11-12 / Run-by-Run Governance Revalidation v1.
 
 
@@ -978,3 +978,29 @@ The run-by-run revalidation and role-accountability requirements are a cross-pro
 - **F-196-02 correction:** Added a controlled NOT APPLICABLE (N/A) path for Independent Testing on Director-authorized documentation/governance-only milestones with no executable behaviour in scope. The rationale must be in the acceptance criteria, test plan and lifecycle record; the Builder cannot waive the stage unilaterally. Where a Tester verdict or executable evidence remains required, the Tester records BLOCKED with reason. Independent Review, applicable document validation and Director acceptance remain mandatory.
 - **Scope and compatibility:** Additive clarification only. No runtime, architecture, phase-gate, branch-target or merge authorization changes. Independent Review and Director acceptance remain separate mandatory gates.
 - **Verification status:** Builder correction and exact-revision checks are to be recorded in the PR handoff after the resulting commit is verified. The Independent Reviewer must independently confirm both corrections against the new exact revision.
+
+
+---
+
+### Project Director acceptance record — 2026-11-12
+
+- **Decision authority:** Project Director.
+- **Decision:** ACCEPTED — the Project Director has reviewed and accepted this governance standard, including Rules 11.1–11.16 and Sections 17–22, as the operating standard for the governed project work.
+- **Accepted governance content:** The governance document at blob `bb8a20d560f753d27da32259a72112bc18a5be3b`, present at PR #196 HEAD `46b220c7d7b066fc98d48eaa5680d9e021a3d899` immediately before this acceptance-record-only update.
+- **Scope of this record:** Records Director acceptance and authorizes this acceptance-status clarification, independent verification of the resulting exact revision, and—only after acceptable independent verification—merging PR #196 into its existing base branch `docs/jarvis-phase-2-whole-brain-integration-map-20261105`.
+- **No expanded authority:** This acceptance does not clear Gate A or any other phase gate; authorize runtime implementation, training runs, architecture changes, deployment, or changes to accepted technical decisions; retarget the PR; or authorize merging into `main`.
+- **Historical status reconciliation:** Earlier statements that this document was Proposed accurately describe its status before this Director decision. They are retained as historical records and do not override this acceptance record.
+- **Repository state:** Acceptance is recorded here; PR integration remains pending until independent verification of this exact acceptance-record revision and the authorized merge into the existing base branch.
+
+---
+
+### Builder Governance Revalidation Record — Director acceptance-status update
+
+1. **Project / work item:** MethaneX PR #196 — record Project Director acceptance and reconcile current document status.
+2. **Governing source:** `docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md`, freshly retrieved and read at pre-change HEAD `46b220c7d7b066fc98d48eaa5680d9e021a3d899`, blob `bb8a20d560f753d27da32259a72112bc18a5be3b`.
+3. **Fresh-read confirmation:** Yes, during this work run.
+4. **Role / applicable rules:** Builder executing Director-authorized documentation update; Rules 11.9–11.16, 17.1–17.5, 18, 19, 20, 22.1–22.5.
+5. **Authorized scope:** Change current status wording, reconcile creation-time Proposed language as historical, add the Director acceptance record, and prepare the exact revision for independent verification. No other governance substance or project scope changes.
+6. **Constraints checked:** PR #196 current target branch, current governance content, review findings and correction verification, and existing JARVIS phase/gate boundaries. No gate clearance or runtime authorization.
+7. **Conflicts / disposition:** The header and an unqualified sentence in §16 still stated Proposed despite Director acceptance; resolved by updating current status and explicitly marking §16 wording historical. The earlier Section 22 amendment-time status is clarified as historical. No conflict with the approved governance substance identified.
+8. **Participant / revision:** Builder; this record applies to the acceptance-status update commit to be produced from pre-change HEAD `46b220c7d7b066fc98d48eaa5680d9e021a3d899`.
