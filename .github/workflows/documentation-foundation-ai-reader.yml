@@ -57,7 +57,7 @@ jobs:
           git fetch --no-tags --depth=1 origin d7d676b79dbf3269f7fd3ebdb4363a6df19f255d
           git fetch --no-tags --depth=1 origin 7e9481677197cf82df31bbe08984fa5d58644d98
           git fetch --no-tags --depth=1 origin 0811a59e46bf934e32e794f90e4e7d18d4e2bd97
-          git fetch --no-tags --depth=1 origin 16a82663d6a421575234b5f8f4ea0c5ad4f735cf
+          git fetch --no-tags --depth=1 origin 9502989ffae91c00ba0a8568ab5296925fa9f27b
           python3 - <<'PY'
           from pathlib import Path
           import hashlib, json, os, subprocess
@@ -74,7 +74,7 @@ jobs:
               ("docs/architecture/research/02_BRAIN_FOUNDATIONAL_CAPABILITY_INVESTIGATION_2026-11-03.md", "d7d676b79dbf3269f7fd3ebdb4363a6df19f255d", "docs/architecture/research/02_BRAIN_FOUNDATIONAL_CAPABILITY_INVESTIGATION_2026-11-03.md"),
               ("docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md [current proposed architecture; not accepted]", "7e9481677197cf82df31bbe08984fa5d58644d98", "docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md"),
               ("docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md [accepted baseline]", "0811a59e46bf934e32e794f90e4e7d18d4e2bd97", "docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md"),
-              ("docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md [current corrected proposal]", "16a82663d6a421575234b5f8f4ea0c5ad4f735cf", "docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md"),
+              ("docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md [current corrected proposal]", "9502989ffae91c00ba0a8568ab5296925fa9f27b", "docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md"),
           ]
           chunks, manifest = [], []
           for label, commit, path in docs:
