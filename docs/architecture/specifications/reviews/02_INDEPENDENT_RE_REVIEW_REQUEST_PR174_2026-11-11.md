@@ -10,7 +10,7 @@
 - **Parent architecture proposal currently under separate review:** PR #173 HEAD `7e9481677197cf82df31bbe08984fa5d58644d98`
 - **Review requested:** independent technical re-review of the complete current PR #174 specification, with particular attention to the recovered F-02/F-03 obligations.
 
-The reviewer must be a genuinely separate model/person from the Architecture & Engineering Builder, disclose identity and any prior involvement, inspect the exact current PR #174 HEAD recorded in the latest review-assignment comment and verify that it contains the current specification blob above, and produce a report tied to the exact SHA. A Builder self-review, Project Director decision, same-model review, or report against an earlier SHA does not satisfy this request.
+The reviewer must be a genuinely separate model/person from the Architecture & Engineering Builder, disclose identity and any prior involvement, inspect the live current PR #174 HEAD obtained from PR metadata immediately before review and verify that it contains the current specification blob above, and produce a report tied to the exact SHA. A Builder self-review, Project Director decision, same-model review, or report against an earlier SHA does not satisfy this request.
 
 ## 2. Review packet and anti-coaching boundary
 
