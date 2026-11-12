@@ -320,7 +320,7 @@ jobs:
           required_sections = list("ABCDEFGH")
           missing_sections = [
               section for section in required_sections
-              if not re.search(r"(?m)^\\s*(?:#{1,6}\\s*)?(?:\\*\\*)?" + re.escape(section) + r"\\.\\s+", content)
+              if not re.search(r"(?m)^\s*(?:#{1,6}\s*)?(?:\*\*)?" + re.escape(section) + r"\.\s+", content)
           ]
           if metadata["provider"] != "Nvidia" or metadata["model"] != "nvidia/nemotron-3.5-super-vl:free":
               raise SystemExit("Unexpected model identity; assessment and sanitized metadata were preserved.")
