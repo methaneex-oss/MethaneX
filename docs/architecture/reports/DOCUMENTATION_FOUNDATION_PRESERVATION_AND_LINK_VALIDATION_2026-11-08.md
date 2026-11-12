@@ -534,3 +534,26 @@ The historical ChatGPT shared-conversation pointer in the PR #174 provenance rec
 **DF-06 remains NOT MET.** Builder-side semantic relevance, repository-relative path integrity, GitHub destination revalidation and the enumerated historical/cross-branch comparisons are complete for the exact scope above. The remaining technical blocker is rendered GitHub line/fragment-anchor behavior, which cannot be verified through the available source/API retrieval surface. The historical ChatGPT pointer remains separately and explicitly classified as access-limited.
 
 Do not convert static line-range validity into a claim of rendered-anchor success. If the independent reviewer has a rendered GitHub browser surface, include this exact check in the single review pass. No further Builder claim of DF-06 clearance is made.
+
+## 21. Exact current PR #192 relative-link and structure recheck — 2026-11-12
+
+### 21.1 Snapshot and method
+
+- PR #192 HEAD before this report update: `da31a4d8429e6a3da513b9c9649dc237ac8c5a12` (open, non-draft, unmerged).
+- Exact recursive tree: `cf324a14d378e86b194e96debbfda9550deedfc9`, 268 entries, `truncated=false`.
+- All 38 PR #192 changed paths were fetched at that exact HEAD.
+- The scan checked inline Markdown link targets against the exact recursive tree, reference-style link definitions, raw HTML anchor attributes and local fragment links.
+
+### 21.2 Results
+
+- **116 repository-relative Markdown targets:** zero missing.
+- **Reference-style link definitions:** none detected in the 38 changed Markdown files.
+- **Raw HTML `href`/`id`/`name` anchors:** none detected.
+- **Local fragment links:** none detected in the scanned Markdown.
+- The planning index contained two repeated generic headings from prior dated snapshots; those two headings were disambiguated in the subsequent index update. Other repeated headings are repeated structural labels inside historical multi-finding reports; no local fragment links depend on them.
+
+### 21.3 Limits
+
+This is a source-level path/structure check, not rendered GitHub navigation validation. It does not prove external URL reachability, semantic relevance of every destination, GitHub-generated heading/line-anchor behavior, or every historical/cross-branch link's current authority. DF-06 remains **NOT MET**. The historical shared-conversation pointer remains access-limited and is not represented as a verified navigation target.
+
+The report update advances PR #192 after the recorded snapshot. The final 38-path parent/blob manifest and resulting tree must be recorded after all remaining intended PR #192 writes.
