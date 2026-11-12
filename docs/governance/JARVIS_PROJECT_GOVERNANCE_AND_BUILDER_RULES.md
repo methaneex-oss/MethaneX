@@ -716,7 +716,7 @@ The Builder must not transfer unfinished self-review or obvious defects to the I
 
 ### Rule 17.3 — Independent Reviewer owns independent technical scrutiny
 
-The Independent Reviewer must be separate from the Builder's implementation and must evaluate the complete, stable handoff independently. The Builder's self-review is not an independent review.
+The Independent Reviewer must be a genuinely separate person or independently operated agent who did not author or implement the submitted work and did not perform the Builder's self-review. The Reviewer must receive the exact stable handoff and governing materials and conduct a fresh assessment. The Builder must not act as, simulate, or submit a purported Independent Reviewer verdict for its own work. If no genuinely separate Reviewer is available, the review status is PENDING or BLOCKED; Builder self-review cannot be relabelled as independent review.
 
 The review must examine, as applicable:
 1. Requirement completeness.
@@ -740,7 +740,7 @@ The reviewer must not approve work merely because the Builder claims completion.
 
 ### Rule 17.4 — Independent Tester owns behavioural verification
 
-The Independent Tester verifies actual behaviour independently against the authorized requirements and test plan. Testing must target a stable implementation revision that has completed Builder self-verification and the required review/correction cycle.
+The Independent Tester must be a genuinely separate person or independently operated agent who did not author or implement the submitted work and did not act as its Independent Reviewer. The Tester must verify actual behaviour independently against the authorized requirements and test plan, using a fresh test assessment. The Builder must not act as, simulate, or submit a purported Independent Tester verdict for its own work. If no genuinely separate Tester is available, testing is PENDING or BLOCKED; Builder tests cannot be relabelled as independent testing. Testing must target a stable implementation revision that has completed Builder self-verification and the required review/correction cycle.
 
 Applicable coverage includes:
 - unit tests;
@@ -889,3 +889,79 @@ The objective is not merely to build more. It is to build the right things, fini
 - **Approval authority:** Project Director instruction dated 2026-11-12 authorizes this additive repository amendment. This records authorization to prepare the amendment; it does not claim final acceptance or merge approval for PR #196.
 - **Effective date:** 2026-11-12 for work governed by this amendment, subject to repository commit and the project's normal governance/acceptance process.
 - **Version:** Governance amendment 2026-11-12 / Directorship and Team Operating Standard v1.
+
+---
+
+## 22. Mandatory governance revalidation on every work run
+
+### Rule 22.1 — Revisit the governing standard at the start of every run
+
+Every project participant must freshly revisit the applicable governance standard at the beginning of **every work run**, without exception for task size, duration, perceived simplicity or risk. A work run includes a new task execution, a resumed or continued task after an interruption, a new Builder implementation/revision run, an Independent Review run, an Independent Testing run, and a supporting-agent run.
+
+This is a required operating step, not optional background reading and not a documentation-only requirement. Participants must read the current authoritative source itself; relying only on memory, a previous summary, a prior chat, a copied checklist or another participant's assurance does not satisfy this rule.
+
+At minimum, the participant must freshly revisit:
+- the Project Governance and Builder Rules document, including the permanent project principles and the applicable role/workflow rules;
+- the current Director-authorized milestone scope and acceptance criteria;
+- the authoritative architecture, decisions, constraints and gate status relevant to the work;
+- any newer governance amendment or explicit Project Director instruction that applies.
+
+The revalidation must be proportionate in recording detail, but never omitted. A small task may use a concise record; it does not receive an exemption.
+
+### Rule 22.2 — Each role performs its own revalidation
+
+The requirement applies independently to the Project Director, Builder, Independent Reviewer, Independent Tester and every supporting agent.
+
+- **Builder:** reread before investigation or modification, then apply the rules throughout implementation, self-review, self-testing and handoff.
+- **Independent Reviewer:** reread independently before review; verify the current scope, authority, role-separation requirements and review criteria without relying on the Builder's attestation or conclusions.
+- **Independent Tester:** reread independently before test planning or execution; verify the current scope, test criteria, review/correction status and exact target revision without relying on the Builder's or Reviewer's assurance in place of evidence.
+- **Project Director and supporting agents:** reread the applicable standard before directing, authorizing or performing their part of the work.
+
+A prior participant's completed revalidation does not satisfy another participant's obligation.
+
+### Rule 22.3 — Record a run-specific revalidation
+
+Every run must create or update a concise **Governance Revalidation Record** in its work log, task record or handoff, containing:
+1. Project and work item/run identifier.
+2. Exact governing document path/title and revision identifier (commit, version or date).
+3. Confirmation that the source was freshly read during this run.
+4. Applicable role and the rules that materially govern the work.
+5. Current authorized scope, exclusions and acceptance criteria.
+6. Relevant architecture, gate constraints and unresolved obligations checked.
+7. Conflicts, ambiguities or changes found, with their disposition or escalation.
+8. Participant identity/role and the exact artifact revision to which the record applies.
+
+For very small tasks, fields may be compressed into a short entry, but source revision, fresh-read confirmation, role, scope and any conflict must remain identifiable. Never fabricate a revision, reading event or attestation.
+
+### Rule 22.4 — Stop when the governing source cannot be verified
+
+If the current governing source, applicable scope, authority or material gate status cannot be located or verified, the participant must not proceed with affected substantive or state-changing work on remembered assumptions. Record the limitation and mark the work BLOCKED or request the missing authority/source. Safe, non-mutating discovery to locate the authoritative material may continue.
+
+If a new governance instruction or amendment appears during a run, pause affected work, reread it, assess its impact on current work and evidence, and record the result before proceeding.
+
+### Rule 22.5 — Governance compliance is an acceptance and review criterion
+
+Builder handoffs must include the Builder's run-specific Governance Revalidation Record. Independent Review must check that record and independently perform its own fresh revalidation. Independent Testing must do the same before testing. Missing, stale, copied without rereading, unverifiable or role-inappropriate records are findings; where they prevent confidence in authority or acceptance, the verdict must be REJECTED or BLOCKED as appropriate.
+
+The Reviewer and Tester must explicitly assess whether the work complied with the governance principles throughout the run, not merely whether a checklist was filled in. A ceremonial attestation does not prove compliance. Evidence must show how scope, role boundaries, change control, root-cause correction, review/test separation and completion criteria were applied where relevant.
+
+### Rule 22.6 — Preserve role independence while enforcing revalidation
+
+Governance revalidation does not collapse the roles. The Builder cannot satisfy the Reviewer's or Tester's fresh-read obligation for them, and cannot create their verdicts. Reviewer and Tester must independently inspect the exact submitted revision and relevant evidence. If distinct qualified actors are unavailable, the independent stage remains PENDING or BLOCKED and the milestone cannot be represented as fully reviewed, tested or complete.
+
+### Rule 22.7 — Apply the operating standard across projects
+
+The run-by-run revalidation and role-accountability requirements are a cross-project operating standard for projects undertaken by this team, not merely a JARVIS documentation convention. For another project, participants must freshly read that project's current authoritative governance and architecture documents as well as apply this operating standard. Project-specific stricter rules and authority hierarchies remain in force; this standard does not silently override them or authorize changes to another project's repository. Where no project-specific governance exists, the Project Director must establish the applicable scope and authority before substantive implementation.
+
+---
+
+### Amendment 2026-11-12 — Run-by-run governance enforcement
+
+- **Sections added:** Section 22 establishes mandatory fresh governance revalidation at the start of every work run for every role, including Builder, Independent Reviewer, Independent Tester, Project Director and supporting agents.
+- **Corrections to prior amendment:** Sections 17.3 and 17.4 now explicitly require genuinely separate Reviewer and Tester actors. The Builder may not simulate or relabel its own work as independent review or testing; unavailable independent roles remain PENDING/BLOCKED.
+- **Enforcement:** Every run must carry a revision-specific Governance Revalidation Record. Reviewer and Tester must independently reread the governing source and independently verify compliance. Missing or unverifiable revalidation is a review/testing finding and may block the stage.
+- **Cross-project application:** The run-by-run operating requirement applies across projects undertaken by this team, subject to each project's own stricter governance and authority hierarchy. This JARVIS repository amendment does not itself modify other project repositories.
+- **Compatibility and authority:** Additive to existing Rules 1–21. It does not clear gates, authorize runtime implementation, approve a merge, or alter accepted architecture.
+- **Approval authority:** Project Director instruction dated 2026-11-12.
+- **Effective operating instruction:** Apply immediately in this collaboration. Repository governance remains proposed until the normal review and acceptance process is completed.
+- **Version:** Governance amendment 2026-11-12 / Run-by-Run Governance Revalidation v1.
