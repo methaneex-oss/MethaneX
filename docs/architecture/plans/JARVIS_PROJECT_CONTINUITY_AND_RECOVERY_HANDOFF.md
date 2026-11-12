@@ -4,7 +4,7 @@
 >
 > **Current phase: Initial Planning Gate Closure — NOT COMPLETE.** Implementation planning is held; runtime implementation is not authorized.
 >
-> - PR #173: corrected architecture proposal HEAD `756724b95e093ac48fcd95c5587117c0a4d8f3c0`; independent blind re-review and Project Director disposition of BFA-C01–BFA-C14 remain outstanding. Historical acceptance at `97191111bc2573c14d391c0af9628db7b11f194b` was superseded as sufficient/final architecture.
+> - PR #173: corrected architecture proposal HEAD `7e9481677197cf82df31bbe08984fa5d58644d98`; independent blind re-review and Project Director disposition of BFA-C01–BFA-C14 remain outstanding. Historical acceptance at `97191111bc2573c14d391c0af9628db7b11f194b` was superseded as sufficient/final architecture.
 > - PR #174: current corrected specification proposal HEAD `16a82663d6a421575234b5f8f4ea0c5ad4f735cf`; F-02/F-03 Builder corrections submitted; original report and exact criteria remain unavailable; independent re-review and Project Director disposition remain outstanding. Historical accepted baseline `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` is limited to that exact planning-baseline scope. Prior corrected snapshot `4b134048680fb5902f8c2a5a067b0c369169dbfe` is superseded.
 > - PR #191: bounded human/MCU reference report; content/dependency review complete; Project Director disposition pending.
 > - PR #192: documentation foundation proposal; DF-06 NOT MET, DF-08 RESOLVED within exact criterion, DF-09 OPEN / NOT MET (latest result 31/32 PARTIALLY CLEAR on an older revision), DF-11 WAIVED, DF-12 NOT ACCEPTED.
