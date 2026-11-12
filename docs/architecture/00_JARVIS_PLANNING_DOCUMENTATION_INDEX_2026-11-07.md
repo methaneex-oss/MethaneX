@@ -13,11 +13,11 @@
 - **PR #196:** closed/merged into its existing documentation base branch at `c151e52781e56e6481424f774c19ea30128debb0`; not merged into `main`.
 - **DF-06:** **NOT MET** — rendered GitHub anchor behavior and the access-limited historical 2026-11-03 primary-source pointer remain unresolved.
 - **DF-08:** **RESOLVED** only within its exact bounded preservation criterion.
-- **DF-09:** **OPEN / NOT MET** — no current-head CLEAR assessment. The corrected manual dispatch is prepared but awaits independent review of PR #195 and an authorized operator's Actions UI run against PR #192 HEAD `42993087ed7ff0d6fb1ed96157da6cf22291edcc` (or a newly re-frozen exact HEAD if PR #192 advances).
+- **DF-09:** **OPEN / NOT MET** — no current-head CLEAR assessment. The corrected manual dispatch is prepared but awaits independent review of PR #195 and an authorized operator's Actions UI run. Freeze the exact PR #192 HEAD only after the final M0 documentation/inventory commit; do not use earlier pre-inventory snapshots.
 - **DF-10:** inventory cycle reopened by §12 and the index update; refresh the exact changed-path manifest and post-write verification after the remaining M0 documentation updates.
 - **DF-11:** **WAIVED** by explicit Project Director decision.
 - **DF-12:** **NOT ACCEPTED**.
-- **Manual assessment inputs:** DF-09 target `42993087ed7ff0d6fb1ed96157da6cf22291edcc`, label `jarvis-m0-df09-42993087-20261112`; BFA target `7e9481677197cf82df31bbe08984fa5d58644d98`, label `jarvis-m0-bfa-7e948167-20261112`. Both select workflow branch `docs/ai-role-terminology-audit-20261111` at PR #195 corrected HEAD `26bdfc49316489675d947f5c0a60faa887309d8d`.
+- **Manual assessment inputs:** DF-09 target/label must be generated from the final frozen PR #192 HEAD after inventory closure; BFA target `7e9481677197cf82df31bbe08984fa5d58644d98`, label `jarvis-m0-bfa-7e948167-20261112`. Both select workflow branch `docs/ai-role-terminology-audit-20261111` at PR #195 corrected HEAD `26bdfc49316489675d947f5c0a60faa887309d8d`.
 - **Stage A:** NOT STARTED / HELD. Implementation planning remains HELD. Runtime implementation, source-baseline selection, PR integration, merge and deployment remain NOT AUTHORIZED.
 
 ---
