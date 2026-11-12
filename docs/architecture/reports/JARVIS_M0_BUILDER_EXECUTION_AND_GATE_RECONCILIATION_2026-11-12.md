@@ -3,7 +3,7 @@
 **Milestone:** JARVIS-M0 — Initial Planning Gate Closure  
 **Authorization:** Project Director explicitly approved JARVIS-M0 exactly as proposed on 2026-11-12. The authorization is limited to gate-closure work; it does not authorize Stage A, runtime implementation, implementation-planning execution, source-baseline selection, PR integration, branch-history operations or deployment.  
 **Role:** Builder  
-**Status:** IN PROGRESS — Builder discovery and bounded verification recorded; external/authority gates remain open.  
+**Status:** IN PROGRESS — Builder discovery and bounded verification recorded; external/authority gates remain open. PR #191 Director disposition has since been recorded as Option A; remaining independent-evidence and reserved-authority gates are unchanged.  
 **Repository:** `methaneex-oss/MethaneX`  
 **Working PR:** #192, branch `docs/whole-brain-planning-scope-correction-20261107`
 
@@ -126,13 +126,13 @@ The comparison report is a bounded BM-01–BM-12 human-cognition / MCU J.A.R.V.I
 
 Current ancestry is one commit ahead and 36 behind the current PR #179 branch. The unique commit adds only the comparison report. The report remains a useful bounded reference, but its prior 1-ahead/23-behind count is stale. The branch is not current with the latest Phase 2 map.
 
-**Options for Project Director disposition:**
+**Historical options presented before the Director decision (superseded by §11):**
 
 - **Option A — Retain as a separate historical/bounded reference (Builder recommendation):** keep PR #191 open/draft and unmerged, preserving its exact revision and historical context. Do not replay or integrate it. This avoids history changes and preserves a useful comparison artifact while the wider Phase 2 map continues to evolve.
 - **Option B — Authorize dependent replay:** authorize a separate, explicit replay of the single comparison-report commit onto the current PR #179 branch, with conflict inspection, source-reference refresh, exact-revision self-review and subsequent independent review. This is a branch-history/content integration operation and is not currently authorized.
 - **Option C — Close PR #191 without merging while retaining the branch/commit:** archive it as a standalone historical artifact. This is reversible only by reopening the PR and should be done only after an explicit Director decision.
 
-**Builder recommendation:** Option A pending the Director's decision. No option has been executed.
+**Builder recommendation at the time:** Option A. The Director subsequently selected Option A; see §11. No branch operation was authorized or executed.
 
 ### 7.2 PR #192 / #193 integration order
 
@@ -207,10 +207,40 @@ This is a Builder report only. It is not an Independent Reviewer verdict, Blind 
 | DF-12 | NOT ACCEPTED |
 | PR #173 | Blind assessment and BFA-C01–BFA-C14 Director decisions pending |
 | PR #174 | Independent re-review and Director disposition of F-02/F-03 pending |
-| PR #191 | Director disposition pending; options in §7.1 |
+| PR #191 | Director selected Option A — retain separately; decision recorded in §11; no branch operation |
 | PR #192 / #193 | Remain unmerged; integration hold remains in force |
 | PR #195 | Candidate only; review/integration/dispatch pending |
 | Stage A | NOT STARTED / HELD |
 | Runtime implementation | NOT AUTHORIZED |
 
 **Next required actions:** resolve the DF-06 primary-source/anchor limitations through evidence or explicit Director determination; obtain the required distinct Blind Fresh Tester assessment and Independent Reviewer work through an authorized route; then return the exact-revision evidence package for the reserved Director decisions. No work beyond JARVIS-M0's approved scope is implied.
+
+
+## 11. Project Director disposition — PR #191 — 2026-11-12
+
+### 11.1 Decision and exact effect
+
+The Project Director selected **Option A — Retain as a separate historical/bounded reference artifact** after the Builder presented the three permitted options.
+
+- Director decision comment: PR #191 issue comment `6836333027`.
+- Cross-reference recorded in PR #192 comment `6836335152`.
+- Exact PR #191 HEAD at verification: `609d38ede50bbdd98a93dfed112781eacabee9fd`.
+- Verified state after the decision: open, draft, unmerged.
+- The bounded human-cognition / MCU J.A.R.V.I.S. comparison remains a separate historical reference. It is not promoted to whole-Brain architecture or implementation authority.
+
+### 11.2 Operations expressly not performed
+
+No replay, cherry-pick, rebase, retarget, merge, close, branch deletion or other branch-history operation was performed. The existing PR #192/#193 integration hold remains in force.
+
+### 11.3 Authority and gate effect
+
+This decision resolves only the **PR #191 disposition choice**. It does not independently review or accept the comparison report, clear any Documentation Foundation gate, accept PR #173 or #174, authorize PR integration, begin Stage A, execute implementation planning, select a source baseline, authorize runtime implementation or deployment.
+
+### 11.4 Builder verification
+
+After posting the decision, the Builder re-fetched PR #191 and PR #192 metadata and both issue-comment collections. The exact PR #191 HEAD remained unchanged; PR #191 remained open/draft/unmerged; both decision comments were present. This is verification of decision recording and repository state, not an Independent Reviewer verdict, Tester result or Director acceptance of JARVIS-M0.
+
+### 11.5 Remaining M0 status
+
+JARVIS-M0 remains OPEN / BLOCKED. DF-06 remains NOT MET; DF-09 remains OPEN / NOT MET; DF-12 remains NOT ACCEPTED. PR #173 blind assessment and BFA-C01–BFA-C14 Director decisions, PR #174 independent re-review and F-02/F-03 Director disposition, and the applicable final independent review / testing-or-authorized-N/A stages remain outstanding. Stage A remains HELD and runtime implementation remains NOT AUTHORIZED.
+
