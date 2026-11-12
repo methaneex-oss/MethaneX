@@ -3,18 +3,18 @@
 > This block is the controlling Builder status snapshot for JARVIS-M0. It supersedes earlier live-status tables and embedded current-status claims below where they conflict. Historical snapshots remain preserved. It is Builder evidence, not independent review, gate clearance or Director acceptance.
 
 - **Authorized milestone:** JARVIS-M0 — Initial Planning Gate Closure, approved by the Project Director on 2026-11-12. Authorization is limited to gate-closure work. Stage A and runtime implementation remain unauthorized.
-- **Execution record:** [JARVIS-M0 Builder Execution and Gate Reconciliation](reports/JARVIS_M0_BUILDER_EXECUTION_AND_GATE_RECONCILIATION_2026-11-12.md).
+- **Execution record:** [JARVIS-M0 Builder Execution and Gate Reconciliation](reports/JARVIS_M0_BUILDER_EXECUTION_AND_GATE_RECONCILIATION_2026-11-12.md), including §11 Director disposition for PR #191.
 - **PR #192:** open, non-draft, unmerged; branch `docs/whole-brain-planning-scope-correction-20261107`; use the live PR page for exact current HEAD. It now contains 39 changed paths after the JARVIS-M0 execution report was added. Its recorded base SHA `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` predates the live base branch tip `ea64607ef94f142a6142a013e119a7225bc95c1c` by 14 commits. Compare reports 474 ahead / 14 behind from the current base tip to PR #192 head; no integration or history operation is authorized.
 - **PR #173:** open/draft/unmerged at `7e9481677197cf82df31bbe08984fa5d58644d98`; no GitHub review submission. Blind assessment and BFA-C01–BFA-C14 Director decisions remain outstanding.
 - **PR #174:** open/draft/unmerged at `9502989ffae91c00ba0a8568ab5296925fa9f27b`; corrected specification blob `a1798ee8a1d48284bd0dc6686ce255eacab8a2b7`. No current independent review submission; F-02/F-03 and Director disposition remain open.
-- **PR #191:** open/draft/unmerged at `609d38ede50bbdd98a93dfed112781eacabee9fd`; now 1 commit ahead / 36 behind current PR #179. Its unique commit adds the bounded human/MCU comparison. Director disposition remains pending; see the M0 report for options.
+- **PR #191:** open/draft/unmerged at `609d38ede50bbdd98a93dfed112781eacabee9fd`; 1 commit ahead / 36 behind current PR #179. The Director selected Option A — retain separately as a bounded historical reference. Decision comment `6836333027` on PR #191; no replay, rebase, retarget, merge or closure. See the M0 report §11.
 - **PR #193:** open/draft/unmerged at `fa2bd50d6fb0bb77dc3cbaab684f51d606e94bb5`; 48 ahead / 3 behind current PR #175. It remains a separate non-operative lineage.
 - **PR #195:** open/draft/unmerged at `6f43b94fca4b00a0196f7775e5a41316142ea5e9`; consolidated workflow candidate only. Static and synthetic checks are not YAML/runtime execution. No workflow dispatch was available; no assessment run is claimed.
 - **PR #196:** closed/merged into its existing documentation base branch, merge commit `c151e52781e56e6481424f774c19ea30128debb0`; it was not merged into `main`. The governance document now records the post-merge state.
 - **DF-06:** **NOT MET** — rendered GitHub anchor behavior remains unverified; the historical 2026-11-03 primary-source pointer remains access-limited and no Director determination resolving it was found.
 - **DF-08:** **RESOLVED** only within its exact bounded preservation criterion.
 - **DF-09:** **OPEN / NOT MET** — latest qualifying 31/32 result is historical and not against current PR #192; PR #195 remains unintegrated/unexecuted.
-- **DF-10:** inventory cycle reopened by the M0 report and index/register updates; final 39-path parent manifest and post-write verification are required.
+- **DF-10:** inventory cycle reopened by the M0 report, index/register updates and PR #191 decision reconciliation; final exact 39-path parent manifest and post-write verification are required.
 - **DF-11:** **WAIVED** by explicit Project Director decision.
 - **DF-12:** **NOT ACCEPTED**.
 - **Stage A:** NOT STARTED / HELD. Implementation planning remains HELD. Runtime implementation, source-baseline selection, PR integration, merge and deployment remain NOT AUTHORIZED.
