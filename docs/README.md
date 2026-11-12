@@ -221,13 +221,13 @@ If a reader cannot determine where to start, which revision is relevant, what is
 For exact artifact paths and blob identities across the principal JARVIS planning PR lineages, use the [Historical Documentation Preservation Register](architecture/inventory/HISTORICAL_DOCUMENTATION_PRESERVATION_REGISTER_2026-11-08.md). It complements the [Historical Preservation and Cross-Revision Comparison Report](architecture/reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md): the latter covers earlier branch discovery and selected cross-revision comparisons; the register maps the later PR #171–#193 documentation artifacts. Neither document converts a proposal into an accepted decision or authorizes branch integration.
 
 
-## Active documentation-foundation review resources — 2026-11-10
+## Active documentation-foundation review resources — 2026-11-12
 
-The current review cycle uses the following repository-resident instructions and evidence. These files are the communication channel between Builder, Nemotron and Grok; the Project Director does not need to copy or relay reports.
+The active role split is **Builder**, **Blind Fresh Tester**, and **Independent Reviewer**. The reviewer and tester are separate roles with separate evidence requirements. Do not use Grok as the assigned reviewer for this cycle; the prior Grok request and reports are retained as historical evidence only.
 
-- [Nemotron blind fresh-reader rerun runbook](architecture/reports/NEMOTRON_FRESH_READER_RERUN_RUNBOOK_2026-11-10.md) — how to launch one exact-revision assessment and verify/preserve its result.
-- [Grok independent reviewer assignment](architecture/reports/GROK_INDEPENDENT_REVIEW_REQUEST_2026-11-10.md) — full review scope, exact-revision protocol, verdict criteria and repository-based communication requirements.
-- [Previous Nemotron assessment](architecture/reports/NEMOTRON_BLIND_FRESH_READER_ASSESSMENT_2026-11-10.md) — historical PARTIALLY CLEAR result and the findings that the repeat assessment must retest.
-- [Previous Grok independent review](architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_GROK_2026-11-09.md) — historical NOT CLEAR TO PROCEED report; it does not cover the current PR #192 HEAD.
+- [Blind Fresh Tester rerun runbook](architecture/reports/NEMOTRON_FRESH_READER_RERUN_RUNBOOK_2026-11-10.md) — records the Nemotron-backed assessment workflow, exact-revision packet rules and evidence checks. The existing 31/32 result is historical; no current-HEAD assessment is claimed.
+- [Independent Reviewer handoff](architecture/reports/INDEPENDENT_REVIEWER_HANDOFF_2026-11-08.md) — current role-based review scope, exact-revision protocol, independence requirements and authority boundary.
+- [Previous Blind Fresh Tester assessment](architecture/reports/NEMOTRON_BLIND_FRESH_READER_ASSESSMENT_2026-11-10.md) — historical PARTIALLY CLEAR result; not a result for the current PR #192 HEAD.
+- [Historical Grok review request](architecture/reports/GROK_INDEPENDENT_REVIEW_REQUEST_2026-11-10.md) and [historical Grok review report](architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_GROK_2026-11-10.md) — preserved for audit/provenance only; neither is an active assignment or a substitute for the current Independent Reviewer.
 
-**Current authority boundary:** A Nemotron CLEAR result and Grok CLEAR recommendation are evidence inputs only. The Project Director retains final documentation-foundation acceptance. Stage A remains HELD; runtime implementation and PR integration remain NOT AUTHORIZED.
+**Current authority boundary:** A Blind Fresh Tester result and an Independent Reviewer recommendation are evidence inputs only. The Project Director retains final documentation-foundation acceptance. Stage A remains HELD; runtime implementation and PR integration remain NOT AUTHORIZED.
