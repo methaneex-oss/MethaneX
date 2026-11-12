@@ -896,7 +896,7 @@ The objective is not merely to build more. It is to build the right things, fini
 
 ### Rule 22.1 — Revisit the governing standard at the start of every run
 
-Every project participant must freshly revisit the applicable governance standard at the beginning of **every work run**, without exception for task size, duration, perceived simplicity or risk. A work run includes a new task execution, a resumed or continued task after an interruption, a new Builder implementation/revision run, an Independent Review run, an Independent Testing run, and a supporting-agent run.
+Every project participant must freshly revisit the applicable governance standard at the beginning of **every work run or execution invocation**, without exception for task size, duration, perceived simplicity or risk. This includes every assistant/agent execution that performs project work, every new or continued task run, each resumed task after an interruption, every Builder implementation or revision run, every Independent Review run, every Independent Testing run, and every supporting-agent run. A continuing objective does not create an exemption for later executions.
 
 This is a required operating step, not optional background reading and not a documentation-only requirement. Participants must read the current authoritative source itself; relying only on memory, a previous summary, a prior chat, a copied checklist or another participant's assurance does not satisfy this rule.
 
