@@ -993,3 +993,54 @@ The plan now distinguishes the accepted PR #174 baseline's **34** scenarios at e
 PR #174's accepted baseline remains limited to exact HEAD `0811a59...`. Its current proposal and F-02/F-03 additions are not newly accepted. PR #173's corrected architecture proposal remains open/draft/unmerged. PR #193 remains a non-operative roadmap hold. Stage A remains NOT STARTED / HELD; implementation planning remains HELD; runtime implementation, source-baseline selection and PR integration remain NOT AUTHORIZED.
 
 This is a Builder revision/status correction, not an Independent Reviewer verdict, Project Director acceptance or implementation authorization.
+
+
+## 20. Live cross-PR and Builder-status reconciliation — 2026-11-12
+
+This section supersedes earlier live-status tables where they conflict. Historical snapshots remain preserved. PR #192's own resulting HEAD is intentionally not embedded because this index update advances that branch; use the live PR #192 page and its final inventory manifest.
+
+### 20.1 Live PR heads and dispositions
+
+| PR | Exact live HEAD | State | Current disposition |
+|---|---|---|---|
+| #173 — Brain Foundation Architecture | `7e9481677197cf82df31bbe08984fa5d58644d98` | Open / draft / unmerged | Architecture proposal; CF-17 Partial; blind architecture assessment and BFA-C01–BFA-C14 Project Director decisions remain outstanding |
+| #174 — Brain Mechanism Specification | `9502989ffae91c00ba0a8568ab5296925fa9f27b` | Open / draft / unmerged | Specification blob `a1798ee8a1d48284bd0dc6686ce255eacab8a2b7`; F-02/F-03 corrections proposed; independent re-review and Project Director disposition remain outstanding |
+| #175 — Implementation roadmap | `c30fe20cfdf3f499416972042be06acdd70f752d` | Open / draft / unmerged | Non-operative planning proposal |
+| #179 — Phase 2 integration map | `d30237b81c3695f2a7cb980144b221bbd42ce548` | Open / draft / unmerged | Bounded source-integration evidence; not whole-Brain acceptance |
+| #191 — Human/MCU comparison | `609d38ede50bbdd98a93dfed112781eacabee9fd` | Open / draft / unmerged | Bounded BM-01–BM-12 reference; Project Director disposition pending |
+| #192 — Documentation Foundation | Live PR page is the exact HEAD pointer | Open / non-draft / unmerged | 38 documentation-only paths; Builder inventory and post-write verification are being finalized |
+| #193 — Deferred implementation-plan hold | `fa2bd50d6fb0bb77dc3cbaab684f51d606e94bb5` | Open / draft / unmerged | Non-operative; plan/handoff current references refreshed; branch diverged from current PR #175 |
+| #194 — Older reader-workflow alternative | `9b457e35c601719d9b213fb843dd5876976b35b9` | Open / draft / unmerged | Superseded alternative; do not integrate alongside PR #195 |
+| #195 — Role terminology and assessment workflows | `6f43b94fca4b00a0196f7775e5a41316142ea5e9` | Open / draft / unmerged | Consolidated reader and architecture workflows; static assertions and synthetic logic tests only; no YAML parse or Actions execution |
+| #196 — Governance reform | `bd778bd235062e8bfdf0ae1a05232c9489c1eda3` | Open / non-draft / unmerged | Governance document blob `f9979cf92a7297a5d38467223a41560188accb54`; Sections 17–21 add the 2026-11-12 directorship/team standard; not merged |
+
+### 20.2 Cross-PR ancestry and integration boundaries
+
+Exact GitHub commit comparisons confirm:
+
+- PR #174 versus current PR #173: diverged from merge base `97191111bc2573c14d391c0af9628db7b11f194b`; PR #174 is 24 commits ahead and 12 behind. No rebase, retarget, merge, cherry-pick or replay is authorized.
+- PR #191 versus current PR #179: diverged from merge base `f6267456560a08054d69f7960d2951452b14017c`; PR #191 is one commit ahead and 23 behind. Its unique commit adds only the human/MCU comparison report. Project Director disposition remains pending.
+- PR #192's recorded base SHA `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` is one commit behind current PR #179 branch HEAD `d30237b81c3695f2a7cb980144b221bbd42ce548`. Preserve the discrepancy; do not silently retarget or rebase.
+- PR #193 versus current PR #175: diverged from merge base `874c732973b6ab303d65a503f5a215b0af8e1153`; PR #193 is 48 commits ahead and 3 behind. It remains a separate non-operative proposal.
+
+No PR integration or branch-history operation has been performed or authorized.
+
+### 20.3 Workflow and governance reconciliation
+
+- PR #195 is the consolidated workflow candidate. Its documentation-reader workflow blob is `7d202c8c3e8ea29a7b40ec70baafbc75d07a34e2`; its blind architecture workflow blob is `96dc2971503af022e4d247d4be07d257aec5d7db`. The reader workflow pins PR #173 at `7e948167...` and the PR #174 specification content at `16a82663d6a421575234b5f8f4ea0c5ad4f735cf`; that immutable commit contains the same specification blob `a1798ee8...` as current PR #174 HEAD `9502989...`. The source content is therefore identical even though the PR #174 review-request-only commit advanced its branch.
+- PR #194 remains the older alternative. Do not merge both workflow candidates.
+- PR #195 has not undergone YAML parsing or GitHub Actions execution. Its recorded static assertions and 31-assertion synthetic logic harness do not prove workflow runtime behavior.
+- PR #196's new Sections 17–21 remain on its unmerged branch. The repository's proposed governance document is not yet integrated into a governing base branch.
+
+### 20.4 Current gate and role status
+
+- DF-06: **NOT MET**. Builder semantic relevance, enumerated external destination checks, relative-path integrity and recorded historical/cross-branch checks are complete for the documented scope. GitHub-rendered line/fragment-anchor behavior remains unverified. The historical ChatGPT pointer remains access-limited/non-clickable and requires primary-source access or explicit Project Director determination.
+- DF-08: **RESOLVED** only within its exact bounded preservation criterion.
+- DF-09: **OPEN / NOT MET**. The 31/32 PARTIALLY CLEAR result is historical and does not assess the final current PR #192 revision. The corrected PR #195 workflow is not integrated or executed.
+- DF-10: Builder closeout remains open until the final post-write 38-path inventory verification is recorded.
+- DF-11: **WAIVED** by explicit Project Director decision.
+- DF-12: **NOT ACCEPTED**; exact-revision Project Director acceptance remains reserved.
+- Independent Reviewer assessments for the current PR #173/#174 revisions and a current PR #192 handoff remain outstanding. PR #191 disposition and BFA-C01–BFA-C14 decisions remain reserved to the Project Director.
+- Stage A: **NOT STARTED / HELD**. Implementation planning: **HELD**. Runtime implementation, source-baseline selection, PR integration, merge and deployment: **NOT AUTHORIZED**.
+
+This is Builder status evidence only. It is not an Independent Reviewer verdict, Blind Fresh Tester result, gate clearance or Project Director acceptance.
