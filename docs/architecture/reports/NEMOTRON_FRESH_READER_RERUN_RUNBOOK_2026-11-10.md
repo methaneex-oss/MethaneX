@@ -126,3 +126,20 @@ The current run target must be the live PR #192 HEAD fetched after all intended 
 The remaining DF-09 reader-verifiability issue concerns the absence of an independently addressable immutable export/message identifier for the recovered 2026-11-03 primary conversation record. The evidence extract must preserve that limitation rather than invent a URL or relabel the later GitHub comment as the original. A repeat run is useful only against a materially updated packet or additional primary-source evidence; repeated assessment of the same packet is not a substitute for the missing provenance decision.
 
 DF-11 is WAIVED. The prior independent-review reports remain historical evidence; no new documentation independent review is required by DF-11. PR #191 disposition remains a separate Project Director decision. DF-12 remains NOT ACCEPTED until the exact final package is submitted and explicitly decided.
+
+## 13. PR #195 follow-up workflow hardening — 2026-11-12
+
+The consolidated PR #195 candidate received further Builder corrections after the workflow-hardening details recorded in §1. Re-fetch the live PR before any review or later authorized execution.
+
+Current candidate evidence at the time of this update:
+
+- PR #195 HEAD: `6f43b94fca4b00a0196f7775e5a41316142ea5e9`.
+- Documentation-reader workflow blob: `7d202c8c3e8ea29a7b40ec70baafbc75d07a34e2`.
+- Architecture-assessment workflow blob: `96dc2971503af022e4d247d4be07d257aec5d7db`.
+- Audit record blob: `8a8157c135287529f883b103f59db5d78e7a4fa1`.
+
+The two workflows now validate the exact target SHA and bounded assessment label before checkout, disable persisted checkout credentials, treat supplied repository documents as untrusted evidence rather than instructions, and reject malformed boolean/out-of-range provider error-code metadata. The documentation-reader validator now requires A–H section headings at line starts rather than accepting stray inline substrings.
+
+The Builder ran bounded exact-source assertions and a 31-assertion synthetic logic harness covering response extraction, section completeness and model/completion/refusal/tool-call gates. These are not YAML parsing or execution tests. Neither workflow has been dispatched; no provider invocation, artifact inspection or Blind Fresh Tester result is claimed.
+
+**Execution remains blocked:** do not dispatch the current `main` workflow. PR #195 is still open/draft/unmerged. After the authorized integration process, re-fetch the live `main` workflow, validate the exact approved content and run only the one authorized assessment against the exact current PR #192 HEAD. The runbook does not itself authorize that integration or dispatch.
