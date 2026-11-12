@@ -1,3 +1,24 @@
+# Current status refresh — 2026-11-12 (JARVIS-M0 Builder continuation 04)
+
+> Controlling live-status snapshot for this Builder run. Historical snapshots below remain preserved. Builder evidence only; not independent review, testing, gate clearance or Director acceptance.
+
+- **Governance revalidation:** freshly read during run `JARVIS-M0-BLD-2026-11-12-04`; exact accepted governance blob `f5827c552f36f4647339b3f8dfb38956d146c570`. Sections 17–22 and Rules 11.9–11.16 re-examined.
+- **M0 execution record:** [Builder continuation and current-target handoff reconciliation](reports/JARVIS_M0_BUILDER_EXECUTION_AND_GATE_RECONCILIATION_2026-11-12.md), §13.
+- **PR #192:** open/non-draft/unmerged. At start of run, exact HEAD `6141de967b862a4c90384052d4c16c66eb7f8b13`; 39 changed paths. Subsequent M0 documentation updates may advance it; always re-fetch live PR metadata before dispatch or handoff. Recorded base SHA remains `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; integration remains held.
+- **PR #173:** open/draft/unmerged at `7e9481677197cf82df31bbe08984fa5d58644d98`. Superseding blind-assessment handoff posted at comment `6837198028`; old stale-target assignment retained historically.
+- **PR #174:** open/draft/unmerged at `9502989ffae91c00ba0a8568ab5296925fa9f27b`; spec blob `a1798ee8a1d48284bd0dc6686ce255eacab8a2b7`. Superseding independent-review handoff posted at comment `6837198710`; missing original-review provenance remains disclosed.
+- **PR #195:** open/draft/unmerged at `26bdfc49316489675d947f5c0a60faa887309d8d`; corrected workflow blob `5b58d8250860f10df64947858bae7b729cb8a501`. Independent review request comment `6836686985` is present; no independent verdict or workflow execution is claimed.
+- **PR #191:** Director Option A — retain separately — remains recorded at its original HEAD. No branch operation.
+- **DF-06:** NOT MET — rendered GitHub anchor behavior and access-limited historical primary-source pointer unresolved.
+- **DF-08:** RESOLVED only within its exact bounded preservation criterion.
+- **DF-09:** OPEN / NOT MET — workflow candidate review and one exact-final-head CLEAR assessment remain outstanding. Dispatch inputs must be frozen only after final M0 documentation/inventory writes.
+- **DF-10:** inventory cycle reopened by this report/index/register update; final parent manifest and post-write exact verification required.
+- **DF-11:** WAIVED by explicit Director decision.
+- **DF-12:** NOT ACCEPTED.
+- **Stage A:** NOT STARTED / HELD. Implementation planning: HELD. Runtime implementation, source-baseline selection, PR integration, merge and deployment: NOT AUTHORIZED.
+
+---
+
 # Current status refresh — 2026-11-12 (JARVIS-M0 Builder continuation)
 
 > Controlling Builder status snapshot. This block supersedes earlier live-status snapshots below where they conflict; dated historical records remain preserved. This is Builder evidence, not independent review, gate clearance or Director acceptance.
