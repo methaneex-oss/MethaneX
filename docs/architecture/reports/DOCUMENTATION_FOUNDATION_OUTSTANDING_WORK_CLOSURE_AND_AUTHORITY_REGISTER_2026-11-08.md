@@ -1263,3 +1263,44 @@ The Builder has exhausted the available source/API and browser-retrieval routes 
 - PR #173 BFA-C01–BFA-C14; PR #174 independent re-review/disposition; PR #191 disposition; and PR #192/#193 integration order remain external review/authority work.
 
 Stage A remains **NOT STARTED / HELD**. Implementation planning remains **HELD**. Runtime implementation, PR integration and deployment remain **NOT AUTHORIZED**.
+
+
+---
+
+## 38. Builder review and correction reconciliation — 2026-11-12
+
+### 38.1 Exact live PR snapshot before this register update
+
+| PR | Exact HEAD | State | Status |
+|---|---|---|---|
+| #173 | \`7e9481677197cf82df31bbe08984fa5d58644d98\` | Open/draft/unmerged | CF-17 foundational social/agent classification corrected; blind architecture assessment and BFA-C01–BFA-C14 Project Director dispositions remain outstanding |
+| #174 | \`8e66ad5f693dc23354a5386661eda99328313e5f\` | Open/draft/unmerged | F-02/F-03 correction summary now includes scenarios 47–48; independent re-review and Project Director disposition remain outstanding |
+| #191 | \`609d38ede50bbdd98a93dfed112781eacabee9fd\` | Open/draft/unmerged | Bounded human/MCU reference; Project Director disposition pending |
+| #192 | \`550fe06f91f038d19a4965bec2a08d4e8dc23e27\` (pre-write) | Open/non-draft/unmerged | 38 changed paths; Builder review/correction pass and final inventory synchronization continue |
+| #193 | \`9d8aec43e749ffe1eaa5a75b53e153954ac5bd55\` | Open/draft/unmerged | Current DF gate wording corrected; non-operative PR #175-derived hold |
+| #195 | \`1e18536a3bc769fadd4bf2b53639c5490cc0d052\` | Open/draft/unmerged | Workflow response-handling and diagnostics hardened; static only, not YAML-runtime-validated or executed |
+| #196 | \`9a744927c5ebcfea2c720ded42ec7425edc499c0\` | Open/non-draft/unmerged | Additive Builder Rules 11.9–11.16; not merged |
+
+PR #192's base SHA remains \`61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c\`, while the live PR #179/base-branch tip remains \`d30237b81c3695f2a7cb980144b221bbd42ce548\`. No branch-history or integration operation was performed.
+
+### 38.2 Builder corrections made in this pass
+
+- PR #173 completion matrix: CF-17 corrected from wholly deferred to PARTIAL because the architecture already defines a minimum foundational agent representation and ownership contract; advanced social cognition remains deferred.
+- PR #174 mechanism specification: F-03 correction-status summary updated to include scenarios 47–48, which add explicit downstream owner-state/decision-version effects and reconsideration after invalidation.
+- PR #193 continuity handoff: corrected the current DF-06/DF-08 status contradiction.
+- PR #195 blind architecture workflow: bounded successful and error response reads; sanitized diagnostics; multiple response-shape extraction; bounded metadata; expected provider/model, completion, refusal/tool-call and A–K content checks.
+- PR #192 planning index, runbook, closeout report and Builder self-review: current-status references and review findings are being synchronized; the exact final inventory must be refreshed after the last intended write.
+
+### 38.3 Current gate status and remaining Builder verification
+
+- DF-06: **NOT MET**; rendered GitHub line/fragment-anchor behavior remains unverified.
+- DF-08: **RESOLVED** only against the exact bounded preservation criterion.
+- DF-09: **OPEN / NOT MET**; the latest qualifying result remains PARTIALLY CLEAR (31/32) on older packet revision \`887b349f9826de7726707209f640ae0cafd78ace\`. No result is claimed for the current final PR #192 HEAD.
+- DF-10: Builder content review, correction and final exact-parent inventory synchronization remain in progress.
+- DF-11: **WAIVED** by explicit Project Director decision.
+- DF-12: **NOT ACCEPTED**; exact-revision Project Director decision remains reserved.
+- Stage A: NOT STARTED / HELD. Implementation planning: HELD. Runtime implementation and PR integration: NOT AUTHORIZED.
+
+Remaining Builder-owned checks: complete the content-level review of all 38 PR #192 changed paths; run the available structural checks against the exact final tree; validate JSON evidence files; inspect exact current link/fragment/anchor references; verify the final parent manifest and post-write tree; and record any validation that cannot be executed. YAML-runtime validation, Actions execution, provider-response tests and rendered GitHub anchor verification must remain explicitly unclaimed unless evidence becomes available.
+
+This section is Builder evidence only. It is not an Independent Reviewer verdict, Blind Fresh Tester result, Project Director acceptance or implementation authorization.
