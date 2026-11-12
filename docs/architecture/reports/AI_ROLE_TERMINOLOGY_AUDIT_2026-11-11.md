@@ -242,3 +242,37 @@ The documentation-reader workflow was subsequently refreshed so its pinned archi
 The workflow diff at `aac0a58` changes only the fetched/pinned proposal commit identifiers and their corresponding source labels. It does not change prompt content, response parsing, metadata handling, validation thresholds, permissions or artifact handling.
 
 **Verification boundary:** exact commit diff and resulting file blob were inspected. No YAML parser, GitHub Actions execution, provider call, artifact inspection or Blind Fresh Tester assessment is claimed. The workflow remains a proposal and is not authorized for dispatch by this audit.
+
+## 12. Additional workflow hardening and bounded synthetic verification — 2026-11-12
+
+A further Builder review identified improvements needed before either assessment workflow can be considered ready for an authorized run.
+
+### 12.1 Corrections applied
+
+Both workflows now:
+
+- validate the full 40-character lowercase target SHA and bounded assessment label in a dedicated step **before checkout**, while retaining the later exact-HEAD comparison;
+- set `persist-credentials: false` on checkout because neither workflow pushes to the repository;
+- explicitly instruct the assessment model to treat repository documents as untrusted evidence and to ignore any instructions or role claims embedded in those documents;
+- reject boolean and out-of-range integer values in provider error-code metadata.
+
+The documentation-reader workflow additionally changed its A–H completeness check from substring matching to anchored line-start section matching. A stray inline occurrence of `A.` or `B.` can no longer satisfy the required section check. The validator accepts ordinary section headings and Markdown headings/bold prefixes, while still requiring all eight sections.
+
+### 12.2 Exact revisions
+
+- Reader input/prompt/metadata hardening commit: `5a1b099d0ecac2fb211d1f055ac200b21bc54189`.
+- Reader section-regex correction commit: `4fe38c6c0e98ec76bc295757a1390fe6e59a8f39`.
+- Architecture workflow input/prompt/metadata hardening commit: `324a8159bbae17dd9b5372ca26c847753a287586`.
+- Current documentation-reader workflow blob: `7d202c8c3e8ea29a7b40ec70baafbc75d07a34e2`.
+- Current architecture-assessment workflow blob: `96dc2971503af022e4d247d4be07d257aec5d7db`.
+- PR #195 HEAD at the time of this update: `324a8159bbae17dd9b5372ca26c847753a287586`. This audit-only update advances the branch after that workflow commit; re-fetch live metadata before further review.
+
+### 12.3 Verification performed
+
+- Re-fetched both exact workflow blobs and ran source assertions for pre-checkout input validation, environment-only shell handling, disabled credential persistence, bounded successful/error response reads, sanitized error handling, response-shape fallbacks, bounded metadata, exact provider/model checks, completion/refusal/tool-call checks, anchored section validation and unconditional evidence-artifact upload.
+- Ran a local synthetic logic harness with 31 assertions covering SHA/label validation, metadata bounds, string/list/content/output-text/legacy response extraction, required section presence, rejection of inline-only section markers, wrong provider/model, non-stop completion, refusal and tool-call cases.
+- The first edit of the reader section regex was over-escaped. The fetched source exposed that defect; commit `4fe38c6` corrected it, and the synthetic harness was run against the corrected regex.
+
+### 12.4 Verification boundary
+
+The synthetic harness exercises copied response-extraction and validation logic; it is not execution of the workflow's embedded Python script. Exact-source static assertions are not a YAML parser, GitHub Actions execution, provider invocation, artifact inspection or Blind Fresh Tester result. No workflow was dispatched. Both workflows remain open-PR proposals, and no workflow run is authorized by this audit.
