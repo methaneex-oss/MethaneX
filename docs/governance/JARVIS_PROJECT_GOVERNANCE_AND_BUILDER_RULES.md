@@ -666,6 +666,8 @@ If a rule is obsolete, mark it superseded and explain why. Preserve the prior ve
 
 ## 16. Current execution status
 
+**Historical snapshot notice:** This section records the status at the document's creation. Current operating requirements are defined in Sections 17–22 and the dated amendment records; do not treat this creation-time snapshot as a replacement for those current requirements.
+
 This document is a proposed governance baseline for project-owner review. It does not retroactively certify that all earlier work complied with these rules.
 
 At creation:
@@ -751,6 +753,8 @@ Applicable coverage includes:
 - failure handling;
 - persistence, replay and state transitions;
 - relevant performance and reliability requirements.
+
+**Documentation-only applicability:** When a Director-authorized milestone consists solely of documentation or governance changes and has no executable behaviour in scope, its acceptance criteria may explicitly mark Independent Testing as **NOT APPLICABLE (N/A)**. The test plan and lifecycle record must state the reason and the scope basis for that determination; the Builder may not unilaterally waive the stage. If project-specific requirements still require a Tester verdict or executable test evidence, the Tester must record **BLOCKED** with the reason rather than inventing behavioural tests or treating N/A as PASS. This does not waive Independent Review, applicable document/format validation, or Project Director acceptance.
 
 The Tester must verify the actual implementation, use reproducible procedures, record actual outcomes, preserve failure evidence, distinguish untested behaviour from passing behaviour, rerun failed tests after corrections and identify coverage gaps.
 
@@ -842,13 +846,13 @@ A milestone deliverable is complete only when:
 - relevant Builder self-tests have been executed and their results recorded;
 - Independent Review has reached an acceptable verdict;
 - required review corrections have been verified by the reviewer;
-- Independent Testing has reached an acceptable verdict;
+- Independent Testing has reached an acceptable verdict, or has been explicitly recorded as **NOT APPLICABLE (N/A)** under Rule 17.4 with its Director-authorized scope rationale documented;
 - required implementation corrections have been retested by the Tester;
 - remaining limitations and untested areas are documented;
 - evidence is available for the exact claimed revision;
 - Project Director acceptance is recorded.
 
-The acceptance criteria may define a justified subset of test types for a particular deliverable, but omitted test categories must be identified with a reason. No role may silently waive a required gate.
+The acceptance criteria may define a justified subset of test types for a particular deliverable, but omitted test categories must be identified with a reason. For documentation-only deliverables, Independent Testing may be recorded as NOT APPLICABLE only under Rule 17.4; this does not waive Independent Review or Director acceptance. No role may silently waive a required gate.
 
 ### Rule 20.2 — Activity and partial evidence are not completion
 
@@ -965,3 +969,12 @@ The run-by-run revalidation and role-accountability requirements are a cross-pro
 - **Approval authority:** Project Director instruction dated 2026-11-12.
 - **Effective operating instruction:** Apply immediately in this collaboration. Repository governance remains proposed until the normal review and acceptance process is completed.
 - **Version:** Governance amendment 2026-11-12 / Run-by-Run Governance Revalidation v1.
+
+
+### Builder correction record — Independent Review findings F-196-01 and F-196-02
+
+- **Source review:** Independent Reviewer report `docs/architecture/reports/INDEPENDENT_GOVERNANCE_REVIEW_GROK_PR196_2026-11-12.md`, verdict **APPROVED WITH DOCUMENTED NON-BLOCKING ISSUES**, submitted against HEAD `1a8d3b691c71af0e8a2fc8091370109c4a548584`.
+- **F-196-01 correction:** Added a historical-snapshot notice to §16 directing readers to current operating requirements in §§17–22 and the dated amendment records. Historical status content was not rewritten.
+- **F-196-02 correction:** Added a controlled NOT APPLICABLE (N/A) path for Independent Testing on Director-authorized documentation/governance-only milestones with no executable behaviour in scope. The rationale must be in the acceptance criteria, test plan and lifecycle record; the Builder cannot waive the stage unilaterally. Where a Tester verdict or executable evidence remains required, the Tester records BLOCKED with reason. Independent Review, applicable document validation and Director acceptance remain mandatory.
+- **Scope and compatibility:** Additive clarification only. No runtime, architecture, phase-gate, branch-target or merge authorization changes. Independent Review and Director acceptance remain separate mandatory gates.
+- **Verification status:** Builder correction and exact-revision checks are to be recorded in the PR handoff after the resulting commit is verified. The Independent Reviewer must independently confirm both corrections against the new exact revision.
