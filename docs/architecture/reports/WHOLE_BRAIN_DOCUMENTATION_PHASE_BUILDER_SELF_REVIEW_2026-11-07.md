@@ -1635,3 +1635,20 @@ The review has found and corrected multiple real defects; this is not a claim th
 - Stage A: NOT STARTED / HELD. Implementation planning: HELD. Runtime implementation and PR integration: NOT AUTHORIZED.
 
 This self-review is Builder evidence only. It is not an Independent Reviewer verdict, Blind Fresh Tester result, Project Director acceptance or implementation authorization.
+
+## 17. Final role and revision reconciliation — 2026-11-12
+
+The portal, planning index, Grok-specific request and Independent Reviewer handoff were reconciled after the prior §16 snapshot.
+
+- The active roles are **Builder**, **Blind Fresh Tester** and **Independent Reviewer**.
+- The portal and planning index now route to the role-based Independent Reviewer handoff and the separate Blind Fresh Tester runbook.
+- The Grok-specific request is explicitly **SUPERSEDED / INACTIVE**. It must not be executed or reactivated.
+- Prior Grok reports and formal review events remain historical evidence with their exact reviewed revisions and same-account attribution disclosed. They do not constitute the current assignment or a review of the final PR #192 HEAD.
+- The Independent Reviewer handoff explicitly states that no new Independent Reviewer has been assigned or has reviewed the final current PR #192 revision.
+- The Nemotron-backed 31/32 Blind Fresh Tester result remains historical and tied to packet revision `887b349f9826de7726707209f640ae0cafd78ace`; it is not a current-head result.
+
+The final inventory must include the latest portal, index, runbook, handoff, superseded Grok request, preservation report, authority register, closeout report and self-review blobs. PR #192 must be re-fetched after the inventory write.
+
+**Gate status:** DF-06 NOT MET; DF-08 RESOLVED only within its bounded criterion; DF-09 OPEN / NOT MET; DF-10 Builder verification remains open until exact final inventory/post-write verification; DF-11 WAIVED; DF-12 NOT ACCEPTED. Stage A NOT STARTED / HELD. Implementation planning HELD. Runtime implementation and PR integration NOT AUTHORIZED.
+
+This is Builder self-review evidence only. It is not an Independent Reviewer verdict, Blind Fresh Tester result or Project Director acceptance.
