@@ -227,3 +227,18 @@ Static source assertions against the exact final workflow confirmed full-SHA and
 ### 10.3 Verification boundary
 
 This is static source verification only. GitHub Actions YAML parsing, workflow execution, provider response-shape tests, artifact inspection and a Blind Fresh Tester assessment have not been performed. The workflow remains unexecuted; no architecture-review verdict, gate clearance or Project Director acceptance is claimed.
+
+## 11. Live revision reconciliation — 2026-11-12
+
+The documentation-reader workflow was subsequently refreshed so its pinned architecture and specification inputs match the then-current proposal heads. This supersedes the earlier reader-workflow blob reference in section 9.5 for current-source identification; it does not invalidate that section's historical description of the preceding correction.
+
+- Refresh commit: `aac0a58fad2638a71dfa8e58b02437258bae148c`.
+- Updated documentation-reader workflow blob: `e6d493080d5aa93c695c33d05eab02c1ecf7b1e3`.
+- Pinned PR #173 architecture proposal: `7e9481677197cf82df31bbe08984fa5d58644d98`.
+- Pinned PR #174 corrected specification proposal: `16a82663d6a421575234b5f8f4ea0c5ad4f735cf`.
+- The architecture-assessment workflow remains at blob `8f7f94c87c905c033ac4385ca1a977f30b41478c`; its hardening commit remains `87087800ba8a24b07066656691fdc0ef16eae6f5`.
+- PR #195 HEAD at the time of this reconciliation was `aac0a58fad2638a71dfa8e58b02437258bae148c`. This audit-only update advances the branch head after that workflow-refresh commit; re-fetch the live PR head before any later review or execution.
+
+The workflow diff at `aac0a58` changes only the fetched/pinned proposal commit identifiers and their corresponding source labels. It does not change prompt content, response parsing, metadata handling, validation thresholds, permissions or artifact handling.
+
+**Verification boundary:** exact commit diff and resulting file blob were inspected. No YAML parser, GitHub Actions execution, provider call, artifact inspection or Blind Fresh Tester assessment is claimed. The workflow remains a proposal and is not authorized for dispatch by this audit.
