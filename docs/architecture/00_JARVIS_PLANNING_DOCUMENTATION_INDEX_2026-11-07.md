@@ -968,3 +968,28 @@ These checks establish relative-path existence and bounded structure only. They 
 - Stage A: NOT STARTED / HELD. Implementation planning: HELD. Runtime implementation, source-baseline selection, PR integration, merge and deployment: NOT AUTHORIZED.
 
 This is a Builder status entry only. It is not an Independent Reviewer verdict, Blind Fresh Tester result, Project Director acceptance or implementation authorization.
+
+## 19. PR #193 proposal-revision refresh and accepted-scenario boundary — 2026-11-12
+
+This entry supersedes the PR #193 revision row in §§17–18 and the corresponding PR #193 HEAD references in inventory §72 for the latest live branch state. The exact PR #192 HEAD remains a live pointer because this index update advances that branch.
+
+### 19.1 Re-fetched PR #193 and PR #174 revisions
+
+- **PR #193 HEAD:** `fa2bd50d6fb0bb77dc3cbaab684f51d606e94bb5` (open/draft/unmerged).
+- **PR #193 implementation-plan blob:** `e6ac7ccef9ba210f22c5a9ab6c492892e8347704`.
+- **PR #193 continuity-handoff blob:** `482dc36f41877165f35b5295bec3559830d56b63`.
+- **PR #193 base SHA:** `874c732973b6ab303d65a503f5a215b0af8e1153`.
+- **PR #175 current HEAD:** `c30fe20cfdf3f499416972042be06acdd70f752d`; compare `874c...` to `c30fe...` reports 3 commits ahead, 0 behind. PR #193 has not been rebased or retargeted.
+- **PR #174 current HEAD:** `9502989ffae91c00ba0a8568ab5296925fa9f27b`; specification blob `a1798ee8a1d48284bd0dc6686ce255eacab8a2b7`.
+
+### 19.2 Corrections verified in PR #193
+
+The plan and continuity handoff now identify PR #174 HEAD `9502989...` as the current corrected proposal. The prior proposal snapshot `16a82663d6a421575234b5f8f4ea0c5ad4f735cf` is explicitly historical/superseded. Exact re-fetch confirms the current-head references in both files.
+
+The plan now distinguishes the accepted PR #174 baseline's **34** scenarios at exact accepted HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` from the current proposal's additional scenarios **35–48**. The additional 14 scenarios, including the F-02/F-03 corrections, remain proposed pending Independent Reviewer re-review and Project Director disposition; they are not silently promoted to accepted/binding status.
+
+### 19.3 Authority boundary
+
+PR #174's accepted baseline remains limited to exact HEAD `0811a59...`. Its current proposal and F-02/F-03 additions are not newly accepted. PR #173's corrected architecture proposal remains open/draft/unmerged. PR #193 remains a non-operative roadmap hold. Stage A remains NOT STARTED / HELD; implementation planning remains HELD; runtime implementation, source-baseline selection and PR integration remain NOT AUTHORIZED.
+
+This is a Builder revision/status correction, not an Independent Reviewer verdict, Project Director acceptance or implementation authorization.
