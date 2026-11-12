@@ -1,22 +1,23 @@
-# Current status refresh — 2026-11-12 (JARVIS-M0 Builder revalidation)
+# Current status refresh — 2026-11-12 (JARVIS-M0 Builder continuation)
 
-> This block is the controlling Builder status snapshot for JARVIS-M0. It supersedes earlier live-status tables and embedded current-status claims below where they conflict. Historical snapshots remain preserved. It is Builder evidence, not independent review, gate clearance or Director acceptance.
+> Controlling Builder status snapshot. This block supersedes earlier live-status snapshots below where they conflict; dated historical records remain preserved. This is Builder evidence, not independent review, gate clearance or Director acceptance.
 
-- **Authorized milestone:** JARVIS-M0 — Initial Planning Gate Closure, approved by the Project Director on 2026-11-12. Authorization is limited to gate-closure work. Stage A and runtime implementation remain unauthorized.
-- **Execution record:** [JARVIS-M0 Builder Execution and Gate Reconciliation](reports/JARVIS_M0_BUILDER_EXECUTION_AND_GATE_RECONCILIATION_2026-11-12.md), including §11 Director disposition for PR #191.
-- **PR #192:** open, non-draft, unmerged; branch `docs/whole-brain-planning-scope-correction-20261107`; use the live PR page for exact current HEAD. It now contains 39 changed paths after the JARVIS-M0 execution report was added. Its recorded base SHA `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` predates the live base branch tip `ea64607ef94f142a6142a013e119a7225bc95c1c` by 14 commits. Compare reports 474 ahead / 14 behind from the current base tip to PR #192 head; no integration or history operation is authorized.
-- **PR #173:** open/draft/unmerged at `7e9481677197cf82df31bbe08984fa5d58644d98`; no GitHub review submission. Blind assessment and BFA-C01–BFA-C14 Director decisions remain outstanding.
-- **PR #174:** open/draft/unmerged at `9502989ffae91c00ba0a8568ab5296925fa9f27b`; corrected specification blob `a1798ee8a1d48284bd0dc6686ce255eacab8a2b7`. No current independent review submission; F-02/F-03 and Director disposition remain open.
-- **PR #191:** open/draft/unmerged at `609d38ede50bbdd98a93dfed112781eacabee9fd`; 1 commit ahead / 36 behind current PR #179. The Director selected Option A — retain separately as a bounded historical reference. Decision comment `6836333027` on PR #191; no replay, rebase, retarget, merge or closure. See the M0 report §11.
-- **PR #193:** open/draft/unmerged at `fa2bd50d6fb0bb77dc3cbaab684f51d606e94bb5`; 48 ahead / 3 behind current PR #175. It remains a separate non-operative lineage.
-- **PR #195:** open/draft/unmerged at `6f43b94fca4b00a0196f7775e5a41316142ea5e9`; consolidated workflow candidate only. Static and synthetic checks are not YAML/runtime execution. No workflow dispatch was available; no assessment run is claimed.
-- **PR #196:** closed/merged into its existing documentation base branch, merge commit `c151e52781e56e6481424f774c19ea30128debb0`; it was not merged into `main`. The governance document now records the post-merge state.
-- **DF-06:** **NOT MET** — rendered GitHub anchor behavior remains unverified; the historical 2026-11-03 primary-source pointer remains access-limited and no Director determination resolving it was found.
+- **Authorized milestone:** JARVIS-M0 — Initial Planning Gate Closure, approved by the Project Director on 2026-11-12. Gate-closure work only. Stage A and runtime implementation remain unauthorized.
+- **Execution record:** [JARVIS-M0 Builder Execution and Gate Reconciliation](reports/JARVIS_M0_BUILDER_EXECUTION_AND_GATE_RECONCILIATION_2026-11-12.md), including §11 PR #191 Option A and §12 PR #195 workflow correction.
+- **PR #192:** open, non-draft, unmerged; branch `docs/whole-brain-planning-scope-correction-20261107`; exact HEAD is the live PR page. Its recorded base SHA `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` predates the current base branch; no integration or branch-history operation is authorized.
+- **PR #173:** open/draft/unmerged at `7e9481677197cf82df31bbe08984fa5d58644d98`; blind architecture assessment pending; BFA-C01–BFA-C14 remain reserved for the Project Director.
+- **PR #174:** open/draft/unmerged at `9502989ffae91c00ba0a8568ab5296925fa9f27b`; corrected specification blob `a1798ee8a1d48284bd0dc6686ce255eacab8a2b7`; independent re-review and Director disposition of F-02/F-03 remain pending.
+- **PR #191:** open/draft/unmerged at `609d38ede50bbdd98a93dfed112781eacabee9fd`; Director selected Option A — retain separately as a bounded historical reference (PR #191 comment `6836333027`). No replay, rebase, retarget, merge or closure.
+- **PR #193:** open/draft/unmerged at `fa2bd50d6fb0bb77dc3cbaab684f51d606e94bb5`; separate, non-operative lineage; integration hold remains.
+- **PR #195:** open/draft/unmerged at corrected workflow candidate HEAD `26bdfc49316489675d947f5c0a60faa887309d8d`. Builder corrected the documentation fresh-reader workflow's stale PR #174 proposal pin. Independent review and runtime validation remain pending; no merge is authorized.
+- **PR #196:** closed/merged into its existing documentation base branch at `c151e52781e56e6481424f774c19ea30128debb0`; not merged into `main`.
+- **DF-06:** **NOT MET** — rendered GitHub anchor behavior and the access-limited historical 2026-11-03 primary-source pointer remain unresolved.
 - **DF-08:** **RESOLVED** only within its exact bounded preservation criterion.
-- **DF-09:** **OPEN / NOT MET** — latest qualifying 31/32 result is historical and not against current PR #192; PR #195 remains unintegrated/unexecuted.
-- **DF-10:** inventory cycle reopened by the M0 report, index/register updates and PR #191 decision reconciliation; final exact 39-path parent manifest and post-write verification are required.
+- **DF-09:** **OPEN / NOT MET** — no current-head CLEAR assessment. The corrected manual dispatch is prepared but awaits independent review of PR #195 and an authorized operator's Actions UI run against PR #192 HEAD `42993087ed7ff0d6fb1ed96157da6cf22291edcc` (or a newly re-frozen exact HEAD if PR #192 advances).
+- **DF-10:** inventory cycle reopened by §12 and the index update; refresh the exact changed-path manifest and post-write verification after the remaining M0 documentation updates.
 - **DF-11:** **WAIVED** by explicit Project Director decision.
 - **DF-12:** **NOT ACCEPTED**.
+- **Manual assessment inputs:** DF-09 target `42993087ed7ff0d6fb1ed96157da6cf22291edcc`, label `jarvis-m0-df09-42993087-20261112`; BFA target `7e9481677197cf82df31bbe08984fa5d58644d98`, label `jarvis-m0-bfa-7e948167-20261112`. Both select workflow branch `docs/ai-role-terminology-audit-20261111` at PR #195 corrected HEAD `26bdfc49316489675d947f5c0a60faa887309d8d`.
 - **Stage A:** NOT STARTED / HELD. Implementation planning remains HELD. Runtime implementation, source-baseline selection, PR integration, merge and deployment remain NOT AUTHORIZED.
 
 ---
