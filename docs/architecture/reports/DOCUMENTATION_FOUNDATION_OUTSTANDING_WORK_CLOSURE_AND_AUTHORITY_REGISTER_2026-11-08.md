@@ -1550,3 +1550,19 @@ After independent review, an authorized operator may use GitHub Actions UI and s
 - BFA workflow: `.github/workflows/brain-foundation-blind-architecture-review.yml`; target `7e9481677197cf82df31bbe08984fa5d58644d98`; label `jarvis-m0-bfa-7e948167-20261112`.
 
 This entry records Builder correction and verification only. It is not an Independent Reviewer verdict, Tester result, workflow run, gate clearance or Director acceptance.
+
+
+
+## 42. JARVIS-M0 Builder continuation 04 — exact-target handoff correction — 2026-11-12
+
+- **Governance revalidation:** Builder freshly read accepted governance blob `f5827c552f36f4647339b3f8dfb38956d146c570` during run `JARVIS-M0-BLD-2026-11-12-04`; Sections 17–22 and Rules 11.9–11.16 were specifically re-examined.
+- **Run report:** [JARVIS-M0 Builder Execution and Gate Reconciliation — §13](JARVIS_M0_BUILDER_EXECUTION_AND_GATE_RECONCILIATION_2026-11-12.md).
+- **PR #173 stale handoff correction:** old assignment comment #6803566867 targeted `756724b95e093ac48fcd95c5587117c0a4d8f3c0`; current PR #173 HEAD is `7e9481677197cf82df31bbe08984fa5d58644d98`. Superseding exact-target handoff posted as comment #6837198028. The old comment remains historical.
+- **PR #174 stale handoff correction:** old assignment comment #6803481563 targeted `f6662c149be4395f4c207f62a42920e787f063c4`; current PR #174 HEAD is `9502989ffae91c00ba0a8568ab5296925fa9f27b`. Current specification blob is `a1798ee8a1d48284bd0dc6686ce255eacab8a2b7`. Superseding independent-review handoff posted as comment #6837198710. The missing original-review provenance limitation remains explicit.
+- **PR #195:** exact candidate HEAD `26bdfc49316489675d947f5c0a60faa887309d8d`; corrected reader workflow blob `5b58d8250860f10df64947858bae7b729cb8a501`. Independent-review request comment #6836686985 is present. No independent verdict, YAML runtime validation, Actions dispatch, provider call or blind assessment is claimed.
+- **PR #192:** run-start exact HEAD `6141de967b862a4c90384052d4c16c66eb7f8b13`; open/non-draft/unmerged; 39 changed paths. The report/index/register writes in this run reopen DF-10; the final inventory must supersede prior manifest sections.
+- **DF-06:** NOT MET. **DF-08:** RESOLVED only within bounded criterion. **DF-09:** OPEN / NOT MET. **DF-11:** WAIVED. **DF-12:** NOT ACCEPTED.
+- **PR #191:** Director Option A remains recorded; no history operation.
+- **Authority:** No merge, branch-history operation, workflow dispatch, Stage A, implementation-planning execution, source-baseline selection, runtime implementation, training or deployment authorized or performed.
+
+This Builder record is not an Independent Reviewer verdict, Tester result, gate clearance or Project Director acceptance.
