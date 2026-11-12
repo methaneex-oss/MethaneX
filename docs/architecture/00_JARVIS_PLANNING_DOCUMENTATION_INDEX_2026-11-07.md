@@ -2,17 +2,17 @@
 
 > This block supersedes earlier active-status snapshots below where they conflict. Dated historical records remain preserved as historical evidence.
 
-- **PR #192:** open, non-draft, unmerged; branch `docs/whole-brain-planning-scope-correction-20261107`; base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; 38 changed paths. The live PR page is the authoritative current-HEAD pointer; the final inventory §65 records the exact parent commit, all 38 parent blob identities and the post-write verification. Do not rely on older embedded HEAD snapshots.
-- **PR #173:** open, draft, unmerged; corrected architecture proposal HEAD `756724b95e093ac48fcd95c5587117c0a4d8f3c0`. Blind Fresh Tester assessment of this exact revision and Project Director disposition of BFA-C01–BFA-C14 remain outstanding.
-- **PR #174:** open, draft, unmerged; exact current HEAD `b78e24b6fa122d1141b1f225bc6d29e1e7c77631`; accepted historical planning baseline remains `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`. F-02/F-03 Builder responses exist, but the original full review artifact and exact originally reviewed SHA remain unavailable; Independent Reviewer re-review and Project Director disposition remain outstanding.
+- **PR #192:** open, non-draft, unmerged; branch `docs/whole-brain-planning-scope-correction-20261107`; base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; 38 changed paths. The live PR page is the authoritative current-HEAD pointer; the final inventory §71 records the exact parent commit, all 38 parent blob identities and the post-write verification. Do not rely on older embedded HEAD snapshots.
+- **PR #173:** open, draft, unmerged; corrected architecture proposal HEAD `7e9481677197cf82df31bbe08984fa5d58644d98`. Blind Fresh Tester assessment of this exact revision and Project Director disposition of BFA-C01–BFA-C14 remain outstanding.
+- **PR #174:** open, draft, unmerged; exact current HEAD `8e66ad5f693dc23354a5386661eda99328313e5f`; accepted historical planning baseline remains `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`. F-02/F-03 Builder responses exist, but the original full review artifact and exact originally reviewed SHA remain unavailable; Independent Reviewer re-review and Project Director disposition remain outstanding.
 - **PR #191:** open, draft, unmerged; HEAD `609d38ede50bbdd98a93dfed112781eacabee9fd`, historical base `f6267456560a08054d69f7960d2951452b14017c`. It remains a bounded human/MCU reference artifact; content/dependency review is complete, but Project Director disposition is pending. No retarget/rebase/replay is authorized.
-- **PR #193:** open, draft, unmerged; HEAD `4705716e0845d7b5621ab7e339d36c9f42853b1a`, separate PR #175-derived lineage. Integration with PR #192 remains held.
+- **PR #193:** open, draft, unmerged; HEAD `9d8aec43e749ffe1eaa5a75b53e153954ac5bd55`, separate PR #175-derived lineage. Integration with PR #192 remains held.
 - **PR #194:** open, draft, unmerged; workflow response-diagnostics correction branch HEAD `9b457e35c601719d9b213fb843dd5876976b35b9`. It remains separate and unintegrated.
-- **PR #195:** open, draft, unmerged; role terminology / Blind Fresh Tester workflow branch HEAD `507263f470987cf5f91fa07e052e85e6b92bf652`. Its workflow now uses the current PR #173 and PR #174 revisions, validates a full SHA through an environment variable, and preserves safe response diagnostics. Static checks passed; the workflow remains unexecuted. PR #194 remains a separate open proposal; PR #195 carries its response-diagnostics handling plus later corrections. Do not merge both.
+- **PR #195:** open, draft, unmerged; role terminology / Blind Fresh Tester workflow branch HEAD `1e18536a3bc769fadd4bf2b53639c5490cc0d052`. Its workflow now uses the current PR #173 and PR #174 revisions, validates a full SHA through an environment variable, and preserves safe response diagnostics. Static checks passed; the workflow remains unexecuted. PR #194 remains a separate open proposal; PR #195 carries its response-diagnostics handling plus later corrections. Do not merge both.
 - **DF-06:** **NOT MET.** Existing validation remains bounded. Complete semantic relevance, all applicable external destination reachability, renderer-specific anchor behavior and applicable historical/cross-branch link validation are not established. Do not repeat earlier bounded-scope RESOLVED wording as current gate status.
 - **DF-08:** **RESOLVED** against its exact bounded preservation criterion. This does not claim repository-wide semantic archive completeness.
 - **DF-09:** **OPEN / NOT MET.** Latest qualifying result is PARTIALLY CLEAR (31/32), run `42970930733`, on older packet revision `887b349f9826de7726707209f640ae0cafd78ace`. A CLEAR Blind Fresh Tester result against the frozen final PR #192 revision is required. No new run is claimed; the available GitHub connection exposes no workflow-dispatch action.
-- **DF-10:** Builder self-review and inventory are finalized. The final inventory §65 records the exact final commit and tree verification: all 38 changed paths are present, the parent-blob manifest matches the exact parent tree, and the final inventory commit changes only the inventory blob.
+- **DF-10:** Builder self-review and inventory are finalized. The final inventory §71 records the exact final commit and tree verification: all 38 changed paths are present, the parent-blob manifest matches the exact parent tree, and the final inventory commit changes only the inventory blob.
 - **DF-11:** **WAIVED** by explicit Project Director decision. No new DF-11 review is required or commissioned.
 - **DF-12:** **NOT ACCEPTED.** Exact-revision Project Director acceptance remains pending after all applicable evidence and reserved decisions are resolved.
 - **PR #192 / #193 integration:** held by explicit Project Director decision. No merge, rebase, retarget, cherry-pick or branch-history operation is authorized.
@@ -824,13 +824,13 @@ This addendum supersedes the earlier status statements in this index that descri
 - **DF-06 — NOT MET.** The final semantic-link audit is recorded in preservation report §20. All 116 repository-relative targets resolve; the 89 Phase 2 source citations across 45 exact commit/path pairs were checked against their adjacent claims; 20 Phase 1 source references and nine immutable cross-branch document pins were checked; external GitHub evidence destinations were revalidated. The remaining technical blocker is rendered GitHub line/fragment-anchor behavior, which the available source/API connector cannot verify and direct browser retrieval could not fetch. The historical ChatGPT shared-conversation pointer remains explicitly access-limited and is not used as a clickable navigation dependency.
 - **DF-08 — RESOLVED** only against its exact bounded preservation criterion.
 - **DF-09 — OPEN / NOT MET.** The 31/32 PARTIALLY CLEAR result is tied to an older packet revision. A CLEAR Blind Fresh Tester result against the final exact PR #192 HEAD is still required.
-- **DF-10 — BUILDER COMPLETE** for the exact final PR #192 HEAD after inventory §70 and its post-write verification. This is not Independent Reviewer or Project Director acceptance.
+- **DF-10 — BUILDER COMPLETE** for the exact final PR #192 HEAD after inventory §71 and its post-write verification. This is not Independent Reviewer or Project Director acceptance.
 - **DF-11 — WAIVED** by the Project Director.
 - **DF-12 — NOT ACCEPTED.** Exact-revision Project Director acceptance remains outstanding.
 
 ### Related Builder proposals
 
-- **PR #195:** HEAD 9d0255041c1d3c41c1b6a9f9e373f2bf673184cd. Consolidated terminology and blind-assessment workflow proposal; statically inspected only, not YAML-runtime-validated or executed. Open/draft/unmerged. PR #194 remains the stale alternative.
+- **PR #195:** HEAD 1e18536a3bc769fadd4bf2b53639c5490cc0d052. Consolidated terminology and blind-assessment workflow proposal; statically inspected only, not YAML-runtime-validated or executed. Open/draft/unmerged. PR #194 remains the stale alternative.
 - **PR #196:** HEAD 9a744927c5ebcfea2c720ded42ec7425edc499c0. Additive governance amendment containing Builder Rules 11.9–11.16. Open/non-draft/unmerged; the rules are not yet integrated into the base governance branch.
 
 ### Reserved review and authority work
@@ -846,3 +846,44 @@ The PR #192 base-reference discrepancy remains disclosed: the PR API records bas
 ### Phase boundary
 
 Initial planning is **NOT COMPLETE** while DF-06, DF-09 and DF-12 remain open. Stage A is **NOT STARTED / HELD**. Implementation planning is **HELD**. Runtime implementation, source-baseline selection and PR integration remain **NOT AUTHORIZED**.
+
+
+---
+
+## Builder review and correction reconciliation — 2026-11-12
+
+This is the latest Builder status entry. It supersedes earlier active snapshots in this index where they conflict; the dated historical evidence below is retained.
+
+### Exact live PR state re-fetched before this index update
+
+| PR | Exact HEAD | State | Builder interpretation |
+|---|---|---|---|
+| #173 Brain Foundation Architecture | \`7e9481677197cf82df31bbe08984fa5d58644d98\` | Open, draft, unmerged | Builder corrected the CF-17 social/agent classification; blind fresh assessment and BFA-C01–BFA-C14 Project Director dispositions remain outstanding |
+| #174 Brain Mechanism Specification | \`8e66ad5f693dc23354a5386661eda99328313e5f\` | Open, draft, unmerged | F-02/F-03 corrections remain proposed; Independent Reviewer re-review and Project Director disposition remain outstanding; original follow-on report and exact original reviewed SHA remain unavailable |
+| #191 Human/MCU comparison | \`609d38ede50bbdd98a93dfed112781eacabee9fd\` | Open, draft, unmerged | Bounded reference artifact; Project Director disposition remains pending |
+| #192 Documentation Foundation | Live PR page is the current HEAD pointer | Open, non-draft, unmerged | 38 documentation/README/report/template paths; Builder review/corrections and exact final inventory verification are in progress |
+| #193 Deferred implementation-plan hold | \`9d8aec43e749ffe1eaa5a75b53e153954ac5bd55\` | Open, draft, unmerged | Separate PR #175-derived non-operative hold; current gate wording corrected |
+| #195 Role terminology and workflow corrections | \`1e18536a3bc769fadd4bf2b53639c5490cc0d052\` | Open, draft, unmerged | Workflow response handling and diagnostics hardened; static checks only, no YAML runtime validation or workflow execution |
+| #196 Builder operating controls | \`9a744927c5ebcfea2c720ded42ec7425edc499c0\` | Open, non-draft, unmerged | Additive Rules 11.9–11.16; not merged into the governing branch |
+
+PR #192 still reports base SHA \`61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c\`, while the live PR #179/base-branch tip is \`d30237b81c3695f2a7cb980144b221bbd42ce548\`. The discrepancy is disclosed and unchanged; no rebase, retarget or merge was performed.
+
+### Builder review findings and corrections
+
+- **PR #173:** corrected the completion matrix's CF-17 status from wholly deferred to partial, distinguishing the minimum foundational agent representation/ownership contract from advanced social cognition. The exact live PR head is shown above.
+- **PR #174:** corrected the F-03 status summary to include scenarios 47–48, which require material downstream state/decision-version effects and owner-specific reconsideration after invalidation. The exact live PR head is shown above.
+- **PR #193:** corrected the current handoff gate summary so DF-06 is NOT MET, DF-08 is RESOLVED only against its bounded criterion, DF-09 is OPEN / NOT MET, DF-11 is WAIVED and DF-12 is NOT ACCEPTED.
+- **PR #195:** hardened the blind architecture workflow's response-size bounds, error diagnostics, response-shape extraction and completeness/model checks. The workflow has not been YAML-runtime-validated or executed.
+- **PR #192:** corrected stale current-status references and runbook descriptions as part of the continuing package review. Earlier historical snapshots are not silently rewritten.
+
+### Gate and authorization status
+
+- DF-06: **NOT MET**; rendered GitHub line/fragment-anchor behavior remains unverified through the available retrieval surface.
+- DF-08: **RESOLVED** only against its exact bounded preservation criterion.
+- DF-09: **OPEN / NOT MET**; latest qualifying result remains PARTIALLY CLEAR (31/32) on an older packet revision; no result is claimed for the current final PR #192 HEAD.
+- DF-10: Builder review, correction and final exact-parent inventory synchronization are being completed; no independent clearance is implied.
+- DF-11: **WAIVED** by explicit Project Director decision.
+- DF-12: **NOT ACCEPTED**; final exact-revision Project Director decision remains reserved.
+- Stage A: NOT STARTED / HELD. Implementation planning: HELD. Runtime implementation, source-baseline selection and PR integration: NOT AUTHORIZED.
+
+This Builder entry is not an Independent Reviewer verdict, Blind Fresh Tester result, Project Director acceptance or implementation authorization.
