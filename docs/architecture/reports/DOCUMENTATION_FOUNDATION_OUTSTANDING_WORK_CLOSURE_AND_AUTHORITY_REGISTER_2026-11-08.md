@@ -1508,3 +1508,45 @@ This report/status update advances the PR #192 tree and reopens inventory closur
 
 This is Builder documentation and repository-state evidence only. It is not an Independent Reviewer verdict, Tester result, gate clearance or Project Director acceptance of JARVIS-M0.
 
+
+
+
+## 43. JARVIS-M0 PR #195 assessment workflow source-pin correction — 2026-11-12
+
+### 43.1 Governance revalidation record
+
+- **Project/work item/run:** MethaneX / JARVIS-M0 / Builder continuation; `JARVIS-M0-BLD-2026-11-12-03`.
+- **Governing source:** `docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md`, blob `f5827c552f36f4647339b3f8dfb38956d146c570`, freshly fetched and read from the governing documentation branch.
+- **Fresh-read confirmation:** Yes; permanent principles, Rules 1–16, Sections 17–22 and amendments revisited during this run.
+- **Role:** Builder.
+- **Authorized scope:** JARVIS-M0 gate closure; correct the stale source revision in the assessment workflow candidate so the blind reader packet represents the current PR #174 proposal.
+- **Exclusions:** No workflow dispatch, PR merge/integration, rebase, retarget, replay, cherry-pick, Stage A, implementation planning execution, source-baseline selection, runtime implementation, training or deployment.
+
+### 43.2 Finding and correction
+
+- **Finding:** At PR #195 prior HEAD `6f43b94fca4b00a0196f7775e5a41316142ea5e9`, `.github/workflows/documentation-foundation-ai-reader.yml` labelled the PR #174 specification as the current corrected proposal but pinned it to stale SHA `16a82663d6a421575234b5f8f4ea0c5ad4f735cf`.
+- **Current PR #174 proposal at verification:** `9502989ffae91c00ba0a8568ab5296925fa9f27b`.
+- **Correction commit:** `26bdfc49316489675d947f5c0a60faa887309d8d`.
+- **Workflow blob:** `5b58d8250860f10df64947858bae7b729cb8a501`.
+- **Exact change:** replaced the stale SHA in the workflow's fetch command and packet-manifest source entry (2 additions, 2 deletions; one changed file only).
+- **Exact verification:** PR #195 and branch ref both point to the correction commit; the commit's sole parent is the previous PR #195 HEAD; the resulting workflow contains the current PR #174 SHA twice and no stale SHA.
+
+### 43.3 Review and execution status
+
+- Builder self-review and exact-revision source-pin verification: **COMPLETE**.
+- Independent Reviewer review of PR #195 workflow candidate: **PENDING**.
+- YAML parser / actionlint validation: **NOT RUN**.
+- GitHub Actions workflow execution: **NOT RUN**.
+- Provider invocation / assessment artifact: **NOT PRODUCED**.
+- DF-09: **OPEN / NOT MET** until the final frozen PR #192 HEAD receives a valid Blind Fresh Tester result of **CLEAR**.
+- PR #173 blind architecture assessment: pending; BFA-C01–BFA-C14 remain Director-reserved.
+- No PR integration or branch-history operation is authorized.
+
+### 43.4 Dispatch preparation
+
+After independent review, an authorized operator may use GitHub Actions UI and select branch `docs/ai-role-terminology-audit-20261111` at workflow candidate HEAD `26bdfc49316489675d947f5c0a60faa887309d8d`.
+
+- DF-09 workflow: `.github/workflows/documentation-foundation-ai-reader.yml`; use the exact PR #192 HEAD re-fetched after final M0 documentation/inventory closure as `target_revision`; label `jarvis-m0-df09-<first-8-of-final-head>-20261112`.
+- BFA workflow: `.github/workflows/brain-foundation-blind-architecture-review.yml`; target `7e9481677197cf82df31bbe08984fa5d58644d98`; label `jarvis-m0-bfa-7e948167-20261112`.
+
+This entry records Builder correction and verification only. It is not an Independent Reviewer verdict, Tester result, workflow run, gate clearance or Director acceptance.
