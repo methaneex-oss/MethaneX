@@ -941,7 +941,7 @@ If a new governance instruction or amendment appears during a run, pause affecte
 
 ### Rule 22.5 — Governance compliance is an acceptance and review criterion
 
-Builder handoffs must include the Builder's run-specific Governance Revalidation Record. Independent Review must check that record and independently perform its own fresh revalidation. Independent Testing must do the same before testing. Missing, stale, copied without rereading, unverifiable or role-inappropriate records are findings; where they prevent confidence in authority or acceptance, the verdict must be REJECTED or BLOCKED as appropriate.
+Builder handoffs must include the Builder's run-specific Governance Revalidation Record. Independent Review must check that record and independently perform its own fresh revalidation. Independent Testing must do the same before testing. Missing, stale, copied without rereading, unverifiable or role-inappropriate records are findings. The Reviewer must issue **REJECTED — CORRECTIONS REQUIRED** when governance noncompliance prevents approval; if the review cannot be conducted because required sources or evidence are unavailable, record the review stage as PENDING/BLOCKED without issuing an approval verdict. The Tester must issue **FAIL** for demonstrated noncompliance or **BLOCKED** when required testing cannot be performed.
 
 The Reviewer and Tester must explicitly assess whether the work complied with the governance principles throughout the run, not merely whether a checklist was filled in. A ceremonial attestation does not prove compliance. Evidence must show how scope, role boundaries, change control, root-cause correction, review/test separation and completion criteria were applied where relevant.
 
