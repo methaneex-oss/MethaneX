@@ -1652,3 +1652,53 @@ The final inventory must include the latest portal, index, runbook, handoff, sup
 **Gate status:** DF-06 NOT MET; DF-08 RESOLVED only within its bounded criterion; DF-09 OPEN / NOT MET; DF-10 Builder verification remains open until exact final inventory/post-write verification; DF-11 WAIVED; DF-12 NOT ACCEPTED. Stage A NOT STARTED / HELD. Implementation planning HELD. Runtime implementation and PR integration NOT AUTHORIZED.
 
 This is Builder self-review evidence only. It is not an Independent Reviewer verdict, Blind Fresh Tester result or Project Director acceptance.
+
+
+## 18. Final Builder self-review — current documentation closeout — 2026-11-12
+
+**Author and self-reviewer:** ChatGPT (GPT-6), the same Builder that performed this continuation.  
+**Review classification:** Builder self-review only. This is not an Independent Reviewer verdict, Blind Fresh Tester result or Project Director acceptance.  
+**Target PR:** #192, branch `docs/whole-brain-planning-scope-correction-20261107`. Re-fetch live PR metadata for the resulting exact HEAD after the final inventory write.
+
+### 18.1 Scope and preservation
+
+- The live PR #192 changed-path inventory contains 38 paths, all README/documentation/inventory/report/template files.
+- The complete recursive tree contains 268 entries and is not truncated. All 38 changed paths are present.
+- No runtime source, test source, dependency, build configuration, runtime workflow or runtime-state path is in PR #192's changed-file set.
+- The latest pre-final-inventory commits in this continuation update only the planning index, authority register, preservation report and this self-review. The final inventory must be written last and must record the exact parent/blob identities after those updates.
+- The existing JARVIS principles and authority boundaries are preserved. Stage A, implementation planning, source-baseline selection, runtime implementation, PR integration, merge and deployment remain held/unauthorized.
+
+### 18.2 Builder checks performed
+
+1. **Current PR state:** re-fetched PR #173, #174, #175, #179, #191, #192, #193, #194, #195 and #196 metadata and the relevant branch refs.
+2. **Cross-branch lineage:** verified exact commit comparisons. PR #174 is 24 ahead/12 behind PR #173; PR #191 is 1 ahead/23 behind PR #179; PR #192's recorded base is one commit behind PR #179; PR #193 is 48 ahead/3 behind PR #175. No history operation was performed.
+3. **38-path structural review:** fetched every changed path at the exact pre-final-inventory PR #192 snapshot. The exact tree is complete (268 entries); all changed paths exist.
+4. **Relative links:** the established Markdown/autolink extraction records 316 occurrences, including 116 repository-relative targets and 200 external HTTP(S) occurrences. All 116 relative targets resolve. The inventory update did not add, remove or alter its 20 Markdown link destinations; the index/register updates in this continuation add no Markdown link destinations.
+5. **External and semantic checks:** preservation report §§20 and 22 record the bounded semantic audit, exact immutable source pins and enumerated GitHub Actions/PR/comment/artifact destination checks. The source-map evidence includes 89 Phase 2 citations across 45 exact commit/path pairs and 20 Phase 1 references.
+6. **Structure:** no reference-style definitions, raw HTML anchor attributes or local relative fragment links were detected in the scanned package.
+7. **JSON:** both historical fresh-reader evidence JSON files parse successfully. They are not a new assessment of the current PR #192 HEAD.
+8. **PR #173/#174:** re-fetched the current architecture, completion matrix, specification, F-02/F-03 correction report and independent re-review request. The current PR #174 specification blob is `a1798ee8a1d48284bd0dc6686ce255eacab8a2b7`; the PR #195 reader workflow's pinned source commit `16a82663d6a421575234b5f8f4ea0c5ad4f735cf` contains the same blob.
+9. **PR #195 workflows:** re-fetched exact current workflow blobs `7d202c8c3e8ea29a7b40ec70baafbc75d07a34e2` and `96dc2971503af022e4d247d4be07d257aec5d7db`. The recorded exact-source assertions and 31-assertion synthetic logic harness cover target-SHA/label validation, response-shape extraction, metadata bounds, sanitized failures, provider/model identity, completion/refusal/tool-call checks, section validation and evidence upload.
+10. **PR #196 governance:** re-fetched the amended governance file at exact commit `bd778bd235062e8bfdf0ae1a05232c9489c1eda3`. Sections 17–21 and the 2026-11-12 amendment record are present; original Rules 11.1–11.16 and the 2026-11-11 amendment remain present.
+
+### 18.3 Verification limitations — explicit
+
+- No YAML parser was available through the connected repository tool surface, and the container's direct GitHub fetch attempt failed. The PR #195 workflow files were source-inspected and synthetically checked, but **were not YAML-parsed or executed**.
+- No workflow-dispatch action is exposed by the available GitHub connection. PR #195 remains open/draft/unmerged; no provider call, uploaded assessment artifact or current-head Blind Fresh Tester result exists.
+- GitHub-rendered line/fragment-anchor behavior remains unverified. The connector returns normalized source text; the rendered GitHub page request returned a disabled-fetch error.
+- The historical ChatGPT shared-conversation pointer remains access-limited and non-clickable; primary-source access or Project Director disposition is required.
+- The original full PR #174 F-02/F-03 follow-on review and exact originally reviewed SHA remain unavailable. The correction report is a secondary recovery and is explicitly not represented as verbatim source material.
+- The current PR #173/#174 branches have no submitted Independent Reviewer reviews. PR #191's Project Director disposition remains pending.
+
+### 18.4 Final gate disposition
+
+- DF-06: **NOT MET** — Builder-side semantic, external-destination and relative-path checks are complete for the documented scope; rendered-anchor behavior and the access-limited historical pointer remain unresolved as described above.
+- DF-08: **RESOLVED** only within its bounded preservation criterion.
+- DF-09: **OPEN / NOT MET** — no current-head Blind Fresh Tester result.
+- DF-10: **Builder closeout remains pending only until the final exact parent/blob inventory and post-write verification are recorded.**
+- DF-11: **WAIVED** by the Project Director.
+- DF-12: **NOT ACCEPTED**; Project Director disposition remains reserved.
+
+**Builder conclusion:** the bounded documentation corrections, current-status reconciliation, source-level checks and workflow source review are complete. The remaining Builder action is the final inventory write and exact post-write verification. The unavailable rendered-anchor check is explicitly blocked, not passed. Independent review, Blind Fresh Testing and Project Director decisions remain separate responsibilities.
+
+No claim of full Documentation Foundation acceptance, DF-06 clearance, DF-09 clearance, architecture acceptance or implementation authorization is made.
