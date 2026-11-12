@@ -220,7 +220,7 @@ The architecture workflow now:
 - Architecture workflow blob before correction: eb87ba8e17a6dee6b992be50a3a95463621559fb.
 - Correction commits: d190dc8a90e9643fd7494139b699475638691ba3 and 87087800ba8a24b07066656691fdc0ef16eae6f5.
 - Final architecture workflow blob: 8f7f94c87c905c033ac4385ca1a977f30b41478c.
-- The final live PR #195 head was re-fetched as 87087800ba8a24b07066656691fdc0ef16eae6f5; the workflow was re-fetched at that exact head.
+- The workflow-hardening change itself is commit `87087800ba8a24b07066656691fdc0ef16eae6f5`, with final workflow blob `8f7f94c87c905c033ac4385ca1a977f30b41478c`. Subsequent audit-only commits may advance the PR head without changing this workflow blob; always re-fetch the live PR head and the workflow blob before any future review or execution.
 
 Static source assertions against the exact final workflow confirmed full-SHA and label validation, environment-only target handling, response and diagnostic read bounds, all four response extraction paths, bounded metadata, expected provider/model checks, finish/refusal/tool-call validation, A–K section checks, and saving output before validation.
 
