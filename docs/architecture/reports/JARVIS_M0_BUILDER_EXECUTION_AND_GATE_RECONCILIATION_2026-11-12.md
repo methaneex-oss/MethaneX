@@ -244,3 +244,77 @@ After posting the decision, the Builder re-fetched PR #191 and PR #192 metadata 
 
 JARVIS-M0 remains OPEN / BLOCKED. DF-06 remains NOT MET; DF-09 remains OPEN / NOT MET; DF-12 remains NOT ACCEPTED. PR #173 blind assessment and BFA-C01–BFA-C14 Director decisions, PR #174 independent re-review and F-02/F-03 Director disposition, and the applicable final independent review / testing-or-authorized-N/A stages remain outstanding. Stage A remains HELD and runtime implementation remains NOT AUTHORIZED.
 
+
+
+
+## 12. PR #195 assessment workflow correction and exact dispatch preparation — 2026-11-12
+
+### 12.1 Governance revalidation record
+
+- **Project/work item/run:** MethaneX / JARVIS-M0 / Builder continuation; run `JARVIS-M0-BLD-2026-11-12-03`.
+- **Governing source:** `docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md`, freshly fetched from `docs/jarvis-phase-2-whole-brain-integration-map-20261105`, blob `f5827c552f36f4647339b3f8dfb38956d146c570`.
+- **Fresh-read confirmation:** Yes; permanent principles, Rules 1–16, Sections 17–22 and the dated amendments were revisited in this run.
+- **Role:** Builder.
+- **Authorized scope:** Continue the Director-approved JARVIS-M0 gate-closure work. Correct the assessment workflow's stale source pin where necessary to ensure the authorized blind assessment uses the current approved/proposed source revisions. No PR integration or runtime work.
+- **Exclusions:** No PR merge, rebase, retarget, cherry-pick, replay, close, Stage A, implementation-planning execution, source-baseline selection, runtime implementation, training or deployment.
+- **Relevant architecture and authority:** PR #171 and accepted PR #172 baselines; current PR #173 architecture proposal; accepted PR #174 specification baseline and current corrected proposal; PR #192 documentation target; PR #195 workflow candidate; DF-06/08/09/10/11/12; the existing integration hold.
+
+### 12.2 Root cause
+
+The PR #195 documentation fresh-reader workflow candidate at its prior HEAD `6f43b94fca4b00a0196f7775e5a41316142ea5e9` pinned the "current corrected proposal" input to PR #174 revision `16a82663d6a421575234b5f8f4ea0c5ad4f735cf`. The live PR #174 proposal had advanced to `9502989ffae91c00ba0a8568ab5296925fa9f27b`. The workflow therefore would have assembled a packet containing an outdated proposed specification while labelling it as the current corrected proposal.
+
+This is a source-revision drift defect in the assessment harness, not a defect in the PR #174 specification itself. Dispatching without correction would have weakened the validity of the DF-09 evidence.
+
+### 12.3 Correction performed
+
+- **Workflow path:** `.github/workflows/documentation-foundation-ai-reader.yml`.
+- **Previous blob:** `7d202c8c3e8ea29a7b40ec70baafbc75d07a34e2`.
+- **Corrected blob:** `5b58d8250860f10df64947858bae7b729cb8a501`.
+- **Commit:** `26bdfc49316489675d947f5c0a60faa887309d8d`.
+- **Parent:** `6f43b94fca4b00a0196f7775e5a41316142ea5e9`.
+- Replaced the stale PR #174 proposal SHA in exactly two locations (the explicit fetch and packet manifest source entry) with `9502989ffae91c00ba0a8568ab5296925fa9f27b`.
+- No other workflow lines or paths were changed by this commit.
+
+### 12.4 Builder self-review and exact-revision verification
+
+- Re-fetched PR #195 metadata and branch ref before modification; both pointed to `6f43b94fca4b00a0196f7775e5a41316142ea5e9`.
+- Re-fetched the target workflow at its exact prior blob and confirmed exactly two occurrences of the stale SHA before replacement.
+- Re-fetched PR #195, its branch ref, the changed workflow and the commit after the write.
+- PR #195 HEAD and branch ref both now equal `26bdfc49316489675d947f5c0a60faa887309d8d`.
+- The exact commit has one parent and modifies exactly one path: the workflow file (2 additions, 2 deletions).
+- The resulting workflow blob contains the current PR #174 SHA in both expected locations and contains no occurrence of the stale `16a82663...` SHA.
+- The architecture blind-assessment workflow's pinned accepted baselines remain PR #171 `b05434758ad4fe72815503f89bd5d2990ccb658b` and PR #172 `d7d676b79dbf3269f7fd3ebdb4363a6df19f255d`; its PR #173 target remains `7e9481677197cf82df31bbe08984fa5d58644d98`.
+- No YAML parser, GitHub Actions run, provider invocation or blind assessment was executed in this Builder run. Static inspection and exact source-pin checks are not runtime validation.
+
+### 12.5 Exact manual dispatch inputs now prepared
+
+The workflow files already exist on the repository default branch, and GitHub's manual-run UI permits selecting the branch containing the workflow revision. The corrected PR #195 branch may therefore be selected without merging PR #195.
+
+**DF-09 — Documentation Foundation Blind Fresh-Reader Assessment**
+- Workflow: `.github/workflows/documentation-foundation-ai-reader.yml`
+- Branch to select: `docs/ai-role-terminology-audit-20261111`
+- Workflow revision: `26bdfc49316489675d947f5c0a60faa887309d8d`
+- `target_revision`: `42993087ed7ff0d6fb1ed96157da6cf22291edcc`
+- `assessment_label`: `jarvis-m0-df09-42993087-20261112`
+- Required outcome: **CLEAR**. PARTIALLY CLEAR or a partial score does not satisfy DF-09.
+
+**BFA — Brain Foundation Blind Architecture Assessment**
+- Workflow: `.github/workflows/brain-foundation-blind-architecture-review.yml`
+- Branch to select: `docs/ai-role-terminology-audit-20261111`
+- Workflow revision: `26bdfc49316489675d947f5c0a60faa887309d8d`
+- `target_revision`: `7e9481677197cf82df31bbe08984fa5d58644d98`
+- `assessment_label`: `jarvis-m0-bfa-7e948167-20261112`
+
+**Execution limitation:** this session's GitHub connection exposes workflow-run inspection and artifact retrieval but no workflow-dispatch operation. The Builder cannot start either manual run from this session. No run, provider result or assessment verdict is claimed. The independent technical review of PR #195's workflow candidate must also be completed before relying on the workflow for gate evidence. The Project Director or authorized operator must initiate the manual runs through GitHub Actions UI after that review.
+
+### 12.6 Current disposition
+
+- PR #195 remains open/draft/unmerged at `26bdfc49316489675d947f5c0a60faa887309d8d`; no integration or history operation was performed.
+- DF-09 remains **OPEN / NOT MET** until a valid exact-current-head run returns CLEAR.
+- PR #173 blind assessment remains pending; BFA-C01–BFA-C14 remain reserved to the Project Director.
+- PR #174 independent re-review and Director disposition remain pending.
+- DF-06 remains NOT MET; DF-12 remains NOT ACCEPTED.
+- PR #191 Option A remains recorded; PR #192/#193 integration remains held.
+- Stage A remains HELD; runtime implementation remains NOT AUTHORIZED.
+
+This section records Builder correction and verification only. It is not an Independent Reviewer verdict, Tester result, workflow execution, gate clearance or Project Director acceptance.
