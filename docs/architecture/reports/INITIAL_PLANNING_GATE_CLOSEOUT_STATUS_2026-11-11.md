@@ -255,3 +255,62 @@ This section supersedes the earlier §9/§10 Builder status snapshots where they
 The Blind Fresh Tester has not assessed the final exact PR #192 HEAD. The Independent Reviewer has not reviewed this final exact snapshot. Project Director decisions remain outstanding for PR #173 BFA-C01–BFA-C14, PR #174 disposition, PR #191 disposition, PR #192/#193 integration order and DF-12 acceptance.
 
 Initial planning is **NOT COMPLETE**. Stage A is **NOT STARTED / HELD**. Implementation planning is **HELD**. Runtime implementation and PR integration remain **NOT AUTHORIZED**.
+
+
+---
+
+## 13. Builder review and correction reconciliation — 2026-11-12
+
+### 13.1 Exact repository state at the start of this update
+
+The live PR metadata was re-fetched before this report update. PR #192 was open, non-draft and unmerged at pre-write HEAD \`ad5ba912ea60c0d14b910f8783a09131ef844210\`, with 38 changed paths. The report update itself advances PR #192; this SHA is a pre-write snapshot, not the resulting HEAD.
+
+| PR | Exact HEAD at this re-fetch | State | Current disposition |
+|---|---|---|---|
+| #173 Brain Foundation Architecture | \`7e9481677197cf82df31bbe08984fa5d58644d98\` | Open, draft, unmerged | Builder CF-17 correction committed; blind fresh assessment and BFA-C01–BFA-C14 Project Director dispositions remain outstanding |
+| #174 Brain Mechanism Specification | \`8e66ad5f693dc23354a5386661eda99328313e5f\` | Open, draft, unmerged | F-02/F-03 specification corrections remain proposed; Independent Reviewer re-review and Project Director disposition remain outstanding |
+| #191 Human/MCU comparison | \`609d38ede50bbdd98a93dfed112781eacabee9fd\` | Open, draft, unmerged | Bounded reference artifact; Project Director disposition remains pending |
+| #192 Documentation Foundation | \`ad5ba912ea60c0d14b910f8783a09131ef844210\` (pre-write) | Open, non-draft, unmerged | 38 changed paths; Builder review/correction pass continues |
+| #193 Deferred implementation-plan hold | \`9d8aec43e749ffe1eaa5a75b53e153954ac5bd55\` | Open, draft, unmerged | Separate PR #175-derived non-operative hold; current DF status wording corrected |
+| #195 Role terminology and workflow corrections | \`1e18536a3bc769fadd4bf2b53639c5490cc0d052\` | Open, draft, unmerged | Workflow response handling and diagnostics hardened; static inspection only |
+| #196 Builder operating controls | \`9a744927c5ebcfea2c720ded42ec7425edc499c0\` | Open, non-draft, unmerged | Additive Builder Rules 11.9–11.16; not merged into the governing branch |
+
+PR #192's API base remains \`61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c\`, while the live PR #179/base-branch tip is \`d30237b81c3695f2a7cb980144b221bbd42ce548\`. No base update, rebase, retarget or merge was performed.
+
+### 13.2 Builder findings and corrections completed in this pass
+
+1. **PR #173 CF-17 classification:** corrected the completion matrix so the minimum foundational social/agent representation and ownership contract is classified PARTIAL, while advanced theory-of-mind and social cognition remain deferred. This prevents the matrix from understating architecture already present in the foundation.
+2. **PR #174 F-03 scenario coverage:** corrected the main specification's F-03 status summary to include scenarios 47–48. Those scenarios add explicit evidence of material downstream owner-state/decision-version effects and owner-specific reconsideration after invalidation. The prior summary mentioned only scenarios 41–46.
+3. **PR #193 current gate status:** corrected the controlling continuity-handoff summary. It now states DF-06 NOT MET, DF-08 RESOLVED only within its bounded criterion, DF-09 OPEN / NOT MET, DF-11 WAIVED and DF-12 NOT ACCEPTED.
+4. **PR #195 architecture workflow:** hardened bounded provider-response reads, allowlisted HTTP-error diagnostics, generic exception sanitization, response-shape extraction, bounded metadata, expected provider/model checks, finish/refusal/tool-call validation and required A–K assessment sections. The workflow-hardening commit is \`87087800ba8a24b07066656691fdc0ef16eae6f5\`; workflow blob \`8f7f94c87c905c033ac4385ca1a977f30b41478c\`. Subsequent audit-only commits advance the PR head without changing that workflow blob.
+5. **PR #192 current-status pointers:** refreshed the planning index, the fresh-reader runbook and this closeout record to distinguish current workflow evidence from stale snapshots and to point to the latest inventory section.
+
+### 13.3 Builder verification performed and limitations
+
+- Fetched all four PR #173 changed documents at the exact PR #173 revision and checked the matrix/architecture/source-audit relationship.
+- Fetched all five PR #174 changed documents at the exact PR #174 revision and checked BM-02, BM-12, scenarios 35–48, the correction report and the re-review request.
+- Fetched the two PR #193 documents at the exact PR #193 revision and corrected a current gate-status contradiction in the continuity handoff.
+- Fetched both PR #195 workflows and the role terminology audit at the exact PR #195 revision. Static checks confirm the response-handling protections described above. No YAML parser, GitHub Actions execution, provider response-shape test or Blind Fresh Tester run has been executed in this environment.
+- Fetched PR #196's governance file and inspected Rules 11.9–11.16 and their amendment record. The proposal remains unmerged and does not change the authorization boundary.
+- Ran bounded Markdown relative-target, duplicate-heading and placeholder scans across the inspected PR #192 documents. No missing relative targets or placeholder markers were found in those inspected files. This is not a full Markdown parser, does not prove semantic link relevance, does not establish all external destinations, and does not verify rendered GitHub anchors.
+- Reconciled the F-03 scenario summary with the actual specification: scenarios 47–48 exist in the specification and are now reflected in its correction-status section.
+
+### 13.4 Remaining Builder-owned verification
+
+- Complete the content-level review of every one of the 38 PR #192 changed paths, including authority, provenance, gate status, historical-snapshot and cross-document consistency.
+- Re-run structural tests against the exact post-correction PR #192 tree: all relative links, fragments/anchors where statically testable, reference-style links, raw HTML links, JSON parsing, heading/numbering integrity and exact inventory manifest.
+- Recheck the exact 38-path inventory parent manifest and final resulting tree after all intended writes.
+- Perform available syntax/validation checks for the workflow files. YAML runtime validation and Actions execution are not available through the current GitHub connection; do not claim them passed.
+- Re-fetch every changed PR head and blob after the final inventory update. Any moved head requires a refreshed target and rerun of affected checks.
+
+### 13.5 Gate and authority status
+
+- DF-06: **NOT MET**. Rendered GitHub line/fragment-anchor behavior remains unverified; static path/line checks are not rendered evidence.
+- DF-08: **RESOLVED** only against its exact bounded preservation criterion.
+- DF-09: **OPEN / NOT MET**. The latest qualifying result remains PARTIALLY CLEAR (31/32) on older packet revision \`887b349f9826de7726707209f640ae0cafd78ace\`; no result is claimed for the current final PR #192 revision.
+- DF-10: Builder review/correction and exact final inventory synchronization are still in progress in this update.
+- DF-11: **WAIVED** by explicit Project Director decision.
+- DF-12: **NOT ACCEPTED**; exact-revision Project Director decision remains reserved.
+- Stage A remains NOT STARTED / HELD. Implementation planning remains HELD. Runtime implementation, source-baseline selection, PR integration and deployment remain NOT AUTHORIZED.
+
+This addendum is Builder evidence only. It is not an Independent Reviewer verdict, Blind Fresh Tester result, Project Director acceptance or implementation authorization.
