@@ -1580,3 +1580,58 @@ Builder review has found and corrected real defects, but **this is not the final
 DF-06 remains NOT MET; DF-08 remains RESOLVED only within its bounded criterion; DF-09 remains OPEN / NOT MET; DF-10 remains in Builder verification; DF-11 is WAIVED; DF-12 is NOT ACCEPTED. Stage A remains NOT STARTED / HELD. Implementation planning remains HELD. Runtime implementation and PR integration remain NOT AUTHORIZED.
 
 This is a Builder self-review. It does not constitute an independent review, Blind Fresh Tester result or Project Director acceptance.
+
+## 16. Builder continuation — review, corrections and test evidence — 2026-11-12
+
+### 16.1 Live revision snapshot
+
+The related PR metadata was re-fetched before this update. PR #192 is open, non-draft and unmerged; its exact resulting HEAD must be read from the live PR page because this file update advances that branch.
+
+| PR | Exact HEAD at this re-fetch | Status |
+|---|---|---|
+| #173 | `7e9481677197cf82df31bbe08984fa5d58644d98` | Open/draft/unmerged |
+| #174 | `9502989ffae91c00ba0a8568ab5296925fa9f27b` | Open/draft/unmerged |
+| #191 | `609d38ede50bbdd98a93dfed112781eacabee9fd` | Open/draft/unmerged |
+| #193 | `948cb19c0bad39705835a8885b4f58df2f42d5a2` | Open/draft/unmerged |
+| #195 | `6f43b94fca4b00a0196f7775e5a41316142ea5e9` | Open/draft/unmerged |
+| #196 | `9a744927c5ebcfea2c720ded42ec7425edc499c0` | Open/non-draft/unmerged |
+
+### 16.2 Additional Builder corrections
+
+1. **PR #173:** verified the CF-17 Partial classification against the current architecture's §31 minimum social/agent ownership contract and the advanced-capability deferral boundary.
+2. **PR #174:** verified the F-03 scenario 47–48 content in the exact current specification. Corrected the independent re-review request's stale specification blob and removed its dependency on an older review-assignment comment. The request now requires a live PR metadata fetch immediately before review.
+3. **PR #193:** corrected both the implementation plan and continuity handoff to the live PR #173 proposal HEAD. Exact re-fetch confirms zero occurrences of the superseded `756724b...` SHA in either current file.
+4. **PR #195:** further hardened both workflows with pre-checkout input validation, disabled checkout credential persistence, untrusted-document prompt handling and bounded error-code metadata. The reader A–H section validator was corrected after its first edit was found to be over-escaped.
+5. **PR #192:** updated the planning index, fresh-reader runbook, preservation/link-validation report, outstanding-work authority register and this self-review. The final inventory manifest remains the last planned write.
+
+### 16.3 Verification actually performed
+
+- All 38 PR #192 changed paths were fetched at the exact pre-inventory review snapshot and checked for relative-link target existence against the complete recursive tree. **116 repository-relative targets were found; zero were missing.**
+- No reference-style link definitions, raw HTML anchor attributes or local fragment links were detected in the scanned Markdown. The current index's two repeated generic headings were disambiguated. Other repeated headings are structural labels reused by historical multi-finding reports; no local fragment links depend on them.
+- The recursive tree contained 268 entries and was not truncated.
+- Both PR #192 JSON evidence files parsed successfully. Their contents remain historical evidence for the 2026-11-10 assessment, not a new current-head assessment.
+- PR #173 architecture/matrix/source-audit relationships, PR #174 BM-02/BM-07/BM-08/BM-09/BM-11/BM-12 contracts and scenarios 35–48, PR #191 human/MCU comparison, PR #193 exact plan/handoff, PR #195 workflows/audit and PR #196 Rules 11.9–11.16 were inspected.
+- PR #195 exact-source static assertions passed for pre-checkout validation, shell-input isolation, checkout credential handling, response-size bounds, sanitized diagnostics, extraction fallbacks, provider/model/finish/refusal/tool-call/completion gates, anchored section validation and evidence-artifact upload.
+- A 31-assertion local synthetic logic harness passed for response extraction, metadata bounds, all required section headings and invalid provider/completion/refusal/tool-call cases.
+
+### 16.4 Verification not available or not performed
+
+- The 31-assertion harness exercises copied validation logic; it does not execute the embedded workflow Python source.
+- No YAML parser or GitHub Actions execution was available through the connected repository tools. Neither PR #195 workflow has been dispatched.
+- No new provider response, uploaded artifact or Blind Fresh Tester assessment exists for the current PR #192 revision.
+- GitHub-rendered heading/line-anchor behavior and external URL reachability remain unverified.
+- The exact final 38-path parent/blob manifest and post-write tree verification remain to be completed after all remaining PR #192 edits.
+
+### 16.5 Final Builder status for this continuation
+
+The review has found and corrected multiple real defects; this is not a claim that every semantic question is closed. The remaining Builder-owned work is to finish cross-document semantic reconciliation, record the exact final inventory parent/blob manifest, perform post-write verification against the resulting live PR #192 HEAD and report any check that cannot be run.
+
+- DF-06: **NOT MET** — rendered GitHub anchors and external destination checks remain incomplete.
+- DF-08: **RESOLVED** only within its exact bounded preservation criterion.
+- DF-09: **OPEN / NOT MET** — 31/32 PARTIALLY CLEAR belongs to an older packet revision; no current-head Blind Fresh Tester result exists.
+- DF-10: **Builder closeout in progress** — final inventory and post-write verification remain.
+- DF-11: **WAIVED**.
+- DF-12: **NOT ACCEPTED** — Project Director decision reserved.
+- Stage A: NOT STARTED / HELD. Implementation planning: HELD. Runtime implementation and PR integration: NOT AUTHORIZED.
+
+This self-review is Builder evidence only. It is not an Independent Reviewer verdict, Blind Fresh Tester result, Project Director acceptance or implementation authorization.
