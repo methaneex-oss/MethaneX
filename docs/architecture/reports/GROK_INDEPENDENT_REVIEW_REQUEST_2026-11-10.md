@@ -1,16 +1,18 @@
 # Independent Reviewer Assignment — Grok — 2026-11-10
 
+> **SUPERSEDED / INACTIVE — 2026-11-12.** This was the original Grok-specific assignment. The current project direction is to use the role-based **Independent Reviewer** and **Blind Fresh Tester** roles; Grok is not the assigned reviewer. Do not execute or reactivate this request. Preserve it only as historical assignment evidence. Use `INDEPENDENT_REVIEWER_HANDOFF_2026-11-08.md` for the current reviewer role and process.
+
 **Repository:** https://github.com/methaneex-oss/MethaneX  
 **Target:** PR #192 — Documentation Foundation Reconciliation  
 **Current target revision at request creation:** `f7f63b49cc0f6976d91e0370726270588f809fa5`  
 **PR:** https://github.com/methaneex-oss/MethaneX/pull/192  
-**Role:** Grok is the designated independent reviewer for this documentation-foundation review cycle.
+**Historical role at request creation:** Grok (xAI) was designated as reviewer at that time. This designation is superseded; no Grok assignment is currently active.
 
 ## 1. Assignment and independence
 
 You are being engaged as the independent reviewer, not as a second Builder. Review the repository evidence independently. Do not rely on the Builder's conclusions, prior review summaries, conversation excerpts, or the desired outcome. Treat those materials as claims to verify.
 
-The user has explicitly designated Grok as the reviewer. The user does not wish to act as a human messenger between Builder and reviewer. Therefore:
+At the time this request was created, the user designated Grok as reviewer. That assignment was later superseded by the instruction to use the role-based Independent Reviewer instead. This historical request no longer assigns Grok or any other specific model. The user does not wish to act as a human messenger between Builder and reviewer. Therefore:
 
 - Put all reviewer requests, questions, findings, and required Builder responses in repository files and/or the PR discussion.
 - Do not ask the user to copy reports, summarize findings, relay questions, or transfer messages.
