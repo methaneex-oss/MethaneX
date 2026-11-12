@@ -1,6 +1,6 @@
 # JARVIS Project Governance and Builder Rules
 
-**Status:** Accepted project-wide governance standard by Project Director; repository merge pending  
+**Status:** Accepted project-wide governance standard by Project Director; merged into `docs/jarvis-phase-2-whole-brain-integration-map-20261105` by PR #196  
 **Created:** 2026-11-05  
 **Repository:** `methaneex-oss/MethaneX`  
 **Companion baseline:** [Phase 1 — Whole-Repository Investigation, Reuse and Conflict Audit](../architecture/reports/PHASE_1_WHOLE_REPOSITORY_INVESTIGATION_AND_REUSE_AUDIT_2026-11-04.md)  
@@ -990,7 +990,7 @@ The run-by-run revalidation and role-accountability requirements are a cross-pro
 - **Scope of this record:** Records Director acceptance and authorizes this acceptance-status clarification, independent verification of the resulting exact revision, and—only after acceptable independent verification—merging PR #196 into its existing base branch `docs/jarvis-phase-2-whole-brain-integration-map-20261105`.
 - **No expanded authority:** This acceptance does not clear Gate A or any other phase gate; authorize runtime implementation, training runs, architecture changes, deployment, or changes to accepted technical decisions; retarget the PR; or authorize merging into `main`.
 - **Historical status reconciliation:** Earlier statements that this document was Proposed accurately describe its status before this Director decision. They are retained as historical records and do not override this acceptance record.
-- **Repository state:** Acceptance is recorded here; PR integration remains pending until independent verification of this exact acceptance-record revision and the authorized merge into the existing base branch.
+- **Repository state (historical wording):** At the time this acceptance record was written, PR integration remained pending. PR #196 was subsequently independently verified and merged into the existing base branch; see the dated post-merge reconciliation record below.
 
 ---
 
@@ -1004,3 +1004,18 @@ The run-by-run revalidation and role-accountability requirements are a cross-pro
 6. **Constraints checked:** PR #196 current target branch, current governance content, review findings and correction verification, and existing JARVIS phase/gate boundaries. No gate clearance or runtime authorization.
 7. **Conflicts / disposition:** The header and an unqualified sentence in §16 still stated Proposed despite Director acceptance; resolved by updating current status and explicitly marking §16 wording historical. The earlier Section 22 amendment-time status is clarified as historical. No conflict with the approved governance substance identified.
 8. **Participant / revision:** Builder; this record applies to the acceptance-status update commit to be produced from pre-change HEAD `46b220c7d7b066fc98d48eaa5680d9e021a3d899`.
+
+
+---
+
+### Post-merge status reconciliation — 2026-11-12
+
+- **Work item:** JARVIS-M0 / Workstream A — reconcile governance status after PR #196 integration.
+- **Governance revalidation:** Builder freshly reread this complete governance document at blob `9c17d2870047cc1d58afea745cd7160d15e216c3` on the current documentation branch before this update.
+- **Verified merge:** PR #196, `docs(governance): enforce Builder operating controls`, merged on 2026-11-12 into its existing base branch `docs/jarvis-phase-2-whole-brain-integration-map-20261105`.
+- **Merge commit:** `c151e52781e56e6481424f774c19ea30128debb0`.
+- **Verification:** Governance document blob at the merge commit was `9c17d2870047cc1d58afea745cd7160d15e216c3`; the accepted governance content and Project Director acceptance record were present.
+- **Correction:** The header now reports the verified merged state. The acceptance record's former "repository merge pending" sentence is explicitly identified as a historical statement accurate when written, not current status.
+- **Scope:** Status/documentation reconciliation only. This does not clear any planning gate, accept PR #173/#174, authorize Stage A, runtime implementation, training, baseline selection, PR integration beyond PR #196, or deployment.
+- **Builder role:** Builder; JARVIS-M0 Workstream A.
+- **Current revision:** This record applies to the commit created by this post-merge status reconciliation. Independent review/validation and Project Director acceptance remain separate where required by JARVIS-M0.
