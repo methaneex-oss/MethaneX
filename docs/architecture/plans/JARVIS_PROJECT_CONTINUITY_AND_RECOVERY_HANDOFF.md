@@ -23,7 +23,7 @@
 
 > **Current task:** Complete the Initial Documentation Foundation Completion Gate. Stage A whole-Brain capability definition has not started and remains held until the foundation is cleared and accepted.
 >
-> **Current DF status:** DF-06 and DF-08 remain PARTIAL / NOT MET; DF-09 requires a full CLEAR result from the blind AI fresh-reader assessment against the corrected exact PR #192 revision; DF-11 is WAIVED by explicit Project Director decision; DF-12 is NOT ACCEPTED until all outstanding issues are cleared and the Project Director makes an exact-revision decision. DF-13 is being respected: Stage A remains held.
+> **Current DF status:** DF-06 is NOT MET pending the Project Director's full-resolution link/anchor criteria; DF-08 is RESOLVED only against its exact bounded preservation criterion; DF-09 is OPEN / NOT MET pending a CLEAR blind AI fresh-reader result against the final exact PR #192 revision; DF-11 is WAIVED by explicit Project Director decision; DF-12 is NOT ACCEPTED pending the Project Director's exact-revision decision after all applicable conditions are met. DF-13 is being respected: Stage A remains held.
 >
 > **PR #173:** The original 2026-11-03 Project Director response “Yes I do / Proceed” at 08:18:21 UTC has been recovered from the original conversation history, following the explicit acceptance question at 08:14:29 UTC and review approval of exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b`. The authorized scope was the Detailed Brain Mechanism Specification stage only. The repository evidence extract records that the primary source has no separately available immutable message URL/export ID.
 >
