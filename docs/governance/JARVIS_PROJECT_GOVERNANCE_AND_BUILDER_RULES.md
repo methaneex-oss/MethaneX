@@ -847,12 +847,12 @@ A milestone deliverable is complete only when:
 - Independent Review has reached an acceptable verdict;
 - required review corrections have been verified by the reviewer;
 - Independent Testing has reached an acceptable verdict, or has been explicitly recorded as **NOT APPLICABLE (N/A)** under Rule 17.4 with its Director-authorized scope rationale documented;
-- required implementation corrections have been retested by the Tester;
+- required implementation corrections have been retested by the Tester, where applicable;
 - remaining limitations and untested areas are documented;
 - evidence is available for the exact claimed revision;
 - Project Director acceptance is recorded.
 
-The acceptance criteria may define a justified subset of test types for a particular deliverable, but omitted test categories must be identified with a reason. For documentation-only deliverables, Independent Testing may be recorded as NOT APPLICABLE only under Rule 17.4; this does not waive Independent Review or Director acceptance. No role may silently waive a required gate.
+The acceptance criteria may define a justified subset of test types for a particular deliverable, but omitted test categories must be identified with a reason. For documentation-only deliverables, Independent Testing may be recorded as NOT APPLICABLE only under Rule 17.4; in that case no behavioural Tester retest is implied, while required document corrections and applicable document validation remain subject to their stated verification criteria. This does not waive Independent Review or Director acceptance. No role may silently waive a required gate.
 
 ### Rule 20.2 — Activity and partial evidence are not completion
 
