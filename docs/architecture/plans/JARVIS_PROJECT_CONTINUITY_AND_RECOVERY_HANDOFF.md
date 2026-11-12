@@ -5,7 +5,7 @@
 > **Current phase: Initial Planning Gate Closure — NOT COMPLETE.** Implementation planning is held; runtime implementation is not authorized.
 >
 > - PR #173: corrected architecture proposal HEAD `756724b95e093ac48fcd95c5587117c0a4d8f3c0`; independent blind re-review and Project Director disposition of BFA-C01–BFA-C14 remain outstanding. Historical acceptance at `97191111bc2573c14d391c0af9628db7b11f194b` was superseded as sufficient/final architecture.
-> - PR #174: corrected specification proposal HEAD `4b134048680fb5902f8c2a5a067b0c369169dbfe`; F-02/F-03 Builder corrections submitted; original report and exact criteria remain unavailable; independent re-review and Project Director disposition remain outstanding. Historical accepted baseline `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` is limited to that exact planning-baseline scope.
+> - PR #174: current corrected specification proposal HEAD `b78e24b6fa122d1141b1f225bc6d29e1e7c77631`; F-02/F-03 Builder corrections submitted; original report and exact criteria remain unavailable; independent re-review and Project Director disposition remain outstanding. Historical accepted baseline `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` is limited to that exact planning-baseline scope. Prior corrected snapshot `4b134048680fb5902f8c2a5a067b0c369169dbfe` is superseded.
 > - PR #191: bounded human/MCU reference report; content/dependency review complete; Project Director disposition pending.
 > - PR #192: documentation foundation proposal; DF-06 NOT MET, DF-08 RESOLVED within exact criterion, DF-09 OPEN / NOT MET (latest result 31/32 PARTIALLY CLEAR on an older revision), DF-11 WAIVED, DF-12 NOT ACCEPTED.
 > - PR #193: this plan/handoff update remains draft, non-operative and unmerged. It does not authorize implementation planning execution.
@@ -14,6 +14,8 @@
 > Do not merge, rebase, cherry-pick, retarget, dispatch implementation, run runtime tests/builds, select technologies, or deploy. Only documentation/static review and evidence reconciliation within the Project Director's initial-planning authorization may proceed.
 >
 > Reconcile this block against live GitHub state before future work. Do not rely on stale commit SHAs later in this handoff.
+>
+> PR #193 lineage note: this hold PR is based on PR #175 branch snapshot `874c732973b6ab303d65a503f5a215b0af8e1153`; current PR #175 HEAD is `c30fe20cfdf3f499416972042be06acdd70f752d` (three commits ahead, zero behind that base). The newer PR #175 commits are not silently included in this PR #193 snapshot. No rebase or retarget was performed.
 
 ---
 
