@@ -676,3 +676,216 @@ At creation:
 - Repository merge status and all PR heads: must be rechecked live before future gate decisions.
 
 **Governing principle:** Every future phase inherits the evidence, decisions, constraints and unresolved obligations of Phase 1 and every intervening phase. Nothing is silently discarded, contradicted or restarted. New evidence may change the project, but it must do so transparently, traceably and with the required approval.
+
+
+---
+
+## 17. Project roles and accountability
+
+The following role model applies across all project phases and deliverables. It clarifies responsibility and decision authority; it does not change the existing JARVIS vision, architecture, accepted requirements or phase/gate restrictions.
+
+### Rule 17.1 — Project Director owns direction and acceptance
+
+The Project Director is responsible for project direction, priorities, boundaries, milestone authorization and final acceptance.
+
+The Director must:
+1. Establish measurable milestones before implementation.
+2. Define completion criteria and the evidence required to evaluate them.
+3. Protect the established project vision, architecture and approved decisions.
+4. Prevent uncontrolled scope expansion and prioritize finishing existing commitments.
+5. Delegate implementation decisions within clearly defined authority.
+6. Evaluate evidence rather than repeatedly requesting assurances.
+7. Make timely decisions when the available evidence is sufficient.
+8. Avoid unnecessary intervention in ordinary engineering decisions that have been delegated.
+
+The Director must not routinely supervise implementation details, confuse activity with measurable progress, accept unsupported completion claims, introduce unrelated work before current commitments are completed, or demand repeated reviews after sufficient verification without a new evidence-based reason.
+
+The Director retains authority over direction, scope, reserved decisions and acceptance. The Director does not need to approve every ordinary engineering choice made within an authorized scope.
+
+### Rule 17.2 — Builder owns complete implementation and self-verification
+
+The Builder owns the complete implementation responsibility for the authorized milestone.
+
+Before implementation, the Builder must read the authoritative project documentation, understand the current architecture and prior decisions, identify dependencies and constraints, confirm scope and acceptance criteria, and assess material risks.
+
+During implementation, the Builder must complete the assigned scope, preserve architectural consistency, avoid unnecessary redesign, investigate root causes, avoid superficial patches, document significant decisions and keep changes aligned with project objectives.
+
+Before handoff, the Builder must inspect all relevant changes, complete self-review, run relevant available tests, correct discovered defects, check integration points, disclose unresolved issues and prepare a complete evidence-backed handoff.
+
+The Builder must not transfer unfinished self-review or obvious defects to the Independent Reviewer or Tester. Existing Rules 11.1–11.16 remain in force and provide additional enforceable Builder controls.
+
+### Rule 17.3 — Independent Reviewer owns independent technical scrutiny
+
+The Independent Reviewer must be separate from the Builder's implementation and must evaluate the complete, stable handoff independently. The Builder's self-review is not an independent review.
+
+The review must examine, as applicable:
+1. Requirement completeness.
+2. Architectural compliance.
+3. Implementation correctness.
+4. Integration with existing mechanisms and state owners.
+5. Unnecessary complexity.
+6. Missing functionality.
+7. Error handling and failure conditions.
+8. Maintainability and regression risks.
+9. Deviations from established project decisions.
+
+Every finding must state its severity, exact location or affected component, explanation, supporting evidence, and required correction or justified recommendation.
+
+The review verdict must be exactly one of:
+- **APPROVED**
+- **APPROVED WITH DOCUMENTED NON-BLOCKING ISSUES**
+- **REJECTED — CORRECTIONS REQUIRED**
+
+The reviewer must not approve work merely because the Builder claims completion. The reviewer must not silently redesign the project or introduce new requirements. Findings must remain within the authorized scope; genuinely new proposals must be classified and handled through change control.
+
+### Rule 17.4 — Independent Tester owns behavioural verification
+
+The Independent Tester verifies actual behaviour independently against the authorized requirements and test plan. Testing must target a stable implementation revision that has completed Builder self-verification and the required review/correction cycle.
+
+Applicable coverage includes:
+- unit tests;
+- integration tests;
+- end-to-end behaviour;
+- regression tests;
+- boundary conditions and invalid inputs;
+- failure handling;
+- persistence, replay and state transitions;
+- relevant performance and reliability requirements.
+
+The Tester must verify the actual implementation, use reproducible procedures, record actual outcomes, preserve failure evidence, distinguish untested behaviour from passing behaviour, rerun failed tests after corrections and identify coverage gaps.
+
+The test verdict must be exactly one of:
+- **PASS**
+- **PASS WITH DOCUMENTED NON-BLOCKING LIMITATIONS**
+- **FAIL**
+- **BLOCKED**
+
+A blocked test is not a passing test. A test that was not executed, could not reach its target, or lacks an observable result must not be reported as passed. The Tester must not silently change acceptance criteria to make a result pass.
+
+### Rule 17.5 — Role separation and accountability
+
+Each role is accountable for its own responsibilities:
+- Project Director: direction, priorities, scope boundaries, reserved decisions and final acceptance.
+- Builder: complete implementation, self-review, self-testing, correction and evidence-backed handoff.
+- Independent Reviewer: unbiased technical scrutiny and verification of review corrections.
+- Independent Tester: independent behavioural verification and retesting after implementation corrections.
+
+One role's work does not substitute for another role's required evidence. In particular, Builder self-review does not substitute for independent review, and successful compilation or isolated unit tests do not substitute for independent behavioural testing.
+
+---
+
+## 18. Mandatory milestone workflow and handoff control
+
+### Rule 18.1 — Use the required sequence
+
+Unless a documented project-specific constraint requires a justified variation, each milestone must follow this sequence:
+
+1. The Project Director authorizes a bounded milestone and its acceptance criteria.
+2. The Builder implements the authorized scope and completes self-verification.
+3. The Builder submits a complete handoff with exact revision and evidence.
+4. The Independent Reviewer examines the complete, stable scope.
+5. The Builder resolves review findings.
+6. The Independent Reviewer confirms the corrections or records why a finding remains unresolved.
+7. The Independent Tester executes the approved test plan against the reviewed, stable revision.
+8. The Builder corrects implementation defects found during testing.
+9. The Independent Tester verifies the corrections and reruns affected tests.
+10. The Project Director evaluates the final evidence and records acceptance or rejection.
+
+### Rule 18.2 — Do not review or test unstable work
+
+Do not begin the milestone's independent review while the Builder is still making unrelated implementation changes to the submitted scope. Do not begin final testing against an unstable implementation or before the required review/correction stage is complete.
+
+If a material change is necessary after handoff, the Builder must identify the changed revision and affected scope. The review and test evidence must be refreshed wherever the change could invalidate it. Never carry approval or passing status forward automatically to a materially different revision.
+
+### Rule 18.3 — Preserve an auditable lifecycle record
+
+Maintain a clear record of the authorized scope, implementation revision, Builder self-review and test results, handoff, review verdict and findings, corrections, reviewer confirmation, test procedures and outcomes, retests, limitations and Director acceptance.
+
+The record must identify the exact commit or artifact revision to which each result applies. A status summary without traceable evidence is insufficient.
+
+---
+
+## 19. Milestone scope and change control
+
+### Rule 19.1 — Define and protect milestone scope
+
+Every milestone must have an explicit objective, included work, exclusions, dependencies, owner, acceptance criteria and required evidence before implementation begins. Work outside that boundary is not automatically authorized because it is discovered during implementation.
+
+### Rule 19.2 — Classify new discoveries
+
+Every material discovery or proposed addition must be classified as one of:
+- **Required to complete current scope** — necessary to satisfy an existing acceptance criterion.
+- **Critical defect** — a defect that makes the current deliverable unsafe, invalid or materially incorrect.
+- **Architectural dependency** — a prerequisite or contract issue that blocks correct completion.
+- **Future improvement** — useful but not necessary to meet the current milestone.
+- **Unrelated suggestion** — outside the current objective and its dependencies.
+
+Only work necessary to complete the authorized scope or correct a blocking defect/dependency should enter the current milestone. Future improvements and unrelated suggestions must be recorded for later prioritization rather than silently added to current commitments.
+
+### Rule 19.3 — Require approval for material scope changes
+
+A material change to scope, acceptance criteria, architecture, dependencies, schedule commitment or authority boundary must include its justification, evidence, impact assessment, affected deliverables and required approval. The Builder may make ordinary implementation decisions within the authorized scope but may not unilaterally change reserved Project Director decisions.
+
+### Rule 19.4 — Preserve existing commitments
+
+Do not introduce additional work before existing milestone commitments are completed unless a critical defect, safety concern or blocking dependency makes reprioritization necessary. Record the reason and the effect on the current milestone. Do not equate starting more tasks with making more progress.
+
+---
+
+## 20. Completion, acceptance and evidence
+
+### Rule 20.1 — Completion requires the full applicable evidence chain
+
+A milestone deliverable is complete only when:
+- the agreed scope is implemented;
+- Builder self-review is complete;
+- relevant Builder self-tests have been executed and their results recorded;
+- Independent Review has reached an acceptable verdict;
+- required review corrections have been verified by the reviewer;
+- Independent Testing has reached an acceptable verdict;
+- required implementation corrections have been retested by the Tester;
+- remaining limitations and untested areas are documented;
+- evidence is available for the exact claimed revision;
+- Project Director acceptance is recorded.
+
+The acceptance criteria may define a justified subset of test types for a particular deliverable, but omitted test categories must be identified with a reason. No role may silently waive a required gate.
+
+### Rule 20.2 — Activity and partial evidence are not completion
+
+A successful build alone is insufficient. A passing isolated test suite alone is insufficient. A large implementation, extensive documentation, a successful commit or a completed Builder checklist alone is insufficient.
+
+Completion claims must state the deliverable and revision, the criteria evaluated, the review and test verdicts, the evidence references, the limitations and the Director's acceptance status. If any required stage is pending, blocked or failed, report the milestone as open, blocked or not accepted as appropriate.
+
+### Rule 20.3 — Preserve limitations and negative evidence
+
+Record failed tests, blocked tests, missing coverage, unresolved review findings, known limitations and deviations. Do not omit negative evidence from a handoff or summarize a mixed result as an unconditional pass.
+
+---
+
+## 21. Continuous improvement and governing operating principle
+
+### Rule 21.1 — Improve the process from recurring evidence
+
+Recurring failures must trigger investigation of their root causes and proportionate process improvements. Where evidence justifies it, improve engineering practices, automated checks, templates, review criteria and authoritative documentation so that previously resolved defects are less likely to recur.
+
+Do not create a new rule for every isolated incident. First determine whether the incident exposes a recurring systemic weakness, an existing rule that was not followed, or an exceptional event. Improvements must be proportionate to the demonstrated cause and must not create needless process overhead.
+
+### Rule 21.2 — Do not make the project dependent on constant Director intervention
+
+The project must not depend on the Project Director constantly supervising routine engineering to maintain quality. Builders own implementation; reviewers own independent technical scrutiny; testers own independent behavioural verification; the Director owns direction, boundaries and final acceptance.
+
+The objective is not merely to build more. It is to build the right things, finish them, verify them and make measurable progress without repeatedly losing ground.
+
+---
+
+### Amendment 2026-11-12 — Project directorship and team operating standard
+
+- **Sections added:** 17–21, covering Project Director, Builder, Independent Reviewer and Independent Tester accountability; mandatory workflow and handoff; scope and change control; completion and evidence; continuous improvement.
+- **Prior wording:** Existing Rules 1–16 established project principles, authority boundaries, phase gates and detailed Builder controls, but did not consolidate the complete role-accountability model and milestone workflow supplied by the Project Director.
+- **Amended wording:** Sections 17–21 add the supplied Parts A–I as enforceable project operating requirements, with role separation, explicit verdicts, ordered handoffs, scope classification and evidence-gated completion.
+- **Reason and evidence:** Explicit Project Director instruction on 2026-11-12 to incorporate the complete "PROJECT GOVERNANCE REFORM — DIRECTORSHIP AND TEAM OPERATING STANDARD" into the existing governance document as an additive amendment.
+- **Affected scope:** All project directors, builders, independent reviewers, testers and supporting agents across project investigation, planning, documentation, implementation, testing, integration and release.
+- **Compatibility/conflict analysis:** Additive to Rules 1–16. Existing Builder Rules 11.1–11.16 remain in force. Existing architecture, phase scope, accepted requirements, gate decisions and implementation authorization boundaries are unchanged. The workflow does not authorize runtime implementation, PR integration, gate clearance, branch-history operations or waiver of any reserved decision.
+- **Approval authority:** Project Director instruction dated 2026-11-12 authorizes this additive repository amendment. This records authorization to prepare the amendment; it does not claim final acceptance or merge approval for PR #196.
+- **Effective date:** 2026-11-12 for work governed by this amendment, subject to repository commit and the project's normal governance/acceptance process.
+- **Version:** Governance amendment 2026-11-12 / Directorship and Team Operating Standard v1.
