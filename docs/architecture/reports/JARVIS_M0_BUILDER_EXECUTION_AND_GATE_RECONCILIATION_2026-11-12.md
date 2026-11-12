@@ -294,8 +294,8 @@ The workflow files already exist on the repository default branch, and GitHub's 
 - Workflow: `.github/workflows/documentation-foundation-ai-reader.yml`
 - Branch to select: `docs/ai-role-terminology-audit-20261111`
 - Workflow revision: `26bdfc49316489675d947f5c0a60faa887309d8d`
-- `target_revision`: `42993087ed7ff0d6fb1ed96157da6cf22291edcc`
-- `assessment_label`: `jarvis-m0-df09-42993087-20261112`
+- `target_revision`: **re-fetch and freeze the exact live PR #192 HEAD after all M0 documentation/inventory writes are complete; do not reuse the earlier `42993087...` snapshot.**
+- `assessment_label`: use `jarvis-m0-df09-<first-8-of-frozen-head>-20261112`.
 - Required outcome: **CLEAR**. PARTIALLY CLEAR or a partial score does not satisfy DF-09.
 
 **BFA — Brain Foundation Blind Architecture Assessment**
@@ -305,7 +305,7 @@ The workflow files already exist on the repository default branch, and GitHub's 
 - `target_revision`: `7e9481677197cf82df31bbe08984fa5d58644d98`
 - `assessment_label`: `jarvis-m0-bfa-7e948167-20261112`
 
-**Execution limitation:** this session's GitHub connection exposes workflow-run inspection and artifact retrieval but no workflow-dispatch operation. The Builder cannot start either manual run from this session. No run, provider result or assessment verdict is claimed. The independent technical review of PR #195's workflow candidate must also be completed before relying on the workflow for gate evidence. The Project Director or authorized operator must initiate the manual runs through GitHub Actions UI after that review.
+**Execution limitation:** this session's GitHub connection exposes workflow-run inspection and artifact retrieval but no workflow-dispatch operation. The Builder cannot start either manual run from this session. No run, provider result or assessment verdict is claimed. The independent technical review of PR #195's workflow candidate must also be completed before relying on the workflow for gate evidence. The exact DF-09 target SHA and label must be recorded only after the final M0 documentation inventory commit; this avoids dispatching against a stale pre-inventory snapshot. The Project Director or authorized operator must initiate the manual runs through GitHub Actions UI after that review.
 
 ### 12.6 Current disposition
 
