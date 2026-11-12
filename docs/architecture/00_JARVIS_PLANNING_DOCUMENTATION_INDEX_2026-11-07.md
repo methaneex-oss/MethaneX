@@ -843,7 +843,7 @@ This addendum supersedes the earlier status statements in this index that descri
 
 The PR #192 base-reference discrepancy remains disclosed: the PR API records base SHA 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c, while the live PR #179/base-branch tip is d30237b81c3695f2a7cb980144b221bbd42ce548. No rebase, retarget, merge, cherry-pick or history rewrite was performed.
 
-### Phase boundary
+### Phase boundary — 2026-11-12 snapshot
 
 Initial planning is **NOT COMPLETE** while DF-06, DF-09 and DF-12 remain open. Stage A is **NOT STARTED / HELD**. Implementation planning is **HELD**. Runtime implementation, source-baseline selection and PR integration remain **NOT AUTHORIZED**.
 
@@ -876,7 +876,7 @@ PR #192 still reports base SHA \`61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c\`, whi
 - **PR #195:** hardened the blind architecture workflow's response-size bounds, error diagnostics, response-shape extraction and completeness/model checks. The workflow has not been YAML-runtime-validated or executed.
 - **PR #192:** corrected stale current-status references and runbook descriptions as part of the continuing package review. Earlier historical snapshots are not silently rewritten.
 
-### Gate and authorization status
+### Gate and authorization status — 2026-11-12 snapshot
 
 - DF-06: **NOT MET**; rendered GitHub line/fragment-anchor behavior remains unverified through the available retrieval surface.
 - DF-08: **RESOLVED** only against its exact bounded preservation criterion.
@@ -925,3 +925,44 @@ This entry supersedes the live-PR snapshot in §16 where commit identifiers or c
 - Stage A: NOT STARTED / HELD. Implementation planning: HELD. Runtime implementation, source-baseline selection, PR integration, merge and deployment: NOT AUTHORIZED.
 
 This is a Builder status record only. It is not an Independent Reviewer verdict, Blind Fresh Tester result, Project Director acceptance or implementation authorization.
+
+## 18. Builder review continuation — exact current revisions and verification boundary — 2026-11-12
+
+This entry supersedes §17 for live branch metadata and Builder verification status. The PR #192 HEAD is deliberately not recorded as a fixed value in its own index; this update advances the branch again. Use the live PR #192 page for its resulting HEAD.
+
+### 18.1 Live PR metadata re-fetched before this update
+
+| PR | Exact HEAD | Current state and boundary |
+|---|---|---|
+| #173 | `7e9481677197cf82df31bbe08984fa5d58644d98` | Open/draft/unmerged. CF-17 remains Partial; blind architecture assessment and BFA-C01–BFA-C14 Project Director dispositions remain outstanding. |
+| #174 | `9502989ffae91c00ba0a8568ab5296925fa9f27b` | Open/draft/unmerged. Specification blob `a1798ee8a1d48284bd0dc6686ce255eacab8a2b7`; re-review request blob `9473fe7d38ca2bee9e0c66901693ca0c62db0cc4`. F-02/F-03 remain proposed corrections pending Independent Reviewer re-review and Project Director disposition. |
+| #175 | `c30fe20cfdf3f499416972042be06acdd70f752d` | Open/draft/unmerged. PR #193 remains based on snapshot `874c732973b6ab303d65a503f5a215b0af8e1153`; compare confirms 3 commits ahead, 0 behind. No rebase/retarget. |
+| #191 | `609d38ede50bbdd98a93dfed112781eacabee9fd` | Open/draft/unmerged. Human/MCU comparison remains a bounded reference artifact; Project Director disposition pending. |
+| #192 | Live PR page is the current HEAD pointer | Open/non-draft/unmerged. Builder review and final inventory synchronization continue. |
+| #193 | `948cb19c0bad39705835a8885b4f58df2f42d5a2` | Open/draft/unmerged. Plan blob `a812dcc135594a475d5f003410b01a97f619711a`; continuity-handoff blob `dfa3b4df4c8973ca5af9517f939557e78c3295a0`. Stale current PR #173 references are corrected; branch remains separate from PR #192. |
+| #194 | `9b457e35c601719d9b213fb843dd5876976b35b9` | Open/draft/unmerged older workflow alternative. Do not integrate alongside PR #195. |
+| #195 | `6f43b94fca4b00a0196f7775e5a41316142ea5e9` | Open/draft/unmerged. Reader workflow blob `7d202c8c3e8ea29a7b40ec70baafbc75d07a34e2`; architecture workflow blob `96dc2971503af022e4d247d4be07d257aec5d7db`; audit blob `8a8157c135287529f883b103f59db5d78e7a4fa1`. Static checks and synthetic logic tests only; no YAML parse, Actions run, provider call or assessment result. |
+| #196 | `9a744927c5ebcfea2c720ded42ec7425edc499c0` | Open/non-draft/unmerged. Builder operating controls remain a proposed governance amendment, not merged into the governing branch. |
+
+### 18.2 PR #192 package checks at the pre-update HEAD
+
+- All 38 changed paths were fetched and structurally scanned.
+- Across those 38 files, 116 inline Markdown links were checked against the exact PR #192 recursive tree; zero repository-relative targets were missing.
+- No reference-style link definitions, raw HTML `href`/`id`/`name` anchors or local fragment links were detected in the scanned Markdown.
+- The current recursive tree had 268 entries and was not truncated.
+- Repeated generic headings remain in some historical multi-finding reports and dated snapshots. The current index's repeated `Phase boundary` and `Gate and authorization status` headings have been disambiguated in this update. No local fragment link depended on the earlier duplicate headings.
+- The §71 inventory manifest was verified against its recorded parent tree before these latest PR #192 writes. A new exact parent/blob manifest must be recorded after all remaining PR #192 edits; the older manifest is not silently treated as the final one.
+
+These checks establish relative-path existence and bounded structure only. They do not establish external URL reachability, semantic relevance, GitHub-rendered heading/line anchors, complete cross-branch validity, or content correctness by themselves.
+
+### 18.3 Builder and gate status
+
+- DF-06: **NOT MET**; rendered GitHub line/fragment-anchor behavior and external destination verification remain incomplete.
+- DF-08: **RESOLVED** only against its exact bounded preservation criterion.
+- DF-09: **OPEN / NOT MET**; the 31/32 PARTIALLY CLEAR result belongs to an older packet revision. No current-head Blind Fresh Tester result exists.
+- DF-10: **Builder closeout in progress**; final semantic reconciliation and exact post-correction inventory verification remain Builder-owned.
+- DF-11: **WAIVED** by Project Director decision.
+- DF-12: **NOT ACCEPTED**; exact-revision Project Director disposition remains reserved.
+- Stage A: NOT STARTED / HELD. Implementation planning: HELD. Runtime implementation, source-baseline selection, PR integration, merge and deployment: NOT AUTHORIZED.
+
+This is a Builder status entry only. It is not an Independent Reviewer verdict, Blind Fresh Tester result, Project Director acceptance or implementation authorization.
