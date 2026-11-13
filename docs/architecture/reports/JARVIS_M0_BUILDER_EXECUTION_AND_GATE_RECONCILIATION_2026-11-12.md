@@ -536,3 +536,46 @@ A final superseding exact-current-HEAD review request was posted on PR #195 (com
 - DF-06 remains NOT MET; DF-09 remains OPEN until a new exact-final-head reader run returns CLEAR; DF-10 remains OPEN until the final inventory and self-review chain is verified; DF-12 remains reserved for Director acceptance. DF-13 remains maintained.
 
 No Stage A, runtime implementation, architecture decision, merge, draft exit, branch-history operation, gate clearance or Director acceptance was performed.
+
+
+---
+
+## 15.8 Post-write verification and final reader-workflow source correction — 2026-11-14
+
+### First inventory-only commit verification
+
+The first parent-manifest cycle completed successfully:
+
+- Parent PR #192 HEAD: `182b8b37fcfa6ea4cf0df14eee011634f2103a73`.
+- Inventory-only commit: `18b4633b8bb959cbdf5866b568bcbb04ba4132ef`.
+- Parent-to-final comparison: exactly 1 commit ahead, 0 behind, 1 changed path.
+- The sole changed path was `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md` (65 additions, 0 deletions).
+- Parent manifest rows: 39; expected parent changed files: 39; SHA/path mismatches: 0.
+- Recursive base, parent and final trees were all complete (`truncated=false`).
+- Final PR #192 state: open, non-draft, unmerged; 39 changed files.
+- Inventory blob after the inventory-only commit: `d42e7102df72319f24fe4ac600a7c53c226d1ff5`.
+
+This verifies the inventory-only commit against its exact parent. Subsequent status/report changes require a refreshed parent manifest; the next inventory cycle is therefore the final cycle for this continuation.
+
+### PR #195 reader source-fetch correction
+
+Builder static inspection of the expanded reader workflow found that the source list had been updated to PR #173 HEAD `f8dd67f...` and governance HEAD `ea64607...`, but the shell fetch list still fetched the old PR #173 SHA `7e948167...` and did not fetch `ea64607...`. A later `git show` would therefore fail for the newly added sources.
+
+Corrected in PR #195 commit `5a07a616949e060cb5dab6d739789024624f896e`:
+- Replace the stale `7e948167...` fetch with `f8dd67fc866242d29298ffc6a03a8782a4e6982c`.
+- Add the missing `ea64607ef94f142a6142a013e119a7225bc95c1c` fetch.
+
+The reader workflow now fetches all six fixed source commits referenced by its packet assembly: `b054347...`, `d7d676b...`, `f8dd67f...`, `ea64607...`, `0811a59...`, and `9502989...`. The target documentation revision is checked out separately from the manual `target_revision` input. Every newly added source path was independently fetched from its declared exact revision and resolved successfully. The current workflow blobs are:
+- Reader workflow: `fb5612cfefb7ed3c7fce680e27c537e44aba569f`.
+- BFA assessment workflow: `b5696f82c48406a53e3cd26cbe71a1e3b6f7fd4d`.
+
+A final superseding exact-current-HEAD review request was posted against PR #195 HEAD `5a07a616949e060cb5dab6d739789024624f896e` (comment ID `6867611794`). Prior requests against `ec01b440...` and `ada5fe...` are superseded. Review is pending; no independent verdict on `5a07a616...` is claimed.
+
+### Current execution boundary
+
+- The corrected reader workflow has not been dispatched or executed. The connected GitHub integration still exposes run inspection but no workflow-dispatch action.
+- The prior DF-09 run 43384559530 remains PARTIALLY CLEAR against PR #192 `07acbf61...`; it is not evidence for the updated documentation revision.
+- The inventory manifest must be refreshed once more after this report and index status update. The next inventory-only commit must again be the only changed path, followed by exact post-write verification.
+- DF-06 remains NOT MET; DF-09 remains OPEN; DF-12 remains reserved for Project Director acceptance. DF-13 remains maintained.
+
+No Stage A, runtime implementation, architecture decision, PR integration, merge, draft exit, gate clearance or Director acceptance was performed.
