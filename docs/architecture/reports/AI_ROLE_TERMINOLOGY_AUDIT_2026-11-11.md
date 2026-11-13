@@ -438,12 +438,17 @@ The full advisory result and its limitations were posted to PR #192: https://git
 **Current boundary:** PR #195 remains open/draft/unmerged. The two workflow executions and artifact digests are verified. Findings are advisory and routed; no architecture/documentation corrections are claimed. Exact-final-HEAD Independent Review, any necessary corrections/recheck, and separate Project Director merge approval remain outstanding.
 
 
-## 17. Independent-review role-separation check — 2026-11-13
+## 17. Independent-review role-separation clarification — 2026-11-13
 
-The current GitHub review record was re-fetched after the audit update. It contains one submitted review on PR #195: state `COMMENTED`, submitted 2026-11-12, with a body attributing the assessment to “Grok (xAI)” against earlier HEAD `26bdfc49316489675d947f5c0a60faa887309d8d`. GitHub records the review author as `methaneex-oss`, the same repository account used for the PR.
+The Project Director has explicitly confirmed that **xAI / Grok is the project's designated Independent Reviewer and is a separate entity from the Builder**. The GitHub account `methaneex-oss` is the repository integration identity used to publish the review record; that shared publishing identity alone does not establish that the underlying reviewer role is the Builder. My prior conclusion that independence was “NOT VERIFIED” solely because the GitHub submission account matched the repository account was an incorrect inference and is withdrawn.
 
-Under the governing requirement for genuinely separate Builder and Independent Reviewer actors, the review body’s model attribution alone does not establish that a distinct qualified reviewer actor performed and submitted the review. The prior **APPROVED WITH DOCUMENTED NON-BLOCKING ISSUES** result therefore remains historical evidence, but its role independence is **NOT VERIFIED** from the available GitHub record. It also predates the current exact PR #195 HEAD and cannot approve the current audit additions.
+The historical review remains:
+- Reviewer: xAI / Grok, as designated by the Project Director.
+- Recorded verdict: **APPROVED WITH DOCUMENTED NON-BLOCKING ISSUES**.
+- Exact historical revision: `26bdfc49316489675d947f5c0a60faa887309d8d`.
+- Review record: https://github.com/methaneex-oss/MethaneX/pull/195#issuecomment-6837425414
 
-No new Independent Reviewer verdict has been fabricated or submitted by the Builder. The exact-current-HEAD Independent Review stage remains **PENDING** until a genuinely separate reviewer independently rereads governance, inspects the exact current PR revision and evidence, and records their own verdict. A Blind Fresh Tester assessment is a distinct role and does not substitute for this review.
+That historical verdict must not be stretched to the newer PR #195 revision. The current exact HEAD is `afe96313976e8f934e295a75cba1f5afbeb30771`. A fresh review request has therefore been posted to the designated xAI reviewer for this exact HEAD, covering the complete PR scope, this audit update, both workflow artifacts and Builder triage. The reviewer must freshly revalidate governance and issue its own verdict, with findings and any required corrections pinned to this revision.
 
-This qualification was added to prevent the PR description or earlier review attribution from overstating governance compliance. No merge, ready-state transition, architecture decision or gate clearance is implied.
+**Current disposition:** xAI's designation as Independent Reviewer is accepted. The previous “independence NOT VERIFIED” assertion is withdrawn. The exact-current-HEAD review is now **REQUESTED / PENDING**, not complete. No Builder-authored review or verdict is substituted for xAI's work. PR #195 remains draft and unmerged; merge still requires the Project Director's separate explicit approval after final evidence is presented.
+
