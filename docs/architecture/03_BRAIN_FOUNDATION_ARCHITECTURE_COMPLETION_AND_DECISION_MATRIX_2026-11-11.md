@@ -67,7 +67,7 @@ The following is the required conceptual responsibility model. It is a model of 
 
 | Responsibility | Authoritative state it owns | May consume | May propose or emit | Must not do |
 |---|---|---|---|---|
-| Continuity/state stewardship | Cognitive identity, lifecycle and state lineage | All versioned state summaries and recovery evidence | Validated continuity snapshots and recovery status | Invent missing cognitive history or reinterpret infrastructure failure as experience |
+| Continuity/state stewardship | Cognitive identity, canonical epistemic-class taxonomy, cross-responsibility lifecycle contract, state lineage and recovery validation | All versioned state summaries and recovery evidence | Validated continuity snapshots, taxonomy/lifecycle conformance and recovery status | Invent missing cognitive history, determine domain semantics or reinterpret infrastructure failure as experience |
 | Experience interpretation/grounding | Candidate interpretations and grounded referent hypotheses | Qualified observations, context, memory, beliefs | Candidate entities, events, relations, interpretations and uncertainty | Rewrite source observations or silently collapse competing hypotheses |
 | Memory/knowledge stewardship | Episodes, retained evidence references, memory organization and knowledge lineage | Observations, interpretations, outcomes, learning changes | Retrieval sets, summaries, associations and candidate knowledge updates | Promote generated summaries or simulations to observed facts |
 | Belief stewardship | Current qualified beliefs and their revision history | Evidence, memory, inference, prediction outcomes | Belief proposals, confidence/qualification changes, withdrawal and contradiction notices | Erase contradiction or claim certainty unsupported by evidence |
@@ -76,9 +76,11 @@ The following is the required conceptual responsibility model. It is a model of 
 | Reasoning/inference | Inference artifacts and derivation lineage | Evidence, memory, beliefs, models, active context | Conclusions, alternatives, explanations, requests for more evidence | Present assumptions as observations or use fluent explanation as evidence |
 | Goals/valuation/affect | Goal candidates, valuation/appraisal state and their lineage | Experience, constraints, internal conditions, outcomes, predictions | Candidate goals, appraisals, priorities and alternatives | Encode fixed stimulus-to-emotion, emotion-to-action or desired-goal mappings |
 | Planning/decision | Plans, decision records and commitment state | Goals, constraints, beliefs, predictions, valuations | Plan candidates, decisions, defer/ask/stop recommendations and action proposals | Grant permissions or claim an action was executed |
-| Learning/adaptation | Learning candidates, accepted adaptations and developmental lineage | Evidence, prediction errors, outcomes, evaluation results | Candidate state changes, consolidation proposals and regression alerts | Treat every error as a learning instruction or update unrelated state without evidence |
+| Learning/adaptation | Learning candidates, eligibility/risk assessments, evaluation records, accepted adaptations and developmental lineage | Evidence, prediction errors, outcomes, evaluation results and applicable governance decisions | Candidate state changes, activation proposals within delegated authority, consolidation records and regression alerts | Self-authorize high-impact activation, treat every error as a learning instruction or update unrelated state without evidence |
 | Metacognitive control | Monitoring state, capability estimates and corrective-work records | Signals from all responsibilities | Bounded reconsideration, evidence requests, suspension and strategy-change requests | Become a second global source of truth or bypass governance |
 | Coordination | Work scheduling, dependency and conflict-resolution records | Work requests and state-version metadata | Dispatch, arbitration, cancellation, resumption and stale-work notices | Own other responsibilities' semantic state or silently decide their conclusions |
+
+Coordination is itself a named responsibility and the accountable semantic owner of its work-management state; it is not an ownerless facility. Continuity/state stewardship owns the canonical cross-domain epistemic taxonomy and lifecycle contract, while each state-domain owner retains semantic authority over its own contents. Learning/adaptation owns candidate evaluation and risk/eligibility records, but high-impact activation remains subject to the applicable external governance approval.
 
 Authority is semantic, not a claim that each row must be a separate process, service, model or code package. Implementation may combine responsibilities if ownership, observability, isolation and correction remain explicit.
 
@@ -537,9 +539,32 @@ The 14 BFA-C decisions remain reserved for explicit Project Director disposition
 | BFA-C10–BFA-C12 | Accept, reject or revise action/governance boundary, SYS-06 optionality and SYS-01/SYS-08 responsibility split |
 | BFA-C13–BFA-C14 | Accept, reject or revise atomic owner commits/asynchronous propagation and capability evidence standard |
 
+### 22.1 Conditional architecture dependency map
+
+The following map identifies the principal architecture sections that depend on each reserved decision. Every mapped section remains **proposed and conditional** until the Project Director records the corresponding accept/reject/revise disposition. A proposal's presence in the architecture, this map or a review report does not approve it. If a decision is rejected or revised, all mapped sections and downstream specifications must be reconciled before they are relied upon.
+
+| Decision | Proposed decision | Principal dependent architecture sections |
+|---|---|---|
+| BFA-C01 | One coherent cognitive authority with distinct state-owning responsibilities | §§3.1, 4, 16.1 |
+| BFA-C02 | Owner-managed authoritative state plus bounded task-scoped active context | §§5–6, 16.1, 18 |
+| BFA-C03 | Explicit epistemic classes and provenance-preserving lifecycle | §§5, 17–18 |
+| BFA-C04 | Recurrent, branching and concurrent cognition | §§6, 18 |
+| BFA-C05 | Foundational evidence-aware reasoning and inference | §§4.5, 19, 24 |
+| BFA-C06 | Distributed learning with risk-sensitive evaluation, transfer and regression | §§8, 21, 24 |
+| BFA-C07 | Experience-acquired candidate-goal formation | §§20, 25 |
+| BFA-C08 | Foundational contextual affective appraisal | §§4.6, 20, 25 |
+| BFA-C09 | Bounded metacognitive correction and evidence-qualified self-model | §§4.8, 22, 24 |
+| BFA-C10 | Separation of intention, authorization, execution and verified outcome | §§3.7, 7, 17, 23 |
+| BFA-C11 | SYS-06 optionality and non-dependency | §§7, 20, 23 |
+| BFA-C12 | SYS-08 substrate and SYS-01 semantic state/recovery authority | §§7, 16.1, 23 |
+| BFA-C13 | Atomic owner-state commits and asynchronous versioned propagation | §§6, 18 |
+| BFA-C14 | Persistence, variation, transfer and regression evidence standard | §§11, 24 |
+
+This map is a traceability aid, not a replacement for the reserved decision register. It does not grant any owner authority to accept a BFA-C decision on the Project Director's behalf.
+
 ## 23. Current completion status — Builder correction pass
 
-**Builder correction status:** The five Blind Fresh Tester findings now have explicit architecture-level responses in §§31–34 and this matrix's §§19–24. A bounded source audit of the PR #97 donor revision is complete; compatibility is NOT accepted as-is and remediation/specification work remains. This is not independent clearance. The 14 BFA-C decisions remain reserved to the Project Director. The exact corrected revision must be independently re-reviewed and any new findings corrected before Director acceptance.
+**Builder response status:** The five earlier Blind Fresh Tester findings have Builder-authored architecture responses in §§31–34 and this matrix's §§19–24. These are proposed corrections only; none is represented as independently rechecked or closed by this statement. Independent re-review of the exact corrected revision remains mandatory. A bounded source audit of the PR #97 donor revision is complete for the four named patterns; broader compatibility inventory and remediation/specification work remain open. The 14 BFA-C decisions remain reserved to the Project Director.
 
 **No-shortcut status:** no merge, implementation, runtime source change, runtime test, technology selection, deployment, PR #191 disposition, PR #192/#193 integration or branch-history operation is authorized by this document.
 
@@ -576,6 +601,8 @@ The exact source evidence and line-level findings are recorded in [Inherited Mec
 - Accepted PR #172 HEAD: d7d676b79dbf3269f7fd3ebdb4363a6df19f255d.
 
 The matrix update itself advances the PR #173 branch. The resulting matrix blob and PR #173 HEAD must be re-fetched; the parent SHA above is not the post-write target.
+
+**Revision-reference semantics:** §25.1 records a historical parent snapshot, not the review target. The `97191111...` starting HEAD and `0f8ca586...` pre-matrix-update parent HEAD are ancestry references; they are not competing claims about the current PR target. For every blind assessment and independent review, the target is the exact live PR #173 HEAD fetched immediately before dispatch/review, and the packet manifest must record that SHA plus both architecture-document blob identities at that same commit.
 
 ### 25.2 Source compatibility disposition
 
