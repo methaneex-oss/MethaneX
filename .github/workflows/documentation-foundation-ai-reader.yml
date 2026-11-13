@@ -55,7 +55,8 @@ jobs:
           mkdir -p documentation-foundation-reader-evidence
           git fetch --no-tags --depth=1 origin b05434758ad4fe72815503f89bd5d2990ccb658b
           git fetch --no-tags --depth=1 origin d7d676b79dbf3269f7fd3ebdb4363a6df19f255d
-          git fetch --no-tags --depth=1 origin 7e9481677197cf82df31bbe08984fa5d58644d98
+          git fetch --no-tags --depth=1 origin f8dd67fc866242d29298ffc6a03a8782a4e6982c
+          git fetch --no-tags --depth=1 origin ea64607ef94f142a6142a013e119a7225bc95c1c
           git fetch --no-tags --depth=1 origin 0811a59e46bf934e32e794f90e4e7d18d4e2bd97
           git fetch --no-tags --depth=1 origin 9502989ffae91c00ba0a8568ab5296925fa9f27b
           python3 - <<'PY'
