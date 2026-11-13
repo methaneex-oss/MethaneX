@@ -13,7 +13,7 @@ Repository: `methaneex-oss/MethaneX`. Values below were fetched from GitHub on 2
 | #178 — Governance proposal lineage | `39fe09dcf13496f5f0005ccf3f00739303e29f88` | `1273ddbcd0087d189e01388ded2d362fb1e058d2` | Open / draft / unmerged | Separate PR lineage; not the merge destination of PR #196 |
 | #179 — Phase 2 branch | `ea64607ef94f142a6142a013e119a7225bc95c1c` | `39fe09dcf13496f5f0005ccf3f00739303e29f88` | Open / draft / unmerged | Current Phase 2 branch head; contains PR #196 merge and status reconciliation |
 | #191 — Human/MCU reference comparison | `609d38ede50bbdd98a93dfed112781eacabee9fd` | `f6267456560a08054d69f7960d2951452b14017c` | Open / draft / unmerged | Director Option A: retain separately; no integration operation |
-| #192 — Documentation Foundation | `9a70a606d57901c78846c331874d6eb9178a1fee` | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | Open / non-draft / unmerged | Exact target of the latest DF-09 reader assessment |
+| #192 — Documentation Foundation | Live PR page; exact tested HEAD is captured in the run packet manifest | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | Open / non-draft / unmerged | This index is part of the current PR revision; the packet manifest records the exact self-referential target SHA |
 | #193 — Implementation-plan proposal | `fa2bd50d6fb0bb77dc3cbaab684f51d606e94bb5` | `874c732973b6ab303d65a503f5a215b0af8e1153` | Open / draft / unmerged | Separate non-operative lineage |
 | #195 — Role terminology and assessment workflows | `ada5fe740275aa9d84a645b0bdd9116aa0dacf1b` | `8edc7cdfc886537d319d81cea04cdc9f3476044e` | Open / draft / unmerged | Current workflow candidate; exact-current-HEAD independent review requested |
 | #196 — Governance operating controls | `0ebc4e978fa38011b2f6bb5d97a03c267c1c12c9` | `d30237b81c3695f2a7cb980144b221bbd42ce548` | Closed / merged | Merge commit `c151e52781e56e6481424f774c19ea30128debb0`; merged into its existing Phase 2 base branch, not `main` |
@@ -36,6 +36,8 @@ These are different comparisons, not contradictory statements. No rebase, retarg
 ### 1.3 PR #192 base relationship
 
 PR #192's recorded base `61311fe...` is 14 commits behind the current PR #179/Phase 2 branch head `ea64607...` (current head is 14 ahead, 0 behind). PR #192 therefore targets an earlier point in that branch history. This is an integration dependency to disclose, not authorization to retarget or rebase. No branch-history operation was performed.
+
+**Self-referential revision rule:** this index is itself included in PR #192, so its containing commit SHA cannot be hard-coded into its own content without making that value stale on the next write. Use the live [PR #192 page](https://github.com/methaneex-oss/MethaneX/pull/192) for the current HEAD and the Actions packet manifest field `target_documentation_revision` for the exact revision tested. All supporting source commits remain pinned explicitly.
 
 ## 2. Documentation Foundation exit criteria — DF-01 through DF-13
 
