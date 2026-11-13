@@ -1,3 +1,106 @@
+# CURRENT EXACT STATE — 2026-11-14 (JARVIS-M0 Builder continuation 05)
+
+> **Controlling live-status snapshot.** This block supersedes all earlier dated status snapshots below for current PR heads, base relationships and gate state. Those snapshots remain historical evidence and must not be combined into a synthetic current state. Builder evidence only; not independent review, Tester clearance, gate clearance or Director acceptance.
+
+## 1. Live repository state
+
+Repository: \`methaneex-oss/MethaneX\`. Values below were fetched from GitHub on 2026-11-14. Full SHAs identify the exact revisions; branch names are mutable.
+
+| PR | Exact HEAD | Base SHA | State | Current disposition |
+|---|---|---|---|---|
+| #173 — Brain Foundation Architecture | \`f8dd67fc866242d29298ffc6a03a8782a4e6982c\` | \`1273ddbcd0087d189e01388ded2d362fb1e058d2\` | Open / draft / unmerged | Current proposal; not accepted as complete/final architecture |
+| #174 — Brain Mechanism Specification | \`9502989ffae91c00ba0a8568ab5296925fa9f27b\` | \`97191111bc2573c14d391c0af9628db7b11f194b\` | Open / draft / unmerged | Corrected proposal; independent re-review and F-02/F-03 disposition pending |
+| #178 — Governance proposal lineage | \`39fe09dcf13496f5f0005ccf3f00739303e29f88\` | \`1273ddbcd0087d189e01388ded2d362fb1e058d2\` | Open / draft / unmerged | Separate PR lineage; not the merge destination of PR #196 |
+| #179 — Phase 2 branch | \`ea64607ef94f142a6142a013e119a7225bc95c1c\` | \`39fe09dcf13496f5f0005ccf3f00739303e29f88\` | Open / draft / unmerged | Current Phase 2 branch head; contains PR #196 merge and status reconciliation |
+| #191 — Human/MCU reference comparison | \`609d38ede50bbdd98a93dfed112781eacabee9fd\` | \`f6267456560a08054d69f7960d2951452b14017c\` | Open / draft / unmerged | Director Option A: retain separately; no integration operation |
+| #192 — Documentation Foundation | \`07acbf61a4d7d532bc838711d6837e2c16ce12b1\` | \`61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c\` | Open / non-draft / unmerged | Exact target of the latest DF-09 reader assessment |
+| #193 — Implementation-plan proposal | \`fa2bd50d6fb0bb77dc3cbaab684f51d606e94bb5\` | \`874c732973b6ab303d65a503f5a215b0af8e1153\` | Open / draft / unmerged | Separate non-operative lineage |
+| #195 — Role terminology and assessment workflows | \`ec01b440047fb8365322b898f7f290856bdc9eb8\` | \`8edc7cdfc886537d319d81cea04cdc9f3476044e\` | Open / draft / unmerged | Current workflow candidate; exact-current-HEAD independent review requested |
+| #196 — Governance operating controls | \`0ebc4e978fa38011b2f6bb5d97a03c267c1c12c9\` | \`d30237b81c3695f2a7cb980144b221bbd42ce548\` | Closed / merged | Merge commit \`c151e52781e56e6481424f774c19ea30128debb0\`; merged into its existing Phase 2 base branch, not \`main\` |
+
+### 1.1 Accepted baselines are not blanket approval of later proposals
+
+- **PR #173:** accepted starting baseline \`97191111bc2573c14d391c0af9628db7b11f194b\`; current HEAD \`f8dd67f...\` is 14 commits ahead, 0 behind. The current branch adds/updates the BFA architecture, completion/decision matrix, and inherited-mechanism source-compatibility audit. The matrix explicitly supersedes the earlier conclusion that the accepted starting baseline was sufficient as the complete/final Brain Foundation Architecture. The accepted revision remains a valid historical starting point and evidence source within its exact scope; it is not the complete/final architecture. BFA-C01–BFA-C14 remain reserved for Project Director disposition.
+- **PR #174:** accepted specification baseline \`0811a59e46bf934e32e794f90e4e7d18d4e2bd97\`; current corrected proposal \`9502989...\` is 18 commits ahead, 0 behind. Re-review must target the current corrected proposal, not the old accepted baseline. The earlier acceptance does not transfer to the corrected proposal. The original F-02/F-03 follow-on review body and exact reviewed SHA remain unavailable; the repository records reconstructed finding summaries, not verbatim reviewer text.
+- **PR #196 governance:** the accepted governance document is \`docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md\`. PR #196 merged at \`c151e527...\` into \`docs/jarvis-phase-2-whole-brain-integration-map-20261105\`, not into \`main\`. The governance blob at merge was \`9c17d287...\`; current Phase 2 branch head \`ea64607...\` carries status-only reconciliation, blob \`f5827c55...\`. PR #178 remains a separate open/draft/unmerged lineage and must not be mistaken for the PR #196 merge destination.
+
+### 1.2 PR #191 ancestry — two different comparisons
+
+The Director's Option A — retain PR #191 separately — remains in force. Current GitHub comparisons show:
+
+1. PR #191 **base** \`f626745...\` to PR #179 current HEAD \`ea64607...\`: PR #179 is 36 commits ahead and 0 behind; the PR #191 base is an ancestor of PR #179.
+2. PR #179 current HEAD \`ea64607...\` to PR #191 **head** \`609d38e...\`: the branches diverge from merge base \`f626745...\`; PR #191 has 1 unique commit and is 36 commits behind PR #179.
+
+These are different comparisons, not contradictory statements. No rebase, retarget, cherry-pick, replay, merge or closure was performed.
+
+### 1.3 PR #192 base relationship
+
+PR #192's recorded base \`61311fe...\` is 14 commits behind the current PR #179/Phase 2 branch head \`ea64607...\` (current head is 14 ahead, 0 behind). PR #192 therefore targets an earlier point in that branch history. This is an integration dependency to disclose, not authorization to retarget or rebase. No branch-history operation was performed.
+
+## 2. Documentation Foundation exit criteria — DF-01 through DF-13
+
+The authoritative criterion definitions are in \`docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md\` at PR #192 revision \`07acbf61...\`. The complete audit is not part of the blind reader packet; the following table reproduces its exit criteria so readers can understand gate identifiers without opening external links.
+
+| ID | Exit criterion |
+|---|---|
+| DF-01 | One canonical entry point exists: README points to one index; the index states current phase and reading order. |
+| DF-02 | Detailed inventory is synchronized: foundational artifacts have exact locations, revisions, statuses and dependencies. |
+| DF-03 | Authority is traceable: accepted claims have exact decision records and scope; unresolved claims remain explicitly unresolved. |
+| DF-04 | Governance status is honest: proposed governance is not represented as accepted or binding. |
+| DF-05 | Branch dependencies are explicit: PR bases, heads, ancestry, stale bases and integration decisions are recorded. |
+| DF-06 | Cross-document links are durable: links resolve to exact commit-pinned paths; PR links remain for discussion. |
+| DF-07 | Status language is consistent: README, index, inventory, correction, handoff and roadmap agree on current phase and holds. |
+| DF-08 | Historical work is preserved: historical evidence is not deleted or silently superseded; open preservation follow-up is visible. |
+| DF-09 | Continuity is reproducible: a fresh Builder can reconstruct state without chat memory or assumptions. |
+| DF-10 | Builder self-review is complete: exact changed paths, blob SHAs, checks, limitations and remaining findings are recorded. |
+| DF-11 | Independent review is complete: a genuinely separate reviewer submits a verdict against the exact final revision. |
+| DF-12 | Required authority decision is recorded: acceptance, rejection or conditional acceptance is recorded against exact artifacts and scope. |
+| DF-13 | Planning hold is respected: no Stage A work begins before this gate is accepted. |
+
+## 3. DF-09 evidence and remaining limitations
+
+The latest blind fresh-reader assessment is GitHub Actions run [43384559530](https://github.com/methaneex-oss/MethaneX/actions/runs/43384559530), targeting PR #192 exact HEAD \`07acbf61a4d7d532bc838711d6837e2c16ce12b1\`. It returned **PARTIALLY CLEAR**, not CLEAR. The API-reported provider/model were Nvidia / \`nvidia/nemotron-3.5-super-vl:free\`; the response completed with \`stop\`, contained no refusal or tool calls, and passed the required A–H output validation. Artifact SHA-256: \`a14f46ec6a23e2abca2061cd139a4fc75f223ee669e19e34878e1293e50f6\`.
+
+The report's primary reader traps were: stale/conflicting current-head snapshots; PR #191 comparison ambiguity; insufficient explanation of PR #173/#174 accepted-baseline versus current-proposal status; unexplained DF criteria; and insufficiently prominent disclosure of materials excluded from the packet. The run label has a leading-letter typo (\`lpr195-reader-2026-11-13\`), but run ID, target SHA and artifact digest preserve traceability.
+
+The historical 17-question DF-09 list was not recovered. The executed prompt is preserved inside the run artifact as \`assessment_prompt.md\`; it contains eight core comprehension questions plus usability checks. Do not claim the unrecovered 17-question list was executed. A new CLEAR assessment is required against the final PR #192 HEAD after the remediation and inventory cycle.
+
+The earlier BFA assessment run 43384336255 targeted PR #173 \`7e948167...\` and returned NOT CLEAR. It does not assess current PR #173 HEAD \`f8dd67f...\`.
+
+## 4. What the blind reader packet does not contain
+
+The DF-09 run is bounded evidence. The packet did not include, and the reader did not open or inspect:
+
+- The full Initial Documentation Foundation Audit at \`docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md\`; the DF criteria are summarized above.
+- The full artifact inventory at \`docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md\` and the full historical preservation register.
+- The full template guide and template documents under \`docs/templates/\`.
+- The accepted governance document at \`docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md\`, currently on the Phase 2 branch at blob \`f5827c55...\`.
+- The full PR #193 handoff/implementation-plan branch and live GitHub PR/issue pages, review threads and inline annotations.
+- The original PR #174 F-02/F-03 follow-on review body and exact reviewed revision; only reconstructed summaries are available.
+- The historical 17-question DF-09 protocol; it remains unrecovered.
+
+The packet included selected decision extracts and a bounded set of architecture/planning documents. A statement about an excluded item is a recorded summary or provenance note, not proof that the blind reader inspected the excluded source.
+
+## 5. Current gate status and authority boundary
+
+- **DF-01:** Builder corrections present; current exact-state snapshot and reader-facing clarifications added in this continuation.
+- **DF-02:** OPEN until the final post-write inventory manifest and exact blob verification are complete.
+- **DF-03:** accepted-baseline and decision provenance distinctions recorded; unrecoverable primary-source provenance remains disclosed.
+- **DF-04:** accepted governance source revalidated; PR #196 merge scope explicitly distinguished from PR #178 and \`main\`.
+- **DF-05:** branch dependencies and PR #191/PR #192 ancestry comparisons recorded.
+- **DF-06:** NOT MET — GitHub-rendered fragment/line-anchor behavior and the access-limited historical primary-source pointer remain unresolved.
+- **DF-07:** remediation in progress; a new blind reader run is required after final writes.
+- **DF-08:** RESOLVED only within its exact bounded preservation criterion.
+- **DF-09:** OPEN / NOT MET — latest result is PARTIALLY CLEAR.
+- **DF-10:** OPEN until Builder self-review, parent manifest, final inventory-only commit and post-write verification are complete.
+- **DF-11:** WAIVED by explicit Project Director decision. This does not waive the separate technical review required for the PR #195 workflow candidate.
+- **DF-12:** NOT ACCEPTED; exact-revision Project Director decision remains reserved.
+- **DF-13:** MAINTAINED; Stage A has not started and remains held.
+
+**No Stage A, runtime implementation, source-baseline selection, donor adoption, PR integration, merge, rebase, retarget, deployment or gate clearance is authorized by this snapshot.**
+
+---
+
 # Current status refresh — 2026-11-12 (JARVIS-M0 Builder continuation 04)
 
 > Controlling live-status snapshot for this Builder run. Historical snapshots below remain preserved. Builder evidence only; not independent review, testing, gate clearance or Director acceptance.
