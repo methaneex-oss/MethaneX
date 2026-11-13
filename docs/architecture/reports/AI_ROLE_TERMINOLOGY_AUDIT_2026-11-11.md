@@ -436,3 +436,14 @@ The full advisory result and its limitations were posted to PR #192: https://git
 8. **Participant / revision:** Builder; this audit update applies to the PR #195 branch starting HEAD `a33c48a61ef4964daebfc21213dba22bac0d4ada`. PR #195's head was re-fetched immediately before update and had not moved. The resulting commit/blob must be independently reviewed at its new exact revision.
 
 **Current boundary:** PR #195 remains open/draft/unmerged. The two workflow executions and artifact digests are verified. Findings are advisory and routed; no architecture/documentation corrections are claimed. Exact-final-HEAD Independent Review, any necessary corrections/recheck, and separate Project Director merge approval remain outstanding.
+
+
+## 17. Independent-review role-separation check — 2026-11-13
+
+The current GitHub review record was re-fetched after the audit update. It contains one submitted review on PR #195: state `COMMENTED`, submitted 2026-11-12, with a body attributing the assessment to “Grok (xAI)” against earlier HEAD `26bdfc49316489675d947f5c0a60faa887309d8d`. GitHub records the review author as `methaneex-oss`, the same repository account used for the PR.
+
+Under the governing requirement for genuinely separate Builder and Independent Reviewer actors, the review body’s model attribution alone does not establish that a distinct qualified reviewer actor performed and submitted the review. The prior **APPROVED WITH DOCUMENTED NON-BLOCKING ISSUES** result therefore remains historical evidence, but its role independence is **NOT VERIFIED** from the available GitHub record. It also predates the current exact PR #195 HEAD and cannot approve the current audit additions.
+
+No new Independent Reviewer verdict has been fabricated or submitted by the Builder. The exact-current-HEAD Independent Review stage remains **PENDING** until a genuinely separate reviewer independently rereads governance, inspects the exact current PR revision and evidence, and records their own verdict. A Blind Fresh Tester assessment is a distinct role and does not substitute for this review.
+
+This qualification was added to prevent the PR description or earlier review attribution from overstating governance compliance. No merge, ready-state transition, architecture decision or gate clearance is implied.
