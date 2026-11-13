@@ -67,6 +67,7 @@ jobs:
           docs = [
               ("PR173 architecture", target, "docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md"),
               ("PR173 completion and decision matrix", target, "docs/architecture/03_BRAIN_FOUNDATION_ARCHITECTURE_COMPLETION_AND_DECISION_MATRIX_2026-11-11.md"),
+              ("PR173 bounded inherited-mechanism source compatibility audit", target, "docs/architecture/reports/INHERITED_MECHANISM_SOURCE_COMPATIBILITY_AUDIT_2026-11-11.md"),
               ("PR171 whole-system architecture foundation", "b05434758ad4fe72815503f89bd5d2990ccb658b", "docs/architecture/00_JARVIS_SYSTEM_ARCHITECTURE_FOUNDATION.md"),
               ("PR171 whole-system anatomy and responsibility map", "b05434758ad4fe72815503f89bd5d2990ccb658b", "docs/architecture/01_JARVIS_WHOLE_SYSTEM_ANATOMY_AND_RESPONSIBILITY_MAP.md"),
               ("Accepted PR172 foundational capability investigation", "d7d676b79dbf3269f7fd3ebdb4363a6df19f255d", "docs/architecture/research/02_BRAIN_FOUNDATIONAL_CAPABILITY_INVESTIGATION_2026-11-03.md"),
@@ -83,6 +84,7 @@ jobs:
           (out / "blind_review_packet.md").write_text(packet)
           (out / "packet_manifest.json").write_text(json.dumps({
               "target_revision": target,
+              "review_target_semantics": "target_revision is the sole exact PR #173 review target; parent/start SHAs appearing inside source documents are historical ancestry references, not alternate review targets.",
               "baseline_pr171": "b05434758ad4fe72815503f89bd5d2990ccb658b",
               "accepted_pr172": "d7d676b79dbf3269f7fd3ebdb4363a6df19f255d",
               "documents": manifest,
@@ -92,7 +94,7 @@ jobs:
                   "prior reviewer reports and verdicts",
                   "conversation history and Project Director commentary"
               ],
-              "purpose": "Blind assessment of the architecture and matrix against the accepted baselines; no prior reviewer findings are disclosed."
+              "purpose": "Blind assessment of the architecture and matrix against the accepted baselines, including the bounded PR #97 source-compatibility evidence; no prior reviewer findings or Builder triage are disclosed."
           }, indent=2))
           PY
 
@@ -131,6 +133,8 @@ jobs:
           10. Every CF-01 through CF-27 obligation and each of the 14 proposed decision dispositions in the completion matrix. Identify omissions and unsupported closure claims.
           11. Compatibility with PR #171 system responsibilities and PR #172 research conclusions; identify any contradiction, unjustified narrowing or untraceable architectural claim.
           12. Whether implementation-level matters are properly deferred with explicit architectural obligations, rationale and later ownership—or whether deferral hides a foundational gap.
+          13. Whether the supplied bounded source-compatibility audit supports only its stated PR #97 donor conclusions, and whether the architecture/matrix accurately distinguish that bounded assessment from broader unresolved compatibility work.
+          14. Whether every reserved BFA-C decision is traceably conditional in the architecture sections that depend on it, without treating the decision register as approval.
 
           Be adversarial but fair. Separate a true architecture blocker from a detail properly deferred to mechanism specifications. Do not require arbitrary technical choices where architecture-level contracts are sufficient. Do not treat a passing CI build as evidence of conceptual correctness.
 
