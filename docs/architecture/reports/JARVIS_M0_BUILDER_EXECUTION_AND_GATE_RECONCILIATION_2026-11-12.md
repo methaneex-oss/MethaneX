@@ -417,3 +417,84 @@ During Builder self-review of §13, I identified one incorrect workflow-ref inst
 The corrected branch instruction supersedes only the workflow-ref field in comment #6837198028. All other target, baseline, review and authority details remain unchanged. PR #195 still requires acceptable independent technical review before dispatch. No workflow run or assessment result is claimed.
 
 **Builder self-review outcome:** the incorrect ref was caught before dispatch and corrected in a new auditable comment. No code, workflow, source baseline or project authority changed. This correction does not clear DF-09, DF-06, DF-12 or authorize Stage A/runtime work.
+
+
+---
+
+## 15. JARVIS-M0 Builder continuation 05 — exact-state reconciliation and DF-09 result — 2026-11-14
+
+### 15.1 Run-specific governance and scope revalidation
+
+- **Run identifier:** `JARVIS-M0-BLD-2026-11-14-01`.
+- **Milestone authority:** JARVIS-M0 — Initial Planning Gate Closure, explicitly approved by the Project Director on 2026-11-12. This run remains limited to documentation-foundation gate closure, exact-state reconciliation, and evidence preparation. It does not authorize Stage A, runtime implementation, source-baseline selection, donor adoption, PR integration, branch-history operations, deployment, or technical architecture changes.
+- **Governing source:** `docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md`, freshly read at the current Phase 2 branch head `ea64607ef94f142a6142a013e119a7225bc95c1c`, blob `f5827c552f36f4647339b3f8dfb38956d146c570`.
+- **Acceptance and merge provenance:** PR #196 was closed/merged at `c151e52781e56e6481424f774c19ea30128debb0` into its existing base branch `docs/jarvis-phase-2-whole-brain-integration-map-20261105`, not into `main`. The governance document blob at the merge commit was `9c17d2870047cc1d58afea745cd7160d15e216c3`. The one-commit advance to `ea64607...` is a status-only reconciliation: it updates the header and clarifies historical merge wording; it does not change the accepted governance rules. The current `f5827...` blob was reread.
+- **Separate operating directive:** EBT-01, supplied directly by the Project Director on 2026-11-13, remains an active behavioural directive for Builders, Reviewers, Testers and supporting agents. It does not enlarge JARVIS-M0's technical scope or replace the accepted governance source.
+- **Scope revalidation:** all work below is documentation/evidence/gate-closeout work. No runtime code, tests, builds, training, source baselines, or architecture decisions were changed.
+
+### 15.2 Exact live repository and PR state
+
+All values below were fetched from GitHub during this run; branch names are mutable and the full commit SHAs are the revision identities.
+
+| PR | Exact HEAD | Base SHA | Live state | Current meaning |
+|---|---|---|---|---|
+| #173 | `f8dd67fc866242d29298ffc6a03a8782a4e6982c` | `1273ddbcd0087d189e01388ded2d362fb1e058d2` | Open / draft / unmerged | Current BFA proposal; 14 commits after accepted starting baseline; current head not yet assessed by the recorded blind architecture run |
+| #174 | `9502989ffae91c00ba0a8568ab5296925fa9f27b` | `97191111bc2573c14d391c0af9628db7b11f194b` | Open / draft / unmerged | Current corrected mechanism-specification proposal; F-02/F-03 re-review and Director disposition remain pending |
+| #178 | `39fe09dcf13496f5f0005ccf3f00739303e29f88` | `1273ddbcd0087d189e01388ded2d362fb1e058d2` | Open / draft / unmerged | Separate governance PR lineage; not the repository location of the accepted PR #196 merge |
+| #179 | `ea64607ef94f142a6142a013e119a7225bc95c1c` | `39fe09dcf13496f5f0005ccf3f00739303e29f88` | Open / draft / unmerged | Current Phase 2 branch head; contains the PR #196 merge and governance status reconciliation |
+| #191 | `609d38ede50bbdd98a93dfed112781eacabee9fd` | `f6267456560a08054d69f7960d2951452b14017c` | Open / draft / unmerged | Retained separately under Director Option A; no integration action |
+| #192 | `07acbf61a4d7d532bc838711d6837e2c16ce12b1` | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | Open / non-draft / unmerged | Current documentation-foundation package target for the recorded DF-09 run |
+| #193 | `fa2bd50d6fb0bb77dc3cbaab684f51d606e94bb5` | `874c732973b6ab303d65a503f5a215b0af8e1153` | Open / draft / unmerged | Separate non-operative planning/handoff lineage |
+| #195 | `ec01b440047fb8365322b898f7f290856bdc9eb8` | `8edc7cdfc886537d319d81cea04cdc9f3476044e` | Open / draft / unmerged | Consolidated workflow/role candidate; exact-current-HEAD independent review requested |
+| #196 | `0ebc4e978fa38011b2f6bb5d97a03c267c1c12c9` | `d30237b81c3695f2a7cb980144b221bbd42ce548` | Closed / merged | Merge commit `c151e52781e56e6481424f774c19ea30128debb0`; merged into its existing Phase 2 base branch, not `main` |
+
+### 15.3 Branch and accepted-baseline clarifications
+
+**PR #191 ancestry is not contradictory.** Two distinct comparisons were re-run against current refs:
+- PR #191 base `f626745...` to current PR #179 HEAD `ea64607...`: PR #179 is 36 commits ahead, 0 behind; the PR #191 base is an ancestor of current PR #179.
+- Current PR #179 HEAD `ea64607...` to PR #191 HEAD `609d38e...`: the branches diverge from merge base `f626745...`; PR #191 has 1 unique commit and is 36 commits behind PR #179.
+These answer different questions (base ancestry versus head-to-head divergence). Director Option A — retain PR #191 separately — remains in force. No rebase, retarget, cherry-pick, replay, merge, or closure was performed.
+
+**PR #173 accepted baseline versus current proposal.** The exact accepted starting baseline is `97191111bc2573c14d391c0af9628db7b11f194b`. Current PR #173 HEAD `f8dd67f...` is 14 commits ahead and 0 behind that baseline. The changed artifacts are the BFA architecture, the completion/decision matrix, and the inherited-mechanism source-compatibility audit. The completion matrix explicitly supersedes the earlier decision that the accepted starting baseline was sufficient as a complete/final Brain Foundation Architecture. The accepted baseline remains a valid historical starting point and evidence source within its exact scope; it is not the complete/final architecture and its acceptance does not transfer to the current proposal. BFA-C01–BFA-C14 remain reserved for Project Director disposition. The prior blind architecture run assessed `7e948167...`, not current HEAD `f8dd67f...`; no exact-current-head CLEAR result is claimed.
+
+**PR #174 accepted baseline versus current corrected proposal.** The exact accepted baseline remains `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`. Current PR #174 HEAD `9502989...` is 18 commits ahead and 0 behind that baseline. The current corrected proposal and F-02/F-03 correction report are the appropriate revisions for a fresh independent re-review; acceptance of the earlier baseline is not silently transferred to the corrected proposal. The original follow-on review body, exact reviewed SHA and verbatim F-02/F-03 criteria remain unavailable; the recorded F-02/F-03 descriptions are explicitly reconstructed summaries, not quotations.
+
+**PR #192 base freshness.** PR #192 records base SHA `61311fe...`; the current PR #179/Phase 2 branch head is `ea64607...`, 14 commits ahead and 0 behind that base. PR #192 is therefore based on an earlier point in that branch history. This is a visible integration dependency, not authorization to retarget or rebase. No branch-history operation was performed.
+
+### 15.4 DF-09 blind fresh-reader execution evidence
+
+- **Run:** [GitHub Actions run 43384559530](https://github.com/methaneex-oss/MethaneX/actions/runs/43384559530).
+- **Exact documentation target:** PR #192 HEAD `07acbf61a4d7d532bc838711d6837e2c16ce12b1`.
+- **Workflow candidate revision:** `a33c48a61ef4964daebfc21213dba22bac0d4ada`.
+- **Model/provider reported by the API:** Nvidia / `nvidia/nemotron-3.5-super-vl:free`.
+- **Result:** **PARTIALLY CLEAR** — not CLEAR; DF-09 remains OPEN / NOT MET.
+- **Artifact:** `documentation-reader-assessment.zip`; SHA-256 `a14f46ec6a23e2abca2061cd139a4fc75f223ee669e19e34894678e1293e50f6`.
+- **Run label:** `lpr195-reader-2026-11-13` contains a leading-letter typo; the run ID, target SHA and artifact digest preserve traceability.
+- **Response validation:** HTTP 200; provider/model matched expected metadata; finish reason `stop`; no refusal or tool calls; response content saved; all required A–H sections validated. This establishes a completed blind assessment response, not a CLEAR outcome.
+- **Primary residual reader findings:** the packet lacked one controlling exact-current-state snapshot; PR #191's two distinct ancestry comparisons were not accompanied by live compare evidence; PR #173 and #174 accepted-baseline/current-proposal relationships were insufficiently explicit; DF-01–DF-13 criteria were named but not fully defined in the packet; excluded documents and unverified links needed a more prominent boundary; the exact older 17-question DF-09 protocol was not recoverable.
+- **Protocol limitation:** the historical 17-question list remains unrecovered. The executed assessment prompt is preserved in the run artifact as `assessment_prompt.md`; it contains eight core comprehension questions plus practical usability checks. Do not claim that the unrecovered 17-question list was executed.
+- **Earlier architecture assessment:** run 43384336255 targeted PR #173 HEAD `7e948167...` and returned **NOT CLEAR** (artifact SHA-256 `9919d0833f54d9c41dde476dbe186a63273061749415051403ea2cf30eb9cb8e`). It does not assess current PR #173 HEAD `f8dd67f...`.
+
+### 15.5 PR #195 exact-head review boundary
+
+PR #195 current HEAD is `ec01b440047fb8365322b898f7f290856bdc9eb8`. The prior xAI review verdict was issued against `6a7dedf38bd2265fd45b89f16afd19017e21bf30`. The later current workflow change modifies `.github/workflows/brain-foundation-blind-architecture-review.yml`; therefore the previous verdict is not an exact-current-HEAD review of the workflow delta. A superseding exact-current-HEAD review request was posted in the PR discussion. No review verdict on `ec01b440...` is claimed. PR #195 remains open/draft/unmerged.
+
+The connected GitHub integration exposes workflow-run inspection but no workflow-dispatch operation. No new Actions run, provider call, or live negative-path matrix was triggered in this run. The existing reader run above is real evidence for its exact target and workflow revision only; it does not prove the current PR #195 workflow candidate is reviewed or executed.
+
+### 15.6 Current gate disposition and next Builder work
+
+- **DF-01:** Builder corrections present; exact-state snapshot and reader remediation are being added.
+- **DF-02:** inventory synchronization remains open until the final post-write manifest and exact blob verification.
+- **DF-03:** accepted-baseline and decision provenance distinctions are being clarified; unresolved provenance remains disclosed.
+- **DF-04:** accepted governance source is now located and revalidated; PR #196 merge scope is explicit.
+- **DF-05:** branch dependencies and exact PR #191/PR #192 comparisons are recorded above.
+- **DF-06:** **NOT MET** — GitHub-rendered fragment/line-anchor behavior and the access-limited historical primary-source pointer remain unresolved.
+- **DF-07:** status reconciliation is in progress; a new blind reader run is required after final writes.
+- **DF-08:** **RESOLVED only within its exact bounded historical-preservation criterion.**
+- **DF-09:** **OPEN / NOT MET** — the exact-target reader returned PARTIALLY CLEAR. A new CLEAR assessment is required against the final PR #192 HEAD.
+- **DF-10:** **OPEN** until Builder self-review, parent manifest, final inventory-only commit and post-write exact verification are complete.
+- **DF-11:** **WAIVED** by explicit Project Director decision. This does not waive the separate technical review of the PR #195 workflow candidate required before relying on it.
+- **DF-12:** **NOT ACCEPTED** — exact-revision Project Director decision remains reserved.
+- **DF-13:** **MAINTAINED** — Stage A remains not started and held.
+
+**Builder disposition:** exact-state discovery, governance revalidation, ancestry comparisons, and the PR #195 exact-head review request are complete. Documentation corrections, workflow candidate review, final inventory verification, a new DF-09 CLEAR assessment, DF-06 disposition, and DF-12 remain open. No gate is cleared and no Stage A/runtime work is authorized.
