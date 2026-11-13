@@ -15,7 +15,7 @@ Repository: `methaneex-oss/MethaneX`. Values below were fetched from GitHub on 2
 | #191 — Human/MCU reference comparison | `609d38ede50bbdd98a93dfed112781eacabee9fd` | `f6267456560a08054d69f7960d2951452b14017c` | Open / draft / unmerged | Director Option A: retain separately; no integration operation |
 | #192 — Documentation Foundation | Live PR page; exact tested HEAD is captured in the run packet manifest | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | Open / non-draft / unmerged | This index is part of the current PR revision; the packet manifest records the exact self-referential target SHA |
 | #193 — Implementation-plan proposal | `fa2bd50d6fb0bb77dc3cbaab684f51d606e94bb5` | `874c732973b6ab303d65a503f5a215b0af8e1153` | Open / draft / unmerged | Separate non-operative lineage |
-| #195 — Role terminology and assessment workflows | `ada5fe740275aa9d84a645b0bdd9116aa0dacf1b` | `8edc7cdfc886537d319d81cea04cdc9f3476044e` | Open / draft / unmerged | Current workflow candidate; exact-current-HEAD independent review requested |
+| #195 — Role terminology and assessment workflows | `5a07a616949e060cb5dab6d739789024624f896e` | `8edc7cdfc886537d319d81cea04cdc9f3476044e` | Open / draft / unmerged | Current workflow candidate; exact-current-HEAD independent review requested |
 | #196 — Governance operating controls | `0ebc4e978fa38011b2f6bb5d97a03c267c1c12c9` | `d30237b81c3695f2a7cb980144b221bbd42ce548` | Closed / merged | Merge commit `c151e52781e56e6481424f774c19ea30128debb0`; merged into its existing Phase 2 base branch, not `main` |
 
 ### 1.1 Accepted baselines are not blanket approval of later proposals
@@ -85,12 +85,12 @@ The packet included selected decision extracts and a bounded set of architecture
 
 ### 4.1 Current PR #195 workflow review request
 
-The final superseding exact-current-HEAD review request was posted against `ada5fe740275aa9d84a645b0bdd9116aa0dacf1b` (PR comment ID `6867559481`). It supersedes the earlier request against `ec01b440...`. No reviewer verdict on the current head is yet recorded.
+The final superseding exact-current-HEAD review request was posted against `5a07a616949e060cb5dab6d739789024624f896e` (PR comment ID `6867611794`). It supersedes earlier requests against `ec01b440...` and `ada5fe...`. No reviewer verdict on the current head is yet recorded. Builder inspection corrected the stale PR #173 fetch pin and added the missing Phase 2 governance fetch; all newly added source paths resolved at their declared revisions.
 
 ## 5. Current gate status and authority boundary
 
 - **DF-01:** Builder corrections present; current exact-state snapshot and reader-facing clarifications added in this continuation.
-- **DF-02:** OPEN until the final post-write inventory manifest and exact blob verification are complete.
+- **DF-02:** RESOLVED by the final 39-file parent manifest and inventory-only commit; exact parent blobs and post-write verification are recorded in inventory section 81.
 - **DF-03:** accepted-baseline and decision provenance distinctions recorded; unrecoverable primary-source provenance remains disclosed.
 - **DF-04:** accepted governance source revalidated; PR #196 merge scope explicitly distinguished from PR #178 and `main`.
 - **DF-05:** branch dependencies and PR #191/PR #192 ancestry comparisons recorded.
@@ -98,7 +98,7 @@ The final superseding exact-current-HEAD review request was posted against `ada5
 - **DF-07:** remediation in progress; a new blind reader run is required after final writes.
 - **DF-08:** RESOLVED only within its exact bounded preservation criterion.
 - **DF-09:** OPEN / NOT MET — latest result is PARTIALLY CLEAR.
-- **DF-10:** OPEN until Builder self-review, parent manifest, final inventory-only commit and post-write verification are complete.
+- **DF-10:** RESOLVED — Builder self-review, exact parent manifest, inventory-only commit and post-write verification are recorded in M0 report sections 15.7–15.8 and inventory section 81.
 - **DF-11:** WAIVED by explicit Project Director decision. This does not waive the separate technical review required for the PR #195 workflow candidate.
 - **DF-12:** NOT ACCEPTED; exact-revision Project Director decision remains reserved.
 - **DF-13:** MAINTAINED; Stage A has not started and remains held.
