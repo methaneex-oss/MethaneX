@@ -365,3 +365,74 @@ This addendum supersedes the default-branch feasibility interpretation in Sectio
 - **Conflict found and disposition:** Section 13 overstated the default-branch constraint. The workflow paths already exist on `main`; branch selection enables candidate testing without merge. Corrected here without rewriting the historical record.
 - **Unresolved obligations:** actual manual dispatch and artifact inspection; independent review of the exact final PR #195 HEAD including this audit correction; final pre-merge verification; separate Director merge approval.
 - **Artifact revision:** audit addendum committed as `484368788aa650c71d0e61ec692d2f36d3cb9ce0`; resulting audit blob `e4582efd925c00f4f2732dd7158aed354de0e35d`.
+
+
+## 16. Manual candidate workflow execution, artifact verification and Builder triage — 2026-11-13
+
+### 16.1 Exact execution evidence
+
+Both candidate workflows were manually dispatched from branch `docs/ai-role-terminology-audit-20261111`. GitHub run/artifact metadata confirms that both runs used the exact PR #195 candidate HEAD `a33c48a61ef4964daebfc21213dba22bac0d4ada`.
+
+**Brain Foundation architecture assessment**
+- Run: [43384336255](https://github.com/methaneex-oss/MethaneX/actions/runs/43384336255)
+- Workflow job: `Blind Fresh Tester — blind architecture assessment`; all steps completed; conclusion `success`.
+- Target revision: PR #173 HEAD `7e9481677197cf82df31bbe08984fa5d58644d98`.
+- Provider/model: Nvidia / `nvidia/nemotron-3.5-super-vl:free`.
+- Assessment artifact: `brain-foundation-blind-review-pr195-brain-2026-11-13`; artifact ID `14018425582`.
+- Artifact digest: `sha256:9919d0833f54d9c41dde476dbe186a63273061749415051403ea2cf30eb9cb8e` (independently recomputed against the downloaded ZIP; exact match).
+- Advisory result: **NOT CLEAR**; 7 major and 3 minor finding headings; no CRITICAL finding reported.
+- Metadata records `finish_reason=stop`, no refusal, no tool calls, one textual response, and a saved assessment artifact.
+
+**Documentation Foundation fresh-reader assessment**
+- Run: [43384559530](https://github.com/methaneex-oss/MethaneX/actions/runs/43384559530)
+- Workflow job: `Blind Fresh Tester — blind fresh-reader assessment`; all steps completed; conclusion `success`.
+- Target revision: PR #192 HEAD `07acbf61a4d7d532bc838711d6837e2c16ce12b1`; live PR metadata independently confirms this is PR #192's current HEAD at this check.
+- Provider/model: Nvidia / `nvidia/nemotron-3.5-super-vl:free`.
+- Assessment artifact: `documentation-foundation-blind-fresh-tester-43384559530-1`; artifact ID `14018975215`.
+- Artifact digest: `sha256:a14f46ec6a23e2abca2061cd139a4fc75f223ee669e19e34894678e1293e50f6` (independently recomputed against the downloaded ZIP; exact match).
+- Advisory result: **PARTIALLY CLEAR**; four high-severity comprehension issues plus medium/low recommendations.
+- Metadata records `finish_reason=stop`, no refusal, no tool calls, one textual response, successful A–H section validation and a saved assessment artifact.
+- **Traceability defect:** artifact metadata's `assessment_label` is `lpr195-reader-2026-11-13` (leading lowercase “l”), rather than the intended `pr195-reader-2026-11-13`. Run ID, target SHA and artifact identity remain unambiguous; record this as a label defect, not a content failure.
+
+A successful Actions job proves the workflow executed and produced an artifact. It does not prove the model's findings are correct, nor does it constitute a formal Independent Reviewer verdict, Independent Tester acceptance, Project Director decision, DF gate clearance or architecture acceptance.
+
+### 16.2 Builder triage — PR #173 assessment
+
+The Blind Fresh Tester assessed exact live PR #173 HEAD `7e9481677197cf82df31bbe08984fa5d58644d98`. The NOT CLEAR result is retained, but several generated findings overstate or misread the supplied architecture/matrix:
+
+- **MAJOR-01 — not substantiated as stated:** architecture §16.1 and matrix §4 explicitly assign authoritative work scheduling, dependencies, conflict and interruption records to the Coordination responsibility. A narrower specification/failure-contract ownership question may remain.
+- **MAJOR-02 — partially substantiated:** Continuity/state stewardship, Memory/knowledge stewardship and Belief stewardship are named, but the owner and change-control path for the epistemic taxonomy and cross-class transition contract should be made unambiguous.
+- **MAJOR-03 — partially substantiated:** Learning/adaptation is a named responsibility owning learning candidates, accepted adaptations and developmental lineage. The exact authority for risk-sensitive eligibility and high-impact activation/approval merits clarification.
+- **MAJOR-04 — overstated:** SYS-06 is expressly optional/unresolved and BFA-C11 is expressly reserved for Project Director disposition. A narrower owner/criteria question for evaluating any future SYS-06 proposal may remain.
+- **MAJOR-05 — contradicted at PR scope:** the inherited-mechanism compatibility audit is one of PR #173's four changed files and is linked from architecture §32. Matrix CF-26 says the bounded donor audit is complete while broader inventory/remediation/Director dispositions remain open. The blind packet omitted the report; that is a packet-coverage limitation, not evidence that the PR lacks the report.
+- **MAJOR-06 — remains an open verification concern:** matrix §23 describes architecture-level responses, not final acceptance; §33 says narrative assertion is not closure and requires exact-revision independent recheck. A separate recheck record remains necessary before closure.
+- **MAJOR-07 — contradicted as stated:** matrix §15 labels BFA-C01–C14 proposals, and §22 explicitly states “no implied acceptance” and reserves them for Project Director disposition. A narrower traceability improvement may be useful: map each decision-dependent architectural statement to its BFA-C ID and conditional status.
+- **MINOR-01 — clarify reference semantics:** the manifest target is the exact live PR HEAD; the matrix's other SHAs are historical starting/parent references, not interchangeable review targets.
+- **MINOR-02/03 — packet limitations:** line-number availability and omission of the source audit report are blind-packet limitations; the source audit report itself is present in PR #173.
+
+This is Builder evidence triage, not an Independent Reviewer verdict. The full triage was posted to PR #173: https://github.com/methaneex-oss/MethaneX/pull/173#issuecomment-6846861384. No architecture source was modified.
+
+### 16.3 Builder triage — PR #192 assessment
+
+The fresh-reader assessment target `07acbf61a4d7d532bc838711d6837e2c16ce12b1` is confirmed as the live PR #192 HEAD. The PARTIALLY CLEAR result identifies these principal comprehension concerns:
+1. historical PR/commit snapshots make the controlling exact state difficult to identify;
+2. the earlier accepted PR #173 starting baseline versus the later supersession of its sufficiency is not sufficiently clear in one place;
+3. the accepted PR #174 specification baseline versus the current corrected proposal is not sufficiently clear for a newcomer;
+4. DF-09 status is difficult to reconcile across dated snapshots.
+
+Additional recommendations concern PR #191 ancestry, excluded packet materials, DF-01–DF-13 criteria, duplicate headings and the status relationship of PR #196 governance rules. The assessor explicitly did not access live GitHub, PR review threads or excluded documents; exact-current-state and ancestry comments are therefore reader-comprehension findings, not repository-state verification.
+
+The full advisory result and its limitations were posted to PR #192: https://github.com/methaneex-oss/MethaneX/pull/192#issuecomment-6846862135. No documentation source was modified.
+
+### 16.4 Governance Revalidation Record — this Builder run
+
+1. **Project/work item:** MethaneX / PR #195 — inspect the two manual workflow runs, verify artifact integrity, triage findings and route advisory evidence.
+2. **Governing source:** `docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md`, freshly fetched and read during this run; exact blob `9c17d2870047cc1d58afea745cd7160d15e216c3`.
+3. **Fresh-read confirmation:** Yes. The complete source was retrieved from ref `governance/builder-operating-controls-20261111` in this run, not inferred from memory.
+4. **Role / applicable requirements:** Builder; Rules 2.1–2.7 (continuity/evidence), 4.1–4.3 (authority), applicable Builder/self-review/handoff rules, role separation requirements and Rules 22.1–22.6 (fresh run-specific revalidation and distinct Reviewer/Tester roles).
+5. **Authorized scope:** inspect the two user-supplied workflow runs and artifacts; verify target revisions and digests; record evidence in PR #195's audit; route advisory findings to the relevant PR discussions.
+6. **Exclusions preserved:** no merge, no PR ready-state transition, no architecture or runtime source edits, no gate clearance, no Stage A, no runtime implementation, no secret/credential changes, no branch-history operation and no Project Director acceptance claim.
+7. **Conflicts / disposition:** the architecture assessor's MAJOR-05 and MAJOR-07 conclusions conflict with explicit PR evidence (source audit report included; BFA-C decisions expressly reserved). These are recorded as Builder triage, not silently adopted or used to rewrite architecture. MAJOR-02/03/06 and reader comprehension issues remain open for responsible owners.
+8. **Participant / revision:** Builder; this audit update applies to the PR #195 branch starting HEAD `a33c48a61ef4964daebfc21213dba22bac0d4ada`. PR #195's head was re-fetched immediately before update and had not moved. The resulting commit/blob must be independently reviewed at its new exact revision.
+
+**Current boundary:** PR #195 remains open/draft/unmerged. The two workflow executions and artifact digests are verified. Findings are advisory and routed; no architecture/documentation corrections are claimed. Exact-final-HEAD Independent Review, any necessary corrections/recheck, and separate Project Director merge approval remain outstanding.
