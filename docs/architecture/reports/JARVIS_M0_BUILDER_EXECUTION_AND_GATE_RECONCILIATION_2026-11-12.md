@@ -498,3 +498,41 @@ The connected GitHub integration exposes workflow-run inspection but no workflow
 - **DF-13:** **MAINTAINED** — Stage A remains not started and held.
 
 **Builder disposition:** exact-state discovery, governance revalidation, ancestry comparisons, and the PR #195 exact-head review request are complete. Documentation corrections, workflow candidate review, final inventory verification, a new DF-09 CLEAR assessment, DF-06 disposition, and DF-12 remain open. No gate is cleared and no Stage A/runtime work is authorized.
+
+
+---
+
+## 15.7 Subsequent remediation writes and refreshed workflow packet — 2026-11-14
+
+### PR #192 documentation updates
+
+The following Builder commits were made on the existing PR #192 branch; no new branch was created and no PR was merged:
+
+1. `8e1a0cb222842d5ef27fcc882efa05106880cff5` — appended this run's governance revalidation, exact PR/branch comparisons, DF-09 result and gate reconciliation to this execution report.
+2. `9a70a606d57901c78846c331874d6eb9178a1fee` — added a controlling 2026-11-14 exact-state snapshot to the planning index, defined DF-01–DF-13 exit criteria in the packet, and clarified accepted-baseline/current-proposal relationships, PR #191 ancestry, packet exclusions and DF-09 limitations.
+3. `823acdbbd0ac9a1e5b762aa892d4adb37b0cef5b` — corrected the live PR #192/#195 rows, fixed the reader artifact SHA-256 transcription, and recorded the exact-current-HEAD review request.
+4. `7eb51625d538418624a303ef73acca06ee879860` — replaced the self-referential PR #192 HEAD literal with a live PR pointer and an explicit rule to use `packet_manifest.target_documentation_revision` for the exact tested revision.
+
+The index is itself part of PR #192; therefore it cannot embed the SHA of its own containing commit without becoming stale on the next write. The live PR page and the exact Actions packet manifest are the authoritative current-head pointers. The final inventory-only commit will occur after the parent-tree manifest is generated and verified.
+
+### PR #195 reader workflow packet update
+
+PR #195 current HEAD is `ada5fe740275aa9d84a645b0bdd9116aa0dacf1b`; the updated reader workflow blob is `ef1611ebb6e79ec2034a0c6f11d76741d27b11f7`. The reader packet now:
+- Pins the current PR #173 BFA architecture, completion/decision matrix and inherited-mechanism source-compatibility audit at `f8dd67f...`.
+- Includes the current PR #174 corrected specification and F-02/F-03 correction rationale at `9502989...`.
+- Includes the full DF-01–DF-13 audit from the exact PR #192 target revision.
+- Includes the accepted governance source from Phase 2 branch head `ea64607...`.
+- Clarifies that the first exact-state block controls live status, older snapshots are historical, accepted baselines do not automatically approve later proposals, and the packet manifest defines source provenance.
+- Explicitly lists the full inventory, historical preservation register, templates, Builder self-review/remediation register, raw PR review threads and prior reviewer reports as excluded sources.
+
+A final superseding exact-current-HEAD review request was posted on PR #195 (comment ID `6867559481`) against `ada5fe740275aa9d84a645b0bdd9116aa0dacf1b`. It supersedes the earlier request against `ec01b440...`. The current review verdict is pending. The PR remains open/draft/unmerged.
+
+### Verification boundary and remaining work
+
+- The earlier DF-09 run 43384559530 still targets `07acbf61...`; its PARTIALLY CLEAR result is not a result for the updated PR #192 head.
+- The PR #195 reader workflow packet changes have not yet been dispatched or executed. No YAML runtime validation, provider call, new artifact or new reader verdict is claimed in this section.
+- The current PR #192 live HEAD after these documentation writes must be read from GitHub. The index intentionally uses the live PR pointer and the Actions packet manifest for exact self-referential revision identity.
+- The 39-path PR #192 inventory and parent-tree blob manifest must be refreshed after all non-inventory writes. The final inventory-only commit and post-write verification remain outstanding.
+- DF-06 remains NOT MET; DF-09 remains OPEN until a new exact-final-head reader run returns CLEAR; DF-10 remains OPEN until the final inventory and self-review chain is verified; DF-12 remains reserved for Director acceptance. DF-13 remains maintained.
+
+No Stage A, runtime implementation, architecture decision, merge, draft exit, branch-history operation, gate clearance or Director acceptance was performed.
