@@ -309,3 +309,59 @@ GitHub's manual-dispatch constraint also means the workflow file must exist on t
 - **Scope exclusions preserved:** no merge, no base/status change, no workflow trigger expansion, no default-branch integration, no credential/secret changes, no PR #173/#174 source changes, no gate disposition and no Director acceptance claim.
 - **Current authoritative inputs checked:** PR #195, PR #173 and PR #174 live metadata; exact reader workflow blob; exact PR #174 specification contents at both historical and live pin commits.
 - **Unresolved obligation:** actual GitHub Actions dispatch/runtime verification remains blocked by the absence of a dispatch action in the connected GitHub tools and the default-branch availability constraint for `workflow_dispatch`. Escalate rather than bypassing the boundary.
+
+## 15. Correction — workflow_dispatch branch-selection feasibility and live workflow refs — 2026-11-13
+
+This addendum corrects the execution-feasibility conclusion in Section 13. The earlier conclusion treated the default-branch requirement as though the candidate workflow revision itself had to be integrated into the default branch before dispatch. That interpretation was too broad.
+
+### 15.1 Default-branch registration is already satisfied
+
+GitHub requires a workflow file that declares `workflow_dispatch` to exist on the repository's default branch before it can be manually triggered. Both workflow paths in this PR already exist on `main`, and both current `main` versions declare `workflow_dispatch`:
+
+- `.github/workflows/documentation-foundation-ai-reader.yml` on `main`: blob `6eb1162ad9a47724f227e0c275d3f7dbd96133f7`.
+- `.github/workflows/brain-foundation-blind-architecture-review.yml` on `main`: blob `c1b91ce63cb0232a3a526832bc8a79b18d6d79b5`.
+
+The default-branch registration prerequisite is therefore met. These `main` versions are older than the candidate files in PR #195; dispatching against `main` would not test the candidate changes.
+
+### 15.2 Correct candidate execution route
+
+GitHub's manual-run interface permits selecting a branch in the **Run workflow** branch selector. The candidate can therefore be tested without merging PR #195 by selecting branch `docs/ai-role-terminology-audit-20261111`. The selected branch must be the PR branch, not `main`.
+
+Official documentation:
+- Events and `workflow_dispatch`: https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows
+- Manually running a workflow and selecting a branch: https://docs.github.com/en/actions/how-tos/manage-workflow-runs/manually-run-a-workflow
+
+The exact candidate revisions currently fetched from PR #195 HEAD `37d84da20089998ec81a5d856c1ae411ea5d7353` are:
+
+- Documentation-reader workflow blob: `5b58d8250860f10df64947858bae7b729cb8a501`.
+- Brain architecture-assessment workflow blob: `96dc2971503af022e4d247d4be07d257aec5d7db`.
+
+For a controlled manual run, use these inputs:
+
+| Workflow | `target_revision` | `assessment_label` |
+|---|---|---|
+| Documentation Foundation — Blind Fresh-Reader Assessment | `07acbf61a4d7d532bc838711d6837e2c16ce12b1` | `pr195-reader-2026-11-13` |
+| Brain Foundation — Blind Fresh Architecture Assessment | `7e9481677197cf82df31bbe08984fa5d58644d98` | `pr195-brain-2026-11-13` |
+
+After dispatch, verify the run's selected branch/ref and exact workflow revision, then inspect job logs and uploaded artifacts. A run against `main` is not evidence for the PR #195 candidate. A successful workflow execution and structurally valid provider response are still not an Independent Reviewer verdict, Independent Tester acceptance, Project Director acceptance or gate clearance.
+
+### 15.3 Current execution limitation and corrected status
+
+The connected GitHub tools available to this Builder expose workflow-run and artifact inspection but no workflow-dispatch action. I therefore cannot trigger the run through the current connection. This is a connector capability limitation, not a GitHub default-branch blocker.
+
+**Corrected status:** candidate dispatch is technically feasible without merging PR #195, subject to selecting the PR branch in GitHub Actions. Actual dispatch, provider invocation, artifact inspection and assessment results remain **NOT YET VERIFIED**. Do not claim a runtime pass. If the manual run interface does not offer the PR branch or the resulting run does not use the candidate workflow revision, stop and record the observed blocker rather than substituting the `main` workflow.
+
+This addendum supersedes the default-branch feasibility interpretation in Section 13 and the corresponding "default-branch availability constraint" stated in Section 14. Sections 13 and 14 remain as historical records of the earlier assessment and its then-current conclusion.
+
+### 15.4 Builder Governance Revalidation Record — this run
+
+- **Project / work item:** MethaneX / PR #195 integration preparation and workflow-dispatch feasibility correction.
+- **Role:** Builder.
+- **Governing source freshly read:** `docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md`, blob `9c17d2870047cc1d58afea745cd7160d15e216c3`.
+- **Applicable requirements:** Rules 2.1–2.7 (continuity and evidence), 4.1–4.3 (authority), 8 and 11 (bounded engineering and Builder verification), 17.2–17.4 (role separation), 18–20 (handoff and evidence), and 22 (run-specific revalidation).
+- **Authorized scope:** prepare PR #195 for integration into `main`, perform necessary in-scope corrections, verify current source refs and evidence, and present a final pre-merge evidence packet. The Director explicitly withholds merge authority pending a separate approval.
+- **Exclusions preserved:** no merge, no runtime implementation, no architecture or gate changes, no credential/secret changes, no modification of PR #192/#173/#174, and no representation of Builder checks as independent review or testing.
+- **Current authoritative inputs checked:** PR #195 HEAD `37d84da20089998ec81a5d856c1ae411ea5d7353`; default-branch workflow blobs `6eb1162ad9a47724f227e0c275d3f7dbd96133f7` and `c1b91ce63cb0232a3a526832bc8a79b18d6d79b5`; candidate workflow blobs `5b58d8250860f10df64947858bae7b729cb8a501` and `96dc2971503af022e4d247d4be07d257aec5d7db`; live PR #192/#173/#174 heads; and the Independent Review report for HEAD `26bdfc49316489675d947f5c0a60faa887309d8d`.
+- **Conflict found and disposition:** Section 13 overstated the default-branch constraint. The workflow paths already exist on `main`; branch selection enables candidate testing without merge. Corrected here without rewriting the historical record.
+- **Unresolved obligations:** actual manual dispatch and artifact inspection; independent review of the exact final PR #195 HEAD including this audit correction; final pre-merge verification; separate Director merge approval.
+- **Artifact revision:** this audit addendum is committed on PR #195's existing branch; the resulting commit and blob are to be recorded after the update succeeds.
