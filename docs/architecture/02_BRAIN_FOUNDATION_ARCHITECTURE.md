@@ -631,6 +631,8 @@ The responsibility groupings in §4 are conceptual ownership domains. They may l
 | Metacognition | Monitoring state, capability estimates and corrective-work history | Signals from all responsibilities | Bounded reconsideration, evidence requests and suspension | Become an unrestricted second cognitive authority |
 | Coordination | Work scheduling, dependencies, conflict and interruption records | Work requests and version metadata | Dispatch, arbitration, cancellation and stale-work notices | Own other responsibilities' semantic state |
 
+**Coordination ownership clarification:** Coordination is a first-class responsibility and the semantic owner of its own work-management state. That state includes scheduling, dependency, arbitration, conflict, interruption, cancellation, resumption and stale-work records. It owns the process state needed to coordinate concurrent work; it does not own or decide the semantic content of another responsibility's state. No separate unowned coordination facility or second cognitive authority is implied. Implementations may combine this responsibility with others only if its state ownership and authority remain explicit.
+
 ## 17. Epistemic classes and state-transition contract
 
 The conceptual minimum information classes are:
@@ -652,6 +654,14 @@ The conceptual minimum information classes are:
 - **Metacognitive assessment:** evidence-qualified estimate or finding about cognitive process/capability.
 
 No class is silently promoted into another. Every transition retains derivation, owner, time, context, uncertainty and status.
+
+### 17.0 Taxonomy ownership and change control
+
+Continuity/state stewardship is accountable for the canonical epistemic-class taxonomy and the cross-responsibility lifecycle contract: class definitions, permitted transitions, status distinctions, versioning, compatibility and state-lineage requirements. This is governance of the information model, not authority over the semantic content of observations, interpretations, memories, beliefs, predictions, goals, plans, decisions or learning changes.
+
+Each responsibility that owns a state class remains accountable for the semantic validity of that class's contents and for accepting, rejecting or qualifying transitions into its own authoritative state. Continuity/state stewardship validates that transitions preserve the canonical class, provenance, lifecycle and recovery contract; it does not overrule a domain owner's semantic decision.
+
+A change to a class definition or cross-domain transition requires a documented impact assessment, review by affected state owners, versioned compatibility/migration rules and explicit verification. A change that alters foundational authority or accepted architecture remains subject to Project Director decision; no taxonomy owner may self-authorize such a change.
 
 ### 17.1 State lifecycle
 
@@ -792,6 +802,12 @@ Learning is a distributed change process across memory, representation, beliefs,
 8. **Post-change monitoring:** assess durability, transfer and regression.
 9. **Correction/recovery:** qualify, reverse, isolate or supersede adverse changes while preserving history.
 
+### 21.1.1 Learning lifecycle ownership and activation authority
+
+Learning/adaptation is accountable for the end-to-end learning-candidate lifecycle: candidate registration, evidence and dependency capture, eligibility/risk assessment, evaluation, activation proposal, accepted-adaptation records, developmental lineage, post-change monitoring and correction/recovery. It owns the assessment record and must make the evidence and rationale inspectable.
+
+Learning/adaptation may activate only changes covered by an explicit, approved delegation or policy. Changes affecting cognitive identity, foundational epistemic integrity, broad world models, goal/valuation policy, safety-relevant capabilities or wide-ranging behaviour require the applicable external governance approval before activation. The governance authority owns that approval; Learning/adaptation records and enforces the decision but cannot grant itself permission. If the required approval path is undefined or unavailable, the candidate remains deferred and the owner requests a decision rather than activating it.
+
 ### 21.2 Learning classes
 
 The architecture distinguishes episodic retention/retrieval, semantic/relational knowledge, belief calibration/revision, predictive/model learning, reasoning-strategy learning, attention/relevance learning, goal/valuation learning, affective appraisal calibration, procedural/skill learning and self-model/metacognitive learning. They may share infrastructure but are not assumed to share one undifferentiated update rule.
@@ -831,6 +847,8 @@ Metacognitive monitoring may request reconsideration, retrieval, further evidenc
 - **SYS-07:** security/integrity authority within its approved system scope; Brain intent cannot bypass it.
 - **SYS-08:** operational substrate including compute, storage, networking, devices and runtime; infrastructure acknowledgements are not semantic cognitive truth.
 - **Governance/action path:** independently authorizes and validates action proposals, executes permitted operations and returns execution/outcome evidence.
+
+**SYS-06 decision ownership:** SYS-06 remains a proposed, optional and unresolved modulation responsibility; this architecture does not instantiate it, assign it runtime authority or create a Brain dependency on it. BFA-C11 is reserved for explicit Project Director accept/reject/revise disposition. If a SYS-06 proposal is commissioned, the Architecture & Engineering Builder prepares its evidence-backed rationale and boundary analysis; the Project Director retains the decision, and the Independent Reviewer may challenge the evidence. Until that decision is recorded, SYS-06 remains absent from the required foundational Brain.
 
 ### 23.2 Security and information access
 
