@@ -1,16 +1,18 @@
-# Independent Re-review Request — PR #174 Brain Mechanism Specification — 2026-11-11
+# Independent Re-review Request — PR #174 Brain Mechanism Specification — superseding exact-HEAD request, 2026-11-14
 
 ## 1. Exact target and review independence
 
 - **Repository:** `methaneex-oss/MethaneX`
 - **Pull request:** [#174](https://github.com/methaneex-oss/MethaneX/pull/174)
-- **Exact target PR HEAD:** re-fetch live PR #174 metadata immediately before review and record the exact 40-character HEAD in the review report; do not rely on an older assignment comment.
-- **Current specification blob:** `a1798ee8a1d48284bd0dc6686ce255eacab8a2b7` (verify this blob is present at the live target HEAD before review).
-- **Accepted historical planning baseline:** `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`
-- **Parent architecture proposal currently under separate review:** PR #173 HEAD `7e9481677197cf82df31bbe08984fa5d58644d98`
+- **Exact target PR HEAD:** fetch live PR #174 metadata immediately before review; the Builder will publish the final exact HEAD and all changed specification/review blob SHAs in the superseding PR comment after this request-file commit.
+- **Current specification blob:** `848bbb858dad903b8e838277b7f096d146c904b9` (verify this blob is present at the live target HEAD before review).
+- **Current F-02/F-03 correction-record blob:** `b3089c11b5ee7b7e4244ca4e63d7e89afc038cd0`.
+- **Original independent re-review source transcription:** `docs/architecture/specifications/reviews/03_PR174_INDEPENDENT_TECHNICAL_REREVIEW_SOURCE_2026-11-14.md` at commit `778c28a45e4b6281b9e8e0cd67695f2065931e2c`. It records the report's own stated target `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` and verdict REVISE — NOT APPROVED FOR THE NEXT GATE. The source artifact does not identify its reviewer model/person.
+- **Accepted historical planning baseline:** `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`.
+- **Current parent architecture proposal:** PR #173 HEAD `f8dd67fc866242d29298ffc6a03a8782a4e6982c` (proposal, not Director-accepted as final architecture).
 - **Review requested:** independent technical re-review of the complete current PR #174 specification, with particular attention to the recovered F-02/F-03 obligations.
 
-The reviewer must be a genuinely separate model/person from the Architecture & Engineering Builder, disclose identity and any prior involvement, inspect the live current PR #174 HEAD obtained from PR metadata immediately before review and verify that it contains the current specification blob above, and produce a report tied to the exact SHA. A Builder self-review, Project Director decision, same-model review, or report against an earlier SHA does not satisfy this request.
+The reviewer must be a genuinely separate model/person from the Architecture & Engineering Builder, disclose identity and any prior involvement, inspect the live current PR #174 HEAD obtained from PR metadata immediately before review and verify that it contains the current specification blob above, and produce a report tied to the exact SHA. A Builder self-review, Project Director decision, same-model review, or report against an earlier SHA does not satisfy this request. The reviewer must explicitly state whether it is Grok/xAI or another independent reviewer; do not infer identity from a report title or filename.
 
 ## 2. Review packet and anti-coaching boundary
 
@@ -19,9 +21,10 @@ Inspect the following repository artifacts directly at their exact revisions:
 1. Current specification at the exact target HEAD above.
 2. Historical accepted specification baseline at `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, to identify what was changed and whether accepted content was improperly altered.
 3. PR #173 historical accepted planning baseline at `97191111bc2573c14d391c0af9628db7b11f194b` and current corrected architecture proposal at `7e9481677197cf82df31bbe08984fa5d58644d98`, while keeping their authority scopes distinct.
-4. Secondary recovery record `docs/architecture/reports/PR_174_FOLLOW_ON_REVIEW_PROVENANCE_RECOVERY_2026-11-06.md` at PR #192's current branch snapshot. It contains recovered finding identities/severity/themes but is explicitly not the original report.
+4. Original independent technical re-review source transcription `docs/architecture/specifications/reviews/03_PR174_INDEPENDENT_TECHNICAL_REREVIEW_SOURCE_2026-11-14.md` at commit `778c28a45e4b6281b9e8e0cd67695f2065931e2c`.
+5. Current Builder correction record `docs/architecture/specifications/reviews/01_BRAIN_MECHANISM_SPECIFICATION_F02_F03_CORRECTIONS_2026-11-11.md` at its exact current blob; use it only as a navigation aid, not as proof of correction.
 
-Do **not** rely on the Builder's correction report, PR description, comments, chat history, or prior review conclusions as proof that a finding is fixed. Verify each material claim from the specification itself. The original F-02/F-03 report and exact originally reviewed SHA remain unavailable; assess whether the recovered secondary themes are sufficiently precise for a bounded technical re-review, and state what cannot be established.
+Do **not** rely on the Builder's correction report, PR description, comments, chat history, or prior review conclusions as proof that a finding is fixed. Verify every material claim directly from the full current specification and compare it against the exact acceptance criteria in the source transcription. The source report itself records the historical accepted baseline as its target; it does not assess the corrected current PR #174 proposal.
 
 ## 3. Required technical review
 
@@ -41,25 +44,32 @@ Challenge missing foundational obligations, contradictory ownership, hidden seri
 
 ### 3.2 F-02 — contextual language and operator-intent grounding
 
-The secondary recovery record identifies the finding as HIGH / CONFIRMED and records these themes:
-- contextual intent;
-- reference grounding;
-- speech-act and source attribution;
-- uncertainty handling;
-- clarification when context is insufficient;
-- trusted versus untrusted content separation;
-- continuity across the interaction.
+The supplied independent re-review source identifies F-02 as HIGH / CONFIRMED and requires:
+- contextual interpretation of utterances and communicative intent;
+- reference resolution across conversational context, entities and relevant memory;
+- distinguishing questions, instructions, suggestions, assertions and commitments;
+- identifying the speaker and participant whose intention or commitment is represented;
+- tracking commitments across interactions and attributing ownership correctly;
+- separating explicit intent from inferred intent;
+- representing uncertainty and clarifying/deferring when required;
+- distinguishing direct operator instructions from quoted, retrieved or untrusted content;
+- preserving conversational and task continuity.
+
+The reviewer must specifically verify BM-02 interpretation/attribution, BM-08 operational commitment/goal handling, BM-03 continuity and governance separation.
 
 Assess whether the current BM-02 contract and scenarios adequately address each theme without hardcoded phrase-to-intent mappings, conflating literal content with inferred intent, or treating inferred intent as authorization. Check whether BM-08 and other consumers preserve the distinction.
 
 ### 3.3 F-03 — enforceable downstream reasoning integration
 
-The secondary recovery record identifies the finding as MEDIUM / CONFIRMED specification weakness and records these themes:
-- accepted reasoning must materially influence authoritative downstream computation;
-- invalidation and rejection must be handled explicitly;
-- end-to-end effects must be traceable through acceptance scenarios.
+The supplied independent re-review source identifies F-03 as MEDIUM / CONFIRMED specification weakness and requires:
+- BM-04 to evaluate and accept, qualify, dispute, defer or reject candidate claims;
+- BM-05 to receive relevant implications without surrendering prediction/causal ownership;
+- BM-08 to use qualified reasoning when relevant to planning/decisions;
+- invalidated conclusions to trigger reconsideration of dependent computations;
+- rejected or unsupported conclusions not to silently influence downstream decisions;
+- end-to-end scenarios demonstrating a material downstream computation change, with traceable reasoning and resulting state/version evidence.
 
-Assess whether BM-12, BM-04, BM-05, BM-08, BM-11 and scenarios 41–48 define an enforceable contract. In particular, determine whether accepted reasoning is required to influence a consuming owner's state/computation and whether the exact reasoning artifact/version and resulting downstream state/decision version can be traced. Logging, delivery or persistence alone must not count as integration.
+Assess whether BM-12, BM-04, BM-05, BM-08, BM-11, Section 5.5 and scenarios 41–48 define an enforceable contract. In particular, determine whether accepted reasoning is required to influence a consuming owner's state/computation and whether the exact reasoning artifact/version and resulting downstream state/decision version can be traced. Logging, delivery or persistence alone must not count as integration.
 
 ### 3.4 Source compatibility and deferral boundaries
 
@@ -76,6 +86,8 @@ Return a concise but evidence-rich report with:
 5. F-03 disposition: CLEAR / PARTIAL / NOT CLEAR, with explicit assessment of material downstream computation, rejection, invalidation and version traceability.
 6. Whole-specification findings, each with severity, exact path/heading, defect, concrete correction and objective recheck criterion.
 7. CF-01–CF-27 traceability and any uncovered architecture obligation.
+8. Explicit exact-criteria matrix for every F-02 and F-03 obligation in the source transcription; mark each CLEAR / PARTIAL / NOT CLEAR and cite exact specification headings/scenarios.
+9. Whether the Builder's added commitment ownership/lifecycle rules create any duplicated state ownership or conflict with SYS-09/SYS-11 boundaries.
 8. Source compatibility/deferred-decision risks.
 9. Provenance limitations that cannot be resolved from repository evidence.
 10. Whether the exact reviewed revision is suitable to return to the Project Director for disposition. Do not make the Project Director's decision or authorize implementation.
