@@ -615,3 +615,46 @@ The corrected section 82 manifest was generated directly from the exact PR #192 
 - PR #192 remained open, non-draft and unmerged, with 39 changed files.
 
 This supersedes the inaccurate first-cycle claim in §15.8 and the pending correction state in §15.9. A final manifest cycle is still required after the present report/index closeout updates; its exact parent and final commit evidence will be recorded in inventory section 83. DF-02/DF-10 are therefore not marked complete until that final cycle passes.
+
+---
+
+## 15.11 PR #174 source recovery and F-02/F-03 Builder correction — 2026-11-14
+
+### Original review source recovered
+
+The Project Director supplied the seven-page `PR174_Independent_Technical_ReReview_Builder_Handoff.docx` and confirmed that the original shared-conversation link opened and displayed the review. The report's own target section identifies PR #174 HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, the historical accepted planning baseline. Its verdict is **REVISE — NOT APPROVED FOR THE NEXT GATE**; it confirms F-02 (HIGH) and F-03 (MEDIUM). The report is specification-level with bounded source verification and does not authorize implementation, merge or deployment. The supplied artifact does not identify reviewer model/person; this record does not attribute it to xAI.
+
+The source transcription is committed on PR #174 at `778c28a45e4b6281b9e8e0cd67695f2065931e2c`, path `docs/architecture/specifications/reviews/03_PR174_INDEPENDENT_TECHNICAL_REREVIEW_SOURCE_2026-11-14.md`.
+
+### Builder correction submitted
+
+Builder reconciled the full report against the current PR #174 specification and corrected the existing twelve-mechanism specification without redesign:
+
+- BM-02 now distinguishes questions, instructions, suggestions, assertions, commitments, reports, hypotheticals and corrections; attributes speaker/addressee/participant; separates explicit and inferred intent; and records commitment ownership, uncertainty, provenance and continuity.
+- BM-08 explicitly owns operational commitment/task records and lifecycle when commitments become relevant to goal/plan state; BM-02 retains interpretation/attribution ownership and BM-03 preserves interaction history.
+- BM-04 evaluates BM-12 candidate claims with explicit accept/qualify/dispute/reject/defer dispositions and state-version traceability.
+- BM-05 evaluates relevant reasoning implications without treating explanations as verified causality and records resulting model/prediction versions.
+- BM-08 consumes qualified reasoning when relevant and records downstream goal/plan/decision effects.
+- Section 5.5 now requires consumer-side evaluation and exact reasoning-artifact/resulting-owner-state version traceability.
+- Acceptance scenarios now cover IDs 1–54; Section 9 was checked for 54 scenario IDs with no missing or duplicate identifiers.
+
+**Exact corrected PR #174 HEAD:** `d0e8df405e0b54f6866a3cd7c5efa3f213d792bb`.
+**Specification blob:** `66a1aee31b846e0eea463577ac73ad4350d83de7`.
+**F-02/F-03 correction record blob:** `b3089c11b5ee7b7e4244ca4e63d7e89afc038cd0`.
+**Review request blob:** `884e5863d14bca08574544ab984a50195478eacc`.
+
+A fresh exact-HEAD independent review was requested in PR #174 comment `6882606747`. The source report's verdict is not carried forward as approval of this corrected revision. No independent verdict on `d0e8df...` is yet recorded.
+
+### M0 gate impact
+
+- **DF-03:** improved; the original PR #174 source report is no longer an inaccessible primary-source pointer and is preserved as a commit-pinned transcription. Other provenance limitations remain disclosed.
+- **DF-06:** still NOT MET. The historical report source is now preserved, and the Project Director manually verified one pinned source line-anchor sample (`c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`, lines 155–223). That single sample does not establish complete GitHub-rendered fragment/line-anchor validation.
+- **DF-07:** still requires fresh-reader consistency confirmation after the final M0 documentation revision.
+- **DF-09:** still OPEN / NOT MET. The previous PARTIALLY CLEAR result targets old PR #192 HEAD `07acbf61...`; a fresh CLEAR result against the final PR #192 target is still required.
+- **DF-11:** remains waived by the Project Director's explicit decision; this does not waive the separate xAI technical review of PR #195's current workflow candidate.
+- **DF-12:** remains reserved for exact-revision Project Director acceptance.
+- **DF-13:** maintained; Stage A remains held.
+
+### Authority and limitation
+
+This was Builder documentation work and self-verification only. The new PR #174 review request is pending. No independent approval, runtime test, Stage A start, implementation authorization, PR merge, rebase, retarget or deployment is claimed.
