@@ -8,14 +8,12 @@
 **Current pre-correction PR head:** `be46b3858102c31022128522c4b3506aad4dff8a`  
 **Current specification blob before correction:** `b366564b3f68e674ae5f5f9fc5a6c90d8b4f454d`
 
-The original follow-on reviewer report was previously supplied as a ChatGPT shared-conversation URL:
-`https://chatgpt.com/s/t_6aeb2a73b6dc81918355a8da5bfb6a84`.
-An attempt to retrieve that shared conversation failed. The exact report body, exact reviewed commit SHA, verbatim finding text and full acceptance criteria therefore remain unavailable in the repository evidence.
+The original follow-on review is now available to the Builder as the seven-page document `PR174_Independent_Technical_ReReview_Builder_Handoff.docx`, supplied by the Project Director on 2026-11-14. The Project Director confirmed that the historical shared-conversation URL opened and displayed the original review. The report records the reviewed PR #174 HEAD as `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, the historical accepted planning baseline. It does not review the current corrected proposal at `9502989ffae91c00ba0a8568ab5296925fa9f27b` or the Builder correction commit now being prepared. The report's document does not identify the reviewer by model/person; this record therefore does not attribute it to xAI or claim a qualifying independent-review identity based solely on the filename/title.
 
-The following finding summaries are reconstructed from the recorded prior review context. They are not represented as verbatim quotations:
+The exact finding titles and acceptance criteria below are taken from the supplied report. The report states F-02 is HIGH / confirmed and F-03 is MEDIUM / confirmed specification weakness. Its scope is specification-level with bounded source verification; it explicitly does not claim runtime correctness, runtime tests, or implementation authorization.
 
-- **F-02 — Contextual language/operator-intent grounding (High):** define a general, context-sensitive mechanism for interpreting language and operator intent; do not substitute fixed phrase-to-intent mappings.
-- **F-03 — Downstream reasoning integration (Medium):** specify how reasoning conclusions, uncertainty and alternatives influence downstream cognitive processing through explicit integration contracts and acceptance scenarios.
+- **F-02 — Missing explicit contextual language and operator-intent grounding (HIGH):** specify contextual utterance/communicative-intent interpretation, reference resolution, speech-act distinctions, speaker/participant attribution, commitment ownership and lifecycle, explicit versus inferred intent, uncertainty/clarification, direct versus quoted/untrusted content, and interaction continuity.
+- **F-03 — Downstream reasoning integration is not sufficiently enforceable (MEDIUM):** make material downstream influence an observable acceptance obligation; require BM-04 to evaluate candidate claims, BM-05 to receive relevant implications without surrendering prediction ownership, BM-08 to use qualified reasoning where relevant, invalidated conclusions to trigger reconsideration, and rejected/unsupported conclusions not to silently influence downstream decisions.
 
 This report addresses those known requirements conservatively. It does not claim that the missing original report has been recovered or that every original acceptance criterion is known.
 
@@ -158,3 +156,39 @@ The additional scenarios 47–48 supplement the existing 35–46 set. They are s
 **Builder reconciliation:** the earlier correction pass covered much of the recovered substance but did not explicitly name speech-act/source attribution, discourse continuity, or a traceable downstream state-version effect for accepted reasoning. Those omissions are now corrected in the current specification proposal.
 
 **Status remains:** Builder correction submitted; Independent Reviewer re-review and Project Director disposition are outstanding. The original report and exact original reviewed SHA remain unavailable. This report is not a verbatim reconstruction and does not claim independent clearance or implementation authorization.
+
+
+## 7. Reconciliation against the full 2026-11-14 independent technical re-review
+
+The supplied report is the controlling source for the exact F-02/F-03 acceptance criteria. It identifies the historical PR #174 review target as `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, which is the accepted planning baseline. The corrected proposal was at `9502989ffae91c00ba0a8568ab5296925fa9f27b` when the Builder began this reconciliation. The report therefore establishes the findings against the historical baseline; it does not provide a verdict on the later corrected proposal.
+
+### 7.1 F-02 exact obligations and Builder reconciliation
+
+| Independent finding obligation | Current specification response |
+|---|---|
+| Contextual interpretation of utterances and communicative intent | BM-02 §4.2 and §9.I/K; interpretation is evidence- and context-sensitive, not phrase-table driven |
+| Reference resolution across conversation, entities and memory | BM-02 inputs/requirements; BM-03 supplies retrieved context; scenarios 35–38 |
+| Distinguish questions, instructions, suggestions, assertions and commitments | BM-02 requirement 14; scenarios 49 and 53 |
+| Identify speaker and participant whose intent/commitment is represented | BM-02 requirement 15; BM-08 operational ownership; scenario 50 |
+| Track commitment ownership and lifecycle across interactions | BM-02 requirements 17–19; BM-08 requirements 11–13; scenarios 51, 52 and 54 |
+| Separate explicit intent from inferred intent | BM-02 requirements 16–17; scenario 51 |
+| Preserve uncertainty and clarify/defer materially ambiguous intent | BM-02 requirements 16–17; scenario 36 and 51 |
+| Distinguish direct operator instructions from quoted/retrieved/untrusted content | BM-02 requirement 13; scenarios 39 and 53 |
+| Preserve conversational/task continuity | BM-02 requirement 18; BM-03 history; scenarios 38 and 52 |
+
+### 7.2 F-03 exact obligations and Builder reconciliation
+
+| Independent finding obligation | Current specification response |
+|---|---|
+| BM-04 evaluates and accepts, qualifies, disputes, rejects or defers candidate claims | BM-04 requirements 9–10; scenario 41 |
+| BM-05 receives relevant implications without surrendering prediction/causal ownership | BM-05 requirements 11–12; scenario 43 |
+| BM-08 uses qualified reasoning in relevant planning/decision work | BM-08 interaction contract and BM-12 routing; scenarios 42 and 47 |
+| Invalidated conclusions trigger reconsideration of dependent computation | BM-11 dependency rules; BM-12 requirements 10, 16–17; scenario 48 |
+| Rejected/unsupported conclusions do not silently influence downstream decisions | BM-12 requirements 14–17; Section 5.5 consumer contract; scenarios 45–48 |
+| Prove material downstream effect rather than delivery/logging | Section 5.5; BM-04/BM-05/BM-08 consumer requirements; scenario 47 |
+
+### 7.3 Remaining verification boundary
+
+The Builder has translated the report's specification obligations into the current PR #174 proposal and added explicit acceptance scenarios. This is a Builder reconciliation, not independent confirmation that the correction is sufficient. The designated Independent Reviewer must inspect the exact corrected PR #174 HEAD, verify the mapping and identify any remaining gap. The report's bounded source-level observations are not runtime tests; no runtime implementation or test authorization is implied.
+
+**Current Builder disposition:** F-02 and F-03 have been addressed at the specification-edit level in the current correction pass. They are **SUBMITTED FOR FRESH INDEPENDENT RE-REVIEW**, not independently cleared and not Director-accepted.
