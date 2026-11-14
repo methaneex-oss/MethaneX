@@ -579,3 +579,24 @@ A final superseding exact-current-HEAD review request was posted against PR #195
 - DF-06 remains NOT MET; DF-09 remains OPEN; DF-12 remains reserved for Project Director acceptance. DF-13 remains maintained.
 
 No Stage A, runtime implementation, architecture decision, PR integration, merge, draft exit, gate clearance or Director acceptance was performed.
+
+
+---
+
+## 15.9 Correction to parent-manifest verification — 2026-11-14
+
+A fresh independent tree-to-manifest comparison found that the prior §15.8 statement "SHA/path mismatches: 0" was incorrect. The 39-row manifest in inventory section 81 contained three incorrect parent blob SHAs:
+
+| Path | Incorrect recorded SHA | Actual blob at parent `cb755ed762fa55c0438705a918be2eef0c83a430` |
+|---|---|---|
+| `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md` | `1c62896b5a0b9dd30ca1ff5e8be41d9b30cb040c` | `790a46059fa096b9e5de421f9215a848a18669e5` |
+| `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md` | `79ba7ac0c01afa8608f3c41b899c032846f53c9d` | `d42e7102df72319f24fe4ac600a7c53c226d1ff5` |
+| `docs/architecture/reports/JARVIS_M0_BUILDER_EXECUTION_AND_GATE_RECONCILIATION_2026-11-12.md` | `ff9e1fadd1cb7137d3c2a0d59a0223a9bdd3072b` | `0def699d02daf2fa3dff06805b1c85324185cf70` |
+
+The path set itself was complete: 39 manifest paths matched 39 changed blob paths, with no missing or unexpected paths. The error was limited to these three blob identifiers. The earlier verification claim is superseded and must not be relied upon.
+
+**Correction procedure:** refresh the exact PR #192 parent tree after this report/index correction; regenerate every parent blob SHA directly from that tree; replace the manifest in the inventory; then make the inventory update the sole changed path in the final commit. Verify (1) the manifest has exactly 39 unique rows, (2) every path and parent blob SHA matches the exact parent tree, (3) the parent-to-final comparison is exactly one commit ahead and one changed file, and (4) all other 38 changed file blobs are unchanged.
+
+Until that final check passes, DF-02 and DF-10 are **OPEN / NOT VERIFIED**. No gate is cleared by the earlier inaccurate statement. DF-06 remains NOT MET; DF-09 remains OPEN / NOT MET; DF-11 remains waived; DF-12 remains reserved for Project Director acceptance; DF-13 remains maintained.
+
+This correction is recorded as a Builder self-audit. It is not an independent review, Tester result, gate clearance or Project Director acceptance.
