@@ -90,7 +90,7 @@ The final superseding exact-current-HEAD review request was posted against `5a07
 ## 5. Current gate status and authority boundary
 
 - **DF-01:** Builder corrections present; current exact-state snapshot and reader-facing clarifications added in this continuation.
-- **DF-02:** RESOLVED by the final 39-file parent manifest and inventory-only commit; exact parent blobs and post-write verification are recorded in inventory section 81.
+- **DF-02:** OPEN / NOT VERIFIED pending correction of three parent blob SHAs discovered by the 2026-11-14 Builder re-audit; see M0 report §15.9.
 - **DF-03:** accepted-baseline and decision provenance distinctions recorded; unrecoverable primary-source provenance remains disclosed.
 - **DF-04:** accepted governance source revalidated; PR #196 merge scope explicitly distinguished from PR #178 and `main`.
 - **DF-05:** branch dependencies and PR #191/PR #192 ancestry comparisons recorded.
@@ -98,7 +98,7 @@ The final superseding exact-current-HEAD review request was posted against `5a07
 - **DF-07:** remediation in progress; a new blind reader run is required after final writes.
 - **DF-08:** RESOLVED only within its exact bounded preservation criterion.
 - **DF-09:** OPEN / NOT MET — latest result is PARTIALLY CLEAR.
-- **DF-10:** RESOLVED — Builder self-review, exact parent manifest, inventory-only commit and post-write verification are recorded in M0 report sections 15.7–15.8 and inventory section 81.
+- **DF-10:** OPEN / NOT VERIFIED pending corrected 39-path manifest and exact post-write verification; see M0 report §15.9.
 - **DF-11:** WAIVED by explicit Project Director decision. This does not waive the separate technical review required for the PR #195 workflow candidate.
 - **DF-12:** NOT ACCEPTED; exact-revision Project Director decision remains reserved.
 - **DF-13:** MAINTAINED; Stage A has not started and remains held.
