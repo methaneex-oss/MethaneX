@@ -1,6 +1,6 @@
 # JARVIS Brain — Integrated Mechanism Specification
 
-**Historical baseline status:** Accepted as the Brain Mechanism Specification planning baseline at PR #174 HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` by Project Director decision comment [#6604790481](https://github.com/methaneex-oss/MethaneX/pull/174#issuecomment-6604790481). This acceptance is limited to that exact baseline and is not implementation authorization. The current correction revision contains Builder responses to the follow-on F-02/F-03 findings; independent re-review and Project Director disposition remain outstanding. The historical parent architecture baseline was superseded on 2026-11-11 as sufficient/final architecture; this specification must be reconciled against the current PR #173 architecture before implementation reliance.  
+**Historical baseline status:** Accepted as the Brain Mechanism Specification planning baseline at PR #174 HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` by Project Director decision comment [#6604790481](https://github.com/methaneex-oss/MethaneX/pull/174#issuecomment-6604790481). This acceptance is limited to that exact baseline and is not implementation authorization. A 14 November 2026 independent technical re-review report supplied to the Builder examined the reported historical PR #174 HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` and confirmed F-02 (HIGH) and F-03 (MEDIUM) specification gaps. That report predates and does not assess the current corrected proposal at `9502989ffae91c00ba0a8568ab5296925fa9f27b`. The current revision is being corrected against its full acceptance criteria and requires a fresh exact-HEAD independent review and Project Director disposition. The historical parent architecture baseline was superseded on 2026-11-11 as sufficient/final architecture; this specification must be reconciled against the current PR #173 architecture before implementation reliance.  
 **Stage:** Detailed Brain Mechanism Specification  
 **Authority:** Project Director authorization for this specification stage was recorded as received 2026-11-03. The Project Director's exact-revision acceptance of PR #173 as the Brain Foundation Architecture planning baseline was recovered from the 2026-11-03 decision and transcribed in PR #173 comment #6752144835.  
 **Parent architecture reference:** PR #173, accepted planning-baseline HEAD `97191111bc2573c14d391c0af9628db7b11f194b` (Project Director decision 2026-11-03; provenance transcription in PR #173 comment #6752144835).
@@ -216,15 +216,19 @@ Each mechanism below is specified by responsibility, conceptual inputs and outpu
 11. Preserve materially different readings and their assumptions when context does not discriminate among them; request clarification when ambiguity changes the likely outcome or consequence.
 12. Incorporate corrections as new evidence and revise the interpretation without rewriting the original utterance.
 13. Treat quoted, reported, hypothetical or otherwise untrusted imperative text as content to interpret, not automatically as an instruction from the current operator.
-14. Represent speech-act/communicative-function hypotheses separately from literal content and inferred desired outcome; attribute utterances and embedded claims to their actual source/speaker where evidence permits, preserving quoted/reported source boundaries.
-15. Preserve discourse continuity across turns and interruptions: retain provenance and temporal scope of active referents, unresolved interpretations, corrections and relevant context, while allowing stale or contradicted context to be revised.
-16. Keep inferred intent distinct from authority: interpretation does not authorize action.
+14. Represent speech-act/communicative-function hypotheses separately from literal content and inferred desired outcome. Distinguish, where context supports it, questions, instructions, suggestions, assertions, commitments, reports, hypothetical statements and corrections; do not infer a speech act from a fixed phrase or surface-form table.
+15. Attribute each utterance and embedded claim to the actual speaker/source and, where supported, identify the addressee and the participant whose intention, action or commitment is represented. Do not attribute another participant's statement or commitment to the current operator.
+16. Distinguish explicit intent/commitment from inferred intent/commitment. Preserve the evidence, alternatives, assumptions and uncertainty for inferred cases; ask for clarification or defer when attribution or meaning is materially uncertain.
+17. When a communicative act expresses or implies a commitment, represent a candidate commitment with its speaker/owner, intended recipient where known, content, scope, conditions, relevant time/trigger, provenance and explicit-versus-inferred status. BM-02 owns interpretation and attribution, not operational commitment fulfillment.
+18. Preserve discourse continuity across turns and interruptions, including active referents, unresolved interpretations, corrections and commitment references. Preserve provenance and temporal scope while allowing stale or contradicted context to be revised.
+19. Preserve commitment revisions, corrections, disputes, withdrawal and fulfillment as new evidence; never rewrite the original utterance or silently transfer commitment ownership.
+20. Keep inferred intent distinct from authority: interpretation does not authorize action.
 
 **Publishes:** Candidate representations, including literal/semantic readings, reference/discourse hypotheses and pragmatic/operator-intent hypotheses where applicable, with evidence links, alternatives, uncertainty and explicit epistemic status.
 
 **Interactions:** BM-03 supplies context; BM-04 compares interpretations with current claims; BM-05 may discover relations; BM-06 supplies active context and allocates further processing; BM-08 supplies goal/request context and evaluates qualified intent hypotheses; BM-09 may improve representational competence through evaluated experience; BM-12 reasons over interpretations and contextual evidence without committing beliefs or authorizing actions.
 
-**Failure semantics:** Unsupported interpretation remains a hypothesis or unresolved input. Provider failure, absent modality support and low confidence must be visible, not silently replaced with a claim of successful perception.
+**Failure semantics:** Unsupported interpretation remains a hypothesis or unresolved input. Provider failure, absent modality support and low confidence must be visible, not silently replaced with a claim of successful perception. If the speaker, addressee, speech act or commitment owner cannot be established, preserve the attribution as unresolved rather than inventing an owner or commitment.
 
 ### BM-03 — Continuity and memory
 
@@ -277,10 +281,12 @@ These are functional distinctions, not a mandate for five isolated stores.
 6. Preserve prior versions and the evidence responsible for a revision.
 7. Notify or expose affected predictions, plans, goals and derived representations when a belief changes.
 8. Do not interpret missing evidence as evidence of absence unless the acquisition conditions justify that conclusion.
+9. Evaluate material BM-12 conclusions as candidate claims using their premise provenance, scope, assumptions, uncertainty, alternatives and contradictions. Record an explicit accept-for-belief-revision, qualify, dispute, reject, defer or request-more-evidence disposition with rationale; never silently promote a provisional conclusion to an accepted belief.
+10. When a reasoning result materially changes a belief, retain the exact reasoning artifact/version as a dependency and record the resulting belief-state version and evidence-sensitive change.
 
-**Publishes:** Qualified working claims and explicit change events for dependent mechanisms.
+**Publishes:** Qualified working claims and explicit change events for dependent mechanisms, including traceable consumer dispositions for material reasoning results.
 
-**Interactions:** BM-01/02 supply evidence; BM-03 supplies prior episodes; BM-05 uses claims as assumptions and returns prediction evidence; BM-06 selects claims for active context; BM-08 uses claims in feasibility and planning; BM-09 evaluates belief revision; BM-10 monitors contradiction and uncertainty.
+**Interactions:** BM-01/02 supply evidence; BM-03 supplies prior episodes; BM-05 uses claims as assumptions and returns prediction evidence; BM-06 selects claims for active context; BM-08 uses claims in feasibility and planning; BM-09 evaluates belief revision; BM-10 monitors contradiction and uncertainty; BM-12 supplies provisional conclusions for BM-04's evaluation.
 
 **Failure semantics:** A failed update must not leave a partially revised belief with stale dependents. Conflicting claims remain inspectable; the system may defer commitment rather than invent resolution.
 
@@ -302,10 +308,12 @@ These are functional distinctions, not a mandate for five isolated stores.
 8. Do not resolve an outcome from a mere action request, provider acknowledgement or infrastructure event.
 9. Compare prediction with outcome using a measure appropriate to the predicted content; exact equality is not a universal error metric.
 10. Feed resolved outcomes to BM-04 and BM-09 with traceable attribution.
+11. Evaluate relevant BM-12 conclusions as candidate implications for association/causal hypotheses or prediction premises. Preserve their uncertainty, assumptions and provenance; an explanatory conclusion is not verified causality and must not silently become a model fact.
+12. Record whether a relevant reasoning result materially changes a scoped model or prediction computation, including the reasoning artifact/version dependency and resulting model/prediction version. If the result is irrelevant, rejected or deferred, record that disposition and rationale rather than silently ignoring it.
 
-**Publishes:** Scoped predictions, relation hypotheses, prediction errors and evidence-backed model-change candidates.
+**Publishes:** Scoped predictions, relation hypotheses, prediction errors and evidence-backed model-change candidates, with traceable dispositions for relevant reasoning inputs.
 
-**Interactions:** BM-03 supplies prior episodes; BM-04 supplies premises; BM-06 prioritizes unresolved predictions; BM-07 may appraise prediction discrepancy; BM-08 uses predictions for planning; BM-09 evaluates model revision; BM-10 monitors calibration and repeated failure.
+**Interactions:** BM-03 supplies prior episodes; BM-04 supplies premises; BM-06 prioritizes unresolved predictions; BM-07 may appraise prediction discrepancy; BM-08 uses predictions for planning; BM-09 evaluates model revision; BM-10 monitors calibration and repeated failure; BM-12 supplies qualified conclusions for evaluation as scoped implications.
 
 **Failure semantics:** An unresolved prediction is neither success nor failure. An unobserved outcome, a failed sensor, a cancelled action and a verified negative outcome must remain distinguishable.
 
@@ -390,12 +398,15 @@ These are distinct origins and must not be conflated.
 8. Build plans from current evidence and predictions; invalidate or reconsider plans when dependencies become stale.
 9. Preserve alternatives and reasons for deferral or rejection.
 10. Decision formation may select, defer, observe, clarify, recommend, reject or escalate. It does not authorize execution.
+11. Evaluate BM-02 speech-act, intent and commitment hypotheses before creating or changing task/goal state. A question, suggestion, assertion or reported commitment is not automatically an operator request, accepted goal or commitment by the Brain.
+12. Track operationally relevant commitments across interactions with explicit ownership, recipient where known, content, scope, conditions, time/trigger, provenance, uncertainty, dependencies and lifecycle status. BM-02 owns interpretation/attribution; BM-08 owns the operational task/intent representation when a commitment is accepted as relevant to goals or plans; BM-03 preserves the interaction history. Do not create a commitment when the evidence supports only a possibility.
+13. Preserve commitment lifecycle changes—including acknowledgement, activation, revision, fulfillment, withdrawal, dispute, expiry or unresolved status—with the evidence and rationale for each transition. Reconsider dependent goals/plans when a commitment changes; never silently reassign ownership or mark fulfillment without verified evidence.
 
 **Publishes:** Evaluated goals, intent, plans, decisions and action requests.
 
-**Interactions:** BM-03/04 provide experience and beliefs; BM-05 provides predictions; BM-06 allocates focus; BM-07 contributes appraisal; BM-09 can improve candidate formation and planning competence; BM-10 detects poor goal/decision calibration; external governance validates action requests.
+**Interactions:** BM-02 supplies contextual speech-act, intent and commitment hypotheses with attribution and uncertainty; BM-03 supplies continuity and prior commitment history; BM-04 supplies beliefs; BM-05 supplies predictions; BM-06 allocates focus; BM-07 contributes appraisal; BM-09 can improve candidate formation and planning competence; BM-10 detects poor goal/decision calibration; BM-12 supplies qualified reasoning results where relevant; external governance validates action requests.
 
-**Failure semantics:** No eligible goal is a valid state, not a reason to invent one. An invalid or unauthorized action request cannot be reframed as permission. Goal abandonment must preserve its history and reason where known.
+**Failure semantics:** No eligible goal is a valid state, not a reason to invent one. An invalid or unauthorized action request cannot be reframed as permission. Goal abandonment must preserve its history and reason where known. Ambiguous speech acts or uncertain commitment ownership remain unresolved until clarified; an inferred commitment is not represented as an explicit promise or fulfilled obligation.
 
 ### BM-09 — Learning and developmental adaptation
 
@@ -623,6 +634,8 @@ Every material reasoning result must preserve, at the conceptual level:
 
 A result that cannot provide this lineage may still be a tentative internal signal, but it cannot satisfy the specification's evidence standard for a material conclusion.
 
+For every material result routed to BM-04, BM-05 or BM-08, the receiving owner must record its evaluation and disposition. Where the result is relevant and accepted for use, the owner must show the specific belief, model/prediction, goal, plan or decision computation affected and identify both the reasoning artifact/version and resulting owner-state version. A no-change, rejection, deferral or request for evidence is valid only when its relevance assessment and rationale are recorded. Delivery, logging or persistence without this consumer-side evidence is not integration.
+
 ## 6. Core recurrent interaction patterns
 
 These are allowed interaction patterns, not a mandatory global pipeline.
@@ -844,6 +857,15 @@ These scenarios are architecture-to-mechanism obligations. They are not claims t
 47. An accepted reasoning result is used by a relevant owner to produce a materially different qualified belief, prediction/model state or goal/plan evaluation; the downstream record identifies the exact reasoning artifact/version and the resulting owner-state/decision version. If no material downstream computation can be demonstrated, the integration claim fails.
 48. A previously accepted reasoning result is invalidated by a changed premise or contradicted evidence; BM-11 identifies affected downstream versions, and each owner records whether it recomputes, qualifies, withdraws or retains its state with rationale. Silent persistence of invalid dependent conclusions fails.
 
+### K. Communication, speaker attribution and commitment continuity
+
+49. The same utterance is interpreted as a question, suggestion, assertion, instruction or commitment only when its linguistic and contextual evidence supports that communicative function; surface wording alone does not determine the speech act.
+50. A multi-participant interaction distinguishes the actual speaker, addressee and participant whose intention or commitment is represented. A statement by another participant is not attributed to the operator.
+51. An explicit commitment and an inferred possible commitment remain distinguishable. The inferred case preserves uncertainty and triggers clarification or deferral when ownership or terms materially affect a task.
+52. A commitment is tracked across interactions with owner, recipient where known, content, scope, conditions/time or trigger, provenance and lifecycle. A revision, withdrawal, dispute or fulfillment creates a traceable update without rewriting the original utterance.
+53. A question, suggestion, assertion, quoted statement or hypothetical does not become an accepted operator instruction or Brain commitment merely because it contains imperative or future-oriented language.
+54. A commitment attributed to an external participant is not treated as fulfilled until an attributable outcome supports fulfillment; absence of an update is not proof of completion.
+
 ---
 
 ## 10. Developmental evidence standard
@@ -931,10 +953,12 @@ This document does not select:
 
 The Builder's 2026-11-11 response to the recorded follow-on findings is in [PR #174 Follow-on Review Corrections — F-02 and F-03](reviews/01_BRAIN_MECHANISM_SPECIFICATION_F02_F03_CORRECTIONS_2026-11-11.md).
 
-- **F-02 — contextual language/operator-intent grounding:** BM-02 now explicitly distinguishes acquired utterance, literal/semantic interpretation, reference/discourse interpretation and pragmatic/operator-intent hypotheses. It requires context, source role, history, alternatives, uncertainty, correction handling and authority separation. Scenarios 35–40 define minimum verification.
+- **F-02 — contextual language/operator-intent grounding:** BM-02 now explicitly distinguishes acquired utterance, literal/semantic interpretation, reference/discourse interpretation and pragmatic/operator-intent hypotheses. The current correction also requires speech-act differentiation (question, instruction, suggestion, assertion, commitment, report, hypothetical and correction), speaker/addressee/participant attribution, explicit versus inferred commitment, clarification under material uncertainty, and traceable commitment lifecycle. BM-08 owns operational task/intent commitment state after interpretation; BM-03 preserves interaction history. Scenarios 35–40 and 49–54 define minimum verification.
 - **F-03 — downstream reasoning integration:** BM-12 now requires owner-routed conclusions with preserved uncertainty, alternatives, assumptions, provenance, scope and dependencies, plus explicit consumer disposition. Delivery/logging alone is not integration. Scenarios 41–46 establish baseline consumer evaluation and invalidation; scenarios 47–48 extend the contract to prove material downstream state/decision-version effects and owner-specific reconsideration when an accepted result is invalidated.
 
-**Provenance qualification:** the original follow-on review report was supplied as a shared-conversation URL but could not be retrieved during this correction pass. The exact reviewed SHA, verbatim finding text and complete original acceptance criteria remain unavailable. The correction report therefore distinguishes recorded finding summaries from verbatim source material and does not claim full original-criteria closure.
+**Provenance update (2026-11-14):** The Project Director supplied the seven-page document `PR174_Independent_Technical_ReReview_Builder_Handoff.docx`, which contains the full F-02/F-03 review text previously linked through the shared-conversation URL. The Project Director confirmed that the historical conversation link opened and displayed the original review. The report records F-02 as HIGH / confirmed and F-03 as MEDIUM / confirmed specification weakness. Its review-target section reports PR #174 HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`; that is the historical accepted planning baseline, not the current corrected proposal `9502989ffae91c00ba0a8568ab5296925fa9f27b`. The report artifact does not identify the reviewer by model/person, so this record does not attribute it to xAI. It is the source of the exact acceptance criteria below; a fresh independent review by the designated reviewer must still assess the corrected current HEAD.
 
-**Builder status:** specification-level corrections submitted. **Independent re-review and Project Director disposition remain outstanding.** PR #174's previously accepted planning baseline at exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` is not silently replaced by this corrected revision. No implementation is authorized.
+The report's exact F-02 obligations include contextual interpretation; reference resolution; distinguishing questions, instructions, suggestions, assertions and commitments; speaker and participant attribution; commitment ownership and lifecycle; explicit versus inferred intent; uncertainty and clarification/deferral; direct operator instructions versus quoted/retrieved/untrusted content; and continuity. Its exact F-03 obligations include BM-04 evaluation of candidate claims, BM-05 evaluation of relevant implications without surrendering prediction ownership, BM-08 use of qualified reasoning in relevant planning/decisions, dependency reconsideration after invalidation, and prevention of unsupported/rejected conclusions silently influencing downstream decisions.
+
+**Builder status:** the existing proposal already contained substantial F-02/F-03 corrections. This 2026-11-14 Builder pass adds the previously under-specified speech-act distinctions, speaker/addressee/commitment attribution and commitment lifecycle, and strengthens the BM-04/BM-05/BM-08 consumer obligations. These are specification changes only; scenarios are not runtime tests. The corrected current HEAD must receive a fresh exact-HEAD independent review and explicit Project Director disposition. The historical accepted baseline `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` remains a historical planning-baseline decision, not acceptance of the corrected proposal. No implementation is authorized.
 
