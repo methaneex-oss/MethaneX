@@ -5,7 +5,7 @@
 - **Repository:** `methaneex-oss/MethaneX`
 - **Pull request:** [#174](https://github.com/methaneex-oss/MethaneX/pull/174)
 - **Exact target PR HEAD:** fetch live PR #174 metadata immediately before review; the Builder will publish the final exact HEAD and all changed specification/review blob SHAs in the superseding PR comment after this request-file commit.
-- **Current specification blob:** `848bbb858dad903b8e838277b7f096d146c904b9` (verify this blob is present at the live target HEAD before review).
+- **Current specification blob:** `66a1aee31b846e0eea463577ac73ad4350d83de7` (verify this blob is present at the live target HEAD before review).
 - **Current F-02/F-03 correction-record blob:** `b3089c11b5ee7b7e4244ca4e63d7e89afc038cd0`.
 - **Original independent re-review source transcription:** `docs/architecture/specifications/reviews/03_PR174_INDEPENDENT_TECHNICAL_REREVIEW_SOURCE_2026-11-14.md` at commit `778c28a45e4b6281b9e8e0cd67695f2065931e2c`. It records the report's own stated target `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` and verdict REVISE — NOT APPROVED FOR THE NEXT GATE. The source artifact does not identify its reviewer model/person.
 - **Accepted historical planning baseline:** `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`.
