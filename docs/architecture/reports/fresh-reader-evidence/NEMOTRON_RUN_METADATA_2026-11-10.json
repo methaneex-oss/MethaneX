@@ -1,0 +1,23 @@
+{
+  "provider": "Nvidia",
+  "model": "nvidia/nemotron-3.5-super-vl:free",
+  "id": "gen-1794320850-PXFxrWdBUKmeVOzLq0fJ",
+  "created": 1794320850,
+  "finish_reason": "stop",
+  "native_finish_reason": "stop",
+  "content_type": "str",
+  "content_characters": 23440,
+  "refusal_present": false,
+  "tool_calls_present": false,
+  "reasoning_present": false,
+  "usage": {
+    "prompt_tokens": 76155,
+    "completion_tokens": 6091,
+    "total_tokens": 82246,
+    "cost": 0
+  },
+  "reasoning_tokens": 0,
+  "response_content_saved": true,
+  "reasoning_fields_saved": false,
+  "completed_at_utc": "2026-11-10T14:28:53.793355+00:00"
+}

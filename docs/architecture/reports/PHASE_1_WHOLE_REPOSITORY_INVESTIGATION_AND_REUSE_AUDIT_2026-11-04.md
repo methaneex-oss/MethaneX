@@ -1,5 +1,7 @@
 # Phase 1 — Whole-Repository Investigation, Reuse and Conflict Audit
 
+> **Whole-Brain scope correction — 2026-11-07:** This report is a repository inventory and static reuse/conflict investigation at the exact baseline recorded below. It is not the complete definition or completeness proof of the future Brain. Preserve its source findings; do not treat BM-01–BM-12 coverage or reuse classifications as a final whole-Brain architecture or development decision. The corrected planning sequence and Builder error record are in [Whole-Brain Planning Scope and Builder Correction](WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md).
+
 **Date:** 2026-11-04  
 **Repository:** methaneex-oss/MethaneX  
 **Audited main baseline:** 1273ddbcd0087d189e01388ded2d362fb1e058d2  
@@ -686,13 +688,13 @@ The correct next step is Phase 2 capability-to-source integration mapping agains
 
 - PR #171 whole-system architecture foundation: https://github.com/methaneex-oss/MethaneX/pull/171
 - PR #172 accepted capability investigation: https://github.com/methaneex-oss/MethaneX/pull/172
-- PR #173 accepted Brain Foundation Architecture: https://github.com/methaneex-oss/MethaneX/pull/173
-- PR #174 accepted Brain Mechanism Specification: https://github.com/methaneex-oss/MethaneX/pull/174
+- PR #173 Brain Foundation Architecture proposal (historical “accepted” label superseded; exact-revision acceptance remains UNVERIFIED/PROPOSED; see §26.2): https://github.com/methaneex-oss/MethaneX/pull/173
+- PR #174 accepted Brain Mechanism Specification planning baseline only (exact accepted HEAD and scope recorded in PR #174 discussion): https://github.com/methaneex-oss/MethaneX/pull/174
 - PR #175 implementation roadmap and Gate A evidence: https://github.com/methaneex-oss/MethaneX/pull/175
 - PR #176 donor corrections: https://github.com/methaneex-oss/MethaneX/pull/176
-- Gate A Report 13 — final baseline recommendation: https://github.com/methaneex-oss/MethaneX/blob/plan/brain-implementation-roadmap-20261103/docs/architecture/plans/reviews/13_GATE_A_FINAL_BASELINE_RECOMMENDATION_2026-11-04.md
-- Gate A Report 14 — independent technical review: https://github.com/methaneex-oss/MethaneX/blob/plan/brain-implementation-roadmap-20261103/docs/architecture/plans/reviews/14_GATE_A_INDEPENDENT_TECHNICAL_REVIEW_2026-11-04.md
-- Gate A Report 16 — closure evidence update: https://github.com/methaneex-oss/MethaneX/blob/plan/brain-implementation-roadmap-20261103/docs/architecture/plans/reviews/16_GATE_A_CLOSURE_EVIDENCE_UPDATE_2026-11-04.md
+- Gate A Report 13 — final baseline recommendation: https://github.com/methaneex-oss/MethaneX/blob/874c732973b6ab303d65a503f5a215b0af8e1153/docs/architecture/plans/reviews/13_GATE_A_FINAL_BASELINE_RECOMMENDATION_2026-11-04.md
+- Gate A Report 14 — independent technical review: https://github.com/methaneex-oss/MethaneX/blob/874c732973b6ab303d65a503f5a215b0af8e1153/docs/architecture/plans/reviews/14_GATE_A_INDEPENDENT_TECHNICAL_REVIEW_2026-11-04.md
+- Gate A Report 16 — closure evidence update: https://github.com/methaneex-oss/MethaneX/blob/874c732973b6ab303d65a503f5a215b0af8e1153/docs/architecture/plans/reviews/16_GATE_A_CLOSURE_EVIDENCE_UPDATE_2026-11-04.md
 - PR #176 Native Brain Build: https://github.com/methaneex-oss/MethaneX/actions/runs/41808525486
 - PR #176 Brain ThreadSanitizer: https://github.com/methaneex-oss/MethaneX/actions/runs/41808525492
 - PR #176 Brain CI: https://github.com/methaneex-oss/MethaneX/actions/runs/41808525499
@@ -700,10 +702,10 @@ The correct next step is Phase 2 capability-to-source integration mapping agains
 
 ### Preservation inventory
 
-- Existing documentation/artifact inventory branch: https://github.com/methaneex-oss/MethaneX/tree/docs/jarvis-phase-1-preservation-inventory-20261104
+- Existing documentation/artifact inventory branch: https://github.com/methaneex-oss/MethaneX/tree/ebbda074957e0f9fb0d0f04dd9b03fe58b270a0a
 - Legacy master blueprint: https://github.com/methaneex-oss/MethaneX/blob/1273ddbcd0087d189e01388ded2d362fb1e058d2/docs/JARVIS_BRAIN_MASTER_BLUEPRINT.md
 - Legacy Phase 2 completion note: https://github.com/methaneex-oss/MethaneX/blob/1273ddbcd0087d189e01388ded2d362fb1e058d2/docs/JARVIS_PHASE_2_COMPLETION.md
-- Priority-One trust-boundary contract: https://github.com/methaneex-oss/MethaneX/blob/docs/priority-one-trust-boundary-contract-20261031/docs/PRIORITY_ONE_TRUST_BOUNDARY_CONTRACT.md
+- Priority-One trust-boundary contract: https://github.com/methaneex-oss/MethaneX/blob/cfbcbdd29839f062851d3ca7da63ab2ae3a8f4f1/docs/PRIORITY_ONE_TRUST_BOUNDARY_CONTRACT.md
 
 ## 16. Post-publication review corrections and reproducibility records
 
