@@ -600,3 +600,18 @@ The path set itself was complete: 39 manifest paths matched 39 changed blob path
 Until that final check passes, DF-02 and DF-10 are **OPEN / NOT VERIFIED**. No gate is cleared by the earlier inaccurate statement. DF-06 remains NOT MET; DF-09 remains OPEN / NOT MET; DF-11 remains waived; DF-12 remains reserved for Project Director acceptance; DF-13 remains maintained.
 
 This correction is recorded as a Builder self-audit. It is not an independent review, Tester result, gate clearance or Project Director acceptance.
+
+
+### 15.10 Corrected manifest and inventory-only verification — 2026-11-14
+
+The corrected section 82 manifest was generated directly from the exact PR #192 parent tree and independently rechecked against that tree. The resulting inventory-only commit `8157c9ee253393e8b2318b9373cfa6e57f5df6a9` passed:
+
+- Parent: `f1199c71b5dd58beca03b501526c4bed06575a16`.
+- Parent-to-final comparison: exactly 1 commit ahead, 0 behind, and exactly 1 changed file.
+- Sole changed path: `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md`.
+- Manifest: 39 unique rows; 39 changed file paths; 0 SHA mismatches; 0 missing paths; 0 unexpected paths.
+- Parent, final and base recursive Git trees: complete, `truncated=false`.
+- All other 38 changed-file blobs are byte-identical between parent and final.
+- PR #192 remained open, non-draft and unmerged, with 39 changed files.
+
+This supersedes the inaccurate first-cycle claim in §15.8 and the pending correction state in §15.9. A final manifest cycle is still required after the present report/index closeout updates; its exact parent and final commit evidence will be recorded in inventory section 83. DF-02/DF-10 are therefore not marked complete until that final cycle passes.
