@@ -375,7 +375,7 @@ These are functional distinctions, not a mandate for five isolated stores.
 
 **Purpose:** Convert supplied goals and experience-informed candidate goals into evaluated priorities, plans and cognitive decisions while preserving governance boundaries.
 
-**Owns:** Goal records and lifecycle, candidate-goal lineage, intent, plans, decision rationale and dependencies.
+**Owns:** Goal records and lifecycle, candidate-goal lineage, accepted operational commitment/task records and their lifecycle, intent, plans, decision rationale and dependencies.
 
 **Goal origin distinctions:**
 
