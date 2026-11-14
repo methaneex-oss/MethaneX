@@ -1,4 +1,4 @@
-# CURRENT EXACT STATE — 2026-11-14 (JARVIS-M0 Builder continuation 05)
+# CURRENT EXACT STATE — 2026-11-14 (JARVIS-M0 Builder continuation 06)
 
 > **Controlling live-status snapshot.** This block supersedes all earlier dated status snapshots below for current PR heads, base relationships and gate state. Those snapshots remain historical evidence and must not be combined into a synthetic current state. Builder evidence only; not independent review, Tester clearance, gate clearance or Director acceptance.
 
@@ -9,7 +9,7 @@ Repository: `methaneex-oss/MethaneX`. Values below were fetched from GitHub on 2
 | PR | Exact HEAD | Base SHA | State | Current disposition |
 |---|---|---|---|---|
 | #173 — Brain Foundation Architecture | `f8dd67fc866242d29298ffc6a03a8782a4e6982c` | `1273ddbcd0087d189e01388ded2d362fb1e058d2` | Open / draft / unmerged | Current proposal; not accepted as complete/final architecture |
-| #174 — Brain Mechanism Specification | `9502989ffae91c00ba0a8568ab5296925fa9f27b` | `97191111bc2573c14d391c0af9628db7b11f194b` | Open / draft / unmerged | Corrected proposal; independent re-review and F-02/F-03 disposition pending |
+| #174 — Brain Mechanism Specification | `d0e8df405e0b54f6866a3cd7c5efa3f213d792bb` | `97191111bc2573c14d391c0af9628db7b11f194b` | Open / draft / unmerged | Builder F-02/F-03 corrections committed; fresh exact-HEAD independent review requested (comment #6882606747) |
 | #178 — Governance proposal lineage | `39fe09dcf13496f5f0005ccf3f00739303e29f88` | `1273ddbcd0087d189e01388ded2d362fb1e058d2` | Open / draft / unmerged | Separate PR lineage; not the merge destination of PR #196 |
 | #179 — Phase 2 branch | `ea64607ef94f142a6142a013e119a7225bc95c1c` | `39fe09dcf13496f5f0005ccf3f00739303e29f88` | Open / draft / unmerged | Current Phase 2 branch head; contains PR #196 merge and status reconciliation |
 | #191 — Human/MCU reference comparison | `609d38ede50bbdd98a93dfed112781eacabee9fd` | `f6267456560a08054d69f7960d2951452b14017c` | Open / draft / unmerged | Director Option A: retain separately; no integration operation |
@@ -21,7 +21,7 @@ Repository: `methaneex-oss/MethaneX`. Values below were fetched from GitHub on 2
 ### 1.1 Accepted baselines are not blanket approval of later proposals
 
 - **PR #173:** accepted starting baseline `97191111bc2573c14d391c0af9628db7b11f194b`; current HEAD `f8dd67f...` is 14 commits ahead, 0 behind. The current branch adds/updates the BFA architecture, completion/decision matrix, and inherited-mechanism source-compatibility audit. The matrix explicitly supersedes the earlier conclusion that the accepted starting baseline was sufficient as the complete/final Brain Foundation Architecture. The accepted revision remains a valid historical starting point and evidence source within its exact scope; it is not the complete/final architecture. BFA-C01–BFA-C14 remain reserved for Project Director disposition.
-- **PR #174:** accepted specification baseline `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`; current corrected proposal `9502989...` is 18 commits ahead, 0 behind. Re-review must target the current corrected proposal, not the old accepted baseline. The earlier acceptance does not transfer to the corrected proposal. The original F-02/F-03 follow-on review body and exact reviewed SHA remain unavailable; the repository records reconstructed finding summaries, not verbatim reviewer text.
+- **PR #174:** accepted specification baseline `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`; current corrected proposal `d0e8df405e0b54f6866a3cd7c5efa3f213d792bb` is the current review target. The 14 November source report explicitly reviewed the historical baseline `0811a59...`, not this corrected proposal. Its full text is preserved at `docs/architecture/specifications/reviews/03_PR174_INDEPENDENT_TECHNICAL_REREVIEW_SOURCE_2026-11-14.md` in PR #174. Builder corrections are submitted for fresh independent review; the earlier acceptance does not transfer to the corrected proposal.
 - **PR #196 governance:** the accepted governance document is `docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md`. PR #196 merged at `c151e527...` into `docs/jarvis-phase-2-whole-brain-integration-map-20261105`, not into `main`. The governance blob at merge was `9c17d287...`; current Phase 2 branch head `ea64607...` carries status-only reconciliation, blob `f5827c55...`. PR #178 remains a separate open/draft/unmerged lineage and must not be mistaken for the PR #196 merge destination.
 
 ### 1.2 PR #191 ancestry — two different comparisons
@@ -78,7 +78,7 @@ The DF-09 run is bounded evidence. The packet did not include, and the reader di
 - The full template guide and template documents under `docs/templates/`.
 - The accepted governance document at `docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md`, currently on the Phase 2 branch at blob `f5827c55...`.
 - The full PR #193 handoff/implementation-plan branch and live GitHub PR/issue pages, review threads and inline annotations.
-- The original PR #174 F-02/F-03 follow-on review body and exact reviewed revision; only reconstructed summaries are available.
+- The full PR #174 F-02/F-03 report was not included in the prior DF-09 packet; it is now preserved separately as a source transcription on PR #174, with the report's own historical target SHA and reviewer-identity limitation disclosed.
 - The historical 17-question DF-09 protocol; it remains unrecovered.
 
 The packet included selected decision extracts and a bounded set of architecture/planning documents. A statement about an excluded item is a recorded summary or provenance note, not proof that the blind reader inspected the excluded source.
@@ -91,10 +91,10 @@ The final superseding exact-current-HEAD review request was posted against `5a07
 
 - **DF-01:** Builder corrections present; current exact-state snapshot and reader-facing clarifications added in this continuation.
 - **DF-02:** RESOLVED at Builder-evidence level by the corrected 39-path parent manifest and final inventory-only post-write verification recorded in inventory §83. This is not Director acceptance.
-- **DF-03:** accepted-baseline and decision provenance distinctions recorded; unrecoverable primary-source provenance remains disclosed.
+- **DF-03:** accepted-baseline and decision provenance distinctions recorded; the PR #174 F-02/F-03 source report is now recovered and preserved as a commit-pinned transcription; remaining provenance limits stay explicitly disclosed.
 - **DF-04:** accepted governance source revalidated; PR #196 merge scope explicitly distinguished from PR #178 and `main`.
 - **DF-05:** branch dependencies and PR #191/PR #192 ancestry comparisons recorded.
-- **DF-06:** NOT MET — GitHub-rendered fragment/line-anchor behavior and the access-limited historical primary-source pointer remain unresolved.
+- **DF-06:** NOT MET — the historical PR #174 source report is now available and preserved; one exact GitHub line-anchor sample was manually verified, but complete rendered fragment/line-anchor validation remains outstanding.
 - **DF-07:** remediation in progress; a new blind reader run is required after final writes.
 - **DF-08:** RESOLVED only within its exact bounded preservation criterion.
 - **DF-09:** OPEN / NOT MET — latest result is PARTIALLY CLEAR.
@@ -1214,3 +1214,11 @@ No PR integration or branch-history operation has been performed or authorized.
 - Stage A: **NOT STARTED / HELD**. Implementation planning: **HELD**. Runtime implementation, source-baseline selection, PR integration, merge and deployment: **NOT AUTHORIZED**.
 
 This is Builder status evidence only. It is not an Independent Reviewer verdict, Blind Fresh Tester result, gate clearance or Project Director acceptance.
+
+### 1.4 PR #174 F-02/F-03 source recovery and current correction
+
+- The Project Director supplied the full seven-page 14 November independent technical re-review report. The Project Director confirmed the original shared-conversation link opened and displayed the report.
+- The report states its reviewed PR #174 HEAD was `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` (the historical accepted planning baseline), not the current corrected proposal.
+- The report's source transcription is committed on PR #174 at `778c28a45e4b6281b9e8e0cd67695f2065931e2c`; it reports F-02 HIGH and F-03 MEDIUM, verdict REVISE — NOT APPROVED FOR THE NEXT GATE. Its artifact does not identify reviewer model/person; no xAI attribution is made.
+- Builder corrections to BM-02, BM-04, BM-05, BM-08, Section 5.5 and acceptance scenarios 49–54 are committed at PR #174 HEAD `d0e8df405e0b54f6866a3cd7c5efa3f213d792bb`. A fresh exact-HEAD independent review was requested in PR #174 comment `6882606747`; no new verdict is yet claimed.
+- The correction does not authorize implementation. The exact corrected proposal remains subject to independent review and Project Director disposition.
