@@ -658,3 +658,15 @@ A fresh exact-HEAD independent review was requested in PR #174 comment `68826067
 ### Authority and limitation
 
 This was Builder documentation work and self-verification only. The new PR #174 review request is pending. No independent approval, runtime test, Stage A start, implementation authorization, PR merge, rebase, retarget or deployment is claimed.
+
+---
+
+## 15.12 Final M0 documentation closeout and inventory cycle — 2026-11-14
+
+The Project Director requested that the initial planning/documentation work be finalized without further optional documentation loops. The Builder therefore froze the current M0 documentation scope after the PR #174 F-02/F-03 source recovery and correction, refreshed the controlling index and M0 report, and prepared one final 39-path parent manifest in inventory section 86.
+
+**Final manifest rule:** inventory §86 is generated from the immediate parent tree of its own update commit. The final verification must establish one parent, one changed path (the inventory), exactly 39 unique parent path/blob pairs, no mismatches/missing/unexpected paths, complete recursive trees, and byte-identical blobs for the other 38 changed files. The exact parent, final commit and measured results are recorded in inventory §86. Earlier sections 84 and 85 are retained as historical attempts; §85 corrects §84's one-commit-early parent selection, and §86 is the final current cycle after this report/index update.
+
+**Gate state after Builder closeout:** DF-02 and DF-10 are Builder-evidence items and may be marked resolved only if §86's post-write check passes. DF-06 remains NOT MET pending complete rendered GitHub fragment/line-anchor validation; the original PR #174 review source is now recovered and pinned. DF-07 and DF-09 remain pending a fresh exact-final-head blind-reader result of CLEAR. DF-11 remains waived by the Director. DF-12 remains the Director's exact-revision acceptance. DF-13 remains maintained.
+
+No independent review, Tester clearance, DF-09 CLEAR result, Director acceptance, Stage A start, implementation authorization, PR merge, branch-history operation or deployment is claimed.
