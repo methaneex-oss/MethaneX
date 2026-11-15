@@ -5,11 +5,11 @@
 - **Repository:** `methaneex-oss/MethaneX`
 - **Pull request:** [#174](https://github.com/methaneex-oss/MethaneX/pull/174)
 - **Exact target PR HEAD:** fetch live PR #174 metadata immediately before review; the Builder will publish the final exact HEAD and all changed specification/review blob SHAs in the superseding PR comment after this request-file commit.
-- **Current specification blob:** `66a1aee31b846e0eea463577ac73ad4350d83de7` (verify this blob is present at the live target HEAD before review).
+- **Current specification blob:** `cfdda9e6e7070cd5533b076e9bd77c2904694a32` (verify this blob is present at the live target HEAD before review).
 - **Current F-02/F-03 correction-record blob:** `b3089c11b5ee7b7e4244ca4e63d7e89afc038cd0`.
 - **Original independent re-review source transcription:** `docs/architecture/specifications/reviews/03_PR174_INDEPENDENT_TECHNICAL_REREVIEW_SOURCE_2026-11-14.md` at commit `778c28a45e4b6281b9e8e0cd67695f2065931e2c`. It records the report's own stated target `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` and verdict REVISE — NOT APPROVED FOR THE NEXT GATE. The source artifact does not identify its reviewer model/person.
 - **Accepted historical planning baseline:** `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`.
-- **Current parent architecture proposal:** PR #173 HEAD `f8dd67fc866242d29298ffc6a03a8782a4e6982c` (proposal, not Director-accepted as final architecture).
+- **Current parent architecture proposal:** PR #173 HEAD `c4c9158437ffa6a4915b1b7b1b83e7e8867d9e72` (current proposal, not Director-accepted as final architecture; architecture blob `50b5c6e471df797d490b314c542e8d2bdce71c42`; matrix blob `aa5ba3ead2ab8a0379a3c2ebc2277c797a6d7f2e`, recording Project Director acceptance of BFA-C01–BFA-C14 only).
 - **Review requested:** independent technical re-review of the complete current PR #174 specification, with particular attention to the recovered F-02/F-03 obligations.
 
 The reviewer must be a genuinely separate model/person from the Architecture & Engineering Builder, disclose identity and any prior involvement, inspect the live current PR #174 HEAD obtained from PR metadata immediately before review and verify that it contains the current specification blob above, and produce a report tied to the exact SHA. A Builder self-review, Project Director decision, same-model review, or report against an earlier SHA does not satisfy this request. The reviewer must explicitly state whether it is Grok/xAI or another independent reviewer; do not infer identity from a report title or filename.
@@ -20,9 +20,9 @@ Inspect the following repository artifacts directly at their exact revisions:
 
 1. Current specification at the exact target HEAD above.
 2. Historical accepted specification baseline at `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, to identify what was changed and whether accepted content was improperly altered.
-3. PR #173 historical accepted planning baseline at `97191111bc2573c14d391c0af9628db7b11f194b` and current corrected architecture proposal at `7e9481677197cf82df31bbe08984fa5d58644d98`, while keeping their authority scopes distinct.
+3. PR #173 historical accepted planning baseline at `97191111bc2573c14d391c0af9628db7b11f194b` and current proposal at `c4c9158437ffa6a4915b1b7b1b83e7e8867d9e72`, while keeping their authority scopes distinct. The current architecture blob is `50b5c6e471df797d490b314c542e8d2bdce71c42`; the current decision matrix blob is `aa5ba3ead2ab8a0379a3c2ebc2277c797a6d7f2e` and records acceptance of BFA-C01–BFA-C14 only, not overall architecture acceptance.
 4. Original independent technical re-review source transcription `docs/architecture/specifications/reviews/03_PR174_INDEPENDENT_TECHNICAL_REREVIEW_SOURCE_2026-11-14.md` at commit `778c28a45e4b6281b9e8e0cd67695f2065931e2c`.
-5. Current Builder correction record `docs/architecture/specifications/reviews/01_BRAIN_MECHANISM_SPECIFICATION_F02_F03_CORRECTIONS_2026-11-11.md` at its exact current blob; use it only as a navigation aid, not as proof of correction.
+5. Current Builder correction record `docs/architecture/specifications/reviews/01_BRAIN_MECHANISM_SPECIFICATION_F02_F03_CORRECTIONS_2026-11-11.md` at its exact current blob; use it only as a navigation aid, not as proof of correction.\n6. PR #173 bounded inherited-mechanism source compatibility audit `docs/architecture/reports/INHERITED_MECHANISM_SOURCE_COMPATIBILITY_AUDIT_2026-11-11.md` at PR #173 HEAD `c4c9158437ffa6a4915b1b7b1b83e7e8867d9e72`, blob `037dc71df9e508c0cc08e96a42b41aa7ba5bc041`; assess only its stated bounded scope.
 
 Do **not** rely on the Builder's correction report, PR description, comments, chat history, or prior review conclusions as proof that a finding is fixed. Verify every material claim directly from the full current specification and compare it against the exact acceptance criteria in the source transcription. The source report itself records the historical accepted baseline as its target; it does not assess the corrected current PR #174 proposal.
 
