@@ -1,4 +1,4 @@
-# CURRENT EXACT STATE — 2026-11-15 (JARVIS-M0 Builder continuation 08)
+# CURRENT EXACT STATE — 2026-11-15 (JARVIS-M0 Builder continuation 10)
 
 > **Controlling live-status snapshot.** This block supersedes all earlier dated status snapshots below for current PR heads, base relationships and gate state. Those snapshots remain historical evidence and must not be combined into a synthetic current state. Builder evidence only; not independent review, Tester clearance, gate clearance or Director acceptance.
 
@@ -9,19 +9,19 @@ Repository: `methaneex-oss/MethaneX`. Values below were fetched from GitHub on 2
 | PR | Exact HEAD | Base SHA | State | Current disposition |
 |---|---|---|---|---|
 | #173 — Brain Foundation Architecture | `c4c9158437ffa6a4915b1b7b1b83e7e8867d9e72` | `1273ddbcd0087d189e01388ded2d362fb1e058d2` | Open / draft / unmerged | BFA-C01–BFA-C14 accepted by Director and recorded in matrix §22; current proposal is not accepted as complete/final architecture. Fresh blind architecture assessment requested at this exact HEAD; no result yet. |
-| #174 — Brain Mechanism Specification | `d0e8df405e0b54f6866a3cd7c5efa3f213d792bb` | `97191111bc2573c14d391c0af9628db7b11f194b` | Open / draft / unmerged | Builder F-02/F-03 corrections submitted; Director confirmed historical shared-conversation source opens and contains original review. Fresh exact-HEAD independent re-review requested; no verdict yet. |
+| #174 — Brain Mechanism Specification | `7cb6271531f3e80a45728756273218132499722e` | `97191111bc2573c14d391c0af9628db7b11f194b` | Open / draft / unmerged | Corrected F-02/F-03 specification and review request source references reconciled; fresh exact-HEAD independent re-review requested in comment #6895749266; no verdict yet. |
 | #178 — Governance proposal lineage | `39fe09dcf13496f5f0005ccf3f00739303e29f88` | `1273ddbcd0087d189e01388ded2d362fb1e058d2` | Open / draft / unmerged | Separate PR lineage; not the merge destination of PR #196. |
 | #179 — Phase 2 branch | `ea64607ef94f142a6142a013e119a7225bc95c1c` | `39fe09dcf13496f5f0005ccf3f00739303e29f88` | Open / draft / unmerged | Current Phase 2 branch head; contains accepted governance PR #196 and status reconciliation. |
 | #191 — Human/MCU reference comparison | `609d38ede50bbdd98a93dfed112781eacabee9fd` | `f6267456560a08054d69f7960d2951452b14017c` | Open / draft / unmerged | Director Option A: retain separately; no integration operation. |
 | #192 — Documentation Foundation | Self-referential: use the live [PR #192 page](https://github.com/methaneex-oss/MethaneX/pull/192) for the exact current HEAD; this index cannot pin the commit that contains itself. Latest 39-path parent manifest is inventory §89. | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | Open / non-draft / unmerged | Inventory §89 records the latest exact parent manifest; the live PR page is authoritative for the current self-referential HEAD. DF-06 and DF-09 remain open; DF-12 awaits Director decision. |
 | #193 — Implementation-plan proposal | `fa2bd50d6fb0bb77dc3cbaab684f51d606e94bb5` | `874c732973b6ab303d65a503f5a215b0af8e1153` | Open / draft / unmerged | Separate non-operative lineage; implementation planning remains held. |
-| #195 — Role terminology and assessment workflows | `52f3de82e7df498d09631e2bc5dae1045f56e300` | `8edc7cdfc886537d319d81cea04cdc9f3476044e` | Open / draft / unmerged | Reader workflow pins PR #174 current corrected proposal `d0e8df...`; exact-HEAD xAI review request #6894912708 is pending. Earlier verdict on `215e205e...` is historical and not carried forward. Native Brain Build run #43718330491 completed successfully (Configure + Build); this does not execute either manual assessment workflow. |
+| #195 — Role terminology and assessment workflows | `de0636056cc5815980d0ddc2f18829a24d9d06d0` | `8edc7cdfc886537d319d81cea04cdc9f3476044e` | Open / draft / unmerged | Reader workflow pins PR #174 current corrected proposal `7cb627...`; exact-HEAD xAI review request #6895750463 is pending. Earlier verdict on `215e205e...` is historical and not carried forward. Latest Native Brain Build run #43723033446 is pending; no current-head build result or manual assessment execution is claimed. |
 | #196 — Governance operating controls | `0ebc4e978fa38011b2f6bb5d97a03c267c1c12c9` | `d30237b81c3695f2a7cb980144b221bbd42ce548` | Closed / merged | Merge commit `c151e52781e56e6481424f774c19ea30128debb0`; merged into its existing Phase 2 base branch, not `main`. |
 
 ### 1.1 Accepted baselines are not blanket approval of later proposals
 
 - **PR #173:** historical accepted starting baseline `97191111bc2573c14d391c0af9628db7b11f194b`; current proposal HEAD `c4c9158437ffa6a4915b1b7b1b83e7e8867d9e72` remains unaccepted as complete/final architecture. The Project Director explicitly accepted BFA-C01–BFA-C14 as foundational constraints; this does not substitute for independent architecture assessment or overall architecture acceptance.
-- **PR #174:** accepted specification baseline `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`; current corrected proposal `d0e8df405e0b54f6866a3cd7c5efa3f213d792bb` is the current review target. The original F-02/F-03 source was confirmed accessible by the Project Director; the current corrected proposal still requires independent re-review and Director disposition.
+- **PR #174:** accepted specification baseline `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`; current corrected proposal `7cb6271531f3e80a45728756273218132499722e` is the current review target. The Director-confirmed original F-02/F-03 source remains preserved; fresh independent review and Director disposition remain pending.
 - **PR #196 governance:** the accepted governance document is `docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md`. PR #196 merged at `c151e527...` into `docs/jarvis-phase-2-whole-brain-integration-map-20261105`, not into `main`. The current Phase 2 branch head is `ea64607ef94f142a6142a013e119a7225bc95c1c`.
 
 ### 1.2 PR #191 ancestry — two different comparisons
@@ -85,7 +85,7 @@ The packet included selected decision extracts and a bounded set of architecture
 
 ### 4.1 Current PR #195 workflow review request
 
-The xAI review against `215e205eebb7ddb93a123214a3ac57d82dc52144` returned **APPROVED WITH DOCUMENTED NON-BLOCKING ISSUES** (PR review #5910907948; report commit `5227ea427a4b086efb8eb4cc507b3d8b6a5f234b`). That verdict did not cover the subsequent current-state prompt update at `4fef583c...` or the PR #174 source-pin correction at `52f3de82...`. The current exact-head review request is comment #6894912708; no verdict on `52f3de82...` is yet recorded. The source-pin correction was verified against PR #174 exact current proposal `d0e8df...` (spec blob `66a1aee...`; F-02/F-03 correction-rationale blob `b3089c1...`).
+The xAI review against `215e205eebb7ddb93a123214a3ac57d82dc52144` returned **APPROVED WITH DOCUMENTED NON-BLOCKING ISSUES** (PR review #5910907948; report commit `5227ea427a4b086efb8eb4cc507b3d8b6a5f234b`). That verdict does not cover the later source reconciliation. Current PR #195 HEAD is `de0636056cc5815980d0ddc2f18829a24d9d06d0`; workflow blob `b943a592197a46d3b48b0e00c2e613eeb719ac79`; exact-HEAD xAI review request #6895750463 is pending. Its reader packet pins PR #174 HEAD `7cb6271531f3e80a45728756273218132499722e`, with specification blob `cfdda9e6e7070cd5533b076e9bd77c2904694a32` and correction-rationale blob `b3089c11b5ee7b7e4244ca4e63d7e89afc038cd0`. The earlier approval is historical and is not carried forward.
 
 ## 5. Current gate status and authority boundary
 
