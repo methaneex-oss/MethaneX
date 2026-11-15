@@ -91,10 +91,10 @@ The xAI review against `215e205eebb7ddb93a123214a3ac57d82dc52144` returned **APP
 
 - **DF-01:** Builder corrections present; current exact-state snapshot and reader-facing clarifications added in this continuation.
 - **DF-02:** RESOLVED at Builder-evidence level by the current 39-path parent manifest in the final inventory section and the final inventory-only post-write verification recorded in PR #192 comment #6895825429. This is not Director acceptance.
-- **DF-03:** accepted-baseline and decision provenance distinctions recorded; the PR #174 F-02/F-03 source report is now recovered and preserved as a commit-pinned transcription; remaining provenance limits stay explicitly disclosed.
+- **DF-03:** accepted-baseline and decision provenance distinctions recorded; the PR #174 F-02/F-03 source report is preserved as a commit-pinned transcription, and the Project Director confirmed the historical shared-conversation source opened and displayed the original review (PR #192 comment #6894260448). This provenance confirmation does not establish a new exact-HEAD independent review verdict.
 - **DF-04:** accepted governance source revalidated; PR #196 merge scope explicitly distinguished from PR #178 and `main`.
 - **DF-05:** branch dependencies and PR #191/PR #192 ancestry comparisons recorded.
-- **DF-06:** NOT MET — the historical PR #174 source report is now available and preserved; one exact GitHub line-anchor sample was manually verified, but complete rendered fragment/line-anchor validation remains outstanding.
+- **DF-06:** NOT MET — the historical PR #174 source report is preserved, and the Project Director has confirmed access to the original review (PR #192 comment #6894260448); one exact GitHub line-anchor sample was manually verified, but complete rendered fragment/line-anchor validation remains outstanding.
 - **DF-07:** remediation in progress; a new blind reader run is required after final writes.
 - **DF-08:** RESOLVED only within its exact bounded preservation criterion.
 - **DF-09:** OPEN / NOT MET — latest result is PARTIALLY CLEAR.
