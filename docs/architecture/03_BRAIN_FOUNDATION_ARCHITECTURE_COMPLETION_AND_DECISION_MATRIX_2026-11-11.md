@@ -58,7 +58,7 @@ A topic is not complete merely because it is named, listed as a future capabilit
 | CF-23 | Developmental stages | Partial | Define bootstrap, early learning, capability growth and mature/advanced scope without age-based assumptions | Stages describe capability evidence, not hardcoded personality or a fixed timetable |
 | CF-24 | Failure and degraded operation | Partial | Define responsibility-local failure, uncertainty escalation, recovery and safe suspension | Partial failure is visible and contained; it does not silently corrupt unrelated cognition |
 | CF-25 | Verification and evidence | Partial | Map every capability to positive, negative, transfer, persistence and regression evidence | No capability claim without repeatable evidence and explicit limits |
-| CF-26 | Existing mechanism disposition | PARTIALLY ASSESSED | Bounded source compatibility audit completed for PR #97 donor HEAD c1da222e6c94aeb3f2ad000392c21fe4fc81ab25; broader mechanism inventory, remediation specifications and Director dispositions remain open | Existing code is candidate evidence/material, not an architectural constraint or automatic discard |
+| CF-26 | Existing mechanism disposition | CROSS-BASELINE INVENTORY COMPLETE; REMEDIATION OPEN | Exact PR #171/PR #172 engineering baseline and PR #97 donor inventory completed across 209 core C++ source/header/test paths (81 identical, 85 modified, 43 donor-only); mechanism dispositions and owned follow-up specifications recorded in the expanded compatibility report | Existing code is candidate evidence/material, not an architectural constraint or automatic discard; runtime adoption still requires remediation evidence and authorization |
 | CF-27 | Architecture decision governance | Open | Separate settled foundational decisions from implementation decisions and reserved Project Director approvals | No hidden decisions migrate into implementation specifications |
 
 ## 4. Integrated responsibility and authority model
@@ -520,9 +520,9 @@ The following table is the required traceability map. Section references identif
 | Deferred work | Accountable delivery owner | Minimum deliverable | Gate |
 |---|---|---|---|
 | Social/Agent Representation Specification | Architecture & Engineering Builder | Claim taxonomy, ownership map, provenance/temporal semantics, contradiction and privacy/security contracts, verification scenarios | Independent challenge; Project Director approval for scope/authority changes |
-| Legacy rule/mechanism source audit and remediation specification | Architecture & Engineering Builder | Bounded PR #97 donor audit completed for reliability, numeric thresholds, goal selection/context and belief overwrite; extend to additional source baselines only where the inventory shows a real gap, then define remediation and objective tests | Independent challenge; Project Director disposition for reserved changes |
+| Cross-baseline inherited-mechanism compatibility and remediation specifications | Architecture & Engineering Builder | Exact PR #171/PR #172 engineering baseline versus PR #97 donor census completed for 209 core C++ source/header/test paths; 14 mechanism families dispositioned in the expanded report; deliver the seven owned remediation/evaluation specifications and objective tests | Independent challenge; Project Director disposition for reserved changes |
 | Fixed learning-rate parameterization | Architecture & Engineering Builder | Treat the audited weighted coefficients and 0.05–0.95 clamp as provisional engineered parameters, not acquired behaviour; specify objective, scope, owner, version, sensitivity, transfer, adaptation and regression evaluation, and explicit consequences before adoption | Independent technical challenge; Project Director approval if the change alters foundational learning authority or scope |
-| CF-26 compatibility assessment | Architecture & Engineering Builder | Bounded donor audit completed; per-mechanism remediation specifications and evidence against ownership, epistemic, developmental, integration, failure and verification obligations remain | Project Director decision where reserved authority is affected |
+| CF-26 compatibility assessment | Architecture & Engineering Builder | Cross-baseline file/blob census and mechanism-family dispositions completed for the exact approved source revisions; per-mechanism remediation/evaluation specifications and evidence against ownership, epistemic, developmental, integration, failure and verification obligations remain | Project Director decision where reserved authority is affected |
 | CF-27 decision ledger | Project Director owns decisions; Architecture & Engineering Builder maintains record | Exact proposal/revision, alternatives, rationale, consequences, dependencies and accept/reject/revise status | Project Director acceptance; Independent Reviewer may challenge traceability |
 | CF-01–CF-27 traceability maintenance | Architecture & Engineering Builder | Section-level map synchronized to every architecture revision | Independent exact-revision recheck |
 
@@ -569,7 +569,7 @@ This map is a traceability aid. It does not grant any owner authority to change 
 
 ## 23. Current completion status — Builder correction pass
 
-**Builder response status:** The five earlier Blind Fresh Tester findings have Builder-authored architecture responses in §§31–34 and this matrix's §§19–24. These are proposed corrections only; none is represented as independently rechecked or closed by this statement. Independent re-review of the exact corrected revision remains mandatory. A bounded source audit of the PR #97 donor revision is complete for the four named patterns; broader compatibility inventory and remediation/specification work remain open. BFA-C01–BFA-C14 have been accepted by the Project Director; independent architecture review and overall architecture acceptance remain outstanding.
+**Builder response status:** The five earlier Blind Fresh Tester findings have Builder-authored architecture responses in §§31–34 and this matrix's §§19–24. These are proposed corrections only; none is represented as independently rechecked or closed by this statement. Independent re-review of the exact corrected revision remains mandatory. The CF-26 cross-baseline file/blob census and mechanism-family dispositions are now recorded in §26 and the expanded compatibility report; remediation/evaluation specifications remain open. BFA-C01–BFA-C14 have been accepted by the Project Director; independent architecture review and overall architecture acceptance remain outstanding.
 
 **No-shortcut status:** no merge, implementation, runtime source change, runtime test, technology selection, deployment, PR #191 disposition, PR #192/#193 integration or branch-history operation is authorized by this document.
 
@@ -586,7 +586,7 @@ The exact source evidence and line-level findings are recorded in [Inherited Mec
 | Fixed learning-rate equation | developmental_learning.cpp uses a weighted update equation with fixed coefficients and a 0.05–0.95 clamp. | Provisional engineered schedule only; evaluate sensitivity, transfer and adaptation under an owned, versioned objective. Do not represent coefficients as acquired behaviour. |
 | Belief overwrite | Brain belief map replaces the existing value before marking dispute; action-status belief is unconditionally replaced. WorldModel preserves some conflicting incoming facts but not a complete versioned claim history. | Replace with versioned, provenance-bearing claim revision and full alternative preservation. |
 
-**CF-26 status:** PARTIALLY ASSESSED. The named inherited patterns are now source-assessed for the PR #97 donor revision. The complete cross-branch/source-lineage inventory, per-mechanism remediation specifications and implementation tests remain later work. No code is changed or authorized.
+**CF-26 status at this historical section's original date:** PARTIALLY ASSESSED. This status is superseded by §26 (2026-11-15), which records completion of the exact PR #171/PR #172 versus PR #97 scoped file/blob inventory and mechanism-family dispositions. Remediation/evaluation specifications remain open. No code is changed or authorized.
 
 **BFA-C01–BFA-C14 status:** ACCEPTED by the Project Director as written; see §22 and PR #173 comment #6894239520. This acceptance does not close CF-26 or replace independent review.
 
@@ -625,13 +625,72 @@ The bounded donor audit identifies four inherited rule patterns plus a fixed lea
 4. The authoritative belief map overwrites an existing value before setting a disputed flag; action-status beliefs are unconditionally replaced. WorldModel conflict retention is partial, not a complete versioned claim ledger.
 5. The fixed weighted learning-rate equation and clamp are engineered parameterization, not learned dynamics; sensitivity, transfer and adaptation evaluation remain required before adoption.
 
-CF-26 is therefore **PARTIALLY ASSESSED**, not closed: the identified donor patterns have source evidence and dispositions, but cross-branch lineage, complete mechanism-by-mechanism compatibility and remediation specifications remain open. The audit does not authorize runtime changes.
+At the time of this historical §25.2 entry, CF-26 was **PARTIALLY ASSESSED**. The 2026-11-15 cross-baseline inventory in §26 supersedes the earlier limitation: the scoped source/header/test file census and mechanism-family dispositions are complete for the exact PR #171/PR #172 and PR #97 revisions. Remediation/evaluation specifications remain open; no runtime changes are authorized.
 
 ### 25.3 Remaining acceptance gates
 
 - The five prior Blind Fresh Tester findings have Builder-side responses in §§31–34 and this matrix's §§19–24. A new blind independent review of the exact post-update PR #173 HEAD remains required. The previous NOT CLEAR result on 4b960062b7b3d41fa18c60909c628e8264459927 is historical and cannot be upgraded retroactively.
 - BFA-C01–BFA-C14 are accepted by the Project Director as written (PR #173 comment #6894239520); the remaining independent-review and architecture-acceptance gates remain open.
-- CF-26 broader source compatibility and remediation remain open as described above.
+- CF-26's scoped cross-baseline inventory is complete under §26; remediation/evaluation specifications remain open.
 - No PR merge, runtime source modification, runtime test, technology selection, deployment or Stage A start is authorized.
 
-**Builder status:** architecture corrections and bounded source audit are complete for this pass; independent re-review and Project Director decisions are not complete. Architecture acceptance remains NOT CLEARED.
+**Builder status at this historical section's original date:** architecture corrections and the bounded donor audit were complete for that pass; see §26 for the superseding 2026-11-15 cross-baseline inventory. Independent re-review and Project Director acceptance of the exact final architecture revision remain outstanding. Architecture acceptance remains NOT CLEARED.
+
+
+## 26. CF-26 Project Director Option A — cross-baseline inventory execution (2026-11-15)
+
+**Director instruction:** CF-26 Option A accepted on 2026-11-15. Complete an architectural compatibility inventory across the approved engineering baselines, give each inherited mechanism an evidence-backed disposition, and specify owned remediation/evaluation work. This instruction does not reopen BFA-C01–BFA-C14 or alter prior authorization boundaries.
+
+### 26.1 Exact source baselines and census
+
+- PR #171 reviewed package HEAD: `b05434758ad4fe72815503f89bd5d2990ccb658b`.
+- PR #172 accepted investigation engineering-evidence baseline: `main` at `1273ddbcd0087d189e01388ded2d362fb1e058d2`.
+- PR #97 donor branch HEAD: `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+- PR #173 architecture HEAD used for this inventory: `a8be408921afaa7a417cc972e891155bbcd11d19`.
+
+The PR #171 and PR #172 engineering trees have identical blob identities across the 166 paths in the scoped core C++ source/header/test inventory. Compared with that shared baseline, the PR #97 donor has 81 identical paths, 85 modified paths and 43 donor-only paths, for a 209-path union. There are no baseline-only paths in this scope. The exact path/blob manifest and mechanism-level evidence are in [Cross-Baseline Inherited Mechanism Compatibility Inventory](reports/INHERITED_MECHANISM_SOURCE_COMPATIBILITY_AUDIT_2026-11-11.md).
+
+The census covers all tracked paths under `core/cpp/src/`, `core/cpp/include/jarvis/core/` and `core/cpp/tests/` at those exact revisions. It does not claim an audit of every repository directory, historical branch, external consumer, binary or deployed artifact.
+
+### 26.2 Mechanism dispositions
+
+| Mechanism family | Disposition |
+|---|---|
+| Cognitive event journal, persistence and replay | PRESERVE + ADAPT |
+| Perception, representation, knowledge and reasoning | PRESERVE + ADAPT |
+| Episodic and prediction-linked experience memory | ADAPT |
+| Prediction and contextual matching | PRESERVE + ADAPT |
+| Source reliability and evidence confidence | ADAPT |
+| Numeric thresholds and fixed learning-rate schedule | ADAPT |
+| Goal model and intent lifecycle | PRESERVE |
+| General first-eligible goal fallback and independent strategy-context coupling | REPLACE |
+| Belief/world-model semantic last-write-wins | REPLACE |
+| Developmental association and strategy learning | PRESERVE + ADAPT |
+| Affective state and appraisal learning | PRESERVE + ADAPT |
+| Action execution and consequence feedback | PRESERVE + ADAPT |
+| Developmental environment/world | PRESERVE as controlled training/test substrate; ADAPT its evidence boundary |
+| Evolution and parameter experimentation | PRESERVE + ADAPT |
+| Attention, reflection, self-model and causal modelling | PRESERVE + ADAPT |
+| Social/agent representation | DEFER to its owned specification; do not claim implemented |
+| RETIRE | None justified by the current evidence; no whole mechanism has been shown redundant with verified replacement coverage |
+
+The dispositions apply to mechanism semantics and roles, not blanket approval of entire source files. The report identifies the relevant evidence, limitations and later obligations.
+
+### 26.3 Owned remediation/evaluation specifications
+
+The Architecture & Engineering Builder owns:
+1. Versioned belief/claim revision and conflict preservation.
+2. Goal/intent selection and selected-goal context identity.
+3. Evidence reliability, confidence semantics and numeric parameter governance.
+4. Affective appraisal semantics, calibration and persistence/replay.
+5. Prediction-context candidate resolution and ambiguity handling.
+6. Action/developmental-world evidence contracts.
+7. Learning/evolution integration boundaries, eligibility, risk, transfer and rollback.
+
+Each specification must include parent architectural decisions, ownership, provenance, failure/recovery semantics, objective verification, counterexamples, persistence, variation/transfer and regression scope. Runtime implementation or test execution still requires its separate authorization.
+
+### 26.4 Current CF-26 status
+
+**Scoped cross-baseline inventory: COMPLETE. Mechanism remediation/evaluation specifications: OPEN. CF-26 overall: OPEN.**
+
+The report's test-source references describe intended assertions only. No build or runtime tests were executed during this documentation-only pass. Independent challenge of the exact revised PR #173 revision remains required. BFA-C01–BFA-C14 remain accepted as recorded in PR #173 comment #6894239520. No merge, draft exit, Stage A, runtime implementation, technology selection, runtime test or deployment is authorized.
