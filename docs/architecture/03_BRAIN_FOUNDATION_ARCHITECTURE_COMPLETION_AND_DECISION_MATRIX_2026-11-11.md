@@ -513,7 +513,7 @@ The following table is the required traceability map. Section references identif
 | CF-24 | Failure and degraded operation | §§6.4, 10 | §§23–24 |
 | CF-25 | Verification and evidence | §§11, 24 | §§12, 17 |
 | CF-26 | Existing mechanism disposition | §§29, 32, 34 | §33 and the bounded source audit report; compatibility remains unaccepted as-is |
-| CF-27 | Architecture decision governance | §§30, 33 | §§15, 17; Project Director decisions remain reserved |
+| CF-27 | Architecture decision governance | §§30, 33 | §§15, 17; BFA-C01–BFA-C14 accepted by Project Director on 2026-11-15; other decision items remain governed by their own gates |
 
 ## 21. Accountable deferred-specification register
 
@@ -527,9 +527,13 @@ The following table is the required traceability map. Section references identif
 
 “Deferred” is not ownerless. A later specification cannot begin implementation merely because an owner and deliverable are named; it still requires its own authorization and predecessor decisions.
 
-## 22. Project Director reserved decision register — no implied acceptance
+## 22. Project Director disposition register — BFA-C01–BFA-C14 accepted
 
-The 14 BFA-C decisions remain reserved for explicit Project Director disposition. The Builder's recommended positions are proposals only. No response, reviewer verdict, successful workflow, merge status or implementation convenience is acceptance.
+**Director disposition:** ACCEPT BFA-C01–BFA-C14 as written. Recorded in PR #173 conversation comment #6894239520 on 2026-11-15.
+
+**Exact revision considered:** PR #173 HEAD `f8dd67fc866242d29298ffc6a03a8782a4e6982c`; matrix blob `4f297f7da7c8d9c8b0312bcc32dba353bcc0be66`.
+
+The acceptance settles only the fourteen listed foundational architecture decisions. It does not accept the whole architecture, substitute for independent review or blind assessment, close CF-26, authorize merge, Stage A, runtime implementation, technology selection, deployment or branch-history changes.
 
 | Decision range | Required Director action |
 |---|---|
@@ -541,7 +545,7 @@ The 14 BFA-C decisions remain reserved for explicit Project Director disposition
 
 ### 22.1 Conditional architecture dependency map
 
-The following map identifies the principal architecture sections that depend on each reserved decision. Every mapped section remains **proposed and conditional** until the Project Director records the corresponding accept/reject/revise disposition. A proposal's presence in the architecture, this map or a review report does not approve it. If a decision is rejected or revised, all mapped sections and downstream specifications must be reconciled before they are relied upon.
+The following map records the principal architecture sections governed by the now-accepted decisions. Their architectural direction is settled by the Director's disposition above; their implementation detail and overall proposal remain subject to independent review, verification and later authorization.
 
 | Decision | Proposed decision | Principal dependent architecture sections |
 |---|---|---|
@@ -560,11 +564,11 @@ The following map identifies the principal architecture sections that depend on 
 | BFA-C13 | Atomic owner-state commits and asynchronous versioned propagation | §§6, 18 |
 | BFA-C14 | Persistence, variation, transfer and regression evidence standard | §§11, 24 |
 
-This map is a traceability aid, not a replacement for the reserved decision register. It does not grant any owner authority to accept a BFA-C decision on the Project Director's behalf.
+This map is a traceability aid. It does not grant any owner authority to change an accepted BFA-C decision or to authorize implementation.
 
 ## 23. Current completion status — Builder correction pass
 
-**Builder response status:** The five earlier Blind Fresh Tester findings have Builder-authored architecture responses in §§31–34 and this matrix's §§19–24. These are proposed corrections only; none is represented as independently rechecked or closed by this statement. Independent re-review of the exact corrected revision remains mandatory. A bounded source audit of the PR #97 donor revision is complete for the four named patterns; broader compatibility inventory and remediation/specification work remain open. The 14 BFA-C decisions remain reserved to the Project Director.
+**Builder response status:** The five earlier Blind Fresh Tester findings have Builder-authored architecture responses in §§31–34 and this matrix's §§19–24. These are proposed corrections only; none is represented as independently rechecked or closed by this statement. Independent re-review of the exact corrected revision remains mandatory. A bounded source audit of the PR #97 donor revision is complete for the four named patterns; broader compatibility inventory and remediation/specification work remain open. BFA-C01–BFA-C14 have been accepted by the Project Director; independent architecture review and overall architecture acceptance remain outstanding.
 
 **No-shortcut status:** no merge, implementation, runtime source change, runtime test, technology selection, deployment, PR #191 disposition, PR #192/#193 integration or branch-history operation is authorized by this document.
 
@@ -582,10 +586,15 @@ The exact source evidence and line-level findings are recorded in [Inherited Mec
 
 **CF-26 status:** PARTIALLY ASSESSED. The named inherited patterns are now source-assessed for the PR #97 donor revision. The complete cross-branch/source-lineage inventory, per-mechanism remediation specifications and implementation tests remain later work. No code is changed or authorized.
 
-**BFA-C01–BFA-C14 status:** all 14 remain reserved for explicit Project Director disposition. This audit does not convert Builder recommendations into accepted decisions.
+**BFA-C01–BFA-C14 status:** ACCEPTED by the Project Director as written; see §22 and PR #173 comment #6894239520. This acceptance does not close CF-26 or replace independent review.
 
 
 
+
+
+### 22.2 Decision scope and authority boundary
+
+The accepted decisions establish foundational architecture constraints, not a detailed implementation design. Builders may now use these constraints as settled inputs when completing specifications, but may not infer permission to implement runtime code. Independent review must assess the corrected exact revision, and any material contradiction with accepted baselines must be escalated rather than silently changing the decisions.
 
 ## 25. Final Builder source-audit manifest and remaining independent gate — 2026-11-11
 
@@ -618,7 +627,7 @@ CF-26 is therefore **PARTIALLY ASSESSED**, not closed: the identified donor patt
 ### 25.3 Remaining acceptance gates
 
 - The five prior Blind Fresh Tester findings have Builder-side responses in §§31–34 and this matrix's §§19–24. A new blind independent review of the exact post-update PR #173 HEAD remains required. The previous NOT CLEAR result on 4b960062b7b3d41fa18c60909c628e8264459927 is historical and cannot be upgraded retroactively.
-- BFA-C01–BFA-C14 remain reserved for explicit Project Director disposition; the matrix's recommendations are not approvals.
+- BFA-C01–BFA-C14 are accepted by the Project Director as written (PR #173 comment #6894239520); the remaining independent-review and architecture-acceptance gates remain open.
 - CF-26 broader source compatibility and remediation remain open as described above.
 - No PR merge, runtime source modification, runtime test, technology selection, deployment or Stage A start is authorized.
 
