@@ -1,4 +1,4 @@
-# CURRENT EXACT STATE — 2026-11-15 (JARVIS-M0 Builder continuation 13)
+# CURRENT EXACT STATE — 2026-11-15 (JARVIS-M0 Builder continuation 14)
 
 > **Controlling live-status snapshot.** This block supersedes all earlier dated status snapshots below for current PR heads, base relationships and gate state. Those snapshots remain historical evidence and must not be combined into a synthetic current state. Builder evidence only; not independent review, Tester clearance, gate clearance or Director acceptance.
 
@@ -13,7 +13,7 @@ Repository: `methaneex-oss/MethaneX`. Values below were fetched from GitHub on 2
 | #178 — Governance proposal lineage | `39fe09dcf13496f5f0005ccf3f00739303e29f88` | `1273ddbcd0087d189e01388ded2d362fb1e058d2` | Open / draft / unmerged | Separate PR lineage; not the merge destination of PR #196. |
 | #179 — Phase 2 branch | `ea64607ef94f142a6142a013e119a7225bc95c1c` | `39fe09dcf13496f5f0005ccf3f00739303e29f88` | Open / draft / unmerged | Current Phase 2 branch head; contains accepted governance PR #196 and status reconciliation. |
 | #191 — Human/MCU reference comparison | `609d38ede50bbdd98a93dfed112781eacabee9fd` | `f6267456560a08054d69f7960d2951452b14017c` | Open / draft / unmerged | Director Option A: retain separately; no integration operation. |
-| #192 — Documentation Foundation | Self-referential: use the live [PR #192 page](https://github.com/methaneex-oss/MethaneX/pull/192) for the exact current HEAD; this index cannot pin the commit that contains itself. Latest 39-path parent manifest is inventory §92. | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | Open / non-draft / unmerged | Inventory §92 records the latest exact parent manifest; the final inventory-only post-write verification is recorded in PR #192 comment #6895825429. The live PR page is authoritative for the current self-referential HEAD. DF-06 and DF-09 remain open; DF-12 awaits Director decision. |
+| #192 — Documentation Foundation | Self-referential: use the live [PR #192 page](https://github.com/methaneex-oss/MethaneX/pull/192) for the exact current HEAD; this index cannot pin the commit that contains itself. The latest 39-path parent manifest is recorded in the final section of the inventory; the live PR page is authoritative for the current self-referential HEAD. | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | Open / non-draft / unmerged | The final inventory section records the latest exact parent manifest; the final inventory-only post-write verification is recorded in the superseding PR #192 Builder verification comment. The live PR page is authoritative for the current self-referential HEAD. DF-06 and DF-09 remain open; DF-12 awaits Director decision. |
 | #193 — Implementation-plan proposal | `fa2bd50d6fb0bb77dc3cbaab684f51d606e94bb5` | `874c732973b6ab303d65a503f5a215b0af8e1153` | Open / draft / unmerged | Separate non-operative lineage; implementation planning remains held. |
 | #195 — Role terminology and assessment workflows | `de0636056cc5815980d0ddc2f18829a24d9d06d0` | `8edc7cdfc886537d319d81cea04cdc9f3476044e` | Open / draft / unmerged | Reader workflow pins PR #174 current corrected proposal `7cb627...`; exact-HEAD xAI review request #6895750463 is pending. Earlier verdict on `215e205e...` is historical and not carried forward. Latest Native Brain Build run #43723033446 completed successfully; its `cpp` job Configure and Build steps passed. This does not execute either manual assessment workflow. |
 | #196 — Governance operating controls | `0ebc4e978fa38011b2f6bb5d97a03c267c1c12c9` | `d30237b81c3695f2a7cb980144b221bbd42ce548` | Closed / merged | Merge commit `c151e52781e56e6481424f774c19ea30128debb0`; merged into its existing Phase 2 base branch, not `main`. |
@@ -90,7 +90,7 @@ The xAI review against `215e205eebb7ddb93a123214a3ac57d82dc52144` returned **APP
 ## 5. Current gate status and authority boundary
 
 - **DF-01:** Builder corrections present; current exact-state snapshot and reader-facing clarifications added in this continuation.
-- **DF-02:** RESOLVED at Builder-evidence level by the current 39-path parent manifest in inventory §92 and the final inventory-only post-write verification recorded in PR #192 comment #6895825429. This is not Director acceptance.
+- **DF-02:** RESOLVED at Builder-evidence level by the current 39-path parent manifest in the final inventory section and the final inventory-only post-write verification recorded in PR #192 comment #6895825429. This is not Director acceptance.
 - **DF-03:** accepted-baseline and decision provenance distinctions recorded; the PR #174 F-02/F-03 source report is now recovered and preserved as a commit-pinned transcription; remaining provenance limits stay explicitly disclosed.
 - **DF-04:** accepted governance source revalidated; PR #196 merge scope explicitly distinguished from PR #178 and `main`.
 - **DF-05:** branch dependencies and PR #191/PR #192 ancestry comparisons recorded.
@@ -98,7 +98,7 @@ The xAI review against `215e205eebb7ddb93a123214a3ac57d82dc52144` returned **APP
 - **DF-07:** remediation in progress; a new blind reader run is required after final writes.
 - **DF-08:** RESOLVED only within its exact bounded preservation criterion.
 - **DF-09:** OPEN / NOT MET — latest result is PARTIALLY CLEAR.
-- **DF-10:** RESOLVED at Builder-evidence level by exact self-review, the current 39-path parent manifest in inventory §92 and the final inventory-only post-write verification recorded in PR #192 comment #6895825429. This is not Independent Reviewer approval or Director acceptance.
+- **DF-10:** RESOLVED at Builder-evidence level by exact self-review, the current 39-path parent manifest in the final inventory section and the final inventory-only post-write verification recorded in PR #192 comment #6895825429. This is not Independent Reviewer approval or Director acceptance.
 - **DF-11:** WAIVED by explicit Project Director decision. This does not waive the separate technical review required for the PR #195 workflow candidate.
 - **DF-12:** NOT ACCEPTED; exact-revision Project Director decision remains reserved.
 - **DF-13:** MAINTAINED; Stage A has not started and remains held.
