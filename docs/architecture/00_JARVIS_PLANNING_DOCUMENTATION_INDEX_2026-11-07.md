@@ -1,4 +1,4 @@
-# CURRENT EXACT STATE — 2026-11-15 (JARVIS-M0 Builder continuation 07)
+# CURRENT EXACT STATE — 2026-11-15 (JARVIS-M0 Builder continuation 08)
 
 > **Controlling live-status snapshot.** This block supersedes all earlier dated status snapshots below for current PR heads, base relationships and gate state. Those snapshots remain historical evidence and must not be combined into a synthetic current state. Builder evidence only; not independent review, Tester clearance, gate clearance or Director acceptance.
 
@@ -13,9 +13,9 @@ Repository: `methaneex-oss/MethaneX`. Values below were fetched from GitHub on 2
 | #178 — Governance proposal lineage | `39fe09dcf13496f5f0005ccf3f00739303e29f88` | `1273ddbcd0087d189e01388ded2d362fb1e058d2` | Open / draft / unmerged | Separate PR lineage; not the merge destination of PR #196. |
 | #179 — Phase 2 branch | `ea64607ef94f142a6142a013e119a7225bc95c1c` | `39fe09dcf13496f5f0005ccf3f00739303e29f88` | Open / draft / unmerged | Current Phase 2 branch head; contains accepted governance PR #196 and status reconciliation. |
 | #191 — Human/MCU reference comparison | `609d38ede50bbdd98a93dfed112781eacabee9fd` | `f6267456560a08054d69f7960d2951452b14017c` | Open / draft / unmerged | Director Option A: retain separately; no integration operation. |
-| #192 — Documentation Foundation | `ebd25342b9c881f42ee593d7f6b6f55b8cb20ad5` | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | Open / non-draft / unmerged | Final 39-path inventory manifest §86 verified at this exact HEAD. DF-06 and DF-09 remain open; DF-12 awaits Director decision. |
+| #192 — Documentation Foundation | `00e99ea3e986d1813f4bee416d06b6437ac4505b` | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | Open / non-draft / unmerged | Final 39-path inventory manifest §87 verified at this exact HEAD; the final inventory-only commit preserves the 38 other parent blobs. DF-06 and DF-09 remain open; DF-12 awaits Director decision. |
 | #193 — Implementation-plan proposal | `fa2bd50d6fb0bb77dc3cbaab684f51d606e94bb5` | `874c732973b6ab303d65a503f5a215b0af8e1153` | Open / draft / unmerged | Separate non-operative lineage; implementation planning remains held. |
-| #195 — Role terminology and assessment workflows | `215e205eebb7ddb93a123214a3ac57d82dc52144` | `8edc7cdfc886537d319d81cea04cdc9f3476044e` | Open / draft / unmerged | Current workflow candidate; exact-HEAD xAI review requested in comment #6894256026; no verdict on this HEAD. Prior xAI verdicts target older revisions. Native Brain Build CI run #43713566750 passed Configure and Build only. |
+| #195 — Role terminology and assessment workflows | `52f3de82e7df498d09631e2bc5dae1045f56e300` | `8edc7cdfc886537d319d81cea04cdc9f3476044e` | Open / draft / unmerged | Reader workflow corrected to pin PR #174 current proposal `d0e8df...`; fresh exact-HEAD xAI review requested in comment #6894912708. Earlier xAI verdict on `215e205e...` is not carried forward. Native Brain Build run #43718330491 was in progress at snapshot time. |
 | #196 — Governance operating controls | `0ebc4e978fa38011b2f6bb5d97a03c267c1c12c9` | `d30237b81c3695f2a7cb980144b221bbd42ce548` | Closed / merged | Merge commit `c151e52781e56e6481424f774c19ea30128debb0`; merged into its existing Phase 2 base branch, not `main`. |
 
 ### 1.1 Accepted baselines are not blanket approval of later proposals
@@ -85,7 +85,7 @@ The packet included selected decision extracts and a bounded set of architecture
 
 ### 4.1 Current PR #195 workflow review request
 
-The final superseding exact-current-HEAD review request was posted against `5a07a616949e060cb5dab6d739789024624f896e` (PR comment ID `6867611794`). It supersedes earlier requests against `ec01b440...` and `ada5fe...`. No reviewer verdict on the current head is yet recorded. Builder inspection corrected the stale PR #173 fetch pin and added the missing Phase 2 governance fetch; all newly added source paths resolved at their declared revisions.
+The xAI review against `215e205eebb7ddb93a123214a3ac57d82dc52144` returned **APPROVED WITH DOCUMENTED NON-BLOCKING ISSUES** (PR review #5910907948; report commit `5227ea427a4b086efb8eb4cc507b3d8b6a5f234b`). That verdict did not cover the subsequent current-state prompt update at `4fef583c...` or the PR #174 source-pin correction at `52f3de82...`. The current exact-head review request is comment #6894912708; no verdict on `52f3de82...` is yet recorded. The source-pin correction was verified against PR #174 exact current proposal `d0e8df...` (spec blob `66a1aee...`; F-02/F-03 correction-rationale blob `b3089c1...`).
 
 ## 5. Current gate status and authority boundary
 
