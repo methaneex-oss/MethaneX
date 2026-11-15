@@ -597,3 +597,18 @@ The historical ChatGPT shared-conversation pointer remains ACCESS-LIMITED / NOT 
 **DF-06 remains NOT MET.** The Builder-side semantic review, enumerated external destination checks, relative-path existence, structural checks and documented historical/cross-branch comparisons are complete for the declared package. The rendered GitHub line/fragment-anchor check remains technically unavailable through the present tools. The access-limited historical pointer requires primary-source access or an explicit Project Director determination that the disclosed non-clickable treatment satisfies the criterion.
 
 No full DF-06 clearance is claimed. Static line-range validity must not be represented as rendered-anchor success. This report is Builder evidence only, not an Independent Reviewer verdict or Project Director gate decision.
+
+
+## 23. Director-confirmed historical-source access update — 2026-11-15
+
+### 23.1 Exact authority evidence
+
+The Project Director's supplemental decision and provenance comment on PR #192, comment [#6894260448](https://github.com/methaneex-oss/MethaneX/pull/192#issuecomment-6894260448), records that on 2026-11-15 the historical ChatGPT shared-conversation link opened and displayed the original PR #174 F-02/F-03 review. The Director explicitly determined that the historical-primary-source access limitation for this pointer is resolved by that confirmation.
+
+### 23.2 Reconciliation with historical Builder observations
+
+Sections 20 and 22 accurately preserve the Builder's earlier access-limited attempts and the limits of the Builder retrieval surface at those dates. They are historical records and are not rewritten. The later Director confirmation supersedes the earlier unresolved access status for current gate interpretation. This confirmation establishes provenance/access for the historical source only; it does not create a new independent review verdict against current PR #174 HEAD and does not change the specification's acceptance status.
+
+### 23.3 Current DF-06 disposition
+
+The historical ChatGPT pointer is no longer an outstanding DF-06 access limitation. It remains literal provenance evidence; its original Builder-side inability to retrieve it is preserved as historical context. **DF-06 remains NOT MET solely because complete rendered GitHub fragment/line-anchor behavior has not been verified.** The existing semantic, relative-path, external-destination and cross-branch checks remain bounded to the scopes already recorded above. No full DF-06 clearance is claimed.
