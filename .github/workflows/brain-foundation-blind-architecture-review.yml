@@ -56,6 +56,7 @@ jobs:
           docs = [
               ("PR173 architecture", target, "docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md"),
               ("PR173 completion and decision matrix", target, "docs/architecture/03_BRAIN_FOUNDATION_ARCHITECTURE_COMPLETION_AND_DECISION_MATRIX_2026-11-11.md"),
+              ("PR173 cross-baseline inherited mechanism compatibility inventory", target, "docs/architecture/reports/INHERITED_MECHANISM_SOURCE_COMPATIBILITY_AUDIT_2026-11-11.md"),
               ("PR171 whole-system architecture foundation", "b05434758ad4fe72815503f89bd5d2990ccb658b", "docs/architecture/00_JARVIS_SYSTEM_ARCHITECTURE_FOUNDATION.md"),
               ("PR171 whole-system anatomy and responsibility map", "b05434758ad4fe72815503f89bd5d2990ccb658b", "docs/architecture/01_JARVIS_WHOLE_SYSTEM_ANATOMY_AND_RESPONSIBILITY_MAP.md"),
               ("Accepted PR172 foundational capability investigation", "d7d676b79dbf3269f7fd3ebdb4363a6df19f255d", "docs/architecture/research/02_BRAIN_FOUNDATIONAL_CAPABILITY_INVESTIGATION_2026-11-03.md"),
@@ -81,7 +82,7 @@ jobs:
                   "prior reviewer reports and verdicts",
                   "conversation history and Project Director commentary"
               ],
-              "purpose": "Blind assessment of the architecture and matrix against the accepted baselines; no prior reviewer findings are disclosed."
+              "purpose": "Blind assessment of the architecture, completion matrix and Builder-produced cross-baseline compatibility inventory against the accepted baselines; no prior reviewer findings are disclosed."
           }, indent=2))
           PY
 
@@ -120,6 +121,7 @@ jobs:
           10. Every CF-01 through CF-27 obligation and each of the 14 proposed decision dispositions in the completion matrix. Identify omissions and unsupported closure claims.
           11. Compatibility with PR #171 system responsibilities and PR #172 research conclusions; identify any contradiction, unjustified narrowing or untraceable architectural claim.
           12. Whether implementation-level matters are properly deferred with explicit architectural obligations, rationale and later ownership—or whether deferral hides a foundational gap.
+          13. Audit the supplied PR #173 cross-baseline compatibility inventory: verify the exact source revisions and scoped path/blob counts; challenge PRESERVE/ADAPT/REPLACE/DEFER/RETIRE dispositions against the evidence and accepted architecture; identify unsupported claims, omitted mechanism families, and whether remediation specifications have objective closure criteria.
 
           Be adversarial but fair. Separate a true architecture blocker from a detail properly deferred to mechanism specifications. Do not require arbitrary technical choices where architecture-level contracts are sufficient. Do not treat a passing CI build as evidence of conceptual correctness.
 
@@ -135,6 +137,7 @@ jobs:
           I. Deferred-specification register: acceptable deferrals versus hidden foundational omissions, with later specification ownership where the documents identify it.
           J. Final recheck plan: exact corrections and evidence required before a second independent review.
           K. Confidence, scope limits and any packet evidence that was unavailable.
+          L. Cross-baseline compatibility audit: disposition-by-disposition verdict, exact supporting/contradicting evidence, inventory omissions and required corrections.
 
           Verdict standard:
           - CLEAR only if no critical or major architectural blocker remains and all foundational obligations are adequately specified at architecture level.
