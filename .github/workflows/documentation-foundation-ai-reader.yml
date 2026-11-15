@@ -55,7 +55,7 @@ jobs:
           mkdir -p documentation-foundation-reader-evidence
           git fetch --no-tags --depth=1 origin b05434758ad4fe72815503f89bd5d2990ccb658b
           git fetch --no-tags --depth=1 origin d7d676b79dbf3269f7fd3ebdb4363a6df19f255d
-          git fetch --no-tags --depth=1 origin f8dd67fc866242d29298ffc6a03a8782a4e6982c
+          git fetch --no-tags --depth=1 origin c4c9158437ffa6a4915b1b7b1b83e7e8867d9e72
           git fetch --no-tags --depth=1 origin ea64607ef94f142a6142a013e119a7225bc95c1c
           git fetch --no-tags --depth=1 origin 0811a59e46bf934e32e794f90e4e7d18d4e2bd97
           git fetch --no-tags --depth=1 origin 9502989ffae91c00ba0a8568ab5296925fa9f27b
@@ -75,9 +75,9 @@ jobs:
               ("docs/architecture/00_JARVIS_SYSTEM_ARCHITECTURE_FOUNDATION.md", "b05434758ad4fe72815503f89bd5d2990ccb658b", "docs/architecture/00_JARVIS_SYSTEM_ARCHITECTURE_FOUNDATION.md"),
               ("docs/architecture/01_JARVIS_WHOLE_SYSTEM_ANATOMY_AND_RESPONSIBILITY_MAP.md", "b05434758ad4fe72815503f89bd5d2990ccb658b", "docs/architecture/01_JARVIS_WHOLE_SYSTEM_ANATOMY_AND_RESPONSIBILITY_MAP.md"),
               ("docs/architecture/research/02_BRAIN_FOUNDATIONAL_CAPABILITY_INVESTIGATION_2026-11-03.md", "d7d676b79dbf3269f7fd3ebdb4363a6df19f255d", "docs/architecture/research/02_BRAIN_FOUNDATIONAL_CAPABILITY_INVESTIGATION_2026-11-03.md"),
-              ("docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md [current proposed architecture; not accepted]", "f8dd67fc866242d29298ffc6a03a8782a4e6982c", "docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md"),
-              ("docs/architecture/03_BRAIN_FOUNDATION_ARCHITECTURE_COMPLETION_AND_DECISION_MATRIX_2026-11-11.md [current completion and reserved decision matrix]", "f8dd67fc866242d29298ffc6a03a8782a4e6982c", "docs/architecture/03_BRAIN_FOUNDATION_ARCHITECTURE_COMPLETION_AND_DECISION_MATRIX_2026-11-11.md"),
-              ("docs/architecture/reports/INHERITED_MECHANISM_SOURCE_COMPATIBILITY_AUDIT_2026-11-11.md [bounded source compatibility audit]", "f8dd67fc866242d29298ffc6a03a8782a4e6982c", "docs/architecture/reports/INHERITED_MECHANISM_SOURCE_COMPATIBILITY_AUDIT_2026-11-11.md"),
+              ("docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md [current proposed architecture; not accepted]", "c4c9158437ffa6a4915b1b7b1b83e7e8867d9e72", "docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md"),
+              ("docs/architecture/03_BRAIN_FOUNDATION_ARCHITECTURE_COMPLETION_AND_DECISION_MATRIX_2026-11-11.md [current completion matrix; BFA-C01–BFA-C14 accepted by the Project Director]", "c4c9158437ffa6a4915b1b7b1b83e7e8867d9e72", "docs/architecture/03_BRAIN_FOUNDATION_ARCHITECTURE_COMPLETION_AND_DECISION_MATRIX_2026-11-11.md"),
+              ("docs/architecture/reports/INHERITED_MECHANISM_SOURCE_COMPATIBILITY_AUDIT_2026-11-11.md [bounded source compatibility audit]", "c4c9158437ffa6a4915b1b7b1b83e7e8867d9e72", "docs/architecture/reports/INHERITED_MECHANISM_SOURCE_COMPATIBILITY_AUDIT_2026-11-11.md"),
               ("docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md [accepted baseline]", "0811a59e46bf934e32e794f90e4e7d18d4e2bd97", "docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md"),
               ("docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md [current corrected proposal]", "9502989ffae91c00ba0a8568ab5296925fa9f27b", "docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md"),
               ("docs/architecture/specifications/reviews/01_BRAIN_MECHANISM_SPECIFICATION_F02_F03_CORRECTIONS_2026-11-11.md [correction rationale; not reviewer verdict]", "9502989ffae91c00ba0a8568ab5296925fa9f27b", "docs/architecture/specifications/reviews/01_BRAIN_MECHANISM_SPECIFICATION_F02_F03_CORRECTIONS_2026-11-11.md"),
@@ -97,7 +97,7 @@ jobs:
           (out / "packet_manifest.json").write_text(json.dumps({
               "target_documentation_revision": os.environ["TARGET_DOCS_SHA"],
               "documents": manifest,
-              "note": "Packet includes the DF criteria audit, accepted governance source, current PR #173 proposal/matrix/source audit, and current PR #174 corrected proposal/correction rationale. It excludes the full artifact inventory, historical preservation register, templates, Builder self-review/remediation register, raw PR review threads, and prior reviewer reports. The index current-state block controls live status; older snapshots and audit status tables are historical evidence only."
+              "note": "Packet includes the DF criteria audit, accepted governance source, current PR #173 architecture, Director-dispositioned matrix and source audit, and current PR #174 corrected proposal/correction rationale. It excludes the full artifact inventory, historical preservation register, templates, Builder self-review/remediation register, raw PR review threads, and prior reviewer reports. The index current-state block controls live status; older snapshots and audit status tables are historical evidence only."
           }, indent=2))
           PY
 
