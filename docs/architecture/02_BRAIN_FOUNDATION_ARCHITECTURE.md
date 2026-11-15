@@ -1062,4 +1062,40 @@ The exact PR #97 donor source audit is recorded in [Inherited Mechanism Source C
 
 The next specification must define remediation and objective verification; it must not silently preserve these donor semantics. This section closes the source-evidence identification task for the bounded donor revision only. It does not authorize runtime changes, decide final architecture acceptance or substitute for blind independent re-review.
 
+
+## 35. CF-26 cross-baseline compatibility inventory — Project Director Option A (2026-11-15)
+
+The Project Director accepted CF-26 Option A on 2026-11-15. The Builder completed the scoped architectural source inventory against the approved engineering baselines and recorded mechanism-level dispositions in [Cross-Baseline Inherited Mechanism Compatibility Inventory](reports/INHERITED_MECHANISM_SOURCE_COMPATIBILITY_AUDIT_2026-11-11.md), with the corresponding completion status in matrix §26.
+
+### 35.1 Baselines and scope
+
+The inventory compares:
+- PR #171 reviewed package HEAD `b05434758ad4fe72815503f89bd5d2990ccb658b`;
+- PR #172 accepted investigation engineering-evidence baseline `1273ddbcd0087d189e01388ded2d362fb1e058d2`;
+- PR #97 donor branch HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+
+PR #171 and PR #172 have identical Git blob identities across the scoped C++ source/header/test paths. The comparison with PR #97 covers 209 unique paths under `core/cpp/src/`, `core/cpp/include/jarvis/core/` and `core/cpp/tests/`: 81 identical, 85 modified and 43 donor-only. The report includes the exact path/blob manifest.
+
+This is a complete file/blob census for those directories and revisions, not a claim that every repository path, historical branch, external consumer, runtime binary or deployed artifact has been audited. Test files are inventoried as source evidence; no tests or builds were executed during this documentation pass.
+
+### 35.2 Architectural dispositions
+
+The inventory retains existing cognitive capabilities where their role is compatible, adapts provisional or insufficiently evidenced mechanisms, and replaces specific semantics that conflict with accepted architecture:
+
+- **Preserve and adapt:** event-journal persistence/replay; perception, representation, knowledge and reasoning; prediction lifecycle; developmental association/strategy learning; affective appraisal; action/outcome feedback; developmental world as a controlled training/test substrate; evolution/parameter experimentation; attention, reflection, self-model and causal modelling.
+- **Adapt:** experience-memory indexing; contextual prediction matching; source reliability; numeric thresholds and learning-rate parameterization; affective input semantics/calibration; action execution evidence; world-observation boundaries.
+- **Replace:** first-eligible goal selection as a general cognitive selector and its independent strategy-context coupling; semantic last-write-wins belief revision.
+- **Defer:** detailed social/agent representation to its owned specification; do not claim it is implemented.
+- **Retire:** no whole mechanism is retired on the current evidence because no mechanism has been shown redundant with verified replacement coverage.
+
+These are mechanism-level dispositions, not blanket approval of source files. In particular, donor code is not accepted as-is merely because it exists or has associated tests.
+
+### 35.3 Remaining CF-26 work and authority boundary
+
+The scoped inventory is complete. CF-26 remains open until the owned remediation/evaluation specifications are completed and independently challenged. The Architecture & Engineering Builder owns the specifications for versioned belief revision, goal/intent selection and context identity, evidence reliability and numeric parameter governance, affective appraisal calibration, prediction-context resolution, action/developmental-world evidence contracts, and learning/evolution integration boundaries.
+
+Those specifications must remain within the accepted BFA-C01–BFA-C14 decisions. Any proposal changing cognitive authority, foundational scope, governance, mandatory subsystem status or high-impact learning authority must return to the Project Director. BFA-C01–BFA-C14 remain accepted as recorded in PR #173 comment #6894239520.
+
+This inventory does not accept the whole architecture, close CF-27, satisfy independent review, authorize Stage A, runtime implementation, runtime test execution, technology selection, merge, draft exit or deployment. The architecture remains subject to independent review and exact-revision Project Director acceptance.
+
 **End of architecture completion addendum.**
