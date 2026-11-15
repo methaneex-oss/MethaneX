@@ -521,6 +521,7 @@ The following table is the required traceability map. Section references identif
 |---|---|---|---|
 | Social/Agent Representation Specification | Architecture & Engineering Builder | Claim taxonomy, ownership map, provenance/temporal semantics, contradiction and privacy/security contracts, verification scenarios | Independent challenge; Project Director approval for scope/authority changes |
 | Legacy rule/mechanism source audit and remediation specification | Architecture & Engineering Builder | Bounded PR #97 donor audit completed for reliability, numeric thresholds, goal selection/context and belief overwrite; extend to additional source baselines only where the inventory shows a real gap, then define remediation and objective tests | Independent challenge; Project Director disposition for reserved changes |
+| Fixed learning-rate parameterization | Architecture & Engineering Builder | Treat the audited weighted coefficients and 0.05–0.95 clamp as provisional engineered parameters, not acquired behaviour; specify objective, scope, owner, version, sensitivity, transfer, adaptation and regression evaluation, and explicit consequences before adoption | Independent technical challenge; Project Director approval if the change alters foundational learning authority or scope |
 | CF-26 compatibility assessment | Architecture & Engineering Builder | Bounded donor audit completed; per-mechanism remediation specifications and evidence against ownership, epistemic, developmental, integration, failure and verification obligations remain | Project Director decision where reserved authority is affected |
 | CF-27 decision ledger | Project Director owns decisions; Architecture & Engineering Builder maintains record | Exact proposal/revision, alternatives, rationale, consequences, dependencies and accept/reject/revise status | Project Director acceptance; Independent Reviewer may challenge traceability |
 | CF-01–CF-27 traceability maintenance | Architecture & Engineering Builder | Section-level map synchronized to every architecture revision | Independent exact-revision recheck |
@@ -582,6 +583,7 @@ The exact source evidence and line-level findings are recorded in [Inherited Mec
 | Source reliability | KnowledgeModel averages incoming reliability metadata; correctness-based score_source has no call site in the 14 inspected production cognitive files and appears in a unit test. Defaults include 0.5 and replay fallback 0.7. | Adapt; not calibrated source trust. |
 | Confidence/threshold concern | No single global confidence cutoff found. Action-score, uncertainty/risk, similarity, retention and minimum-strength thresholds are distinct configurable/default parameters. | Provisional engineering parameters only, each with objective-specific evaluation and ownership. |
 | Goal selection | CognitiveCycle falls back to eligible.front(); planning and decision paths also bind strategy context to eligible.front() independently of selected intent. | Replace as general selector; correct context binding; any safe fallback must be explicit external policy. |
+| Fixed learning-rate equation | developmental_learning.cpp uses a weighted update equation with fixed coefficients and a 0.05–0.95 clamp. | Provisional engineered schedule only; evaluate sensitivity, transfer and adaptation under an owned, versioned objective. Do not represent coefficients as acquired behaviour. |
 | Belief overwrite | Brain belief map replaces the existing value before marking dispute; action-status belief is unconditionally replaced. WorldModel preserves some conflicting incoming facts but not a complete versioned claim history. | Replace with versioned, provenance-bearing claim revision and full alternative preservation. |
 
 **CF-26 status:** PARTIALLY ASSESSED. The named inherited patterns are now source-assessed for the PR #97 donor revision. The complete cross-branch/source-lineage inventory, per-mechanism remediation specifications and implementation tests remain later work. No code is changed or authorized.
@@ -615,12 +617,13 @@ The matrix update itself advances the PR #173 branch. The resulting matrix blob 
 
 ### 25.2 Source compatibility disposition
 
-The bounded donor audit is complete for the four named inherited patterns. Its conclusions are:
+The bounded donor audit identifies four inherited rule patterns plus a fixed learning-rate parameterization. The source report records all five; the matrix summary and deferred register track the learning-rate parameterization separately so it cannot disappear from CF-26 remediation. Its conclusions are:
 
 1. Source reliability is an average of caller-supplied reliability metadata in the production assimilation path, not a calibrated source-trust estimate; the correctness-scoring method was not found called in the inspected production files.
 2. No single global confidence cutoff was found. Action-score, uncertainty/risk, similarity, retention and minimum-strength thresholds are distinct parameters with different semantics.
 3. First-eligible selection is both a fallback and a context-coupling shortcut; strategy context can be bound to eligible.front() rather than the selected intent.
 4. The authoritative belief map overwrites an existing value before setting a disputed flag; action-status beliefs are unconditionally replaced. WorldModel conflict retention is partial, not a complete versioned claim ledger.
+5. The fixed weighted learning-rate equation and clamp are engineered parameterization, not learned dynamics; sensitivity, transfer and adaptation evaluation remain required before adoption.
 
 CF-26 is therefore **PARTIALLY ASSESSED**, not closed: the identified donor patterns have source evidence and dispositions, but cross-branch lineage, complete mechanism-by-mechanism compatibility and remediation specifications remain open. The audit does not authorize runtime changes.
 
