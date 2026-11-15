@@ -58,7 +58,7 @@ jobs:
           git fetch --no-tags --depth=1 origin c4c9158437ffa6a4915b1b7b1b83e7e8867d9e72
           git fetch --no-tags --depth=1 origin ea64607ef94f142a6142a013e119a7225bc95c1c
           git fetch --no-tags --depth=1 origin 0811a59e46bf934e32e794f90e4e7d18d4e2bd97
-          git fetch --no-tags --depth=1 origin 9502989ffae91c00ba0a8568ab5296925fa9f27b
+          git fetch --no-tags --depth=1 origin d0e8df405e0b54f6866a3cd7c5efa3f213d792bb
           python3 - <<'PY'
           from pathlib import Path
           import hashlib, json, os, subprocess
@@ -79,8 +79,8 @@ jobs:
               ("docs/architecture/03_BRAIN_FOUNDATION_ARCHITECTURE_COMPLETION_AND_DECISION_MATRIX_2026-11-11.md [current completion matrix; BFA-C01–BFA-C14 accepted by the Project Director]", "c4c9158437ffa6a4915b1b7b1b83e7e8867d9e72", "docs/architecture/03_BRAIN_FOUNDATION_ARCHITECTURE_COMPLETION_AND_DECISION_MATRIX_2026-11-11.md"),
               ("docs/architecture/reports/INHERITED_MECHANISM_SOURCE_COMPATIBILITY_AUDIT_2026-11-11.md [bounded source compatibility audit]", "c4c9158437ffa6a4915b1b7b1b83e7e8867d9e72", "docs/architecture/reports/INHERITED_MECHANISM_SOURCE_COMPATIBILITY_AUDIT_2026-11-11.md"),
               ("docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md [accepted baseline]", "0811a59e46bf934e32e794f90e4e7d18d4e2bd97", "docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md"),
-              ("docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md [current corrected proposal]", "9502989ffae91c00ba0a8568ab5296925fa9f27b", "docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md"),
-              ("docs/architecture/specifications/reviews/01_BRAIN_MECHANISM_SPECIFICATION_F02_F03_CORRECTIONS_2026-11-11.md [correction rationale; not reviewer verdict]", "9502989ffae91c00ba0a8568ab5296925fa9f27b", "docs/architecture/specifications/reviews/01_BRAIN_MECHANISM_SPECIFICATION_F02_F03_CORRECTIONS_2026-11-11.md"),
+              ("docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md [current corrected proposal]", "d0e8df405e0b54f6866a3cd7c5efa3f213d792bb", "docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md"),
+              ("docs/architecture/specifications/reviews/01_BRAIN_MECHANISM_SPECIFICATION_F02_F03_CORRECTIONS_2026-11-11.md [correction rationale; not reviewer verdict]", "d0e8df405e0b54f6866a3cd7c5efa3f213d792bb", "docs/architecture/specifications/reviews/01_BRAIN_MECHANISM_SPECIFICATION_F02_F03_CORRECTIONS_2026-11-11.md"),
           ]
           chunks, manifest = [], []
           for label, commit, path in docs:
