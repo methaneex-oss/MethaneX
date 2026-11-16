@@ -58,7 +58,7 @@ A topic is not complete merely because it is named, listed as a future capabilit
 | CF-23 | Developmental stages | Partial | Define bootstrap, early learning, capability growth and mature/advanced scope without age-based assumptions | Stages describe capability evidence, not hardcoded personality or a fixed timetable |
 | CF-24 | Failure and degraded operation | Partial | Define responsibility-local failure, uncertainty escalation, recovery and safe suspension | Partial failure is visible and contained; it does not silently corrupt unrelated cognition |
 | CF-25 | Verification and evidence | Partial | Map every capability to positive, negative, transfer, persistence and regression evidence | No capability claim without repeatable evidence and explicit limits |
-| CF-26 | Existing mechanism disposition | CROSS-BASELINE INVENTORY COMPLETE; REMEDIATION OPEN | Exact PR #171/PR #172 engineering baseline and PR #97 donor inventory completed across 209 core C++ source/header/test paths (81 identical, 85 modified, 43 donor-only); mechanism dispositions and owned follow-up specifications recorded in the expanded compatibility report | Existing code is candidate evidence/material, not an architectural constraint or automatic discard; runtime adoption still requires remediation evidence and authorization |
+| CF-26 | Existing mechanism disposition | INVENTORY COMPLETE; SEVEN REMEDIATION/EVALUATION SPECIFICATIONS AUTHORED; INDEPENDENT CHALLENGE PENDING; CF-26 OPEN | Exact PR #171/PR #172 engineering baseline and PR #97 donor inventory completed across 209 scoped core C++ source/header/test paths; 14 mechanism families dispositioned and crosswalked to CF-01–CF-27; seven detailed specifications are in [CF-26 Remediation and Evaluation Specifications](specifications/CF26_INHERITED_MECHANISM_REMEDIATION_AND_EVALUATION_SPECIFICATIONS_2026-11-16.md) | Specifications are planning contracts, not implementation or runtime evidence; independent challenge and Project Director disposition of any reserved change remain required |
 | CF-27 | Architecture decision governance | Open | Separate settled foundational decisions from implementation decisions and reserved Project Director approvals | No hidden decisions migrate into implementation specifications |
 
 ## 4. Integrated responsibility and authority model
@@ -520,7 +520,7 @@ The following table is the required traceability map. Section references identif
 | Deferred work | Accountable delivery owner | Minimum deliverable | Gate |
 |---|---|---|---|
 | Social/Agent Representation Specification | Architecture & Engineering Builder | Claim taxonomy, ownership map, provenance/temporal semantics, contradiction and privacy/security contracts, verification scenarios | Independent challenge; Project Director approval for scope/authority changes |
-| Cross-baseline inherited-mechanism compatibility and remediation specifications | Architecture & Engineering Builder | Exact PR #171/PR #172 engineering baseline versus PR #97 donor census completed for 209 core C++ source/header/test paths; 14 mechanism families dispositioned in the expanded report; deliver the seven owned remediation/evaluation specifications and objective tests | Independent challenge; Project Director disposition for reserved changes |
+| Cross-baseline inherited-mechanism compatibility and remediation specifications | Architecture & Engineering Builder | Exact PR #171/PR #172 engineering baseline versus PR #97 donor census completed for 209 scoped core C++ source/header/test paths; 14 mechanism families dispositioned and crosswalked; seven architecture-level remediation/evaluation specifications authored in [CF-26 specification package](specifications/CF26_INHERITED_MECHANISM_REMEDIATION_AND_EVALUATION_SPECIFICATIONS_2026-11-16.md); objective runtime tests remain separately unauthorized | Independent challenge; Project Director disposition for reserved changes |
 | Fixed learning-rate parameterization | Architecture & Engineering Builder | Treat the audited weighted coefficients and 0.05–0.95 clamp as provisional engineered parameters, not acquired behaviour; specify objective, scope, owner, version, sensitivity, transfer, adaptation and regression evaluation, and explicit consequences before adoption | Independent technical challenge; Project Director approval if the change alters foundational learning authority or scope |
 | CF-26 compatibility assessment | Architecture & Engineering Builder | Cross-baseline file/blob census and mechanism-family dispositions completed for the exact approved source revisions; per-mechanism remediation/evaluation specifications and evidence against ownership, epistemic, developmental, integration, failure and verification obligations remain | Project Director decision where reserved authority is affected |
 | CF-27 decision ledger | Project Director owns decisions; Architecture & Engineering Builder maintains record | Exact proposal/revision, alternatives, rationale, consequences, dependencies and accept/reject/revise status | Project Director acceptance; Independent Reviewer may challenge traceability |
@@ -693,6 +693,53 @@ Each specification must include parent architectural decisions, ownership, prove
 
 ### 26.4 Current CF-26 status
 
-**Scoped cross-baseline inventory: COMPLETE. Mechanism remediation/evaluation specifications: OPEN. CF-26 overall: OPEN.**
+**Scoped cross-baseline inventory: COMPLETE. Seven architecture-level remediation/evaluation specifications: AUTHORED; independent challenge: PENDING. CF-26 overall: OPEN until the exact-revision independent challenge and required Project Director disposition are complete.**
 
-The report's test-source references describe intended assertions only. No build or runtime tests were executed during this documentation-only pass. Independent challenge of the exact revised PR #173 revision remains required. BFA-C01–BFA-C14 remain accepted as recorded in PR #173 comment #6894239520. No merge, draft exit, Stage A, runtime implementation, technology selection, runtime test or deployment is authorized.
+The report's test-source references describe intended assertions only. No build or runtime tests were executed during this documentation-only pass. The seven architecture-level specifications are authored in [CF-26 Remediation and Evaluation Specifications](specifications/CF26_INHERITED_MECHANISM_REMEDIATION_AND_EVALUATION_SPECIFICATIONS_2026-11-16.md); independent challenge of that package and the exact revised PR #173 revision remains required. BFA-C01–BFA-C14 remain accepted as recorded in PR #173 comment #6894239520. No merge, draft exit, Stage A, runtime implementation, technology selection, runtime test or deployment is authorized.
+
+
+## 27. CF-27 exact-revision decision and authority ledger
+
+**Ledger purpose:** record the proposal/revision, explicit Project Director disposition, downstream constraints and remaining gate for every architecture-level decision currently in scope. This ledger distinguishes an accepted decision from a Builder recommendation, a specification deliverable and an unresolved approval. A reviewer recommendation, document entry or implementation convenience is never Project Director approval.
+
+**Ledger revision:** this section is part of PR #173 branch `architecture/brain-foundation-planning-20261103`; the exact post-write PR HEAD and matrix blob must be re-fetched and recorded in the subsequent Builder handoff. The ledger must be refreshed whenever a decision, accepted baseline or architecture revision changes.
+
+### 27.1 Explicit Project Director decisions
+
+| Decision | Exact decision evidence | Disposition | Downstream constraint / remaining gate |
+|---|---|---|---|
+| BFA-C01–BFA-C14 | Project Director PR #173 comment [#6894239520](https://github.com/methaneex-oss/MethaneX/pull/173#issuecomment-6894239520), dated 2026-11-15; decision applied to matrix at the recorded revision `f8dd67fc866242d29298ffc6a03a8782a4e6982c` | **ACCEPTED as written** | Settled architecture constraints. Does not accept the whole architecture, close CF-26/CF-27, clear independent review or authorize implementation. Any material change returns to the Project Director. |
+| CF-26 Option A | Project Director CF-26 Option A execution record, PR #173 comment [#6899575912](https://github.com/methaneex-oss/MethaneX/pull/173#issuecomment-6899575912), dated 2026-11-15 | **ACCEPTED and applied** | Complete the bounded cross-baseline inventory first, then produce owned remediation/evaluation specifications. Does not reopen BFA-C01–C14 or authorize runtime changes. |
+
+### 27.2 Disposition of the fourteen architecture questions
+
+The following maps the fourteen questions in architecture §13 to the controlling accepted decision or the owned specification. “Covered by accepted decision” means the foundational direction is settled; it does not mean the detailed mechanism is implemented.
+
+| Question | Architecture disposition | Authority / owner | Status |
+|---|---|---|---|
+| Q1 — atomic owner transitions vs asynchronous propagation | Coherent atomic commit within each authoritative owner; versioned asynchronous cross-owner propagation with stale/reconciliation states | BFA-C13; each state owner, Coordination and Continuity/state stewardship; Architecture & Engineering Builder owns later mechanism detail | Foundational direction accepted; mechanism detail remains specification work |
+| Q2 — bounded active workspace | Task-scoped activation of references/derived work; source owners remain authoritative | BFA-C02; Attention/workspace owner | Foundational direction accepted |
+| Q3 — epistemic distinctions | Canonical 15-class minimum taxonomy with typed extensions and provenance-preserving lifecycle | BFA-C03; Continuity/state stewardship owns taxonomy, domain owners own semantic content | Foundational direction accepted; compatible taxonomy changes follow §17.0 |
+| Q4 — essential reasoning forms | Foundational deduction, qualified induction, abduction/hypothesis generation, constraint reasoning and comparison; advanced depth staged | BFA-C05; Reasoning responsibility | Foundational direction accepted |
+| Q5 — conflicting beliefs | Preserve scoped competing claims and evidence; evaluate source, time, context and independence; abstain where unresolved | BFA-C03/BFA-C05; Belief stewardship; CF-26 specification 1 | Architecture constraint accepted; versioned revision contract specified, independent challenge pending |
+| Q6 — safe online learning | Bounded reversible candidates, explicit eligibility/risk assessment, evaluation, monitoring and governance for high-impact changes | BFA-C06; Learning/adaptation and Governance; CF-26 specification 7 | Foundational direction accepted; detailed contract specified, independent challenge pending |
+| Q7 — minimum self-model | Evidence-qualified estimates of capability, uncertainty, resources, commitments, failures and correction effectiveness | BFA-C09; Metacognitive responsibility | Foundational direction accepted |
+| Q8 — minimum affective appraisal | Contextual, revisable appraisal; advanced sophistication acquired; no fixed emotional/behavioural mapping | BFA-C08; Affective appraisal; CF-26 specification 4 | Foundational direction accepted; calibration contract specified, independent challenge pending |
+| Q9 — SYS-06 justification | SYS-06 remains optional/unresolved; Brain must function without it; any later proposal needs a separate contract and Director decision | BFA-C11; Project Director retains reserved authority | Optionality accepted; making SYS-06 mandatory remains unapproved |
+| Q10 — experience-acquired goals | Candidate goals may arise from interpreted experience and internal conditions; no fixed trigger-to-goal rule | BFA-C07; Goals/valuation/planning | Foundational direction accepted |
+| Q11 — transfer/generalization evidence | Require original-context evidence, relevant variation, held-out related cases, counterexamples, persistence and regression scope | BFA-C14; capability owner and independent evaluator | Evidence principle accepted; each capability claim still requires its own evidence package |
+| Q12 — pre-embodiment operation | Foundational Brain can operate with supplied observations/outcomes and known limits; SYS-08 supplies substrate; intent remains separate from authorization/execution | BFA-C10 and BFA-C12; SYS-01/SYS-08 and governance/action owners | Foundational boundary accepted |
+| Q13 — preserve/adapt/replace inherited mechanisms | Complete scoped cross-baseline inventory, then produce seven owned remediation/evaluation specifications; no blanket source approval | CF-26 Option A; Architecture & Engineering Builder | Inventory complete; seven specifications authored; independent challenge pending |
+| Q14 — decisions requiring Director approval | Apply architecture §30 reserved-decision list; no silence, reviewer recommendation or implementation convenience substitutes for approval | Project Director is decision authority; Architecture & Engineering Builder maintains ledger | Authority rule established; any reserved change remains pending until explicit decision |
+
+### 27.3 Open approvals and closure status
+
+| Item | Current status | What closes it |
+|---|---|---|
+| Independent review of the exact current PR #173 revision and this ledger | OPEN | Independent assessment with exact target SHA, exact document blobs, full artifact/provenance and finding-by-finding recheck |
+| Project Director acceptance of the complete Brain Foundation Architecture | OPEN | Explicit Project Director acceptance of the exact independently reviewed revision |
+| CF-26 | OPEN | Independent challenge of the 209-path inventory, 14 mechanism dispositions, CF crosswalk and seven specification package; Project Director disposition for any reserved change |
+| CF-27 | LEDGER POPULATED; FINAL GATE OPEN | Independent confirmation that each decision is traceable and no reserved decision is inferred; Project Director disposition of the exact final architecture revision |
+| Runtime implementation, Stage A, runtime tests, technology selection, merge, draft exit and deployment | NOT AUTHORIZED | Separate explicit Project Director authorization; none is granted by this ledger |
+
+**No implied approval:** the seven CF-26 specifications are planning contracts only. Their authorship does not authorize implementation, execution of tests, technology selection or activation of any mechanism. BFA-C01–BFA-C14 and CF-26 Option A remain unchanged.
