@@ -76,8 +76,8 @@ jobs:
           # Prior reviewer reports, Builder responses and general PR discussion remain excluded.
           governance_records = []
           for comment_id, label in [
-              (6894239520, "Project Director decision record: BFA-C01 through BFA-C14"),
-              (6899575912, "Project Director decision record: CF-26 Option A")
+              (6894239520, "Builder-authored provenance record of Project Director decision: BFA-C01 through BFA-C14"),
+              (6899575912, "Builder-authored execution record of Project Director decision: CF-26 Option A")
           ]:
               req = urllib.request.Request(
                   f"https://api.github.com/repos/methaneex-oss/MethaneX/issues/comments/{comment_id}",
@@ -113,7 +113,7 @@ jobs:
                   "prior reviewer reports and verdicts",
                   "conversation history and Project Director commentary outside the two exact cited decision records"
               ],
-              "purpose": "Blind assessment of the architecture, completion matrix, cross-baseline compatibility inventory, CF-26 remediation/evaluation specifications and CF-27 decision ledger against the accepted baselines. The two exact governing Project Director decisions cited by the target are supplied as authoritative inputs; prior reviewer findings and Builder responses are not disclosed."
+              "purpose": "Blind assessment of the architecture, completion matrix, cross-baseline compatibility inventory, CF-26 remediation/evaluation specifications and CF-27 decision ledger against the accepted baselines. The two exact Builder-authored repository records of Project Director decisions cited by the target are supplied as governance provenance inputs; their author and timestamp are included so the reviewer can distinguish the recorded decision from its transcription. Prior reviewer findings and Builder responses are not disclosed."
           }, indent=2))
           PY
 
@@ -138,7 +138,7 @@ jobs:
           Treat PR #171 as the accepted whole-system architecture baseline and PR #172 as the accepted foundational capability investigation. Assess whether the PR #173 architecture and completion matrix are complete, internally coherent, compatible with those baselines, and sufficient to guide later mechanism specifications without prematurely choosing implementation details.
 
           Apply the governing principle: ENGINEER THE MECHANISMS; LET BEHAVIOR BE ACQUIRED THROUGH EXPERIENCE. Challenge any hidden hardcoding of learned beliefs, goals, motivation, preferences, affective reactions, strategies or behaviour. Do not mistake naming a responsibility for specifying its authority, state, lifecycle, interactions, failure semantics or verification obligations.
-          Treat the two supplied, exact Project Director decision records as authoritative only for their stated scope. Do not infer whole-architecture acceptance, implementation authorization or any decision beyond what those records explicitly accept.
+          Treat the two supplied, exact Builder-authored provenance records as evidence of the Project Director decisions they transcribe, subject to their explicit scope and visible authorship. Do not misstate the repository-comment author as the Project Director. Do not infer whole-architecture acceptance, implementation authorization or any decision beyond what those records explicitly accept.
 
           Independently examine at minimum:
           1. Coverage of every foundational cognitive responsibility and whether any responsibility is missing, duplicated, ownerless or ambiguously owned.
