@@ -59,7 +59,7 @@ A topic is not complete merely because it is named, listed as a future capabilit
 | CF-24 | Failure and degraded operation | Partial | Define responsibility-local failure, uncertainty escalation, recovery and safe suspension | Partial failure is visible and contained; it does not silently corrupt unrelated cognition |
 | CF-25 | Verification and evidence | Partial | Map every capability to positive, negative, transfer, persistence and regression evidence | No capability claim without repeatable evidence and explicit limits |
 | CF-26 | Existing mechanism disposition | INVENTORY COMPLETE; SEVEN REMEDIATION/EVALUATION SPECIFICATIONS AUTHORED; INDEPENDENT CHALLENGE PENDING; CF-26 OPEN | Exact PR #171/PR #172 engineering baseline and PR #97 donor inventory completed across 209 scoped core C++ source/header/test paths; 14 mechanism families dispositioned and crosswalked to CF-01–CF-27; seven detailed specifications are in [CF-26 Remediation and Evaluation Specifications](specifications/CF26_INHERITED_MECHANISM_REMEDIATION_AND_EVALUATION_SPECIFICATIONS_2026-11-16.md) | Specifications are planning contracts, not implementation or runtime evidence; independent challenge and Project Director disposition of any reserved change remain required |
-| CF-27 | Architecture decision governance | Open | Separate settled foundational decisions from implementation decisions and reserved Project Director approvals | No hidden decisions migrate into implementation specifications |
+| CF-27 | Architecture decision governance | EXACT-REVISION LEDGER POPULATED; INDEPENDENT RECHECK AND FINAL PROJECT DIRECTOR GATE OPEN | §27 records BFA-C01–BFA-C14 and CF-26 Option A provenance, maps Q1–Q14 to accepted decisions/specification owners, and separates settled constraints from pending approvals | No new reserved decision is inferred; whole-architecture acceptance remains a separate exact-revision Director decision |
 
 ## 4. Integrated responsibility and authority model
 
@@ -451,7 +451,7 @@ The Brain Foundation Architecture is complete only when:
 4. Add a traceability table mapping each foundational requirement and accepted baseline item to exact architecture sections.
 5. Run a contradiction and omission review across PR #171, PR #172, PR #173 and this completion artifact.
 6. Produce a concise change log and exact revision manifest.
-7. Submit the exact completed revision for blind independent review. The reviewer must not be given the Builder's desired verdict.
+7. Submit the exact completed revision for blind independent review. **Process-integrity requirement (not an architectural invariant):** the reviewer must not be given the Builder's desired verdict.
 8. Correct findings, then obtain a fresh independent recheck.
 9. Present only the exact reviewed revision and unresolved decision list to the Project Director for final acceptance.
 
