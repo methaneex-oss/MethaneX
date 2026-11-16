@@ -61,6 +61,31 @@ Disposition meanings:
 | Social/agent representation | PR #171/PR #172 architecture and PR #173 CF-17/§31; no complete dedicated mechanism established by this scoped source inventory | **DEFER as an owned specification; do not claim implemented** | The architecture's minimum claim-ownership contract remains authoritative. Detailed social/agent representation belongs to the separately owned specification; absence of a dedicated implementation in this inventory is not grounds to invent one or retire the requirement. |
 | Mechanism retirement | Complete scoped file/blob census plus the mechanism findings above | **No RETIRE disposition justified yet** | No unique mechanism was shown to be wholly redundant or to have a fully verified replacement. Where semantics conflict, replace the specific contract (e.g. belief overwrite), not necessarily the entire source module. Retirement requires explicit dependency and replacement-coverage evidence. |
 
+
+### 3.1 Targeted source evidence anchors
+
+The following 1-based line ranges are direct inspection anchors at the exact PR #97 donor revision `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`. Each row supplies the source blob SHA so a reviewer can reproduce the evidence independently. These are targeted anchors for the dispositions above, not a claim that the listed lines exhaust every use site in the repository.
+
+| Mechanism finding | Exact donor source path | Blob SHA | Relevant lines | What the lines establish |
+|---|---|---|---:|---|
+| Event journal append and replay/reconstruction | `core/cpp/src/memory.cpp` | `ab42bba1d32d6f48d091787491c72294a4a55bb5` | 33–35 | Journal initialization, persisted append, ordered replay and reconstruction of continuity/metadata |
+| Prediction experience index and duplicate append risk | `core/cpp/include/jarvis/core/experience_memory.hpp` | `28cce354eb9db7e8ca292746fd14649debb7ab04` | 28–38 | Prediction identity is indexed by sequence, while each call appends to the per-key sequence vector |
+| Contextual prediction first-match selection | `core/cpp/src/brain_prediction_context.cpp` | `b3ceff150f3fe8223dc3f76f4c298ac264d72dae` | 68–72 | Generalized candidates are obtained and `matches.front()` supplies the selected context |
+| Caller-supplied source reliability averaging | `core/cpp/src/knowledge.cpp` | `21de8abbcd4426cb4ead70cb089e7d7c4ed0e81a` | 8–19 | Incoming reliability metadata is clamped and averaged into the source metric |
+| Reliability fallback and affective signal consumption | `core/cpp/src/brain.cpp` | `dec9e5442b3ca4b81a7879855c6146b2619934cc` | 245–271 | Action-outcome reliability falls back through evidence/reliability metadata to a fixed 0.5 default and is consumed as signal confidence |
+| General first-eligible goal fallback | `core/cpp/src/cognitive_cycle.cpp` | `f191dd610d6cbe1621756c35e7c13af2054a7266` | 118–137 | Goal selection returns the first eligible candidate when no explicit selection resolves it |
+| Independent first-eligible strategy-context coupling | `core/cpp/src/brain_affective_planning.cpp` | `2a9406257c23f3a66a64071842be7d6448799406` | 96–107 | Affective planning derives context from the first eligible goal independently of the selected intent |
+| Fixed learning-rate equation and clamp | `core/cpp/src/developmental_learning.cpp` | `dbf5f43271dfa0a3c57236e2faa82eb88d15490d` | 250–269 | Learning rate is a fixed weighted combination of error/reward/salience/novelty/uncertainty, clamped to 0.05–0.95 and scaled by reliability |
+| Inherited affective parameter defaults and transforms | `core/cpp/include/jarvis/core/affective_learning.hpp` | `fa06043dc481336ba544247f365d37f5476a0651` | 13–17, 60–91 | Affective weights have fixed initial values and are applied by deterministic transforms in the inherited model |
+| Fixed execution-status reliability values | `core/cpp/src/brain_action_execution.cpp` | `3b66bafb438cd28790e6f25611b96c86f1eff05c` | 62–95 | Execution status maps to 0.75/0.25/0.0 and is persisted separately from evidence reliability |
+| Belief/world-model conflict replacement | `core/cpp/src/world_model.cpp` | `5b68e8fe37d99732557237e347ae02234a3de172` | 11–33 | Existing facts are updated and disputed evidence is recorded; a higher-confidence incoming fact can replace the current fact |
+| Developmental-world observation boundary | `core/cpp/include/jarvis/core/developmental_environment.hpp` | `913c8cca2a03499249b834a890812c57b9aa4b1a` | 14–16, 67–75 | Brain receives observations rather than transition functions; failed execution does not itself create consequence evidence |
+| Representation provenance and confidence initialization | `core/cpp/src/representation.cpp` | `054bd9ecee3ef3da83dd405dc5785464d874fa21` | 28–76 | Confidence is read from event metadata or modality-specific defaults; evidence spans retain source and event sequence |
+| Reasoning premise handling | `core/cpp/src/reasoning.cpp` | `18bf2facc9f95c6bd2e8d9a559a0e5b1c5ae06e1` | 31–45 | Reasoning consistency and inference operate over the supplied belief-premise vector |
+| Bounded evolution experiment recording | `core/cpp/src/evolution_controller.cpp` | `4e77ec2e5daa09a964132ca486b8c5ee1cebf2f5` | 15–48 | Candidate experiment evidence is validated and appended to the evolution history with replay-aware persistence handling |
+
+**Interpretation limit:** these anchors demonstrate the cited inherited mechanisms and their concrete code locations. They do not prove that the donor code is approved for adoption, that every consumer was audited, or that any later implementation has been corrected. The architecture and seven CF-26 specifications govern the required future treatment; runtime remediation remains separately unauthorized.
+
 ## 4. CF-01–CF-27 coverage crosswalk for mechanism dispositions
 
 This crosswalk connects each mechanism family in §3 to the architectural capability obligations it informs. It is a traceability index, not a claim that the mechanisms are implemented, compatible as-is, or sufficient to close a CF obligation. A CF obligation may depend on several mechanism families, and a family may affect several obligations. The authoritative capability status remains in PR #173's completion matrix §3 and §20.
