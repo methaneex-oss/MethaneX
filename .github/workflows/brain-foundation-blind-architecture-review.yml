@@ -80,15 +80,15 @@ jobs:
           matrix = doc_contents["docs/architecture/03_BRAIN_FOUNDATION_ARCHITECTURE_COMPLETION_AND_DECISION_MATRIX_2026-11-11.md"]
           specs = doc_contents["docs/architecture/specifications/CF26_INHERITED_MECHANISM_REMEDIATION_AND_EVALUATION_SPECIFICATIONS_2026-11-16.md"]
           path_rows = [line for line in audit.splitlines()
-                       if re.match(r"^\\| `core/cpp/(?:src|include/jarvis/core|tests)/.+` \\|", line)]
+                       if re.match(r"^\| `core/cpp/(?:src|include/jarvis/core|tests)/.+` \|", line)]
           lineage_counts = {
               "IDENTICAL": sum(line.endswith("| IDENTICAL |") for line in path_rows),
               "MODIFIED": sum(line.endswith("| MODIFIED |") for line in path_rows),
               "DONOR-ONLY": sum(line.endswith("| DONOR-ONLY |") for line in path_rows)
           }
-          cf_rows = [line for line in matrix.splitlines() if re.match(r"^\\| CF-\\d{2} \\|", line)]
-          q_rows = [line for line in matrix.splitlines() if re.match(r"^\\| Q\\d+ —", line)]
-          spec_heads = re.findall(r"^## [3-9]\\. Specification [1-7] —", specs, flags=re.MULTILINE)
+          cf_rows = [line for line in matrix.splitlines() if re.match(r"^\| CF-\d{2} \|", line)]
+          q_rows = [line for line in matrix.splitlines() if re.match(r"^\| Q\d+ —", line)]
+          spec_heads = re.findall(r"^## [3-9]\. Specification [1-7] —", specs, flags=re.MULTILINE)
           packet_validation = {
               "inventory_path_rows": len(path_rows),
               "unique_inventory_paths": len({line.split("|", 2)[1].strip() for line in path_rows}),
@@ -106,7 +106,7 @@ jobs:
               lineage_counts != packet_validation["expected"]["lineage_counts"] or
               len(cf_rows) != 27 or len(q_rows) != 14 or len(spec_heads) != 7):
               raise SystemExit("Blind-review packet failed evidence-count validation: " + json.dumps(packet_validation))
-          chunks.append("\\n\\n===== MACHINE-VERIFIED PACKET COUNTS\\n\\n" +
+          chunks.append("\n\n===== MACHINE-VERIFIED PACKET COUNTS\n\n" +
                         json.dumps(packet_validation, indent=2))
 
           # Include only the two exact Project Director decision records cited by the target documents.
