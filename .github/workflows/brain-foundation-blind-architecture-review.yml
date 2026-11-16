@@ -15,6 +15,7 @@ on:
 
 permissions:
   contents: read
+  issues: read
 
 concurrency:
   group: brain-foundation-blind-review-${{ inputs.target_revision }}
@@ -36,6 +37,7 @@ jobs:
         env:
           TARGET_SHA: ${{ inputs.target_revision }}
           ASSESSMENT_LABEL: ${{ inputs.assessment_label }}
+          GITHUB_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
@@ -70,6 +72,33 @@ jobs:
               manifest.append({"label": label, "path": path, "source_commit": commit,
                                "sha256": hashlib.sha256(content.encode()).hexdigest(),
                                "characters": len(content)})
+          # Include only the two exact Project Director decision records cited by the target documents.
+          # Prior reviewer reports, Builder responses and general PR discussion remain excluded.
+          governance_records = []
+          for comment_id, label in [
+              (6894239520, "Project Director decision record: BFA-C01 through BFA-C14"),
+              (6899575912, "Project Director decision record: CF-26 Option A")
+          ]:
+              req = urllib.request.Request(
+                  f"https://api.github.com/repos/methaneex-oss/MethaneX/issues/comments/{comment_id}",
+                  headers={"Authorization": "Bearer " + os.environ["GITHUB_TOKEN"],
+                           "Accept": "application/vnd.github+json",
+                           "X-GitHub-Api-Version": "2022-11-28"})
+              with urllib.request.urlopen(req, timeout=30) as response:
+                  record = json.loads(response.read().decode())
+              if record.get("id") != comment_id or not isinstance(record.get("body"), str):
+                  raise SystemExit(f"Unable to verify governing decision record {comment_id}.")
+              body = record["body"]
+              chunks.append(f"\\n\\n===== {label}\\nCOMMENT ID: {comment_id}\\nAUTHOR: {record.get('user', {}).get('login')}\\nCREATED AT: {record.get('created_at')}\\n=====\\n\\n{body}")
+              governance_records.append({
+                  "comment_id": comment_id,
+                  "label": label,
+                  "author": record.get("user", {}).get("login"),
+                  "created_at": record.get("created_at"),
+                  "body_sha256": hashlib.sha256(body.encode()).hexdigest(),
+                  "characters": len(body)
+              })
+
           packet = "".join(chunks)
           (out / "blind_review_packet.md").write_text(packet)
           (out / "packet_manifest.json").write_text(json.dumps({
@@ -77,13 +106,14 @@ jobs:
               "baseline_pr171": "b05434758ad4fe72815503f89bd5d2990ccb658b",
               "accepted_pr172": "d7d676b79dbf3269f7fd3ebdb4363a6df19f255d",
               "documents": manifest,
+              "governance_records": governance_records,
               "exclusions": [
-                  "PR description and comments",
+                  "PR description and non-governing discussion comments",
                   "Builder correction/review-response record",
                   "prior reviewer reports and verdicts",
-                  "conversation history and Project Director commentary"
+                  "conversation history and Project Director commentary outside the two exact cited decision records"
               ],
-              "purpose": "Blind assessment of the architecture, completion matrix, cross-baseline compatibility inventory, CF-26 remediation/evaluation specifications and CF-27 decision ledger against the accepted baselines; no prior reviewer findings are disclosed."
+              "purpose": "Blind assessment of the architecture, completion matrix, cross-baseline compatibility inventory, CF-26 remediation/evaluation specifications and CF-27 decision ledger against the accepted baselines. The two exact governing Project Director decisions cited by the target are supplied as authoritative inputs; prior reviewer findings and Builder responses are not disclosed."
           }, indent=2))
           PY
 
@@ -108,6 +138,7 @@ jobs:
           Treat PR #171 as the accepted whole-system architecture baseline and PR #172 as the accepted foundational capability investigation. Assess whether the PR #173 architecture and completion matrix are complete, internally coherent, compatible with those baselines, and sufficient to guide later mechanism specifications without prematurely choosing implementation details.
 
           Apply the governing principle: ENGINEER THE MECHANISMS; LET BEHAVIOR BE ACQUIRED THROUGH EXPERIENCE. Challenge any hidden hardcoding of learned beliefs, goals, motivation, preferences, affective reactions, strategies or behaviour. Do not mistake naming a responsibility for specifying its authority, state, lifecycle, interactions, failure semantics or verification obligations.
+          Treat the two supplied, exact Project Director decision records as authoritative only for their stated scope. Do not infer whole-architecture acceptance, implementation authorization or any decision beyond what those records explicitly accept.
 
           Independently examine at minimum:
           1. Coverage of every foundational cognitive responsibility and whether any responsibility is missing, duplicated, ownerless or ambiguously owned.
