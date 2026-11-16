@@ -743,3 +743,33 @@ The following maps the fourteen questions in architecture §13 to the controllin
 | Runtime implementation, Stage A, runtime tests, technology selection, merge, draft exit and deployment | NOT AUTHORIZED | Separate explicit Project Director authorization; none is granted by this ledger |
 
 **No implied approval:** the seven CF-26 specifications are planning contracts only. Their authorship does not authorize implementation, execution of tests, technology selection or activation of any mechanism. BFA-C01–BFA-C14 and CF-26 Option A remain unchanged.
+
+## 28. Independent assessment #43822364205 — finding reconciliation (2026-11-16)
+
+### 28.1 Assessment provenance and limitation
+
+The assessment reviewed PR #173 target `84dacbb5b3aae924a6a363f6fcdfeb1b4b2b2664` and returned **NOT CLEAR**. Its workflow execution succeeded, but its workflow ref was `main`, not the dedicated review ref `review/cf26-option-a-independent-check-20261115`. Its packet included the architecture, completion matrix and PR #171/PR #172 baseline documents, but omitted the seven CF-26 specifications, the cross-baseline compatibility inventory and the two exact Builder-authored decision-provenance records. The verdict is therefore valid evidence about the supplied architecture/matrix packet at that target SHA, but not a complete Option A closeout review.
+
+### 28.2 Finding adjudication
+
+The Builder re-read the exact target architecture and adjudicates the findings as follows:
+
+| Finding | Adjudication | Exact response |
+|---|---|---|
+| BLOCKER-01 / MAJOR-01 — dependency invalidation ownership | Partially substantiated. Coordination and owner publication were already named; consumer discovery, commit-race handling and failed-propagation behavior needed stronger contract language. | Architecture §16.1 and §18.2 now define source-owner version publication, Coordination dependency tracking/propagation, consumer-side authoritative version discovery, pre-use and pre-commit validation, and stale/blocked handling on unavailable or failed validation. |
+| BLOCKER-02 / MAJOR-02 — contradiction lifecycle | Partially substantiated. Belief stewardship already owned contradiction notices and §17.2 already defined evidence criteria/abstention; the conflict-record owner and detector-to-owner handoff were implicit. | Architecture §16.1 and §17.2 now assign canonical conflict records and resolution/abstention lifecycle to Belief stewardship. Any responsibility may emit a versioned conflict candidate; only Belief stewardship commits semantic belief transitions. |
+| BLOCKER-03 / MAJOR-03 — workspace freshness | Partially substantiated. Source versions and consumer validation were required, but Attention/workspace's duty and failure/race behavior were insufficiently explicit. | Architecture §16.1 and §18.2 now explicitly require workspace validation before activation/reuse, authoritative source-version discovery and fail-closed stale handling. |
+| MAJOR-05 — high-impact learning governance | Partially substantiated. External approval and deferral were already required, but SYS-11 ownership and request/timeout semantics were not explicit. | Architecture §21.1.1 now assigns policy/approval ownership to SYS-11 governance/assurance, requires a versioned decision and evidence-bearing request, and forbids implicit activation on silence, timeout, denial or ambiguity. |
+| MAJOR-06 — metacognitive signal contract | Partially substantiated. Bounded authority was already specified; minimum signal semantics and owner-published versioned inputs were not. | Architecture §§4.8 and 16.1 now define the minimum owner-published signal, access constraints, version-scoped requests and receiving-owner commit authority. |
+| HARDCODE-01–04 — fixed parameters, reliability defaults, goal fallback and belief overwrite | Partially substantiated. Semantic last-write-wins and fixed behavioural mappings were already prohibited; permitted use of provisional defaults and fallback labelling needed sharper constraints. | Architecture §32 now prohibits uncalibrated inherited defaults from serving as calibrated cognitive evidence/policy and requires SYS-11-owned policy, typed provenance and expiry/revalidation for any operational goal fallback. The versioned belief-revision requirement remains mandatory. |
+| BLOCKER-04 — CF-26/CF-27 gates open | Correct status observation, not a missing mechanism contract. | No status is upgraded. CF-26 and CF-27 remain OPEN pending independent challenge and exact-revision Project Director gate. |
+
+### 28.3 Current exact revision and next gate
+
+- PR #173 remains open, draft and unmerged; no implementation or Stage A authorization is granted.
+- Architecture correction commit: `80561b413f077b23c79f0ebd2101d884268b87d0`; architecture blob: `afc32af1489d0e5da76ca13716accbfbe9277738`.
+- This matrix update must be followed by a fresh fetch of the live PR #173 HEAD and both document blob identities; the resulting commit is the only valid next review target.
+- The dedicated review workflow is `.github/workflows/brain-foundation-blind-architecture-review.yml` on `review/cf26-option-a-independent-check-20261115`. It includes the architecture, matrix, cross-baseline inventory, seven CF-26 specifications, accepted PR #171/PR #172 baselines and the two exact decision-provenance records. Dispatch must select that workflow ref and the exact refreshed PR HEAD, not `main`.
+- A new independent CLEAR is not Project Director acceptance. CF-26/CF-27 and whole-architecture acceptance remain open until their separate gates are satisfied.
+
+**Scope:** this is a planning/documentation correction only. No runtime code, tests, technology selection, deployment, merge or draft-state transition is authorized.
