@@ -512,7 +512,7 @@ The following table is the required traceability map. Section references identif
 | CF-23 | Developmental stages | §§3.6, 8–9 | §§21, 24 |
 | CF-24 | Failure and degraded operation | §§6.4, 10 | §§23–24 |
 | CF-25 | Verification and evidence | §§11, 24 | §§12, 17 |
-| CF-26 | Existing mechanism disposition | §§29, 32, 34 | §33 and the bounded source audit report; compatibility remains unaccepted as-is |
+| CF-26 | Existing mechanism disposition | §§29, 32, 34–35 | §§26.1–26.4 and the expanded compatibility report; scoped inventory COMPLETE, seven remediation/evaluation specifications OPEN, CF-26 overall OPEN; no runtime tests executed |
 | CF-27 | Architecture decision governance | §§30, 33 | §§15, 17; BFA-C01–BFA-C14 accepted by Project Director on 2026-11-15; other decision items remain governed by their own gates |
 
 ## 21. Accountable deferred-specification register
@@ -530,9 +530,11 @@ The following table is the required traceability map. Section references identif
 
 ## 22. Project Director disposition register — BFA-C01–BFA-C14 accepted
 
-**Director disposition:** ACCEPT BFA-C01–BFA-C14 as written. Recorded in PR #173 conversation comment #6894239520 on 2026-11-15.
+**Director disposition:** ACCEPT BFA-C01–BFA-C14 as written. Recorded in the Project Director's PR #173 conversation comment [#6894239520](https://github.com/methaneex-oss/MethaneX/pull/173#issuecomment-6894239520) on 2026-11-15.
 
 **Exact revision considered:** PR #173 HEAD `f8dd67fc866242d29298ffc6a03a8782a4e6982c`; matrix blob `4f297f7da7c8d9c8b0312bcc32dba353bcc0be66`.
+
+**Decision evidence and scope:** the cited comment records the Project Director's explicit ACCEPT decision for BFA-C01–BFA-C14 and enumerates the accepted boundaries. The blind CF-26 packet intentionally excluded PR comments and conversation history, so its reviewer could not independently inspect that external decision record. That packet limitation is not evidence that the decision was absent. The decision remains limited to those fourteen items; it does not accept the whole architecture, close CF-26/CF-27, clear independent review or authorize implementation.
 
 The acceptance settles only the fourteen listed foundational architecture decisions. It does not accept the whole architecture, substitute for independent review or blind assessment, close CF-26, authorize merge, Stage A, runtime implementation, technology selection, deployment or branch-history changes.
 

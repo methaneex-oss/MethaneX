@@ -20,7 +20,7 @@ PR #171 and PR #172 engineering source trees have identical Git blob identities 
 - `core/cpp/include/jarvis/core/`
 - `core/cpp/tests/`
 
-The union contains **209 paths**: **81 identical**, **85 modified**, and **43 donor-only** between the shared PR #171/PR #172 engineering baseline and PR #97. There are no baseline-only paths in this scoped union. This is a complete path/blob census for those three directories at those exact revisions. It is not a claim that every repository directory, historical branch, external consumer, binary, dataset or deployment artifact was audited.
+The union contains **209 paths**: **166 shared-baseline paths** (the PR #171 and PR #172 engineering trees have identical blobs for these paths) plus **43 PR #97 donor-only paths**. Within the 166 shared paths, the PR #97 donor has **81 identical** and **85 modified** blobs; together with the 43 donor-only paths this yields the 209-path union. There are no baseline-only paths in this scoped union. The exact source manifest in §8 contains one row for each of the 209 union paths; the number 166 describes the shared baseline subset, not the manifest total. This is a complete path/blob census for those three directories at those exact revisions. It is not a claim that every repository directory, historical branch, external consumer, binary, dataset or deployment artifact was audited.
 
 **No runtime authorization:** this is architecture/source-planning work only. No source code, tests, workflows, dependencies, schemas, runtime state, technology choices, branch history, merge state or deployment were changed or authorized by this report.
 
@@ -61,7 +61,32 @@ Disposition meanings:
 | Social/agent representation | PR #171/PR #172 architecture and PR #173 CF-17/§31; no complete dedicated mechanism established by this scoped source inventory | **DEFER as an owned specification; do not claim implemented** | The architecture's minimum claim-ownership contract remains authoritative. Detailed social/agent representation belongs to the separately owned specification; absence of a dedicated implementation in this inventory is not grounds to invent one or retire the requirement. |
 | Mechanism retirement | Complete scoped file/blob census plus the mechanism findings above | **No RETIRE disposition justified yet** | No unique mechanism was shown to be wholly redundant or to have a fully verified replacement. Where semantics conflict, replace the specific contract (e.g. belief overwrite), not necessarily the entire source module. Retirement requires explicit dependency and replacement-coverage evidence. |
 
-## 4. Required remediation/evaluation specifications
+## 4. CF-01–CF-27 coverage crosswalk for mechanism dispositions
+
+This crosswalk connects each mechanism family in §3 to the architectural capability obligations it informs. It is a traceability index, not a claim that the mechanisms are implemented, compatible as-is, or sufficient to close a CF obligation. A CF obligation may depend on several mechanism families, and a family may affect several obligations. The authoritative capability status remains in PR #173's completion matrix §3 and §20.
+
+| Mechanism family in §3 | Related CF obligations | Why the relationship matters |
+|---|---|---|
+| Cognitive event journal, memory persistence and replay | CF-01, CF-04, CF-05, CF-10, CF-14, CF-21, CF-24, CF-25 | Continuity, episodic retention, belief lineage, learning persistence, self-monitoring, substrate recovery and evidence reconstruction |
+| Perception, representation, knowledge and reasoning | CF-02, CF-03, CF-05, CF-08, CF-16, CF-17, CF-22 | Acquisition boundaries, grounded representation, qualified knowledge, inference, symbolic input, agent claims and information access |
+| Episodic and prediction-linked experience memory | CF-04, CF-07, CF-09, CF-10, CF-25 | Experience retention, prediction linkage, simulation separation, learning evidence and replay verification |
+| Prediction and contextual matching | CF-05, CF-07, CF-08, CF-09, CF-10, CF-15, CF-25 | Evidence-linked prediction resolution, reasoning context, simulation separation, learning feedback, coordination and verification |
+| Source reliability and evidence confidence | CF-02, CF-03, CF-05, CF-07, CF-08, CF-25 | Acquisition provenance, grounding, belief qualification, prediction matching, inference and calibration evidence |
+| Numeric thresholds and fixed learning-rate schedule | CF-10, CF-12, CF-13, CF-14, CF-23, CF-25 | Learning eligibility, affective calibration, decision consequences, metacognitive estimates, developmental progression and evaluation |
+| Goal model, intent selection and strategy context | CF-11, CF-12, CF-13, CF-19, CF-22 | Goal origin/competition, valuation, planning/decision, internal-condition inputs and governance constraints |
+| Belief and world-model revision | CF-05, CF-07, CF-08, CF-10, CF-15, CF-24, CF-25 | Claim lifecycle, prediction assumptions, inference, learning updates, dependency coordination, recovery and verification |
+| Developmental association and strategy learning | CF-08, CF-10, CF-11, CF-12, CF-13, CF-23, CF-25 | Reasoning strategy, adaptation, goal/valuation effects, decision influence, developmental evidence and regression |
+| Affective state and appraisal learning | CF-10, CF-11, CF-12, CF-13, CF-19, CF-20, CF-23, CF-25 | Experience-dependent calibration, goal relevance, affective appraisal, decision influence, internal conditions, optional modulation boundary and developmental verification |
+| Action execution and consequence feedback | CF-18, CF-22, CF-24, CF-25 | Intention/execution/outcome separation, governance, failure semantics and evidence |
+| Developmental environment and world | CF-02, CF-10, CF-18, CF-23, CF-24, CF-25 | Observation boundary, controlled learning, action feedback, developmental stages, failure injection and reproducibility |
+| Evolution and parameter experimentation | CF-10, CF-14, CF-23, CF-24, CF-25, CF-27 | Adaptation governance, self-monitoring, developmental claims, rollback/recovery, evaluation and decision authority |
+| Attention, reflection, self-model and causal modelling | CF-06, CF-08, CF-09, CF-14, CF-15, CF-24, CF-25 | Context selection, inference, simulation, metacognition, coordination, failure response and verification |
+| Social/agent representation | CF-03, CF-05, CF-16, CF-17, CF-22 | Grounded entity claims, attributed beliefs, language reports, social modelling and privacy/security |
+| Mechanism retirement and replacement coverage | CF-10, CF-15, CF-24, CF-25, CF-26, CF-27 | Safe adaptation, dependency impact, recovery, replacement evidence, compatibility disposition and reserved approval |
+
+**Coverage check:** the union of the CF references in this table is CF-01 through CF-27. The table deliberately does not label any CF item CLEAR: the mapping identifies relevant evidence families, while closure still requires the owned remediation/evaluation specifications, objective evidence and the independent/Project Director gates in the completion matrix. In particular, CF-26 remains OPEN overall and CF-27 retains its separate decision-governance gate.
+
+## 5. Required remediation/evaluation specifications
 
 The following are the next owned specification outputs. They do not authorize runtime implementation.
 
@@ -77,7 +102,7 @@ The following are the next owned specification outputs. They do not authorize ru
 
 Project Director approval remains required if a specification changes foundational cognitive authority, scope, governance, mandatory subsystem status or high-impact learning authority. Routine algorithm and data-structure choices remain delegated only within the accepted architecture.
 
-## 5. Disposition of the Director's decision and previously accepted decisions
+## 6. Disposition of the Director's decision and previously accepted decisions
 
 CF-26 Option A is the controlling instruction for this inventory. It does not supersede, reopen or narrow the Project Director's prior acceptance of BFA-C01–BFA-C14 (PR #173 comment #6894239520). Those fourteen decisions remain accepted as written.
 
@@ -85,7 +110,7 @@ This report does not accept the whole Brain Foundation Architecture, close CF-26
 
 CF-27 remains a separate decision-governance obligation: the Builder maintains the exact-revision ledger; the Project Director retains the reserved decision authority. No new reserved architecture decision is inferred from Option A.
 
-## 6. Completion status and limitations
+## 7. Completion status and limitations
 
 **Completed by this report:**
 - exact three-revision source-baseline identification;
@@ -103,9 +128,9 @@ CF-27 remains a separate decision-governance obligation: the Builder maintains t
 
 The inventory is exhaustive at the file/blob level for the stated paths and revisions, not a proof that every function in every source file has been exhaustively verified. Any mechanism not directly evidenced here remains unapproved for reuse merely by association with an inventoried file. No tests/builds were executed during this documentation-only pass.
 
-## 7. Exact source manifest
+## 8. Exact source manifest
 
-The baseline columns for PR #171 and PR #172's engineering-evidence revision are identical for every path in this scoped union. The manifest therefore records one shared baseline blob and the PR #97 donor blob. An em dash means the path did not exist at that revision.
+The baseline columns for PR #171 and PR #172's engineering-evidence revision are identical for every path in this scoped union. The manifest therefore records one shared baseline blob and the PR #97 donor blob. The manifest has 209 path rows: 166 rows have a shared-baseline blob and 43 rows are donor-only. An em dash means the path did not exist at that revision. The donor lineage column partitions the 209 rows into 81 IDENTICAL, 85 MODIFIED and 43 DONOR-ONLY; these categories sum to 209.
 
 | Path | PR #171 / PR #172 evidence blob | PR #97 donor blob | Lineage |
 |---|---|---|---|
@@ -319,7 +344,7 @@ The baseline columns for PR #171 and PR #172's engineering-evidence revision are
 | `core/cpp/tests/world_self_model_phase4_suite.cpp` | f375f6e36c16fbb038d2ce3ba5c4cd18adf1860c | f375f6e36c16fbb038d2ce3ba5c4cd18adf1860c | IDENTICAL |
 | `core/cpp/tests/world_state_suite.cpp` | bc6539059a8cc856572f3b01358085f27b1673a9 | bc6539059a8cc856572f3b01358085f27b1673a9 | IDENTICAL |
 
-## 8. Exact architecture revision reviewed for this inventory
+## 9. Exact architecture revision reviewed for this inventory
 
 - PR #173 HEAD: `a8be408921afaa7a417cc972e891155bbcd11d19`.
 - Architecture blob: `50b5c6e471df797d490b314c542e8d2bdce71c42`.
