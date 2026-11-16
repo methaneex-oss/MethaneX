@@ -32,6 +32,22 @@ All seven specifications inherit the following requirements:
 
 A later implementation specification must identify concrete owners, dependencies, state transitions, failure modes and observable evidence without weakening these invariants.
 
+### 2.1 Specification-by-specification contract coverage
+
+The shared requirements above are normative for every specification; they are not optional package-level aspirations. The following map identifies where each specification applies them and where its local failure/recovery contract is stated.
+
+| Specification | Semantic owner and state boundary | Proposal/commit and provenance | Failure/recovery and invalidation | Independent evaluation |
+|---|---|---|---|---|
+| 1 — Belief/claim revision | §3.2 | §§3.2–3.3; claim identity, epistemic status, evidence lineage and owner commit | §3.4; preserve prior version, unresolved alternatives and dependent invalidation | §3.5; independent evaluator under shared rule 9 |
+| 2 — Goal/intent/context | §4.2 | §§4.2–4.3; candidate versus selected intent and exact context identity | §4.4; stale candidate, unavailable evidence and unresolved selection | §4.5; independent evaluator under shared rule 9 |
+| 3 — Evidence/numeric governance | §5.2–5.3 | §5.3; parameter owner, register version, provenance and scoped decision consequence | §5.5; retain uncalibrated status, reject stale/invalid register updates and restore prior version | §§5.4–5.5; independent calibration/evaluation required |
+| 4 — Affective appraisal | §6.2 | §§6.2–6.3; appraisal owner, contextual evidence and candidate parameter change | §6.5; retain prior appraisal/parameter state and invalidate dependent appraisals/plans | §§6.4–6.5; independent contextual calibration and regression evaluation |
+| 5 — Prediction-context resolution | §7.2–7.3 | §7.3; candidate outcome versus owner-accepted prediction resolution | §7.5; preserve unresolved status and re-evaluate stale/ambiguous candidates | §§7.4–7.5; independent matching and replay evaluation |
+| 6 — Action/developmental-world evidence | §8.2–8.3 | §§8.2–8.3; proposal, authorization, execution, observation and consequence remain distinct | §8.5; unavailable/partial evidence remains unresolved and replay cannot invent outcomes | §§8.4–8.5; independent evidence-boundary and leakage evaluation |
+| 7 — Learning/evolution integration | §§9.2–9.3 | §§9.3–9.4; candidate proposal, owner commit and external high-impact approval | §9.5; rollback, invalidation and owner-local recovery | §9.6; evaluator independent of candidate author/activator |
+
+A specification does not satisfy a row merely by naming a responsibility: the cited sections and the shared contract together define the normative boundary. If an independent evaluator, required source evidence or recovery dependency is unavailable, the result remains unverified/deferred rather than being inferred from author review.
+
 ---
 
 ## 3. Specification 1 — Versioned belief and claim revision
@@ -153,6 +169,12 @@ Evaluate independent outcome scoring versus caller metadata; source-domain misma
 
 **Reject the mechanism** if caller metadata alone becomes trusted source truth, if an unscoped numeric threshold establishes belief/action authority, or if a fixed schedule is presented as experience-acquired learning.
 
+### 5.5 Failure, recovery and independent calibration decision
+
+The parameter-register owner rejects an update if its identity, scope, units, provenance, version, objective or decision consequence is missing or inconsistent. Missing calibration evidence leaves the parameter explicitly UNCALIBRATED; it is not replaced by a neutral/trusted default. If evidence is stale, correlated beyond the declared assumptions, unavailable or outside the registered domain, the affected measurement remains unknown or provisional and dependent decisions must not consume it as calibrated. A failed parameter update leaves the prior accepted version intact; rollback restores that version and publishes its dependencies for invalidation/re-evaluation. Replay must not count the same evidence twice.
+
+The semantic owner of the affected parameter makes the technical calibration-status decision only after an independent evaluator has assessed the declared calibration, sensitivity, transfer, drift and regression evidence. There is no universal numeric calibration threshold. A parameter remains provisional when the evidence does not meet its own predeclared objective and error-cost criteria. Any high-impact activation additionally requires the separate SYS-11 approval contract in architecture §21.1.1; that approval does not certify calibration.
+
 ---
 
 ## 6. Specification 4 — Affective appraisal semantics and calibration
@@ -189,6 +211,12 @@ Evaluate new contexts, repeated contexts, contradictory outcomes, mixed signific
 
 **Reject the mechanism** if fixed weights are treated as universal emotional meaning, if one outcome directly prescribes appraisal, or if appraisal silently grants permission or determines action.
 
+### 6.5 Failure, recovery and independent calibration decision
+
+If relevant goal, context, internal-condition or source evidence is missing, stale, withdrawn or inaccessible, the appraisal is marked incomplete/uncertain and must not be filled by a fixed emotional interpretation. A failed or rejected candidate calibration leaves the prior accepted parameter version and appraisal lineage intact. If rollback or recalibration changes a parameter, dependent appraisals, priorities and plans are marked stale through Coordination and re-evaluated before consequential reuse. Replay must preserve the original evidence and must not apply one experience twice.
+
+The affective appraisal owner decides whether its parameter is technically calibrated only against the predeclared objective and the contextual, held-out, counterexample and regression evidence in §§6.3–6.4, with independent evaluation separate from candidate authorship/activation. No universal numeric threshold is imposed. Insufficient or unavailable evaluation leaves the parameter provisional. SYS-11 approval is additionally required only for high-impact activation; it does not replace technical calibration.
+
 ---
 
 ## 7. Specification 5 — Prediction-context candidate resolution
@@ -221,6 +249,12 @@ Evaluate reordered candidate lists; multiple equally plausible matches; no match
 **Acceptance criteria:** candidate ordering does not change semantic resolution; ambiguity remains representable; outcome matching respects event time, scope and identity; duplicate delivery is idempotent; prediction error is generated only from accepted matched outcomes; revisions invalidate dependent learning/decisions.
 
 **Reject the mechanism** if `front()`, insertion order or similarity alone resolves a prediction without sufficient evidence.
+
+### 7.5 Failure, recovery and independent resolution evaluation
+
+If a candidate outcome, source record or required dependency is unavailable, corrupt, stale or withdrawn, the prediction remains unresolved/partially matched; the mechanism must not substitute the nearest remaining candidate or infer a negative outcome. Concurrent candidate resolutions are evaluated against the current prediction-owner version; a stale proposal is re-evaluated, not silently rebased. A failed resolution leaves the prior prediction version and candidate evidence intact. Duplicate delivery/replay is idempotent, and a later contradictory outcome reopens the resolution only through the prediction owner's versioned lifecycle.
+
+The prediction owner alone commits resolution status. An independent evaluator assesses candidate-order invariance, event-time/context matching, ambiguity preservation and replay/rollback behaviour. If independent evaluation is unavailable, resolution may remain operationally provisional but cannot be claimed as verified capability.
 
 ---
 
@@ -256,6 +290,12 @@ Evaluate denied actions; executor timeout/crash; partial execution; successful e
 **Acceptance criteria:** proposal, authorization, execution and verified consequence remain separate; failure evidence updates only the execution path unless an independently observed consequence supports more; simulator-only evidence remains labelled and isolated; provenance/replay are complete; no action or learning activation bypasses governance.
 
 **Reject the mechanism** if execution status is treated as world outcome, simulator internals leak as observations, or simulated experience is represented as real-world evidence.
+
+### 8.5 Failure, recovery and independent evidence evaluation
+
+An action proposal is a cognitive candidate only; authorization and execution remain owned by the governance/action path. Missing authorization, execution acknowledgement, observation or verified consequence must retain its distinct unknown/denied/failed/unobserved status. If the executor, observer or developmental world is unavailable, the episode records the gap and does not synthesize a world consequence. Partial execution and rollback retain their own operational evidence. A later observation may be associated only after identity, event time, context and provenance are revalidated.
+
+The action/world evidence owners preserve the original episode and versions; Learning/adaptation may propose downstream changes only from the evidence actually verified. A failed evidence commit leaves the prior owner state intact; replay is idempotent and simulated records remain labelled/isolated. An evaluator independent of the action author, executor and candidate-learning activator checks authorization separation, observation leakage, outcome provenance and recovery/replay. If the independent evidence path is unavailable, the consequence remains unverified.
 
 ---
 
@@ -305,7 +345,22 @@ Evaluate false-positive eligibility; ambiguous impact classification; low-qualit
 
 ## 10. Cross-specification integration and dependency order
 
-These specifications are not seven isolated components. Their shared contracts must be reconciled in a single end-to-end evaluation. **The numbered trace below is an illustrative evidence path, not a mandatory cognitive pipeline or execution order.** The architecture remains recurrent, branching, concurrent and interruptible: responsibilities may repeat, be skipped when irrelevant, operate in parallel, or be reopened when new evidence or invalidation arrives.
+These specifications are not seven isolated components. Their shared contracts must be reconciled in a single end-to-end evaluation. **The numbered trace below is an illustrative evidence path, not a mandatory cognitive pipeline or execution order.**
+
+### 10.1 Cross-specification dependency and integration contracts
+
+The following are semantic dependencies and invalidation relationships, not a required execution order or serial pipeline. Coordination owns the cross-responsibility dependency/work graph under architecture §18.2; each semantic owner publishes its own version transitions and remains authoritative for its state.
+
+| Upstream evidence/state | Consuming specification/responsibility | Required contract |
+|---|---|---|
+| Retained episodes and retrieved summaries | Reasoning premises; Specs 1 and 5 where relevant | Memory/knowledge supplies provenance-bearing candidates; Reasoning records exact retrieved identities/versions and selection rationale; retrieval does not automatically promote a memory to fact |
+| Versioned claims and conflict status (Spec 1) | Prediction assumptions/resolution (Spec 5); learning candidates (Spec 7) | Prediction and Learning record claim-version dependencies; claim revision/withdrawal invalidates affected predictions and candidates |
+| Source/evidence reliability and parameter register (Spec 3) | Affective calibration (Spec 4), action evidence qualification (Spec 6), learning eligibility (Spec 7) | Consumers preserve quantity semantics and scope; provisional values remain distinguishable from calibrated measurements |
+| Goal/intent identity and context (Spec 2) | Affective appraisal (Spec 4), action proposal (Spec 6), learning impact analysis (Spec 7) | Each consumer records the exact selected goal/context version; a changed selection does not rewrite prior evidence |
+| Verified action/world observations (Spec 6) | Claim revision (Spec 1), prediction resolution (Spec 5), learning (Spec 7) | Execution status alone is not environmental consequence; only owner-accepted, provenance-bearing observations may inform downstream candidates |
+| Accepted adaptation and rollback (Spec 7) | Every affected state owner | Learning records the candidate and rollback; Coordination propagates invalidation; each affected owner validates and repairs its own state |
+
+A dependency becoming stale does not impose a global stop on unrelated cognition. Only work that consumes the affected version is invalidated or suspended. No cross-spec dependency grants one owner permission to commit another owner's semantic state. The architecture remains recurrent, branching, concurrent and interruptible: responsibilities may repeat, be skipped when irrelevant, operate in parallel, or be reopened when new evidence or invalidation arrives.
 
 1. A source observation enters through the acquisition boundary with provenance and uncertainty.
 2. Interpretation/grounding creates candidate representations without promoting them automatically to fact.
