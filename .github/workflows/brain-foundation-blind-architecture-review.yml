@@ -57,6 +57,7 @@ jobs:
               ("PR173 architecture", target, "docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md"),
               ("PR173 completion and decision matrix", target, "docs/architecture/03_BRAIN_FOUNDATION_ARCHITECTURE_COMPLETION_AND_DECISION_MATRIX_2026-11-11.md"),
               ("PR173 cross-baseline inherited mechanism compatibility inventory", target, "docs/architecture/reports/INHERITED_MECHANISM_SOURCE_COMPATIBILITY_AUDIT_2026-11-11.md"),
+              ("PR173 CF-26 inherited-mechanism remediation and evaluation specifications", target, "docs/architecture/specifications/CF26_INHERITED_MECHANISM_REMEDIATION_AND_EVALUATION_SPECIFICATIONS_2026-11-16.md"),
               ("PR171 whole-system architecture foundation", "b05434758ad4fe72815503f89bd5d2990ccb658b", "docs/architecture/00_JARVIS_SYSTEM_ARCHITECTURE_FOUNDATION.md"),
               ("PR171 whole-system anatomy and responsibility map", "b05434758ad4fe72815503f89bd5d2990ccb658b", "docs/architecture/01_JARVIS_WHOLE_SYSTEM_ANATOMY_AND_RESPONSIBILITY_MAP.md"),
               ("Accepted PR172 foundational capability investigation", "d7d676b79dbf3269f7fd3ebdb4363a6df19f255d", "docs/architecture/research/02_BRAIN_FOUNDATIONAL_CAPABILITY_INVESTIGATION_2026-11-03.md"),
@@ -82,7 +83,7 @@ jobs:
                   "prior reviewer reports and verdicts",
                   "conversation history and Project Director commentary"
               ],
-              "purpose": "Blind assessment of the architecture, completion matrix and Builder-produced cross-baseline compatibility inventory against the accepted baselines; no prior reviewer findings are disclosed."
+              "purpose": "Blind assessment of the architecture, completion matrix, cross-baseline compatibility inventory, CF-26 remediation/evaluation specifications and CF-27 decision ledger against the accepted baselines; no prior reviewer findings are disclosed."
           }, indent=2))
           PY
 
@@ -122,6 +123,8 @@ jobs:
           11. Compatibility with PR #171 system responsibilities and PR #172 research conclusions; identify any contradiction, unjustified narrowing or untraceable architectural claim.
           12. Whether implementation-level matters are properly deferred with explicit architectural obligations, rationale and later ownership—or whether deferral hides a foundational gap.
           13. Audit the supplied PR #173 cross-baseline compatibility inventory: verify the exact source revisions and scoped path/blob counts; challenge PRESERVE/ADAPT/REPLACE/DEFER/RETIRE dispositions against the evidence and accepted architecture; identify unsupported claims, omitted mechanism families, and whether remediation specifications have objective closure criteria.
+          14. Independently review all seven CF-26 remediation/evaluation specifications: check ownership, state authority, proposal/commit separation, epistemic and provenance semantics, developmental integrity, failure/recovery, cross-spec integration, objective evaluation criteria and whether any specification silently selects implementation details or violates BFA-C01–BFA-C14.
+          15. Audit the CF-27 exact-revision decision ledger: verify the cited Director decision provenance, distinguish accepted decisions from Builder recommendations, check Q1–Q14 traceability, and identify any reserved decision incorrectly treated as approved.
 
           Be adversarial but fair. Separate a true architecture blocker from a detail properly deferred to mechanism specifications. Do not require arbitrary technical choices where architecture-level contracts are sufficient. Do not treat a passing CI build as evidence of conceptual correctness.
 
@@ -138,6 +141,8 @@ jobs:
           J. Final recheck plan: exact corrections and evidence required before a second independent review.
           K. Confidence, scope limits and any packet evidence that was unavailable.
           L. Cross-baseline compatibility audit: disposition-by-disposition verdict, exact supporting/contradicting evidence, inventory omissions and required corrections.
+          M. CF-26 specification-package review: per-specification verdict, missing contracts, acceptance-criterion quality, cross-spec dependency findings and explicit deferrals.
+          N. CF-27 decision-ledger review: exact provenance, accepted versus pending decisions, authority-boundary consistency and closure gaps.
 
           Verdict standard:
           - CLEAR only if no critical or major architectural blocker remains and all foundational obligations are adequately specified at architecture level.
