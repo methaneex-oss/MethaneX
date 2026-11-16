@@ -86,7 +86,12 @@ jobs:
               "MODIFIED": sum(line.endswith("| MODIFIED |") for line in path_rows),
               "DONOR-ONLY": sum(line.endswith("| DONOR-ONLY |") for line in path_rows)
           }
-          cf_rows = [line for line in matrix.splitlines() if re.match(r"^\| CF-\d{2} \|", line)]
+          trace_start = matrix.find("## 20. Complete CF-01")
+          trace_end = matrix.find("## 21. Accountable deferred", trace_start)
+          if trace_start < 0 or trace_end < 0:
+              raise SystemExit("CF traceability section boundaries are missing from the matrix.")
+          trace_section = matrix[trace_start:trace_end]
+          cf_rows = [line for line in trace_section.splitlines() if re.match(r"^\| CF-\d{2} \|", line)]
           q_rows = [line for line in matrix.splitlines() if re.match(r"^\| Q\d+ —", line)]
           spec_heads = re.findall(r"^## [3-9]\. Specification [1-7] —", specs, flags=re.MULTILINE)
           packet_validation = {
