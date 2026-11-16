@@ -530,7 +530,7 @@ The following table is the required traceability map. Section references identif
 
 ## 22. Project Director disposition register — BFA-C01–BFA-C14 accepted
 
-**Director disposition:** ACCEPT BFA-C01–BFA-C14 as written. Recorded in the Project Director's PR #173 conversation comment [#6894239520](https://github.com/methaneex-oss/MethaneX/pull/173#issuecomment-6894239520) on 2026-11-15.
+**Director disposition:** ACCEPT BFA-C01–BFA-C14 as written. The Project Director's explicit decision was made in the project conversation on 2026-11-15 and transcribed into the repository by the Builder in PR #173 provenance comment [#6894239520](https://github.com/methaneex-oss/MethaneX/pull/173#issuecomment-6894239520). The repository comment is a Builder-authored provenance record, not a comment authored by the Project Director.
 
 **Exact revision considered:** PR #173 HEAD `f8dd67fc866242d29298ffc6a03a8782a4e6982c`; matrix blob `4f297f7da7c8d9c8b0312bcc32dba353bcc0be66`.
 
@@ -708,8 +708,8 @@ The report's test-source references describe intended assertions only. No build 
 
 | Decision | Exact decision evidence | Disposition | Downstream constraint / remaining gate |
 |---|---|---|---|
-| BFA-C01–BFA-C14 | Project Director PR #173 comment [#6894239520](https://github.com/methaneex-oss/MethaneX/pull/173#issuecomment-6894239520), dated 2026-11-15; decision applied to matrix at the recorded revision `f8dd67fc866242d29298ffc6a03a8782a4e6982c` | **ACCEPTED as written** | Settled architecture constraints. Does not accept the whole architecture, close CF-26/CF-27, clear independent review or authorize implementation. Any material change returns to the Project Director. |
-| CF-26 Option A | Project Director CF-26 Option A execution record, PR #173 comment [#6899575912](https://github.com/methaneex-oss/MethaneX/pull/173#issuecomment-6899575912), dated 2026-11-15 | **ACCEPTED and applied** | Complete the bounded cross-baseline inventory first, then produce owned remediation/evaluation specifications. Does not reopen BFA-C01–C14 or authorize runtime changes. |
+| BFA-C01–BFA-C14 | Builder-authored repository provenance comment [#6894239520](https://github.com/methaneex-oss/MethaneX/pull/173#issuecomment-6894239520), transcribing the Project Director's explicit 2026-11-15 conversation decision; decision applied to matrix at the recorded revision `f8dd67fc866242d29298ffc6a03a8782a4e6982c` | **ACCEPTED as written** | Settled architecture constraints. Does not accept the whole architecture, close CF-26/CF-27, clear independent review or authorize implementation. Any material change returns to the Project Director. |
+| CF-26 Option A | Builder-authored PR #173 execution/provenance comment [#6899575912](https://github.com/methaneex-oss/MethaneX/pull/173#issuecomment-6899575912), recording the Project Director's 2026-11-15 Option A choice | **ACCEPTED and applied** | Complete the bounded cross-baseline inventory first, then produce owned remediation/evaluation specifications. Does not reopen BFA-C01–C14 or authorize runtime changes. |
 
 ### 27.2 Disposition of the fourteen architecture questions
 
