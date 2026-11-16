@@ -483,37 +483,37 @@ The completion material is integrated into the main architecture document. The e
 
 ## 20. Complete CF-01–CF-27 architecture traceability
 
-The following table is the required traceability map. Section references identify the substantive architecture contract; the matrix's §3 identifies the domain-level gap/closure obligation. A reference to a later specification is not a claim that its implementation already exists.
+The following table maps each CF obligation to the exact architecture subsection(s) that contain its substantive contract, rather than relying on broad chapter references. The matrix §3 remains the domain-level statement of the gap and completion obligation. Supporting references identify related failure, governance or verification contracts. A reference to a later specification is not a claim that its implementation already exists.
 
-| ID | Domain | Main architecture contract | Supporting matrix/architecture sections |
+| ID | Domain | Primary substantive architecture contract | Supporting contract / verification anchors |
 |---|---|---|---|
-| CF-01 | Cognitive identity and continuity | §4.1 | §§16–18, 23–24 |
-| CF-02 | Experience acquisition boundary | §§4.2, 7 | §§16–18, 23 |
-| CF-03 | Representation and grounding | §4.2 | §§17, 19, 28 |
-| CF-04 | Memory and episodic retention | §4.3 | §§8, 17, 21 |
-| CF-05 | Belief and knowledge stewardship | §4.3 | §§17, 19, 21, 32 |
-| CF-06 | Attention and working context | §4.4 | §§5–6, 18 |
-| CF-07 | Prediction and outcome resolution | §4.5 | §§17, 19, 21 |
-| CF-08 | Reasoning and inference | §4.5 | §§19, 24 |
-| CF-09 | Simulation and imagination | §4.5 | §§17, 19, 23–24 |
-| CF-10 | Learning and adaptation | §4.7 | §§8, 21, 24, 32 |
-| CF-11 | Goals and motivation | §4.6 | §§20, 25 |
-| CF-12 | Affective appraisal | §4.6 | §§20, 25 |
-| CF-13 | Planning and decision | §4.6 | §§17, 20, 23 |
-| CF-14 | Metacognition and self-model | §4.8 | §§22, 24 |
-| CF-15 | Coordination and concurrency | §§3.2, 6 | §§16, 18, 23 |
-| CF-16 | Language and symbolic cognition | §28.1 | §§17, 19, 24 |
-| CF-17 | Social and agent modelling | §31 | §§7, 17, 23, 30 |
-| CF-18 | Action intention and feedback | §§3.7, 7 | §§17, 19, 23 |
-| CF-19 | Internal condition and homeostasis | §§4.6, 7 | §§20, 23 |
-| CF-20 | SYS-06 modulation boundary | §§7, 20 | §§23, 25, 30 |
-| CF-21 | SYS-08 substrate and SYS-01 state authority | §§7, 16 | §§18, 23 |
-| CF-22 | Security, privacy and governance | §§3.7, 7 | §§23, 30–31 |
-| CF-23 | Developmental stages | §§3.6, 8–9 | §§21, 24 |
-| CF-24 | Failure and degraded operation | §§6.4, 10 | §§23–24 |
-| CF-25 | Verification and evidence | §§11, 24 | §§12, 17 |
-| CF-26 | Existing mechanism disposition | §§29, 32, 34–35 | §§26.1–26.4 and the expanded compatibility report; scoped inventory COMPLETE, seven remediation/evaluation specifications OPEN, CF-26 overall OPEN; no runtime tests executed |
-| CF-27 | Architecture decision governance | §§30, 33 | §§15, 17; BFA-C01–BFA-C14 accepted by Project Director on 2026-11-15; other decision items remain governed by their own gates |
+| CF-01 | Cognitive identity and continuity | §4.1 identity/state stewardship; §16.1 Continuity/state stewardship ownership | §17.0 taxonomy/lifecycle change control; §18.2 coherent owner-state commit; §23.1 SYS-01 recovery boundary; §24.1 reconstruction/progression evidence |
+| CF-02 | Experience acquisition boundary | §4.2 interpretation/grounding; §7 SYS-03 acquisition boundary | §16.1 Interpretation/grounding ownership; §18.1 provenance/epistemic exchange; §23.2 access constraints |
+| CF-03 | Representation and grounding | §4.2 candidate referents, events, relations and ambiguity | §17.1 observation-to-interpretation lifecycle; §17.2 contradiction/time; §18.1 provenance and scope; §31 agent-identity hypotheses |
+| CF-04 | Memory and episodic retention | §4.3 memory/knowledge stewardship | §16.1 Memory/knowledge ownership; §17.1 episode and summary transitions; §18.1 derivation lineage; §21.1 consolidation/persistence |
+| CF-05 | Belief and knowledge stewardship | §4.3 belief formation/revision; §16.1 Belief stewardship conflict-record ownership | §17.1 evidence-to-belief and revision transitions; §17.2 contradiction detection handoff/resolution/abstention; §32 semantic last-write-wins prohibition; CF-26 specification 1 |
+| CF-06 | Attention and working context | §4.4 bounded active workspace; §16.1 Attention/workspace freshness ownership | §5.2 dependency/staleness; §18.2 source-version discovery and pre-use/pre-commit validation; §23.3 workspace-pressure/degraded behavior |
+| CF-07 | Prediction and outcome resolution | §4.5 prediction/modeling | §17.1 prediction lifecycle/resolution; §17.2 temporal and delayed evidence; §19 outcome matching/unresolved status; CF-26 specification 5 |
+| CF-08 | Reasoning and inference | §4.5 reasoning/inference | §17.1 inference/evidence lifecycle; §18.1 epistemic exchange; §19 reasoning classes/assumptions/abstention; §24.2 evidence record |
+| CF-09 | Simulation and imagination | §4.5 simulation boundary | §17.1 simulation-to-belief transition; §19 hypothetical-state isolation; §23.3 degraded operation |
+| CF-10 | Learning and adaptation | §4.7 learning/adaptation; §8.1–§8.4 developmental integrity | §21.1/§21.1.1 candidate lifecycle, owner and activation authority; §21.3 risk eligibility; §21.4 transfer/regression; CF-26 specification 7 |
+| CF-11 | Goals and motivation | §4.6 goals/valuation; §20.1 goal origin/lifecycle; §20.2 competition/persistence | §17.1 experience-to-candidate-goal transition; §32 policy-labelled fallback prohibition; CF-26 specification 2 |
+| CF-12 | Affective appraisal | §4.6 affective responsibility; §20.3 minimum contextual appraisal | §21.1.1 parameter/activation governance; §21.2 learning classes; §21.4 calibration/transfer evidence; CF-26 specification 4 |
+| CF-13 | Planning and decision | §3.7 intent/authorization boundary; §4.6 planning/decision ownership | §16.1 Planning/decision authority; §17.1 plan/decision/action-proposal transitions; §19 constraint reasoning; §23.1 governance/action path |
+| CF-14 | Metacognition and self-model | §4.8 bounded metacognitive regulation; §16.1 Metacognition signal contract; §22 self-model | §18.1 versioned exchange; §24.2 independent capability-evidence evaluation |
+| CF-15 | Coordination and concurrency | §3.2 recurrent/concurrent cognition; §3.3 owner-managed state/shared context; §16.1 Coordination ownership | §5.2 dependency/staleness; §6.3 conflicting updates; §6.4 partial failure; §18.1 exchange; §18.2 invalidation/freshness |
+| CF-16 | Language and symbolic cognition | §28.1 language and symbolic cognition boundary | §17 epistemic classes; §19 reasoning/inference; §24.2 grounding and evidence verification |
+| CF-17 | Social and agent modelling | §28.2 minimum social/agent modelling; §31 social/agent ownership contract | §17.2 contradiction/time; §23.2 privacy/access control; §30 reserved scope/authority approval |
+| CF-18 | Action intention and feedback | §3.7 intent/authorization/execution separation; §7 external action boundary | §16.1 Planning/decision ownership; §17.1 proposal/authorization/execution/outcome transitions; §23.1 governance/action path |
+| CF-19 | Internal condition and homeostasis | §4.6 affective/internal-condition boundary; §7 SYS-05 boundary | §20.3 appraisal inputs; §23.1 SYS-05 operational/homeostatic responsibility |
+| CF-20 | SYS-06 modulation boundary | §4.6 SYS-06 boundary; §7 SYS-06 optionality | §23.1 explicit non-dependency/conditional interface; §25 SYS-06 disposition; §30 reserved Director authority |
+| CF-21 | SYS-08 substrate and SYS-01 state authority | §3.3 authoritative cognitive-state ownership; §7 SYS-01/SYS-08 split; §16.1 Continuity/state stewardship | §18.2 owner-state commit/recovery; §23.1 substrate acknowledgement versus semantic validation |
+| CF-22 | Security, privacy and governance | §3.7 action/governance boundary; §7 whole-system boundaries | §23.1 SYS-07/SYS-11 responsibilities; §23.2 access/privacy enforcement; §30 reserved approvals; §31 agent-data privacy |
+| CF-23 | Developmental stages | §3.6 developmental capacity; §3.8 observable/correctable development; §8 learning integrity; §9 staged scope | §21.4 developmental lineage/transfer; §24.1 evidence-based progression |
+| CF-24 | Failure and degraded operation | §6.4 partial failure and recovery; §10 architecture risks | §18.2 stale/failed propagation; §23.3 degraded-operation contracts; §24.1 regression-triggered reassessment |
+| CF-25 | Verification and evidence | §11 capability-level acceptance criteria; §24.1 progression gate; §24.2 verification record | §21.4 transfer/regression evidence; §33 accountable completion evidence |
+| CF-26 | Existing mechanism disposition | §29 compatibility/disposition criteria; §32 inherited-rule constraints; §34 bounded donor findings; §35 Option A inventory | Matrix §§26.1–26.4; cross-baseline compatibility report; seven-specification package; independent challenge and Director gate |
+| CF-27 | Architecture decision governance | §30 reserved Project Director approvals; §33 accountable decision/traceability ownership | Matrix §§15, 17, 22 and 27; exact provenance records; independent exact-revision review and final Director gate |
 
 ## 21. Accountable deferred-specification register
 
@@ -759,6 +759,7 @@ The Builder re-read the exact target architecture and adjudicates the findings a
 | BLOCKER-01 / MAJOR-01 — dependency invalidation ownership | Partially substantiated. Coordination and owner publication were already named; consumer discovery, commit-race handling and failed-propagation behavior needed stronger contract language. | Architecture §16.1 and §18.2 now define source-owner version publication, Coordination dependency tracking/propagation, consumer-side authoritative version discovery, pre-use and pre-commit validation, and stale/blocked handling on unavailable or failed validation. |
 | BLOCKER-02 / MAJOR-02 — contradiction lifecycle | Partially substantiated. Belief stewardship already owned contradiction notices and §17.2 already defined evidence criteria/abstention; the conflict-record owner and detector-to-owner handoff were implicit. | Architecture §16.1 and §17.2 now assign canonical conflict records and resolution/abstention lifecycle to Belief stewardship. Any responsibility may emit a versioned conflict candidate; only Belief stewardship commits semantic belief transitions. |
 | BLOCKER-03 / MAJOR-03 — workspace freshness | Partially substantiated. Source versions and consumer validation were required, but Attention/workspace's duty and failure/race behavior were insufficiently explicit. | Architecture §16.1 and §18.2 now explicitly require workspace validation before activation/reuse, authoritative source-version discovery and fail-closed stale handling. |
+| MAJOR-04 — CF-to-contract traceability | Partially substantiated. The previous §20 mapped CF IDs but some supporting references were broad chapter ranges rather than exact contract subsections. | Matrix §20 is replaced with a CF-01–CF-27 map to exact architecture subsections and named responsibility/transition/verification contracts; broad supporting ranges are removed. | Independent reviewer can follow every CF ID to substantive contract text and distinguish architecture obligations from later specification work. |
 | MAJOR-05 — high-impact learning governance | Partially substantiated. External approval and deferral were already required, but SYS-11 ownership and request/timeout semantics were not explicit. | Architecture §21.1.1 now assigns policy/approval ownership to SYS-11 governance/assurance, requires a versioned decision and evidence-bearing request, and forbids implicit activation on silence, timeout, denial or ambiguity. |
 | MAJOR-06 — metacognitive signal contract | Partially substantiated. Bounded authority was already specified; minimum signal semantics and owner-published versioned inputs were not. | Architecture §§4.8 and 16.1 now define the minimum owner-published signal, access constraints, version-scoped requests and receiving-owner commit authority. |
 | HARDCODE-01–04 — fixed parameters, reliability defaults, goal fallback and belief overwrite | Partially substantiated. Semantic last-write-wins and fixed behavioural mappings were already prohibited; permitted use of provisional defaults and fallback labelling needed sharper constraints. | Architecture §32 now prohibits uncalibrated inherited defaults from serving as calibrated cognitive evidence/policy and requires SYS-11-owned policy, typed provenance and expiry/revalidation for any operational goal fallback. The versioned belief-revision requirement remains mandatory. |
