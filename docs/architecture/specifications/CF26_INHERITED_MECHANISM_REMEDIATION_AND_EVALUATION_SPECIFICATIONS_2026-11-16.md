@@ -305,7 +305,7 @@ Evaluate false-positive eligibility; ambiguous impact classification; low-qualit
 
 ## 10. Cross-specification integration and dependency order
 
-These specifications are not seven isolated components. Their shared contracts must be reconciled in a single end-to-end evaluation:
+These specifications are not seven isolated components. Their shared contracts must be reconciled in a single end-to-end evaluation. **The numbered trace below is an illustrative evidence path, not a mandatory cognitive pipeline or execution order.** The architecture remains recurrent, branching, concurrent and interruptible: responsibilities may repeat, be skipped when irrelevant, operate in parallel, or be reopened when new evidence or invalidation arrives.
 
 1. A source observation enters through the acquisition boundary with provenance and uncertainty.
 2. Interpretation/grounding creates candidate representations without promoting them automatically to fact.
