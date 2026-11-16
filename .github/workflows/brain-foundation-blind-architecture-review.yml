@@ -66,12 +66,49 @@ jobs:
           ]
           out = Path("brain-foundation-blind-review-evidence")
           chunks, manifest = [], []
+          doc_contents = {}
           for label, commit, path in docs:
               content = subprocess.check_output(["git", "show", f"{commit}:{path}"], text=True)
+              doc_contents[path] = content
               chunks.append(f"\n\n===== {label}\nPATH: {path}\nSOURCE COMMIT: {commit}\n=====\n\n{content}")
               manifest.append({"label": label, "path": path, "source_commit": commit,
                                "sha256": hashlib.sha256(content.encode()).hexdigest(),
                                "characters": len(content)})
+          # Validate the supplied evidence packet before asking a model to review it.
+          import re
+          audit = doc_contents["docs/architecture/reports/INHERITED_MECHANISM_SOURCE_COMPATIBILITY_AUDIT_2026-11-11.md"]
+          matrix = doc_contents["docs/architecture/03_BRAIN_FOUNDATION_ARCHITECTURE_COMPLETION_AND_DECISION_MATRIX_2026-11-11.md"]
+          specs = doc_contents["docs/architecture/specifications/CF26_INHERITED_MECHANISM_REMEDIATION_AND_EVALUATION_SPECIFICATIONS_2026-11-16.md"]
+          path_rows = [line for line in audit.splitlines()
+                       if re.match(r"^\\| `core/cpp/(?:src|include/jarvis/core|tests)/.+` \\|", line)]
+          lineage_counts = {
+              "IDENTICAL": sum(line.endswith("| IDENTICAL |") for line in path_rows),
+              "MODIFIED": sum(line.endswith("| MODIFIED |") for line in path_rows),
+              "DONOR-ONLY": sum(line.endswith("| DONOR-ONLY |") for line in path_rows)
+          }
+          cf_rows = [line for line in matrix.splitlines() if re.match(r"^\\| CF-\\d{2} \\|", line)]
+          q_rows = [line for line in matrix.splitlines() if re.match(r"^\\| Q\\d+ —", line)]
+          spec_heads = re.findall(r"^## [3-9]\\. Specification [1-7] —", specs, flags=re.MULTILINE)
+          packet_validation = {
+              "inventory_path_rows": len(path_rows),
+              "unique_inventory_paths": len({line.split("|", 2)[1].strip() for line in path_rows}),
+              "lineage_counts": lineage_counts,
+              "cf_traceability_rows": len(cf_rows),
+              "decision_question_rows": len(q_rows),
+              "cf26_specification_heads": len(spec_heads),
+              "expected": {"inventory_path_rows": 209, "unique_inventory_paths": 209,
+                           "lineage_counts": {"IDENTICAL": 81, "MODIFIED": 85, "DONOR-ONLY": 43},
+                           "cf_traceability_rows": 27, "decision_question_rows": 14,
+                           "cf26_specification_heads": 7}
+          }
+          if (packet_validation["inventory_path_rows"] != 209 or
+              packet_validation["unique_inventory_paths"] != 209 or
+              lineage_counts != packet_validation["expected"]["lineage_counts"] or
+              len(cf_rows) != 27 or len(q_rows) != 14 or len(spec_heads) != 7):
+              raise SystemExit("Blind-review packet failed evidence-count validation: " + json.dumps(packet_validation))
+          chunks.append("\\n\\n===== MACHINE-VERIFIED PACKET COUNTS\\n\\n" +
+                        json.dumps(packet_validation, indent=2))
+
           # Include only the two exact Project Director decision records cited by the target documents.
           # Prior reviewer reports, Builder responses and general PR discussion remain excluded.
           governance_records = []
@@ -106,6 +143,7 @@ jobs:
               "baseline_pr171": "b05434758ad4fe72815503f89bd5d2990ccb658b",
               "accepted_pr172": "d7d676b79dbf3269f7fd3ebdb4363a6df19f255d",
               "documents": manifest,
+              "packet_validation": packet_validation,
               "governance_records": governance_records,
               "exclusions": [
                   "PR description and non-governing discussion comments",
@@ -139,6 +177,8 @@ jobs:
 
           Apply the governing principle: ENGINEER THE MECHANISMS; LET BEHAVIOR BE ACQUIRED THROUGH EXPERIENCE. Challenge any hidden hardcoding of learned beliefs, goals, motivation, preferences, affective reactions, strategies or behaviour. Do not mistake naming a responsibility for specifying its authority, state, lifecycle, interactions, failure semantics or verification obligations.
           Treat the two supplied, exact Builder-authored provenance records as evidence of the Project Director decisions they transcribe, subject to their explicit scope and visible authorship. Do not misstate the repository-comment author as the Project Director. Do not infer whole-architecture acceptance, implementation authorization or any decision beyond what those records explicitly accept.
+
+          The packet contains a machine-verified count block and packet_manifest.json.packet_validation. Treat these values as reproducible preflight evidence and independently recount the full inventory table if challenging it. Do not claim a path-count mismatch from a truncated excerpt or a partial rendering. The distinction between a completed subtask (for example, scoped inventory complete) and an overall gate (for example, CF-26 OPEN pending independent challenge) must be read literally; do not collapse those statuses into a contradiction.
 
           Independently examine at minimum:
           1. Coverage of every foundational cognitive responsibility and whether any responsibility is missing, duplicated, ownerless or ambiguously owned.
