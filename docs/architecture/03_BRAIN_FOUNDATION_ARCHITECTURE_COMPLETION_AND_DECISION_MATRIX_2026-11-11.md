@@ -768,8 +768,9 @@ The Builder re-read the exact target architecture and adjudicates the findings a
 ### 28.3 Current exact revision and next gate
 
 - PR #173 remains open, draft and unmerged; no implementation or Stage A authorization is granted.
-- Architecture correction commit: `80561b413f077b23c79f0ebd2101d884268b87d0`; architecture blob: `afc32af1489d0e5da76ca13716accbfbe9277738`.
-- This matrix update must be followed by a fresh fetch of the live PR #173 HEAD and both document blob identities; the resulting commit is the only valid next review target.
+- Exact PR #173 review target after architecture and matrix reconciliation: `32ab7cd115d8756d000682beb1dd4c3dfce1aaca`.
+- Architecture blob at that target: `afc32af1489d0e5da76ca13716accbfbe9277738`; matrix blob at that target: `fea85814dcc5eb015fe3ca152afa6deeb65787ea`.
+- These identities are a pre-dispatch snapshot. Re-fetch live PR #173 HEAD and both blobs immediately before dispatch; if any identity changes, update the packet target rather than reviewing this stale snapshot.
 - The dedicated review workflow is `.github/workflows/brain-foundation-blind-architecture-review.yml` on `review/cf26-option-a-independent-check-20261115`. It includes the architecture, matrix, cross-baseline inventory, seven CF-26 specifications, accepted PR #171/PR #172 baselines and the two exact decision-provenance records. Dispatch must select that workflow ref and the exact refreshed PR HEAD, not `main`.
 - A new independent CLEAR is not Project Director acceptance. CF-26/CF-27 and whole-architecture acceptance remain open until their separate gates are satisfied.
 
