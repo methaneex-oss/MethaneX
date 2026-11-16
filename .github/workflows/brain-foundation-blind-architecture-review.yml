@@ -52,7 +52,7 @@ jobs:
           mkdir -p brain-foundation-blind-review-evidence
           python3 - <<'PY'
           from pathlib import Path
-          import hashlib, json, os, subprocess
+          import hashlib, json, os, subprocess, urllib.request
 
           target = os.environ["TARGET_SHA"]
           docs = [
@@ -89,7 +89,7 @@ jobs:
               if record.get("id") != comment_id or not isinstance(record.get("body"), str):
                   raise SystemExit(f"Unable to verify governing decision record {comment_id}.")
               body = record["body"]
-              chunks.append(f"\\n\\n===== {label}\\nCOMMENT ID: {comment_id}\\nAUTHOR: {record.get('user', {}).get('login')}\\nCREATED AT: {record.get('created_at')}\\n=====\\n\\n{body}")
+              chunks.append(f"\n\n===== {label}\nCOMMENT ID: {comment_id}\nAUTHOR: {record.get('user', {}).get('login')}\nCREATED AT: {record.get('created_at')}\n=====\n\n{body}")
               governance_records.append({
                   "comment_id": comment_id,
                   "label": label,
