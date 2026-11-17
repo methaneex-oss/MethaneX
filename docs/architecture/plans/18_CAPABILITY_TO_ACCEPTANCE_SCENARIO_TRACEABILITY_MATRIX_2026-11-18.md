@@ -34,7 +34,7 @@ These are planning groupings, not an implementation order or authorization to ac
 |---:|---|---|---|---|
 | 1 | Retain competing interpretations; update relative support without rewriting acquisition | BM-01, BM-02, BM-04 | I1, I2 | Ambiguity + later evidence + immutable acquisition lineage |
 | 2 | Preserve observation/interpretation/belief distinctions through persistence and reconstruction | BM-01, BM-02, BM-03, BM-04, BM-11 | I1, I2 | Persist/reconstruct; provenance and epistemic-status audit |
-| 3 | Classify provider failure as capability failure, not external-event evidence | BM-01, BM-10, BM-11; SYS-08 boundary | I1, I7 | Injected provider failure; event truth remains unresolved |
+| 3 | Classify provider failure as capability failure, not external-event evidence | BM-01, BM-10, BM-11; provider capability boundary (SYS-08 only when substrate/network failure is evidenced) | I1, I7 | Injected provider failure; capability-unavailable status preserved; external-event truth remains unresolved |
 | 4 | Retrieved prior episode materially changes later inference with traceable influence | BM-03, BM-12, BM-02 | I1, I2 | Paired inference with/without relevant memory; lineage comparison |
 | 5 | Retrieved but irrelevant episode does not gain authority from retrieval alone | BM-03, BM-06, BM-12, BM-04 | I2, I4 | Relevant/irrelevant retrieval contrast; no unsupported premise use |
 | 6 | Working-context eviction does not erase durable episodic history | BM-03, BM-06, BM-11 | I1, I4 | Eviction + durable retrieval after reconstruction |
@@ -51,13 +51,13 @@ These are planning groupings, not an implementation order or authorization to ac
 | 17 | Revise/defer/abandon candidate goal when later evidence defeats its premise | BM-08, BM-04, BM-05, BM-11 | I3, I5 | Defeated-premise injection; explicit candidate lifecycle transition |
 | 18 | Governance denial blocks execution while preserving intent and denial as distinct records | BM-08; SYS governance/security/execution owners | I5, I7 | Denial path; intent unchanged and no execution claim |
 | 19 | Reject/rollback candidate that improves acquisition context but regresses relevant counterexample | BM-09 plus affected state owners | I6, I7 | Paired acquisition/counterexample evaluation; rejection or rollback evidence |
-| 20 | Persist candidate change through reconstruction and demonstrate changed later behavior | BM-09, BM-03, BM-11 | I1, I6, I7 | Pre/post behavior; restart/reconstruction; causal attribution |
+| 20 | Persist candidate change through reconstruction and demonstrate changed later behavior | BM-09, affected behavior/state owner(s), BM-03, BM-11 | I1, I6, I7 | Pre/post behavior at the receiving owner; restart/reconstruction; causal attribution to the accepted candidate |
 | 21 | Transfer learned change to justified related context without indiscriminate unrelated transfer | BM-09, BM-02, BM-03, BM-05 | I2, I3, I6, I7 | Held-out related and unrelated contexts; positive/negative transfer |
 | 22 | Report numeric parameter improvement only as narrow adaptation, not broad learning | BM-09, BM-10 | I6, I7 | Claim-to-evidence calibration; explicit scope of demonstrated change |
 | 23 | Belief change stales dependent plan; reconsider before use | BM-04, BM-08, BM-11 | I2, I5 | Version change; stale-plan detection before consequential use |
-| 24 | Reconcile concurrent updates without silently discarding evidence | BM-04, BM-09, BM-11 | I1, I2, I6 | Concurrent conflicting proposals; complete conflict and disposition history |
-| 25 | Partial persistence failure cannot be reported as completed state transition | BM-03, BM-09, BM-11 | I1, I6, I7 | Failure injection at persistence boundary; incomplete status and recovery |
-| 26 | After interruption/reconstruction validate identity, lineage, consistency and pending work before resuming | BM-03, BM-10, BM-11 | I1, I4, I7 | Interrupt/restart; recovery validation checklist and pending-work reconciliation |
+| 24 | Reconcile concurrent updates without silently discarding evidence | BM-11; owner of the conflicted authoritative state (BM-01–BM-12, context-dependent); BM-09 when learning updates participate | I1, I2, I6 | Concurrent conflicting proposals at the actual state owner; complete conflict and disposition history |
+| 25 | Partial persistence failure cannot be reported as completed state transition | BM-11 and affected authoritative state owner(s); SYS-08 substrate / SYS-01 cognitive-validity boundary; BM-03/BM-09 where their state is involved | I1, I6, I7 | Failure injection at persistence boundary; distinguish substrate acknowledgement from validated cognitive transition; incomplete status and recovery |
+| 26 | After interruption/reconstruction validate identity, lineage, consistency and pending work before resuming | BM-03, BM-10, BM-11; SYS-01 cognitive-state validation after reconstruction (SYS-08 substrate boundary where applicable) | I1, I4, I7 | Interrupt/restart; validate cognitive state separately from substrate availability; recovery checklist and pending-work reconciliation |
 | 27 | BM-12 derives from sufficient premises with exact premise/inference lineage; owner evaluates conclusion | BM-12, BM-04, BM-05, BM-08 | I2, I3, I5 | Valid derivation; premise IDs/versions; provisional status and owner disposition |
 | 28 | Empty/incomplete premises produce unresolved result, not substantive inference success | BM-12, BM-10 | I2, I7 | Empty/incomplete premise negative tests; explicit insufficiency |
 | 29 | Contradictory premises remain a conflict; no silent winner or unqualified conclusion | BM-12, BM-04 | I2 | Contradictory premise set; conflict-preserving inference record |
@@ -111,13 +111,29 @@ The current planning supplement already describes integrated increments, work-pa
 
 These are planning findings from the current proposed specification. They are not a claim that the existing implementation has been inspected against all 54 scenarios, nor a judgment that the current PR #174 proposal is accepted.
 
-## 5. Decisions and gates still reserved
+## 5. Owner-boundary cross-check — 2026-11-18
+
+The Builder cross-checked the 54 scenario owner mappings against the BM-01–BM-12 ownership definitions and the current proposed specification's system-boundary and failure semantics at exact PR #174 HEAD `c34472354e4122fc1d78dc25bf45d81f1eb4dc69` (specification blob `cfdda9e6e7070cd5533b076e9bd77c2904694a32`). This is a bounded planning consistency check, not independent review, scenario execution or implementation evidence.
+
+Five rows were clarified to avoid assigning ownership more narrowly or more broadly than the specification supports:
+
+- **Scenario 3:** provider unavailability is a capability failure; it is not automatically a SYS-08 substrate failure. SYS-08 applies only when network/runtime substrate evidence establishes that cause.
+- **Scenario 20:** a persisted learning candidate must be shown to affect the receiving mechanism's later behavior. BM-09/BM-03/BM-11 evidence alone cannot substitute for an observable downstream owner-state or behavior change.
+- **Scenario 24:** the owner of the conflicted authoritative state is scenario-dependent. BM-11 coordinates conflict handling; BM-09 participates where learning updates are involved. BM-04 is not the universal owner of every authoritative state.
+- **Scenario 25:** partial persistence failure crosses both SYS-08 substrate availability and SYS-01 cognitive validity. An infrastructure acknowledgement cannot by itself prove the semantic transition completed; the affected cognitive state owner remains responsible for its state.
+- **Scenario 26:** restart/reconstruction must separately establish substrate availability (SYS-08, where relevant) and validate recovered cognitive state (SYS-01), with BM-03/BM-10/BM-11 retaining their respective memory, monitoring and coordination responsibilities.
+
+These clarifications do not change the proposed increments or acceptance authority. No scenario is marked passed, no gate is cleared, and no implementation work package is activated.
+
+---
+
+## 6. Decisions and gates still reserved
 
 - PR #173 architecture review/acceptance, CF-26 and CF-27 remain unresolved.
 - PR #174 current corrected proposal requires exact-revision independent review and Project Director disposition.
 - PR #175 Gate A remains NOT CLEARED; no implementation source baseline is selected.
 - PR #175 Gate B static traceability is documented, but mechanism capability acceptance has NOT PASSED.
-- PR #192 Documentation Foundation remains unaccepted; DF-02, DF-06, DF-09 and DF-12 remain open as recorded on its exact HEAD.
+- PR #192 Documentation Foundation remains unaccepted. The independent xAI review returned PARTIALLY CLEAR against exact reviewed HEAD `beb4d5a174a1dd613878f89132e97b5e6052c7d3`: DF-02 OPEN, DF-06 NOT MET, DF-09 NOT MET, DF-11 WAIVED, DF-12 PENDING; Stage A HELD. The report was committed afterward on the PR branch at `2dd7d7394c1d520d7e3baa74380b866a65449e58` (report blob `1371d6792e6ae9f5ce7d286e1e1a1d7576852060`); that successor is not a newly reviewed target.
 - No implementation work package is activated by this matrix. No runtime source change, test/build execution, algorithm/provider/schema/API selection, donor adoption, source-baseline selection, merge, Stage A or deployment is authorized.
 
 ---
