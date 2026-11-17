@@ -85,7 +85,7 @@ The Phase 2 map's commit-pinned source links are intentionally historical source
 | Rendered GitHub line/fragment behavior | Unverified |
 | DF-06 overall | **NOT MET — independent challenge and rendered/external checks remain open** |
 
-Builder-side local-path integrity passes for the 131 parsed local destinations. The known assignment/report navigation defects are corrected. DF-06 is not declared clear because (1) rendered GitHub line/comment navigation was not verified in an authenticated interactive browser; (2) external/historical destinations have not received exhaustive current status and semantic-relevance checks; and (3) the independent reviewer challenge has not yet been executed against the final frozen PR #192 revision.
+Builder-side local-path integrity passes for the 131 parsed local destinations. The known assignment/report navigation defects are corrected. DF-06 is not declared clear because (1) rendered GitHub line/comment navigation was not verified in an authenticated interactive browser; and (2) external/historical destinations have not received exhaustive current status and semantic-relevance checks. DF-11's independent-review requirement is waived by the Project Director's recorded decision and is not treated as a DF-06 prerequisite here.
 
 ## 7. Reproducibility and boundaries
 
@@ -97,9 +97,9 @@ For external destinations, enumerate unique URLs from the final exact revision, 
 
 DF-09 requires its own approved blind fresh-reader assessment against the final frozen PR #192 HEAD. DF-10 inventory closeout is separate. DF-12 remains a Project Director decision. PR #173 architecture acceptance, CF-26/CF-27, PR #195 F-195-07, Stage A, implementation, source-baseline selection, integration, merge, and deployment remain outside this audit and unchanged.
 
-## 8. Independent closeout handoff — not yet executed
+## 8. Optional independent challenge protocol — not a DF-11 prerequisite
 
-This is a complete assignment specification for the Independent Reviewer. It does not claim that xAI has been notified, that the review has run, or that DF-06/DF-09 is cleared.
+The Project Director's recorded decision waives DF-11. This section is retained only as an optional technical challenge protocol if a separate reviewer is engaged to scrutinize DF-06 evidence; it is not a required gate and does not delay closure on account of DF-11. No claim is made that xAI has been notified or that an optional challenge has run.
 
 ### 8.1 Exact-revision acquisition
 
@@ -121,4 +121,4 @@ DF-09 is a separate gate and must receive a separate result against the final ex
 
 ### 8.4 Publication and authority limits
 
-Publish the complete review report in the established repository review location and post a concise PR comment linking it. State reviewer identity and independence basis. Keep DF-06, DF-09, DF-12 Project Director acceptance, PR #173 architecture acceptance, CF-26/CF-27, F-195-07, Stage A, implementation and merge authority separate. This assignment authorizes no implementation, branch-history operation, PR integration, merge, draft exit or deployment.
+If an optional challenge is commissioned, publish the complete report in the established repository review location and post a concise PR comment linking it. State reviewer identity and independence basis. Keep DF-06, DF-09, DF-12 Project Director acceptance, PR #173 architecture acceptance, CF-26/CF-27, F-195-07, Stage A, implementation and merge authority separate. This optional protocol authorizes no implementation, branch-history operation, PR integration, merge, draft exit or deployment.
