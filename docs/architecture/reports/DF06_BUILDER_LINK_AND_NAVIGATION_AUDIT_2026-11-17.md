@@ -3,64 +3,68 @@
 **Repository:** `methaneex-oss/MethaneX`  
 **PR:** #192 — Documentation Foundation  
 **Branch:** `docs/whole-brain-planning-scope-correction-20261107`  
-**Exact source revision audited:** `1d5526afdfaf6056c3a0263c08f5cc405a8d81b9`  
+**Exact source revision audited:** `aa090bb54079a634f536a1ab0663be87ee250097`  
 **PR state at source snapshot:** open, non-draft, unmerged; 41 changed files.  
 **Audit role:** Builder-side static and repository-evidence audit. This is not an Independent Reviewer verdict, DF-09 fresh-reader result, DF-12 Project Director acceptance, or gate-closure decision.
 
 ## 1. Scope and method
 
-The live PR metadata, complete changed-filename listing, PR patch inventory, and recursive Git tree were retrieved for the exact source revision above. GitHub reported 41 changed files; the paginated filename listing contained 41 unique paths. The recursive tree contained 271 entries (242 blobs and 29 tree entries) and was not truncated. The changed-path inventory was fetched at the exact revision. All listed changed paths are represented in the repository tree.
+The live PR metadata, complete changed-filename listing, and recursive Git tree were retrieved for the exact source revision above. GitHub reported 41 changed files; the changed-filename listing contained 41 unique paths. The recursive tree contained 271 entries (242 blobs and 29 tree entries) and was not truncated. All 41 changed paths were present in that tree.
 
-All 41 changed files were fetched at the exact commit. The package contains 39 Markdown files and two JSON fresh-reader evidence artifacts. A static scan of Markdown inline-link syntax was performed across the Markdown files. It counted 332 inline link occurrences: 125 repository-relative/local destinations and 207 external destinations. The 125 local destinations were normalized against the source file directory and checked against the complete exact-revision tree, including repository-root paths, `.md`, `README.md`, and `index.md` conventions. **All 125 local destinations resolved; no missing relative target was found.**
+All 41 changed files were fetched at the exact source revision: 39 Markdown files and two JSON fresh-reader evidence artifacts. A static scan of the 39 Markdown files covered inline Markdown links, reference-style link definitions, HTML `href`/`src` attributes, and autolinks, excluding fenced code blocks. The scan counted 332 link occurrences: 131 repository-relative/local destinations and 201 external destinations. Local destinations were normalized against each source file's directory and checked against the complete exact-revision tree, including repository-root paths and common Markdown index conventions. **All 131 local destinations resolved; no missing local target was found.**
 
-The scan did not identify reference-style link definitions or HTML `href`/`src` destinations in the inspected files. The parser did not treat the 332 count as a rendered-link count. The two principal navigation documents remain a subset of the full-package scan: `docs/README.md` contains 35 local-link occurrences and the planning index contains 41, for 76 local-link occurrences with zero missing targets.
+The two fresh-reader JSON artifacts were fetched and confirmed present, but were not parsed for URLs as part of the Markdown-link scan. Link counts are syntactic occurrences, not unique destinations or rendered-link counts. External destinations were enumerated but not all live-HTTP revalidated in this run.
 
 ## 2. Exact-revision inventory
 
 - Changed paths: 41 unique.
 - Changed paths present in the exact revision tree: 41/41.
 - Recursive tree: 271 entries; 242 blobs; 29 tree entries; `truncated=false`.
-- Changed files successfully fetched: 41/41.
-- Markdown files statically scanned: 39.
-- JSON evidence artifacts fetched: 2.
-- Inline Markdown link occurrences counted: 332.
-- Repository-relative/local destinations: 125; missing targets: 0.
-- External destinations: 207 occurrences. These were enumerated by the scan but were **not all live-HTTP revalidated in this run**.
-- Fragment-bearing destinations: 92 occurrences in the scanned Markdown links. This includes source line fragments and GitHub issue-comment fragments; repeated occurrences are not necessarily distinct targets.
+- Changed files fetched: 41/41.
+- Markdown files scanned: 39/39.
+- JSON evidence artifacts fetched: 2/2.
+- Link occurrences counted: 332.
+- Repository-relative/local destinations: 131; missing targets: 0.
+- External destinations: 201 occurrences; exhaustive live-status and semantic-relevance validation was not completed.
+- The two principal navigation documents were scanned at this revision: `docs/README.md` had 35 local occurrences and the planning index had 43 local occurrences; all 78 resolved.
 
-The prior preservation report's 89 source citations across 45 exact commit/path pairs and 76 checked line ranges remain historical evidence bound to the revision and method documented there. They are not represented as a new complete source-blob or line-range validation run at this revision.
+The prior preservation report's source citations and line-range checks remain historical evidence bound to its own recorded revision and method. They are not upgraded to current-HEAD source-blob or rendered-anchor verification by this audit.
 
-## 3. Navigation corrections present at this revision
+## 3. Navigation and inventory corrections
 
-### DF06-01 — Assignment reference is now clickable
+### DF06-01 — Assignment reference
 
-The planning index §99 now uses a relative Markdown link to the canonical Builder-to-xAI assignment:
+The planning index §99 contains a relative Markdown link to the canonical Builder-to-xAI assignment:
 
 `reports/BUILDER_TO_XAI_EXACT_REVISION_RE_REVIEW_REQUEST_PR173_PR195_2026-11-17.md`
 
-The destination resolves in the exact revision tree. The earlier inventory wording that said it was “linked from the controlling index” is still inaccurate if it refers to a separate direct link from the inventory; it should say “referenced from the controlling index” unless the inventory itself is given a direct link. This wording correction is required in the next inventory synchronization.
+The target exists in the exact source tree. The wording in inventory §100 now says the assignment is “referenced from the controlling index,” rather than claiming the inventory itself contains a direct link.
 
-### DF06-02 — Exact-revision xAI reports are directly navigable
+### DF06-02 — Exact-revision xAI reports
 
-The planning index §100 now contains immutable commit-pinned GitHub links:
+The planning index §100 contains immutable commit-pinned GitHub links:
 - PR #173 report at successor commit `a96af5b18d3a1d580ff56cff6191240893bceeb5`; expected report blob `7bd31a709ec8015a1ec5441e52af7c1e28c495f6`.
 - PR #195 report at successor commit `89385d3165e8c5b895fee6453247f4d732047dc0`; expected report blob `d7933ece34775e5b5a09435a01c290b99ba5c895`.
 
-Both report files were fetched at their immutable successor commits and their blob identities matched the index. The navigation defects identified in the earlier source-snapshot audit are therefore corrected in this source revision.
+Both report files were re-fetched at their immutable successor commits and their blob identities matched the index.
 
-## 4. Rendered GitHub line/fragment navigation — blocked
+### DF06-03 — Historical manifest count is explicitly qualified
 
-The Phase 2 integration map contains commit-pinned GitHub source links with line fragments. The prior preservation report records validation of 76 line-anchor ranges against exact fetched source-file lengths. This is evidence that the cited line ranges existed in those source files at the recorded commits. It does **not** establish that GitHub's rendered blob page loads and scrolls to the intended line range.
+Inventory §100 described a 40-path manifest created at parent commit `60b4f49953ac6a33e1f8ecfda66e8b3854dc8f87`. The current PR has 41 changed paths. The inventory wording has been corrected to identify the 40-path table as a historical parent manifest and to direct readers to fetch the live PR inventory for current state. This avoids silently presenting a stale count as current.
 
-A direct attempt to open a representative GitHub blob URL with a line fragment was rejected by the browser retrieval layer with `DisabledError`. The GitHub repository connector returns normalized source content and strips the URL fragment, so it cannot prove browser scroll behavior. No authenticated interactive GitHub browser session was available in this Builder audit.
+## 4. Rendered GitHub line/fragment navigation — not verified
 
-**Result:** actual rendered GitHub line/fragment navigation remains unverified. Do not mark this criterion passed based on static source-line existence.
+The Phase 2 integration map contains commit-pinned GitHub source links with line fragments. Static existence of source lines and successful repository-API retrieval do not prove that GitHub's rendered page loads and scrolls to the intended line.
+
+A headless-browser screenshot attempt was made for one representative commit-pinned blob line-range URL and one PR issue-comment anchor. The browser session was not authenticated to the repository, and the screenshot output was not independently inspected for the target element or viewport position. Therefore these attempts are **not counted as rendered-navigation evidence**. The GitHub connector's normalized source response also strips URL fragments.
+
+**Result:** rendered GitHub line/fragment navigation remains unverified. No claim is made that the tested URLs landed on the intended line or comment.
 
 ## 5. External and historical destinations
 
-The scan enumerated 207 external-link occurrences at the exact source revision. This run did not perform a live status check for every unique external destination. Earlier preservation-report checks of 189 external URL occurrences remain historical evidence for the exact scope and revision recorded in that report; they must not be silently upgraded to current-live verification.
+The scan enumerated 201 external-link occurrences at the exact source revision. It did not perform a fresh live-status, redirect-chain, or semantic-relevance check for every unique external destination. Targeted retrieval of the two exact-revision xAI reports succeeded and their blob identities matched. Targeted historical decision-comment retrieval performed in prior work remains limited to those specific URLs and revisions; it is not exhaustive current external-link validation.
 
-The exact-revision xAI report destinations were independently re-fetched and their expected blobs matched. Historical decision-comment URLs referenced in the portal and index were also fetched and their returned comment bodies inspected. These targeted checks do not constitute a fresh exhaustive validation of all external destinations.
+The Phase 2 map's commit-pinned source links are intentionally historical source evidence. Their exact commit references must remain immutable; the audit must check that each referenced path and line range exists at the referenced commit, and that the surrounding claim is supported. Do not “repair” historical evidence by retargeting it to a mutable branch or a different commit.
 
 ## 6. Disposition
 
@@ -69,46 +73,52 @@ The exact-revision xAI report destinations were independently re-fetched and the
 | Exact PR changed-path inventory | 41 unique paths |
 | Changed paths present in tree | 41/41 |
 | Changed files fetched | 41/41 |
-| Local/relative link destinations | 125 |
-| Missing local/relative destinations | 0 |
-| External destinations enumerated | 207 occurrences |
+| Markdown files scanned | 39/39 |
+| JSON evidence artifacts fetched | 2/2 |
+| Link occurrences enumerated | 332 |
+| Local destinations | 131 |
+| Missing local destinations | 0 |
+| External destinations enumerated | 201 occurrences |
 | All external destinations live-rechecked | No |
-| Historical line-range source existence | Prior evidence: 76 ranges, exact scope in preservation report |
-| Rendered GitHub line/fragment behavior | Unverified / blocked |
-| DF-06 overall | **NOT MET** |
+| Assignment/report navigation defects | Corrected and statically resolved |
+| Inventory's historical 40-path wording | Corrected and qualified |
+| Rendered GitHub line/fragment behavior | Unverified |
+| DF-06 overall | **NOT MET — independent challenge and rendered/external checks remain open** |
 
-DF06-01 and DF06-02 are corrected in this source revision. Local path integrity passes for the 125 parsed destinations. Two evidence requirements remain before DF-06 can be declared met: (1) rendered GitHub navigation for the distinct line/fragment target families must be checked in a normal interactive GitHub browser; and (2) the external/historical destination inventory must receive a fresh exact-revision status and semantic-relevance check, or each item not verifiable must be explicitly dispositioned as historical/access-limited with a primary-source alternative where applicable.
+Builder-side local-path integrity passes for the 131 parsed local destinations. The known assignment/report navigation defects are corrected. DF-06 is not declared clear because (1) rendered GitHub line/comment navigation was not verified in an authenticated interactive browser; (2) external/historical destinations have not received exhaustive current status and semantic-relevance checks; and (3) the independent reviewer challenge has not yet been executed against the final frozen PR #192 revision.
 
 ## 7. Reproducibility and boundaries
 
-Reproduce the local-path scan against the final PR #192 HEAD after all closeout writes. Re-fetch live PR metadata, the complete changed-path list, the exact tree, and all changed-file blobs. For browser verification, open representative line-fragment links from the final exact revision in a normal authenticated GitHub browser, confirm both destination resolution and viewport position, and record the exact tested URLs and outcomes. Cover every distinct target family, not merely one arbitrary link. Repeat the external-destination classification at the final exact revision and retain a list of any status failures, redirects, access limitations, and semantically stale destinations.
+At the audited source revision, the exact tree and all 41 changed paths were retrieved. All 39 Markdown changed files were fetched and scanned; both JSON evidence files were fetched. To reproduce, fetch the live PR metadata and changed-path list, pin the resulting HEAD SHA, fetch its recursive tree, and re-run the link parser over every changed Markdown file. Do not mix results across commits.
 
-DF-09 must be independently assessed against the final frozen PR #192 HEAD. DF-12 remains a Project Director decision. DF-10 inventory closeout is separate. PR #173 architecture acceptance, CF-26/CF-27, PR #195 F-195-07, Stage A, implementation, source-baseline selection, integration, merge, and deployment remain outside this audit and unchanged.
+For rendered-browser verification, use an authenticated GitHub browser session on the final frozen HEAD. Open representative examples from every distinct fragment target family, including commit-pinned blob line ranges and PR issue-comment anchors. Record exact URLs, destination status, target element identity, viewport position, and observed result. A screenshot without target inspection is insufficient.
 
+For external destinations, enumerate unique URLs from the final exact revision, follow redirects, record HTTP status and final destination, inspect semantic relevance, and classify unavailable or historical links explicitly. Do not assume success from URL syntax or a single prior fetch.
+
+DF-09 requires its own approved blind fresh-reader assessment against the final frozen PR #192 HEAD. DF-10 inventory closeout is separate. DF-12 remains a Project Director decision. PR #173 architecture acceptance, CF-26/CF-27, PR #195 F-195-07, Stage A, implementation, source-baseline selection, integration, merge, and deployment remain outside this audit and unchanged.
 
 ## 8. Independent closeout handoff — not yet executed
 
-This section is the complete Builder-to-Independent-Reviewer handoff. It does not claim that xAI has been notified, that the review has run, or that DF-06/DF-09 is cleared.
+This is a complete assignment specification for the Independent Reviewer. It does not claim that xAI has been notified, that the review has run, or that DF-06/DF-09 is cleared.
 
 ### 8.1 Exact-revision acquisition
 
-1. Fetch the live PR #192 page at review start. Record repository, PR number, branch, base SHA, exact HEAD SHA, state, draft state, changed-file count, and all changed paths.
+1. Fetch live PR #192 metadata at review start. Record repository, PR number, branch, base SHA, exact HEAD SHA, state, draft state, changed-file count, and all changed paths.
 2. Review only that exact HEAD. If the branch advances during review, stop and restart against the new exact revision; do not mix evidence across SHAs.
-3. Fetch every changed file at that exact SHA and record its blob identity. Read the complete PR diff and the current audit report.
+3. Fetch every changed file at that exact SHA and record its blob identity. Read the complete PR diff and this audit.
 
-### 8.2 DF-06 rendered-link and external-destination challenge
+### 8.2 DF-06 independent challenge
 
-Independently challenge the Builder results rather than relying on them:
-- Re-run the local-path inventory and confirm the 125 destinations recorded for source snapshot `1d5526afdfaf6056c3a0263c08f5cc405a8d81b9` still resolve at the exact review HEAD.
-- Enumerate and live-check every external destination at the exact review HEAD. Record HTTP/status result, redirects, destination identity, semantic relevance, and whether the destination is current, historical, access-limited, or unavailable. Do not infer a successful destination from a URL's appearance.
-- Inspect all fragment-bearing destinations, including the commit-pinned source line links in the Phase 2 map and issue-comment anchors. Use a normal interactive GitHub browser. For each distinct target family, record the exact URL, whether the page loads, whether GitHub lands on the intended line/comment, and the observed result. Static source-line existence is not rendered-navigation proof.
-- Check semantic link text against the actual destination content. Identify stale branch URLs, wrong-file targets, superseded evidence, and destinations whose content does not support the surrounding claim.
-- Return a DF-06 verdict of CLEAR, PARTIALLY CLEAR, or NOT CLEAR. Every finding must include stable ID, severity, exact path/line, destination, evidence, required correction, and objective recheck criterion. Disclose any browser or access limitation explicitly.
+- Re-run the local-path inventory and confirm every local destination resolves at the exact review HEAD.
+- Enumerate every unique external destination. Record HTTP/status result, redirects, final destination identity, semantic relevance, and whether the destination is current, historical, access-limited, or unavailable.
+- Inspect fragment-bearing destinations, including commit-pinned source line links and issue-comment anchors, in a normal authenticated GitHub browser. For every distinct target family, record the exact URL, whether the page loads, whether GitHub lands on the intended line/comment, and the observed result.
+- Check semantic link text against destination content. Identify stale branch URLs, wrong-file targets, superseded evidence, and destinations that do not support the surrounding claim.
+- Return CLEAR, PARTIALLY CLEAR, or NOT CLEAR. Every finding must include stable ID, severity, exact path/line, destination, evidence, required correction, and objective recheck criterion. Disclose browser/access limitations.
 
 ### 8.3 Separate DF-09 blind fresh-reader assessment
 
-DF-09 is a separate gate and must receive a separate result against the final exact PR #192 HEAD. Use only the established approved fresh-reader protocol/workflow and its documented inputs. Do not treat this link audit as a fresh-reader run. Do not infer a CLEAR result from a successful workflow wrapper or static checks. If the approved workflow cannot be executed because its required runtime/failure-path evidence is unavailable (including the open F-195-07 boundary), report DF-09 as blocked rather than substituting an informal review.
+DF-09 is a separate gate and must receive a separate result against the final exact PR #192 HEAD. Use only the established approved fresh-reader protocol/workflow and its documented inputs. Do not treat this link audit as a fresh-reader run. Do not infer CLEAR from a successful workflow wrapper or static checks. If required runtime/failure-path evidence is unavailable (including the open F-195-07 boundary), report DF-09 as blocked rather than substituting an informal review.
 
-### 8.4 Required publication and authority limits
+### 8.4 Publication and authority limits
 
 Publish the complete review report in the established repository review location and post a concise PR comment linking it. State reviewer identity and independence basis. Keep DF-06, DF-09, DF-12 Project Director acceptance, PR #173 architecture acceptance, CF-26/CF-27, F-195-07, Stage A, implementation and merge authority separate. This assignment authorizes no implementation, branch-history operation, PR integration, merge, draft exit or deployment.
