@@ -1,4 +1,4 @@
-# CURRENT EXACT STATE — 2026-11-17 (Builder continuation 22)
+# CURRENT EXACT STATE — 2026-11-17 (Builder continuation 23)
 
 > **Controlling live-status snapshot.** This block supersedes earlier active-status snapshots below for current PR heads, base relationships and gate state. Older dated sections remain historical evidence. This is Builder evidence only; not independent review, fresh-reader clearance, gate clearance or Project Director acceptance.
 
@@ -29,7 +29,7 @@ Repository: `methaneex-oss/MethaneX`. Full SHAs identify exact revisions; branch
 | Gate | Current status |
 |---|---|
 | DF-01 | Builder corrections recorded; exact-final-revision reconciliation remains part of closeout. |
-| DF-02 | **OPEN — detailed-inventory reconciliation remains.** The 41-path parent manifest in inventory §108 is DF-10 changed-file/blob evidence; it does not by itself establish that every foundational artifact has a current exact location, revision, status and dependency in the detailed register. The inventory retains an initial 2026-11-04 baseline with later dated appendices; reconcile the controlling artifact/status/dependency register at this exact PR revision before marking DF-02 met. |
+| DF-02 | **OPEN — detailed-inventory reconciliation remains.** The changed-file parent manifest is DF-10 self-review evidence, not the detailed inventory criterion. The inventory retains an initial 2026-11-04 baseline with later dated appendices. A current artifact/status/dependency register must be reconciled against the foundational document set at the exact frozen PR revision before DF-02 can be marked met. |
 | DF-03 | Accepted-baseline and decision provenance distinctions are recorded; no inference beyond the cited exact artifacts. |
 | DF-04 | Accepted governance source revalidated; PR #196 merge scope distinguished from PR #178 and `main`. |
 | DF-05 | PR bases, heads and ancestry dependencies are recorded. The PR #195 workflow prerequisite was merged into `main` at `4f07d772...` under the Project Director's supervised 2026-11-17 authorization. PR #192's recorded base SHA `61311fe5...` predates the current Phase 2 base-branch head `ea64607...`; no retarget, rebase or merge of PR #192 is authorized. |
@@ -37,7 +37,7 @@ Repository: `methaneex-oss/MethaneX`. Full SHAs identify exact revisions; branch
 | DF-07 | Must be reconciled against the frozen final documentation revision after all corrections. |
 | DF-08 | RESOLVED only within its documented bounded preservation criterion. |
 | DF-09 | **OPEN / NOT MET.** Latest recorded blind Nemotron assessment, run `43384559530`, assessed older revision `07acbf61a4d7d532bc838711d6837e2c16ce12b1` and returned **PARTIALLY CLEAR**. It is not an assessment of the live PR #192 HEAD. One new blind assessment against the final frozen HEAD is required. The updated runbook §8.3 requires DF-09 to remain BLOCKED if required F-195-07 failure-path evidence is unavailable; no waiver is inferred. |
-| DF-10 | **RESOLVED at Builder-evidence level** by inventory §108 and its exact post-write verification: 41 sequential unique changed paths; all 41 blob identities match the complete parent tree at `b1236c8a0bbf08c7eb8d3a1762572da97ff2e5b4`; successor `fb1552a362be99886caecf990c7e2084129135cc` is exactly one commit ahead and changes only the inventory file. This records changed-file identity, checks and limitations; it is not Director acceptance. |
+| DF-10 | **RESOLVED at Builder-evidence level** by inventory §109: it records all 41 unique changed paths and their parent blob identities at exact parent `075ecece054def978c52087a2a1524cecefb3048`. The separate post-write verification confirms the resulting successor changes only the inventory file and all 41 identities match that complete parent tree. This records changed-file identity, checks and limitations; it is not Director acceptance. |
 | DF-11 | **WAIVED** by explicit Project Director decision on 2026-11-11. Do not treat independent review as a required DF-11 gate or invent a review verdict. |
 | DF-12 | **NOT ACCEPTED / PENDING.** Project Director's exact-revision foundation decision remains reserved until applicable evidence is complete. |
 | DF-13 | Stage A remains NOT STARTED / HELD. Runtime implementation remains NOT AUTHORIZED. |
