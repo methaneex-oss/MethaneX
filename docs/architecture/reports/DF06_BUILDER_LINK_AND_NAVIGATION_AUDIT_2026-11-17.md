@@ -3,7 +3,7 @@
 **Repository:** `methaneex-oss/MethaneX`  
 **PR:** #192 — Documentation Foundation  
 **Branch:** `docs/whole-brain-planning-scope-correction-20261107`  
-**Exact source revision audited:** `d065e8b60f192be165953e89f248d343bc698380`  
+**Exact source revision audited:** `6952a23d1ab401ad3599a3e4ea169fc78e2cb4ac`  
 **PR state at source snapshot:** open, non-draft, unmerged; 41 changed files.  
 **Audit role:** Builder-side static and repository-evidence audit. This is not an Independent Reviewer verdict, DF-09 fresh-reader result, DF-12 Project Director acceptance, or gate-closure decision.
 
@@ -11,9 +11,9 @@
 
 The live PR metadata, complete changed-filename listing, and recursive Git tree were retrieved for the exact source revision above. GitHub reported 41 changed files; the changed-filename listing contained 41 unique paths. The recursive tree contained 271 entries (242 blobs and 29 tree entries) and was not truncated. All 41 changed paths were present in that tree.
 
-All 41 changed files were fetched at the exact source revision: 39 Markdown files and two JSON fresh-reader evidence artifacts. A static scan of the 39 Markdown files covered inline Markdown links, reference-style link definitions, HTML `href`/`src` attributes, and autolinks, excluding fenced code blocks. The scan counted 332 link occurrences: 131 repository-relative/local destinations and 201 external destinations. Local destinations were normalized against each source file's directory and checked against the complete exact-revision tree, including repository-root paths and common Markdown index conventions. **All 131 local destinations resolved; no missing local target was found.**
+All 41 changed files were fetched at the exact source revision: 39 Markdown files and two JSON fresh-reader evidence artifacts. A static scan of the 39 Markdown files covered inline Markdown links, reference-style link definitions, HTML `href`/`src` attributes, and autolinks, excluding fenced code blocks. The repeat scan used the same broad link classes (inline Markdown links, reference definitions, HTML `href`/`src`, and autolinks; fenced code excluded) and extracted 331 link occurrences: 125 repository-relative/local destinations and 206 external destinations. Local destinations were normalized against each source file's directory and checked against the complete exact-revision tree, including repository-root paths and common Markdown index conventions. **All 125 local destinations extracted by this pass resolved; no missing local target was found.**
 
-The two fresh-reader JSON artifacts were fetched and confirmed present, but were not parsed for URLs as part of the Markdown-link scan. The synchronized inventory now includes §101, a 41-path parent manifest captured at `2ab51755b9b9e907aacb282020305bd012dbb395`; its 41 recorded blob identities match that exact parent tree. At post-write verification on `d065e8b60f192be165953e89f248d343bc698380`, all 41 changed paths remained present in the non-truncated tree. The inventory row intentionally records its own pre-update parent blob at the manifest snapshot; after the manifest append, the inventory blob changed, so that one self-entry is not expected to equal the successor tree's inventory blob. Link counts are syntactic occurrences, not unique destinations or rendered-link counts. External destinations were enumerated but not all live-HTTP revalidated in this run.
+The two fresh-reader JSON artifacts were fetched and confirmed present, but were not parsed for URLs as part of the Markdown-link scan. The inventory contains §101 (historical parent snapshot `2ab51755b9b9e907aacb282020305bd012dbb395`) and §102 (parent snapshot `73687f7c732b58627702352c74174d93498b8234`). Both manifests are parent snapshots, not a manifest of the current source revision. The §102 41-row manifest matches its exact parent tree. A final parent manifest must be refreshed after this audit report is written. Link counts are syntactic occurrences, not unique destinations or rendered-link counts. External destinations were enumerated but not all live-HTTP revalidated in this run.
 
 ## 2. Exact-revision inventory
 
@@ -23,10 +23,10 @@ The two fresh-reader JSON artifacts were fetched and confirmed present, but were
 - Changed files fetched: 41/41.
 - Markdown files scanned: 39/39.
 - JSON evidence artifacts fetched: 2/2.
-- Link occurrences counted: 332.
-- Repository-relative/local destinations: 131; missing targets: 0.
-- External destinations: 201 occurrences; exhaustive live-status and semantic-relevance validation was not completed.
-- The two principal navigation documents were scanned at this revision: `docs/README.md` had 35 local occurrences and the planning index had 43 local occurrences; all 78 resolved.
+- Link occurrences extracted by this repeat pass: 331.
+- Repository-relative/local destinations extracted: 125; missing targets among those extracted: 0.
+- External destinations extracted: 206 occurrences; exhaustive live-status and semantic-relevance validation was not completed.
+- A prior audit snapshot recorded 332 total / 131 local / 201 external occurrences. This repeat pass differs by one total occurrence and by six local/five external classifications. The earlier parser's per-file output or executable is not preserved in the report, so the discrepancy is unresolved. Do not treat the counts as reconciled or claim parser equivalence.
 
 The prior preservation report's source citations and line-range checks remain historical evidence bound to its own recorded revision and method. They are not upgraded to current-HEAD source-blob or rendered-anchor verification by this audit.
 
@@ -62,7 +62,7 @@ A headless-browser screenshot attempt was made for one representative commit-pin
 
 ## 5. External and historical destinations
 
-The scan enumerated 201 external-link occurrences at the exact source revision. It did not perform a fresh live-status, redirect-chain, or semantic-relevance check for every unique external destination. Targeted retrieval of the two exact-revision xAI reports succeeded and their blob identities matched. Targeted historical decision-comment retrieval performed in prior work remains limited to those specific URLs and revisions; it is not exhaustive current external-link validation.
+The repeat scan extracted 206 external-link occurrences at the exact source revision. It did not perform a fresh live-status, redirect-chain, or semantic-relevance check for every unique external destination. Targeted retrieval of the two exact-revision xAI reports succeeded and their blob identities matched. Targeted historical decision-comment retrieval performed in prior work remains limited to those specific URLs and revisions; it is not exhaustive current external-link validation.
 
 The Phase 2 map's commit-pinned source links are intentionally historical source evidence. Their exact commit references must remain immutable; the audit must check that each referenced path and line range exists at the referenced commit, and that the surrounding claim is supported. Do not “repair” historical evidence by retargeting it to a mutable branch or a different commit.
 
@@ -75,21 +75,22 @@ The Phase 2 map's commit-pinned source links are intentionally historical source
 | Changed files fetched | 41/41 |
 | Markdown files scanned | 39/39 |
 | JSON evidence artifacts fetched | 2/2 |
-| Link occurrences enumerated | 332 |
-| Local destinations | 131 |
-| Missing local destinations | 0 |
-| External destinations enumerated | 201 occurrences |
+| Link occurrences extracted by repeat pass | 331 |
+| Local destinations extracted | 125 |
+| Missing among extracted local destinations | 0 |
+| External destinations extracted | 206 occurrences |
+| Prior-vs-repeat parser count discrepancy | Unresolved; see §2 |
 | All external destinations live-rechecked | No |
 | Assignment/report navigation defects | Corrected and statically resolved |
 | Inventory's historical 40-path wording | Corrected and qualified |
 | Rendered GitHub line/fragment behavior | Unverified |
 | DF-06 overall | **NOT MET — rendered/external checks remain open** |
 
-Builder-side local-path integrity passes for the 131 parsed local destinations. The known assignment/report navigation defects are corrected. DF-06 is not declared clear because (1) rendered GitHub line/comment navigation was not verified in an authenticated interactive browser; and (2) external/historical destinations have not received exhaustive current status and semantic-relevance checks. DF-11's independent-review requirement is waived by the Project Director's recorded decision and is not treated as a DF-06 prerequisite here.
+Builder-side local-path integrity passes for the 125 local destinations extracted by the repeat parser pass; the count discrepancy against the prior audit remains unresolved. The known assignment/report navigation defects are corrected. DF-06 is not declared clear because (1) rendered GitHub line/comment navigation was not verified in an authenticated interactive browser; and (2) external/historical destinations have not received exhaustive current status and semantic-relevance checks. DF-11's independent-review requirement is waived by the Project Director's recorded decision and is not treated as a DF-06 prerequisite here.
 
 ## 7. Reproducibility and boundaries
 
-At the audited source revision, the exact tree and all 41 changed paths were retrieved. All 39 Markdown changed files were fetched and scanned; both JSON evidence files were fetched. The 41-row inventory parent manifest was compared against its exact snapshot tree (all 41 blob identities matched), and the post-write tree at the audited revision again contained all 41 changed paths. The only intentional parent/current blob difference is the inventory file itself, which changed when the manifest was appended. To reproduce, fetch the live PR metadata and changed-path list, pin the resulting HEAD SHA, fetch its recursive tree, and re-run the link parser over every changed Markdown file. Do not mix results across commits.
+At the audited source revision, the exact tree and all 41 changed paths were retrieved. All 39 Markdown changed files were fetched and scanned; both JSON evidence files were fetched. The §102 41-row inventory parent manifest was compared against its exact snapshot tree (all 41 blob identities matched). The source revision's complete tree again contained all 41 changed paths. A subsequent inventory-only commit must record a new manifest against the post-audit parent; no current-final manifest is claimed yet. To reproduce, fetch the live PR metadata and changed-path list, pin the resulting HEAD SHA, fetch its recursive tree, and re-run the link parser over every changed Markdown file. Do not mix results across commits.
 
 For rendered-browser verification, use an authenticated GitHub browser session on the final frozen HEAD. Open representative examples from every distinct fragment target family, including commit-pinned blob line ranges and PR issue-comment anchors. Record exact URLs, destination status, target element identity, viewport position, and observed result. A screenshot without target inspection is insufficient.
 
