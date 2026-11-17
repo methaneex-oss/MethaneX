@@ -1,14 +1,14 @@
-# CURRENT EXACT STATE — 2026-11-15 (JARVIS-M0 Builder continuation 15)
+# CURRENT EXACT STATE — 2026-11-17 (JARVIS-M0 Builder continuation 18)
 
 > **Controlling live-status snapshot.** This block supersedes all earlier dated status snapshots below for current PR heads, base relationships and gate state. Those snapshots remain historical evidence and must not be combined into a synthetic current state. Builder evidence only; not independent review, Tester clearance, gate clearance or Director acceptance.
 
 ## 1. Live repository state
 
-Repository: `methaneex-oss/MethaneX`. Values below were fetched from GitHub on 2026-11-15. Full SHAs identify the exact revisions; branch names are mutable.
+Repository: `methaneex-oss/MethaneX`. Values below were fetched from GitHub on 2026-11-17. Full SHAs identify the exact revisions; branch names are mutable.
 
 | PR | Exact HEAD | Base SHA | State | Current disposition |
 |---|---|---|---|---|
-| #173 — Brain Foundation Architecture | `a8be408921afaa7a417cc972e891155bbcd11d19` | `1273ddbcd0087d189e01388ded2d362fb1e058d2` | Open / draft / unmerged | BFA-C01–BFA-C14 accepted by Director at the recorded decision revision; current proposal is not accepted as complete/final architecture. Blind assessment at prior HEAD `c4c91584...` returned NOT CLEAR; Builder triage and the narrow CF-26 learning-rate traceability correction are recorded in PR comments #6899129380 and #6899125884. Fresh blind assessment and independent exact-HEAD re-review remain pending. |
+| #173 — Brain Foundation Architecture | `1f137cbaed985821bbc32408151911b18418f713` | `1273ddbcd0087d189e01388ded2d362fb1e058d2` | Open / draft / unmerged | xAI reviewed exact SHA `276d2766653ad781899c20a820f442da56bb5d7d`: **PARTIALLY CLEAR**. Corrective documentation commits now at current HEAD add normative concurrency/partial-failure invariants, social-agent minimum acceptance conditions, mechanism/owner/test crosswalks and finding adjudication. Current HEAD has not yet received independent re-review; CF-26 and CF-27 remain open; whole-architecture Director acceptance remains open. No implementation authorization. |
 | #174 — Brain Mechanism Specification | `c34472354e4122fc1d78dc25bf45d81f1eb4dc69` | `97191111bc2573c14d391c0af9628db7b11f194b` | Open / draft / unmerged | Independent xAI review **PARTIALLY CLEAR** against exact reviewed SHA `7cb6271531f3e80a45728756273218132499722e` (review/comment #6896098398; report added in this one-commit documentation-only successor). F-02/F-03 substantially addressed at specification level; parent-architecture reconciliation, provenance limits and specification-only evidence remain. Await Project Director disposition; no implementation or merge authorization. |
 | #178 — Governance proposal lineage | `39fe09dcf13496f5f0005ccf3f00739303e29f88` | `1273ddbcd0087d189e01388ded2d362fb1e058d2` | Open / draft / unmerged | Separate PR lineage; not the merge destination of PR #196. |
 | #179 — Phase 2 branch | `ea64607ef94f142a6142a013e119a7225bc95c1c` | `39fe09dcf13496f5f0005ccf3f00739303e29f88` | Open / draft / unmerged | Current Phase 2 branch head; contains accepted governance PR #196 and status reconciliation. |
@@ -20,7 +20,7 @@ Repository: `methaneex-oss/MethaneX`. Values below were fetched from GitHub on 2
 
 ### 1.1 Accepted baselines are not blanket approval of later proposals
 
-- **PR #173:** historical accepted starting baseline `97191111bc2573c14d391c0af9628db7b11f194b`; current proposal HEAD `c4c9158437ffa6a4915b1b7b1b83e7e8867d9e72` remains unaccepted as complete/final architecture. The Project Director explicitly accepted BFA-C01–BFA-C14 as foundational constraints; this does not substitute for independent architecture assessment or overall architecture acceptance.
+- **PR #173:** historical accepted starting baseline `97191111bc2573c14d391c0af9628db7b11f194b`; current proposal HEAD `1f137cbaed985821bbc32408151911b18418f713` remains unaccepted as complete/final architecture. xAI reviewed exact predecessor `276d2766653ad781899c20a820f442da56bb5d7d` as **PARTIALLY CLEAR**; the current HEAD contains Builder corrections and an adjudication record but has not yet been independently re-reviewed. The Project Director's acceptance of BFA-C01–BFA-C14 remains limited to those foundational constraints and is not whole-architecture acceptance.
 - **PR #174:** accepted specification baseline `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`; corrected proposal reviewed at exact SHA `7cb6271531f3e80a45728756273218132499722e` with verdict **PARTIALLY CLEAR**. Current PR tip `c34472354e4122fc1d78dc25bf45d81f1eb4dc69` adds only the review report. Project Director disposition remains pending; the verdict does not authorize implementation or merge.
 - **PR #196 governance:** the accepted governance document is `docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md`. PR #196 merged at `c151e527...` into `docs/jarvis-phase-2-whole-brain-integration-map-20261105`, not into `main`. The current Phase 2 branch head is `ea64607ef94f142a6142a013e119a7225bc95c1c`.
 
