@@ -83,7 +83,7 @@ The Phase 2 map's commit-pinned source links are intentionally historical source
 | Assignment/report navigation defects | Corrected and statically resolved |
 | Inventory's historical 40-path wording | Corrected and qualified |
 | Rendered GitHub line/fragment behavior | Unverified |
-| DF-06 overall | **NOT MET — independent challenge and rendered/external checks remain open** |
+| DF-06 overall | **NOT MET — rendered/external checks remain open** |
 
 Builder-side local-path integrity passes for the 131 parsed local destinations. The known assignment/report navigation defects are corrected. DF-06 is not declared clear because (1) rendered GitHub line/comment navigation was not verified in an authenticated interactive browser; and (2) external/historical destinations have not received exhaustive current status and semantic-relevance checks. DF-11's independent-review requirement is waived by the Project Director's recorded decision and is not treated as a DF-06 prerequisite here.
 
