@@ -1228,7 +1228,7 @@ This is Builder status evidence only. It is not an Independent Reviewer verdict,
 
 The complete Builder-to-xAI assignment for the corrected Brain Foundation Architecture and blind fresh-reader workflow is recorded at:
 
-`docs/architecture/reports/BUILDER_TO_XAI_EXACT_REVISION_RE_REVIEW_REQUEST_PR173_PR195_2026-11-17.md`
+[Builder-to-xAI exact-revision review assignment](reports/BUILDER_TO_XAI_EXACT_REVISION_RE_REVIEW_REQUEST_PR173_PR195_2026-11-17.md)
 
 Canonical commit containing the assignment: `9348d314084a34ef0e0379444661ee1ba09d0eae`.
 
@@ -1242,7 +1242,12 @@ The prior verdicts remain bound to their original SHAs. The two new verdicts and
 
 The two independent reports have been retrieved from their respective PR branches and their blob SHAs verified. Their verdicts are separate and apply only to the exact source revisions named in each report.
 
-- **PR #173:** reviewed architecture SHA `1f137cbaed985821bbc32408151911b18418f713`; verdict **PARTIALLY CLEAR**. Report path `docs/architecture/reviews/INDEPENDENT_ARCHITECTURE_RE_REVIEW_XAI_PR173_2026-11-17.md`; blob `7bd31a709ec8015a1ec5441e52af7c1e28c495f6`. The report was committed as report-only successor `a96af5b18d3a1d580ff56cff6191240893bceeb5`. Whole-architecture acceptance, CF-26 independent challenge, CF-27 final gate and runtime donor remediation remain open or unauthorized.
-- **PR #195:** reviewed workflow SHA `6b8e6fce342397b17f0ed237ccc5a09fb38034df`; verdict **APPROVED WITH DOCUMENTED NON-BLOCKING ISSUES**. Report path `docs/architecture/reports/INDEPENDENT_REVIEW_XAI_PR195_2026-11-17_HEAD_6b8e6fce.md`; blob `d7933ece34775e5b5a09435a01c290b99ba5c895`. The report was committed as report-only successor `89385d3165e8c5b895fee6453247f4d732047dc0`. F-195-07 live negative-path Actions evidence remains open.
+- **PR #173:** reviewed architecture SHA `1f137cbaed985821bbc32408151911b18418f713`; verdict **PARTIALLY CLEAR**. Report: [PR #173 xAI architecture re-review](https://github.com/methaneex-oss/MethaneX/blob/a96af5b18d3a1d580ff56cff6191240893bceeb5/docs/architecture/reviews/INDEPENDENT_ARCHITECTURE_RE_REVIEW_XAI_PR173_2026-11-17.md) (blob `7bd31a709ec8015a1ec5441e52af7c1e28c495f6`). The report was committed as report-only successor `a96af5b18d3a1d580ff56cff6191240893bceeb5`. Whole-architecture acceptance, CF-26 independent challenge, CF-27 final gate and runtime donor remediation remain open or unauthorized.
+- **PR #195:** reviewed workflow SHA `6b8e6fce342397b17f0ed237ccc5a09fb38034df`; verdict **APPROVED WITH DOCUMENTED NON-BLOCKING ISSUES**. Report: [PR #195 xAI workflow re-review](https://github.com/methaneex-oss/MethaneX/blob/89385d3165e8c5b895fee6453247f4d732047dc0/docs/architecture/reports/INDEPENDENT_REVIEW_XAI_PR195_2026-11-17_HEAD_6b8e6fce.md) (blob `d7933ece34775e5b5a09435a01c290b99ba5c895`). The report was committed as report-only successor `89385d3165e8c5b895fee6453247f4d732047dc0`. F-195-07 live negative-path Actions evidence remains open.
 
 The report-only successor commits do not change the reviewed architecture or workflow blobs. Earlier verdicts remain attached only to their own predecessor SHAs. PR #195 review is not DF-09/DF-12 clearance. Neither review grants Project Director acceptance, Stage A, implementation, merge, draft exit or deployment authorization.
+
+
+## 101. DF-06 Builder link and navigation audit — 2026-11-17
+
+The exact-source Builder audit is recorded in [DF-06 Builder Link and Navigation Audit](reports/DF06_BUILDER_LINK_AND_NAVIGATION_AUDIT_2026-11-17.md). It audited PR #192 source HEAD `2df41432b83f1f627a049c0b9c1fe2a03b661ace`: all 40 changed paths existed in the complete 241-blob tree; 118 parsed relative/local link occurrences resolved with zero missing targets. The two index-navigation defects identified in the audit are corrected in the subsequent Builder commits. Actual rendered GitHub line/fragment behavior remains unverified, so DF-06 remains **NOT MET** pending browser evidence and the required final-revision recheck. The audit is Builder evidence only, not DF-09, DF-12 or Project Director acceptance.
