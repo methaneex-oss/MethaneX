@@ -29,7 +29,7 @@ Repository: `methaneex-oss/MethaneX`. Full SHAs identify exact revisions; branch
 | Gate | Current status |
 |---|---|
 | DF-01 | Builder corrections recorded; exact-final-revision reconciliation remains part of closeout. |
-| DF-02 | **RESOLVED at Builder-evidence level** by inventory §109: its 41-row parent manifest matches the exact parent tree after this index, DF-06 audit, and operator-runbook update; the final successor changes only the inventory file and preserves the other 40 path blobs. This is not Director acceptance. |
+| DF-02 | **RESOLVED at Builder-evidence level** by inventory §108: its 41-row parent manifest matches the exact parent tree after this index, DF-06 audit, and operator-runbook update; the final successor changes only the inventory file and preserves the other 40 path blobs. This is not Director acceptance. |
 | DF-03 | Accepted-baseline and decision provenance distinctions are recorded; no inference beyond the cited exact artifacts. |
 | DF-04 | Accepted governance source revalidated; PR #196 merge scope distinguished from PR #178 and `main`. |
 | DF-05 | PR bases, heads and ancestry dependencies are recorded. The PR #195 workflow prerequisite was merged into `main` at `4f07d772...` under the Project Director's supervised 2026-11-17 authorization. PR #192's recorded base SHA `61311fe5...` predates the current Phase 2 base-branch head `ea64607...`; no retarget, rebase or merge of PR #192 is authorized. |
