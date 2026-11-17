@@ -3,76 +3,84 @@
 **Repository:** `methaneex-oss/MethaneX`  
 **PR:** #192 — Documentation Foundation  
 **Branch:** `docs/whole-brain-planning-scope-correction-20261107`  
-**Exact source revision audited:** `2df41432b83f1f627a049c0b9c1fe2a03b661ace`  
-**PR state at audit start:** open, non-draft, unmerged; 40 changed files.  
+**Exact source revision audited:** `1d5526afdfaf6056c3a0263c08f5cc405a8d81b9`  
+**PR state at source snapshot:** open, non-draft, unmerged; 41 changed files.  
 **Audit role:** Builder-side static and repository-evidence audit. This is not an Independent Reviewer verdict, DF-09 fresh-reader result, DF-12 Project Director acceptance, or gate-closure decision.
 
 ## 1. Scope and method
 
-The live PR metadata, complete paginated changed-file list, PR patch inventory, and recursive Git tree were retrieved at the exact revision above. GitHub reported 40 changed files; the paginated filename listing contained 40 unique paths; the recursive tree was not truncated and contained 241 blobs. All 40 changed paths were confirmed present in the tree.
+The live PR metadata, complete changed-filename listing, PR patch inventory, and recursive Git tree were retrieved for the exact source revision above. GitHub reported 41 changed files; the paginated filename listing contained 41 unique paths. The recursive tree contained 271 entries (242 blobs and 29 tree entries) and was not truncated. The changed-path inventory was fetched at the exact revision. All listed changed paths are represented in the repository tree.
 
-All 40 changed files were fetched by exact commit SHA. This included Markdown documents, templates, and the three JSON fresh-reader evidence artifacts. A static parser inspected Markdown inline links, reference-link definitions, and HTML `href`/`src` attributes. Relative paths were normalized against each source file and checked against the exact revision's complete repository tree, including `.md`, `README.md`, and `index.md` resolution conventions.
+All 41 changed files were fetched at the exact commit. The package contains 39 Markdown files and two JSON fresh-reader evidence artifacts. A static scan of Markdown inline-link syntax was performed across the Markdown files. It counted 332 inline link occurrences: 125 repository-relative/local destinations and 207 external destinations. The 125 local destinations were normalized against the source file directory and checked against the complete exact-revision tree, including repository-root paths, `.md`, `README.md`, and `index.md` conventions. **All 125 local destinations resolved; no missing relative target was found.**
 
-The four batches produced 118 relative/local link occurrences. All 118 targets resolved to an existing repository path. No missing relative target was found in this sweep.
+The scan did not identify reference-style link definitions or HTML `href`/`src` destinations in the inspected files. The parser did not treat the 332 count as a rendered-link count. The two principal navigation documents remain a subset of the full-package scan: `docs/README.md` contains 35 local-link occurrences and the planning index contains 41, for 76 local-link occurrences with zero missing targets.
 
-The current PR's two navigation documents were separately checked: `docs/README.md` (35 local links) and the planning index (41 local links), for 76 local-link occurrences with zero missing targets. These counts are subsets of the 118-occurrence whole-PR sweep, not additional occurrences.
+## 2. Exact-revision inventory
 
-## 2. Current-revision inventory
+- Changed paths: 41 unique.
+- Changed paths present in the exact revision tree: 41/41.
+- Recursive tree: 271 entries; 242 blobs; 29 tree entries; `truncated=false`.
+- Changed files successfully fetched: 41/41.
+- Markdown files statically scanned: 39.
+- JSON evidence artifacts fetched: 2.
+- Inline Markdown link occurrences counted: 332.
+- Repository-relative/local destinations: 125; missing targets: 0.
+- External destinations: 207 occurrences. These were enumerated by the scan but were **not all live-HTTP revalidated in this run**.
+- Fragment-bearing destinations: 92 occurrences in the scanned Markdown links. This includes source line fragments and GitHub issue-comment fragments; repeated occurrences are not necessarily distinct targets.
 
-- Changed paths: 40 unique.
-- Changed paths present in the exact revision tree: 40/40.
-- Recursive tree: 241 blobs; `truncated=false`.
-- Changed files successfully fetched: 40/40.
-- Relative/local link occurrences parsed: 118.
-- Missing relative/local targets: 0.
-- Exact-commit source files for historical Phase 2 citations: the prior preservation audit records 89 source citations across 45 exact commit/path pairs and 76 checked line ranges. That earlier evidence is preserved in `DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md`; it is not re-labelled as a new 2026-11-17 run.
+The prior preservation report's 89 source citations across 45 exact commit/path pairs and 76 checked line ranges remain historical evidence bound to the revision and method documented there. They are not represented as a new complete source-blob or line-range validation run at this revision.
 
-## 3. Corrected navigation defects
+## 3. Navigation corrections present at this revision
 
-### DF06-01 — Assignment reference was not a clickable link
+### DF06-01 — Assignment reference is now clickable
 
-The planning index §99 previously rendered the canonical Builder-to-xAI assignment path as inline code. The inventory §100.0 then said it was “linked from the controlling index,” which was inaccurate.
+The planning index §99 now uses a relative Markdown link to the canonical Builder-to-xAI assignment:
 
-Correction required/applied in the follow-up revision: convert the index path to a relative Markdown link and change the inventory description to say “referenced” unless it links directly.
+`reports/BUILDER_TO_XAI_EXACT_REVISION_RE_REVIEW_REQUEST_PR173_PR195_2026-11-17.md`
 
-Canonical assignment:
-`docs/architecture/reports/BUILDER_TO_XAI_EXACT_REVISION_RE_REVIEW_REQUEST_PR173_PR195_2026-11-17.md`
+The destination resolves in the exact revision tree. The earlier inventory wording that said it was “linked from the controlling index” is still inaccurate if it refers to a separate direct link from the inventory; it should say “referenced from the controlling index” unless the inventory itself is given a direct link. This wording correction is required in the next inventory synchronization.
 
-### DF06-02 — Exact-revision xAI reports lacked direct index navigation
+### DF06-02 — Exact-revision xAI reports are directly navigable
 
-The planning index §100 identified the two report paths and blob SHAs but did not provide clickable destinations. Because the reports live on separate PR branches, relative paths from PR #192 would be invalid.
+The planning index §100 now contains immutable commit-pinned GitHub links:
+- PR #173 report at successor commit `a96af5b18d3a1d580ff56cff6191240893bceeb5`; expected report blob `7bd31a709ec8015a1ec5441e52af7c1e28c495f6`.
+- PR #195 report at successor commit `89385d3165e8c5b895fee6453247f4d732047dc0`; expected report blob `d7933ece34775e5b5a09435a01c290b99ba5c895`.
 
-Correction required/applied in the follow-up revision: use immutable commit-pinned GitHub blob links:
-- PR #173 report: `a96af5b18d3a1d580ff56cff6191240893bceeb5`, report blob `7bd31a709ec8015a1ec5441e52af7c1e28c495f6`.
-- PR #195 report: `89385d3165e8c5b895fee6453247f4d732047dc0`, report blob `d7933ece34775e5b5a09435a01c290b99ba5c895`.
+Both report files were fetched at their immutable successor commits and their blob identities matched the index. The navigation defects identified in the earlier source-snapshot audit are therefore corrected in this source revision.
 
-Both report files were fetched at those immutable commits and their blob SHAs matched the planning index.
+## 4. Rendered GitHub line/fragment navigation — blocked
 
-## 4. Rendered GitHub anchors — still blocked
+The Phase 2 integration map contains commit-pinned GitHub source links with line fragments. The prior preservation report records validation of 76 line-anchor ranges against exact fetched source-file lengths. This is evidence that the cited line ranges existed in those source files at the recorded commits. It does **not** establish that GitHub's rendered blob page loads and scrolls to the intended line range.
 
-The historical Phase 2 integration map contains many commit-pinned GitHub source links with line fragments, for example `#L155-L223`, `#L140-L158`, and other line ranges. The preservation report's source-identity and line-range checks establish that the referenced files and line ranges existed at the reviewed commits. They do not establish that GitHub's rendered blob page scrolls to the intended fragment.
+A direct attempt to open a representative GitHub blob URL with a line fragment was rejected by the browser retrieval layer with `DisabledError`. The GitHub repository connector returns normalized source content and strips the URL fragment, so it cannot prove browser scroll behavior. No authenticated interactive GitHub browser session was available in this Builder audit.
 
-A direct browser retrieval attempt for a representative GitHub blob URL with `#L155-L223` returned a fetch-level `DisabledError`. The GitHub repository connector returns normalized source content and strips the URL fragment; it therefore cannot establish browser scroll behavior. No browser-capable GitHub session was available in this Builder audit.
-
-**Result:** actual rendered line/fragment navigation remains unverified. Static source checks must not be represented as rendered-browser verification. DF-06 cannot be marked MET on the evidence currently available.
+**Result:** actual rendered GitHub line/fragment navigation remains unverified. Do not mark this criterion passed based on static source-line existence.
 
 ## 5. External and historical destinations
 
-The existing preservation/link-validation report records the prior Builder checks of semantic relevance, enumerated external destinations, historical/cross-branch references, relative-path integrity, 89 source citations, and 76 line ranges. Those historical results remain bound to the source revision and coverage documented in that report.
+The scan enumerated 207 external-link occurrences at the exact source revision. This run did not perform a live status check for every unique external destination. Earlier preservation-report checks of 189 external URL occurrences remain historical evidence for the exact scope and revision recorded in that report; they must not be silently upgraded to current-live verification.
 
-This audit re-fetched the two current xAI report targets, confirmed their exact report blobs, and checked all current-PR relative paths. It did not re-run a live HTTP status check against every external URL or every historical Actions artifact URL. Such destinations must be reported as historically checked or not freshly revalidated, not silently upgraded to current-live verification.
+The exact-revision xAI report destinations were independently re-fetched and their expected blobs matched. Historical decision-comment URLs referenced in the portal and index were also fetched and their returned comment bodies inspected. These targeted checks do not constitute a fresh exhaustive validation of all external destinations.
 
 ## 6. Disposition
 
-- DF06-01: corrected by making the assignment destination clickable and reconciling the inventory wording.
-- DF06-02: corrected by making both exact-revision xAI reports directly navigable from the index.
-- Relative/local path integrity: **PASS** for the 118 parsed occurrences at the exact source revision.
-- Rendered GitHub line/fragment behavior: **UNVERIFIED / BLOCKED**.
-- Exhaustive live external URL revalidation: **NOT PERFORMED in this run**; prior documented checks remain historical evidence.
-- DF-06 overall: **NOT MET pending rendered-anchor evidence and any required fresh external-destination recheck**.
+| Check | Result |
+|---|---|
+| Exact PR changed-path inventory | 41 unique paths |
+| Changed paths present in tree | 41/41 |
+| Changed files fetched | 41/41 |
+| Local/relative link destinations | 125 |
+| Missing local/relative destinations | 0 |
+| External destinations enumerated | 207 occurrences |
+| All external destinations live-rechecked | No |
+| Historical line-range source existence | Prior evidence: 76 ranges, exact scope in preservation report |
+| Rendered GitHub line/fragment behavior | Unverified / blocked |
+| DF-06 overall | **NOT MET** |
+
+DF06-01 and DF06-02 are corrected in this source revision. Local path integrity passes for the 125 parsed destinations. Two evidence requirements remain before DF-06 can be declared met: (1) rendered GitHub navigation for the distinct line/fragment target families must be checked in a normal interactive GitHub browser; and (2) the external/historical destination inventory must receive a fresh exact-revision status and semantic-relevance check, or each item not verifiable must be explicitly dispositioned as historical/access-limited with a primary-source alternative where applicable.
 
 ## 7. Reproducibility and boundaries
 
-Repeat the static path check against the final PR #192 HEAD, not the source SHA recorded above, after the Builder corrections are committed. Re-fetch the 40/41-file inventory and verify the changed-file count and blob identities. A reviewer with an authenticated normal GitHub browser must open representative line-fragment links from the final exact revision, confirm that the target file loads and the viewport lands at the cited line range, and record the tested URLs and outcomes. Expand this to every distinct line-anchor pattern/target family identified in the preservation register.
+Reproduce the local-path scan against the final PR #192 HEAD after all closeout writes. Re-fetch live PR metadata, the complete changed-path list, the exact tree, and all changed-file blobs. For browser verification, open representative line-fragment links from the final exact revision in a normal authenticated GitHub browser, confirm both destination resolution and viewport position, and record the exact tested URLs and outcomes. Cover every distinct target family, not merely one arbitrary link. Repeat the external-destination classification at the final exact revision and retain a list of any status failures, redirects, access limitations, and semantically stale destinations.
 
 DF-09 must be independently assessed against the final frozen PR #192 HEAD. DF-12 remains a Project Director decision. DF-10 inventory closeout is separate. PR #173 architecture acceptance, CF-26/CF-27, PR #195 F-195-07, Stage A, implementation, source-baseline selection, integration, merge, and deployment remain outside this audit and unchanged.
