@@ -1222,3 +1222,18 @@ This is Builder status evidence only. It is not an Independent Reviewer verdict,
 - The report's source transcription is committed on PR #174 at `778c28a45e4b6281b9e8e0cd67695f2065931e2c`; it reports F-02 HIGH and F-03 MEDIUM, verdict REVISE — NOT APPROVED FOR THE NEXT GATE. Its artifact does not identify reviewer model/person; no xAI attribution is made.
 - Builder corrections to BM-02, BM-04, BM-05, BM-08, Section 5.5 and acceptance scenarios 49–54 are retained at PR #174 HEAD `7cb6271531f3e80a45728756273218132499722e` (specification blob `cfdda9e6e7070cd5533b076e9bd77c2904694a32`; refreshed review-request blob `e0d308bcb20008db6e2ab9594e663e8cad611d0d`). Superseding exact-HEAD independent review was requested in PR #174 comment `6895749266`; no verdict is claimed.
 - The correction does not authorize implementation. The exact corrected proposal remains subject to independent review and Project Director disposition.
+
+
+## 99. Exact-revision independent re-review assignment — 2026-11-17
+
+The complete Builder-to-xAI assignment for the corrected Brain Foundation Architecture and blind fresh-reader workflow is recorded at:
+
+`docs/architecture/reports/BUILDER_TO_XAI_EXACT_REVISION_RE_REVIEW_REQUEST_PR173_PR195_2026-11-17.md`
+
+Canonical commit containing the assignment: `9348d314084a34ef0e0379444661ee1ba09d0eae`.
+
+The request defines two separate reviews:
+- PR #173 exact target `1f137cbaed985821bbc32408151911b18418f713`, with ARCH-173-01–07, all seven CF-26 specifications, source compatibility, exact-revision lineage and normative architecture checks.
+- PR #195 exact target `6b8e6fce342397b17f0ed237ccc5a09fb38034df`, with workflow pinning, blind-packet integrity, permissions, validation/failure paths and residual F-195-07.
+
+The prior verdicts remain bound to their original SHAs. The two new verdicts and reports must remain separate. The Project Director is not the communications intermediary. This assignment does not authorize implementation, Stage A, runtime testing, merge, draft exit or deployment.
