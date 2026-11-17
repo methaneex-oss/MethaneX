@@ -1,109 +1,60 @@
-# CURRENT EXACT STATE — 2026-11-17 (JARVIS-M0 Builder continuation 18)
+# CURRENT EXACT STATE — 2026-11-17 (Builder continuation 19)
 
-> **Controlling live-status snapshot.** This block supersedes all earlier dated status snapshots below for current PR heads, base relationships and gate state. Those snapshots remain historical evidence and must not be combined into a synthetic current state. Builder evidence only; not independent review, Tester clearance, gate clearance or Director acceptance.
+> **Controlling live-status snapshot.** This block supersedes earlier active-status snapshots below for current PR heads, base relationships and gate state. Older dated sections remain historical evidence. This is Builder evidence only; not independent review, fresh-reader clearance, gate clearance or Project Director acceptance.
 
 ## 1. Live repository state
 
-Repository: `methaneex-oss/MethaneX`. Values below were fetched from GitHub on 2026-11-17. Full SHAs identify the exact revisions; branch names are mutable.
+Repository: `methaneex-oss/MethaneX`. Full SHAs identify exact revisions; branch names are mutable. The live GitHub PR metadata was re-fetched for this continuation.
 
 | PR | Exact HEAD | Base SHA | State | Current disposition |
 |---|---|---|---|---|
-| #173 — Brain Foundation Architecture | `a96af5b18d3a1d580ff56cff6191240893bceeb5` (report-only successor; reviewed architecture SHA `1f137cbaed985821bbc32408151911b18418f713`) | `1273ddbcd0087d189e01388ded2d362fb1e058d2` | Open / draft / unmerged | xAI re-reviewed exact architecture SHA `1f137cba...`: **PARTIALLY CLEAR**. Report `INDEPENDENT_ARCHITECTURE_RE_REVIEW_XAI_PR173_2026-11-17.md` (blob `7bd31a...`) is in the report-only successor. Concurrency/partial-failure invariants, donor-conflict crosswalk and social minimum are improved; whole-architecture acceptance, CF-26 independent challenge, CF-27 final gate and runtime donor remediation remain open or unauthorized. |
-| #174 — Brain Mechanism Specification | `c34472354e4122fc1d78dc25bf45d81f1eb4dc69` | `97191111bc2573c14d391c0af9628db7b11f194b` | Open / draft / unmerged | Independent xAI review **PARTIALLY CLEAR** against exact reviewed SHA `7cb6271531f3e80a45728756273218132499722e` (review/comment #6896098398; report added in this one-commit documentation-only successor). F-02/F-03 substantially addressed at specification level; parent-architecture reconciliation, provenance limits and specification-only evidence remain. Await Project Director disposition; no implementation or merge authorization. |
-| #178 — Governance proposal lineage | `39fe09dcf13496f5f0005ccf3f00739303e29f88` | `1273ddbcd0087d189e01388ded2d362fb1e058d2` | Open / draft / unmerged | Separate PR lineage; not the merge destination of PR #196. |
-| #179 — Phase 2 branch | `ea64607ef94f142a6142a013e119a7225bc95c1c` | `39fe09dcf13496f5f0005ccf3f00739303e29f88` | Open / draft / unmerged | Current Phase 2 branch head; contains accepted governance PR #196 and status reconciliation. |
-| #191 — Human/MCU reference comparison | `609d38ede50bbdd98a93dfed112781eacabee9fd` | `f6267456560a08054d69f7960d2951452b14017c` | Open / draft / unmerged | Director Option A: retain separately; no integration operation. |
-| #192 — Documentation Foundation | Self-referential: use the live [PR #192 page](https://github.com/methaneex-oss/MethaneX/pull/192) for the exact current HEAD; this index cannot pin the commit that contains itself. The latest 41-path parent manifest is recorded in the final section of the inventory; the live PR page is authoritative for the current self-referential HEAD. | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | Open / non-draft / unmerged | The final inventory section records the latest exact parent manifest; the final inventory-only post-write verification is recorded in the superseding PR #192 Builder verification comment. The live PR page is authoritative for the current self-referential HEAD. DF-06 and DF-09 remain open; DF-12 awaits Director decision. |
-| #193 — Implementation-plan proposal | `fa2bd50d6fb0bb77dc3cbaab684f51d606e94bb5` | `874c732973b6ab303d65a503f5a215b0af8e1153` | Open / draft / unmerged | Separate non-operative lineage; implementation planning remains held. |
-| #195 — Role terminology and assessment workflows | `89385d3165e8c5b895fee6453247f4d732047dc0` (report-only successor; reviewed workflow SHA `6b8e6fce342397b17f0ed237ccc5a09fb38034df`) | `8edc7cdfc886537d319d81cea04cdc9f3476044e` | Open / draft / unmerged | xAI re-reviewed exact workflow SHA `6b8e6fce...`: **APPROVED WITH DOCUMENTED NON-BLOCKING ISSUES**. Report `INDEPENDENT_REVIEW_XAI_PR195_2026-11-17_HEAD_6b8e6fce.md` (blob `d7933e...`) is in the report-only successor. F-195-07 live negative-path Actions evidence remains OPEN; no fresh-reader run or workflow runtime success is claimed. Not DF-09/DF-12 clearance. |
+| #173 — Brain Foundation Architecture | `a96af5b18d3a1d580ff56cff6191240893bceeb5` (report-only successor; reviewed architecture SHA `1f137cbaed985821bbc32408151911b18418f713`) | `1273ddbcd0087d189e01388ded2d362fb1e058d2` | Open / draft / unmerged | xAI exact-architecture re-review: **PARTIALLY CLEAR**. Whole-architecture acceptance, CF-26 challenge, CF-27 final gate and runtime donor remediation remain open or unauthorized. |
+| #174 — Brain Mechanism Specification | `c34472354e4122fc1d78dc25bf45d81f1eb4dc69` | `97191111bc2573c14d391c0af9628db7b11f194b` | Open / draft / unmerged | xAI review **PARTIALLY CLEAR** against exact reviewed SHA `7cb6271531f3e80a45728756273218132499722e`; Project Director disposition remains pending. |
+| #179 — Phase 2 branch | `ea64607ef94f142a6142a013e119a7225bc95c1c` | `39fe09dcf13496f5f0005ccf3f00739303e29f88` | Open / draft / unmerged | Current Phase 2 branch head; contains accepted governance PR #196. |
+| #191 — Human/MCU reference comparison | `609d38ede50bbdd98a93dfed112781eacabee9fd` | `f6267456560a08054d69f7960d2951452b14017c` | Open / draft / unmerged | Director Option A: retain separately; no branch-history operation authorized. |
+| #192 — Documentation Foundation | Live HEAD: use [PR #192](https://github.com/methaneex-oss/MethaneX/pull/192); last fetched exact HEAD `4e0e4f875f1a08361c4bdfbcab06aa1b49f06f34` | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | Open / non-draft / unmerged; 41 changed files | DF-06 NOT MET; DF-09 NOT MET; DF-12 pending. DF-06 report source snapshot `d065e8b60f192be165953e89f248d343bc698380` is stale relative to this HEAD. The live PR page remains authoritative for self-referential current HEAD. |
+| #193 — Implementation-plan proposal | `fa2bd50d6fb0bb77dc3cbaab684f51d606e94bb5` | `874c732973b6ab303d65a503f5a215b0af8e1153` | Open / draft / unmerged | Separate non-operative lineage; implementation planning remains held pending documentation foundation disposition. |
+| #195 — Role terminology and assessment workflows | `89385d3165e8c5b895fee6453247f4d732047dc0` (report-only successor; reviewed workflow SHA `6b8e6fce342397b17f0ed237ccc5a09fb38034df`) | `8edc7cdfc886537d319d81cea04cdc9f3476044e` | Open / draft / unmerged; 12 changed files | xAI exact-workflow review: **APPROVED WITH DOCUMENTED NON-BLOCKING ISSUES**. F-195-07 live negative-path Actions evidence remains OPEN; no workflow runtime success or new fresh-reader run is claimed. |
 | #196 — Governance operating controls | `0ebc4e978fa38011b2f6bb5d97a03c267c1c12c9` | `d30237b81c3695f2a7cb980144b221bbd42ce548` | Closed / merged | Merge commit `c151e52781e56e6481424f774c19ea30128debb0`; merged into its existing Phase 2 base branch, not `main`. |
 
-### 1.1 Accepted baselines are not blanket approval of later proposals
+### 1.1 Exact revision and evidence rules
 
-- **PR #173:** historical accepted starting baseline `97191111bc2573c14d391c0af9628db7b11f194b`; reviewed proposal SHA `1f137cbaed985821bbc32408151911b18418f713` received xAI **PARTIALLY CLEAR**. Its report-only successor is current PR tip `a96af5b18d3a1d580ff56cff6191240893bceeb5`. Whole-architecture acceptance, CF-26 independent challenge and CF-27 final gate remain open. The Project Director's acceptance of BFA-C01–BFA-C14 remains limited to those foundational constraints.
-- **PR #174:** accepted specification baseline `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`; corrected proposal reviewed at exact SHA `7cb6271531f3e80a45728756273218132499722e` with verdict **PARTIALLY CLEAR**. Current PR tip `c34472354e4122fc1d78dc25bf45d81f1eb4dc69` adds only the review report. Project Director disposition remains pending; the verdict does not authorize implementation or merge.
-- **PR #196 governance:** the accepted governance document is `docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md`. PR #196 merged at `c151e527...` into `docs/jarvis-phase-2-whole-brain-integration-map-20261105`, not into `main`. The current Phase 2 branch head is `ea64607ef94f142a6142a013e119a7225bc95c1c`.
+- PR #192's index is self-referential. Use the live PR page for its current HEAD; never hard-code the commit containing this index into the index itself.
+- The DF-06 audit currently audits source snapshot `d065e8b60f192be165953e89f248d343bc698380`, not live PR #192 HEAD `4e0e4f875f1a08361c4bdfbcab06aa1b49f06f34`. Its earlier 131/131 local-target result is historical until the audit is refreshed against the frozen final source revision.
+- The exact current PR #192 changed-path count remains 41. Inventory §101 is a 41-path parent manifest for commit `2ab51755b9b9e907aacb282020305bd012dbb395`; it is not a manifest of the current live HEAD. Refresh the manifest after the last documentation write.
+- PR #173 and PR #195 review verdicts apply only to their exact reviewed SHAs, not to later revisions or unrelated gates.
 
-### 1.2 PR #191 ancestry — two different comparisons
+## 2. Documentation Foundation gates — current disposition
 
-The Director's Option A — retain PR #191 separately — remains in force. Current GitHub comparisons show:
-
-1. PR #191 **base** `f626745...` to PR #179 current HEAD `ea64607...`: PR #179 is 36 commits ahead and 0 behind; the PR #191 base is an ancestor of PR #179.
-2. PR #179 current HEAD `ea64607...` to PR #191 **head** `609d38e...`: the branches diverge from merge base `f626745...`; PR #191 has 1 unique commit and is 36 commits behind PR #179.
-
-These are different comparisons, not contradictory statements. No rebase, retarget, cherry-pick, replay, merge or closure was performed.
-
-### 1.3 PR #192 base relationship
-
-PR #192's recorded base `61311fe...` is 14 commits behind the current PR #179/Phase 2 branch head `ea64607...` (current head is 14 ahead, 0 behind). PR #192 therefore targets an earlier point in that branch history. This is an integration dependency to disclose, not authorization to retarget or rebase. No branch-history operation was performed.
-
-**Self-referential revision rule:** this index is itself included in PR #192, so its containing commit SHA cannot be hard-coded into its own content without making that value stale on the next write. Use the live [PR #192 page](https://github.com/methaneex-oss/MethaneX/pull/192) for the current HEAD and the Actions packet manifest field `target_documentation_revision` for the exact revision tested. All supporting source commits remain pinned explicitly.
-
-## 2. Documentation Foundation exit criteria — DF-01 through DF-13
-
-The authoritative criterion definitions are in `docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md` at PR #192 revision `07acbf61...`. The complete audit is not part of the blind reader packet; the following table reproduces its exit criteria so readers can understand gate identifiers without opening external links.
-
-| ID | Exit criterion |
+| Gate | Current status |
 |---|---|
-| DF-01 | One canonical entry point exists: README points to one index; the index states current phase and reading order. |
-| DF-02 | Detailed inventory is synchronized: foundational artifacts have exact locations, revisions, statuses and dependencies. |
-| DF-03 | Authority is traceable: accepted claims have exact decision records and scope; unresolved claims remain explicitly unresolved. |
-| DF-04 | Governance status is honest: proposed governance is not represented as accepted or binding. |
-| DF-05 | Branch dependencies are explicit: PR bases, heads, ancestry, stale bases and integration decisions are recorded. |
-| DF-06 | Cross-document links are durable: links resolve to exact commit-pinned paths; PR links remain for discussion. |
-| DF-07 | Status language is consistent: README, index, inventory, correction, handoff and roadmap agree on current phase and holds. |
-| DF-08 | Historical work is preserved: historical evidence is not deleted or silently superseded; open preservation follow-up is visible. |
-| DF-09 | Continuity is reproducible: a fresh Builder can reconstruct state without chat memory or assumptions. |
-| DF-10 | Builder self-review is complete: exact changed paths, blob SHAs, checks, limitations and remaining findings are recorded. |
-| DF-11 | Independent review is complete: a genuinely separate reviewer submits a verdict against the exact final revision. |
-| DF-12 | Required authority decision is recorded: acceptance, rejection or conditional acceptance is recorded against exact artifacts and scope. |
-| DF-13 | Planning hold is respected: no Stage A work begins before this gate is accepted. |
+| DF-01 | Builder corrections recorded; exact-final-revision reconciliation remains part of closeout. |
+| DF-02 | Prior Builder inventory verification exists, but the manifest must be refreshed after the latest documentation writes and checked against its exact parent tree. |
+| DF-03 | Accepted-baseline and decision provenance distinctions are recorded; no inference beyond the cited exact artifacts. |
+| DF-04 | Accepted governance source revalidated; PR #196 merge scope distinguished from PR #178 and `main`. |
+| DF-05 | PR bases, heads and ancestry dependencies are recorded; no integration operation is authorized. |
+| DF-06 | **NOT MET.** Prior static scan found 131/131 local destinations resolving and enumerated 201 external occurrences, but its source snapshot is stale; exhaustive external reachability/semantic checks and authenticated rendered GitHub line/comment-anchor verification remain incomplete. |
+| DF-07 | Must be reconciled against the frozen final documentation revision after all corrections. |
+| DF-08 | RESOLVED only within its documented bounded preservation criterion. |
+| DF-09 | **OPEN / NOT MET.** Latest recorded blind Nemotron assessment, run `43384559530`, assessed older revision `07acbf61a4d7d532bc838711d6837e2c16ce12b1` and returned **PARTIALLY CLEAR**. It is not an assessment of the live PR #192 HEAD. A new blind assessment against the final frozen HEAD must return **CLEAR**. |
+| DF-10 | Builder self-review and §101 historical parent manifest exist; exact current changed-path/blob manifest and post-write verification must be refreshed after final writes. |
+| DF-11 | **WAIVED** by explicit Project Director decision on 2026-11-11. Do not treat independent review as a required DF-11 gate or invent a review verdict. |
+| DF-12 | **NOT ACCEPTED / PENDING.** Project Director's exact-revision foundation decision remains reserved until applicable evidence is complete. |
+| DF-13 | Stage A remains NOT STARTED / HELD. Runtime implementation remains NOT AUTHORIZED. |
 
-## 3. DF-09 evidence and remaining limitations
+## 3. Fresh-reader evidence and workflow dependency
 
-The latest blind fresh-reader assessment is GitHub Actions run [43384559530](https://github.com/methaneex-oss/MethaneX/actions/runs/43384559530), targeting PR #192 exact HEAD `07acbf61a4d7d532bc838711d6837e2c16ce12b1`. It returned **PARTIALLY CLEAR**, not CLEAR. The API-reported provider/model were Nvidia / `nvidia/nemotron-3.5-super-vl:free`; the response completed with `stop`, contained no refusal or tool calls, and passed the required A–H output validation. Artifact SHA-256: `a14f46ec6a23e2abca2061cd139a4fc75f223ee669e19e34894678e1293e50f6`.
+The latest recorded blind fresh-reader result is run [43384559530](https://github.com/methaneex-oss/MethaneX/actions/runs/43384559530), targeting PR #192 revision `07acbf61a4d7d532bc838711d6837e2c16ce12b1`. It returned **PARTIALLY CLEAR**. Provider/model and completion validation were recorded as successful, but that does not convert the comprehension verdict to CLEAR. The executed prompt and raw assessment are preserved in the run artifact; do not claim the unrecovered historical 17-question protocol was executed.
 
-The report's primary reader traps were: stale/conflicting current-head snapshots; PR #191 comparison ambiguity; insufficient explanation of PR #173/#174 accepted-baseline versus current-proposal status; unexplained DF criteria; and insufficiently prominent disclosure of materials excluded from the packet. The run label has a leading-letter typo (`lpr195-reader-2026-11-13`), but run ID, target SHA and artifact digest preserve traceability.
+PR #195's exact reviewed workflow SHA `6b8e6fce342397b17f0ed237ccc5a09fb38034df` received xAI **APPROVED WITH DOCUMENTED NON-BLOCKING ISSUES**. Its report-only successor is current PR #195 HEAD `89385d3165e8c5b895fee6453247f4d732047dc0`. F-195-07 live negative-path Actions evidence remains open. The runbook still requires the corrected workflow dependency to be integrated and re-fetched from `main` before dispatch; the available GitHub connection does not expose workflow dispatch. No fresh-reader execution is claimed.
 
-The historical 17-question DF-09 list was not recovered. The executed prompt is preserved inside the run artifact as `assessment_prompt.md`; it contains eight core comprehension questions plus usability checks. Do not claim the unrecovered 17-question list was executed. A new CLEAR assessment is required against the final PR #192 HEAD after the remediation and inventory cycle.
+## 4. Authority and execution boundary
 
-The earlier BFA assessment run 43384336255 targeted PR #173 `7e948167...` and returned NOT CLEAR. It does not assess current PR #173 HEAD `f8dd67f...`.
-
-## 4. What the blind reader packet does not contain
-
-The DF-09 run is bounded evidence. The packet did not include, and the reader did not open or inspect:
-
-- The full Initial Documentation Foundation Audit at `docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md`; the DF criteria are summarized above.
-- The full artifact inventory at `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md` and the full historical preservation register.
-- The full template guide and template documents under `docs/templates/`.
-- The accepted governance document at `docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md`, currently on the Phase 2 branch at blob `f5827c55...`.
-- The full PR #193 handoff/implementation-plan branch and live GitHub PR/issue pages, review threads and inline annotations.
-- The full PR #174 F-02/F-03 report was not included in the prior DF-09 packet; it is now preserved separately as a source transcription on PR #174, with the report's own historical target SHA and reviewer-identity limitation disclosed.
-- The historical 17-question DF-09 protocol; it remains unrecovered.
-
-The packet included selected decision extracts and a bounded set of architecture/planning documents. A statement about an excluded item is a recorded summary or provenance note, not proof that the blind reader inspected the excluded source.
-
-### 4.1 Current PR #195 workflow review request
-
-The xAI exact-HEAD review of PR #195 at `de0636056cc5815980d0ddc2f18829a24d9d06d0` returned **APPROVED WITH DOCUMENTED NON-BLOCKING ISSUES** (review/comment #6896096827; full report `docs/architecture/reports/INDEPENDENT_REVIEW_XAI_PR195_2026-11-15_HEAD_de063605.md`). The current PR #195 tip `3cfbf99414fb75d3fc5b1c810584610b57e46d95` adds only that report. The reviewed delta from prior reader-workflow review `215e205e...` was pin-only: PR #174 proposal pin to `7cb62715...` and snapshot date. Residual F-195-07 live negative-path Actions evidence remains. The reader packet pins PR #174 exact proposal `7cb6271531f3e80a45728756273218132499722e`, specification blob `cfdda9e6e7070cd5533b076e9bd77c2904694a32`, and correction-rationale blob `b3089c11b5ee7b7e4244ca4e63d7e89afc038cd0`. This review is not merge or workflow-clearance authorization.
-
-## 5. Current gate status and authority boundary
-
-- **DF-01:** Builder corrections present; current exact-state snapshot and reader-facing clarifications added in this continuation.
-- **DF-02:** RESOLVED at Builder-evidence level by the current 39-path parent manifest in the final inventory section and the final inventory-only post-write verification recorded in PR #192 comment #6895825429. This is not Director acceptance.
-- **DF-03:** accepted-baseline and decision provenance distinctions recorded; the PR #174 F-02/F-03 source report is preserved as a commit-pinned transcription, and the Project Director confirmed the historical shared-conversation source opened and displayed the original review (PR #192 comment #6894260448). This provenance confirmation does not establish a new exact-HEAD independent review verdict.
-- **DF-04:** accepted governance source revalidated; PR #196 merge scope explicitly distinguished from PR #178 and `main`.
-- **DF-05:** branch dependencies and PR #191/PR #192 ancestry comparisons recorded.
-- **DF-06:** NOT MET solely because complete rendered GitHub fragment/line-anchor behavior remains unverified. The historical PR #174 source report is preserved, and the Project Director confirmed that the original review opened and displayed (PR #192 comment #6894260448); that historical-source access limitation is resolved.
-- **DF-07:** remediation in progress; a new blind reader run is required after final writes.
-- **DF-08:** RESOLVED only within its exact bounded preservation criterion.
-- **DF-09:** OPEN / NOT MET — latest result is PARTIALLY CLEAR.
-- **DF-10:** RESOLVED at Builder-evidence level by exact self-review, the current 39-path parent manifest in the final inventory section and the final inventory-only post-write verification recorded in PR #192 comment #6895825429. This is not Independent Reviewer approval or Director acceptance.
-- **DF-11:** WAIVED by explicit Project Director decision. The separate PR #195 technical review is now complete at its exact reviewed SHA with APPROVED WITH DOCUMENTED NON-BLOCKING ISSUES; F-195-07 live negative-path evidence remains outstanding.
-- **DF-12:** NOT ACCEPTED; exact-revision Project Director decision remains reserved.
-- **DF-13:** MAINTAINED; Stage A has not started and remains held.
-
-**No Stage A, runtime implementation, source-baseline selection, donor adoption, PR integration, merge, rebase, retarget, deployment or gate clearance is authorized by this snapshot.**
+- DF-11 is waived; this does not waive DF-06, DF-09 or DF-12.
+- A blind fresh-reader CLEAR result is not an independent technical review. The two forms of evidence must not be conflated.
+- PR #192 and PR #193 remain open and unmerged. Their integration hold remains in force.
+- Stage A, runtime implementation, source-baseline selection, donor adoption, PR integration, merge, rebase, retarget, deployment and training remain unauthorized.
+- This status block records current evidence and outstanding work; it does not declare the Documentation Foundation complete or accepted.
 
 ---
 
