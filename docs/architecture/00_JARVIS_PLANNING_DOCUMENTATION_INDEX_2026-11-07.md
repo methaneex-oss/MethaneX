@@ -1,4 +1,4 @@
-# CURRENT EXACT STATE — 2026-11-17 (Builder continuation 19)
+# CURRENT EXACT STATE — 2026-11-17 (Builder continuation 20)
 
 > **Controlling live-status snapshot.** This block supersedes earlier active-status snapshots below for current PR heads, base relationships and gate state. Older dated sections remain historical evidence. This is Builder evidence only; not independent review, fresh-reader clearance, gate clearance or Project Director acceptance.
 
@@ -14,7 +14,7 @@ Repository: `methaneex-oss/MethaneX`. Full SHAs identify exact revisions; branch
 | #191 — Human/MCU reference comparison | `609d38ede50bbdd98a93dfed112781eacabee9fd` | `f6267456560a08054d69f7960d2951452b14017c` | Open / draft / unmerged | Director Option A: retain separately; no branch-history operation authorized. |
 | #192 — Documentation Foundation | Live HEAD: use the live [PR #192 page](https://github.com/methaneex-oss/MethaneX/pull/192); the exact HEAD is intentionally not duplicated in this self-referential index. | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | Open / non-draft / unmerged; 41 changed files | DF-06 NOT MET; DF-09 NOT MET; DF-12 pending. DF-06 report source snapshot `6952a23d1ab401ad3599a3e4ea169fc78e2cb4ac` is a pinned predecessor audit snapshot; the report explicitly records its scope and remaining DF-06 blockers. The live PR page remains authoritative for self-referential current HEAD. |
 | #193 — Implementation-plan proposal | `fa2bd50d6fb0bb77dc3cbaab684f51d606e94bb5` | `874c732973b6ab303d65a503f5a215b0af8e1153` | Open / draft / unmerged | Separate non-operative lineage; implementation planning remains held pending documentation foundation disposition. |
-| #195 — Role terminology and assessment workflows | `89385d3165e8c5b895fee6453247f4d732047dc0` (report-only successor; reviewed workflow SHA `6b8e6fce342397b17f0ed237ccc5a09fb38034df`) | `8edc7cdfc886537d319d81cea04cdc9f3476044e` | Open / draft / unmerged; 12 changed files | xAI exact-workflow review: **APPROVED WITH DOCUMENTED NON-BLOCKING ISSUES**. F-195-07 live negative-path Actions evidence remains OPEN; no workflow runtime success or new fresh-reader run is claimed. |
+| #195 — Role terminology and assessment workflows | `fe8a3b6216f874c7ab35e3c8d9489b5caf8ffd37` (merged PR head; merge commit `4f07d772beae03c99a8dd58b174201a3aa3074b2`) | `8edc7cdfc886537d319d81cea04cdc9f3476044e` | Closed / merged into `main` on 2026-11-17 | The documentation-reader workflow blob `585c9399318b0af17514a95a5c435d497a76234a` is present on `main` and was re-fetched after merge. xAI reviewed that exact workflow blob at `6b8e6fce...`: **APPROVED WITH DOCUMENTED NON-BLOCKING ISSUES**. F-195-07 remains OPEN as a disclosed non-blocking negative-path verification residual; no fresh-reader assessment is claimed. |
 | #196 — Governance operating controls | `0ebc4e978fa38011b2f6bb5d97a03c267c1c12c9` | `d30237b81c3695f2a7cb980144b221bbd42ce548` | Closed / merged | Merge commit `c151e52781e56e6481424f774c19ea30128debb0`; merged into its existing Phase 2 base branch, not `main`. |
 
 ### 1.1 Exact revision and evidence rules
@@ -29,10 +29,10 @@ Repository: `methaneex-oss/MethaneX`. Full SHAs identify exact revisions; branch
 | Gate | Current status |
 |---|---|
 | DF-01 | Builder corrections recorded; exact-final-revision reconciliation remains part of closeout. |
-| DF-02 | Prior Builder inventory verification exists, but the manifest must be refreshed after the latest documentation writes and checked against its exact parent tree. |
+| DF-02 | **RESOLVED at Builder-evidence level** by inventory §107: its 41-row parent manifest matches the exact parent tree after this index update; the final successor changes only the inventory file and preserves the other 40 path blobs. This is not Director acceptance. |
 | DF-03 | Accepted-baseline and decision provenance distinctions are recorded; no inference beyond the cited exact artifacts. |
 | DF-04 | Accepted governance source revalidated; PR #196 merge scope distinguished from PR #178 and `main`. |
-| DF-05 | PR bases, heads and ancestry dependencies are recorded; no integration operation is authorized. |
+| DF-05 | PR bases, heads and ancestry dependencies are recorded. The PR #195 workflow prerequisite was merged into `main` at `4f07d772...` under the Project Director's supervised 2026-11-17 authorization. PR #192's recorded base SHA `61311fe5...` predates the current Phase 2 base-branch head `ea64607...`; no retarget, rebase or merge of PR #192 is authorized. |
 | DF-06 | **NOT MET.** Prior static scan found 131/131 local destinations resolving and enumerated 201 external occurrences, but its source snapshot is stale; exhaustive external reachability/semantic checks and authenticated rendered GitHub line/comment-anchor verification remain incomplete. |
 | DF-07 | Must be reconciled against the frozen final documentation revision after all corrections. |
 | DF-08 | RESOLVED only within its documented bounded preservation criterion. |
@@ -46,7 +46,7 @@ Repository: `methaneex-oss/MethaneX`. Full SHAs identify exact revisions; branch
 
 The latest recorded blind fresh-reader result is run [43384559530](https://github.com/methaneex-oss/MethaneX/actions/runs/43384559530), targeting PR #192 revision `07acbf61a4d7d532bc838711d6837e2c16ce12b1`. It returned **PARTIALLY CLEAR**. Provider/model and completion validation were recorded as successful, but that does not convert the comprehension verdict to CLEAR. The executed prompt and raw assessment are preserved in the run artifact; do not claim the unrecovered historical 17-question protocol was executed.
 
-PR #195's exact reviewed workflow SHA `6b8e6fce342397b17f0ed237ccc5a09fb38034df` received xAI **APPROVED WITH DOCUMENTED NON-BLOCKING ISSUES**. Its report-only successor is current PR #195 HEAD `89385d3165e8c5b895fee6453247f4d732047dc0`. F-195-07 live negative-path Actions evidence remains open. The runbook still requires the corrected workflow dependency to be integrated and re-fetched from `main` before dispatch; the available GitHub connection does not expose workflow dispatch. No fresh-reader execution is claimed.
+PR #195's exact reviewed documentation-reader workflow blob `585c9399318b0af17514a95a5c435d497a76234a` received xAI **APPROVED WITH DOCUMENTED NON-BLOCKING ISSUES** at workflow revision `6b8e6fce342397b17f0ed237ccc5a09fb38034df`. The reviewed workflow has now been integrated into `main` by merge commit `4f07d772beae03c99a8dd58b174201a3aa3074b2` and was re-fetched from `main` with the same blob SHA. PR #195 remains historical as a closed/merged support PR. F-195-07 live negative-path Actions evidence remains OPEN and non-blocking for that PR's stated scope. The workflow integration prerequisite is satisfied; one new DF-09 assessment against the final frozen PR #192 HEAD is still required. The current GitHub connection does not expose workflow dispatch, so no fresh-reader execution is claimed.
 
 ## 4. Authority and execution boundary
 
