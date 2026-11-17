@@ -1,6 +1,8 @@
 # Nemotron Blind Fresh-Reader Rerun — Operator Runbook — 2026-11-10
 
-> **Execution hold — 2026-11-11:** Do not dispatch the workflow from the current `main` branch yet. Its Bash step interpolates the manual `target_revision` input directly into a shell command. PR #195 contains the corrected candidate, but it is still open/draft/unmerged and has not been executed. Review PR #195 and integrate the approved correction first; then re-fetch `main` and verify the corrected workflow before launching exactly one assessment. Do not use the older main workflow merely because it is green or because previous runs succeeded.
+> **Current execution status — 2026-11-17:** The workflow-integration hold is lifted. PR #195 merged into `main` at `4f07d772beae03c99a8dd58b174201a3aa3074b2`; the documentation-reader workflow was re-fetched from `main` and matched the independently reviewed blob `585c9399318b0af17514a95a5c435d497a76234a`. The current workflow no longer uses the unsafe direct interpolation of `target_revision` into a shell command. No new DF-09 run has yet been dispatched. The run target must be the final frozen PR #192 HEAD after all documentation and inventory updates.
+>
+> **F-195-07 boundary:** Live negative-path Actions evidence remains OPEN. xAI classified that gap as non-blocking for PR #195's terminology/workflow PR scope; that is not a DF-09 waiver. Under §8.3 below, if the failure-path evidence is required for DF-09 and remains unavailable, record DF-09 as BLOCKED rather than claiming that a fresh-reader CLEAR or green workflow alone closes the gate. Any waiver must come from the Project Director and be recorded explicitly.
 
 **Purpose:** Run one new blind fresh-reader assessment against the final corrected PR #192 documentation revision.  
 **Model:** `nvidia/nemotron-3.5-super-vl:free` via OpenRouter.  
@@ -9,7 +11,7 @@
 
 ## 1. Workflow readiness
 
-The workflow on `main` accepts an exact `target_revision` input, but the current main-branch implementation still interpolates that input directly inside a Bash command. Do not dispatch the current main version. PR #195 contains the corrected candidate at workflow-hardening commit `87087800ba8a24b07066656691fdc0ef16eae6f5` (workflow blob `8f7f94c87c905c033ac4385ca1a977f30b41478c`); the PR's later audit-only head is mutable and must be re-fetched before review. The candidate validates the full 40-character SHA through an environment variable, bounds response/error reads, sanitizes diagnostics, supports multiple response shapes, and rejects wrong-model, refused, incomplete or structurally truncated assessments. Static inspection only; YAML-runtime validation, execution and provider-response tests have not been performed. PR #195 must be reviewed and integrated through the authorized process before the one new blind run. After integration, re-fetch the live `main` workflow and verify that it contains the approved correction before dispatching. Historical workflow update commits:
+The current `main` workflow was re-fetched after PR #195 merged and has exact blob `585c9399318b0af17514a95a5c435d497a76234a`, matching the workflow blob independently reviewed by xAI at exact workflow revision `6b8e6fce342397b17f0ed237ccc5a09fb38034df`. PR #195's merge commit is `4f07d772beae03c99a8dd58b174201a3aa3074b2`. The approved workflow validates the full 40-character SHA through an environment variable, checks the checked-out HEAD against that SHA, uses `persist-credentials: false`, restricts permissions to `contents: read`, bounds response/error reads, sanitizes diagnostics, supports multiple response shapes, and rejects wrong-model, refused, incomplete or structurally truncated assessments. This establishes exact-source availability and static review, not a new provider invocation or successful current-head assessment. F-195-07 negative-path live evidence remains OPEN and its interaction with DF-09 is governed by the explicit boundary in §8.3. Historical workflow update commits:
 
 - `12ced8bf445309fcad0422194febcc7002e9621f` — parameterize exact target revision.
 - `3b43ac1c5f6c7a9c070505a5d621e8e96645aa9e` — correct dispatch input YAML.
@@ -34,11 +36,12 @@ The workflow timeout is 20 minutes. It does not create paid compute, GPU infrast
 ## 2. How to launch
 
 1. Open the workflow link above.
-2. Do **not** select Run workflow until PR #195 has been reviewed and integrated.
-3. After integration, re-fetch the live workflow on `main` and verify the SHA-validation/environment-variable correction is present; only then select **Run workflow** and set branch/ref to `main`.
-4. In **target_revision**, paste the exact current HEAD SHA shown at the top of PR #192. Do not use a branch name.
-5. Keep assessment label as `post-review-corrections`.
+2. Re-fetch the workflow from `main` and verify its blob is exactly `585c9399318b0af17514a95a5c435d497a76234a`. Do not dispatch from a feature branch or an older workflow revision.
+3. Confirm PR #192 has no remaining planned documentation or inventory writes, then fetch its live PR metadata and copy the exact full 40-character HEAD SHA. Do not use a branch name or a pre-manifest commit.
+4. In **target_revision**, paste that exact PR #192 HEAD SHA. Set the workflow branch/ref to `main`.
+5. Use a distinct valid label such as `df09-final-20261117`.
 6. Start the workflow once. Do not launch duplicate runs while one is queued or running.
+7. Preserve the run ID, exact target SHA, artifact ID/digest, provider/model identity, finish reason, and raw assessment. Then apply §5 and §8.3; do not convert a green Actions result into DF-09 clearance by itself.
 
 The exact SHA must be copied from PR #192 after the Builder has finished all documentation changes intended for this reader test. Do not use the SHA recorded in this runbook as the target; the runbook is committed before the run and therefore cannot contain its own final resulting SHA.
 
