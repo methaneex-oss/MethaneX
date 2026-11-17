@@ -3,7 +3,7 @@
 **Repository:** `methaneex-oss/MethaneX`  
 **PR:** #192 — Documentation Foundation  
 **Branch:** `docs/whole-brain-planning-scope-correction-20261107`  
-**Exact source revision audited:** `aa090bb54079a634f536a1ab0663be87ee250097`  
+**Exact source revision audited:** `d065e8b60f192be165953e89f248d343bc698380`  
 **PR state at source snapshot:** open, non-draft, unmerged; 41 changed files.  
 **Audit role:** Builder-side static and repository-evidence audit. This is not an Independent Reviewer verdict, DF-09 fresh-reader result, DF-12 Project Director acceptance, or gate-closure decision.
 
@@ -13,7 +13,7 @@ The live PR metadata, complete changed-filename listing, and recursive Git tree 
 
 All 41 changed files were fetched at the exact source revision: 39 Markdown files and two JSON fresh-reader evidence artifacts. A static scan of the 39 Markdown files covered inline Markdown links, reference-style link definitions, HTML `href`/`src` attributes, and autolinks, excluding fenced code blocks. The scan counted 332 link occurrences: 131 repository-relative/local destinations and 201 external destinations. Local destinations were normalized against each source file's directory and checked against the complete exact-revision tree, including repository-root paths and common Markdown index conventions. **All 131 local destinations resolved; no missing local target was found.**
 
-The two fresh-reader JSON artifacts were fetched and confirmed present, but were not parsed for URLs as part of the Markdown-link scan. Link counts are syntactic occurrences, not unique destinations or rendered-link counts. External destinations were enumerated but not all live-HTTP revalidated in this run.
+The two fresh-reader JSON artifacts were fetched and confirmed present, but were not parsed for URLs as part of the Markdown-link scan. The synchronized inventory now includes §101, a 41-path parent manifest captured at `2ab51755b9b9e907aacb282020305bd012dbb395`; its 41 recorded blob identities match that exact parent tree. At post-write verification on `d065e8b60f192be165953e89f248d343bc698380`, all 41 changed paths remained present in the non-truncated tree. The inventory row intentionally records its own pre-update parent blob at the manifest snapshot; after the manifest append, the inventory blob changed, so that one self-entry is not expected to equal the successor tree's inventory blob. Link counts are syntactic occurrences, not unique destinations or rendered-link counts. External destinations were enumerated but not all live-HTTP revalidated in this run.
 
 ## 2. Exact-revision inventory
 
@@ -89,7 +89,7 @@ Builder-side local-path integrity passes for the 131 parsed local destinations. 
 
 ## 7. Reproducibility and boundaries
 
-At the audited source revision, the exact tree and all 41 changed paths were retrieved. All 39 Markdown changed files were fetched and scanned; both JSON evidence files were fetched. To reproduce, fetch the live PR metadata and changed-path list, pin the resulting HEAD SHA, fetch its recursive tree, and re-run the link parser over every changed Markdown file. Do not mix results across commits.
+At the audited source revision, the exact tree and all 41 changed paths were retrieved. All 39 Markdown changed files were fetched and scanned; both JSON evidence files were fetched. The 41-row inventory parent manifest was compared against its exact snapshot tree (all 41 blob identities matched), and the post-write tree at the audited revision again contained all 41 changed paths. The only intentional parent/current blob difference is the inventory file itself, which changed when the manifest was appended. To reproduce, fetch the live PR metadata and changed-path list, pin the resulting HEAD SHA, fetch its recursive tree, and re-run the link parser over every changed Markdown file. Do not mix results across commits.
 
 For rendered-browser verification, use an authenticated GitHub browser session on the final frozen HEAD. Open representative examples from every distinct fragment target family, including commit-pinned blob line ranges and PR issue-comment anchors. Record exact URLs, destination status, target element identity, viewport position, and observed result. A screenshot without target inspection is insufficient.
 
