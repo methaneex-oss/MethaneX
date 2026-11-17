@@ -342,6 +342,22 @@ The architecture must define, in later detailed specifications, which changes re
 
 No cognitive responsibility may silently overwrite another responsibility's authoritative state. If two valid sources disagree, the disagreement must remain visible until an evidence-sensitive resolution is justified.
 
+### 6.3.1 Normative ownership, concurrency and partial-failure invariants
+
+The following are architecture-level invariants, not optional implementation suggestions. Later specifications may choose algorithms and data structures, but MUST preserve these semantics:
+
+1. **Single semantic authority:** every authoritative state class and item has exactly one semantic owner. A consumer, workspace, cache, coordinator, evaluator or transport layer MUST NOT become a second writer for that state.
+2. **Owner-atomic transition:** an accepted owner-state transition MUST commit coherently with its identity, version, provenance, temporal/context scope, epistemic status and dependency references. A partially written transition MUST remain uncommitted or explicitly recoverable as incomplete; it MUST NOT be exposed as accepted state.
+3. **No silent winner:** concurrent or contradictory proposals MUST be evaluated by the semantic owner against the current version. Arrival order, timestamp alone, container order, first-match position or last-write-wins MUST NOT select a semantic winner. A stale proposal MUST be rejected for re-evaluation; it MUST NOT be silently rebased.
+4. **Proposal/commit separation:** proposal, evaluation, authorization (where required), owner commit and downstream propagation are distinct states. A proposal, evaluator result, timeout, acknowledgement or partial propagation MUST NOT be represented as an accepted owner-state transition.
+5. **Dependency validation:** consequential consumers MUST validate the exact source versions and freshness conditions on which their work depends before use and again before committing a consequential transition. If a dependency changes or cannot be validated, affected work MUST become stale, blocked, suspended or explicitly unresolved.
+6. **Bounded asynchronous propagation:** cross-owner propagation MAY be asynchronous, but MUST expose pending, delivered, failed, stale and reconciled states. Coordination owns dependency/work tracking and propagation status; it MUST NOT rewrite another owner's semantic state.
+7. **Partial-failure integrity:** failure or unavailability of any owner, observer, executor, persistence layer or coordinator MUST NOT fabricate an experience, observation, prediction outcome, successful action consequence, learning approval or completed rollback. Missing, delayed, corrupt or inaccessible evidence remains unknown/unavailable and dependent work remains unresolved or stale.
+8. **Idempotent recovery:** duplicate delivery and replay MUST NOT create duplicate semantic effects. Recovery MUST revalidate identity, version, provenance and dependencies; it MUST NOT promote a partially recovered snapshot to complete cognitive state.
+9. **Locality of degradation:** a local failure invalidates only work that depends on the affected state, unless evidence demonstrates a wider impact. Unrelated authoritative state MUST remain intact.
+
+**Minimum acceptance evidence for any later implementation:** inject concurrent conflicting proposals, stale commits, lost/delayed notifications, duplicate replay, owner unavailability, interrupted persistence, partial activation and rollback interruption. Demonstrate that no invalid proposal becomes authoritative, dependent work is visibly invalidated, unrelated state survives, and recovery reconciles against current owner versions. These are required evaluation cases; this architecture document does not authorize runtime implementation or test execution.
+
 ### 6.4 Partial failure and recovery
 
 A failure in one responsibility should degrade the capabilities that depend on it without corrupting unrelated authoritative state. The Brain should be able to preserve recoverable context, mark unavailable information, suspend unsafe conclusions and resume when dependencies return.
