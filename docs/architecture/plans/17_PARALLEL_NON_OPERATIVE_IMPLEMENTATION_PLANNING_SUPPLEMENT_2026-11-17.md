@@ -3,7 +3,7 @@
 **Document status:** Non-operative planning supplement; prepared under a narrow Project Director exception recorded in the 2026-11-17 Builder conversation.  
 **Repository:** methaneex-oss/MethaneX  
 **Planning branch:** plan/brain-implementation-roadmap-20261103  
-**Planning source HEAD:** c30fe20cfdf3f499416972042be06acdd70f752d (PR #175)  
+**Planning source HEAD:** 1423ac7803ac07fec1ecbaf4608c2c035a95332b (PR #175)  
 **Governing principle:** **Engineer the mechanisms; let behavior be acquired through experience.**
 
 ---
@@ -46,7 +46,7 @@ This plan uses existing repository documents as planning evidence, not as a new 
 | PR #176 — donor defect corrections | HEAD 4cf017e073da980c9f77d739fde6f92ef1a2fbc1; open/draft/unmerged; based on PR #156 HEAD 7fe212bbb0bd61116ea56581435e03b06c69b673 | D1/D2 correction and bounded journal/replay failure evidence may be considered as candidate donor risk evidence | It is not integrated into PR #156 or PR #175. The deeper EvolutionController compensation failure boundary remains open. PR description reports the exact-head four-workflow pass and 73/73 CTest result; those are candidate-branch results, not whole-Brain capability acceptance. |
 | PR #156 — integrated donor candidate | HEAD 7fe212bbb0bd61116ea56581435e03b06c69b673; open/draft/unmerged | Its code and reports remain candidates for later path-specific source review | It is not an approved source baseline and is not recommended for wholesale adoption. External trust, journal integrity and downstream factual-feedback limits remain open. |
 | PR #193 — deferred-plan hold | HEAD fa2bd50d6fb0bb77dc3cbaab684f51d606e94bb5; open/draft/unmerged; based on prior PR #175 snapshot 874c732973b6ab303d65a503f5a215b0af8e1153 | Its hold language and continuity record remain authoritative evidence of the existing restraint | It is diverged from current PR #175: 48 commits ahead and 3 behind relative to the current PR #175 head. No history operation or integration is proposed. |
-| PR #192 — Documentation Foundation | Final Builder snapshot 78995c9697a5bb726826cb1c3bc8e9b9e0399f3d; open/non-draft/unmerged | Its exact current gate state defines the documentation/authority constraints | DF-02, DF-06, DF-09 and DF-12 remain open; DF-11 is waived. PR #192's recorded base is stale relative to its current base branch; no retarget or rebase is authorized. |
+| PR #192 — Documentation Foundation | Exact PR #192 HEAD at this planning refresh beb4d5a174a1dd613878f89132e97b5e6052c7d3; open/non-draft/unmerged | Its exact current gate state defines the documentation/authority constraints | DF-02, DF-06, DF-09 and DF-12 remain open; DF-11 is waived. PR #192's recorded base is stale relative to its current base branch; no retarget or rebase is authorized. |
 
 The source audit and completion matrix are not evidence that a mechanism is fully implemented, integrated or capable. Source presence, a CMake target, an isolated test fixture and a historical green build must not be promoted into a whole-Brain capability claim.
 
