@@ -4873,3 +4873,61 @@ The inventory update immediately following this parent must be the only changed 
 - The PR must remain open, non-draft and unmerged, with 39 unique changed paths.
 - The planning index blob must be `9f2cbf1013adc6fb07356fd3a711f4ba948feba2`; the portal remains `b15b436f6cad0bbf24cc1b12e56d1a23d9a58afb`.
 - DF-06 remains NOT MET; DF-09 remains OPEN until a fresh CLEAR assessment targets the final frozen PR #192 HEAD. DF-12 remains reserved for the Project Director. Stage A remains held and implementation remains unauthorized.
+
+
+## 100. Exact parent manifest after reviewer-assignment registration — 2026-11-17
+
+**Exact immediate parent:** `60b4f49953ac6a33e1f8ecfda66e8b3854dc8f87`.  
+**PR #192 base:** `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.  
+**Parent PR state:** open, non-draft, unmerged. The changed-file listing contains 40 unique paths. The exact parent Git tree was queried and all 40 changed paths were resolved to their blob SHAs. The new reviewer-assignment file is part of this PR's documentation evidence and is linked from the controlling index (§99).
+
+| # | Path | Parent blob SHA |
+|---:|---|---|
+| 1 | `README.md` | `780651b804b491781fdcac8e248eaca9243797a4` |
+| 2 | `docs/ARCHITECTURE.md` | `3c6692b52059e43947d1fd2e7e84debb2362023f` |
+| 3 | `docs/JARVIS_BRAIN_MASTER_BLUEPRINT.md` | `0e49d313bf3929aa30140cb7149ebab038918378` |
+| 4 | `docs/JARVIS_PHASE_2_COMPLETION.md` | `e0e57a44216fc36c52d469a79abfc8df058515a3` |
+| 5 | `docs/README.md` | `b15b436f6cad0bbf24cc1b12e56d1a23d9a58afb` |
+| 6 | `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md` | `bcf2d8f5ac359aaa2faddea25cbb0c1a6d6d680d` |
+| 7 | `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md` | `818353b356ae3fea6aa7a6d7aede2e0a427c309a` |
+| 8 | `docs/architecture/inventory/HISTORICAL_DOCUMENTATION_PRESERVATION_REGISTER_2026-11-08.md` | `95cd280295c86c6d33278aa667de1d72048026ea` |
+| 9 | `docs/architecture/reports/BUILDER_FINAL_DOCUMENTATION_FOUNDATION_RECONCILIATION_2026-11-08.md` | `c962de2465f1728752e46456f69e722caf277de7` |
+| 10 | `docs/architecture/reports/BUILDER_TO_INDEPENDENT_REVIEWER_REQUEST_2026-11-08.md` | `c458f689ccbcd1e1d54242e38648ca151d70c250` |
+| 11 | `docs/architecture/reports/BUILDER_TO_XAI_EXACT_REVISION_RE_REVIEW_REQUEST_PR173_PR195_2026-11-17.md` | `b30ffa6109c04d3ffbc250490ccc1ed4339d4bab` |
+| 12 | `docs/architecture/reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md` | `19fd6123a17ccbcf78735a0a4a914f574c7534c2` |
+| 13 | `docs/architecture/reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md` | `cf4c7a71171ca7531876a920ae433a327dc454bf` |
+| 14 | `docs/architecture/reports/GROK_INDEPENDENT_REVIEW_REQUEST_2026-11-10.md` | `fb15d6edf6dda105a1305e369acb9b1ec57a7cf8` |
+| 15 | `docs/architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_2026-11-08.md` | `c43d82ba18ff89de226d2268cf72e724b222a5bd` |
+| 16 | `docs/architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_GROK_2026-11-09.md` | `1938203fe3a0e3cb4e7a7df7d5fa8e3298fa8635` |
+| 17 | `docs/architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_GROK_2026-11-10.md` | `4ad40a2cf9ca57df75f5b5d0134c99b164b8bf75` |
+| 18 | `docs/architecture/reports/INDEPENDENT_REVIEWER_HANDOFF_2026-11-08.md` | `e3a0e9ccbf80d524dbbb1eb9966da95c3d8b4077` |
+| 19 | `docs/architecture/reports/INDEPENDENT_RE_REVIEW_BUILDER_FOLLOW_UP_2026-11-08.md` | `2d63ed93344a7081dcedb44247536c416322c793` |
+| 20 | `docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md` | `4143159f3c3cb1f99fd7edb9cdbe2ad5c3592d3d` |
+| 21 | `docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_EXECUTION_AND_READINESS_2026-11-10.md` | `04d8f92dbef6ee70eb990e62c83d0c3e2eb4fc84` |
+| 22 | `docs/architecture/reports/INITIAL_PLANNING_GATE_CLOSEOUT_STATUS_2026-11-11.md` | `4fbf3a0d0ab0a5dc4718b13f9f7afb0ba177774d` |
+| 23 | `docs/architecture/reports/JARVIS_M0_BUILDER_EXECUTION_AND_GATE_RECONCILIATION_2026-11-12.md` | `3e7d0229b94259256963c843a16adad2fcdeda32` |
+| 24 | `docs/architecture/reports/NEMOTRON_BLIND_FRESH_READER_ASSESSMENT_2026-11-10.md` | `34d960245c8d44fc5dca3f5c168718c0bff0ae7d` |
+| 25 | `docs/architecture/reports/NEMOTRON_FRESH_READER_RERUN_RUNBOOK_2026-11-10.md` | `8726adaffd059262f5a26953fd3abd50ac65ab02` |
+| 26 | `docs/architecture/reports/PHASE_1_REVIEW_CORRECTIONS_AND_SCOPE_RECONCILIATION_2026-11-05.md` | `a459cdfd02d850d455ca526e6823e68525776ba3` |
+| 27 | `docs/architecture/reports/PHASE_1_WHOLE_REPOSITORY_INVESTIGATION_AND_REUSE_AUDIT_2026-11-04.md` | `7dc1a246486abfb13169c89365289fcc8134a6ea` |
+| 28 | `docs/architecture/reports/PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md` | `9dd776920d0a479a9d7275acc821e12c266623d9` |
+| 29 | `docs/architecture/reports/PROJECT_DIRECTOR_DECISION_EVIDENCE_EXTRACTS_2026-11-10.md` | `1c0b6a580b0420fd6d68140a15383364b468acd4` |
+| 30 | `docs/architecture/reports/PROJECT_DIRECTOR_DECISION_PROVENANCE_AND_GATE_RECONCILIATION_2026-11-09.md` | `3542b3af3d5c25098b102a926e6078d30631c684` |
+| 31 | `docs/architecture/reports/PR_174_FOLLOW_ON_REVIEW_PROVENANCE_RECOVERY_2026-11-06.md` | `86111e43b6a1dd36c6c49458d6da3306acdadfa3` |
+| 32 | `docs/architecture/reports/WHOLE_BRAIN_DOCUMENTATION_PHASE_BUILDER_SELF_REVIEW_2026-11-07.md` | `2839a7306ee086c1cf387be27b35f9a915d4be16` |
+| 33 | `docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md` | `afc0155b79beda7a04508cab825a5a5f9d0a1173` |
+| 34 | `docs/architecture/reports/fresh-reader-evidence/NEMOTRON_ASSESSMENT_PROMPT_2026-11-10.md` | `03475a43c1440ca9affd38dfe046b8ef1e9b91d0` |
+| 35 | `docs/architecture/reports/fresh-reader-evidence/NEMOTRON_PACKET_MANIFEST_2026-11-10.json` | `5910299b3ea4f686fe30220867b1273bf52e8dba` |
+| 36 | `docs/architecture/reports/fresh-reader-evidence/NEMOTRON_RUN_METADATA_2026-11-10.json` | `7d1d287ee571c673b23184c2d523a35b90845fa3` |
+| 37 | `docs/templates/INDEPENDENT_REVIEW_REPORT_TEMPLATE.md` | `f3176cf1a1f45735a3ad62fa4a865806edc24e08` |
+| 38 | `docs/templates/PLANNING_DOCUMENT_TEMPLATE.md` | `b9f71a923b0d717a3b29655574c89c10e0801115` |
+| 39 | `docs/templates/README.md` | `7209fd0fcda239349af602490d26b8c708b743da` |
+| 40 | `docs/templates/TEST_EVIDENCE_REPORT_TEMPLATE.md` | `9c6bbae48a22beb7c4e95858282d7d8d7b2159c2` |
+
+### 100.1 Post-write verification requirements
+
+- This inventory update must have exactly one parent: `60b4f49953ac6a33e1f8ecfda66e8b3854dc8f87`.
+- The resulting commit diff must contain exactly one changed path: this inventory file.
+- PR #192 must remain open, non-draft and unmerged; the changed-file listing must contain 40 unique paths.
+- The controlling index must include §99 and point to the canonical reviewer-assignment file.
+- DF-06 remains NOT MET; DF-09 remains OPEN pending a fresh CLEAR assessment on the final frozen PR #192 revision. DF-12 remains reserved for the Project Director. Stage A remains held.
