@@ -1,0 +1,177 @@
+# DF-02 — Foundational Artifact Authority and Dependency Reconciliation
+**Prepared:** 2026-11-18  
+**Repository:** `methaneex-oss/MethaneX`  
+**Documentation Foundation PR:** #192  
+**Source PR #192 HEAD inspected:** `3c9e512947412ea0ca8776a77b2e0e71c0f7af42`  
+**Source inventory blob:** `dc7a5dc5eb1c0807e54998c9657a3e33bf107713`  
+**Purpose:** Reconcile the principal JARVIS planning artifacts against live pull-request metadata, exact source revisions, recorded Project Director decisions, independent-review targets, and material dependencies.  
+**Status:** Builder reconciliation evidence; **DF-02 remains OPEN** pending completion of the wider historical/branch inventory and independent verification.
+
+---
+
+## 1. Scope and method
+
+This pass addresses the specific DF-02 deficiency identified in the xAI review of PR #192: a changed-path/blob manifest is not a semantic inventory of each artifact's authority, revision, status, and dependencies.
+
+For each principal artifact below, the Builder:
+1. fetched live PR metadata on 2026-11-18 (state, draft/merged status, head SHA, base branch and base SHA);
+2. fetched the named document at its identified commit and recorded the returned blob SHA;
+3. inspected the relevant PR discussion records for exact-revision Project Director decisions and independent-review outcomes;
+4. distinguished the accepted historical baseline from a later proposal or successor revision; and
+5. recorded material predecessor/consumer relationships and the authorization boundary.
+
+A PR being open or draft does not negate a separate, exact-scope Director decision. Conversely, a PR title, a document header, a prior handoff, or a later branch head does not expand an earlier acceptance. A review verdict applies only to the exact revision named by that review. No PR, branch, or document is treated as accepted merely because it is present in this register.
+
+This is a bounded reconciliation of the principal JARVIS planning lineages and their controlling dependencies. It is not yet a complete census of every historical artifact, every README/fragment reference, every donor branch, or every cross-branch dependency. It does not recommend deletion, relocation, merge, rebase, retargeting, or source-baseline selection.
+
+## 2. Authority vocabulary
+
+| Classification | Meaning |
+|---|---|
+| **Approved within stated scope** | A Project Director decision explicitly approves the identified artifact/revision for the stated scope. It does not transfer to materially changed content or a wider deliverable. |
+| **Accepted planning input / decision** | Explicit acceptance permits use in a named subsequent planning stage or settles specified decisions; it is not architecture-wide acceptance or implementation authority. |
+| **Proposed / unaccepted** | A submitted proposal or later successor for which the required approval is absent. |
+| **Independent review — exact revision only** | A technical/reader verdict is attached only to the exact SHA identified in the review record. It is not Director acceptance. |
+| **Historical / donor / reference** | Retained as source evidence or a bounded comparison; not a selected implementation baseline or governing architecture. |
+| **Merged into named base** | Repository integration occurred into the exact base branch stated. It does not imply merge to `main`, phase acceptance, or implementation authorization. |
+| **Open / unresolved** | Required provenance, review, acceptance, gate, or technical disposition remains outstanding. |
+
+## 3. Reconciled artifact and authority register
+
+### 3.1 Whole-system foundation and bounded research
+
+| Artifact / lineage | Exact revision and content identity verified | Authority and live status (2026-11-18) | Dependencies / consumers and boundary |
+|---|---|---|---|
+| PR #171 — Document 00, `00_JARVIS_SYSTEM_ARCHITECTURE_FOUNDATION.md` | Approved content revision: commit `8490737429b052b65fed3b998e0320d8834f640f`; approval comment #6555976534. The later PR #171 administrative record identifies approved content blob `ff0e57f2f9a266466687dca2c4cbcda6a64cb7d7`. Fetched current PR head `b05434758ad4fe72815503f89bd5d2990ccb658b`, current blob `db0f136b3aaa338fb7d06d7be9e50bb42fc82821`. | **Approved within stated scope** at the named approved revision. PR #171 remains open/draft/unmerged. The later current blob contains approval/status administration; it must not be described as a separately approved new architectural revision. | Parent foundation for Document 01, the PR #171 research package, and subsequent whole-system / Brain-first planning. It defines project principles and the no-implementation boundary; it does not itself complete the architecture. |
+| PR #171 — Document 01, `01_JARVIS_WHOLE_SYSTEM_ANATOMY_AND_RESPONSIBILITY_MAP.md` | Approved revision: commit `f32d2c9ede71676759b55c87c783253bd23ebbae`, blob `15c9bfc06f5f094d396f8a9dc625c22ac0d1b279`; Director approval comment #6556276653. Fetched current PR head `b05434758ad4fe72815503f89bd5d2990ccb658b`, current blob `2b595af4fefb54c7f8dc81fb997d4d391f2250e0`. | **Approved within stated scope** at the exact approved revision. PR remains open/draft/unmerged. Current administrative successor is not a fresh approval of changed architectural content. | Depends on Document 00. Provides the whole-system SYS-01–SYS-11 functional responsibility map and ownership boundaries. It is a functional anatomy, not a completed computational/runtime architecture. Brain-specific work must remain subordinate to this whole-system scope. |
+| PR #171 — Comparative Brain Foundation Research Log | Current PR #171 head `b05434758ad4fe72815503f89bd5d2990ccb658b`; blob `f84077179f9fa8e151b5faca39940e43a13db2a2`. | **Working research / provisional**, not an approved architecture. PR #171 remains open/draft/unmerged. | Depends on the approved foundation as research framing; supplies comparative evidence, alternatives, assumptions, and unresolved questions to later Brain architecture. Length or inclusion in the approved-documents PR does not confer approval. |
+| PR #171 — Brain Foundation Mechanism Gap Analysis | Same PR #171 head; blob `a90204f28c09dd9c1e2e0e1b24d108a58dc82b46`. | **Working research / provisional**. | Companion to the comparative research log; identifies representational, perceptual-grounding, integration and learning gaps. It informs subsequent research/specification but is not itself a specification or acceptance decision. |
+| PR #172 — Foundational Brain Capability Investigation | Accepted exact head `d7d676b79dbf3269f7fd3ebdb4363a6df19f255d`; report blob `410edf234f79d9a370fb63deffaaf22cfed9ec9c). Director acceptance and authorization of the next planning stage recorded in PR #172 comment #6598249449. | **Accepted planning input**. PR #172 remains open/draft/unmerged. Its report is not an architecture specification. | Explicitly based on PR #171 approved foundation and main engineering baseline `1273ddbcd0087d189e01388ded2d362fb1e058d2`. It informs PR #173 Brain Foundation Architecture Planning. Test source was inspected, not executed; no runtime learning capability is established by this report. |
+
+### 3.2 Brain Foundation Architecture and mechanism specification
+
+| Artifact / lineage | Exact revision and content identity verified | Authority and live status (2026-11-18) | Dependencies / consumers and boundary |
+|---|---|---|---|
+| PR #173 — Brain Foundation Architecture | Historical proposal/initial inspection: `97191111bc2573c14d391c0af9628db7b11f194b`. Director accepted BFA-C01–BFA-C14 only at exact PR #173 HEAD `f8dd67fc866242d29298ffc6a03a8782a4e6982c`, matrix blob `4f297f7da7c8d9c8b0312bcc32dba353bcc0be66`, in comment #6894239520. Current live PR #173 HEAD: `a96af5b18d3a1d580ff56cff6191240893bceeb5`; architecture blob `cc4922ac0973ad7aaeee4b2b43d2ec93193f54e6`. | **BFA-C01–C14 accepted as discrete decisions only. Whole architecture remains proposed/unaccepted.** PR #173 is open/draft/unmerged. xAI returned **PARTIALLY CLEAR** against exact earlier HEAD `1f137cbaed985821bbc32408151911b18418f713` (comment #6950255396); that verdict does not assess current HEAD `a96af5b...`. | Depends on accepted PR #172 capability investigation and PR #171 whole-system foundation. It is the proposed Brain-level architecture input to PR #174 and later Phase 2 mapping. CF-26 and CF-27 remain open; whole-architecture Director acceptance, Stage A and implementation are not granted. |
+| PR #173 — Completion and Decision Matrix | Current PR #173 HEAD `a96af5b18d3a1d580ff56cff6191240893bceeb5`; blob `0ba7c132152128319d14e72b49a7bd1a56985f45`. | **Proposed completion/decision evidence**, not final acceptance. The matrix distinguishes accepted BFA-C01–C14 from outstanding CF-26/CF-27 and architecture-wide gates. | Authoritative traceability companion to the proposed PR #173 architecture. Must be read at the same exact revision as the architecture, not mixed with earlier matrix snapshots. |
+| PR #173 — Inherited Mechanism Source Compatibility Audit | Current PR #173 HEAD `a96af5b18d3a1d580ff56cff6191240893bceeb5`; blob `50269e8159c58ed4b30f11a463f4ab72fc0727ea`. | **Scoped source-compatibility inventory complete as a planning artifact; CF-26 overall remains OPEN.** Director selected Option A in comment #6899575912. The inventory is not runtime compatibility proof. | Compares approved engineering baselines and PR #97 donor lineage; records mechanism-level PRESERVE / ADAPT / REPLACE / DEFER dispositions and seven remediation/evaluation outputs. Consumed by the PR #173 architecture/matrix and independent re-review. No build or runtime tests were executed for this inventory. |
+| PR #173 — CF-26 remediation/evaluation specifications | At PR #173 current HEAD `a96af5b18d3a1d580ff56cff6191240893bceeb5`, specification blob `35eacfd00bc4f90ed58016593c92ab6f5fde6f43` (identified in Builder continuation comment #6909874390). | **Specifications authored; independent challenge pending; CF-26 overall OPEN.** | Seven architecture-level remediation specifications consume the source-compatibility inventory. They define ownership, lifecycle, failure/recovery, evaluation and acceptance requirements. They do not select implementation technologies or authorize code/tests. |
+| PR #174 — Integrated Brain Mechanism Specification | Historically accepted baseline: exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, accepted by Director comment #6604790481. Current live PR #174 HEAD: `c34472354e4122fc1d78dc25bf45d81f1eb4dc69`; current specification blob `cfdda9e6e7070cd5533b076e9bd77c2904694a32`. | **Historical baseline accepted; current expanded proposal is not separately accepted.** xAI returned **PARTIALLY CLEAR** against earlier exact HEAD `7cb6271531f3e80a45728756273218132499722e` (comment #6896098398). The current `c344723...` successor has no verdict inherited from that review. | Depends on PR #173 Brain architecture. The accepted `0811a59...` baseline remains valid for its scope; the current expanded proposal includes 54 scenarios and follow-on F-02/F-03 corrections. Preserve this two-revision distinction. The later proposal is used as a non-operative planning source by PR #175, not as a silently substituted accepted baseline. |
+| PR #174 — Existing Mechanism Source Audit | Current PR #174 HEAD `c34472354e4122fc1d78dc25bf45d81f1eb4dc69`; blob `4479874476715fd59a4c3ba6c908f06c43a1c6c2`. | **Static source audit / supporting evidence**, not implementation proof or independent review. | Supports the mechanism specification by describing the engineering baseline `1273ddbcd0087d189e01388ded2d362fb1e058d2`. Keep its source baseline distinct from later donor and Phase 2 branch snapshots. |
+| PR #174 — Independent technical re-review | Report blob `de3bf393d5fedf0d80f75bc09250f0244ad6f176` at current PR #174 head; report targets exact HEAD `7cb6271531f3e80a45728756273218132499722e`. | **PARTIALLY CLEAR for that exact earlier target only**. Original F-02/F-03 review provenance is recovered as a source transcription/pointer; it is not a verbatim immutable reviewer export. | Review evidence informs corrections to current proposal. It does not accept the current proposal or authorize implementation. |
+
+### 3.3 Implementation planning, donor evidence, and whole-Brain Phase 2
+
+| Artifact / lineage | Exact revision and content identity verified | Authority and live status (2026-11-18) | Dependencies / consumers and boundary |
+|---|---|---|---|
+| PR #175 — Brain Implementation Roadmap | Current PR #175 HEAD `4d0cfe729e64c718dd4f21ba95a0167166252e6e`; plan blob `9511cda1389e47c94dcaf9373423570d8177a3c7`. | **Proposed / non-operative planning**, PR open/draft/unmerged. Gate A remains NOT CLEARED; no implementation baseline selected; Gate B not passed; no implementation authorization. | Historically derives from accepted PR #174 baseline `0811a59...` and the PR #173 architecture planning lineage. Its present supplementary planning also references the expanded, unaccepted PR #174 proposal `c344723...`; these sources must remain separately labelled. |
+| PR #175 — Parallel Non-Operative Planning Supplement | Current PR #175 HEAD `4d0cfe729e64c718dd4f21ba95a0167166252e6e`; blob `a8c8ff0ca1ef6a7008e206662e05a202ffa743fe`. | **Narrowly authorized, non-operative planning only**, under the Director's 2026-11-17 exception recorded in PR #175 discussion. | Organizes BM-01–BM-12 dependencies, eight proposed increments, work-package definitions and verification portfolio. It does not activate work packages or authorize implementation. |
+| PR #175 — Capability-to-Acceptance-Scenario Traceability Matrix | Same current PR #175 HEAD; blob `faa2b88947cdd9604e4a0c2d240d931926425a57`. | **Non-operative proposed planning artifact.** 54 rows are structurally mapped; no scenario is thereby passed. | Maps the 54 scenarios in current proposed PR #174 HEAD `c344723...` to BM-01–BM-12 owners, increments I0–I7 and minimum evidence classes. Five owner-boundary clarifications were recorded in comment #6963723759. |
+| PR #156 — Developmental Brain donor | Live HEAD `7fe212bbb0bd61116ea56581435e03b06c69b673`; open/draft/unmerged; base `integration/knowledge-composition-20261031`. | **Unmerged candidate donor; not selected baseline.** | Contains developmental Brain implementation and supporting plan. PR #175 records PR #156 as a conditional/selective donor only. No wholesale donor adoption, cherry-pick or integration is authorized. |
+| PR #176 — Gate A D1/D2 donor corrections | HEAD `4cf017e073da980c9f77d739fde6f92ef1a2fbc1`; open/draft/unmerged; base `integration/priority-one-20261031`. | **Separate donor-correction evidence; unmerged and not integrated.** | Relates to PR #156 donor defect evidence. Its test results, if any, apply to that donor branch/revision and cannot be attributed to main, PR #173, or a future integrated Brain. |
+| PR #178 — JARVIS Project Governance Rules | HEAD `39fe09dcf13496f5f0005ccf3f00739303e29f88`; open/draft/unmerged; base `main`. | **Proposed / unaccepted branch snapshot.** | Governance predecessor in the PR #179 Phase 2 documentation lineage. Do not conflate this draft with PR #196's separately accepted governance amendment. |
+| PR #179 — Phase 2 Whole-Brain Capability-to-Source Integration Map | HEAD `ea64607ef94f142a6142a013e119a7225bc95c1c`; blob `a703e96c9aa813324b9b607300fa1dc9030d2307`; open/draft/unmerged; base PR #178 branch. | **Working Phase 2 integration map; Phase 2 not accepted.** Gate A NOT CLEARED; Gate B not cleared. | Consumes the accepted PR #174 historical specification baseline and PR #173 Brain planning inputs while reconciling the whole-Brain capability map to actual source. It is a Phase 2 planning/integration map, not proof of complete implementation or a selected runtime baseline. |
+| PR #180 — Overlapping Phase 2 research proposal | HEAD `6ca140300b914ed981a50301bbf1d82a5bfe4d8b`; closed/unmerged. | **Closed historical/overlapping proposal**, not canonical Phase 2 map. | Its overlapping report path was identified against PR #179. Preserve as history; do not treat it as a parallel current authority. |
+| PR #188 — Phase 2 independent-review follow-up | HEAD `36b843f6959628a689d81bc1e12e523e17227073`; open/non-draft/unmerged; base main. | **Review report lineage**, not an independent formal review of PR #179 by a separate GitHub reviewer. PR #179 discussion records a self-review identity limitation. | Reports mainline persistence/state-consistency defects. No production code, tests or failure injections were changed/executed by that report. It is a defect-evidence input to Phase 2 reconciliation, not a gate pass. |
+| PR #191 — Human/MCU comparison | Exact HEAD `609d38ede50bbdd98a93dfed112781eacabee9fd`; open/draft/unmerged; base historical PR #179 snapshot. | **Director disposition: retain as separate bounded reference artifact**, comment #6836333027. Not whole-Brain acceptance. | Human-cognition and MCU J.A.R.V.I.S. comparison is a bounded reference for BM-01–BM-12. Director explicitly prohibited replay/cherry-pick/rebase/retarget/merge or history rewrite absent a new decision. |
+| PR #193 — Whole-Brain planning roadmap hold | HEAD `fa2bd50d6fb0bb77dc3cbaab684f51d606e94bb5`; open/draft/unmerged; base PR #175 historical snapshot. | **Hold / continuity documentation**, not an implementation authorization or accepted roadmap. | Records the separation between Brain implementation planning and the wider whole-Brain architecture. Keep its lineage separate from PR #192 and PR #179; no integration order is selected. |
+
+### 3.4 Documentation Foundation and governance controls
+
+| Artifact / lineage | Exact revision and content identity verified | Authority and live status (2026-11-18) | Dependencies / consumers and boundary |
+|---|---|---|---|
+| PR #192 — Documentation Foundation | Current PR #192 HEAD `3c9e512947412ea0ca8776a77b2e0e71c0f7af42`; open/non-draft/unmerged; base branch `docs/jarvis-phase-2-whole-brain-integration-map-20261105`, base SHA `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; 42 changed paths. | **Documentation Foundation not accepted.** xAI review PARTIALLY CLEAR at prior exact HEAD `beb4d5a...`; current successor not reviewed. DF-02 OPEN; DF-06 NOT MET; DF-09 NOT MET; DF-11 WAIVED; DF-12 pending Director; Stage A held. | Depends on the existing PR #179 Phase 2 documentation lineage and preserves multiple prior branches/artifacts without merging them. PR #192 base SHA is a historical snapshot and must not be assumed to equal the current base-branch head. |
+| PR #192 — Planning Documentation Index | Current PR #192 HEAD; blob `6c61e6abb2de4e099c21d9eac0ea9f049988cd48`. | **Controlling navigation/status index for this Documentation Foundation proposal**, not Director acceptance. | Links the inventory, preservation register, reports and planning artifacts. Its current-status block must distinguish live metadata from historical snapshots and must not overstate exact-revision review coverage. |
+| PR #192 — Historical Documentation Preservation Register | Current PR #192 HEAD; blob `95cd280295c86c6d33278aa667de1d72048026ea`. | **Preservation evidence**, not disposition approval. | Provides immutable locations and lineage references for prior documentation. It does not by itself establish semantic authority or authorize moving/deleting artifacts. |
+| PR #195 — AI role terminology / documentation reader workflow correction | Merged into `main` at merge commit `4f07d772beae03c99a8dd58b174201a3aa3074b2`; PR closed/merged. xAI workflow review was against exact earlier HEAD `6b8e6fce342397b17f0ed237ccc5a09fb38034df`, verdict APPROVED WITH DOCUMENTED NON-BLOCKING ISSUES; report-only successor is separate. | **Merged into main.** F-195-07 live negative-path evidence remained open in the review record. No automatic DF-09 or DF-12 clearance. | Supports Documentation Foundation review tooling and terminology. The merged workflow source is available on main, but static review is not evidence that all negative-path executions were run. |
+| PR #196 — Builder Operating Controls / project governance amendment | Accepted governance content blob `9c17d2870047cc1d58afea745cd7160d15e216c3`; Director acceptance record comment #6833435191; independent verification comment #6833511900. Merged into the existing Phase 2 base branch at `c151e52781e56e6481424f774c19ea30128debb0`, not main. | **Accepted project-wide governance standard; merged into the Phase 2 base branch only.** | Governs Builder process and authorization boundaries. It does not accept the Brain architecture, clear Gate A/B, authorize runtime implementation, or merge PR #192 into main. |
+
+### 3.5 Earlier proposal chain and legacy main-branch artifacts
+
+| Artifact / lineage | Exact revision / evidence verified | Authority and status | Dependencies / disposition |
+|---|---|---|---|
+| PRs #166–#170 | Live heads: #166 `c803e9873df1c22111156d894853ef2d8832a8ea`; #167 `e7227919c13cc65c0e3915fdc7b6491465be1921`; #168 `004e8753d01c9b18bb243b257591657f9b19d7db`; #169 `bdc980f3dcf322541556c0756aeee4eb1ff955a1`; #170 `abf3303c04638a89146a4161b91a439910235add`. All open/draft/unmerged; they form a chained proposal lineage. | **Proposed / unaccepted** language ownership, polyglot rules, MCU target analysis, and constitution/readiness materials. | Preserve as prior planning inputs. Their draft branch sequence is not authority to impose Brain-only language or layer constraints on whole JARVIS. Reconcile useful content with approved whole-system ownership and later architecture; no silent adoption. |
+| Main-branch Brain Master Blueprint | Main baseline `1273ddbcd0087d189e01388ded2d362fb1e058d2`; blob `9958b8a596e172488b21fce1cdc256ccde419cfe`. | **Existing main-branch planning document; authority beyond its stated “Architecture/build plan” status is not established by its title.** | Layer 0–19 construction plan. Must be reconciled with whole-system architecture and later Brain decisions before treating layer order or content as binding. |
+| Main-branch `docs/ARCHITECTURE.md` | Same main baseline; blob `819544194e080f1210a32efc05867c6220f9e6fd`. | **Existing high-level architecture summary; authority/currentness requires reconciliation.** | Summarizes cognitive flow, continuity, learning and evolution. Keep as historical/current-main evidence until link and authority audit determines its relationship to approved Document 00/01 and newer planning. |
+| Main-branch `docs/JARVIS_PHASE_2_COMPLETION.md` | Same main baseline; blob `7e001e63703bf07efe95c321c1f6c4272ae626f7`. | **Historical completion declaration on main; not sufficient evidence of current Phase 2 acceptance.** | Its stated Perception & Representation completion is bounded to its recorded scope. It must not override the later whole-Brain Phase 2 map, outstanding persistence findings, or Gate A/B status. |
+| PR #156 donor `DEVELOPMENTAL_BRAIN_PLAN.md` | PR #156 live head `7fe212bbb0bd61116ea56581435e03b06c69b673`; PR open/draft/unmerged. Historical inventory records the file at blob `1db14e73ecc4ff4fded2791df17f34d20958c329` in a prior donor checkpoint. | **Historical donor planning artifact; not selected baseline.** | Retain as donor evidence and compare only under the PR #173/PR #175 compatibility and Gate A process. The prior blob SHA is not a current-head blob verification. |
+
+## 4. Dependency and authority graph
+
+The principal planning dependencies, without implying merge or automatic approval, are:
+
+```text
+Main engineering baseline (1273ddb...)
+        │
+        ├── PR #171 Document 00 (approved exact scope)
+        │       └── PR #171 Document 01 (approved exact scope)
+        │               └── PR #171 comparative research + gap analysis (working research)
+        │                       └── PR #172 capability investigation (accepted planning input)
+        │                               └── PR #173 Brain Foundation Architecture (proposed)
+        │                                      ├── BFA-C01–C14 (accepted decisions only)
+        │                                      ├── CF-26 compatibility/remediation (OPEN)
+        │                                      └── CF-27 exact-revision decision ledger (OPEN)
+        │
+        ├── PR #174 mechanism specification
+        │       ├── accepted historical baseline 0811a59... (planning baseline only)
+        │       └── expanded current proposal c344723... (not separately accepted)
+        │
+        └── PR #156 donor evidence ── PR #176 donor corrections (separate/unmerged)
+
+PR #173 + accepted historical PR #174 baseline
+        └── PR #179 Phase 2 whole-Brain capability/source map (not accepted)
+                 ├── PR #191 bounded comparison (retain separately)
+                 ├── PR #196 accepted governance amendment (merged into this base)
+                 └── PR #192 Documentation Foundation proposal (base snapshot is historical)
+
+PR #175 Brain implementation roadmap (non-operative / Gate A NOT CLEARED)
+        ├── consumes accepted historical PR #174 baseline
+        ├── references expanded PR #174 proposal only as proposed source
+        ├── parallel non-operative supplement + 54-scenario matrix
+        └── PR #193 roadmap hold / continuity branch (separate lineage)
+```
+
+The graph represents content dependencies and planning relationships, not a Git merge graph. PR #192 and PR #193 remain separate lineages. PR #196's merge target is the existing Phase 2 base branch, not `main`. PR #195 is a separate merged workflow/terminology correction on `main`.
+
+## 5. Reconciliation findings and corrections required in the controlling inventory
+
+1. **PR #173 authority must be stated at two levels.** The Director accepted BFA-C01–C14 at exact revision `f8dd67f...`; that did not accept the whole architecture. The latest xAI verdict is PARTIALLY CLEAR at `1f137cb...`, and the current live PR head `a96af5b...` is a later successor. Do not label the current whole architecture accepted or carry the prior review verdict forward.
+2. **PR #174 has two valid but different authority states.** The exact historical baseline `0811a59...` was accepted. The expanded current proposal `c344723...` has not been separately accepted; its earlier xAI review was PARTIALLY CLEAR at `7cb6271...`. The header is not a contradiction when it accurately distinguishes historical acceptance from current proposal.
+3. **PR #172 acceptance is exact and scoped.** The accepted capability investigation report is a planning input; PR open/draft state does not negate that decision, and the decision does not accept the architecture that followed.
+4. **PR #171 approvals are document-specific.** Document 00 and Document 01 have separate exact-revision approvals. The PR #171 research package remains working research; current administrative successor blobs do not retroactively expand those approvals.
+5. **PR #175 planning work remains non-operative.** The 54-row matrix maps the expanded PR #174 proposal, which is explicitly unaccepted. Structural completeness does not pass scenarios, clear Gate A/B, select a source baseline, or authorize implementation.
+6. **PR #179 is not a phase acceptance.** It remains open/draft/unmerged, and its source integration map records unresolved persistence/recovery and independent-review obligations. A successful Configure/Build-only CI run is not CTest or failure-injection evidence.
+7. **PR #191 is a separate bounded reference by Director disposition.** Its historical base and explicit no-rewrite instruction must be preserved.
+8. **PR #195 and #196 have distinct merge targets and effects.** #195 merged into main; #196 merged into the existing Phase 2 base branch. Neither clears architecture gates or authorizes implementation.
+9. **Legacy main docs remain present.** Their continued presence is preservation evidence, not proof of current authority. PR #192 proposed navigation updates are not yet merged.
+10. **The donor lineage remains unselected.** PR #156 and #176 are separate unmerged candidate/evidence branches. Do not treat their artifacts or tests as integrated mainline capabilities.
+11. **Snapshot staleness is material.** PR #192's base SHA `61311fe...` is a recorded base snapshot, not a claim that the named branch still points there. All review/merge decisions must fetch current branch and PR metadata at decision time.
+
+## 6. Remaining DF-02 work
+
+This reconciliation materially improves the artifact authority/dependency record, but does not yet satisfy DF-02. The remaining work is:
+
+- Complete the full historical branch/artifact census beyond the principal lineages above, including PRs and standalone artifacts not captured by the current inventory and preservation register.
+- Reconcile all relevant documents in the PR #166–#170 proposal chain and donor PRs #156/#176 at their exact current heads, including cross-file dependencies and duplicated/overlapping material.
+- Resolve all status/header/README claims across the relevant repository trees against the exact authority records; this pass samples controlling records but is not a complete repository-wide semantic scan.
+- Verify the complete dependency/reference closure for each retained, superseded, or historical artifact, including consumers on separate branches.
+- Record explicit disposition for any unresolved provenance claim rather than converting a transcribed/handoff claim into verified acceptance.
+- Obtain independent verification of this register and the resulting inventory update. DF-02 remains OPEN until the full scope is complete and the evidence is accepted through the applicable process.
+
+## 7. Explicit non-authorizations
+
+This report does not authorize PR merge, rebase, retarget, cherry-pick, branch rewrite, archive relocation, deletion, source-baseline selection, Gate A/B clearance, Stage A, runtime implementation, runtime testing, technology selection, deployment, or Project Director acceptance. It records Builder-side source inspection and repository evidence only.
+
+## 8. Primary repository decision/evidence pointers
+
+- PR #171 Document 00 approval: https://github.com/methaneex-oss/MethaneX/pull/171#issuecomment-6555976534
+- PR #171 Document 01 approval: https://github.com/methaneex-oss/MethaneX/pull/171#issuecomment-6556276653
+- PR #172 accepted planning input: https://github.com/methaneex-oss/MethaneX/pull/172#issuecomment-6598249449
+- PR #173 BFA-C01–C14 decision: https://github.com/methaneex-oss/MethaneX/pull/173#issuecomment-6894239520
+- PR #173 CF-26 Option A: https://github.com/methaneex-oss/MethaneX/pull/173#issuecomment-6899575912
+- PR #173 latest xAI re-review: https://github.com/methaneex-oss/MethaneX/pull/173#issuecomment-6950255396
+- PR #174 accepted historical baseline: https://github.com/methaneex-oss/MethaneX/pull/174#issuecomment-6604790481
+- PR #174 xAI technical re-review: https://github.com/methaneex-oss/MethaneX/pull/174#issuecomment-6896098398
+- PR #191 Director disposition: https://github.com/methaneex-oss/MethaneX/pull/191#issuecomment-6836333027
+- PR #192 exact-HEAD xAI review: https://github.com/methaneex-oss/MethaneX/pull/192#issuecomment-6963581974
+- PR #196 governance acceptance: https://github.com/methaneex-oss/MethaneX/pull/196#issuecomment-6833435191
