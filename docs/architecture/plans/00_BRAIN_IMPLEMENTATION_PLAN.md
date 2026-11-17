@@ -1,10 +1,30 @@
-# Brain Implementation Plan — Planning Baseline
+> **CONTROLLING AUTHORITY / DEFERRED STATUS — 2026-11-11**
+>
+> This document is a historical implementation-planning proposal retained for traceability. It is **NON-OPERATIVE and NOT CLEARED FOR IMPLEMENTATION PLANNING EXECUTION** while initial planning remains incomplete.
+>
+> The parent architecture and mechanism specification references below are historical accepted planning baselines only. The Project Director superseded PR #173 HEAD `97191111bc2573c14d391c0af9628db7b11f194b` as sufficient/final architecture on 2026-11-11. Current corrected proposals are PR #173 HEAD `7e9481677197cf82df31bbe08984fa5d58644d98` and PR #174 HEAD `9502989ffae91c00ba0a8568ab5296925fa9f27b`; neither has completed the required review/disposition. The earlier corrected PR #174 snapshot `4b134048680fb5902f8c2a5a067b0c369169dbfe` is historical and superseded by the current head. The previous current-proposal snapshot `16a82663d6a421575234b5f8f4ea0c5ad4f735cf` is superseded by live PR #174 HEAD `9502989ffae91c00ba0a8568ab5296925fa9f27b`.
+>
+> Documentation Foundation remains NOT ACCEPTED: DF-06 is NOT MET; DF-09 is OPEN / NOT MET (latest qualifying result PARTIALLY CLEAR, 31/32, on an older revision); DF-11 is WAIVED; DF-12 is NOT ACCEPTED. DF-08 is RESOLVED against its exact bounded exit criterion. PR #191 disposition and PR #192/#193 integration order remain reserved.
+>
+> This plan may be read as a prior proposal and audited for stale assumptions, but it must not be advanced, treated as current, used to select a source baseline or technology, converted into implementation tickets, or used to authorize runtime changes. Stage A remains HELD; runtime implementation is NOT AUTHORIZED. The Project Director must explicitly reopen implementation planning after initial-planning acceptance.
+>
+> PR #193 lineage note: this hold PR is based on PR #175 branch snapshot `874c732973b6ab303d65a503f5a215b0af8e1153`; current PR #175 HEAD is `c30fe20cfdf3f499416972042be06acdd70f752d` (three commits ahead, zero behind that base). The newer PR #175 commits are not silently included in this PR #193 snapshot. No rebase or retarget was performed.
 
-**Document status:** Proposed implementation plan; submitted for independent review and Project Director decision  
+---
+
+> **Controlling status refresh — 2026-11-11:** This plan remains a deferred, non-operative implementation proposal. Documentation Foundation status: **DF-06 NOT MET; DF-08 RESOLVED against its exact stated exit criterion and bounded foundational-document scope; DF-09 OPEN pending a CLEAR blind fresh-reader result against the final exact PR #192 revision; DF-11 WAIVED; DF-12 NOT ACCEPTED.** PR #173's historical planning-baseline acceptance is superseded as sufficient/final architecture; corrected proposal HEAD `7e9481677197cf82df31bbe08984fa5d58644d98` awaits blind independent re-review and Project Director disposition. PR #174's historical accepted specification baseline remains distinct from current corrected proposal HEAD `9502989ffae91c00ba0a8568ab5296925fa9f27b`, whose F-02/F-03 responses await independent re-review and Project Director disposition; the original review report remains unavailable. The prior corrected snapshot `4b134048680fb5902f8c2a5a067b0c369169dbfe` is superseded. PR #191 content/dependency review is complete, but Project Director disposition remains pending. PR #192/#193 remain open and unmerged; integration is held. Stage A has not started. **No implementation, source-baseline selection, runtime tests/builds, or deployment is authorized.** Consult the live [PR #192 planning index](https://github.com/methaneex-oss/MethaneX/pull/192) for the controlling status. This dated block supersedes older status statements below where they conflict; all older planning content is retained as historical evidence.
+
+# Brain Implementation Plan — Deferred Proposal
+
+> **Documentation entry point:** Use the [JARVIS Documentation Portal](https://github.com/methaneex-oss/MethaneX/blob/db5968bfbddf77590cd9303539abda00dd961ab7/docs/README.md) for role-based navigation and the [Planning Documentation Index](https://github.com/methaneex-oss/MethaneX/blob/db5968bfbddf77590cd9303539abda00dd961ab7/docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md) for canonical planning-artifact status and dependencies. This file is a deferred proposal, not the current Builder handoff.
+>
+> **Deferred as the active plan — 2026-11-07:** This is a proposed implementation roadmap derived from the earlier BM-01–BM-12 specification and repository audit. Its proposed increments, dependency ordering and first implementation target are not authorized as the current development sequence. Whole-Brain capability definition, mechanism architecture and completeness/reconciliation must come first. Preserve this plan as a downstream proposal; do not execute or refine its implementation sequence until the whole-Brain planning baseline is independently reviewed and accepted. See the [Whole-Brain Planning Scope and Builder Correction](https://github.com/methaneex-oss/MethaneX/blob/db5968bfbddf77590cd9303539abda00dd961ab7/docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md).
+
+**Document status:** Deferred, non-operative implementation proposal. The earlier submission-for-review wording is a historical status and is superseded by the 2026-11-07 whole-Brain planning hold and the 2026-11-08 documentation-foundation gate. This document is not currently awaiting a decision to activate its proposed implementation sequence.  
 **Planning run:** Run 01 — 2026-11-03  
-**Planning authority:** Project Director authorization received 2026-11-03  
-**Governing specification:** PR #174, accepted HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`  
-**Parent architecture:** PR #173, accepted HEAD `97191111bc2573c14d391c0af9628db7b11f194b`  
+**Planning authority:** Authorization to prepare this planning proposal recorded as received 2026-11-03; this does not authorize implementation or make the proposal operative.  
+**Historical accepted specification baseline:** PR #174 HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`; corrected proposal snapshot `4b134048680fb5902f8c2a5a067b0c369169dbfe` contains the F-02/F-03 Builder responses as they stood at that historical revision and is superseded by current PR #174 HEAD `9502989ffae91c00ba0a8568ab5296925fa9f27b`, which still awaits independent re-review and Project Director disposition.  
+**Historical parent architecture baseline:** PR #173 HEAD `97191111bc2573c14d391c0af9628db7b11f194b`; its sufficiency as complete/final architecture was superseded on 2026-11-11. Corrected proposal HEAD `7e9481677197cf82df31bbe08984fa5d58644d98` awaits blind independent re-review and Project Director disposition.  
 **Engineering evidence baseline used by the existing audit:** `main` at `1273ddbcd0087d189e01388ded2d362fb1e058d2`  
 **Scope:** Documentation and planning only  
 **Governing principle:** **ENGINEER THE MECHANISMS; LET BEHAVIOR BE ACQUIRED THROUGH EXPERIENCE.**
@@ -15,7 +35,7 @@
 
 This plan translates the accepted Brain Mechanism Specification into a proposed, evidence-driven implementation programme. It is intended to establish implementation order, dependency management, bounded work packages, integration obligations, verification evidence and stage gates.
 
-This is an existing JARVIS project. This plan does not restart the project, replace the accepted architecture, or treat the current source tree as either wholly reusable or wholly disposable.
+This is an existing JARVIS project. This plan does not restart the project, replace the proposed architecture, or treat the current source tree as either wholly reusable or wholly disposable.
 
 ### 1.1 Authority boundary
 
@@ -33,8 +53,8 @@ A later Project Director decision must explicitly authorize implementation. Runt
 
 1. Accepted whole-system boundary and system ownership baseline in PR #171.
 2. Accepted foundational capability investigation in PR #172.
-3. Accepted Brain Foundation Architecture in PR #173.
-4. Accepted 12-mechanism specification in PR #174, including 34 acceptance scenarios and BM-12 reasoning ownership.
+3. Historical PR #173 Brain Foundation Architecture planning-baseline revision at exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b`; its sufficiency as complete/final architecture was superseded on 2026-11-11. The corrected proposal at `7e9481677197cf82df31bbe08984fa5d58644d98` awaits blind re-review and Project Director disposition.
+4. Historical accepted PR #174 specification baseline at `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`; the corrected proposal snapshot `4b134048680fb5902f8c2a5a067b0c369169dbfe` added F-02/F-03 responses and scenarios 35–46 at that time. The current PR #174 proposal is `9502989ffae91c00ba0a8568ab5296925fa9f27b`; it remains unreviewed and unaccepted.
 5. Existing source audit at main commit `1273ddbcd0087d189e01388ded2d362fb1e058d2`.
 
 The source audit is static inspection, not proof of runtime behavior. Its observations must be revalidated against the exact implementation target before coding begins.
@@ -293,7 +313,7 @@ The verification report must identify:
 11. Interrupted or partially committed multi-mechanism updates recover to a coherent state.
 12. A governance denial, execution failure or substrate failure is not misrepresented as a verified external outcome.
 
-The 34 scenarios in PR #174 remain binding. The list above prioritizes cross-mechanism integration; it does not replace or reduce the specification suite.
+The 34 scenarios in the exact accepted PR #174 baseline at HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` remain the accepted/binding baseline. The current corrected PR #174 proposal adds scenarios 35–48, including the F-02/F-03 responses; those additions remain proposed pending Independent Reviewer re-review and Project Director disposition and are not silently promoted to accepted/binding. The list above prioritizes cross-mechanism integration; it does not replace or reduce the specification suite.
 
 ---
 
@@ -469,7 +489,7 @@ The extended Builder-side Gate A review is recorded in
 - Treat confirmed D1/D2 defects as mandatory correction prerequisites; prove the unresolved goal-completion and evolution rollback failure boundaries with failure-injection/replay evidence.
 - Do not claim capability acceptance from source presence or the historical 73/73 CTest result. The 34 accepted foundational scenarios remain the governing acceptance target.
 
-The comparison established that accepted PR #174 HEAD is 12 commits ahead of current main and adds the accepted architecture/specification documents; candidate PR #156 is 21 commits behind that accepted point. The candidate and current main are substantially divergent. The candidate contains useful cognitive mechanisms, but wholesale adoption would import known defects, miss current validation workflows and require broad reconciliation.
+The comparison established that PR #174 HEAD is 12 commits ahead of current main and adds the PR #173 architecture proposal plus the accepted PR #174 specification documents; candidate PR #156 is 21 commits behind that accepted point. The candidate and current main are substantially divergent. The candidate contains useful cognitive mechanisms, but wholesale adoption would import known defects, miss current validation workflows and require broad reconciliation.
 
 **Builder technical result:** PR #156 is rejected as a wholesale baseline and accepted as a selective source donor; accepted PR #174 HEAD is the recommended integration base.
 
@@ -497,3 +517,46 @@ Latest consolidated evidence: docs/architecture/plans/reviews/16_GATE_A_CLOSURE_
 Draft PR #176 isolates D1/D2 corrections and journal failure/replay tests from this documentation-only planning branch. At head 4cf017e073da980c9f77d739fde6f92ef1a2fbc1, Brain CI, Native Brain Build, Brain ThreadSanitizer and JARVIS Brain Tests all passed; native, ASan/UBSan and TSAN CTest runs each report 73/73. See Report 16 and PR #176 for run links and scope.
 
 PR #176 remains draft and unmerged. These results validate the corrected donor branch, not the accepted PR #174 integration tree or external ABI. The deeper EvolutionController compensation failure boundary and independent Gate A re-check remain open. No implementation baseline is selected or authorized.
+
+---
+
+## 18. Whole-Brain planning scope hold — 2026-11-07
+
+The Project Director clarified that the entire future Brain must be architecturally planned before deciding where development begins or which repository source should be used.
+
+This roadmap was prepared from the earlier accepted BM-01–BM-12 specification and Phase 1 source investigation. It is a proposed downstream implementation plan, not the whole-Brain capability architecture. The existence of a dependency graph and six proposed implementation phases does not establish that all future Brain capabilities, mechanisms, emergent interactions or developmental requirements have been identified.
+
+Accordingly, the following are **held and non-operative** until whole-Brain planning is completed and accepted:
+- the implementation phases in §5;
+- the proposed work-package structure in §6;
+- the recommended first implementation increment in §10;
+- any source-baseline or reuse implication inferred from the proposed order.
+
+Do not delete this plan or its prior reasoning. Preserve it as a candidate input for Stage D development planning. Reassess every proposed increment against the accepted whole-Brain architecture before retaining, changing or rejecting it.
+
+The corrected sequence is:
+1. whole-Brain capability definition using human cognition, MCU J.A.R.V.I.S. and the developing-Brain analogy;
+2. whole-Brain mechanism architecture and interaction model;
+3. completeness challenge and reconciliation with existing architecture/specification;
+4. independent review and Project Director acceptance;
+5. development order and first increment planning;
+6. repository reuse/adaptation assessment for that increment;
+7. implementation planning and separate explicit authorization.
+
+The prior Builder (ChatGPT, GPT-6) acknowledges that it allowed the existing twelve-mechanism decomposition to become the effective planning boundary, conflated mechanism-to-source mapping with complete capability definition, and advanced toward development sequencing before proving whole-Brain completeness. The full error record and next-Builder instructions are in the linked correction document.
+
+**Current disposition:** implementation roadmap deferred; no implementation baseline selected by this correction; no runtime implementation, build, test, merge or gate clearance authorized.
+
+## 19. Initial Documentation Foundation hold — 2026-11-07
+
+The implementation roadmap remains deferred and non-operative. A further prerequisite now controls the immediate sequence: the Initial Documentation Foundation Completion Gate must be completed, independently reviewed, and accepted before Stage A whole-Brain planning begins.
+
+The documentation foundation audit records the live repository snapshot and DF-01–DF-13 criteria. The historical-preservation and cross-revision comparison report is [here](https://github.com/methaneex-oss/MethaneX/blob/db5968bfbddf77590cd9303539abda00dd961ab7/docs/architecture/reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md). The canonical entry point is the [JARVIS Planning Documentation Index](https://github.com/methaneex-oss/MethaneX/blob/db5968bfbddf77590cd9303539abda00dd961ab7/docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md).
+
+This section changes only the immediate documentation/planning hold. It does not reopen completed Phase 1 technical investigation, clear Gate A or Gate B, accept the whole-Brain architecture, select a source baseline, or authorize implementation.
+
+**Current phase:** Initial Documentation Foundation Completion Gate.  
+**Stage A:** Not started; held pending acceptance of the documentation foundation.  
+**Implementation roadmap:** Deferred/non-operative.  
+**Implementation authorization:** None.
+
