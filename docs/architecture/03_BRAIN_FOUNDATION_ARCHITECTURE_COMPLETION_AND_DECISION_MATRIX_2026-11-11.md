@@ -1,0 +1,874 @@
+# Brain Foundation Architecture — Completion and Decision Matrix
+
+**Date:** 2026-11-11  
+**Status:** Completion work product for Project Director review; not yet independently cleared or finally accepted  
+**Parent proposal:** PR #173, exact starting HEAD `97191111bc2573c14d391c0af9628db7b11f194b`  
+**Governing principle:** **ENGINEER THE MECHANISMS; LET BEHAVIOR BE ACQUIRED THROUGH EXPERIENCE.**
+
+## 1. Controlling disposition
+
+The Project Director's earlier acceptance of PR #173 as sufficient is superseded. PR #173 remains retained as the architectural starting point and evidence source; it is not accepted as the complete or final Brain Foundation Architecture.
+
+This matrix does not authorize implementation, runtime changes, testing, technology selection, merge or deployment. Its purpose is to close architecture-level gaps, make proposed foundational decisions explicit, and provide a traceable completion and independent-review contract.
+
+The target is a complete foundational architecture: every foundational responsibility, authority, state class, interaction, developmental obligation, failure boundary and verification obligation must be defined at the conceptual architecture level. Algorithm internals, concrete schemas, APIs, protocols, code structure, technology and deployment choices remain later specifications—but only after their architectural obligations and decision owners are defined here.
+
+## 2. Completion standard
+
+A foundational element is complete only when all applicable questions have explicit answers:
+
+1. **Purpose:** what responsibility exists and what outcome it serves.
+2. **Authority:** which responsibility owns the authoritative state and which may only propose, consume or challenge it.
+3. **Inputs:** what evidence, state or requests it may use, with provenance and epistemic status preserved.
+4. **Outputs:** what it may produce and what those outputs do not imply.
+5. **Interactions:** which responsibilities it depends on, informs, invalidates or coordinates with.
+6. **Development:** what must be available at bootstrap and what must be acquired or improved through experience.
+7. **Failure:** how uncertainty, partial failure, stale state, contradiction and recovery are handled.
+8. **Verification:** what observable evidence demonstrates the capability and what counterevidence falsifies the claim.
+9. **Traceability:** which approved baseline, requirement or Project Director decision justifies it.
+
+A topic is not complete merely because it is named, listed as a future capability, or described as an unresolved question.
+
+## 3. Existing proposal coverage and closure matrix
+
+| ID | Foundational domain | PR #173 coverage | Remaining closure required | Completion obligation |
+|---|---|---|---|---|
+| CF-01 | Cognitive identity and continuity | Partial | Define identity invariants, version lineage, interruption and reconstruction semantics | Identity continuity must survive restart without converting missing state into invented knowledge |
+| CF-02 | Experience acquisition boundary | Partial | Define trust and evidence boundary between SYS-03 acquisition/preprocessing and Brain interpretation | Acquisition output remains evidence/proposal, not an automatically accepted cognitive fact |
+| CF-03 | Representation and grounding | Partial | Define candidate representation lifecycle, entity/event identity hypotheses, ambiguity and cross-modal reconciliation | Competing interpretations remain available until evidence justifies resolution |
+| CF-04 | Memory and episodic retention | Partial | Distinguish raw episode, transformed representation, summary, semantic knowledge and retrieval result | Summaries never silently replace source evidence; retrieval can be traced to retained lineage |
+| CF-05 | Belief and knowledge stewardship | Partial | Define belief lifecycle, contradiction handling, confidence semantics, scope and withdrawal | Beliefs remain revisable, qualified and linked to supporting/contradicting evidence |
+| CF-06 | Attention and working context | Partial | Define activation, prioritization, capacity pressure, interruption, suspension and resumption | Active context is bounded, freshness-aware and never authoritative over source state |
+| CF-07 | Prediction and outcome resolution | Partial | Define prediction lifecycle, horizons, assumptions, delayed/out-of-order outcome matching and unresolved status | Prediction error is computed only against a suitably matched, verified outcome |
+| CF-08 | Reasoning and inference | Partial | Define inference classes, evidence/assumption separation, memory use, explanation lineage and stopping/abstention | Reasoning conclusions identify their evidential basis and uncertainty; fluent text is not proof |
+| CF-09 | Simulation and imagination | Partial | Define hypothetical-state isolation and transition to evidence only through observation | Simulated content cannot contaminate memory or belief as observed history |
+| CF-10 | Learning and adaptation | Partial | Define learning classes, eligibility, candidate evaluation, activation, consolidation, interference and rollback | Every material adaptation has evidence lineage, scope, evaluation and recovery semantics |
+| CF-11 | Goals and motivation | Partial | Define supplied, inferred and candidate goals; goal competition, persistence, revision and abandonment | Goal formation is experience-responsive without bootstrap objectives prescribing desired behaviour |
+| CF-12 | Affective appraisal | Partial | Define minimum appraisal dimensions, contextual dependence and routes of influence | Affect informs appraisal and allocation without fixed emotion/action mappings or fact authority |
+| CF-13 | Planning and decision | Partial | Define alternatives, constraints, feasibility, commitment, revision and distinction from action | Plans and decisions remain cognitive products, not authorization or execution evidence |
+| CF-14 | Metacognition and self-model | Partial | Define monitored properties, limits of self-estimation, corrective requests and outcome evaluation | Monitoring can initiate bounded correction but cannot become a second unrestricted cognitive authority |
+| CF-15 | Coordination and concurrency | Partial | Define dependency, ownership conflict, cancellation, interruption, partial completion and stale work | Concurrent responsibilities coordinate without a mandatory serial pipeline or silent state overwrite |
+| CF-16 | Language and symbolic cognition | Partial | Define language as one representational/interaction modality, not the Brain's whole cognition | Language output remains grounded in available evidence and does not substitute for non-linguistic state |
+| CF-17 | Social and agent modelling | Partial | Specify detailed representation mechanisms in the later Social/Agent Representation Specification; retain the minimum foundational representation and ownership contract already defined in the architecture | Minimum agent records distinguish observed, reported, inferred, predicted and unknown claims with provenance; advanced theory-of-mind and social motivation remain deferred and experience-acquired |
+| CF-18 | Action intention and feedback | Partial | Define proposal lifecycle, denial, execution evidence, verified outcome and learning feedback | Brain cannot authorize itself; denial is not execution; request is not outcome |
+| CF-19 | Internal condition and homeostasis | Partial | Define distinction between cognitive significance/appraisal and SYS-05 operational regulation | Operational state can inform cognition but does not silently set goals, beliefs or emotional meaning |
+| CF-20 | SYS-06 modulation boundary | Partial | Keep unresolved optional responsibility with explicit non-dependency and governance conditions | Foundational Brain functions when SYS-06 is absent; no implicit mandatory subsystem |
+| CF-21 | SYS-08 substrate and SYS-01 state authority | Partial | Define persistence acknowledgement, failure reporting, reconstruction and semantic validation | Storage/runtime success is not cognitive truth; SYS-01 validates recovered cognitive state |
+| CF-22 | Security, privacy and governance | Partial | Define data access, authorization, provenance, retention and action-governance boundaries at conceptual level | Cognitive capability never bypasses system governance or security authority |
+| CF-23 | Developmental stages | Partial | Define bootstrap, early learning, capability growth and mature/advanced scope without age-based assumptions | Stages describe capability evidence, not hardcoded personality or a fixed timetable |
+| CF-24 | Failure and degraded operation | Partial | Define responsibility-local failure, uncertainty escalation, recovery and safe suspension | Partial failure is visible and contained; it does not silently corrupt unrelated cognition |
+| CF-25 | Verification and evidence | Partial | Map every capability to positive, negative, transfer, persistence and regression evidence | No capability claim without repeatable evidence and explicit limits |
+| CF-26 | Existing mechanism disposition | INVENTORY COMPLETE; SEVEN REMEDIATION/EVALUATION SPECIFICATIONS AUTHORED; INDEPENDENT CHALLENGE PENDING; CF-26 OPEN | Exact PR #171/PR #172 engineering baseline and PR #97 donor inventory completed across 209 scoped core C++ source/header/test paths; 14 mechanism families dispositioned and crosswalked to CF-01–CF-27; seven detailed specifications are in [CF-26 Remediation and Evaluation Specifications](specifications/CF26_INHERITED_MECHANISM_REMEDIATION_AND_EVALUATION_SPECIFICATIONS_2026-11-16.md) | Specifications are planning contracts, not implementation or runtime evidence; independent challenge and Project Director disposition of any reserved change remain required |
+| CF-27 | Architecture decision governance | EXACT-REVISION LEDGER POPULATED; INDEPENDENT RECHECK AND FINAL PROJECT DIRECTOR GATE OPEN | §27 records BFA-C01–BFA-C14 and CF-26 Option A provenance, maps Q1–Q14 to accepted decisions/specification owners, and separates settled constraints from pending approvals | No new reserved decision is inferred; whole-architecture acceptance remains a separate exact-revision Director decision |
+
+## 4. Integrated responsibility and authority model
+
+The following is the required conceptual responsibility model. It is a model of ownership and interaction, not a prescribed process topology or one-module-per-responsibility design.
+
+| Responsibility | Authoritative state it owns | May consume | May propose or emit | Must not do |
+|---|---|---|---|---|
+| Continuity/state stewardship | Cognitive identity, canonical epistemic-class taxonomy, cross-responsibility lifecycle contract, state lineage and recovery validation | All versioned state summaries and recovery evidence | Validated continuity snapshots, taxonomy/lifecycle conformance and recovery status | Invent missing cognitive history, determine domain semantics or reinterpret infrastructure failure as experience |
+| Experience interpretation/grounding | Candidate interpretations and grounded referent hypotheses | Qualified observations, context, memory, beliefs | Candidate entities, events, relations, interpretations and uncertainty | Rewrite source observations or silently collapse competing hypotheses |
+| Memory/knowledge stewardship | Episodes, retained evidence references, memory organization and knowledge lineage | Observations, interpretations, outcomes, learning changes | Retrieval sets, summaries, associations and candidate knowledge updates | Promote generated summaries or simulations to observed facts |
+| Belief stewardship | Current qualified beliefs and their revision history | Evidence, memory, inference, prediction outcomes | Belief proposals, confidence/qualification changes, withdrawal and contradiction notices | Erase contradiction or claim certainty unsupported by evidence |
+| Attention/working context | Active selection and task-scoped context state | Goals, relevance signals, uncertainty, deadlines, evidence availability | Activation, prioritization, suspension and resumption decisions | Become long-term truth storage or overwrite source owners |
+| Prediction/modeling | Predictions, assumptions, scope and resolution state | Beliefs, representations, context, prior outcomes | Predictions, expected outcomes, mismatch and unresolved status | Treat unverified outcomes or late arrival as confirmed prediction error |
+| Reasoning/inference | Inference artifacts and derivation lineage | Evidence, memory, beliefs, models, active context | Conclusions, alternatives, explanations, requests for more evidence | Present assumptions as observations or use fluent explanation as evidence |
+| Goals/valuation/affect | Goal candidates, valuation/appraisal state and their lineage | Experience, constraints, internal conditions, outcomes, predictions | Candidate goals, appraisals, priorities and alternatives | Encode fixed stimulus-to-emotion, emotion-to-action or desired-goal mappings |
+| Planning/decision | Plans, decision records and commitment state | Goals, constraints, beliefs, predictions, valuations | Plan candidates, decisions, defer/ask/stop recommendations and action proposals | Grant permissions or claim an action was executed |
+| Learning/adaptation | Learning candidates, eligibility/risk assessments, evaluation records, accepted adaptations and developmental lineage | Evidence, prediction errors, outcomes, evaluation results and applicable governance decisions | Candidate state changes, activation proposals within delegated authority, consolidation records and regression alerts | Self-authorize high-impact activation, treat every error as a learning instruction or update unrelated state without evidence |
+| Metacognitive control | Monitoring state, capability estimates and corrective-work records | Signals from all responsibilities | Bounded reconsideration, evidence requests, suspension and strategy-change requests | Become a second global source of truth or bypass governance |
+| Coordination | Work scheduling, dependency and conflict-resolution records | Work requests and state-version metadata | Dispatch, arbitration, cancellation, resumption and stale-work notices | Own other responsibilities' semantic state or silently decide their conclusions |
+
+Coordination is itself a named responsibility and the accountable semantic owner of its work-management state; it is not an ownerless facility. Continuity/state stewardship owns the canonical cross-domain epistemic taxonomy and lifecycle contract, while each state-domain owner retains semantic authority over its own contents. Learning/adaptation owns candidate evaluation and risk/eligibility records, but high-impact activation remains subject to the applicable external governance approval.
+
+Authority is semantic, not a claim that each row must be a separate process, service, model or code package. Implementation may combine responsibilities if ownership, observability, isolation and correction remain explicit.
+
+## 5. Cognitive information and state lifecycle
+
+### 5.1 Required epistemic classes
+
+The architecture must preserve at least these distinct classes:
+
+1. **Acquired observation:** received sensory, device, human-reported or system-provided evidence, retaining source and acquisition context.
+2. **Perceptual/interpretive hypothesis:** candidate meaning assigned to observations.
+3. **Episode:** retained record of an experience and its provenance.
+4. **Memory summary:** derived compression or reconstruction of one or more episodes, linked to source lineage.
+5. **Belief:** a qualified claim currently accepted within a stated scope.
+6. **Prediction:** a claim about an expected future or not-yet-resolved state.
+7. **Simulation/hypothesis:** an internally generated possible state or explanation.
+8. **Goal:** a represented desired state or condition, with origin and constraints.
+9. **Plan:** a candidate organized course of action.
+10. **Intention/decision:** a selected or committed cognitive direction.
+11. **Action proposal/request:** a request to the authorized external action path.
+12. **Execution evidence:** evidence that an authorized execution process did or did not perform an operation.
+13. **Verified outcome:** evidence about the resulting state, distinct from execution acknowledgement.
+14. **Learning candidate/adaptation:** proposed or accepted change to cognitive state or capability.
+15. **Metacognitive assessment:** an estimate or finding about cognition itself, with evidence and limits.
+
+No class silently converts into another. Conversion requires an explicit operation, source lineage, context and status.
+
+### 5.2 Lifecycle rules
+
+- New evidence is retained with its original source, event time and receipt time where available.
+- Interpretation produces hypotheses; insufficient evidence preserves alternatives or an unknown status.
+- Retrieval may reactivate episodes or summaries but does not rewrite the underlying historical record.
+- Belief formation and revision require evidence qualification, scope and lineage.
+- Prediction remains unresolved until a suitable outcome is matched or the prediction is explicitly expired/cancelled under a defined rule.
+- Simulation remains hypothetical unless independently corroborated by acquired evidence.
+- Goal formation records origin: supplied, derived from explicit instruction, or internally proposed from experience and current conditions.
+- A plan may be revised without rewriting the goal or evidence that motivated it.
+- Intention may produce an action proposal, but authorization belongs to governance.
+- Execution evidence and verified outcomes are returned as separate evidence classes.
+- Learning may be proposed from experience, but candidate evaluation precedes activation where the change is material or risky.
+- Any material state change preserves prior version and dependencies so that affected downstream state can be re-evaluated.
+
+### 5.3 Conflict and uncertainty rules
+
+- Contradiction is represented, not erased by last-write-wins.
+- Source reliability, signal quality, ambiguity, missing context, model uncertainty and disagreement remain distinguishable.
+- Confidence is attached to a proposition and scope; it is not a universal quality score.
+- Time-sensitive claims retain validity intervals where relevant.
+- Unknown, unresolved, unavailable and false are distinct states.
+- When evidence is insufficient, the architecture permits abstention, clarification, more observation or deferral.
+
+## 6. Integrated cognitive interaction model
+
+The Brain operates as a recurrent, branching and concurrent system. The following interaction pattern is illustrative of causal responsibilities, not a mandatory serial pipeline:
+
+1. Qualified experience becomes available from the acquisition boundary.
+2. Interpretation/grounding forms candidate representations while retaining source evidence and alternatives.
+3. Memory may retain the episode and retrieve related experience.
+4. Belief stewardship evaluates whether evidence supports, contradicts or qualifies current claims.
+5. Attention activates information relevant to current tasks, goals, uncertainty and resource limits.
+6. Reasoning may request further memory, interpretation, prediction, simulation or external evidence.
+7. Prediction/modeling forms expectations and tracks their resolution.
+8. Goal/valuation/affective appraisal evaluates significance in context; it can influence attention, encoding, retrieval, learning eligibility and decision comparison.
+9. Planning evaluates feasible alternatives against goals, constraints, beliefs, risks and predicted consequences.
+10. Decision formation selects, defers, asks, suspends or proposes an action.
+11. Governance and the authorized action path independently authorize, validate and execute or deny the proposal.
+12. Execution evidence and verified outcomes return as new evidence.
+13. Prediction comparison and learning evaluate what should change, if anything.
+14. Metacognition monitors the quality and limits of the process and can initiate bounded correction.
+15. Coordination tracks dependencies, stale work, interruption and resumption throughout.
+
+Any step may be skipped, repeated, run concurrently, interrupted or reopened. The architecture does not require every experience to cause a durable update. It requires every durable update to have a defensible evidential basis.
+
+### 6.1 Required interaction contracts
+
+Every cross-responsibility exchange must conceptually identify:
+- producing owner and consuming responsibility;
+- item identity, version and epistemic class;
+- source and derivation lineage;
+- context and temporal scope;
+- uncertainty and known limitations;
+- whether the item is provisional, accepted, stale, superseded or withdrawn;
+- dependencies and invalidation conditions;
+- whether the exchange is informational, a proposal, a request or an authoritative state transition.
+
+Concrete message schemas and transport are implementation specifications, but omission of these semantics is not permitted.
+
+## 7. Foundational mechanisms versus acquired capability
+
+### 7.1 Bootstrap mechanisms that must exist
+
+The initial Brain must have enough enabling structure to:
+- preserve identity and state lineage;
+- represent source-bearing observations and uncertainty;
+- maintain distinct epistemic classes;
+- retain and retrieve basic episodes;
+- maintain qualified, revisable beliefs;
+- establish bounded active context and task continuity;
+- form bounded predictions and resolve them against outcomes;
+- perform foundational evidence-aware inference;
+- represent supplied goals and constraints;
+- perform minimum context-sensitive affective appraisal;
+- represent plans, decisions and action proposals distinctly;
+- evaluate material learning candidates before activation;
+- preserve dependencies, detect stale state and recover from partial failure;
+- monitor uncertainty and request bounded correction;
+- interoperate with governance, action, acquisition and substrate responsibilities without absorbing their authority.
+
+These are enabling mechanisms and integrity invariants, not a preloaded body of desired knowledge or behaviour.
+
+### 7.2 Capabilities that must be acquired or improved through experience
+
+The Brain must develop, rather than receive as fixed conclusions:
+- semantic and cross-modal grounding quality;
+- entity/event continuity and abstraction;
+- retrieval relevance, association and consolidation;
+- belief calibration and world knowledge;
+- predictive accuracy and useful causal models;
+- reasoning strategies and transfer;
+- learned attention and relevance allocation;
+- candidate-goal formation, priorities and preferences;
+- nuanced affective appraisal and modulation;
+- planning competence and consequence modelling;
+- skill and procedural capability;
+- self-model accuracy and metacognitive strategy selection.
+
+No developmental phase is defined by an assumed personality, emotional catalogue, fixed motivation, preferred strategy or predetermined conclusion.
+
+## 8. Closure decisions for the 14 unresolved questions in PR #173
+
+These are recommended architecture-level dispositions to remove avoidable ambiguity. They do not select algorithms, concrete schemas or technology.
+
+| PR #173 question | Recommended closure | Rationale / later specification boundary |
+|---|---|---|
+| Q1. Atomic vs asynchronous transitions | Require atomicity for each authoritative owner-state commit and its lineage; allow asynchronous cross-owner propagation with versioning, dependency tracking, idempotency and explicit pending/stale status | Prevents partial corruption without imposing global synchronous cognition; transaction mechanism remains later |
+| Q2. Active workspace semantics | Treat workspace as bounded, task-scoped, freshness-aware activation of references and derived working items; source owners remain authoritative | Avoids duplicate universal state; capacity and eviction policies are later mechanism details |
+| Q3. Epistemic and uncertainty distinctions | Adopt the 15 conceptual classes in §5.1 as the minimum taxonomy; permit typed extensions without collapsing classes | Provides enough distinction for memory, prediction, simulation, action and learning |
+| Q4. Essential reasoning forms | Foundation requires evidence-based deduction, induction with qualification, abduction/hypothesis generation, constraint reasoning and comparative evaluation; causal/analogical/counterfactual depth is staged but architecturally supported | Defines capability families without choosing algorithms |
+| Q5. Conflicting beliefs | Preserve multiple scoped claims and evidence; evaluate source, temporal validity, context and independence; resolve only when criteria support it; otherwise retain conflict/abstain | Avoids global scalar ranking or silent overwrite; scoring method is later |
+| Q6. Safe online learning | Allow low-risk reversible candidates only under explicit eligibility and monitoring; require stronger controlled evaluation for identity, core epistemic, goal/valuation, safety-relevant or broad model changes; governance approval where system policy requires | Separates learning opportunity from permission to mutate high-impact state; exact risk tiers and algorithms are later |
+| Q7. Minimum self-model | Maintain evidence-qualified estimates of capability, uncertainty, resource limits, current commitments, known failure patterns and recent correction effectiveness; track provenance and calibration error | Useful for metacognition without a second cognitive authority |
+| Q8. Minimum affective appraisal | Appraise goal relevance, valence/significance, urgency, risk, uncertainty and relevant internal condition as contextual, revisable signals; preserve dimensions separately and permit unknown/ambivalent states | Foundational appraisal without fixed emotion labels or stimulus-response mappings |
+| Q9. SYS-06 justification | SYS-06 remains optional and unresolved. Brain must function without it. Any future proposal must define distinct value beyond Brain-owned appraisal and SYS-05 regulation, plus authority, failure, observability and governance boundaries | Avoids assuming a subsystem because an analogy suggests it |
+| Q10. Experience-acquired goals | Candidate goals may arise from discrepancies, opportunities, needs, outcomes, observed constraints or learned models; origin and evidence are retained; goals are evaluated for feasibility, conflict, risk and consequences; no trigger directly mandates a goal | Makes internally proposed goals possible without a hardcoded objective generator |
+| Q11. Transfer/generalization evidence | Require original-context improvement, relevant variation, held-out related context, counterexamples, unrelated-capability regression checks and persistence/reconstruction checks; claims are bounded to tested scope | Prevents fixture memorization from being called general learning |
+| Q12. Minimum Brain contract before full embodiment | Brain can operate on supplied observations, records, goals and verified outcomes; missing modalities remain unavailable/unknown; it can reason, learn and request evidence within those limits; no simulated embodiment is treated as real | Allows staged integration without false sensor/action claims |
+| Q13. Preserve/adapt/replace existing mechanisms | No blanket retain or discard decision. A bounded audit of the four inherited patterns is complete for PR #97 donor HEAD c1da222e6c94aeb3f2ad000392c21fe4fc81ab25; later specifications must extend the inventory where required, define remediation, and test each disposition against ownership, evidence, developmental, integration and verification criteria | Existing implementation is evidence and candidate material, not architecture authority |
+| Q14. Decisions requiring Project Director approval | PD approval required for changes to cognitive authority, foundational scope, safety/governance boundary, mandatory subsystem status, bootstrap-acquired boundary, high-impact learning authority, and any deviation from governing principle; routine mechanism details remain delegated to approved specs | Keeps strategic authority explicit without routing every engineering choice to PD |
+
+## 9. Goal, valuation and affective architecture closure
+
+### 9.1 Goal categories
+
+The Brain must distinguish:
+- **supplied goal:** provided by an authorized external source or user;
+- **derived goal:** logically or operationally derived from an explicitly supplied goal and its constraints;
+- **candidate self-formed goal:** proposed by the Brain from experience, learned models, discrepancies or internal conditions;
+- **active goal:** currently selected for consideration or pursuit;
+- **suspended/abandoned/completed goal:** lifecycle statuses with reason and evidence.
+
+A candidate self-formed goal is not automatically legitimate, safe, feasible or authorized. It must be evaluated, and any external action remains subject to governance.
+
+### 9.2 Goal competition and persistence
+
+Goals may conflict, become infeasible, lose relevance or be superseded. The architecture must preserve:
+- goal origin and motivating evidence;
+- constraints and dependencies;
+- priority rationale and uncertainty;
+- affected commitments and downstream plans;
+- reasons for revision, suspension or abandonment.
+
+Priority is contextual and revisable. No fixed rank ordering is prescribed for all situations.
+
+### 9.3 Minimum affective appraisal
+
+Affective appraisal is a cognitive responsibility that evaluates the significance of information in context. It may influence attention, memory encoding/retrieval, learning eligibility, goal priority and alternative evaluation. It does not establish external facts, create permission or dictate action.
+
+The minimum foundation need not begin with a named human-like emotion catalogue. It must support differentiated, contextual and revisable appraisal, including uncertainty and mixed significance. SYS-05 operational/homeostatic signals may be inputs, but SYS-05 does not own cognitive meaning. SYS-06 remains optional and unresolved.
+
+## 10. Learning architecture closure
+
+Learning is a coordinated change process across memory, beliefs, representations, predictions, reasoning, attention, goals, valuation, affect and skills.
+
+### 10.1 Required learning lifecycle
+
+1. **Experience registration:** preserve source, context, temporal information and epistemic status.
+2. **Learning opportunity detection:** identify a possible discrepancy, regularity, outcome or capability limitation without assuming it warrants change.
+3. **Candidate formation:** specify the proposed target state, scope, supporting evidence, assumptions and dependencies.
+4. **Risk and eligibility assessment:** consider reversibility, impact, evidence quality, interference, safety and authority.
+5. **Evaluation:** compare against prior behaviour, relevant variation, counterexamples and unaffected capabilities.
+6. **Activation decision:** accept, reject, defer or request further evidence; high-impact changes follow their required approval path.
+7. **Consolidation/persistence:** preserve accepted change and lineage.
+8. **Post-change monitoring:** assess durability, transfer and regression.
+9. **Correction/recovery:** qualify, reverse, isolate or supersede an adverse change while preserving history.
+
+### 10.2 Learning classes
+
+The architecture distinguishes, at minimum:
+- episodic retention and retrieval learning;
+- semantic/relational knowledge learning;
+- belief calibration and revision;
+- predictive/model learning;
+- reasoning-strategy learning;
+- attention/relevance learning;
+- goal and valuation learning;
+- affective appraisal calibration;
+- procedural/skill learning;
+- self-model/metacognitive learning.
+
+These classes may share infrastructure but must not be assumed equivalent or governed by one undifferentiated update rule.
+
+### 10.3 Learning evidence
+
+A claimed durable learning event must show:
+- what changed and where;
+- which evidence caused or supported the change;
+- baseline and post-change behaviour;
+- original-context performance;
+- transfer and counterexample performance where applicable;
+- regression checks on unrelated capabilities;
+- persistence across reconstruction where relevant;
+- uncertainty and limits of the claim.
+
+A prediction error, reward signal, failure or success alone is not sufficient proof that a particular belief, emotion, goal or strategy should change.
+
+## 11. Failure, recovery and degraded cognition
+
+| Failure condition | Required Brain response | Forbidden interpretation |
+|---|---|---|
+| Missing or corrupt memory segment | Mark unavailable, preserve gap and recover from validated lineage where possible | Invent episode content or treat missing record as evidence that event did not occur |
+| Conflicting observations | Retain alternatives and seek discriminating evidence or abstain | Last-write-wins truth |
+| Stale belief-dependent plan | Mark dependency stale and reconsider before relying on it | Continue as if old assumptions remain current |
+| Prediction outcome unavailable | Keep unresolved or expire under explicit rule | Count as success or failure by default |
+| Learning candidate regression | Contain, reject, reverse or supersede with lineage | Hide regression or erase developmental history |
+| Workspace pressure | Deprioritize/suspend with recoverable references and commitments | Silently discard authoritative state |
+| Coordination responsibility unavailable | Continue independent safe work or suspend dependent work with visible status | Pretend all work completed |
+| SYS-08 substrate outage | Record operational failure; recover through substrate; SYS-01 validates restored cognitive state | Treat outage as external-world event, memory absence or prediction error |
+| SYS-06 absent | Continue within foundational capability and known limits | Assume mandatory modulation exists |
+| Governance denies action | Preserve denial as governance outcome and reconsider plan | Treat request as executed or denial as world-state change |
+| Metacognitive estimate wrong | Retain estimate lineage and recalibrate against observed performance | Grant self-estimate unquestioned authority |
+
+## 12. Verification architecture and traceability requirements
+
+Every foundational capability must have a verification record with:
+- capability statement and owner;
+- preconditions and input evidence;
+- expected observable behaviour;
+- prohibited/negative behaviour;
+- evidence and lineage requirements;
+- persistence/reconstruction requirements;
+- variation/transfer scope;
+- counterexamples and boundary cases;
+- regression surface;
+- known limitations and claim scope.
+
+### 12.1 Required verification classes
+
+1. **Responsibility tests:** owner performs its defined role without crossing authority.
+2. **Interaction tests:** cross-responsibility exchange preserves epistemic class, provenance, version and dependency.
+3. **Lifecycle tests:** provisional-to-accepted, stale, superseded, withdrawn and recovered transitions behave correctly.
+4. **Contradiction tests:** competing evidence remains visible and resolution is justified.
+5. **Failure-injection tests:** partial failure, unavailable dependencies and substrate recovery do not corrupt unrelated state.
+6. **Longitudinal learning tests:** a change persists and alters later behaviour for evidence-supported reasons.
+7. **Transfer tests:** learning applies in relevant varied/novel contexts without unsupported overgeneralization.
+8. **Regression tests:** unrelated capabilities and counterexamples remain protected.
+9. **Governance tests:** action proposals cannot bypass authorization and execution/outcome distinctions.
+10. **Developmental tests:** bootstrap contains enabling mechanisms but not prescribed learned beliefs, goals, preferences, emotions or strategies.
+
+### 12.2 Capability claims
+
+Claims must be bounded to the tested capability, environment, data, variation and time horizon. Passing a narrow fixture is not evidence of broad intelligence, generalized grounding, autonomous motivation or human-like affect.
+
+## 13. Developmental capability progression
+
+This is a capability progression, not a calendar, personality model or claim that every capability develops linearly.
+
+| Developmental level | Required capability evidence | What must not be assumed |
+|---|---|---|
+| Foundation-ready | Identity, evidence discipline, memory, qualified beliefs, bounded context, basic prediction/inference, supplied-goal processing, minimum appraisal, controlled learning candidates, governance boundaries | Mature autonomy, broad knowledge or sophisticated emotion |
+| Integrated learner | Memory informs reasoning; belief changes invalidate dependencies; predictions resolve against outcomes; learning changes persist with evidence | General transfer from one success |
+| Adaptive learner | Candidate changes improve varied relevant cases while protecting unrelated capabilities; goal/attention/strategy changes are traceable | Fixed motivation or guaranteed improvement |
+| Advanced cognitive development | Stronger abstraction, causal/analogical/counterfactual reasoning, robust grounding, complex skill and social modelling, calibrated metacognition | Human equivalence or unbounded self-direction |
+
+Progression requires evidence for each capability; no level is reached by code volume or subsystem count.
+
+## 14. Advanced and deferred specifications
+
+The following details are intentionally assigned to later mechanism specifications. Each must be specified before implementation of the corresponding capability, and each specification must trace back to this architecture:
+
+- representation and grounding mechanisms;
+- episodic, semantic and procedural memory mechanisms;
+- retrieval, association and consolidation;
+- belief representation, confidence calibration and conflict resolution;
+- attention allocation and workspace scheduling;
+- prediction, causal modelling and outcome matching;
+- reasoning mechanisms and simulation;
+- candidate-goal generation and goal competition;
+- affective appraisal and modulation mechanisms;
+- planning, decision and commitment mechanisms;
+- learning eligibility, evaluation, consolidation and rollback;
+- metacognitive monitoring and self-model calibration;
+- concurrency, dependency and coordination mechanisms;
+- persistence, reconstruction and recovery;
+- governance/action contracts and verified outcome ingestion;
+- verification harnesses and developmental evaluation.
+
+A later specification may choose algorithms and concrete data structures, but it may not redefine ownership, epistemic semantics, developmental constraints or governance boundaries without an explicit architecture change and Project Director approval.
+
+## 15. Decision register proposed for Project Director disposition
+
+| Decision ID | Recommended foundational decision | Required PD disposition |
+|---|---|---|
+| BFA-C01 | One coherent cognitive authority with distinct state-owning responsibilities | Accept / reject / revise |
+| BFA-C02 | Hybrid coordination: owner-managed authoritative state plus bounded task-scoped active context | Accept / reject / revise |
+| BFA-C03 | Explicit epistemic classes and provenance-preserving lifecycle | Accept / reject / revise |
+| BFA-C04 | Recurrent, branching and concurrent cognition | Accept / reject / revise |
+| BFA-C05 | Foundational evidence-aware reasoning including deduction, qualified induction, abduction, constraint reasoning and comparison | Accept / reject / revise |
+| BFA-C06 | Distributed learning lifecycle with risk-sensitive evaluation, transfer and regression protection | Accept / reject / revise |
+| BFA-C07 | Experience-acquired candidate-goal formation; no predetermined learned objectives | Accept / reject / revise |
+| BFA-C08 | Foundational contextual affective appraisal; advanced affective sophistication acquired | Accept / reject / revise |
+| BFA-C09 | Bounded metacognitive correction and evidence-qualified self-model | Accept / reject / revise |
+| BFA-C10 | Strict separation of cognitive intention, governance authorization, execution and verified outcome | Accept / reject / revise |
+| BFA-C11 | SYS-06 optional/unresolved; Brain remains capable without it | Accept / reject / revise |
+| BFA-C12 | SYS-08 substrate responsibility; SYS-01 semantic cognitive-state ownership and recovery validation | Accept / reject / revise |
+| BFA-C13 | Atomic owner-state commits with asynchronous, versioned cross-owner propagation | Accept / reject / revise |
+| BFA-C14 | Capability evidence requires persistence, variation, transfer and regression scope | Accept / reject / revise |
+
+These are proposed decisions for the Project Director, not silently approved decisions. Any rejected or revised decision must have its rationale and downstream architectural impact recorded.
+
+## 16. Traceability to existing approved planning baselines
+
+This completion work must be checked against:
+- PR #171 whole-system architecture and responsibility map, exact reviewed package HEAD `b05434758ad4fe72815503f89bd5d2990ccb658b`;
+- PR #172 accepted foundational capability investigation, exact HEAD `d7d676b79dbf3269f7fd3ebdb4363a6df19f255d`;
+- PR #173 proposed architecture, exact starting HEAD `97191111bc2573c14d391c0af9628db7b11f194b`;
+- PR #173 correction record for F-01, F-02 and F-03.
+
+The exact current source revisions must be rechecked before independent review. The engineering evidence baseline used by PR #173 is historical and must not be represented as a current source audit.
+
+## 17. Completion gates and no-shortcut rules
+
+The Brain Foundation Architecture is complete only when:
+
+- [ ] Every CF-01–CF-27 domain has been incorporated into the architecture or explicitly scoped with a reason and accountable later specification.
+- [ ] Every responsibility has purpose, authority, inputs, outputs, interactions, developmental status, failure semantics and verification obligations.
+- [ ] The 14 PR #173 unresolved questions have explicit dispositions; no foundational question is left as an unowned placeholder.
+- [ ] All epistemic classes and lifecycle transitions are coherent across memory, belief, prediction, simulation, goals, action and learning.
+- [ ] Goal formation, motivation and affect are foundationally addressed without hardcoded desired behaviours.
+- [ ] Learning architecture covers more than numeric parameter adaptation and requires transfer/regression evidence.
+- [ ] SYS-01, SYS-03, SYS-05, SYS-06, SYS-07 and SYS-08 boundaries are consistent with the approved whole-system architecture.
+- [ ] Every architecture-level decision is either accepted by the Project Director, rejected with rationale, or explicitly reserved for a named later specification.
+- [ ] Independent review of the exact completed revision returns CLEAR with no unresolved critical finding.
+- [ ] Builder corrections are independently rechecked against exact changed lines.
+- [ ] Project Director explicitly accepts the completed exact revision.
+
+**No-shortcut rules:**
+- A Builder's self-assessment is not independent review.
+- A correction log is not proof that a finding is resolved.
+- An open PR, green documentation workflow or large document is not architectural acceptance.
+- No merge, implementation, runtime test, technology selection or deployment is authorized by this matrix.
+- The next planning stage may begin only after the completion gates and explicit Project Director acceptance are satisfied.
+
+## 18. Required Builder execution order
+
+1. Reconcile every CF item against the existing architecture and add missing material to the architecture itself, not only this matrix.
+2. Apply the recommended dispositions for Q1–Q14 as proposed architectural decisions, clearly labelled for Project Director review.
+3. Update the main architecture's responsibility, state lifecycle, integration, developmental, failure and verification sections so this matrix is not a disconnected parallel specification.
+4. Add a traceability table mapping each foundational requirement and accepted baseline item to exact architecture sections.
+5. Run a contradiction and omission review across PR #171, PR #172, PR #173 and this completion artifact.
+6. Produce a concise change log and exact revision manifest.
+7. Submit the exact completed revision for blind independent review. **Process-integrity requirement (not an architectural invariant):** the reviewer must not be given the Builder's desired verdict.
+8. Correct findings, then obtain a fresh independent recheck.
+9. Present only the exact reviewed revision and unresolved decision list to the Project Director for final acceptance.
+
+**Current completion status:** The matrix and recommended architecture-level closures are established in this artifact. The architecture itself is not yet declared complete, independently cleared or accepted until steps 1–9 are evidenced.
+
+
+## 19. Corrected integration and exact revision manifest — 2026-11-11
+
+The completion material is integrated into the main architecture document. The earlier manifest entries in this section's predecessor were inconsistent: one entry named an intermediate PR head while a later note incorrectly named an integration commit as the PR head. Those values are retained in Git history, not repeated as current state.
+
+### Historical manifest before bounded source audit — superseded by §25
+
+- PR #173 branch: `architecture/brain-foundation-planning-20261103`.
+- Current architecture file: `docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md`.
+- Architecture blob SHA after this correction: `d51912a8c71688f85d2864ff69607b3558bd9d1f`.
+- Architecture correction commit: `1f6584a2308c4b80735ec2863bb2bc97a888f5e1`.
+- Current PR #173 HEAD must be re-fetched after the matrix update; the commit above is the latest known branch commit at the time this section was authored.
+- Exact parent baselines remain PR #171 reviewed package HEAD `b05434758ad4fe72815503f89bd5d2990ccb658b` and PR #172 accepted HEAD `d7d676b79dbf3269f7fd3ebdb4363a6df19f255d`.
+
+### Corrections made against the Blind Fresh Tester findings
+
+| Finding | Architectural correction | Remaining evidence requirement |
+|---|---|---|
+| Social/agent modelling contract and ownership insufficiently explicit | §31 assigns semantic ownership by claim type across representation/grounding, memory/belief, prediction/reasoning, goals/planning and governance/security; defines minimum record semantics and failure handling | Independent reviewer must challenge ownership completeness and privacy/security boundary against PR #171 and PR #172 |
+| Accountable owners/constraints for CF-26/CF-27 unclear | §33 names accountable delivery owner, deliverable and approval/challenge boundary for compatibility audit, decision governance and traceability | Project Director must make reserved decisions; reviewer must verify no authority was delegated incorrectly |
+| Revision manifest stale/conflicting | This section replaces the inconsistent prior current-state claims with a single exact manifest and labels prior values historical | Re-fetch exact PR head and both file blobs at review time |
+| CF-01–CF-27 traceability absent | §20 maps all 27 domains to architecture sections and matrix obligations | Reviewer must verify each mapping reaches substantive text, not only a heading |
+| Inherited reliability/threshold/goal-selection/belief-overwrite rules not dispositioned | §§32–34 and the source compatibility audit report define explicit dispositions; the bounded PR #97 donor audit is complete and finds incompatibilities requiring adaptation/replacement | Broader repository/source-lineage inventory, remediation specifications and tests remain required; no donor mechanism is silently adopted |
+
+## 20. Complete CF-01–CF-27 architecture traceability
+
+The following table maps each CF obligation to the exact architecture subsection(s) that contain its substantive contract, rather than relying on broad chapter references. The matrix §3 remains the domain-level statement of the gap and completion obligation. Supporting references identify related failure, governance or verification contracts. A reference to a later specification is not a claim that its implementation already exists.
+
+| ID | Domain | Primary substantive architecture contract | Supporting contract / verification anchors |
+|---|---|---|---|
+| CF-01 | Cognitive identity and continuity | §4.1 identity/state stewardship; §16.1 Continuity/state stewardship ownership | §17.0 taxonomy/lifecycle change control; §18.2 coherent owner-state commit; §23.1 SYS-01 recovery boundary; §24.1 reconstruction/progression evidence |
+| CF-02 | Experience acquisition boundary | §4.2 interpretation/grounding; §7 SYS-03 acquisition boundary | §16.1 Interpretation/grounding ownership; §18.1 provenance/epistemic exchange; §23.2 access constraints |
+| CF-03 | Representation and grounding | §4.2 candidate referents, events, relations and ambiguity | §17.1 observation-to-interpretation lifecycle; §17.2 contradiction/time; §18.1 provenance and scope; §31 agent-identity hypotheses |
+| CF-04 | Memory and episodic retention | §4.3 memory/knowledge stewardship | §16.1 Memory/knowledge ownership; §17.1 episode and summary transitions; §18.1 derivation lineage; §21.1 consolidation/persistence |
+| CF-05 | Belief and knowledge stewardship | §4.3 belief formation/revision; §16.1 Belief stewardship conflict-record ownership | §17.1 evidence-to-belief and revision transitions; §17.2 contradiction detection handoff/resolution/abstention; §32 semantic last-write-wins prohibition; CF-26 specification 1 |
+| CF-06 | Attention and working context | §4.4 bounded active workspace; §16.1 Attention/workspace freshness ownership | §5.2 dependency/staleness; §18.2 source-version discovery and pre-use/pre-commit validation; §23.3 workspace-pressure/degraded behavior |
+| CF-07 | Prediction and outcome resolution | §4.5 prediction/modeling | §17.1 prediction lifecycle/resolution; §17.2 temporal and delayed evidence; §19 outcome matching/unresolved status; CF-26 specification 5 |
+| CF-08 | Reasoning and inference | §4.5 reasoning/inference | §18.1 epistemic exchange; §19 inference classes, evidence/assumption separation and abstention; §24.2 evidence record |
+| CF-09 | Simulation and imagination | §4.5 simulation boundary | §17.1 simulation-to-belief transition; §19 hypothetical-state isolation; §23.3 degraded operation |
+| CF-10 | Learning and adaptation | §4.7 learning/adaptation; §8.1–§8.4 developmental integrity | §21.1/§21.1.1 candidate lifecycle, owner and activation authority; §21.3 risk eligibility; §21.4 transfer/regression; CF-26 specification 7 |
+| CF-11 | Goals and motivation | §4.6 goals/valuation; §20.1 goal origin/lifecycle; §20.2 competition/persistence | §17.1 experience-to-candidate-goal transition; §32 policy-labelled fallback prohibition; CF-26 specification 2 |
+| CF-12 | Affective appraisal | §4.6 affective responsibility; §20.3 minimum contextual appraisal | §21.1.1 parameter/activation governance; §21.2 learning classes; §21.4 calibration/transfer evidence; CF-26 specification 4 |
+| CF-13 | Planning and decision | §3.7 intent/authorization boundary; §4.6 planning/decision ownership | §16.1 Planning/decision authority; §17.1 plan/decision/action-proposal transitions; §19 constraint reasoning; §23.1 governance/action path |
+| CF-14 | Metacognition and self-model | §4.8 bounded metacognitive regulation; §16.1 Metacognition signal contract; §22 self-model | §18.1 versioned exchange; §24.2 independent capability-evidence evaluation |
+| CF-15 | Coordination and concurrency | §3.2 recurrent/concurrent cognition; §3.3 owner-managed state/shared context; §16.1 Coordination ownership | §5.2 dependency/staleness; §6.3 conflicting updates; §6.4 partial failure; §18.1 exchange; §18.2 invalidation/freshness |
+| CF-16 | Language and symbolic cognition | §28.1 language and symbolic cognition boundary | §17.0 taxonomy ownership/change control; §17.1 state lifecycle; §19 reasoning/inference and evidence/assumption lineage; §24.2 grounding and evidence verification |
+| CF-17 | Social and agent modelling | §28.2 minimum social/agent modelling; §31 social/agent ownership contract | §17.2 contradiction/time; §23.2 privacy/access control; §30 reserved scope/authority approval |
+| CF-18 | Action intention and feedback | §3.7 intent/authorization/execution separation; §7 external action boundary | §16.1 Planning/decision ownership; §17.1 proposal/authorization/execution/outcome transitions; §23.1 governance/action path |
+| CF-19 | Internal condition and homeostasis | §4.6 affective/internal-condition boundary; §7 SYS-05 boundary | §20.3 appraisal inputs; §23.1 SYS-05 operational/homeostatic responsibility |
+| CF-20 | SYS-06 modulation boundary | §4.6 SYS-06 boundary; §7 SYS-06 optionality | §23.1 explicit non-dependency/conditional interface; §25 SYS-06 disposition; §30 reserved Director authority |
+| CF-21 | SYS-08 substrate and SYS-01 state authority | §3.3 authoritative cognitive-state ownership; §7 SYS-01/SYS-08 split; §16.1 Continuity/state stewardship | §18.2 owner-state commit/recovery; §23.1 substrate acknowledgement versus semantic validation |
+| CF-22 | Security, privacy and governance | §3.7 action/governance boundary; §23.1 whole-system authority boundaries | §23.2 security and information access; §30 reserved approvals; §31 agent-data privacy |
+| CF-23 | Developmental stages | §3.6 developmental capacity; §3.8 observable/correctable development; §§8.1–8.4 developmental integrity; §9 staged scope | §21.4 developmental lineage/transfer; §24.1 evidence-based progression |
+| CF-24 | Failure and degraded operation | §6.4 partial failure and recovery; §10 architecture risks | §18.2 stale/failed propagation; §23.3 degraded-operation contracts; §24.1 regression-triggered reassessment |
+| CF-25 | Verification and evidence | §11 capability-level acceptance criteria; §24.1 progression gate; §24.2 verification record | §21.4 transfer/regression evidence; §33 accountable completion evidence |
+| CF-26 | Existing mechanism disposition | §29 compatibility/disposition criteria; §32 inherited-rule constraints; §34 bounded donor findings; §35 Option A inventory | Matrix §§26.1–26.4; cross-baseline compatibility report; seven-specification package; independent challenge and Director gate |
+| CF-27 | Architecture decision governance | §30 reserved Project Director approvals; §33 accountable decision/traceability ownership | Matrix §§15, 17, 22 and 27; exact provenance records; independent exact-revision review and final Director gate |
+
+## 21. Accountable deferred-specification register
+
+| Deferred work | Accountable delivery owner | Minimum deliverable | Objective closure evidence | Gate |
+|---|---|---|---|---|
+| Social/Agent Representation Specification | Architecture & Engineering Builder | Claim taxonomy, ownership map, provenance/temporal semantics, contradiction and privacy/security contracts, verification scenarios | Every required claim class has an owner, source/provenance, temporal scope, conflict lifecycle, access rule and adversarial/ambiguous evaluation; unsupported identity remains unresolved | Independent challenge; Project Director approval for scope/authority changes |
+| Cross-baseline inherited-mechanism compatibility and remediation specifications | Architecture & Engineering Builder | Exact PR #171/PR #172 engineering baseline versus PR #97 donor census for 209 scoped paths; 14 mechanism families dispositioned; seven architecture-level specifications | Reproducible path/blob census; every disposition has source evidence and explicit preserve/adapt/replace/defer rationale; every specification maps ownership, proposal/commit, provenance, failure/recovery, evaluation and cross-spec dependencies; no source is accepted merely by presence | Independent challenge of inventory and specifications; Project Director disposition for reserved changes |
+| Fixed learning-rate parameterization | Architecture & Engineering Builder | Treat weighted coefficients and 0.05–0.95 clamp as provisional engineered parameters; register objective, scope, owner, version, sensitivity, transfer, adaptation, regression and consequences | Parameter-specific baseline/alternative comparison, sensitivity and stability evidence, held-out context transfer, negative-transfer/regression results, rollback/replay evidence; remains provisional if any required evidence is absent | Independent technical challenge; Project Director approval if foundational learning authority or scope changes |
+| CF-26 compatibility assessment | Architecture & Engineering Builder | Cross-baseline file/blob census, mechanism-family dispositions and seven owned remediation/evaluation specifications | Independent reviewer reproduces census counts, verifies disposition evidence and challenges every specification against the shared contract; all findings are adjudicated with exact-revision evidence | Project Director decision where reserved authority is affected |
+| CF-27 decision ledger | Project Director owns decisions; Architecture & Engineering Builder maintains record | Exact proposal/revision, alternatives, rationale, consequences, dependencies and accept/reject/revise/reserved status | Every Q/BFA decision maps to an accepted Director decision, a named specification with owner/gate, or an explicit reserved Director decision; no Builder recommendation is represented as approval | Project Director acceptance; Independent Reviewer may challenge traceability |
+| CF-01–CF-27 traceability maintenance | Architecture & Engineering Builder | Section-level map synchronized to every architecture revision | All 27 rows resolve to existing substantive subsections; no stale or missing reference; every status has an owner, evidence pointer and closure gate | Independent exact-revision recheck |
+
+“Deferred” is not ownerless. A later specification cannot begin implementation merely because an owner and deliverable are named; it still requires its own authorization and predecessor decisions.
+
+## 22. Project Director disposition register — BFA-C01–BFA-C14 accepted
+
+**Director disposition:** ACCEPT BFA-C01–BFA-C14 as written. The Project Director's explicit decision was made in the project conversation on 2026-11-15 and transcribed into the repository by the Builder in PR #173 provenance comment [#6894239520](https://github.com/methaneex-oss/MethaneX/pull/173#issuecomment-6894239520). The repository comment is a Builder-authored provenance record, not a comment authored by the Project Director.
+
+**Exact revision considered:** PR #173 HEAD `f8dd67fc866242d29298ffc6a03a8782a4e6982c`; matrix blob `4f297f7da7c8d9c8b0312bcc32dba353bcc0be66`.
+
+**Decision evidence and scope:** the cited comment records the Project Director's explicit ACCEPT decision for BFA-C01–BFA-C14 and enumerates the accepted boundaries. The blind CF-26 packet intentionally excluded PR comments and conversation history, so its reviewer could not independently inspect that external decision record. That packet limitation is not evidence that the decision was absent. The decision remains limited to those fourteen items; it does not accept the whole architecture, close CF-26/CF-27, clear independent review or authorize implementation.
+
+The acceptance settles only the fourteen listed foundational architecture decisions. It does not accept the whole architecture, substitute for independent review or blind assessment, close CF-26, authorize merge, Stage A, runtime implementation, technology selection, deployment or branch-history changes.
+
+| Decision range | Required Director action |
+|---|---|
+| BFA-C01–BFA-C04 | Accept, reject or revise cognitive authority, ownership, epistemic lifecycle and recurrent coordination |
+| BFA-C05–BFA-C06 | Accept, reject or revise foundational reasoning and distributed learning obligations |
+| BFA-C07–BFA-C09 | Accept, reject or revise acquired goal formation, affective appraisal and metacognitive authority |
+| BFA-C10–BFA-C12 | Accept, reject or revise action/governance boundary, SYS-06 optionality and SYS-01/SYS-08 responsibility split |
+| BFA-C13–BFA-C14 | Accept, reject or revise atomic owner commits/asynchronous propagation and capability evidence standard |
+
+### 22.1 Conditional architecture dependency map
+
+The following map records the principal architecture sections governed by the now-accepted decisions. Their architectural direction is settled by the Director's disposition above; their implementation detail and overall proposal remain subject to independent review, verification and later authorization.
+
+| Decision | Proposed decision | Principal dependent architecture sections |
+|---|---|---|
+| BFA-C01 | One coherent cognitive authority with distinct state-owning responsibilities | §§3.1, 4, 16.1 |
+| BFA-C02 | Owner-managed authoritative state plus bounded task-scoped active context | §§5–6, 16.1, 18 |
+| BFA-C03 | Explicit epistemic classes and provenance-preserving lifecycle | §§5, 17–18 |
+| BFA-C04 | Recurrent, branching and concurrent cognition | §§6, 18 |
+| BFA-C05 | Foundational evidence-aware reasoning and inference | §§4.5, 19, 24 |
+| BFA-C06 | Distributed learning with risk-sensitive evaluation, transfer and regression | §§8, 21, 24 |
+| BFA-C07 | Experience-acquired candidate-goal formation | §§20, 25 |
+| BFA-C08 | Foundational contextual affective appraisal | §§4.6, 20, 25 |
+| BFA-C09 | Bounded metacognitive correction and evidence-qualified self-model | §§4.8, 22, 24 |
+| BFA-C10 | Separation of intention, authorization, execution and verified outcome | §§3.7, 7, 17, 23 |
+| BFA-C11 | SYS-06 optionality and non-dependency | §§7, 20, 23 |
+| BFA-C12 | SYS-08 substrate and SYS-01 semantic state/recovery authority | §§7, 16.1, 23 |
+| BFA-C13 | Atomic owner-state commits and asynchronous versioned propagation | §§6, 18 |
+| BFA-C14 | Persistence, variation, transfer and regression evidence standard | §§11, 24 |
+
+This map is a traceability aid. It does not grant any owner authority to change an accepted BFA-C decision or to authorize implementation.
+
+## 23. Current completion status — Builder correction pass
+
+**Builder response status:** The five earlier Blind Fresh Tester findings have Builder-authored architecture responses in §§31–34 and this matrix's §§19–24. These are proposed corrections only; none is represented as independently rechecked or closed by this statement. Independent re-review of the exact corrected revision remains mandatory. The CF-26 cross-baseline file/blob census and mechanism-family dispositions are now recorded in §26 and the expanded compatibility report; remediation/evaluation specifications remain open. BFA-C01–BFA-C14 have been accepted by the Project Director; independent architecture review and overall architecture acceptance remain outstanding.
+
+**No-shortcut status:** no merge, implementation, runtime source change, runtime test, technology selection, deployment, PR #191 disposition, PR #192/#193 integration or branch-history operation is authorized by this document.
+
+
+## 24. Bounded inherited-mechanism source audit — 2026-11-11
+
+The exact source evidence and line-level findings are recorded in [Inherited Mechanism Source Compatibility Audit — 2026-11-11](reports/INHERITED_MECHANISM_SOURCE_COMPATIBILITY_AUDIT_2026-11-11.md). The audit uses PR #97 donor HEAD c1da222e6c94aeb3f2ad000392c21fe4fc81ab25 and exact source blob identities.
+
+| Finding | Source result | Architecture disposition |
+|---|---|---|
+| Source reliability | KnowledgeModel averages incoming reliability metadata; correctness-based score_source has no call site in the 14 inspected production cognitive files and appears in a unit test. Defaults include 0.5 and replay fallback 0.7. | Adapt; not calibrated source trust. |
+| Confidence/threshold concern | No single global confidence cutoff found. Action-score, uncertainty/risk, similarity, retention and minimum-strength thresholds are distinct configurable/default parameters. | Provisional engineering parameters only, each with objective-specific evaluation and ownership. |
+| Goal selection | CognitiveCycle falls back to eligible.front(); planning and decision paths also bind strategy context to eligible.front() independently of selected intent. | Replace as general selector; correct context binding; any safe fallback must be explicit external policy. |
+| Fixed learning-rate equation | developmental_learning.cpp uses a weighted update equation with fixed coefficients and a 0.05–0.95 clamp. | Provisional engineered schedule only; evaluate sensitivity, transfer and adaptation under an owned, versioned objective. Do not represent coefficients as acquired behaviour. |
+| Belief overwrite | Brain belief map replaces the existing value before marking dispute; action-status belief is unconditionally replaced. WorldModel preserves some conflicting incoming facts but not a complete versioned claim history. | Replace with versioned, provenance-bearing claim revision and full alternative preservation. |
+
+**CF-26 status at this historical section's original date:** PARTIALLY ASSESSED. This status is superseded by §26 (2026-11-15), which records completion of the exact PR #171/PR #172 versus PR #97 scoped file/blob inventory and mechanism-family dispositions. Remediation/evaluation specifications remain open. No code is changed or authorized.
+
+**BFA-C01–BFA-C14 status:** ACCEPTED by the Project Director as written; see §22 and PR #173 comment #6894239520. This acceptance does not close CF-26 or replace independent review.
+
+
+
+
+
+### 22.2 Decision scope and authority boundary
+
+The accepted decisions establish foundational architecture constraints, not a detailed implementation design. Builders may now use these constraints as settled inputs when completing specifications, but may not infer permission to implement runtime code. Independent review must assess the corrected exact revision, and any material contradiction with accepted baselines must be escalated rather than silently changing the decisions.
+
+## 25. Final Builder source-audit manifest and remaining independent gate — 2026-11-11
+
+### 25.1 Exact parent snapshot before this matrix update
+
+- PR #173 branch: architecture/brain-foundation-planning-20261103.
+- PR #173 parent HEAD before this matrix update: 0f8ca586316b96e3c5738acdf6f26630746ce39d.
+- Architecture file blob: d5a7676e81d2c95b5ba18f45a237d3e0a7635696.
+- Matrix file blob before this update: f905df8f9c31fa8f3fc5a1c9247d94263a92e71e.
+- Bounded source audit report blob: 037dc71df9e508c0cc08e96a42b41aa7ba5bc041.
+- Audited donor source: PR #97 HEAD c1da222e6c94aeb3f2ad000392c21fe4fc81ab25.
+- Baseline PR #171 HEAD: b05434758ad4fe72815503f89bd5d2990ccb658b.
+- Accepted PR #172 HEAD: d7d676b79dbf3269f7fd3ebdb4363a6df19f255d.
+
+The matrix update itself advances the PR #173 branch. The resulting matrix blob and PR #173 HEAD must be re-fetched; the parent SHA above is not the post-write target.
+
+**Revision-reference semantics:** §25.1 records a historical parent snapshot, not the review target. The `97191111...` starting HEAD and `0f8ca586...` pre-matrix-update parent HEAD are ancestry references; they are not competing claims about the current PR target. For every blind assessment and independent review, the target is the exact live PR #173 HEAD fetched immediately before dispatch/review, and the packet manifest must record that SHA plus both architecture-document blob identities at that same commit.
+
+### 25.2 Source compatibility disposition
+
+The bounded donor audit identifies four inherited rule patterns plus a fixed learning-rate parameterization. The source report records all five; the matrix summary and deferred register track the learning-rate parameterization separately so it cannot disappear from CF-26 remediation. Its conclusions are:
+
+1. Source reliability is an average of caller-supplied reliability metadata in the production assimilation path, not a calibrated source-trust estimate; the correctness-scoring method was not found called in the inspected production files.
+2. No single global confidence cutoff was found. Action-score, uncertainty/risk, similarity, retention and minimum-strength thresholds are distinct parameters with different semantics.
+3. First-eligible selection is both a fallback and a context-coupling shortcut; strategy context can be bound to eligible.front() rather than the selected intent.
+4. The authoritative belief map overwrites an existing value before setting a disputed flag; action-status beliefs are unconditionally replaced. WorldModel conflict retention is partial, not a complete versioned claim ledger.
+5. The fixed weighted learning-rate equation and clamp are engineered parameterization, not learned dynamics; sensitivity, transfer and adaptation evaluation remain required before adoption.
+
+At the time of this historical §25.2 entry, CF-26 was **PARTIALLY ASSESSED**. The 2026-11-15 cross-baseline inventory in §26 supersedes the earlier limitation: the scoped source/header/test file census and mechanism-family dispositions are complete for the exact PR #171/PR #172 and PR #97 revisions. Remediation/evaluation specifications remain open; no runtime changes are authorized.
+
+### 25.3 Remaining acceptance gates
+
+- The five prior Blind Fresh Tester findings have Builder-side responses in §§31–34 and this matrix's §§19–24. A new blind independent review of the exact post-update PR #173 HEAD remains required. The previous NOT CLEAR result on 4b960062b7b3d41fa18c60909c628e8264459927 is historical and cannot be upgraded retroactively.
+- BFA-C01–BFA-C14 are accepted by the Project Director as written (PR #173 comment #6894239520); the remaining independent-review and architecture-acceptance gates remain open.
+- CF-26's scoped cross-baseline inventory is complete under §26; remediation/evaluation specifications remain open.
+- No PR merge, runtime source modification, runtime test, technology selection, deployment or Stage A start is authorized.
+
+**Builder status at this historical section's original date:** architecture corrections and the bounded donor audit were complete for that pass; see §26 for the superseding 2026-11-15 cross-baseline inventory. Independent re-review and Project Director acceptance of the exact final architecture revision remain outstanding. Architecture acceptance remains NOT CLEARED.
+
+
+## 26. CF-26 Project Director Option A — cross-baseline inventory execution (2026-11-15)
+
+**Director instruction:** CF-26 Option A accepted on 2026-11-15. Complete an architectural compatibility inventory across the approved engineering baselines, give each inherited mechanism an evidence-backed disposition, and specify owned remediation/evaluation work. This instruction does not reopen BFA-C01–BFA-C14 or alter prior authorization boundaries.
+
+### 26.1 Exact source baselines and census
+
+- PR #171 reviewed package HEAD: `b05434758ad4fe72815503f89bd5d2990ccb658b`.
+- PR #172 accepted investigation engineering-evidence baseline: `main` at `1273ddbcd0087d189e01388ded2d362fb1e058d2`.
+- PR #97 donor branch HEAD: `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+- PR #173 architecture HEAD used for this inventory: `a8be408921afaa7a417cc972e891155bbcd11d19`.
+
+The PR #171 and PR #172 engineering trees have identical blob identities across the 166 paths in the scoped core C++ source/header/test inventory. Compared with that shared baseline, the PR #97 donor has 81 identical paths, 85 modified paths and 43 donor-only paths, for a 209-path union. There are no baseline-only paths in this scope. The exact path/blob manifest and mechanism-level evidence are in [Cross-Baseline Inherited Mechanism Compatibility Inventory](reports/INHERITED_MECHANISM_SOURCE_COMPATIBILITY_AUDIT_2026-11-11.md).
+
+The census covers all tracked paths under `core/cpp/src/`, `core/cpp/include/jarvis/core/` and `core/cpp/tests/` at those exact revisions. It does not claim an audit of every repository directory, historical branch, external consumer, binary or deployed artifact.
+
+### 26.2 Mechanism dispositions
+
+| Mechanism family | Disposition |
+|---|---|
+| Cognitive event journal, persistence and replay | PRESERVE + ADAPT |
+| Perception, representation, knowledge and reasoning | PRESERVE + ADAPT |
+| Episodic and prediction-linked experience memory | ADAPT |
+| Prediction and contextual matching | PRESERVE + ADAPT |
+| Source reliability and evidence confidence | ADAPT |
+| Numeric thresholds and fixed learning-rate schedule | ADAPT |
+| Goal model and intent lifecycle | PRESERVE |
+| General first-eligible goal fallback and independent strategy-context coupling | REPLACE |
+| Belief/world-model semantic last-write-wins | REPLACE |
+| Developmental association and strategy learning | PRESERVE + ADAPT |
+| Affective state and appraisal learning | PRESERVE + ADAPT |
+| Action execution and consequence feedback | PRESERVE + ADAPT |
+| Developmental environment/world | PRESERVE as controlled training/test substrate; ADAPT its evidence boundary |
+| Evolution and parameter experimentation | PRESERVE + ADAPT |
+| Attention, reflection, self-model and causal modelling | PRESERVE + ADAPT |
+| Social/agent representation | DEFER to its owned specification; do not claim implemented |
+| RETIRE | None justified by the current evidence; no whole mechanism has been shown redundant with verified replacement coverage |
+
+The dispositions apply to mechanism semantics and roles, not blanket approval of entire source files. The report identifies the relevant evidence, limitations and later obligations.
+
+### 26.3 Owned remediation/evaluation specifications
+
+The Architecture & Engineering Builder owns:
+1. Versioned belief/claim revision and conflict preservation.
+2. Goal/intent selection and selected-goal context identity.
+3. Evidence reliability, confidence semantics and numeric parameter governance.
+4. Affective appraisal semantics, calibration and persistence/replay.
+5. Prediction-context candidate resolution and ambiguity handling.
+6. Action/developmental-world evidence contracts.
+7. Learning/evolution integration boundaries, eligibility, risk, transfer and rollback.
+
+Each specification must include parent architectural decisions, ownership, provenance, failure/recovery semantics, objective verification, counterexamples, persistence, variation/transfer and regression scope. Runtime implementation or test execution still requires its separate authorization.
+
+### 26.3.1 Mechanism-to-specification ownership and acceptance crosswalk
+
+The dispositions above are semantic decisions for the scoped donor inventory, not blanket approvals of source files. The following crosswalk makes each material disposition actionable and prevents a mechanism family from disappearing inside a broad specification title.
+
+| Inherited mechanism / conflict | Controlling specification and accountable owner | Required disposition | Minimum objective acceptance test |
+|---|---|---|---|
+| Event journal, persistence and replay | Spec 1 and Spec 6; Architecture & Engineering Builder for specification, Continuity/state stewardship for state validation | PRESERVE + ADAPT | Duplicate/reordered replay is idempotent; source event history and semantic revisions remain distinct; interrupted recovery remains explicitly partial |
+| Perception, representation, knowledge and reasoning | Specs 1, 3 and 5; Interpretation/grounding, Memory/knowledge and Reasoning owners | PRESERVE + ADAPT | Competing interpretations retain provenance and uncertainty; retrieved evidence is explicitly delivered to reasoning premises with exact versions; unsupported semantic generalization is rejected |
+| Episodic and prediction-linked memory | Specs 1 and 5; Memory/knowledge owner | ADAPT | Retrieval preserves episode identity, source lineage and context; a summary cannot replace or silently alter the source episode |
+| Prediction and contextual matching | Spec 5; Prediction/modeling owner | PRESERVE + ADAPT | Multiple plausible outcomes remain unresolved; no nearest/first candidate is silently committed; delayed contradictory evidence reopens owner-governed resolution |
+| Caller-supplied source-reliability averaging | Spec 3; Evidence-reliability/parameter-register owner, with independent evaluator | ADAPT; averaging caller metadata is not accepted as calibrated source trust | Caller metadata alone cannot update calibrated source competence; unknown sources remain unknown; independent, scoped outcome evidence and uncertainty are required |
+| Numeric thresholds and fixed learning-rate schedule | Spec 3; Parameter-register owner, with Learning/adaptation and governance for high-impact use | ADAPT; inherited values remain provisional | Every value has owner, purpose, scope, units, provenance, calibration evidence, sensitivity, expiry/review and rollback; no universal confidence cutoff or unreviewed learned-dynamics claim |
+| Goal model and intent lifecycle | Spec 2; Goal/valuation owner | PRESERVE | Supplied, inferred and self-formed origins remain distinct; candidate lifecycle and lineage survive persistence and revision |
+| General first-eligible goal fallback | Spec 2; Goal/intent-selection owner | REPLACE | Candidate set is compared using evidence/context/constraints; no selection depends on list order, first eligible item or a fixed universal ranking; unresolved/no-intent is valid |
+| Independent first-eligible strategy-context coupling | Spec 2; Goal/intent-selection owner, coordinated with Planning | REPLACE | Strategy context references the exact selected intent and candidate/evidence versions; a mismatch or changed selection invalidates dependent context |
+| Belief/world-model semantic last-write-wins | Spec 1; Belief stewardship owner | REPLACE | Contradictory claims and prior versions remain inspectable; stale concurrent proposals cannot overwrite current owner state; supersession requires explicit evidence and rationale |
+| Developmental association and strategy learning | Spec 7; Learning/adaptation plus each affected state owner | PRESERVE + ADAPT | Candidate formation, evaluation, owner commit, transfer, regression and rollback are separate evidenced stages |
+| Affective state and appraisal learning | Spec 4; Affective appraisal owner, with independent calibration evaluator | PRESERVE + ADAPT | No fixed stimulus-to-emotion or outcome-to-valence mapping; context variation, held-out cases, mixed evidence and unrelated-capability regression are evaluated |
+| Action execution and consequence feedback | Spec 6; Governance/action executor and observation owners | PRESERVE + ADAPT | Request, authorization, execution, observation and verified consequence remain distinct; execution status alone cannot become world outcome |
+| Developmental environment/world | Spec 6; Developmental-world owner | PRESERVE as controlled substrate; ADAPT evidence boundary | Hidden state and evaluator labels do not leak into Brain evidence; simulated episodes remain labelled simulated and reproducible |
+| Evolution and parameter experimentation | Spec 7; Learning/adaptation and Governance | PRESERVE + ADAPT | Parameter optimization cannot self-authorize high-impact cognitive changes or be represented as broad cognitive learning |
+| Attention, reflection, self-model and causal modelling | Spec 7 plus relevant owner specifications; respective semantic owners | PRESERVE + ADAPT | Attention/monitoring signals cannot mutate other owners' state; missing signals remain unknown; learning claims require persistent downstream behavioural evidence |
+| Social/agent representation | Owned Social/Agent Representation Specification; Architecture & Engineering Builder | DEFER advanced capabilities; minimum provenance/authority contract remains mandatory | Observed/reported/inferred/predicted/unknown claims remain distinct; conflicting identity hypotheses persist; another agent's statement is not operator intent or verified fact |
+
+The Architecture & Engineering Builder is accountable for maintaining these specifications and their crosswalk. Each semantic state owner remains accountable for its own acceptance and commit rules. Independent evaluation is separate from authorship. A reserved change to accepted authority, privacy, governance or foundational scope returns to the Project Director. The tests above are acceptance obligations for a later authorized implementation; they are not claims that donor runtime code has already been corrected.
+
+### 26.4 Current CF-26 status
+
+**Scoped cross-baseline inventory: COMPLETE. Seven architecture-level remediation/evaluation specifications: AUTHORED; independent challenge: PENDING. CF-26 overall: OPEN until the exact-revision independent challenge and required Project Director disposition are complete.**
+
+The report's test-source references describe intended assertions only. No build or runtime tests were executed during this documentation-only pass. The seven architecture-level specifications are authored in [CF-26 Remediation and Evaluation Specifications](specifications/CF26_INHERITED_MECHANISM_REMEDIATION_AND_EVALUATION_SPECIFICATIONS_2026-11-16.md); independent challenge of that package and the exact revised PR #173 revision remains required. BFA-C01–BFA-C14 remain accepted as recorded in PR #173 comment #6894239520. No merge, draft exit, Stage A, runtime implementation, technology selection, runtime test or deployment is authorized.
+
+
+## 27. CF-27 exact-revision decision and authority ledger
+
+**Ledger purpose:** record the proposal/revision, explicit Project Director disposition, downstream constraints and remaining gate for every architecture-level decision currently in scope. This ledger distinguishes an accepted decision from a Builder recommendation, a specification deliverable and an unresolved approval. A reviewer recommendation, document entry or implementation convenience is never Project Director approval.
+
+**Ledger revision:** this section is part of PR #173 branch `architecture/brain-foundation-planning-20261103`; the exact post-write PR HEAD and matrix blob must be re-fetched and recorded in the subsequent Builder handoff. The ledger must be refreshed whenever a decision, accepted baseline or architecture revision changes.
+
+### 27.1 Explicit Project Director decisions
+
+| Decision | Exact decision evidence | Disposition | Downstream constraint / remaining gate |
+|---|---|---|---|
+| BFA-C01–BFA-C14 | Builder-authored repository provenance comment [#6894239520](https://github.com/methaneex-oss/MethaneX/pull/173#issuecomment-6894239520), transcribing the Project Director's explicit 2026-11-15 conversation decision; decision applied to matrix at the recorded revision `f8dd67fc866242d29298ffc6a03a8782a4e6982c` | **ACCEPTED as written** | Settled architecture constraints. Does not accept the whole architecture, close CF-26/CF-27, clear independent review or authorize implementation. Any material change returns to the Project Director. |
+| CF-26 Option A | Builder-authored PR #173 execution/provenance comment [#6899575912](https://github.com/methaneex-oss/MethaneX/pull/173#issuecomment-6899575912), recording the Project Director's 2026-11-15 Option A choice | **ACCEPTED and applied** | Complete the bounded cross-baseline inventory first, then produce owned remediation/evaluation specifications. Does not reopen BFA-C01–C14 or authorize runtime changes. |
+
+### 27.2 Disposition of the fourteen architecture questions
+
+The following maps the fourteen questions in architecture §13 to the controlling accepted decision or the owned specification. “Covered by accepted decision” means the foundational direction is settled; it does not mean the detailed mechanism is implemented.
+
+| Question | Architecture disposition | Authority / owner | Status |
+|---|---|---|---|
+| Q1 — atomic owner transitions vs asynchronous propagation | Coherent atomic commit within each authoritative owner; versioned asynchronous cross-owner propagation with stale/reconciliation states | BFA-C13; each state owner, Coordination and Continuity/state stewardship; Architecture & Engineering Builder owns later mechanism detail | Foundational direction accepted; mechanism detail remains specification work |
+| Q2 — bounded active workspace | Task-scoped activation of references/derived work; source owners remain authoritative | BFA-C02; Attention/workspace owner | Foundational direction accepted |
+| Q3 — epistemic distinctions | Canonical 15-class minimum taxonomy with typed extensions and provenance-preserving lifecycle | BFA-C03; Continuity/state stewardship owns taxonomy, domain owners own semantic content | Foundational direction accepted; compatible taxonomy changes follow §17.0 |
+| Q4 — essential reasoning forms | Foundational deduction, qualified induction, abduction/hypothesis generation, constraint reasoning and comparison; advanced depth staged | BFA-C05; Reasoning responsibility | Foundational direction accepted |
+| Q5 — conflicting beliefs | Preserve scoped competing claims and evidence; evaluate source, time, context and independence; abstain where unresolved | BFA-C03/BFA-C05; Belief stewardship; CF-26 specification 1 | Architecture constraint accepted; versioned revision contract specified, independent challenge pending |
+| Q6 — safe online learning | Bounded reversible candidates, explicit eligibility/risk assessment, evaluation, monitoring and governance for high-impact changes | BFA-C06; Learning/adaptation and Governance; CF-26 specification 7 | Foundational direction accepted; detailed contract specified, independent challenge pending |
+| Q7 — minimum self-model | Evidence-qualified estimates of capability, uncertainty, resources, commitments, failures and correction effectiveness | BFA-C09; Metacognitive responsibility | Foundational direction accepted |
+| Q8 — minimum affective appraisal | Contextual, revisable appraisal; advanced sophistication acquired; no fixed emotional/behavioural mapping | BFA-C08; Affective appraisal; CF-26 specification 4 | Foundational direction accepted; calibration contract specified, independent challenge pending |
+| Q9 — SYS-06 justification | SYS-06 remains optional/unresolved; Brain must function without it; any later proposal needs a separate contract and Director decision | BFA-C11; Project Director retains reserved authority | Optionality accepted; making SYS-06 mandatory remains unapproved |
+| Q10 — experience-acquired goals | Candidate goals may arise from interpreted experience and internal conditions; no fixed trigger-to-goal rule | BFA-C07; Goals/valuation/planning | Foundational direction accepted |
+| Q11 — transfer/generalization evidence | Require original-context evidence, relevant variation, held-out related cases, counterexamples, persistence and regression scope | BFA-C14; capability owner and independent evaluator | Evidence principle accepted; each capability claim still requires its own evidence package |
+| Q12 — pre-embodiment operation | Foundational Brain can operate with supplied observations/outcomes and known limits; SYS-08 supplies substrate; intent remains separate from authorization/execution | BFA-C10 and BFA-C12; SYS-01/SYS-08 and governance/action owners | Foundational boundary accepted |
+| Q13 — preserve/adapt/replace inherited mechanisms | Complete scoped cross-baseline inventory, then produce seven owned remediation/evaluation specifications; no blanket source approval | CF-26 Option A; Architecture & Engineering Builder | Inventory complete; seven specifications authored; independent challenge pending |
+| Q14 — decisions requiring Director approval | Apply architecture §30 reserved-decision list; no silence, reviewer recommendation or implementation convenience substitutes for approval | Project Director is decision authority; Architecture & Engineering Builder maintains ledger | Authority rule established; any reserved change remains pending until explicit decision |
+
+### 27.2.1 Reserved-decision crosswalk
+
+The fourteen Q rows above describe architecture questions and their dispositions; they are not fourteen new, unrecorded Project Director decisions. The controlling authority is BFA-C01–BFA-C14 plus the explicit reserved-decision list in architecture §30. For auditability, the remaining reserved boundaries are mapped here:
+
+| Question(s) | Accepted direction already settled | Reserved choice still requiring explicit Project Director disposition |
+|---|---|---|
+| Q1–Q4 | BFA-C01–C05 and C13 settle owner-managed state, bounded workspace, epistemic lifecycle, recurrent cognition and foundational reasoning | Any change to cognitive authority, owner boundaries or foundational epistemic transitions |
+| Q5 | BFA-C03/C05 settle preservation of conflicting claims and evidence-qualified reasoning; Specification 1 defines the detailed revision contract | Any change to accepted epistemic classes or foundational belief authority |
+| Q6 | BFA-C06 settles risk-sensitive learning, independent evaluation and regression protection; Specification 7 defines candidate/activation contracts | Any expansion of high-impact learning authority or governance boundary |
+| Q7–Q8 | BFA-C08/C09 settle minimum contextual appraisal and bounded metacognitive self-model | Any change to foundational affective status, bootstrap/acquired boundary or authority over goals/actions |
+| Q9 | BFA-C11 settles SYS-06 optionality and Brain non-dependency | Making SYS-06 mandatory or transferring authority among SYS-01/SYS-05/SYS-06/SYS-08 |
+| Q10–Q12 | BFA-C07/C08/C10/C12 settle experience-acquired goals, affective foundation, intent/authorization separation and substrate/state ownership | Any change to those accepted foundational boundaries |
+| Q13 | CF-26 Option A settles inventory-first compatibility work and owned specifications | Any reserved preserve/adapt/replace decision that materially changes foundational scope or authority |
+| Q14 | Architecture §30 defines the reserved-decision classes and the Project Director as decision authority | Every proposal falling within §30 remains individually pending until an explicit Director disposition is recorded |
+
+A later specification may refine implementation-neutral mechanisms within accepted boundaries. It may not turn a reserved choice into an approved choice by describing it as a recommendation, a dependency or an engineering convenience.
+
+### 27.3 Open approvals and closure status
+
+| Item | Current status | What closes it |
+|---|---|---|
+| Independent review of the exact current PR #173 revision and this ledger | OPEN | Independent assessment with exact target SHA, exact document blobs, full artifact/provenance and finding-by-finding recheck |
+| Project Director acceptance of the complete Brain Foundation Architecture | OPEN | Explicit Project Director acceptance of the exact independently reviewed revision |
+| CF-26 | OPEN | Independent challenge of the 209-path inventory, 14 mechanism dispositions, CF crosswalk and seven specification package; Project Director disposition for any reserved change |
+| CF-27 | LEDGER POPULATED; FINAL GATE OPEN | Independent confirmation that each decision is traceable and no reserved decision is inferred; Project Director disposition of the exact final architecture revision |
+| Runtime implementation, Stage A, runtime tests, technology selection, merge, draft exit and deployment | NOT AUTHORIZED | Separate explicit Project Director authorization; none is granted by this ledger |
+
+**No implied approval:** the seven CF-26 specifications are planning contracts only. Their authorship does not authorize implementation, execution of tests, technology selection or activation of any mechanism. BFA-C01–BFA-C14 and CF-26 Option A remain unchanged.
+
+## 28. Independent assessment #43822364205 — finding reconciliation (2026-11-16)
+
+### 28.1 Assessment provenance and limitation
+
+The assessment reviewed PR #173 target `84dacbb5b3aae924a6a363f6fcdfeb1b4b2b2664` and returned **NOT CLEAR**. Its workflow execution succeeded, but its workflow ref was `main`, not the dedicated review ref `review/cf26-option-a-independent-check-20261115`. Its packet included the architecture, completion matrix and PR #171/PR #172 baseline documents, but omitted the seven CF-26 specifications, the cross-baseline compatibility inventory and the two exact Builder-authored decision-provenance records. The verdict is therefore valid evidence about the supplied architecture/matrix packet at that target SHA, but not a complete Option A closeout review.
+
+### 28.2 Finding adjudication
+
+The Builder re-read the exact target architecture and adjudicates the findings as follows:
+
+| Finding | Adjudication | Exact response |
+|---|---|---|
+| BLOCKER-01 / MAJOR-01 — dependency invalidation ownership | Partially substantiated. Coordination and owner publication were already named; consumer discovery, commit-race handling and failed-propagation behavior needed stronger contract language. | Architecture §16.1 and §18.2 now define source-owner version publication, Coordination dependency tracking/propagation, consumer-side authoritative version discovery, pre-use and pre-commit validation, and stale/blocked handling on unavailable or failed validation. |
+| BLOCKER-02 / MAJOR-02 — contradiction lifecycle | Partially substantiated. Belief stewardship already owned contradiction notices and §17.2 already defined evidence criteria/abstention; the conflict-record owner and detector-to-owner handoff were implicit. | Architecture §16.1 and §17.2 now assign canonical conflict records and resolution/abstention lifecycle to Belief stewardship. Any responsibility may emit a versioned conflict candidate; only Belief stewardship commits semantic belief transitions. |
+| BLOCKER-03 / MAJOR-03 — workspace freshness | Partially substantiated. Source versions and consumer validation were required, but Attention/workspace's duty and failure/race behavior were insufficiently explicit. | Architecture §16.1 and §18.2 now explicitly require workspace validation before activation/reuse, authoritative source-version discovery and fail-closed stale handling. |
+| MAJOR-04 — CF-to-contract traceability | Partially substantiated. The previous §20 mapped CF IDs but some supporting references were broad chapter ranges rather than exact contract subsections. | Matrix §20 is replaced with a CF-01–CF-27 map to exact architecture subsections and named responsibility/transition/verification contracts; broad supporting ranges are removed. | Independent reviewer can follow every CF ID to substantive contract text and distinguish architecture obligations from later specification work. |
+| MAJOR-05 — high-impact learning governance | Partially substantiated. External approval and deferral were already required, but SYS-11 ownership and request/timeout semantics were not explicit. | Architecture §21.1.1 now assigns policy/approval ownership to SYS-11 governance/assurance, requires a versioned decision and evidence-bearing request, and forbids implicit activation on silence, timeout, denial or ambiguity. |
+| MAJOR-06 — metacognitive signal contract | Partially substantiated. Bounded authority was already specified; minimum signal semantics and owner-published versioned inputs were not. | Architecture §§4.8 and 16.1 now define the minimum owner-published signal, access constraints, version-scoped requests and receiving-owner commit authority. |
+| HARDCODE-01–04 — fixed parameters, reliability defaults, goal fallback and belief overwrite | Partially substantiated. Semantic last-write-wins and fixed behavioural mappings were already prohibited; permitted use of provisional defaults and fallback labelling needed sharper constraints. | Architecture §32 now prohibits uncalibrated inherited defaults from serving as calibrated cognitive evidence/policy and requires SYS-11-owned policy, typed provenance and expiry/revalidation for any operational goal fallback. The versioned belief-revision requirement remains mandatory. |
+| BLOCKER-04 — CF-26/CF-27 gates open | Correct status observation, not a missing mechanism contract. | No status is upgraded. CF-26 and CF-27 remain OPEN pending independent challenge and exact-revision Project Director gate. |
+
+### 28.3 Current exact revision and next gate
+
+- PR #173 remains open, draft and unmerged; no implementation or Stage A authorization is granted.
+- Exact PR #173 review target after architecture and matrix reconciliation: `32ab7cd115d8756d000682beb1dd4c3dfce1aaca`.
+- Architecture blob at that target: `afc32af1489d0e5da76ca13716accbfbe9277738`; matrix blob at that target: `fea85814dcc5eb015fe3ca152afa6deeb65787ea`.
+- These identities are a pre-dispatch snapshot. Re-fetch live PR #173 HEAD and both blobs immediately before dispatch; if any identity changes, update the packet target rather than reviewing this stale snapshot.
+- The dedicated review workflow is `.github/workflows/brain-foundation-blind-architecture-review.yml` on `review/cf26-option-a-independent-check-20261115`. It includes the architecture, matrix, cross-baseline inventory, seven CF-26 specifications, accepted PR #171/PR #172 baselines and the two exact decision-provenance records. Dispatch must select that workflow ref and the exact refreshed PR HEAD, not `main`.
+- A new independent CLEAR is not Project Director acceptance. CF-26/CF-27 and whole-architecture acceptance remain open until their separate gates are satisfied.
+
+**Scope:** this is a planning/documentation correction only. No runtime code, tests, technology selection, deployment, merge or draft-state transition is authorized.
+
+## 29. Independent assessment #43824564754 — evidence adjudication (2026-11-16)
+
+### 29.1 Review provenance
+
+The independent workflow completed successfully on review ref `review/cf26-option-a-independent-check-20261115` and assessed the exact PR #173 document target `daf6106f98cf7a798a2a5a4624147f871c23431d`. The packet manifest confirms all four PR #173 documents were supplied from that same target commit, together with the accepted PR #171/PR #172 baseline documents and both Builder-authored governance provenance records. The workflow run's own HEAD is the review-workflow commit; the packet's `target_revision` is the PR #173 revision. These are distinct by design.
+
+The reviewer returned **NOT CLEAR** with five critical and ten major findings. That verdict is retained as independent evidence, but the findings below are adjudicated against the full packet and exact source documents. A reviewer finding is not accepted merely because the workflow succeeded.
+
+### 29.2 Critical-finding adjudication
+
+| Finding | Builder adjudication | Exact evidence and response |
+|---|---|---|
+| C-1 — CF-26 completion claim unsupported | **NOT SUBSTANTIATED** | Matrix §3 CF-26 row explicitly says inventory complete, seven specifications authored, independent challenge pending, and **CF-26 OPEN**. Matrix §26.4 repeats the same split. Inventory completion is not CF-26 closure; the reviewer conflated the scoped inventory subtask with the overall CF-26 gate. No status correction is required. |
+| C-2 — CF-27 ledger does not disposition Q1–Q14 | **PARTIALLY SUBSTANTIATED** | Matrix §27.2 already maps Q1–Q14 to BFA-C decisions, specification owners and status; it does not silently accept Builder recommendations. The remaining ambiguity was the per-question reserved-decision crosswalk. New §27.2.1 explicitly maps accepted direction versus reserved Project Director choices. |
+| C-3 — 209-path manifest contains only 64 rows | **NOT SUBSTANTIATED; REVIEW EXTRACTION ERROR** | Inventory §8 contains **209 unique path rows**. Recount at the exact target yields 81 IDENTICAL, 85 MODIFIED and 43 DONOR-ONLY, totaling 209. The complete inventory document (53,936 characters) is present in the packet; the packet itself is 466,054 characters. The reviewer’s 64-row count is not reproducible from the supplied document. |
+| C-4 — seven specifications lack architectural contracts | **PARTIALLY SUBSTANTIATED; PRIMARY CLAIM INCORRECT** | The package §2 already defines shared ownership, proposal/commit, provenance, scope, contradiction, persistence/recovery, failure/rollback, developmental integrity, independent evaluation and Director boundaries. Specs 1–7 each contain owner/state contracts and objective evaluations; Specs 1, 2 and 7 already had local failure/recovery sections. Local failure/recovery and independent-evaluation statements were less explicit in Specs 3–6. New package §2.1 maps each contract to each specification, and §§5.5, 6.5, 7.5 and 8.5 add their local failure/recovery and independent-evaluation obligations. |
+| C-5 — inherited numeric values hardcode learned behaviour | **PARTIALLY SUBSTANTIATED AS A SOURCE-REMEDIATION RISK; NOT AS AN ARCHITECTURE APPROVAL** | The donor does contain fixed values and paths: execution reliability 0.75/0.25/0.0; reliability fallbacks 0.5/0.7; a 0.05–0.95 learning-rate clamp; and affective weights. Architecture §20.3/§32 and Specifications 3, 4 and 6 classify these as provisional engineering parameters, prohibit treating them as calibrated/acquired behaviour, and require owner/scope/evaluation/governance evidence before adoption. The donor implementation has not been remediated by this documentation-only work; it remains a later, separately authorized source task. |
+
+### 29.3 Major-finding adjudication
+
+| Finding | Builder adjudication | Exact evidence and response |
+|---|---|---|
+| M-1 — Coordination graph owner ambiguous | **NOT SUBSTANTIATED** | Architecture §16.1 assigns the cross-responsibility dependency/work graph and work-management records to Coordination; §18.2 repeats that single ownership and distinguishes source-owner version publication. |
+| M-2 — Conflict-candidate delivery/order/unavailable owner | **SUBSTANTIATED IN PART** | §17.2 already assigns canonical conflict records and semantic resolution to Belief stewardship. Delivery identity, duplicate handling, concurrent candidate treatment and unavailable-owner behaviour were not explicit. Architecture §17.2 now defines immutable version-scoped candidates, deduplication, revalidation, no arrival-order winner and pending/unresolved behaviour while the owner is unavailable. |
+| M-3 — Workspace freshness race | **NOT SUBSTANTIATED** | Architecture §18.2 already requires validation against authoritative owners before consequential use and commit, makes commit conditional on the exact dependency-version set, rejects a changed version as stale, and blocks when a version cannot be read or propagation fails. |
+| M-4 — High-impact approval deferral timeout | **SUBSTANTIATED IN PART; REVIEWER'S MAXIMUM-TIME REMEDY NOT ACCEPTED** | §21.1.1 already says timeout/unavailability is not approval and candidates remain deferred/inactive. A fixed maximum deferral duration would be an arbitrary policy constant and could create unsafe automatic rejection/approval pressure. Architecture §21.1.1 now states that no automatic timeout changes status, dependent work remains blocked/deferred or recomputed against accepted state, and escalation/review is policy-defined. |
+| M-5 — Metacognitive missing/delayed signal semantics | **NOT SUBSTANTIATED** | Architecture §4.8 already requires owner-published versioned signals and says missing, delayed or inaccessible signals are unknown, never evidence that no issue exists; source access controls apply. Concrete subscription/delivery/retry is intentionally deferred. |
+| M-6 — Affective parameter calibration owner/evidence | **SUBSTANTIATED IN PART** | Architecture §20.3 and Specification 4 already require provisional status, owner, scope, version, sensitivity, contextual variation, held-out evidence and regression evaluation. The technical calibration decision and independence boundary were insufficiently explicit. Architecture §20.3 and Specifications §§5.5/6.5 now identify the semantic owner, independent evaluator, no universal numeric threshold and separate SYS-11 high-impact gate. |
+| M-7 — SYS-06 withdrawal behaviour | **NOT SUBSTANTIATED** | Architecture §23.1 explicitly says the Brain must remain operable when SYS-06 is absent, unavailable, denied or withdrawn, and no core transition may wait on it. |
+| M-8 — SYS-01 recovery rejection path | **SUBSTANTIATED** | SYS-01 validation ownership existed, but the explicit substrate-success/cognitive-validation-failure branch was missing. Architecture §7's recovery-responsibility contract now requires rejection of activation, quarantine/diagnostic status, verified-checkpoint recovery only, and suspension where lineage/integrity cannot be established. |
+| M-9 — CF traceability too broad | **MOSTLY NOT SUBSTANTIATED** | Matrix §20 already mapped all 27 obligations to numbered architecture subsections. The remaining broad references for language/symbolic, security and developmental scope are now narrowed to specific numbered subsections. All 27 rows remain present. |
+| M-10 — deferred work lacks closure criteria | **SUBSTANTIATED IN PART** | Matrix §21 already names accountable owners, deliverables and gates. It did not state an objective closure test for every row. §21 now adds explicit evidence/exit criteria for each deferred deliverable. |
+
+### 29.4 Hardcoding audit adjudication
+
+The reviewer correctly identified donor-source fixed values but overstated their architectural status. The source evidence is now reproducible in the inventory report §3.1 with exact donor blob SHAs and 1-based line ranges. Architecture §32 and CF-26 Specifications 3, 4 and 6 continue to prohibit these values from being treated as calibrated source trust, universal thresholds, learned dynamics, foundational affective conclusions or production learning authority without their declared evidence and approval gates.
+
+The exact donor values and paths are not erased from the inventory: they are compatibility risks to be handled in the separately authorized implementation/remediation stage. This review pass does not modify runtime source or claim the donor code has been corrected.
+
+### 29.5 Cross-baseline and specification corrections
+
+- Inventory report §3.1 now maps the principal mechanism findings to exact donor source paths, blob SHAs and 1-based line ranges.
+- Architecture §19 now defines the missing memory-to-reasoning-premises contract: retrieved episodes remain provenance-bearing candidates; Reasoning records exact memory versions and dependencies; memory revisions invalidate dependent reasoning.
+- CF-26 Specifications §§2.1 and 10.1 now map the shared contract to each of the seven specifications and make cross-spec dependencies/invalidation explicit without imposing a serial cognitive pipeline.
+- The specification package adds local failure/recovery and independent-evaluation obligations for Specifications 3–6.
+- Matrix §§20, 21 and 27.2.1 now provide more precise traceability, deferred-work closure criteria and reserved-decision mapping.
+
+### 29.6 Remaining gate
+
+The current review run remains **NOT CLEAR**. Its false or partially substantiated findings are not treated as accepted blockers; the genuine omissions have been corrected in the planning documents. The next independent review must target the refreshed exact PR #173 HEAD and inspect the updated architecture, matrix, inventory report and specification package. It must verify the new clauses rather than inherit the previous report's conclusions.
+
+CF-26 and CF-27 remain OPEN until independent exact-revision challenge and the separate Project Director gate. Whole-architecture acceptance, Stage A, runtime implementation, runtime testing, technology selection, merge, draft exit and deployment remain unauthorized.
+
