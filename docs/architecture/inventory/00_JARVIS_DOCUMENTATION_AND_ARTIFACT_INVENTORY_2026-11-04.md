@@ -4879,7 +4879,7 @@ The inventory update immediately following this parent must be the only changed 
 
 **Exact immediate parent:** `60b4f49953ac6a33e1f8ecfda66e8b3854dc8f87`.  
 **PR #192 base:** `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.  
-**Parent PR state:** open, non-draft, unmerged. The changed-file listing contains 40 unique paths. The exact parent Git tree was queried and all 40 changed paths were resolved to their blob SHAs. The new reviewer-assignment file is part of this PR's documentation evidence and is referenced from the controlling index (§99).
+**Parent PR state at this manifest snapshot:** open, non-draft, unmerged. The manifest records 40 unique changed paths at parent commit `60b4f49953ac6a33e1f8ecfda66e8b3854dc8f87`; it is a historical parent manifest, not the current PR #192 changed-file inventory. The reviewer-assignment file is referenced from the controlling index (§99). The current PR #192 HEAD and 41-path changed-file inventory must be fetched live.
 
 | # | Path | Parent blob SHA |
 |---:|---|---|
