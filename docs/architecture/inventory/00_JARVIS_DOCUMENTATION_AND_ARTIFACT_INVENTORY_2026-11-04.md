@@ -5619,3 +5619,35 @@ Verify the inventory-only successor has this exact parent and exactly one change
 ### 110.1 Post-write verification
 
 Verify the inventory-only successor has this exact parent and exactly one changed path (this inventory file); verify all 41 rows against this parent tree and confirm the other 40 changed paths remain byte-identical. This manifest supports DF-10 Builder self-review only; it does not establish DF-02 detailed-inventory reconciliation, DF-06 link durability, DF-09 continuity, or DF-12 Director acceptance.
+
+---
+
+## 111. DF-02 foundational artifact authority and dependency reconciliation — 2026-11-18
+
+A bounded semantic reconciliation of the principal JARVIS planning lineages was completed in the separate report:
+
+[`DF02_FOUNDATIONAL_ARTIFACT_AUTHORITY_AND_DEPENDENCY_RECONCILIATION_2026-11-18.md`](../reports/DF02_FOUNDATIONAL_ARTIFACT_AUTHORITY_AND_DEPENDENCY_RECONCILIATION_2026-11-18.md)
+
+**Source PR #192 HEAD inspected:** `3c9e512947412ea0ca8776a77b2e0e71c0f7af42`  
+**Source inventory blob:** `dc7a5dc5eb1c0807e54998c9657a3e33bf107713`  
+**Reconciliation report commit:** `8ba1d6bc645bd454372a045e329a4e8ff56629b6`  
+**Reconciliation report blob at that commit:** `473a7c5580c4541c9f4640a204eb8834b02b3feb`
+
+The report records exact-revision identities, live PR states, scope-limited Director decisions, exact-head independent-review outcomes, authority classifications and material dependencies for the principal foundation, research, Brain architecture, mechanism specification, implementation-planning, donor, Phase 2, documentation-foundation and governance lineages.
+
+### 111.1 Material authority distinctions verified
+
+- PR #171 Documents 00 and 01 have separate exact-revision Project Director approvals; the research package remains working research.
+- PR #172 is an accepted capability-investigation planning input, not an architecture approval.
+- PR #173 BFA-C01–C14 are accepted at their recorded exact revision; the whole Brain Foundation Architecture remains proposed, with CF-26/CF-27 and architecture-wide acceptance open. The latest xAI PARTIALLY CLEAR verdict is tied to an earlier exact head and is not carried forward to the current head.
+- PR #174's historical exact baseline `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` is accepted as a planning baseline; the expanded current proposal is not separately accepted. Its earlier PARTIALLY CLEAR review is not a verdict on the current successor.
+- PR #175's roadmap, parallel supplement and 54-scenario matrix remain non-operative planning; no Gate A/B clearance, baseline selection or implementation authorization follows.
+- PR #191 is retained as a separate bounded reference by explicit Director disposition.
+- PR #195 merged into `main`; PR #196 merged into the existing Phase 2 base branch, not `main`. Neither merge clears architecture gates.
+- PR #192 remains open and unaccepted; its current base SHA is a historical snapshot and is not assumed to equal the live base-branch head.
+
+### 111.2 DF-02 disposition
+
+This is a material DF-02 evidence improvement, **not DF-02 closure**. The register is bounded to principal lineages and does not yet prove exhaustive historical branch/artifact coverage, complete cross-branch dependency closure, or repository-wide status/header/README consistency. DF-02 remains **OPEN** pending the remaining work in Section 6 of the reconciliation report and independent verification.
+
+No merge, rebase, retarget, cherry-pick, archive relocation, deletion, source-baseline selection, Gate A/B clearance, Stage A, runtime implementation, runtime testing, technology selection, deployment or Project Director acceptance is authorized by this addendum.
