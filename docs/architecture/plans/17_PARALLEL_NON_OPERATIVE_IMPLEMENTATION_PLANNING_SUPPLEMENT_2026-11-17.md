@@ -42,7 +42,7 @@ This plan uses existing repository documents as planning evidence, not as a new 
 |---|---|---|---|
 | PR #173 — Brain Foundation Architecture | Current report-only HEAD a96af5b18d3a1d580ff56cff6191240893bceeb5; architecture reviewed at 1f137cbaed985821bbc32408151911b18418f713 | The reviewed architecture's responsibility model, ownership and partial-failure invariants may inform planning | xAI verdict is PARTIALLY CLEAR. Whole-architecture acceptance, CF-26 independent challenge and CF-27 final gate remain open. |
 | PR #174 — Brain Mechanism Specification | Current PR HEAD c34472354e4122fc1d78dc25bf45d81f1eb4dc69; current specification blob cfdda9e6e7070cd5533b076e9bd77c2904694a32 | Its BM-01–BM-12 responsibility definitions, information contracts and scenario structure may be used as a proposed specification input | Current proposal remains draft/unmerged; independent re-review and Project Director disposition remain outstanding. The historically accepted 0811a59e specification is accepted only for that exact historical planning-baseline scope, not as acceptance of the corrected current proposal. |
-| PR #175 — implementation roadmap | HEAD c30fe20cfdf3f499416972042be06acdd70f752d; open/draft/unmerged; base PR #174 at 0811a59e46bf934e32e794f90e4e7d18d4e2bd97 | Existing dependency graph, proposed vertical increments, verification portfolio and work-package template are retained as planning material | Gate A remains NOT CLEARED; Gate B capability acceptance has NOT PASSED. No implementation baseline is selected. The proposal's historic recommendation to use PR #174 as an integration starting point is not adopted by this supplement. |
+| PR #175 — implementation roadmap | HEAD a01899b4e3b3ee9c6e5e3d83fedd0f22ce2b3891 before this matrix addition; open/draft/unmerged; base PR #174 at 0811a59e46bf934e32e794f90e4e7d18d4e2bd97 | Existing dependency graph, proposed vertical increments, verification portfolio and work-package template are retained as planning material | Gate A remains NOT CLEARED; Gate B capability acceptance has NOT PASSED. No implementation baseline is selected. The proposal's historic recommendation to use PR #174 as an integration starting point is not adopted by this supplement. |
 | PR #176 — donor defect corrections | HEAD 4cf017e073da980c9f77d739fde6f92ef1a2fbc1; open/draft/unmerged; based on PR #156 HEAD 7fe212bbb0bd61116ea56581435e03b06c69b673 | D1/D2 correction and bounded journal/replay failure evidence may be considered as candidate donor risk evidence | It is not integrated into PR #156 or PR #175. The deeper EvolutionController compensation failure boundary remains open. PR description reports the exact-head four-workflow pass and 73/73 CTest result; those are candidate-branch results, not whole-Brain capability acceptance. |
 | PR #156 — integrated donor candidate | HEAD 7fe212bbb0bd61116ea56581435e03b06c69b673; open/draft/unmerged | Its code and reports remain candidates for later path-specific source review | It is not an approved source baseline and is not recommended for wholesale adoption. External trust, journal integrity and downstream factual-feedback limits remain open. |
 | PR #193 — deferred-plan hold | HEAD fa2bd50d6fb0bb77dc3cbaab684f51d606e94bb5; open/draft/unmerged; based on prior PR #175 snapshot 874c732973b6ab303d65a503f5a215b0af8e1153 | Its hold language and continuity record remain authoritative evidence of the existing restraint | It is diverged from current PR #175: 48 commits ahead and 3 behind relative to the current PR #175 head. No history operation or integration is proposed. |
@@ -309,7 +309,17 @@ No row in this table is closed by this supplement.
 - **Authority leakage:** coordination, evaluation, workspace, reasoning or learning must not become a second semantic writer or bypass external system authorization.
 - **Stale planning lineage:** PR #193 is not a safe fast-forward of current PR #175. Do not reconcile their histories by assumption.
 
-## 12. Planning continuation steps
+## 12.1 Capability-to-scenario traceability completed — 2026-11-18
+
+Added `docs/architecture/plans/18_CAPABILITY_TO_ACCEPTANCE_SCENARIO_TRACEABILITY_MATRIX_2026-11-18.md`. It maps every scenario in the current proposed PR #174 specification (54 scenarios, A–K) to primary mechanism owners, the existing integrated planning increments I0–I7, and a minimum evidence class.
+
+This exposes an important version distinction: the original PR #175 plan's reference to 34 scenarios reflects the historically accepted PR #174 baseline at `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`; the current corrected PR #174 proposal at `c34472354e4122fc1d78dc25bf45d81f1eb4dc69` contains 54. The matrix does not silently replace the accepted historical baseline with the unaccepted current proposal. It is explicitly provisional until PR #174 review and Project Director disposition.
+
+The matrix also makes downstream BM-12 owner evaluation (scenarios 41–48), contextual language/intent/commitment lifecycle (35–40, 49–54), dependency invalidation/recovery (23–26, 44–48), and longitudinal learning/transfer/regression (19–22) visible as integrated evidence obligations.
+
+## 12.2 Remaining planning continuation steps
+
+
 
 1. Reconcile the accepted/reviewed PR #173 architecture, current PR #174 specification proposal and CF-26/CF-27 obligations into one exact-revision contract crosswalk.
 2. Reconcile PR #175 Reports 08–16, current PR #176 correction evidence and the remaining Gate A findings into a single conditional donor-risk register. Do not select the donor or baseline.
