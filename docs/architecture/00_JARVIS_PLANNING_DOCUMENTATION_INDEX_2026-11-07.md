@@ -1,4 +1,4 @@
-# CURRENT EXACT STATE — 2026-11-17 (Builder continuation 20)
+# CURRENT EXACT STATE — 2026-11-17 (Builder continuation 21)
 
 > **Controlling live-status snapshot.** This block supersedes earlier active-status snapshots below for current PR heads, base relationships and gate state. Older dated sections remain historical evidence. This is Builder evidence only; not independent review, fresh-reader clearance, gate clearance or Project Director acceptance.
 
@@ -20,7 +20,7 @@ Repository: `methaneex-oss/MethaneX`. Full SHAs identify exact revisions; branch
 ### 1.1 Exact revision and evidence rules
 
 - PR #192's index is self-referential. Use the live PR page for its current HEAD; never hard-code the commit containing this index into the index itself.
-- The DF-06 Builder report is pinned to source snapshot `6952a23d1ab401ad3599a3e4ea169fc78e2cb4ac`. It records a repeat scan (125 local destinations extracted, zero missing; 206 external occurrences) and an unresolved parser-count discrepancy against the prior scan. External reachability/semantic checks and authenticated rendered-anchor verification remain open.
+- The DF-06 Builder report is pinned to source snapshot `3d44626cb30169790019f20409b107811217b58f`. At that exact revision, 39/39 Markdown files and 2/2 JSON artifacts were fetched directly; the repeat scan extracted 331 link occurrences (125 local, 206 external), with all 125 local destinations resolving. The earlier 332/131/201 scan discrepancy remains unresolved. Exhaustive external reachability/semantic checks and authenticated rendered line/comment-anchor verification remain open.
 - The exact current PR #192 changed-path count remains 41. The latest inventory section records the Builder's final 41-path parent manifest and post-write verification; see the PR #192 Builder continuation comment for the exact parent/final comparison.
 - PR #173 and PR #195 review verdicts apply only to their exact reviewed SHAs, not to later revisions or unrelated gates.
 
@@ -29,11 +29,11 @@ Repository: `methaneex-oss/MethaneX`. Full SHAs identify exact revisions; branch
 | Gate | Current status |
 |---|---|
 | DF-01 | Builder corrections recorded; exact-final-revision reconciliation remains part of closeout. |
-| DF-02 | **RESOLVED at Builder-evidence level** by inventory §107: its 41-row parent manifest matches the exact parent tree after this index update; the final successor changes only the inventory file and preserves the other 40 path blobs. This is not Director acceptance. |
+| DF-02 | **RESOLVED at Builder-evidence level** by inventory §108: its 41-row parent manifest matches the exact parent tree after this controlling-index and DF-06 audit update; the final successor changes only the inventory file and preserves the other 40 path blobs. This is not Director acceptance. |
 | DF-03 | Accepted-baseline and decision provenance distinctions are recorded; no inference beyond the cited exact artifacts. |
 | DF-04 | Accepted governance source revalidated; PR #196 merge scope distinguished from PR #178 and `main`. |
 | DF-05 | PR bases, heads and ancestry dependencies are recorded. The PR #195 workflow prerequisite was merged into `main` at `4f07d772...` under the Project Director's supervised 2026-11-17 authorization. PR #192's recorded base SHA `61311fe5...` predates the current Phase 2 base-branch head `ea64607...`; no retarget, rebase or merge of PR #192 is authorized. |
-| DF-06 | **NOT MET.** Prior static scan found 131/131 local destinations resolving and enumerated 201 external occurrences, but its source snapshot is stale; exhaustive external reachability/semantic checks and authenticated rendered GitHub line/comment-anchor verification remain incomplete. |
+| DF-06 | **NOT MET.** The exact-source repeat scan at `3d44626...` found 125/125 local destinations resolving and 206 external occurrences, but the earlier 332/131/201 parser discrepancy remains unresolved. Exhaustive external reachability/semantic checks and authenticated rendered GitHub line/comment-anchor verification remain incomplete. |
 | DF-07 | Must be reconciled against the frozen final documentation revision after all corrections. |
 | DF-08 | RESOLVED only within its documented bounded preservation criterion. |
 | DF-09 | **OPEN / NOT MET.** Latest recorded blind Nemotron assessment, run `43384559530`, assessed older revision `07acbf61a4d7d532bc838711d6837e2c16ce12b1` and returned **PARTIALLY CLEAR**. It is not an assessment of the live PR #192 HEAD. A new blind assessment against the final frozen HEAD must return **CLEAR**. |
@@ -46,7 +46,7 @@ Repository: `methaneex-oss/MethaneX`. Full SHAs identify exact revisions; branch
 
 The latest recorded blind fresh-reader result is run [43384559530](https://github.com/methaneex-oss/MethaneX/actions/runs/43384559530), targeting PR #192 revision `07acbf61a4d7d532bc838711d6837e2c16ce12b1`. It returned **PARTIALLY CLEAR**. Provider/model and completion validation were recorded as successful, but that does not convert the comprehension verdict to CLEAR. The executed prompt and raw assessment are preserved in the run artifact; do not claim the unrecovered historical 17-question protocol was executed.
 
-PR #195's exact reviewed documentation-reader workflow blob `585c9399318b0af17514a95a5c435d497a76234a` received xAI **APPROVED WITH DOCUMENTED NON-BLOCKING ISSUES** at workflow revision `6b8e6fce342397b17f0ed237ccc5a09fb38034df`. The reviewed workflow has now been integrated into `main` by merge commit `4f07d772beae03c99a8dd58b174201a3aa3074b2` and was re-fetched from `main` with the same blob SHA. PR #195 remains historical as a closed/merged support PR. F-195-07 live negative-path Actions evidence remains OPEN and non-blocking for that PR's stated scope. The workflow integration prerequisite is satisfied; one new DF-09 assessment against the final frozen PR #192 HEAD is still required. The current GitHub connection does not expose workflow dispatch, so no fresh-reader execution is claimed.
+PR #195's exact reviewed documentation-reader workflow blob `585c9399318b0af17514a95a5c435d497a76234a` received xAI **APPROVED WITH DOCUMENTED NON-BLOCKING ISSUES** at workflow revision `6b8e6fce342397b17f0ed237ccc5a09fb38034df`. The reviewed workflow is integrated into `main` by merge commit `4f07d772beae03c99a8dd58b174201a3aa3074b2` and was re-fetched from `main` with the same blob SHA. PR #195 is closed/merged. F-195-07 live negative-path Actions evidence remains OPEN and non-blocking for PR #195's stated scope. The corrected workflow is now available on `main`; one new DF-09 assessment against the final frozen PR #192 HEAD is still required. The current GitHub connection has no workflow-dispatch operation. The runbook also says DF-09 must remain blocked if required F-195-07 failure-path evidence is unavailable. No new fresh-reader execution is claimed.
 
 ## 4. Authority and execution boundary
 
