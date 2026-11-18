@@ -1576,3 +1576,37 @@ This Builder record is not an Independent Reviewer verdict, Tester result, gate 
 - **Correction:** PR #173 comment #6837226392 now instructs selecting branch `docs/ai-role-terminology-audit-20261111`, exact PR #195 HEAD `26bdfc49316489675d947f5c0a60faa887309d8d`.
 - **BFA target:** PR #173 `7e9481677197cf82df31bbe08984fa5d58644d98`; label `jarvis-m0-bfa-7e948167-20261112`.
 - **Disposition:** corrected before dispatch; no workflow run claimed. PR #195 independent review remains a prerequisite. No gate or implementation authority changed.
+
+
+## 44. Builder bulk continuation — Documentation Foundation exact-head reconciliation — 2026-11-18
+
+### 44.1 Exact starting state and work completed
+
+- **PR #192 source HEAD at continuation start:** `5bc0cfa4266ee387bccf26f6b0e6f95c6a1a6509`; branch `docs/whole-brain-planning-scope-correction-20261107`; base `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; open, non-draft, unmerged; 45 changed paths.
+- Re-fetched the 45-path changed-file list, exact PR metadata, full recursive tree (277 entries, not truncated), and all 43 changed Markdown documents at the same source SHA. Two changed JSON evidence artifacts were retained in the path inventory and excluded from Markdown navigation parsing.
+- Corrected the planning-index relative link to the DF-02 review request. The request file is stored under `docs/architecture/reports/reviews/`; the corrected path is `reports/reviews/DF02_HISTORICAL_COGNITIVE_LEARNING_LINEAGE_INDEPENDENT_REVIEW_REQUEST_2026-11-18.md` relative to the index document. The incorrect target under `docs/architecture/reviews/` did not exist.
+- Added a controlling exact-state block to the planning index, updated the DF-06 report with the exact-source 43-file scan, and updated the DF-02 report with the remaining semantic/dependency closure boundaries. The index link correction was committed first; these report updates are Builder documentation work only.
+
+### 44.2 DF-06 exact-source scan and current disposition
+
+At exact source HEAD `5bc0cfa4266ee387bccf26f6b0e6f95c6a1a6509`, the strict parser excluded fenced code and inline-code examples before scanning Markdown inline links, reference definitions, HTML href/src and autolinks. The result was 341 rendered-Markdown candidate occurrences: 128 local and 213 HTTP(S) external. A raw inline regex that includes code examples counted 350 occurrences: 131 local and 219 external. No reference-style definitions, HTML link attributes or autolinks were found. Before the index correction, one of the 128 strict local paths did not resolve; its exact file path is now corrected. Other local-path groups were independently checked against the complete 277-entry tree and had no additional misses.
+
+The earlier 348/129/219 scan was pinned to source SHA `5a8dafb5ae8d5b31952a90846704a935a29b4421`; the current source scan is a later 22-commit successor and the index contributes two local links. Older 331/125/206 and 332/131/201 counts cannot be fully replayed because their original parser code/per-file outputs were not preserved. DF-06 therefore remains **NOT MET** until final post-inventory local validation, exhaustive unique external destination status/redirect/semantic assessment, and authenticated rendered GitHub heading/line/comment-anchor verification are completed. The current connection does not provide an authenticated interactive browser capability; no rendered-anchor pass is claimed.
+
+### 44.3 Current gate disposition and explicit limits
+
+| Gate | Disposition after this Builder pass |
+|---|---|
+| DF-02 | **OPEN.** The metadata census, principal authority/dependency register, exact ancestry work and bounded donor audit are recorded. Full historical artifact discovery, all-159-path PR #97 semantic disposition, complete cross-branch consumer/dependency closure, repository-wide status/header consistency, and the new exact-head Independent Reviewer verdict remain outstanding. |
+| DF-06 | **NOT MET.** One broken local index path corrected; final path verification still required after inventory update. External reachability/semantic checks and authenticated rendered anchors remain incomplete. |
+| DF-09 | **NOT MET.** The approved AI substitution applies; the latest completed run #44192302873 is PARTIALLY CLEAR (31/32) against old SHA `beb4d5a174a1dd613878f89132e97b5e6052c7d3`. No new exact-current-head dispatch is available from this connection and no CLEAR result is claimed. |
+| DF-10 | **REOPENED.** A final exact-parent manifest must be written after all other PR #192 file changes, then verified as the only changed path in a one-commit successor. |
+| DF-11 | **WAIVED** by the Project Director; it is not reintroduced as a required gate. |
+| DF-12 | **PENDING — PROJECT DIRECTOR ONLY.** No acceptance or conditional acceptance is inferred. |
+| DF-13 | **STAGE A NOT STARTED / HELD.** Runtime implementation, source-baseline selection, training and deployment remain unauthorized. |
+
+### 44.4 Next authority and verification boundary
+
+After the last content and index/report corrections, the Builder must refresh the complete PR #192 changed-path list and write a final inventory manifest against the exact parent tree. The inventory update must be the final branch file write. Post-write verification must prove the complete parent tree, every changed path/blob, exactly one commit ahead and only the inventory file changed. Then the Builder may update PR metadata/comment with the exact final HEAD and issue a superseding Independent Reviewer request for DF-02/DF-06 evidence. That request is not a verdict and cannot close either gate. DF-09 remains blocked until an authorized exact-head blind-reader run returns CLEAR. DF-12 remains a separate Project Director decision.
+
+No merge, retarget, rebase, cherry-pick, branch rewrite, PR integration, baseline selection, Gate A/B clearance, Stage A activation, runtime change/test, training run or deployment was performed or authorized by this Builder continuation.
