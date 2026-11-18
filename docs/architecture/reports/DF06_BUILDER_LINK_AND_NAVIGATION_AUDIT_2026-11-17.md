@@ -185,3 +185,23 @@ The strict current pass removes nine raw matches found only in fenced or inline-
 The Builder corrected the one broken local path and verified the corrected link text points to the actual repository location. The current strict local set therefore has a concrete correction; the final inventory-stage re-scan must establish that all 128/128 strict local targets resolve in the final exact tree. This is path resolution only. It does not validate heading fragments, commit-pinned line anchors, pull-request comment anchors, external availability, redirect identity, or whether a destination is semantically the right source for its link text.
 
 DF-06 remains **NOT MET**. The remaining work is exhaustive live-status/redirect/semantic validation of the external destinations and authenticated interactive GitHub verification of rendered fragment, line-range and issue-comment anchors. The current GitHub connection does not expose an authenticated interactive browser session, so those claims are not made. A future file write changes the PR target SHA and requires a final exact-revision scan; the terminal inventory update must remain the final branch file write.
+
+
+## 10. Final post-inventory local-path verification — exact final source HEAD eacbe341 (2026-11-18)
+
+After the inventory-only commit `eacbe3417dfef36319a7b402e0ae60e09a3fa784`, the Builder fetched the final PR #192 changed-path list and all 43 changed Markdown files again at that exact SHA. The full recursive tree remained complete (`truncated=false`, 277 entries). The final strict parser reproduced the same whole-set totals:
+
+| Measure | Final exact-HEAD result |
+|---|---:|
+| Changed paths | 45 |
+| Changed Markdown files fetched | 43 / 43 |
+| Strict Markdown link/image occurrences | 341 |
+| Strict local destinations | 128 |
+| Strict HTTP(S) external destinations | 213 |
+| Local destinations absent from final complete tree | **0** |
+
+The corrected DF-02 reviewer-request path is included in this final re-scan and resolves. Batch totals were 175 occurrences (104 local, 71 external), 50 (13 local, 37 external), and 116 (11 local, 105 external), respectively. No other local-path misses were detected. The 9 raw regex matches excluded as code examples remain outside the strict total. These results establish local path existence at the exact final source; they do not establish fragment validity, external availability or semantic correctness.
+
+**Final disposition:** local Markdown navigation target resolution is **Builder-verified for exact HEAD `eacbe3417dfef36319a7b402e0ae60e09a3fa784`**. DF-06 as a whole remains **NOT MET** pending external destination reachability/redirect/semantic verification and authenticated rendered GitHub heading, line and comment-anchor checks. No claim is made that those residuals were tested.
+
+The subsequent inventory-only commit is expected to advance the PR head; it does not change Markdown link destinations. The final inventory parent/successor pair must be verified separately under DF-10.
