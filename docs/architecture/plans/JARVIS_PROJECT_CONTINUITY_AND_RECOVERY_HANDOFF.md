@@ -328,3 +328,56 @@ Consolidated evidence: docs/architecture/plans/reviews/16_GATE_A_CLOSURE_EVIDENC
 ### PR #176 branch/PR snapshot discrepancy
 
 A follow-up controller-history compensation test was committed to the branch ref as a37add18babf8afc2e9c12ca0449a2ee84ecd60d. However, the live PR #176 metadata and its Actions runs still report head 4cf017e073da980c9f77d739fde6f92ef1a2fbc1; the PR commit list does not include a37add18. Do not count that follow-up test as part of the verified PR until the branch/PR snapshot is synchronized and CI passes at the updated head. The deeper controller compensation boundary therefore remains open.
+
+
+---
+
+## 9. Current Builder handoff — 18 November 2026
+
+This section is the current continuation point and supersedes older mutable-branch/head statements above. Earlier sections remain historical evidence for the dates and decisions they record.
+
+### 9.1 Current phase
+
+**Current phase:** Documentation Foundation closeout plus non-operative whole-Brain implementation planning in parallel. Runtime implementation and starter-training execution have not begun and remain unauthorized.
+
+Governing principle remains: **Engineer the mechanisms; let behavior be acquired through experience.**
+
+### 9.2 Live planning and documentation PRs
+
+| PR | Current exact HEAD | State | Current disposition |
+|---|---|---|---|
+| #175 — Brain Implementation Planning | `04bdb3de293dfb92b61b957709fe0792c84215b8` | Open / draft / unmerged | Non-operative planning; WP-00–WP-08 kickoff and starter learning-run protocol recorded. Gate A NOT CLEARED; Gate B capability acceptance NOT PASSED. |
+| #192 — Documentation Foundation | `4b4a3d71dd8ed28dc0b39766e323253289255741` | Open / non-draft / unmerged | DF-02 OPEN; DF-06 NOT MET; DF-09 NOT MET; DF-10 Builder-verified only for inventory §121 exact pair; DF-11 WAIVED; DF-12 pending Director decision; Stage A HELD. |
+| #197 — blind reader packet target-SHA correction | `2b2bfd9afe6e1325119f7ccee507bb04e71aa343` | Open / non-draft / unmerged | Reader-visible target-SHA header and fail-closed assertion; Native Brain Build passed; exact-HEAD xAI review requested but no verdict recorded; no fresh-reader dispatch claimed. |
+| #173 — Brain Foundation Architecture | `a96af5b18d3a1d580ff56cff6191240893bceeb5` | Open / draft / unmerged | xAI review PARTIALLY CLEAR against architecture SHA `1f137cbaed985821bbc32408151911b18418f713`; whole-architecture acceptance and CF-26/CF-27 remain open. |
+| #174 — Brain Mechanism Specification | `c34472354e4122fc1d78dc25bf45d81f1eb4dc69` | Open / draft / unmerged | Current corrected proposal remains unaccepted; historical accepted baseline `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` is a separate revision/scope. |
+
+### 9.3 Latest implementation-planning artifacts
+
+- `19_IMPLEMENTATION_PLANNING_KICKOFF_AND_STARTER_LEARNING_WORK_PACKAGES_2026-11-18.md` — WP-00–WP-08, dependency-aware integrated capability increments, first learning-loop target, evidence classes and decision prerequisites.
+- `20_STARTER_LEARNING_RUN_PROTOCOL_AND_EVALUATION_DESIGN_2026-11-18.md` — R0–R6 planning protocol: fixture integrity, baseline, staged exposure, post-exposure evaluation, persistence/reconstruction, sealed transfer/regression and longitudinal replication.
+- `17_PARALLEL_NON_OPERATIVE_IMPLEMENTATION_PLANNING_SUPPLEMENT_2026-11-17.md` — original scope and authority of the parallel-planning exception.
+- `18_CAPABILITY_TO_ACCEPTANCE_SCENARIO_TRACEABILITY_MATRIX_2026-11-18.md` — 54 proposed scenarios mapped to BM owners and integrated increments; these scenarios belong to the current unaccepted PR #174 proposal, not the historical accepted 34-scenario baseline.
+
+These artifacts are planning material. They do not authorize implementation tickets for immediate execution, source-baseline selection, donor adoption, technology/schema/API choices, builds, runtime tests, training runs or deployment.
+
+### 9.4 Documentation Foundation evidence boundary
+
+- **DF-02 OPEN:** bounded principal-lineage and donor mechanism audit recorded; full semantic disposition, exhaustive historical census, complete dependency closure and independent verification remain.
+- **DF-06 NOT MET:** bounded scan fetched 41/41 changed Markdown files at source `5a8dafb5ae8d5b31952a90846704a935a29b4421`; 348 inline link/image occurrences, 129 local paths all present in the complete tree, 219 external occurrences not individually verified. Parser counts remain unreconciled; external semantic checks and authenticated rendered GitHub anchors remain incomplete.
+- **DF-09 NOT MET:** latest blind-reader and xAI verdicts are PARTIALLY CLEAR against older exact revision `beb4d5a174a1dd613878f89132e97b5e6052c7d3`. PR #197 targets the packet SHA visibility defect; independent review is pending and a new workflow dispatch has not occurred.
+- **DF-10 BUILDER-VERIFIED only for exact snapshot:** inventory §121 parent `b22cf1e35932aa195a6b209c578cd934d9e51585`, successor `4b4a3d71dd8ed28dc0b39766e323253289255741`; 43/43 changed paths in a complete 274-entry tree, one commit ahead/zero behind, inventory-only successor. Any later PR #192 write reopens this verification.
+- **DF-11 WAIVED** by explicit Project Director decision.
+- **DF-12 PENDING** exact-final-revision Project Director decision.
+- **Stage A HELD.** No implementation baseline selected.
+
+### 9.5 Immediate Builder operating rules
+
+1. Continue bounded documentation corrections and planning-only work without restarting the project.
+2. Do not claim DF-02/DF-06/DF-09 complete, or Documentation Foundation accepted, until their evidence and required independent assessments actually pass.
+3. Do not treat a Native Brain Build as a learning-capability test or a training-run result.
+4. Do not merge, rebase, retarget, select a baseline, adopt donors or start runtime implementation without the separate required authority.
+5. Keep every review verdict attached to the exact SHA it examined.
+6. Keep implementation planning moving in PR #175 while the Documentation Foundation review work proceeds, but do not activate runtime work packages.
+
+**Current next step:** obtain independent DF-06 exact-HEAD challenge and xAI review of PR #197; resolve their findings, then freeze a final PR #192 revision for a new blind-reader assessment and exact-revision Project Director decision.
