@@ -368,3 +368,212 @@ The Builder has now re-fetched the complete PR #97 changed-path list, all 159 pa
 5. Independent Reviewer verification of the exact final PR #192 inventory and authority/dependency claims.
 
 **DF-02 remains OPEN.** No donor adoption, source-baseline selection, merge, port, branch rewrite, Gate A/B clearance, Stage A start or runtime implementation is authorized or implied by these measurements.
+
+
+## 14. Complete PR #97 changed-path semantic-role and exact-tree comparison — 2026-11-18
+
+**Evidence target:** PR #97 exact HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`; PR #192 exact HEAD `e6ee04a8a4052a72943a820217aa0d306b2e6b0a`. Both recursive trees were fetched from GitHub with `truncated=false`. The PR #97 changed-file endpoint returned 159 unique paths over two pages; the patch endpoint returned 159 path patches. The current PR #192 tree contains 279 entries.
+
+### 14.1 Structural/semantic-role classification
+
+The full 159-path set is classified by the responsibility evidenced by its path and patch contents. This is a role classification, not a claim that every function, test assertion, or behavioral requirement has been semantically validated.
+
+| Role | Paths |
+|---|---:|
+| CI workflow / controlled trial orchestration | 8 |
+| Build/test registration | 3 |
+| Executable developmental-world example | 3 |
+| Core public API / mechanism contract | 35 |
+| Core mechanism implementation | 37 |
+| Behavioral, integration, persistence or regression test | 54 |
+| Design / planning / training documentation | 9 |
+| Engineering agent coordination, messaging or durable task ledger | 10 |
+| **Total** | **159** |
+
+### 14.2 Exact path/blob disposition against current PR #192
+
+| Relationship | Paths |
+|---|---:|
+| Donor path absent from current PR #192 tree | 63 |
+| Same path present with identical donor blob | 1 |
+| Same path present with a different blob | 95 |
+| **Total** | **159** |
+
+The following table is the complete path-by-path evidence record. Blob equality is exact content identity. A different blob establishes divergence only; it does not establish whether the current file is a successor, partial port, independent implementation, regression, or unrelated rewrite. An absent path establishes only that no same-path file exists in this exact tree; it does not establish capability deletion or nonexistence under another name.
+
+| PR #97 changed path | PR #97 change type | Role classification | Same path in PR #192 tree | Evidence disposition |
+|---|---|---|---|---|
+| `.github/workflows/brain-ci.yml` | modified | CI workflow / controlled trial orchestration | Present | Different blob; semantic successor not yet proven |
+| `.github/workflows/dlt-001-long-run.yml` | added | CI workflow / controlled trial orchestration | Absent | No same-path successor identified |
+| `.github/workflows/dlt-002-four-hour.yml` | added | CI workflow / controlled trial orchestration | Present | Identical blob |
+| `.github/workflows/dlt-002-overnight-validation.yml` | added | CI workflow / controlled trial orchestration | Absent | No same-path successor identified |
+| `.github/workflows/jarvis-brain-probe-001.yml` | added | CI workflow / controlled trial orchestration | Absent | No same-path successor identified |
+| `.github/workflows/jarvis-core.yml` | added | CI workflow / controlled trial orchestration | Absent | No same-path successor identified |
+| `.github/workflows/jarvis-learning-seed-sweep.yml` | added | CI workflow / controlled trial orchestration | Absent | No same-path successor identified |
+| `.github/workflows/jbp-mem-001.yml` | added | CI workflow / controlled trial orchestration | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/CMakeLists.txt` | modified | Build/test registration | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/examples/CMakeLists.txt` | added | Executable developmental-world example | Absent | No same-path successor identified |
+| `core/cpp/examples/README.md` | added | Executable developmental-world example | Absent | No same-path successor identified |
+| `core/cpp/examples/developmental_world.cpp` | added | Executable developmental-world example | Absent | No same-path successor identified |
+| `core/cpp/include/jarvis/core/action_execution.hpp` | modified | Core public API / mechanism contract | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/include/jarvis/core/action_model.hpp` | modified | Core public API / mechanism contract | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/include/jarvis/core/adaptation.hpp` | modified | Core public API / mechanism contract | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/include/jarvis/core/affective_learning.hpp` | added | Core public API / mechanism contract | Absent | No same-path successor identified |
+| `core/cpp/include/jarvis/core/affective_state.hpp` | added | Core public API / mechanism contract | Absent | No same-path successor identified |
+| `core/cpp/include/jarvis/core/association_model.hpp` | modified | Core public API / mechanism contract | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/include/jarvis/core/attention.hpp` | modified | Core public API / mechanism contract | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/include/jarvis/core/brain.hpp` | modified | Core public API / mechanism contract | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/include/jarvis/core/causal_link_codec.hpp` | added | Core public API / mechanism contract | Absent | No same-path successor identified |
+| `core/cpp/include/jarvis/core/causal_model.hpp` | modified | Core public API / mechanism contract | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/include/jarvis/core/cognition.hpp` | modified | Core public API / mechanism contract | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/include/jarvis/core/cognitive_cycle.hpp` | modified | Core public API / mechanism contract | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/include/jarvis/core/cognitive_goal_outcome.hpp` | added | Core public API / mechanism contract | Absent | No same-path successor identified |
+| `core/cpp/include/jarvis/core/cognitive_runtime.hpp` | modified | Core public API / mechanism contract | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/include/jarvis/core/cognitive_workspace.hpp` | modified | Core public API / mechanism contract | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/include/jarvis/core/decision.hpp` | modified | Core public API / mechanism contract | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/include/jarvis/core/developmental_environment.hpp` | added | Core public API / mechanism contract | Absent | No same-path successor identified |
+| `core/cpp/include/jarvis/core/developmental_learning.hpp` | added | Core public API / mechanism contract | Absent | No same-path successor identified |
+| `core/cpp/include/jarvis/core/developmental_world.hpp` | added | Core public API / mechanism contract | Absent | No same-path successor identified |
+| `core/cpp/include/jarvis/core/evolution.hpp` | modified | Core public API / mechanism contract | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/include/jarvis/core/evolution_adoption_journal.hpp` | modified | Core public API / mechanism contract | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/include/jarvis/core/evolution_canary.hpp` | modified | Core public API / mechanism contract | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/include/jarvis/core/evolution_controller.hpp` | modified | Core public API / mechanism contract | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/include/jarvis/core/evolution_experiment.hpp` | modified | Core public API / mechanism contract | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/include/jarvis/core/evolution_experiment_coordinator.hpp` | modified | Core public API / mechanism contract | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/include/jarvis/core/evolution_experiment_runner.hpp` | modified | Core public API / mechanism contract | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/include/jarvis/core/evolution_orchestrator.hpp` | modified | Core public API / mechanism contract | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/include/jarvis/core/experience_memory.hpp` | added | Core public API / mechanism contract | Absent | No same-path successor identified |
+| `core/cpp/include/jarvis/core/goals.hpp` | modified | Core public API / mechanism contract | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/include/jarvis/core/intent.hpp` | modified | Core public API / mechanism contract | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/include/jarvis/core/knowledge.hpp` | modified | Core public API / mechanism contract | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/include/jarvis/core/memory.hpp` | modified | Core public API / mechanism contract | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/include/jarvis/core/planning.hpp` | modified | Core public API / mechanism contract | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/include/jarvis/core/reflection.hpp` | modified | Core public API / mechanism contract | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/include/jarvis/core/self_model.hpp` | modified | Core public API / mechanism contract | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/src/action_execution.cpp` | modified | Core mechanism implementation | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/src/adaptation.cpp` | modified | Core mechanism implementation | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/src/affective_learning.cpp` | added | Core mechanism implementation | Absent | No same-path successor identified |
+| `core/cpp/src/affective_state.cpp` | added | Core mechanism implementation | Absent | No same-path successor identified |
+| `core/cpp/src/association_model.cpp` | modified | Core mechanism implementation | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/src/attention.cpp` | modified | Core mechanism implementation | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/src/brain.cpp` | modified | Core mechanism implementation | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/src/brain_action_execution.cpp` | added | Core mechanism implementation | Absent | No same-path successor identified |
+| `core/cpp/src/brain_affective_planning.cpp` | added | Core mechanism implementation | Absent | No same-path successor identified |
+| `core/cpp/src/brain_prediction_context.cpp` | added | Core mechanism implementation | Absent | No same-path successor identified |
+| `core/cpp/src/brain_restored_api.cpp` | added | Core mechanism implementation | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/src/causal_model.cpp` | modified | Core mechanism implementation | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/src/cognitive_cycle.cpp` | modified | Core mechanism implementation | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/src/cognitive_runtime.cpp` | modified | Core mechanism implementation | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/src/decision.cpp` | modified | Core mechanism implementation | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/src/developmental_learning.cpp` | added | Core mechanism implementation | Absent | No same-path successor identified |
+| `core/cpp/src/evolution.cpp` | modified | Core mechanism implementation | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/src/evolution_adoption.cpp` | modified | Core mechanism implementation | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/src/evolution_adoption_journal.cpp` | modified | Core mechanism implementation | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/src/evolution_canary.cpp` | modified | Core mechanism implementation | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/src/evolution_controller.cpp` | modified | Core mechanism implementation | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/src/evolution_experiment_coordinator.cpp` | modified | Core mechanism implementation | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/src/evolution_experiment_runner.cpp` | modified | Core mechanism implementation | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/src/evolution_history.cpp` | modified | Core mechanism implementation | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/src/evolution_orchestrator.cpp` | modified | Core mechanism implementation | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/src/evolution_safety.cpp` | modified | Core mechanism implementation | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/src/evolution_sandbox.cpp` | modified | Core mechanism implementation | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/src/goals.cpp` | modified | Core mechanism implementation | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/src/intent.cpp` | modified | Core mechanism implementation | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/src/knowledge.cpp` | modified | Core mechanism implementation | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/src/memory.cpp` | modified | Core mechanism implementation | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/src/planning.cpp` | modified | Core mechanism implementation | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/src/process_isolation.cpp` | modified | Core mechanism implementation | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/src/reasoning.cpp` | modified | Core mechanism implementation | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/src/reflection.cpp` | modified | Core mechanism implementation | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/src/representation.cpp` | modified | Core mechanism implementation | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/src/self_model.cpp` | modified | Core mechanism implementation | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/tests/CMakeLists.txt` | modified | Build/test registration | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/tests/action_authorization_suite.cpp` | modified | Behavioral, integration, persistence or regression test | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/tests/action_execution_phase7_suite.cpp` | modified | Behavioral, integration, persistence or regression test | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/tests/action_model_architecture_suite.cpp` | modified | Behavioral, integration, persistence or regression test | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/tests/affective_brain_decision_suite.cpp` | added | Behavioral, integration, persistence or regression test | Absent | No same-path successor identified |
+| `core/cpp/tests/affective_decision_learning_suite.cpp` | added | Behavioral, integration, persistence or regression test | Absent | No same-path successor identified |
+| `core/cpp/tests/affective_decision_suite.cpp` | added | Behavioral, integration, persistence or regression test | Absent | No same-path successor identified |
+| `core/cpp/tests/affective_evidence_suite.cpp` | added | Behavioral, integration, persistence or regression test | Absent | No same-path successor identified |
+| `core/cpp/tests/affective_goal_outcome_suite.cpp` | added | Behavioral, integration, persistence or regression test | Absent | No same-path successor identified |
+| `core/cpp/tests/affective_learning_suite.cpp` | added | Behavioral, integration, persistence or regression test | Absent | No same-path successor identified |
+| `core/cpp/tests/affective_planning.cmake` | added | Build/test registration | Absent | No same-path successor identified |
+| `core/cpp/tests/affective_planning_suite.cpp` | added | Behavioral, integration, persistence or regression test | Absent | No same-path successor identified |
+| `core/cpp/tests/affective_state_model_suite.cpp` | added | Behavioral, integration, persistence or regression test | Absent | No same-path successor identified |
+| `core/cpp/tests/affective_state_suite.cpp` | added | Behavioral, integration, persistence or regression test | Absent | No same-path successor identified |
+| `core/cpp/tests/association_causality_phase5_suite.cpp` | modified | Behavioral, integration, persistence or regression test | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/tests/attention_architecture_suite.cpp` | modified | Behavioral, integration, persistence or regression test | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/tests/attention_learning_brain_suite.cpp` | added | Behavioral, integration, persistence or regression test | Absent | No same-path successor identified |
+| `core/cpp/tests/brain_10_suite.cpp` | modified | Behavioral, integration, persistence or regression test | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/tests/brain_action_consequence_integration_suite.cpp` | added | Behavioral, integration, persistence or regression test | Absent | No same-path successor identified |
+| `core/cpp/tests/brain_contract.cpp` | modified | Behavioral, integration, persistence or regression test | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/tests/brain_deep_suite.cpp` | modified | Behavioral, integration, persistence or regression test | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/tests/cognitive_cycle_suite.cpp` | modified | Behavioral, integration, persistence or regression test | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/tests/cognitive_runtime_goal_feedback_suite.cpp` | added | Behavioral, integration, persistence or regression test | Absent | No same-path successor identified |
+| `core/cpp/tests/cognitive_runtime_learning_integration_suite.cpp` | added | Behavioral, integration, persistence or regression test | Absent | No same-path successor identified |
+| `core/cpp/tests/cognitive_runtime_suite.cpp` | modified | Behavioral, integration, persistence or regression test | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/tests/cognitive_workspace_runtime_suite.cpp` | modified | Behavioral, integration, persistence or regression test | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/tests/decision_planning_architecture_suite.cpp` | modified | Behavioral, integration, persistence or regression test | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/tests/developmental_brain_integration_suite.cpp` | added | Behavioral, integration, persistence or regression test | Absent | No same-path successor identified |
+| `core/cpp/tests/developmental_environment_suite.cpp` | added | Behavioral, integration, persistence or regression test | Absent | No same-path successor identified |
+| `core/cpp/tests/developmental_learning_suite.cpp` | added | Behavioral, integration, persistence or regression test | Absent | No same-path successor identified |
+| `core/cpp/tests/developmental_learning_tests.cpp` | added | Behavioral, integration, persistence or regression test | Absent | No same-path successor identified |
+| `core/cpp/tests/developmental_training_environment_suite.cpp` | added | Behavioral, integration, persistence or regression test | Absent | No same-path successor identified |
+| `core/cpp/tests/developmental_world_integration_suite.cpp` | added | Behavioral, integration, persistence or regression test | Absent | No same-path successor identified |
+| `core/cpp/tests/developmental_world_suite.cpp` | added | Behavioral, integration, persistence or regression test | Absent | No same-path successor identified |
+| `core/cpp/tests/dlt_001_long_run.cpp` | added | Behavioral, integration, persistence or regression test | Absent | No same-path successor identified |
+| `core/cpp/tests/dlt_001_trial.cpp` | added | Behavioral, integration, persistence or regression test | Absent | No same-path successor identified |
+| `core/cpp/tests/dlt_002_long_run.cpp` | added | Behavioral, integration, persistence or regression test | Absent | No same-path successor identified |
+| `core/cpp/tests/dlt_002_persistence.cpp` | added | Behavioral, integration, persistence or regression test | Absent | No same-path successor identified |
+| `core/cpp/tests/evolution_adoption_journal_suite.cpp` | modified | Behavioral, integration, persistence or regression test | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/tests/evolution_brain_integration_suite.cpp` | modified | Behavioral, integration, persistence or regression test | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/tests/evolution_canary_controller_suite.cpp` | modified | Behavioral, integration, persistence or regression test | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/tests/evolution_experiment_coordinator_suite.cpp` | modified | Behavioral, integration, persistence or regression test | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/tests/evolution_experiment_runner_suite.cpp` | modified | Behavioral, integration, persistence or regression test | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/tests/evolution_opportunity_orchestration_suite.cpp` | modified | Behavioral, integration, persistence or regression test | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/tests/experience_memory_test.cpp` | added | Behavioral, integration, persistence or regression test | Absent | No same-path successor identified |
+| `core/cpp/tests/goal_directed_cognition_suite.cpp` | added | Behavioral, integration, persistence or regression test | Absent | No same-path successor identified |
+| `core/cpp/tests/goal_outcome_model_suite.cpp` | added | Behavioral, integration, persistence or regression test | Absent | No same-path successor identified |
+| `core/cpp/tests/goals_architecture_suite.cpp` | modified | Behavioral, integration, persistence or regression test | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/tests/knowledge_memory_phase3_suite.cpp` | modified | Behavioral, integration, persistence or regression test | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/tests/learning_adaptation_phase8_suite.cpp` | modified | Behavioral, integration, persistence or regression test | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/tests/memory_architecture_suite.cpp` | modified | Behavioral, integration, persistence or regression test | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/tests/memory_learning_evolution_persistence_suite.cpp` | added | Behavioral, integration, persistence or regression test | Absent | No same-path successor identified |
+| `core/cpp/tests/prediction_feedback_phase10_suite.cpp` | modified | Behavioral, integration, persistence or regression test | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/tests/process_isolation_suite.cpp` | modified | Behavioral, integration, persistence or regression test | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/tests/reasoning_architecture_suite.cpp` | modified | Behavioral, integration, persistence or regression test | Present | Different blob; semantic successor not yet proven |
+| `core/cpp/tests/representation_suite.cpp` | modified | Behavioral, integration, persistence or regression test | Present | Different blob; semantic successor not yet proven |
+| `docs/developmental-training-environment.md` | added | Design / planning / training documentation | Absent | No same-path successor identified |
+| `docs/superpowers/plans/2026-09-25-cognitive-action-feedback-loop.md` | added | Design / planning / training documentation | Absent | No same-path successor identified |
+| `docs/superpowers/plans/2026-09-26-concept-context-prediction.md` | added | Design / planning / training documentation | Absent | No same-path successor identified |
+| `docs/superpowers/plans/2026-09-30-developmental-cognition.md` | added | Design / planning / training documentation | Absent | No same-path successor identified |
+| `docs/superpowers/plans/2026-10-01-affective-state.md` | added | Design / planning / training documentation | Absent | No same-path successor identified |
+| `docs/superpowers/specs/2026-09-25-cognitive-action-feedback-loop-design.md` | added | Design / planning / training documentation | Absent | No same-path successor identified |
+| `docs/superpowers/specs/2026-09-26-concept-context-prediction-design.md` | added | Design / planning / training documentation | Absent | No same-path successor identified |
+| `docs/superpowers/specs/2026-09-30-developmental-cognition.md` | added | Design / planning / training documentation | Absent | No same-path successor identified |
+| `docs/superpowers/specs/2026-10-01-affective-state.md` | added | Design / planning / training documentation | Absent | No same-path successor identified |
+| `engineering/cpp/CMakeLists.txt` | modified | Engineering agent coordination, messaging or durable task ledger | Present | Different blob; semantic successor not yet proven |
+| `engineering/cpp/include/jarvis/engineering/agent.hpp` | modified | Engineering agent coordination, messaging or durable task ledger | Present | Different blob; semantic successor not yet proven |
+| `engineering/cpp/include/jarvis/engineering/coordinator.hpp` | modified | Engineering agent coordination, messaging or durable task ledger | Present | Different blob; semantic successor not yet proven |
+| `engineering/cpp/include/jarvis/engineering/message_bus.hpp` | modified | Engineering agent coordination, messaging or durable task ledger | Present | Different blob; semantic successor not yet proven |
+| `engineering/cpp/include/jarvis/engineering/task_ledger.hpp` | added | Engineering agent coordination, messaging or durable task ledger | Absent | No same-path successor identified |
+| `engineering/cpp/src/coordinator.cpp` | modified | Engineering agent coordination, messaging or durable task ledger | Present | Different blob; semantic successor not yet proven |
+| `engineering/cpp/src/message_bus.cpp` | modified | Engineering agent coordination, messaging or durable task ledger | Present | Different blob; semantic successor not yet proven |
+| `engineering/cpp/src/task_ledger.cpp` | added | Engineering agent coordination, messaging or durable task ledger | Absent | No same-path successor identified |
+| `engineering/cpp/tests/agent_and_console_suite.cpp` | modified | Engineering agent coordination, messaging or durable task ledger | Present | Different blob; semantic successor not yet proven |
+| `engineering/cpp/tests/task_ledger_suite.cpp` | added | Engineering agent coordination, messaging or durable task ledger | Absent | No same-path successor identified |
+
+### 14.3 Required semantic follow-through — still open
+
+The complete 159-path enumeration and role classification close the prior *structural classification gap*, but do not close DF-02's semantic and dependency obligations. Specifically:
+
+1. The 95 divergent same-path files still require symbol/API/behavior comparison to establish which donor responsibilities are preserved, adapted, replaced, or intentionally not carried forward.
+2. The 63 absent paths require successor-name searches and reverse-consumer checks across relevant branches before any retirement or replacement conclusion can be recorded.
+3. The 1 identical path must still be interpreted in its workflow and branch context; identical content is not evidence of authorization, execution, or acceptance.
+4. The 56 core tests and long-run/training artifacts require outcome provenance to remain bound to the exact PR #97 or descendant branch and SHA. Their existence or historical green CI does not establish current-main acceptance or generalization.
+5. The 9 documentation paths are historical donor specifications/plans. They must be reconciled with approved PR #171 SYS-01–SYS-11 and later accepted planning decisions without copying or creating duplicate architecture documents.
+6. Engineering task-ledger and messaging changes are a distinct engineering coordination subsystem. They are not JARVIS Brain cognitive mechanisms and must not be conflated with the Brain's learning loop.
+7. All-branch consumer/reference closure and semantic disposition of other material historical PRs/standalone artifacts remain open.
+
+**DF-02 remains OPEN.** This update is Builder evidence only. It does not approve donor adoption, select a source baseline, declare a capability complete, authorize a merge/port/history operation, close Gate A/B, start Stage A, or authorize runtime implementation. Independent verification and applicable Project Director authority remain separate.
+
