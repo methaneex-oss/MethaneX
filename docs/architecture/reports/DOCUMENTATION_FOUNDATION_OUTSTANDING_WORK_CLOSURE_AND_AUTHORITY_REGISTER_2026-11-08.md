@@ -1645,3 +1645,15 @@ No merge, retarget, rebase, cherry-pick, branch rewrite, PR integration, baselin
 The Builder has not claimed Documentation Foundation acceptance, an independent verdict, DF-09 CLEAR, or DF-12 approval. The Independent Reviewer request is to be published only after the Builder-owned evidence package is frozen; its exact final target SHA will be pinned in the PR conversation after the terminal inventory commit. The reviewer must independently re-fetch and inspect that exact revision.
 
 Stage A remains NOT STARTED / HELD. PR #171's approved SYS-01–SYS-11 whole-system foundation remains authoritative within its recorded scope; Stage A must reconcile with it rather than duplicate it. No implementation, donor adoption, baseline selection, training, merge, rebase, retarget, cherry-pick, branch rewrite or deployment is authorized by this register update.
+
+
+## 13. Review-request publication and final DF-06 delta — 2026-11-18
+
+**PR #192 HEAD at the start of this addendum:** `0b332a9ccf5c58d251a6cc819311317cc8739fdd`.
+
+- The complete review request is now published at `docs/architecture/reports/reviews/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_REQUEST_PR192_2026-11-18.md`. It requires exact-HEAD acquisition, DF-01–DF-12 adjudication, full DF-02/DF-06/DF-09/DF-10 challenge, a clear independence basis, explicit verdict and all authority boundaries. The terminal inventory successor SHA will be pinned in the PR conversation after the final inventory write.
+- The Builder's exact-revision self-review continuation is appended to `docs/architecture/reports/BUILDER_FINAL_DOCUMENTATION_FOUNDATION_RECONCILIATION_2026-11-08.md`.
+- DF-06 was refreshed for the two new index destinations. The checkpoint source scan remains 50/50 Markdown, 342 occurrences, 129 local and 213 external occurrences with zero missing local paths. Current tree at the scan source contains 280 entries and 51 Markdown files. The compare identifies exactly two newly added local links in the index; both destinations are present. This is a two-link delta check, not a full 51-file parser rerun. External reachability/redirect/semantic checks, parser reconciliation and authenticated rendered anchors remain unverified.
+- The main-branch blind reader workflow was re-fetched and its blob verified as `585c9399318b0af17514a95a5c435d497a76234a`. It exposes `workflow_dispatch` with required `target_revision` (full 40-character SHA) and optional `assessment_label`. The Builder connection has no dispatch operation. After the terminal inventory successor is created, the authorized operator must launch the workflow from `main` against that exact final SHA. No run or CLEAR verdict is claimed.
+
+The gate dispositions remain unchanged: DF-02 OPEN; DF-06 NOT MET; DF-09 NOT MET pending a new exact-target CLEAR result; DF-10 reopened pending the terminal inventory proof; DF-11 waived as a mandatory gate while the separate review request is issued under current direction; DF-12 reserved to the Project Director. Stage A remains HELD.
