@@ -6163,24 +6163,24 @@ No merge, rebase, retarget, cherry-pick, archive relocation, deletion, source-ba
 
 ---
 
-## 119. Exact 43-path parent manifest after DF-10 status reconciliation — 2026-11-18
+## 119. Exact 43-path parent manifest after live DF-06 refresh — 2026-11-18
 
-**Exact parent HEAD:** `a9be80ad54e1e27a031e16b9ef389332f4663712`  
-**Parent tree:** `a9be80ad54e1e27a031e16b9ef389332f4663712` (`truncated=false`, 274 entries)  
+**Exact parent HEAD:** `dfcd576c98d3bb9852648fbefa2dfd2f97696c45`  
+**Parent tree:** `dfcd576c98d3bb9852648fbefa2dfd2f97696c45` (`truncated=false`, 274 entries)  
 **PR #192 state at parent:** open, non-draft, unmerged; 43 changed paths.  
-**Parent index correction:** `a9be80ad54e1e27a031e16b9ef389332f4663712` records DF-10 as Builder-verified only for the exact manifest pair in this section.
+**Parent index:** records the current DF-06 live repeat scan and exact PR #192 source snapshot.
 
 | # | Changed path | Parent blob SHA |
 |---:|---|---|
 | 1 | `docs/ARCHITECTURE.md` | `3c6692b52059e43947d1fd2e7e84debb2362023f` |
-| 2 | `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md` | `2b819e53d34cb896be847daae770f213a963bf9f` |
-| 3 | `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md` | `46359f7f4e676984c24fb31a1f520b22fb565afe` |
+| 2 | `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md` | `a7b4dc38ac0d4d28f1c96da0fd07b6ed233cca49` |
+| 3 | `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md` | `d9d07321447ced1092c9c794fce57da99a11fdf5` |
 | 4 | `docs/architecture/inventory/HISTORICAL_DOCUMENTATION_PRESERVATION_REGISTER_2026-11-08.md` | `95cd280295c86c6d33278aa667de1d72048026ea` |
 | 5 | `docs/architecture/reports/BUILDER_FINAL_DOCUMENTATION_FOUNDATION_RECONCILIATION_2026-11-08.md` | `c962de2465f1728752e46456f69e722caf277de7` |
 | 6 | `docs/architecture/reports/BUILDER_TO_INDEPENDENT_REVIEWER_REQUEST_2026-11-08.md` | `c458f689ccbcd1e1d54242e38648ca151d70c250` |
 | 7 | `docs/architecture/reports/BUILDER_TO_XAI_EXACT_REVISION_RE_REVIEW_REQUEST_PR173_PR195_2026-11-17.md` | `b30ffa6109c04d3ffbc250490ccc1ed4339d4bab` |
 | 8 | `docs/architecture/reports/DF02_FOUNDATIONAL_ARTIFACT_AUTHORITY_AND_DEPENDENCY_RECONCILIATION_2026-11-18.md` | `e2bd94c3a97d046c4ac084bedbfb233263a395d3` |
-| 9 | `docs/architecture/reports/DF06_BUILDER_LINK_AND_NAVIGATION_AUDIT_2026-11-17.md` | `ec9e429ffc0d74c8e3b44343a7e2db5c184d4954` |
+| 9 | `docs/architecture/reports/DF06_BUILDER_LINK_AND_NAVIGATION_AUDIT_2026-11-17.md` | `318989205b186421ae103c14ebb9bd688f035f27` |
 | 10 | `docs/architecture/reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md` | `19fd6123a17ccbcf78735a0a4a914f574c7534c2` |
 | 11 | `docs/architecture/reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md` | `cf4c7a71171ca7531876a920ae433a327dc454bf` |
 | 12 | `docs/architecture/reports/fresh-reader-evidence/NEMOTRON_ASSESSMENT_PROMPT_2026-11-10.md` | `03475a43c1440ca9affd38dfe046b8ef1e9b91d0` |
@@ -6219,7 +6219,7 @@ No merge, rebase, retarget, cherry-pick, archive relocation, deletion, source-ba
 ### 119.1 Verification conditions
 
 - The PR changed-path endpoint returned 43 unique paths; all 43 are present in the complete, non-truncated parent tree.
-- This table records exact parent-tree blob identities for all 43 changed paths, including the inventory's own pre-update blob `46359f7f4e676984c24fb31a1f520b22fb565afe`.
-- After this inventory-only update, compare the parent and successor: exactly one commit ahead, zero behind, exactly one changed path (this inventory file); the other 42 changed-path blobs must remain unchanged.
+- This table records exact parent-tree blob identities for all 43 changed paths, including the inventory's own pre-update blob `d9d07321447ced1092c9c794fce57da99a11fdf5`.
+- After this inventory-only update, compare the parent and successor: exactly one commit ahead, zero behind, exactly one changed path (this inventory file); all other 42 changed-path blobs must remain unchanged.
 - DF-10 is Builder-verified only for this exact parent/successor pair if all post-write conditions pass. Any later PR #192 write reopens the inventory cycle.
 - DF-02 remains OPEN; DF-06 and DF-09 remain NOT MET; DF-11 remains WAIVED; DF-12 remains reserved to the Project Director; Stage A remains HELD.
