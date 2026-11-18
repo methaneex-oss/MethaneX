@@ -271,3 +271,15 @@ This establishes the current local-path delta for the checkpoint scan, not a fre
 - **Current tree continuity:** 51 tracked Markdown files, complete 280-entry tree, nine changed documentation paths since the checkpoint, two new navigation destinations, both present.
 - **Not verified:** exhaustive external destination live-status/redirect/content checks; parser-history reconciliation; authenticated rendered GitHub heading, line-range and issue-comment anchors; historical access-limited pointer.
 - **DF-06 remains NOT MET.** Do not present the 50-file checkpoint scan plus two-link delta as a fresh 51-file parser run or as external/rendered-navigation acceptance.
+
+
+## 14. Pre-inventory navigation freeze check — 2026-11-18
+
+**Exact PR #192 source before this audit update:** `c50d6dd1c3f2f2a3425e20ac8a9bb46fa7db7cb1`.  
+The recursive tree is complete (`truncated=false`) with 280 entries and 51 tracked Markdown files. Comparing the exact source of §13 (`7af58141dbb5c84484d8a3cb4e65257349848cdd`) to this source yields three commits ahead, zero behind, and only three changed paths: the planning index, outstanding-work register and continuity checkpoint. The compare patches introduce **zero new navigation destinations**.
+
+Accordingly, the two local links independently checked in §13 remain the only new destinations since the 50-file checkpoint extraction. Both targets remain present in this exact tree. No new link destinations were added by the current register/checkpoint refresh.
+
+This is a pre-inventory navigation-freeze check. The terminal inventory update is expected to change only the inventory file and add no navigation destination. If any later commit changes a Markdown destination, DF-06 local-path delta evidence must be reopened.
+
+**DF-06 remains NOT MET.** This record does not verify external HTTP status, redirects, semantic relevance, heading fragments, rendered line/comment anchors, or the historical access-limited pointer. It does not claim a fresh 51-file parser run.
