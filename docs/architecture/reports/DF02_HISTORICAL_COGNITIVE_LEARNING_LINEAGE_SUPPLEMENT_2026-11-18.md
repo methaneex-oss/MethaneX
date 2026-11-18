@@ -89,11 +89,11 @@ This supplement materially expands the historical PR census but does not close D
 
 This supplement does not authorize merge, rebase, retarget, cherry-pick, branch rewrite, archive relocation, deletion, source-baseline selection, Gate A/B clearance, Stage A, runtime implementation, runtime testing, or Project Director acceptance. It records bounded Builder-side repository metadata only.
 
-## 8. Complete pull-request metadata census — PR #1–#165 snapshot
+## 8. Complete repository pull-request metadata census — PR #1–#197
 
-**Snapshot source:** GitHub REST pull-request collection fetched on 2026-11-18 against the live repository while PR #192 was at `0d09ee2f3650a61a4c1e209a001e9f8241d04363`. The query returned 157 pull requests numbered 1–165 (missing PR numbers: 24, 25, 26, 27, 28, 74, 82, 85). This is a complete metadata census for that numeric range, not a complete source/path or semantic audit.
+**Snapshot date:** 2026-11-18. **Source:** GitHub REST pull-request collection, `state=all`, `per_page=100`, created ascending, pages 1–3. **Source PR #192 HEAD at census capture:** `d0755a6e41d005263de74e1fec6eb1149ed5eec5`. The collection returned 188 PRs numbered 1–197; missing numbers are 24, 25, 26, 27, 28, 74, 82, 85, 177.
 
-**State counts:** 55 merged into their declared base branch (49 declared base `main`; 6 declared non-main base); 57 open (27 draft); 45 closed without a merge date. Merge status is determined by `merged_at`, not by the presence of `merge_commit_sha`. A merged-to-feature/integration PR is not represented as merged to `main`.
+**State totals:** 57 merged into their declared base branch (50 with `main` as the declared base; 7 with a non-main base); 84 open (44 draft); 47 closed without a merge date. `merged_at` is the merge-state authority for this table. A populated `merge_commit_sha` without `merged_at` does not make a PR merged. A merge into a feature/integration/documentation branch is not a merge into `main`.
 
 | PR | Title | Exact head SHA | Declared base branch @ base SHA | State / merge date | Changed files |
 |---:|---|---|---|---|---:|
@@ -254,11 +254,43 @@ This supplement does not authorize merge, rebase, retarget, cherry-pick, branch 
 | #163 | fix(memory): reject invalid serialized boolean encodings | `573ed8e43ed77c1e119af89e13a6a2cd9a319557` | `docs/priority-one-trust-boundary-contract-20261031` @ `cfbcbdd29839f062851d3ca7da63ab2ae3a8f4f1` | OPEN/DRAFT | ? |
 | #164 | docs: audit polyglot brain foundation technology | `5433b0d0ae6ea7ff9d0991e84c8a6a8a2506c1cb` | `fix/journal-bool-decoding-validation-20261031` @ `573ed8e43ed77c1e119af89e13a6a2cd9a319557` | OPEN/DRAFT | ? |
 | #165 | fix(memory): integrate canonical boolean validation into Priority One | `b627dcc6a0ec849386425c785ba567ff2d2198dc` | `fix/reject-nonfinite-cognitive-evidence-20261031` @ `c6c76cfa2716551490859d6e8699992ebd4b5798` | OPEN/DRAFT | ? |
+| #166 | docs: establish JARVIS project command and role governance | `c803e9873df1c22111156d894853ef2d8832a8ea` | `integration/priority-one-memory-bool-hardening-20261031` @ `b627dcc6a0ec849386425c785ba567ff2d2198dc` | OPEN/DRAFT | ? |
+| #167 | docs: map language ownership across Brain layers | `e7227919c13cc65c0e3915fdc7b6491465be1921` | `docs/jarvis-project-command-governance-20261031` @ `c803e9873df1c22111156d894853ef2d8832a8ea` | OPEN/DRAFT | ? |
+| #168 | docs: define Brain polyglot engineering governance | `004e8753d01c9b18bb243b257591657f9b19d7db` | `docs/brain-layer-language-ownership-map-20261031` @ `e7227919c13cc65c0e3915fdc7b6491465be1921` | OPEN/DRAFT | ? |
+| #169 | docs: define MCU JARVIS behavioral Brain target | `bdc980f3dcf322541556c0756aeee4eb1ff955a1` | `docs/brain-polyglot-engineering-governance-20261031` @ `004e8753d01c9b18bb243b257591657f9b19d7db` | OPEN/DRAFT | ? |
+| #170 | docs: define Brain foundation constitution and planning readiness | `abf3303c04638a89146a4161b91a439910235add` | `docs/jarvis-mcu-brain-target-analysis-20261031` @ `bdc980f3dcf322541556c0756aeee4eb1ff955a1` | OPEN/DRAFT | ? |
+| #171 | docs: establish fresh JARVIS system architecture foundation | `b05434758ad4fe72815503f89bd5d2990ccb658b` | `main` @ `1273ddbcd0087d189e01388ded2d362fb1e058d2` | OPEN/DRAFT | ? |
+| #172 | research: document foundational Brain capability investigation | `d7d676b79dbf3269f7fd3ebdb4363a6df19f255d` | `main` @ `1273ddbcd0087d189e01388ded2d362fb1e058d2` | OPEN/DRAFT | ? |
+| #173 | architecture: propose integrated Brain foundation | `a96af5b18d3a1d580ff56cff6191240893bceeb5` | `main` @ `1273ddbcd0087d189e01388ded2d362fb1e058d2` | OPEN/DRAFT | ? |
+| #174 | specification: define integrated Brain mechanisms | `c34472354e4122fc1d78dc25bf45d81f1eb4dc69` | `architecture/brain-foundation-planning-20261103` @ `97191111bc2573c14d391c0af9628db7b11f194b` | OPEN/DRAFT | ? |
+| #175 | planning: define Brain implementation roadmap | `48a7103f87c00992e4e19d84c768d1e72682a1b0` | `spec/brain-mechanism-specification-20261103` @ `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` | OPEN/DRAFT | ? |
+| #176 | test(brain): reproduce Gate A D1 and D2 defects | `4cf017e073da980c9f77d739fde6f92ef1a2fbc1` | `integration/priority-one-20261031` @ `7fe212bbb0bd61116ea56581435e03b06c69b673` | OPEN/DRAFT | ? |
+| #178 | docs(governance): establish JARVIS project and phase continuity rules | `39fe09dcf13496f5f0005ccf3f00739303e29f88` | `main` @ `1273ddbcd0087d189e01388ded2d362fb1e058d2` | OPEN/DRAFT | ? |
+| #179 | docs(phase-2): map whole-brain capabilities to source | `ea64607ef94f142a6142a013e119a7225bc95c1c` | `docs/jarvis-project-governance-rules-20261105` @ `39fe09dcf13496f5f0005ccf3f00739303e29f88` | OPEN/DRAFT | ? |
+| #180 | research(phase-2): map whole-Brain capabilities to existing source | `6ca140300b914ed981a50301bbf1d82a5bfe4d8b` | `spec/brain-mechanism-specification-20261103` @ `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` | CLOSED/UNMERGED | ? |
+| #181 | research: map whole-Brain capability and source integration | `cf3f8db7e5e5ca5eb1c0345bafdb704e92d70f25` | `spec/brain-mechanism-specification-20261103` @ `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` | OPEN/DRAFT | ? |
+| #182 | review: challenge Phase 2 whole-Brain integration map | `1ffc2d66c3c0b389eaddae992318d53eeab8416b` | `research/phase-2-whole-brain-integration-map-20261105` @ `cf3f8db7e5e5ca5eb1c0345bafdb704e92d70f25` | OPEN/DRAFT | ? |
+| #183 | docs(review): publish independent Phase 2 integration review | `30eaefe3bee02e2038f66fb18c907673026ebe76` | `main` @ `1273ddbcd0087d189e01388ded2d362fb1e058d2` | OPEN | ? |
+| #184 | docs(review): publish second independent Phase 2 corrections review | `8ba6dfcb17f2aab409f58cbd8bc57898edd60405` | `main` @ `1273ddbcd0087d189e01388ded2d362fb1e058d2` | OPEN | ? |
+| #185 | docs(phase-2): prepare Phase 2 closeout evidence and contracts | `cb7b0877bcdd82b88dd387c99a9442997e0220ce` | `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `6f2c2cf05196e69a48f5deefcc3f4609e258c19a` | OPEN | ? |
+| #186 | docs(phase-2): prepare closeout evidence and review handoff | `53278d5918163b286247f608efcadd5ef0afd232` | `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `6f2c2cf05196e69a48f5deefcc3f4609e258c19a` | OPEN | ? |
+| #187 | docs(phase-2): complete IR-02/03/04 builder follow-through | `8e18f5eb2f8921e4bcd5d8441d432b5923d28da8` | `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `6f2c2cf05196e69a48f5deefcc3f4609e258c19a` | OPEN | ? |
+| #188 | docs(review): publish independent Phase 2 follow-up review | `36b843f6959628a689d81bc1e12e523e17227073` | `main` @ `1273ddbcd0087d189e01388ded2d362fb1e058d2` | OPEN | ? |
+| #189 | review(phase-2): independent review of whole-brain integration map | `46796725fd656628f7b6e47a57929b87f79a6d8d` | `main` @ `1273ddbcd0087d189e01388ded2d362fb1e058d2` | OPEN | ? |
+| #190 | docs(review): third independent Phase 2 integration review | `a1df22531765b7022f6bfbcfd9f3f5251cf5adf5` | `main` @ `1273ddbcd0087d189e01388ded2d362fb1e058d2` | OPEN | ? |
+| #191 | docs(phase-2): add human and MCU reference comparison | `609d38ede50bbdd98a93dfed112781eacabee9fd` | `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `f6267456560a08054d69f7960d2951452b14017c` | OPEN/DRAFT | ? |
+| #192 | docs(jarvis): correct whole-Brain planning scope and Builder handoff | `d0755a6e41d005263de74e1fec6eb1149ed5eec5` | `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | OPEN | ? |
+| #193 | docs(planning): hold implementation roadmap pending whole-Brain architecture | `fa2bd50d6fb0bb77dc3cbaab684f51d606e94bb5` | `plan/brain-implementation-roadmap-20261103` @ `874c732973b6ab303d65a503f5a215b0af8e1153` | OPEN/DRAFT | ? |
+| #194 | fix(docs): preserve Nemotron fresh-reader response diagnostics | `9b457e35c601719d9b213fb843dd5876976b35b9` | `main` @ `73a4deb7e532277e390da6a1d7d2c81be26b63bb` | CLOSED/UNMERGED | ? |
+| #195 | docs: standardize AI project role terminology | `fe8a3b6216f874c7ab35e3c8d9489b5caf8ffd37` | `main` @ `8edc7cdfc886537d319d81cea04cdc9f3476044e` | MERGED 2026-11-17 | ? |
+| #196 | docs(governance): enforce Builder operating controls | `0ebc4e978fa38011b2f6bb5d97a03c267c1c12c9` | `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `d30237b81c3695f2a7cb980144b221bbd42ce548` | MERGED 2026-11-12 | ? |
+| #197 | ci(docs): expose exact target revision in blind reader packet | `2b2bfd9afe6e1325119f7ccee507bb04e71aa343` | `main` @ `4f07d772beae03c99a8dd58b174201a3aa3074b2` | OPEN | ? |
 
 ### 8.1 Interpretation and limits
 
-- This census closes the earlier **missing PR-metadata enumeration** for the numeric range #1–#165. It does not close changed-path retrieval for every PR, semantic review of every changed file, source-presence verification, branch-consumer closure, or dependency/duplication analysis.
-- The selected lineage tables in §§2–4 remain the semantic focus for cognitive/memory/evolution/learning work. The full census exposes additional open and closed-unmerged branches outside that selected set; those remain historical or candidate evidence until individually classified by path and dependency.
-- Open PRs with a populated `merge_commit_sha` are still classified OPEN unless `merged_at` is present. Closed PRs without `merged_at` are CLOSED/UNMERGED. No merge or Director acceptance is inferred from a commit SHA field alone.
-- Exact head/base SHAs and changed-file counts are a time-bounded snapshot. If any PR head or base branch advances, its live metadata must be refreshed before a later baseline decision.
-- The census does not authorize selecting, merging, rebasing, cherry-picking, closing, or retargeting any branch.
+- This closes the **repository PR metadata enumeration** for the returned PR range through #197 as of the snapshot date. It does not establish the existence or completeness of every Git branch, commit, standalone artifact, or issue, and it is not a semantic source audit.
+- Exact head/base SHAs, base branch names, merge dates and changed-file counts are time-bounded. Refresh live metadata before relying on a PR's present state or current base-branch tip.
+- The selected semantic tables in §§2–4 and the detailed PR #97/#156/#176 analysis in §9 remain bounded reviews. The census does not imply every PR's changed paths were individually fetched or every file semantically classified.
+- PR #6/#7/#8 and #20/#21 remain duplicate/successor relationships; branch-scoped merges remain branch-scoped. The full metadata table must not be read as acceptance or implementation authority.
+- Remaining DF-02 work is path-level and semantic: enumerate changed paths for relevant omitted PRs, inspect material source revisions, resolve current source presence and cross-branch consumers, and build a defensible dependency/duplication graph. Record any residual unreviewed PRs as bounded limitations rather than claiming universal semantic coverage.
+- No branch merge, rebase, retarget, cherry-pick, closure, deletion, source-baseline selection, Gate A/B clearance, or runtime authorization follows from this census.
