@@ -123,3 +123,31 @@ DF-09 is a separate gate and must receive a separate result against the final ex
 ### 8.4 Publication and authority limits
 
 If an optional challenge is commissioned, publish the complete report in the established repository review location and post a concise PR comment linking it. State reviewer identity and independence basis. Keep DF-06, DF-09, DF-12 Project Director acceptance, PR #173 architecture acceptance, CF-26/CF-27, F-195-07, Stage A, implementation and merge authority separate. This optional protocol authorizes no implementation, branch-history operation, PR integration, merge, draft exit or deployment.
+
+
+## 8. Live PR #192 exact-HEAD repeat scan — 2026-11-18
+
+**Exact source revision:** `5a8dafb5ae8d5b31952a90846704a935a29b4421`  
+**PR #192 state at scan:** open, non-draft, unmerged; 43 changed paths (41 Markdown, 2 JSON).  
+**Repository tree:** 274 entries, `truncated=false`.  
+**Fetched Markdown coverage:** 41/41 changed Markdown files fetched directly at the exact source revision; the two JSON artifacts remain part of the 43-path inventory but were not included in Markdown link parsing.
+
+A bounded repeat parser scanned Markdown inline link/image destinations using the pattern `!?[[^]]*](([^)]+))`, stripped optional titles, classified HTTP(S)/protocol-relative destinations as external, and resolved relative local destinations against the complete repository tree after normalizing `.` and `..` path segments.
+
+| Measure | Result |
+|---|---:|
+| Markdown files fetched | 41 / 41 |
+| Inline Markdown link/image occurrences | 348 |
+| Local destinations | 129 |
+| External HTTP(S)/protocol-relative destinations | 219 |
+| Local destinations absent from the complete repository tree | 0 |
+
+All 129 local destinations identified by this repeat parser resolve to paths present in the complete tree at the exact source revision. This is a path-existence result only; it does not prove fragment/heading-anchor validity, rendered GitHub line/comment-anchor validity, or the semantic correctness of the destination.
+
+**Parser reconciliation remains OPEN.** This repeat parser's 348/129/219 result does not reconcile the previously recorded 331/125/206 repeat-scan result or the earlier 332/131/201 result. The parser expressions and inclusion rules are not yet demonstrated to be equivalent; the difference must not be represented as a confirmed regression or as a clean parser reconciliation. The old report sections remain historical evidence for their pinned revisions.
+
+**External and rendered-anchor verification remain incomplete.** The 219 external occurrences were classified but not individually fetched or semantically verified in this scan. GitHub-rendered headings, line anchors, comment anchors and fragment targets were not authenticated. No claim of exhaustive external reachability or rendered navigation correctness is made.
+
+### 8.1 Current disposition
+
+DF-06 remains **NOT MET**. The live exact-HEAD scan improves the local-path evidence to 129/129 resolving under the stated parser, but the parser discrepancy, external destination checks, and authenticated rendered-anchor checks remain open. A later PR #192 write changes the target SHA and requires a new exact-revision scan.
