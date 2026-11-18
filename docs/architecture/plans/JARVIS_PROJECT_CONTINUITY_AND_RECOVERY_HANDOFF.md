@@ -346,7 +346,7 @@ Governing principle remains: **Engineer the mechanisms; let behavior be acquired
 
 | PR | Current exact HEAD | State | Current disposition |
 |---|---|---|---|
-| #175 — Brain Implementation Planning | `04bdb3de293dfb92b61b957709fe0792c84215b8` | Open / draft / unmerged | Non-operative planning; WP-00–WP-08 kickoff and starter learning-run protocol recorded. Gate A NOT CLEARED; Gate B capability acceptance NOT PASSED. |
+| #175 — Brain Implementation Planning | Source HEAD before this handoff refresh: `04bdb3de293dfb92b61b957709fe0792c84215b8`; handoff refresh commit: `091af33c87ae571822370f467bc25f2892960d69` | Open / draft / unmerged | Non-operative planning; WP-00–WP-08 kickoff and starter learning-run protocol recorded. Gate A NOT CLEARED; Gate B capability acceptance NOT PASSED. Use live PR #175 metadata for the current branch HEAD. |
 | #192 — Documentation Foundation | `4b4a3d71dd8ed28dc0b39766e323253289255741` | Open / non-draft / unmerged | DF-02 OPEN; DF-06 NOT MET; DF-09 NOT MET; DF-10 Builder-verified only for inventory §121 exact pair; DF-11 WAIVED; DF-12 pending Director decision; Stage A HELD. |
 | #197 — blind reader packet target-SHA correction | `2b2bfd9afe6e1325119f7ccee507bb04e71aa343` | Open / non-draft / unmerged | Reader-visible target-SHA header and fail-closed assertion; Native Brain Build passed; exact-HEAD xAI review requested but no verdict recorded; no fresh-reader dispatch claimed. |
 | #173 — Brain Foundation Architecture | `a96af5b18d3a1d580ff56cff6191240893bceeb5` | Open / draft / unmerged | xAI review PARTIALLY CLEAR against architecture SHA `1f137cbaed985821bbc32408151911b18418f713`; whole-architecture acceptance and CF-26/CF-27 remain open. |
