@@ -376,7 +376,7 @@ The Builder has now re-fetched the complete PR #97 changed-path list, all 159 pa
 
 ### 14.1 Structural/semantic-role classification
 
-The full 159-path set is classified by the responsibility evidenced by its path and patch contents. This is a role classification, not a claim that every function, test assertion, or behavioral requirement has been semantically validated.
+The full 159-path set is classified by repository area, path and file type, with the corresponding PR patch set inspected to confirm the file's broad responsibility. This is a structural/functional-role classification, not a claim that every function, test assertion, or behavioral requirement has been semantically validated.
 
 | Role | Paths |
 |---|---:|
