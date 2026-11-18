@@ -279,3 +279,20 @@ This section narrows the donor-lineage gap using live PR metadata, complete chan
 The evidence confirms that PR #97 contains real connected learning machinery and durable experience-dependent behavior, but also confirms material limitations; it is not a completed learning brain. PR #156 is a later integrated candidate with exact-head CI and 73/73 CTest, but retains explicit trust, journal-integrity and ordinary-factual-feedback gaps. PR #176 supplies additional correctness/failure-boundary corrections, but its branch ancestry diverges from the live PR #156 tip and its own rollback-compensation limitation remains. All three PRs remain open/draft/unmerged; none is accepted or authorized for selective porting by this report.
 
 This review closes only the **bounded donor path and selected-file evidence** recorded above. It does not complete semantic review of every one of PR #97's 159 changed files, the full cross-file dependency graph, complete duplicated-material analysis, or the historical branch census. DF-02 remains OPEN.
+
+
+## 10. Historical cognitive and learning lineage supplement
+
+A further bounded historical census was added at:
+
+`docs/architecture/reports/DF02_HISTORICAL_COGNITIVE_LEARNING_LINEAGE_SUPPLEMENT_2026-11-18.md`
+
+The supplement records exact live PR metadata (head SHA, base branch/base SHA, merge state, changed-file count) for the early cognitive/memory line (#1–#15), evolution/controlled experimentation (#16–#22 and #29), prediction correction (#38), and selected later learning/test/correction branches (#95, #97, #99, #101, #107, #109, #111, #118, #121, #137, #146, #149, #151, #156, #157 and #165).
+
+It identifies important authority distinctions that the earlier bounded report did not make explicit:
+- PRs #1–#5 and #8–#15 are historical merges into `main`; #6 remains open, #7 is a closed unmerged duplicate sharing #6's head, and #8 is the distinct merged successor.
+- PR #16 and #29 remain open/unmerged; PR #20 is closed unmerged while #21 is its merged rebased successor.
+- Several later learning tests/corrections are branch-scoped or unmerged. In particular, #101 and #121 were merged into named feature/integration branches, not `main`; #107/#109/#111/#137/#146/#149/#151/#156/#157/#165 remain open; #118 is closed unmerged.
+- PR #97 remains an unmerged 159-path developmental candidate. PR #156 remains an unmerged integration candidate; neither is a selected baseline.
+
+This supplement is evidence of a bounded PR metadata census, not a semantic audit of all files or a complete dependency closure. DF-02 remains OPEN. The explicit remaining work and non-authorizations in §6–§7 remain in force.
