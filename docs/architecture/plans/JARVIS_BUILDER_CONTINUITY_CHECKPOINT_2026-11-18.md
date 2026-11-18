@@ -86,3 +86,62 @@ The earlier "80% MCU JARVIS" question cannot be answered credibly with a percent
 
 ## Required first message/action in the next chat
 Act as the continuing JARVIS Project Builder. Read this checkpoint and verify its exact current HEAD before making changes. Then continue PR #192 documentation-foundation closure in bulk, beginning with the DF-01–DF-12 evidence matrix and exact DF-02/DF-06/DF-09/DF-10 obligations. Do not ask the user to repeat project context. Do not give a generic project recap instead of doing the work.
+
+
+## Latest Builder continuation — 2026-11-18 (supersedes earlier active-state summaries)
+
+### Exact live state before this checkpoint update
+
+- Repository: `methaneex-oss/MethaneX`
+- PR #192: open, non-draft, unmerged.
+- Branch: `docs/whole-brain-planning-scope-correction-20261107`
+- Exact PR HEAD before this checkpoint update: `26983f0267795f73d7caf8971d138d791b370f3a`
+- Base: `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`
+- Changed paths: 46 (44 Markdown, 2 JSON).
+- Recursive tree: 279 entries, complete (`truncated=false`).
+
+The earlier checkpoint SHA `bc4dbde5b25a96546b7b90273d06a7d72f7962a0` is a historical checkpoint, not the current branch head. The PR description and older status snapshots also contain stale HEAD values. Always re-fetch live PR metadata.
+
+### Builder work advanced in this continuation
+
+1. Re-fetched PR #97's exact head `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`, all 159 changed paths, all 159 patches, and complete recursive tree. The DF-02 report now records all 159 paths by repository/function role and compares each against the PR #192 tree: 1 identical blob, 95 divergent same-path blobs, 63 absent same-path entries. Divergence and absence do not prove replacement, retirement, or capability loss; semantic successor mapping remains open.
+2. Fetched the full live branch collection in three pages: 251 branch refs, 210 distinct tips, eight duplicate-tip groups involving 49 branch names. The complete exact branch/tip manifest and duplicate-tip groups are preserved in the DF-02 historical lineage supplement. Branch enumeration does not complete all-branch consumer/reference analysis.
+3. DF-06's prior exact checkpoint scan covered 50/50 tracked Markdown files, 342 extracted navigation occurrences, and zero missing repository-relative destinations in a complete 279-entry tree. The current tree remains 279 entries / 50 Markdown files. The compare from the checkpoint to the later Builder source found no navigation-bearing additions in the four intervening documentation paths. The DF-06 report records this as a continuity check, not a fresh full parser rerun.
+4. DF-09's exact controlling runbook was read. The latest completed fresh-reader run #44192302873 returned PARTIALLY CLEAR (31/32) against historical SHA `beb4d5a174a1dd613878f89132e97b5e6052c7d3`. It does not assess current PR #192. A new blind assessment must target the final frozen HEAD and return CLEAR. The current GitHub connection has no workflow-dispatch operation; no new run is claimed.
+5. DF-10's historical §125 inventory-only parent/successor pair remains valid for that exact historical pair. Subsequent PR #192 file writes reopened the current inventory cycle. The final parent manifest and exact one-commit/one-file successor check remain pending.
+6. The controlling planning index and outstanding-work register were refreshed to distinguish Builder evidence, unclosed gates, waived DF-11, and Project Director-only DF-12 authority.
+
+### Current DF-01–DF-12 Builder matrix
+
+| Gate | Current status | Remaining action / authority |
+|---|---|---|
+| DF-01 | Builder evidence present; final sync pending | Final exact-head portal/index/inventory reconciliation — Builder |
+| DF-02 | **OPEN** | Semantic successor/retirement mapping for 95 divergent and 63 absent PR #97 paths; historical artifact discovery; all-branch consumers/dependencies/duplicates — Builder; independent challenge after freeze |
+| DF-03 | Partially evidenced | Preserve exact decision provenance and limited scopes; reserved decisions remain Project Director-owned |
+| DF-04 | Builder evidence present | Keep proposed governance distinct from accepted bounded amendments |
+| DF-05 | Partially evidenced | Branch metadata/ancestry recorded; semantic dependency closure remains open |
+| DF-06 | **NOT MET** | External status/redirect/semantic checks, parser-history reconciliation, authenticated rendered GitHub anchors |
+| DF-07 | Reconciliation in progress | Final synchronized status records |
+| DF-08 | Resolved within bounded criterion | Preserve historical evidence and disclosed limits |
+| DF-09 | **NOT MET** | Exact-final-HEAD blind fresh-reader assessment returning CLEAR; authorized operator must dispatch |
+| DF-10 | **REOPENED** | Final complete parent manifest; terminal inventory write; exact one-commit/one-file verification |
+| DF-11 | **WAIVED** as a mandatory gate | Waiver preserved. A separate Independent Reviewer challenge will be requested under the current Project Director instruction |
+| DF-12 | **PENDING — PROJECT DIRECTOR ONLY** | Exact-final-revision acceptance/rejection/conditional acceptance |
+
+### Remaining execution order
+
+1. Complete all Builder-owned semantic and status reconciliation that can be evidenced without adopting donors or altering branch history.
+2. Publish a full Independent Reviewer request under the repository's established review-request directory. The exact target SHA will be pinned in the PR conversation after the terminal inventory commit; the reviewer must independently re-fetch the live HEAD and verify it matches.
+3. Re-fetch all PR #192 changed paths and exact parent recursive tree; write the final inventory manifest as the final branch file write.
+4. Verify the inventory successor is exactly one commit ahead, zero behind, and changes only the inventory file; verify all changed paths/blobs against the complete parent/successor trees.
+5. Post the full review-request link and exact final SHA on PR #192. Do not invent a verdict.
+6. DF-09 still requires a separate exact-head workflow dispatch and CLEAR result. The Builder connection cannot dispatch; the runbook specifies the authorized manual launch from `main`.
+7. DF-12 remains the Project Director's exact-revision decision.
+
+### Non-negotiable boundaries
+
+- Stage A remains NOT STARTED / HELD.
+- Existing PR #171 SYS-01–SYS-11 architecture remains the whole-system foundation. Stage A must reconcile with it, not duplicate it.
+- No runtime implementation, source-baseline selection, donor adoption, runtime tests/training, merge, rebase, retarget, cherry-pick, branch rewrite, or deployment is authorized.
+- The Independent Reviewer is a role label. Do not place a personal or vendor/model name in project documentation.
+- Builder implementation, test evidence, independent review, acceptance, and blocked work must remain distinct.
