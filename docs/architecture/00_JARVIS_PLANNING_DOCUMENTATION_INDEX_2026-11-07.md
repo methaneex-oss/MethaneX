@@ -9,7 +9,7 @@
 | Repository | `methaneex-oss/MethaneX` |
 | PR | #192 — Documentation Foundation |
 | Branch | `docs/whole-brain-planning-scope-correction-20261107` |
-| Exact source HEAD before this index update | `8e64c257223ffee928c8110706b3c04af2611984` |
+| Exact source HEAD before this index update | `5856366a8fe0ded0ab3d092d4dd77344ac816df4` |
 | Base | `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` |
 | State | Open, non-draft, unmerged |
 | Changed paths | 46 total: 44 Markdown and 2 JSON |
@@ -24,10 +24,10 @@ The initial completion-gate report §6 defines DF-01–DF-12. This matrix record
 | Gate | Builder disposition | Evidence / remaining obligation | Owner |
 |---|---|---|---|
 | DF-01 — canonical entry point | Builder evidence present; final sync pending | README → docs portal → planning index path exists; reconcile the final changed-path set and exact revision | Builder |
-| DF-02 — synchronized detailed inventory | **OPEN** | 159 PR #97 changed paths enumerated, patch set retrieved, path-role classification recorded, current PR #192 tree comparison: 1 identical blob, 95 divergent same-path blobs, 63 absent paths. Map divergences/absences to semantic successors, retirement or non-adoption; complete historical artifact and cross-branch consumer/dependency/duplication closure | Builder; Independent Reviewer verifies |
-| DF-03 — authority traceability | Partially evidenced | Exact approval claims and scopes are registered; preserve unresolved/proposed classifications and recoverable-decision provenance; no authority inferred from headers or merges | Builder; Project Director for reserved decisions |
+| DF-02 — synchronized detailed inventory | **OPEN** | 159 PR #97 changed paths enumerated and role-classified; current PR #192 tree comparison: 1 identical blob, 95 divergent same-path blobs, 63 absent paths. Live branch census: 251 refs / 210 distinct tips / 8 duplicate-tip groups. Map divergent/absent paths to semantic successors, retirement or non-adoption; complete cross-branch consumer/dependency/duplication closure and historical artifact discovery | Builder; Independent Reviewer verifies |
+| DF-03 — authority traceability | Partially evidenced | Exact approval claims and scopes are registered; preserve unresolved/proposed classifications and recovered-decision provenance; no authority inferred from headers or merges | Builder; Project Director for reserved decisions |
 | DF-04 — governance honesty | Builder evidence present | Proposed governance and accepted bounded governance amendments remain distinct; no broader governance acceptance inferred | Builder |
-| DF-05 — branch dependencies | Partially evidenced | PR bases, heads and selected ancestry recorded; refresh exact current refs and keep branch-scoped merges distinct | Builder |
+| DF-05 — branch dependencies | Partially evidenced | PR bases, heads and selected ancestry plus all live branch refs are recorded as time-bounded snapshots; semantic consumer and dependency relationships remain open | Builder |
 | DF-06 — durable cross-document links | **NOT MET** | Checkpoint scan: 50/50 tracked Markdown files, 342 extracted occurrences, zero missing local destinations at `bc4dbde...`; current tree remains 279 entries/50 Markdown and intervening compare added no navigation destinations. This is continuity evidence, not a full rerun. External status/redirect/semantic checks, parser-history reconciliation and authenticated rendered GitHub heading/line/comment-anchor verification remain open | Builder; authenticated browser evidence needed |
 | DF-07 — status consistency | Reconciliation in progress | Synchronize controlling index, inventory, register, checkpoint and PR conversation against the frozen final SHA | Builder |
 | DF-08 — historical preservation | Resolved within bounded criterion | Preserve historical evidence and disclosed limits; no deletion, relocation or silent supersession | Builder; Project Director for destructive/canonical decisions |
@@ -46,7 +46,7 @@ The initial completion-gate report §6 defines DF-01–DF-12. This matrix record
 | #175 — Brain Implementation Planning | `48a7103f87c00992e4e19d84c768d1e72682a1b0` | Open/draft/unmerged; non-operative planning only; Gate A not cleared, Gate B not passed, no source baseline selected |
 | #179 — Phase 2 capability-to-source map | `ea64607ef94f142a6142a013e119a7225bc95c1c` | Open/draft/unmerged; planning input, not implementation acceptance |
 | #191 — Human/MCU comparison | `609d38ede50bbdd98a93dfed112781eacabee9fd` | Open/draft/unmerged; Director's bounded retain-separately disposition; no history operation |
-| #192 — Documentation Foundation | `8e64c257223ffee928c8110706b3c04af2611984` | Open/non-draft/unmerged; live metadata is authoritative |
+| #192 — Documentation Foundation | `5856366a8fe0ded0ab3d092d4dd77344ac816df4` | Open/non-draft/unmerged; live metadata is authoritative |
 | #195 — reader workflow / role terminology | merged to `main` at `4f07d772beae03c99a8dd58b174201a3aa3074b2` | Reviewed workflow blob is integrated; F-195-07 remains a separately disclosed residual |
 | #196 — Builder operating controls | `0ebc4e978fa38011b2f6bb5d97a03c267c1c12c9` | Merged into its declared Phase 2 base branch, not `main` |
 | #197 — reader-visible exact target revision | `2b2bfd9afe6e1325119f7ccee507bb04e71aa343` | Open/non-draft/unmerged; no new fresh-reader run or CLEAR result |
