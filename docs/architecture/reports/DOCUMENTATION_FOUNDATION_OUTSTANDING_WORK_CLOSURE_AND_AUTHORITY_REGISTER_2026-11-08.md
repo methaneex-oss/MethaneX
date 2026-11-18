@@ -1657,3 +1657,16 @@ Stage A remains NOT STARTED / HELD. PR #171's approved SYS-01–SYS-11 whole-sys
 - The main-branch blind reader workflow was re-fetched and its blob verified as `585c9399318b0af17514a95a5c435d497a76234a`. It exposes `workflow_dispatch` with required `target_revision` (full 40-character SHA) and optional `assessment_label`. The Builder connection has no dispatch operation. After the terminal inventory successor is created, the authorized operator must launch the workflow from `main` against that exact final SHA. No run or CLEAR verdict is claimed.
 
 The gate dispositions remain unchanged: DF-02 OPEN; DF-06 NOT MET; DF-09 NOT MET pending a new exact-target CLEAR result; DF-10 reopened pending the terminal inventory proof; DF-11 waived as a mandatory gate while the separate review request is issued under current direction; DF-12 reserved to the Project Director. Stage A remains HELD.
+
+
+## 14. Terminal pre-inventory synchronization — 2026-11-18
+
+**Exact PR #192 HEAD before this register update:** `1d5e65ce7a4f58f6b8235615955bdc47631992a3`. PR #192 remains open/non-draft/unmerged; 47 changed paths (45 Markdown, 2 JSON); recursive tree 280 entries, complete.
+
+The full Independent Reviewer request and Builder self-review are present and linked from the controlling index. The DF-06 audit records the current 51-Markdown/280-entry tree, verifies the two new index links, and confirms no additional navigation destinations in the intervening pre-inventory compare. DF-06 remains NOT MET for external and rendered-anchor residuals.
+
+The main-branch fresh-reader workflow blob `585c9399318b0af17514a95a5c435d497a76234a` is verified. The runbook's manual workflow_dispatch requires the final full SHA in `target_revision`; the Builder connection cannot dispatch. DF-09 remains NOT MET pending a new exact-target CLEAR result.
+
+The next branch file write is reserved for the final inventory manifest. It must include all 47 changed paths and parent blob SHAs, with a complete parent tree. The successor comparison must prove exactly one commit ahead, zero behind, one changed path (the inventory), and complete successor tree. No branch file write may follow. The review-request target SHA is to be pinned in the PR conversation after that verification.
+
+DF-02 remains OPEN; DF-06 and DF-09 remain NOT MET; DF-10 is pending the terminal comparison; DF-11 remains waived as a mandatory gate while the separately requested review is published; DF-12 remains Project Director-only. Stage A remains HELD.
