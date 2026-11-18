@@ -132,7 +132,7 @@ If an optional challenge is commissioned, publish the complete report in the est
 **Repository tree:** 274 entries, `truncated=false`.  
 **Fetched Markdown coverage:** 41/41 changed Markdown files fetched directly at the exact source revision; the two JSON artifacts remain part of the 43-path inventory but were not included in Markdown link parsing.
 
-A bounded repeat parser scanned Markdown inline link/image destinations using the pattern `!?[[^]]*](([^)]+))`, stripped optional titles, classified HTTP(S)/protocol-relative destinations as external, and resolved relative local destinations against the complete repository tree after normalizing `.` and `..` path segments.
+A bounded repeat parser scanned Markdown inline link/image destinations using the pattern `!?\[[^\]]*\]\(([^)]+)\)`, stripped optional titles, classified HTTP(S)/protocol-relative destinations as external, and resolved relative local destinations against the complete repository tree after normalizing `.` and `..` path segments.
 
 | Measure | Result |
 |---|---:|
