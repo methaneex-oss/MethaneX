@@ -1,3 +1,38 @@
+# CURRENT EXACT STATE — 2026-11-18 (Builder documentation continuation)
+
+> **Controlling Builder snapshot.** This block records the live PR #192 revision fetched at the start of the current documentation closeout. It supersedes older active-status snapshots below for the status observed here. Subsequent documentation commits advance the branch; the final head and exact parent inventory are recorded by the final inventory section and live PR metadata, not guessed from this starting SHA.
+
+## PR #192 source snapshot at closeout start
+
+| Field | Verified value |
+|---|---|
+| Repository | `methaneex-oss/MethaneX` |
+| PR | #192 — Documentation Foundation |
+| Branch | `docs/whole-brain-planning-scope-correction-20261107` |
+| Exact source HEAD | `5bc0cfa4266ee387bccf26f6b0e6f95c6a1a6509` |
+| Base | `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` |
+| State | Open, non-draft, unmerged |
+| Changed paths | 45 total: 43 Markdown and 2 JSON |
+| Repository tree | 277 entries, complete (`truncated=false`) |
+
+## Documentation Foundation gate disposition
+
+| Gate | Current Builder disposition at this source snapshot |
+|---|---|
+| DF-02 | **OPEN.** Principal authority/dependency reconciliation, the 188-PR metadata census, exact ancestry checks, and bounded PR #97/#156/#176 learning-lineage audit are recorded. Full per-file semantic closure of all 159 PR #97 paths, wider historical artifact census, cross-branch consumer/dependency closure and Independent Reviewer verification remain outstanding. |
+| DF-06 | **NOT MET.** Exact-current link scan found one broken local index link, corrected in this continuation. The strict scan covered 43/43 Markdown files: 341 occurrences (128 local, 213 HTTP(S) external); local path validation found 1 failure before correction. External reachability/semantic validation and authenticated rendered heading/line/comment-anchor checks remain incomplete. Raw regex count, historical parser differences and exact methods are recorded in the DF-06 report. |
+| DF-09 | **NOT MET.** The approved AI fresh-reader substitution is the governing method. Latest completed run #44192302873 returned PARTIALLY CLEAR (31/32) against historical SHA `beb4d5a174a1dd613878f89132e97b5e6052c7d3`. It does not assess this or any later SHA. The current tool connection provides no workflow-dispatch operation; no new run or CLEAR result is claimed. |
+| DF-10 | **REOPENED BY DOCUMENTATION WRITES.** The former §121 exact-parent snapshot is historical. A new complete parent-tree manifest must be the final repository file write, followed by exact one-commit/one-path post-write verification. |
+| DF-11 | **WAIVED** by the Project Director. It is not a current blocking gate. |
+| DF-12 | **PENDING — PROJECT DIRECTOR ONLY.** No Builder action can substitute for the exact-revision Project Director disposition. |
+| DF-13 | **STAGE A NOT STARTED / HELD.** Runtime implementation and starter-training execution remain NOT AUTHORIZED. |
+
+## Execution boundary
+
+This continuation is documentation-only. It does not claim DF-02/DF-06/DF-09 acceptance, DF-12 disposition, Stage A activation, Gate A/B clearance, implementation authorization, source-baseline selection, donor adoption, PR integration, merge, branch-history operations or deployment. All older dated status sections below remain historical evidence and must be interpreted under this controlling snapshot and later exact-revision updates.
+
+---
+
 # CURRENT EXACT STATE — 2026-11-18 (post historical PR census; supersedes earlier live-status snapshots)
 
 > This is the latest controlling snapshot for this Builder continuation. Earlier dated status blocks remain historical evidence. This snapshot records Builder-verified repository metadata only; it is not independent review, Project Director acceptance, gate clearance, or implementation authorization.
@@ -23,7 +58,7 @@ The historical lineage supplement now records a complete GitHub PR metadata cens
 
 - [DF-02 authority/dependency reconciliation](reports/DF02_FOUNDATIONAL_ARTIFACT_AUTHORITY_AND_DEPENDENCY_RECONCILIATION_2026-11-18.md) — updated with the full census boundary and remaining semantic/dependency work.
 - [DF-02 historical cognitive/learning lineage supplement](reports/DF02_HISTORICAL_COGNITIVE_LEARNING_LINEAGE_SUPPLEMENT_2026-11-18.md) — selected mechanism lineage analysis plus the complete PR metadata table.
-- [DF-02 Independent Reviewer assignment](reviews/DF02_HISTORICAL_COGNITIVE_LEARNING_LINEAGE_INDEPENDENT_REVIEW_REQUEST_2026-11-18.md) — exact target to be pinned in the PR conversation after the final inventory snapshot.
+- [DF-02 Independent Reviewer assignment](reports/reviews/DF02_HISTORICAL_COGNITIVE_LEARNING_LINEAGE_INDEPENDENT_REVIEW_REQUEST_2026-11-18.md) — exact target to be pinned in the PR conversation after the final inventory snapshot.
 
 ## Authorization boundary
 
