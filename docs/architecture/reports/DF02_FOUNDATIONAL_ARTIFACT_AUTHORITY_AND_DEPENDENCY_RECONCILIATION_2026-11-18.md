@@ -200,7 +200,7 @@ The graph represents content dependencies and planning relationships, not a Git 
 This reconciliation now covers the complete PR #192 documentation tree, the PR #166–#170 Brain-planning proposal chain, the principal PR #171–#196 foundation/architecture/Phase 2/documentation lineages, and the identified parallel Phase 2 review/closeout branches #181–#190. It still does not satisfy DF-02. The remaining work is:
 
 - Complete the historical branch/artifact census beyond the explicitly enumerated PR #156 and PR #166–#196 lineages, including earlier donor/implementation branches and standalone artifacts retained in the preservation register.
-- Reconcile the complete file sets of donor PRs #156/#176 and PR #97 at their exact revisions, including cross-file dependencies and duplicated/overlapping material; the current register records their principal status and selected donor evidence, not every file-level disposition.
+- A bounded exact-revision donor review is now recorded in §6.1: all 159 PR #97 changed paths are classified by subsystem, the critical learning loop and selected tests are inspected at exact blobs, and PR #156/#176 file overlap, ancestry and CI evidence are reconciled. Full per-file semantic disposition across all 159 PR #97 paths and a complete cross-file dependency/duplication graph remain outstanding.
 - Resolve status/header/README claims across the relevant repository trees against exact authority records. This pass records the complete PR #192 documentation tree but is not a repository-wide semantic scan of every historical branch.
 - Verify complete dependency/reference closure for every retained, superseded, or historical artifact, including all consumers on separate branches and exact current base/head relationships.
 - Record explicit disposition for any remaining unresolved provenance claim rather than converting a transcribed/handoff claim into verified acceptance.
@@ -223,3 +223,59 @@ This report does not authorize PR merge, rebase, retarget, cherry-pick, branch r
 - PR #191 Director disposition: https://github.com/methaneex-oss/MethaneX/pull/191#issuecomment-6836333027
 - PR #192 exact-HEAD xAI review: https://github.com/methaneex-oss/MethaneX/pull/192#issuecomment-6963581974
 - PR #196 governance acceptance: https://github.com/methaneex-oss/MethaneX/pull/196#issuecomment-6833435191
+
+
+## 6.1 Donor lineage and learning-mechanism audit — exact revisions, 2026-11-18
+
+This section narrows the donor-lineage gap using live PR metadata, complete changed-path listings, commit comparisons, exact-revision source reads, and exact-head CI evidence. It is a bounded audit, not donor adoption or acceptance.
+
+### PR #97 — broad cognitive/affective learning baseline
+
+- **Exact HEAD:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`; **base:** `4ba84b8b5ccf0e41530c46fdb8101551254ba864`; open, draft, unmerged; 159 changed paths.
+- Changed-path classification: 8 workflow files; 35 core headers; 37 core source files; 56 core tests; 9 documentation files; 10 engineering files; 2 build-configuration files; 2 other files. The full exact path list remains available through PR #97's changed-files endpoint.
+- Exact-head GitHub checks: `cpp-core`, `sanitizer`, and `native-brain` all completed successfully on 2026-10-28. This does not establish broad held-out learning quality or resolve the semantic defects below.
+- The PR #97 learning-machinery audit comment is [issue comment #6521585791](https://github.com/methaneex-oss/MethaneX/pull/97#issuecomment-6521585791). It records the baseline as a learning-development stack, not a completed learning brain.
+
+**Direct source inspection at PR #97 HEAD** confirms a real connected mechanism path rather than a disconnected set of modules:
+
+| Mechanism | Exact source evidence |
+|---|---|
+| Pre-observation memory retrieval | `core/cpp/src/cognitive_cycle.cpp`, blob `f191dd610d6cbe1621756c35e7c13af2054a7266`: recalls prior observation memories and action-outcome memories before committing the current observation; uses salient episodic fallback when neither retrieval channel returns a match. |
+| Prediction resolution from new experience | Same `cognitive_cycle.cpp` blob: captures unresolved forecasts made after the prior observation and resolves only against a matching belief updated by the newly committed observation. Action-consequence forecasts use a separate execution-feedback path. |
+| Durable memory | `core/cpp/src/memory.cpp`, blob `ab42bba1d32d6f48d091787491c72294a4a55bb5`: append persists the event before updating in-memory metadata/continuity; ranked recall is implemented. |
+| Runtime feedback | `core/cpp/src/cognitive_runtime.cpp`, blob `cf00acb6abd52308343f3a0e7016e6173b945603`: validates prediction/evidence/goal feedback, queues it, and routes it through `cycle_.process_outcome`; failed/stale updates are counted as failures, not successful processing. |
+| Brain replay | `core/cpp/src/brain.cpp`, blob `dec9e5442b3ca4b81a7879855c6146b2619934cc`: constructor reloads journal history and replays events to reconstruct Brain state. |
+| Experience-dependent learning | `core/cpp/src/developmental_learning.cpp`, blob `dbf5f43271dfa0a3c57236e2faa82eb88d15490d`: learning rate depends on prediction error, reward, salience, novelty, affective significance and reliability; association/strategy estimates update from observed reward and confidence. |
+| Action-consequence integration | `core/cpp/tests/cognitive_runtime_learning_integration_suite.cpp`, blob `656de56b1368e40afb090778a7a5504ab4208056`, and `core/cpp/tests/brain_action_consequence_integration_suite.cpp`, blob `7616082579d53e3579cae8e87895bdb3dadba66f`: test resolved consequence predictions and resulting learning metrics. |
+| Restart persistence | `core/cpp/tests/memory_learning_evolution_persistence_suite.cpp`, blob `98e6598f60912714234f2dfabfbe52fa5eb77044`: checks prediction resolution, learning observations, strategy evidence and evolution history after journal replay. |
+
+**Confirmed limitations at this exact baseline:**
+
+1. `CausalModel::observe_transition` in `core/cpp/src/causal_model.cpp`, blob `b7e1e6e6aeb929f09af33b9d17c80a6eed34948c`, uses the post-transition `current.value` as the cause rather than the pre-transition `prior->value`; it also iterates all post-state facts as effects, including unchanged facts. This creates invalid causal associations. The previously recorded PR #135 correction addresses pre-state cause semantics and excludes unchanged effects; do not attribute that fix to PR #97.
+2. DLT-003 tests changing context/action mappings, reversal and restart, but all tested contexts are trained before evaluation. Held-out transfer to an unseen combination is not established.
+3. DLT-002 prediction feedback plumbing does not establish improving prediction quality; the earlier long-run report recorded final MAE worse than early MAE. Require held-out error curves and regime-change evaluation before claiming predictive competence.
+4. The PR #97 world model does not accumulate and compare support for competing fact/relation alternatives sufficiently to resolve contradictions; PR #148 supplies a later correction, not a capability already proven by PR #97.
+5. Evolution replay is a supporting trust mechanism, not the learning objective. Production cryptographic trust configuration, key lifecycle, authenticated journal integrity and complete paired-trial evidence remain separate concerns.
+
+### PR #156 — integrated knowledge/action/evolution replay candidate
+
+- **Exact current HEAD:** `7fe212bbb0bd61116ea56581435e03b06c69b673`; **base:** `52c367a4b53fdfe9b29776795200555076e8cb49`; open, draft, unmerged; 8 changed paths.
+- The PR #97 HEAD is an ancestor of PR #156's base: comparing `52c367a...` against `c1da222...` shows PR #97 is 172 commits behind that base. PR #156 HEAD is 185 commits ahead of PR #97 HEAD, with 22 net changed paths in that broader comparison. PR #156 is therefore a later descendant of the PR #97 development line, not an independent competing donor.
+- PR #156's eight changed paths are: `core/cpp/include/jarvis/core/brain.hpp`; `core/cpp/src/brain.cpp`; `core/cpp/src/brain_restored_api.cpp`; `core/cpp/src/evolution_controller.cpp`; `core/cpp/tests/evolution_brain_integration_suite.cpp`; `core/cpp/tests/evolution_canary_controller_suite.cpp`; `core/cpp/tests/knowledge_source_feedback_suite.cpp`; and `docs/DEVELOPMENTAL_BRAIN_PLAN.md`. Six overlap PR #97's changed-path set; the knowledge-source feedback suite and plan are additional paths relative to PR #97.
+- The PR description still cites older combined HEAD `da9d77361ae6f1e12fe47168d843b8bedfec6301`; live HEAD `7fe212b...` is 9 commits later, with a six-file delta from that cited snapshot. Do not use the stale body SHA as current.
+- Four exact-head workflows completed successfully on `7fe212b...`: Native Brain Build [#41174439433](https://github.com/methaneex-oss/MethaneX/actions/runs/41174439433), Brain ThreadSanitizer [#41174439446](https://github.com/methaneex-oss/MethaneX/actions/runs/41174439446), Brain CI [#41174439557](https://github.com/methaneex-oss/MethaneX/actions/runs/41174439557), and JARVIS Brain Tests [#41174439423](https://github.com/methaneex-oss/MethaneX/actions/runs/41174439423). The JARVIS Brain Tests log records **73/73 CTest tests passed** on this exact HEAD.
+- Its scope combines knowledge contradiction/evidence handling, compositional action-feature learning and evolution replay-evidence safeguards. Its own PR description preserves important non-claims: production cryptographic signature verification, protected evaluator trust configuration/key rotation/revocation, deterministic historical verification, cryptographic journal integrity, and end-to-end calibration of ordinary factual-source feedback into belief/world-model weighting remain unproven. The compositional action learner is not evidence that ordinary factual feedback changes the world model.
+
+### PR #176 — D1/D2 and journal-failure correction candidate
+
+- **Exact HEAD:** `4cf017e073da980c9f77d739fde6f92ef1a2fbc1`; declared **base branch:** PR #156, whose live HEAD is `7fe212bbb0bd61116ea56581435e03b06c69b673`; open, draft, unmerged; 4 changed paths.
+- Changed paths: `core/cpp/src/brain_restored_api.cpp`; `core/cpp/tests/developmental_brain_integration_suite.cpp`; `core/cpp/tests/evolution_brain_integration_suite.cpp`; `core/cpp/tests/goals_architecture_suite.cpp`. Two overlap PR #156's changed paths; all four overlap PR #97's broader changed-path set.
+- The Git graph is not a clean descendant relationship against the live PR #156 HEAD: comparing PR #156 HEAD to PR #176 HEAD reports divergence (PR #176 is 15 commits ahead and 1 behind; merge base `15d49e5fdeb5723c475922ab78fb92f97c4b3b84`). PR #156 itself is one commit ahead of that merge base, a documentation-plan update. The PR #176 branch must not be assumed to contain the live PR #156 tip simply because its declared base branch is PR #156.
+- Four exact-head workflows passed: Native Brain Build [#41808525486](https://github.com/methaneex-oss/MethaneX/actions/runs/41808525486), Brain ThreadSanitizer [#41808525492](https://github.com/methaneex-oss/MethaneX/actions/runs/41808525492), Brain CI [#41808525499](https://github.com/methaneex-oss/MethaneX/actions/runs/41808525499), and JARVIS Brain Tests [#41808525557](https://github.com/methaneex-oss/MethaneX/actions/runs/41808525557). The JARVIS Brain Tests log records **73/73 CTest tests passed** on this exact HEAD.
+- PR #176 corrects learned-strategy context selection (D1), rejects non-finite goal priority/progress before mutation (D2), and tests goal-completion/evolution-rollback journal-append failure plus restart after a durable rollback event. It explicitly does not inject failures inside every compensating operation of EvolutionController rollback, and it does not establish external ABI compatibility or accepted-baseline integration. Its own body says PR #156 remains unchanged until the correction is independently reviewed and merged or its fixes are selectively ported.
+
+### Donor disposition
+
+The evidence confirms that PR #97 contains real connected learning machinery and durable experience-dependent behavior, but also confirms material limitations; it is not a completed learning brain. PR #156 is a later integrated candidate with exact-head CI and 73/73 CTest, but retains explicit trust, journal-integrity and ordinary-factual-feedback gaps. PR #176 supplies additional correctness/failure-boundary corrections, but its branch ancestry diverges from the live PR #156 tip and its own rollback-compensation limitation remains. All three PRs remain open/draft/unmerged; none is accepted or authorized for selective porting by this report.
+
+This review closes only the **bounded donor path and selected-file evidence** recorded above. It does not complete semantic review of every one of PR #97's 159 changed files, the full cross-file dependency graph, complete duplicated-material analysis, or the historical branch census. DF-02 remains OPEN.
