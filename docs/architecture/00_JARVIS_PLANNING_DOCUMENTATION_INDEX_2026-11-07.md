@@ -1,3 +1,36 @@
+# CURRENT EXACT STATE — 2026-11-18 (post historical PR census; supersedes earlier live-status snapshots)
+
+> This is the latest controlling snapshot for this Builder continuation. Earlier dated status blocks remain historical evidence. This snapshot records Builder-verified repository metadata only; it is not independent review, Project Director acceptance, gate clearance, or implementation authorization.
+
+## Live PR state
+
+| PR | Exact live HEAD | Declared base @ base SHA | Live state | Current boundary |
+|---|---|---|---|---|
+| #173 — Brain Foundation Architecture | `a96af5b18d3a1d580ff56cff6191240893bceeb5` | `main` @ `1273ddbcd0087d189e01388ded2d362fb1e058d2` | Open / draft / unmerged | Prior exact-head review was PARTIALLY CLEAR on an earlier SHA; no verdict transfers to this head. Whole-architecture acceptance and CF-26/CF-27 remain open. |
+| #174 — Brain Mechanism Specification | `c34472354e4122fc1d78dc25bf45d81f1eb4dc69` | `architecture/brain-foundation-planning-20261103` @ `97191111bc2573c14d391c0af9628db7b11f194b` | Open / draft / unmerged | Historical 34-scenario baseline accepted for its stated scope; current 54-scenario proposal is not separately accepted. Prior PARTIALLY CLEAR review applies only to an earlier SHA. |
+| #175 — Brain Implementation Planning | `48a7103f87c00992e4e19d84c768d1e72682a1b0` | `spec/brain-mechanism-specification-20261103` @ `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` | Open / draft / unmerged | Run 02 readiness/activation map, WP-00–WP-08 and R0–R6 planning are present. Independent Reviewer assignment is posted; no verdict recorded. Non-operative planning only. Gate A NOT CLEARED; Gate B NOT PASSED; no source baseline selected. |
+| #179 — Phase 2 capability-to-source map | `ea64607ef94f142a6142a013e119a7225bc95c1c` | `docs/jarvis-project-governance-rules-20261105` @ `39fe09dcf13496f5f0005ccf3f00739303e29f88` | Open / draft / unmerged | Phase 2 mapping input; not a selected source baseline or capability acceptance. |
+| #191 — Human/MCU reference comparison | `609d38ede50bbdd98a93dfed112781eacabee9fd` | `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `f6267456560a08054d69f7960d2951452b14017c` | Open / draft / unmerged | Project Director's bounded retain-separately disposition remains; no branch-history operation authorized. |
+| #192 — Documentation Foundation | Pre-index parent snapshot: `5259a883a1f2a8eb88d463a0628931fb2d20514e`; 45 changed paths. | `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | Open / non-draft / unmerged | DF-02 OPEN: complete PR metadata census through #197 added; path-level semantic audit, current source presence, cross-branch consumer/dependency closure and independent verification remain. DF-06 NOT MET; DF-09 NOT MET; DF-10 to be re-verified for the final exact inventory parent/successor; DF-11 WAIVED; DF-12 pending Project Director; Stage A HELD. Earlier PARTIALLY CLEAR verdict applies only to its exact historical SHA. |
+| #193 — Deferred implementation-plan hold | `fa2bd50d6fb0bb77dc3cbaab684f51d606e94bb5` | `plan/brain-implementation-roadmap-20261103` @ `874c732973b6ab303d65a503f5a215b0af8e1153` | Open / draft / unmerged | Separate deferred lineage; no integration order inferred. |
+| #195 — Role terminology / reader workflow | `fe8a3b6216f874c7ab35e3c8d9489b5caf8ffd37` | `main` @ `8edc7cdfc886537d319d81cea04cdc9f3476044e` | Closed / merged to main, 2026-11-17 | Reviewed workflow verdict applies only to the exact reviewed workflow SHA; F-195-07 remains a disclosed residual. |
+| #196 — Builder operating controls | `0ebc4e978fa38011b2f6bb5d97a03c267c1c12c9` | `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `d30237b81c3695f2a7cb980144b221bbd42ce548` | Closed / merged to declared Phase 2 base, not main | Governance integration remains branch-scoped. |
+| #197 — Reader-visible exact target revision | `2b2bfd9afe6e1325119f7ccee507bb04e71aa343` | `main` @ `4f07d772beae03c99a8dd58b174201a3aa3074b2` | Open / non-draft / unmerged | Independent Reviewer exact-head review remains pending; no new fresh-reader dispatch or CLEAR result is claimed. |
+
+## DF-02 historical census update
+
+The historical lineage supplement now records a complete GitHub PR metadata census for the 188 existing PRs numbered #1–#197 as of 2026-11-18 (missing numbers: #24–#28, #74, #82, #85 and #177). The snapshot records exact head SHA, declared base branch/base SHA, state/merge date and changed-file count. Counts: 57 merged into declared bases (50 with `main` as base; 7 with non-main bases), 84 open (44 draft), and 47 closed without a merge date. This is metadata enumeration, not semantic review of all PR files or proof that every branch/commit/artifact has been inventoried.
+
+- [DF-02 authority/dependency reconciliation](reports/DF02_FOUNDATIONAL_ARTIFACT_AUTHORITY_AND_DEPENDENCY_RECONCILIATION_2026-11-18.md) — updated with the full census boundary and remaining semantic/dependency work.
+- [DF-02 historical cognitive/learning lineage supplement](reports/DF02_HISTORICAL_COGNITIVE_LEARNING_LINEAGE_SUPPLEMENT_2026-11-18.md) — selected mechanism lineage analysis plus the complete PR metadata table.
+- [DF-02 Independent Reviewer assignment](reviews/DF02_HISTORICAL_COGNITIVE_LEARNING_LINEAGE_INDEPENDENT_REVIEW_REQUEST_2026-11-18.md) — exact target to be pinned in the PR conversation after the final inventory snapshot.
+
+## Authorization boundary
+
+No donor adoption, source-baseline selection, Gate A/B clearance, Stage A, runtime implementation, runtime test/training execution, merge, rebase, retarget, cherry-pick, branch rewrite, or deployment is authorized by this update. The existing non-operative planning authority on PR #175 remains unchanged.
+
+---
+
 # CURRENT EXACT STATE — 2026-11-18 (DF-02 reconciliation continuation)
 
 > **Controlling live-status snapshot.** This block supersedes earlier active-status snapshots below for current PR heads, base relationships and gate state. Older dated sections remain historical evidence. This is Builder evidence only; not independent review, fresh-reader clearance, gate clearance or Project Director acceptance.
