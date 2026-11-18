@@ -9,10 +9,10 @@
 | Repository | `methaneex-oss/MethaneX` |
 | PR | #192 — Documentation Foundation |
 | Branch | `docs/whole-brain-planning-scope-correction-20261107` |
-| Exact source HEAD before this index update | `7af58141dbb5c84484d8a3cb4e65257349848cdd` |
+| Exact source HEAD before this index update | `eca79ffbb5536e0e2dadc503d62856ab1a820595` |
 | Base | `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` |
 | State | Open, non-draft, unmerged |
-| Changed paths | 47 total
+| Changed paths | 47 total: 45 Markdown and 2 JSON |
 | Recursive tree | 280 entries, complete (`truncated=false`)
 
 The exact source SHA above is the immutable parent for this index update, not the resulting commit SHA. Re-fetch live PR metadata after any subsequent write. The PR description and earlier index snapshots contain stale head values; do not use them instead of live metadata.
@@ -28,7 +28,7 @@ The initial completion-gate report §6 defines DF-01–DF-12. This matrix record
 | DF-03 — authority traceability | Partially evidenced | Exact approval claims and scopes are registered; preserve unresolved/proposed classifications and recovered-decision provenance; no authority inferred from headers or merges | Builder; Project Director for reserved decisions |
 | DF-04 — governance honesty | Builder evidence present | Proposed governance and accepted bounded governance amendments remain distinct; no broader governance acceptance inferred | Builder |
 | DF-05 — branch dependencies | Partially evidenced | PR bases, heads and selected ancestry plus all live branch refs are recorded as time-bounded snapshots; semantic consumer and dependency relationships remain open | Builder |
-| DF-06 — durable cross-document links | **NOT MET** | Checkpoint scan: 50/50 tracked Markdown files, 342 extracted occurrences, zero missing local destinations at `bc4dbde...`; current tree remains 279 entries/50 Markdown and intervening compare added no navigation destinations. This is continuity evidence, not a full rerun. External status/redirect/semantic checks, parser-history reconciliation and authenticated rendered GitHub heading/line/comment-anchor verification remain open | Builder; authenticated browser evidence needed |
+| DF-06 — durable cross-document links | **NOT MET** | Checkpoint scan: 50/50 Markdown, 342 occurrences, 129 local and 213 HTTP(S) destinations, zero missing local paths at `bc4dbde...`. Current tree: 280 entries / 51 Markdown. The current delta checks exactly two new index links and verifies both targets exist; the subsequent pre-inventory compare adds zero destinations. This is not a fresh 51-file parser run. External status/redirect/semantic checks, parser-history reconciliation and authenticated rendered GitHub heading/line/comment-anchor verification remain open | Builder; authenticated browser evidence needed |
 | DF-07 — status consistency | Reconciliation in progress | Synchronize controlling index, inventory, register, checkpoint and PR conversation against the frozen final SHA | Builder |
 | DF-08 — historical preservation | Resolved within bounded criterion | Preserve historical evidence and disclosed limits; no deletion, relocation or silent supersession | Builder; Project Director for destructive/canonical decisions |
 | DF-09 — reproducible continuity | **NOT MET** | Exact controlling runbook requires a blind fresh-reader assessment against final frozen PR #192 HEAD and a **CLEAR** comprehension verdict. Latest run #44192302873 was PARTIALLY CLEAR (31/32) against historical `beb4d5a...`; it cannot qualify for this successor. Current connection has no workflow-dispatch operation | Builder prepares; authorized operator dispatches; fresh reader assesses |
@@ -46,7 +46,7 @@ The initial completion-gate report §6 defines DF-01–DF-12. This matrix record
 | #175 — Brain Implementation Planning | `48a7103f87c00992e4e19d84c768d1e72682a1b0` | Open/draft/unmerged; non-operative planning only; Gate A not cleared, Gate B not passed, no source baseline selected |
 | #179 — Phase 2 capability-to-source map | `ea64607ef94f142a6142a013e119a7225bc95c1c` | Open/draft/unmerged; planning input, not implementation acceptance |
 | #191 — Human/MCU comparison | `609d38ede50bbdd98a93dfed112781eacabee9fd` | Open/draft/unmerged; Director's bounded retain-separately disposition; no history operation |
-| #192 — Documentation Foundation | `5856366a8fe0ded0ab3d092d4dd77344ac816df4` | Open/non-draft/unmerged; live metadata is authoritative |
+| #192 — Documentation Foundation | `eca79ffbb5536e0e2dadc503d62856ab1a820595` | Open/non-draft/unmerged; live metadata is authoritative |
 | #195 — reader workflow / role terminology | merged to `main` at `4f07d772beae03c99a8dd58b174201a3aa3074b2` | Reviewed workflow blob is integrated; F-195-07 remains a separately disclosed residual |
 | #196 — Builder operating controls | `0ebc4e978fa38011b2f6bb5d97a03c267c1c12c9` | Merged into its declared Phase 2 base branch, not `main` |
 | #197 — reader-visible exact target revision | `2b2bfd9afe6e1325119f7ccee507bb04e71aa343` | Open/non-draft/unmerged; no new fresh-reader run or CLEAR result |
