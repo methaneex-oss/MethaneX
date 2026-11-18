@@ -200,7 +200,7 @@ The graph represents content dependencies and planning relationships, not a Git 
 This reconciliation now covers the complete PR #192 documentation tree, the PR #166–#170 Brain-planning proposal chain, the principal PR #171–#196 foundation/architecture/Phase 2/documentation lineages, and the identified parallel Phase 2 review/closeout branches #181–#190. It still does not satisfy DF-02. The remaining work is:
 
 - Complete the historical branch/artifact census beyond the explicitly enumerated PR #156 and PR #166–#196 lineages, including earlier donor/implementation branches and standalone artifacts retained in the preservation register.
-- A bounded exact-revision donor review is now recorded in §6.1: all 159 PR #97 changed paths are classified by subsystem, the critical learning loop and selected tests are inspected at exact blobs, and PR #156/#176 file overlap, ancestry and CI evidence are reconciled. Full per-file semantic disposition across all 159 PR #97 paths and a complete cross-file dependency/duplication graph remain outstanding.
+- A bounded exact-revision donor review is now recorded in §9: all 159 PR #97 changed paths are classified by subsystem, the critical learning loop and selected tests are inspected at exact blobs, and PR #156/#176 file overlap, ancestry and CI evidence are reconciled. Full per-file semantic disposition across all 159 PR #97 paths and a complete cross-file dependency/duplication graph remain outstanding.
 - Resolve status/header/README claims across the relevant repository trees against exact authority records. This pass records the complete PR #192 documentation tree but is not a repository-wide semantic scan of every historical branch.
 - Verify complete dependency/reference closure for every retained, superseded, or historical artifact, including all consumers on separate branches and exact current base/head relationships.
 - Record explicit disposition for any remaining unresolved provenance claim rather than converting a transcribed/handoff claim into verified acceptance.
@@ -225,7 +225,7 @@ This report does not authorize PR merge, rebase, retarget, cherry-pick, branch r
 - PR #196 governance acceptance: https://github.com/methaneex-oss/MethaneX/pull/196#issuecomment-6833435191
 
 
-## 6.1 Donor lineage and learning-mechanism audit — exact revisions, 2026-11-18
+## 9. Donor lineage and learning-mechanism audit — exact revisions, 2026-11-18
 
 This section narrows the donor-lineage gap using live PR metadata, complete changed-path listings, commit comparisons, exact-revision source reads, and exact-head CI evidence. It is a bounded audit, not donor adoption or acceptance.
 
