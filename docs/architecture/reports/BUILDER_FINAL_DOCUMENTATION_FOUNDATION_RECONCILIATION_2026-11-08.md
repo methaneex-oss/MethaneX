@@ -343,3 +343,48 @@ The fourth blind fresh-reader run [#42970930733](https://github.com/methaneex-os
 The Project Director-approved AI fresh-reader substitution supersedes the old 17-question human-session criterion. DF-09 execution is complete; DF-09 acceptance is now reserved for the Project Director's decision on the 31/32 result and its provenance limitation. No identical repeat is recommended. The old human question list is not a current deliverable.
 
 **Remaining Builder/authority boundary:** DF-11 reviewer qualification and exact-current-HEAD review; DF-12 exact-revision Project Director decision; PR #191 disposition; and PR #192/#193 integration order remain outstanding/reserved. DF-06 and DF-08 remain bounded/partial as previously qualified. Stage A remains NOT STARTED / HELD. Runtime implementation, PR integration and gate clearance remain NOT AUTHORIZED. The Builder does not make the Project Director's acceptance decision.
+
+
+## 12. Exact-revision Builder self-review — 2026-11-18 continuation
+
+**Live PR #192 source before this self-review update:** `0b07089ab93e2b6fc144fa1c6fda71746d44c935`. PR #192 is open, non-draft, unmerged, on branch `docs/whole-brain-planning-scope-correction-20261107`, based on `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`. Re-fetch live metadata for the terminal inventory successor; this source SHA is not the final target.
+
+### 12.1 Work verified in this continuation
+
+- PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` was re-fetched. The PR changed-file endpoint returned 159 unique paths; the patch endpoint returned 159 patches. The DF-02 report now has a complete path-by-path role/presence/blob-relation table.
+- Current PR #192 tree comparison at its recorded source SHA: 1 donor path with identical blob, 95 same-path divergent blobs, 63 absent same-path entries. These comparisons do not establish semantic equivalence, successor identity or retirement.
+- Live GitHub branch refs were fetched across all three pages: 251 refs, 210 distinct tips, eight duplicate-tip groups involving 49 names. The exact branch/tip manifest is in the DF-02 historical lineage supplement.
+- PR #192's current tree was fetched with 279 entries and `truncated=false`. The tracked Markdown count is 50. The checkpoint-pinned DF-06 scan remains 50/50 files, 342 extracted occurrences, zero missing local destinations at `bc4dbde5b25a96546b7b90273d06a7d72f7962a0`. A compare from that checkpoint to the subsequent Builder source found no navigation-bearing additions in the four intervening documentation paths. This is a continuity check, not a fresh full parse at the final target.
+- The exact DF-09 runbook was inspected. The latest completed fresh-reader run #44192302873 returned PARTIALLY CLEAR (31/32) against historical `beb4d5a174a1dd613878f89132e97b5e6052c7d3`; no exact-terminal-HEAD CLEAR result exists. The current connection exposes no workflow-dispatch action.
+- DF-10 historical §125 is valid for its recorded parent/successor pair only. Subsequent PR #192 file writes reopened the current inventory cycle.
+
+### 12.2 Current gate dispositions
+
+| Gate | Builder self-review disposition |
+|---|---|
+| DF-01 | Builder evidence present; final exact-head index/portal/inventory synchronization remains |
+| DF-02 | **OPEN** — structural path and branch-ref inventories improved; semantic successor/retirement mapping and complete cross-branch consumer/dependency closure remain |
+| DF-03 | Partially evidenced; exact authority provenance and limited scopes remain explicitly qualified |
+| DF-04 | Builder evidence present; proposed governance is not presented as accepted |
+| DF-05 | Partially evidenced; exact PR bases/heads and selected ancestry recorded; semantic dependency closure remains |
+| DF-06 | **NOT MET** — local path continuity evidence exists; external live status/redirect/semantic checks and authenticated rendered anchors remain open |
+| DF-07 | Final controlling status synchronization remains |
+| DF-08 | Resolved within bounded criterion; no broader archive-completeness claim |
+| DF-09 | **NOT MET** — final exact-head blind assessment must return CLEAR |
+| DF-10 | **REOPENED** — final terminal inventory parent/successor proof remains |
+| DF-11 | Waived as mandatory gate by Project Director; separate review challenge requested under current Project Director instruction |
+| DF-12 | Pending exact-revision Project Director decision |
+
+### 12.3 Independent review request and remaining work
+
+The full Independent Reviewer request has now been published at:
+
+`docs/architecture/reports/reviews/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_REQUEST_PR192_2026-11-18.md`
+
+The exact target SHA will be pinned in the PR #192 conversation after the terminal inventory-only commit. The reviewer must independently re-fetch live PR metadata and verify that SHA before review. No reviewer verdict or acceptance is claimed.
+
+### 12.4 Final Builder disposition
+
+The Builder has completed the current evidence-backed structural additions and synchronized the major controlling reports, but DF-02, DF-06 and DF-09 remain open/not met for the specific reasons above. DF-10 remains open until the terminal inventory comparison passes. DF-12 remains Project Director-only. The independent request is a request, not a verdict.
+
+Stage A remains NOT STARTED / HELD. The existing PR #171 SYS-01–SYS-11 foundation must be reused as the governing whole-system architecture; no duplicate whole-system blueprint is created here. No implementation, source-baseline selection, donor adoption, training, merge, rebase, retarget, cherry-pick, branch rewrite or deployment is authorized.
