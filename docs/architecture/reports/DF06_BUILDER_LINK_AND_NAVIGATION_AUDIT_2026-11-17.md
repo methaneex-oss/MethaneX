@@ -205,3 +205,27 @@ The corrected DF-02 reviewer-request path is included in this final re-scan and 
 **Final disposition:** local Markdown navigation target resolution is **Builder-verified for exact HEAD `eacbe3417dfef36319a7b402e0ae60e09a3fa784`**. DF-06 as a whole remains **NOT MET** pending external destination reachability/redirect/semantic verification and authenticated rendered GitHub heading, line and comment-anchor checks. No claim is made that those residuals were tested.
 
 The subsequent inventory-only commit is expected to advance the PR head; it does not change Markdown link destinations. The final inventory parent/successor pair must be verified separately under DF-10.
+
+## 11. Repository-wide Markdown path recheck — checkpoint source tree, 2026-11-18
+
+A supplemental static navigation extraction was run against all 50 tracked Markdown files in the complete recursive tree at PR #192 checkpoint source `bc4dbde5b25a96546b7b90273d06a7d72f7962a0` (`truncated=false`, 279 entries). The set includes the 44 PR #192 changed Markdown files plus six other tracked Markdown files in the repository tree. Both changed JSON evidence files were outside this Markdown pass.
+
+| Measure | Result |
+|---|---:|
+| Tracked Markdown files fetched | 50 / 50 |
+| Extracted Markdown link/image, reference-definition, HTML href/src and autolink occurrences | 342 |
+| Repository-relative destination occurrences | 129 |
+| HTTP(S) destination occurrences | 213 |
+| Repository-relative destinations absent from the complete source tree | **0** |
+
+The extraction discarded HTML comments, fenced code blocks and inline-code spans before parsing. Relative destinations were resolved from the containing file path against the exact recursive Git tree. The pass was broad repository navigation coverage; it was not a browser-rendering test, nor an exhaustive check of all external destination responses.
+
+This 50-file supplemental extraction is deliberately **not** substituted for the prior strict 43-changed-Markdown report in §10 (341 candidates, 128 local, 213 external). The parser implementations and file scopes are not identical; the supplemental result is retained as an additional independently reproducible tree-path check, not as a silent correction to the earlier figures. The added checkpoint file contains no navigation destinations. The subsequent DF-02 report update added no link destinations.
+
+### 11.1 What this establishes and what it does not
+
+- **Builder-verified:** every repository-relative destination extracted by this supplemental pass resolves to an existing path in the exact complete tree used for the pass.
+- **Not verified:** local or GitHub-rendered heading fragments; line-range anchors; issue-comment anchors; external link response status, redirect destination or content identity; semantic relevance of each external destination to its link text; and access to the historical shared-conversation pointer.
+- **Not a formal independent finding:** this is Builder-produced static evidence. It does not close DF-06 by itself.
+
+**DF-06 remains NOT MET.** The remaining work is to reconcile the documented parser-count histories with preserved per-file outputs, check the applicable unique external destinations for availability/redirect/content relevance, verify applicable rendered GitHub heading/line/comment anchors in a normal authenticated browser, and record the access-limited historical pointer's disposition. A direct Builder claim that all 213 external occurrences or rendered anchors were verified would be unsupported.
