@@ -316,3 +316,287 @@ The following relationships were reconstructed from live PR metadata and exact c
 
 **Important correction:** the PR #6/#7/#8 table now labels #8 as a merged sibling/alternative, not a linear successor. The PR #16/#17 and #29/#87 comparisons likewise show that an open candidate is not necessarily included by a later merged or open PR in the same broad workstream.
 
+
+
+## 9. Complete live branch-reference census — 2026-11-18
+
+**Repository:** `methaneex-oss/MethaneX`  
+**Source:** GitHub repository branches collection, fetched with `per_page=100`, pages 1–3, after the PR #192 branch reached `283ebb880122c7755c8fe81a39943f6fdaf27052`.  
+**Returned refs:** 251; **distinct tip SHAs:** 210; **duplicate-tip groups:** 8, containing 49 branch names.
+
+This is a complete branch-reference enumeration for the returned GitHub branch collection at this snapshot. It is not an exhaustive inventory of deleted branches, tags, forks, unreachable commits, local working copies, or standalone artifacts. A shared tip means the named refs resolve to the same commit; it does not prove the branch names have identical governance or historical purpose. A distinct tip does not prove a distinct implementation or accepted authority.
+
+### 9.1 Duplicate-tip groups
+
+| Exact tip SHA | Branch names sharing this tip |
+|---|---|
+| `d179c5d7c73cd9f719d4a600ca0eabfabcf4681d` | `capability-decision-work`, `capability-decision-work-2`, `capability-decision-work-3`, `feat/capability-decision-path`, `feat/capability-decision-path-v2`, `feat/capability-decision-path-v3`, `feat/capability-decision-path-v4`, `feat/capability-decision-path-v5`, `feat/capability-decision-path-v6`, `feat/capability-decision-path-v7` |
+| `16abca97caf77ce65d5ac901513eb2790f04c68c` | `docs/jarvis-affective-plan`, `feat/jarvis-affective-impl`, `feat/jarvis-affective-plan`, `feat/jarvis-affective-state-impl`, `feat/jarvis-affective-state-plan`, `feat/jarvis-affective-state-plan2`, `feat/jarvis-affective-state-plan3`, `feat/jarvis-affective-state-plan4`, `feat/jarvis-affective-state-plan5`, `feat/jarvis-affective-state-plan6`, `feat/jarvis-affective-state-plan7`, `feat/jarvis-affective-state-plan8`, `feat/jarvis-affective-state-plan9`, `feat/jarvis-affective-state-plan10`, `feat/jarvis-affective-state-plan11`, `feat/jarvis-affective-state-plan12`, `feat/jarvis-affective-state-plan13`, `feat/jarvis-affective-state-plan14`, `feat/jarvis-affective-state-plan15`, `feat/jarvis-affective-state-plan16`, `feat/jarvis-affective-state-plan17`, `feat/jarvis-affective-state-plan18`, `feat/jarvis-affective-state-plan19`, `feat/jarvis-affective-state-plan20`, `feat/jarvis-affective-state-plan-final`, `feat/jarvis-affective-state-work`, `feat/jarvis-cognitive-action-loop` |
+| `142fa464cc34292879eadadd1ebcef8cbecb32d0` | `feat/agent-direct-console`, `feat/engineering-agent-human-channel` |
+| `af09cf28d35e4a7b75c3c019e9f97893d8e19364` | `feat/engineering-direct-agent-console`, `feat/engineering-human-agent-console-v2` |
+| `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` | `feat/jarvis-affective-state`, `fix/evolution-safety-provenance-20261029` |
+| `bfb81e0ef5514377a1ef326e98e2f77326a486bf` | `feat/judgment-intent-strategy-phase6-verified`, `feat/judgment-intent-strategy-phase6` |
+| `1273ddbcd0087d189e01388ded2d362fb1e058d2` | `fix/evolution-replay-auth-main-20261029`, `research/phase-2-whole-brain-integration-mapping-20261105` |
+| `fb994fed8b1bd39482aafd98110055032e8bc82f` | `fix/isolation-replay-attestation-20261029`, `integration/learning-layer-20261028` |
+
+### 9.2 Exact branch-reference manifest
+
+| Branch | Exact tip SHA |
+|---|---|
+| `architecture/brain-foundation-planning-20261103` | `a96af5b18d3a1d580ff56cff6191240893bceeb5` |
+| `capability-decision-work` | `d179c5d7c73cd9f719d4a600ca0eabfabcf4681d` |
+| `capability-decision-work-2` | `d179c5d7c73cd9f719d4a600ca0eabfabcf4681d` |
+| `capability-decision-work-3` | `d179c5d7c73cd9f719d4a600ca0eabfabcf4681d` |
+| `chore/agent-engineering-workbench` | `5a6609cd80586379ad9a4f0c9514c6f84bfa0d9c` |
+| `chore/reset-engineering-agent-layer` | `9b8d91c5f479d7c84dd4becbd62c2aa1331ad43c` |
+| `ci/priority-one-provenance-validation-20261031` | `d2efb1eeddd783e00cb266cf0c63695abb198206` |
+| `ci/priority-one-validation-20261031` | `1e7b659ad0fdd9ffc6d77b0566c60e25d75cecf9` |
+| `docs/ai-role-terminology-audit-20261111` | `fe8a3b6216f874c7ab35e3c8d9489b5caf8ffd37` |
+| `docs/brain-constitution-planning-readiness-20261031` | `abf3303c04638a89146a4161b91a439910235add` |
+| `docs/brain-identity-behavioral-spec-20261031` | `39ca36eb66d20fe7ded0d891aad7a153c59628a0` |
+| `docs/brain-layer-language-ownership-map-20261031` | `e7227919c13cc65c0e3915fdc7b6491465be1921` |
+| `docs/brain-polyglot-engineering-governance-20261031` | `004e8753d01c9b18bb243b257591657f9b19d7db` |
+| `docs/brain-polyglot-foundation-audit-20261031` | `5433b0d0ae6ea7ff9d0991e84c8a6a8a2506c1cb` |
+| `docs/jarvis-affective-plan` | `16abca97caf77ce65d5ac901513eb2790f04c68c` |
+| `docs/jarvis-mcu-brain-target-analysis-20261031` | `bdc980f3dcf322541556c0756aeee4eb1ff955a1` |
+| `docs/jarvis-phase2-human-mcu-comparison-20261106` | `609d38ede50bbdd98a93dfed112781eacabee9fd` |
+| `docs/jarvis-phase-1-preservation-inventory-20261104` | `ebbda074957e0f9fb0d0f04dd9b03fe58b270a0a` |
+| `docs/jarvis-phase-2-whole-brain-integration-map-20261105` | `ea64607ef94f142a6142a013e119a7225bc95c1c` |
+| `docs/jarvis-project-command-governance-20261031` | `c803e9873df1c22111156d894853ef2d8832a8ea` |
+| `docs/jarvis-project-governance-rules-20261105` | `39fe09dcf13496f5f0005ccf3f00739303e29f88` |
+| `docs/jarvis-system-architecture-foundation-20261101` | `b05434758ad4fe72815503f89bd5d2990ccb658b` |
+| `docs/phase-2-closeout-evidence-20261106` | `53278d5918163b286247f608efcadd5ef0afd232` |
+| `docs/phase-2-closeout-preparation-20261106` | `cb7b0877bcdd82b88dd387c99a9442997e0220ce` |
+| `docs/phase-2-ir02-ir04-ir03-followthrough-20261106` | `8e18f5eb2f8921e4bcd5d8441d432b5923d28da8` |
+| `docs/priority-one-trust-boundary-contract-20261031` | `cfbcbdd29839f062851d3ca7da63ab2ae3a8f4f1` |
+| `docs/reader-packet-sha-identification-20261118` | `2b2bfd9afe6e1325119f7ccee507bb04e71aa343` |
+| `docs/reviewer-records-foundation-20261108` | `185712526ebbe34232e9e95acb738b464b35b486` |
+| `docs/whole-brain-planning-roadmap-hold-20261107` | `fa2bd50d6fb0bb77dc3cbaab684f51d606e94bb5` |
+| `docs/whole-brain-planning-scope-correction-20261107` | `283ebb880122c7755c8fe81a39943f6fdaf27052` |
+| `feat/action-execution-feedback-phase7` | `f08f677a0c9a7777e1eba2835c6362ac2cfe3b81` |
+| `feat/agent-direct-console` | `142fa464cc34292879eadadd1ebcef8cbecb32d0` |
+| `feat/agent-direct-conversation` | `b19c67ac4fb443a4d4a1c3553210bf6a4d1d5540` |
+| `feat/agent-evolution-sandbox` | `995fa880d0b846f9c2a2c62a1960f46724f7aa1d` |
+| `feat/agent-human-console` | `33fbae0dad7d6bbad7ee97c75ff19c8553d9ad6b` |
+| `feat/agent-operator-console` | `1c4e8d50ce7336ec3b66010a36892b084de830c4` |
+| `feat/association-causality-phase5` | `917173f7140f4fd0a43697ae149103a23ef352e3` |
+| `feat/autonomous-evolution-loop` | `ee1bf3a35e98fb05d64bc8f50e79c9899d98be1a` |
+| `feat/benchmark-harness` | `8b2053098d34a266591f3b1bab68374a2662a4cc` |
+| `feat/capability-cognition-integration` | `8e98e70e87f8a4c0f8d83f7408438aadf6c3ebe2` |
+| `feat/capability-decision-path` | `d179c5d7c73cd9f719d4a600ca0eabfabcf4681d` |
+| `feat/capability-decision-path-v2` | `d179c5d7c73cd9f719d4a600ca0eabfabcf4681d` |
+| `feat/capability-decision-path-v3` | `d179c5d7c73cd9f719d4a600ca0eabfabcf4681d` |
+| `feat/capability-decision-path-v4` | `d179c5d7c73cd9f719d4a600ca0eabfabcf4681d` |
+| `feat/capability-decision-path-v5` | `d179c5d7c73cd9f719d4a600ca0eabfabcf4681d` |
+| `feat/capability-decision-path-v6` | `d179c5d7c73cd9f719d4a600ca0eabfabcf4681d` |
+| `feat/capability-decision-path-v7` | `d179c5d7c73cd9f719d4a600ca0eabfabcf4681d` |
+| `feat/capability-execution-boundary` | `3f6b2ab8c8fab074b1138425d85a562ad858d312` |
+| `feat/capability-execution-brain-integration` | `fcc0b83e609fe2759cdf9ca4f765cb4097e68437` |
+| `feat/cognitive-cycle-action-assessment` | `caa38dec38605fbe57ad22117e9264a776f91d8a` |
+| `feat/cognitive-feedback-loop` | `45dda32b606449c004db54787e7e8ec99455e27f` |
+| `feat/cognitive-runtime-failure-results` | `44a522bff03cfd98b7c61f2922485779a3e93552` |
+| `feat/continuous-cognitive-runtime` | `312d3f33cf1f3b8c29c1e76ceea3df19dbe0d1fb` |
+| `feat/core-authorization-boundary` | `9172bf2fdfae631b33947f6d7b3fbbe3a39c51b0` |
+| `feat/core-authorization-boundary-v2` | `ed80fc2e8d7b05f35e8fffd00b5a5a4e6d7ef5d7` |
+| `feat/direct-agent-conversation` | `2c4df0b7619e6f7b34676ec83cc5a389acbb6dce` |
+| `feat/dlt-002-adaptive-trial` | `fc0f7d383ae78e74a60d2e9895d604a1a18f0e1d` |
+| `feat/engineering-agent-charter-direct-channel` | `86588cd487360873ebc993f0bf713e04c5765820` |
+| `feat/engineering-agent-communication-context` | `15ac1840387b379f1aa8fa6069adbd3ee546f617` |
+| `feat/engineering-agent-control-channel` | `db2bea72eed4ed80db4d5e6117ad14fd3e72dcb0` |
+| `feat/engineering-agent-direct-channel` | `f90de1999f340bfb3665f0419c1d037fdd9f839e` |
+| `feat/engineering-agent-direct-console` | `44fb7959fecb231cd82f2b83458b099fcdc1abd5` |
+| `feat/engineering-agent-direct-conversation` | `7cc32e587e92773e3428fef67b0d621be4cce4fb` |
+| `feat/engineering-agent-foundation` | `54301a948d89619f798babcab899c7733af8ad65` |
+| `feat/engineering-agent-human-channel` | `142fa464cc34292879eadadd1ebcef8cbecb32d0` |
+| `feat/engineering-agent-human-gateway` | `81e69e8d37cf4bde2127896007b312e2db8022b6` |
+| `feat/engineering-agent-message-bus` | `bb64ee588d4a42af02061a3ff54c54ed2554a8c9` |
+| `feat/engineering-agent-operator-bridge` | `b1ed958e82b6cdd7a957adcc0f79965a96283642` |
+| `feat/engineering-agent-operator-channel` | `5caf4aeb54674dbfd377d706112934cc572bdab8` |
+| `feat/engineering-agent-operator-console` | `1da70c4cf359435c9c598b615e3b018aa21213c9` |
+| `feat/engineering-agent-orchestration` | `27873ef5f281fcdcd2876118b2d8af7878eecdab` |
+| `feat/engineering-agent-pipeline` | `b38c53394066e396be43eb630f0397ff8460e07f` |
+| `feat/engineering-agent-selection-orchestration` | `ab63c1c0d1da44433f7b254e00c628c3eec44c6a` |
+| `feat/engineering-agent-selection-v2` | `3a2e628f35bb7e6ff9673ae3d5a94a8d3629674d` |
+| `feat/engineering-agent-stage-handoff` | `e6c4b57288fa5aa40132c74644e0937f0343ddf1` |
+| `feat/engineering-agent-synchronization` | `be32aa8445c717bc5a9b841653acd0075b8a0c52` |
+| `feat/engineering-agents-live` | `7c2fbc81d2a40134afad8061ccb443911ec571bd` |
+| `feat/engineering-dependency-scheduler` | `a6690b6e9ae14142f32adf9cc3bbcc7f150748be` |
+| `feat/engineering-direct-agent-console` | `af09cf28d35e4a7b75c3c019e9f97893d8e19364` |
+| `feat/engineering-external-model-transport` | `93266a704b7b052e6c79d0930021e61b789a7c7f` |
+| `feat/engineering-feedback-loop` | `15e5b8332a90ff350b98d4a42ecc120e73927717` |
+| `feat/engineering-git-workspace-adapter` | `0aaa38bc5fbcd8e3c1c668899c731e8166133265` |
+| `feat/engineering-huggingface-provider` | `43783db39e85f9ac5299ba577349ecb5310b0980` |
+| `feat/engineering-huggingface-provider-v2` | `89217965610a51e6a0e41b0eadd1a9a0bc08acef` |
+| `feat/engineering-human-agent-bridge` | `b6fd583b1f41ce8298ed6c984e7547016cbb7175` |
+| `feat/engineering-human-agent-console` | `277e59e710fa1c29ac0bec33334542c59dc179f4` |
+| `feat/engineering-human-agent-console-v2` | `af09cf28d35e4a7b75c3c019e9f97893d8e19364` |
+| `feat/engineering-live-model-providers` | `b68ef8266962b1a2cf977794ed94f78bf18a899b` |
+| `feat/engineering-model-agent-orchestration` | `f434969d04de8fa1737a3feaeb7db9101aaf6783` |
+| `feat/engineering-model-provider-adapters-v2` | `654366d96738eb3a6336851f03bdd7f97ddd9ffe` |
+| `feat/engineering-model-provider-adapters-v3` | `9c47f1cacd1555851f669fe0b19597c51866e4ca` |
+| `feat/engineering-model-provider-boundary` | `c7fced936acb8326de09870899d482637bb09680` |
+| `feat/engineering-operator-agent-channel` | `0769dc4b1f5122e6c0505c906e477a2228a5e916` |
+| `feat/engineering-operator-channel` | `a15fea2b7a234633ddc275b2dae9398108b15a14` |
+| `feat/engineering-operator-console` | `32ff276fa5b8de736bc918f655e35218b119f2e9` |
+| `feat/engineering-operator-dialogue` | `def3b51247e3c9048c1c28ff1f254cb863f69c88` |
+| `feat/engineering-operator-gateway` | `34444fb305ca81bf8b30477f0be292f70b6dec10` |
+| `feat/engineering-parallel-scheduler` | `9b0df022e6e6d2c27228e1016f6cbf8837de8be2` |
+| `feat/engineering-process-worker` | `61bb27764f46080f407b4484820300f33a5a2434` |
+| `feat/engineering-review-verification-agents` | `0ec81fe45b147273b04c500600d7d64a9d29d0c3` |
+| `feat/engineering-run-context` | `4e32426af40ace90fe21bc55f6badc6356af7f9f` |
+| `feat/engineering-scheduler-execution` | `b3b29c2138414d53cf16bdf643920ff3376fb724` |
+| `feat/engineering-shared-workspace-pipeline` | `dcf8605261c3b8bc0561700bb0605ef069d4f983` |
+| `feat/engineering-worker-runtime` | `2f9cf4ba7e5a2df5b8afb2825af7d36d910b89d6` |
+| `feat/engineering-workspace-artifact` | `922971c596f53782c29f8d27b9c1ab0d6d3e6342` |
+| `feat/event-driven-cognition` | `866666ab59b07b39ce118237f801a1378aebfee2` |
+| `feat/evolution-adoption-journal` | `6edb3a4e913f35f68dd136c214fafdb6c43d054f` |
+| `feat/evolution-adoption-journal-rebased` | `a98f37c4a80a19f805a48d5ba50cb3cd7d91fa75` |
+| `feat/evolution-experiment-runner` | `3e034ef064421f469d079c7ff223abd6c397e49a` |
+| `feat/evolution-finish` | `58c506045addb435131612d523f4b8a48549ab32` |
+| `feat/evolution-isolation-boundary` | `7bcb3be32125754ba64cf67d2d593e69bd8e5ced` |
+| `feat/evolution-isolation-hardening` | `4bf2f2bf7d4759960c75e77f11d6e0dbe89452e9` |
+| `feat/evolution-opportunity-orchestration` | `f4dde37db57c4075e2ebf2038f472eea2eb28092` |
+| `feat/evolution-statistical-evaluation` | `502565c0018b05bc3247585d7b42d1422b88e333` |
+| `feat/evolution-statistical-gates` | `3723f0cef080ca7f88985c504f76b6f8facb9f25` |
+| `feat/evolution-statistical-gates-rebased` | `690d9d8be71e3a768866754e45a7beb5c17813db` |
+| `feat/evolution-syscall-boundary` | `d8b9d68bb1641f0ea517c90812bb39e989065cef` |
+| `feat/feature-compositional-learning-20261031` | `8c8889fc225fbefbda27989e06e656aad9bbfd33` |
+| `feat/finish-builder-agent-interface` | `3a682c97c128aa471f68c2bf07e169fd5e694470` |
+| `feat/jarvis-affective-impl` | `16abca97caf77ce65d5ac901513eb2790f04c68c` |
+| `feat/jarvis-affective-plan` | `16abca97caf77ce65d5ac901513eb2790f04c68c` |
+| `feat/jarvis-affective-state` | `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` |
+| `feat/jarvis-affective-state-impl` | `16abca97caf77ce65d5ac901513eb2790f04c68c` |
+| `feat/jarvis-affective-state-plan` | `16abca97caf77ce65d5ac901513eb2790f04c68c` |
+| `feat/jarvis-affective-state-plan2` | `16abca97caf77ce65d5ac901513eb2790f04c68c` |
+| `feat/jarvis-affective-state-plan3` | `16abca97caf77ce65d5ac901513eb2790f04c68c` |
+| `feat/jarvis-affective-state-plan4` | `16abca97caf77ce65d5ac901513eb2790f04c68c` |
+| `feat/jarvis-affective-state-plan5` | `16abca97caf77ce65d5ac901513eb2790f04c68c` |
+| `feat/jarvis-affective-state-plan6` | `16abca97caf77ce65d5ac901513eb2790f04c68c` |
+| `feat/jarvis-affective-state-plan7` | `16abca97caf77ce65d5ac901513eb2790f04c68c` |
+| `feat/jarvis-affective-state-plan8` | `16abca97caf77ce65d5ac901513eb2790f04c68c` |
+| `feat/jarvis-affective-state-plan9` | `16abca97caf77ce65d5ac901513eb2790f04c68c` |
+| `feat/jarvis-affective-state-plan10` | `16abca97caf77ce65d5ac901513eb2790f04c68c` |
+| `feat/jarvis-affective-state-plan11` | `16abca97caf77ce65d5ac901513eb2790f04c68c` |
+| `feat/jarvis-affective-state-plan12` | `16abca97caf77ce65d5ac901513eb2790f04c68c` |
+| `feat/jarvis-affective-state-plan13` | `16abca97caf77ce65d5ac901513eb2790f04c68c` |
+| `feat/jarvis-affective-state-plan14` | `16abca97caf77ce65d5ac901513eb2790f04c68c` |
+| `feat/jarvis-affective-state-plan15` | `16abca97caf77ce65d5ac901513eb2790f04c68c` |
+| `feat/jarvis-affective-state-plan16` | `16abca97caf77ce65d5ac901513eb2790f04c68c` |
+| `feat/jarvis-affective-state-plan17` | `16abca97caf77ce65d5ac901513eb2790f04c68c` |
+| `feat/jarvis-affective-state-plan18` | `16abca97caf77ce65d5ac901513eb2790f04c68c` |
+| `feat/jarvis-affective-state-plan19` | `16abca97caf77ce65d5ac901513eb2790f04c68c` |
+| `feat/jarvis-affective-state-plan20` | `16abca97caf77ce65d5ac901513eb2790f04c68c` |
+| `feat/jarvis-affective-state-plan-final` | `16abca97caf77ce65d5ac901513eb2790f04c68c` |
+| `feat/jarvis-affective-state-work` | `16abca97caf77ce65d5ac901513eb2790f04c68c` |
+| `feat/jarvis-build-agents-clean` | `04a441676c1d41833f64bc0f20f5320af6f10855` |
+| `feat/jarvis-cognitive-action-loop` | `16abca97caf77ce65d5ac901513eb2790f04c68c` |
+| `feat/jarvis-learning-mechanisms-probe` | `9ae1a3f92ccdca846074d1433734851d9483f190` |
+| `feat/judgment-intent-strategy-phase6-final` | `449b303218c196d260ff872b0c69fc9ee19188fa` |
+| `feat/judgment-intent-strategy-phase6-verified` | `bfb81e0ef5514377a1ef326e98e2f77326a486bf` |
+| `feat/judgment-intent-strategy-phase6` | `bfb81e0ef5514377a1ef326e98e2f77326a486bf` |
+| `feat/learning-adaptation-phase8` | `e4257777a85649a76c368a52de912f0f09454822` |
+| `feat/memory-phase3` | `7b03f9bbad590e2f5c27e8f46a5157e4e508ffd5` |
+| `feat/operator-agent-bridge` | `74b1c261b84a163b1950368540b843b8204def18` |
+| `feat/operator-agent-console` | `c4f779a54b1e06a4954a49bb5298e47aa2b6e2db` |
+| `feat/polyglot-boundary-cleanup` | `ab3ac2312dc99f1ee839472f3e7b9d21c4f13bb4` |
+| `feat/prediction-developmental-validation-20261030` | `a8b46d43cd55021f3a9a9f29ba9039358a92bb29` |
+| `feat/prediction-feedback-integration-phase10` | `b88232068f82c6192cff21a0379a24d23aaadeae` |
+| `feat/runtime-closed-loop-feedback` | `030d03cd6460db1ffc563a4009270e0bfaf65d04` |
+| `feat/self-testing-healing-phase9` | `f6e2528bc0b1d269e91966f28209220aec65db5e` |
+| `feat/source-feedback-journal` | `4cf0ab32b7673aa06e6930bd2e5a1775a6b9480d` |
+| `feat/world-self-model-phase4` | `c0a5fa398b2911aa8af722a55659429223d7e1ca` |
+| `fix/causal-key-value-codec-20261028` | `52e363a911a9a93d1e59c70358e75f180120c265` |
+| `fix/causal-learning-ignore-unchanged-effects-20261029` | `58acf23c9cc4594284062465ed658daf7f99e9a2` |
+| `fix/causal-scalar-codec-20261028` | `6bea39e4a7e21c7ef0ab67b9d769fd07245f737f` |
+| `fix/context-reserved-marker-20261028` | `6dcb03a9140b0c2a9d2b9386aa6ceca1e732d53c` |
+| `fix/engineering-final-audit-and-operator-bridge` | `e0ddd650feba897ae272e19ae54af4afd60b057f` |
+| `fix/evolution-authenticated-evidence-20261030` | `cc00afaebb4da58eb75993f0386eaab333e8282d` |
+| `fix/evolution-authenticated-replay-20261029` | `3251425d1843f42b49ce59b505550afdc21027b3` |
+| `fix/evolution-authenticated-replay-final-20261030` | `e737cae7f907696ef787a4e85b0dee3a739d71b1` |
+| `fix/evolution-evaluation-lifecycle-20261029` | `9c6a80a230922f96ada7a4a78af5362d6f9f1cc0` |
+| `fix/evolution-evaluation-lifecycle-ci-20261029` | `bbf40a7438fdee71e1b369c84009c0e5bc836b5e` |
+| `fix/evolution-executable-path-fd-isolation-20261029` | `4688cf4aa87edbde1ae35b9c5a40d5dcf9cea3a7` |
+| `fix/evolution-isolation-review-remediation-20261029` | `c6e5d790db457868cd805a6e8f051c6a35236a38` |
+| `fix/evolution-lifecycle-ci-tests-20261029` | `abcf5e59a78db2278b32b13d3852fa8fe1bf0124` |
+| `fix/evolution-lifecycle-final-review-20261029` | `91d89b626e9165038a6928b30e5a7296faa5a9fd` |
+| `fix/evolution-lifecycle-ready-20261029` | `c3f83e6adb799f28e8c801590507ed181352bec3` |
+| `fix/evolution-lifecycle-release-candidate-20261029` | `4f5153ee0a1f98ce1aff294a99d260ece386e1b3` |
+| `fix/evolution-lifecycle-review-20261029` | `e78a2b28b566bd75af9420c0251cf7ba6297e18c` |
+| `fix/evolution-lifecycle-reviewed-20261029` | `bf1883d460aca471b178fdf30500f465e12f325d` |
+| `fix/evolution-lifecycle-trust-20261029` | `5f4595336ee3a94e0ee42bbd96ce6bee73087964` |
+| `fix/evolution-lifecycle-trust-final-20261029` | `7df460cd1a3457615319d98ecbab5eafc093c217` |
+| `fix/evolution-lifecycle-trusted-replay-20261029` | `9717f5a78130e1ebd4e230eb957b82905fa7f3ab` |
+| `fix/evolution-lifecycle-verified-20261029` | `5ffa26514d6c57da7614902466e13675da4ab84a` |
+| `fix/evolution-lifecycle-verified-final-20261029` | `ce1f7ec5857b5572693208e950c2f3d565679e5f` |
+| `fix/evolution-replay-attestation-20261029` | `1ff213900bfe50378a9c577d26cf26d962bb776f` |
+| `fix/evolution-replay-auth-main-20261029` | `1273ddbcd0087d189e01388ded2d362fb1e058d2` |
+| `fix/evolution-replay-evidence-20261031` | `ec1ce132d9d2c46f9562eeee42e6cfe8eee8ef7b` |
+| `fix/evolution-replay-fail-closed-20261029` | `1488bdd0fdf9cad1c97965bf54582d854afa1ba4` |
+| `fix/evolution-safety-provenance-20261029` | `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` |
+| `fix/evolution-trusted-evaluation-20261029` | `7ce87f90ac6265f6063b5adcdae2db0138dee979` |
+| `fix/evolution-trustworthy-lifecycle-20261029` | `b95203efc771ab3dcffd6db75c922c2eff70de87` |
+| `fix/gate-a-d1-d2-20261104` | `a37add18babf8afc2e9c12ca0449a2ee84ecd60d` |
+| `fix/isolation-replay-attestation-20261029-v2` | `296f2a8e7c871f1e82d3c3513379f9d720c28283` |
+| `fix/isolation-replay-attestation-20261029` | `fb994fed8b1bd39482aafd98110055032e8bc82f` |
+| `fix/journal-bool-decoding-validation-20261031` | `573ed8e43ed77c1e119af89e13a6a2cd9a319557` |
+| `fix/knowledge-calibration-conflicting-sequences-20261031` | `14f060c66b3877989ac2966f2bcf51086f511c5a` |
+| `fix/knowledge-calibration-freshness-20261031` | `edacf39d91a086480358f6878ecb8461c3cbd7af` |
+| `fix/learning-contradiction-resolution-20261030` | `23196511ab04fe7ec2095a6640ef9691ad07b3f9` |
+| `fix/learning-contradiction-resolution-after-dlt003` | `be848d35d575dc0a6d48052ad1ac5265039c879e` |
+| `fix/learning-layer-review-20261028` | `67fdeb0026ced8218f835b16ffec4534ae69a993` |
+| `fix/learning-review-findings-20261028` | `804497f7458ccd8346332cc0bd63bb0a9313858d` |
+| `fix/memory-journal-framing-20261028` | `b0560edaa72b6d455001be51695731cf988b43b2` |
+| `fix/memory-journal-preserve-corrupt-tail-20261028` | `292f406d0ce5bfae85d96e188822212f571750eb` |
+| `fix/memory-journal-quarantine-20261028` | `0c1d0b5f01fb448a07e9ca1c091285bc01830845` |
+| `fix/nemotron-reader-response-diagnostics-2026-11-10` | `9b457e35c601719d9b213fb843dd5876976b35b9` |
+| `fix/prediction-error-learning-signal` | `52ea2747b96083139918eafc056ce3e05d135d83` |
+| `fix/process-isolation-path-fd-20261029` | `ea7b3d6a463d0926ad2368cc9e6a236c98a1007f` |
+| `fix/reject-nonfinite-cognitive-evidence-20261031` | `c6c76cfa2716551490859d6e8699992ebd4b5798` |
+| `fix/trusted-evolution-lifecycle-20261029` | `192ad45a93b4a06f8ca205b9304d560ec90c91f9` |
+| `governance/builder-operating-controls-20261111` | `245081460d9692637fb64f3658e6d2899e4ac9f7` |
+| `integration/knowledge-composition-20261031` | `52c367a4b53fdfe9b29776795200555076e8cb49` |
+| `integration/learning-layer-20261028` | `fb994fed8b1bd39482aafd98110055032e8bc82f` |
+| `integration/priority-one-20261031` | `7fe212bbb0bd61116ea56581435e03b06c69b673` |
+| `integration/priority-one-internal-event-guard-20261031` | `4380fcbbdf4887b8332948083d000483d8f8d622` |
+| `integration/priority-one-memory-bool-hardening-20261031` | `b627dcc6a0ec849386425c785ba567ff2d2198dc` |
+| `main` | `4f07d772beae03c99a8dd58b174201a3aa3074b2` |
+| `ops/openrouter-blind-reader-assessment-20261110` | `21483f532ed5e7e7746f9cd484fabdda8b7fc2d0` |
+| `plan/brain-implementation-roadmap-20261103` | `48a7103f87c00992e4e19d84c768d1e72682a1b0` |
+| `research/brain-capability-investigation-20261103` | `d7d676b79dbf3269f7fd3ebdb4363a6df19f255d` |
+| `research/phase-2-brain-integration-map-20261105` | `6ca140300b914ed981a50301bbf1d82a5bfe4d8b` |
+| `research/phase-2-whole-brain-integration-map-20261105` | `cf3f8db7e5e5ca5eb1c0345bafdb704e92d70f25` |
+| `research/phase-2-whole-brain-integration-mapping-20261105` | `1273ddbcd0087d189e01388ded2d362fb1e058d2` |
+| `review/builder-response-review-2026-11-08` | `43733ae997f61aa6f2e0f59e61b2dc6d8f566f6c` |
+| `review/cf26-option-a-independent-check-20261115` | `9e3b3d24f5937cefd39ee8bf7a5c276e73cea2c4` |
+| `review/documentation-foundation-rereview-2026-11-08` | `b2ca8c4ce6cab3f508987a51caf4ec65a085a374` |
+| `review/independent-documentation-foundation-2026-11-08` | `07202eb5adeb729695951bf8ce41a1b51a95e07c` |
+| `review/phase-2-independent-review-20261106` | `30eaefe3bee02e2038f66fb18c907673026ebe76` |
+| `review/phase-2-independent-review-followup-20261106` | `36b843f6959628a689d81bc1e12e523e17227073` |
+| `review/phase-2-second-independent-review-20261106` | `8ba6dfcb17f2aab409f58cbd8bc57898edd60405` |
+| `review/phase-2-source-challenge-20261105` | `1ffc2d66c3c0b389eaddae992318d53eeab8416b` |
+| `review/phase-2-third-independent-review-20261106` | `a1df22531765b7022f6bfbcfd9f3f5251cf5adf5` |
+| `review/phase-2-whole-brain-map-independent-review-20261106` | `46796725fd656628f7b6e47a57929b87f79a6d8d` |
+| `review/whole-brain-builder-report-rereview-2026-11-08` | `11c3bc2802e390cffc7b8b08de96d1f7fe352c4d` |
+| `self-review-internal-event-guard-20261031` | `024f7c2296368608c9bb3a82deb87755bb86cb90` |
+| `spec/brain-mechanism-specification-20261103` | `c34472354e4122fc1d78dc25bf45d81f1eb4dc69` |
+| `test/dlt-002-behavioral-change-evidence` | `06aee3174ba850ed8142ca95f54a840ad565cc93` |
+| `test/dlt-002-fixed-policy-baseline` | `4f839e9896092d4af127105d16a28f944069bbde` |
+| `test/dlt-002-prediction-lifecycle-diagnostics` | `613037fae24b8221b983256363a1bac761ffd5f0` |
+| `test/dlt-002-seed-sweep` | `27519e2d5871cad49b90f5080b55010ba80ea54a` |
+| `test/jbp-002-deep-learning-persistence` | `ffb91df83d4c5fae017c48f220a1226544bb6287` |
+| `test/jbp-003-evolving-world-challenge` | `92cce78985f2630f62a6e0beb49ac725623d7d85` |
+| `test/jbp-004-integrated-memory-evolution` | `f6effc957244e5626638da0bb85b35a47cb298c4` |
+| `test/jbp-004-memory-learning-evolution` | `ea96c5ca92d739efe316a6ef24c90d1912f95c2e` |
+| `test/jbp-004-memory-learning-evolution-integration` | `5869b541ab6f97d782f1043d27479f176f2ea4d4` |
+| `test/jbp-004-unseen-transfer` | `c6718cc7fb58b4fa4183bf8bc2402b7cdedc67b0` |
+| `test/jbp-learn-002-short-stress` | `1817a3a48bcdd8bbb80b92ea385f2102b7677137` |
+| `test/learning-mapping-generalization-20261029` | `94d02976ef4bcf36ad2e7a67f53cfc09d7018494` |
+| `test/learning-trial-evidence-diagnostics` | `26bca1244a698610d8d48a91308d9c0cf0855a87` |
+| `test/memory-learning-evolution-integration` | `7ce776e83714dbe0a9216d82e3d805e781707768` |
+| `test/runtime-experience-choice-loop-20261028` | `5bc1c8421a79220cfe8235db058337a3a2a8438f` |
+
+### 9.3 DF-02 interpretation
+
+The repository now has a Builder-fetched snapshot of all 251 live branch refs and their exact tip SHAs. This materially improves branch discovery and identifies 8 same-tip alias groups. It does **not** close all-branch consumer/reference analysis: that requires examining relevant tree contents, changed-path history, and references to material artifacts across branch tips and historical PR snapshots. Do not infer that every branch was semantically reviewed from this ref listing.
+
+**DF-02 remains OPEN** pending semantic disposition of the PR #97 path matrix, successor/retirement mapping, cross-branch consumer and dependency closure, and repository-wide active authority consistency. No merge, donor adoption, branch deletion, rename, rebase, retarget, cherry-pick, baseline selection, Stage A start or runtime implementation is authorized by this census.
