@@ -145,3 +145,21 @@ The earlier checkpoint SHA `bc4dbde5b25a96546b7b90273d06a7d72f7962a0` is a histo
 - No runtime implementation, source-baseline selection, donor adoption, runtime tests/training, merge, rebase, retarget, cherry-pick, branch rewrite, or deployment is authorized.
 - The Independent Reviewer is a role label. Do not place a personal or vendor/model name in project documentation.
 - Builder implementation, test evidence, independent review, acceptance, and blocked work must remain distinct.
+
+
+## Final pre-inventory closeout state — 2026-11-18
+
+**Live PR #192 HEAD before this checkpoint update:** `0b332a9ccf5c58d251a6cc819311317cc8739fdd`. This is not the terminal inventory successor; fetch live PR metadata after the final inventory write.
+
+- PR #192 remains open, non-draft and unmerged; base remains `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.
+- Current changed paths: 47 (45 Markdown, 2 JSON). Current recursive tree: 280 entries, complete (`truncated=false`).
+- Full Independent Reviewer request published: `docs/architecture/reports/reviews/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_REQUEST_PR192_2026-11-18.md`.
+- Builder self-review continuation appended to `docs/architecture/reports/BUILDER_FINAL_DOCUMENTATION_FOUNDATION_RECONCILIATION_2026-11-08.md`.
+- Planning index and outstanding-work register now link the request and record current evidence.
+- DF-06 current delta: 51 tracked Markdown files; checkpoint's full 50-file scan found 129 local and 213 external occurrences with zero missing local targets. Two new index links were checked against the exact current tree and both resolve. This is not a full 51-file parser rerun; external, redirect, semantic and rendered-anchor checks remain open.
+- DF-09 workflow prerequisite: main workflow blob `585c9399318b0af17514a95a5c435d497a76234a` verified. Manual `workflow_dispatch` requires `target_revision` set to the final terminal inventory successor SHA. The current Builder connection cannot dispatch.
+- DF-02 remains OPEN. DF-06 and DF-09 remain NOT MET. DF-10 is reopened pending the final inventory-only successor. DF-11 remains waived as a mandatory gate; the separate Independent Reviewer request is published. DF-12 remains Project Director-only.
+- The next branch file write must be the terminal inventory update. It must record the exact complete parent tree and every changed-path/blob identity. After that write, no further PR #192 branch file writes are permitted. Verify exactly one commit ahead, zero behind, one changed path (the inventory), complete successor tree, all 47 changed paths present, and exact inventory blob SHA.
+- After verification, post a PR comment linking the full request and pinning the exact terminal successor SHA. Then the Independent Reviewer can independently inspect that exact revision. The operator must separately run the blind fresh-reader workflow against the same SHA and preserve its raw artifact and verdict.
+
+Stage A remains NOT STARTED / HELD. No implementation, donor adoption, source-baseline selection, training, merge, rebase, retarget, cherry-pick, branch rewrite or deployment is authorized.
