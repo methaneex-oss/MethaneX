@@ -296,3 +296,9 @@ It identifies important authority distinctions that the earlier bounded report d
 - PR #97 remains an unmerged 159-path developmental candidate. PR #156 remains an unmerged integration candidate; neither is a selected baseline.
 
 This supplement is evidence of a bounded PR metadata census, not a semantic audit of all files or a complete dependency closure. DF-02 remains OPEN. The explicit remaining work and non-authorizations in §6–§7 remain in force.
+
+## 10. Historical PR metadata census update — 2026-11-18
+
+A complete pull-request metadata census for repository PR numbers #1–#165 was fetched from the GitHub pull-request collection while PR #192 was at exact HEAD `0d09ee2f3650a61a4c1e209a001e9f8241d04363`. The census contains 157 existing PRs (missing numbers: 24, 25, 26, 27, 28, 74, 82, 85): 55 have a merge date, 57 remain open (27 draft), and 45 are closed without a merge date. Of the merged PRs, 49 declared `main` as base and 6 declared a non-main base. The exact head SHA, declared base branch/base SHA, state/merge date, and changed-file count for every returned PR are recorded in supplement §8.
+
+This closes the metadata-enumeration gap for the #1–#165 PR range only. It does **not** complete path-level enumeration for every PR, semantic review of all changed files, source-presence checks, complete cross-branch consumer/reference closure, or the dependency/duplication graph. Existing bounded semantic conclusions and explicit limitations remain in force. DF-02 remains OPEN pending those remaining checks and independent verification.
