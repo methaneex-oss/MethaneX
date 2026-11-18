@@ -9,7 +9,7 @@
 | Repository | `methaneex-oss/MethaneX` |
 | PR | #192 — Documentation Foundation |
 | Branch | `docs/whole-brain-planning-scope-correction-20261107` |
-| Exact source HEAD before this index update | `8ff435235c2d1c4ae209ea548c010bc9ac30fad0` |
+| Exact source HEAD before this index update | `7af58141dbb5c84484d8a3cb4e65257349848cdd` |
 | Base | `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` |
 | State | Open, non-draft, unmerged |
 | Changed paths | 47 total
