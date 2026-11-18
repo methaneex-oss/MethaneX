@@ -381,3 +381,19 @@ These artifacts are planning material. They do not authorize implementation tick
 6. Keep implementation planning moving in PR #175 while the Documentation Foundation review work proceeds, but do not activate runtime work packages.
 
 **Current next step:** obtain independent DF-06 exact-HEAD challenge and xAI review of PR #197; resolve their findings, then freeze a final PR #192 revision for a new blind-reader assessment and exact-revision Project Director decision.
+
+
+## 11. Current continuation — 2026-11-18 (Planning Run 02)
+
+**Live planning PR:** #175, branch `plan/brain-implementation-roadmap-20261103`, exact HEAD `ebc4daf15b24d40bfb03319a942d7a618628e439`; open/draft/unmerged. This supersedes the older HEADs recorded above.
+
+**Implementation planning is underway, not newly invented.** Existing artifacts 00 and 17–20 already define the integrated dependency model, parallel non-operative planning exception, 54-scenario traceability for the current proposed PR #174 revision, WP-00–WP-08, and the R0–R6 starter-learning protocol. New Run 02 decision map:
+`docs/architecture/plans/21_IMPLEMENTATION_PLANNING_RUN_02_READINESS_AND_ACTIVATION_DECISION_MAP_2026-11-18.md`.
+
+Run 02 reconciles exact upstream states and divides remaining prerequisites into Documentation Foundation closure, architecture/specification authority, Gate A baseline reconciliation, and Gate B capability acceptance. It defines the first intended integrated evidence-to-learning increment and package activation checklist. It is non-operative planning only.
+
+**Current blockers:** PR #192 is open at `4b4a3d71dd8ed28dc0b39766e323253289255741`; DF-02 OPEN, DF-06 NOT MET, DF-09 NOT MET, DF-10 Builder-verified only for exact inventory §121 pair, DF-11 WAIVED, DF-12 pending Project Director. PR #197 remains open at `2b2bfd9afe6e1325119f7ccee507bb04e71aa343`, with exact-HEAD xAI review requested but no review verdict or fresh-reader dispatch recorded. PR #173 and #174 remain draft proposals with PARTIALLY CLEAR reviews on earlier exact revisions; current architecture/specification acceptance boundaries remain open. Gate A is NOT CLEARED; Gate B capability acceptance NOT PASSED; no source baseline selected.
+
+**Allowed now:** continue bounded non-operative planning, source/requirement traceability, owner-contract refinement, evaluation-protocol refinement and preparation of exact-revision review/Director decision packets. **Not authorized:** runtime source changes, runtime builds/tests, training execution, donor adoption/porting, source-baseline selection, branch-history operations, PR integration/merge, Stage A activation or deployment.
+
+**Recovery rule:** verify the live PR #175 head and all upstream PR heads before every further write. Treat this handoff as navigation; exact live repository metadata and governing decisions remain authoritative.
