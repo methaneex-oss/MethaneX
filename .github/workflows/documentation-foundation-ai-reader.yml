@@ -93,6 +93,18 @@ jobs:
                   "characters": len(content)
               })
           packet = "".join(chunks)
+          target_revision = os.environ["TARGET_DOCS_SHA"]
+          packet_header = (
+              "# Blind Fresh-Reader Packet Metadata\\n\\n"
+              f"- Exact target documentation revision: `{target_revision}`\\n"
+              "- This SHA identifies the exact repository checkout used to assemble the supplied packet. "
+              "It is a revision identifier, not evidence that the contents have been independently reviewed or accepted.\\n"
+              "- Source commits for individual included documents are listed separately in the packet manifest.\\n\\n"
+              "---\\n\\n"
+          )
+          packet = packet_header + packet
+          if target_revision not in packet.split("===== DOCUMENT:", 1)[0]:
+              raise SystemExit("The exact target revision is missing from the reader-visible packet header.")
           out = Path("documentation-foundation-reader-evidence")
           (out / "reader_packet.md").write_text(packet)
           (out / "packet_manifest.json").write_text(json.dumps({
