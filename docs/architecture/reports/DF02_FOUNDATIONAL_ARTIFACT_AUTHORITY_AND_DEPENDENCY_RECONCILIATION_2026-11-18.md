@@ -326,3 +326,45 @@ The previously recorded metadata census and exact ancestry evidence remain bound
 The Builder has made no donor adoption, source-baseline selection, architecture or algorithm choice, branch-history operation, merge, Stage A start, runtime source/test change, training run or deployment. **DF-02 remains OPEN** and is not presented as ready for Project Director closure until the residual work and exact-revision review are completed.
 
 This addendum is Builder evidence only. It does not alter the authority of PR #171/172/173/174/179/191, does not broaden their approvals, and does not make a current proposal an accepted baseline.
+
+## 13. PR #97 changed-path and current-tree presence recheck — 2026-11-18
+
+This addendum strengthens the bounded donor-lineage evidence in §9. It does not claim the remaining 159-path semantic audit is complete.
+
+### 13.1 Exact source and patch evidence
+
+- PR #97 was re-fetched as **open / draft / unmerged**, HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`, base `main` @ `4ba84b8b5ccf0e41530c46fdb8101551254ba864`, with **159** changed paths.
+- The recursive PR #97 tree is complete (`truncated=false), with 287 entries / 260 blobs. The connector returned a patch for all 159 changed paths; no changed path lacked a patch. The retrieved patch corpus totals 1,240,387 characters.
+- The path classification is: 8 workflow files; 35 core public headers; 37 core implementation files; 56 core test files; 3 core example files; 1 core CMake file; 9 documentation files; and 10 engineering files. Total: 159. This is structural classification, not a per-file semantic disposition.
+- The exact-head Check Runs API returned three completed successful checks at `c1da222...`: `cpp-core`, `sanitizer` and `native-brain`, completed on 2026-10-28. The two underlying Actions workflow runs are #40788714735 and #40788714686. These results establish only the recorded build/check executions at that SHA; they do not establish held-out learning quality, generalization, semantic correctness or donor acceptance.
+
+### 13.2 Current source-path presence comparison
+
+The following recursive trees were independently fetched with `truncated=false`:
+
+| Tree | Exact commit | Blobs | PR #97 changed paths present | Absent | Present paths with identical PR #97 blob | Present paths with a different blob |
+|---|---|---:|---:|---:|---:|---:|
+| PR #97 donor | `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` | 260 | 159 / 159 | 0 | 159 / 159 (identity baseline) | 0 |
+| Current `main` | `4f07d772beae03c99a8dd58b174201a3aa3074b2` | 211 | 96 / 159 | 63 | 1 / 159 | 95 / 159 |
+| Current Phase 2 base branch | `ea64607ef94f142a6142a013e119a7225bc95c1c` | 213 | 96 / 159 | 63 | 1 / 159 | 95 / 159 |
+| PR #192 closeout-start tree | `bc4dbde5b25a96546b7b90273d06a7d72f7962a0` | 247 | 96 / 159 | 63 | 1 / 159 | 95 / 159 |
+
+**Interpretation:** 63 PR #97 changed paths are not present under the same path in the current `main`, Phase 2 base or PR #192 trees. Of the 96 paths still present, 95 have different blob contents from PR #97; only `.github/workflows/dlt-002-four-hour.yml` retains the same blob. Path absence does not prove that a capability was deleted: a renamed, split, consolidated or superseding implementation may exist elsewhere. Conversely, path presence does not prove semantic equivalence. The 63 absent paths and 95 changed blobs therefore require explicit source-to-successor/retirement disposition before the DF-02 donor/authority graph can be called complete.
+
+### 13.3 Reconfirmed lineage boundary
+
+Live PR metadata still identifies PR #156 as open / draft / unmerged at HEAD `7fe212bbb0bd61116ea56581435e03b06c69b673`, based on `52c367a4b53fdfe9b29776795200555076e8cb49`; PR #176 remains open / draft / unmerged at HEAD `4cf017e073da980c9f77d739fde6f92ef1a2fbc1`, with declared base branch `integration/priority-one-20261031` at `7fe212bbb0bd61116ea56581435e03b06c69b673`. Exact comparison confirms PR #97 HEAD is an ancestor of PR #156's declared base (172 commits ahead, zero behind). Comparing PR #156 HEAD to PR #176 HEAD remains **DIVERGED** (15 ahead, one behind; merge base `15d49e5fdeb5723c475922ab78fb92f97c4b3b84`). The live #176 branch must not be described as containing the current #156 tip solely because its base field names that branch.
+
+The PR #97 causal-transition defect, pre-state cause requirement, held-out generalization limitations, worsening DLT-002 MAE history, world-model contradiction limitations, and evolution/trust boundaries recorded in §9 remain applicable. PR #135, #148 and later correction branches must retain their own exact source attribution; their corrections must not be credited retroactively to PR #97.
+
+### 13.4 DF-02 disposition after this recheck
+
+The Builder has now re-fetched the complete PR #97 changed-path list, all 159 patch bodies, the exact PR #97 tree and Check Runs, plus the current `main`, Phase 2 and PR #192 trees. This closes the **bounded source-path presence measurement** for those exact snapshots. It does **not** close:
+
+1. semantic classification of every PR #97 path and mapping of all 63 absent / 95 changed paths to successors, replacements or explicit retirement;
+2. full changed-path and dependency analysis for every material historical cognitive/learning PR and standalone artifact beyond the selected lineages;
+3. all-branch consumers, duplicates, historical source references and cross-branch dependency closure;
+4. repository-wide active README/header/status consistency across all relevant branches;
+5. Independent Reviewer verification of the exact final PR #192 inventory and authority/dependency claims.
+
+**DF-02 remains OPEN.** No donor adoption, source-baseline selection, merge, port, branch rewrite, Gate A/B clearance, Stage A start or runtime implementation is authorized or implied by these measurements.
