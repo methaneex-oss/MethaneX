@@ -6163,18 +6163,18 @@ No merge, rebase, retarget, cherry-pick, archive relocation, deletion, source-ba
 
 ---
 
-## 119. Exact 43-path parent manifest after DF-06 parser correction — 2026-11-18
+## 120. Exact 43-path parent manifest after live-state reconciliation — 2026-11-18
 
-**Exact parent HEAD:** `68c13ba17bae05bee7a6e841e3173ed5137f5f60`  
-**Parent tree:** `68c13ba17bae05bee7a6e841e3173ed5137f5f60` (`truncated=false`, 274 entries)  
+**Exact parent HEAD:** `cd675ebda2f3998e635ddd9f25f5800bf6814af9`  
+**Parent tree:** `cd675ebda2f3998e635ddd9f25f5800bf6814af9` (`truncated=false`, 274 entries)  
 **PR #192 state at parent:** open, non-draft, unmerged; 43 changed paths.  
-**Parent index:** records the corrected DF-06 report blob and exact scan source revision.
+**Parent index:** live PR/DF status refresh at `cd675ebda2f3998e635ddd9f25f5800bf6814af9`.
 
 | # | Changed path | Parent blob SHA |
 |---:|---|---|
 | 1 | `docs/ARCHITECTURE.md` | `3c6692b52059e43947d1fd2e7e84debb2362023f` |
-| 2 | `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md` | `adcc6d6d8693a1e14fd5488c667e84f412d430d1` |
-| 3 | `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md` | `a5088b280184d9ff02ab2773df7194f2afeff1e2` |
+| 2 | `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md` | `37ee57ffa628446e9342c31ab0182fbc7c8ca75a` |
+| 3 | `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md` | `2e3cc9031ff0d0de8329c09494c478519f321c91` |
 | 4 | `docs/architecture/inventory/HISTORICAL_DOCUMENTATION_PRESERVATION_REGISTER_2026-11-08.md` | `95cd280295c86c6d33278aa667de1d72048026ea` |
 | 5 | `docs/architecture/reports/BUILDER_FINAL_DOCUMENTATION_FOUNDATION_RECONCILIATION_2026-11-08.md` | `c962de2465f1728752e46456f69e722caf277de7` |
 | 6 | `docs/architecture/reports/BUILDER_TO_INDEPENDENT_REVIEWER_REQUEST_2026-11-08.md` | `c458f689ccbcd1e1d54242e38648ca151d70c250` |
@@ -6216,10 +6216,10 @@ No merge, rebase, retarget, cherry-pick, archive relocation, deletion, source-ba
 | 42 | `docs/templates/TEST_EVIDENCE_REPORT_TEMPLATE.md` | `9c6bbae48a22beb7c4e95858282d7d8d7b2159c2` |
 | 43 | `README.md` | `780651b804b491781fdcac8e248eaca9243797a4` |
 
-### 119.1 Verification conditions
+### 120.1 Verification conditions
 
-- The PR changed-path endpoint returned 43 unique paths; all 43 are present in the complete, non-truncated parent tree.
-- This table records exact parent-tree blob identities for all 43 changed paths, including the inventory's own pre-update blob `a5088b280184d9ff02ab2773df7194f2afeff1e2`.
-- After this inventory-only update, compare the parent and successor: exactly one commit ahead, zero behind, exactly one changed path (this inventory file); all other 42 changed-path blobs must remain unchanged.
+- The live PR changed-path endpoint returned 43 unique paths; all 43 are present in the complete, non-truncated parent tree.
+- This table records exact parent-tree blob identities for all 43 changed paths, including the inventory's own pre-update blob `2e3cc9031ff0d0de8329c09494c478519f321c91`.
+- After this inventory-only update, compare the parent and successor: exactly one commit ahead, zero behind, exactly one changed path (this inventory file).
 - DF-10 is Builder-verified only for this exact parent/successor pair if all post-write conditions pass. Any later PR #192 write reopens the inventory cycle.
 - DF-02 remains OPEN; DF-06 and DF-09 remain NOT MET; DF-11 remains WAIVED; DF-12 remains reserved to the Project Director; Stage A remains HELD.
