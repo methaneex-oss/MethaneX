@@ -246,3 +246,28 @@ This is a bounded continuity check, not a claim that the entire 50-file parser w
 - **Current-target continuity check:** 50 tracked Markdown files remain; complete tree; intervening four-path compare shows no new navigation destinations.
 - **Not verified:** exhaustive current live status/redirect/content relevance of external destinations; authenticated GitHub rendered heading/line/comment anchors; parser equivalence to historical counts; any access-limited historical conversation pointer.
 - **DF-06 remains NOT MET.** Do not describe the 50-file checkpoint scan as a fresh full parser execution at `e590500c48eeae69a33f6d81a64e22b1d6e09792`, and do not claim all external links or rendered anchors are verified.
+
+
+## 13. Exact-head local-link delta verification — 2026-11-18
+
+**Exact source revision:** `f3fe70d637afdc38eb6cce6bf20e03412522afb6`  
+**Recursive tree:** 280 entries; complete (`truncated=false`).  
+**Tracked Markdown files:** 51.
+
+The checkpoint source `bc4dbde5b25a96546b7b90273d06a7d72f7962a0` remains the last full 50-file static extraction (50/50 Markdown files, 342 occurrences, 129 repository-relative destinations, 213 HTTP(S) occurrences, zero missing local paths). The current checkpoint-to-source compare is 15 commits ahead / 0 behind and changes nine documentation paths. The compare patches were inspected for new navigation destinations. Exactly two new Markdown navigation links were introduced, both in the current planning index:
+
+| Source | New destination | Exact-tree result |
+|---|---|---|
+| `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md` | `reports/BUILDER_FINAL_DOCUMENTATION_FOUNDATION_RECONCILIATION_2026-11-08.md` | Present in exact current tree |
+| `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md` | `reports/reviews/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_REQUEST_PR192_2026-11-18.md` | Present in exact current tree |
+
+The new Independent Reviewer request document and the appended Builder self-review contain no additional Markdown navigation destinations. The other intervening report/register/checkpoint changes likewise introduced no additional destinations. The two new index links were checked against the complete exact current tree; neither target is missing.
+
+This establishes the current local-path delta for the checkpoint scan, not a fresh full parser rerun over all 51 Markdown files. It does not resolve the historical parser-count discrepancy or validate heading fragments, line/comment anchors, external reachability, redirects or semantic relevance.
+
+### 13.1 Current disposition
+
+- **Builder-verified:** 129/129 repository-relative destinations from the checkpoint extraction resolved at that checkpoint; the two newly introduced index destinations also resolve in the exact current tree.
+- **Current tree continuity:** 51 tracked Markdown files, complete 280-entry tree, nine changed documentation paths since the checkpoint, two new navigation destinations, both present.
+- **Not verified:** exhaustive external destination live-status/redirect/content checks; parser-history reconciliation; authenticated rendered GitHub heading, line-range and issue-comment anchors; historical access-limited pointer.
+- **DF-06 remains NOT MET.** Do not present the 50-file checkpoint scan plus two-link delta as a fresh 51-file parser run or as external/rendered-navigation acceptance.
