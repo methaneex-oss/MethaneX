@@ -9,11 +9,11 @@
 | Repository | `methaneex-oss/MethaneX` |
 | PR | #192 — Documentation Foundation |
 | Branch | `docs/whole-brain-planning-scope-correction-20261107` |
-| Exact source HEAD before this index update | `5856366a8fe0ded0ab3d092d4dd77344ac816df4` |
+| Exact source HEAD before this index update | `8ff435235c2d1c4ae209ea548c010bc9ac30fad0` |
 | Base | `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` |
 | State | Open, non-draft, unmerged |
-| Changed paths | 46 total: 44 Markdown and 2 JSON |
-| Recursive tree | 279 entries, complete (`truncated=false`) |
+| Changed paths | 47 total
+| Recursive tree | 280 entries, complete (`truncated=false`)
 
 The exact source SHA above is the immutable parent for this index update, not the resulting commit SHA. Re-fetch live PR metadata after any subsequent write. The PR description and earlier index snapshots contain stale head values; do not use them instead of live metadata.
 
@@ -55,6 +55,12 @@ The initial completion-gate report §6 defines DF-01–DF-12. This matrix record
 
 Stage A remains **NOT STARTED / HELD**. It may define whole-Brain capabilities and responsibilities only after the documented Documentation Foundation and authority gates are satisfied. It must reconcile with existing PR #171 SYS-01–SYS-11 architecture and must not reproduce that foundation. No runtime implementation, source-baseline selection, donor adoption, training, PR integration, merge, rebase, retarget, cherry-pick, branch rewrite or deployment is authorized by this Builder reconciliation.
 
+
+
+## Builder self-review and independent request
+
+- [Builder exact-revision self-review](reports/BUILDER_FINAL_DOCUMENTATION_FOUNDATION_RECONCILIATION_2026-11-08.md) — current continuation evidence and explicit residuals.
+- [Full Independent Reviewer request](reports/reviews/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_REQUEST_PR192_2026-11-18.md) — published in the repository; the exact terminal inventory successor SHA will be pinned in the PR #192 conversation comment. This is a request, not a verdict.
 
 ---
 
