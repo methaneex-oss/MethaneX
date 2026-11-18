@@ -151,3 +151,37 @@ All 129 local destinations identified by this repeat parser resolve to paths pre
 ### 8.1 Current disposition
 
 DF-06 remains **NOT MET**. The live exact-HEAD scan improves the local-path evidence to 129/129 resolving under the stated parser, but the parser discrepancy, external destination checks, and authenticated rendered-anchor checks remain open. A later PR #192 write changes the target SHA and requires a new exact-revision scan.
+
+
+## 9. Full changed-Markdown re-scan — exact PR #192 source HEAD 5bc0cfa (2026-11-18)
+
+**Exact source revision:** `5bc0cfa4266ee387bccf26f6b0e6f95c6a1a6509`  
+**PR state at source:** open, non-draft, unmerged; 45 changed paths.  
+**Changed Markdown coverage:** 43/43 fetched directly at the exact source revision; the remaining two changed paths are JSON evidence artifacts and are not Markdown navigation inputs.  
+**Repository tree:** 277 entries; recursive tree complete (`truncated=false`).
+
+The Builder repeated the link scan across all 43 changed Markdown files at one exact SHA. The strict pass removed fenced code blocks and inline-code spans before parsing Markdown links, reference definitions, HTML `href`/`src` and autolinks. No reference-style definitions, HTML link attributes or autolinks were found. The raw occurrence count is retained separately because Markdown-looking syntax inside code examples is not a rendered navigation link.
+
+| Measure | Result |
+|---|---:|
+| Markdown files fetched | 43 / 43 |
+| Raw inline-link/image regex occurrences (including code examples) | 350 |
+| Raw local / HTTP(S) external occurrences | 131 / 219 |
+| Strict rendered-Markdown candidate occurrences (code examples excluded) | 341 |
+| Strict local / HTTP(S) external occurrences | 128 / 213 |
+| Reference definitions / HTML href-src / autolinks | 0 / 0 / 0 |
+| Strict local targets absent from the exact repository tree before correction | 1 |
+
+The sole missing local destination was in the controlling planning index: its relative path resolved to `docs/architecture/reviews/DF02_HISTORICAL_COGNITIVE_LEARNING_LINEAGE_INDEPENDENT_REVIEW_REQUEST_2026-11-18.md`, while the actual artifact resides at `docs/architecture/reports/reviews/DF02_HISTORICAL_COGNITIVE_LEARNING_LINEAGE_INDEPENDENT_REVIEW_REQUEST_2026-11-18.md`. The index was corrected in commit `3f19557274e7129774ce41e61a386d11a0d10757`. The corrected target was subsequently fetched from the current branch; final post-inventory verification must re-run local-path validation against the final exact PR HEAD.
+
+### 9.1 Historical parser-count reconciliation
+
+The prior live source scan at `5a8dafb5ae8d5b31952a90846704a935a29b4421` reported 348 raw occurrences (129 local, 219 external) across 41 Markdown files. The current exact-source raw scan reports 350 (131 local, 219 external) across 43 Markdown files. The branch comparison from the prior scan source to this source is 22 commits ahead and changes six documentation paths. The index contributes two additional local navigation occurrences; the other additions are the two new Markdown documents and report corrections. The older 331/125/206 and 332/131/201 snapshots cannot be fully replayed because their original parser implementations, per-file outputs and complete input manifests were not preserved. They remain historical measurements, not reconciled equivalent results.
+
+The strict current pass removes nine raw matches found only in fenced or inline-code examples (three local-looking and six external-looking). It is therefore the better current estimate of actual Markdown navigation links, but it is not represented as byte-for-byte reproduction of the missing historical parser runs.
+
+### 9.2 Final disposition and residuals
+
+The Builder corrected the one broken local path and verified the corrected link text points to the actual repository location. The current strict local set therefore has a concrete correction; the final inventory-stage re-scan must establish that all 128/128 strict local targets resolve in the final exact tree. This is path resolution only. It does not validate heading fragments, commit-pinned line anchors, pull-request comment anchors, external availability, redirect identity, or whether a destination is semantically the right source for its link text.
+
+DF-06 remains **NOT MET**. The remaining work is exhaustive live-status/redirect/semantic validation of the external destinations and authenticated interactive GitHub verification of rendered fragment, line-range and issue-comment anchors. The current GitHub connection does not expose an authenticated interactive browser session, so those claims are not made. A future file write changes the PR target SHA and requires a final exact-revision scan; the terminal inventory update must remain the final branch file write.
