@@ -229,3 +229,20 @@ This 50-file supplemental extraction is deliberately **not** substituted for the
 - **Not a formal independent finding:** this is Builder-produced static evidence. It does not close DF-06 by itself.
 
 **DF-06 remains NOT MET.** The remaining work is to reconcile the documented parser-count histories with preserved per-file outputs, check the applicable unique external destinations for availability/redirect/content relevance, verify applicable rendered GitHub heading/line/comment anchors in a normal authenticated browser, and record the access-limited historical pointer's disposition. A direct Builder claim that all 213 external occurrences or rendered anchors were verified would be unsupported.
+
+
+## 12. Exact-head navigation-change continuity check — 2026-11-18
+
+**Exact target checked:** PR #192 HEAD `e590500c48eeae69a33f6d81a64e22b1d6e09792`.  
+**Checkpoint scan carried forward:** `bc4dbde5b25a96546b7b90273d06a7d72f7962a0`, where §11 records 50/50 tracked Markdown files fetched, a complete 279-entry recursive tree (`truncated=false`), 342 extracted navigation occurrences, and zero missing repository-relative destinations.
+
+A fresh recursive tree fetch at the current target again returned 279 entries with `truncated=false` and 50 tracked Markdown files. The exact compare from the checkpoint to this target is six commits ahead, zero behind, and changes four documentation paths: the planning index, inventory, DF-02 report and this DF-06 report. The compare patches were inspected for navigation-bearing additions (Markdown inline/reference links, HTML `href`/`src`, and HTTP(S) autolinks); **no new navigation destinations were introduced** in those four paths. The two DF-02 report updates after the checkpoint add the 159-path donor matrix and explanatory scope correction, not new links.
+
+This is a bounded continuity check, not a claim that the entire 50-file parser was rerun at this target. It supports carrying forward the checkpoint's local-path existence result for unchanged destinations, because the repository tree remains complete and the intervening diffs add no navigation destinations. It does not upgrade the prior scan into current authenticated rendered-browser evidence or live external-link evidence.
+
+### 12.1 Current exact-head disposition
+
+- **Builder-verified historical/local-path evidence:** checkpoint scan §11, 50/50 tracked Markdown files; all extracted repository-relative destinations resolved at that checkpoint SHA.
+- **Current-target continuity check:** 50 tracked Markdown files remain; complete tree; intervening four-path compare shows no new navigation destinations.
+- **Not verified:** exhaustive current live status/redirect/content relevance of external destinations; authenticated GitHub rendered heading/line/comment anchors; parser equivalence to historical counts; any access-limited historical conversation pointer.
+- **DF-06 remains NOT MET.** Do not describe the 50-file checkpoint scan as a fresh full parser execution at `e590500c48eeae69a33f6d81a64e22b1d6e09792`, and do not claim all external links or rendered anchors are verified.
