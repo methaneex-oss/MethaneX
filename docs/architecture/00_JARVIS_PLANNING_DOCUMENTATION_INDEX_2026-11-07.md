@@ -1,35 +1,57 @@
-# CURRENT EXACT STATE — 2026-11-18 (Builder documentation continuation)
+# CURRENT EXACT STATE — 2026-11-18 (Builder documentation continuation; refreshed after checkpoint addition)
 
-> **Controlling Builder snapshot.** This block records the live PR #192 revision fetched at the start of the current documentation closeout. It supersedes older active-status snapshots below for the status observed here. Subsequent documentation commits advance the branch; the final head and exact parent inventory are recorded by the final inventory section and live PR metadata, not guessed from this starting SHA.
+> **Controlling live snapshot.** This block supersedes older active-status snapshots below for the exact PR metadata and gate disposition observed here. Older records remain historical. The current PR #192 HEAD is `bc4dbde5b25a96546b7b90273d06a7d72f7962a0`; any subsequent branch commit advances it and invalidates this exact-head snapshot.
 
-## PR #192 source snapshot at closeout start
+## PR #192 live source snapshot
 
 | Field | Verified value |
 |---|---|
 | Repository | `methaneex-oss/MethaneX` |
 | PR | #192 — Documentation Foundation |
 | Branch | `docs/whole-brain-planning-scope-correction-20261107` |
-| Exact source HEAD | `5bc0cfa4266ee387bccf26f6b0e6f95c6a1a6509` |
+| Exact source HEAD before this index update | `bc4dbde5b25a96546b7b90273d06a7d72f7962a0` |
 | Base | `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` |
 | State | Open, non-draft, unmerged |
-| Changed paths | 45 total: 43 Markdown and 2 JSON |
-| Repository tree | 277 entries, complete (`truncated=false`) |
+| Changed paths | 46 total: 44 Markdown and 2 JSON |
+| Recursive tree | 279 entries, complete (`truncated=false`) |
+
+The new `docs/architecture/plans/JARVIS_BUILDER_CONTINUITY_CHECKPOINT_2026-11-18.md` was added after the previous exact inventory successor. It is a new Markdown path and invalidates the former 45-path manifest as the current complete PR inventory. The checkpoint contains no relative Markdown link destinations. The DF-06 report was also advanced after the prior local-path verification; its added Section 10 contains no new links. These facts do not remove the need for final exact-HEAD verification.
 
 ## Documentation Foundation gate disposition
 
-| Gate | Current Builder disposition at this source snapshot |
+| Gate | Current Builder disposition |
 |---|---|
-| DF-02 | **OPEN.** Principal authority/dependency reconciliation, the 188-PR metadata census, exact ancestry checks, and bounded PR #97/#156/#176 learning-lineage audit are recorded. Full per-file semantic closure of all 159 PR #97 paths, wider historical artifact census, cross-branch consumer/dependency closure and Independent Reviewer verification remain outstanding. |
-| DF-06 | **NOT MET.** Exact-current link scan found one broken local index link, corrected in this continuation. The strict scan covered 43/43 Markdown files: 341 occurrences (128 local, 213 HTTP(S) external); local path validation found 1 failure before correction. External reachability/semantic validation and authenticated rendered heading/line/comment-anchor checks remain incomplete. Raw regex count, historical parser differences and exact methods are recorded in the DF-06 report. |
-| DF-09 | **NOT MET.** The approved AI fresh-reader substitution is the governing method. Latest completed run #44192302873 returned PARTIALLY CLEAR (31/32) against historical SHA `beb4d5a174a1dd613878f89132e97b5e6052c7d3`. It does not assess this or any later SHA. The current tool connection provides no workflow-dispatch operation; no new run or CLEAR result is claimed. |
-| DF-10 | **REOPENED BY DOCUMENTATION WRITES.** The former §121 exact-parent snapshot is historical. A new complete parent-tree manifest must be the final repository file write, followed by exact one-commit/one-path post-write verification. |
-| DF-11 | **WAIVED** by the Project Director. It is not a current blocking gate. |
-| DF-12 | **PENDING — PROJECT DIRECTOR ONLY.** No Builder action can substitute for the exact-revision Project Director disposition. |
-| DF-13 | **STAGE A NOT STARTED / HELD.** Runtime implementation and starter-training execution remain NOT AUTHORIZED. |
+| DF-01 | Builder corrections recorded; reconcile the final exact revision before submission. |
+| DF-02 | **OPEN.** The 188-PR metadata census, principal authority/decision register, selected branch ancestry and bounded donor audit are recorded. Full historical artifact discovery, semantic disposition of all 159 PR #97 paths, complete cross-branch consumer/dependency/duplication closure and repository-wide status/header/README consistency remain outstanding. |
+| DF-03 | Accepted-baseline and decision-provenance distinctions are recorded; no inference beyond the cited exact artifacts. |
+| DF-04 | Governance authority and PR #195/#196 merge targets are distinguished; no broader architecture acceptance is implied. |
+| DF-05 | PR bases, heads and ancestry are recorded as time-bounded snapshots; PR #192 remains on its recorded Phase 2 base without rebase/retarget authorization. |
+| DF-06 | **NOT MET.** Builder local-path evidence is 128/128 at exact pre-inventory Markdown source `eacbe3417dfef36319a7b402e0ae60e09a3fa784`; the later checkpoint adds no relative Markdown links and the report's added Section 10 adds no link destination. This does not constitute a new full parse at `bc4dbde5b25a96546b7b90273d06a7d72f7962a0`. External destination reachability/redirect/semantic checks remain incomplete, parser history remains unreproducible for the 331/125/206 and 332/131/201 snapshots, and authenticated rendered GitHub heading/line/comment-anchor verification remains unavailable. |
+| DF-07 | Reconcile against the final frozen exact revision and preserve the applicable documented residuals. |
+| DF-08 | Resolved only within its exact bounded preservation criterion; do not extend that result beyond its scope. |
+| DF-09 | **OPEN / NOT MET.** Latest completed blind fresh-reader run #44192302873 returned PARTIALLY CLEAR (31/32) against historical SHA `beb4d5a174a1dd613878f89132e97b5e6052c7d3`. It does not assess this or any later HEAD. PR #197's reader-visible SHA correction is open/unmerged and has no independent review verdict; no new dispatch or CLEAR result is claimed. |
+| DF-10 | **REOPENED FOR THE 46-PATH PR STATE.** Previous §124 records a valid historical 45-path parent/successor pair ending at `ac6e121c17865e162095fe0d5e7b4f30d18ae0b1`. The subsequent checkpoint addition makes that pair no longer the complete current PR manifest. A new exact 46-path parent manifest and one-file successor comparison will be recorded in the terminal inventory section. |
+| DF-11 | **WAIVED** by the Project Director; not a blocking requirement. |
+| DF-12 | **PENDING — PROJECT DIRECTOR ONLY.** Exact-revision foundation acceptance remains reserved to the Project Director. |
+| DF-13 | **STAGE A NOT STARTED / HELD.** Runtime implementation, source-baseline selection and starter-training execution remain NOT AUTHORIZED. |
 
-## Execution boundary
+## Related live workstreams
 
-This continuation is documentation-only. It does not claim DF-02/DF-06/DF-09 acceptance, DF-12 disposition, Stage A activation, Gate A/B clearance, implementation authorization, source-baseline selection, donor adoption, PR integration, merge, branch-history operations or deployment. All older dated status sections below remain historical evidence and must be interpreted under this controlling snapshot and later exact-revision updates.
+| PR | Live HEAD | State / boundary |
+|---|---|---|
+| #173 — Brain Foundation Architecture | `a96af5b18d3a1d580ff56cff6191240893bceeb5` | Open/draft/unmerged; earlier xAI review was PARTIALLY CLEAR on a different exact SHA; whole-architecture acceptance and CF-26/CF-27 remain open. |
+| #174 — Brain Mechanism Specification | `c34472354e4122fc1d78dc25bf45d81f1eb4dc69` | Open/draft/unmerged; the historical 34-scenario baseline remains distinct from the unaccepted 54-scenario proposal. |
+| #175 — Brain Implementation Planning | `48a7103f87c00992e4e19d84c768d1e72682a1b0` | Open/draft/unmerged; WP-00–WP-08 and R0–R6 planning may continue non-operatively under the existing narrow exception. Gate A not cleared; Gate B not passed; no source baseline selected. |
+| #179 — Phase 2 capability-to-source map | `ea64607ef94f142a6142a013e119a7225bc95c1c` | Open/draft/unmerged; mapping input, not implementation acceptance. |
+| #191 — Human/MCU comparison | `609d38ede50bbdd98a93dfed112781eacabee9fd` | Open/draft/unmerged; Director's bounded retain-separately disposition; no history operation. |
+| #192 — Documentation Foundation | `bc4dbde5b25a96546b7b90273d06a7d72f7962a0` | Open/non-draft/unmerged; 46 changed paths. This index update will supersede this source SHA; the terminal inventory successor is authoritative thereafter. |
+| #195 — reader workflow / role terminology | merged to `main` at `4f07d772beae03c99a8dd58b174201a3aa3074b2` | xAI's approved workflow verdict is pinned to the exact reviewed workflow blob; F-195-07 remains a disclosed residual. |
+| #196 — Builder operating controls | `0ebc4e978fa38011b2f6bb5d97a03c267c1c12c9` | Merged into its declared Phase 2 base branch, not `main`. |
+| #197 — reader-visible exact target revision | `2b2bfd9afe6e1325119f7ccee507bb04e71aa343` | Open/non-draft/unmerged; independent review pending; no new reader run or CLEAR result. |
+
+## Execution and authority boundary
+
+This is Builder documentation work only. It does not close DF-02, DF-06 or DF-09; accept DF-12; authorize Stage A; clear Gate A/B; select a source baseline; adopt donors; or authorize runtime changes, tests, training, PR integration, merge, rebase, retarget, cherry-pick, branch rewrite or deployment. Historical status blocks below remain preserved as historical evidence and must not override this controlling snapshot.
 
 ---
 
