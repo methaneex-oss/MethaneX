@@ -1610,3 +1610,38 @@ The earlier 348/129/219 scan was pinned to source SHA `5a8dafb5ae8d5b31952a90846
 After the last content and index/report corrections, the Builder must refresh the complete PR #192 changed-path list and write a final inventory manifest against the exact parent tree. The inventory update must be the final branch file write. Post-write verification must prove the complete parent tree, every changed path/blob, exactly one commit ahead and only the inventory file changed. Then the Builder may update PR metadata/comment with the exact final HEAD and issue a superseding Independent Reviewer request for DF-02/DF-06 evidence. That request is not a verdict and cannot close either gate. DF-09 remains blocked until an authorized exact-head blind-reader run returns CLEAR. DF-12 remains a separate Project Director decision.
 
 No merge, retarget, rebase, cherry-pick, branch rewrite, PR integration, baseline selection, Gate A/B clearance, Stage A activation, runtime change/test, training run or deployment was performed or authorized by this Builder continuation.
+
+
+## 12. Current exact-head Builder reconciliation — 2026-11-18
+
+**Live PR #192 HEAD at the start of this addendum:** `1be38bfc2a56845dce99afdb5845e90259cc9d30`. PR #192 remains open, non-draft and unmerged, based on `docs/jarvis-phase-2-whole-brain-integration-map-20261105` at `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`. This is a time-bounded source snapshot; re-fetch the PR page after subsequent Builder writes.
+
+### 12.1 Builder work completed or materially advanced
+
+- **DF-02:** Re-fetched all 159 PR #97 changed paths and all 159 patches at exact PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`. Added a complete path-by-path role and current PR #192 tree comparison to the existing DF-02 report. Current comparison: 1 identical donor blob, 95 same-path divergent blobs, 63 absent same-path entries. Added a live branch-ref census of 251 branches / 210 distinct tips, including eight duplicate-tip groups. These are structural/provenance advances, not complete semantic successor mapping or cross-branch consumer closure.
+- **DF-06:** The exact checkpoint scan remains 50/50 Markdown files, 342 extracted occurrences, zero missing repository-relative destinations against its complete 279-entry tree. The current tree also contains 279 entries / 50 Markdown files. A checkpoint-to-current compare found no navigation-bearing additions in the intervening four documentation paths, and the DF-06 report records that bounded continuity check. This is not a fresh 50-file parser rerun at the current head and does not close external reachability/redirect/semantic checks, historical parser reconciliation, or authenticated rendered GitHub anchors.
+- **DF-09:** Re-read the controlling initial exit criterion and the exact Nemotron operator runbook. The latest completed run #44192302873 remains PARTIALLY CLEAR (31/32) against historical SHA `beb4d5a174a1dd613878f89132e97b5e6052c7d3`. The required next assessment must target the final frozen PR #192 HEAD and return CLEAR. The current GitHub tool connection has no workflow-dispatch operation; the Builder must not claim a run or verdict.
+- **DF-10:** Historical §125 inventory-only parent/successor evidence remains valid for that exact historical pair, but subsequent PR #192 file writes reopen the current inventory cycle. The terminal manifest and exact one-commit/one-file post-write verification remain pending.
+
+### 12.2 Current DF-01–DF-12 disposition
+
+| Gate | Current status | Exact remaining work / authority |
+|---|---|---|
+| DF-01 | Builder evidence present; final sync pending | Final exact-head portal/index/inventory reconciliation — Builder |
+| DF-02 | **OPEN** | Map 95 divergent and 63 absent PR #97 paths to semantic successors, replacement, retirement or non-adoption; complete historical artifact discovery and cross-branch consumers/dependencies/duplicates — Builder; exact-revision challenge — Independent Reviewer |
+| DF-03 | Partially evidenced | Preserve exact decision provenance and limited scopes; unresolved decisions remain with Project Director |
+| DF-04 | Builder evidence present | Keep proposed governance distinct from accepted bounded amendments — Builder |
+| DF-05 | Partially evidenced | Branch metadata and ancestry recorded; full dependency semantics remain open — Builder |
+| DF-06 | **NOT MET** | External destination live status/redirect/semantic checks, parser-history reconciliation, authenticated rendered heading/line/comment anchors — Builder evidence / authenticated browser required |
+| DF-07 | Reconciliation in progress | Final synchronized status records — Builder |
+| DF-08 | Resolved within bounded criterion | Preserve all disclosed historical limits; no destructive changes |
+| DF-09 | **NOT MET** | New exact-final-HEAD blind assessment with CLEAR verdict; dispatch is an external operator action under the runbook |
+| DF-10 | **REOPENED** | Final complete parent manifest, terminal inventory write, exact one-commit/one-file comparison — Builder |
+| DF-11 | **WAIVED** as mandatory gate | Preserve waiver. A separate Independent Reviewer challenge is nevertheless requested under the current Project Director instruction; this does not retroactively change DF-11's waiver |
+| DF-12 | **PENDING — PROJECT DIRECTOR ONLY** | Exact-final-revision acceptance/rejection/conditional acceptance decision |
+
+### 12.3 Authority and sequence
+
+The Builder has not claimed Documentation Foundation acceptance, an independent verdict, DF-09 CLEAR, or DF-12 approval. The Independent Reviewer request is to be published only after the Builder-owned evidence package is frozen; its exact final target SHA will be pinned in the PR conversation after the terminal inventory commit. The reviewer must independently re-fetch and inspect that exact revision.
+
+Stage A remains NOT STARTED / HELD. PR #171's approved SYS-01–SYS-11 whole-system foundation remains authoritative within its recorded scope; Stage A must reconcile with it rather than duplicate it. No implementation, donor adoption, baseline selection, training, merge, rebase, retarget, cherry-pick, branch rewrite or deployment is authorized by this register update.
