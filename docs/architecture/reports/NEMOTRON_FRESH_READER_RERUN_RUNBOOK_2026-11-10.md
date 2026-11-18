@@ -1,8 +1,8 @@
 # Nemotron Blind Fresh-Reader Rerun — Operator Runbook — 2026-11-10
 
-> **Current execution status — 2026-11-17:** The workflow-integration hold is lifted. PR #195 merged into `main` at `4f07d772beae03c99a8dd58b174201a3aa3074b2`; the documentation-reader workflow was re-fetched from `main` and matched the independently reviewed blob `585c9399318b0af17514a95a5c435d497a76234a`. The current workflow no longer uses the unsafe direct interpolation of `target_revision` into a shell command. No new DF-09 run has yet been dispatched. The run target must be the final frozen PR #192 HEAD after all documentation and inventory updates.
+> **Current execution status — 2026-11-18:** The workflow-integration hold is lifted. PR #195 merged into `main` at `4f07d772beae03c99a8dd58b174201a3aa3074b2`; the documentation-reader workflow on `main` matches the independently reviewed blob `585c9399318b0af17514a95a5c435d497a76234a`. Blind fresh-reader run [#44192302873](https://github.com/methaneex-oss/MethaneX/actions/runs/44192302873) completed successfully against exact PR #192 revision `beb4d5a174a1dd613878f89132e97b5e6052c7d3`, but its assessment verdict was **PARTIALLY CLEAR (31/32)**. It is not a CLEAR result and does not assess later PR #192 successors. The next target must be the final frozen PR #192 HEAD after all intended documentation and inventory updates.
 >
-> **F-195-07 boundary:** Live negative-path Actions evidence remains OPEN. xAI classified that gap as non-blocking for PR #195's terminology/workflow PR scope; that is not a DF-09 waiver. Under §8.3 below, if the failure-path evidence is required for DF-09 and remains unavailable, record DF-09 as BLOCKED rather than claiming that a fresh-reader CLEAR or green workflow alone closes the gate. Any waiver must come from the Project Director and be recorded explicitly.
+> **F-195-07 boundary:** Live negative-path Actions evidence remains OPEN. xAI classified that gap as non-blocking for PR #195's terminology/workflow PR scope; that is not itself a DF-09 waiver or a DF-09 clearance. Do not infer that F-195-07 is either satisfied or an automatic DF-09 prerequisite. If an applicable DF-09 criterion or explicit Project Director decision requires this failure-path evidence and it remains unavailable, record DF-09 as BLOCKED rather than claiming that a green workflow or reader result alone closes the gate. Any waiver of an established requirement must come from the Project Director and be recorded explicitly.
 
 **Purpose:** Run one new blind fresh-reader assessment against the final corrected PR #192 documentation revision.  
 **Model:** `nvidia/nemotron-3.5-super-vl:free` via OpenRouter.  
@@ -146,3 +146,23 @@ The two workflows now validate the exact target SHA and bounded assessment label
 The Builder ran bounded exact-source assertions and a 31-assertion synthetic logic harness covering response extraction, section completeness and model/completion/refusal/tool-call gates. These are not YAML parsing or execution tests. Neither workflow has been dispatched; no provider invocation, artifact inspection or Blind Fresh Tester result is claimed.
 
 **Execution remains blocked:** do not dispatch the current `main` workflow. PR #195 is still open/draft/unmerged. After the authorized integration process, re-fetch the live `main` workflow, validate the exact approved content and run only the one authorized assessment against the exact current PR #192 HEAD. The runbook does not itself authorize that integration or dispatch.
+
+
+---
+
+## 14. Exact blind fresh-reader run reconciliation — 2026-11-18
+
+The latest completed blind fresh-reader workflow execution recorded for PR #192 is [Actions run #44192302873](https://github.com/methaneex-oss/MethaneX/actions/runs/44192302873).
+
+- **Workflow result:** completed successfully; the assessment request returned HTTP 200, `finish_reason=stop`, and all required A–H sections passed structural validation.
+- **Exact target revision:** `beb4d5a174a1dd613878f89132e97b5e6052c7d3`. PR #192 HEAD matched this SHA when the run was dispatched.
+- **Provider/model:** Nvidia / `nvidia/nemotron-3.5-super-vl:free`.
+- **Assessment verdict:** **PARTIALLY CLEAR — 31/32**, not CLEAR.
+- **Artifact:** `documentation-foundation-blind-fresh-tester-44192302873-1`, artifact ID `14377077066`, SHA-256 `4302f195523d06dd74cbc7379fb9da661bb8c86a17f49bad5d16d6d0790f3239`.
+- **Durable PR record:** [PR #192 assessment evidence comment](https://github.com/methaneex-oss/MethaneX/pull/192#issuecomment-6963175700).
+
+The reader understood the project identity, governing principle, Brain-first boundary, research/fiction/engineering distinctions, current phase/holds, unauthorized actions, and role routes. The remaining findings concerned document-class distinctions, exact-revision self-identification, provenance clarity, glossary/navigation, historical status chronology, and the limits of the bounded packet. The assessment did not open external links or independently verify live GitHub metadata.
+
+The separate xAI independent review of exact SHA `beb4d5a174a1dd613878f89132e97b5e6052c7d3` also returned **PARTIALLY CLEAR**; see [the exact-revision review report](https://github.com/methaneex-oss/MethaneX/blob/2dd7d7394c1d520d7e3baa74380b866a65449e58/docs/architecture/reviews/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_XAI_PR192_2026-11-17.md). The two results are distinct evidence and neither applies to later successors.
+
+**Disposition:** DF-09 remains **NOT MET**. Do not reuse run #44192302873 as evidence for a later target SHA. A new run is useful only after the material findings are corrected and the final PR #192 documentation/inventory revision is frozen. The fresh-reader result does not replace independent technical review or Project Director DF-12 acceptance. The F-195-07 negative-path residual remains separately disclosed under the conditional boundary at the top of this runbook; it must not be silently converted into a new DF-09 criterion or silently waived.
