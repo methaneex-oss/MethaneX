@@ -309,3 +309,20 @@ This closes repository **PR metadata enumeration** for the returned range and sn
 A bounded exact-SHA graph check was added to historical lineage supplement §8.2. It verifies material relationships including: #6/#7/#8 are duplicate-plus-divergent-sibling rather than a linear chain; #16 and #17 diverge from their common base; #29 and #87 diverge; #84 and #87 diverge; #101–#104 form a feature-branch test chain; #107–#112 are based on earlier feature snapshots; #119's merge commit equals open PR #97 head and is a merge to the feature branch only; #120/#121 are integration-branch scoped; #122–#139 and #148–#165 form multiple correction/test branches; and #176 is based on #156 head. PR #149's immediate parent remains unresolved because its declared base does not match a PR head in the enumerated collection.
 
 The comparisons support branch-ancestry statements only. They do not establish semantic equivalence, source correctness, test acceptance, mainline presence, or Director approval. The #6/#7/#8 description in the supplement was corrected to state that #8 is a merged sibling/alternative, not a descendant of #6. DF-02 remains OPEN pending changed-path/semantic audits of the material unreviewed PRs, current source-presence and cross-branch consumer closure, and independent verification.
+
+
+## 12. Builder continuation — exact PR #192 status recheck (2026-11-18)
+
+**Live source revision for this continuation:** PR #192 HEAD `5bc0cfa4266ee387bccf26f6b0e6f95c6a1a6509`, fetched before the Builder documentation corrections in this continuation. PR #192 was open, non-draft and unmerged; its changed-file endpoint returned 45 paths. The PR base remained `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.
+
+The previously recorded metadata census and exact ancestry evidence remain bounded to the census scope stated in §§10–11. The current Builder pass did not convert that metadata census into an exhaustive all-branch semantic audit. The DF-02 residuals below therefore remain explicit:
+
+1. **Historical artifact/branch closure:** the 188-PR metadata census covers the returned GitHub PR collection at its stated snapshot, not every standalone artifact, branch ref, tag, commit, fork or historical working copy. Earlier donor/implementation lineages outside the bounded reviewed sets remain to be discovered and dispositioned.
+2. **PR #97 semantic disposition:** the 159 changed paths have subsystem classification and selected critical source/test evidence. This is not a complete semantic review of every path, complete source dependency closure, or duplicate-lineage analysis. Those remain outstanding.
+3. **Cross-branch consumers and references:** the complete dependency/consumer graph is not yet proven. The current PR #192 tree census does not inspect every other branch's references to retained, superseded or historical artifacts.
+4. **Repository-wide authority consistency:** the current PR #192 documentation tree has been examined as a bounded set, but a repository-wide semantic scan of every README/header/status statement across all historical branches remains incomplete.
+5. **Independent verification:** the exact-target DF-02 review request was previously posted for SHA `5bc0cfa4266ee387bccf26f6b0e6f95c6a1a6509`. That review target becomes stale when this continuation advances PR #192. A superseding exact-HEAD assignment must be issued after final inventory closure; no verdict is claimed here.
+
+The Builder has made no donor adoption, source-baseline selection, architecture or algorithm choice, branch-history operation, merge, Stage A start, runtime source/test change, training run or deployment. **DF-02 remains OPEN** and is not presented as ready for Project Director closure until the residual work and exact-revision review are completed.
+
+This addendum is Builder evidence only. It does not alter the authority of PR #171/172/173/174/179/191, does not broaden their approvals, and does not make a current proposal an accepted baseline.
