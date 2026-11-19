@@ -1774,3 +1774,35 @@ PR #171 remains open/draft/unmerged, but the Project Director individually appro
 No runtime source, tests, CMake or workflows were changed. No build, CTest, training run, workflow dispatch or fresh-reader provider call was executed. No donor code was adopted, no source baseline was selected, no independent verdict or Project Director acceptance is claimed.
 
 Stage A remains **NOT STARTED / HELD**. Runtime implementation, donor adoption, training, integration, merge, rebase, retarget, cherry-pick, branch rewrite and deployment remain **NOT AUTHORIZED**. The inventory remains the final branch-file write only after all other Builder-owned documentation/evidence changes are complete.
+
+
+## 20. Exact-ref JBP-004 branch lineage and behavioral evidence update — 2026-11-19
+
+**Exact PR #192 HEAD before this register update:** `b7e5fb4ab5c5588f9a4a085562b44d4e3df3f2dd`.  
+**DF-02 report blob:** `c304a482779dd1ca7572c4125e2a08d52b1cf6a4`, §47.  
+**Continuity checkpoint blob:** `1b34a9071e7c5f6361159bef087f78cdcf004629`, §39.
+
+### 20.1 Builder evidence added
+
+DF-02 §47 records two additional exact-ref JBP-004 branches:
+
+- PR #110 head `5869b541ab6f97d782f1043d27479f176f2ea4d4`: 118/159 donor-path blobs identical, 38 divergent and 3 absent.
+- PR #112 head `f6effc957244e5626638da0bb85b35a47cb298c4`: 119/159 identical, 37 divergent and the same 3 absent.
+
+Both branches are open/draft/unmerged. Neither is a selected or accepted source baseline.
+
+Twelve GitHub Actions runs were independently checked: six completed successfully on PR #110's exact head and six on PR #112's exact head. The two JBP-004 runs were additionally checked for exact `head_sha`, successful job steps, CTest 2/2, artifact metadata and downloaded artifact digest. PR #110's artifact preserves three-seed noisy context-reversal trials and separate-process verification; PR #112's artifact preserves the exact tested revision, build/CTest logs and persisted journal. Their bounded test contracts and limitations are detailed in DF-02 §47.
+
+### 20.2 Gate and authority disposition
+
+- DF-02: **OPEN**. The new branches and successful historical tests improve exact-ref ownership and bounded behavioral evidence. They do not close any of the 159 PR #97 ledger rows, do not establish a candidate successor on PR #192, and do not complete all-ref source-content consumer/dependency/duplicate closure or historical authority/retirement dispositions.
+- DF-06: **NOT MET**. The parser discrepancy, local fragment resolution, exhaustive external status/redirect/relevance checks and authenticated rendered GitHub anchors remain open.
+- DF-09: **NOT MET / externally blocked** pending an authorized workflow dispatch and exact-final-HEAD CLEAR result.
+- DF-10: **REOPENED** by the latest documentation writes; the terminal inventory-only successor must follow all remaining branch-file writes.
+- DF-11: waived as mandatory; the separate independent review request remains pending.
+- DF-12: **PROJECT DIRECTOR ONLY**.
+- Stage A: **NOT STARTED / HELD**. No runtime implementation, donor adoption, source-baseline selection, training, merge or deployment is authorized.
+
+### 20.3 Verification and non-authorization
+
+The JBP-004 runs are historical branch evidence only. No PR #192 runtime source, test, CMake or workflow was changed; no current-PR build or CTest was executed. No independent reviewer verdict, DF-09 CLEAR, DF-12 acceptance or gate closure is claimed. The existing PR #171 SYS-01–SYS-11 architecture foundation remains authoritative within its recorded scope.
