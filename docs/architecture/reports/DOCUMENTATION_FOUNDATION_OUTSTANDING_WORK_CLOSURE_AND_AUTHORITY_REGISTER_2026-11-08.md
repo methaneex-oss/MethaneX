@@ -1864,3 +1864,40 @@ The passing tests include cognitive-runtime learning integration, memory/learnin
 This confirms the final donor tree is compiled and tested with the integrated learning/memory/evolution mechanisms. It does not prove open-ended intelligence or current PR #192 behavior. PR #97 remains open/unmerged into main; no donor code was adopted.
 
 **Gate disposition unchanged:** DF-02 remains OPEN pending complete per-path semantic/authority closure and all-ref reverse-consumer/dependency/duplicate ownership. DF-06 remains NOT MET; DF-09 remains NOT MET / externally blocked; DF-10 remains REOPENED; DF-11 remains waived as mandatory; DF-12 remains Project Director-only. Stage A remains HELD.
+
+
+## 22. Exact-current PR/base state, DLT-002 artifact evidence and Builder residual ownership — 2026-11-19
+
+**PR #192 exact HEAD at acquisition:** \`9d61e9bb3ef0433e7b1c03bfcd1a3a19b8c6741d\`; direct branch ref and PR metadata agree. PR remains open/non-draft/unmerged with 47 changed paths; the complete tree contains 280 entries and 51 Markdown files.
+
+The PR description's prior \`bbd33d8...\` head and 0-behind claim are stale. The current base branch tip is \`ea64607ef94f142a6142a013e119a7225bc95c1c\`; the PR's recorded base/merge-base is \`61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c\`. Current base-to-head comparison is 754 ahead / 14 behind, diverged; live PR metadata reports mergeable=false. This does not authorize a retarget, rebase, merge or history rewrite.
+
+### 22.1 Evidence additions
+
+- DF-02 §49 adds exact PR #99/#100 DLT-002 run and artifact provenance, plus ten exact-ref tree comparisons against all 159 PR #97 donor paths.
+- Historical lineage supplement §10 records the same DLT-002 artifacts with exact tested runtime commits and interpretation boundaries.
+- DF-06 §21 records a bounded four-file destination delta from \`849ae...\` to \`9d61...\`; no destination additions/removals were found in those four files. This is not the required complete parser run across all 51 Markdown files.
+- Checkpoint §41 and index §110 record the live state and current evidence.
+
+### 22.2 DLT-002 historical evidence
+
+PR #99 run \`40419118694\` succeeded; artifact \`12696474493\` digest verified locally against GitHub. Tested runtime commit \`8525de...\` is an ancestor of PR #97 donor head. PR #100 run \`40596743895\` succeeded; artifact \`12778958158\` digest verified locally against GitHub. Tested runtime commit \`beb797...\` is also an ancestor of PR #97 donor head. The primary PR #100 trial recorded 569/586 optimal action selections (97.1%) with outcome feedback versus 295/591 (49.9%) in a matched outcome-feedback-withheld control. The control still receives observations and may update self-model/execution reliability; it is not a fully learning-disabled control. These results are historical donor-lineage evidence and do not prove PR #192 candidate behavior.
+
+### 22.3 Current gate/authority matrix
+
+| Gate | Current status | Remaining owner/action |
+|---|---|---|
+| DF-01 | Builder evidence present; final sync pending | Builder — final exact-head portal/index/inventory synchronization |
+| DF-02 | **OPEN** | Builder — all-ref source-content consumer/dependency/alternate-owner search; per-path successor/retirement/non-adoption and authority disposition |
+| DF-03 | Partially evidenced | Builder — preserve primary/recovered decision provenance; Project Director for reserved decisions |
+| DF-04 | Builder evidence present within bounded scope | Builder — maintain proposed vs accepted distinction |
+| DF-05 | Partially evidenced | Builder — semantic dependency closure; Project Director for cross-lineage integration order |
+| DF-06 | **NOT MET** | Builder/authenticated browser operator — complete parser reconciliation, local fragments, unique external status/redirect/relevance, rendered GitHub anchors |
+| DF-07 | Correction in progress | Builder — synchronize PR description and all controlling documents to final exact SHA |
+| DF-08 | Resolved within bounded criterion | Preserve bounded scope; Project Director retains destructive/archive decisions |
+| DF-09 | **NOT MET / externally blocked** | Authorized workflow operator and blind fresh reader — exact-final-HEAD dispatch and CLEAR |
+| DF-10 | **REOPENED** | Builder — terminal parent manifest and inventory-only successor after all other branch writes |
+| DF-11 | Waived as mandatory | Separate challenge remains requested; reviewer supplies independent verdict |
+| DF-12 | **PROJECT DIRECTOR ONLY** | Project Director — exact-final-revision acceptance/rejection/conditions |
+
+No runtime source/test/CMake/workflow change, current-PR build/CTest, fresh-reader dispatch, independent verdict or Director acceptance is claimed. Stage A remains HELD; implementation, source-baseline selection, donor adoption, training and integration remain unauthorized.
