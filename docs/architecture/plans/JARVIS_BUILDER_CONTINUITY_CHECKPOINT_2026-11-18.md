@@ -887,3 +887,59 @@ The earlier extractor recorded 353 destinations (134 local, 219 HTTP(S)). The ei
 - DF-01 final synchronization pending; DF-03 and DF-05 partially evidenced; DF-04 Builder evidence present; DF-08 resolved within bounded criterion.
 
 No runtime C++, tests, CMake, workflow or training environment was changed. No build, CTest, training run or fresh-reader dispatch was executed. No donor code was adopted. Stage A remains HELD; implementation, source-baseline selection, training, integration and merge remain unauthorized.
+
+
+## 39. Builder milestone checkpoint — exact-ref JBP-004 lineage and preserved behavioral-run evidence (2026-11-19)
+
+**Exact PR #192 HEAD before this checkpoint write:** `c3c97e79d9b25fb5b8eeb9b15a4ebead16b4ad31`.  
+**DF-02 report blob after the preceding write:** `c304a482779dd1ca7572c4125e2a08d52b1cf6a4`.  
+**Donor PR #97 exact HEAD:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+
+### 39.1 Additional exact-ref branches recovered
+
+Two open, draft, unmerged PR branches were recovered and compared against the exact 159 changed paths from PR #97:
+
+- PR #110 head `5869b541ab6f97d782f1043d27479f176f2ea4d4`, base `feat/jarvis-affective-state` @ `f4dab1fce3809e39439a7f2cff2558e7a41b96fe`.
+- PR #112 head `f6effc957244e5626638da0bb85b35a47cb298c4`, same base ref/SHA.
+
+Both exact recursive trees were complete. Against PR #97's 159 changed paths, PR #110 contains 118 identical donor blobs, 38 divergent same-path blobs and 3 absent paths; PR #112 contains 119 identical, 37 divergent and the same 3 absent paths. The absent paths are `causal_link_codec.hpp`, `cognitive_runtime_learning_integration_suite.cpp` and `memory_learning_evolution_persistence_suite.cpp` at their respective donor-relative paths. The divergent files include Brain/developmental-learning/evolution implementation and test/CMake paths. These are exact identity comparisons, not semantic-equivalence claims.
+
+### 39.2 PR #110 bounded behavioral evidence
+
+PR #110 changes the JBP-004 workflow, developmental-learning header/implementation, test CMake registration and its integration suite. The strategy update reduces the influence of isolated noisy outcomes as evidence accumulates and responds more strongly to persistent prediction error.
+
+All six Actions runs were independently fetched and verified completed/successful on the exact PR #110 head:
+
+- JBP-004 run `40651801076`
+- Core Verification `40651801011`
+- Brain ThreadSanitizer `40651801261`
+- Brain Tests `40651800984`
+- Brain CI `40651801125`
+- Native Brain Build `40651801007`
+
+The JBP-004 job checked out the exact SHA, configured and built the native target, trained and verified in separate OS processes, and ran its registered CTest fixture (2/2 passed). Artifact `12800305726` (`JBP-004-40651801076-1`) was downloaded and inspected; its SHA-256 matched the GitHub artifact digest `5abe0fa467575ee82d1e7f0cdfb9d1c89729893b0aad4ea353eaaa098af1d091`. It preserves metadata, configure/build/CTest logs, three seeded trial logs and journals. The logs record simple/hard/very-hard generated environments, noisy context-specific action mapping, reversals, fresh-process verification and 30/30 final choices for each reported context across seeds 17, 29 and 43. Test CMake explicitly uses `-UNDEBUG`, so its `assert` checks remain active in Release.
+
+This is bounded historical evidence of experience-updated context/action selection, adaptation and journal replay. The environment and label set are finite and synthetic; this is not open-world learning, general intelligence or evidence for PR #192.
+
+### 39.3 PR #112 integrated cognitive-loop evidence
+
+PR #112 is test-only: it adds a workflow, CTest registration and an integrated suite. Its explicit `require` gates verify observed action outcomes flowing through Brain, learned context-specific strategy changing subsequent `CognitiveCycle` decisions, a single-context reversal with an unchanged control, prediction-error feedback, guarded evolution evaluation/adoption, pending canary evidence restored across processes, rollback, second restore and contextual memory recall.
+
+All six Actions runs completed successfully on exact PR #112 head:
+
+- JBP-004 integrated run `40699944763`
+- Native Brain Build `40699944979`
+- Core Verification `40699944876`
+- Brain ThreadSanitizer `40699944909`
+- Brain Tests `40699944786`
+- Brain CI `40699944924`
+
+The JBP-004 job completed exact-revision checkout, native configure/build, separate-process CTest train/verify and artifact preservation; CTest reports 2/2 passed. Artifact `12820513931` (`JBP-004-40699944763-1`) was downloaded and inspected; its SHA-256 matched GitHub's digest `9a70c5d4f331fd3a2711cc2beaccc0cace84bd8de6c29e8e2b40a82fbcbb0d31`. It preserves exact tested-commit metadata, configure/build/CTest logs and the persisted journal plus metadata. Successful CTest output suppresses test stdout, so the artifact contains the CTest pass summary rather than per-check stdout.
+
+This is bounded cross-process integration evidence on a historical branch, not current PR #192 evidence. The test uses two fixed synthetic contexts/actions and one reversal; it does not establish broad generalization or full-system capability.
+
+### 39.4 Disposition and next work
+
+The two branches provide additional exact-ref artifact ownership and historical behavioral evidence. Both PRs remain open/draft/unmerged and neither is an accepted candidate source baseline. The comparisons and runs do not close any PR #97 ledger row or establish a semantic successor for PR #192.
+
+DF-02 remains OPEN. All-ref source-content consumer/dependency analysis across the 210 unique branch tips, complete per-path successor/retirement/non-adoption disposition, historical authority and duplicate capability ownership remain outstanding. DF-06 remains NOT MET; DF-09 remains NOT MET pending an authorized exact-final-HEAD dispatch and CLEAR result; DF-10 remains reopened pending the eventual inventory-only final write; DF-11 remains waived as mandatory; DF-12 remains Project Director-only. No runtime source, tests, CMake or workflow in PR #192 was changed. No donor code was adopted, and Stage A remains HELD.
