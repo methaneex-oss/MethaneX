@@ -1739,3 +1739,63 @@ The donor association/causal test requires the first one-observation simulation 
 The exact donor test CMake file registers 71 executable targets; the exact candidate file registers 45. For this cohort, both revisions register the adaptation, association/causality and attention-architecture suites, while only the donor registers `jarvis_attention_learning_brain_suite`. No target registration is evidence that a binary was built or a test executed.
 
 **Per-path semantic finding:** the candidate retains narrower adaptation, pair-association, three-feature attention and basic causal-link prediction mechanisms, but it does not preserve the donor's full behavior contracts described above. The exact path/blob comparisons and test-content deltas are now evidenced for the listed rows. These rows are not marked closed: the required reverse-consumer search across the enumerated branch collection, historical artifact authority, dependency/ownership reconciliation and any Project Director retirement/scope decision remain outstanding. No donor code was copied or adopted, no runtime source/test/CMake file was changed, and no build, CTest or workflow was run. **DF-02 remains OPEN.**
+
+
+## 40. Cognitive state, workspace, decision and evolution public-contract audit — exact header and integration-test comparison (2026-11-19)
+
+**Exact candidate PR #192 source:** `97d60ddddcea6a51110f5019b5ac00e3bce67300`.  
+**Exact donor PR #97 source:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
+**Method:** fetched the four public headers by exact donor blob and exact candidate tree path, then compared their corresponding donor/candidate test sources. The cognitive-workspace implementation file is byte-identical across the two trees. This is source/test-content evidence only; no build or test was executed.
+
+### 40.1 Core cognition data contracts
+
+| Artifact | Donor blob | Candidate blob |
+|---|---|---|
+| `core/cpp/include/jarvis/core/cognition.hpp` | `92febfa5d5feab45de1a3a19fe37282852898e6c` | `e9aec6461351db42c77ff8414a175ce4c5eea33e` |
+| `core/cpp/tests/brain_contract.cpp` | `3536648d901b004a644db79e9d50ff9a765182ed` | `54340d74eca3d8613db1763f8e01e3bc6fc221ba` |
+
+The donor public data model includes an `Evidence` type distinct from source-reliability evidence; a `Belief.disputed` flag; `PredictionContext` with concept members and evidence strength; prediction context attached to each `Prediction`; action confidence, novelty and uncertainty; affective dimensions in `DecisionContext`; and a decision rationale string. The candidate header removes those fields/types. These omissions constrain what active consumers can represent and exchange; they are not just internal implementation changes.
+
+The donor and candidate Brain contract tests also differ in behavior expectations. The donor test expects the sample evolution proposal not to be adopted and rollback to be unavailable in that scenario; the candidate test expects adoption and rollback to succeed. The donor test's event/cycle/memory counts are six, while the candidate's are eight, reflecting a changed observable lifecycle. These are materially different contract expectations and require a deliberate compatibility/authority disposition rather than an assumption that the candidate is a direct successor.
+
+### 40.2 Cognitive workspace — reduced integrated state surface
+
+| Artifact | Donor blob | Candidate blob |
+|---|---|---|
+| `core/cpp/include/jarvis/core/cognitive_workspace.hpp` | `e002025dd69183311b41afa9d57c2b0780b7f7f8` | `b015d44e332ea2511d29e607495714d0b982d44e` |
+| `core/cpp/src/cognitive_workspace.cpp` | `fbd2321d9cd1c98217389beced292654e33a906e` | `fbd2321d9cd1c98217389beced292654e33a906e` |
+
+The workspace implementation is byte-identical, but the public `CognitiveWorkspace` aggregate is not. The donor workspace includes perceptual representation, affective state and appraisal, attention signal, and action-execution results, alongside memories, beliefs, causal links, predictions, reasoning, goals, plans, decisions and assessments. The candidate aggregate removes the representation, affective, attention and action-execution-result members and their associated header dependencies. An unchanged snapshot/replace/clear implementation does not restore fields that the candidate type no longer contains.
+
+This is a reduced integration-state contract. It does not prove those mechanisms are intentionally retired, replaced elsewhere, or still available through another active workspace owner.
+
+### 40.3 Decision model — affective calibration removed from policy and context
+
+| Artifact | Donor blob | Candidate blob |
+|---|---|---|
+| `core/cpp/include/jarvis/core/decision.hpp` | `88ee24e6dc93826759de46b38d15a08a685a3aac` | `7dd9d6b7337311868d236dc0ced81f558200ab1a` |
+| `core/cpp/tests/decision_planning_architecture_suite.cpp` | `3ed85a1acc55f47eb266599d809525ef08ba0b11` | `16934f99898c3ffffcf5ac04a7a031e0845da050` |
+
+The donor `DecisionPolicy` has weights for valence, arousal, affective uncertainty, tension and stability; its `DecisionContext` exposes those dimensions and `Decision` retains a rationale. The candidate policy/context/result omit them. The donor decision/planning test varies those affective dimensions and asserts that the resulting action score changes; the candidate test retains ranking, uncertainty clarification, threat/risk escalation and planning constraints but does not exercise affective decision modulation.
+
+This is a direct reduction in the decision input contract and the test evidence for affective influence. It must not be represented as preserved affective integration solely because the candidate still has a DecisionEngine and a decision-planning suite.
+
+### 40.4 Evolution public API — previous-value restoration removed
+
+| Artifact | Donor blob | Candidate blob |
+|---|---|---|
+| `core/cpp/include/jarvis/core/evolution.hpp` | `907cdf538671ad600c498b60b74a2281853b9076` | `736876b339846e0ad4da62854a206712e79a201b` |
+| `core/cpp/src/evolution.cpp` | `7a3bc311034c48181cc9b9d4df81c308ebaa8f3d` | `3860a5a59495460c44e49b8539adff637d7ae65d` |
+| `core/cpp/tests/evolution_brain_integration_suite.cpp` | `59d7dd68c42eea18d488d8e5e6aa9f7a9a327ded` | `3164cbc19bfb056cdccfdd58f0be047226d41a86` |
+
+The donor public model exposes both `restore_baseline` and `restore_previous`; the candidate exposes only `restore_baseline`. The implementation-level rollback/previous-value differences are already described in §27 and the controller/replay differences in §28. The test source delta reinforces the integration gap: donor integration coverage is 298 lines and exercises legacy replay, evaluation/adoption history, manual rollback and parameter restoration; the candidate counterpart is 46 lines and checks a narrower experiment-adoption and baseline-rollback path. File length is not used as a quality metric; the missing scenarios and assertions are the material evidence.
+
+### 40.5 Deep integration regression-test scope
+
+The donor `brain_deep_suite.cpp` blob `1314123ea3b524b24fd6693fc6fb4873b6c550d5` is 835 lines; candidate blob `ca8e7012c92822608c3be0539784d281b0578bfd` is 182 lines. The donor assertions include attention-state replay, attention/causal effects on goal-directed decisions, action assessments and action execution outcomes, and replay-equivalent cognitive-cycle behavior. The candidate suite focuses on event/memory/goal persistence, sequence ordering, invalid input handling and memory retrieval. These are useful tests, but they do not cover the donor's integrated attention→decision→action consequence/replay scenarios.
+
+### 40.6 Per-path disposition and remaining work
+
+The exact public-contract deltas are now evidenced for donor ledger rows 23, 27, 28 and 32, with corresponding implementation/test evidence for rows 104, 105, 111 and 124. The candidate retains core cognition, workspace storage, decision ranking/planning and evolution primitives, but these interfaces and integration tests are not semantically equivalent to the donor contracts described above.
+
+These rows remain **OPEN** pending reverse-consumer and alternate-owner searches across exact refs, dependency/duplicate ownership reconciliation, historical authority and any Project Director scope/retirement decision. No source, test, CMake or workflow file was changed; no donor code was adopted; no build or test was executed. **DF-02 remains OPEN.**
