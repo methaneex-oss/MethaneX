@@ -2466,3 +2466,68 @@ The current PR #192 candidate remains a separate tree. The last exact 159-path c
 No donor code is adopted by this report. The donor branch is still PR #97, open/unmerged into `main`; it is not a Project Director-selected source baseline. PR #192 remains documentation-only in this workstream, and no current-PR runtime source, test, CMake or workflow was changed or tested.
 
 **Disposition:** record exact tree equality and exact donor-HEAD 71/71 CI as verified historical donor evidence. Retain all 159 PR #97 donor-ledger rows **OPEN** until full per-path semantic successor/retirement/non-adoption, reverse-consumer/dependency/duplicate ownership across all 210 unique branch tips, and historical authority/decision provenance are complete. DF-02 remains **OPEN**.
+
+
+## 49. Exact-current PR state correction, DLT-002 historical behavioral artifacts and additional exact-ref lineage tranche — 2026-11-19
+
+**Exact PR #192 HEAD at acquisition:** \`9d61e9bb3ef0433e7b1c03bfcd1a3a19b8c6741d\`.  
+**PR #192 branch ref:** same SHA.  
+**Exact donor PR #97 HEAD:** \`c1da222e6c94aeb3f2ad000392c21fe4fc81ab25\`.
+
+### 49.1 Live PR/base reconciliation and stale-description correction
+
+A fresh PR metadata read and direct branch-ref read agree that PR #192 is open, non-draft and unmerged at \`9d61e9bb3ef0433e7b1c03bfcd1a3a19b8c6741d\`. The complete recursive tree contains 280 entries (\`truncated=false\`), the PR changed-path list contains 47 unique paths, and the tree contains 51 tracked Markdown files.
+
+The PR description still named \`bbd33d8d8097464d578f87258fc991e6b880f99a\` as its “exact live HEAD” and claimed 0 commits behind. Both claims are stale. The live head is the branch-ref/PR metadata SHA above. The PR's recorded base SHA remains \`61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c\`, but the named base branch currently points to \`ea64607ef94f142a6142a013e119a7225bc95c1c\`. Comparing the current base-branch tip with the PR head reports **754 ahead / 14 behind**, status **diverged**, with mergeability reported false by the live PR metadata. The merge base is the recorded \`61311fe...\` snapshot.
+
+This is a current branch/base divergence fact, not permission to retarget, rebase, merge, or rewrite either branch. The Project Director's recorded integration/authority boundaries remain controlling. The PR description and current-status index require synchronization; the historical base SHA must remain visible as the PR's recorded merge-base snapshot rather than being silently replaced by the current base-branch tip.
+
+### 49.2 Historical PR #99/#100 DLT-002 execution evidence recovered from exact artifacts
+
+The historical lineage supplement already records PR #99 as a merged test-workflow PR, but its actual workflow artifacts had not been incorporated into the semantic evidence at this level. The Builder fetched the exact run metadata, job steps, artifacts and artifact bytes for PR #99 and PR #100.
+
+**PR #99 — explicit learning-mechanisms probe**
+- PR #99 head: \`9ae1a3f92ccdca846074d1433734851d9483f190\`; PR #99 is closed/merged, but its only changed path was the selectable learning-probe workflow. It did not merge the feature-branch runtime implementation into main.
+- Workflow run \`40419118694\` completed successfully on that exact PR head. Its single job completed exact checkout, revision/input validation, C++20 configure, build of the brain and registered mechanism suites, explicit mechanism gates, a 10-minute integrated DLT-002 trial, summary and artifact preservation.
+- Artifact \`12696474493\`, \`JARVIS-Learning-Probe-40419118694-1\`, was downloaded and inspected. Its SHA-256 is \`ab109d1849e63d8f0e6409861a131b3214a1e4c6db62a7d9ce33f255bcc66013\`, matching GitHub's artifact digest.
+- Artifact metadata identifies the runtime revision actually tested as \`8525de774493de7c8eab05baa98af94cd068e995\`, not the workflow PR head. This tested commit is an ancestor of PR #97 HEAD \`c1da222...\` (32 commits ahead, 0 behind). The artifact records six DLT-002 phases, a 600-second run, 20% noisy outcomes, resolved prediction evidence, and 36 explicit mechanism-gate rows marked PASS. This is historical test evidence for that exact feature-lineage revision, not current PR #192 evidence.
+
+**PR #100 — quantitative multi-seed and matched outcome-feedback control**
+- PR #100 head: \`26bca1244a698610d8d48a91308d9c0cf0855a87\`; PR #100 remains open/non-draft/unmerged and changes the learning-probe workflow only.
+- Workflow run \`40596743895\` completed successfully on that exact PR head. Its job completed exact checkout, C++20 configure/build, explicit mechanism gates, the integrated six-phase trial, two additional seeded trials, a matched outcome-feedback-disabled control, three-seed comparison, evidence analysis and artifact preservation.
+- Artifact \`12778958158\`, \`JARVIS-Learning-Probe-40596743895-1\`, was downloaded and inspected. Its SHA-256 is \`e706f91d2d6d89d8357ee27566a66bdb81dafb470839f8e0057eaa6603a712e2\`, matching GitHub's artifact digest.
+- Artifact metadata identifies the runtime revision actually tested as \`beb7971426c42d326f7553363d16f37ce311e9d9\`, an ancestor of PR #97 HEAD \`c1da222...\` (12 commits ahead, 0 behind).
+- The artifact's primary feedback-enabled trial reports 569/586 optimal action choices (97.1%). Its same-seed, same-task, same-duration outcome-feedback-withheld control reports 295/591 (49.9%), a 47.2 percentage-point difference. Across three feedback-enabled seeds, mean phase accuracy is 93.3% clear baseline, 96.3% flooded, 94.6% tunnel, 93.5% clear reversal, 98.6% generalization probe and 93.3% flooded reversal. The first unseen-context action is separately identified from the first ten decisions; later decisions include feedback and are not described as zero-shot transfer.
+- The control still receives observations and can update execution-reliability/self-model mechanisms. It isolates consequence feedback, not every learning process. The artifact explicitly warns that the finite synthetic navigation task and fixed-action baselines do not establish general intelligence or broad open-world transfer.
+- Build logs contain non-fatal compiler warnings; they are retained in the downloaded artifact and are not hidden by the successful workflow result.
+
+These artifacts materially improve the evidence that the donor-lineage mechanisms were built, registered, executed and subjected to a matched feedback control. They do **not** establish that PR #192's candidate implements those mechanisms, that every donor behavior is equivalent, or that the historical branch is an accepted implementation baseline. PR #99's merged workflow is not a runtime merge; PR #100 remains an unmerged workflow/test-evidence PR.
+
+### 49.3 Additional exact-ref tree comparison tranche — ten relevant branch tips
+
+The 159-path PR #97 ledger was compared by exact path/blob identity against complete, non-truncated recursive trees for ten relevant feature tips. Results are:
+
+| Exact branch tip | Identical donor blobs | Divergent same-path blobs | Absent donor paths |
+|---|---:|---:|---:|
+| \`feat/jarvis-affective-state\` @ \`c1da222...\` | 159 | 0 | 0 |
+| \`feat/jarvis-learning-mechanisms-probe\` @ \`9ae1a3f...\` | 1 | 94 | 64 |
+| \`feat/learning-adaptation-phase8\` @ \`e425777...\` | 0 | 57 | 102 |
+| \`feat/memory-phase3\` @ \`7b03f9b...\` | 0 | 48 | 111 |
+| \`feat/prediction-feedback-integration-phase10\` @ \`b882320...\` | 0 | 58 | 101 |
+| \`feat/world-self-model-phase4\` @ \`c0a5fa3...\` | 0 | 48 | 111 |
+| \`feat/association-causality-phase5\` @ \`917173f...\` | 0 | 51 | 108 |
+| \`feat/event-driven-cognition\` @ \`866666a...\` | 0 | 60 | 99 |
+| \`feat/autonomous-evolution-loop\` @ \`ee1bf3a...\` | 0 | 85 | 74 |
+| \`feat/cognitive-feedback-loop\` @ \`45dda32...\` | 0 | 47 | 112 |
+
+All ten recursive-tree responses were complete. These counts are **same-path identity comparisons only**. A divergent blob is not automatically a semantic successor, and an absent path is not automatically retired. The tree scan does not search file contents for consumers, alternate API names, dependencies, or duplicate capability ownership. It therefore extends exact-ref artifact-presence evidence but does not satisfy the all-ref source-content requirement.
+
+The repository-wide branch census remains 251 refs / 210 unique tips (eight duplicate-tip groups covering 49 branch names). The ten-tip tranche above is not the 210-tip content scan.
+
+### 49.4 Current DF-02 disposition
+
+The recovered DLT-002 artifacts provide real historical behavior evidence: action choices changed after experience, context reversals were exercised, predictions were resolved, and withholding consequence feedback materially reduced performance in a matched synthetic control. This evidence belongs to the tested donor-lineage commits \`8525de...\` and \`beb797...\`, both ancestors of PR #97's exact donor head.
+
+The all-ref source-content consumer/dependency/alternate-owner scan remains incomplete. The 159 rows still require complete per-path semantic successor/retirement/non-adoption disposition, historical authority, source-to-test/workflow provenance, reverse-consumer/dependency tracing and duplicate-capability ownership. No donor code was adopted, no PR #192 runtime/test/CMake/workflow was changed, and no current-PR build, CTest or training run was executed.
+
+**DF-02 remains OPEN.** The exact-ref evidence tranche and historical execution artifacts do not close the Director's Option A standard. No Director decision is inferred.
