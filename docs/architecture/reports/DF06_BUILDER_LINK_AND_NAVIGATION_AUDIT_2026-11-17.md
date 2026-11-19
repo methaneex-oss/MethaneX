@@ -420,3 +420,51 @@ The live base branch has also advanced: \`docs/jarvis-phase-2-whole-brain-integr
 The connected tools still do not expose an authenticated interactive GitHub browser. No rendered heading/line/comment anchor has been verified in a logged-in browser. External URL live-status/redirect/semantic-relevance validation remains incomplete.
 
 **Disposition:** the four-file destination delta is stable under the bounded extractor, but parser reconciliation, complete local-fragment validation, exhaustive external checks and authenticated rendered-anchor verification remain open. DF-06 remains **NOT MET** under the Project Director's Option A.
+
+
+## 21. Post-DLT-002 documentation link-set delta and capability boundary — 2026-11-19
+
+**Prior full-file extraction source:** `d4f88ab430fd1d2257313ac90eacfd1c72f4fba9`.  
+**Current exact PR #192 source before this report update:** `8080f0b9991f66940dd8966f3bc15a1ac5380617`.  
+**Compare:** 31 commits ahead, 0 behind.  
+**Current recursive tree:** 280 entries, `truncated=false`; 51 tracked Markdown files.
+
+The exact compare identifies seven changed Markdown paths since the prior full extraction:
+
+1. `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md`
+2. `docs/architecture/plans/JARVIS_BUILDER_CONTINUITY_CHECKPOINT_2026-11-18.md`
+3. `docs/architecture/reports/BUILDER_FINAL_DOCUMENTATION_FOUNDATION_RECONCILIATION_2026-11-08.md`
+4. `docs/architecture/reports/DF02_FOUNDATIONAL_ARTIFACT_AUTHORITY_AND_DEPENDENCY_RECONCILIATION_2026-11-18.md`
+5. `docs/architecture/reports/DF02_HISTORICAL_COGNITIVE_LEARNING_LINEAGE_SUPPLEMENT_2026-11-18.md`
+6. `docs/architecture/reports/DF06_BUILDER_LINK_AND_NAVIGATION_AUDIT_2026-11-17.md`
+7. `docs/architecture/reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md`
+
+A bounded before/after static destination-set comparison was performed for all seven paths at both exact revisions. It excludes fenced code blocks and inline-code spans and collects inline Markdown links/images, reference definitions, HTTP(S)/mailto autolinks, HTML `href`/`src`, and bare HTTP(S) URLs. The combined seven-file set contains 73 unique destinations. The exact before/after comparison found **zero unique destination additions and zero unique destination removals**. The per-file destination sets were also compared; the updated Builder evidence sections, including the JBP-003/JBP-004/DLT-002 and donor-integration material, introduced no new Markdown navigation destination.
+
+This is a bounded unique-destination delta, not a complete parser run. It does not establish that duplicate occurrence counts are unchanged, nor does it reproduce the complete historical CommonMark/GFM parse. The last full 51-file custom extraction remains the `d4f88...` snapshot: 345 candidate occurrences (131 local, 214 HTTP(S)); zero missing local paths under that extractor's normalization. The seven-file delta confirms no new or removed unique destination since that snapshot, but the report's own update creates a new exact source and the final terminal inventory cycle will create another successor.
+
+### 21.1 Current evidence that remains valid within its stated scope
+
+- The 131 local path references from the last full extraction resolved in the exact tree at that time. The seven-file delta contains no new or removed unique local destination, so it does not introduce a new path-existence failure under the same resolver.
+- The bounded GitHub API subset remains 22 PR destinations, 14 issue-comment destinations and 22 Actions-run destinations retrieved in §18. This proves API object reachability for those enumerated references only.
+- The six commit-pinned line-range corrections and six issue-comment ID existence checks in §16 remain immutable-source/API checks, not rendered-browser verification.
+- The ChatGPT shared-conversation pointer remains a code-literal provenance pointer, not a rendered Markdown link destination.
+
+### 21.2 Explicit capability tests and blockers
+
+A direct GitHub blob-page fetch through the connected GitHub integration returns normalized source text, not GitHub's rendered HTML page. A web-open attempt against the exact GitHub blob URL did not produce a usable rendered page. The available connected tool inventory exposes no authenticated browser, Computer Use, Playwright or screenshot/DOM-inspection action. The available GitHub connector exposes exact-ref file/tree and API retrieval, but no full repository checkout/CommonMark parser runtime; the execution container cannot reach GitHub to clone/download the repository archive.
+
+Consequently the following acceptance obligations remain unperformed:
+
+1. Full CommonMark/GFM parser and reference-link-use reconciliation over all 51 Markdown files, including the eight-occurrence historical parser discrepancy (353 versus 345; three local and five external occurrences).
+2. Complete local heading-fragment resolution and rendered heading-slug confirmation.
+3. Exhaustive unique external destination deduplication, live HTTP status, redirect chain, final destination and claim-to-destination semantic relevance checks for the complete final destination set.
+4. Authenticated rendered GitHub verification of commit-pinned blob line-range anchors and PR issue-comment anchors, including target-element identity and viewport landing.
+
+No static slug calculation, API object lookup, or source-file line-range check is substituted for the required authenticated rendered-browser evidence. The required browser work must be completed by an authorized operator with an authenticated GitHub session, or DF-06 remains open.
+
+### 21.3 Disposition
+
+This tranche verifies that the seven changed Markdown files since `d4f88...` introduce no new or removed unique navigation destination. It does not reconcile the parser discrepancy, complete the local fragment check, validate the full external destination set, or verify rendered GitHub navigation.
+
+**DF-06 remains NOT MET** under the Project Director's Option A. Do not declare the gate clear or claim that the final 51-file parser/browser standard has been met. A final exact-revision scan is still required after the remaining Builder-owned documentation writes and before the terminal DF-10 inventory cycle.
