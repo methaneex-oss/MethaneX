@@ -1799,3 +1799,74 @@ The donor `brain_deep_suite.cpp` blob `1314123ea3b524b24fd6693fc6fb4873b6c550d5`
 The exact public-contract deltas are now evidenced for donor ledger rows 23, 27, 28 and 32, with corresponding implementation/test evidence for rows 104, 105, 111 and 124. The candidate retains core cognition, workspace storage, decision ranking/planning and evolution primitives, but these interfaces and integration tests are not semantically equivalent to the donor contracts described above.
 
 These rows remain **OPEN** pending reverse-consumer and alternate-owner searches across exact refs, dependency/duplicate ownership reconciliation, historical authority and any Project Director scope/retirement decision. No source, test, CMake or workflow file was changed; no donor code was adopted; no build or test was executed. **DF-02 remains OPEN.**
+
+
+## 41. Goal, intent, knowledge, planning, reflection and self-model contract audit — exact-revision implementation and test comparison (2026-11-19)
+
+**Exact candidate PR #192 source:** `d6a7138cfc87f290f84b1f519d1075422434bfd0`.  
+**Exact donor PR #97 source:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
+**Method:** fetched exact donor and candidate headers, implementations and relevant test sources from complete recursive trees. Candidate CMake target registration was checked. No tests or builds were executed.
+
+### 41.1 Goal outcome state — experience-derived momentum removed
+
+| Artifact | Donor blob | Candidate blob |
+|---|---|---|
+| `core/cpp/include/jarvis/core/goals.hpp` | `66f8cd436a18a0bca8039205f682fc929c32b6a5` | `803fdd34130c71f54912b23fcba2f9eed23dd4f2` |
+| `core/cpp/src/goals.cpp` | `afaedcfb0f2f68ff88b3a20e474fce04bb59815c` | `778a829de8314e83b095af2f2c2a6b83baa769f4` |
+| `core/cpp/tests/goals_architecture_suite.cpp` | `0b99d090b400d0af50b186cd3a416fa28a177b99` | `14a52aa606b53f8529aa5c54861c11902deb7c97` |
+
+The donor `Goal` includes `outcome_momentum`, documented as persistent experience-derived state reconstructed from progress events and used to adapt future goal appraisal. Candidate `Goal` omits it; candidate `goals.cpp` has no outcome-momentum update/replay behavior. The candidate goals suite still tests lifecycle, prerequisites, progress and persistence, but does not establish the donor's experience-derived goal-outcome accumulation. The separate donor `cognitive_goal_outcome.hpp` and `assimilate_goal_outcome` capability were already found absent/uncompiled in §31; this header comparison confirms the active Goal contract also lacks the donor momentum state.
+
+### 41.2 Intent selection — affect-conditioned selection removed
+
+| Artifact | Donor blob | Candidate blob |
+|---|---|---|
+| `core/cpp/include/jarvis/core/intent.hpp` | `d9d926db40a3361f8354a42051106ab2b00b3c77` | `1749ae0d795da496dd6a9a4dcdbd203ae7ddaf6f` |
+| `core/cpp/src/intent.cpp` | `9707d5b6da4ddede4dfc99d52f30e7cdc7eed032` | `4283a4255284c51257df6bad12734782f2a6cde9` |
+| `core/cpp/tests/judgment_intent_strategy_phase6_suite.cpp` | `05b6c3f4c331e035dc9276025ae1d03bfe931a71` | `05b6c3f4c331e035dc9276025ae1d03bfe931a71` |
+
+The donor API includes `select_with_affect`, taking valence, arousal, affective uncertainty, tension and stability. The candidate API and implementation expose only `select`; the affect-conditioned method is absent. The test source is identical across trees and checks ordinary intent/strategy selection, but does not call the donor-only affect-conditioned API. Identical test blobs therefore do not prove that the removed method remains covered or active.
+
+### 41.3 Knowledge evidence type — semantic distinction collapsed
+
+| Artifact | Donor blob | Candidate blob |
+|---|---|---|
+| `core/cpp/include/jarvis/core/knowledge.hpp` | `3da0d2059331af405bbb0ba98c61308ead99c405` | `50eb1113a4569c3de05489c421d1cabb1437733d` |
+| `core/cpp/src/knowledge.cpp` | `21de8abbcd4426cb4ead70cb089e7d7c4ed0e81a` | `25ecf822e6132f576266c1f86a964a227c7fb75` |
+| `core/cpp/tests/knowledge_memory_phase3_suite.cpp` | `e33b9813edbfaf02a91a3f94988f5c7a54ceed8f` | `f796977fd116418b3cf0a5f9c8d33ed7a48f811e` |
+
+The donor uses `KnowledgeEvidence`, distinct from the experience-learning `Evidence` contract in `cognition.hpp`. Candidate renames the knowledge input to generic `Evidence`. This removes the type-level distinction between external/source-reliability evidence and experience-derived learning evidence. The candidate test retains reliability assimilation and source scoring, but does not establish that the original semantic type separation remains enforced. The exact consumer/namespace collision and intended unified ownership require a wider API-consumer check before disposition.
+
+### 41.4 Planning — affective appraisal inputs and weights removed
+
+| Artifact | Donor blob | Candidate blob |
+|---|---|---|
+| `core/cpp/include/jarvis/core/planning.hpp` | `2bc6fc8a6bc4649da475f71f112a9fa3fd2b3610` | `303731d3ac52362ec86afdb482a5567c3b38a8ff` |
+| `core/cpp/src/planning.cpp` | `9fcc2317e5acf0bfc24865a89eb9a54b80f8a80a` | `aab022b7cbc06f380413395757d590b56a1f3a20` |
+
+The donor `PlanningContext` and `PlanningPolicy` include valence, arousal, affective uncertainty, tension and stability inputs/weights. Candidate removes these fields and the corresponding implementation calculations. The existing donor decision/planning test includes an affective-context score comparison; candidate test coverage does not preserve that assertion. This is consistent with the reductions independently recorded for attention, decision and workspace in §§39–40.
+
+### 41.5 Reflection — affective calibration self-assessment removed
+
+| Artifact | Donor blob | Candidate blob |
+|---|---|---|
+| `core/cpp/include/jarvis/core/reflection.hpp` | `5d9e11d7529f35445adbd23209914f6363548186` | `435e03f8f03f74cb910338ab4ab1264e4eaf085c` |
+| `core/cpp/src/reflection.cpp` | `fe7dd1fada300300673b90caffa128384c65bde1` | `06f34e20f35aad535a2c606b3669b2127ef7a480` |
+
+The donor Reflection state records affective calibration error, affective learning pressure and the number of affective observations. Its `evaluate` method accepts those values and computes metacognitive appraisal-reliability measurements. Candidate removes all three fields and the corresponding method inputs/calculations. The implementation contracts are materially different; the candidate reflection model cannot report the donor's appraisal-calibration state.
+
+### 41.6 Self-model — execution-result performance update removed
+
+| Artifact | Donor blob | Candidate blob |
+|---|---|---|
+| `core/cpp/include/jarvis/core/self_model.hpp` | `caffaa55562201db6f46ca07bb72189b11695b0b` | `afd8a340f3e172b09c3859eb2602e383316ec4f8` |
+| `core/cpp/src/self_model.cpp` | `c1beeec968fa62fce8fb037f8b95a869031331ce` | `3c6a375eadd6894a635d2e18023a7079cba97c86` |
+| `core/cpp/tests/world_self_model_phase4_suite.cpp` | `f375f6e36c16fbb038d2ce3ba5c4cd18adf1860c` | `f375f6e36c16fbb038d2ce3ba5c4cd18adf1860c` |
+
+The donor SelfModel exposes `update_performance`, explicitly intended to update performance from an execution result without overriding availability or isolation. Candidate removes the method from both header and implementation. The shared `world_self_model_phase4_suite` test is about world/self-state persistence and does not exercise this removed method; identical test content is not evidence of the donor execution-feedback contract.
+
+### 41.7 Registration and disposition
+
+The candidate test CMake file registers the goals, knowledge, intent/strategy and world/self-model suites, so those source files are active test targets. Registration does not cover the donor-only APIs removed from the public contracts; the identical intent and world/self-model test sources do not call those APIs.
+
+These findings establish that the candidate retains goal lifecycle, ordinary intent selection, source reliability scoring, non-affective planning/reflection and capability-state tracking, but removes the donor's experience-derived goal momentum, affect-conditioned intent/planning, appraisal calibration and execution-result performance update. The rows remain **OPEN** pending exact-ref consumer/alternate-owner searches, historical authority, dependency/duplicate ownership and any Project Director scope/retirement disposition. No source, test or CMake file was changed; no donor code was adopted; no build or test was run. **DF-02 remains OPEN.**
