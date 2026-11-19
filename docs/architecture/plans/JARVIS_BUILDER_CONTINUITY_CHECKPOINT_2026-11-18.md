@@ -650,3 +650,30 @@ No runtime C++ source, tests or CMake files were changed. No donor code was adop
 - DF-02 OPEN; DF-06 NOT MET; DF-09 NOT MET pending exact-final-HEAD CLEAR; DF-11 waived as a mandatory gate; DF-12 Project Director-only; Stage A NOT STARTED / HELD.
 
 This checkpoint records Builder evidence only and does not authorize implementation, donor adoption, integration, merge, rebase, retarget, cherry-pick, branch rewrite, training or deployment.
+
+
+## 32. Builder milestone checkpoint — cognitive data, workspace, decision and evolution contracts (2026-11-19)
+
+**Exact PR #192 HEAD before this checkpoint write:** `c6e5edd48c0aa5a47bf9db143075523bf255422c`.  
+**DF-02 report blob after the preceding write:** `e0b02303f977883248811932d610832ab3156752`.  
+**Donor PR #97 exact HEAD:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+
+### 32.1 Work completed in DF-02 §40
+
+Compared exact donor and candidate public headers for cognition, cognitive workspace, decision and evolution, plus the related Brain contract, deep integration, decision/planning and evolution integration test sources.
+
+Material findings:
+
+- The candidate cognition data model removes the donor's separate experience-evidence type, disputed-belief state, prediction context/concept evidence, action confidence/novelty/uncertainty, affective decision-context fields and decision rationale. The Brain contract tests also encode different adoption/rollback outcomes and event/memory lifecycle counts.
+- The candidate cognitive workspace removes representation, affective state/appraisal, attention and action-execution-result members. Its snapshot/replace/clear implementation is byte-identical to donor, but the candidate aggregate no longer carries those state components.
+- The candidate decision policy/context removes valence, arousal, affective uncertainty, tension and stability weights/inputs. The donor decision/planning test exercises affective score modulation; the candidate test does not.
+- The candidate EvolutionModel public API removes `restore_previous`. The donor evolution integration test covers replay/history/manual rollback cases not present in the much narrower candidate counterpart.
+- The donor Brain deep suite exercises integrated attention, decision, action assessment/execution and replay behavior absent from the candidate suite's narrower persistence/goal/memory coverage.
+
+Exact blob identities and detailed comparisons are in DF-02 §40. These are source/test-content comparisons, not runtime test results.
+
+### 32.2 Disposition and limits
+
+The comparisons extend the per-path semantic evidence but do not close the affected rows. Reverse-consumer/alternate-owner search across exact refs, dependency and duplicate ownership reconciliation, historical authority, and any Project Director scope/retirement decisions remain open.
+
+No runtime source, test or CMake file was changed. No donor code was adopted. No build, CTest or workflow was executed. DF-02 remains OPEN; DF-06 remains NOT MET; DF-09 remains NOT MET; DF-10 remains reopened; DF-11 remains waived as a mandatory gate; DF-12 remains Project Director-only; Stage A remains HELD.
