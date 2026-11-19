@@ -44,7 +44,12 @@ Relevant upstream authority/evidence:
 9. Are WP-00–WP-08 activation prerequisites measurable and fail-closed? Identify any package that is missing an owner, dependency, evidence class, negative path, persistence/recovery requirement or stop criterion.
 10. Is the starter-learning R0–R6 protocol sufficient to prevent fixture leakage, post-hoc metric tuning, false learning claims, overgeneralization, negative transfer and regression?
 11. Does the Run 02 document introduce any unsupported exact-SHA, branch-ancestry, CI, review or Director-authority claim?
-12. What is the minimum correction set required before the planning package is ready for Project Director disposition?
+12. Do the detailed WP-02–WP-06 owner contracts preserve each mechanism's authoritative state, status transitions, provenance, failure semantics and receiving-owner boundaries?
+13. Does the WP-02–WP-04 first-slice acceptance trace join one attributable experience through interpretation, relevant memory retrieval, BM-12 inference, BM-04 disposition and BM-11 dependency/recovery handling?
+14. Do the WP-05–WP-06 contracts correctly distinguish unresolved prediction, verified outcome, provider/sensor/execution failure and learning attribution; do they prevent prediction error from directly mutating owner state?
+15. Are the WP-02–WP-06 scenario references correctly separated between the accepted 34-scenario baseline and additional proposed scenarios 35–54?
+16. Are multi-owner activation, partial failure, reconstruction, rollback/containment and later behavioral-effect criteria observable without silently selecting a transaction protocol, schema or implementation technology?
+17. What is the minimum correction set required before the planning package is ready for Project Director disposition?
 
 ## 3. Required evidence method
 
