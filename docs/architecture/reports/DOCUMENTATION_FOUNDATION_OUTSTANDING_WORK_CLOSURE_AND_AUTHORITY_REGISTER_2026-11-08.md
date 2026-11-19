@@ -1821,3 +1821,26 @@ All six associated Actions runs were independently verified successful on the ex
 This is substantive but bounded historical evidence of hidden-rule, noisy, context-specific action learning and adaptation on PR #107's existing runtime. It is not a production-code change, current PR #192 test, broad generalization or full JARVIS capability. The finite two-context/two-action/one-task challenge does not close any donor ledger row.
 
 **Current gate register:** DF-02 remains OPEN; DF-06 remains NOT MET; DF-09 remains NOT MET / externally blocked; DF-10 remains REOPENED; DF-11 remains waived as mandatory; DF-12 remains Project Director-only. Stage A remains HELD. No current-PR runtime/test/CMake/workflow was changed, no donor code was adopted, and no independent verdict or Director acceptance is claimed.
+
+
+## 22. DLT-002 probe and PR #119/#121 final donor integration evidence — 2026-11-19
+
+**Exact PR #192 HEAD before this register update:** `de642a91bd7273d8be2ff52b00b4939c2ba3b816`.  
+**DF-02 report blob:** `bc4132a916b626a01f3cc615e18d632d63e8b6ae`, §§49–50.  
+**Continuity checkpoint blob:** `36e5f0cc22f580113d2aee02b8178994b4f6b916`, §41.
+
+### 22.1 Historical behavior evidence
+
+PR #100's expanded learning-probe workflow passed on its workflow branch exact head `26bca1244a698610d8d48a91308d9c0cf0855a87` while checking out Brain source `beb7971426c42d326f7553363d16f37ce311e9d9`. The downloaded artifact `12778958158` was hash-verified. It records 35/35 mechanism suites PASS, three 10-minute enabled trials, and a matched same-seed no-feedback control. Independently recalculated enabled accuracy was 569/586 for the primary seed versus 295/591 in the control; three-seed mean phase accuracy ranged from 93.3% to 98.6%. These accuracy values are descriptive, not workflow acceptance thresholds. The control suppresses consequence feedback but still receives observations; 1,629 non-action projections remained unresolved. The tested Brain commit is 12 commits behind PR #97 donor HEAD, although the DLT-002 test source blob itself is identical at the donor head.
+
+### 22.2 Integrated donor branch and verification
+
+PR #119 and PR #121 are merged into the donor feature branch (not main). Five PR #119 workflow runs were verified successful on exact head `fb994fed8b1bd39482aafd98110055032e8bc82f`; four PR #121 runs were verified successful on exact head `804497f7458ccd8346332cc0bd63bb0a9313858d`. Source inspection confirms the donor branch contains connected runtime action-feedback learning, context isolation, reversal, memory replay, evolution proposal/evaluation/adoption safeguards, local process isolation and typed causal-link encoding. The tests are registered, and the CMake configuration keeps assert checks enabled in Release.
+
+The final donor head `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` contains all 159 PR #97 changed paths. The current PR #192 candidate at `9d61e9bb3ef0433e7b1c03bfcd1a3a19b8c6741d` still compares as 1 identical, 95 divergent and 63 absent. PR #119's 40-path set has 34 divergent/6 absent candidate paths; PR #121's 26-path set has 23 divergent/3 absent candidate paths. This is concrete candidate delta evidence, not authority to port donor code.
+
+### 22.3 Gate status and boundaries
+
+DF-02 remains **OPEN**: the new evidence improves donor lineage and behavioral proof, but does not complete all-ref consumers/dependencies/duplicate ownership or per-path semantic/authority dispositions. DF-06 remains **NOT MET**. DF-09 remains **NOT MET / externally blocked**. DF-10 remains **REOPENED**. DF-11 remains waived as mandatory. DF-12 remains **PROJECT DIRECTOR ONLY**. Stage A remains **HELD**.
+
+No PR #192 runtime/test/CMake/workflow changed; no current-PR build/CTest was run; no donor code was adopted; no source baseline was selected; no independent reviewer verdict or Project Director acceptance is claimed.
