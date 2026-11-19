@@ -1901,3 +1901,27 @@ PR #99 run \`40419118694\` succeeded; artifact \`12696474493\` digest verified l
 | DF-12 | **PROJECT DIRECTOR ONLY** | Project Director — exact-final-revision acceptance/rejection/conditions |
 
 No runtime source/test/CMake/workflow change, current-PR build/CTest, fresh-reader dispatch, independent verdict or Director acceptance is claimed. Stage A remains HELD; implementation, source-baseline selection, donor adoption, training and integration remain unauthorized.
+
+
+## 23. Pre-terminal exact-current synchronization — 2026-11-19
+
+PR #192's exact live HEAD before this synchronization is \`1e968baa0a35ef22bddbb3f5a65532811adca412\`; the branch ref and raw PR metadata agree. The complete tree has 280 entries, 47 changed paths and 51 tracked Markdown files. The base branch tip is \`ea64607ef94f142a6142a013e119a7225bc95c1c\`, 14 commits beyond the recorded PR merge-base \`61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c\`; current comparison is 774 ahead / 14 behind and diverged.
+
+The latest DF-02 and lineage supplement evidence includes exact PR #99/#100 DLT-002 run/artifact provenance, ten exact-ref tree comparisons, and PR #119/#121 donor-integration lineage. This materially strengthens historical evidence but does not close the all-ref source-content search or the 159 per-path semantic/authority dispositions. DF-06's bounded destination deltas show no unique URL/path changes in the inspected file cohorts, but the complete parser/fragment/external/rendered-browser requirements remain open.
+
+| Gate | Status | Required owner/action |
+|---|---|---|
+| DF-01 | Builder evidence present; final sync pending | Builder — terminal exact-head navigation/status sync |
+| DF-02 | **OPEN** | Builder — all-ref source-content consumers/dependencies/alternate owners and per-path successor/retirement/non-adoption/authority disposition |
+| DF-03 | Partially evidenced | Builder — primary/recovered decision provenance; Director for reserved decisions |
+| DF-04 | Builder evidence present within bounded scope | Maintain proposed/accepted separation |
+| DF-05 | Partially evidenced | Builder — semantic dependency closure; Director for integration-order decisions |
+| DF-06 | **NOT MET** | Complete parser, local fragments, exhaustive external status/redirect/relevance, authenticated rendered anchors |
+| DF-07 | Pre-terminal synchronization in progress | Builder — final PR description and controlling-document refresh |
+| DF-08 | Resolved within bounded criterion | Preserve scope and history |
+| DF-09 | **NOT MET / externally blocked** | Authorized operator + blind reader — exact-final-HEAD dispatch and CLEAR |
+| DF-10 | **REOPENED** | Builder — final parent manifest and inventory-only successor verification |
+| DF-11 | Waived as mandatory | Separate reviewer challenge still requested |
+| DF-12 | **PROJECT DIRECTOR ONLY** | Exact-final-revision decision |
+
+No implementation or donor adoption is authorized. Stage A remains HELD.

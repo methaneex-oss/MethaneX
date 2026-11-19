@@ -471,3 +471,17 @@ This tranche verifies that the seven changed Markdown files since `d4f88...` int
 
 
 **Exact-revision correction within §21:** the first seven-file comparison was computed at `3b55f38...`; three further commits then advanced the source to `8080f0b...` and changed only the planning index, Builder self-review and outstanding-work register. Those three files were re-fetched at both exact refs and their per-file unique destination sets remained 59, 2 and 8 respectively, with zero additions and zero removals. Therefore the combined 73-unique-destination set across the seven changed Markdown files remains unchanged at `8080f0b...`. The current DF-06 report update is a report-only successor and adds no Markdown destination. The source pin and ahead count above refer to the actual parent of this report update, not the earlier intermediate `3b55...` snapshot.
+
+
+## 22. Pre-terminal exact-source synchronization and unresolved Option A checks — 2026-11-19
+
+**PR #192 source at acquisition:** \`1e968baa0a35ef22bddbb3f5a65532811adca412\`.  
+**Complete tree:** 280 entries, \`truncated=false\`; 51 tracked Markdown files; 47 PR changed paths.
+
+Since the \`8080f0...\` source, the exact compare identifies three commits: two DF-06 report corrections and one historical-lineage supplement update. A bounded before/after unique-destination extractor over the exact DF-06 and supplement blobs found zero unique destination additions and zero removals. The DF-06 report's own correction adds no new destination; the new supplement material adds no destination. The earlier seven-file comparison remains 73 unique destinations with zero unique additions/removals at its stated source boundary.
+
+This is a bounded destination-set delta, not a complete CommonMark/GFM parser run. It does not reconcile the historical 353-versus-345 occurrence discrepancy, resolve all local heading fragments, check every unique external URL's status/redirect/final destination and claim relevance, or verify rendered GitHub anchors in an authenticated browser.
+
+The current base branch tip is \`ea64607ef94f142a6142a013e119a7225bc95c1c\`, 14 commits beyond PR #192's recorded merge-base \`61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c\`. The current base-to-head graph is 774 ahead / 14 behind and diverged. This does not authorize retarget/rebase/merge.
+
+**Disposition:** DF-06 remains **NOT MET** under the Director's Option A. No static scan, API retrieval, or prior screenshot is represented as authenticated rendered-anchor verification.

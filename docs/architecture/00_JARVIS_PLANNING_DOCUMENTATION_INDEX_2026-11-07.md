@@ -1666,3 +1666,46 @@ PR #99 workflow run \`40419118694\` succeeded and preserved artifact \`126964744
 | DF-12 | **PENDING — PROJECT DIRECTOR ONLY** |
 
 Stage A remains **NOT STARTED / HELD**. No runtime implementation, source-baseline selection, donor adoption, training, integration, merge, rebase, retarget, branch rewrite or deployment is authorized.
+
+
+## 111. Pre-terminal exact-current synchronization — 2026-11-19
+
+**PR #192 exact HEAD before this synchronization:** \`1e968baa0a35ef22bddbb3f5a65532811adca412\`; branch ref and raw PR metadata agree.  
+**Base branch current tip:** \`ea64607ef94f142a6142a013e119a7225bc95c1c\`; PR recorded merge-base \`61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c\`.  
+**Current comparison:** 774 ahead / 14 behind, diverged; live PR metadata reports mergeable=false.  
+**Tree:** 280 entries, complete; 47 changed paths; 51 tracked Markdown files.
+
+### 111.1 Current artifact snapshot
+
+| Artifact | Blob at pre-terminal parent |
+|---|---|
+| DF-02 reconciliation | \`51cb7da31af2c302ea6599393ca29254cef18d20\` |
+| Historical lineage supplement | \`d12641053e9247966aac107438032d7b7b6cd2af\` |
+| DF-06 audit | \`7680aff0a0d65fcdfe90156632e2ec2f550ab393\` |
+| Continuity checkpoint | \`b0b5042ebdf5b4b50375c2ad1363efdf9e6c66a5\` |
+| Planning index | \`e05e8ad52f2c179d1cb2f92639fcafe67c60808e\` |
+| Outstanding-work register | \`347b54a523f417571ed8a286ba6c6c3046c02767\` |
+| Builder self-review | \`6402613eaa3e98c480681cdadedd2574f996e66c\` |
+
+### 111.2 New historical evidence and remaining gates
+
+DF-02 §§49–50 and lineage supplement §§10–11 now include PR #99/#100 exact DLT-002 workflow/artifact evidence, ten exact-ref branch-tree comparisons, and later donor-integration lineage. The primary PR #100 trial recorded 97.1% optimal action selection with consequence feedback versus 49.9% in a matched feedback-withheld control. This is historical donor-lineage evidence, not PR #192 candidate behavior or accepted source-baseline authority.
+
+DF-06 §§21–22 record bounded seven-file and later two-file unique-destination deltas with no unique destination additions/removals. The full 51-file CommonMark/GFM parser discrepancy, local fragments, exhaustive external status/redirect/relevance and authenticated rendered GitHub anchor obligations remain open.
+
+| Gate | Current Builder disposition |
+|---|---|
+| DF-01 | Builder evidence present; terminal synchronization pending |
+| DF-02 | **OPEN** — all-ref source-content consumers/dependencies/duplicate ownership and complete per-path semantic/authority disposition remain |
+| DF-03 | Partially evidenced |
+| DF-04 | Builder evidence present within bounded scope |
+| DF-05 | Partially evidenced; current base divergence recorded, semantic dependency graph incomplete |
+| DF-06 | **NOT MET** — parser discrepancy, fragments, exhaustive external checks and authenticated rendered anchors remain |
+| DF-07 | Pre-terminal synchronization in progress |
+| DF-08 | Resolved within bounded preservation criterion |
+| DF-09 | **NOT MET / externally blocked** — no dispatch operation and no exact-final-HEAD blind CLEAR |
+| DF-10 | **REOPENED** — terminal inventory-only successor still required |
+| DF-11 | Waived as mandatory; separate reviewer challenge remains requested |
+| DF-12 | **PENDING — PROJECT DIRECTOR ONLY** |
+
+Stage A remains **NOT STARTED / HELD**. No runtime implementation, baseline selection, donor adoption, training, integration, merge, rebase, retarget, branch rewrite or deployment is authorized.

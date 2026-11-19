@@ -646,3 +646,20 @@ DF-06 §21 records a bounded four-file link-set delta from \`849ae...\` to \`9d6
 This work strengthens the historical evidence base: the donor lineage has exact-run, exact-artifact evidence for integrated learning mechanisms and a matched consequence-feedback control. It does not establish that the current PR #192 candidate implements those mechanisms. The candidate/donor semantic differences remain material and must not be waived by historical donor success.
 
 DF-02 remains **OPEN**; DF-06 remains **NOT MET**; DF-09 remains **NOT MET / externally blocked**; DF-10 remains **REOPENED**; DF-12 remains **PROJECT DIRECTOR ONLY**. DF-11's mandatory-gate waiver remains preserved. No runtime source, test, CMake or workflow in PR #192 was changed; no current-PR build/CTest or training run was performed. No donor code was adopted or source baseline selected. PR #171 SYS-01–SYS-11 remains the existing whole-system foundation. Stage A remains **NOT STARTED / HELD**.
+
+
+## 23. Pre-terminal exact-current self-review — 2026-11-19
+
+**PR #192 exact HEAD before this synchronization:** \`1e968baa0a35ef22bddbb3f5a65532811adca412\`; 47 changed paths; complete 280-entry tree; 51 Markdown files. The current base branch tip is \`ea64607ef94f142a6142a013e119a7225bc95c1c\`, 14 commits beyond the PR's recorded merge-base; the current graph is 774 ahead / 14 behind and diverged.
+
+The latest Builder evidence now includes:
+- PR #99/#100 exact DLT-002 workflow/job/artifact verification, with downloaded artifact digests independently matched to GitHub.
+- PR #119/#121 donor integration lineage and exact-head CI/CTest evidence recorded in the historical lineage supplement.
+- Ten exact-ref recursive-tree comparisons against the 159 PR #97 donor paths.
+- A bounded DF-06 unique-destination comparison over seven Markdown files and a subsequent two-file delta, with zero unique destination additions/removals in those stated scopes.
+
+These are useful improvements in provenance and behavioral evidence, but they are not substitutes for the Director's Option A standards. DF-02 remains **OPEN** because the 210-unique-tip source-content consumer/dependency/alternate-owner scan and complete per-path semantic/authority disposition are unfinished. DF-06 remains **NOT MET** because the complete parser discrepancy, local fragments, exhaustive external status/redirect/relevance and authenticated rendered GitHub anchors are unresolved. DF-09 remains **NOT MET / externally blocked** because no dispatch operation is exposed and no exact-final-HEAD blind CLEAR exists.
+
+DF-10 remains **REOPENED** until the inventory-only terminal successor is written after all other branch-file writes and independently compared. DF-11 remains waived as a mandatory gate; the separate exact-revision challenge remains requested. DF-12 remains Project Director-only. DF-01/03/04/05/07 still require final synchronization/traceability work; DF-08 remains resolved within its bounded criterion.
+
+No current PR #192 runtime source/test/CMake/workflow, donor adoption, source-baseline selection, training, integration, rebase, retarget, merge or deployment occurred. Stage A remains **NOT STARTED / HELD**.

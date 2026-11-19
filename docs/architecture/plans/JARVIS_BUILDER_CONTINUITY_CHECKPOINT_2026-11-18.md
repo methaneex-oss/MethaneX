@@ -1086,3 +1086,35 @@ DF-06 §21 records a fresh 849ae... → 9d61... four-file delta for the index, c
 - DF-12: **PROJECT DIRECTOR ONLY**.
 
 No runtime C++, test, CMake or workflow in PR #192 was changed. No current-PR build, CTest, training run, fresh-reader dispatch, independent verdict or Director acceptance was performed. No donor code was adopted and no source baseline selected. PR #171 SYS-01–SYS-11 remains the existing whole-system architecture foundation; the approved Document 00/01 revisions remain separately scoped and must not be duplicated. Stage A remains **NOT STARTED / HELD**.
+
+
+## 42. Pre-terminal synchronization checkpoint — 2026-11-19
+
+**Exact PR #192 parent before this synchronized evidence update:** \`1e968baa0a35ef22bddbb3f5a65532811adca412\`.  
+**Base branch current tip:** \`ea64607ef94f142a6142a013e119a7225bc95c1c\`; PR recorded merge-base: \`61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c\`.  
+**Current graph:** 774 ahead / 14 behind, diverged; live PR metadata says mergeable=false.  
+**Tree:** 280 entries, untruncated; 47 changed paths; 51 Markdown files.
+
+### 42.1 Synchronized evidence state
+
+- DF-02 §§49–50 and the historical lineage supplement §§10–11 contain exact PR #99/#100 DLT-002 run/artifact evidence, ten exact-ref tree comparisons, later donor-integration provenance, and explicit all-ref source-content limitations.
+- DF-06 §§21–22 contain the seven-file unique-destination comparison, the exact later DF-06/supplement delta, and the continuing parser/fragment/external/rendered-anchor blockers.
+- Index §110, register §22 and self-review §22 contain the earlier live-state/gate synchronization. Their exact blob identities at this parent are in DF-02 §50.1.
+
+The exact current blobs at this parent are in DF-02 §50.1. This synchronized commit is the last planned content/control-document synchronization before the terminal inventory cycle. After it, fetch the exact resulting HEAD and every affected blob; do not infer the commit SHA from this checkpoint.
+
+### 42.2 What the historical DLT-002 evidence does and does not establish
+
+PR #99/#100 artifacts demonstrate finite synthetic action-learning behavior on exact historical runtime commits ancestral to PR #97: integrated mechanism gates, a six-phase 10-minute trial, multi-seed reversals, prediction evidence, and a matched outcome-feedback-withheld control. The primary PR #100 trial achieved 97.1% optimal choices with feedback versus 49.9% in the matched control. This supports a bounded claim that consequence feedback materially changed behavior on that donor-lineage runtime. It does not establish current PR #192 behavior, broad open-world transfer, or accepted baseline authority.
+
+### 42.3 Final pre-terminal gate boundaries
+
+- DF-02 OPEN: complete all-ref source-content consumers/dependencies/alternate owners, per-path semantic successor/retirement/non-adoption and authority disposition remain.
+- DF-06 NOT MET: full parser reconciliation, local fragments, exhaustive external status/redirect/relevance and authenticated rendered GitHub anchors remain.
+- DF-09 NOT MET / externally blocked: no workflow-dispatch capability or exact-final-HEAD blind CLEAR result.
+- DF-10 REOPENED: terminal inventory-only write and exact successor verification still required.
+- DF-11 waived as mandatory; separate challenge remains requested.
+- DF-12 Project Director only.
+- DF-01/03/04/05/07 final synchronization remains Builder work; DF-08 remains resolved within its bounded criterion.
+
+No runtime implementation, tests, CMake, workflow, donor adoption, source-baseline selection, training, integration, rebase, retarget, merge or deployment occurred. Stage A remains HELD.
