@@ -1925,3 +1925,36 @@ The latest DF-02 and lineage supplement evidence includes exact PR #99/#100 DLT-
 | DF-12 | **PROJECT DIRECTOR ONLY** | Exact-final-revision decision |
 
 No implementation or donor adoption is authorized. Stage A remains HELD.
+
+
+## 24. Current governed Builder state after exact link correction — 2026-11-19
+
+**Exact PR #192 HEAD before this register update:** `4279a6ef3e64940b6682b23806731d97ba67650f`.  
+**Governance revalidation:** continuity checkpoint §43, based on accepted governance blob `f5827c552f36f4647339b3f8dfb38956d146c570` at base tip `ea64607ef94f142a6142a013e119a7225bc95c1c`.
+
+The live base branch is 14 commits beyond the PR's recorded merge-base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`. The PR branch is currently 780 commits ahead / 14 behind and GitHub reports mergeable=true after the two targeted Phase 2 map line-range corrections. No rebase, retarget, merge or base-branch write was performed. The PR description remains stale and requires a metadata-only correction.
+
+The final donor branch remains PR #97 HEAD `c1da...`; its tree is exact and its Core Verification/Brain CI logs show 71/71 CTest in core, native and ASan/UBSan configurations. DLT-002 has 35/35 mechanism-gate data rows, not 36; the three-seed behavioral results and matched feedback-disabled control remain bounded synthetic evidence. The 10-tip tree tranche is not the all-210-tip source-content consumer scan.
+
+At the last exact candidate tree comparison, the 159 donor paths were 1 identical, 95 divergent and 63 absent. The Phase 2 map line ranges are now corrected and the PR is mergeable, but the 210-tip consumer/dependency/duplicate-owner analysis and complete semantic/authority dispositions remain open.
+
+### Gate matrix
+
+| Gate | Current status | Remaining Builder-owned action / boundary |
+|---|---|---|
+| DF-01 | Builder evidence present; final sync pending | Synchronize final exact successor and PR metadata |
+| DF-02 | **OPEN** | Complete all-ref source-content consumers/dependencies/alternate owners and 159 per-path semantic/authority dispositions |
+| DF-03 | Partially evidenced | Preserve primary/recovered decision provenance; Director owns reserved decisions |
+| DF-04 | Builder evidence present within bounded scope | Maintain proposed/accepted separation |
+| DF-05 | Partially evidenced | Complete semantic dependency/authority graph; no duplicate of accepted Document 00/01 |
+| DF-06 | **NOT MET** | Full parser discrepancy, local fragments, exhaustive external status/redirect/relevance and authenticated rendered anchors |
+| DF-07 | In progress | Correct PR description and synchronize all controlling evidence |
+| DF-08 | Resolved within bounded criterion | Preserve bounded status |
+| DF-09 | **NOT MET / externally blocked** | Authorized exact-final-HEAD workflow dispatch and blind fresh-reader CLEAR |
+| DF-10 | **REOPENED** | New terminal inventory cycle after all remaining branch-file writes |
+| DF-11 | Waived as mandatory | Preserve separate reviewer challenge request |
+| DF-12 | **PROJECT DIRECTOR ONLY** | No Builder acceptance or decision |
+
+The prior inventory candidate `67be666f...` passed its exact one-commit/one-file/47-row manifest verification against parent `18194...`. Subsequent checkpoint, Phase 2 map, DF-06 and DF-02 writes reopened DF-10. Preserve the candidate as historical evidence and write a new terminal inventory only after all Builder-owned work is complete.
+
+No current PR #192 runtime/test/CMake/workflow change, build, CTest or training run is claimed. No donor adoption, source-baseline selection, independent verdict, Project Director acceptance or merge permission is claimed. Stage A remains HELD.
