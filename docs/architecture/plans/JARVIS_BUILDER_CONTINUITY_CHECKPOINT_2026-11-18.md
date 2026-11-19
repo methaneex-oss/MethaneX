@@ -603,3 +603,15 @@ This is a concrete API and behavior contract difference. No exact successor was 
 3. Preserve all outstanding DF-02/DF-06/DF-09/DF-10/DF-12 boundaries and Stage A hold.
 
 No runtime/engineering source, tests, CMake or workflows were modified. No tests/build/workflow were executed.
+
+
+## 30. Builder correction checkpoint — exact-ref tree access versus all-ref search (2026-11-19)
+
+**PR #192 exact HEAD before checkpoint write:** 63f363fd724824c21a4dfa7b1f775db86651db13.  
+**DF-02 report blob:** 8ea7f4807bac2002f1e34e8dd2b2e97d3ed7f4d2.
+
+A prior statement that the GitHub connector lacked recursive-tree retrieval was too broad. The generic GitHub API fetch action can retrieve a complete recursive tree at an exact ref; this was demonstrated for both PR #97 donor and PR #192 candidate. DF-02 §§29–30 are corrected.
+
+The actual limitation is all-ref **content** search: GitHub code search indexes only the default branch. To close reverse-consumer scope across the 251 enumerated branches, each relevant branch tip would require exact-ref tree retrieval plus source-file retrieval/search, or an approved local clone/index. This bulk scan remains unperformed. DF-02 remains OPEN.
+
+Because this correction required another PR #192 report/checkpoint write, the prior DF-10 inventory-only parent/successor pair is now historical and DF-10 is REOPENED. A new terminal inventory-only successor must be the final branch-file write after all remaining work. No source or runtime code changed.
