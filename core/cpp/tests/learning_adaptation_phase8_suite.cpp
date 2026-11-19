@@ -24,6 +24,7 @@ int main() {
     assert(std::get<double>(outcomes.back().data.at("error")) == 0.4);
     assert(cycle.adaptation.observations == 1);
     assert(cycle.adaptation.mean_error >= 0.0 && cycle.adaptation.mean_error <= 1.0);
+    assert(cycle.adaptation.recent_error >= 0.0 && cycle.adaptation.recent_error <= 1.0);
     assert(cycle.confidence >= 0.0 && cycle.confidence <= 1.0);
     assert(brain.learning_metric("forecast") != nullptr);
 
@@ -31,6 +32,7 @@ int main() {
     const auto cycle2 = brain.learn_from_prediction("forecast", Scalar{0.9}, 0.8);
     assert(cycle2.adaptation.observations == 2);
     assert(cycle2.adaptation.mean_error < cycle.adaptation.mean_error);
+    assert(cycle2.adaptation.recent_error < cycle.adaptation.recent_error);
     assert(second.created_sequence != 0);
 
     for (int i = 0; i < 10; ++i) {
@@ -43,20 +45,38 @@ int main() {
     assert(parameter->observations == 12);
     assert(parameter->value > 0.5);
 
+    // Developmental adaptation must respond to a changed environment even after
+    // a long history of successful predictions. Long-term experience is retained,
+    // but recent prediction errors must reduce confidence quickly.
+    const auto* before_change = brain.learning_metric("forecast");
+    assert(before_change != nullptr);
+    const double stable_confidence = brain.learning_confidence("forecast");
+    for (int i = 0; i < 4; ++i) {
+        brain.predict("forecast", Scalar{0.9}, 0.9);
+        (void)brain.learn_from_prediction("forecast", Scalar{0.1}, 0.8);
+    }
+    const auto* after_change = brain.learning_metric("forecast");
+    assert(after_change != nullptr);
+    assert(after_change->observations == 16);
+    assert(after_change->recent_error > before_change->recent_error);
+    assert(brain.learning_confidence("forecast") < stable_confidence);
+    assert(after_change->mean_error < 0.5);
+
     const auto invalid = brain.learn_from_prediction("", Scalar{0.5}, 0.8);
     assert(invalid.adaptation.observations == 0);
     assert(invalid.adopted == 0);
 
-    assert(brain.memory().all().size() >= 24);
+    assert(brain.memory().all().size() >= 32);
 
     Brain restored(path);
     const auto* metric = restored.learning_metric("forecast");
     assert(metric != nullptr);
-    assert(metric->observations == 12);
+    assert(metric->observations == 16);
     assert(std::isfinite(metric->mean_error));
+    assert(std::isfinite(metric->recent_error));
     const auto* restored_parameter = restored.evolution_parameter("forecast");
     assert(restored_parameter != nullptr);
-    assert(restored_parameter->observations == 12);
+    assert(restored_parameter->observations == 16);
     assert(restored_parameter->value > 0.5);
 
     std::filesystem::remove(path, ec);

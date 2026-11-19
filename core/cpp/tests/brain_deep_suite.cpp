@@ -73,13 +73,11 @@ int main() {
     assert(brain.state().events_seen == before_invalid + 1);
 
     for (int i = 0; i < 20; ++i) {
-        brain.observe(event(0, "memory", "observation",
-                            i % 2 ? "target" : "noise", static_cast<double>(i + 1)));
+        brain.observe(event(0, "memory", "observation", i % 2 ? "target" : "noise", static_cast<double>(i + 1)));
     }
     const auto changed_target = brain.observe(event(0, "memory", "observation", "target", 21.0));
     assert(changed_target.novelty > 0.0 && changed_target.novelty <= 1.0);
-    const auto recalled = brain.memory().recall(
-        Attributes{{"topic", Scalar{std::string("target")}}}, 3);
+    const auto recalled = brain.memory().recall(Attributes{{"topic", Scalar{std::string("target")}}}, 3);
     assert(recalled.size() == 3);
     assert(recalled.front().data.at("topic") == Scalar{std::string("target")});
     assert(brain.memory().recent(0).size() <= 256);
@@ -98,84 +96,93 @@ int main() {
     (void)brain.simulate(beliefs);
     assert(brain.causal_links().size() >= causal_before);
 
-    const std::vector<CandidateAction> actions{
-        {"safe", 0.9, 0.9, 0.05, 0.9},
-        {"risky", 0.95, 0.2, 0.9, 0.8}
-    };
+    const std::vector<CandidateAction> actions{{"safe", 0.9, 0.9, 0.05, 0.9}, {"risky", 0.95, 0.2, 0.9, 0.8}};
     const auto decisions = brain.choose(actions);
     assert(!decisions.empty());
     assert(!brain.plan(actions, 4).steps.empty());
+    const auto assessments = brain.assess_actions(decisions, ActionConstraints{0.5, true});
+    assert(!assessments.empty());
+    const auto& executable = assessments.front();
+    const auto action_result = brain.execute_action(
+        executable,
+        [](const CandidateAction& action) { return action.name == "safe"; },
+        [](const CandidateAction& action) { return action.name == "safe"; });
+    assert(action_result.authorized);
+    assert(action_result.executed);
+    assert(action_result.verified);
+    assert(brain.memory().by_kind("action_outcome", 1).size() == 1);
+    assert(brain.memory().by_kind("learning", 1).size() == 1);
     (void)brain.reflect();
     (void)brain.attention();
     (void)brain.threat();
 
-    brain.observe(Event{0, 0, "memory", "observation",
-                        {{"health", Scalar{0.2}}, {"mode", Scalar{std::string("degraded")}}}});
-    assert(brain.isolate("memory"));
-    assert(!brain.recovery_options().empty());
-    assert(brain.recover("memory", 1.0));
+    const auto failed_action = brain.execute_action(
+        executable,
+        [](const CandidateAction&) { return false; },
+        [](const CandidateAction&) { return false; });
+    assert(failed_action.authorized);
+    assert(!failed_action.executed);
+    assert(brain.memory().by_kind("action_outcome", 2).size() == 2);
 
-    brain.observe_capability("test-capability", 1.0, 1.0);
-    assert(brain.isolate_capability("test-capability"));
-    assert(brain.restore_capability("test-capability", 1.0, 1.0));
-
-    brain.register_evolution_parameter("latency", 0.5);
-    for (int i = 0; i < 6; ++i) brain.observe_evolution_fitness("latency", 0.8 + 0.02 * i);
-    const auto proposals = brain.evolution_options();
-    assert(!proposals.empty());
-    const auto proposal = proposals.front();
-    assert(proposal.proposed != proposal.current);
-    assert(brain.adopt_evolution(proposal));
-    assert(brain.rollback_evolution(proposal.key));
-    assert(!brain.adopt_evolution(EvolutionProposal{}));
-    assert(!brain.rollback_evolution(""));
-
-    brain.predict("deep.prediction", Scalar{10.0}, 2.0);
-    assert(!brain.resolve_prediction("deep.prediction", Scalar{11.0}));
-    assert(!brain.resolve_prediction("deep.prediction", Scalar{11.0}));
-    brain.predict("correct.prediction", Scalar{10.0}, -1.0);
-    assert(brain.resolve_prediction("correct.prediction", Scalar{10.0}));
-    assert(brain.learning_confidence("deep.prediction") >= 0.0);
-    assert(brain.learning_confidence("deep.prediction") <= 1.0);
-
-    constexpr int workers = 16;
-    constexpr int per_worker = 100;
-    const auto before_events = brain.state().events_seen;
-    std::vector<std::thread> threads;
-    for (int w = 0; w < workers; ++w) {
-        threads.emplace_back([&brain]() {
-            for (int i = 0; i < per_worker; ++i)
-                brain.observe(event(0, "stress", "observation", "concurrent", 0.5));
-        });
-    }
-    for (auto& t : threads) t.join();
-    assert(brain.state().events_seen >= before_events + static_cast<std::uint64_t>(workers * per_worker));
-
-    const auto start = std::chrono::steady_clock::now();
-    for (int i = 0; i < 1000; ++i)
-        brain.observe(event(0, "benchmark", "observation", "load", 0.25));
-    const auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
-        std::chrono::steady_clock::now() - start).count();
-    assert(elapsed >= 0);
-    assert(brain.state().cycle > 0);
-
-    const auto corrupt = root / "corrupt.bin";
+    const auto action_journal = root / "action-replay.bin";
     {
-        Memory writer(256, corrupt);
-        assert(writer.append(event(0, "recovery", "observation", "valid", 1.0)) == 1);
-        assert(writer.append(event(0, "recovery", "observation", "valid", 2.0)) == 2);
+        Brain first(action_journal);
+        const auto local_decisions = first.choose({CandidateAction{"persist-action", 0.9, 0.9, 0.05, 0.9}});
+        const auto local_assessments = first.assess_actions(local_decisions);
+        assert(!local_assessments.empty());
+        const auto result = first.execute_action(local_assessments.front(), [](const CandidateAction&) { return true; }, [](const CandidateAction&) { return true; });
+        assert(result.verified);
     }
     {
-        std::ofstream out(corrupt, std::ios::binary | std::ios::app);
-        const char bytes[] = {0x7f, 0x45, 0x4c, 0x46, 0x00, 0x01, 0x02};
-        out.write(bytes, sizeof(bytes));
+        Brain restarted(action_journal);
+        assert(restarted.memory().by_kind("action_outcome", 1).size() == 1);
+        assert(restarted.memory().by_kind("learning", 1).size() == 1);
+        assert(restarted.knowledge_source("action_executor") != nullptr);
     }
-    Memory recovered_memory(256, corrupt);
-    assert(recovered_memory.size() == 2);
-    assert(recovered_memory.next_sequence() == 3);
-    assert(recovered_memory.append(event(0, "recovery", "observation", "after", 3.0)) == 3);
-    assert(recovered_memory.size() == 3);
 
-    std::filesystem::remove_all(root, ec);
-    return 0;
+    const auto concept_journal = root / "concepts.bin";
+    Brain concept_brain(concept_journal);
+    concept_brain.observe(Event{0, 0, "experience", "observation", {{"alpha", Scalar{false}}, {"beta", Scalar{false}}, {"context_one", Scalar{false}}, {"context_two", Scalar{false}}}});
+    concept_brain.observe(Event{0, 0, "experience", "observation", {{"alpha", Scalar{true}}, {"beta", Scalar{true}}, {"context_one", Scalar{true}}, {"context_two", Scalar{true}}}});
+    concept_brain.observe(Event{0, 0, "experience", "observation", {{"alpha", Scalar{false}}, {"beta", Scalar{false}}, {"context_one", Scalar{false}}, {"context_two", Scalar{false}}}});
+    concept_brain.observe(Event{0, 0, "experience", "observation", {{"alpha", Scalar{true}}, {"beta", Scalar{true}}, {"context_one", Scalar{true}}, {"context_two", Scalar{true}}}});
+    const auto contextual = concept_brain.predict_with_context("alpha", Scalar{1.0}, 0.2, 0.5, 2);
+    assert(!contextual.context.concept_members.empty());
+    assert(contextual.context.evidence_strength > 0.0);
+    concept_brain.observe(Event{0, 0, "experience", "observation", {{"gamma", Scalar{true}}, {"context_one", Scalar{true}}, {"context_two", Scalar{true}}}});
+    const auto matches = concept_brain.generalized_concepts("gamma", 0.5, 2, 0.5);
+    bool generalized = false;
+    for (const auto& match : matches) if (match.concept_members == contextual.context.concept_members && match.matched_contexts.size() >= 2 && match.similarity >= 0.5 && match.evidence_strength > 0.0) { generalized = true; break; }
+    assert(generalized);
+
+    const auto prediction_journal = root / "prediction-replay.bin";
+    {
+        Brain first(prediction_journal);
+        const auto prediction = first.predict_with_context("replay.prediction", Scalar{10.0}, 0.3);
+        assert(prediction.created_sequence > 0);
+        assert(first.resolve_prediction("replay.prediction", Scalar{10.0}));
+    }
+    {
+        Brain restarted(prediction_journal);
+        const auto snapshot = restarted.snapshot();
+        bool restored = false;
+        for (const auto& prediction : snapshot.predictions) if (prediction.key == "replay.prediction") { restored = prediction.resolved && prediction.error == 0.0 && prediction.confidence >= 0.3; break; }
+        assert(restored);
+    }
+
+    brain.observe(Event{0, 0, "memory", "observation", {{"health", Scalar{0.2}}, {"mode", Scalar{std::string("degraded")}}}});
+    assert(brain.isolate("memory")); assert(!brain.recovery_options().empty()); assert(brain.recover("memory", 1.0));
+    brain.observe_capability("test-capability", 1.0, 1.0); assert(brain.isolate_capability("test-capability")); assert(brain.restore_capability("test-capability", 1.0, 1.0));
+    brain.register_evolution_parameter("latency", 0.5); for (int i = 0; i < 6; ++i) brain.observe_evolution_fitness("latency", 0.8 + 0.02 * i);
+    const auto proposals = brain.evolution_options(); assert(!proposals.empty()); const auto proposal = proposals.front(); assert(proposal.proposed != proposal.current); assert(brain.adopt_evolution(proposal)); assert(brain.rollback_evolution(proposal.key)); assert(!brain.adopt_evolution(EvolutionProposal{})); assert(!brain.rollback_evolution(""));
+    brain.predict("deep.prediction", Scalar{10.0}, 2.0); assert(!brain.resolve_prediction("deep.prediction", Scalar{11.0})); assert(!brain.resolve_prediction("deep.prediction", Scalar{11.0})); brain.predict("correct.prediction", Scalar{10.0}, -1.0); assert(brain.resolve_prediction("correct.prediction", Scalar{10.0})); assert(brain.learning_confidence("deep.prediction") >= 0.0); assert(brain.learning_confidence("deep.prediction") <= 1.0);
+
+    constexpr int workers = 16; constexpr int per_worker = 100; const auto before_events = brain.state().events_seen; std::vector<std::thread> threads;
+    for (int w = 0; w < workers; ++w) threads.emplace_back([&brain]() { for (int i = 0; i < per_worker; ++i) brain.observe(event(0, "stress", "observation", "concurrent", 0.5)); });
+    for (auto& t : threads) t.join(); assert(brain.state().events_seen >= before_events + static_cast<std::uint64_t>(workers * per_worker));
+    const auto start = std::chrono::steady_clock::now(); for (int i = 0; i < 1000; ++i) brain.observe(event(0, "benchmark", "observation", "load", 0.25)); const auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start).count(); assert(elapsed >= 0); assert(brain.state().cycle > 0);
+    const auto corrupt = root / "corrupt.bin"; { Memory writer(256, corrupt); assert(writer.append(event(0, "recovery", "observation", "valid", 1.0)) == 1); assert(writer.append(event(0, "recovery", "observation", "valid", 2.0)) == 2); }
+    { std::ofstream out(corrupt, std::ios::binary | std::ios::app); const char bytes[] = {0x7f, 0x45, 0x4c, 0x46, 0x00, 0x01, 0x02}; out.write(bytes, sizeof(bytes)); }
+    Memory recovered_memory(256, corrupt); assert(recovered_memory.size() == 2); assert(recovered_memory.next_sequence() == 3); assert(recovered_memory.append(event(0, "recovery", "observation", "after", 3.0)) == 3); assert(recovered_memory.size() == 3);
+    std::filesystem::remove_all(root, ec); return 0;
 }

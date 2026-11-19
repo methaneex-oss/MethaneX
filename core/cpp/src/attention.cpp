@@ -49,9 +49,9 @@ std::vector<AttentionSignal> AttentionModel::focus(const std::vector<Event>& eve
 void AttentionModel::reinforce(const AttentionSignal& signal, double reward) {
     const double r = std::clamp(reward, 0.0, 1.0);
     if (r <= 0.0) return;
-    policy_.novelty_weight += r * signal.novelty;
-    policy_.uncertainty_weight += r * signal.uncertainty;
-    policy_.urgency_weight += r * signal.urgency;
+    policy_.novelty_weight = std::clamp(policy_.novelty_weight + r * signal.novelty, 0.0, 4.0);
+    policy_.uncertainty_weight = std::clamp(policy_.uncertainty_weight + r * signal.uncertainty, 0.0, 4.0);
+    policy_.urgency_weight = std::clamp(policy_.urgency_weight + r * signal.urgency, 0.0, 4.0);
 }
 
 void AttentionModel::suppress(const AttentionSignal& signal, double penalty) {

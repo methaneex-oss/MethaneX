@@ -56,6 +56,8 @@ int main() {
     std::error_code ec;
     std::filesystem::remove(journal, ec);
     Brain brain(journal);
+    assert(brain.create_goal(Goal{"goal-alpha", "protect the system", 0.8, 0.0, 0, 0, GoalStatus::pending, {}, {}}));
+    assert(brain.activate_goal("goal-alpha"));
     const auto result = brain.execute_action(
         permitted,
         [](const CandidateAction&) { return true; },
@@ -70,6 +72,18 @@ int main() {
         }
     }
     assert(saw_action_feedback);
+    const auto strategies = brain.developmental_strategies();
+    assert(strategies.size() == 1);
+    assert(strategies.front().context == "goal-alpha");
+    assert(strategies.front().action == "protect");
+    assert(strategies.front().value > 0.0);
+    const auto* best = brain.developmental_best_strategy("goal-alpha");
+    assert(best != nullptr && best->action == "protect");
+    Brain restored(journal);
+    const auto restored_strategies = restored.developmental_strategies();
+    assert(restored_strategies.size() == 1);
+    assert(restored_strategies.front().context == "goal-alpha");
+    assert(restored_strategies.front().action == "protect");
     std::filesystem::remove(journal, ec);
     return 0;
 }
