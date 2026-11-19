@@ -250,6 +250,16 @@ A work package must not be approved merely because it is small or easy to implem
 
 ## 7. Verification strategy
 
+### Capability is the outcome; verification instruments are supporting evidence
+
+The object of acceptance is what the Brain can demonstrably accomplish in a bounded task, under declared conditions and constraints. Architecture, mechanisms, work packages, documents, test cases, passing suites, benchmark scores and green workflows are means of engineering, inspection and diagnosis; none is itself a capability or a measure of intelligence.
+
+A capability claim must be expressed as an observable task outcome and the behavior that produced it: what the Brain understood, which relevant evidence and experience it used, how it handled uncertainty and competing demands, what decision or plan it selected, how it adapted when circumstances changed, and whether the resulting task state or external consequence was independently verified. Where the correct behavior is to clarify, defer, reject an unsupported premise or surface a limitation, that behavior must be evaluated as such rather than penalized for not producing an action.
+
+Tests, fixtures, benchmarks, metrics and internal traces provide supporting evidence. They make challenges repeatable, expose failure modes, compare pre/post behavior and establish provenance or attribution. They must not replace task performance as the primary acceptance object. A test result supports only the behavior and conditions it actually demonstrates; the number of tests passed, modules implemented or documents written is not a substitute for demonstrated capability. No single aggregate score may conceal critical failures in evidence provenance, owner authority, persistence, recovery, regression or external authorization.
+
+For a learning claim, task-level evidence must additionally establish that attributable experience and an owner-approved change caused a persistent improvement in later relevant task behavior, including after reconstruction, while held-out related and unrelated tasks establish the justified limits of transfer. A successful internal state transition, explanation or API response alone is not a demonstrated capability.
+
 ### 7.1 Evidence levels
 
 | Level | What it establishes | What it does not establish |
