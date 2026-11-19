@@ -292,3 +292,21 @@ This is a pre-inventory navigation-freeze check. The terminal inventory update i
 This is a fresh exact-tree extraction, but **not a complete CommonMark parser or DF-06 pass**. It does not yet prove reference-style use resolution, every HTML/Markdown edge case, local fragment/heading resolution, external URL deduplication and live status/redirect/final destination, semantic relevance, or authenticated GitHub-rendered heading, line-range and issue-comment anchors. The earlier 50-file/342-occurrence scan and parser-count discrepancies must still be reconciled against the extractor's inclusion rules. The 219 external occurrences have not been individually checked for live status or semantic relevance.
 
 **DF-06 remains NOT MET under the Project Director's Option A.** Treat the 134/0 result as exact-tree local-path evidence only; do not claim external reachability, rendered navigation or complete link closure.
+
+
+## 16. Commit-pinned line-anchor verification — 2026-11-19
+
+The Builder extracted 76 commit-pinned source line-range references from the Phase 2 capability-to-source integration map and deduplicated them to 73 unique commit/path/range tuples. Each referenced file was fetched at the exact commit named in its URL, with the maximum requested end line. Sixty-seven unique ranges ended at or before the file's last line. Six ranges extended one line past EOF and were corrected in the integration map:
+
+| Path and commit | Previous range | Verified file length | Corrected range |
+|---|---:|---:|---:|
+| `core/cpp/src/action_execution.cpp` @ `1273ddbcd0087d189e01388ded2d362fb1e058d2` | 18–77 | 76 lines | 18–76 |
+| `core/cpp/tests/evolution_adoption_journal_suite.cpp` @ `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` | 1–108 | 107 lines | 1–107 |
+| `core/cpp/tests/evolution_brain_integration_suite.cpp` @ `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` | 1–298 | 297 lines | 1–297 |
+| `core/cpp/tests/cognitive_runtime_goal_feedback_suite.cpp` @ `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` | 1–84 | 83 lines | 1–83 |
+| `core/cpp/src/action_authorization.cpp` @ `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` | 14–45 | 44 lines | 14–44 |
+| `core/cpp/tests/action_authorization_suite.cpp` @ `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` | 1–48 | 47 lines | 1–47 |
+
+The six source links are corrected to their actual final lines. The other 67 line-range tuples passed the bounded file-length check. This verifies source existence and range bounds at immutable commits; it does **not** prove GitHub's rendered browser anchor behavior. Six issue-comment anchor IDs referenced by the Markdown set were also confirmed to exist in the PR discussion APIs: PR #97 comment 6521585791; PR #173 comment 6752144835; PR #174 comment 6604790481; and PR #192 comments 6894260448, 6963175700 and 6963480952. API existence is not authenticated rendered-browser verification.
+
+**DF-06 remains NOT MET.** External HTTP status/redirect/final-target and semantic relevance checks, full parser reconciliation, and authenticated rendered heading/line/comment anchor verification remain outstanding.

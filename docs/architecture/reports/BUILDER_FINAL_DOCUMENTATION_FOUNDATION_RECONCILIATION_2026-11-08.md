@@ -399,3 +399,10 @@ The PR #97 patch endpoint returned 159 patches, grouped as 8 CI/workflows, 1 bui
 A fresh bounded static link extraction fetched all 51 tracked Markdown files from the complete 280-entry tree. It found 353 candidate destinations: 134 local path references with zero missing targets under the extractor's normalization and 219 HTTP(S) occurrences. It is not a complete CommonMark parser, did not resolve local fragments, and did not perform external status/redirect/relevance or authenticated rendered-anchor checks. DF-06 remains NOT MET.
 
 The previous terminal inventory pair applies only to its old parent/successor. These updates reopen DF-10; a new terminal inventory cycle must follow the last branch file write. No Independent Reviewer verdict, DF-09 CLEAR, DF-12 acceptance, Stage A start or implementation authorization is claimed.
+
+
+## 17. Continuation — DF-06 anchor check (2026-11-19)
+
+The Builder extracted 76 commit-pinned line ranges (73 unique tuples) from the Phase 2 integration map and fetched each exact commit/path. Six ranges extended one line beyond EOF; the Phase 2 map has been corrected to the verified final line. The remaining 67 ranges were within file bounds. Six referenced PR issue-comment IDs were confirmed present in discussion APIs. This is not authenticated rendered-browser verification.
+
+DF-06 remains NOT MET pending complete parser reconciliation, external URL status/redirect/semantic checks and authenticated rendered-anchor verification. The correction is another PR #192 file write; DF-10 remains reopened until the final inventory-only successor is produced after all other writes.

@@ -189,3 +189,10 @@ At PR #192 source HEAD `d8efba1d99cc0017e27d6915cfb8c6e8bf384da1`, PR #97 return
 A fresh bounded static extraction fetched 51/51 tracked Markdown files from the complete 280-entry tree and found 353 candidate destinations: 134 local path references (zero missing under the extractor's normalization) and 219 HTTP(S) occurrences. Fragment resolution, full parser reconciliation, external live status/redirect/relevance and authenticated rendered GitHub anchors remain unverified. DF-06 remains NOT MET.
 
 The review request's prior target `7d2238542dddf5ab210ad84c37bf259cea3b3559` is superseded by subsequent PR commits. The next Independent Reviewer assignment must pin the final post-inventory SHA only after all Builder-owned evidence work is complete. DF-10 is reopened by these documentation writes. DF-09 still requires an exact-final-HEAD CLEAR result; Stage A and implementation remain held/unauthorized.
+
+
+## 16. DF-06 anchor verification and correction record — 2026-11-19
+
+The Builder checked the 73 unique commit-pinned line-range tuples extracted from the Phase 2 capability-to-source map. Six ranges exceeded the exact target file length by one line and were corrected in that map; the other 67 ranges were within file bounds. The six comment IDs referenced by the extraction were confirmed present through the PR discussion APIs. These checks establish source-range bounds and comment-record existence, not browser-rendered anchor behavior.
+
+DF-06 remains NOT MET under the Project Director's Option A. External status/redirect/semantic relevance, complete parser reconciliation and authenticated rendered GitHub anchor verification remain outstanding.

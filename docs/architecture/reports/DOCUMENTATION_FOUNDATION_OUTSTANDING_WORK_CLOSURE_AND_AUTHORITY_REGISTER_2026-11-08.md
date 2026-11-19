@@ -1681,3 +1681,12 @@ At source PR #192 HEAD `d8efba1d99cc0017e27d6915cfb8c6e8bf384da1`, Builder work 
 A fresh bounded static extraction fetched all 51 tracked Markdown files in the complete 280-entry source tree. It found 353 candidate destinations (134 local paths, all resolved under the extractor's normalization; 219 HTTP(S) occurrences). This does not satisfy the full DF-06 parser, fragment, external status/redirect/relevance or authenticated rendered-anchor requirements. DF-06 remains NOT MET.
 
 The review request's four malformed paths were corrected and the planning index's live-source block refreshed. This documentation update advances the PR head and reopens DF-10. No final inventory, exact review target, independent verdict, DF-09 CLEAR, DF-12 acceptance or Stage A authorization is claimed.
+
+
+## 16. DF-06 commit-pinned anchor findings — 2026-11-19
+
+The Builder extracted 76 line-range links from the Phase 2 capability-to-source map, yielding 73 unique immutable commit/path/range tuples. It fetched each referenced file at the pinned commit and checked the maximum linked line. Six links extended one line past EOF and have been corrected in the Phase 2 map: action_execution.cpp 18–77→18–76; evolution_adoption_journal_suite.cpp 1–108→1–107; evolution_brain_integration_suite.cpp 1–298→1–297; cognitive_runtime_goal_feedback_suite.cpp 1–84→1–83; action_authorization.cpp 14–45→14–44; action_authorization_suite.cpp 1–48→1–47. The other 67 unique ranges were within the fetched file lengths.
+
+Six issue-comment IDs referenced by the 51-file extraction were confirmed present in the PR discussion APIs (PR #97 #6521585791; PR #173 #6752144835; PR #174 #6604790481; PR #192 #6894260448, #6963175700, #6963480952). This is API-level existence evidence only; authenticated browser rendering remains unverified.
+
+This check improves the local immutable-anchor evidence but does not complete DF-06. Full parser reconciliation, external URL status/redirect/semantic checks and authenticated rendered heading/line/comment anchors remain open. DF-06 remains NOT MET.
