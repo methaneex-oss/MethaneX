@@ -2424,3 +2424,45 @@ The three paths absent from PR #107/#110/#112 older challenge-branch trees—`ca
 PR #119/#121 provide strong implementation provenance and exact-head build/test/sanitizer evidence for the integrated donor branch. They show that the final PR #97 donor head contains connected action-feedback learning, context isolation, reversal, memory replay, evolution adoption validation, process isolation and typed causal-link handling. They do not make the donor branch an approved source baseline, and they do not establish that PR #192 has those capabilities.
 
 No donor code is adopted by this report. No path is marked retired, superseded or accepted solely because a later branch contains a different blob. The 159-path ledger remains **OPEN** until every path has a semantic successor/disposition, reverse-consumer/dependency analysis across the complete branch-ref collection, duplicate ownership analysis, and historical authority/decision provenance. PR #119/#121 are now explicit lineage owners in that analysis. DF-02 remains **OPEN**.
+
+
+## 51. Final donor tree identity and exact-HEAD 71-test CI verification — 2026-11-19
+
+This section resolves the distinction between the PR #119 integration commit and the PR #97 donor merge commit. Their commit histories diverge, but their Git tree identities are exactly equal; therefore the PR #119/#121 integration tests ran against the same file tree as the final donor HEAD.
+
+### 51.1 Exact tree identity
+
+- PR #119 integration merge commit: `fb994fed8b1bd39482aafd98110055032e8bc82f`; tree `9ed26529a28d6eb28970355396ff2e2bbb3a3964`.
+- PR #97 donor branch HEAD: `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`; tree `9ed26529a28d6eb28970355396ff2e2bbb3a3964`.
+- **Tree identity: exact match.** The commits have different parent histories, but the complete source trees are byte-identical by Git tree SHA. PR #121's correction was merged into the PR #119 integration head before that tree was merged to the donor branch.
+
+This means the PR #119/121 tests at `fb994...` are tests of the exact same file tree as PR #97 donor HEAD `c1da...`, not merely an earlier similar revision.
+
+### 51.2 Exact donor-HEAD push workflows
+
+The GitHub Actions runs endpoint was queried with `head_sha=c1da...`, rather than relying only on PR-triggered workflow lookup. It returned two completed/successful push runs on the exact donor HEAD:
+
+- JARVIS Core Verification: run `40788714735`, job `cpp-core` ID `123168281914`; checkout, configure, build and test steps all successful. The raw job log reports **100% tests passed out of 71**, total CTest time 2.97 seconds.
+- Brain CI: run `40788714686`; jobs `native-brain` ID `123168281291` and `sanitizer` ID `123168281548`; checkout, configure, build and test steps all successful. The native job log reports **71/71 CTest passed** in 2.83 seconds; the AddressSanitizer/UndefinedBehaviorSanitizer job reports **71/71 passed** in 13.00 seconds.
+
+The two logs include successful execution of the key integration targets: cognitive-runtime learning integration (#23), memory/learning/evolution persistence (#45), evolution-adoption journal (#49), developmental learning (#50), developmental-brain integration (#60), developmental-world integration (#68), and DLT-002 persistence train/verify (#70–71). All 71 registered tests passed in each configuration.
+
+The preserved logs contain non-fatal compiler warnings, including missing aggregate-field initializers and an unused helper in `brain.cpp`. No warning-free-build claim is made.
+
+### 51.3 Combined evidence strength
+
+The exact donor tree is therefore supported by three complementary evidence layers:
+
+1. DLT-002: 35/35 mechanism suites plus three 10-minute feedback-enabled runs and a same-seed no-feedback control on ancestor commit `beb797...`; the trial source blob is unchanged at donor head.
+2. PR #119/#121: five plus four successful exact-head workflow runs on the same tree as donor HEAD, with integrated runtime learning, memory/evolution persistence, adoption safety, process isolation and no-feedback tests.
+3. PR #97 donor HEAD `c1da...`: exact push-triggered Core Verification and Brain CI runs, including native and ASan/UBSan 71/71 CTest results.
+
+This is strong evidence that the final donor branch contains connected, compiled, registered and tested mechanisms for experience/action feedback, adaptation, memory replay, prediction feedback, affective updates, developmental strategies/world integration and guarded evolution adoption. It remains bounded test evidence, not proof of open-ended general intelligence or arbitrary transfer.
+
+### 51.4 Candidate boundary and disposition
+
+The current PR #192 candidate remains a separate tree. The last exact 159-path comparison at candidate head `9d61e9bb3ef0433e7b1c03bfcd1a3a19b8c6741d` was 1 identical, 95 divergent and 63 absent against donor head `c1da...`; all 159 paths exist in the donor. The PR #119/121 integration set has material missing/divergent paths in the candidate as recorded in §50.
+
+No donor code is adopted by this report. The donor branch is still PR #97, open/unmerged into `main`; it is not a Project Director-selected source baseline. PR #192 remains documentation-only in this workstream, and no current-PR runtime source, test, CMake or workflow was changed or tested.
+
+**Disposition:** record exact tree equality and exact donor-HEAD 71/71 CI as verified historical donor evidence. Retain all 159 PR #97 donor-ledger rows **OPEN** until full per-path semantic successor/retirement/non-adoption, reverse-consumer/dependency/duplicate ownership across all 210 unique branch tips, and historical authority/decision provenance are complete. DF-02 remains **OPEN**.
