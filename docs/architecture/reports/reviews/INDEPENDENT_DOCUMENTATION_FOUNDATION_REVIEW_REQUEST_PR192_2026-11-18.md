@@ -61,19 +61,19 @@ Fetch and inspect the exact-target versions of these repository artifacts:
 - `docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md`
 - `docs/architecture/inventory/HISTORICAL_DOCUMENTATION_PRESERVATION_REGISTER_2026-11-08.md`
 - `docs/architecture/reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md`
-- `docs/architecture/plans/JARVIS_BUILDER_CONTINUITY_CHECKPOINT_2026-11-18.md
+- `docs/architecture/plans/JARVIS_BUILDER_CONTINUITY_CHECKPOINT_2026-11-18.md`
 
 ### DF-02 authority, provenance and lineage
 
 - `docs/architecture/reports/DF02_FOUNDATIONAL_ARTIFACT_AUTHORITY_AND_DEPENDENCY_RECONCILIATION_2026-11-18.md`
-- `docs/architecture/reports/DF02_HISTORICAL_COGNITIVE_LEARNING_LINEAGE_SUPPLEMENT_2026-11-18.md
-- `docs/architecture/inventory/PHASE_1_PR97_DONOR_CAPABILITY_TRACEABILITY_2026-11-05.md
+- `docs/architecture/reports/DF02_HISTORICAL_COGNITIVE_LEARNING_LINEAGE_SUPPLEMENT_2026-11-18.md`
+- `docs/architecture/inventory/PHASE_1_PR97_DONOR_CAPABILITY_TRACEABILITY_2026-11-05.md`
 - Relevant decision-provenance extracts and exact Project Director decision records linked by those documents.
 
 ### DF-06 navigation
 
 - `docs/architecture/reports/DF06_BUILDER_LINK_AND_NAVIGATION_AUDIT_2026-11-17.md`
-- `docs/architecture/reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md
+- `docs/architecture/reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md`
 - The exact repository tree and all relevant Markdown files, including the index and checkpoint.
 
 ### DF-09 and fresh-reader evidence
