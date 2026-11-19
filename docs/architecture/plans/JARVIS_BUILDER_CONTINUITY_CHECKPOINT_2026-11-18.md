@@ -358,3 +358,33 @@ The runbook confirms the latest applicable historical blind reader run #44192302
 4. Preserve DF-10 final-inventory ordering, DF-11 waiver, DF-12 Director-only acceptance and Stage A hold.
 
 No runtime code, donor code, build configuration or tests were changed. This checkpoint updates an existing PR path only.
+
+
+## 21. Builder milestone checkpoint — canonical 159-path donor ledger (2026-11-19)
+
+**PR #192 exact HEAD before checkpoint write:** 4630b95a789cc5f3fe69cc9616c1448ffcdfc6d1.  
+**DF-02 report blob:** 61ea3c6449507be92d15b1dea79d6a5136d9aa15.  
+**Donor PR #97 exact HEAD:** c1da222e6c94aeb3f2ad000392c21fe4fc81ab25.
+
+### 21.1 Work completed
+
+DF-02 §30 now contains a canonical one-row-per-path ledger for all 159 PR #97 changed paths. Each row is bound to the donor blob SHA and the candidate PR #192 exact-tree blob SHA or explicit absence.
+
+Both recursive trees were fetched at exact SHAs and were complete (truncated=false): donor 287 entries; candidate 280 entries. PR #97's paginated changed-file endpoint returned 159 paths across both pages. Exact candidate mapping:
+
+- 95 paths have a different candidate blob.
+- 63 donor paths are absent at the same path in the candidate tree.
+- 1 path has an identical blob.
+
+These are structural relations only. No semantic closure is inferred. All 159 rows remain OPEN until successor/retirement semantics, exact-ref consumer/dependency tracing, test/build provenance and authority are recorded. The five evolution/reflection source comparisons in §§27–28 remain useful partial evidence, not closed rows.
+
+### 21.2 Next work
+
+1. Work through absent donor paths in coherent subsystem batches, identify candidate successors and reverse consumers, and distinguish retired test/workflow scaffolding from missing runtime behavior.
+2. Work through the changed-blob implementation/test paths and record material behavior deltas, not just blob identity.
+3. Preserve the exact-ref/all-branch limitation: default-branch code search is not all-ref evidence. Use a bounded local clone/index if available or mark unprovable scope blocked.
+4. Continue DF-06 exact-tree parser reconciliation and destination verification. DF-06 remains NOT MET until external and authenticated rendered navigation checks are satisfied.
+5. DF-09 remains NOT MET pending a new exact-final-HEAD blind assessment returning CLEAR; do not reuse the stale 31/32 result.
+6. DF-10 remains terminal: inventory is the final branch-file write, so do not write it until all other source/report/checkpoint changes are complete. DF-11 remains waived; DF-12 remains Project Director-only; Stage A remains held.
+
+No runtime code was modified, no donor code adopted, no tests/build run and no CI workflow dispatched.
