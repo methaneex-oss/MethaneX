@@ -330,3 +330,41 @@ The earlier exact-tree static extraction at `d8efba1d99cc0017e27d6915cfb8c6e8bf3
 **Still not verified:** unique external URL live status, redirects and final destinations; semantic relevance of all external destinations; local heading-fragment resolution; authenticated rendered GitHub heading/line/comment anchors; and the access-limited historical conversation pointer. The six line-range bounds and six issue-comment IDs in §16 were checked through immutable file/API evidence, not authenticated rendered-browser behavior.
 
 **DF-06 remains NOT MET under the Project Director's Option A.** This exact-revision delta check narrows the remaining local-link uncertainty but does not satisfy external or rendered-navigation closure.
+
+
+## 18. GitHub external-destination reachability and historical-pointer classification — 2026-11-19
+
+**Exact PR #192 source:** `4227b163d4bb2efafcf42b55389469b5fe6f5608`.  
+**Scope:** GitHub PR links, issue-comment anchors and Actions-run links present in the current documentation set. Each destination was retrieved through the GitHub repository API; this is endpoint-reachability and metadata evidence, not a complete semantic-relevance review or rendered-browser test.
+
+### 18.1 Pull-request destinations
+
+The following 22 PR destinations returned successfully with current metadata: #96, #97, #99, #148, #150, #151, #155, #156, #164, #171, #172, #173, #174, #175, #176, #178, #179, #191, #192, #193, #195 and #196.
+
+All are reachable. At verification time, #99, #195 and #196 were closed/merged; the remaining referenced PRs were open. PR #97 remains open/draft at donor HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`. PR #192 remains open/non-draft. Historical PR state is not treated as a broken link.
+
+### 18.2 Issue-comment destinations
+
+All 14 distinct issue-comment IDs referenced in the audited reports were retrievable from the GitHub API: 6521585791, 6555976534, 6556276653, 6598249449, 6604790481, 6752144835, 6836333027, 6894239520, 6896098398, 6899575912, 6950255396, 6963175700, 6963480952 and 6963581974.
+
+Each returned the requested comment ID, author and canonical PR comment URL. These include the recorded Project Director decisions, the donor learning-machinery audit, and the independent review/fresh-reader artifacts. API existence does not prove that a browser session scrolls to the visible comment or that every claim in the comment is semantically applicable to the current candidate.
+
+### 18.3 Actions-run destinations
+
+All 21 distinct Actions-run IDs referenced in the inspected documentation were retrievable: 40243557728, 40419118694, 40565468650, 40788714686, 40788714735, 41174439423, 41174439433, 41174439446, 41174439557, 41808525486, 41808525492, 41808525499, 41808525557, 42080973918, 42834248124, 42879721340, 42909224258, 42970930733, 43019119856, 43384559530 and 44192302873.
+
+All returned terminal status `completed` and conclusion `success`. Their head SHAs vary and are historical evidence; none is represented as CI for current PR #192 HEAD. In particular, run #44192302873 is successful as a workflow execution, but its associated blind-reader assessment remains PARTIALLY CLEAR (31/32) on its recorded reviewed revision. A successful workflow status is not a CLEAR assessment.
+
+### 18.4 Access-limited historical ChatGPT pointer
+
+The ChatGPT shared-conversation URL retained in the outstanding-work register and PR #174 recovery record is enclosed in Markdown inline-code spans, and the source text explicitly says it is a retained literal pointer rather than a verified navigation link. It is therefore **not a Markdown/HTML destination** and must not be counted as an external link occurrence. A direct retrieval attempt failed with a cache miss. The underlying historical conversation provenance remains unavailable; that is a source-authority limitation, not a broken navigation destination in the rendered Markdown.
+
+### 18.5 Remaining DF-06 obligations
+
+- GitHub PR/comment/Actions destination reachability: **Builder-verified for the 22 PRs, 14 comments and 21 runs enumerated above**.
+- Historical workflow relevance: still requires claim-to-run/commit comparison where the surrounding text makes a stronger claim than successful execution.
+- External non-GitHub destinations: the ChatGPT pointer is a code literal, not a destination; no other non-GitHub destination was identified in the inspected Markdown URL occurrences. Full parser reconciliation remains required before declaring the external destination inventory exhaustive.
+- Authenticated rendered GitHub heading, line-range and issue-comment fragment navigation: **not verified**. API endpoint existence and static HTML/anchor presence are not a substitute for authenticated browser target/viewport inspection.
+- Local path and fragment resolution: existing exact-tree evidence remains bounded by its parser rules; full CommonMark/reference-link/HTML/heading-fragment reconciliation remains open.
+
+**Disposition:** This tranche closes a substantial GitHub endpoint-reachability subset and corrects the classification of the access-limited ChatGPT literal. It does not close DF-06. DF-06 remains **NOT MET** until complete parser reconciliation, remaining destination relevance checks and authenticated rendered-anchor verification are evidenced.
