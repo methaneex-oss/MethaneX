@@ -28,7 +28,7 @@ Upstream project lineages and authority:
 Current planning work:
 - **PR #175** — Brain implementation roadmap / planning.
 - Branch: `plan/brain-implementation-roadmap-20261103`.
-- Latest verified HEAD as of 2026-11-19: `cea7e5e246aa1b3722e97a2faa3ac0633b037f3f`. Re-fetch live PR metadata before any operation.
+- Latest content-bearing planning HEAD before the handoff-only refreshes: `cea7e5e246aa1b3722e97a2faa3ac0633b037f3f`. The handoff-only successor commits are part of PR #175 and therefore advance its branch HEAD; do not use this content HEAD as the current PR HEAD. Re-fetch live PR metadata before any operation.
 - PR: https://github.com/methaneex-oss/MethaneX/pull/175
 
 ### Exact subphase: Gate A — repository baseline reconciliation
@@ -419,14 +419,14 @@ The MCU JARVIS comparison is a capability reference only, excluding fictional te
 
 | PR | Exact live HEAD | Live state | Current disposition |
 |---|---|---|---|
-| #175 — Brain Implementation Planning | **cea7e5e246aa1b3722e97a2faa3ac0633b037f3f** | Open / draft / unmerged; 26 changed paths; base spec/brain-mechanism-specification-20261103 at 0811a59e46bf934e32e794f90e4e7d18d4e2bd97 | Non-operative planning. Latest review assignment is comment [#7003294950](https://github.com/methaneex-oss/MethaneX/pull/175#issuecomment-7003294950), pinned to this exact HEAD. Zero submitted reviews at the latest check. |
+| #175 — Brain Implementation Planning | Content-bearing planning HEAD before the handoff-only refresh: **cea7e5e246aa1b3722e97a2faa3ac0633b037f3f** | Open / draft / unmerged; 26 changed paths before the handoff-only refresh; base spec/brain-mechanism-specification-20261103 at 0811a59e46bf934e32e794f90e4e7d18d4e2bd97 | Non-operative planning. The handoff-only successor advances the live PR HEAD; fetch current PR metadata and the newest superseding review assignment comment. The prior assignment #7003294950 for cea7e5e... is superseded. |
 | #192 — Documentation Foundation | **711ce19e360bb5d4a7c91e9d94092466bb344f89** | Open / non-draft / unmerged; 47 changed paths; base docs/jarvis-phase-2-whole-brain-integration-map-20261105 at 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c | DF-02 OPEN; DF-06 NOT MET; DF-09 NOT MET; DF-10 REOPENED; DF-11 WAIVED as mandatory gate; DF-12 pending Project Director. Stage A HELD. |
 | #173 — Brain Foundation Architecture | **a96af5b18d3a1d580ff56cff6191240893bceeb5** | Open / draft / unmerged | Current architecture proposal is not accepted as complete/final. PARTIALLY CLEAR review applies to earlier exact SHA 1f137cbaed985821bbc32408151911b18418f713; whole-architecture acceptance and CF-26/CF-27 remain open. |
 | #174 — Brain Mechanism Specification | **c34472354e4122fc1d78dc25bf45d81f1eb4dc69** | Open / draft / unmerged | Current 54-scenario correction proposal remains unaccepted. Historical accepted baseline 0811a59e46bf934e32e794f90e4e7d18d4e2bd97 remains the 34-scenario authority until a separate exact-revision decision. |
 | #197 — Blind reader packet target-SHA correction | **2b2bfd9afe6e1325119f7ccee507bb04e71aa343** | Open / non-draft / unmerged; one changed workflow file | Exact-HEAD Independent Reviewer request exists; zero submitted reviews at the latest check. No fresh-reader dispatch is claimed; F-195-07 remains open. |
 | #179 — Phase 2 capability map | **ea64607ef94f142a6142a013e119a7225bc95c1c** | Open / draft / unmerged; 11 changed paths | Separate Phase 2 mapping lineage; do not retarget, merge or treat as an implementation baseline. |
 
-These are snapshots fetched on 2026-11-19, not permanent truths. Refresh before further operations.
+These are content/status snapshots fetched on 2026-11-19 before the handoff-only successor commits. This file is itself part of PR #175, so its own commit advances that PR. The resulting SHA cannot be embedded in the file without creating another successor; use live PR metadata as the authoritative current HEAD.
 
 ### 12.3 Current PR #175 planning work
 
@@ -485,7 +485,7 @@ PR #192 is a separate Documentation Foundation lineage. Do not treat PR #175 pla
 2. Use the capability-first standard in all planning: what can JARVIS do, under which conditions, how reliably, and what observable result proves it? Mechanism/test/document counts are not progress criteria.
 3. Preserve the distinction between task capability, supporting test/trace evidence, learned change and external execution/outcome verification.
 4. Keep accepted PR #174 scenarios 1–34 separate from proposed/unaccepted scenarios 35–54.
-5. Keep every reviewer verdict tied to the exact SHA reviewed. Latest PR #175 assignment is comment #7003294950 for cea7e5e...; it is pending, not accepted.
+5. Keep every reviewer verdict tied to the exact SHA reviewed. The assignment at comment #7003294950 for cea7e5e... is superseded by the assignment posted after the handoff-only refresh. Fetch the newest superseding PR #175 discussion comment and verify its target SHA against live metadata; it is pending until an actual submitted review/report exists.
 6. Continue only bounded non-operative planning under existing authority. Any executable work package still requires its prerequisites and explicit Project Director activation decision.
 7. Before each repository write, re-fetch the target PR metadata and use the exact current HEAD as the expected parent. If it changes, stop and re-reconcile.
 8. Do not claim background review will arrive; review completion must be established from an actual submitted review or report.
