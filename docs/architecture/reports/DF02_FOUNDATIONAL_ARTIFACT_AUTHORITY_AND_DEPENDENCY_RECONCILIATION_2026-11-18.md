@@ -1505,3 +1505,53 @@ Before any autonomous evolution mutation is considered safe, reconcile all three
 Define which paths are permitted for autonomous learning versus trusted/manual administration, ensure the persisted event schema is sufficient to validate/reconstruct the selected policy, and add Brain-level negative-path, failure-compensation and restart/replay tests. This is an API/authority decision and integration contract, not a request to restore the donor code wholesale.
 
 **Disposition:** §31's function-name reference is corrected. The separate direct-adoption path is now traced to the exact public method and its test/replay boundary. The control-plane invariant remains unresolved; no runtime code or tests were changed or executed. DF-02 remains OPEN.
+
+
+## 34. Donor learning-integration test successor audit — behavior exercised versus candidate coverage (2026-11-19)
+
+**Exact candidate source:** PR #192 HEAD `bac95103f3f9e9619487ac4efbe7771ff8a6d353`.  
+**Donor source:** PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
+**Scope:** Eight absent donor integration/model test paths compared with their closest candidate registered tests. This section distinguishes partial adjacent coverage from equivalent integration coverage.
+
+### 34.1 Action-consequence and runtime-learning integration
+
+- Donor `brain_action_consequence_integration_suite.cpp` (317 lines; blob `7616082579d53e3579cae8e87895bdb3dadba66f`) runs a cognitive cycle, authorizes/executes/verifies an action, observes a negative consequence, resolves the corresponding prediction and checks the persisted prediction record.
+- Donor `cognitive_runtime_learning_integration_suite.cpp` (327 lines; blob `656de56b1368e40afb090778a7a5504ab4208056`) runs the asynchronous CognitiveRuntime with an action adapter, observes action outcomes, checks prediction resolution and learning metrics, and verifies the resulting strategy/affective updates.
+- Candidate `cognitive_cycle_suite.cpp` (98 lines; blob `38ff2c7d6e851b4745e9dc7c01f968b7245400a2`) tests perception/belief/goal/plan/decision integration and prediction feedback, but does not execute an action through an adapter or verify learned action-consequence strategy changes.
+- Candidate `cognitive_runtime_suite.cpp` (87 lines; blob `48cac9cb0e27e2dc8a15323429d1f7158ee427a0`) tests runtime start/submit/queue/process/metrics behavior, not action-adapter execution, observed consequences or learning from those consequences.
+- Candidate lower-level `action_execution_phase7_suite.cpp` is registered, but it is not a replacement for the donor end-to-end CognitiveRuntime → action execution → observed consequence → changed future decision regression.
+
+**Disposition:** Candidate has partial cycle/runtime/action-component tests, but the donor's integrated action-consequence learning test is not demonstrated as replaced.
+
+### 34.2 Developmental Brain integration and contextual strategy learning
+
+- Donor `developmental_brain_integration_suite.cpp` (1,139 lines; blob `760162dd6d1e669162e0bf22223a437491f5e262`) exercises Brain-level prediction experiences, contextual associations/strategies, action success/failure consequences, changes to action preference, affective significance and journal reconstruction.
+- Donor `developmental_learning_suite.cpp` (301 lines; blob `8e94932b40c109f1c73470418d85ca2020a2e198`) tests association/strategy learning, affect as a continuous learning modifier, prediction-error effects and rejection of malformed/non-finite learning signals.
+- Candidate `learning_loop_architecture_suite.cpp` (59 lines; blob `1b01fc772f525619fb635579ccf7831187fee08a`) tests scalar adaptation/evolution proposal generation and finite-input guards in isolation. It does not test contextual strategy learning, affective modulation, world/action consequence integration or Brain restart.
+- Candidate `CognitiveCycleInput` does not carry the donor's developmental-context field; no active candidate developmental learner/world was found in §§31–32.
+
+**Disposition:** No equivalent candidate developmental Brain or contextual strategy-learning regression was found. The LearningLoop test is not a successor for these tests.
+
+### 34.3 Goal-outcome learning
+
+- Donor `goal_directed_cognition_suite.cpp` (73 lines; blob `7fe6cf6c4dd2dc2a54bb9f48fcdd3c3d91d7c282`) exercises goal selection/planning and then feeds positive, negative and completion outcome evidence through `Brain::assimilate_goal_outcome`, including restart persistence.
+- Donor `goal_outcome_model_suite.cpp` (44 lines; blob `c9f19978d6d2df45028cb824e835144dc45c70e7`) verifies positive/negative outcome counts, confidence aggregation and completion in GoalProgressModel.
+- Candidate `goals_architecture_suite.cpp` (72 lines; blob `14a52aa606b53f8529aa5c54861c11902deb7c97`) tests goal dependency, activation, manual progress updates, completion and replay. It does not test evidence-based outcome assimilation, confidence accumulation or positive/negative outcome counts.
+- The candidate's `assimilate_goal_outcome` method exists only in the uncompiled `brain_restored_api.cpp` orphan identified in §31; the active Brain header/build does not expose it.
+
+**Disposition:** Candidate basic goal lifecycle is covered; donor goal-outcome learning semantics are not demonstrated as replaced.
+
+### 34.4 Experience identity and persistent integrated learning
+
+- Donor `experience_memory_test.cpp` (36 lines; blob `fe69fed346c9f843101fc3379d6d474f4a082651`) records two predictions under the same semantic key with different sequence IDs, resolves one by sequence, and retrieves the latest unresolved experience.
+- Candidate Brain stores predictions in an `unordered_map<string, Prediction>` keyed by semantic key; a second unresolved prediction with the same key replaces the first map entry. Candidate `resolve_prediction` is key-based rather than sequence-based. Candidate `memory_architecture_suite` tests durable event/memory-tier persistence, not multiple prediction instances under one key.
+- Donor `memory_learning_evolution_persistence_suite.cpp` (209 lines; blob `98e6598f60912714234f2dfabfbe52fa5eb77044`) integrates prediction learning, action consequence learning, learned strategy preference and journal reconstruction in one Brain-level scenario.
+- Candidate memory, LearningLoop and evolution-journal tests are separate component tests. The current evolution adoption journal suite is only five lines and checks basic stage/commit/rollback transitions; it does not provide the donor's integrated memory-learning-evolution persistence coverage.
+
+**Disposition:** Candidate has persistent event memory and component-level learning tests, but the donor's sequence-identified ExperienceMemory and integrated learning-persistence regression are not equivalent to the current candidate coverage.
+
+### 34.5 Overall test-successor finding
+
+The candidate test suite has meaningful tests for its current components. However, the absent donor tests above are not all redundant: several cover behaviors that are not present in the active candidate implementation or CMake registrations. The missing test targets enumerated in §32 are consistent with these absent tests and explain why copied specialized workflows refer to unavailable gates.
+
+No tests were executed; all findings are source/test-registration comparisons. **Disposition:** these eight donor test paths remain OPEN in the canonical 159-path ledger pending per-path successor/retirement/authority decisions. Do not count nearby component tests as full replacements. DF-02 remains OPEN; Gate A/B and Stage A remain held.
