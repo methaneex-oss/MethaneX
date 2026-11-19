@@ -9,9 +9,10 @@
 | Repository | `methaneex-oss/MethaneX` |
 | PR | #192 — Documentation Foundation |
 | Branch | `docs/whole-brain-planning-scope-correction-20261107` |
-| Exact source HEAD before this index update | `f6196dce5f09810b63ab11cd7fbf418f5913d5cb` |
+| Exact source HEAD before this index update | `6a92fdc56823055f13bef6d29ed37f743ca9e519` |
 | Base | `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` |
 | State | Open, non-draft, unmerged |
+| Commits ahead / behind | 748 / 0 |
 | Changed paths | 47 total: 45 Markdown and 2 JSON |
 | Recursive tree | 280 entries, complete (`truncated=false`)
 
@@ -56,7 +57,7 @@ The initial completion-gate report §6 defines DF-01–DF-12. This matrix record
 | #175 — Brain Implementation Planning | `48a7103f87c00992e4e19d84c768d1e72682a1b0` | Open/draft/unmerged; non-operative planning only; Gate A not cleared, Gate B not passed, no source baseline selected |
 | #179 — Phase 2 capability-to-source map | `ea64607ef94f142a6142a013e119a7225bc95c1c` | Open/draft/unmerged; planning input, not implementation acceptance |
 | #191 — Human/MCU comparison | `609d38ede50bbdd98a93dfed112781eacabee9fd` | Open/draft/unmerged; Director's bounded retain-separately disposition; no history operation |
-| #192 — Documentation Foundation | `f6196dce5f09810b63ab11cd7fbf418f5913d5cb` | Open/non-draft/unmerged; live metadata is authoritative |
+| #192 — Documentation Foundation | `6a92fdc56823055f13bef6d29ed37f743ca9e519` | Open/non-draft/unmerged; live metadata is authoritative |
 | #195 — reader workflow / role terminology | merged to `main` at `4f07d772beae03c99a8dd58b174201a3aa3074b2` | Reviewed workflow blob is integrated; F-195-07 remains a separately disclosed residual |
 | #196 — Builder operating controls | `0ebc4e978fa38011b2f6bb5d97a03c267c1c12c9` | Merged into its declared Phase 2 base branch, not `main` |
 | #197 — reader-visible exact target revision | `2b2bfd9afe6e1325119f7ccee507bb04e71aa343` | Open/non-draft/unmerged; no new fresh-reader run or CLEAR result |
@@ -71,6 +72,20 @@ Stage A remains **NOT STARTED / HELD**. It may define whole-Brain capabilities a
 
 - [Builder exact-revision self-review](reports/BUILDER_FINAL_DOCUMENTATION_FOUNDATION_RECONCILIATION_2026-11-08.md) — current continuation evidence and explicit residuals.
 - [Full Independent Reviewer request](reports/reviews/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_REQUEST_PR192_2026-11-18.md) — published in the repository; the exact terminal inventory successor SHA will be pinned in the PR #192 conversation comment. This is a request, not a verdict.
+
+
+## Latest Builder evidence — JBP-004 exact-ref lineage (2026-11-19)
+
+DF-02 §47 records exact PR #110/#112 branch-tip comparisons against all 159 PR #97 changed paths, plus twelve successful exact-head workflow runs and two inspected JBP-004 artifacts. The evidence demonstrates bounded historical learning/persistence and cognitive-loop integration on separate open, draft, unmerged branches. It does not establish candidate behavior on PR #192, close donor-ledger rows, or select a source baseline.
+
+- DF-02 report blob: `c304a482779dd1ca7572c4125e2a08d52b1cf6a4`, through §47.
+- Continuity checkpoint blob: `1b34a9071e7c5f6361159bef087f78cdcf004629`, through §39.
+- Outstanding-work register blob: `46a1dbf714a9805ea9d3632d74f1b4709bc84151`, through §20.
+- Builder self-review blob: `50e9e63f46e0455b6ecec88c71c820eed5b935ff`, through §20.
+- DF-06 audit blob: `8455ec627beb1aeab7fa5c65b86254a9106778eb`, through §20; parser/fragment/external/rendered-anchor obligations remain open.
+- Inventory blob: `9bd0e1b5589df286b156dbecf787eb6017467326`; its recorded terminal parent is superseded by later branch writes, so DF-10 remains reopened.
+- PR #192 Independent Reviewer request blob: `53a3671a6307329d051b379dd20830bc147df3e8`; intentionally unpinned until the terminal inventory successor.
+
 
 ---
 
@@ -1468,3 +1483,45 @@ PR #171 remains open/draft/unmerged. Its two whole-system architecture documents
 Stage A remains **NOT STARTED / HELD**. No runtime source, tests, CMake, workflows or training environment were changed; no build, CTest, fresh-reader dispatch or provider invocation was executed. No donor code was adopted or source baseline selected. No independent verdict or Project Director acceptance is claimed.
 
 **Next:** finish remaining Builder-controlled semantic/dependency evidence; obtain the exact-ref repository mirror/search, authenticated browser and workflow-dispatch execution through the responsible external operators; then synchronize the controlling documents, perform the terminal DF-10 inventory cycle, pin the exact final reviewer request, and preserve the separate DF-12 Director decision boundary.
+
+
+## 108. Exact-current Builder reconciliation — JBP-004 branch evidence and current PR #192 state (2026-11-19)
+
+**Exact PR #192 source before this index update:** `6a92fdc56823055f13bef6d29ed37f743ca9e519`; open, non-draft, unmerged.  
+**Base:** `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.  
+**Compare:** 748 commits ahead, 0 behind.  
+**Changed paths:** 47 (45 Markdown, 2 JSON).  
+**Complete recursive tree:** 280 entries, `truncated=false`.
+
+### 108.1 Latest controlling evidence
+
+- DF-02 blob `c304a482779dd1ca7572c4125e2a08d52b1cf6a4`, §47: exact PR #110/#112 JBP-004 branch comparisons and preserved historical behavioral-run evidence. Both PRs remain open/draft/unmerged. All 159 donor ledger rows remain OPEN; all-ref consumer/dependency/duplicate and authority disposition remains incomplete.
+- Continuity checkpoint blob `1b34a9071e7c5f6361159bef087f78cdcf004629`, §39; it records the 890-line live checkpoint through §39. The older handoff's 618-line count is stale.
+- Outstanding-work register blob `46a1dbf714a9805ea9d3632d74f1b4709bc84151`, §20.
+- Builder self-review blob `50e9e63f46e0455b6ecec88c71c820eed5b935ff`, §20.
+- DF-06 report blob `8455ec627beb1aeab7fa5c65b86254a9106778eb`, §20; the 345-vs-353 parser discrepancy, local fragment checks, exhaustive external status/redirect/relevance and authenticated rendered GitHub anchors remain outstanding.
+- Inventory blob `9bd0e1b5589df286b156dbecf787eb6017467326` contains §128's historical terminal-write contract, but later PR #192 branch-file writes supersede that parent. DF-10 remains REOPENED; the inventory must be regenerated as the final branch-file write.
+- The PR #192 Independent Reviewer request remains intentionally unpinned until the terminal inventory successor. Its current blob is `53a3671a6307329d051b379dd20830bc147df3e8`.
+
+### 108.2 Gate disposition and authority boundary
+
+| Gate | Current Builder disposition |
+|---|---|
+| DF-01 | Builder evidence present; final exact-head synchronization pending |
+| DF-02 | **OPEN** — exact 159-path identity ledger verified; semantic evidence extended; all-ref consumers/dependencies/duplicate ownership and final authority dispositions incomplete |
+| DF-03 | Partially evidenced |
+| DF-04 | Builder evidence present within bounded scope |
+| DF-05 | Partially evidenced |
+| DF-06 | **NOT MET** — parser discrepancy, fragments, external status/redirect/relevance and authenticated rendered anchors remain |
+| DF-07 | Synchronization in progress |
+| DF-08 | Resolved within bounded preservation criterion |
+| DF-09 | **NOT MET / externally blocked** — no workflow-dispatch operation and no exact-final-HEAD CLEAR result |
+| DF-10 | **REOPENED** — terminal inventory-only successor must follow all remaining branch-file writes |
+| DF-11 | Waived as mandatory; separate reviewer challenge remains requested |
+| DF-12 | **PENDING — PROJECT DIRECTOR ONLY** |
+
+PR #171 SYS-01–SYS-11 remains the existing whole-system architecture foundation. Stage A remains **NOT STARTED / HELD**. No runtime source, test, CMake or workflow in PR #192 was changed; no donor code was adopted or source baseline selected. No current-PR build/CTest, fresh-reader dispatch, independent verdict or Director acceptance is claimed.
+
+### 108.3 Next concrete actions
+
+Continue exact-ref all-branch consumer/dependency analysis using an authorized repository mirror or exact-ref source-search capability; complete the remaining DF-06 parser, fragment, external-destination and authenticated-browser checks through the responsible operators; then synchronize all Builder-owned documents and the PR description. Only after those writes, regenerate the full parent manifest, perform the terminal DF-10 inventory-only write, verify the exact successor, pin the Independent Reviewer request to that SHA, and preserve the separate DF-12 Director decision.
