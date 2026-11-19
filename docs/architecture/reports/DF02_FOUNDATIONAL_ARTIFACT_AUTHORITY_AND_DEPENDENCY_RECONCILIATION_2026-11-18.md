@@ -1673,3 +1673,69 @@ A prior statement in §§29–30 said the connected GitHub interface exposed no 
 - Therefore the earlier phrase "no recursive-tree operation" is withdrawn. The correct disposition is: exact-ref tree retrieval is available; all-ref source-content consumer search remains uncompleted and is still a DF-02 blocker.
 
 This correction changes no gate status and does not convert the 251-branch census into consumer closure. DF-02 remains OPEN.
+
+
+
+## 39. Donor adaptation, association, attention and causal-model contract audit — exact-revision source and test comparison (2026-11-19)
+
+**Exact candidate PR #192 source:** `87900ed74ea5db0789a042d80769a84351642aee`.  
+**Exact donor PR #97 source:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
+**Method:** fetched the donor blobs by their exact SHA and the candidate files from the exact candidate commit. Rechecked the candidate and donor `core/cpp/tests/CMakeLists.txt` registrations. This section records source/API/test-content comparison only; no build, CTest or workflow was executed.
+
+### 39.1 Adaptation model — bounded scalar adaptation is not the donor's generic change-responsive contract
+
+| Artifact | Donor blob | Candidate blob |
+|---|---|---|
+| `core/cpp/include/jarvis/core/adaptation.hpp` | `dec808ad879c9d1e7afc3adb3ae777ee611fadb7` | `9a2bb897a120f7585286481a6138dc9cb767ac30` |
+| `core/cpp/src/adaptation.cpp` | `51b91a52c20f71a1be462f660c45bee9199259c3` | `7e07a491a5b13379a5719882a834ecc2452a54ef` |
+| `core/cpp/tests/learning_adaptation_phase8_suite.cpp` | `59859480a6d09aaab70eaf09ffc94c731484d2ff` | `79cb7b8146686b35273628de213d33edd4328cff` |
+
+The donor metric records both long-term and recent error plus a consecutive-surprise count. It accepts finite numeric values without forcing the observed domain into [0,1], initializes its estimate from the first actual observation, updates a recency-sensitive estimate, and allows a sustained surprise sequence to increase the update rate. Its confidence uses both stable and recent accuracy.
+
+The candidate header removes `recent_error` and `consecutive_surprises`. Its implementation clamps predicted and actual values to [0,1], starts from the default estimate of 0.5, and uses a cumulative-average update. It therefore cannot preserve the donor's general real-valued calibration or the explicit sustained-regime-change response. This is a material contract narrowing, not merely a refactor.
+
+The candidate test retains basic prediction-feedback, adaptation-count and persistence assertions. The donor test additionally checks recent-error response to a changed environment after a successful history, preservation of long-term evidence, restored recent-error state, and extreme finite values near the double limits. Those donor assertions are absent from the candidate test. The candidate target remains registered, but its existence does not establish execution or equivalence.
+
+### 39.2 Association model — pair co-change remains, contextual and contradiction semantics do not
+
+| Artifact | Donor blob | Candidate blob |
+|---|---|---|
+| `core/cpp/include/jarvis/core/association_model.hpp` | `9890f4e0178200acada0f43a5626be6f6daa6cce` | `faa835175cfd6c2fdc1d4561269edb8ab406c689` |
+| `core/cpp/src/association_model.cpp` | `80bc2e94d8cab4e5a48ead18ba9efcad4ed785b6` | `b378d4237527dfbb4c65f43545f7f0fc7c42669b` |
+| `core/cpp/tests/association_causality_phase5_suite.cpp` | `0d31349857e85a019467e9864bbe6625a6ecdef7` | `d520025258805b02c1b3fbb2dbebe32e01562fbf` |
+
+The donor public contract includes contradictory-observation counts, multi-hop contextual inference, concept-candidate discovery and generalized-concept matching. Its implementation treats a newly introduced belief as a state change, weakens existing associations when only one endpoint changes, and tracks contradiction evidence. The candidate public header exposes only pair observation, enumeration and direct related lookup; its implementation has no contextual/concept methods, no contradiction counter/update, and does not treat a newly introduced belief as a changed prior state.
+
+The donor test exercises reliability-weighted association strength, contextual inference over two hops, persistence/replay of contradiction state, contradiction-driven weakening, concept discovery/generalization and prediction-context evidence. The candidate test retains a basic pair association and causal simulation scenario; those broader assertions and behaviors are absent. The candidate suite is not a semantic successor for the full donor association contract.
+
+### 39.3 Attention model — internal activation and prediction-error appraisal removed from the active contract
+
+| Artifact | Donor blob | Candidate blob |
+|---|---|---|
+| `core/cpp/include/jarvis/core/attention.hpp` | `bc3f97b79664e433fed5bca07b24a6b94dbec1d3` | `c7e8ab0c5430d5c942fe314d928400f769c0a77c` |
+| `core/cpp/src/attention.cpp` | `67def4987f4a49a852bd2e4c9760f05c2ee15216` | `58f734dbe9772675d687752026231297f289e770` |
+| `core/cpp/tests/attention_architecture_suite.cpp` | `4b6f4ad50b9706e372c51e21803e57438d99d155` | `3a5609ed29e117c2241ce3f23543c8042f5815b2` |
+
+The donor attention signal and policy include internal activation and prediction-error features and their weights. Scoring consumes internal activation; reinforcement and suppression update all five feature weights. The candidate signal/policy retain novelty, uncertainty and urgency only. The candidate scorer has no internal-activation input and does not derive prediction-error salience; feedback changes only the three remaining weights.
+
+The donor architecture suite contains a dedicated test proving that internal activation raises salience and that feedback changes its policy weight. That test is absent from the candidate suite. The donor CMake also registers `jarvis_attention_learning_brain_suite`; that target and its source are absent from candidate test registration. The candidate retains `jarvis_attention_architecture_suite`, which is not proof of the removed Brain-integrated attention-learning coverage.
+
+### 39.4 Causal model and codec — candidate predicts from one co-occurrence and lacks counterexample weakening
+
+| Artifact | Donor blob | Candidate blob |
+|---|---|---|
+| `core/cpp/include/jarvis/core/causal_link_codec.hpp` | `a6286281e4b22564a39e02a7e38a778bb81042f0` | **ABSENT at the candidate path** |
+| `core/cpp/include/jarvis/core/causal_model.hpp` | `a6bf02cf75c6f55fa47120c772aad9c77fa40cf1` | `f740bdf222b3309b13f0c2f541c97448fc05da3e` |
+| `core/cpp/src/causal_model.cpp` | `b7e1e6e6aeb929f09af33b9d17c80a6eed34948c` | `f873d0a6e7fa0676bb88bf7a1f66436bc88a3c0d` |
+
+The donor model exposes `observe_outcome` and calls it before updating from a new transition. Failed predictions weaken matching causal hypotheses rather than deleting them, so repeated counterexamples can revise stale causal expectations. A new co-occurrence begins at strength 0.40, below the 0.50 prediction threshold, and repeated evidence strengthens it gradually.
+
+The candidate header and implementation omit `observe_outcome`. A first co-occurrence begins at strength 0.55, already above the 0.50 prediction threshold, and later matching observations strengthen it more slowly; there is no corresponding counterexample-driven weakening path in this implementation. Candidate encoding concatenates key, '=' and a stringified value, then decodes by the first '='. The donor codec is versioned, type-tagged and length-prefixed, explicitly preserving keys and string values containing delimiter characters and distinguishing scalar types. The donor codec file is absent at the candidate path; the inline candidate codec is not an equivalent delimiter-safe/type-preserving successor.
+
+The donor association/causal test requires the first one-observation simulation to remain empty, a repeated observation to produce a prediction, and subsequent contradiction/association tests to preserve and weaken learned structures. The candidate test expects a prediction immediately after the first transition and does not exercise outcome-based weakening, delimiter-safe round trips, association replay or contextual generalization.
+
+### 39.5 Build/test registration and exact disposition
+
+The exact donor test CMake file registers 71 executable targets; the exact candidate file registers 45. For this cohort, both revisions register the adaptation, association/causality and attention-architecture suites, while only the donor registers `jarvis_attention_learning_brain_suite`. No target registration is evidence that a binary was built or a test executed.
+
+**Per-path semantic finding:** the candidate retains narrower adaptation, pair-association, three-feature attention and basic causal-link prediction mechanisms, but it does not preserve the donor's full behavior contracts described above. The exact path/blob comparisons and test-content deltas are now evidenced for the listed rows. These rows are not marked closed: the required reverse-consumer search across the enumerated branch collection, historical artifact authority, dependency/ownership reconciliation and any Project Director retirement/scope decision remain outstanding. No donor code was copied or adopted, no runtime source/test/CMake file was changed, and no build, CTest or workflow was run. **DF-02 remains OPEN.**
