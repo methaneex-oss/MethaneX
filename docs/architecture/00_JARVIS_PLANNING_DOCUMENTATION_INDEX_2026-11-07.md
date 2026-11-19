@@ -9,7 +9,7 @@
 | Repository | `methaneex-oss/MethaneX` |
 | PR | #192 — Documentation Foundation |
 | Branch | `docs/whole-brain-planning-scope-correction-20261107` |
-| Exact source HEAD before this index update | `0629879a6382fb952629deede9d2d59118d56298` |
+| Exact source HEAD before this index update | `86a140eec61d8244988217ff5d307d517105a4ec` |
 | Base | `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` |
 | State | Open, non-draft, unmerged |
 | Changed paths | 47 total: 45 Markdown and 2 JSON |
@@ -56,7 +56,7 @@ The initial completion-gate report §6 defines DF-01–DF-12. This matrix record
 | #175 — Brain Implementation Planning | `48a7103f87c00992e4e19d84c768d1e72682a1b0` | Open/draft/unmerged; non-operative planning only; Gate A not cleared, Gate B not passed, no source baseline selected |
 | #179 — Phase 2 capability-to-source map | `ea64607ef94f142a6142a013e119a7225bc95c1c` | Open/draft/unmerged; planning input, not implementation acceptance |
 | #191 — Human/MCU comparison | `609d38ede50bbdd98a93dfed112781eacabee9fd` | Open/draft/unmerged; Director's bounded retain-separately disposition; no history operation |
-| #192 — Documentation Foundation | `0629879a6382fb952629deede9d2d59118d56298` | Open/non-draft/unmerged; live metadata is authoritative |
+| #192 — Documentation Foundation | `86a140eec61d8244988217ff5d307d517105a4ec` | Open/non-draft/unmerged; live metadata is authoritative |
 | #195 — reader workflow / role terminology | merged to `main` at `4f07d772beae03c99a8dd58b174201a3aa3074b2` | Reviewed workflow blob is integrated; F-195-07 remains a separately disclosed residual |
 | #196 — Builder operating controls | `0ebc4e978fa38011b2f6bb5d97a03c267c1c12c9` | Merged into its declared Phase 2 base branch, not `main` |
 | #197 — reader-visible exact target revision | `2b2bfd9afe6e1325119f7ccee507bb04e71aa343` | Open/non-draft/unmerged; no new fresh-reader run or CLEAR result |
@@ -1381,3 +1381,17 @@ These are closure standards, not claims that the work is complete. DF-02 remains
 Stage A remains **NOT STARTED / HELD**. Implementation planning remains **HELD**. Runtime implementation, source-baseline selection, donor adoption, training, PR integration, merge, rebase, retarget, cherry-pick, branch rewrite and deployment remain **NOT AUTHORIZED**. PR #171's approved SYS-01–SYS-11 whole-system foundation remains authoritative within its recorded scope; Stage A must reconcile with it rather than duplicate it.
 
 This section records the Project Director's three selected closure standards and Builder status only. It is not independent review, DF-09 CLEAR, Documentation Foundation acceptance, DF-12 acceptance or implementation authorization.
+
+
+## 104. Exact-current Builder evidence and review-target reset — 2026-11-19
+
+**Exact PR #192 source HEAD before this index update:** `86a140eec61d8244988217ff5d307d517105a4ec`. Live metadata re-fetched immediately before this update: PR #192 open, non-draft, unmerged; 47 changed paths; recursive tree 280 entries, complete (`truncated=false`); 51 tracked Markdown files.
+
+- The Project Director's Option A decisions for stale index/review-request correction, DF-02 semantic closure and DF-06 complete link verification are recorded in §103 and implemented as the controlling closure standards.
+- The four malformed repository paths in the Independent Reviewer request were corrected. Exact-tree verification confirms all four destinations exist and none of the four malformed path strings remain. The request blob is `9a21c403a46fffedecc098817c5cd85c7e288ab5` at this source revision.
+- PR #97 returned all 159 patches. The path-family breakdown and the limits of the seven-capability selected traceability sample are recorded in the DF-02 report. DF-02 remains **OPEN** pending all-path semantic successor/retirement/non-adoption, historical provenance, reverse-consumer and cross-branch dependency closure.
+- Fresh bounded DF-06 extraction fetched all 51 Markdown files and recorded 353 candidate destinations: 134 local references (zero missing under the extractor's normalization) and 219 HTTP(S) occurrences. Exact pinned-file checks found six line ranges one line beyond EOF; all six links were corrected in the Phase 2 capability-to-source map. The other 67 unique line-range tuples were within fetched file lengths. Six referenced PR issue-comment IDs were confirmed to exist through discussion APIs. These checks do not prove authenticated browser rendering or external semantic relevance. DF-06 remains **NOT MET**.
+- The former review target `7d2238542dddf5ab210ad84c37bf259cea3b3559` is superseded. Supersession notice is PR #192 comment #7002367084; no new exact-final review target is assigned until after the terminal inventory cycle.
+- DF-09 remains **NOT MET** pending a new blind fresh-reader assessment against the exact final HEAD returning **CLEAR**. DF-10 remains **REOPENED** until the new inventory-only successor is independently compared. DF-11 remains waived as mandatory; DF-12 remains Project Director-only. Stage A remains held; implementation and integration remain unauthorized.
+
+This is Builder evidence and status reconciliation only. It is not independent review, DF-09 CLEAR, Documentation Foundation acceptance, DF-12 acceptance or implementation authorization.
