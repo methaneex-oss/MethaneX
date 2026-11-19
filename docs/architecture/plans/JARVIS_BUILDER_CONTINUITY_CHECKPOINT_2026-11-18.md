@@ -615,3 +615,38 @@ A prior statement that the GitHub connector lacked recursive-tree retrieval was 
 The actual limitation is all-ref **content** search: GitHub code search indexes only the default branch. To close reverse-consumer scope across the 251 enumerated branches, each relevant branch tip would require exact-ref tree retrieval plus source-file retrieval/search, or an approved local clone/index. This bulk scan remains unperformed. DF-02 remains OPEN.
 
 Because this correction required another PR #192 report/checkpoint write, the prior DF-10 inventory-only parent/successor pair is now historical and DF-10 is REOPENED. A new terminal inventory-only successor must be the final branch-file write after all remaining work. No source or runtime code changed.
+
+
+## 31. Builder milestone checkpoint — adaptation, association, attention and causal contract comparison (2026-11-19)
+
+**Exact PR #192 HEAD before this checkpoint write:** `a745534e0e2fe99e36a2e1695ea225ef52281abf`.  
+**DF-02 report blob after the preceding write:** `2276722a671742c07afc654fd99ada26a795a0d7`.  
+**Donor PR #97 exact HEAD:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+
+### 31.1 Work completed in DF-02 §39
+
+Fetched exact donor blobs and candidate files at the exact revisions above for the adaptation, association, attention and causal-model cohort. Compared public headers, implementations, test sources and the donor/candidate test CMake registrations.
+
+Material differences now recorded:
+
+- **Adaptation:** donor retains long-term and recent prediction error, consecutive-surprise tracking, generic finite numeric domains and a sustained-regime-change update response. Candidate clamps inputs to [0,1], omits recent-error/surprise state and uses cumulative averaging. The candidate test omits donor checks for environmental change response, restored recent-error state and extreme finite numeric values.
+- **Association:** donor supports newly observed beliefs, contradiction tracking/weakening, multi-hop contextual inference and concept discovery/generalization. Candidate retains direct pair associations but omits those contracts. The donor test covers reliability weighting, contextual inference, replay, contradiction weakening and concept behavior; candidate test does not.
+- **Attention:** donor includes internal activation and prediction-error features/weights. Candidate retains novelty, uncertainty and urgency only. The donor internal-activation test and Brain-integrated attention-learning target are absent from candidate registration.
+- **Causal model:** donor has explicit outcome evaluation and counterexample-driven link weakening, plus a versioned type-tagged length-prefixed codec. Candidate has no `observe_outcome`, begins causal links above its prediction threshold after one co-occurrence, and uses delimiter-based string encoding. The donor codec path is absent at the candidate path.
+
+Exact blob identities and per-artifact analysis are in DF-02 §39. The candidate/donor CMake test target counts are 45 and 71 respectively. These are registration facts, not test execution.
+
+### 31.2 Current disposition and limits
+
+The new comparison materially extends semantic evidence for the 159-path ledger. It does **not** close the affected rows: all-ref reverse-consumer/dependency analysis, historical artifact authority, duplicate ownership and any Project Director retirement/scope decisions remain unresolved. The GitHub connector supports exact-ref tree retrieval, but default-branch code search does not establish all-ref content closure.
+
+No runtime C++ source, tests or CMake files were changed. No donor code was adopted. No build, CTest or Actions workflow was executed. No independent review or gate acceptance is claimed.
+
+### 31.3 Exact state after the report update
+
+- PR #192 was open, non-draft and unmerged at the pre-checkpoint source; base SHA remained `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.
+- DF-02 report update commit: `a745534e0e2fe99e36a2e1695ea225ef52281abf`; report blob: `2276722a671742c07afc654fd99ada26a795a0d7`.
+- The checkpoint update is the next branch-file write. DF-10 remains reopened; the inventory remains the eventual final branch-file write only after every other report/index/register/checkpoint/review-request write is complete.
+- DF-02 OPEN; DF-06 NOT MET; DF-09 NOT MET pending exact-final-HEAD CLEAR; DF-11 waived as a mandatory gate; DF-12 Project Director-only; Stage A NOT STARTED / HELD.
+
+This checkpoint records Builder evidence only and does not authorize implementation, donor adoption, integration, merge, rebase, retarget, cherry-pick, branch rewrite, training or deployment.
