@@ -406,13 +406,13 @@ The first absent-path subsystem cohort was inspected against the active candidat
 - **CausalLinkCodec:** candidate causal_model has inline delimiter-based encoding/decoding, but it does not demonstrate donor's typed length-prefixed serialization or equivalent delimiter-safe compatibility.
 - Candidate CMake registers no affective/developmental/goal-outcome suites corresponding to these donor paths.
 
-A further important finding: candidate Brain::learn_outcome invokes LearningLoop, which can directly call EvolutionModel::adopt after scalar confidence/gain thresholds and emits an adoption event. This is a second autonomous mutation path in addition to the experiment-controller/Brain APIs traced in §28. It must be included in the controller/journal/replay safety analysis.
+A further important finding: candidate Brain::learn_from_prediction invokes LearningLoop, which can directly call EvolutionModel::adopt after scalar confidence/gain thresholds and emits an adoption event. This is a second autonomous mutation path in addition to the experiment-controller/Brain APIs traced in §28. It must be included in the controller/journal/replay safety analysis.
 
 These are bounded source/build-registration findings, not test/build verdicts. No tests or builds were run.
 
 ### 22.2 Resume point
 
-1. Trace Brain::learn_outcome callers and the exact evolution adoption event/replay behavior; reconcile this path with the intended controller/journal authority invariant.
+1. Trace Brain::learn_from_prediction callers and the exact evolution adoption event/replay behavior; reconcile this path with the intended controller/journal authority invariant.
 2. Continue the absent-path ledger in batches: workflows/trials, split Brain translation units, tests, task ledger, documentation/specifications. Identify exact successors, not just similar names.
 3. Continue changed-blob semantic comparisons and per-row disposition in the canonical §30 ledger.
 4. Keep DF-06, DF-09 and terminal DF-10 requirements intact. DF-11 waived; DF-12 Director-only; Stage A held.
@@ -467,9 +467,37 @@ This means the candidate workflows cannot be counted as evidence that the remove
 
 ### 24.2 Resume point
 
-1. Trace the candidate Brain::learn_outcome API/replay path and classify its external caller/authority contract.
+1. Trace the candidate Brain::learn_from_prediction API/replay path and classify its external caller/authority contract.
 2. Continue the absent test/build/engineering-coordination donor cohorts and the changed-blob implementation rows.
 3. Keep specialized workflow/target mismatch visible; do not dispatch stale workflows or infer success.
 4. DF-06 remains NOT MET; DF-09 remains NOT MET pending actual distinct-model blind assessment. DF-10 remains the final inventory write. DF-11 waived; DF-12 Director-only; Stage A held.
 
 No runtime source, CMake or workflow file was changed. No tests/build or CI workflow were executed.
+
+
+## 25. Builder milestone checkpoint — exact Brain learning/adoption API and replay trace (2026-11-19)
+
+**PR #192 exact HEAD before checkpoint write:** 005ef245e44271f6576955b00757ac9eb45b3534.  
+**DF-02 report blob:** dd6073fb6b7ec573d2b4078f02fb0de59c7fe9bf.
+
+### 25.1 Correction and new evidence
+
+The previous §22 shorthand incorrectly called the public API Brain::learn_outcome. The exact API is Brain::learn_from_prediction; both DF-02 §31 and this checkpoint are corrected.
+
+DF-02 §33 now traces its actual implementation:
+- Brain::learn_from_prediction is a public inline Brain method.
+- It journals prediction_outcome and evolution_fitness, calls LearningLoop, and journals an evolution_adopt event when the model value changes.
+- LearningLoop directly invokes EvolutionModel::adopt when confidence >= 0.75 and expected gain is positive.
+- Brain replay applies evolution_adopt directly to EvolutionModel and appends history; the event does not carry the full experiment identity/evaluation/sandbox evidence.
+- The registered LearningLoop architecture test tests LearningLoop in isolation, not Brain::learn_from_prediction, persistence-failure compensation or Brain restart/replay behavior.
+- No in-repository caller was found in the inspected candidate source/test set, but the public API remains callable by external consumers.
+
+The three mutation paths now explicitly requiring one authority contract are Brain::adopt_evolution, Brain::learn_from_prediction/LearningLoop, and Brain::adopt_evolution_experiment/EvolutionController. Do not treat the controller as the sole autonomous path until the public API and learning-loop route are reconciled.
+
+### 25.2 Resume point
+
+1. Continue absent donor test/build/engineering paths and changed-blob semantic mapping.
+2. Resolve the exact workflow target-registration mismatch in §32 through authorized engineering disposition; no workflow was edited or run.
+3. Keep DF-02 OPEN, DF-06 NOT MET, DF-09 NOT MET, DF-10 terminal ordering, DF-11 waiver, DF-12 Director-only and Stage A hold intact.
+
+No runtime source, CMake or workflow file was changed. No test/build/workflow was executed.
