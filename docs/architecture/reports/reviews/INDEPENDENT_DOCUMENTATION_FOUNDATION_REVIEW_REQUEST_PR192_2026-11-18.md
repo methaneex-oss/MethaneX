@@ -10,6 +10,16 @@
 
 **Request status:** Formal review request; not a review report, verdict, acceptance, gate clearance, or implementation authorization.
 
+## 1A. Project Director's mandatory closure standards (2026-11-19)
+
+The Project Director selected Option A for the stale-index correction, DF-02, and DF-06. These decisions govern this review:
+
+- Correct the controlling index and all malformed paths in this request before the terminal inventory is regenerated. A superseding request must pin the new exact terminal SHA.
+- DF-02 requires semantic disposition of all 159 PR #97 changed paths, historical artifact provenance reconciliation, and cross-branch consumer/dependency/duplication closure. For each path, inspect content and relevant symbol/API/behavior changes, identify verified successors or explicitly record no successor, trace reverse consumers, and bind tests/workflow outcomes to exact revisions. The 1 identical / 95 divergent / 63 absent blob comparison and 251-ref census are discovery evidence only.
+- DF-06 requires a fresh parser run over every tracked Markdown file at the frozen target, parser-history reconciliation, local path and fragment checks, unique external URL status/redirect/final destination and semantic relevance checks, and authenticated rendered GitHub heading, line-range and comment-anchor checks. A static source scan or path existence alone is insufficient.
+
+The reviewer must assess the Builder's evidence against these standards and may find the gates open. Do not infer closure from the Director's selection of a standard.
+
 ## 1. Purpose
 
 Independently determine whether the Documentation Foundation package on the exact pinned PR #192 revision is coherent, accurate, sufficiently evidenced, navigable, and ready for the Project Director's exact-revision DF-12 decision.
@@ -110,7 +120,7 @@ The reviewer must answer these questions with exact paths, revisions and evidenc
 4. Does the PR #97 159-path analysis actually support its stated role classification and current-tree blob comparison? Which of the 95 divergent and 63 absent same-path entries have proven semantic successors, and which remain unresolved?
 5. Does the 251-ref branch census prove branch enumeration only, or does the package overstate it as cross-branch dependency/consumer closure? Are duplicate-tip groups interpreted correctly?
 6. Are PR metadata census counts and ancestry conclusions time-bounded and correctly distinguished from semantic review or acceptance?
-7. Does DF-06's 50-file checkpoint scan apply to the exact target, or is it only a historical local-path result plus a bounded no-new-link continuity check? Are parser discrepancies, external destinations and rendered anchors accurately disclosed?
+7. Does the exact-target parser cover every tracked Markdown file? Are parser discrepancies reconciled? Are all external destinations, redirects, semantic relevance, local fragments and authenticated rendered anchors verified?
 8. Does the latest DF-09 evidence assess the exact target? If not, is the gate correctly NOT MET/BLOCKED rather than implied CLEAR?
 9. Does the inventory terminal parent/successor pair meet the exact DF-10 one-file/one-commit requirement?
 10. Are DF-11's waiver and the separate current request for independent challenge represented without contradiction?
@@ -121,7 +131,7 @@ The reviewer must answer these questions with exact paths, revisions and evidenc
 
 Do not treat the Builder's path scan as a substitute for independent verification.
 
-- Re-fetch the exact complete recursive tree and every tracked Markdown file within the documented scope.
+- Re-fetch the exact complete recursive tree and every tracked Markdown file (the current pre-correction snapshot contains 51 Markdown files) within the documented scope.
 - Parse rendered Markdown destinations while excluding fenced code and inline-code examples; include inline links, reference definitions, HTML attributes and autolinks as applicable.
 - Resolve local paths and fragments. Distinguish repository-relative paths, root-relative paths, commit-pinned GitHub files, live PR/workflow links, historical immutable links and external references.
 - Enumerate unique external URLs, follow redirects, record HTTP status/final destination and inspect content relevance to the source claim.
