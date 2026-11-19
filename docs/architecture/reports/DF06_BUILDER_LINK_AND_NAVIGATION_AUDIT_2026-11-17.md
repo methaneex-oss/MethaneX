@@ -361,7 +361,7 @@ The ChatGPT shared-conversation URL retained in the outstanding-work register an
 
 ### 18.5 Remaining DF-06 obligations
 
-- GitHub PR/comment/Actions destination reachability: **Builder-verified for the 22 PRs, 14 comments and 21 runs enumerated above**.
+- GitHub PR/comment/Actions destination reachability: **Builder-verified for the 22 PRs, 14 comments and 22 runs enumerated above**.
 - Historical workflow relevance: still requires claim-to-run/commit comparison where the surrounding text makes a stronger claim than successful execution.
 - External non-GitHub destinations: the ChatGPT pointer is a code literal, not a destination; no other non-GitHub destination was identified in the inspected Markdown URL occurrences. Full parser reconciliation remains required before declaring the external destination inventory exhaustive.
 - Authenticated rendered GitHub heading, line-range and issue-comment fragment navigation: **not verified**. API endpoint existence and static HTML/anchor presence are not a substitute for authenticated browser target/viewport inspection.
@@ -375,7 +375,7 @@ The ChatGPT shared-conversation URL retained in the outstanding-work register an
 **Exact PR #192 documentation source:** `ff33515de059b00c8a95c07a3fab2f8ba8d1e214`.  
 **Additional linked destination:** [Actions run #42976840057](https://github.com/methaneex-oss/MethaneX/actions/runs/42976840057).
 
-The current planning index contains this Actions-run URL in its historical CI evidence paragraph, while the prior §18 enumeration listed 21 distinct Actions runs and omitted it. The destination was fetched directly through the GitHub Actions API and returned:
+The current planning index contains this Actions-run URL in its historical CI evidence paragraph. The initial §18.3 enumeration contained 21 distinct Actions runs; the subsequent §18.3 update now includes this run, producing the current 22-ID list. The destination was fetched directly through the GitHub Actions API and returned:
 
 - Workflow: **Native Brain Build** (`.github/workflows/build.yml`).
 - Event: `pull_request`.
@@ -383,8 +383,23 @@ The current planning index contains this Actions-run URL in its historical CI ev
 - Actual run head SHA: `e687f3295f6f858f713694d941e97fbd94ac6154`.
 - Run date: 2026-11-11.
 
-This is a historical native C++ build result on the recorded SHA. It is not a build result for current PR #192 HEAD `ff33515de059b00c8a95c07a3fab2f8ba8d1e214`, not a fresh-reader result, and not evidence of current-source correctness. The linked destination is reachable and its historical scope is now explicitly reconciled. The current documentation destination census has 22 distinct Actions-run IDs across the enumerated scope; this does not claim exhaustive external status/redirect/final-destination or semantic-relevance verification.
+This is a historical native C++ build result on the recorded SHA. It is not a build result for current PR #192 HEAD `ff33515de059b00c8a95c07a3fab2f8ba8d1e214`, not a fresh-reader result, and not evidence of current-source correctness. The linked destination is reachable and its historical scope is now explicitly reconciled. The current §18.3 documentation destination census has 22 distinct Actions-run IDs, including this previously omitted run. This does not claim exhaustive external status/redirect/final-destination or semantic-relevance verification.
 
 **Remaining DF-06 obligations:** complete parser/reference-link/HTML/autolink reconciliation over all 51 tracked Markdown files with reproducible parser history; local heading-fragment resolution; exhaustive unique external destination status, redirects, final destinations and claim relevance; and authenticated rendered GitHub heading, commit-pinned line-range and issue-comment anchor verification. The available connector can retrieve repository/API resources but does not expose an authenticated interactive browser. Static source ranges and API object existence do not close rendered-anchor behavior.
 
-**Disposition:** this tranche adds one previously omitted, exact-scope GitHub Actions destination and corrects its relevance boundary. It does not close DF-06. DF-06 remains **NOT MET** under the Project Director's Option A.
+**Disposition:** this tranche records the previously omitted, exact-scope GitHub Actions destination and reconciles the current §18.3 list. It is not an additional 23rd run. It does not close DF-06. DF-06 remains **NOT MET** under the Project Director's Option A.
+
+
+## 20. Exact-head link-set delta, parser reproduction discrepancy and rendered-browser blocker — 2026-11-19
+
+**Exact PR #192 source at this recheck:** `d4f88ab430fd1d2257313ac90eacfd1c72f4fba9`. The complete recursive tree contains 280 entries and 51 tracked Markdown files. The 51-file full-scope custom extraction previously performed at `ff33515de059b00c8a95c07a3fab2f8ba8d1e214` produced 344 candidate destination occurrences: 131 local references and 213 HTTP(S) occurrences, with zero missing local paths under that extractor's normalization.
+
+A before/after extraction was then performed for all seven Markdown paths changed between `ff33515...` and the current `d4f88...` source. The comparison found one new HTTP(S) occurrence — the Actions run #42976840057 recorded in §19 — and no local destination additions/removals or other external URL additions/removals. The resulting bounded custom-extractor count at the current source is therefore 345 occurrences: 131 local references and 214 HTTP(S) occurrences. The exact seven-file delta is reproducible from those two immutable revisions.
+
+**Parser discrepancy remains unresolved:** the earlier full extractor recorded in index §104 and DF-06 §15 reported 353 candidate destinations: 134 local references and 219 HTTP(S) occurrences. The current bounded custom extraction does not reproduce that count; the difference is eight occurrences (three local and five HTTP(S)). The custom parser used for this recheck excludes fenced code and inline-code spans and scans inline links/images, reference definitions/uses, HTTP(S)/mailto autolinks and HTML href/src attributes, but it is not a complete CommonMark/GFM parser. It may miss nested-parenthesis destinations, uncommon reference forms or other parser-supported syntax. The difference is recorded, not silently normalized. No claim is made that 345 or 353 is the definitive complete destination count.
+
+The custom path resolver found no missing target among its 131 local references, but neither extractor has yet provided complete local heading-fragment validation. The 214 HTTP(S) occurrences have not been deduplicated into a complete unique-URL set and individually checked for status, redirects, final destination and semantic relevance. The existing 22 PR / 14 comment / 22 Actions API retrievals establish endpoint reachability for that bounded GitHub subset only.
+
+**Capability boundary:** the connected GitHub integration provides exact-ref tree/file retrieval and API metadata, but the available tool set exposes neither a full repository checkout/CommonMark parser runtime nor an authenticated interactive GitHub browser. A local `git ls-remote` attempt from the available execution container also failed because outbound DNS/network access to github.com is unavailable. Therefore authenticated rendered heading, commit-line and issue-comment anchor verification cannot be claimed from this environment. The missing rendered-browser evidence must be supplied by an authorized authenticated browser operator, or DF-06 remains open.
+
+**Disposition:** parser-count discrepancy, local-fragment resolution, exhaustive external status/redirect/relevance checks and authenticated rendered-anchor verification remain outstanding. DF-06 remains **NOT MET** under the Project Director's Option A. The correction of the §18.5 count and §19 chronology above preserves the 22-run current list without representing the historical addition as a 23rd destination.
