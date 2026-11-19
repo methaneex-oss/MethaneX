@@ -1635,3 +1635,29 @@ Candidate PR #192 contains higher-level Brain architecture/planning documents, b
 PR #97 remains open/draft/unmerged at its exact donor HEAD. The historical paths therefore remain retrievable from that branch and have not been deleted from repository history. This establishes preservation at the donor branch, not adoption into PR #192 and not a decision that the requirements are retired.
 
 **Disposition:** 12 absent example/specification/documentation rows are now classified as historical donor artifacts retained on PR #97, with no exact candidate successor established. Whether they are superseded, retained as separate historical evidence, or intentionally excluded from the current foundation remains an authority/scope decision where the requirement materially affects the accepted Brain baseline. No files were copied, deleted or retargeted. DF-02 remains OPEN pending the remaining donor rows and all-ref consumer/authority closure.
+
+
+## 37. Engineering agent/task/message public-contract regression audit (2026-11-19)
+
+**Exact candidate source:** PR #192 HEAD `282a54e5331aa69112df4c5b63b69a573a55e413`.  
+**Donor source:** PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+
+### 37.1 Task and result contract fields removed
+
+Donor `engineering/cpp/include/jarvis/engineering/agent.hpp` blob `6acadd5558b7385c5993323ad963ed80b08b6652` defines `EngineeringTask.dependencies` and `AgentResult.revision`. Candidate blob `b71c525a97790f460535713d85a705db086c55ac` removes both fields. The donor dependencies are not decorative metadata: the donor ledger enforces that dependency tasks complete before a dependent task can be claimed. The revision field binds an agent result to the source revision it acted on. Candidate's task ledger and revision-bearing result contract are absent.
+
+### 37.2 Tracked dispatch removed from coordinator API
+
+Donor `coordinator.hpp` blob `fc2cced25d47b23893571a100ee7f36a05d37a9b` declares `dispatch_tracked`, taking task ID, expected ledger version, base revision and `EngineeringTaskLedger&`. Candidate blob `d395db8ce7ae24e40d56aa923758a2251f9188e4` exposes only discover/rank/dispatch. This is the public API-level removal of the tracked dispatch path described in §35, not merely an implementation-file rename.
+
+### 37.3 Message delivery backpressure and idempotency removed
+
+Donor `message_bus.hpp` blob `a8a334881dc087e83640c984bf02e1704802754a` defines a receiver callback returning bool, so a receiver can reject a message and the bus can propagate backpressure. It also defines a bounded deduplication window, accepted-message history and in-flight message IDs to acknowledge retries without redelivery and prevent concurrent duplicate delivery.
+
+Candidate `message_bus.hpp` blob `2658f6c12d60f3df611f5cc0a01569b51b59bcb7` changes the receiver callback to void and removes the deduplication configuration/state. Candidate `message_bus.cpp` calls the receiver and reports delivery without a receiver-acceptance result or duplicate-delivery guard. This is a concrete reduction in delivery semantics, not only a smaller test suite.
+
+### 37.4 Disposition
+
+The candidate engineering API retains agent discovery/ranking/dispatch and in-process request/result messaging, but removes task dependency tracking, revision-bound results, ledger-tracked dispatch, receiver backpressure and bounded message idempotency. Together with the absent durable ledger (§35), these are material multi-agent coordination contract differences. No exact successor for the removed semantics was found in the candidate engineering tree.
+
+No engineering source was changed and no tests were run. **Disposition:** the three engineering header rows and their source/test rows remain OPEN pending a Project Director scope/retirement decision or a verified exact-ref successor. DF-02 remains OPEN.
