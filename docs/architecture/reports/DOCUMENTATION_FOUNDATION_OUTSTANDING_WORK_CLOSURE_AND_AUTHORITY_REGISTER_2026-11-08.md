@@ -1844,3 +1844,23 @@ The final donor head `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` contains all 159
 DF-02 remains **OPEN**: the new evidence improves donor lineage and behavioral proof, but does not complete all-ref consumers/dependencies/duplicate ownership or per-path semantic/authority dispositions. DF-06 remains **NOT MET**. DF-09 remains **NOT MET / externally blocked**. DF-10 remains **REOPENED**. DF-11 remains waived as mandatory. DF-12 remains **PROJECT DIRECTOR ONLY**. Stage A remains **HELD**.
 
 No PR #192 runtime/test/CMake/workflow changed; no current-PR build/CTest was run; no donor code was adopted; no source baseline was selected; no independent reviewer verdict or Project Director acceptance is claimed.
+
+
+## 23. Exact final donor-tree identity and 71/71 CI verification — 2026-11-19
+
+**Exact PR #192 HEAD before this register update:** `457599833480c3d712402e6b1cd318ad88b3445e`.  
+**DF-02 report blob:** `0859a8de92dca98b7c688e5d3e3e0e68c6af71eb`, §§49–51.  
+**Continuity checkpoint blob:** `d8cb7c2f11bc113e8c7d04bae82bf2059b573d82`, §42.
+
+PR #119 integration merge `fb994fed8b1bd39482aafd98110055032e8bc82f` and final PR #97 donor HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` share exact Git tree `9ed26529a28d6eb28970355396ff2e2bbb3a3964`. Their commit ancestry differs; their complete file trees are identical.
+
+Exact-head push runs on `c1da...` were independently fetched:
+
+- Core Verification run `40788714735`, job `123168281914`: all configure/build/test steps successful; raw log 71/71 CTest passed.
+- Brain CI run `40788714686`, native job `123168281291` and ASan/UBSan job `123168281548`: all steps successful; both raw logs 71/71 CTest passed.
+
+The passing tests include cognitive-runtime learning integration, memory/learning/evolution persistence, evolution adoption journal, developmental learning, developmental-brain/world integration and DLT-002 train/verify. The logs contain non-fatal compiler warnings; no warning-free claim is made.
+
+This confirms the final donor tree is compiled and tested with the integrated learning/memory/evolution mechanisms. It does not prove open-ended intelligence or current PR #192 behavior. PR #97 remains open/unmerged into main; no donor code was adopted.
+
+**Gate disposition unchanged:** DF-02 remains OPEN pending complete per-path semantic/authority closure and all-ref reverse-consumer/dependency/duplicate ownership. DF-06 remains NOT MET; DF-09 remains NOT MET / externally blocked; DF-10 remains REOPENED; DF-11 remains waived as mandatory; DF-12 remains Project Director-only. Stage A remains HELD.
