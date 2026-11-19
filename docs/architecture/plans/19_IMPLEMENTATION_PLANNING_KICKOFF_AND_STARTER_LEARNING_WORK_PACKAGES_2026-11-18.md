@@ -150,6 +150,101 @@ These are planning packages, not executable implementation tickets. Every packag
 
 **Primary owner:** BM-12; integrated with BM-02/BM-03/BM-04/BM-11.
 
+## 5A. First-slice owner-contract detail — planning refinement
+
+The following contract detail makes WP-02–WP-04 reviewable and testable without selecting implementation technology, data schema, algorithm or source baseline. It is derived from the historically accepted PR #174 mechanism specification at `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`. It is a planning decomposition, not a replacement specification or implementation authorization.
+
+### WP-02 contract: attributable experience, memory and continuity
+
+| Contract element | BM-01 — acquisition owner | BM-03 — memory owner | BM-11 — coordination owner |
+|---|---|---|---|
+| Receives | External/internal observation, provider result, action evidence, internal event or restored record | Evidence-bearing experience plus context and retention request | Owner events, dependency versions, work identity, interruption/recovery signals |
+| Authoritative state | Acquired record and source/acquisition lineage | Retained episodes, classifications, retrieval/consolidation records and supersession lineage | Dependency graph/status, coordination records, checkpoints, conflict and recovery status |
+| Must preserve | Original content or verifiable reference; source, acquisition/event time, modality, context, integrity and transformation lineage | Episode provenance/context; distinction between storage and truth; retrieval-use evidence; working eviction versus durable history | State ownership, dependency identity/version, committed versus pending/failed status, interruption and recovery history |
+| Must not claim | Interpretation, belief truth, successful perception from transport acknowledgement | That retrieval implies relevance/truth, or that missing memory proves non-occurrence | Authority to overwrite owner state, or successful cognitive recovery from substrate/process availability |
+| Failure states | Missing/malformed/partial/duplicate/delayed/reordered evidence; source/provider unavailable; integrity unknown | Empty result, unavailable store, retrieval failure, corruption, stale index/dependency and partial persistence are distinct | Conflict, duplicate/out-of-order event, partial commit, stale dependency, interrupted work and unvalidated recovery |
+| Required evidence | Original-to-derived lineage; source and event-time distinction; malformed/provider failure negative controls | Retain/retrieve/reconstruct with provenance; relevant-versus-irrelevant retrieval; durable episode survives working-context eviction | Idempotent replay; owner conflict disposition; dependency invalidation; interrupted recovery with cognitive-state validation |
+
+**Cross-owner invariants:**
+
+1. A successful transport, provider or storage acknowledgement is not proof that an experience was semantically accepted or that cognitive state is valid.
+2. Intake failure, unavailable source, missing evidence and an empty retrieval result must never be rewritten as a negative observation.
+3. Memory stores episodes and derived memory artifacts; the relevant epistemic owner decides what those artifacts support.
+4. BM-11 coordinates and validates dependencies but does not become the owner of BM-01 acquisition records or BM-03 memory content.
+5. Replay and reconstruction must be idempotent or explicitly detect duplicates; partial writes cannot be reported as complete state transitions.
+6. If recovery cannot establish coherent owner state, affected state remains unavailable, provisional or quarantined pending owner validation.
+
+**Minimum scenario coverage:** accepted-baseline scenarios 2, 4, 6, 24, 25 and 26; use scenario 3 only where provider/capability failure is in scope. Scenario 4 is an integration obligation: retrieved history must later affect inference, not merely appear in a context object.
+
+**WP-02 exit evidence:** one attributable episode is retained and retrieved with provenance/context; relevant and irrelevant retrieval are distinguished; durable history survives the declared lifecycle; interruption/reconstruction validates state and pending work; negative cases distinguish absence, failure, corruption, partial write and unavailability.
+
+### WP-03 contract: representation and owner-controlled belief revision
+
+| Contract element | BM-02 — representation owner | BM-04 — belief/world-state owner |
+|---|---|---|
+| Receives | BM-01 acquired evidence, context, retrieved memory and active task/goal context | Evidence, candidate interpretations, retrieved episodes, reasoning conclusions, counterevidence and dependency-change notices |
+| Authoritative state | Derived representations, candidate interpretations, entity/event hypotheses, relations and transformation lineage | Accepted/qualified beliefs, scope, evidence support/contradiction, status, revision lineage and dependent-state references |
+| Must preserve | Acquisition/interpretation distinction; alternative interpretations; modality/source context; evidence and assumption links | Claim scope/time, epistemic status, uncertainty, competing claims, prior versions and evidence responsible for each revision |
+| Must not claim | That normalized labels or lexical matches prove identity; that interpretation is accepted belief | That every inference is a belief; that missing evidence proves absence; that one generic confidence update is valid for all evidence |
+| Failure states | Unsupported or ambiguous interpretation, absent modality capability, low confidence and contradictory context | Unresolved conflict, stale claim, failed/partial update, missing support and dependent state requiring invalidation |
+| Required evidence | Same evidence under ambiguous contexts; later revision without rewriting acquisition; multiple interpretations retained where underdetermined | Accept/qualify/suspend/withdraw paths; contradiction and counterevidence; prior revision lineage; dependent-state invalidation and recovery |
+
+**Cross-owner invariants:**
+
+1. BM-01's acquired evidence remains unchanged by interpretation or belief revision.
+2. BM-02 may publish one or more candidate interpretations with evidence links and epistemic status; it cannot silently promote them into accepted beliefs.
+3. BM-04 alone accepts, qualifies, revises, suspends, supersedes or withdraws authoritative belief state.
+4. BM-04 revision must preserve the previous version and identify the evidence/reason for change.
+5. A belief change exposes affected predictions, plans, goals and derived representations for owner-specific reconsideration; BM-11 coordinates invalidation but does not decide their new content.
+6. Where evidence does not discriminate, competing claims remain visible and commitment may be deferred.
+
+**Minimum scenario coverage:** accepted-baseline scenarios 1, 2 and 7, with scenario 23 for stale dependent plans. Delayed evidence, mistaken interpretation and failed belief update are mandatory negative-path cases.
+
+**WP-03 exit evidence:** an acquired observation is represented without overwrite; competing interpretations/claims survive; new evidence changes only the justified derived state; belief revision is performed by BM-04 with preserved lineage; dependent state is identified and reconsidered by its actual owner.
+
+### WP-04 contract: memory-supported general reasoning
+
+| Contract element | BM-12 — reasoning owner | Receiving owner(s) |
+|---|---|---|
+| Receives | Evidence-bearing premises from BM-01; interpretations from BM-02; retrieved episodes from BM-03; current claims/status from BM-04; scoped hypotheses/predictions from BM-05; task/context and constraints from relevant owners | Provisional conclusion, alternative explanations, premise/assumption lineage, uncertainty, scope, counterexamples and unresolved gaps |
+| Authoritative state | Reasoning episode; premise/assumption set; inference/argument lineage; provisional conclusions and alternatives; contradiction/counterexample records; dependency references | BM-04 owns accepted beliefs; BM-05 owns causal/prediction state; BM-08 owns goal/plan/decision state |
+| Must preserve | Premise identity/version, source and temporal provenance, retrieval context, epistemic category, applicability, assumptions, alternatives, uncertainty and dependency lineage | Original reasoning episode plus accept/qualify/reject/defer disposition and rationale |
+| Must not claim | That valid derivation proves premise truth; that retrieved memory is relevant merely because returned; that a provisional conclusion is an accepted belief, causal model, plan or authorization | That receipt/logging alone is successful reasoning integration |
+| Failure states | Empty/incomplete premises, stale/out-of-scope premise, contradiction, defeated assumption, unavailable memory, unresolved alternatives and invalidated conclusion | Rejection/qualification, missing consumer, stale conclusion, owner evaluation failure and downstream state not changed |
+| Required evidence | Traceable inference with explicit premises/assumptions; paired relevant-memory and no-memory comparison; irrelevant-memory negative control; contradiction/defeated-assumption handling | Owner-specific evaluation record; preserved rationale; exact linkage between accepted inference and any resulting authoritative state change |
+
+**Cross-owner invariants:**
+
+1. BM-12 performs general derivation/evaluation; BM-02 represents, BM-03 retrieves, BM-04 commits belief state, BM-05 resolves predictions/causal hypotheses and BM-08 owns goals/plans/decisions.
+2. BM-12 cannot promote retrieved memories, interpretations, assumptions or provisional conclusions to a stronger epistemic status.
+3. A conclusion is not accepted merely because it is validly derived: premise truth, provenance, applicability, scope and uncertainty remain separate questions.
+4. Empty or contradictory premises produce an explicit unresolved/conflict result, not a substantive success.
+5. If a material premise, assumption, memory interpretation, belief or context changes, BM-11 tracks the dependency and the affected owner must reconsider the conclusion before consequential reuse.
+6. Delivery, logging or storage of a reasoning artifact is not downstream integration. The receiving owner must evaluate it and preserve its disposition.
+7. If a receiving owner accepts a conclusion, evidence must show the exact accepted inference and owner-state version, plus a material effect on that owner's computation/state where the scenario requires one.
+
+**Minimum scenario coverage:** accepted-baseline scenarios 4 and 27–34. The current PR #174 proposal's additional scenarios 41–48 remain proposed/unaccepted, but are recorded as forward-looking planning risks and must not be represented as accepted requirements.
+
+**WP-04 exit evidence:** a relevant retrieved episode materially changes an inference for a traceable reason; irrelevant memory does not gain authority; premise/assumption and alternative lineage is inspectable; contradictions and defeated assumptions qualify/withdraw conclusions; BM-04 or another actual receiving owner records its disposition; at least one accepted result causes a demonstrated, version-linked downstream owner-state/computation change when that capability is in scope.
+
+### First-slice integrated acceptance trace
+
+The first coding-slice target is not satisfied by independent BM-01, BM-03, BM-02, BM-12 and BM-04 unit tests alone. Its end-to-end evidence must join the same attributable experience and its later use across the following trace:
+
+1. BM-01 records an experience with source, event/acquisition time, context and immutable acquisition lineage.
+2. BM-02 creates a candidate interpretation linked to that experience, retaining ambiguity and epistemic status.
+3. BM-03 retains the episode and later retrieves it with provenance and contextual applicability.
+4. BM-12 receives the retrieved episode as an identifiable premise, alongside current evidence/claims and explicit assumptions; it records how the memory affected or did not affect the inference.
+5. BM-04 evaluates any candidate belief change and records accept/qualify/reject/defer with evidence and revision lineage.
+6. BM-11 tracks dependency versions, interruption and recovery; after a relevant upstream change, stale conclusions are not reused without reconsideration.
+7. A later attributable experience confirms, qualifies or defeats the earlier conclusion; the responsible owner updates state while preserving the full history.
+
+**Required paired/negative controls:** remove or substitute the relevant memory and compare inference lineage; supply irrelevant memory; provide contradictory or defeated evidence; make retrieval unavailable; interrupt between persistence stages; replay a duplicate; fail a partial write; reconstruct with stale dependent state. Each case must yield a distinct, attributable status rather than a generic success/failure.
+
+**Planning stop condition:** if an accepted specification does not settle an owner transition, state authority, failure disposition or required evidence, record the unresolved question and decision owner. Do not choose a schema, algorithm, ordering guarantee, persistence protocol or implementation behavior by implication.
+
+---
+
 ### WP-05 — Prediction and feedback contract
 
 **Purpose:** Connect expectations to correctly attributed outcomes and qualified learning candidates.
