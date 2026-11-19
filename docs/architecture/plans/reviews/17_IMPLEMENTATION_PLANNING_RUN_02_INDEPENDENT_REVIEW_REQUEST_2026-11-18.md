@@ -5,7 +5,7 @@
 **Branch:** `plan/brain-implementation-roadmap-20261103`  
 **Assignment document source parent:** `b441fc7a3c236b0d239ae3efee56489f18db430e`  
 **Exact review target:** The immutable PR #175 HEAD SHA stated in the accompanying PR Conversation assignment comment. The assignment document cannot contain its own resulting commit SHA; fetch live PR metadata and stop if it differs from the comment's exact target.  
-**Requested reviewer:** Established independent reviewer (xAI / Grok), distinct from the Builder.  
+**Requested reviewer:** Independent Reviewer, distinct from the Builder.  
 **Scope:** Planning coherence and readiness only; not a gate-clearance or implementation-authorization review.
 
 ## 1. Why this review is requested
