@@ -1012,3 +1012,31 @@ The three files absent from the older JBP-003/JBP-004 branch tips were introduce
 This strengthens the donor evidence from isolated source presence to integrated, exact-head-tested historical mechanisms. It does not transfer the results to PR #192, select a source baseline, authorize donor adoption, or prove open-ended intelligence. PR #97 remains open/unmerged into main; PR #119/#121 are merged only into its donor feature branch.
 
 DF-02 remains OPEN pending full per-path semantic successor/retirement/non-adoption, reverse-consumer/dependency/duplicate ownership across all 210 unique branch tips, and historical authority. DF-06 remains NOT MET; DF-09 remains NOT MET/external dispatch blocked; DF-10 remains reopened; DF-11 remains waived as mandatory; DF-12 remains Project Director-only. Stage A remains HELD. No PR #192 runtime/test/CMake/workflow was changed, no current-PR build/CTest was run, and no donor code was adopted.
+
+
+## 42. Builder milestone checkpoint — final donor tree and exact-HEAD CI (2026-11-19)
+
+**Exact PR #192 HEAD before this checkpoint write:** `66ca2156bb7ef32cef9b2d0fd02113fa7cef9e0f`.  
+**DF-02 report blob:** `0859a8de92dca98b7c688e5d3e3e0e68c6af71eb`, §§49–51.  
+**PR #97 donor HEAD:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+
+### 42.1 Final donor tree verified
+
+PR #119 integration merge `fb994fed8b1bd39482aafd98110055032e8bc82f` and PR #97 donor HEAD `c1da...` have the exact same Git tree SHA: `9ed26529a28d6eb28970355396ff2e2bbb3a3964`. Their commit histories differ, but their file trees are identical. This confirms the PR #119/#121 test evidence applies to the exact final donor tree.
+
+### 42.2 Exact donor-HEAD CI
+
+The Actions runs endpoint filtered by exact `head_sha=c1da...` returned two successful push workflows:
+
+- Core Verification `40788714735`, cpp-core job `123168281914`: configure/build/test successful; raw log shows 71/71 CTest passed.
+- Brain CI `40788714686`: native-brain job `123168281291` and sanitizer job `123168281548` both successful; raw logs show 71/71 CTest passed in native and ASan/UBSan configurations.
+
+The logs include cognitive-runtime learning integration, memory/learning/evolution persistence, evolution adoption, developmental learning, developmental-brain/world integration and DLT-002 train/verify targets. Non-fatal compiler warnings remain in the logs.
+
+### 42.3 Final interpretation
+
+The donor branch now has three corroborating evidence layers: DLT-002 multi-seed learning/feedback ablation on an ancestor revision; PR #119/#121 integrated tests on a tree identical to donor HEAD; and exact donor-HEAD 71/71 Core Verification/native/sanitizer tests. This is substantive bounded evidence of connected learning, memory, prediction, affect, developmental and guarded evolution mechanisms. It is not proof of open-ended general intelligence and is not evidence that current PR #192 contains the same implementation.
+
+Current candidate PR #192 remains 1 identical, 95 divergent and 63 absent across the 159 donor paths at its last verified code-tree snapshot. No donor code was adopted. PR #97 remains open/unmerged into main.
+
+DF-02 remains OPEN pending complete per-path semantic/authority dispositions and all-ref reverse consumers/dependencies/duplicate ownership. DF-06 remains NOT MET; DF-09 remains NOT MET/external dispatch blocked; DF-10 remains reopened; DF-11 remains waived as mandatory; DF-12 remains Project Director-only. Stage A remains HELD. No current PR #192 runtime/test/CMake/workflow changed or was tested.
