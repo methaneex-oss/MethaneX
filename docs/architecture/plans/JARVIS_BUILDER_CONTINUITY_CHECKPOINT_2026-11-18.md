@@ -1244,3 +1244,46 @@ This checkpoint, the Phase 2 map correction, DF-06 report update and DF-02 repor
 - DF-12: **PROJECT DIRECTOR ONLY**.
 
 The accepted governance standard has been freshly read and recorded in §43. PR #171 SYS-01–SYS-11 remains the existing architecture foundation. Stage A remains **NOT STARTED / HELD**. No runtime implementation, donor adoption, baseline selection, independent verdict, Director acceptance or merge is claimed.
+
+
+## 45. Exact-current Builder checkpoint after governance and index synchronization — 2026-11-19
+
+**Exact PR #192 HEAD before this checkpoint write:** `84fed8addc0876f0bcc14d16ab95e570f5745478`.  
+**Base branch tip:** `ea64607ef94f142a6142a013e119a7225bc95c1c`.  
+**Recorded PR merge-base:** `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.  
+**Current compare:** 783 ahead / 14 behind; GitHub reports `mergeable=true`.
+
+### 45.1 Controlling evidence blobs at this checkpoint parent
+
+| Artifact | Exact blob |
+|---|---|
+| DF-02 reconciliation | `73772192b9303d560b09c89a337f603d08459314`, through §52 |
+| DF-02 historical lineage supplement | `d12641053e9247966aac107438032d7b7b6cd2af`, through §11 |
+| DF-06 navigation audit | `b42fdbd380135187c471092219ec1fb5e489811d`, through §23 |
+| Planning index | `0ae13ed6a9b2514267686e35d210e88d2dedc411`, through §112 |
+| Outstanding-work register | `f8104239130e5a59c8c6aa1b50ff04690f8dc9a1`, through §24 |
+| Builder self-review | `cdd0762a00ae1b4bc78b613ea84c2923f99d12db`, through §24 |
+| Phase 2 integration map | `1ae6ca2dcde4c6f88040762a07ac11e7f01ea255` |
+| Terminal inventory candidate | `e585ed31d03868ac38d965c023368a01250b22df` at commit `67be...`; not currently terminal |
+
+### 45.2 Governance and branch state
+
+The accepted governance document was fully re-read (1,022 lines) from live base tip `ea646...`; its blob and Project Director acceptance provenance are recorded in §43. This Builder run remains restricted to documentation-foundation closure. No independent reviewer/tester verdict or Project Director decision is made.
+
+The PR branch has 47 changed paths (45 Markdown, 2 JSON), a complete 280-entry tree and 51 Markdown files. The base branch is 14 commits beyond the PR's recorded merge-base. The only overlap was the Phase 2 integration map; two exact source-line ranges were corrected in the PR branch. GitHub now reports mergeable=true, but the branch remains behind14. No rebase, retarget, merge, cherry-pick or base-branch modification occurred.
+
+### 45.3 Current evidence and limitations
+
+- Final donor PR #97 HEAD `c1da...` shares exact tree SHA `9ed26529a28d6eb28970355396ff2e2bbb3a3964` with PR #119 integration head. Exact donor-head Core Verification and Brain CI logs show 71/71 CTest in core, native and ASan/UBSan.
+- DLT-002 artifacts contain 35 mechanism-gate data rows, all PASS; three enabled 10-minute runs and a matched no-feedback control. Accuracy metrics are descriptive, the control still receives observations, and 1,629 non-action predictions remained unresolved.
+- The 10-tip exact-ref tree tranche is not the all-210-tip source-content consumer/dependency/duplicate-owner scan. The container cannot resolve github.com; the connected code-search action is default-branch-only.
+- Two stale Phase 2 map line ranges were corrected against exact pinned source blobs. DF-06 still lacks the full parser/fragment/external/rendered-browser standard.
+- The last exact 159-path candidate comparison at `81b62...` remains 1 identical, 95 divergent and 63 absent against donor; subsequent commits are documentation-only.
+
+### 45.4 DF-10 and gate disposition
+
+The inventory-only candidate `67be...` passed its exact parent/successor verification: parent `18194...`, one commit ahead/zero behind, one changed path, 47 exact manifest rows, 46 unchanged non-inventory blobs, complete 280-entry parent/successor trees. This checkpoint, the map correction, DF-06/DF-02 updates, register, self-review and index are subsequent branch-file writes. DF-10 remains **REOPENED** and requires a new terminal inventory after all remaining Builder-owned writes.
+
+DF-02 **OPEN**; DF-03 partially evidenced; DF-04 Builder evidence present within bounded scope; DF-05 partially evidenced; DF-06 **NOT MET**; DF-07 synchronization pending; DF-08 resolved within bounded criterion; DF-09 **NOT MET / externally blocked**; DF-10 **REOPENED**; DF-11 waived as mandatory; DF-12 **PROJECT DIRECTOR ONLY**. Stage A remains **NOT STARTED / HELD**.
+
+The PR description remains stale and must be updated to the live head/base/mergeability facts. The Independent Reviewer request must remain unpinned until the new terminal inventory successor exists. No runtime implementation, donor adoption, source-baseline selection, independent verdict, Director acceptance or merge permission is claimed.
