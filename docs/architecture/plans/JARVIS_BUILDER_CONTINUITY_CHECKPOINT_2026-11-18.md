@@ -1040,3 +1040,49 @@ The donor branch now has three corroborating evidence layers: DLT-002 multi-seed
 Current candidate PR #192 remains 1 identical, 95 divergent and 63 absent across the 159 donor paths at its last verified code-tree snapshot. No donor code was adopted. PR #97 remains open/unmerged into main.
 
 DF-02 remains OPEN pending complete per-path semantic/authority dispositions and all-ref reverse consumers/dependencies/duplicate ownership. DF-06 remains NOT MET; DF-09 remains NOT MET/external dispatch blocked; DF-10 remains reopened; DF-11 remains waived as mandatory; DF-12 remains Project Director-only. Stage A remains HELD. No current PR #192 runtime/test/CMake/workflow changed or was tested.
+
+
+## 41. Builder milestone checkpoint — exact-current PR/base reconciliation and recovered DLT-002 artifacts (2026-11-19)
+
+**Exact PR #192 HEAD at this checkpoint's initial acquisition:** \`9d61e9bb3ef0433e7b1c03bfcd1a3a19b8c6741d\`.  
+**Exact donor PR #97 HEAD:** \`c1da222e6c94aeb3f2ad000392c21fe4fc81ab25\`.
+
+### 41.1 Live repository and PR metadata correction
+
+A fresh PR metadata read and direct branch-ref read agree on PR #192 HEAD \`9d61e9bb3ef0433e7b1c03bfcd1a3a19b8c6741d\`. The complete tree contains 280 entries (\`truncated=false\`), the changed-path list contains 47 unique paths, and the tree contains 51 Markdown files. PR #192 remains open, non-draft and unmerged.
+
+The PR description was stale: it named \`bbd33d8d8097464d578f87258fc991e6b880f99a\` as live HEAD and said 0 behind. The live base branch \`docs/jarvis-phase-2-whole-brain-integration-map-20261105\` now points to \`ea64607ef94f142a6142a013e119a7225bc95c1c\`, while the PR's recorded base/merge-base remains \`61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c\`. Comparing current base tip to PR head yields 754 ahead / 14 behind and a diverged graph. Live PR metadata reports mergeable=false. This is not permission to retarget, rebase, merge or rewrite history. The PR description/index must be corrected to distinguish the recorded base snapshot from the moving base-branch tip.
+
+### 41.2 New historical behavior evidence and exact artifact integrity
+
+DF-02 §49 and the historical lineage supplement §10 now record PR #99/#100 DLT-002 runs and downloaded artifacts.
+
+- PR #99 run \`40419118694\` succeeded on PR #99 workflow head \`9ae1a3f...\`; the artifact identifies tested runtime commit \`8525de774493de7c8eab05baa98af94cd068e995\`. Artifact \`12696474493\` SHA-256 \`ab109d1849e63d8f0e6409861a131b3214a1e4c6db62a7d9ce33f255bcc66013\` matches GitHub's digest. It preserves a 10-minute, six-phase DLT-002 run and 36 explicit mechanism-gate PASS rows.
+- PR #100 run \`40596743895\` succeeded on PR #100 workflow head \`26bca1244a698610d8d48a91308d9c0cf0855a87\`; the artifact identifies tested runtime commit \`beb7971426c42d326f7553363d16f37ce311e9d9\`. Artifact \`12778958158\` SHA-256 \`e706f91d2d6d89d8357ee27566a66bdb81dafb470839f8e0057eaa6603a712e2\` matches GitHub's digest. Its three-seed feedback-enabled trials average 93.3–98.6% phase accuracy; the primary matched outcome-feedback-withheld control is 49.9% versus 97.1% feedback-enabled.
+
+Both tested runtime commits are ancestors of donor PR #97 HEAD \`c1da222...\`. The results are historical donor-lineage evidence, not current PR #192 tests or accepted source-baseline decisions. The control still receives observations and can update execution-reliability/self-model mechanisms; it isolates consequence feedback, not every learning process. Full details and limitations are in DF-02 §49 and supplement §10.
+
+### 41.3 Additional exact-ref lineage tranche
+
+DF-02 §49.3 records ten complete exact-ref tree comparisons against the 159 PR #97 paths: the donor head and nine related feature tips. The donor tip has 159 identical blobs. The learning-probe tip has 1 identical / 94 divergent / 64 absent. The other eight feature tips range from 47 to 85 divergent same-path blobs and 74 to 112 absent paths. These are structural same-path counts only, not semantic successors or content-consumer results. The 251-ref / 210-unique-tip census is unchanged; the ten-tip tree tranche is not the all-ref source-content search.
+
+### 41.4 DF-06 exact-head delta
+
+DF-06 §21 records a fresh 849ae... → 9d61... four-file delta for the index, checkpoint, self-review and outstanding-work register. The bounded extractor found no destination additions/removals in those four files. This is not a full parser reconciliation of all 51 Markdown files. The 345-vs-353 historical discrepancy, local fragments, exhaustive external status/redirect/relevance and authenticated rendered GitHub anchor checks remain open. No authenticated browser is exposed by the current connected tool set.
+
+### 41.5 Gate and authority disposition
+
+- DF-01: Builder evidence present; final exact-head synchronization remains.
+- DF-02: **OPEN** — 159-path identity and broad semantic tranches exist; complete all-ref source-content consumer/dependency/duplicate ownership and per-path authority/disposition remain incomplete.
+- DF-03: Partially evidenced; preserve exact decision provenance and scope.
+- DF-04: Builder evidence present within bounded scope.
+- DF-05: Partially evidenced; current base-branch divergence is now explicitly recorded, but semantic dependencies remain open.
+- DF-06: **NOT MET** — parser, fragments, exhaustive external checks and authenticated rendered anchors remain.
+- DF-07: Correction/synchronization in progress, including PR description and exact-current metadata.
+- DF-08: Resolved within bounded preservation criterion.
+- DF-09: **NOT MET / externally blocked** — no workflow-dispatch operation is exposed and no exact-final-HEAD blind CLEAR result exists.
+- DF-10: **REOPENED** — terminal inventory-only write must follow every other branch-file update.
+- DF-11: Waived as a mandatory gate; separate exact-revision challenge remains requested.
+- DF-12: **PROJECT DIRECTOR ONLY**.
+
+No runtime C++, test, CMake or workflow in PR #192 was changed. No current-PR build, CTest, training run, fresh-reader dispatch, independent verdict or Director acceptance was performed. No donor code was adopted and no source baseline selected. PR #171 SYS-01–SYS-11 remains the existing whole-system architecture foundation; the approved Document 00/01 revisions remain separately scoped and must not be duplicated. Stage A remains **NOT STARTED / HELD**.
