@@ -600,3 +600,28 @@ This is a complete branch-reference enumeration for the returned GitHub branch c
 The repository now has a Builder-fetched snapshot of all 251 live branch refs and their exact tip SHAs. This materially improves branch discovery and identifies 8 same-tip alias groups. It does **not** close all-branch consumer/reference analysis: that requires examining relevant tree contents, changed-path history, and references to material artifacts across branch tips and historical PR snapshots. Do not infer that every branch was semantically reviewed from this ref listing.
 
 **DF-02 remains OPEN** pending semantic disposition of the PR #97 path matrix, successor/retirement mapping, cross-branch consumer and dependency closure, and repository-wide active authority consistency. No merge, donor adoption, branch deletion, rename, rebase, retarget, cherry-pick, baseline selection, Stage A start or runtime implementation is authorized by this census.
+
+
+## 10. PR #99/#100 DLT-002 execution artifacts — exact tested commits and limits (2026-11-19)
+
+The earlier §4 table records PR #99 as a merged learning-probe workflow and does not include PR #100's quantitative follow-up. This addendum preserves the actual exact-run/artifact evidence so a workflow merge is not confused with a runtime merge.
+
+### 10.1 PR #99 — explicit mechanism gates and integrated trial
+
+- PR #99 head: \`9ae1a3f92ccdca846074d1433734851d9483f190\`; closed/merged 2026-10-27; one changed path (the selectable workflow). The workflow's successful run \`40419118694\` was triggered against that exact PR head.
+- The job completed exact runtime checkout, revision/input validation, C++20 configure, native build, all registered mechanism gates, a 600-second integrated DLT-002 run, evidence summary and artifact upload.
+- Artifact \`12696474493\` (\`JARVIS-Learning-Probe-40419118694-1\`) was downloaded. Its SHA-256 \`ab109d1849e63d8f0e6409861a131b3214a1e4c6db62a7d9ce33f255bcc66013\` matches GitHub's artifact digest.
+- Metadata identifies tested runtime commit \`8525de774493de7c8eab05baa98af94cd068e995\`, an ancestor of PR #97 head \`c1da222e6c94aeb3f2ad000392c21fe4fc81ab25\` (32 commits ahead, 0 behind). The artifact records six DLT-002 phases, 20% outcome noise, resolved-prediction evidence and 36 explicit mechanism-gate PASS rows.
+
+### 10.2 PR #100 — three-seed diagnostics and matched feedback control
+
+- PR #100 head: \`26bca1244a698610d8d48a91308d9c0cf0855a87\`; open/non-draft/unmerged; one changed workflow path. Successful run \`40596743895\` completed the same explicit mechanism gates plus the primary integrated trial, two additional seeds, matched outcome-feedback-disabled control, comparison analysis and artifact upload.
+- Artifact \`12778958158\` (\`JARVIS-Learning-Probe-40596743895-1\`) was downloaded. Its SHA-256 \`e706f91d2d6d89d8357ee27566a66bdb81dafb470839f8e0057eaa6603a712e2\` matches GitHub's artifact digest.
+- Metadata identifies tested runtime commit \`beb7971426c42d326f7553363d16f37ce311e9d9\`, an ancestor of PR #97 head \`c1da222...\` (12 commits ahead, 0 behind).
+- Primary feedback-enabled performance: 569/586 optimal action selections (97.1%). Same-seed/task/duration outcome-feedback-withheld control: 295/591 (49.9%), a 47.2 percentage-point difference.
+- Across the three feedback-enabled seeds, mean phase accuracy was 93.3% clear baseline, 96.3% flooded, 94.6% tunnel, 93.5% clear reversal, 98.6% generalization probe and 93.3% flooded reversal. The first unseen-context decision is separated from the first ten decisions; the latter include feedback and are not described as zero-shot transfer.
+- The control still receives observations and may update execution-reliability/self-model mechanisms. It isolates consequence feedback, not all learning. The artifacts themselves state that the finite synthetic task and simple fixed-action baselines do not prove general-purpose intelligence or broad open-world transfer.
+
+### 10.3 Interpretation and authority
+
+The artifacts demonstrate that the historical donor-lineage implementation was built and exercised through integrated mechanism tests and a bounded experience-dependent action-selection trial. They are stronger than source-presence evidence alone. They do not prove that the same behaviors exist on PR #192, do not close any PR #97 donor-ledger row, and do not select PR #97 or any related branch as an accepted source baseline. PR #99 merged a workflow only; PR #100 remains unmerged. These are historical, exact-commit test results, not current candidate test results or Project Director acceptance.
