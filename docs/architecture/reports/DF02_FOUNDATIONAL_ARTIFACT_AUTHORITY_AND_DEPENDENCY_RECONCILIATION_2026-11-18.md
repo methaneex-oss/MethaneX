@@ -1142,3 +1142,30 @@ Priority order for the next bounded audit:
 **Disposition:** The orchestrator's normal candidate path is controller-mediated, but the current controller does not enforce the full evaluation-evidence invariant, and a public Brain API plus Brain replay apply model changes directly. This is a concrete integration/control-plane discrepancy requiring API/authority and persistence-boundary resolution. It is not yet a verified exploitable bypass because caller trust/permission contracts and runtime deployment context have not been established.
 
 No runtime code was modified or adopted. No build or tests were run. No CI workflow was dispatched. **DF-02 remains OPEN** pending all-path semantic dispositions, all-branch consumer/dependency/duplication closure, historical artifact authority reconciliation and independent challenge. Gate A/B and Stage A remain held.
+
+
+## 29. DF-02 per-path coverage-count reconciliation — 2026-11-19
+
+A consistency check was performed after §28 because the earlier §26 summary states that §§16–§26 cover 98/159 paths, while the later public-header tranche in §25 was appended after that summary and the report contains duplicate section numbers.
+
+### 29.1 Reproducible path-name audit
+
+- PR #97's changed-path endpoint was fetched again and returned 159 paths.
+- The report text from the first bounded semantic-audit section (§16) through the current end was checked for exact backtick-delimited full-path occurrences.
+- **102 of 159** donor paths have at least one exact full-path mention in this audit text; **57** do not.
+- The 26-header table in §25 uses header basenames rather than full repository paths. Its 26 rows cannot be counted by the exact-full-path check without an explicit normalized mapping, and some header rows overlap paths already mentioned in other audit sections.
+- This string-presence check is a reproducible report-integrity diagnostic only. It is **not** a semantic-coverage count: a path can be mentioned in a broad table without a complete donor/current behavioral comparison, reverse-consumer trace or evidence-backed disposition.
+
+### 29.2 Required correction to the prior coverage claim
+
+The **98/159** figure in §26 is not currently reproducible from the report's exact full-path mentions, and it was not recomputed after the subsequent 26-header tranche and §§27–§28. It must not be used as the current semantic-coverage denominator or completion claim. The **102/159** exact-path-mention result must not be substituted as semantic coverage either.
+
+The report's duplicate §10 and §25 headings are additional editorial defects. A safe renumbering requires a cross-reference audit; no blind global replacement was performed.
+
+### 29.3 Closure method from this point
+
+Before DF-02 can close, create a canonical 159-row ledger (one row per exact donor path) with: donor blob; current exact candidate blob or absence; normalized semantic disposition; evidence section(s); consumer/successor search scope and results; relevant test/build/workflow provenance; historical authority/decision owner; and unresolved dependency. Count each path exactly once, and classify each row as **semantically closed**, **retired with evidence**, **not adopted with approved rationale**, or **unresolved**. Do not count structural inventory, basename-only mentions, shared evidence, or test-source presence as semantic closure.
+
+For the remaining reverse-consumer obligation, record the exact branch/PR/ref search coverage and distinguish complete search from default-branch-only code search. GitHub code search is default-branch scoped and therefore cannot, by itself, establish all-branch consumer closure. The connector currently used in this audit exposes branch enumeration and file retrieval but no recursive-tree or all-ref code-search operation; if no exact-ref consumer search mechanism is available, that portion must be explicitly blocked rather than inferred closed.
+
+**Corrected disposition:** DF-02 remains **OPEN**. The historical 98/159 count is superseded as a current progress metric; no replacement semantic-coverage percentage is asserted. This correction narrows the audit's claims and prevents an unsupported closure declaration. Gate A/B and Stage A remain held.
