@@ -590,3 +590,29 @@ At candidate head `9d61e9...`, the exact 159-path comparison remains 1 identical
 The evidence corrects the earlier risk of dismissing donor capabilities as merely uncompiled source: the final donor branch has connected, registered and historically CI-tested learning/persistence/evolution mechanisms. It does **not** prove that the current candidate implements them, authorize copying them, or establish that donor branch is the Project Director-selected baseline. PR #97 remains open/unmerged into main.
 
 DF-02 remains **OPEN** pending all-ref reverse-consumer/dependency/duplicate closure and full per-path semantic/authority disposition. DF-06 remains **NOT MET**; DF-09 remains **NOT MET / externally blocked**; DF-10 remains **REOPENED**; DF-12 remains **PROJECT DIRECTOR ONLY**. Stage A remains HELD. No current PR #192 runtime source/test/CMake/workflow changed; no current-PR build/CTest was run; no donor adoption, independent verdict or Director acceptance is claimed. This is Builder self-review only.
+
+
+## 23. Final donor tree and exact-HEAD test evidence — critical appraisal (2026-11-19)
+
+**Exact PR #192 HEAD before this self-review update:** `13e912522d2db434c70556e47f3b7ff45323039d`.  
+**DF-02 report blob:** `0859a8de92dca98b7c688e5d3e3e0e68c6af71eb`, §§49–51.  
+**Continuity checkpoint blob:** `d8cb7c2f11bc113e8c7d04bae82bf2059b573d82`, §42.  
+**Outstanding-work register blob:** `16be4502fa8ba36b5d736b2fdebf05288779d347`, §23.
+
+### 23.1 Exact donor tree and CI
+
+PR #119 integration merge `fb994...` and final PR #97 donor head `c1da...` have identical Git tree SHA `9ed26529a28d6eb28970355396ff2e2bbb3a3964`. Exact push-triggered runs on `c1da...` were verified: Core Verification `40788714735` and Brain CI `40788714686`. Raw job logs show 71/71 CTest passed in cpp-core, native-brain and ASan/UBSan configurations. The logs include the runtime learning, memory/evolution persistence, evolution adoption, developmental, world-integration and DLT-002 train/verify suites. Non-fatal compiler warnings remain recorded.
+
+### 23.2 What this proves — and what it does not
+
+Combined with the DLT-002 multi-seed probe and PR #119/#121 exact-tree integration runs, this is credible evidence that the final donor branch has implemented, registered and tested connected action-consequence learning, adaptation, prediction feedback, affective updates, experience memory, developmental strategy/world integration, evolution evaluation/adoption safeguards and cross-process persistence.
+
+It does not prove unrestricted intelligence. The learning probes use finite synthetic environments; DLT-002's accuracy is descriptive rather than a workflow threshold; its no-feedback control still receives observations; most non-action predictions remain unresolved. The integration suites use controlled scenarios and deterministic outcomes. The final donor's 71 passing tests prove their registered contracts, not broad transfer or arbitrary capability acquisition.
+
+It also does not prove the current PR #192 candidate has these mechanisms. At the last exact candidate snapshot, the 159 donor paths were 1 identical, 95 divergent and 63 absent. The donor branch is PR #97 and remains unmerged into main; it is not automatically the selected baseline. No donor code was adopted.
+
+### 23.3 Current conclusion
+
+The historical donor capability record is now materially better evidenced than a simple source-presence audit. The remaining task is not to deny these mechanisms exist; it is to finish the candidate-versus-donor semantic reconciliation, all-ref consumer/dependency/duplicate analysis and authority provenance without silently porting or blessing donor code.
+
+DF-02 remains **OPEN**. DF-06 remains **NOT MET**; DF-09 remains **NOT MET / externally blocked**; DF-10 remains **REOPENED**; DF-12 remains **PROJECT DIRECTOR ONLY**. Stage A remains HELD. No current PR #192 runtime/test/CMake/workflow change, build, CTest, independent verdict or Director acceptance is claimed. This is Builder self-review only.
