@@ -1806,3 +1806,18 @@ Twelve GitHub Actions runs were independently checked: six completed successfull
 ### 20.3 Verification and non-authorization
 
 The JBP-004 runs are historical branch evidence only. No PR #192 runtime source, test, CMake or workflow was changed; no current-PR build or CTest was executed. No independent reviewer verdict, DF-09 CLEAR, DF-12 acceptance or gate closure is claimed. The existing PR #171 SYS-01–SYS-11 architecture foundation remains authoritative within its recorded scope.
+
+
+## 21. JBP-003 evolving-world challenge evidence and expanded exact-ref lineage — 2026-11-19
+
+**Exact PR #192 HEAD before this register update:** `4662169fb473764752db78c2c3a72fd7ec349530`.  
+**DF-02 report blob:** `28dc2ca86a1be46e42d3d03fa6f78e1eef63a8dc`, §48.  
+**Continuity checkpoint blob:** `48d44cfddf4f7dcd0df28eb668f590df29d93039`, §40.
+
+PR #107 `test/jbp-003-evolving-world-challenge` @ `92cce78985f2630f62a6e0beb49ac725623d7d85` was added to the exact-ref lineage evidence. Its complete 288-entry tree compares against PR #97's 159 changed paths as 119 identical blobs, 37 divergent blobs and 3 absent paths. It is open/draft/unmerged, based on `feat/jarvis-affective-state` @ `a06900347f5e463b67e5994d7962a5ea16c3cd2a`, and changes only its challenge workflow, test registration, test suite and test specification.
+
+All six associated Actions runs were independently verified successful on the exact head. The JBP-003 run `40647015963` completed its exact-checkout/build/three-seed training/fresh-process verification/artifact-upload steps. Artifact `12798381657` was downloaded and inspected; its SHA-256 matches GitHub's digest `f89d4e2e7db0db82baccee0bba4ea7bba455dabce022dd0516a8da46a785cc9e`. The artifact records 20/20 acquisition in both contexts for all three seeds; reversed-context results of 57/60, 56/60 and 57/60; unchanged-context control 60/60 for each; and 20/20 per context after fresh-process restoration without feedback.
+
+This is substantive but bounded historical evidence of hidden-rule, noisy, context-specific action learning and adaptation on PR #107's existing runtime. It is not a production-code change, current PR #192 test, broad generalization or full JARVIS capability. The finite two-context/two-action/one-task challenge does not close any donor ledger row.
+
+**Current gate register:** DF-02 remains OPEN; DF-06 remains NOT MET; DF-09 remains NOT MET / externally blocked; DF-10 remains REOPENED; DF-11 remains waived as mandatory; DF-12 remains Project Director-only. Stage A remains HELD. No current-PR runtime/test/CMake/workflow was changed, no donor code was adopted, and no independent verdict or Director acceptance is claimed.
