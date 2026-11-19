@@ -323,3 +323,38 @@ The detailed evidence, exact blobs and limits are in DF-02 §28. These are sourc
 6. Continue DF-06 exact-tree parser, fragments, external destinations and authenticated rendered-anchor work. Preserve DF-09, DF-10, DF-11, DF-12 and Stage A authority boundaries.
 
 No runtime code was modified, no donor code adopted, no tests/build executed, and no workflow dispatched. This checkpoint updates an existing changed path only.
+
+
+## 20. Builder milestone checkpoint — DF-02 count correction and control-plane risk (2026-11-19)
+
+**PR #192 exact HEAD before checkpoint write:** `792460fd7cb745d6dd5e92ee341d268d95a9cdf7`.
+**DF-02 report blob:** `8837babd204447d3d93e5f746452f7ae08f88fe6`.
+
+### 20.1 Material new findings
+
+DF-02 §28 traces the exact current orchestrator, Brain API/replay, evolution controller, runner, adoption journal and history against PR #97 donor equivalents. It establishes:
+- The normal orchestrator path is coordinator → record evaluation → controller adoption.
+- The current controller itself does not enforce matching durable evaluation evidence before adoption.
+- A public Brain adoption API directly mutates the evolution model outside the experiment controller; its intended trusted/manual contract remains unresolved.
+- Brain replay applies adoption events directly to the model and does not reconstruct controller journal state or revalidate linked evaluation evidence.
+- Current runner/journal/history lifecycle contracts are materially narrower than donor equivalents; rollback compensation and retry identity require explicit design.
+- These are source-level control-plane differences, not proven exploitable runtime behavior. No code or tests were changed or executed.
+
+### 20.2 DF-02 progress-count correction
+
+DF-02 §29 now corrects the previous stale 98/159 progress claim. A reproducible exact-full-path mention check finds 102/159 paths mentioned in §§16 onward and 57 not mentioned by full path. However, the later 26-header table uses basenames and overlaps some exact-path references, and mention is not semantic closure. Therefore neither 98/159 nor 102/159 is a valid semantic-coverage metric. No replacement percentage is asserted.
+
+A canonical 159-row ledger is now the required closure method. Every row must bind exact donor/candidate blobs, semantic disposition, consumer/successor search scope, test/build provenance, historical authority and unresolved dependencies. Complete all-branch reverse-consumer closure is additionally limited by the currently available GitHub connector: code search is default-branch scoped and no recursive-tree/all-ref search operation is exposed. Do not infer complete branch coverage.
+
+### 20.3 DF-09 exact status
+
+The runbook confirms the latest applicable historical blind reader run #44192302873 returned PARTIALLY CLEAR (31/32) against `beb4d5a174a1dd613878f89132e97b5e6052c7d3`, not the current PR head. Its unresolved issue is the primary-source provenance/authority packet, not a generic navigation correction. No workflow run is associated with the current PR #192 head in the PR-triggered workflow-run endpoint; this endpoint does not enumerate workflow_dispatch runs, so absence there is not proof no manual run exists. DF-09 remains NOT MET; do not rerun an unchanged packet simply to generate another score.
+
+### 20.4 Next work
+
+1. Continue DF-02 by building and reconciling the canonical 159-row ledger; keep semantic closure distinct from structural mention.
+2. Continue DF-06's exact-current-tree parser/fragment/external work. Authenticated rendered GitHub anchors require a real authenticated browser session; do not substitute API existence.
+3. Keep DF-09 pending until the packet's material provenance limitation is addressed or the Project Director explicitly decides how to disposition it.
+4. Preserve DF-10 final-inventory ordering, DF-11 waiver, DF-12 Director-only acceptance and Stage A hold.
+
+No runtime code, donor code, build configuration or tests were changed. This checkpoint updates an existing PR path only.
