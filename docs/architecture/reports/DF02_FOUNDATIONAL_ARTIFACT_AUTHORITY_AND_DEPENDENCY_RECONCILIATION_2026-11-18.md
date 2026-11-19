@@ -1166,7 +1166,7 @@ The report's duplicate §10 and §25 headings are additional editorial defects. 
 
 Before DF-02 can close, create a canonical 159-row ledger (one row per exact donor path) with: donor blob; current exact candidate blob or absence; normalized semantic disposition; evidence section(s); consumer/successor search scope and results; relevant test/build/workflow provenance; historical authority/decision owner; and unresolved dependency. Count each path exactly once, and classify each row as **semantically closed**, **retired with evidence**, **not adopted with approved rationale**, or **unresolved**. Do not count structural inventory, basename-only mentions, shared evidence, or test-source presence as semantic closure.
 
-For the remaining reverse-consumer obligation, record the exact branch/PR/ref search coverage and distinguish complete search from default-branch-only code search. GitHub code search is default-branch scoped and therefore cannot, by itself, establish all-branch consumer closure. The connector currently used in this audit exposes branch enumeration and file retrieval but no recursive-tree or all-ref code-search operation; if no exact-ref consumer search mechanism is available, that portion must be explicitly blocked rather than inferred closed.
+For the remaining reverse-consumer obligation, record the exact branch/PR/ref search coverage and distinguish complete search from default-branch-only code search. GitHub code search is default-branch scoped and therefore cannot, by itself, establish all-branch consumer closure. Exact-ref recursive-tree retrieval is available through the GitHub API fetch endpoint and was used for the donor/candidate trees. What remains unavailable is a bulk all-ref content search: each relevant branch tip would require its own tree and source-file retrieval/search, or an approved local clone/index. Until that scan is completed, the all-ref consumer portion remains OPEN rather than inferred closed.
 
 **Corrected disposition:** DF-02 remains **OPEN**. The historical 98/159 count is superseded as a current progress metric; no replacement semantic-coverage percentage is asserted. This correction narrows the audit's claims and prevents an unsupported closure declaration. Gate A/B and Stage A remain held.
 
@@ -1661,3 +1661,15 @@ Candidate `message_bus.hpp` blob `2658f6c12d60f3df611f5cc0a01569b51b59bcb7` chan
 The candidate engineering API retains agent discovery/ranking/dispatch and in-process request/result messaging, but removes task dependency tracking, revision-bound results, ledger-tracked dispatch, receiver backpressure and bounded message idempotency. Together with the absent durable ledger (§35), these are material multi-agent coordination contract differences. No exact successor for the removed semantics was found in the candidate engineering tree.
 
 No engineering source was changed and no tests were run. **Disposition:** the three engineering header rows and their source/test rows remain OPEN pending a Project Director scope/retirement decision or a verified exact-ref successor. DF-02 remains OPEN.
+
+
+## 38. Correction — exact-ref recursive-tree capability and all-ref consumer-search boundary (2026-11-19)
+
+A prior statement in §§29–30 said the connected GitHub interface exposed no recursive-tree retrieval. That statement was too broad and is corrected here.
+
+- The GitHub API's recursive tree endpoint is retrievable through the generic GitHub fetch action for any supplied exact commit/ref. This audit used it successfully for donor PR #97 HEAD and candidate PR #192 HEAD, both with complete, non-truncated trees.
+- The limitation is **not** per-ref tree access. The limitation is the absence of an all-ref content-search operation. GitHub code search itself indexes only the default branch, so it cannot establish consumer closure across all 251 enumerated branches.
+- A complete all-ref scan would require enumerating relevant branch tips, retrieving a recursive tree for each exact tip, then retrieving and searching the relevant source files on each ref (or using an approved local clone/index). The current audit has not completed that bulk scan.
+- Therefore the earlier phrase "no recursive-tree operation" is withdrawn. The correct disposition is: exact-ref tree retrieval is available; all-ref source-content consumer search remains uncompleted and is still a DF-02 blocker.
+
+This correction changes no gate status and does not convert the 251-branch census into consumer closure. DF-02 remains OPEN.
