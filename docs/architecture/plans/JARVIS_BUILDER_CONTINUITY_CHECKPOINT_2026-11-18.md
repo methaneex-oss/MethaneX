@@ -677,3 +677,33 @@ Exact blob identities and detailed comparisons are in DF-02 §40. These are sour
 The comparisons extend the per-path semantic evidence but do not close the affected rows. Reverse-consumer/alternate-owner search across exact refs, dependency and duplicate ownership reconciliation, historical authority, and any Project Director scope/retirement decisions remain open.
 
 No runtime source, test or CMake file was changed. No donor code was adopted. No build, CTest or workflow was executed. DF-02 remains OPEN; DF-06 remains NOT MET; DF-09 remains NOT MET; DF-10 remains reopened; DF-11 remains waived as a mandatory gate; DF-12 remains Project Director-only; Stage A remains HELD.
+
+
+## 33. Builder milestone checkpoint — goal, intent, knowledge, planning, reflection and self-model contracts (2026-11-19)
+
+**Exact PR #192 HEAD before this checkpoint write:** `6b5619f8b0432f012f99c0715786e4fa29a02674`.  
+**DF-02 report blob after the preceding write:** `202cde25283c029a02a185ba55752531afd2a3cf`.  
+**Donor PR #97 exact HEAD:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+
+### 33.1 Work completed in DF-02 §41
+
+Compared exact donor/candidate public headers and implementation files for goals, intent, knowledge, planning, reflection and self-model, and checked their relevant test source and candidate CMake registration.
+
+Material findings:
+
+- Goal removes the donor's persistent experience-derived `outcome_momentum` and its update/replay behavior.
+- Intent removes the donor's `select_with_affect` API and implementation.
+- Knowledge renames the donor's distinct `KnowledgeEvidence` input to generic `Evidence`, collapsing the explicit type-level distinction from experience-learning evidence.
+- Planning removes valence, arousal, affective uncertainty, tension and stability from planning context and policy.
+- Reflection removes affective calibration error, affective learning pressure and affective observation counts from state and evaluation.
+- SelfModel removes `update_performance`, the donor API for incorporating execution-result performance without overwriting availability/isolation.
+
+The shared intent and world/self-model test source blobs do not call the removed APIs. The goals, knowledge, intent and world/self-model targets are registered in candidate CMake; target registration is not execution or proof of removed behavior.
+
+Exact blob identities and test details are in DF-02 §41.
+
+### 33.2 Disposition and limits
+
+The evidence extends the semantic comparison across additional public contracts. The affected rows remain OPEN pending exact-ref consumer/alternate-owner searches, dependency/duplicate ownership, historical authority and any Project Director scope/retirement decisions. The all-ref content scan remains incomplete.
+
+No runtime source, test or CMake file was changed. No donor code was adopted. No build, CTest or workflow was executed. DF-02 remains OPEN; DF-06 and DF-09 remain unmet; DF-10 remains reopened; DF-11 remains waived; DF-12 remains Project Director-only; Stage A remains HELD.
