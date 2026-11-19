@@ -577,3 +577,26 @@ The complete 159-path enumeration and role classification close the prior *struc
 
 **DF-02 remains OPEN.** This update is Builder evidence only. It does not approve donor adoption, select a source baseline, declare a capability complete, authorize a merge/port/history operation, close Gate A/B, start Stage A, or authorize runtime implementation. Independent verification and applicable Project Director authority remain separate.
 
+
+
+## 15. Project Director Option A — expanded PR #97 structural inventory, semantic closure still outstanding (2026-11-19)
+
+**Exact PR #192 source snapshot:** `d8efba1d99cc0017e27d6915cfb8c6e8bf384da1`; live PR #192 was re-fetched immediately before this documentation update and matched that SHA. PR #97 donor HEAD remains `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`. Its patch endpoint returned 159 patches. The complete path inventory groups as follows:
+
+| File family | Paths | What the family represents | Semantic closure status |
+|---|---:|---|---|
+| CI/workflows | 8 | Core CI, long-run trials, memory persistence and probe/seed-sweep workflows | Exact run-to-source provenance and operational status still require per-workflow reconciliation |
+| Core build/config | 1 | Core CMake source/target integration | Build graph and downstream target compatibility not fully compared |
+| Core examples | 3 | Developmental-world example and its build/readme | Example behavior and successor mapping not fully compared |
+| Core public headers | 35 | Public cognitive, memory, learning, action, affect and evolution interfaces | API/symbol/contract comparison for every path remains outstanding |
+| Core implementation | 37 | Brain, cognitive cycle/runtime, memory, prediction, decision, developmental learning, affect, evolution and supporting mechanisms | Function/behavior and state-ownership comparison for every path remains outstanding |
+| Core tests | 56 | Unit, integration, persistence, developmental and long-run tests | Test registration, assertion semantics, exact run provenance and successor mapping remain outstanding |
+| Documentation/specifications | 9 | Developmental environment and dated plans/specifications | Authority, supersession and relationship to approved PR #171 SYS-01–SYS-11 require per-artifact disposition |
+| Engineering coordination | 10 | Agent/coordinator/message-bus/task-ledger subsystem | Must be reconciled separately; do not misclassify it as a Brain cognitive mechanism |
+| **Total** | **159** |  |  |
+
+The existing PR #97 donor capability traceability document gives deeper source-level analysis for seven capability groups: continuous affective state; affective appraisal adaptation; action execution/consequence feedback; developmental strategy learning/contextual transfer; contextual prediction feedback; event-journal reconstruction/persistence; and evolution evaluation/adoption control. It is explicitly a selected high-impact sample, not a semantic disposition of all 159 paths.
+
+The existing PR #97 → PR #192 same-path comparison remains: 1 identical blob, 95 divergent same-path blobs, 63 absent same-path entries. The live branch census remains 251 refs / 210 distinct tips / eight duplicate-tip groups. Neither structural comparison nor ref census identifies a semantic successor, proves retirement, or closes reverse consumers/dependencies.
+
+**DF-02 remains OPEN under the Project Director's Option A.** The next substantive work is a per-path semantic disposition matrix across all 159 paths, with exact donor and candidate-successor revisions/blobs; symbol/API/behavior changes; reverse consumers; test/CI evidence bound to exact commits; historical provenance; and an explicit disposition (preserved, adapted, replaced, retired with evidence, not adopted with rationale, or unresolved). For absent paths, search successor candidates and reverse consumers across the relevant branch/PR lineages. Do not select/adopt a donor baseline or claim closure from naming or blob similarity.

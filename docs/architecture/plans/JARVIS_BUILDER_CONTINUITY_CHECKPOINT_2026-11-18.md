@@ -178,3 +178,14 @@ Stage A remains NOT STARTED / HELD. No implementation, donor adoption, source-ba
 - Terminal inventory procedure: fetch the live PR changed-file list across all pages; fetch the complete exact parent recursive tree; record each of the 47 path/blob identities, including the inventory's parent blob; write the inventory once; then compare parent/successor and verify exactly one commit ahead, zero behind, only the inventory path changed, all 47 paths retained, and complete successor tree. Do not write any other PR #192 file afterward.
 
 Stage A remains NOT STARTED / HELD. Existing PR #171 SYS-01–SYS-11 architecture remains the whole-system foundation. No implementation, donor adoption, source-baseline selection, training, merge, rebase, retarget, cherry-pick, branch rewrite or deployment is authorized.
+
+
+## 16. 2026-11-19 continuation — Project Director Option A execution
+
+The Project Director explicitly selected Option A for stale index/review-request correction, DF-02 full semantic closure and DF-06 full navigation verification. The Builder corrected the four malformed paths in the Independent Reviewer request and refreshed the controlling index to record those standards. The review packet is not yet terminal; no final inventory or superseding exact-target review assignment has been issued.
+
+At PR #192 source HEAD `d8efba1d99cc0017e27d6915cfb8c6e8bf384da1`, PR #97 returned 159 patches grouped into 8 CI/workflows, 1 build/config, 3 examples, 35 public headers, 37 implementation files, 56 tests, 9 documentation/specification files and 10 engineering-coordination files. Existing detailed donor traceability covers seven high-impact capability groups only. Full per-path semantic successor/retirement/non-adoption and cross-branch consumer/dependency closure remain open.
+
+A fresh bounded static extraction fetched 51/51 tracked Markdown files from the complete 280-entry tree and found 353 candidate destinations: 134 local path references (zero missing under the extractor's normalization) and 219 HTTP(S) occurrences. Fragment resolution, full parser reconciliation, external live status/redirect/relevance and authenticated rendered GitHub anchors remain unverified. DF-06 remains NOT MET.
+
+The review request's prior target `7d2238542dddf5ab210ad84c37bf259cea3b3559` is superseded by subsequent PR commits. The next Independent Reviewer assignment must pin the final post-inventory SHA only after all Builder-owned evidence work is complete. DF-10 is reopened by these documentation writes. DF-09 still requires an exact-final-HEAD CLEAR result; Stage A and implementation remain held/unauthorized.

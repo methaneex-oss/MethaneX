@@ -283,3 +283,12 @@ Accordingly, the two local links independently checked in §13 remain the only n
 This is a pre-inventory navigation-freeze check. The terminal inventory update is expected to change only the inventory file and add no navigation destination. If any later commit changes a Markdown destination, DF-06 local-path delta evidence must be reopened.
 
 **DF-06 remains NOT MET.** This record does not verify external HTTP status, redirects, semantic relevance, heading fragments, rendered line/comment anchors, or the historical access-limited pointer. It does not claim a fresh 51-file parser run.
+
+
+## 15. Exact-current-tree preliminary static link extraction — 2026-11-19
+
+**Exact PR #192 source:** `d8efba1d99cc0017e27d6915cfb8c6e8bf384da1`. The recursive tree contained 280 entries and was complete (`truncated=false`). All 51 tracked Markdown files in that tree were fetched successfully. A bounded static extractor excluded fenced code blocks and inline-code spans, then collected inline Markdown links/images, reference-link definitions, HTTP(S)/mailto autolinks and HTML `href`/`src` attributes. It produced 353 candidate destination occurrences: 134 repository-relative/local path references and 219 HTTP(S) occurrences. All 134 local path references resolved to an entry in the exact tree under the extractor's normalization rules; zero missing local paths were found.
+
+This is a fresh exact-tree extraction, but **not a complete CommonMark parser or DF-06 pass**. It does not yet prove reference-style use resolution, every HTML/Markdown edge case, local fragment/heading resolution, external URL deduplication and live status/redirect/final destination, semantic relevance, or authenticated GitHub-rendered heading, line-range and issue-comment anchors. The earlier 50-file/342-occurrence scan and parser-count discrepancies must still be reconciled against the extractor's inclusion rules. The 219 external occurrences have not been individually checked for live status or semantic relevance.
+
+**DF-06 remains NOT MET under the Project Director's Option A.** Treat the 134/0 result as exact-tree local-path evidence only; do not claim external reachability, rendered navigation or complete link closure.

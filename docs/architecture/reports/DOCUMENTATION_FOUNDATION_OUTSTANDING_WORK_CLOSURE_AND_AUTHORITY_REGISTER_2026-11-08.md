@@ -1670,3 +1670,14 @@ The main-branch fresh-reader workflow blob `585c9399318b0af17514a95a5c435d497a76
 The next branch file write is reserved for the final inventory manifest. It must include all 47 changed paths and parent blob SHAs, with a complete parent tree. The successor comparison must prove exactly one commit ahead, zero behind, one changed path (the inventory), and complete successor tree. No branch file write may follow. The review-request target SHA is to be pinned in the PR conversation after that verification.
 
 DF-02 remains OPEN; DF-06 and DF-09 remain NOT MET; DF-10 is pending the terminal comparison; DF-11 remains waived as a mandatory gate while the separately requested review is published; DF-12 remains Project Director-only. Stage A remains HELD.
+
+
+## 15. Project Director decisions and exact-current evidence update — 2026-11-19
+
+The Project Director selected Option A for stale index/review-request correction, DF-02 semantic closure, and DF-06 complete navigation verification. These are mandatory closure standards, not passes.
+
+At source PR #192 HEAD `d8efba1d99cc0017e27d6915cfb8c6e8bf384da1`, Builder work re-fetched all 159 PR #97 patches and grouped them into 8 CI/workflows, 1 core build/config, 3 core examples, 35 public headers, 37 implementation files, 56 tests, 9 documentation/specification files and 10 engineering-coordination files. The seven-capability source traceability document is explicitly a selected sample, not a 159-path semantic disposition. DF-02 remains OPEN pending all-path semantic successors/retirement/non-adoption, historical provenance and reverse-consumer/dependency closure.
+
+A fresh bounded static extraction fetched all 51 tracked Markdown files in the complete 280-entry source tree. It found 353 candidate destinations (134 local paths, all resolved under the extractor's normalization; 219 HTTP(S) occurrences). This does not satisfy the full DF-06 parser, fragment, external status/redirect/relevance or authenticated rendered-anchor requirements. DF-06 remains NOT MET.
+
+The review request's four malformed paths were corrected and the planning index's live-source block refreshed. This documentation update advances the PR head and reopens DF-10. No final inventory, exact review target, independent verdict, DF-09 CLEAR, DF-12 acceptance or Stage A authorization is claimed.
