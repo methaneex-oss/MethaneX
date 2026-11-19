@@ -2073,3 +2073,61 @@ The donor `core/cpp/tests/affective_planning.cmake` blob `e3a52416b2538791a93666
 The candidate tree has no same-path successor for the four foundational headers, five developmental test/trial sources, six affective test sources or the separate affective-planning fragment. The main CMake target graph independently confirms that the registered developmental and affective test families are absent from candidate registration. The donor long-run harnesses and tests provide intended evidence mechanisms, not successful execution evidence.
 
 These rows remain **OPEN**. Exact-ref reverse-consumer/alternate-owner searches, source-to-test dependency mapping, historical authority and any Project Director retirement/non-adoption decision remain outstanding. No donor code was copied, no candidate runtime or test file was changed, and no build, CTest or developmental training run was executed. **DF-02 remains OPEN.**
+
+
+## 45. Remaining Brain, workspace, memory and prediction-feedback test deltas — exact source comparison (2026-11-19)
+
+**Exact candidate PR #192 source:** `331e9f080ab5d14e750b134cc759c3b1d3f8bdf9`.  
+**Exact donor PR #97 source:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
+**Method:** compared exact donor test blobs with candidate files at the candidate revision and checked both CMake target lists. No build or test was executed.
+
+### 45.1 Brain-10 integration contract — unverified evolution adoption expectation changed
+
+| Artifact | Donor blob | Candidate blob |
+|---|---|---|
+| `core/cpp/tests/brain_10_suite.cpp` | `1da00539509824ba282d05501307febd27e21219` | `be220d6bdaf1af2a584f6c628fd03b9aea12811c` |
+
+The donor test explicitly expects an unverified evolution proposal not to be adopted and rollback not to proceed for that proposal. The candidate test expects `adopt_evolution` and `rollback_evolution` to succeed for the same scenario. This is a change in the expected safety/authorization contract, not a test-only simplification. It must be reconciled with the donor's attestation and Brain authorization guarantees in §§27–28 and §42.
+
+### 45.2 Cognitive workspace runtime — representation and attention assertions removed
+
+| Artifact | Donor blob | Candidate blob |
+|---|---|---|
+| `core/cpp/tests/cognitive_workspace_runtime_suite.cpp` | `b29e75aa8b0e289c01f2e9188d26c639cfa1f22d` | `ae938f5df02d8f907a548c446c01e17fbd2f1470` |
+
+The donor runtime suite asserts that the resulting workspace has non-empty representation nodes and an attention signal keyed to the workspace. Candidate retains runtime start/submit/result/observation/cycle assertions but removes those representation and attention checks. This directly aligns with the reduced CognitiveWorkspace aggregate recorded in §40.2.
+
+### 45.3 Memory architecture — persistence, consolidation and corruption recovery coverage removed
+
+| Artifact | Donor blob | Candidate blob |
+|---|---|---|
+| `core/cpp/tests/memory_architecture_suite.cpp` | `ecabc6af76c52ed1e4175b151f76fadecae7729d` | `2a9eb061427c622260304d09f45089e1debef294` |
+
+The donor suite is 188 lines; candidate is 61. The donor tests latest-sequence-by-kind indexing, promotion and consolidation, older-but-consolidated experience outranking newer traces, learned tier distribution after new experiences, journal reconstruction when metadata is missing, and quarantine/preservation of a corrupt journal suffix while keeping the active journal appendable. Candidate retains basic append/recall, tier promotion, working-memory removal and restart persistence, but removes those consolidation, learned-distribution, metadata-reconstruction and corruption-recovery scenarios. The candidate's reduced test does not establish the donor's durability/recovery guarantees.
+
+### 45.4 Prediction feedback — sequence identity, context, affect, attention and replay test body reduced
+
+| Artifact | Donor blob | Candidate blob |
+|---|---|---|
+| `core/cpp/tests/prediction_feedback_phase10_suite.cpp` | `973350623e52bd9609ebaf1e01082ee52aeb480b` | `e72da8e7653aee775cfade9060064231c7a01630` |
+
+The donor suite is 1,339 lines; candidate is 73. The donor assertions cover invalid prediction rejection without corrupting state, sequence-specific resolution, numeric type handling, contextual predictions and concept evidence, prediction/experience memory identity, affective consequences and replay, attention changes, action outcomes and persistent reconstruction. Candidate retains a basic cognitive-cycle prediction/feedback/persistence path, but not those detailed invariants. This test delta is particularly material given the donor-only ExperienceMemory API in §44.1 and the candidate semantic-key prediction overwrite risk recorded in §38.
+
+### 45.5 Brain deep suite and attention-learning integration target
+
+| Artifact | Donor blob | Candidate blob |
+|---|---|---|
+| `core/cpp/tests/brain_deep_suite.cpp` | `1314123ea3b524b24fd6693fc6fb4873b6c550d5` | `ca8e7012c92822608c3be0539784d281b0578bfd` |
+| `core/cpp/tests/attention_learning_brain_suite.cpp` | `1fa972d9ecffdae8dce49b17356f6f4dc274d1a3` | **ABSENT** |
+
+The deep-suite behavior delta is described in §40.5; this row now has its exact repository path and both blob identities. The donor-only attention-learning Brain suite is absent from the candidate tree and candidate CMake. It is distinct from the retained attention-architecture suite: the latter does not substitute for Brain-integrated attention learning.
+
+### 45.6 Candidate target registration
+
+The donor main core test CMake registers all six targets in this section: `jarvis_brain_10_suite`, `jarvis_brain_deep_suite`, `jarvis_cognitive_workspace_runtime_suite`, `jarvis_memory_architecture_suite`, `jarvis_prediction_feedback_phase10_suite` and `jarvis_attention_learning_brain_suite`. Candidate registers the first five, but not the attention-learning Brain target. Registration is not evidence of build/test execution.
+
+### 45.7 Per-path disposition
+
+These exact test-path comparisons complete the semantic evidence for the remaining changed Brain/workspace/memory/prediction test artifacts in this cohort. Candidate retains useful baseline integration and memory tests, but the donor's sequence-identity, contextual prediction, affective/attention replay, memory consolidation/recovery and Brain safety scenarios are not preserved by the candidate tests.
+
+The paths remain **OPEN** pending reverse-consumer/alternate-owner and dependency reconciliation, historical artifact authority, and any Project Director decision. No runtime or test source was changed; no donor code was adopted; no build or test was run. **DF-02 remains OPEN.**
