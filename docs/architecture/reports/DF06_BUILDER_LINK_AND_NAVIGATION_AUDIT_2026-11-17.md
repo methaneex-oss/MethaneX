@@ -426,7 +426,7 @@ The connected tools still do not expose an authenticated interactive GitHub brow
 
 **Prior full-file extraction source:** `d4f88ab430fd1d2257313ac90eacfd1c72f4fba9`.  
 **Current exact PR #192 source before this report update:** `8080f0b9991f66940dd8966f3bc15a1ac5380617`.  
-**Compare:** 31 commits ahead, 0 behind.  
+**Compare:** 35 commits ahead, 0 behind.  
 **Current recursive tree:** 280 entries, `truncated=false`; 51 tracked Markdown files.
 
 The exact compare identifies seven changed Markdown paths since the prior full extraction:
@@ -468,3 +468,6 @@ No static slug calculation, API object lookup, or source-file line-range check i
 This tranche verifies that the seven changed Markdown files since `d4f88...` introduce no new or removed unique navigation destination. It does not reconcile the parser discrepancy, complete the local fragment check, validate the full external destination set, or verify rendered GitHub navigation.
 
 **DF-06 remains NOT MET** under the Project Director's Option A. Do not declare the gate clear or claim that the final 51-file parser/browser standard has been met. A final exact-revision scan is still required after the remaining Builder-owned documentation writes and before the terminal DF-10 inventory cycle.
+
+
+**Exact-revision correction within §21:** the first seven-file comparison was computed at `3b55f38...`; three further commits then advanced the source to `8080f0b...` and changed only the planning index, Builder self-review and outstanding-work register. Those three files were re-fetched at both exact refs and their per-file unique destination sets remained 59, 2 and 8 respectively, with zero additions and zero removals. Therefore the combined 73-unique-destination set across the seven changed Markdown files remains unchanged at `8080f0b...`. The current DF-06 report update is a report-only successor and adds no Markdown destination. The source pin and ahead count above refer to the actual parent of this report update, not the earlier intermediate `3b55...` snapshot.
