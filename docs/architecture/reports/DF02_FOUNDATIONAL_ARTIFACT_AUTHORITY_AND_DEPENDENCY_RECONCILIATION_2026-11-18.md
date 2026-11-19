@@ -2304,3 +2304,123 @@ Its scope remains narrow: two contexts, two candidate actions, one generated tas
 PR #107 remains open/draft/unmerged and is not an accepted candidate source baseline. No PR #97 ledger row is closed by this evidence. The all-ref source-content consumer/dependency scan across the 210 unique branch tips, complete per-path semantic successor/retirement/non-adoption disposition, historical authority and duplicate capability ownership remain outstanding.
 
 **Disposition:** add PR #107 to the exact-ref lineage and bounded behavioral-evidence set; preserve the three-seed artifact as historical evidence; keep DF-02 **OPEN** and all 159 donor-ledger rows open pending full semantic, reverse-consumer, dependency, duplicate-ownership and authority closure.
+
+
+## 49. DLT-002 multi-seed learning-mechanisms probe — raw evidence, ablation and limits — 2026-11-19
+
+This section records the expanded learning probe executed by PR #100's workflow against a historical exact Brain revision. It distinguishes the workflow PR's head from the Brain commit actually checked out by the job.
+
+### 49.1 Workflow provenance and exact Brain revision
+
+- PR #99 introduced the learning-mechanisms workflow and was merged to `main` (workflow-only change; merge commit `6ce51f6d6947efc17759e14e6032f591926f10ad`). Its earlier probe run `40419118694` checked out Brain commit `8525de774493de7c8eab05baa98af94cd068e995`, ran 10 minutes and preserved 35/35 mechanism gates as PASS.
+- PR #100 extends only `.github/workflows/jarvis-learning-mechanisms.yml`; it is open, non-draft, unmerged. Its workflow branch exact head is `26bca1244a698610d8d48a91308d9c0cf0855a87`, workflow blob `fd538fa082d359d12314f095abce8628b0992741`.
+- Probe run `40596743895` is a completed/successful pull-request run on that exact workflow head. The artifact metadata separately records `source_ref=feat/jarvis-affective-state` and `tested_commit=beb7971426c42d326f7553363d16f37ce311e9d9`, with a 10-minute duration and primary seed `20261026`.
+- The donor PR #97 head `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` is 12 commits ahead of the tested Brain revision and has no commits behind it in the exact compare. The DLT-002 executable source blob `cbd80951c2f331fa4893c1805fff45a4035d5d24` is identical at both `beb797...` and donor head `c1da...`. The trial's production dependencies nevertheless predate PR #119/#121's later integration corrections; the run must not be relabelled as a test of final donor HEAD `c1da...`.
+
+### 49.2 Mechanism gates and raw artifact
+
+The probe job built the native Brain and all registered suites, then executed 35 named mechanism gates covering experience memory/consolidation, knowledge assimilation, novelty/attention, learning-loop adaptation, association/causal transitions, prediction feedback, evolution proposal/coordination/runner/scheduler/monitor/canary/adoption, developmental strategy/world, affective learning/decision influence, action-consequence feedback, and cross-process persistence. The artifact's `mechanism-gates.tsv` was inspected: **35/35 PASS**.
+
+The workflow job completed its exact-source checkout, input validation, configure, full build, 35 mechanism gates, primary integrated trial, two additional seeded trials, matched no-feedback control, three-seed comparison, diagnostics and artifact upload. Artifact `12778958158` (`JARVIS-Learning-Probe-40596743895-1`) was downloaded and inspected; local SHA-256 matches GitHub's digest `e706f91d2d6d89d8357ee27566a66bdb81dafb470839f8e0057eaa6603a712e2`. It contains exact tested-commit metadata, build/configure logs, all mechanism gate logs, raw episode/checkpoint/trial logs, three enabled-run journals, a matched no-feedback journal, diagnostics and comparison output.
+
+### 49.3 Trial protocol and independently recalculated outcomes
+
+At the tested Brain commit, `dlt_002_long_run.cpp` runs the existing `CognitiveRuntime` against a partially observed `DevelopmentalWorld`. A hidden alpha/beta route-condition-to-action mapping is randomized per seed and withheld by the observation filter. The brain sees visible context/cues, candidate actions and (in enabled mode) consequences of the action it selected. The world introduces 20% noisy outcome flips and six fixed phases: clear baseline, flooded, tunnel, clear reversal, unseen canyon/generalization probe, and flooded reversal. The task uses two actions and one binary latent relation; it is a finite controlled navigation task, not an open-ended world.
+
+Three 10-minute feedback-enabled runs were executed: seed `20261026`, `20261027` and `20261028`. Raw CSVs were independently parsed from the artifact. Per-phase mean accuracy across the three enabled runs:
+
+| Phase | Mean accuracy across three seeds |
+|---|---:|
+| clear-baseline | 93.3% |
+| flooded | 96.3% |
+| tunnel | 94.6% |
+| clear-reversal | 93.5% |
+| generalization-probe | 98.6% |
+| flooded-reversal | 93.3% |
+
+The primary seed selected the optimal action in 569/586 episodes (97.1%). The same-seed, same-duration no-feedback control selected the optimal action in 295/591 episodes (49.9%), a 47.2 percentage-point difference. The control explicitly records `brain_received_consequence_feedback=0` for every episode; it still receives observations and may update execution-reliability/self-model mechanisms, so it isolates consequence feedback rather than disabling all learning.
+
+The first generalization-probe decision was optimal for all three seeds. The first ten probe decisions were 10/10, 8/10 and 10/10; the matched no-feedback control also scored 10/10 in its first ten probe decisions. Consequently, the first decision is a local transfer observation, and the first-ten window is not evidence that consequence feedback caused transfer. Later probe decisions include feedback-driven adaptation.
+
+The primary trial recorded 2,215 prediction records, 586 resolved predictions, 1,629 unresolved non-action projections (73.5% of all predictions), zero unresolved observed action-consequence forecasts, and mean absolute prediction error 0.650978. The workflow validates lifecycle reconciliation and requires zero unresolved action-consequence forecasts; it does not require all causal projections to resolve.
+
+### 49.4 Acceptance strength and limitations
+
+The 35 mechanism-suite outcomes are executable PASS/FAIL gates. The integrated DLT-002 trial's accuracy figures are **descriptive measurements, not enforced minimum-accuracy gates**: the workflow requires completion, six-phase coverage, finite/consistent diagnostic data, feedback-mode integrity, reconciled prediction counts and zero unresolved action-consequence forecasts. It does not fail a run for low per-phase decision accuracy or for a small feedback-enabled/control difference.
+
+The evidence is still materially stronger than source presence: a real Brain/CognitiveRuntime executed actions, received selected-action consequences, changed choices across reversals, retained behavior across an unseen context, and produced different measured outcomes when consequence feedback was withheld. But the environment has two actions, two hidden conditions, a fixed six-phase schedule, one task, one seed-matched ablation and three enabled seeds. The no-feedback control still learns through observations. The generalization context has a related-strategy source at similarity 0.5; it is not a broad held-out concept benchmark. The large unresolved-other-prediction count and nonzero prediction error remain material limitations.
+
+**Disposition:** preserve PR #100 run `40596743895` and artifact `12778958158` as bounded historical evidence on Brain commit `beb797...`; record the 35/35 mechanism gates separately from descriptive DLT-002 metrics. Do not attribute the result to current PR #192 or to final donor HEAD `c1da...`; do not call it general intelligence or a performance acceptance gate.
+
+## 50. PR #119/#121 integrated donor provenance, final branch ownership and candidate delta — 2026-11-19
+
+This section reconciles the older JBP-003/JBP-004 branch tips with the later integrated donor history. The three paths absent from those earlier challenge branches were not absent from the final donor branch: PR #119 added them, and PR #121 supplied corrective adoption/no-feedback changes before the integrated work reached PR #97's recorded head.
+
+### 50.1 Merge and review-correction provenance
+
+- PR #119 `integration/learning-layer-20261028`: head `fb994fed8b1bd39482aafd98110055032e8bc82f`, base `feat/jarvis-affective-state` @ `34da29be34069a76039cf1f03a5193b01b683158`, 40 changed paths; merged into the feature branch at `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+- PR #121 `fix/learning-review-findings-20261028`: head `804497f7458ccd8346332cc0bd63bb0a9313858d`, base `integration/learning-layer-20261028` @ `810587616c84f794729c272b5ea81f185919453a`, 26 changed paths; merged into the integration branch at `fb994fed8b1bd39482aafd98110055032e8bc82f`, then carried into the feature branch at `c1da...`.
+- Both PR changed-path sets are subsets of PR #97's 159 donor paths. PR #97 remains open/unmerged; PR #119/#121 are merged into the donor feature branch, not into `main`.
+
+### 50.2 Exact-head workflow verification
+
+All five PR #119 integration-head workflow runs were fetched and verified completed/successful with exact `head_sha=fb994fed8b1bd39482aafd98110055032e8bc82f`:
+
+- Brain Tests `40788041143`
+- Native Brain Build `40788041129`
+- Brain ThreadSanitizer `40788041134`
+- Core Verification `40788041180`
+- Brain CI `40788041176`
+
+All four PR #121 corrective-head workflow runs were fetched and verified completed/successful with exact `head_sha=804497f7458ccd8346332cc0bd63bb0a9313858d`:
+
+- Native Brain Build `40785456466`
+- Brain Tests `40785456502`
+- Brain ThreadSanitizer `40785456520`
+- Brain CI `40785456490`
+
+The Brain Tests run for each head exposes successful native build/test and sanitizer build/test jobs. These workflow results belong to the exact PR #119/#121 heads, not to PR #192. No artifact was assumed where none was exposed.
+
+### 50.3 Integrated behavioral and safety mechanisms inspected at donor head
+
+The final donor head `c1da...` contains and registers:
+
+- `cognitive_runtime_learning_integration_suite.cpp` blob `656de56b1368e40afb090778a7a5504ab4208056`: the runtime executes a selected action, observes its consequence, resolves the corresponding prediction, updates prediction-error metrics, affective learning and episodic outcome memory, and changes the next action choice. It tests an unrelated-context isolation control, a regime reversal that changes the selected action, and a restored Brain that makes a real post-restart decision from persisted strategy. Its no-feedback control verifies that successful verified execution without consequence observation does not create a developmental strategy preference.
+- `memory_learning_evolution_persistence_suite.cpp` blob `98e6598f60912714234f2dfabfbe52fa5eb77044`: prediction feedback updates a registered evolution parameter's evidence; action outcomes produce contextual strategy evidence; a later decision reflects that evidence; an isolated evaluation/adoption changes the parameter; and a fresh Brain reconstructs the adopted value, strategy evidence, evolution history, resolved prediction and action-outcome memory from the journal.
+- `causal_link_codec.hpp` blob `a6286281e4b22564a39e02a7e38a778bb81042f0`: typed, length-prefixed causal-link encoding with legacy decode compatibility.
+- `evolution_adoption.cpp` blob `836216bb567e2c87d14b6442bd363e9861ac6974`: the stateless adoption helper fails closed; adoption must pass through the controller where durable matching evaluation evidence can be checked.
+- `process_isolation.cpp` blob `8bb621fc986b4957f079bfdf99f4a1038949bc72`: local process-isolation backend includes Linux syscall/network restrictions. PR #121 binds adoption to runner-issued field-bound isolation evidence and persists the fields required for replay validation.
+
+The final donor `core/cpp/tests/CMakeLists.txt` applies `-UNDEBUG` (or MSVC `/UNDEBUG`) to executable test targets, so the assert-based runtime integration suite retains its assertions in Release builds. The persistence suite uses explicit failure-returning checks. The runtime integration test's environment is deterministic and uses a fixed action/consequence mapping and a single controlled reversal; the persistence/evolution suite is likewise a bounded synthetic integration test. These tests prove the specified interactions on the donor revision, not unrestricted behavior acquisition.
+
+### 50.4 Reconciliation against current PR #192 candidate
+
+The live PR #192 head at the start of this section was `9d61e9bb3ef0433e7b1c03bfcd1a3a19b8c6741d`; PR #97 donor head remained `c1da...`. Both recursive trees were complete (`truncated=false`): donor 287 entries, candidate 280 entries. Re-fetching PR #97's 159 changed filenames and comparing exact blob IDs at these heads reproduced:
+
+| PR #97 donor path identity | Count |
+|---|---:|
+| Identical donor blob in candidate | 1 |
+| Same path, divergent blob | 95 |
+| Same path absent from candidate | 63 |
+| Donor path absent from donor tree | 0 |
+
+All 159 paths exist in the donor tree. The candidate remains materially different.
+
+For the PR #119 40-path implementation/test set, the current candidate has 34 divergent blobs and 6 absent paths (0 identical). The six absent paths are:
+
+- `core/cpp/include/jarvis/core/causal_link_codec.hpp`
+- `core/cpp/src/developmental_learning.cpp`
+- `core/cpp/tests/cognitive_runtime_learning_integration_suite.cpp`
+- `core/cpp/tests/developmental_brain_integration_suite.cpp`
+- `core/cpp/tests/developmental_world_integration_suite.cpp`
+- `core/cpp/tests/memory_learning_evolution_persistence_suite.cpp`
+
+For the PR #121 26-path correction set, the candidate has 23 divergent blobs and 3 absent paths (0 identical): `cognitive_runtime_learning_integration_suite.cpp`, `developmental_brain_integration_suite.cpp` and `memory_learning_evolution_persistence_suite.cpp`.
+
+The three paths absent from PR #107/#110/#112 older challenge-branch trees—`causal_link_codec.hpp`, `cognitive_runtime_learning_integration_suite.cpp` and `memory_learning_evolution_persistence_suite.cpp`—are all present at final donor head `c1da...`; their absence on those older refs was temporal, not evidence of retirement from the final donor branch. Their absence from current PR #192 is a real candidate delta.
+
+### 50.5 Semantic and authority disposition
+
+PR #119/#121 provide strong implementation provenance and exact-head build/test/sanitizer evidence for the integrated donor branch. They show that the final PR #97 donor head contains connected action-feedback learning, context isolation, reversal, memory replay, evolution adoption validation, process isolation and typed causal-link handling. They do not make the donor branch an approved source baseline, and they do not establish that PR #192 has those capabilities.
+
+No donor code is adopted by this report. No path is marked retired, superseded or accepted solely because a later branch contains a different blob. The 159-path ledger remains **OPEN** until every path has a semantic successor/disposition, reverse-consumer/dependency analysis across the complete branch-ref collection, duplicate ownership analysis, and historical authority/decision provenance. PR #119/#121 are now explicit lineage owners in that analysis. DF-02 remains **OPEN**.
