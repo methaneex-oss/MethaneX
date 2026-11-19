@@ -9,7 +9,7 @@
 | Repository | `methaneex-oss/MethaneX` |
 | PR | #192 — Documentation Foundation |
 | Branch | `docs/whole-brain-planning-scope-correction-20261107` |
-| Exact source HEAD before this index update | `5b7a4b56ecd2975019bc777a90369e76f14b4307` |
+| Exact source HEAD before this index update | `f6196dce5f09810b63ab11cd7fbf418f5913d5cb` |
 | Base | `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` |
 | State | Open, non-draft, unmerged |
 | Changed paths | 47 total: 45 Markdown and 2 JSON |
@@ -56,7 +56,7 @@ The initial completion-gate report §6 defines DF-01–DF-12. This matrix record
 | #175 — Brain Implementation Planning | `48a7103f87c00992e4e19d84c768d1e72682a1b0` | Open/draft/unmerged; non-operative planning only; Gate A not cleared, Gate B not passed, no source baseline selected |
 | #179 — Phase 2 capability-to-source map | `ea64607ef94f142a6142a013e119a7225bc95c1c` | Open/draft/unmerged; planning input, not implementation acceptance |
 | #191 — Human/MCU comparison | `609d38ede50bbdd98a93dfed112781eacabee9fd` | Open/draft/unmerged; Director's bounded retain-separately disposition; no history operation |
-| #192 — Documentation Foundation | `5b7a4b56ecd2975019bc777a90369e76f14b4307` | Open/non-draft/unmerged; live metadata is authoritative |
+| #192 — Documentation Foundation | `f6196dce5f09810b63ab11cd7fbf418f5913d5cb` | Open/non-draft/unmerged; live metadata is authoritative |
 | #195 — reader workflow / role terminology | merged to `main` at `4f07d772beae03c99a8dd58b174201a3aa3074b2` | Reviewed workflow blob is integrated; F-195-07 remains a separately disclosed residual |
 | #196 — Builder operating controls | `0ebc4e978fa38011b2f6bb5d97a03c267c1c12c9` | Merged into its declared Phase 2 base branch, not `main` |
 | #197 — reader-visible exact target revision | `2b2bfd9afe6e1325119f7ccee507bb04e71aa343` | Open/non-draft/unmerged; no new fresh-reader run or CLEAR result |
@@ -1415,3 +1415,16 @@ DF-02 now contains bounded semantic comparisons through §41 and a structural nu
 DF-06 now includes the additional linked Native Brain Build run #42976840057 (historical run head `e687f3295f6f858f713694d941e97fbd94ac6154`) and records 22 Actions-run destinations in its enumerated set. Its current blob is `bff3ab6a81ab12bd20ac3b9e6a2e834ae16b1989`. Full parser/fragment/external-semantic/rendered-anchor closure remains unmet.
 
 Current Builder disposition: DF-01 synchronization pending; DF-02 OPEN; DF-03 partially evidenced; DF-04 Builder evidence present; DF-05 partially evidenced; DF-06 NOT MET; DF-07 correction in progress; DF-08 resolved within its bounded criterion; DF-09 NOT MET pending exact-final-HEAD CLEAR; DF-10 reopened by these branch writes; DF-11 waived as mandatory with a separate reviewer challenge still requested; DF-12 Project Director-only. Stage A remains HELD and implementation remains unauthorized.
+
+
+## 106. Reviewer-request path and Markdown delimiter verification — 2026-11-19
+
+**Exact PR #192 source before this index update:** `f6196dce5f09810b63ab11cd7fbf418f5913d5cb`; open, non-draft, unmerged; 47 changed paths; recursive tree 280 entries, complete (`truncated=false`).
+
+A subsequent exact-line inspection found that the four malformed path corrections described in §105 had removed the trailing `)` but had also left the inline-code spans unclosed. The four lines are now corrected with properly paired backticks in the Independent Reviewer request. The exact request blob is `53a3671a6307329d051b379dd20830bc147df3e8`. Verification at this source confirmed:
+
+- None of the four malformed `...md)` path strings remains.
+- All four intended repository paths are present in the complete PR tree.
+- Each of the 11 repository-path bullets in the required-material list has exactly two inline-code delimiters.
+
+This corrects the verification boundary of the previous §105 statement; the earlier §104/§105 records remain as historical chronology. The review request is still unpinned to a final target; the exact terminal inventory successor SHA will be assigned only after all Builder-owned file writes and the final DF-10 comparison.

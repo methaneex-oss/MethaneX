@@ -1724,3 +1724,14 @@ This check improves the local immutable-anchor evidence but does not complete DF
 The recent commits changed documentation/checkpoint artifacts only. No runtime C++, test source, CMake file, workflow, or training environment was changed. No build, CTest, or CI workflow was executed by this Builder continuation. Historical Actions run #42976840057 is not current-HEAD execution evidence. No reviewer verdict, DF-09 CLEAR, DF-12 acceptance, source-baseline selection, donor adoption, Stage A, runtime implementation, merge, rebase, retarget, cherry-pick, branch rewrite or deployment is claimed or authorized.
 
 This register update is Builder evidence only. It does not close DF-02/DF-06/DF-09, independently accept the documentation foundation or make the Project Director's DF-12 decision.
+
+
+## 18. Reviewer-request delimiter verification and current authority boundary — 2026-11-19
+
+**Exact PR #192 source before this register update:** `f6196dce5f09810b63ab11cd7fbf418f5913d5cb`; open, non-draft, unmerged; 47 changed paths; complete 280-entry tree.
+
+The reviewer-request path correction required a second syntax pass. The previous Builder correction removed the trailing parenthesis from four code-formatted paths but left those four spans without closing backticks. The current request now uses complete code spans. Exact request blob: `53a3671a6307329d051b379dd20830bc147df3e8`. A fresh exact-line check found no remaining malformed `...md)` paths and confirmed all 11 required-material path bullets are correctly delimited. The four intended path targets all exist in the exact tree.
+
+The earlier index §104/§105 verification wording was overconfident. Index §106 now preserves that chronology and records the correction. This update does not change the gate dispositions: DF-02 OPEN; DF-06 NOT MET; DF-09 NOT MET/external dispatch dependency; DF-10 REOPENED by documentation writes; DF-11 waived as mandatory while a separate challenge remains requested; DF-12 Project Director-only. DF-03 and DF-05 remain partially evidenced. Stage A remains HELD.
+
+No tests/build/CTest/workflow were run, no runtime or donor source was changed, and no review verdict or acceptance is inferred.
