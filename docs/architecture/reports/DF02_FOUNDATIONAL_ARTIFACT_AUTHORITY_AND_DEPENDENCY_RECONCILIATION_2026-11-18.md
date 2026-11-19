@@ -1555,3 +1555,39 @@ Define which paths are permitted for autonomous learning versus trusted/manual a
 The candidate test suite has meaningful tests for its current components. However, the absent donor tests above are not all redundant: several cover behaviors that are not present in the active candidate implementation or CMake registrations. The missing test targets enumerated in §32 are consistent with these absent tests and explain why copied specialized workflows refer to unavailable gates.
 
 No tests were executed; all findings are source/test-registration comparisons. **Disposition:** these eight donor test paths remain OPEN in the canonical 159-path ledger pending per-path successor/retirement/authority decisions. Do not count nearby component tests as full replacements. DF-02 remains OPEN; Gate A/B and Stage A remain held.
+
+
+## 35. Engineering task-ledger successor audit — persistent multi-agent coordination capability (2026-11-19)
+
+**Exact candidate source:** PR #192 HEAD `bb36cac4c1ab303d2cecde24853587fb1e292e99`.  
+**Donor source:** PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+
+### 35.1 Donor task-ledger contract
+
+Donor `engineering/cpp/include/jarvis/engineering/task_ledger.hpp` (67 lines; blob `95d3f2e42be742f9e75aed8e55ea389723534a64`) and `engineering/cpp/src/task_ledger.cpp` (494 lines; blob `7acff8990319392c9984035a4a14cc83f7154072`) implement a distinct task-state ledger:
+- append-only durable journal with versioned task records and evidence;
+- queued/claimed/running/blocked/completed/failed transitions;
+- compare-and-swap expected-version checks;
+- dependency-completion checks;
+- cross-process file locking (Windows LockFileEx / POSIX flock);
+- reload-before-mutate to prevent stale independent process snapshots from overwriting one another;
+- recovery from an incomplete final append while preserving complete prior records.
+
+Donor `task_ledger_suite.cpp` (134 lines; blob `e90c062261c95ff99d4b1bdcb55ce7bfad0512ec`) tests dependency gating, stale CAS rejection, state reconstruction after process restart, torn-tail recovery, two independent ledger instances and a concurrent claim race in which exactly one agent wins.
+
+### 35.2 Candidate successor comparison
+
+The candidate tree contains no `engineering/cpp/include/jarvis/engineering/task_ledger.hpp`, `engineering/cpp/src/task_ledger.cpp` or `engineering/cpp/tests/task_ledger_suite.cpp`. Candidate engineering files provide:
+- `EngineeringCoordinator::discover/rank/dispatch` for capability/permission/artifact eligibility and authorized task dispatch;
+- `AgentMessageBus` and `AgentCommunicationEndpoint` for in-memory message routing with run/workspace identity and bounded pending-message queues;
+- `agent_and_console_suite.cpp` for a basic in-process agent dispatch and request/result exchange.
+
+Candidate `coordinator.cpp` blob `44f42429e9730683bd8b529b37ea4e53c4b09c74` validates and dispatches an EngineeringTask but does not persist task state or maintain a versioned transition ledger. Candidate `message_bus.cpp` blob `9811d41fc237e33c80086e33049f9ae482c58c77` maintains subscribers, message sequence and pending queues in process memory; it has no durable journal, task lifecycle state, cross-process lock, CAS or restart reconstruction. Candidate `agent_and_console_suite.cpp` blob `b1f7a48df7adad95750e6970fa76f75acb2ac6ea` is a 10-line basic in-process test and does not cover the donor ledger's durability/concurrency guarantees.
+
+**Disposition:** Coordinator and message bus are adjacent agent-orchestration mechanisms, not semantic successors for the durable task ledger. The 3 absent donor task-ledger paths remain unresolved unless the Project Director has explicitly retired the persistent task-state requirement or an exact-ref successor is found elsewhere.
+
+### 35.3 Engineering implication
+
+The donor PR's engineering-coordination contribution was not only message passing and dispatch; it included durable shared task ownership and recovery across independent agent processes. Candidate PR #192 retains in-process coordination and communication but drops that durable task-state layer. This may be an intentional scope separation, but it is not documented as a retired requirement in the inspected exact candidate evidence.
+
+No task-ledger code was restored or adopted. No engineering tests were run. **Disposition:** all three task-ledger rows remain OPEN pending explicit authority/scope disposition and cross-branch successor search. DF-02 remains OPEN; Gate A/B and Stage A remain held.
