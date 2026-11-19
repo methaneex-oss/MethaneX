@@ -578,3 +578,28 @@ Twelve example/specification/documentation paths have bounded historical classif
 4. Preserve all outstanding gate/authority boundaries. No Stage A or runtime implementation is authorized by these audits.
 
 No runtime source, tests, CMake or workflows were changed. No tests/build/workflow were run.
+
+
+## 29. Builder milestone checkpoint — engineering agent/task/message contract audit (2026-11-19)
+
+**PR #192 exact HEAD before checkpoint write:** 6b0075aafad20bdf437a0c6b626176b735535d66.  
+**DF-02 report blob:** 5e87920d9664fd0a149c7eaaf9e1f7687b432143.
+
+### 29.1 New evidence in DF-02 §37
+
+The candidate engineering public API is materially narrower than donor PR #97:
+- EngineeringTask no longer carries dependency IDs; AgentResult no longer carries the acted-on source revision.
+- EngineeringCoordinator lost dispatch_tracked, which tied dispatch to a durable ledger version and base revision.
+- AgentMessageBus receiver callbacks changed from bool to void, removing receiver backpressure.
+- Candidate message bus removed bounded duplicate-message deduplication and in-flight duplicate protection.
+- Combined with §35, candidate retains in-process dispatch and message exchange but not the donor's durable, versioned, dependency-aware task coordination or message-delivery guarantees.
+
+This is a concrete API and behavior contract difference. No exact successor was found in the candidate engineering tree. The affected rows remain OPEN pending an explicit scope/retirement decision or verified successor. No source was changed and no tests were run.
+
+### 29.2 Resume point
+
+1. Continue remaining test-path and changed-blob implementation reconciliation.
+2. Add per-row evidence-section mapping to the 159-path ledger; do not confuse exact path mentions with semantic closure.
+3. Preserve all outstanding DF-02/DF-06/DF-09/DF-10/DF-12 boundaries and Stage A hold.
+
+No runtime/engineering source, tests, CMake or workflows were modified. No tests/build/workflow were executed.
