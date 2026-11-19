@@ -351,7 +351,7 @@ Each returned the requested comment ID, author and canonical PR comment URL. The
 
 ### 18.3 Actions-run destinations
 
-All 21 distinct Actions-run IDs referenced in the inspected documentation were retrievable: 40243557728, 40419118694, 40565468650, 40788714686, 40788714735, 41174439423, 41174439433, 41174439446, 41174439557, 41808525486, 41808525492, 41808525499, 41808525557, 42080973918, 42834248124, 42879721340, 42909224258, 42970930733, 43019119856, 43384559530 and 44192302873.
+All 22 distinct Actions-run IDs currently referenced in the inspected documentation were retrievable: 40243557728, 40419118694, 40565468650, 40788714686, 40788714735, 41174439423, 41174439433, 41174439446, 41174439557, 41808525486, 41808525492, 41808525499, 41808525557, 42080973918, 42834248124, 42879721340, 42909224258, 42970930733, 42976840057, 43019119856, 43384559530 and 44192302873.
 
 All returned terminal status `completed` and conclusion `success`. Their head SHAs vary and are historical evidence; none is represented as CI for current PR #192 HEAD. In particular, run #44192302873 is successful as a workflow execution, but its associated blind-reader assessment remains PARTIALLY CLEAR (31/32) on its recorded reviewed revision. A successful workflow status is not a CLEAR assessment.
 
@@ -368,3 +368,23 @@ The ChatGPT shared-conversation URL retained in the outstanding-work register an
 - Local path and fragment resolution: existing exact-tree evidence remains bounded by its parser rules; full CommonMark/reference-link/HTML/heading-fragment reconciliation remains open.
 
 **Disposition:** This tranche closes a substantial GitHub endpoint-reachability subset and corrects the classification of the access-limited ChatGPT literal. It does not close DF-06. DF-06 remains **NOT MET** until complete parser reconciliation, remaining destination relevance checks and authenticated rendered-anchor verification are evidenced.
+
+
+## 19. Additional exact linked Actions-run verification — 2026-11-19
+
+**Exact PR #192 documentation source:** `ff33515de059b00c8a95c07a3fab2f8ba8d1e214`.  
+**Additional linked destination:** [Actions run #42976840057](https://github.com/methaneex-oss/MethaneX/actions/runs/42976840057).
+
+The current planning index contains this Actions-run URL in its historical CI evidence paragraph, while the prior §18 enumeration listed 21 distinct Actions runs and omitted it. The destination was fetched directly through the GitHub Actions API and returned:
+
+- Workflow: **Native Brain Build** (`.github/workflows/build.yml`).
+- Event: `pull_request`.
+- Run state: `completed`, conclusion `success`.
+- Actual run head SHA: `e687f3295f6f858f713694d941e97fbd94ac6154`.
+- Run date: 2026-11-11.
+
+This is a historical native C++ build result on the recorded SHA. It is not a build result for current PR #192 HEAD `ff33515de059b00c8a95c07a3fab2f8ba8d1e214`, not a fresh-reader result, and not evidence of current-source correctness. The linked destination is reachable and its historical scope is now explicitly reconciled. The current documentation destination census has 22 distinct Actions-run IDs across the enumerated scope; this does not claim exhaustive external status/redirect/final-destination or semantic-relevance verification.
+
+**Remaining DF-06 obligations:** complete parser/reference-link/HTML/autolink reconciliation over all 51 tracked Markdown files with reproducible parser history; local heading-fragment resolution; exhaustive unique external destination status, redirects, final destinations and claim relevance; and authenticated rendered GitHub heading, commit-pinned line-range and issue-comment anchor verification. The available connector can retrieve repository/API resources but does not expose an authenticated interactive browser. Static source ranges and API object existence do not close rendered-anchor behavior.
+
+**Disposition:** this tranche adds one previously omitted, exact-scope GitHub Actions destination and corrects its relevance boundary. It does not close DF-06. DF-06 remains **NOT MET** under the Project Director's Option A.

@@ -298,7 +298,7 @@ It identifies important authority distinctions that the earlier bounded report d
 This supplement is evidence of a bounded PR metadata census, not a semantic audit of all files or a complete dependency closure. DF-02 remains OPEN. The explicit remaining work and non-authorizations in §6–§7 remain in force.
 
 
-## 10. Complete repository PR metadata census — 2026-11-18
+## 10A. Complete repository PR metadata census — 2026-11-18
 
 A complete live pull-request collection census was fetched on 2026-11-18, while PR #192 was at exact HEAD `d0755a6e41d005263de74e1fec6eb1149ed5eec5`. It returned 188 existing PRs numbered 1–197; missing numbers: 24, 25, 26, 27, 28, 74, 82, 85, 177. State totals: 57 merged into their declared base branch (50 with `main` as declared base; 7 with a non-main base), 84 open (44 draft), and 47 closed without a merge date. Exact head SHA, declared base branch/base SHA, state/merge date and changed-file count for each returned PR are recorded in the historical lineage supplement §8.
 
@@ -315,7 +315,7 @@ The comparisons support branch-ancestry statements only. They do not establish s
 
 **Live source revision for this continuation:** PR #192 HEAD `5bc0cfa4266ee387bccf26f6b0e6f95c6a1a6509`, fetched before the Builder documentation corrections in this continuation. PR #192 was open, non-draft and unmerged; its changed-file endpoint returned 45 paths. The PR base remained `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.
 
-The previously recorded metadata census and exact ancestry evidence remain bounded to the census scope stated in §§10–11. The current Builder pass did not convert that metadata census into an exhaustive all-branch semantic audit. The DF-02 residuals below therefore remain explicit:
+The previously recorded metadata census and exact ancestry evidence remain bounded to the census scope stated in §§10A–11. The current Builder pass did not convert that metadata census into an exhaustive all-branch semantic audit. The DF-02 residuals below therefore remain explicit:
 
 1. **Historical artifact/branch closure:** the 188-PR metadata census covers the returned GitHub PR collection at its stated snapshot, not every standalone artifact, branch ref, tag, commit, fork or historical working copy. Earlier donor/implementation lineages outside the bounded reviewed sets remain to be discovered and dispositioned.
 2. **PR #97 semantic disposition:** the 159 changed paths have subsystem classification and selected critical source/test evidence. This is not a complete semantic review of every path, complete source dependency closure, or duplicate-lineage analysis. Those remain outstanding.
@@ -991,7 +991,7 @@ The donor's test source uses assertions, and §24.1 records the donor CMake rule
 **DF-02 remains OPEN.** Sections §16–§26 now provide bounded semantic dispositions for 98 of PR #97's 159 changed paths. The remaining 61 paths still require per-path semantic disposition, and complete reverse-consumer/dependency/duplication closure across relevant branches and historical artifacts remains outstanding. This tranche does not close Gate A/B, select a source baseline, authorize donor adoption, start Stage A or authorize runtime implementation.
 
 
-## 25. Donor cognitive, goal, causal and evolution public-header reconciliation — 2026-11-19
+## 25A. Donor cognitive, goal, causal and evolution public-header reconciliation — 2026-11-19
 
 **Exact PR #192 source:** `99aa13485768fe176ba9e0ad86803771ac420843`.  
 **Donor PR #97 exact HEAD:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
@@ -1146,21 +1146,21 @@ No runtime code was modified or adopted. No build or tests were run. No CI workf
 
 ## 29. DF-02 per-path coverage-count reconciliation — 2026-11-19
 
-A consistency check was performed after §28 because the earlier §26 summary states that §§16–§26 cover 98/159 paths, while the later public-header tranche in §25 was appended after that summary and the report contains duplicate section numbers.
+A consistency check was performed after §28 because the earlier §26 summary states that §§16–§26 cover 98/159 paths, while the later public-header tranche in §25A was appended after that summary and the report contains duplicate section numbers.
 
 ### 29.1 Reproducible path-name audit
 
 - PR #97's changed-path endpoint was fetched again and returned 159 paths.
 - The report text from the first bounded semantic-audit section (§16) through the current end was checked for exact backtick-delimited full-path occurrences.
 - **102 of 159** donor paths have at least one exact full-path mention in this audit text; **57** do not.
-- The 26-header table in §25 uses header basenames rather than full repository paths. Its 26 rows cannot be counted by the exact-full-path check without an explicit normalized mapping, and some header rows overlap paths already mentioned in other audit sections.
+- The 26-header table in §25A uses header basenames rather than full repository paths. Its 26 rows cannot be counted by the exact-full-path check without an explicit normalized mapping, and some header rows overlap paths already mentioned in other audit sections.
 - This string-presence check is a reproducible report-integrity diagnostic only. It is **not** a semantic-coverage count: a path can be mentioned in a broad table without a complete donor/current behavioral comparison, reverse-consumer trace or evidence-backed disposition.
 
 ### 29.2 Required correction to the prior coverage claim
 
 The **98/159** figure in §26 is not currently reproducible from the report's exact full-path mentions, and it was not recomputed after the subsequent 26-header tranche and §§27–§28. It must not be used as the current semantic-coverage denominator or completion claim. The **102/159** exact-path-mention result must not be substituted as semantic coverage either.
 
-The report's duplicate §10 and §25 headings are additional editorial defects. A safe renumbering requires a cross-reference audit; no blind global replacement was performed.
+The duplicate headings have now been disambiguated without shifting the later section numbering: the complete PR metadata census is now §10A, and the public-header reconciliation is now §25A. Internal references are updated accordingly. No blanket renumbering was applied.
 
 ### 29.3 Closure method from this point
 
@@ -1870,3 +1870,17 @@ The donor SelfModel exposes `update_performance`, explicitly intended to update 
 The candidate test CMake file registers the goals, knowledge, intent/strategy and world/self-model suites, so those source files are active test targets. Registration does not cover the donor-only APIs removed from the public contracts; the identical intent and world/self-model test sources do not call those APIs.
 
 These findings establish that the candidate retains goal lifecycle, ordinary intent selection, source reliability scoring, non-affective planning/reflection and capability-state tracking, but removes the donor's experience-derived goal momentum, affect-conditioned intent/planning, appraisal calibration and execution-result performance update. The rows remain **OPEN** pending exact-ref consumer/alternate-owner searches, historical authority, dependency/duplicate ownership and any Project Director scope/retirement disposition. No source, test or CMake file was changed; no donor code was adopted; no build or test was run. **DF-02 remains OPEN.**
+
+
+## 42. DF-02 numbering correction and exact-current residual boundary — 2026-11-19
+
+**Exact PR #192 source at preparation:** `ff33515de059b00c8a95c07a3fab2f8ba8d1e214`.  
+**Donor PR #97 source:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+
+The duplicate section labels identified during recovery have been disambiguated without shifting the later report numbering: the complete PR metadata census is §10A, and the donor public-header reconciliation is §25A. The internal references within this report have been updated. The prior sections and their historical evidence remain intact.
+
+The canonical §30 ledger still provides exact donor/candidate blob identity for all 159 donor paths. Sections §16–§41 contain bounded semantic comparisons across selected cognitive mechanisms, state/API contracts, implementation paths, tests, build registration, workflows, examples, historical specifications and engineering coordination. The expanded evidence identifies material behavioral/API deltas; it does not establish all-path semantic closure. The affected rows remain open where successor ownership, exact-ref reverse consumers, test/build provenance, duplicate capability ownership or Project Director retirement/non-adoption authority is unresolved.
+
+The repository branch census remains 251 refs / 210 distinct tips / eight duplicate-tip groups. Exact-ref recursive trees can be fetched, but the all-ref source-content consumer scan across all relevant branch tips has not been completed. GitHub code search remains default-branch scoped, and the available environment has no local clone/index capability because direct Git access is unavailable. No cross-branch consumer closure is inferred.
+
+**Disposition:** DF-02 remains **OPEN**. No donor code was adopted; no runtime source, test, CMake or workflow was changed; no build or CTest was executed. Stage A remains HELD.
