@@ -943,3 +943,41 @@ This is bounded cross-process integration evidence on a historical branch, not c
 The two branches provide additional exact-ref artifact ownership and historical behavioral evidence. Both PRs remain open/draft/unmerged and neither is an accepted candidate source baseline. The comparisons and runs do not close any PR #97 ledger row or establish a semantic successor for PR #192.
 
 DF-02 remains OPEN. All-ref source-content consumer/dependency analysis across the 210 unique branch tips, complete per-path successor/retirement/non-adoption disposition, historical authority and duplicate capability ownership remain outstanding. DF-06 remains NOT MET; DF-09 remains NOT MET pending an authorized exact-final-HEAD dispatch and CLEAR result; DF-10 remains reopened pending the eventual inventory-only final write; DF-11 remains waived as mandatory; DF-12 remains Project Director-only. No runtime source, tests, CMake or workflow in PR #192 was changed. No donor code was adopted, and Stage A remains HELD.
+
+
+## 40. Builder milestone checkpoint — JBP-003 hidden-rule evolving-world challenge and exact-head artifact verification (2026-11-19)
+
+**Exact PR #192 HEAD before this checkpoint write:** `849ae24152d057fddd37451caba8da0d9e3a733d`.  
+**DF-02 report blob after the preceding write:** `28dc2ca86a1be46e42d3d03fa6f78e1eef63a8dc`, §48.  
+**PR #107 exact tested HEAD:** `92cce78985f2630f62a6e0beb49ac725623d7d85`.
+
+### 40.1 Work completed
+
+Recovered PR #107 `test/jbp-003-evolving-world-challenge`, an open/draft/unmerged test-only branch based on `feat/jarvis-affective-state` @ `a06900347f5e463b67e5994d7962a5ea16c3cd2a`. It changes four paths: dedicated workflow, CMake test registration, JBP-003 suite and test specification. No production source path is changed.
+
+Compared the exact 159 PR #97 changed paths against the complete PR #107 tree (288 entries, untruncated): 119 identical donor blobs, 37 divergent same-path blobs and 3 absent paths. The same three donor paths are absent as on the PR #110/#112 branch tips.
+
+Fetched all six PR-triggered Actions run records and verified every run completed successfully on exact head `92cce78985f2630f62a6e0beb49ac725623d7d85`:
+
+- JBP-003 challenge `40647015963`
+- Core Verification `40647016005`
+- Native Brain Build `40647015814`
+- Brain ThreadSanitizer `40647015804`
+- Brain CI `40647016039`
+- Brain Tests `40647015826`
+
+Downloaded artifact `12798381657` (`JBP-003-40647015963-1`) and inspected its metadata, scope, build log, trial log and three journals. Its local SHA-256 matches the GitHub digest `f89d4e2e7db0db82baccee0bba4ea7bba455dabce022dd0516a8da46a785cc9e`.
+
+### 40.2 Behavioral evidence and limitations
+
+The exact test generates hidden per-seed action/reward mappings in a partially observed virtual world, applies 15% stochastic outcome flips, reverses only one context and preserves an unchanged control. It trains using the existing CognitiveRuntime and the consequences of actions actually selected. The workflow invokes training and verification as separate OS processes; verification restores the journal and withholds outcome feedback.
+
+Seeds 17, 29 and 43 each achieved 20/20 acquisition choices in both contexts, 57/60, 56/60 and 57/60 respectively in the reversed context, 60/60 in the unchanged control, and 20/20 in each context after fresh-process restore without feedback. The test uses explicit return-value gates; its checks do not depend on Release-disabled C `assert`.
+
+This is substantive bounded evidence of experience-dependent action choice, adaptation, control-context retention and behavioral recall on PR #107's historical runtime. It is not broad generalization or full JARVIS capability: two contexts, two actions, one generated task, one reversal and three fixed seeds. The PR changes tests/workflow/specification only; no result transfers to current PR #192.
+
+### 40.3 Current disposition
+
+DF-02 §48 records exact refs, blobs, run IDs, artifact digest, per-seed outcomes and limitations. PR #107 remains open/draft/unmerged and is not an accepted source baseline. No PR #97 ledger row is closed; all-ref content consumers/dependencies, complete semantic successor/retirement/non-adoption, historical authority and duplicate ownership remain open. DF-02 remains OPEN; DF-06 remains NOT MET; DF-09 remains NOT MET/external dispatch blocked; DF-10 remains reopened; DF-11 remains waived as mandatory; DF-12 remains Project Director-only. Stage A remains HELD.
+
+No PR #192 runtime source, test, CMake or workflow was changed. No current-PR build, CTest, training run or independent review was performed. No donor code was adopted.
