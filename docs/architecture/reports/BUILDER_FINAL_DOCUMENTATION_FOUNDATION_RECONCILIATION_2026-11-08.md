@@ -504,3 +504,33 @@ The current PR #171 branch copies are later administrative approval-record revis
 No runtime C++, test source, CMake, workflow or training environment was changed. No build, CTest, training run, fresh-reader dispatch or provider invocation was executed. No donor code was adopted, no source baseline selected, no independent verdict obtained, and no Project Director acceptance is claimed.
 
 Stage A remains **NOT STARTED / HELD**. The Builder continues only Builder-owned documentation/evidence closure. The terminal inventory, exact-final reviewer assignment and Director decision remain later steps; none is manufactured by this self-review.
+
+
+## 20. Exact-ref JBP-004 lineage and behavioral-run evidence — 2026-11-19
+
+**Exact PR #192 HEAD before this self-review update:** `cf97f715e031760b596fae6e4a26f3701c52b988`.  
+**DF-02 report blob:** `c304a482779dd1ca7572c4125e2a08d52b1cf6a4`, §47.  
+**Continuity checkpoint blob:** `1b34a9071e7c5f6361159bef087f78cdcf004629`, §39.  
+**Outstanding-work register blob:** `46a1dbf714a9805ea9d3632d74f1b4709bc84151`, §20.
+
+### 20.1 Exact-ref lineage and blob comparison
+
+The PR #97 donor changed-path list was fetched in full (159 paths). Complete recursive trees at the exact PR #110 and PR #112 heads were compared against those paths. PR #110 has 118 identical donor blobs, 38 divergent same-path blobs and 3 absent paths; PR #112 has 119 identical, 37 divergent and the same 3 absent paths. Both branches are open/draft/unmerged and based on the historical `feat/jarvis-affective-state` revision `f4dab1fce3809e39439a7f2cff2558e7a41b96fe`. These results establish additional exact-ref artifact owners and branch divergence, not accepted successor authority.
+
+### 20.2 Historical behavioral evidence independently rechecked
+
+For PR #110 exact head `5869b541ab6f97d782f1043d27479f176f2ea4d4`, all six associated Actions runs were fetched and verified successful on that exact SHA. The JBP-004 run checked out the exact revision, built the native test, ran train/verify in separate OS processes and completed CTest 2/2. Its artifact was downloaded; the archive SHA-256 matched the GitHub digest. The logs preserve seeds 17/29/43, three generated difficulty levels, noisy context-specific reversals, 30/30 final choice gates and fresh-process replay.
+
+For PR #112 exact head `f6effc957244e5626638da0bb85b35a47cb298c4`, all six associated Actions runs were fetched and verified successful on that exact SHA. The JBP-004 run completed the integrated CTest train/verify fixture (2/2). Its artifact was downloaded and its archive SHA-256 matched the GitHub digest. Source inspection confirms the explicit behavioral gates cover observed action outcomes, learned strategies driving later CognitiveCycle decisions, context reversal with a stable control, prediction feedback, guarded evolution adoption, pending canary evidence, rollback, second restore and contextual memory recall.
+
+These are bounded historical results on separate, unmerged PR branches. PR #110's environment is finite and synthetic; PR #112 uses two fixed synthetic contexts/actions and one reversal. Neither establishes open-world learning, broad transfer, full JARVIS capability or current PR #192 behavior. PR #112's successful CTest artifact does not preserve test stdout separately; it preserves exact tested-commit metadata, configure/build/CTest logs and the journal.
+
+### 20.3 Current assessment and limitations
+
+This is a useful correction to any prior impression that the donor learning/memory/evolution paths are represented only by source files or orphan tests: related unmerged branches contain connected behavioral suites and successful exact-SHA CI evidence. The evidence must remain attributed to PR #110/#112 and must not be credited to PR #192 or treated as Project Director approval.
+
+DF-02 remains **OPEN**. The 159-path ledger still lacks complete per-path semantic successor/retirement/non-adoption disposition, historical authority, and exhaustive reverse-consumer/dependency/duplicate-capability closure across the 210 unique branch tips. The two branch comparisons are a bounded tranche, not an all-ref search.
+
+DF-06 remains **NOT MET**: the 345-vs-353 parser discrepancy, local fragment validation, exhaustive external URL status/redirect/relevance and authenticated rendered GitHub anchor checks remain outstanding. DF-09 remains **NOT MET / externally blocked** without an authorized workflow dispatch and exact-final-HEAD CLEAR result. DF-10 remains **REOPENED** until the eventual terminal inventory-only commit and post-write verification. DF-12 remains reserved to the Project Director. Stage A remains **NOT STARTED / HELD**.
+
+No PR #192 runtime source, tests, CMake or workflows were changed. No current-PR build or CTest was run. No donor code was adopted, no source baseline selected, and no independent verdict or Director acceptance is claimed. This remains Builder self-review, not independent review.
