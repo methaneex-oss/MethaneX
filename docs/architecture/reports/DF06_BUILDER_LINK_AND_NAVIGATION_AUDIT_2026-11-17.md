@@ -403,3 +403,20 @@ The custom path resolver found no missing target among its 131 local references,
 **Capability boundary:** the connected GitHub integration provides exact-ref tree/file retrieval and API metadata, but the available tool set exposes neither a full repository checkout/CommonMark parser runtime nor an authenticated interactive GitHub browser. A local `git ls-remote` attempt from the available execution container also failed because outbound DNS/network access to github.com is unavailable. Therefore authenticated rendered heading, commit-line and issue-comment anchor verification cannot be claimed from this environment. The missing rendered-browser evidence must be supplied by an authorized authenticated browser operator, or DF-06 remains open.
 
 **Disposition:** parser-count discrepancy, local-fragment resolution, exhaustive external status/redirect/relevance checks and authenticated rendered-anchor verification remain outstanding. DF-06 remains **NOT MET** under the Project Director's Option A. The correction of the §18.5 count and §19 chronology above preserves the 22-run current list without representing the historical addition as a 23rd destination.
+
+
+## 21. Exact-current PR #192 link-set delta and live base-branch divergence — 2026-11-19
+
+**Exact PR #192 HEAD at acquisition:** \`9d61e9bb3ef0433e7b1c03bfcd1a3a19b8c6741d\`.  
+**Complete recursive tree:** 280 entries, \`truncated=false\`; 51 tracked Markdown files.  
+**Changed paths:** 47.
+
+A fresh comparison from checkpoint source \`849ae24152d057fddd37451caba8da0d9e3a733d\` to the acquired PR head reports four changed paths only: the planning index, continuity checkpoint, Builder self-review and outstanding-work register. The exact old/new blobs were fetched for all four paths. A bounded delta extractor (fenced-code and inline-code exclusion; inline links/images, reference definitions, HTTP(S)/mailto autolinks and HTML href/src attributes) found no added or removed destination occurrences in any of those four files. Per-file extracted counts remained: index 84 (50 local / 34 external), checkpoint 0, self-review 2 (0 local / 2 external), register 10 (5 local / 5 external).
+
+This is a narrow before/after link-set delta for those four changed files. It is not a new complete CommonMark/GFM parse of all 51 Markdown files and does not resolve the historical 345-vs-353 parser discrepancy. It does not validate local fragments, deduplicate/check every external URL, follow every redirect, assess all destination content, or verify rendered GitHub anchors. Do not combine these per-file counts with the earlier 345/353 whole-package counts as though they were the same extraction scope.
+
+The live base branch has also advanced: \`docs/jarvis-phase-2-whole-brain-integration-map-20261105\` now points to \`ea64607ef94f142a6142a013e119a7225bc95c1c\`, 14 commits beyond PR #192's recorded base SHA \`61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c\`. Comparing that current base tip with PR #192 HEAD reports 754 ahead / 14 behind, diverged. This does not authorize retarget/rebase/merge; it is a current branch-state fact that the PR description and index must report accurately.
+
+The connected tools still do not expose an authenticated interactive GitHub browser. No rendered heading/line/comment anchor has been verified in a logged-in browser. External URL live-status/redirect/semantic-relevance validation remains incomplete.
+
+**Disposition:** the four-file destination delta is stable under the bounded extractor, but parser reconciliation, complete local-fragment validation, exhaustive external checks and authenticated rendered-anchor verification remain open. DF-06 remains **NOT MET** under the Project Director's Option A.
