@@ -133,13 +133,15 @@ No concrete algorithm, model/provider, framework, storage technology, schema, AP
 |---|---|---|
 | WP-00 | Planning structure exists | Freeze exact accepted inputs and decision log for the authorized implementation target. |
 | WP-01 | Contract planning started | Gate A source map, provenance contract approval, authorized implementation scope. |
-| WP-02 | Contract planning started | Memory owner contract, retrieval applicability, persistence/recovery and source-baseline evidence. |
-| WP-03 | Contract planning started | Accepted representation/belief semantics and competing-claim lifecycle. |
-| WP-04 | Contract planning started | BM-12 accepted premise/assumption/lineage contract and proof that retrieved memory is consumed downstream. |
-| WP-05 | Contract planning started | Prediction identity/scope/resolution and correct outcome-attribution contract. |
-| WP-06 | Contract planning started | Multi-owner approval, atomicity, persistence, containment and negative-transfer criteria. |
+| WP-02 | Detailed owner-contract planning drafted | BM-01 acquisition provenance; BM-03 memory lifecycle/retrieval; BM-11 dependency, idempotency, interruption and reconstruction obligations. Independent challenge and exact-source revalidation remain. |
+| WP-03 | Detailed owner-contract planning drafted | BM-02 representation/interpretation boundary; BM-04 sole belief-state authority, competing claims, revision lineage and dependent-state invalidation. Independent challenge and exact-source revalidation remain. |
+| WP-04 | Detailed owner-contract planning drafted | BM-12 premise/assumption/inference lineage, memory relevance controls, contradiction handling and receiving-owner disposition. Independent challenge and exact-source revalidation remain. |
+| WP-05 | Detailed owner-contract planning drafted | BM-05 prediction identity, scope, horizon, resolution, delayed/out-of-order outcomes and outcome attribution; BM-04/BM-09 receiving-owner boundaries. Independent challenge and exact-source revalidation remain. |
+| WP-06 | Detailed owner-contract planning drafted | BM-09 candidate lifecycle, affected-owner approval, coordinated multi-owner state change, persistence/reconstruction, rollback/containment, transfer and regression. Independent challenge and exact-source revalidation remain. |
 | WP-07 | Contract planning started | Accepted ownership boundaries and no deterministic stimulus-to-behavior shortcuts. |
 | WP-08 | Protocol drafted (R0–R6) | Approved baseline, frozen fixtures/holdouts/metrics, environment manifest and separate run authorization. |
+
+The kickoff document now contains explicit WP-02–WP-06 owner-contract tables, cross-owner invariants, failure states, accepted-baseline scenario coverage and minimum exit evidence. The first-slice integration trace links the same experience through acquisition, interpretation, memory retrieval, BM-12 reasoning, BM-04 belief disposition and BM-11 continuity. WP-05/WP-06 define the later prediction-to-learning handoff without allowing prediction error to mutate owner state directly. These are Builder planning drafts, not independently accepted contracts or passed scenarios.
 
 “Planning started” is not “package activated.” No work package in this table is authorized for runtime execution.
 
