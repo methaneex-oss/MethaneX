@@ -534,3 +534,31 @@ DF-02 remains **OPEN**. The 159-path ledger still lacks complete per-path semant
 DF-06 remains **NOT MET**: the 345-vs-353 parser discrepancy, local fragment validation, exhaustive external URL status/redirect/relevance and authenticated rendered GitHub anchor checks remain outstanding. DF-09 remains **NOT MET / externally blocked** without an authorized workflow dispatch and exact-final-HEAD CLEAR result. DF-10 remains **REOPENED** until the eventual terminal inventory-only commit and post-write verification. DF-12 remains reserved to the Project Director. Stage A remains **NOT STARTED / HELD**.
 
 No PR #192 runtime source, tests, CMake or workflows were changed. No current-PR build or CTest was run. No donor code was adopted, no source baseline selected, and no independent verdict or Director acceptance is claimed. This remains Builder self-review, not independent review.
+
+
+## 21. JBP-003 evolving-world challenge — exact-ref evidence and critical appraisal (2026-11-19)
+
+**Exact PR #192 HEAD before this self-review update:** `4676cd2cadb6f572625e68e85d7325928a4c558b`.  
+**DF-02 report blob:** `28dc2ca86a1be46e42d3d03fa6f78e1eef63a8dc`, §48.  
+**Continuity checkpoint blob:** `48d44cfddf4f7dcd0df28eb668f590df29d93039`, §40.  
+**Outstanding-work register blob:** `659898f3612387f52ccff6557c8ab5e6650e786d`, §21.
+
+### 21.1 What was verified
+
+PR #107's exact head `92cce78985f2630f62a6e0beb49ac725623d7d85` was fetched as open/draft/unmerged and its four changed paths inspected. The complete recursive tree has 288 entries, untruncated. Against the 159 exact PR #97 donor paths, 119 blobs are identical, 37 divergent and 3 absent.
+
+All six associated workflow runs were fetched and verified successful on that exact SHA. The JBP-003 job steps for exact checkout, configure, build, independent-seed training/fresh-process recall, scope recording and artifact upload all succeeded. The artifact was downloaded, its SHA-256 matched the GitHub digest, and its raw trial/build/scope/journal files were inspected.
+
+The test's evaluator-side hidden mapping is generated per seed; the brain does not receive the latent rule. It receives context, candidate actions and the consequences of actions actually selected during training. The world introduces 15% outcome noise and reverses only the storm mapping. The workflow executes train and verify as separate processes, with no outcome feedback during verification.
+
+### 21.2 Results and limits
+
+Seeds 17/29/43 each passed acquisition at 20/20 in both contexts; storm adaptation at 57/60, 56/60 and 57/60; clear control at 60/60; and fresh-process no-feedback recall at 20/20 in each context. The build log contains non-fatal warnings, which remain preserved in the artifact.
+
+This is real bounded behavior-change evidence, stronger than source presence or storage-only tests. It remains limited to two contexts, two actions, one generated task, one reversal and three fixed seeds. It does not prove open-ended concept learning, transfer to unseen tasks, language/perception acquisition or unrestricted self-improvement. PR #107 adds tests/workflow/specification only, not production mechanisms. The result belongs to PR #107's exact historical runtime and must not be attributed to PR #192.
+
+### 21.3 Current self-review conclusion
+
+The additional JBP-003 evidence corrects the historical record: related JARVIS branches contain a validated, finite, hidden-rule action-learning challenge with adaptation and fresh-process recall, not merely orphan source files. This improves the factual basis for assessing donor capability and branch lineage. It does not establish that PR #192 has these behaviors, does not select a source baseline and does not close the 159-path semantic/authority ledger.
+
+DF-02 remains **OPEN** pending all-ref reverse consumers/dependencies/duplicate ownership and complete per-path semantic/authority disposition. DF-06 remains **NOT MET**; DF-09 remains **NOT MET / externally blocked**; DF-10 remains **REOPENED**; DF-12 remains **PROJECT DIRECTOR ONLY**. No PR #192 runtime/test/CMake/workflow change, current build/CTest, donor adoption, independent verdict or Director acceptance occurred. This is Builder self-review only.
