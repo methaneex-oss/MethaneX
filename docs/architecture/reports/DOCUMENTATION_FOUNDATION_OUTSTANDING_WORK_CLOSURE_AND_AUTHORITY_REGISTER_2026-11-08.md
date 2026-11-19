@@ -1735,3 +1735,42 @@ The reviewer-request path correction required a second syntax pass. The previous
 The earlier index §104/§105 verification wording was overconfident. Index §106 now preserves that chronology and records the correction. This update does not change the gate dispositions: DF-02 OPEN; DF-06 NOT MET; DF-09 NOT MET/external dispatch dependency; DF-10 REOPENED by documentation writes; DF-11 waived as mandatory while a separate challenge remains requested; DF-12 Project Director-only. DF-03 and DF-05 remain partially evidenced. Stage A remains HELD.
 
 No tests/build/CTest/workflow were run, no runtime or donor source was changed, and no review verdict or acceptance is inferred.
+
+
+## 19. Current exact-state and outstanding-gate reconciliation — 2026-11-19
+
+**Exact PR #192 HEAD before this register update:** `2c49ec93950f3e59a690a76309d00e89a0b3bdcb`; PR #192 open, non-draft, unmerged; base `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; 47 changed paths; 742 commits ahead / 0 behind at this snapshot. The complete recursive tree remains 280 entries, untruncated.
+
+### 19.1 Evidence updated
+
+- DF-02 report blob `e3feb2369b232c615cfb30933330b0102436a115`, through §46. The exact 159-row donor/candidate blob ledger was checked against complete trees: 1 identical, 95 divergent, 63 absent, zero SHA mismatches. Semantic comparison has been extended through §§39–45 across learning, affect, cognition, decision/planning, evolution safety/transaction, engineering coordination, developmental/experience memory, and Brain/memory/prediction tests.
+- DF-02's remaining all-ref limitation is explicit in §46: 251 live branch refs / 210 unique tips were re-fetched; default-branch symbol search is negative for the bounded symbols, but the connected code-search operation is default-branch-only and no local Git mirror can be fetched from the current execution network. Full all-ref reverse-consumer/alternate-owner/dependency/duplicate closure remains open.
+- DF-06 report blob `8455ec627beb1aeab7fa5c65b86254a9106778eb`, through §20. The 22-run count is reconciled. The custom 345-destination extraction does not reproduce the earlier 353-destination strict extraction; the eight-item discrepancy is recorded, not concealed. Local fragment, exhaustive external status/redirect/semantic relevance and authenticated rendered-anchor checks remain open.
+- The continuity checkpoint now includes §§31–37, with exact source/commit/blob milestones and current external blockers.
+- The Builder self-review was extended through §19, distinguishing Builder evidence from independent review and Project Director acceptance.
+- The current PR #192 review request remains unpinned until after the terminal inventory successor. The separate DF-02 historical-lineage review request has not received an independent verdict.
+
+### 19.2 Current gate register
+
+| Gate | Status | Remaining work / authority |
+|---|---|---|
+| DF-01 | Builder evidence present; final synchronization pending | Final exact-head index, register, checkpoint, portal and terminal inventory synchronization — Builder |
+| DF-02 | **OPEN** | Finish per-row semantic successor/retirement/non-adoption and historical authority; all-ref reverse-consumer, alternate-owner, dependency and duplicate-capability closure remains blocked by exact-ref content-search limitations — Builder / repository mirror or exact-ref search operator / Project Director for reserved scope decisions |
+| DF-03 | Partially evidenced | Preserve decision provenance, exact scope and revision; do not infer authority from summary or merge state — Builder |
+| DF-04 | Builder evidence present within bounded scope | Proposed governance remains distinct from accepted amendments — Builder / Project Director where reserved |
+| DF-05 | Partially evidenced | Branch ancestry is not semantic dependency/consumer closure — Builder |
+| DF-06 | **NOT MET** | Resolve 345/353 parser discrepancy with complete CommonMark/GFM/reference/HTML parser; local fragments; unique external status/redirect/final destination/content relevance; authenticated rendered GitHub anchors — Builder / authenticated browser operator |
+| DF-07 | Synchronization in progress | Update index, register, checkpoint, self-review, review request and PR description against final exact HEAD — Builder |
+| DF-08 | Resolved within bounded criterion | Preserve historical artifacts and all stated limitations; no destructive archive claim — Builder |
+| DF-09 | **NOT MET / externally blocked** | One blind fresh-reader dispatch against final exact PR #192 HEAD, exact model/provider validation and verdict **CLEAR**. Latest applicable run #44192302873 was PARTIALLY CLEAR (31/32) on historical SHA beb4d5a174a1dd613878f89132e97b5e6052c7d3; no workflow-dispatch operation is exposed — authorized workflow operator / distinct fresh-reader model |
+| DF-10 | **REOPENED** | Capture complete parent tree after every other branch-file write; terminal inventory-only commit; verify one ahead / zero behind, inventory-only diff, all changed-path blob identities and complete successor tree — Builder |
+| DF-11 | **WAIVED as mandatory** | Preserve waiver. A separate exact-revision Independent Reviewer challenge remains requested under Project Director instruction; it is not a mandatory gate — Independent Reviewer |
+| DF-12 | **PENDING — PROJECT DIRECTOR ONLY** | Exact-final-revision accept/reject/conditional decision. Builder cannot issue it. |
+
+### 19.3 Existing architecture and non-authorization
+
+PR #171 remains open/draft/unmerged, but the Project Director individually approved Document 00 at commit `8490737429b052b65fed3b998e0320d8834f640f` / blob `ff0e57f2f9a266466687dca2c4cbcda6a64cb7d7` (comment #6556047098), and Document 01 at commit `f32d2c9ede71676759b55c87c783253bd23ebbae` / blob `15c9bfc06f5f094d396f8a9dc625c22ac0d1b279` (comment #6556276653). The approval scope is the two architectural documents only. Preserve the SYS-01–SYS-11 foundation; do not duplicate or redesign it.
+
+No runtime source, tests, CMake or workflows were changed. No build, CTest, training run, workflow dispatch or fresh-reader provider call was executed. No donor code was adopted, no source baseline was selected, no independent verdict or Project Director acceptance is claimed.
+
+Stage A remains **NOT STARTED / HELD**. Runtime implementation, donor adoption, training, integration, merge, rebase, retarget, cherry-pick, branch rewrite and deployment remain **NOT AUTHORIZED**. The inventory remains the final branch-file write only after all other Builder-owned documentation/evidence changes are complete.
