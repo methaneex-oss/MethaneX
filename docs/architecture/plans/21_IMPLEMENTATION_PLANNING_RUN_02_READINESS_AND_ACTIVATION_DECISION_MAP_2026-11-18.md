@@ -104,9 +104,13 @@ Required sequence:
 
 **Exit evidence:** every governing scenario has an exact source/owner mapping and executable evidence definition; the integrated capability acceptance criteria are met on an authorized baseline; the Project Director records Gate B disposition.
 
-## 5. First implementation increment — planning definition only
+## 5. First end-to-end capability target — staged coding decomposition only
 
-The first planned increment remains the **evidence-to-learning vertical capability**, not a chatbot surface, an autonomous action layer, or a broad collection of disconnected mechanism tickets.
+The first planned capability outcome remains the **evidence-to-learning vertical capability**, not a chatbot surface, an autonomous action layer, or a broad collection of disconnected mechanism tickets.
+
+**Terminology and scope reconciliation with `00_BRAIN_IMPLEMENTATION_PLAN.md` §10:** this section describes the end-to-end capability target, not one oversized first coding increment. The existing main plan recommends a smaller first coding slice, to be considered only after Phase 0 and separate implementation authorization: attributable experience and interpretation → relevant memory retrieval → BM-12 reasoning with traceable premises/assumptions → BM-04 owner-evaluated belief revision, with BM-11 continuity, dependency freshness and interruption/recovery. This slice directly addresses the known planning gap that retrieved memory reaches cycle context but is not supplied to reasoning premises.
+
+Only after that bounded slice is verified should dependent increments add BM-05 prediction identity/resolution and correct outcome attribution, then BM-09 candidate learning with affected-owner evaluation/approval, persistent multi-owner change, later behavioral effect, reconstruction, held-out transfer and regression controls. The complete evidence-to-learning loop remains the capability acceptance target; it must be reached through dependency-ordered increments and separate gates, not bundled into one first ticket. This remains non-operative planning and does not authorize any coding or package activation.
 
 Its intended contract is:
 
