@@ -93,7 +93,26 @@ Repeat the exposure/evaluation cycle with a fresh experience sequence and indepe
 
 **Exit evidence:** replicated effect with disclosed variance and no unexplained divergence in state lineage.
 
-## 4. Measurement framework
+## 4. Capability-first evaluation and measurement framework
+
+The result being evaluated is what the Brain can actually accomplish. R0–R6, tests, fixtures, benchmarks and metrics are instruments for observing, reproducing and diagnosing that capability; their quantity or pass rate is not the capability itself.
+
+### 4.1 Primary evidence: demonstrated task performance
+
+For each named capability, define a bounded task family and evaluate the Brain performing the task under explicit starting conditions, constraints and outcome-verification rules. The primary evidence package must show:
+
+1. **Task outcome:** whether the intended task objective was achieved, partially achieved, correctly deferred, or not achieved; verify relevant environment/task state independently where possible.
+2. **Decision quality:** whether the Brain selected a useful and justified next step, preserved constraints, handled trade-offs, and asked for clarification or deferred when evidence was insufficient.
+3. **Contextual competence:** whether it used relevant history, maintained distinct concurrent contexts, and adapted when the task or evidence changed.
+4. **Correction and recovery:** whether it detected a material error or stale premise, corrected through the responsible owner, and resumed without losing valid context or claiming unverified success.
+5. **Experience-dependent improvement:** where learning is claimed, whether later task behavior improved after attributable experience and an owner-approved change, including after reconstruction.
+6. **Transfer boundaries:** whether improvement carried to a relevant unfamiliar task and was appropriately withheld from unrelated contexts.
+
+A verbal explanation, internal state update, log entry, successful API response or action request is not a substitute for task performance or an independently verified consequence. Where the task is not safely executable, a bounded decision or action request can demonstrate only that cognitive capability—not external execution.
+
+Tests and benchmarks may provide repeatable challenge conditions and isolate causes of failure. They support the task evidence; they do not replace it. Reporting must lead with demonstrated capabilities and limitations, then use test and trace evidence to explain why the result is credible. A test count, test pass percentage, document count, module count or green workflow must never be presented as a measure of how intelligent or useful the Brain has become.
+
+### 4.2 Supporting measures
 
 Final metric definitions and thresholds must be selected during contract freeze, before results are observed. The evaluation report must include at least:
 

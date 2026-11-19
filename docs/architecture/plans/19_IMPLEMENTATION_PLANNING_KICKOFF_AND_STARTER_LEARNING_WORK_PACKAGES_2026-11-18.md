@@ -58,6 +58,16 @@ The first capability target is a narrow but genuine closed learning loop:
 
 This is a planning target, not a prescribed implementation algorithm. Each arrow is a required interaction to evidence; it is not permission to hardcode a fixed mapping.
 
+### 4.3 Capability is the result; engineering artifacts are instruments
+
+Progress is judged by what the Brain can demonstrably do in a task, not by the number of mechanisms, work packages, documents, test cases, passing test suites or green workflows. Those artifacts help engineers build, inspect and diagnose the system; none is itself a capability.
+
+A capability claim must name a bounded task family and show the Brain performing it under stated conditions. The primary evidence is the task outcome and the Brain's observable choices: what it understood, what relevant experience it used, what it decided, what it changed when circumstances changed, where it sought clarification or deferred, and whether the resulting task state or external consequence was independently verified. Internal traces explain and attribute that behavior; they do not substitute for it.
+
+Tests, fixtures, benchmarks and metrics remain necessary supporting instruments for repeatability, diagnosis, comparison and failure discovery. Their count or pass rate is not the acceptance objective. A narrow successful test supports only the specific behavior it demonstrates; it does not establish broad competence, general intelligence or a complete learning capability.
+
+The first WP-02–WP-04 slice is an internal cognitive foundation, not by itself a complete useful JARVIS capability or proof of developmental learning. It must be connected to a bounded task and a receiving behavior before any capability claim. Subsequent WP-05–WP-08 work must demonstrate the full experience-to-later-behavior change in task performance, including persistence and justified transfer.
+
 ### 4.1 Required properties
 
 - Experience intake preserves source, time, context, scope and uncertainty; intake is not automatically accepted as truth.
@@ -358,18 +368,40 @@ A resolved prediction/outcome may contribute evidence to a learning candidate, b
 
 **Primary owner:** BM-09; coordinated by BM-11 and every affected state owner.
 
-### WP-07 — Attention, appraisal, goals and metacognitive integration
+### WP-07 — Attention, appraisal, goals, planning and metacognitive integration
 
-**Purpose:** Plan how the integrated loop selects work, evaluates context and revises goals without deterministic behavioural shortcuts.
+**Purpose:** Define how one Brain selects what deserves processing, evaluates significance in its current context, forms or revises goals, plans useful next steps, and detects when its own cognition needs correction.
 
-**Planning outputs:**
-- attention priority and dependency-freshness obligations;
-- appraisal influence and revision evidence;
-- metacognitive diagnose–request–correct–verify loop;
-- supplied-goal versus experience-derived candidate-goal distinctions;
-- cognitive decision versus external execution authorization boundary.
+**Capability outcome:** When faced with multiple active contexts, changing circumstances, incomplete evidence and competing demands, the Brain can preserve and prioritize the right work; resume a suspended context with its constraints; evaluate the significance of an event relative to current goals, relevant history and qualified internal-condition evidence; form, evaluate, revise or abandon a candidate goal; build and update a feasible plan; choose an appropriate cognitive decision; and identify when it should gather evidence, ask for clarification, defer or surface a limitation. It must not confuse salience with truth, appraisal with command, intent with permission, an action request with execution, or an attempted action with a verified consequence.
 
-**Primary owners:** BM-06/BM-07/BM-08/BM-10, integrated with all preceding packages.
+**Owner contract:**
+
+| Owner | Authoritative state | Required behavior | Must not claim or do |
+|---|---|---|---|
+| **BM-06 — Attention and active context** | Focus, attention history, active-context membership, resource allocation, interruption and resumption state | Allocate limited processing capacity using contextually relevant signals such as task relevance, uncertainty, novelty, urgency, risk, goal state, consequences, appraisal and cognitive load; support multiple appropriately isolated contexts; redirect focus when new evidence or changed goals justify it; preserve enough state to resume work | Treat salience as truth, priority as authorization, active context as authoritative memory/belief state, or eviction as deletion of durable evidence |
+| **BM-07 — Affective appraisal and valuation** | Contextual appraisal state, qualified cognitive estimates of relevant internal conditions, evidence and developmental lineage | Evaluate significance relative to goals, context, history, predictions and authorized internal-condition observations; preserve uncertainty and multiple dimensions; permit the same event to have different significance under different conditions; allow later evidence to revise appraisal | Use a fixed stimulus-to-emotion or emotion-to-action mapping; let appraisal directly command action, establish an external fact, or overwrite SYS-owned state. SYS-05 remains authoritative for autonomic regulation; SYS-08 remains authoritative for compute, storage, devices and runtime substrate |
+| **BM-08 — Goals, intent, planning and decision** | Goal lifecycle, candidate-goal lineage, intent, plans, decision rationale and dependencies | Distinguish supplied goals, experience-acquired candidate goals, governance constraints and dependent subgoals; form candidates from interpreted experience without fixed triggers; evaluate relevance, feasibility, expected consequences, conflicts, resources, uncertainty, risk and constraints; accept, revise, defer, suspend or abandon with reasons; build plans from qualified evidence and reconsider them when dependencies change; choose among acting through an authorized request, clarifying, observing, gathering evidence, deferring, rejecting or escalating | Claim a supplied goal is internally originated; fabricate a goal when none is justified; equate priority with urgency or authorization; treat a cognitive decision/action request as permission or verified execution |
+| **BM-10 — Metacognitive monitoring and control** | Monitoring observations, detected inconsistencies, confidence/calibration assessments, limitation hypotheses and corrective-work lineage | Detect unsupported conclusions, scope overreach, contradiction, stale dependencies, missing evidence, poor prediction calibration, overload, repeated failure and capability degradation; request proportionate retrieval, evidence, reasoning, belief or plan reconsideration; verify whether correction improved the task outcome; preserve original and correction history | Directly overwrite another owner's state, replace reasoning or decision ownership, endlessly reprocess without new evidence, or conceal repeated unsuccessful correction as increased confidence |
+
+**Cross-owner invariants:**
+
+1. Attention selects what receives processing; it does not determine truth or create a goal. Retrieval and durable history remain with BM-03, qualified claims with BM-04, predictions with BM-05 and conclusions with BM-12.
+2. Appraisal is a qualified contextual influence on attention, memory, learning, goal evaluation and decision formation. It is neither a factual premise by itself nor an action command.
+3. Goal origin, current priority, feasibility, governance constraint, authorization, action request, execution record and verified outcome remain separate states with traceable transitions.
+4. Every material goal and plan retains its supporting evidence, assumptions, scope, resource constraints and dependency versions. A changed premise or constraint triggers proportionate reconsideration before consequential use.
+5. BM-10 requests correction; the actual state owner performs it. Correction is complete only when its effect on the task or affected capability is evaluated.
+6. BM-11 coordinates context dependencies, interruption, conflict and recovery but does not become a second cognitive authority. External governance, security, execution and outcome verification remain with their approved SYS/external owners.
+7. Having no eligible candidate goal, insufficient evidence, or no safe/useful next step is a valid result. The Brain must be able to clarify, observe, defer or report a limitation rather than manufacture certainty or activity.
+
+**Failure states to preserve:** attention starvation, overload, focus oscillation, dropped or stale context; unreliable or conflicting appraisal; unsupported or infeasible candidate goals; unresolved goal conflict; resource or constraint changes; stale plans; missed dependency invalidation; unauthorized action requests; unverified consequences; metacognitive non-convergence; and interruption/reconstruction that cannot validate the resumed context. Each is distinct and must not be collapsed into generic task failure.
+
+**Minimum accepted-baseline scenario coverage:** scenarios 12–18 and 23 in the historical accepted PR #174 baseline. Scenarios 27–34 provide cross-cutting reasoning, uncertainty, contradiction, defeated-assumption and stale-premise obligations where WP-07 consumes or acts on those results. The additional PR #174 proposal scenarios 35–54 remain proposed/unaccepted and must not be promoted into accepted requirements by this planning contract.
+
+**Integrated capability demonstration:** use a bounded, meaningful task sequence with at least two competing contexts and changing evidence. The Brain must preserve both contexts and their constraints; expose why focus changed; evaluate the same material event under differing goal/context conditions without a fixed mapping; form or revise a candidate goal only when the evidence supports it; produce a feasible plan; ask for missing information or defer when materially underdetermined; invalidate and reconsider a plan when a supporting belief or constraint changes; and preserve intent separately from any external authorization, action and verified outcome. Interrupt and resume the work to establish continuity. The task result—not the number of internal operations or test assertions—is the primary capability evidence.
+
+**WP-07 exit evidence:** a repeatable integrated task demonstration shows competent context selection and resumption, justified goal/plan formation and revision, useful appraisal modulation, and bounded metacognitive correction. The task outcome and decision quality are observable; supporting traces establish provenance and owner boundaries; negative controls show that irrelevant salience, unsupported goals, stale plans and denied actions do not produce false success. Later developmental claims must additionally show that experience improves subsequent task behavior and transfers only where justified; that later learning claim belongs to WP-06/WP-08, not WP-07 alone.
+
+**Primary owners:** BM-06/BM-07/BM-08/BM-10, integrated with BM-01–BM-05, BM-09, BM-11/BM-12 and the applicable SYS governance/execution boundaries.
 
 ### WP-08 — Integrated starter-training and evaluation protocol
 

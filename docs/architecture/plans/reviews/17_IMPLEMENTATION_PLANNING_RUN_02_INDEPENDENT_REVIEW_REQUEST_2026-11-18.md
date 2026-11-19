@@ -3,7 +3,7 @@
 **Repository:** `methaneex-oss/MethaneX`  
 **PR:** #175 — Brain implementation planning  
 **Branch:** `plan/brain-implementation-roadmap-20261103`  
-**Assignment document source parent:** `b441fc7a3c236b0d239ae3efee56489f18db430e`  
+**Assignment document source parent:** `ddb74684be67dee5da0746b0244a5afdece924b1`  
 **Exact review target:** The immutable PR #175 HEAD SHA stated in the accompanying PR Conversation assignment comment. The assignment document cannot contain its own resulting commit SHA; fetch live PR metadata and stop if it differs from the comment's exact target.  
 **Requested reviewer:** Independent Reviewer, distinct from the Builder.  
 **Scope:** Planning coherence and readiness only; not a gate-clearance or implementation-authorization review.
@@ -51,7 +51,11 @@ Relevant upstream authority/evidence:
 16. Are multi-owner activation, partial failure, reconstruction, rollback/containment and later behavioral-effect criteria observable without silently selecting a transaction protocol, schema or implementation technology?
 17. Does the FS-01–FS-12 first-slice case set faithfully operationalize the accepted-baseline scenarios without silently adding requirements, omitting negative controls or confusing test design with executed evidence?
 18. Are paired controls, reconstruction checks and owner-specific pass criteria sufficiently discriminating to detect memory retrieval without use, inference without premises, belief mutation without BM-04 authority, and partial recovery?
-19. What is the minimum correction set required before the planning package is ready for Project Director disposition?
+19. Does the detailed WP-07 contract preserve the accepted BM-06/BM-07/BM-08/BM-10 boundaries and translate them into observable task capabilities rather than mechanism-only completion claims?
+20. Does the WP-07 integrated task demonstration adequately cover competing contexts, justified focus changes, context-sensitive appraisal, candidate-goal formation/revision, plan invalidation, bounded metacognitive correction, interruption/resumption and external authorization/outcome separation?
+21. Does WP-08 make demonstrated task performance the primary capability outcome, with tests/benchmarks/traces serving as supporting diagnostic evidence rather than treating test counts, pass rates or document/module counts as capability?
+22. Are WP-00–WP-08 names and responsibilities numbered consistently between the kickoff, Run 02 map and main implementation plan, particularly WP-01 source reconciliation versus WP-02 experience/memory/continuity?
+23. What is the minimum correction set required before the planning package is ready for Project Director disposition?
 
 ## 3. Required evidence method
 
@@ -61,6 +65,7 @@ Relevant upstream authority/evidence:
 - Verify status claims against live PR metadata and exact review submissions/comments.
 - Distinguish Builder-authored assertions from independently reproduced evidence.
 - Do not infer implementation authorization from planning completeness, a successful build, source presence or review approval.
+- Judge capability claims from task-level behavior and independently verifiable task outcomes; use tests and traces as supporting evidence, not as the definition of success.
 - Do not claim that 54 proposed scenarios are accepted or passed.
 - Do not inherit an earlier review verdict from a different exact SHA.
 
