@@ -772,3 +772,30 @@ Exact blob identities and source/test evidence are in DF-02 §42. Existing imple
 The new cohort extends exact semantic comparison across seven evolution API headers and the corresponding test coverage. These rows remain OPEN pending exact-ref reverse-consumer/alternate-owner analysis, dependency and duplicate-ownership reconciliation, historical authority and any Project Director scope/retirement decision. No all-ref content closure is claimed.
 
 No runtime source, test, CMake or workflow file was changed. No donor code was adopted. No build, CTest or workflow was executed. DF-02 remains OPEN; DF-06 and DF-09 remain unmet; DF-10 remains reopened; DF-11 remains waived; DF-12 remains Project Director-only; Stage A remains HELD.
+
+
+## 35. Builder milestone checkpoint — donor-only developmental, experience-memory and affective artifact families (2026-11-19)
+
+**Exact PR #192 HEAD before this checkpoint write:** `d091ac6b81ac0ee2acef1635adfbdfd2ea1e5bf0`.  
+**DF-02 report blob after the preceding write:** `05b1557d233b47684ca432bde9c4a5418809ff4c`.  
+**Donor PR #97 exact HEAD:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+
+### 35.1 Work completed in DF-02 §44
+
+Compared exact donor-only headers and test sources against the complete candidate tree and checked donor/candidate CMake target registration.
+
+Material findings:
+
+- Candidate has no same-path successor for the donor's goal-outcome progress model, developmental environment, developmental world or sequence-keyed ExperienceMemory headers.
+- ExperienceMemory distinguishes each experience by prediction sequence while separately indexing by semantic key; it can resolve one prediction instance and retrieve the latest unresolved experience. Candidate's semantic-key prediction representation remains a separately documented identity/collision concern.
+- Candidate has no same-path successor for the donor developmental learning/world tests or DLT-001/DLT-002 trial harnesses. The donor harnesses define context reversal, hidden/partial observations, execution-failure controls, transfer probes, prediction metrics and multi-hour checkpoint logging; they are source programs, not evidence that a run succeeded.
+- Candidate has no same-path successor for the donor affective Brain-decision, affective decision, goal-outcome, affective-learning, affective-state-model or affective-state test sources. The donor CMake registers those six suites and the developmental learning/world and DLT trial targets; candidate CMake registers none of them.
+- The donor affective-planning CMake fragment and suite source are not active targets in the donor main CMake file either; they are explicitly classified as scaffolding, not an executed/registered donor test.
+
+Exact blob identities and evidence are in DF-02 §44.
+
+### 35.2 Disposition and limits
+
+The donor-only paths and missing candidate targets are established, but they are not closed as non-adoptions. Reverse-consumer/alternate-owner analysis, source-to-test dependency mapping, historical artifact authority and Project Director retirement/non-adoption decisions remain outstanding. No successful developmental training run is claimed.
+
+No runtime source, test or CMake file was changed. No donor code was adopted. No build, CTest or training run was executed. DF-02 remains OPEN; DF-06 and DF-09 remain unmet; DF-10 remains reopened; DF-11 remains waived; DF-12 remains Project Director-only; Stage A remains HELD.
