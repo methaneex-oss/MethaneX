@@ -441,3 +441,66 @@ DF-06 remains NOT MET pending complete parser reconciliation, external URL statu
 No runtime C++, tests, CMake, workflow or training environment changed. No build, CTest, fresh-reader workflow dispatch or new provider invocation was executed. No donor code was adopted; no source baseline was selected. No reviewer verdict, Project Director acceptance, Stage A, merge or implementation authorization is claimed.
 
 The documentation foundation is **not accepted** on this record. The Builder will continue only evidence-backed work within the existing authority boundary, then run the terminal DF-10 cycle and request exact-revision independent challenge. DF-09 and DF-12 remain external decision/execution boundaries.
+
+
+## 19. Exact-current Builder reconciliation — semantic audit extension, source integrity and remaining external boundaries (2026-11-19)
+
+**Exact PR #192 HEAD before this self-review update:** `605f0c585cbe499986736c5b3386652fd45bf3e0`. PR #192 was re-fetched as open, non-draft, unmerged; branch `docs/whole-brain-planning-scope-correction-20261107`; base `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; 741 commits ahead / 0 behind; 47 changed paths; complete 280-entry recursive tree.
+
+### 19.1 DF-02 — new semantic evidence and exact-tree integrity
+
+The DF-02 report is now at blob `e3feb2369b232c615cfb30933330b0102436a115`, with evidence through §§39–46. New bounded comparisons cover:
+
+- adaptation, association, attention and causal-model/codec contracts;
+- cognition, cognitive workspace, decision, evolution, goals, intent, knowledge, planning, reflection and self-model interfaces;
+- evolution adoption journal, canary/controller, experiment attestation, trial coordinator, runner and orchestrator;
+- engineering coordination, durable task-ledger, revision tracking, message-delivery idempotency and receiver backpressure;
+- donor-only developmental world/learning, ExperienceMemory, goal-outcome and affective artifacts/test families;
+- Brain-10, workspace runtime, memory architecture, prediction feedback and Brain deep integration test deltas.
+
+The exact 159-row ledger was rechecked against complete recursive trees at donor PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` and candidate PR #192 source `d4f88ab430fd1d2257313ac90eacfd1c72f4fba9`: 1 identical blob, 95 same-path divergent blobs, 63 absent candidate paths, zero ledger/tree SHA mismatches. Subsequent PR #192 commits changed documentation only; the candidate runtime/test/CMake tree remains unchanged. A bounded continuity comparison also confirmed the active candidate Brain/LearningLoop/CognitiveCycle/memory/runtime files and their key test/CMake blobs from §31 still match the current tree.
+
+This is a structural identity and source/test comparison result, **not** final semantic closure. All 159 paths now have evidence-section references outside the ledger, but not every row has an accepted successor/retirement/non-adoption decision. Reverse-consumer/alternate-owner search across all refs, dependency/duplicate ownership and historical authority remain open.
+
+The live branch census was re-fetched: 251 branch refs, 210 unique tips, eight duplicate-tip groups covering 49 names. Ten donor-specific symbol searches on the current default branch returned no results; the GitHub code-search operation is default-branch-only. A complete all-ref source-content search remains blocked: exact-ref trees/files can be fetched, but the connector does not provide arbitrary-ref code search, and the execution container cannot resolve github.com for a local mirror. This is explicitly recorded in DF-02 §46 and is not represented as closure.
+
+### 19.2 DF-06 — exact link count correction and remaining Option A requirements
+
+DF-06 report blob is `8455ec627beb1aeab7fa5c65b86254a9106778eb`, through §20. The 22-run Actions enumeration and §18.5 count are reconciled; §19's historical addition is not counted as a 23rd run.
+
+The custom full-tree extraction at the earlier source `ff33515...` found 344 candidate destinations (131 local, 213 HTTP(S)). A seven-file exact Markdown delta to `d4f88ab...` adds one external Actions URL and no local changes, producing 345 (131 local, 214 HTTP(S)) under that extractor. The earlier strict extraction recorded 353 (134 local, 219 HTTP(S)); the eight-destination discrepancy remains unresolved. The custom extractor is not a complete CommonMark/GFM parser. Local fragment validation, exhaustive external status/redirect/final-target/semantic checks and authenticated rendered GitHub anchors remain outstanding. DF-06 remains **NOT MET** under the Project Director's Option A.
+
+### 19.3 DF-09 — no current-head blind CLEAR evidence
+
+The runbook's latest completed blind fresh-reader run remains #44192302873, targeting historical SHA `beb4d5a174a1dd613878f89132e97b5e6052c7d3`, verdict **PARTIALLY CLEAR (31/32)**. The current exact PR #192 HEAD has no associated PR-triggered workflow run in the commit-run endpoint. The workflow runbook requires `workflow_dispatch`; the available GitHub tools expose fetch/list and rerun operations but no workflow-dispatch operation. No exact-final-HEAD fresh-reader run was dispatched or executed. DF-09 remains **NOT MET / externally blocked**.
+
+### 19.4 Historical authority, independent review and PR #171 foundation
+
+The PR #192 Independent Reviewer request remains intentionally unpinned until the terminal inventory successor. The separate DF-02 historical-lineage review request remains a request with no returned independent verdict. The latest xAI review of historical exact SHA `beb4d5a...` returned **PARTIALLY CLEAR**; prior Grok and 2026-11-08 review reports remain historical and do not apply to this current source. DF-11 remains waived as a mandatory gate, while the separate review challenge requested by the Project Director remains pending.
+
+PR #171 remains open/draft/unmerged. Its Document 00 and Document 01 baselines were individually approved by the Project Director at their exact historical revisions:
+- Document 00: commit `8490737429b052b65fed3b998e0320d8834f640f`, blob `ff0e57f2f9a266466687dca2c4cbcda6a64cb7d7`, approval comment #6556047098.
+- Document 01: commit `f32d2c9ede71676759b55c87c783253bd23ebbae`, blob `15c9bfc06f5f094d396f8a9dc625c22ac0d1b279`, approval comment #6556276653.
+
+The current PR #171 branch copies are later administrative approval-record revisions, not new approvals. The approved SYS-01–SYS-11 whole-system foundation remains the governing architecture within its recorded scope; it does not authorize Brain architecture approval or implementation.
+
+### 19.5 Current gate and authority disposition
+
+| Gate | Current Builder assessment |
+|---|---|
+| DF-01 | Builder evidence present; final exact-head index/register/checkpoint/portal/inventory synchronization remains |
+| DF-02 | **OPEN** — 159-path identity integrity verified; complete per-row successor/retirement authority and all-ref reverse-consumer/dependency/duplicate closure remain |
+| DF-03 | Partially evidenced |
+| DF-04 | Builder evidence present within bounded scope; proposed governance is not presented as accepted |
+| DF-05 | Partially evidenced; branch ancestry is not semantic consumer/dependency closure |
+| DF-06 | **NOT MET** — parser discrepancy, local fragments, exhaustive external checks and authenticated rendered anchors remain |
+| DF-07 | Synchronization in progress; PR description and all controlling artifacts must be refreshed against final exact HEAD |
+| DF-08 | Resolved within bounded preservation criterion |
+| DF-09 | **NOT MET / externally blocked** — no dispatch operation and no exact-final-HEAD CLEAR result |
+| DF-10 | **REOPENED** — inventory must be the terminal one-file commit after all other branch-file writes |
+| DF-11 | Waived as mandatory; separate exact-revision reviewer challenge remains requested |
+| DF-12 | **PENDING — PROJECT DIRECTOR ONLY** |
+
+No runtime C++, test source, CMake, workflow or training environment was changed. No build, CTest, training run, fresh-reader dispatch or provider invocation was executed. No donor code was adopted, no source baseline selected, no independent verdict obtained, and no Project Director acceptance is claimed.
+
+Stage A remains **NOT STARTED / HELD**. The Builder continues only Builder-owned documentation/evidence closure. The terminal inventory, exact-final reviewer assignment and Director decision remain later steps; none is manufactured by this self-review.
