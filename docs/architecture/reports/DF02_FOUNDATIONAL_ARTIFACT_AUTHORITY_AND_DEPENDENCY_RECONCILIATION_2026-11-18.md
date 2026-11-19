@@ -1364,3 +1364,55 @@ The five evolution/reflection source paths audited in §§27–28 have concrete 
 **Important limitation:** this ledger is exact for PR #97's changed-file set and PR #192's exact candidate tree. It does not establish candidate consumer closure across all 251 branches or every related PR. The GitHub connector exposes branch enumeration but no all-ref recursive-tree search in one operation; a complete all-branch consumer search remains blocked until exact-ref tree/file retrieval can be performed for every relevant ref or an approved local clone/index is used.
 
 **Disposition:** The stale progress-count problem is corrected structurally: the canonical denominator is now explicit and every donor path has an exact candidate mapping. **DF-02 remains OPEN** because no semantic closure is inferred from this inventory. Gate A/B and Stage A remain held.
+
+
+## 31. Absent donor learning/affect subsystem successor audit — candidate integration evidence (2026-11-19)
+
+**Exact candidate source:** PR #192 HEAD `f920a5b3530929a68794c2607846de5d567519dd`.  
+**Donor source:** PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
+**Purpose:** Begin semantic successor analysis for the 63 donor paths absent at the same path in the candidate tree. This section focuses on the developmental-learning, affective, experience-memory, and Brain split-source cohorts. Absence is not automatically treated as capability loss; candidate integration and build registration were inspected.
+
+### 31.1 Developmental-learning subsystem: no equivalent integrated subsystem established
+
+Donor PR #97 contains `developmental_learning.hpp/.cpp`, `developmental_world.hpp`, `developmental_environment.hpp`, and associated tests/example/docs. The donor world owns task/world state, resource costs, action availability, seeded transitions, partial-observation filtering and exogenous dynamics. The donor developmental learner maintains learned associations and context-sensitive strategies, with integration tests exercising the Brain/world loop.
+
+Candidate PR #192 has no files with developmental/experience/affective naming in its complete tree. Its candidate `learning_loop.cpp` blob is `bc9a6aaca38d060667bcdf82f2b1a1f72c5936ba` (34 lines). It accepts a single `LearningFeedback` tuple (key, predicted, actual, fitness), updates a scalar adaptation metric, updates evolution fitness, proposes parameters, and adopts a matching proposal if confidence is at least 0.75 and expected gain is positive. It is not a developmental world, does not model action/environment transitions, partial observation, episodes or learned context/action strategies, and does not establish the donor's developmental successor behavior.
+
+Candidate `cognitive_cycle.cpp` does provide a different active integration path: it recalls ranked memories, performs reasoning/simulation, records predictions, selects a goal, plans/decides, and routes outcome feedback through `Brain::learn` and `Brain::resolve_prediction`. Candidate `memory.cpp` persists event journals and memory metadata, and `cognitive_runtime.cpp` orchestrates the cycle. These are real adjacent mechanisms, but they are not evidence that the absent developmental-world/strategy-learning subsystem was replaced.
+
+**Disposition:** Donor developmental-learning/world files and their dedicated suites remain **unresolved / no equivalent successor demonstrated**. Do not classify the generic LearningLoop or the ordinary CognitiveCycle as a full successor.
+
+### 31.2 Affective-state and affective-appraisal subsystem: no active candidate integration found
+
+The donor contributes explicit `affective_state.hpp/.cpp`, `affective_learning.hpp`, Brain affective planning integration, and affective decision/learning/evidence/goal-outcome suites. The complete candidate tree contains no affective-state/learning implementation or corresponding affective tests. Candidate `brain.hpp` has no affective model members or affective API; its active Brain composition includes attention, threat, adaptation, learning loop, planning, reflection, knowledge and self-state models. Candidate `decision.cpp` has no affective inputs in the inspected path.
+
+A candidate file named `brain_restored_api.cpp` (blob `618deb6976eed951eae02b7f0da741e6d730bb0c`) contains methods referencing `AffectiveState`, `AffectiveAppraisal`, `affective_state_model_`, `affective_learning_model_`, and `developmental_learning_`. However, this file is **not listed in the candidate `core/cpp/CMakeLists.txt` source list**, and the candidate `brain.hpp` does not declare those methods or members. It is therefore orphan/stale source, not evidence of a compiled or linked capability. Candidate CMake instead compiles `brain.cpp`, `brain_novelty.cpp`, and the active subsystem files explicitly listed in the target.
+
+**Disposition:** Donor affective state/appraisal/learning has no verified active candidate successor in PR #192. The orphan restored-API source must not be counted as implementation. This is a material capability gap for the candidate baseline unless an authoritative decision documents an intentional exclusion or a different exact-ref successor is found.
+
+### 31.3 ExperienceMemory and goal-outcome evidence: partial analogues, not equivalent proof
+
+Donor `experience_memory.hpp` (88 lines) maintains prediction experiences by unique sequence, a semantic key index, resolved actual outcomes, and lookup of latest unresolved experience by key. Candidate Brain stores predictions in an in-memory map and persists prediction/outcome events through `Memory`; `Brain::replay` reconstructs those maps from its event journal. This is a partial functional analogue for prediction persistence, but it is not the same sequence-indexed ExperienceMemory contract and does not by itself prove all donor query/association behavior.
+
+Donor `cognitive_goal_outcome.hpp` captures before/after goal progress, delta, completion and confidence and accumulates outcome counts/confidence. Candidate `brain_restored_api.cpp` contains `assimilate_goal_outcome`, but the file is not compiled and the current Brain header has no corresponding declaration. The active candidate goal API in `brain.cpp` supports create/activate/progress/complete/abandon/priority, but no equivalent goal-outcome learning model was found in the active source/test registration.
+
+**Disposition:** Prediction experience and goal progress have partial candidate analogues; full donor ExperienceMemory and GoalOutcomeEvidence semantics remain open pending exact API/call-site/test equivalence.
+
+### 31.4 CausalLinkCodec: candidate inline encoding is not equivalent
+
+Donor `causal_link_codec.hpp` provides a typed, length-prefixed versioned encoding that safely preserves delimiters and scalar types, with backward-compatible decoding. Candidate `causal_model.cpp` contains local `encode`/`decode` helpers and `decode_effect` that split on the first '='. The candidate decoder does not demonstrate the donor's typed, length-prefixed format or equivalent delimiter-safe round-trip behavior. This is a plausible successor location, but it is not semantically equivalent based on inspected source. Candidate causal persistence and legacy-format migration need targeted tests.
+
+**Disposition:** Candidate inline codec is a partial replacement with a materially narrower serialization contract; unresolved pending persistence compatibility and round-trip regression coverage.
+
+### 31.5 Active integration and test-registration evidence
+
+- Candidate `core/cpp/CMakeLists.txt` compiles `learning_loop.cpp`, `cognitive_cycle.cpp`, `cognitive_runtime.cpp`, `memory.cpp`, `causal_model.cpp` and other active modules, but not `brain_restored_api.cpp` or donor affective/developmental translation units.
+- Candidate `core/cpp/tests/CMakeLists.txt` registers a LearningLoop architecture suite and memory/prediction/evolution suites, but no affective, developmental-world, developmental-learning, or goal-outcome suite corresponding to the absent donor cohort.
+- Candidate `Brain::learn_outcome`/LearningLoop path is a separate evolution-adoption route from the experiment controller path already audited in §28. It calls `LearningLoop::process`, which may call `EvolutionModel::adopt` directly after its scalar threshold checks. This is an additional autonomous model-mutation path requiring caller/authority and journal/replay tracing; it must not be overlooked when defining the controller-only invariant.
+- No tests or build were executed during this source audit. CMake registration is evidence of intended compilation/test inclusion, not proof that the build succeeds.
+
+### 31.6 Closure consequence
+
+The absent donor cohort cannot be closed as “superseded” by filename or by generic Brain functionality. The candidate has a functioning event-memory/prediction/cognitive-cycle path, but the inspected exact candidate source does not demonstrate equivalent affective appraisal, developmental world/strategy learning, goal-outcome accumulation or donor-grade causal-link serialization. The orphan `brain_restored_api.cpp` is not active build evidence.
+
+**Disposition:** This tranche provides bounded semantic dispositions for four absent-path cohorts and identifies a second direct evolution-adoption route. All corresponding ledger rows remain **OPEN** pending per-path mapping, consumer tracing, test/build evidence and historical authority. DF-02 remains **OPEN**; Gate A/B and Stage A remain held.
