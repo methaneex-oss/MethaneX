@@ -2569,3 +2569,43 @@ DF-10 remains REOPENED until the terminal inventory-only successor is written af
 DF-11 remains waived as a mandatory gate. The separate Independent Reviewer challenge remains requested and must be pinned only after the terminal SHA exists. DF-12 remains Project Director-only.
 
 No runtime C++, tests, CMake, workflow, donor adoption, source-baseline selection, training, integration, merge, rebase, retarget, branch rewrite or deployment occurred. Stage A remains NOT STARTED / HELD.
+
+
+## 52. Current candidate/donor comparison and post-governance base reconciliation — 2026-11-19
+
+**Exact PR #192 HEAD before this report update:** `81b62e436b37c611402bf50df27f1cb03bb6171f`.  
+**Exact donor PR #97 HEAD:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
+**Live base branch tip:** `ea64607ef94f142a6142a013e119a7225bc95c1c`; recorded merge base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.
+
+### 52.1 Reverified exact 159-path ledger at the current candidate HEAD
+
+Both exact recursive trees were re-fetched at this report's parent head and donor head; both are complete. The donor tree contains 287 entries; the candidate tree contains 280 entries and 51 tracked Markdown files. PR #97's 159 changed filenames were re-fetched and compared by exact path/blob identity:
+
+| Relationship | Count |
+|---|---:|
+| Identical donor blob in candidate | 1 |
+| Same path, divergent blob | 95 |
+| Same path absent from candidate | 63 |
+| Donor paths absent from donor tree | 0 |
+
+This reproduces the previous 1/95/63 result at the current candidate revision. All 159 donor paths exist at `c1da...`. The current PR #192 changed-path set remains 47 paths (45 Markdown, 2 JSON).
+
+### 52.2 Current base synchronization and mergeability
+
+The current base branch tip is 14 commits beyond the PR's recorded merge-base snapshot. Comparing the live base tip `ea646...` to current PR head `81b62e436b37c611402bf50df27f1cb03bb6171f` reports **779 ahead / 14 behind**, status `diverged`; live PR metadata reports `mergeable=true`.
+
+The only path changed on both sides since the recorded merge base is the Phase 2 capability-to-source integration map. The two exact source-line ranges identified in checkpoint §43.4 were corrected on the PR branch in commit `3d3e2ab799822fc4f42b453337b1b7058b06691f`, map blob `1ae6ca2dcde4c6f88040762a07ac11e7f01ea255`. The pinned target blobs have 77 and 84 lines respectively; the corrected map now cites `L18-L77` and `L1-L84`. GitHub now reports the PR mergeable, without a rebase or merge.
+
+The PR description remains stale and must be synchronized to the live PR head/base state. Do not replace the recorded merge-base SHA with the current base tip, and do not rebase/retarget/merge without the reserved authority.
+
+### 52.3 Artifact-count correction
+
+The raw PR #99 artifact `12696474493` and PR #100 artifact `12778958158` each contain 35 mechanism-gate data rows, all PASS. Each TSV has 36 physical lines including its header. Any earlier wording that calls these 36 mechanism-gate rows is corrected: the actual gate count is **35/35**. The DLT-002 accuracy and unresolved-prediction limitations remain as recorded in §§49 and 51 and supplement §11.
+
+### 52.4 Semantic disposition remains open
+
+The ten-tip exact-ref tree tranche in §49.3 is not a 210-tip source-content consumer scan. The branch census remains 251 refs / 210 unique tips, and the connected GitHub code-search action is default-branch-only. Exact-ref tree/file retrieval is available, but source-content consumer, reverse-dependency and duplicate-owner analysis across every enumerated tip is incomplete.
+
+All 159 donor paths remain OPEN for complete semantic successor/retirement/non-adoption disposition, reverse consumers/dependencies, duplicate capability ownership, and historical authority/decision provenance. PR #119/#121 and the DLT-002/JBP artifacts strengthen donor evidence but do not authorize adoption or establish current candidate capability.
+
+**Disposition:** DF-02 remains **OPEN**. No donor code was adopted, no runtime/test/CMake/workflow change was made, no current-PR build/CTest/training was executed, and no Project Director or Independent Reviewer decision is claimed.
