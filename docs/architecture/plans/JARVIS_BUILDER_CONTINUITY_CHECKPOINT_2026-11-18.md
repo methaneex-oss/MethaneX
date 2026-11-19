@@ -254,3 +254,39 @@ The next DF-02 work should continue on the 61-path residual stated by §26, firs
 7. Keep the existing PR #171 SYS-01–SYS-11 architecture foundation authoritative within its scope. Do not restart or redesign JARVIS.
 
 **Operating rule:** evidence before completion claims; root-cause correction before repeated attempts; one bounded objective at a time; preserve existing architecture and authority boundaries; report only major milestones. The user's authorization is to continue Builder-owned closure work in bulk, not to bypass gates or begin runtime implementation.
+
+
+## 18. Builder milestone checkpoint — evolution/reflection implementation audit (2026-11-19)
+
+**Exact PR #192 HEAD before this checkpoint write:** `63d0d4314f09f545bb9f58b7c136a7d4ddcf406f`.  
+**DF-02 report blob after the milestone:** `4c4c2f25e8a69a2b28a46a0ec79af52211038d49`.  
+**Donor PR #97:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+
+### 18.1 Work added
+
+DF-02 §27 now compares five implementation files plus one donor-only placeholder translation unit:
+
+- `evolution.cpp`: current rollback/recovery behavior loses the donor's `restore_previous()` capability and overwrites the previous value during rollback.
+- `evolution_adoption.cpp`: donor helper fails closed and requires controller-mediated adoption; current helper can call model adoption after a candidate-executed flag and safety-gate approval. The exact call graph and durable evaluation-history enforcement are priority checks.
+- `evolution_experiment_coordinator.cpp`: donor validates process start and, by default, isolation evidence; current coordinator does not check either, despite the shared sandbox result type exposing both. Donor's public config contains `require_isolation=true`; current config does not.
+- `evolution_history.cpp`: donor suppresses duplicate experiment/parameter/action records; current appends every retry. Replay/idempotency semantics require caller and event-identity analysis.
+- `reflection.cpp`: donor handles empty belief state as uncertain, clamps invalid confidence, accounts for disputed beliefs, and computes evidence-weighted coherence with affective calibration metrics. Current implementation lacks these checks/metrics and can overstate certainty when evidence is absent.
+- `affective_learning.cpp`: donor file is only a seven-line header-only compilation placeholder; current path absence is not a missing runtime capability.
+
+Supporting donor/current tests and public contracts were inspected. Donor test sources cover controller replay/compensation, idempotency, isolated-process attestation and previous-value restoration more broadly than the current same-path suites. **No tests were run.**
+
+### 18.2 Engineering priority
+
+The most consequential findings are experiment isolation/start validation and the possibility of adoption outside the donor's controller-only fail-closed route. These must be traced through actual consumers and controller/journal transaction semantics before any baseline or implementation decision. The history duplicate-suppression rule also needs a deliberate event-identity contract; blindly suppressing all repeats could erase legitimate repeated events.
+
+No runtime C++ or test file was changed. No donor code was adopted. No CI/workflow was dispatched. This is source-level comparison, not proof of runtime failure or a test verdict.
+
+### 18.3 Resume point
+
+1. Re-fetch live PR #192 HEAD before continuing.
+2. Trace all callers of `EvolutionAdoption::adopt`, `EvolutionExperimentCoordinator::run`, `EvolutionHistory::append`, and `EvolutionModel::rollback/restore_previous` across current branch and relevant donor/controller lineages.
+3. Compare the full controller, safety gate, adoption journal and experiment runner implementations at exact SHAs. Establish whether current controller calls the stateless helper or duplicates its logic, and whether it checks durable matching evaluation records.
+4. Audit the remaining implementation paths in small batches, then remaining tests/build and engineering-coordination paths. Keep the DF-02 count/status conservative; §27 does not close DF-02.
+5. Preserve DF-06, DF-09, DF-10, DF-11, DF-12 and Stage A boundaries recorded in §17.4. Any additional PR #192 file write reopens the terminal inventory cycle; the inventory must be the final branch-file write after all other evidence work.
+
+The checkpoint commit itself changes only this existing continuity file and does not add a new PR changed path.
