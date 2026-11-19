@@ -1169,3 +1169,198 @@ Before DF-02 can close, create a canonical 159-row ledger (one row per exact don
 For the remaining reverse-consumer obligation, record the exact branch/PR/ref search coverage and distinguish complete search from default-branch-only code search. GitHub code search is default-branch scoped and therefore cannot, by itself, establish all-branch consumer closure. The connector currently used in this audit exposes branch enumeration and file retrieval but no recursive-tree or all-ref code-search operation; if no exact-ref consumer search mechanism is available, that portion must be explicitly blocked rather than inferred closed.
 
 **Corrected disposition:** DF-02 remains **OPEN**. The historical 98/159 count is superseded as a current progress metric; no replacement semantic-coverage percentage is asserted. This correction narrows the audit's claims and prevents an unsupported closure declaration. Gate A/B and Stage A remain held.
+
+ 
+## 30. Canonical PR #97 donor-path ledger — exact source and candidate blob reconciliation (2026-11-19)
+
+**Donor:** PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
+**Candidate:** PR #192 HEAD `5017fed62e1dbef28041c32deeb61ee6f0aeb0e6`.  
+**Source method:** GitHub PR #97 changed-files endpoint, both pages (`per_page=100`), plus complete recursive Git trees at both exact commits (`truncated=false`). This ledger binds each of the 159 donor-changed paths to its donor blob and its exact candidate-tree blob or explicit absence.
+
+### 30.1 Reconciliation totals
+
+- Donor changed paths: **159/159**.
+- Donor recursive tree: **complete**, 287 entries.
+- Candidate recursive tree: **complete**, 280 entries.
+- Candidate exact-path status: **95 different blobs**, **63 absent paths**, **1 identical blobs**.
+- These are tree/blob facts only. A different blob does not imply semantic loss or improvement; an absent path does not imply missing capability if a verified successor exists elsewhere. Conversely, path mentions in this report do not constitute semantic closure.
+
+### 30.2 Per-path canonical ledger
+
+| # | Exact donor path | Donor blob | Candidate blob / absence | Tree relation | Semantic disposition |
+|---:|---|---|---|---|---|
+| 1 | `.github/workflows/brain-ci.yml` | `74182cd073ef4b1eec77f78800f96c337545007e` | `0d5d0c9b9528a418e3c1358420ee2ea708c4dd8c` | different | **OPEN** |
+| 2 | `.github/workflows/dlt-001-long-run.yml` | `1706d3b41552f43f0e3b172b61da092f8fc053d7` | **ABSENT** | absent | **OPEN** |
+| 3 | `.github/workflows/dlt-002-four-hour.yml` | `52d08751d29c1b7c7b60e07834ac1bfdc4eba626` | `52d08751d29c1b7c7b60e07834ac1bfdc4eba626` | identical | **OPEN** |
+| 4 | `.github/workflows/dlt-002-overnight-validation.yml` | `7ac465a333a2191cdc76e488bcafac4a8fe08802` | **ABSENT** | absent | **OPEN** |
+| 5 | `.github/workflows/jarvis-brain-probe-001.yml` | `812a0fdbb706ca4e12a9b31efc4f1e2af0a6e483` | **ABSENT** | absent | **OPEN** |
+| 6 | `.github/workflows/jarvis-core.yml` | `60e6ec17ad6078bc8ad767c8375540629de0f143` | **ABSENT** | absent | **OPEN** |
+| 7 | `.github/workflows/jarvis-learning-seed-sweep.yml` | `f40a859a9b6b4f8138cd14df9fa09ad362f3515c` | **ABSENT** | absent | **OPEN** |
+| 8 | `.github/workflows/jbp-mem-001.yml` | `82cec28819357a26881584b4ceb951c258ea24ac` | `9e1efd73a9a91a70c1d9ceda0d6b458f9bdd7f7f` | different | **OPEN** |
+| 9 | `core/cpp/CMakeLists.txt` | `bc264ce7b4ae489404ca03ea6d9676d0330a6a56` | `c51816888e1bddb7bc00c59e72529524e27a0717` | different | **OPEN** |
+| 10 | `core/cpp/examples/CMakeLists.txt` | `31b61c8566062fe5d7c06c3e4dcf8a5f18e0c1eb` | **ABSENT** | absent | **OPEN** |
+| 11 | `core/cpp/examples/README.md` | `ab5537cfc152a3fb467d256ff9ef749c4a22987b` | **ABSENT** | absent | **OPEN** |
+| 12 | `core/cpp/examples/developmental_world.cpp` | `d865c8d66c4529be78c3d7c2cd1a0ed4eb10d3e6` | **ABSENT** | absent | **OPEN** |
+| 13 | `core/cpp/include/jarvis/core/action_execution.hpp` | `04c73d02bdd4e1154be142dfeb024fc07ad432f8` | `38ff7033e7621db8f05cc1edc4bf59cb899ccdd3` | different | **OPEN** |
+| 14 | `core/cpp/include/jarvis/core/action_model.hpp` | `a4e67038e57eb7637e53a532b8da62f2d0f68727` | `6a3b1720d5b58630faf320ba1e3c082cb417b7a9` | different | **OPEN** |
+| 15 | `core/cpp/include/jarvis/core/adaptation.hpp` | `dec808ad879c9d1e7afc3adb3ae777ee611fadb7` | `9a2bb897a120f7585286481a6138dc9cb767ac30` | different | **OPEN** |
+| 16 | `core/cpp/include/jarvis/core/affective_learning.hpp` | `fa06043dc481336ba544247f365d37f5476a0651` | **ABSENT** | absent | **OPEN** |
+| 17 | `core/cpp/include/jarvis/core/affective_state.hpp` | `f63da2e0060938864bf434012d0b3b4d74fa5f29` | **ABSENT** | absent | **OPEN** |
+| 18 | `core/cpp/include/jarvis/core/association_model.hpp` | `9890f4e0178200acada0f43a5626be6f6daa6cce` | `faa835175cfd6c2fdc1d4561269edb8ab406c689` | different | **OPEN** |
+| 19 | `core/cpp/include/jarvis/core/attention.hpp` | `bc3f97b79664e433fed5bca07b24a6b94dbec1d3` | `c7e8ab0c5430d5c942fe314d928400f769c0a77c` | different | **OPEN** |
+| 20 | `core/cpp/include/jarvis/core/brain.hpp` | `671186f4c39879a182f9e511394fc564d86f2988` | `8268ef84e0b361ead536724ba7761904b30ee58f` | different | **OPEN** |
+| 21 | `core/cpp/include/jarvis/core/causal_link_codec.hpp` | `a6286281e4b22564a39e02a7e38a778bb81042f0` | **ABSENT** | absent | **OPEN** |
+| 22 | `core/cpp/include/jarvis/core/causal_model.hpp` | `a6bf02cf75c6f55fa47120c772aad9c77fa40cf1` | `f740bdf222b3309b13f0c2f541c97448fc05da3e` | different | **OPEN** |
+| 23 | `core/cpp/include/jarvis/core/cognition.hpp` | `92febfa5d5feab45de1a3a19fe37282852898e6c` | `e9aec6461351db42c77ff8414a175ce4c5eea33e` | different | **OPEN** |
+| 24 | `core/cpp/include/jarvis/core/cognitive_cycle.hpp` | `eed8bc75f59557c255e796343d77498d90b31ea5` | `28e7af98327956268a769adf7813125be842c1a2` | different | **OPEN** |
+| 25 | `core/cpp/include/jarvis/core/cognitive_goal_outcome.hpp` | `c986480d82b9951177031f3387169819c3856234` | **ABSENT** | absent | **OPEN** |
+| 26 | `core/cpp/include/jarvis/core/cognitive_runtime.hpp` | `e5a3c853add8b5fcb9b8c04c9b25f20179b5b629` | `d02b2607cebcb7c31963e2fe336970707a481e00` | different | **OPEN** |
+| 27 | `core/cpp/include/jarvis/core/cognitive_workspace.hpp` | `e002025dd69183311b41afa9d57c2b0780b7f7f8` | `b015d44e332ea2511d29e607495714d0b982d44e` | different | **OPEN** |
+| 28 | `core/cpp/include/jarvis/core/decision.hpp` | `88ee24e6dc93826759de46b38d15a08a685a3aac` | `7dd9d6b7337311868d236dc0ced81f558200ab1a` | different | **OPEN** |
+| 29 | `core/cpp/include/jarvis/core/developmental_environment.hpp` | `913c8cca2a03499249b834a890812c57b9aa4b1a` | **ABSENT** | absent | **OPEN** |
+| 30 | `core/cpp/include/jarvis/core/developmental_learning.hpp` | `e3b9bf8af265b67829fd7deb323d88a3a9dd4b75` | **ABSENT** | absent | **OPEN** |
+| 31 | `core/cpp/include/jarvis/core/developmental_world.hpp` | `2ba5bdbfc6db1f24eff8eb0a20ee145d0efc16cf` | **ABSENT** | absent | **OPEN** |
+| 32 | `core/cpp/include/jarvis/core/evolution.hpp` | `907cdf538671ad600c498b60b74a2281853b9076` | `736876b339846e0ad4da62854a206712e79a201b` | different | **OPEN** |
+| 33 | `core/cpp/include/jarvis/core/evolution_adoption_journal.hpp` | `289e4dd74ad6646d0fd9c2b77645722c2aa3f3fe` | `f902abfc65d705e15b6b9c8690f8e023f55afacc` | different | **OPEN** |
+| 34 | `core/cpp/include/jarvis/core/evolution_canary.hpp` | `9a2e2966a242df345ebb778e78b69b7db90dc502` | `46ca0938caf1b27b1ea804f1b5ea795683ab0ef0` | different | **OPEN** |
+| 35 | `core/cpp/include/jarvis/core/evolution_controller.hpp` | `c1af30f84f03d87d151fe3c5fbfd89ef39fbe34e` | `e06441d23685093a3c533498a09adf3a8baf5914` | different | **OPEN** |
+| 36 | `core/cpp/include/jarvis/core/evolution_experiment.hpp` | `551d0d41b19abbeca425d102ec4c61984dfac0b6` | `53bcd379fb788a3b0c369309c328f70d56f051ba` | different | **OPEN** |
+| 37 | `core/cpp/include/jarvis/core/evolution_experiment_coordinator.hpp` | `b7bf85429096b4d3b50c417b929564c2b15ed826` | `2fde3fdf0b3e6772f11358385e069f9b94af34d0` | different | **OPEN** |
+| 38 | `core/cpp/include/jarvis/core/evolution_experiment_runner.hpp` | `eb7f5c23a47054d1e60aa65f28627199f511645d` | `38668879bec3e1cd5d8bcdf884edad819b1573d6` | different | **OPEN** |
+| 39 | `core/cpp/include/jarvis/core/evolution_orchestrator.hpp` | `05e5ca1578dc5b1635619aa61dc2da0459ef7708` | `75105e51509156f1fad361ec47e0ae365a1a0291` | different | **OPEN** |
+| 40 | `core/cpp/include/jarvis/core/experience_memory.hpp` | `28cce354eb9db7e8ca292746fd14649debb7ab04` | **ABSENT** | absent | **OPEN** |
+| 41 | `core/cpp/include/jarvis/core/goals.hpp` | `66f8cd436a18a0bca8039205f682fc929c32b6a5` | `803fdd34130c71f54912b23fcba2f9eed23dd4f2` | different | **OPEN** |
+| 42 | `core/cpp/include/jarvis/core/intent.hpp` | `d9d926db40a3361f8354a42051106ab2b00b3c77` | `1749ae0d795da496dd6a9a4dcdbd203ae7ddaf6f` | different | **OPEN** |
+| 43 | `core/cpp/include/jarvis/core/knowledge.hpp` | `3da0d2059331af405bbb0ba98c61308ead99c405` | `50eb1113a4569c3de05489c421d1cabb1437733d` | different | **OPEN** |
+| 44 | `core/cpp/include/jarvis/core/memory.hpp` | `5401d5bd236cca8d3a93f2815164a7734cf6990f` | `f3662038237246efa51155f940d77564f144d6d9` | different | **OPEN** |
+| 45 | `core/cpp/include/jarvis/core/planning.hpp` | `2bc6fc8a6bc4649da475f71f112a9fa3fd2b3610` | `303731d3ac52362ec86afdb482a5567c3b38a8ff` | different | **OPEN** |
+| 46 | `core/cpp/include/jarvis/core/reflection.hpp` | `5d9e11d7529f35445adbd23209914f6363548186` | `435e03f8f03f74cb910338ab4ab1264e4eaf085c` | different | **OPEN** |
+| 47 | `core/cpp/include/jarvis/core/self_model.hpp` | `caffaa55562201db6f46ca07bb72189b11695b0b` | `afd8a340f3e172b09c3859eb2602e383316ec4f8` | different | **OPEN** |
+| 48 | `core/cpp/src/action_execution.cpp` | `af5bed6cec9ed1309b24ed3d50241fb4c0d33bff` | `c2f8653eb755fa2790a88e49bc8b0b9c3077e439` | different | **OPEN** |
+| 49 | `core/cpp/src/adaptation.cpp` | `51b91a52c20f71a1be462f660c45bee9199259c3` | `7e07a491a5b13379a5719882a834ecc2452a54ef` | different | **OPEN** |
+| 50 | `core/cpp/src/affective_learning.cpp` | `dd1735a10871512691d4b518d1ce45246c80f708` | **ABSENT** | absent | **OPEN** |
+| 51 | `core/cpp/src/affective_state.cpp` | `563a61cd8f6440f78a084f76a799b2c84bdd6813` | **ABSENT** | absent | **OPEN** |
+| 52 | `core/cpp/src/association_model.cpp` | `80bc2e94d8cab4e5a48ead18ba9efcad4ed785b6` | `b378d4237527dfbb4c65f43545f7f0fc7c42669b` | different | **OPEN** |
+| 53 | `core/cpp/src/attention.cpp` | `67def4987f4a49a852bd2e4c9760f05c2ee15216` | `58f734dbe9772675d687752026231297f289e770` | different | **OPEN** |
+| 54 | `core/cpp/src/brain.cpp` | `dec9e5442b3ca4b81a7879855c6146b2619934cc` | `e9f3758fcc9c0e89b7280ce376db9033d547682d` | different | **OPEN** |
+| 55 | `core/cpp/src/brain_action_execution.cpp` | `3b66bafb438cd28790e6f25611b96c86f1eff05c` | **ABSENT** | absent | **OPEN** |
+| 56 | `core/cpp/src/brain_affective_planning.cpp` | `2a9406257c23f3a66a64071842be7d6448799406` | **ABSENT** | absent | **OPEN** |
+| 57 | `core/cpp/src/brain_prediction_context.cpp` | `b3ceff150f3fe8223dc3f76f4c298ac264d72dae` | **ABSENT** | absent | **OPEN** |
+| 58 | `core/cpp/src/brain_restored_api.cpp` | `7155d4d9c8eef527836fb79bf901aa32ddbae38b` | `618deb6976eed951eae02b7f0da741e6d730bb0c` | different | **OPEN** |
+| 59 | `core/cpp/src/causal_model.cpp` | `b7e1e6e6aeb929f09af33b9d17c80a6eed34948c` | `f873d0a6e7fa0676bb88bf7a1f66436bc88a3c0d` | different | **OPEN** |
+| 60 | `core/cpp/src/cognitive_cycle.cpp` | `f191dd610d6cbe1621756c35e7c13af2054a7266` | `3df14c552f2048b0394dc362f7ee7a654a93fb32` | different | **OPEN** |
+| 61 | `core/cpp/src/cognitive_runtime.cpp` | `cf00acb6abd52308343f3a0e7016e6173b945603` | `1a1383cedc42e357dc9efce117328b8d55e30bca` | different | **OPEN** |
+| 62 | `core/cpp/src/decision.cpp` | `012025bc2ef66b1b9555b9b9f2b220b49c8d36c4` | `6a49e0f1f80c3c6b0955ddf98182fc6611c0e84c` | different | **OPEN** |
+| 63 | `core/cpp/src/developmental_learning.cpp` | `dbf5f43271dfa0a3c57236e2faa82eb88d15490d` | **ABSENT** | absent | **OPEN** |
+| 64 | `core/cpp/src/evolution.cpp` | `7a3bc311034c48181cc9b9d4df81c308ebaa8f3d` | `3860a5a59495460c44e49b8539adff637d7ae65d` | different | **OPEN** |
+| 65 | `core/cpp/src/evolution_adoption.cpp` | `836216bb567e2c87d14b6442bd363e9861ac6974` | `b62153de36395b3ef46e25a1af0520e15af85e3f` | different | **OPEN** |
+| 66 | `core/cpp/src/evolution_adoption_journal.cpp` | `d8df30a2902d3dac734fb1a571cbbecdd881b76f` | `a9e141ac0b784466e86575eefdb3260b2e15dfc0` | different | **OPEN** |
+| 67 | `core/cpp/src/evolution_canary.cpp` | `8773507b4bc5842c60b78bcb384f09ea4c4caa2b` | `b40c2eec58db1a3f7d3007781f0a5e6abe8c70a9` | different | **OPEN** |
+| 68 | `core/cpp/src/evolution_controller.cpp` | `4e77ec2e5daa09a964132ca486b8c5ee1cebf2f5` | `01484ebf12fc3902bce749030a1f54610b26236a` | different | **OPEN** |
+| 69 | `core/cpp/src/evolution_experiment_coordinator.cpp` | `93d2e01c785ed4867efec07673cd802afbe27427` | `c689d16b31c039a7be9ab5c9bde0de49e677b32d` | different | **OPEN** |
+| 70 | `core/cpp/src/evolution_experiment_runner.cpp` | `0545662ea0ef865feb0527207fc4c32ecb50566e` | `83d3c26e589cd16151818774a81ccb62f9d514fc` | different | **OPEN** |
+| 71 | `core/cpp/src/evolution_history.cpp` | `e394042ba7fc6db85e4663722f735918aa1ce7fb` | `4c023ab4a726efb07f563c2b5425b824e19aeee9` | different | **OPEN** |
+| 72 | `core/cpp/src/evolution_orchestrator.cpp` | `c913ff0f42fc4647605376579b3f343b5c12c387` | `efd55281ba7d2edf95c6a9f6537ed2944022617e` | different | **OPEN** |
+| 73 | `core/cpp/src/evolution_safety.cpp` | `5a4669de9296958eacc77534bad87ce7c30ae52d` | `6c930ebbe69ad92fe155e3c169e3e996442f22cf` | different | **OPEN** |
+| 74 | `core/cpp/src/evolution_sandbox.cpp` | `364641cf3616db100dd54853d12293341d609116` | `837ab2adb087284fb370b623371693660b47624a` | different | **OPEN** |
+| 75 | `core/cpp/src/goals.cpp` | `afaedcfb0f2f68ff88b3a20e474fce04bb59815c` | `778a829de8314e83b095af2f2c2a6b83baa769f4` | different | **OPEN** |
+| 76 | `core/cpp/src/intent.cpp` | `9707d5b6da4ddede4dfc99d52f30e7cdc7eed032` | `4283a4255284c51257df6bad12734782f2a6cde9` | different | **OPEN** |
+| 77 | `core/cpp/src/knowledge.cpp` | `21de8abbcd4426cb4ead70cb089e7d7c4ed0e81a` | `25ecf822e6132f576266c1f86a964a227c7fb75f` | different | **OPEN** |
+| 78 | `core/cpp/src/memory.cpp` | `ab42bba1d32d6f48d091787491c72294a4a55bb5` | `ba72a897306d4761246d0deab2fbab37c49d372f` | different | **OPEN** |
+| 79 | `core/cpp/src/planning.cpp` | `9fcc2317e5acf0bfc24865a89eb9a54b80f8a80a` | `aab022b7cbc06f380413395757d590b56a1f3a20` | different | **OPEN** |
+| 80 | `core/cpp/src/process_isolation.cpp` | `8bb621fc986b4957f079bfdf99f4a1038949bc72` | `eac7a12fafe36b6c5f463ad0a41caa3bb835a61c` | different | **OPEN** |
+| 81 | `core/cpp/src/reasoning.cpp` | `18bf2facc9f95c6bd2e8d9a559a0e5b1c5ae06e1` | `feec78b2e8a1f2b0b58733fd509e4e5a750258fc` | different | **OPEN** |
+| 82 | `core/cpp/src/reflection.cpp` | `fe7dd1fada300300673b90caffa128384c65bde1` | `06f34e20f35aad535a2c606b3669b2127ef7a480` | different | **OPEN** |
+| 83 | `core/cpp/src/representation.cpp` | `054bd9ecee3ef3da83dd405dc5785464d874fa21` | `0e53bfaa0c1114cb7390d9f7ce577c87d6bc6169` | different | **OPEN** |
+| 84 | `core/cpp/src/self_model.cpp` | `c1beeec968fa62fce8fb037f8b95a869031331ce` | `3c6a375eadd6894a635d2e18023a7079cba97c86` | different | **OPEN** |
+| 85 | `core/cpp/tests/CMakeLists.txt` | `cbfd1fde52fffa6eeac025da2b7ddcb5ab493261` | `dab0c52ab4dfe15e1e2cbccfa9e6c904abdf54e3` | different | **OPEN** |
+| 86 | `core/cpp/tests/action_authorization_suite.cpp` | `66127a2b574d5c44571332733edb800fb558bcaf` | `cf0cd95ec6fd83da756c305c54439a018cad796b` | different | **OPEN** |
+| 87 | `core/cpp/tests/action_execution_phase7_suite.cpp` | `db11ac95d26a97b01dfeb67cfb85194dc284ffb8` | `b4a0060596c91c67080ac0a2db324f720d760fbe` | different | **OPEN** |
+| 88 | `core/cpp/tests/action_model_architecture_suite.cpp` | `e2e0ecf121ab866f5793bb63c2f605ec5f68dafa` | `24f419a4ff469995bbc5961974c7ee3b869c9911` | different | **OPEN** |
+| 89 | `core/cpp/tests/affective_brain_decision_suite.cpp` | `9ff9c0480fa34fa4f5600e514af419b2bbc79765` | **ABSENT** | absent | **OPEN** |
+| 90 | `core/cpp/tests/affective_decision_learning_suite.cpp` | `920ddcbc8a422783bb8724093afd952cc885e6b6` | **ABSENT** | absent | **OPEN** |
+| 91 | `core/cpp/tests/affective_decision_suite.cpp` | `982b11e117b8f59cce3719a5253cb52e96304c0d` | **ABSENT** | absent | **OPEN** |
+| 92 | `core/cpp/tests/affective_evidence_suite.cpp` | `c8a401cab1a29d57506f990043a1f82536fd9029` | **ABSENT** | absent | **OPEN** |
+| 93 | `core/cpp/tests/affective_goal_outcome_suite.cpp` | `06d72304fa0c4ea67eb4a27b91c484007f231199` | **ABSENT** | absent | **OPEN** |
+| 94 | `core/cpp/tests/affective_learning_suite.cpp` | `bfbbca315c60c9b1c941dbc553a0cabba304581c` | **ABSENT** | absent | **OPEN** |
+| 95 | `core/cpp/tests/affective_planning.cmake` | `e3a52416b2538791a93666e5124b1f34ad1b082a` | **ABSENT** | absent | **OPEN** |
+| 96 | `core/cpp/tests/affective_planning_suite.cpp` | `32e5f04cfb6e4764cb205744266375367228bedf` | **ABSENT** | absent | **OPEN** |
+| 97 | `core/cpp/tests/affective_state_model_suite.cpp` | `29f15bdd1a5d55afd5170a9d21bc3572befc97f0` | **ABSENT** | absent | **OPEN** |
+| 98 | `core/cpp/tests/affective_state_suite.cpp` | `3956eec2ed9885e80ada1d038de6c581338b8f8c` | **ABSENT** | absent | **OPEN** |
+| 99 | `core/cpp/tests/association_causality_phase5_suite.cpp` | `0d31349857e85a019467e9864bbe6625a6ecdef7` | `d520025258805b02c1b3fbb2dbebe32e01562fbf` | different | **OPEN** |
+| 100 | `core/cpp/tests/attention_architecture_suite.cpp` | `4b6f4ad50b9706e372c51e21803e57438d99d155` | `3a5609ed29e117c2241ce3f23543c8042f5815b2` | different | **OPEN** |
+| 101 | `core/cpp/tests/attention_learning_brain_suite.cpp` | `1fa972d9ecffdae8dce49b17356f6f4dc274d1a3` | **ABSENT** | absent | **OPEN** |
+| 102 | `core/cpp/tests/brain_10_suite.cpp` | `1da00539509824ba282d05501307febd27e21219` | `be220d6bdaf1af2a584f6c628fd03b9aea12811c` | different | **OPEN** |
+| 103 | `core/cpp/tests/brain_action_consequence_integration_suite.cpp` | `7616082579d53e3579cae8e87895bdb3dadba66f` | **ABSENT** | absent | **OPEN** |
+| 104 | `core/cpp/tests/brain_contract.cpp` | `3536648d901b004a644db79e9d50ff9a765182ed` | `54340d74eca3d8613db1763f8e01e3bc6fc221ba` | different | **OPEN** |
+| 105 | `core/cpp/tests/brain_deep_suite.cpp` | `1314123ea3b524b24fd6693fc6fb4873b6c550d5` | `ca8e7012c92822608c3be0539784d281b0578bfd` | different | **OPEN** |
+| 106 | `core/cpp/tests/cognitive_cycle_suite.cpp` | `3e762cdec8b27030cf94478a1a68a4605a38c8c5` | `38ff2c7d6e851b4745e9dc7c01f968b7245400a2` | different | **OPEN** |
+| 107 | `core/cpp/tests/cognitive_runtime_goal_feedback_suite.cpp` | `15a6bdffe37ae7df6c625ea9737fda4c0bf08a7f` | **ABSENT** | absent | **OPEN** |
+| 108 | `core/cpp/tests/cognitive_runtime_learning_integration_suite.cpp` | `656de56b1368e40afb090778a7a5504ab4208056` | **ABSENT** | absent | **OPEN** |
+| 109 | `core/cpp/tests/cognitive_runtime_suite.cpp` | `361cba84a6fc6e07e31d14b5fa618c3f0a7848fa` | `48cac9cb0e27e2dc8a15323429d1f7158ee427a0` | different | **OPEN** |
+| 110 | `core/cpp/tests/cognitive_workspace_runtime_suite.cpp` | `b29e75aa8b0e289c01f2e9188d26c639cfa1f22d` | `ae938f5df02d8f907a548c446c01e17fbd2f1470` | different | **OPEN** |
+| 111 | `core/cpp/tests/decision_planning_architecture_suite.cpp` | `3ed85a1acc55f47eb266599d809525ef08ba0b11` | `16934f99898c3ffffcf5ac04a7a031e0845da050` | different | **OPEN** |
+| 112 | `core/cpp/tests/developmental_brain_integration_suite.cpp` | `760162dd6d1e669162e0bf22223a437491f5e262` | **ABSENT** | absent | **OPEN** |
+| 113 | `core/cpp/tests/developmental_environment_suite.cpp` | `a3fa73f78b56a3ea04cdfb6b1bf16739f0894d5d` | **ABSENT** | absent | **OPEN** |
+| 114 | `core/cpp/tests/developmental_learning_suite.cpp` | `8e94932b40c109f1c73470418d85ca2020a2e198` | **ABSENT** | absent | **OPEN** |
+| 115 | `core/cpp/tests/developmental_learning_tests.cpp` | `553b3253462344a00d9fbcff1ff682a2788262d2` | **ABSENT** | absent | **OPEN** |
+| 116 | `core/cpp/tests/developmental_training_environment_suite.cpp` | `62a0ee4f8ec966e48a45848217ba7a6d6e96196f` | **ABSENT** | absent | **OPEN** |
+| 117 | `core/cpp/tests/developmental_world_integration_suite.cpp` | `4290fcfde741f1be9a4a69adc70699ade6fe7922` | **ABSENT** | absent | **OPEN** |
+| 118 | `core/cpp/tests/developmental_world_suite.cpp` | `bd8f6767cdcf6513674730f24c184bac6600e116` | **ABSENT** | absent | **OPEN** |
+| 119 | `core/cpp/tests/dlt_001_long_run.cpp` | `896caa7e4d14ce6e4f12e453181a14bbb74c62fd` | **ABSENT** | absent | **OPEN** |
+| 120 | `core/cpp/tests/dlt_001_trial.cpp` | `deca50aec499a04d46cbc7aed429e335fff18f72` | **ABSENT** | absent | **OPEN** |
+| 121 | `core/cpp/tests/dlt_002_long_run.cpp` | `cbd80951c2f331fa4893c1805fff45a4035d5d24` | **ABSENT** | absent | **OPEN** |
+| 122 | `core/cpp/tests/dlt_002_persistence.cpp` | `d818a75cff936bffc8a383e032302f51ac8a1034` | **ABSENT** | absent | **OPEN** |
+| 123 | `core/cpp/tests/evolution_adoption_journal_suite.cpp` | `fc8ae17bb837831fef7bf69873ec0e5243e2bc22` | `24a1be9541cc038518065724aef1968efc4dc595` | different | **OPEN** |
+| 124 | `core/cpp/tests/evolution_brain_integration_suite.cpp` | `59d7dd68c42eea18d488d8e5e6aa9f7a9a327ded` | `3164cbc19bfb056cdccfdd58f0be047226d41a86` | different | **OPEN** |
+| 125 | `core/cpp/tests/evolution_canary_controller_suite.cpp` | `80cac5df347987a9074e1ced43202f8759f797d7` | `6acd8aedb7520aebe745b15a2a10c527262f28e0` | different | **OPEN** |
+| 126 | `core/cpp/tests/evolution_experiment_coordinator_suite.cpp` | `5b410197e3c5e48acb381e274ae22e8ba037aa84` | `83d884dd97cbcf2d002249a70e44bb29e6ac0560` | different | **OPEN** |
+| 127 | `core/cpp/tests/evolution_experiment_runner_suite.cpp` | `307fe75b42f804d9bb2b0e8199df1e9cf773e3c6` | `08888276d875ce5e55f421e828f1bb4f061d1ea5` | different | **OPEN** |
+| 128 | `core/cpp/tests/evolution_opportunity_orchestration_suite.cpp` | `24d6dd905cb537cc6c14e329db6a7d52d49c97b8` | `4ef1dc80a85a8e9247c5816bdb73c6876d3a1b22` | different | **OPEN** |
+| 129 | `core/cpp/tests/experience_memory_test.cpp` | `fe69fed346c9f843101fc3379d6d474f4a082651` | **ABSENT** | absent | **OPEN** |
+| 130 | `core/cpp/tests/goal_directed_cognition_suite.cpp` | `7fe6cf6c4dd2dc2a54bb9f48fcdd3c3d91d7c282` | **ABSENT** | absent | **OPEN** |
+| 131 | `core/cpp/tests/goal_outcome_model_suite.cpp` | `c9f19978d6d2df45028cb824e835144dc45c70e7` | **ABSENT** | absent | **OPEN** |
+| 132 | `core/cpp/tests/goals_architecture_suite.cpp` | `0b99d090b400d0af50b186cd3a416fa28a177b99` | `14a52aa606b53f8529aa5c54861c11902deb7c97` | different | **OPEN** |
+| 133 | `core/cpp/tests/knowledge_memory_phase3_suite.cpp` | `e33b9813edbfaf02a91a3f94988f5c7a54ceed8f` | `f796977fd116418b3cf0a5f9c8d33ed7a48f811e` | different | **OPEN** |
+| 134 | `core/cpp/tests/learning_adaptation_phase8_suite.cpp` | `59859480a6d09aaab70eaf09ffc94c731484d2ff` | `79cb7b8146686b35273628de213d33edd4328cff` | different | **OPEN** |
+| 135 | `core/cpp/tests/memory_architecture_suite.cpp` | `ecabc6af76c52ed1e4175b151e76fadecae7729d` | `2a9eb061427c622260304d09f45089e1debef294` | different | **OPEN** |
+| 136 | `core/cpp/tests/memory_learning_evolution_persistence_suite.cpp` | `98e6598f60912714234f2dfabfbe52fa5eb77044` | **ABSENT** | absent | **OPEN** |
+| 137 | `core/cpp/tests/prediction_feedback_phase10_suite.cpp` | `973350623e52bd9609ebaf1e01082ee52aeb480b` | `e72da8e7653aee775cfade9060064231c7a01630` | different | **OPEN** |
+| 138 | `core/cpp/tests/process_isolation_suite.cpp` | `6539da294b55e537ed28c08f3f72aff5f6b869e2` | `78b764368de4d427c3196b26b57255edc422bf50` | different | **OPEN** |
+| 139 | `core/cpp/tests/reasoning_architecture_suite.cpp` | `ceb6d471b3283f4a89fe243ac3c9e79f52f137a2` | `a7119afd091e045d6294aa1b15c20de349ed6a1c` | different | **OPEN** |
+| 140 | `core/cpp/tests/representation_suite.cpp` | `07c515018eca0f34f496e85608f504620fd07306` | `1ee7663934f067de4fdd31832719b06274ae6171` | different | **OPEN** |
+| 141 | `docs/developmental-training-environment.md` | `d4831d44cb6e3ee327428d3bbd43094e46954b7f` | **ABSENT** | absent | **OPEN** |
+| 142 | `docs/superpowers/plans/2026-09-25-cognitive-action-feedback-loop.md` | `a2f4bfc8dfba5a7bf8973f94c68c1978ac66969b` | **ABSENT** | absent | **OPEN** |
+| 143 | `docs/superpowers/plans/2026-09-26-concept-context-prediction.md` | `7f06d469820cf2fb973485bbf76237c602b59c60` | **ABSENT** | absent | **OPEN** |
+| 144 | `docs/superpowers/plans/2026-09-30-developmental-cognition.md` | `17abc6fb32a79571ada116d44ed4aa63b4092ee7` | **ABSENT** | absent | **OPEN** |
+| 145 | `docs/superpowers/plans/2026-10-01-affective-state.md` | `339fe43d9332bab8ff2d21165b6be5cf7c9a6f81` | **ABSENT** | absent | **OPEN** |
+| 146 | `docs/superpowers/specs/2026-09-25-cognitive-action-feedback-loop-design.md` | `6b601d18898422143978bfdea3a971cfdc794cfd` | **ABSENT** | absent | **OPEN** |
+| 147 | `docs/superpowers/specs/2026-09-26-concept-context-prediction-design.md` | `264d0a10e3f3d5d31be485c4ddc35633eea2c974` | **ABSENT** | absent | **OPEN** |
+| 148 | `docs/superpowers/specs/2026-09-30-developmental-cognition.md` | `562c2505f0cae58601067095222b2ee3d77001a6` | **ABSENT** | absent | **OPEN** |
+| 149 | `docs/superpowers/specs/2026-10-01-affective-state.md` | `89f0d76f48284a817789bff50affe277136fb6f7` | **ABSENT** | absent | **OPEN** |
+| 150 | `engineering/cpp/CMakeLists.txt` | `44ad82199248b9a6a53d996d046e2e3eb8265f1c` | `7e2621c8678ad784d6e8c9e777b22b7c5310b855` | different | **OPEN** |
+| 151 | `engineering/cpp/include/jarvis/engineering/agent.hpp` | `6acadd5558b7385c5993323ad963ed80b08b6652` | `b71c525a97790f460535713d85a705db086c55ac` | different | **OPEN** |
+| 152 | `engineering/cpp/include/jarvis/engineering/coordinator.hpp` | `fc2cced25d47b23893571a100ee7f36a05d37a9b` | `d395db8ce7ae24e40d56aa923758a2251f9188e4` | different | **OPEN** |
+| 153 | `engineering/cpp/include/jarvis/engineering/message_bus.hpp` | `a8a334881dc087e83640c984bf02e1704802754a` | `2658f6c12d60f3df611f5cc0a01569b51b59bcb7` | different | **OPEN** |
+| 154 | `engineering/cpp/include/jarvis/engineering/task_ledger.hpp` | `95d3f2e42be742f9e75aed8e55ea389723534a64` | **ABSENT** | absent | **OPEN** |
+| 155 | `engineering/cpp/src/coordinator.cpp` | `e175dd61aaa3d8302aba6381401305db9f034062` | `44f42429e9730683bd8b529b37ea4e53c4b09c74` | different | **OPEN** |
+| 156 | `engineering/cpp/src/message_bus.cpp` | `94700db67f43c8bdb0bcc774f1fb0464f5bff81c` | `9811d41fc237e33c80086e33049f9ae482c58c77` | different | **OPEN** |
+| 157 | `engineering/cpp/src/task_ledger.cpp` | `7acff8990319392c9984035a4a14cc83f7154072` | **ABSENT** | absent | **OPEN** |
+| 158 | `engineering/cpp/tests/agent_and_console_suite.cpp` | `7ac8c21e6df0d157d4d95fe87fabae962734139a` | `b1f7a48df7adad95750e6970fa76f75acb2ac6ea` | different | **OPEN** |
+| 159 | `engineering/cpp/tests/task_ledger_suite.cpp` | `e90c062261c95ff99d4b1bdcb55ce7bfad0512ec` | **ABSENT** | absent | **OPEN** |
+
+### 30.3 Closure protocol and current disposition
+
+Every row remains **OPEN** until it has all of the following, recorded either in the row or an explicitly linked evidence section:
+
+1. A donor-to-candidate semantic comparison that identifies preserved, changed, split, merged, replaced, retired, or intentionally excluded behavior; absence must be followed through candidate successors rather than inferred from filename.
+2. Exact-ref reverse-consumer and dependency tracing for the relevant donor and candidate paths, including branch/PR/ref search coverage. Default-branch code search is not all-ref evidence.
+3. Test and build evidence tied to exact source revisions, including relevant negative-path and integration coverage; source inspection or test-file existence alone is insufficient.
+4. Historical authority and decision provenance for any behavior not carried forward, including whether the disposition is a Builder technical finding or a Project Director decision.
+5. A recorded residual risk and explicit closure classification: semantically closed, retired with evidence, not adopted with approved rationale, or unresolved.
+
+The five evolution/reflection source paths audited in §§27–28 have concrete semantic comparisons, but their final disposition remains open pending the consumer/persistence/authority closure described there. This ledger deliberately does not promote those comparisons to closed rows. The remaining 154 rows have not received complete per-path semantic closure merely because their blob identities are now bound here.
+
+**Important limitation:** this ledger is exact for PR #97's changed-file set and PR #192's exact candidate tree. It does not establish candidate consumer closure across all 251 branches or every related PR. The GitHub connector exposes branch enumeration but no all-ref recursive-tree search in one operation; a complete all-branch consumer search remains blocked until exact-ref tree/file retrieval can be performed for every relevant ref or an approved local clone/index is used.
+
+**Disposition:** The stale progress-count problem is corrected structurally: the canonical denominator is now explicit and every donor path has an exact candidate mapping. **DF-02 remains OPEN** because no semantic closure is inferred from this inventory. Gate A/B and Stage A remain held.
