@@ -4,17 +4,19 @@
 **Repository:** `methaneex-oss/MethaneX`  
 **Planning branch:** `plan/brain-implementation-roadmap-20261103`  
 **Planning source HEAD before this addition:** `a01899b4e3b3ee9c6e5e3d83fedd0f22ce2b3891` (PR #175)  
-**Scenario source:** current proposed PR #174 HEAD `c34472354e4122fc1d78dc25bf45d81f1eb4dc69`, file `docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md`, blob `cfdda9e6e7070cd5533b076e9bd77c2904694a32`.  
-**Architecture context:** PR #173 current report-only HEAD `a96af5b18d3a1d580ff56cff6191240893bceeb5`; its xAI review remains PARTIALLY CLEAR.  
-**Authority:** Planning traceability only. PR #174 current proposal is not accepted; this matrix does not convert its scenarios into approved requirements or authorize implementation.
+**Scenario sources:** (1) historical accepted PR #174 planning baseline `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`, file `docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md`, blob `3b6a53c8a295fa0d9fc29bbb6c7688b61d1dcdb1` (34 scenarios); (2) current corrected PR #174 proposal `c34472354e4122fc1d78dc25bf45d81f1eb4dc69`, same file, blob `cfdda9e6e7070cd5533b076e9bd77c2904694a32` (54 scenarios). Exact §9 comparison confirms scenarios 1–34 are textually identical; scenarios 35–54 are additions in the current proposal.  
+**Architecture context:** PR #173 current proposal HEAD `a96af5b18d3a1d580ff56cff6191240893bceeb5`; the latest recorded Independent Reviewer assessment is PARTIALLY CLEAR against an earlier exact revision.  
+**Authority:** Scenarios 1–34 are accepted only within the historical PR #174 baseline at `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`. Scenarios 35–54 are additional requirements in the current corrected proposal and remain proposed/unaccepted pending exact-revision review and Project Director disposition. The scenario owner, increment and evidence mappings in this matrix are non-operative Builder planning classifications, not a new approval of the current proposal, not proof of scenario passage, and not implementation authorization.
 
 ---
 
 ## 1. Purpose and controlling interpretation
 
-This matrix turns the current PR #174 proposal's foundational acceptance scenarios into a capability-oriented verification map for future planning. It is intended to prevent scenario coverage from being mistaken for module coverage: a scenario passes only when the relevant cross-mechanism behavior and its evidence are demonstrated.
+This matrix provides a capability-oriented verification map for the 54 scenarios in the current PR #174 proposal while preserving their distinct authority histories. It is intended to prevent scenario coverage from being mistaken for module coverage: a scenario passes only when the relevant cross-mechanism behavior and its evidence are demonstrated.
 
-**Scenario-count correction:** The current PR #174 proposal contains **54** scenarios (A–K, numbered 1–54), not 34. The older PR #175 planning text's reference to 34 scenarios reflects the historically accepted PR #174 baseline at `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`; it must not be used as the count for the corrected current proposal. This matrix deliberately identifies the current proposal as unaccepted and provisional. The 54 scenarios are not represented as Project Director-approved requirements until PR #174's exact-current-proposal review and disposition are complete.
+**Scenario authority reconciliation:** The historical accepted PR #174 planning baseline at `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` contains 34 scenarios. The current corrected proposal at `c34472354e4122fc1d78dc25bf45d81f1eb4dc69` contains 54. A direct comparison of the exact §9 scenario text confirms that IDs 1–34 are textually identical across the two revisions; IDs 35–54 are additional scenarios in the current proposal. Therefore, IDs 1–34 retain their historical accepted-baseline status, while IDs 35–54 remain proposed/unaccepted. This scenario-text equality does not mean the entire specification documents are identical or resolve the F-02/F-03 gaps recorded against the historical baseline. The current corrected specification still requires its own exact-revision review and Project Director disposition.
+
+The owner, increment and evidence-class assignments below were cross-checked against the current proposed specification. They remain Builder planning classifications, not a change to accepted ownership authority.
 
 The planning increments referenced below are defined in `17_PARALLEL_NON_OPERATIVE_IMPLEMENTATION_PLANNING_SUPPLEMENT_2026-11-17.md`:
 - **I0** — contract and authority readiness.
@@ -133,9 +135,9 @@ These clarifications do not change the proposed increments or acceptance authori
 - PR #174 current corrected proposal requires exact-revision independent review and Project Director disposition.
 - PR #175 Gate A remains NOT CLEARED; no implementation source baseline is selected.
 - PR #175 Gate B static traceability is documented, but mechanism capability acceptance has NOT PASSED.
-- PR #192 Documentation Foundation remains unaccepted. The independent xAI review returned PARTIALLY CLEAR against exact reviewed HEAD `beb4d5a174a1dd613878f89132e97b5e6052c7d3`: DF-02 OPEN, DF-06 NOT MET, DF-09 NOT MET, DF-11 WAIVED, DF-12 PENDING; Stage A HELD. The report was committed afterward on the PR branch at `2dd7d7394c1d520d7e3baa74380b866a65449e58` (report blob `1371d6792e6ae9f5ce7d286e1e1a1d7576852060`); that successor is not a newly reviewed target.
+- PR #192 Documentation Foundation remains unaccepted. The latest recorded Independent Reviewer verdict is PARTIALLY CLEAR against historical HEAD `beb4d5a174a1dd613878f89132e97b5e6052c7d3`; it does not assess the current successor. Live PR #192 metadata is open/non-draft/unmerged at HEAD `711ce19e360bb5d4a7c91e9d94092466bb344f89` with 47 changed paths. Current disposition: DF-02 OPEN; DF-06 NOT MET; DF-09 NOT MET; DF-10 REOPENED pending a new terminal inventory successor; DF-11 WAIVED; DF-12 PENDING — Project Director only; Stage A HELD.
 - No implementation work package is activated by this matrix. No runtime source change, test/build execution, algorithm/provider/schema/API selection, donor adoption, source-baseline selection, merge, Stage A or deployment is authorized.
 
 ---
 
-**Final status:** Non-operative planning traceability artifact. It maps all 54 scenarios in the current proposed PR #174 specification to capability increments and minimum evidence classes. It does not approve the proposal, pass any scenario, clear Gate A/B, or authorize implementation.
+**Final status:** Non-operative planning traceability artifact. It maps all 54 scenarios in the current proposed PR #174 specification to capability increments and minimum evidence classes, while distinguishing the 34 scenario statements accepted in the exact historical baseline from the 20 additional proposed scenarios. No scenario is claimed passed. The matrix does not accept the current proposal, clear Gate A/B, or authorize implementation.
