@@ -443,3 +443,33 @@ DF-06 remains NOT MET: exhaustive parser/reference-link/HTML/heading-fragment re
 DF-02 remains OPEN: the canonical 159-path ledger exists, but semantic and all-ref consumer closure is incomplete. DF-09 remains NOT MET: no workflow-dispatch capability is exposed by the connected GitHub tools, and the last applicable blind reader result is stale/PARTIALLY CLEAR. DF-10 remains the terminal final-write gate. DF-11 waived; DF-12 Project Director-only; Stage A held.
 
 No runtime source, test or build configuration was changed. No tests/build were run and no workflow was dispatched.
+
+
+## 24. Builder milestone checkpoint — donor workflow successor and CMake target audit (2026-11-19)
+
+**PR #192 exact HEAD before checkpoint write:** 98b6f980bbd57dde7a566df05e660b04b9e963df.  
+**DF-02 report blob:** b4830f4956c59575945849a993031fec42f2acf1.
+
+### 24.1 New evidence in DF-02 §32
+
+Five absent donor workflow paths were compared to candidate workflow successors. The generic donor core workflow has a plausible candidate successor in brain-ci.yml. DLT-002 overnight and the JBP/seed-sweep workflows have candidate successors, but the specialized candidate workflows are not wired to the current candidate CMake registration.
+
+The exact candidate CMake files register 45 target/test names. Five specialized candidate workflows reference 20 distinct names absent from those registrations:
+- dlt-002-four-hour: 2 missing;
+- jarvis-learning-mechanisms: 19 missing;
+- jbp-brain-int-001: 6 missing;
+- jbp-learning-002: 1 missing;
+- jbp-mem-001: 2 missing.
+
+The missing names include the DLT-002 executable/persistence gate and the former affective, developmental-world, experience-memory, goal-outcome and Brain action-consequence suites. The source audit establishes target-registration mismatch; no workflow was run, so no runtime failure is claimed. The generic brain-ci workflow has not been run against current PR #192 HEAD.
+
+This means the candidate workflows cannot be counted as evidence that the removed donor capabilities remain tested. They require an explicit engineering disposition: restore real successor targets or deliberately revise workflow checks without weakening acceptance coverage.
+
+### 24.2 Resume point
+
+1. Trace the candidate Brain::learn_outcome API/replay path and classify its external caller/authority contract.
+2. Continue the absent test/build/engineering-coordination donor cohorts and the changed-blob implementation rows.
+3. Keep specialized workflow/target mismatch visible; do not dispatch stale workflows or infer success.
+4. DF-06 remains NOT MET; DF-09 remains NOT MET pending actual distinct-model blind assessment. DF-10 remains the final inventory write. DF-11 waived; DF-12 Director-only; Stage A held.
+
+No runtime source, CMake or workflow file was changed. No tests/build or CI workflow were executed.
