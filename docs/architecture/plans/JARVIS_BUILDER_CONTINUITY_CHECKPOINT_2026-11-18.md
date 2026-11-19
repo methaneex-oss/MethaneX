@@ -717,7 +717,7 @@ No runtime source, test or CMake file was changed. No donor code was adopted. No
 
 ### 34.1 Evidence work now recorded
 
-- DF-02 report blob `397c4db47f959f1784b97431273d9104bf8b3cef` contains the 159-row exact blob ledger, prior bounded semantic audit tranches, and new §39–§41 comparisons covering adaptation/association/attention/causal behavior; cognitive state/workspace/decision/evolution contracts; and goal/intent/knowledge/planning/reflection/self-model contracts. The duplicate report headings have been disambiguated as §10A and §25A, recorded in §42. These source/API/test comparisons remain bounded; they do not close all 159 semantic dispositions or cross-branch reverse-consumer/dependency closure.
+- DF-02 report blob `397c4db47f959f1784b97431273d9104bf8b3cef` contains the 159-row exact blob ledger, prior bounded semantic audit tranches, and new §39–§41 comparisons covering adaptation/association/attention/causal behavior; cognitive state/workspace/decision/evolution contracts; and goal/intent/knowledge/planning/reflection/self-model contracts. The duplicate report headings have been disambiguated as §10A and §25A, recorded in §41A. These source/API/test comparisons remain bounded; they do not close all 159 semantic dispositions or cross-branch reverse-consumer/dependency closure.
 - DF-06 report blob `bff3ab6a81ab12bd20ac3b9e6a2e834ae16b1989` adds the missed linked Actions run #42976840057. The run completed successfully on historical head `e687f3295f6f858f713694d941e97fbd94ac6154` on 2026-11-11; it is not evidence for current PR #192. The report now enumerates 22 Actions-run IDs in its inspected destination scope and retains the full parser/fragment/external-semantic/rendered-anchor residuals.
 - The Independent Reviewer request's four path strings were rechecked and corrected twice: first the trailing `)` was removed, then the missing closing code delimiters were restored. Current request blob `53a3671a6307329d051b379dd20830bc147df3e8` has no `...md)` malformed strings; all four intended target paths exist in the exact complete tree, and all 11 path bullets in the required-material section have paired backticks.
 - The planning index now records the path-syntax correction in §106. Current index blob at the preceding update: `ecd91574e3da8415ff7857cb9bc13619e8cdedb8`. The outstanding-work register §18 records the same correction; current register blob at the preceding update: `afb29f88399fd3f7abd0097164e8076ae7cbc297`.
@@ -746,13 +746,13 @@ The current branch work changed documentation only. No runtime source, tests, CM
 Continue the remaining Builder-owned semantic/authority and link-evidence work without converting unavailable exact-ref all-branch content search or authenticated browser verification into passes. After all content writes, regenerate the exact parent manifest, perform the terminal DF-10 inventory-only commit, verify the successor, and then publish a superseding Independent Reviewer assignment pinned to the immutable terminal SHA. DF-09 must be separately dispatched by an authorized operator against that same SHA.
 
 
-## 34. Builder milestone checkpoint — evolution transaction, isolation and orchestration contract audit (2026-11-19)
+## 35. Builder milestone checkpoint — evolution transaction, isolation and orchestration contract audit (2026-11-19)
 
 **Exact PR #192 HEAD before this checkpoint write:** `2ebf225a792e06ad2312f862ce6ceec33987e7dd`.  
 **DF-02 report blob after the preceding write:** `513b020d61bc51974ddeadbca07ccd550b672761`.  
 **Donor PR #97 exact HEAD:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
 
-### 34.1 Work completed in DF-02 §42
+### 35.1 Work completed in DF-02 §42
 
 Compared exact donor and candidate headers for the adoption journal, canary, controller, experiment, trial coordinator, runner and orchestrator. Compared the associated donor/candidate test sources and the two test CMake files.
 
@@ -767,20 +767,20 @@ Material findings:
 
 Exact blob identities and source/test evidence are in DF-02 §42. Existing implementation-level journal/controller/rollback analysis in §§27–28 remains the supporting evidence.
 
-### 34.2 Current disposition and limits
+### 35.2 Current disposition and limits
 
 The new cohort extends exact semantic comparison across seven evolution API headers and the corresponding test coverage. These rows remain OPEN pending exact-ref reverse-consumer/alternate-owner analysis, dependency and duplicate-ownership reconciliation, historical authority and any Project Director scope/retirement decision. No all-ref content closure is claimed.
 
 No runtime source, test, CMake or workflow file was changed. No donor code was adopted. No build, CTest or workflow was executed. DF-02 remains OPEN; DF-06 and DF-09 remain unmet; DF-10 remains reopened; DF-11 remains waived; DF-12 remains Project Director-only; Stage A remains HELD.
 
 
-## 35. Builder milestone checkpoint — donor-only developmental, experience-memory and affective artifact families (2026-11-19)
+## 36. Builder milestone checkpoint — donor-only developmental, experience-memory and affective artifact families (2026-11-19)
 
 **Exact PR #192 HEAD before this checkpoint write:** `d091ac6b81ac0ee2acef1635adfbdfd2ea1e5bf0`.  
 **DF-02 report blob after the preceding write:** `05b1557d233b47684ca432bde9c4a5418809ff4c`.  
 **Donor PR #97 exact HEAD:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
 
-### 35.1 Work completed in DF-02 §44
+### 36.1 Work completed in DF-02 §44
 
 Compared exact donor-only headers and test sources against the complete candidate tree and checked donor/candidate CMake target registration.
 
@@ -794,20 +794,20 @@ Material findings:
 
 Exact blob identities and evidence are in DF-02 §44.
 
-### 35.2 Disposition and limits
+### 37.2 Disposition and limits
 
 The donor-only paths and missing candidate targets are established, but they are not closed as non-adoptions. Reverse-consumer/alternate-owner analysis, source-to-test dependency mapping, historical artifact authority and Project Director retirement/non-adoption decisions remain outstanding. No successful developmental training run is claimed.
 
 No runtime source, test or CMake file was changed. No donor code was adopted. No build, CTest or training run was executed. DF-02 remains OPEN; DF-06 and DF-09 remain unmet; DF-10 remains reopened; DF-11 remains waived; DF-12 remains Project Director-only; Stage A remains HELD.
 
 
-## 36. Builder milestone checkpoint — Brain, workspace, memory and prediction-feedback test reconciliation (2026-11-19)
+## 37. Builder milestone checkpoint — Brain, workspace, memory and prediction-feedback test reconciliation (2026-11-19)
 
 **Exact PR #192 HEAD before this checkpoint write:** `7687c6fe44b49af1ccaccf29bacb2c387a32a6df`.  
 **DF-02 report blob after the preceding write:** `557a681a126645ab087d78853d495760c65273c2`.  
 **Donor PR #97 exact HEAD:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
 
-### 36.1 Work completed in DF-02 §45
+### 37.1 Work completed in DF-02 §45
 
 Compared exact donor/candidate test blobs for Brain-10, cognitive-workspace runtime, memory architecture, prediction feedback and Brain deep integration; also established the exact donor-only attention-learning Brain test path and checked CMake registration.
 
@@ -826,3 +826,26 @@ The exact comparison and CMake target evidence are in DF-02 §45.
 The remaining changed Brain/workspace/memory/prediction test paths now have explicit exact-revision comparisons. The all-ref reverse-consumer and dependency search, historical authority and Project Director dispositions remain open. Test registration and source assertions are not test execution.
 
 No runtime or test source was changed. No donor code was adopted. No build, CTest or workflow was executed. DF-02 remains OPEN; DF-06 and DF-09 remain unmet; DF-10 remains reopened; DF-11 remains waived; DF-12 remains Project Director-only; Stage A remains HELD.
+
+
+## 38. Builder milestone checkpoint — durable engineering coordination and delivery audit — 2026-11-19
+
+**Exact PR #192 HEAD before this checkpoint write:** `d4f88ab430fd1d2257313ac90eacfd1c72f4fba9`.  
+**DF-02 report blob:** `557a681a126645ab087d78853d495760c65273c2`.  
+**Donor PR #97 exact HEAD:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+
+### 38.1 Work completed in DF-02 §43
+
+The latest engineering coordination comparison identifies material donor/candidate contract differences:
+
+- Donor `dispatch_tracked` validates task ID/version/base revision, checks the durable task definition, claims against concurrency races, records running/completed/failed transitions, verifies returned identity, stores result revision/evidence and returns a reconciliation-required result if completion persistence fails. Candidate exposes only discovery, ranking and untracked dispatch.
+- Donor message delivery uses content-bound IDs, bounded deduplication, in-flight duplicate protection, a boolean receiver acceptance result and queue backpressure. Candidate lacks those guards, returns success after a void handler and silently drops the oldest queued item when full.
+- Donor task-ledger header/source/test and target are absent from candidate tree and CMake. Candidate agent/console test checks simple dispatch/send/receive, not durable task reload, versioned dispatch, duplicate retry protection or backpressure.
+
+These are exact source/API/test/build-graph comparisons. No engineering source or test was changed, and no build or test ran. The affected rows remain OPEN pending exact-ref consumers/alternate owners, dependency/duplicate ownership, historical authority and Project Director scope/retirement decisions.
+
+### 38.2 Numbering correction and current disposition
+
+DF-02's duplicated heading is corrected: its editorial residual-boundary note is now §41A; substantive evolution transaction/isolation audit remains §42, engineering coordination remains §43, donor-only developmental/affective audit remains §44, and Brain/memory test audit remains §45. This checkpoint's prior duplicated §34/§35/§36 labels are now sequential §§34–§37, and this new coordination checkpoint is §38.
+
+DF-02 remains **OPEN**. DF-06 remains **NOT MET**; DF-09 remains **NOT MET** pending an authorized final-SHA workflow dispatch and CLEAR result; DF-10 remains reopened pending the eventual terminal inventory-only successor; DF-11 remains waived as mandatory; DF-12 remains Project Director-only. Stage A remains HELD.

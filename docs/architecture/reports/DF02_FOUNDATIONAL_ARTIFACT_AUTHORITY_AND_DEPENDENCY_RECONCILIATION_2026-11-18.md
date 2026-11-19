@@ -1872,7 +1872,7 @@ The candidate test CMake file registers the goals, knowledge, intent/strategy an
 These findings establish that the candidate retains goal lifecycle, ordinary intent selection, source reliability scoring, non-affective planning/reflection and capability-state tracking, but removes the donor's experience-derived goal momentum, affect-conditioned intent/planning, appraisal calibration and execution-result performance update. The rows remain **OPEN** pending exact-ref consumer/alternate-owner searches, historical authority, dependency/duplicate ownership and any Project Director scope/retirement disposition. No source, test or CMake file was changed; no donor code was adopted; no build or test was run. **DF-02 remains OPEN.**
 
 
-## 42. DF-02 numbering correction and exact-current residual boundary — 2026-11-19
+## 41A. DF-02 numbering correction and exact-current residual boundary — 2026-11-19
 
 **Exact PR #192 source at preparation:** `ff33515de059b00c8a95c07a3fab2f8ba8d1e214`.  
 **Donor PR #97 source:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
