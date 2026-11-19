@@ -744,3 +744,31 @@ Stage A remains NOT STARTED / HELD. Runtime implementation, baseline selection, 
 The current branch work changed documentation only. No runtime source, tests, CMake or workflow was modified. No build, CTest, or new Actions run was executed. Historical run #42976840057 is not current-source evidence. No Independent Reviewer verdict, DF-09 CLEAR, or DF-12 decision is claimed.
 
 Continue the remaining Builder-owned semantic/authority and link-evidence work without converting unavailable exact-ref all-branch content search or authenticated browser verification into passes. After all content writes, regenerate the exact parent manifest, perform the terminal DF-10 inventory-only commit, verify the successor, and then publish a superseding Independent Reviewer assignment pinned to the immutable terminal SHA. DF-09 must be separately dispatched by an authorized operator against that same SHA.
+
+
+## 34. Builder milestone checkpoint — evolution transaction, isolation and orchestration contract audit (2026-11-19)
+
+**Exact PR #192 HEAD before this checkpoint write:** `2ebf225a792e06ad2312f862ce6ceec33987e7dd`.  
+**DF-02 report blob after the preceding write:** `513b020d61bc51974ddeadbca07ccd550b672761`.  
+**Donor PR #97 exact HEAD:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+
+### 34.1 Work completed in DF-02 §42
+
+Compared exact donor and candidate headers for the adoption journal, canary, controller, experiment, trial coordinator, runner and orchestrator. Compared the associated donor/candidate test sources and the two test CMake files.
+
+Material findings:
+
+- The candidate adoption journal removes the donor's evidence-rich adoption record fields and both post-persistence compensation operations (`restore_pending` and `restore_adopted`). The donor 108-line test covers compensation, replay and idempotency; the candidate counterpart is five lines and checks only basic stage/commit/rollback.
+- The candidate canary removes preview. The controller removes validation, compensation and replay entry points and replaces per-parameter canary state with one controller-wide canary.
+- The candidate experiment object removes the private tamper-evident isolation attestation. The runner suite no longer checks attestation invalidation after tampering or rejects non-isolated results on that basis.
+- The coordinator removes the `require_isolation` trial option. The runner removes the process-isolated command entry point, although the separate process-isolation implementation/header/test remain present in the candidate tree.
+- The orchestrator constructor no longer accepts a caller-supplied trial configuration.
+- The donor memory/evolution persistence integration suite and target are absent from the candidate tree/CMake registration.
+
+Exact blob identities and source/test evidence are in DF-02 §42. Existing implementation-level journal/controller/rollback analysis in §§27–28 remains the supporting evidence.
+
+### 34.2 Current disposition and limits
+
+The new cohort extends exact semantic comparison across seven evolution API headers and the corresponding test coverage. These rows remain OPEN pending exact-ref reverse-consumer/alternate-owner analysis, dependency and duplicate-ownership reconciliation, historical authority and any Project Director scope/retirement decision. No all-ref content closure is claimed.
+
+No runtime source, test, CMake or workflow file was changed. No donor code was adopted. No build, CTest or workflow was executed. DF-02 remains OPEN; DF-06 and DF-09 remain unmet; DF-10 remains reopened; DF-11 remains waived; DF-12 remains Project Director-only; Stage A remains HELD.
