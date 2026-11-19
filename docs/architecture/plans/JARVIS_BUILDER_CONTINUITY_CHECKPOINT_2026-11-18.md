@@ -530,3 +530,28 @@ These findings align with the 20 missing workflow targets in §32. They are sour
 3. Preserve the explicit unresolved status of DF-02, DF-06, DF-09, DF-10 and DF-12. No Stage A or runtime implementation authorization is implied.
 
 No runtime source, test, CMake or workflow file was changed. No tests/build/workflow were run.
+
+
+## 27. Builder milestone checkpoint — engineering task-ledger successor audit (2026-11-19)
+
+**PR #192 exact HEAD before checkpoint write:** 136befcb98ca771edbaffed763450a1bea1706f4.  
+**DF-02 report blob:** 506564d0c4d89709867523104875e2aec6ef6e9f.
+
+### 27.1 New evidence in DF-02 §35
+
+The three donor engineering task-ledger paths were compared with candidate engineering coordinator/message-bus sources and the candidate test:
+
+- Donor ledger persists task lifecycle states, versioned evidence, dependency checks, compare-and-swap transitions, cross-process file locks, reload-before-mutate, torn-tail recovery and process-restart reconstruction.
+- Candidate coordinator discovers/ranks/dispatches tasks but does not persist task lifecycle state.
+- Candidate message bus routes in-memory messages and maintains in-process sequence/queues; it has no durable task journal, cross-process lock, CAS or restart recovery.
+- Candidate agent/console suite covers basic in-process request/result messaging, not the donor ledger's concurrency and durability invariants.
+
+The candidate engineering components are adjacent, not semantic successors to the persistent task ledger. Whether persistent multi-agent task state was intentionally retired remains an authority/scope question. All three donor task-ledger paths remain OPEN.
+
+### 27.2 Resume point
+
+1. Continue the remaining donor documentation/specification/example paths and changed-blob implementation rows.
+2. Continue all-ref successor/consumer tracing; branch census alone is not consumer closure.
+3. Preserve DF-02 OPEN, DF-06 NOT MET, DF-09 NOT MET, DF-10 terminal ordering, DF-11 waiver, DF-12 Director-only and Stage A hold.
+
+No runtime or engineering source, test, CMake or workflow file was changed. No tests/build/workflow were run.
