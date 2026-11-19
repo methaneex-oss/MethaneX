@@ -2172,3 +2172,75 @@ Accordingly, the Builder has **not** completed the required all-ref reverse-cons
 The 159-path exact blob ledger is now revalidated with zero mismatches; all 159 paths have evidence-section references outside the ledger; and the donor/candidate source, public API, test and CMake comparisons have been extended through §§39–45. These are meaningful Builder evidence improvements.
 
 **DF-02 remains OPEN.** Full semantic successor/retirement/non-adoption disposition, historical artifact authority, reverse-consumer/alternate-owner search across all relevant exact refs, and dependency/duplicate ownership closure are not complete. No Project Director decision is manufactured. No donor code was adopted, no runtime source was changed, and no build, CTest or training run was executed.
+
+
+## 47. Exact-ref JBP-004 branch lineage, behavioral integration evidence and bounded disposition — 2026-11-19
+
+This section extends the all-ref investigation with two exact branch-tip comparisons and their preserved behavioral-run evidence. It does not replace the 159-path PR #97 → PR #192 candidate ledger, and it does not close any ledger row by branch-name or blob-presence inference.
+
+### 47.1 Exact source refs and branch ownership
+
+- PR #97 donor branch: `feat/jarvis-affective-state` at `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`; 159 changed paths.
+- PR #110: `test/jbp-004-memory-learning-evolution-integration` at `5869b541ab6f97d782f1043d27479f176f2ea4d4`; open, draft, unmerged; base `feat/jarvis-affective-state` at `f4dab1fce3809e39439a7f2cff2558e7a41b96fe`; five changed paths.
+- PR #112: `test/jbp-004-integrated-memory-evolution` at `f6effc957244e5626638da0bb85b35a47cb298c4`; open, draft, unmerged; same base ref/SHA; three changed paths.
+
+Both PR #110 and PR #112 are separate historical workstreams, not merged candidate successors and not Project Director-approved source-baseline selections.
+
+### 47.2 Exact 159-path donor identity comparison across the two branch tips
+
+The complete recursive trees were fetched at the exact donor, PR #110 and PR #112 SHAs. Both successor trees were complete (`truncated=false`): donor tree 287 entries; PR #110 tree 286 entries; PR #112 tree 286 entries. The exact 159 filenames returned by PR #97's paginated changed-file endpoint were compared against the donor and each branch-tip tree.
+
+| PR #97 donor path comparison | Identical donor blob | Divergent same-path blob | Absent same-path path |
+|---|---:|---:|---:|
+| PR #110 head `5869b541...` | 118 | 38 | 3 |
+| PR #112 head `f6effc95...` | 119 | 37 | 3 |
+
+The same three donor paths are absent at both branch tips:
+
+- `core/cpp/include/jarvis/core/causal_link_codec.hpp`
+- `core/cpp/tests/cognitive_runtime_learning_integration_suite.cpp`
+- `core/cpp/tests/memory_learning_evolution_persistence_suite.cpp`
+
+The 37/38 divergent paths are exact blob differences, not semantic equivalence or proof of regression. The two branch tips retain substantial donor source and test content while carrying distinct follow-on edits. The comparison therefore identifies additional exact-ref owners and duplicate/divergent artifact lineages that must be considered in the all-ref consumer/authority analysis. It does not establish that either branch is the accepted successor for PR #192.
+
+### 47.3 PR #110 — noisy, context-specific adaptation and fresh-process learning evidence
+
+PR #110 changes exactly these five paths: the JBP-004 workflow, `developmental_learning.hpp`, `developmental_learning.cpp`, the test CMake registration, and `jbp_004_memory_learning_evolution_suite.cpp`. Its learning implementation changes the strategy update rule to discount noisy single-outcome updates as evidence accumulates and to accelerate again when prediction errors persist.
+
+The exact-head workflow runs were independently fetched. All six completed with conclusion `success` and each run's `head_sha` equals `5869b541ab6f97d782f1043d27479f176f2ea4d4`:
+
+- JBP-004 integration: run `40651801076`
+- JARVIS Core Verification: run `40651801011`
+- Brain ThreadSanitizer: run `40651801261`
+- JARVIS Brain Tests: run `40651800984`
+- Brain CI: run `40651801125`
+- Native Brain Build: run `40651801007`
+
+The JBP-004 job completed its exact-revision checkout, native configure/build, separate-process train/verify step, and registered CTest fixture. Its CTest log reports 2/2 passed. The preserved artifact is `JBP-004-40651801076-1`, artifact ID `12800305726`, SHA-256 `5abe0fa467575ee82d1e7f0cdfb9d1c89729893b0aad4ea353eaaa098af1d091`. The artifact was downloaded and inspected; its metadata binds it to the tested SHA and its trial log records seeds 17, 29 and 43 across simple, hard and very-hard levels, with post-reversal action-choice gates, fresh-process verification, 1,560 observed outcomes per seed, and 30/30 evaluation choices for each reported context. The test CMake file explicitly applies `-UNDEBUG` to executable test targets, preserving its `assert` checks in the workflow's Release configuration.
+
+This is bounded evidence of learned context-specific action selection, adaptation after reversals, journal persistence and a guarded evolution-parameter experiment on PR #110's exact historical branch. The challenge uses a generated finite context/action environment, a fixed set of context/action labels, seeded mappings and synthetic noisy outcomes. It does not demonstrate open-world learning, broad unseen-context transfer, general reasoning, or current PR #192 behavior.
+
+### 47.4 PR #112 — CognitiveCycle, prediction feedback, memory and evolution rollback integration
+
+PR #112 is test-only: its three changed paths are the JBP-004 workflow, test CMake registration and `jbp_004_integrated_memory_evolution_suite.cpp`. The test source uses explicit failure-returning `require` checks rather than C `assert` for its behavioral gates. It drives actual `Brain::execute_action` calls with observed consequences, verifies that learned context-specific strategies change subsequent `CognitiveCycle` decisions, reverses one context while retaining an unchanged control context, resolves a prediction with error, and carries learned utility into a guarded evolution evaluation/adoption. It then restores in a separate CTest process, checks prediction/learning/affective state and contextual memory recall, supplies the remaining canary evidence to trigger rollback, and reopens the journal again to verify the rollback/history transition persisted.
+
+All six workflow runs completed successfully on exact head `f6effc957244e5626638da0bb85b35a47cb298c4`:
+
+- JBP-004 integrated challenge: run `40699944763`
+- Native Brain Build: run `40699944979`
+- JARVIS Core Verification: run `40699944876`
+- Brain ThreadSanitizer: run `40699944909`
+- JARVIS Brain Tests: run `40699944786`
+- Brain CI: run `40699944924`
+
+The JBP-004 job completed exact-revision checkout, native configure/build, training/fresh-process verification and artifact preservation. Its CTest log reports 2/2 passed. The preserved artifact is `JBP-004-40699944763-1`, artifact ID `12820513931`, SHA-256 `9a70c5d4f331fd3a2711cc2beaccc0cace84bd8de6c29e8e2b40a82fbcbb0d31`; it contains the exact tested-commit metadata, configure/build/CTest logs and persisted journal plus metadata. The successful CTest output is a pass/fail record; because CTest was invoked with `--output-on-failure`, the successful test process's stdout is not separately preserved in this artifact.
+
+This is bounded cross-process integration evidence for the tested branch: action outcomes → learned strategy → subsequent cognitive-cycle decisions; prediction feedback → learning metric; experience journal → fresh-process restore; guarded evolution adoption → persisted pending canary → rollback → second restore; and contextual memory recall. The test uses two fixed synthetic contexts and two fixed actions with a single context reversal. It does not establish broad generalization or full-system capability, and it is not current PR #192 test evidence.
+
+### 47.5 Semantic disposition and remaining all-ref obligations
+
+The two JBP-004 branch tips establish additional exact-ref artifact owners, divergent implementations and successful historical behavioral tests. They strengthen the evidence that some donor capabilities were exercised in related, unmerged branches rather than existing only as uncompiled source. They also expose why same-path absence on PR #192 cannot be called retirement without tracing alternate refs and their decision authority.
+
+No PR #97 ledger row is closed by this section. PR #110 and PR #112 remain open/draft/unmerged; neither branch is an accepted source baseline, and their test outcomes cannot be transferred to PR #192's candidate tree. The remaining all-ref search still lacks exhaustive source-content consumer/dependency coverage across all 210 unique branch tips, and historical authority/retirement/non-adoption decisions remain to be reconciled path by path. The exact-ref comparisons here are a bounded tranche, not a substitute for that complete search.
+
+**Disposition:** add PR #110 and PR #112 to the exact-ref lineage/duplicate-owner evidence set; retain their workflow and artifact evidence as historical bounded behavioral validation; keep all 159 PR #97 donor-ledger rows **OPEN** pending full per-path semantic disposition, reverse-consumer/dependency/duplicate closure and authority provenance. DF-02 remains **OPEN**.
