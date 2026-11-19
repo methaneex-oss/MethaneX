@@ -625,3 +625,58 @@ The earlier §4 table records PR #99 as a merged learning-probe workflow and doe
 ### 10.3 Interpretation and authority
 
 The artifacts demonstrate that the historical donor-lineage implementation was built and exercised through integrated mechanism tests and a bounded experience-dependent action-selection trial. They are stronger than source-presence evidence alone. They do not prove that the same behaviors exist on PR #192, do not close any PR #97 donor-ledger row, and do not select PR #97 or any related branch as an accepted source baseline. PR #99 merged a workflow only; PR #100 remains unmerged. These are historical, exact-commit test results, not current candidate test results or Project Director acceptance.
+
+
+## 11. Expanded exact-ref JBP lineage, DLT-002 artifacts and final donor-tree verification — 2026-11-19
+
+This section supplements the 188-PR metadata census and 251-ref/210-unique-tip branch manifest above. It records the newly recovered exact behavioral evidence and the final donor integration tree. It does not convert the bounded lineage census into a complete source-content consumer/dependency audit.
+
+### 11.1 JBP-003 and JBP-004 challenge branches
+
+The exact branch-tip trees for the following historical challenge PRs were complete and were compared against the exact 159 PR #97 donor changed paths:
+
+| PR / branch | Exact head | Identical donor blobs | Divergent same-path blobs | Absent same-path paths |
+|---|---|---:|---:|---:|
+| #107 `test/jbp-003-evolving-world-challenge` | `92cce78985f2630f62a6e0beb49ac725623d7d85` | 119 | 37 | 3 |
+| #110 `test/jbp-004-memory-learning-evolution-integration` | `5869b541ab6f97d782f1043d27479f176f2ea4d4` | 118 | 38 | 3 |
+| #112 `test/jbp-004-integrated-memory-evolution` | `f6effc957244e5626638da0bb85b35a47cb298c4` | 119 | 37 | 3 |
+
+The same three paths are absent at all three older challenge tips: `causal_link_codec.hpp`, `cognitive_runtime_learning_integration_suite.cpp`, and `memory_learning_evolution_persistence_suite.cpp`. These absences are temporal, not final-donor retirement: PR #119 subsequently added the files, and all three are present at final donor head `c1da...`.
+
+**PR #107 / JBP-003:** all six PR-triggered workflow runs completed successfully on exact head `92cce...`. Artifact `12798381657` was downloaded and hash-verified (`f89d4e2e7db0db82baccee0bba4ea7bba455dabce022dd0516a8da46a785cc9e`). The test uses a generated hidden per-seed mapping, 15% noisy outcomes, one context-specific reversal, an unchanged control context, and separate-process verification without feedback. Seeds 17/29/43 each achieved 20/20 acquisition in both contexts, storm adaptation 57/60, 56/60 and 57/60, clear control 60/60, and fresh-process recall 20/20 in both contexts. The PR changes test/workflow/specification only; this is bounded evidence on its historical runtime.
+
+**PR #110 / JBP-004:** all six exact-head workflow runs completed successfully on `5869...`. Artifact `12800305726` was downloaded and hash-verified (`5abe0fa467575ee82d1e7f0cdfb9d1c89729893b0aad4ea353eaaa098af1d091`). It records three seeds and three difficulty levels, noisy context-specific action selection, reversals, separate-process restoration and 30/30 final choice gates per context. The PR changes the developmental-learning implementation as well as its test/workflow/CMake registration.
+
+**PR #112 / JBP-004 integrated suite:** all six exact-head workflow runs completed successfully on `f6eff...`. Artifact `12820513931` was downloaded and hash-verified (`9a70c5d4f331fd3a2711cc2beaccc0cace84bd8de6c29e8e2b40a82fbcbb0d31`). The test-only branch exercises actual action outcomes, learned strategy driving later CognitiveCycle decisions, prediction feedback, memory recall, evolution adoption, pending canary evidence, rollback and second restore across process boundaries.
+
+All three PRs remain open/draft/unmerged. Their results are historical branch evidence, not current PR #192 behavior or source-baseline acceptance.
+
+### 11.2 DLT-002 artifact correction and evidence boundary
+
+PR #99's earlier 10-minute probe artifact `12696474493` and PR #100's expanded artifact `12778958158` were downloaded and independently inspected. Both `mechanism-gates.tsv` files contain **35 data rows, all PASS** (36 lines including the header). This clarifies the earlier §10 wording that described 36 gate rows; the verified gate count is 35.
+
+PR #100 workflow run `40596743895` ran on workflow head `26bca...` but checked out Brain source commit `beb7971426c42d326f7553363d16f37ce311e9d9`, an ancestor of PR #97 donor head `c1da...` (12 commits ahead, 0 behind). The DLT-002 executable source blob is identical at the tested revision and donor head. Its artifact SHA-256 is `e706f91d2d6d89d8357ee27566a66bdb81dafb470839f8e0057eaa6603a712e2`.
+
+The primary 10-minute enabled run recorded 569/586 optimal choices (97.1%); the matched same-seed, same-duration consequence-feedback-disabled control recorded 295/591 (49.9%). Across three enabled seeds, phase means ranged from 93.3% to 98.6%. The workflow enforces trial completion, phase/data integrity, feedback-mode integrity and action-consequence prediction resolution, but it does not impose a minimum decision-accuracy threshold. The no-feedback control still receives observations, and 1,629/2,215 non-action predictions remained unresolved. These are descriptive controlled-task results, not a general-intelligence claim or a complete learning-quality acceptance gate.
+
+### 11.3 PR #119/#121 integrated donor provenance
+
+- PR #119 integration head: `fb994fed8b1bd39482aafd98110055032e8bc82f`; 40 changed paths; merged into PR #97's feature branch at donor head `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+- PR #121 corrective head: `804497f7458ccd8346332cc0bd63bb0a9313858d`; 26 changed paths; merged into PR #119's integration branch before its donor merge.
+- PR #119 and PR #121 exact-head workflow sets were verified successful (five runs on `fb994...`, four on `804497...`).
+- PR #119 integration merge `fb994...` and final donor HEAD `c1da...` have identical Git tree SHA `9ed26529a28d6eb28970355396ff2e2bbb3a3964`, despite different commit ancestry.
+- Exact push-triggered runs on final donor HEAD `c1da...`: Core Verification `40788714735` and Brain CI `40788714686`. Raw job logs show 71/71 CTest passed in cpp-core, native-brain and ASan/UBSan configurations.
+
+The final donor tree contains the cognitive-runtime learning integration suite, memory/learning/evolution persistence suite, causal-link codec, fail-closed evolution-adoption helper and local process-isolation backend. Its tests cover observed action consequences updating prediction/affect/memory, context isolation, regime reversal, post-restart decisions, no-feedback execution controls, evidence-bound evolution adoption and journal replay. The test CMake configuration keeps assert checks enabled in Release. These are connected, compiled and exact-tree-tested mechanisms, but the integration tests use controlled synthetic scenarios and do not establish open-ended intelligence.
+
+### 11.4 Current candidate comparison and authority
+
+At the last exact PR #192 code-tree snapshot `9d61e9bb3ef0433e7b1c03bfcd1a3a19b8c6741d`, comparison against final donor head `c1da...` reproduced 1 identical, 95 divergent and 63 absent blobs across the 159 PR #97 changed paths. All 159 paths exist in the donor tree. PR #119's 40-path set has 34 divergent and 6 absent candidate paths; PR #121's 26-path set has 23 divergent and 3 absent candidate paths. The six PR #119 paths absent in the candidate include the causal-link codec, developmental-learning implementation, cognitive-runtime learning integration, developmental-brain/world integration and memory-learning-evolution persistence suites.
+
+Subsequent PR #192 writes in this workstream are documentation-only; no runtime C++/test/CMake/workflow path was changed. The final exact candidate comparison must still be refreshed before DF-02 closure and the terminal inventory cycle.
+
+### 11.5 Remaining all-ref obligations
+
+The branch census remains 251 refs / 210 unique tips, but the source-content consumer/dependency scan is not complete across those tips. The exact-ref comparisons above are bounded branch cohorts. Same-path blob divergence is not semantic equivalence; path absence is not retirement; a test pass on one historical branch is not evidence for a different branch. Every donor path still needs a semantic successor/disposition, reverse-consumer/dependency tracing, duplicate capability ownership and historical authority/decision provenance.
+
+PR #97 remains open/unmerged into `main`. PR #119/#121 are integrated into its donor feature branch only. No donor code is adopted or selected by this supplement. DF-02 remains **OPEN**.
