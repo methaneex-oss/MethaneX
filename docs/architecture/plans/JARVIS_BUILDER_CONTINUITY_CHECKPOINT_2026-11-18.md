@@ -1193,3 +1193,54 @@ The raw PR #99 artifact `12696474493` and PR #100 artifact `12778958158` each co
 - DF-12: **PROJECT DIRECTOR ONLY**.
 
 PR #171 SYS-01–SYS-11 remains the existing whole-system architecture foundation. Stage A remains **NOT STARTED / HELD**. No runtime implementation, donor adoption, source-baseline selection, independent verdict, Project Director acceptance or merge permission is claimed.
+
+
+## 44. Current-state correction after governance revalidation and targeted DF-06 repair — 2026-11-19
+
+**Exact PR #192 HEAD before this checkpoint update:** `ee39954916d34ef351d1f4956fc11cfb2f467db0`.  
+**DF-02 report blob:** `73772192b9303d560b09c89a337f603d08459314`, through §52.  
+**DF-06 report blob:** `b42fdbd380135187c471092219ec1fb5e489811d`, through §23.  
+**DF-02 lineage supplement blob:** `d12641053e9247966aac107438032d7b7b6cd2af`, through §11.  
+**Governance revalidation:** §43; accepted governance source `f5827c552f36f4647339b3f8dfb38956d146c570` at live base tip `ea646...`.
+
+### 44.1 Current live branch and exact candidate comparison
+
+At the preceding PR #192 head `81b62e436b37c611402bf50df27f1cb03bb6171f`, exact metadata/tree reads confirmed:
+
+- PR #97 donor HEAD: `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+- PR #192 head: `81b62e436b37c611402bf50df27f1cb03bb6171f`.
+- Live base tip: `ea64607ef94f142a6142a013e119a7225bc95c1c`; recorded PR merge-base: `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.
+- Base-to-head compare: 779 ahead / 14 behind; status diverged; GitHub metadata reports mergeable=true.
+- Complete trees: donor 287 entries, candidate 280 entries; neither truncated. Candidate has 51 Markdown files and 47 PR changed paths.
+- Recomputed 159-path ledger: 1 identical, 95 divergent, 63 absent; all 159 paths exist in donor.
+
+The current PR description still names an older HEAD and claims zero commits behind. PR metadata synchronization remains outstanding; do not replace the recorded merge-base SHA with the live base tip.
+
+### 44.2 Targeted Phase 2 map link repair verified
+
+The PR #192 Phase 2 map now has blob `1ae6ca2dcde4c6f88040762a07ac11e7f01ea255`. It contains the corrected `action_execution.cpp#L18-L77` and `cognitive_runtime_goal_feedback_suite.cpp#L1-L84` destinations. Their exact pinned target blobs have 77 and 84 lines. The correction was made in commit `3d3e2ab799822fc4f42b453337b1b7058b06691f`; no rebase, merge, retarget or base-branch modification occurred.
+
+Live GitHub metadata changed from mergeable=false before the correction to mergeable=true afterward. The PR remains 14 commits behind its live base; no merge permission is inferred.
+
+### 44.3 DF-10 inventory candidate and reopening
+
+The prior inventory-only commit `67be666f27dfa7879f2c7b73aa5ee17b43828f79` passed exact pair verification against parent `18194d2285f2325fa35c8d8488ccdb007274b8bd`: one commit ahead/zero behind, only the inventory file changed, 47 manifest rows matched the parent tree, all 46 other changed-path blobs remained identical, and both parent/successor trees were complete at 280 entries.
+
+This checkpoint, the Phase 2 map correction, DF-06 report update and DF-02 report update are later PR #192 branch-file writes. DF-10 therefore remains **REOPENED**. The verified inventory candidate is preserved as historical evidence; a new terminal inventory must be written after all remaining Builder-owned documentation and evidence changes.
+
+### 44.4 Gate status
+
+- DF-01: Builder evidence present; final PR/metadata synchronization pending.
+- DF-02: **OPEN** — exact 159-path semantic/authority dispositions and all-210-tip source-content consumer/dependency/duplicate ownership remain incomplete.
+- DF-03: Partially evidenced.
+- DF-04: Builder evidence present within bounded scope.
+- DF-05: Partially evidenced; base divergence now mergeable but dependency closure incomplete.
+- DF-06: **NOT MET** — two line ranges corrected; full parser discrepancy, all local fragments, exhaustive external status/redirect/relevance and authenticated rendered anchors remain.
+- DF-07: Reconciliation in progress; stale PR description and current base/head synchronization remain.
+- DF-08: Resolved within bounded criterion.
+- DF-09: **NOT MET / externally blocked** — no exact-final-HEAD blind CLEAR result and no connected workflow-dispatch/browser action.
+- DF-10: **REOPENED** after the verified inventory candidate.
+- DF-11: Waived as a mandatory gate.
+- DF-12: **PROJECT DIRECTOR ONLY**.
+
+The accepted governance standard has been freshly read and recorded in §43. PR #171 SYS-01–SYS-11 remains the existing architecture foundation. Stage A remains **NOT STARTED / HELD**. No runtime implementation, donor adoption, baseline selection, independent verdict, Director acceptance or merge is claimed.
