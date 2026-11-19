@@ -1081,3 +1081,64 @@ The donor's test source uses assertions, and §24.1 records the donor CMake rule
 **Disposition for this tranche:** five implementation paths have explicit semantic comparisons and one placeholder translation unit is classified as non-capability scaffolding. Three material risk areas (isolation validation, controller-only adoption and replay/idempotency) are elevated for targeted follow-through. No runtime code was modified or adopted.
 
 **DF-02 remains OPEN.** This tranche advances the implementation-level comparison but does not close the remaining all-path audit, reverse-consumer/dependency/duplication closure, historical artifact authority or exact CI/test evidence. Gate A/B remain uncleared; Stage A remains held; runtime implementation remains unauthorized.
+
+
+## 28. Evolution runtime call-chain and Brain replay integration audit — 2026-11-19
+
+**Exact PR #192 source:** `9866489663d9e64d024983eb4eed44ffdffa59a7`.  
+**Donor PR #97 exact HEAD:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
+**Scope:** Current-branch `evolution_orchestrator.cpp`, `brain.cpp`, controller, experiment runner, adoption journal and history implementations, compared with donor controller/runner/journal and associated regression sources. Current-branch files were fetched at the exact PR #192 HEAD; donor files at the exact PR #97 HEAD.
+
+### 28.1 Actual orchestrator path
+
+Current `core/cpp/src/evolution_orchestrator.cpp` blob `efd55281ba7d2edf95c6a9f6537ed2944022617e` performs this sequence:
+
+1. Runs `EvolutionExperimentCoordinator::run` for candidate experiments.
+2. Marks the experiment candidate as executed when the batch reports execution.
+3. Calls `controller->record_evaluation(experiment)` when a controller is supplied and the candidate executed.
+4. Selects a winner and calls `controller->adopt(selected)` when a controller is supplied.
+5. If no controller is supplied, the orchestrator returns without controller-mediated adoption.
+
+This establishes a controller-mediated path in the orchestrator, but it does not prove every public Brain/API entry point uses that path.
+
+### 28.2 Current controller is materially smaller than donor
+
+- Donor `evolution_controller.cpp` blob: `4e77ec2e5daa09a964132ca486b8c5ee1cebf2f5` (316 lines).
+- Current `evolution_controller.cpp` blob: `01484ebf12fc3902bce749030a1f54610b26236a` (82 lines).
+- Donor controller includes validation of finite/ranged experiment values, independent outcome re-evaluation, durable matching evaluation-history verification before adoption, exact experiment/journal-field matching, isolation-attestation enforcement, compensation, replay APIs and guarded rollback.
+- Current controller `record_evaluation` stages the experiment and appends an evaluation record without validating identity, candidate execution, finite values, outcome, or isolation. Current `adopt` checks only `candidate_executed`, stages the experiment, applies the safety gate, adopts the model, commits the in-memory journal and appends history. It does not require a matching prior durable evaluation record or independently re-evaluate the experiment. Current rollback mutates the model before checking journal/history success and returns the conjunction without compensating the model if a later step fails.
+- Current header blob `e06441d23685093a3c533498a09adf3a8baf5914` lacks donor declarations for replay, validation, Brain-specific transaction/compensation and previous-value restoration pathways.
+
+This is a significant control-plane contract reduction in the exact current implementation. The orchestrator's normal path does call `record_evaluation` before `adopt`, but the controller itself does not enforce that invariant and remains callable from other entry points.
+
+### 28.3 Brain entry points and replay
+
+Current `core/cpp/src/brain.cpp` blob `e9f3758fcc9c0e89b7280ce376db9033d547682d` reveals two distinct paths:
+
+- `Brain::adopt_evolution_experiment` calls `evolution_controller_.adopt(experiment)`, then appends an `evolution_adopt` event. This is controller-mediated, but inherits the current controller's missing durable-evaluation check.
+- Legacy/public `Brain::adopt_evolution(const EvolutionProposal&)` calls `evolution_.adopt(proposal)` directly and records an `evolution_adopt` event. It bypasses the experiment controller, experiment execution evidence, safety policy and adoption journal. Whether this API is intentionally a lower-level/manual administrative operation or an unsafe general action must be decided from its API contract, all callers and permission boundary; do not assume it is unused or safe.
+- On Brain reconstruction, `Brain::replay` handles `evolution_adopt` by applying `evolution_.adopt(proposal)` and appending history. It does not reconstruct the `EvolutionController` adoption journal or validate a linked evaluation record. The event schema currently records parameter key/current/proposed/expected gain/confidence, but does not itself carry the full experiment identity and sandbox attestation needed to re-establish the donor's controller-level adoption proof.
+- `Brain::replay` handles `evolution_evaluated` by appending a history record; this is not the same as rebuilding and validating the controller's complete journal state.
+- `Brain::rollback_evolution` also directly rolls back the model and then appends an event; on append failure it does not restore the prior model value.
+
+### 28.4 Experiment runner and adoption journal
+
+- Current runner blob `83d3c26e589cd16151818774a81ccb62f9d514fc` rejects unstarted, incomplete, timed-out, output-limited, non-isolated or non-finite sandbox results. It does not set `experiment.isolated` or issue the donor's isolated-result attestation in the inspected current source.
+- Donor runner blob `0545662ea0ef865feb0527207fc4c32ecb50566e` distinguishes callback execution from isolated-command execution; it clears isolation by default, validates the isolated backend result and only then attests the result. The current runner has only the generic sandbox overload and the same-path header lacks the donor isolated-command overload.
+- Current journal blob `a9e141ac0b784466e86575eefdb3260b2e15dfc0` stores a reduced subset of experiment evidence. Its `stage` overwrites an existing non-Adopted record with new experiment values and returns it to Pending; it does not compare the full evidence tuple or reject reuse of a rejected/rolled-back ID. Donor journal blob `d8df30a2902d3dac734fb1a571cbbecdd881b76f` rejects terminal-ID restaging and requires an exact evidence match for existing Pending/Adopted IDs; it also provides compensation transitions.
+- Current history blob `4c023ab4a726efb07f563c2b5425b824e19aeee9` has no duplicate suppression in `append`; donor history blob `e394042ba7fc6db85e4663722f735918aa1ce7fb` suppresses repeated experiment/parameter/action identities.
+
+### 28.5 Regression-test implications and priority
+
+The donor `evolution_adoption_journal_suite.cpp` exercises the controller through repeated evaluation, rejected neutral/unsafe/unrecorded experiments, compensation, rollback restoration, replay and history idempotency. The current same-path suite only tests basic journal stage/commit/rollback transitions and does not include the controller integration checks. The current `evolution_experiment_coordinator_suite.cpp` is a happy-path test; it does not test missing start/isolation evidence or invalid result values. Source files were inspected; no tests were executed.
+
+Priority order for the next bounded audit:
+1. Establish every caller and intended contract of `Brain::adopt_evolution`, `Brain::adopt_evolution_experiment`, and `EvolutionController::adopt`; distinguish trusted/manual administration from autonomous candidate adoption.
+2. Trace the actual event persistence/replay boundary and establish whether the event store is durable, what failure guarantees it provides, and how the controller journal should be reconstructed after restart.
+3. Decide whether a controller-owned evaluation/adoption transaction is the sole autonomous mutation route; if so, record the exact API invariant and tests needed before implementation is considered.
+4. Establish the identity semantics for experiment IDs, retries, repeated observations and replay before selecting journal/history idempotency behavior.
+5. Trace all model rollback callers and define compensation behavior for each failure point.
+
+**Disposition:** The orchestrator's normal candidate path is controller-mediated, but the current controller does not enforce the full evaluation-evidence invariant, and a public Brain API plus Brain replay apply model changes directly. This is a concrete integration/control-plane discrepancy requiring API/authority and persistence-boundary resolution. It is not yet a verified exploitable bypass because caller trust/permission contracts and runtime deployment context have not been established.
+
+No runtime code was modified or adopted. No build or tests were run. No CI workflow was dispatched. **DF-02 remains OPEN** pending all-path semantic dispositions, all-branch consumer/dependency/duplication closure, historical artifact authority reconciliation and independent challenge. Gate A/B and Stage A remain held.
