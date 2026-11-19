@@ -799,3 +799,30 @@ Exact blob identities and evidence are in DF-02 §44.
 The donor-only paths and missing candidate targets are established, but they are not closed as non-adoptions. Reverse-consumer/alternate-owner analysis, source-to-test dependency mapping, historical artifact authority and Project Director retirement/non-adoption decisions remain outstanding. No successful developmental training run is claimed.
 
 No runtime source, test or CMake file was changed. No donor code was adopted. No build, CTest or training run was executed. DF-02 remains OPEN; DF-06 and DF-09 remain unmet; DF-10 remains reopened; DF-11 remains waived; DF-12 remains Project Director-only; Stage A remains HELD.
+
+
+## 36. Builder milestone checkpoint — Brain, workspace, memory and prediction-feedback test reconciliation (2026-11-19)
+
+**Exact PR #192 HEAD before this checkpoint write:** `7687c6fe44b49af1ccaccf29bacb2c387a32a6df`.  
+**DF-02 report blob after the preceding write:** `557a681a126645ab087d78853d495760c65273c2`.  
+**Donor PR #97 exact HEAD:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+
+### 36.1 Work completed in DF-02 §45
+
+Compared exact donor/candidate test blobs for Brain-10, cognitive-workspace runtime, memory architecture, prediction feedback and Brain deep integration; also established the exact donor-only attention-learning Brain test path and checked CMake registration.
+
+Material findings:
+
+- Brain-10 changes the expected result for unverified evolution adoption/rollback from rejection in donor to success in candidate.
+- Cognitive-workspace runtime drops representation-node and attention-signal assertions.
+- Memory architecture drops donor tests for learned tier distribution, consolidation preference, metadata reconstruction and corrupt-journal suffix quarantine/recovery.
+- Prediction feedback drops a 1,339-line donor test body to a 73-line candidate body. The missing assertions include sequence-specific prediction resolution, contextual prediction evidence, affective/action consequence replay, attention changes, memory identity and invalid-input recovery.
+- The donor Brain deep suite and the donor-only attention-learning Brain test now have exact path/blob references. Candidate omits the latter source and target.
+
+The exact comparison and CMake target evidence are in DF-02 §45.
+
+### 36.2 Disposition and limits
+
+The remaining changed Brain/workspace/memory/prediction test paths now have explicit exact-revision comparisons. The all-ref reverse-consumer and dependency search, historical authority and Project Director dispositions remain open. Test registration and source assertions are not test execution.
+
+No runtime or test source was changed. No donor code was adopted. No build, CTest or workflow was executed. DF-02 remains OPEN; DF-06 and DF-09 remain unmet; DF-10 remains reopened; DF-11 remains waived; DF-12 remains Project Director-only; Stage A remains HELD.
