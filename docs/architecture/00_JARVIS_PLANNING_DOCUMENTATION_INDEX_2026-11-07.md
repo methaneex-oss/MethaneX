@@ -9,10 +9,10 @@
 | Repository | `methaneex-oss/MethaneX` |
 | PR | #192 — Documentation Foundation |
 | Branch | `docs/whole-brain-planning-scope-correction-20261107` |
-| Exact source HEAD before this index update | `60f0edc8e0c451568ccaba10b4bdb89e74c4d88b` |
+| Exact source HEAD before this index update | `0b486b99de67d8e07d48713d1877b4c6d6c3f8b2` |
 | Base | `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` |
 | State | Open, non-draft, unmerged |
-| Commits ahead / behind | 758 / 0 |
+| Commits ahead / behind | 763 / 0 |
 | Changed paths | 47 total: 45 Markdown and 2 JSON |
 | Recursive tree | 280 entries, complete (`truncated=false`)
 
@@ -57,7 +57,7 @@ The initial completion-gate report §6 defines DF-01–DF-12. This matrix record
 | #175 — Brain Implementation Planning | `48a7103f87c00992e4e19d84c768d1e72682a1b0` | Open/draft/unmerged; non-operative planning only; Gate A not cleared, Gate B not passed, no source baseline selected |
 | #179 — Phase 2 capability-to-source map | `ea64607ef94f142a6142a013e119a7225bc95c1c` | Open/draft/unmerged; planning input, not implementation acceptance |
 | #191 — Human/MCU comparison | `609d38ede50bbdd98a93dfed112781eacabee9fd` | Open/draft/unmerged; Director's bounded retain-separately disposition; no history operation |
-| #192 — Documentation Foundation | `60f0edc8e0c451568ccaba10b4bdb89e74c4d88b` | Open/non-draft/unmerged; live metadata is authoritative |
+| #192 — Documentation Foundation | `0b486b99de67d8e07d48713d1877b4c6d6c3f8b2` | Open/non-draft/unmerged; live metadata is authoritative |
 | #195 — reader workflow / role terminology | merged to `main` at `4f07d772beae03c99a8dd58b174201a3aa3074b2` | Reviewed workflow blob is integrated; F-195-07 remains a separately disclosed residual |
 | #196 — Builder operating controls | `0ebc4e978fa38011b2f6bb5d97a03c267c1c12c9` | Merged into its declared Phase 2 base branch, not `main` |
 | #197 — reader-visible exact target revision | `2b2bfd9afe6e1325119f7ccee507bb04e71aa343` | Open/non-draft/unmerged; no new fresh-reader run or CLEAR result |
@@ -74,14 +74,14 @@ Stage A remains **NOT STARTED / HELD**. It may define whole-Brain capabilities a
 - [Full Independent Reviewer request](reports/reviews/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_REQUEST_PR192_2026-11-18.md) — published in the repository; the exact terminal inventory successor SHA will be pinned in the PR #192 conversation comment. This is a request, not a verdict.
 
 
-## Latest Builder evidence — JBP-003/JBP-004 exact-ref lineage (2026-11-19)
+## Latest Builder evidence — DLT-002/JBP and final donor CI (2026-11-19)
 
 DF-02 §47 records exact PR #110/#112 branch-tip comparisons against all 159 PR #97 changed paths, plus twelve successful exact-head workflow runs and two inspected JBP-004 artifacts. The evidence demonstrates bounded historical learning/persistence and cognitive-loop integration on separate open, draft, unmerged branches. It does not establish candidate behavior on PR #192, close donor-ledger rows, or select a source baseline.
 
-- DF-02 report blob: `bc4132a916b626a01f3cc615e18d632d63e8b6ae`, through §50.
-- Continuity checkpoint blob: `36e5f0cc22f580113d2aee02b8178994b4f6b916`, through §41.
-- Outstanding-work register blob: `41d2660253dff735151503f56b89a36b7733a140`, through §22.
-- Builder self-review blob: `9ed382d8e73892fa00e85b83695ce31aea000016`, through §22.
+- DF-02 report blob: `0859a8de92dca98b7c688e5d3e3e0e68c6af71eb`, through §51.
+- Continuity checkpoint blob: `d8cb7c2f11bc113e8c7d04bae82bf2059b573d82`, through §42.
+- Outstanding-work register blob: `16be4502fa8ba36b5d736b2fdebf05288779d347`, through §23.
+- Builder self-review blob: `069057d2d3eb29cf5996cbb5a4fc5f0a57c7384d`, through §23.
 - DF-06 audit blob: `8455ec627beb1aeab7fa5c65b86254a9106778eb`, through §20; parser/fragment/external/rendered-anchor obligations remain open.
 - Inventory blob: `9bd0e1b5589df286b156dbecf787eb6017467326`; its recorded terminal parent is superseded by later branch writes, so DF-10 remains reopened.
 - PR #192 Independent Reviewer request blob: `53a3671a6307329d051b379dd20830bc147df3e8`; intentionally unpinned until the terminal inventory successor.
@@ -91,6 +91,9 @@ DF-02 §47 records exact PR #110/#112 branch-tip comparisons against all 159 PR 
 
 - PR #100 DLT-002 probe: workflow run `40596743895` on workflow head `26bca...`, tested Brain commit `beb7971426c42d326f7553363d16f37ce311e9d9`; artifact `12778958158` verified. 35/35 mechanism gates passed; three 10-minute enabled trials and one matched no-feedback control; see DF-02 §49 for metrics and limitations.
 - PR #119/#121 integrated donor provenance: PR #119's five exact-head workflows passed on `fb994fed8b1bd39482aafd98110055032e8bc82f`; PR #121's four passed on `804497f7458ccd8346332cc0bd63bb0a9313858d`. Both are merged into donor feature branch head `c1da...`, not main. See DF-02 §50 for source/test evidence and exact candidate deltas.
+
+- Final PR #97 donor HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` shares exact Git tree `9ed26529a28d6eb28970355396ff2e2bbb3a3964` with PR #119 integration head `fb994fed8b1bd39482aafd98110055032e8bc82f`. Exact push-triggered Core Verification and Brain CI runs on `c1da...` passed 71/71 CTest in cpp-core, native and ASan/UBSan configurations. See DF-02 §51.
+
 
 
 
@@ -1591,3 +1594,36 @@ At the immediately preceding PR #192 source `9d61e9bb3ef0433e7b1c03bfcd1a3a19b8c
 DF-02 remains **OPEN**: exact donor lineage and historical behavioral evidence are stronger, but all-ref consumers/dependencies/duplicate ownership and full per-path semantic/authority disposition remain incomplete. DF-06 remains **NOT MET**. DF-09 remains **NOT MET / externally blocked**. DF-10 remains **REOPENED**. DF-11 remains waived as mandatory. DF-12 remains **PROJECT DIRECTOR ONLY**. PR #171 SYS-01–SYS-11 remains the existing architecture foundation. Stage A remains **NOT STARTED / HELD**.
 
 No current PR #192 runtime/test/CMake/workflow was changed. No current-PR build/CTest, donor adoption, independent verdict or Director acceptance is claimed.
+
+
+## 111. Exact-current Builder reconciliation — final donor tree and 71/71 test evidence (2026-11-19)
+
+**Exact PR #192 source before this index update:** `0b486b99de67d8e07d48713d1877b4c6d6c3f8b2`; open, non-draft, unmerged.  
+**Base:** `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.  
+**Compare:** 763 commits ahead, 0 behind.  
+**Changed paths:** 47 (45 Markdown, 2 JSON).  
+**Complete recursive tree:** 280 entries, `truncated=false`; 51 Markdown files.
+
+### 111.1 Final donor exact-tree and CI
+
+PR #119 integration head `fb994fed8b1bd39482aafd98110055032e8bc82f` and PR #97 donor HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` have identical Git tree `9ed26529a28d6eb28970355396ff2e2bbb3a3964`.
+
+Two push workflows on exact donor HEAD `c1da...` were fetched and verified successful:
+- Core Verification run `40788714735`, job `123168281914`: raw log 71/71 CTest passed.
+- Brain CI run `40788714686`, native job `123168281291` and ASan/UBSan job `123168281548`: both raw logs 71/71 CTest passed.
+
+The test set includes cognitive-runtime learning integration, memory/learning/evolution persistence, evolution adoption, developmental learning, developmental-brain/world integration and DLT-002 train/verify. Non-fatal compiler warnings remain recorded. The donor branch remains open/unmerged into main.
+
+### 111.2 Learning-probe evidence
+
+PR #100 DLT-002: 35/35 mechanism gates passed on historical Brain commit `beb797...`; three 10-minute enabled runs and one matched no-feedback control produced 569/586 vs 295/591 primary-seed choices. The workflow does not enforce an accuracy threshold, the no-feedback control still receives observations, and 1,629 non-action predictions remained unresolved. Full evidence and limitations are in DF-02 §49.
+
+PR #107 JBP-003 and PR #110/#112 JBP-004 remain additional bounded historical behavior evidence, with exact refs, artifact hashes and limitations in DF-02 §§47–48.
+
+### 111.3 Candidate boundary and gate status
+
+At the last exact candidate code-tree snapshot `9d61e9bb3ef0433e7b1c03bfcd1a3a19b8c6741d`, the 159 PR #97 paths compare as 1 identical, 95 divergent and 63 absent against donor `c1da...`; all 159 exist in donor. PR #119/#121 integration paths have material divergent/absent candidate deltas. Later PR #192 writes in this workstream are documentation-only and do not alter the audited C++ path set.
+
+DF-02 remains **OPEN** pending all-ref source-content consumers/dependencies/duplicate ownership and complete per-path semantic/authority disposition. DF-06 remains **NOT MET**. DF-09 remains **NOT MET / externally blocked**. DF-10 remains **REOPENED**. DF-11 remains waived as mandatory. DF-12 remains **PROJECT DIRECTOR ONLY**. PR #171 SYS-01–SYS-11 remains the existing architecture foundation. Stage A remains HELD.
+
+No donor code was adopted; no current PR #192 runtime/test/CMake/workflow changed or was tested; no independent verdict or Director acceptance is claimed.
