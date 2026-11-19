@@ -1408,7 +1408,7 @@ Donor `causal_link_codec.hpp` provides a typed, length-prefixed versioned encodi
 
 - Candidate `core/cpp/CMakeLists.txt` compiles `learning_loop.cpp`, `cognitive_cycle.cpp`, `cognitive_runtime.cpp`, `memory.cpp`, `causal_model.cpp` and other active modules, but not `brain_restored_api.cpp` or donor affective/developmental translation units.
 - Candidate `core/cpp/tests/CMakeLists.txt` registers a LearningLoop architecture suite and memory/prediction/evolution suites, but no affective, developmental-world, developmental-learning, or goal-outcome suite corresponding to the absent donor cohort.
-- Candidate `Brain::learn_outcome`/LearningLoop path is a separate evolution-adoption route from the experiment controller path already audited in §28. It calls `LearningLoop::process`, which may call `EvolutionModel::adopt` directly after its scalar threshold checks. This is an additional autonomous model-mutation path requiring caller/authority and journal/replay tracing; it must not be overlooked when defining the controller-only invariant.
+- Candidate `Brain::learn_from_prediction`/LearningLoop path is a separate evolution-adoption route from the experiment controller path already audited in §28. It calls `LearningLoop::process`, which may call `EvolutionModel::adopt` directly after its scalar threshold checks. This is an additional autonomous model-mutation path requiring caller/authority and journal/replay tracing; it must not be overlooked when defining the controller-only invariant.
 - No tests or build were executed during this source audit. CMake registration is evidence of intended compilation/test inclusion, not proof that the build succeeds.
 
 ### 31.6 Closure consequence
@@ -1464,3 +1464,44 @@ This is not a speculative inference: the candidate CMake files enumerate the com
 - Before a specialized learning workflow can serve as evidence, its targets must be restored as real implementation/tests or the workflow must be deliberately rewritten to test only real, registered successor mechanisms. Do not silently delete the checks and then count the workflow as equivalent evidence.
 
 **Disposition:** Five donor workflow paths receive bounded successor mapping; four candidate specialized workflows plus the memory probe are shown to reference missing targets. The generic core workflow is a plausible successor but has no current-head execution evidence. These rows remain OPEN pending an authorized target/workflow disposition, exact-head CI evidence and the wider 159-path consumer/authority closure. No workflow was edited or dispatched. DF-02 remains OPEN; Gate A/B and Stage A remain held.
+
+
+## 33. Exact Brain::learn_from_prediction adoption and replay path — corrected API identity (2026-11-19)
+
+**Exact candidate source:** PR #192 HEAD `f413570ef4be5885c167a8087c7504c8e0364563`.  
+**Candidate Brain header blob:** `8268ef84e0b361ead536724ba7761904b30ee58f`.  
+**Candidate Brain replay blob:** `e9f3758fcc9c0e89b7280ce376db9033d547682d`.  
+**LearningLoop implementation blob:** `bc9a6aaca38d060667bcdf82f2b1a1f72c5936ba`.  
+**LearningLoop test blob:** `1b01fc772f525619fb635579ccf7831187fee08a`.
+
+### 33.1 Exact public API behavior
+
+The earlier §31 shorthand is corrected: the API is `Brain::learn_from_prediction`, not `Brain::learn_outcome`.
+
+The method is an inline public member of `Brain` in `brain.hpp`. It:
+1. Requires a matching unresolved numeric prediction and finite fitness/actual/predicted values.
+2. Appends a `prediction_outcome` event and marks the prediction resolved.
+3. Appends an `evolution_fitness` event.
+4. Calls `learning_loop_.process`.
+5. For a changed proposal whose value is already present in the EvolutionModel, appends an `evolution_adopt` event.
+
+The invoked `LearningLoop::process` independently performs adaptation and fitness observation, generates proposals, then directly calls `EvolutionModel::adopt` when the proposal matches the feedback key, confidence is at least 0.75 and expected gain is positive. The method is therefore a separate public mutation route from `Brain::adopt_evolution_experiment` and `EvolutionController::adopt`; it does not stage/commit through the controller or its adoption journal.
+
+### 33.2 Replay and test coverage
+
+`Brain::replay` handles `evolution_adopt` by reconstructing a proposal from the event and directly calling `evolution_.adopt(proposal)`, then appending a replayed history record. The event emitted by `learn_from_prediction` contains key/current/proposed/expected_gain/confidence, but not the full experiment identity, evaluation evidence, or sandbox attestation required by the donor controller route.
+
+The registered `learning_loop_architecture_suite` tests `LearningLoop` directly with `AdaptationModel` and `EvolutionModel`; it does not instantiate Brain, call `Brain::learn_from_prediction`, inject persistence failures, or reconstruct the Brain and assert controller/journal/replay invariants. The inspected candidate test suite therefore does not provide a Brain-level regression for this public direct-adoption route.
+
+No in-repository caller of `Brain::learn_from_prediction` was found in the inspected candidate source/test set. That does not make the public API inaccessible to external clients; its public declaration means the authority/compatibility contract must be explicit. Do not silently remove or reroute it without checking public API consumers and the historical design decision.
+
+### 33.3 Required disposition
+
+Before any autonomous evolution mutation is considered safe, reconcile all three paths:
+- `Brain::adopt_evolution(const EvolutionProposal&)` — direct model mutation;
+- `Brain::learn_from_prediction(...)` / `LearningLoop::process` — direct model mutation after scalar thresholds;
+- `Brain::adopt_evolution_experiment(...)` / `EvolutionController::adopt` — controller/journal path with the gaps identified in §28.
+
+Define which paths are permitted for autonomous learning versus trusted/manual administration, ensure the persisted event schema is sufficient to validate/reconstruct the selected policy, and add Brain-level negative-path, failure-compensation and restart/replay tests. This is an API/authority decision and integration contract, not a request to restore the donor code wholesale.
+
+**Disposition:** §31's function-name reference is corrected. The separate direct-adoption path is now traced to the exact public method and its test/replay boundary. The control-plane invariant remains unresolved; no runtime code or tests were changed or executed. DF-02 remains OPEN.
