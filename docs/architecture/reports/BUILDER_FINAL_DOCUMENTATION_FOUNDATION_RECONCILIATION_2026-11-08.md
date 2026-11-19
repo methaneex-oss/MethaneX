@@ -663,3 +663,30 @@ These are useful improvements in provenance and behavioral evidence, but they ar
 DF-10 remains **REOPENED** until the inventory-only terminal successor is written after all other branch-file writes and independently compared. DF-11 remains waived as a mandatory gate; the separate exact-revision challenge remains requested. DF-12 remains Project Director-only. DF-01/03/04/05/07 still require final synchronization/traceability work; DF-08 remains resolved within its bounded criterion.
 
 No current PR #192 runtime source/test/CMake/workflow, donor adoption, source-baseline selection, training, integration, rebase, retarget, merge or deployment occurred. Stage A remains **NOT STARTED / HELD**.
+
+
+## 24. Current governed Builder state and residual gate appraisal — 2026-11-19
+
+**Exact PR #192 HEAD before this self-review update:** `4279a6ef3e64940b6682b23806731d97ba67650f`.  
+**Current governance source:** accepted governance document blob `f5827c552f36f4647339b3f8dfb38956d146c570` at live base tip `ea64607ef94f142a6142a013e119a7225bc95c1c`; fresh 1,022-line reread and run-specific revalidation are recorded in checkpoint §43.
+
+### What is now stronger
+
+- The final donor PR #97 tree is exactly identical to PR #119's integrated tree and has exact push-triggered Core Verification/Brain CI logs showing 71/71 CTest in cpp-core, native and ASan/UBSan configurations.
+- DLT-002 has 35/35 mechanism-gate data rows and three 10-minute enabled trials plus a matched consequence-feedback-disabled control. The observed accuracy difference is substantial but descriptive, not a workflow threshold; the control still receives observations and 1,629 non-action predictions remain unresolved.
+- JBP-003/JBP-004 provide additional bounded exact-branch behavioral evidence; the ten-tip exact-ref tree comparison broadens branch presence/difference evidence.
+- The PR #192 Phase 2 map's two stale source-line ranges were corrected against exact pinned blobs. GitHub now reports mergeable=true without rebase/retarget/merge.
+
+### What remains open
+
+The candidate-versus-donor ledger remains 1 identical, 95 divergent and 63 absent across 159 donor paths at the last exact candidate comparison. The all-210-tip source-content consumer/dependency/duplicate-owner scan is not complete; exact-ref tree comparisons and default-branch-only code search do not satisfy it. DF-02 remains OPEN.
+
+DF-06 remains NOT MET: the complete CommonMark/GFM parser discrepancy (353 versus 345), all local heading fragments, exhaustive external URL status/redirect/relevance, and authenticated rendered GitHub anchor/viewport checks remain unperformed. The connected tools do not expose an authenticated browser or local repository checkout; the container cannot resolve github.com.
+
+DF-09 remains NOT MET / externally blocked: no GitHub workflow-dispatch operation is exposed, and the latest blind fresh-reader verdict remains historical 31/32 PARTIALLY CLEAR, not CLEAR on the final target. DF-10 remains REOPENED because the verified inventory candidate was followed by additional Builder-owned branch-file writes. DF-12 remains Project Director-only.
+
+### Current branch state
+
+The live base branch is `ea646...`; the PR's recorded merge-base remains `61311...`. The branch is 780 ahead / 14 behind and GitHub reports mergeable=true after the targeted link correction. The PR description remains stale. The prior inventory candidate `67be...` is verified only for its exact parent/successor pair and is no longer terminal.
+
+No runtime source/test/CMake/workflow changes, donor adoption, source-baseline selection, build/CTest/training, independent verdict or Director acceptance occurred. PR #171 SYS-01–SYS-11 remains the architecture foundation. Stage A remains HELD. This is Builder self-review only.
