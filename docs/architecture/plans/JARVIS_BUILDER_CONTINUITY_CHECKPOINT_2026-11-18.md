@@ -501,3 +501,32 @@ The three mutation paths now explicitly requiring one authority contract are Bra
 3. Keep DF-02 OPEN, DF-06 NOT MET, DF-09 NOT MET, DF-10 terminal ordering, DF-11 waiver, DF-12 Director-only and Stage A hold intact.
 
 No runtime source, CMake or workflow file was changed. No test/build/workflow was executed.
+
+
+## 26. Builder milestone checkpoint — donor learning-test successor audit (2026-11-19)
+
+**PR #192 exact HEAD before checkpoint write:** af4e7c1543c46c427a614ce6ecc03ee734fda158.  
+**DF-02 report blob:** ba8b371c896f2c1f9746eff984fa57201f6b1db8.
+
+### 26.1 New test-successor findings in DF-02 §34
+
+Eight absent donor test paths were compared with candidate registered suites:
+
+- Candidate cognitive_cycle_suite tests cycle/decision/prediction feedback but not execution through an action adapter and consequence learning.
+- Candidate cognitive_runtime_suite tests runtime queue/start/metrics, not observed action consequences and learned future strategy.
+- Candidate learning_loop_architecture_suite tests scalar adaptation/evolution in isolation, not developmental contextual strategy learning or affective modulation.
+- Candidate goals_architecture_suite tests lifecycle and manual progress, not evidence-based positive/negative goal-outcome accumulation.
+- Candidate memory_architecture_suite tests event persistence and memory tiers, not multiple prediction experiences with the same semantic key distinguished by sequence.
+- Candidate component tests are separate; they do not replace donor's integrated memory-learning-evolution persistence scenario.
+- The active candidate Brain stores predictions in an unordered_map keyed by semantic key, so a second unresolved prediction with the same key replaces the first. The donor ExperienceMemory stores distinct experiences by sequence and resolves them independently.
+- The orphan goal-outcome API remains uncompiled and cannot count as an active successor.
+
+These findings align with the 20 missing workflow targets in §32. They are source/test-registration comparisons only; no tests were executed.
+
+### 26.2 Resume point
+
+1. Continue the remaining absent documentation/specification, example, and engineering-coordination paths in the 159-row ledger.
+2. Continue semantic comparisons for changed-blob runtime paths, with consumer tracing and event/persistence semantics.
+3. Preserve the explicit unresolved status of DF-02, DF-06, DF-09, DF-10 and DF-12. No Stage A or runtime implementation authorization is implied.
+
+No runtime source, test, CMake or workflow file was changed. No tests/build/workflow were run.
