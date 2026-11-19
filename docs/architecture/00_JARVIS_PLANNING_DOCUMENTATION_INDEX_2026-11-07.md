@@ -12,7 +12,7 @@
 | Exact source HEAD before this index update | `0b486b99de67d8e07d48713d1877b4c6d6c3f8b2` |
 | Base | `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` |
 | State | Open, non-draft, unmerged |
-| Commits ahead / behind | 763 / 0 |
+| Commits ahead / behind | 783 / 14 |
 | Changed paths | 47 total: 45 Markdown and 2 JSON |
 | Recursive tree | 280 entries, complete (`truncated=false`)
 
@@ -78,11 +78,11 @@ Stage A remains **NOT STARTED / HELD**. It may define whole-Brain capabilities a
 
 DF-02 §47 records exact PR #110/#112 branch-tip comparisons against all 159 PR #97 changed paths, plus twelve successful exact-head workflow runs and two inspected JBP-004 artifacts. The evidence demonstrates bounded historical learning/persistence and cognitive-loop integration on separate open, draft, unmerged branches. It does not establish candidate behavior on PR #192, close donor-ledger rows, or select a source baseline.
 
-- DF-02 report blob: `0859a8de92dca98b7c688e5d3e3e0e68c6af71eb`, through §51.
-- Continuity checkpoint blob: `d8cb7c2f11bc113e8c7d04bae82bf2059b573d82`, through §42.
-- Outstanding-work register blob: `16be4502fa8ba36b5d736b2fdebf05288779d347`, through §23.
-- Builder self-review blob: `069057d2d3eb29cf5996cbb5a4fc5f0a57c7384d`, through §23.
-- DF-06 audit blob: `8455ec627beb1aeab7fa5c65b86254a9106778eb`, through §20; parser/fragment/external/rendered-anchor obligations remain open.
+- DF-02 report blob: `73772192b9303d560b09c89a337f603d08459314`, through §51.
+- Continuity checkpoint blob: `abef33db99ffb720cd1e1cef99fafedd66cdd877`, through §42.
+- Outstanding-work register blob: `f8104239130e5a59c8c6aa1b50ff04690f8dc9a1`, through §23.
+- Builder self-review blob: `cdd0762a00ae1b4bc78b613ea84c2923f99d12db`, through §23.
+- DF-06 audit blob: `b42fdbd380135187c471092219ec1fb5e489811d`, through §20; parser/fragment/external/rendered-anchor obligations remain open.
 - Inventory blob: `9bd0e1b5589df286b156dbecf787eb6017467326`; its recorded terminal parent is superseded by later branch writes, so DF-10 remains reopened.
 - PR #192 Independent Reviewer request blob: `53a3671a6307329d051b379dd20830bc147df3e8`; intentionally unpinned until the terminal inventory successor.
 
@@ -93,6 +93,11 @@ DF-02 §47 records exact PR #110/#112 branch-tip comparisons against all 159 PR 
 - PR #119/#121 integrated donor provenance: PR #119's five exact-head workflows passed on `fb994fed8b1bd39482aafd98110055032e8bc82f`; PR #121's four passed on `804497f7458ccd8346332cc0bd63bb0a9313858d`. Both are merged into donor feature branch head `c1da...`, not main. See DF-02 §50 for source/test evidence and exact candidate deltas.
 
 - Final PR #97 donor HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` shares exact Git tree `9ed26529a28d6eb28970355396ff2e2bbb3a3964` with PR #119 integration head `fb994fed8b1bd39482aafd98110055032e8bc82f`. Exact push-triggered Core Verification and Brain CI runs on `c1da...` passed 71/71 CTest in cpp-core, native and ASan/UBSan configurations. See DF-02 §51.
+
+- Accepted governance revalidation: `docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md` blob `f5827c552f36f4647339b3f8dfb38956d146c570` at live base tip `ea646...`; full 1,022-line read and Builder revalidation are recorded in checkpoint §43.
+- Phase 2 map correction: blob `1ae6ca2dcde4c6f88040762a07ac11e7f01ea255`; exact pinned ranges now L18–L77 and L1–L84. GitHub reports mergeable=true, still 14 commits behind the live base.
+- Inventory candidate `67be666f...` passed exact one-commit/one-file/47-row verification against parent `18194...`, but subsequent checkpoint/map/DF06/DF02/register/self-review writes reopened DF-10. A new terminal cycle remains required.
+
 
 
 
@@ -1709,3 +1714,29 @@ DF-06 §§21–22 record bounded seven-file and later two-file unique-destinatio
 | DF-12 | **PENDING — PROJECT DIRECTOR ONLY** |
 
 Stage A remains **NOT STARTED / HELD**. No runtime implementation, baseline selection, donor adoption, training, integration, merge, rebase, retarget, branch rewrite or deployment is authorized.
+
+
+## 112. Exact-current governed PR/base state and reopened DF-10 cycle — 2026-11-19
+
+**Exact PR #192 source before this index update:** `6c65abbc412861ffc52881b4bbf53cd84c1e4269`; open, non-draft, unmerged.  
+**Base branch live tip:** `ea64607ef94f142a6142a013e119a7225bc95c1c`; PR recorded merge-base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.  
+**Compare:** 783 ahead / 14 behind; live GitHub metadata `mergeable=true`.  
+**Changed paths:** 47 (45 Markdown, 2 JSON).  
+**Complete recursive tree:** 280 entries, `truncated=false`; 51 tracked Markdown files.
+
+### 112.1 Accepted governance and current authority
+
+PR #196 is closed/merged into the existing base branch at `c151e52781e56e6481424f774c19ea30128debb0`. The accepted governance source is blob `f5827c552f36f4647339b3f8dfb38956d146c570` (1,022 lines) at base tip `ea646...`. The full read and Builder revalidation record are in checkpoint §43. No authority boundary changes are inferred beyond that accepted document.
+
+### 112.2 Current technical evidence
+
+- Final donor PR #97 HEAD `c1da...` and PR #119 integration tree share exact Git tree SHA `9ed26529a28d6eb28970355396ff2e2bbb3a3964`; exact donor-head Core Verification and Brain CI logs show 71/71 CTest in cpp-core, native and ASan/UBSan.
+- DLT-002: 35/35 mechanism-gate data rows PASS; three 10-minute enabled trials and matched no-feedback control; accuracy is descriptive, not a workflow threshold.
+- Current candidate exact 159-path comparison at `81b62...`: 1 identical, 95 divergent, 63 absent; all donor paths exist. The later branch writes are documentation-only.
+- Two Phase 2 map line ranges were corrected against exact pinned source blobs. The current PR is 14 commits behind but mergeable=true without rebase.
+
+### 112.3 Gate status and terminal inventory
+
+DF-02 remains **OPEN** pending all-210-tip source-content consumers/dependencies/duplicate ownership and complete per-path semantic/authority dispositions. DF-06 remains **NOT MET** pending full parser, local fragments, exhaustive external URL validation and authenticated rendered anchors. DF-09 remains **NOT MET / externally blocked**. DF-10 remains **REOPENED**: inventory candidate `67be...` passed its exact parent/successor test, but later branch-file writes superseded it. DF-11 remains waived as mandatory; DF-12 remains **PROJECT DIRECTOR ONLY**. Stage A remains **NOT STARTED / HELD**.
+
+The PR description is still stale and requires metadata-only synchronization. The Independent Reviewer request must not be pinned/dispatched until the final terminal inventory successor exists. No merge/rebase/retarget, runtime implementation, donor adoption, source-baseline selection, independent verdict or Director acceptance is claimed.
