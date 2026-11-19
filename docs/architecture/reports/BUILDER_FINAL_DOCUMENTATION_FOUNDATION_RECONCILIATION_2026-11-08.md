@@ -562,3 +562,31 @@ This is real bounded behavior-change evidence, stronger than source presence or 
 The additional JBP-003 evidence corrects the historical record: related JARVIS branches contain a validated, finite, hidden-rule action-learning challenge with adaptation and fresh-process recall, not merely orphan source files. This improves the factual basis for assessing donor capability and branch lineage. It does not establish that PR #192 has these behaviors, does not select a source baseline and does not close the 159-path semantic/authority ledger.
 
 DF-02 remains **OPEN** pending all-ref reverse consumers/dependencies/duplicate ownership and complete per-path semantic/authority disposition. DF-06 remains **NOT MET**; DF-09 remains **NOT MET / externally blocked**; DF-10 remains **REOPENED**; DF-12 remains **PROJECT DIRECTOR ONLY**. No PR #192 runtime/test/CMake/workflow change, current build/CTest, donor adoption, independent verdict or Director acceptance occurred. This is Builder self-review only.
+
+
+## 22. DLT-002 and final integrated donor branch — evidence appraisal (2026-11-19)
+
+**Exact PR #192 HEAD before this self-review update:** `075a18db54990362bb2df761fa3bf21c936d9bdd`.  
+**DF-02 report blob:** `bc4132a916b626a01f3cc615e18d632d63e8b6ae`, §§49–50.  
+**Continuity checkpoint blob:** `36e5f0cc22f580113d2aee02b8178994b4f6b916`, §41.  
+**Outstanding-work register blob:** `41d2660253dff735151503f56b89a36b7733a140`, §22.
+
+### 22.1 DLT-002 evidence
+
+The PR #100 workflow run `40596743895` succeeded on workflow head `26bca...` and its artifact binds the actual Brain revision to `beb7971426c42d326f7553363d16f37ce311e9d9`. The downloaded artifact's digest was verified. It contains 35/35 passing mechanism gates, three 10-minute enabled runs, a matched same-seed no-feedback control and raw episode data. Independent recomputation confirms the primary enabled run's 569/586 optimal decisions versus 295/591 in the control, and three-seed phase means of 93.3%–98.6%.
+
+This is credible controlled-task evidence of action-consequence learning and adaptation. It is not a formal accuracy acceptance gate: the workflow gates completion, phase/data integrity and action-consequence prediction resolution, while accuracy metrics are descriptive. The no-feedback control still receives observations; first-ten unseen-context performance also reaches 10/10 in the control. 1,629/2,215 non-action predictions remain unresolved. The tested Brain commit is 12 commits behind final donor head, although the DLT-002 test harness blob is identical at donor head.
+
+### 22.2 Final donor implementation and tests
+
+PR #119 and corrective PR #121 were merged into the donor feature branch at PR #97 head `c1da...`, not into main. Five workflows were verified successful on integration head `fb994...`; four were verified on correction head `804497...`. The donor head includes the runtime learning integration suite, memory/learning/evolution persistence suite, typed causal-link codec, fail-closed adoption helper and local process isolation. The test CMake file preserves assertions in Release.
+
+The inspected integration suite tests actual action execution/consequence feedback, prediction resolution, affective update, episodic memory, context isolation, regime reversal, and a real post-restart action decision. Its no-feedback control distinguishes successful verified execution from observed consequence learning. The persistence/evolution suite tests evidence propagation, strategy-driven choice, isolated evaluation/adoption and replay restoration. These are meaningful connected mechanisms, but they are controlled synthetic tests; they do not prove open-ended learning.
+
+### 22.3 Candidate delta and conclusion
+
+At candidate head `9d61e9...`, the exact 159-path comparison remains 1 identical, 95 divergent and 63 absent against donor head `c1da...`. PR #119's 40 paths include six absent and 34 divergent candidate paths; PR #121's 26 paths include three absent and 23 divergent. The donor branch contains all 159 paths. This makes the missing integrated learning/evolution interfaces and tests concrete candidate gaps.
+
+The evidence corrects the earlier risk of dismissing donor capabilities as merely uncompiled source: the final donor branch has connected, registered and historically CI-tested learning/persistence/evolution mechanisms. It does **not** prove that the current candidate implements them, authorize copying them, or establish that donor branch is the Project Director-selected baseline. PR #97 remains open/unmerged into main.
+
+DF-02 remains **OPEN** pending all-ref reverse-consumer/dependency/duplicate closure and full per-path semantic/authority disposition. DF-06 remains **NOT MET**; DF-09 remains **NOT MET / externally blocked**; DF-10 remains **REOPENED**; DF-12 remains **PROJECT DIRECTOR ONLY**. Stage A remains HELD. No current PR #192 runtime source/test/CMake/workflow changed; no current-PR build/CTest was run; no donor adoption, independent verdict or Director acceptance is claimed. This is Builder self-review only.
