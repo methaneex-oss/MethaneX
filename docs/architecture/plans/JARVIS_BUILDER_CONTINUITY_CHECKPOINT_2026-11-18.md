@@ -707,3 +707,40 @@ Exact blob identities and test details are in DF-02 §41.
 The evidence extends the semantic comparison across additional public contracts. The affected rows remain OPEN pending exact-ref consumer/alternate-owner searches, dependency/duplicate ownership, historical authority and any Project Director scope/retirement decisions. The all-ref content scan remains incomplete.
 
 No runtime source, test or CMake file was changed. No donor code was adopted. No build, CTest or workflow was executed. DF-02 remains OPEN; DF-06 and DF-09 remain unmet; DF-10 remains reopened; DF-11 remains waived; DF-12 remains Project Director-only; Stage A remains HELD.
+
+
+## 34. Builder milestone checkpoint — DF-02/DF-06 correction and review-packet integrity — 2026-11-19
+
+**Exact PR #192 HEAD before this checkpoint write:** `046c43eba6bae97bffd7350c645065268421f02c`.  
+**Base:** `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.  
+**Donor PR #97 exact HEAD:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+
+### 34.1 Evidence work now recorded
+
+- DF-02 report blob `397c4db47f959f1784b97431273d9104bf8b3cef` contains the 159-row exact blob ledger, prior bounded semantic audit tranches, and new §39–§41 comparisons covering adaptation/association/attention/causal behavior; cognitive state/workspace/decision/evolution contracts; and goal/intent/knowledge/planning/reflection/self-model contracts. The duplicate report headings have been disambiguated as §10A and §25A, recorded in §42. These source/API/test comparisons remain bounded; they do not close all 159 semantic dispositions or cross-branch reverse-consumer/dependency closure.
+- DF-06 report blob `bff3ab6a81ab12bd20ac3b9e6a2e834ae16b1989` adds the missed linked Actions run #42976840057. The run completed successfully on historical head `e687f3295f6f858f713694d941e97fbd94ac6154` on 2026-11-11; it is not evidence for current PR #192. The report now enumerates 22 Actions-run IDs in its inspected destination scope and retains the full parser/fragment/external-semantic/rendered-anchor residuals.
+- The Independent Reviewer request's four path strings were rechecked and corrected twice: first the trailing `)` was removed, then the missing closing code delimiters were restored. Current request blob `53a3671a6307329d051b379dd20830bc147df3e8` has no `...md)` malformed strings; all four intended target paths exist in the exact complete tree, and all 11 path bullets in the required-material section have paired backticks.
+- The planning index now records the path-syntax correction in §106. Current index blob at the preceding update: `ecd91574e3da8415ff7857cb9bc13619e8cdedb8`. The outstanding-work register §18 records the same correction; current register blob at the preceding update: `afb29f88399fd3f7abd0097164e8076ae7cbc297`.
+
+### 34.2 Current gate disposition and authority boundary
+
+- DF-01: Builder entry-point evidence exists; exact final synchronization remains pending.
+- DF-02: **OPEN**. The donor path/blob ledger and multiple semantic tranches exist, but all-path semantic successor/retirement/non-adoption, complete historical authority provenance and cross-branch consumer/dependency/duplication closure are not complete.
+- DF-03: Partially evidenced; recovered and primary decision provenance must remain distinguished and scoped.
+- DF-04: Builder evidence present; proposed governance remains distinct from accepted bounded amendments.
+- DF-05: Partially evidenced; branch and selected ancestry records do not establish the complete semantic dependency graph.
+- DF-06: **NOT MET**; complete parser history, local fragment checks, exhaustive external status/redirect/relevance and authenticated rendered GitHub anchor checks remain outstanding.
+- DF-07: Correction in progress until index/register/checkpoint/self-review/PR description/review assignment all match the final frozen revision.
+- DF-08: Resolved within its bounded preservation criterion.
+- DF-09: **NOT MET / externally blocked** pending authorized workflow dispatch for the final exact SHA and a genuine fresh-reader result of CLEAR. The connected GitHub actions do not expose workflow dispatch; prior 31/32 PARTIALLY CLEAR is historical.
+- DF-10: **REOPENED** by the current documentation writes; the complete final parent manifest and inventory-only successor must be regenerated after every other branch-file write.
+- DF-11: **WAIVED as a mandatory gate**; a separate exact-revision review challenge remains requested by Project Director instruction.
+- DF-12: **PROJECT DIRECTOR ONLY**; no acceptance is inferred.
+
+Stage A remains NOT STARTED / HELD. Runtime implementation, baseline selection, donor adoption, test/training execution, merge, rebase, retarget, cherry-pick, branch rewrite and deployment remain unauthorized.
+
+### 34.3 Verification record and next bounded objective
+
+The current branch work changed documentation only. No runtime source, tests, CMake or workflow was modified. No build, CTest, or new Actions run was executed. Historical run #42976840057 is not current-source evidence. No Independent Reviewer verdict, DF-09 CLEAR, or DF-12 decision is claimed.
+
+Continue the remaining Builder-owned semantic/authority and link-evidence work without converting unavailable exact-ref all-branch content search or authenticated browser verification into passes. After all content writes, regenerate the exact parent manifest, perform the terminal DF-10 inventory-only commit, verify the successor, and then publish a superseding Independent Reviewer assignment pinned to the immutable terminal SHA. DF-09 must be separately dispatched by an authorized operator against that same SHA.

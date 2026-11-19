@@ -406,3 +406,38 @@ The previous terminal inventory pair applies only to its old parent/successor. T
 The Builder extracted 76 commit-pinned line ranges (73 unique tuples) from the Phase 2 integration map and fetched each exact commit/path. Six ranges extended one line beyond EOF; the Phase 2 map has been corrected to the verified final line. The remaining 67 ranges were within file bounds. Six referenced PR issue-comment IDs were confirmed present in discussion APIs. This is not authenticated rendered-browser verification.
 
 DF-06 remains NOT MET pending complete parser reconciliation, external URL status/redirect/semantic checks and authenticated rendered-anchor verification. The correction is another PR #192 file write; DF-10 remains reopened until the final inventory-only successor is produced after all other writes.
+
+
+## 18. Exact-current Builder self-review — 2026-11-19 continuation
+
+**Exact PR #192 source before this self-review update:** `046c43eba6bae97bffd7350c645065268421f02c`; open, non-draft, unmerged; 47 changed paths; complete 280-entry recursive tree. Base remains `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.
+
+### 18.1 Evidence added and verified
+
+- DF-02 report `397c4db47f959f1784b97431273d9104bf8b3cef`: semantic audits §§39–41 now compare additional exact donor/candidate contracts across adaptation, association, attention, causal modeling/codec, cognition/workspace, decision, evolution, goals, intent, knowledge, planning, reflection and self-model. The report numbering collision is disambiguated as §§10A/25A. The exact 159-path ledger remains a structural identity ledger; it is not a completed semantic-disposition matrix.
+- DF-06 report `bff3ab6a81ab12bd20ac3b9e6a2e834ae16b1989`: includes the additional reachable Actions destination #42976840057 and its actual historical run SHA `e687f3295f6f858f713694d941e97fbd94ac6154`. It is historical CI, not a current PR #192 run. The enumerated Actions destination count is 22; external semantic and rendered checks remain open.
+- Independent Reviewer request blob `53a3671a6307329d051b379dd20830bc147df3e8`: the four previously malformed repository paths were corrected, then all four inline-code spans were verified to have matching delimiters. All four intended paths are present in the exact tree; none of the malformed `...md)` strings remain. The full request remains unassigned to a current SHA pending terminal inventory closure.
+- The controlling index and authority register were updated to disclose the correction and preserve exact revision boundaries.
+
+### 18.2 Current gate assessment
+
+| Gate | Builder assessment |
+|---|---|
+| DF-01 | Entry route exists; final exact-head synchronization pending |
+| DF-02 | **OPEN** — all-path semantic successor/retirement authority and all-ref consumers/dependencies remain incomplete |
+| DF-03 | Partially evidenced — decision provenance and authority scopes still require exact distinction |
+| DF-04 | Builder evidence present — proposed governance is not misrepresented as accepted |
+| DF-05 | Partially evidenced — branch metadata/selected ancestry are not complete semantic dependency closure |
+| DF-06 | **NOT MET** — full parser/fragment/external-semantic/authenticated rendered-anchor checks remain incomplete |
+| DF-07 | Correction in progress — all controlling artifacts and PR description require final exact-head synchronization |
+| DF-08 | Resolved within the bounded preservation criterion |
+| DF-09 | **NOT MET / externally blocked** — no workflow-dispatch operation; final exact SHA must receive a distinct-model CLEAR assessment |
+| DF-10 | **REOPENED** — terminal inventory must be the final branch-file write and be verified as a one-commit/one-file successor |
+| DF-11 | **WAIVED** as mandatory; separate Independent Reviewer challenge remains requested |
+| DF-12 | **PENDING — PROJECT DIRECTOR ONLY** |
+
+### 18.3 What was not done
+
+No runtime C++, tests, CMake, workflow or training environment changed. No build, CTest, fresh-reader workflow dispatch or new provider invocation was executed. No donor code was adopted; no source baseline was selected. No reviewer verdict, Project Director acceptance, Stage A, merge or implementation authorization is claimed.
+
+The documentation foundation is **not accepted** on this record. The Builder will continue only evidence-backed work within the existing authority boundary, then run the terminal DF-10 cycle and request exact-revision independent challenge. DF-09 and DF-12 remain external decision/execution boundaries.
