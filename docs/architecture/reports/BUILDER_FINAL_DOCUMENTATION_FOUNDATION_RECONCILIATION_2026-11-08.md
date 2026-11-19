@@ -616,3 +616,33 @@ It also does not prove the current PR #192 candidate has these mechanisms. At th
 The historical donor capability record is now materially better evidenced than a simple source-presence audit. The remaining task is not to deny these mechanisms exist; it is to finish the candidate-versus-donor semantic reconciliation, all-ref consumer/dependency/duplicate analysis and authority provenance without silently porting or blessing donor code.
 
 DF-02 remains **OPEN**. DF-06 remains **NOT MET**; DF-09 remains **NOT MET / externally blocked**; DF-10 remains **REOPENED**; DF-12 remains **PROJECT DIRECTOR ONLY**. Stage A remains HELD. No current PR #192 runtime/test/CMake/workflow change, build, CTest, independent verdict or Director acceptance is claimed. This is Builder self-review only.
+
+
+## 22. Exact-current PR/base correction and recovered DLT-002 behavioral artifacts — 2026-11-19
+
+**PR #192 exact HEAD at acquisition:** \`9d61e9bb3ef0433e7b1c03bfcd1a3a19b8c6741d\`; branch ref and PR metadata agree.  
+**Base branch current tip:** \`ea64607ef94f142a6142a013e119a7225bc95c1c\`; PR recorded base/merge-base: \`61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c\`.
+
+### 22.1 Live-state correction
+
+The current PR tree contains 280 entries (\`truncated=false\`), 47 changed paths and 51 Markdown files. The PR remains open, non-draft and unmerged. Its description still named \`bbd33d8...\` as the live head and claimed 0 behind. The current base branch has advanced 14 commits from the recorded PR base; current base-to-head comparison reports 754 ahead / 14 behind and a diverged graph. Live PR metadata reports mergeable=false. This is recorded without retargeting, rebasing, merging or rewriting either branch.
+
+### 22.2 DLT-002 evidence recovered and artifact hashes independently checked
+
+PR #99 run \`40419118694\` succeeded on the workflow PR head and completed exact checkout, configure/build, 36 explicit mechanism gates, a 10-minute six-phase DLT-002 trial and artifact upload. Artifact \`12696474493\` was downloaded; local SHA-256 \`ab109d1849e63d8f0e6409861a131b3214a1e4c6db62a7d9ce33f255bcc66013\` matches GitHub's digest. Its metadata identifies tested runtime commit \`8525de774493de7c8eab05baa98af94cd068e995\`, an ancestor of PR #97 head.
+
+PR #100 run \`40596743895\` succeeded and completed exact checkout, configure/build, explicit mechanism gates, the primary integrated trial, two additional seeds, a matched outcome-feedback-withheld control, analysis and artifact upload. Artifact \`12778958158\` was downloaded; local SHA-256 \`e706f91d2d6d89d8357ee27566a66bdb81dafb470839f8e0057eaa6603a712e2\` matches GitHub's digest. Its metadata identifies tested runtime commit \`beb7971426c42d326f7553363d16f37ce311e9d9\`, also an ancestor of PR #97 head.
+
+The primary feedback-enabled trial achieved 569/586 optimal action choices (97.1%); the matched consequence-feedback-withheld control achieved 295/591 (49.9%). The control still receives observations and can update execution-reliability/self-model mechanisms; it isolates consequence feedback rather than disabling every learning process. The artifacts are finite synthetic navigation trials and do not establish open-world generalization or general intelligence.
+
+### 22.3 Additional exact-ref tree evidence and limits
+
+DF-02 §49.3 compares the 159 donor paths against ten complete exact-ref branch trees. The donor head contains all 159 identical blobs; the learning-probe branch contains 1 identical, 94 divergent and 64 absent; eight additional cognitive/learning/evolution tips contain 47–85 divergent and 74–112 absent same-path entries. These counts are not semantic successors or content-consumer results. The 251-ref / 210-unique-tip census remains a branch enumeration only.
+
+DF-06 §21 records a bounded four-file link-set delta from \`849ae...\` to \`9d61...\` with no destination additions/removals in those four files. It does not resolve the full CommonMark/GFM parser discrepancy, local fragments, exhaustive external checks or authenticated rendered GitHub anchors.
+
+### 22.4 Current self-review conclusion
+
+This work strengthens the historical evidence base: the donor lineage has exact-run, exact-artifact evidence for integrated learning mechanisms and a matched consequence-feedback control. It does not establish that the current PR #192 candidate implements those mechanisms. The candidate/donor semantic differences remain material and must not be waived by historical donor success.
+
+DF-02 remains **OPEN**; DF-06 remains **NOT MET**; DF-09 remains **NOT MET / externally blocked**; DF-10 remains **REOPENED**; DF-12 remains **PROJECT DIRECTOR ONLY**. DF-11's mandatory-gate waiver remains preserved. No runtime source, test, CMake or workflow in PR #192 was changed; no current-PR build/CTest or training run was performed. No donor code was adopted or source baseline selected. PR #171 SYS-01–SYS-11 remains the existing whole-system foundation. Stage A remains **NOT STARTED / HELD**.
