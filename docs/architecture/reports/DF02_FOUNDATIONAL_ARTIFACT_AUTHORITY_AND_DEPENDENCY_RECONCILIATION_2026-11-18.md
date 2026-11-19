@@ -965,3 +965,27 @@ The action authorization and action model tests are already materially represent
 **Disposition for this tranche:** two tests are classified as semantically preserved; two are classified as substantial donor test expansions over narrower current tests. No tests were run, and no test result or donor adoption is claimed.
 
 **DF-02 remains OPEN.** Sections §16–§25 now provide bounded semantic dispositions for 94 of PR #97's 159 changed paths. The remaining 65 paths still require per-path semantic disposition, and complete reverse-consumer/dependency/duplication closure across relevant branches and historical artifacts remains outstanding. This tranche does not close Gate A/B, select a source baseline, authorize donor adoption, start Stage A or authorize runtime implementation.
+
+
+## 26. Goal progress, prediction-instance memory and knowledge-reliability test audit — 2026-11-19
+
+**Exact PR #192 source:** `36aa6e10179172c408eccb19d436d7f8825c6814`.  
+**Donor PR #97 exact HEAD:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
+**Scope:** Four donor test sources covering goal-outcome modeling, goal persistence, prediction-instance memory and reliability updates.
+
+| Test path | Donor blob | Current PR #192 result | Semantic disposition |
+|---|---|---|---|
+| `core/cpp/tests/goal_directed_cognition_suite.cpp` | `7fe6cf6c4dd2dc2a54bb9f48fcdd3c3d91d7c282` | Absent at exact current tree. | **Donor-only goal integration/persistence test.** Checks active-goal intent and priority, plan/decision selection, progress increase from positive outcome evidence, regression after negative evidence, completion transition and reconstruction of completed goal/progress after journal restart. It is a bounded goal-state capability test, not proof that goal priorities or goals themselves emerge autonomously. |
+| `core/cpp/tests/goal_outcome_model_suite.cpp` | `c9f19978d6d2df45028cb824e835144dc45c70e7` | Absent at exact current tree. | **Donor-only focused model test.** Verifies positive and negative progress deltas, confidence aggregation, completion threshold and isolation of unrelated goal IDs. This validates arithmetic/state semantics in isolation, not the Brain's full goal feedback pipeline. |
+| `core/cpp/tests/experience_memory_test.cpp` | `fe69fed346c9f843101fc3379d6d474f4a082651` | Absent at exact current tree. | **Donor-only prediction-instance memory test.** Stores two forecasts sharing a key but carrying different sequence IDs, resolves the older instance without resolving the newer one, then resolves the remaining instance. This is a key invariant against stale or misattributed delayed feedback. The test is not a substitute for verifying the production Brain journal and replay path. |
+| `core/cpp/tests/knowledge_memory_phase3_suite.cpp` | `e33b9813edbfaf02a91a3f94988f5c7a54ceed8f` | Current blob `f796977fd116418b3cf0a5f9c8d33ed7a48f811e`; same 40-line structure and assertions inspected. | **Preserved.** Both versions test knowledge-source reliability updating from evidence, observation count and bounded reliability. The donor does not add a material behavioral contract in this test. |
+
+### 26.1 Cross-mechanism interpretation
+
+These tests cover distinct state owners that must remain coordinated: prediction instances are identified independently even when semantic keys repeat; goal progress is updated from outcome evidence and can move backward; and knowledge-source reliability is revised from subsequent evidence. The first two are donor-only tests in the current tree, while the knowledge-reliability test is already preserved.
+
+The donor's test source uses assertions, and §24.1 records the donor CMake rule that keeps assertions enabled for Release test executables under GNU/Clang and MSVC. No build or test execution is claimed.
+
+**Disposition for this tranche:** three donor-only test contracts are retained as explicit successor/evaluation criteria; one test is classified as preserved. No test file is adopted or modified.
+
+**DF-02 remains OPEN.** Sections §16–§26 now provide bounded semantic dispositions for 98 of PR #97's 159 changed paths. The remaining 61 paths still require per-path semantic disposition, and complete reverse-consumer/dependency/duplication closure across relevant branches and historical artifacts remains outstanding. This tranche does not close Gate A/B, select a source baseline, authorize donor adoption, start Stage A or authorize runtime implementation.
