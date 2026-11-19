@@ -1428,3 +1428,43 @@ A subsequent exact-line inspection found that the four malformed path correction
 - Each of the 11 repository-path bullets in the required-material list has exactly two inline-code delimiters.
 
 This corrects the verification boundary of the previous §105 statement; the earlier §104/§105 records remain as historical chronology. The review request is still unpinned to a final target; the exact terminal inventory successor SHA will be assigned only after all Builder-owned file writes and the final DF-10 comparison.
+
+
+## 107. Exact-current Builder reconciliation — DF-02 §§39–46, DF-06 §20 and current gate blockers (2026-11-19)
+
+**Exact PR #192 source before this index update:** `cabcb79cd14d9786de29dff5f47df227a01da176`; open, non-draft, unmerged; branch `docs/whole-brain-planning-scope-correction-20261107`; base `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; 743 commits ahead / 0 behind; 47 changed paths; complete 280-entry recursive tree (`truncated=false`).
+
+### 107.1 Latest controlling evidence
+
+- **DF-02:** `docs/architecture/reports/DF02_FOUNDATIONAL_ARTIFACT_AUTHORITY_AND_DEPENDENCY_RECONCILIATION_2026-11-18.md` — blob `e3feb2369b232c615cfb30933330b0102436a115`, §§39–46. New exact source/API/test comparisons cover learning, affect, attention, causal modeling, cognition/workspace, decision/planning, evolution transaction/attestation, goal/intent/knowledge/reflection/self-model, engineering task coordination/message delivery, donor-only developmental/ExperienceMemory/affective artifacts, and Brain/memory/prediction integration tests.
+- **DF-02 identity verification:** exact donor/candidate trees rechecked all 159 ledger pairs with zero SHA mismatches: 1 identical, 95 divergent and 63 absent same-path candidate entries. The 251-branch/210-tip census is current. This is not all-ref source-consumer closure; GitHub code search is default-branch-only, and no local mirror can be fetched in this runtime. DF-02 remains **OPEN**.
+- **DF-06:** `docs/architecture/reports/DF06_BUILDER_LINK_AND_NAVIGATION_AUDIT_2026-11-17.md` — blob `8455ec627beb1aeab7fa5c65b86254a9106778eb`, §20. The current custom extraction count is 345 destinations (131 local, 214 HTTP(S)); earlier strict extraction was 353 (134 local, 219 HTTP(S)). The eight-destination discrepancy remains unresolved. Local fragments, exhaustive external status/redirect/relevance and authenticated rendered GitHub anchors remain open. The 22-run Actions count is reconciled. DF-06 remains **NOT MET**.
+- **Continuity checkpoint:** `docs/architecture/plans/JARVIS_BUILDER_CONTINUITY_CHECKPOINT_2026-11-18.md` — current blob `a4aa23d935843b6c6ccb617c4756ddb6d228a08e`, §§31–37.
+- **Builder self-review:** `docs/architecture/reports/BUILDER_FINAL_DOCUMENTATION_FOUNDATION_RECONCILIATION_2026-11-08.md` — blob `f3c8c25ce7ec1bb4c7956176067ff6cffec5aed5`, §19.
+- **Outstanding-work register:** `docs/architecture/reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md` — blob `7ffa827bcef29941fa155787af3a7184cd4b5b7f`, §19.
+- **Independent review:** latest xAI review of historical exact SHA `beb4d5a174a1dd613878f89132e97b5e6052c7d3` was PARTIALLY CLEAR (31/32); it does not apply to the current head. The PR #192 Independent Reviewer request remains unpinned until after the terminal inventory successor. The separate DF-02 historical-lineage review request has no returned verdict.
+
+### 107.2 Existing whole-system architecture foundation
+
+PR #171 remains open/draft/unmerged. Its two whole-system architecture documents were individually approved by the Project Director at exact historical revisions: Document 00 commit `8490737429b052b65fed3b998e0320d8834f640f` / blob `ff0e57f2f9a266466687dca2c4cbcda6a64cb7d7` (comment #6556047098), and Document 01 commit `f32d2c9ede71676759b55c87c783253bd23ebbae` / blob `15c9bfc06f5f094d396f8a9dc625c22ac0d1b279` (comment #6556276653). Current branch copies contain administrative approval-record updates, not new architectural approvals. Preserve SYS-01–SYS-11 as the existing whole-system foundation; Stage A must reconcile with it, not duplicate it.
+
+### 107.3 Current gate disposition
+
+| Gate | Status |
+|---|---|
+| DF-01 | Builder evidence present; final exact-head synchronization pending |
+| DF-02 | **OPEN** — exact 159-path identity ledger verified; all-ref consumer/dependency and final authority/disposition closure incomplete |
+| DF-03 | Partially evidenced |
+| DF-04 | Builder evidence present within bounded scope |
+| DF-05 | Partially evidenced |
+| DF-06 | **NOT MET** — parser discrepancy, fragment, external and authenticated rendered-anchor requirements remain |
+| DF-07 | Synchronization in progress |
+| DF-08 | Resolved within bounded preservation criterion |
+| DF-09 | **NOT MET / externally blocked** — latest run #44192302873 is historical PARTIALLY CLEAR; no workflow-dispatch operation is exposed |
+| DF-10 | **REOPENED** — terminal inventory-only successor must follow all other branch-file writes |
+| DF-11 | Waived as mandatory; separate reviewer challenge remains requested |
+| DF-12 | **PENDING — PROJECT DIRECTOR ONLY** |
+
+Stage A remains **NOT STARTED / HELD**. No runtime source, tests, CMake, workflows or training environment were changed; no build, CTest, fresh-reader dispatch or provider invocation was executed. No donor code was adopted or source baseline selected. No independent verdict or Project Director acceptance is claimed.
+
+**Next:** finish remaining Builder-controlled semantic/dependency evidence; obtain the exact-ref repository mirror/search, authenticated browser and workflow-dispatch execution through the responsible external operators; then synchronize the controlling documents, perform the terminal DF-10 inventory cycle, pin the exact final reviewer request, and preserve the separate DF-12 Director decision boundary.
