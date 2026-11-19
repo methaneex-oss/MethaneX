@@ -196,3 +196,61 @@ The review request's prior target `7d2238542dddf5ab210ad84c37bf259cea3b3559` is 
 The Builder checked the 73 unique commit-pinned line-range tuples extracted from the Phase 2 capability-to-source map. Six ranges exceeded the exact target file length by one line and were corrected in that map; the other 67 ranges were within file bounds. The six comment IDs referenced by the extraction were confirmed present through the PR discussion APIs. These checks establish source-range bounds and comment-record existence, not browser-rendered anchor behavior.
 
 DF-06 remains NOT MET under the Project Director's Option A. External status/redirect/semantic relevance, complete parser reconciliation and authenticated rendered GitHub anchor verification remain outstanding.
+
+
+## 17. Builder continuity checkpoint — 2026-11-19 (app/session recovery)
+
+This checkpoint is a recovery handoff. It records the exact live repository state and the work performed in this continuation. It does not supersede the Project Director's decisions or authorize work outside the existing boundaries.
+
+### 17.1 Exact repository state at checkpoint
+
+- Repository: `methaneex-oss/MethaneX`.
+- PR: **#192 — Documentation Foundation**.
+- Branch: `docs/whole-brain-planning-scope-correction-20261107`.
+- Base: `docs/jarvis-phase-2-whole-brain-integration-map-20261105` at `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.
+- Exact PR #192 HEAD before this checkpoint write: `42b9d19c133040d2c730c02dbbb9451813693b8e`.
+- PR state at acquisition: open, non-draft, unmerged.
+- PR changed-path count at acquisition: 47. The current tree contains the existing continuity checkpoint and DF-02/DF-06/inventory/review artifacts; this update modifies an already-changed checkpoint path and does not introduce a new changed path.
+- Donor PR #97 exact HEAD: `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`; changed-path count: 159.
+
+### 17.2 Work completed in the latest bulk continuation
+
+The Builder continued the Project Director-authorized DF-02 Option A semantic reconciliation. New bounded sections were appended to the DF-02 report:
+
+- §21: all eight donor workflows, core build graph and three developmental-world example files, with exact donor/current dispositions and operational caveats.
+- §22: the developmental training guide and four plan/specification pairs, with historical authority and successor limitations.
+- §23: public cognitive/runtime/memory/action/affective API contracts, including the important distinction between engineered priors and experience-updated parameters.
+- §24: six donor developmental integration/environment/learning/world/persistence test sources, including the cross-process persistence gate and Release assertion-preservation rule.
+- §25: regression-test lineage for action authorization, action model, cognitive cycle and cognitive runtime.
+- §26: goal-progress, prediction-instance memory and knowledge-reliability test contracts.
+- A subsequent public-header reconciliation section (also numbered §25 in the current report) compares 26 donor public headers and records additive, divergent and donor-only contracts. The duplicate section number is a report-structure defect to correct in the next DF-02 editorial pass; do not silently renumber until all internal cross-references are checked.
+
+These are source/API/test-source audits only. No C++ source was changed, no donor code was adopted, no build or CTest was run, no workflow was dispatched, and no independent review verdict was obtained. A test source or CMake registration is not evidence that a test passed.
+
+### 17.3 Current DF-02 state and important correction
+
+The current DF-02 report blob at the checkpoint source is `263f3b39fa4399d202107bdd13b05a081888dbbe`. Its §26 explicitly states that §§16–§26 provide bounded semantic dispositions for **98 of 159** donor paths, leaving **61** for per-path semantic disposition; it also states that reverse-consumer/dependency/duplication closure remains outstanding. The additional public-header reconciliation section records 26 header/API dispositions, but it does not claim the remaining implementation/test/build and consumer audit is complete. Do not infer DF-02 closure from the fact that donor path names occur somewhere in the report or from structural inventory coverage.
+
+The next DF-02 work should continue on the 61-path residual stated by §26, first reconcile the duplicate §25 numbering and source-revision anchors, then audit the remaining implementation files and their reverse consumers, followed by remaining tests/build integration and engineering-coordination paths. Count a path as semantically covered only when its exact donor blob, exact candidate successor (or documented absence), behavioral/API delta, consumer/successor search and explicit disposition are recorded—not merely because the path name appears in a table.
+
+### 17.4 Current gate and authority state
+
+- DF-02: **OPEN**; all-path semantic successor/retirement/non-adoption and reverse-consumer/dependency/duplication closure are not complete.
+- DF-06: **NOT MET** under Project Director Option A. Existing static local-path and pinned-line-range evidence does not close full parser/fragment reconciliation, external URL status/redirect/semantic checks or authenticated rendered GitHub anchors.
+- DF-09: **NOT MET** pending a new exact-final-HEAD blind fresh-reader assessment returning CLEAR. The prior 31/32 PARTIALLY CLEAR result is historical and cannot be reused.
+- DF-10: **REOPENED** by the continuing PR #192 documentation writes. The terminal inventory must be refreshed against the exact final parent tree and then written as the final branch-file change; verify one commit ahead, zero behind, one changed path (the inventory), all changed-path blob identities and a complete successor tree.
+- DF-11: waived as a mandatory gate under the recorded direction; the separate Independent Reviewer request remains published.
+- DF-12: **PROJECT DIRECTOR ONLY**; no acceptance is inferred.
+- Stage A: **NOT STARTED / HELD**. Runtime implementation, source-baseline selection, donor adoption, training, PR integration, merge, rebase, retarget, cherry-pick, branch rewrite and deployment remain unauthorized.
+
+### 17.5 Immediate resume protocol
+
+1. Re-fetch live PR #192 metadata before any work; do not assume this checkpoint SHA remains current.
+2. Fetch the current DF-02 report and reconcile the duplicate §25 numbering and exact source revision anchors before adding further sections.
+3. Continue the residual implementation audit in bounded batches (three to five paths), comparing exact PR #97 donor blobs with the exact live PR #192 tree and tracing call sites/consumers. Do not mark absence as retirement without searching alternate owners and branches.
+4. Continue test/build/engineering path reconciliation only after their runtime dependencies and consumers are understood. Never claim test execution without actual exact-SHA build/CTest/CI evidence.
+5. Complete DF-06 using the Option A standard; do not convert static checks into rendered-browser or external-reachability claims.
+6. Synchronize the planning index, register, review request and self-review only when their exact-current evidence is ready. Then perform the terminal DF-10 inventory cycle as the final file write, pin the exact SHA in a superseding reviewer assignment, and wait for independent review and the separate DF-12 Director decision.
+7. Keep the existing PR #171 SYS-01–SYS-11 architecture foundation authoritative within its scope. Do not restart or redesign JARVIS.
+
+**Operating rule:** evidence before completion claims; root-cause correction before repeated attempts; one bounded objective at a time; preserve existing architecture and authority boundaries; report only major milestones. The user's authorization is to continue Builder-owned closure work in bulk, not to bypass gates or begin runtime implementation.
