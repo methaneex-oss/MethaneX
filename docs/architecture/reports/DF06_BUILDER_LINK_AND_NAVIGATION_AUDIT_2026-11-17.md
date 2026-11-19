@@ -310,3 +310,23 @@ The Builder extracted 76 commit-pinned source line-range references from the Pha
 The six source links are corrected to their actual final lines. The other 67 line-range tuples passed the bounded file-length check. This verifies source existence and range bounds at immutable commits; it does **not** prove GitHub's rendered browser anchor behavior. Six issue-comment anchor IDs referenced by the Markdown set were also confirmed to exist in the PR discussion APIs: PR #97 comment 6521585791; PR #173 comment 6752144835; PR #174 comment 6604790481; and PR #192 comments 6894260448, 6963175700 and 6963480952. API existence is not authenticated rendered-browser verification.
 
 **DF-06 remains NOT MET.** External HTTP status/redirect/final-target and semantic relevance checks, full parser reconciliation, and authenticated rendered heading/line/comment anchor verification remain outstanding.
+
+
+## 17. Post-extraction exact-revision link-delta verification — 2026-11-19
+
+**Prior full static extraction source:** `d8efba1d99cc0017e27d6915cfb8c6e8bf384da1`.  
+**Current source checked:** `dc490bac432bd1c2107897821b70cdf54240f9d2`.  
+The exact commit comparison is four commits ahead / zero behind and changes seven Markdown paths: the planning index, Builder continuity checkpoint, final reconciliation report, DF-02 report, this DF-06 report, outstanding-work register, and Phase 2 capability-to-source integration map.
+
+A before/after destination comparison was performed for all seven changed Markdown files. It found:
+
+- No newly introduced repository-relative/local destination.
+- No removed repository-relative/local destination.
+- No new or removed destination in the planning index, continuity checkpoint, final reconciliation report, DF-02 report, DF-06 report, or outstanding-work register.
+- Exactly six changed commit-pinned line-range URLs in the Phase 2 integration map. These replace the six previously recorded one-line-past-EOF ranges with corrected final-line bounds already verified in §16. They are corrections to existing destinations, not new file/path references.
+
+The earlier exact-tree static extraction at `d8efba1d99cc0017e27d6915cfb8c6e8bf384da1` remains the last full-file extraction: 51/51 Markdown files fetched, 353 candidate occurrences, 134 local path references (zero missing under the extractor's normalization), and 219 HTTP(S) occurrences. This delta check establishes continuity of local destination membership and corrects six existing line-range targets; it is **not** a fresh full CommonMark parse at the current SHA and does not validate all reference-link/HTML edge cases.
+
+**Still not verified:** unique external URL live status, redirects and final destinations; semantic relevance of all external destinations; local heading-fragment resolution; authenticated rendered GitHub heading/line/comment anchors; and the access-limited historical conversation pointer. The six line-range bounds and six issue-comment IDs in §16 were checked through immutable file/API evidence, not authenticated rendered-browser behavior.
+
+**DF-06 remains NOT MET under the Project Director's Option A.** This exact-revision delta check narrows the remaining local-link uncertainty but does not satisfy external or rendered-navigation closure.
