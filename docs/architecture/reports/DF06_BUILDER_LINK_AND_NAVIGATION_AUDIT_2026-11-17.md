@@ -485,3 +485,26 @@ This is a bounded destination-set delta, not a complete CommonMark/GFM parser ru
 The current base branch tip is \`ea64607ef94f142a6142a013e119a7225bc95c1c\`, 14 commits beyond PR #192's recorded merge-base \`61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c\`. The current base-to-head graph is 774 ahead / 14 behind and diverged. This does not authorize retarget/rebase/merge.
 
 **Disposition:** DF-06 remains **NOT MET** under the Director's Option A. No static scan, API retrieval, or prior screenshot is represented as authenticated rendered-anchor verification.
+
+
+## 23. Phase 2 map line-range correction and base-overlap reconciliation — 2026-11-19
+
+**Exact PR #192 HEAD before this report update:** `3d3e2ab799822fc4f42b453337b1b7058b06691f`.  
+**Base branch live tip:** `ea64607ef94f142a6142a013e119a7225bc95c1c`.  
+**Recorded PR merge-base:** `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.  
+**Current compare:** 778 ahead / 14 behind. Live PR metadata now reports `mergeable=true`.
+
+The current base branch's 14 commits included two link-range corrections to the same Phase 2 integration map path changed by PR #192. The PR branch's map was checked against the exact pinned target blobs before correction:
+
+| Link target | Exact target blob | Exact line count | Old PR #192 range | Corrected range |
+|---|---|---:|---|---|
+| `core/cpp/src/action_execution.cpp` at `1273ddbcd0087d189e01388ded2d362fb1e058d2` | `c2f8653eb755fa2790a88e49bc8b0b9c3077e439` | 77 | `L18-L76` | `L18-L77` |
+| `core/cpp/tests/cognitive_runtime_goal_feedback_suite.cpp` at donor `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` | `15a6bdffe37ae7df6c625ea9737fda4c0bf08a7f` | 84 | `L1-L83` | `L1-L84` |
+
+Both corrections were applied to the PR #192 copy of `PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md` in commit `3d3e2ab799822fc4f42b453337b1b7058b06691f`. Its resulting blob is `1ae6ca2dcde4c6f88040762a07ac11e7f01ea255`. The exact updated file was re-fetched and both corrected destinations were confirmed in place.
+
+This was a targeted documentation/link correction only. No rebase, merge, retarget, cherry-pick or base-branch modification was performed. The PR remains 14 commits behind the live base branch; it is now reported mergeable by GitHub. No merge permission is inferred.
+
+The two fragment destinations changed from `#L18-L76` to `#L18-L77` and from `#L1-L83` to `#L1-L84`. The underlying GitHub file paths and hosts did not change. These source-line checks establish that the cited lines exist in the exact pinned blobs; they do not establish authenticated rendered-anchor landing or viewport behavior.
+
+**DF-06 disposition:** this correction closes these two known stale line-range defects in the PR #192 Phase 2 map. The full CommonMark/GFM parser discrepancy, all local heading-fragment checks, exhaustive external URL status/redirect/relevance checks, and authenticated rendered GitHub verification remain open. DF-06 remains **NOT MET** under the Director's Option A.
