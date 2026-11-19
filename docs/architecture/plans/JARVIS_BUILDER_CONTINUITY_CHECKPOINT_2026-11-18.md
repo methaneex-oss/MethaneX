@@ -555,3 +555,26 @@ The candidate engineering components are adjacent, not semantic successors to th
 3. Preserve DF-02 OPEN, DF-06 NOT MET, DF-09 NOT MET, DF-10 terminal ordering, DF-11 waiver, DF-12 Director-only and Stage A hold.
 
 No runtime or engineering source, test, CMake or workflow file was changed. No tests/build/workflow were run.
+
+
+## 28. Builder milestone checkpoint — donor examples and historical specification audit (2026-11-19)
+
+**PR #192 exact HEAD before checkpoint write:** ac642f5297d2766b352c2e1ef27d0e30b572d205.  
+**DF-02 report blob:** ae28be46e2966f4f4be8752d71d275949d39b1ec.
+
+### 28.1 New evidence in DF-02 §36
+
+The three absent donor developmental-world example paths were inspected. The donor example is not a decorative demo: it exercises a 24-episode environment with no correct-action label, observed consequences, reversal of conditions, persistence and context-specific strategy change. Candidate PR #192 has no examples directory, target or active developmental-world implementation.
+
+Nine absent donor design/plan documents were also inspected. They preserve behavior-level requirements for prediction-instance identity, learning that changes future behavior, restart/replay, contextual generalization, affective-state influence and safety constraints. Candidate architecture documents are higher-level and were not proven one-to-one successors. PR #97 remains open/draft/unmerged, so the historical donor artifacts remain retrievable; this is preservation, not adoption or retirement.
+
+Twelve example/specification/documentation paths have bounded historical classification, but their final supersession/retirement authority remains unresolved.
+
+### 28.2 Resume point
+
+1. Continue the remaining donor paths, especially any unreviewed implementation/build/test and public API files.
+2. Reconcile per-row dispositions with the 159-path ledger; do not count a report mention as closure.
+3. Complete reverse-consumer and exact-ref branch analysis where tooling permits; record unavailable coverage rather than overclaim.
+4. Preserve all outstanding gate/authority boundaries. No Stage A or runtime implementation is authorized by these audits.
+
+No runtime source, tests, CMake or workflows were changed. No tests/build/workflow were run.
