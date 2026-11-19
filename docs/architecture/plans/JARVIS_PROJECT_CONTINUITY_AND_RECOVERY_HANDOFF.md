@@ -1,6 +1,6 @@
 # JARVIS Project Continuity & Recovery Handoff
 
-**Last updated:** 2026-11-03 (updated after the user's reviewer-status report)  
+**Last updated:** 2026-11-19 (current continuation state in §12; earlier snapshots are historical)  
 **Purpose:** This is the authoritative restart point for any new ChatGPT conversation, collaborator, or agent continuing this project. Read this document before taking action. Do not rely on chat memory as the source of truth.
 
 ## 1. Project identity and objective
@@ -17,18 +17,18 @@ The human-cognition and MCU J.A.R.V.I.S. comparisons are reference lenses for an
 
 ## 2. Current phase — read this first
 
-**Current phase: Brain Implementation Planning — combined Gate A reconciliation review and Gate B mechanism traceability audit. We are not in implementation.**
+**Current phase: non-operative whole-Brain implementation planning (PR #175) continuing in parallel with Documentation Foundation closeout (PR #192). Gate A is NOT CLEARED; Gate B capability acceptance is NOT PASSED. Runtime implementation and starter-training execution have not begun and remain NOT AUTHORIZED. See §12 for the live exact-revision state.**
 
-Accepted upstream work:
-- **PR #171** — whole-system foundation.
-- **PR #172** — foundational Brain capability investigation.
-- **PR #173** — integrated Brain foundation architecture.
-- **PR #174** — integrated Brain mechanism specification. This is the governing mechanism specification; accepted HEAD: `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`.
+Upstream project lineages and authority:
+- **PR #171** — accepted whole-system foundation, within its recorded scope.
+- **PR #172** — accepted foundational Brain capability investigation, within its recorded scope.
+- **PR #173** — Brain Foundation Architecture. Current proposal is open/draft/unmerged; it is not accepted as the complete/final architecture. Historical acceptance does not transfer to the current successor.
+- **PR #174** — Brain Mechanism Specification. Historical accepted baseline: `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` (34 scenarios). Current corrected proposal is a separate, open/draft/unmerged 54-scenario revision and is not accepted.
 
 Current planning work:
 - **PR #175** — Brain implementation roadmap / planning.
 - Branch: `plan/brain-implementation-roadmap-20261103`.
-- Latest known HEAD: `5088c0644658f573bd18cf579ba426bb51dfb506`.
+- Latest verified HEAD as of 2026-11-19: `cea7e5e246aa1b3722e97a2faa3ac0633b037f3f`. Re-fetch live PR metadata before any operation.
 - PR: https://github.com/methaneex-oss/MethaneX/pull/175
 
 ### Exact subphase: Gate A — repository baseline reconciliation
@@ -332,7 +332,7 @@ A follow-up controller-history compensation test was committed to the branch ref
 
 ---
 
-## 9. Current Builder handoff — 18 November 2026
+## 9. Historical Builder handoff snapshot — 18 November 2026 (superseded by §12)
 
 This section is the current continuation point and supersedes older mutable-branch/head statements above. Earlier sections remain historical evidence for the dates and decisions they record.
 
@@ -383,7 +383,7 @@ These artifacts are planning material. They do not authorize implementation tick
 **Current next step:** obtain independent DF-06 exact-HEAD challenge and xAI review of PR #197; resolve their findings, then freeze a final PR #192 revision for a new blind-reader assessment and exact-revision Project Director decision.
 
 
-## 11. Current continuation — 2026-11-18 (Planning Run 02)
+## 11. Historical continuation snapshot — 2026-11-18 (superseded by §12)
 
 **Live planning PR:** #175, branch `plan/brain-implementation-roadmap-20261103`, exact HEAD `ebc4daf15b24d40bfb03319a942d7a618628e439`; open/draft/unmerged. This supersedes the older HEADs recorded above.
 
@@ -397,3 +397,97 @@ Run 02 reconciles exact upstream states and divides remaining prerequisites into
 **Allowed now:** continue bounded non-operative planning, source/requirement traceability, owner-contract refinement, evaluation-protocol refinement and preparation of exact-revision review/Director decision packets. **Not authorized:** runtime source changes, runtime builds/tests, training execution, donor adoption/porting, source-baseline selection, branch-history operations, PR integration/merge, Stage A activation or deployment.
 
 **Recovery rule:** verify the live PR #175 head and all upstream PR heads before every further write. Treat this handoff as navigation; exact live repository metadata and governing decisions remain authoritative.
+
+
+---
+
+## 12. Current continuation — 19 November 2026
+
+**This section is the current continuation point.** Sections 1–11 preserve project history and earlier snapshots; their mutable-branch HEADs and status tables must not be treated as current. For every action, re-fetch live PR metadata and verify exact SHAs. Current work is non-operative planning only.
+
+### 12.1 Project objective and governing capability standard
+
+JARVIS is an existing project. Do not restart it, replace its accepted architecture, or reduce it to a chatbot, thin LLM wrapper, fixed rule engine, hardcoded behavior tree or static knowledge base.
+
+The governing principle remains: **Engineer the mechanisms; let behavior be acquired through experience.**
+
+The outcome is judged by what JARVIS can demonstrably accomplish in bounded real tasks. Mechanisms, documents, work packages, tests, benchmarks, metrics and workflows are engineering instruments. Their quantity and pass rates are not the measure of intelligence or usefulness. Task behavior and independently verifiable task outcomes are primary; tests and traces support repeatability, attribution, falsification and diagnosis. Do not substitute a successful test suite, internal state transition, explanation, API response or document count for demonstrated capability.
+
+The MCU JARVIS comparison is a capability reference only, excluding fictional technology. It is not a claim that JARVIS can achieve fictional capabilities or a reason to invent implementation internals. The target is an integrated, useful, context-aware, adaptive and reliable cognitive system within real engineering limits.
+
+### 12.2 Live PR state — re-fetched 19 November 2026
+
+| PR | Exact live HEAD | Live state | Current disposition |
+|---|---|---|---|
+| #175 — Brain Implementation Planning | **cea7e5e246aa1b3722e97a2faa3ac0633b037f3f** | Open / draft / unmerged; 26 changed paths; base spec/brain-mechanism-specification-20261103 at 0811a59e46bf934e32e794f90e4e7d18d4e2bd97 | Non-operative planning. Latest review assignment is comment [#7003294950](https://github.com/methaneex-oss/MethaneX/pull/175#issuecomment-7003294950), pinned to this exact HEAD. Zero submitted reviews at the latest check. |
+| #192 — Documentation Foundation | **711ce19e360bb5d4a7c91e9d94092466bb344f89** | Open / non-draft / unmerged; 47 changed paths; base docs/jarvis-phase-2-whole-brain-integration-map-20261105 at 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c | DF-02 OPEN; DF-06 NOT MET; DF-09 NOT MET; DF-10 REOPENED; DF-11 WAIVED as mandatory gate; DF-12 pending Project Director. Stage A HELD. |
+| #173 — Brain Foundation Architecture | **a96af5b18d3a1d580ff56cff6191240893bceeb5** | Open / draft / unmerged | Current architecture proposal is not accepted as complete/final. PARTIALLY CLEAR review applies to earlier exact SHA 1f137cbaed985821bbc32408151911b18418f713; whole-architecture acceptance and CF-26/CF-27 remain open. |
+| #174 — Brain Mechanism Specification | **c34472354e4122fc1d78dc25bf45d81f1eb4dc69** | Open / draft / unmerged | Current 54-scenario correction proposal remains unaccepted. Historical accepted baseline 0811a59e46bf934e32e794f90e4e7d18d4e2bd97 remains the 34-scenario authority until a separate exact-revision decision. |
+| #197 — Blind reader packet target-SHA correction | **2b2bfd9afe6e1325119f7ccee507bb04e71aa343** | Open / non-draft / unmerged; one changed workflow file | Exact-HEAD Independent Reviewer request exists; zero submitted reviews at the latest check. No fresh-reader dispatch is claimed; F-195-07 remains open. |
+| #179 — Phase 2 capability map | **ea64607ef94f142a6142a013e119a7225bc95c1c** | Open / draft / unmerged; 11 changed paths | Separate Phase 2 mapping lineage; do not retarget, merge or treat as an implementation baseline. |
+
+These are snapshots fetched on 2026-11-19, not permanent truths. Refresh before further operations.
+
+### 12.3 Current PR #175 planning work
+
+The latest two PR #175 commits after ddb74684be67dee5da0746b0244a5afdece924b1 are:
+
+- **0cab7c72fafb5d7314d219a2510906842dec8687** — defines a detailed capability-level WP-07 contract; makes task performance the primary capability outcome in the R0–R6 learning evaluation; fixes WP-01/WP-02 numbering in Run 02; expands the Independent Reviewer assignment.
+- **cea7e5e246aa1b3722e97a2faa3ac0633b037f3f** — adds the capability-first acceptance standard to the main implementation plan's verification section.
+
+Verified current document blobs at PR #175 HEAD:
+
+| Document | Blob |
+|---|---|
+| 00_BRAIN_IMPLEMENTATION_PLAN.md | edf8224e25193ab7cde99873340d1bf4fda6a3a8 |
+| 19_IMPLEMENTATION_PLANNING_KICKOFF_AND_STARTER_LEARNING_WORK_PACKAGES_2026-11-18.md | 4a30a516dcb920dd55be1a39cedbc2c198bd91b0 |
+| 20_STARTER_LEARNING_RUN_PROTOCOL_AND_EVALUATION_DESIGN_2026-11-18.md | 3c9a863b9e8d1ddfcdbf121f3a44f72e1f72227e |
+| 21_IMPLEMENTATION_PLANNING_RUN_02_READINESS_AND_ACTIVATION_DECISION_MAP_2026-11-18.md | b662b7b6982eb591aba226759126a7ff36ebda42 |
+| reviews/17_IMPLEMENTATION_PLANNING_RUN_02_INDEPENDENT_REVIEW_REQUEST_2026-11-18.md | c1732982119d436119c32c5c35b8e0a501b17f89 |
+
+Current work-package map:
+- **WP-00:** authority and contract freeze.
+- **WP-01:** exact source and integration-target reconciliation; Gate A and Project Director baseline selection are prerequisites.
+- **WP-02:** attributable experience, memory and continuity.
+- **WP-03:** representation and belief revision.
+- **WP-04:** memory-supported reasoning.
+- **WP-05:** prediction and outcome feedback.
+- **WP-06:** owner-approved learning, persistence, later behavioral effect, transfer and regression.
+- **WP-07:** capability-level attention/context, appraisal, candidate goals, planning/decision and metacognitive integration.
+- **WP-08:** controlled starter learning and capability-first evaluation protocol (R0–R6).
+
+The WP-02–WP-04 first slice is internal cognitive groundwork. It is not by itself a complete useful JARVIS capability and does not prove developmental learning. The later claim requires task-level improvement caused by attributable experience and an owner-approved change, persistence after reconstruction, and justified transfer.
+
+The 12 FS-01–FS-12 cases are proposed diagnostic case designs for the first cognitive foundation. They are not executed tests, passed scenarios or overall capability measures.
+
+### 12.4 Documentation Foundation and activation gates
+
+PR #192's controlling planning index at exact HEAD 711ce19e360bb5d4a7c91e9d94092466bb344f89, §§103–104, is the current status source. It records the Project Director's Option A standards for DF-02 and DF-06 and the following dispositions:
+
+- **DF-02 OPEN:** full semantic disposition of all 159 PR #97 donor paths; provenance of unmatched historical artifacts; successor/retirement/non-adoption mapping; reverse-consumer, cross-branch dependency and duplication closure remain.
+- **DF-06 NOT MET:** parser-scope reconciliation; all applicable local destinations/fragments; external status/redirect and semantic relevance; authenticated rendered GitHub anchor verification remain.
+- **DF-09 NOT MET:** a qualifying blind fresh-reader assessment must return CLEAR against the exact final PR #192 HEAD. The earlier 31/32 PARTIALLY CLEAR run on historical SHA beb4d5a174a1dd613878f89132e97b5e6052c7d3 does not apply to a successor.
+- **DF-10 REOPENED:** a new terminal inventory parent manifest and inventory-only successor comparison are required after all other PR #192 branch writes.
+- **DF-11 WAIVED as a mandatory gate** by the Project Director; the separate Independent Reviewer challenge remains requested and is not silently treated as completed.
+- **DF-12 PENDING — PROJECT DIRECTOR ONLY:** exact-final-revision acceptance/rejection/conditional acceptance remains the Director's decision.
+- **Stage A NOT STARTED / HELD.**
+
+Project gates remain distinct:
+- **Gate A NOT CLEARED.** No implementation source baseline has been selected.
+- **Gate B capability acceptance NOT PASSED.** Static source mapping, historical CTest or module presence is not proof of capability.
+- **Runtime implementation, builds/tests, donor adoption/ports, training execution, Stage A, PR integration, merge, rebase/retarget/cherry-pick, branch rewrite and deployment remain NOT AUTHORIZED.**
+
+PR #192 is a separate Documentation Foundation lineage. Do not treat PR #175 planning progress as closing PR #192 or clearing any DF gate.
+
+### 12.5 Immediate Builder continuation rules
+
+1. Continue the existing JARVIS project from the exact live repository state; do not restart, redesign generically or repeat completed inventories.
+2. Use the capability-first standard in all planning: what can JARVIS do, under which conditions, how reliably, and what observable result proves it? Mechanism/test/document counts are not progress criteria.
+3. Preserve the distinction between task capability, supporting test/trace evidence, learned change and external execution/outcome verification.
+4. Keep accepted PR #174 scenarios 1–34 separate from proposed/unaccepted scenarios 35–54.
+5. Keep every reviewer verdict tied to the exact SHA reviewed. Latest PR #175 assignment is comment #7003294950 for cea7e5e...; it is pending, not accepted.
+6. Continue only bounded non-operative planning under existing authority. Any executable work package still requires its prerequisites and explicit Project Director activation decision.
+7. Before each repository write, re-fetch the target PR metadata and use the exact current HEAD as the expected parent. If it changes, stop and re-reconcile.
+8. Do not claim background review will arrive; review completion must be established from an actual submitted review or report.
+
+**Current stopping boundary:** PR #175 planning has been advanced and its exact-revision independent review is pending. PR #192's DF-02/DF-06/DF-09 work and final inventory cycle remain separate blockers. No source baseline is selected and no runtime implementation/training is authorized.
