@@ -388,3 +388,33 @@ These are structural relations only. No semantic closure is inferred. All 159 ro
 6. DF-10 remains terminal: inventory is the final branch-file write, so do not write it until all other source/report/checkpoint changes are complete. DF-11 remains waived; DF-12 remains Project Director-only; Stage A remains held.
 
 No runtime code was modified, no donor code adopted, no tests/build run and no CI workflow dispatched.
+
+
+## 22. Builder milestone checkpoint — absent donor learning/affect successor audit (2026-11-19)
+
+**PR #192 exact HEAD before checkpoint write:** c1c36981768aff3f426cd12654022414650ad59f.  
+**DF-02 report blob:** a8c4e6cc999535aa129fbaa7663167d537e368ea.  
+**Donor PR #97 exact HEAD:** c1da222e6c94aeb3f2ad000392c21fe4fc81ab25.
+
+### 22.1 Material findings recorded in DF-02 §31
+
+The first absent-path subsystem cohort was inspected against the active candidate CMake source/test registrations:
+
+- **Developmental learning/world:** donor has a seeded task world with action transitions, resource constraints, partial observation and exogenous dynamics, plus a contextual association/strategy learner. Candidate has a generic 34-line LearningLoop and an active CognitiveCycle with memory/prediction/goal feedback. Those are adjacent mechanisms, not demonstrated replacements for the donor developmental world and contextual strategy learning.
+- **Affective state/appraisal:** candidate Brain header and active build list have no affective model members or source/test registration. Candidate has an orphan brain_restored_api.cpp containing affective/developmental methods, but it is not in CMake and refers to members/API absent from the active Brain header. It is not compiled capability evidence.
+- **ExperienceMemory/goal outcome:** candidate event journal and prediction map provide partial persistence/lookup analogues; no equivalent sequence-indexed ExperienceMemory or goal-outcome accumulation contract was demonstrated. An assimilate_goal_outcome implementation exists only in the uncompiled orphan source.
+- **CausalLinkCodec:** candidate causal_model has inline delimiter-based encoding/decoding, but it does not demonstrate donor's typed length-prefixed serialization or equivalent delimiter-safe compatibility.
+- Candidate CMake registers no affective/developmental/goal-outcome suites corresponding to these donor paths.
+
+A further important finding: candidate Brain::learn_outcome invokes LearningLoop, which can directly call EvolutionModel::adopt after scalar confidence/gain thresholds and emits an adoption event. This is a second autonomous mutation path in addition to the experiment-controller/Brain APIs traced in §28. It must be included in the controller/journal/replay safety analysis.
+
+These are bounded source/build-registration findings, not test/build verdicts. No tests or builds were run.
+
+### 22.2 Resume point
+
+1. Trace Brain::learn_outcome callers and the exact evolution adoption event/replay behavior; reconcile this path with the intended controller/journal authority invariant.
+2. Continue the absent-path ledger in batches: workflows/trials, split Brain translation units, tests, task ledger, documentation/specifications. Identify exact successors, not just similar names.
+3. Continue changed-blob semantic comparisons and per-row disposition in the canonical §30 ledger.
+4. Keep DF-06, DF-09 and terminal DF-10 requirements intact. DF-11 waived; DF-12 Director-only; Stage A held.
+
+No runtime source or tests were changed. No donor code was adopted. No build/test/workflow was executed.
