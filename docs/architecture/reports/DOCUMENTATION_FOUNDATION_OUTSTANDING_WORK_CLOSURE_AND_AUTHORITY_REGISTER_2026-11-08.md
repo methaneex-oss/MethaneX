@@ -1690,3 +1690,37 @@ The Builder extracted 76 line-range links from the Phase 2 capability-to-source 
 Six issue-comment IDs referenced by the 51-file extraction were confirmed present in the PR discussion APIs (PR #97 #6521585791; PR #173 #6752144835; PR #174 #6604790481; PR #192 #6894260448, #6963175700, #6963480952). This is API-level existence evidence only; authenticated browser rendering remains unverified.
 
 This check improves the local immutable-anchor evidence but does not complete DF-06. Full parser reconciliation, external URL status/redirect/semantic checks and authenticated rendered heading/line/comment anchors remain open. DF-06 remains NOT MET.
+
+
+## 17. Exact-current Builder continuation — reviewer request and evidence reconciliation — 2026-11-19
+
+**PR #192 source before this register update:** `5b7a4b56ecd2975019bc777a90369e76f14b4307`; open, non-draft, unmerged; 47 changed paths; base `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.
+
+### 17.1 Builder work added since the previous register update
+
+- DF-02 was expanded through semantic comparison sections §§39–41: adaptation, association, attention, causal-model/codec; cognition/workspace/decision/evolution public contracts and integration-test scope; goal, intent, knowledge, planning, reflection and self-model contracts. The duplicate section headings are corrected as §§10A and 25A. Report blob: `397c4db47f959f1784b97431273d9104bf8b3cef`.
+- DF-06's destination register now includes the additional Native Brain Build run #42976840057, whose actual historical run SHA is `e687f3295f6f858f713694d941e97fbd94ac6154`, not the current PR #192 HEAD. The report enumerates 22 Actions-run IDs within its inspected scope. Report blob: `bff3ab6a81ab12bd20ac3b9e6a2e834ae16b1989`.
+- A fresh read of the Independent Reviewer request found that four path strings still included a trailing `)` inside code-formatted paths, contrary to the earlier assertion in index §104. The request paths have now been corrected; blob: `4a9e1cc814ae3931508b0a969014bca7a620f9bc`. The controlling index §105 corrects the previous verification claim and records the exact current parent.
+
+### 17.2 Current DF-01–DF-12 Builder disposition
+
+| Gate | Current disposition | Exact remaining obligation / authority |
+|---|---|---|
+| DF-01 | Builder evidence present; final sync pending | Reconcile portal, index, inventory, changed-path manifest and exact final HEAD after all documentation writes — Builder |
+| DF-02 | **OPEN** | Per-path semantic successor/retirement/non-adoption and historical authority closure for all 159 donor paths; reverse consumers, alternate owners, dependencies and duplicate capabilities across relevant exact refs. The 251-ref/210-tip census is not a source-content consumer scan — Builder evidence; independent challenge follows freeze |
+| DF-03 | Partially evidenced | Preserve exact primary decision provenance, revision and scope; do not turn recovered transcriptions, later headers or administrative merges into new acceptance decisions — Builder; Project Director for reserved decisions |
+| DF-04 | Builder evidence present | Keep proposed governance distinct from accepted bounded amendments — Builder |
+| DF-05 | Partially evidenced | PR ancestry and branch refs are recorded; semantic consumer/dependency graph across branches remains open — Builder |
+| DF-06 | **NOT MET** | Complete reproducible parser/reference-link/HTML/autolink reconciliation, local fragment resolution, unique external status/redirect/final-target/content relevance, and authenticated rendered GitHub heading/line/comment anchor checks. API existence and static range checks are partial only; no authenticated browser is exposed to this Builder — Builder / external browser operator |
+| DF-07 | Correction in progress | Synchronize index, register, checkpoint, self-review, review request and PR description against final exact HEAD; re-fetch after every write — Builder |
+| DF-08 | Resolved within bounded criterion | Preserve historical paths and all disclosed limitations; no destructive archival operation — Builder |
+| DF-09 | **NOT MET / externally blocked** | Required workflow_dispatch against final inventory successor SHA and a genuine fresh-reader result of CLEAR. The connected GitHub tools expose no workflow-dispatch operation; latest applicable run #44192302873 was PARTIALLY CLEAR on historical SHA `beb4d5a...` — authorized operator / distinct fresh-reader model |
+| DF-10 | **REOPENED** | Rebuild the full parent blob manifest after all other writes; make inventory the terminal one-file commit; verify one ahead/zero behind, inventory-only diff and complete successor tree — Builder |
+| DF-11 | **WAIVED as mandatory** | Preserve the waiver. A separate exact-revision Independent Reviewer challenge remains requested under Director instruction; it is not a mandatory gate — Independent Reviewer; Builder publishes request |
+| DF-12 | **PENDING — PROJECT DIRECTOR ONLY** | Exact-final-revision accept/reject/conditional decision; Builder cannot issue it |
+
+### 17.3 Verification and non-authorization record
+
+The recent commits changed documentation/checkpoint artifacts only. No runtime C++, test source, CMake file, workflow, or training environment was changed. No build, CTest, or CI workflow was executed by this Builder continuation. Historical Actions run #42976840057 is not current-HEAD execution evidence. No reviewer verdict, DF-09 CLEAR, DF-12 acceptance, source-baseline selection, donor adoption, Stage A, runtime implementation, merge, rebase, retarget, cherry-pick, branch rewrite or deployment is claimed or authorized.
+
+This register update is Builder evidence only. It does not close DF-02/DF-06/DF-09, independently accept the documentation foundation or make the Project Director's DF-12 decision.
