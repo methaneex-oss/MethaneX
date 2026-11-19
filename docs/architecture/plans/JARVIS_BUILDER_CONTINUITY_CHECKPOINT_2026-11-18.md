@@ -849,3 +849,41 @@ These are exact source/API/test/build-graph comparisons. No engineering source o
 DF-02's duplicated heading is corrected: its editorial residual-boundary note is now §41A; substantive evolution transaction/isolation audit remains §42, engineering coordination remains §43, donor-only developmental/affective audit remains §44, and Brain/memory test audit remains §45. This checkpoint's prior duplicated §34/§35/§36 labels are now sequential §§34–§37, and this new coordination checkpoint is §38.
 
 DF-02 remains **OPEN**. DF-06 remains **NOT MET**; DF-09 remains **NOT MET** pending an authorized final-SHA workflow dispatch and CLEAR result; DF-10 remains reopened pending the eventual terminal inventory-only successor; DF-11 remains waived as mandatory; DF-12 remains Project Director-only. Stage A remains HELD.
+
+
+## 37. Builder milestone checkpoint — exact 159-path identity revalidation, all-ref search limit and DF-06 parser discrepancy (2026-11-19)
+
+**Exact PR #192 HEAD before this checkpoint write:** `ba085ad448a0e95e81e21404b2026ae0c4422ed5`.  
+**DF-02 report blob after the preceding write:** `e3feb2369b232c615cfb30933330b0102436a115`.  
+**DF-06 report blob after the preceding write:** `8455ec627beb1aeab7fa5c65b86254a9106778eb`.  
+**Donor PR #97 exact HEAD:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+
+### 37.1 Exact 159-path tree/blob verification
+
+Fetched complete recursive trees at the exact donor and candidate revisions: donor 287 entries and candidate 280 entries, both untruncated. Reconciled all 159 DF-02 ledger rows against the exact trees. Result: 1 identical blob, 95 same-path divergent blobs and 63 absent candidate paths; zero donor/candidate ledger SHA mismatches. This validates the structural identity ledger only, not semantic equivalence or successor authority.
+
+All 159 donor paths now have evidence-section references outside the ledger, across DF-02 §§9, 13, 16–28 and 31–46. The new sections compare additional exact public APIs, implementations, tests, CMake targets, donor-only developmental/affective artifacts, and engineering coordination. This is broader semantic evidence, not a final all-path disposition.
+
+### 37.2 Branch refs and all-ref consumer limitation
+
+Re-fetched all GitHub branch-ref pages: 251 refs, 210 unique tips, eight duplicate-tip groups covering 49 branch names. A bounded default-branch code search for ten donor-specific symbols returned no results. The GitHub search operation is explicitly default-branch-only; it cannot establish absence or consumers across the 251 refs. Exact-ref tree/file retrieval is available, but no all-ref content search operation is exposed.
+
+A local `git ls-remote` attempt failed because the execution container cannot resolve `github.com`. The complete cross-branch reverse-consumer/alternate-owner/dependency/duplicate-capability scan remains open and requires an authorized local mirror/checkout containing all refs or a connected exact-ref code-search facility. No branch census or default-branch zero-result search is represented as all-ref closure.
+
+### 37.3 DF-06 parser discrepancy and current disposition
+
+The full custom extraction at the earlier exact source `ff33515de059b00c8a95c07a3fab2f8ba8d1e214` found 344 destinations (131 local, 213 HTTP(S)); the exact seven-Markdown-file delta to current source `d4f88ab430fd1d2257313ac90eacfd1c72f4fba9` adds one external Actions URL and no local changes, yielding 345 (131 local, 214 HTTP(S)) under that custom extractor.
+
+The earlier extractor recorded 353 destinations (134 local, 219 HTTP(S)). The eight-occurrence discrepancy (three local, five HTTP(S)) is unresolved. The custom extractor is not a complete CommonMark/GFM parser. Local heading-fragment resolution, exhaustive external status/redirect/relevance checks and authenticated rendered GitHub anchor verification remain outstanding. The connected tools expose no authenticated interactive browser. DF-06 remains NOT MET.
+
+### 37.4 Authority and gate status
+
+- DF-02 OPEN; exact ledger identity verified, all-ref content and final semantic/authority dispositions incomplete.
+- DF-06 NOT MET; parser discrepancy, fragment/external/rendered checks remain.
+- DF-09 NOT MET / externally blocked; no workflow-dispatch operation is exposed, and no exact-final-HEAD blind CLEAR result exists.
+- DF-10 REOPENED; terminal inventory must follow all remaining branch-file writes.
+- DF-11 WAIVED as mandatory; separate exact-revision Independent Reviewer challenge remains requested.
+- DF-12 PENDING — PROJECT DIRECTOR ONLY.
+- DF-01 final synchronization pending; DF-03 and DF-05 partially evidenced; DF-04 Builder evidence present; DF-08 resolved within bounded criterion.
+
+No runtime C++, tests, CMake, workflow or training environment was changed. No build, CTest, training run or fresh-reader dispatch was executed. No donor code was adopted. Stage A remains HELD; implementation, source-baseline selection, training, integration and merge remain unauthorized.
