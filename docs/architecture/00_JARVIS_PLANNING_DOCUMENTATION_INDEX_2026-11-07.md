@@ -1627,3 +1627,42 @@ At the last exact candidate code-tree snapshot `9d61e9bb3ef0433e7b1c03bfcd1a3a19
 DF-02 remains **OPEN** pending all-ref source-content consumers/dependencies/duplicate ownership and complete per-path semantic/authority disposition. DF-06 remains **NOT MET**. DF-09 remains **NOT MET / externally blocked**. DF-10 remains **REOPENED**. DF-11 remains waived as mandatory. DF-12 remains **PROJECT DIRECTOR ONLY**. PR #171 SYS-01–SYS-11 remains the existing architecture foundation. Stage A remains HELD.
 
 No donor code was adopted; no current PR #192 runtime/test/CMake/workflow changed or was tested; no independent verdict or Director acceptance is claimed.
+
+
+## 110. Exact-current PR #192 metadata correction and DLT-002 evidence update — 2026-11-19
+
+**Live PR #192 HEAD at acquisition:** \`9d61e9bb3ef0433e7b1c03bfcd1a3a19b8c6741d\` (direct branch ref and PR metadata agree).  
+**PR state:** open, non-draft, unmerged; 47 changed paths; complete recursive tree 280 entries (\`truncated=false\`); 51 tracked Markdown files.
+
+The PR description's previous \`bbd33d8...\` HEAD and 0-behind statement were stale. The named base branch currently points to \`ea64607ef94f142a6142a013e119a7225bc95c1c\`; PR #192's recorded base/merge-base remains \`61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c\`. Comparing current base tip with PR head yields 754 ahead / 14 behind, diverged. Live PR metadata reports mergeable=false. No retarget/rebase/merge is performed or implied; the Director's integration boundary remains controlling.
+
+### 110.1 Current controlling evidence after this update
+
+- DF-02 report now contains §49: live PR/base correction, exact PR #99/#100 DLT-002 artifact evidence, and ten exact-ref tree comparisons against the 159 donor paths. The all-ref source-content consumer/dependency/alternate-owner scan and complete per-path authority/disposition remain open.
+- Historical cognitive/learning lineage supplement now contains §10 with PR #99/#100 exact run, tested-runtime commit, artifact ID/digest and behavioral limits.
+- DF-06 audit now contains §21: exact 849ae... → 9d61... four-file link-set delta. The bounded extractor found no destination additions/removals in those four files; it is not a complete CommonMark/GFM parse of all 51 Markdown files.
+- Continuity checkpoint now contains §41 with the live metadata, evidence and authority boundaries.
+- PR #171 SYS-01–SYS-11 remains the existing whole-system foundation. Document 00/01 approvals remain scoped to their exact approved revisions; no duplicate architecture or implementation authority is created here.
+
+### 110.2 DLT-002 historical behavior evidence
+
+PR #99 workflow run \`40419118694\` succeeded and preserved artifact \`12696474493\` (SHA-256 \`ab109d1849e63d8f0e6409861a131b3214a1e4c6db62a7d9ce33f255bcc66013\`), testing runtime commit \`8525de774493de7c8eab05baa98af94cd068e995\`. PR #100 workflow run \`40596743895\` succeeded and preserved artifact \`12778958158\` (SHA-256 \`e706f91d2d6d89d8357ee27566a66bdb81dafb470839f8e0057eaa6603a712e2\`), testing runtime commit \`beb7971426c42d326f7553363d16f37ce311e9d9\`. Both tested commits are ancestors of PR #97's exact donor HEAD. The primary PR #100 trial measured 97.1% optimal action selections with consequence feedback versus 49.9% in the matched feedback-withheld control. This is bounded historical donor-lineage evidence, not PR #192 behavior or a source-baseline decision.
+
+### 110.3 Current gate disposition
+
+| Gate | Current Builder disposition |
+|---|---|
+| DF-01 | Builder evidence present; final exact-head synchronization pending |
+| DF-02 | **OPEN** — all-ref source-content consumers/dependencies/duplicate ownership and complete per-path semantic/authority disposition remain |
+| DF-03 | Partially evidenced |
+| DF-04 | Builder evidence present within bounded scope |
+| DF-05 | Partially evidenced; current base divergence recorded, semantic dependency graph incomplete |
+| DF-06 | **NOT MET** — parser discrepancy, fragments, exhaustive external checks and authenticated rendered anchors remain |
+| DF-07 | Synchronization in progress, including PR description and exact-current metadata |
+| DF-08 | Resolved within bounded preservation criterion |
+| DF-09 | **NOT MET / externally blocked** — no dispatch operation and no exact-final-HEAD blind CLEAR |
+| DF-10 | **REOPENED** — terminal inventory-only successor remains last branch-file write |
+| DF-11 | Waived as mandatory; separate reviewer challenge remains requested |
+| DF-12 | **PENDING — PROJECT DIRECTOR ONLY** |
+
+Stage A remains **NOT STARTED / HELD**. No runtime implementation, source-baseline selection, donor adoption, training, integration, merge, rebase, retarget, branch rewrite or deployment is authorized.
