@@ -290,3 +290,36 @@ No runtime C++ or test file was changed. No donor code was adopted. No CI/workfl
 5. Preserve DF-06, DF-09, DF-10, DF-11, DF-12 and Stage A boundaries recorded in §17.4. Any additional PR #192 file write reopens the terminal inventory cycle; the inventory must be the final branch-file write after all other evidence work.
 
 The checkpoint commit itself changes only this existing continuity file and does not add a new PR changed path.
+
+
+## 19. Builder milestone checkpoint — evolution controller and Brain replay call-chain audit (2026-11-19)
+
+**PR #192 exact HEAD before checkpoint write:** `3a983e88c3ca1c9e6f7066448ecc7af277b5ae04`.  
+**DF-02 report blob:** `182f0fddae51b3972835329f0d745289407a4b98`.  
+**Donor PR #97 exact HEAD:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+
+### 19.1 New call-chain evidence recorded in DF-02 §28
+
+The Builder traced the current exact-HEAD orchestrator, Brain replay/API, evolution controller, runner, journal and history against donor counterparts.
+
+- The normal orchestrator candidate path calls coordinator → controller.record_evaluation → controller.adopt. This is a controller-mediated normal path, but the current controller does not itself require a matching prior durable evaluation record or independently re-evaluate the experiment before adoption.
+- Current `Brain::adopt_evolution_experiment` uses the controller, inheriting that gap.
+- Current public `Brain::adopt_evolution` directly calls `EvolutionModel::adopt`, bypassing experiment evidence, controller safety policy and the adoption journal. Its intended manual/admin contract and callers must be established before classifying it as unsafe.
+- Current Brain replay applies `evolution_adopt` events directly to the model and appends history; it does not reconstruct controller journal state or revalidate a linked evaluation record. Current rollback API also lacks compensation if event append fails.
+- Current controller (82 lines) is materially smaller than donor controller (316 lines); donor includes experiment validation, matching durable evaluation evidence, isolation attestation, replay and compensation operations absent from current.
+- Current runner rejects non-isolated sandbox results but does not set experiment isolation state or issue donor-style isolated-result attestation. Donor has a distinct isolated-command path.
+- Current adoption journal stores a reduced evidence tuple and permits restaging a terminal non-Adopted ID; donor enforces exact evidence matching and rejects terminal-ID restaging.
+- Current same-path adoption-journal test is much narrower than donor's controller integration/replay/compensation/idempotency coverage.
+
+The detailed evidence, exact blobs and limits are in DF-02 §28. These are source-level contract differences, not verified runtime exploitability. The public manual API may have a trusted administrative use; its intended authorization contract is unresolved.
+
+### 19.2 Resume point
+
+1. Trace all current-branch callers of the two Brain adoption APIs and identify the trust/authorization boundary for manual versus autonomous adoption.
+2. Trace Brain event persistence and restart reconstruction, including what guarantees the memory store provides and whether journal state is intentionally derived or omitted.
+3. Reconcile the two Brain adoption APIs with the orchestrator's candidate path and specify a single documented invariant for autonomous model mutation.
+4. Audit experiment ID lifecycle, retry and replay semantics before deciding journal/history idempotency keys.
+5. Continue remaining DF-02 implementation/test/build/engineering paths and reverse-consumer searches; do not infer all-path closure from the added call-chain analysis.
+6. Continue DF-06 exact-tree parser, fragments, external destinations and authenticated rendered-anchor work. Preserve DF-09, DF-10, DF-11, DF-12 and Stage A authority boundaries.
+
+No runtime code was modified, no donor code adopted, no tests/build executed, and no workflow dispatched. This checkpoint updates an existing changed path only.
