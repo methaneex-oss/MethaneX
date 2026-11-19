@@ -1118,3 +1118,78 @@ PR #99/#100 artifacts demonstrate finite synthetic action-learning behavior on e
 - DF-01/03/04/05/07 final synchronization remains Builder work; DF-08 remains resolved within its bounded criterion.
 
 No runtime implementation, tests, CMake, workflow, donor adoption, source-baseline selection, training, integration, rebase, retarget, merge or deployment occurred. Stage A remains HELD.
+
+
+## 43. Governance revalidation record and post-inventory scope correction — 2026-11-19
+
+### 43.1 Run-specific Governance Revalidation Record
+
+| Field | Verified value |
+|---|---|
+| Project / work item | MethaneX — JARVIS Documentation Foundation, PR #192 |
+| Active role | Builder |
+| Governance source | `docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md` |
+| Exact governance revision | Base branch `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `ea64607ef94f142a6142a013e119a7225bc95c1c` |
+| Governance blob / length | `f5827c552f36f4647339b3f8dfb38956d146c570`, 1,022 lines |
+| Fresh-read evidence | Entire file read in five consecutive ranges: lines 1–220, 221–440, 441–660, 661–880 and 881–1,022 |
+| Acceptance provenance | PR #196 closed/merged 2026-11-12 at merge commit `c151e52781e56e6481424f774c19ea30128debb0`; file line 3 records Project Director acceptance as the project-wide governance standard; acceptance record §22 records ACCEPTED |
+| Independent governance evidence | Grok governance review blob `ba222d474b7e05d4a4433109942652ce9b98dbbf`; acceptance verification `5eca017741493df6aabc5aaf330dc1635e5a9c22`; correction verification `5a360bd4ab34e88008678c209eff8dddca21a67e` |
+| Applicable controls revalidated | Rules 11.1–11.16 (Builder execution/evidence discipline); Sections 17–21 (role accountability, workflow, scope/change control, completion/evidence, improvement); Section 22 (fresh revalidation on every run) |
+| Current scope authorization | Continue Builder-owned documentation-foundation reconciliation and evidence synchronization only, under the user's existing authorization |
+| Explicit exclusions | No Project Director decision/acceptance; no Independent Reviewer verdict; no Independent Tester verdict; no Stage A/runtime implementation; no donor adoption or source-baseline selection; no merge, rebase, retarget, cherry-pick or branch rewrite; no deployment/training |
+| Result | Governance reread complete; current Builder scope revalidated. The source is on the live base branch and is not yet part of the PR #192 head because that branch is 14 commits behind. |
+
+**Process note:** the base branch's accepted governance amendment was discovered after earlier documentation-only Builder writes and after the pre-terminal inventory candidate had been written. The Builder paused substantive work, fetched the live base revision, read all 1,022 lines and the PR #196 acceptance/review records, then recorded this revalidation before making further project-file changes. No runtime source, test, CMake or workflow was changed, and no protected authority action was taken before the governance source was discovered.
+
+### 43.2 Live PR/base state — refreshed after the terminal inventory candidate
+
+- PR #192 branch HEAD and branch ref: `67be666f27dfa7879f2c7b73aa5ee17b43828f79`.
+- Base branch live tip: `ea64607ef94f142a6142a013e119a7225bc95c1c`.
+- PR's recorded base/merge-base snapshot: `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.
+- Exact compare of current base tip to PR head: **776 ahead / 14 behind**, status `diverged`; live PR metadata reports `mergeable=false`.
+- Current PR tree: 280 entries, complete; 47 changed paths (45 Markdown, 2 JSON); 51 tracked Markdown files.
+- The 14 base-only commits touch five paths; the sole overlap with PR #192 is `docs/architecture/reports/PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md`. The other base-only paths include the accepted governance document and its independent governance review/acceptance/correction reports.
+- No rebase, retarget, merge, cherry-pick or branch rewrite is authorized. Preserve the historical merge-base SHA and the current base tip as distinct facts.
+
+### 43.3 Verified DF-10 inventory candidate — then reopened
+
+The inventory write `67be666f27dfa7879f2c7b73aa5ee17b43828f79` was verified against exact parent `18194d2285f2325fa35c8d8488ccdb007274b8bd`:
+
+- Parent tree `02449466ac7be428b815383d7a73ebf1d561e538`: 280 entries, complete.
+- Successor tree `861e70e8f8eec99ab959ab9950f9fd62ed2f8efc`: 280 entries, complete.
+- Parent-to-successor compare: exactly one commit ahead, zero behind; exactly one changed path, the terminal inventory.
+- Terminal manifest §129.1 contains 47 changed-path rows; all 47 exact blob IDs match the parent tree.
+- All 46 non-inventory changed-path blobs are identical between parent and successor.
+- Inventory parent blob `9bd0e1b5589df286b156dbecf787eb6017467326`; successor blob `e585ed31d03868ac38d965c023368a01250b22df`; the live PR head equals the successor.
+
+**Result:** the inventory candidate passed the exact parent/successor technical comparison for that pair. It is not the final accepted DF-10 cycle because this governance revalidation checkpoint is a subsequent PR #192 branch-file write, and additional Builder-owned corrections remain. Under the inventory's own §129.2 rule, this write reopens DF-10. Preserve the verified candidate as historical evidence; perform a new terminal inventory only after all remaining Builder-owned documentation writes and evidence synchronization are complete.
+
+### 43.4 Newly identified targeted DF-06 correction
+
+The current base branch's accepted Phase 2 map revision corrected two exact source line ranges that remain stale in PR #192's version:
+
+1. `core/cpp/src/action_execution.cpp` at pinned commit `1273ddbcd0087d189e01388ded2d362fb1e058d2` has 77 lines. PR #192's map currently cites `#L18-L76`; the base branch map cites `#L18-L77`.
+2. `core/cpp/tests/cognitive_runtime_goal_feedback_suite.cpp` at donor commit `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` has 84 lines. PR #192's map currently cites `#L1-L83`; the base branch map cites `#L1-L84`.
+
+These are source-count-verified line-range corrections, not architecture changes. A targeted correction to the PR #192 map is Builder-owned DF-06 work; it is not a rebase or adoption of the base branch's other 14 commits. After that correction, re-run the local destination/fragment checks and retain the authenticated rendered-browser requirement as open until actually completed.
+
+### 43.5 Corrected DLT-002 gate-row count
+
+The raw PR #99 artifact `12696474493` and PR #100 artifact `12778958158` each contain 35 data rows in `mechanism-gates.tsv`, all PASS. Each file has 36 physical lines including its header. Earlier checkpoint wording that called these 36 mechanism-gate rows is corrected here: the verified gate count is **35/35**, not 36/36. The main DF-02 report and historical lineage supplement carry the same correction.
+
+### 43.6 Current gate and authority state
+
+- DF-01: Builder evidence present; final synchronization remains.
+- DF-02: **OPEN** — ten-tip exact-ref tree tranche and behavioral evidence are not the 210-tip source-content consumer/dependency/duplicate-owner scan; all 159 path dispositions remain incomplete.
+- DF-03: Partially evidenced.
+- DF-04: Builder evidence present within bounded scope.
+- DF-05: Partially evidenced; current base divergence is recorded, full dependency closure is not established.
+- DF-06: **NOT MET** — two line-range corrections identified; full parser/reference-use reconciliation, local fragments, exhaustive external status/redirect/relevance and authenticated rendered anchors remain.
+- DF-07: Reconciliation in progress; current PR/base state and stale description require synchronization.
+- DF-08: Resolved within bounded criterion.
+- DF-09: **NOT MET / externally blocked** — no authorized workflow-dispatch/browser action is exposed for the required exact-final-HEAD blind CLEAR assessment; the historical 31/32 PARTIALLY CLEAR result is insufficient.
+- DF-10: **REOPENED** after the verified inventory candidate, due this checkpoint write and remaining Builder-owned work.
+- DF-11: Waived as a mandatory gate.
+- DF-12: **PROJECT DIRECTOR ONLY**.
+
+PR #171 SYS-01–SYS-11 remains the existing whole-system architecture foundation. Stage A remains **NOT STARTED / HELD**. No runtime implementation, donor adoption, source-baseline selection, independent verdict, Project Director acceptance or merge permission is claimed.
