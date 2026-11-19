@@ -418,3 +418,28 @@ These are bounded source/build-registration findings, not test/build verdicts. N
 4. Keep DF-06, DF-09 and terminal DF-10 requirements intact. DF-11 waived; DF-12 Director-only; Stage A held.
 
 No runtime source or tests were changed. No donor code was adopted. No build/test/workflow was executed.
+
+
+## 23. Builder milestone checkpoint — DF-06 GitHub destination reachability tranche (2026-11-19)
+
+**PR #192 exact HEAD before checkpoint write:** a6825c14915bccbe24ded2f5af7417ae52495ca3.  
+**DF-06 report blob:** 4a942e93d96baa9fb3474bd3868426dd6ebdbf25.
+
+### 23.1 Work completed
+
+DF-06 §18 records direct GitHub API retrieval for:
+- 22 referenced PRs (all returned metadata);
+- 14 referenced issue comments (all returned their exact IDs and canonical comment URLs);
+- 21 referenced Actions runs (all returned terminal completed/success status).
+
+The historical ChatGPT share pointer was reclassified correctly: it appears inside inline-code spans and is explicitly described in the source as a literal retained pointer, not a verified navigation link. It must not be counted as a Markdown destination. Direct retrieval failed with a cache miss, so the historical provenance itself remains unavailable.
+
+All successful historical workflow runs have varying historical head SHAs. None is evidence of CI on the current PR #192 head. Run #44192302873 completed successfully but its associated blind-reader verdict remains PARTIALLY CLEAR (31/32), not CLEAR.
+
+### 23.2 Remaining blockers
+
+DF-06 remains NOT MET: exhaustive parser/reference-link/HTML/heading-fragment reconciliation and authenticated rendered GitHub heading/line/comment anchor verification are still outstanding. The connector can retrieve GitHub API resources but cannot provide the required authenticated interactive browser viewport/target inspection.
+
+DF-02 remains OPEN: the canonical 159-path ledger exists, but semantic and all-ref consumer closure is incomplete. DF-09 remains NOT MET: no workflow-dispatch capability is exposed by the connected GitHub tools, and the last applicable blind reader result is stale/PARTIALLY CLEAR. DF-10 remains the terminal final-write gate. DF-11 waived; DF-12 Project Director-only; Stage A held.
+
+No runtime source, test or build configuration was changed. No tests/build were run and no workflow was dispatched.
