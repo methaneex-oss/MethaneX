@@ -941,3 +941,27 @@ The donor `core/cpp/tests/CMakeLists.txt` blob `cbfd1fde52fffa6eeac025da2b7ddcb5
 **Disposition for this tranche:** six test sources are recorded as donor-only behavioral/persistence evidence. Preserve their acceptance criteria for future exact-baseline validation; do not count them as passing tests or adopt the donor test files without source/build compatibility review.
 
 **DF-02 remains OPEN.** Sections §16–§24 now provide bounded semantic dispositions for 90 of PR #97's 159 changed paths. The remaining 69 paths still require per-path semantic disposition, and full reverse-consumer/dependency/duplication closure across relevant branches and historical artifacts remains outstanding. This tranche does not close Gate A/B, select a source baseline, authorize donor adoption, start Stage A or authorize runtime implementation.
+
+
+## 25. Action authorization and cognitive runtime/cycle regression-test lineage — 2026-11-19
+
+**Exact PR #192 source:** `ea5312ce5d5243449c5540d0c963c0b321fd3980`.  
+**Donor PR #97 exact HEAD:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
+**Scope:** Four donor test paths compared with their exact current PR #192 same-path versions.
+
+| Test path | Donor blob / size | Current PR #192 blob / size | Semantic disposition |
+|---|---|---|---|
+| `core/cpp/tests/action_authorization_suite.cpp` | `66127a2b574d5c44571332733edb800fb558bcaf`, 48 lines | `cf0cd95ec6fd83da756c305c54439a018cad796b`, 47 lines | **Preserved with a small fixture/API difference.** Both assert permission denial, permitted execution under the required permission/risk context, risk-limit rejection and the invariant that a denied action is never executed. The donor's extra line does not by itself establish a material capability change. |
+| `core/cpp/tests/action_model_architecture_suite.cpp` | `e2e0ecf121ab866f5793bb63c2f605ec5f68dafa`, 39 lines | `24f419a4ff469995bbc5961974c7ee3b869c9911`, 39 lines | **Preserved semantically.** Both check execute/reject/recommend dispositions, reversibility constraints and bounded confidence. This remains a focused action-assessment contract test, not an action-feedback learning test. |
+| `core/cpp/tests/cognitive_cycle_suite.cpp` | `3e762cdec8b27030cf94478a1a68a4605a38c8c5`, 788 lines | `38ff2c7d6e851b4745e9dc7c01f968b7245400a2`, 98 lines | **Major donor test expansion.** Current test verifies core cycle output, decision/plan agreement, action assessment, basic prediction feedback and invalid-goal handling. Donor adds structural context encoding and collision-avoidance cases, developmental context propagation, adaptive strategy influence, capability isolation/recovery, richer feedback and numerous boundary cases. This is strong evidence that the donor tests substantially broader contracts; it is not proof the 690-line delta is all correct or should be ported verbatim. |
+| `core/cpp/tests/cognitive_runtime_suite.cpp` | `361cba84a6fc6e07e31d14b5fa618c3f0a7848fa`, 356 lines | `48cac9cb0e27e2dc8a15323429d1f7158ee427a0`, 87 lines | **Major donor integration-test expansion.** Current test checks worker start/stop, submission, result completion, priority processing and metrics. Donor additionally checks perception-provider evidence, prior-memory retrieval, action execution/authorization, action-outcome journaling, feedback queue processing, workspace publication, denied-action non-bypass, bounded feedback queues, prediction identity and drain/failure behavior. Those are exactly the missing integrated runtime contracts identified in §23; their presence in the donor test source still requires build/run evidence. |
+
+### 25.1 Cross-check against the donor runtime contract
+
+The public API differences in §23 and test differences here are consistent: the donor expands the cycle and runtime not only by adding declarations but by adding regression tests for the connected behavior. The current PR #192 versions of the two core runtime tests are materially narrower. This is an observable integration gap, not merely a source-file count difference.
+
+The action authorization and action model tests are already materially represented in current PR #192. They should be preserved rather than replaced solely because the donor contains a later revision.
+
+**Disposition for this tranche:** two tests are classified as semantically preserved; two are classified as substantial donor test expansions over narrower current tests. No tests were run, and no test result or donor adoption is claimed.
+
+**DF-02 remains OPEN.** Sections §16–§25 now provide bounded semantic dispositions for 94 of PR #97's 159 changed paths. The remaining 65 paths still require per-path semantic disposition, and complete reverse-consumer/dependency/duplication closure across relevant branches and historical artifacts remains outstanding. This tranche does not close Gate A/B, select a source baseline, authorize donor adoption, start Stage A or authorize runtime implementation.
