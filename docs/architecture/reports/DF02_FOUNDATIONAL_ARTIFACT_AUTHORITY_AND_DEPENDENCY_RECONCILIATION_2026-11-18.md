@@ -1416,3 +1416,51 @@ Donor `causal_link_codec.hpp` provides a typed, length-prefixed versioned encodi
 The absent donor cohort cannot be closed as “superseded” by filename or by generic Brain functionality. The candidate has a functioning event-memory/prediction/cognitive-cycle path, but the inspected exact candidate source does not demonstrate equivalent affective appraisal, developmental world/strategy learning, goal-outcome accumulation or donor-grade causal-link serialization. The orphan `brain_restored_api.cpp` is not active build evidence.
 
 **Disposition:** This tranche provides bounded semantic dispositions for four absent-path cohorts and identifies a second direct evolution-adoption route. All corresponding ledger rows remain **OPEN** pending per-path mapping, consumer tracing, test/build evidence and historical authority. DF-02 remains **OPEN**; Gate A/B and Stage A remain held.
+
+
+## 32. Donor-to-candidate CI/workflow successor and target-registration audit — 2026-11-19
+
+**Exact candidate source:** PR #192 HEAD `9711f77d69cdacdf553d8ceb1021bf6fa0adf8d6`.  
+**Donor source:** PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
+**Candidate CMake evidence:** `core/cpp/CMakeLists.txt` blob `c51816888e1bddb7bc00c59e72529524e27a0717`; `core/cpp/tests/CMakeLists.txt` blob `dab0c52ab4dfe15e1e2cbccfa9e6c904abdf54e3`.
+
+### 32.1 Workflow successor mapping
+
+The donor's five absent workflow paths were compared to candidate workflows and their actual target registration:
+
+| Donor workflow absent in candidate | Candidate plausible successor | Disposition |
+|---|---|---|
+| `dlt-001-long-run.yml` | DLT-002/JBP trial workflows | No direct equivalent established; candidate trial model has changed from DLT-001 to the six-phase DLT-002 challenge |
+| `dlt-002-overnight-validation.yml` | `dlt-002-four-hour.yml` | Intended successor, but it references two executable/test targets absent from candidate CMake |
+| `jarvis-brain-probe-001.yml` | `jbp-brain-int-001.yml` and `jbp-learning-002.yml` | Probe responsibilities split; both reference absent candidate targets |
+| `jarvis-core.yml` | `brain-ci.yml` | Plausible successor: candidate workflow configures, builds and runs registered CTest targets, with an additional sanitizer job |
+| `jarvis-learning-seed-sweep.yml` | `jbp-learning-002.yml` / `jarvis-learning-mechanisms.yml` | Intended learning validation successor, but referenced executable/test targets are absent |
+
+The candidate also contains `jbp-mem-001.yml`, whose intended memory/persistence gate references one absent experience-memory test and one absent persistence executable.
+
+### 32.2 Exact target-registration mismatch
+
+Candidate CMake registers 45 executable/test names across `core/cpp/CMakeLists.txt` and `core/cpp/tests/CMakeLists.txt`. Five candidate workflows were checked against those exact registrations:
+
+| Candidate workflow | Referenced names absent from CMake registration |
+|---|---:|
+| `dlt-002-four-hour.yml` | 2 |
+| `jarvis-learning-mechanisms.yml` | 19 |
+| `jbp-brain-int-001.yml` | 6 |
+| `jbp-learning-002.yml` | 1 |
+| `jbp-mem-001.yml` | 2 |
+
+Across these workflows, **20 distinct referenced target/test names are not registered** in the candidate CMake files:
+
+`jarvis_dlt_002_persistence`, `jarvis_dlt_002_persistence_verify`, `jarvis_dlt_002_long_run`, `jarvis_attention_learning_brain_suite`, `jarvis_developmental_learning_suite`, `jarvis_affective_learning_suite`, `jarvis_affective_state_model_suite`, `jarvis_affective_goal_outcome_suite`, `jarvis_affective_brain_decision_suite`, `jarvis_cognitive_runtime_goal_feedback_suite`, `jarvis_goal_outcome_model_suite`, `jarvis_affective_evidence_suite`, `jarvis_affective_decision_learning_suite`, `jarvis_developmental_brain_integration_suite`, `jarvis_experience_memory_test`, `jarvis_brain_action_consequence_integration_suite`, `jarvis_developmental_training_environment_suite`, `jarvis_developmental_environment_suite`, `jarvis_developmental_world_suite`, and `jarvis_developmental_world_integration_suite`.
+
+This is not a speculative inference: the candidate CMake files enumerate the complete active target/test registrations, and the workflow source names targets outside those lists. The affected jobs will fail at target build or named CTest selection unless those targets are supplied through an unregistered external mechanism (none was found in the candidate CMake configuration). This source audit did not dispatch the workflows; runtime failure is therefore not claimed as an observed run result.
+
+### 32.3 Engineering implication
+
+- Candidate `brain-ci.yml` is the only inspected workflow here whose generic full build/CTest approach aligns with the active candidate CMake registration. Its success on the current PR head has not been verified.
+- The candidate's specialized learning/experience workflows still contain donor-era target references. They do not prove that the donor affective/developmental/persistence tests remain integrated; rather, they expose stale workflow configuration after the candidate removed those targets.
+- The absence of donor developmental/affective implementation and test files is not repaired by keeping workflow steps that invoke their former target names.
+- Before a specialized learning workflow can serve as evidence, its targets must be restored as real implementation/tests or the workflow must be deliberately rewritten to test only real, registered successor mechanisms. Do not silently delete the checks and then count the workflow as equivalent evidence.
+
+**Disposition:** Five donor workflow paths receive bounded successor mapping; four candidate specialized workflows plus the memory probe are shown to reference missing targets. The generic core workflow is a plausible successor but has no current-head execution evidence. These rows remain OPEN pending an authorized target/workflow disposition, exact-head CI evidence and the wider 159-path consumer/authority closure. No workflow was edited or dispatched. DF-02 remains OPEN; Gate A/B and Stage A remain held.
