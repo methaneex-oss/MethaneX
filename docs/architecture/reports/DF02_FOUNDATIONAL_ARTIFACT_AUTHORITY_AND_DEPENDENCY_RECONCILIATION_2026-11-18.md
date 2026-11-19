@@ -1591,3 +1591,47 @@ Candidate `coordinator.cpp` blob `44f42429e9730683bd8b529b37ea4e53c4b09c74` vali
 The donor PR's engineering-coordination contribution was not only message passing and dispatch; it included durable shared task ownership and recovery across independent agent processes. Candidate PR #192 retains in-process coordination and communication but drops that durable task-state layer. This may be an intentional scope separation, but it is not documented as a retired requirement in the inspected exact candidate evidence.
 
 No task-ledger code was restored or adopted. No engineering tests were run. **Disposition:** all three task-ledger rows remain OPEN pending explicit authority/scope disposition and cross-branch successor search. DF-02 remains OPEN; Gate A/B and Stage A remain held.
+
+
+## 36. Donor examples and historical design-specification disposition (2026-11-19)
+
+**Exact candidate source:** PR #192 HEAD `20e5350993ba4144e2fb0cbfefb38659d9c37cda`.  
+**Donor source:** PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
+**Related canonical path rows:** §30.
+
+### 36.1 Developmental-world example cohort
+
+Donor PR #97 adds:
+- `core/cpp/examples/CMakeLists.txt`, registering `jarvis_developmental_world`;
+- `core/cpp/examples/developmental_world.cpp`, a runnable 24-episode environment in which the environment does not label the correct action and observed consequences reverse after the clear-condition baseline;
+- `core/cpp/examples/README.md`, documenting the environment, build/run command, persistence journal and expected behavior.
+
+The example explicitly demonstrates the desired behavioral criterion: a preference should emerge from feedback, contradictory outcomes should revise the local preference in a flooded context, and the useful clear-context strategy should be preserved. It also explicitly disclaims open-ended natural-language perception or arbitrary real-world action capability.
+
+Candidate PR #192 has no examples directory and no `jarvis_developmental_world` CMake target. The underlying donor DevelopmentalWorld and DevelopmentalLearning implementations are also absent from the candidate active build, as recorded in §31. This is therefore not merely a missing demo wrapper: the demo depends on the absent world/learning mechanisms.
+
+**Disposition:** three example/build/documentation paths have no candidate successor. They remain preserved on the still-open donor PR #97 branch; they are not present in PR #192.
+
+### 36.2 Historical design and implementation-plan cohort
+
+The nine absent donor documentation/specification paths are:
+
+- `docs/developmental-training-environment.md`;
+- `docs/superpowers/plans/2026-09-25-cognitive-action-feedback-loop.md`;
+- `docs/superpowers/plans/2026-09-26-concept-context-prediction.md`;
+- `docs/superpowers/plans/2026-09-30-developmental-cognition.md`;
+- `docs/superpowers/plans/2026-10-01-affective-state.md`;
+- `docs/superpowers/specs/2026-09-25-cognitive-action-feedback-loop-design.md`;
+- `docs/superpowers/specs/2026-09-26-concept-context-prediction-design.md`;
+- `docs/superpowers/specs/2026-09-30-developmental-cognition.md`;
+- `docs/superpowers/specs/2026-10-01-affective-state.md`.
+
+The developmental-cognition plan contains explicit behavior-level constraints: multiple unresolved predictions sharing a semantic key must coexist and resolve independently; learning must change future behavior rather than merely append records; learned state must survive restart/replay; unrelated experience must not corrupt associations; and generalization must be structural rather than hard-coded. The affective-state specification requires bounded internal valuation dimensions that influence attention, memory, prediction and action selection without mapping directly to fixed actions, with persistence/replay and safety constraints. The developmental training environment document defines behavioral acceptance criteria and clearly distinguishes what a passing controlled trial does and does not establish.
+
+Candidate PR #192 contains higher-level Brain architecture/planning documents, but the nine historical artifacts are not present at their donor paths. No exact one-to-one successor mapping or Project Director retirement decision was established in this bounded audit. The candidate's absence of active developmental/affective implementation and the missing workflow test targets in §§31–32 mean these specifications cannot be treated as satisfied solely because a newer blueprint exists.
+
+### 36.3 Preservation and authority
+
+PR #97 remains open/draft/unmerged at its exact donor HEAD. The historical paths therefore remain retrievable from that branch and have not been deleted from repository history. This establishes preservation at the donor branch, not adoption into PR #192 and not a decision that the requirements are retired.
+
+**Disposition:** 12 absent example/specification/documentation rows are now classified as historical donor artifacts retained on PR #97, with no exact candidate successor established. Whether they are superseded, retained as separate historical evidence, or intentionally excluded from the current foundation remains an authority/scope decision where the requirement materially affects the accepted Brain baseline. No files were copied, deleted or retargeted. DF-02 remains OPEN pending the remaining donor rows and all-ref consumer/authority closure.
