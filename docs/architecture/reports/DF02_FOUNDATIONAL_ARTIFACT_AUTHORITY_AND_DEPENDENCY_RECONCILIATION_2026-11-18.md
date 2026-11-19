@@ -2244,3 +2244,63 @@ The two JBP-004 branch tips establish additional exact-ref artifact owners, dive
 No PR #97 ledger row is closed by this section. PR #110 and PR #112 remain open/draft/unmerged; neither branch is an accepted source baseline, and their test outcomes cannot be transferred to PR #192's candidate tree. The remaining all-ref search still lacks exhaustive source-content consumer/dependency coverage across all 210 unique branch tips, and historical authority/retirement/non-adoption decisions remain to be reconciled path by path. The exact-ref comparisons here are a bounded tranche, not a substitute for that complete search.
 
 **Disposition:** add PR #110 and PR #112 to the exact-ref lineage/duplicate-owner evidence set; retain their workflow and artifact evidence as historical bounded behavioral validation; keep all 159 PR #97 donor-ledger rows **OPEN** pending full per-path semantic disposition, reverse-consumer/dependency/duplicate closure and authority provenance. DF-02 remains **OPEN**.
+
+
+## 48. Exact-ref JBP-003 evolving-world challenge, behavioral results and bounded lineage disposition — 2026-11-19
+
+This section records a third historical branch in the JBP lineage. It adds exact-ref source ownership and preserved behavioral evidence; it does not close the 159-path donor ledger or transfer test results to PR #192.
+
+### 48.1 Exact branch and artifact refs
+
+- PR #107: `test/jbp-003-evolving-world-challenge` at `92cce78985f2630f62a6e0beb49ac725623d7d85`; open, draft, unmerged; base `feat/jarvis-affective-state` at `a06900347f5e463b67e5994d7962a5ea16c3cd2a`; four changed paths.
+- Changed paths: `.github/workflows/jbp-003-evolving-world.yml`, `core/cpp/tests/CMakeLists.txt`, `core/cpp/tests/jbp_003_evolving_world_suite.cpp`, and `docs/testing/jbp-003-evolving-world-challenge.md`. No production source path is changed by this PR.
+- Exact file blobs: test suite `2563c959fd2219195ee3c1daa5525b1b689dc7be`; workflow `aeaff26f4804aab32fb8ec42f739d5d0ec546622`; challenge specification `6f22423c165939940ccac7a950c5d4753da6ad60`; test CMake `a51175cffbbe5deb862d9f88dd96ac77f3f44505`.
+
+### 48.2 Exact 159-path donor identity comparison
+
+The complete recursive tree at PR #107 head contains 288 entries and is untruncated. Comparing the exact 159 PR #97 changed paths against the PR #107 tree gives 119 identical donor blobs, 37 divergent same-path blobs and 3 absent same-path paths. The same three paths are absent as in PR #110 and PR #112:
+
+- `core/cpp/include/jarvis/core/causal_link_codec.hpp`
+- `core/cpp/tests/cognitive_runtime_learning_integration_suite.cpp`
+- `core/cpp/tests/memory_learning_evolution_persistence_suite.cpp`
+
+The divergent set is the same 37-path cohort recorded for PR #112. These are blob-identity facts, not proof that the branch's divergent files are semantically equivalent or accepted successors. PR #107 is an additional exact-ref owner of a substantial subset of the donor artifacts.
+
+### 48.3 JBP-003 challenge mechanics
+
+The suite builds and runs the existing `CognitiveRuntime` against a generated, partially observed `DevelopmentalWorld`. For each seed, the evaluator generates two hidden binary action/reward mappings; the brain receives only visible context, candidate actions and (during training) the consequence of its selected action. The environment hides `latent_route_rule`, introduces 15% stochastic outcome flips, reverses only the storm mapping, and preserves clear as an unchanged control. Training and verification invoke the executable separately, so verification restores the journal in a new OS process and withholds outcome feedback.
+
+The test gates are explicit runtime conditions and nonzero return paths, not `assert` statements that could be disabled in Release. The challenge runs 80 acquisition episodes per context, 60 post-reversal episodes per context and 20 no-feedback restart evaluations per context. Thresholds are checked separately for each context; the three seeds are not averaged to hide failures.
+
+### 48.4 Exact-head Actions and preserved artifact verification
+
+All six PR-triggered workflow runs were fetched and verified as completed/successful on exact head `92cce78985f2630f62a6e0beb49ac725623d7d85`:
+
+- JBP-003 evolving-world challenge: run `40647015963`
+- JARVIS Core Verification: run `40647016005`
+- Native Brain Build: run `40647015814`
+- Brain ThreadSanitizer: run `40647015804`
+- Brain CI: run `40647016039`
+- JARVIS Brain Tests: run `40647015826`
+
+The JBP-003 job's exact-revision checkout, configure, native build, independent-seed train/fresh-process verification, interpretation recording and artifact upload steps all completed successfully. Artifact `12798381657` (`JBP-003-40647015963-1`) was downloaded and inspected; its local SHA-256 matched the GitHub artifact digest `f89d4e2e7db0db82baccee0bba4ea7bba455dabce022dd0516a8da46a785cc9e`. The archive contains exact tested-commit metadata, configure/build logs, scope statement, three per-seed journals and the trial log.
+
+Recorded results:
+
+| Seed | Acquisition: clear | Acquisition: storm | Post-reversal: storm | Unchanged clear control | Fresh-process clear | Fresh-process storm |
+|---|---:|---:|---:|---:|---:|---:|
+| 17 | 20/20 | 20/20 | 57/60 | 60/60 | 20/20 | 20/20 |
+| 29 | 20/20 | 20/20 | 56/60 | 60/60 | 20/20 | 20/20 |
+| 43 | 20/20 | 20/20 | 57/60 | 60/60 | 20/20 | 20/20 |
+
+The build completed with non-fatal compiler warnings, including an unused helper and missing aggregate-field initializers; these warnings remain visible in the preserved build log. The workflow's success and behavioral logs are historical exact-head evidence, not a current PR #192 build or test result.
+
+### 48.5 Semantic disposition and limits
+
+JBP-003 is the strongest recovered bounded evidence so far for experience-dependent action selection under hidden per-seed rules, stochastic outcomes, context-specific reversal, preservation of an unrelated control context and fresh-process behavioral recall without evaluation feedback. It demonstrates a real behavioral change on the tested historical runtime, not merely storage of event counts.
+
+Its scope remains narrow: two contexts, two candidate actions, one generated task, a binary hidden mapping, 15% noise, one targeted reversal, three fixed seeds and finite evaluation windows. It does not demonstrate broad concept transfer, open-ended task acquisition, natural-language learning, perception, generalized reasoning, or unrestricted self-improvement. PR #107 changes tests/workflow/specification only; the passing challenge does not prove current PR #192 contains or passes the same target.
+
+PR #107 remains open/draft/unmerged and is not an accepted candidate source baseline. No PR #97 ledger row is closed by this evidence. The all-ref source-content consumer/dependency scan across the 210 unique branch tips, complete per-path semantic successor/retirement/non-adoption disposition, historical authority and duplicate capability ownership remain outstanding.
+
+**Disposition:** add PR #107 to the exact-ref lineage and bounded behavioral-evidence set; preserve the three-seed artifact as historical evidence; keep DF-02 **OPEN** and all 159 donor-ledger rows open pending full semantic, reverse-consumer, dependency, duplicate-ownership and authority closure.
