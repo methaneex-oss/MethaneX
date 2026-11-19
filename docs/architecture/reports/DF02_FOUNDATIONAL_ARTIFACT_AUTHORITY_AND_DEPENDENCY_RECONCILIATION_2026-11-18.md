@@ -1884,3 +1884,75 @@ The canonical §30 ledger still provides exact donor/candidate blob identity for
 The repository branch census remains 251 refs / 210 distinct tips / eight duplicate-tip groups. Exact-ref recursive trees can be fetched, but the all-ref source-content consumer scan across all relevant branch tips has not been completed. GitHub code search remains default-branch scoped, and the available environment has no local clone/index capability because direct Git access is unavailable. No cross-branch consumer closure is inferred.
 
 **Disposition:** DF-02 remains **OPEN**. No donor code was adopted; no runtime source, test, CMake or workflow was changed; no build or CTest was executed. Stage A remains HELD.
+
+
+## 42. Evolution transaction, attestation, isolation and orchestration API audit — exact header/test comparison (2026-11-19)
+
+**Exact candidate PR #192 source:** `5b7a4b56ecd2975019bc777a90369e76f14b4307`.  
+**Exact donor PR #97 source:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
+**Method:** compared exact donor blobs with candidate files from the complete candidate recursive tree; compared related donor/candidate test sources and both test CMake target lists. No build, test or workflow was executed.
+
+### 42.1 Adoption journal — compensation and transaction evidence removed
+
+| Artifact | Donor blob | Candidate blob |
+|---|---|---|
+| `core/cpp/include/jarvis/core/evolution_adoption_journal.hpp` | `289e4dd74ad6646d0fd9c2b77645722c2aa3f3fe` | `f902abfc65d705e15b6b9c8690f8e023f55afacc` |
+| `core/cpp/tests/evolution_adoption_journal_suite.cpp` | `fc8ae17bb837831fef7bf69873ec0e5243e2bc22` | `24a1be9541cc038518065724aef1968efc4dc595` |
+
+The donor journal record retains proposal current/proposed values, expected gain, proposal confidence, minimum improvement and isolation evidence. It exposes `restore_pending` and `restore_adopted` to compensate when a post-adoption or post-rollback persistence step fails. The candidate record drops those evidence fields and both compensation operations.
+
+The donor journal/controller suite is 108 lines and tests idempotent stage/commit/rollback, both compensation paths, replay of evaluation/adoption/rollback, history consistency and restoration of the previous parameter value. The candidate counterpart is five lines: it stages, commits and rolls back a simple record. Those transaction and replay guarantees are not present in the candidate test contract.
+
+### 42.2 Canary and controller — validation, preview, replay and per-parameter state reduced
+
+| Artifact | Donor blob | Candidate blob |
+|---|---|---|
+| `core/cpp/include/jarvis/core/evolution_canary.hpp` | `9a2e2966a242df345ebb778e78b69b7db90dc502` | `46ca0938caf1b27b1ea804f1b5ea795683ab0ef0` |
+| `core/cpp/include/jarvis/core/evolution_controller.hpp` | `c1af30f84f03d87d151fe3c5fbfd89ef39fbe34e` | `e06441d23685093a3c533498a09adf3a8baf5914` |
+| `core/cpp/tests/evolution_canary_controller_suite.cpp` | `80cac5df347987a9074e1ced43202f8759f797d7` | `6acd8aedb7520aebe745b15a2a10c527262f28e0` |
+
+The donor canary exposes a non-mutating `preview` operation; the candidate removes it. The donor controller exposes separate validation, Brain-safe mutation, compensation and replay operations for evaluation, adoption, canary and rollback. It also exposes the adopted experiment for a parameter and stores canaries in a map keyed by parameter. Candidate removes those validation/replay/compensation APIs and replaces the map with one controller-wide canary instance. The latter changes the state-isolation boundary: independent parameter canary histories are no longer represented by the controller's public/internal state.
+
+The donor canary/controller suite is 105 lines and tests preview-before-evidence, multi-observation canary decisions, isolation attestation, idempotent replay of evaluation/adoption/rollback, and history/journal consistency. The candidate suite is 39 lines and retains the basic adopt→canary→rollback path, but not those preview/replay/attestation assertions.
+
+### 42.3 Experiment object — tamper-evident isolation attestation removed
+
+| Artifact | Donor blob | Candidate blob |
+|---|---|---|
+| `core/cpp/include/jarvis/core/evolution_experiment.hpp` | `551d0d41b19abbeca425d102ec4c61984dfac0b6` | `53bcd379fb788a3b0c369309c328f70d56f051ba` |
+| `core/cpp/tests/evolution_experiment_runner_suite.cpp` | `307fe75b42f804d9bb2b0e8199df1e9cf773e3c6` | `08888276d875ce5e55f421e828f1bb4f061d1ea5` |
+
+The donor experiment carries an isolation result and a private attestation snapshot over the experiment ID, proposal fields, fitness values, minimum improvement, confidence and outcome. Its `has_valid_isolation_attestation` verifies that the evaluated object has not changed after sandbox attestation. The candidate object is a plain public data aggregate with `candidate_executed`; it has no isolation bit, private snapshot or validation method.
+
+The donor runner suite asserts valid attestation after isolated execution, invalidation after tampering, rejection of non-isolated results by the safety gate, and invalid outcomes when execution fails. Candidate tests preserve basic runner success/failure but remove the attestation and tamper-resistance checks. This is a material safety-evidence contract reduction.
+
+### 42.4 Trial coordinator and runner — isolation control and isolated-command entry point removed
+
+| Artifact | Donor blob | Candidate blob |
+|---|---|---|
+| `core/cpp/include/jarvis/core/evolution_experiment_coordinator.hpp` | `b7bf85429096b4d3b50c417b929564c2b15ed826` | `2fde3fdf0b3e6772f11358385e069f9b94af34d0` |
+| `core/cpp/include/jarvis/core/evolution_experiment_runner.hpp` | `eb7f5c23a47054d1e60aa65f28627199f511645d` | `38668879bec3e1cd5d8bcdf884edad819b1573d6` |
+| `core/cpp/tests/evolution_experiment_coordinator_suite.cpp` | `5b410197e3c5e48acb381e274ae22e8ba037aa84` | `83d884dd97cbcf2d002249a70e44bb29e6ac0560` |
+
+The donor `EvolutionTrialConfig` includes `require_isolation`; candidate removes that field. The coordinator test source is byte-identical and checks the standard baseline/candidate trial counts and fitness outcome, but does not itself prove that the removed isolation policy switch remains active.
+
+The donor runner API includes `run_isolated_command` using `ProcessIsolationBackend` and `IsolatedCommand`. Candidate removes that entry point and the header dependency on `process_isolation.hpp`. The process-isolation header, implementation and process-isolation test suite still exist in the candidate tree (the header and syscall suite are byte-identical to donor), and the ordinary process-isolation target remains registered. Therefore the accurate finding is not that process isolation is absent repository-wide; it is that the donor EvolutionExperimentRunner no longer exposes the process-isolated execution path.
+
+### 42.5 Orchestrator — trial policy cannot be supplied by caller
+
+| Artifact | Donor blob | Candidate blob |
+|---|---|---|
+| `core/cpp/include/jarvis/core/evolution_orchestrator.hpp` | `05e5ca1578dc5b1635619aa61dc2da0459ef7708` | `75105e51509156f1fad361ec47e0ae365a1a0291` |
+| `core/cpp/tests/evolution_opportunity_orchestration_suite.cpp` | `24d6dd905cb537cc6c14e329db6a7d52d49c97b8` | `4ef1dc80a85a8e9247c5816bdb73c6876d3a1b22` |
+
+The donor constructor accepts both scheduler policy and trial configuration; candidate accepts scheduler policy only, although the orchestrator still stores a default-initialized trial configuration internally. The candidate API therefore removes caller control of trial counts, confidence/improvement thresholds and isolation requirement at orchestration construction. The candidate orchestration test also omits donor assertions that resolve the adopted experiment record, journal state and exact history count for the adopted lifecycle.
+
+### 42.6 CMake and missing persistence integration suite
+
+The donor `core/cpp/tests/CMakeLists.txt` blob is `cbfd1fde52fffa6eeac025da2b7ddcb5ab493261` (71 executable targets); candidate blob is `dab0c52ab4dfe15e1e2cbccfa9e6c904abdf54e3` (45 targets). Both register the adoption-journal, canary/controller, coordinator, runner and opportunity-orchestration suites, plus the process-isolation suite. The donor also registers `jarvis_memory_learning_evolution_persistence_suite`; the corresponding donor source `core/cpp/tests/memory_learning_evolution_persistence_suite.cpp` (blob `98e6598f60912714234f2dfabfbe52fa5eb77044`) is absent from the candidate tree and has no candidate target. This removes a dedicated test of memory/evolution persistence integration from the candidate test graph.
+
+### 42.7 Per-path disposition
+
+The header/test comparisons evidence substantial candidate reductions in evolution transaction compensation, replay/idempotency, canary preview, per-parameter canary isolation, experiment attestation, configurable trial isolation, isolated command execution, orchestration policy injection and memory/evolution persistence coverage. They complement the implementation-level controller/journal/rollback findings already recorded in §§27–28.
+
+The affected rows remain **OPEN** pending reverse-consumer/alternate-owner analysis across exact refs, dependency and duplicate ownership, historical authority, and any Project Director scope/retirement decision. No runtime source, tests, CMake files or donor code were changed. No build or test was executed. **DF-02 remains OPEN.**
