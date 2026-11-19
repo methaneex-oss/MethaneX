@@ -1956,3 +1956,56 @@ The donor `core/cpp/tests/CMakeLists.txt` blob is `cbfd1fde52fffa6eeac025da2b7dd
 The header/test comparisons evidence substantial candidate reductions in evolution transaction compensation, replay/idempotency, canary preview, per-parameter canary isolation, experiment attestation, configurable trial isolation, isolated command execution, orchestration policy injection and memory/evolution persistence coverage. They complement the implementation-level controller/journal/rollback findings already recorded in §§27–28.
 
 The affected rows remain **OPEN** pending reverse-consumer/alternate-owner analysis across exact refs, dependency and duplicate ownership, historical authority, and any Project Director scope/retirement decision. No runtime source, tests, CMake files or donor code were changed. No build or test was executed. **DF-02 remains OPEN.**
+
+
+## 43. Engineering coordination durability, revision tracking and message-delivery contract audit (2026-11-19)
+
+**Exact candidate PR #192 source:** `6a639c7eb12c16a8254b34738d945fa8ca6d6059`.  
+**Exact donor PR #97 source:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
+**Method:** compared exact donor blobs with candidate files at the candidate commit and compared the engineering CMake source/target graph and agent/console test. No build or test was executed.
+
+### 43.1 Coordinator — tracked dispatch and durable task transitions removed
+
+| Artifact | Donor blob | Candidate blob |
+|---|---|---|
+| `engineering/cpp/include/jarvis/engineering/coordinator.hpp` | `fc2cced25d47b23893571a100ee7f36a05d37a9b` | `d395db8ce7ae24e40d56aa923758a2251f9188e4` |
+| `engineering/cpp/src/coordinator.cpp` | `e175dd61aaa3d8302aba6381401305db9f034062` | `44f42429e9730683bd8b529b37ea4e53c4b09c74` |
+
+The donor coordinator exposes `dispatch_tracked`, taking a task ID, expected ledger version and base revision. It retrieves the durable task definition as authoritative, rejects stale/non-queued versions, validates the agent and permissions, claims the task against a concurrency race, records the running transition, catches execution exceptions, verifies returned task/agent identity, and records completion or failure with result revision and evidence. If completion/failure persistence fails, it returns an explicit reconciliation-required result rather than silently claiming durable success.
+
+The candidate coordinator header and implementation expose only discovery, ranking and untracked dispatch. The implementation is 12 lines and does not include the task ledger. The tracked dispatch, version guard, claim/start/fail/complete transitions, revision provenance and durable reconciliation path are absent.
+
+### 43.2 Message bus — at-least-once retry safety and receiver backpressure removed
+
+| Artifact | Donor blob | Candidate blob |
+|---|---|---|
+| `engineering/cpp/include/jarvis/engineering/message_bus.hpp` | `a8a334881dc087e83640c984bf02e1704802754a` | `2658f6c12d60f3df611f5cc0a01569b51b59bcb7` |
+| `engineering/cpp/src/message_bus.cpp` | `94700db67f43c8bdb0bcc774f1fb0464f5bff81c` | `9811d41fc237e33c80086e33049f9ae482c58c77` |
+
+The donor handler returns a boolean acceptance result. The bus uses a length-prefixed delivery key, accepted-message content history, bounded FIFO deduplication, an in-flight ID set and content comparison. A retry with the same ID/content is acknowledged without redelivery; reuse of the ID with different content is rejected; concurrent duplicate delivery is rejected; a receiver that cannot accept the message propagates backpressure so the sender can retry. The endpoint queue refuses overflow without discarding already accepted work.
+
+The candidate handler returns `void`, the bus has no deduplication/in-flight/content history, and `send` reports delivered after invoking the handler without an acceptance result. The candidate endpoint's `receive` silently drops the oldest queued message when full, then accepts the new one. It therefore replaces explicit backpressure/retry semantics with silent loss under queue pressure and has no duplicate-message idempotency contract.
+
+### 43.3 Durable task-ledger implementation and target absent
+
+The donor tree contains:
+- `engineering/cpp/include/jarvis/engineering/task_ledger.hpp` — blob `95d3f2e42be742f9e75aed8e55ea389723534a64`;
+- `engineering/cpp/src/task_ledger.cpp` — blob `7acff8990319392c9984035a4a14cc83f7154072`;
+- `engineering/cpp/tests/task_ledger_suite.cpp` — blob `e90c062261c95ff99d4b1bdcb55ce7bfad0512ec`.
+
+All three paths are absent from the candidate tree. The candidate `engineering/cpp/CMakeLists.txt` does not compile the task-ledger source or register its test. The donor CMake file registers both `jarvis_engineering_agent_and_console_suite` and `jarvis_engineering_task_ledger_suite`; the candidate registers only the former.
+
+### 43.4 Exact test delta
+
+| Artifact | Donor blob | Candidate blob |
+|---|---|---|
+| `engineering/cpp/tests/agent_and_console_suite.cpp` | `7ac8c21e6df0d157d4d95fe87fabae962734139a` | `b1f7a48df7adad95750e6970fa76f75acb2ac6ea` |
+| `engineering/cpp/CMakeLists.txt` | `44ad82199248b9a6a53d996d046e2e3eb8265f1c` | `7e2621c8678ad784d6e8c9e777b22b7c5310b855` |
+
+The donor agent/console suite is 74 lines and exercises tracked task creation, versioned dispatch, base/result revision recording, durable evidence, rejection of duplicate/stale dispatch, ledger reload, duplicate message acknowledgement without redelivery, conflicting duplicate rejection, bounded-queue backpressure, preservation of earlier messages and retry after draining. The candidate counterpart is 10 lines and tests basic untracked agent dispatch plus simple send/receive. The donor task-ledger suite and target are entirely absent.
+
+### 43.5 Semantic finding and disposition
+
+This is not merely a smaller engineering coordination implementation. The candidate removes the donor's durable task lifecycle, revision-aware concurrency control, execution-result provenance, task-ledger recovery, duplicate-delivery idempotency and explicit receiver backpressure. Its queue can silently evict accepted work, and its dispatcher cannot durably reconcile an execution with a task record.
+
+The candidate retains basic agent discovery/ranking/dispatch and a basic message bus/endpoint, but those mechanisms are not semantic successors for the donor's durable coordination and delivery guarantees. These paths remain **OPEN** pending exact-ref consumer/dependency/alternate-owner analysis, historical artifact authority, duplicate ownership and any Project Director scope/retirement decision. No runtime or engineering source, tests or CMake files were changed; no donor code was adopted; no build or test was run. **DF-02 remains OPEN.**
