@@ -245,6 +245,63 @@ The first coding-slice target is not satisfied by independent BM-01, BM-03, BM-0
 
 ---
 
+### WP-05 contract: scoped prediction, outcome attribution and feedback
+
+| Contract element | BM-05 — prediction/model owner | Evidence/receiving owners |
+|---|---|---|
+| Receives | Qualified premises and beliefs, relevant episodes, context, causal/association hypotheses, prediction objective and expected observation | Attributable later experience/outcome, sensor/provider/execution status, changed premises and dependency notices |
+| Authoritative state | Association/causal hypotheses, prediction identity, scope, assumptions, horizon, expected observation, resolution criteria and resolution lineage | BM-01 owns acquired outcome evidence; BM-04 owns belief revision; BM-09 owns learning-candidate lifecycle; BM-11 coordinates dependencies |
+| Must preserve | Distinction among co-occurrence, correlation, association, temporal precedence, causal hypothesis and verified causal knowledge; prediction identity and independent resolution | Event/acquisition time, source reliability, actual observation versus acknowledgement/failure, outcome attribution and unresolved status |
+| Must not claim | That co-occurrence alone proves causality; that an action request or provider acknowledgement proves an outcome; that unresolved means success/failure | That prediction error alone identifies its cause or authorizes model/behavior change |
+| Failure states | Duplicate/similar predictions, missing or delayed outcome, partial/ambiguous/contradictory evidence, out-of-order outcome, invalid resolution criteria, unobserved outcome | Sensor/provider failure, cancelled/failed execution, infrastructure failure, weak attribution and conflicting observations |
+| Required evidence | Independent prediction IDs and resolution; scoped assumptions/horizon; content-appropriate comparison; counterexample/confounder handling; delayed/out-of-order attribution | BM-01 evidence lineage; BM-04 disposition where belief changes; BM-09 candidate/defer record where adaptation is considered |
+
+**Cross-owner invariants:**
+
+1. Every prediction has an identity and explicit scope, assumptions, horizon, expected observation and resolution conditions; similar predictions must remain independently resolvable.
+2. A prediction is unresolved until qualifying evidence satisfies its declared resolution conditions. Missing observation, failed sensor, cancelled action, provider acknowledgement and verified negative outcome are distinct.
+3. BM-01 records what was actually observed and its source; BM-05 decides whether that evidence bears on a particular prediction, preserving attribution rationale.
+4. Comparison uses a measure appropriate to the predicted content. Exact equality is not a universal prediction-error metric.
+5. Association, correlation, temporal order and causal hypothesis remain distinct statuses. A prediction discrepancy is not, by itself, causal explanation.
+6. BM-05 may publish a resolved outcome and evidence-backed candidate; BM-04 evaluates belief changes, BM-09 evaluates learning candidates, and BM-11 tracks affected dependencies.
+7. Weak or ambiguous attribution defers resolution or marks it qualified; it must not be forced into a success/failure label for convenience.
+
+**Minimum scenario coverage:** accepted-baseline scenarios 7–11, with scenario 17 where a defeated premise affects a candidate goal. Scenario 8 specifically challenges co-occurrence-to-causality promotion; scenarios 9–10 challenge prediction identity and delayed outcome attribution; scenario 11 distinguishes cancelled action/sensor failure from verified external outcome.
+
+**WP-05 exit evidence:** two similar predictions resolve independently; a delayed/out-of-order attributable outcome resolves only the matching prediction; an unobserved or failed-sensor case remains unresolved; a confounder/counterexample prevents unjustified causal promotion; downstream BM-04/BM-09 receives the exact attributed evidence and records its own disposition.
+
+### WP-06 contract: owner-approved learning, persistent change and recovery
+
+| Contract element | BM-09 — learning coordinator/owner | Affected authoritative state owner(s) |
+|---|---|---|
+| Receives | Attributed experiences and outcomes, discrepancy/limitation evidence, candidate scope, counterexamples, current capability baseline and dependency status | Candidate change proposal, evidence set, expected effect, affected-state map, risk/containment and evaluation record |
+| Authoritative state | Learning hypotheses/candidates, evidence and evaluation records, accepted learning-change version/history, monitoring and rollback lineage | The actual belief, representation, memory, causal model, prediction, attention, goal, reasoning strategy or skill state owned by BM-01–BM-12 |
+| Must preserve | Candidate lifecycle from evidence/attribution through evaluation, controlled activation, persistence, monitoring and recovery; prior and accepted versions | Owner-specific approval/qualification/rejection, state version, constraints and local invariants |
+| Must not claim | That every surprise is learnable; that one episode proves a general rule; that a candidate is accepted before required owner evaluation; that persistence alone proves behavioral learning | That BM-09 can overwrite owner state or bypass owner-specific acceptance and safety constraints |
+| Failure states | Weak attribution, insufficient/conflicting evidence, overfit candidate, counterexample regression, negative transfer, incomplete evaluation, partial activation or reconstruction failure | Owner rejection/defer, incompatible update, stale dependency, partial state transition and failed rollback/containment |
+| Required evidence | Candidate rationale; evidence/counterevidence; context and scope; evaluation; explicit owner decisions; accepted version and provenance; post-activation monitoring | Exact pre/post owner state and behavior; persistence/reconstruction; rollback or containment; later relevant effect and held-out transfer/regression |
+
+**Cross-owner invariants:**
+
+1. Learning is a candidate lifecycle, not an automatic reaction to surprise, reward, prediction error or repetition.
+2. Attribution precedes candidate formation. If evidence cannot be attributed to the relevant prediction, belief, representation, strategy, skill or capability, learning is deferred.
+3. A candidate states what may change, why, the evidence and assumptions, expected scope/effect, counterexamples and interference risk.
+4. BM-09 coordinates evaluation and records the accepted developmental change; each affected mechanism retains authority over its own authoritative state and must explicitly accept, qualify, reject or defer the proposed change.
+5. Multi-owner changes must not be reported as complete while only some affected owners have committed. Planning must define observable prepare/commit/failure/recovery outcomes without selecting a particular transaction technology or protocol.
+6. If evaluation is incomplete, the candidate remains inactive. If activation or persistence partially fails, the affected capability is restored to a coherent prior state or isolated and explicitly marked incomplete; no false success is published.
+7. Persistence is necessary but insufficient. A learning claim requires measurable, causally attributable change in the receiving owner's later behavior/state after reconstruction.
+8. Evaluation must include counterexamples and acquisition-context performance, related held-out transfer, unrelated-context non-transfer where appropriate, negative transfer and regression.
+9. Candidate rejection, suspension or rollback preserves the evidence and history that caused the decision; a rollback is itself an attributable state transition.
+10. A numeric parameter change or local optimization supports only a narrow adaptation claim unless broader capability evidence is separately demonstrated.
+
+**Minimum scenario coverage:** accepted-baseline scenarios 19–21. Scenario 22 constrains claim scope. The current proposed specification adds further learning-related requirements, but those additions remain proposed/unaccepted and cannot be presented as accepted baseline obligations.
+
+**WP-06 exit evidence:** an attributed candidate is evaluated against supporting evidence and counterexamples; affected owners explicitly disposition it; a justified accepted change persists through reconstruction; a later relevant task shows a measurable receiving-owner behavior/state change; held-out related and unrelated cases establish transfer boundaries; a regressing candidate is rejected or rolled back with coherent state and preserved history.
+
+### WP-05/WP-06 handoff invariant
+
+A resolved prediction/outcome may contribute evidence to a learning candidate, but it does not directly mutate a belief, causal model, strategy or skill. The evidence path is: BM-01 attributable outcome → BM-05 prediction-specific resolution and attribution → BM-09 candidate formation/evaluation → affected owner decision → coordinated activation/persistence → post-change monitoring and reconstruction → measured later behavior. Every transition retains identity, provenance, status and the responsible owner. No transition is inferred solely from a log entry, delivery event, numeric score or storage acknowledgement.
+
 ### WP-05 — Prediction and feedback contract
 
 **Purpose:** Connect expectations to correctly attributed outcomes and qualified learning candidates.
