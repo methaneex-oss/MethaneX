@@ -30,7 +30,7 @@ The existing planning outputs are substantive. Recreating them as a second gener
 | Brain Foundation Architecture — PR #173 | HEAD `a96af5b18d3a1d580ff56cff6191240893bceeb5`; open/draft/unmerged; xAI re-review of `1f137cbaed985821bbc32408151911b18418f713` returned **PARTIALLY CLEAR** | Use the reviewed responsibility model as planning input only. Whole-architecture acceptance, CF-26 independent challenge and CF-27 final gate remain open. |
 | Brain Mechanism Specification — PR #174 | HEAD `c34472354e4122fc1d78dc25bf45d81f1eb4dc69`; open/draft/unmerged; xAI review of `7cb6271531f3e80a45728756273218132499722e` returned **PARTIALLY CLEAR** | Current 54-scenario proposal is traceability input, not accepted authority. The historical accepted baseline is `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` with 34 scenarios. Do not merge the two sets or silently upgrade the proposal. |
 | Implementation planning — PR #175 | HEAD `d98c9e0ef964f52b8aa9647834092210438c6458`; open/draft/unmerged | Continue documentation/planning and decision preparation only. |
-| Documentation Foundation — PR #192 | HEAD `4b4a3d71dd8ed28dc0b39766e323253289255741`; open/non-draft/unmerged; 43 changed paths | DF-02 OPEN; DF-06 NOT MET; DF-09 NOT MET; DF-10 Builder-verified only for exact inventory §121 parent/successor pair; DF-11 WAIVED; DF-12 pending Director decision. Stage A held. |
+| Documentation Foundation — PR #192 | HEAD `711ce19e360bb5d4a7c91e9d94092466bb344f89`; open/non-draft/unmerged; 47 changed paths; base unchanged at `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` | DF-02 OPEN; DF-06 NOT MET; DF-09 NOT MET; DF-10 REOPENED (the prior inventory-only successor proof was superseded by later branch writes; final inventory successor remains pending); DF-11 WAIVED; DF-12 pending Director decision. Stage A held. |
 | Reader workflow correction — PR #197 | HEAD `2b2bfd9afe6e1325119f7ccee507bb04e71aa343`; open/non-draft/unmerged; one workflow file | xAI exact-HEAD request posted; no independent verdict or new assessment run is recorded. No dispatch or integration is claimed. |
 | Phase 2 capability map — PR #179 | HEAD `ea64607ef94f142a6142a013e119a7225bc95c1c`; open/draft/unmerged | Retain as the current Phase 2 mapping input; do not retarget or merge planning branches. |
 | Donor candidates — PR #97/#156/#176 | Exact revisions and bounded findings are recorded in PR #192's DF-02 report §9 | Treat as evidence for future path-specific Gate A review only. No wholesale donor selection or selective port is authorized. |
@@ -164,6 +164,8 @@ The request must fail closed if any required authority, source identity or evide
 5. Prepare separate exact-revision review assignments for PR #173, PR #174, PR #192 and PR #197; never combine their review scopes or transfer verdicts across SHAs.
 
 No runtime source changes, runtime builds/tests, training runs, donor ports, branch-history operations, merges, releases or deployments are included.
+
+**Project Director direction — 2026-11-19:** Continue the existing PR #175 implementation-planning work promptly within its established non-operative authority. This direction does not waive PR #192 or architecture/specification gates, clear Gate A or Gate B, select a source baseline, start Stage A, activate an executable work package, or authorize runtime implementation/training.
 
 ## 9. Planning exit and transition decision
 
