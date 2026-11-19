@@ -1329,3 +1329,45 @@ The audit report now also contains the complete independent closeout handoff in 
 - PR #175 contains the non-operative parallel planning supplement at `1423ac7803ac07fec1ecbaf4608c2c035a95332b`. Native Brain Build run `44184339540` completed successfully. The exception permits planning only; Gate A, Gate B, baseline selection, runtime implementation and Stage A remain unapproved.
 
 **Disposition:** DF-02 remains open; DF-06 remains not met; DF-09 remains open/not met and may be blocked under the runbook's opening F-195-07 boundary note if an applicable DF-09 criterion or Director decision requires failure-path evidence and it remains unavailable; DF-12 remains reserved to the Project Director. DF-11 remains waived. This is Builder reconciliation, not independent clearance or Project Director acceptance.
+
+
+## 103. Project Director decisions and superseding exact-state reconciliation — 2026-11-19
+
+**Source snapshot independently re-fetched before this correction:** PR #192 HEAD `7d2238542dddf5ab210ad84c37bf259cea3b3559`; open, non-draft, unmerged; base `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; 47 changed paths (45 Markdown, 2 JSON); recursive tree 280 entries, complete (`truncated=false`). This is the pre-correction source snapshot. The resulting commit advances PR #192; use live PR metadata for the new exact HEAD.
+
+### 103.1 Explicit Project Director decisions
+
+The Project Director explicitly selected the following options for PR #192 on 2026-11-19:
+
+1. **Stale index/review-request correction — Option A:** correct the stale controlling index and malformed review-request file references, then repeat the terminal inventory verification and issue a superseding exact-revision review request.
+2. **DF-02 — Option A:** require full semantic successor/retirement mapping, historical provenance reconciliation, and cross-branch consumer/dependency closure. Filename similarity, same-path presence, blob differences, PR metadata, or branch-tip enumeration alone do not satisfy this criterion.
+3. **DF-06 — Option A:** require complete link verification, including parser-scope reconciliation, local destination/fragment resolution, external status and redirect checks, semantic relevance, and rendered GitHub anchor verification.
+
+These are closure standards, not claims that the work is complete. DF-02 remains **OPEN** until its full semantic and dependency obligations are evidenced. DF-06 remains **NOT MET** until its complete verification obligations are evidenced.
+
+### 103.2 Exact current PR #192 and terminal inventory status before this correction
+
+- The source PR #192 snapshot contained 47 changed paths. Its prior terminal inventory section §126 verified the parent `bfda8975cfa57e9df404b4e4393483fc86ab13cf` and successor `7d2238542dddf5ab210ad84c37bf259cea3b3559`, with one commit ahead, zero behind, and the inventory as the only changed path. That proof applied only to that exact pair.
+- This authorized correction pass writes documentation after that successor. Therefore DF-10 is **REOPENED** and must be re-established against a new final parent/successor pair. No previous terminal inventory proof is carried forward.
+- The previous §102 active-status snapshot is historical. It records an earlier PR #192 HEAD and 41 changed paths. It must not be used as current metadata.
+
+### 103.3 Gate disposition and authority boundary
+
+| Gate | Current Builder disposition | Remaining obligation |
+|---|---|---|
+| DF-01 | Builder evidence present; synchronization refreshed in this correction pass | Verify exact final changed-path set and navigation after final inventory |
+| DF-02 | **OPEN** | Full 159-path PR #97 semantic successor/retirement map; provenance of unmatched historical artifacts; cross-branch consumer/dependency/duplication closure |
+| DF-03 | Partially evidenced | Preserve exact decision source, scope, revision and provenance; no authority inferred from summaries |
+| DF-04 | Builder evidence present | Proposed governance remains distinct from accepted bounded amendments |
+| DF-05 | Partially evidenced | Branch/PR ancestry is recorded, but semantic consumer/dependency closure remains open |
+| DF-06 | **NOT MET** | Full 51-file parser reconciliation; local path/fragment checks; external status/redirect/content relevance; authenticated rendered GitHub anchors |
+| DF-07 | Correction in progress | Synchronize index, register, checkpoint, self-review, PR description and review assignment to the final exact HEAD |
+| DF-08 | Resolved within its bounded criterion | Preserve disclosed limits; no destructive archival action |
+| DF-09 | **NOT MET** | Authorized blind fresh-reader run against final exact HEAD returning **CLEAR**; prior 31/32 PARTIALLY CLEAR result is historical only |
+| DF-10 | **REOPENED** | New terminal parent manifest and inventory-only successor verification after every other branch file write |
+| DF-11 | **WAIVED** as mandatory gate | Separate Independent Reviewer challenge remains requested under Director instruction; waiver is not reversed |
+| DF-12 | **PENDING — PROJECT DIRECTOR ONLY** | Exact-final-revision acceptance/rejection/conditional acceptance decision |
+
+Stage A remains **NOT STARTED / HELD**. Implementation planning remains **HELD**. Runtime implementation, source-baseline selection, donor adoption, training, PR integration, merge, rebase, retarget, cherry-pick, branch rewrite and deployment remain **NOT AUTHORIZED**. PR #171's approved SYS-01–SYS-11 whole-system foundation remains authoritative within its recorded scope; Stage A must reconcile with it rather than duplicate it.
+
+This section records the Project Director's three selected closure standards and Builder status only. It is not independent review, DF-09 CLEAR, Documentation Foundation acceptance, DF-12 acceptance or implementation authorization.
