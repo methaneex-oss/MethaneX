@@ -981,3 +981,34 @@ This is substantive bounded evidence of experience-dependent action choice, adap
 DF-02 §48 records exact refs, blobs, run IDs, artifact digest, per-seed outcomes and limitations. PR #107 remains open/draft/unmerged and is not an accepted source baseline. No PR #97 ledger row is closed; all-ref content consumers/dependencies, complete semantic successor/retirement/non-adoption, historical authority and duplicate ownership remain open. DF-02 remains OPEN; DF-06 remains NOT MET; DF-09 remains NOT MET/external dispatch blocked; DF-10 remains reopened; DF-11 remains waived as mandatory; DF-12 remains Project Director-only. Stage A remains HELD.
 
 No PR #192 runtime source, test, CMake or workflow was changed. No current-PR build, CTest, training run or independent review was performed. No donor code was adopted.
+
+
+## 41. Builder milestone checkpoint — DLT-002 multi-seed probe and PR #119/#121 donor integration provenance (2026-11-19)
+
+**Exact PR #192 HEAD before this checkpoint write:** `9cb9d6a829e6aa88f8663873126260179d11f6fa`.  
+**DF-02 report blob after the preceding write:** `bc4132a916b626a01f3cc615e18d632d63e8b6ae`, §§49–50.  
+**PR #97 donor HEAD:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+
+### 41.1 DLT-002 multi-seed learning probe
+
+PR #100's workflow-only branch head `26bca1244a698610d8d48a91308d9c0cf0855a87` ran workflow `40596743895` successfully. The workflow checked out the Brain source ref `feat/jarvis-affective-state` at exact tested commit `beb7971426c42d326f7553363d16f37ce311e9d9` (12 commits behind donor head `c1da...`). The DLT-002 source blob `cbd80951c2f331fa4893c1805fff45a4035d5d24` is identical at the tested commit and donor head; production dependencies at the tested revision predate PR #119/#121 integration corrections.
+
+The artifact `12778958158` was downloaded and inspected; its SHA-256 matches GitHub digest `e706f91d2d6d89d8357ee27566a66bdb81dafb470839f8e0057eaa6603a712e2`. It contains 35/35 mechanism-gate PASS results, raw trial/episode/checkpoint data, three enabled-run journals, and a same-seed no-feedback control. Three 10-minute enabled runs produced 93.3%–98.6% mean accuracy by phase; the primary seed achieved 569/586 choices (97.1%) versus 295/591 (49.9%) in the consequence-feedback-disabled control. The workflow does not gate on minimum accuracy; these are descriptive measurements. The control still receives observations, and 1,629/2,215 non-action projections remained unresolved while all observed action-consequence forecasts resolved.
+
+### 41.2 Final donor integrated branch provenance
+
+PR #119 (40 paths) merged into the donor feature branch at `c1da...`; PR #121 (26 paths) corrected adoption safety/no-feedback behavior and merged into PR #119's integration branch at `fb994fed8b1bd39482aafd98110055032e8bc82f`, which was then carried into the donor feature branch. PR #119's five exact-head workflows were verified successful on `fb994...`; PR #121's four exact-head workflows were verified successful on `804497f7458ccd8346332cc0bd63bb0a9313858d`.
+
+Inspected donor blobs include the runtime learning integration suite, memory/learning/evolution persistence suite, typed causal-link codec, fail-closed adoption helper and local process-isolation backend. The CMake test file explicitly keeps `assert` active in Release. The runtime suite tests observed consequences updating prediction metrics, affective learning and episodic memory; context isolation; regime reversal; real post-restart decision selection; and no-feedback execution without strategy preference. The persistence suite tests evidence-driven strategy selection, evolution proposal/evaluation/adoption, and replay restoration of parameter, strategy, history, prediction and memory state.
+
+### 41.3 Current candidate comparison and interpretation
+
+Re-fetched exact PR #97 and PR #192 metadata/trees. At PR #192 HEAD `9d61e9bb3ef0433e7b1c03bfcd1a3a19b8c6741d`, the 159 donor paths compare as 1 identical, 95 divergent and 63 absent; donor tree 287 entries and candidate tree 280 entries, both complete. All 159 paths exist in donor. PR #119's 40-path set has 34 divergent and 6 absent candidate paths; PR #121's 26-path set has 23 divergent and 3 absent candidate paths. The six PR #119 absent paths include the developmental-learning source, causal-link codec, and integrated runtime/developmental/memory-learning suites.
+
+The three files absent from the older JBP-003/JBP-004 branch tips were introduced by PR #119 and are present at final donor head `c1da...`. Their earlier absence was temporal; their absence in current PR #192 is a genuine candidate delta.
+
+### 41.4 Disposition
+
+This strengthens the donor evidence from isolated source presence to integrated, exact-head-tested historical mechanisms. It does not transfer the results to PR #192, select a source baseline, authorize donor adoption, or prove open-ended intelligence. PR #97 remains open/unmerged into main; PR #119/#121 are merged only into its donor feature branch.
+
+DF-02 remains OPEN pending full per-path semantic successor/retirement/non-adoption, reverse-consumer/dependency/duplicate ownership across all 210 unique branch tips, and historical authority. DF-06 remains NOT MET; DF-09 remains NOT MET/external dispatch blocked; DF-10 remains reopened; DF-11 remains waived as mandatory; DF-12 remains Project Director-only. Stage A remains HELD. No PR #192 runtime/test/CMake/workflow was changed, no current-PR build/CTest was run, and no donor code was adopted.
