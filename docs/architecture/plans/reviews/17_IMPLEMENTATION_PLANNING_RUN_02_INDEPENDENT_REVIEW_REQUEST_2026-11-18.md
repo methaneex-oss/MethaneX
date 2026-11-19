@@ -49,7 +49,9 @@ Relevant upstream authority/evidence:
 14. Do the WP-05–WP-06 contracts correctly distinguish unresolved prediction, verified outcome, provider/sensor/execution failure and learning attribution; do they prevent prediction error from directly mutating owner state?
 15. Are the WP-02–WP-06 scenario references correctly separated between the accepted 34-scenario baseline and additional proposed scenarios 35–54?
 16. Are multi-owner activation, partial failure, reconstruction, rollback/containment and later behavioral-effect criteria observable without silently selecting a transaction protocol, schema or implementation technology?
-17. What is the minimum correction set required before the planning package is ready for Project Director disposition?
+17. Does the FS-01–FS-12 first-slice case set faithfully operationalize the accepted-baseline scenarios without silently adding requirements, omitting negative controls or confusing test design with executed evidence?
+18. Are paired controls, reconstruction checks and owner-specific pass criteria sufficiently discriminating to detect memory retrieval without use, inference without premises, belief mutation without BM-04 authority, and partial recovery?
+19. What is the minimum correction set required before the planning package is ready for Project Director disposition?
 
 ## 3. Required evidence method
 
