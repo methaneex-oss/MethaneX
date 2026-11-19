@@ -243,6 +243,36 @@ The first coding-slice target is not satisfied by independent BM-01, BM-03, BM-0
 
 **Planning stop condition:** if an accepted specification does not settle an owner transition, state authority, failure disposition or required evidence, record the unresolved question and decision owner. Do not choose a schema, algorithm, ordering guarantee, persistence protocol or implementation behavior by implication.
 
+### First-slice acceptance case set — non-operative test design
+
+This case set turns the accepted-baseline scenarios into a bounded first-slice verification plan. It is not a replacement for the governing scenarios, does not prescribe fixture content or implementation technology, and does not claim any case has been executed.
+
+| Case | Accepted scenario(s) | Controlled challenge | Minimum pass evidence | Required owner(s) |
+|---|---:|---|---|---|
+| FS-01 — Acquisition integrity | 2 | Interpret and revise the meaning of one acquired experience across later evidence | Original acquisition identity/content or verifiable reference remains unchanged; derived interpretations and belief versions link back to it | BM-01, BM-02, BM-04 |
+| FS-02 — Relevant memory influence | 4, 30 | Run a matched inference with and without a relevant retrieved episode | Inference/premise lineage identifies the memory; a justified difference in conclusion or support is observable; no unsupported memory premise appears | BM-03, BM-12, receiving owner |
+| FS-03 — Irrelevant memory restraint | 5 | Supply a retrieved but contextually irrelevant episode | Retrieval is recorded, but the episode is excluded or qualified as a premise with an inspectable applicability rationale; no authority is gained from retrieval alone | BM-03, BM-12, BM-04 |
+| FS-04 — Sufficient premise derivation | 27 | Supply sufficient, in-scope evidence and assumptions | Every premise has identity/version/provenance; inference links premises to conclusion; conclusion remains provisional pending owner evaluation | BM-12, BM-04 |
+| FS-05 — Insufficient evidence | 28 | Remove a necessary premise or make it unavailable | Explicit unresolved/insufficient-evidence result; no fabricated substantive conclusion; missing retrieval is not treated as proof of absence | BM-03, BM-10, BM-12 |
+| FS-06 — Contradiction preservation | 29 | Supply mutually incompatible premises | Conflict and affected conclusions remain inspectable; no silent winner, last-write preference or unqualified conclusion | BM-12, BM-04 |
+| FS-07 — Defeated assumption | 31 | Introduce later evidence that defeats an explicit inference assumption | Dependent conclusion is qualified/withdrawn or marked stale; prior inference and assumption lineage remain; affected owners are notified | BM-12, BM-04, BM-11 |
+| FS-08 — Counterexample and generalization restraint | 32 | Supply a counterexample to a previously supported generalization | Affected generalization is invalidated or narrowed; unrelated claims remain unchanged unless their dependencies require review | BM-12, BM-04, BM-05, BM-11 |
+| FS-09 — Uncertainty and alternatives | 33 | Provide underdetermined evidence supporting multiple plausible explanations | Alternatives and uncertainty remain explicit; no forced single answer; any request for discriminating evidence is traceable | BM-12, BM-02, BM-04 |
+| FS-10 — Stale/out-of-scope premise | 34 | Reuse a premise after its scope, validity or supporting state changes | Premise is rejected, qualified or marked stale before consequential use; source and invalidation reason are inspectable | BM-12, BM-04, BM-05, BM-10 |
+| FS-11 — Belief owner disposition | 1, 7, 23 | Present a reasoning conclusion with competing or contradictory evidence and dependent state | BM-04 records accept/qualify/reject/defer; prior belief version survives; affected dependent plan/prediction is reconsidered by its actual owner | BM-04, BM-05/BM-08 as applicable, BM-11 |
+| FS-12 — Lifecycle and recovery | 6, 24, 25, 26 | Evict working context, interrupt persistence, replay duplicate events and reconstruct | Durable episode remains retrievable; duplicate/partial transitions are detected; owner state and dependencies are validated before resume; incomplete recovery is not reported as success | BM-03, BM-10, BM-11, affected owner |
+
+**Case-set rules:**
+
+- Each case records exact input/experience IDs, software revision, configuration, environment, initial owner-state versions, event order, and evaluator version once execution is separately authorized.
+- Cases must be paired where the claim depends on comparison (for example, relevant memory versus no memory); only the intended variable changes.
+- Negative controls are first-class outcomes. A case that correctly remains unresolved, rejects irrelevant evidence or defers a belief update can pass.
+- A case passes only when the expected owner state transition and its lineage are observed. Logs, API responses, class presence or emitted artifacts alone are insufficient.
+- The first-slice set does not claim BM-05 prediction resolution or BM-09 developmental learning has passed. Those are later dependent increments and use the separate WP-05/WP-06 contracts and R0–R6 protocol.
+- Thresholds, fixture identities, statistical treatment and run limits remain to be frozen under WP-00/WP-08 after accepted inputs and a source baseline are established.
+
+
+
 ---
 
 ### WP-05 contract: scoped prediction, outcome attribution and feedback
