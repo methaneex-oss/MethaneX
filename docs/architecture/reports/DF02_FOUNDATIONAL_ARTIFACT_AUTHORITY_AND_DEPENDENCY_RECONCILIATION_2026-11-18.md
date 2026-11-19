@@ -2131,3 +2131,44 @@ The donor main core test CMake registers all six targets in this section: `jarvi
 These exact test-path comparisons complete the semantic evidence for the remaining changed Brain/workspace/memory/prediction test artifacts in this cohort. Candidate retains useful baseline integration and memory tests, but the donor's sequence-identity, contextual prediction, affective/attention replay, memory consolidation/recovery and Brain safety scenarios are not preserved by the candidate tests.
 
 The paths remain **OPEN** pending reverse-consumer/alternate-owner and dependency reconciliation, historical artifact authority, and any Project Director decision. No runtime or test source was changed; no donor code was adopted; no build or test was run. **DF-02 remains OPEN.**
+
+
+## 46. Exact 159-path tree/blob integrity recheck and all-ref consumer-search boundary (2026-11-19)
+
+**Exact candidate PR #192 source checked:** `1e492cb93f0089c52b25fb9c448173cfc276559d`.  
+**Exact donor PR #97 source checked:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+
+### 46.1 Complete-tree verification of every ledger identity
+
+Fetched the complete recursive Git trees at both exact revisions. The donor tree contains 287 entries and the candidate tree 280 entries; both responses report `truncated=false`. Parsed all 159 rows in §30 and compared every recorded donor/candidate blob SHA against the corresponding exact-tree path entry.
+
+| Same-path relation | Verified rows |
+|---|---:|
+| Identical donor/candidate blob | 1 |
+| Same path, divergent blob | 95 |
+| Same path absent from candidate | 63 |
+| **Total** | **159** |
+
+**Integrity result:** zero ledger/tree mismatches across all 159 rows. Every recorded donor SHA matches the donor tree; every candidate SHA or ABSENT marker matches the candidate tree. This verifies the structural identity ledger at the exact revisions above. It does not prove semantic equivalence, successor ownership, retirement, non-adoption, or consumer closure.
+
+### 46.2 Current branch-ref census revalidation
+
+Re-fetched all GitHub branch-ref pages (`per_page=100`) at this continuation. The repository currently returns 251 branch refs and 210 distinct tip SHAs. Eight duplicate-tip groups account for 49 branch names. The branch-ref census is therefore current and confirms the earlier recorded 251/210 count; it remains an enumeration of branch names and tips, not a source-content consumer search.
+
+### 46.3 Default-branch consumer-search tranche
+
+The available GitHub code-search operation explicitly searches the repository's default branch only. A bounded search on the current default branch for the following donor-specific symbols returned no results: `ExperienceMemory`, `DevelopmentalWorld`, `GoalOutcomeEvidence`, `dispatch_tracked`, `restore_pending`, `select_with_affect`, `observe_outcome`, `consecutive_surprises`, `affective_learning_updates`, and `has_valid_isolation_attestation`.
+
+This is useful negative evidence for the current default branch only. It does not prove absence from the 251 branch refs or the 210 unique commit tips, and it does not establish whether a different-named API or alternate owner supplies equivalent behavior.
+
+### 46.4 Why the all-ref content search remains open
+
+The connected GitHub search operation does not accept an arbitrary ref and is documented as default-branch-only. Exact-ref tree and file retrieval are available, but there is no connected all-ref source-content search or authenticated interactive browser. A local `git ls-remote` attempt from the execution container failed because the environment cannot resolve `github.com`; a complete local mirror/grep over the 210 unique tips cannot be performed from this runtime.
+
+Accordingly, the Builder has **not** completed the required all-ref reverse-consumer, alternate-owner, dependency or duplicate-capability scan. The branch census and default-branch zero-result tranche must not be presented as closure. To complete this requirement, an authorized repository mirror/local checkout with all 251 refs (or a connected code-search facility that supports exact refs) is required. Once available, the scan must inspect consumer source content, not only tree paths, and record exact ref/commit/blob evidence for each positive and negative result.
+
+### 46.5 Current DF-02 disposition
+
+The 159-path exact blob ledger is now revalidated with zero mismatches; all 159 paths have evidence-section references outside the ledger; and the donor/candidate source, public API, test and CMake comparisons have been extended through §§39–45. These are meaningful Builder evidence improvements.
+
+**DF-02 remains OPEN.** Full semantic successor/retirement/non-adoption disposition, historical artifact authority, reverse-consumer/alternate-owner search across all relevant exact refs, and dependency/duplicate ownership closure are not complete. No Project Director decision is manufactured. No donor code was adopted, no runtime source was changed, and no build, CTest or training run was executed.
