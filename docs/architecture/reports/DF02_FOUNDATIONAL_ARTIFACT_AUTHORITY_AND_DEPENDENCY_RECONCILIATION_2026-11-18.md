@@ -2009,3 +2009,67 @@ The donor agent/console suite is 74 lines and exercises tracked task creation, v
 This is not merely a smaller engineering coordination implementation. The candidate removes the donor's durable task lifecycle, revision-aware concurrency control, execution-result provenance, task-ledger recovery, duplicate-delivery idempotency and explicit receiver backpressure. Its queue can silently evict accepted work, and its dispatcher cannot durably reconcile an execution with a task record.
 
 The candidate retains basic agent discovery/ranking/dispatch and a basic message bus/endpoint, but those mechanisms are not semantic successors for the donor's durable coordination and delivery guarantees. These paths remain **OPEN** pending exact-ref consumer/dependency/alternate-owner analysis, historical artifact authority, duplicate ownership and any Project Director scope/retirement decision. No runtime or engineering source, tests or CMake files were changed; no donor code was adopted; no build or test was run. **DF-02 remains OPEN.**
+
+
+## 44. Donor-only developmental, experience-memory and affective artifact families — exact path and target-graph audit (2026-11-19)
+
+**Exact candidate PR #192 source:** `6a639c7eb12c16a8254b34738d945fa8ca6d6059`.  
+**Exact donor PR #97 source:** `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
+**Method:** fetched exact donor blobs and compared paths against the complete candidate recursive tree. Checked the donor and candidate core test CMake files. These are source/API and target-registration findings; no tests or training runs were executed.
+
+### 44.1 Donor-only foundational headers
+
+| Donor artifact | Donor blob | Candidate path |
+|---|---|---|
+| `core/cpp/include/jarvis/core/cognitive_goal_outcome.hpp` | `c986480d82b9951177031f3387169819c3856234` | ABSENT |
+| `core/cpp/include/jarvis/core/developmental_environment.hpp` | `913c8cca2a03499249b834a890812c57b9aa4b1a` | ABSENT |
+| `core/cpp/include/jarvis/core/developmental_world.hpp` | `2ba5bdbfc6db1f24eff8eb0a20ee145d0efc16cf` | ABSENT |
+| `core/cpp/include/jarvis/core/experience_memory.hpp` | `28cce354eb9db7e8ca292746fd14649debb7ab04` | ABSENT |
+
+The donor-only contracts provide distinct capabilities:
+
+- **Goal outcome evidence:** `GoalOutcomeEvidence` normalizes progress deltas and confidence; `GoalProgressModel` tracks positive, negative and completed outcomes per goal and updates confidence from accumulated observations. Candidate's active `Goal` type also lacks the donor's `outcome_momentum` (§41).
+- **Developmental environment:** owns task/context/state and action transition functions; emits observations and before/after state snapshots; distinguishes failed execution from observed consequences; permits context/state changes between trials.
+- **Developmental world:** owns seeded stochastic world state, action availability/costs, hidden state, partial-observation filters, exogenous dynamics, resources, events and terminal state. The brain receives observations and consequences rather than direct access to the transition function.
+- **Experience memory:** separates semantic key from individual experience identity. It records each prediction by sequence, resolves one specific experience by sequence, retains actual outcome/error, and can find the latest unresolved experience for a semantic key. This is a different ownership/identity contract from a prediction map keyed only by semantic key.
+
+These are donor artifacts, not evidence that the candidate should import them unchanged. Their candidate-path absence is established; alternate owners, equivalent mechanisms and all-ref consumers remain to be reconciled before a non-adoption disposition can be accepted.
+
+### 44.2 Donor-only developmental test and trial artifacts
+
+| Donor test artifact | Donor blob | Candidate path |
+|---|---|---|
+| `core/cpp/tests/developmental_learning_tests.cpp` | `553b3253462344a00d9fbcff1ff682a2788262d2` | ABSENT |
+| `core/cpp/tests/developmental_world_suite.cpp` | `bd8f6767cdcf6513674730f24c184bac6600e116` | ABSENT |
+| `core/cpp/tests/dlt_001_long_run.cpp` | `896caa7e4d14ce6e4f12e453181a14bbb74c62fd` | ABSENT |
+| `core/cpp/tests/dlt_001_trial.cpp` | `deca50aec499a04d46cbc7aed429e335fff18f72` | ABSENT |
+| `core/cpp/tests/dlt_002_long_run.cpp` | `cbd80951c2f331fa4893c1805fff45a4035d5d24` | ABSENT |
+
+The donor developmental-learning test demonstrates experience-created associations and strategy preferences that can change after repeated outcomes, followed by selective consolidation. The developmental-world suite exercises partial observations, hidden world state, failed-execution controls, unknown actions, resource costs and action consequences. DLT-001 trial integrates a cognitive runtime with a changing route environment, including the distinction between executor outage and actual negative consequence. DLT-001 long-run is a configurable multi-hour run with episode/checkpoint logs. DLT-002 long-run defines six seeded phases including context reversal, an unseen-context transfer probe and a second reversal to measure repeated revision/interference and prediction outcomes.
+
+The donor main test CMake registers `jarvis_developmental_learning_suite`, `jarvis_developmental_world_suite`, `jarvis_dlt_001_trial`, `jarvis_dlt_001_long_run` and `jarvis_dlt_002_long_run`. The candidate CMake registers none of these. `developmental_learning_tests.cpp` is a separate donor source file and is not the source named by the donor `jarvis_developmental_learning_suite` target; its presence is not counted as a registered test. These long-run source files define test programs; no run result is claimed.
+
+### 44.3 Donor-only affective test family
+
+| Donor test artifact | Donor blob | Candidate path |
+|---|---|---|
+| `core/cpp/tests/affective_brain_decision_suite.cpp` | `9ff9c0480fa34fa4f5600e514af419b2bbc79765` | ABSENT |
+| `core/cpp/tests/affective_decision_suite.cpp` | `982b11e117b8f59cce3719a5253cb52e96304c0d` | ABSENT |
+| `core/cpp/tests/affective_goal_outcome_suite.cpp` | `06d72304fa0c4ea67eb4a27b91c484007f231199` | ABSENT |
+| `core/cpp/tests/affective_learning_suite.cpp` | `bfbbca315c60c9b1c941dbc553a0cabba304581c` | ABSENT |
+| `core/cpp/tests/affective_state_model_suite.cpp` | `29f15bdd1a5d55afd5170a9d21bc3572befc97f0` | ABSENT |
+| `core/cpp/tests/affective_state_suite.cpp` | `3956eec2ed9885e80ada1d038de6c581338b8f8c` | ABSENT |
+
+These suites test materially different dimensions of affective integration: Brain-level affect state and decision choice; affective modulation of reversibility/risk ranking; goal-completion consequences and replay reconstruction; learning of appraisal weights and calibration confidence; affective-state update/decay/restore; and finite bounded state invariants. The learning suite explicitly tests that poor calibration reduces confidence in affective influence on future state updates, and that learned appraisal modulates later evidence. The Brain decision suite verifies that action consequence events are included in affective replay.
+
+The donor core test CMake registers the six named affective targets above. The candidate CMake registers none of them. This absence aligns with the reduced active cognition/workspace/decision/reflection contracts documented in §§39–41, but the report does not infer that no affect-related code exists anywhere in the candidate repository.
+
+### 44.4 Affective planning fragment — not a registered donor target
+
+The donor `core/cpp/tests/affective_planning.cmake` blob `e3a52416b2538791a93666e5124b1f34ad1b082a` references donor `affective_planning_suite.cpp` blob `32e5f04cfb6e4764cb205744266375367228bedf`. Neither path exists in the candidate tree. However, `jarvis_affective_planning_suite` is not registered in the donor's main `core/cpp/tests/CMakeLists.txt` target list either. This fragment is recorded as donor test scaffolding, not as an active donor CTest target or executed test.
+
+### 44.5 Per-path disposition and limitations
+
+The candidate tree has no same-path successor for the four foundational headers, five developmental test/trial sources, six affective test sources or the separate affective-planning fragment. The main CMake target graph independently confirms that the registered developmental and affective test families are absent from candidate registration. The donor long-run harnesses and tests provide intended evidence mechanisms, not successful execution evidence.
+
+These rows remain **OPEN**. Exact-ref reverse-consumer/alternate-owner searches, source-to-test dependency mapping, historical authority and any Project Director retirement/non-adoption decision remain outstanding. No donor code was copied, no candidate runtime or test file was changed, and no build, CTest or developmental training run was executed. **DF-02 remains OPEN.**
