@@ -694,3 +694,32 @@ The last full-tree bounded custom-extractor baseline recorded 345 candidate occu
 **Still NOT verified:** full parser equivalence; local heading fragments/duplicate-heading anchors across all 51 files; exhaustive unique external URL HTTP status, redirect chain, final destination and claim relevance; authenticated rendered GitHub heading/line-range/issue-comment anchors; final-head blind-reader output.
 
 DF-06 remains **NOT MET** under Option A. Do not claim a static API retrieval or source line-bound check proves rendered GitHub navigation.
+
+
+## 33. Exact-current 51-Markdown sweep after DF-02 source adjudication — 2026-11-20
+
+**Exact source revision scanned:** `281f22b57d117a63f36708a85d60a1544b510483` (PR #192 branch before this audit-section write).  
+**Repository tree:** 281 entries, complete (`truncated=false`); 51 tracked Markdown files. All 51 files were fetched directly from the exact branch revision.
+
+A single bounded custom extractor was applied consistently to all 51 Markdown files. It removed fenced code blocks and inline-code spans, then extracted inline Markdown link/image destinations, reference-style link definitions, HTML `href`/`src` attributes, and angle-bracket HTTP(S) autolinks. Each local destination was normalized relative to its source file and checked against the exact recursive tree, including Markdown extension and README/index conventions.
+
+| Measure | Exact-current result |
+|---|---:|
+| Markdown files fetched | 51 / 51 |
+| Extracted destination occurrences | 357 |
+| Local/repository-relative destinations | 134 |
+| HTTP(S)/protocol-relative destinations | 223 |
+| Local destinations missing from the exact tree | **0** |
+| Local fragment destinations extracted | **0** |
+
+No missing local path was found among the 134 local destinations. No local heading-fragment destination was emitted by this extractor across the 51-file set. This is a bounded custom extraction result; it is not represented as a complete CommonMark/GFM parser result. In particular, it does not prove equivalence with the historical 345/353/348 measurements, and it does not validate every possible escaped/nested Markdown construct or bare-URL autolink form.
+
+The existing exact commit-pinned source audit remains separately bounded: the Phase 2 map's previously audited set contains 45/45 exact commit/path targets and 73/73 source line-range tuples within source-file bounds. These are source/API and line-count checks, not proof of GitHub-rendered fragment landing.
+
+### 33.1 Current external-link and rendered-navigation boundary
+
+The 223 external occurrences were extracted but were not exhaustively checked for unique-URL HTTP status, redirect chain, final destination, and semantic relevance in this pass. The repository's external destinations are predominantly GitHub pull-request, Actions-run, and immutable blob links; their existence must be checked against the exact linked resource, not inferred from a 200 response to a parent page.
+
+No authenticated interactive GitHub browser was available to inspect rendered heading, line-range, or issue-comment anchors and verify viewport landing. Static source retrieval and source-line bounds are not substituted for this evidence.
+
+**Disposition:** this pass establishes 51/51 exact-revision file coverage, 134/134 local path resolution under the stated extractor, and zero extracted local-fragment destinations. It does not close the parser-equivalence, exhaustive external status/redirect/relevance, or authenticated rendered-anchor requirements. DF-06 remains **NOT MET** under the Project Director's Option A.
