@@ -2010,3 +2010,10 @@ The refined all-ref discovery run is workflow [#44799437811](https://github.com/
 The exact 159-path matrix was refreshed against candidate snapshot `cbc51e2b10f1fc976257653adf773735a2b27d49` using complete donor/candidate trees. Status remains 1 identical / 95 divergent / 63 absent. The matrix refresh is commit `e441e56467fa9d3fa56d4f354cf9ec119053db2b`.
 
 **Gate status is unchanged:** DF-02 OPEN because the remaining 118 donor paths with lexical candidates and all 1,134 exact consumer versions are not fully semantically adjudicated; authority/non-adoption decisions remain reserved. DF-06 NOT MET; DF-09 NOT MET/BLOCKED; DF-10 must be reverified after the final Builder file write; DF-12 remains Project Director-only. Stage A remains HELD.
+
+
+## 125. DF-06 inline HTML parser correction — 2026-11-20
+
+The Builder found and corrected an extraction gap: inline HTML child tokens inside Markdown paragraphs were not being inspected for `href`, `src`, and `id` attributes. The corrected script and its self-test are in `scripts/audit_documentation_links.py`; the workflow now runs `--self-test` before the full audit. The fixture covers reference links, tables, strikethrough, inline HTML destinations/IDs, duplicate headings and bare HTTP autolinks. The parser logic was locally exercised with `markdown-it-py`; the exact GitHub Actions result for the new step has not been retrieved, so no CI-pass claim is made.
+
+DF-06 remains NOT MET. Full CommonMark/GFM equivalence, all local fragments, exhaustive external status/redirect/final-target/relevance checks, and authenticated rendered GitHub anchor landing remain outstanding.
