@@ -817,3 +817,18 @@ The scanner's raw count is dominated by `jarvis` and `namespace` (75.24% overall
 7. DF-12 is Project Director-only. Stage A remains HELD.
 
 **Self-review verdict:** Builder evidence is materially stronger and more precise, but the package is **not ready for a CLEAR/acceptance recommendation**. No independent verdict, fresh-reader CLEAR, Project Director decision, runtime baseline selection, donor adoption, Stage A authorization or merge permission is claimed.
+
+
+## 31. Final pre-terminal adversarial self-review — 2026-11-20
+
+**Exact source PR #192 HEAD before this synchronization:** `5afb57b1c99ee24c35a9f431018ea58c3c387f05`. Live branch and PR refs matched; 48 changed paths; complete tree 281 entries / 249 blobs, not truncated; 51 Markdown files; open, non-draft, unmerged; GitHub mergeable=true; recorded base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.
+
+The Builder's current recommendation remains **NOT READY FOR FINAL INDEPENDENT CLEARANCE / NOT CLEARED FOR ACCEPTANCE**. The package has materially improved evidence, but the Director's Option A standards are not fully satisfied:
+
+- DF-02: 159 path rows are cross-referenced, but none is represented as fully closed; 1,148 exact consumer-blob versions are not all semantically adjudicated; duplicate ownership, reverse dependencies, historical provenance and non-adoption authority remain incomplete.
+- DF-06: no reconciled full parser, complete fragment audit, exhaustive external URL audit or authenticated rendered-anchor verification.
+- DF-09: no integrated/reviewed workflow correction and no exact-final-HEAD blind CLEAR.
+- DF-10: terminal inventory-only successor has not yet been created and verified.
+- DF-12: reserved exclusively to the Project Director.
+
+No source baseline is selected, no donor code is adopted, Stage A remains HELD, and no runtime implementation/training/merge/history operation is authorized. This self-review is not an independent verdict.

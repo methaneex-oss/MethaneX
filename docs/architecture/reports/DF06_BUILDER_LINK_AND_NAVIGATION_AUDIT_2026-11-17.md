@@ -681,3 +681,16 @@ The subsequent DF-02 semantic audit, exact-current 159-path matrix refresh, inde
 - PR #197/#198 workflow changes remain separate unmerged proposals; DF-09 remains blocked as recorded in §30.
 
 **Disposition:** DF-06 remains **NOT MET** under the Project Director's Option A. No authenticated rendered-anchor success, exhaustive external-link pass, or full parser equivalence is claimed.
+
+
+## 32. Pre-terminal exact-current DF-06 disposition — 2026-11-20
+
+**Exact PR #192 source before final synchronization:** `5afb57b1c99ee24c35a9f431018ea58c3c387f05`. The complete recursive tree contains 281 entries / 249 blobs, `truncated=false`, including 51 tracked Markdown files. The PR changed-path endpoint returns 48 paths.
+
+The last full-tree bounded custom-extractor baseline recorded 345 candidate occurrences (131 local / 214 HTTP(S)); later exact-delta accounting derived 348 (131 local / 217 HTTP(S)). The historical alternate parser count of 353 remains unreconciled. The 348 figure is not a full CommonMark/GFM parser result. Subsequent exact-current DF-02, index, register and checkpoint sections were reviewed for destination-set changes; no new Markdown link destinations were added by those sections under the prior extractor's supported patterns. This is not a replacement for the required fresh parser run.
+
+**Builder-verified within stated scope:** complete tree and Markdown file count; historical bounded local-target existence result (131/131 at its exact prior source snapshot); exact source-line bounds for the 73 line-range tuples; 45/45 pinned commit/path source retrievals; exact PR #198 destination identity at its historical snapshot.
+
+**Still NOT verified:** full parser equivalence; local heading fragments/duplicate-heading anchors across all 51 files; exhaustive unique external URL HTTP status, redirect chain, final destination and claim relevance; authenticated rendered GitHub heading/line-range/issue-comment anchors; final-head blind-reader output.
+
+DF-06 remains **NOT MET** under Option A. Do not claim a static API retrieval or source line-bound check proves rendered GitHub navigation.

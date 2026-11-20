@@ -2072,3 +2072,16 @@ At checkpoint parent `20c6e812a98f390d80c8d4d2c0103eb65ad236c3`, the latest veri
 **DF-10 — REOPENED.** Terminal inventory-only successor must be created after all branch-file writes, including self-review and the superseding reviewer request.
 
 **DF-12 — PROJECT DIRECTOR ONLY / PENDING.** No acceptance, Stage A authorization, donor adoption, source-baseline selection or runtime implementation is inferred. Stage A remains HELD.
+
+
+## 30. Pre-terminal exact-current gate synchronization — 2026-11-20
+
+The live PR #192 HEAD and branch ref matched at `5afb57b1c99ee24c35a9f431018ea58c3c387f05` immediately before this final documentation synchronization. PR #192 is open, non-draft, unmerged; 48 changed paths; complete tree 281 entries / 249 blobs, not truncated; 51 Markdown files; base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; GitHub reports mergeable=true. The branch is diverged from the current base tip; mergeability is not authorization.
+
+DF-02 remains **OPEN**. The exact 159-path matrix is pinned to candidate `739d108eda6d4b296d7191b31d7883dc59ebf97a` and remains 1 identical / 95 divergent / 63 absent. The all-ref artifact is verified, but its 1,148 consumer-blob versions have not all been semantically inspected. The 159-row crosswalk remains navigable but unresolved for closure. Candidate source/test registration is materially narrower than donor registration, and the bounded semantic crosswalk identifies missing/non-equivalent donor mechanisms.
+
+DF-06 remains **NOT MET**. The full 51-file CommonMark/GFM parser discrepancy, all local fragments, exhaustive external URL status/redirect/final-target/relevance checks and authenticated rendered GitHub anchor verification remain incomplete. The 348 occurrence count is derived from a bounded custom extractor and is not a reconciled parser result.
+
+DF-09 remains **NOT MET / BLOCKED**. PR #197/#198 are parallel, unmerged and unreviewed changes to the same main workflow; this connection exposes no workflow-dispatch action; no final-target blind CLEAR exists. DF-10 remains **REOPENED** pending the terminal inventory-only successor. DF-12 remains **PROJECT DIRECTOR ONLY / PENDING**. DF-03 and DF-05 remain partial; DF-08 is resolved only within its bounded criterion; DF-11 remains waived as a mandatory gate.
+
+This register update is pre-terminal. The final inventory must record the exact parent and all 48 path/blob identities after this synchronization. No branch-file writes may follow the inventory-only successor.
