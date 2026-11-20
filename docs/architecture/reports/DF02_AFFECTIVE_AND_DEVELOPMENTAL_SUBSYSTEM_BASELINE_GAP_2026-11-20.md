@@ -72,3 +72,13 @@ The alternate branches documented in the compiled-consumer report contain additi
 This report closes the factual question of whether affective/developmental source and build integration exist in the candidate PR #192 baseline: **they do not**. The donor PR #97 contains a compiled/tested implementation line, and some alternate branches contain related integration. The Project Director's source-baseline/adoption decision remains reserved.
 
 No runtime or CMake code was changed. No donor files were copied. DF-02 remains OPEN pending full semantic mapping, dependency/duplicate-owner/authority decisions and explicit source-baseline disposition.
+
+
+## 6. Donor source line has successful build, test and sanitizer evidence
+
+The exact donor PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` has two completed successful GitHub Actions runs from 2026-10-28:
+
+- [JARVIS Core Verification run #40788714735](https://github.com/methaneex-oss/MethaneX/actions/runs/40788714735): `cpp-core` configure, build and test all succeeded; **71/71 CTest tests passed**.
+- [Brain CI run #40788714686](https://github.com/methaneex-oss/MethaneX/actions/runs/40788714686): both `native-brain` and `sanitizer` jobs completed configure, build and test successfully; **71/71 tests passed in each job**, including the AddressSanitizer/UndefinedBehaviorSanitizer run.
+
+The test log includes `jarvis_dlt_001_trial`, `jarvis_dlt_002_persistence_train` and `jarvis_dlt_002_persistence_verify`, all passing. This is concrete evidence that the donor source line builds and its registered test suite passes on the pinned revision. It is not evidence of an extended four-hour DLT run, open-world generalization, or Project Director adoption. The candidate PR #192 baseline remains distinct and has not received these modules.
