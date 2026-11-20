@@ -3029,7 +3029,7 @@ The 2026-10-31 15-tip integration cohort and the PR #121 merge line remain disti
 **Disposition:** exact tree/blob integrity, the 159-row evidence crosswalk, and bounded semantic comparisons are Builder-verified within their stated scope. DF-02 remains **OPEN** under the Project Director's Option A standard. The remaining all-ref semantic consumer adjudication and authority/non-adoption decisions are not represented as complete. No donor code is adopted and no runtime baseline is selected.
 
 
-## 10. Exact donor-to-candidate source-content adjudication — 2026-11-20
+## 60. Exact donor-to-candidate source-content adjudication — 2026-11-20
 
 **Comparison endpoints**
 
@@ -3037,7 +3037,7 @@ The 2026-10-31 15-tip integration cohort and the PR #121 merge line remain disti
 - PR #192 candidate base: `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.
 - The all-ref lexical scan candidate `32722f104f76817983b0156cca821949e406b8c1` is 13 commits behind PR #192's terminal documentation HEAD; the intervening changes are documentation-only. The source comparisons below use the exact PR #192 base and exact PR #97 donor endpoints.
 
-### 10.1 High-impact source comparisons
+### 60.1 High-impact source comparisons
 
 | Donor artifact | Donor blob | PR #192 candidate blob / state | Source-level finding |
 |---|---|---|---|
@@ -3051,7 +3051,7 @@ The 2026-10-31 15-tip integration cohort and the PR #121 merge line remain disti
 
 The `memory.hpp` and `memory.cpp` comparisons are especially material: the candidate is not merely missing a donor filename. It lacks the donor's consolidation state, retrieval constraints, and M2 metadata extension/backward-reader behavior. Likewise, the Brain header and CMake comparisons show that affective/developmental mechanisms are not wired into this candidate build in the same way as the donor lineage.
 
-### 10.2 Exact consumer-context findings from the all-ref artifact
+### 60.2 Exact consumer-context findings from the all-ref artifact
 
 The 1,223 exact consumer-blob contents were available for source inspection. Distinctive identifiers—not generic tokens such as `state`, `event`, or `update`—establish the following bounded findings:
 
@@ -3060,14 +3060,14 @@ The 1,223 exact consumer-blob contents were available for source inspection. Dis
 - `ExperienceMemory` is referenced by its dedicated test; its presence alone does not establish integration into Brain's durable event memory or the prediction-feedback loop.
 - The all-ref scan reports 182,302 lexical match rows, but those rows are discovery leads. Repeated generic identifiers and repeated blob occurrences are not independent semantic consumers. Each conclusion above is tied to distinctive type/API references and the exact source blob/path occurrences, not raw row totals.
 
-### 10.3 Technical disposition
+### 60.3 Technical disposition
 
 The exact source comparison rejects the proposition that PR #192's candidate base is a semantic successor to PR #97 merely because both contain files with overlapping names. The candidate has material API, persistence, build-registration, and test-registration differences. The PR #121 / `integration/learning-layer-20261028` lineage remains a distinct historical integration line in which all 159 donor paths were previously verified present with donor-identical blobs at the recorded integration commit. That is evidence of preservation/integration into that named branch only; it is not proof that the line is the current selected baseline or that its code is ready to merge into PR #192.
 
 No donor adoption, source-baseline selection, merge, rebase, retarget, cherry-pick, or implementation authorization is inferred from this comparison. The 159-path semantic disposition and all-ref dependency/duplicate-owner adjudication are **not yet complete**: the comparisons above close specific high-impact questions and identify concrete non-equivalence, but they do not adjudicate every divergent/absent donor artifact or every exact consumer version. DF-02 therefore remains **OPEN** pending the remaining per-path technical dispositions and the authority decision reserved to the Project Director.
 
 
-### 10.4 Engineering-agent coordination lineage — exact API/behavior comparison
+### 60.4 Engineering-agent coordination lineage — exact API/behavior comparison
 
 The donor package also contains a distinct engineering-agent coordination subsystem. It must not be conflated with Brain cognition, but its ownership and durability contracts matter to the multi-agent builder architecture.
 
@@ -3085,7 +3085,7 @@ These are behavioral contract differences, not naming-only variations. In partic
 **Disposition:** the candidate engineering subsystem is not a semantic successor to the donor's task-ledger/deduplicating-message-bus contract. The donor task-ledger paths are absent from this candidate. This does not establish that the donor subsystem should be adopted: ownership overlap with other engineering orchestration branches, full test evidence, and Project Director source-baseline authority remain to be resolved.
 
 
-### 10.5 Refined all-ref source-content scan and exact consumer-version accounting
+### 60.5 Refined all-ref source-content scan and exact consumer-version accounting
 
 A follow-up scanner correction excludes three high-frequency lexical false positives: the namespace keyword, the repository namespace token `jarvis`, and the generic filesystem operation `remove`. The scanner self-test now asserts that these are not emitted as API-like identifiers. This correction does not automatically classify any remaining identifier hit as semantic use.
 
@@ -3115,7 +3115,7 @@ A follow-up scanner correction excludes three high-frequency lexical false posit
 
 The previous 182,302-row / 1,149-version figures belong to the earlier, noisier scanner output and are superseded for triage by this refined run. The 40,032 remaining matches are still lexical discovery candidates, not 40,032 semantic dependencies. Exact consumer blob SHA, source path, category, and branch-tip occurrence remain part of the evidence key. The 41 no-symbol paths below are not presumed retired or unused.
 
-### 10.6 The 41 donor paths without remaining lexical symbol-consumer candidates
+### 60.6 The 41 donor paths without remaining lexical symbol-consumer candidates
 
 The refined scanner's 41 no-symbol paths fall into five distinct classes. Same-path status refers only to the frozen candidate input revision; it is not a successor or retirement decision.
 
@@ -3139,7 +3139,7 @@ The refined scanner's 41 no-symbol paths fall into five distinct classes. Same-p
 
 All 41 also have exact-path references in the all-ref documentation-reference index. The appropriate next adjudication is class-specific: workflow trigger/replacement and run history; CMake target and CI registration; production implementation call/dependency inspection; test target/CTest coverage; or historical provenance and authority. The zero-symbol result is only a reason to inspect a path differently, never evidence by itself for retirement, non-adoption, or deletion.
 
-### 10.7 Confirmed high-specificity consumer examples — limited scope
+### 60.7 Confirmed high-specificity consumer examples — limited scope
 
 The full-content artifact was inspected beyond aggregate counts. The following examples are confirmed source-level uses, not merely identifier co-occurrences:
 
@@ -3151,7 +3151,7 @@ The full-content artifact was inspected beyond aggregate counts. The following e
 These inspected examples demonstrate that the refined index contains real production and compile-time dependencies as well as incidental matches. They do not complete the 159-path semantic disposition. DF-02 remains **OPEN** until each donor path receives an evidence-backed successor, retained-authority, retirement, non-adoption, or duplicate-owner classification and any authority decision reserved to the Project Director is recorded.
 
 
-### 10.8 Path-level semantic adjudication — production-source subset of the 41 no-symbol paths
+### 60.8 Path-level semantic adjudication — production-source subset of the 41 no-symbol paths
 
 The following four production-source paths were fetched at the exact PR #97 donor revision and compared with the frozen PR #192 candidate input revision. These are source-content findings, not lexical-index inferences.
 
@@ -3169,7 +3169,7 @@ The following four production-source paths were fetched at the exact PR #97 dono
 **Disposition of this subset:** two paths are divergent candidate owners with material behavioral-contract differences; one absent path is a non-capability-bearing compilation boundary; one absent path contains a real stateful mechanism whose candidate successor remains unproven. This adjudicates these four source files only. It does not close the remaining 37 no-symbol paths or the 118 lexical-candidate paths. In particular, it does not authorize donor adoption, source-baseline selection, or Stage A implementation.
 
 
-### 10.9 Build/test registration adjudication — selected no-symbol paths
+### 60.9 Build/test registration adjudication — selected no-symbol paths
 
 Exact donor/candidate CMake and test files were inspected to distinguish an absent implementation from an implementation that exists but is not part of the candidate build.
 
@@ -3185,3 +3185,16 @@ The engineering CMake difference is particularly consequential when read with th
 The inspected candidate evolution-experiment-coordinator test retains the same basic four-trial baseline-versus-candidate execution and improvement assertions as the donor test. Its candidate-side configuration omits the donor's final explicit boolean argument and relies on the candidate API's default. This test is therefore not evidence of a wholesale loss of coordinator trial behavior; nor does it establish durable adoption, replay protection, or lifecycle integration.
 
 **Disposition of this subset:** two absent build/test registration files, one divergent engineering build definition that excludes the donor task-ledger implementation and suite, and one absent experience-memory test. These findings establish specific build/test omissions and coverage gaps only. They do not establish that every corresponding capability is absent from every branch or subsystem, and they do not authorize transplanting donor code.
+
+
+## 61. Full no-symbol donor-path adjudication supplement — 2026-11-20
+
+The detailed exact-source, build, test and workflow dispositions for the 41 donor paths without remaining lexical symbol-consumer candidates are recorded in [DF-02 No-Symbol Path Semantic Adjudication Supplement](DF02_NO_SYMBOL_PATH_SEMANTIC_ADJUDICATION_SUPPLEMENT_2026-11-20.md).
+
+The refined all-ref scan ran as workflow [#44799437811](https://github.com/methaneex-oss/MethaneX/actions/runs/44799437811), artifact `14659828741`, SHA-256 `3a7d90b475564097a2ccf1de3f4492659b4417a7d46d3e193d9c95ff7b78ab22`. It scanned 254 branch refs / 213 unique tips, 1,397 text blobs and 724 API-like donor identifiers; it produced 40,032 lexical candidate rows, 1,208 full consumer blobs and 1,134 exact consumer-blob/path/category versions. The 41 no-symbol paths were manually grouped and inspected across eight workflows, four build/example artifacts, four production source paths, 22 test artifacts and three historical design documents.
+
+The supplement distinguishes exact retained artifacts, semantic successors with changed protocols, partial successors with specific test-coverage reductions, absent/unproven capabilities, and historical documents. It does not turn lexical matches into semantic dependencies or infer retirement/non-adoption authority.
+
+The 159-path CSV matrix was refreshed against the exact PR #192 documentation snapshot `cbc51e2b10f1fc976257653adf773735a2b27d49`, using complete untruncated donor/candidate trees (287 and 284 entries respectively). Its result remains 1 identical / 95 divergent / 63 absent. The refresh commit is `e441e56467fa9d3fa56d4f354cf9ec119053db2b`.
+
+**DF-02 remains OPEN.** The 118 paths with lexical candidates and their 1,134 exact consumer versions still require semantic consumer/dependency/duplicate-owner adjudication, and historical authority/retirement/non-adoption decisions remain reserved where applicable. No source baseline, donor adoption or runtime implementation is selected.
