@@ -2059,3 +2059,8 @@ Read [DF-02 Goal-Outcome and Adaptive-Priority Regression Audit](reports/DF02_GO
 ## 133. DF-02 cognitive-cycle perception/action integration audit — 2026-11-20
 
 Read [DF-02 Cognitive-Cycle Perception and Action Integration Audit](reports/DF02_COGNITIVE_CYCLE_PERCEPTION_AND_ACTION_INTEGRATION_AUDIT_2026-11-20.md). It records missing candidate cycle contract for structured perception, affective/attention context, selected-action execution results, sequence-aware prediction feedback, goal-outcome assimilation and outcome utility. The donor cycle suite is 186 assertions versus 31 candidate assertions. No code was copied.
+
+
+## 134. DF-02 representation provenance and canary preview audit — 2026-11-20
+
+Read [DF-02 Representation Provenance and Canary Preview Audit](reports/DF02_REPRESENTATION_PROVENANCE_AND_CANARY_PREVIEW_AUDIT_2026-11-20.md). Candidate representation conflates appraisal metadata with semantic nodes, ignores supplied confidence, uses unstable hash IDs and allows NaN confidence; donor separates provenance, uses deterministic IDs and finite validation. The representation test file is unregistered in both snapshots. Candidate canary lacks donor non-mutating preview and its registered suite is 9 versus 36 assertions.
