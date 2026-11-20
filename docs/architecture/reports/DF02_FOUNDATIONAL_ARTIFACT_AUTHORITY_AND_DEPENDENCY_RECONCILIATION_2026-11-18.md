@@ -3265,3 +3265,10 @@ No runtime or CMake changes were made. DF-02 remains OPEN for the remaining cand
 ## 70. Representation provenance and canary-preview audit — 2026-11-20
 
 [DF-02 Representation Provenance and Canary Preview Audit](DF02_REPRESENTATION_PROVENANCE_AND_CANARY_PREVIEW_AUDIT_2026-11-20.md) records that candidate representation turns appraisal/provenance metadata into semantic nodes, ignores supplied event confidence, uses `std::hash` for node identity and does not reject NaN confidence; donor keeps appraisal metadata separate, derives confidence from evidence, uses deterministic length-prefixed IDs and validates finiteness. The candidate representation test file is not registered in CTest in either snapshot. The donor also exposes non-mutating `EvolutionCanary::preview`, absent in candidate; canary tests fall 36→9 assertions. No runtime changes.
+
+
+## 71. Affective/developmental baseline gap and comparison-scope correction — 2026-11-20
+
+[DF-02 Affective and Developmental Subsystem Baseline Gap](DF02_AFFECTIVE_AND_DEVELOPMENTAL_SUBSYSTEM_BASELINE_GAP_2026-11-20.md) establishes that candidate PR #192 source baseline `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` contains zero tracked affective/developmental paths, while donor PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` contains compiled affective state/learning, developmental learning/environment/world, affective planning and contextual prediction. Donor CMake compiles five added core source files; donor test CMake has 71 executables / 70 CTest registrations versus candidate 45 / 45, including 17 affective/developmental/runtime integration suites. The candidate's orphan `brain_restored_api.cpp` is not compiled and cannot supply these modules.
+
+**Terminology correction:** the source reports are capability-gap comparisons between a pre-PR-#97 candidate baseline and an unmerged donor line, not claims that the candidate previously integrated these mechanisms and then regressed. Exact cited candidate blobs were verified at PR #192 base; PR #192 source changes after the scan snapshot are documentation/workflow-only. No donor baseline or adoption is selected.
