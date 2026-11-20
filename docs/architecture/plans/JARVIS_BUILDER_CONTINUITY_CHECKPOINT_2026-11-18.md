@@ -1495,3 +1495,48 @@ The candidate tree contains `brain_restored_api.cpp`, but it is excluded from th
 Scanner noise is substantial: `jarvis` and `namespace` account for 137,140 / 182,266 symbol rows (75.24%); within the candidate-tip subset they account for 24,048 / 28,100 rows (85.58%). The remaining 45,126 rows after excluding only those two tokens are still lexical. The 1,148 consumer-blob versions and 194 candidate consumer blobs remain discovery input, not semantic verdicts.
 
 The detailed source crosswalk is in DF-02 §59 and index §120. DF-02 remains **OPEN** pending the full 159-path successor/retirement/non-adoption ledger and all-ref semantic consumer/dependency/duplicate-owner adjudication. No donor adoption or runtime baseline is selected.
+
+
+## 53. Exact-current Builder continuation checkpoint — 2026-11-20
+
+**Current exact PR #192 HEAD at checkpoint parent:** `1c10dd5b71cad4dd13ce4add7a0f41c47a2a265e`. Branch ref and PR head were re-fetched and matched. PR #192 remains open, non-draft, unmerged; 48 changed paths; base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; current comparison is 798 ahead / 14 behind and diverged; GitHub reports mergeable=true. This checkpoint commit itself will advance the branch, so always refresh before further writes.
+
+### Work completed since the previous handoff
+
+1. Retrieved and SHA-256-verified the corrected all-ref scanner artifact from GitHub Actions run `44646915235`, artifact `14588258314`. The artifact contains 253 branch refs / 212 unique tips, all 159 donor paths, 1,393 tracked text blobs, 1,595 exact-path reference rows, and 182,266 exact-blob-keyed lexical symbol matches. GitHub's published digest matches the downloaded ZIP. Matches remain discovery leads.
+2. Corrected the scanner interpretation: 80,376 `jarvis` rows and 56,764 `namespace` rows together account for 75.24% of all symbol rows; within candidate-tip rows they account for 85.58%. Excluding only those tokens still leaves lexical candidates, not semantic consumer verdicts.
+3. Recovered distinct historical integration lines: PR #121 merge commit `fb994fed8b1bd39482aafd98110055032e8bc82f` contains all 159 donor paths with identical blobs and has exact-line CI/CTest evidence. The 15-tip October 31 cohort is a separate diverged line; 13/15 tips register 74 executable targets / 73 CTest entries, while two have 73/72. Neither line is current main or selected runtime baseline.
+4. Corrected the candidate CMake/test registration claim: current candidate has 57 source translation units and 45 executable targets / 45 CTest entries; PR #97 donor has 64 source units and 71 executable targets / 70 CTest entries. No current-candidate build/CTest run is claimed.
+5. Added exact-current bounded semantic crosswalk: no verified compiled affective-state/affective-learning successor; partial non-equivalent ExperienceMemory overlap; adjacent but non-equivalent association/strategy mechanisms; no evidence-driven GoalOutcome successor; fact/relation WorldModel rather than executable developmental world; and a compiled CognitiveCycle with material memory-to-reasoning/action-execution gaps.
+6. Revalidated all 159 donor paths against complete donor and candidate trees. The candidate matrix now pins its candidate-ref column to `739d108eda6d4b296d7191b31d7883dc59ebf97a`; exact distribution remains 1 identical / 95 divergent / 63 absent.
+7. Corrected the DF-02 report's stale crosswalk/matrix candidate SHA and added §59. The matrix refresh does not turn blob identity or lexical discovery into semantic closure.
+
+### Current gate status and exact blockers
+
+- **DF-01:** entry-point path evidence exists; final synchronization remains.
+- **DF-02 — OPEN:** §53 navigates all 159 paths to detailed audits, but every row remains unresolved for Option A closure. Full semantic disposition, all-ref consumer-blob adjudication, duplicate-capability ownership, historical authority and reserved non-adoption decisions remain.
+- **DF-03 — PARTIAL:** exact historical approval scopes are mapped; current proposals and residual provenance are not accepted.
+- **DF-04:** Builder evidence present within bounded package scope.
+- **DF-05 — PARTIAL:** branch ancestry is explicit; PR #192 integration order and broader semantic dependency closure remain.
+- **DF-06 — NOT MET:** exact full CommonMark/GFM parser reconciliation, all local fragments, exhaustive external status/redirect/final-target/relevance checks, and authenticated rendered GitHub heading/line/comment anchors remain.
+- **DF-07:** this checkpoint synchronizes the latest known state; PR description and inventory still require final exact-HEAD synchronization.
+- **DF-08:** resolved only within its bounded historical-preservation criterion.
+- **DF-09 — NOT MET / BLOCKED:** no current workflow dispatch action is exposed; PR #197 and #198 remain parallel/unintegrated changes to the same workflow file, with no formal reviews. No exact-final-HEAD blind CLEAR result exists.
+- **DF-10 — REOPENED:** final inventory must be the last branch-file write after all remaining evidence/docs/review requests, followed by exact one-commit/one-file proof.
+- **DF-11 — WAIVED as mandatory gate:** preserve the Director's waiver; still request a distinct exact-revision challenge as a separate assurance action.
+- **DF-12 — PROJECT DIRECTOR ONLY / PENDING.**
+- **Stage A:** NOT STARTED / HELD. No runtime implementation, donor adoption, source-baseline selection, training, merge, rebase, retarget, cherry-pick or deployment authorized.
+
+### Next Builder actions
+
+1. Reconcile DF-06 parser and fragment checks against the exact complete 51-Markdown tree. Record the parser implementation/scope and do not call a custom extractor CommonMark/GFM.
+2. Validate all unique external destinations for HTTP status, redirects, final target and claim relevance; preserve historical commit pins.
+3. Inspect the remaining exact-blob-keyed consumer candidates in bounded batches and update the per-path ledger only where full source context supports a semantic conclusion. Do not auto-classify lexical hits.
+4. Synchronize index, register, DF-06 report, self-review, review request and PR description; keep the inventory as terminal final file write.
+5. Re-fetch all current PR state, then perform the DF-10 terminal inventory cycle and exact successor verification.
+6. Pin a superseding Independent Reviewer assignment to the frozen final HEAD. Do not claim a verdict before one is submitted.
+7. Stop for the Project Director's DF-12 decision only after the evidence packet and external reviewer/reader results are genuinely ready. Do not make that decision on the Director's behalf.
+
+### Recovery rule
+
+If interrupted, start by reading this §53, then fetch live PR #192 metadata and branch ref. If they differ from the SHA above, the live refs win. Continue at the first incomplete Builder action. Do not repeat completed artifact recovery, the 159-path matrix refresh, or the semantic crosswalk unless the source tree changed.

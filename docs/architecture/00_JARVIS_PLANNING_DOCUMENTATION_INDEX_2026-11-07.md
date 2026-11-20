@@ -9,13 +9,13 @@
 | Repository | `methaneex-oss/MethaneX` |
 | PR | #192 — Documentation Foundation |
 | Branch | `docs/whole-brain-planning-scope-correction-20261107` |
-| Exact source HEAD at this checkpoint parent | `e06975a9e133642441423690725b615253e50ca3` |
+| Exact source HEAD at this checkpoint parent | `1c10dd5b71cad4dd13ce4add7a0f41c47a2a265e` |
 | Branch ref / PR HEAD | Match exactly |
 | Base branch | `docs/jarvis-phase-2-whole-brain-integration-map-20261105` |
 | Current base-branch tip | `ea64607ef94f142a6142a013e119a7225bc95c1c` |
 | PR-recorded base / merge base | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` |
 | State | Open, non-draft, unmerged; GitHub reports `mergeable=true` |
-| Current base-tip comparison | 796 ahead / 14 behind; diverged |
+| Current base-tip comparison | 798 ahead / 14 behind; diverged |
 | Changed paths | 48 total: 45 Markdown, 2 JSON, 1 CSV |
 | Recursive tree | 281 entries, complete (`truncated=false`) |
 | Tracked Markdown files | 51 |
@@ -63,7 +63,7 @@ The initial completion-gate report §6 defines DF-01–DF-12. This matrix record
 | #179 — Phase 2 capability-to-source map | `ea64607ef94f142a6142a013e119a7225bc95c1c`; base PR #178 @ `39fe09...`; open/draft/unmerged | Project Director selected it as canonical working map, not accepted Phase 2 authority. No formal review. PR #192 uses this branch as its base |
 | #180 — earlier Phase 2 map proposal | `6ca140300b914ed981a50301bbf1d82a5bfe4d8b`; closed/unmerged | One-path historical precursor; superseded by PR #179 as canonical working map. Preserve history; do not merge |
 | #191 — human/MCU comparison | `609d38ede50bbdd98a93dfed112781eacabee9fd`; base PR #179 historical SHA @ `f626745...`; open/draft/unmerged | Director Option A: retain as separate bounded reference (comment #6836333027); no replay, retarget, rebase or merge |
-| #192 — Documentation Foundation | `85bf5f39a47056c6b62e10cf50df0d5321f0277b` at this checkpoint; base branch PR #179 @ `ea646...`; open/non-draft/unmerged | 795 ahead / 14 behind current base; diverged but GitHub mergeable=true. DF-12 pending; no merge/rebase/retarget |
+| #192 — Documentation Foundation | `1c10dd5b71cad4dd13ce4add7a0f41c47a2a265e` at this checkpoint; base branch PR #179 @ `ea646...`; open/non-draft/unmerged | 798 ahead / 14 behind current base; diverged but GitHub mergeable=true. DF-12 pending; no merge/rebase/retarget |
 | #195 — AI role terminology | `fe8a3b6216f874c7ab35e3c8d9489b5caf8ffd37`; merged to main | Workflow/role terminology changes integrated; F-195-07 remains a separate residual |
 | #196 — Builder operating controls | `0ebc4e978fa38011b2f6bb5d97a03c267c1c12c9`; merged into PR #179 branch on 2026-11-12 | Governance source blob `f5827c...` at PR #179 tip `ea646...` is Director-accepted and independently verified; it is not merged to main and does not accept PR #179/Phase 2 |
 | #197 — reader-visible exact target revision | `2b2bfd9afe6e1325119f7ccee507bb04e71aa343`; main @ `4f07d772...`; open/non-draft/unmerged | One workflow file; adds target-revision metadata to blind-reader packet; no formal review |
@@ -1970,3 +1970,14 @@ The 28,100 rows marked as exact candidate-tip occurrences include 14,157 `jarvis
 This confirms the scanner is a useful exact-blob discovery index but not a dependency classifier. The generic-token noise, uncompiled-source matches and possible incidental identifier matches prevent raw row counts from supporting semantic closure. Any future automated refinement should distinguish declaration/call/include/test/build references and use a reviewed low-signal token policy or AST-aware extraction; no scanner workflow/source change is made in this documentation pass.
 
 **Disposition:** this bounded source audit establishes several concrete partial successors and several absent donor mechanisms in the current candidate. It does not complete the required 159-path semantic successor/retirement/non-adoption ledger or all 1,148 cross-branch consumer-blob adjudications. DF-02 remains **OPEN**; no source baseline or donor adoption is selected.
+
+
+## 121. Exact-current DF-02 checkpoint and remaining closure boundary — 2026-11-20
+
+PR #192 live HEAD at this index checkpoint parent: `1c10dd5b71cad4dd13ce4add7a0f41c47a2a265e`; the branch and PR refs matched. The PR remains open, non-draft, unmerged, 48 changed paths, GitHub mergeable=true, and 798 commits ahead / 14 behind its recorded base; it remains diverged from the current base tip.
+
+The exact 159-path donor matrix has been refreshed to candidate ref `739d108eda6d4b296d7191b31d7883dc59ebf97a`, the exact parent immediately before this report/index synchronization. Complete-tree comparison confirms 1 identical / 95 divergent / 63 absent. This is structural identity evidence only.
+
+The bounded semantic successor audit is DF-02 §59. It confirms several real but non-equivalent candidate mechanisms and concrete missing donor families. The 159-row crosswalk §53 remains 159/159 navigable but all 159 paths are unresolved for Option A closure. The all-ref artifact's 1,148 consumer-blob versions have not all been semantically adjudicated. DF-02 therefore remains OPEN.
+
+DF-06 remains NOT MET: exact-current full CommonMark/GFM parser reconciliation, local heading-fragment validation, exhaustive unique external URL status/redirect/semantic relevance, and authenticated rendered GitHub anchors remain incomplete. DF-09 remains NOT MET/BLOCKED pending integrated/reviewed reader-workflow corrections, authorized dispatch against the final frozen HEAD, and blind CLEAR. DF-10 remains REOPENED until the terminal inventory-only successor is created after all other branch-file writes. DF-12 remains PROJECT DIRECTOR ONLY / PENDING. Stage A remains HELD; runtime implementation, donor adoption, source-baseline selection, training, merge, rebase and retarget remain unauthorized.
