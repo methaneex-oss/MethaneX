@@ -1987,3 +1987,8 @@ Builder fetched all 45 unique commit-pinned GitHub blob targets extracted from t
 ## 28. DF-06 correction — complete numeric line-range tranche — 2026-11-20
 
 The earlier 33 count referred to unique ranged files. The Phase 2 map contains 73 unique line-range tuples across 33 exact commit/path files. All 33 files were fetched at their pinned commits; all 73 ranges were checked using the maximum referenced end line per file against the exact line count. All 73/73 are within bounds. Forty-five unique commit/path targets resolve, including 12 without line fragments. This does not verify rendered anchors, parser completeness, local heading fragments or exhaustive external URL behavior. DF-06 remains NOT MET.
+
+
+## 29. DF-02 current candidate blob identity revalidation — 2026-11-20
+
+The current PR #192 candidate tree and the prior ledger tree have identical blob SHAs for all 159 PR #97 changed paths. Exact donor-versus-current-candidate classification remains 1 identical, 95 divergent and 63 absent; all 159 donor paths exist in the donor tree. This confirms the ledger is current at the stated candidate SHA. It does not close semantic successor, reverse-consumer, all-ref dependency/duplicate ownership or historical authority requirements. DF-02 remains OPEN.

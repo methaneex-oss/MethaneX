@@ -2794,3 +2794,30 @@ This crosswalk maps every canonical ledger row to the detailed semantic-audit se
 The crosswalk closes a report-navigation defect: the 159-path ledger now has a direct route to its detailed evidence. It does not close the remaining Option A requirements. In particular, the exact-ref tree tranche remains ten tips, not all 210 unique tips; default-branch-only code search cannot prove cross-branch consumers; and a Builder-proposed non-adoption rationale is not an approved Project Director disposition.
 
 **Disposition:** per-path evidence navigation is Builder-verified for 159/159 rows. DF-02 remains **OPEN**. No donor code adoption, source-baseline selection, runtime implementation or reserved authority decision is made.
+
+
+## 54. Exact-current 159-path candidate tree revalidation — 2026-11-20
+
+**Current candidate PR #192 HEAD:** \`5f70f228d4142e02dc520588f02e40afc78b681f\`.  
+**Prior ledger source:** \`9d61e9bb3ef0433e7b1c03bfcd1a3a19b8c6741d\`.  
+**Exact donor PR #97 HEAD:** \`c1da222e6c94aeb3f2ad000392c21fe4fc81ab25\`.
+
+The recursive trees at the prior ledger source and current candidate HEAD are both complete (280 entries, \`truncated=false\`). The donor tree is complete (287 entries, \`truncated=false\`). The live PR #97 changed-path list contains 159 paths; every path exists in the donor tree.
+
+For all 159 donor paths, the current candidate blob SHA was compared with the prior ledger source blob SHA. **All 159/159 candidate blob identities are unchanged** across those two candidate revisions. Recomputing donor-versus-current-candidate identity from the exact current trees yields:
+
+| Status | Paths |
+|---|---:|
+| Identical blob | 1 |
+| Divergent blob | 95 |
+| Candidate path absent | 63 |
+| Donor path absent | 0 |
+| **Total** | **159** |
+
+The sole identical path is \`.github/workflows/dlt-002-four-hour.yml\`. The same 63 candidate-absent paths and 95 divergent paths recorded in the canonical ledger remain current at \`5f70f228d4142e02dc520588f02e40afc78b681f\`. The 63-path absence set includes key donor affective-state, experience-memory, developmental-learning/world and integration-test interfaces previously identified in §§16–50.
+
+### 54.1 Meaning and boundary
+
+This verifies that the §30.2 candidate blob identities and the 1/95/63 classification remain current at this PR #192 HEAD. It does not convert a divergent same-path file into a semantic successor, nor prove that an absent same-path artifact has no alternate successor elsewhere. The 159 path-to-evidence crosswalk in §53 remains the navigation index; the all-ref source-content consumer/dependency/duplicate-owner scan and historical authority dispositions remain incomplete.
+
+**Disposition:** current 159-path tree identity is Builder-verified. DF-02 remains **OPEN**.

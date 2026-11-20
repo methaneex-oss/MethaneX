@@ -732,3 +732,10 @@ No claim of authenticated rendered verification, full parser compliance, indepen
 The initial §26 summary conflated 33 ranged files with 33 line-range tuples. The map actually contains 73 unique range tuples across those 33 files. This was corrected in §27 after extracting all 73 tuples and re-fetching each of the 33 exact source files. The maximum end line for each file covers every tuple on that file; all 73 are in bounds. The 12 no-fragment targets also resolve. The 45 count refers to unique commit/path pairs, not line ranges.
 
 This correction demonstrates why counts must identify their unit. It does not upgrade the source check to rendered browser verification. DF-06 remains NOT MET.
+
+
+## 29. Adversarial self-review — current 159-path blob ledger — 2026-11-20
+
+The current PR #192 recursive tree was compared against both the exact donor PR #97 tree and the prior ledger source. All 159 candidate blob identities are unchanged from the prior ledger source; the recomputed classification is 1 identical, 95 divergent and 63 absent. The donor tree contains all 159 paths and both trees are complete/untruncated.
+
+This verifies only exact path/blob currentness. The 95 divergent blobs may contain materially different behavior; the 63 absent paths may have alternate successors; and the 210-unique-tip consumer/dependency scan is still incomplete. The ledger remains open. No semantic or authority closure is inferred.

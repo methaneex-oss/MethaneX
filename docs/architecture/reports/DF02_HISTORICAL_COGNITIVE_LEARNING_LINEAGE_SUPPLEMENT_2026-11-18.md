@@ -680,3 +680,12 @@ Subsequent PR #192 writes in this workstream are documentation-only; no runtime 
 The branch census remains 251 refs / 210 unique tips, but the source-content consumer/dependency scan is not complete across those tips. The exact-ref comparisons above are bounded branch cohorts. Same-path blob divergence is not semantic equivalence; path absence is not retirement; a test pass on one historical branch is not evidence for a different branch. Every donor path still needs a semantic successor/disposition, reverse-consumer/dependency tracing, duplicate capability ownership and historical authority/decision provenance.
 
 PR #97 remains open/unmerged into `main`. PR #119/#121 are integrated into its donor feature branch only. No donor code is adopted or selected by this supplement. DF-02 remains **OPEN**.
+
+
+### 11.6 Exact-current candidate tree identity revalidation — 2026-11-20
+
+At PR #192 HEAD \`5f70f228d4142e02dc520588f02e40afc78b681f\`, the complete recursive tree has 280 entries and is untruncated. The exact PR #97 donor HEAD \`c1da222e6c94aeb3f2ad000392c21fe4fc81ab25\` has a complete 287-entry tree. All 159 PR #97 changed paths exist in the donor tree.
+
+Comparing every donor path's current candidate blob with the exact prior ledger source \`9d61e9bb3ef0433e7b1c03bfcd1a3a19b8c6741d\` shows all 159 candidate blob identities unchanged. Recomputing donor-versus-current-candidate statuses gives 1 identical, 95 divergent and 63 absent. The only identical path remains \`.github/workflows/dlt-002-four-hour.yml\`.
+
+This confirms the prior 159-path blob classification remains current; it does not establish semantic successors or close the all-ref source-content consumer/dependency/authority scan. DF-02 remains OPEN.

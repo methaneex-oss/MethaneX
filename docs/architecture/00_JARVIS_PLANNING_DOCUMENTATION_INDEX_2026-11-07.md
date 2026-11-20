@@ -1788,3 +1788,10 @@ This is not authenticated rendered-anchor verification and does not close the 51
 The Phase 2 integration map exact blob \`1ae6ca2dcde4c6f88040762a07ac11e7f01ea255\` contains 73 unique commit-pinned line-range tuples across 33 ranged files and 45 unique commit/path targets. All 33 ranged files were fetched at exact commits; all 73 distinct ranges are within source line counts. Twelve additional no-fragment targets also resolve. This supersedes the §115/DF-06 §26 partial count wording: 33 is the ranged-file count, not the range-tuple count.
 
 Authenticated rendered anchors, viewport landing, full CommonMark/GFM parser reconciliation, local heading fragments and exhaustive external URL checks remain open. DF-06 remains NOT MET.
+
+
+## 117. Exact-current candidate blob revalidation — 2026-11-20
+
+The PR #192 current candidate tree at \`5f70f228d4142e02dc520588f02e40afc78b681f\` and prior ledger tree at \`9d61e9bb3ef0433e7b1c03bfcd1a3a19b8c6741d\` each contain 280 complete entries. Their blob identities match for all 159 PR #97 donor changed paths. Recomputed donor #97 HEAD \`c1da222e6c94aeb3f2ad000392c21fe4fc81ab25\` versus current candidate remains 1 identical, 95 divergent, 63 absent.
+
+This validates currentness of the canonical blob ledger; it does not establish semantic successors or complete all-ref consumers. DF-02 remains OPEN.
