@@ -3085,39 +3085,67 @@ These are behavioral contract differences, not naming-only variations. In partic
 **Disposition:** the candidate engineering subsystem is not a semantic successor to the donor's task-ledger/deduplicating-message-bus contract. The donor task-ledger paths are absent from this candidate. This does not establish that the donor subsystem should be adopted: ownership overlap with other engineering orchestration branches, full test evidence, and Project Director source-baseline authority remain to be resolved.
 
 
-### 10.5 All-ref source-content scan normalization and residual classification
+### 10.5 Refined all-ref source-content scan and exact consumer-version accounting
 
-The complete all-ref artifact was re-aggregated by donor path and exact consumer blob/path/category, rather than treating each lexical match row as an independent consumer.
+A follow-up scanner correction excludes three high-frequency lexical false positives: the namespace keyword, the repository namespace token `jarvis`, and the generic filesystem operation `remove`. The scanner self-test now asserts that these are not emitted as API-like identifiers. This correction does not automatically classify any remaining identifier hit as semantic use.
 
-| Measure | Recomputed result |
+**Exact donor and candidate inputs:** PR #97 donor `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`; PR #192 candidate input `32722f104f76817983b0156cca821949e406b8c1`.  
+**Scanner revision:** `8179bafcc5cb681a8abc73a0bf9819bbdd6a0b9e`.  
+**Workflow:** [DF-02 exact-ref all-branch source-content scan](https://github.com/methaneex-oss/MethaneX/actions/runs/44799437811).  
+**Artifact:** `df02-all-ref-consumer-scan-8179bafcc5cb681a8abc73a0bf9819bbdd6a0b9e`; SHA-256 `3a7d90b475564097a2ccf1de3f4492659b4417a7d46d3e193d9c95ff7b78ab22`.
+
+| Measure | Refined result |
 |---|---:|
 | Remote branch refs | 254 |
 | Unique branch tips | 213 |
 | Donor paths | 159 |
-| Donor paths with at least one lexical source/test/build/workflow consumer candidate | 144 |
-| Donor paths without a lexical symbol-consumer candidate | 15 |
-| Donor paths with exact-path documentation references | 159 |
-| Raw candidate symbol-match rows | 182,302 |
-| Distinct exact consumer blob/path/category versions | 1,149 |
-| Distinct versions classified as source | 664 |
-| Distinct versions classified as test | 389 |
+| Unique text blobs scanned | 1,397 |
+| Donor API-like identifiers after exclusions | 724 |
+| Exact path-reference candidate rows | 1,757 |
+| Symbol-consumer candidate rows | 40,032 |
+| Distinct donor paths with at least one remaining lexical symbol candidate | 118 |
+| Donor paths with no remaining lexical symbol candidate | 41 |
+| Exact consumer blob content records | 1,208 |
+| Exact consumer blob/path/category versions | 1,134 |
+| Distinct versions classified as source | 649 |
+| Distinct versions classified as test | 388 |
 | Distinct versions classified as build | 58 |
-| Distinct versions classified as workflow | 37 |
+| Distinct versions classified as workflow | 38 |
 | Distinct versions classified as other | 1 |
 
-The 15 paths without a symbol-consumer candidate are not thereby retired: they still have exact-path documentation references and require provenance/authority disposition. Conversely, the 144 paths with lexical consumers are not thereby proven semantically consumed. The 1,149 exact versions are the review unit; repeated symbol hits in the same exact blob are not additional independent consumers.
+The previous 182,302-row / 1,149-version figures belong to the earlier, noisier scanner output and are superseded for triage by this refined run. The 40,032 remaining matches are still lexical discovery candidates, not 40,032 semantic dependencies. Exact consumer blob SHA, source path, category, and branch-tip occurrence remain part of the evidence key. The 41 no-symbol paths below are not presumed retired or unused.
 
-The all-ref evidence therefore establishes the scale and exact source material for the remaining review, but it does not convert the 182,302 lexical rows into 182,302 semantic dependencies. Per-path classification must continue to distinguish production implementation, tests, build registration, workflow invocation, documentation-only references, and duplicate/alternate owners. This section does not claim that DF-02 is closed.
+### 10.6 The 41 donor paths without remaining lexical symbol-consumer candidates
 
+The refined scanner's 41 no-symbol paths fall into five distinct classes. Same-path status refers only to the frozen candidate input revision; it is not a successor or retirement decision.
 
-### 10.6 The 15 donor paths without lexical symbol-consumer candidates
+| Class | Count | Same-path status |
+|---|---:|---|
+| Workflow entrypoints | 8 | 2 divergent, 5 absent, 1 identical |
+| Build/example configuration | 4 | 3 absent, 1 divergent |
+| Production source files | 4 | 2 absent, 2 divergent |
+| Test suites | 22 | 10 absent, 12 divergent |
+| Historical design/documentation | 3 | 3 absent |
 
-The 15 no-symbol paths were enumerated individually. They are not one homogeneous class:
+**Workflow entrypoints:** `.github/workflows/brain-ci.yml`; `.github/workflows/dlt-001-long-run.yml`; `.github/workflows/dlt-002-four-hour.yml`; `.github/workflows/dlt-002-overnight-validation.yml`; `.github/workflows/jarvis-brain-probe-001.yml`; `.github/workflows/jarvis-core.yml`; `.github/workflows/jarvis-learning-seed-sweep.yml`; `.github/workflows/jbp-mem-001.yml`.
 
-| Class | Exact donor paths | Candidate same-path status |
-|---|---|---|
-| CI/workflow entrypoints (8) | `.github/workflows/brain-ci.yml`; `.github/workflows/dlt-001-long-run.yml`; `.github/workflows/dlt-002-four-hour.yml`; `.github/workflows/dlt-002-overnight-validation.yml`; `.github/workflows/jarvis-brain-probe-001.yml`; `.github/workflows/jarvis-core.yml`; `.github/workflows/jarvis-learning-seed-sweep.yml`; `.github/workflows/jbp-mem-001.yml` | 2 divergent, 5 absent, 1 identical |
-| Build/example/test configuration (4) | `core/cpp/examples/CMakeLists.txt`; `core/cpp/examples/README.md`; `core/cpp/tests/affective_planning.cmake`; `engineering/cpp/CMakeLists.txt` | 3 absent, 1 divergent |
-| Historical design documents (3) | `docs/developmental-training-environment.md`; `docs/superpowers/specs/2026-09-26-concept-context-prediction-design.md`; `docs/superpowers/specs/2026-09-30-developmental-cognition.md` | 3 absent |
+**Build/example configuration:** `core/cpp/examples/CMakeLists.txt`; `core/cpp/examples/README.md`; `core/cpp/tests/affective_planning.cmake`; `engineering/cpp/CMakeLists.txt`.
 
-All 15 have exact-path documentation references in the indexed refs. The workflow paths require workflow-trigger/replacement review rather than C++ symbol matching; the build/configuration paths require target-registration and build-invocation review; the three design documents require provenance and historical-preservation treatment rather than a runtime-consumer claim. The one identical workflow path is not evidence that the other seven workflows are redundant. No retirement or deletion is inferred from a zero-symbol result.
+**Production source:** `core/cpp/src/action_execution.cpp`; `core/cpp/src/affective_learning.cpp`; `core/cpp/src/affective_state.cpp`; `core/cpp/src/evolution_adoption.cpp`.
+
+**Test suites:** `core/cpp/tests/action_authorization_suite.cpp`; `core/cpp/tests/action_model_architecture_suite.cpp`; `core/cpp/tests/affective_decision_suite.cpp`; `core/cpp/tests/affective_learning_suite.cpp`; `core/cpp/tests/affective_state_model_suite.cpp`; `core/cpp/tests/affective_state_suite.cpp`; `core/cpp/tests/attention_architecture_suite.cpp`; `core/cpp/tests/brain_10_suite.cpp`; `core/cpp/tests/cognitive_workspace_runtime_suite.cpp`; `core/cpp/tests/decision_planning_architecture_suite.cpp`; `core/cpp/tests/developmental_environment_suite.cpp`; `core/cpp/tests/developmental_learning_suite.cpp`; `core/cpp/tests/developmental_learning_tests.cpp`; `core/cpp/tests/developmental_world_suite.cpp`; `core/cpp/tests/evolution_adoption_journal_suite.cpp`; `core/cpp/tests/evolution_experiment_coordinator_suite.cpp`; `core/cpp/tests/evolution_opportunity_orchestration_suite.cpp`; `core/cpp/tests/experience_memory_test.cpp`; `core/cpp/tests/goal_outcome_model_suite.cpp`; `core/cpp/tests/knowledge_memory_phase3_suite.cpp`; `core/cpp/tests/process_isolation_suite.cpp`; `core/cpp/tests/representation_suite.cpp`.
+
+**Historical design/documentation:** `docs/developmental-training-environment.md`; `docs/superpowers/specs/2026-09-26-concept-context-prediction-design.md`; `docs/superpowers/specs/2026-09-30-developmental-cognition.md`.
+
+All 41 also have exact-path references in the all-ref documentation-reference index. The appropriate next adjudication is class-specific: workflow trigger/replacement and run history; CMake target and CI registration; production implementation call/dependency inspection; test target/CTest coverage; or historical provenance and authority. The zero-symbol result is only a reason to inspect a path differently, never evidence by itself for retirement, non-adoption, or deletion.
+
+### 10.7 Confirmed high-specificity consumer examples — limited scope
+
+The full-content artifact was inspected beyond aggregate counts. The following examples are confirmed source-level uses, not merely identifier co-occurrences:
+
+- Donor `core/cpp/include/jarvis/core/affective_state.hpp`, symbol `AffectiveSignal`: `core/cpp/src/brain.cpp` on `integration/knowledge-composition-20261031` constructs an `AffectiveSignal` while processing affective experience. This is a production implementation consumer.
+- Donor `core/cpp/src/association_model.cpp`, symbol `apply_prediction_feedback`: the same `brain.cpp` revision invokes `association_.apply_prediction_feedback(...)` from the prediction-outcome path. This is a production integration call, not a comment or test-only reference.
+- Donor `core/cpp/src/cognitive_runtime.cpp`, type `CognitiveRuntime`: `core/cpp/examples/developmental_world.cpp` instantiates and drives the runtime, including polling a completed cognitive-cycle result. This is a production-facing example consumer; it does not alone prove that the example is part of the shipping runtime.
+- Donor `core/cpp/include/jarvis/core/evolution_experiment_coordinator.hpp`, type `EvolutionExperimentCoordinator`: the type appears as a friend declaration in `evolution_experiment.hpp` across the lifecycle branch family. This establishes compile-time access coupling only; it is not counted as proof that the coordinator lifecycle is correctly integrated or durable.
+
+These inspected examples demonstrate that the refined index contains real production and compile-time dependencies as well as incidental matches. They do not complete the 159-path semantic disposition. DF-02 remains **OPEN** until each donor path receives an evidence-backed successor, retained-authority, retirement, non-adoption, or duplicate-owner classification and any authority decision reserved to the Project Director is recorded.
