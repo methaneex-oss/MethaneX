@@ -1661,3 +1661,12 @@ The Builder verified that the candidate `EvolutionSandbox::run` accepts `Sandbox
 The corrected parser self-test and full link audit ran successfully on exact revision `49b48037b35f2800d5e46a0102b3d23980ed222d`, Actions run [#44817901365](https://github.com/methaneex-oss/MethaneX/actions/runs/44817901365), artifact `14670192265`, ZIP SHA-256 `69882f5602c9786aeee01f12f575b60e2fac9592fc01b05c35e2c38800655d81`. Results: 56 Markdown files, 428 destinations, 143/143 local destinations resolved, 190 unique external URLs (187 HTTP 200/API verified and three GitHub HTTP 206 responses separately checked through API), zero extracted local fragments. The audit found and corrected one stale runbook link to the unmerged PR #200 workflow proposal, now pinned to its exact file blob and labelled as unmerged.
 
 DF-06 remains NOT MET: rendered GitHub anchor landing is not performed, semantic relevance is not automated/full, and full parser equivalence is not established. A successful parser/link workflow is not a reader clearance.
+
+
+## 63. DF-02 prediction identity and affective decision integration — 2026-11-20
+
+The Builder documented two more source-level areas:
+- Prediction identity is key-only in the candidate; a later prediction with the same key overwrites the earlier unresolved item. The candidate lacks sequence-based feedback resolution and pre-mutation validation; phase-10 suite is 12 assertions versus donor 371.
+- Candidate DecisionContext/DecisionPolicy omit direct affective context and weights. The candidate public Brain API lacks `choose_with_affect`; a same-purpose method appears only in an uncompiled `brain_restored_api.cpp` that duplicates many definitions in `brain.cpp` and calls absent AssociationModel methods. It cannot safely be added to CMake as-is.
+
+Reports: `DF02_PREDICTION_IDENTITY_AND_FEEDBACK_VALIDATION_REGRESSION_AUDIT_2026-11-20.md` and `DF02_AFFECTIVE_DECISION_AND_ORPHANED_BRAIN_API_AUDIT_2026-11-20.md`. No source changes; DF-02 remains OPEN. This branch write reopens DF-10.
