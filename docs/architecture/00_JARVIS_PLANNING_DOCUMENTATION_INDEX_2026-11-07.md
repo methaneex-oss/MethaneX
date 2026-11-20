@@ -2044,3 +2044,8 @@ Read [DF-02 Evolution Process-Isolation Attestation Regression Audit](reports/DF
 ## 130. DF-02 prediction identity and affective decision/API audits — 2026-11-20
 
 Read [DF-02 Prediction Identity and Feedback-Validation Audit](reports/DF02_PREDICTION_IDENTITY_AND_FEEDBACK_VALIDATION_REGRESSION_AUDIT_2026-11-20.md) and [DF-02 Affective Decision and Orphaned Brain API Audit](reports/DF02_AFFECTIVE_DECISION_AND_ORPHANED_BRAIN_API_AUDIT_2026-11-20.md). They record key-only prediction identity/overwrites and missing sequence-bound feedback validation; phase-10 tests 371→12 assertions. They also record missing direct affective decision context and an uncompiled stale Brain API source with duplicate definitions and missing AssociationModel dependencies. No CMake/runtime changes were made.
+
+
+## 131. DF-02 attention, self-model and evolution-recovery audit — 2026-11-20
+
+Read [DF-02 Attention, Self-Model and Evolution-Recovery Audit](reports/DF02_ATTENTION_SELF_MODEL_AND_EVOLUTION_RECOVERY_AUDIT_2026-11-20.md). Candidate attention omits prediction-error/internal-activation salience, candidate self-model omits incremental capability-performance updates from action outcomes, and candidate evolution compensation resets to baseline rather than restoring the exact prior value. Candidate evolution Brain integration tests fall 97→7 assertions. No donor code copied.
