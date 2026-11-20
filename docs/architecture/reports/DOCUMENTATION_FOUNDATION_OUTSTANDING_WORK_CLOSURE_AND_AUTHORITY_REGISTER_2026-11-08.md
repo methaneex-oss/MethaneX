@@ -2131,3 +2131,8 @@ DF-06 now has a successful exact-commit CI self-test and link audit: run #448179
 ## 36. DF-02 prediction and affective decision regressions — 2026-11-20
 
 [Prediction Identity and Feedback-Validation Audit](DF02_PREDICTION_IDENTITY_AND_FEEDBACK_VALIDATION_REGRESSION_AUDIT_2026-11-20.md) documents key-only candidate prediction storage, same-key overwrite and missing sequence-bound feedback validation; the phase-10 suite is 371 donor assertions versus 12 candidate assertions. [Affective Decision and Orphaned Brain API Audit](DF02_AFFECTIVE_DECISION_AND_ORPHANED_BRAIN_API_AUDIT_2026-11-20.md) documents missing direct affective decision context and an uncompiled stale Brain API translation unit with duplicate definitions and missing association dependencies. No runtime/CMake changes were made; DF-02 remains OPEN.
+
+
+## 37. DF-02 attention, self-model and evolution recovery regressions — 2026-11-20
+
+[DF-02 Attention, Self-Model and Evolution-Recovery Audit](DF02_ATTENTION_SELF_MODEL_AND_EVOLUTION_RECOVERY_AUDIT_2026-11-20.md) records missing prediction-error/internal-activation attention, missing action-outcome-driven capability performance updates, and loss of exact previous-value restoration on failed evolution transactions. The report distinguishes required capability contracts from donor coefficients, which are not adopted automatically. No runtime changes; DF-02 remains OPEN.
