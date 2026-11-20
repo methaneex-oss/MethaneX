@@ -10,6 +10,7 @@ from __future__ import annotations
 import concurrent.futures
 import html
 import json
+import os
 import re
 import subprocess
 import sys
@@ -24,7 +25,7 @@ from markdown_it import MarkdownIt
 ROOT = Path.cwd()
 TIMEOUT = 12
 RETRIES = 2
-MAX_WORKERS = 10
+MAX_WORKERS = 6
 USER_AGENT = "MethaneX-Documentation-Link-Audit/1.0"
 
 
@@ -126,6 +127,39 @@ class RedirectRecorder(HTTPRedirectHandler):
         return super().redirect_request(req, fp, code, msg, headers, newurl)
 
 
+def verify_github_artifact(url: str) -> dict | None:
+    token = os.environ.get("GITHUB_TOKEN")
+    parts = urlsplit(url)
+    match = re.fullmatch(r"/([^/]+/[^/]+)/actions/runs/\\d+/artifacts/(\\d+)", parts.path)
+    if not token or not match:
+        return None
+    repository, artifact_id = match.groups()
+    api_url = f"https://api.github.com/repos/{repository}/actions/artifacts/{artifact_id}"
+    request = Request(api_url, headers={
+        "Authorization": f"Bearer {token}",
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+        "User-Agent": USER_AGENT,
+    })
+    try:
+        with build_opener().open(request, timeout=TIMEOUT) as response:
+            artifact = json.loads(response.read().decode("utf-8"))
+        if artifact.get("id") == int(artifact_id) and not artifact.get("expired", True):
+            return {
+                "url": url, "status": 200, "final_url": api_url, "redirects": [],
+                "result": "verified_via_api", "artifact_id": int(artifact_id),
+                "artifact_name": artifact.get("name"),
+            }
+        return {"url": url, "status": 410, "final_url": api_url, "redirects": [], "result": "not_found"}
+    except HTTPError as error:
+        return {
+            "url": url, "status": error.code, "final_url": api_url, "redirects": [],
+            "result": "access_limited" if error.code in {401, 403, 429} else "not_found" if error.code in {404, 410} else "http_error",
+        }
+    except (URLError, TimeoutError, OSError, ValueError) as error:
+        return {"url": url, "status": None, "final_url": api_url, "redirects": [], "result": "unreachable", "error": str(error)}
+
+
 def check_external(url: str) -> dict:
     fetch_url, _ = urldefrag(url)
     last_error = None
@@ -143,6 +177,13 @@ def check_external(url: str) -> dict:
                     "result": "ok" if response.status < 400 else "http_error",
                 }
         except HTTPError as error:
+            if error.code in {500, 502, 503, 504, 429} and attempt < RETRIES:
+                time.sleep(1 + attempt)
+                continue
+            if error.code in {404, 410}:
+                artifact_result = verify_github_artifact(url)
+                if artifact_result is not None:
+                    return artifact_result
             return {
                 "url": url,
                 "status": error.code,
@@ -216,6 +257,8 @@ def main() -> int:
         "external_unique_urls": len(external_urls),
         "external_404_or_410": len(hard_external),
         "external_access_limited": sum(item["result"] == "access_limited" for item in external_results),
+        "external_http_errors": sum(item["result"] == "http_error" for item in external_results),
+        "external_artifacts_verified_via_api": sum(item["result"] == "verified_via_api" for item in external_results),
         "external_unreachable": sum(item["result"] == "unreachable" for item in external_results),
         "rendered_github_anchor_verification": report["rendered_github_anchor_verification"],
         "semantic_relevance_review": report["semantic_relevance_review"],
