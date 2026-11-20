@@ -3235,3 +3235,13 @@ The report distinguishes capability loss from donor implementation details and f
 ## 65. Evolution process-isolation attestation regression — 2026-11-20
 
 [DF-02 Evolution Process-Isolation Attestation Regression Audit](DF02_EVOLUTION_PROCESS_ISOLATION_ATTESTATION_REGRESSION_AUDIT_2026-11-20.md) confirms that the candidate sandbox trusts the callback's self-reported `isolated` Boolean, the candidate runner has no process-isolated command/attestation API, and the candidate multi-trial coordinator has no `require_isolation` configuration or all-trials isolation proof. Candidate tests explicitly accept a callback returning `isolated=true`; donor tests explicitly reject a lying callback, require the real process-isolation command path, bind a private attestation to evaluated fields and invalidate it after mutation. This compounds the missing experiment attestation and weakened adoption safety gate recorded in §63. No runtime change was made.
+
+
+## 66. Prediction identity, feedback validation and affective decision/API integration — 2026-11-20
+
+Two further DF-02 supplements pin exact source/test regressions.
+
+- [Prediction Identity and Feedback-Validation Audit](DF02_PREDICTION_IDENTITY_AND_FEEDBACK_VALIDATION_REGRESSION_AUDIT_2026-11-20.md): candidate stores predictions in a key-only map and overwrites same-key unresolved instances; it lacks sequence-bound resolution and the donor's pre-mutation validation contract. The phase-10 suite falls from 371 assertions / 1,339 lines to 12 / 73; the deep suite falls 260→68 assertions.
+- [Affective Decision and Orphaned Brain API Audit](DF02_AFFECTIVE_DECISION_AND_ORPHANED_BRAIN_API_AUDIT_2026-11-20.md): candidate DecisionContext/DecisionPolicy omit donor affective dimensions and weights; the public Brain API lacks `choose_with_affect`. A candidate `brain_restored_api.cpp` is uncompiled by CMake, duplicates many definitions already in `brain.cpp`, and references AssociationModel methods absent from the candidate API. Adding it to CMake directly would not be safe.
+
+No runtime or CMake changes were made. DF-02 remains OPEN for the remaining candidate paths and full dependency/duplicate-owner/retention/authority closure.
