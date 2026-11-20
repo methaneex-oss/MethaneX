@@ -249,13 +249,15 @@ def main():
       "donor_path_count":len(donor_paths),"candidate_same_path_status":dict(status),
       "unique_text_blob_count":len(blob_occurrences),"scanned_blob_count":scanned,"binary_blob_count_skipped":skipped_binary,
       "donor_symbol_count":len(symbols),"exact_path_reference_match_rows":len(path_rows2),
-      "candidate_symbol_consumer_match_rows":len(symbol_rows),"matched_consumer_blob_content_count":matched_blob_content_count,\n      "matched_consumer_blob_content_bytes":matched_blob_content_bytes,"symbol_matches_exclude_documentation":True,
+      "candidate_symbol_consumer_match_rows":len(symbol_rows),"matched_consumer_blob_content_count":matched_blob_content_count,
+      "matched_consumer_blob_content_bytes":matched_blob_content_bytes,"symbol_matches_exclude_documentation":True,
       "limitations":["Path and identifier matches are candidate reverse-consumer evidence, not semantic consumer proof.",
         "Consumer blob SHA is part of each match key; each row maps only to branch tips that contain that exact blob.",
         "Symbol matches exclude documentation files; exact path references retain documentation matches.",
         "A same-path divergent blob is not a semantic successor.","An absent same-path artifact may have an alternate successor elsewhere.",
         "Comments, documentation and tests can produce lexical matches; inspect category and exact source context.",
-        "consumer_blob_sources.jsonl stores the full text of each exact blob that produced a path or symbol match, with exact branch/path occurrence metadata.",\n        "This scan makes no retirement, non-adoption, authority or source-baseline decisions."]}
+        "consumer_blob_sources.jsonl stores the full text of each exact blob that produced a path or symbol match, with exact branch/path occurrence metadata.",
+        "This scan makes no retirement, non-adoption, authority or source-baseline decisions."]}
     (out/"summary.json").write_text(json.dumps(summary,indent=2)+"\n",encoding="utf-8")
     report=["# DF-02 all-ref source-content consumer discovery","",f"- Donor PR #97 HEAD: {donor_sha}",
       f"- Candidate PR #192 HEAD: {candidate_sha}",f"- Branch refs scanned: {summary['remote_branch_ref_count']}",
@@ -269,7 +271,8 @@ def main():
       "- donor_path_presence.csv: exact path/blob presence and version counts by unique tip.",
       "- unique_branch_tips.csv: all remote branch names grouped by exact tip SHA.",
       "- exact_path_reference_matches.csv: exact donor path strings found in other files.",
-      "- candidate_symbol_consumer_matches.csv: candidate identifier matches with exact branch/path/line samples.",\n      "- consumer_blob_sources.jsonl: exact full text for every blob that produced a path or symbol match, keyed by blob SHA and exact branch/path occurrences.",
+      "- candidate_symbol_consumer_matches.csv: candidate identifier matches with exact branch/path/line samples.",
+      "- consumer_blob_sources.jsonl: exact full text for every blob that produced a path or symbol match, keyed by blob SHA and exact branch/path occurrences.",
       "- summary.json: machine-readable scan counts and limitations.","",
       "No semantic successor, retirement, non-adoption, Project Director authority or implementation-baseline decision is made by this workflow."]
     (out/"report.md").write_text("\n".join(report)+"\n",encoding="utf-8")
