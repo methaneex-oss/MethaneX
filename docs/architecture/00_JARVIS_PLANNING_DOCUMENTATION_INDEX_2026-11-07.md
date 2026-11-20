@@ -2017,3 +2017,10 @@ The exact 159-path matrix was refreshed against candidate snapshot `cbc51e2b10f1
 The Builder found and corrected an extraction gap: inline HTML child tokens inside Markdown paragraphs were not being inspected for `href`, `src`, and `id` attributes. The corrected script and its self-test are in `scripts/audit_documentation_links.py`; the workflow now runs `--self-test` before the full audit. The fixture covers reference links, tables, strikethrough, inline HTML destinations/IDs, duplicate headings and bare HTTP autolinks. The parser logic was locally exercised with `markdown-it-py`; the exact GitHub Actions result for the new step has not been retrieved, so no CI-pass claim is made.
 
 DF-06 remains NOT MET. Full CommonMark/GFM equivalence, all local fragments, exhaustive external status/redirect/final-target/relevance checks, and authenticated rendered GitHub anchor landing remain outstanding.
+
+
+## 126. DF-02 compiled-consumer and alternate-branch adjudication — 2026-11-20
+
+Read [DF-02 Compiled-Consumer and Alternate-Branch Adjudication](reports/DF02_COMPILED_CONSUMER_AND_ALTERNATE_BRANCH_ADJUDICATION_2026-11-20.md). It filters the refined all-ref candidate set through the exact candidate CMake/include graph and distinguishes registered test consumers from unregistered files. It also records seven donor paths whose lexical matches exist only on other refs, including donor-identical compiled affective-planning/contextual-prediction implementations on `integration/knowledge-composition-20261031` and a donor-identical compiled/persisted/tested task ledger on `ci/priority-one-validation-20261031`.
+
+These alternate branches are evidence of distinct source lines, not a selected baseline or authorization to merge. Candidate association-causality and reasoning test suites are materially reduced relative to donor assertions. DF-02 remains OPEN pending the remaining semantic consumer/dependency/duplicate-owner and authority decisions.
