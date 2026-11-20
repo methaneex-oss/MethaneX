@@ -621,3 +621,30 @@ The exact source commits and 45 path targets are enumerated in §26's extraction
 This resolves the numeric source-line-bound question for all 73 distinct ranges. It still does not verify GitHub-rendered target IDs, authenticated browser fragment navigation or viewport landing. Nor does it resolve the full 51-file CommonMark/GFM parser discrepancy, all local heading fragments, or exhaustive external status/redirect/final-destination/semantic-relevance checks.
 
 **Disposition:** 73/73 source line-range tuples and 45/45 unique commit/path targets are Builder-verified. DF-06 remains **NOT MET** under Option A.
+
+
+## 29. Exact-current destination delta after PR #198 link publication — 2026-11-20
+
+**Comparison:** prior full custom-extraction source `d4f88ab430fd1d2257313ac90eacfd1c72f4fba9` → current PR #192 checkpoint parent `63d7fbcc4821b54c53b275cc1ab6310f0853b2a8`. The exact Git compare is 57 commits ahead / 0 behind and identifies ten changed paths: nine Markdown files and the new DF-02 CSV matrix.
+
+The nine changed Markdown files were fetched at both exact revisions and their destination sets compared with the same bounded custom extractor used for the earlier 345-occurrence baseline. The result is:
+
+| Changed Markdown file | Old occurrences | Current occurrences | Destination delta |
+|---|---:|---:|---|
+| Planning index | 84 | 85 | One PR #198 URL added |
+| Documentation inventory | 14 | 14 | No change |
+| Builder continuity checkpoint | 0 | 1 | One PR #198 URL added |
+| Builder final self-review | 2 | 2 | No change |
+| DF-02 reconciliation | 9 | 9 | No change |
+| Historical lineage supplement | 0 | 0 | No change |
+| DF-06 link audit | 1 | 2 | One PR #198 URL added |
+| Outstanding-work register | 10 | 10 | No change |
+| Phase 2 integration map | 100 | 100 | Two commit-pinned line-range URLs replaced by corrected end-line URLs |
+
+Across this exact delta, **three HTTP(S) occurrences were added**, all pointing to the same unique PR #198 destination. Two old commit-pinned line URLs were replaced by corrected URLs; the destination count is unchanged for that pair. **No local destination was added or removed** in the nine changed Markdown files.
+
+Using the same bounded custom extractor, the prior 51-file whole-tree baseline was 345 candidate occurrences (131 local, 214 HTTP(S)); the exact delta therefore implies 348 occurrences (131 local, 217 HTTP(S)) at this checkpoint parent. This is a derived count, not a new full 51-file parser run. The historical alternate parser's 353 count remains unreconciled; the exact-current full CommonMark/GFM parse has not been reproduced. Do not treat 348 as a definitive complete parser count.
+
+The new PR #198 destination resolves to an open, non-draft, unmerged, one-file PR whose live head is `84bbc940696ba77f80c78ae85b886e1353c552a0`; GitHub reports mergeable=true. It is a proposed workflow correction, not an active main-branch change. The two corrected Phase 2 map line destinations are within the previously verified 73/73 exact source line-range tuples; that check is source-line bounds, not rendered-browser landing.
+
+**Disposition:** this delta adds no local-path regression under the existing bounded extractor. It does not close the full parser discrepancy, local heading fragments, exhaustive external status/redirect/final-destination/semantic relevance, or authenticated rendered GitHub heading/line/comment anchor verification. DF-06 remains **NOT MET** under Option A.

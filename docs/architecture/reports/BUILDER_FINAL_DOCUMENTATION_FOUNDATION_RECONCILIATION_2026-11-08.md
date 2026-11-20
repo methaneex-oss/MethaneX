@@ -751,3 +751,17 @@ Fifteen 2026-10-31 branch tips contain all 159 donor paths, 139–143 exact dono
 ## 25. PR119/PR121 authority-lineage clarification — 2026-11-20
 
 PR #119 and PR #121 merged into feature/integration branches, not main. PR #121 merge \`fb994...\` preserves all 159 donor paths exactly and has 71 targets / 70 CTest entries with the affective/developmental stack registered. The 15-tip 2026-10-31 integration cohort is a separate line: representative \`cfbcbdd...\` descends from donor \`c1da...\` but diverges from PR #121 merge \`fb994...\` (209 ahead / 70 behind, merge-base \`34da...\`). PR #121's CI/review evidence is not transferable to the 15 tips. Their test registration is 74/73 in 13 tips and 73/72 in two. ExperienceMemory remains a standalone, non-Brain-integrated, non-durable primitive. No implementation baseline is selected.
+
+
+
+## 27. Adversarial self-review — corrected all-ref artifact and exact-current snapshot — 2026-11-20
+
+The all-ref scan artifact was downloaded and its SHA-256 matched GitHub's published digest. Its corrected match rows are keyed by exact consumer blob SHA, avoiding the prior cross-blob aggregation defect. The scan is materially stronger than a branch census: it supplies exact branch-tip and consumer-blob discovery across 253 refs / 212 unique tips. It still does not adjudicate semantics.
+
+The 182,266 symbol rows map to 1,148 exact consumer path/blob/category versions. The 144 donor paths with at least one identifier match and 15 without a match are not pass/fail classifications. A symbol match may be a real source consumer, test, build/workflow reference, comment, incidental identifier or false positive. The 15 no-match paths are not proven unused. No semantic successor, retirement, non-adoption, dependency, duplicate-capability or authority decision is inferred.
+
+The scan candidate `32722f104f76817983b0156cca821949e406b8c1` and current PR #192 parent `63d7fbcc4821b54c53b275cc1ab6310f0853b2a8` have identical candidate blobs for all 96 donor paths present in both; the same 63 paths are absent in both. The current 159-path matrix has been checked against the complete current tree and remains 1 identical / 95 divergent / 63 absent.
+
+DF-06's exact nine-Markdown-file delta from the prior custom-parser source adds three occurrences of PR #198, replaces two commit-pinned source URLs with corrected line ranges, and adds/removes no local destination. The derived 348-occurrence count is not a full parser rerun; authenticated rendered anchors remain unverified.
+
+**Builder self-review verdict:** evidence integrity and current-state reconciliation improved. DF-02, DF-06 and DF-09 remain open/not met; DF-10 remains reopened. No independent verdict, Tester verdict, Project Director acceptance, merge approval or Stage A authorization is claimed.

@@ -1,6 +1,6 @@
-# CURRENT EXACT STATE — 2026-11-19 (Project Director decisions and Builder continuation)
+# CURRENT EXACT STATE — 2026-11-20 (live PR #192 and evidence refresh)
 
-> **Controlling live snapshot.** This block supersedes older active-status snapshots below for current PR metadata and gate disposition. Older records remain historical evidence. The live PR page remains authoritative if another commit advances the branch.
+> **Controlling live snapshot.** This block supersedes older active-status snapshots below for current PR metadata and gate disposition. Older records remain historical evidence. The live PR page and branch ref are authoritative if another commit advances the branch.
 
 ## PR #192 live source snapshot
 
@@ -9,14 +9,61 @@
 | Repository | `methaneex-oss/MethaneX` |
 | PR | #192 — Documentation Foundation |
 | Branch | `docs/whole-brain-planning-scope-correction-20261107` |
-| Exact source HEAD before this index update | `0b486b99de67d8e07d48713d1877b4c6d6c3f8b2` |
-| Base | `docs/jarvis-phase-2-whole-brain-integration-map-20261105` @ `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` |
-| State | Open, non-draft, unmerged |
-| Commits ahead / behind | 783 / 14 |
-| Changed paths | 47 total: 45 Markdown and 2 JSON |
-| Recursive tree | 280 entries, complete (`truncated=false`)
+| Exact source HEAD at this checkpoint parent | `63d7fbcc4821b54c53b275cc1ab6310f0853b2a8` |
+| Branch ref / PR HEAD | Match exactly |
+| Base branch | `docs/jarvis-phase-2-whole-brain-integration-map-20261105` |
+| Current base-branch tip | `ea64607ef94f142a6142a013e119a7225bc95c1c` |
+| PR-recorded base / merge base | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` |
+| State | Open, non-draft, unmerged; GitHub reports `mergeable=true` |
+| Current base-tip comparison | 794 ahead / 14 behind; diverged |
+| Changed paths | 48 total: 45 Markdown, 2 JSON, 1 CSV |
+| Recursive tree | 281 entries, complete (`truncated=false`) |
+| Tracked Markdown files | 51 |
 
-The exact source SHA above is the immutable parent for this index update, not the resulting commit SHA. Re-fetch live PR metadata after any subsequent write. The PR description and earlier index snapshots contain stale head values; do not use them instead of live metadata.
+The exact source SHA above is the immutable parent for this checkpoint update, not the resulting commit SHA. Re-fetch live PR metadata after every subsequent write. The PR description is stale at this parent: it reports HEAD `434ef4a81e6bddb02a27de01e540cbadb104ceae` and 47 changed paths. Correct it only after the final terminal inventory cycle so it can be synchronized to the frozen successor. The current base comparison is diverged; `mergeable=true` does not authorize merge, rebase or retarget.
+
+## Project Director closure standards — 2026-11-19
+
+The Project Director selected Option A for each of the following PR #192 decisions:
+
+- **Stale index/review-request correction:** correct the controlling index and malformed review-request paths, complete all Builder-owned evidence work, then repeat the terminal inventory cycle and issue a superseding exact-revision review assignment.
+- **DF-02:** full semantic successor/retirement/non-adoption mapping, historical provenance reconciliation, and cross-branch consumer/dependency/duplication closure. Path names, same-path presence, blob comparisons, PR metadata, branch enumeration and lexical symbol matches are discovery evidence only.
+- **DF-06:** complete parser-scope reconciliation, local path/fragment validation, external destination status/redirect/content relevance checks, and authenticated rendered GitHub anchor verification.
+
+These are mandatory closure standards, not evidence that the gates have passed. DF-02 remains OPEN and DF-06 remains NOT MET until the specified evidence is recorded. DF-09 still requires an exact-final-HEAD blind assessment returning CLEAR. DF-10 must be re-established after the last branch file write. DF-12 remains Project Director-only. Stage A remains HELD and implementation remains unauthorized.
+
+## Documentation Foundation gate disposition
+
+The initial completion-gate report §6 defines DF-01–DF-12. This matrix records current Builder evidence and outstanding owner/action; it is not independent acceptance or Project Director gate clearance.
+
+| Gate | Builder disposition | Evidence / remaining obligation | Owner |
+|---|---|---|---|
+| DF-01 — canonical entry point | Builder evidence present; final sync pending | README → docs portal → planning index path exists; reconcile the final changed-path set and exact terminal revision | Builder |
+| DF-02 — synchronized detailed inventory | **OPEN — Option A closure standard** | 159-path donor ledger remains 1 identical / 95 divergent / 63 absent. Corrected all-ref scan: 253 refs / 212 unique tips; 182,266 exact-blob-keyed symbol matches across 1,148 consumer blob versions. These are discovery leads; manual semantic consumer/dependency/duplicate-owner adjudication and per-path authority disposition remain | Builder; Independent Reviewer verifies |
+| DF-03 — authority traceability | Partially evidenced | Preserve exact decision provenance, scopes, recovered-decision status and unresolved/proposed classifications; reserved decisions remain Director-owned | Builder; Project Director for reserved decisions |
+| DF-04 — governance honesty | Builder evidence present | Proposed governance and accepted bounded amendments remain distinct; no broader governance acceptance inferred | Builder |
+| DF-05 — branch dependencies | Partially evidenced | Current base divergence and branch lineage recorded; complete semantic dependency/consumer graph remains open | Builder; Project Director for integration-order decisions |
+| DF-06 — durable cross-document links | **NOT MET — Option A closure standard** | Exact 51-file full parser reconciliation, local path/fragment validation, exhaustive unique external URL status/redirect/final-target and semantic relevance checks, and authenticated rendered GitHub heading/line-range/comment anchor verification remain | Builder; authenticated browser evidence needed |
+| DF-07 — status consistency | **CORRECTION IN PROGRESS** | Synchronize index, inventory, register, checkpoint, self-review, review assignment and PR description to the final post-correction exact HEAD | Builder |
+| DF-08 — historical preservation | Resolved within bounded criterion | Preserve historical evidence and disclosed limits; no deletion, relocation or silent supersession | Builder; Project Director for destructive/canonical decisions |
+| DF-09 — reproducible continuity | **NOT MET / BLOCKED** | PR #198 proposes the stale workflow-prompt correction but remains open/unmerged; corrected main workflow must be verified and dispatched against the final frozen PR #192 SHA, with a blind CLEAR result | Authorized operator dispatches; fresh reader assesses |
+| DF-10 — Builder self-review/inventory | **REOPENED** | Final complete changed-path/blob manifest must be the final branch file write, followed by exact one-commit/one-file comparison | Builder |
+| DF-11 — independent review | **WAIVED as a mandatory gate** by recorded Project Director decision | Waiver preserved. A separate exact-revision Independent Reviewer challenge will still be requested after Builder evidence is frozen | Independent Reviewer; Builder publishes request |
+| DF-12 — authority decision | **PENDING — PROJECT DIRECTOR ONLY** | Explicit decision against exact final artifacts and scope; no acceptance inferred | Project Director |
+
+## Related live workstreams
+
+| PR | Live HEAD / exact reference | State / boundary |
+|---|---|---|
+| #171 — whole-system architecture foundation | Existing SYS-01–SYS-11 foundation | Preserve; do not duplicate in Stage A |
+| #192 — Documentation Foundation | `63d7fbcc4821b54c53b275cc1ab6310f0853b2a8` at checkpoint parent | Open/non-draft/unmerged; final terminal inventory and review assignment still pending |
+| #198 — blind-reader workflow prompt correction | `84bbc940696ba77f80c78ae85b886e1353c552a0` | Open/non-draft/unmerged; one workflow file; no merge or dispatch |
+| #199 — all-ref consumer discovery | `6429c777f033d049ed1ca777f6584046f3ce0567` | Open/non-draft/unmerged; read-only scan workflow and artifact; not semantic adjudication |
+
+## Execution and authority boundary
+
+Stage A remains **NOT STARTED / HELD**. It may define whole-Brain capabilities and responsibilities only after the documented Documentation Foundation and authority gates are satisfied. It must reconcile with existing PR #171 SYS-01–SYS-11 architecture and must not reproduce that foundation. No runtime implementation, source-baseline selection, donor adoption, training, PR integration, merge, rebase, retarget, cherry-pick, branch rewrite or deployment is authorized by this Builder reconciliation.
+
 
 ## Project Director closure standards — 2026-11-19
 
@@ -1809,3 +1856,16 @@ Fifteen exact 2026-10-31 branch tips were identified with all 159 donor paths pr
 PR #119 merged into \`feat/jarvis-affective-state\` at donor PR #97 HEAD \`c1da...\`; PR #121 merged into \`integration/learning-layer-20261028\` at \`fb994...\`. The PR #121 merge tree preserves all 159 donor paths exactly and registers the integrated affective/developmental source stack plus 71 targets / 70 CTest entries.
 
 The 15-tip 2026-10-31 \`integration/priority-one\` cohort is a separate line: representative tip \`cfbcbdd...\` is 208 ahead / 0 behind donor \`c1da...\`, but diverges from PR #121 merge \`fb994...\` (209 ahead / 70 behind, merge-base \`34da...\`). Do not transfer PR #121 CI/review evidence to that cohort. The 15-tip cohort's test registration is 74/73 in 13 tips and 73/72 in two. ExperienceMemory remains unconnected to Brain and non-durable. Neither line is current main or Director-selected baseline. DF-02 remains OPEN.
+
+
+## 118. Exact-current PR #192 and all-ref artifact integrity — 2026-11-20
+
+At checkpoint parent `63d7fbcc4821b54c53b275cc1ab6310f0853b2a8`, PR #192 and its branch ref agree. The current tree is complete at 281 entries, including 51 Markdown files; 48 PR paths are changed (45 Markdown, 2 JSON, 1 CSV). The current base branch tip is `ea64607ef94f142a6142a013e119a7225bc95c1c`, 14 commits beyond the recorded merge base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`. The compare is 794 ahead / 14 behind and diverged; GitHub reports mergeable=true. No merge/rebase/retarget is inferred.
+
+The corrected PR #199 scan artifact (`44646915235`, artifact `14588258314`) was downloaded and its ZIP SHA-256 independently matched GitHub's published digest `62e287411685109d02741d8c0a7161d0f5c95d3318c676759a566b0a8a5e3052`. It scanned 253 refs / 212 unique tips / 8 duplicate-tip groups, 159 donor paths and 1,393 text blobs. The artifact contains 182,266 exact-blob-keyed symbol matches and 1,595 exact-path reference matches. These are lexical discovery records, not semantic closure.
+
+The 159-row blob matrix is current at the checkpoint parent: all 96 candidate-present donor paths have the same exact candidate blob as the scan input SHA `32722f104f76817983b0156cca821949e406b8c1`; the other 63 paths are absent in both. Current donor/candidate classification remains 1 identical / 95 divergent / 63 absent. The matrix's candidate-ref column is corrected to the exact checkpoint parent. DF-02 remains OPEN.
+
+DF-06's exact delta from the previous 51-file custom extraction baseline is recorded in its audit. Three new HTTP(S) occurrences reference PR #198; two Phase 2 map line destinations were corrected. No local destination changed in the nine Markdown files in the exact delta. This is not a full parser rerun, fragment validation, exhaustive external review or authenticated rendered-browser verification. DF-06 remains NOT MET.
+
+DF-09 remains blocked: PR #198 is not merged, the corrected workflow is not yet on main, and no exact-final-HEAD blind CLEAR run exists. DF-10 remains open pending the terminal inventory-only successor. DF-12 remains Project Director-only. Stage A remains HELD.

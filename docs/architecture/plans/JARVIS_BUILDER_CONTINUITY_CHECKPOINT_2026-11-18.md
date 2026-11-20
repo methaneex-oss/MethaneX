@@ -1399,3 +1399,60 @@ Neither integration line is current main or an accepted implementation baseline.
 ## 45. Exact-ref 159-path comparison matrix — 2026-11-20
 
 Added \`DF02_EXACT_REF_159_PATH_BLOB_COMPARISON_2026-11-20.csv\`, a per-path donor/PR121/October31/PR192 blob-SHA matrix. Exact tree counts: PR #121 merge 159 identical / 0 divergent / 0 absent; October 31 representative 141 / 18 / 0; PR #192 candidate at \`35957ed...\` 1 / 95 / 63. This establishes exact path/blob status only, not semantic successors or dispositions. DF-02 remains open.
+
+
+
+## 50. Interruption-safe checkpoint — exact PR #192 state and next execution boundary — 2026-11-20
+
+### 50.1 Exact parent state
+
+- Repository: `methaneex-oss/MethaneX`.
+- PR: #192, open, non-draft, unmerged.
+- Branch: `docs/whole-brain-planning-scope-correction-20261107`.
+- Exact parent before this checkpoint commit: `63d7fbcc4821b54c53b275cc1ab6310f0853b2a8`.
+- Base branch tip: `ea64607ef94f142a6142a013e119a7225bc95c1c`.
+- PR-recorded merge base: `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.
+- Compare: 794 ahead / 14 behind; diverged. GitHub reports mergeable=true.
+- Changed paths: 48 (45 Markdown, 2 JSON, 1 CSV).
+- Recursive tree: 281 entries, complete; 51 Markdown files.
+- PR description is stale and must be corrected only after the terminal inventory successor is known.
+
+### 50.2 Evidence recovered and revalidated
+
+1. Downloaded PR #199 artifact `14588258314` from run `44646915235`; ZIP SHA-256 matches GitHub's digest `62e287411685109d02741d8c0a7161d0f5c95d3318c676759a566b0a8a5e3052`.
+2. Corrected all-ref scan covers 253 refs / 212 unique tips / 8 duplicate-tip groups; 159 donor paths; 1,393 text blobs; 182,266 exact-blob-keyed symbol rows and 1,595 exact-path reference rows.
+3. The 182,266 symbol rows map to 1,148 exact consumer path/blob/category versions. This is a discovery index, not manual semantic adjudication. DF-02 remains OPEN.
+4. The scan candidate `32722f104f76817983b0156cca821949e406b8c1` and current parent `63d7fbcc...` have identical blobs for all 96 donor paths present in both; 63 donor paths are absent in both. Current matrix is 1 identical / 95 divergent / 63 absent.
+5. DF-06 exact delta from the previous 51-file custom-extractor baseline adds three HTTP(S) occurrences of PR #198, replaces two corrected commit-pinned line URLs, and changes no local destination. Derived custom count is 348 (131 local / 217 HTTP(S)); this is not a full parser run. Parser history, fragments, exhaustive external checks and authenticated rendered anchors remain unresolved.
+6. Current independent-review evidence is still historical: xAI PARTIALLY CLEAR on `beb4d5a174a1dd613878f89132e97b5e6052c7d3`; no verdict applies to this parent or its successor. DF-12 remains Project Director-only.
+
+### 50.3 Gate disposition
+
+| Gate | Current Builder disposition |
+|---|---|
+| DF-01 | Builder evidence present; terminal synchronization pending |
+| DF-02 | **OPEN** — 159-path semantic/authority closure and manual exact-blob consumer/dependency/duplicate ownership remain |
+| DF-03 | Partially evidenced; preserve decision provenance and reserved authority |
+| DF-04 | Builder evidence present within bounded scope |
+| DF-05 | Partially evidenced; semantic dependency graph remains incomplete |
+| DF-06 | **NOT MET** — parser, fragments, exhaustive external checks and authenticated rendered anchors remain |
+| DF-07 | Correction in progress; final metadata/status sync pending |
+| DF-08 | Resolved within bounded preservation criterion |
+| DF-09 | **NOT MET / BLOCKED** — PR #198 is open/unmerged; no exact-final-HEAD blind CLEAR |
+| DF-10 | **REOPENED** — terminal inventory-only successor still required |
+| DF-11 | Waived as mandatory; separate exact-revision challenge remains requested |
+| DF-12 | **PROJECT DIRECTOR ONLY** |
+
+### 50.4 Next execution order
+
+1. Continue exact-blob semantic adjudication using the 1,148 consumer-blob discovery index, preserving per-blob/per-tip identity and distinguishing true dependencies from incidental matches.
+2. Complete Builder-owned DF-03/DF-05 provenance and dependency cross-checks without making reserved Director decisions.
+3. Finish DF-06 static local/fragment and external destination work where tooling permits; explicitly preserve authenticated rendered-browser limitations.
+4. Synchronize all controlling docs and PR metadata after the evidence pass.
+5. Publish the superseding Independent Reviewer request against the exact frozen target.
+6. Re-fetch the complete PR changed-path set and parent tree; write the new inventory manifest as the final PR #192 branch-file write; verify exactly one commit ahead, zero behind, one changed path (inventory), complete successor tree, and all changed-path blob identities.
+7. After terminal inventory verification, post the exact target SHA and reviewer-request link in the PR conversation. Do not perform any further branch-file writes.
+
+### 50.5 Non-negotiable boundaries
+
+No merge, rebase, retarget, branch rewrite, implementation, runtime source/test/CMake/workflow change, donor adoption, source-baseline selection, training, integration, deployment, independent verdict, DF-12 acceptance or Stage A activation. Stage A remains **NOT STARTED / HELD**. Stop for the Project Director's decision only after Builder-owned evidence and the terminal inventory are complete; do not relabel externally blocked or reserved items as passed.

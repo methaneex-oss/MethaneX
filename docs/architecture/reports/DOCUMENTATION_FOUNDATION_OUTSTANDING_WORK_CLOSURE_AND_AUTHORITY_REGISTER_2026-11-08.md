@@ -2009,3 +2009,17 @@ PR #119 and PR #121 merged into feature/integration branches, not main. PR #121 
 ## 26. Exact-ref 159-path matrix added — 2026-11-20
 
 The DF-02 report now includes a machine-readable exact-ref CSV comparing all 159 donor paths across donor PR #97, PR #121 merge, representative October 31 integration tip and PR #192 candidate. Counts are 159/0/0, 141/18/0 and 1/95/63 respectively (identical/divergent/absent). This is blob identity evidence, not semantic disposition. DF-02 remains OPEN.
+
+
+
+## 26. Exact-current PR #192 and corrected all-ref artifact checkpoint — 2026-11-20
+
+At PR #192 parent `63d7fbcc4821b54c53b275cc1ab6310f0853b2a8`, the branch ref and live PR metadata agree. PR #192 is open/non-draft/unmerged; the complete tree has 281 entries and 51 Markdown files; 48 paths are changed (45 Markdown, 2 JSON, 1 CSV). The current base tip is `ea64607ef94f142a6142a013e119a7225bc95c1c`; the recorded merge base is `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; compare is 794 ahead / 14 behind and diverged. GitHub reports mergeable=true. The PR description is stale and is reserved for final exact-HEAD synchronization.
+
+The corrected all-ref artifact from PR #199 run `44646915235` / artifact `14588258314` was downloaded and its SHA-256 verified against GitHub's digest `62e287411685109d02741d8c0a7161d0f5c95d3318c676759a566b0a8a5e3052`. It covers 253 branch refs / 212 unique tips / 8 duplicate-tip groups; all 159 donor paths; 1,393 text blobs; 182,266 exact-blob-keyed symbol matches; and 1,595 exact-path reference rows. The symbol matches resolve to 1,148 distinct consumer path/blob/category versions (664 source, 389 test, 58 build, 36 workflow, 1 other). They remain lexical discovery evidence, not semantic dependency verdicts.
+
+The scan candidate SHA `32722f104f76817983b0156cca821949e406b8c1` and current PR #192 parent have identical candidate blobs for all 96 donor paths present in both trees; the same 63 paths are absent in both. The current 159-path matrix is pinned to parent `63d7...` and remains 1 identical / 95 divergent / 63 absent. DF-02 remains OPEN pending manual exact-blob consumer adjudication, semantic successors/retirement/non-adoption, duplicate ownership and historical authority.
+
+DF-06's bounded exact delta from the prior 51-file custom extraction adds three HTTP(S) occurrences of the same PR #198 URL, replaces two corrected commit-pinned line URLs and changes no local destination in the nine changed Markdown files. The derived custom-extractor count is 348 (131 local / 217 HTTP(S)); it is not a new complete parser run. DF-06 remains NOT MET.
+
+DF-09 remains NOT MET/BLOCKED pending normal review and Project Director acceptance/merge of PR #198, exact main-workflow re-fetch, authorized dispatch against the final frozen PR #192 SHA and a blind CLEAR result. DF-10 remains REOPENED until the final inventory-only successor. DF-12 remains Project Director-only. Stage A remains HELD.

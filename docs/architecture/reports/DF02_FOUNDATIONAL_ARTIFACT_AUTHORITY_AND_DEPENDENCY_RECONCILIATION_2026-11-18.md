@@ -2929,3 +2929,58 @@ All 159 donor paths are represented with donor blob SHA, exact comparison-tip bl
 | PR #192 candidate \`35957...\` | 1 | 95 | 63 |
 
 The CSV is an exact-path blob-identity matrix. It does **not** equate divergent same-path files with semantic successors, nor absent files with retired capabilities. The 159 semantic dispositions still require path-by-path successor, retirement/non-adoption, authority/provenance, duplicate ownership and exact-ref consumer adjudication. This artifact is an auditable input to that work, not DF-02 closure.
+
+
+
+## 57. Exact-blob-keyed all-ref scan artifact integrity and candidate currentness — 2026-11-20
+
+**Workflow run:** `44646915235` on PR #199.  
+**Artifact ID:** `14588258314`.  
+**Artifact ZIP SHA-256:** `62e287411685109d02741d8c0a7161d0f5c95d3318c676759a566b0a8a5e3052` — downloaded and matched GitHub's published artifact digest.  
+**Donor:** PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
+**Scan candidate:** PR #192 SHA `32722f104f76817983b0156cca821949e406b8c1`.  
+**Current candidate recheck:** PR #192 checkpoint parent `63d7fbcc4821b54c53b275cc1ab6310f0853b2a8`.
+
+### 57.1 Reproducible artifact contents
+
+The corrected run fetched **253 branch refs / 212 unique tips / 8 duplicate-tip groups**, inspected all **159 donor paths**, indexed and scanned **1,393 tracked text blobs**, and skipped zero binary blobs.
+
+The artifact's 182,266 symbol-match rows break down as follows:
+
+| Match category | Rows |
+|---|---:|
+| Source | 112,771 |
+| Test | 66,783 |
+| Workflow | 2,396 |
+| Build | 237 |
+| Other | 79 |
+| **Total** | **182,266** |
+
+Those rows map to **1,148 distinct exact consumer path/blob/category versions**: 664 source, 389 test, 58 build, 36 workflow and 1 other. **144 of 159 donor paths** yielded at least one identifier-match row; 15 yielded none. The separate exact-path reference file contains **1,595 rows** (1,580 documentation and 15 workflow), covering all 159 donor path strings across 55 consumer paths and 80 distinct consumer path/blob/category versions.
+
+The corrected scanner keys each match by exact consumer blob SHA and maps it only to branch tips containing that exact blob. This prevents aggregation across different versions of the same consumer path. The scanner's `candidate_tip_present` field is an exact path/blob occurrence test, not a semantic judgment.
+
+### 57.2 Exact current-candidate verification
+
+The scan input tree at `32722f104f76817983b0156cca821949e406b8c1` is complete at 280 entries. The current PR #192 checkpoint-parent tree is complete at 281 entries. Comparing every one of the 159 donor paths across those two candidate trees shows:
+
+- **96/96 candidate-present donor paths** retain the exact same blob SHA.
+- **63/63 candidate-absent donor paths** remain absent.
+- No donor-path blob changed between the scan candidate and this checkpoint parent.
+
+The exact-ref 159-path CSV matrix now pins its candidate-ref column to `63d7fbcc4821b54c53b275cc1ab6310f0853b2a8`. Rechecking all 159 rows against the complete current tree yields 1 identical / 95 divergent / 63 absent.
+
+### 57.3 Semantic and authority boundary
+
+The 182,266 rows and 1,148 exact consumer blob versions are **discovery leads, not adjudicated dependencies**. They include source, test, build, workflow and other lexical matches. A symbol match can be a real API consumer, a test, a build reference, an incidental identifier, a comment or a false positive. The exact line samples do not replace inspection of the full exact-blob source context. A missing symbol match does not prove no consumer or semantic successor.
+
+Accordingly, this run does **not** establish:
+- verified semantic successors for divergent or absent donor paths;
+- retirement or non-adoption decisions;
+- complete reverse-consumer and dependency closure for every exact consumer blob;
+- duplicate capability ownership or authority provenance;
+- Project Director selection of a runtime baseline or donor adoption.
+
+The existing §§16–50 audits remain the detailed semantic comparisons and the §53 crosswalk remains navigation-only. The all-ref artifact substantially improves the reverse-consumer discovery input, but manual exact-blob adjudication and reserved authority decisions remain open.
+
+**Disposition:** artifact integrity and current-candidate blob continuity are Builder-verified. DF-02 remains **OPEN**. No source baseline is selected and no donor code is adopted.
