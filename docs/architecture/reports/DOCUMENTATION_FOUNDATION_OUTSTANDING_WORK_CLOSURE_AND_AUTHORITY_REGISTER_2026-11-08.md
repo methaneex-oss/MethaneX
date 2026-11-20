@@ -2037,3 +2037,21 @@ Current Builder dispositions:
 - DF-05: **PARTIAL** — branch ancestry and dependency chain are explicit; PR #192 integration order remains a Project Director decision.
 - DF-09: **NOT MET / BLOCKED** — PR #197/#198 are not integrated/reviewed; no dispatch and no final-target CLEAR.
 - DF-12: **PROJECT DIRECTOR ONLY**.
+
+
+
+## 28. Bounded candidate semantic successor audit — 2026-11-20
+
+At PR #192 current HEAD `e06975a9e133642441423690725b615253e50ca3`, the candidate CMake registers 57 source translation units and 45 executable targets / 45 CTest entries, versus donor PR #97's 64 source units and 71 executable targets / 70 CTest entries. Seven donor source files and 26 executable targets / 25 CTest entries are absent. The candidate has only one byte-identical donor path, a workflow; no C++ source/test donor blob is identical.
+
+The manual crosswalk in DF-02 §59 establishes:
+- no verified compiled affective-state/affective-learning successor;
+- partial but non-equivalent persistent event-memory overlap for ExperienceMemory;
+- partial association/strategy components but no equivalent developmental learner;
+- manual GoalModel progress operations but no evidence-driven GoalOutcome model;
+- a fact/relation WorldModel, not a developmental action-transition world;
+- a real compiled CognitiveCycle whose retrieved memories do not feed reasoning premises and whose action stage assesses rather than executes.
+
+The candidate's `brain_restored_api.cpp` is present but excluded from CMake and references declarations/members absent from current `brain.hpp`; it cannot be counted as working integration. The all-ref symbol scan is also noisy: `jarvis` and `namespace` contribute 75.24% of all symbol rows and 85.58% of candidate-tip rows. Raw match counts cannot establish dependency closure.
+
+**DF-02 remains OPEN.** This bounded audit is not a substitute for all 159 path dispositions and the 1,148 exact consumer-blob semantic review. No donor adoption or implementation baseline is selected.

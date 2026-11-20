@@ -780,3 +780,15 @@ The authority audit now distinguishes:
 The current dependency chain is not a reason to retarget or merge automatically. PR #192 remains based on PR #179; PR #179 is based on PR #178. The live comparison is diverged but GitHub reports mergeable=true. No authority is inferred from this status.
 
 **Self-review verdict:** DF-03 and DF-05 remain PARTIAL, DF-09 remains NOT MET/BLOCKED, DF-12 remains Project Director-only. No current exact-head architecture/specification acceptance, branch integration order, independent review, merge, or Stage A activation is claimed.
+
+
+
+## 29. Adversarial self-review — candidate implementation and scan quality — 2026-11-20
+
+The candidate's exact source registration was compared with donor CMake rather than inferred from file presence. Seven donor source units are not in the candidate's explicit library list; `brain_restored_api.cpp` is an uncompiled tree file and its API/member references do not exist in the current Brain header. The donor's affective/developmental/goal-outcome/world mechanisms therefore cannot be claimed as integrated merely because a stale source file or lexical match exists.
+
+The candidate does have genuine mechanisms: a persistent event journal, prediction replay, belief-transition association updates, a cognitive cycle, goal state and planning/decision/action assessment. But their contracts are narrower than the donor families. In particular, retrieved memories are not passed into the CognitiveCycle reasoning premises; association updates are not the donor's reward/affect-driven DevelopmentalLearning; and action assessment is not action execution or observed consequence.
+
+The scanner's raw count is dominated by `jarvis` and `namespace` (75.24% overall, 85.58% in candidate-tip rows). The remaining lexical matches still require exact source-context adjudication. This reinforces the decision not to convert the 1,148 consumer-blob versions into semantic dependency claims.
+
+**Self-review verdict:** this is useful bounded semantic evidence, not DF-02 closure. DF-02 remains OPEN; DF-06 remains NOT MET; DF-09 remains NOT MET/BLOCKED; DF-10 remains REOPENED; DF-12 remains Project Director-only.

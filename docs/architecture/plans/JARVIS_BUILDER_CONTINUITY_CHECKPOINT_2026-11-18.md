@@ -1475,3 +1475,23 @@ PR #197 and PR #198 are parallel unmerged one-file PRs against the same main bas
 ### 51.3 Decision boundary
 
 DF-03 and DF-05 remain PARTIAL; the exact authority and branch graph is now recorded in the provenance report §12 and index §119. The remaining current-proposal acceptance and PR #192 integration-order choices belong to the Project Director. Do not infer them from accepted historical baselines or branch mergeability.
+
+
+
+## 52. Candidate semantic crosswalk and scanner signal-quality checkpoint — 2026-11-20
+
+At current PR #192 HEAD `e06975a9e133642441423690725b615253e50ca3`, the exact C++/CMake blobs remain unchanged from the prior scan candidate. Current candidate CMake declares 57 source translation units and 45 executable targets / 45 CTest entries. PR #97 donor CMake declares 64 source translation units and 71 executable targets / 70 CTest entries. Seven donor source units and 26 executable targets / 25 CTest entries are absent from the candidate. No current build or CTest run is claimed.
+
+The highest-risk missing donor families were inspected at exact blobs:
+- Affective state/learning: no compiled semantic successor; attention/threat are adjacent, not equivalent.
+- ExperienceMemory: candidate persistent event journal and prediction replay provide partial overlap, but not the donor's sequence/per-key experience index.
+- DevelopmentalLearning: candidate belief-transition association and stateless strategy projection are partial adjacent mechanisms, not outcome/affect-driven learned strategies.
+- GoalOutcome: candidate GoalModel has manual progress operations but no evidence/confidence/delta model.
+- DevelopmentalEnvironment/World: candidate WorldModel stores facts/relations, not executable action transitions/resources/episodes.
+- CognitiveCycle: a real compiled integration mechanism, but retrieved memories are not supplied to reasoning premises and actions are assessed, not executed.
+
+The candidate tree contains `brain_restored_api.cpp`, but it is excluded from the explicit CMake source list and refers to types/members absent from the current `brain.hpp`. It is not a valid basis for claiming affective/developmental/goal-outcome integration.
+
+Scanner noise is substantial: `jarvis` and `namespace` account for 137,140 / 182,266 symbol rows (75.24%); within the candidate-tip subset they account for 24,048 / 28,100 rows (85.58%). The remaining 45,126 rows after excluding only those two tokens are still lexical. The 1,148 consumer-blob versions and 194 candidate consumer blobs remain discovery input, not semantic verdicts.
+
+The detailed source crosswalk is in DF-02 §59 and index §120. DF-02 remains **OPEN** pending the full 159-path successor/retirement/non-adoption ledger and all-ref semantic consumer/dependency/duplicate-owner adjudication. No donor adoption or runtime baseline is selected.

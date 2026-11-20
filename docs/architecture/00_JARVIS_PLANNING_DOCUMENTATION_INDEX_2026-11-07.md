@@ -9,13 +9,13 @@
 | Repository | `methaneex-oss/MethaneX` |
 | PR | #192 — Documentation Foundation |
 | Branch | `docs/whole-brain-planning-scope-correction-20261107` |
-| Exact source HEAD at this checkpoint parent | `63d7fbcc4821b54c53b275cc1ab6310f0853b2a8` |
+| Exact source HEAD at this checkpoint parent | `e06975a9e133642441423690725b615253e50ca3` |
 | Branch ref / PR HEAD | Match exactly |
 | Base branch | `docs/jarvis-phase-2-whole-brain-integration-map-20261105` |
 | Current base-branch tip | `ea64607ef94f142a6142a013e119a7225bc95c1c` |
 | PR-recorded base / merge base | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` |
 | State | Open, non-draft, unmerged; GitHub reports `mergeable=true` |
-| Current base-tip comparison | 794 ahead / 14 behind; diverged |
+| Current base-tip comparison | 796 ahead / 14 behind; diverged |
 | Changed paths | 48 total: 45 Markdown, 2 JSON, 1 CSV |
 | Recursive tree | 281 entries, complete (`truncated=false`) |
 | Tracked Markdown files | 51 |
@@ -1914,3 +1914,59 @@ PR #197 and PR #198 both target the same main-branch workflow path, `.github/wor
 DF-03 remains **PARTIAL**: exact authority is now more precisely mapped (PR #173 planning-baseline transcription, BFA-C01–C14 direct acceptance, PR #174 accepted historical specification baseline, PR #191 separate-retention decision, and PR #196 accepted governance amendment). The current PR #173 whole architecture, current PR #174 corrected proposal, and PR #179 Phase 2 map do not have current exact-head acceptance.
 
 DF-05 remains **PARTIAL**: the branch graph and accepted governance descendant are now explicit, but PR #192's integration order against the PR #179 → PR #178 chain remains an authority decision. No branch-history operation is authorized by this evidence.
+
+
+
+## 120. Current candidate semantic successor crosswalk and scan-noise qualification — 2026-11-20
+
+This section records a bounded source-level semantic audit at current PR #192 HEAD `e06975a9e133642441423690725b615253e50ca3`. The code/build/test blobs are unchanged from the all-ref scan candidate `32722f104f76817983b0156cca821949e406b8c1`; the intervening changes were documentation and the matrix artifact only.
+
+### 120.1 Build/test registration comparison
+
+| Evidence | Current PR #192 candidate | PR #97 donor |
+|---|---|---|
+| `core/cpp/CMakeLists.txt` | blob `c51816888e1bddb7bc00c59e72529524e27a0717`; 57 source translation units | blob `bc264ce7b4ae489404ca03ea6d9676d0330a6a56`; 64 source translation units |
+| `core/cpp/tests/CMakeLists.txt` | blob `dab0c52ab4dfe15e1e2cbccfa9e6c904abdf54e3`; 45 executable targets / 45 CTest entries | blob `cbfd1fde52fffa6eeac025da2b7ddcb5ab493261`; 71 executable targets / 70 CTest entries |
+
+Seven donor source files are absent from the candidate's explicit compiled-source list:
+
+- `src/brain_restored_api.cpp`
+- `src/brain_action_execution.cpp`
+- `src/brain_prediction_context.cpp`
+- `src/brain_affective_planning.cpp`
+- `src/affective_state.cpp`
+- `src/affective_learning.cpp`
+- `src/developmental_learning.cpp`
+
+The candidate tree does contain `src/brain_restored_api.cpp` (blob `618deb6976eed951eae02b7f0da741e6d730bb0c`), but it is not listed in the candidate CMake source list. It defines affective and developmental API methods and refers to `AffectiveState`, `AffectiveAppraisal`, `GoalOutcomeEvidence`, `affective_state_model_`, `affective_learning_model_` and `developmental_learning_`. The current `brain.hpp` blob `8268ef84e0b361ead536724ba7761904b30ee58f` does not include the donor affective/developmental headers or declare those methods/members. This file is not evidence of a built consumer or working integration. No compile was run; adding it without reconciliation appears incompatible and must be tested before any claim.
+
+The candidate test registration is missing 26 donor executable targets and 25 CTest entries. The missing groups include attention-learning integration, cognitive-runtime learning/goal feedback, memory-learning-evolution persistence, affective state/learning/decision/evidence/goal-outcome, developmental learning/Brain/environment/world integration, goal-directed cognition/outcome, ExperienceMemory, action-consequence integration and DLT-001/002 trial/persistence/long-run suites. Registration is not execution: no current-candidate build or CTest run is claimed.
+
+Only one of the 159 donor paths is byte-identical in the candidate: `.github/workflows/dlt-002-four-hour.yml`. The current candidate remains 1 identical / 95 divergent / 63 absent. No C++ source or test file is an identical donor blob.
+
+### 120.2 Mechanism-family semantic disposition
+
+| Donor mechanism | Candidate evidence | Builder disposition |
+|---|---|---|
+| Affective state / affective learning | Donor headers `affective_state.hpp` blob `f63da2e0060938864bf434012d0b3b4d74fa5f29` and `affective_learning.hpp` blob `fa06043dc481336ba544247f365d37f5476a0651` are absent. Candidate has attention and threat models, but no affective-state/appraisal model in the compiled source list. The only `AffectiveState` token hit is in uncompiled `brain_restored_api.cpp`. | **No verified semantic successor.** Attention/threat are adjacent mechanisms, not affective appraisal or learned affective calibration. |
+| ExperienceMemory | Donor `experience_memory.hpp` blob `28cce354eb9db7e8ca292746fd14649debb7ab04` stores experience by sequence and maintains a per-key sequence index. Candidate `Memory` blob `f3662038237246efa51155f940d77564f144d6d9` provides a persistent event journal/metadata; `Brain::replay` reconstructs prediction and outcome events. Candidate `predictions_` is keyed by prediction key and does not provide the donor's per-key multi-experience index or structured `actual` field on the prediction record. | **Partial overlap, not equivalent.** Durable event replay is useful, but the donor's sequence/key experience identity and retrieval contract are not reproduced. |
+| DevelopmentalLearning | Donor `developmental_learning.hpp` blob `e3b9bf8af265b67829fd7deb323d88a3a9dd4b75` uses a LearningSignal containing prediction error, reward, salience, novelty and affective significance; it learns associations and strategies and consolidates them. Candidate `AssociationModel` learns pair strengths from changed belief transitions; `StrategyModel` is a stateless projection from intent/attention/threat/uncertainty to planning context; `LearningLoop` processes scalar adaptation/evolution feedback. | **Partial adjacent mechanisms, no equivalent developmental learner.** There is no corresponding outcome-weighted learned-strategy store or affective developmental signal in the candidate. |
+| GoalOutcome model | Donor `cognitive_goal_outcome.hpp` blob `c986480d82b9951177031f3387169819c3856234` defines `GoalOutcomeEvidence` (before/after/delta/completed/confidence) and a `GoalProgressModel`. Candidate `GoalModel` supports create/activate/update_progress/complete/abandon/priority but has no evidence object, confidence or outcome-normalization model. The uncompiled restored API references the donor evidence type. | **Partial API overlap, no verified evidence-driven goal-outcome successor.** |
+| Developmental environment / world | Donor `developmental_environment.hpp` blob `913c8cca2a03499249b834a890812c57b9aa4b1a` and `developmental_world.hpp` blob `2ba5bdbfc6db1f24eff8eb0a20ee145d0efc16cf` model actions, transitions, execution/observation/consequence, resources, episodes and terminal state. Candidate `WorldModel` blob `1c14f692374b0ab272f05634b7bdd26e358b4f1f` stores facts and relations; it does not simulate action transitions or a developmental environment. | **No verified semantic successor.** A fact/relation world model is not an executable developmental world. |
+| CognitiveCycle | Candidate `cognitive_cycle.hpp` blob `28e7af98327956268a769adf7813125be842c1a2` and `cognitive_cycle.cpp` blob `3df14c552f2048b0394dc362f7ee7a654a93fb32` are in the compiled source list and have registered suite/stress tests. The cycle retrieves ranked memories, then builds reasoning premises from beliefs and causal links; retrieved memories are not passed into the reasoning problem. It assesses actions but does not execute them. | **Real integrated mechanism, materially bounded.** It is not evidence that the donor's full memory-to-reasoning, action-consequence or developmental loop is integrated. |
+
+Candidate-side exact symbol discovery also found zero `ExperienceMemory`, `AffectiveLearning`, `DevelopmentalLearning`, `CognitiveGoalOutcome`, `DevelopmentalEnvironment`, `DevelopmentalWorld` or `GoalOutcome` tokens in candidate consumer files. This is not proof that no renamed semantic equivalent exists; the source crosswalk above is the bounded manual check.
+
+### 120.3 All-ref scanner noise profile
+
+The corrected scanner's raw 182,266 symbol rows are highly skewed by generic identifiers:
+
+- `jarvis`: 80,376 rows.
+- `namespace`: 56,764 rows.
+- Together: 137,140 rows (**75.24%** of all symbol matches).
+
+The 28,100 rows marked as exact candidate-tip occurrences include 14,157 `jarvis` and 9,891 `namespace` rows (**85.58%**). Excluding only those two generic tokens leaves 45,126 lexical rows across 120 donor paths and 190 candidate consumer blobs; those are still not semantic dependency verdicts. The candidate-tip subset comprises 194 consumer blob versions: 131 source, 50 test, 10 workflow, 2 build and 1 other.
+
+This confirms the scanner is a useful exact-blob discovery index but not a dependency classifier. The generic-token noise, uncompiled-source matches and possible incidental identifier matches prevent raw row counts from supporting semantic closure. Any future automated refinement should distinguish declaration/call/include/test/build references and use a reviewed low-signal token policy or AST-aware extraction; no scanner workflow/source change is made in this documentation pass.
+
+**Disposition:** this bounded source audit establishes several concrete partial successors and several absent donor mechanisms in the current candidate. It does not complete the required 159-path semantic successor/retirement/non-adoption ledger or all 1,148 cross-branch consumer-blob adjudications. DF-02 remains **OPEN**; no source baseline or donor adoption is selected.
