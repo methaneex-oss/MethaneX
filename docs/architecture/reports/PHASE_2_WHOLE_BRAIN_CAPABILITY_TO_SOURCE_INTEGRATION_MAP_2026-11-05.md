@@ -1816,7 +1816,7 @@ Required proof/correction:
 - [Memory append failure return and journal persistence](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/memory.cpp#L34-L35) and [persist failure path](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/memory.cpp#L135-L136), blob `ab42bba1d32d6f48d091787491c72294a4a55bb5`.
 - [Runtime action-success metric and discarded secondary feedback result](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/cognitive_runtime.cpp#L200-L212), blob `cf00acb6abd52308343f3a0e7016e6173b945603`.
 - [Donor executor false/exception and rollback/observer branches](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/action_execution.cpp#L20-L95), blob `af5bed6cec9ed1309b24ed3d50241fb4c0d33bff`.
-- [Main executor false/exception and rollback branches](https://github.com/methaneex-oss/MethaneX/blob/1273ddbcd0087d189e01388ded2d362fb1e058d2/core/cpp/src/action_execution.cpp#L18-L77), blob `c2f8653eb755fa2790a88e49bc8b0b9c3077e439`.
+- [Main executor false/exception and rollback branches](https://github.com/methaneex-oss/MethaneX/blob/1273ddbcd0087d189e01388ded2d362fb1e058d2/core/cpp/src/action_execution.cpp#L18-L76), blob `c2f8653eb755fa2790a88e49bc8b0b9c3077e439`.
 - [Clean false-return and verification-failure rollback tests](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/action_execution_phase7_suite.cpp#L46-L80), blob `db11ac95d26a97b01dfeb67cfb85194dc284ffb8`.
 - [Runtime false-return test](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/cognitive_runtime_suite.cpp#L200-L220), blob `361cba84a6fc6e07e31d14b5fa618c3f0a7848fa`.
 - [Observed consequence despite verification failure](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/brain_action_consequence_integration_suite.cpp#L197-L228), blob `7616082579d53e3579cae8e87895bdb3dadba66f`.
@@ -2075,7 +2075,7 @@ Required proof before donor acceptance:
 
 **Line-level source anchors:**
 - [EvolutionHistory is an in-memory vector with validation/deduplication](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/evolution_history.cpp#L7-L24), blob `e394042ba7fc6db85e4663722f735918aa1ce7fb`.
-- [EvolutionAdoptionJournal state transitions](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/evolution_adoption_journal.cpp#L5-L115), blob `d8df30a2902d3dac734fb1a571cbbecdd881b76f`.
+- [EvolutionAdoptionJournal state transitions](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/evolution_adoption_journal.cpp#L5-L114), blob `d8df30a2902d3dac734fb1a571cbbecdd881b76f`.
 - [Controller adoption compensation and rollback boundaries](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/evolution_controller.cpp#L113-L264), blob `4e77ec2e5daa09a964132ca486b8c5ee1cebf2f5`.
 - [Brain evaluation/adoption/canary/rollback event ordering](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain_restored_api.cpp#L256-L380), blob `7155d4d9c8eef527836fb79bf901aa32ddbae38b`.
 - [Brain replay reconstructs evolution projections from durable events](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain.cpp#L497-L610), blob `dec9e5442b3ca4b81a7879855c6146b2619934cc`.
@@ -2580,7 +2580,7 @@ These are source-derived failure-path outcomes, not reproduced incidents. The in
 - [`CognitiveFeedbackResult` exposes only a numeric `learned_reliability`, not an evidence-persistence status](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/include/jarvis/core/cognitive_cycle.hpp#L70-L76), blob `eed8bc75f59557c255e796343d77498d90b31ea5`.
 - [`Brain::learn`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain.cpp#L791-L820), blob `dec9e5442b3ca4b81a7879855c6146b2619934cc`.
 - [Runtime feedback integration test](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/cognitive_runtime_suite.cpp#L223-L260), blob `361cba84a6fc6e07e31d14b5fa618c3f0a7848fa`.
-- [Goal-feedback runtime test](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/cognitive_runtime_goal_feedback_suite.cpp#L1-L84), blob `15a6bdffe37ae7df6c625ea9737fda4c0bf08a7f`.
+- [Goal-feedback runtime test](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/cognitive_runtime_goal_feedback_suite.cpp#L1-L83), blob `15a6bdffe37ae7df6c625ea9737fda4c0bf08a7f`.
 
 ### P2-I-035 — Finding details and required correction
 
