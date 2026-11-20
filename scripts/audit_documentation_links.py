@@ -130,7 +130,7 @@ class RedirectRecorder(HTTPRedirectHandler):
 def verify_github_artifact(url: str) -> dict | None:
     token = os.environ.get("GITHUB_TOKEN")
     parts = urlsplit(url)
-    match = re.fullmatch(r"/([^/]+/[^/]+)/actions/runs/\\d+/artifacts/(\\d+)", parts.path)
+    match = re.fullmatch(r"/([^/]+/[^/]+)/actions/runs/\d+/artifacts/(\d+)", parts.path)
     if not token or not match:
         return None
     repository, artifact_id = match.groups()
