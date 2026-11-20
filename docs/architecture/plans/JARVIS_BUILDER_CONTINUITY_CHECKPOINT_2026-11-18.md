@@ -1685,3 +1685,8 @@ The candidate goal model handles prerequisites, deadlines and progress/status bu
 ## 66. DF-02 cognitive-cycle integration gap — 2026-11-20
 
 The candidate CognitiveCycle contract stops at raw observation and action assessment. Unlike the donor, it has no PerceptionPipeline/PerceptualRepresentation contract, no developmental context, no affective state/appraisal/attention in the cycle result, no action execution results, and no sequence-aware/goal-outcome feedback overload. The donor suite is 186 assertions versus 31 candidate assertions. Detailed exact blobs and API comparison: `DF02_COGNITIVE_CYCLE_PERCEPTION_AND_ACTION_INTEGRATION_AUDIT_2026-11-20.md`. No runtime change; DF-02 remains OPEN. This write reopens DF-10.
+
+
+## 67. DF-02 representation provenance and canary-preview findings — 2026-11-20
+
+Candidate representation currently converts confidence/reliability/novelty/salience/urgency/prediction-error/outcome metadata into semantic nodes, uses `std::hash` node IDs, ignores event-supplied confidence and does not reject NaN numeric confidence. Donor keeps appraisal metadata outside semantic nodes, uses deterministic length-prefixed IDs, reads supplied confidence and checks `std::isfinite`. The candidate representation test file is not CTest-registered in either snapshot. Candidate EvolutionCanary also lacks donor's non-mutating `preview`; registered canary suite is nine versus 36 assertions. See `DF02_REPRESENTATION_PROVENANCE_AND_CANARY_PREVIEW_AUDIT_2026-11-20.md`. No runtime changes; this write reopens DF-10.
