@@ -162,7 +162,7 @@ jobs:
               f"- Terminal parent: `{terminal_parent}`\n"
               f"- Parent-to-target ancestry: {parent_to_target_commits} commit\n"
               f"- Changed path: `{inventory_path}` only\n"
-              "- Parent manifest: {len(terminal_manifest)} paths verified; all {non_inventory_count} non-inventory blobs unchanged\n"
+              f"- Parent manifest: {len(terminal_manifest)} paths verified; all {non_inventory_count} non-inventory blobs unchanged\n"
               f"- Successor inventory blob: `{successor_inventory_blob}`\n"
           )
           chunks.insert(0, f"\n\n===== DOCUMENT: Verified terminal inventory metadata\nSOURCE COMMIT: {target_revision}\n=====\n\n{terminal_summary}")
@@ -178,7 +178,7 @@ jobs:
               "# Blind Fresh-Reader Packet Metadata\n\n"
               f"- Exact target documentation revision: `{target_revision}`\n"
               f"- Verified terminal inventory parent: `{terminal_parent}`\n"
-              "- Verified parent-to-target relationship: one commit; inventory file only; {non_inventory_count} other manifest blobs unchanged\n"
+              f"- Verified parent-to-target relationship: one commit; inventory file only; {non_inventory_count} other manifest blobs unchanged\n"
               "- This SHA identifies the exact repository checkout used to assemble the supplied packet. "
               "It is a revision identifier, not evidence that the contents have been independently reviewed or accepted.\n"
               "- Source commits for individual included documents are listed separately in the packet manifest.\n\n"
