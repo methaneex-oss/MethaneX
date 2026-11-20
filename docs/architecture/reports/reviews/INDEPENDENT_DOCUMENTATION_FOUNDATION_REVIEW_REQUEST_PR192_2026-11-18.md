@@ -1,3 +1,5 @@
+> **WITHDRAWN — 2026-11-20, by Project Director instruction.** This formal Independent Reviewer request is withdrawn. Do not dispatch, assign, or wait for an independent reviewer under this request. The Project Director retains the final decision. This notice supersedes the request status and any historical instructions below; the original request is retained solely as an audit record and is not an active assignment.
+
 # Independent Reviewer Request — JARVIS Documentation Foundation PR #192
 
 **Requesting role:** Project Builder  
