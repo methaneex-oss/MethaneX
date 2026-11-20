@@ -2156,3 +2156,8 @@ DF-06 now has a successful exact-commit CI self-test and link audit: run #448179
 ## 41. DF-02 affective/developmental baseline gap — 2026-11-20
 
 [DF-02 Affective and Developmental Subsystem Baseline Gap](DF02_AFFECTIVE_AND_DEVELOPMENTAL_SUBSYSTEM_BASELINE_GAP_2026-11-20.md) confirms the candidate baseline has no affective/developmental source paths, while unmerged donor PR #97 contains compiled/tested affective and developmental mechanisms. The candidate/donor reports are capability-gap comparisons, not post-integration regression claims. No source baseline or adoption is selected; DF-02 remains OPEN.
+
+
+## 42. Donor PR #97 CI evidence — 2026-11-20
+
+The unmerged donor PR #97 HEAD passed JARVIS Core Verification (71/71 CTest) and Brain CI native plus ASan/UBSan jobs (71/71 each), including DLT-001 and DLT-002 persistence train/verify. See the baseline gap report §6. This is test evidence, not source-baseline adoption or extended open-world learning proof.
