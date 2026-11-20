@@ -6,7 +6,7 @@
 
 **Purpose:** Run one new blind fresh-reader assessment against the final corrected PR #192 documentation revision.  
 **Model:** `nvidia/nemotron-3.5-super-vl:free` via OpenRouter.  
-**Workflow:** [Documentation Foundation — Blind AI Fresh-Reader Assessment](https://github.com/methaneex-oss/MethaneX/actions/workflows/documentation-foundation-ai-reader.yml)  
+**Workflow:** [Documentation Foundation — Blind AI Fresh-Reader Assessment (proposed workflow in unmerged PR #200)](https://github.com/methaneex-oss/MethaneX/blob/0884b6ac0551996f30429008031476e5d38d32b7/.github/workflows/documentation-foundation-ai-reader.yml)  
 **Secret required:** repository Actions secret `OPENROUTER_API_KEY` (already configured for the previous successful run; do not paste the key into this file, chat, workflow inputs or logs).
 
 ## 1. Workflow readiness
