@@ -3211,3 +3211,13 @@ Seven donor paths had lexical matches only on other refs. Exact alternate-branch
 This is evidence of distinct source lines, not permission to select or merge an alternate baseline. The Project Director's baseline/adoption authority remains reserved.
 
 **DF-02 remains OPEN.** The supplements resolve 41 no-symbol paths and seven specific alternate-ref-only path cases; the remaining candidate-path semantic successor, dependency, duplicate-owner, retention/retirement/non-adoption and authority adjudication is not complete.
+
+
+## 63. Action feedback and evolution-adoption regression audit — 2026-11-20
+
+The Builder compared the exact candidate PR #192 base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` with donor PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`. [DF-02 Action Feedback and Evolution-Adoption Regression Audit](DF02_ACTION_FEEDBACK_AND_EVOLUTION_ADOPTION_REGRESSION_AUDIT_2026-11-20.md) records two high-impact regressions with exact blob hashes and test evidence.
+
+1. Candidate action execution removes the consequence observer and `ActionOutcome` fields. The donor phase-7 test demonstrates observed consequence → prediction error → affective/developmental learning → changed planning choice, including persistence after restart. The candidate test retains only basic action status/belief assertions.
+2. Candidate evolution adoption removes isolation attestation from `EvolutionExperiment`; its safety gate ignores `require_isolation` and does not recompute the minimum-improvement threshold; its controller does not require durable matching evaluation history before adoption; and its journal lacks donor compensation transitions. The candidate adoption suite is a five-line smoke test versus the donor controller-level safety, history, rollback and recovery scenarios.
+
+These are source-level regression findings, not authorization to copy donor files. DF-02 remains OPEN for the remaining candidate lexical paths, semantic successor/dependency/duplicate-owner and retention/retirement/authority adjudication. No runtime code changed.
