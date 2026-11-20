@@ -2141,3 +2141,8 @@ DF-06 now has a successful exact-commit CI self-test and link audit: run #448179
 ## 38. DF-02 goal-outcome and adaptive-priority regression — 2026-11-20
 
 [DF-02 Goal-Outcome and Adaptive-Priority Regression Audit](DF02_GOAL_OUTCOME_AND_ADAPTIVE_PRIORITY_REGRESSION_AUDIT_2026-11-20.md) documents missing goal outcome momentum/priority adaptation and the absent goal-outcome evidence model/test. Candidate goals suite has 34 assertions versus 45 donor assertions, plus the donor-only 15-assertion outcome-model suite. Donor fixed coefficients are not adopted automatically. No runtime changes; DF-02 remains OPEN.
+
+
+## 39. DF-02 cognitive-cycle integration audit — 2026-11-20
+
+[DF-02 Cognitive-Cycle Perception and Action Integration Audit](DF02_COGNITIVE_CYCLE_PERCEPTION_AND_ACTION_INTEGRATION_AUDIT_2026-11-20.md) documents missing structured perception, per-cycle affect/attention, selected-action execution outcomes and sequence-safe/goal-aware feedback in the candidate cycle contract. Donor cognitive-cycle suite: 186 assertions; candidate: 31. No runtime code changed; DF-02 remains OPEN.
