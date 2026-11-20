@@ -2064,3 +2064,8 @@ Read [DF-02 Cognitive-Cycle Perception and Action Integration Audit](reports/DF0
 ## 134. DF-02 representation provenance and canary preview audit — 2026-11-20
 
 Read [DF-02 Representation Provenance and Canary Preview Audit](reports/DF02_REPRESENTATION_PROVENANCE_AND_CANARY_PREVIEW_AUDIT_2026-11-20.md). Candidate representation conflates appraisal metadata with semantic nodes, ignores supplied confidence, uses unstable hash IDs and allows NaN confidence; donor separates provenance, uses deterministic IDs and finite validation. The representation test file is unregistered in both snapshots. Candidate canary lacks donor non-mutating preview and its registered suite is 9 versus 36 assertions.
+
+
+## 135. DF-02 affective/developmental baseline gap — 2026-11-20
+
+Read [DF-02 Affective and Developmental Subsystem Baseline Gap](reports/DF02_AFFECTIVE_AND_DEVELOPMENTAL_SUBSYSTEM_BASELINE_GAP_2026-11-20.md). The exact candidate PR #192 baseline has no affective/developmental source paths. Unmerged donor PR #97 contains compiled affective state/learning, developmental learning/environment/world, affective planning and contextual prediction, plus 17 relevant CTest suites. Candidate/donor comparisons are capability-gap evidence, not post-integration regression claims. The Project Director retains source-baseline/adoption authority.
