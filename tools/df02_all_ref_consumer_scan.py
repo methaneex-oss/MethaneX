@@ -149,36 +149,59 @@ def main():
     path_pattern=re.compile("|".join(re.escape(p) for p in sorted(donor_paths,key=len,reverse=True)))
 
     path_matches={}; symbol_matches={}; all_blob_ids=sorted(blob_occurrences)
-    scanned=0; skipped_binary=0
-    for offset in range(0,len(all_blob_ids),400):
-        batch=cat_file_batch(all_blob_ids[offset:offset+400])
-        for blob,raw in batch.items():
-            scanned+=1
-            if b"\0" in raw: skipped_binary+=1; continue
-            text=raw.decode("utf-8",errors="replace"); occs=blob_occurrences[blob]
-            for m in path_pattern.finditer(text):
-                donor_path=m.group(0); line=text.count("\n",0,m.start())+1
-                for tip,consumer in occs:
-                    if consumer in AUDIT_TOOL_PATHS or consumer==donor_path: continue
-                    key=(donor_path,consumer,category(consumer),blob)
-                    rec=path_matches.setdefault(key,{"tips":set(),"branches":set(),"lines":set()})
-                    rec["tips"].add(tip); rec["branches"].update(branch_groups[tip])
-                    if len(rec["lines"])<20: rec["lines"].add(line)
-            found=collections.defaultdict(set)
-            for pattern in symbol_patterns:
-                for m in pattern.finditer(text):
-                    sym=m.group(0)
-                    if len(found[sym])<20: found[sym].add(text.count("\n",0,m.start())+1)
-            for sym,lines in found.items():
-                for donor_path in symbol_to_donors[sym]:
+    out=pathlib.Path(args.output); out.mkdir(parents=True,exist_ok=True)
+    blob_sources_path=out/"consumer_blob_sources.jsonl"
+    scanned=0; skipped_binary=0; matched_blob_content_count=0; matched_blob_content_bytes=0
+    with blob_sources_path.open("w",encoding="utf-8") as source_file:
+        for offset in range(0,len(all_blob_ids),400):
+            batch=cat_file_batch(all_blob_ids[offset:offset+400])
+            for blob,raw in batch.items():
+                scanned+=1
+                if b"\0" in raw: skipped_binary+=1; continue
+                text=raw.decode("utf-8",errors="replace"); occs=blob_occurrences[blob]
+                blob_has_match=False
+                for m in path_pattern.finditer(text):
+                    donor_path=m.group(0); line=text.count("\n",0,m.start())+1
                     for tip,consumer in occs:
                         if consumer in AUDIT_TOOL_PATHS or consumer==donor_path: continue
-                        cat=category(consumer)
-                        if cat=="documentation": continue
-                        key=(donor_path,sym,consumer,cat,blob)
-                        rec=symbol_matches.setdefault(key,{"tips":set(),"branches":set(),"lines":set()})
-                        rec["tips"].add(tip); rec["branches"].update(branch_groups[tip]); rec["lines"].update(lines)
-
+                        key=(donor_path,consumer,category(consumer),blob)
+                        rec=path_matches.setdefault(key,{"tips":set(),"branches":set(),"lines":set()})
+                        rec["tips"].add(tip); rec["branches"].update(branch_groups[tip])
+                        if len(rec["lines"])<20: rec["lines"].add(line)
+                        blob_has_match=True
+                found=collections.defaultdict(set)
+                for pattern in symbol_patterns:
+                    for m in pattern.finditer(text):
+                        sym=m.group(0)
+                        if len(found[sym])<20: found[sym].add(text.count("\n",0,m.start())+1)
+                for sym,lines in found.items():
+                    for donor_path in symbol_to_donors[sym]:
+                        for tip,consumer in occs:
+                            if consumer in AUDIT_TOOL_PATHS or consumer==donor_path: continue
+                            cat=category(consumer)
+                            if cat=="documentation": continue
+                            key=(donor_path,sym,consumer,cat,blob)
+                            rec=symbol_matches.setdefault(key,{"tips":set(),"branches":set(),"lines":set()})
+                            rec["tips"].add(tip); rec["branches"].update(branch_groups[tip]); rec["lines"].update(lines)
+                            blob_has_match=True
+                if blob_has_match:
+                    occurrence_map=collections.defaultdict(lambda:{"tips":set(),"branches":set()})
+                    for tip,consumer in occs:
+                        if consumer in AUDIT_TOOL_PATHS: continue
+                        occurrence_map[consumer]["tips"].add(tip)
+                        occurrence_map[consumer]["branches"].update(branch_groups[tip])
+                    record={
+                        "blob_sha":blob,
+                        "occurrences":[
+                            {"path":consumer,"category":category(consumer),"tip_count":len(meta["tips"]),
+                             "tip_shas":sorted(meta["tips"]),"branches":sorted(meta["branches"])}
+                            for consumer,meta in sorted(occurrence_map.items())
+                        ],
+                        "content":text
+                    }
+                    source_file.write(json.dumps(record,ensure_ascii=False,separators=(",",":"))+"\n")
+                    matched_blob_content_count+=1
+                    matched_blob_content_bytes+=len(raw)
     out=pathlib.Path(args.output); out.mkdir(parents=True,exist_ok=True)
     path_rows=[]
     for path in donor_paths:
@@ -219,20 +242,20 @@ def main():
       ["donor_path","symbol","consumer_path","category","unique_tip_count","candidate_tip_present","tip_shas","branch_names","line_numbers_sample","consumer_blob"],symbol_rows)
 
     status=collections.Counter(r["candidate_status"] for r in path_rows)
-    summary={"schema_version":1,"repository":inputs["repository"],"pr97":inputs["pr_number"],
+    summary={"schema_version":2,"repository":inputs["repository"],"pr97":inputs["pr_number"],
       "donor_base_sha":inputs["donor_base_sha"],"donor_sha":donor_sha,"candidate_pr":inputs["candidate_pr_number"],
       "candidate_sha":candidate_sha,"remote_branch_ref_count":sum(len(v) for v in branch_groups.values()),
       "unique_branch_tip_count":len(branch_groups),"duplicate_tip_group_count":sum(1 for v in branch_groups.values() if len(v)>1),
       "donor_path_count":len(donor_paths),"candidate_same_path_status":dict(status),
       "unique_text_blob_count":len(blob_occurrences),"scanned_blob_count":scanned,"binary_blob_count_skipped":skipped_binary,
       "donor_symbol_count":len(symbols),"exact_path_reference_match_rows":len(path_rows2),
-      "candidate_symbol_consumer_match_rows":len(symbol_rows),"symbol_matches_exclude_documentation":True,
+      "candidate_symbol_consumer_match_rows":len(symbol_rows),"matched_consumer_blob_content_count":matched_blob_content_count,\n      "matched_consumer_blob_content_bytes":matched_blob_content_bytes,"symbol_matches_exclude_documentation":True,
       "limitations":["Path and identifier matches are candidate reverse-consumer evidence, not semantic consumer proof.",
         "Consumer blob SHA is part of each match key; each row maps only to branch tips that contain that exact blob.",
         "Symbol matches exclude documentation files; exact path references retain documentation matches.",
         "A same-path divergent blob is not a semantic successor.","An absent same-path artifact may have an alternate successor elsewhere.",
         "Comments, documentation and tests can produce lexical matches; inspect category and exact source context.",
-        "This scan makes no retirement, non-adoption, authority or source-baseline decisions."]}
+        "consumer_blob_sources.jsonl stores the full text of each exact blob that produced a path or symbol match, with exact branch/path occurrence metadata.",\n        "This scan makes no retirement, non-adoption, authority or source-baseline decisions."]}
     (out/"summary.json").write_text(json.dumps(summary,indent=2)+"\n",encoding="utf-8")
     report=["# DF-02 all-ref source-content consumer discovery","",f"- Donor PR #97 HEAD: {donor_sha}",
       f"- Candidate PR #192 HEAD: {candidate_sha}",f"- Branch refs scanned: {summary['remote_branch_ref_count']}",
@@ -246,7 +269,7 @@ def main():
       "- donor_path_presence.csv: exact path/blob presence and version counts by unique tip.",
       "- unique_branch_tips.csv: all remote branch names grouped by exact tip SHA.",
       "- exact_path_reference_matches.csv: exact donor path strings found in other files.",
-      "- candidate_symbol_consumer_matches.csv: candidate identifier matches with exact branch/path/line samples.",
+      "- candidate_symbol_consumer_matches.csv: candidate identifier matches with exact branch/path/line samples.",\n      "- consumer_blob_sources.jsonl: exact full text for every blob that produced a path or symbol match, keyed by blob SHA and exact branch/path occurrences.",
       "- summary.json: machine-readable scan counts and limitations.","",
       "No semantic successor, retirement, non-adoption, Project Director authority or implementation-baseline decision is made by this workflow."]
     (out/"report.md").write_text("\n".join(report)+"\n",encoding="utf-8")
