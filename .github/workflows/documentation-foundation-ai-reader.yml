@@ -97,10 +97,12 @@ jobs:
           inventory_text = subprocess.check_output(
               ["git", "show", f"{target_revision}:{inventory_path}"], text=True
           )
-          section_start = inventory_text.find("## 130. Terminal PR #192 inventory")
-          if section_start < 0:
-              raise SystemExit("The exact target does not contain the terminal PR #192 inventory section.")
-          terminal_section = inventory_text[section_start:]
+          section_matches = list(re.finditer(r"(?m)^## (\\d+)\\. Terminal PR #192 inventory$", inventory_text))
+          if not section_matches:
+              raise SystemExit("The exact target does not contain a terminal PR #192 inventory section.")
+          terminal_section_match = section_matches[-1]
+          terminal_section_number = terminal_section_match.group(1)
+          terminal_section = inventory_text[terminal_section_match.start():]
           parent_match = re.search(
               r"(?m)^\\| Exact parent before this inventory-only write \\| `([0-9a-f]{40})` \\|$",
               r"(?m)^\| Exact parent before this inventory-only write \| `([0-9a-f]{40})` \|$",
@@ -118,7 +120,7 @@ jobs:
           terminal_changed_paths = subprocess.check_output(
               ["git", "diff", "--name-only", terminal_parent, target_revision], text=True
           ).splitlines()
-          manifest_text = terminal_section.split("### 130.2", 1)[1].split("### 130.3", 1)[0]
+          manifest_text = terminal_section.split(f"### {terminal_section_number}.2", 1)[1].split(f"### {terminal_section_number}.3", 1)[0]
           terminal_manifest = re.findall(
               r"(?m)^\|\s*\d+\s*\|\s*`([^`]+)`\s*\|\s*`([0-9a-f]{40})`\s*\|$",
               manifest_text
@@ -144,7 +146,7 @@ jobs:
           if parent_to_target_commits != "1" or terminal_changed_paths != [inventory_path]:
               raise SystemExit("Terminal DF-10 check failed: expected one commit and only the inventory path.")
           terminal_summary = (
-              "## Verified terminal inventory metadata\n\n"
+              "f"## Verified terminal inventory metadata (section {terminal_section_number})\n\n""
               f"- Exact target revision: `{target_revision}`\n"
               f"- Terminal parent: `{terminal_parent}`\n"
               f"- Parent-to-target ancestry: {parent_to_target_commits} commit\n"
