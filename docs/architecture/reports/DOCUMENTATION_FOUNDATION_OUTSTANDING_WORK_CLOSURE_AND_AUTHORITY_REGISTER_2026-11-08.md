@@ -2096,3 +2096,14 @@ The Builder inspected the 41 donor paths without remaining lexical symbol candid
 **DF-02 remains OPEN.** The 118 paths with lexical candidates and the 1,134 exact consumer versions still require semantic consumer/dependency/duplicate-owner adjudication; authority, retirement and non-adoption decisions remain distinct and cannot be inferred from scanner output.
 
 DF-06 remains NOT MET; DF-09 remains NOT MET/BLOCKED; DF-10 must be reverified after all Builder-owned file writes; DF-12 remains Project Director-only/pending. No runtime implementation, donor adoption, source-baseline selection, Stage A start, merge, rebase or retarget is authorized.
+
+
+## 32. DF-02 compiled-consumer and alternate-branch evidence — 2026-11-20
+
+The Builder refined the 118-path lexical candidate set against the candidate CMake/include graph. Candidate branch snapshot `84dd10094cac675b97b1ab2d45b36618d61efe38`: 111 donor paths with candidate-branch matches; 107 source-category matches; 85 direct compiled-TU matches; 123 source/header consumer paths reachable from 62 compiled translation units (57 core, five engineering); 50 test consumer paths with 46 actual registered executables (45 core, one engineering).
+
+Seven donor paths with matches only on other refs were inspected. The `integration/knowledge-composition-20261031` branch contains donor-identical compiled affective-planning and contextual-prediction implementations with CMake/test registration. The `ci/priority-one-validation-20261031` branch contains donor-identical task-ledger header/source/test and CMake integration. The candidate association-causality suite is 46→12 assertions and reasoning suite 33→19; both targets remain registered but have lost material donor checks.
+
+Full evidence: [DF-02 Compiled-Consumer and Alternate-Branch Adjudication](DF02_COMPILED_CONSUMER_AND_ALTERNATE_BRANCH_ADJUDICATION_2026-11-20.md).
+
+**DF-02 remains OPEN.** This resolves seven specific other-ref-only path cases and improves the candidate compile/test consumer map; it does not close all remaining semantic successor, dependency, duplicate-owner, retention/retirement/non-adoption or authority decisions. No source baseline is selected and no donor code is adopted. This branch-file write reopens DF-10; a new terminal inventory is required after all Builder-owned writes.
