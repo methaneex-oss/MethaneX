@@ -3277,3 +3277,8 @@ No runtime or CMake changes were made. DF-02 remains OPEN for the remaining cand
 ## 72. Donor PR #97 build/test evidence — 2026-11-20
 
 The donor source line is not merely unbuilt proposal code. Exact PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` has successful [JARVIS Core Verification #40788714735](https://github.com/methaneex-oss/MethaneX/actions/runs/40788714735) and [Brain CI #40788714686](https://github.com/methaneex-oss/MethaneX/actions/runs/40788714686). The core job passed configure/build/test and 71/71 CTest cases; native-brain and ASan/UBSan jobs also each passed 71/71. The log includes passing DLT-001 trial and DLT-002 persistence train/verify tests. This proves the donor revision builds and its registered suite passes, not that it is adopted or that it has completed an extended four-hour/open-world trial. Detailed evidence is in the affective/developmental baseline gap report.
+
+
+## 73. Causal feedback and typed persistence gap — 2026-11-20
+
+[DF-02 Causal Feedback and Typed Persistence Gap](DF02_CAUSAL_FEEDBACK_AND_TYPED_PERSISTENCE_GAP_2026-11-20.md) records that the candidate causal model strengthens co-occurrence but has no `observe_outcome` path to weaken existing hypotheses when new observations contradict predictions. Donor adds counterexample-driven weakening and starts new links below the prediction threshold; phase-5 suite is 46 assertions versus 12 candidate. Candidate causal serialization is untyped `key=value`, which can misparse delimiter-bearing keys and string values that look like Boolean/null/numeric values; donor adds a versioned, typed, length-prefixed codec with backward decoding. Donor coefficients are not adopted automatically.
