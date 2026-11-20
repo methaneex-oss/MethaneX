@@ -3245,3 +3245,8 @@ Two further DF-02 supplements pin exact source/test regressions.
 - [Affective Decision and Orphaned Brain API Audit](DF02_AFFECTIVE_DECISION_AND_ORPHANED_BRAIN_API_AUDIT_2026-11-20.md): candidate DecisionContext/DecisionPolicy omit donor affective dimensions and weights; the public Brain API lacks `choose_with_affect`. A candidate `brain_restored_api.cpp` is uncompiled by CMake, duplicates many definitions already in `brain.cpp`, and references AssociationModel methods absent from the candidate API. Adding it to CMake directly would not be safe.
 
 No runtime or CMake changes were made. DF-02 remains OPEN for the remaining candidate paths and full dependency/duplicate-owner/retention/authority closure.
+
+
+## 67. Attention, self-model and evolution-recovery audit — 2026-11-20
+
+[DF-02 Attention, Self-Model and Evolution-Recovery Audit](DF02_ATTENTION_SELF_MODEL_AND_EVOLUTION_RECOVERY_AUDIT_2026-11-20.md) records three additional candidate regressions: attention no longer scores prediction error/internal activation; self-model no longer incrementally updates capability performance from action outcomes; and evolution transaction compensation resets to baseline instead of restoring the exact previous value. The donor evolution Brain-integration suite has 97 assertions versus seven in the candidate. The report flags fixed donor weights/rates for separate design review rather than blind adoption. No runtime changes were made.
