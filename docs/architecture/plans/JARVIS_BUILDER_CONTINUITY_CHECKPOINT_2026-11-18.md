@@ -1700,3 +1700,8 @@ The Builder verified the candidate PR #192 source tree at exact base `61311fe5b4
 ## 69. Donor PR #97 build/test/sanitizer verification — 2026-11-20
 
 Verified exact donor HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`: JARVIS Core Verification #40788714735 passed configure/build/test and 71/71 CTest; Brain CI #40788714686 passed native-brain and ASan/UBSan configure/build/test, each 71/71. The logs explicitly show DLT-001 trial and DLT-002 persistence train/verify passing. This establishes the donor line is buildable and its registered suite passes; it does not establish an extended four-hour or open-world transfer result, nor adoption. See `DF02_AFFECTIVE_AND_DEVELOPMENTAL_SUBSYSTEM_BASELINE_GAP_2026-11-20.md` §6.
+
+
+## 70. DF-02 causal feedback and codec finding — 2026-11-20
+
+The candidate causal model does not evaluate existing hypotheses against the next observed outcome; it only adds/strengthens co-occurrence links. Donor `observe_outcome` checks predicted versus actual beliefs and records contradiction/weakening. Candidate codec is untyped `key=value`, so strings such as `true`/ `42` and keys containing `=` can be corrupted; donor adds a versioned typed length-prefixed codec. Candidate phase-5 suite is 12 assertions versus donor 46. See `DF02_CAUSAL_FEEDBACK_AND_TYPED_PERSISTENCE_GAP_2026-11-20.md`. No source change; this branch write reopens DF-10.
