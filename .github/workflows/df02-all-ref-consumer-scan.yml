@@ -11,7 +11,7 @@ permissions:
 
 concurrency:
   group: df02-all-ref-consumer-scan
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   all-ref-scan:
