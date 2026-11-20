@@ -1624,3 +1624,14 @@ Continue with the remaining high-specificity all-ref consumer versions and depen
 The documentation-link parser previously missed `html_inline` child tokens when scanning Markdown paragraphs. The Builder corrected extraction of inline `href`/`src` destinations and `id` anchors, added a `--self-test` fixture covering reference links, tables, strikethrough, inline HTML, duplicate headings and bare HTTP autolinks, and wired that self-test before the full audit in `documentation-link-audit.yml`.
 
 The matching parser logic was exercised locally with `markdown-it-py`; the exact GitHub Actions result for the newly added workflow step has not been retrieved, so no CI-pass claim is made. DF-06 remains NOT MET pending full parser-equivalence, local-fragment, exhaustive external semantic/reachability and authenticated rendered-anchor evidence.
+
+
+## 58. DF-02 compiled-consumer and alternate-branch refinement — 2026-11-20
+
+The Builder used the refined artifact to filter lexical candidates through the candidate CMake/include graph. At candidate branch snapshot `84dd10094cac675b97b1ab2d45b36618d61efe38`, 111 of 118 all-ref donor paths had candidate-branch lexical matches; 107 had source-category matches, 85 had direct compiled-translation-unit matches, and all 123 source/header consumer paths in the bounded graph were reachable from 62 compiled TUs (57 core, five engineering). Candidate test consumer evidence covered 50 paths, with 46 actual registered executables (45 core, one engineering).
+
+Seven donor paths with matches only on other refs were inspected. The `integration/knowledge-composition-20261031` branch contains donor-identical, CMake-compiled affective-planning and contextual-prediction sources with associated test registrations. The `ci/priority-one-validation-20261031` branch contains donor-identical task-ledger header/source/test and CMake integration. These are alternate source-line evidence, not an accepted candidate baseline. Candidate association-causality and reasoning suites are materially reduced (46→12 and 33→19 assertions).
+
+Detailed evidence is in `DF02_COMPILED_CONSUMER_AND_ALTERNATE_BRANCH_ADJUDICATION_2026-11-20.md`, linked from DF-02 §62 and index §126.
+
+DF-02 remains OPEN: the remaining candidate consumer paths still require semantic successor/retention/retirement/non-adoption, dependency, duplicate-owner and authority adjudication. No alternate baseline or donor adoption is selected. This branch-file write reopens DF-10; a new terminal inventory cycle is required after all Builder-owned file work.
