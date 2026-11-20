@@ -105,6 +105,14 @@ def parse_document(path: str, content: str, parser: MarkdownIt) -> tuple[list[di
                             "source": path, "destination": src, "kind": "image",
                             "label": child.attrGet("alt") or child.content,
                         })
+                elif child.type == "html_inline":
+                    for match in re.finditer(r"\\bid\\s*=\\s*['\\\"]([^'\\\"]+)['\\\"]", child.content, re.I):
+                        anchors.add(html.unescape(match.group(1)))
+                    for match in re.finditer(r"\\b(href|src)\\s*=\\s*['\\\"]([^'\\\"]+)['\\\"]", child.content, re.I):
+                        links.append({
+                            "source": path, "destination": html.unescape(match.group(2)),
+                            "kind": "html_inline",
+                        })
                 elif child.type == "text" and link_depth == 0:
                     for match in re.finditer(r"(?<![\w@])(?:https?://|www\.)[^\s<>()]+", child.content, re.I):
                         destination = match.group(0).rstrip(".,;:!?")
@@ -315,8 +323,46 @@ def check_external(url: str) -> dict:
     return {"url": url, "status": None, "final_url": None, "redirects": [], "result": "unreachable", "error": last_error}
 
 
+def self_test(parser: MarkdownIt) -> None:
+    sample = """# Duplicate
+
+# Duplicate
+
+[reference link][target]
+
+[target]: reference.md#section
+
+| Header |
+| --- |
+| [table link](table.md) |
+
+~~[struck link](strike.md)~~
+
+Inline <a href="inline.md#heading">anchor link</a> <span id="inline-anchor"></span>
+
+https://example.test/path
+"""
+    links, anchors = parse_document("self-test.md", sample, parser)
+    destinations = {item["destination"] for item in links}
+    assert "reference.md#section" in destinations
+    assert "table.md" in destinations
+    assert "strike.md" in destinations
+    assert "inline.md#heading" in destinations
+    assert "duplicate" in anchors and "duplicate-1" in anchors
+    assert "inline-anchor" in anchors
+    assert "https://example.test/path" in destinations
+
+
 def main() -> int:
+    import argparse
+    cli = argparse.ArgumentParser()
+    cli.add_argument("--self-test", action="store_true")
+    args = cli.parse_args()
     parser = MarkdownIt("commonmark", {"html": True}).enable(["table", "strikethrough"])
+    if args.self_test:
+        self_test(parser)
+        print("Documentation parser self-test: PASS")
+        return 0
     paths = tracked_markdown()
     tree_paths = {
         line.decode("utf-8")
