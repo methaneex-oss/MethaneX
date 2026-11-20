@@ -14,7 +14,7 @@ AUDIT_TOOL_PATHS = {
     ".github/workflows/df02-all-ref-consumer-scan.yml",
 }
 BINARY_EXTS = {".png",".jpg",".jpeg",".gif",".webp",".ico",".pdf",".zip",".gz",".tar",".7z",".rar",".exe",".dll",".so",".dylib",".a",".o",".obj",".class",".jar",".woff",".woff2",".ttf",".otf",".mp4",".mp3",".wav",".flac",".sqlite",".db",".bin"}
-STOP = {"main","test","tests","run","get","set","create","update","delete","find","read","write","open","close","init","reset","clear","process","execute","handle","on","off","to","from","value","data","id","name","type","status","state","action","memory","brain","runtime","event","context","result","error","config","manager","controller","engine","system","model","base","current","new","old","testcase","suite","string","vector","map","optional","shared_ptr","unique_ptr","size","count","index","begin","end","empty","push_back","emplace","filesystem","path","temp_directory_path","current_path","exists","remove_all","create_directories","ofstream","ifstream","istream","ostream","stringstream","unordered_map","unordered_set","find_if","any_of","all_of","sort","min","max","to_string","chrono","milliseconds","seconds","sleep_for","future","async","thread","mutex","atomic","functional","expected","pair","tuple","span","array","numeric","algorithm","utility","iostream","cassert","exception","runtime_error","invalid_argument","move","forward","make_shared","make_unique","size_t","std"}
+STOP = {"namespace","jarvis","remove","main","test","tests","run","get","set","create","update","delete","find","read","write","open","close","init","reset","clear","process","execute","handle","on","off","to","from","value","data","id","name","type","status","state","action","memory","brain","runtime","event","context","result","error","config","manager","controller","engine","system","model","base","current","new","old","testcase","suite","string","vector","map","optional","shared_ptr","unique_ptr","size","count","index","begin","end","empty","push_back","emplace","filesystem","path","temp_directory_path","current_path","exists","remove_all","create_directories","ofstream","ifstream","istream","ostream","stringstream","unordered_map","unordered_set","find_if","any_of","all_of","sort","min","max","to_string","chrono","milliseconds","seconds","sleep_for","future","async","thread","mutex","atomic","functional","expected","pair","tuple","span","array","numeric","algorithm","utility","iostream","cassert","exception","runtime_error","invalid_argument","move","forward","make_shared","make_unique","size_t","std"}
 
 def git(args: List[str], binary: bool=False) -> bytes | str:
     p = subprocess.run(["git", *args], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
@@ -93,6 +93,9 @@ std::filesystem::path temp_directory_path();
     syms=extract_symbols(sample,"core/cpp/src/developmental_learning.cpp")
     assert {"DevelopmentalLearning","ExperienceMemory","updatePredictionContext"} <= syms
     assert "temp_directory_path" not in syms
+    assert "namespace" not in syms
+    assert "jarvis" not in syms
+    assert "remove" not in syms
     assert is_text_path("core/rust/lib.rs")
     assert category("core/cpp/tests/example_suite.cpp")=="test"
     assert category(".github/workflows/brain-ci.yml")=="workflow"
