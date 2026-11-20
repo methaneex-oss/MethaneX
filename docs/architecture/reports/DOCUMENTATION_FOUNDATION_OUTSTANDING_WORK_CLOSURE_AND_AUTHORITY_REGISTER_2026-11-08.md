@@ -2055,3 +2055,20 @@ The manual crosswalk in DF-02 §59 establishes:
 The candidate's `brain_restored_api.cpp` is present but excluded from CMake and references declarations/members absent from current `brain.hpp`; it cannot be counted as working integration. The all-ref symbol scan is also noisy: `jarvis` and `namespace` contribute 75.24% of all symbol rows and 85.58% of candidate-tip rows. Raw match counts cannot establish dependency closure.
 
 **DF-02 remains OPEN.** This bounded audit is not a substitute for all 159 path dispositions and the 1,148 exact consumer-blob semantic review. No donor adoption or implementation baseline is selected.
+
+
+## 29. Exact-current Builder checkpoint and outstanding evidence — 2026-11-20
+
+At checkpoint parent `20c6e812a98f390d80c8d4d2c0103eb65ad236c3`, the latest verified PR #192 source before this register update was `1c10dd5b71cad4dd13ce4add7a0f41c47a2a265e`; subsequent index/checkpoint synchronization is documented in the continuity checkpoint §53. Live metadata must be re-fetched after this write.
+
+**DF-02 — OPEN.** Exact current donor-tree comparison at candidate `739d108eda6d4b296d7191b31d7883dc59ebf97a`: 1 identical / 95 divergent / 63 absent across 159 paths. All 159 rows link to detailed audit sections, but all remain UNRESOLVED for Option A closure. Current candidate CMake has 57 source units and 45 executable targets / 45 CTest entries versus donor 64 / 71 / 70. The recovered all-ref scan's 1,148 exact consumer-blob versions remain lexical discovery candidates; generic-token skew is substantial. No full all-ref semantic adjudication or Project Director non-adoption decision is claimed.
+
+**DF-06 — NOT MET.** The complete current tree contains 51 tracked Markdown files (281 total tree entries; not truncated). The previous bounded custom-extractor baseline and exact destination delta remain historical, bounded evidence; the full CommonMark/GFM parser discrepancy (345/348/353 counts), local heading fragments, exhaustive external HTTP status/redirect/final-target/claim-relevance checks and authenticated rendered GitHub anchors remain unresolved. The recent DF-02, index and checkpoint updates added no Markdown link destinations under the previously used extraction patterns, but this does not replace a fresh full parser run.
+
+**DF-07 — IN PROGRESS.** Index §121 and checkpoint §53 synchronize the exact evidence and recovery state. The PR description, terminal inventory and superseding review assignment still require synchronization after all Builder-owned report work.
+
+**DF-09 — NOT MET / BLOCKED.** PR #197 and #198 remain parallel, unmerged, unreviewed changes to the same main workflow. The available connector cannot dispatch the required workflow. No exact-final-HEAD blind CLEAR exists.
+
+**DF-10 — REOPENED.** Terminal inventory-only successor must be created after all branch-file writes, including self-review and the superseding reviewer request.
+
+**DF-12 — PROJECT DIRECTOR ONLY / PENDING.** No acceptance, Stage A authorization, donor adoption, source-baseline selection or runtime implementation is inferred. Stage A remains HELD.

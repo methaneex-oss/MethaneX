@@ -661,3 +661,23 @@ The main-branch workflow `.github/workflows/documentation-foundation-ai-reader.y
 Both PRs are open, non-draft, unmerged, and have zero formal review submissions. They modify the same workflow file from the same base; the exact file comparison confirms that PR #197 adds the target-revision packet metadata while PR #198 corrects the prompt line but is based on the original pre-PR197 file. They are not an integrated successor. Merging either in isolation would leave the other required correction unapplied; merging sequentially may require conflict resolution or a combined reviewed successor. No merge or workflow edit is performed by this Builder.
 
 The current GitHub connector exposes no workflow-dispatch action. DF-09 therefore remains **NOT MET / BLOCKED** until the two corrections are combined and independently reviewed, the resulting workflow is accepted and present on main, and an authorized operator dispatches it against the final frozen PR #192 SHA. A successful wrapper run or an assessment on any older target does not qualify; a blind **CLEAR** result is required.
+
+
+## 31. Exact-current tree and destination-set continuity checkpoint — 2026-11-20
+
+**Exact current PR #192 source before this report update:** `20c6e812a98f390d80c8d4d2c0103eb65ad236c3`. The live branch/PR refs must be re-fetched after the report write. The recursive tree at this checkpoint contains 281 entries, is not truncated, and contains 51 tracked Markdown files. PR #192 has 48 changed paths.
+
+The previous full-tree bounded custom-extractor baseline was 345 candidate occurrences (131 local / 214 HTTP(S)); subsequent exact delta work derived 348 (131 local / 217 HTTP(S)) after three PR #198 URL occurrences were added. The historical alternate parser count of 353 remains unreconciled. The 348 figure is not a full CommonMark/GFM count and must not be represented as one.
+
+The subsequent DF-02 semantic audit, exact-current 159-path matrix refresh, index §121 and continuity checkpoint §53 were inspected for Markdown destination additions. They add no Markdown link destinations under the prior custom extractor's supported patterns; therefore the previously recorded bounded destination set is unchanged by those updates. This is a delta observation, not a fresh all-51-file parse or proof that every local fragment is valid.
+
+**Current exact evidence boundary:**
+- Complete tree and 51 Markdown file count: verified.
+- Historical bounded local-target result: 131/131 targets resolved at its exact recorded source snapshot; it is not silently promoted to a current full-parser result.
+- Full current CommonMark/GFM parser reconciliation: NOT COMPLETE.
+- Local heading-fragment and duplicate-heading anchor validation: NOT COMPLETE.
+- Exhaustive unique external URL HTTP status, redirect chain, final target and semantic relevance: NOT COMPLETE.
+- Authenticated rendered GitHub heading, line-range and issue-comment anchor landing: NOT VERIFIED. Source API fetches and line-bound checks are not browser-rendering evidence.
+- PR #197/#198 workflow changes remain separate unmerged proposals; DF-09 remains blocked as recorded in §30.
+
+**Disposition:** DF-06 remains **NOT MET** under the Project Director's Option A. No authenticated rendered-anchor success, exhaustive external-link pass, or full parser equivalence is claimed.
