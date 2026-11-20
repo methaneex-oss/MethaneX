@@ -53,12 +53,22 @@ The initial completion-gate report §6 defines DF-01–DF-12. This matrix record
 
 ## Related live workstreams
 
-| PR | Live HEAD / exact reference | State / boundary |
+| PR | Live HEAD / base / state | Authority and dependency boundary |
 |---|---|---|
-| #171 — whole-system architecture foundation | Existing SYS-01–SYS-11 foundation | Preserve; do not duplicate in Stage A |
-| #192 — Documentation Foundation | `63d7fbcc4821b54c53b275cc1ab6310f0853b2a8` at checkpoint parent | Open/non-draft/unmerged; final terminal inventory and review assignment still pending |
-| #198 — blind-reader workflow prompt correction | `84bbc940696ba77f80c78ae85b886e1353c552a0` | Open/non-draft/unmerged; one workflow file; no merge or dispatch |
-| #199 — all-ref consumer discovery | `6429c777f033d049ed1ca777f6584046f3ce0567` | Open/non-draft/unmerged; read-only scan workflow and artifact; not semantic adjudication |
+| #171 — whole-system architecture foundation | `b05434758ad4fe72815503f89bd5d2990ccb658b`; open/draft/unmerged | Existing SYS-01–SYS-11 whole-system foundation; preserve and do not duplicate in Stage A |
+| #173 — Brain Foundation Architecture | `a96af5b18d3a1d580ff56cff6191240893bceeb5`; main @ `1273ddbcd0087d189e01388ded2d362fb1e058d2`; open/draft/unmerged | Director accepted BFA-C01–C14 at exact `f8dd67...` (comment #6894239520); not whole-architecture acceptance. Latest xAI reviews are PARTIALLY CLEAR on older `276d...` / `1f137...`; current head has no review. CF-26/CF-27 and whole-architecture acceptance remain open |
+| #174 — Brain Mechanism Specification | `c34472354e4122fc1d78dc25bf45d81f1eb4dc69`; base PR #173 @ `97191111bc2573c14d391c0af9628db7b11f194b`; open/draft/unmerged | Accepted planning baseline remains exact `0811a59...` by comment #6604790481. Later corrected proposal review was PARTIALLY CLEAR on `7cb627...`; current head has no review and no new Director acceptance. F-02/F-03 follow-on provenance remains bounded |
+| #175 — Brain Implementation Planning | `6dd3add8fe7b5d71a5038ca3cf7807330085840f`; base PR #174 accepted baseline @ `0811a59...`; open/draft/unmerged | Planning only; Gate A not cleared, Gate B not passed, no runtime source baseline selected |
+| #178 — project governance rules proposal | `39fe09dcf13496f5f0005ccf3f00739303e29f88`; main @ `1273ddb...`; open/draft/unmerged | Six-path proposal branch; no formal review. Do not infer whole-PR acceptance from the accepted governance descendant in PR #196 |
+| #179 — Phase 2 capability-to-source map | `ea64607ef94f142a6142a013e119a7225bc95c1c`; base PR #178 @ `39fe09...`; open/draft/unmerged | Project Director selected it as canonical working map, not accepted Phase 2 authority. No formal review. PR #192 uses this branch as its base |
+| #180 — earlier Phase 2 map proposal | `6ca140300b914ed981a50301bbf1d82a5bfe4d8b`; closed/unmerged | One-path historical precursor; superseded by PR #179 as canonical working map. Preserve history; do not merge |
+| #191 — human/MCU comparison | `609d38ede50bbdd98a93dfed112781eacabee9fd`; base PR #179 historical SHA @ `f626745...`; open/draft/unmerged | Director Option A: retain as separate bounded reference (comment #6836333027); no replay, retarget, rebase or merge |
+| #192 — Documentation Foundation | `85bf5f39a47056c6b62e10cf50df0d5321f0277b` at this checkpoint; base branch PR #179 @ `ea646...`; open/non-draft/unmerged | 795 ahead / 14 behind current base; diverged but GitHub mergeable=true. DF-12 pending; no merge/rebase/retarget |
+| #195 — AI role terminology | `fe8a3b6216f874c7ab35e3c8d9489b5caf8ffd37`; merged to main | Workflow/role terminology changes integrated; F-195-07 remains a separate residual |
+| #196 — Builder operating controls | `0ebc4e978fa38011b2f6bb5d97a03c267c1c12c9`; merged into PR #179 branch on 2026-11-12 | Governance source blob `f5827c...` at PR #179 tip `ea646...` is Director-accepted and independently verified; it is not merged to main and does not accept PR #179/Phase 2 |
+| #197 — reader-visible exact target revision | `2b2bfd9afe6e1325119f7ccee507bb04e71aa343`; main @ `4f07d772...`; open/non-draft/unmerged | One workflow file; adds target-revision metadata to blind-reader packet; no formal review |
+| #198 — blind-reader current-state prompt correction | `84bbc940696ba77f80c78ae85b886e1353c552a0`; main @ `4f07d772...`; open/non-draft/unmerged | Same workflow file as PR #197; removes stale dated heading; no formal review. The two PRs are parallel changes and are not yet combined on main |
+| #199 — all-ref consumer discovery | `6429c777f033d049ed1ca777f6584046f3ce0567`; main @ `4f07d772...`; open/non-draft/unmerged | Read-only scan workflow and artifact; no formal review. Artifact is discovery evidence, not semantic adjudication |
 
 ## Execution and authority boundary
 
@@ -1869,3 +1879,38 @@ The 159-row blob matrix is current at the checkpoint parent: all 96 candidate-pr
 DF-06's exact delta from the previous 51-file custom extraction baseline is recorded in its audit. Three new HTTP(S) occurrences reference PR #198; two Phase 2 map line destinations were corrected. No local destination changed in the nine Markdown files in the exact delta. This is not a full parser rerun, fragment validation, exhaustive external review or authenticated rendered-browser verification. DF-06 remains NOT MET.
 
 DF-09 remains blocked: PR #198 is not merged, the corrected workflow is not yet on main, and no exact-final-HEAD blind CLEAR run exists. DF-10 remains open pending the terminal inventory-only successor. DF-12 remains Project Director-only. Stage A remains HELD.
+
+
+
+## 119. Authority provenance and branch dependency adjudication — 2026-11-20
+
+### 119.1 PR #173 and #174: exact decisions, not blanket acceptance
+
+- PR #173 comment #6752144835 is a repository-side transcription of the Project Director's 2026-11-03 acceptance of exact HEAD `97191111bc2573c14d391c0af9628db7b11f194b` as the Brain Foundation Architecture planning baseline, with authority to proceed to the detailed specification stage only.
+- PR #173 comment #6894239520 is a direct Project Director decision accepting BFA-C01–BFA-C14 at exact HEAD `f8dd67fc866242d29298ffc6a03a8782a4e6982c`. It explicitly does **not** accept the whole architecture or clear CF-26/CF-27.
+- The latest xAI reviews #5934712837 and #5939837636 are PARTIALLY CLEAR against older PR #173 heads `276d276...` and `1f137c...`. Live PR #173 HEAD is now `a96af5b18d3a1d580ff56cff6191240893bceeb5`; no review verdict is recorded against that exact current head. Whole-architecture acceptance and CF-26/CF-27 remain open.
+- PR #174 comment #6604790481 directly accepts exact HEAD `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` as the Brain Mechanism Specification planning baseline, clears F-01, and records the BM-07 clarification as non-blocking. It does not authorize implementation.
+- The latest xAI PR #174 review #5911251137 is PARTIALLY CLEAR against `7cb6271531f3e80a45728756273218132499722e`; current PR #174 HEAD is `c34472354e4122fc1d78dc25bf45d81f1eb4dc69`, with no review against that exact head and no new Director acceptance. Follow-on F-02/F-03 themes are recovered secondarily; the full original report/inline annotations are not present in the repository. Director comment #6894260023 confirms the original shared-conversation pointer was accessible to the Director, but is not an immutable transcript.
+
+### 119.2 PR #178 / #179 / #180 / #196: accepted governance source versus working Phase 2 map
+
+- PR #178 remains open/draft/unmerged at `39fe09dcf13496f5f0005ccf3f00739303e29f88`, with no formal review submission.
+- PR #179 remains open/draft/unmerged at `ea64607ef94f142a6142a013e119a7225bc95c1c`, based on PR #178's exact head. It is the Project Director-selected canonical **working** Phase 2 map, not an accepted Phase 2 deliverable; no formal review submission exists.
+- PR #180 is closed/unmerged at `6ca140300b914ed981a50301bbf1d82a5bfe4d8b` and remains a preserved historical precursor, not an alternate active canonical map.
+- PR #196 merged into the existing Phase 2 branch on 2026-11-12. Its governance amendment was accepted by the Project Director at `f67cff57b27bfc5bf430827de259f13caaba50a6` and independently verified by xAI at the same exact revision. The merged governance source at PR #179 tip `ea646...` is blob `f5827c552f36f4647339b3f8dfb38956d146c570`. This acceptance is for the governance standard; it is not acceptance of PR #178 as a whole, PR #179's Phase 2 map, or a main-branch merge.
+- PR #191 remains open/draft/unmerged at `609d38ede50bbdd98a93dfed112781eacabee9fd`. Director comment #6836333027 explicitly selects Option A: retain it as a separate bounded reference and do not replay or rewrite its history.
+
+### 119.3 PR #192 dependency and reader-workflow blockers
+
+PR #192 is based on the PR #179 Phase 2 branch. At checkpoint parent `85bf5f39a47056c6b62e10cf50df0d5321f0277b`, it is 795 commits ahead / 14 behind the live base tip `ea646...`, diverged, and GitHub reports mergeable=true. The base chain still includes PR #178 as PR #179's base. No merge, rebase, retarget or source-baseline selection is inferred.
+
+PR #197 and PR #198 both target the same main-branch workflow path, `.github/workflows/documentation-foundation-ai-reader.yml`, from the same main base `4f07d772...`:
+- PR #197 blob `68040680ca99ed16a8ead0f0b99985542e9a48a6` adds the exact target revision to the reader-visible packet.
+- PR #198 blob `86abcb3a6bdbeafa1c29841a3c42c2ff1ff50f56` replaces the stale hard-coded 2026-11-17 index heading with an instruction to read the first controlling `CURRENT EXACT STATE` block.
+- Both are open/unmerged and have zero formal review submissions. Their changes are parallel and have not been integrated together. Do not treat either branch alone as a complete corrected workflow or dispatch it as such.
+
+### 119.4 DF-03 / DF-05 disposition
+
+DF-03 remains **PARTIAL**: exact authority is now more precisely mapped (PR #173 planning-baseline transcription, BFA-C01–C14 direct acceptance, PR #174 accepted historical specification baseline, PR #191 separate-retention decision, and PR #196 accepted governance amendment). The current PR #173 whole architecture, current PR #174 corrected proposal, and PR #179 Phase 2 map do not have current exact-head acceptance.
+
+DF-05 remains **PARTIAL**: the branch graph and accepted governance descendant are now explicit, but PR #192's integration order against the PR #179 → PR #178 chain remains an authority decision. No branch-history operation is authorized by this evidence.

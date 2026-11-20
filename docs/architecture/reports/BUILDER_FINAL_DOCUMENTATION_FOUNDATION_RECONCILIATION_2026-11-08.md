@@ -765,3 +765,18 @@ The scan candidate `32722f104f76817983b0156cca821949e406b8c1` and current PR #19
 DF-06's exact nine-Markdown-file delta from the prior custom-parser source adds three occurrences of PR #198, replaces two commit-pinned source URLs with corrected line ranges, and adds/removes no local destination. The derived 348-occurrence count is not a full parser rerun; authenticated rendered anchors remain unverified.
 
 **Builder self-review verdict:** evidence integrity and current-state reconciliation improved. DF-02, DF-06 and DF-09 remain open/not met; DF-10 remains reopened. No independent verdict, Tester verdict, Project Director acceptance, merge approval or Stage A authorization is claimed.
+
+
+
+## 28. Adversarial self-review — authority and branch dependency scope — 2026-11-20
+
+The authority audit now distinguishes:
+- PR #173's historical planning-baseline acceptance (a conversation-history transcription) from the direct BFA-C01–C14 decision at exact `f8dd67...`; neither accepts the current whole architecture.
+- PR #174's accepted historical specification baseline `0811a59...` from its later corrected proposal, which has only a PARTIALLY CLEAR review on older `7cb627...`.
+- PR #196's accepted governance amendment (merged into the PR #179 Phase 2 branch) from acceptance of PR #178 as a whole or PR #179's Phase 2 map.
+- PR #179's canonical-working-map status from formal acceptance; PR #191's explicit separate-retention decision from integration.
+- PR #197's target-revision packet improvement from PR #198's stale-heading correction. They are parallel, unreviewed changes to the same main workflow, not a combined accepted successor.
+
+The current dependency chain is not a reason to retarget or merge automatically. PR #192 remains based on PR #179; PR #179 is based on PR #178. The live comparison is diverged but GitHub reports mergeable=true. No authority is inferred from this status.
+
+**Self-review verdict:** DF-03 and DF-05 remain PARTIAL, DF-09 remains NOT MET/BLOCKED, DF-12 remains Project Director-only. No current exact-head architecture/specification acceptance, branch integration order, independent review, merge, or Stage A activation is claimed.

@@ -648,3 +648,16 @@ Using the same bounded custom extractor, the prior 51-file whole-tree baseline w
 The new PR #198 destination resolves to an open, non-draft, unmerged, one-file PR whose live head is `84bbc940696ba77f80c78ae85b886e1353c552a0`; GitHub reports mergeable=true. It is a proposed workflow correction, not an active main-branch change. The two corrected Phase 2 map line destinations are within the previously verified 73/73 exact source line-range tuples; that check is source-line bounds, not rendered-browser landing.
 
 **Disposition:** this delta adds no local-path regression under the existing bounded extractor. It does not close the full parser discrepancy, local heading fragments, exhaustive external status/redirect/final-destination/semantic relevance, or authenticated rendered GitHub heading/line/comment anchor verification. DF-06 remains **NOT MET** under Option A.
+
+
+
+## 30. Blind-reader workflow correction PR dependency — 2026-11-20
+
+The main-branch workflow `.github/workflows/documentation-foundation-ai-reader.yml` is still at blob `585c9399318b0af17514a95a5c435d497a76234a`. Two parallel one-file PRs are open against the same main base `4f07d772beae03c99a8dd58b174201a3aa3074b2`:
+
+- PR #197 head `2b2bfd9afe6e1325119f7ccee507bb04e71aa343`, workflow blob `68040680ca99ed16a8ead0f0b99985542e9a48a6`. It adds the exact target revision to the reader-visible packet and manifest.
+- PR #198 head `84bbc940696ba77f80c78ae85b886e1353c552a0`, workflow blob `86abcb3a6bdbeafa1c29841a3c42c2ff1ff50f56`. It removes the stale hard-coded `CURRENT EXACT STATE — 2026-11-17` heading and tells the reader to use the first controlling `CURRENT EXACT STATE` block.
+
+Both PRs are open, non-draft, unmerged, and have zero formal review submissions. They modify the same workflow file from the same base; the exact file comparison confirms that PR #197 adds the target-revision packet metadata while PR #198 corrects the prompt line but is based on the original pre-PR197 file. They are not an integrated successor. Merging either in isolation would leave the other required correction unapplied; merging sequentially may require conflict resolution or a combined reviewed successor. No merge or workflow edit is performed by this Builder.
+
+The current GitHub connector exposes no workflow-dispatch action. DF-09 therefore remains **NOT MET / BLOCKED** until the two corrections are combined and independently reviewed, the resulting workflow is accepted and present on main, and an authorized operator dispatches it against the final frozen PR #192 SHA. A successful wrapper run or an assessment on any older target does not qualify; a blind **CLEAR** result is required.

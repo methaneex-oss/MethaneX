@@ -1456,3 +1456,22 @@ Added \`DF02_EXACT_REF_159_PATH_BLOB_COMPARISON_2026-11-20.csv\`, a per-path don
 ### 50.5 Non-negotiable boundaries
 
 No merge, rebase, retarget, branch rewrite, implementation, runtime source/test/CMake/workflow change, donor adoption, source-baseline selection, training, integration, deployment, independent verdict, DF-12 acceptance or Stage A activation. Stage A remains **NOT STARTED / HELD**. Stop for the Project Director's decision only after Builder-owned evidence and the terminal inventory are complete; do not relabel externally blocked or reserved items as passed.
+
+
+
+## 51. Authority and DF-09 dependency checkpoint — 2026-11-20
+
+### 51.1 Exact authority distinctions
+
+- PR #173: Director provenance transcription #6752144835 accepted historical HEAD `97191111...` as the planning baseline. Direct Director comment #6894239520 separately accepted BFA-C01–C14 at `f8dd67...`, not the whole architecture. Latest xAI reviews are PARTIALLY CLEAR on older heads; current head `a96af5...` has no review.
+- PR #174: Director comment #6604790481 accepted exact historical baseline `0811a59...`; latest xAI follow-on review is PARTIALLY CLEAR on older `7cb627...`; current head `c344723...` has no review or new Director acceptance.
+- PR #196 governance amendment was accepted by the Director, independently verified, and merged into PR #179's Phase 2 branch. The accepted governance file is blob `f5827c...` at `ea646...`; it is not merged to main and does not accept PR #179's Phase 2 map.
+- PR #179 is the canonical working Phase 2 map but remains open/draft/unmerged and based on PR #178. PR #180 is closed/unmerged as a historical precursor. PR #191 is retained separately by explicit Director Option A.
+
+### 51.2 DF-09 workflow dependency
+
+PR #197 and PR #198 are parallel unmerged one-file PRs against the same main base and same workflow path. PR #197 adds exact-target metadata; PR #198 corrects the stale dated heading. Neither has a formal review. They must be integrated into one independently reviewed workflow successor before dispatch. The current connector cannot dispatch workflow runs. DF-09 remains NOT MET/BLOCKED.
+
+### 51.3 Decision boundary
+
+DF-03 and DF-05 remain PARTIAL; the exact authority and branch graph is now recorded in the provenance report §12 and index §119. The remaining current-proposal acceptance and PR #192 integration-order choices belong to the Project Director. Do not infer them from accepted historical baselines or branch mergeability.

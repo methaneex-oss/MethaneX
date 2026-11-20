@@ -2023,3 +2023,17 @@ The scan candidate SHA `32722f104f76817983b0156cca821949e406b8c1` and current PR
 DF-06's bounded exact delta from the prior 51-file custom extraction adds three HTTP(S) occurrences of the same PR #198 URL, replaces two corrected commit-pinned line URLs and changes no local destination in the nine changed Markdown files. The derived custom-extractor count is 348 (131 local / 217 HTTP(S)); it is not a new complete parser run. DF-06 remains NOT MET.
 
 DF-09 remains NOT MET/BLOCKED pending normal review and Project Director acceptance/merge of PR #198, exact main-workflow re-fetch, authorized dispatch against the final frozen PR #192 SHA and a blind CLEAR result. DF-10 remains REOPENED until the final inventory-only successor. DF-12 remains Project Director-only. Stage A remains HELD.
+
+
+
+## 27. Authority and reader-workflow dependency reconciliation — 2026-11-20
+
+DF-03 and DF-05 were refreshed against live PR metadata and direct decision/review comments. PR #173's historical planning-baseline transcription (#6752144835) and direct BFA-C01–C14 acceptance (#6894239520) are distinct and limited; current PR #173 head `a96af5...` remains without a current review/whole-architecture acceptance. PR #174's accepted historical baseline is `0811a59...`; the corrected proposal review was PARTIALLY CLEAR on `7cb627...`, not current head `c344723...`. PR #196's governance amendment is Director-accepted, independently verified and merged into PR #179's Phase 2 branch, but not main. PR #179 is a canonical working map, not accepted Phase 2 authority; it remains based on PR #178. PR #191 is retained separately by explicit Director decision.
+
+PR #197 and PR #198 are parallel unmerged changes to the same main-branch reader workflow: exact target revision metadata and stale-heading correction respectively. Both have zero formal review submissions. Their integrated successor must be reviewed and merged before an authorized exact-final-HEAD dispatch. The connected GitHub tool set exposes no workflow-dispatch operation.
+
+Current Builder dispositions:
+- DF-03: **PARTIAL** — accepted scopes are accurately mapped; current proposal acceptances and residual provenance limits remain.
+- DF-05: **PARTIAL** — branch ancestry and dependency chain are explicit; PR #192 integration order remains a Project Director decision.
+- DF-09: **NOT MET / BLOCKED** — PR #197/#198 are not integrated/reviewed; no dispatch and no final-target CLEAR.
+- DF-12: **PROJECT DIRECTOR ONLY**.

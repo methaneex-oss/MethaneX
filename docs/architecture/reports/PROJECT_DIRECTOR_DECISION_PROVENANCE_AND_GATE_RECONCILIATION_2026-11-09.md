@@ -389,3 +389,24 @@ The previously cited recovery-report path docs/architecture/reports/PR_174_FOLLO
 - DF-11 remains a separate reviewer-qualification/exact-head issue; the fresh-reader substitution does not waive it.
 - PR #174 F-02/F-03, PR #191 disposition, PR #192/#193 integration order, DF-11 qualification, and DF-12 final exact-revision acceptance remain unresolved authority/evidence items.
 - No merge, close, rebase, retarget, cherry-pick, implementation, or Stage A release was performed.
+
+
+
+## 12. Exact authority decisions and live branch dependencies — 2026-11-20
+
+The live PR metadata and exact Project Director/reviewer comments were re-fetched. The following distinctions are now authoritative for this Builder checkpoint:
+
+| Artifact / branch | Exact evidence | Correct scope |
+|---|---|---|
+| PR #173 historical planning baseline | Director provenance transcription comment #6752144835; exact HEAD `97191111...` | Accepted as Brain Foundation Architecture planning baseline; proceed to detailed specification only |
+| PR #173 BFA decisions | Direct Director comment #6894239520; exact HEAD `f8dd67...` | BFA-C01–C14 accepted only; not whole-architecture acceptance |
+| PR #173 current proposal | Live HEAD `a96af5...`; latest xAI reviews #5934712837 / #5939837636 are PARTIALLY CLEAR on older SHAs | No review or Director acceptance on current head; whole architecture and CF-26/CF-27 remain open |
+| PR #174 accepted specification baseline | Direct Director comment #6604790481; exact HEAD `0811a59...` | Accepted planning baseline; F-01 cleared; BM-07 clarification non-blocking; no implementation authorization |
+| PR #174 corrected proposal | Live HEAD `c344723...`; xAI review #5911251137 PARTIALLY CLEAR on older `7cb627...` | No current-head review or new Director acceptance; follow-on F-02/F-03 provenance remains bounded |
+| PR #178 governance proposal | Live HEAD `39fe09...`; open/draft/unmerged; no formal review | Proposed branch, not accepted as a whole |
+| PR #179 Phase 2 map | Live HEAD `ea646...`; based on PR #178; open/draft/unmerged; no formal review | Canonical working map by Director selection; not accepted Phase 2 authority |
+| PR #180 earlier map | Closed/unmerged at `6ca140...` | Preserved historical precursor; superseded as canonical working map |
+| PR #196 governance amendment | Merged into PR #179 branch; Director acceptance at `f67cff...`; xAI verification APPROVED at same SHA | Accepted governance standard at PR #179 tip blob `f5827c...`; not merged to main and not Phase 2 acceptance |
+| PR #191 human/MCU comparison | Direct Director Option A comment #6836333027 | Retain as separate bounded reference; no replay or branch rewrite |
+
+The PR #192 base chain and parallel reader-workflow PRs are detailed in DF02 §58 and the index §119. DF-03 and DF-05 remain PARTIAL because current proposal acceptance and integration-order decisions are not established. No Builder inference substitutes for those decisions.

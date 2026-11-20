@@ -2984,3 +2984,17 @@ Accordingly, this run does **not** establish:
 The existing §§16–50 audits remain the detailed semantic comparisons and the §53 crosswalk remains navigation-only. The all-ref artifact substantially improves the reverse-consumer discovery input, but manual exact-blob adjudication and reserved authority decisions remain open.
 
 **Disposition:** artifact integrity and current-candidate blob continuity are Builder-verified. DF-02 remains **OPEN**. No source baseline is selected and no donor code is adopted.
+
+
+
+## 58. Authority and dependency lineage revalidated against live PR records — 2026-11-20
+
+The current exact authority and branch-dependency graph is recorded in `PROJECT_DIRECTOR_DECISION_PROVENANCE_AND_GATE_RECONCILIATION_2026-11-09.md` §12 and the controlling index §119. Key boundaries:
+- PR #173's historical planning-baseline acceptance and later BFA-C01–C14 acceptance are two separate decisions; neither accepts the current whole architecture.
+- PR #174's accepted historical specification baseline remains `0811a59...`; the current corrected proposal has only a PARTIALLY CLEAR review on an older exact SHA.
+- PR #196's governance amendment is accepted and merged into the PR #179 Phase 2 branch, but is not merged to main and does not accept the Phase 2 map.
+- PR #179 is the canonical working Phase 2 map, not an accepted deliverable; it is based on PR #178. PR #192 uses PR #179 as its base.
+- PR #191 remains a separate bounded reference by explicit Director decision.
+- PR #197 and #198 are parallel, unmerged changes to the same main-branch reader workflow; neither alone represents the combined exact-target packet and corrected prompt.
+
+DF-03 and DF-05 remain **PARTIAL**. The evidence now distinguishes exact accepted scopes from current proposals and branch dependencies; the remaining choices are reserved to the Project Director. No merge, retarget, rebase, donor adoption or phase acceptance is inferred.
