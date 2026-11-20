@@ -2085,3 +2085,14 @@ DF-06 remains **NOT MET**. The full 51-file CommonMark/GFM parser discrepancy, a
 DF-09 remains **NOT MET / BLOCKED**. PR #197/#198 are parallel, unmerged and unreviewed changes to the same main workflow; this connection exposes no workflow-dispatch action; no final-target blind CLEAR exists. DF-10 remains **REOPENED** pending the terminal inventory-only successor. DF-12 remains **PROJECT DIRECTOR ONLY / PENDING**. DF-03 and DF-05 remain partial; DF-08 is resolved only within its bounded criterion; DF-11 remains waived as a mandatory gate.
 
 This register update is pre-terminal. The final inventory must record the exact parent and all 48 path/blob identities after this synchronization. No branch-file writes may follow the inventory-only successor.
+
+
+## 31. DF-02 refined all-ref scan and no-symbol path adjudication — 2026-11-20
+
+The refined scan artifact `14659828741` from workflow `44799437811` was downloaded and SHA-256 verified (`3a7d90b475564097a2ccf1de3f4492659b4417a7d46d3e193d9c95ff7b78ab22`). It covers 254 remote branch refs / 213 unique tips, 1,397 text blobs, 724 API-like donor identifiers, 40,032 lexical candidate rows, 1,208 full consumer blobs and 1,134 exact consumer-blob/path/category versions.
+
+The Builder inspected the 41 donor paths without remaining lexical symbol candidates and recorded exact dispositions in [DF-02 No-Symbol Path Semantic Adjudication Supplement](DF02_NO_SYMBOL_PATH_SEMANTIC_ADJUDICATION_SUPPLEMENT_2026-11-20.md), linked from DF-02 §61 and index §124. The 159-path matrix was refreshed against the exact complete-tree candidate snapshot `cbc51e2b10f1fc976257653adf773735a2b27d49`; result remains 1 identical / 95 divergent / 63 absent. Refresh commit: `e441e56467fa9d3fa56d4f354cf9ec119053db2b`.
+
+**DF-02 remains OPEN.** The 118 paths with lexical candidates and the 1,134 exact consumer versions still require semantic consumer/dependency/duplicate-owner adjudication; authority, retirement and non-adoption decisions remain distinct and cannot be inferred from scanner output.
+
+DF-06 remains NOT MET; DF-09 remains NOT MET/BLOCKED; DF-10 must be reverified after all Builder-owned file writes; DF-12 remains Project Director-only/pending. No runtime implementation, donor adoption, source-baseline selection, Stage A start, merge, rebase or retarget is authorized.
