@@ -1760,3 +1760,17 @@ DF-06 §24 records that the approved main workflow is \`.github/workflows/docume
 | DF-12 | Project Director only |
 
 Stage A remains HELD. No runtime implementation or donor adoption is authorized.
+
+
+## 114. Exact-current PR #198 workflow-prompt correction dependency — 2026-11-20
+
+The main-branch blind fresh-reader workflow's stale dated index-heading instruction was corrected in separate PR [#198](https://github.com/methaneex-oss/MethaneX/pull/198), not directly on \`main\`.
+
+- Main parent: \`4f07d772beae03c99a8dd58b174201a3aa3074b2\`.
+- Proposed head: \`84bbc940696ba77f80c78ae85b886e1353c552a0\`.
+- Exact changed path: \`.github/workflows/documentation-foundation-ai-reader.yml\` only.
+- Workflow blob: \`585c939...\` → \`86abcb3...\`.
+- Compare: 1 ahead / 0 behind; one line replaced.
+- PR state: open, non-draft, unmerged, mergeable=true / unstable; no review or CI verdict recorded.
+
+This is a proposed workflow correction, not a live \`main\` change. DF-09 remains NOT MET / BLOCKED until PR #198 is accepted and merged, the main workflow blob is re-fetched, and the corrected workflow is dispatched against the final terminal PR #192 SHA with a CLEAR result. The Builder cannot dispatch using the current GitHub connector.

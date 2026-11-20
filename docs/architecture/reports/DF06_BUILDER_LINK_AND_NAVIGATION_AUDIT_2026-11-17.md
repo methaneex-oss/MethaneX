@@ -542,3 +542,22 @@ The correct main workflow exists, exact-target checkout and provider/model valid
 - the historical 31/32 PARTIALLY CLEAR result is not transferable.
 
 **Disposition:** DF-09 remains **NOT MET / BLOCKED**. Smallest next actions: authorize and correct the main-branch workflow prompt; then have an authorized operator dispatch the corrected workflow against the final terminal PR #192 SHA and preserve its raw assessment artifact. A CLEAR verdict is still required by the controlling runbook.
+
+
+## 25. Workflow correction dependency — PR #198 exact evidence — 2026-11-20
+
+The stale main-branch blind-reader instruction identified in §24 has been corrected in a separate, scope-contained pull request rather than modifying \`main\` directly or expanding PR #192's branch.
+
+**Correction PR:** [#198](https://github.com/methaneex-oss/MethaneX/pull/198)  
+**Base:** \`main\` @ \`4f07d772beae03c99a8dd58b174201a3aa3074b2\`  
+**Head:** \`84bbc940696ba77f80c78ae85b886e1353c552a0\`  
+**Changed path:** \`.github/workflows/documentation-foundation-ai-reader.yml\` only  
+**Parent/successor compare:** 1 ahead / 0 behind; one file, one insertion and one deletion.  
+**Parent blob:** \`585c9399318b0af17514a95a5c435d497a76234a\`  
+**Successor blob:** \`86abcb3a6bdbeafa1c29841a3c42c2ff1ff50f56\`
+
+The exact successor fetch confirms the obsolete dated instruction is absent and the generic exact-target-index instruction is present. The workflow's model, provider, rubric, packet, secret, permissions, timeout, response validation and artifact behavior were not changed.
+
+At this checkpoint PR #198 is open, non-draft, unmerged, mergeable=true, mergeable_state=\`unstable\`; no CI status is recorded and no review is assigned. This is a proposed correction, not a merged main-branch workflow revision. It must complete normal review and Project Director acceptance/merge before the corrected workflow is available on \`main\`.
+
+**DF-09 remains NOT MET / BLOCKED.** Do not dispatch the old main workflow and represent its output as satisfying the corrected prompt requirement. After PR #198 is accepted and merged, re-fetch the exact workflow blob on \`main\`, then dispatch the corrected workflow against the final terminal PR #192 SHA and require a CLEAR assessment. No workflow run or blind assessment is claimed here.

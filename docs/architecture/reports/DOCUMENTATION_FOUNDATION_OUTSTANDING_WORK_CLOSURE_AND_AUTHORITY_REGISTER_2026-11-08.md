@@ -1970,3 +1970,10 @@ At PR #192 HEAD \`434ef4a81e6bddb02a27de01e540cbadb104ceae\`, the Builder revali
 - DF-10: remains REOPENED pending the final inventory-only successor after all other branch writes.
 
 No same-identity Builder review is represented as independent review. DF-12 remains Project Director-only. Stage A remains HELD.
+
+
+## 26. DF-09 workflow defect correction PR #198 — 2026-11-20
+
+The main-branch fresh-reader workflow's hard-coded 2026-11-17 index heading was corrected in a separate one-file PR #198. Exact compare is 1 ahead / 0 behind; workflow blob \`585c939...\` → \`86abcb3...\`. PR #198 is open, non-draft, unmerged, mergeable=true/unstable, with no reviewer verdict or CI result recorded.
+
+DF-09 remains NOT MET/BLOCKED until PR #198 is accepted and merged, the corrected workflow is verified on main, and an authorized operator dispatches it against the final frozen PR #192 SHA and obtains a CLEAR result. No old-prompt run may be treated as closure.

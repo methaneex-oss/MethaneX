@@ -707,3 +707,14 @@ No runtime source/test/CMake/workflow changes, donor adoption, source-baseline s
 ### Verdict
 
 Builder evidence mapping improved. DF-02, DF-06 and DF-09 remain open. No independent verdict, Tester verdict, Director acceptance, merge approval or Stage A authorization is claimed.
+
+
+## 26. Adversarial self-review — PR #198 workflow correction dependency — 2026-11-20
+
+- The correction is narrowly scoped: exactly one stale dated sentence replaced; no workflow execution, secret, model, packet, rubric, permissions or validation logic changed.
+- The exact branch compare proves one file and one line changed. This is not yet proof of YAML parser success or runtime workflow success; no CI status or workflow run was observed.
+- The PR is unmerged, so the corrected prompt is not yet available on main. DF-09 remains blocked.
+- The Builder has not dispatched the workflow or produced a blind-reader verdict. The exact terminal PR #192 SHA does not exist yet because DF-10 remains open.
+- The Builder cannot provide the independent reviewer verdict under Governance Rule 17.3 or substitute self-review for independent review under Rule 22.6.
+
+**Disposition:** PR #198 is a proposed root-cause correction. It needs normal independent review and Project Director acceptance before merge. No DF-09 clearance, independent review, Director decision or Stage A authorization is claimed.

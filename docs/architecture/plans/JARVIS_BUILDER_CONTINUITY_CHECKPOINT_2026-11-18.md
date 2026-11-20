@@ -1337,3 +1337,17 @@ The PR description remains stale and must be updated to the live head/base/merge
 - DF-12: **PROJECT DIRECTOR ONLY**.
 
 No implementation, donor adoption, source-baseline selection, training, integration, independent verdict, Director acceptance, merge or Stage A authorization occurred. PR #171 SYS-01–SYS-11 remains the existing whole-system architecture foundation.
+
+
+## 47. DF-09 workflow defect correction PR and exact-current dependency — 2026-11-20
+
+**PR #192 exact HEAD before this checkpoint update:** \`e6164132ffbeeea2afb0b4989e4c95abc066738b\`.  
+**PR #198:** \`fix(reader): remove stale current-state heading from blind assessment\` — [PR #198](https://github.com/methaneex-oss/MethaneX/pull/198).  
+**PR #198 base:** \`main\` @ \`4f07d772beae03c99a8dd58b174201a3aa3074b2\`.  
+**PR #198 head:** \`84bbc940696ba77f80c78ae85b886e1353c552a0\`.  
+**Exact change:** one line replaced in \`.github/workflows/documentation-foundation-ai-reader.yml\`; parent blob \`585c9399318b0af17514a95a5c435d497a76234a\`; successor blob \`86abcb3a6bdbeafa1c29841a3c42c2ff1ff50f56\`.  
+**Comparison:** 1 ahead / 0 behind; one changed path. Exact successor fetch confirms the old 2026-11-17 heading is absent.
+
+PR #198 is open, non-draft, unmerged and mergeable=true (\`unstable\` mergeability state). No CI status or reviewer verdict is recorded. The correction is not active on \`main\` until the PR is reviewed and merged through normal authority.
+
+DF-09 therefore remains **NOT MET / BLOCKED**. After PR #198 acceptance/merge, the Builder must verify the live main workflow blob, then an authorized operator must dispatch it against the final frozen PR #192 terminal SHA. The resulting evidence must include the exact target, run ID, artifact digest, provider/model identity, finish reason and raw assessment; a CLEAR result is required. No run or CLEAR is claimed.
