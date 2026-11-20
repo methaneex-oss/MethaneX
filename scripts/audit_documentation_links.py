@@ -71,15 +71,36 @@ def parse_document(path: str, content: str, parser: MarkdownIt) -> tuple[list[di
                 links.append({"source": path, "destination": html.unescape(match.group(2)), "kind": "html"})
 
         if token.type == "inline":
-            for child in token.children or []:
+            children = token.children or []
+            for child_index, child in enumerate(children):
                 if child.type == "link_open":
                     href = child.attrGet("href")
                     if href:
-                        links.append({"source": path, "destination": href, "kind": "markdown"})
+                        label_parts = []
+                        depth = 1
+                        cursor = child_index + 1
+                        while cursor < len(children) and depth:
+                            nested = children[cursor]
+                            if nested.type == "link_open":
+                                depth += 1
+                            elif nested.type == "link_close":
+                                depth -= 1
+                            elif depth and nested.type in {"text", "code_inline", "html_inline"}:
+                                label_parts.append(nested.content)
+                            elif depth and nested.type == "image":
+                                label_parts.append(nested.attrGet("alt") or nested.content)
+                            cursor += 1
+                        links.append({
+                            "source": path, "destination": href, "kind": "markdown",
+                            "label": html.unescape("".join(label_parts)),
+                        })
                 elif child.type == "image":
                     src = child.attrGet("src")
                     if src:
-                        links.append({"source": path, "destination": src, "kind": "image"})
+                        links.append({
+                            "source": path, "destination": src, "kind": "image",
+                            "label": child.attrGet("alt") or child.content,
+                        })
 
     return links, anchors
 
@@ -313,8 +334,21 @@ def main() -> int:
         else:
             local_results.append(resolve_local(link["source"], destination, tree_paths, anchors_by_path))
 
+    occurrences_by_url: dict[str, list[dict]] = {}
+    for link in all_links:
+        destination = link["destination"].strip()
+        if destination.startswith("//"):
+            destination = "https:" + destination
+        if urlsplit(destination).scheme.lower() in {"http", "https"}:
+            occurrences_by_url.setdefault(destination, []).append({
+                "source": link["source"], "label": link.get("label", ""),
+                "kind": link.get("kind", "markdown"),
+            })
+
     with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as pool:
         external_results = list(pool.map(check_external, sorted(external_urls)))
+    for result in external_results:
+        result["occurrences"] = occurrences_by_url.get(result["url"], [])
 
     missing_local = [item for item in local_results if item["status"] != "ok"]
     hard_external = [item for item in external_results if item["result"] == "not_found"]
