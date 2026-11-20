@@ -2161,3 +2161,8 @@ DF-06 now has a successful exact-commit CI self-test and link audit: run #448179
 ## 42. Donor PR #97 CI evidence — 2026-11-20
 
 The unmerged donor PR #97 HEAD passed JARVIS Core Verification (71/71 CTest) and Brain CI native plus ASan/UBSan jobs (71/71 each), including DLT-001 and DLT-002 persistence train/verify. See the baseline gap report §6. This is test evidence, not source-baseline adoption or extended open-world learning proof.
+
+
+## 43. DF-02 causal feedback and typed persistence — 2026-11-20
+
+[DF-02 Causal Feedback and Typed Persistence Gap](DF02_CAUSAL_FEEDBACK_AND_TYPED_PERSISTENCE_GAP_2026-11-20.md) records missing causal counterexample weakening and ambiguous key=value serialization, compared with donor outcome feedback and a versioned typed length-prefixed codec. No runtime change; DF-02 remains OPEN.
