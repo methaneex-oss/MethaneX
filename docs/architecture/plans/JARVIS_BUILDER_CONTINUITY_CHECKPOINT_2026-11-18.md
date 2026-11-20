@@ -1635,3 +1635,13 @@ Seven donor paths with matches only on other refs were inspected. The `integrati
 Detailed evidence is in `DF02_COMPILED_CONSUMER_AND_ALTERNATE_BRANCH_ADJUDICATION_2026-11-20.md`, linked from DF-02 §62 and index §126.
 
 DF-02 remains OPEN: the remaining candidate consumer paths still require semantic successor/retention/retirement/non-adoption, dependency, duplicate-owner and authority adjudication. No alternate baseline or donor adoption is selected. This branch-file write reopens DF-10; a new terminal inventory cycle is required after all Builder-owned file work.
+
+
+## 59. DF-02 action-feedback and evolution-adoption regression findings — 2026-11-20
+
+The Builder completed a source-level comparison of candidate PR #192 base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` and donor PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`. The new report `DF02_ACTION_FEEDBACK_AND_EVOLUTION_ADOPTION_REGRESSION_AUDIT_2026-11-20.md` records exact blobs and tests.
+
+- Candidate action execution has no consequence-observer API or outcome record; donor tests show real consequence error updates learning, changes the next planning choice and survives journal restore.
+- Candidate evolution experiments lack isolation attestation; the candidate safety gate does not enforce `require_isolation` or recompute minimum improvement; candidate controller adoption does not require a durable matching evaluation record; candidate adoption recovery transitions and tests are materially reduced.
+
+These findings are documentation/evidence only. No runtime code was modified or donor files adopted. DF-02 remains OPEN for the remaining semantic consumer/dependency/duplicate-owner/authority closure. This branch-file write reopens DF-10; a new terminal inventory is required after all Builder-owned writes.
