@@ -2039,3 +2039,8 @@ Read [DF-02 Cognitive Runtime, Memory, Association and Adaptation Regression Aud
 ## 129. DF-02 evolution process-isolation attestation audit — 2026-11-20
 
 Read [DF-02 Evolution Process-Isolation Attestation Regression Audit](reports/DF02_EVOLUTION_PROCESS_ISOLATION_ATTESTATION_REGRESSION_AUDIT_2026-11-20.md). Candidate callback execution trusts a self-reported isolation Boolean; the donor deliberately clears that claim, provides a separate process-isolated command path and binds the result to a tamper-evident experiment attestation. The candidate multi-trial coordinator also lacks a default isolation requirement. This is a critical adoption trust-boundary regression; no donor code is copied.
+
+
+## 130. DF-02 prediction identity and affective decision/API audits — 2026-11-20
+
+Read [DF-02 Prediction Identity and Feedback-Validation Audit](reports/DF02_PREDICTION_IDENTITY_AND_FEEDBACK_VALIDATION_REGRESSION_AUDIT_2026-11-20.md) and [DF-02 Affective Decision and Orphaned Brain API Audit](reports/DF02_AFFECTIVE_DECISION_AND_ORPHANED_BRAIN_API_AUDIT_2026-11-20.md). They record key-only prediction identity/overwrites and missing sequence-bound feedback validation; phase-10 tests 371→12 assertions. They also record missing direct affective decision context and an uncompiled stale Brain API source with duplicate definitions and missing AssociationModel dependencies. No CMake/runtime changes were made.
