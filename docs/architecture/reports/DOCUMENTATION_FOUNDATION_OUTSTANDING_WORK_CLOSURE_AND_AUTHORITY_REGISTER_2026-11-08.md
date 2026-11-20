@@ -2107,3 +2107,10 @@ Seven donor paths with matches only on other refs were inspected. The `integrati
 Full evidence: [DF-02 Compiled-Consumer and Alternate-Branch Adjudication](DF02_COMPILED_CONSUMER_AND_ALTERNATE_BRANCH_ADJUDICATION_2026-11-20.md).
 
 **DF-02 remains OPEN.** This resolves seven specific other-ref-only path cases and improves the candidate compile/test consumer map; it does not close all remaining semantic successor, dependency, duplicate-owner, retention/retirement/non-adoption or authority decisions. No source baseline is selected and no donor code is adopted. This branch-file write reopens DF-10; a new terminal inventory is required after all Builder-owned writes.
+
+
+## 33. DF-02 action-feedback and evolution-adoption regression findings — 2026-11-20
+
+[DF-02 Action Feedback and Evolution-Adoption Regression Audit](DF02_ACTION_FEEDBACK_AND_EVOLUTION_ADOPTION_REGRESSION_AUDIT_2026-11-20.md) documents two source-level regressions between candidate PR #192 base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` and donor PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`: (1) removal of action consequence observation and end-to-end behavioral learning/persistence evidence; (2) removal of isolation attestation, weaker adoption validation, absent durable matching evaluation enforcement and reduced transaction compensation/test coverage.
+
+No runtime code changed and no donor code was adopted. DF-02 remains OPEN; the remaining candidate lexical paths and their semantic ownership/dependency/authority decisions are not yet fully adjudicated. This branch-file write reopens DF-10.
