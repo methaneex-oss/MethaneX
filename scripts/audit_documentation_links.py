@@ -340,12 +340,16 @@ def main() -> int:
         "external_404_or_410": len(hard_external),
         "external_access_limited": sum(item["result"] == "access_limited" for item in external_results),
         "external_http_errors": sum(item["result"] == "http_error" for item in external_results),
-        "external_artifacts_verified_via_api": sum(item["result"] == "verified_via_api" for item in external_results),
+        "external_github_resources_verified_via_api": sum(item["result"] == "verified_via_api" for item in external_results),
+        "external_artifacts_verified_via_api": sum(item.get("artifact_id") is not None and item["result"] == "verified_via_api" for item in external_results),
+        "external_line_ranges_verified": sum(item.get("line_range_valid") is True for item in external_results),
+        "external_line_ranges_invalid": sum(item.get("line_range_valid") is False for item in external_results),
+        "external_comment_anchors_verified": sum(item.get("comment_status", 999) < 400 for item in external_results),
         "external_unreachable": sum(item["result"] == "unreachable" for item in external_results),
         "rendered_github_anchor_verification": report["rendered_github_anchor_verification"],
         "semantic_relevance_review": report["semantic_relevance_review"],
     }, indent=2))
-    return 1 if missing_local or hard_external else 0
+    return 1 if missing_local or any(item["result"] not in {"ok", "verified_via_api"} for item in external_results) else 0
 
 
 if __name__ == "__main__":
