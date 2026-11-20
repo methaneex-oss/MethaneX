@@ -1,5 +1,7 @@
 # DF-02 — Evolution process-isolation attestation regression audit
 
+> **Scope clarification:** This is a capability-gap comparison between the pre-PR-#97 candidate source baseline and the unmerged PR #97 donor implementation line. It does **not** claim the candidate previously integrated these donor mechanisms and then lost them. The term “regression” in this historical report filename means a functional delta relative to the donor, not a post-integration code regression. The donor is not an adopted baseline; the Project Director retains source selection and adoption authority.
+
 **Date:** 2026-11-20  
 **Candidate baseline:** PR #192 base/merge-base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`. Every candidate source/test blob cited in this report was re-fetched at that exact PR base and matched the blob previously inspected at `cbc51e2b10f1fc976257653adf773735a2b27d49`.  
 **Donor snapshot:** PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`
