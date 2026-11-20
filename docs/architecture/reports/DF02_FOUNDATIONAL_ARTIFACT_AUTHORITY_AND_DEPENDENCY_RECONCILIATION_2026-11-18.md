@@ -3250,3 +3250,8 @@ No runtime or CMake changes were made. DF-02 remains OPEN for the remaining cand
 ## 67. Attention, self-model and evolution-recovery audit — 2026-11-20
 
 [DF-02 Attention, Self-Model and Evolution-Recovery Audit](DF02_ATTENTION_SELF_MODEL_AND_EVOLUTION_RECOVERY_AUDIT_2026-11-20.md) records three additional candidate regressions: attention no longer scores prediction error/internal activation; self-model no longer incrementally updates capability performance from action outcomes; and evolution transaction compensation resets to baseline instead of restoring the exact previous value. The donor evolution Brain-integration suite has 97 assertions versus seven in the candidate. The report flags fixed donor weights/rates for separate design review rather than blind adoption. No runtime changes were made.
+
+
+## 68. Goal-outcome learning and adaptive-priority regression — 2026-11-20
+
+[DF-02 Goal-Outcome and Adaptive-Priority Regression Audit](DF02_GOAL_OUTCOME_AND_ADAPTIVE_PRIORITY_REGRESSION_AUDIT_2026-11-20.md) verifies that candidate goals retain progress/status/prerequisite/deadline handling but omit donor `outcome_momentum` and progress-delta-driven priority adaptation. The donor also has a separate goal-outcome evidence model and dedicated 15-assertion suite absent from the candidate; the candidate's goals suite is 34 assertions versus 45 in the donor. Donor fixed adaptation coefficients are explicitly not accepted automatically. No runtime changes were made.
