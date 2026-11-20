@@ -3198,3 +3198,16 @@ The supplement distinguishes exact retained artifacts, semantic successors with 
 The 159-path CSV matrix was refreshed against the exact PR #192 documentation snapshot `cbc51e2b10f1fc976257653adf773735a2b27d49`, using complete untruncated donor/candidate trees (287 and 284 entries respectively). Its result remains 1 identical / 95 divergent / 63 absent. The refresh commit is `e441e56467fa9d3fa56d4f354cf9ec119053db2b`.
 
 **DF-02 remains OPEN.** The 118 paths with lexical candidates and their 1,134 exact consumer versions still require semantic consumer/dependency/duplicate-owner adjudication, and historical authority/retirement/non-adoption decisions remain reserved where applicable. No source baseline, donor adoption or runtime implementation is selected.
+
+
+## 62. Compiled-consumer and alternate-branch refinement — 2026-11-20
+
+The second semantic supplement, [DF-02 Compiled-Consumer and Alternate-Branch Adjudication](DF02_COMPILED_CONSUMER_AND_ALTERNATE_BRANCH_ADJUDICATION_2026-11-20.md), refines the 118-path lexical candidate set against the exact PR #192 candidate branch source/build/test graph.
+
+At candidate branch snapshot `84dd10094cac675b97b1ab2d45b36618d61efe38`, 111 of the 118 donor paths had at least one lexical candidate on that branch. 107 had source-category matches; 85 had direct matches in a compiled translation unit. The 123 candidate source/header consumer paths were reachable from the 62 CMake-compiled translation units (57 core, five engineering) through the bounded include-graph walk. Fifty test-category consumer paths were present; 45 core and one engineering test executable were registered. These are compile-time/test reachability facts, not runtime-behavior proof.
+
+Seven donor paths had lexical matches only on other refs. Exact alternate-branch inspection established donor-identical, CMake-compiled affective planning and contextual prediction implementations on `integration/knowledge-composition-20261031`, and a donor-identical, CMake-compiled/persisted/tested engineering task ledger on `ci/priority-one-validation-20261031`. It also established that candidate association-causality and reasoning suites retain their target registrations but shrink from 46 to 12 and 33 to 19 assertions respectively, removing reliability/contextual and disputed-premise/causal-codec checks.
+
+This is evidence of distinct source lines, not permission to select or merge an alternate baseline. The Project Director's baseline/adoption authority remains reserved.
+
+**DF-02 remains OPEN.** The supplements resolve 41 no-symbol paths and seven specific alternate-ref-only path cases; the remaining candidate-path semantic successor, dependency, duplicate-owner, retention/retirement/non-adoption and authority adjudication is not complete.
