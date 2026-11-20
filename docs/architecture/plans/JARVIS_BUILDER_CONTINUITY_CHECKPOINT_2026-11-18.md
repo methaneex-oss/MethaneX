@@ -1675,3 +1675,8 @@ Reports: `DF02_PREDICTION_IDENTITY_AND_FEEDBACK_VALIDATION_REGRESSION_AUDIT_2026
 ## 64. DF-02 attention, self-model and evolution compensation findings — 2026-11-20
 
 The Builder verified that candidate attention lacks donor prediction-error/internal-activation inputs, candidate SelfModel lacks `update_performance` and the donor Brain action-outcome call, and candidate EvolutionModel lacks `restore_previous`. The candidate controller compensates failed adoption transactions using baseline rollback, which can discard a prior valid non-baseline value; the donor restores the exact previous value. Candidate evolution Brain-integration suite has seven assertions versus donor 97. See `DF02_ATTENTION_SELF_MODEL_AND_EVOLUTION_RECOVERY_AUDIT_2026-11-20.md`. No runtime changes. DF-02 remains OPEN; this branch write reopens DF-10.
+
+
+## 65. DF-02 goal-outcome and adaptive-priority finding — 2026-11-20
+
+The candidate goal model handles prerequisites, deadlines and progress/status but lacks the donor's persisted `outcome_momentum` and signed progress-delta priority adaptation. The separate donor `cognitive_goal_outcome.hpp` evidence model and 15-assertion suite are absent from candidate; candidate goals suite is 34 assertions versus donor 45. The same API appears only in the uncompiled candidate Brain restored-API artifact and is not a valid integrated successor. See `DF02_GOAL_OUTCOME_AND_ADAPTIVE_PRIORITY_REGRESSION_AUDIT_2026-11-20.md`. Fixed donor coefficients require design review; no runtime changes. This branch write reopens DF-10.
