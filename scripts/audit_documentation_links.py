@@ -72,8 +72,10 @@ def parse_document(path: str, content: str, parser: MarkdownIt) -> tuple[list[di
 
         if token.type == "inline":
             children = token.children or []
+            link_depth = 0
             for child_index, child in enumerate(children):
                 if child.type == "link_open":
+                    link_depth += 1
                     href = child.attrGet("href")
                     if href:
                         label_parts = []
@@ -94,6 +96,8 @@ def parse_document(path: str, content: str, parser: MarkdownIt) -> tuple[list[di
                             "source": path, "destination": href, "kind": "markdown",
                             "label": html.unescape("".join(label_parts)),
                         })
+                elif child.type == "link_close":
+                    link_depth = max(0, link_depth - 1)
                 elif child.type == "image":
                     src = child.attrGet("src")
                     if src:
@@ -101,6 +105,16 @@ def parse_document(path: str, content: str, parser: MarkdownIt) -> tuple[list[di
                             "source": path, "destination": src, "kind": "image",
                             "label": child.attrGet("alt") or child.content,
                         })
+                elif child.type == "text" and link_depth == 0:
+                    for match in re.finditer(r"(?<![\\w@])(?:https?://|www\\.)[^\\s<>()]+", child.content, re.I):
+                        destination = match.group(0).rstrip(".,;:!?")
+                        if destination.startswith("www."):
+                            destination = "https://" + destination
+                        if destination:
+                            links.append({
+                                "source": path, "destination": destination,
+                                "kind": "gfm_autolink", "label": match.group(0),
+                            })
 
     return links, anchors
 
@@ -302,9 +316,7 @@ def check_external(url: str) -> dict:
 
 
 def main() -> int:
-    parser = MarkdownIt("commonmark", {"html": True, "linkify": True}).enable(
-        ["table", "strikethrough", "linkify"]
-    )
+    parser = MarkdownIt("commonmark", {"html": True}).enable(["table", "strikethrough"])
     paths = tracked_markdown()
     tree_paths = {
         line.decode("utf-8")
