@@ -1540,3 +1540,32 @@ The detailed source crosswalk is in DF-02 §59 and index §120. DF-02 remains **
 ### Recovery rule
 
 If interrupted, start by reading this §53, then fetch live PR #192 metadata and branch ref. If they differ from the SHA above, the live refs win. Continue at the first incomplete Builder action. Do not repeat completed artifact recovery, the 159-path matrix refresh, or the semantic crosswalk unless the source tree changed.
+
+
+## 54. Pre-terminal synchronization checkpoint — 2026-11-20
+
+**Exact source PR #192 HEAD before this checkpoint update:** `b71c1cff2eae105eb516b767bf0c38624a76b03c`. The branch ref and PR head matched. PR #192 remains open, non-draft, unmerged; 48 changed paths; complete tree 281 entries / 249 blobs, `truncated=false`; 51 Markdown files; 800 ahead / 14 behind the recorded base; diverged; GitHub mergeable=true.
+
+### Completed Builder work
+
+- Exact all-ref scanner artifact retrieved and SHA-256 matched to GitHub's artifact digest.
+- Distinct PR #121 and October 31 integration lineages reconciled without promoting either to current baseline.
+- Candidate/donor source and test registration counts corrected; candidate 57 source units, 45 executable targets / 45 CTest entries; donor 64 / 71 / 70.
+- Bounded semantic successor audit documented in DF-02 §59.
+- Exact 159-path matrix refreshed to candidate ref `739d108eda6d4b296d7191b31d7883dc59ebf97a`; complete-tree verification remains 1 identical / 95 divergent / 63 absent.
+- 159-row crosswalk navigates all rows to audit evidence but all rows remain UNRESOLVED for full Option A closure.
+- DF-06 current tree and destination-set continuity boundary documented; no claim of full parser, external, fragment or authenticated-rendered closure.
+- Current gate state and recovery instructions are in index §122, register §29, DF-06 §31 and self-review §30.
+
+### Remaining Builder/external requirements
+
+1. Finish all Builder-owned semantic consumer adjudication that can be supported from exact source context; do not mark all 1,148 lexical blob versions reviewed without actually inspecting them.
+2. Finish DF-06 parser/fragment/external checks where tooling permits; authenticated rendered GitHub anchors remain externally blocked.
+3. PR #197/#198 require an integrated, independently reviewed workflow successor on main; an authorized operator must dispatch it against the final frozen SHA. The connected GitHub action set exposes no dispatch action.
+4. Publish a superseding Independent Reviewer assignment pinned to the final terminal inventory successor via PR comment. Do not claim a verdict before an actual reviewer submits it.
+5. Perform the DF-10 terminal inventory cycle as the final branch-file write. Verify one commit ahead / zero behind, exactly one changed path (inventory), all 48 PR paths present, all 47 non-inventory path blobs unchanged, complete tree and exact live ref match.
+6. After the inventory write, update only PR metadata/comments; do not write any branch file.
+
+### Decision boundary
+
+DF-12 remains exclusively the Project Director's decision. The Builder must stop only after presenting the exact terminal artifacts and genuine independent/reader evidence or clearly identifying any external action still outstanding. Stage A remains NOT STARTED / HELD. No runtime implementation, donor adoption, source-baseline selection, training, merge, rebase, retarget, cherry-pick or deployment is authorized.

@@ -10,9 +10,9 @@
 
 The Builder has consolidated the current PR state, the exact changed-file/blob manifest, the existing review findings, the authority/provenance boundaries and the remaining gate criteria into this report.
 
-**Builder recommendation: READY TO SUBMIT FOR INDEPENDENT REVIEW — NOT CLEARED FOR ACCEPTANCE.**
+**Builder recommendation: NOT YET READY FOR FINAL INDEPENDENT REVIEW — NOT CLEARED FOR ACCEPTANCE.**
 
-This distinction is deliberate. The Builder-controlled documentation corrections and repository snapshot reconciliation are ready to be challenged by an independent reviewer. The documentation-foundation gate itself is not cleared. The prior GPT-6 review is useful technical input but does not satisfy the qualifying independent-review requirement because the reviewer and Builder share the same model identity. The fresh-reader protocol has not been executed by an uninvolved human. The Project Director has not yet made the exact-revision gate decision.
+This distinction is deliberate. The Builder-controlled documentation corrections and repository snapshot reconciliation are ready to be challenged by an independent reviewer. The documentation-foundation gate itself is not cleared. The prior GPT-6 review is useful technical input but does not satisfy the qualifying independent-review requirement because the reviewer and Builder share the same model identity. The fresh-reader protocol has not produced a CLEAR result on the final exact HEAD; the historical blind AI assessment returned PARTIALLY CLEAR (31/32) on a prior SHA. The Project Director has not yet made the exact-revision gate decision.
 
 **Stage A remains HELD.** No implementation, source/donor selection, baseline selection, merge, rebase, cherry-pick, retarget, branch deletion, archive relocation or PR integration is authorized or claimed.
 
@@ -792,3 +792,28 @@ The candidate does have genuine mechanisms: a persistent event journal, predicti
 The scanner's raw count is dominated by `jarvis` and `namespace` (75.24% overall, 85.58% in candidate-tip rows). The remaining lexical matches still require exact source-context adjudication. This reinforces the decision not to convert the 1,148 consumer-blob versions into semantic dependency claims.
 
 **Self-review verdict:** this is useful bounded semantic evidence, not DF-02 closure. DF-02 remains OPEN; DF-06 remains NOT MET; DF-09 remains NOT MET/BLOCKED; DF-10 remains REOPENED; DF-12 remains Project Director-only.
+
+
+## 30. Exact-current Builder self-review and residual gate decision packet — 2026-11-20
+
+**Exact PR #192 source before this self-review synchronization:** `b71c1cff2eae105eb516b767bf0c38624a76b03c`. Live PR metadata and branch ref matched; open, non-draft, unmerged; 48 changed paths; complete tree 281 entries / 249 blobs / 51 Markdown files; `truncated=false`. Base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; 800 ahead / 14 behind; diverged. GitHub reports mergeable=true. This is the pre-terminal parent snapshot, not the final inventory successor.
+
+### New verified work
+
+- Recovered and SHA-256-verified the all-ref Actions artifact (run `44646915235`, artifact `14588258314`, published digest `62e287411685109d02741d8c0a7161d0f5c95d3318c676759a566a0b8a5e3052`).
+- Refreshed the exact 159-path CSV candidate-ref field to `739d108eda6d4b296d7191b31d7883dc59ebf97a` and independently compared all 159 donor paths against complete exact-ref trees: 1 identical / 95 divergent / 63 absent.
+- Added §59 bounded semantic successor audit. Candidate CMake has 57 source translation units and 45 executable targets / 45 CTest entries versus donor 64 / 71 / 70. The candidate has real but narrower mechanisms; key donor affective/developmental/world/outcome capabilities are not verified as compiled successors.
+- Distinguished PR #121's exact donor integration line from the separate 15-tip October 31 cohort; neither is current main or a selected baseline.
+- Updated index, register, DF-02, DF-06 and continuity checkpoint with explicit residual boundaries.
+
+### Adversarial findings retained
+
+1. DF-02 is not closed: all 159 crosswalk rows remain unresolved for the Director's Option A standard. The 1,148 exact consumer-blob versions from the scanner are not fully inspected; generic tokens dominate the lexical output. Semantic successor, retirement/non-adoption, duplicate capability, reverse-consumer and authority closure remain incomplete.
+2. DF-06 is not closed: the full 51-file CommonMark/GFM parser discrepancy remains unreconciled; all local fragments are not validated; external URLs have not all been checked for status, redirect chain, final target and claim relevance; authenticated rendered GitHub anchors are not verified.
+3. DF-09 is not closed: PR #197 and #198 are parallel, unmerged and unreviewed workflow changes; no workflow dispatch capability is exposed here; no final-target blind CLEAR exists.
+4. DF-10 is reopened until a terminal inventory-only successor is verified after every other branch-file write.
+5. DF-03 and DF-05 remain partially evidenced; reserved acceptance and PR #192 integration order belong to the Project Director.
+6. DF-11 remains waived as a mandatory gate; a separate exact-revision reviewer challenge is still required as assurance, not as a reversal of the waiver.
+7. DF-12 is Project Director-only. Stage A remains HELD.
+
+**Self-review verdict:** Builder evidence is materially stronger and more precise, but the package is **not ready for a CLEAR/acceptance recommendation**. No independent verdict, fresh-reader CLEAR, Project Director decision, runtime baseline selection, donor adoption, Stage A authorization or merge permission is claimed.
