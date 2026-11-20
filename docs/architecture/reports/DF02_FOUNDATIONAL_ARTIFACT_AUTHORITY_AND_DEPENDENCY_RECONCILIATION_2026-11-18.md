@@ -2939,7 +2939,7 @@ The CSV is an exact-path blob-identity matrix. It does **not** equate divergent 
 **Artifact ZIP SHA-256:** `62e287411685109d02741d8c0a7161d0f5c95d3318c676759a566b0a8a5e3052` — downloaded and matched GitHub's published artifact digest.  
 **Donor:** PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
 **Scan candidate:** PR #192 SHA `32722f104f76817983b0156cca821949e406b8c1`.  
-**Current candidate recheck:** PR #192 checkpoint parent `63d7fbcc4821b54c53b275cc1ab6310f0853b2a8`.
+**Current candidate recheck:** PR #192 checkpoint parent `739d108eda6d4b296d7191b31d7883dc59ebf97a`.
 
 ### 57.1 Reproducible artifact contents
 
@@ -2998,3 +2998,32 @@ The current exact authority and branch-dependency graph is recorded in `PROJECT_
 - PR #197 and #198 are parallel, unmerged changes to the same main-branch reader workflow; neither alone represents the combined exact-target packet and corrected prompt.
 
 DF-03 and DF-05 remain **PARTIAL**. The evidence now distinguishes exact accepted scopes from current proposals and branch dependencies; the remaining choices are reserved to the Project Director. No merge, retarget, rebase, donor adoption or phase acceptance is inferred.
+
+
+## 59. Exact-current semantic audit checkpoint and 159-path matrix refresh — 2026-11-20
+
+**Live PR #192 HEAD:** `739d108eda6d4b296d7191b31d7883dc59ebf97a`. The branch ref and PR head were independently re-fetched and matched. PR #192 is open, non-draft, unmerged, reports mergeable=true, and contains 48 changed paths. Its recorded base remains `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; the current base branch is newer and the branch remains diverged. No merge, rebase or retarget is inferred.
+
+### 59.1 Exact 159-path current tree verification
+
+The complete recursive trees were fetched at donor PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` (287 entries, not truncated) and current PR #192 HEAD `739d108eda6d4b296d7191b31d7883dc59ebf97a` (281 entries, not truncated). All 159 paths from the canonical donor ledger were compared by exact path and blob SHA:
+
+- **1 identical** donor blob;
+- **95 divergent** present paths;
+- **63 absent** paths.
+
+The updated CSV `DF02_EXACT_REF_159_PATH_BLOB_COMPARISON_2026-11-20.csv` now records candidate ref `739d108eda6d4b296d7191b31d7883dc59ebf97a` on all 159 rows. The path/blob status distribution is unchanged from the previous checkpoint. This refresh corrects the stale candidate-ref field; it does not add semantic closure.
+
+### 59.2 Current candidate source/build/test comparison
+
+The candidate CMake evidence recorded in the bounded semantic crosswalk remains exact at the current code blobs: `core/cpp/CMakeLists.txt` blob `c51816888e1bddb7bc00c59e72529524e27a0717` (57 source translation units) and `core/cpp/tests/CMakeLists.txt` blob `dab0c52ab4dfe15e1e2cbccfa9e6c904abdf54e3` (45 executable targets / 45 CTest entries). Donor PR #97 records 64 source translation units and 71 executable targets / 70 CTest entries. The candidate's seven omitted donor source translation units and 26 missing executable targets / 25 missing CTest entries remain material integration gaps. No current-candidate build or CTest execution is claimed.
+
+The source-level dispositions in the preceding semantic crosswalk remain bounded and unchanged: no verified compiled affective-state/affective-learning successor; partial, non-equivalent persistent event-memory overlap; partial adjacent association/strategy mechanisms rather than the donor developmental learner; manual GoalModel progress rather than evidence-driven GoalOutcome; fact/relation WorldModel rather than executable developmental action-transition world; and a compiled CognitiveCycle whose retrieved memories do not feed reasoning premises and whose action stage assesses rather than executes.
+
+### 59.3 Per-path and all-ref semantic closure status
+
+The 159-row crosswalk in §53 establishes navigation from each donor path to at least one detailed comparison section, but all 159 rows remain explicitly UNRESOLVED for closure. The all-ref artifact covers 253 branch refs / 212 unique tips and contains 182,266 lexical matches across 1,148 exact consumer-blob versions. Its strongest signal-quality correction is that `jarvis` and `namespace` account for 75.24% of all rows and 85.58% of candidate-tip rows. The remaining rows are still lexical discovery leads. The Builder has not inspected all 1,148 full consumer blobs and cannot claim complete reverse-consumer, semantic successor, duplicate-capability, authority or non-adoption closure.
+
+The 2026-10-31 15-tip integration cohort and the PR #121 merge line remain distinct historical lineages. Neither is current main nor a selected runtime baseline. The 2026-10-31 cohort's specialist test registration is not test execution; its standalone ExperienceMemory test is not evidence of Brain-loop wiring. PR #121 CI evidence applies only to its exact merge line.
+
+**Disposition:** exact tree/blob integrity, the 159-row evidence crosswalk, and bounded semantic comparisons are Builder-verified within their stated scope. DF-02 remains **OPEN** under the Project Director's Option A standard. The remaining all-ref semantic consumer adjudication and authority/non-adoption decisions are not represented as complete. No donor code is adopted and no runtime baseline is selected.
