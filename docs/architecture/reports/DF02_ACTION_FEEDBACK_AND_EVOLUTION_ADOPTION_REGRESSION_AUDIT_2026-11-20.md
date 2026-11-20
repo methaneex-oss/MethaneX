@@ -21,7 +21,7 @@ This supplement records two high-impact source-level regressions. The comparison
 
 The donor request adds an optional consequence observer returning `std::optional<double>`. The donor result adds `ActionOutcome` with expected consequence, observed flag, actual consequence and bounded consequence error, plus prediction sequence/key/value linkage. After an action executes, the donor records a finite observed consequence and computes the difference from the expectation. This observation is intentionally independent of verification/rollback status because a failed or rolled-back action can still have a real-world consequence.
 
-The candidate request and result remove all of those fields. Its `Brain::execute_action` wrapper accepts execute/verify/rollback/authorization only and records a coarse status belief. It has no route for an observed consequence to enter the action outcome through this API.
+The candidate request and result remove all of those fields. Its inline `Brain::execute_action` wrapper accepts execute/verify/rollback/authorization only and submits a coarse action-reason/reliability evidence item through `learn`. It has no consequence-observer parameter or structured observed-consequence outcome, so there is no route for measured consequence/error to enter the action outcome through this API.
 
 ### Behavioral test difference
 
