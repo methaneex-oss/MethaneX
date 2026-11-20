@@ -1645,3 +1645,8 @@ The Builder completed a source-level comparison of candidate PR #192 base `61311
 - Candidate evolution experiments lack isolation attestation; the candidate safety gate does not enforce `require_isolation` or recompute minimum improvement; candidate controller adoption does not require a durable matching evaluation record; candidate adoption recovery transitions and tests are materially reduced.
 
 These findings are documentation/evidence only. No runtime code was modified or donor files adopted. DF-02 remains OPEN for the remaining semantic consumer/dependency/duplicate-owner/authority closure. This branch-file write reopens DF-10; a new terminal inventory is required after all Builder-owned writes.
+
+
+## 60. DF-02 runtime, memory, association and adaptation regression findings — 2026-11-20
+
+The new report `DF02_COGNITIVE_RUNTIME_MEMORY_ASSOCIATION_ADAPTATION_REGRESSION_AUDIT_2026-11-20.md` compares candidate snapshot `cbc51e2b10f1fc976257653adf773735a2b27d49` with donor PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`. It documents missing runtime feedback ingress and selected-plan execution, memory consolidation/learned-tier reconstruction APIs, contextual and generalized association plus prediction-feedback updates, and the candidate adaptation model's `[0,1]` clamp versus donor signed/unbounded numeric support and recency/change response. Cognitive-cycle implementation/test size also differs substantially. Five suites contain 462 donor assertions versus 112 candidate assertions. Donor fixed coefficients are not accepted by default; their design must be assessed against mechanism-first learning. No runtime files changed. DF-02 remains OPEN; this write reopens DF-10.
