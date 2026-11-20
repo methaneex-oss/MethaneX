@@ -3255,3 +3255,8 @@ No runtime or CMake changes were made. DF-02 remains OPEN for the remaining cand
 ## 68. Goal-outcome learning and adaptive-priority regression — 2026-11-20
 
 [DF-02 Goal-Outcome and Adaptive-Priority Regression Audit](DF02_GOAL_OUTCOME_AND_ADAPTIVE_PRIORITY_REGRESSION_AUDIT_2026-11-20.md) verifies that candidate goals retain progress/status/prerequisite/deadline handling but omit donor `outcome_momentum` and progress-delta-driven priority adaptation. The donor also has a separate goal-outcome evidence model and dedicated 15-assertion suite absent from the candidate; the candidate's goals suite is 34 assertions versus 45 in the donor. Donor fixed adaptation coefficients are explicitly not accepted automatically. No runtime changes were made.
+
+
+## 69. Cognitive-cycle perception, affect and action integration audit — 2026-11-20
+
+[DF-02 Cognitive-Cycle Perception and Action Integration Audit](DF02_COGNITIVE_CYCLE_PERCEPTION_AND_ACTION_INTEGRATION_AUDIT_2026-11-20.md) pins exact candidate/donor API differences: candidate cycle has no shared perception pipeline or structured representation, no developmental context, no per-cycle affective/appraisal/attention context, no action-execution result collection, and a narrower feedback API without sequence-aware prediction, goal-progress or outcome-utility inputs. The donor exposes those paths and its registered cycle suite is 186 assertions versus 31 candidate assertions. This reinforces the runtime feedback/action gap; no runtime code was changed.
