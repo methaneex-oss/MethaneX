@@ -2074,3 +2074,8 @@ Read [DF-02 Affective and Developmental Subsystem Baseline Gap](reports/DF02_AFF
 ## 136. Donor PR #97 CI evidence — 2026-11-20
 
 Pinned donor PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` passed JARVIS Core Verification run #40788714735 (71/71 CTest) and Brain CI run #40788714686 (native and ASan/UBSan, each 71/71). DLT-001 trial and DLT-002 persistence train/verify all passed. This is build/test evidence for the unmerged donor source line, not adoption or an extended open-world learning claim.
+
+
+## 137. DF-02 causal feedback and typed persistence audit — 2026-11-20
+
+Read [DF-02 Causal Feedback and Typed Persistence Gap](reports/DF02_CAUSAL_FEEDBACK_AND_TYPED_PERSISTENCE_GAP_2026-11-20.md). Candidate lacks causal counterexample-driven weakening and uses ambiguous untyped key=value serialization; donor adds outcome-based hypothesis weakening and a typed length-prefixed codec. Candidate phase-5 suite is 12 assertions versus 46 donor assertions. No runtime change.
