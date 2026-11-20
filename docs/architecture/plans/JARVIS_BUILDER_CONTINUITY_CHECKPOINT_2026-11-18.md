@@ -1617,3 +1617,10 @@ DF-02 remains OPEN: 118 donor paths with lexical candidates and 1,134 exact cons
 ### Continuation instructions
 
 Continue with the remaining high-specificity all-ref consumer versions and dependency/duplicate-owner reconciliation. Do not claim all 1,134 versions reviewed. Complete remaining Builder-owned DF-06 checks where tooling permits. Do not request or await an Independent Reviewer; the Project Director withdrew that request. Do not merge, rebase, retarget, select a source baseline, adopt donor code, start Stage A, or run developmental training. Perform the terminal DF-10 inventory-only successor only after all Builder-owned branch-file work is complete; then stop repository file writes and present the exact evidence for DF-12.
+
+
+## 57. DF-06 inline HTML extraction correction — 2026-11-20
+
+The documentation-link parser previously missed `html_inline` child tokens when scanning Markdown paragraphs. The Builder corrected extraction of inline `href`/`src` destinations and `id` anchors, added a `--self-test` fixture covering reference links, tables, strikethrough, inline HTML, duplicate headings and bare HTTP autolinks, and wired that self-test before the full audit in `documentation-link-audit.yml`.
+
+The matching parser logic was exercised locally with `markdown-it-py`; the exact GitHub Actions result for the newly added workflow step has not been retrieved, so no CI-pass claim is made. DF-06 remains NOT MET pending full parser-equivalence, local-fragment, exhaustive external semantic/reachability and authenticated rendered-anchor evidence.
