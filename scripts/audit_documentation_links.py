@@ -106,7 +106,7 @@ def parse_document(path: str, content: str, parser: MarkdownIt) -> tuple[list[di
                             "label": child.attrGet("alt") or child.content,
                         })
                 elif child.type == "text" and link_depth == 0:
-                    for match in re.finditer(r"(?<![\\w@])(?:https?://|www\\.)[^\\s<>()]+", child.content, re.I):
+                    for match in re.finditer(r"(?<![\w@])(?:https?://|www\.)[^\s<>()]+", child.content, re.I):
                         destination = match.group(0).rstrip(".,;:!?")
                         if destination.startswith("www."):
                             destination = "https://" + destination
