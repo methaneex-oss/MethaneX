@@ -51,3 +51,17 @@ The required boundary is not “callback says isolated”; it is a trusted proce
 Do not simply copy the donor runner. Verify the actual supported platform isolation guarantees and the candidate process backend's policy. Preserve deterministic callback simulations for testing, but ensure they cannot claim process isolation or reach production adoption. Restore an explicit isolated-command path and tamper-evident attestation only as part of a coordinated design covering experiment evaluation, controller validation, adoption journal and recovery tests.
 
 No donor code was copied. No source baseline was selected. DF-02 remains OPEN.
+
+
+## 6. Multi-trial coordinator also loses the isolation requirement
+
+| Artifact | Candidate blob | Donor blob |
+|---|---|---|
+| `core/cpp/include/jarvis/core/evolution_experiment_coordinator.hpp` | `2fde3fdf0b3e6772f11358385e069f9b94af34d0` | `b7bf85429096b4d3b50c417b929564c2b15ed826` |
+| `core/cpp/src/evolution_experiment_coordinator.cpp` | `c689d16b31c039a7be9ab5c9bde0de49e677b32d` | `93d2e01c785ed4867efec07673cd802afbe27427` |
+
+The donor `EvolutionTrialConfig` includes `require_isolation{true}` by default. The coordinator verifies every baseline and candidate trial has started, completed and—when required—returned isolated evidence; it tracks whether all trials were isolated and attests the resulting experiment only when the entire batch is isolated.
+
+The candidate configuration has no `require_isolation` field. Its coordinator does not check `result.started`, does not require `result.isolated`, does not aggregate isolation across trials and cannot attest the resulting experiment. This compounds the callback-isolation issue: multi-trial fitness evidence can be accepted without proving that either baseline or candidate trials ran inside the required process boundary.
+
+**Updated disposition:** the candidate isolation regression spans the sandbox callback contract, single-experiment runner, multi-trial coordinator, experiment data type, safety gate and adoption controller. It is a connected trust-boundary failure, not a single missing helper.
