@@ -2054,3 +2054,8 @@ Read [DF-02 Attention, Self-Model and Evolution-Recovery Audit](reports/DF02_ATT
 ## 132. DF-02 goal-outcome and adaptive-priority audit — 2026-11-20
 
 Read [DF-02 Goal-Outcome and Adaptive-Priority Regression Audit](reports/DF02_GOAL_OUTCOME_AND_ADAPTIVE_PRIORITY_REGRESSION_AUDIT_2026-11-20.md). Candidate Goal has no outcome momentum and progress updates do not adapt priority from signed progress change. The donor's separate goal-outcome evidence model and 15-assertion suite are absent from candidate; goals architecture suite is 34 versus 45 assertions. No donor coefficients are accepted automatically.
+
+
+## 133. DF-02 cognitive-cycle perception/action integration audit — 2026-11-20
+
+Read [DF-02 Cognitive-Cycle Perception and Action Integration Audit](reports/DF02_COGNITIVE_CYCLE_PERCEPTION_AND_ACTION_INTEGRATION_AUDIT_2026-11-20.md). It records missing candidate cycle contract for structured perception, affective/attention context, selected-action execution results, sequence-aware prediction feedback, goal-outcome assimilation and outcome utility. The donor cycle suite is 186 assertions versus 31 candidate assertions. No code was copied.
