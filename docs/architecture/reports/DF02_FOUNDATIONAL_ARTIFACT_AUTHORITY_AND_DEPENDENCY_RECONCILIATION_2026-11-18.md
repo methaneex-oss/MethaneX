@@ -3221,3 +3221,12 @@ The Builder compared the exact candidate PR #192 base `61311fe5b44c81c4409c8ba8d
 2. Candidate evolution adoption removes isolation attestation from `EvolutionExperiment`; its safety gate ignores `require_isolation` and does not recompute the minimum-improvement threshold; its controller does not require durable matching evaluation history before adoption; and its journal lacks donor compensation transitions. The candidate adoption suite is a five-line smoke test versus the donor controller-level safety, history, rollback and recovery scenarios.
 
 These are source-level regression findings, not authorization to copy donor files. DF-02 remains OPEN for the remaining candidate lexical paths, semantic successor/dependency/duplicate-owner and retention/retirement/authority adjudication. No runtime code changed.
+
+
+## 64. Cognitive runtime, memory, association and adaptation audit — 2026-11-20
+
+[DF-02 Cognitive Runtime, Memory, Association and Adaptation Regression Audit](DF02_COGNITIVE_RUNTIME_MEMORY_ASSOCIATION_ADAPTATION_REGRESSION_AUDIT_2026-11-20.md) compares candidate snapshot `cbc51e2b10f1fc976257653adf773735a2b27d49` with donor PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+
+It records: removal of runtime feedback ingress and selected-plan action execution; removal of explicit memory consolidation/learned-tier reconstruction APIs; removal of contextual association inference, concept generalization and prediction-feedback association updates; narrowing of adaptation from general signed numeric values to `[0,1]`; and major cognitive-cycle implementation/test scope reduction. Five registered suites shrink from 462 donor assertions to 112 candidate assertions (350 fewer): cycle 186→31, runtime 100→19, memory 70→27, association 46→12, adaptation 60→23.
+
+The report distinguishes capability loss from donor implementation details and flags fixed donor coefficients for separate design review; no donor code was copied. DF-02 remains OPEN for the remaining candidate paths and complete semantic ownership/dependency/authority closure.
