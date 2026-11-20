@@ -1374,3 +1374,14 @@ At PR #192 HEAD \`5f70f228d4142e02dc520588f02e40afc78b681f\`, the candidate tree
 PR #198 exact head \`84bbc940696ba77f80c78ae85b886e1353c552a0\` corrects the stale main-branch blind-reader index-heading prompt. Its independent review request is recorded in PR comment #7026146111. PR #198 remains open and unmerged; no review verdict or workflow execution is recorded.
 
 DF-02 remains OPEN due all-ref source-content consumer/dependency/duplicate ownership and authority disposition. DF-09 remains BLOCKED pending PR #198 normal review/acceptance/merge, exact main workflow re-fetch and exact-terminal-SHA blind-reader dispatch/CLEAR.
+
+
+## 43. All-ref consumer discovery and 2026-10-31 branch-cohort checkpoint — 2026-11-20
+
+- PR #199 read-only all-ref scan run \`44646915235\`, artifact \`14588258314\`; donor PR #97 HEAD \`c1da222e6c94aeb3f2ad000392c21fe4fc81ab25\`; candidate PR #192 HEAD \`32722f104f76817983b0156cca821949e406b8c1\`.
+- Census: 253 branch refs, 212 unique tips, 8 duplicate-tip groups; all 159 donor paths inspected; 1,393 tracked text blobs indexed and scanned.
+- Candidate same-path status: 1 identical / 95 divergent / 63 absent.
+- Corrected match rows are keyed by exact consumer blob SHA. The earlier artifact's match tables are superseded due a cross-blob aggregation defect discovered during exact-ref spot checking.
+- Fifteen 2026-10-31 tips contain all 159 donor paths, with 139–143 donor-identical, 16–20 divergent, zero absent. All share CMake blob \`bc264ce7b4ae489404ca03ea6d9676d0330a6a56\`, registering the affective/developmental source stack.
+- The integration cohort is branch-only, not current main or PR #192. Affective planning has one registered specialist test; other specialist test sources are unregistered. ExperienceMemory remains header-only, unconnected to Brain and non-durable.
+- This is major DF-02 discovery evidence, not semantic closure or Project Director baseline acceptance.

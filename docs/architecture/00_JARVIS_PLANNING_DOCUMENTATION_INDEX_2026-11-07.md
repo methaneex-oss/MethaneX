@@ -1795,3 +1795,10 @@ Authenticated rendered anchors, viewport landing, full CommonMark/GFM parser rec
 The PR #192 current candidate tree at \`5f70f228d4142e02dc520588f02e40afc78b681f\` and prior ledger tree at \`9d61e9bb3ef0433e7b1c03bfcd1a3a19b8c6741d\` each contain 280 complete entries. Their blob identities match for all 159 PR #97 donor changed paths. Recomputed donor #97 HEAD \`c1da222e6c94aeb3f2ad000392c21fe4fc81ab25\` versus current candidate remains 1 identical, 95 divergent, 63 absent.
 
 This validates currentness of the canonical blob ledger; it does not establish semantic successors or complete all-ref consumers. DF-02 remains OPEN.
+
+
+## 112. DF-02 all-ref scan and branch-cohort discovery — 2026-11-20
+
+The corrected PR #199 scan (run \`44646915235\`, artifact \`14588258314\`) enumerated 253 branch refs / 212 unique tips and scanned all 159 donor paths plus 1,393 tracked text blobs. It records exact consumer blob identities. Candidate PR #192 remained 1 identical / 95 divergent / 63 absent at candidate SHA \`32722f104f76817983b0156cca821949e406b8c1\`.
+
+Fifteen exact 2026-10-31 branch tips were identified with all 159 donor paths present (139–143 donor-identical, 16–20 divergent, zero absent). Their shared CMake blob registers the affective/developmental implementation stack. This stack is not present in current main or PR #192. The cohort's ExperienceMemory header is not Brain-integrated or durable; only the affective-planning specialist test is registered. See DF-02 §55 and lineage supplement §11.7. DF-02 remains OPEN pending per-path semantic/authority dispositions and manual exact-blob consumer adjudication.

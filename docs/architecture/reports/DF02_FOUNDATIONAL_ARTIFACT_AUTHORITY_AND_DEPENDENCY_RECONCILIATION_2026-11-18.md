@@ -2821,3 +2821,71 @@ The sole identical path is \`.github/workflows/dlt-002-four-hour.yml\`. The same
 This verifies that the §30.2 candidate blob identities and the 1/95/63 classification remain current at this PR #192 HEAD. It does not convert a divergent same-path file into a semantic successor, nor prove that an absent same-path artifact has no alternate successor elsewhere. The 159 path-to-evidence crosswalk in §53 remains the navigation index; the all-ref source-content consumer/dependency/duplicate-owner scan and historical authority dispositions remain incomplete.
 
 **Disposition:** current 159-path tree identity is Builder-verified. DF-02 remains **OPEN**.
+
+
+## 55. Corrected all-ref scan and the 2026-10-31 integrated branch cohort — 2026-11-20
+
+### 55.1 Reproducible all-ref discovery run
+
+The read-only audit workflow in PR #199 completed successfully at workflow run \`44646915235\`; uploaded artifact ID \`14588258314\`. The exact inputs were donor PR #97 HEAD \`c1da222e6c94aeb3f2ad000392c21fe4fc81ab25\`, donor base \`4ba84b8b5ccf0e41530c46fdb8101551254ba864\`, and candidate PR #192 HEAD \`32722f104f76817983b0156cca821949e406b8c1\`.
+
+The run fetched **253 branch refs / 212 unique tips** (8 duplicate-tip groups), inspected all **159 donor paths**, indexed and scanned **1,393 unique tracked text blobs**, and skipped zero binary blobs. The candidate same-path disposition remains **1 identical / 95 divergent / 63 absent**. The exact-blob-keyed output contains 1,595 exact-path-reference rows and 182,266 source/test/build/workflow symbol-match rows. These are lexical discovery candidates, not semantic consumer verdicts.
+
+**Superseded artifact warning:** the earlier run's match aggregator keyed only by donor path/symbol/consumer path and could combine different consumer blob versions. That artifact's match tables are not used. The corrected run keys every match by exact consumer blob SHA and records \`candidate_tip_present\` against the exact path/blob occurrence. The earlier branch census and donor-path-presence table remain valid, but only the corrected artifact is accepted for match-level analysis.
+
+### 55.2 Fifteen exact-ref tips expose a coherent, unmerged integration cohort
+
+The corrected all-ref output identified 15 unique branch tips carrying a coherent 2026-10-31 integration state. Every one of the 15 exact recursive trees contains all 159 PR #97 donor paths. Per-tip exact blob comparison against donor HEAD shows 139–143 donor-identical paths, 16–20 divergent paths, and zero absent paths:
+
+| Branch tip | Exact tip SHA | Donor-identical | Divergent | Absent |
+|---|---|---:|---:|---:|
+| docs/brain-constitution-planning-readiness-20261031 | `004e8753d01c9b18bb243b257591657f9b19d7db` | 139 | 20 | 0 |
+| docs/brain-identity-behavioral-spec-20261031 | `14f060c66b3877989ac2966f2bcf51086f511c5a` | 141 | 18 | 0 |
+| docs/brain-layer-language-ownership-map-20261031 | `39ca36eb66d20fe7ded0d891aad7a153c59628a0` | 139 | 20 | 0 |
+| docs/brain-polyglot-engineering-governance-20261031 | `4380fcbbdf4887b8332948083d000483d8f8d622` | 141 | 18 | 0 |
+| docs/brain-polyglot-foundation-audit-20261031 | `5433b0d0ae6ea7ff9d0991e84c8a6a8a2506c1cb` | 139 | 20 | 0 |
+| docs/jarvis-mcu-brain-target-analysis-20261031 | `573ed8e43ed77c1e119af89e13a6a2cd9a319557` | 139 | 20 | 0 |
+| docs/jarvis-project-command-governance-20261031 | `7fe212bbb0bd61116ea56581435e03b06c69b673` | 143 | 16 | 0 |
+| docs/priority-one-trust-boundary-contract-20261031 | `abf3303c04638a89146a4161b91a439910235add` | 139 | 20 | 0 |
+| fix/journal-bool-decoding-validation-20261031 | `b627dcc6a0ec849386425c785ba567ff2d2198dc` | 139 | 20 | 0 |
+| fix/knowledge-calibration-conflicting-sequences-20261031 | `bdc980f3dcf322541556c0756aeee4eb1ff955a1` | 139 | 20 | 0 |
+| fix/knowledge-calibration-freshness-20261031 | `c6c76cfa2716551490859d6e8699992ebd4b5798` | 141 | 18 | 0 |
+| fix/reject-nonfinite-cognitive-evidence-20261031 | `c803e9873df1c22111156d894853ef2d8832a8ea` | 139 | 20 | 0 |
+| integration/priority-one-20261031 | `cfbcbdd29839f062851d3ca7da63ab2ae3a8f4f1` | 141 | 18 | 0 |
+| integration/priority-one-internal-event-guard-20261031 | `e7227919c13cc65c0e3915fdc7b6491465be1921` | 139 | 20 | 0 |
+| integration/priority-one-memory-bool-hardening-20261031 | `edacf39d91a086480358f6878ecb8461c3cbd7af` | 141 | 18 | 0 |
+
+All 15 tips share the same \`core/cpp/CMakeLists.txt\` blob \`bc264ce7b4ae489404ca03ea6d9676d0330a6a56\`. That CMake file registers \`src/brain_restored_api.cpp\`, \`src/brain_affective_planning.cpp\`, \`src/affective_state.cpp\`, \`src/affective_learning.cpp\`, and \`src/developmental_learning.cpp\`, and includes \`tests/affective_planning.cmake\`.
+
+Representative exact-ref evidence at \`integration/priority-one-20261031\` (\`cfbcbdd29839f062851d3ca7da63ab2ae3a8f4f1\`):
+
+| Artifact | Blob SHA | Finding |
+|---|---|---|
+| \`core/cpp/src/brain_restored_api.cpp\` | \`00d69ab2eb3811d453a643ef18dc69741109cbc8\` | 530-line restored API implementation |
+| \`core/cpp/src/brain_affective_planning.cpp\` | \`2a9406257c23f3a66a64071842be7d6448799406\` | Compiled affective/developmental planning integration |
+| \`core/cpp/src/affective_state.cpp\` | \`563a61cd8f6440f78a084f76a799b2c84bdd6813\` | Compiled affective-state implementation |
+| \`core/cpp/src/affective_learning.cpp\` | \`dd1735a10871512691d4b518d1ce45246c80f708\` | Header-backed affective-learning translation unit |
+| \`core/cpp/src/developmental_learning.cpp\` | \`c9a34d562fa1a20641530daba81bfdc1f3621fee\` | Compiled developmental-learning implementation |
+| \`core/cpp/include/jarvis/core/brain.hpp\` | \`7679c207be9bb5e6a70b36d770d5dfb846137fb5\` | Brain owns affective/developmental state and APIs |
+| \`core/cpp/include/jarvis/core/affective_state.hpp\` | \`f63da2e0060938864bf434012d0b3b4d74fa5f29\` | Affective-state interface |
+| \`core/cpp/include/jarvis/core/developmental_learning.hpp\` | \`65174400d8c3ce1dea17667ac928767cf3af333a\` | Developmental-learning interface |
+| \`core/cpp/include/jarvis/core/experience_memory.hpp\` | \`28cce354eb9db7e8ca292746fd14649debb7ab04\` | Standalone header-only experience-memory primitive |
+| \`core/cpp/tests/affective_planning.cmake\` | \`e3a52416b2538791a93666e5124b1f34ad1b082a\` | Registers \`jarvis_affective_planning_suite\` |
+
+This cohort is real source/build integration evidence, not an accepted runtime baseline. No workflow or test execution has been newly attributed to these 15 exact tips by this scan.
+
+### 55.3 Test and experience-memory limits inside that cohort
+
+The representative CMake includes the affective-planning test registration. The tree also contains multiple affective, developmental, goal-outcome, learned-association, learned-strategy, prediction-context and experience-memory test sources; the general \`core/cpp/tests/CMakeLists.txt\` blob \`4c034eefa3547cd6d070d24406f0ff159163fd6f\` does not register those suites. The specialized \`affective_planning.cmake\` registers the affective-planning suite only. Source presence therefore must not be reported as test execution or comprehensive coverage.
+
+The \`ExperienceMemory\` header \`28cce354eb9db7e8ca292746fd14649debb7ab04\` is a standalone in-memory sequence/key index. It is not included by the cohort's \`brain.hpp\`, is not wired into the Brain state/learning loop, has no durable persistence implementation in that header, and its \`experience_memory_test.cpp\` is not registered in CMake. It is not evidence of integrated durable experience memory.
+
+### 55.4 Current main and PR #192 candidate do not contain this integrated stack
+
+At current main \`4f07d772beae03c99a8dd58b174201a3aa3074b2\` and PR #192 candidate \`32722f104f76817983b0156cca821949e406b8c1\`, the richer affective/developmental source files and \`experience_memory.hpp\` are absent. Both contain only the 77-line \`brain_restored_api.cpp\` blob \`618deb6976eed951eae02b7f0da741e6d730bb0c\`; candidate CMake blob \`c51816888e1bddb7bc00c59e72529524e27a0717\` does not register it. The candidate \`brain.hpp\` blob \`8268ef84e0b361ead536724ba7761904b30ee58f\` lacks the affective/developmental ownership declarations present in the 2026-10-31 cohort.
+
+The 77-line candidate \`brain_restored_api.cpp\` duplicates method names already defined in compiled \`brain.cpp\`; it is not the 530-line integrated implementation above and is not compiled by the candidate CMake. Do not infer missing or working capability from its mere presence.
+
+### 55.5 DF-02 disposition
+
+This closes a major discovery gap: a 15-tip exact-ref integration cohort and its source/CMake/test-registration differences are now recorded. It does **not** close DF-02. The 159-path ledger still requires a per-path semantic successor/retirement/non-adoption and authority decision; the corrected lexical match tables require manual exact-blob/context adjudication; and no Project Director baseline/acceptance decision is inferred. The 15 tips remain branch-only evidence, not an instruction to adopt or merge them.

@@ -689,3 +689,16 @@ At PR #192 HEAD \`5f70f228d4142e02dc520588f02e40afc78b681f\`, the complete recur
 Comparing every donor path's current candidate blob with the exact prior ledger source \`9d61e9bb3ef0433e7b1c03bfcd1a3a19b8c6741d\` shows all 159 candidate blob identities unchanged. Recomputing donor-versus-current-candidate statuses gives 1 identical, 95 divergent and 63 absent. The only identical path remains \`.github/workflows/dlt-002-four-hour.yml\`.
 
 This confirms the prior 159-path blob classification remains current; it does not establish semantic successors or close the all-ref source-content consumer/dependency/authority scan. DF-02 remains OPEN.
+
+
+## 11.7 Corrected all-ref source discovery and integrated branch cohort — 2026-11-20
+
+The read-only PR #199 workflow run \`44646915235\` uploaded artifact \`14588258314\`, scanning 253 remote branch refs / 212 unique tips and all 159 donor PR #97 paths. It indexed 1,393 tracked text blobs. Candidate PR #192 HEAD was \`32722f104f76817983b0156cca821949e406b8c1\`; donor HEAD was \`c1da222e6c94aeb3f2ad000392c21fe4fc81ab25\`. Candidate same-path counts were 1 identical, 95 divergent, 63 absent.
+
+The first scanner artifact's match rows were superseded after Builder self-review found a cross-blob aggregation defect. The accepted artifact keys each match by exact consumer blob SHA and records exact candidate-tip presence. The 182,266 symbol rows remain lexical candidates requiring semantic adjudication.
+
+Fifteen exact branch tips dated 2026-10-31 contain all 159 donor paths, with 139–143 donor-identical, 16–20 divergent and zero absent. All 15 share CMake blob \`bc264ce7b4ae489404ca03ea6d9676d0330a6a56\`, which registers the restored Brain API, affective planning, affective state/learning and developmental learning sources. Representative \`integration/priority-one-20261031\` tip \`cfbcbdd29839f062851d3ca7da63ab2ae3a8f4f1\` contains the exact compiled sources and Brain ownership declarations recorded in DF-02 §55.
+
+This is a branch-only integrated source cohort, not current main or PR #192. The current main and candidate trees lack the affective/developmental source stack and experience-memory header. The branch cohort registers the affective-planning test only; other specialist test sources are present but not registered. Its \`ExperienceMemory\` header is not connected to Brain and has no durable persistence. No test pass or runtime capability is inferred for these 15 tips.
+
+The cohort materially advances semantic successor discovery but does not close DF-02 or authorize baseline selection, adoption, merge or runtime activation.

@@ -739,3 +739,10 @@ This correction demonstrates why counts must identify their unit. It does not up
 The current PR #192 recursive tree was compared against both the exact donor PR #97 tree and the prior ledger source. All 159 candidate blob identities are unchanged from the prior ledger source; the recomputed classification is 1 identical, 95 divergent and 63 absent. The donor tree contains all 159 paths and both trees are complete/untruncated.
 
 This verifies only exact path/blob currentness. The 95 divergent blobs may contain materially different behavior; the 63 absent paths may have alternate successors; and the 210-unique-tip consumer/dependency scan is still incomplete. The ledger remains open. No semantic or authority closure is inferred.
+
+
+## 24. DF-02 all-ref scan and integrated branch cohort — 2026-11-20
+
+Corrected exact-blob-keyed all-ref scan: run \`44646915235\`, artifact \`14588258314\`; 253 branch refs / 212 unique tips; 159 donor paths; 1,393 text blobs. Candidate same-path disposition at PR #192 SHA \`32722f104f76817983b0156cca821949e406b8c1\`: 1 identical / 95 divergent / 63 absent.
+
+Fifteen 2026-10-31 branch tips contain all 159 donor paths, 139–143 exact donor blobs and 16–20 divergent blobs each. Their shared CMake configuration compiles the affective/developmental source stack. This is a branch-only integration cohort, not current main or candidate. Specialist test registration is incomplete; ExperienceMemory remains an unconnected, non-durable header. The exact evidence and limitations are in DF-02 §55.

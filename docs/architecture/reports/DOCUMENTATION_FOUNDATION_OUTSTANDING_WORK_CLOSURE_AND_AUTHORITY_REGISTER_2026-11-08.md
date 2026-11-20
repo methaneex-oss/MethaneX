@@ -1992,3 +1992,10 @@ The earlier 33 count referred to unique ranged files. The Phase 2 map contains 7
 ## 29. DF-02 current candidate blob identity revalidation — 2026-11-20
 
 The current PR #192 candidate tree and the prior ledger tree have identical blob SHAs for all 159 PR #97 changed paths. Exact donor-versus-current-candidate classification remains 1 identical, 95 divergent and 63 absent; all 159 donor paths exist in the donor tree. This confirms the ledger is current at the stated candidate SHA. It does not close semantic successor, reverse-consumer, all-ref dependency/duplicate ownership or historical authority requirements. DF-02 remains OPEN.
+
+
+## 24. DF-02 all-ref scan and integrated branch cohort — 2026-11-20
+
+Corrected exact-blob-keyed all-ref scan: run \`44646915235\`, artifact \`14588258314\`; 253 branch refs / 212 unique tips; 159 donor paths; 1,393 text blobs. Candidate same-path disposition at PR #192 SHA \`32722f104f76817983b0156cca821949e406b8c1\`: 1 identical / 95 divergent / 63 absent.
+
+Fifteen 2026-10-31 branch tips contain all 159 donor paths, 139–143 exact donor blobs and 16–20 divergent blobs each. Their shared CMake configuration compiles the affective/developmental source stack. This is a branch-only integration cohort, not current main or candidate. Specialist test registration is incomplete; ExperienceMemory remains an unconnected, non-durable header. The exact evidence and limitations are in DF-02 §55.
