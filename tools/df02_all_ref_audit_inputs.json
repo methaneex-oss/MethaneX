@@ -166,5 +166,6 @@
     "engineering/cpp/src/task_ledger.cpp",
     "engineering/cpp/tests/agent_and_console_suite.cpp",
     "engineering/cpp/tests/task_ledger_suite.cpp"
-  ]
+  ],
+  "trigger_label": "df02-all-ref-scan-push-trigger-2026-11-20"
 }
