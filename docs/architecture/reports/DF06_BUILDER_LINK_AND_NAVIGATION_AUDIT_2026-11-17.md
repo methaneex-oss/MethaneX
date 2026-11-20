@@ -594,3 +594,30 @@ This is exact source-file and line-bound verification. It does **not** prove:
 The previous six- and two-link targeted corrections remain separately recorded in §§16 and 23. This 45-target tranche adds broader source-level evidence, not authenticated rendered-browser acceptance.
 
 **Disposition:** 45/45 exact commit-pinned blob targets resolve; 33/33 line ranges are in bounds. DF-06 remains **NOT MET** under Option A.
+
+
+## 27. Full 73-tuple line-range recheck and correction to §26 — 2026-11-20
+
+**Correction to §26 count:** the 33 figure is the number of unique commit/path targets carrying line fragments, not the number of distinct line-range tuples. The Phase 2 map's exact blob \`1ae6ca2dcde4c6f88040762a07ac11e7f01ea255\` contains **73 unique (commit SHA, path, start-line, end-line) tuples** across 33 ranged files. The extraction produced 89 raw blob-URL matches and 86 unique commit/path/fragment tuples; 45 unique commit/path targets were fetched across five immutable commits, including 12 targets without line fragments.
+
+All 33 ranged files were fetched at their exact pinned commits. For each file, the maximum end line across every one of its referenced tuples was compared with the exact fetched file's line count; every referenced start line was positive and every maximum end line was within the file. This validates all **73/73 unique line-range tuples**, not merely one representative range per file. The 12 commit-pinned targets without line fragments also resolve, giving **45/45 unique commit/path targets**.
+
+### 27.1 Exact result
+
+| Check | Result |
+|---|---:|
+| Raw commit-pinned blob URL matches | 89 |
+| Unique commit/path/fragment tuples | 86 |
+| Unique line-range tuples | **73/73 valid** |
+| Unique ranged source files | 33/33 fetched |
+| Additional no-fragment targets | 12/12 fetched |
+| Unique commit/path targets | **45/45 resolved** |
+| Out-of-range endpoints | 0 |
+
+The exact source commits and 45 path targets are enumerated in §26's extraction source, the Phase 2 map blob above, and the pinned links in that map. This recheck uses maximum referenced end line per file, so every distinct range on a file is covered by the same exact source-length bound.
+
+### 27.2 Acceptance boundary
+
+This resolves the numeric source-line-bound question for all 73 distinct ranges. It still does not verify GitHub-rendered target IDs, authenticated browser fragment navigation or viewport landing. Nor does it resolve the full 51-file CommonMark/GFM parser discrepancy, all local heading fragments, or exhaustive external status/redirect/final-destination/semantic-relevance checks.
+
+**Disposition:** 73/73 source line-range tuples and 45/45 unique commit/path targets are Builder-verified. DF-06 remains **NOT MET** under Option A.

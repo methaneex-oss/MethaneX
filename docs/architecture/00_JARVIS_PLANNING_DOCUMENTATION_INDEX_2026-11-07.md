@@ -1781,3 +1781,10 @@ This is a proposed workflow correction, not a live \`main\` change. DF-09 remain
 The Phase 2 map at exact blob \`1ae6ca2dcde4c6f88040762a07ac11e7f01ea255\` contains 45 unique commit-pinned GitHub blob targets across five source commits. Exact-ref file retrieval resolved 45/45 targets; all 33 referenced line ranges were within the fetched source line counts. Twelve additional blob targets without line fragments also resolved.
 
 This is not authenticated rendered-anchor verification and does not close the 51-file CommonMark/GFM parser discrepancy or exhaustive external status/redirect/relevance requirement. DF-06 remains NOT MET.
+
+
+## 116. Corrected full source-range count — 2026-11-20
+
+The Phase 2 integration map exact blob \`1ae6ca2dcde4c6f88040762a07ac11e7f01ea255\` contains 73 unique commit-pinned line-range tuples across 33 ranged files and 45 unique commit/path targets. All 33 ranged files were fetched at exact commits; all 73 distinct ranges are within source line counts. Twelve additional no-fragment targets also resolve. This supersedes the §115/DF-06 §26 partial count wording: 33 is the ranged-file count, not the range-tuple count.
+
+Authenticated rendered anchors, viewport landing, full CommonMark/GFM parser reconciliation, local heading fragments and exhaustive external URL checks remain open. DF-06 remains NOT MET.

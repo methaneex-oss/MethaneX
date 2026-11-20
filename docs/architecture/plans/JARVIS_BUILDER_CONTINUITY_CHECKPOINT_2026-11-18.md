@@ -1358,3 +1358,10 @@ DF-09 therefore remains **NOT MET / BLOCKED**. After PR #198 acceptance/merge, t
 At PR #192 source \`fbb56390eff11d64699517babae4f9a33713fb20\`, the Phase 2 integration map exact blob \`1ae6ca2dcde4c6f88040762a07ac11e7f01ea255\` was parsed for unique commit-pinned GitHub blob destinations. Forty-five unique \`(commit SHA, path)\` pairs across five immutable commits were fetched at exact refs. All 45 resolved. Thirty-three explicit line ranges were checked against the exact fetched file line counts; all 33 endpoints were in bounds. Twelve commit-pinned blob links without line ranges also resolved.
 
 This is source-file and line-bound verification only. It does not establish rendered HTML anchors, authenticated GitHub viewport landing, full CommonMark/GFM parser reconciliation, or exhaustive external URL status/redirect/relevance. DF-06 remains **NOT MET**.
+
+
+## 49. Corrected full line-range count — 73/73 exact-source bounds — 2026-11-20
+
+The §26 tranche's 33 count represented unique ranged files, not unique ranges. A fresh extraction from the exact Phase 2 map blob \`1ae6ca2dcde4c6f88040762a07ac11e7f01ea255\` found 73 unique commit/path/start/end tuples across 33 files and 45 unique commit/path targets total. All 33 ranged files were fetched at their exact pinned commits; maximum referenced end line per file was compared with its exact line count. All 73/73 range tuples are in bounds. The 12 additional no-fragment targets also resolve. No out-of-range endpoint was found.
+
+This is source-line-bound verification, not rendered GitHub anchor/viewport verification. DF-06 remains NOT MET.

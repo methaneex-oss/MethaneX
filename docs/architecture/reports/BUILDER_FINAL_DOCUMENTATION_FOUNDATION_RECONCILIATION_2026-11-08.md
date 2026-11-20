@@ -725,3 +725,10 @@ Builder evidence mapping improved. DF-02, DF-06 and DF-09 remain open. No indepe
 The 45-target verification is reproducible from the exact Phase 2 map blob. The check fetched each unique commit/path pair, counted exact source lines and verified all 33 numeric ranges. It is stronger than path-only existence but still not a rendered browser test. The check did not inspect GitHub DOM target IDs or viewport landing, did not run a full CommonMark/GFM parser, and did not exhaustively validate all 51 Markdown files' external URLs. The DF-06 status therefore remains NOT MET.
 
 No claim of authenticated rendered verification, full parser compliance, independent review or Director acceptance is made.
+
+
+## 28. Adversarial self-review — correcting the 45-target/73-range accounting — 2026-11-20
+
+The initial §26 summary conflated 33 ranged files with 33 line-range tuples. The map actually contains 73 unique range tuples across those 33 files. This was corrected in §27 after extracting all 73 tuples and re-fetching each of the 33 exact source files. The maximum end line for each file covers every tuple on that file; all 73 are in bounds. The 12 no-fragment targets also resolve. The 45 count refers to unique commit/path pairs, not line ranges.
+
+This correction demonstrates why counts must identify their unit. It does not upgrade the source check to rendered browser verification. DF-06 remains NOT MET.

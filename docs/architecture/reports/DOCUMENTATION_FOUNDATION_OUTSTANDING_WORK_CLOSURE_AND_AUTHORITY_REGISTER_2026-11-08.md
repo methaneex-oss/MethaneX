@@ -1982,3 +1982,8 @@ DF-09 remains NOT MET/BLOCKED until PR #198 is accepted and merged, the correcte
 ## 27. DF-06 exact source-link tranche — 2026-11-20
 
 Builder fetched all 45 unique commit-pinned GitHub blob targets extracted from the exact Phase 2 map blob \`1ae6ca2dcde4c6f88040762a07ac11e7f01ea255\`. All 45 paths resolved at their pinned commits; all 33 explicit line ranges were within the exact file line counts. This closes only source-path and line-bound verification for that map's 45 unique targets. Rendered/authenticated anchor landing, full CommonMark/GFM parser reconciliation and exhaustive external URL status/redirect/relevance remain outstanding. DF-06 remains NOT MET.
+
+
+## 28. DF-06 correction — complete numeric line-range tranche — 2026-11-20
+
+The earlier 33 count referred to unique ranged files. The Phase 2 map contains 73 unique line-range tuples across 33 exact commit/path files. All 33 files were fetched at their pinned commits; all 73 ranges were checked using the maximum referenced end line per file against the exact line count. All 73/73 are within bounds. Forty-five unique commit/path targets resolve, including 12 without line fragments. This does not verify rendered anchors, parser completeness, local heading fragments or exhaustive external URL behavior. DF-06 remains NOT MET.
