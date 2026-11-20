@@ -1680,3 +1680,8 @@ The Builder verified that candidate attention lacks donor prediction-error/inter
 ## 65. DF-02 goal-outcome and adaptive-priority finding — 2026-11-20
 
 The candidate goal model handles prerequisites, deadlines and progress/status but lacks the donor's persisted `outcome_momentum` and signed progress-delta priority adaptation. The separate donor `cognitive_goal_outcome.hpp` evidence model and 15-assertion suite are absent from candidate; candidate goals suite is 34 assertions versus donor 45. The same API appears only in the uncompiled candidate Brain restored-API artifact and is not a valid integrated successor. See `DF02_GOAL_OUTCOME_AND_ADAPTIVE_PRIORITY_REGRESSION_AUDIT_2026-11-20.md`. Fixed donor coefficients require design review; no runtime changes. This branch write reopens DF-10.
+
+
+## 66. DF-02 cognitive-cycle integration gap — 2026-11-20
+
+The candidate CognitiveCycle contract stops at raw observation and action assessment. Unlike the donor, it has no PerceptionPipeline/PerceptualRepresentation contract, no developmental context, no affective state/appraisal/attention in the cycle result, no action execution results, and no sequence-aware/goal-outcome feedback overload. The donor suite is 186 assertions versus 31 candidate assertions. Detailed exact blobs and API comparison: `DF02_COGNITIVE_CYCLE_PERCEPTION_AND_ACTION_INTEGRATION_AUDIT_2026-11-20.md`. No runtime change; DF-02 remains OPEN. This write reopens DF-10.
