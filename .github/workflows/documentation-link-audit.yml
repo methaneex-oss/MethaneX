@@ -1,0 +1,48 @@
+name: Documentation Link and Fragment Audit
+
+on:
+  push:
+    branches:
+      - docs/whole-brain-planning-scope-correction-20261107
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: documentation-link-audit
+  cancel-in-progress: false
+
+jobs:
+  documentation-links:
+    name: CommonMark/GFM link integrity and external reachability
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out exact branch revision
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install Markdown parser with GFM extensions
+        run: python -m pip install "markdown-it-py[linkify]>=4,<5"
+
+      - name: Audit all tracked Markdown destinations
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python scripts/audit_documentation_links.py
+
+      - name: Preserve exact-revision audit output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: documentation-link-audit-${{ github.sha }}
+          path: documentation-link-audit.json
+          if-no-files-found: warn
+          retention-days: 30

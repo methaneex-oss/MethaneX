@@ -1,5 +1,7 @@
 # Phase 2 — Whole-Brain Capability-to-Source Integration Map
 
+> **Whole-Brain scope correction — 2026-11-07:** This report is a substantial but bounded source-integration investigation organized around the existing BM-01–BM-12 specification. It does not establish that those twelve mechanisms exhaust the future Brain's capabilities. Preserve the source/dataflow findings, but do not treat the BM-01–BM-12 acceptance ledger as proof of whole-Brain architectural completeness or as a development sequence. The corrected planning scope and prior Builder error record are in [Whole-Brain Planning Scope and Builder Correction](WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md).
+
 **Date:** 2026-11-05  
 **Repository:** `methaneex-oss/MethaneX`  
 **Phase 2 branch:** `docs/jarvis-phase-2-whole-brain-integration-map-20261105`  
@@ -2077,8 +2079,8 @@ Required proof before donor acceptance:
 - [Controller adoption compensation and rollback boundaries](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/evolution_controller.cpp#L113-L264), blob `4e77ec2e5daa09a964132ca486b8c5ee1cebf2f5`.
 - [Brain evaluation/adoption/canary/rollback event ordering](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain_restored_api.cpp#L256-L380), blob `7155d4d9c8eef527836fb79bf901aa32ddbae38b`.
 - [Brain replay reconstructs evolution projections from durable events](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain.cpp#L497-L610), blob `dec9e5442b3ca4b81a7879855c6146b2619934cc`.
-- [Journal transition/compensation tests](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/evolution_adoption_journal_suite.cpp#L1-L108), blob `fc8ae17bb837831fef7bf69873ec0e5243e2bc22`.
-- [Brain-level adoption/restart/canary tests](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/evolution_brain_integration_suite.cpp#L1-L298), blob `59d7dd68c42eea18d488d8e5e6aa9f7a9a327ded`.
+- [Journal transition/compensation tests](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/evolution_adoption_journal_suite.cpp#L1-L107), blob `fc8ae17bb837831fef7bf69873ec0e5243e2bc22`.
+- [Brain-level adoption/restart/canary tests](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/evolution_brain_integration_suite.cpp#L1-L297), blob `59d7dd68c42eea18d488d8e5e6aa9f7a9a327ded`.
 
 **Status remains:** Phase 2 IN PROGRESS. Gate A NOT CLEARED. No implementation baseline selected, no donor approved, and no implementation authorization implied.
 
@@ -2884,8 +2886,8 @@ This is not a claim that every action needs a short time-to-live or that a stati
 - [`CognitiveActionAdapter` and `CognitiveRuntimeConfig`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/include/jarvis/core/cognitive_runtime.hpp#L17-L40), blob `e5a3c853add8b5fcb9b8c04c9b25f20179b5b629`.
 - [`CognitiveRuntime::execute_actions`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/cognitive_runtime.cpp#L112-L175), blob `cf00acb6abd52308343f3a0e7016e6173b945603`.
 - [`Brain::execute_action`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain_action_execution.cpp#L8-L50), blob `3b66bafb438cd28790e6f25611b96c86f1eff05c`.
-- [`ActionAuthorizer::authorize`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/action_authorization.cpp#L14-L45), blob `669bc86c8111ae9755bcd40715352b4fc71350d0`.
-- [`Action authorization tests`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/action_authorization_suite.cpp#L1-L48), blob `66127a2b574d5c44571332733edb800fb558bcaf`.
+- [`ActionAuthorizer::authorize`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/action_authorization.cpp#L14-L44), blob `669bc86c8111ae9755bcd40715352b4fc71350d0`.
+- [`Action authorization tests`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/action_authorization_suite.cpp#L1-L47), blob `66127a2b574d5c44571332733edb800fb558bcaf`.
 - [Accepted BM-06 permission/freshness preservation](https://github.com/methaneex-oss/MethaneX/blob/0811a59e46bf934e32e794f90e4e7d18d4e2bd97/docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md#L307-L324), blob `3b6a53c8a295fa0d9fc29bbb6c7688b61d1dcdb1`.
 
 **Finding disposition:** P2-I-038 is a distinct governance-context lifecycle gap. It is not the same as P2-I-030's partial external side-effect contract or P2-I-029's persistence acknowledgement. Keep it provisional until the real host policy lifecycle is inspected.
@@ -3888,7 +3890,7 @@ To close the external-host portions of criteria 2, 3, 5 and 6, the Project Direc
 
 If the deployed host is intentionally outside this repository, its contract and exact version must be attached or linked as review evidence. A repository-only source map cannot certify uninspected deployment behavior.
 
-### 61.4 Status
+### 60.4 Status
 
 **Bounded call-site search complete; external host remains unidentified.** Criteria 2, 3, 5 and 6 retain their existing PARTIAL/BLOCKED dispositions. No implementation authority or phase-exit status changes.
 
@@ -3920,7 +3922,7 @@ Do not infer that the reviewer failed to assess F-02/F-03, and do not infer that
 3. Keep SYS-08 substrate responsibility separate from goal-formation F-02; do not merge similarly numbered findings across review packages.
 4. Retain the existing accepted PR #174 baseline and its stated limits; this reconciliation does not revoke that acceptance.
 
-### 60.4 Status
+### 61.4 Status
 
 **Criterion 5 remains PARTIAL.** The original F-02/F-03 correction map and PR #174 acceptance are now better evidenced, but the specific follow-on review artifact / explicit owner disposition remains unresolved. No gate or implementation authority changes.
 
@@ -4170,3 +4172,47 @@ No hardcoded memory-to-belief or reasoning-kind-to-action mapping is proposed. T
 ### 65.4 Status
 
 **Line-level source audit complete; criterion 4 remains MAPPED / BLOCKED.** The missing Memory-to-reasoning input and reasoning-to-downstream consumer edges are now stated with exact mainline line anchors. Corrections and integration tests remain unauthorized pending Gate A, baseline/scope selection and Project Director approval. Phase 2 exit remains NOT MET.
+
+---
+
+## 66. Whole-Brain planning scope correction — 2026-11-07
+
+### 66.1 Scope distinction
+
+The Phase 2 map was authored to map the twelve logical mechanisms in PR #174 to repository source, donor evidence, state ownership, producer/consumer paths, persistence/replay, tests and limitations. It contains meaningful integrated-system analysis, but its capability universe and exit ledger are substantially organized around BM-01–BM-12.
+
+The Project Director has clarified that the project must first plan the **entire future Brain**, before deciding where development should begin or which repository components should be used. Therefore, this report is not a complete whole-Brain capability architecture and cannot close that architectural planning requirement by itself.
+
+### 66.2 What remains valid
+
+- Preserve all exact source references, dataflow traces, defects, integration gaps, donor comparisons and test-evidence qualifications in this report.
+- Preserve the distinction between mainline, donor-only, partial, unverified and implemented behavior.
+- Preserve the existing finding that mechanisms must interact as one coherent Brain rather than as twelve isolated modules.
+- Preserve all unresolved technical findings and gate restrictions unless a later exact-evidence decision closes them.
+
+### 66.3 What is not established
+
+This report does not establish that:
+- BM-01–BM-12 are an exhaustive list of every mechanism/responsibility required by the future Brain;
+- all human cognitive functions relevant to the target have been covered;
+- all functional aspirations drawn from MCU J.A.R.V.I.S. have been translated into Brain/system responsibilities;
+- the developing-Brain analogy has been fully applied to foundational capacity versus experience-acquired competence;
+- all emergent capabilities, recurrent interactions, developmental paths or Brain-to-surrounding-system boundaries have been identified;
+- a development sequence, first implementation increment or repository reuse decision is authorized.
+
+### 66.4 Corrected order of work
+
+1. Define the whole-Brain capability space using human cognition, MCU J.A.R.V.I.S. and the developing-Brain analogy as distinct reference lenses.
+2. Derive and define the mechanisms, state ownership, contracts, dependencies and recurrent interactions required to support those capabilities.
+3. Challenge completeness and reconcile the resulting architecture with BM-01–BM-12 and the accepted upstream architecture/specifications.
+4. Obtain independent review and Project Director acceptance of the whole-Brain planning baseline.
+5. Only then determine development order and the first development increment.
+6. Only then assess repository code and donor material for reuse/adaptation/replacement against the selected increment.
+7. Obtain separate implementation authorization before runtime changes.
+
+The detailed definitions, exit evidence and constraints are maintained in [Whole-Brain Planning Scope and Builder Correction](WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md).
+
+### 66.5 Status correction
+
+The existing BM-01–BM-12 mapping remains a useful partial source-integration investigation. It must not be represented as a completed whole-Brain planning exercise. Existing Phase 2 ledger items remain open/partial/blocked as recorded; this addendum does not close them, clear Gate A, pass Gate B, select a baseline or authorize implementation.
+
