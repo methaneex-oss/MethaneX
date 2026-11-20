@@ -17,7 +17,7 @@ import sys
 import time
 from pathlib import Path, PurePosixPath
 from urllib.error import HTTPError, URLError
-from urllib.parse import unquote, urldefrag, urlsplit
+from urllib.parse import quote, unquote, urldefrag, urlsplit
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 from markdown_it import MarkdownIt
@@ -127,40 +127,126 @@ class RedirectRecorder(HTTPRedirectHandler):
         return super().redirect_request(req, fp, code, msg, headers, newurl)
 
 
-def verify_github_artifact(url: str) -> dict | None:
-    token = os.environ.get("GITHUB_TOKEN")
-    parts = urlsplit(url)
-    match = re.fullmatch(r"/([^/]+/[^/]+)/actions/runs/\d+/artifacts/(\d+)", parts.path)
-    if not token or not match:
-        return None
-    repository, artifact_id = match.groups()
-    api_url = f"https://api.github.com/repos/{repository}/actions/artifacts/{artifact_id}"
+def github_api_request(api_url: str, token: str, accept: str = "application/vnd.github+json") -> tuple[int, bytes, str]:
     request = Request(api_url, headers={
         "Authorization": f"Bearer {token}",
-        "Accept": "application/vnd.github+json",
+        "Accept": accept,
         "X-GitHub-Api-Version": "2022-11-28",
         "User-Agent": USER_AGENT,
     })
+    with build_opener().open(request, timeout=TIMEOUT) as response:
+        return response.status, response.read(), response.geturl()
+
+
+def verify_github_resource(url: str) -> dict | None:
+    token = os.environ.get("GITHUB_TOKEN")
+    parts = urlsplit(url)
+    if parts.hostname not in {"github.com", "www.github.com"} or not token:
+        return None
+    segments = [unquote(item) for item in parts.path.strip("/").split("/") if item]
+    if len(segments) < 2:
+        return None
+    repository = "/".join(segments[:2])
+    fragment = unquote(parts.fragment)
     try:
-        with build_opener().open(request, timeout=TIMEOUT) as response:
-            artifact = json.loads(response.read().decode("utf-8"))
-        if artifact.get("id") == int(artifact_id) and not artifact.get("expired", True):
+        if len(segments) >= 4 and segments[2] == "blob":
+            revision = segments[3]
+            file_path = "/".join(segments[4:])
+            if not file_path:
+                return None
+            api_url = (
+                f"https://api.github.com/repos/{repository}/contents/"
+                f"{quote(file_path, safe='/')}?ref={quote(revision, safe='')}"
+            )
+            status, body, final_url = github_api_request(
+                api_url, token, "application/vnd.github.raw+json"
+            )
+            line_count = len(body.decode("utf-8", errors="replace").splitlines())
+            line_match = re.fullmatch(r"L(\d+)(?:-L(\d+))?", fragment)
+            line_valid = None
+            if line_match:
+                first = int(line_match.group(1))
+                last = int(line_match.group(2) or first)
+                line_valid = first >= 1 and last >= first and last <= line_count
             return {
-                "url": url, "status": 200, "final_url": api_url, "redirects": [],
-                "result": "verified_via_api", "artifact_id": int(artifact_id),
-                "artifact_name": artifact.get("name"),
+                "url": url, "status": status, "final_url": final_url, "redirects": [],
+                "result": "verified_via_api" if status < 400 and line_valid is not False else "not_found",
+                "source_revision": revision, "source_path": file_path,
+                "source_line_count": line_count, "line_range_valid": line_valid,
+                "rendered_anchor_verified": False,
             }
-        return {"url": url, "status": 410, "final_url": api_url, "redirects": [], "result": "not_found"}
+
+        if len(segments) >= 4 and segments[2] == "pull":
+            number = segments[3]
+            api_url = f"https://api.github.com/repos/{repository}/pulls/{number}"
+            status, body, final_url = github_api_request(api_url, token)
+            if status >= 400:
+                return {"url": url, "status": status, "final_url": final_url, "redirects": [], "result": "not_found"}
+            resource = json.loads(body.decode("utf-8"))
+            result = {
+                "url": url, "status": status, "final_url": final_url, "redirects": [],
+                "result": "verified_via_api", "pull_request": int(number),
+                "pull_request_state": resource.get("state"),
+            }
+            comment_match = re.fullmatch(r"issuecomment-(\d+)", fragment)
+            if comment_match:
+                comment_url = f"https://api.github.com/repos/{repository}/issues/comments/{comment_match.group(1)}"
+                comment_status, comment_body, comment_final = github_api_request(comment_url, token)
+                result["comment_status"] = comment_status
+                result["comment_final_url"] = comment_final
+                if comment_status >= 400:
+                    result["result"] = "not_found"
+            return result
+
+        if len(segments) >= 4 and segments[2] == "actions" and segments[3] == "runs":
+            if len(segments) >= 6 and segments[5] == "artifacts":
+                artifact_id = segments[6] if len(segments) >= 7 else ""
+                if not artifact_id:
+                    return None
+                api_url = f"https://api.github.com/repos/{repository}/actions/artifacts/{artifact_id}"
+                status, body, final_url = github_api_request(api_url, token)
+                artifact = json.loads(body.decode("utf-8")) if status < 400 else {}
+                valid = status < 400 and artifact.get("id") == int(artifact_id) and not artifact.get("expired", True)
+                return {
+                    "url": url, "status": status, "final_url": final_url, "redirects": [],
+                    "result": "verified_via_api" if valid else "not_found",
+                    "artifact_id": int(artifact_id), "artifact_name": artifact.get("name"),
+                    "artifact_expired": artifact.get("expired"),
+                }
+            run_id = segments[4]
+            api_url = f"https://api.github.com/repos/{repository}/actions/runs/{run_id}"
+            status, body, final_url = github_api_request(api_url, token)
+            return {
+                "url": url, "status": status, "final_url": final_url, "redirects": [],
+                "result": "verified_via_api" if status < 400 else "not_found",
+                "workflow_run": int(run_id),
+            }
+
+        if len(segments) >= 4 and segments[2] == "commit":
+            api_url = f"https://api.github.com/repos/{repository}/commits/{segments[3]}"
+            status, _, final_url = github_api_request(api_url, token)
+            return {"url": url, "status": status, "final_url": final_url, "redirects": [], "result": "verified_via_api" if status < 400 else "not_found"}
+
+        if len(segments) >= 4 and segments[2] == "compare":
+            comparison = "/".join(segments[3:])
+            api_url = f"https://api.github.com/repos/{repository}/compare/{comparison}"
+            status, _, final_url = github_api_request(api_url, token)
+            return {"url": url, "status": status, "final_url": final_url, "redirects": [], "result": "verified_via_api" if status < 400 else "not_found"}
+
     except HTTPError as error:
         return {
-            "url": url, "status": error.code, "final_url": api_url, "redirects": [],
+            "url": url, "status": error.code, "final_url": error.geturl(), "redirects": [],
             "result": "access_limited" if error.code in {401, 403, 429} else "not_found" if error.code in {404, 410} else "http_error",
         }
-    except (URLError, TimeoutError, OSError, ValueError) as error:
-        return {"url": url, "status": None, "final_url": api_url, "redirects": [], "result": "unreachable", "error": str(error)}
+    except (URLError, TimeoutError, OSError, ValueError, json.JSONDecodeError) as error:
+        return {"url": url, "status": None, "final_url": None, "redirects": [], "result": "unreachable", "error": str(error)}
+    return None
 
 
 def check_external(url: str) -> dict:
+    github_result = verify_github_resource(url)
+    if github_result is not None:
+        return github_result
     fetch_url, _ = urldefrag(url)
     last_error = None
     for attempt in range(RETRIES + 1):
@@ -180,10 +266,6 @@ def check_external(url: str) -> dict:
             if error.code in {500, 502, 503, 504, 429} and attempt < RETRIES:
                 time.sleep(1 + attempt)
                 continue
-            if error.code in {404, 410}:
-                artifact_result = verify_github_artifact(url)
-                if artifact_result is not None:
-                    return artifact_result
             return {
                 "url": url,
                 "status": error.code,
