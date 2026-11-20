@@ -1,7 +1,7 @@
 # DF-02 — Evolution process-isolation attestation regression audit
 
 **Date:** 2026-11-20  
-**Candidate snapshot:** `cbc51e2b10f1fc976257653adf773735a2b27d49`  
+**Candidate baseline:** PR #192 base/merge-base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`. Every candidate source/test blob cited in this report was re-fetched at that exact PR base and matched the blob previously inspected at `cbc51e2b10f1fc976257653adf773735a2b27d49`.  
 **Donor snapshot:** PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`
 
 This report isolates a critical safety-boundary defect in the candidate evolution-experiment path. The process-isolation backend itself exists in both snapshots; the regression is that the candidate runner no longer connects it to a trustworthy attestation path.
