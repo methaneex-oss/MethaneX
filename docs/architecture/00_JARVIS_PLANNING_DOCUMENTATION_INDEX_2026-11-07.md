@@ -2029,3 +2029,8 @@ These alternate branches are evidence of distinct source lines, not a selected b
 ## 127. DF-02 action-feedback and evolution-adoption regression audit — 2026-11-20
 
 Read [DF-02 Action Feedback and Evolution-Adoption Regression Audit](reports/DF02_ACTION_FEEDBACK_AND_EVOLUTION_ADOPTION_REGRESSION_AUDIT_2026-11-20.md). It compares candidate PR #192 base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` against donor PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`. The candidate removes action consequence observation and the end-to-end behavior-change/persistence test. It also removes isolation attestation, weakens the safety gate and omits durable matching evaluation validation and compensation transitions from evolution adoption. Exact source/test blob hashes are in the report. No donor code is adopted; DF-02 remains OPEN.
+
+
+## 128. DF-02 runtime/memory/association/adaptation audit — 2026-11-20
+
+Read [DF-02 Cognitive Runtime, Memory, Association and Adaptation Regression Audit](reports/DF02_COGNITIVE_RUNTIME_MEMORY_ASSOCIATION_ADAPTATION_REGRESSION_AUDIT_2026-11-20.md). The exact candidate/donor comparison finds missing runtime feedback and selected-action execution, explicit memory consolidation APIs, contextual/conceptual association and prediction-feedback updates, and general signed-numeric/recency adaptation. Five registered test suites fall from 462 donor assertions to 112 candidate assertions. Fixed donor coefficients are flagged for design review rather than automatic adoption. No runtime code changed; DF-02 remains OPEN.
