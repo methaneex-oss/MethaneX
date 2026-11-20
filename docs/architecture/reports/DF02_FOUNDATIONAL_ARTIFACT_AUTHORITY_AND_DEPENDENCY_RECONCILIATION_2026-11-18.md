@@ -3260,3 +3260,8 @@ No runtime or CMake changes were made. DF-02 remains OPEN for the remaining cand
 ## 69. Cognitive-cycle perception, affect and action integration audit — 2026-11-20
 
 [DF-02 Cognitive-Cycle Perception and Action Integration Audit](DF02_COGNITIVE_CYCLE_PERCEPTION_AND_ACTION_INTEGRATION_AUDIT_2026-11-20.md) pins exact candidate/donor API differences: candidate cycle has no shared perception pipeline or structured representation, no developmental context, no per-cycle affective/appraisal/attention context, no action-execution result collection, and a narrower feedback API without sequence-aware prediction, goal-progress or outcome-utility inputs. The donor exposes those paths and its registered cycle suite is 186 assertions versus 31 candidate assertions. This reinforces the runtime feedback/action gap; no runtime code was changed.
+
+
+## 70. Representation provenance and canary-preview audit — 2026-11-20
+
+[DF-02 Representation Provenance and Canary Preview Audit](DF02_REPRESENTATION_PROVENANCE_AND_CANARY_PREVIEW_AUDIT_2026-11-20.md) records that candidate representation turns appraisal/provenance metadata into semantic nodes, ignores supplied event confidence, uses `std::hash` for node identity and does not reject NaN confidence; donor keeps appraisal metadata separate, derives confidence from evidence, uses deterministic length-prefixed IDs and validates finiteness. The candidate representation test file is not registered in CTest in either snapshot. The donor also exposes non-mutating `EvolutionCanary::preview`, absent in candidate; canary tests fall 36→9 assertions. No runtime changes.
