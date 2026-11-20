@@ -1287,3 +1287,53 @@ The inventory-only candidate `67be...` passed its exact parent/successor verific
 DF-02 **OPEN**; DF-03 partially evidenced; DF-04 Builder evidence present within bounded scope; DF-05 partially evidenced; DF-06 **NOT MET**; DF-07 synchronization pending; DF-08 resolved within bounded criterion; DF-09 **NOT MET / externally blocked**; DF-10 **REOPENED**; DF-11 waived as mandatory; DF-12 **PROJECT DIRECTOR ONLY**. Stage A remains **NOT STARTED / HELD**.
 
 The PR description remains stale and must be updated to the live head/base/mergeability facts. The Independent Reviewer request must remain unpinned until the new terminal inventory successor exists. No runtime implementation, donor adoption, source-baseline selection, independent verdict, Director acceptance or merge permission is claimed.
+
+
+## 46. Builder run revalidation and exact-current residual audit crosswalk — 2026-11-20
+
+### 46.1 Governance Revalidation Record
+
+| Field | Verified value |
+|---|---|
+| Project / work item | MethaneX — JARVIS Documentation Foundation, PR #192 |
+| Active role | Main Builder; Builder self-review only |
+| Governance source | \`docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md\` |
+| Exact governing revision | Base branch \`docs/jarvis-phase-2-whole-brain-integration-map-20261105\` @ \`ea64607ef94f142a6142a013e119a7225bc95c1c\` |
+| Governance blob / length | \`f5827c552f36f4647339b3f8dfb38956d146c570\`, 1,022 lines |
+| Fresh-read evidence | Entire 1,022-line source re-fetched and read in ranges 1–220, 221–440, 441–560, 561–660, 661–760, 761–880 and 881–1,022 during this run |
+| Applicable rules | 2.1–2.7; 3; 4; 5; 6; 11.9–11.16; 17.1–17.5; 18; 19; 20; 22.1–22.7 |
+| Authorized scope | Continue Builder-owned PR #192 documentation-foundation investigation, evidence mapping, correction and verification under the user's standing authorization |
+| Exclusions | No runtime C++, tests, CMake or workflow changes; no donor adoption/baseline selection; no merge, rebase, retarget, cherry-pick or branch rewrite; no independent Reviewer/Tester verdict; no Project Director decision/acceptance; no Stage A activation |
+| Result | Governance revalidation complete; role and scope boundaries preserved |
+
+### 46.2 Exact live state before this checkpoint update
+
+- PR #192 and branch ref both point to \`434ef4a81e6bddb02a27de01e540cbadb104ceae\`.
+- Base branch tip: \`ea64607ef94f142a6142a013e119a7225bc95c1c\`; PR-recorded merge-base: \`61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c\`.
+- Current comparison: **785 ahead / 14 behind**, diverged; GitHub reports \`mergeable=true\`.
+- PR remains open, non-draft and unmerged. The PR description has a live-state correction at this revision.
+- Complete recursive tree: 280 entries, \`truncated=false\`; 47 changed paths; 51 tracked Markdown files.
+- The former inventory successor \`67be666f27dfa7879f2c7b73aa5ee17b43828f79\` is historical only; later branch-file writes reopened DF-10.
+
+### 46.3 New Builder evidence in this run
+
+- DF-02 §53 adds an exact-path audit-to-evidence crosswalk for all 159 canonical donor ledger rows. All 159 rows map to at least one detailed audit section in §§16–50. This is evidence navigation, not semantic closure; each row remains unresolved for complete successor/retirement/non-adoption, cross-branch consumer/dependency/duplicate-owner and authority provenance requirements.
+- DF-06 §24 verifies the approved main-branch blind-reader workflow blob \`585c939...\`, its \`workflow_dispatch\` input \`target_revision\`, and its OpenRouter secret dependency. The connector exposes no dispatch action.
+- DF-06 §24 also identifies a concrete stale prompt defect: the workflow instructs the reader to treat a \`CURRENT EXACT STATE — 2026-11-17\` index block as controlling, while the PR #192 index begins with \`CURRENT EXACT STATE — 2026-11-19\`. The workflow is on \`main\`, outside this PR branch. It was not modified.
+
+### 46.4 Current gate status and next actions
+
+- DF-01: Builder evidence present; final terminal synchronization remains.
+- DF-02: **OPEN** — path-to-evidence navigation mapped 159/159; semantic dispositions, all-210-tip source-content consumers/dependencies/alternate owners/duplicate capabilities, and historical authority remain incomplete.
+- DF-03: Partially evidenced; reserved authority and recovered-decision provenance remain explicit.
+- DF-04: Builder evidence present within bounded scope.
+- DF-05: Partially evidenced; 14-commit base divergence is mergeable but semantic dependency/consumer closure is not established.
+- DF-06: **NOT MET** — local fragments, complete parser reconciliation, exhaustive external status/redirect/relevance and authenticated rendered anchors remain. The main reader workflow has a stale prompt instruction requiring a separately authorized main-branch correction.
+- DF-07: Current PR description is live-state corrected; final inventory, index and register synchronization remain.
+- DF-08: Resolved within bounded preservation criterion.
+- DF-09: **NOT MET / BLOCKED** — corrected main-branch workflow dispatch against exact terminal SHA and a blind CLEAR result remain required.
+- DF-10: **REOPENED** — write the new inventory only after all remaining Builder-owned branch-file writes.
+- DF-11: Waived as a mandatory gate; separate reviewer challenge remains. Same-identity Builder self-review cannot satisfy independent review.
+- DF-12: **PROJECT DIRECTOR ONLY**.
+
+No implementation, donor adoption, source-baseline selection, training, integration, independent verdict, Director acceptance, merge or Stage A authorization occurred. PR #171 SYS-01–SYS-11 remains the existing whole-system architecture foundation.

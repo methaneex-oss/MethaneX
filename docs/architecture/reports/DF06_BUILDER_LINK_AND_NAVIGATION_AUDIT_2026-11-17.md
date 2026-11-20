@@ -508,3 +508,37 @@ This was a targeted documentation/link correction only. No rebase, merge, retarg
 The two fragment destinations changed from `#L18-L76` to `#L18-L77` and from `#L1-L83` to `#L1-L84`. The underlying GitHub file paths and hosts did not change. These source-line checks establish that the cited lines exist in the exact pinned blobs; they do not establish authenticated rendered-anchor landing or viewport behavior.
 
 **DF-06 disposition:** this correction closes these two known stale line-range defects in the PR #192 Phase 2 map. The full CommonMark/GFM parser discrepancy, all local heading-fragment checks, exhaustive external URL status/redirect/relevance checks, and authenticated rendered GitHub verification remain open. DF-06 remains **NOT MET** under the Director's Option A.
+
+
+## 24. Main-branch blind-reader workflow revalidation and newly confirmed prompt defect — 2026-11-20
+
+**Workflow source:** \`.github/workflows/documentation-foundation-ai-reader.yml\` on \`main\`, exact blob \`585c9399318b0af17514a95a5c435d497a76234a\`.  
+**Workflow branch:** \`main\`; workflow is not present on the PR #192 branch or current Phase 2 base branch.  
+**Trigger:** \`workflow_dispatch\`; required input \`target_revision\` accepts the exact 40-character documentation commit SHA; optional \`assessment_label\`.  
+**Secret dependency:** repository Actions secret \`OPENROUTER_API_KEY\`.
+
+### 24.1 Capability and permission check
+
+The current GitHub connector exposes read operations for workflow metadata/runs/jobs/artifacts and rerun operations for existing jobs. Its available action inventory does **not** expose a workflow-dispatch operation. Therefore the approved main-branch workflow is present and technically dispatchable by an authorized GitHub Actions operator, but this Builder connection cannot submit the required new \`workflow_dispatch\` event. Rerunning an old workflow job would reuse its old inputs and cannot target the future terminal SHA.
+
+The exact operator procedure remains the runbook §2: open the workflow on \`main\`, verify the workflow blob above, set \`target_revision\` to the final frozen PR #192 SHA, choose a distinct label, dispatch once, and preserve the exact run/artifact evidence. No dispatch or provider invocation is claimed in this Builder run.
+
+### 24.2 Newly confirmed stale workflow-prompt instruction
+
+The exact main workflow's reader prompt instructs the model to:
+
+\`Read the first "CURRENT EXACT STATE — 2026-11-17" block in the planning index as the controlling live-status snapshot.\`
+
+At the exact current PR #192 source, the index's first controlling block is headed **CURRENT EXACT STATE — 2026-11-19**, not 2026-11-17. The prompt therefore names an obsolete heading and can direct the fresh reader toward an older historical snapshot or create an avoidable ambiguity. This is a real prompt/workflow defect, not a result that can be corrected by editing the PR #192 index alone.
+
+The workflow is on \`main\`, outside this PR's documentation-only branch scope. No workflow file was modified. A workflow correction requires its own authorized, reviewed change on the workflow's controlling branch, followed by exact-blob re-verification before the final DF-09 dispatch. The current runbook's static readiness claims must be read with this newly identified defect.
+
+### 24.3 DF-09 disposition
+
+The correct main workflow exists, exact-target checkout and provider/model validation are implemented, and the required input is available. However:
+- this connector cannot dispatch it;
+- the prompt's controlling-index heading is stale;
+- no exact-final-HEAD blind assessment exists yet;
+- the historical 31/32 PARTIALLY CLEAR result is not transferable.
+
+**Disposition:** DF-09 remains **NOT MET / BLOCKED**. Smallest next actions: authorize and correct the main-branch workflow prompt; then have an authorized operator dispatch the corrected workflow against the final terminal PR #192 SHA and preserve its raw assessment artifact. A CLEAR verdict is still required by the controlling runbook.

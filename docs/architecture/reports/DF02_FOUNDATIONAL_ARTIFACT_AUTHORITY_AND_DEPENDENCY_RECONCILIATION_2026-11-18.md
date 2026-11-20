@@ -2609,3 +2609,188 @@ The ten-tip exact-ref tree tranche in §49.3 is not a 210-tip source-content con
 All 159 donor paths remain OPEN for complete semantic successor/retirement/non-adoption disposition, reverse consumers/dependencies, duplicate capability ownership, and historical authority/decision provenance. PR #119/#121 and the DLT-002/JBP artifacts strengthen donor evidence but do not authorize adoption or establish current candidate capability.
 
 **Disposition:** DF-02 remains **OPEN**. No donor code was adopted, no runtime/test/CMake/workflow change was made, no current-PR build/CTest/training was executed, and no Project Director or Independent Reviewer decision is claimed.
+
+
+## 53. Canonical 159-path audit-to-evidence crosswalk — 2026-11-20
+
+**Exact source PR #192 HEAD:** \`434ef4a81e6bddb02a27de01e540cbadb104ceae\`.  
+**Donor PR #97 HEAD:** \`c1da222e6c94aeb3f2ad000392c21fe4fc81ab25\`.  
+**Ledger source:** §30.2, 159 exact donor paths with donor blob and candidate exact-path blob/absence.
+
+This crosswalk maps every canonical ledger row to the detailed semantic-audit section(s) that discuss the exact path. It was generated from the exact §30.2 path table and exact backtick-delimited path occurrences in the report's detailed audit sections §§16–50, excluding the structural-only §14 and ledger-only §30. It is an evidence-navigation index, not an inference that a path is semantically closed.
+
+| # | Exact donor path | Detailed audit evidence | Current disposition |
+|---:|---|---|---|
+| 1 | `.github/workflows/brain-ci.yml` | §21 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 2 | `.github/workflows/dlt-001-long-run.yml` | §21 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 3 | `.github/workflows/dlt-002-four-hour.yml` | §21 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 4 | `.github/workflows/dlt-002-overnight-validation.yml` | §21 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 5 | `.github/workflows/jarvis-brain-probe-001.yml` | §21 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 6 | `.github/workflows/jarvis-core.yml` | §21 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 7 | `.github/workflows/jarvis-learning-seed-sweep.yml` | §21 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 8 | `.github/workflows/jbp-mem-001.yml` | §21 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 9 | `core/cpp/CMakeLists.txt` | §20, §21, §31, §32 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 10 | `core/cpp/examples/CMakeLists.txt` | §21, §36 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 11 | `core/cpp/examples/README.md` | §21, §36 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 12 | `core/cpp/examples/developmental_world.cpp` | §21, §36 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 13 | `core/cpp/include/jarvis/core/action_execution.hpp` | §23 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 14 | `core/cpp/include/jarvis/core/action_model.hpp` | §23 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 15 | `core/cpp/include/jarvis/core/adaptation.hpp` | §39 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 16 | `core/cpp/include/jarvis/core/affective_learning.hpp` | §23 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 17 | `core/cpp/include/jarvis/core/affective_state.hpp` | §23 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 18 | `core/cpp/include/jarvis/core/association_model.hpp` | §39 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 19 | `core/cpp/include/jarvis/core/attention.hpp` | §39 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 20 | `core/cpp/include/jarvis/core/brain.hpp` | §20 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 21 | `core/cpp/include/jarvis/core/causal_link_codec.hpp` | §39, §47, §48, §50 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 22 | `core/cpp/include/jarvis/core/causal_model.hpp` | §39 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 23 | `core/cpp/include/jarvis/core/cognition.hpp` | §40 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 24 | `core/cpp/include/jarvis/core/cognitive_cycle.hpp` | §23 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 25 | `core/cpp/include/jarvis/core/cognitive_goal_outcome.hpp` | §44 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 26 | `core/cpp/include/jarvis/core/cognitive_runtime.hpp` | §23 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 27 | `core/cpp/include/jarvis/core/cognitive_workspace.hpp` | §40 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 28 | `core/cpp/include/jarvis/core/decision.hpp` | §40 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 29 | `core/cpp/include/jarvis/core/developmental_environment.hpp` | §44 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 30 | `core/cpp/include/jarvis/core/developmental_learning.hpp` | §23 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 31 | `core/cpp/include/jarvis/core/developmental_world.hpp` | §44 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 32 | `core/cpp/include/jarvis/core/evolution.hpp` | §40 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 33 | `core/cpp/include/jarvis/core/evolution_adoption_journal.hpp` | §42 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 34 | `core/cpp/include/jarvis/core/evolution_canary.hpp` | §42 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 35 | `core/cpp/include/jarvis/core/evolution_controller.hpp` | §42 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 36 | `core/cpp/include/jarvis/core/evolution_experiment.hpp` | §42 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 37 | `core/cpp/include/jarvis/core/evolution_experiment_coordinator.hpp` | §42 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 38 | `core/cpp/include/jarvis/core/evolution_experiment_runner.hpp` | §42 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 39 | `core/cpp/include/jarvis/core/evolution_orchestrator.hpp` | §42 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 40 | `core/cpp/include/jarvis/core/experience_memory.hpp` | §44 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 41 | `core/cpp/include/jarvis/core/goals.hpp` | §41 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 42 | `core/cpp/include/jarvis/core/intent.hpp` | §41 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 43 | `core/cpp/include/jarvis/core/knowledge.hpp` | §41 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 44 | `core/cpp/include/jarvis/core/memory.hpp` | §23 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 45 | `core/cpp/include/jarvis/core/planning.hpp` | §41 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 46 | `core/cpp/include/jarvis/core/reflection.hpp` | §41 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 47 | `core/cpp/include/jarvis/core/self_model.hpp` | §41 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 48 | `core/cpp/src/action_execution.cpp` | §18 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 49 | `core/cpp/src/adaptation.cpp` | §17, §39 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 50 | `core/cpp/src/affective_learning.cpp` | §27 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 51 | `core/cpp/src/affective_state.cpp` | §18 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 52 | `core/cpp/src/association_model.cpp` | §17, §39 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 53 | `core/cpp/src/attention.cpp` | §17, §39 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 54 | `core/cpp/src/brain.cpp` | §16, §28 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 55 | `core/cpp/src/brain_action_execution.cpp` | §18 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 56 | `core/cpp/src/brain_affective_planning.cpp` | §18 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 57 | `core/cpp/src/brain_prediction_context.cpp` | §18 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 58 | `core/cpp/src/brain_restored_api.cpp` | §20 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 59 | `core/cpp/src/causal_model.cpp` | §17, §39 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 60 | `core/cpp/src/cognitive_cycle.cpp` | §16 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 61 | `core/cpp/src/cognitive_runtime.cpp` | §18 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 62 | `core/cpp/src/decision.cpp` | §18 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 63 | `core/cpp/src/developmental_learning.cpp` | §16, §50 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 64 | `core/cpp/src/evolution.cpp` | §27, §40 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 65 | `core/cpp/src/evolution_adoption.cpp` | §27 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 66 | `core/cpp/src/evolution_adoption_journal.cpp` | §19 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 67 | `core/cpp/src/evolution_canary.cpp` | §19 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 68 | `core/cpp/src/evolution_controller.cpp` | §17 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 69 | `core/cpp/src/evolution_experiment_coordinator.cpp` | §27 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 70 | `core/cpp/src/evolution_experiment_runner.cpp` | §19 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 71 | `core/cpp/src/evolution_history.cpp` | §27 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 72 | `core/cpp/src/evolution_orchestrator.cpp` | §19, §28 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 73 | `core/cpp/src/evolution_safety.cpp` | §19 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 74 | `core/cpp/src/evolution_sandbox.cpp` | §19 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 75 | `core/cpp/src/goals.cpp` | §18, §41 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 76 | `core/cpp/src/intent.cpp` | §18, §41 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 77 | `core/cpp/src/knowledge.cpp` | §18, §41 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 78 | `core/cpp/src/memory.cpp` | §16 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 79 | `core/cpp/src/planning.cpp` | §18, §41 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 80 | `core/cpp/src/process_isolation.cpp` | §19 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 81 | `core/cpp/src/reasoning.cpp` | §17 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 82 | `core/cpp/src/reflection.cpp` | §27, §41 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 83 | `core/cpp/src/representation.cpp` | §17 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 84 | `core/cpp/src/self_model.cpp` | §18, §41 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 85 | `core/cpp/tests/CMakeLists.txt` | §16, §18, §24, §31, §32, §39, §42, §44, §48, §50 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 86 | `core/cpp/tests/action_authorization_suite.cpp` | §25 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 87 | `core/cpp/tests/action_execution_phase7_suite.cpp` | §18 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 88 | `core/cpp/tests/action_model_architecture_suite.cpp` | §25 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 89 | `core/cpp/tests/affective_brain_decision_suite.cpp` | §44 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 90 | `core/cpp/tests/affective_decision_learning_suite.cpp` | §18 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 91 | `core/cpp/tests/affective_decision_suite.cpp` | §44 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 92 | `core/cpp/tests/affective_evidence_suite.cpp` | §18 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 93 | `core/cpp/tests/affective_goal_outcome_suite.cpp` | §44 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 94 | `core/cpp/tests/affective_learning_suite.cpp` | §44 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 95 | `core/cpp/tests/affective_planning.cmake` | §44 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 96 | `core/cpp/tests/affective_planning_suite.cpp` | §18 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 97 | `core/cpp/tests/affective_state_model_suite.cpp` | §44 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 98 | `core/cpp/tests/affective_state_suite.cpp` | §44 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 99 | `core/cpp/tests/association_causality_phase5_suite.cpp` | §17, §39 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 100 | `core/cpp/tests/attention_architecture_suite.cpp` | §39 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 101 | `core/cpp/tests/attention_learning_brain_suite.cpp` | §45 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 102 | `core/cpp/tests/brain_10_suite.cpp` | §45 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 103 | `core/cpp/tests/brain_action_consequence_integration_suite.cpp` | §18 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 104 | `core/cpp/tests/brain_contract.cpp` | §40 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 105 | `core/cpp/tests/brain_deep_suite.cpp` | §45 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 106 | `core/cpp/tests/cognitive_cycle_suite.cpp` | §25 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 107 | `core/cpp/tests/cognitive_runtime_goal_feedback_suite.cpp` | §18 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 108 | `core/cpp/tests/cognitive_runtime_learning_integration_suite.cpp` | §16, §18, §47, §48, §50 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 109 | `core/cpp/tests/cognitive_runtime_suite.cpp` | §25 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 110 | `core/cpp/tests/cognitive_workspace_runtime_suite.cpp` | §45 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 111 | `core/cpp/tests/decision_planning_architecture_suite.cpp` | §40 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 112 | `core/cpp/tests/developmental_brain_integration_suite.cpp` | §24, §50 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 113 | `core/cpp/tests/developmental_environment_suite.cpp` | §24 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 114 | `core/cpp/tests/developmental_learning_suite.cpp` | §24 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 115 | `core/cpp/tests/developmental_learning_tests.cpp` | §44 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 116 | `core/cpp/tests/developmental_training_environment_suite.cpp` | §24 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 117 | `core/cpp/tests/developmental_world_integration_suite.cpp` | §24, §50 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 118 | `core/cpp/tests/developmental_world_suite.cpp` | §44 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 119 | `core/cpp/tests/dlt_001_long_run.cpp` | §44 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 120 | `core/cpp/tests/dlt_001_trial.cpp` | §44 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 121 | `core/cpp/tests/dlt_002_long_run.cpp` | §44 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 122 | `core/cpp/tests/dlt_002_persistence.cpp` | §24 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 123 | `core/cpp/tests/evolution_adoption_journal_suite.cpp` | §17, §42 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 124 | `core/cpp/tests/evolution_brain_integration_suite.cpp` | §17, §40 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 125 | `core/cpp/tests/evolution_canary_controller_suite.cpp` | §17, §42 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 126 | `core/cpp/tests/evolution_experiment_coordinator_suite.cpp` | §19, §42 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 127 | `core/cpp/tests/evolution_experiment_runner_suite.cpp` | §19, §42 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 128 | `core/cpp/tests/evolution_opportunity_orchestration_suite.cpp` | §19, §42 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 129 | `core/cpp/tests/experience_memory_test.cpp` | §26 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 130 | `core/cpp/tests/goal_directed_cognition_suite.cpp` | §26 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 131 | `core/cpp/tests/goal_outcome_model_suite.cpp` | §26 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 132 | `core/cpp/tests/goals_architecture_suite.cpp` | §18, §41 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 133 | `core/cpp/tests/knowledge_memory_phase3_suite.cpp` | §26, §41 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 134 | `core/cpp/tests/learning_adaptation_phase8_suite.cpp` | §17, §39 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 135 | `core/cpp/tests/memory_architecture_suite.cpp` | §45 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 136 | `core/cpp/tests/memory_learning_evolution_persistence_suite.cpp` | §16, §42, §47, §48, §50 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 137 | `core/cpp/tests/prediction_feedback_phase10_suite.cpp` | §45 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 138 | `core/cpp/tests/process_isolation_suite.cpp` | §19 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 139 | `core/cpp/tests/reasoning_architecture_suite.cpp` | §17 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 140 | `core/cpp/tests/representation_suite.cpp` | §17 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 141 | `docs/developmental-training-environment.md` | §22, §36 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 142 | `docs/superpowers/plans/2026-09-25-cognitive-action-feedback-loop.md` | §22, §36 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 143 | `docs/superpowers/plans/2026-09-26-concept-context-prediction.md` | §22, §36 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 144 | `docs/superpowers/plans/2026-09-30-developmental-cognition.md` | §22, §36 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 145 | `docs/superpowers/plans/2026-10-01-affective-state.md` | §22, §36 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 146 | `docs/superpowers/specs/2026-09-25-cognitive-action-feedback-loop-design.md` | §22, §36 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 147 | `docs/superpowers/specs/2026-09-26-concept-context-prediction-design.md` | §22, §36 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 148 | `docs/superpowers/specs/2026-09-30-developmental-cognition.md` | §22, §36 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 149 | `docs/superpowers/specs/2026-10-01-affective-state.md` | §22, §36 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 150 | `engineering/cpp/CMakeLists.txt` | §43 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 151 | `engineering/cpp/include/jarvis/engineering/agent.hpp` | §37 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 152 | `engineering/cpp/include/jarvis/engineering/coordinator.hpp` | §43 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 153 | `engineering/cpp/include/jarvis/engineering/message_bus.hpp` | §43 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 154 | `engineering/cpp/include/jarvis/engineering/task_ledger.hpp` | §35, §43 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 155 | `engineering/cpp/src/coordinator.cpp` | §43 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 156 | `engineering/cpp/src/message_bus.cpp` | §43 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 157 | `engineering/cpp/src/task_ledger.cpp` | §35, §43 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 158 | `engineering/cpp/tests/agent_and_console_suite.cpp` | §43 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+| 159 | `engineering/cpp/tests/task_ledger_suite.cpp` | §35, §43 | **UNRESOLVED** — evidence mapped; cross-branch consumer/authority closure outstanding |
+
+### 53.1 Crosswalk integrity
+
+- Canonical ledger rows parsed: **159/159**.
+- Rows with at least one detailed-audit section reference: **159/159**.
+- Rows without a detailed-audit section reference: **0**.
+- The section references are exact path-name matches in the report. They establish that a reviewer can navigate from each donor path to the relevant existing comparison material; they do not independently validate the content of those sections or prove a semantic successor.
+- Each row remains **UNRESOLVED** for closure purposes until its semantic successor/retirement/non-adoption disposition is justified, reverse consumers and dependencies are searched across the required branch/ref scope, duplicate capability ownership is reconciled, and historical authority/decision provenance is established.
+
+### 53.2 Why the gate remains open
+
+The crosswalk closes a report-navigation defect: the 159-path ledger now has a direct route to its detailed evidence. It does not close the remaining Option A requirements. In particular, the exact-ref tree tranche remains ten tips, not all 210 unique tips; default-branch-only code search cannot prove cross-branch consumers; and a Builder-proposed non-adoption rationale is not an approved Project Director disposition.
+
+**Disposition:** per-path evidence navigation is Builder-verified for 159/159 rows. DF-02 remains **OPEN**. No donor code adoption, source-baseline selection, runtime implementation or reserved authority decision is made.

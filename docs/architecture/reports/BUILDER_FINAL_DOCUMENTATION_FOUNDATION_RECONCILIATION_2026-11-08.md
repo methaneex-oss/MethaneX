@@ -690,3 +690,20 @@ DF-09 remains NOT MET / externally blocked: no GitHub workflow-dispatch operatio
 The live base branch is `ea646...`; the PR's recorded merge-base remains `61311...`. The branch is 780 ahead / 14 behind and GitHub reports mergeable=true after the targeted link correction. The PR description remains stale. The prior inventory candidate `67be...` is verified only for its exact parent/successor pair and is no longer terminal.
 
 No runtime source/test/CMake/workflow changes, donor adoption, source-baseline selection, build/CTest/training, independent verdict or Director acceptance occurred. PR #171 SYS-01–SYS-11 remains the architecture foundation. Stage A remains HELD. This is Builder self-review only.
+
+
+## 25. Adversarial Builder self-review — crosswalk and DF-09 workflow path — 2026-11-20
+
+**Reviewed Builder source:** \`434ef4a81e6bddb02a27de01e540cbadb104ceae\`; accepted governance source blob \`f5827c552f36f4647339b3f8dfb38956d146c570\`.
+
+### Findings
+
+1. **DF-02 crosswalk is structurally complete but not a semantic pass.** The generated mapping is based on exact path-name occurrence in detailed audit sections §§16–50. This proves 159/159 navigation coverage only. It does not establish that every referenced section has complete behavioral comparison, verified successor identity, reverse-consumer closure, or accepted non-adoption authority. All 159 ledger dispositions correctly remain unresolved.
+2. **DF-06 has more than an unavailable browser blocker.** The exact main workflow exists and accepts an exact target SHA, but the prompt still names the 2026-11-17 index heading while the current index's first controlling block is 2026-11-19. A fresh reader could be directed to stale status. This is a root-cause defect in the workflow prompt and must be corrected on its controlling branch before treating a future CLEAR as reliable.
+3. **DF-09 dispatch is an operator capability, not a missing repository workflow.** The approved workflow is dispatchable from GitHub Actions UI, but the current connected tool inventory does not expose the POST dispatch operation. Rerunning a historical job cannot substitute because it retains historical inputs.
+4. **Role independence remains non-negotiable.** The Builder cannot issue the Independent Reviewer or Independent Tester verdicts under accepted governance Rules 17.3–17.5 and 22.6. This report is adversarial self-review only.
+5. **DF-10 must remain reopened.** Any further branch-file write before the final inventory cycle reopens the inventory gate. The final inventory must be the final branch-file write.
+
+### Verdict
+
+Builder evidence mapping improved. DF-02, DF-06 and DF-09 remain open. No independent verdict, Tester verdict, Director acceptance, merge approval or Stage A authorization is claimed.

@@ -1740,3 +1740,23 @@ PR #196 is closed/merged into the existing base branch at `c151e52781e56e6481424
 DF-02 remains **OPEN** pending all-210-tip source-content consumers/dependencies/duplicate ownership and complete per-path semantic/authority dispositions. DF-06 remains **NOT MET** pending full parser, local fragments, exhaustive external URL validation and authenticated rendered anchors. DF-09 remains **NOT MET / externally blocked**. DF-10 remains **REOPENED**: inventory candidate `67be...` passed its exact parent/successor test, but later branch-file writes superseded it. DF-11 remains waived as mandatory; DF-12 remains **PROJECT DIRECTOR ONLY**. Stage A remains **NOT STARTED / HELD**.
 
 The PR description is still stale and requires metadata-only synchronization. The Independent Reviewer request must not be pinned/dispatched until the final terminal inventory successor exists. No merge/rebase/retarget, runtime implementation, donor adoption, source-baseline selection, independent verdict or Director acceptance is claimed.
+
+
+## 113. Exact-current Builder continuation and residual capability correction — 2026-11-20
+
+**Exact PR #192 source before this synchronization:** \`434ef4a81e6bddb02a27de01e540cbadb104ceae\`; base tip \`ea64607ef94f142a6142a013e119a7225bc95c1c\`; recorded merge-base \`61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c\`; 785 ahead / 14 behind; mergeable=true; 47 changed paths; 280-entry complete tree; 51 Markdown files.
+
+DF-02 §53 maps all 159 canonical donor paths to detailed audit sections §§16–50. This closes the evidence-navigation crosswalk only; all 159 semantic dispositions remain unresolved pending reverse-consumer/dependency/duplicate ownership and authority closure.
+
+DF-06 §24 records that the approved main workflow is \`.github/workflows/documentation-foundation-ai-reader.yml\` at blob \`585c9399318b0af17514a95a5c435d497a76234a\`, with \`workflow_dispatch\` input \`target_revision\`. The connected GitHub tool inventory has no dispatch action. The workflow prompt also hardcodes the stale index heading \`CURRENT EXACT STATE — 2026-11-17\`, while the current index begins with the 2026-11-19 controlling snapshot. The workflow is outside PR #192 and was not modified.
+
+| Gate | Current Builder disposition |
+|---|---|
+| DF-02 | **OPEN** — 159/159 path-to-audit crosswalk mapped; full semantic and all-ref content-consumer/authority closure incomplete |
+| DF-06 | **NOT MET** — parser/fragment/external/rendered checks incomplete; workflow prompt defect identified |
+| DF-09 | **NOT MET / BLOCKED** — workflow correction, authorized exact-target dispatch and blind CLEAR required |
+| DF-10 | **REOPENED** — terminal inventory after all remaining branch writes |
+| DF-11 | Waived as mandatory; independent challenge remains separate |
+| DF-12 | Project Director only |
+
+Stage A remains HELD. No runtime implementation or donor adoption is authorized.

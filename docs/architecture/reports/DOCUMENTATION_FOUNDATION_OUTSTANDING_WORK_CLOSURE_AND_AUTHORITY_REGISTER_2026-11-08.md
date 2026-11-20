@@ -1958,3 +1958,15 @@ At the last exact candidate tree comparison, the 159 donor paths were 1 identica
 The prior inventory candidate `67be666f...` passed its exact one-commit/one-file/47-row manifest verification against parent `18194...`. Subsequent checkpoint, Phase 2 map, DF-06 and DF-02 writes reopened DF-10. Preserve the candidate as historical evidence and write a new terminal inventory only after all Builder-owned work is complete.
 
 No current PR #192 runtime/test/CMake/workflow change, build, CTest or training run is claimed. No donor adoption, source-baseline selection, independent verdict, Project Director acceptance or merge permission is claimed. Stage A remains HELD.
+
+
+## 25. Builder continuation — exact path crosswalk and fresh-reader workflow defect — 2026-11-20
+
+At PR #192 HEAD \`434ef4a81e6bddb02a27de01e540cbadb104ceae\`, the Builder revalidated accepted governance blob \`f5827c552f36f4647339b3f8dfb38956d146c570\` (1,022 lines) on base tip \`ea64607ef94f142a6142a013e119a7225bc95c1c\`.
+
+- DF-02: the canonical 159-row ledger now has an exact path-to-detailed-audit-section crosswalk (159/159) in DF-02 §53. This does not close semantic dispositions, all-210-tip source-content consumer/dependency/duplicate ownership or historical authority.
+- DF-06: the main-branch reader workflow was verified at exact blob \`585c9399318b0af17514a95a5c435d497a76234a\`. It supports exact \`target_revision\` dispatch, but the current GitHub connector has no dispatch action. The workflow prompt's controlling-index heading is stale (2026-11-17 versus the current index's 2026-11-19). The workflow is on \`main\`; no workflow file was modified.
+- DF-09: remains NOT MET/BLOCKED pending a separately authorized correction of the main-branch workflow prompt, an exact-terminal-SHA dispatch by an authorized operator, and a CLEAR assessment.
+- DF-10: remains REOPENED pending the final inventory-only successor after all other branch writes.
+
+No same-identity Builder review is represented as independent review. DF-12 remains Project Director-only. Stage A remains HELD.
