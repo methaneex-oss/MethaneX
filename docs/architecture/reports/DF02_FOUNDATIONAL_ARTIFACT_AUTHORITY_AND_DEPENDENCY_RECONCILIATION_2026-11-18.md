@@ -3027,3 +3027,41 @@ The 159-row crosswalk in §53 establishes navigation from each donor path to at 
 The 2026-10-31 15-tip integration cohort and the PR #121 merge line remain distinct historical lineages. Neither is current main nor a selected runtime baseline. The 2026-10-31 cohort's specialist test registration is not test execution; its standalone ExperienceMemory test is not evidence of Brain-loop wiring. PR #121 CI evidence applies only to its exact merge line.
 
 **Disposition:** exact tree/blob integrity, the 159-row evidence crosswalk, and bounded semantic comparisons are Builder-verified within their stated scope. DF-02 remains **OPEN** under the Project Director's Option A standard. The remaining all-ref semantic consumer adjudication and authority/non-adoption decisions are not represented as complete. No donor code is adopted and no runtime baseline is selected.
+
+
+## 10. Exact donor-to-candidate source-content adjudication — 2026-11-20
+
+**Comparison endpoints**
+
+- Donor PR #97: `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+- PR #192 candidate base: `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.
+- The all-ref lexical scan candidate `32722f104f76817983b0156cca821949e406b8c1` is 13 commits behind PR #192's terminal documentation HEAD; the intervening changes are documentation-only. The source comparisons below use the exact PR #192 base and exact PR #97 donor endpoints.
+
+### 10.1 High-impact source comparisons
+
+| Donor artifact | Donor blob | PR #192 candidate blob / state | Source-level finding |
+|---|---|---|---|
+| `core/cpp/include/jarvis/core/brain.hpp` | `671186f4c39879a182f9e511394fc564d86f2988` | `8268ef84e0b361ead536724ba7761904b30ee58f` | Donor Brain directly owns `DevelopmentalLearning`, `AffectiveStateModel`, and `AffectiveLearningModel`; its snapshot exposes affective state. Candidate Brain omits those includes, state owners, and affective snapshot field. |
+| `core/cpp/include/jarvis/core/memory.hpp` | `5401d5bd236cca8d3a93f2815164a7734cf6990f` | `f3662038237246efa51155f940d77564f144d6d9` | Donor adds per-record consolidation, a latest-sequence-by-kind index, learned-tier rebuild, and kind-filtered/exact-match ranked recall. Candidate retains only the simpler ranked-recall signature and lacks those lifecycle/retrieval contracts. |
+| `core/cpp/src/memory.cpp` | `ab42bba1d32d6f48d091787491c72294a4a55bb5` | `ba72a897306d4761246d0deab2fbab37c49d372f` | Donor writes metadata format M2, reads both M1 and M2, and persists consolidation values. Candidate writes/reads M1 only and has no consolidation metadata. This is a concrete persistence-format and capability divergence; it is a compatibility risk requiring data-fixture testing, not proof of observed data loss. |
+| `core/cpp/CMakeLists.txt` | `bc264ce7b4ae489404ca03ea6d9676d0330a6a56` | `c51816888e1bddb7bc00c59e72529524e27a0717` | Donor registers `brain_restored_api.cpp`, `brain_action_execution.cpp`, `brain_prediction_context.cpp`, `brain_affective_planning.cpp`, affective state/learning, and developmental learning. Those source registrations are absent from the candidate file. |
+| `core/cpp/tests/CMakeLists.txt` | `cbfd1fde52fffa6eeac025da2b7ddcb5ab493261` | `dab0c52ab4dfe15e1e2cbccfa9e6c904abdf54e3` | Exact file counts: donor defines 71 executable targets and 70 CTest registrations; candidate defines 45 executable targets and 45 CTest registrations. The donor file therefore contains 26 additional executable targets and 25 additional CTest registrations, including affective, developmental, experience-memory, runtime-learning-integration, and memory-learning-evolution-persistence suites. Counts describe CMake declarations, not executed tests. |
+| `core/cpp/include/jarvis/core/experience_memory.hpp` | `e3b9bf8af265b67829fd7deb323d88a3a9dd4b75` | Absent at candidate path (404) | The all-ref source-content scan finds its distinctive `ExperienceMemory` API in a test only. It is a separate prediction/experience index, not evidence that durable Brain memory is connected to the cognitive learning loop. |
+| `core/cpp/include/jarvis/core/developmental_learning.hpp` | `e3b9bf8af265b67829fd7deb323d88a3a9dd4b75` | Absent at candidate path (404) | The donor lineage has production consumers in `brain.hpp`, `brain.cpp`, `brain_affective_planning.cpp`, and `developmental_learning.cpp`, plus integration tests. This is materially different from a standalone test fixture. |
+
+The `memory.hpp` and `memory.cpp` comparisons are especially material: the candidate is not merely missing a donor filename. It lacks the donor's consolidation state, retrieval constraints, and M2 metadata extension/backward-reader behavior. Likewise, the Brain header and CMake comparisons show that affective/developmental mechanisms are not wired into this candidate build in the same way as the donor lineage.
+
+### 10.2 Exact consumer-context findings from the all-ref artifact
+
+The 1,223 exact consumer-blob contents were available for source inspection. Distinctive identifiers—not generic tokens such as `state`, `event`, or `update`—establish the following bounded findings:
+
+- `AffectiveLearningModel` and `AffectiveOutcomeEvidence` have production references in Brain/cognitive source and separate mechanism tests in the donor lineage.
+- `DevelopmentalLearning` has production references across Brain, developmental-learning implementation, and affective-planning integration, with dedicated tests. This supports a real multi-file integration claim for that lineage, but does not establish that every learning mechanism is complete or behaviorally adequate.
+- `ExperienceMemory` is referenced by its dedicated test; its presence alone does not establish integration into Brain's durable event memory or the prediction-feedback loop.
+- The all-ref scan reports 182,302 lexical match rows, but those rows are discovery leads. Repeated generic identifiers and repeated blob occurrences are not independent semantic consumers. Each conclusion above is tied to distinctive type/API references and the exact source blob/path occurrences, not raw row totals.
+
+### 10.3 Technical disposition
+
+The exact source comparison rejects the proposition that PR #192's candidate base is a semantic successor to PR #97 merely because both contain files with overlapping names. The candidate has material API, persistence, build-registration, and test-registration differences. The PR #121 / `integration/learning-layer-20261028` lineage remains a distinct historical integration line in which all 159 donor paths were previously verified present with donor-identical blobs at the recorded integration commit. That is evidence of preservation/integration into that named branch only; it is not proof that the line is the current selected baseline or that its code is ready to merge into PR #192.
+
+No donor adoption, source-baseline selection, merge, rebase, retarget, cherry-pick, or implementation authorization is inferred from this comparison. The 159-path semantic disposition and all-ref dependency/duplicate-owner adjudication are **not yet complete**: the comparisons above close specific high-impact questions and identify concrete non-equivalence, but they do not adjudicate every divergent/absent donor artifact or every exact consumer version. DF-02 therefore remains **OPEN** pending the remaining per-path technical dispositions and the authority decision reserved to the Project Director.
