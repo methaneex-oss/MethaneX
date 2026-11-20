@@ -3083,3 +3083,28 @@ The donor package also contains a distinct engineering-agent coordination subsys
 These are behavioral contract differences, not naming-only variations. In particular, reporting a message as delivered after ignoring the receiver's result and silently dropping the oldest queued message are different delivery semantics from explicit rejection/backpressure and deduplication. The donor's tracked coordinator path is coupled to a durable task ledger; candidate coordinator/message-bus files do not establish equivalent task revision, dependency, or replay guarantees.
 
 **Disposition:** the candidate engineering subsystem is not a semantic successor to the donor's task-ledger/deduplicating-message-bus contract. The donor task-ledger paths are absent from this candidate. This does not establish that the donor subsystem should be adopted: ownership overlap with other engineering orchestration branches, full test evidence, and Project Director source-baseline authority remain to be resolved.
+
+
+### 10.5 All-ref source-content scan normalization and residual classification
+
+The complete all-ref artifact was re-aggregated by donor path and exact consumer blob/path/category, rather than treating each lexical match row as an independent consumer.
+
+| Measure | Recomputed result |
+|---|---:|
+| Remote branch refs | 254 |
+| Unique branch tips | 213 |
+| Donor paths | 159 |
+| Donor paths with at least one lexical source/test/build/workflow consumer candidate | 144 |
+| Donor paths without a lexical symbol-consumer candidate | 15 |
+| Donor paths with exact-path documentation references | 159 |
+| Raw candidate symbol-match rows | 182,302 |
+| Distinct exact consumer blob/path/category versions | 1,149 |
+| Distinct versions classified as source | 664 |
+| Distinct versions classified as test | 389 |
+| Distinct versions classified as build | 58 |
+| Distinct versions classified as workflow | 37 |
+| Distinct versions classified as other | 1 |
+
+The 15 paths without a symbol-consumer candidate are not thereby retired: they still have exact-path documentation references and require provenance/authority disposition. Conversely, the 144 paths with lexical consumers are not thereby proven semantically consumed. The 1,149 exact versions are the review unit; repeated symbol hits in the same exact blob are not additional independent consumers.
+
+The all-ref evidence therefore establishes the scale and exact source material for the remaining review, but it does not convert the 182,302 lexical rows into 182,302 semantic dependencies. Per-path classification must continue to distinguish production implementation, tests, build registration, workflow invocation, documentation-only references, and duplicate/alternate owners. This section does not claim that DF-02 is closed.
