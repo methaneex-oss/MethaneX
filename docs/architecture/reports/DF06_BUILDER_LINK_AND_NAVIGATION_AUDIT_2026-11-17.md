@@ -723,3 +723,16 @@ The 223 external occurrences were extracted but were not exhaustively checked fo
 No authenticated interactive GitHub browser was available to inspect rendered heading, line-range, or issue-comment anchors and verify viewport landing. Static source retrieval and source-line bounds are not substituted for this evidence.
 
 **Disposition:** this pass establishes 51/51 exact-revision file coverage, 134/134 local path resolution under the stated extractor, and zero extracted local-fragment destinations. It does not close the parser-equivalence, exhaustive external status/redirect/relevance, or authenticated rendered-anchor requirements. DF-06 remains **NOT MET** under the Project Director's Option A.
+
+
+## 34. Inline HTML parser correction and reproducible self-test — 2026-11-20
+
+A source inspection found that the Markdown parser handled top-level HTML blocks but did not inspect `html_inline` child tokens inside ordinary inline Markdown. Consequently, inline HTML `href`/`src` destinations and inline `id` anchors could be missed. This was a real parser-coverage defect.
+
+The Builder corrected `scripts/audit_documentation_links.py` to inspect inline HTML child tokens, extract their `href`/`src` destinations, and collect inline `id` anchors. The script now exposes `--self-test`; the self-test covers reference-style links, tables, strikethrough links, inline HTML destinations/IDs, duplicate heading anchors, and bare HTTP autolinks. The `documentation-link-audit.yml` workflow now runs this self-test before the full repository audit.
+
+The parser/extraction logic was exercised locally with the installed `markdown-it-py` parser against the same fixture; all expected destinations and anchors were observed. The exact GitHub Actions execution of the new self-test step has not been independently retrieved through the connected GitHub tools, so no workflow-pass claim is made here.
+
+This correction improves parser coverage but does not establish complete GitHub-Flavored Markdown equivalence. The implementation uses the CommonMark parser with table/strikethrough extensions and explicit autolink handling; a full parser-equivalence proof remains outstanding. Exhaustive external destination semantic relevance and authenticated rendered GitHub anchor viewport verification also remain outstanding.
+
+**Disposition:** this specific inline-HTML omission is corrected in the Builder branch. DF-06 remains **NOT MET** under Option A until full parser reconciliation, local fragment verification, exhaustive external status/redirect/final-target/relevance checks, and authenticated rendered-anchor verification are evidenced.
