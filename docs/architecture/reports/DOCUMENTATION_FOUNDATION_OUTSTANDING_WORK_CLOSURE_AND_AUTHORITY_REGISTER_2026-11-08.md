@@ -2004,3 +2004,8 @@ Fifteen 2026-10-31 branch tips contain all 159 donor paths, 139–143 exact dono
 ## 25. PR119/PR121 authority-lineage clarification — 2026-11-20
 
 PR #119 and PR #121 merged into feature/integration branches, not main. PR #121 merge \`fb994...\` preserves all 159 donor paths exactly and has 71 targets / 70 CTest entries with the affective/developmental stack registered. The 15-tip 2026-10-31 integration cohort is a separate line: representative \`cfbcbdd...\` descends from donor \`c1da...\` but diverges from PR #121 merge \`fb994...\` (209 ahead / 70 behind, merge-base \`34da...\`). PR #121's CI/review evidence is not transferable to the 15 tips. Their test registration is 74/73 in 13 tips and 73/72 in two. ExperienceMemory remains a standalone, non-Brain-integrated, non-durable primitive. No implementation baseline is selected.
+
+
+## 26. Exact-ref 159-path matrix added — 2026-11-20
+
+The DF-02 report now includes a machine-readable exact-ref CSV comparing all 159 donor paths across donor PR #97, PR #121 merge, representative October 31 integration tip and PR #192 candidate. Counts are 159/0/0, 141/18/0 and 1/95/63 respectively (identical/divergent/absent). This is blob identity evidence, not semantic disposition. DF-02 remains OPEN.

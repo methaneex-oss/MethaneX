@@ -2907,3 +2907,25 @@ The 15-tip cohort's test CMake is more recent in 13 tips (blob \`4c034eefa3547cd
 Even on the PR #121 merge line, \`experience_memory.hpp\` is not included by \`brain.hpp\` or used in \`brain.cpp\`; \`experience_memory_test.cpp\` tests the standalone in-memory primitive. Registration and passing a standalone test do not establish Brain-integrated or durable experience memory.
 
 Neither feature/integration line is current main. Current main and PR #192 candidate omit the richer affective/developmental source stack. No branch is selected as the Project Director's implementation baseline by this evidence.
+
+
+## 56. Exact-ref 159-path blob comparison matrix — 2026-11-20
+
+A machine-readable, per-path comparison has now been generated and checked against four exact recursive-tree snapshots:
+
+- Donor PR #97: \`c1da222e6c94aeb3f2ad000392c21fe4fc81ab25\`.
+- PR #121 merge line: \`fb994fed8b1bd39482aafd98110055032e8bc82f\`.
+- Representative October 31 integration tip: \`cfbcbdd29839f062851d3ca7da63ab2ae3a8f4f1\`.
+- PR #192 candidate at this audit: \`35957ed44e010aca65aadd55887411244cdb36b3\`.
+
+Artifact: \`docs/architecture/reports/DF02_EXACT_REF_159_PATH_BLOB_COMPARISON_2026-11-20.csv\`.
+
+All 159 donor paths are represented with donor blob SHA, exact comparison-tip blob SHA, and explicit identical/divergent/absent status. Results:
+
+| Comparison tree | Identical | Divergent | Absent |
+|---|---:|---:|---:|
+| PR #121 merge \`fb994...\` | 159 | 0 | 0 |
+| October 31 representative \`cfbcbdd...\` | 141 | 18 | 0 |
+| PR #192 candidate \`35957...\` | 1 | 95 | 63 |
+
+The CSV is an exact-path blob-identity matrix. It does **not** equate divergent same-path files with semantic successors, nor absent files with retired capabilities. The 159 semantic dispositions still require path-by-path successor, retirement/non-adoption, authority/provenance, duplicate ownership and exact-ref consumer adjudication. This artifact is an auditable input to that work, not DF-02 closure.

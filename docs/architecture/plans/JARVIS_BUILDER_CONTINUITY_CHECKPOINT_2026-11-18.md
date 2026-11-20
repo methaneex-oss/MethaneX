@@ -1394,3 +1394,8 @@ PR #119 merged into \`feat/jarvis-affective-state\` at donor PR #97 HEAD \`c1da.
 The 15-tip 2026-10-31 \`integration/priority-one\` cohort is a separate line: representative tip \`cfbcbdd...\` is 208 ahead / 0 behind donor \`c1da...\`, but diverges from PR #121 merge \`fb994...\` (209 ahead / 70 behind, merge-base \`34da...\`). PR #121's review and CI evidence must not be attributed to that cohort. The 15-tip cohort has 74/73 test registration in 13 tips and 73/72 in two. ExperienceMemory remains a standalone, non-Brain-integrated, non-durable primitive despite its registered standalone test.
 
 Neither integration line is current main or an accepted implementation baseline. DF-02 remains open.
+
+
+## 45. Exact-ref 159-path comparison matrix — 2026-11-20
+
+Added \`DF02_EXACT_REF_159_PATH_BLOB_COMPARISON_2026-11-20.csv\`, a per-path donor/PR121/October31/PR192 blob-SHA matrix. Exact tree counts: PR #121 merge 159 identical / 0 divergent / 0 absent; October 31 representative 141 / 18 / 0; PR #192 candidate at \`35957ed...\` 1 / 95 / 63. This establishes exact path/blob status only, not semantic successors or dispositions. DF-02 remains open.
