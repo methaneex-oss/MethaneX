@@ -2136,3 +2136,8 @@ DF-06 now has a successful exact-commit CI self-test and link audit: run #448179
 ## 37. DF-02 attention, self-model and evolution recovery regressions — 2026-11-20
 
 [DF-02 Attention, Self-Model and Evolution-Recovery Audit](DF02_ATTENTION_SELF_MODEL_AND_EVOLUTION_RECOVERY_AUDIT_2026-11-20.md) records missing prediction-error/internal-activation attention, missing action-outcome-driven capability performance updates, and loss of exact previous-value restoration on failed evolution transactions. The report distinguishes required capability contracts from donor coefficients, which are not adopted automatically. No runtime changes; DF-02 remains OPEN.
+
+
+## 38. DF-02 goal-outcome and adaptive-priority regression — 2026-11-20
+
+[DF-02 Goal-Outcome and Adaptive-Priority Regression Audit](DF02_GOAL_OUTCOME_AND_ADAPTIVE_PRIORITY_REGRESSION_AUDIT_2026-11-20.md) documents missing goal outcome momentum/priority adaptation and the absent goal-outcome evidence model/test. Candidate goals suite has 34 assertions versus 45 donor assertions, plus the donor-only 15-assertion outcome-model suite. Donor fixed coefficients are not adopted automatically. No runtime changes; DF-02 remains OPEN.
