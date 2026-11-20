@@ -86,7 +86,10 @@ def extract_symbols(content: str, path: str) -> set[str]:
     return found
 
 def self_test():
-    sample="class DevelopmentalLearning {};\\nstruct ExperienceMemory {};\\nvoid updatePredictionContext(int x);\\n"
+    sample = """class DevelopmentalLearning {};
+struct ExperienceMemory {};
+void updatePredictionContext(int x);
+"""
     syms=extract_symbols(sample,"core/cpp/src/developmental_learning.cpp")
     assert {"DevelopmentalLearning","ExperienceMemory","updatePredictionContext"} <= syms
     assert category("core/cpp/tests/example_suite.cpp")=="test"

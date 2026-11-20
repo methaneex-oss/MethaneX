@@ -32,6 +32,10 @@ jobs:
           git fetch --no-tags origin '+refs/heads/*:refs/remotes/origin/*' --prune
           git status --short
 
+      - name: Syntax-check scanner
+        shell: bash
+        run: python3 -m py_compile tools/df02_all_ref_consumer_scan.py
+
       - name: Run scanner self-tests
         shell: bash
         run: python3 tools/df02_all_ref_consumer_scan.py --self-test
