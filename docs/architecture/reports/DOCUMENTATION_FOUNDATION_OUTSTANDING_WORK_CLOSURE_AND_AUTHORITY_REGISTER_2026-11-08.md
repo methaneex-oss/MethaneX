@@ -2151,3 +2151,8 @@ DF-06 now has a successful exact-commit CI self-test and link audit: run #448179
 ## 40. DF-02 representation provenance and canary preview — 2026-11-20
 
 [DF-02 Representation Provenance and Canary Preview Audit](DF02_REPRESENTATION_PROVENANCE_AND_CANARY_PREVIEW_AUDIT_2026-11-20.md) records metadata/content conflation, unstable node IDs, ignored event confidence and NaN validation gaps in candidate representation, plus missing non-mutating canary preview and reduced test coverage. No runtime code changed; DF-02 remains OPEN.
+
+
+## 41. DF-02 affective/developmental baseline gap — 2026-11-20
+
+[DF-02 Affective and Developmental Subsystem Baseline Gap](DF02_AFFECTIVE_AND_DEVELOPMENTAL_SUBSYSTEM_BASELINE_GAP_2026-11-20.md) confirms the candidate baseline has no affective/developmental source paths, while unmerged donor PR #97 contains compiled/tested affective and developmental mechanisms. The candidate/donor reports are capability-gap comparisons, not post-integration regression claims. No source baseline or adoption is selected; DF-02 remains OPEN.
