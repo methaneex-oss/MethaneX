@@ -718,3 +718,10 @@ Builder evidence mapping improved. DF-02, DF-06 and DF-09 remain open. No indepe
 - The Builder cannot provide the independent reviewer verdict under Governance Rule 17.3 or substitute self-review for independent review under Rule 22.6.
 
 **Disposition:** PR #198 is a proposed root-cause correction. It needs normal independent review and Project Director acceptance before merge. No DF-09 clearance, independent review, Director decision or Stage A authorization is claimed.
+
+
+## 27. Adversarial self-review — exact-source link verification — 2026-11-20
+
+The 45-target verification is reproducible from the exact Phase 2 map blob. The check fetched each unique commit/path pair, counted exact source lines and verified all 33 numeric ranges. It is stronger than path-only existence but still not a rendered browser test. The check did not inspect GitHub DOM target IDs or viewport landing, did not run a full CommonMark/GFM parser, and did not exhaustively validate all 51 Markdown files' external URLs. The DF-06 status therefore remains NOT MET.
+
+No claim of authenticated rendered verification, full parser compliance, independent review or Director acceptance is made.

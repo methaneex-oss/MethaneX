@@ -1351,3 +1351,10 @@ No implementation, donor adoption, source-baseline selection, training, integrat
 PR #198 is open, non-draft, unmerged and mergeable=true (\`unstable\` mergeability state). No CI status or reviewer verdict is recorded. The correction is not active on \`main\` until the PR is reviewed and merged through normal authority.
 
 DF-09 therefore remains **NOT MET / BLOCKED**. After PR #198 acceptance/merge, the Builder must verify the live main workflow blob, then an authorized operator must dispatch it against the final frozen PR #192 terminal SHA. The resulting evidence must include the exact target, run ID, artifact digest, provider/model identity, finish reason and raw assessment; a CLEAR result is required. No run or CLEAR is claimed.
+
+
+## 48. Expanded exact-source link verification — 45 commit-pinned targets — 2026-11-20
+
+At PR #192 source \`fbb56390eff11d64699517babae4f9a33713fb20\`, the Phase 2 integration map exact blob \`1ae6ca2dcde4c6f88040762a07ac11e7f01ea255\` was parsed for unique commit-pinned GitHub blob destinations. Forty-five unique \`(commit SHA, path)\` pairs across five immutable commits were fetched at exact refs. All 45 resolved. Thirty-three explicit line ranges were checked against the exact fetched file line counts; all 33 endpoints were in bounds. Twelve commit-pinned blob links without line ranges also resolved.
+
+This is source-file and line-bound verification only. It does not establish rendered HTML anchors, authenticated GitHub viewport landing, full CommonMark/GFM parser reconciliation, or exhaustive external URL status/redirect/relevance. DF-06 remains **NOT MET**.

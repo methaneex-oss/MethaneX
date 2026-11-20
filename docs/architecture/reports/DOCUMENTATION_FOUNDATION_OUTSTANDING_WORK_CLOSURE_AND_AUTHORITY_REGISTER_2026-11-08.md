@@ -1977,3 +1977,8 @@ No same-identity Builder review is represented as independent review. DF-12 rema
 The main-branch fresh-reader workflow's hard-coded 2026-11-17 index heading was corrected in a separate one-file PR #198. Exact compare is 1 ahead / 0 behind; workflow blob \`585c939...\` → \`86abcb3...\`. PR #198 is open, non-draft, unmerged, mergeable=true/unstable, with no reviewer verdict or CI result recorded.
 
 DF-09 remains NOT MET/BLOCKED until PR #198 is accepted and merged, the corrected workflow is verified on main, and an authorized operator dispatches it against the final frozen PR #192 SHA and obtains a CLEAR result. No old-prompt run may be treated as closure.
+
+
+## 27. DF-06 exact source-link tranche — 2026-11-20
+
+Builder fetched all 45 unique commit-pinned GitHub blob targets extracted from the exact Phase 2 map blob \`1ae6ca2dcde4c6f88040762a07ac11e7f01ea255\`. All 45 paths resolved at their pinned commits; all 33 explicit line ranges were within the exact file line counts. This closes only source-path and line-bound verification for that map's 45 unique targets. Rendered/authenticated anchor landing, full CommonMark/GFM parser reconciliation and exhaustive external URL status/redirect/relevance remain outstanding. DF-06 remains NOT MET.

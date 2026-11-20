@@ -1774,3 +1774,10 @@ The main-branch blind fresh-reader workflow's stale dated index-heading instruct
 - PR state: open, non-draft, unmerged, mergeable=true / unstable; no review or CI verdict recorded.
 
 This is a proposed workflow correction, not a live \`main\` change. DF-09 remains NOT MET / BLOCKED until PR #198 is accepted and merged, the main workflow blob is re-fetched, and the corrected workflow is dispatched against the final terminal PR #192 SHA with a CLEAR result. The Builder cannot dispatch using the current GitHub connector.
+
+
+## 115. Exact-source link verification — 2026-11-20
+
+The Phase 2 map at exact blob \`1ae6ca2dcde4c6f88040762a07ac11e7f01ea255\` contains 45 unique commit-pinned GitHub blob targets across five source commits. Exact-ref file retrieval resolved 45/45 targets; all 33 referenced line ranges were within the fetched source line counts. Twelve additional blob targets without line fragments also resolved.
+
+This is not authenticated rendered-anchor verification and does not close the 51-file CommonMark/GFM parser discrepancy or exhaustive external status/redirect/relevance requirement. DF-06 remains NOT MET.

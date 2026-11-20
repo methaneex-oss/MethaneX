@@ -561,3 +561,36 @@ The exact successor fetch confirms the obsolete dated instruction is absent and 
 At this checkpoint PR #198 is open, non-draft, unmerged, mergeable=true, mergeable_state=\`unstable\`; no CI status is recorded and no review is assigned. This is a proposed correction, not a merged main-branch workflow revision. It must complete normal review and Project Director acceptance/merge before the corrected workflow is available on \`main\`.
 
 **DF-09 remains NOT MET / BLOCKED.** Do not dispatch the old main workflow and represent its output as satisfying the corrected prompt requirement. After PR #198 is accepted and merged, re-fetch the exact workflow blob on \`main\`, then dispatch the corrected workflow against the final terminal PR #192 SHA and require a CLEAR assessment. No workflow run or blind assessment is claimed here.
+
+
+## 26. Exact commit-pinned source-target and line-range verification — 2026-11-20
+
+**Source document:** PR #192 Phase 2 integration map, exact blob \`1ae6ca2dcde4c6f88040762a07ac11e7f01ea255\`, fetched at PR #192 HEAD \`fbb56390eff11d64699517babae4f9a33713fb20\`.
+
+A static extraction of the map's commit-pinned GitHub blob destinations produced **45 unique (commit SHA, repository path) targets** across five immutable source commits. Every unique target was fetched through the GitHub repository API at its exact pinned commit.
+
+| Source commit | Unique exact-path targets | Result |
+|---|---:|---|
+| \`c1da222e6c94aeb3f2ad000392c21fe4fc81ab25\` | 40 | 40/40 retrieved |
+| \`c6a8a00db848035c2f93564fa35f837c0fdb477f\` | 1 | 1/1 retrieved |
+| \`1273ddbcd0087d189e01388ded2d362fb1e058d2\` | 1 | 1/1 retrieved |
+| \`82c49a75bd30de2962879f044776f4bf2391970a\` | 2 | 2/2 retrieved |
+| \`0811a59e46bf934e32e794f90e4e7d18d4e2bd97\` | 1 | 1/1 retrieved |
+| **Total** | **45** | **45/45 retrieved** |
+
+Of the 45 targets, 33 carry explicit \`#Lstart-Lend\` fragments. Every start and end line was checked against the exact fetched file's line count: **33/33 ranges are within the source file bounds**. The remaining 12 destinations are commit-pinned blob links without a line range; all 12 exact files resolve.
+
+No missing path or out-of-range line endpoint was found in this 45-target set. The check uses the exact commit/path pairs already present in the source map; it does not substitute a current branch file for a historical pinned source.
+
+### 26.1 Scope boundary
+
+This is exact source-file and line-bound verification. It does **not** prove:
+- that GitHub's rendered HTML contains the expected target element ID;
+- that a browser follows the fragment and positions the target in the viewport;
+- that an authenticated GitHub session renders the same page/anchor behavior;
+- that every destination in all 51 Markdown files has been parsed by a full CommonMark/GFM parser;
+- that all external URLs have been checked for status, redirect chain, final destination and semantic relevance.
+
+The previous six- and two-link targeted corrections remain separately recorded in §§16 and 23. This 45-target tranche adds broader source-level evidence, not authenticated rendered-browser acceptance.
+
+**Disposition:** 45/45 exact commit-pinned blob targets resolve; 33/33 line ranges are in bounds. DF-06 remains **NOT MET** under Option A.
