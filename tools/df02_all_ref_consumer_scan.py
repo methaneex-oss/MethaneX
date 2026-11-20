@@ -14,7 +14,7 @@ AUDIT_TOOL_PATHS = {
     ".github/workflows/df02-all-ref-consumer-scan.yml",
 }
 BINARY_EXTS = {".png",".jpg",".jpeg",".gif",".webp",".ico",".pdf",".zip",".gz",".tar",".7z",".rar",".exe",".dll",".so",".dylib",".a",".o",".obj",".class",".jar",".woff",".woff2",".ttf",".otf",".mp4",".mp3",".wav",".flac",".sqlite",".db",".bin"}
-STOP = {"main","test","tests","run","get","set","create","update","delete","find","read","write","open","close","init","reset","clear","process","execute","handle","on","off","to","from","value","data","id","name","type","status","state","action","memory","brain","runtime","event","context","result","error","config","manager","controller","engine","system","model","base","current","new","old","testcase","suite","string","vector","map","optional","shared_ptr","unique_ptr","size","count","index","begin","end","empty","push_back","emplace"}
+STOP = {"main","test","tests","run","get","set","create","update","delete","find","read","write","open","close","init","reset","clear","process","execute","handle","on","off","to","from","value","data","id","name","type","status","state","action","memory","brain","runtime","event","context","result","error","config","manager","controller","engine","system","model","base","current","new","old","testcase","suite","string","vector","map","optional","shared_ptr","unique_ptr","size","count","index","begin","end","empty","push_back","emplace","filesystem","path","temp_directory_path","current_path","exists","remove_all","create_directories","ofstream","ifstream","istream","ostream","stringstream","unordered_map","unordered_set","find_if","any_of","all_of","sort","min","max","to_string","chrono","milliseconds","seconds","sleep_for","future","async","thread","mutex","atomic","functional","expected","pair","tuple","span","array","numeric","algorithm","utility","iostream","cassert","exception","runtime_error","invalid_argument","move","forward","make_shared","make_unique","size_t","std"}
 
 def git(args: List[str], binary: bool=False) -> bytes | str:
     p = subprocess.run(["git", *args], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
@@ -65,35 +65,35 @@ def category(path: str) -> str:
     return "other"
 
 def extract_symbols(content: str, path: str) -> set[str]:
+    """Extract declared API-like identifiers, not include stems or filename tokens."""
     found=set()
     patterns=[
-      r"\b(?:class|struct|enum(?:\s+class)?|namespace|using|typedef)\s+([A-Za-z_]\w*)",
-      r"\b[A-Za-z_]\w*::([A-Za-z_]\w*)\s*\(",
-      r"\b(?:export\s+)?(?:class|interface|type|enum|function|const|let|var)\s+([A-Za-z_]\w*)",
+      r"\b(?:class|struct|enum(?:\s+class)?|namespace|using|typedef|trait|interface)\s+([A-Za-z_]\w*)",
+      r"\b(?!std::)[A-Za-z_]\w*::([A-Za-z_]\w*)\s*\(",
+      r"\b(?:export\s+)?(?:class|interface|type|enum|function)\s+([A-Za-z_]\w*)",
       r"^\s*(?:def|class)\s+([A-Za-z_]\w*)",
       r"^\s*(?:pub(?:\([^)]*\))?\s+)?(?:async\s+)?fn\s+([A-Za-z_]\w*)",
       r"^\s*(?:pub\s+)?(?:trait|mod|type)\s+([A-Za-z_]\w*)",
       r"^\s*(?:[\w:<>,*&]+\s+)+([A-Za-z_]\w*)\s*\([^;{}]*\)\s*(?:const\s*)?(?:noexcept\s*)?(?:override\s*)?(?:\{|;)",
-      r"\b(?:add_executable|add_library|add_test|add_custom_target|add_subdirectory)\s*\(\s*([A-Za-z_][A-Za-z0-9_.-]*)",
+      r"\b(?:add_executable|add_library|add_test|add_custom_target)\s*\(\s*([A-Za-z_][A-Za-z0-9_.-]*)",
     ]
     for pat in patterns:
         for m in re.finditer(pat,content,re.MULTILINE):
             name=m.group(1)
-            if len(name)>=6 and name.lower() not in STOP: found.add(name)
-    for inc in re.findall(r'^\s*#\s*include\s*[<"]([^>"]+)[>"]',content,re.MULTILINE):
-        stem=pathlib.PurePosixPath(inc).stem
-        if len(stem)>=7: found.add(stem)
-    stem=pathlib.PurePosixPath(path).stem
-    if len(stem)>=8 and stem.lower() not in STOP: found.add(stem)
+            if len(name)>=6 and name.lower() not in STOP:
+                found.add(name)
     return found
 
 def self_test():
     sample = """class DevelopmentalLearning {};
 struct ExperienceMemory {};
 void updatePredictionContext(int x);
+std::filesystem::path temp_directory_path();
 """
     syms=extract_symbols(sample,"core/cpp/src/developmental_learning.cpp")
     assert {"DevelopmentalLearning","ExperienceMemory","updatePredictionContext"} <= syms
+    assert "temp_directory_path" not in syms
+    assert is_text_path("core/rust/lib.rs")
     assert category("core/cpp/tests/example_suite.cpp")=="test"
     assert category(".github/workflows/brain-ci.yml")=="workflow"
     assert category("core/cpp/src/brain.cpp")=="source"
@@ -160,8 +160,8 @@ def main():
                 donor_path=m.group(0); line=text.count("\n",0,m.start())+1
                 for tip,consumer in occs:
                     if consumer in AUDIT_TOOL_PATHS or consumer==donor_path: continue
-                    key=(donor_path,consumer,category(consumer))
-                    rec=path_matches.setdefault(key,{"tips":set(),"branches":set(),"lines":set(),"blob":blob})
+                    key=(donor_path,consumer,category(consumer),blob)
+                    rec=path_matches.setdefault(key,{"tips":set(),"branches":set(),"lines":set()})
                     rec["tips"].add(tip); rec["branches"].update(branch_groups[tip])
                     if len(rec["lines"])<20: rec["lines"].add(line)
             found=collections.defaultdict(set)
@@ -173,8 +173,10 @@ def main():
                 for donor_path in symbol_to_donors[sym]:
                     for tip,consumer in occs:
                         if consumer in AUDIT_TOOL_PATHS or consumer==donor_path: continue
-                        key=(donor_path,sym,consumer,category(consumer))
-                        rec=symbol_matches.setdefault(key,{"tips":set(),"branches":set(),"lines":set(),"blob":blob})
+                        cat=category(consumer)
+                        if cat=="documentation": continue
+                        key=(donor_path,sym,consumer,cat,blob)
+                        rec=symbol_matches.setdefault(key,{"tips":set(),"branches":set(),"lines":set()})
                         rec["tips"].add(tip); rec["branches"].update(branch_groups[tip]); rec["lines"].update(lines)
 
     out=pathlib.Path(args.output); out.mkdir(parents=True,exist_ok=True)
@@ -200,21 +202,21 @@ def main():
     write_csv(out/"unique_branch_tips.csv",list(tip_rows[0].keys()),tip_rows)
 
     path_rows2=[]
-    for (donor_path,consumer,cat),rec in sorted(path_matches.items()):
+    for (donor_path,consumer,cat,blob),rec in sorted(path_matches.items()):
         path_rows2.append({"donor_path":donor_path,"consumer_path":consumer,"category":cat,"unique_tip_count":len(rec["tips"]),
-          "tip_shas":";".join(sorted(rec["tips"])),"branch_names":";".join(sorted(rec["branches"])),
-          "line_numbers_sample":";".join(map(str,sorted(rec["lines"]))),"consumer_blob":rec["blob"]})
+          "candidate_tip_present":candidate_sha in rec["tips"],"tip_shas":";".join(sorted(rec["tips"])),"branch_names":";".join(sorted(rec["branches"])),
+          "line_numbers_sample":";".join(map(str,sorted(rec["lines"]))),"consumer_blob":blob})
     write_csv(out/"exact_path_reference_matches.csv",
-      ["donor_path","consumer_path","category","unique_tip_count","tip_shas","branch_names","line_numbers_sample","consumer_blob"],path_rows2)
+      ["donor_path","consumer_path","category","unique_tip_count","candidate_tip_present","tip_shas","branch_names","line_numbers_sample","consumer_blob"],path_rows2)
 
     symbol_rows=[]
-    for (donor_path,symbol,consumer,cat),rec in sorted(symbol_matches.items()):
+    for (donor_path,symbol,consumer,cat,blob),rec in sorted(symbol_matches.items()):
         symbol_rows.append({"donor_path":donor_path,"symbol":symbol,"consumer_path":consumer,"category":cat,
-          "unique_tip_count":len(rec["tips"]),"tip_shas":";".join(sorted(rec["tips"])),
-          "branch_names":";".join(sorted(rec["branches"])),"line_numbers_sample":";".join(map(str,sorted(rec["lines"]))),
-          "consumer_blob":rec["blob"]})
+          "unique_tip_count":len(rec["tips"]),"candidate_tip_present":candidate_sha in rec["tips"],
+          "tip_shas":";".join(sorted(rec["tips"])),"branch_names":";".join(sorted(rec["branches"])),
+          "line_numbers_sample":";".join(map(str,sorted(rec["lines"]))),"consumer_blob":blob})
     write_csv(out/"candidate_symbol_consumer_matches.csv",
-      ["donor_path","symbol","consumer_path","category","unique_tip_count","tip_shas","branch_names","line_numbers_sample","consumer_blob"],symbol_rows)
+      ["donor_path","symbol","consumer_path","category","unique_tip_count","candidate_tip_present","tip_shas","branch_names","line_numbers_sample","consumer_blob"],symbol_rows)
 
     status=collections.Counter(r["candidate_status"] for r in path_rows)
     summary={"schema_version":1,"repository":inputs["repository"],"pr97":inputs["pr_number"],
@@ -224,8 +226,10 @@ def main():
       "donor_path_count":len(donor_paths),"candidate_same_path_status":dict(status),
       "unique_text_blob_count":len(blob_occurrences),"scanned_blob_count":scanned,"binary_blob_count_skipped":skipped_binary,
       "donor_symbol_count":len(symbols),"exact_path_reference_match_rows":len(path_rows2),
-      "candidate_symbol_consumer_match_rows":len(symbol_rows),
+      "candidate_symbol_consumer_match_rows":len(symbol_rows),"symbol_matches_exclude_documentation":True,
       "limitations":["Path and identifier matches are candidate reverse-consumer evidence, not semantic consumer proof.",
+        "Consumer blob SHA is part of each match key; each row maps only to branch tips that contain that exact blob.",
+        "Symbol matches exclude documentation files; exact path references retain documentation matches.",
         "A same-path divergent blob is not a semantic successor.","An absent same-path artifact may have an alternate successor elsewhere.",
         "Comments, documentation and tests can produce lexical matches; inspect category and exact source context.",
         "This scan makes no retirement, non-adoption, authority or source-baseline decisions."]}
