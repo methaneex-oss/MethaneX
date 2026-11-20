@@ -103,7 +103,7 @@ jobs:
           terminal_section = inventory_text[section_start:]
           parent_match = re.search(
               r"(?m)^\\| Exact parent before this inventory-only write \\| `([0-9a-f]{40})` \\|$",
-              terminal_section
+              r"(?m)^\| Exact parent before this inventory-only write \| `([0-9a-f]{40})` \|$",
           )
           if not parent_match:
               raise SystemExit("The terminal inventory parent SHA is missing or malformed.")
@@ -117,7 +117,7 @@ jobs:
           ).splitlines()
           manifest_text = terminal_section.split("### 130.2", 1)[1].split("### 130.3", 1)[0]
           terminal_manifest = re.findall(
-              r"(?m)^\\|\\s*\\d+\\s*\\|\\s*`([^\`]+)`\\s*\\|\\s*`([0-9a-f]{40})`\\s*\\|$",
+              r"(?m)^\|\s*\d+\s*\|\s*`([^`]+)`\s*\|\s*`([0-9a-f]{40})`\s*\|$",
               manifest_text
           )
           if len(terminal_manifest) != 48 or len({path for path, _ in terminal_manifest}) != 48:
@@ -141,16 +141,16 @@ jobs:
           if parent_to_target_commits != "1" or terminal_changed_paths != [inventory_path]:
               raise SystemExit("Terminal DF-10 check failed: expected one commit and only the inventory path.")
           terminal_summary = (
-              "## Verified terminal inventory metadata\\n\\n"
-              f"- Exact target revision: `{target_revision}`\\n"
-              f"- Terminal parent: `{terminal_parent}`\\n"
-              f"- Parent-to-target ancestry: {parent_to_target_commits} commit\\n"
-              f"- Changed path: `{inventory_path}` only\\n"
-              "- Parent manifest: 48 paths verified; all 47 non-inventory blobs unchanged\\n"
-              f"- Successor inventory blob: `{successor_inventory_blob}`\\n"
+              "## Verified terminal inventory metadata\n\n"
+              f"- Exact target revision: `{target_revision}`\n"
+              f"- Terminal parent: `{terminal_parent}`\n"
+              f"- Parent-to-target ancestry: {parent_to_target_commits} commit\n"
+              f"- Changed path: `{inventory_path}` only\n"
+              "- Parent manifest: 48 paths verified; all 47 non-inventory blobs unchanged\n"
+              f"- Successor inventory blob: `{successor_inventory_blob}`\n"
           )
-          chunks.insert(0, f"\\n\\n===== DOCUMENT: Verified terminal inventory metadata\\nSOURCE COMMIT: {target_revision}\\n=====\\n\\n{terminal_summary}")
-          chunks.append(f"\\n\\n===== DOCUMENT: Terminal DF-10 inventory section\\nSOURCE COMMIT: {target_revision}\\n=====\\n\\n{terminal_section}")
+          chunks.insert(0, f"\n\n===== DOCUMENT: Verified terminal inventory metadata\nSOURCE COMMIT: {target_revision}\n=====\n\n{terminal_summary}")
+          chunks.append(f"\n\n===== DOCUMENT: Terminal DF-10 inventory section\nSOURCE COMMIT: {target_revision}\n=====\n\n{terminal_section}")
           manifest.append({
               "path": "Terminal DF-10 inventory section",
               "source_commit": target_revision,
@@ -159,14 +159,14 @@ jobs:
           })
           packet = "".join(chunks)
           packet_header = (
-              "# Blind Fresh-Reader Packet Metadata\\n\\n"
-              f"- Exact target documentation revision: `{target_revision}`\\n"
-              f"- Verified terminal inventory parent: `{terminal_parent}`\\n"
-              "- Verified parent-to-target relationship: one commit; inventory file only; 47 other manifest blobs unchanged\\n"
+              "# Blind Fresh-Reader Packet Metadata\n\n"
+              f"- Exact target documentation revision: `{target_revision}`\n"
+              f"- Verified terminal inventory parent: `{terminal_parent}`\n"
+              "- Verified parent-to-target relationship: one commit; inventory file only; 47 other manifest blobs unchanged\n"
               "- This SHA identifies the exact repository checkout used to assemble the supplied packet. "
-              "It is a revision identifier, not evidence that the contents have been independently reviewed or accepted.\\n"
-              "- Source commits for individual included documents are listed separately in the packet manifest.\\n\\n"
-              "---\\n\\n"
+              "It is a revision identifier, not evidence that the contents have been independently reviewed or accepted.\n"
+              "- Source commits for individual included documents are listed separately in the packet manifest.\n\n"
+              "---\n\n"
           )
           packet = packet_header + packet
           if target_revision not in packet.split("===== DOCUMENT:", 1)[0]:
