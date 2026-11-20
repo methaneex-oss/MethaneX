@@ -3108,3 +3108,16 @@ The complete all-ref artifact was re-aggregated by donor path and exact consumer
 The 15 paths without a symbol-consumer candidate are not thereby retired: they still have exact-path documentation references and require provenance/authority disposition. Conversely, the 144 paths with lexical consumers are not thereby proven semantically consumed. The 1,149 exact versions are the review unit; repeated symbol hits in the same exact blob are not additional independent consumers.
 
 The all-ref evidence therefore establishes the scale and exact source material for the remaining review, but it does not convert the 182,302 lexical rows into 182,302 semantic dependencies. Per-path classification must continue to distinguish production implementation, tests, build registration, workflow invocation, documentation-only references, and duplicate/alternate owners. This section does not claim that DF-02 is closed.
+
+
+### 10.6 The 15 donor paths without lexical symbol-consumer candidates
+
+The 15 no-symbol paths were enumerated individually. They are not one homogeneous class:
+
+| Class | Exact donor paths | Candidate same-path status |
+|---|---|---|
+| CI/workflow entrypoints (8) | `.github/workflows/brain-ci.yml`; `.github/workflows/dlt-001-long-run.yml`; `.github/workflows/dlt-002-four-hour.yml`; `.github/workflows/dlt-002-overnight-validation.yml`; `.github/workflows/jarvis-brain-probe-001.yml`; `.github/workflows/jarvis-core.yml`; `.github/workflows/jarvis-learning-seed-sweep.yml`; `.github/workflows/jbp-mem-001.yml` | 2 divergent, 5 absent, 1 identical |
+| Build/example/test configuration (4) | `core/cpp/examples/CMakeLists.txt`; `core/cpp/examples/README.md`; `core/cpp/tests/affective_planning.cmake`; `engineering/cpp/CMakeLists.txt` | 3 absent, 1 divergent |
+| Historical design documents (3) | `docs/developmental-training-environment.md`; `docs/superpowers/specs/2026-09-26-concept-context-prediction-design.md`; `docs/superpowers/specs/2026-09-30-developmental-cognition.md` | 3 absent |
+
+All 15 have exact-path documentation references in the indexed refs. The workflow paths require workflow-trigger/replacement review rather than C++ symbol matching; the build/configuration paths require target-registration and build-invocation review; the three design documents require provenance and historical-preservation treatment rather than a runtime-consumer claim. The one identical workflow path is not evidence that the other seven workflows are redundant. No retirement or deletion is inferred from a zero-symbol result.
