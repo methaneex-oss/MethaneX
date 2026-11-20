@@ -2119,3 +2119,10 @@ No runtime code changed and no donor code was adopted. DF-02 remains OPEN; the r
 ## 34. DF-02 runtime/memory/association/adaptation regression findings — 2026-11-20
 
 [DF-02 Cognitive Runtime, Memory, Association and Adaptation Regression Audit](DF02_COGNITIVE_RUNTIME_MEMORY_ASSOCIATION_ADAPTATION_REGRESSION_AUDIT_2026-11-20.md) records missing runtime feedback/action execution, memory consolidation APIs, contextual/conceptual association and prediction-feedback updates, and loss of general signed-numeric/recency adaptation. The five compared test suites have 462 donor assertions versus 112 candidate assertions. The report flags donor fixed coefficients for independent design review and does not recommend blind copying. No runtime code changed; DF-02 remains OPEN. This branch write reopens DF-10.
+
+
+## 35. DF-02 evolution isolation and DF-06 exact-run evidence — 2026-11-20
+
+[DF-02 Evolution Process-Isolation Attestation Regression Audit](DF02_EVOLUTION_PROCESS_ISOLATION_ATTESTATION_REGRESSION_AUDIT_2026-11-20.md) records the callback-trusted isolation Boolean, missing isolated-command/attestation path and missing multi-trial isolation requirement in the candidate; donor tests reject callback claims and require process-attested evidence. No runtime code changed.
+
+DF-06 now has a successful exact-commit CI self-test and link audit: run #44817901365 at `49b48037b35f2800d5e46a0102b3d23980ed222d`, artifact `14670192265`, 56 Markdown files, 428 destinations, 143/143 local targets resolved, 190 external URLs existence-checked through API, zero local fragments extracted. The runbook's stale PR #200 workflow link is corrected to a commit-pinned proposal file link. DF-06 remains NOT MET pending full parser equivalence, semantic relevance review and authenticated rendered-anchor verification. This branch-file write reopens DF-10.
