@@ -2034,3 +2034,8 @@ Read [DF-02 Action Feedback and Evolution-Adoption Regression Audit](reports/DF0
 ## 128. DF-02 runtime/memory/association/adaptation audit — 2026-11-20
 
 Read [DF-02 Cognitive Runtime, Memory, Association and Adaptation Regression Audit](reports/DF02_COGNITIVE_RUNTIME_MEMORY_ASSOCIATION_ADAPTATION_REGRESSION_AUDIT_2026-11-20.md). The exact candidate/donor comparison finds missing runtime feedback and selected-action execution, explicit memory consolidation APIs, contextual/conceptual association and prediction-feedback updates, and general signed-numeric/recency adaptation. Five registered test suites fall from 462 donor assertions to 112 candidate assertions. Fixed donor coefficients are flagged for design review rather than automatic adoption. No runtime code changed; DF-02 remains OPEN.
+
+
+## 129. DF-02 evolution process-isolation attestation audit — 2026-11-20
+
+Read [DF-02 Evolution Process-Isolation Attestation Regression Audit](reports/DF02_EVOLUTION_PROCESS_ISOLATION_ATTESTATION_REGRESSION_AUDIT_2026-11-20.md). Candidate callback execution trusts a self-reported isolation Boolean; the donor deliberately clears that claim, provides a separate process-isolated command path and binds the result to a tamper-evident experiment attestation. The candidate multi-trial coordinator also lacks a default isolation requirement. This is a critical adoption trust-boundary regression; no donor code is copied.
