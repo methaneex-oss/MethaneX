@@ -13,7 +13,7 @@ AUDIT_TOOL_PATHS = {
     "tools/df02_all_ref_audit_inputs.json",
     ".github/workflows/df02-all-ref-consumer-scan.yml",
 }
-TEXT_EXTS = {".c",".cc",".cpp",".cxx",".h",".hh",".hpp",".hxx",".m",".mm",".ts",".tsx",".js",".jsx",".py",".md",".yml",".yaml",".json",".toml",".cmake",".sh",".ps1",".txt",".xml",".sql",".proto",".ini",".cfg",".rst",".html",".css",".gradle",".properties"}
+BINARY_EXTS = {".png",".jpg",".jpeg",".gif",".webp",".ico",".pdf",".zip",".gz",".tar",".7z",".rar",".exe",".dll",".so",".dylib",".a",".o",".obj",".class",".jar",".woff",".woff2",".ttf",".otf",".mp4",".mp3",".wav",".flac",".sqlite",".db",".bin"}
 STOP = {"main","test","tests","run","get","set","create","update","delete","find","read","write","open","close","init","reset","clear","process","execute","handle","on","off","to","from","value","data","id","name","type","status","state","action","memory","brain","runtime","event","context","result","error","config","manager","controller","engine","system","model","base","current","new","old","testcase","suite","string","vector","map","optional","shared_ptr","unique_ptr","size","count","index","begin","end","empty","push_back","emplace"}
 
 def git(args: List[str], binary: bool=False) -> bytes | str:
@@ -52,8 +52,8 @@ def cat_file_batch(shas: List[str]) -> Dict[str,bytes]:
     return out
 
 def is_text_path(path: str) -> bool:
-    name = pathlib.PurePosixPath(path).name
-    return name in {"CMakeLists.txt","Makefile","Dockerfile",".gitignore",".editorconfig"} or pathlib.PurePosixPath(path).suffix.lower() in TEXT_EXTS
+    # Scan every tracked path except known binary formats; unknown binary blobs are skipped by NUL detection.
+    return pathlib.PurePosixPath(path).suffix.lower() not in BINARY_EXTS
 
 def category(path: str) -> str:
     p=path.lower()
@@ -71,6 +71,8 @@ def extract_symbols(content: str, path: str) -> set[str]:
       r"\b[A-Za-z_]\w*::([A-Za-z_]\w*)\s*\(",
       r"\b(?:export\s+)?(?:class|interface|type|enum|function|const|let|var)\s+([A-Za-z_]\w*)",
       r"^\s*(?:def|class)\s+([A-Za-z_]\w*)",
+      r"^\s*(?:pub(?:\([^)]*\))?\s+)?(?:async\s+)?fn\s+([A-Za-z_]\w*)",
+      r"^\s*(?:pub\s+)?(?:trait|mod|type)\s+([A-Za-z_]\w*)",
       r"^\s*(?:[\w:<>,*&]+\s+)+([A-Za-z_]\w*)\s*\([^;{}]*\)\s*(?:const\s*)?(?:noexcept\s*)?(?:override\s*)?(?:\{|;)",
       r"\b(?:add_executable|add_library|add_test|add_custom_target|add_subdirectory)\s*\(\s*([A-Za-z_][A-Za-z0-9_.-]*)",
     ]
