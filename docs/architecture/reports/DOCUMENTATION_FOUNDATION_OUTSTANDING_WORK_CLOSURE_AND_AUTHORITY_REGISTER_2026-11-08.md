@@ -2114,3 +2114,8 @@ Full evidence: [DF-02 Compiled-Consumer and Alternate-Branch Adjudication](DF02_
 [DF-02 Action Feedback and Evolution-Adoption Regression Audit](DF02_ACTION_FEEDBACK_AND_EVOLUTION_ADOPTION_REGRESSION_AUDIT_2026-11-20.md) documents two source-level regressions between candidate PR #192 base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` and donor PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`: (1) removal of action consequence observation and end-to-end behavioral learning/persistence evidence; (2) removal of isolation attestation, weaker adoption validation, absent durable matching evaluation enforcement and reduced transaction compensation/test coverage.
 
 No runtime code changed and no donor code was adopted. DF-02 remains OPEN; the remaining candidate lexical paths and their semantic ownership/dependency/authority decisions are not yet fully adjudicated. This branch-file write reopens DF-10.
+
+
+## 34. DF-02 runtime/memory/association/adaptation regression findings — 2026-11-20
+
+[DF-02 Cognitive Runtime, Memory, Association and Adaptation Regression Audit](DF02_COGNITIVE_RUNTIME_MEMORY_ASSOCIATION_ADAPTATION_REGRESSION_AUDIT_2026-11-20.md) records missing runtime feedback/action execution, memory consolidation APIs, contextual/conceptual association and prediction-feedback updates, and loss of general signed-numeric/recency adaptation. The five compared test suites have 462 donor assertions versus 112 candidate assertions. The report flags donor fixed coefficients for independent design review and does not recommend blind copying. No runtime code changed; DF-02 remains OPEN. This branch write reopens DF-10.
