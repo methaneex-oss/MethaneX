@@ -1695,3 +1695,8 @@ Candidate representation currently converts confidence/reliability/novelty/salie
 ## 68. DF-02 affective/developmental subsystem baseline gap — 2026-11-20
 
 The Builder verified the candidate PR #192 source tree at exact base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`: zero tracked paths contain `affective` or `developmental`. Donor PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` contains compiled affective state/learning, developmental learning/environment/world, affective planning and contextual prediction. Its CMake has five added source files and 17 relevant registered affective/developmental/runtime suites; test targets are 71/70 versus candidate 45/45. This is a donor capability delta, not a claim of a previously integrated candidate feature being removed. The source-baseline/adoption decision remains Director-only. See `DF02_AFFECTIVE_AND_DEVELOPMENTAL_SUBSYSTEM_BASELINE_GAP_2026-11-20.md`. No runtime changes; DF-02 remains OPEN. This write reopens DF-10.
+
+
+## 69. Donor PR #97 build/test/sanitizer verification — 2026-11-20
+
+Verified exact donor HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`: JARVIS Core Verification #40788714735 passed configure/build/test and 71/71 CTest; Brain CI #40788714686 passed native-brain and ASan/UBSan configure/build/test, each 71/71. The logs explicitly show DLT-001 trial and DLT-002 persistence train/verify passing. This establishes the donor line is buildable and its registered suite passes; it does not establish an extended four-hour or open-world transfer result, nor adoption. See `DF02_AFFECTIVE_AND_DEVELOPMENTAL_SUBSYSTEM_BASELINE_GAP_2026-11-20.md` §6.
