@@ -1670,3 +1670,8 @@ The Builder documented two more source-level areas:
 - Candidate DecisionContext/DecisionPolicy omit direct affective context and weights. The candidate public Brain API lacks `choose_with_affect`; a same-purpose method appears only in an uncompiled `brain_restored_api.cpp` that duplicates many definitions in `brain.cpp` and calls absent AssociationModel methods. It cannot safely be added to CMake as-is.
 
 Reports: `DF02_PREDICTION_IDENTITY_AND_FEEDBACK_VALIDATION_REGRESSION_AUDIT_2026-11-20.md` and `DF02_AFFECTIVE_DECISION_AND_ORPHANED_BRAIN_API_AUDIT_2026-11-20.md`. No source changes; DF-02 remains OPEN. This branch write reopens DF-10.
+
+
+## 64. DF-02 attention, self-model and evolution compensation findings — 2026-11-20
+
+The Builder verified that candidate attention lacks donor prediction-error/internal-activation inputs, candidate SelfModel lacks `update_performance` and the donor Brain action-outcome call, and candidate EvolutionModel lacks `restore_previous`. The candidate controller compensates failed adoption transactions using baseline rollback, which can discard a prior valid non-baseline value; the donor restores the exact previous value. Candidate evolution Brain-integration suite has seven assertions versus donor 97. See `DF02_ATTENTION_SELF_MODEL_AND_EVOLUTION_RECOVERY_AUDIT_2026-11-20.md`. No runtime changes. DF-02 remains OPEN; this branch write reopens DF-10.
