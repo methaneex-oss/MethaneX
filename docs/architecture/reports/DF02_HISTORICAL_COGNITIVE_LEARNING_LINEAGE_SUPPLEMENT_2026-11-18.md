@@ -702,3 +702,12 @@ Fifteen exact branch tips dated 2026-10-31 contain all 159 donor paths, with 139
 This is a branch-only integrated source cohort, not current main or PR #192. The representative test CMake registers 74 executable targets and 73 CTest entries, including affective, developmental, experience-memory and DLT suites; 13 of the 15 tips share this full test-CMake blob, while two have an earlier 73-target/72-CTest version. The \`experience_memory_test.cpp\` target is registered, but the \`ExperienceMemory\` header is not included by Brain and does not provide durable persistence. Registration is not execution evidence; no tests were run on these exact 15 tips in this audit.
 
 The cohort materially advances semantic successor discovery but does not close DF-02 or authorize baseline selection, adoption, merge or runtime activation.
+
+
+## 11.8 PR119/PR121 branch authority and separate successor lineage — 2026-11-20
+
+PR #119 merged \`integration/learning-layer-20261028\` into \`feat/jarvis-affective-state\` at donor PR #97 HEAD \`c1da222e6c94aeb3f2ad000392c21fe4fc81ab25\`. PR #121 then merged \`fix/learning-review-findings-20261028\` into \`integration/learning-layer-20261028\` at \`fb994fed8b1bd39482aafd98110055032e8bc82f\`. The PR #121 merge tree has all 159 donor paths with exact identical blobs, and its CMake registers the affective/developmental source stack plus 71 executable targets / 70 CTest entries.
+
+The 15-tip 2026-10-31 \`integration/priority-one\` cohort is a separate line: representative tip \`cfbcbdd29839f062851d3ca7da63ab2ae3a8f4f1\` descends from donor \`c1da...\` but diverges from PR #121 merge \`fb994...\` (209 ahead / 70 behind, merge-base \`34da...\`). Do not transfer PR #121's CI/review evidence to the 15 tips. Their test CMake is 74/73 in 13 tips and 73/72 in two. The ExperienceMemory header remains standalone and is not wired into Brain even on the PR #121 merge line.
+
+Both lines remain feature/integration branches, not current main or Project Director-selected baseline. No baseline decision is inferred.

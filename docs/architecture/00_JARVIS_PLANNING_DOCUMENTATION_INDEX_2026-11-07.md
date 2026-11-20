@@ -1802,3 +1802,10 @@ This validates currentness of the canonical blob ledger; it does not establish s
 The corrected PR #199 scan (run \`44646915235\`, artifact \`14588258314\`) enumerated 253 branch refs / 212 unique tips and scanned all 159 donor paths plus 1,393 tracked text blobs. It records exact consumer blob identities. Candidate PR #192 remained 1 identical / 95 divergent / 63 absent at candidate SHA \`32722f104f76817983b0156cca821949e406b8c1\`.
 
 Fifteen exact 2026-10-31 branch tips were identified with all 159 donor paths present (139–143 donor-identical, 16–20 divergent, zero absent). Their shared source CMake registers the affective/developmental implementation stack. Thirteen tips share test-CMake blob 4c034e... (74 executable targets / 73 CTest entries, including specialist affective, developmental, experience-memory and DLT suites); two use an earlier 73/72 version. This stack is not present in current main or PR #192. ExperienceMemory's test is registered, but its header is not Brain-integrated or durable. See DF-02 §55 and lineage supplement §11.7. DF-02 remains OPEN pending per-path semantic/authority dispositions and manual exact-blob consumer adjudication.
+
+
+## 113. PR119/PR121 branch-lineage authority distinction — 2026-11-20
+
+PR #119 merged into \`feat/jarvis-affective-state\` at donor PR #97 HEAD \`c1da...\`; PR #121 merged into \`integration/learning-layer-20261028\` at \`fb994...\`. The PR #121 merge tree preserves all 159 donor paths exactly and registers the integrated affective/developmental source stack plus 71 targets / 70 CTest entries.
+
+The 15-tip 2026-10-31 \`integration/priority-one\` cohort is a separate line: representative tip \`cfbcbdd...\` is 208 ahead / 0 behind donor \`c1da...\`, but diverges from PR #121 merge \`fb994...\` (209 ahead / 70 behind, merge-base \`34da...\`). Do not transfer PR #121 CI/review evidence to that cohort. The 15-tip cohort's test registration is 74/73 in 13 tips and 73/72 in two. ExperienceMemory remains unconnected to Brain and non-durable. Neither line is current main or Director-selected baseline. DF-02 remains OPEN.

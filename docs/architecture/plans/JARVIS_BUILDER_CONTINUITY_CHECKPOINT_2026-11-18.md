@@ -1385,3 +1385,12 @@ DF-02 remains OPEN due all-ref source-content consumer/dependency/duplicate owne
 - Fifteen 2026-10-31 tips contain all 159 donor paths, with 139–143 donor-identical, 16–20 divergent, zero absent. All share CMake blob \`bc264ce7b4ae489404ca03ea6d9676d0330a6a56\`, registering the affective/developmental source stack.
 - The integration cohort is branch-only, not current main or PR #192. Its representative test CMake registers 74 executable targets and 73 CTest entries, including affective, developmental, experience-memory and DLT suites; 13/15 tips share this full blob and 2/15 use an earlier 73/72 version. ExperienceMemory's test is registered, but its header is not included by Brain and is not durable. No tests were executed on these exact 15 tips in this audit.
 - This is major DF-02 discovery evidence, not semantic closure or Project Director baseline acceptance.
+
+
+## 44. PR119/PR121 lineage distinction — 2026-11-20
+
+PR #119 merged into \`feat/jarvis-affective-state\` at donor PR #97 HEAD \`c1da...\`; PR #121 merged into \`integration/learning-layer-20261028\` at \`fb994...\`. The PR #121 merge tree preserves all 159 donor paths exactly and has the integrated source CMake plus 71/70 test target/CTest registration.
+
+The 15-tip 2026-10-31 \`integration/priority-one\` cohort is a separate line: representative tip \`cfbcbdd...\` is 208 ahead / 0 behind donor \`c1da...\`, but diverges from PR #121 merge \`fb994...\` (209 ahead / 70 behind, merge-base \`34da...\`). PR #121's review and CI evidence must not be attributed to that cohort. The 15-tip cohort has 74/73 test registration in 13 tips and 73/72 in two. ExperienceMemory remains a standalone, non-Brain-integrated, non-durable primitive despite its registered standalone test.
+
+Neither integration line is current main or an accepted implementation baseline. DF-02 remains open.

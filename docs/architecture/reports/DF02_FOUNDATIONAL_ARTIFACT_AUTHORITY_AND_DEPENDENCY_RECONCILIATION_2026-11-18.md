@@ -2889,3 +2889,21 @@ The 77-line candidate \`brain_restored_api.cpp\` duplicates method names already
 ### 55.5 DF-02 disposition
 
 This closes a major discovery gap: a 15-tip exact-ref integration cohort and its source/CMake/test-registration differences are now recorded. It does **not** close DF-02. The 159-path ledger still requires a per-path semantic successor/retirement/non-adoption and authority decision; the corrected lexical match tables require manual exact-blob/context adjudication; and no Project Director baseline/acceptance decision is inferred. The 15 tips remain branch-only evidence, not an instruction to adopt or merge them.
+
+
+## 55.6 PR119/PR121 authority lineage and the separate 2026-10-31 branch line
+
+The PR history resolves an important authority distinction:
+
+- PR #119 merged head \`integration/learning-layer-20261028\` (\`fb994fed8b1bd39482aafd98110055032e8bc82f\`) into base \`feat/jarvis-affective-state\` (\`34da29be34069a76039cf1f03a5193b01b683158\`); its merge commit is donor PR #97 HEAD \`c1da222e6c94aeb3f2ad000392c21fe4fc81ab25\`.
+- PR #121 merged head \`fix/learning-review-findings-20261028\` (\`804497f7458ccd8346332cc0bd63bb0a9313858d\`) into base \`integration/learning-layer-20261028\` (\`810587616c84f794729c272b5ea81f185919453a\`); its merge commit is \`fb994fed8b1bd39482aafd98110055032e8bc82f\`.
+
+The PR #121 merge commit tree contains all 159 donor paths with **159 exact donor blobs / 0 divergent / 0 absent**. Its \`core/cpp/CMakeLists.txt\` blob is the same integrated source-registration blob \`bc264ce7b4ae489404ca03ea6d9676d0330a6a56\`. Its test CMake blob \`cbfd1fde52fffa6eeac025da2b7ddcb5ab493261\` registers 71 executable targets and 70 CTest entries, including affective, developmental, ExperienceMemory and DLT suites.
+
+The representative 2026-10-31 \`integration/priority-one-20261031\` tip \`cfbcbdd29839f062851d3ca7da63ab2ae3a8f4f1\` is 208 commits ahead / 0 behind donor PR #97 HEAD, merge-base exactly \`c1da...\`. It is **not** a descendant of PR #121 merge commit: compared with \`fb994...\` it is diverged (209 ahead / 70 behind), merge-base \`34da...\`. Therefore the 15-tip cohort is a separate branch line from PR #121's reviewed integration line; do not attribute PR #121's review fixes or CI evidence to those 15 tips without exact-head verification.
+
+The 15-tip cohort's test CMake is more recent in 13 tips (blob \`4c034eefa3547cd6d070d24406f0ff159163fd6f\`, 74 targets / 73 CTest entries); two tips retain blob \`0251936730f82a7a8c928fa31dfe1d7effc83d91\` (73 / 72). The PR #121 merge line has its own 71 / 70 test registration. These are separate, exact branch states.
+
+Even on the PR #121 merge line, \`experience_memory.hpp\` is not included by \`brain.hpp\` or used in \`brain.cpp\`; \`experience_memory_test.cpp\` tests the standalone in-memory primitive. Registration and passing a standalone test do not establish Brain-integrated or durable experience memory.
+
+Neither feature/integration line is current main. Current main and PR #192 candidate omit the richer affective/developmental source stack. No branch is selected as the Project Director's implementation baseline by this evidence.

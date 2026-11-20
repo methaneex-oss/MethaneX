@@ -1999,3 +1999,8 @@ The current PR #192 candidate tree and the prior ledger tree have identical blob
 Corrected exact-blob-keyed all-ref scan: run \`44646915235\`, artifact \`14588258314\`; 253 branch refs / 212 unique tips; 159 donor paths; 1,393 text blobs. Candidate same-path disposition at PR #192 SHA \`32722f104f76817983b0156cca821949e406b8c1\`: 1 identical / 95 divergent / 63 absent.
 
 Fifteen 2026-10-31 branch tips contain all 159 donor paths, 139–143 exact donor blobs and 16–20 divergent blobs each. Their shared CMake configuration compiles the affective/developmental source stack. Thirteen tips share the 74-target/73-CTest specialist test registration; two use a 73/72 version. This is a branch-only integration cohort, not current main or candidate. ExperienceMemory's test is registered, but the header is not Brain-integrated or durable. The exact evidence and limitations are in DF-02 §55.
+
+
+## 25. PR119/PR121 authority-lineage clarification — 2026-11-20
+
+PR #119 and PR #121 merged into feature/integration branches, not main. PR #121 merge \`fb994...\` preserves all 159 donor paths exactly and has 71 targets / 70 CTest entries with the affective/developmental stack registered. The 15-tip 2026-10-31 integration cohort is a separate line: representative \`cfbcbdd...\` descends from donor \`c1da...\` but diverges from PR #121 merge \`fb994...\` (209 ahead / 70 behind, merge-base \`34da...\`). PR #121's CI/review evidence is not transferable to the 15 tips. Their test registration is 74/73 in 13 tips and 73/72 in two. ExperienceMemory remains a standalone, non-Brain-integrated, non-durable primitive. No implementation baseline is selected.
