@@ -736,3 +736,28 @@ The parser/extraction logic was exercised locally with the installed `markdown-i
 This correction improves parser coverage but does not establish complete GitHub-Flavored Markdown equivalence. The implementation uses the CommonMark parser with table/strikethrough extensions and explicit autolink handling; a full parser-equivalence proof remains outstanding. Exhaustive external destination semantic relevance and authenticated rendered GitHub anchor viewport verification also remain outstanding.
 
 **Disposition:** this specific inline-HTML omission is corrected in the Builder branch. DF-06 remains **NOT MET** under Option A until full parser reconciliation, local fragment verification, exhaustive external status/redirect/final-target/relevance checks, and authenticated rendered-anchor verification are evidenced.
+
+
+## 35. Exact-commit parser self-test and full link audit — 2026-11-20
+
+**Exact source revision:** `49b48037b35f2800d5e46a0102b3d23980ed222d`  
+**GitHub Actions run:** [#44817901365](https://github.com/methaneex-oss/MethaneX/actions/runs/44817901365)  
+**Workflow result:** completed / success  
+**Artifact:** `documentation-link-audit-49b48037b35f2800d5e46a0102b3d23980ed222d`, ID `14670192265`  
+**Downloaded ZIP SHA-256:** `69882f5602c9786aeee01f12f575b60e2fac9592fc01b05c35e2c38800655d81`
+
+The exact workflow steps show success for checkout of the exact revision, parser installation, **Self-test CommonMark/GFM and inline HTML extraction**, full tracked-Markdown destination audit, and artifact preservation. This closes the prior evidence gap about whether the corrected self-test ran in GitHub Actions.
+
+Artifact results:
+- 56 Markdown files scanned.
+- 428 destination occurrences extracted.
+- 143 local/repository-relative destinations; all 143 resolved, zero missing.
+- 190 unique external URLs.
+- 187 external URLs returned HTTP 200 and were verified through GitHub API.
+- Three GitHub HTML destinations returned HTTP 206 to the audit's HTTP request. Their exact targets were separately checked through GitHub API: the repository endpoint and both immutable Git tree SHAs exist. These are not counted as failed destinations.
+- Zero local fragment destinations were emitted by the corrected parser on this revision.
+- The artifact explicitly records rendered GitHub anchor verification as `not_performed` and semantic relevance review as `not_automated`.
+
+The audit exposed one stale external workflow link in the Nemotron fresh-reader runbook: it pointed to an Actions workflow path that did not exist on the documentation branch. The runbook now links to the exact proposed workflow file blob on PR #200 revision `0884b6ac0551996f30429008031476e5d38d32b7` and labels it as an unmerged proposal. This does not imply the workflow is integrated or dispatched.
+
+**Disposition:** the corrected parser's self-test and exact-revision link audit now have successful CI evidence. The 143 local targets resolve, and all 190 external destinations have been existence-checked through the automated or bounded manual API path described above. DF-06 nevertheless remains **NOT MET** under Option A: full CommonMark/GFM parser equivalence is not proven, semantic relevance of every external claim is not fully reviewed, and authenticated rendered GitHub heading/line-range/issue-comment anchor landing has not been verified. The successful workflow is not misrepresented as closing those remaining criteria.
