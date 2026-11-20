@@ -109,9 +109,12 @@ jobs:
               raise SystemExit("The terminal inventory parent SHA is missing or malformed.")
           terminal_parent = parent_match.group(1)
           subprocess.check_call(["git", "fetch", "--no-tags", "--depth=1", "origin", terminal_parent])
-          parent_to_target_commits = subprocess.check_output(
-              ["git", "rev-list", "--count", f"{terminal_parent}..{target_revision}"], text=True
-          ).strip()
+          target_parents = subprocess.check_output(
+              ["git", "show", "-s", "--format=%P", target_revision], text=True
+          ).split()
+          if target_parents != [terminal_parent]:
+              raise SystemExit("Terminal DF-10 check failed: target is not a direct child of the recorded parent.")
+          parent_to_target_commits = "1"
           terminal_changed_paths = subprocess.check_output(
               ["git", "diff", "--name-only", terminal_parent, target_revision], text=True
           ).splitlines()
