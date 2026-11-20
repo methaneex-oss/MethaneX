@@ -106,9 +106,9 @@ def parse_document(path: str, content: str, parser: MarkdownIt) -> tuple[list[di
                             "label": child.attrGet("alt") or child.content,
                         })
                 elif child.type == "html_inline":
-                    for match in re.finditer(r"\\bid\\s*=\\s*['\\\"]([^'\\\"]+)['\\\"]", child.content, re.I):
+                    for match in re.finditer(r"\bid\s*=\s*['\\\"]([^'\\\"]+)['\\\"]", child.content, re.I):
                         anchors.add(html.unescape(match.group(1)))
-                    for match in re.finditer(r"\\b(href|src)\\s*=\\s*['\\\"]([^'\\\"]+)['\\\"]", child.content, re.I):
+                    for match in re.finditer(r"\b(href|src)\s*=\s*['\\\"]([^'\\\"]+)['\\\"]", child.content, re.I):
                         links.append({
                             "source": path, "destination": html.unescape(match.group(2)),
                             "kind": "html_inline",
