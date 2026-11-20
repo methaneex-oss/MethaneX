@@ -2146,3 +2146,8 @@ DF-06 now has a successful exact-commit CI self-test and link audit: run #448179
 ## 39. DF-02 cognitive-cycle integration audit — 2026-11-20
 
 [DF-02 Cognitive-Cycle Perception and Action Integration Audit](DF02_COGNITIVE_CYCLE_PERCEPTION_AND_ACTION_INTEGRATION_AUDIT_2026-11-20.md) documents missing structured perception, per-cycle affect/attention, selected-action execution outcomes and sequence-safe/goal-aware feedback in the candidate cycle contract. Donor cognitive-cycle suite: 186 assertions; candidate: 31. No runtime code changed; DF-02 remains OPEN.
+
+
+## 40. DF-02 representation provenance and canary preview — 2026-11-20
+
+[DF-02 Representation Provenance and Canary Preview Audit](DF02_REPRESENTATION_PROVENANCE_AND_CANARY_PREVIEW_AUDIT_2026-11-20.md) records metadata/content conflation, unstable node IDs, ignored event confidence and NaN validation gaps in candidate representation, plus missing non-mutating canary preview and reduced test coverage. No runtime code changed; DF-02 remains OPEN.
