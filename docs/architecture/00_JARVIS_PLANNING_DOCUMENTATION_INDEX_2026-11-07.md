@@ -2079,3 +2079,8 @@ Pinned donor PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` passed JARVI
 ## 137. DF-02 causal feedback and typed persistence audit — 2026-11-20
 
 Read [DF-02 Causal Feedback and Typed Persistence Gap](reports/DF02_CAUSAL_FEEDBACK_AND_TYPED_PERSISTENCE_GAP_2026-11-20.md). Candidate lacks causal counterexample-driven weakening and uses ambiguous untyped key=value serialization; donor adds outcome-based hypothesis weakening and a typed length-prefixed codec. Candidate phase-5 suite is 12 assertions versus 46 donor assertions. No runtime change.
+
+
+## 138. DF-02 candidate-branch 111-path consumer reconciliation — 2026-11-21
+
+Read [DF-02 Candidate-Branch 111-Path Consumer Reconciliation](reports/DF02_CANDIDATE_BRANCH_111_PATH_CONSUMER_RECONCILIATION_2026-11-21.md). It pins 111/118 all-ref candidate paths to exact candidate tip 84dd100..., with 76 divergent same-path artifacts, 35 absent same-path artifacts, 107 source-category matches and 85 direct compiled-TU matches. Candidate consumer corpus: 206 exact path/category occurrences (128 source, 50 tests, 11 workflows, 2 build, 14 docs, 1 other). This narrows the discovery inventory but does not promote generic-token matches to semantic integration. DF-02 remains OPEN for remaining semantic successor/duplicate-owner and authority disposition.
