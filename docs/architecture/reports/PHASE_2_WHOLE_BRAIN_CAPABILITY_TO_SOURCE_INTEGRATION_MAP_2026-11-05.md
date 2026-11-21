@@ -2803,7 +2803,7 @@ Accepted PR #174 BM-01 requires intake failures and missing evidence not to be c
 - [`PerceptionProvider::supports` and provider contract](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/include/jarvis/core/perception_pipeline.hpp#L25-L31), blob `1e5fed009a2453211dac1a4187ff47c5cc65da39`.
 - [`CognitiveRuntimeMetrics`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/include/jarvis/core/cognitive_runtime.hpp#L42-L59), blob `e5a3c853add8b5fcb9b8c04c9b25f20179b5b629`.
 - [`ThrowingProvider` fallback test](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/perception_pipeline_suite.cpp#L39-L44) and [asserted fallback behavior](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/perception_pipeline_suite.cpp#L72-L78), blob `2312d9f86763a05d7eef9e341d7b1d60bfe845e9`.
-- [Accepted BM-02 provider-failure scenario](https://github.com/methaneex-oss/MethaneX/blob/0811a59e46bf934e32e794f90e4e7d18d4e2bd97/docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md#L752-L760), blob `3b6a53c8a295fa0d9fc29bbb6c7688b61d1dcdb1`.
+- [Accepted BM-02 provider-failure scenario](https://github.com/methaneex-oss/MethaneX/blob/0811a59e46bf934e32e794f90e4e7d18d4e2bd97/docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md?plain=1#L752-L760), blob `3b6a53c8a295fa0d9fc29bbb6c7688b61d1dcdb1`.
 
 **Finding disposition:** P2-I-037 is a distinct BM-02/BM-11 observability and failure-contract finding. It does not duplicate the general representation/grounding gap or the external consequence observer provenance findings. It remains open pending structured failure reporting and tests.
 
@@ -2888,7 +2888,7 @@ This is not a claim that every action needs a short time-to-live or that a stati
 - [`Brain::execute_action`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/brain_action_execution.cpp#L8-L50), blob `3b66bafb438cd28790e6f25611b96c86f1eff05c`.
 - [`ActionAuthorizer::authorize`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/src/action_authorization.cpp#L14-L44), blob `669bc86c8111ae9755bcd40715352b4fc71350d0`.
 - [`Action authorization tests`](https://github.com/methaneex-oss/MethaneX/blob/c1da222e6c94aeb3f2ad000392c21fe4fc81ab25/core/cpp/tests/action_authorization_suite.cpp#L1-L47), blob `66127a2b574d5c44571332733edb800fb558bcaf`.
-- [Accepted BM-06 permission/freshness preservation](https://github.com/methaneex-oss/MethaneX/blob/0811a59e46bf934e32e794f90e4e7d18d4e2bd97/docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md#L307-L324), blob `3b6a53c8a295fa0d9fc29bbb6c7688b61d1dcdb1`.
+- [Accepted BM-06 permission/freshness preservation](https://github.com/methaneex-oss/MethaneX/blob/0811a59e46bf934e32e794f90e4e7d18d4e2bd97/docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md?plain=1#L307-L324), blob `3b6a53c8a295fa0d9fc29bbb6c7688b61d1dcdb1`.
 
 **Finding disposition:** P2-I-038 is a distinct governance-context lifecycle gap. It is not the same as P2-I-030's partial external side-effect contract or P2-I-029's persistence acknowledgement. Keep it provisional until the real host policy lifecycle is inspected.
 
