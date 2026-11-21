@@ -7,6 +7,7 @@
 #include <cstring>
 #include <string>
 #include <cstdlib>
+#include <filesystem>
 
 #if defined(__unix__) || defined(__APPLE__)
 #include <fcntl.h>
@@ -116,6 +117,63 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
     result.error = "process isolation backend unsupported on this platform";
     return result;
 #else
+    // Resolve path-containing executable names before the child changes its
+    // working directory, so "./evaluator" cannot silently select a different
+    // file after chdir.
+    std::string executable = command.executable;
+    char* resolved = realpath(command.executable.c_str(), nullptr);
+    if (resolved != nullptr) {
+        executable.assign(resolved);
+        std::free(resolved);
+    } else if (command.executable.find('/') != std::string::npos) {
+        result.error = std::string("cannot resolve executable: ") + std::strerror(errno);
+        return result;
+    } else {
+        // Resolve PATH in the parent as well. execvp() after chdir() would
+        // reinterpret relative PATH entries against the evaluator's working
+        // directory and could select an unregistered executable.
+        const char* configured_path = std::getenv("PATH");
+        const std::string search_path = configured_path == nullptr
+            ? "/bin:/usr/bin" : configured_path;
+        bool found = false;
+        std::size_t begin = 0;
+        while (begin <= search_path.size()) {
+            const auto end = search_path.find(':', begin);
+            const auto entry = search_path.substr(begin,
+                end == std::string::npos ? std::string::npos : end - begin);
+            const auto candidate = (entry.empty()
+                ? std::filesystem::current_path()
+                : std::filesystem::path(entry).is_absolute()
+                    ? std::filesystem::path(entry)
+                    : std::filesystem::current_path() / entry) / command.executable;
+            char* path_resolved = realpath(candidate.c_str(), nullptr);
+            if (path_resolved != nullptr) {
+                const bool executable_file = access(path_resolved, X_OK) == 0;
+                if (executable_file) {
+                    executable.assign(path_resolved);
+                    found = true;
+                    std::free(path_resolved);
+                    break;
+                }
+                std::free(path_resolved);
+            }
+            if (end == std::string::npos) break;
+            begin = end + 1;
+        }
+        if (!found) {
+            result.error = "cannot resolve executable through PATH";
+            return result;
+        }
+    }
+
+    // Build argv before fork: allocating in a multithreaded child is unsafe.
+    std::vector<char*> argv;
+    argv.reserve(command.arguments.size() + 2);
+    argv.push_back(const_cast<char*>(executable.c_str()));
+    for (const auto& argument : command.arguments)
+        argv.push_back(const_cast<char*>(argument.c_str()));
+    argv.push_back(nullptr);
+
     int pipe_fds[2] = {-1, -1};
     if (pipe(pipe_fds) != 0) {
         result.error = std::string("pipe failed: ") + std::strerror(errno);
@@ -135,6 +193,17 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
         (void)dup2(pipe_fds[1], STDOUT_FILENO);
         (void)dup2(pipe_fds[1], STDERR_FILENO);
         close(pipe_fds[1]);
+        // Do not leak caller-owned descriptors (including connected sockets)
+        // into the evaluator. stdout/stderr are the only intentional handles.
+#if defined(__linux__) && defined(SYS_close_range)
+        if (syscall(SYS_close_range, 3U, ~0U, 0U) != 0) {
+            const long max_fd = sysconf(_SC_OPEN_MAX);
+            for (int fd = 3; fd < (max_fd > 0 ? max_fd : 1024); ++fd) close(fd);
+        }
+#else
+        const long max_fd = sysconf(_SC_OPEN_MAX);
+        for (int fd = 3; fd < (max_fd > 0 ? max_fd : 1024); ++fd) close(fd);
+#endif
         (void)setpgid(0, 0);
 
 #if defined(__linux__)
@@ -171,12 +240,10 @@ ProcessIsolationResult ProcessIsolationBackend::run(const IsolatedCommand& comma
 
         if (!command.working_directory.empty() && chdir(command.working_directory.c_str()) != 0) _exit(126);
 
-        std::vector<char*> argv;
-        argv.reserve(command.arguments.size() + 2);
-        argv.push_back(const_cast<char*>(command.executable.c_str()));
-        for (const auto& argument : command.arguments) argv.push_back(const_cast<char*>(argument.c_str()));
-        argv.push_back(nullptr);
-        execvp(command.executable.c_str(), argv.data());
+        if (executable.find('/') != std::string::npos)
+            execv(executable.c_str(), argv.data());
+        else
+            execvp(executable.c_str(), argv.data());
         _exit(127);
     }
 
