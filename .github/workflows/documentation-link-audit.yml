@@ -49,3 +49,43 @@ jobs:
           path: documentation-link-audit.json
           if-no-files-found: warn
           retention-days: 30
+
+
+  df02-path-ownership:
+    if: contains(github.event.head_commit.message, 'df02 ownership scan')
+    name: Exact DF-02 branch-to-blob ownership map
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Check out the pinned read-only all-ref scanner
+        uses: actions/checkout@v6
+        with:
+          ref: audit/df02-all-ref-consumer-scan-20261120
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Fetch every live remote branch ref
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --no-tags origin '+refs/heads/*:refs/remotes/origin/*' --prune
+
+      - name: Syntax-check scanner
+        run: python3 -m py_compile tools/df02_all_ref_consumer_scan.py
+
+      - name: Run scanner self-tests
+        run: python3 tools/df02_all_ref_consumer_scan.py --self-test
+
+      - name: Build exact branch-to-blob ownership map
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/df02_all_ref_consumer_scan.py --inputs tools/df02_all_ref_audit_inputs.json --output artifacts/df02
+
+      - name: Upload full ownership evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: df02-branch-blob-ownership-${{ github.sha }}
+          path: artifacts/df02/
+          if-no-files-found: error
+          retention-days: 90
