@@ -84,3 +84,14 @@ The refined scan is no longer being treated as a flat set of 118 candidate paths
 This evidence reveals at least two distinct source lines worth preserving for Project Director comparison: the candidate baseline and the alternate knowledge-composition / priority-one integration branches. The latter contain donor-identical affective planning, contextual prediction and task-ledger implementations with their CMake/test integration. Their existence does not establish that they should replace or be merged into the candidate baseline.
 
 **DF-02 remains OPEN.** This supplement resolves seven previously ambiguous other-ref-only path cases and sharpens the 111 candidate-branch consumer map. The remaining lexical candidates still require per-path semantic successor/retention/retirement/non-adoption, dependency and duplicate-owner review. The Project Director retains source-baseline and adoption authority. No donor code was merged or copied.
+
+
+## 4. 2026-11-21 exact-ownership and prediction-identity correction
+
+The 2026-11-21 all-ref scan (workflow 44931803411, artifact 14717933378) now provides exact branch-tip-to-blob ownership for all seven other-ref-only paths in §2. The seven paths are not newly discovered by this addendum; they were already covered here. The new report DF02_SEVEN_NEW_NO_SYMBOL_PATH_ADJUDICATION_2026-11-21.md cross-reconciles the seven with the 48-path no-symbol inventory and records exact branch/blob clusters.
+
+Important correction to §2.6: ExperienceMemory is a standalone helper and is not included or instantiated by the donor Brain. The donor Brain nevertheless preserves prediction identity directly using a sequence-preserving vector and sequence-based resolution. The candidate Brain uses an unordered map keyed by semantic key; repeated unresolved predictions with the same key can collapse. The candidate gap is therefore sequence-safe prediction identity, not the absence of the ExperienceMemory helper as an integrated subsystem.
+
+Exact ownership highlights: ExperienceMemory donor blob 28cce354... is present on 77 tips; brain_affective_planning donor blob 2a940625... on 76; brain_prediction_context has a later 76-tip blob b3ceff150... plus one older one-tip blob; affective_planning_suite donor blob 32e5f04c... on 76; task_ledger donor blob 95d3f2e4... on 76. Association-causality has five exact versions (candidate 131 tips, donor 49, b627/Gate-A later variant 26, and two one-tip variants). Reasoning architecture has three versions (candidate 135 tips, donor/b627 57, and another 20-tip variant).
+
+The new exact owner map supersedes the earlier assumption that branch names could not be joined to exact blob versions. It does not select a source baseline or authorize adoption.

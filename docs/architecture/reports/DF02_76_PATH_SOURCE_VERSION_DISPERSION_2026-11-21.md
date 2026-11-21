@@ -38,3 +38,16 @@ The scanner enhancement is committed but **not executed**. The installed GitHub 
 The 76 paths have complete focused-report cross-reference coverage, and the 35 absent-path cases are individually adjudicated. The remaining Builder-owned technical task is to execute the exact branch-to-blob ownership scan and reconcile the resulting clusters into donor-identical copies, candidate successors, distinct implementations and stale/unowned variants. Until that evidence exists, DF-02 cannot truthfully be marked fully closed.
 
 No source/runtime code was changed. No branch is declared owner merely because it contains the donor blob. No source baseline, merge, retirement or non-adoption decision is made here; those decisions remain with the Project Director.
+
+
+## 5. Superseding exact branch-to-blob scan — 2026-11-21
+
+The statement in §§2–4 that the available scan could not map a branch/tip to the exact blob is superseded.
+
+A new all-ref scan was executed by workflow 44931803411 on candidate PR #192 source snapshot 19c1c168fdbdab58ed9732cd250d2ae4624936eb and donor PR #97 HEAD c1da222e6c94aeb3f2ad000392c21fe4fc81ab25. Scanner commit b8a594ea514ff44cadb5342986c68b1eac6e22ed; artifact 14717933378; SHA-256 189f65b26b78e3811fb5b2c9fef6cfc97a8f6a24c8f62f80b0f6c1e7c9d70e7f.
+
+The new artifact includes path_blob_ownership.csv, directly joining each donor path and exact blob SHA to branch names and unique tip SHAs. It contains 798 path/blob ownership rows and 1,938 exact path-reference rows. The full scan covers 254 branch refs / 213 unique tips, 1,415 text blobs, 40,041 lexical candidate rows, and 1,226 consumer-blob/path/category occurrences. The 76 divergent candidate paths remain 76; the new scan resolves which exact branch tips hold each version.
+
+The earlier 76-path dispersion counts (17 paths with two versions, 59 with three or more, maximum 40 versions for core/cpp/tests/CMakeLists.txt) remain valid as counts. The old statement that exact ownership could not be established is no longer current. The new exact ownership map is an input to semantic reconciliation, not a source-baseline decision.
+
+**DF02 remains OPEN:** exact branch ownership is now available, but each material divergent path still requires semantic successor/duplicate-owner/retirement disposition, and source-baseline authority remains with the Project Director.

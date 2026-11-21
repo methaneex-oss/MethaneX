@@ -1819,3 +1819,13 @@ This is an evidence-only workflow; it does not alter runtime source, select a ba
 4. Make all documentation/index/checkpoint updates before the terminal inventory-only commit.
 5. Run the final inventory-only commit, verify exact tree state, update PR #192 body with current facts, and present the remaining Director decisions.
 6. Do not begin Stage A or adopt b627 until the Director selects and authorizes the source baseline.
+
+## 84. DF02 cross-report correction — 2026-11-21
+
+The seven paths in the prior section are not newly discovered across all DF02 reports. They were already covered as other-ref-only donor paths by DF02_COMPILED_CONSUMER_AND_ALTERNATE_BRANCH_ADJUDICATION_2026-11-20.md; the EngineeringTaskLedger was also covered by DF02_ENGINEERING_AGENT_DELIVERY_AND_TASK_LEDGER_GAP_2026-11-21.md. The new seven-path report is a cross-report reconciliation and exact branch/blob ownership correction.
+
+Key correction: ExperienceMemory is a standalone helper and is not integrated into donor Brain. Donor Brain itself stores prediction records by sequence in a vector; candidate Brain uses an unordered map keyed by semantic key, which can collapse repeated unresolved predictions with the same key. The real candidate gap is sequence-safe prediction identity, not the absence of ExperienceMemory as a separate subsystem.
+
+The 2026-11-21 scan's path_blob_ownership.csv now joins branch names/tip SHAs to exact blob versions. The earlier 76-path dispersion report's statement that this join was unavailable is superseded. Exact ownership highlights and path versions are recorded in the seven-path cross-report addendum. The 76 divergent paths still require semantic successor/duplicate-owner decisions.
+
+The task-ledger suite tests multiple instances and concurrent operations within one process; it does not spawn separate OS processes. The OS file-lock implementation exists, but true cross-process stress evidence is still missing.

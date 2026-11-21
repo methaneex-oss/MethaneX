@@ -45,3 +45,16 @@ The already completed focused reports remain the semantic evidence for material 
 **Builder evidence reconciliation advanced; DF-02 is not falsely marked closed.** The 111 candidate-branch paths now have an exact path-level consumer matrix, joined to the 159-path donor/candidate inventory and full-content scan. The previous blanket statement that all 118 paths were still an undifferentiated lexical set is superseded.
 
 Remaining closure work is narrower and explicit: finish semantic successor/duplicate-owner decisions for the divergent paths not already covered by focused reports; confirm which generic-token matches are incidental; reconcile cross-branch source ownership for remaining true consumers; and preserve the distinction between technical disposition and Director-only source-baseline, retirement, non-adoption or adoption authority. No source baseline is selected and no donor/runtime code is adopted by this report.
+
+
+## 5. Superseding scan and exact ownership update — 2026-11-21
+
+The earlier artifact/run cited above is superseded for all-ref branch ownership by workflow 44931803411, artifact 14717933378, candidate PR #192 source snapshot 19c1c168fdbdab58ed9732cd250d2ae4624936eb, donor PR #97 HEAD c1da222e6c94aeb3f2ad000392c21fe4fc81ab25, scanner commit b8a594ea514ff44cadb5342986c68b1eac6e22ed. Artifact SHA-256: 189f65b26b78e3811fb5b2c9fef6cfc97a8f6a24c8f62f80b0f6c1e7c9d70e7f.
+
+The new scan covers 254 branch refs / 213 unique tips, 1,415 text blobs, 40,041 lexical candidate rows, 1,226 consumer-blob/path/category occurrences, 798 path/blob ownership rows and 1,938 exact path-reference rows. The candidate path set remains 111: 76 divergent same-path artifacts and 35 absent same-path artifacts. The no-symbol set is 48 (28 absent, 19 divergent, one identical).
+
+The new artifact supplies the branch-name/tip-to-exact-blob join missing from the previous artifact. The 76-path dispersion report now has a direct ownership map; it is no longer accurate to say that branch ownership cannot be established from the scan.
+
+The C++ source tree in the PR #192 documentation branch remained unchanged through the documentation-only successor commit 5c402cf8110bf38f2db114e1fadf463e245e9dae; the source/build/test consumer findings remain applicable. The new scan is the controlling evidence for exact branch/blob ownership. Lexical and compile reachability still do not substitute for per-path semantic successor decisions.
+
+**DF02 remains OPEN:** the 76 divergent paths still require semantic disposition and duplicate-owner reconciliation. No source baseline or adoption decision is made.

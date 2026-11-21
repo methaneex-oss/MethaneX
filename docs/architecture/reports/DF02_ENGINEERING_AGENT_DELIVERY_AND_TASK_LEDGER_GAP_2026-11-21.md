@@ -83,3 +83,8 @@ The same donor-identical task-ledger header/source/test and their CMake/coordina
 | `engineering/cpp/tests/task_ledger_suite.cpp` | absent | `e90c062261c95ff99d4b1bdcb55ce7bfad0512ec` |
 
 The candidate/donor `agent.cpp` blob is identical (`d922dab52bd2f8d774f3734686da21391cabbf19`); no behavioral delta is claimed for that file.
+
+
+## 8. Task-ledger test scope clarification — 2026-11-21
+
+The 43-assertion task-ledger suite uses multiple independently constructed ledger instances and concurrent/stale operations within the same test process. It does not spawn separate operating-system processes. The implementation uses OS file locking, but the existing suite does not independently validate lock exclusion across two real processes. Describe this as multi-instance/concurrent ledger testing, not as a completed cross-process stress test. A true cross-process test remains required before relying on the ledger for multiple independent builder processes.
