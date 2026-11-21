@@ -2099,3 +2099,8 @@ Read [DF-02 Supporting Cognitive, Reasoning, Reflection and Evolution Contracts]
 ## 141. DF-02 adoption safety test semantics — 2026-11-21
 
 The candidate and donor brain_contract suites both have 19 assertions, but candidate asserts direct proposal adoption succeeds while donor asserts it fails without recorded evaluation evidence; donor also rejects rollback of an unadopted parameter. See supporting mechanism audit §10.
+
+
+## 142. DF-02 candidate-absent 35-path semantic adjudication — 2026-11-21
+
+Read [DF-02 Candidate-Absent 35-Path Semantic Adjudication](reports/DF02_CANDIDATE_ABSENT_35_PATH_SEMANTIC_ADJUDICATION_2026-11-21.md). All 35 candidate-absent paths are classified individually, separating orphaned uncompiled API references, generic-token false positives, absent test coverage, alternate-branch task-ledger ownership and historical plan/spec preservation. This closes the absent-path subset, not the 76 divergent-path duplicate-owner/authority reconciliation.
