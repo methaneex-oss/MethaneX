@@ -106,3 +106,13 @@ No source, CMake or runtime file was modified. DF-02 remains OPEN pending the re
 Both snapshots contain 19 assertions, but the critical assertions are different. Candidate calls `adopt_evolution(proposals.front())` and expects success, then expects a direct rollback to succeed. Donor explicitly asserts both operations fail: a proposal is not evaluation evidence, and an unadopted parameter cannot be rolled back. The persisted event count correspondingly changes from eight to six. This is a semantic safety correction despite an unchanged assertion count; raw assertion totals alone would miss it.
 
 This exact test supports the evolution-adoption safety findings in the action-feedback and evolution-recovery reports. It does not by itself prove all controller/replay/attestation behavior; those are covered by the separate 97-assertion donor integration suite and focused source audits.
+
+
+## 11. Exact path ownership cross-reference
+
+The following additional divergent paths are included in the source comparison and must remain explicit in the 111-path inventory:
+
+| Path | Candidate blob | Donor blob | Disposition |
+|---|---|---|---|
+| `core/cpp/include/jarvis/core/evolution_orchestrator.hpp` | `75105e51509156f1fad361ec47e0ae365a1a0291` | `05e5ca1578dc5b1635619aa61dc2da0459ef7708` | Donor constructor accepts explicit `EvolutionTrialConfig`; candidate silently uses its default. The corresponding source lifecycle guard is covered in §6. |
+| `core/cpp/tests/evolution_brain_integration_suite.cpp` | `3164cbc19bfb056cdccfdd58f0be047226d41a86` | `59d7dd68c42eea18d488d8e5e6aa9f7a9a327ded` | Candidate 7 assertions; donor 97. Donor covers legacy replay rejection, evaluation attestation, proposal-only adoption rejection, threshold recomputation, evidence mismatch, canary persistence and restart recovery. |
