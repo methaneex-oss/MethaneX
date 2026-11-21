@@ -7190,3 +7190,183 @@ Any failed check means DF-10 is not verified. This is the final planned branch-f
 ### 133.3 Authority and gate boundary
 
 DF-02 remains OPEN: two source-level regression cases are now documented, but the remaining candidate-branch lexical paths still require semantic successor/dependency/duplicate-owner/retention/retirement/authority adjudication. DF-06 remains NOT MET pending full parser equivalence, fragments, exhaustive external destination semantic/reachability review and authenticated rendered-anchor verification. DF-09 remains NOT MET/BLOCKED pending an exact-final-HEAD blind-reader CLEAR; the connected GitHub tools do not expose workflow dispatch. DF-11 is waived as a mandatory gate; Independent Reviewer requests remain withdrawn. DF-12 remains Project Director-only/pending. Stage A remains HELD. No source baseline, donor adoption, runtime implementation, training, merge, rebase, retarget, cherry-pick or deployment is authorized.
+
+
+## 134. Terminal inventory snapshot — 2026-11-21 (pre-inventory parent)
+
+### Exact repository and PR state
+
+- Repository: methaneex-oss/MethaneX
+- PR: #192 — docs(jarvis): correct whole-Brain planning scope and Builder handoff
+- Branch: docs/whole-brain-planning-scope-correction-20261107
+- Exact parent HEAD before this terminal inventory write: 655c20609482a2a56d6432623024fbf4d2faed1f
+- PR-recorded base SHA: 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c
+- PR base ref: docs/jarvis-phase-2-whole-brain-integration-map-20261105
+- Live base-branch ref at inventory time: ea64607ef94f142a6142a013e119a7225bc95c1c
+- Main HEAD: 4f07d772beae03c99a8dd58b174201a3aa3074b2
+- PR state: open; draft=false; mergeable=false; mergeable_state=dirty
+- PR-reported commits: 963
+- PR changed files: 70; additions=31487; deletions=24
+- Complete tree: 304 entries, 271 blobs, truncated=false
+- Tree SHA: d3f2fd124f65df46722b947d0f4c77b118cf09a3
+
+The PR's recorded base SHA is 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c, while the live base branch ref is ea64607ef94f142a6142a013e119a7225bc95c1c. The live base is 14 commits ahead of the recorded base. The base branch is PR #179's head; PR #179 remains open/draft. PR #196 has been merged into that base line and the Project Director acceptance record is present. Do not rebase, retarget, merge, or rewrite PR #192 without explicit authorization. GitHub currently reports the PR as dirty/unmergeable.
+
+### Run-specific governance revalidation
+
+For this builder run, the accepted governance source was freshly read at live base revision ea64607ef94f142a6142a013e119a7225bc95c1c:
+
+- File: docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md
+- Blob: f5827c0eec4e2d84a8b7c4ec6ec5c1d0d9e14b4a
+- Acceptance provenance: PR #196 merged into the PR #179 base line; Director-acceptance commit f67cff57b27bfc5bf430827de259f13caaba50a6.
+- The same governance file blob exists at PR #192 HEAD.
+- Relevant rules: 2.6–2.7; 11.9–11.16; 17.3–17.5; 18; 20.1; 22.
+
+PR #192 is 14 commits behind the live base branch. Its body still contains an older governance-status description and must be updated after this terminal inventory. No rebase or retarget was performed.
+
+### Exact branch/source-line state
+
+- Current main: 4f07d772beae03c99a8dd58b174201a3aa3074b2; 45/45 CTest in the current candidate source line.
+- PR #97 donor: c1da222e6c94aeb3f2ad000392c21fe4fc81ab25; open, draft, large history divergence, not mergeable as-is.
+- b627 source line: integration/priority-one-memory-bool-hardening at b627dcc6a0ec849386425c785ba567ff2d2198dc; exact-head 74/74 CTest, ThreadSanitizer and native-build runs succeeded (runs 41238156443, 41238156399, 41238156415, 41238156428). It remains unmerged and is not an approved baseline.
+- Gate-A line: a37add18babf8afc2e9c12ca0449a2ee84ecd60d; divergent, no exact-head CI evidence.
+- The current PR #192 documentation branch has the same core/cpp and engineering/cpp source tree as main. This PR contains documentation and audit tooling only; no production cognitive source or runtime implementation was changed.
+
+Historical long-run evidence (JBP-MEM-001, JBP-LEARNING-002, JBP-BRAIN-INT-001, and the Learning Mechanisms Probe) used tested commit 3a4524b6723b976a3141e66ec90ab1686a9f5762, not b627. The b627 DLT-002 no-feedback control path has not yet been run through the existing workflow because feedback_mode is not exposed by that workflow.
+
+### DF-02 evidence snapshot
+
+All-ref scan: workflow 44931803411; candidate source snapshot 19c1c168fdbdab58ed9732cd250d2ae4624936eb; donor c1da222e6c94aeb3f2ad000392c21fe4fc81ab25; scanner commit b8a594ea514ff44cadb5342986c68b1eac6e22ed; artifact 14717933378; SHA-256 189f65b26b78e3811fb5b2c9fef6cfc97a8f6a24c8f62f80b0f6c1e7c9d70e7f.
+
+- 254 branch refs / 213 unique tips.
+- 159 donor paths: candidate 63 absent, 95 divergent, one identical.
+- 111 candidate lexical-consumer paths: 76 divergent and 35 absent.
+- 48 no-symbol paths: 28 absent, 19 divergent, one identical. The earlier 41-path supplement plus the seven-path cross-report exact-ownership reconciliation cover this inventory.
+- 798 path/blob ownership rows; 1,938 exact path-reference rows; 1,226 consumer-blob/path/category occurrences; 1,415 text blobs; 40,041 lexical rows.
+- The exact branch-tip-to-blob mapping is now available. The 76 divergent paths have focused reports and source-version dispersion evidence; remaining semantic successor/duplicate-owner/retirement decisions and source-baseline authority remain open.
+- The ExperienceMemory helper is standalone, not integrated into donor Brain. Donor Brain uses sequence-preserving prediction storage; candidate Brain's semantic-key map can collapse repeated unresolved predictions. This is a real prediction-identity gap, not a missing separate Brain memory module.
+- b627 has additional integrated affective planning, contextual prediction and engineering task-ledger mechanisms, but no donor adoption is authorized.
+
+**DF-02 remains OPEN.** No source baseline was selected, no donor source was adopted, and no runtime implementation was authorized.
+
+### DF-06 exact workflow evidence
+
+Latest completed exact-head link/anchor audit before this inventory commit:
+
+- Workflow: 44935465829
+- Head: 655c20609482a2a56d6432623024fbf4d2faed1f
+- Result: SUCCESS
+- Artifact: 14719178407
+- Artifact SHA-256: 1e6a8baed10371c262575dcd468b0c670da56a3d49009716a545280fefe37d8c
+- 70 Markdown files; 471 destination occurrences; 180 local result records; 191 unique external destinations.
+- External destinations: 188 HTTP 200 and three HTTP 206; all 191 classified valid.
+- 89 GitHub comment anchors: 83 verified in initial HTML, six verified through canonical issue-comment API, zero failed.
+- rendered_github_anchor_verification remains not_performed; semantic_relevance_review remains not_automated; local fragment coverage remains unproven.
+
+**DF-06 remains NOT MET.** The workflow is green, but API existence is not browser-rendering proof. The 191 external destinations still need semantic relevance review, and local-fragment coverage is not established.
+
+### Current gate and authority state
+
+- DF-01: Builder evidence and exact status reconciliation present.
+- DF-02: OPEN; exact branch ownership mapped; remaining semantic decisions and source-baseline authority unresolved.
+- DF-03: partially evidenced; reserved authority is not inferred.
+- DF-04: Builder evidence present within M0 scope.
+- DF-05: partially evidenced; PR base divergence is recorded; no retarget/rebase authorized.
+- DF-06: NOT MET; see exact workflow evidence above.
+- DF-07: exact PR/head/inventory synchronization pending this final inventory commit.
+- DF-08: resolved within bounded historical-preservation scope.
+- DF-09: NOT MET / BLOCKED; no fresh exact-final-HEAD blind-reader CLEAR result. PR #200 workflow correction remains unmerged; the available GitHub connector has no workflow-dispatch action.
+- DF-10: this inventory-only successor is the final Builder write and must be verified by exact parent/successor comparison.
+- DF-11: PENDING/BLOCKED, not waived. The Project Director withdrew the reviewer request (PR #192 comment 7034496417); no reviewer request is active. Accepted governance rules 17.3, 17.4 and 20.1 still require an independent reviewer and prohibit silent waiver. A formal governance amendment is required to remove that gate. No reviewer request will be created.
+- DF-12: Project Director only.
+- Stage A: NOT STARTED / HELD. No runtime implementation, training, source-baseline selection, donor adoption, merge, rebase, retarget, cherry-pick, branch rewrite or deployment is authorized.
+
+### PR #192 changed-file manifest at parent 655c20609482a2a56d6432623024fbf4d2faed1f
+
+The following 70 paths are the exact PR file list reported against the recorded base SHA. The inventory file itself is included; its blob SHA below is the pre-inventory parent version and will change in the terminal inventory-only commit.
+
+| # | Path | PR status | Parent blob SHA | Additions | Deletions |
+|---:|---|---|---|---:|---:|
+| 1 | .github/workflows/documentation-link-audit.yml | added | 65d5b2857fe67f7eda5eb33389f5fb63ff19db84 | 120 | 0 |
+| 2 | README.md | modified | 780651b804b491781fdcac8e248eaca9243797a4 | 7 | 3 |
+| 3 | docs/ARCHITECTURE.md | modified | 3c6692b52059e43947d1fd2e7e84debb2362023f | 3 | 0 |
+| 4 | docs/JARVIS_BRAIN_MASTER_BLUEPRINT.md | modified | 0e49d313bf3929aa30140cb7149ebab038918378 | 3 | 1 |
+| 5 | docs/JARVIS_PHASE_2_COMPLETION.md | modified | e0e57a44216fc36c52d469a79abfc8df058515a3 | 2 | 0 |
+| 6 | docs/README.md | added | b15b436f6cad0bbf24cc1b12e56d1a23d9a58afb | 233 | 0 |
+| 7 | docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md | added | 62dc85648962cd130d8d7e4efd03a810840191db | 2156 | 0 |
+| 8 | docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md | modified | 310fb397caecb82258dc9b2de4b04222fc754752 | 6774 | 1 |
+| 9 | docs/architecture/inventory/HISTORICAL_DOCUMENTATION_PRESERVATION_REGISTER_2026-11-08.md | added | 95cd280295c86c6d33278aa667de1d72048026ea | 366 | 0 |
+| 10 | docs/architecture/plans/JARVIS_BUILDER_CONTINUITY_CHECKPOINT_2026-11-18.md | added | bc03deee1be21e588345e9b19c0b300b0985d7b8 | 1858 | 0 |
+| 11 | docs/architecture/reports/BUILDER_FINAL_DOCUMENTATION_FOUNDATION_RECONCILIATION_2026-11-08.md | added | dd9f5eade367b214e153a97a02389c804d347988 | 834 | 0 |
+| 12 | docs/architecture/reports/BUILDER_TO_INDEPENDENT_REVIEWER_REQUEST_2026-11-08.md | added | c458f689ccbcd1e1d54242e38648ca151d70c250 | 58 | 0 |
+| 13 | docs/architecture/reports/BUILDER_TO_XAI_EXACT_REVISION_RE_REVIEW_REQUEST_PR173_PR195_2026-11-17.md | added | b30ffa6109c04d3ffbc250490ccc1ed4339d4bab | 246 | 0 |
+| 14 | docs/architecture/reports/DF02_76_PATH_SOURCE_VERSION_DISPERSION_2026-11-21.md | added | f5a64a856dc60117c315f816a09829c64b9a0ba1 | 53 | 0 |
+| 15 | docs/architecture/reports/DF02_ACTION_FEEDBACK_AND_EVOLUTION_ADOPTION_REGRESSION_AUDIT_2026-11-20.md | added | 9084476ebb6255db794975609210966a8d6141b6 | 87 | 0 |
+| 16 | docs/architecture/reports/DF02_AFFECTIVE_AND_DEVELOPMENTAL_SUBSYSTEM_BASELINE_GAP_2026-11-20.md | added | 93eb5b1dad71b60a096933064e8317a34019b052 | 84 | 0 |
+| 17 | docs/architecture/reports/DF02_AFFECTIVE_DECISION_AND_ORPHANED_BRAIN_API_AUDIT_2026-11-20.md | added | eb613b5d703433efe8fedfb2f6c15184ca1aedc5 | 45 | 0 |
+| 18 | docs/architecture/reports/DF02_ATTENTION_SELF_MODEL_AND_EVOLUTION_RECOVERY_AUDIT_2026-11-20.md | added | 88145e91afbac8a3cfbb6f838ca04fdcb4db49ab | 64 | 0 |
+| 19 | docs/architecture/reports/DF02_CANDIDATE_ABSENT_35_PATH_SEMANTIC_ADJUDICATION_2026-11-21.md | added | 721f2754a81c1884516515b98a9ef38c06376390 | 89 | 0 |
+| 20 | docs/architecture/reports/DF02_CANDIDATE_BRANCH_111_PATH_CONSUMER_RECONCILIATION_2026-11-21.md | added | 94f5e37081728863b71ae9fbddf9b2b3a588c715 | 60 | 0 |
+| 21 | docs/architecture/reports/DF02_CAUSAL_FEEDBACK_AND_TYPED_PERSISTENCE_GAP_2026-11-20.md | added | 781610a277b61606060ea29790381e1d6423d3d0 | 45 | 0 |
+| 22 | docs/architecture/reports/DF02_COGNITIVE_CYCLE_PERCEPTION_AND_ACTION_INTEGRATION_AUDIT_2026-11-20.md | added | d6f645eaae860232e10023603017fdf40d6c6787 | 57 | 0 |
+| 23 | docs/architecture/reports/DF02_COGNITIVE_RUNTIME_MEMORY_ASSOCIATION_ADAPTATION_REGRESSION_AUDIT_2026-11-20.md | added | adf387534ee7de5443df5545fc7dac478cd00482 | 106 | 0 |
+| 24 | docs/architecture/reports/DF02_COMPILED_CONSUMER_AND_ALTERNATE_BRANCH_ADJUDICATION_2026-11-20.md | added | 5facbc8e6a4a9500fb93870327efe8cdd7ad9899 | 97 | 0 |
+| 25 | docs/architecture/reports/DF02_ENGINEERING_AGENT_DELIVERY_AND_TASK_LEDGER_GAP_2026-11-21.md | added | 638cd22ee615739f2ac6c4f7226fad7879663b4c | 90 | 0 |
+| 26 | docs/architecture/reports/DF02_EVOLUTION_PROCESS_ISOLATION_ATTESTATION_REGRESSION_AUDIT_2026-11-20.md | added | 71250bc757db4e1a77d8e4cd435e766811662bf1 | 69 | 0 |
+| 27 | docs/architecture/reports/DF02_EXACT_REF_159_PATH_BLOB_COMPARISON_2026-11-20.csv | added | 17418926326eddf9701c0c8b172af7ca3f6cb369 | 160 | 0 |
+| 28 | docs/architecture/reports/DF02_FOUNDATIONAL_ARTIFACT_AUTHORITY_AND_DEPENDENCY_RECONCILIATION_2026-11-18.md | added | ba5db2d33b609fb44d2f46fc8fe64433eaed66b7 | 3284 | 0 |
+| 29 | docs/architecture/reports/DF02_GOAL_OUTCOME_AND_ADAPTIVE_PRIORITY_REGRESSION_AUDIT_2026-11-20.md | added | 8d16b1c0aad6c7ed89ef8d2065b15de5cb84988b | 35 | 0 |
+| 30 | docs/architecture/reports/DF02_HISTORICAL_COGNITIVE_LEARNING_LINEAGE_SUPPLEMENT_2026-11-18.md | added | 70f0fb175b3aa54812f78979f7655ede4f7a093a | 713 | 0 |
+| 31 | docs/architecture/reports/DF02_NO_SYMBOL_PATH_SEMANTIC_ADJUDICATION_SUPPLEMENT_2026-11-20.md | added | 899e0a419d73777022d3f5c7e1c791371d71fb76 | 88 | 0 |
+| 32 | docs/architecture/reports/DF02_PREDICTION_IDENTITY_AND_FEEDBACK_VALIDATION_REGRESSION_AUDIT_2026-11-20.md | added | 08821740986075fd1406a47eff205006a054290b | 46 | 0 |
+| 33 | docs/architecture/reports/DF02_REPRESENTATION_PROVENANCE_AND_CANARY_PREVIEW_AUDIT_2026-11-20.md | added | f5ceda60164ecef986df07f7afa8585b89f95478 | 45 | 0 |
+| 34 | docs/architecture/reports/DF02_SEVEN_NEW_NO_SYMBOL_PATH_ADJUDICATION_2026-11-21.md | added | b67d4b879cfa63158b374c461555bc5f86836805 | 76 | 0 |
+| 35 | docs/architecture/reports/DF02_SUPPORTING_COGNITIVE_REASONING_REFLECTION_AND_EVOLUTION_CONTRACTS_2026-11-21.md | added | 876a6110af4154d7469365390d23c2e6583ca6e5 | 118 | 0 |
+| 36 | docs/architecture/reports/DF06_BUILDER_LINK_AND_NAVIGATION_AUDIT_2026-11-17.md | added | a8dff418109487058393a65722ecff2b4b2edfd3 | 806 | 0 |
+| 37 | docs/architecture/reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md | added | 34ff8153fe5ee40e4809acc46cd6d191b7cfbc61 | 2198 | 0 |
+| 38 | docs/architecture/reports/DOCUMENTATION_FOUNDATION_PRESERVATION_AND_LINK_VALIDATION_2026-11-08.md | added | cf4c7a71171ca7531876a920ae433a327dc454bf | 614 | 0 |
+| 39 | docs/architecture/reports/GROK_INDEPENDENT_REVIEW_REQUEST_2026-11-10.md | added | fb15d6edf6dda105a1305e369acb9b1ec57a7cf8 | 178 | 0 |
+| 40 | docs/architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_2026-11-08.md | added | c43d82ba18ff89de226d2268cf72e724b222a5bd | 748 | 0 |
+| 41 | docs/architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_GROK_2026-11-09.md | added | 1938203fe3a0e3cb4e7a7df7d5fa8e3298fa8635 | 243 | 0 |
+| 42 | docs/architecture/reports/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_GROK_2026-11-10.md | added | 4ad40a2cf9ca57df75f5b5d0134c99b164b8bf75 | 223 | 0 |
+| 43 | docs/architecture/reports/INDEPENDENT_REVIEWER_HANDOFF_2026-11-08.md | added | e3a0e9ccbf80d524dbbb1eb9966da95c3d8b4077 | 672 | 0 |
+| 44 | docs/architecture/reports/INDEPENDENT_RE_REVIEW_BUILDER_FOLLOW_UP_2026-11-08.md | added | 2d63ed93344a7081dcedb44247536c416322c793 | 163 | 0 |
+| 45 | docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md | added | 4143159f3c3cb1f99fd7edb9cdbe2ad5c3592d3d | 1378 | 0 |
+| 46 | docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_EXECUTION_AND_READINESS_2026-11-10.md | added | 04d8f92dbef6ee70eb990e62c83d0c3e2eb4fc84 | 630 | 0 |
+| 47 | docs/architecture/reports/INITIAL_PLANNING_GATE_CLOSEOUT_STATUS_2026-11-11.md | added | 4fbf3a0d0ab0a5dc4718b13f9f7afb0ba177774d | 361 | 0 |
+| 48 | docs/architecture/reports/JARVIS_M0_BUILDER_EXECUTION_AND_GATE_RECONCILIATION_2026-11-12.md | added | 3e7d0229b94259256963c843a16adad2fcdeda32 | 672 | 0 |
+| 49 | docs/architecture/reports/NEMOTRON_BLIND_FRESH_READER_ASSESSMENT_2026-11-10.md | added | 34d960245c8d44fc5dca3f5c168718c0bff0ae7d | 244 | 0 |
+| 50 | docs/architecture/reports/NEMOTRON_FRESH_READER_RERUN_RUNBOOK_2026-11-10.md | added | 071b8df1cc5b0b9eb2bc979eaa2517794e24a486 | 168 | 0 |
+| 51 | docs/architecture/reports/PHASE_1_REVIEW_CORRECTIONS_AND_SCOPE_RECONCILIATION_2026-11-05.md | modified | a459cdfd02d850d455ca526e6823e68525776ba3 | 13 | 0 |
+| 52 | docs/architecture/reports/PHASE_1_WHOLE_REPOSITORY_INVESTIGATION_AND_REUSE_AUDIT_2026-11-04.md | modified | 7dc1a246486abfb13169c89365289fcc8134a6ea | 9 | 7 |
+| 53 | docs/architecture/reports/PHASE_2_WHOLE_BRAIN_CAPABILITY_TO_SOURCE_INTEGRATION_MAP_2026-11-05.md | modified | a90a0fcc4bd3fc5bc87108165f3de3a552bdd278 | 57 | 11 |
+| 54 | docs/architecture/reports/PROJECT_DIRECTOR_DECISION_EVIDENCE_EXTRACTS_2026-11-10.md | added | 1c0b6a580b0420fd6d68140a15383364b468acd4 | 73 | 0 |
+| 55 | docs/architecture/reports/PROJECT_DIRECTOR_DECISION_PROVENANCE_AND_GATE_RECONCILIATION_2026-11-09.md | added | 8dfbd72c93a65cb556ea3bb6ceab380914e9233d | 0 | 0 |
+| 56 | docs/architecture/reports/PR_174_FOLLOW_ON_REVIEW_PROVENANCE_RECOVERY_2026-11-06.md | modified | 86111e43b6a1dd36c6c49458d6da3306acdadfa3 | 0 | 0 |
+| 57 | docs/architecture/reports/WHOLE_BRAIN_DOCUMENTATION_PHASE_BUILDER_SELF_REVIEW_2026-11-07.md | added | 2839a7306ee086c1cf387be27b35f9a915d4be16 | 0 | 0 |
+| 58 | docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md | added | afc0155b79beda7a04508cab825a5a5f9d0a1173 | 0 | 0 |
+| 59 | docs/architecture/reports/fresh-reader-evidence/NEMOTRON_ASSESSMENT_PROMPT_2026-11-10.md | added | 03475a43c1440ca9affd38dfe046b8ef1e9b91d0 | 0 | 0 |
+| 60 | docs/architecture/reports/fresh-reader-evidence/NEMOTRON_PACKET_MANIFEST_2026-11-10.json | added | 5910299b3ea4f686fe30220867b1273bf52e8dba | 0 | 0 |
+| 61 | docs/architecture/reports/fresh-reader-evidence/NEMOTRON_RUN_METADATA_2026-11-10.json | added | 7d1d287ee571c673b23184c2d523a35b90845fa3 | 0 | 0 |
+| 62 | docs/architecture/reports/reviews/DF02_HISTORICAL_COGNITIVE_LEARNING_LINEAGE_INDEPENDENT_REVIEW_REQUEST_2026-11-18.md | added | 35b65327634afd59d1b6381f68ed95c6162dc743 | 0 | 0 |
+| 63 | docs/architecture/reports/reviews/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_REQUEST_PR192_2026-11-18.md | added | 81c061c1c272b42ac11751f437368f35041f24e2 | 0 | 0 |
+| 64 | docs/architecture/reviews/INDEPENDENT_DOCUMENTATION_FOUNDATION_REVIEW_XAI_PR192_2026-11-17.md | added | 1371d6792e6ae9f5ce7d286e1e1a1d7576852060 | 0 | 0 |
+| 65 | docs/templates/INDEPENDENT_REVIEW_REPORT_TEMPLATE.md | added | f3176cf1a1f45735a3ad62fa4a865806edc24e08 | 0 | 0 |
+| 66 | docs/templates/PLANNING_DOCUMENT_TEMPLATE.md | added | b9f71a923b0d717a3b29655574c89c10e0801115 | 0 | 0 |
+| 67 | docs/templates/README.md | added | 7209fd0fcda239349af602490d26b8c708b743da | 0 | 0 |
+| 68 | docs/templates/TEST_EVIDENCE_REPORT_TEMPLATE.md | added | 9c6bbae48a22beb7c4e95858282d7d8d7b2159c2 | 0 | 0 |
+| 69 | scripts/audit_documentation_links.py | added | bd79393af99df016c212cdbb397cdd015c6bdde8 | 0 | 0 |
+| 70 | scripts/verify_github_rendered_anchors.py | added | 2dce883c07542c522f942058f20d1bdf6130a732 | 0 | 0 |
+
+### Terminal inventory-only commit contract
+
+This section is the final branch-file write. The commit must:
+1. Have parent exactly 655c20609482a2a56d6432623024fbf4d2faed1f.
+2. Change exactly one path: docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md.
+3. Preserve all other 69 PR path blobs exactly.
+4. Preserve all 70 PR paths and the complete untruncated tree.
+5. Leave core/cpp and engineering/cpp source trees unchanged.
+6. Advance the PR branch ref and PR HEAD to the same successor SHA.
+7. Trigger a successful documentation-link/anchor-target workflow.
+
+After verification, do not make further branch-file writes. Update PR #192's description and post any final status as PR metadata/comments only. Any later branch-file write reopens DF-10.
