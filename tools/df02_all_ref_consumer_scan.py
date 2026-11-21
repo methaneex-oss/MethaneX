@@ -135,10 +135,17 @@ def main():
     if missing: raise RuntimeError(f"donor tree missing {len(missing)} paths: {missing[:10]}")
 
     tip_trees={}; blob_occurrences=collections.defaultdict(list); tip_entries={}
+    path_blob_groups=collections.defaultdict(lambda:{"tips":set(),"branches":set()})
     for tip in sorted(branch_groups):
         tree=parse_tree(tip); tip_trees[tip]=tree; tip_entries[tip]=len(tree)
         for path,blob in tree.items():
             if is_text_path(path): blob_occurrences[blob].append((tip,path))
+        for donor_path in donor_paths:
+            path_blob=tree.get(donor_path)
+            if path_blob:
+                rec=path_blob_groups[(donor_path,path_blob)]
+                rec["tips"].add(tip)
+                rec["branches"].update(branch_groups[tip])
 
     donor_blob_ids=sorted({donor_tree[p] for p in donor_paths})
     donor_blobs=cat_file_batch(donor_blob_ids)
@@ -223,6 +230,21 @@ def main():
           "donor_symbols_extracted":len(symbols_by_donor[path])})
     write_csv(out/"donor_path_presence.csv",list(path_rows[0].keys()),path_rows)
 
+    ownership_rows=[]
+    for (path,blob),rec in sorted(path_blob_groups.items()):
+        ownership_rows.append({
+            "donor_path":path,
+            "blob_sha":blob,
+            "is_donor_blob":blob==donor_tree[path],
+            "is_candidate_blob":blob==candidate_tree.get(path,""),
+            "tip_count":len(rec["tips"]),
+            "tip_shas":";".join(sorted(rec["tips"])),
+            "branch_names":";".join(sorted(rec["branches"])),
+        })
+    write_csv(out/"path_blob_ownership.csv",
+      ["donor_path","blob_sha","is_donor_blob","is_candidate_blob","tip_count","tip_shas","branch_names"],
+      ownership_rows)
+
     tip_rows=[{"tip_sha":tip,"branch_count":len(names),"branches":";".join(sorted(names)),"tree_entries":tip_entries[tip],
       "is_donor_tip":tip==donor_sha,"is_candidate_tip":tip==candidate_sha} for tip,names in sorted(branch_groups.items())]
     write_csv(out/"unique_branch_tips.csv",list(tip_rows[0].keys()),tip_rows)
@@ -251,7 +273,8 @@ def main():
       "unique_branch_tip_count":len(branch_groups),"duplicate_tip_group_count":sum(1 for v in branch_groups.values() if len(v)>1),
       "donor_path_count":len(donor_paths),"candidate_same_path_status":dict(status),
       "unique_text_blob_count":len(blob_occurrences),"scanned_blob_count":scanned,"binary_blob_count_skipped":skipped_binary,
-      "donor_symbol_count":len(symbols),"exact_path_reference_match_rows":len(path_rows2),
+      "donor_symbol_count":len(symbols),"path_blob_ownership_rows":len(ownership_rows),
+      "exact_path_reference_match_rows":len(path_rows2),
       "candidate_symbol_consumer_match_rows":len(symbol_rows),"matched_consumer_blob_content_count":matched_blob_content_count,
       "matched_consumer_blob_content_bytes":matched_blob_content_bytes,"symbol_matches_exclude_documentation":True,
       "limitations":["Path and identifier matches are candidate reverse-consumer evidence, not semantic consumer proof.",
@@ -272,6 +295,7 @@ def main():
       "This artifact is a repository-wide lexical discovery index across fetched branch refs. It is not an automated semantic disposition. Each candidate match must be inspected at its exact branch tip and classified as a real consumer, test, build/workflow dependency, documentation reference, incidental token match or false positive. A missing match is not proof of no semantic successor.",
       "","## Outputs","",
       "- donor_path_presence.csv: exact path/blob presence and version counts by unique tip.",
+      "- path_blob_ownership.csv: exact donor-path blob SHA grouped by all branch tips and branch names, with donor/candidate identity flags.",
       "- unique_branch_tips.csv: all remote branch names grouped by exact tip SHA.",
       "- exact_path_reference_matches.csv: exact donor path strings found in other files.",
       "- candidate_symbol_consumer_matches.csv: candidate identifier matches with exact branch/path/line samples.",
