@@ -2104,3 +2104,8 @@ The candidate and donor brain_contract suites both have 19 assertions, but candi
 ## 142. DF-02 candidate-absent 35-path semantic adjudication — 2026-11-21
 
 Read [DF-02 Candidate-Absent 35-Path Semantic Adjudication](reports/DF02_CANDIDATE_ABSENT_35_PATH_SEMANTIC_ADJUDICATION_2026-11-21.md). All 35 candidate-absent paths are classified individually, separating orphaned uncompiled API references, generic-token false positives, absent test coverage, alternate-branch task-ledger ownership and historical plan/spec preservation. This closes the absent-path subset, not the 76 divergent-path duplicate-owner/authority reconciliation.
+
+
+## 143. DF-02 76-path source-version dispersion — 2026-11-21
+
+Read [DF-02 76-Path Source-Version Dispersion](reports/DF02_76_PATH_SOURCE_VERSION_DISPERSION_2026-11-21.md). It records 2–40 exact blob versions per divergent candidate path across 213 branch tips. The existing scan lacks a branch-to-blob join; the enhanced scanner output is committed but awaits manual workflow dispatch. Exact duplicate-owner/source-line clustering remains open.
