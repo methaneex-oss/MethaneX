@@ -1829,3 +1829,13 @@ Key correction: ExperienceMemory is a standalone helper and is not integrated in
 The 2026-11-21 scan's path_blob_ownership.csv now joins branch names/tip SHAs to exact blob versions. The earlier 76-path dispersion report's statement that this join was unavailable is superseded. Exact ownership highlights and path versions are recorded in the seven-path cross-report addendum. The 76 divergent paths still require semantic successor/duplicate-owner decisions.
 
 The task-ledger suite tests multiple instances and concurrent operations within one process; it does not spawn separate OS processes. The OS file-lock implementation exists, but true cross-process stress evidence is still missing.
+
+## 85. DF06 verifier correction — 2026-11-21
+
+The documentation audit workflow's static HTML false negative was corrected without misrepresenting API evidence as browser rendering. The verifier now checks ordinary anchors against initial HTML and falls back to the canonical GitHub issue-comment API only for issuecomment anchors missing from initial HTML. Workflow permission issues:read was added.
+
+Exact run: 44934867515, HEAD 0f6065461c8feca3d50c6127214bfd3e92e95e20, SUCCESS. Artifact 14718734370, SHA-256 8d5def868d1818533e39626bcf095bdd0b4a2bfc1ce17d7b34f3117bd98e52ea. Results: 70 Markdown files; 471 destination occurrences; 180 local results; 191 unique external targets, all valid (188 HTTP 200, three HTTP 206); 89 comment anchors checked, 83 initial-HTML verified, six canonical issue-comment API verified, zero failed targets.
+
+The artifact keeps rendered_github_anchor_verification=not_performed and github_anchor_target_verification=passed. Browser rendering of the six older comments is not proven. External semantic relevance is not automated; local fragment coverage is not established. DF06 remains NOT MET pending Director acceptance of API-only verification or browser-level proof.
+
+The audit workflow is now green; the DF06 acceptance gate is not falsely marked closed.

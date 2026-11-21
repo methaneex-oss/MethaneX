@@ -778,3 +778,29 @@ The current run supersedes the earlier 56-Markdown/428-destination snapshot.
 - The 191 external destinations still require semantic relevance review. The audit's local result records contain no extracted local fragments, so local-fragment coverage is not yet established.
 
 **DF06 remains NOT MET.** Do not convert API existence into a claim of rendered-anchor verification. The next valid closure route is either a browser-level check of the six comment URLs or an explicit Project Director decision accepting API-backed canonical comment verification as sufficient for this gate.
+
+## 2026-11-21 follow-up — canonical GitHub comment target verification
+
+The verifier/workflow was corrected after the 449318 run showed that GitHub's initial HTML response omits some older timeline comments. The updated script distinguishes initial-HTML verification from GitHub issue-comment API verification. It does not relabel API confirmation as rendered HTML.
+
+- Workflow run: 44934867515
+- Exact PR #192 HEAD: 0f6065461c8feca3d50c6127214bfd3e92e95e20
+- Workflow result: SUCCESS
+- Artifact: 14718734370
+- Artifact SHA-256: 8d5def868d1818533e39626bcf095bdd0b4a2bfc1ce17d7b34f3117bd98e52ea
+- Markdown files: 70
+- Markdown destination occurrences: 471
+- Local destination results: 180
+- Unique external destination results: 191 (188 HTTP 200; three HTTP 206; all classified valid)
+- GitHub comment anchors checked: 89
+- Initial-HTML verified: 83
+- Canonical issue-comment API verified: 6
+- Failed anchor targets: 0
+
+The six API-verified comments are issuecomment IDs 6894239520, 6899575912, 6894260448, 6963175700, 6963480952, and 6963581974. For each, the API returned HTTP 200 and the canonical html_url matched the intended PR comment URL.
+
+The artifact deliberately records rendered_github_anchor_verification as not_performed and github_anchor_target_verification as passed. This distinction is correct: the six comments are confirmed to exist at the intended canonical URLs, but the workflow has not proved that a browser renders each older comment target when opened.
+
+The audit also records semantic_relevance_review as not_automated. The 191 external destinations still require semantic relevance review, and the local results contain no extracted local fragments, so local-fragment coverage remains unproven.
+
+**DF06 remains NOT MET** until the Project Director either accepts API-backed canonical comment verification as sufficient or a browser-level check proves the six older comment targets render. The workflow itself is now green and no longer fails on the static-HTML false negative.

@@ -2136,3 +2136,11 @@ The 2026-11-21 all-ref scan (workflow 44931803411, artifact 14717933378; scanner
 The b627 source line contains all 159 donor paths (139 donor-identical, 20 later variants), with exact-head 74/74 CTest, ThreadSanitizer and native-build evidence. It remains an unmerged source line. The 48 no-symbol paths are accounted for across the 41-path supplement and seven-path cross-report reconciliation; this does not close the 76 divergent lexical paths or DF02.
 
 The engineering task-ledger report now clarifies that its suite tests multiple instances/concurrent operations in one process, not separate OS processes. The standalone ExperienceMemory helper is not integrated into donor Brain; the donor Brain's sequence-vector implementation is the relevant comparison. No source baseline, donor adoption, retirement or non-adoption decision is made.
+
+## 146. 2026-11-21 DF06 verifier correction and successful exact-head run
+
+The GitHub anchor verifier now distinguishes initial-HTML anchors from older issue-comment anchors confirmed by the canonical GitHub API. This removed the false CI failure without claiming that API confirmation is browser rendering.
+
+Workflow 44934867515 passed on PR #192 HEAD 0f6065461c8feca3d50c6127214bfd3e92e95e20. Artifact 14718734370, SHA-256 8d5def868d1818533e39626bcf095bdd0b4a2bfc1ce17d7b34f3117bd98e52ea. It scanned 70 Markdown files and 471 destination occurrences (180 local result records, 191 unique external destinations). All 191 external destinations were classified valid (188 HTTP 200, three HTTP 206). Of 89 GitHub comment anchors, 83 were present in initial HTML and six were verified through the issue-comment API; zero anchor targets failed.
+
+The artifact correctly records rendered_github_anchor_verification as not_performed and github_anchor_target_verification as passed. Semantic relevance review remains not automated and local-fragment coverage remains unproven. DF06 therefore remains NOT MET pending Director acceptance of API-only canonical verification or browser-level proof for the six older comments.
