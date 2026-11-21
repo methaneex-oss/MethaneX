@@ -95,3 +95,14 @@ Candidate uses the generic `Evidence` type; donor uses `KnowledgeEvidence` for s
 This report adjudicates the above supporting contracts and adds the reasoning/reflection, planning/intent, workspace/action-context, adaptation, evolution-history/orchestration and process-isolation findings to the focused DF-02 record. It does not authorize copying donor code or adopting its fixed coefficients. The candidate branch's 76 divergent paths are not all equivalent in significance: some are substantive missing feedback/safety contracts; some are additive context fields; and the knowledge evidence rename is a typed API boundary with unchanged update arithmetic.
 
 No source, CMake or runtime file was modified. DF-02 remains OPEN pending the remaining path-by-path semantic and duplicate-owner reconciliation and Director-only source-baseline/retirement/non-adoption decisions.
+
+
+## 10. Equal assertion count does not mean equal adoption safety
+
+| Artifact | Candidate blob | Donor blob |
+|---|---|---|
+| `core/cpp/tests/brain_contract.cpp` | `54340d74eca3d8613db1763f8e01e3bc6fc221ba` | `3536648d901b004a644db79e9d50ff9a765182ed` |
+
+Both snapshots contain 19 assertions, but the critical assertions are different. Candidate calls `adopt_evolution(proposals.front())` and expects success, then expects a direct rollback to succeed. Donor explicitly asserts both operations fail: a proposal is not evaluation evidence, and an unadopted parameter cannot be rolled back. The persisted event count correspondingly changes from eight to six. This is a semantic safety correction despite an unchanged assertion count; raw assertion totals alone would miss it.
+
+This exact test supports the evolution-adoption safety findings in the action-feedback and evolution-recovery reports. It does not by itself prove all controller/replay/attestation behavior; those are covered by the separate 97-assertion donor integration suite and focused source audits.
