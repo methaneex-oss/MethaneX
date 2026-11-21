@@ -2094,3 +2094,8 @@ Read [DF-02 Engineering-Agent Delivery and Task-Ledger Gap](reports/DF02_ENGINEE
 ## 140. DF-02 supporting cognitive and evolution contract audit — 2026-11-21
 
 Read [DF-02 Supporting Cognitive, Reasoning, Reflection and Evolution Contracts](reports/DF02_SUPPORTING_COGNITIVE_REASONING_REFLECTION_AND_EVOLUTION_CONTRACTS_2026-11-21.md). It records disputed-premise/confidence propagation, empty-experience reflection, continuous affective planning/intent, workspace action/context propagation, adaptation surprise history, idempotent evolution evidence, durable adoption gating, compensation lifecycle and post-fork async-signal-safety differences. Reasoning tests 19 candidate vs 33 donor assertions; action-model tests are equal at 11/11 (no regression claim). Fixed donor coefficients are not adopted automatically.
+
+
+## 141. DF-02 adoption safety test semantics — 2026-11-21
+
+The candidate and donor brain_contract suites both have 19 assertions, but candidate asserts direct proposal adoption succeeds while donor asserts it fails without recorded evaluation evidence; donor also rejects rollback of an unadopted parameter. See supporting mechanism audit §10.
