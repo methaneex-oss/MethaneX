@@ -1856,3 +1856,88 @@ PR #192's recorded base SHA is 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c. The liv
 The Project Director explicitly withdrew the Independent Reviewer request in PR #192 comment 7034496417. No reviewer request will be created or pursued in this work. Accepted governance rules 17.3, 17.4 and 20.1 nevertheless require a separate Independent Reviewer, say documentation-only testing N/A does not waive Independent Review, and prohibit silently waiving a required gate.
 
 Therefore the accurate status is **PENDING/BLOCKED, not WAIVED**: the Director's no-reviewer-request instruction is honored, but no independent review has occurred and the gate is not satisfied. A formal governance amendment is needed if the project intends to remove this requirement. This is not a request to appoint a reviewer. Builder-owned M0 evidence work may continue, but milestone completion must not be represented as fully accepted while DF11 remains unresolved.
+
+## 87. Mandatory successor-Builder governance and authority map — 2026-11-21
+
+**This section is an enforceable navigation and operating instruction, not a replacement for the accepted governance standard. It supersedes conflicting historical statements in earlier checkpoint sections, including any statement that the governance document is merely proposed or that DF-11 was waived.** The full accepted governance document controls whenever this map is abbreviated or appears inconsistent.
+
+### 87.1 Authoritative governance source and stale-copy correction
+
+- Repository: \`methaneex-oss/MethaneX\`.
+- Accepted governance source: \`docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md\`.
+- Authoritative source branch/revision: \`docs/jarvis-phase-2-whole-brain-integration-map-20261105\` at \`ea64607ef94f142a6142a013e119a7225bc95c1c\`.
+- Accepted source blob: \`f5827c552f36f4647339b3f8dfb38956d146c570\`.
+- Acceptance provenance: Project Director acceptance record in the governance document; PR #196 was merged into its existing base branch, merge commit \`c151e52781e56e6481424f774c19ea30128debb0\`; Director-acceptance record commit \`f67cff57b27bfc5bf430827de259f13caaba50a6\`.
+- **Stale-copy defect discovered in this run:** PR #192 HEAD \`4baef6d9c2aa5059abf0b07d06c6ca371c701a08\` contained a 600-line, 16-section historical governance copy (blob \`e4315956cfb1ed075b508af3053601fed345f0a5\`) that still described the standard as proposed and did not contain the accepted Sections 17–22. The accepted source is 1,022 lines and contains the current accepted role, workflow, completion and run-by-run revalidation rules.
+- **Correction:** This run synchronizes the PR #192 governance path to the exact accepted source content. The successor branch copy must be byte-identical to the accepted source blob \`f5827c552f36f4647339b3f8dfb38956d146c570\`. The accepted base-branch source remains authoritative; this synchronization does not change the base branch or acceptance provenance.
+
+### 87.2 Mandatory reading order for every Builder run
+
+Before substantive investigation or any repository write, the Builder must freshly read, from the live authoritative revision:
+
+1. This governance document in full, especially Rules 2.1–2.7, 5.1–5.6, 6.1–6.6, 11.1–11.16, 12, 17.1–17.5, 18, 19, 20 and 22.1–22.7.
+2. The current Director-authorized milestone scope, acceptance criteria, reserved decisions and explicit instructions.
+3. The current architecture/constitution, accepted specifications, decision records and phase/gate status relevant to the task.
+4. The latest continuity checkpoint, then verify every SHA, PR, branch, workflow and gate status against live repository evidence.
+
+A prior handoff, this map, memory, an earlier chat or another agent's assertion is not a substitute for freshly reading the authoritative source. Each Builder run must add a run-specific Governance Revalidation Record under Rule 22.3. Reviewers and Testers must independently perform their own revalidation; the Builder cannot do it on their behalf.
+
+### 87.3 Non-negotiable cognitive and engineering principles
+
+| Principle | Governing rules | Required Builder behaviour |
+|---|---|---|
+| Mechanisms before scripted behaviour | 2.2, 6.1–6.6 | Engineer perception, representation, memory, prediction, appraisal, attention, planning, action, feedback and learning. Do not encode an exhaustive catalogue of situations and expected responses as intelligence. |
+| No universal hardcoded reaction tables | 6.1–6.2 | Classify fixed rules as safety/infrastructure invariants, provisional cognitive priors, prohibited situation-specific behaviour mappings, or isolated test ground truth. A parser or bounded safety rule is not general understanding. |
+| Demonstrable learning | 6.3–6.5 | Prove persistent, evidence-grounded change and later behavioural effect. Separate observation from action/outcome, preserve provenance and uncertainty, test held-out generalization and guard against leakage. Storing data, changing a counter or calling a learning API is not proof of learning. |
+| Coherent cognitive authority | 2.5, 5.2–5.3 | Give each persistent cognitive-state domain one explicit owner. Verify real dataflow, contracts, persistence, replay, failure and consistency behaviour. Do not create competing authoritative Brain state. |
+| No unjustified polyglot architecture | 5.3–5.5 | Language follows demonstrated architectural need. Do not add C++, Rust, TypeScript, Python or another runtime because polyglot design sounds advanced. Every boundary must justify its build, serialization, testing, security, deployment and operational cost. |
+| Whole-system engineering | 2.3–2.4, 5.1, 5.5–5.6 | JARVIS is not merely a chatbot, LLM wrapper, Brain library or engineering-agent platform. Trace capability from system responsibility through inputs, state, dependencies, persistence, failure, authorization and measurable outcomes. |
+| Human cognition and MCU J.A.R.V.I.S. | 2.6 | Analyze both as comparative functional lenses. Explain agreements, differences and non-transferable aspects. Neither is a literal implementation blueprint; never claim biological equivalence or fictional capabilities without engineering and evidence. |
+| Evidence over appearance | 2.7, 5.6, 6.5, 20 | Count demonstrated integrated capability and outcomes, not files, classes, modules, tests, commits, documentation volume or green workflows. State exactly what evidence proves and does not prove. |
+
+**Hardcoding clarification:** Fixed safety, authorization, validation, resource-bound and integrity invariants are legitimate and often mandatory. The prohibition is against substituting situation-specific hardcoded mappings for acquired cognitive behaviour. Every material fixed rule must be classified and justified under Rule 6.1; do not overcorrect by removing necessary safety controls.
+
+### 87.4 Authority hierarchy and separation of powers
+
+The Project Director is the highest project authority. The authority model is:
+
+1. **Project Director — Rules 17.1, 19.3, 20.1:** Owns vision, direction, priorities, scope boundaries, milestone authorization, reserved decisions, acceptance criteria where reserved, and final acceptance. The Director may delegate ordinary engineering choices without surrendering reserved authority.
+2. **Principal Builder — Rules 11.1–11.16 and 17.2:** Owns execution of the authorized scope, repository investigation, implementation, documentation, root-cause correction, self-review, self-testing and evidence-backed handoff. The Builder is the principal engineering worker, not the project owner. Delegated engineering authority does not include silently changing architecture, baseline, scope, gates or Director-reserved decisions.
+3. **Independent Reviewer — Rules 17.3 and 18:** Owns unbiased technical scrutiny of the exact stable handoff and review verdict. Must be a genuinely separate person or independently operated agent who did not author, implement or self-review the work. The Reviewer does not own project direction or authorize scope changes.
+4. **Independent Tester — Rules 17.4 and 18:** Owns fresh behavioural verification against the authorized requirements and test plan. Must be separate from both Builder and Reviewer. The Tester does not authorize architecture or scope changes.
+5. **Supporting agents/tools:** Have only the specific delegated task authority; they do not gain cognitive, architectural, acceptance or Project Director authority.
+
+The Builder must not be a yes-man. The Builder must respectfully challenge unsupported assumptions, technically unsound proposals, scope creep, conflicts with accepted decisions, safety problems and evidence gaps. A challenge must identify the exact rule/requirement, evidence, engineering consequences, viable alternatives and what decision is reserved to the Director. Do not agree merely to please the Director; equally, do not substitute Builder preference for Director authority. When a reserved decision conflicts with a material technical or governance constraint, explain the conflict and stop only the affected action until the authorized decision is clear.
+
+The Independent Reviewer and Tester are not ceremonial approvers or subordinate Builder roles. Their verdicts must be evidence-based and independent. The Builder cannot simulate, write or relabel their verdicts. If a genuinely separate actor is unavailable, the applicable stage remains PENDING/BLOCKED; it is not silently waived.
+
+### 87.5 Mandatory execution and completion discipline
+
+- Follow the ordered milestone lifecycle in Rule 18: Director authorization → Builder implementation/self-verification → stable handoff → independent review → corrections and reviewer confirmation → independent testing → corrections and retest → Director acceptance.
+- Lock scope and exclusions before work (Rule 19.1). Classify discoveries under Rule 19.2. Do not silently absorb future improvements or unrelated suggestions into the current milestone.
+- Diagnose causal mechanisms before patching symptoms (Rule 11.11). Prefer the smallest root-cause correction that preserves requirements.
+- Before each write, verify repository, branch, live HEAD/base, target file blobs, PR scope and authority (Rule 11.9). After each coherent change, verify exact successor revision, changed paths, relevant tests and evidence (Rule 11.12).
+- Never claim complete/fixed/verified/passed without exact-scope evidence (Rules 2.7, 11.4, 11.12–11.14 and 20). Distinguish implemented, compiled, unit-tested, integration-tested, experimentally evaluated, independently reviewed, independently tested, accepted, merged and deployed.
+- Do not restart, replace baseline, merge/close PR, rebase/retarget, cherry-pick, waive a gate, alter accepted architecture or begin unauthorized implementation as a recovery shortcut (Rule 11.16).
+- A documentation-only testing N/A is possible only under Rule 17.4 with Director-authorized scope rationale recorded. It does not waive Independent Review or Director acceptance (Rules 17.4 and 20.1).
+- Revalidate the current authoritative governance source at the start of every work run and record it (Rules 22.1–22.7).
+
+### 87.6 Current authority and gate constraints at this checkpoint
+
+- This governance synchronization and handoff-map update are documentation-only.
+- No runtime implementation, training, source-baseline selection, donor adoption, architecture change, merge, rebase, retarget, cherry-pick, branch rewrite or deployment is authorized by this update.
+- Stage A remains NOT STARTED / HELD.
+- DF-11 remains PENDING/BLOCKED, not WAIVED. The Project Director withdrew the reviewer request (PR #192 comment 7034496417); no reviewer request will be created. The accepted governance standard still requires independent review; only a formal governance amendment could remove that requirement.
+- DF-10 was previously verified for the inventory-only terminal commit, but this subsequent two-file governance/continuity update reopens DF-10. It must not be described as terminal or closed until the changed-file manifest, inventory and exact successor tree are reconciled and reverified.
+- Any earlier checkpoint statements that governance is proposed, that the old 16-section copy is authoritative, or that DF-11 was waived are superseded by this section and the accepted governance source.
+
+### 87.7 Run-specific Governance Revalidation Record
+
+1. **Project/work item:** MethaneX JARVIS-M0 — correct successor Builder governance references and authority map.
+2. **Governing source:** \`docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md\` at accepted base revision \`ea64607ef94f142a6142a013e119a7225bc95c1c\`, blob \`f5827c552f36f4647339b3f8dfb38956d146c570\`.
+3. **Fresh-read confirmation:** Yes; the accepted 1,022-line source was fetched and relevant sections were freshly read during this run. The stale PR-branch copy was also fetched and compared.
+4. **Role/applicable rules:** Principal Builder; Rules 2.1–2.7, 5.1–5.6, 6.1–6.6, 11.1–11.16, 17.1–17.5, 18, 19, 20 and 22.1–22.7.
+5. **Authorized scope:** Synchronize the PR-branch governance copy with the accepted source and add an explicit Builder reading/authority map to the continuity checkpoint. No runtime or architecture implementation.
+6. **Constraints checked:** Project Director authority; independent role separation; no-hardcoded-behaviour distinction; language follows architecture; MCU/human-cognition comparison limits; exact-revision verification; Stage A hold; DF-11 status.
+7. **Conflict found/disposition:** PR #192 carried a stale proposed 16-section governance copy while the accepted base contained the 22-section accepted standard. This update corrects the branch copy to the exact accepted source and records the mismatch and supersession here. DF-11 is PENDING/BLOCKED, not waived.
+8. **Participant/revision:** Principal Builder; this record applies to the exact successor commit created from pre-change PR #192 HEAD \`4baef6d9c2aa5059abf0b07d06c6ca371c701a08\`. The exact successor SHA and blob IDs must be recorded after live verification.
