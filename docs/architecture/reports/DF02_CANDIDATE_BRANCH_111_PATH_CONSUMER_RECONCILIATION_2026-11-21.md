@@ -25,7 +25,7 @@ For those 111 candidate-branch paths:
 - Candidate-branch consumer evidence comprises **128 source-category paths** (123 C++ headers/translation units plus five TypeScript/Rust source files), **50 test paths**, **11 workflow paths**, **2 build paths**, **14 documentation paths**, and **1 other path**: 206 unique path/category occurrences in total.
 - The exact candidate-branch consumer corpus contains 206 distinct blob/path occurrences. The per-donor-path matrix preserves each donor blob, candidate same-path blob/status, matched identifier set, source/test/build/workflow/documentation consumer paths, candidate-branch exact consumer-blob/path versions and line-class counts.
 
-The complete machine-readable path matrix is `DF02_CANDIDATE_BRANCH_111_PATH_CONSUMER_EVIDENCE_2026-11-21.csv`. It has one row for each of the 111 paths and includes the exact source/test consumer paths, not merely aggregate totals.
+A 111-row machine-readable evidence matrix was generated from the verified artifact and retained as a local CSV export for this Builder session. It includes one row per donor path, exact donor/candidate blob identities, matched identifier sets, candidate-branch source/test/build/workflow/documentation consumer paths, exact consumer-blob/path versions and line-class counters. The matrix is an analysis aid; it is not represented as a committed repository artifact.
 
 ## 3. What the evidence establishes—and what it does not
 
