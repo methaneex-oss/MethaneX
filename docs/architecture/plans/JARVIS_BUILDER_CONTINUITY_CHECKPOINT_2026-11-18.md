@@ -1839,3 +1839,20 @@ Exact run: 44934867515, HEAD 0f6065461c8feca3d50c6127214bfd3e92e95e20, SUCCESS. 
 The artifact keeps rendered_github_anchor_verification=not_performed and github_anchor_target_verification=passed. Browser rendering of the six older comments is not proven. External semantic relevance is not automated; local fragment coverage is not established. DF06 remains NOT MET pending Director acceptance of API-only verification or browser-level proof.
 
 The audit workflow is now green; the DF06 acceptance gate is not falsely marked closed.
+
+## 86. Accepted-governance revalidation and DF11 correction — 2026-11-21
+
+### Governing source re-read for this work run
+- Source: docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md
+- Revision: base branch docs/jarvis-phase-2-whole-brain-integration-map-20261105 at ea64607ef94f142a6142a013e119a7225bc95c1c
+- Blob: f5827c0eec4e2d84a8b7c4ec6ec5c1d0d9e14b4a
+- Acceptance provenance: PR #196 merged into the PR #179 base line; Director-acceptance commit f67cff57b27bfc5bf430827de259f13caaba50a6.
+- Relevant rules re-read: 2.6–2.7 (MCU/human cognition as reference lenses and evidence over claims); 11.9–11.16 (Builder execution and reporting); 17.3–17.5 (independent role separation); 18 (ordered workflow); 20.1 (completion criteria and no silent gate waiver); 22 (run-by-run revalidation and checkpoint discipline).
+
+### Base-branch divergence
+PR #192's recorded base SHA is 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c. The live base branch ref is ea64607ef94f142a6142a013e119a7225bc95c1c, 14 commits ahead. Those commits include the PR #196 merge and Director acceptance. The governance document blob itself is identical between PR #192 HEAD and the accepted base branch, but PR #192 does not contain the 14-commit history. Do not rebase, retarget, or merge without authorization. PR #192's body still has a stale “governance proposed” statement.
+
+### DF11 status correction
+The Project Director explicitly withdrew the Independent Reviewer request in PR #192 comment 7034496417. No reviewer request will be created or pursued in this work. Accepted governance rules 17.3, 17.4 and 20.1 nevertheless require a separate Independent Reviewer, say documentation-only testing N/A does not waive Independent Review, and prohibit silently waiving a required gate.
+
+Therefore the accurate status is **PENDING/BLOCKED, not WAIVED**: the Director's no-reviewer-request instruction is honored, but no independent review has occurred and the gate is not satisfied. A formal governance amendment is needed if the project intends to remove this requirement. This is not a request to appoint a reviewer. Builder-owned M0 evidence work may continue, but milestone completion must not be represented as fully accepted while DF11 remains unresolved.
