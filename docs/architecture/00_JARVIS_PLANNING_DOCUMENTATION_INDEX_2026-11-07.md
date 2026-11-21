@@ -2084,3 +2084,8 @@ Read [DF-02 Causal Feedback and Typed Persistence Gap](reports/DF02_CAUSAL_FEEDB
 ## 138. DF-02 candidate-branch 111-path consumer reconciliation — 2026-11-21
 
 Read [DF-02 Candidate-Branch 111-Path Consumer Reconciliation](reports/DF02_CANDIDATE_BRANCH_111_PATH_CONSUMER_RECONCILIATION_2026-11-21.md). It pins 111/118 all-ref candidate paths to exact candidate tip 84dd100..., with 76 divergent same-path artifacts, 35 absent same-path artifacts, 107 source-category matches and 85 direct compiled-TU matches. Candidate consumer corpus: 206 exact path/category occurrences (128 source, 50 tests, 11 workflows, 2 build, 14 docs, 1 other). This narrows the discovery inventory but does not promote generic-token matches to semantic integration. DF-02 remains OPEN for remaining semantic successor/duplicate-owner and authority disposition.
+
+
+## 139. DF-02 engineering-agent delivery and task-ledger gap — 2026-11-21
+
+Read [DF-02 Engineering-Agent Delivery and Task-Ledger Gap](reports/DF02_ENGINEERING_AGENT_DELIVERY_AND_TASK_LEDGER_GAP_2026-11-21.md). Candidate engineering coordinator lacks durable version-bound tracked dispatch; task ledger and test are absent from candidate build. Candidate message bus silently evicts queued work on overflow and lacks deduplicated retry/backpressure. Donor suite is 31 assertions versus 7 candidate, plus 43 ledger assertions. Donor ledger exists as a compiled/tested alternate-branch implementation, not candidate integration or selected baseline.
