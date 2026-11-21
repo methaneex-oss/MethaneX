@@ -1739,3 +1739,28 @@ The 76 divergent candidate paths are all cross-referenced to focused source audi
 ## 81. DF-02 exact branch-to-blob ownership scan — 2026-11-21
 
 The documentation link-audit workflow now has a narrowly conditional DF-02 ownership job. It checks out the read-only all-ref scanner from audit/df02-all-ref-consumer-scan-20261120, fetches every live branch ref, resolves the exact candidate tip from the named PR #192 branch, runs scanner self-tests, and emits path_blob_ownership.csv grouped by exact blob SHA and branch names. The job runs only on a push whose commit message contains the exact trigger phrase. This is an evidence-only scan; it does not modify source, select a baseline, merge branches or request review.
+
+
+## 82. Incoming Builder succession and exact-current evidence run — 2026-11-21
+
+The incoming Principal Builder revalidated the accepted governance source at PR #179 base tip `ea64607ef94f142a6142a013e119a7225bc95c1c` (governance blob `f5827c552f36f4647339b3f8dfb38956d146c570`) before repository work. The governing principle, role separation, evidence requirements, milestone workflow, change control and per-run revalidation rules remain in force.
+
+### Exact live repository state before this checkpoint update
+- Repository: `methaneex-oss/MethaneX`.
+- PR #192 branch: `docs/whole-brain-planning-scope-correction-20261107`.
+- Exact PR #192 HEAD before this update: `38f4d55bbf99e8d554e0478c438f6b08a9fedd2b`.
+- PR #192: open, non-draft, unmerged; GitHub reports mergeable=false; 53 changed paths.
+- Base branch PR #179: `docs/jarvis-phase-2-whole-brain-integration-map-20261105` at `ea64607ef94f142a6142a013e119a7225bc95c1c`; PR #192's recorded source base remains `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.
+- PR #192 exact tree: 303 entries / 270 blobs, complete (not truncated); 69 Markdown files, 2 Python audit scripts, 112 C++ sources and 63 C++ headers.
+- The prior PR #192 terminal checkpoint at `9e88496e7ee10d009254c5c048ec38a980a6a9bf` is superseded: live PR HEAD is 107 commits ahead / 0 behind that SHA, and the exact diff changes 24 paths. The latest PR description and the index's embedded exact-HEAD snapshots do not match live metadata. The old DF-10 inventory-only verification is not current; DF-10 remains reopened.
+- The 24-path delta since the old terminal checkpoint is documentation, workflow and audit-script work; no C++ runtime source path appears in that delta. This is not a claim that the candidate source baseline is approved.
+
+### Scope and authority revalidation
+The current work remains JARVIS-M0 documentation-foundation/gate-closure evidence only. Stage A remains NOT STARTED / HELD. No runtime implementation, source-baseline selection, donor adoption, training, merge, rebase, retarget, cherry-pick, branch rewrite or deployment is authorized. The Project Director's PR #192 instruction withdrew the Independent Reviewer request; do not assign or await one. DF-11 remains waived as a mandatory Documentation Foundation gate, and DF-12 remains Project Director-only.
+
+### Exact-current evidence workflow trigger
+The current PR #192 branch contains `.github/workflows/documentation-link-audit.yml` with a push trigger on this exact branch. Its conditional `df02-path-ownership` job runs when the pushed commit message contains the literal phrase `df02 ownership scan`. The same push also runs the full documentation link/fragment audit and rendered-GitHub-anchor verifier. The DF-02 job checks out the read-only scanner from `audit/df02-all-ref-consumer-scan-20261120`, fetches all live branch refs, resolves the candidate branch tip, runs scanner self-tests, emits exact path/blob ownership evidence, builds/tests the candidate C++ baseline at the pushed SHA, and builds/tests the donor engineering task-ledger project at PR #97 donor SHA `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+
+This is an evidence-only workflow; it does not alter runtime source, select a baseline, adopt donor code or authorize integration. The current Builder is triggering this existing workflow through a documentation-only checkpoint update. Its resulting commit SHA, workflow run IDs, job outcomes and artifact digests must be fetched and recorded before any claim of success. A workflow that fails, is not triggered, or produces no artifact remains unverified/blocked.
+
+**No runtime source has been modified by this succession update.**
