@@ -2191,3 +2191,8 @@ The supporting mechanism audit §10 pins candidate/donor brain_contract test blo
 ## 48. DF-02 candidate-absent 35-path semantic adjudication — 2026-11-21
 
 [DF-02 Candidate-Absent 35-Path Semantic Adjudication](DF02_CANDIDATE_ABSENT_35_PATH_SEMANTIC_ADJUDICATION_2026-11-21.md) individually classifies all 35 same-path-absent cases among the 111 candidate-branch lexical paths: 10 source/example artifacts, 17 test artifacts, six historical plan/spec documents and two engineering task-ledger artifacts. It proves most hits are incidental generic tokens/helper names; affective/developmental/goal-outcome typed API hits are in uncompiled orphan code or generic methods; the inline Brain execute_action wrapper is only a partial successor; task ledger exists on the alternate compiled branch, not candidate. Historical document absence is not retirement authority. This closes the 35-path absent-case semantic classification; it does not close duplicate-owner/authority work for all 76 divergent paths.
+
+
+## 49. DF-02 76-path source-version dispersion — 2026-11-21
+
+[DF-02 76-Path Source-Version Dispersion](DF02_76_PATH_SOURCE_VERSION_DISPERSION_2026-11-21.md) records that the 76 divergent candidate paths span 2–40 distinct blobs across 213 branch tips: 17 paths have two versions and 59 have three or more. The scan provides exact version counts and branch-presence lists but not the branch-name-to-blob join. A scanner enhancement now emits path_blob_ownership.csv, but it has not been executed; the connector has no workflow-dispatch action and the previous run is pinned to the old scanner commit. Exact owner-cluster adjudication remains open.
