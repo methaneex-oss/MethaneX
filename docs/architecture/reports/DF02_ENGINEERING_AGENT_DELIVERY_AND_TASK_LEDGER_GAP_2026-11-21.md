@@ -66,3 +66,20 @@ The same-path candidate engineering agent/console suite has seven assertions (bl
 The same donor-identical task-ledger header/source/test and their CMake/coordinator integration exist on alternate branch `ci/priority-one-validation-20261031`, as recorded in the compiled-consumer/alternate-branch report. This is a mature alternate implementation line, not a candidate-baseline successor and not authority to merge or transplant it.
 
 **DF-02 disposition:** the engineering-agent subset is now source/build/test adjudicated. Candidate retains direct coordinator dispatch and a basic message bus, but lacks durable tracked task execution, task dependency/revision evidence, idempotent delivery and backpressure. The task-ledger implementation is absent from the candidate tree/build and has a compiled/tested alternate owner. No source code was changed or copied; no source baseline or adoption is selected.
+
+
+## 7. Exact same-path source and test blob cross-reference
+
+| Path | Candidate blob | Donor blob |
+|---|---|---|
+| `engineering/cpp/include/jarvis/engineering/agent.hpp` | `b71c525a97790f460535713d85a705db086c55ac` | `6acadd5558b7385c5993323ad963ed80b08b6652` |
+| `engineering/cpp/include/jarvis/engineering/coordinator.hpp` | `d395db8ce7ae24e40d56aa923758a2251f9188e4` | `fc2cced25d47b23893571a100ee7f36a05d37a9b` |
+| `engineering/cpp/include/jarvis/engineering/message_bus.hpp` | `2658f6c12d60f3df611f5cc0a01569b51b59bcb7` | `a8a334881dc087e83640c984bf02e1704802754a` |
+| `engineering/cpp/src/coordinator.cpp` | `44f42429e9730683bd8b529b37ea4e53c4b09c74` | `e175dd61aaa3d8302aba6381401305db9f034062` |
+| `engineering/cpp/src/message_bus.cpp` | `9811d41fc237e33c80086e33049f9ae482c58c77` | `94700db67f43c8bdb0bcc774f1fb0464f5bff81c` |
+| `engineering/cpp/tests/agent_and_console_suite.cpp` | `b1f7a48df7adad95750e6970fa76f75acb2ac6ea` | `7ac8c21e6df0d157d4d95fe87fabae962734139a` |
+| `engineering/cpp/include/jarvis/engineering/task_ledger.hpp` | absent | `95d3f2e42be742f9e75aed8e55ea389723534a64` |
+| `engineering/cpp/src/task_ledger.cpp` | absent | `7acff8990319392c9984035a4a14cc83f7154072` |
+| `engineering/cpp/tests/task_ledger_suite.cpp` | absent | `e90c062261c95ff99d4b1bdcb55ce7bfad0512ec` |
+
+The candidate/donor `agent.cpp` blob is identical (`d922dab52bd2f8d774f3734686da21391cabbf19`); no behavioral delta is claimed for that file.
