@@ -41,14 +41,24 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: python scripts/audit_documentation_links.py
 
+      - name: Self-test rendered GitHub anchor verifier
+        run: python scripts/verify_github_rendered_anchors.py --self-test
+
+      - name: Verify anchors in rendered GitHub pages
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python scripts/verify_github_rendered_anchors.py
+
       - name: Preserve exact-revision audit output
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: documentation-link-audit-${{ github.sha }}
-          path: documentation-link-audit.json
+          path: |
+            documentation-link-audit.json
+            rendered-github-anchors.json
           if-no-files-found: warn
-          retention-days: 30
+          retention-days: 90
 
 
   df02-path-ownership:
