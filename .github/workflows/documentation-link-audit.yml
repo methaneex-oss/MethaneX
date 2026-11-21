@@ -8,6 +8,7 @@ on:
 permissions:
   contents: read
   actions: read
+  issues: read
 
 concurrency:
   group: documentation-link-audit
@@ -41,10 +42,10 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: python scripts/audit_documentation_links.py
 
-      - name: Self-test rendered GitHub anchor verifier
+      - name: Self-test GitHub anchor-target verifier
         run: python scripts/verify_github_rendered_anchors.py --self-test
 
-      - name: Verify anchors in rendered GitHub pages
+      - name: Verify GitHub anchor targets (HTML + issue-comment API fallback)
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: python scripts/verify_github_rendered_anchors.py
