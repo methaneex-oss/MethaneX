@@ -2089,3 +2089,8 @@ Read [DF-02 Candidate-Branch 111-Path Consumer Reconciliation](reports/DF02_CAND
 ## 139. DF-02 engineering-agent delivery and task-ledger gap — 2026-11-21
 
 Read [DF-02 Engineering-Agent Delivery and Task-Ledger Gap](reports/DF02_ENGINEERING_AGENT_DELIVERY_AND_TASK_LEDGER_GAP_2026-11-21.md). Candidate engineering coordinator lacks durable version-bound tracked dispatch; task ledger and test are absent from candidate build. Candidate message bus silently evicts queued work on overflow and lacks deduplicated retry/backpressure. Donor suite is 31 assertions versus 7 candidate, plus 43 ledger assertions. Donor ledger exists as a compiled/tested alternate-branch implementation, not candidate integration or selected baseline.
+
+
+## 140. DF-02 supporting cognitive and evolution contract audit — 2026-11-21
+
+Read [DF-02 Supporting Cognitive, Reasoning, Reflection and Evolution Contracts](reports/DF02_SUPPORTING_COGNITIVE_REASONING_REFLECTION_AND_EVOLUTION_CONTRACTS_2026-11-21.md). It records disputed-premise/confidence propagation, empty-experience reflection, continuous affective planning/intent, workspace action/context propagation, adaptation surprise history, idempotent evolution evidence, durable adoption gating, compensation lifecycle and post-fork async-signal-safety differences. Reasoning tests 19 candidate vs 33 donor assertions; action-model tests are equal at 11/11 (no regression claim). Fixed donor coefficients are not adopted automatically.
