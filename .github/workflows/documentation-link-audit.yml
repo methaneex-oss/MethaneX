@@ -92,6 +92,24 @@ jobs:
           set -euo pipefail
           python3 tools/df02_all_ref_consumer_scan.py --inputs tools/df02_all_ref_audit_inputs.json --output artifacts/df02
 
+      - name: Build and test exact candidate C++ baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          git worktree add --detach /tmp/df02-candidate "${GITHUB_SHA}"
+          cmake -S /tmp/df02-candidate/core/cpp -B /tmp/df02-candidate-build -DCMAKE_BUILD_TYPE=Release
+          cmake --build /tmp/df02-candidate-build --parallel 2
+          ctest --test-dir /tmp/df02-candidate-build --output-on-failure
+
+      - name: Build and test donor engineering task-ledger project
+        shell: bash
+        run: |
+          set -euo pipefail
+          git worktree add --detach /tmp/df02-donor c1da222e6c94aeb3f2ad000392c21fe4fc81ab25
+          cmake -S /tmp/df02-donor/engineering/cpp -B /tmp/df02-engineering-build -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON
+          cmake --build /tmp/df02-engineering-build --parallel 2
+          ctest --test-dir /tmp/df02-engineering-build --output-on-failure
+
       - name: Upload full ownership evidence
         uses: actions/upload-artifact@v4
         with:
