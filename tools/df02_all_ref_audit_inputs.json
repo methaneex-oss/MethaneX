@@ -5,7 +5,7 @@
   "donor_base_sha": "4ba84b8b5ccf0e41530c46fdb8101551254ba864",
   "donor_sha": "c1da222e6c94aeb3f2ad000392c21fe4fc81ab25",
   "candidate_pr_number": 192,
-  "candidate_sha": "76a5d27377721f6469aff03d3d04d3c5ce1fd7a1",
+  "candidate_branch": "docs/whole-brain-planning-scope-correction-20261107",
   "donor_paths": [
     ".github/workflows/brain-ci.yml",
     ".github/workflows/dlt-001-long-run.yml",

@@ -116,10 +116,12 @@ def main():
     if args.self_test: self_test(); return 0
 
     inputs=json.loads(pathlib.Path(args.inputs).read_text(encoding="utf-8"))
-    donor_sha=inputs["donor_sha"]; candidate_sha=inputs["candidate_sha"]
+    donor_sha=inputs["donor_sha"]
+    candidate_sha=inputs.get("candidate_sha","")
+    candidate_branch=inputs.get("candidate_branch","")
     donor_paths=sorted(set(inputs["donor_paths"]))
     if len(donor_paths)!=159: raise RuntimeError(f"expected 159 donor paths, got {len(donor_paths)}")
-    git(["cat-file","-e",donor_sha+"^{commit}"]); git(["cat-file","-e",candidate_sha+"^{commit}"])
+    git(["cat-file","-e",donor_sha+"^{commit}"])
 
     refs_raw=git(["for-each-ref","--format=%(refname:short)%09%(objectname)","refs/remotes/origin"])
     branch_groups=collections.defaultdict(list)
@@ -129,6 +131,15 @@ def main():
         if name.endswith("/HEAD") or name=="origin/HEAD": continue
         branch_groups[sha].append(name.removeprefix("origin/"))
     if not branch_groups: raise RuntimeError("no remote branch refs were fetched")
+    if candidate_branch:
+        candidate_tips=[sha for sha,names in branch_groups.items() if candidate_branch in names]
+        if len(candidate_tips)!=1:
+            raise RuntimeError(f"candidate branch {candidate_branch!r} resolved to {len(candidate_tips)} unique tips")
+        if candidate_sha and candidate_sha!=candidate_tips[0]:
+            raise RuntimeError(f"pinned candidate SHA {candidate_sha} does not match branch tip {candidate_tips[0]}")
+        candidate_sha=candidate_tips[0]
+    if not candidate_sha: raise RuntimeError("candidate_sha or candidate_branch is required")
+    git(["cat-file","-e",candidate_sha+"^{commit}"])
 
     donor_tree=parse_tree(donor_sha); candidate_tree=parse_tree(candidate_sha)
     missing=[p for p in donor_paths if p not in donor_tree]
@@ -269,7 +280,7 @@ def main():
     status=collections.Counter(r["candidate_status"] for r in path_rows)
     summary={"schema_version":2,"repository":inputs["repository"],"pr97":inputs["pr_number"],
       "donor_base_sha":inputs["donor_base_sha"],"donor_sha":donor_sha,"candidate_pr":inputs["candidate_pr_number"],
-      "candidate_sha":candidate_sha,"remote_branch_ref_count":sum(len(v) for v in branch_groups.values()),
+      "candidate_branch":candidate_branch,"candidate_sha":candidate_sha,"remote_branch_ref_count":sum(len(v) for v in branch_groups.values()),
       "unique_branch_tip_count":len(branch_groups),"duplicate_tip_group_count":sum(1 for v in branch_groups.values() if len(v)>1),
       "donor_path_count":len(donor_paths),"candidate_same_path_status":dict(status),
       "unique_text_blob_count":len(blob_occurrences),"scanned_blob_count":scanned,"binary_blob_count_skipped":skipped_binary,
@@ -286,7 +297,7 @@ def main():
         "This scan makes no retirement, non-adoption, authority or source-baseline decisions."]}
     (out/"summary.json").write_text(json.dumps(summary,indent=2)+"\n",encoding="utf-8")
     report=["# DF-02 all-ref source-content consumer discovery","",f"- Donor PR #97 HEAD: {donor_sha}",
-      f"- Candidate PR #192 HEAD: {candidate_sha}",f"- Branch refs scanned: {summary['remote_branch_ref_count']}",
+      f"- Candidate PR #192 branch: {candidate_branch}",f"- Candidate PR #192 HEAD: {candidate_sha}",f"- Branch refs scanned: {summary['remote_branch_ref_count']}",
       f"- Unique branch tips scanned: {summary['unique_branch_tip_count']}",f"- Donor paths: {len(donor_paths)}",
       f"- Candidate same-path status: {dict(status)}",f"- Unique text blobs indexed: {len(blob_occurrences)}",
       f"- Blobs scanned: {scanned}; binary blobs skipped: {skipped_binary}",f"- Extracted donor identifiers: {len(symbols)}",
