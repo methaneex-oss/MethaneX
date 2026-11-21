@@ -2109,3 +2109,20 @@ Read [DF-02 Candidate-Absent 35-Path Semantic Adjudication](reports/DF02_CANDIDA
 ## 143. DF-02 76-path source-version dispersion — 2026-11-21
 
 Read [DF-02 76-Path Source-Version Dispersion](reports/DF02_76_PATH_SOURCE_VERSION_DISPERSION_2026-11-21.md). It records 2–40 exact blob versions per divergent candidate path across 213 branch tips. The existing scan lacks a branch-to-blob join; the enhanced scanner output is committed but awaits manual workflow dispatch. Exact duplicate-owner/source-line clustering remains open.
+
+## 144. 2026-11-21 successor-builder exact-source and audit reconciliation
+
+The successor builder completed a fresh review of the 2026-11-21 all-ref branch/blob scan and adjudicated the seven no-symbol paths not covered by the previous 41-path supplement. See:
+- docs/architecture/reports/DF02_SEVEN_NEW_NO_SYMBOL_PATH_ADJUDICATION_2026-11-21.md
+- docs/architecture/reports/DF06_BUILDER_LINK_AND_NAVIGATION_AUDIT_2026-11-17.md (2026-11-21 addendum)
+- docs/architecture/plans/JARVIS_BUILDER_CONTINUITY_CHECKPOINT_2026-11-18.md (section 83)
+
+Exact scan: workflow run 44931803411, candidate PR #192 HEAD 19c1c168fdbdab58ed9732cd250d2ae4624936eb, donor PR #97 HEAD c1da222e6c94aeb3f2ad000392c21fe4fc81ab25, scanner commit b8a594ea514ff44cadb5342986c68b1eac6e22ed, artifact 14717933378, SHA-256 189f65b26b78e3811fb5b2c9fef6cfc97a8f6a24c8f62f80b0f6c1e7c9d70e7f. The scan covered 254 branch refs / 213 unique tips, 159 donor paths, 798 path/blob ownership rows, 1,938 path-reference rows, and 1,226 consumer-blob/path/category occurrences. Candidate path status: 63 absent, 95 divergent, one identical. The no-symbol set is 48 paths (28 absent, 19 divergent, one identical); the prior supplement covered 41 and the new supplement covers seven.
+
+The b627 integration/priority-one-memory-bool-hardening source line contains all 159 donor paths (139 donor-identical, 20 later variants) and has exact-head successful 74/74 CTest, ThreadSanitizer, and native-build evidence. It remains an unmerged draft source line, not an approved baseline. Current main and PR #192 retain identical C++ core/engineering source trees; PR #192 is documentation-only. PR #97 is a large divergent draft and is not mergeable as-is.
+
+Historical learning trials are confirmed on tested commit 3a4524b6723b976a3141e66ec90ab1686a9f5762, not b627. They show useful controlled adaptation but leave prediction calibration weaker and do not validate the later source line. The b627 DLT-002 code supports a no-feedback control, but the existing workflow does not expose it.
+
+The 2026-11-21 DF06 run checked 69 Markdown files and 471 destination occurrences. Local/external link checks found no broken destinations. The rendered-anchor checker found 83 of 89 comment anchors in initial HTML; six comment targets were absent from that HTML response but all six canonical comment IDs/URLs were verified through the GitHub API. Browser-level rendering remains unverified, and external-link semantic relevance/local fragment coverage remain open.
+
+Current gate status remains: DF02 OPEN (76 divergent lexical paths still need semantic successor decisions and source baseline is Director-reserved); DF06 NOT MET; DF09 pending fresh exact-head blind AI reader; DF10 reopened pending final inventory-only commit; DF11 waived by Project Director; DF12 reserved for Project Director. Stage A remains held. No runtime source change, donor adoption, merge, rebase, or source-baseline selection was performed.

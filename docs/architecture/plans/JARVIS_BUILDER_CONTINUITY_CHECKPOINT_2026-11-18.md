@@ -1764,3 +1764,58 @@ The current PR #192 branch contains `.github/workflows/documentation-link-audit.
 This is an evidence-only workflow; it does not alter runtime source, select a baseline, adopt donor code or authorize integration. The current Builder is triggering this existing workflow through a documentation-only checkpoint update. Its resulting commit SHA, workflow run IDs, job outcomes and artifact digests must be fetched and recorded before any claim of success. A workflow that fails, is not triggered, or produces no artifact remains unverified/blocked.
 
 **No runtime source has been modified by this succession update.**
+
+
+## 83. Successor-builder checkpoint — 2026-11-21
+
+### Verified repository state
+- PR #192 head at start of this work: 19c1c168fdbdab58ed9732cd250d2ae4624936eb
+- Head branch: docs/whole-brain-planning-scope-correction-20261107
+- Base branch: docs/jarvis-phase-2-whole-brain-integration-map-20261105
+- PR #192 is open, has a large divergent history, and is not mergeable as-is. Its body still contains older terminal-head/inventory figures and must be reconciled after the final inventory.
+- Main HEAD: 4f07d772beae03c99a8dd58b174201a3aa3074b2
+- PR #97 donor HEAD: c1da222e6c94aeb3f2ad000392c21fe4fc81ab25
+- b627 source line: integration/priority-one-memory-bool-hardening at b627dcc6a0ec849386425c785ba567ff2d2198dc
+- Whole-Brain planning/docs line: docs/brain-constitution at abf3303c04638a89146a4161b91a439910235add
+- Divergent Gate-A line: fix/gate-a-d1-d2 at a37add18babf8afc2e9c12ca0449a2ee84ecd60d
+
+### Exact scan and test evidence
+- All-ref scan workflow: 44931803411; scanner job 136929830815; artifact 14717933378.
+- Scanner commit: b8a594ea514ff44cadb5342986c68b1eac6e22ed.
+- Artifact SHA-256: 189f65b26b78e3811fb5b2c9fef6cfc97a8f6a24c8f62f80b0f6c1e7c9d70e7f.
+- 254 branch refs / 213 unique tips; 159 donor paths; 798 path/blob ownership rows; 1,938 exact path-reference rows; 1,226 consumer-blob/path/category occurrences.
+- Candidate: 63 donor paths absent, 95 divergent, one identical. 111 candidate lexical-consumer paths: 76 divergent and 35 absent. No-symbol set: 48 paths, 41 previously adjudicated and seven covered by the new supplement.
+- Candidate C++ build and 45/45 CTest passed in the scan workflow. Donor engineering build and 2/2 CTest passed; one non-fatal AgentResult::revision initializer warning remains.
+- b627 exact-head CI: Brain CI run 41238156443, JARVIS Brain Tests run 41238156399 (74/74 CTest), ThreadSanitizer run 41238156415, Native Brain Build run 41238156428; all concluded success.
+- Historical long-run artifacts: JBP-MEM-001 run 40564048699 (60/60); JBP-LEARNING-002 run 40564002262 (three 15-minute seeds); JBP-BRAIN-INT-001 run 40563931674; JARVIS Learning Mechanisms Probe run 40563880254 (36/36 gates, 1,643 episodes). All tested 3a4524b6723b976a3141e66ec90ab1686a9f5762, not b627. The 3-seed trial's final action accuracy varied by seed; prediction MAE remained about 0.61–0.66. The 30-minute integrated probe ended at about 96.98% decision accuracy and about 0.713 prediction MAE.
+- b627 DLT-002 source supports a feedback-disabled control, but the current JBP-LEARNING-002 workflow does not expose feedback_mode; no paired no-feedback run was found.
+
+### Important technical corrections
+- The standalone ExperienceMemory helper is tested but not integrated into the donor Brain. The donor Brain uses sequence-preserving prediction storage directly. The current main Brain uses a map keyed by semantic key, which can collapse repeated unresolved predictions for the same key. The real gap is sequence-safe prediction identity, not simply a missing header.
+- b627 has integrated affective planning and contextual prediction paths. The current main does not have equivalent methods.
+- The task ledger is integrated into the b627 EngineeringCoordinator, but it is an engineering task ledger, not Brain memory or a full LLM-agent platform. Its test does not spawn separate OS processes.
+- b627 Memory tier assignment has a simple feedback-derived event-kind distribution; consolidation weights, tier thresholds, and recall ranking remain fixed. The header claim that salience/retrieval are learned is broader than the inspected implementation.
+- Knowledge-source reliability still depends on host-supplied provenance/evaluator verification. No production trust root, cryptographic journal integrity, fsync guarantee, anti-replay anchor, or independent ground-truth adjudicator is established.
+
+### DF06 exact-head run
+- Workflow run 44931803411 checked 69 Markdown files and 471 destination occurrences.
+- Local/external link checks found no broken destinations (180 local result records and 191 unique external destinations).
+- 89 comment anchors were examined; 83 were present in the initial HTML. Six older comment anchors were not in the initial HTML response. All six comment IDs and canonical URLs were verified through GitHub's issue-comment API. Browser-level rendering is not verified.
+- DF06 remains NOT MET because rendered-anchor proof, local-fragment coverage, and semantic relevance review of external destinations remain open.
+
+### Current gates and restrictions
+- DF02 OPEN: the 48 no-symbol paths are now individually adjudicated across the earlier 41-path supplement and the new seven-path supplement. The 76 divergent lexical-consumer paths still need semantic successor/retirement decisions. Source baseline remains Director-reserved.
+- DF06 NOT MET.
+- DF09 pending a fresh blind AI reader against the final exact PR #192 head. Previous Nemotron assessment (31/32, PARTIALLY CLEAR) is on an older head and is superseded. PR #200 workflow correction remains unmerged; this connector has no workflow-dispatch action.
+- DF10 reopened by the latest branch write; final inventory-only commit still required.
+- DF11 waived by the Project Director; do not request an Independent Reviewer.
+- DF12 remains Project Director-only acceptance.
+- Stage A remains held. No production code, tests, runtime behavior, donor adoption, merge, rebase, or source-baseline selection is authorized by this checkpoint.
+
+### Next actions
+1. Finish semantic successor mapping for the 76 divergent lexical-consumer paths using the exact branch/blob ownership artifact.
+2. Resolve DF06 rendered-anchor verification with browser-level evidence or an explicit Director acceptance of API-only comment verification; complete semantic relevance review.
+3. Complete DF09 only after the final PR #192 content/head is stable; use the corrected blind-reader workflow, subject to its merge/dispatch authority.
+4. Make all documentation/index/checkpoint updates before the terminal inventory-only commit.
+5. Run the final inventory-only commit, verify exact tree state, update PR #192 body with current facts, and present the remaining Director decisions.
+6. Do not begin Stage A or adopt b627 until the Director selects and authorizes the source baseline.

@@ -761,3 +761,20 @@ Artifact results:
 The audit exposed one stale external workflow link in the Nemotron fresh-reader runbook: it pointed to an Actions workflow path that did not exist on the documentation branch. The runbook now links to the exact proposed workflow file blob on PR #200 revision `0884b6ac0551996f30429008031476e5d38d32b7` and labels it as an unmerged proposal. This does not imply the workflow is integrated or dispatched.
 
 **Disposition:** the corrected parser's self-test and exact-revision link audit now have successful CI evidence. The 143 local targets resolve, and all 190 external destinations have been existence-checked through the automated or bounded manual API path described above. DF-06 nevertheless remains **NOT MET** under Option A: full CommonMark/GFM parser equivalence is not proven, semantic relevance of every external claim is not fully reviewed, and authenticated rendered GitHub heading/line-range/issue-comment anchor landing has not been verified. The successful workflow is not misrepresented as closing those remaining criteria.
+
+
+## 2026-11-21 exact-head addendum — workflow run 44931803411
+
+The current run supersedes the earlier 56-Markdown/428-destination snapshot.
+
+- Candidate PR #192 HEAD: 19c1c168fdbdab58ed9732cd250d2ae4624936eb
+- 69 Markdown files scanned.
+- 471 destination occurrences were discovered; the audit produced 180 local-target result records and 191 unique external-target result records.
+- No local-target failures were reported. External results included 188 HTTP 200 responses and three HTTP 206 responses; all 191 were classified as valid by the audit/API fallback.
+- The link-audit step passed. The workflow failed only in the separate initial-HTML rendered-anchor check.
+- 89 comment anchors were examined: 83 were found in the initial HTML and six were not.
+- The six missing initial-HTML targets are comment IDs 6894239520, 6899575912, 6894260448, 6963175700, 6963480952, and 6963581974. Each was independently retrieved from the GitHub issue-comment API, and its canonical html_url matched the intended repository/PR comment URL.
+- This establishes that all six comments exist and that the canonical URLs are correct. It does not establish browser-level rendering or prove that GitHub's client-side page loads the target when a user opens the link. The current checker uses an initial HTML response, not a full browser.
+- The 191 external destinations still require semantic relevance review. The audit's local result records contain no extracted local fragments, so local-fragment coverage is not yet established.
+
+**DF06 remains NOT MET.** Do not convert API existence into a claim of rendered-anchor verification. The next valid closure route is either a browser-level check of the six comment URLs or an explicit Project Director decision accepting API-backed canonical comment verification as sufficient for this gate.
