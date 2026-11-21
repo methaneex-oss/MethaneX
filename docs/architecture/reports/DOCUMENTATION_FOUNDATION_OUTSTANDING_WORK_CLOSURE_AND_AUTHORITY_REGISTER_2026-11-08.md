@@ -2186,3 +2186,8 @@ The unmerged donor PR #97 HEAD passed JARVIS Core Verification (71/71 CTest) and
 ## 47. DF-02 equal-count adoption safety test inversion — 2026-11-21
 
 The supporting mechanism audit §10 pins candidate/donor brain_contract test blobs. Both have 19 assertions, but candidate expects proposal-only direct adoption and rollback to succeed; donor expects both to fail because a proposal is not evaluation evidence and an unadopted parameter cannot be rolled back. This is a semantic safety correction that assertion counts alone do not reveal.
+
+
+## 48. DF-02 candidate-absent 35-path semantic adjudication — 2026-11-21
+
+[DF-02 Candidate-Absent 35-Path Semantic Adjudication](DF02_CANDIDATE_ABSENT_35_PATH_SEMANTIC_ADJUDICATION_2026-11-21.md) individually classifies all 35 same-path-absent cases among the 111 candidate-branch lexical paths: 10 source/example artifacts, 17 test artifacts, six historical plan/spec documents and two engineering task-ledger artifacts. It proves most hits are incidental generic tokens/helper names; affective/developmental/goal-outcome typed API hits are in uncompiled orphan code or generic methods; the inline Brain execute_action wrapper is only a partial successor; task ledger exists on the alternate compiled branch, not candidate. Historical document absence is not retirement authority. This closes the 35-path absent-case semantic classification; it does not close duplicate-owner/authority work for all 76 divergent paths.
