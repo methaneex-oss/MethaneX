@@ -3210,7 +3210,7 @@ Seven donor paths had lexical matches only on other refs. Exact alternate-branch
 
 This is evidence of distinct source lines, not permission to select or merge an alternate baseline. The Project Director's baseline/adoption authority remains reserved.
 
-**DF-02 remains OPEN.** The supplements resolve 41 no-symbol paths and seven specific alternate-ref-only path cases; the remaining candidate-path semantic successor, dependency, duplicate-owner, retention/retirement/non-adoption and authority adjudication is not complete.
+**DF-02 remains OPEN, but the candidate-path semantic mapping is now substantially reconciled.** The 111 candidate-branch lexical paths are isolated to exact tip; all 35 absent same-path cases are individually adjudicated; and all 76 divergent same-path artifacts are cross-referenced to focused source audits (100% path coverage verified). The seven other-ref-only cases and 41 no-symbol cases are separately adjudicated. The remaining technical item is exact per-branch blob ownership mapping for the 76 divergent paths: the current scan reports 2–40 unique versions per path but lacks branch-to-blob mapping. A scanner enhancement now emits path_blob_ownership.csv and pins the candidate revision, but it has not yet been executed. Director-only source-baseline/adoption/retirement/non-adoption authority remains reserved.
 
 
 ## 63. Action feedback and evolution-adoption regression audit — 2026-11-20
