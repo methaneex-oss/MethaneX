@@ -1720,3 +1720,8 @@ The Builder inspected exact candidate/donor engineering source, header, CMake an
 ## 77. DF-02 supporting cognitive and evolution contract adjudication — 2026-11-21
 
 Inspected exact candidate/donor blobs for action assessment, adaptation, cognitive workspace, intent, knowledge, planning, reflection, reasoning, evolution history/orchestration, adoption journal/controller and process isolation. Findings: donor context fields carry representation/affect/attention/action results and developmental context into feedback; donor adaptation stores recent error/surprise streak; reasoning excludes disputed premises and propagates confidence; reflection treats empty experience as uncertainty rather than competence; planning/intent receive continuous affective appraisal and learned goal momentum; evolution history is idempotent and orchestrator requires durable evaluation before adoption; adoption journal has compensation transitions; process isolation prepares argv before fork. Candidate reasoning suite is 19 assertions vs 33 donor; action-model suite remains 11/11. KnowledgeEvidence is a type-boundary change with same update arithmetic. No source change; DF-02 remains OPEN pending remaining semantic/duplicate-owner and Director-only authority decisions.
+
+
+## 78. DF-02 equal-count adoption test correction — 2026-11-21
+
+Verified candidate/donor brain_contract.cpp blobs: 19 assertions each, but candidate asserts direct proposal adoption and rollback succeed; donor asserts both fail because proposals are not evaluation evidence and no rollback applies before adoption. This proves why assertion counts alone are insufficient. See DF02_SUPPORTING_COGNITIVE_REASONING_REFLECTION_AND_EVOLUTION_CONTRACTS_2026-11-21.md §10. No source change.
