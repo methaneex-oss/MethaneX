@@ -2166,3 +2166,8 @@ The unmerged donor PR #97 HEAD passed JARVIS Core Verification (71/71 CTest) and
 ## 43. DF-02 causal feedback and typed persistence — 2026-11-20
 
 [DF-02 Causal Feedback and Typed Persistence Gap](DF02_CAUSAL_FEEDBACK_AND_TYPED_PERSISTENCE_GAP_2026-11-20.md) records missing causal counterexample weakening and ambiguous key=value serialization, compared with donor outcome feedback and a versioned typed length-prefixed codec. No runtime change; DF-02 remains OPEN.
+
+
+## 44. DF-02 candidate-branch 111-path consumer reconciliation — 2026-11-21
+
+[DF-02 Candidate-Branch 111-Path Consumer Reconciliation](DF02_CANDIDATE_BRANCH_111_PATH_CONSUMER_RECONCILIATION_2026-11-21.md) isolates exact candidate branch tip 84dd10094cac675b97b1ab2d45b36618d61efe38 from the verified all-ref artifact. Of the 118 donor paths with all-ref lexical candidates, 111 have at least one candidate-branch occurrence; seven other-ref-only paths are separately adjudicated in the alternate-branch report. Among the 111: 76 are same-path divergent and 35 have no same-path candidate artifact; 107 have source-category hits and 85 have a hit in a directly compiled translation unit. The exact candidate corpus has 206 path/category occurrences: 128 source, 50 test, 11 workflow, 2 build, 14 documentation and 1 other. This is exact consumer-location evidence, not a claim that every lexical match is semantic. Focused source audits remain the semantic evidence for material mechanisms. DF-02 remains OPEN pending remaining true-consumer successor/duplicate-owner and authority disposition.
