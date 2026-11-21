@@ -1725,3 +1725,8 @@ Inspected exact candidate/donor blobs for action assessment, adaptation, cogniti
 ## 78. DF-02 equal-count adoption test correction — 2026-11-21
 
 Verified candidate/donor brain_contract.cpp blobs: 19 assertions each, but candidate asserts direct proposal adoption and rollback succeed; donor asserts both fail because proposals are not evaluation evidence and no rollback applies before adoption. This proves why assertion counts alone are insufficient. See DF02_SUPPORTING_COGNITIVE_REASONING_REFLECTION_AND_EVOLUTION_CONTRACTS_2026-11-21.md §10. No source change.
+
+
+## 79. DF-02 candidate-absent path adjudication — 2026-11-21
+
+The Builder inspected all 35 candidate-absent paths individually using the exact 111-path candidate-branch consumer matrix and exact donor blob IDs. They comprise 10 source/example artifacts, 17 test files, six historical plan/spec documents and two engineering task-ledger files. The majority of lexical hits are false positives (restore/restored/replayed/make_input/observe/constexpr/baseline/checkpoints/etc.); typed affective/developmental/goal-outcome references are in uncompiled brain_restored_api.cpp or generic methods; candidate execute_action is only a partial inline wrapper; task ledger is a donor-identical alternate-branch implementation, not candidate. No historical docs are marked retired. See DF02_CANDIDATE_ABSENT_35_PATH_SEMANTIC_ADJUDICATION_2026-11-21.md. The 35-path subset is closed; DF-02 remains OPEN for remaining 76 divergent-path duplicate-owner reconciliation and Director-only source-baseline/adoption/retirement decisions.
