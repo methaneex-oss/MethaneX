@@ -151,7 +151,7 @@ jobs:
               lines = text.splitlines()
               headings = []
               for index, line in enumerate(lines):
-                  match = re.match(r"^(#{1,6})\\s+(.+?)\\s*$", line)
+                  match = re.match(r"^(#{1,6})\s+(.+?)\s*$", line)
                   if match:
                       headings.append((index, len(match.group(1)), match.group(2)))
               blocks = []
@@ -164,12 +164,12 @@ jobs:
                       if next_index > start_index and next_level <= level:
                           end_index = next_index
                           break
-                  blocks.append("\\n".join(lines[start_index:end_index]))
+                  blocks.append("\n".join(lines[start_index:end_index]))
                   found.add(title)
               missing_titles = [title for title in selected_titles if title not in found]
               if missing_titles:
                   raise SystemExit("Selected source sections missing: " + "; ".join(missing_titles))
-              return "\\n\\n".join(blocks)
+              return "\n\n".join(blocks)
 
           chunks, manifest = [], []
           total_source_chars = 0
@@ -180,7 +180,7 @@ jobs:
               content = extract_selected_sections(source_content, selected_sections) if selected_sections else source_content
               if not content.strip():
                   raise SystemExit(f"Document excerpt is empty: {path}")
-              chunks.append(f"\\n\\n===== DOCUMENT: {label}\\nSOURCE COMMIT: {commit}\\nSOURCE BLOB: {source_blob_sha}\\n=====\\n\\n{content}")
+              chunks.append(f"\n\n===== DOCUMENT: {label}\nSOURCE COMMIT: {commit}\nSOURCE BLOB: {source_blob_sha}\n=====\n\n{content}")
               manifest.append({
                   "path": label,
                   "repository_path": path,
