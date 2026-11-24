@@ -281,6 +281,45 @@ def self_test() -> None:
     )
     assert line_range_fits("L10-L20", 20)
     assert not line_range_fits("L10-L21", 20)
+
+    # Exercise the authenticated Contents API fallback without a network call.
+    api_base = "https://github.com/methaneex-oss/MethaneX/blob/abc123/core/cpp/src/action_execution.cpp"
+    api_url = "https://api.github.com/repos/methaneex-oss/MethaneX/contents/core/cpp/src/action_execution.cpp?ref=abc123"
+    fake_text = "\\n".join(f"line {number}" for number in range(1, 21))
+    fake_payload = {
+        "content": base64.b64encode(fake_text.encode("utf-8")).decode("ascii"),
+        "encoding": "base64",
+        "html_url": api_base,
+        "path": "core/cpp/src/action_execution.cpp",
+    }
+
+    class FakeResponse:
+        status = 200
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, exc_type, exc, traceback):
+            return False
+
+        def read(self, size: int = -1) -> bytes:
+            body = json.dumps(fake_payload).encode("utf-8")
+            return body if size < 0 else body[:size]
+
+    def fake_urlopen(request, timeout):
+        assert request.full_url == api_url
+        return FakeResponse()
+
+    original_urlopen = globals()["urlopen"]
+    globals()["urlopen"] = fake_urlopen
+    try:
+        valid_result = verify_line_range_api(api_base, "L10-L20", "self-test-token")
+        assert valid_result["verified"] and valid_result["line_count"] == 20
+        invalid_result = verify_line_range_api(api_base, "L10-L21", "self-test-token")
+        assert not invalid_result["verified"] and invalid_result["error"] == "line_range_out_of_bounds"
+    finally:
+        globals()["urlopen"] = original_urlopen
+
     print("GitHub anchor-target verifier self-test: PASS")
 
 
