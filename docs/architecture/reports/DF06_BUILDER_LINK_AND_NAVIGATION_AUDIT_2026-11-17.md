@@ -804,3 +804,24 @@ The artifact deliberately records rendered_github_anchor_verification as not_per
 The audit also records semantic_relevance_review as not_automated. The 191 external destinations still require semantic relevance review, and the local results contain no extracted local fragments, so local-fragment coverage remains unproven.
 
 **DF06 remains NOT MET** until the Project Director either accepts API-backed canonical comment verification as sufficient or a browser-level check proves the six older comment targets render. The workflow itself is now green and no longer fails on the static-HTML false negative.
+
+## 36. Exact-current audit refresh — 2026-11-24
+
+**Exact PR #192 HEAD:** `437c26939db515f8fbabdab238a8e6042848eec1`  
+**Workflow run:** [#44946373422](https://github.com/methaneex-oss/MethaneX/actions/runs/44946373422) — completed / success  
+**Audit artifact:** `14724140649`  
+**Artifact SHA-256:** `a93ce1d1ab607ea45c19cb5b39899e6fe98bc98da806526518aaa18c3a614074`
+
+The exact-revision artifact reports:
+
+- 70 Markdown files scanned.
+- 472 Markdown destinations extracted.
+- 180 local/repository-relative destinations; all 180 resolved, zero failures.
+- 192 unique external URLs: 189 HTTP 200 and three HTTP 206; all classified valid by the audit/API fallback.
+- 89 GitHub anchor targets checked: 83 verified in the initial rendered HTML and six verified through the canonical issue-comment API.
+- Zero failed anchor targets; 41 rendered pages.
+- Zero local-fragment destinations were emitted by the current parser, so there were no local fragment targets requiring resolution in this tree.
+
+The artifact explicitly distinguishes `github_anchor_target_verification: passed` from `rendered_github_anchor_verification: not_performed`. The six API-verified issue comments are confirmed to exist at their canonical URLs; browser-level viewport landing for those six is not established. The workflow's semantic relevance review remains `not_automated`.
+
+**DF-06 remains NOT MET under the current Option A standard.** The corrected parser self-test and exact-current link audit pass; all local targets resolve; all 89 GitHub anchor targets have an evidence-backed target check. Remaining work is a bounded semantic relevance review of the 192 unique external GitHub destinations and a formal disposition of whether API-backed canonical comment verification is sufficient in place of browser viewport proof. Do not describe the workflow as a full DF-06 pass.
