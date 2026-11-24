@@ -878,3 +878,20 @@ The exact-current audit reports 70 Markdown files, 474 destinations, 180 local d
 The anchor-verifier self-test now exercises both the line-range API URL/bounds logic and a mocked authenticated Contents API response, including an out-of-bounds negative case. It passed on this exact revision. The live run did not need the line-range API fallback because the three historically intermittent line-range pages rendered normally; the six issue-comment targets used the canonical issue-comment API fallback.
 
 The artifact still accurately reports `rendered_github_anchor_verification: not_performed` and `semantic_relevance_review: not_automated`. The delegated DF-06 scope decision remains: mechanical navigation integrity is closed; content-level relevance is assigned to DF-09. The final inventory successor will receive a new exact-head audit.
+
+
+## 11. Exact-final-HEAD mechanical navigation audit — 2026-11-24
+
+This addendum records the final exact-revision mechanical audit used by the PR #192 terminal status at frozen HEAD caf87986dfea7aca75728818651c8687e9f5faf0. It supersedes older workflow-run references for this bounded mechanical result; prior parser/browser limitations remain part of the historical record and are not silently erased.
+
+**Workflow:** [run #45470173876](https://github.com/methaneex-oss/MethaneX/actions/runs/45470173876)  
+**Artifact:** 14956697074  
+**SHA-256:** becc106d0bf538fd3f69fb291ebd4713bfc242d187c9c352f706a2f4ed7d8fbf
+
+- 70 Markdown files were checked.
+- 474 destinations were enumerated; 180/180 local targets resolved.
+- 194 internal GitHub URLs were status-verified: 191 HTTP 200 and three HTTP 206.
+- 89/89 anchor targets were verified: 83 rendered HTML targets and six canonical issue-comment API targets.
+- Zero failed targets; 41 rendered pages.
+
+**Bounded disposition:** DF-06 is closed for mechanical navigation integrity at this exact frozen revision. This result does not claim general browser viewport/scroll behavior, exhaustive semantic relevance of every link, or an independent blind-reader verdict. Those are distinct claims and remain outside this mechanical audit. The blind-reader DF-09 gate remains separate.
