@@ -180,7 +180,7 @@ jobs:
               content = extract_selected_sections(source_content, selected_sections) if selected_sections else source_content
               if not content.strip():
                   raise SystemExit(f"Document excerpt is empty: {path}")
-              chunks.append(f"\\n\\n===== DOCUMENT: {label}\\nSOURCE COMMIT: {commit}\\nSOURCE BLOB: {source_blob_sha}\\n==== =\\n\\n{content}")
+              chunks.append(f"\\n\\n===== DOCUMENT: {label}\\nSOURCE COMMIT: {commit}\\nSOURCE BLOB: {source_blob_sha}\\n=====\\n\\n{content}")
               manifest.append({
                   "path": label,
                   "repository_path": path,
@@ -296,7 +296,6 @@ jobs:
               "- This SHA identifies the exact repository checkout used to assemble the supplied packet. "
               "It is a revision identifier, not evidence that the contents have been independently reviewed or accepted.\n"
               "- Source commits and blob SHAs are listed per document. Some long documents are bounded excerpts; omitted sections are not reviewed.\n"
-              f"- Estimated packet size: {estimated_input_tokens:,} tokens (safety cap 100,000).\n\n"
               "---\n\n"
           )
           packet = packet_header + packet
@@ -313,6 +312,7 @@ jobs:
               "target_documentation_revision": os.environ["TARGET_DOCS_SHA"],
               "documents": manifest,
               "packet_characters": len(packet),
+              "total_source_characters": total_source_chars,
               "estimated_input_tokens": estimated_input_tokens,
               "note": "This is a bounded blind-reader packet, not a full repository dump. Long source documents are represented by the exact sections listed in packet_manifest.json; omitted sections and omitted documents were not reviewed. The packet includes the current PR #192 state/navigation excerpt, DF criteria and governance excerpts, PR #171 whole-system responsibility map excerpt, current PR #173 architecture and decision-matrix excerpts, the historically accepted PR #174 34-scenario baseline excerpt, current PR #174 54-scenario proposal, current PR #175 non-operative implementation plan, focused DF-02 evidence, latest DF-06 closeout addenda, and the exact terminal DF-10 inventory section. The DF-06 excerpt contains mechanical navigation results and explicitly does not claim automated semantic relevance or browser viewport proof. The packet does not include the full historical preservation register, all PR review threads, the complete CF-26 package, raw reviewer reports or every historical audit snapshot. The reader must not claim to have reviewed omitted material."
           }, indent=2))
