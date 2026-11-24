@@ -491,3 +491,31 @@ PR #192 is a separate Documentation Foundation lineage. Do not treat PR #175 pla
 8. Do not claim background review will arrive; review completion must be established from an actual submitted review or report.
 
 **Current stopping boundary:** PR #175 planning has been advanced and its exact-revision independent review is pending. PR #192's DF-02/DF-06/DF-09 work and final inventory cycle remain separate blockers. No source baseline is selected and no runtime implementation/training is authorized.
+
+
+---
+
+## 13. Current continuation — 2026-11-24
+
+**This is the controlling continuation snapshot for this handoff.** Older mutable-branch heads and gate statuses above are historical. The current live PR metadata is authoritative.
+
+### Live state
+
+- PR #192 HEAD at this refresh: `d09166d96817de53e87f14c0357533007c30fa40`; open/non-draft/unmerged; 71 changed paths; 969 ahead / 14 behind; non-mergeable/dirty. Its base is the PR #179 documentation branch, not main.
+- DF-02 and DF-06 are closed under the Project Director's explicit 2026-11-24 delegation to the Builder for bounded documentation-foundation dispositions. DF-02 records all 159 donor paths against current main and preserves non-main variants as non-adopted history. DF-06 records exact-current link/anchor integrity and moves content-level semantic relevance to DF-09.
+- DF-09 remains blocked until PR #200 is merged and its blind-reader workflow is dispatched against the final frozen PR #192 SHA, returning CLEAR. The previous 31/32 PARTIALLY CLEAR result is historical.
+- DF-10 remains pending the final inventory-only branch write and exact one-commit/one-file comparison.
+- DF-11 remains waived as a mandatory gate by the prior recorded Project Director decision; no independent verdict is claimed.
+- DF-12 awaits the user's final acceptance and merge/save decision. Stage A remains HELD.
+- PR #171 is open/draft/unmerged at `b05434758ad4fe72815503f89bd5d2990ccb658b`; PR #173 at `a96af5b18d3a1d580ff56cff6191240893bceeb5`; PR #174 at `c34472354e4122fc1d78dc25bf45d81f1eb4dc69`; PR #175 before this handoff refresh at `6dd3add8fe7b5d71a5038ca3cf7807330085840f`.
+- PR #199 scanner remains open at `ef5fe173c8fdd50d620016f9f9130cc5046f9e6a`; PR #200 reader workflow correction remains open at `0884b6ac0551996f30429008031476e5d38d32b7`.
+
+### Engineering continuation
+
+JARVIS remains the whole integrated system, not a model wrapper or agent router. PR #171 is the existing whole-system responsibility map; PR #173 defines the Brain foundation; PR #174 specifies BM-01–BM-12; PR #175 translates the accepted architecture/specification into non-operative work packages and acceptance scenarios.
+
+After the remaining reader and final acceptance gates, the first implementation slice is the bounded experience → interpretation/context → relevant memory → traceable reasoning → owner-evaluated belief revision → continuity/recovery path. Later increments add prediction/outcome attribution and experience-dependent learning. Do not begin runtime implementation or select a donor baseline before the explicit Gate A/B and Project Director decisions.
+
+### Recovery rule
+
+This handoff is a navigation aid, not a source of authority. Re-fetch live PR metadata, exact branch heads and relevant decision records before any write. Do not reuse a verdict across SHAs. Do not merge, rebase, retarget, cherry-pick, rewrite branches, activate work packages or deploy without the required authorization.

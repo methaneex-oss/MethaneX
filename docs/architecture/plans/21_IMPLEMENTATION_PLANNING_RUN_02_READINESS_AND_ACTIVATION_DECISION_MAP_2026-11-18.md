@@ -186,3 +186,25 @@ The planning package is ready for a Project Director planning disposition when:
 This document records that implementation planning is underway and gives it a controlled transition map. It does **not** declare the Documentation Foundation closed, Gate A cleared, Gate B passed, an implementation baseline selected, Stage A started, or runtime implementation authorized.
 
 **Current disposition:** Planning Run 02 opened; non-operative planning may continue. Runtime implementation and starter-training execution remain NOT AUTHORIZED pending the required exact-revision decisions.
+
+
+## 10. Upstream exact-state refresh — 2026-11-24
+
+This section supersedes the older mutable PR #192 and supporting-workstream snapshots in earlier sections. Re-fetch live metadata before any later action.
+
+| Workstream | Exact current reference at this refresh | Disposition |
+|---|---|---|
+| PR #192 Documentation Foundation | HEAD `d09166d96817de53e87f14c0357533007c30fa40`; branch `docs/whole-brain-planning-scope-correction-20261107`; open/non-draft/unmerged; 71 changed paths; 969 ahead / 14 behind its base; non-mergeable/dirty | DF-02 and DF-06 are closed under explicit delegated bounded dispositions. DF-09 remains blocked pending exact-final-HEAD blind-reader CLEAR. DF-10 final inventory is pending. DF-11 remains waived as a mandatory gate by the prior Project Director decision. DF-12 awaits the user's final acceptance/merge-save decision. Stage A remains HELD. |
+| PR #171 whole-system anatomy | `b05434758ad4fe72815503f89bd5d2990ccb658b`; open/draft/unmerged | Existing SYS-01–SYS-11 system-level architecture proposal. Preserve; do not duplicate. |
+| PR #173 Brain Foundation Architecture | `a96af5b18d3a1d580ff56cff6191240893bceeb5`; open/draft/unmerged | BFA-C01–C14 accepted only; whole-architecture acceptance and CF-26/CF-27 remain open. Latest independent verdict PARTIALLY CLEAR applies to older SHA `1f137cbaed985821bbc32408151911b18418f713`, not this HEAD. |
+| PR #174 Brain Mechanism Specification | `c34472354e4122fc1d78dc25bf45d81f1eb4dc69`; open/draft/unmerged | Accepted historical 34-scenario baseline `0811a59e46bf934e32e794f90e4e7d18d4e2bd97` remains distinct from current 54-scenario proposal. Latest independent verdict PARTIALLY CLEAR applies to older SHA `7cb6271531f3e80a45728756273218132499722e`. F-02/F-03 remain partially addressed, not fully cleared. |
+| PR #175 Brain Implementation Planning | Parent HEAD `6dd3add8fe7b5d71a5038ca3cf7807330085840f` before this handoff refresh; open/draft/unmerged | Non-operative planning only. No Gate A clearance, Gate B acceptance, source-baseline selection or runtime implementation authorization. |
+| PR #199 all-ref scanner | `ef5fe173c8fdd50d620016f9f9130cc5046f9e6a`; open/non-draft/unmerged | Supporting scanner implementation used by PR #192's current ownership workflow; scanner output remains discovery/ownership evidence, not semantic proof by itself. |
+| PR #200 blind-reader workflow correction | `0884b6ac0551996f30429008031476e5d38d32b7`; open/non-draft/unmerged | Corrected reader workflow proposal. It must be merged to main before the authorized exact-final-HEAD workflow_dispatch can run. |
+| Current main | `4f07d772beae03c99a8dd58b174201a3aa3074b2` | Current source comparison tip; not a Stage A source-baseline decision. |
+
+### Current continuation boundary
+
+The first coding target remains the bounded capability slice already defined in this plan: attributable experience acquisition → interpretation/context → relevant memory retrieval → traceable BM-12 reasoning → owner-evaluated BM-04 belief revision → BM-11 continuity/recovery. Prediction identity/outcome attribution (BM-05) and experience-dependent learning (BM-09) follow as later increments. This remains non-operative planning; no code, build, test, training, donor adoption or activation is authorized.
+
+PR #192's delegated DF-02/DF-06 scope decisions do not accept PR #171, #173 or #174, do not clear Gate A/B, and do not activate WP-00–WP-08. Preserve the existing SYS-01–SYS-11 system architecture and the BM-01–BM-12 Brain mechanism boundaries; do not create a replacement blueprint.
