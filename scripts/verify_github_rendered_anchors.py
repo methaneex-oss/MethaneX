@@ -143,7 +143,7 @@ def line_range_api_url(base: str, fragment: str) -> tuple[str, str, str] | None:
 
 
 def line_range_fits(fragment: str, line_count: int) -> bool:
-    match = re.fullmatch(r"L(\\d+)(?:-L(\\d+))?", fragment)
+    match = re.fullmatch(r"L(\d+)(?:-L(\d+))?", fragment)
     if not match:
         return False
     first = int(match.group(1))
