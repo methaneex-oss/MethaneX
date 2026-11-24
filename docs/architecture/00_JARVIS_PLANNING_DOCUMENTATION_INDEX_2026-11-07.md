@@ -1,44 +1,59 @@
-# CURRENT EXACT STATE — 2026-11-24 (post-verifier correction)
+# CURRENT EXACT STATE — 2026-11-25 (follow-up consistency synchronization)
 
-> This snapshot supersedes earlier 2026-11-24 state blocks below. The HEAD shown is the exact parent before this synchronization write; re-fetch live metadata after commit.
+> This controlling snapshot distinguishes the frozen PR #192 review target from the separate documentation-correction branch. It supersedes older current-state snapshots below; those older snapshots remain historical provenance.
 
-## PR #192
+## Frozen PR #192 review target
 
-- Parent HEAD: `97f208a6f2f4881c7b3b94b3a14707a3bc394367`
-- Branch: `docs/whole-brain-planning-scope-correction-20261107`
-- Base: `docs/jarvis-phase-2-whole-brain-integration-map-20261105` (recorded base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`; live tip `ea64607ef94f142a6142a013e119a7225bc95c1c`)
-- State: open, non-draft, unmerged; 71 changed paths; 977 ahead / 14 behind; non-mergeable / dirty.
-- Current main: `4f07d772beae03c99a8dd58b174201a3aa3074b2`.
+- Repository: methaneex-oss/MethaneX.
+- PR #192 branch: docs/whole-brain-planning-scope-correction-20261107.
+- Frozen HEAD under external review: caf87986dfea7aca75728818651c8687e9f5faf0.
+- Live PR state at this synchronization: open, non-draft, unmerged; 71 changed paths; 979 commits ahead / 14 behind; GitHub reports non-mergeable / dirty.
+- Base: docs/jarvis-phase-2-whole-brain-integration-map-20261105; recorded base/merge-base 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c; live base tip ea64607ef94f142a6142a013e119a7225bc95c1c.
+- Do not merge PR #192 as-is. The original branch remains unchanged by this correction work.
 
-## Current gate state
+## Separate follow-up consistency branch
+
+- Branch: docs/pr192-consistency-corrections-20261125.
+- Created directly from frozen PR #192 HEAD caf87986dfea7aca75728818651c8687e9f5faf0.
+- Purpose: synchronize four documentation representations without changing the external review target: this planning index, the DF-02 report, the DF-06 report and inventory §135.4.
+- This is a follow-up correction branch, not a rewrite or replacement of PR #192. Its review/merge status is separate; no merge is authorized or performed.
+
+## Current Documentation Foundation disposition
 
 | Gate | Disposition |
 |---|---|
 | DF-01 | CLOSED |
-| DF-02 | CLOSED — delegated bounded non-adoption disposition; 159 donor paths mapped; 544 non-main alternate blob versions preserved as historical/non-adopted |
-| DF-03 | CLOSED within package — authority/provenance scopes distinguished |
-| DF-04 | CLOSED within package — accepted governance distinct from proposals |
-| DF-05 | CLOSED by explicit non-integration disposition |
-| DF-06 | CLOSED — exact-current mechanical audit passed: 70 Markdown, 474 destinations, 180 local valid, 194 internal GitHub URLs, 89 anchors, zero failures |
-| DF-07 | PENDING final inventory and PR-description synchronization |
-| DF-08 | RESOLVED within bounded preservation criterion |
-| DF-09 | BLOCKED — PR #200 must be merged and blind-reader workflow dispatched against final exact SHA; distinct-model CLEAR required |
-| DF-10 | PENDING — final inventory-only write and exact one-commit/one-file proof |
-| DF-11 | WAIVED as mandatory by prior Project Director decision; no independent verdict claimed |
-| DF-12 | PENDING user's final acceptance and merge/save decision |
+| DF-02 | CLOSED under bounded non-adoption disposition; exact all-ref evidence and limits recorded in the DF-02 report and inventory §135.4 |
+| DF-03 | CLOSED within documented authority/provenance scope |
+| DF-04 | CLOSED within documented governance scope |
+| DF-05 | CLOSED by explicit non-integration disposition; no branch-history operation |
+| DF-06 | CLOSED for mechanical navigation integrity at frozen HEAD; exact audit evidence and limits recorded in the DF-06 report and inventory §135.4 |
+| DF-07 | CORRECTED on the follow-up branch; final branch-wide consistency verification and review remain pending |
+| DF-08 | RESOLVED within bounded historical-preservation criterion |
+| DF-09 | BLOCKED pending blind fresh-reader CLEAR against exact frozen HEAD caf87986dfea7aca75728818651c8687e9f5faf0 |
+| DF-10 | BUILDER-VERIFIED only for the original PR #192 parent/successor pair recorded in its terminal inventory; this follow-up branch is not that one-file successor |
+| DF-11 | WAIVED as a mandatory gate by prior Project Director decision; no independent verdict is claimed |
+| DF-12 | PENDING Project Director final acceptance |
 
-The latest link-audit artifact is run `45469600069`, artifact `14956636709`, SHA-256 `3b450a714846982fbe709e8a58549537632688c8e71dc060c3fb9368575850d0`. The final inventory successor will receive fresh exact-head audit and all-ref scan runs.
+**DF-02 evidence:** workflow [#45470173876](https://github.com/methaneex-oss/MethaneX/actions/runs/45470173876), artifact 14956148301, SHA-256 9902957475c76f4840d1d280c7d4f50537941e9445810afb805132374a328f38.
 
-## Related PRs at this snapshot
+**DF-06 evidence:** workflow [#45470173876](https://github.com/methaneex-oss/MethaneX/actions/runs/45470173876), artifact 14956697074, SHA-256 becc106d0bf538fd3f69fb291ebd4713bfc242d187c9c352f706a2f4ed7d8fbf.
 
-- #171: `b05434758ad4fe72815503f89bd5d2990ccb658b` — whole-system anatomy proposal, open/draft.
-- #173: `a96af5b18d3a1d580ff56cff61912408` — Brain Foundation Architecture proposal, open/draft; whole-architecture acceptance/CF-26/CF-27 open.
-- #174: `c34472354e4122fc1d78dc25bf45d81f1eb4dc69` — Brain mechanism specification proposal, open/draft; historical 34-scenario accepted baseline distinct from 54-scenario proposal.
-- #175: `6ee97f83b5768bc107b070e2fd9ac40e4675ff0e` — implementation planning proposal, open/draft/non-operative.
-- #199: `ef5fe173c8fdd50d620016f9f9130cc5046f9e6a` — scanner proposal, open/unmerged.
-- #200: `0884b6ac0551996f30429008031476e5d38d32b7` — blind-reader workflow correction, open/unmerged.
+## Related architecture and supporting PRs
 
-Stage A remains HELD. No runtime source, build, tests, training, donor adoption, source-baseline selection or deployment is authorized.
+- PR #171: b05434758ad4fe72815503f89bd5d2990ccb658b — open/draft whole-system anatomy proposal.
+- PR #173: a96af5b18d3a1d580ff56cff6191240893bceeb5 — open/draft Brain Foundation Architecture proposal; BFA-C01–C14 accepted only; whole-architecture acceptance and CF-26/CF-27 remain open.
+- PR #174: c34472354e4122fc1d78dc25bf45d81f1eb4dc69 — open/draft mechanism proposal; accepted 34-scenario historical baseline remains distinct from 54-scenario proposal.
+- PR #175: 1274c05a2628d23a43620613c6baf205e4ede3b3 — open/draft non-operative implementation plan.
+- PR #199: ef5fe173c8fdd50d620016f9f9130cc5046f9e6a — open/unmerged scanner proposal.
+- PR #200: b57a9eac00ae7eda02e53a73526891a281009ae5 — open/unmerged blind-reader workflow correction; workflow not dispatched and no reader verdict claimed.
+
+## Execution boundary
+
+Stage A remains **NOT STARTED / HELD**. No runtime implementation, training, donor adoption, source-baseline selection, integration, deployment, merge, rebase or retarget is authorized by these documentation corrections. DF-09 and DF-12 remain separate from the bounded DF-02/DF-06 dispositions.
+
+---
+
 ---
 
 # CURRENT EXACT STATE — 2026-11-24 (post-decision synchronization)
