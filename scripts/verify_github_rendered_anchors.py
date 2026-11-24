@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import base64
 import concurrent.futures
 import json
 import os
@@ -11,7 +12,7 @@ import time
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.error import HTTPError, URLError
-from urllib.parse import urlsplit, urlunsplit
+from urllib.parse import quote, urlsplit, urlunsplit
 from urllib.request import Request, urlopen
 
 
@@ -124,6 +125,96 @@ def verify_issue_comment_api(url: str, base: str, fragment: str, token: str) -> 
                 time.sleep(1 + attempt)
     return {"verified": False, "status": None, "api_url": api_url, "error": last_error or "unreachable"}
 
+def line_range_api_url(base: str, fragment: str) -> tuple[str, str, str] | None:
+    match = re.fullmatch(r"L(\\d+)(?:-L(\\d+))?", fragment)
+    if not match:
+        return None
+    parts = urlsplit(base)
+    segments = parts.path.strip("/").split("/")
+    if len(segments) < 5 or segments[2] != "blob":
+        return None
+    owner, repository, _, ref = segments[:4]
+    path = "/".join(segments[4:])
+    if not path:
+        return None
+    api_path = quote(path, safe="/")
+    api_url = f"https://api.github.com/repos/{owner}/{repository}/contents/{api_path}?ref={quote(ref, safe='')}"
+    return api_url, path, ref
+
+
+def line_range_fits(fragment: str, line_count: int) -> bool:
+    match = re.fullmatch(r"L(\\d+)(?:-L(\\d+))?", fragment)
+    if not match:
+        return False
+    first = int(match.group(1))
+    last = int(match.group(2) or first)
+    return 1 <= first <= last <= line_count
+
+
+def verify_line_range_api(base: str, fragment: str, token: str) -> dict:
+    target = line_range_api_url(base, fragment)
+    if not target:
+        return {"verified": False, "error": "unsupported_line_anchor"}
+    api_url, path, ref = target
+    request = Request(
+        api_url,
+        headers={
+            "User-Agent": USER_AGENT,
+            "Accept": "application/vnd.github+json",
+            "Authorization": f"Bearer {token}",
+            "X-GitHub-Api-Version": "2022-11-28",
+        },
+        method="GET",
+    )
+    last_error = None
+    for attempt in range(3):
+        try:
+            with urlopen(request, timeout=TIMEOUT) as response:
+                status = response.status
+                payload = json.loads(response.read(2 * 1024 * 1024).decode("utf-8"))
+            content = payload.get("content", "")
+            encoding = payload.get("encoding")
+            if status != 200 or encoding != "base64" or not content:
+                return {
+                    "verified": False,
+                    "status": status,
+                    "api_url": api_url,
+                    "html_url": payload.get("html_url"),
+                    "path": path,
+                    "ref": ref,
+                    "error": "file_content_unavailable",
+                }
+            raw = base64.b64decode(content)
+            line_count = len(raw.decode("utf-8", errors="replace").splitlines())
+            canonical = payload.get("html_url", "")
+            canonical_path = urlsplit(canonical).path
+            base_segments = urlsplit(base).path.strip("/").split("/")
+            expected_path = f"/{base_segments[0]}/{base_segments[1]}/blob/{ref}/{path}"
+            path_matches = canonical_path == expected_path and payload.get("path") == path
+            range_valid = line_range_fits(fragment, line_count)
+            return {
+                "verified": bool(status == 200 and path_matches and range_valid),
+                "status": status,
+                "api_url": api_url,
+                "html_url": canonical,
+                "path": path,
+                "ref": ref,
+                "line_count": line_count,
+                "error": None if path_matches and range_valid else ("canonical_path_mismatch" if not path_matches else "line_range_out_of_bounds"),
+            }
+        except HTTPError as error:
+            last_error = f"http_{error.code}"
+            if error.code in {429, 500, 502, 503, 504} and attempt < 2:
+                time.sleep(1 + attempt)
+                continue
+            return {"verified": False, "status": error.code, "api_url": api_url, "path": path, "ref": ref, "error": last_error}
+        except (URLError, TimeoutError, OSError, ValueError, json.JSONDecodeError) as error:
+            last_error = type(error).__name__
+            if attempt < 2:
+                time.sleep(1 + attempt)
+    return {"verified": False, "status": None, "api_url": api_url, "path": path, "ref": ref, "error": last_error or "unreachable"}
+
+
 
 def fetch_page(url: str, token: str) -> dict:
     request = Request(
@@ -180,6 +271,16 @@ def self_test() -> None:
         "https://github.com/methaneex-oss/MethaneX/pull/173",
         "L10-L20",
     ) is None
+    assert line_range_api_url(
+        "https://github.com/methaneex-oss/MethaneX/blob/abc123/core/cpp/src/action_execution.cpp",
+        "L10-L20",
+    ) == (
+        "https://api.github.com/repos/methaneex-oss/MethaneX/contents/core/cpp/src/action_execution.cpp?ref=abc123",
+        "core/cpp/src/action_execution.cpp",
+        "abc123",
+    )
+    assert line_range_fits("L10-L20", 20)
+    assert not line_range_fits("L10-L21", 20)
     print("GitHub anchor-target verifier self-test: PASS")
 
 
@@ -219,14 +320,18 @@ def main() -> int:
         api_result = {"verified": False}
         method = "initial_html" if html_verified else None
 
-        # GitHub does not include every older timeline comment in its initial HTML.
-        # For issuecomment anchors only, verify the canonical target through GitHub's
-        # authenticated read API. This is explicitly reported as API verification,
-        # not as proof that a browser rendered the target.
-        if not method:
+        # GitHub may omit older timeline comments from initial HTML, and some
+        # historical blob line-range pages can return 503 even when the exact
+        # commit/path/line range is valid. Use the matching authenticated API
+        # fallback for each anchor type; report it separately from rendered HTML.
+        if not method and re.fullmatch(r"issuecomment-\\d+", fragment):
             api_result = verify_issue_comment_api(url, base, fragment, token)
             if api_result.get("verified"):
                 method = "github_issue_comment_api"
+        elif not method and re.fullmatch(r"L\\d+(?:-L\\d+)?", fragment):
+            api_result = verify_line_range_api(base, fragment, token)
+            if api_result.get("verified"):
+                method = "github_contents_line_range_api"
 
         results.append({
             "url": url,
@@ -240,6 +345,9 @@ def main() -> int:
             "api_verified": bool(api_result.get("verified")),
             "api_status": api_result.get("status"),
             "api_html_url": api_result.get("html_url"),
+            "api_line_count": api_result.get("line_count"),
+            "api_target_path": api_result.get("path"),
+            "api_target_ref": api_result.get("ref"),
             "matched_ids": matched,
             "rendered_id_count": page.get("id_count", 0),
             "error": None if method else (api_result.get("error") or page.get("error") or "anchor_not_found"),
