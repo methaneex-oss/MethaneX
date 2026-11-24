@@ -45,7 +45,7 @@ jobs:
       - name: Self-test GitHub anchor-target verifier
         run: python scripts/verify_github_rendered_anchors.py --self-test
 
-      - name: Verify GitHub anchor targets (HTML + issue-comment API fallback)
+      - name: Verify GitHub anchor targets (HTML + authenticated GitHub API fallback)
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: python scripts/verify_github_rendered_anchors.py

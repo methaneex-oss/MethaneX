@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify GitHub anchor targets using initial HTML and canonical issue-comment API fallback."""
+"""Verify GitHub anchor targets using rendered HTML and authenticated GitHub API fallbacks."""
 from __future__ import annotations
 
 import argparse
@@ -19,7 +19,7 @@ from urllib.request import Request, urlopen
 ROOT = Path.cwd()
 TIMEOUT = 30
 MAX_PAGE_BYTES = 25 * 1024 * 1024
-USER_AGENT = "MethaneX-GitHub-Anchor-Audit/1.1"
+USER_AGENT = "MethaneX-GitHub-Anchor-Audit/1.2"
 
 
 class IdCollector(HTMLParser):
