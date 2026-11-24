@@ -361,6 +361,7 @@ jobs:
           - Are PR #191 ancestry statements actually contradictory, or do they describe different comparisons?
           - Are BM, SYS, DF, F, and gate identifiers explained sufficiently for a newcomer?
           - Are links and cross-revision references understandable from the packet?
+          - Are the bounded excerpts sufficient for a defensible assessment? Identify specific omitted material that prevents a reliable verdict; do not assume omitted sections were reviewed.
           - For each key evidence link included in the packet, does its target actually support the claim, or does it merely exist? Distinguish navigation integrity from evidentiary relevance.
           - Are the delegated DF-02 non-adoption and DF-06 mechanical-navigation decisions clearly bounded by their exact evidence and limitations, without being misrepresented as independent review or reader acceptance?
           - Does the packet correctly state that DF-09 remains blocked until this blind assessment returns CLEAR, DF-11 is waived as a mandatory gate by prior decision, and DF-12 remains pending final Project Director acceptance?
