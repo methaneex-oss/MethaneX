@@ -2247,3 +2247,12 @@ This section supersedes §9's pre-synchronization HEAD and audit metrics. The cu
 The latest exact-head documentation-link audit is run `45468106824`, artifact `14956295213`, SHA-256 `37397b425efebdfc963dc99a2556fc5b1bf0fef153fec48485aee3f47d8d824d`: 70 Markdown files, 474 destinations, 180/180 local targets valid, 194 internal GitHub URLs status-verified, 89/89 GitHub anchor targets verified (83 rendered HTML, six canonical API), zero failed targets. DF-02's fresh all-ref scan remains run `45466755887` at parent `674bf4b...`; no C++/engineering source changed in the subsequent documentation-only commits. A fresh all-ref scan will be run on the terminal inventory successor.
 
 Gate dispositions remain: DF-01–DF-08 closed/resolved within the delegated bounded standards recorded in §9; DF-09 BLOCKED pending exact-final-HEAD distinct-model CLEAR; DF-10 pending terminal inventory; DF-11 waived by prior Project Director decision; DF-12 pending user's final acceptance. Stage A remains HELD.
+
+
+## 11. Exact-current verifier and audit refresh — 2026-11-24
+
+The exact PR #192 parent HEAD is `97f208a6f2f4881c7b3b94b3a14707a3bc394367`. The latest link audit run `45469600069`, artifact `14956636709`, SHA-256 `3b450a714846982fbe709e8a58549537632688c8e71dc060c3fb9368575850d0`, completed successfully: 70 Markdown files; 474 destinations; 180/180 local targets valid; 194 internal GitHub URLs status-verified (191 HTTP 200, three HTTP 206); 89/89 anchor targets verified (83 rendered HTML, six canonical issue-comment API); zero failures; 41 rendered pages. The anchor verifier's new line-range Contents API fallback passed its mocked positive and negative self-tests.
+
+The current parent-to-live-base comparison is 977 ahead / 14 behind, status DIVERGED. PR #192 remains open/non-draft/unmerged and non-mergeable/dirty. The branch still contains 71 changed paths; no runtime source changed.
+
+DF-02 remains CLOSED under the delegated bounded non-adoption decision; the fresh all-ref scan is scheduled for the terminal inventory successor. DF-06 remains CLOSED for mechanical navigation integrity; semantic relevance remains assigned to DF-09. DF-09 BLOCKED; DF-10 PENDING terminal inventory; DF-11 WAIVED by prior Director decision; DF-12 PENDING user final acceptance. Stage A remains HELD.

@@ -2009,3 +2009,16 @@ The terminal inventory is the next and final PR #192 branch-file write. After it
 5. Update the PR description without further branch-file writes.
 
 DF-09 remains blocked until PR #200 is merged and the corrected blind-reader workflow is dispatched against the frozen final SHA with a distinct-model CLEAR result. DF-11 remains waived as a mandatory gate; no independent verdict is claimed. DF-12 remains the user's final acceptance decision. Stage A remains HELD; no runtime source or training is authorized.
+
+
+## 91. Exact-current link-audit verification — 2026-11-24
+
+**Parent PR #192 HEAD:** `97f208a6f2f4881c7b3b94b3a14707a3bc394367`.  
+**Workflow run:** `45469600069` — completed / success.  
+**Artifact:** `14956636709`; SHA-256 `3b450a714846982fbe709e8a58549537632688c8e71dc060c3fb9368575850d0`.
+
+The exact-current audit verifies 70 Markdown files, 474 destinations, 180/180 local destinations, 194 internal GitHub URLs, 89/89 anchor targets (83 rendered HTML and six canonical API), zero failures and 41 rendered pages. The verifier self-test passes for line-range parsing, API URL construction, mocked Contents API content decoding, exact path/ref matching, valid line bounds and an out-of-bounds negative case.
+
+The live run did not need line-range API fallback because those pages rendered normally; six historical issue-comment anchors used the canonical API. The workflow does not claim browser viewport proof or automated semantic relevance.
+
+The terminal inventory is now the only remaining PR #192 branch-file write. It must be one commit ahead / zero behind, change only the inventory path, retain all 71 changed paths in the complete successor tree, and be followed by fresh all-ref and link-audit workflows on the exact successor. No later branch-file write is permitted.

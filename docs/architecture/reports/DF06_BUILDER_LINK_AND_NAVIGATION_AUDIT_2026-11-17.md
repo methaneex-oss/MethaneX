@@ -864,3 +864,17 @@ This supersedes the earlier Option A interpretation only to the extent that it r
 The post-decision exact-head audit reports 70 Markdown files, 474 destinations, 180 local destinations (all 180 valid), and 194 unique external URLs (191 HTTP 200 and three HTTP 206). All 194 URLs are within `github.com/methaneex-oss/MethaneX`. It verifies 89/89 GitHub anchor targets: 83 from rendered HTML and six from canonical issue-comment API; zero failed targets; 41 rendered pages. No local-fragment destinations were emitted.
 
 The artifact retains the limitations already recorded in §37: semantic relevance is not automated, and browser viewport/scroll behavior is not proven for the six API-fallback comments. Those limitations are handled by the delegated DF-06 scope decision and DF-09's separate blind-reader requirement. No link-target failures were found at this exact revision.
+
+
+## 39. Exact-current audit and verifier self-test — 2026-11-24
+
+**Exact PR #192 HEAD:** `97f208a6f2f4881c7b3b94b3a14707a3bc394367`  
+**Workflow run:** `45469600069` — completed / success  
+**Audit artifact:** `14956636709`  
+**Artifact SHA-256:** `3b450a714846982fbe709e8a58549537632688c8e71dc060c3fb9368575850d0`
+
+The exact-current audit reports 70 Markdown files, 474 destinations, 180 local destinations (all valid), 194 unique external URLs (191 HTTP 200 and three HTTP 206), all 194 within `github.com/methaneex-oss/MethaneX), and 89/89 GitHub anchor targets verified (83 rendered HTML, six canonical issue-comment API); zero failed anchors; 41 rendered pages.
+
+The anchor-verifier self-test now exercises both the line-range API URL/bounds logic and a mocked authenticated Contents API response, including an out-of-bounds negative case. It passed on this exact revision. The live run did not need the line-range API fallback because the three historically intermittent line-range pages rendered normally; the six issue-comment targets used the canonical issue-comment API fallback.
+
+The artifact still accurately reports `rendered_github_anchor_verification: not_performed` and `semantic_relevance_review: not_automated`. The delegated DF-06 scope decision remains: mechanical navigation integrity is closed; content-level relevance is assigned to DF-09. The final inventory successor will receive a new exact-head audit.
