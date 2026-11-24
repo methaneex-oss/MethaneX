@@ -126,7 +126,7 @@ def verify_issue_comment_api(url: str, base: str, fragment: str, token: str) -> 
     return {"verified": False, "status": None, "api_url": api_url, "error": last_error or "unreachable"}
 
 def line_range_api_url(base: str, fragment: str) -> tuple[str, str, str] | None:
-    match = re.fullmatch(r"L(\\d+)(?:-L(\\d+))?", fragment)
+    match = re.fullmatch(r"L(\d+)(?:-L(\d+))?", fragment)
     if not match:
         return None
     parts = urlsplit(base)
@@ -324,11 +324,11 @@ def main() -> int:
         # historical blob line-range pages can return 503 even when the exact
         # commit/path/line range is valid. Use the matching authenticated API
         # fallback for each anchor type; report it separately from rendered HTML.
-        if not method and re.fullmatch(r"issuecomment-\\d+", fragment):
+        if not method and re.fullmatch(r"issuecomment-\d+", fragment):
             api_result = verify_issue_comment_api(url, base, fragment, token)
             if api_result.get("verified"):
                 method = "github_issue_comment_api"
-        elif not method and re.fullmatch(r"L\\d+(?:-L\\d+)?", fragment):
+        elif not method and re.fullmatch(r"L\d+(?:-L\d+)?", fragment):
             api_result = verify_line_range_api(base, fragment, token)
             if api_result.get("verified"):
                 method = "github_contents_line_range_api"
