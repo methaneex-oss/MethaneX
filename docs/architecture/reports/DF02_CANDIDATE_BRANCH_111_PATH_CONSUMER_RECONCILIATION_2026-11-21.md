@@ -58,3 +58,13 @@ The new artifact supplies the branch-name/tip-to-exact-blob join missing from th
 The C++ source tree in the PR #192 documentation branch remained unchanged through the documentation-only successor commit 5c402cf8110bf38f2db114e1fadf463e245e9dae; the source/build/test consumer findings remain applicable. The new scan is the controlling evidence for exact branch/blob ownership. Lexical and compile reachability still do not substitute for per-path semantic successor decisions.
 
 **DF02 remains OPEN:** the 76 divergent paths still require semantic disposition and duplicate-owner reconciliation. No source baseline or adoption decision is made.
+
+## 6. Corrected exact all-ref artifact digest and candidate-path coverage — 2026-11-24
+
+The exact all-ref artifact downloaded from run `44931803411`, artifact `14717933378`, has SHA-256 `189f65acfc5561c71da652ac32b71d308aa47ea8737793381af3a17cae45676a`. This locally computed digest matches the artifact bytes; the earlier §5 digest `189f65b26b78e3811fb5b2c9fef6cfc97a8f6a24c8f62f80b0f6c1e7c9d70e7f` is incorrect and is superseded.
+
+The 76 divergent candidate-branch paths are now exact-path cross-referenced to the existing focused reports (70 core and six engineering). The 35 absent-path and 48 no-symbol cohorts are also covered by their per-path adjudication reports. Thus all 159 donor paths have candidate-path-level semantic coverage; this does not claim exhaustive semantic review of every alternate-branch blob variant or every lexical consumer candidate.
+
+The full artifact contains 413 distinct consumer paths, 1,226 exact consumer-blob contents, 798 path/blob ownership rows, 1,938 exact path-reference rows, 40,041 symbol-match rows, 254 refs and 213 unique tips. These are discovery/ownership evidence, not 1,226 proven dependencies. The candidate C++/engineering source tree is unchanged between the artifact's candidate snapshot `19c1c168fdbdab58ed9732cd250d2ae4624936eb` and PR #192 HEAD `437c26939db515f8fbabdab238a8e6042848eec1`.
+
+The prior statement in §5 that all 76 divergent paths still require candidate-path semantic disposition is superseded. **The remaining DF-02 work is material alternate-branch consumer/implementation cluster adjudication and historical authority/retention disposition.** DF-02 remains OPEN; no source baseline or donor adoption is selected.
