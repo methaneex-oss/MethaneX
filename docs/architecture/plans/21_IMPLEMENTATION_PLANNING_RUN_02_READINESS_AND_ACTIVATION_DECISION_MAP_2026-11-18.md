@@ -208,3 +208,39 @@ This section supersedes the older mutable PR #192 and supporting-workstream snap
 The first coding target remains the bounded capability slice already defined in this plan: attributable experience acquisition → interpretation/context → relevant memory retrieval → traceable BM-12 reasoning → owner-evaluated BM-04 belief revision → BM-11 continuity/recovery. Prediction identity/outcome attribution (BM-05) and experience-dependent learning (BM-09) follow as later increments. This remains non-operative planning; no code, build, test, training, donor adoption or activation is authorized.
 
 PR #192's delegated DF-02/DF-06 scope decisions do not accept PR #171, #173 or #174, do not clear Gate A/B, and do not activate WP-00–WP-08. Preserve the existing SYS-01–SYS-11 system architecture and the BM-01–BM-12 Brain mechanism boundaries; do not create a replacement blueprint.
+
+
+## 11. Exact upstream state refresh — 2026-11-24
+
+This section supersedes the mutable upstream snapshot in §10. The older section remains historical provenance; its PR #192, PR #200 and gate-status values are not live.
+
+### 11.1 Exact current revisions
+
+| Workstream | Exact current revision | Live disposition |
+|---|---|---|
+| PR #171 whole-system anatomy | `b05434758ad4fe72815503f89bd5d2990ccb658b` | Open/draft. Existing SYS-01–SYS-11 whole-system responsibility proposal; preserve, do not duplicate. |
+| PR #173 Brain Foundation Architecture | `a96af5b18d3a1d580ff56cff6191240893bceeb5` | Open/draft. BFA-C01–C14 accepted only; whole-architecture acceptance and CF-26/CF-27 final gates remain open. |
+| PR #174 Brain Mechanism Specification | `c34472354e4122fc1d78dc25bf45d81f1eb4dc69` | Open/draft. Current 54-scenario proposal remains unaccepted and distinct from the historical accepted 34-scenario baseline `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`. |
+| PR #175 implementation plan | Parent before this checkpoint: `6ee97f83b5768bc107b070e2fd9ac40e4675ff0e` | Open/draft, non-operative. This update changes only this readiness map; the resulting live PR #175 HEAD must be fetched from PR metadata. |
+| PR #192 Documentation Foundation | `caf87986dfea7aca75728818651c8687e9f5faf0` | Open/unmerged; 71 changed paths; 979 ahead / 14 behind; compare DIVERGED; GitHub reports non-mergeable/dirty. Preserve as evidence branch; do not merge as-is. |
+| PR #199 all-ref scanner | `ef5fe173c8fdd50d620016f9f9130cc5046f9e6a` | Open/unmerged; scanner implementation is supporting evidence, not a semantic decision. |
+| PR #200 blind-reader workflow | `b57a9eac00ae7eda02e53a73526891a281009ae5` | Open/unmerged, mergeable/clean; `cpp` check passed. Workflow is corrected for terminal inventory §135 and the current PR #173/#174/#175 source revisions; no dispatch or reader verdict exists. |
+| Current main | `4f07d772beae03c99a8dd58b174201a3aa3074b2` | Current comparison tip, not a selected Stage A source baseline. |
+
+### 11.2 PR #192 terminal evidence and gate status
+
+- **DF-02:** CLOSED under the delegated bounded non-adoption disposition. Exact-final-head all-ref scan run `45470173876`, artifact `14956148301`, SHA-256 `9902957475c76f4840d1d280c7d4f50537941e9445810afb805132374a328f38`. It covered 254 branch refs / 213 unique tips and all 159 donor paths. The scanner reports 95 divergent same-path blobs, 63 candidate-absent paths and one identical path. It discovered 1,416 text blobs, 724 donor identifiers, 1,946 exact-path-reference candidates and 40,048 symbol-consumer candidates. Candidate C++ baseline and donor engineering task-ledger build/tests passed. Scanner output is discovery evidence, not semantic proof; no donor code was adopted.
+- **DF-06:** CLOSED for mechanical navigation integrity under the delegated bounded disposition. Exact-final-head audit run `45470173876`, artifact `14956697074`, SHA-256 `becc106d0bf538fd3f69fb291ebd4713bfc242d187c9c352f706a2f4ed7d8fbf`: 70 Markdown files, 474 destinations, 180/180 local targets valid, 194 internal GitHub URLs status-verified, 89/89 anchor targets verified, zero failures and 41 rendered pages. Semantic relevance and browser viewport/scroll behavior are not claimed by the mechanical audit.
+- **DF-09:** BLOCKED until the corrected blind fresh-reader workflow is merged and dispatched against exact target `caf87986dfea7aca75728818651c8687e9f5faf0`, returning CLEAR. PR #200 is prepared but not merged or dispatched.
+- **DF-10:** BUILDER-VERIFIED. Parent `a099ce6f6faa3756b26c8b8728f05ad15745cc7a` → successor `caf87986dfea7aca75728818651c8687e9f5faf0`; exactly one commit ahead / zero behind, exactly one changed path (terminal inventory), all 71 PR paths retained in a complete 304-entry successor tree.
+- **DF-11:** WAIVED as a mandatory gate by the prior Project Director decision; no independent verdict is claimed.
+- **DF-12:** PENDING final Project Director acceptance.
+- **Stage A:** HELD. No source-baseline selection, donor adoption, runtime implementation, training, integration or deployment is authorized.
+
+### 11.3 First implementation increment remains bounded
+
+After the upstream architecture/specification and Stage A gates are satisfied, the planned first coding sequence remains Phase 0 source/contract readiness followed by the evidence-to-memory-to-reasoning-to-belief vertical slice: attributable experience → interpretation/context → relevant memory retrieval → traceable BM-12 reasoning → owner-evaluated BM-04 belief revision, with BM-11 continuity/recovery.
+
+**WP-02–WP-04 alone is not a complete useful JARVIS capability and is not proof of developmental learning.** It must connect to a bounded task and receiving behavior with observable acceptance evidence. Prediction/outcome attribution (WP-05) and experience-dependent learning (WP-06) follow as later increments; a learning claim requires persistent, measurable improvement on later relevant tasks, plus held-out transfer and regression evidence.
+
+No new architecture, replacement blueprint, source baseline, runtime package or implementation authorization is created by this refresh.
