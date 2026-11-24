@@ -1959,3 +1959,35 @@ This section completes the post-write evidence fields required by Section 87.7. 
 - **Scope:** documentation/governance only. No runtime implementation, source-baseline selection, donor adoption, merge, rebase, retarget, cherry-pick, branch rewrite or deployment.
 - **Current gate consequence:** DF-10 remains REOPENED because the repository inventory and changed-file manifest still describe the prior terminal snapshot. This section does not claim terminal inventory completion. DF-02 remains OPEN; DF-06 and DF-09 remain NOT MET/BLOCKED as previously recorded; DF-11 remains PENDING/BLOCKED, not waived; Stage A remains NOT STARTED / HELD.
 
+
+
+## 89. Builder closeout and delegated decisions — 2026-11-24
+
+### Governance revalidation and delegation
+
+The accepted governance source `docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md` was re-read at its accepted PR #179 revision (blob `f5827c552f36f4647339b3f8dfb38956d146c570`). The EBT-01 principles were revalidated from the user's prior operating-standard context: independent thinking, ownership, scope discipline, evidence-based communication, professional disagreement and autonomous correction. A separate EBT-01 file was not found in the MethaneX repository; the accepted governance document contains the corresponding Builder obligations.
+
+The Project Director explicitly delegated closeout technical and gate-disposition decisions to the Project Builder for this pass, including previously Director-reserved closeout dispositions, while reserving final acceptance, merge and save approval. This does not authorize the Builder to fabricate a distinct-model reader result or claim an independent review.
+
+### Exact current PR #192 evidence
+
+- Pre-closeout parent HEAD: `674bf4b273ff9a3f91c6582d50b08ce4bd8fce51`.
+- Current main tip: `4f07d772beae03c99a8dd58b174201a3aa3074b2`.
+- Fresh all-ref scan run `45466755887`, artifact `14953933984`, SHA-256 `5d49f5bb81f646f295bfb5ea05ff6eb0a775d6933388c18072de0c9768a05ed7`.
+- Fresh link audit run `45466755887`, artifact `14955492173`, SHA-256 `8d6dd01e90962072b8b2f0ff7cdbe3459a1fc796f23bbe47e828733cad13f419`.
+- Both jobs completed successfully on exact PR #192 HEAD `674bf4b...`.
+
+### Decisions
+
+1. **DF-02 CLOSED under bounded delegated non-adoption disposition.** All 159 donor paths have candidate-path dispositions. Current main contains the candidate blob for 95 divergent and one identical path; 63 donor paths are absent. The 76 divergent candidate paths have exact-path focused-report coverage (70 core, six engineering); the 35 absent and 48 no-symbol cohorts have their own reports. All-ref ownership maps 254 refs / 213 tips, 798 path/blob rows and 1,945 exact path references. The 544 alternate blob versions are not present at current main and remain preserved, non-adopted historical proposals. Reopen a specific alternate branch only if Stage A later nominates it.
+2. **DF-06 CLOSED for mechanical navigation integrity under bounded delegated disposition.** 70 Markdown files, 473 destinations, 180/180 local destinations valid, 193 internal repository URLs status-verified, 89/89 GitHub anchor targets verified (83 rendered HTML, six canonical API), zero failures. Accept canonical API verification for six issue-comment targets; browser viewport proof is not required. Semantic relevance is assigned to DF-09 rather than duplicated in a manual 193-URL link audit.
+3. **DF-11 remains waived** as a mandatory gate by the prior recorded Project Director decision. No independent verdict is claimed.
+4. **DF-09 remains BLOCKED** pending a workflow_dispatch run against the final frozen PR #192 SHA and a distinct-model CLEAR result. The connected GitHub actions interface does not expose dispatch. The prior 31/32 PARTIALLY CLEAR result is historical and does not qualify.
+5. **DF-10 remains pending** until the terminal inventory is the final branch-file write and its exact parent/successor compare proves one commit ahead, zero behind, one changed path only.
+6. **DF-12 remains pending** for the user's final acceptance and merge/save decision. Stage A remains HELD.
+
+### Brain architecture continuation
+
+The existing PR chain is preserved without duplication: PR #171 provides the SYS-01–SYS-11 whole-system anatomy proposal; PR #173 provides the Brain Foundation Architecture proposal; PR #174 provides the detailed BM-01–BM-12 mechanism specification; PR #175 provides the non-operative implementation plan. Their current heads and review limitations are recorded in the controlling index and outstanding-work register.
+
+The next capability-first coding target, after the remaining authority/reader gates and Stage A authorization, is the bounded vertical slice: attributable experience acquisition → interpretation/context → relevant memory retrieval → traceable BM-12 reasoning → owner-evaluated BM-04 belief revision → BM-11 continuity/recovery. Prediction identity/outcome attribution (BM-05) and experience-dependent learning (BM-09) follow as later increments. This is not runtime implementation authorization.

@@ -65,3 +65,30 @@ The artifact records 254 branch refs / 213 unique tips, 1,415 unique text blobs,
 The candidate source snapshot in the artifact is `19c1c168fdbdab58ed9732cd250d2ae4624936eb`. Exact comparison to current PR #192 HEAD `437c26939db515f8fbabdab238a8e6042848eec1` is eight commits ahead / zero behind and changes 12 documentation, workflow, index, inventory, checkpoint and audit-script paths; no C++ or engineering source path changed. The candidate source/build/test blob identities therefore remain applicable to the current PR #192 source baseline.
 
 **DF-02 remains OPEN.** Candidate-path semantic coverage and exact ownership mapping are now reconciled. Remaining work is limited to material alternate-branch implementation/consumer clusters and historical authority/retention dispositions. Do not re-review duplicate branch names when their exact blob SHA is identical; do not promote incidental lexical matches, documentation mentions, tests or workflows into runtime dependency claims.
+
+
+## 7. Delegated closeout disposition — 2026-11-24
+
+The Project Director explicitly delegated closeout technical and gate-disposition decisions to the Project Builder for this pass, while reserving final acceptance, merge and save approval. The following is the recorded delegated decision.
+
+### Exact current evidence
+
+- Current PR #192 candidate HEAD: `674bf4b273ff9a3f91c6582d50b08ce4bd8fce51`.
+- Current `main` tip: `4f07d772beae03c99a8dd58b174201a3aa3074b2`.
+- Current all-ref workflow run: `45466755887`; artifact `14953933984`; SHA-256 `5d49f5bb81f646f295bfb5ea05ff6eb0a775d6933388c18072de0c9768a05ed7`.
+- Scan scope: 254 branch refs, 213 unique tips, 159 PR #97 donor paths, 1,416 unique text blobs, 798 exact path/blob ownership rows, 1,945 exact path-reference rows, 40,041 symbol-match rows, 1,227 full consumer-blob records and 414 distinct consumer paths.
+- Donor-path same-path relation: 95 DIVERGENT, 63 CANDIDATE_ABSENT, one IDENTICAL.
+- Exact main-tip comparison: main contains the candidate blob for all 95 divergent paths and the one identical path; the 63 absent paths are absent at main. None of the 544 other distinct path/blob versions is present at the current main tip.
+- The 76 divergent candidate-branch paths have exact-path focused-report coverage (70 core, six engineering). The 35 absent-path cohort and 48 no-symbol cohort have their own per-path adjudication reports. Together these account for all 159 donor paths.
+
+### Delegated decision
+
+**DF-02 is CLOSED for the Documentation Foundation scope under a bounded non-adoption disposition.**
+
+The current `main` tree is the active comparison baseline for this historical reconciliation only; this does not select the future Stage A source baseline. All 159 donor paths have a candidate-path disposition. The exact all-ref artifact records every discovered alternate blob and its branch-tip owners. The 544 non-main alternate versions are preserved as historical, non-authoritative proposals and are not adopted. They are not active dependencies of the current main source tree.
+
+The 1,227 consumer-blob records and 40,041 symbol matches are discovery evidence, not 1,227 proven dependencies. Requiring manual semantic adjudication of every lexical hit and every non-main historical branch version would be disproportionate and would not improve the decision about the current main baseline. A specific alternate branch may be reopened only if a future Stage A source-baseline decision explicitly nominates it; duplicate branch names sharing an exact blob SHA are one content version, not separate engineering findings.
+
+This decision supersedes the earlier Option A interpretation only to the extent that it required exhaustive semantic adjudication of every non-main lexical consumer version. It does not authorize donor adoption, source-baseline selection for Stage A, runtime implementation or training.
+
+**DF-02 disposition:** CLOSED — candidate-path semantic coverage, exact all-ref ownership and current-main non-adoption decision recorded. Final package acceptance remains separate.

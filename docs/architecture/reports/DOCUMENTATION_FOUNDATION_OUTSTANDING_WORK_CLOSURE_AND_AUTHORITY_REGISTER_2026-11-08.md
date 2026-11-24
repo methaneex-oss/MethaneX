@@ -2196,3 +2196,39 @@ The supporting mechanism audit §10 pins candidate/donor brain_contract test blo
 ## 49. DF-02 76-path source-version dispersion — 2026-11-21
 
 [DF-02 76-Path Source-Version Dispersion](DF02_76_PATH_SOURCE_VERSION_DISPERSION_2026-11-21.md) records that the 76 divergent candidate paths span 2–40 distinct blobs across 213 branch tips: 17 paths have two versions and 59 have three or more. The scan provides exact version counts and branch-presence lists but not the branch-name-to-blob join. A scanner enhancement now emits path_blob_ownership.csv, but it has not been executed; the connector has no workflow-dispatch action and the previous run is pinned to the old scanner commit. Exact owner-cluster adjudication remains open.
+
+## 9. Delegated closeout decisions and current gate state — 2026-11-24
+
+The Project Director explicitly delegated closeout technical and gate-disposition decisions to the Project Builder for this pass, excluding final acceptance, merge and save approval. This section supersedes older active-state summaries above only for the exact revision and bounded decisions recorded here; historical records remain intact.
+
+### Delegated dispositions
+
+| Gate | Current disposition | Basis / remaining boundary |
+|---|---|---|
+| DF-01 — canonical entry point | CLOSED | Current index and entry-point links are covered by the exact-current 70-file link audit; 180/180 local targets resolve. |
+| DF-02 — detailed donor/source reconciliation | CLOSED — delegated bounded non-adoption decision | All 159 donor paths have candidate-path dispositions; exact all-ref ownership is recorded; current main matches candidate blobs for 96 present paths and has 63 donor paths absent. The 544 non-main alternate blob versions are preserved as non-adopted historical proposals, not active main dependencies. |
+| DF-03 — authority traceability | CLOSED within this package | Exact-scope approvals, proposals, recovered findings and unverified provenance are distinguished. No unverified PR #173/#174 whole-architecture acceptance is inferred. |
+| DF-04 — governance honesty | CLOSED within this package | Accepted governance and proposed governance remain distinct; no broader approval is inferred. |
+| DF-05 — branch dependencies | CLOSED by explicit non-integration disposition | PR #171/#173/#174/#175/#191/#192/#193 remain separate proposals/lineages. No rebase, retarget, cherry-pick, branch rewrite, integration or merge is authorized by this closeout. |
+| DF-06 — durable links | CLOSED — delegated mechanical-integrity disposition | Exact-current audit: 70 Markdown files, 473 destinations, 180/180 local targets valid, 193 internal GitHub URLs status-verified, 89/89 anchors target-verified (83 rendered HTML, six canonical API), zero failures. Browser viewport proof is not required; semantic relevance is assigned to DF-09. |
+| DF-07 — status consistency | PENDING final synchronization | Update the index, checkpoint, register, inventory and PR description to the final exact terminal SHA. |
+| DF-08 — historical preservation | RESOLVED within its bounded criterion | Historical artifacts and disclosed evidence limits remain preserved. |
+| DF-09 — blind fresh-reader assessment | BLOCKED | The current exact-head workflow requires a workflow_dispatch run and a distinct-model CLEAR result. The connected GitHub actions do not expose workflow dispatch. The prior 31/32 PARTIALLY CLEAR result is historical and cannot satisfy this gate. PR #200 is the corrected workflow proposal but remains open/unmerged. |
+| DF-10 — Builder self-review / terminal inventory | PENDING final write | The final inventory must be the last branch-file write, followed by exact one-commit/one-file verification. |
+| DF-11 — independent review | WAIVED as a mandatory gate by the prior recorded Project Director decision | No independent verdict is claimed. The user's later delegation does not convert Builder self-review into independent review. |
+| DF-12 — final authority decision | PENDING user's final acceptance | The user reserved the final go-ahead to merge or save the completed package. No acceptance is inferred. |
+
+### Exact current supporting state
+
+- PR #192 current head before this closeout record: `674bf4b273ff9a3f91c6582d50b08ce4bd8fce51`; open, non-draft, unmerged; 71 changed paths; 969 commits ahead / 14 behind its current base; GitHub reports non-mergeable / dirty.
+- PR #192 base branch: `docs/jarvis-phase-2-whole-brain-integration-map-20261105`; live base tip `ea64607ef94f142a6142a013e119a7225bc95c1c`; recorded base `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.
+- Current main tip: `4f07d772beae03c99a8dd58b174201a3aa3074b2`.
+- PR #171: `b05434758ad4fe72815503f89bd5d2990ccb658b`, open/draft/unmerged.
+- PR #173: `a96af5b18d3a1d580ff56cff61912408`, open/draft/unmerged; BFA-C01–C14 accepted only; whole-architecture acceptance and CF-26/CF-27 remain open; latest independent verdict is PARTIALLY CLEAR on an older exact SHA.
+- PR #174: `c34472354e4122fc1d78dc25bf45d81f1eb4dc69`, open/draft/unmerged; historical accepted 34-scenario baseline remains distinct from current 54-scenario proposal; latest independent verdict is PARTIALLY CLEAR on older SHA; F-02/F-03 are not fully cleared.
+- PR #175: `6dd3add8fe7b5d71a5038ca3cf7807330085840f`, open/draft/unmerged; non-operative planning only; no implementation authorization.
+- PR #199 scanner and PR #200 reader-workflow correction remain supporting open proposals; neither is merged or independently reviewed.
+
+### Execution boundary
+
+Stage A remains NOT STARTED / HELD. No runtime source, tests, build configuration, training, source-baseline selection, donor adoption, branch integration, merge, rebase, retarget, cherry-pick, branch rewrite or deployment is authorized by this closeout. DF-09 and the user's final acceptance remain explicit external gates; do not report the whole Documentation Foundation as accepted or fully cleared until those are resolved.

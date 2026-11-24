@@ -68,3 +68,12 @@ The 76 divergent candidate-branch paths are now exact-path cross-referenced to t
 The full artifact contains 413 distinct consumer paths, 1,226 exact consumer-blob contents, 798 path/blob ownership rows, 1,938 exact path-reference rows, 40,041 symbol-match rows, 254 refs and 213 unique tips. These are discovery/ownership evidence, not 1,226 proven dependencies. The candidate C++/engineering source tree is unchanged between the artifact's candidate snapshot `19c1c168fdbdab58ed9732cd250d2ae4624936eb` and PR #192 HEAD `437c26939db515f8fbabdab238a8e6042848eec1`.
 
 The prior statement in §5 that all 76 divergent paths still require candidate-path semantic disposition is superseded. **The remaining DF-02 work is material alternate-branch consumer/implementation cluster adjudication and historical authority/retention disposition.** DF-02 remains OPEN; no source baseline or donor adoption is selected.
+
+
+## 7. Current exact scan and delegated disposition — 2026-11-24
+
+The fresh run `45466755887` scanned PR #192 HEAD `674bf4b273ff9a3f91c6582d50b08ce4bd8fce51`. Artifact `14953933984` SHA-256: `5d49f5bb81f646f295bfb5ea05ff6eb0a775d6933388c18072de0c9768a05ed7`. It reports 254 branch refs, 213 unique tips, 159 donor paths, 95 divergent / 63 absent / one identical same-path relation, 1,416 unique text blobs, 798 path/blob ownership rows, 1,945 exact path-reference rows, 40,041 symbol-match rows, 1,227 consumer-blob contents and 414 distinct consumer paths.
+
+The current `main` tip `4f07d772beae03c99a8dd58b174201a3aa3074b2` is present in the exact ownership map. It contains the candidate blob for all 95 divergent paths and the one identical path; the 63 absent donor paths are absent at `main`. None of the 544 other distinct path/blob versions is present at the current main tip.
+
+The Builder's delegated disposition is recorded in §7 of `DF02_76_PATH_SOURCE_VERSION_DISPERSION_2026-11-21.md`: DF-02 is CLOSED for the Documentation Foundation scope under a bounded non-adoption decision. The 1,227 lexical consumer records remain discovery evidence, not proven dependencies; non-main variants are preserved and may be reopened only if explicitly nominated for future Stage A baseline consideration. No donor code is adopted and no Stage A source baseline is selected.

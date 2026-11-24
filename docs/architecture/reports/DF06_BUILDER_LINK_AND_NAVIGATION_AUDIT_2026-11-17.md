@@ -825,3 +825,30 @@ The exact-revision artifact reports:
 The artifact explicitly distinguishes `github_anchor_target_verification: passed` from `rendered_github_anchor_verification: not_performed`. The six API-verified issue comments are confirmed to exist at their canonical URLs; browser-level viewport landing for those six is not established. The workflow's semantic relevance review remains `not_automated`.
 
 **DF-06 remains NOT MET under the current Option A standard.** The corrected parser self-test and exact-current link audit pass; all local targets resolve; all 89 GitHub anchor targets have an evidence-backed target check. Remaining work is a bounded semantic relevance review of the 192 unique external GitHub destinations and a formal disposition of whether API-backed canonical comment verification is sufficient in place of browser viewport proof. Do not describe the workflow as a full DF-06 pass.
+
+
+## 37. Delegated closeout disposition — 2026-11-24
+
+The Project Director explicitly delegated closeout technical and gate-disposition decisions to the Project Builder for this pass, while reserving final acceptance, merge and save approval.
+
+### Exact current evidence
+
+- Exact PR #192 HEAD: `674bf4b273ff9a3f91c6582d50b08ce4bd8fce51`.
+- Workflow run: [#45466755887](https://github.com/methaneex-oss/MethaneX/actions/runs/45466755887) — completed / success.
+- Link-audit artifact: `14955492173`; SHA-256 `8d6dd01e90962072b8b2f0ff7cdbe3459a1fc796f23bbe47e828733cad13f419`.
+- 70 Markdown files; 473 destinations; 180 local destinations, all 180 valid; 193 unique external URLs, all within `github.com/methaneex-oss/MethaneX` (190 HTTP 200, three HTTP 206).
+- 89 GitHub anchor targets checked: 83 verified in rendered HTML and six through canonical issue-comment API; zero failed targets; 41 rendered pages.
+- No local-fragment destinations were emitted by the current parser.
+- The workflow records `rendered_github_anchor_verification: not_performed` and `semantic_relevance_review: not_automated`; these limitations are preserved, not concealed.
+
+### Delegated decision
+
+**DF-06 is CLOSED for mechanical navigation integrity under a bounded scope.**
+
+The six canonical issue-comment API checks are accepted as sufficient proof that the referenced comment targets exist at their canonical URLs; browser viewport/scroll behavior is not a required link-integrity property. The 193 external URLs are all immutable or canonical GitHub resources within this repository, and the audit verified their reachability/status and all 89 target anchors. The absence of local-fragment destinations means no local fragment target was left unchecked.
+
+Content-level semantic relevance of evidence claims is not a separate 193-URL manual audit. It belongs to the blind fresh-reader/content assessment under DF-09. This is an explicit delegated scope disposition, not a claim that the audit automated semantic relevance or that a blind reader has already passed.
+
+This supersedes the earlier Option A interpretation only to the extent that it required browser viewport proof and a duplicate manual semantic review of every internal GitHub URL as part of DF-06. The exact audit limitations remain visible.
+
+**DF-06 disposition:** CLOSED — mechanical link and anchor integrity verified; content-level review remains assigned to DF-09.
