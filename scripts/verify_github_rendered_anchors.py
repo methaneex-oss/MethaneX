@@ -285,7 +285,7 @@ def self_test() -> None:
     # Exercise the authenticated Contents API fallback without a network call.
     api_base = "https://github.com/methaneex-oss/MethaneX/blob/abc123/core/cpp/src/action_execution.cpp"
     api_url = "https://api.github.com/repos/methaneex-oss/MethaneX/contents/core/cpp/src/action_execution.cpp?ref=abc123"
-    fake_text = "\\n".join(f"line {number}" for number in range(1, 21))
+    fake_text = "\n".join(f"line {number}" for number in range(1, 21))
     fake_payload = {
         "content": base64.b64encode(fake_text.encode("utf-8")).decode("ascii"),
         "encoding": "base64",
