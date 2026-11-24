@@ -51,3 +51,17 @@ The new artifact includes path_blob_ownership.csv, directly joining each donor p
 The earlier 76-path dispersion counts (17 paths with two versions, 59 with three or more, maximum 40 versions for core/cpp/tests/CMakeLists.txt) remain valid as counts. The old statement that exact ownership could not be established is no longer current. The new exact ownership map is an input to semantic reconciliation, not a source-baseline decision.
 
 **DF02 remains OPEN:** exact branch ownership is now available, but each material divergent path still requires semantic successor/duplicate-owner/retirement disposition, and source-baseline authority remains with the Project Director.
+
+## 6. Exact-path coverage and artifact integrity correction — 2026-11-24
+
+A Builder cross-reference pass matched the 76 divergent candidate-branch paths against the existing focused DF-02 source/build/test reports by exact repository path. **Coverage is 76/76: 70 core paths and six engineering paths.** The engineering subset is covered by `DF02_ENGINEERING_AGENT_DELIVERY_AND_TASK_LEDGER_GAP_2026-11-21.md`; the core subset is distributed across the action-feedback, affective/developmental, attention/self-model, causal/persistence, cognitive-cycle, runtime/memory/association, evolution-isolation, goal-outcome, prediction-identity, representation/canary and supporting cognitive-contract reports.
+
+Together with the existing per-path reports for the 35 absent-path cohort and the 48 no-symbol cohort, all 159 PR #97 donor paths now have candidate-path-level semantic coverage. This corrects the older blanket statement that all 76 divergent candidate paths still lacked focused semantic reports. It does **not** claim that every alternate-branch blob variant or every lexical consumer match has been semantically adjudicated.
+
+The exact all-ref artifact identity is corrected here. Workflow run `44931803411`, artifact `14717933378`, has SHA-256 `189f65acfc5561c71da652ac32b71d308aa47ea8737793381af3a17cae45676a`. The earlier digest `189f65b26b78e3811fb5b2c9fef6cfc97a8f6a24c8f62f80b0f6c1e7c9d70e7f` recorded in §5 was incorrect and is superseded.
+
+The artifact records 254 branch refs / 213 unique tips, 1,415 unique text blobs, 40,041 symbol-match rows, 1,938 exact path-reference rows, 798 exact path/blob ownership rows, and 1,226 matched consumer-blob contents. A separate parse of the complete artifact identifies 413 distinct consumer paths. These are lexical/path-reference discovery candidates, not 1,226 proven dependencies.
+
+The candidate source snapshot in the artifact is `19c1c168fdbdab58ed9732cd250d2ae4624936eb`. Exact comparison to current PR #192 HEAD `437c26939db515f8fbabdab238a8e6042848eec1` is eight commits ahead / zero behind and changes 12 documentation, workflow, index, inventory, checkpoint and audit-script paths; no C++ or engineering source path changed. The candidate source/build/test blob identities therefore remain applicable to the current PR #192 source baseline.
+
+**DF-02 remains OPEN.** Candidate-path semantic coverage and exact ownership mapping are now reconciled. Remaining work is limited to material alternate-branch implementation/consumer clusters and historical authority/retention dispositions. Do not re-review duplicate branch names when their exact blob SHA is identical; do not promote incidental lexical matches, documentation mentions, tests or workflows into runtime dependency claims.
