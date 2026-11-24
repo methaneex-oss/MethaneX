@@ -2232,3 +2232,18 @@ The Project Director explicitly delegated closeout technical and gate-dispositio
 ### Execution boundary
 
 Stage A remains NOT STARTED / HELD. No runtime source, tests, build configuration, training, source-baseline selection, donor adoption, branch integration, merge, rebase, retarget, cherry-pick, branch rewrite or deployment is authorized by this closeout. DF-09 and the user's final acceptance remain explicit external gates; do not report the whole Documentation Foundation as accepted or fully cleared until those are resolved.
+
+
+## 10. Post-decision live-state refresh — 2026-11-24
+
+This section supersedes §9's pre-synchronization HEAD and audit metrics. The current PR #192 HEAD before this refresh commit is `d09166d96817de53e87f14c0357533007c30fa40`.
+
+- PR #192: open/non-draft/unmerged; 71 changed paths; 970 commits ahead / 14 behind the live base tip `ea64607ef94f142a6142a013e119a7225bc95c1c`; GitHub reports non-mergeable / dirty. Recorded base remains `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c`.
+- Current main tip: `4f07d772beae03c99a8dd58b174201a3aa3074b2`.
+- PR #175 current head after the 2026-11-24 continuity refresh: `6ee97f83b5768bc107b070e2fd9ac40e4675ff0e`.
+- PR #199 scanner proposal: `ef5fe173c8fdd50d620016f9f9130cc5046f9e6a`, open/unmerged.
+- PR #200 reader-workflow correction: `0884b6ac0551996f30429008031476e5d38d32b7`, open/unmerged.
+
+The latest exact-head documentation-link audit is run `45468106824`, artifact `14956295213`, SHA-256 `37397b425efebdfc963dc99a2556fc5b1bf0fef153fec48485aee3f47d8d824d`: 70 Markdown files, 474 destinations, 180/180 local targets valid, 194 internal GitHub URLs status-verified, 89/89 GitHub anchor targets verified (83 rendered HTML, six canonical API), zero failed targets. DF-02's fresh all-ref scan remains run `45466755887` at parent `674bf4b...`; no C++/engineering source changed in the subsequent documentation-only commits. A fresh all-ref scan will be run on the terminal inventory successor.
+
+Gate dispositions remain: DF-01–DF-08 closed/resolved within the delegated bounded standards recorded in §9; DF-09 BLOCKED pending exact-final-HEAD distinct-model CLEAR; DF-10 pending terminal inventory; DF-11 waived by prior Project Director decision; DF-12 pending user's final acceptance. Stage A remains HELD.

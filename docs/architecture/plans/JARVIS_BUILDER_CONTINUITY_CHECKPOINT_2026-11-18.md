@@ -1991,3 +1991,21 @@ The Project Director explicitly delegated closeout technical and gate-dispositio
 The existing PR chain is preserved without duplication: PR #171 provides the SYS-01–SYS-11 whole-system anatomy proposal; PR #173 provides the Brain Foundation Architecture proposal; PR #174 provides the detailed BM-01–BM-12 mechanism specification; PR #175 provides the non-operative implementation plan. Their current heads and review limitations are recorded in the controlling index and outstanding-work register.
 
 The next capability-first coding target, after the remaining authority/reader gates and Stage A authorization, is the bounded vertical slice: attributable experience acquisition → interpretation/context → relevant memory retrieval → traceable BM-12 reasoning → owner-evaluated BM-04 belief revision → BM-11 continuity/recovery. Prediction identity/outcome attribution (BM-05) and experience-dependent learning (BM-09) follow as later increments. This is not runtime implementation authorization.
+
+
+## 90. Exact-head synchronization after delegated closeout — 2026-11-24
+
+**Parent PR #192 HEAD for this synchronization:** `d09166d96817de53e87f14c0357533007c30fa40`.
+
+The post-decision link audit on this exact parent completed successfully: run `45468106824`, artifact `14956295213`, SHA-256 `37397b425efebdfc963dc99a2556fc5b1bf0fef153fec48485aee3f47d8d824d`. It scanned 70 Markdown files and 474 destinations; 180/180 local targets are valid; 194 unique internal GitHub URLs returned 191 HTTP 200 and three HTTP 206; 89/89 anchors are target-verified (83 rendered HTML, six canonical API); zero failures; 41 rendered pages. The workflow does not automate semantic relevance and does not prove browser viewport behavior for the six API-fallback comments.
+
+PR #175's planning continuity refresh is now at exact live HEAD `6ee97f83b5768bc107b070e2fd9ac40e4675ff0e`; the updated readiness map and handoff explicitly preserve the non-operative planning boundary and the first experience-to-belief-revision slice.
+
+The terminal inventory is the next and final PR #192 branch-file write. After it:
+1. Re-fetch live PR #192 metadata and changed-file list.
+2. Verify the inventory-only successor is exactly one commit ahead / zero behind and changes only the inventory file.
+3. Run the final all-ref ownership scan and link audit on that exact successor.
+4. Post a PR comment with exact parent/successor SHAs, inventory blob, scan artifact and audit artifact.
+5. Update the PR description without further branch-file writes.
+
+DF-09 remains blocked until PR #200 is merged and the corrected blind-reader workflow is dispatched against the frozen final SHA with a distinct-model CLEAR result. DF-11 remains waived as a mandatory gate; no independent verdict is claimed. DF-12 remains the user's final acceptance decision. Stage A remains HELD; no runtime source or training is authorized.

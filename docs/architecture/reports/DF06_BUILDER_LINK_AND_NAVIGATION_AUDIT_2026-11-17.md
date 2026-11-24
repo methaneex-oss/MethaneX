@@ -852,3 +852,15 @@ Content-level semantic relevance of evidence claims is not a separate 193-URL ma
 This supersedes the earlier Option A interpretation only to the extent that it required browser viewport proof and a duplicate manual semantic review of every internal GitHub URL as part of DF-06. The exact audit limitations remain visible.
 
 **DF-06 disposition:** CLOSED — mechanical link and anchor integrity verified; content-level review remains assigned to DF-09.
+
+
+## 38. Post-decision exact-head audit refresh — 2026-11-24
+
+**Exact PR #192 revision:** `d09166d96817de53e87f14c0357533007c30fa40`  
+**Workflow run:** `45468106824` — completed / success  
+**Audit artifact:** `14956295213`  
+**Artifact SHA-256:** `37397b425efebdfc963dc99a2556fc5b1bf0fef153fec48485aee3f47d8d824d`
+
+The post-decision exact-head audit reports 70 Markdown files, 474 destinations, 180 local destinations (all 180 valid), and 194 unique external URLs (191 HTTP 200 and three HTTP 206). All 194 URLs are within `github.com/methaneex-oss/MethaneX`. It verifies 89/89 GitHub anchor targets: 83 from rendered HTML and six from canonical issue-comment API; zero failed targets; 41 rendered pages. No local-fragment destinations were emitted.
+
+The artifact retains the limitations already recorded in §37: semantic relevance is not automated, and browser viewport/scroll behavior is not proven for the six API-fallback comments. Those limitations are handled by the delegated DF-06 scope decision and DF-09's separate blind-reader requirement. No link-target failures were found at this exact revision.

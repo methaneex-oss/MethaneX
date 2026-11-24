@@ -1,3 +1,56 @@
+# CURRENT EXACT STATE — 2026-11-24 (post-decision synchronization)
+
+> This controlling snapshot supersedes the earlier 2026-11-24 pre-decision snapshot and the older 2026-11-20 snapshot below. The exact HEAD shown is the parent before this synchronization write; re-fetch live metadata after the commit.
+
+## PR #192 live state at synchronization parent
+
+| Field | Verified value |
+|---|---|
+| Repository | `methaneex-oss/MethaneX` |
+| PR | #192 — Documentation Foundation |
+| Branch | `docs/whole-brain-planning-scope-correction-20261107` |
+| Parent HEAD | `d09166d96817de53e87f14c0357533007c30fa40` |
+| Base branch | `docs/jarvis-phase-2-whole-brain-integration-map-20261105` |
+| Live base tip | `ea64607ef94f142a6142a013e119a7225bc95c1c` |
+| Recorded base | `61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c` |
+| State | Open, non-draft, unmerged; 71 changed paths; 970 ahead / 14 behind; non-mergeable / dirty |
+| Current main tip | `4f07d772beae03c99a8dd58b174201a3aa3074b2` |
+
+## Current Documentation Foundation dispositions
+
+| Gate | Disposition |
+|---|---|
+| DF-01 | CLOSED — canonical entry point and local navigation verified |
+| DF-02 | CLOSED — delegated bounded non-adoption disposition; all 159 donor paths mapped; non-main variants preserved as historical/non-adopted |
+| DF-03 | CLOSED within package — accepted, proposed, recovered and unverified authority scopes distinguished |
+| DF-04 | CLOSED within package — governance proposals remain distinct from accepted controls |
+| DF-05 | CLOSED by explicit non-integration disposition — no branch history operation or PR integration authorized |
+| DF-06 | CLOSED — delegated mechanical navigation-integrity disposition; latest exact audit: 70 Markdown, 474 destinations, 180 local valid, 194 internal GitHub URLs status-verified, 89 anchors target-verified, zero failures |
+| DF-07 | PENDING terminal inventory and final PR-description synchronization |
+| DF-08 | RESOLVED within bounded historical-preservation criterion |
+| DF-09 | BLOCKED — PR #200 must be merged and blind-reader workflow dispatched against final exact SHA; distinct-model CLEAR required |
+| DF-10 | PENDING — terminal inventory must be final branch-file write and exact one-commit/one-file proof |
+| DF-11 | WAIVED as mandatory by prior Project Director decision; no independent verdict claimed |
+| DF-12 | PENDING user's final acceptance and merge/save decision |
+
+DF-02 and DF-06 closures are explicit delegated scope decisions, not claims that every lexical consumer or semantic assertion was manually reviewed. DF-09 remains a real external gate. Stage A remains HELD.
+
+## Related architecture and supporting PRs
+
+| PR | Exact head at this snapshot | State / boundary |
+|---|---|---|
+| #171 — whole-system anatomy | `b05434758ad4fe72815503f89bd5d2990ccb658b` | Open/draft/unmerged; existing SYS-01–SYS-11 foundation proposal |
+| #173 — Brain Foundation Architecture | `a96af5b18d3a1d580ff56cff61912408` | Open/draft/unmerged; BFA-C01–C14 accepted only; CF-26/CF-27 and whole-architecture acceptance remain open; latest review PARTIALLY CLEAR on older SHA |
+| #174 — Brain Mechanism Specification | `c34472354e4122fc1d78dc25bf45d81f1eb4dc69` | Open/draft/unmerged; accepted 34-scenario historical baseline distinct from 54-scenario proposal; latest review PARTIALLY CLEAR on older SHA |
+| #175 — Brain Implementation Planning | `6ee97f83b5768bc107b070e2fd9ac40e4675ff0e` | Open/draft/unmerged; non-operative planning only; exact-state handoff refreshed |
+| #199 — all-ref scanner | `ef5fe173c8fdd50d620016f9f9130cc5046f9e6a` | Open/unmerged; supporting scanner proposal used by PR #192 |
+| #200 — blind-reader workflow correction | `0884b6ac0551996f30429008031476e5d38d32b7` | Open/unmerged; corrected workflow proposal needed for DF-09 |
+
+## Execution boundary
+
+The next capability target after DF-09 and final user acceptance remains the integrated experience → interpretation/context → relevant memory → traceable reasoning → evaluated belief revision → continuity/recovery slice, with prediction and experience-dependent learning as later increments. This reconciles with PR #171 and PR #173–#175; it does not replace them or authorize runtime code.
+---
+
 # CURRENT EXACT STATE — 2026-11-24 (delegated closeout snapshot)
 
 > This controlling snapshot supersedes the older 2026-11-20 status block below for current PR metadata and the delegated DF-02/DF-06 dispositions. Historical records remain intact. Re-fetch live metadata after any later branch write.
