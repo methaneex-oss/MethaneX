@@ -92,3 +92,20 @@ The 1,227 consumer-blob records and 40,041 symbol matches are discovery evidence
 This decision supersedes the earlier Option A interpretation only to the extent that it required exhaustive semantic adjudication of every non-main lexical consumer version. It does not authorize donor adoption, source-baseline selection for Stage A, runtime implementation or training.
 
 **DF-02 disposition:** CLOSED — candidate-path semantic coverage, exact all-ref ownership and current-main non-adoption decision recorded. Final package acceptance remains separate.
+
+
+## 7. Exact-final-HEAD all-ref discovery and bounded closeout evidence — 2026-11-24
+
+This addendum records the final evidence used by the PR #192 terminal status at frozen HEAD caf87986dfea7aca75728818651c8687e9f5faf0. It supersedes older workflow-run references for the final all-ref discovery result; earlier run records remain historical evidence for their own revisions.
+
+**Workflow:** [run #45470173876](https://github.com/methaneex-oss/MethaneX/actions/runs/45470173876)  
+**Artifact:** 14956148301  
+**SHA-256:** 9902957475c76f4840d1d280c7d4f50537941e9445810afb805132374a328f38
+
+- 254 remote branch refs and 213 unique branch tips were examined.
+- All 159 PR #97 donor paths were checked: 95 divergent same-path blobs, 63 candidate-absent paths and one identical path.
+- 1,416 unique text blobs and 724 donor identifiers were scanned.
+- Discovery produced 1,946 exact-path-reference candidates and 40,048 symbol-consumer candidates across 1,227 exact consumer blobs / 17,882,050 bytes.
+- The exact candidate C++ baseline build/test passed; the donor engineering task-ledger project build/test passed.
+
+These are reproducible discovery and build/test observations, not proof that every lexical match is a semantic dependency. The delegated bounded disposition is **non-adoption**: no donor code is adopted, no Stage A source baseline is selected, and non-main alternate versions remain historical/non-authoritative. DF-02 is closed only within that recorded Documentation Foundation scope. The report does not claim exhaustive manual semantic adjudication of every lexical consumer match.
