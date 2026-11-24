@@ -54,51 +54,143 @@ jobs:
           test "$(git rev-parse HEAD)" = "$TARGET_DOCS_SHA"
           mkdir -p documentation-foundation-reader-evidence
           git fetch --no-tags --depth=1 origin b05434758ad4fe72815503f89bd5d2990ccb658b
-          git fetch --no-tags --depth=1 origin d7d676b79dbf3269f7fd3ebdb4363a6df19f255d
-          git fetch --no-tags --depth=1 origin 1f137cbaed985821bbc32408151911b18418f713
-          git fetch --no-tags --depth=1 origin ea64607ef94f142a6142a013e119a7225bc95c1c
-          git fetch --no-tags --depth=1 origin 0811a59e46bf934e32e794f90e4e7d18d4e2bd97
-          git fetch --no-tags --depth=1 origin 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c
-          git fetch --no-tags --depth=1 origin 7cb6271531f3e80a45728756273218132499722e
           git fetch --no-tags --depth=1 origin a96af5b18d3a1d580ff56cff6191240893bceeb5
           git fetch --no-tags --depth=1 origin c34472354e4122fc1d78dc25bf45d81f1eb4dc69
           git fetch --no-tags --depth=1 origin 6ee97f83b5768bc107b070e2fd9ac40e4675ff0e
+          git fetch --no-tags --depth=1 origin ea64607ef94f142a6142a013e119a7225bc95c1c
+          git fetch --no-tags --depth=1 origin 0811a59e46bf934e32e794f90e4e7d18d4e2bd97
+          git fetch --no-tags --depth=1 origin 61311fe5b44c81c4409c8ba8dc581a83bdd5dd2c
           python3 - <<'PY'
           from pathlib import Path
           import hashlib, json, os, re, subprocess
 
           root = Path(".")
           docs = [
-              ("README.md", os.environ["TARGET_DOCS_SHA"], "README.md"),
-              ("docs/README.md", os.environ["TARGET_DOCS_SHA"], "docs/README.md"),
-              ("docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md", os.environ["TARGET_DOCS_SHA"], "docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md"),
-              ("docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md", os.environ["TARGET_DOCS_SHA"], "docs/architecture/reports/WHOLE_BRAIN_PLANNING_SCOPE_AND_BUILDER_CORRECTION_2026-11-07.md"),
-              ("docs/architecture/reports/PROJECT_DIRECTOR_DECISION_EVIDENCE_EXTRACTS_2026-11-10.md", os.environ["TARGET_DOCS_SHA"], "docs/architecture/reports/PROJECT_DIRECTOR_DECISION_EVIDENCE_EXTRACTS_2026-11-10.md"),
-              ("docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md [DF-01 through DF-13 criterion source]", os.environ["TARGET_DOCS_SHA"], "docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md"),
-              ("docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md [accepted governance source; Phase 2 branch]", "ea64607ef94f142a6142a013e119a7225bc95c1c", "docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md"),
-              ("docs/architecture/00_JARVIS_SYSTEM_ARCHITECTURE_FOUNDATION.md", "b05434758ad4fe72815503f89bd5d2990ccb658b", "docs/architecture/00_JARVIS_SYSTEM_ARCHITECTURE_FOUNDATION.md"),
-              ("docs/architecture/01_JARVIS_WHOLE_SYSTEM_ANATOMY_AND_RESPONSIBILITY_MAP.md", "b05434758ad4fe72815503f89bd5d2990ccb658b", "docs/architecture/01_JARVIS_WHOLE_SYSTEM_ANATOMY_AND_RESPONSIBILITY_MAP.md"),
-              ("docs/architecture/research/02_BRAIN_FOUNDATIONAL_CAPABILITY_INVESTIGATION_2026-11-03.md", "d7d676b79dbf3269f7fd3ebdb4363a6df19f255d", "docs/architecture/research/02_BRAIN_FOUNDATIONAL_CAPABILITY_INVESTIGATION_2026-11-03.md"),
-              ("docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md [current proposed architecture; not accepted]", "a96af5b18d3a1d580ff56cff6191240893bceeb5", "docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md"),
-              ("docs/architecture/03_BRAIN_FOUNDATION_ARCHITECTURE_COMPLETION_AND_DECISION_MATRIX_2026-11-11.md [current completion matrix; BFA-C01–BFA-C14 accepted by the Project Director]", "a96af5b18d3a1d580ff56cff6191240893bceeb5", "docs/architecture/03_BRAIN_FOUNDATION_ARCHITECTURE_COMPLETION_AND_DECISION_MATRIX_2026-11-11.md"),
-              ("docs/architecture/reports/INHERITED_MECHANISM_SOURCE_COMPATIBILITY_AUDIT_2026-11-11.md [bounded source compatibility audit]", "a96af5b18d3a1d580ff56cff6191240893bceeb5", "docs/architecture/reports/INHERITED_MECHANISM_SOURCE_COMPATIBILITY_AUDIT_2026-11-11.md"),
-              ("docs/architecture/specifications/CF26_INHERITED_MECHANISM_REMEDIATION_AND_EVALUATION_SPECIFICATIONS_2026-11-16.md [current CF-26 planning package; not runtime evidence]", "a96af5b18d3a1d580ff56cff6191240893bceeb5", "docs/architecture/specifications/CF26_INHERITED_MECHANISM_REMEDIATION_AND_EVALUATION_SPECIFICATIONS_2026-11-16.md"),
-              ("docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md [accepted baseline]", "0811a59e46bf934e32e794f90e4e7d18d4e2bd97", "docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md"),
-              ("docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md [current corrected proposal]", "c34472354e4122fc1d78dc25bf45d81f1eb4dc69", "docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md"),
-              ("docs/architecture/specifications/reviews/01_BRAIN_MECHANISM_SPECIFICATION_F02_F03_CORRECTIONS_2026-11-11.md [current F-02/F-03 correction rationale; not a reviewer verdict]", "c34472354e4122fc1d78dc25bf45d81f1eb4dc69", "docs/architecture/specifications/reviews/01_BRAIN_MECHANISM_SPECIFICATION_F02_F03_CORRECTIONS_2026-11-11.md"),
-              ("docs/architecture/plans/00_BRAIN_IMPLEMENTATION_PLAN.md [current non-operative implementation plan; WP-02–WP-04 is not by itself a complete useful capability or proof of learning]", "6ee97f83b5768bc107b070e2fd9ac40e4675ff0e", "docs/architecture/plans/00_BRAIN_IMPLEMENTATION_PLAN.md"),
-              ("docs/architecture/reports/DF02_76_PATH_SOURCE_VERSION_DISPERSION_2026-11-21.md [current delegated DF-02 closeout evidence; no donor adoption]", os.environ["TARGET_DOCS_SHA"], "docs/architecture/reports/DF02_76_PATH_SOURCE_VERSION_DISPERSION_2026-11-21.md"),
-              ("docs/architecture/reports/DF06_BUILDER_LINK_AND_NAVIGATION_AUDIT_2026-11-17.md [current delegated DF-06 mechanical navigation closeout; semantic relevance is not automated]", os.environ["TARGET_DOCS_SHA"], "docs/architecture/reports/DF06_BUILDER_LINK_AND_NAVIGATION_AUDIT_2026-11-17.md"),
-              ("docs/architecture/reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md [current gate register and explicit remaining blockers]", os.environ["TARGET_DOCS_SHA"], "docs/architecture/reports/DOCUMENTATION_FOUNDATION_OUTSTANDING_WORK_CLOSURE_AND_AUTHORITY_REGISTER_2026-11-08.md"),
+              ("Project README [full]", os.environ["TARGET_DOCS_SHA"], "README.md", None),
+              ("Planning index [bounded current-state and navigation sections]", os.environ["TARGET_DOCS_SHA"], "docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md", [
+                  "CURRENT EXACT STATE — 2026-11-24 (post-verifier correction)",
+                  "Reader glossary — identifiers used in this documentation set",
+                  "1. Current objective and immediate next work",
+                  "2. Read in this order",
+                  "3. Document classes",
+                  "4. Existing work and how it fits",
+                  "6. Authority and status vocabulary",
+                  "8. Immediate handoff — documentation foundation only",
+                  "9. Role-based reading and contribution routes",
+              ]),
+              ("DF-01–DF-13 criteria source [bounded sections 1–9]", os.environ["TARGET_DOCS_SHA"], "docs/architecture/reports/INITIAL_DOCUMENTATION_FOUNDATION_AUDIT_AND_COMPLETION_GATE_2026-11-07.md", [
+                  "1. Executive disposition",
+                  "2. Audit method and exact repository snapshot",
+                  "3. Document authority and provenance register",
+                  "4. Structural findings",
+                  "5. Documentation-foundation work sequence",
+                  "6. Initial Documentation Foundation — exit criteria",
+                  "7. Explicitly deferred work",
+                  "8. Non-actions and safety boundary",
+                  "9. Required next action",
+              ]),
+              ("Accepted governance source [bounded authority and operating-rule sections; Phase 2 branch]", "ea64607ef94f142a6142a013e119a7225bc95c1c", "docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md", [
+                  "1. Purpose and scope",
+                  "2. Permanent project principles",
+                  "4. Authority and decision hierarchy",
+                  "5. Architecture and integration rules",
+                  "6. Learning, hardcoding and generalization rules",
+                  "8. Implementation controls",
+                  "9. Testing and evidence standards",
+                  "11. Builder operating rules",
+                  "12. Phase lifecycle and mandatory gates",
+                  "17. Project roles and accountability",
+              ]),
+              ("PR #171 whole-system responsibility map [bounded system map and boundary sections]", "b05434758ad4fe72815503f89bd5d2990ccb658b", "docs/architecture/01_JARVIS_WHOLE_SYSTEM_ANATOMY_AND_RESPONSIBILITY_MAP.md", [
+                  "1. Purpose",
+                  "2. Governing interpretation",
+                  "3. Proposed top-level system map",
+                  "4. SYS-01 — Brain / Cognitive System",
+                  "15. Cross-system interaction model",
+                  "16. Ownership and boundary rules",
+                  "17. Architecture risks and failure patterns to prevent",
+                  "18. Proposed decomposition and approval gates",
+              ]),
+              ("PR #173 Brain Foundation Architecture [bounded core architecture sections; current proposal, not accepted]", "a96af5b18d3a1d580ff56cff6191240893bceeb5", "docs/architecture/02_BRAIN_FOUNDATION_ARCHITECTURE.md", [
+                  "1. Purpose and authority",
+                  "2. Architectural objective",
+                  "3. Foundational architecture principles",
+                  "4. Foundational cognitive responsibility architecture",
+                  "5. Cognitive state and information lifecycle",
+                  "6. Integration and coordination model",
+                  "7. Whole-system boundaries and external interactions",
+                  "8. Learning and developmental integrity",
+                  "9. Initial foundation versus later development",
+                  "10. Architecture risks and required safeguards",
+                  "11. Capability-level architecture acceptance criteria",
+              ]),
+              ("PR #173 completion and decision matrix [bounded current disposition sections]", "a96af5b18d3a1d580ff56cff6191240893bceeb5", "docs/architecture/03_BRAIN_FOUNDATION_ARCHITECTURE_COMPLETION_AND_DECISION_MATRIX_2026-11-11.md", [
+                  "1. Controlling disposition",
+                  "2. Completion standard",
+                  "3. Existing proposal coverage and closure matrix",
+                  "22. Project Director disposition register — BFA-C01–BFA-C14 accepted",
+                  "23. Current completion status — Builder correction pass",
+                  "27. CF-27 exact-revision decision and authority ledger",
+              ]),
+              ("PR #174 accepted 34-scenario baseline [bounded authority, mechanism map and acceptance scenarios]", "0811a59e46bf934e32e794f90e4e7d18d4e2bd97", "docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md", [
+                  "1. Purpose and specification authority",
+                  "2. Governing design invariants",
+                  "3. Integrated mechanism map",
+                  "9. Foundational acceptance scenarios",
+              ]),
+              ("PR #174 current 54-scenario mechanism specification [current proposal, not accepted]", "c34472354e4122fc1d78dc25bf45d81f1eb4dc69", "docs/architecture/specifications/00_BRAIN_MECHANISM_SPECIFICATION.md", None),
+              ("PR #175 Brain implementation plan [full non-operative plan]", "6ee97f83b5768bc107b070e2fd9ac40e4675ff0e", "docs/architecture/plans/00_BRAIN_IMPLEMENTATION_PLAN.md", None),
+              ("PR #192 DF-02 donor/source-version disposition [full focused report; no donor adoption]", os.environ["TARGET_DOCS_SHA"], "docs/architecture/reports/DF02_76_PATH_SOURCE_VERSION_DISPERSION_2026-11-21.md", None),
+              ("PR #192 DF-06 mechanical navigation closeout [latest sections 37–39 only]", os.environ["TARGET_DOCS_SHA"], "docs/architecture/reports/DF06_BUILDER_LINK_AND_NAVIGATION_AUDIT_2026-11-17.md", [
+                  "37. Delegated closeout disposition — 2026-11-24",
+                  "38. Post-decision exact-head audit refresh — 2026-11-24",
+                  "39. Exact-current audit and verifier self-test — 2026-11-24",
+              ]),
           ]
+          def extract_selected_sections(text, selected_titles):
+              lines = text.splitlines()
+              headings = []
+              for index, line in enumerate(lines):
+                  match = re.match(r"^(#{1,6})\\s+(.+?)\\s*$", line)
+                  if match:
+                      headings.append((index, len(match.group(1)), match.group(2)))
+              blocks = []
+              found = set()
+              for start_index, level, title in headings:
+                  if title not in selected_titles:
+                      continue
+                  end_index = len(lines)
+                  for next_index, next_level, _ in headings:
+                      if next_index > start_index and next_level <= level:
+                          end_index = next_index
+                          break
+                  blocks.append("\\n".join(lines[start_index:end_index]))
+                  found.add(title)
+              missing_titles = [title for title in selected_titles if title not in found]
+              if missing_titles:
+                  raise SystemExit("Selected source sections missing: " + "; ".join(missing_titles))
+              return "\\n\\n".join(blocks)
+
           chunks, manifest = [], []
-          for label, commit, path in docs:
-              content = subprocess.check_output(["git", "show", f"{commit}:{path}"], text=True)
-              chunks.append(f"\n\n===== DOCUMENT: {label}\nSOURCE COMMIT: {commit}\n=====\n\n{content}")
+          total_source_chars = 0
+          for label, commit, path, selected_sections in docs:
+              source_content = subprocess.check_output(["git", "show", f"{commit}:{path}"], text=True)
+              source_blob_sha = subprocess.check_output(["git", "rev-parse", f"{commit}:{path}"], text=True).strip()
+              total_source_chars += len(source_content)
+              content = extract_selected_sections(source_content, selected_sections) if selected_sections else source_content
+              if not content.strip():
+                  raise SystemExit(f"Document excerpt is empty: {path}")
+              chunks.append(f"\\n\\n===== DOCUMENT: {label}\\nSOURCE COMMIT: {commit}\\nSOURCE BLOB: {source_blob_sha}\\n==== =\\n\\n{content}")
               manifest.append({
-                  "path": label, "source_commit": commit,
+                  "path": label,
+                  "repository_path": path,
+                  "source_commit": commit,
+                  "source_blob_sha": source_blob_sha,
+                  "source_characters": len(source_content),
+                  "characters": len(content),
+                  "excerpted": bool(selected_sections),
+                  "selected_sections": selected_sections or [],
                   "sha256": hashlib.sha256(content.encode()).hexdigest(),
-                  "characters": len(content)
               })
           target_revision = os.environ["TARGET_DOCS_SHA"]
           inventory_path = "docs/architecture/inventory/00_JARVIS_DOCUMENTATION_AND_ARTIFACT_INVENTORY_2026-11-04.md"
@@ -203,10 +295,16 @@ jobs:
               f"- Verified parent-to-target relationship: one commit; inventory file only; {non_inventory_count} other manifest blobs unchanged\n"
               "- This SHA identifies the exact repository checkout used to assemble the supplied packet. "
               "It is a revision identifier, not evidence that the contents have been independently reviewed or accepted.\n"
-              "- Source commits for individual included documents are listed separately in the packet manifest.\n\n"
+              "- Source commits and blob SHAs are listed per document. Some long documents are bounded excerpts; omitted sections are not reviewed.\n"
+              f"- Estimated packet size: {estimated_input_tokens:,} tokens (safety cap 100,000).\n\n"
               "---\n\n"
           )
           packet = packet_header + packet
+          estimated_input_tokens = (len(packet) + 3) // 4
+          if estimated_input_tokens > 100000:
+              raise SystemExit(
+                  f"Blind-reader packet exceeds the 100,000-token safety budget: {estimated_input_tokens}"
+              )
           if target_revision not in packet.split("===== DOCUMENT:", 1)[0]:
               raise SystemExit("The exact target revision is missing from the reader-visible packet header.")
           out = Path("documentation-foundation-reader-evidence")
@@ -214,7 +312,9 @@ jobs:
           (out / "packet_manifest.json").write_text(json.dumps({
               "target_documentation_revision": os.environ["TARGET_DOCS_SHA"],
               "documents": manifest,
-              "note": "Packet includes the DF criteria audit, accepted governance source, current PR #171 whole-system map, current PR #173 Brain Foundation Architecture proposal and decision matrix, CF-26 planning package, accepted historical PR #174 34-scenario baseline and current 54-scenario proposal/correction rationale, current PR #175 non-operative implementation plan, and PR #192 DF-02/DF-06 delegated closeout reports and current gate register. It includes only the terminal DF-10 inventory section and a dynamically verified parent/successor summary, not the full artifact inventory. It excludes raw PR review threads, historical reviewer reports and review-adjudication records. The packet metadata header and terminal-inventory verification establish exact target identity; the first CURRENT EXACT STATE block in the planning index is a pre-terminal parent checkpoint, not the live HEAD. Older snapshots and audit status tables are historical evidence only."
+              "packet_characters": len(packet),
+              "estimated_input_tokens": estimated_input_tokens,
+              "note": "This is a bounded blind-reader packet, not a full repository dump. Long source documents are represented by the exact sections listed in packet_manifest.json; omitted sections and omitted documents were not reviewed. The packet includes the current PR #192 state/navigation excerpt, DF criteria and governance excerpts, PR #171 whole-system responsibility map excerpt, current PR #173 architecture and decision-matrix excerpts, the historically accepted PR #174 34-scenario baseline excerpt, current PR #174 54-scenario proposal, current PR #175 non-operative implementation plan, focused DF-02 evidence, latest DF-06 closeout addenda, and the exact terminal DF-10 inventory section. The DF-06 excerpt contains mechanical navigation results and explicitly does not claim automated semantic relevance or browser viewport proof. The packet does not include the full historical preservation register, all PR review threads, the complete CF-26 package, raw reviewer reports or every historical audit snapshot. The reader must not claim to have reviewed omitted material."
           }, indent=2))
           PY
 
