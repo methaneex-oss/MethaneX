@@ -2147,3 +2147,10 @@ This slice is prioritized evidence, not a dependency edge or ownership decision.
 - Candidate-present 352 symbols: 3,441 rows, 3,325 code-context, 116 comment/string-only. Candidate exact context and high-frequency generic false-positive examples documented.
 
 Phase 2 remains OPEN; all-ref consumer context, API/dependency/duplicate-owner and branch authority remain incomplete. Phase 3 provenance/retention/retirement remains open.
+
+
+### 2026-11-25 — High-specificity absent-consumer role/path concentration
+
+The 73 prioritized candidate-absent identifiers occur in 105 consumer paths / 44 donor paths: 1,651 source/header rows, 756 test rows, three workflow text rows; 2,375 code-context rows. Most concentrated historical consumers are `brain_restored_api.cpp`, `brain.cpp`, `brain.hpp`, `evolution_controller.cpp`, evolution integration/canary/runner suites and developmental/memory/cognitive paths. Donor identifiers are concentrated in evolution controller/API, developmental-learning and experiment headers/source. Report §27 provides counts and priorities.
+
+This is an exact-context priority queue, not dependency/owner closure. Phase 2 and DF-02 remain OPEN.
