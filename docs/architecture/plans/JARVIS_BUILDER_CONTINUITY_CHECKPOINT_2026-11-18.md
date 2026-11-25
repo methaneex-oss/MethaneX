@@ -2096,3 +2096,14 @@ The 11 single-alternate tests include candidate-absent affective evidence, cogni
 ### 2026-11-25 — DF-02 cohort count correction
 
 Path overlap was reconciled. `evolution_brain_integration_suite.cpp` belongs to the seven high-dispersion cluster group and the test-history review, but is one path/22 alternate blobs. Cumulative Phase 1 targeted triage is **44 unique paths / 320 alternate blobs** (not the previous double-counted 343). The complete discovery cohort is 544 alternates; **44 paths / 224 blobs remain outside the targeted cohort**. Detailed report §15 lists next priority. This is a coverage/count correction, not semantic closure; DF-02 remains OPEN.
+
+
+### 2026-11-25 — Final targeted triage slice and cohort reconciliation
+
+The final targeted slice covered 22 path clusters / 62 alternate blobs: core CMake, evolution/cognitive API headers, six high-variation integration/persistence suites, engineering message bus/task-dispatch files, cognitive runtime, evolution safety, causal codec, adaptation, and remaining API headers/tests.
+
+Source-level findings: donor cognitive runtime adds bounded validated feedback, sequence-aware resolution, action adapter execute/verify/rollback/consequence observation and selected-plan execution; donor safety gate validates attestation/finite policy and recomputes outcome; typed/escaped causal codec avoids key-value delimiter collisions; adaptation uses relative error and first-observation calibration; engineering message bus adds backpressure and bounded dedup; task coordinator adds ledger-backed versioned claim/start/failure/result flow. Header/API differences include experiment attestation, journal compensation, per-experiment canary, sequence feedback, outcome utility, cognitive workspace representation/affect/action results and memory consolidation.
+
+Test cohort includes absent candidate suites for long-run, persistence, cognitive-runtime learning, action consequence and developmental learning; other donor suites add substantially more replay, persistence, learning and feedback scenarios. Test counts are not equivalence.
+
+Cumulative targeted coverage: **66 unique path clusters / 482 alternate blobs**. Discovery totals 88 paths / 544 alternates; **22 paths / 62 blobs remain untriaged**. Targeted triage does not mean individual semantic disposition. Detailed report §17. DF-02 remains OPEN.
