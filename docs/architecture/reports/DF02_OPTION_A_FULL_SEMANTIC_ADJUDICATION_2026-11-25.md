@@ -374,3 +374,45 @@ The engineering variants are distinct workforce-control-plane contracts. They re
 ### 16.5 Disposition
 
 This slice confirms substantial API, source-registration, persistence, runtime action-feedback, message-delivery and durable-task lifecycle variation. The 162 alternate blobs remain in the audit cohort and are not fully dispositioned. Phase 1 remains OPEN; Phase 2 reverse consumers and Phase 3 authority/retention reconciliation are still required.
+
+
+## 17. Cognitive-runtime feedback/action execution, safety, codecs and final low-dispersion suite cohort
+
+The final targeted source/test slice covers the remaining 22 path clusters / 62 alternate blobs in the discovery corpus. It is triage coverage; each exact alternate version still needs final disposition and cross-consumer/authority review.
+
+### 17.1 Cognitive runtime action/feedback lifecycle
+
+Candidate `cognitive_runtime.cpp` is 187 lines; donor 225; five alternate blobs. Donor adds bounded feedback queue submission and validation, sequence-bound prediction resolution, optional goal-outcome assimilation and utility feedback, feedback failure accounting, and an action adapter with execute/verify/rollback/consequence-observation callbacks. It executes only actions selected by the plan, not every candidate assessment; unavailable adapters fail closed, execution exceptions are surfaced, and action outcomes can be submitted as evidence. Candidate has only input queue/work-item/result processing and no corresponding action execution/feedback lifecycle. The runtime adapter is an external execution boundary, not autonomous physical access.
+
+### 17.2 Safety and serialization/learning contracts
+
+- `evolution_safety.cpp`: donor rejects non-finite/out-of-range confidence/policy/minimum-improvement fields, requires valid isolation attestation when policy requires it, recomputes whether claimed Improved fitness actually exceeds minimum improvement, then applies regression/confidence gates. Candidate only checks outcome, fitness finiteness, confidence threshold and regression.
+- `causal_model.cpp`: donor delegates causal-side encoding/decoding to the typed/escaped causal-link codec; candidate encodes `key=value` and parses on the first equals sign. This can alias keys/values containing delimiters and typed values; exact codec/consumer compatibility is a persistence contract.
+- `adaptation.cpp`: donor rejects non-finite inputs without creating/updating a metric, uses scale-relative error for unbounded numeric values, initializes the estimate from the first actual observation, and tracks consecutive surprise/change evidence. Candidate clamps prediction/actual to [0,1], uses absolute error and its prior estimate. This is a learning-model semantic change, not just numeric hygiene.
+- `engineering/coordinator.hpp`: donor exposes tracked durable dispatch with task version and base-revision preconditions, paired with the ledger-backed source implementation.
+- `cognition.hpp`: donor adds source/reliability evidence, prediction context, disputed-belief flag and confidence fields. `action_execution.hpp` adds observed consequence, consequence error and prediction identity. `cognitive_workspace.hpp` adds structured representation, affect/attention and execution results. `evolution_canary.hpp` adds a non-mutating preview API. `evolution.hpp` adds previous-value restoration.
+
+### 17.3 Remaining test paths — candidate/donor comparison
+
+| Test path | Candidate assertions | Donor assertions | Alternate blobs | Candidate status |
+|---|---:|---:|---:|
+| knowledge-memory phase 3 | 14 | 14 | 5 | present |
+| learning-adaptation phase 8 | 23 | 60 | 5 | present |
+| process isolation | 8 | 8 | 4 | present |
+| DLT-002 long-run | — | custom-check harness, 479 lines | 3 | absent |
+| evolution adoption journal | 8 | 53 | 3 | present (candidate file is a 4-line stub) |
+| association causality phase 5 | 12 | 46 | 3 | present |
+| cognitive-runtime learning integration | — | 88 | 2 | absent |
+| Brain action-consequence integration | — | 95 | 2 | absent |
+| developmental learning | — | 63 | 2 | absent |
+| cognitive runtime | 19 | 100 | 2 | present |
+| DLT-002 persistence | — | 63 | 2 | absent |
+| prediction feedback phase 10 | 12 | 371 | 2 | present |
+
+The DLT long-run/persistence suites use custom check helpers rather than `assert` macros, so macro counts are not used as a test-pass claim. The prediction-feedback donor suite contains extensive sequence identity, stale-feedback rejection, persistence/replay and utility/outcome coverage; candidate coverage is substantially smaller. The runtime learning/action-consequence/developmental suites are donor-only path/test artifacts, not candidate test passes.
+
+### 17.4 Cumulative targeted cohort reconciliation
+
+This final slice covers 22 previously unreviewed path clusters / 62 alternate blobs. Combined with the earlier 44 path clusters / 320 alternate blobs, **the targeted corpus is now 66 unique path clusters / 482 alternate blobs**. The all-ref discovery cohort contains 88 paths / 544 alternate blobs, so **22 path clusters / 62 alternate blobs remain untriaged**. The report's cohort accounting is updated accordingly.
+
+The 482 versions have not all received individual semantic disposition; targeted comparisons and feature-family triage are not a substitute for the required per-blob/per-owner/consumer/authority ledger. DF-02 remains OPEN.
