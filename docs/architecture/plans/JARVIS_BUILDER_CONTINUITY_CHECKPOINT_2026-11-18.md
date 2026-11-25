@@ -2154,3 +2154,8 @@ Phase 2 remains OPEN; all-ref consumer context, API/dependency/duplicate-owner a
 The 73 prioritized candidate-absent identifiers occur in 105 consumer paths / 44 donor paths: 1,651 source/header rows, 756 test rows, three workflow text rows; 2,375 code-context rows. Most concentrated historical consumers are `brain_restored_api.cpp`, `brain.cpp`, `brain.hpp`, `evolution_controller.cpp`, evolution integration/canary/runner suites and developmental/memory/cognitive paths. Donor identifiers are concentrated in evolution controller/API, developmental-learning and experiment headers/source. Report §27 provides counts and priorities.
 
 This is an exact-context priority queue, not dependency/owner closure. Phase 2 and DF-02 remain OPEN.
+
+
+### 2026-11-25 — Candidate/historical identifier specificity split
+
+Conservative token-shape filter across 502 matched identifiers: 157 high-specificity candidate-present symbols (638 rows, 126 consumers/52 donor paths) and 73 high-specificity candidate-absent symbols (2,410 rows/2,375 code-context). Remaining 272 symbols are lower-specificity/ambiguous; 195 are candidate-present (2,803 rows) and 77 historical-only. These prioritization buckets do not substitute for exact semantic classification.
