@@ -178,3 +178,24 @@ Engineering test CMake has 35 versions but 30 unique target sets; exact identica
 ### 10.4 Exact-slice disposition
 
 This deeper comparison completes the initial source-level triage of the seven high-dispersion clusters only. It establishes source/API ownership and test-registration discrepancies and identifies exact policy families to reconcile. It does **not** complete the 544 alternate-version cohort, reverse-consumer adjudication or Director authority/retention ledger. Phase 1 remains OPEN.
+
+
+## 11. Evolution integration/runner/canary test-version review
+
+Three high-variation integration test paths were inspected at exact donor/candidate blobs, with alternate versions enumerated by exact SHA and branch owners:
+
+| Test path | Alternate blobs | Candidate assertions | Donor assertions | Alternate assertion range |
+|---|---:|---:|---:|
+| `evolution_brain_integration_suite.cpp` | 22 | 7 | 97 | 68–154 |
+| `evolution_experiment_runner_suite.cpp` | 17 | 11 | 17 | 13–43 |
+| `evolution_canary_controller_suite.cpp` | 15 | 9 | 36 | 35–42 |
+
+Assertion totals are not a substitute for semantic equivalence. Exact scenario review of the donor integration suite confirms coverage of: legacy adoption-event replay without evaluation evidence; persisted legacy rollback events; evaluation/adoption journal ordering; direct adoption rejected without recorded evaluation; equal-fitness and subthreshold gate rejection; outcome mismatch; canary sufficiency/rollback; duplicate evaluation idempotency; persistence and restart state; and replay of evaluated/adopted/rolled-back transitions. The frozen candidate's 7 assertions cover a basic successful evaluation/adoption and canary rollback, followed by restart-to-baseline, but not those negative/replay/legacy-evidence scenarios.
+
+The donor experiment-runner suite's 17 assertions specifically validate isolated execution attestation, clearing attestation on simulated execution, policy rejection of non-isolated evidence, and invalid outcomes for failed/malformed execution cases. Candidate's 11 assertions do not cover the donor's full attestation/invalid-execution set.
+
+The donor canary suite's 36 assertions exercise evaluation/adoption state, sufficient-evidence rollback, a no-evidence preview, repeated observations to threshold, and idempotent replay of evaluation/adoption/rollback journal transitions. Candidate's nine assertions test basic adoption and rollback but omit most replay/idempotency/threshold-persistence cases.
+
+Alternate versions vary by lifecycle stage: the exact assertion count ranges above include stripped phase prototypes, broader authenticated-replay versions, and later integration branches. The 54 distinct historical test blobs across these three paths are not 54 independent implementations; their source commits/branch owners must be clustered and the scenario changes reviewed. No test blob is selected solely by its assertion count.
+
+**Disposition:** these test histories materially show regression/coverage variation and establish the donor behavior contract to compare against. They do not establish that every donor scenario is valid for a future architecture, and no test code is adopted. Phase 1 remains OPEN.
