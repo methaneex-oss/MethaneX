@@ -2084,3 +2084,10 @@ Additional exact-source triage covered five paths (28 alternate blobs): cognitiv
 - Evolution rollback differs: candidate resets previous value to baseline; donor preserves pre-rollback current value and exposes bounded restore_previous.
 
 Detailed report §13. This is source-level triage; no historical implementation is accepted, and DF-02 remains OPEN.
+
+
+### 2026-11-25 — Single-alternate source/test cohort
+
+The artifact contains 25 donor paths with exactly one alternate blob (12 production/header, 11 test, two workflows). Targeted exact source diffs found API reduction in causal/self-model headers; a candidate ActionAuthorizer bypass alternate; contradictory-association learning; clamped attention weights; fail-closed low-level evolution adoption; canary policy changed from worst-regression to mean-only; disputed-premise reasoning and confidence propagation; and capability-health removal. Two donor-only source paths—Brain action-execution feedback and contextual prediction—are not frozen-candidate integrations.
+
+The 11 single-alternate tests include candidate-absent affective evidence, cognitive-runtime goal-feedback, developmental-world integration and goal-directed cognition suites; present test paths also show coverage deltas. Counts are indicators, not equivalence. See report §14. This cohort is triaged, not fully authority-dispositioned.
