@@ -2164,3 +2164,10 @@ Conservative token-shape filter across 502 matched identifiers: 157 high-specifi
 ### 2026-11-25 — Candidate-present high-specificity API context
 
 157 higher-specificity candidate-present identifiers account for 638 rows across 126 consumer paths/52 donor paths; 627 are code-context and 11 comment/string-only. Roles: 389 source/header,199 test,49 workflow,one build. Strong names include EvolutionExperiment, CandidateAction, EvolutionModel/Proposal, ExperimentOutcome, EvolutionController, AttentionSignal, ActionAssessment, EvolutionSandbox, CognitiveCycleInput, CognitiveRuntime and AgentMessageBus. Remaining195 candidate-present low-specificity symbols account for 2,803 rows; exact semantic classification remains open. See report §29.
+
+
+### 2026-11-25 — Manual promotion of short historical API names and candidate-only set
+
+Token-shape filter is conservative: 77 lower-specificity absent symbols (2,104 rows) include 21 short but semantically meaningful names manually promoted (1,486 rows) such as `consolidate`, isolation attest/replay, restore/adoption, `observe_strategy`, `await_result`, `prediction_error`, `find_prediction`, `set_context`, `attention_policy`; remaining56 absent low-specific tokens618 rows. Candidate low-specific195 tokens2803 rows still require context review.
+
+Candidate/historical symbol sets: 352 candidate,497 historical,347 shared,five candidate-only (10 rows),150 historical-only. Candidate-only names: `clamp_unit`, `for_parameter`, `jarvis_cognitive_trigger_suite`, `perceive`, `should_rollback`; exact consumers/registration documented in report §31. These are lexical-only findings, not novel-capability or ownership conclusions.
