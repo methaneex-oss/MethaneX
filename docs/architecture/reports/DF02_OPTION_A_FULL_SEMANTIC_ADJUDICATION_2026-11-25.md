@@ -571,3 +571,27 @@ Sampled exact source contexts confirm that the high-specificity rows above are r
 Prioritize the 73 higher-specificity absent identifiers: group by exact donor blob and historical owner; inspect declaration/definition/call sites; map include/API edges and build/test registration; classify production, test-only, workflow, docs and false-positive; reconcile duplicates and behavioral evidence. Then review the 352 candidate-present symbols in the same exact-context manner. The 36,607 historical-only rows remain a large branch-specific cohort and must be filtered by exact blob/tip/category before conclusions.
 
 Phase 2 remains OPEN. This triage identifies high-value consumer edges; it does not prove ownership, dependency closure, adoption or retirement authority.
+
+
+## 23. Exact-token code-context filter across the 40,048 consumer rows
+
+A second independent context filter scanned the full content for each row's exact identifier using token boundaries, and stripped C++ comments and string literals (simple lexical stripping, not a full compiler lexer). It classified rows as code-context or comment/string-only. Workflow/build/other text remains raw-text classification.
+
+| Row cohort | Code-context rows | Comment/string-only rows | Total |
+|---|---:|---:|---:|
+| Candidate-tip | 3,325 | 116 | 3,441 |
+| Historical-only | 31,921 | 4,686 | 36,607 |
+| All refs | 35,246 | 4,802 | 40,048 |
+
+By category across all refs: source 21,370 code-context / 2,578 comment-string; test 12,750 / 2,224; workflow 861 raw-text matches; build 237; other 28. Candidate source: 1,981 code-context / 69 comment-string; candidate test: 1,089 / 47; workflow219, build8, other28.
+
+This removes comment/string-only lexical matches from the direct-code priority queue. **Code-context is not semantic dependency proof**: generic names such as `observe`, `restored`, `evaluate`, `policy`, `confidence`, `rollback` can still be unrelated method calls/fields. Raw-text matches in workflow/build/docs are classified separately. The simple comment/string stripper can miss C++ raw-string edge cases; the report does not claim compiler-level tokenization.
+
+### Phase 2 queue after context filtering
+
+1. Candidate-tip code-context rows (3,325): exact source/header/test/build registration and direct API context, with high-specificity and donor-path-specific symbols first.
+2. Historical-only code-context rows (31,921): exact blob/ref owner and branch-lineage grouping, then production/test/build/workflow role and dependency classification.
+3. Comment/string-only rows (4,802): classify as documentation/annotation/test fixture or false-positive candidate; retain useful provenance/intent without creating dependency edges.
+4. Exact path references (1,946): documentary/workflow lineage and authority/status cross-check.
+
+Phase 2 remains OPEN; this filter is a prioritization/false-positive reduction, not full consumer adjudication.
