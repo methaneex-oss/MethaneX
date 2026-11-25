@@ -323,3 +323,54 @@ A path-overlap reconciliation across the preceding sections prevents double-coun
 The highest remaining alternate-version counts are: core CMake (20); evolution-experiment API header (13); evolution-opportunity orchestration suite (12); experiment-runner header (11); memory-learning-evolution persistence suite (11); experiment-coordinator suite (11); adoption-journal header (8); developmental-brain integration suite (8); engineering message bus header/source (7 each); engineering agent header (7); engineering coordinator source (6); memory architecture suite (6); cognitive-cycle suite and cognitive runtime source (5 each. These form the next audit priority, followed by the remaining low-dispersion cohorts.
 
 This reconciliation is a count/coverage correction, not semantic closure. The complete alternate cohort remains OPEN.
+
+
+## 16. Core CMake, evolution API headers and remaining high-variation integration suites
+
+A further priority slice reviewed **22 path clusters / 162 alternate blobs**: core CMake (20); 11 API headers (62); six integration/persistence suites (53); and four engineering workforce/message-bus paths (27).
+
+### 16.1 Core CMake source ownership
+
+The frozen candidate registers 57 translation units; donor registers 64. The candidate has no source-only registrations relative to donor; donor adds seven source paths: `affective_learning.cpp`, `affective_state.cpp`, `brain_action_execution.cpp`, `brain_affective_planning.cpp`, `brain_prediction_context.cpp`, `brain_restored_api.cpp`, and `developmental_learning.cpp`. Candidate does not register `brain_restored_api.cpp` (the 40-name duplicate-definition risk documented in §10); donor registers the split API implementation alongside its smaller `brain.cpp`. The donor CMake also enables affective-planning test integration and examples. The 20 alternate CMake blobs have 20 unique source sets; their source counts range from 25 to 64 and include different feature-phase combinations. Source registration is not a semantic owner/acceptance decision.
+
+### 16.2 Evolution/cognitive API header differences
+
+Exact candidate/donor header comparisons establish:
+- `evolution_experiment.hpp`: donor adds the `isolated` field and a private attestation snapshot binding the experiment identity, proposal/fitness/policy fields, outcome and execution flags; the validity method checks those values have not changed after attestation. Candidate has only `candidate_executed` and no attestation.
+- `evolution_experiment_runner.hpp`: donor exposes a dedicated isolated-command API using `ProcessIsolationBackend`; candidate only has the callback runner.
+- `evolution_experiment_coordinator.hpp`: donor adds `require_isolation` defaulting true, with simulation/testing explicitly distinguished from adoption policy.
+- `evolution_adoption_journal.hpp`: donor records proposal/fitness/policy/isolation identity and exposes compensating `restore_pending`/`restore_adopted` transitions.
+- `evolution_controller.hpp`: donor exposes Brain-scoped validate/record/replay/evaluate/adopt/compensate/rollback methods and per-experiment canary storage; candidate's API is narrower.
+- `evolution_orchestrator.hpp`: donor accepts trial configuration; its source path checks durable evaluation lifecycle before adoption.
+- `developmental_learning.hpp`: absent from candidate, present in donor, and includes bounded finite-input learning signals, associations and context-conditioned strategies.
+- `knowledge.hpp`: candidate's `Evidence` type is replaced by donor `KnowledgeEvidence`; this changes the type contract.
+- `memory.hpp`: donor adds consolidation metadata/API, latest-sequence-by-kind cursor and kind/exact-match retrieval parameters.
+- `cognitive_cycle.hpp`: donor adds structured perception, developmental context, affective/attention signals, action-execution result slots, sequence-bound prediction feedback, goal-outcome assimilation and optional outcome utility.
+- `cognitive_runtime.hpp`: donor adds action execute/verify/rollback/consequence adapter, perception providers, feedback queue/capacity and action/feedback metrics. Candidate has no corresponding runtime action-feedback adapter.
+
+These interfaces have cross-file consequences. Header/API availability alone does not establish that the implementations, registration, tests and persistence are consistent.
+
+### 16.3 Integration and persistence suites
+
+| Test path | Candidate | Donor | Alternate blobs | Review note |
+|---|---|---|---:|---|
+| evolution opportunity orchestration | 17 assertions | 21 | 12 | scheduling/opportunity/evaluation orchestration scenarios vary |
+| memory-learning-evolution persistence | absent | 208 lines, custom checks | 11 | donor-only end-to-end learning/action outcome/evolution persistence and restart behavior |
+| evolution experiment coordinator | 6 assertions | 6 | 11 | same assertion count; source scenarios differ in trial/isolation policy |
+| developmental Brain integration | absent | 1,138 lines / 194 assertions | 8 | donor-only prediction identity, action feedback, strategy generalization, goal/context and persistence scenarios |
+| memory architecture | 27 | 70 | 6 | donor covers metadata/corrupt-tail/legacy/consolidation and memory behavior beyond candidate |
+| cognitive cycle | 31 | 186 | 5 | donor tests perception/context, feedback, goal/strategy, uncertainty/dispute and persistence integration |
+
+For the persistence suite, checks are explicit helper calls (not C `assert` macros), so an assertion-count of zero from a macro scanner is not a zero-test claim. Its donor test validates that prediction/action outcomes update learning, developmental strategies affect decisions, evolution consumes evidence, and these states/records survive a new Brain instance's journal replay. The developmental integration suite is donor-only; its 194 assertions test sequence-bound prediction resolution, action consequence feedback, developmental generalization, disputed-belief uncertainty, inferred context and restart behavior. These are historical test contracts, not acceptance of the donor architecture.
+
+### 16.4 Engineering message bus and durable task-dispatch variants
+
+- `message_bus.hpp/.cpp`: candidate handler returns void and the bus reports delivery after invoking it. Donor handler returns acceptance, propagates receiver backpressure, retains a bounded deduplication window, tracks in-flight IDs, length-prefixes delivery keys and compares message content to reject conflicting duplicate IDs. This changes delivery semantics/idempotency.
+- `engineering/agent.hpp`: donor adds task dependencies and result revision identity fields.
+- `engineering/coordinator.cpp`: donor adds durable `dispatch_tracked` flow: checks ledger task/version/queued state, uses stored task as authoritative, authorizes/claims/starts with version transitions, handles execution exceptions, validates returned identity and records failures/results. Candidate has only the small non-ledger dispatch.
+
+The engineering variants are distinct workforce-control-plane contracts. They require exact task-ledger, message-bus, concurrency and authorization consumer/test reconciliation; no adoption is authorized.
+
+### 16.5 Disposition
+
+This slice confirms substantial API, source-registration, persistence, runtime action-feedback, message-delivery and durable-task lifecycle variation. The 162 alternate blobs remain in the audit cohort and are not fully dispositioned. Phase 1 remains OPEN; Phase 2 reverse consumers and Phase 3 authority/retention reconciliation are still required.
