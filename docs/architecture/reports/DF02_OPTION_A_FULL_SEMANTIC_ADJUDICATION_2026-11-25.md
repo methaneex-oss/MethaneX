@@ -262,3 +262,55 @@ Candidate rollback sets both current and previous value to baseline. Donor rollb
 ### 13.6 Disposition
 
 These exact comparisons identify real memory durability/recovery, learning integration, context/feedback and compensation differences. They do not close the alternate versions or authorize adoption. Phase 1 remains OPEN; Phase 2/3 reverse-consumer and authority work remains.
+
+
+## 14. Single-alternate-path cohort — targeted source and test diffs
+
+The exact corpus contains **25 donor paths with exactly one alternate blob** (12 production/header paths, 11 test paths, two workflow files). The 12 production/header alternates were diffed against frozen candidate content where present. This cohort is small enough for focused follow-up, but the findings below are still path-level—not authority closure.
+
+### 14.1 Production/header deltas
+
+| Path | Exact alternate finding |
+|---|---|
+| `causal_model.hpp` | API/representation change: removes `CausalPrediction`/`SimulationResult` and horizon simulation declaration; switches causal-link storage from vector to keyed map. Source/API compatibility must be traced. |
+| `self_model.hpp` | Removes `SelfCapabilityHealth` and `SelfModel::health()`; alternate API is narrower. |
+| `action_execution.cpp` | Alternate removes `ActionAuthorizer` and trusts assessment's `permitted` + disposition directly. This is an authorization-boundary regression candidate; compare authorization context/identity checks and tests before any use. |
+| `association_model.cpp` | Large alternate adds changed/present-key reconciliation, contradictory-observation counts and confidence/strength decay for links whose endpoints change inconsistently. This is substantive learning behavior. |
+| `attention.cpp` | Alternate clamps learned novelty/uncertainty/urgency weights to [0,4], preventing unbounded weight growth. |
+| `evolution_adoption.cpp` | Alternate low-level helper fails closed because it lacks an evaluation journal; routes the authority boundary to `EvolutionController`. |
+| `evolution_canary.cpp` | Alternate drops worst-case-delta tracking and uses mean regression only; candidate/donor track the worst regression. This changes rollback sensitivity. |
+| `reasoning.cpp` | Alternate excludes disputed beliefs as authoritative premises and propagates confidence as min(cause confidence, link strength). Candidate deducts from all supplied premises and uses link strength as conclusion confidence. |
+| `self_model.cpp` | Alternate removes aggregate capability-health calculation. |
+| `adaptation.hpp` | Single alternate is a small one-line API/content delta; must be reconciled with adaptation behavior and downstream headers. |
+
+### 14.2 Candidate-absent source paths
+
+Two source paths are absent from frozen candidate but present in donor and alternate historical content:
+- `brain_action_execution.cpp` (186-line alternate): action execution/outcome integration path, including event replay, consequence feedback and consolidation hooks.
+- `brain_prediction_context.cpp` (68-line alternate): contextual prediction identity and context-aware predict/replay APIs.
+
+These are historical capability candidates, not candidate integration. Check header ownership, CMake registration, exact consumer graph, tests and provenance before any disposition.
+
+### 14.3 Single-alternate test cohort
+
+The alternate test blobs show differing coverage, but assertion counts alone are not quality metrics:
+
+| Test path | Candidate assertions | Donor assertions | Alternate assertions | Candidate status |
+|---|---:|---:|---:|---|
+| action execution phase 7 | 14 | 45 | 24 | present |
+| affective evidence | — | 20 | 20 | absent |
+| Brain 10 | 29 | 32 | 29 | present |
+| Brain deep | 68 | 260 | 88 | present |
+| cognitive runtime goal feedback | — | 22 | 19 | absent |
+| cognitive workspace runtime | 6 | 8 | 6 | present |
+| developmental world integration | — | 40 | 28 | absent |
+| goal-directed cognition | — | 23 | 23 | absent |
+| goals architecture | 34 | 45 | 68 | present |
+| reasoning architecture | 19 | 33 | 26 | present |
+| engineering agent/console | 7 | 31 | 8 | present |
+
+Candidate-absent suites are not silently treated as failed or passed. They represent no frozen-candidate test registration/source. The single alternate blob is a different test revision and must be reviewed against its exact source API and target registration.
+
+### 14.4 Disposition
+
+This one-alternate cohort reveals authorization, contradiction learning, attention-weight bounds, canary regression policy, disputed-premise reasoning, capability-health API and candidate-absent action/prediction/affective/developmental tests. All require exact owner/consumer/provenance classification. The two workflow files are tracked separately as test/CI evidence, not runtime capabilities. Phase 1 remains OPEN; no adoption/retirement/baseline authority is inferred.
