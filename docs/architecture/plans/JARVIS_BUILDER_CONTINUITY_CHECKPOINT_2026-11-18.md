@@ -2130,3 +2130,10 @@ The report records candidate/historical specific APIs, lexical false positives, 
 Recursive C++ include analysis over exact candidate blobs and CMake-registered source/test sets: 62 production TUs (57 core + 5 engineering); 61 matched header paths; 59 direct production headers and 61 recursively reachable; 46 registered tests (45 core + one engineering); 43 direct test headers and 60 recursively reachable. All 61 matched headers are reachable from production or registered tests. The orphan candidate `brain_restored_api.cpp` and three unregistered tests remain outside the compiled-source/test graph.
 
 This reconciles build reachability, not semantic dependency/ownership. Phase 2 remains OPEN for exact contextual classification of 352 candidate-present symbols and 73 high-specificity candidate-absent symbols, plus historical-only rows, branch owners and authority.
+
+
+### 2026-11-25 — High-specificity historical consumer triage
+
+Candidate-absent symbols: 150; conservative high-specificity prioritization set: 73. Selected exact historical contexts include `run_isolated_command` (416 rows/8 consumer paths), `has_valid_isolation_attestation` (74/11), canary observation/preview APIs, adoption validation/compensation/rollback/evaluation APIs, prediction feedback/status/context, developmental/affective learning and `EngineeringTaskLedger`, causal codec. Generic tokens remain lexical false-positive/ambiguous until context reviewed. Full table and sample context classifications are in report §22.
+
+This slice is prioritized evidence, not a dependency edge or ownership decision. Phase 2 remains OPEN; exact owner/ref/context, build/test reachability, duplicates and authority must be reconciled.
