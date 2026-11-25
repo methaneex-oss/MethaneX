@@ -2137,3 +2137,13 @@ This reconciles build reachability, not semantic dependency/ownership. Phase 2 r
 Candidate-absent symbols: 150; conservative high-specificity prioritization set: 73. Selected exact historical contexts include `run_isolated_command` (416 rows/8 consumer paths), `has_valid_isolation_attestation` (74/11), canary observation/preview APIs, adoption validation/compensation/rollback/evaluation APIs, prediction feedback/status/context, developmental/affective learning and `EngineeringTaskLedger`, causal codec. Generic tokens remain lexical false-positive/ambiguous until context reviewed. Full table and sample context classifications are in report §22.
 
 This slice is prioritized evidence, not a dependency edge or ownership decision. Phase 2 remains OPEN; exact owner/ref/context, build/test reachability, duplicates and authority must be reconciled.
+
+
+### 2026-11-25 — Phase 2 exact consumer-owner cross-map
+
+- Candidate/historical consumer blob sets are exact: 193 candidate blobs + 942 historical-only = 1,135. Cross-mapped against donor path/blob ownership: 96 candidate + 691 historical exact same-path owner matches (787 total); 97 candidate + 251 historical consumer blobs outside exact donor-path ownership (348 total). Exact branch names/tip SHAs for all 1,135 blobs are in the artifact's occurrence metadata and 213-tip inventory.
+- Historical-only consumer rows concentrate: top five paths 41.8%, top 20 66.4%, top 50 81.7%. Top-20 path/blob/consumer matrix is documented in report §24.
+- 73 high-specificity candidate-absent symbols: 2,410 rows, 2,375 code-context after simple comments/string stripping. Family groups: evolution trust 13/1,217 rows; prediction-feedback 9/272; developmental-affective 29/627; engineering 5/51; causal/knowledge 5/96; other 12/147. Generic tokens are not dependency edges absent exact semantic context.
+- Candidate-present 352 symbols: 3,441 rows, 3,325 code-context, 116 comment/string-only. Candidate exact context and high-frequency generic false-positive examples documented.
+
+Phase 2 remains OPEN; all-ref consumer context, API/dependency/duplicate-owner and branch authority remain incomplete. Phase 3 provenance/retention/retirement remains open.
