@@ -706,3 +706,12 @@ Using the same conservative token-shape filter across all 502 matched identifier
 The 638 candidate-present high-specificity rows span 126 consumer paths and 52 donor paths: 384 source/header, 199 test, 49 workflow, one build and five other-role rows. The combined high-specificity set is 230 symbols/3,048 rows; 272 symbols remain lower-specificity/ambiguous.
 
 This split prioritizes API/type names and longer domain identifiers. It does not make the high-specificity rows true dependencies automatically, nor the lower-specificity rows false positives. Exact declaration/call context, owner SHA, include/build/test role and authority remain the required evidence.
+
+
+## 29. Candidate-present high-specificity API context
+
+The 157 higher-specificity candidate-present identifiers account for 638 rows across 126 consumer paths / 52 donor paths. The comment/string-strip filter leaves **627 code-context** rows and 11 comment/string-only. Role totals: 389 source/header, 199 test, 49 workflow and one build row.
+
+The strongest candidate-present names include `EvolutionExperiment` (25 rows/25 paths), `CandidateAction` (22/22), `EvolutionModel` (22/12), `EvolutionProposal` (21/21), `ExperimentOutcome` (21/21), `EvolutionController` (19/7), `AttentionSignal` (18/10), `register_evolution_parameter` (14/8), `ActionAssessment` (10/10), `EvolutionSandbox` (10/10), `CognitiveCycleInput` (9/9), `CognitiveRuntime` (8/5), `AgentMessageBus` (8/5), and `EvolutionExperimentCoordinator` (7/4). This is a candidate API/context map, not an acceptance statement for every historical variant.
+
+The remaining 195 candidate-present lower-specificity symbols account for 2,803 rows. Exact source context and consumer roles still need semantic classification; generic tokens are not treated as dependencies.
