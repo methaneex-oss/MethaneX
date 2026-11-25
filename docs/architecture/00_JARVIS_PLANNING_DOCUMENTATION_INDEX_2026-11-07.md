@@ -1,3 +1,63 @@
+# CURRENT EXACT STATE — 2026-11-25 (Project Director decisions; DF-02 Option A reopened)
+
+> This snapshot supersedes the prior bounded DF-02 closeout status. Historical reports and prior delegated dispositions remain provenance, but are not closure under the newly selected full Option A standard.
+
+## Project Director decisions (2026-11-25)
+
+- **D1 / DF-09: A** — continue to obtain an exact-frozen-HEAD Blind Fresh Reader CLEAR. Correct legitimate findings and repeat the review; do not claim CLEAR without the actual verdict.
+- **D2 / DF-02: B** — reopen and complete full Option A semantic adjudication across historical blobs, reverse consumers, dependencies, duplicate owners, retirement/retention and provenance. The earlier bounded non-adoption closure is superseded as the closure standard.
+- **D3 / DF-11: A** — retain the waiver and document its provenance residual; no time-expensive reconstruction effort is authorized.
+- **D4 / DF-12: B** — after DF-09 CLEAR, prepare a clean consolidation PR for Director consideration. No merge is authorized.
+
+## Frozen PR #192 target
+
+- PR #192 branch: `docs/whole-brain-planning-scope-correction-20261107`.
+- Frozen review target: `caf87986dfea7aca75728818651c8687e9f5faf0`.
+- Open, unmerged, divergent/non-mergeable; do not merge as-is. The frozen branch remains unchanged by follow-up work.
+
+## Current gate status
+
+| Gate | Disposition |
+|---|---|
+| DF-01 | CLOSED |
+| DF-02 | **REOPENED / OPEN — full Option A required**. Phase 0 evidence acquisition and integrity is complete; semantic/authority adjudication remains incomplete. |
+| DF-03 | CLOSED within documented authority/provenance scope |
+| DF-04 | CLOSED within documented governance scope |
+| DF-05 | CLOSED by explicit non-integration disposition; no branch-history operation |
+| DF-06 | CLOSED for mechanical navigation integrity only; semantic relevance/browser scope remains distinct |
+| DF-07 | corrected across PR #201/#202; branch-wide final consistency still must be verified |
+| DF-08 | resolved within bounded historical-preservation criterion |
+| DF-09 | **BLOCKED** pending blind fresh-reader CLEAR against frozen SHA `caf87986dfea7aca75728818651c8687e9f5faf0` |
+| DF-10 | Builder-verified only for the original exact parent/successor pair; any follow-up writes require a new terminal inventory |
+| DF-11 | waived as mandatory by Director decision; provenance citation residual retained |
+| DF-12 | pending Director acceptance |
+
+## DF-02 Phase 0 — verified discovery corpus
+
+Report: [DF-02 Full Option A Semantic Adjudication](reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md).
+
+All-ref workflow #45470173876, artifact 14956148301, SHA-256 `9902957475c76f4840d1d280c7d4f50537941e9445810afb805132374a328f38` was downloaded and independently hashed.
+
+Verified: 254 refs / 213 unique tips; 159 donor paths; 95 divergent / 63 absent / 1 identical candidate same-path; 798 exact path/blob ownership rows; 639 non-donor versions comprising 96 candidate blobs and 544 alternate historical blobs across 88 donor paths; 40,048 symbol-match candidates; 1,946 exact-path-reference candidates. Full content is available for all 159 donor blobs, 96 candidate blobs and 544 alternate blobs (six missing donor blobs were fetched by exact SHA).
+
+**DF-02 is not closed.** Phase 1 path/version semantic ledger is in progress. Consumer/dependency adjudication and authority/duplicate-owner/retention reconciliation remain outstanding. No donor adoption, source-baseline selection, runtime implementation or Stage A authorization is inferred.
+
+## Separate review-correction branches
+
+- PR #201: `d56a57b2d74bc0f0d50594528b51c3755acb2ecc` — approved with documented non-blocking residuals for its limited consistency-correction scope.
+- PR #202: reviewed at `cf66f8e567df04a315c0ecc3604103ee0a7a1a02` — approved with documented non-blocking residuals for its limited response scope; report-only successor `a56526ae5896dfd06293ccab64289fd75507dda5`.
+- Independent re-check report is committed at `a56526ae5896dfd06293ccab64289fd75507dda5`. Those verdicts do not clear DF-09, close the reopened DF-02 Option A, or accept DF-12.
+
+## Current Builder follow-up
+
+- Branch: `docs/df02-option-a-full-semantic-adjudication-20261125`.
+- Decision/evidence report commit: `df8b5a0cbe27ddff3c4b0c401be355ff23d7fe90`.
+- This follow-up is documentation-only; it does not alter PR #192's frozen review target or runtime sources.
+
+**Stage A remains NOT STARTED / HELD.** No merge, rebase, retarget, donor adoption, source-baseline selection, training, runtime implementation, integration or deployment is authorized.
+
+---
+
 # CURRENT EXACT STATE — 2026-11-25 (follow-up consistency synchronization)
 
 > This controlling snapshot distinguishes the frozen PR #192 review target from the separate documentation-correction branch. It supersedes older current-state snapshots below; those older snapshots remain historical provenance.
