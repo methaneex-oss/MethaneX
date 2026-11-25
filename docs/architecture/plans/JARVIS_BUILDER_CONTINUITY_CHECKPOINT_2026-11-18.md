@@ -2022,3 +2022,25 @@ The exact-current audit verifies 70 Markdown files, 474 destinations, 180/180 lo
 The live run did not need line-range API fallback because those pages rendered normally; six historical issue-comment anchors used the canonical API. The workflow does not claim browser viewport proof or automated semantic relevance.
 
 The terminal inventory is now the only remaining PR #192 branch-file write. It must be one commit ahead / zero behind, change only the inventory path, retain all 71 changed paths in the complete successor tree, and be followed by fresh all-ref and link-audit workflows on the exact successor. No later branch-file write is permitted.
+
+
+## 2026-11-25 — Project Director decisions and full DF-02 Option A reopening
+
+**Director decisions:** D1= A (DF-09 exact frozen-HEAD Blind Fresh Reader CLEAR pursued); D2= B (reopen full Option A semantic adjudication); D3= A (retain DF-11 waiver and provenance residual, no reconstruction effort); D4= B (prepare clean consolidation PR only after DF-09 CLEAR; no merge authorization).
+
+The prior bounded DF-02 closeout is superseded as the closure standard. DF-02 is **REOPENED / OPEN**. Stage A remains held; donor adoption, source-baseline selection, runtime implementation, integration and merge remain unauthorized.
+
+### Evidence corpus acquisition — Phase 0 complete
+
+- Frozen PR #192 review target: `caf87986dfea7aca75728818651c8687e9f5faf0`.
+- All-ref workflow: `45470173876`; artifact `14956148301`; SHA-256 `9902957475c76f4840d1d280c7d4f50537941e9445810afb805132374a328f38`. Downloaded ZIP hash independently matches.
+- Scan: 254 branch refs / 213 unique tips; 159 donor paths; 95 divergent / 63 absent / 1 identical candidate path; 798 path/blob ownership rows.
+- Version reconciliation: 639 non-donor versions = 96 candidate blobs + 544 alternate historical blobs across 88 donor paths. Full exact contents are available for the 159 donor blobs, 96 candidate blobs and 544 alternate blobs. Six donor blobs missing from the scan corpus were retrieved directly by exact SHA.
+- Discovery: 40,048 symbol-match rows, 1,946 exact-path-reference rows, 1,227 blob/path/category records. Discovery remains lexical evidence, not semantic dependency proof.
+- Detailed report: `docs/architecture/reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md`.
+
+### Current progress and next bounded objective
+
+Phase 0 evidence acquisition/integrity is complete. Phase 1 semantic path/version ledger is in progress; Phase 2 consumer/dependency review and Phase 3 duplicate-owner/authority/retention reconciliation are not complete. Start with high-dispersion CMake, Brain/runtime, restored API, evolution lifecycle, coordinator/runner and associated registered integration tests; then cover remaining path cohorts. Record exact blob SHA, branch/tip owners, meaningful semantic delta, consumer role, build/test evidence, ownership, provenance and disposition. Do not claim a path or cluster closed from lexical presence, absence, same-path comparison or report cross-reference alone.
+
+DF-09 remains blocked pending actual blind fresh-reader CLEAR against the frozen target. DF-11 waiver remains retained with provenance residual. DF-12 acceptance and consolidation preparation are Director-reserved until DF-09 CLEAR. No merge is authorized.
