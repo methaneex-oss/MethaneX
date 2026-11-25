@@ -228,3 +228,37 @@ Candidate is 154 lines; donor 162. Donor adds explicit trial configuration and r
 ### 12.6 Disposition
 
 The five exact source diffs establish additional concrete trust, execution, identity, replay and persistence differences. The 56 historical blobs remain unclosed: versions need exact SHA/owner grouping, tests/build reachability, source-line provenance and semantic dispositions. No adoption, baseline or retirement decision is inferred. Phase 1 remains OPEN.
+
+
+## 13. Cognitive-cycle, memory continuity and learning source-version review
+
+Five additional source paths were compared at exact frozen-candidate and donor blobs and their alternate versions. This slice covers 29 alternate blobs (8 cognitive-cycle, 7 memory, 6 knowledge, 5 developmental-learning and 2 evolution-model versions).
+
+### 13.1 Cognitive cycle — 8 alternate blobs
+
+Candidate `cognitive_cycle.cpp` is 161 lines; donor is 776. Five alternate versions contain the integrated context/perception/prediction-feedback/affective/attention/developmental feature family; three are small earlier phase prototypes (106–143 lines). The exact donor implementation adds reversible escaping for hierarchical context keys and reserved-segment collision protection; infers structured developmental context from observation identity, representation features and goal; retrieves context/action/perceptual memories; uses structured perception and attention; incorporates disputed facts/relations and belief uncertainty; integrates affective state/appraisal; applies strategy/developmental context; validates/assimilates prediction feedback by sequence; and assimilates goal outcomes. Candidate's exact run path does not contain this integration family. These differences correspond to previously focused cognitive-cycle, prediction-identity, representation and affective/developmental reports, but the eight alternate blobs still need owner/lineage and test evidence adjudication.
+
+### 13.2 Memory continuity — 7 alternate blobs
+
+Candidate `memory.cpp` is 428 lines; donor is 225 lines (donor source is heavily compacted, so line count is not a complexity/quality measure). The exact code comparison establishes:
+- Candidate journal load truncates an unreadable suffix at the last valid record without first preserving it. Donor attempts to copy that suffix to a `.corrupt` quarantine file and only truncates the active journal if quarantine succeeds. The legacy journal is still unframed and has no checksum; the donor explicitly acknowledges that a malformed record boundary cannot be safely resynchronized.
+- Candidate metadata magic is v1; donor supports v1 and v2, with a consolidation field in v2. Donor validates and stages metadata updates before applying them, rather than leaving a partial update on a malformed snapshot.
+- Candidate `append` persists the event and updates metadata/continuity/sequence, but does not update learned-tier counts or the latest-sequence-by-kind map in that function. Donor updates both. Exact constructor/load/promotion paths must be tested to establish the behavioral impact.
+- Donor adds `Memory::consolidate`: finite-value validation, bounded evidence inputs and a recurrence-derived consolidation score combining salience, novelty, prediction error, confidence and recurrence. This mechanism's coefficients are evidence for review, not accepted policy.
+- Six of seven alternate blobs contain the v1 metadata compatibility/consolidation family; five contain learned-tier rebuild logic; one alternate includes quarantine behavior. The remaining version differences must be grouped and checked for loss/corruption, sequence, persistence-failure rollback and metadata compatibility.
+
+### 13.3 Knowledge model — 6 alternate blobs
+
+Candidate and donor `knowledge.cpp` are both 35 lines, but the public assimilation type differs: candidate takes `Evidence`; donor takes `KnowledgeEvidence`. Five of six alternate blobs contain finite-value/contradiction validation and an `assess` path. This is a contract/API difference despite similar file length; cross-reference the header, feedback provenance and source-calibration reports before disposition.
+
+### 13.4 Developmental learning — 5 alternate blobs
+
+The frozen candidate has no `developmental_learning.cpp`; donor has 444 lines. Five alternate versions range from 102 to 563 lines, and all include finite-value validation, learning-rate and consolidation code. Three include the context-path encoding feature. The path is absent in the candidate, so these are historical alternate implementations—not candidate integration. Exact ownership, API/CMake/test registration, persistence and behavior remain open.
+
+### 13.5 Evolution model compensation — 2 alternate blobs
+
+Candidate rollback sets both current and previous value to baseline. Donor rollback preserves the pre-rollback current value as `previous_value` and restores baseline; donor also exposes `restore_previous` with finite-value and bounds validation. Both alternate blobs contain the previous-value restoration API. This is a real compensation semantics difference, already cross-referenced by the evolution-recovery report.
+
+### 13.6 Disposition
+
+These exact comparisons identify real memory durability/recovery, learning integration, context/feedback and compensation differences. They do not close the alternate versions or authorize adoption. Phase 1 remains OPEN; Phase 2/3 reverse-consumer and authority work remains.
