@@ -2107,3 +2107,10 @@ Source-level findings: donor cognitive runtime adds bounded validated feedback, 
 Test cohort includes absent candidate suites for long-run, persistence, cognitive-runtime learning, action consequence and developmental learning; other donor suites add substantially more replay, persistence, learning and feedback scenarios. Test counts are not equivalence.
 
 Cumulative targeted coverage: **66 unique path clusters / 482 alternate blobs**. Discovery totals 88 paths / 544 alternates; **22 paths / 62 blobs remain untriaged**. Targeted triage does not mean individual semantic disposition. Detailed report §17. DF-02 remains OPEN.
+
+
+### 2026-11-25 — All-ref alternate version triage coverage reached
+
+The final 22 path clusters / 62 alternate blobs were targeted: cognitive runtime action/feedback, evolution safety, causal codec, adaptation, engineering coordinator and API headers, and 12 test cohorts. Exact source comparisons and branch/blob feature inventories are recorded in report §18. This brings Phase 1 **targeted triage coverage to all 88 donor-path clusters / 544 alternate blobs**. Coverage does not mean every version is semantically adjudicated or accepted; exact owner, API/consumer, behavior/build/test, provenance, authority, retention and retirement dispositions remain to be completed.
+
+**Next phase: Phase 2 reverse-consumer/dependency adjudication.** Reconcile 40,048 symbol candidates and 1,946 exact-path candidates by exact context/blob/ref owner. Classify compiled/runtime/test/build/workflow/docs/false positives; trace dependency and duplicate-owner edges; tie conclusions to behavior/build/test and authority. Phase 3 provenance/retention/authority and independent scrutiny remain open. DF-02 remains OPEN; no donor adoption or baseline selection.
