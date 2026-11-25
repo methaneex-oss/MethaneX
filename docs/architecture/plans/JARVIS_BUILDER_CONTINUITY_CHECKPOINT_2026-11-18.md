@@ -2123,3 +2123,10 @@ Candidate-tip graph: 3,441 lexical rows, 111 donor paths, 352 symbols, 193 consu
 Historical-only matches: 36,607 rows, 118 donor paths, 270 consumer paths, 942 blobs. All-ref: 40,048 rows / 502 symbols / 346 consumer paths / 1,135 blobs. Exact path refs: 1,946 rows, 159 donor paths, 76 consumer paths/101 blobs; 1,930 docs, 15 workflows, one other. These are documentation/workflow references, not code dependency edges.
 
 The report records candidate/historical specific APIs, lexical false positives, and scope. Phase 2 remains OPEN; exact contextual classification, full dependency/duplicate-owner and authority ledger still required.
+
+
+### 2026-11-25 — Candidate include reachability cross-check
+
+Recursive C++ include analysis over exact candidate blobs and CMake-registered source/test sets: 62 production TUs (57 core + 5 engineering); 61 matched header paths; 59 direct production headers and 61 recursively reachable; 46 registered tests (45 core + one engineering); 43 direct test headers and 60 recursively reachable. All 61 matched headers are reachable from production or registered tests. The orphan candidate `brain_restored_api.cpp` and three unregistered tests remain outside the compiled-source/test graph.
+
+This reconciles build reachability, not semantic dependency/ownership. Phase 2 remains OPEN for exact contextual classification of 352 candidate-present symbols and 73 high-specificity candidate-absent symbols, plus historical-only rows, branch owners and authority.
