@@ -2071,3 +2071,16 @@ Exact donor/candidate/alternate blobs were reviewed for three test paths:
 - `evolution_canary_controller_suite.cpp`: 15 alternates; candidate 9, donor 36, alternates 35–42. Donor checks canary threshold/persistence and idempotent replay of evaluation/adoption/rollback journal transitions.
 
 Assertion totals are coverage indicators, not quality or semantic-equivalence scores. Alternate blobs require content/lineage clustering. Findings are in report §11. This slice advances exact behavioral-contract evidence but does not close the 544 alternate versions or DF-02.
+
+
+### 2026-11-25 — Cognitive-cycle, memory continuity and learning source review
+
+Additional exact-source triage covered five paths (28 alternate blobs): cognitive_cycle.cpp (8), memory.cpp (7), knowledge.cpp (6), developmental_learning.cpp (5), evolution.cpp (2).
+
+- Candidate cognitive-cycle source is 161 lines vs donor 776; five alternate versions include structured context, perception, attention/affect, sequence-bound prediction feedback, developmental context and goal-outcome assimilation. Three are earlier small prototypes.
+- Memory candidate vs donor differs in corrupt-tail handling (candidate truncates; donor quarantines before truncation), metadata schema/migration (candidate v1 vs donor v1/v2 with consolidation), append learned-tier/sequence updates, and memory consolidation. The donor journal remains legacy unframed/no-checksum; quarantine preserves unreadable suffix but does not solve framing.
+- Knowledge evidence API type differs; five of six alternates include finite-value/contradiction validation and assessment.
+- Developmental-learning implementation is absent from frozen candidate and present in donor; five alternate versions range 102–563 lines with finite validation, learning-rate and consolidation logic.
+- Evolution rollback differs: candidate resets previous value to baseline; donor preserves pre-rollback current value and exposes bounded restore_previous.
+
+Detailed report §13. This is source-level triage; no historical implementation is accepted, and DF-02 remains OPEN.
