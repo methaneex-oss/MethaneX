@@ -2171,3 +2171,8 @@ Conservative token-shape filter across 502 matched identifiers: 157 high-specifi
 Token-shape filter is conservative: 77 lower-specificity absent symbols (2,104 rows) include 21 short but semantically meaningful names manually promoted (1,486 rows) such as `consolidate`, isolation attest/replay, restore/adoption, `observe_strategy`, `await_result`, `prediction_error`, `find_prediction`, `set_context`, `attention_policy`; remaining56 absent low-specific tokens618 rows. Candidate low-specific195 tokens2803 rows still require context review.
 
 Candidate/historical symbol sets: 352 candidate,497 historical,347 shared,five candidate-only (10 rows),150 historical-only. Candidate-only names: `clamp_unit`, `for_parameter`, `jarvis_cognitive_trigger_suite`, `perceive`, `should_rollback`; exact consumers/registration documented in report §31. These are lexical-only findings, not novel-capability or ownership conclusions.
+
+
+### 2026-11-25 — All candidate-absent identifiers context-partitioned
+
+The 150 candidate-absent identifiers are now partitioned: 73 higher-specificity (2,410 rows,2,375 code-context),21 manually prioritized lower-specificity APIs (1,486 rows,1,262 code-context/224 comment-string),51 additional code-context tokens (502 rows),five text-only tokens (116 rows). Total absent-token rows4,514. Context partition is not dependency/authority closure. Candidate-present352 identifiers remain semantically unclosed.
