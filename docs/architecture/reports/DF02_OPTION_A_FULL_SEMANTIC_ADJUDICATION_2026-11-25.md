@@ -96,3 +96,51 @@ The connected GitHub operations permit repository/ref/content access and artifac
 **DF-02: REOPENED / OPEN — full Option A required.** Phase 0 is complete. The next bounded audit slice is the high-dispersion build/runtime/evolution clusters (CMake, `brain.cpp`, `brain.hpp`, `brain_restored_api.cpp`, `evolution_controller.cpp`, experiment runner/coordinator and their registered integration suites), followed by lower-dispersion source/test and absent/no-symbol cohorts. Every review must produce exact SHA-linked classifications; unresolved material variants remain OPEN.
 
 DF-09 remains blocked pending blind fresh-reader CLEAR against frozen PR #192 SHA `caf87986dfea7aca75728818651c8687e9f5faf0`. DF-11 waiver remains retained with its provenance residual. DF-12 remains pending Director acceptance; consolidation preparation is authorized only after DF-09 CLEAR. No merge is authorized.
+
+
+## 9. Phase 1 — high-dispersion cluster triage (2026-11-25)
+
+A first targeted source-level triage was performed on seven high-dispersion path clusters. This is an initial semantic review, not full closure of every version in these clusters.
+
+### 9.1 Exact version counts
+
+| Path | Unique versions across tips | Alternate blobs beyond donor/candidate | Candidate/donor size observation |
+|---|---:|---:|---|
+| `core/cpp/src/brain.cpp` | 35 | 33 | Candidate 218 lines; donor 888 lines |
+| `core/cpp/include/jarvis/core/brain.hpp` | 21 | 19 | Candidate 324 lines; donor 83 lines |
+| `core/cpp/src/brain_restored_api.cpp` | 20 | 18 | Candidate 18 alternate versions; path is not included in candidate CMake source registration |
+| `core/cpp/src/evolution_controller.cpp` | 19 | 17 | Candidate 81 lines; donor 315 lines |
+| `core/cpp/tests/evolution_brain_integration_suite.cpp` | 24 | 22 | Candidate 45 lines; donor 297 lines |
+| `core/cpp/tests/CMakeLists.txt` | 40 | 38 | Candidate 45 executable/CTest entries; donor 71 executables / 70 CTest entries |
+| `engineering/cpp/CMakeLists.txt` | 35 | 33 | Candidate registers one test executable; donor registers two |
+
+### 9.2 Lifecycle and trust-boundary variants
+
+The 17 alternate `evolution_controller.cpp` versions are not interchangeable snapshots. Feature-presence triage found:
+- 13 versions contain the Brain-level validation/adoption/replay lifecycle methods;
+- 11 contain isolation-attestation checks;
+- four explicitly allow simulated evidence;
+- one contains trusted evaluator-digest and evaluation-evidence checks;
+- all 17 include rollback-related code and candidate-execution evidence checks.
+
+The inspected diffs show materially different acceptance policies: invalid/non-finite evidence rejection; outcome recomputation; duplicate experiment handling; journal staging; evaluator identity/evidence validation; and whether simulated evidence is allowed. These are trust-boundary differences. A branch name or later-looking date is not sufficient to select the strongest or correct implementation. Existing DF-02 evolution-isolation/adoption reports are relevant evidence, but each exact version cluster still needs an explicit owner/lineage/disposition.
+
+### 9.3 Brain/runtime variants
+
+The 33 alternate `brain.cpp` blobs form materially different lineages. Feature triage across exact contents found 27 versions with sequence-aware prediction identity, 26 with prediction-feedback resolution, 26 with adoption replay, 27 with experience consolidation and developmental paths, and 26 with affective-experience processing. Candidate and donor remain substantially different source snapshots. The clusters must be grouped by exact content/branch lineage and reconciled against focused cognitive-runtime, feedback, memory, affective and developmental reports; feature-presence counts alone are not semantic acceptance.
+
+The 19 alternate `brain.hpp` versions also vary: 10 expose sequence-aware prediction identity, nine prediction-feedback APIs, 10 consolidation, nine affective processing and six knowledge-source-feedback APIs. Header/API compatibility and the implementation/test/build owner must be traced together, not assessed in isolation.
+
+### 9.4 Restored API orphaning and source registration
+
+Exact frozen candidate and donor CMake contents were compared. Candidate `core/cpp/CMakeLists.txt` registers `src/brain.cpp` but not `src/brain_restored_api.cpp`; donor CMake registers both. The candidate test CMake does not register the restored API file either. This confirms that the source path is not a compiled candidate target under the frozen build configuration; it must not be counted as a candidate-integrated API solely from its path or lexical matches. Its 18 historical alternate blobs remain a distinct source-history cluster requiring duplicate-definition, dependency and API-provenance adjudication.
+
+### 9.5 Test registration is version-sensitive
+
+All 40 `core/cpp/tests/CMakeLists.txt` blob versions have distinct executable target sets in the artifact. The frozen candidate has 45 executable/CTest entries. Donor has 71 executable targets but 70 CTest registrations (the training/verification executable distinction matters). Donor-only target names include affective/developmental suites, cognitive-runtime learning/goal-feedback integration, memory-learning-evolution persistence, action-consequence integration, goal-outcome, ExperienceMemory, and DLT long-run/trial suites. This is a registration/build gap, not proof those mechanisms should be imported.
+
+The engineering test-CMake path has 35 versions and 30 unique target sets. The branch histories range from small operator/agent foundations to provider/orchestration stacks; these are distinct engineering architectures, not a single monotonic successor. The donor's task-ledger test is registered on a specific alternative line; the candidate does not register it. The existing engineering task-ledger report must be reconciled with the exact blob-owner matrix.
+
+### 9.6 Phase 1 disposition
+
+This triage establishes that the high-dispersion clusters contain real semantic, API, build/test-registration and trust-policy variation—not merely duplicate branch names. It identifies the precise files and comparison obligations for the next audit slice. **No alternate version is accepted as owner, successor, retirement candidate, adoption target or source baseline.** Phase 1 remains IN PROGRESS; the 544-version cohort is not fully semantically adjudicated.
