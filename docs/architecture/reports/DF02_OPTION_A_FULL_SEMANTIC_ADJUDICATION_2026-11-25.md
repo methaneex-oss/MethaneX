@@ -595,3 +595,51 @@ This removes comment/string-only lexical matches from the direct-code priority q
 4. Exact path references (1,946): documentary/workflow lineage and authority/status cross-check.
 
 Phase 2 remains OPEN; this filter is a prioritization/false-positive reduction, not full consumer adjudication.
+
+
+## 24. Exact consumer blob-to-donor-path ownership cross-map
+
+The 1,135 unique consumer blob records were cross-mapped by exact `(consumer_path, blob_sha)` against the 798 donor-path/blob ownership rows. This is content identity and ref-owner evidence, not semantic ownership:
+
+| Consumer blob cohort | Exact same-path donor ownership row | No exact same-path donor ownership row | Total |
+|---|---:|---:|---:|
+| Candidate-tip | 96 | 97 | 193 |
+| Historical-only | 691 | 251 | 942 |
+| All refs | 787 | 348 | 1,135 |
+
+The 97 candidate non-owner consumer blobs span 97 paths: 31 headers, 29 source files, 22 test sources, eight workflows and seven other files. The 251 historical non-owner blob versions span 123 paths: 90 test, 72 source, 67 header, 18 workflow and four other path-role entries (path-role counts are not mutually exclusive across blob versions). Exact content and tip SHA owners are preserved in the scan corpus.
+
+The 787 same-path exact matches are historical/candidate versions of files already in the 159 donor-path inventory. They can be mapped to the donor-path version ledger by exact SHA. The 348 non-owner consumer blobs are a distinct reverse-consumer cohort outside exact same-path donor ownership; their API/context, dependency, registration and branch lineage must be reviewed rather than inferred from path identity.
+
+### Historical-only consumer concentration
+
+The historical-only 36,607 rows are concentrated: top five consumer paths contribute 15,320 rows (41.8%); top 20 contribute 24,305 (66.4%); top 50 contribute 29,890 (81.7%). The top 20 exact paths/blob counts are recorded below and should be prioritized by material API/behavior changes and owner tips:
+
+| Consumer path | Rows | Blobs | Donor paths | Symbols |
+|---|---:|---:|---:|---:|
+| `core/cpp/src/brain.cpp` | 5,656 | 34 | 90 | 176 |
+| `core/cpp/src/brain_restored_api.cpp` | 3,369 | 19 | 60 | 110 |
+| `core/cpp/include/jarvis/core/brain.hpp` | 3,131 | 20 | 79 | 151 |
+| `core/cpp/src/evolution_controller.cpp` | 1,628 | 18 | 68 | 59 |
+| `core/cpp/tests/evolution_brain_integration_suite.cpp` | 1,536 | 23 | 74 | 67 |
+| `core/cpp/tests/evolution_canary_controller_suite.cpp` | 1,287 | 16 | 54 | 38 |
+| `core/cpp/tests/developmental_brain_integration_suite.cpp` | 1,204 | 9 | 81 | 80 |
+| `core/cpp/tests/memory_learning_evolution_persistence_suite.cpp` | 1,083 | 12 | 61 | 55 |
+| `core/cpp/src/cognitive_cycle.cpp` | 953 | 9 | 63 | 85 |
+| `core/cpp/tests/cognitive_cycle_suite.cpp` | 575 | 6 | 68 | 66 |
+| `core/cpp/tests/evolution_experiment_runner_suite.cpp` | 516 | 17 | 53 | 25 |
+| `core/cpp/src/evolution_experiment_runner.cpp` | 466 | 16 | 28 | 27 |
+| `core/cpp/tests/knowledge_source_feedback_suite.cpp` | 431 | 7 | 53 | 26 |
+| `core/cpp/tests/memory_architecture_suite.cpp` | 413 | 7 | 38 | 28 |
+| `core/cpp/tests/evolution_opportunity_orchestration_suite.cpp` | 375 | 13 | 22 | 22 |
+| `core/cpp/src/evolution_orchestrator.cpp` | 373 | 9 | 27 | 23 |
+| `core/cpp/src/evolution_experiment_coordinator.cpp` | 335 | 12 | 21 | 19 |
+| `core/cpp/tests/evolution_adoption_journal_suite.cpp` | 333 | 4 | 56 | 36 |
+| `core/cpp/tests/dlt_002_long_run.cpp` | 322 | 4 | 42 | 47 |
+| `core/cpp/src/memory.cpp` | 319 | 8 | 23 | 41 |
+
+Across the historical-only rows, 18,246 matches (49.8%) occur on one unique branch tip. This is branch-local evidence; one-tip presence is not proof of authority or correctness. Multi-tip presence is not semantic equivalence either. Branch-tip SHA and exact blob owners remain required.
+
+### Disposition
+
+This cross-map reduces the historical reverse-consumer queue to exact content ownership groups and prioritizes the 20 most concentrated paths. Phase 2 remains OPEN; the 348 non-owner blobs and all owner-linked consumer relationships require contextual/dependency/authority adjudication.
