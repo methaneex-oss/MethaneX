@@ -23,7 +23,7 @@
 | Gate | Disposition |
 |---|---|
 | DF-01 | CLOSED |
-| DF-02 | CLOSED under bounded non-adoption disposition; exact all-ref evidence and limits recorded in the DF-02 report and inventory §135.4 |
+| DF-02 | CLOSED only for the explicitly bounded non-adoption scope authorized in the delegated closeout record (§7 of the DF-02 report); this is not completion of exhaustive Option A semantic adjudication across every historical blob/lexical candidate |
 | DF-03 | CLOSED within documented authority/provenance scope |
 | DF-04 | CLOSED within documented governance scope |
 | DF-05 | CLOSED by explicit non-integration disposition; no branch-history operation |
@@ -32,7 +32,7 @@
 | DF-08 | RESOLVED within bounded historical-preservation criterion |
 | DF-09 | BLOCKED pending blind fresh-reader CLEAR against exact frozen HEAD caf87986dfea7aca75728818651c8687e9f5faf0 |
 | DF-10 | BUILDER-VERIFIED only for the original PR #192 parent/successor pair recorded in its terminal inventory; this follow-up branch is not that one-file successor |
-| DF-11 | WAIVED as a mandatory gate by prior Project Director decision; no independent verdict is claimed |
+| DF-11 | Mandatory-gate waiver remains the recorded Project Director disposition; the xAI report is independent scrutiny of frozen SHA caf87986… but is not DF-12 acceptance and does not automatically clear the follow-up revision |
 | DF-12 | PENDING Project Director final acceptance |
 
 **DF-02 evidence:** workflow [#45470173876](https://github.com/methaneex-oss/MethaneX/actions/runs/45470173876), artifact 14956148301, SHA-256 9902957475c76f4840d1d280c7d4f50537941e9445810afb805132374a328f38.
