@@ -607,7 +607,7 @@ The 1,135 unique consumer blob records were cross-mapped by exact `(consumer_pat
 | Historical-only | 691 | 251 | 942 |
 | All refs | 787 | 348 | 1,135 |
 
-The 97 candidate non-owner consumer blobs span 97 paths: 31 headers, 29 source files, 22 test sources, eight workflows and seven other files. The 251 historical non-owner blob versions span 123 paths: 90 test, 72 source, 67 header, 18 workflow and four other path-role entries (path-role counts are not mutually exclusive across blob versions). Exact content and tip SHA owners are preserved in the scan corpus.
+The 97 candidate non-owner consumer blobs span 97 paths: 31 headers, 29 source files, 22 test sources, eight workflows and seven other files. The 251 historical non-owner blob versions span 123 paths: 90 test, 72 source, 67 header, 18 workflow and four other path-role entries (counts are consumer blob versions, so a path with multiple versions contributes more than once). Exact content and tip SHA owners are preserved in the scan corpus.
 
 The 787 same-path exact matches are historical/candidate versions of files already in the 159 donor-path inventory. They can be mapped to the donor-path version ledger by exact SHA. The 348 non-owner consumer blobs are a distinct reverse-consumer cohort outside exact same-path donor ownership; their API/context, dependency, registration and branch lineage must be reviewed rather than inferred from path identity.
 
@@ -749,3 +749,18 @@ The conservative token-shape filter misses short but semantically meaningful nam
 | `numeric_value` | 58 | 3 | 2 | typed causal-value representation |
 
 These 21 names are manually prioritized above the remaining 56 lower-specificity candidate-absent tokens (618 rows). The 195 candidate-present lower-specificity tokens (2,803 rows) remain context-ambiguous. This demonstrates that token-shape heuristics alone are insufficient; the semantic review must include source/API meaning, exact branch owners and test/build consumers.
+
+
+## 31. Candidate-only identifiers — no historical consumer match
+
+Exact symbol-set comparison: 352 candidate-tip matched identifiers, 497 historical-only matched identifiers, 347 shared, **five candidate-only identifiers** and 150 historical-only identifiers. The five candidate-only identifiers occur in ten candidate rows:
+
+| Identifier | Rows | Candidate consumers | Donor-path match |
+|---|---:|---|---|
+| `clamp_unit` | 1 | `core/cpp/src/evolution_opportunity.cpp` | `affective_learning.hpp` |
+| `for_parameter` | 3 | `evolution_history.hpp`, `evolution_learning.cpp`, `evolution_strategy.cpp` | `evolution_history.cpp` |
+| `jarvis_cognitive_trigger_suite` | 1 | `core/cpp/tests/cognitive_trigger_suite.cpp` | test CMake path |
+| `perceive` | 3 | perception pipeline header/source/test | cognitive-runtime suite path |
+| `should_rollback` | 2 | evolution rollback header/source | evolution controller path |
+
+These are candidate-tip-only lexical identifiers, not proven novel capabilities. Their exact current consumers and build/test registrations are recorded; review whether they represent candidate additions, renamed interfaces, private helpers, or scanner artifacts. The five-token result also means the historical scan has no match for these names, not that the historical architecture lacked equivalent behavior.
