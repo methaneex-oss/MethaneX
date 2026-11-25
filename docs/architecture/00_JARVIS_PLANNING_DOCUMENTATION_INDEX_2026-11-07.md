@@ -1,3 +1,36 @@
+# CURRENT EXACT STATE — 2026-11-25 (DF-02 full Option A; targeted source triage advanced)
+
+> The prior bounded DF-02 closeout is superseded as the closure standard by Director decision D2=B. Full Option A is required; DF-02 remains OPEN.
+
+## Director decisions
+- D1=A: pursue blind fresh-reader CLEAR at frozen DF-09 target.
+- D2=B: full semantic review of historical blobs, consumers, dependencies, duplicate ownership, retention/retirement and provenance.
+- D3=A: retain DF-11 waiver with provenance residual; no reconstruction.
+- D4=B: prepare clean consolidation PR after DF-09 CLEAR; no merge authority.
+
+## Frozen PR #192
+- Exact review target: `caf87986dfea7aca75728818651c8687e9f5faf0`.
+- Open, unmerged, diverged/non-mergeable. No changes to frozen branch.
+
+## DF-02 progress
+- Phase 0 complete: all-ref artifact #45470173876 / artifact 14956148301 SHA-256 verified.
+- Reconciled 159 donor paths; 798 path/blob rows; 639 non-donor versions (96 candidate blobs + 544 historical alternates across 88 paths); all exact contents available; six donor blobs fetched by exact SHA.
+- 40,048 symbol candidates and 1,946 exact-path candidates. Lexical discovery is not semantic proof.
+- Targeted Phase 1 source-level triage now covers seven high-dispersion clusters (180 alternate blobs): brain.cpp, brain.hpp, restored API, evolution controller, evolution integration suite, core test CMake, engineering test CMake. Deeper comparisons found multiple evolution evidence-validation policies, 40 candidate/restored-API duplicate method names (restored file is not candidate CMake-registered), candidate/donor test-registration delta (45 vs 71 executable targets / 45 vs 70 CTest registrations), and distinct CMake target-set variants.
+- Report: [DF-02 Full Option A Semantic Adjudication](reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md), latest report commit `f7a5c909585048d6253c946a941b93d8636734e6`.
+
+**DF-02 remains OPEN.** No historical version is selected. The 544 alternate-version cohort, reverse-consumer/dependency classification and duplicate-owner/authority/retention ledger remain incomplete.
+
+## Other gates
+DF-09 BLOCKED pending actual blind-reader CLEAR at frozen SHA; DF-11 waiver retained with provenance residual; DF-12 pending Director acceptance. PR #201/#202 review approvals remain limited to their correction scopes.
+
+## Audit follow-up
+Draft PR #203: [DF-02 full Option A semantic audit](https://github.com/methaneex-oss/MethaneX/pull/203). Branch `docs/df02-option-a-full-semantic-adjudication-20261125`, exact HEAD at this snapshot `f7a5c909585048d6253c946a941b93d8636734e6`. Three documentation paths only. No runtime changes or merge.
+
+Stage A remains NOT STARTED / HELD. No merge, donor adoption, baseline selection, implementation, training or deployment is authorized.
+
+---
+
 # CURRENT EXACT STATE — 2026-11-25 (DF-02 full Option A execution)
 
 > This controlling status supersedes the earlier bounded DF-02 closure. The Director selected full Option A; the audit is reopened and not yet complete.
