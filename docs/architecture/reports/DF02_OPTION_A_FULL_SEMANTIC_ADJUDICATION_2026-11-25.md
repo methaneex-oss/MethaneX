@@ -314,3 +314,12 @@ Candidate-absent suites are not silently treated as failed or passed. They repre
 ### 14.4 Disposition
 
 This one-alternate cohort reveals authorization, contradiction learning, attention-weight bounds, canary regression policy, disputed-premise reasoning, capability-health API and candidate-absent action/prediction/affective/developmental tests. All require exact owner/consumer/provenance classification. The two workflow files are tracked separately as test/CI evidence, not runtime capabilities. Phase 1 remains OPEN; no adoption/retirement/baseline authority is inferred.
+
+
+## 15. Cumulative cohort accounting and next slice
+
+A path-overlap reconciliation across the preceding sections prevents double-counting: `evolution_brain_integration_suite.cpp` is included in §9's seven high-dispersion clusters and §11's test review, so it is one path/22 alternate blobs, not two. The cumulative targeted triage cohort is therefore **44 unique path clusters / 320 alternate blobs**. The total discovery cohort is 544 alternate blobs across 88 donor paths; **44 path clusters / 224 alternate blobs remain outside this targeted cohort**.
+
+The highest remaining alternate-version counts are: core CMake (20); evolution-experiment API header (13); evolution-opportunity orchestration suite (12); experiment-runner header (11); memory-learning-evolution persistence suite (11); experiment-coordinator suite (11); adoption-journal header (8); developmental-brain integration suite (8); engineering message bus header/source (7 each); engineering agent header (7); engineering coordinator source (6); memory architecture suite (6); cognitive-cycle suite and cognitive runtime source (5 each. These form the next audit priority, followed by the remaining low-dispersion cohorts.
+
+This reconciliation is a count/coverage correction, not semantic closure. The complete alternate cohort remains OPEN.
