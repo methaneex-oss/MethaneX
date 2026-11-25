@@ -1,3 +1,55 @@
+# CURRENT EXACT STATE — 2026-11-25 (DF-02 full Option A execution)
+
+> This controlling status supersedes the earlier bounded DF-02 closure. The Director selected full Option A; the audit is reopened and not yet complete.
+
+## Project Director decisions
+- D1 DF-09=A: pursue exact-frozen-HEAD blind-reader CLEAR; correct findings and repeat.
+- D2 DF-02=B: full semantic adjudication across historical blobs, consumers, dependencies, duplicate owners, retention/retirement and provenance.
+- D3 DF-11=A: retain waiver; preserve citation/provenance residual, no reconstruction effort.
+- D4 DF-12=B: prepare clean consolidation PR only after DF-09 CLEAR; no merge authorization.
+
+## Frozen PR #192
+- Frozen review target: `caf87986dfea7aca75728818651c8687e9f5faf0`.
+- PR #192 remains open/unmerged and divergent/non-mergeable. Do not merge as-is.
+- No changes have been made to its frozen review branch.
+
+## DF-02 — REOPENED / OPEN
+**Phase 0 complete; Phase 1 targeted triage in progress.**
+- All-ref artifact workflow #45470173876 / artifact 14956148301, SHA-256 `9902957475c76f4840d1d280c7d4f50537941e9445810afb805132374a328f38`, downloaded and independently verified.
+- 254 refs / 213 unique tips; 159 donor paths; 95 divergent / 63 absent / 1 identical candidate status; 798 path/blob ownership rows.
+- 639 non-donor blob versions: 96 candidate blobs plus 544 alternate historical blobs across 88 donor paths. All exact contents available; six donor blobs were retrieved directly by SHA.
+- 40,048 symbol-match candidates, 1,946 exact-path-reference candidates. Discovery candidates are not semantic dependencies.
+- Initial high-dispersion source-level triage: 7 clusters (brain.cpp, brain.hpp, restored API, evolution controller, evolution integration test, core test CMake, engineering test CMake). Real API/trust/build/test variation observed. No historical version is selected.
+- Full report: [DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25](reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md).
+
+DF-02 remains OPEN until 159-path dispositions, 544 alternate-version semantic review, reverse-consumer/dependency classification and duplicate-owner/authority/retention reconciliation are complete and independently scrutinized.
+
+## Other gates
+| Gate | Status |
+|---|---|
+| DF-01 | CLOSED |
+| DF-03 | CLOSED within documented authority/provenance scope |
+| DF-04 | CLOSED within governance scope |
+| DF-05 | CLOSED by explicit non-integration disposition |
+| DF-06 | CLOSED for mechanical navigation integrity only |
+| DF-07 | correction synchronized on #201/#202; follow-up consistency verification pending |
+| DF-08 | resolved within bounded preservation criterion |
+| DF-09 | BLOCKED pending blind-reader CLEAR at frozen SHA |
+| DF-10 | original PR #192 parent/successor pair only; new follow-up writes require new inventory |
+| DF-11 | waived; provenance residual retained |
+| DF-12 | Project Director acceptance pending |
+
+PR #201 and #202 correction scopes were independently approved with documented non-blocking residuals. Their approvals do not close DF-02, DF-09 or DF-12.
+
+## Builder follow-up
+- Branch `docs/df02-option-a-full-semantic-adjudication-20261125`.
+- Latest Builder report commit before this index update: `ee7dce6fd9e1835fe182bf07248338ebfbc50e27`.
+- Documentation-only changes; frozen PR #192 and runtime code remain unchanged.
+
+Stage A remains NOT STARTED / HELD. No merge, donor adoption, source-baseline selection, runtime implementation, training or deployment is authorized.
+
+---
+
 # CURRENT EXACT STATE — 2026-11-25 (Project Director decisions; DF-02 Option A reopened)
 
 > This snapshot supersedes the prior bounded DF-02 closeout status. Historical reports and prior delegated dispositions remain provenance, but are not closure under the newly selected full Option A standard.
