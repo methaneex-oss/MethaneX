@@ -643,3 +643,18 @@ Across the historical-only rows, 18,246 matches (49.8%) occur on one unique bran
 ### Disposition
 
 This cross-map reduces the historical reverse-consumer queue to exact content ownership groups and prioritizes the 20 most concentrated paths. Phase 2 remains OPEN; the 348 non-owner blobs and all owner-linked consumer relationships require contextual/dependency/authority adjudication.
+
+
+## 25. Consumer blob owner-tip lineage crosswalk
+
+The `consumer_blob_sources.jsonl` occurrence records were reconciled to `unique_branch_tips.csv` (213 unique tip SHAs, 254 branch refs). Each of the 1,135 unique consumer blobs has exact path/category, branch names, tip SHA list and tip count. This is lineage/identity evidence, not authority.
+
+| Consumer blob set | Unique blobs | Tip-count distribution observation |
+|---|---:|---|
+| Candidate-tip blobs | 193 | content is widely shared; median occurrence tip count 136, with some blobs on 212 unique tips |
+| Historical-only blobs | 942 | median tip count 2; 461 blobs occur on exactly one unique tip; 76 blobs occur on 76 tips |
+| All consumer blobs | 1,135 | occurrence metadata covers 253 branch names across the scanned refs |
+
+The exact tip SHA/branch-owner mapping is preserved in the downloaded scan artifact. Historical one-tip blobs are branch-local content candidates and should be reviewed by branch/ref provenance. Shared content across many tips is an exact-blob reuse fact; it does not prove semantic equivalence of surrounding files, approval, or owner authority.
+
+This crosswalk closes the **metadata owner-tip mapping step** for the consumer corpus. The semantic lineage step remains open: identify which branch is a successor, experiment, duplicate, abandoned fork or authorized source; reconcile each material API/capability and test/build edge; document authority and preservation/retirement constraints. No branch is chosen based on branch name, tip count, recency or blob sharing.
