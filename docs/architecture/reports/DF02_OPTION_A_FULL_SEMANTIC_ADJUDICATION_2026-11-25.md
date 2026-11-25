@@ -658,3 +658,26 @@ The `consumer_blob_sources.jsonl` occurrence records were reconciled to `unique_
 The exact tip SHA/branch-owner mapping is preserved in the downloaded scan artifact. Historical one-tip blobs are branch-local content candidates and should be reviewed by branch/ref provenance. Shared content across many tips is an exact-blob reuse fact; it does not prove semantic equivalence of surrounding files, approval, or owner authority.
 
 This crosswalk closes the **metadata owner-tip mapping step** for the consumer corpus. The semantic lineage step remains open: identify which branch is a successor, experiment, duplicate, abandoned fork or authorized source; reconcile each material API/capability and test/build edge; document authority and preservation/retirement constraints. No branch is chosen based on branch name, tip count, recency or blob sharing.
+
+
+## 26. High-specificity candidate-absent tokens — code-context classification
+
+The 73 prioritized identifiers account for 2,410 historical-only match rows. The exact-token/comment-strip filter classifies **2,375 as code-context** and 35 as comment/string-only. The prioritization set is divided into the following non-overlapping token families:
+
+| Family | Tokens | Match rows |
+|---|---:|---:|
+| Evolution trust/isolation/adoption/canary | 13 | 1,217 |
+| Prediction/context/feedback | 9 | 272 |
+| Developmental/affective learning | 29 | 627 |
+| Engineering workforce/task | 5 | 51 |
+| Causal/knowledge evidence | 5 | 96 |
+| Other high-specificity API/type names | 12 | 147 |
+| **Total** | **73** | **2,410** |
+
+Representative high-specificity names and exact contexts are in §22. This classification prioritizes code/API consumer edges rather than comment/string mentions; it still does not establish whether a call is a valid dependency, intended successor, duplicate implementation, test-only consumer or approved owner.
+
+### Candidate-present symbol context
+
+The 352 candidate-present matched symbols contribute 3,441 rows: 3,325 code-context and 116 comment/string-only. Among source/test rows, 1,981 source/header and 1,089 test rows are code-context; 69 source/header and 47 test rows are comment/string-only. The remaining candidate workflow/build/other matches are raw-text/context evidence.
+
+The highest-frequency candidate identifiers are generic `observe` (377 rows), `restored` (294), `evaluate` (241), `policy` (140), `confidence` (118) and `rollback` (108). These require exact API context before creating a dependency edge. The 352-symbol candidate set is not yet semantically closed.
