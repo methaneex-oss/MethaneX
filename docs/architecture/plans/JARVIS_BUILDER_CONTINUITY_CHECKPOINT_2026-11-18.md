@@ -2091,3 +2091,8 @@ Detailed report §13. This is source-level triage; no historical implementation 
 The artifact contains 25 donor paths with exactly one alternate blob (12 production/header, 11 test, two workflows). Targeted exact source diffs found API reduction in causal/self-model headers; a candidate ActionAuthorizer bypass alternate; contradictory-association learning; clamped attention weights; fail-closed low-level evolution adoption; canary policy changed from worst-regression to mean-only; disputed-premise reasoning and confidence propagation; and capability-health removal. Two donor-only source paths—Brain action-execution feedback and contextual prediction—are not frozen-candidate integrations.
 
 The 11 single-alternate tests include candidate-absent affective evidence, cognitive-runtime goal-feedback, developmental-world integration and goal-directed cognition suites; present test paths also show coverage deltas. Counts are indicators, not equivalence. See report §14. This cohort is triaged, not fully authority-dispositioned.
+
+
+### 2026-11-25 — DF-02 cohort count correction
+
+Path overlap was reconciled. `evolution_brain_integration_suite.cpp` belongs to the seven high-dispersion cluster group and the test-history review, but is one path/22 alternate blobs. Cumulative Phase 1 targeted triage is **44 unique paths / 320 alternate blobs** (not the previous double-counted 343). The complete discovery cohort is 544 alternates; **44 paths / 224 blobs remain outside the targeted cohort**. Detailed report §15 lists next priority. This is a coverage/count correction, not semantic closure; DF-02 remains OPEN.
