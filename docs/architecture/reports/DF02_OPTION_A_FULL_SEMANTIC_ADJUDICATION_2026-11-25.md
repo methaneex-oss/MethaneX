@@ -681,3 +681,12 @@ Representative high-specificity names and exact contexts are in §22. This class
 The 352 candidate-present matched symbols contribute 3,441 rows: 3,325 code-context and 116 comment/string-only. Among source/test rows, 1,981 source/header and 1,089 test rows are code-context; 69 source/header and 47 test rows are comment/string-only. The remaining candidate workflow/build/other matches are raw-text/context evidence.
 
 The highest-frequency candidate identifiers are generic `observe` (377 rows), `restored` (294), `evaluate` (241), `policy` (140), `confidence` (118) and `rollback` (108). These require exact API context before creating a dependency edge. The 352-symbol candidate set is not yet semantically closed.
+
+
+## 27. High-specificity absent-token consumer role and path concentration
+
+The 73-token set is further partitioned by consumer role: 1,651 source/header rows, 756 test rows and three workflow rows; 2,375 of these are code-context (1,617 source/header and 755 test, with three workflow text matches). The tokens occur across 105 consumer paths and 44 donor paths.
+
+The largest historical consumers for this set are `brain_restored_api.cpp` (457 rows), `brain.cpp` (422), `brain.hpp` (206), `evolution_controller.cpp` (145), the evolution Brain/canary/runner integration suites, `evolution_experiment_runner.cpp`, memory-learning-evolution persistence, cognitive cycle, coordinator, developmental-learning source and related tests.
+
+The most concentrated donor-path identifiers are `evolution_controller.hpp` (371 rows), `brain_restored_api.cpp` (350), `evolution_controller.cpp` (263), `developmental_learning.hpp` (208), `evolution_experiment.hpp` (121), and `developmental_learning.cpp` (95). These direct source/test contexts are prioritized for semantic owner and dependency review; counts do not establish capability ownership or adoption.
