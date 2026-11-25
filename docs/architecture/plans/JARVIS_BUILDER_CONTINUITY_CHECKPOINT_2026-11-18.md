@@ -2159,3 +2159,8 @@ This is an exact-context priority queue, not dependency/owner closure. Phase 2 a
 ### 2026-11-25 — Candidate/historical identifier specificity split
 
 Conservative token-shape filter across 502 matched identifiers: 157 high-specificity candidate-present symbols (638 rows, 126 consumers/52 donor paths) and 73 high-specificity candidate-absent symbols (2,410 rows/2,375 code-context). Remaining 272 symbols are lower-specificity/ambiguous; 195 are candidate-present (2,803 rows) and 77 historical-only. These prioritization buckets do not substitute for exact semantic classification.
+
+
+### 2026-11-25 — Candidate-present high-specificity API context
+
+157 higher-specificity candidate-present identifiers account for 638 rows across 126 consumer paths/52 donor paths; 627 are code-context and 11 comment/string-only. Roles: 389 source/header,199 test,49 workflow,one build. Strong names include EvolutionExperiment, CandidateAction, EvolutionModel/Proposal, ExperimentOutcome, EvolutionController, AttentionSignal, ActionAssessment, EvolutionSandbox, CognitiveCycleInput, CognitiveRuntime and AgentMessageBus. Remaining195 candidate-present low-specificity symbols account for 2,803 rows; exact semantic classification remains open. See report §29.
