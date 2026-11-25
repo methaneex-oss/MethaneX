@@ -416,3 +416,43 @@ The DLT long-run/persistence suites use custom check helpers rather than `assert
 This final slice covers 22 previously unreviewed path clusters / 62 alternate blobs. Combined with the earlier 44 path clusters / 320 alternate blobs, **the targeted corpus is now 66 unique path clusters / 482 alternate blobs**. The all-ref discovery cohort contains 88 paths / 544 alternate blobs, so **22 path clusters / 62 alternate blobs remain untriaged**. The report's cohort accounting is updated accordingly.
 
 The 482 versions have not all received individual semantic disposition; targeted comparisons and feature-family triage are not a substitute for the required per-blob/per-owner/consumer/authority ledger. DF-02 remains OPEN.
+
+
+## 18. Final remaining 22-path / 62-blob triage
+
+The final cohort was inspected at exact candidate/donor content where present, with all 62 alternate blob SHA/branch owners and feature signatures enumerated. This completes **targeted triage coverage of the full all-ref alternate cohort: 88 unique donor paths / 544 alternate blobs**. It does not complete the per-version semantic/authority ledger.
+
+### 18.1 Runtime, safety, codec and learning source differences
+
+- `cognitive_runtime.cpp`: five alternate blobs (153–267 lines). Donor action/feedback orchestration was compared with the candidate; alternate families range from priority/work-item runtime prototypes to feedback/action-execution integrations.
+- `evolution_safety.cpp`: four alternate blobs. The policy variants range from finite/outcome/confidence checks to isolation and attestation enforcement; exact validation families differ.
+- `causal_model.cpp`: three alternate blobs. Typed/escaped codec integration is present on later branches; one early alternate has the smaller phase implementation. These versions must be reconciled with the exact causal-link codec and persistence tests.
+- `adaptation.cpp`: two alternate blobs. The relative-error/first-observation/change-response semantics vary; exact scale and prior behavior are not interchangeable.
+- Engineering coordinator, cognition, action-execution, evolution, cognitive-workspace and canary headers have two or three alternates each; their API changes cover durable task dispatch, evidence/context/feedback fields, execution/consequence contracts, previous-value restoration, workspace representation/action outcomes and canary preview.
+
+### 18.2 Final test-version cohort
+
+| Test path | Candidate assertions | Donor assertions | Alternate blobs | Notable scope |
+|---|---:|---:|---:|---|
+| knowledge-memory phase 3 | 14 | 14 | 5 | evidence/feedback, disputed beliefs, contradiction and sequence variants |
+| learning-adaptation phase 8 | 23 | 60 | 5 | prediction/adaptation and persistence/learning coverage |
+| process isolation | 8 | 8 | 4 | alternate sandbox/attestation/process-boundary scenarios |
+| DLT-002 long-run | — | custom checks | 3 | donor-only long-running feedback/behavioral trial harness |
+| evolution adoption journal | 8 | 53 | 3 | identity, evaluation/adoption/rollback/replay and attestation |
+| association causality phase 5 | 12 | 46 | 3 | changed observations, causal associations, sequence/context persistence |
+| cognitive-runtime learning integration | — | 88 | 2 | donor-only action/feedback/utility/goal/context/persistence integration |
+| Brain action-consequence integration | — | 95 | 2 | donor-only execute/verify/rollback, consequence and feedback sequence |
+| developmental learning | — | 63 | 2 | donor-only contextual strategy learning/generalization |
+| cognitive runtime | 19 | 100 | 2 | runtime queue/action/feedback/persistence behavior |
+| DLT-002 persistence | — | 63 | 2 | donor-only persistent adaptive trial and restart/replay |
+| prediction feedback phase 10 | 12 | 371 | 2 | donor has large sequence/utility/stale-feedback/replay/persistence scenario set |
+
+Custom-check suites are not misclassified as zero tests because they do not use C `assert` macros. Counts are reported only as a comparison indicator. The full content and scenario names are available for further per-blob adjudication.
+
+### 18.3 Coverage boundary and next phase
+
+**All 88 path clusters / 544 alternate blobs have now been enumerated and targeted-triaged.** Individual semantic disposition is still incomplete: source/test versions must be grouped by exact identical content, exact owner/ref provenance, material deltas, dependency/API consumers, build registration, behavior evidence and authority. Some alternate blobs are only feature-signature/metadata triage, not line-by-line semantic acceptance.
+
+The next objective is Phase 2 reverse-consumer/dependency adjudication: reconcile the 40,048 lexical symbol rows and 1,946 exact-path-reference rows by exact consumer blob/context and branch-tip owner; classify compiled/runtime/test/build/workflow/documentation/false-positive; identify API/dependency edges and duplicate owners; link each edge to source/test/build evidence. Candidate-tip consumer evidence and prior compiled-graph reports are inputs, not all-ref closure.
+
+DF-02 remains OPEN. No donor path/blob is accepted, adopted, selected as baseline, retired or deleted by this triage.
