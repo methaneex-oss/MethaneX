@@ -199,3 +199,32 @@ The donor canary suite's 36 assertions exercise evaluation/adoption state, suffi
 Alternate versions vary by lifecycle stage: the exact assertion count ranges above include stripped phase prototypes, broader authenticated-replay versions, and later integration branches. The 54 distinct historical test blobs across these three paths are not 54 independent implementations; their source commits/branch owners must be clustered and the scenario changes reviewed. No test blob is selected solely by its assertion count.
 
 **Disposition:** these test histories materially show regression/coverage variation and establish the donor behavior contract to compare against. They do not establish that every donor scenario is valid for a future architecture, and no test code is adopted. Phase 1 remains OPEN.
+
+
+## 12. Process-isolation and evolution execution/journal source-version review
+
+Five additional source clusters were compared at exact candidate/donor blobs and their alternate versions. This slice covers **56 alternate blobs** (13 + 15 + 11 + 9 + 8); feature counts below are exact-content indicators and are not a substitute for per-blob semantic dispositions.
+
+### 12.1 Process isolation — 13 alternate blobs
+
+Candidate and donor have 250 and 258 lines respectively. Donor's exact diff moves `argv` allocation/preparation before `fork()`, avoiding non-async-signal-safe allocation in a child of a multithreaded parent, and uses `execv` for explicit executable paths while retaining `execvp` for PATH lookup. The candidate only uses `execvp` and constructs `argv` after the fork. Across the 13 alternate blobs, 12 contain both `execv` and `execvp`, 10 contain the async-signal-safety correction, and three contain `close_range`. This is material process-boundary variation; branch content must be compared to exact platform behavior and syscall isolation, not merely the presence of `fork/exec`.
+
+### 12.2 Experiment runner — 15 alternate blobs
+
+Candidate `evolution_experiment_runner.cpp` is 23 lines; donor is 59. Donor marks callback/sandbox results as non-isolated even when the callback returns a self-reported isolation flag, and adds a dedicated `run_isolated_command` path using the process-isolation backend, validating exit status/output/finite fitness and attesting only successful isolated execution. Thirteen of 15 alternate blobs contain isolated-result attestation; seven contain trusted-evaluator digest handling. These policies are not interchangeable.
+
+### 12.3 Experiment coordinator — 11 alternate blobs
+
+Candidate is 75 lines; donor 84. Donor validates `started`, completion, timeout/output limits, finite fitness and config-required isolation for baseline and candidate trials; tracks whether all trials were isolated; and emits an isolation attestation only when the result is actually isolated. Nine of 11 alternate versions contain both `require_isolation` and attestation logic. One version carries valid-evaluation-evidence handling. A candidate self-reported isolation flag cannot be assumed equivalent to donor trial provenance.
+
+### 12.4 Adoption journal — 9 alternate blobs
+
+Candidate is 71 lines; donor 114. Donor's `stage` refuses an existing non-new record unless the experiment's complete identity/metrics/proposal/policy fields match (including parameter key, fitness values, confidence, proposal current/proposed/expected gain/confidence, minimum improvement and isolation). It also supplies `restore_pending` and `restore_adopted` transitions. All nine alternate versions contain both restoration methods and parameter identity checks; eight compare proposal-current values. Candidate's prior adopted-record fast path returns success without this full equality check, creating an idempotency/identity mismatch risk. The journal must be reviewed with the history/codec/replay implementation, not alone.
+
+### 12.5 Evolution orchestrator — 8 alternate blobs
+
+Candidate is 154 lines; donor 162. Donor adds explicit trial configuration and refuses model mutation unless the selected experiment has reached `CandidateEvaluated`, preserving durable evaluation as an adoption precondition. Seven of eight alternate versions contain that lifecycle precondition and candidate-execution evidence. One alternate additionally checks isolation and valid-evaluation evidence. This is a substantive authority/order constraint, not merely an API change.
+
+### 12.6 Disposition
+
+The five exact source diffs establish additional concrete trust, execution, identity, replay and persistence differences. The 56 historical blobs remain unclosed: versions need exact SHA/owner grouping, tests/build reachability, source-line provenance and semantic dispositions. No adoption, baseline or retirement decision is inferred. Phase 1 remains OPEN.
