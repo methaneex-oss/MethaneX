@@ -2061,3 +2061,13 @@ These findings are documented in report §9. This is triage only. No variant is 
 - Candidate `brain.cpp` and `brain_restored_api.cpp` have 40 overlapping Brain method definitions by name. Candidate CMake does not register the restored API translation unit, so this is currently dormant, not a live duplicate-symbol failure. Donor source split has nine Brain definitions in `brain.cpp`, 62 in restored API and zero overlap; donor CMake registers the latter. API ownership split must be resolved before any adoption/integration.
 - All 40 core test-CMake blobs have distinct target sets. Frozen candidate: 45 executable/CTest targets. Donor: 71 executable targets, 70 CTest registrations. Donor-only targets include affective/developmental suites, action-consequence, runtime-learning/goal-feedback, goal-outcome, memory-learning-evolution, ExperienceMemory and DLT trial/long-run. Engineering test-CMake: 35 versions / 30 unique target sets.
 - Report §10 captures exact findings and scope limits. Phase 1 remains OPEN; the 544 alternate blob cohort and all consumer/authority disposition work remain incomplete.
+
+
+### 2026-11-25 — Evolution test-history slice
+
+Exact donor/candidate/alternate blobs were reviewed for three test paths:
+- `evolution_brain_integration_suite.cpp`: 22 alternates; candidate 7 assertions, donor 97, alternates 68–154. Donor scenarios include legacy adoption/rollback replay, evaluation gate negatives, canary rollback, duplicate-evaluation idempotency, persistence/restart and transition replay.
+- `evolution_experiment_runner_suite.cpp`: 17 alternates; candidate 11, donor 17, alternates 13–43. Donor checks isolated attestation, simulated-run clearing, non-isolated rejection and invalid execution outcomes.
+- `evolution_canary_controller_suite.cpp`: 15 alternates; candidate 9, donor 36, alternates 35–42. Donor checks canary threshold/persistence and idempotent replay of evaluation/adoption/rollback journal transitions.
+
+Assertion totals are coverage indicators, not quality or semantic-equivalence scores. Alternate blobs require content/lineage clustering. Findings are in report §11. This slice advances exact behavioral-contract evidence but does not close the 544 alternate versions or DF-02.
