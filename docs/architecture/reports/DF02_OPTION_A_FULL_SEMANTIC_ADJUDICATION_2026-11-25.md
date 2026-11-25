@@ -533,3 +533,41 @@ This cross-check is separate from lexical symbol-match rows. It establishes curr
 ## 21. Candidate-tip graph slice — status
 
 Candidate-tip registration and include reachability have been reconciled. The 352 candidate-present symbols still require exact-context review; the 73 high-specificity candidate-absent identifiers require historical branch-owner and consumer-lineage adjudication. The 36,607 historical-only rows and 1,210 historical exact-path refs remain open. Phase 2 is IN PROGRESS; this is not a full dependency or ownership closure.
+
+
+## 22. Candidate-absent high-specificity consumer triage
+
+The 150 candidate-absent matched symbols were separated by token specificity. A conservative filter yields 73 higher-specificity identifiers (domain APIs/types or long underscore APIs); the remaining 77 are mostly generic/ambiguous identifiers and remain context-dependent. The 73 are a prioritization set, not 73 proven dependencies.
+
+### 22.1 Direct historical consumer evidence
+
+| API/identifier | Match rows | Consumer paths | Donor paths | First inspected context |
+|---|---:|---:|---:|---|
+| `run_isolated_command` | 416 | 8 | 6 | coordinator calls isolated runner |
+| `observe_canary_for_brain` | 138 | 5 | 2 | Brain delegates canary observation |
+| `preview_canary_for_brain` | 84 | 4 | 2 | restored API exposes preview |
+| `has_valid_isolation_attestation` | 74 | 11 | 1 | restored API serializes attestation validity |
+| `observe_association` | 74 | 5 | 2 | developmental-learning association observation |
+| `validate_adoption_for_brain` | 74 | 5 | 2 | Brain gates adoption on controller validation |
+| `compensate_adoption_for_brain` | 62 | 4 | 2 | Brain/controller compensation path |
+| `resolve_prediction_feedback` | 59 | 10 | 1 | sequence-bound feedback API |
+| `apply_prediction_feedback` | 59 | 3 | 2 | association-model feedback assimilation |
+| `record_evaluation_for_brain` | 56 | 4 | 2 | evaluation record gate |
+| `rollback_for_brain` | 56 | 4 | 2 | journaled Brain rollback |
+| `attest_isolated_result` | 47 | 4 | 1 | experiment attestation creation |
+| `PredictionFeedbackStatus` | 39 | 8 | 1 | feedback status contract |
+| `DevelopmentalLearning` | 28 | 8 | 1 | Brain developmental subsystem type |
+| `EngineeringTaskLedger` | 15 | 6 | 3 | durable engineering task-ledger declaration/use |
+| `decode_causal_side` | 15 | 4 | 4 | typed causal-side decoder call |
+
+Other specific historical consumer tokens cover previous-value restoration, evaluator evidence, prediction contexts, memory sequence cursors, developmental/affective learning and strategy APIs, action consequence/verification, goal-outcome feedback, and donor-only integration-test/world types. Each must be linked to exact branch/blob owner and consumer role before it becomes a dependency edge.
+
+### 22.2 Context classification boundary
+
+Sampled exact source contexts confirm that the high-specificity rows above are real API/type/call references in historical blobs, but their ownership and current applicability remain unresolved. Other scanner rows for generic names such as `restored`, `observe`, `evaluate`, `rollback`, `policy`, `confidence`, `journal` and `append` are often prose, unrelated functions, test helper names or workflow text. The scanner is an over-approximation; no row is promoted to a dependency based on token match alone.
+
+### 22.3 Next bounded work
+
+Prioritize the 73 higher-specificity absent identifiers: group by exact donor blob and historical owner; inspect declaration/definition/call sites; map include/API edges and build/test registration; classify production, test-only, workflow, docs and false-positive; reconcile duplicates and behavioral evidence. Then review the 352 candidate-present symbols in the same exact-context manner. The 36,607 historical-only rows remain a large branch-specific cohort and must be filtered by exact blob/tip/category before conclusions.
+
+Phase 2 remains OPEN. This triage identifies high-value consumer edges; it does not prove ownership, dependency closure, adoption or retirement authority.
