@@ -2114,3 +2114,12 @@ Cumulative targeted coverage: **66 unique path clusters / 482 alternate blobs**.
 The final 22 path clusters / 62 alternate blobs were targeted: cognitive runtime action/feedback, evolution safety, causal codec, adaptation, engineering coordinator and API headers, and 12 test cohorts. Exact source comparisons and branch/blob feature inventories are recorded in report §18. This brings Phase 1 **targeted triage coverage to all 88 donor-path clusters / 544 alternate blobs**. Coverage does not mean every version is semantically adjudicated or accepted; exact owner, API/consumer, behavior/build/test, provenance, authority, retention and retirement dispositions remain to be completed.
 
 **Next phase: Phase 2 reverse-consumer/dependency adjudication.** Reconcile 40,048 symbol candidates and 1,946 exact-path candidates by exact context/blob/ref owner. Classify compiled/runtime/test/build/workflow/docs/false positives; trace dependency and duplicate-owner edges; tie conclusions to behavior/build/test and authority. Phase 3 provenance/retention/authority and independent scrutiny remain open. DF-02 remains OPEN; no donor adoption or baseline selection.
+
+
+### 2026-11-25 — Phase 2 reverse-consumer first slice
+
+Candidate-tip graph: 3,441 lexical rows, 111 donor paths, 352 symbols, 193 consumer paths/blobs. Candidate production source registration has 62 C++ translation units (57 core + five engineering); 61 have candidate lexical matches, while `brain_restored_api.cpp` is the unregistered matched source and `brain_novelty.cpp` is the registered source without a donor-symbol match. Candidate test consumer graph has 49 test source paths with matches; 46 are registered and three are not: `brain_smoke.cpp`, `evolution_experiment_test.cpp`, `representation_suite.cpp`.
+
+Historical-only matches: 36,607 rows, 118 donor paths, 270 consumer paths, 942 blobs. All-ref: 40,048 rows / 502 symbols / 346 consumer paths / 1,135 blobs. Exact path refs: 1,946 rows, 159 donor paths, 76 consumer paths/101 blobs; 1,930 docs, 15 workflows, one other. These are documentation/workflow references, not code dependency edges.
+
+The report records candidate/historical specific APIs, lexical false positives, and scope. Phase 2 remains OPEN; exact contextual classification, full dependency/duplicate-owner and authority ledger still required.
