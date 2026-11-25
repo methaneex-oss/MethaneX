@@ -690,3 +690,19 @@ The 73-token set is further partitioned by consumer role: 1,651 source/header ro
 The largest historical consumers for this set are `brain_restored_api.cpp` (457 rows), `brain.cpp` (422), `brain.hpp` (206), `evolution_controller.cpp` (145), the evolution Brain/canary/runner integration suites, `evolution_experiment_runner.cpp`, memory-learning-evolution persistence, cognitive cycle, coordinator, developmental-learning source and related tests.
 
 The most concentrated donor-path identifiers are `evolution_controller.hpp` (371 rows), `brain_restored_api.cpp` (350), `evolution_controller.cpp` (263), `developmental_learning.hpp` (208), `evolution_experiment.hpp` (121), and `developmental_learning.cpp` (95). These direct source/test contexts are prioritized for semantic owner and dependency review; counts do not establish capability ownership or adoption.
+
+
+## 28. Candidate-present vs historical-only identifier specificity split
+
+Using the same conservative token-shape filter across all 502 matched identifiers:
+
+| Specificity cohort | Symbols | Rows | Candidate status |
+|---|---:|---:|---|
+| Higher-specificity, candidate-present | 157 | 638 | present in candidate-tip consumers |
+| Higher-specificity, candidate-absent | 73 | 2,410 | historical-only |
+| Lower-specificity/ambiguous, candidate-present | 195 | 2,803 | present in candidate-tip consumers |
+| Lower-specificity/ambiguous, candidate-absent | 77 | historical-only rows remain in the 36,607 historical-only set |
+
+The 638 candidate-present high-specificity rows span 126 consumer paths and 52 donor paths: 384 source/header, 199 test, 49 workflow, one build and five other-role rows. The combined high-specificity set is 230 symbols/3,048 rows; 272 symbols remain lower-specificity/ambiguous.
+
+This split prioritizes API/type names and longer domain identifiers. It does not make the high-specificity rows true dependencies automatically, nor the lower-specificity rows false positives. Exact declaration/call context, owner SHA, include/build/test role and authority remain the required evidence.
