@@ -1,3 +1,34 @@
+# CURRENT EXACT STATE — 2026-11-25 (DF-02 Option A; Phase 2 reverse-consumer audit)
+
+DF-02 is **REOPENED / OPEN** under Project Director D2=B. Full semantic and authority adjudication is required; prior bounded closeout is superseded.
+
+## Director decisions
+D1=A pursue blind fresh-reader CLEAR at frozen DF-09 SHA. D2=B full historical semantic review across blobs, consumers, dependencies, duplicate owners, retention/retirement and provenance. D3=A retain DF-11 waiver with provenance residual, no reconstruction. D4=B clean consolidation PR preparation after DF-09 CLEAR; no merge authority.
+
+## Frozen PR #192
+Review target `caf87986dfea7aca75728818651c8687e9f5faf0`. Open/unmerged/divergent/non-mergeable. Frozen branch unchanged.
+
+## DF-02 progress
+- Phase 0 complete: all-ref artifact #14956148301 / run #45470173876 SHA-256 verified.
+- Phase 1 targeted triage coverage complete: 88 paths / 544 alternate blobs; not individual semantic closure.
+- Phase 2 first reverse-consumer slice reconciled candidate-tip graph and CMake registration: 3,441 lexical rows / 111 donor paths / 352 symbols / 193 consumer blobs. Candidate production 62 TUs, 61 lexical matches; orphan matched source `brain_restored_api.cpp`; one registered no-token source `brain_novelty.cpp`. Candidate tests: 49 test source matches, 46 registered; three unregistered. All 61 matched headers reachable from production or registered tests.
+- Historical-only: 36,607 rows / 118 donor paths / 270 consumers / 942 blobs. All refs: 40,048 rows / 502 symbols / 346 consumers / 1,135 blobs.
+- Exact path refs: 1,946 rows / 159 donor paths / 76 consumers / 101 blobs; 1,930 docs, 15 workflow, one other. Documentary references, not code dependency edges.
+- Phase 2 prioritized historical APIs with high-specificity candidate-absent consumer contexts (73 tokens). Direct historical references include isolated-runner, isolation-attestation, canary/adoption/compensation/rollback, prediction feedback, developmental/affective and durable engineering ledger APIs. Contextual classification/owner/dependency closure is still incomplete.
+- Latest report commit `7d71c64ee117261077290931620241c27e4a8d1c`: [DF-02 Full Option A](reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md).
+
+DF-02 remains OPEN. No donor implementation is accepted/adopted/baseline-selected/retired/deleted.
+
+## Other gates
+DF-09 BLOCKED pending actual blind fresh-reader CLEAR at frozen SHA. DF-11 waiver retained with provenance residual. DF-12 acceptance pending Director. PR #201/#202 approvals remain limited to correction scopes.
+
+## Audit PR
+Draft PR #203: [DF-02 full Option A audit](https://github.com/methaneex-oss/MethaneX/pull/203), branch `docs/df02-option-a-full-semantic-adjudication-20261125`. Documentation-only, three paths; frozen PR #192 and runtime sources unchanged.
+
+Stage A remains NOT STARTED / HELD. No merge, donor adoption, baseline selection, implementation, training or deployment authorized.
+
+---
+
 # CURRENT EXACT STATE — 2026-11-25 (DF-02 Option A; Phase 2 consumer audit)
 
 DF-02 is **REOPENED / OPEN** under Project Director D2=B. Full semantic and authority adjudication is required; prior bounded closeout is superseded.
