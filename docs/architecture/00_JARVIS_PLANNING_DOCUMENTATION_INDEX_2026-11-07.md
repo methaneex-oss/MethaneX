@@ -1,3 +1,32 @@
+# CURRENT EXACT STATE — 2026-11-25 (DF-02 full Option A source audit advanced)
+
+DF-02 is **REOPENED / OPEN** under Project Director D2=B. Full Option A semantic/authority adjudication is required; prior bounded closeout is not the closure standard.
+
+## Director decisions
+D1=A: pursue blind fresh-reader CLEAR at frozen DF-09 SHA. D2=B: exhaustive historical semantic review across blobs, consumers, dependencies, duplicate owners, retention/retirement and provenance. D3=A: retain DF-11 waiver and provenance residual; no reconstruction. D4=B: clean consolidation PR preparation after DF-09 CLEAR; no merge authorization.
+
+## Frozen PR #192
+Frozen review target `caf87986dfea7aca75728818651c8687e9f5faf0`. Open, unmerged, diverged/non-mergeable. Frozen branch unchanged.
+
+## DF-02 execution
+- Phase 0: COMPLETE. All-ref artifact #14956148301 from run #45470173876 SHA-256 verified.
+- 159 donor paths, 798 path/blob rows; 639 non-donor versions (96 candidate + 544 historical alternates across 88 paths). Exact content complete; six donor blobs retrieved by SHA.
+- Discovery: 40,048 symbol candidates and 1,946 exact path references (not semantic proof).
+- Phase 1 targeted source/test review: 20 path clusters and 318 alternate blobs enumerated across Brain/API/evolution, CMake, process isolation/runner/coordinator/journal/orchestrator, cognitive cycle, memory, knowledge, developmental learning and evolution model, plus three evolution integration/runner/canary test suites. Exact candidate/donor differences include isolation/evaluator policy, orphaned API duplicate risk, process isolation async-signal-safety/exec-path handling, journal identity/replay/rollback, memory corrupt-tail preservation and metadata compatibility, cognitive context/feedback/affect/goal integration, and test registration/behavior coverage.
+- Detailed report: [DF-02 Full Option A Semantic Adjudication](reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md), latest report commit `d9ca1f5037c2303b34d15e772ade547b606ec2bb`.
+
+DF-02 remains OPEN: the full 544 alternate blobs are not semantically closed, reverse-consumer/dependency adjudication is incomplete, and duplicate-owner/provenance/retention/authority decisions remain.
+
+## Other gates
+DF-09 BLOCKED pending actual blind fresh-reader CLEAR at frozen SHA. DF-11 waiver retained with provenance residual. DF-12 acceptance pending Director. PR #201/#202 approvals apply only to their bounded correction scopes.
+
+## Audit PR
+Draft PR #203: [DF-02 full Option A audit](https://github.com/methaneex-oss/MethaneX/pull/203), branch `docs/df02-option-a-full-semantic-adjudication-20261125`, latest HEAD at this snapshot `d9ca1f5037c2303b34d15e772ade547b606ec2bb`. Three documentation files only; frozen PR #192 and runtime sources unchanged.
+
+Stage A remains NOT STARTED / HELD. No merge, adoption, source-baseline selection, implementation, training or deployment authorized.
+
+---
+
 # CURRENT EXACT STATE — 2026-11-25 (DF-02 Option A test-history review)
 
 DF-02 is **REOPENED / OPEN** under Director decision D2=B. The prior bounded closeout does not satisfy full Option A.
