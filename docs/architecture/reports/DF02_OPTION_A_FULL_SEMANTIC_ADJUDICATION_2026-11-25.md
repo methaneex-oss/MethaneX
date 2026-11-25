@@ -515,3 +515,21 @@ The 1,946 exact-path-reference rows cover all 159 donor paths, 76 consumer paths
 Completed for this slice: exact candidate-tip graph aggregation, candidate CMake production/test registration cross-check, high-specificity absent-token prioritization and sampled context classification. Confirmed one candidate orphan production translation unit and three candidate test-source registration gaps. No donor dependency/adoption is inferred.
 
 **Phase 2 remains OPEN.** Next: build a donor-path → exact symbol/context → consumer blob/ref-owner matrix; review the 73 high-specificity absent tokens and all 352 candidate-present symbols for true API/dependency edges; then adjudicate the 36,607 historical-only rows by branch/blob, category, compiled registration and lineage. Full semantic closure and authority/retention work remain mandatory.
+
+
+## 20. Candidate C++ include-graph cross-check
+
+A recursive include reachability pass was run over the exact candidate-tip source contents and CMake-registered production/test source sets, using the 193 candidate consumer blobs.
+
+- Candidate registered production translation units: 62 (57 core + five engineering).
+- Candidate matched header paths: 61.
+- Direct production includes: 59 unique matched headers; recursive production reachability: 61/61.
+- Registered test translation units: 46 (45 core + one engineering).
+- Direct test includes: 43 unique matched headers; recursive test reachability: 60/61.
+- All 61 matched headers are reachable from either registered production or registered tests; no matched header was left unreachable.
+
+This cross-check is separate from lexical symbol-match rows. It establishes current candidate include reachability for these files; it does not prove semantic ownership, runtime use, or dependency equivalence to donor. The unregistered `brain_restored_api.cpp` is intentionally outside the compiled-source graph, and the three unregistered test files are outside the registered-test graph.
+
+## 21. Candidate-tip graph slice — status
+
+Candidate-tip registration and include reachability have been reconciled. The 352 candidate-present symbols still require exact-context review; the 73 high-specificity candidate-absent identifiers require historical branch-owner and consumer-lineage adjudication. The 36,607 historical-only rows and 1,210 historical exact-path refs remain open. Phase 2 is IN PROGRESS; this is not a full dependency or ownership closure.
