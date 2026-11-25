@@ -456,3 +456,62 @@ Custom-check suites are not misclassified as zero tests because they do not use 
 The next objective is Phase 2 reverse-consumer/dependency adjudication: reconcile the 40,048 lexical symbol rows and 1,946 exact-path-reference rows by exact consumer blob/context and branch-tip owner; classify compiled/runtime/test/build/workflow/documentation/false-positive; identify API/dependency edges and duplicate owners; link each edge to source/test/build evidence. Candidate-tip consumer evidence and prior compiled-graph reports are inputs, not all-ref closure.
 
 DF-02 remains OPEN. No donor path/blob is accepted, adopted, selected as baseline, retired or deleted by this triage.
+
+
+## 19. Phase 2 — reverse-consumer graph, candidate-tip registration audit (first slice)
+
+The all-ref lexical consumer table was reconciled against the exact frozen candidate CMake registrations and consumer blob content. This is the first reverse-consumer slice; it does not semantically adjudicate every historical row.
+
+### 19.1 Candidate-tip consumer graph
+
+| Measure | Exact result |
+|---|---:|
+| Candidate-tip symbol-match rows | 3,441 |
+| Donor paths with candidate-tip matches | 111 |
+| Candidate-tip symbols matched | 352 |
+| Candidate consumer paths/blobs | 193 / 193 |
+| Candidate rows by scanner category | 2,050 source; 1,136 test; 219 workflow; 8 build; 28 other |
+| Candidate consumer paths by file role | 62 C++ source; 61 header; 49 test source; 11 workflow; 2 build; 7 other |
+
+Candidate current-tip matches include 61 of the 62 registered C++ source files; `brain_novelty.cpp` is the one registered source with no lexical donor-identifier match. The remaining C++ source match is `core/cpp/src/brain_restored_api.cpp`, which is present in the candidate path corpus but is not registered in candidate CMake. This is the same orphan translation unit/duplicate-definition risk described in §10; it is not a compiled consumer.
+
+### 19.2 Candidate test registration cross-check
+
+Candidate CMake registers 45 core test source targets and one engineering test target (46 total). The candidate-tip consumer table contains 49 test source paths; three are not registered in candidate test CMake:
+- `core/cpp/tests/brain_smoke.cpp`
+- `core/cpp/tests/evolution_experiment_test.cpp`
+- `core/cpp/tests/representation_suite.cpp`
+
+This is a registration gap, not a claim those files fail or should automatically be added. Registration, source intent and build/test authority need a separate disposition. The exact candidate CMake source set is 57 core + five engineering production translation units (62 total); test sources are not counted as production compile units.
+
+### 19.3 Candidate absent direct identifiers — high-specificity set
+
+The 502 unique matched symbols divide into 352 present on candidate-tip matches and 150 with no candidate-tip match. A conservative token-shape filter identifies 73 higher-specificity absent identifiers (CamelCase types or long domain API names); this filter is a prioritization aid, not semantic classification.
+
+Examples of historically present, candidate-absent APIs with exact source/test contexts:
+- `run_isolated_command` — 416 match rows, eight consumer paths, six donor paths; no candidate-tip occurrence.
+- `has_valid_isolation_attestation` — 74 rows, 11 consumer paths.
+- `observe_canary_for_brain` — 138 rows; `preview_canary_for_brain` — 84 rows.
+- `validate_adoption_for_brain`, `compensate_adoption_for_brain`, `record_evaluation_for_brain`, `rollback_for_brain` and replay methods — exact source/test consumers across the evolution lifecycle.
+- `resolve_prediction_feedback`, `apply_prediction_feedback`, `PredictionFeedbackStatus`, `PredictionContext` and `latest_sequence_by_kind` — historical prediction identity/feedback and memory cursor APIs.
+- `DevelopmentalLearning`, `developmental_strategies`, `best_related_strategy`, `choose_with_developmental_learning`, `AffectiveLearningModel`, `AffectiveOutcomeEvidence` and affective/context APIs — historical cognitive-learning consumers.
+- `EngineeringTaskLedger`, `EngineeringTaskRecord`, `EngineeringTaskStatus` — historical durable workforce-task consumers.
+- `decode_causal_side`/`encode_causal_side` — historical codec consumers.
+
+The high-frequency generic tokens `restored`, `observe`, `evaluate`, `rollback`, `policy`, `confidence`, `journal` and `append` generate substantial lexical over-approximation. Context inspection confirms false positives such as prose/workflow phrases and unrelated generic method names. These are not dependency edges unless the exact token context and API semantics support that relationship.
+
+### 19.4 Historical-only reverse-consumer table
+
+The remaining 36,607 rows are historical-ref-only matches: 118 donor paths, 497 symbols, 270 consumer paths and 942 exact consumer blobs. Category totals: 21,898 source; 13,838 test; 642 workflow; 229 build. Across all refs, the table covers 118 donor paths, 502 matched symbols, 346 consumer paths and 1,135 consumer blobs. Historical branch matches are evidence of branch-local consumer candidates; they do not imply current candidate dependency or a later/approved owner.
+
+The `unique_tip_count` field is preserved for each match. Rows present on only one unique branch tip are branch-local evidence requiring owner/provenance review; multi-tip presence does not prove equivalent semantics or acceptance.
+
+### 19.5 Exact-path reference candidates
+
+The 1,946 exact-path-reference rows cover all 159 donor paths, 76 consumer paths and 101 blobs: 1,930 documentation, 15 workflow and one other-category reference. 736 are candidate-tip and 1,210 historical-only. These are primarily planning/inventory/review lineage citations, not code dependency edges. The top consumers include the whole-Brain integration map, Gate-A baseline/provenance reports and the DF-02 inventory/semantic reports; their authority and status must be classified individually, not treated as runtime ownership.
+
+### 19.6 First-slice disposition and next work
+
+Completed for this slice: exact candidate-tip graph aggregation, candidate CMake production/test registration cross-check, high-specificity absent-token prioritization and sampled context classification. Confirmed one candidate orphan production translation unit and three candidate test-source registration gaps. No donor dependency/adoption is inferred.
+
+**Phase 2 remains OPEN.** Next: build a donor-path → exact symbol/context → consumer blob/ref-owner matrix; review the 73 high-specificity absent tokens and all 352 candidate-present symbols for true API/dependency edges; then adjudicate the 36,607 historical-only rows by branch/blob, category, compiled registration and lineage. Full semantic closure and authority/retention work remain mandatory.
