@@ -694,18 +694,21 @@ The most concentrated donor-path identifiers are `evolution_controller.hpp` (371
 
 ## 28. Candidate-present vs historical-only identifier specificity split
 
-Using the same conservative token-shape filter across all 502 matched identifiers:
+Using the same conservative token-shape filter across all 502 matched identifiers, historical rows for candidate-present tokens are kept separate from candidate absence:
 
-| Specificity cohort | Symbols | Rows | Candidate status |
-|---|---:|---:|---|
-| Higher-specificity, candidate-present | 157 | 638 | present in candidate-tip consumers |
-| Higher-specificity, candidate-absent | 73 | 2,410 | historical-only |
-| Lower-specificity/ambiguous, candidate-present | 195 | 2,803 | present in candidate-tip consumers |
-| Lower-specificity/ambiguous, candidate-absent | 77 | historical-only rows remain in the 36,607 historical-only set |
+| Specificity cohort | Symbols | Candidate rows | Historical-only rows |
+|---|---:|---:|---:|
+| Higher-specificity, candidate-present | 157 | 638 | 6,927 |
+| Higher-specificity, candidate-absent | 73 | — | 2,410 |
+| Lower-specificity/ambiguous, candidate-present | 195 | 2,803 | 25,166 |
+| Lower-specificity/ambiguous, candidate-absent | 77 | — | 2,104 |
+| **Totals** | **502** | **3,441** | **36,607** |
 
-The 638 candidate-present high-specificity rows span 126 consumer paths and 52 donor paths: 384 source/header, 199 test, 49 workflow, one build and five other-role rows. The combined high-specificity set is 230 symbols/3,048 rows; 272 symbols remain lower-specificity/ambiguous.
+The all-ref high-specificity cohort is 230 symbols/9,975 rows; the lower-specificity cohort is 272 symbols/30,073 rows. The high-specificity candidate-present cohort has 638 rows (627 code-context, 11 comment/string-only); the historical versions of those same candidate-present symbols contribute 6,927 rows (6,819 code-context,108 comment/string-only). The candidate-absent high-specificity cohort contributes 2,410 historical rows (2,375 code-context,35 comment/string-only).
 
-This split prioritizes API/type names and longer domain identifiers. It does not make the high-specificity rows true dependencies automatically, nor the lower-specificity rows false positives. Exact declaration/call context, owner SHA, include/build/test role and authority remain the required evidence.
+The lower-specificity cohort has 2,803 candidate rows (2,698 code-context,105 comment/string-only), 25,166 historical rows for candidate-present tokens (20,963 code-context,4,203 comment/string-only), and 2,104 historical rows for candidate-absent tokens (1,764 code-context,340 comment/string-only).
+
+The split prioritizes API/type names and longer domain identifiers. It does not make high-specificity rows true dependencies automatically, nor lower-specificity rows false positives. Exact declaration/call context, owner SHA, include/build/test role and authority remain required evidence.
 
 
 ## 29. Candidate-present high-specificity API context
@@ -715,3 +718,34 @@ The 157 higher-specificity candidate-present identifiers account for 638 rows ac
 The strongest candidate-present names include `EvolutionExperiment` (25 rows/25 paths), `CandidateAction` (22/22), `EvolutionModel` (22/12), `EvolutionProposal` (21/21), `ExperimentOutcome` (21/21), `EvolutionController` (19/7), `AttentionSignal` (18/10), `register_evolution_parameter` (14/8), `ActionAssessment` (10/10), `EvolutionSandbox` (10/10), `CognitiveCycleInput` (9/9), `CognitiveRuntime` (8/5), `AgentMessageBus` (8/5), and `EvolutionExperimentCoordinator` (7/4). This is a candidate API/context map, not an acceptance statement for every historical variant.
 
 The remaining 195 candidate-present lower-specificity symbols account for 2,803 rows. Exact source context and consumer roles still need semantic classification; generic tokens are not treated as dependencies.
+
+
+## 30. Manually promoted lower-specificity historical API tokens
+
+The conservative token-shape filter misses short but semantically meaningful names. Twenty-one lower-specificity candidate-absent tokens were promoted after exact source/test context review. They account for **1,486 rows** across source/test consumers; these remain candidate historical API/dependency edges, not authority decisions.
+
+| Token | Rows | Consumer paths | Donor paths | Role |
+|---|---:|---:|---|
+| `consolidate` | 212 | 8 | 4 | memory consolidation |
+| `attest_isolated` | 122 | 5 | 3 | isolation attestation (tests) |
+| `replay_adoption` | 108 | 5 | 2 | adoption-journal replay |
+| `replay_rollback` | 108 | 5 | 2 | rollback replay |
+| `replay_evaluation` | 100 | 4 | 2 | evaluation replay |
+| `preview` | 98 | 5 | 2 | canary preview |
+| `restore_previous` | 92 | 5 | 2 | prior-state restoration |
+| `observe_strategy` | 86 | 8 | 2 | developmental strategy observation |
+| `await_result` | 62 | 8 | 6 | isolated runner result handling |
+| `prediction_error` | 61 | 16 | 1 | prediction/feedback error |
+| `adoption_journal` | 59 | 5 | 1 | journal contract |
+| `adopt_for_brain` | 56 | 4 | 2 | Brain adoption API |
+| `restore_pending` | 55 | 4 | 2 | journal compensation transition |
+| `restore_adopted` | 55 | 4 | 2 | journal compensation transition |
+| `find_prediction` | 40 | 3 | 1 | prediction-memory retrieval |
+| `set_context` | 26 | 10 | 2 | contextual state/strategy APIs |
+| `strategy_value` | 25 | 6 | 3 | developmental strategy valuation |
+| `restored_cycle` | 24 | 3 | 3 | cognitive-cycle restore tests |
+| `score_for` | 20 | 2 | 2 | evolution scoring tests |
+| `attention_policy` | 19 | 6 | 1 | attention policy |
+| `numeric_value` | 58 | 3 | 2 | typed causal-value representation |
+
+These 21 names are manually prioritized above the remaining 56 lower-specificity candidate-absent tokens (618 rows). The 195 candidate-present lower-specificity tokens (2,803 rows) remain context-ambiguous. This demonstrates that token-shape heuristics alone are insufficient; the semantic review must include source/API meaning, exact branch owners and test/build consumers.
