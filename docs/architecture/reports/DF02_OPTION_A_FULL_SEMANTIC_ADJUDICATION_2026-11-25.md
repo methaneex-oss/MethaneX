@@ -144,3 +144,37 @@ The engineering test-CMake path has 35 versions and 30 unique target sets. The b
 ### 9.6 Phase 1 disposition
 
 This triage establishes that the high-dispersion clusters contain real semantic, API, build/test-registration and trust-policy variation—not merely duplicate branch names. It identifies the precise files and comparison obligations for the next audit slice. **No alternate version is accepted as owner, successor, retirement candidate, adoption target or source baseline.** Phase 1 remains IN PROGRESS; the 544-version cohort is not fully semantically adjudicated.
+
+
+## 10. Deeper exact-source comparison — lifecycle policy and API ownership
+
+### 10.1 `EvolutionController::record_evaluation` policy families
+
+The exact method body was extracted from all 17 alternate `evolution_controller.cpp` blobs and grouped by policy features (not branch-name ordering):
+
+| Variant family | Count | Material checks/behavior |
+|---|---:|---|
+| Minimal journal/evaluation path | 4 | journal stage/history append without the full evidence-validation contract |
+| Outcome re-evaluation but incomplete validation | 1 | checks basic identity/execution and re-evaluates the outcome; missing the full finite/isolation contract |
+| Finite-value validation, no isolation policy | 2 | rejects empty identity, non-executed/invalid numeric values and pending outcome; lacks isolation-attestation gate and invalid-outcome handling |
+| Strict isolation + outcome validation | 5 | requires policy-controlled isolation attestation; rejects invalid/pending outcome; recomputes evaluation; stages journal and appends history with duplicate handling |
+| Isolation + simulation-policy variants | 4 | strict attestation path with an explicit `allow_simulated_evidence` policy branch; policy semantics differ from the strict non-simulation family |
+| Trusted evaluator/evidence variant | 1 | additionally requires trusted evaluator digest, valid evaluation evidence and isolation attestation, with duplicate record/journal identity checks |
+
+This matrix is a concrete finding: the historical source line is not one consistent implementation. The stronger trusted-evaluator branch is one blob version, not automatically the canonical owner. The weak/minimal variants also remain historical evidence; they cannot be selected just because their branch contains a relevant file.
+
+### 10.2 Brain API/source split and duplicate-definition risk
+
+A name-level exact-source comparison of the frozen candidate `brain.cpp` and candidate `brain_restored_api.cpp` identifies **40 overlapping Brain method definitions** (including prediction, beliefs, associations, goals, capability/evolution and recovery APIs). The candidate CMake file does not compile `brain_restored_api.cpp`, so these overlaps are currently dormant rather than an active duplicate-symbol build failure. If that orphan file were added to the candidate target without reconciliation, the duplicate definitions would be a direct build hazard.
+
+The donor split is different: donor `brain.cpp` has nine Brain methods and donor `brain_restored_api.cpp` has 62; the extracted definition sets have zero overlap. Donor CMake registers the restored API translation unit; candidate CMake does not. This is an architectural ownership split, not a file-presence equivalence. The 18 historical restored-API variants must be grouped by exact content and checked for duplicate definitions, missing dependencies and API lineage before any disposition.
+
+### 10.3 CMake registration variant analysis
+
+The exact 40 versions of core test CMake each have a distinct executable target set. The candidate/donor target delta is 26 donor-only executables (including the affective/developmental family, runtime-learning and goal-feedback integration, action-consequence integration, goal-outcome, memory-learning-evolution persistence, ExperienceMemory and DLT trial/long-run targets); no candidate-only target was found in the target-set comparison. Donor has 71 executable targets but 70 CTest entries, while candidate has 45/45, so executable and test-registration counts must not be conflated.
+
+Engineering test CMake has 35 versions but 30 unique target sets; exact identical blob groups exist and should be reviewed once by blob SHA. The branch families include operator/console, orchestration, worker, workspace, provider and model-routing variants. These clusters are not a single monotonic progression and require ownership/provenance mapping.
+
+### 10.4 Exact-slice disposition
+
+This deeper comparison completes the initial source-level triage of the seven high-dispersion clusters only. It establishes source/API ownership and test-registration discrepancies and identifies exact policy families to reconcile. It does **not** complete the 544 alternate-version cohort, reverse-consumer adjudication or Director authority/retention ledger. Phase 1 remains OPEN.
