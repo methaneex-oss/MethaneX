@@ -2044,3 +2044,12 @@ The prior bounded DF-02 closeout is superseded as the closure standard. DF-02 is
 Phase 0 evidence acquisition/integrity is complete. Phase 1 semantic path/version ledger is in progress; Phase 2 consumer/dependency review and Phase 3 duplicate-owner/authority/retention reconciliation are not complete. Start with high-dispersion CMake, Brain/runtime, restored API, evolution lifecycle, coordinator/runner and associated registered integration tests; then cover remaining path cohorts. Record exact blob SHA, branch/tip owners, meaningful semantic delta, consumer role, build/test evidence, ownership, provenance and disposition. Do not claim a path or cluster closed from lexical presence, absence, same-path comparison or report cross-reference alone.
 
 DF-09 remains blocked pending actual blind fresh-reader CLEAR against the frozen target. DF-11 waiver remains retained with provenance residual. DF-12 acceptance and consolidation preparation are Director-reserved until DF-09 CLEAR. No merge is authorized.
+
+
+### 2026-11-25 — Phase 1 high-dispersion cluster triage
+
+Initial exact-content triage covered seven clusters: `brain.cpp` (33 alternate blobs), `brain.hpp` (19), `brain_restored_api.cpp` (18), `evolution_controller.cpp` (17), `evolution_brain_integration_suite.cpp` (22), core test CMake (38), engineering test CMake (33). They represent 180 alternate versions beyond donor/candidate, not 180 independent owners; branch-tip/blob clustering is required.
+
+Observed material variation: evolution lifecycle variants differ in isolation attestation, trusted evaluator/evidence validation, simulated-evidence allowance, adoption replay and compensation/rollback policy; brain runtime/header variants differ in sequence-bound prediction, feedback resolution, memory consolidation, affective/developmental integration and API surfaces; restored API source is not candidate CMake-registered; test CMake variants change registration materially. All 40 core test-CMake versions have distinct target sets. Frozen candidate registers 45 executable/CTest targets versus donor 71 executable targets/70 CTest entries; donor-only test families are evidence of coverage gaps, not an adoption decision. Engineering CMake has 35 versions / 30 unique target sets and divergent architectures.
+
+These findings are documented in report §9. This is triage only. No variant is adjudicated as accepted owner/successor, retired, adopted or selected baseline. Full semantic review of the 544 alternate blob cohort and consumer/authority matrix remains OPEN.
