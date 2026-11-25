@@ -764,3 +764,17 @@ Exact symbol-set comparison: 352 candidate-tip matched identifiers, 497 historic
 | `should_rollback` | 2 | evolution rollback header/source | evolution controller path |
 
 These are candidate-tip-only lexical identifiers, not proven novel capabilities. Their exact current consumers and build/test registrations are recorded; review whether they represent candidate additions, renamed interfaces, private helpers, or scanner artifacts. The five-token result also means the historical scan has no match for these names, not that the historical architecture lacked equivalent behavior.
+
+
+## 32. Remaining lower-specificity absent tokens — exact context split
+
+The 56 lower-specificity candidate-absent tokens left after the 21 manually promoted names were individually checked against exact consumer content. They divide into:
+
+| Context cohort | Tokens | Rows | Role |
+|---|---:|---:|---|
+| Additional code-context candidates | 51 | 502 | 227 source, 252 test, 23 workflow-text rows; exact token appears in code context for source/test, but semantic relation remains unresolved |
+| Comment/string-only | 5 | 116 | `instead` (58), `reconstructed` (45), `predictor` (7), `experienced` (5), `damaged` (1) |
+
+The 51 code-context tokens include short cognitive-runtime feedback/queue APIs (`submit_feedback`, `pending_feedback`, `process_feedback`, `wait_for_feedback`, `publish_result`, `execute_actions`), engineering ledger/message-bus functions (`requeue`, `dispatch_tracked`, `delivery_key`, `same_content`, `commit_record`, `append_record`, `load_locked`, `execvp`), developmental-world APIs (`add_action`, `reset_episode`, `available_actions`, `step_count`, `set_state`, `true_state`), causal/adaptation (`predictor`, `observe_outcome`, `integer_value`, `learning_rate`, `modulate`), and memory/learning/test helpers (`for_key`, `record_prediction`, `record_experience`, `latest_unresolved`, `copy_file`, `serialize`, `parse_double`, `replayed_behavior`, `strategy_brain`, `concept_brain`, etc.). Generic words `changed`, `direct`, `learner`, `resolve`, `accumulated` and `generalized` require careful semantic context despite code-context occurrence.
+
+Thus the 77 lower-specificity candidate-absent identifiers are fully partitioned by exact context: 21 manually prioritized API/type names (1,486 rows; 1,262 code-context/224 comments), 51 additional code-context names (502 rows), and five text-only names (116 rows). This is a context filter, not dependency/authority closure.
