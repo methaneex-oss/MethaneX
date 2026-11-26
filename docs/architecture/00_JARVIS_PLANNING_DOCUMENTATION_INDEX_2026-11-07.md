@@ -62,7 +62,7 @@ Review target `caf87986dfea7aca75728818651c8687e9f5faf0`. Open/unmerged/divergen
 - Identifier sets: 347 shared candidate/historical; five candidate-only identifiers (10 rows); 150 historical-only identifiers.
 - Exact path refs: 1,946 rows / 159 donor paths / 76 consumers / 101 blobs; 1,930 docs,15 workflows,one other.
 - Phase 2 remains open: exact semantic context, dependency/duplicate-owner, branch authority and provenance/retention review.
-- Latest report commit `609f4f2b7397086fc50f9452a169d4d4495baced`: [DF-02 Full Option A](reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md).
+- Latest report commit `47dcb18777c3bfd3f5dca5d87794b8eafb0020e5`: [DF-02 Full Option A](reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md).
 
 DF-02 remains OPEN. No donor implementation accepted/adopted/baseline-selected/retired/deleted.
 
@@ -96,7 +96,7 @@ Review target `caf87986dfea7aca75728818651c8687e9f5faf0`. Open/unmerged/divergen
 - High-specificity split: 157 candidate-present symbols (638 rows/627 code-context) vs 73 absent historical (2,410 rows/2,375 code-context). Candidate/historical consumer context remains semantic review, not dependency closure.
 - Exact path refs: 1,946 rows / 159 donor paths / 76 consumers / 101 blobs; 1,930 docs,15 workflows,one other.
 - Phase 2 remains open: exact semantic context, dependency/duplicate-owner, branch authority and provenance/retention review.
-- Latest report commit `33ee41270728d43f912dae9cca6b3e08ee4ae83e`: [DF-02 Full Option A](reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md).
+- Latest report commit `47dcb18777c3bfd3f5dca5d87794b8eafb0020e5`: [DF-02 Full Option A](reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md).
 
 DF-02 remains OPEN. No donor implementation accepted/adopted/baseline-selected/retired/deleted.
 
@@ -130,7 +130,7 @@ Review target `caf87986dfea7aca75728818651c8687e9f5faf0`. Open/unmerged/divergen
 - High-specificity API split: 157 present candidate (638 rows) vs 73 absent historical (2,410 rows/2,375 code-context). 105 historical consumer paths/44 donor paths for absent set. Low-specificity/ambiguous 272 symbols.
 - Exact path refs: 1,946 rows / 159 donor paths / 76 consumers / 101 blobs; 1,930 docs,15 workflows,one other.
 - Phase 2 remains open: exact semantic context, dependency/duplicate-owner, branch authority and provenance/retention review.
-- Latest report commit `f30d8a41a50e6ba5c32d99d129a202140417f472`: [DF-02 Full Option A](reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md).
+- Latest report commit `47dcb18777c3bfd3f5dca5d87794b8eafb0020e5`: [DF-02 Full Option A](reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md).
 
 DF-02 remains OPEN. No donor implementation accepted/adopted/baseline-selected/retired/deleted.
 
@@ -164,7 +164,7 @@ Review target `caf87986dfea7aca75728818651c8687e9f5faf0`. Open/unmerged/divergen
 - High-specificity absent APIs: 73 tokens / 2,410 rows / 2,375 code-context; 105 consumer paths / 44 donor paths. Direct families include evolution trust, prediction feedback, developmental/affective, durable engineering task ledger and causal/knowledge APIs.
 - Exact path refs: 1,946 rows / 159 donor paths / 76 consumers / 101 blobs; 1,930 docs,15 workflows,one other.
 - Phase 2 still open: semantic context, dependency/duplicate-owner, branch authority and provenance/retention review.
-- Latest report commit `7061e8965bdccaed9610cdb6987e8a1c2b30ea01`: [DF-02 Full Option A](reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md).
+- Latest report commit `47dcb18777c3bfd3f5dca5d87794b8eafb0020e5`: [DF-02 Full Option A](reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md).
 
 DF-02 remains OPEN. No donor implementation accepted/adopted/baseline-selected/retired/deleted.
 
@@ -198,7 +198,7 @@ Review target `caf87986dfea7aca75728818651c8687e9f5faf0`. Open/unmerged/divergen
 - 73 high-specificity candidate-absent tokens: 2,410 rows, 2,375 code-context. Families include evolution trust, prediction feedback, developmental/affective, engineering ledger and causal evidence. Generic names remain context-dependent.
 - Exact path refs: 1,946 rows / 159 donor paths / 76 consumers / 101 blobs; 1,930 docs, 15 workflow, one other.
 - Phase 2 still open: semantic context/dependency/duplicate-owner/branch-authority classification; Phase 3 provenance, retention/retirement and independent scrutiny.
-- Latest report commit `fdba4e53ee12c679e1e5a42449a4469325329ea3`: [DF-02 Full Option A](reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md).
+- Latest report commit `47dcb18777c3bfd3f5dca5d87794b8eafb0020e5`: [DF-02 Full Option A](reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md).
 
 DF-02 remains OPEN. No donor implementation is accepted/adopted/baseline-selected/retired/deleted.
 
@@ -229,7 +229,7 @@ Review target `caf87986dfea7aca75728818651c8687e9f5faf0`. Open/unmerged/divergen
 - Historical-only: 36,607 rows / 118 donor paths / 270 consumers / 942 blobs. All refs: 40,048 rows / 502 symbols / 346 consumers / 1,135 blobs.
 - Exact path refs: 1,946 rows / 159 donor paths / 76 consumers / 101 blobs; 1,930 docs, 15 workflow, one other. Documentary references, not code dependency edges.
 - Phase 2 prioritized historical APIs with high-specificity candidate-absent consumer contexts (73 tokens). Direct historical references include isolated-runner, isolation-attestation, canary/adoption/compensation/rollback, prediction feedback, developmental/affective and durable engineering ledger APIs. Contextual classification/owner/dependency closure is still incomplete.
-- Latest report commit `7d71c64ee117261077290931620241c27e4a8d1c`: [DF-02 Full Option A](reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md).
+- Latest report commit `47dcb18777c3bfd3f5dca5d87794b8eafb0020e5`: [DF-02 Full Option A](reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md).
 
 DF-02 remains OPEN. No donor implementation is accepted/adopted/baseline-selected/retired/deleted.
 
@@ -260,7 +260,7 @@ Review target `caf87986dfea7aca75728818651c8687e9f5faf0`. Open/unmerged/divergen
 - Historical-only: 36,607 rows / 118 donor paths / 270 consumer paths / 942 blobs. All refs: 40,048 rows / 502 symbols / 346 consumers / 1,135 blobs.
 - Exact path references: 1,946 rows / 159 donor paths / 76 consumers / 101 blobs; 1,930 docs, 15 workflow, one other. These are documentary references, not code dependency edges.
 - Phase 2 remains open: exact-context classification, branch-owner/dependency/duplicate-owner and authority/lineage review of candidate and historical matches.
-- Latest report commit `432fb9c7c4a6c96fe1ee319022995470f94b737c`: [DF-02 Full Option A](reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md).
+- Latest report commit `47dcb18777c3bfd3f5dca5d87794b8eafb0020e5`: [DF-02 Full Option A](reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md).
 
 DF-02 remains OPEN; no donor implementation is accepted/adopted/baseline-selected/retired/deleted.
 
@@ -292,7 +292,7 @@ Review target `caf87986dfea7aca75728818651c8687e9f5faf0`. Open/unmerged/divergen
 - Historical-only symbol rows: 36,607 / 118 donor paths / 270 consumer paths / 942 blobs. All-ref totals: 40,048 rows / 118 donor paths / 502 symbols / 346 consumer paths / 1,135 blobs.
 - Exact path-reference candidates: 1,946 rows, 159 donor paths, 76 consumer paths / 101 blobs; 1,930 documentation, 15 workflow, one other. These are documentary references, not runtime dependency edges.
 - Phase 2 still open: full consumer-context, dependency/duplicate-owner, branch lineage and authority adjudication.
-- Latest report commit `705ce51b0bd4ca14f9f5747bf594ef486f1489a5`: [DF-02 Full Option A](reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md).
+- Latest report commit `47dcb18777c3bfd3f5dca5d87794b8eafb0020e5`: [DF-02 Full Option A](reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md).
 
 DF-02 remains OPEN; no donor implementation is accepted/adopted/baseline-selected/retired/deleted.
 
@@ -323,7 +323,7 @@ Review target `caf87986dfea7aca75728818651c8687e9f5faf0`. Open/unmerged/divergen
 - **Phase 1 targeted triage coverage COMPLETE for all 88 path clusters / 544 alternate blobs.** This means exact-version/owner enumeration, feature/source/test comparisons and targeted triage are recorded—not individual semantic closure or acceptance.
 - Phase 2 reverse-consumer/dependency adjudication is now the next objective: exact-context classification of 40,048 symbol candidates and 1,946 path references across branches, distinguishing compiled/runtime/test/build/workflow/docs/false positives; map dependency edges, duplicate owners, evidence and authority.
 - Phase 3 provenance, retention/retirement, semantic disposition and independent scrutiny remain outstanding.
-- Latest report commit `1204bb51ee48ab7ee1a59e1e6fbb79a5113dc0b7`: [DF-02 Full Option A](reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md).
+- Latest report commit `47dcb18777c3bfd3f5dca5d87794b8eafb0020e5`: [DF-02 Full Option A](reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md).
 
 DF-02 remains OPEN. No donor path/blob is accepted, adopted, selected as baseline, retired or deleted.
 
@@ -409,7 +409,7 @@ Review target `caf87986dfea7aca75728818651c8687e9f5faf0`. Open/unmerged/divergen
 - 40,048 symbol candidates / 1,946 exact-path candidates: discovery, not semantic proof.
 - Phase 1 targeted source/test triage now covers 25 path clusters and 343 alternate blobs enumerated: high-dispersion Brain/API/evolution/CMake, process-isolation/runner/coordinator/journal/orchestrator, cognitive-cycle/memory/knowledge/developmental/evolution model, evolution tests, and the single-alternate source/test cohort.
 - Findings include authorization-boundary divergence (ActionAuthorizer bypass alternate), contradictory-association learning, attention-weight bounds, mean-vs-worst canary policy, disputed-premise reasoning, candidate-absent action/prediction/affective/developmental sources/tests, memory journal quarantine/schema/consolidation, and API/registration variation.
-- Latest report commit `7a6f3b35d71f309e8b91db42e3e5ca947c406cc1`: [DF-02 full Option A report](reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md).
+- Latest report commit `47dcb18777c3bfd3f5dca5d87794b8eafb0020e5`: [DF-02 full Option A report](reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md).
 
 DF-02 remains OPEN. Full 544 alternate blobs are not semantically closed; reverse consumers/dependencies and duplicate-owner/provenance/retention/authority disposition remain incomplete.
 
