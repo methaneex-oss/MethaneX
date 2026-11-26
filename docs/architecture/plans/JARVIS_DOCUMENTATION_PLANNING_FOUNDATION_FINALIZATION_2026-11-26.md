@@ -27,7 +27,7 @@ Learning acceptance requires later measurable behavior change, persistent/recons
 | Brain Foundation Architecture — PR #173 | Current proposal HEAD `a96af5b18d3a1d580ff56cff6191240893bceeb5` | Open; whole-architecture acceptance and CF-26/CF-27 unresolved |
 | Brain Mechanism Specification — PR #174 | Historical 34-scenario baseline accepted at `0811a59e46bf934e32e794f90e4e7d18d4e2bd97`; current 54-scenario proposal HEAD `c34472354e4122fc1d78dc25bf45d81f1eb4dc69` | Current proposal unaccepted; provenance/re-review residuals |
 | Brain implementation roadmap — PR #175 | HEAD `1274c05a2628d23a43620613c6baf205e4ede3b3`; WP-00–WP-08, R0–R6, I0–I7 | Non-operative; Gate A NOT CLEARED, Gate B NOT PASSED; no baseline selected |
-| Documentation Foundation — PR #192 | Frozen review SHA `caf87986dfea7aca75728818651c8687e9f5faf0` | Open/unmerged/divergent; not accepted |
+| Documentation Foundation — PR #192 | Frozen review SHA `caf87986dfea7aca75728818651c8687e9f5faf0`; live PR #192 branch HEAD `25265f88f96a42d6e797d04c27ead0a076a378f4` is exactly one report-only commit ahead. Compare confirms only the independent-review report was added; the frozen source/inventory target is unchanged. | Open/unmerged/divergent; not accepted |
 
 ## 4. DF-02 full Option A phase disposition
 
