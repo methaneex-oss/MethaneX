@@ -1,38 +1,44 @@
-# CURRENT EXACT STATE — 2026-11-25 (DF-02 Option A; Phase 2 reverse-consumer audit)
+# CURRENT EXACT STATE — 2026-11-26 (planning frozen; foundation acceptance pending)
 
-DF-02 is **REOPENED / OPEN** under Project Director D2=B. Full semantic and authority adjudication is required; prior bounded closeout is superseded.
+**Disposition:** planning content consolidated and frozen against scope expansion. This is not full foundation acceptance or implementation authorization.
 
-## Director decisions
-D1=A pursue blind fresh-reader CLEAR at frozen DF-09 SHA. D2=B full historical semantic review across blobs, consumers, dependencies, duplicate owners, retention/retirement and provenance. D3=A retain DF-11 waiver with provenance residual, no reconstruction. D4=B clean consolidation PR preparation after DF-09 CLEAR; no merge authority.
+## Project Director decisions
+- D1 DF-09=A: pursue actual blind fresh-reader CLEAR at frozen SHA `caf87986dfea7aca75728818651c8687e9f5faf0`.
+- D2 DF-02=B: full semantic/authority adjudication, not bounded non-adoption.
+- D3 DF-11=A: retain waiver and provenance residual; no reconstruction.
+- D4 DF-12=B: prepare consolidation only after DF-09 CLEAR; no merge authority.
 
-## Frozen PR #192
-Review target `caf87986dfea7aca75728818651c8687e9f5faf0`. Open/unmerged/divergent/non-mergeable. Frozen branch unchanged.
+## Exact revision state
+- Frozen PR #192 review target: `caf87986dfea7aca75728818651c8687e9f5faf0`. Live PR remains open, unmerged, divergent/non-mergeable. Do not merge as-is.
+- PR #203 audit/finalization branch: `docs/df02-option-a-full-semantic-adjudication-20261125`. Current work is documentation-only; PR #192 frozen files and runtime sources remain unchanged.
+- Finalization snapshot: [JARVIS Documentation & Planning Foundation](plans/JARVIS_DOCUMENTATION_PLANNING_FOUNDATION_FINALIZATION_2026-11-26.md).
+- DF-02 detailed evidence: [Full Option A adjudication](reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md).
 
-## DF-02 progress
-- Phase 0 complete: all-ref artifact #45470173876 / artifact14956148301 SHA-256 verified.
-- Phase 1 targeted triage complete for 88 paths / 544 alternate blobs; not individual semantic closure.
-- Phase 2 candidate graph/CMake/include reachability reconciled; all 1,135 consumer blobs mapped to branch-tip owners.
-- Candidate-tip: 3,441 rows / 111 donor paths / 352 symbols / 193 consumers. Production 62 TUs,61 lexical matches; orphan `brain_restored_api.cpp`; `brain_novelty.cpp` compiled/no donor token. Tests 49 matched/46 registered; three unregistered. All 61 matched headers reachable from registered production/tests.
-- Historical-only: 36,607 rows / 118 donor paths / 270 consumers / 942 blobs; 31,921 code-context,4,686 comment/string-only. All refs: 40,048 rows / 502 symbols / 346 consumers / 1,135 blobs.
-- Exact owner cross-map: 787 same-path ownership pairs (96 candidate,691 historical); 348 non-owner blobs (97 candidate,251 historical). Top20 historical consumers66.4%.
-- High-specificity: 157 candidate-present (638 candidate rows;6,927 historical) vs 73 candidate-absent (2,410 historical). Lower-specificity: 195 candidate-present (2,803 rows) vs77 absent (2,104 rows).
-- All 150 candidate-absent tokens context-partitioned: 73 high-specific (2,410 rows/2,375 code-context); 21 manually prioritized lower-specific (1,486 rows/1,262 code-context/224 comment-string); 51 additional code-context tokens (502 rows); five text-only (116 rows). This is context triage, not dependency closure.
-- Candidate/historical identifiers: 347 shared, five candidate-only (10 rows),150 historical-only.
-- Exact path refs: 1,946 rows / 159 donor paths / 76 consumers / 101 blobs;1,930 docs,15 workflows,one other.
-- Phase 2 remains open: exact semantic context, dependency/duplicate-owner, branch authority and provenance/retention review.
-- Latest report commit `4570ef63d9dfef7835285a60727d355a91a0308f` (Builder self-review §34): [DF-02 Full Option A](reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md).
-
-DF-02 remains OPEN. No donor implementation accepted/adopted/baseline-selected/retired/deleted.
+## DF-02 status
+- Phase 0 — discovery acquisition/integrity: **COMPLETE**.
+- Phase 1 — targeted triage coverage: **COMPLETE for 88 paths / 544 alternate blobs; individual semantic closure not complete**.
+- Phase 2 — consumer graph evidence/indexing: **PARTIALLY COMPLETE**. Candidate graph, include/CMake reachability, blob-owner cross-map and lexical partitions reconciled; exact semantic edges/dispositions remain open.
+- Phase 3 — duplicate capability/owner, authority/provenance, retention/retirement: **NOT COMPLETE**.
+- Phase 4 — 159-path closure matrix and independent scrutiny: **NOT COMPLETE**.
+- DF-02 remains **OPEN**. No historical source is selected, adopted, retired, deleted or baseline-authorized.
 
 ## Other gates
-DF-09 BLOCKED pending actual blind fresh-reader CLEAR at frozen SHA. DF-11 waiver retained with provenance residual. DF-12 acceptance pending Director. PR #201/#202 approvals remain bounded to correction scopes.
+- DF-06: closed only within the bounded mechanical navigation audit.
+- DF-07: correction branches #201/#202 were approved within scope; final exact-terminal synchronization/inventory still required after this branch's writes.
+- DF-09: **BLOCKED** — PR #200 workflow is open/unmerged; no exact-target blind-reader execution/CLEAR. Workflow dispatch is unavailable through this connector.
+- DF-11: waived as mandatory gate; provenance residual retained.
+- DF-12: Project Director acceptance pending.
 
-## Audit PR
-Draft PR #203: [DF-02 full Option A audit](https://github.com/methaneex-oss/MethaneX/pull/203), branch `docs/df02-option-a-full-semantic-adjudication-20261125`. Documentation-only, three paths; frozen PR #192 and runtime sources unchanged.
+## Planning foundation disposition
+Existing whole-system architecture, Brain architecture proposal, mechanism specification, implementation roadmap, scenario map and learning-evaluation protocol are consolidated as the **single planning lineage**. Planning is frozen against expansion; no new roadmap/blueprint/review loop unless a material defect or explicit decision requires it.
 
-Stage A remains NOT STARTED / HELD. No merge, donor adoption, baseline selection, implementation, training or deployment authorized.
+The planning package is **NOT fully accepted and NOT implementation-ready**. PR #173 whole-architecture acceptance/CF-26/CF-27, PR #174 current 54-scenario proposal acceptance/provenance, Gate A and Gate B remain open. Historical accepted revisions are revision-bound and cannot be transferred to newer proposals.
+
+## Authority boundary
+Stage A is NOT STARTED / HELD. No source baseline selection, donor adoption, runtime implementation, training, integration, merge, rebase, retarget, deployment or consolidation PR is authorized. Final acceptance is reserved to the Project Director.
 
 ---
+
 
 # CURRENT EXACT STATE — 2026-11-25 (DF-02 Option A; Phase 2 reverse-consumer audit)
 
