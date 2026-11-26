@@ -2221,3 +2221,14 @@ Planning/documentation consolidation is Builder-completed as an administrative s
 **Administrative scope freeze is not technical acceptance.** DF-02 phases 3 and 4 remain incomplete; DF-09 exact blind-reader CLEAR remains blocked; DF-12 remains Director-only. DF-11: D3 recorded the requested waiver retention, but accepted governance Rules 17.3 and 20.1 require genuine independent review and prohibit silent waiver. The status is BLOCKED until genuine independent review or a formal governance amendment resolves it. Builder self-review cannot substitute.
 
 The final terminal inventory/status synchronization must be performed after the last write and pinned to the exact branch HEAD. PR #203 remains draft documentation-only; no frozen PR #192 file or runtime source is changed. Stage A remains HELD; no merge, baseline, donor adoption or implementation authorized.
+
+
+## 2026-11-26 — DF-02 Phase 2 exact registration slice
+
+Builder checked exact frozen candidate PR #192 SHA `caf87986dfea7aca75728818651c8687e9f5faf0` against donor PR #97 SHA `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` for core production/test CMake and selected cognitive/evolution source/test blobs. Evidence is appended in DF-02 report §37.
+
+- Production CMake registration: candidate 57 translation units vs donor 64; seven donor-only translation units (restored Brain API, Brain action execution/prediction context/affective planning, affective state/learning, developmental learning). Candidate restored API file exists but is not registered in candidate CMake. This resolves the false-positive duplicate-source interpretation for this selected source: lexical overlap does not imply a candidate build collision.
+- Test registration: candidate 45 executable targets/45 CTest entries; donor 71 executable targets/70 CTest entries. 26 donor-only targets, grouped in the report; none candidate-only in the exact lists.
+- Exact blob IDs and structural/behavioral deltas for eight production paths and four tests are recorded. Selected tests show material coverage divergence; counts do not establish donor quality or semantic equivalence.
+
+**Disposition:** selected registration/consumer edges adjudicated at frozen refs; Phase 2 remains PARTIAL. This does not close the 159-path matrix, all 1,135 consumer blobs, dependency/ownership/authority/provenance/retention, Phases 3–4, or DF-02. No implementation, baseline, adoption, retirement, merge, or Stage A authorization.
