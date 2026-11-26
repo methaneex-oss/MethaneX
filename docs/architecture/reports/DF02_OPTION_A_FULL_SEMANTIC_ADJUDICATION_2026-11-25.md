@@ -791,6 +791,8 @@ The frozen artifact's 502-symbol set was re-partitioned by **symbol presence on 
 | **Total** | **502** | **40,048** | **346** | **1,135** | **118** |
 
 Candidate-present rows split into 3,441 candidate-tip and 32,093 historical rows. Candidate-absent rows are all historical-only. These are unique symbol/path/blob discovery dimensions, not unique dependencies. Exact blob SHA, owner tips and full consumer contents are available in the scan artifact and were re-read locally for this cross-map.
+**Count interpretation:** row counts are additive across the two symbol cohorts; consumer-path, consumer-blob and donor-path counts are distinct-set sizes and therefore overlap between cohorts. The union values in the total row are deduplicated. The candidate-present cohort contains historical rows for symbols also present on the frozen candidate; these are not candidate-absent symbols.
+
 
 ### 33.1 Candidate-absent, high-priority exact-context findings
 
