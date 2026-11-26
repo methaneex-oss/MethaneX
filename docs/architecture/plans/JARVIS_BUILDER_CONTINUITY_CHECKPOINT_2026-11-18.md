@@ -2176,3 +2176,10 @@ Candidate/historical symbol sets: 352 candidate,497 historical,347 shared,five c
 ### 2026-11-25 — All candidate-absent identifiers context-partitioned
 
 The 150 candidate-absent identifiers are now partitioned: 73 higher-specificity (2,410 rows,2,375 code-context),21 manually prioritized lower-specificity APIs (1,486 rows,1,262 code-context/224 comment-string),51 additional code-context tokens (502 rows),five text-only tokens (116 rows). Total absent-token rows4,514. Context partition is not dependency/authority closure. Candidate-present352 identifiers remain semantically unclosed.
+
+
+### 2026-11-26 — Builder reverse-consumer evidence reconciliation
+
+Frozen artifact #14956148301 was re-downloaded and SHA-256 reverified (9902957475c76f4840d1d280c7d4f50537941e9445810afb805132374a328f38). Reconciled the 502 identifier universe into 352 candidate-present (35,534 rows) and 150 candidate-absent (4,514 rows), with exact consumer path/blob and tip-owner dimensions. Selected high-value absent API contexts include isolated experiment execution, evaluation/adoption/rollback replay and validation, canary preview/observation, prediction feedback, developmental learning, durable task ledger and typed causal codec. Report §33 contains counts and selected exact contexts.
+
+This is a reproducible evidence/indexing step. It is not semantic dependency closure: all 1,135 consumer blobs and historical owner/capability/authority relationships remain subject to contextual disposition. DF-02 remains OPEN. No adoption, retirement, baseline, Stage A, merge or PR #192 target change.
