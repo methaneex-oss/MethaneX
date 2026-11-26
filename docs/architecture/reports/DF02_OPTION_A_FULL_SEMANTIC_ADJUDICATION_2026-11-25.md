@@ -860,7 +860,7 @@ Recomputed from the downloaded artifact tables and full consumer-blob source cor
 - Category arithmetic: candidate-present source 21,054 + test 13,380 + workflow 835 + build 237 + other 28 = 35,534; candidate-absent source 2,894 + test 1,594 + workflow 26 = 4,514.
 - Distinct-set counts were checked against the full row table: 346 consumer paths and 1,135 consumer blobs overall; path/blob/tip dimensions overlap between cohorts and are not additive.
 - Artifact ZIP digest recomputed locally and matches the recorded SHA-256.
-- Report, planning index and continuity checkpoint were synchronized on the same PR #203 branch. Compare against its base confirms only those three documentation paths changed; no runtime source or frozen PR #192 file changed.
+- At the §34 self-review point, report, planning index and continuity checkpoint were synchronized on PR #203; that point-in-time compare showed three documentation paths only. Later §35–36 finalization and archive commits expanded the current PR to five documentation paths. The current PR changed-path list is the controlling inventory; no runtime source or frozen PR #192 file changed.
 
 **Self-review result:** §33's arithmetic and scope boundaries are consistent. Remaining semantic work is accurately marked OPEN. This is Builder self-review only; it is not independent review, DF-02 closure, DF-09 CLEAR, or Director acceptance.
 
