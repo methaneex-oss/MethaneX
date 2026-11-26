@@ -2232,3 +2232,14 @@ Builder checked exact frozen candidate PR #192 SHA `caf87986dfea7aca75728818651c
 - Exact blob IDs and structural/behavioral deltas for eight production paths and four tests are recorded. Selected tests show material coverage divergence; counts do not establish donor quality or semantic equivalence.
 
 **Disposition:** selected registration/consumer edges adjudicated at frozen refs; Phase 2 remains PARTIAL. This does not close the 159-path matrix, all 1,135 consumer blobs, dependency/ownership/authority/provenance/retention, Phases 3–4, or DF-02. No implementation, baseline, adoption, retirement, merge, or Stage A authorization.
+
+
+## 2026-11-26 — candidate-absent API reverse-consumer slice
+
+DF-02 report §38 records exact source/API/test edges for donor-only action-execution, contextual-prediction, affective-planning and developmental-learning components. Key bounded evidence:
+- Candidate Brain header declares `execute_action`, but frozen candidate has no registered implementation source; donor source provides it and 59 symbol rows (14 consumer paths/59 blobs) locate source/test uses. Donor action-consequence integration suite has four direct call scenarios; candidate lacks its target registration.
+- `predict_with_context`: 19 matches across 4 paths/19 blobs; `plan_with_affect` and `choose_with_developmental_learning`: 42 matches across 5 paths/32 blobs. Donor API/implementation consumers were directly checked.
+- `DevelopmentalLearning`: 476 lexical rows / 10 identifiers / 40 consumer paths / 177 blobs, split source 354, test 111, workflow 11. Donor integration tests directly cover strategy selection, consequences, persistence/restoration and consolidation.
+- Affective state/learning source files have zero lexical symbol matches; recorded as no-symbol-hit, not proof of no dependency. Further type/include/build/manual semantic tracing remains necessary.
+
+This is candidate-vs-donor evidence at frozen refs only. No capability is declared equivalent, selected, adopted, retired or deleted. Phase 2 remains PARTIAL; DF-02 remains OPEN; no implementation/baseline/Stage A/merge authority.
